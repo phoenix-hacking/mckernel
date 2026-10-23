@@ -1,0 +1,20 @@
+--- /home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/run_actual_capsule_stage.py
++++ /home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-diagnostic-collector-successor-1/capsule-preparation-1/run_actual_capsule_stage.py
+@@ -2,7 +2,7 @@
+ from pathlib import Path
+ import ast,hashlib,json,os,resource,shutil,signal,sys,time
+ D=Path(__file__).resolve().parent
+-E=Path('/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1')
++E=Path('/home/holden/mckernel/docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-diagnostic-collector-successor-1/capsule-preparation-1')
+ assert sys.version.startswith('3.9.12 ')
+ mem_available=int(next(x.split()[1] for x in Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemAvailable:')))*1024;assert mem_available>=19<<30
+ usage=json.loads(Path('/home/holden/mckernel/.git/os-autopilot/state.json').read_bytes())['last_rate_limits']['primary']['usedPercent'];assert usage<100
+@@ -33,7 +33,7 @@
+  result['status']='PASS_ACTUAL_CAPSULE_STAGE_AND_STRICT_LOADER' if ok else 'FAIL_FIRST_STAGE_CAPTURE_RETAINED';result['CPU6_released']=joined['direct_child_joined'] and joined['group_absent'] and joined['closed_streams']
+  if ok:
+   out=D/'actual-stage-1';stage=json.loads((out/'stage-result.json').read_text());old=json.loads(Path(binding['baseline_overlay_manifest']['path']).read_text())['final_map'];new=json.loads((out/'overlay-manifest.json').read_text())['final_map'];delta=[name for name in old if old[name]!=new[name]]
+-  assert set(new)==set(old) and len(old)==62 and delta==['modules/ihk-smp-x86_64.ko'],'exact1SMP/61unchanged'
++  assert set(new)==set(old) and len(old)==62 and delta==['init'],'exact1init/61unchanged'
+   result['actual_stage']=stage;result['actual_changed_members']=delta;result['actual_unchanged_members']=61;result['strict_loader']='Original unchanged builder load_manifest returned successfully'
+ ns['write'](D/'ACTUAL-CAPSULE-STAGE-WHOLE-JOIN.json',result)
+ files=[D/'ACTUAL-CAPACITY-BEFORE-STAGE.json',D/'ACTUAL-CAPSULE-STAGE-WHOLE-JOIN.json']

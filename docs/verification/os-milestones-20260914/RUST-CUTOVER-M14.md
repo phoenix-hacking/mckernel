@@ -1,3 +1,29 @@
+## Latest scheduling: Rust cutover and hour session in parallel — 2026-10-23
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The latest user instruction keeps M14 Rust conversion and P12 hour validation
+active in parallel, superseding the brief Rust-first scheduling instruction.
+Use disjoint ordinary lanes immediately; overlap a compile-only Docker lane only
+after its reviewed resource/ownership successor is released and admitted. See
+[the current scheduling policy](CONVERGENCE.md). The session proves its frozen
+image; final Rust-image acceptance still needs matching production linkage,
+targeted native behavior and final-session evidence. Existing35-check progress
+and M14 per-file progress remain separate and unchanged by this scheduling edit.
+
+## Remote-flush entry forwarding increment — 2026-10-23
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M14-01-04 now has a canonical Rust entry for
+`remote_flush_tlb_array_cpumask`, reusing the existing Rust body and preserving the
+C fallback. Independent source and actual forwarding checks pass: 1,792 original
+C/Rust comparisons, real-header ABI/layout and PUBLIC/fallback selection, and a
+selected leaf partial link. All 15 commands joined cleanly in 0.690091 seconds.
+See [the bounded acceptance record](../evidence/velocity-intervention-20261023-3/m14-remote-flush/INDEPENDENT-SOURCE-AND-ACTUAL-LEAF-FIXTURE-ACCEPTANCE.ROOT-RECORD.json).
+Canonical integration follows actual78 Rust and complete selected GCC9 TU/partial-link acceptance. Thirteen C callbacks
+remain debt. Actual full Rust/complete selected C consumers are the next stage;
+default image linkage, native behavior and full-file
+retirement remain open. The practical count remains separate at34/35.
+
 ## Current increment: linker-end getter in Rust — 2026-10-23 15:08 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

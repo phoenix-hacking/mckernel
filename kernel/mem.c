@@ -4300,32 +4300,42 @@ int coredump(struct thread *thread, void *regs, int sig)
 	return ret;
 }
 
-static unsigned long mem_tlb_rdtsc_bridge(void)
+/* Immutable source-header geometry; no new C runtime implementation. */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+const int mem_remote_tlb_geometry[3] = {
+	IHK_TLB_FLUSH_IRQ_VECTOR_SIZE, IHK_TLB_FLUSH_IRQ_VECTOR_START, CPU_SETSIZE
+};
+#define MEM_TLB_PUBLIC_BRIDGE
+#else
+#define MEM_TLB_PUBLIC_BRIDGE static
+#endif
+
+MEM_TLB_PUBLIC_BRIDGE unsigned long mem_tlb_rdtsc_bridge(void)
 {
 	return rdtsc();
 }
 
-static int mem_tlb_current_cpu_bridge(void)
+MEM_TLB_PUBLIC_BRIDGE int mem_tlb_current_cpu_bridge(void)
 {
 	return ihk_mc_get_processor_id();
 }
 
-static void mem_tlb_noirq_lock_bridge(unsigned long lock_addr)
+MEM_TLB_PUBLIC_BRIDGE void mem_tlb_noirq_lock_bridge(unsigned long lock_addr)
 {
 	ihk_mc_spinlock_lock_noirq((ihk_spinlock_t *)lock_addr);
 }
 
-static void mem_tlb_noirq_unlock_bridge(unsigned long lock_addr)
+MEM_TLB_PUBLIC_BRIDGE void mem_tlb_noirq_unlock_bridge(unsigned long lock_addr)
 {
 	ihk_mc_spinlock_unlock_noirq((ihk_spinlock_t *)lock_addr);
 }
 
-static void mem_tlb_atomic_set_bridge(unsigned long atomic_addr, int value)
+MEM_TLB_PUBLIC_BRIDGE void mem_tlb_atomic_set_bridge(unsigned long atomic_addr, int value)
 {
 	ihk_atomic_set((ihk_atomic_t *)atomic_addr, value);
 }
 
-static void mem_tlb_atomic_inc_bridge(unsigned long atomic_addr)
+MEM_TLB_PUBLIC_BRIDGE void mem_tlb_atomic_inc_bridge(unsigned long atomic_addr)
 {
 	ihk_atomic_inc((ihk_atomic_t *)atomic_addr);
 }
@@ -4335,35 +4345,37 @@ static void mem_tlb_atomic_dec_bridge(unsigned long atomic_addr)
 	ihk_atomic_dec((ihk_atomic_t *)atomic_addr);
 }
 
-static int mem_tlb_atomic_read_bridge(unsigned long atomic_addr)
+MEM_TLB_PUBLIC_BRIDGE int mem_tlb_atomic_read_bridge(unsigned long atomic_addr)
 {
 	return ihk_atomic_read((ihk_atomic_t *)atomic_addr);
 }
 
-static int mem_tlb_get_vector_bridge(int type)
+MEM_TLB_PUBLIC_BRIDGE int mem_tlb_get_vector_bridge(int type)
 {
 	return ihk_mc_get_vector(type);
 }
 
-static void mem_tlb_interrupt_cpu_bridge(int cpu, int vector)
+MEM_TLB_PUBLIC_BRIDGE void mem_tlb_interrupt_cpu_bridge(int cpu, int vector)
 {
 	ihk_mc_interrupt_cpu(cpu, vector);
 }
 
-static void mem_tlb_flush_single_bridge(unsigned long addr)
+MEM_TLB_PUBLIC_BRIDGE void mem_tlb_flush_single_bridge(unsigned long addr)
 {
 	flush_tlb_single(addr);
 }
 
-static void mem_tlb_flush_all_bridge(void)
+MEM_TLB_PUBLIC_BRIDGE void mem_tlb_flush_all_bridge(void)
 {
 	flush_tlb();
 }
 
-static void mem_tlb_pause_bridge(void)
+MEM_TLB_PUBLIC_BRIDGE void mem_tlb_pause_bridge(void)
 {
 	cpu_pause();
 }
+
+#undef MEM_TLB_PUBLIC_BRIDGE
 
 void remote_flush_tlb_cpumask(struct process_vm *vm,
 		unsigned long addr, int cpu_id)
@@ -4372,6 +4384,7 @@ void remote_flush_tlb_cpumask(struct process_vm *vm,
 	return remote_flush_tlb_array_cpumask(vm, &__addr, 1, cpu_id);
 }
 
+#ifndef MCKERNEL_RUST_MEM_HELPERS
 void remote_flush_tlb_array_cpumask(struct process_vm *vm,
 		unsigned long *addr,
 		int nr_addr,
@@ -4387,6 +4400,7 @@ void remote_flush_tlb_array_cpumask(struct process_vm *vm,
 			mem_tlb_atomic_read_bridge, mem_tlb_flush_single_bridge,
 			mem_tlb_flush_all_bridge, mem_tlb_pause_bridge);
 }
+#endif /* C fallback; default Rust entry owns this symbol. */
 
 void tlb_flush_handler(int vector)
 {

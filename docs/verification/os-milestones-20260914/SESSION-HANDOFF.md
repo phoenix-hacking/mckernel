@@ -1,3 +1,96 @@
+## Diagnostic tuple accepted; runtime admission next; ten-minute steering live — 2026-10-23T22:18:28.146426+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Failed599bd7positivephysicala685 NONNULL; nofurthercleanup/query needed. Failed
+21rounds/42launches/112.956787512mixedsec areunaccepted; actualsnapshotn/errnoUNKNOWN.
+Newdiagnosticcollector f358 actual5commandsPASS; newcapsule af008240/manifest27cf
+stage20.857080sPASS, init-only1changed/61same; modules/image10972/apps unchanged.
+Actualdiagcohort99eaa all18guards/256pins/mountcontrolsPASS1.237153s; independent
+d8c8source/fixture and5ceaactualcapsule accepted. Nonceb7d804/HOSTl12s8d1/p/scratch
+p12s8d1/m.json publishedd3ac; releaseABSENT. Nextfreshreadonlyadmission cafdf798/
+argv0890/queryb3ba afterstaticpublication+exactreview, thenlatepayloadreview/release.
+No newnativeowner/heavyreservation now. No unchangedLONG replay orkernel rebuild.
+M14remoteentry canonical681464 withactual78Rust/completeGCC9+partiallink;13Ccallbacks
+andGCC14/defaultimage/nativeOPEN. Rootexecutedunusedforeground23signalfdfixturegrant:
+all23PASS/.470791s/3commandsjoinedgoneclosed, no canonicalsyscallchange. Rootnow
+runsreadychecks promptlyinstead ofleavingunusedhandoffs. CPUentryfirstRustE0530
+no_turbo shadow failure preserved; oneRustlink_name alias correction runningCPU6.
+OtherM14sourcefixtures ready/walkproductionconsumerprepped; plannedcountsnotcredit.
+Timer3938622/start59029100/source231af600, CPU0/AS256MiB/FD128/FSIZE32MiB/core0,
+600secondqueue-onlyreview cadence live perforeLAUNCH/14puretests+independentreview.
+No duplicate supervisor/no resume/root/workload authority. Forecompile-onlyowner
+8cd5/19fakefixturesaccepted, admission049118 sourceprepared; actualnewP12identity,
+rootrelease/build stillNULL. ParallelM14+P12priority; practical34/35/whole12of14.
+
+## Failed SDK8 positively retired; parallel M14 and corrected P12 preparation — 2026-10-23T21:55:45.464264+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Independentactualphysical PASS a68513c031ffe7470702ca53e7bb2b1a0a6e1fef8d5eb7dc420f9d3b8cccf249: twoCOMPLETEpublisherfreePROC97100132,
+23exactclientbirths+outer/ownerabsent; init3925813numericabsenceboth/birthNULL;
+mutex5e8d2c19 permanent27:4/eightexclusionsabsent. Genuinecurrent_live_postjoin
+FAILED_SDK8_LONG_599BD7_POSITIVELY_RETIRED is NONNULL. Closedownerexport9ff82366,
+normalCIDremoval/threeemptyqueries/reaps accepted. No furthercleanup/query needed.
+OriginalLONGFAIL preserved:21rounds/42launches/112.956787512mixedsec reportedONLY,
+zeroformalhourcredit. Snapshotn/errnoUNKNOWN, no provenEBUSY/capacitycause.
+Latestuserpriority21:53 supersedes21:50Rust-first: advanceM14 andqualifiedP12 in
+parallel where reviewedresource/ownershipseparation permits. No unchangedreplay;
+acceptederror-onlycollector diagnostic actual10bodycommandsPASSa0ce27b0 awaits
+completeproductioncollector binding/build. M14canonicalremote-flush entry now
+integrated681464e6 after1792pairs/full78Rust/wholeGCC9+partiallink acceptance;
+13Ccallbacks/GCC14defaultimage/nativeOPEN. Sixsourcefileshave disjointprivate
+implementation lanes, includingforegroundkernel/syscall andbotharchCPU/syscall.
+Foregroundaloneownscompile-onlycontainer successor; CPU0purefixturegrant andCPU6
+foregroundsyscallfixturegrant awaitingwholejoin; no secondcontainer launched.
+Practical34/35/whole12of14 unchanged; P-M12-01OPEN. Ten-minutecheckpointcadence.
+
+## SDK8 LONG FAILED; normal owner closed, physical review next — 2026-10-23T21:46:55.358675+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Reviewed second observation c41e181a:21 complete rounds/42launches/112956787512mixedns,
+then round21 callback-gate/kernel_retirement_wait result-5, ND_PAIR_LONG_ABORT and
+snapshotexporterror. These failed-run counters are NOT accepted session credit.
+No proven EBUSY recurrence/capacitycause: actual snapshotreturn n/errno missing.
+Diagnosis09641ead identifies exactsource funnels; error-onlydiagnostic05c8f9e7
+prepares missingn/errno without changing buffer,5sdeadline,oracle ormodule/image.
+Actualfreshidentity e2cad90b matched3925729/start58851263 before reviewedONEpidfdTERM
+be602a1a; existingnormalcleanup thenouter44335 CLOSEDFAIL1/847.895244s, directjoined/
+groupgone/closed/noouterkill. Inner1df37a6c FAIL1/847.749274s, forcekillfalse; actual
+stderr78d4cb5a OwnerSignal and all threeterminalreads retained. Ownership_complete1
+and joinedPIDs alone are notclearance. current_live_postjoin CLOSED_FAILED_SDK8_LONG_
+PENDING_PHYSICAL is nonNULL; rootreviewingfixedclosedownerexport thenactualclient/
+CID/PROC/permanent27:4/eightpaths. No competingheavy, cleanuprepeat orunchangedreplay.
+Practical34/35 and whole12/14 unchanged; formalLONGcredit0, P-M12-01OPEN.
+M14 remote-flush actual78Rust17.365470s and wholeGCC9+partiallink1.023879s independently
+accepted with13Ccallbacksdebt/defaultimage/nativeOPEN. walk_l4 corrected224pairs
+and bothheaderABI profiles independentlyPASS573c720f, productionconsumersnext.
+Foregrounddual-container owner hasexclusiveprivatecompile-onlyimplementation;
+ourduplicateworker stoppedbeforereadingmore/writinganything andredirected to
+remote-flushintegrationreadiness. No newcontainer/buildlaunched; newprofile
+requiresindependentreview/fresh24GiBadmission, protectsP12/native27:4/control7.
+
+## SDK8 LONG LIVE; first actual workload progress observed — 2026-10-23 21:34 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Exact payload52816700 independently approved; release6803fdc2 and requesta7c967e3
+passed full real-clock validation plus actual published-request consumer before
+one controller launch. Live tool44335; outer3925725/start58851251 and authenticated
+owner3925729/start58851263. Retain ownership/heavy slot until normal terminal and
+physical acceptance; current runtime postjoin unresolved, not physical clearance.
+First actual read1a8a036e returned0/.104294s/directjoined/gone/closed/emptyerr:
+producer reports10 complete rounds/20 launches/53567943406 mixed ns, pending round10
+excluded; captured60924B serial has no failure/abort marker. Counters are lower
+bounds ONLY, formal LONG credit0/practical34of35/whole12of14 unchanged.
+Read started about112s after owner, missing30-60s target. Focused read review wait
+and root capture API mistake delayed it: list passed to dict API TypeError before
+Popen/no child/read; one API-only correction succeeded. Both captures preserved.
+No automatic next read or replay. Next: unchanged healthy session, bounded reviewed
+follow-up at concrete prior-failure boundary, strict terminal+physical acceptance.
+M14 remote-flush private entry source and actual1792 forwarding pairs/headerselection/
+selected leaf partiallink independently PASS907504a4/.690091s;13Ccallbacks remain.
+Actual78 productionRust/completeGCC9memTU now grantedCPU6 to m14_actual_consumer_fix;
+canonical/defaultimage/native remainOPEN. Separate foregroundsyscall source owner
+has no overlap. No new kernel/image/module/app build is needed for this live LONG.
+
 ## SDK8 actual build, physical retirement and capsule accepted; runtime fixture next — 2026-10-23 21:25 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

@@ -1,0 +1,138 @@
+{
+  "CPU0_fixture_grant": {
+    "invocations": 1,
+    "maximum": {
+      "AS_bytes": 2147483648,
+      "CPU_seconds": 60,
+      "FSIZE_bytes": 33554432,
+      "NOFILE": 256,
+      "core": 0,
+      "retirement_seconds": 6,
+      "wall_seconds": 90
+    },
+    "scope": "One pure fake-backend fixture job on CPU0 only; no Docker/root/build.",
+    "source": "Root relayed background dispatcher grant 2026-10-23T21:54:17Z"
+  },
+  "CPU0_fixture_reservation": "RELEASED_AFTER_ONE_JOINED_JOB",
+  "actual_compile": null,
+  "actual_fixture_result": {
+    "bytes": 3210,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/ACTUAL-FIXTURE-RESULT.json",
+    "sha256": "5a1300b7f0d5c9c74ce47914498db071ebc60d4c48d895849656098f42ad8567"
+  },
+  "actual_physical_acceptance": null,
+  "actual_release": null,
+  "actual_root_admission": null,
+  "failure_recovery_limit": "Post-lease/pre-create errors produce no_container_create_attempted=True, retired=False and CID=None. Finite accepted-CID release rejects this state. Separately reviewed exact root reconciliation/release is required; do not imply all failures share ordinary accepted-container release.",
+  "fixture": {
+    "bytes": 16992,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/test_compile_owner.py",
+    "sha256": "eee51f34f08d7e2003fb3d4128608b5106021c6f84d8b70dc64f94a0931f5260"
+  },
+  "fixture_argv": [
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--fsize=16777216",
+    "--nofile=128",
+    "--core=0",
+    "--",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "45s",
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/test_compile_owner.py"
+  ],
+  "fixture_bounds": {
+    "AS_bytes": 536870912,
+    "CPU": 0,
+    "CPU_seconds": 30,
+    "FSIZE_bytes": 16777216,
+    "NOFILE": 128,
+    "core": 0,
+    "jobs": 1,
+    "retirement_seconds": 5,
+    "wall_seconds": 45
+  },
+  "host_helper": {
+    "bytes": 39351,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile_host_helper.py",
+    "sha256": "8ffc9a09e2f2e9e9c9cc09af559d707bf6c4b989fc4f9d3ad51fe88a8e5b6083"
+  },
+  "independent_source_review": null,
+  "lease_cleanup_boundary": "Run stops/removes only authenticated compiler CID and seals receipt, retaining HOST lease. Root must independently accept outer owner/controller/all clients and exact container absence before publishing ROOT-PHYSICAL-ACCEPTANCE.json and root-owned reference file; finite release action rechecks only own absence and exact lease.",
+  "owner": {
+    "bytes": 111651,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile_image_owner.py",
+    "sha256": "8cd5a1948fc973461e15c17cdea604932b723f839f00646ec7df35c31647d555"
+  },
+  "preserved_driver": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/native_rust_exact_mckernel_image_offline.py",
+    "sha256": "7d30085edda4d1272f923b19e8632e9ab8b259874623974c2da53dbe4c3c5be0"
+  },
+  "profile": {
+    "bytes": 2095,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/COMPILE-PROFILE.json",
+    "sha256": "9b78e4ec49f163a333a3fd7e9cf0dc6b05dbdc097a0b785c20cf741aaa6e23fa"
+  },
+  "prohibited_effects": [
+    "native/global27:4 access",
+    "shared heavy record acquire/release",
+    "P12 lifecycle mutation",
+    "QEMU/IHK/module load/hotplug/native guest",
+    "RW scratch/cache inputs",
+    "source/kernel/toolchain/dependency rebuild or installation"
+  ],
+  "proposed_release_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile_image_owner.py",
+    "release-accepted-lease",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile-request.PREPARED.json"
+  ],
+  "proposed_run_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile_image_owner.py",
+    "run",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile-request.PREPARED.json"
+  ],
+  "release_boundary": "Root publishes sealed root-owned ROOT-ADMISSION.json then ROOT-RELEASE.json and binds only compile_only_release ref in new finalized request; templates do not authorize execution.",
+  "request": {
+    "bytes": 26525773,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile-request.PREPARED.json",
+    "sha256": "92bcb96713c498bf2397bb24c3473a2ffbeb61f45dfa423a6ae8b99f4a4ffe4f"
+  },
+  "request_core_sha256": "1a93ac79346055cff43e18afa9b4f358cc9ff9f9328976d37c724b28b020ab2c",
+  "requires_before_launch": [
+    "independent source+fixture review",
+    "root actual CPU6 consumer joined",
+    "fresh actual MemAvailable>=24GiB and dual capacity agreement",
+    "actual P12 exact CID/name/owner/config/HostConfig/RW roots and reserved caps unchanged",
+    "controller CPU0/client allowances accepted",
+    "root-owned complete fact and release binding",
+    "full pure _validate_request on finalized request (currently unreleased)",
+    "exact operation/tool capture review before one launch"
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_delta": {
+    "bytes": 3006,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/SOURCE-DELTA.json",
+    "sha256": "106802074f9988c1a6ea8586891c33fabbbb20f95eb3b6d009c217ac323b7ef0"
+  },
+  "status": "PRIVATE_SOURCE_IMPLEMENTED_UNRELEASED"
+}

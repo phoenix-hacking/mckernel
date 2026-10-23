@@ -1,0 +1,21 @@
+--- fixture/fixture.c
++++ fixture/bounded-correction-1/fixture.c
+@@ -32,7 +32,7 @@
+ }
+ /* Same typed immutable identity emitted in selected production C. */
+ int (*const x86_clear_range_l4_callback)(void*,pte_t*,uint64_t,uint64_t,uint64_t)=&clear_range_l4;
+-#include "original-body.inc"
++#include "../original-body.inc"
+ static void require(int ok,const char *why) { if(!ok){fprintf(stderr,"FAIL %s\n",why);exit(1);} }
+ int main(void)
+ {
+@@ -50,7 +50,8 @@
+   require(!memcmp(sa.events,sc.events,sizeof sa.events),"callback identity/order/args/entry values");
+   require(!memcmp(a,c,sizeof a),"synchronous PTE mutations");
+   if(nullpt)require(ra==-2 && !sa.count,"actual walker null table policy");
+-  if(!nullpt && bounds[v][0]==bounds[v][1])require(ra==-2 && !sa.count,"empty bounds");
++  if(!nullpt && end!=0 && bounds[v][0]==bounds[v][1])require(ra==-2 && !sa.count,"empty bounds");
++  if(!nullpt && end==0 && mode==0)require(ra==0 && sa.count==512,"end0 full512 sentinel");
+   if(!nullpt && sa.count && mode==2)require(ra==-5 && sa.count==1,"first hard error stops");
+   if(!nullpt && sa.count && mode==1)require(ra==-2,"ENOENT aggregation");
+   pairs++;

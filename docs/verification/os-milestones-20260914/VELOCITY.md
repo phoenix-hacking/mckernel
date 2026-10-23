@@ -1,3 +1,16 @@
+## SDK8 actual build and live workload feedback — 2026-10-23 21:34 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+SDK8 modulebuild21.814462s and capsule/fullstrictconsumer20.900863s accepted.
+Runtimecohort18guardfixture1.109246s, freshrootquery.338017s, then exactreleased LONG
+started. Firstread at~112owner seconds reports10complete rounds/20launches and
+53.567943406 mixedseconds, provisionalonly/no accepted closure.30-60s readtarget
+missed due to focusedreviewwaiting plus rootdictAPIcallingerror beforePopen;
+soleobserverAPIcorrection succeeded. Preserve both captures; no unchangedreplay.
+Original2/44.160327s baseline retained; no4x/closure-rate claim from livecounters.
+M14 independent1792entrycomparisons/selectedleaflink actual .690091s accepted;
+production78Rust/GCC9ordinaryconsumer execution is separate from live LONG.
+
 ## Actual957-second failed LONG and next diagnostic loop — 2026-10-23 20:14 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

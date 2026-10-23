@@ -15,6 +15,42 @@ this document is not a claim that the Python harness enforces it.
 
 ## Authority and scope
 
+### Latest user scheduling: parallel M14 and P12, ten-minute steering — 2026-10-23
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The latest explicit user instruction is to advance M14 Rust conversion and the
+P12 hour-long functional session in parallel wherever actual isolation permits.
+It supersedes the short-lived instruction to defer all further hour runs until
+full M14 conversion. Preserve both worklists and their original acceptance
+criteria. A session validates its frozen image; a changed final Rust image needs
+matching targeted native checks and final-session evidence before combined
+acceptance. Neither34/35 nor a private Rust fixture retires a whole C file.
+
+Keep disjoint Rust implementation and ordinary compiler/fixture work advancing
+while P12 runs. Simultaneous Docker builds need the independently reviewed
+compile-only successor, exact release and fresh live resource admission: P12
+retains CPU2-5/12GiB/512 tasks and its native mutex; the proposed compile lane is
+CPU6/1CPU/4GiB with no additional swap/128 tasks/jobs1, HOST outputs only and
+read-only shared inputs. Retain control CPU7, CPU0 coordination, CPU1 exclusion,
+the host reserve and16/12GiB free-space floors. Current proposed admission needs
+at least24GiB MemAvailable. This policy is not an execution release. Until that
+successor qualifies, use existing ordinary lanes and the established heavy build
+lane between native sessions; do not make new harness work a dependency for all
+M14 progress. Finish the failed SDK8 owner's normal physical retirement before
+reusing its lane, and diagnose its actual snapshot error before another attempt.
+
+The user explicitly requests a log/progress review and actionable steering every
+600seconds while the campaign is active. Reuse the existing instruction queue;
+a narrow single-instance local timer may request this review. It must stop on
+pause, service hold, stale heartbeat or changed campaign identity and must never
+resume/restart the campaign, launch workloads or enqueue duplicate pending
+reviews. Each review names the current blocker and owner, new executable results,
+M14 implementation/link/native changes, practical closure changes, useful lane
+occupancy and one concrete strategy adjustment when progress stalls. Use bounded
+state/log reads; do not repeatedly hash evidence or start duplicate supervisors.
+Report timer startup/stop separately from actual review/adoption. Preserve healthy
+long runs and all ownership/deadline/evidence rules.
+
 ### Continuous steering of functional closure and M14 — 2026-10-23
 
 At normal checkpoints and worker completion, reconcile the existing live agent
@@ -46,8 +82,9 @@ rule after one failed candidate and one correction. After two dispatch cycles
 without an executable result, change the strategy. Unknown retirement preserves
 its owner and blocks competing heavy work. For unchanged external facts, name
 one recheck condition/time and wait at least60seconds between observations while
-independent work advances. This is coordinator supervision, not a new daemon,
-auto-resume policy or workload release. Preserve healthy long runs and deadlines.
+independent work advances. This remains coordinator supervision. The user-authorized narrow timer above
+only requests reviews; it grants no auto-resume or workload release. Preserve
+healthy long runs and deadlines.
 
 Explicit user instruction, 2026-10-23: full supported LWK Rust/assembly cutover
 has its own active [M14](RUST-CUTOVER-M14.md) and [per-file worklist](rust-cutover-m14.json).

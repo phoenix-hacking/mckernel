@@ -1,0 +1,34 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_PREPARATION_ONLY_EXECUTION_NOT_GRANTED",
+  "target": "kernel/process.c:vm_range_insert",
+  "worklist": "M14-02-02",
+  "exact_c_fallback_preserved": true,
+  "new_compute_c": false,
+  "selected_c_computation": "none in vm_range_insert entry after selection; two existing Rust-entry callbacks remain C",
+  "remaining_c_callbacks": [
+    "vm_range_insert_log_bridge",
+    "vm_range_insert_dump_bridge; dump_tree and optional dtree subtree"
+  ],
+  "unchanged_real_default_callers": [
+    "process_split_range_insert_bridge",
+    "process_add_range_insert_bridge"
+  ],
+  "lifetime": "Live nonnull ProcessVm and preexisting caller-held VM exclusion; newrange handling unchanged in existing helper. No ownership transfer or reference drop.",
+  "order": "Existing helper logs overlap then returns -EFAULT, or logs success then dumps the PRE-INSERT tree then rb_link_node/rb_insert_color; wrapper does not add a lock or callback.",
+  "tests_run": false,
+  "source_review_pass": false,
+  "full_crate_pass": false,
+  "actual_default_TU_pass": false,
+  "default_image_link_pass": false,
+  "native_pass": false,
+  "failure_family_history": [],
+  "files": {
+    "sourcehandoff/process.c.PREIMAGE": "e2f2562b32ec462d9ee78c74dee4222485a69c4a3e2a81a332663fcef7e2b52d",
+    "sourcehandoff/process_helpers.rs.PREIMAGE": "526baf9363a0845ad50aade7e9b2296d27c8840527f3510d95a1105fc626d8d3",
+    "candidate/process.c": "64af918855ea361bd850d6ad7480d304634c28814e04127fe3dec8c013f21044",
+    "candidate/process_helpers.rs": "3f2c3dc03445147addee47d77e3ad2b31207fb3bfaa591ad99b6d0d9c897932e",
+    "fixture/abi.ACTUAL.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "fixture/rbtree.ACTUAL.rs": "114e8dbd0b48abc156879bfd2f019071c30174019e97904c028ccee911840256"
+  }
+}

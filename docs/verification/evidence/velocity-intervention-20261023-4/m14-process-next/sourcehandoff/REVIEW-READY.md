@@ -1,0 +1,15 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Private M14-02-02 process entry retirement, source prepared only. No compilation, test execution, runtime, root operation or canonical integration performed.
+
+The still-selected static `vm_range_insert(ProcessVm *, VmRange *)` C entry becomes a production Rust export with the identical full signature. It calls the existing `process_vm_range_insert_result`, preserving tree pointer, argument order, callback identity and signed return. The existing add/split callers are unchanged. Selected C has an external declaration and no entry definition; the exact original wrapper remains under the old C fallback selector. No new C getter, helper or compute functionality is introduced.
+
+ABI and lifetime invariant: the existing caller owns VM range exclusion and supplies a live nonnull ProcessVm. There is no new lock, allocation, ownership transfer, reference drop or notification. Success logging then dump of the pre-insert tree precede rb_link_node/rb_insert_color. Overlap logs then returns -EFAULT. Null newrange retains existing -EINVAL behavior. Null VM is outside the original wrapper contract and is not given a new behavior.
+
+Remaining C debt for this entry: existing vm_range_insert_log_bridge, vm_range_insert_dump_bridge and its dump_tree/optional dtree subtree. The two diagnostic callbacks become externally visible only in the selected profile using the existing PROCESS_SCHED_PUBLIC_BRIDGE convention. This is one bounded entry slice; no whole area/file/default-link/native completion claim.
+
+Prepared actual-body fixture: actual original wrapper extraction (only test symbol renamed), exact production Rust entry/helper functions, full production Rust ABI and rbtree modules, actual retained production C header flags. It compares 1088 original-C/Rust insertion results, callbacks and tree snapshots while independently checking interval overlap errno, membership, red-black invariants and pre-insert callback order. High unsigned addresses, exact adjacency, left/right insertion, overlap and null-newrange error are included. No invalid-pointer lifetime vector is invoked. A real-header ABI witness checks complete VmRange/ProcessVm sizes and accessed offsets.
+
+Prepared actual consumers: byte-extracted unchanged add/split caller bodies with exact default/fallback entry selection. Selected leaf partial link must define vm_range_insert once, with only the two stated C callbacks unresolved. This leaf check does not prove the complete selected process.c TU, production fullcrate, current image or native behavior. Those remain root-owned downstream prerequisites.
+
+`EXECUTABLE-READY.json` binds source/fixture/runner hashes and the exact command template. Root must supply an exact hash-bound ordinary CPU6/CPU7 grant before run_once.py. The runner refuses output-directory reuse, records every argv/purpose/stdout/stderr/status, stops on first failure, and does no retry. Its host-GCC builtin-header substitution is diagnostic only. Family history is empty at source preparation. Source read/prepare commands are the only commands performed.

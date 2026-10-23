@@ -1,0 +1,116 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FRESHER_EXISTING_SDK8_FAILED_PRODUCER_OBSERVATION_FOUND",
+  "observed_at_utc": "2026-10-23T21:46:17.795682+00:00",
+  "owner_identity": {
+    "pid": 3925729,
+    "start_ticks": 58851263,
+    "outer_pid": 3925725,
+    "nonce": "599bd7a0a4cb4e29b52d6ed0cc9aa0db"
+  },
+  "current_facts": {
+    "completed_rounds": 21,
+    "completed_launches": 42,
+    "mixed_work_ns": 112956787512,
+    "mixed_work_seconds": 112.956787512,
+    "last_completed_round": 20,
+    "failure_round": 21,
+    "failure_stage": "callback-gate",
+    "pair_stage": "kernel_retirement_wait",
+    "rust_result": -5,
+    "ownership_complete": 1,
+    "abort": true,
+    "failure_trace_snapshot_error": true,
+    "formal_LONG_credit": 0,
+    "classification": "failed producer observations only; no healthy-flow/terminal/physical-clearance claim"
+  },
+  "existing_read": {
+    "source": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/actual-diagnostic-read-2/stdout",
+      "bytes": 129360,
+      "sha256": "c41e181a1d88637dafe5bb4c8741660f99cf8386ecba6deaa0efe335ae9f8a68",
+      "mtime_utc": "2026-10-23T21:40:11.595747+00:00"
+    },
+    "selected": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/actual-diagnostic-read-2/SELECTED-OBSERVATIONS.ROOT-RECORD.json",
+      "bytes": 585,
+      "sha256": "ed133a4f1840ef9e9f73f38ef12c9a38c19285b5b286528491cfb69e270c9182",
+      "mtime_utc": "2026-10-23T21:40:11.651749+00:00"
+    },
+    "returncode": 0,
+    "seconds": 0.08958261902444065,
+    "direct_child_joined": true,
+    "group_absent": true,
+    "closed_streams": true,
+    "error": null,
+    "retirement_error": null,
+    "anchor_consistent_in_that_read": true
+  },
+  "readable_serial": {
+    "path": "/home/holden/mckernel-work/l12s8a1/p/attempt-599bd7a0a4cb4e29b52d6ed0cc9aa0db/serial.log",
+    "bytes": 95573,
+    "sha256": "fac501c7d72cf9a3794c2153adf7e26415b8cf878280b67ef0105cb1cbff9626",
+    "mtime_utc": "2026-10-23T21:34:35.621841+00:00"
+  },
+  "failure_diagnosis": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/failure-diagnosis-1/EXACT-FAILURE-PREDICATE-AND-MISSING-FACTS.json",
+    "bytes": 8845,
+    "sha256": "09641ead4a84c7cca80e2f56e65e43c2891b0f8041570eff9227149e83449de4",
+    "mtime_utc": "2026-10-23T21:42:38.700178+00:00"
+  },
+  "registered_capture_progress": {
+    "state_path": "/home/holden/mckernel/.git/os-autopilot/state.json",
+    "capture_progress": [],
+    "meaning": "No registered progress in selected state read; heartbeat and elapsed wall time were not counted as work."
+  },
+  "existing_later_retirement_output": {
+    "source": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/actual-root-cancel-1/stdout",
+      "bytes": 718,
+      "sha256": "be602a1ae591607fe2a8056d87f0a682ce41dbbfd933bac799bfdf57374d1400",
+      "mtime_utc": "2026-10-23T21:45:12.232842+00:00"
+    },
+    "content": {
+      "application_acceptance": false,
+      "expected_start": 58851263,
+      "fdinfo_pid": 3925729,
+      "matched_pgid": 3925729,
+      "matched_sid": 3925729,
+      "matched_uid": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "nonce": "599bd7a0a4cb4e29b52d6ed0cc9aa0db",
+      "owner_cleanup_observed": false,
+      "physical_clearance": false,
+      "pid": 3925729,
+      "provider": "explicit ctypes libc.syscall pidfd only",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nExplicitly selected Linux x86_64 LP64 pidfd syscall provider. No Python API or numeric-signal fallback.\n",
+      "signal": "SIGTERM",
+      "signal_calls": 1,
+      "source_sha256": "b23c19f45edf56c0b693e6a809727f85d6443d5c6569e02210ba2be97af6e6f3",
+      "status": "ONE_SIGTERM_SENT_TO_EXACT_OWNER_ONLY"
+    },
+    "qualification": "Already produced ordinary-readable capture output only. This task sent no signal; no inference of owner join/physical retirement."
+  },
+  "inaccessible": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/actual-capture-1",
+    "owner": "root",
+    "mode": "0700 directory",
+    "result": "Permission denied listing inner runtime capture; terminal/result not read"
+  },
+  "needed_readback": {
+    "repeat_same_serial_read_needed": false,
+    "reason": "Existing second read and readable serial already expose failure; another unchanged prefix cannot recover absent numeric diagnostics.",
+    "next": "Coordinator existing normal owner terminal result and retained evidence export, then existing physical acceptance route. If exact snapshot n/errno/pair_results already retained, obtain via that bounded export. Do not infer cause or replay.",
+    "missing_numeric_facts": [
+      "actualfirstsettlement snapshot n and errno, exactbefore/after/deadline values, returned readiness result ifsnapshotvalid",
+      "actualsecond failure-export snapshot n and errno: distinguish full1048576 from0 ornegative",
+      "current round21 pair_results PIDs and unchanged app stdout/status/EOF results if retained independently",
+      "only if snapshotvalid: exact retained complete retirement rows forboth currentPIDs and theirtokens/domain/errors/order"
+    ]
+  },
+  "actions_performed": "Bounded ls/read/hash of existing named files and private report writes only; no root/query/Docker/guest/probe/process/signal/cleanup/build/source edits."
+}

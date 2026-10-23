@@ -1,0 +1,63 @@
+{
+  "actual_bodies": [
+    "original/candidate retirement_settlement.inc entire file",
+    "long_kernel_snapshot exactbody",
+    "long_failure_export exactbody",
+    "candidate long_snapshot_error_line exactbody"
+  ],
+  "actual_compiler_argv": null,
+  "actual_fixture_result": null,
+  "assertions": [
+    "Original/candidate snapshotcalls counts/actions/size and returnvalues identical",
+    "Original/candidate syscall errno/retirement/gate behavior unchanged",
+    "Candidateextraoutput ONLY bounded P12_LONG_SNAPSHOT_ERROR lines on existing failurefunnels",
+    "ABORT precedes diagnosticoutput, originalerrormarker retained",
+    "Candidatecaptured n/rawerrno/bound/round/pids exact and parser-safe; positivecountstaleerrno explicitly invalid",
+    "Successsettlement capturesnoerrorrecord/emitsno diagnostic"
+  ],
+  "compile_authorized": false,
+  "compile_profile": {
+    "AS": 2147483648,
+    "CPU": 60,
+    "FSIZE": 33554432,
+    "GCC": "/usr/bin/gcc-9",
+    "NOFILE": 256,
+    "core": 0,
+    "cpu": "root-assigned ordinary CPU pending",
+    "grace": 6,
+    "owned_capture": "990807 with registeredTERM/INT/ALRM handlers",
+    "wall": 90
+  },
+  "root_runtime_release": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "TARGETED_ACTUAL_BODY_FIXTURE_PREPARATION_ONLY_NO_COMPILER_GRANT",
+  "vectors": [
+    {
+      "errno_after": 13,
+      "expected_errno_valid": 1,
+      "n": -1,
+      "name": "snapshot_negative"
+    },
+    {
+      "errno_after": 38,
+      "expected_errno_valid": 0,
+      "n": 0,
+      "name": "snapshot_zero"
+    },
+    {
+      "errno_after": 17,
+      "expected_errno_valid": 0,
+      "n": 1048576,
+      "name": "snapshot_full"
+    },
+    {
+      "expected": "sameactualready/noerrorrecord/noextraoutput",
+      "n": "actualcomplete2PIDretirementrows length",
+      "name": "snapshot_valid_ready"
+    },
+    {
+      "expected": "originalfailreturn/-1 preserved; errnoafterrestore; no new acceptance",
+      "name": "diagnostic_write_error"
+    }
+  ]
+}

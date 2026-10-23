@@ -256,27 +256,75 @@
         {
           "id": "M14-01-04",
           "title": "User-page lookup, fault-PTE lookup and VM page maintenance across split/shared/large-page cases.",
-          "status": "unassessed",
-          "owner": null,
+          "status": "partial",
+          "owner": "m14_actual_consumer_fix implementation; dispatcher integration; m14_callback_review independent",
           "remaining_c_functions": null,
-          "rust_consumer": null,
-          "next_action": "Reconcile this area with the current matched consumer and already accepted Rust bodies; implement only the actual remaining C behavior.",
+          "rust_consumer": "Canonical Rust remote_flush_tlb_array_cpumask entry calls existing mem_remote_flush_tlb_array_body_result; exact C fallback remains.",
+          "next_action": "Preserve canonical accepted entry; retire remaining outer wrapper/callback bodies and include in next coherent default image, targeted native checks and matching final session.",
           "proof": {
             "implementation": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "partial",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/velocity-intervention-20261023-3/m14-remote-flush/CANONICAL-INTEGRATION.ROOT-RECORD.json",
+                  "sha256": "681464e66c5d316d34281eac34a577a5795b533dee8196312e265e549eb503cb",
+                  "size": 2313
+                }
+              ],
+              "scope": "Complete public entry now canonical Rust; exact fallback and 13Ccallback bodies retained as debt. Source integration is not current image/native retirement."
             },
             "focused_checks": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "partial",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/velocity-intervention-20261023-3/m14-remote-flush/INDEPENDENT-SOURCE-AND-ACTUAL-LEAF-FIXTURE-ACCEPTANCE.ROOT-RECORD.json",
+                  "sha256": "363e2ddc0e1707a75ef55716ae298db1b79fcded1625647f44703ef1bf81f193",
+                  "size": 1065
+                },
+                {
+                  "path": "docs/verification/evidence/velocity-intervention-20261023-3/m14-remote-flush/INDEPENDENT-ACTUAL-PRODUCTION-CONSUMER-ACCEPTANCE.ROOT-RECORD.json",
+                  "sha256": "5bd517d506657593f5a7fab60b1380ace84387c78349ff51cb91312b911c83f6",
+                  "size": 777
+                }
+              ],
+              "scope": "1792 unchanged original-C/Rust forwarding pairs,20arguments,12callbackidentities,8ignoredreturns; actual15commands0/.690091s; realheaderlayouts/PUBLICfallback/selectedleafpartiallink. No actual IRQ/TLB behavior proof."
             },
             "production_link": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "partial",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/velocity-intervention-20261023-3/m14-remote-flush/INDEPENDENT-ACTUAL-PRODUCTION-CONSUMER-ACCEPTANCE.ROOT-RECORD.json",
+                  "sha256": "5bd517d506657593f5a7fab60b1380ace84387c78349ff51cb91312b911c83f6",
+                  "size": 777
+                }
+              ],
+              "scope": "Actual78Rust compile+complete selected GCC9 mem.c ABI/relocation/fullRust partial link independently accepted; exactGCC14/finaldefaultimage/native OPEN."
             },
             "native_validation": {
-              "status": "unassessed",
+              "status": "open",
               "evidence": []
+            }
+          },
+          "prior_assessment_before_remote_flush_slice": {
+            "status": "unassessed",
+            "owner": null,
+            "proof": {
+              "implementation": {
+                "status": "unassessed",
+                "evidence": []
+              },
+              "focused_checks": {
+                "status": "unassessed",
+                "evidence": []
+              },
+              "production_link": {
+                "status": "unassessed",
+                "evidence": []
+              },
+              "native_validation": {
+                "status": "unassessed",
+                "evidence": []
+              }
             }
           }
         },
@@ -2064,6 +2112,19 @@
       "all_executable_bytes": 853351,
       "non_Rust_or_padding_bytes": 173374,
       "qualification": "These are different metrics. C filename attribution is incomplete (779738 bytes unknown/other includingRustCGU filenames); hostGNU2.34 versus producer2.41. Remainder is NOT a Ctotal. Zero classifiedRust from firsttool is unresolved attribution, NOTzeroRust. FullCfunctioncount NULL. Image10972 only; newer sourcecandidate12 notnative. No retirement/native/functionalclosure credit."
+    },
+    {
+      "date": "2026-10-23T21:35:31.422813+00:00",
+      "kind": "M14_PRIVATE_REMOTE_FLUSH_ENTRY_SOURCE_AND_ACTUAL_FORWARDING_INCREMENT",
+      "subgoal": "M14-01-04",
+      "evidence": {
+        "path": "docs/verification/evidence/velocity-intervention-20261023-3/m14-remote-flush/INDEPENDENT-SOURCE-AND-ACTUAL-LEAF-FIXTURE-ACCEPTANCE.ROOT-RECORD.json",
+        "sha256": "363e2ddc0e1707a75ef55716ae298db1b79fcded1625647f44703ef1bf81f193",
+        "size": 1065
+      },
+      "canonical_integrated": false,
+      "C_callback_debt": 13,
+      "practical_check_closures": []
     }
   ]
 }

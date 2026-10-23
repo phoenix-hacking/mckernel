@@ -1,0 +1,17 @@
+--- frozen/run_production_once.py
++++ repaired/run_production_once.py
+@@ -62,12 +62,12 @@
+   return (out/'stdout').read_text()
+  capture('00-production-Rust-compile',argv)
+  obj=O/'mckernel_rust.o';durable['Rust']=ns['hashed'](obj,32<<20);write(P/'COMPILE-OBJECT-RECEIPT.json',dict(scope=r['scope'],status='ACTUAL78_RUST_COMPILE_PASS_OBJECT_HASHED_ONCE_BEFORE_OBSERVERS',object=durable['Rust'],compiler_invocations=1,compiler_join=records[-1],recipe=pin(RF),profile=pin(P/'ACTUAL-PROFILE.json')))
+- rn=nmrows(capture('01-production-Rust-NM',['/usr/bin/nm','-g',str(obj)]));re=nmrows(capture('02-production-Rust-ELF',['/usr/bin/readelf','--wide','--syms',str(obj)]))
++ rn=nmrows(capture('01-production-Rust-NM',['/usr/bin/nm','-g',str(obj)]));rust_elf_rows=nmrows(capture('02-production-Rust-ELF',['/usr/bin/readelf','--wide','--syms',str(obj)]))
+  baseline=nmrows(Path(r['baseline_nm']['path']).read_text());oldU={x[-1] for x in baseline if len(x)>=2 and x[-2]=='U'};newU={x[-1] for x in rn if len(x)>=2 and x[-2]=='U'};expected=r['expected_U_delta'];assert len(oldU)==expected['before'] and len(newU)==expected['after'] and sorted(oldU-newU)==expected['removed'] and sorted(newU-oldU)==expected['added'],(len(oldU),len(newU),oldU-newU,newU-oldU)
+  oldT={x[-1] for x in baseline if len(x)>=3 and x[-2]=='T'};newT={x[-1] for x in rn if len(x)>=3 and x[-2]=='T'};assert not oldT-newT and newT-oldT==set(r['expected_new_exports'])
+  for name in r['expected_new_exports']+r['expected_preserved_exports']:unique(rn,name,{'T'})
+  for name in r['expected_new_exports']:
+-  er=named(re,name);assert len(er)==1 and len(er[0])==8 and er[0][3]=='FUNC' and er[0][4]=='GLOBAL' and er[0][6]!='UND' and int(er[0][2])>0
++  er=named(rust_elf_rows,name);assert len(er)==1 and len(er[0])==8 and er[0][3]=='FUNC' and er[0][4]=='GLOBAL' and er[0][6]!='UND' and int(er[0][2])>0
+  write(P/'ACTUAL-RUST-CONSUMER-RECEIPT.json',dict(scope=r['scope'],status='PASS_ACTUAL78_RUST_CONSUMER_AND_ENTRY_ABI_SYMBOLS_ONLY',object=durable['Rust'],compiler_invocations=1,source_identity=r['source_identity'],source_count=78,expected_T=r['expected_new_exports'],preserved_all_prior_T=True,U_delta=dict(before=len(oldU),after=len(newU),removed=sorted(oldU-newU),added=sorted(newU-oldU)),records=records.copy(),whole_C_TU_default_link_native='OPEN'))
+  texts={}
+  for command in c['commands']:

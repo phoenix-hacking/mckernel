@@ -16,6 +16,24 @@ use crate::rbtree::{rb_first_safe, rb_next_safe, RbNode, RbRoot};
 use crate::string::{strcmp, strcpy, strlen, strstr};
 
 unsafe extern "C" {
+    // C owns the complete vector array; this names its first element only.
+    // No array extent is invented: the immutable header geometry supplies it.
+    #[link_name = "tlb_flush_vector"]
+    static mut MEM_TLB_FLUSH_VECTOR_FIRST: TlbFlushEntry;
+    static mem_remote_tlb_geometry: [CInt; 3];
+    fn mem_tlb_rdtsc_bridge() -> CULong;
+    fn mem_tlb_current_cpu_bridge() -> CInt;
+    fn mem_tlb_get_vector_bridge(type_: CInt) -> CInt;
+    fn mem_tlb_interrupt_cpu_bridge(cpu: CInt, vector: CInt);
+    fn mem_tlb_noirq_lock_bridge(lock_addr: CULong);
+    fn mem_tlb_noirq_unlock_bridge(lock_addr: CULong);
+    fn mem_tlb_atomic_set_bridge(atomic_addr: CULong, value: CInt);
+    fn mem_tlb_atomic_inc_bridge(atomic_addr: CULong);
+    fn mem_tlb_atomic_read_bridge(atomic_addr: CULong) -> CInt;
+    fn mem_tlb_flush_single_bridge(addr: CULong);
+    fn mem_tlb_flush_all_bridge();
+    fn mem_tlb_pause_bridge();
+
     #[link_name = "rusage"]
     static mut RUSAGE: RusageGlobal;
 
@@ -5489,6 +5507,33 @@ pub unsafe extern "C" fn mem_lookup_node_body_result(
     }
 
     phys_to_nid_cb(*ptep & PT_PHYSMASK)
+}
+
+/// Keep the original synchronous TLB request and callback ownership boundary.
+///
+/// # Safety
+/// The caller retains vm and the address array until the existing body returns.
+/// Existing callbacks preserve current-CPU, vector, IRQ and lock semantics. C
+/// owns the shared vector and immutable geometry; no pointer is retained by this
+/// entry beyond the original body, and its integer return remains ignored.
+#[no_mangle]
+pub unsafe extern "C" fn remote_flush_tlb_array_cpumask(
+    vm: *mut ProcessVm, addr: *mut CULong, nr_addr: CInt, cpu_id: CInt,
+) {
+    let geometry = unsafe { core::ptr::read(core::ptr::addr_of!(mem_remote_tlb_geometry)) };
+    let _ = unsafe {
+        mem_remote_flush_tlb_array_body_result(
+            vm, addr, nr_addr, cpu_id,
+            core::ptr::addr_of_mut!(MEM_TLB_FLUSH_VECTOR_FIRST),
+            geometry[0], geometry[1], geometry[2],
+            Some(mem_tlb_rdtsc_bridge), Some(mem_tlb_current_cpu_bridge),
+            Some(mem_tlb_get_vector_bridge), Some(mem_tlb_interrupt_cpu_bridge),
+            Some(mem_tlb_noirq_lock_bridge), Some(mem_tlb_noirq_unlock_bridge),
+            Some(mem_tlb_atomic_set_bridge), Some(mem_tlb_atomic_inc_bridge),
+            Some(mem_tlb_atomic_read_bridge), Some(mem_tlb_flush_single_bridge),
+            Some(mem_tlb_flush_all_bridge), Some(mem_tlb_pause_bridge),
+        )
+    };
 }
 
 #[no_mangle]

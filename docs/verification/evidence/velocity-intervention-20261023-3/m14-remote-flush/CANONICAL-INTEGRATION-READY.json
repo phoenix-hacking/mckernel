@@ -1,0 +1,120 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "READY_ROOT_EXACT_TWO_FILE_ATOMIC_INTEGRATION_NOT_EXECUTED",
+  "copies": [
+    {
+      "canonical_path": "/home/holden/mckernel/kernel/mem.c",
+      "exact_preimage": {
+        "path": "/home/holden/mckernel/kernel/mem.c",
+        "sha256": "bac5d4fb766b5cb80e036457465e215743a1cb31622ff11c5b5b605749f3d7fe",
+        "bytes": 226099
+      },
+      "accepted_private_postimage": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/candidate/kernel/mem.c",
+        "sha256": "7498e7c930a55bdcde5ecd12f4498c47c5573d690355c8f09a7b9f957ffe00a2",
+        "bytes": 226712
+      },
+      "canonical_observed_metadata": {
+        "device": 66306,
+        "inode": 47460747,
+        "nlink": 2,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": "0o644"
+      },
+      "integration": "Stage acceptedbytes into a fresh siblingtemporary, preserve mode, fsyncfile, os.replace canonicalpath, fsyncparent. Do not overwrite currentinode in place; frozen/hardlinkedcopies keep oldbytes."
+    },
+    {
+      "canonical_path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "exact_preimage": {
+        "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+        "sha256": "5b1716af8c1f0381001199ed2332efb58562cb983143b0e58c2658abaabfcb3c",
+        "bytes": 200432
+      },
+      "accepted_private_postimage": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/candidate/kernel/rust/mem_helpers.rs",
+        "sha256": "c0e7f8bd0b117c9b4e0a4e3690ef5ed5cb01bdc6b16f7225de973eba039d72d5",
+        "bytes": 202708
+      },
+      "canonical_observed_metadata": {
+        "device": 66306,
+        "inode": 47460787,
+        "nlink": 2,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": "0o644"
+      },
+      "integration": "Stage acceptedbytes into a fresh siblingtemporary, preserve mode, fsyncfile, os.replace canonicalpath, fsyncparent. Do not overwrite currentinode in place; frozen/hardlinkedcopies keep oldbytes."
+    }
+  ],
+  "all_current_preimages_match": true,
+  "accepted_patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/PRIVATE-REMOTE-FLUSH.patch",
+    "sha256": "8dc28a0c3729a77e702507e33b6cd62ae9c262722c3c4f195c78ccc442ff084b",
+    "bytes": 5900
+  },
+  "active_SDK8_direct_pin_check": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/ACTIVE-SDK8-DIRECT-PIN-CHECK.json",
+    "sha256": "dfdd56b72a2553fce28e229dd70a70ef65a3bbbeed25bee9fb0cc10ecbf3d42b",
+    "bytes": 2348
+  },
+  "active_source_hold_required": false,
+  "physical_retirement_credit": "NONE_FROM_THIS_RECORD",
+  "integration_recipe": {
+    "owner": "ROOT_ONLY",
+    "preflight": "Recheck both canonicalpreimageSHA/bytes and both acceptedpostimageSHA/bytes before anywrite; recheck selectedactiveauthority exacthash/pinabsence or require rootpositivephysicalretirement ifdirectpinappears.",
+    "mutation": "For eachofonlythese2paths: stageacceptedprivatebytesinfsyncedsiblingsamefilesystemtemporarywithoriginalmode, atomicallyreplacecanonicalpath, fsyncparent; no inplaceinode overwrite/nootherpath mutation.",
+    "postflight": "BothcanonicalSHA/bytes mustequalacceptedpostimages; record exact2fileintegrationreceipt. No compiler/root/runtime/Git operation authorized by thisdata. Stop andretain partialstate ifany pre/postcheckfails."
+  },
+  "evidence": {
+    "actual_original_C_Rust_1792pairs_15layout_publicfallback_partiallink": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/expert-fixture-repair-1/ACTUAL-WHOLE-JOIN.json",
+      "sha256": "907504a4cebd37350ae5d73742c8b5a47994855a2d056024a323787a366ccb2f",
+      "bytes": 26064
+    },
+    "actual_78_Rust_T_and_U_delta": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/production-consumer-preparation-1/ACTUAL-RUST-CONSUMER-RECEIPT.json",
+      "sha256": "d3bfcd21e64b89715866a3b2a7ebdcbc6c7f66f4be967b39dd273e08f3787ff5",
+      "bytes": 6066
+    },
+    "actual_complete_GCC9_mem_TU_ABI_reloc_and_fullRust_partiallink": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/production-consumer-preparation-1/expert-observer-correction-1/ACTUAL-PRODUCTION-WHOLE-JOIN.json",
+      "sha256": "72211a29e13036fd6cc0eb96250d42458d80213483fcdc44aa55ea33a010614b",
+      "bytes": 16039
+    },
+    "independent_source_and_actual_leaf_acceptance": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-3/m14-remote-flush/INDEPENDENT-SOURCE-AND-ACTUAL-LEAF-FIXTURE-ACCEPTANCE.ROOT-RECORD.json",
+      "sha256": "363e2ddc0e1707a75ef55716ae298db1b79fcded1625647f44703ef1bf81f193",
+      "bytes": 1065
+    }
+  },
+  "independent_production_acceptance": {
+    "reviewer": "m14_callback_review",
+    "verdict": "PASS_REPORTED_BY_ROOT_ASSIGNMENT",
+    "separate_root_record": null,
+    "qualification": "Root assignment explicitly reports independent actual78Rust/completeGCC9+partial PASS. This worker does not create reviewer acceptance or infer native proof."
+  },
+  "semantic_change": "remote_flush_tlb_array_cpumask publicentry movesfromCtoexistingRustbodydelegator; ignoredreturn/lifetimes/IRQ/currentCPU/locks/callbacksemantics preserved. Cfallbackbody exact under existingMCKERNEL_RUST_MEM_HELPERS defaultselection.",
+  "debt": {
+    "nearby_C_callback_bodies_remaining": 13,
+    "selected_C_callbacks_exposed": 12,
+    "remaining_outer_C_wrapper": "remote_flush_tlb_cpumask",
+    "immutable_C_data": "mem_remote_tlb_geometry constint[3] and existingtlb_flush_vector remain Cowned; declaration/data not runtime Cbody retirement.",
+    "whole_file_retirement": false,
+    "practical_check_closure": false,
+    "exact_GCC14_wholeTU_default_kernel_link": false,
+    "native": false
+  },
+  "preserved_failures": "All originalcaptureimports/kernelmemset/re-shadowing failures and correctedexpert receipts remainunchanged; SDK8callerfamilyclosed separately. No familyreset/replay.",
+  "canonical_writes": 0,
+  "compiler_jobs": 0,
+  "test_jobs": 0,
+  "root_or_Docker_or_runtime_jobs": 0,
+  "CPU_slots_held": 0,
+  "duplicate_dual_container_work": {
+    "plans_read_only": true,
+    "implementation_1_path_exists": false,
+    "implementation_files_written_by_this_worker": 0,
+    "execution": 0
+  }
+}

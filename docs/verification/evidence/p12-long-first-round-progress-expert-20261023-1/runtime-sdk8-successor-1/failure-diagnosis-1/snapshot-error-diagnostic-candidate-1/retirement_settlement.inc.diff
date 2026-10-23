@@ -1,0 +1,34 @@
+--- actual142dsource/retirement_settlement.inc
++++ private-error-only-diagnostic/retirement_settlement.inc
+@@ -1,6 +1,12 @@
+ /* Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+  * Observe settlement before the strict gate mutates its PID/token ledgers.
+  * Readiness never grants app, ownership, work or retirement acceptance. */
++/* Error-only retained syscall facts. No acceptance or retry authority. */
++static struct {
++    int valid,n,errno_after,pid0,pid1;
++    size_t bound;
++    unsigned round;
++} pair_settlement_snapshot_error;
+ static int pair_round_retirement_ready(const char *log)
+ {
+     int seen[2]={0,0};unsigned attempts[2]={0,0},tokens_used=0;
+@@ -43,7 +49,17 @@
+         uint64_t before=now_ns();
+         if(!before || before<previous || before>=deadline)return -1;
+         int n=long_kernel_snapshot(log,capacity-1);
+-        if(n<=0 || (size_t)n>=capacity-1)return -1;
++        int snapshot_errno=errno;
++        if(n<=0 || (size_t)n>=capacity-1) {
++            pair_settlement_snapshot_error.valid=1;
++            pair_settlement_snapshot_error.n=n;
++            pair_settlement_snapshot_error.errno_after=snapshot_errno;
++            pair_settlement_snapshot_error.bound=capacity-1;
++            pair_settlement_snapshot_error.round=pair_active_round;
++            pair_settlement_snapshot_error.pid0=pair_results[0].pid;
++            pair_settlement_snapshot_error.pid1=pair_results[1].pid;
++            return -1;
++        }
+         log[n]=0;
+         int ready=pair_round_retirement_ready(log);
+         uint64_t after=now_ns();

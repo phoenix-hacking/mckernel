@@ -1,0 +1,72 @@
+{
+  "CPU0_reservation_released": true,
+  "Docker_root_compiler_build_guest": false,
+  "actual_compile": null,
+  "actual_release": null,
+  "actual_root_admission": null,
+  "argv": [
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--fsize=16777216",
+    "--nofile=128",
+    "--core=0",
+    "--",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "45s",
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/test_compile_owner.py"
+  ],
+  "first_test_failure": null,
+  "fixture": {
+    "bytes": 16992,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/test_compile_owner.py",
+    "sha256": "eee51f34f08d7e2003fb3d4128608b5106021c6f84d8b70dc64f94a0931f5260"
+  },
+  "granted_once_CPU0": true,
+  "helper": {
+    "bytes": 39351,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile_host_helper.py",
+    "sha256": "8ffc9a09e2f2e9e9c9cc09af559d707bf6c4b989fc4f9d3ad51fe88a8e5b6083"
+  },
+  "outer_tool_wall_seconds": 0.601072256,
+  "owner": {
+    "bytes": 111651,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile_image_owner.py",
+    "sha256": "8cd5a1948fc973461e15c17cdea604932b723f839f00646ec7df35c31647d555"
+  },
+  "preserved_source_finding": "ENTRYPOINT-CORRECTION.json; preimage omitted __main__, corrected before granted job",
+  "profile": {
+    "bytes": 2095,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/COMPILE-PROFILE.json",
+    "sha256": "9b78e4ec49f163a333a3fd7e9cf0dc6b05dbdc097a0b785c20cf741aaa6e23fa"
+  },
+  "real_entrypoint_child": "subprocess.run direct-joined; nonzero NULL-release refusal; lease/attempt/output/evidence remain absent",
+  "request": {
+    "bytes": 26525773,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile-request.PREPARED.json",
+    "sha256": "92bcb96713c498bf2397bb24c3473a2ffbeb61f45dfa423a6ae8b99f4a4ffe4f"
+  },
+  "returncode": 0,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE_ONLY_FAKE_BACKEND_AND_REAL_NULL_ADMISSION_ENTRYPOINT",
+  "stderr": {
+    "bytes": 1569,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/fixture-actual-1.stderr",
+    "sha256": "468a6df2b2e0358519d6adda1365451bc068fb272feed54017e1c2f5a02ff5c9"
+  },
+  "stdout": {
+    "bytes": 0,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/fixture-actual-1.stdout",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "test_methods": 19,
+  "unittest_seconds": 0.367
+}

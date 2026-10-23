@@ -1,0 +1,187 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "NO_GO_UNCHANGED_OWNER; CONDITIONAL_GO_PRIVATE_SINGLE_CPU_COMPILE_LINK_SUCCESSOR_AFTER_INDEPENDENT_REVIEW",
+  "current_LONG_must_wait": false,
+  "native_guests_authorized_by_this_plan": 0,
+  "facts": {
+    "observed_utc": "2026-10-23T21:38:34Z",
+    "MemAvailable_bytes": 27381039104,
+    "MemAvailable_GiB": 25.500579833984375,
+    "allowed_CPUs": [
+      0,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "HOST_free_bytes": 169268224000,
+    "scratch_free_bytes": 14101286912,
+    "backing_size": 118111600640,
+    "backing_unallocated_gap_bytes": 15838826496,
+    "observation": "ordinary filesystem/proc reads only; no Docker/root/probe/test/build/guest/control/cleanup/resize executed"
+  },
+  "saved_caps_read_once": {
+    "path": "/home/holden/mckernel/.git/os-autopilot/state.json",
+    "settings.resources": {
+      "profile": "aggressive",
+      "max_agents": 11,
+      "build_jobs": 7,
+      "memory_gib": 22.52585220336914,
+      "heavy_jobs": 1,
+      "memory_reserve_gib": 4,
+      "cpu_affinity": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "planning_only": "saved capacity is not fresh admission"
+  },
+  "topology": {
+    "P12": {
+      "cpuset": "2-5",
+      "cpus": 4,
+      "memory_GiB": 12,
+      "swap_extra": 0,
+      "pids": 512,
+      "native_global_mutex": "/run/lock/mckernel-development.lock permanent dev27:ino4; untouched",
+      "control_CPU": 7,
+      "heavy_jobs": 1
+    },
+    "M14": {
+      "cpuset": "6",
+      "cpus": 1,
+      "memory_GiB": 4,
+      "swap_extra": 0,
+      "pids": 128,
+      "jobs": 1,
+      "controller_CPU": 6,
+      "control_class": "exact independently reviewed build-only exception; never a second native/heavy owner",
+      "HOST_work_root": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/compile-link-attempt-1/work",
+      "lease_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/compile-link-attempt-1/compile-only.lease.json",
+      "scratch_writes": false,
+      "native_IHK_QEMU_device_control": false,
+      "additional_CPU6_compiler_overlap": false
+    },
+    "CPU0": "retain for foreground ordinary source/observers; do not take by default",
+    "two_CPU_option": "not selected: no speed evidence justifies displacing foreground CPU0 or another2GiB"
+  },
+  "memory_admission": {
+    "P12_max_GiB": 12,
+    "M14_cgroup_max_GiB": 4,
+    "P12_controller_allowance_GiB": 2,
+    "M14_controller_allowance_GiB": 2,
+    "host_reserve_GiB": 4,
+    "conservative_MemAvailable_floor_GiB": 24,
+    "floor_pass_at_snapshot": true,
+    "reason": "Conservative gross reservation intentionally does not subtract already resident P12 pages. Container tmpfs/page cache charged within its4GiB; HOST source is disk-backed. Other local compiler work must stop/join; no independent allocation of agent shares. Fresh snapshot immediately before launch required."
+  },
+  "existing_inputs": {
+    "request": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/next-build-preparation-1/image-request.PREPARED.json",
+      "bytes": 26526057,
+      "sha256": "d68b8cc32ecc2f76f3446ffe78001852f3de6420bd1c857bf616d4076d5b4b90"
+    },
+    "owner": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/next-build-preparation-1/native_rust_exact_mckernel_image_container_owner.py",
+      "bytes": 93046,
+      "sha256": "172d38fd9e04125aa8f1ba9d6e8b4f1b8a5e7970058c25c941e6feb1908ef3fe"
+    },
+    "driver": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/native_rust_exact_mckernel_image_offline.py",
+      "bytes": 190811,
+      "sha256": "7d30085edda4d1272f923b19e8632e9ab8b259874623974c2da53dbe4c3c5be0"
+    },
+    "source_manifest": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/source-materialization-attempt-1/source-inputs.json",
+      "bytes": 10195266,
+      "sha256": "bf3096e00f9f176c308604332ac276abc30c2576b2c7c3052c837ccf7e640b47"
+    },
+    "image_id": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+    "source_root": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/source-materialization-attempt-1/materialized-source",
+    "toolchain_manifest": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/image-toolchain.json",
+    "kernel_rebuild": false,
+    "driver_change_required_for_jobs1": false,
+    "native_fork_owned_transaction": "compile-time functionality opt-in; preserve True, not a native guest launch"
+  },
+  "required_source_changes": [
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/next-build-preparation-1/native_rust_exact_mckernel_image_container_owner.py",
+      "destination": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/native_rust_exact_mckernel_image_container_owner.COMPILE_ONLY.PENDING.py",
+      "changes": [
+        "Bind exact reviewed build-only exception identity; no generic runtime opt-out flag. Keep canonical image/heavy/native owners unchanged.",
+        "Replace LIMITS/RESOURCE_ARGS and effective profile validation together:1CPU6/4GiB/MemorySwap4GiB/pids128. Require jobs==1.",
+        "Replace image-run global-heavy acquisition with exact compile-only O_EXCL lease under private HOST attempt, bound to live P12 owner identity and reviewed concurrent exception. Keep fresh unique common/output lease and direct child/container retirement. This is a reviewed classification/admission change, never an unlink/bypass of27:4 or existing heavy token.",
+        "Do not enter the legacy outer guard guarded_execute that takes the native development mutex for the whole image build. Use the exact build-only ordinary operation instead, only after independent acceptance of absence of native/device/scratch mutation.",
+        "Replace request aggregate==12GiB/launcher16.2158 assumptions with explicit shared accounting:12+4+2+2+4=24GiB conservative fresh MemAvailable floor; preserve larger existing packet disk reservations.",
+        "Keep all source/toolchain/GCC14/image/ABI/default-link checks and artifact/retirement checks. Preserve no-network/read-only/no capabilities/no devices; sole writable bind private HOST work. No IHK/QEMU/module/device paths."
+      ]
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/next-build-preparation-1/image-request.PREPARED.json",
+      "destination": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/image-request.COMPILE_ONLY.PENDING.json",
+      "changes": [
+        "Fresh private HOST attempt/output/evidence/cache/common/lease paths; jobs1; aggregate4GiB plus explicit shared reservation tuple; new owner/hash and exact operation binding.",
+        "Preserve candidate14 source/manifest/GCC14 image/toolchain/kernel inputs read-only. No rebuilding Linux or downloading/installing toolchain. No writable shared cache; cache/temp private /work/cache or bounded container/tmp."
+      ]
+    }
+  ],
+  "ordinary_capture_reuse": {
+    "source": "/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py",
+    "sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8",
+    "usage": "Reuse owned_capture direct-child/join/group-gone/closed-stream receipt logic as current CPU6 consumer does. A finite compiler-only operation needs its own reviewed wall/CPU bounds; do not reuse90s selected-TU bounds for whole image or attach a destructive outer timeout to active P12."
+  },
+  "planned_next_files_not_created": [
+    "native_rust_exact_mckernel_image_container_owner.COMPILE_ONLY.PENDING.py",
+    "image-request.COMPILE_ONLY.PENDING.json",
+    "COMPILE-LINK-PROFILE.PENDING.json",
+    "COMPILE-LINK-OPERATION.PENDING.json",
+    "capture_compile_link.PENDING.py"
+  ],
+  "planned_owner_argv_not_executable_yet": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/native_rust_exact_mckernel_image_container_owner.COMPILE_ONLY.PENDING.py",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/image-request.COMPILE_ONLY.PENDING.json"
+  ],
+  "container_profile_argv_fragment": [
+    "--cpus=1",
+    "--cpuset-cpus=6",
+    "--memory=4g",
+    "--memory-swap=4g",
+    "--pids-limit=128",
+    "--network=none",
+    "--ipc=private",
+    "--user",
+    "1000:1000",
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges",
+    "--read-only",
+    "--tmpfs",
+    "/tmp:rw,nodev,nosuid,size=256m"
+  ],
+  "preconditions": [
+    "m14_actual_consumer_fix CPU6 direct child joined/group gone/streams closed and root explicitly reassigns ordinaryCPU6 grant. No competing CPU6 compiler.",
+    "Independent source/profile review accepts this exact compiler-only exception, immutable owner/request/capture/argv and total accounting; existing heavy_jobs1 policy retained.",
+    "Fresh capacity >=24GiB MemAvailable and existing stronger HOST/scratch full-sparse-gap/output/capture/emergency floors. Preserve16GiB HOST and12GiB scratch minima.",
+    "Read-only binding to live P12 identity; never require/rewrite its live postjoin/heavy/native ownership as absent. Any uncertainty stops the new M14 lane only.",
+    "Exact readonly bind allowlist and sole HOST output/cache verified through Docker inspect before start; immutable GCC14 image and retained kernel/toolchain identities.",
+    "Default full image completed and checked artifact is compile/link evidence only; M14 native acceptance remains serialized later."
+  ],
+  "fallback": "If the exception cannot be reviewed promptly, continue existing CPU6 productionRust/GCC9 ordinary work and defer full GCC14/default-image build until P12 normal terminal/physical acceptance. Do not delay or interrupt LONG for this task."
+}

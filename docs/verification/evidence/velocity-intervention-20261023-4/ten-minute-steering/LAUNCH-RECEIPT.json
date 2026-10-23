@@ -1,0 +1,27 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "authorization": "Explicit user ten-minute steering and dispatcher21:58:24 post-pass grant",
+  "at": "2026-10-23T22:00:46.302143+00:00",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=268435456:268435456",
+    "--fsize=33554432:33554432",
+    "--nofile=128:128",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/ten-minute-steering/steer_every_ten_minutes.py",
+    "--run"
+  ],
+  "main_sha256": "231af6003652e9596c35415823cda65178978e8569842e6903869a3af4e4373b",
+  "test_result": "14PASS",
+  "status": "process_started",
+  "pid": 3938622,
+  "start_ticks": "59029100",
+  "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb"
+}

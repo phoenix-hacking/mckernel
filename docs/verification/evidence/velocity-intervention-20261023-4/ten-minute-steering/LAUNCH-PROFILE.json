@@ -1,0 +1,51 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FINAL_PREPARED_PARENT_LAUNCH_ONLY",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=268435456:268435456",
+    "--fsize=33554432:33554432",
+    "--nofile=128:128",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/ten-minute-steering/steer_every_ten_minutes.py",
+    "--run"
+  ],
+  "cpu_affinity": [
+    0
+  ],
+  "AS_bytes": 268435456,
+  "NOFILE": 128,
+  "FSIZE_bytes": 33554432,
+  "core_bytes": 0,
+  "lifetime_CPU_time_limit": null,
+  "inherited_CPU_time_limits_required": "unlimited",
+  "poll_seconds": 15,
+  "review_interval_seconds": 600,
+  "fresh_heartbeat_max_age_seconds": 120,
+  "bounded_outputs": "snapshot/current+previous each about17KiB; eventlogs current+previous <=1MiB; compact privatejournal and processreceipt",
+  "one_instance_lock": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/ten-minute-steering/supervisor.lock",
+  "first_queue": "Immediate if exact thread/activegoal/freshheartbeat/nohold and queueempty; otherwise stop or backlogwait. Each later queue >=600s after priorqueue.",
+  "expected_immediate_private_artifacts": [
+    "supervisor.lock",
+    "supervisor.json (pid,start_ticks,boot_id,script_path)",
+    "snapshot.json",
+    "journal.json",
+    "events.jsonl"
+  ],
+  "expected_queue_artifact": "/home/holden/mckernel/.git/os-autopilot/instructions/pending/<existing queue_instruction id>.json (may move rapidly to sending/delivered under existing launcher)",
+  "canonical_state_changes": "None by monitor. Existing launcher may update last_instruction after delivering request.",
+  "optional_stop_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/ten-minute-steering/stop_supervisor.py"
+  ],
+  "stop_helper_test_status": "SOURCE_ONLY_NOT_EXECUTED"
+}

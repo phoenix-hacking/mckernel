@@ -1,0 +1,772 @@
+--- /home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/next-build-preparation-1/native_rust_exact_mckernel_image_container_owner.py
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile_image_owner.py
+@@ -3,8 +3,8 @@
+ 
+ This module is an admission/transport boundary around the offline image
+ driver.  It does not relocate sources, install software, or perform a guest
+-operation.  A real invocation creates exactly one private, read-only-root
+-container under the reviewed 4 CPU/12 GiB lease; tests inject a fake Docker
++operation.  A root-released invocation creates exactly one private compile-only, read-only-root
++container on CPU6/1CPU/4GiB under its separate HOST lease; tests inject a fake Docker
+ transport and never contact Docker.
+ """
+ from __future__ import annotations
+@@ -32,13 +32,13 @@
+ OWNER_RECEIPT_NAME = "owner-receipt.json"
+ EXPECTED_DRIVER_SHA256 = '7d30085edda4d1272f923b19e8632e9ab8b259874623974c2da53dbe4c3c5be0'
+ EXPECTED_PROVENANCE_SHA256 = '453dd998e4ef1e2ed21b0818771d97197d77f98c90ca8c6c67cc8ab019063044'
+-EXPECTED_HOST_OWNER_SHA256 = "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
++EXPECTED_HOST_OWNER_SHA256 = '8ffc9a09e2f2e9e9c9cc09af559d707bf6c4b989fc4f9d3ad51fe88a8e5b6083'
+ EXPECTED_HEAVY_ENTRY_CONTRACT_SHA256 = "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1"
+ # The image owner advances with the image-candidate namespace.  Keep consumed
+ # exclusions explicit: accepting one of these would allow a request to race a
+ # retired build candidate.  Tests may replace COMMON_EXCLUSION with a private
+ # fixture, so the rejection list remains separate from the active value.
+-COMMON_EXCLUSION = '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1/common-exclusion.json'
++COMMON_EXCLUSION = '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/operation-1/compile-lease.json'
+ RETIRED_COMMON_EXCLUSIONS = frozenset(
+     "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-" + suffix + ".json"
+     for suffix in (
+@@ -82,12 +82,12 @@
+ RETIRED_COMMON_EXCLUSIONS = RETIRED_COMMON_EXCLUSIONS | frozenset(('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-13/default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1/common-exclusion.json',))
+ 
+ LIMITS = {
+-    "NanoCpus": 4_000_000_000, "CpusetCpus": "2-5",
+-    "Memory": 12 * 2**30, "MemorySwap": 12 * 2**30,
+-    "PidsLimit": 512, "NetworkMode": "none",
++    "NanoCpus": 1_000_000_000, "CpusetCpus": "6",
++    "Memory": 4 * 2**30, "MemorySwap": 4 * 2**30,
++    "PidsLimit": 128, "NetworkMode": "none",
+ }
+-RESOURCE_ARGS = ("--cpus=4", "--cpuset-cpus=2-5", "--memory=12g",
+-                 "--memory-swap=12g", "--pids-limit=512")
++RESOURCE_ARGS = ("--cpus=1", "--cpuset-cpus=6", "--memory=4g",
++                 "--memory-swap=4g", "--pids-limit=128")
+ MAX_TIMEOUT = 19_800
+ LAUNCHER_AGGREGATE_GIB = "16.2158"
+ LAUNCHER_AGGREGATE_BYTES = int(Decimal(LAUNCHER_AGGREGATE_GIB) * 2**30)
+@@ -128,38 +128,6 @@
+ RETIRED_COMMON_EXCLUSIONS = RETIRED_COMMON_EXCLUSIONS | frozenset(('/home/holden/mckernel-work/scratch/native-fp-copy-image-preparation-20261018-1/preparation-commands-1/common-exclusion-084cffb0413a4275bfdd66e3fd6c3368.json',))
+ 
+ 
+-def _load_heavy_entry_contract(path=None, expected_sha256=None):
+-    """Execute the authenticated regular-file bytes of the shared contract.
+-
+-    Importlib is deliberately avoided: a loader may consult a cache or follow
+-    a changed path after authentication.  The path and identity are checked
+-    both before and after the single byte read, then those exact bytes are
+-    compiled and executed.
+-    """
+-    path = (Path('/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_disk_build_wrapper.py')
+-            if path is None else Path(path))
+-    expected_sha256 = (EXPECTED_HEAVY_ENTRY_CONTRACT_SHA256
+-                       if expected_sha256 is None else expected_sha256)
+-    if not (path.is_absolute() and path.is_file() and not path.is_symlink()):
+-        raise OwnerError("shared heavy-entry contract is not a regular source file")
+-    current = Path(path.anchor)
+-    for component in path.parts[1:]:
+-        current /= component
+-        if current.is_symlink():
+-            raise OwnerError("shared heavy-entry contract has symlink parent")
+-    before = os.lstat(path)
+-    data = path.read_bytes()
+-    after = os.lstat(path)
+-    identity = lambda row: (row.st_dev, row.st_ino, row.st_size, row.st_mode)
+-    if identity(before) != identity(after):
+-        raise OwnerError("shared heavy-entry contract identity changed during import")
+-    if hashlib.sha256(data).hexdigest() != expected_sha256:
+-        raise OwnerError("shared heavy-entry contract hash mismatch")
+-    module = types.ModuleType("_mckernel_exact_heavy_entry_contract")
+-    module.__file__ = str(path)
+-    module.__package__ = ""
+-    exec(compile(data, str(path), "exec"), module.__dict__)
+-    return module
+ 
+ 
+ def _load_reviewed_host_owner(path, host_sha256=None, provenance_path=None,
+@@ -214,7 +182,7 @@
+         sys.modules.pop(package_name, None)
+ 
+ 
+-_HOST_OWNER_PATH = Path('/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_build_container_owner.py')
++_HOST_OWNER_PATH = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile_host_helper.py')
+ _HOST_OWNER = _load_reviewed_host_owner(
+     _HOST_OWNER_PATH, EXPECTED_HOST_OWNER_SHA256,
+     Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/native_rust_exact_build_offline.py'),
+@@ -225,7 +193,7 @@
+     pass
+ 
+ 
+-_SHARED_HEAVY_ENTRY_CONTRACT = _load_heavy_entry_contract()
++
+ 
+ 
+ def _gitlink_rows(raw, tree=False):
+@@ -984,6 +952,7 @@
+ RETIRED_COMMON_EXCLUSIONS = RETIRED_COMMON_EXCLUSIONS | frozenset(('/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/production-preflight-correction-preparation-1/full-image-attempt-2/common-exclusion.json',))
+ 
+ def _validate_request(request):
++    _validate_compile_domain(request)
+     _fail(isinstance(request, dict) and request.get("schema") == REQUEST_SCHEMA,
+           "request schema")
+     _fail(isinstance(request.get("native_fork_owned_transaction", False), bool),
+@@ -1261,38 +1230,12 @@
+             "lease": lease}
+ 
+ 
+-class CommonExclusion:
+-    def __init__(self, path, request):
+-        self.path = Path(path); self.request = request; self.record = None
+-
+-    def acquire(self):
+-        self.path.parent.mkdir(parents=True, exist_ok=True)
+-        self.record = {"schema": "mckernel.native-exact-operational-exclusion.v1",
+-                       "pid": os.getpid(), "starttime": _proc_starttime(os.getpid()),
+-                       "boot_id": Path("/proc/sys/kernel/random/boot_id").read_text().strip(),
+-                       "request_sha256": hashlib.sha256(json.dumps(self.request, sort_keys=True).encode()).hexdigest()}
+-        try:
+-            fd = os.open(self.path, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+-        except FileExistsError as exc:
+-            raise OwnerError("common exclusion exists; reconciliation required") from exc
+-        identity = os.fstat(fd)
+-        self.record.update({"dev": identity.st_dev, "inode": identity.st_ino})
+-        payload = (json.dumps(self.record, sort_keys=True) + "\n").encode()
+-        offset = 0
+-        try:
+-            while offset < len(payload):
+-                written = os.write(fd, payload[offset:])
+-                _fail(isinstance(written, int) and written > 0, "common exclusion short write")
+-                offset += written
+-            os.fsync(fd)
+-        finally:
+-            os.close(fd)
+-        _fsync_dir(self.path.parent)
+ 
+ 
+ def _check_profile(info, image, nonce, mounts=None, command=None, user=None,
+                    host_owner=None):
+     (host_owner or _HOST_OWNER).check_profile(info, image, nonce)
++    _fail(info.get("Config", {}).get("Labels", {}).get("mckernel.operation") == COMPILE_PROFILE["operation"], "compile operation label mismatch")
+     config = info.get("Config", {})
+     if command is not None:
+         _fail(config.get("Entrypoint") == ["/usr/bin/python3"] and config.get("Cmd") == command,
+@@ -1462,6 +1405,376 @@
+                                    request["ihk_sha"], source_tools["git"])
+ 
+ 
++COMPILE_PROFILE = {'activation': 'COMPILE_LINK_ONLY_NO_GUEST_OR_KERNEL_ACTIVATION', 'admission_max_age_ns': 120000000000, 'container_name': 'mckernel-m14-compile-95f3c1f79ec040ddbb7065ff9f5ca536', 'driver_sha256': '7d30085edda4d1272f923b19e8632e9ab8b259874623974c2da53dbe4c3c5be0', 'host_helper_sha256': '8ffc9a09e2f2e9e9c9cc09af559d707bf6c4b989fc4f9d3ad51fe88a8e5b6083', 'image_id': 'sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5', 'jobs': 1, 'lease_path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/operation-1/compile-lease.json', 'limits': {'CpusetCpus': '6', 'Memory': 4294967296, 'MemorySwap': 4294967296, 'NanoCpus': 1000000000, 'NetworkMode': 'none', 'PidsLimit': 128}, 'materialization_sha256': '3c0c7e48058afda716d622056cc555b027d27177d5019499cab992f74899dc7f', 'minimum_MemAvailable': 25769803776, 'namespace': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/operation-1', 'operation': 'M14_CANDIDATE14_HOST_COMPILE_LINK_ONLY_V1', 'owner_nonce': '95f3c1f79ec040ddbb7065ff9f5ca536', 'provenance_sha256': '453dd998e4ef1e2ed21b0818771d97197d77f98c90ca8c6c67cc8ab019063044', 'reserved_native_profile': {'CpusetCpus': '2-5', 'Memory': 12884901888, 'MemorySwap': 12884901888, 'NanoCpus': 4000000000, 'NetworkMode': 'none', 'PidsLimit': 512}, 'schema': 'mckernel.m14-candidate14-compile-link-profile.v1', 'sole_rw_mount_target': '/work', 'source_derivative_sha256': 'caa690b06ff078828ecab2ae9d70adfd98072073be2acae7955efd8a48bce3ba', 'source_manifest_sha256': 'bf3096e00f9f176c308604332ac276abc30c2576b2c7c3052c837ccf7e640b47', 'source_root': '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/source-materialization-attempt-1/materialized-source', 'toolchain_manifest_sha256': 'a68e02b3b66b8bfbae96bf742dc8702b6e81dd97b92189b87437c3d08fccdf72'}
++COMPILE_PROFILE_PATH = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/COMPILE-PROFILE.json')
++COMPILE_PROFILE_SHA256 = '9b78e4ec49f163a333a3fd7e9cf0dc6b05dbdc097a0b785c20cf741aaa6e23fa'
++PRIVATE_ROOT = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate')
++
++
++def _canonical_hash(document):
++    return hashlib.sha256(json.dumps(document, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()).hexdigest()
++
++
++def _request_core_hash(request):
++    return _canonical_hash({k: v for k, v in request.items() if k != "compile_only_release"})
++
++
++def _validate_compile_domain(request):
++    """One fixed HOST compile domain; never a native-owner exemption switch."""
++    _fail(isinstance(request, dict), "compile request must be an object")
++    _fail(request.get("compile_operation") == COMPILE_PROFILE["operation"], "compile domain mismatch")
++    _fail(request.get("compile_profile_sha256") == COMPILE_PROFILE_SHA256 and
++          _sha256(COMPILE_PROFILE_PATH) == COMPILE_PROFILE_SHA256, "compile profile changed")
++    _fail(_load_json(COMPILE_PROFILE_PATH, "compile profile") == COMPILE_PROFILE, "compile profile bytes differ")
++    _fail(LIMITS == COMPILE_PROFILE["limits"] and _HOST_OWNER.LIMITS == LIMITS,
++          "private compile owner/helper limits differ")
++    _fail(request.get("jobs") == 1 and request.get("aggregate_memory_required") == LIMITS["Memory"],
++          "compile jobs/aggregate profile mismatch")
++    _fail(request.get("native_fork_owned_transaction") is True,
++          "candidate14 build configuration selection changed")
++    for key in ("source_root", "source_manifest_sha256", "source_derivative_sha256",
++                "materialization_sha256", "driver_sha256", "provenance_sha256",
++                "toolchain_manifest_sha256", "image_id"):
++        _fail(request.get(key) == COMPILE_PROFILE[key], "fixed candidate14 input differs: " + key)
++    root = Path(COMPILE_PROFILE["namespace"])
++    expected = {"work_root": root / "owner-work", "output_root": root / "owner-work/output",
++                "evidence_root": root / "owner-work/evidence", "owner_evidence_root": root / "owner-evidence",
++                "attempt_root": root / "owner-evidence/attempt", "lease_path": root / "compile-lease.json",
++                "common_exclusion_path": root / "compile-lease.json",
++                "host_owner_path": _HOST_OWNER_PATH}
++    _fail(root.parent == PRIVATE_ROOT, "compile namespace escapes private candidate")
++    for key, path in expected.items():
++        _fail(request.get(key) == str(path), "compile HOST path differs: " + key)
++        _no_symlink_parents(path, "compile HOST path")
++    _fail(request.get("host_owner_sha256") == EXPECTED_HOST_OWNER_SHA256 == COMPILE_PROFILE["host_helper_sha256"],
++          "private compile helper binding differs")
++    _fail(root.stat().st_dev == PRIVATE_ROOT.stat().st_dev and
++          Path(request["work_root"]).stat().st_dev == PRIVATE_ROOT.stat().st_dev,
++          "compile outputs must stay on the private HOST filesystem")
++    return expected
++
++
++def _read_root_document(ref, exact_path, label):
++    _fail(isinstance(ref, dict) and set(ref) == {"path", "sha256"} and
++          ref.get("path") == str(exact_path) and re.fullmatch(r"[0-9a-f]{64}", ref.get("sha256", "")),
++          label + " reference missing or differs")
++    _no_symlink_parents(exact_path, label)
++    before = os.lstat(exact_path)
++    _fail(stat.S_ISREG(before.st_mode) and before.st_uid == 0 and before.st_nlink == 1 and
++          not stat.S_IMODE(before.st_mode) & 0o022 and before.st_size <= 2**20,
++          label + " must be a sealed root-owned regular file")
++    raw = exact_path.read_bytes()
++    after = os.lstat(exact_path)
++    _fail((before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns, before.st_ctime_ns) ==
++          (after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns, after.st_ctime_ns), label + " changed during read")
++    _fail(hashlib.sha256(raw).hexdigest() == ref["sha256"], label + " hash mismatch")
++    document = json.loads(raw)
++    _fail(isinstance(document, dict), label + " must be an object")
++    return document
++
++
++def _boottime_ns():
++    return time.clock_gettime_ns(time.CLOCK_BOOTTIME)
++
++
++def _mem_available():
++    return int(next(row.split()[1] for row in Path("/proc/meminfo").read_text().splitlines()
++                    if row.startswith("MemAvailable:"))) * 1024
++
++
++def _validate_launch_admission(request):
++    """Fail closed until root binds actual live P12 facts and source review."""
++    _validate_compile_domain(request)
++    release = _read_root_document(request.get("compile_only_release"), PRIVATE_ROOT / "ROOT-RELEASE.json", "compile release")
++    _fail(release.get("status") == "RELEASED_FOR_ONE_COMPILE_ONLY_CANDIDATE14" and
++          release.get("operation") == COMPILE_PROFILE["operation"] and
++          release.get("request_core_sha256") == _request_core_hash(request) and
++          release.get("profile_sha256") == COMPILE_PROFILE_SHA256 and
++          release.get("owner_sha256") == _sha256(Path(__file__)) and
++          release.get("host_helper_sha256") == EXPECTED_HOST_OWNER_SHA256,
++          "root compile release bindings differ")
++    _fail(isinstance(release.get("independent_source_review_sha256"), str) and
++          re.fullmatch(r"[0-9a-f]{64}", release["independent_source_review_sha256"]),
++          "independent source review binding missing")
++    facts = _read_root_document(release.get("root_admission"), PRIVATE_ROOT / "ROOT-ADMISSION.json", "root live admission")
++    _fail(facts.get("schema") == "mckernel.m14-candidate14-dual-container-admission.v1" and
++          facts.get("operation") == COMPILE_PROFILE["operation"] and
++          facts.get("request_core_sha256") == _request_core_hash(request) and
++          facts.get("profile_sha256") == COMPILE_PROFILE_SHA256,
++          "root live admission bindings differ")
++    _fail(facts.get("cpu6_consumer_joined") is True and facts.get("P12_sole_native_heavy") is True,
++          "CPU6/native lane prerequisites missing")
++    _fail(facts.get("compile_limits") == LIMITS and
++          facts.get("P12_limits") == COMPILE_PROFILE["reserved_native_profile"],
++          "concurrent resource reservation differs")
++    _fail(facts.get("capacity_verdict") == "PASS_DUAL_CONTAINER_COMPILE_CPU6_4G" and
++          facts.get("controller_allowance_reviewed") is True and
++          facts.get("native_cgroups_unchanged") is True, "concurrent capacity/controller agreement missing")
++    for available, required in (("HOST_available", "HOST_required"), ("scratch_available", "scratch_required")):
++        _fail(type(facts.get(available)) is int and type(facts.get(required)) is int and
++              facts[required] >= (16 if available == "HOST_available" else 12) * 2**30 and
++              facts[available] >= facts[required], "concurrent disk capacity admission differs")
++    p12 = facts.get("P12")
++    _fail(isinstance(p12, dict) and set(p12) == {"id", "name", "owner_label_key", "owner_label_value", "config_sha256", "host_config_sha256"},
++          "root P12 identity binding missing")
++    _fail(re.fullmatch(r"[0-9a-f]{64}", p12.get("id", "")) and
++          isinstance(p12.get("name"), str) and p12["name"].startswith("/") and
++          p12["name"] != "/" + COMPILE_PROFILE["container_name"] and
++          isinstance(p12.get("owner_label_key"), str) and p12["owner_label_key"] and
++          isinstance(p12.get("owner_label_value"), str) and p12["owner_label_value"] and
++          all(re.fullmatch(r"[0-9a-f]{64}", p12.get(k, "")) for k in ("config_sha256", "host_config_sha256")),
++          "root P12 identity malformed")
++    roots = facts.get("P12_rw_roots")
++    _fail(isinstance(roots, list) and roots, "root P12 RW domains missing")
++    own = Path(request["work_root"])
++    for raw in roots:
++        _fail(isinstance(raw, str) and Path(raw).is_absolute() and raw == os.path.abspath(raw),
++              "P12 RW domain malformed")
++        other = Path(raw)
++        _fail(own != other and own not in other.parents and other not in own.parents,
++              "compile/P12 output domains overlap")
++    _fresh_compile_resources(facts)
++    return {"release": release, "facts": facts}
++
++
++def _fresh_compile_resources(facts):
++    age = _boottime_ns() - facts.get("observed_boottime_ns", -10**30)
++    _fail(facts.get("boot_id") == Path("/proc/sys/kernel/random/boot_id").read_text().strip() and
++          type(facts.get("observed_boottime_ns")) is int and
++          0 <= age <= COMPILE_PROFILE["admission_max_age_ns"], "root live admission expired or wrong boot")
++    _fail(type(facts.get("MemAvailable")) is int and
++          facts["MemAvailable"] >= COMPILE_PROFILE["minimum_MemAvailable"], "root memory admission below 24GiB")
++    observed = _mem_available()
++    _fail(observed >= COMPILE_PROFILE["minimum_MemAvailable"], "fresh MemAvailable below 24GiB")
++    return {"MemAvailable": observed, "root_admission_age_ns": age, "observed_boottime_ns": _boottime_ns()}
++
++
++def _check_live_p12(docker, facts):
++    expected = facts["P12"]
++    rows = json.loads(docker.call(["inspect", expected["id"]]).stdout)
++    _fail(isinstance(rows, list) and len(rows) == 1, "P12 inspect identity ambiguous")
++    info = rows[0]
++    _fail(info.get("Id") == expected["id"] and info.get("Name") == expected["name"] and
++          info.get("State", {}).get("Running") is True and
++          info.get("Config", {}).get("Labels", {}).get(expected["owner_label_key"]) == expected["owner_label_value"],
++          "P12 identity/state changed")
++    _fail(_canonical_hash(info.get("Config")) == expected["config_sha256"] and
++          _canonical_hash(info.get("HostConfig")) == expected["host_config_sha256"], "P12 effective config changed")
++    _fail(all(info.get("HostConfig", {}).get(k) == v for k, v in COMPILE_PROFILE["reserved_native_profile"].items()),
++          "P12 effective resource reservation changed")
++    return {"id": info["Id"], "name": info["Name"], "config_sha256": expected["config_sha256"],
++            "host_config_sha256": expected["host_config_sha256"], "running": True}
++
++
++class CompileLease:
++    """One exclusively owned HOST record; no native/global record access."""
++    def __init__(self, request):
++        self.path = Path(request["lease_path"])
++        _fail(str(self.path) == COMPILE_PROFILE["lease_path"], "compile lease domain mismatch")
++        self.record = {"schema": "mckernel.m14-candidate14-compile-lease.v1", "operation": COMPILE_PROFILE["operation"],
++                       "pid": os.getpid(), "starttime": _proc_starttime(os.getpid()),
++                       "boot_id": Path("/proc/sys/kernel/random/boot_id").read_text().strip(),
++                       "request_core_sha256": _request_core_hash(request), "profile_sha256": COMPILE_PROFILE_SHA256,
++                       "container_name": COMPILE_PROFILE["container_name"], "owner_nonce": COMPILE_PROFILE["owner_nonce"]}
++
++    def acquire(self):
++        _no_symlink_parents(self.path, "compile lease")
++        fd = os.open(self.path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, "O_NOFOLLOW", 0), 0o600)
++        try:
++            meta = os.fstat(fd)
++            self.record.update(device=meta.st_dev, inode=meta.st_ino)
++            raw = (json.dumps(self.record, sort_keys=True) + "\n").encode()
++            offset = 0
++            while offset < len(raw):
++                written = os.write(fd, raw[offset:])
++                _fail(written > 0, "compile lease short write")
++                offset += written
++            os.fsync(fd)
++        finally:
++            os.close(fd)
++        _fsync_dir(self.path.parent)
++
++    def load_owned(self):
++        _no_symlink_parents(self.path, "compile lease")
++        fd = os.open(self.path, os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0))
++        try:
++            meta = os.fstat(fd)
++            raw = os.read(fd, 1 << 20)
++            current = json.loads(raw)
++            _fail(current == self.record and meta.st_dev == self.record["device"] and
++                  meta.st_ino == self.record["inode"] and meta.st_size == len(raw), "compile lease ownership changed")
++            return raw
++        finally:
++            os.close(fd)
++
++    def release_accepted(self, acceptance):
++        _fail(acceptance.get("status") == "ACCEPTED_COMPILE_ONLY_PHYSICAL_RETIREMENT" and
++              acceptance.get("operation") == self.record["operation"] and
++              acceptance.get("request_core_sha256") == self.record["request_core_sha256"] and
++              acceptance.get("lease_sha256") == hashlib.sha256(self.load_owned()).hexdigest(),
++              "compile lease physical acceptance differs")
++        parent_fd = os.open(self.path.parent, os.O_RDONLY | getattr(os, "O_DIRECTORY", 0) | getattr(os, "O_NOFOLLOW", 0))
++        try:
++            fd = os.open(self.path.name, os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0), dir_fd=parent_fd)
++            try:
++                meta = os.fstat(fd)
++                raw = os.read(fd, 1 << 20)
++                _fail(json.loads(raw) == self.record and meta.st_dev == self.record["device"] and
++                      meta.st_ino == self.record["inode"] and meta.st_size == len(raw), "compile lease changed at release")
++                os.unlink(self.path.name, dir_fd=parent_fd)
++                os.fsync(parent_fd)
++            finally:
++                os.close(fd)
++        finally:
++            os.close(parent_fd)
++
++
++def _assert_owned_container(info, cid=None):
++    _fail(isinstance(info, dict) and re.fullmatch(r"[0-9a-f]{64}", info.get("Id", "")) and
++          info.get("Name") == "/" + COMPILE_PROFILE["container_name"] and
++          (cid is None or info["Id"] == cid) and info.get("Image") == COMPILE_PROFILE["image_id"] and
++          info.get("Config", {}).get("Labels", {}).get("mckernel.owner") == COMPILE_PROFILE["owner_nonce"] and
++          info.get("Config", {}).get("Labels", {}).get("mckernel.operation") == COMPILE_PROFILE["operation"],
++          "refusing lifecycle operation outside exact compiler ownership")
++    _fail(all(info.get("HostConfig", {}).get(k) == v for k, v in LIMITS.items()),
++          "owned compiler resource profile changed")
++    return info["Id"]
++
++
++def _own_inspect(docker, cid=None):
++    target = cid or COMPILE_PROFILE["container_name"]
++    rows = json.loads(docker.call(["inspect", target]).stdout)
++    _fail(isinstance(rows, list) and len(rows) == 1, "owned compiler inspect ambiguous")
++    _assert_owned_container(rows[0], cid)
++    return rows[0]
++
++
++def _own_absence(docker, cid):
++    _fail(re.fullmatch(r"[0-9a-f]{64}", cid or ""), "owned compiler ID missing for absence")
++    rows = []
++    filters = ("id=" + cid, "name=^/" + COMPILE_PROFILE["container_name"] + "$",
++               "label=mckernel.owner=" + COMPILE_PROFILE["owner_nonce"])
++    for value in filters:
++        result = docker.call(["ps", "--all", "--no-trunc", "--filter", value, "--format", "{{.ID}}"])
++        _fail(result.returncode == 0 and not result.stdout.strip() and not result.stderr.strip(),
++              "compiler container absence unproven")
++        rows.append({"filter": value, "returncode": result.returncode, "stdout": result.stdout, "stderr": result.stderr})
++    return rows
++
++
++def _cleanup_owned_compile(docker, attempt, cid=None):
++    """Only captured compiler CID; P12 is never a lifecycle target."""
++    info = _own_inspect(docker, cid)
++    cid = info["Id"]
++    if info.get("State", {}).get("Running") or info.get("State", {}).get("Status") in ("paused", "restarting"):
++        docker.call(["stop", "--time", "15", cid], timeout=30, check=False)
++        info = _own_inspect(docker, cid)
++        if info.get("State", {}).get("Running"):
++            docker.call(["kill", cid], timeout=30)
++        docker.call(["wait", cid], timeout=30)
++        info = _own_inspect(docker, cid)
++    _fail(info.get("State", {}).get("Running") is False and info["State"].get("Pid") == 0 and
++          info["State"].get("Status") in ("exited", "created", "dead"), "owned compiler retirement unproven")
++    logs = docker.call(["logs", cid])
++    _exclusive_text(attempt / "container.log", logs.stdout + logs.stderr)
++    _exclusive_json(attempt / "terminal-before-removal.json", info)
++    _fail(not getattr(docker, "client_retirement_unproven", False), "compiler Docker client retirement unproven")
++    # Reinspect the immutable CID directly before removal; never remove by a reused name.
++    _own_inspect(docker, cid)
++    docker.call(["rm", cid])
++    absence = _own_absence(docker, cid)
++    _fail(not getattr(docker, "client_retirement_unproven", False), "compiler cleanup client retirement unproven")
++    return {"retired": True, "container_id": cid, "container_absence_confirmed": True,
++            "all_docker_clients_joined": True, "terminal_before_removal": info, "absence": absence,
++            "cleanup_separately_required": False, "terminal_container_info": None,
++            "terminal_container_info_current": True, "lease_retained_for_root_acceptance": True}
++
++
++def _compile_mounts(bound):
++    mounts = [(bound["source"], "/src", True), (bound["manifest"], "/inputs.json", True),
++              (bound["gitlink_manifest"], "/libdwarf-inputs.json", True),
++              (bound["gitlink_root"], "/src/executer/user/lib/libdwarf/libdwarf", True),
++              (bound["toolchain"], "/toolchain.json", True), (bound["driver"], "/driver.py", True),
++              (bound["provenance"], "/native_rust_exact_build_offline.py", True),
++              (bound["work"], "/work", False)]
++    _fail(bound["toolchain_schema"].endswith(".v2") and bound["gitlink_root"] is not None,
++          "fixed candidate14 v2/gitlink closure required")
++    mounts += [(root, target, True) for target, root in bound["mounts_by_target"].items()]
++    _fail([(str(src), target) for src, target, ro in mounts if not ro] ==
++          [(str(Path(COMPILE_PROFILE["namespace"]) / "owner-work"), "/work")], "sole HOST RW compile mount differs")
++    _fail(len({target for _, target, _ in mounts}) == len(mounts), "duplicate compile mount target")
++    return mounts
++
++
++def _compile_command(bound, request):
++    return ["/driver.py", "--source-root", "/src", "--candidate-sha", request["candidate_sha"],
++            "--ihk-sha", request["ihk_sha"], "--manifest", "/inputs.json", "--toolchain", "/toolchain.json",
++            "--output", "/work/output", "--evidence", "/work/evidence", "--jobs", "1",
++            "--timeout", str(request["timeout"]), "--gitlink-manifest", "/libdwarf-inputs.json",
++            "--native-fork-owned-transaction"]
++
++
++def _compile_create_args(bound, request):
++    mounts = _compile_mounts(bound)
++    command = _compile_command(bound, request)
++    args = ["create", "--name", COMPILE_PROFILE["container_name"], "--label", "mckernel.owner=" + COMPILE_PROFILE["owner_nonce"],
++            "--label", "mckernel.operation=" + COMPILE_PROFILE["operation"], "--init", "--network=none", "--ipc=private",
++            *RESOURCE_ARGS, "--user", "1000:1000", "--cap-drop=ALL", "--security-opt=no-new-privileges", "--read-only",
++            "--tmpfs", "/tmp:rw,nodev,nosuid,size=256m"]
++    for source, target, readonly in mounts:
++        args += ["--mount", "type=bind,src=" + str(source) + ",dst=" + target + (",readonly" if readonly else "")]
++    args += ["--entrypoint", "/usr/bin/python3", request["image_id"], *command]
++    return args, mounts, command
++
++
++def release_accepted_compile_lease(request, docker=None):
++    """Separate root-approved physical retirement; never a build/native release."""
++    _validate_compile_domain(request)
++    _fail(os.getuid() == os.geteuid() == os.getgid() == os.getegid() == 1000, "ordinary holden release controller required")
++    acceptance_path = PRIVATE_ROOT / "ROOT-PHYSICAL-ACCEPTANCE.json"
++    # Root publishes the exact acceptance hash in a separate root-owned reference.
++    ref_path = PRIVATE_ROOT / "ROOT-PHYSICAL-ACCEPTANCE-REF.json"
++    _no_symlink_parents(ref_path, "physical acceptance reference")
++    meta = os.lstat(ref_path)
++    _fail(stat.S_ISREG(meta.st_mode) and meta.st_uid == 0 and meta.st_nlink == 1 and
++          not stat.S_IMODE(meta.st_mode) & 0o022 and meta.st_size <= 4096, "root physical acceptance reference required")
++    acceptance = _read_root_document(json.loads(ref_path.read_text()), acceptance_path, "root compile physical acceptance")
++    _fail(acceptance.get("status") == "ACCEPTED_COMPILE_ONLY_PHYSICAL_RETIREMENT" and
++          acceptance.get("operation") == COMPILE_PROFILE["operation"] and
++          acceptance.get("request_core_sha256") == _request_core_hash(request) and
++          acceptance.get("owner_sha256") == _sha256(Path(__file__)) and
++          acceptance.get("profile_sha256") == COMPILE_PROFILE_SHA256 and
++          acceptance.get("owner_and_controller_joined") is True and
++          acceptance.get("all_owned_client_identities_retired") is True,
++          "root physical acceptance bindings differ")
++    receipt_path = Path(request["owner_evidence_root"]) / OWNER_RECEIPT_NAME
++    _fail(acceptance.get("owner_receipt_sha256") == _sha256(receipt_path), "accepted compile receipt changed")
++    receipt = _load_json(receipt_path, "compile receipt")
++    _fail(receipt.get("retired") is True and receipt.get("container_absence_confirmed") is True and
++          receipt.get("all_docker_clients_joined") is True and receipt.get("operation") == COMPILE_PROFILE["operation"] and
++          receipt.get("request_core_sha256") == _request_core_hash(request), "compile receipt has no physical retirement")
++    cid = receipt.get("container_id")
++    attempt = Path(request["attempt_root"])
++    client = docker or _HOST_OWNER.Docker(attempt / "lease-release-docker.log", sudo=True)
++    absence = _own_absence(client, cid)
++    _fail(not getattr(client, "client_retirement_unproven", False), "lease-release Docker clients unproven")
++    lease = CompileLease(request)
++    stored = _load_json(lease.path, "compile lease")
++    for key in ("schema", "operation", "request_core_sha256", "profile_sha256", "container_name", "owner_nonce"):
++        _fail(stored.get(key) == lease.record[key], "accepted compile lease binding differs")
++    lease.record = stored
++    lease.load_owned()
++    _exclusive_json(attempt / "accepted-lease-release-intent.json", {
++        "operation": COMPILE_PROFILE["operation"], "acceptance": acceptance, "fresh_own_absence": absence,
++        "lease_record": stored, "lease_sha256": hashlib.sha256(lease.load_owned()).hexdigest()})
++    lease.release_accepted(acceptance)
++    result = {"status": "PASS_COMPILE_ONLY_LEASE_RELEASED", "operation": COMPILE_PROFILE["operation"],
++              "lease_record": stored, "container_id": cid, "fresh_own_absence": absence,
++              "native_guest_or_heavy_release": False}
++    _exclusive_json(attempt / "accepted-lease-release-result.json", result)
++    return result
++
++
+ class ImageOwner:
+     def __init__(self, request, docker=None, signals=None):
+         self.request = dict(request); self.docker = docker; self.signals = signals
+@@ -1473,134 +1786,82 @@
+ 
+     def run(self):
+         r = self.request
+-        # Shared admission must precede validation because validation performs
+-        # authenticated host measurement.  If anything after this acquisition
+-        # fails, the token is intentionally retained for recovery/review.
+-        shared_lock, shared_record = _SHARED_HEAVY_ENTRY_CONTRACT.acquire_heavy_operation(
+-            r, "image")
++        _fail(os.getuid() == os.geteuid() == os.getgid() == os.getegid() == 1000,
++              "ordinary holden compile owner required")
++        # NULL release rejects before full validation, lease or Docker construction.
++        authority = _validate_launch_admission(r)
+         bound = self.validate()
+-        evidence = bound["evidence"]
+         _revalidate_inputs(bound, r)
+-        host_owner = bound["host_owner"]
+-        name = "mckernel-image-" + uuid.uuid4().hex
+-        nonce = uuid.uuid4().hex
+-        common = CommonExclusion(r["common_exclusion_path"], r)
+-        common.acquire()
+-        # No output/evidence mutation occurs until the shared heavy-build
+-        # exclusion is durably owned.  A stale common lock therefore fails
+-        # before creating a misleading fresh output namespace.
+-        # The driver must see absent output/evidence directories.  Only their
+-        # already-existing parent is mounted; the driver creates the fresh
+-        # child roots inside that parent.
+-        bound["attempt"].mkdir(mode=0o700)
+-        _fsync_dir(bound["owner_evidence"])
+-        _fsync_dir(evidence.parent); _fsync_dir(bound["output"].parent)
+-        lease = host_owner.Lease(bound["lease"], name); lease.acquire()
+-        docker = self.docker or host_owner.Docker(bound["attempt"] / "docker.log", self.signals, sudo=True)
+-        receipt = {"schema": RECEIPT_SCHEMA, "status": "FAIL", "candidate_sha": r["candidate_sha"],
+-                   "ihk_sha": r["ihk_sha"], "container_name": name, "owner_nonce": nonce,
+-                   "cleanup_separately_required": True, "terminal_container_retained": False,
+-                   "terminal_container_info": None, "terminal_container_info_current": False,
+-                   "shared_heavy_operation": {"kind": "image", "path": str(shared_lock),
+-                                              "record": shared_record}}
+-        if r.get('source_derivative_sha256') is not None:
+-            receipt.update(candidate_identity_scope='base_git_commit_only',
+-                           source_derivative_sha256=r['source_derivative_sha256'],
+-                           materialization_sha256=r['materialization_sha256'])
++        authority = _validate_launch_admission(r)
++        lease = CompileLease(r)
++        lease.acquire()
++        receipt = {"schema": "mckernel.m14-candidate14-compile-owner-receipt.v1", "status": "FAIL",
++                   "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
++                   "operation": COMPILE_PROFILE["operation"], "profile_sha256": COMPILE_PROFILE_SHA256,
++                   "request_core_sha256": _request_core_hash(r), "candidate_sha": r["candidate_sha"], "ihk_sha": r["ihk_sha"],
++                   "container_name": COMPILE_PROFILE["container_name"], "owner_nonce": COMPILE_PROFILE["owner_nonce"],
++                   "container_id": None, "retired": False, "container_absence_confirmed": False,
++                   "all_docker_clients_joined": False, "cleanup_separately_required": True,
++                   "lease_retained_for_root_acceptance": True, "compile_lease": lease.record,
++                   "source_derivative_sha256": r["source_derivative_sha256"], "materialization_sha256": r["materialization_sha256"],
++                   "native_guest_or_heavy_release": False, "root_release": r["compile_only_release"],
++                   "P12_pre_create": None, "P12_pre_start": None}
+         attempted = False
++        client = None
+         try:
+-            image = json.loads(docker.call(["image", "inspect", r["image_id"]]).stdout)[0]
+-            _fail(image.get("Id") == r["image_id"] and image.get("Architecture") == "amd64",
+-                  "container image identity mismatch")
+-            mounts = [(bound["source"], "/src", True), (bound["manifest"], "/inputs.json", True),
+-                      (bound["toolchain"], "/toolchain.json", True), (bound["driver"], "/driver.py", True),
+-                      (bound["provenance"], "/native_rust_exact_build_offline.py", True),
+-                      (bound["output"].parent, "/work", False)]
+-            if bound.get("gitlink_manifest") is not None:
+-                mounts.insert(2, (bound["gitlink_manifest"], "/libdwarf-inputs.json", True))
+-                mounts.insert(3, (bound["gitlink_root"], "/src/executer/user/lib/libdwarf/libdwarf", True))
+-            # v2 translates the complete host build output to /out.  It is a
+-            # single read-only mount: never mount /build separately or copy
+-            # and rewrite closure bytes.
+-            if bound["toolchain_schema"].endswith(".v2"):
+-                mount_roots = [(root, target) for target, root in bound["mounts_by_target"].items()]
+-            else:
+-                mount_roots = [(root, str(root)) for root in bound["roots"] + [bound["kernel"]]]
+-            for root, target in mount_roots:
+-                row = (root, target, True)
+-                if row not in mounts: mounts.append(row)
+-            rw_mounts = [(source, target) for source, target, readonly in mounts if not readonly]
+-            _fail(rw_mounts == [(bound["work"], "/work")],
+-                  "dedicated work root is not sole RW mount")
+-            args = ["create", "--name", name, "--label", "mckernel.owner=" + nonce, "--init",
+-                    "--network=none", "--ipc=private", *RESOURCE_ARGS, "--user", "%d:%d" % (os.getuid(), os.getgid()),
+-                    "--cap-drop=ALL", "--security-opt=no-new-privileges", "--read-only",
+-                    "--tmpfs", "/tmp:rw,nodev,nosuid,size=256m"]
+-            for source, target, readonly in mounts:
+-                args += ["--mount", "type=bind,src=" + str(source) + ",dst=" + target +
+-                         (",readonly" if readonly else "")]
+-            command = ["/driver.py", "--source-root", "/src",
+-                       "--candidate-sha", r["candidate_sha"], "--ihk-sha", r["ihk_sha"],
+-                       "--manifest", "/inputs.json", "--toolchain", "/toolchain.json",
+-                       "--output", "/work/" + bound["output"].name,
+-                       "--evidence", "/work/" + evidence.name, "--jobs", str(r["jobs"]),
+-                       "--timeout", str(r["timeout"])]
+-            if bound.get("gitlink_manifest") is not None:
+-                command += ["--gitlink-manifest", "/libdwarf-inputs.json"]
+-            if r.get("native_fork_owned_transaction", False):
+-                command += ["--native-fork-owned-transaction"]
+-            args += ["--entrypoint", "/usr/bin/python3", r["image_id"], *command]
++            bound["attempt"].mkdir(mode=0o700)
++            _fsync_dir(bound["owner_evidence"])
++            client = self.docker or bound["host_owner"].Docker(bound["attempt"] / "docker.log", self.signals, sudo=True)
++            image = json.loads(client.call(["image", "inspect", r["image_id"]]).stdout)
++            _fail(isinstance(image, list) and len(image) == 1 and image[0].get("Id") == r["image_id"] and
++                  image[0].get("Architecture") == "amd64", "compile image identity mismatch")
++            authority = _validate_launch_admission(r)
++            receipt["P12_pre_create"] = _check_live_p12(client, authority["facts"])
++            args, mounts, command = _compile_create_args(bound, r)
++            _fail(not getattr(client, "client_retirement_unproven", False), "pre-create Docker clients unproven")
+             attempted = True
+-            created = docker.call(args); receipt["container_id"] = created.stdout.strip()
+-            info = host_owner.inspect(docker, name)
+-            _check_profile(info, r["image_id"], nonce, mounts=mounts, command=command,
+-                           user="%d:%d" % (os.getuid(), os.getgid()), host_owner=host_owner)
+-            # The admission measurement is only a lower bound.  Rebind the
+-            # lease to a fresh host/scratch measurement immediately before
+-            # Docker start so a concurrent allocation cannot slip between
+-            # validation and execution.
+-            latest = host_owner.measure(
+-                r["disk_admission"]["host_root"],
+-                r["disk_admission"]["scratch_root"],
+-                16 * 2**30, 12 * 2**30, source_root=bound["source"],
+-                output_root=bound["work"], memory_allocation_roots=bound["allocation_roots"])
+-            _fail(latest.get("memory_allocation_memory_backed_bytes") ==
+-                  r["memory_backed_bytes"], "pre-start memory allocation changed")
+-            _fail(latest.get("aggregate_memory_required") ==
+-                  r["aggregate_memory_required"], "pre-start aggregate memory changed")
++            created = client.call(args)
++            cid = created.stdout.strip()
++            _fail(re.fullmatch(r"[0-9a-f]{64}", cid or ""), "compiler create did not return exact CID")
++            receipt["container_id"] = cid
++            info = _own_inspect(client, cid)
++            _check_profile(info, r["image_id"], COMPILE_PROFILE["owner_nonce"], mounts=mounts,
++                           command=command, user="1000:1000", host_owner=bound["host_owner"])
++            # Rebind actual capacity, accepted facts and P12 identity after container creation.
++            authority = _validate_launch_admission(r)
++            latest = bound["host_owner"].measure(r["disk_admission"]["host_root"], r["disk_admission"]["scratch_root"],
++                16 * 2**30, 12 * 2**30, source_root=bound["source"], output_root=bound["work"],
++                memory_allocation_roots=bound["allocation_roots"])
++            _fail(latest.get("memory_allocation_memory_backed_bytes") == r["memory_backed_bytes"] and
++                  latest.get("aggregate_memory_required") == r["aggregate_memory_required"],
++                  "pre-start compile allocation changed")
+             receipt["pre_start_measurement"] = latest
+-            docker.call(["start", name]); waited = docker.call(["wait", name], timeout=r["timeout"])
++            receipt["P12_pre_start"] = _check_live_p12(client, authority["facts"])
++            receipt["fresh_concurrent_resources"] = _fresh_compile_resources(authority["facts"])
++            _fail(not getattr(client, "client_retirement_unproven", False), "pre-start Docker clients unproven")
++            client.call(["start", cid])
++            waited = client.call(["wait", cid], timeout=r["timeout"])
+             receipt["exit_code"] = int(waited.stdout.strip())
+-            _fail(receipt["exit_code"] == 0, "offline image driver failed")
+-            receipt_path = _safe_regular(evidence / "receipt.json", "driver receipt")
+-            build_receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+-            _validate_driver_result(evidence, bound["output"], build_receipt, r)
++            _fail(receipt["exit_code"] == 0, "offline candidate14 image driver failed")
++            build_receipt = _load_json(_safe_regular(bound["evidence"] / "receipt.json", "driver receipt"), "driver receipt")
++            _validate_driver_result(bound["evidence"], bound["output"], build_receipt, r)
+             _revalidate_inputs(bound, r)
+             receipt["status"] = "PASS"
+         except BaseException as exc:
+             receipt["error"] = str(exc)
+         finally:
+-            if self.signals: self.signals.cleaning = True
+-            if attempted:
++            if self.signals:
++                self.signals.cleaning = True
++            if attempted and client is not None:
+                 try:
+-                    receipt["terminal_container_info"] = host_owner.retire(docker, name, nonce)
+-                    receipt["terminal_container_retained"] = True
+-                    receipt["retired"] = True
++                    receipt.update(_cleanup_owned_compile(client, bound["attempt"], receipt.get("container_id")))
+                 except BaseException as exc:
+-                    receipt["status"] = "FAIL"; receipt["retirement_error"] = str(exc); receipt["retired"] = False
+-                try:
+-                    logs = docker.call(["logs", name], check=False)
+-                    _fail(logs.returncode == 0, "Docker logs command failed")
+-                    _exclusive_text(bound["attempt"] / "container.log", logs.stdout + logs.stderr)
+-                except BaseException as exc:
+-                    receipt["status"] = "FAIL"; receipt["capture_error"] = str(exc)
+-                if getattr(docker, "client_retirement_unproven", False):
+-                    receipt["status"] = "FAIL"; receipt["retired"] = False
+-                    receipt["client_retirement_unproven"] = True
++                    receipt["status"] = "FAIL"
++                    receipt["cleanup_error"] = str(exc)
+             else:
+-                receipt["retired"] = True
+-                receipt["cleanup_separately_required"] = False
+-                receipt["terminal_container_info_current"] = True
++                # No create was attempted. Keep the lease for root reconciliation;
++                # do not invent Docker/physical retirement that was never observed.
++                receipt["no_container_create_attempted"] = True
+             try:
+                 _revalidate_inputs(bound, r)
+             except BaseException as exc:
+@@ -1609,31 +1870,30 @@
+             if self.signals and self.signals.requested is not None:
+                 receipt["status"] = "FAIL"
+                 receipt["interrupted_signal"] = self.signals.requested
+-            receipt["driver_evidence_root"] = str(evidence)
+-            receipt["owner_evidence_root"] = str(bound["owner_evidence"])
+-            receipt["attempt_root"] = str(bound["attempt"])
+-            receipt["common_exclusion_path"] = r["common_exclusion_path"]
+-            receipt["finished_at"] = time.time()
++            receipt.update(driver_evidence_root=str(bound["evidence"]), output_root=str(bound["output"]),
++                           owner_evidence_root=str(bound["owner_evidence"]), attempt_root=str(bound["attempt"]),
++                           compile_lease_path=str(lease.path), finished_at=time.time())
++            # A compiler result never releases ownership or claims P12/native clearance.
+             _exclusive_json(bound["owner_evidence"] / OWNER_RECEIPT_NAME, receipt)
+-            if receipt.get("retired"):
+-                lease.release()
+-            # The shared contract releases only after a positive PASS,
+-            # terminal retirement, and sealed evidence.  Any uncertain
+-            # container, observer, or evidence state deliberately retains it
+-            # for explicit reconciliation.
+-            _SHARED_HEAVY_ENTRY_CONTRACT._release_exclusion(
+-                shared_lock, shared_record, receipt)
+         return receipt
+ 
+ 
+ def main(argv=None):
+-    parser = argparse.ArgumentParser()
++    parser = argparse.ArgumentParser(description="Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Fixed candidate14 compile owner.")
++    parser.add_argument("action", choices=("run", "release-accepted-lease"))
+     parser.add_argument("request", type=Path)
+     args = parser.parse_args(argv)
++    request = json.loads(args.request.read_text())
++    if args.action == "release-accepted-lease":
++        result = release_accepted_compile_lease(request)
++        print(json.dumps(result, sort_keys=True))
++        return 0
+     with Signals() as signals:
+-        result = ImageOwner(json.loads(args.request.read_text()), signals=signals).run()
++        result = ImageOwner(request, signals=signals).run()
+     print(json.dumps(result, sort_keys=True))
+-    return 0 if result.get("status") == "PASS" else 1
++    return 0 if result.get("status") == "PASS" and result.get("retired") is True else 1
++
++
+ 
+ 
+ if __name__ == "__main__":

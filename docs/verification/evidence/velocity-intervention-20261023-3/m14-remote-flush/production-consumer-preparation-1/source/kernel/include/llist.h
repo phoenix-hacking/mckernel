@@ -1,0 +1,108 @@
+#ifndef LLIST_H
+#define LLIST_H
+/*
+ * Lock-less NULL terminated single linked list
+ *
+ * Cases where locking is not needed:
+ * If there are multiple producers and multiple consumers, llist_add can be
+ * used in producers and llist_del_all can be used in consumers simultaneously
+ * without locking. Also a single consumer can use llist_del_first while
+ * multiple producers simultaneously use llist_add, without any locking.
+ *
+ * Cases where locking is needed:
+ * If we have multiple consumers with llist_del_first used in one consumer, and
+ * llist_del_first or llist_del_all used in other consumers, then a lock is
+ * needed.  This is because llist_del_first depends on list->first->next not
+ * changing, but without lock protection, there's no way to be sure about that
+ * if a preemption happens in the middle of the delete operation and on being
+ * preempted back, the list->first is the same as before causing the cmpxchg in
+ * llist_del_first to succeed. For example, while a llist_del_first operation
+ * is in progress in one consumer, then a llist_del_first, llist_add,
+ * llist_add (or llist_del_all, llist_add, llist_add) sequence in another
+ * consumer may cause violations.
+ *
+ * This can be summarized as follows:
+ *
+ *           |   add    | del_first |  del_all
+ * add       |    -     |     -     |     -
+ * del_first |          |     L     |     L
+ * del_all   |          |           |     -
+ *
+ * Where, a particular row's operation can happen concurrently with a column's
+ * operation, with "-" being no lock needed, while "L" being lock is needed.
+ *
+ * The list entries deleted via llist_del_all can be traversed with
+ * traversing function such as llist_for_each etc.  But the list
+ * entries can not be traversed safely before deleted from the list.
+ * The order of deleted entries is from the newest to the oldest added
+ * one.  If you want to traverse from the oldest to the newest, you
+ * must reverse the order by yourself before traversing.
+ *
+ * The basic atomic operation of this list is cmpxchg on long.  On
+ * architectures that don't have NMI-safe cmpxchg implementation, the
+ * list can NOT be used in NMI handlers.  So code that uses the list in
+ * an NMI handler should depend on CONFIG_ARCH_HAVE_NMI_SAFE_CMPXCHG.
+ *
+ * Copyright 2010,2011 Intel Corp.
+ *   Author: Huang Ying <ying.huang@intel.com>
+ *
+ */
+
+#include <types.h>
+#include <lwk/compiler.h>
+#include <ihk/atomic.h>
+#include <arch/cpu.h>
+
+struct llist_head {
+	struct llist_node *first;
+};
+
+struct llist_node {
+	struct llist_node *next;
+};
+
+/**
+ * init_llist_head - initialize lock-less list head
+ * @head:	the head for your lock-less list
+ */
+void init_llist_head(struct llist_head *list);
+
+/**
+ * llist_empty - tests whether a lock-less list is empty
+ * @head:	the list to test
+ *
+ * Not guaranteed to be accurate or up to date.  Just a quick way to
+ * test whether the list is empty without deleting something from the
+ * list.
+ */
+bool llist_empty(const struct llist_head *head);
+
+struct llist_node *llist_next(struct llist_node *node);
+
+extern bool llist_add_batch(struct llist_node *new_first,
+			    struct llist_node *new_last,
+			    struct llist_head *head);
+/**
+ * llist_add - add a new entry
+ * @new:	new entry to be added
+ * @head:	the head for your lock-less list
+ *
+ * Returns true if the list was empty prior to adding this entry.
+ */
+bool llist_add(struct llist_node *new, struct llist_head *head);
+
+/**
+ * llist_del_all - delete all entries from lock-less list
+ * @head:	the head of lock-less list to delete all entries
+ *
+ * If list is empty, return NULL, otherwise, delete all entries and
+ * return the pointer to the first entry.  The order of entries
+ * deleted is from the newest to the oldest added one.
+ */
+struct llist_node *llist_del_all(struct llist_head *head);
+
+extern struct llist_node *llist_del_first(struct llist_head *head);
+
+struct llist_node *llist_reverse_order(struct llist_node *head);
+
+#endif /* LLIST_H */

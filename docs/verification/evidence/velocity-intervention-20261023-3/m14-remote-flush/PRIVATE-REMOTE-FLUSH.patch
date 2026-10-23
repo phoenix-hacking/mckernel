@@ -1,0 +1,172 @@
+--- a/kernel/mem.c
++++ b/kernel/mem.c
+@@ -4300,32 +4300,42 @@
+ 	return ret;
+ }
+ 
+-static unsigned long mem_tlb_rdtsc_bridge(void)
++/* Immutable source-header geometry; no new C runtime implementation. */
++#ifdef MCKERNEL_RUST_MEM_HELPERS
++const int mem_remote_tlb_geometry[3] = {
++	IHK_TLB_FLUSH_IRQ_VECTOR_SIZE, IHK_TLB_FLUSH_IRQ_VECTOR_START, CPU_SETSIZE
++};
++#define MEM_TLB_PUBLIC_BRIDGE
++#else
++#define MEM_TLB_PUBLIC_BRIDGE static
++#endif
++
++MEM_TLB_PUBLIC_BRIDGE unsigned long mem_tlb_rdtsc_bridge(void)
+ {
+ 	return rdtsc();
+ }
+ 
+-static int mem_tlb_current_cpu_bridge(void)
++MEM_TLB_PUBLIC_BRIDGE int mem_tlb_current_cpu_bridge(void)
+ {
+ 	return ihk_mc_get_processor_id();
+ }
+ 
+-static void mem_tlb_noirq_lock_bridge(unsigned long lock_addr)
++MEM_TLB_PUBLIC_BRIDGE void mem_tlb_noirq_lock_bridge(unsigned long lock_addr)
+ {
+ 	ihk_mc_spinlock_lock_noirq((ihk_spinlock_t *)lock_addr);
+ }
+ 
+-static void mem_tlb_noirq_unlock_bridge(unsigned long lock_addr)
++MEM_TLB_PUBLIC_BRIDGE void mem_tlb_noirq_unlock_bridge(unsigned long lock_addr)
+ {
+ 	ihk_mc_spinlock_unlock_noirq((ihk_spinlock_t *)lock_addr);
+ }
+ 
+-static void mem_tlb_atomic_set_bridge(unsigned long atomic_addr, int value)
++MEM_TLB_PUBLIC_BRIDGE void mem_tlb_atomic_set_bridge(unsigned long atomic_addr, int value)
+ {
+ 	ihk_atomic_set((ihk_atomic_t *)atomic_addr, value);
+ }
+ 
+-static void mem_tlb_atomic_inc_bridge(unsigned long atomic_addr)
++MEM_TLB_PUBLIC_BRIDGE void mem_tlb_atomic_inc_bridge(unsigned long atomic_addr)
+ {
+ 	ihk_atomic_inc((ihk_atomic_t *)atomic_addr);
+ }
+@@ -4335,35 +4345,37 @@
+ 	ihk_atomic_dec((ihk_atomic_t *)atomic_addr);
+ }
+ 
+-static int mem_tlb_atomic_read_bridge(unsigned long atomic_addr)
++MEM_TLB_PUBLIC_BRIDGE int mem_tlb_atomic_read_bridge(unsigned long atomic_addr)
+ {
+ 	return ihk_atomic_read((ihk_atomic_t *)atomic_addr);
+ }
+ 
+-static int mem_tlb_get_vector_bridge(int type)
++MEM_TLB_PUBLIC_BRIDGE int mem_tlb_get_vector_bridge(int type)
+ {
+ 	return ihk_mc_get_vector(type);
+ }
+ 
+-static void mem_tlb_interrupt_cpu_bridge(int cpu, int vector)
++MEM_TLB_PUBLIC_BRIDGE void mem_tlb_interrupt_cpu_bridge(int cpu, int vector)
+ {
+ 	ihk_mc_interrupt_cpu(cpu, vector);
+ }
+ 
+-static void mem_tlb_flush_single_bridge(unsigned long addr)
++MEM_TLB_PUBLIC_BRIDGE void mem_tlb_flush_single_bridge(unsigned long addr)
+ {
+ 	flush_tlb_single(addr);
+ }
+ 
+-static void mem_tlb_flush_all_bridge(void)
++MEM_TLB_PUBLIC_BRIDGE void mem_tlb_flush_all_bridge(void)
+ {
+ 	flush_tlb();
+ }
+ 
+-static void mem_tlb_pause_bridge(void)
++MEM_TLB_PUBLIC_BRIDGE void mem_tlb_pause_bridge(void)
+ {
+ 	cpu_pause();
+ }
++
++#undef MEM_TLB_PUBLIC_BRIDGE
+ 
+ void remote_flush_tlb_cpumask(struct process_vm *vm,
+ 		unsigned long addr, int cpu_id)
+@@ -4372,6 +4384,7 @@
+ 	return remote_flush_tlb_array_cpumask(vm, &__addr, 1, cpu_id);
+ }
+ 
++#ifndef MCKERNEL_RUST_MEM_HELPERS
+ void remote_flush_tlb_array_cpumask(struct process_vm *vm,
+ 		unsigned long *addr,
+ 		int nr_addr,
+@@ -4387,6 +4400,7 @@
+ 			mem_tlb_atomic_read_bridge, mem_tlb_flush_single_bridge,
+ 			mem_tlb_flush_all_bridge, mem_tlb_pause_bridge);
+ }
++#endif /* C fallback; default Rust entry owns this symbol. */
+ 
+ void tlb_flush_handler(int vector)
+ {
+--- a/kernel/rust/mem_helpers.rs
++++ b/kernel/rust/mem_helpers.rs
+@@ -16,6 +16,24 @@
+ use crate::string::{strcmp, strcpy, strlen, strstr};
+ 
+ unsafe extern "C" {
++    // C owns the complete vector array; this names its first element only.
++    // No array extent is invented: the immutable header geometry supplies it.
++    #[link_name = "tlb_flush_vector"]
++    static mut MEM_TLB_FLUSH_VECTOR_FIRST: TlbFlushEntry;
++    static mem_remote_tlb_geometry: [CInt; 3];
++    fn mem_tlb_rdtsc_bridge() -> CULong;
++    fn mem_tlb_current_cpu_bridge() -> CInt;
++    fn mem_tlb_get_vector_bridge(type_: CInt) -> CInt;
++    fn mem_tlb_interrupt_cpu_bridge(cpu: CInt, vector: CInt);
++    fn mem_tlb_noirq_lock_bridge(lock_addr: CULong);
++    fn mem_tlb_noirq_unlock_bridge(lock_addr: CULong);
++    fn mem_tlb_atomic_set_bridge(atomic_addr: CULong, value: CInt);
++    fn mem_tlb_atomic_inc_bridge(atomic_addr: CULong);
++    fn mem_tlb_atomic_read_bridge(atomic_addr: CULong) -> CInt;
++    fn mem_tlb_flush_single_bridge(addr: CULong);
++    fn mem_tlb_flush_all_bridge();
++    fn mem_tlb_pause_bridge();
++
+     #[link_name = "rusage"]
+     static mut RUSAGE: RusageGlobal;
+ 
+@@ -5491,6 +5509,33 @@
+     phys_to_nid_cb(*ptep & PT_PHYSMASK)
+ }
+ 
++/// Keep the original synchronous TLB request and callback ownership boundary.
++///
++/// # Safety
++/// The caller retains vm and the address array until the existing body returns.
++/// Existing callbacks preserve current-CPU, vector, IRQ and lock semantics. C
++/// owns the shared vector and immutable geometry; no pointer is retained by this
++/// entry beyond the original body, and its integer return remains ignored.
++#[no_mangle]
++pub unsafe extern "C" fn remote_flush_tlb_array_cpumask(
++    vm: *mut ProcessVm, addr: *mut CULong, nr_addr: CInt, cpu_id: CInt,
++) {
++    let geometry = unsafe { core::ptr::read(core::ptr::addr_of!(mem_remote_tlb_geometry)) };
++    let _ = unsafe {
++        mem_remote_flush_tlb_array_body_result(
++            vm, addr, nr_addr, cpu_id,
++            core::ptr::addr_of_mut!(MEM_TLB_FLUSH_VECTOR_FIRST),
++            geometry[0], geometry[1], geometry[2],
++            Some(mem_tlb_rdtsc_bridge), Some(mem_tlb_current_cpu_bridge),
++            Some(mem_tlb_get_vector_bridge), Some(mem_tlb_interrupt_cpu_bridge),
++            Some(mem_tlb_noirq_lock_bridge), Some(mem_tlb_noirq_unlock_bridge),
++            Some(mem_tlb_atomic_set_bridge), Some(mem_tlb_atomic_inc_bridge),
++            Some(mem_tlb_atomic_read_bridge), Some(mem_tlb_flush_single_bridge),
++            Some(mem_tlb_flush_all_bridge), Some(mem_tlb_pause_bridge),
++        )
++    };
++}
++
+ #[no_mangle]
+ pub unsafe extern "C" fn mem_remote_flush_tlb_array_body_result(
+     vm: *mut ProcessVm,

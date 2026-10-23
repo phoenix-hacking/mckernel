@@ -1,0 +1,20 @@
+{
+  "correction": "Added real __main__ invocation and bounded real-entrypoint NULL-admission rejection fixture; no build/root/Docker.",
+  "finding": "Reviewer found absent __main__ invocation: direct script previously exited0 without operation.",
+  "fixture": {
+    "bytes": 16992,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/test_compile_owner.py",
+    "sha256": "eee51f34f08d7e2003fb3d4128608b5106021c6f84d8b70dc64f94a0931f5260"
+  },
+  "postimage": {
+    "bytes": 111651,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile_image_owner.py",
+    "sha256": "8cd5a1948fc973461e15c17cdea604932b723f839f00646ec7df35c31647d555"
+  },
+  "preimage": {
+    "bytes": 111593,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile_image_owner.pre-entrypoint-correction.py",
+    "sha256": "e06c35cdf6b55ba6f021163cd17eb4fec990eb80f5162769edddc5226130755e"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing."
+}

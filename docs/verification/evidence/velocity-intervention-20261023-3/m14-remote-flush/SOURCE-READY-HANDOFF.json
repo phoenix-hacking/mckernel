@@ -1,0 +1,71 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_IMPLEMENTATION_AND_EXECUTABLE_RECIPE_READY_NO_COMPILER_GRANT_YET",
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/PRIVATE-REMOTE-FLUSH.patch",
+    "sha256": "8dc28a0c3729a77e702507e33b6cd62ae9c262722c3c4f195c78ccc442ff084b",
+    "bytes": 5900
+  },
+  "source_binding": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/SOURCE-AND-FIXTURE-PREPARATION.json",
+    "sha256": "a0da532809b053f84de1d0872e00192e24ecbbd2e39746652ee77d33dfccfe3d",
+    "bytes": 52528
+  },
+  "recipe": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/EXACT-ORDINARY-FIXTURE-RECIPE.NOT-EXECUTED.json",
+    "sha256": "1e1a3355f2ea084279df92ecf181bc4d7459ce749cc4968e1ea6ada8f6787778",
+    "bytes": 66715
+  },
+  "positions": {
+    "kernel/mem.c": {
+      "const int mem_remote_tlb_geometry": 4305,
+      "MEM_TLB_PUBLIC_BRIDGE unsigned long mem_tlb_rdtsc_bridge": 4313,
+      "void remote_flush_tlb_array_cpumask(": 4388
+    },
+    "kernel/rust/mem_helpers.rs": {
+      "static mut MEM_TLB_FLUSH_VECTOR_FIRST": 22,
+      "static mem_remote_tlb_geometry": 23,
+      "pub unsafe extern \"C\" fn remote_flush_tlb_array_cpumask(": 5520,
+      "pub unsafe extern \"C\" fn mem_remote_flush_tlb_array_body_result(": 5540
+    }
+  },
+  "displaced_current_C_entry": {
+    "path": "/home/holden/mckernel/kernel/mem.c",
+    "line": 4375,
+    "body": "void remote_flush_tlb_array_cpumask(struct process_vm *vm,\n\t\tunsigned long *addr,\n\t\tint nr_addr,\n\t\tint cpu_id)\n{\n\t(void)mem_remote_flush_tlb_array_body_result(vm, addr, nr_addr, cpu_id,\n\t\t\ttlb_flush_vector, IHK_TLB_FLUSH_IRQ_VECTOR_SIZE,\n\t\t\tIHK_TLB_FLUSH_IRQ_VECTOR_START, CPU_SETSIZE,\n\t\t\tmem_tlb_rdtsc_bridge, mem_tlb_current_cpu_bridge,\n\t\t\tmem_tlb_get_vector_bridge, mem_tlb_interrupt_cpu_bridge,\n\t\t\tmem_tlb_noirq_lock_bridge, mem_tlb_noirq_unlock_bridge,\n\t\t\tmem_tlb_atomic_set_bridge, mem_tlb_atomic_inc_bridge,\n\t\t\tmem_tlb_atomic_read_bridge, mem_tlb_flush_single_bridge,\n\t\t\tmem_tlb_flush_all_bridge, mem_tlb_pause_bridge);\n}"
+  },
+  "actual_existing_Rust_body_preserved_sha256": "ea4805a99771a1759610f0edb9c15ca9451f6fa664299bd871a7e6e29a3bee00",
+  "proposed_profile": {
+    "CPU": "ROOT_ASSIGN",
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 90,
+    "retirement_seconds": 6,
+    "FSIZE_bytes": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "CGU": 1,
+    "RUST_MIN_STACK": 2097152,
+    "owned_capture_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+  },
+  "proposed_commands": 16,
+  "planned_pairs_not_acceptance": 1792,
+  "planned_layout_words_not_acceptance": 15,
+  "compiler_invocations": 0,
+  "test_executions": 0,
+  "canonical_mutations": 0,
+  "callbacks_remaining_C_debt": 13,
+  "callbacks_exposed_selected_only": 12,
+  "new_C_runtime_functions": 0,
+  "new_C_declarative_data": "constint[3] fromactualIHKvector/CPU_SETSIZE macros",
+  "requires_header_or_CMake_edits": false,
+  "next_executable_observation": "Root-granted ordinary focused16command recipe with fresh19GiB aggregate/floors/fullgap, accepted990 TERMINTALRM wholejoins and CPUrelease. Then separately authorized realproduction78inputRustconsumer/exactGCC14wholememTU/defaultlink/native.",
+  "remaining_open": [
+    "originalfocusedABI/symboltests notexecuted",
+    "productionRustfullcrate notexecuted",
+    "exactGCC14wholememTU notexecuted",
+    "defaultkernellink/nativefunctionalTLBproof notexecuted"
+  ],
+  "failure_family": "Firstcandidate/sourceonly; onefailedcandidate+oneboundedcorrectionthenexpert. PriorclosedP12source/fixturefamilies preservedseparately."
+}
