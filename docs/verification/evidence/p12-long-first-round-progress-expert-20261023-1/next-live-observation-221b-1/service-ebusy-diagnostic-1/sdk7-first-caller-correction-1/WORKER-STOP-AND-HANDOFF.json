@@ -1,0 +1,96 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "STOP_DIFFERENT_EXPERT_REQUIRED_OBSERVER_FAILURE_BEFORE_RUST_COMPILE",
+  "product_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/sdk7-first-caller-correction-1/source/smp_service.rs",
+    "sha256": "7d4948d7b0a5139048cf8085863ffcca43cbfff53024c34b5fd4281caed6f639",
+    "bytes": 52577
+  },
+  "product_patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/sdk7-first-caller-correction-1/PRIVATE-OMITTED-CALLER-CORRECTION.patch",
+    "sha256": "955a8e11b92a250f81b95d86a96202cb0ae9d64a67c0c9c850b0e581b9db8f33",
+    "bytes": 1770
+  },
+  "product_unchanged": true,
+  "source_checker": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/sdk7-first-caller-correction-1/check_actual_fail_callers.py",
+    "sha256": "16ebfe2d0a9e10785fa95b2032f97267bceec1fd1627e144291884075f0fd604",
+    "bytes": 4592
+  },
+  "source_check_join": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/sdk7-first-caller-correction-1/actual-owned-capture-1/00-finite68-source-fail-caller-check/whole-join.json",
+    "sha256": "3aafc9859cdff41da79c01212f3f6a79266f2083e078b6f0d25ddf26a033e77a",
+    "bytes": 1331
+  },
+  "actual_join": {
+    "captures": {
+      "stderr": {
+        "ctime_ns": 1792788447650212931,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 55988932,
+        "mode": "0o600",
+        "mtime_ns": 1792788447650212931,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/sdk7-first-caller-correction-1/actual-owned-capture-1/00-finite68-source-fail-caller-check/stderr",
+        "sha256": "9b0c80258e75fbffd5d54928247830b7ee88df2092e28d991066cc4376419bd6",
+        "size": 2086,
+        "uid": 1000
+      },
+      "stdout": {
+        "ctime_ns": 1792788447618211904,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 55988931,
+        "mode": "0o600",
+        "mtime_ns": 1792788447618211904,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/sdk7-first-caller-correction-1/actual-owned-capture-1/00-finite68-source-fail-caller-check/stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "uid": 1000
+      }
+    },
+    "closed_streams": true,
+    "direct_child_joined": true,
+    "error": null,
+    "group_absent": true,
+    "pid": 3907104,
+    "remaining_group_members": [],
+    "retirement_error": null,
+    "returncode": 1,
+    "seconds": 0.07102304801810533,
+    "start": 58589231,
+    "timed_out": false,
+    "unexpected_group_members": []
+  },
+  "stderr": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/sdk7-first-caller-correction-1/actual-owned-capture-1/00-finite68-source-fail-caller-check/stderr",
+    "sha256": "9b0c80258e75fbffd5d54928247830b7ee88df2092e28d991066cc4376419bd6",
+    "bytes": 2086
+  },
+  "failure_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/sdk7-first-caller-correction-1/FAILURE-1.json",
+    "sha256": "54e61e9b8f3cf83a729503e733714d81be03c90e8f67ef76efe66adbfcecbdc2",
+    "bytes": 3298
+  },
+  "pre_effect_observer_failure": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/sdk7-first-caller-correction-1/observer-preflight-failure-1/FAILURE.json",
+    "sha256": "2f4376d6cd291e199dd9294d7d77529ce5105015f13954f6ef6e610831a30f7f",
+    "bytes": 1440
+  },
+  "actual_full_SDK7_first_compile_error": "E0061 Service.first omitted new FailureOrigin arg; failed source preserved in parent packet",
+  "actual_full_SDK7_bounded_correction": 1,
+  "actual_Rust_successor_typecheck_invocations": 0,
+  "actual_prepared_Rust_fixture": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/sdk7-first-caller-correction-1/fixture/diagnostic.rs",
+    "sha256": "3d82e5c615c03ceaf4b067e706d643a7ce241491c35b70e4cfa1fc835a302906",
+    "bytes": 40194
+  },
+  "prepared_fixture_scope": "11origin tags+20original/correctedService.first pairs+prior8195memory/90metadata/12RPC/24remote pairs; not compiled or run for successor.",
+  "source_coverage_status": "New checker FAILED, no source coverage PASS claim. Independent reviewer manually enumerated11calls.",
+  "failure": "re.error unterminated character set atposition26 in observer string-stripping regex",
+  "next": "Different expert must repair/replace narrow sourcechecker and validate observer. No selfretry. Then actualfocusedfixture and realfullSDKtypecheck under root release/positivephysicalclearance.",
+  "CPU0_released": true,
+  "canonical_mutations_by_worker": 0
+}

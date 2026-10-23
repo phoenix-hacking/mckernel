@@ -79,6 +79,7 @@ fn errno(code: i32) -> Error {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 enum FailureOrigin {
     Packet { channel: usize, guest_cpu: u32, port: i32, message: i32 },
+    FirstPacket { message: i32 },
     ControlPump,
     RegularPump,
     PublishRemote,
@@ -94,6 +95,7 @@ impl FailureOrigin {
     fn label(self) -> &'static str {
         match self {
             Self::Packet { .. } => "packet_dispatch",
+            Self::FirstPacket { .. } => "first_dispatch",
             Self::ControlPump => "control_pump", Self::RegularPump => "regular_pump",
             Self::PublishRemote => "publish_remote", Self::PublishApplications => "publish_apps",
             Self::PublishSyscalls => "publish_syscalls", Self::AdvanceApplications => "advance_apps",
@@ -203,6 +205,10 @@ impl Runtime {
             if let FailureOrigin::Packet { channel, guest_cpu, port, message } = origin {
                 pr_err!("IHK-P os={} g={} d={} ch={} c={} port={} m={:x}\n",
                     self.owner.slot(), self.owner.generation(), diag, channel, guest_cpu, port, message);
+            }
+            if let FailureOrigin::FirstPacket { message } = origin {
+                pr_err!("IHK-P os={} g={} d={} port=503 m={:x}\n",
+                    self.owner.slot(), self.owner.generation(), diag, message);
             }
         }
     }
@@ -1018,7 +1024,9 @@ impl Started {
 
     pub(super) fn first(&self, packet: &[u8; CONTROL_PACKET_BYTES]) {
         if let Err(error) = self.runtime.dispatch(503, packet) {
-            self.runtime.fail(error);
+            self.runtime.fail(error, FailureOrigin::FirstPacket {
+                message: i32::from_le_bytes(packet[8..12].try_into().unwrap()),
+            });
         }
     }
 

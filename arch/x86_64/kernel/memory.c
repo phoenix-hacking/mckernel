@@ -1382,6 +1382,10 @@ static void x86_clear_effect_log_bridge(int event, unsigned long base,
 	}
 }
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+extern void x86_clear_range_top_log_bridge(int event, void *pt,
+		unsigned long start, unsigned long end, int free_physical);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_clear_range_top_log_bridge(int event, void *pt,
 		unsigned long start, unsigned long end, int free_physical)
 {
@@ -1398,6 +1402,7 @@ X86_MEMORY_PUBLIC_BRIDGE void x86_clear_range_top_log_bridge(int event, void *pt
 		break;
 	}
 }
+#endif
 
 static void x86_clear_range_log_bridge(int event, void *args,
 		unsigned long *ptep, unsigned long base, unsigned long start,

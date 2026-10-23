@@ -1,0 +1,45 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "utc": "2026-10-23T20:44:18.201348+00:00",
+  "status": "EXACT_TWO_CANONICAL_LOGGER_POSTIMAGES_INTEGRATED",
+  "all_preimages_verified_before_any_write": true,
+  "changes": {
+    "arch/x86_64/kernel/memory.c": {
+      "before": {
+        "path": "/home/holden/mckernel/arch/x86_64/kernel/memory.c",
+        "sha256": "b9380953fd379bb28c8827a402700d415cf604a8e46fbae40a1d7daa483fe75b",
+        "bytes": 86177
+      },
+      "after": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/candidate/arch/x86_64/kernel/memory.c",
+        "sha256": "e52b056f783641ab8b48a5a0d6cec793b89c764f8a5ba3b0f16550eac2fd615f",
+        "bytes": 86355
+      }
+    },
+    "kernel/rust/x86_memory_helpers.rs": {
+      "before": {
+        "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+        "sha256": "4868d1b599ff89dffc5dfe32403927b4e887442001bb93253805ab0d94088a90",
+        "bytes": 195780
+      },
+      "after": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/candidate/kernel/rust/x86_memory_helpers.rs",
+        "sha256": "8d9cf2a72a5fcca67edf25e99f20c84fb2aaac4d6c7f95ec73a8e7de9d46b1cc",
+        "bytes": 196605
+      }
+    }
+  },
+  "independent_source_fixture": "PASS_SOURCE_AND_ACTUAL_HOSTED_LOGGER_FIXTURE_SCOPE",
+  "independent_production_Rust": "PASS_ACTUAL78_PRODUCTION_RUST_LOGGER_CONSUMER_ONLY",
+  "independent_selected_C": "PASS_ACTUAL_SELECTED_GCC9_MEMORY_TU_ABI_AND_PARTIAL_LINK_ONLY",
+  "SDK7_request_exclusion_sha256": "493940a2e85fe12e4440b06e700720486215d01be27488a76d822199b4806c7c",
+  "frozen_candidate13_and_image10972_unchanged": true,
+  "source_C_providers_remaining": [
+    "remote_flush_tlb_array_cpumask",
+    "x86_clear_range_walk_l4_bridge"
+  ],
+  "qualified_debt": "Accepted current image still retains its previous C logger until coherent default image/native acceptance; no full retirement credit.",
+  "SDK7_state": "CLOSED_COMPILER_FAIL_PENDING_INDEPENDENT_PHYSICAL",
+  "default_image_link": false,
+  "native": false
+}

@@ -175,7 +175,6 @@ unsafe extern "C" {
     fn ihk_mc_get_processor_id() -> CInt;
     fn remote_flush_tlb_array_cpumask(vm: *mut c_void, addr: *mut CULong, nr_addr: CInt, cpu_id: CInt);
     fn x86_clear_range_walk_l4_bridge(pt: *mut c_void, base: CULong, start: CULong, end: CULong, args: *mut c_void) -> CInt;
-    fn x86_clear_range_top_log_bridge(event: CInt, pt: *mut c_void, start: CULong, end: CULong, requested_free: CInt);
     fn kprintf(format: *const i8, ...) -> CInt;
     fn _ihk_mc_free_pages(ptr: *mut c_void, npages: CInt, is_user: CInt, file: *mut i8, line: CInt);
     static x86_clear_free_pages_user_file: [i8; 1];
@@ -3264,6 +3263,37 @@ pub unsafe extern "C" fn x86_set_range_map_entry_result(
     }
 
     0
+}
+
+// Error logging preserves the original unconditional ekprintf -> kprintf
+// call, format bytes and C varargs payload. Unknown events remain silent.
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_range_top_log_bridge(
+    event: CInt,
+    pt: *mut c_void,
+    start: CULong,
+    end: CULong,
+    requested_free: CInt,
+) {
+    match event {
+        X86_CLEAR_TOP_LOG_INVALID => {
+            unsafe {
+                kprintf(
+                    b"clear_range(%p,%p,%p,%x):invalid start and/or end.\n\0".as_ptr().cast(),
+                    pt, start as *mut c_void, end as *mut c_void, requested_free,
+                );
+            }
+        }
+        X86_CLEAR_TOP_LOG_ALLOC_FAILED => {
+            unsafe {
+                kprintf(
+                    b"%s: error: allocating address array\n\0".as_ptr().cast(),
+                    b"clear_range\0".as_ptr().cast::<i8>(),
+                );
+            }
+        }
+        _ => {}
+    }
 }
 
 // Preserve the existing optional clear_range entry event through the same

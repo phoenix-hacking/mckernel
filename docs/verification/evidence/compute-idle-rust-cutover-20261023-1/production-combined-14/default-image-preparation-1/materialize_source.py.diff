@@ -1,0 +1,30 @@
+--- frozen13/materialize_source.py
++++ candidate14/materialize_source.py
+@@ -13,13 +13,13 @@
+ import time
+ 
+ REPO = Path('/home/holden/mckernel')
+-OUT = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-13/default-image-preparation-1/source-materialization-attempt-1')
+-BASE = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-12/default-image-preparation-1/source-materialization-attempt-1')
++OUT = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/source-materialization-attempt-1')
++BASE = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-13/default-image-preparation-1/source-materialization-attempt-1')
+ SOURCE = BASE / 'materialized-source'
+ DEST = OUT / 'materialized-source'
+-AUTHORITY = Path('/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/CANONICAL-INTEGRATION.json')
+-BASE_CANONICAL_SHA = '8b2b3f20ccf8da69bbb64deedc7b222e23d00a1c83708486810a430d2fe9b692'
+-POST = {'arch/x86_64/kernel/memory.c': 'b9380953fd379bb28c8827a402700d415cf604a8e46fbae40a1d7daa483fe75b', 'kernel/rust/x86_memory_helpers.rs': '4868d1b599ff89dffc5dfe32403927b4e887442001bb93253805ab0d94088a90'}
++AUTHORITY = Path('/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-3/m14-top-log/CANONICAL-INTEGRATION.ROOT-RECORD.json')
++BASE_CANONICAL_SHA = '12b430700c83fc62cd9bc7bc62d29f40d69511953907590696827a64337d92a2'
++POST = {'arch/x86_64/kernel/memory.c': 'e52b056f783641ab8b48a5a0d6cec793b89c764f8a5ba3b0f16550eac2fd615f', 'kernel/rust/x86_memory_helpers.rs': '8d9cf2a72a5fcca67edf25e99f20c84fb2aaac4d6c7f95ec73a8e7de9d46b1cc'}
+ MAX_GROWTH = 256 << 20
+ EXTRA = 16 << 20
+ SCOPE = 'Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
+@@ -50,7 +50,7 @@
+     baseline = json.loads((BASE / 'source-inputs.json').read_text())
+     need(sha(canonical(baseline)) == BASE_CANONICAL_SHA, 'accepted exact base source manifest')
+     authority_raw = AUTHORITY.read_bytes();authority = json.loads(authority_raw)
+-    need(authority['status'] == 'PASS_EXACT_TWO_CANONICAL_MEMORY_POSTIMAGES' and authority['canonical_postimages'] == POST,
++    need(authority['status'] == 'EXACT_TWO_CANONICAL_LOGGER_POSTIMAGES_INTEGRATED' and {p:row['after']['sha256'] for p,row in authority['changes'].items()} == POST,
+          'actual reviewed latest two-file canonical integration')
+     document = copy.deepcopy(baseline)
+     changed = []

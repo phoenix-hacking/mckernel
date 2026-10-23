@@ -1,0 +1,161 @@
+{
+  "LONG_profile": {
+    "min_launches": 100,
+    "round_cap": 2048,
+    "trace_cap": 268435456,
+    "version": 1,
+    "wall_ns": 7200000000000,
+    "work_ns": 3600000000000
+  },
+  "NONE_daemon": {
+    "Config": {},
+    "Type": "none"
+  },
+  "SDK5_authority": null,
+  "SDK5_exact_tuple": {
+    "ihk-smp-x86_64.ko": null,
+    "ihk.ko": null,
+    "mcctrl.ko": null
+  },
+  "SDK5_replacements": {
+    "bin/mcexec": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/launcher-runtime-snapshot-1/mcexec",
+      "sha256": "dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954",
+      "size": 394648
+    },
+    "images/mckernel.img": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/mckernel.img",
+      "sha256": "10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2",
+      "size": 8439816
+    },
+    "modules/ihk-smp-x86_64.ko": null,
+    "modules/ihk.ko": null,
+    "modules/mcctrl.ko": null
+  },
+  "SDK6_source_identity": "2093e464dd2dfb976016a71197a120929e16bfd830f4d643126b96ea1ea0a2e8",
+  "SDK7_actual_authority": null,
+  "SDK7_final_current_live_postjoin": null,
+  "SDK7_full_strict_authority_consumer": null,
+  "SDK7_source_identity": "b3eb1d8ddf42e95036cdac0c32bb19bfa27fab6c123370e806dbd52ee43e3f04",
+  "actual_changed_members_required": null,
+  "application_replacements": {},
+  "application_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-long-mixed-apps-20261023-1/INDEPENDENT-LONG-APP-SOURCE-AND-LINUX-REVIEW.ROOT-RECORD.json",
+    "sha256": "831c0c9eb44a979cc4dddab359cecf27be2f42f35e9bf895447423dc83b4342b",
+    "size": 958
+  },
+  "baseline_capsule": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/capsule-next-1/actual-stage-1/lifecycle-long.cpio.gz",
+    "sha256": "cde77e1882cbf4698111d6d784c531c3666fcc96e8fc65e5124dfb83a7573b49",
+    "size": 19427819
+  },
+  "baseline_manifest": {
+    "bytes": 13153,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/capsule-next-1/actual-stage-1/manifest.json",
+    "sha256": "33eb6e9a08be55651d60e4fb786ac2ccd5dfc476ef611b7fe0be804477403390"
+  },
+  "baseline_overlay_manifest": {
+    "bytes": 20231,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/capsule-next-1/actual-stage-1/overlay-manifest.json",
+    "sha256": "22f196d8dddc330f59ca9d7e2b48b02d3af19802e0ce3051a250b0cd4a15e6fe"
+  },
+  "campaign_bytes": null,
+  "candidate2_source_review_blockers": [
+    "COMPLETE precedes final klogsave/printk restore/syncfs/close; late failure can survive completion",
+    "Default real postflight checks procfs without final workspace identity/emptiness verification"
+  ],
+  "case_id": "practical.rust.LONG.SDK7.current110",
+  "cleanup_profile": {
+    "child_trace_cases": [
+      "P-M06-01-process-exec-wait-235B",
+      "P-M01-02-child-SIGTERM-and-exec-recovery-227B"
+    ],
+    "consumer": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-1/mcctrl_process.rs",
+      "sha256": "8bf30cd8ae79cc778bd91816f30aaf7a37ccc2aab59822ca2a03587426a212b8",
+      "size": 54854
+    },
+    "id": "begin-cleanup-real-ack-parent-clone-v2",
+    "modules": [
+      null,
+      null,
+      null
+    ],
+    "provider": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/smp_application.rs",
+      "sha256": "6adb4d11e7285caadd699bf22359bf21922f7dbfa4828b12b7a96fb7a1b07be0",
+      "size": 74960
+    },
+    "schema_version": 1
+  },
+  "current110_source_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/CURRENT110-SOURCE-PROFILE.NOT-RELEASED.json",
+    "sha256": "902b934f819b0d243e4d5a5838662b274b23e375e353ca8fe16ab64956ffda12",
+    "size": 5222
+  },
+  "diagnostic_source": null,
+  "emergency_bytes": null,
+  "final_capacity_admission": null,
+  "host_floor_bytes": 17179869184,
+  "host_stage_growth_bytes": 134217728,
+  "independent_actual_ELF_acceptance": null,
+  "legacy_builder_key_qualification": "SDK5_* are unchanged accepted builder schema keys; must bind genuine SDK7 accepted authority and all three actual descriptors before READY. No SDK6 authority substitution permitted.",
+  "max_inflated_bytes": 67108864,
+  "max_patched_bytes": 104857600,
+  "member_transformer": {
+    "bytes": 16074,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/stage_m05_two_generation.py",
+    "sha256": "65c01a4f1e4bc7b70350c9705a56fca1c08fb0ed96161a761ad5802f76597193"
+  },
+  "overlay_source": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_overlay.py",
+    "sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d",
+    "size": 26579
+  },
+  "producer_actual_build": {
+    "bytes": 9744,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/ACTUAL-PRODUCTION-BUILD-AND-CONSUMER-RESULT.json",
+    "sha256": "44fa8297032bfe50996a852a51bc8dc1d324b326aad7d0ab50d9157f7fde85b0"
+  },
+  "producer_artifact": {
+    "mode": 448,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/pair-long-collector",
+    "sha256": "142d55fb2ef5e5f1d7377a4731e3f65751984848de1e8543c5b31183e94ab5e7",
+    "size": 1633024
+  },
+  "producer_durable_ELF": {
+    "bytes": 18567,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/ACTUAL-COMPILED-ELF.DURABLE.json",
+    "sha256": "7d2a3089170ba300ca21f234ad29d9bd33290bb5e8d6c97ab93c1b03c60b37ae"
+  },
+  "producer_review": {
+    "bytes": 1279,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-correction-1/INDEPENDENT-SOURCE-AND-ACTUAL-FIXTURE-ACCEPTANCE.ROOT-RECORD.json",
+    "sha256": "ac29e9b9c3bb2aa333581e82944806f022ab48c52f0d2e3bc1f651f6a0189c19"
+  },
+  "producer_review_scope": "Genuineindependentsource/52fixtureapproval +rootexplicitordinaryartifact-stagegrantafteractualproductionlink; noindependentELF/nativeacceptanceclaim.",
+  "retained_blocked_candidate2_artifact": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/production-link-1/attempt-1/pair-long-collector",
+    "sha256": "82b35164897bdc437e227712431935a94fe2588100af1daa30147fffab7919a0",
+    "size": 1627840
+  },
+  "retained_blocked_candidate2_link_evidence": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/production-link-1/FINAL-ACTUAL-STATIC-LONG-ELF-EVIDENCE.json",
+    "sha256": "5816157b8223e46b3fb7827e0453a349ad78d6d756dda8ad983b38a8a85861bb",
+    "size": 4270
+  },
+  "reviewed_stage_profile": null,
+  "runtime_release": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "scratch_floor_bytes": 12884901888,
+  "scratch_input_growth_bytes": null,
+  "selected_members_expected": 6,
+  "status": "PENDING_ACTUAL_SDK7_ARTIFACT_PHYSICAL_AND_STRICT_AUTHORITY_NO_STAGE",
+  "unchanged_final_members_required": null
+}

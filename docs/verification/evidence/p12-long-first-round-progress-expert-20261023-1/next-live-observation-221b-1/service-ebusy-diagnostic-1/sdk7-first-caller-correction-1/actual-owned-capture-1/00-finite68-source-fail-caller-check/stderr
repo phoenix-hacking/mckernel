@@ -1,0 +1,24 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/sdk7-first-caller-correction-1/check_actual_fail_callers.py", line 32, in <module>
+    for call in calls(src):dest.append(dict(key=key,**call))
+  File "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/sdk7-first-caller-correction-1/check_actual_fail_callers.py", line 10, in calls
+    code=strip(src);out=[]
+  File "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/sdk7-first-caller-correction-1/check_actual_fail_callers.py", line 8, in strip
+    return re.sub(r'//[^\n]*|/\*.*?\*/|"(?:\.|[^"\])*"',lambda m:''.join('\n' if c=='\n' else ' ' for c in m.group()),src,flags=re.S)
+  File "/home/holden/anaconda3/lib/python3.9/re.py", line 210, in sub
+    return _compile(pattern, flags).sub(repl, string, count)
+  File "/home/holden/anaconda3/lib/python3.9/re.py", line 304, in _compile
+    p = sre_compile.compile(pattern, flags)
+  File "/home/holden/anaconda3/lib/python3.9/sre_compile.py", line 764, in compile
+    p = sre_parse.parse(p, flags)
+  File "/home/holden/anaconda3/lib/python3.9/sre_parse.py", line 950, in parse
+    p = _parse_sub(source, state, flags & SRE_FLAG_VERBOSE, 0)
+  File "/home/holden/anaconda3/lib/python3.9/sre_parse.py", line 443, in _parse_sub
+    itemsappend(_parse(source, state, verbose, nested + 1,
+  File "/home/holden/anaconda3/lib/python3.9/sre_parse.py", line 836, in _parse
+    p = _parse_sub(source, state, sub_verbose, nested + 1)
+  File "/home/holden/anaconda3/lib/python3.9/sre_parse.py", line 443, in _parse_sub
+    itemsappend(_parse(source, state, verbose, nested + 1,
+  File "/home/holden/anaconda3/lib/python3.9/sre_parse.py", line 549, in _parse
+    raise source.error("unterminated character set",
+re.error: unterminated character set at position 26

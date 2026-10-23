@@ -1,3 +1,63 @@
+## SDK8 callerfix actualfixture+stagingPASS; publish thenfreshbuildadmission — 2026-10-23 20:59 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Differentexpert corrected observer-onlyregex/preflight andactualfixture81924439
+PASS1.734221s/all3commandsjoinedgoneclosed:20Service.first pairs/all11callers plus
+retainedregressions. Product7d4948/955a unchanged, independentlySOURCEPASS; root
+integratedsoleSMPpostimageb1978ef6 afterf5e8preimage+othersixverified unchanged.
+AllSDK7/observerfailurespreserved. ActualSDK8prepare232eb1580/.257498s,68identity
+48bbad0a/7changed61same; actualrootonceSDK8stage0/.108183s/joinedgoneclosed.
+H8request0ba3890160f1332cb85bf9b5a8d14504174b8e1c640ab267b84020aa68751311;
+nonce30717e2c0ee840ffa441d577bed3a427; candidate66306:55996916/inputs1828:116735.
+Exact11runtimeSOURCEPASS2fa5eec9 separatefromsevenhostmoduleverdict; sourcepub and
+freshSDK8query/lastfacts/exactexecutionreview next, no heavy/build yet. Latest
+current_live_postjoin FAILED_SDK7_COMPILER_POSITIVELY_RETIRED via8158 NONNULL;
+no repeatedquery/cleanup, originalSDK6acceptedartifactbasis9159. NextfullSDK8build
+issoleboundedproductcorrection; anotherunexpectedcompilefailureSTOP/expert.
+M14canonicaltop-log e52b/8d9c source+179200hostedpairs+78Rust+selectedGCC9partial
+accepted; candidate14 actualsource/completepure43aabd04 PASS45.044822s independently
+accepted/CPU6released. Manifestbf3096e0/requestd68b8cc3; defaultGCC14/link/native
+remainOPEN/current10972 unchanged. Practical34/35/whole12of14/LONGformal0 unchanged.
+
+## FailedSDK7 POSITIVELY RETIRED; SDK8callerfixture expert — 2026-10-23 20:50 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+IndependentACTUALfailedSDK7physicalPASS: PROC9ec7d25e twoCOMPLETE303/no publishers/
+owner3904337birth58547585+15numericclientsabsentboth; clientbirthsNULL/initNULL.
+Mutex8fdd42ef permanent27:4/eightpathsabsent, normalCIDf300removed/threeemptyqueries/
+allreaps+recordreleasearchive427a accepted. BothexactV3reads0/joinedgoneclosed/
+emptyerr/noouterkill. Current_live_postjoin FAILED_SDK7_COMPILER_POSITIVELY_RETIRED
+nonNULL viaactuald2212f9a; no furtherquery/cleanup needed. SDK7compilerFAIL6.751s
+E0061Service.first remainspreserved/no moduleacceptance. SolecorrectedRust7d4948d7
+sourcePASS; actualfixturepending. ObserverauthorstoppedafterstaleSDK6preflight/
+regexrepairfailure beforeRustcompilation (sourcecheckerchild3907104joinedgone).
+Differentexpert p12_consumer_fixture_expert owns narrowlycorrectedchecker+actual
+fixture; no thirdauthorretry. case227 preparesSDK8helper only, originalaccepted
+SDK6basis retained/no failedSDK7artifactcredit. Newrelease/admission remainsNULL.
+Practical34/35,whole12/14,formalLONG0. M14canonicaltoplog+selectedRust/GCC9partial
+proof retained; candidate14sourceprep independentlyactive/no heavy/nativecredit.
+
+## SDK7 compilerFAIL closed; boundedcallerfix andphysicalclearance — 2026-10-23 20:47 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Tool75034CLOSEDFAIL1/6.751474s, outerdirectjoined/groupgone/closed/emptyerr.
+FirstfullSDKcompilerE0061: smp_service1021 Service.first fail(error) missingnew
+FailureOrigin. No acceptedmodule/native/EBUSYcause result. Normalownerreports
+retiredtrue/ownedremoval+recordreleasePASS/CIDf300removed+threeabsencequeries;
+independentphysicalpending. Current_live_postjoin CLOSED_FAILED_SDK7_PENDING_PHYSICAL
+nonNULL, no competingheavy/no cleanuprepeat. OriginalV3twoqueriespacket9e8fbbe2
+awaitsfocusedrelease, actual15clientbirthsNULL/owner3904337birth58547585 retained.
+Soleproductcorrection7d4948d7/955a8e11 adds initializedFirstPacket message/known503;
+sourceindependentPASS, fixturepending. Observerpreflight usedstaleSDK6preimages
+andcheckerregexescapedwrong; preservedpreeffectfailure/nochild. Rootauthorized
+oneobserver-onlycorrection toknownfailedSDK7postimages/checker; furtherunexpected
+failureSTOP/expert. Source/coreerrors/quarantine unchanged; no release reuse.
+Practical34/35/whole12of14 remains; P-M12-01OPEN/no formalLONGcredit.
+M14toplog exact2canonicale52b/8d9c integratedrootc0e5 after179200hostedpairs,
+78Rustcompile+selectedGCC9/ABI/partiallink29Rust+2C allindependentlyaccepted.
+Currentacceptedimage10972 stillold; finaldefaultimage/native/loggingOPEN. Candidate13
+frozenunchanged, candidate14source-onlypreparation assigned. No wholefilecredit.
+
 ## SDK7 freshadmission PASS; staticpublication thenexactbuildrelease — 2026-10-23 20:36 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

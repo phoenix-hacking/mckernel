@@ -1,0 +1,43 @@
+--- failed-observer/check_actual_fail_callers.py
++++ expert/check_actual_fail_callers.py
+@@ -5,7 +5,7 @@
+ def pin(p):
+  b=p.read_bytes();return dict(path=str(p),sha256=hashlib.sha256(b).hexdigest(),bytes=len(b))
+ def strip(src):
+- return re.sub(r'//[^\n]*|/\*.*?\*/|"(?:\.|[^"\])*"',lambda m:''.join('\n' if c=='\n' else ' ' for c in m.group()),src,flags=re.S)
++ return re.sub(r'//[^\n]*|/\*.*?\*/|"(?:\\.|[^"\\])*"',lambda m:''.join('\n' if c=='\n' else ' ' for c in m.group()),src,flags=re.S)
+ def calls(src):
+  code=strip(src);out=[]
+  for match in re.finditer(r'((?:\w+\.)+)fail\s*\(',code):
+@@ -22,6 +22,16 @@
+   if last:args.append(last)
+   out.append(dict(receiver=match.group(1)[:-1],line=src[:match.start()].count('\n')+1,args=args,source=src[match.start():i]))
+  return out
++# Observer regression controls: comments and escaped Rust strings are not callers.
++lexical_control = r'''// self.fail(error, FailureOrigin::Hidden);
++/* entry.runtime.fail(error, FailureOrigin::Hidden); */
++let text = "quoted \" self.fail(error, FailureOrigin::Hidden) and backslash \\";
++self.runtime.fail(error, FailureOrigin::Visible { message: 503 });
++'''
++lexical_calls=calls(lexical_control)
++assert len(lexical_calls)==1 and lexical_calls[0]['receiver']=='self.runtime'
++assert lexical_calls[0]['line']==4 and lexical_calls[0]['args']==['error','FailureOrigin::Visible { message: 503 }']
++assert strip(lexical_control).count('\n')==lexical_control.count('\n')
+ j=json.loads(M.read_text());rows=j['source_identity_rows'];assert len(rows)==68
+ closure=[];before=[];after=[]
+ for key,sha,size in rows:
+@@ -42,7 +52,7 @@
+ # Invert exactly four additive changes: no functional body or other caller diff.
+ inverse=new.replace('    FirstPacket { message: i32 },\n','',1).replace('            Self::FirstPacket { .. } => "first_dispatch",\n','',1)
+ inverse=inverse.replace('''            if let FailureOrigin::FirstPacket { message } = origin {
+-                pr_err!("IHK-P os={} g={} d={} port=503 m={:x}\n",
++                pr_err!("IHK-P os={} g={} d={} port=503 m={:x}\\n",
+                     self.owner.slot(), self.owner.generation(), diag, message);
+             }
+ ''','',1)
+@@ -57,4 +67,4 @@
+ line='IHK-P os=4294967295 g=18446744073709551615 d=16 port=503 m=ffffffff\n';assert len(line)+96<=255
+ fixture=(C/'fixture/diagnostic.rs').read_text();assert 'origins=11' in fixture and 'first_fixture::test();' in fixture and 'FailureOrigin::FirstPacket{message:i32::MIN}' in fixture
+ result=dict(scope='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.',status='PASS_FINITE68_SOURCE_11_FAIL_CALLER_COVERAGE_NOT_RUST_TYPECHECK',selected_map=pin(M),input_closure=closure,before=before,after=after,callers=11,original_omissions=1,successor_omissions=0,unchanged_prior_ten_calls=True,exact_four_additive_changes_invert_to_failed_preimage=True,new_format_total_bytes_with96prefix=len(line)+96,existing16ticket_budget_unchanged=True,actual_SDK7_successor_compile=None,diagnostic_semantics_only=True,canonical_writes=0)
+-(C/'ACTUAL-FAIL-CALL-COVERAGE.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(dict(status=result['status'],callers=11,omissions=0,new_line_plus96=len(line)+96)))
++(C/'ACTUAL-FAIL-CALL-COVERAGE.EXPERT.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(dict(status=result['status'],callers=11,omissions=0,new_line_plus96=len(line)+96)))
