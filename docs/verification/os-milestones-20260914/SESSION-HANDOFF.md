@@ -1,3 +1,24 @@
+## Settlement producer/cohort acceptedactualchecks; freshadmission next — 2026-10-23 19:20 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Fetchedcheckpointa4a9ba425c51028a9c9fd4bb8e8565f0507f6a4c/412exactchangedblobs,
+proofaaf22957. Failed5603 remainspositivelyretired10c5da13/nonNULLcurrentpostjoin;
+noheavy/liveowner. Observer52commands23a6c70d/22.572840s independentlyaccepted;
+originalearlyFAIL andCONSTRUCTEDsettledPASS/real5sneverSettlesTIMEOUT preserved.
+Actualcollector142d55fb/1633024B+init-onlycapsulecde77/manifest33eb/61same/fullstrict
+88+genuine9159SDK6 independentlyaccepted184ed5aa. m33ebpublishedscratchp12s6l2
+0600singlelink/dev1828/inode116713. Runtime28de/394e/244b coherentnewnonce221b/
+HOSTl12e1/p66306:55861466, actualfixture64d2643d0/.914562s:18guards181pins208paths/
+37opens57ROmounts55roots/bothnegativesrefuse; wholejoin/gone/closedemptyerr.
+Source/queryindependentreview active; terminalauthorpreparesonefreshadmission;
+noexpiry/release/runtime minted. Publishstaticbeforeminting590s andimmediately
+launchafteractualfinalrequestprefix+fullrealclockvalidation/exactreview.
+Practical34/35,whole12/14,acceptedLONG0/100launches/0/60mixedminutes. M14S05Rust
+loggingbodycanonicalintegrated; candidate12actualsource+pure43.319219s independently
+accepted,25Rustproviders/148retained+6descriptorassertions; TU/link/nativeOPEN.
+Onecurrent10972read-onlyattribution actualmeasurement lane active; no newruntimegate.
+Memorytwoactualfailedjobs retained, parked/noCPUslot; no parityexecutableran.
+
 ## SDK6 failed5603 POSITIVELY RETIRED; settlementfixture next — 2026-10-23 19:07 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

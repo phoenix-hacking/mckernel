@@ -1,0 +1,544 @@
+{
+  "LONG_terminal_acceptance": null,
+  "Rust_archive_reuse": {
+    "accepted_source_sha256": {
+      "pair_long_producer.rs": "9f5c980fb616d07a4c9816ea2474c7c6a8d045099df1ae2db11c12a2ebc92917",
+      "pair_long_static.rs": "fc8d6f783b761f6e0552cbac7ad62de2732bace959cd76e442b64717fead1ddb"
+    },
+    "actual_postbuild_sha256": null,
+    "actual_prebuild_sha256": null,
+    "expected_sha256": "45a8d7572bb0ffa1bbdf9d069960c8f0a7040c8c2a103334e7bb746b155a4950",
+    "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/attempt-1/libpair_long.a",
+    "recompile_planned": false,
+    "rule": "Use accepted558 archive path as the unchanged original link input. Under actualbuild grant authenticate stable regular source FD and pre/post hash once; fail if metadata/hash changes. No unobserved archive hash claimed now.",
+    "size_observed": 7261594,
+    "source_bytes_identical": true
+  },
+  "accepted558_build_receipt": {
+    "bytes": 12387,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/FINAL-ACTUAL-SOURCE-ELF-AND-CONSUMER-RESULT.json",
+    "sha256": "4c9521a5411547010dfcebb87714a9a03a86ba76c9311917a7445a7a5045557f"
+  },
+  "accepted_Rust_archive_build_command": {
+    "bytes": 987,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/attempt-1/Rust-staticlib/command.json",
+    "sha256": "5478c4b4ce235640de06bec5ef99df63a010a8a20716d7e46663370fdac657dd"
+  },
+  "accepted_production_command": {
+    "bytes": 1209,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/attempt-1/actual-static-LONG-ELF/command.json",
+    "sha256": "0fd755dc5dec0295de223fdfdf767faabeefe8ed9abfc9609a0cc7cd6329836c"
+  },
+  "accepted_production_driver": {
+    "bytes": 5860,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/run_final_gate_fixture.py",
+    "sha256": "67fe498a6e84ba30e7f413ea55f0855e21216735f97eeeebc27651530e176a17"
+  },
+  "accounting": {
+    "CPIO_writes": 0,
+    "CPU_jobs_started": 0,
+    "big_artifact_hashes": 0,
+    "canonical_or_frozen_source_edits": 0,
+    "compilers_run": 0,
+    "root_or_guest_operations": 0
+  },
+  "actual_closed_captures": null,
+  "actual_new_ELF": null,
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-static",
+        "-fno-pie",
+        "-no-pie",
+        "-Wl,-z,noexecstack",
+        "-DND_CORE_THREADS",
+        "-DND_PAIR_LAUNCH_EXPANSION",
+        "-DND_PAIR_LONG",
+        "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/pair_collector.c",
+        "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/attempt-1/libpair_long.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/pair-long-collector"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1",
+      "label": "production-static-LONG-ELF",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Production ND_PAIR_LONG Linux PID1 ELF link; no TEST modes or execution.",
+      "shell": false
+    },
+    {
+      "argv": [
+        "/usr/bin/nm",
+        "--defined-only",
+        "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/pair-long-collector"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1",
+      "label": "ELF-symbols",
+      "purpose": "Functional OS static ELF production Rust export readback only; no security testing.",
+      "shell": false
+    },
+    {
+      "argv": [
+        "/usr/bin/nm",
+        "-u",
+        "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/pair-long-collector"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1",
+      "label": "ELF-undefined",
+      "purpose": "Functional OS static ELF link completeness only; no security testing.",
+      "shell": false
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-h",
+        "-l",
+        "-d",
+        "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/pair-long-collector"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1",
+      "label": "ELF-headers",
+      "purpose": "Functional OS ELF static EXEC/noINTERP readback only; no security testing.",
+      "shell": false
+    },
+    {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/candidate-1/check_consumer.py",
+        "check"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/candidate-1",
+      "env_binding": {
+        "REAL_ATTEMPT": "attempt-1"
+      },
+      "label": "unchanged-strict-full-consumer",
+      "purpose": "Functional OS unchanged strict pair/LONG consumers on retained controlled actual-Linux bridge derivatives; TESTONLY protocol evidence, no native credit; no security testing.",
+      "shell": false
+    }
+  ],
+  "current_owner_positive_physical_retirement": null,
+  "expert_candidate_acceptance": {
+    "bytes": 10598,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-correction-1/IMPLEMENTATION-AND-ACTUAL-FIXTURE-RESULT.json",
+    "sha256": "4b1676e56b09b23be134470995dc60f04705599c00eb355f30d5bae99a64df6a"
+  },
+  "expert_frozen_sources": {
+    "bytes": 3736,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/candidate-1/FROZEN-SOURCES.json",
+    "sha256": "cadbbb3c5ab5df6757d8f0b88dcc5638ad65f2ca401afa3709b66f8ee1efc27d"
+  },
+  "genuine_changed_source_map": {
+    "long_bridge.inc": "e48e06f14bb7415695fc58a9a8d330aee2af37df7ed604f69a33fd2e68560d58",
+    "pair_collector.c": "5ffe7ef09c601ab3fe13cb25fc4745c538f34f1b8eb3d5858b21a9969f6b0834"
+  },
+  "independent_new_ELF_acceptance": null,
+  "materialized_small_source_root": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source",
+  "new_capsule": null,
+  "next_LONG_native_release": null,
+  "no_execution_or_replay_grant": true,
+  "production_mode_constraints": {
+    "Rust_source_archive_unchanged": true,
+    "exact_flags": [
+      "-DND_CORE_THREADS",
+      "-DND_PAIR_LAUNCH_EXPANSION",
+      "-DND_PAIR_LONG"
+    ],
+    "no_CPP_TEST_MODE": true,
+    "no_ELF_execution": true,
+    "no_app_SDK_image_launcher_rebuild": true,
+    "no_fixture_macro": true
+  },
+  "profile": {
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "FSIZE_bytes": 33554432,
+    "NOFILE": 256,
+    "capture_source_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8",
+    "core": 0,
+    "cpu": 6,
+    "cpu0_grant": null,
+    "cpu6_grant": "RootexplicitONEordinaryproductionbuildafter52fixturewholejoin",
+    "execution_authorized": true,
+    "grace_seconds": 6,
+    "interpreter": "/home/holden/anaconda3/bin/python3",
+    "jobs": 1,
+    "reference_original_cpu": 7,
+    "wall_seconds": 90
+  },
+  "required_actual_output_checks": {
+    "ELF64_AMD64_static_EXEC": true,
+    "INTERP_absent": true,
+    "archive_prepost_stable": true,
+    "dynamic_section_absent": true,
+    "long_complete_C_inlining_allowed_as_accepted": true,
+    "real_production_callbacks_present": [
+      "long_empty",
+      "long_now",
+      "long_pair",
+      "long_read",
+      "long_retain",
+      "long_write",
+      "pair_round_workspace_verify"
+    ],
+    "undefined_symbols": [],
+    "unique_Rust_exports": [
+      "pair_run_long_session",
+      "pair_complete_long_session"
+    ]
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "smallest_full_consumer_proof": {
+    "accepted_strict_consumer_sources": {
+      "native_diagnostic.py": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/source/native_diagnostic.py",
+        "sha256": "f417a029b43b1d7916e733742946a709584b0a606849f1ca2fc46647bd40dbef",
+        "size": 88327
+      },
+      "p12_long_session.py": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/source/p12_long_session.py",
+        "sha256": "bff717d885afdda0d82cd0ab05a0930a3e66b242c6200b1295f2173bb4cdc5d3",
+        "size": 10930
+      }
+    },
+    "actual_new_check_receipt": null,
+    "command_index": 4,
+    "consumes": "Existing candidate-1/attempt-1 actual controlled Linux bridge report/trace, full360round derivatives and final-gate wires produced in expert35commands; first calls original _pair_body, then unchanged check_long_session positive and negatives. No regeneration, no fake native acceptance.",
+    "source": {
+      "bytes": 3784,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/candidate-1/check_consumer.py",
+      "sha256": "e3b4bf8da6c417a61f626452caed481e38e817bee657013d7f99247708c751e2"
+    }
+  },
+  "source_closure": {
+    "long_bridge.inc": {
+      "accepted_preimage": {
+        "bytes": 9503,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/long_bridge.inc",
+        "sha256": "e48e06f14bb7415695fc58a9a8d330aee2af37df7ed604f69a33fd2e68560d58"
+      },
+      "materialized": {
+        "bytes": 9511,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/long_bridge.inc",
+        "sha256": "56780e38e347e0f88c1b911525d56a2165e291387c260caf9ec3b031b1ddb4d8"
+      },
+      "selected": {
+        "bytes": 9511,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-correction-1/bounded-correction-1/long_bridge.inc",
+        "sha256": "56780e38e347e0f88c1b911525d56a2165e291387c260caf9ec3b031b1ddb4d8"
+      },
+      "unchanged": false
+    },
+    "long_empty.inc": {
+      "accepted_preimage": {
+        "bytes": 448,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/long_empty.inc",
+        "sha256": "829151c8080deeeaf56de7b71c5c7493ecbc73cb83e8c010bac38bcafb23a588"
+      },
+      "materialized": {
+        "bytes": 448,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/long_empty.inc",
+        "sha256": "829151c8080deeeaf56de7b71c5c7493ecbc73cb83e8c010bac38bcafb23a588"
+      },
+      "selected": {
+        "bytes": 448,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/long_empty.inc",
+        "sha256": "829151c8080deeeaf56de7b71c5c7493ecbc73cb83e8c010bac38bcafb23a588"
+      },
+      "unchanged": true
+    },
+    "long_provider_decl.inc": {
+      "accepted_preimage": {
+        "bytes": 224,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/long_provider_decl.inc",
+        "sha256": "92d4da589e28f1177c0edcedb71206220bc0185a1fa5282a8021bdba181bf836"
+      },
+      "materialized": {
+        "bytes": 224,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/long_provider_decl.inc",
+        "sha256": "92d4da589e28f1177c0edcedb71206220bc0185a1fa5282a8021bdba181bf836"
+      },
+      "selected": {
+        "bytes": 224,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/long_provider_decl.inc",
+        "sha256": "92d4da589e28f1177c0edcedb71206220bc0185a1fa5282a8021bdba181bf836"
+      },
+      "unchanged": true
+    },
+    "long_support.inc": {
+      "accepted_preimage": {
+        "bytes": 10887,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/long_support.inc",
+        "sha256": "306d889b49249caecc2852454308ed4692d5bb8699fc70314cd07e844fa2cc03"
+      },
+      "materialized": {
+        "bytes": 10893,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/long_support.inc",
+        "sha256": "1eb80bf416ec15d108c48ab3be1e4c5e3f8f159e01eb3e85ee0864e646d0db44"
+      },
+      "selected": {
+        "bytes": 10893,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-correction-1/bounded-correction-1/long_support.inc",
+        "sha256": "1eb80bf416ec15d108c48ab3be1e4c5e3f8f159e01eb3e85ee0864e646d0db44"
+      },
+      "unchanged": false
+    },
+    "long_trace_retention.inc": {
+      "accepted_preimage": {
+        "bytes": 6588,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/long_trace_retention.inc",
+        "sha256": "66ad73a4b7da9ccb775247c2d32a803f445e93a1e5b8762cabc5a4968adf099f"
+      },
+      "materialized": {
+        "bytes": 6588,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/long_trace_retention.inc",
+        "sha256": "66ad73a4b7da9ccb775247c2d32a803f445e93a1e5b8762cabc5a4968adf099f"
+      },
+      "selected": {
+        "bytes": 6588,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/long_trace_retention.inc",
+        "sha256": "66ad73a4b7da9ccb775247c2d32a803f445e93a1e5b8762cabc5a4968adf099f"
+      },
+      "unchanged": true
+    },
+    "pair_assignment.h": {
+      "accepted_preimage": {
+        "bytes": 3010,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_assignment.h",
+        "sha256": "29963c5088598368fe7565a6fba88f5712cece4105314e4d1f2205c6a936b643"
+      },
+      "materialized": {
+        "bytes": 3010,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/pair_assignment.h",
+        "sha256": "29963c5088598368fe7565a6fba88f5712cece4105314e4d1f2205c6a936b643"
+      },
+      "selected": {
+        "bytes": 3010,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_assignment.h",
+        "sha256": "29963c5088598368fe7565a6fba88f5712cece4105314e4d1f2205c6a936b643"
+      },
+      "unchanged": true
+    },
+    "pair_collector.c": {
+      "accepted_preimage": {
+        "bytes": 25323,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_collector.c",
+        "sha256": "5ffe7ef09c601ab3fe13cb25fc4745c538f34f1b8eb3d5858b21a9969f6b0834"
+      },
+      "materialized": {
+        "bytes": 25323,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/pair_collector.c",
+        "sha256": "5ffe7ef09c601ab3fe13cb25fc4745c538f34f1b8eb3d5858b21a9969f6b0834"
+      },
+      "selected": {
+        "bytes": 25323,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_collector.c",
+        "sha256": "5ffe7ef09c601ab3fe13cb25fc4745c538f34f1b8eb3d5858b21a9969f6b0834"
+      },
+      "unchanged": true
+    },
+    "pair_collector.inc": {
+      "accepted_preimage": {
+        "bytes": 4616,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_collector.inc",
+        "sha256": "dcfbb3a9c7199c4d06e014a7b9df9933da7c6f26ed552bc2bdca9e272a082020"
+      },
+      "materialized": {
+        "bytes": 4616,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/pair_collector.inc",
+        "sha256": "dcfbb3a9c7199c4d06e014a7b9df9933da7c6f26ed552bc2bdca9e272a082020"
+      },
+      "selected": {
+        "bytes": 4616,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_collector.inc",
+        "sha256": "dcfbb3a9c7199c4d06e014a7b9df9933da7c6f26ed552bc2bdca9e272a082020"
+      },
+      "unchanged": true
+    },
+    "pair_launch_expansion_run.inc": {
+      "accepted_preimage": {
+        "bytes": 3340,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_launch_expansion_run.inc",
+        "sha256": "6a948ebc2a68b9f3e18cb5fded0eb8309a1bc31a94ecf4e1dccdf1bc620dacbd"
+      },
+      "materialized": {
+        "bytes": 3340,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/pair_launch_expansion_run.inc",
+        "sha256": "6a948ebc2a68b9f3e18cb5fded0eb8309a1bc31a94ecf4e1dccdf1bc620dacbd"
+      },
+      "selected": {
+        "bytes": 3340,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_launch_expansion_run.inc",
+        "sha256": "6a948ebc2a68b9f3e18cb5fded0eb8309a1bc31a94ecf4e1dccdf1bc620dacbd"
+      },
+      "unchanged": true
+    },
+    "pair_launch_expansion_support.inc": {
+      "accepted_preimage": {
+        "bytes": 8799,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_launch_expansion_support.inc",
+        "sha256": "9348bce5f046b3285547e1348966c18b0f09cbfaa9592d04fcc3c7d2c4a64379"
+      },
+      "materialized": {
+        "bytes": 8799,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/pair_launch_expansion_support.inc",
+        "sha256": "9348bce5f046b3285547e1348966c18b0f09cbfaa9592d04fcc3c7d2c4a64379"
+      },
+      "selected": {
+        "bytes": 8799,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_launch_expansion_support.inc",
+        "sha256": "9348bce5f046b3285547e1348966c18b0f09cbfaa9592d04fcc3c7d2c4a64379"
+      },
+      "unchanged": true
+    },
+    "pair_long_producer.h": {
+      "accepted_preimage": {
+        "bytes": 1432,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_long_producer.h",
+        "sha256": "c929df9548b9660857c55fb6c01886df5a7363e7f992f7032941c81a054ef599"
+      },
+      "materialized": {
+        "bytes": 1432,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/pair_long_producer.h",
+        "sha256": "c929df9548b9660857c55fb6c01886df5a7363e7f992f7032941c81a054ef599"
+      },
+      "selected": {
+        "bytes": 1432,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_long_producer.h",
+        "sha256": "c929df9548b9660857c55fb6c01886df5a7363e7f992f7032941c81a054ef599"
+      },
+      "unchanged": true
+    },
+    "pair_long_producer.rs": {
+      "accepted_preimage": {
+        "bytes": 13292,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_long_producer.rs",
+        "sha256": "9f5c980fb616d07a4c9816ea2474c7c6a8d045099df1ae2db11c12a2ebc92917"
+      },
+      "materialized": {
+        "bytes": 13292,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/pair_long_producer.rs",
+        "sha256": "9f5c980fb616d07a4c9816ea2474c7c6a8d045099df1ae2db11c12a2ebc92917"
+      },
+      "selected": {
+        "bytes": 13292,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_long_producer.rs",
+        "sha256": "9f5c980fb616d07a4c9816ea2474c7c6a8d045099df1ae2db11c12a2ebc92917"
+      },
+      "unchanged": true
+    },
+    "pair_long_static.rs": {
+      "accepted_preimage": {
+        "bytes": 13483,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_long_static.rs",
+        "sha256": "fc8d6f783b761f6e0552cbac7ad62de2732bace959cd76e442b64717fead1ddb"
+      },
+      "materialized": {
+        "bytes": 13483,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/pair_long_static.rs",
+        "sha256": "fc8d6f783b761f6e0552cbac7ad62de2732bace959cd76e442b64717fead1ddb"
+      },
+      "selected": {
+        "bytes": 13483,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_long_static.rs",
+        "sha256": "fc8d6f783b761f6e0552cbac7ad62de2732bace959cd76e442b64717fead1ddb"
+      },
+      "unchanged": true
+    },
+    "pair_round_oracles.h": {
+      "accepted_preimage": {
+        "bytes": 2469,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_round_oracles.h",
+        "sha256": "4f7fbd55ffa528e59bdb2445bb74ee681fab4e2cd4ca4e5a016d7c0d525d7bbc"
+      },
+      "materialized": {
+        "bytes": 2469,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/pair_round_oracles.h",
+        "sha256": "4f7fbd55ffa528e59bdb2445bb74ee681fab4e2cd4ca4e5a016d7c0d525d7bbc"
+      },
+      "selected": {
+        "bytes": 2469,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_round_oracles.h",
+        "sha256": "4f7fbd55ffa528e59bdb2445bb74ee681fab4e2cd4ca4e5a016d7c0d525d7bbc"
+      },
+      "unchanged": true
+    },
+    "pair_runtime.inc": {
+      "accepted_preimage": {
+        "bytes": 5686,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_runtime.inc",
+        "sha256": "6fb3c422bd11ecfa2cfdd29eb3665f9d81eb29039cf379ebd415f07087634899"
+      },
+      "materialized": {
+        "bytes": 5686,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/pair_runtime.inc",
+        "sha256": "6fb3c422bd11ecfa2cfdd29eb3665f9d81eb29039cf379ebd415f07087634899"
+      },
+      "selected": {
+        "bytes": 5686,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_runtime.inc",
+        "sha256": "6fb3c422bd11ecfa2cfdd29eb3665f9d81eb29039cf379ebd415f07087634899"
+      },
+      "unchanged": true
+    },
+    "pair_trace_retention.inc": {
+      "accepted_preimage": {
+        "bytes": 11255,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_trace_retention.inc",
+        "sha256": "5b59e01a608740b8e830c5cf2fb94a1610163b961324bce31a0f3d7295856a8d"
+      },
+      "materialized": {
+        "bytes": 11255,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/pair_trace_retention.inc",
+        "sha256": "5b59e01a608740b8e830c5cf2fb94a1610163b961324bce31a0f3d7295856a8d"
+      },
+      "selected": {
+        "bytes": 11255,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_trace_retention.inc",
+        "sha256": "5b59e01a608740b8e830c5cf2fb94a1610163b961324bce31a0f3d7295856a8d"
+      },
+      "unchanged": true
+    },
+    "retirement_settlement.inc": {
+      "accepted_preimage": null,
+      "materialized": {
+        "bytes": 2780,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/retirement_settlement.inc",
+        "sha256": "efafd4127ee976c9ed0a24e1902a2d136600244a2b70113fc1fcd0db91dd5da6"
+      },
+      "selected": {
+        "bytes": 2780,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-correction-1/bounded-correction-1/retirement_settlement.inc",
+        "sha256": "efafd4127ee976c9ed0a24e1902a2d136600244a2b70113fc1fcd0db91dd5da6"
+      },
+      "unchanged": false
+    }
+  },
+  "source_independent_acceptance": null,
+  "source_publication": null,
+  "status": "ROOT_GRANTED_ORDINARY_PRODUCTION_COMPILE_SOURCE_FIXTURE52_PASSED_SOURCE_REVIEW_CONCURRENT",
+  "three_delivered_deltas": [
+    {
+      "name": "pair_collector.c",
+      "role": "Csource",
+      "sha256": "5ffe7ef09c601ab3fe13cb25fc4745c538f34f1b8eb3d5858b21a9969f6b0834"
+    },
+    {
+      "name": "long_bridge.inc",
+      "role": "includedCsource",
+      "sha256": "e48e06f14bb7415695fc58a9a8d330aee2af37df7ed604f69a33fd2e68560d58"
+    },
+    {
+      "bytes": null,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/pair-long-collector",
+      "role": "newactualproductionELF",
+      "sha256": null
+    }
+  ]
+}

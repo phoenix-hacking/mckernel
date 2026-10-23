@@ -1,0 +1,219 @@
+{
+  "accounting": {
+    "CPIOwrites": 0,
+    "CPU_jobs": 0,
+    "compile": 0,
+    "execution_or_reservation_grant": false,
+    "large_hashes": 0,
+    "root_Docker_guest": 0,
+    "stage": 0
+  },
+  "actual_failed5603": {
+    "bytes": 10877,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/diagnosis-1/RETAINED-5603-FACTS.json",
+    "sha256": "8fb82c66d6b0d0449a94e933e4fd6f928ed0fa8769121e97c3e81596b323e2b3"
+  },
+  "existing_accepted_build": {
+    "actual_build_and_strict_consumer": {
+      "bytes": 9173,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/ACTUAL-PRODUCTION-BUILD-AND-CONSUMER-RESULT.json",
+      "sha256": "41b4e2ce23eae673335cf303ba9ea1b27bd1849fccbd7851b7afb8f0271ec4c3"
+    },
+    "actual_production_ELF": "cb3bfbcd065e0cccf36d13afa4e0d09b45319fbb99ab36c2b088c136ecad192f",
+    "archive_rule": "Stable regular nofollow FD, exactsize/hash45a8 pre/post once underactualbuildgrant. Unchanged Rust archive reused; if changed STOP, no Rustcompile substituting. DurableactualELFreceipt before nm/readelf/strictconsumer; observerfailuremustreuseactualELF notcompileagain.",
+    "commands": [
+      {
+        "argv": [
+          "/usr/bin/gcc-9",
+          "-std=gnu11",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-static",
+          "-fno-pie",
+          "-no-pie",
+          "-Wl,-z,noexecstack",
+          "-DND_CORE_THREADS",
+          "-DND_PAIR_LAUNCH_EXPANSION",
+          "-DND_PAIR_LONG",
+          "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/production-source/pair_collector.c",
+          "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/attempt-1/libpair_long.a",
+          "-Wl,--gc-sections",
+          "-o",
+          "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/pair-long-collector"
+        ],
+        "cwd": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1",
+        "label": "production-static-LONG-ELF",
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Production ND_PAIR_LONG Linux PID1 ELF link; no TEST modes or execution.",
+        "shell": false
+      },
+      {
+        "argv": [
+          "/usr/bin/nm",
+          "--defined-only",
+          "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/pair-long-collector"
+        ],
+        "cwd": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1",
+        "label": "ELF-symbols",
+        "purpose": "Functional OS static ELF production Rust export readback only; no security testing.",
+        "shell": false
+      },
+      {
+        "argv": [
+          "/usr/bin/nm",
+          "-u",
+          "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/pair-long-collector"
+        ],
+        "cwd": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1",
+        "label": "ELF-undefined",
+        "purpose": "Functional OS static ELF link completeness only; no security testing.",
+        "shell": false
+      },
+      {
+        "argv": [
+          "/usr/bin/readelf",
+          "-h",
+          "-l",
+          "-d",
+          "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/pair-long-collector"
+        ],
+        "cwd": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1",
+        "label": "ELF-headers",
+        "purpose": "Functional OS ELF static EXEC/noINTERP readback only; no security testing.",
+        "shell": false
+      },
+      {
+        "argv": [
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/candidate-1/check_consumer.py",
+          "check"
+        ],
+        "cwd": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/candidate-1",
+        "env_binding": {
+          "REAL_ATTEMPT": "attempt-1"
+        },
+        "label": "unchanged-strict-full-consumer",
+        "purpose": "Functional OS unchanged strict pair/LONG consumers on retained controlled actual-Linux bridge derivatives; TESTONLY protocol evidence, no native credit; no security testing.",
+        "shell": false
+      }
+    ],
+    "driver": {
+      "bytes": 5855,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/run_actual_production_build.py",
+      "sha256": "4e4accaed6e185b0745ba8d03d3b814866238b90006780bb52498921e250228f"
+    },
+    "postprocessor_scope": "Existing check_consumer.py check is unchanged strict pair/LONG oracle regression over controlled bridge derivatives; TESTONLY, never newELF/nativeacceptance. Newsettlement actualbody/final0/timeout/identity fixtures belongsourceowner and are independent requiredsourceproof.",
+    "profile": {
+      "AS_bytes": 2147483648,
+      "CPU_seconds": 60,
+      "FSIZE_bytes": 33554432,
+      "NOFILE": 256,
+      "capture_source_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8",
+      "core": 0,
+      "cpu": 0,
+      "cpu0_grant": null,
+      "execution_authorized": false,
+      "grace_seconds": 6,
+      "interpreter": "/home/holden/anaconda3/bin/python3",
+      "jobs": 1,
+      "reference_original_cpu": 7,
+      "wall_seconds": 90
+    },
+    "recipe": {
+      "bytes": 4222,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/BUILD-COMMANDS.NOT-EXECUTED.json",
+      "sha256": "91961450624d198112279ec44efbab6198db3a73239c12074584379f44e7f49e"
+    },
+    "toolchain": "GCC9 production static LinuxPID1 link only; exactflags unchanged, NOTEST flags, no ELFexecution."
+  },
+  "existing_accepted_capsule": {
+    "SDK6_IHK_SMP_MCCTRL_reused": [
+      "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+      "4489c873327e1f09e32ed9caccceb29d11294f927c9f60db27e44011f503cde3",
+      "06e8b9b571f21b41821aa03a32ebf4ae20ae19cf4b110c3af2c81b491b92ef86"
+    ],
+    "actual_SDK6_baseline_capsule": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-next-native-preparation-1/capsule-next-1/actual-stage-1/lifecycle-long.cpio.gz",
+      "sha256": "d47c53c78d50b8a6403124e27801f671073f267b7ccebc5b57a557611a054e8d",
+      "size": 19427260
+    },
+    "actual_SDK6_baseline_manifest": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-next-native-preparation-1/capsule-next-1/actual-stage-1/manifest.json",
+      "sha256": "2f4c5c6dab2dcc5993df805da4d4c57c1e8d39c7ac2b4118b59ad578cd9c5c57",
+      "size": 13051
+    },
+    "actual_SDK6_full_strict_loader_handoff": {
+      "bytes": 11879,
+      "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-next-native-preparation-1/capsule-next-1/ACTUAL-SDK6-CAPSULE-AND-STRICT-LOADER-HANDOFF.json",
+      "sha256": "a445b1c9337829788997417931360eb55df7b3a7ff2253cdb85e4e98a3b5b001"
+    },
+    "actual_SDK6_overlay_manifest": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-next-native-preparation-1/capsule-next-1/actual-stage-1/overlay-manifest.json",
+      "sha256": "17e69c0e27178ab70652a37e381382539e9b729fd4c7b2c67194694d099ad60b",
+      "size": 20197
+    },
+    "applications_and_all_existing_oracles_reused": true,
+    "argv_template": [
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      null,
+      "--binding",
+      null
+    ],
+    "builder": {
+      "bytes": 8838,
+      "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-next-native-preparation-1/capsule-next-1/stage_long_session.py",
+      "sha256": "b37c545987bc7643db063575b6de5b4dbb1e83e176b178762b05a57044b0eb0f"
+    },
+    "existing_binding": {
+      "bytes": 10107,
+      "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-next-native-preparation-1/capsule-next-1/CAPSULE-BINDING.READY.json",
+      "sha256": "6d8ccc72092f1a181b4724391c9d3dd85bccfed72751a66c5ed5ce5d171eb20a"
+    },
+    "existing_grant_profile": {
+      "bytes": 687,
+      "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-next-native-preparation-1/capsule-next-1/ROOT-ORDINARY-STAGE-GRANT.json",
+      "sha256": "f71c666bb50010d59f1910bfd02b3378489845c463572b0076b0ed890c752857"
+    },
+    "expected_actual_changed_members": [
+      "init"
+    ],
+    "expected_member_count": 62,
+    "expected_unchanged_final_members": 61,
+    "full_strict_loader": "Use existing unchanged88a diagnostic/bodyoracles+actual9159 authority9f441/ff230/7594, actualFULLnewmanifest loader afterbuilder; oldcollectorbaseline is historical, not newacceptedoutput.",
+    "future_unchanged_builder_copy": null,
+    "image10972_reused": true,
+    "launcherdca0_reused": true,
+    "only_new_artifact": "AcceptednewcollectorELF; guestinit metadata100755 retained independently from actualsourceELF0700.",
+    "stage_profile": "Oneordinary acceptedCPU chosenbyroot: AS512MiB CPU30 wall120+6 FSIZE128MiB NOFILE256/core0 streams32/outputaggregate128/inflate64/raw100. Fresh16GiBHOST/12GiBscratch+fullsparsegrowth+4GiBHOSTcapture+emergency/campaign, no reservesreduction."
+  },
+  "future": {
+    "LONG_acceptance": null,
+    "accepted_settlement_source": null,
+    "actual_capsule": null,
+    "actual_compiled_ELF": null,
+    "actual_manifest": null,
+    "canonical_payload": null,
+    "expiry": null,
+    "fresh_admission": null,
+    "full_strict_loader": null,
+    "independent_ELF_acceptance": null,
+    "independent_execution_review": null,
+    "latest5603_positive_physical": null,
+    "native_result": null,
+    "source_acceptance": null,
+    "source_cohort": null
+  },
+  "one_immediate_blocker": "Genuine frozen settlement2changed+1new source map plus actualfocusedfixturewholejoin and independent sourceacceptance have not arrived. Do not materialize/build beforethatdependency.",
+  "repair_scope": "Linux PID1 read-only trace readiness/settlement beforeunchanged strictbody, using actualexisting per-roundouterdeadline; no sourcepatchduplication, app/Rust/kernel/oracle/TEN changes.",
+  "runtime_successor_rule": "Root/terminalauthor own futurecontroller/transport/owner/source/manifest/nonce/paths. Derive ALLindependent constants fromsource-to-requestmatrix (no prefix-only rebinding). Rebind newcollector/capsule/manifest/sourceauthority+9source156map onlynecessaryrows; preservehistoricalROroot+actualSDK6module/capsuledestinationcoverage. Actualfullbound_manifest/createargv/shadowing ANDactualcontrollerprefixpre-effectguards required; afterfullrealclockvalidate publishedrequest20868consumer beforePopen. No expired/failed5603release replay.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXACT_EXISTING_PRODUCTION_AND_INIT_ONLY_SDK6_STAGE_RECIPES_PENDING_ACCEPTED_SETTLEMENT_SOURCE_NO_GRANT"
+}

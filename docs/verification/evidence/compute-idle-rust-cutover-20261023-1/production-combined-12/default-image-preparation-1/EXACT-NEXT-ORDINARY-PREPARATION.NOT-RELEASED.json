@@ -1,0 +1,46 @@
+{
+  "actual_outputs": null,
+  "combined_outer_argv_template": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-12/default-image-preparation-1/run_materialization_and_pure.py"
+  ],
+  "combined_runner": null,
+  "data_only_affinity_delta": "Accepted ordinaryCPU6->CPU0 literal and materializer affinity assertion6->0; existing historicalCPU0 ordinaryprofile reused. No command algorithm/resource expansion.",
+  "guard": "Freshfull19GiB predicate bothstages; HOST16GiB+complete110GiBbackingremaininggap+acceptedcompiler/output/capture/emergencyreserve+256MiBsource/16MiBcapture, scratch12GiB+67108864control+679477248emergency; no root/resize.",
+  "independent_heavy_release": null,
+  "materializer_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-12/default-image-preparation-1/materialize_source.py"
+  ],
+  "profile": {
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "FSIZE_bytes": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "cpu": 0,
+    "jobs": 1,
+    "retirement_seconds": 6,
+    "wall_seconds": 120
+  },
+  "requires": "Root explicit ordinarygrant then exactaccepted11namespace/request/completepurevalidator successor withowned990ASTload+signalhandlers. CPU6reservedP12fixture. No compiler/Docker/heavy/run/acquire.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nCandidate12 metadata/controller source preparation only; noCPUjob/ordinarygrant.\n",
+  "status": "CPU0_AFFINITY_SUCCESSOR_PREPARED_NO_GRANT_OR_RESERVATION"
+}

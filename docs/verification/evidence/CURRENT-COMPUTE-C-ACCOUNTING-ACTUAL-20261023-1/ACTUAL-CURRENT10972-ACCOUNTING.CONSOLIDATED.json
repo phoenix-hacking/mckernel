@@ -1,0 +1,318 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ACTUAL_CURRENT10972_BOUNDED_ACCOUNTING_COMPLETE_WITH_EXPLICIT_UNRESOLVED_C_SCOPE",
+  "image_sha256": "10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2",
+  "source_derivative": {
+    "root": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source",
+    "base_commit": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "source_manifest": "28a6c1dededda19d2da07279f9a59d542996ae77bd96d176567cc86f0c5a8459",
+    "source_derivative": "5cffcc1b23dc5ca377baa055aab0417b0daac7ddcac0e2281903260f0ebd79e3",
+    "materialization": "d7e24b4c0d3174b3479e33796d712d439444bae82902482448890b9d8142d43d"
+  },
+  "symbol_source_metric": {
+    "report": {
+      "path": "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/CURRENT-COMPUTE-C-ACCOUNTING-ACTUAL-20261023-1/symbol-language.json",
+      "sha256": "2b80b7dd23299734e3fc5e39fce304e11bb7181d3a0f4e8f890747e19e7827e1",
+      "bytes": 18713
+    },
+    "language_bytes": {
+      "assembly": 0,
+      "c": 38243,
+      "other": 779738,
+      "rust": 0
+    },
+    "all_language_symbol_count": 4246,
+    "all_language_unique_span_count": 3867,
+    "per_source_C_filename_groups": [
+      {
+        "bytes": 19452,
+        "language": "c",
+        "source": "syscall.c",
+        "compile_database_candidate_files": [
+          "/src/arch/x86_64/kernel/syscall.c",
+          "/src/kernel/syscall.c"
+        ],
+        "qualification": "Source-start filename group as returned by unchanged tool; candidate file mapping is metadata only, not a disambiguated per-TU byte count."
+      },
+      {
+        "bytes": 8617,
+        "language": "c",
+        "source": "mem.c",
+        "compile_database_candidate_files": [
+          "/src/kernel/mem.c"
+        ],
+        "qualification": "Source-start filename group as returned by unchanged tool; candidate file mapping is metadata only, not a disambiguated per-TU byte count."
+      },
+      {
+        "bytes": 4295,
+        "language": "c",
+        "source": "memory.c",
+        "compile_database_candidate_files": [
+          "/src/arch/x86_64/kernel/memory.c"
+        ],
+        "qualification": "Source-start filename group as returned by unchanged tool; candidate file mapping is metadata only, not a disambiguated per-TU byte count."
+      },
+      {
+        "bytes": 3556,
+        "language": "c",
+        "source": "process.c",
+        "compile_database_candidate_files": [
+          "/src/kernel/process.c"
+        ],
+        "qualification": "Source-start filename group as returned by unchanged tool; candidate file mapping is metadata only, not a disambiguated per-TU byte count."
+      },
+      {
+        "bytes": 2323,
+        "language": "c",
+        "source": "cpu.c",
+        "compile_database_candidate_files": [
+          "/src/arch/x86_64/kernel/cpu.c"
+        ],
+        "qualification": "Source-start filename group as returned by unchanged tool; candidate file mapping is metadata only, not a disambiguated per-TU byte count."
+      }
+    ],
+    "C_total_interpretation": "38243 bytes positively C-attributed by symbol-start source filename; this is not a complete surviving-C total because779738symbolspan bytes are other/unknown. Rust0classifies noRustsuffix and does not mean noRustcode.",
+    "C_function_count": null,
+    "denominator": "Nonzero definedT/t symbol spans, aliasdeduplicated byaddress+size; C+Rust scores excludeASM/other."
+  },
+  "linked_executable_metric": {
+    "report": {
+      "path": "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/CURRENT-COMPUTE-C-ACCOUNTING-ACTUAL-20261023-1/linked-executable.json",
+      "sha256": "2c80caed3a4fbd7373df441acccbfd385ec46990b30469ebbf24215921c76f4f",
+      "bytes": 2376
+    },
+    "exact_Rust_object_executable_contribution_bytes": 679977,
+    "all_allocated_executable_PROGBITS_bytes": 853351,
+    "non_Rust_or_padding_NOT_C_bytes": 173374,
+    "Rust_object_percent_of_all_executable_bytes": "79.683155",
+    "denominator": "All final allocated executablePROGBITS bytes includingASM/fill/padding; numerator exactRustobjectmapcontributions."
+  },
+  "tool_versions": {
+    "nm": "GNU nm (GNU Binutils for Ubuntu) 2.34",
+    "addr2line": "GNU addr2line (GNU Binutils for Ubuntu) 2.34",
+    "producer_recorded_binutils": "GNU2.41-63.el10",
+    "attribution_limit": "Actual host2.34 returned?? and RustCGUbasenames without.rs. Do not inferzeroRust or classifyunknown/header/inlined/padding asC."
+  },
+  "compile_database": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/compile_commands.json",
+    "sha256": "cbf12ca93c9946c7020b428e5dbc9f08df22659651d94c40704e7c8fa41f006b",
+    "bytes": 74392
+  },
+  "captures": [
+    {
+      "name": "nm-version",
+      "result": {
+        "path": "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/CURRENT-COMPUTE-C-ACCOUNTING-ACTUAL-20261023-1/nm-version/RESULT.json",
+        "sha256": "892170a975341c759148fe607fe063480c4eed3dcd31c59369b54d0b145179da",
+        "bytes": 1118
+      },
+      "capture": {
+        "captures": {
+          "stderr": {
+            "ctime_ns": 1792783126284515497,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48673042,
+            "mode": "0o600",
+            "mtime_ns": 1792783126284515497,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/CURRENT-COMPUTE-C-ACCOUNTING-ACTUAL-20261023-1/nm-version/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792783126284515497,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48673041,
+            "mode": "0o600",
+            "mtime_ns": 1792783126284515497,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/CURRENT-COMPUTE-C-ACCOUNTING-ACTUAL-20261023-1/nm-version/stdout",
+            "sha256": "ed18bd6902f09c97d36263244a5491a18e5fb01de06163ceaf63eac1d64d737f",
+            "size": 283,
+            "uid": 1000
+          }
+        },
+        "closed_streams": true,
+        "direct_child_joined": true,
+        "error": null,
+        "group_absent": true,
+        "pid": 3870631,
+        "remaining_group_members": [],
+        "retirement_error": null,
+        "returncode": 0,
+        "seconds": 0.03090120095293969,
+        "start": 58057098,
+        "timed_out": false,
+        "unexpected_group_members": []
+      }
+    },
+    {
+      "name": "addr2line-version",
+      "result": {
+        "path": "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/CURRENT-COMPUTE-C-ACCOUNTING-ACTUAL-20261023-1/addr2line-version/RESULT.json",
+        "sha256": "0935e363bad9851dca88dda058d9538a02e9869edf35748d37829fa61fe00b5d",
+        "bytes": 1132
+      },
+      "capture": {
+        "captures": {
+          "stderr": {
+            "ctime_ns": 1792783126324516472,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48673050,
+            "mode": "0o600",
+            "mtime_ns": 1792783126324516472,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/CURRENT-COMPUTE-C-ACCOUNTING-ACTUAL-20261023-1/addr2line-version/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792783126328516569,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48673049,
+            "mode": "0o600",
+            "mtime_ns": 1792783126328516569,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/CURRENT-COMPUTE-C-ACCOUNTING-ACTUAL-20261023-1/addr2line-version/stdout",
+            "sha256": "23fafedb897006fb5843bdf52b3b1281c362c8b423d2dea2b3aff9e5dc6ad195",
+            "size": 290,
+            "uid": 1000
+          }
+        },
+        "closed_streams": true,
+        "direct_child_joined": true,
+        "error": null,
+        "group_absent": true,
+        "pid": 3870632,
+        "remaining_group_members": [],
+        "retirement_error": null,
+        "returncode": 0,
+        "seconds": 0.02063991199247539,
+        "start": 58057102,
+        "timed_out": false,
+        "unexpected_group_members": []
+      }
+    },
+    {
+      "name": "ownership-once",
+      "result": {
+        "path": "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/CURRENT-COMPUTE-C-ACCOUNTING-ACTUAL-20261023-1/ownership-once/RESULT.json",
+        "sha256": "d93c3139bc6ee9d1cb88f94603b3918c30284d9714fc9540f5d6274ce79f0551",
+        "bytes": 1127
+      },
+      "capture": {
+        "captures": {
+          "stderr": {
+            "ctime_ns": 1792783126348517057,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48673566,
+            "mode": "0o600",
+            "mtime_ns": 1792783126348517057,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/CURRENT-COMPUTE-C-ACCOUNTING-ACTUAL-20261023-1/ownership-once/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792783132336663320,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48673565,
+            "mode": "0o600",
+            "mtime_ns": 1792783132336663320,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/CURRENT-COMPUTE-C-ACCOUNTING-ACTUAL-20261023-1/ownership-once/stdout",
+            "sha256": "2b80b7dd23299734e3fc5e39fce304e11bb7181d3a0f4e8f890747e19e7827e1",
+            "size": 18713,
+            "uid": 1000
+          }
+        },
+        "closed_streams": true,
+        "direct_child_joined": true,
+        "error": null,
+        "group_absent": true,
+        "pid": 3870633,
+        "remaining_group_members": [],
+        "retirement_error": null,
+        "returncode": 0,
+        "seconds": 6.0301284020533785,
+        "start": 58057105,
+        "timed_out": false,
+        "unexpected_group_members": []
+      }
+    },
+    {
+      "name": "linked-ownership-once",
+      "result": {
+        "path": "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/CURRENT-COMPUTE-C-ACCOUNTING-ACTUAL-20261023-1/linked-ownership-once/RESULT.json",
+        "sha256": "0d7a30d74f4a0bfb3efe0a72587704cda724f5de805f9f133dc6ad772131c153",
+        "bytes": 1141
+      },
+      "capture": {
+        "captures": {
+          "stderr": {
+            "ctime_ns": 1792783192330157493,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48673578,
+            "mode": "0o600",
+            "mtime_ns": 1792783192330157493,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/CURRENT-COMPUTE-C-ACCOUNTING-ACTUAL-20261023-1/linked-ownership-once/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792783192614164686,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48673577,
+            "mode": "0o600",
+            "mtime_ns": 1792783192614164686,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/CURRENT-COMPUTE-C-ACCOUNTING-ACTUAL-20261023-1/linked-ownership-once/stdout",
+            "sha256": "2c80caed3a4fbd7373df441acccbfd385ec46990b30469ebbf24215921c76f4f",
+            "size": 2376,
+            "uid": 1000
+          }
+        },
+        "closed_streams": true,
+        "direct_child_joined": true,
+        "error": null,
+        "group_absent": true,
+        "pid": 3871236,
+        "remaining_group_members": [],
+        "retirement_error": null,
+        "returncode": 0,
+        "seconds": 0.32642975193448365,
+        "start": 58063703,
+        "timed_out": false,
+        "unexpected_group_members": []
+      }
+    }
+  ],
+  "CPU0_released": true,
+  "runs": {
+    "symbol_tool": 1,
+    "linked_tool": 1,
+    "optional_reason": "Needed to qualify779738Bother and zeroRust source-suffix classification; not repeatedsymbolattribution.",
+    "separate_big_artifact_hashes": 0,
+    "intrinsic_input_hashes": "Each selectedtool unmodified and executedonce; symboltool hashedELF; linkedtool hashedELF/map/Rustobject under explicitrootexception."
+  },
+  "limits": [
+    "Different metrics/denominators must not be subtracted or combined into exactC residual.",
+    "No C-only function count or newfunctioncountwrapper;4246symbols/3867spans are all-language counts.",
+    "Per-sourceC values are sourcefilename groups; syscall.c may merge multiple TUs, recordedcompileDBcandidates preserveambiguity.",
+    "No all-instruction provenance, runtime/hotpath/functionalcoverage, nativeacceptance or wholeimage Rustretirement credit.",
+    "Remaining fullC attribution is unresolved by these existingtools; reports are actualevidence forM14 residualplanning, not anotherfunctionalruntimegate."
+  ]
+}

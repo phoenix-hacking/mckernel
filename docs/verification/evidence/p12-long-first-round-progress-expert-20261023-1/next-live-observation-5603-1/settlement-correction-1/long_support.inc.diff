@@ -1,0 +1,20 @@
+--- accepted/long_support.inc
++++ settlement/long_support.inc
+@@ -155,12 +155,12 @@
+     return 0;
+ }
+ #include "long_trace_retention.inc"
+-static int pair_round_gate(void)
++#include "retirement_settlement.inc"
++static int pair_round_gate(uint64_t outer_deadline)
+ {
+-    static char log[1048577];int n=long_kernel_snapshot(log,sizeof log-1);
+-    pair_fail_phase="kernel_snapshot";
+-    if(n<=0 || n==(int)sizeof log-1)return -1;
+-    log[n]=0;
++    static char log[1048577];
++    int n=pair_round_retirement_snapshot(log,sizeof log,outer_deadline);
++    if(n<0)return -1;
+     pair_fail_phase="stream_identity_oracle";
+     if(pair_round_streams())return -1;
+     pair_fail_phase="application_membership";

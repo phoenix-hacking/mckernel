@@ -1,0 +1,85 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "STOP_FINITE_SELECTED_C_BODY_ALREADY_REPLACED_BY_EXISTING_RUST_NO_DUPLICATE_PORT",
+  "target": "kernel/process.c::process_sched_waitq_init_bridge",
+  "finding": "Selected MCKERNEL_RUST_PROCESS_HELPERS branch is declaration only. The C function body is inside #else fallback. Existing #[no_mangle] Rust process_helpers provider already forwards exactly to existing Rust waitq_init; accepted migrate wrapper selects that callback.",
+  "selection": {
+    "source": {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "sha256": "e2f2562b32ec462d9ee78c74dee4222485a69c4a3e2a81a332663fcef7e2b52d",
+      "bytes": 161751
+    },
+    "guard_line": 389,
+    "declaration_line": 390,
+    "fallback_body_line": 397
+  },
+  "default_C_flag_authority": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-process-next-body-cutover-20261023-1/next-slice-1/production-abi-layout-1/EXACT-LAYOUT-WITNESS-RECIPE.GRANTED.json",
+    "sha256": "d2ae46b0559a636ac42a4ddfe0f09a4857437ac6314aabc806365961234e173a",
+    "bytes": 80748
+  },
+  "Rust_provider": {
+    "source": {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "sha256": "526baf9363a0845ad50aade7e9b2296d27c8840527f3510d95a1105fc626d8d3",
+      "bytes": 351847
+    },
+    "line": 5827,
+    "marker": "pub unsafe extern \"C\" fn process_sched_waitq_init_bridge("
+  },
+  "underlying_Rust_body": {
+    "source": {
+      "path": "/home/holden/mckernel/kernel/rust/waitq.rs",
+      "sha256": "246a850a7e305d69d55de5903273e35ba62cc204167cc95acc90973c8f0aaefc",
+      "bytes": 10868
+    },
+    "line": 187,
+    "marker": "pub unsafe extern \"C\" fn waitq_init("
+  },
+  "current_Rust_callback_consumer": {
+    "source": {
+      "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "sha256": "d16200db3054d88a83752fda1383d6c101d24de4b787bd78cd42edb46ab251fc",
+      "bytes": 185669
+    },
+    "line": 2247,
+    "marker": "Some(process_sched_waitq_init_bridge),"
+  },
+  "actual_accepted78input_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-3/production-fullcrate-1/ACTUAL-PRODUCTION-FULLCRATE-RECEIPT.json",
+    "sha256": "739accc925947afc864f785b14dc69af3a6618cde861efadbc0fd992c7223607",
+    "bytes": 9299
+  },
+  "actual_NM_capture": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-3/production-fullcrate-1/actual-fullcrate-cpu0-nm-capture-1/stdout",
+    "sha256": "7a7a8dbca0d4e598cdf194f3e2d25d456a2bf59c1131fe46eb11ee61796fc8ab",
+    "bytes": 165448
+  },
+  "actual_unique_definitions": {
+    "process_sched_waitq_init_bridge": [
+      [
+        "0000000000000000",
+        "T",
+        "process_sched_waitq_init_bridge"
+      ]
+    ],
+    "waitq_init": [
+      [
+        "0000000000000000",
+        "T",
+        "waitq_init"
+      ]
+    ]
+  },
+  "ABI": "Existing C unsigned long -> Rust CULong=u64/usize on selected LP64 profile. Existing Waitq pointer body initializes lock and list; no new storage/type/ownership/layout is proposed.",
+  "source_inputs_match_accepted_actual_Rust_closure": true,
+  "implementation_patch": null,
+  "new_fixture": null,
+  "new_compiler_request": null,
+  "CPU_held": false,
+  "compiler_jobs": 0,
+  "canonical_mutations": 0,
+  "frozen12_LONG_mutations": 0,
+  "qualification": "Already implemented/actualRustobject provider finding only. No new implementation/retirement credit. WholeC/defaultlink/native obligations remain as previously recorded.",
+  "stop_condition": "Parent explicitly required stop when selected Cbody already excluded; no adjacent-area search performed."
+}

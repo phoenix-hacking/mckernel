@@ -1,0 +1,203 @@
+{
+  "LONG_profile": {
+    "min_launches": 100,
+    "round_cap": 2048,
+    "trace_cap": 268435456,
+    "version": 1,
+    "wall_ns": 7200000000000,
+    "work_ns": 3600000000000
+  },
+  "NONE_daemon": {
+    "Config": {},
+    "Type": "none"
+  },
+  "SDK5_authority": {
+    "bytes": 11743,
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/postbuild-preparation-1/INDEPENDENT-ACTUAL-SDK6-ARTIFACT-AND-PHYSICAL-ACCEPTANCE.ROOT-RECORD.json",
+    "sha256": "9159dcbd13c816f50d42390a05223e08a479b5f85d8183c4f61579bda20bc176"
+  },
+  "SDK5_exact_tuple": {
+    "ihk-smp-x86_64.ko": "4489c873327e1f09e32ed9caccceb29d11294f927c9f60db27e44011f503cde3",
+    "ihk.ko": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+    "mcctrl.ko": "06e8b9b571f21b41821aa03a32ebf4ae20ae19cf4b110c3af2c81b491b92ef86"
+  },
+  "SDK5_replacements": {
+    "bin/mcexec": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/launcher-runtime-snapshot-1/mcexec",
+      "sha256": "dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954",
+      "size": 394648
+    },
+    "images/mckernel.img": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/mckernel.img",
+      "sha256": "10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2",
+      "size": 8439816
+    },
+    "modules/ihk-smp-x86_64.ko": {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-33f4428ac1c74917bcd6715cdbaee963/modules/ihk-smp-x86_64.ko",
+      "sha256": "4489c873327e1f09e32ed9caccceb29d11294f927c9f60db27e44011f503cde3",
+      "size": 12955392
+    },
+    "modules/ihk.ko": {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-33f4428ac1c74917bcd6715cdbaee963/modules/ihk.ko",
+      "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+      "size": 1527808
+    },
+    "modules/mcctrl.ko": {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-33f4428ac1c74917bcd6715cdbaee963/modules/mcctrl.ko",
+      "sha256": "06e8b9b571f21b41821aa03a32ebf4ae20ae19cf4b110c3af2c81b491b92ef86",
+      "size": 2662320
+    }
+  },
+  "SDK6_source_identity": "2093e464dd2dfb976016a71197a120929e16bfd830f4d643126b96ea1ea0a2e8",
+  "actual_changed_members_required": [
+    "init"
+  ],
+  "application_replacements": {},
+  "application_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-long-mixed-apps-20261023-1/INDEPENDENT-LONG-APP-SOURCE-AND-LINUX-REVIEW.ROOT-RECORD.json",
+    "sha256": "831c0c9eb44a979cc4dddab359cecf27be2f42f35e9bf895447423dc83b4342b",
+    "size": 958
+  },
+  "baseline_capsule": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-next-native-preparation-1/capsule-next-1/actual-stage-1/lifecycle-long.cpio.gz",
+    "sha256": "d47c53c78d50b8a6403124e27801f671073f267b7ccebc5b57a557611a054e8d",
+    "size": 19427260
+  },
+  "baseline_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-next-native-preparation-1/capsule-next-1/actual-stage-1/manifest.json",
+    "sha256": "2f4c5c6dab2dcc5993df805da4d4c57c1e8d39c7ac2b4118b59ad578cd9c5c57",
+    "size": 13051
+  },
+  "baseline_overlay_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-next-native-preparation-1/capsule-next-1/actual-stage-1/overlay-manifest.json",
+    "sha256": "17e69c0e27178ab70652a37e381382539e9b729fd4c7b2c67194694d099ad60b",
+    "size": 20197
+  },
+  "campaign_bytes": null,
+  "candidate2_source_review_blockers": [
+    "COMPLETE precedes final klogsave/printk restore/syncfs/close; late failure can survive completion",
+    "Default real postflight checks procfs without final workspace identity/emptiness verification"
+  ],
+  "case_id": "practical.rust.LONG.SDK6.current110",
+  "cleanup_profile": {
+    "child_trace_cases": [
+      "P-M06-01-process-exec-wait-235B",
+      "P-M01-02-child-SIGTERM-and-exec-recovery-227B"
+    ],
+    "consumer": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-1/mcctrl_process.rs",
+      "sha256": "8bf30cd8ae79cc778bd91816f30aaf7a37ccc2aab59822ca2a03587426a212b8",
+      "size": 54854
+    },
+    "id": "begin-cleanup-real-ack-parent-clone-v2",
+    "modules": [
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-33f4428ac1c74917bcd6715cdbaee963/modules/ihk.ko",
+        "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+        "size": 1527808
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-33f4428ac1c74917bcd6715cdbaee963/modules/ihk-smp-x86_64.ko",
+        "sha256": "4489c873327e1f09e32ed9caccceb29d11294f927c9f60db27e44011f503cde3",
+        "size": 12955392
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-33f4428ac1c74917bcd6715cdbaee963/modules/mcctrl.ko",
+        "sha256": "06e8b9b571f21b41821aa03a32ebf4ae20ae19cf4b110c3af2c81b491b92ef86",
+        "size": 2662320
+      }
+    ],
+    "provider": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-lifecycle-epipe-repair-1/smp_application.rs",
+      "sha256": "f5c56d83a13f10a712a4555849f52078c2d410254080150d34408011daf527a5",
+      "size": 72744
+    },
+    "schema_version": 1
+  },
+  "current110_source_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/CURRENT110-SOURCE-PROFILE.NOT-RELEASED.json",
+    "sha256": "902b934f819b0d243e4d5a5838662b274b23e375e353ca8fe16ab64956ffda12",
+    "size": 5222
+  },
+  "diagnostic_source": {
+    "bytes": 88446,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/capsule-next-1/strict-loader-sources/native_diagnostic.py",
+    "sha256": "88a07d6224f388805552d57b16a671007a1b21ecf099ba1e7b00938a2512ca23"
+  },
+  "emergency_bytes": null,
+  "final_capacity_admission": null,
+  "host_floor_bytes": 17179869184,
+  "host_stage_growth_bytes": 134217728,
+  "independent_actual_ELF_acceptance": null,
+  "legacy_builder_key_qualification": "SDK5_replacements remains the unchanged acceptedbuilder inputkey; genuineSDK6 authority/module descriptor must fill it beforeexecution. It is notSDK5 runtimeacceptance.",
+  "max_inflated_bytes": 67108864,
+  "max_patched_bytes": 104857600,
+  "member_transformer": {
+    "bytes": 16074,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/stage_m05_two_generation.py",
+    "sha256": "65c01a4f1e4bc7b70350c9705a56fca1c08fb0ed96161a761ad5802f76597193"
+  },
+  "overlay_source": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_overlay.py",
+    "sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d",
+    "size": 26579
+  },
+  "producer_actual_build": {
+    "bytes": 9744,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/ACTUAL-PRODUCTION-BUILD-AND-CONSUMER-RESULT.json",
+    "sha256": "44fa8297032bfe50996a852a51bc8dc1d324b326aad7d0ab50d9157f7fde85b0"
+  },
+  "producer_artifact": {
+    "mode": 448,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/pair-long-collector",
+    "sha256": "142d55fb2ef5e5f1d7377a4731e3f65751984848de1e8543c5b31183e94ab5e7",
+    "size": 1633024
+  },
+  "producer_durable_ELF": {
+    "bytes": 18567,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/ACTUAL-COMPILED-ELF.DURABLE.json",
+    "sha256": "7d2a3089170ba300ca21f234ad29d9bd33290bb5e8d6c97ab93c1b03c60b37ae"
+  },
+  "producer_review": {
+    "bytes": 1279,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-correction-1/INDEPENDENT-SOURCE-AND-ACTUAL-FIXTURE-ACCEPTANCE.ROOT-RECORD.json",
+    "sha256": "ac29e9b9c3bb2aa333581e82944806f022ab48c52f0d2e3bc1f651f6a0189c19"
+  },
+  "producer_review_scope": "Genuineindependentsource/52fixtureapproval +rootexplicitordinaryartifact-stagegrantafteractualproductionlink; noindependentELF/nativeacceptanceclaim.",
+  "retained_blocked_candidate2_artifact": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/production-link-1/attempt-1/pair-long-collector",
+    "sha256": "82b35164897bdc437e227712431935a94fe2588100af1daa30147fffab7919a0",
+    "size": 1627840
+  },
+  "retained_blocked_candidate2_link_evidence": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/production-link-1/FINAL-ACTUAL-STATIC-LONG-ELF-EVIDENCE.json",
+    "sha256": "5816157b8223e46b3fb7827e0453a349ad78d6d756dda8ad983b38a8a85861bb",
+    "size": 4270
+  },
+  "reviewed_stage_profile": {
+    "bytes": 722,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/settlement-next-stage-preparation-1/capsule-next-1/ROOT-ORDINARY-STAGE-GRANT.json",
+    "sha256": "589d80ec426ccb72e18747224399b839e4616839e0a098005409f07b29bf08a4"
+  },
+  "runtime_release": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "scratch_floor_bytes": 12884901888,
+  "scratch_input_growth_bytes": null,
+  "selected_members_expected": 6,
+  "status": "READY_FOR_REVIEWED_HOST_STAGE",
+  "unchanged_final_members_required": 61
+}
