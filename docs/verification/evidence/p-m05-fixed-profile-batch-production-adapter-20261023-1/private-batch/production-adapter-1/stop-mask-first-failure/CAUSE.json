@@ -1,0 +1,19 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "failure": "Second injection subcase reused modeled batch-release-used namespace; actual one-use guard correctly refused it before native call. First preassignment injection and preceding19tests passed.",
+  "capture": "/home/holden/mckernel-work/host-preparation/p-m05-fixed-profile-batch-adaptation-20261023-1/production-adapter-1/actual-adapter-check-4-stop-mask",
+  "preimages": [
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/p-m05-fixed-profile-batch-adaptation-20261023-1/production-adapter-1/production_hooks.py",
+      "preimage": "/home/holden/mckernel-work/host-preparation/p-m05-fixed-profile-batch-adaptation-20261023-1/production-adapter-1/stop-mask-first-failure/production_hooks.py",
+      "sha256": "da76f9ef96fc4780ea007038e856327fcab8f2e5ec9f4d205fd5c65443ec0a7a"
+    },
+    {
+      "original": "/home/holden/mckernel-work/host-preparation/p-m05-fixed-profile-batch-adaptation-20261023-1/production-adapter-1/test_production_hooks.py",
+      "preimage": "/home/holden/mckernel-work/host-preparation/p-m05-fixed-profile-batch-adaptation-20261023-1/production-adapter-1/stop-mask-first-failure/test_production_hooks.py",
+      "sha256": "c8643aeabc02a9a31e20134c8ad70af3a8e081f7123d02878a51af9a0959ecdd"
+    }
+  ],
+  "bounded_correction": "Fresh independent MemoryOS for each signal injection subcase; production source unchanged",
+  "remaining_automatic_corrections": 0
+}

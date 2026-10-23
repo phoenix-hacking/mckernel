@@ -1,3 +1,26 @@
+## Current — corrected launcher actual production build PASS; terminal retirement next (2026-10-23 01:26 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+29/35; six checks open; weekly included only; reserve576 unanswered.
+Corrected c9eb launcher actualowner3419280/start51593355 wholejoinedPASS0 in
+161.481343277s, stderr0. Realcontainer build targetmcexec-j1 reportsPASS/exit0,
+retiredtrue, cleanupseparatelyrequiredtrue: container/common/shared remain retained.
+Nonce4719119aabe242e5a5b65f0ec27364f5, CID6959890602bd9c84ba3741b4aa37fc9ea29cb24a86ac93637315b852169074af.
+C/actual-pinned-build-capture-1/stdout372951fc20365B, status8d30f7cd.
+No artifact/native/check credit inferred fromtransport0; launcher_v3_source_review
+owns actualELF/Rustobject/defaultcompile acceptance. m07_closure_join fills existing
+terminalexport/retention/cleanup and235/227staging bindings fromactualrecords e908e808.
+Root alone admits/effects andretirement; no newheavy untilpositivephysicalclearance.
+Original failed3411972 remainsFAIL, exactmanagedretirementaccepted84c3, neverreplayed.
+
+20focusedtests andindependentsource/modelc2edc1f8 accept signal-safe productionbatch
+adapterda76; futurematchingtupleNULL/noexecutionapproval. Publicretentioncapsule
+p-m05-fixed-profile-batch-production-adapter-20261023-1/ ready. P05V3 minimalbinding
+8b3eaf95 reusesactualmodules and57unchangedbaseline members; lifecycle_missing_recovery
+implements exacttypedV3stager authority consumer, no image/helper/SDK rebuild.
+Nextrealresults matched235process→227recovery, thenV3firstrestoration andfixedbatch.
+No finalprofile cyclebudget transfer fromold20352; originalvelocitybaseline preserved.
+
 ## Current — failed launcher retired; corrected launcher admission next (2026-10-23 01:17 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

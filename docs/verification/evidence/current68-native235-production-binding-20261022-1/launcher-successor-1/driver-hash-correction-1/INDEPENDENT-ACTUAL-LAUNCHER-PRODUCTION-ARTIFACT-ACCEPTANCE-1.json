@@ -1,0 +1,38 @@
+{
+  "compiler": "/nightly/bin/rustc; rustc1.95.0-nightly(c04308580,2026-02-18)",
+  "decision": "PASS_ACTUAL_M06_LAUNCHER_PRODUCTION_ARTIFACT_ONLY",
+  "elf": {
+    "bytes": 394648,
+    "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/owner-work/evidence/artifacts/mcexec",
+    "sha256": "dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954"
+  },
+  "findings": [],
+  "implementation_ownership": false,
+  "launcher_source_sha256": "8f9fbe474220433118e6662c9f2517f73a547730575b83ffb73255d06e9b40d7",
+  "limitations": "Production artifact acceptance only; retained container requires separate physical retirement. No application, guest or broader language-retirement acceptance.",
+  "native_acceptance": false,
+  "owner_retirement_acceptance": null,
+  "receipt": {
+    "bytes": 7412,
+    "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/owner-work/evidence/receipt.json",
+    "sha256": "721406623ff74aaebecf656d3287b8fc9dcf1f60b24a6aabbc7ee32fd65df7cd"
+  },
+  "reviewer": "/root/launcher_v3_source_review",
+  "rust_object": {
+    "bytes": 437264,
+    "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/owner-work/evidence/artifacts/mcexec_helpers.o",
+    "sha256": "afa3d82b09fe3805ee525db8c2b054cad0c1e7653eac570baa377061776f36e5"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_acceptance_sha256": "745309b5f27701322145475b503314019a50b6fa3a84b92243bc19a5f4a6b8c6",
+  "toolchain_manifest_sha256": "a68e02b3b66b8bfbae96bf742dc8702b6e81dd97b92189b87437c3d08fccdf72",
+  "verified_actual_scope": [
+    "Production cmake mcexec target exited0; raw log records Rust object rebuild and launcher relink; build stderr empty.",
+    "Observed container mounts select exact8f9 source overlay and pinned toolchain/driver/plan.",
+    "Configured default ENABLE_RUST_USER_TOOLS=ON; C consumer has MCEXEC_RUST_HELPERS.",
+    "Actual generated compiler rule selects whole mcexec_helpers.rs with pinned rustc; link command includes Rust object, C consumer and libmcexec.a.",
+    "Raw symbol evidence proves C mainloop import, unique Rust providers and linked existing C exit bridges.",
+    "Final ELF and Rust object match receipt; dynamic dependencies libnuma.so.1 and libc.so.6.",
+    "Kernel was not rebuilt."
+  ]
+}
