@@ -69,3 +69,7 @@ Report execution seconds versus prerequisite/retirement/admission seconds at
 existing checkpoints, with the longest blocking item and its owner. Count literal
 check closures and comparable application throughput as outcomes; CPU occupancy
 alone is not progress.
+
+## Next user-authorized phase
+
+After genuine35/35, follow [POST-CLOSURE-FUNCTIONAL-FUZZING-20261023.md](POST-CLOSURE-FUNCTIONAL-FUZZING-20261023.md): begin seeded Rust functional workloads through the existing McKernel runner first. Add syzkaller support later as a separate integration task; it is not a prerequisite for initial randomized testing. Keep all six closures first; do not divert current execution to fuzzer setup.

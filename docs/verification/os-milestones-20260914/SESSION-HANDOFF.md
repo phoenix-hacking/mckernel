@@ -1,3 +1,32 @@
+## Current — manual resume reconciled; recorded service-policy hold unresolved (2026-10-23 02:19 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Manual20261023T021713Z-94ad609f recognized. Priorpause does not govern thisresume.
+Latestlauncherstate isrunning/stop_reasonNULL, while last_error.codexErrorInfo remains
+cyberPolicy. LatestforegroundCURRENT records actual02:02:28 service rejection and
+supportedaccount/securityreview prerequisite; no resolutionreceipt isrecorded.
+Do not replay the rejected admission turn, resetcontext, altersettings orswitchmodels.
+No native/admission/build/cleanup/randomized workload ran in thisresume. No childagents
+remainactive. Goalnotcomplete; no goalpause/statusmutation issued.
+
+Practical29/35, sixchecksopen. Positive46ed040d physicalclearance/SDK6a6a/launcher5eeb/
+stage235strictPASS remainretained. Native235 isnext after supportedservice-resolution
+andfreshcurrentadmission/exactrelease; source D/root-live-admission-1/read_only_native235_admission.py
+SHA3dd230d35c41011e84b13cecef9ab303586c02ada9b0259fa50487d16d79b05b
+waspreparedonly, neverinvoked. D hasno capture/metadata/nativeattempt. No one-shotnative
+releasewasissued orconsumed. Existingconditionalreview expires/refreshes underactual
+runtimecontracts; no oldrelease ornonce execution isreplayed. Publication26casefiles
+in23182d13 nowcheckedagainstFETCH_HEAD/localorigin; allhash/sizejoinsPASSread-only.
+Originalfailures/allretainedownership/sourceinputs/scratch21/permanent27:4 preserved.
+
+Currentcountmovingsequence235process→227recovery→V3fullrestore→reviewedfixedbatch/P12;
+M08/M09finitejoinsreuse samecaptures andunchangedacceptedboundaries. V3qualifying
+cycles/launches/mixedminutes0/0/0; old20352restoration stayshistorical. No throughput
+multiplierclaim; original2/44.160327s baseline unchanged. Follow-onaftergenuine35/35
+andpositive retirement: [POST-CLOSURE-FUNCTIONAL-FUZZING-20261023.md](POST-CLOSURE-FUNCTIONAL-FUZZING-20261023.md).
+No randomizedworkload/profile released; sixchecksfirst. Weeklyincludedonly100%stop,
+no credits/APIbilling/fallback/purchase; reserve576 stillunanswered.
+
 ## Current — launcher physically cleared; native235 next (2026-10-23 01:59 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

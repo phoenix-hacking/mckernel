@@ -1,3 +1,56 @@
+## Current — manual resume reconciled; recorded service-policy hold unresolved (2026-10-23 02:19 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Manual20261023T021713Z-94ad609f recognized. Priorpause does not govern thisresume.
+Latestlauncherstate isrunning/stop_reasonNULL, while last_error.codexErrorInfo remains
+cyberPolicy. LatestforegroundCURRENT records actual02:02:28 service rejection and
+supportedaccount/securityreview prerequisite; no resolutionreceipt isrecorded.
+Do not replay the rejected admission turn, resetcontext, altersettings orswitchmodels.
+No native/admission/build/cleanup/randomized workload ran in thisresume. No childagents
+remainactive. Goalnotcomplete; no goalpause/statusmutation issued.
+
+Practical29/35, sixchecksopen. Positive46ed040d physicalclearance/SDK6a6a/launcher5eeb/
+stage235strictPASS remainretained. Native235 isnext after supportedservice-resolution
+andfreshcurrentadmission/exactrelease; source D/root-live-admission-1/read_only_native235_admission.py
+SHA3dd230d35c41011e84b13cecef9ab303586c02ada9b0259fa50487d16d79b05b
+waspreparedonly, neverinvoked. D hasno capture/metadata/nativeattempt. No one-shotnative
+releasewasissued orconsumed. Existingconditionalreview expires/refreshes underactual
+runtimecontracts; no oldrelease ornonce execution isreplayed. Publication26casefiles
+in23182d13 nowcheckedagainstFETCH_HEAD/localorigin; allhash/sizejoinsPASSread-only.
+Originalfailures/allretainedownership/sourceinputs/scratch21/permanent27:4 preserved.
+
+Currentcountmovingsequence235process→227recovery→V3fullrestore→reviewedfixedbatch/P12;
+M08/M09finitejoinsreuse samecaptures andunchangedacceptedboundaries. V3qualifying
+cycles/launches/mixedminutes0/0/0; old20352restoration stayshistorical. No throughput
+multiplierclaim; original2/44.160327s baseline unchanged. Follow-onaftergenuine35/35
+andpositive retirement: [POST-CLOSURE-FUNCTIONAL-FUZZING-20261023.md](POST-CLOSURE-FUNCTIONAL-FUZZING-20261023.md).
+No randomizedworkload/profile released; sixchecksfirst. Weeklyincludedonly100%stop,
+no credits/APIbilling/fallback/purchase; reserve576 stillunanswered.
+
+## Foreground handoff — campaign policy stop and seeded-Rust-first preference (2026-10-23 02:02 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Latest user order: close the six literal checks to35/35, then begin seeded Rust
+randomized functional workloads through the existing native runner. Syzkaller
+support is a required later integration task; no compatibility spike blocks the
+initial Rust workloads. Durable plan: [POST-CLOSURE-FUNCTIONAL-FUZZING-20261023.md](POST-CLOSURE-FUNCTIONAL-FUZZING-20261023.md).
+No randomized workload has started in this foreground update.
+
+Live saved campaign stopped at2026-10-23T02:02:28Z: phase stopped, goal blocked,
+exit23/turn_failed; service last_error.codexErrorInfo=cyberPolicy. Dispatcher thread
+01a1626a-eaa3-7282-a47b-3292178e2cca; rejected turn01a164fb-31aa-7763-87f5-7e84e9507332.
+The service message flagged possible cybersecurity risk and identified account
+security setup prerequisites. The log does not identify which content triggered
+it. Latest native235 live-admission source was prepared; its invocation and native
+execution are not established by the final log. Ledger remains29/35.
+
+Original console/state/error and all ownership/evidence remain preserved. These
+Markdown edits only record the user's test sequence and the observed stop. No
+launcher restart, automatic retry, context reset, hold clearing, release, cleanup,
+build, guest or randomized workload was performed. Resolve the service hold
+through its supported review/account path before retrying rejected work.
+
 ## Current — launcher physically cleared; native235 next (2026-10-23 01:59 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
