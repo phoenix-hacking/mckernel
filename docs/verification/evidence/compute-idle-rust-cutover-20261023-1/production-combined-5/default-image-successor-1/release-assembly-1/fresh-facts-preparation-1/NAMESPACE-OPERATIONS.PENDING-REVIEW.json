@@ -1,0 +1,63 @@
+{
+  "exclusive_UID1000_empty0700_owner_roots_creation": {
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "0",
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "-c",
+      "from pathlib import Path;import os,stat,json;root=Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1');base=Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/pinned-full-image-attempt-1');assert os.getuid()==os.geteuid()==1000 and root.resolve(strict=True)==root and base.parent==root;assert not os.path.lexists(base);created=[]\nfor p in (base,base/'owner-work',base/'owner-evidence'):\n os.mkdir(p,0o700);s=os.lstat(p);assert stat.S_ISDIR(s.st_mode) and stat.S_IMODE(s.st_mode)==0o700 and s.st_uid==1000 and s.st_gid==1000 and not os.listdir(p);created.append({'path':str(p),'dev':s.st_dev,'inode':s.st_ino,'uid':s.st_uid,'gid':s.st_gid,'mode':stat.S_IMODE(s.st_mode)})\nprint(json.dumps({'scope':'Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\\nReuse the accepted finite materializer and controller/static-request derivation.\\n','created':created},sort_keys=True))"
+    ],
+    "executed": false,
+    "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nReuse the accepted finite materializer and controller/static-request derivation.\n Exclusive ordinary UID1000 mode0700 owner-work/owner-evidence creation from reviewed absent namespace. No rollback/removal on uncertainty; preserve partial evidence.",
+    "requires": "Root establishes positive predecessor retirement/shared-heavy boundary and reviews existing exact namespace before invoking; rerun finite namespace observation afterward."
+  },
+  "executed": false,
+  "metadata_preparation_profile": {
+    "as_bytes": 2147483648,
+    "core": 0,
+    "cpu": 6,
+    "cpu_seconds": 30,
+    "fsize_bytes": 33554432,
+    "jobs": 1,
+    "nofile": 256,
+    "wall_seconds": 60
+  },
+  "observation": {
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "-c",
+      "from pathlib import Path;import os,stat,json;paths=['/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/pinned-full-image-attempt-1', '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/pinned-full-image-attempt-1/owner-work', '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/pinned-full-image-attempt-1/owner-evidence', '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/pinned-full-image-attempt-1/owner-evidence/attempt', '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/pinned-full-image-attempt-1/common-exclusion.json', '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/pinned-full-image-attempt-1/lease.json', '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/pinned-full-image-attempt-1/owner-work/output', '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/pinned-full-image-attempt-1/owner-work/evidence', '/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock'];rows=[]\nfor p in paths:\n try:\n  s=os.lstat(p);r={'path':p,'exists':True,'dev':s.st_dev,'inode':s.st_ino,'uid':s.st_uid,'gid':s.st_gid,'mode':stat.S_IMODE(s.st_mode),'file_type':stat.S_IFMT(s.st_mode),'entries':os.listdir(p) if stat.S_ISDIR(s.st_mode) else None}\n except FileNotFoundError:r={'path':p,'exists':False}\n rows.append(r)\nprint(json.dumps({'scope':'Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\\nReuse the accepted finite materializer and controller/static-request derivation.\\n','rows':rows},sort_keys=True))"
+    ],
+    "executed": false,
+    "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nReuse the accepted finite materializer and controller/static-request derivation.\n Finite lstat and directory emptiness/mode observation; no mutation, no workload retirement inferred from absence."
+  },
+  "operation_review": null,
+  "profile": {
+    "as_bytes": 2147483648,
+    "core": 0,
+    "cpu": 0,
+    "cpu_seconds": 30,
+    "fsize_bytes": 33554432,
+    "jobs": 1,
+    "nofile": 256,
+    "wall_seconds": 60
+  },
+  "profile_note": "Exact future creation argv retains CPU0 and the existing reviewed ordinary resource profile. This source/JSON-only preparation ranCPU6; neither observation nor creation operation was executed.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_packet": {
+    "bytes": 12406,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/release-assembly-1/REMAINING-COMMANDS.NOT-EXECUTED.json",
+    "sha256": "037747e1007dae387a3e56205e85582360f008419ea5bb393b015606638c04f6"
+  },
+  "source_profile_review": {
+    "bytes": 562,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/INDEPENDENT-SOURCE-PROFILE-REVIEW.json",
+    "sha256": "495348a657cd41c4c7bcb4ebb7ad91f51815f9cdac28dc5ee5c0a2c4c9a412c7"
+  },
+  "status": "EXACT_EXISTING_NAMESPACE_ARGV_PENDING_FOCUSED_OPERATION_REVIEW"
+}

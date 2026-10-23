@@ -1,0 +1,37 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/m14_callback_review",
+  "verdict": "PASS_SOURCE_CORRECTION_AND_PREPARATORY_OPERATIONS",
+  "packet_sha256": "a743021b00852b1ff4bc956064407a95bd519cc9d1a5934a86947be5db088241",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--core=0:0",
+    "--fsize=8388608:8388608",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/coherent-successor-preparation-1/next-native-preparation-1/read_only_m05_HOST_admission.py"
+  ],
+  "pid": 3662953,
+  "returncode": 0,
+  "elapsed_seconds": 0.3503809879766777,
+  "direct_child_joined": true,
+  "streams_closed": true,
+  "native_execution": false,
+  "stdout": {
+    "bytes": 52175,
+    "sha256": "8aa7bc6596f2b3fd88e74308dfeec7ef74bef92cc564a1a7a204e0da7bc96439"
+  },
+  "stderr": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

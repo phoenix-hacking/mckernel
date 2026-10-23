@@ -1,3 +1,29 @@
+## Corrected M05 collector/cohort ready for release review — 2026-10-23 11:21 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical31/35,whole8/14; newclosedIDsnone. Finalcycles/launches/mixedminutes0/0/0.
+M05readinessRust13d066/Cb30d andstaticELF3e519b/1636672B independentlySOURCE+
+ACTUAL_BUILD accepted. Exactcollector isstaged:actual22.017s,init-only61unchanged,
+manifest663e/8433B,overlay74190/16649758B. Immutabletiny on-scratchmanifest and
+HOSTattemptparent areactualpublished; allcapsule/attempt/capture outputHOST.
+Sourcecohortfirstecdb hadstaleSELF/insideargv pointedolde90; independentreview
+caughtitbeforeexecution. Boundedcorrection85b5 changesSELF+readonlysourcepaths;
+actualinner-script/hash assertion+realhooks/freshHOST pass.579s, oldsource and
+incompletepositive retained. Correctedconditionalpacketa743/nonce758924/QMP96
+awaits independentexactprep/runtime release. No SDK/image10972/launcher rebuild.
+M05failed495e remainsphysicallyretired; no heavywork since. Sourcecorrection
+receiptmtime11:14:27UTC; review dispatch resumed via followup_task aftercompletion,
+notmessage-only. Preparationhandoff/dispatchlatency remains a bottleneck; next
+rootaction is exactfreshadmission+productionguard once reviewer releases them.
+M14successor5 materialized6959entries/120864457B,independentSOURCE_PROFILEPASS;
+fourreadonlyfreshfactsall0 and fixedHOST-outputbudgetadopted; namespace/finalrequest/
+aggregate/rootexecutionrelease remainpending. No defaultGCC14 build/nativecredit.
+P12candidate2 completeELF82b351+controlledfullconsumer17commandspass, butindependent
+reviewfoundearlyCOMPLETE/finalfilesystemgates andmissingrealworkspacepostflight.
+HIGHrepair ownerterminal_lifecycle_repair writesnewfinal-gatecandidate. LONGRust
+3secondmixedworkapp variants ownerm14_production_stage; no sleep/hosttimecredit.
+Included-only100%/servicechecks remain; no resize/reservelowering/speedupclaim.
+
 ## M05 physically retired; public page_unmap Rust integrated — 2026-10-23 10:54 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

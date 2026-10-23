@@ -1,0 +1,181 @@
+{
+  "HOST_outputs": {
+    "base": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/coherent-successor-preparation-1/actual-stage-1/base.cpio.gz",
+    "capsule": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/coherent-successor-preparation-1/actual-stage-1/lifecycle.cpio.gz",
+    "manifest": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/coherent-successor-preparation-1/actual-stage-1/manifest.json",
+    "native_attempt_parent": "/home/holden/mckernel-work/native-runs/m05h1/p",
+    "outer_capture_root": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/coherent-successor-preparation-1/actual-native-capture-1",
+    "overlay_manifest": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/coherent-successor-preparation-1/actual-stage-1/overlay-manifest.json",
+    "root": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/coherent-successor-preparation-1"
+  },
+  "accepted_original_binding": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/BINDING.json",
+    "sha256": "96a826240147102f48d7b0fa77df697f0583750819ca1281d6d1883a18be639a"
+  },
+  "accepted_stage_caller": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/run_actual_sdk5_m05_stage_once.py",
+    "sha256": "f94a42a73ceedeb9995bda6a1d166d2de6d1c769f6b964fd7a67b8a749710ded"
+  },
+  "accepted_staging_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/stage_m05_two_generation.py",
+    "sha256": "65c01a4f1e4bc7b70350c9705a56fca1c08fb0ed96161a761ad5802f76597193"
+  },
+  "actual_HOST_capacity": null,
+  "actual_predecessor_manifest": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/actual-stage-1/manifest.json",
+    "sha256": "8c03e5570b98a99db009f74f6dea9bf27ad9f046abeeea44d66ec561cbe708d7"
+  },
+  "actual_predecessor_stage": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/ACTUAL-SDK5-M05-STAGE-WHOLE-JOIN.json",
+    "sha256": "627bce39f72afaea5c3489940a0bcc80f23394a16eed8275e07741c53dede4a0"
+  },
+  "binding_template": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/coherent-successor-preparation-1/BINDING.NEW-COLLECTOR-REF-NULL.json",
+    "sha256": "20f312c537fc3d1bd52f170ef09aabbb3902cc5e25670e41ddce04d88a56e8b6"
+  },
+  "declared_final_map": {
+    "members": 62,
+    "new_image_launcher_modules_app": false,
+    "payload_40B_oracle_unchanged": {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "app",
+        "A",
+        "",
+        "B"
+      ],
+      "cwd": "/case/work",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PATH": "/usr/bin:/bin"
+      },
+      "oracle": {
+        "exit_code": 0,
+        "stderr_hex": "",
+        "stdout_hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a"
+      },
+      "stderr_limit_bytes": 1024,
+      "stdout_limit_bytes": 1024
+    },
+    "relative_actual_SDK5_baseline_changed": [
+      "init"
+    ],
+    "relative_actual_SDK5_baseline_unchanged": 61,
+    "relative_original_pre_SDK5_changed": [
+      "init",
+      "bin/mcexec",
+      "images/mckernel.img",
+      "modules/ihk-smp-x86_64.ko",
+      "modules/ihk.ko",
+      "modules/mcctrl.ko"
+    ],
+    "relative_original_pre_SDK5_unchanged": 56
+  },
+  "exact_next_operation_template": {
+    "argv": [
+      "/usr/bin/taskset",
+      "--cpu-list",
+      "0",
+      "/usr/bin/prlimit",
+      "--as=536870912",
+      "--cpu=30",
+      "--core=0",
+      "--fsize=134217728",
+      "--nofile=256",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-first-v3-failure-1/coherent-successor-preparation-1/stage_m05_two_generation.py",
+      "--stage"
+    ],
+    "binding_sha256": null,
+    "executable_now": false,
+    "source_sha256": null
+  },
+  "future_manifest": null,
+  "native_result": null,
+  "no_execution": true,
+  "only_new_artifact_dependency": {
+    "mode": null,
+    "name": "actual_readiness_collector_ELF_init",
+    "path": null,
+    "provider": "/root/terminal_lifecycle_repair",
+    "sha256": null,
+    "size": null,
+    "source_and_actual_build_receipt": null
+  },
+  "readonly_inputs": {
+    "base": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/scratch/m05d-261021-1/m05/lifecycle.cpio.gz",
+      "sha256": "ecc94c55d687eaeb421d5cd2f053c1498fe83d00e53a8eba69589eb43ec009d1",
+      "size": 14137598
+    },
+    "first_boot": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel/scratch/m05-a-261021-1/native-boot-4312-0755",
+      "sha256": "4312f9a8f53d8db7b2b6be4c7d5e409f5c0f82cf8215728209be0f6ff4a5d5c5",
+      "size": 35784
+    },
+    "five_SDK5_replacements": {
+      "bin/mcexec": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/launcher-runtime-snapshot-1/mcexec",
+        "sha256": "dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954",
+        "size": 394648
+      },
+      "images/mckernel.img": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/mckernel.img",
+        "sha256": "10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2",
+        "size": 8439816
+      },
+      "modules/ihk-smp-x86_64.ko": {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/runtime-inputs/ihk-smp-x86_64.ko",
+        "sha256": "2eb3e8e6d7e43f55ca262cb455212e205831e26980f10d4ce8ef99556fd2269d",
+        "size": 12944152
+      },
+      "modules/ihk.ko": {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/module-runtime-snapshots-1/ihk.ko",
+        "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+        "size": 1527808
+      },
+      "modules/mcctrl.ko": {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/terminal-control-native-successor-1/runtime-inputs/mcctrl.ko",
+        "sha256": "06e8b9b571f21b41821aa03a32ebf4ae20ae19cf4b110c3af2c81b491b92ef86",
+        "size": 2662320
+      }
+    },
+    "overlay_source": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_overlay.py",
+      "sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d",
+      "size": 26579
+    },
+    "payload": {
+      "mode": 33216,
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/app",
+      "sha256": "8be0b167d7267d4ef5aa122f62ebdbd95d6aa0be4f75384b9285d9983683c234",
+      "size": 872056
+    },
+    "second_boot": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel/scratch/m05d-261021-1/native-boot-second",
+      "sha256": "1a7fd6e3ff3d31c79c7c2665766a2b0e74bb895b2df0ebeff845b67f1dddd609",
+      "size": 35768
+    }
+  },
+  "restoration_credit": 0,
+  "reviewed_stage_profile": "Existing CPU0/AS512MiB/CPU30/FSIZE128MiB/NOFILE256/core0;30work+3cleanup/35wholejoin/8MiBstreams/145MiBHOSTgrowth;16GiBHOST/12GiBscratchfloors unchanged. Root must select released CPU and rebind exact source/input proof.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_guard_delta_required_before_stage": "Accepted65c stager fixes MEMBERS=five, init unchanged,57unchanged. Minimal successor must account init as sixth allowed change/56unchanged relative original62, authenticate old init from original map separately from new collector, and preserve all remaining stage/strict oracle logic. No such source adaptation executed by this preparation.",
+  "stage_result": null,
+  "status": "FINITE_NEW_COLLECTOR_STAGING_INPUTS_PREPARED_NOT_EXECUTED"
+}

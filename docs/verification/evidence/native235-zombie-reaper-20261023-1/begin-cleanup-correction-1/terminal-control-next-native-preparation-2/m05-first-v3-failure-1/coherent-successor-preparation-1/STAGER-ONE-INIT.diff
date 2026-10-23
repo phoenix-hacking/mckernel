@@ -1,0 +1,114 @@
+--- 65c-original
++++ one-init-actualSDK5-successor
+@@ -1,17 +1,16 @@
+ """Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ 
+ Private current68 successor. Reuses the real M05 62-member stage and unchanged
+-overlay implementation. The five artifact members change; M05 app, collector,
+-two boot helpers, public probes and every other member stay exact.
++overlay implementation. Only init collector changes against actual SDK5 base; M05 app,
++two boot helpers, public probes and other61 members stay exact.
+ """
+ from pathlib import Path
+ from contextlib import ExitStack
+ import argparse, copy, gc, hashlib, importlib.util, json, os, resource, shutil
+ 
+ HERE = Path(__file__).resolve().parent
+-BINDING_SHA256 = '96a826240147102f48d7b0fa77df697f0583750819ca1281d6d1883a18be639a'
+-MEMBERS = {'images/mckernel.img', 'bin/mcexec', 'modules/ihk.ko',
+-           'modules/ihk-smp-x86_64.ko', 'modules/mcctrl.ko'}
++BINDING_SHA256 = '9812ec51d837d75ec6bbaf41d5f7fe047d9f7c4b14f52408e708941c89f55a73'
++MEMBERS = {'init'}
+ 
+ 
+ def need(ok, why):
+@@ -106,15 +105,14 @@
+ 
+ 
+ def validate_selection(selection, old, binding):
+-    need(set(selection) == MEMBERS and selection == binding['replacements'],
+-         'exact current image/launcher/three-module tuple')
+-    if binding.get('authority_profile') in ('current68-v3-build-link-physical', 'current68-sdk5-build-link-physical'):
+-        launcher = selection['bin/mcexec']
+-        need(type(launcher['sha256']) is str and len(launcher['sha256']) == 64
+-             and type(launcher['size']) is int and launcher['size'] > 0,
+-             'actual accepted V3 launcher descriptor required')
++    need(set(selection) == MEMBERS and selection == {'init': binding['collector']},
++         'exact one init collector change')
+     need(len(old) == binding['expected_member_count'] == 62, 'exact predecessor membership')
+-    for name, key in [('init', 'collector'), ('apps/app', 'payload'),
++    for name, row in binding['replacements'].items():
++        need(old[name]['sha256'] == row['sha256'] and old[name]['size'] == row['size']
++             and old[name]['mode'] == row['mode'] and old[name]['nlink'] == 1,
++             'actual SDK5 predecessor member ' + name)
++    for name, key in [('init', 'predecessor_collector'), ('apps/app', 'payload'),
+                       ('bin/native-boot', 'first_boot'), ('bin/native-boot-second', 'second_boot')]:
+         row, wanted = old[name], binding[key]
+         need(row['sha256'] == wanted['sha256'] and row['size'] == wanted['size']
+@@ -135,14 +133,14 @@
+ def verify_delta(old, final, binding):
+     need(len(final) == 62 and set(final) == set(old), 'same exact 62-member namespace')
+     need({name for name in old if old[name] != final[name]} == MEMBERS,
+-         'exact five final member changes')
++         'exact one init final member change')
+     for name in old:
+         expected = dict(old[name])
+-        if name in MEMBERS:
+-            row = binding['replacements'][name]
++        if name == 'init':
++            row = binding['collector']
+             expected.update(sha256=row['sha256'], size=row['size'])
+         need(final[name] == expected, 'exact final bytes/metadata ' + name)
+-    need(sum(old[name] == final[name] for name in old) == 57, '57 unchanged M05 members')
++    need(sum(old[name] == final[name] for name in old) == 61, '61 unchanged M05 members')
+ 
+ 
+ def rewrite_last_records(raw, replacement_data, ov):
+@@ -206,7 +204,7 @@
+ 
+ def stage(binding):
+     old = authorities(binding)
+-    validate_selection(binding['replacements'], old, binding)
++    validate_selection({'init': binding['collector']}, old, binding)
+     out = Path(binding['output'])
+     need(out == HERE / 'actual-stage-1' and not os.path.lexists(out), 'fresh exact owned output')
+     need(not any(path.is_symlink() for path in (HERE, *HERE.parents)), 'canonical output parents')
+@@ -228,7 +226,7 @@
+         before = ov._manifest(ov._replay_records(ov.parse_newc(raw)[0]))
+         need(before == old, 'actual predecessor archive exact accepted map')
+         del before
+-        patched = rewrite_last_records(raw, {k: v.data for k, v in selected.items()}, ov)
++        patched = rewrite_last_records(raw, {'init': collector.data}, ov)
+         del raw
+         gc.collect()
+         need(len(patched) <= binding['max_patched_cpio_bytes'], 'patched cpio growth bound')
+@@ -258,7 +256,7 @@
+         m['modules'] = [binding['replacements'][name] for name in
+                         ('modules/ihk.ko', 'modules/ihk-smp-x86_64.ko', 'modules/mcctrl.ko')]
+         m['artifacts']['initramfs'] = m['artifacts']['root_base'] = ref(patched_base)
+-        m['staging'].update(base_initramfs=ref(patched_base), derived_initramfs=ref(overlay),
++        m['staging'].update(collector=binding['collector'], base_initramfs=ref(patched_base), derived_initramfs=ref(overlay),
+              overlay_manifest=ref(om_path), overlay_source=binding['overlay_source'])
+         manifest_path = out / 'manifest.json'
+         write_json(manifest_path, m)
+@@ -272,7 +270,7 @@
+         need(used < binding['max_output_aggregate_bytes'] - 1024 * 1024, 'aggregate output/receipt bound')
+         result = dict(status='PASS_CURRENT68_M05_STAGE_ONLY', manifest=ref(manifest_path),
+                       base=ref(patched_base), overlay=ref(overlay), overlay_manifest=ref(om_path),
+-                      final_map=om['final_map'], changed_members=sorted(MEMBERS), unchanged_members=57,
++                      final_map=om['final_map'], changed_members=sorted(MEMBERS), unchanged_members=61,
+                       binding_sha256=BINDING_SHA256, aggregate_bytes_before_receipt=used,
+                       expected_epochs=binding['expected_epochs'], runtime_release=False, native_acceptance=False)
+         write_json(out / 'stage-result.json', result)
+@@ -290,9 +288,9 @@
+     binding = load_binding()
+     if args.preflight_only:
+         old = authorities(binding)
+-        validate_selection(binding['replacements'], old, binding)
++        validate_selection({'init': binding['collector']}, old, binding)
+         print(json.dumps(dict(status='PASS_EXACT_CURRENT68_M05_SELECTION_ONLY', members=62,
+-             changed=5, unchanged=57, cpio_transformations=0, runtime_release=False)))
++             changed=1, unchanged=61, cpio_transformations=0, runtime_release=False)))
+     else:
+         result = stage(binding)
+         print(json.dumps({k: result[k] for k in ('status', 'changed_members', 'unchanged_members', 'runtime_release')}))

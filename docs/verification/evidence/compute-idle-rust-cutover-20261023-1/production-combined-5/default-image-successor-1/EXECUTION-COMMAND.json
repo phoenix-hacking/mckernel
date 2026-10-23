@@ -1,0 +1,16 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_sha256": "3f93e245930689d2f46b9e5a8acb60aac63a2472a12bfd0ee0edd714a0a9fc34",
+  "preparation_packet_sha256": "a53aa8f443e25d7e8947fee9663a68a16e3e5f4b6d2d2c15572099611e3a39e7",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/run_materialization.py"
+  ],
+  "predecessor_capture_source": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/default-image-successor-1/run_materialization.py",
+  "change": "Only exact new packet/source/namespace bindings and granted CPU60/wall90(+6) budget; same owned_capture990807 and bounded final request derivation. No root/compiler/Docker/guest."
+}
