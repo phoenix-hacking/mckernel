@@ -1,0 +1,471 @@
+{
+  "cleanup_executed": false,
+  "cleanup_release": null,
+  "current_live_postjoin": null,
+  "driver": {
+    "cause_review_owner": "m14_build_release_review; no duplicate diagnosis or compiler replay",
+    "error": "M14 observer failed: successor-real-ABI-arch-x86_64-kernel-cpu-c",
+    "phase": "artifact-validation",
+    "ref": {
+      "bytes": 77077,
+      "ctime_ns": 1792798833532615744,
+      "dev": 66306,
+      "inode": 56120985,
+      "mode": 420,
+      "mtime_ns": 1792798833532615744,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1/owner-work/evidence/receipt.json",
+      "sha256": "fb3d4730c0fa8cd9d23bce8112dc2c981c1852e2609b15bb12b7089ef48c0694"
+    },
+    "status": "FAIL"
+  },
+  "fresh_complete_PROC_and_publisher_census": null,
+  "fresh_root_inspect": null,
+  "independent_physical_acceptance": null,
+  "native_acceptance": null,
+  "normal_cleanup_basis": {
+    "blocker": "Unchanged accepted PASS-case cleanup source requires owner PASS at image_owner_receipt_binding and outer PASS/return0 at image_receipt_binding. Actual owner/outer FAIL preserved; needs independently reviewed FAIL-retired case specialization, no gate bypass or fake PASS.",
+    "observer": {
+      "bytes": 26767,
+      "ctime_ns": 1792763571807699034,
+      "dev": 66306,
+      "inode": 48916683,
+      "mode": 384,
+      "mtime_ns": 1792763571807699034,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/bound-current-normal-image-source-1/observe_current_pass_image_retirement.py",
+      "sha256": "8276cefefc635612e90a384b18c2172b52fadc11ca3b92c249aace36ad36bd9f"
+    },
+    "source": {
+      "bytes": 125139,
+      "ctime_ns": 1792763571715696314,
+      "dev": 66306,
+      "inode": 48916682,
+      "mode": 384,
+      "mtime_ns": 1792763571715696314,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/bound-current-normal-image-source-1/cleanup_pass_image.py",
+      "sha256": "afc557b8430eb395b1a0bd59eedbbc8ff126e3a9c49229437ac0b449d5bb281b"
+    }
+  },
+  "original_clients": [
+    {
+      "birth_starttime": null,
+      "provenance_limit": "Original Docker.call records pid/state/exit_code but no birth tick; source uses process.wait and closed stdout/stderr contexts.",
+      "status": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "inspect",
+          "mckernel-image-0987d8d1bbf04071834dfe6d4f7f76fd"
+        ],
+        "exit_code": 0,
+        "pid": 3983846,
+        "state": "exited",
+        "timeout": 120
+      },
+      "status_ref": {
+        "bytes": 260,
+        "ctime_ns": 1792798833796623861,
+        "dev": 66306,
+        "inode": 56120306,
+        "mode": 384,
+        "mtime_ns": 1792798833792623738,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1/owner-evidence/attempt/command-1ae49443d91d4165a2e4d66ccb4b6cf3/status.json",
+        "sha256": "752ab351b55f791b9f8997d6a62039821f4c0e6c3197cf50a8ad54b546cf4556"
+      }
+    },
+    {
+      "birth_starttime": null,
+      "provenance_limit": "Original Docker.call records pid/state/exit_code but no birth tick; source uses process.wait and closed stdout/stderr contexts.",
+      "status": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "logs",
+          "mckernel-image-0987d8d1bbf04071834dfe6d4f7f76fd"
+        ],
+        "exit_code": 0,
+        "pid": 3983855,
+        "state": "exited",
+        "timeout": 120
+      },
+      "status_ref": {
+        "bytes": 257,
+        "ctime_ns": 1792798833904627181,
+        "dev": 66306,
+        "inode": 56120989,
+        "mode": 384,
+        "mtime_ns": 1792798833904627181,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1/owner-evidence/attempt/command-1d46c74e10e84376ae90b4ef7a5c4366/status.json",
+        "sha256": "4a990f3a9cb51e4e0809ed94cd366101350910d05eec9b736589490b1bb602f1"
+      }
+    },
+    {
+      "birth_starttime": null,
+      "provenance_limit": "Original Docker.call records pid/state/exit_code but no birth tick; source uses process.wait and closed stdout/stderr contexts.",
+      "status": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "wait",
+          "mckernel-image-0987d8d1bbf04071834dfe6d4f7f76fd"
+        ],
+        "exit_code": 0,
+        "pid": 3981706,
+        "state": "exited",
+        "timeout": 19800
+      },
+      "status_ref": {
+        "bytes": 259,
+        "ctime_ns": 1792798833680620294,
+        "dev": 66306,
+        "inode": 56120301,
+        "mode": 384,
+        "mtime_ns": 1792798833680620294,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1/owner-evidence/attempt/command-371b281b8ed04505b4679d811c1c79f8/status.json",
+        "sha256": "02f3c2bf3d11626416ce245d6cb9a5ddbac615e22d0bd0a806256d149a8700c6"
+      }
+    },
+    {
+      "birth_starttime": null,
+      "provenance_limit": "Original Docker.call records pid/state/exit_code but no birth tick; source uses process.wait and closed stdout/stderr contexts.",
+      "status": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "create",
+          "--name",
+          "mckernel-image-0987d8d1bbf04071834dfe6d4f7f76fd",
+          "--label",
+          "mckernel.owner=0b8509e6756f4383b1263785a15ec8e8",
+          "--init",
+          "--network=none",
+          "--ipc=private",
+          "--cpus=4",
+          "--cpuset-cpus=2-5",
+          "--memory=12g",
+          "--memory-swap=12g",
+          "--pids-limit=512",
+          "--user",
+          "1000:1000",
+          "--cap-drop=ALL",
+          "--security-opt=no-new-privileges",
+          "--read-only",
+          "--tmpfs",
+          "/tmp:rw,nodev,nosuid,size=256m",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/source-materialization-attempt-1/materialized-source,dst=/src,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/source-materialization-attempt-1/source-inputs.json,dst=/inputs.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/gitlink-inputs.json,dst=/libdwarf-inputs.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/scratch/native-exact-mckernel-gitlink-libdwarf-942c927b-scratch22-authority3-image1-20261017,dst=/src/executer/user/lib/libdwarf/libdwarf,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/image-toolchain.json,dst=/toolchain.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/native_rust_exact_mckernel_image_offline.py,dst=/driver.py,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/native_rust_exact_build_offline.py,dst=/native_rust_exact_build_offline.py,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1/owner-work,dst=/work",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output,dst=/out,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu,dst=/nightly,readonly",
+          "--entrypoint",
+          "/usr/bin/python3",
+          "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+          "/driver.py",
+          "--source-root",
+          "/src",
+          "--candidate-sha",
+          "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+          "--ihk-sha",
+          "3114d9e7101ad52030eb3effa849a5c108972a1f",
+          "--manifest",
+          "/inputs.json",
+          "--toolchain",
+          "/toolchain.json",
+          "--output",
+          "/work/output",
+          "--evidence",
+          "/work/evidence",
+          "--jobs",
+          "4",
+          "--timeout",
+          "19800",
+          "--gitlink-manifest",
+          "/libdwarf-inputs.json",
+          "--native-fork-owned-transaction"
+        ],
+        "exit_code": 0,
+        "pid": 3981633,
+        "state": "exited",
+        "timeout": 120
+      },
+      "status_ref": {
+        "bytes": 3485,
+        "ctime_ns": 1792798722569216378,
+        "dev": 66306,
+        "inode": 56120276,
+        "mode": 384,
+        "mtime_ns": 1792798722565216256,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1/owner-evidence/attempt/command-5c34b0ddeaee46949b5df2cfaa89611c/status.json",
+        "sha256": "a1373a5aaae0d74a067c27f2d9b2c5ee8c6fa0e303566aa7df646abb57e9cab5"
+      }
+    },
+    {
+      "birth_starttime": null,
+      "provenance_limit": "Original Docker.call records pid/state/exit_code but no birth tick; source uses process.wait and closed stdout/stderr contexts.",
+      "status": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "start",
+          "mckernel-image-0987d8d1bbf04071834dfe6d4f7f76fd"
+        ],
+        "exit_code": 0,
+        "pid": 3981649,
+        "state": "exited",
+        "timeout": 120
+      },
+      "status_ref": {
+        "bytes": 258,
+        "ctime_ns": 1792798723117233103,
+        "dev": 66306,
+        "inode": 56120273,
+        "mode": 384,
+        "mtime_ns": 1792798723117233103,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1/owner-evidence/attempt/command-7c156a0b4d2c4466a28ec12f3b2dd7b9/status.json",
+        "sha256": "0f66c439b8ff99c6dd688cfd3d97be8bd49b1f6c65b966d48ccc35b493b70af9"
+      }
+    },
+    {
+      "birth_starttime": null,
+      "provenance_limit": "Original Docker.call records pid/state/exit_code but no birth tick; source uses process.wait and closed stdout/stderr contexts.",
+      "status": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "inspect",
+          "mckernel-image-0987d8d1bbf04071834dfe6d4f7f76fd"
+        ],
+        "exit_code": 0,
+        "pid": 3981641,
+        "state": "exited",
+        "timeout": 120
+      },
+      "status_ref": {
+        "bytes": 260,
+        "ctime_ns": 1792798722681219796,
+        "dev": 66306,
+        "inode": 56120277,
+        "mode": 384,
+        "mtime_ns": 1792798722677219674,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1/owner-evidence/attempt/command-aecc2c4ceba34ef59130634a924acc91/status.json",
+        "sha256": "c5a1a83448416566d425942994f34fa62dd321a143fb734567ff2be83c6a2f77"
+      }
+    },
+    {
+      "birth_starttime": null,
+      "provenance_limit": "Original Docker.call records pid/state/exit_code but no birth tick; source uses process.wait and closed stdout/stderr contexts.",
+      "status": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "--host=unix:///var/run/docker.sock",
+          "image",
+          "inspect",
+          "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5"
+        ],
+        "exit_code": 0,
+        "pid": 3981625,
+        "state": "exited",
+        "timeout": 120
+      },
+      "status_ref": {
+        "bytes": 297,
+        "ctime_ns": 1792798722445212594,
+        "dev": 66306,
+        "inode": 56120235,
+        "mode": 384,
+        "mtime_ns": 1792798722445212594,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1/owner-evidence/attempt/command-db02bc393b0448f5ad41a2903e2a8e32/status.json",
+        "sha256": "37ba77376b1c82dd4ac25e5c649245f21da6dc6f8ba4645e68c49985913d2005"
+      }
+    }
+  ],
+  "outer": {
+    "ref": {
+      "bytes": 1936,
+      "ctime_ns": 1792798864705574979,
+      "dev": 66306,
+      "inode": 56121013,
+      "mode": 384,
+      "mtime_ns": 1792798864705574979,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/actual-build-owner-capture-1/status.json",
+      "sha256": "81a33e652f3b4426b1cdeeb23380915dd8f7ef505742054c025dc1524a6352eb"
+    },
+    "result": {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--fsize=33554432",
+        "--as=2147483648:2147483648",
+        "--core=0:0",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/native_rust_exact_mckernel_image_container_owner.py",
+        "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/image-request.PREPARED.json"
+      ],
+      "cpu7_released": true,
+      "direct_child_joined": true,
+      "elapsed_seconds": 203.84378029499203,
+      "pid": 3980236,
+      "proc_start_ticks": "59610555",
+      "process_group_absent": true,
+      "returncode": 1,
+      "status": "FAIL_PRESERVED_STOPPED",
+      "stderr": {
+        "bytes": 0,
+        "ctime_ns": 1792798660855337456,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 56120148,
+        "mode": "0o600",
+        "mtime_ns": 1792798660855337456,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/actual-build-owner-capture-1/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "uid": 1000
+      },
+      "stdout": {
+        "bytes": 17891,
+        "ctime_ns": 1792798864689574487,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 56120147,
+        "mode": "0o600",
+        "mtime_ns": 1792798864689574487,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/actual-build-owner-capture-1/stdout",
+        "sha256": "5813e4a79a5a07f0d864850a061c7460de064a97525e120349d1c538f4f56783",
+        "uid": 1000
+      },
+      "streams_closed": true
+    }
+  },
+  "owner": {
+    "cleanup_separately_required": true,
+    "container_id": "ec1c6109dfc4db4df71e9de0344aa75b6122903326cc53e71d52d7676f56cb0e",
+    "container_name": "mckernel-image-0987d8d1bbf04071834dfe6d4f7f76fd",
+    "exit_code": 1,
+    "historical_terminal_state": {
+      "Dead": false,
+      "Error": "",
+      "ExitCode": 1,
+      "FinishedAt": "2026-10-23T23:40:33.615450926Z",
+      "OOMKilled": false,
+      "Paused": false,
+      "Pid": 0,
+      "Restarting": false,
+      "Running": false,
+      "StartedAt": "2026-10-23T23:38:43.106083804Z",
+      "Status": "exited"
+    },
+    "nonce": "0b8509e6756f4383b1263785a15ec8e8",
+    "pid": 3980236,
+    "ref": {
+      "bytes": 21951,
+      "ctime_ns": 1792798864653573378,
+      "dev": 66306,
+      "inode": 56121011,
+      "mode": 384,
+      "mtime_ns": 1792798864653573378,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1/owner-evidence/owner-receipt.json",
+      "sha256": "a535a1bc83a9c92a16bf30dd5a1c5370bd2511c8cefd10ea481b91f0d1b70d90"
+    },
+    "retired": true,
+    "starttime": "59610555",
+    "status": "FAIL",
+    "terminal_container_info_current": false,
+    "terminal_container_retained": true
+  },
+  "records": {
+    "common": {
+      "ref": {
+        "bytes": 272,
+        "ctime_ns": 1792798722325208931,
+        "dev": 66306,
+        "inode": 56120231,
+        "mode": 384,
+        "mtime_ns": 1792798722325208931,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1/common-exclusion.json",
+        "sha256": "2f8446cfe1ba4d0cd77c26e675aebdcc84b69363135d79ecd702202def0c11d4"
+      },
+      "value": {
+        "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+        "dev": 66306,
+        "inode": 56120231,
+        "pid": 3980236,
+        "request_sha256": "35ae2b961fb661e51e3059e8bf8b4c1a4d2a97a095b5f9a9d9338bffa5800109",
+        "schema": "mckernel.native-exact-operational-exclusion.v1",
+        "starttime": "59610555"
+      }
+    },
+    "lease_present": false,
+    "shared": {
+      "ref": {
+        "bytes": 269,
+        "ctime_ns": 1792798661423354708,
+        "dev": 1828,
+        "inode": 116763,
+        "mode": 384,
+        "mtime_ns": 1792798661423354708,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+        "sha256": "d4dfcc8136c17d469cee320bf1b2b98bd270dcded2e186e1f1380b5a10b25895"
+      },
+      "value": {
+        "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+        "device": 1828,
+        "inode": 116763,
+        "kind": "image",
+        "pid": 3980236,
+        "request_sha256": "3abfb4d6708fd0329db0c2b6fa271c5525284cc365ef74da9d8cf20a091517cb",
+        "schema": "mckernel.heavy-operation.v1",
+        "starttime": "59610555"
+      }
+    }
+  },
+  "retained_image": {
+    "ctime_ns": 1792798828536462167,
+    "dev": 66306,
+    "inode": 56120901,
+    "mode": 493,
+    "mtime_ns": 1792798828536462167,
+    "nlink": 1,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1/owner-work/output/build/kernel/mckernel.img",
+    "qualification": "Fresh lstat only; no large artifact rehash or successful image acceptance.",
+    "sha256": null,
+    "size": 8522856
+  },
+  "root_permanent_mutex_and_scratch_identity": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ACTUAL_FAILED_BUILD_CLOSED_NORMAL_OWNER_RETIRED_CONTAINER_RETAINED_PHYSICAL_PENDING"
+}

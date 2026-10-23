@@ -1,0 +1,111 @@
+--- /home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/bound-current-normal-image-source-1/observe_current_pass_image_retirement.py
++++ /home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/postbuild-acceptance-preparation-1/bound-fail-retired-source-1/observe_current_pass_image_retirement.py
+@@ -16,23 +16,23 @@
+ 
+ 
+ 
+-FAILURE_CASE = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/bound-current-normal-image-source-1/PASS-CASE-STATIC.json')
+-FAILURE_CASE_SHA = 'd11bf39e86a5a9c730c6d9e674edf862c16bae06287143875da6498a9b0d2cb9'
++FAILURE_CASE = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/postbuild-acceptance-preparation-1/bound-fail-retired-source-1/FAILED-CASE-STATIC.PENDING.json')
++FAILURE_CASE_SHA = '76be80312e9019ee061d360dccc90b937bdb1eb420baab6e8e4e80e81fe45073'
+ REPO = Path('/home/holden/mckernel')
+ ROOT = Path('/home/holden/mckernel-work/scratch')
+-PREP = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/bound-current-normal-image-source-1')
+-CASE = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/pinned-full-image-attempt-2')
+-CAPTURE = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/pinned-full-image-attempt-2/owner-evidence/attempt')
+-SOURCE = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/bound-current-normal-image-source-1/cleanup_pass_image.py')
++PREP = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/postbuild-acceptance-preparation-1/bound-fail-retired-source-1')
++CASE = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1')
++CAPTURE = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1/owner-evidence/attempt')
++SOURCE = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/postbuild-acceptance-preparation-1/bound-fail-retired-source-1/cleanup_pass_image.py')
+ TEST = Path('/home/holden/mckernel/scripts/tests/test_native_rust_cutover_image_terminal_cleanup.py')
+-SOURCE_SHA = 'afc557b8430eb395b1a0bd59eedbbc8ff126e3a9c49229437ac0b449d5bb281b'
++SOURCE_SHA = 'aff2d2d925779252cfede0010f2fa9fd336420d17127cdecd2d86d06b2204f9e'
+ TEST_SHA = '2fba315ad96f271124cf78f7441faa306f58ea03ae35cdbe78bba5be6488d630'
+-RETIREMENT = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/bound-current-normal-image-source-1/CURRENT-RETAINED-BUILD-AUTHORITY.HOLD.json')
+-RETIREMENT_SHA = '755133996d04e83100a032657b749f6a8742de540b00bbf6310b30df2d8cc596'
+-NONCE = 'm14-normal-image-terminal-observation-20261023-1'
++RETIREMENT = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/postbuild-acceptance-preparation-1/bound-fail-retired-source-1/CURRENT-RETAINED-BUILD-AUTHORITY.HOLD.json')
++RETIREMENT_SHA = 'e4a492a2af3d651ae914b3b7778e8e1dd63edbe45082db76073d6aeb37accc01'
++NONCE = 'm14-failed-retired-image-observation-candidate15-1'
+ OUTPUT = PREP / ('root-observation-' + NONCE)
+ BOOT = '7bfc5687-6c04-4d15-84eb-b92ab9a55dcb'
+-PIDS = (3726786, 3726794, 3730315, 3726852, 3726766, 3726778, 3730323)
++PIDS = (3983846, 3983855, 3981706, 3981633, 3981649, 3981641, 3981625)
+ 
+ 
+ def need(ok, reason):
+@@ -129,7 +129,7 @@
+     return stdout
+ 
+ 
+-TERMINAL_INSPECTION_SHA = '42cb8155240030114cfdd5f48ff327064bfd7b1b44fca649455ea3c411476aa5'
++TERMINAL_INSPECTION_SHA = 'c179a5742260f117669761976857796faea504c00546a27e08f6c5aafddb514f'
+ 
+ OBSERVATION_COMMAND = ['/usr/bin/sudo','-A','/home/holden/anaconda3/bin/python3','-I','-B',str(Path(__file__).resolve())]
+ OBSERVATION_PROFILE = {'metadata_soft_as': 536870912, 'metadata_hard_as': 2147483648, 'only_exact_docker_child_soft_as': 2147483648, 'command_timeout_seconds': 30, 'output_limit_bytes': 1048576, 'selected_hash_cap_bytes': 134217728, 'inventory_cap': 400000}
+@@ -169,35 +169,36 @@
+ 
+ 
+ def current_pass_prerequisites(retirement,case,root_join,artifact):
+-    # Genuine current M14 build/closed direct-capture authority. This record
+-    # explicitly retains physical HOLD; root mutex, publisher census and full
+-    # record identities are independently acquired by the unchanged observer.
++    # Exact failed owner/driver evidence, never production/default-link acceptance.
+     need(retirement['schema']=='mckernel.m14.normal-image.closed-retained-build-authority.v1' and
+          retirement['status']=='HOLD_RETAINED_BUILD_OWNERSHIP' and retirement['physical_release'] is False and
+          retirement['cleanup_authorized'] is False and case['execution_authorized'] is False and
+-         case['successful_artifacts_required'] is True,'current retained normal-image case required')
++         case['successful_artifacts_required'] is False,'exact failed-retired retained case required')
+     need(retirement['target']==case['target'] and case['source_identity']==CURRENT_EXPECTED_SOURCE and
+          retirement['source_identity']==CURRENT_EXPECTED_SOURCE,'exact current target/source authority')
+     for key in ('owner_receipt','guard_result','outer_status','artifact_acceptance'):
+-        need(retirement[key]==case['finite_roles'][key],'exact current closed source role:'+key)
++        need(retirement[key]==case['finite_roles'][key],'exact failed closed role:'+key)
+     need(retirement['terminal_fresh_inspect']==case['finite_roles']['terminal_inspection'] and
+-         retirement['current_live_postjoin']==case['current_live_postjoin'],'exact current retained observation refs')
+-    need(artifact['schema']=='m14-actual-production-default-link-independent-root-record-v1' and
+-         artifact['status']=='PASS_ACTUAL_M14_DEFAULT_LINK_ONLY' and artifact['independent_reviewer'] and
+-         artifact['native'] is False and artifact['physical_clearance']=='HOLD_NORMAL_CLEANUP_REQUIRED' and
+-         artifact['owner_sha256']==case['finite_roles']['image_owner']['sha256'] and
+-         artifact['frozen_request_sha256']==case['request']['sha256'] and
+-         artifact['receipt']['sha256']==case['finite_roles']['driver_receipt']['sha256'],
+-         'genuine exact current M14 default-link artifact authority required')
+-    need(root_join==artifact['current_live_postjoin'] and
+-         root_join['status']=='HOLD_RETAINED_BUILD_OWNERSHIP' and
++         retirement['current_live_postjoin']==case['current_live_postjoin'],'exact fresh inspection/HOLD refs')
++    need(artifact['status']=='ACTUAL_FAILED_BUILD_CLOSED_NORMAL_OWNER_RETIRED_CONTAINER_RETAINED_PHYSICAL_PENDING' and
++         {k:artifact['owner']['ref'][k] for k in ('path','sha256','bytes')}==case['finite_roles']['owner_receipt'] and
++         {k:artifact['driver']['ref'][k] for k in ('path','sha256','bytes')}==case['finite_roles']['driver_receipt'] and
++         {k:artifact['outer']['ref'][k] for k in ('path','sha256','bytes')}==case['finite_roles']['outer_status'],'exact failed receipt authority')
++    need(artifact['owner']['status']=='FAIL' and artifact['owner']['exit_code']==1 and
++         artifact['owner']['retired'] is True and artifact['owner']['terminal_container_retained'] is True and
++         artifact['driver']['status']=='FAIL' and artifact['driver']['phase']=='artifact-validation' and
++         artifact['driver']['error']=='M14 observer failed: successor-real-ABI-arch-x86_64-kernel-cpu-c' and
++         artifact['outer']['result']['status']=='FAIL_PRESERVED_STOPPED' and
++         artifact['outer']['result']['returncode']==1,'original exact failure retained')
++    need(root_join['status']=='HOLD_RETAINED_FAILED_BUILD_OWNERSHIP' and
+          root_join['container_id']==case['target']['container_id'] and
+          root_join['controller_joined_group_absent_streams_closed'] is True and
+          root_join['container_retained'] is True and root_join['shared_heavy_token_retained'] is True and
+-         root_join['normal_cleanup_required'] is True,'actual current postjoin HOLD required')
+-
+-
+-CURRENT_EXPECTED_SOURCE = {'candidate_identity_scope': 'base_git_commit_only', 'candidate_sha': '942c927b1ec93cc31284ff498455909d9bb2d0fc', 'materialization_sha256': 'f38059b611d6dff62631e732cf37e7426aa17bdf48180400608487f7acc1b8a2', 'source_derivative_sha256': 'fc8c64148e98a88be9b5c068a39383810656da85f829f7a44d13d04b5e013bb2', 'source_identity': {'dev': 66306, 'file_type': 16384, 'gid': 1000, 'inode': 48802712, 'mode': 448, 'path': '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/source-materialization-attempt-1/materialized-source', 'uid': 1000}, 'source_root': '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/source-materialization-attempt-1/materialized-source'}
++         root_join['normal_cleanup_required'] is True and root_join['physical_clearance'] is False,
++         'closed controller is physical HOLD only')
++
++
++CURRENT_EXPECTED_SOURCE = {'candidate_identity_scope': 'base_git_commit_only', 'candidate_sha': '942c927b1ec93cc31284ff498455909d9bb2d0fc', 'materialization_sha256': 'b04d514d743068ef233ac6e068583b3843b24a52e2dc96042312f8d483259cf0', 'source_derivative_sha256': '3a8df20ee4f2dd464fc23183c642882111c09b7ef34bafbf3b7749856dfa2c65', 'source_identity': {'dev': 66306, 'file_type': 16384, 'gid': 1000, 'inode': 56109541, 'mode': 448, 'path': '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/source-materialization-attempt-1/materialized-source', 'uid': 1000}, 'source_root': '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/source-materialization-attempt-1/materialized-source'}
+ 
+ def decode_finite_case(case):
+     """Reject scalar inventory schema; bind exact sorted role path union pre-mutation."""
+@@ -335,7 +336,7 @@
+         for row in finite_metadata:
+             refs=[v for v in case['finite_roles'].values() if v['path']==row['path']]
+             need(refs and all(row['sha256']==v['sha256'] and row['size']==v['bytes'] for v in refs),'closed PASS role bytes differ')
+-        store('new-object-metadata.json',m.canonical(dict(authority_path=str(FAILURE_CASE),authority_sha256=FAILURE_CASE_SHA,objects=finite_metadata,successful_artifacts_required=True)))
++        store('new-object-metadata.json',m.canonical(dict(authority_path=str(FAILURE_CASE),authority_sha256=FAILURE_CASE_SHA,objects=finite_metadata,successful_artifacts_required=False)))
+         selected_paths.add(OUTPUT/'new-object-metadata.json')
+         selected=[m.observe_identity(path) for path in sorted(selected_paths)]
+         selected_map={row['path']:row for row in selected}
