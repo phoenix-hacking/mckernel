@@ -1,3 +1,59 @@
+## Current — failed launcher retired; corrected launcher admission next (2026-10-23 01:17 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Weekly included only, reserve576 unanswered. Practical29/35; six remaining checks
+P-M01-02/P-M05-03/P-M06-01/P-M08-02/P-M09-02/P-M12-01. Whole OS remains OPEN.
+
+Failed pre-create owner3411972/start51474156 is now independently physically
+retired: genuine84c3d0a9 verifies original269B/c860 record preservation, source-bound
+no-container failure, joined capture and five never-created paths. Exact existing
+c252 _release_exclusion returnedtrue under permanent27:4; current sharedrecord
+ENOENT. Original build remainsFAIL. Evidence L/failed-precreate-physical-retirement-1/.
+This clears retirement only; no compiler/build/native acceptance follows.
+
+Corrected c9eb owner changes only inheriteddriver hash and fresh common path;
+all function/class ASTs unchanged. Actual real-validator boundary control PASS
+.401273115s: old refuses driver hash, new reaches next exact provenance guard.
+Earlier full-static35s timeout preserved/incomplete; no repeat of unchangedlarge
+inventories. m07_closure_join owns fresh admission/FINALrequest; root then exact
+independent executionrelease and one UID1000 ordinarycapture launcher build.
+Image10972/SDK6a6a/modules8234+c47/helpercccb/collectorC020 remain accepted unchanged.
+Next actual runtime235→227 uses newlinkedlauncher and newmodules after its retirement.
+
+Production batchadapter17tests PASS.9858s; recovery_trace_expert reviews new real
+admission/semantic/physical consumers only. FuturetupleNULL; no nativebudget credit.
+Original2/44.160327s velocitybaseline retained; no measured multiplier claim.
+
+## Current — launcher pre-build driver guard failed; retained ownership (2026-10-23 01:05 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+29/35; six checks remain. Weekly included only, reserve576 unanswered. No compiler,
+container or guest was reached in this attempt; no new heavy release is authorized.
+
+First ordinaryV3launcher owner3411972/start51474156 returned1 in.690176636s and
+capture joined/closed/groupabsent. Exact inheritedbase guard rejects newoffline
+driveraf2 because EXPECTED_DRIVER_SHA256 still03f60d. Source8f9/SDK6a6a/image10972
+remain unchanged. m07_closure_join owns coherent driver-hash-correction-1; actual
+read-only preflight/static verification grantedCPU0, noowner.run/build/root effects.
+matched_guest_build_review owns focused inherited-consumer expert decision.
+
+Shared ownership record is RETAINED: scratch/mckernel-heavy-operation.lock,
+device1828/inode116502,kindimage,pid3411972,start51474156,boot7bfc5687-6c04-4d15-
+84eb-b92ab9a55dcb,canonicalrequesthashcd394a314b4f81b07967243a27d02bda5c78bf8298a168ff195e8079b790d373.
+Never rawunlink or infer retirement from absentPID. m07_final_closure_review owns
+positivepre-create physical assessment and exact existingmanagedrecordrelease route.
+Capture L/actual-pinned-build-capture-1/: statusa9aa9fcb,stderrd8d4a2f6,childstart4056a9e0.
+No automatic retry; fresh source/execution authority/names after physicalclearance.
+
+Prior invocation UIDmismatch was caught beforeeffects and corrected; itsHOLD andold
+055d/3bd packets preserved. Root mistakenly messaged completed author before using
+followup_task, causing avoidablewait; newwork mustalwaysstartcompletedowners via
+followup_task and confirmrunning once. No inferred throughput uplift.
+
+SDK3runtime snapshots underN/module-runtime-snapshots-1 are actualfirstPASS.276s,
+exact17,100,496B/0644/UID1000/singlelinks; sourcebytes unchanged. Newlauncher pending.
+P05batchadapter17puretests PASS.9858s; source/effectful-hook review next, no nativequota.
+
 ## Current — V3 SDK build/artifacts/retirement accepted; launcher next (2026-10-23 00:40 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
