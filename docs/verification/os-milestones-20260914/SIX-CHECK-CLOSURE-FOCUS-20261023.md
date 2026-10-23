@@ -70,6 +70,47 @@ existing checkpoints, with the longest blocking item and its owner. Count litera
 check closures and comparable application throughput as outcomes; CPU occupancy
 alone is not progress.
 
+## Current bottleneck and parallel handoff — 2026-10-23 03:32 UTC
+
+The native235 attempt failed after50.251s. The parent read returned34bytes and
+then EOF; child wait/reap completion remained unproven. Preserve that failure;
+do not spend another attempt changing pipe/poll behavior or extending deadlines
+without new evidence. The isolated Rust repair now passes three ownership and
+five task-liveness tests. Its matching baseline harness observes old behavior;
+these are bounded adapter tests, not a native fix or a newly closed check.
+
+Two512MiB compiler attempts failed from resource limits. The reviewed2GiB
+address-space successor compiles the ownership harness in0.667s with165252KiB
+maximum resident memory. Address space is not resident memory. Reuse that
+accepted ordinary profile for its actual approved scope; preserve the failed
+captures and avoid repeating an undersized profile. At03:29 live available RAM
+was26.16GiB, so this was not a shortage of physical RAM. More agents or heavy
+parallel workloads would not address that compiler-profile problem.
+
+The dispatcher acknowledged concrete routing at03:30: independent Rust ownership
+review by p12_identity_review; affected SDK build preparation by the repair owner;
+failed235 physical-clearance review by p12_successor_review; independent P12
+implementation by p12_log_source. A temporary serverOverloaded error in the prior
+review lane is preserved and the review has a replacement owner. Foreground
+scratch_growth_review rechecks corrected maintenance candidate2 independently;
+reuse its result instead of commissioning another copy. These assignments are
+active coordination, not evidence that reviews or execution have passed.
+
+The critical sequence is positive failed235 retirement plus accepted Rust fix,
+then the affected module build, fresh strict235, strict227, first fullV3 resource
+restoration, and the combined lifecycle/launch/mixed-time session. Continue P12
+and maintenance-source work alongside it. Resize remains between workloads under
+the existing user authorization and operation review. The dispatcher owns live
+execution and Git integration. Retain all six original check contracts.
+
+At existing checkpoints record for each critical stage: dependency-ready time,
+actual start, actual finish, owner, queue/approval wait and result. Measure useful
+runtime versus waiting and literal closures/hour; do not infer a speedup from
+agent count. If an admitted ordinary slot is idle for more than five minutes,
+name its missing dependency and redirect only dependency-ready independent work.
+Review the changed source once, carry unchanged accepted bindings forward, and
+reuse qualified captures across the six checks. This adds no new execution gate.
+
 ## Next user-authorized phase
 
 After genuine35/35, follow [POST-CLOSURE-FUNCTIONAL-FUZZING-20261023.md](POST-CLOSURE-FUNCTIONAL-FUZZING-20261023.md): begin seeded Rust functional workloads through the existing McKernel runner first. Add syzkaller support later as a separate integration task; it is not a prerequisite for initial randomized testing. Keep all six closures first; do not divert current execution to fuzzer setup.

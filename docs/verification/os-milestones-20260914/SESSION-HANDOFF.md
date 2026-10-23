@@ -1,3 +1,58 @@
+## Active repair/build cursor — 2026-10-23 03:40 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+User service-resolution receipt remains active; original rejection retained,
+new service checks active. Practical29/35; no new native/check closure. Current
+V3 qualifying cycle/launch/mixed-time counters remain0/0/0.
+
+Actual235 on SDK6a6a/launcher5eeb/image10972 FAILED: owner50.2508s, payloadexit1,
+stdout13/235B(parent start),stderr105B capturedeadline/cleanup_unprovenchild260.
+Childexec/write34,parentread34 andEOF are observed. WNOHANGreap stalls; pipe/poll
+oracle remains unchanged. Allfailedbytes retained under ../evidence/native235-resume-
+20261023-1/retirement-preparation/failed-raw/ (see retention map for exact names).
+Hostphysicalretirement independently PASS /root/p12_successor_review:77rootexport
+files188416B,25Dockerchildrenreaped, exactCIDffbcb8aa removed, freshname/label/ID
+empty, complete2x305processcensus, correctedpositiveENOENT8paths+mutex27:4.
+Record INDEPENDENT-ACTUAL-FAILED235-PHYSICAL-ACCEPTANCE.json in that evidence root.
+No duplicate cleanup needed; guestchildreap/nativeacceptance remainsunproved.
+
+Focused Rust source fcddb267 accepted by independent expert against b2e635:
+explicit once-only CLEANUP from last process detach despite paired Arcs; referenced
+terminal worker tasks no longer executing, TGID remains conservative.3ownership+
+5liveness candidate tests PASS;8baselineobservations preserveoldbehavior, not
+fail-beforetests. RealRemote/destructor/finalcreditclosure remainsunproved.
+2GiBAS hostcompile passes0.667s/RSS165252KiB; prior512MiBICE/SIGSEGV retained,
+no more512MiBattempts. Source approval/conditional realbuild review returned by
+/root/p12_identity_review; dispatcher records it before build.
+
+Owner native235_zombie_fix prepares coherentSDKsuccessor HOST
+/home/holden/mckernel-work/host-preparation/native235-zombie-sdk-successor-20261023-1/:
+68sources1355207B,15inputs575685B,total1930892B; onlymcctrl_process changed1392B.
+Freshnonce9850d940ac3649a6b8e7ebebf3251853; deriveddriver/owner preserveaccepted
+namespaces/profile andMMlinkchecks. Root-only materialization/liveidentities and
+exactbuildrelease pending; reuseacceptedkernel/cache, no image/launcher rebuild.
+227overlay11.888s+strict.301s bothPASS source/stage scope; native227 waits235success
+and fresh matchedtuple/release. DedicatedP12owner p12_log_source produced private
+coherent142GiB/4GiBgrowth successor:42actualowner+8geometrychecksPASS,SHORTcleanup
+semantics restored, obsoletezero-growth theoremwithdrawn. Physical96MiB bound
+remainsOPEN; bothphysical/externalbindingsNULLfailbeforeFS. Reviewer
+p12_successor_review checks correctedsource+actualdaemon/filesystem query;
+querynotexecuted. No configsecret/root facts guessed.
+
+Maintenance candidate2 independently SOURCEPASS:932f9271/test38b1d3c0/profilea0bae8c7,
+27mocks/actualguardfixtures, no mutation. scratch_growth_prepare prepares bounded
+read-only installedvendor/geometry qualification route; stockfallback decision,
+142GiB successor bindings,freshheadroom androotexactrelease stillpending. Do not
+repeat completedsource review. Apply onlybetween retiredheavyoperations; no shrink,
+reserve lowering, scratch21 deletion or permanentmutexunlink.
+
+Last pushed/fetchedcheckpoint62c91ad55d02512fbe204002cf6ce752c7a3ca6b:89exactchanged
+blobsverified. Originalvelocitybaseline2/44.160327s retained. Actualcurrent235
+successes0/50.2508ownerwall; no comparableuplift/closure-rateclaim. Heavybuildnot
+started; exactSDKpreparation isactive dependency, no idle admittedheavygrant.
+Modelcapacityaffected onephysicalreviewturn(serverOverloaded), reassignedsameGPT6.1
+reviewcompleted; notpolicy. No fallbackorunchangedworkloadreplay.
+
 ## User reports service issue resolved — resume six-check execution (2026-10-23)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
