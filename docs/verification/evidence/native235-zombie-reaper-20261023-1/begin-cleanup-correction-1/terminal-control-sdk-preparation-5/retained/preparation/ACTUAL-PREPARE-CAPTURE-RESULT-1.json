@@ -1,0 +1,124 @@
+{
+  "application_acceptance": false,
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=134217728:134217728",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/prepare.py"
+  ],
+  "cleanup_complete": true,
+  "cleanup_timeout_seconds": 3.0,
+  "cwd": "/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5",
+  "descendant_records_omitted": 0,
+  "descendants": [],
+  "elapsed_seconds": 0.1772862710058689,
+  "env": {
+    "HOME": "/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin:/bin",
+    "TMPDIR": "/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5"
+  },
+  "events": [
+    {
+      "kind": "cleanup_started",
+      "monotonic": 526454.576750344,
+      "reason": "leader_exited"
+    }
+  ],
+  "executable": {
+    "path": "/usr/bin/taskset",
+    "sha256": "28f2dd426247d7d1d794c0fb8a723efc6a1ae3c56393a238b180fe9a0dc32f1c",
+    "size": 35048
+  },
+  "executable_path": "/usr/bin/taskset",
+  "fd_setup": {
+    "close_fds": true,
+    "pass_fds": [],
+    "stderr": "separate owned pipe",
+    "stdin": "regular file or /dev/null",
+    "stdout": "owned pipe"
+  },
+  "gid": 1000,
+  "groups": [
+    4,
+    20,
+    24,
+    27,
+    30,
+    46,
+    120,
+    131,
+    132,
+    133,
+    1000
+  ],
+  "monotonic_finished": 526454.582309575,
+  "monotonic_started": 526454.405023304,
+  "payload_completion_observed_monotonic": 526454.576740929,
+  "payload_monotonic_deadline": 526489.405335993,
+  "payload_monotonic_started": 526454.405335993,
+  "process": {
+    "pgid": 3592246,
+    "pid": 3592246,
+    "ppid": 3592245,
+    "session": 3592246,
+    "starttime_ticks": 54179253,
+    "state": "R"
+  },
+  "provenance": "Linux process collection only; no McKernel evidence",
+  "raw_wait_status": 0,
+  "schema_version": 1,
+  "status": "COMPLETED",
+  "stderr_limit_bytes": 8388608,
+  "stdin": {
+    "kind": "devnull"
+  },
+  "stdin_path": null,
+  "stdout_limit_bytes": 8388608,
+  "streams": {
+    "stderr": {
+      "artifact": {
+        "path": "/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/actual-prepare-capture-1/stderr.bin",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "bytes_observed": 0,
+      "bytes_retained": 0,
+      "discarded_observed_bytes": 0,
+      "eof": true,
+      "limit_bytes": 8388608,
+      "truncated": false
+    },
+    "stdout": {
+      "artifact": {
+        "path": "/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/actual-prepare-capture-1/stdout.bin",
+        "sha256": "502320567c2ddee583e637abb317d0b8532fc33d37d70587b7caf46d6e3e531b",
+        "size": 1168
+      },
+      "bytes_observed": 1168,
+      "bytes_retained": 1168,
+      "discarded_observed_bytes": 0,
+      "eof": true,
+      "limit_bytes": 8388608,
+      "truncated": false
+    }
+  },
+  "supervisor_pid": 3592245,
+  "timeout_seconds": 35.0,
+  "uid": 1000,
+  "umask": "0077",
+  "wait_status": {
+    "code": 0,
+    "kind": "exited"
+  }
+}

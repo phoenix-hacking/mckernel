@@ -172,6 +172,7 @@ const X86_PT_PRINT_LOG_ENTRY: CInt = 3;
 const X86_PT_PRINT_LOG_LARGE: CInt = 4;
 
 unsafe extern "C" {
+    fn page_unmap(page: *mut Page) -> CInt;
     fn phys_to_page(phys: CULong) -> *mut Page;
     fn get_this_cpu_local_var() -> *mut CpuLocalVar;
     fn x86_addr_init_pt_loaded_bridge() -> CInt;
@@ -5184,6 +5185,11 @@ pub unsafe extern "C" fn phys_to_virt(p: CULong) -> *mut c_void {
         MAP_ST_START,
         LINUX_PAGE_OFFSET_BASE,
     )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_page_unmap_bridge(page: *mut c_void) -> CInt {
+    page_unmap(page.cast::<Page>())
 }
 
 #[no_mangle]

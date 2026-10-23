@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-23T07:40:53.604496+00:00",
+  "as_of": "2026-10-23T08:43:53.202037+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -1138,6 +1138,33 @@
                   "scope": "Exact pinned nightly production Rust flags/80-source host fullcrate compile exit0/15.412s; ten unique object exports. Default C/final ELF/native remain open."
                 }
               ]
+            },
+            {
+              "id": "M14-05-03-S03",
+              "title": "Page-unmap clear-range callback",
+              "status": "partial",
+              "source_state": "Independent source-accepted canonical two-file callback cutover integrated; Rust calls existing public page_unmap ABI once with exact pointer/return behavior. Existing mem.c public wrapper/private context remains C debt; fallback C preserved.",
+              "focused_checks": "42actual original-C/new-Rust callback vectors PASS; no invented null/atomic policy.",
+              "production_link": "Actual pinned production full Rust crate/82source closure compiles14.253s; objecta125e872 has11uniqueT exports. Focused independent actual HOST consumer review PASS; actual default C/final image linkage remain OPEN.",
+              "native_validation": "OPEN; frozen functional image10972 unchanged; no whole-body/file/area/native/practical35 credit.",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-unmap-callback-2/CANONICAL-INTEGRATION.json",
+                  "scope": "Independent source-accepted canonical two-file callback cutover; original excluded fallback C retained. Existing public page_unmap C wrapper/private context remains debt; no underlying-body retirement."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-unmap-callback-2/RESULT.json",
+                  "scope": "Actual Rust1.92 original-C/new-Rust callback fixture PASS42vectors:28exact pointer/signed-return forwarding and14unchanged Rust page_unmap_body_result comparisons; direct joins/group absence/closed streams."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-fullcrate-callback3-1/FINAL-HOST-CONSUMER-EVIDENCE.json",
+                  "scope": "Actual pinned production46token Rust fullcrate PASS14.253s; exact82input closure with two separately amended manifest-bound external modules; object a125e872882f8a90e44ba28d344b1d751942732992ea620fe133ba63587963b4 (13632672bytes),11uniqueT exports including callback. Focused independent actual HOST consumer review PASS; default C/final link/native open."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-fullcrate-callback3-1/INDEPENDENT-ACTUAL-HOST-CONSUMER-REVIEW.json",
+                  "scope": "Independent PASS of exact 82-source HOST production Rust crate and 11 unique exports; no default C/final link/native/file credit."
+                }
+              ]
             }
           ]
         },
@@ -1462,6 +1489,11 @@
       "as_of": "2026-10-23T07:40:53.604496+00:00",
       "kind": "actual_fullcrate_consumer_partial",
       "summary": "Pinned host full production Rust crate compiled and ten selected exports independently accepted. M14-02-04/M14-05-03 remain PARTIAL; default C/final ELF/native and all area/file closures stay open. Functional35 unchanged29/35."
+    },
+    {
+      "as_of": "2026-10-23T08:43:53.202037+00:00",
+      "kind": "page_unmap_callback_source_and_actual_fullcrate_partial",
+      "summary": "Added M14-05-03-S03 source-integrated page-unmap callback/42actual fixture vectors and current82input Rust fullcrate14.253s/11uniqueexports objecta125e872. Focused independent actual HOST consumer review PASS. Prior54449c60 proof retained separately; mem.c wrapper/defaultC/final ELF/native/all area/file closures remain open; practical35 counts unchanged."
     }
   ]
 }

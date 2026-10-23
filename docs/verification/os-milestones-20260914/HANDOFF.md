@@ -1,3 +1,31 @@
+## Procfs lifecycle repair staged; callback full crate passed — 2026-10-23 08:43 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Original functional count29/35; closed IDs none; final-profile cycles/launches/
+actual mixed minutes0/0/0. SDK4 build passed22.064s and artifact/physical acceptance
+f1036c02. Fresh original235 nativea7ca failed36.560s: parentWAIT EPIPE(-32) follows
+serviceEBUSY. Child data/EOF is not the new defect. Independent physical retirement
+d1314d93 accepts actual retained captures, client/container retirement and fresh
+PROC/mutex observations; no cleanup replay. Procfs DELETE after revoke is a source-
+proven counterexample; exact failing packet origin remains inferred, not traced.
+Two-file Rust repair f5c56d83/smp_application and ffefabad/smp_service separates
+retained DELETE ledger drainage from CREATE readiness without weakening WAIT,
+quarantine, ACK or release ownership. Nine actual-body tests pass; independent
+SOURCE PASS and canonical integration retained. SDK5 preparation/staging/provider
+rebinding passed .177/.064/.397s;68sources, only these two differ,66 unchanged.
+Independent full11 source/profile review PASS; actual SDK5 build/native pending.
+Next: root completes exact execution release and runs affected SMP build, then
+fresh strict235,227 and V3 restoration. Image10972/launcher/oracles unchanged.
+M14 independently: page-unmap callback source integrated after42 actual vectors
+and independent source/ABI PASS. Exact pinned HOST production Rust full crate
+passes14.253s with explicit82-input closure; objecta125e872/13632672B, all11 expected
+exports each oneT. Direct joins/groups gone/closed captures; warnings retained.
+Original80-only closure blocker retained and two external inputs bound additively.
+Focused actual-consumer review pending; default C TU/final image/native, area/file
+retirement remain open. Public page_unmap implementation still C debt. No practical
+or M14 closure added. No resize performed; original velocity baseline preserved.
+Included-only100% guard and service checks remain active; no speedup claim.
+
 ## Terminal-control Rust repair integrated; M14 full crate accepted — 2026-10-23 07:45 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

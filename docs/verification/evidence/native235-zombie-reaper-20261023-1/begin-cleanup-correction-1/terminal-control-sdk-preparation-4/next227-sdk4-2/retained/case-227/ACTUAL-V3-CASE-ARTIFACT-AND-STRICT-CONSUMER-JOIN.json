@@ -1,0 +1,131 @@
+{
+  "actual_expected_qemu_argv": [
+    "/usr/libexec/qemu-kvm",
+    "-machine",
+    "q35",
+    "-accel",
+    "tcg,thread=multi",
+    "-cpu",
+    "max,la57=off",
+    "-smp",
+    "4,sockets=2,cores=2,threads=1",
+    "-m",
+    "8192",
+    "-object",
+    "memory-backend-ram,size=4G,id=ram-node0",
+    "-object",
+    "memory-backend-ram,size=4G,id=ram-node1",
+    "-numa",
+    "node,nodeid=0,cpus=0-1,memdev=ram-node0",
+    "-numa",
+    "node,nodeid=1,cpus=2-3,memdev=ram-node1",
+    "-nic",
+    "none",
+    "-display",
+    "none",
+    "-no-reboot",
+    "-no-shutdown",
+    "-S",
+    "-monitor",
+    "none",
+    "-qmp",
+    "unix:/home/holden/mckernel-work/scratch/n227s4/p/attempt-c798b4a1d13a4edfb3e601eda885be16/qmp.sock,server=on,wait=off",
+    "-serial",
+    "file:/home/holden/mckernel-work/scratch/n227s4/p/attempt-c798b4a1d13a4edfb3e601eda885be16/serial.log",
+    "-debugcon",
+    "file:/home/holden/mckernel-work/scratch/n227s4/p/attempt-c798b4a1d13a4edfb3e601eda885be16/debugcon.log",
+    "-global",
+    "isa-debugcon.iobase=0xe9",
+    "-kernel",
+    "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+    "-initrd",
+    "/home/holden/mckernel-work/host-preparation/native235-terminal-control-sdk-preparation-20261023-4/next227-sdk4-2/capture-interpreter-correction1/case-227/sdk4-native227-overlay-1.cpio.gz",
+    "-append",
+    "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
+  ],
+  "actual_overlay": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/native235-terminal-control-sdk-preparation-20261023-4/next227-sdk4-2/capture-interpreter-correction1/case-227/sdk4-native227-overlay-1.cpio.gz",
+    "sha256": "af9397ee9043608ed5a5a90393bb372a3bb29bb3f1ee459a3a021e34fd4e7053",
+    "size": 15248138
+  },
+  "base_bound_case": {
+    "bytes": 7786,
+    "path": "/home/holden/mckernel-work/host-preparation/native235-terminal-control-sdk-preparation-20261023-4/next227-sdk4-2/capture-interpreter-correction1/case-227/CASE-DATA.BASE-BOUND.json",
+    "sha256": "6d31c724b98b5f9eb8f767abd58b43c4c69f57772aa3fd7c87b2904e317bbde0"
+  },
+  "case": "227",
+  "live_authorities": {
+    "current_live_postjoin": null,
+    "fullgrowth_capacity_floors": null,
+    "lease_mutex_exclusions": null,
+    "matched_artifact_acceptance": {
+      "sdk": {
+        "bytes": 2579,
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-4/INDEPENDENT-ACTUAL-SDK-ARTIFACT-AND-PHYSICAL-ACCEPTANCE.json",
+        "sha256": "f1036c021f547bc39dfeffed163eac54770cf8e9f18dbe7ba7b40bb2eca0e811"
+      }
+    },
+    "native_execution_release": null,
+    "native_review": null,
+    "ordinary_grant": null,
+    "previous_native_physical_retirement": null,
+    "root_metadata_identity": null
+  },
+  "metadata_publication_argv": {
+    "bytes": 880,
+    "path": "/home/holden/mckernel-work/host-preparation/native235-terminal-control-sdk-preparation-20261023-4/next227-sdk4-2/capture-interpreter-correction1/case-227/METADATA-PUBLICATION-ARGV.ACTUAL.json",
+    "sha256": "246d4704138783bfffbeaab8bfae3ab1ec045f8c90664b3c608a6b0cfbbb0cdd"
+  },
+  "native_acceptance": false,
+  "native_capture_argv": {
+    "bytes": 532,
+    "path": "/home/holden/mckernel-work/host-preparation/native235-terminal-control-sdk-preparation-20261023-4/next227-sdk4-2/capture-interpreter-correction1/case-227/NATIVE-CAPTURE-ARGV.ACTUAL.json",
+    "sha256": "870a016dadd06c2e31da489afa8ca1684cbd24bd66fc946e54d62e7b77366b66"
+  },
+  "native_execution_authorized": false,
+  "native_manifest": {
+    "bytes": 8550,
+    "path": "/home/holden/mckernel-work/host-preparation/native235-terminal-control-sdk-preparation-20261023-4/next227-sdk4-2/capture-interpreter-correction1/case-227/ACTUAL-V3-NATIVE227-MANIFEST.json",
+    "sha256": "f343ad90206615eb3513846a09b30e959b4df005bc0c84e2cf4d607112fad39a"
+  },
+  "native_operation": {
+    "bytes": 2403,
+    "path": "/home/holden/mckernel-work/host-preparation/native235-terminal-control-sdk-preparation-20261023-4/next227-sdk4-2/capture-interpreter-correction1/case-227/NATIVE-OPERATION.ACTUAL.json",
+    "sha256": "e9d061ce7c6f413685c217906c375d08b84e08c3ef5760d11e0c0453f9929b81"
+  },
+  "overlay_capture": {
+    "bytes": 5166,
+    "path": "/home/holden/mckernel-work/host-preparation/native235-terminal-control-sdk-preparation-20261023-4/next227-sdk4-2/capture-interpreter-correction1/case-227/ACTUAL-V3-OVERLAY-CAPTURE-RESULT.json",
+    "sha256": "1a41dc48bb3cc9087466615b7d00469d2716ceb8d471da5b15ea4d782611fba7"
+  },
+  "overlay_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/native235-terminal-control-sdk-preparation-20261023-4/next227-sdk4-2/capture-interpreter-correction1/case-227/sdk4-native227-overlay-1.manifest.json",
+    "sha256": "48c8e225b48aa38d7ff7be46154207b41ddc7bfca4f4bf43659fdddd74a3a165",
+    "size": 15376
+  },
+  "production_consumer": {
+    "bytes": 85812,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/wait-error-observation-native-successor-1/runtime-wait-observation-1/native_diagnostic.py",
+    "sha256": "7fc122e6919e53fe8b8b1c3f30b6465d2a16ff8b5bc6bb69c0574846e211c202"
+  },
+  "qmp_encoded_bytes": 93,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_V3_OVERLAY_AND_ACCEPTED_SCHEMA2_MANIFEST_QMP_JOIN_ONLY",
+  "strict_oracle": {
+    "exit_code": 0,
+    "stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-recovery-batch-prerequisite-20261022-1/expected.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr_bytes_hex": "",
+    "stdout": {
+      "bytes": 227,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-recovery-batch-prerequisite-20261022-1/expected.stdout",
+      "sha256": "4eba8ea20e13ebe307fe67b771c200de36305e787ec31590b05e92dcb67ac9d6"
+    },
+    "stdout_bytes_hex": "7265636f7665727920706172656e742073746172740a706172656e742063616e63656c207369676e616c3d31352072656164793d3120707265726561703d3020656f663d31207265617065643d3120656368696c643d31206f776e65643d300a6368696c642065786563207375636365737320746f6b656e3d66697865642d76310a706172656e74207265636f76657279206578656320657869743d333720656f663d31207265617065643d3120656368696c643d310a706172656e74207265636f7665727920636f6d706c657465206368696c6472656e3d32206f776e65643d300a"
+  }
+}

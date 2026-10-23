@@ -1,0 +1,10 @@
+[
+  "/home/holden/anaconda3/bin/python3",
+  "-I",
+  "-B",
+  "-c",
+  "from pathlib import Path; import hashlib,os,sys; src=Path(sys.argv[1]); root=Path(sys.argv[2]); digest=sys.argv[3]; raw=src.read_bytes(); assert hashlib.sha256(raw).hexdigest()==digest; assert os.getuid()==os.geteuid()==os.getgid()==os.getegid()==1000; root.mkdir(mode=0o700); (root/'p').mkdir(mode=0o700); f=(root/'m.json').open('xb'); f.write(raw); f.flush(); os.fsync(f.fileno()); f.close(); os.chmod(root/'m.json',0o600); assert hashlib.sha256((root/'m.json').read_bytes()).hexdigest()==digest",
+  "/home/holden/mckernel-work/host-preparation/native235-terminal-control-sdk-preparation-20261023-4/next227-sdk4-2/capture-interpreter-correction1/case-227/ACTUAL-V3-NATIVE235-MANIFEST.json",
+  "/home/holden/mckernel-work/scratch/n227s4",
+  "f343ad90206615eb3513846a09b30e959b4df005bc0c84e2cf4d607112fad39a"
+]

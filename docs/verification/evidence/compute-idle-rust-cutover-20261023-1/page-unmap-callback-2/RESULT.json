@@ -1,0 +1,191 @@
+{
+  "status": "PASS_PRIVATE_CALLBACK_SOURCE_AND_EXECUTABLE_FIXTURE",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_deltas": [
+    {
+      "path": "arch/x86_64/kernel/memory.c",
+      "preimage_sha256": "95bb6a4a916a802e98eb9f7eac98eef990d6f75a3e42b06f29ac0a73ef2a452b",
+      "postimage_sha256": "49244e64283fa51f4ab7a9eed42a388934a9227b640657d34a7eca4d8f18136b"
+    },
+    {
+      "path": "kernel/rust/x86_memory_helpers.rs",
+      "preimage_sha256": "689b9741821609a7c2e3aadb8cd46b0dbc57948090b38758f0b3eb120a5297fb",
+      "postimage_sha256": "dbaefd727a0a9786547d06effeb634782cba17741898d9b5515333c5b7b94297"
+    }
+  ],
+  "unchanged_inputs": {
+    "kernel/rust/page_helpers.rs": "fa2f68c00a1568acf6e9ebc4bbdfb0b2bf13e2e5eff758b9048acb06a6aec597",
+    "kernel/include/page.h": "c8f3f5e7804c71430c814395ea14a1ee93267180713caeb39880b662cc9cd0dc",
+    "kernel/mem.c": "00c5e0fc6718bb3f1bd0940d2db88d0a5536390ced699ee435ec882c51eb7c72",
+    "kernel/CMakeLists.txt": "b141d09ad4d717171d9fca51b8ffefec65573f266652bc0d93129bd2a03ec40e"
+  },
+  "default_selection": "Existing RUST_KERNEL_ENABLED x86 memory.c source definition MCKERNEL_RUST_X86_MEMORY_PUBLIC at kernel/CMakeLists.txt:407 chooses new extern; fallback static C body preserved. Current image/whole-crate not tested for these postimages.",
+  "ABI": "Exact existing int page_unmap(struct page *) public ABI; Rust calls once, no null filtering/return transform; pointer cast only. Public mem.c wrapper and private context untouched.",
+  "fixture": {
+    "passed": true,
+    "vectors": 42,
+    "forwarding": 28,
+    "actual_unchanged_rust_body": 14,
+    "controlled_provider_not_production_wrapper": true,
+    "stdout_sha256": "112057ae0627ae25ce17ff24ac9a567eb3e99599f39ab4e246d350b704edd487",
+    "results": [
+      {
+        "captures": {
+          "stderr": {
+            "ctime_ns": 1792743480324065652,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48791070,
+            "mode": "0o600",
+            "mtime_ns": 1792743480324065652,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/page-unmap-callback-2/attempt-1-step-1/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792743480324065652,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48791069,
+            "mode": "0o600",
+            "mtime_ns": 1792743480324065652,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/page-unmap-callback-2/attempt-1-step-1/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          }
+        },
+        "closed_streams": true,
+        "direct_child_joined": true,
+        "error": null,
+        "group_absent": true,
+        "pid": 3585962,
+        "remaining_group_members": [],
+        "retirement_error": null,
+        "returncode": 0,
+        "seconds": 0.12393031700048596,
+        "start": 54092502,
+        "timed_out": false,
+        "unexpected_group_members": []
+      },
+      {
+        "captures": {
+          "stderr": {
+            "ctime_ns": 1792743480452069860,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48791079,
+            "mode": "0o600",
+            "mtime_ns": 1792743480452069860,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/page-unmap-callback-2/attempt-1-step-2/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792743480452069860,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48791078,
+            "mode": "0o600",
+            "mtime_ns": 1792743480452069860,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/page-unmap-callback-2/attempt-1-step-2/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          }
+        },
+        "closed_streams": true,
+        "direct_child_joined": true,
+        "error": null,
+        "group_absent": true,
+        "pid": 3585969,
+        "remaining_group_members": [],
+        "retirement_error": null,
+        "returncode": 0,
+        "seconds": 0.07941195007879287,
+        "start": 54092515,
+        "timed_out": false,
+        "unexpected_group_members": []
+      },
+      {
+        "captures": {
+          "stderr": {
+            "ctime_ns": 1792743480536072622,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48791088,
+            "mode": "0o600",
+            "mtime_ns": 1792743480536072622,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/page-unmap-callback-2/attempt-1-step-3/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792743480536072622,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48791087,
+            "mode": "0o600",
+            "mtime_ns": 1792743480536072622,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/page-unmap-callback-2/attempt-1-step-3/stdout",
+            "sha256": "112057ae0627ae25ce17ff24ac9a567eb3e99599f39ab4e246d350b704edd487",
+            "size": 95,
+            "uid": 1000
+          }
+        },
+        "closed_streams": true,
+        "direct_child_joined": true,
+        "error": null,
+        "group_absent": true,
+        "pid": 3585978,
+        "remaining_group_members": [],
+        "retirement_error": null,
+        "returncode": 0,
+        "seconds": 0.023438535979948938,
+        "start": 54092523,
+        "timed_out": false,
+        "unexpected_group_members": []
+      }
+    ]
+  },
+  "profile": {
+    "cpus": [
+      0
+    ],
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "per_command_wall_seconds": 90,
+    "termination_seconds": 6,
+    "FSIZE_bytes": 33554432,
+    "NOFILE": 256,
+    "CORE": 0,
+    "rust": "1.92.0",
+    "CGU": 1,
+    "RUST_MIN_STACK": 2097152,
+    "capture_source_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+  },
+  "failures": {
+    "candidate": 0,
+    "corrections": 0,
+    "lookup_note": "lookup-failures.txt"
+  },
+  "retirement_credit": "One callback only pending integration/link/native proof; no full file/area/M14/native/practical35 completion credit. kernel/mem.c wrapper remains C debt. Prior54449c60 full-crate/10exports unchanged and does not cover these two postimages.",
+  "remaining": [
+    "Independent focused source/ABI review",
+    "Dispatcher integrate exact two-file patch",
+    "Current full-crate and production C TU compile",
+    "Unique final definition/no unresolved page_unmap link proof",
+    "Reviewed native use of callback"
+  ],
+  "canonical_source_modified": false
+}

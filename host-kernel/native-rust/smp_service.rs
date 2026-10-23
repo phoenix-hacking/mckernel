@@ -174,7 +174,13 @@ impl Runtime {
             {
                 return Err(EINVAL);
             }
-            let process = self.application.procfs_process(pid, cpu)?;
+            let process = if message == 0x44 {
+                self.application.procfs_process(pid, cpu)?
+            } else {
+                // A real destructor may send DELETE after host revoke closed
+                // every MM/backend admission. Drain only the retained ledger.
+                self.application.procfs_delete_process(pid, cpu)?
+            };
             let mut pending = self.procfs_pending.lock();
             // Refuse overflow without acknowledging CREATE. Retain started
             // ownership and report a service failure, but keep draining this

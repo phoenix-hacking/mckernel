@@ -1,0 +1,129 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_HELPER_READY_NO_CANDIDATE_READS_OR_PREPARATION_EXECUTION",
+  "baseline_source_identity": "14eddf4a3718442d35dfe738c2ffae84814665597d2f75f6c398de675884d491",
+  "baseline_preparation": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-terminal-control-sdk-preparation-20261023-4/prepared-sdk/preparation.json",
+    "sha256": "3d5f4d14b1b9e9abeb0beb4925a56419bd25e9b8f1b83d0b007b9dccc0db5407",
+    "bytes": 49980
+  },
+  "baseline_actual_acceptance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-4/INDEPENDENT-ACTUAL-SDK-ARTIFACT-AND-PHYSICAL-ACCEPTANCE.json",
+    "sha256": "f1036c021f547bc39dfeffed163eac54770cf8e9f18dbe7ba7b40bb2eca0e811",
+    "bytes": 2579
+  },
+  "baseline_physical_actual_reads": {
+    "bytes": 67125,
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-4/postbuild-preparation-1/ACTUAL-SDK4-ARTIFACT-AND-POSTFLIGHT-READS.json",
+    "sha256": "8f595ce7f419bd69d1f5beafd53f4853d0968816616a3dbab728245cd18d1448"
+  },
+  "helper": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/prepare.py",
+    "sha256": "26eaa1941958ce9dcb138105094bc46df9ef52e7dd20679be6173c5c9875a298",
+    "bytes": 17427
+  },
+  "predecessor_helper": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-terminal-control-sdk-preparation-20261023-4/prepare.py",
+    "sha256": "78b7bd24a9cb357e4cad76668fe55bd788aca67af9fbf6f76d92fd3a15e0b2da",
+    "bytes": 17330
+  },
+  "predecessor_stager": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-terminal-control-sdk-preparation-20261023-4/metadata/stage_bound_successor.py",
+    "sha256": "3e33836a75856b1babca5a808d88274638cc995d0da04b014711e00855c58243",
+    "bytes": 5529
+  },
+  "allowed_changed_subset": [
+    "procfs_objects.rs",
+    "smp_application.rs",
+    "smp_service.rs"
+  ],
+  "selected_changed_subset": null,
+  "accepted_preimages": {
+    "procfs_objects.rs": {
+      "baseline_sha256": "4d1247a87706e94fa75d7bea667d9349d48b7c525eba99d02688a87f5369411c",
+      "bytes": 19245,
+      "origin": "/home/holden/mckernel-work/host-preparation/native235-terminal-control-sdk-preparation-20261023-4/prepared-sdk/source-modules/procfs_objects.rs",
+      "origin_kind": "CURRENT_LIVE_SOURCE",
+      "path": "procfs_objects.rs",
+      "reviewed_replacement": false,
+      "sha256": "4d1247a87706e94fa75d7bea667d9349d48b7c525eba99d02688a87f5369411c"
+    },
+    "smp_application.rs": {
+      "baseline_sha256": "6b37a71ba79bf5746fd72123b82ebe5afc71c809310a2a942cea08a3d66cf5e8",
+      "bytes": 72000,
+      "origin": "/home/holden/mckernel-work/host-preparation/native235-terminal-control-sdk-preparation-20261023-4/prepared-sdk/source-modules/smp_application.rs",
+      "origin_kind": "CURRENT_LIVE_SOURCE",
+      "path": "smp_application.rs",
+      "reviewed_replacement": true,
+      "sha256": "3dcfeb5fb00b1aeffcef784d600566c3553f74cf7bc1ccb4109ab3ececcee73f"
+    },
+    "smp_service.rs": {
+      "baseline_sha256": "bd0a109fe6c402e21b702b0fa96d99c2d9edbd5179877aa61f9f27bd595fe0e4",
+      "bytes": 47662,
+      "origin": "/home/holden/mckernel-work/host-preparation/native235-terminal-control-sdk-preparation-20261023-4/prepared-sdk/source-modules/smp_service.rs",
+      "origin_kind": "CURRENT_LIVE_SOURCE",
+      "path": "smp_service.rs",
+      "reviewed_replacement": true,
+      "sha256": "dae95a5e91577134e00d38050db1605ef568b11eaa829270bb47a257885188e5"
+    }
+  },
+  "source_gate": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/SOURCE-ACCEPTANCE.INPUT.json",
+    "required_status": "ACCEPTED_FROZEN_SOURCE_READY_FOR_SDK_PREPARATION",
+    "candidates": "nonempty map selected subset of allowed names; each exact path/sha256/bytes; actual changedmap must equal sourcePASS map and genuine deltas",
+    "independent_source_review": "exact path+sha256 keys only; PASS/PASS_SOURCE, independent reviewer, implementation_ownership=false, candidate_sha256_by_relative exact candidates",
+    "actual_tests": "exact path+sha256 keys only; genuine frozen test record required"
+  },
+  "new_source_identity": null,
+  "candidates": null,
+  "independent_source_review": null,
+  "actual_tests": null,
+  "prepared_sdk": null,
+  "runtime_cohort": null,
+  "request": null,
+  "execution_review": null,
+  "execution_release": null,
+  "actual_sdk5_artifacts": null,
+  "actual_physical_acceptance": null,
+  "expected_affected_modules": [
+    "ihk-smp-x86_64.ko"
+  ],
+  "expected_stable_modules": {
+    "ihk.ko": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+    "mcctrl.ko": "06e8b9b571f21b41821aa03a32ebf4ae20ae19cf4b110c3af2c81b491b92ef86"
+  },
+  "preserve_nonselected": "Every68 closure record except exact accepted selected changes; specifically812current_fork_control/ba95mcctrl_vm/8bfWAIT, aliases and MM wrappers",
+  "next_prepare_command_after_root_gate_only": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=134217728:134217728",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=3",
+    "35",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/prepare.py"
+  ],
+  "source_capture_operations": 0,
+  "stage_operations": 0,
+  "compiler_operations": 0,
+  "root_operations": 0,
+  "Docker_operations": 0,
+  "geometry_GiB": 110,
+  "geometry_condition": "Existing frozen110GiB profile only; any growth successor requires separate reconciliation",
+  "failure_history": [
+    "SDK4 prior source_review ref schema corrected to exact2keys; retained",
+    "SDK4 physical actual_reads schema used directly; no generic decision assumption",
+    "SDK4 nonce is not required in every source path",
+    "227failed system3.8 supervisor capture retained; use accepted anaconda interpreter"
+  ]
+}

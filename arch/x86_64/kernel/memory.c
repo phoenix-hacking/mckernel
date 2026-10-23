@@ -1333,10 +1333,14 @@ static void x86_clear_free_pages_user_bridge(void *addr, int nr_pages)
 	_ihk_mc_free_pages(addr, nr_pages, IHK_MC_PG_USER, __FILE__, __LINE__);
 }
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+extern int x86_clear_page_unmap_bridge(void *page);
+#else
 static int x86_clear_page_unmap_bridge(void *page)
 {
 	return page_unmap(page);
 }
+#endif
 
 static void x86_clear_rss_sub_bridge(size_t size, size_t pgsize)
 {

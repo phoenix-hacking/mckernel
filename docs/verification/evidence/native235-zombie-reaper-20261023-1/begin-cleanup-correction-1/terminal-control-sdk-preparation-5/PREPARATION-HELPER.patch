@@ -1,0 +1,83 @@
+--- /home/holden/mckernel-work/host-preparation/native235-terminal-control-sdk-preparation-20261023-4/prepare.py
++++ /home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/prepare.py
+@@ -13,16 +13,16 @@
+ 
+ R = Path('/home/holden/mckernel')
+ E = Path(__file__).resolve().parent / 'metadata'
+-OLD = Path('/home/holden/mckernel-work/host-preparation/native235-wait-error-observation-sdk-successor-20261023-3')
+-H = Path('/home/holden/mckernel-work/host-preparation/native235-terminal-control-sdk-preparation-20261023-4/prepared-sdk')
++OLD = Path('/home/holden/mckernel-work/host-preparation/native235-terminal-control-sdk-preparation-20261023-4/prepared-sdk')
++H = Path('/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/prepared-sdk')
+ SCOPE = 'Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
+-ALLOWED_CHANGED_SOURCES = {'current_fork_control.rs', 'mcctrl_vm.rs'}
++ALLOWED_CHANGED_SOURCES = {'smp_application.rs', 'smp_service.rs', 'procfs_objects.rs'}
+ EXPECTED = None  # Bound only from genuine accepted SOURCE-ACCEPTANCE.INPUT.json at main().
+ 
+ OLD_PINS = {
+-    'preparation.json': 'bf9a71e398ce058703c3de0ad552860d2ba23b785e2ee710e1549264d8d9fb6f',
+-    'derived-runtime/native_running_external_modules_offline.py': 'e7c2bd4c96f4ec2072b4354fcc602ad8d5ff4ff1f7dcfeae57616a795628afc7',
+-    'derived-runtime/native_running_external_modules_owner.py': '1a7083948edd848e6be1d6a283eeee63aa34d62164eaf13251d821c3b1417d4a',
++    'preparation.json': '3d5f4d14b1b9e9abeb0beb4925a56419bd25e9b8f1b83d0b007b9dccc0db5407',
++    'derived-runtime/native_running_external_modules_offline.py': 'd0adb1168ef470301d81bf6680d7b7ec90dd5e25f239c5037be433ec2707ee68',
++    'derived-runtime/native_running_external_modules_owner.py': 'effec02c0d393f9126e92aab9317faf7eace9a9560b9ea5a6014a871100d2018',
+ }
+ 
+ def digest(path):
+@@ -116,14 +116,14 @@
+     assert {row['relative'] for row in deltas} == set(EXPECTED)
+     identity_rows = sorted([[r['path'], r['sha256'], r['bytes']] for r in p['closure']])
+     identity = hashlib.sha256(json.dumps(identity_rows, separators=(',', ':')).encode()).hexdigest()
+-    input_map = dict(status='PREPARED_EXACT68_TERMINAL_CONTROL_SUCCESSOR_NOT_RELEASED',
++    input_map = dict(status='PREPARED_EXACT68_PROCFS_DELETE_SUCCESSOR_NOT_RELEASED',
+                      source_identity=identity, source_identity_rows=identity_rows,
+                      source_identity_encoding='SHA256 compact JSON sorted [relative,sha256,bytes] triples; retained accepted encoding',
+                      rows=rows, source_files=68, source_bytes=sum(r['bytes'] for r in p['closure']),
+                      logical_changed_sources=sorted(EXPECTED), changed_relative_rows=sorted(EXPECTED),
+                      predecessor_preparation=ref(OLD / 'preparation.json'), predecessor_recorded_identity=old['source_identity'],
+                      source_acceptance=None, execution_release=None)
+-    map_path = H / 'CURRENT68-TERMINAL-CONTROL-INPUT-MAP.json'
++    map_path = H / 'CURRENT68-PROCFS-DELETE-INPUT-MAP.json'
+     save(map_path, input_map)
+     p.update(source_identity=identity, source_candidate_sha=identity, current_closure_ref=ref(map_path),
+              closure_bytes=input_map['source_bytes'])
+@@ -177,10 +177,10 @@
+         request[key] = None
+     template = H / 'REQUEST.TEMPLATE.PENDING-LIVE-IDENTITIES.json'
+     save(template, request)
+-    stage_source = R / 'docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-sdk-preparation-1/prepared/stage_bound_successor.py'
++    stage_source = Path('/home/holden/mckernel-work/host-preparation/native235-terminal-control-sdk-preparation-20261023-4/metadata/stage_bound_successor.py')
+     stage = stage_source.read_text().replace(str(OLD), str(H)).replace(OLD_PINS['preparation.json'], digest(prep)).replace(
+-        '56bc171c4a724f9b81060ae6713e9a1c', nonce).replace(
+-        '6bcd200e235699b0f7aac6e1734cf0ba99ed4836ff60c429510a382291fc3222', digest(template))
++        'c943d66a843c4682be64165cbed0039d', nonce).replace(
++        '09ca46bc9d478d0411bd22ef7bb57224bc3c263beb56894dbd4345524e7f598e', digest(template))
+     ast.parse(stage)
+     write(E / 'stage_bound_successor.py', stage.encode())
+     write(E / 'MATERIALIZER.patch', ''.join(difflib.unified_diff(
+@@ -211,7 +211,7 @@
+         assert bodies(before) == bodies(after), name
+         ast_checks.append(name + ': all executable function/class AST bodies unchanged except exact source-byte predicate')
+     assert (H / 'source-modules/mcctrl.rs').read_bytes() == (H / 'source-modules/mcctrl_rust.rs').read_bytes()
+-    for name in ('mcctrl_process.rs', 'mcctrl.rs', 'mcctrl_rust.rs', 'mcctrl_vm_write_compat.c', 'mcctrl_vm_write_compat.h'):
++    for name in ('current_fork_control.rs', 'mcctrl_vm.rs', 'mcctrl_process.rs', 'mcctrl.rs', 'mcctrl_rust.rs', 'mcctrl_vm_write_compat.c', 'mcctrl_vm_write_compat.h'):
+         assert (H / 'source-modules' / name).read_bytes() == (OLD / 'source-modules' / name).read_bytes()
+     for name, sha in OLD_PINS.items():
+         assert digest(OLD / name) == sha
+@@ -228,7 +228,7 @@
+                    Docker_operations=0, scratch_writes=0,
+                    profile_unchanged=dict(container_CPUs='2-5', container_memory_bytes=12*1024**3,
+                                           container_swap=0, container_tasks=512, make_jobs=2, network='none', backing_GiB=110),
+-                   expected_binary_delta=dict(ihk='stable expected; verify actual build', ihk_smp_x86_64='change expected iff accepted current_fork_control.rs delta; actual artifact proof required', mcctrl='change expected iff accepted mcctrl_vm.rs delta; actual artifact proof required'),
++                   expected_binary_delta=dict(ihk='stable expected; verify actual build', ihk_smp_x86_64='change expected iff accepted smp_application.rs/smp_service.rs/procfs_objects.rs provider delta; actual artifact proof required', mcctrl='stable06e8 expected; actual artifact proof required'),
+                    required_next=['independent coherent SDK preparation review',
+                                   'root source/input staging and fresh live identities/capacity/leases',
+                                   'independent exact execution release', 'actual module build and artifact/physical review'])
+@@ -236,7 +236,7 @@
+     save(E / 'PREPARATION-RESULT.json', summary)
+     validation = dict(scope=SCOPE, status='PASS_PURE_DERIVED_DRIVER_AND_OWNER_PREPARATION_CHECKS',
+                       actual_pure_bodies=['driver.load_preparation', 'driver.plan', 'owner.validate_preparation'],
+-                      checks=ast_checks + ['exact independently accepted finite current_fork_control.rs/mcctrl_vm.rs source set only; WAIT observer and entry aliases unchanged', '15 exact small prepared inputs',
++                      checks=ast_checks + ['exact independently accepted nonempty selected subset of smp_application.rs/smp_service.rs/procfs_objects.rs only; current_fork_control812/mcctrl_vmba95/WAIT8bf and entry aliases unchanged', '15 exact small prepared inputs',
+                                             'unchanged source dependency sets', 'unchanged compatibility MM sources and all runtime check bodies',
+                                             'unchanged110GiB owner geometry; fresh nonce/output roots', 'accepted predecessor pins unchanged'],
+                       plan=plan, elapsed_seconds=time.time()-started, staging_executed=False,

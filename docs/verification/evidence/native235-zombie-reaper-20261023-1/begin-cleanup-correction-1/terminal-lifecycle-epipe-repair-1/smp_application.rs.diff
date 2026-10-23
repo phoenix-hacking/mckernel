@@ -1,0 +1,26 @@
+--- a/host-kernel/native-rust/smp_application.rs
++++ b/host-kernel/native-rust/smp_application.rs
+@@ -548,6 +548,23 @@
+         entry.procfs.as_ref().cloned().ok_or(EIO)
+     }
+ 
++    /// DELETE drains the retained thread ledger after terminal intent/revoke.
++    /// It uses no guest memory or inherited MM and grants no backend admission,
++    /// cleanup, destructor ACK, or release authority. The exact-generation
++    /// Remote and retained Entry own this Process until its ledger retires.
++    pub(crate) fn procfs_delete_process(&self, pid: i32, cpu: i32) -> Result<Arc<ProcfsProcess>> {
++        let slots = self.slots.lock();
++        let entry = slots
++            .iter()
++            .flatten()
++            .find(|entry| entry.cleanup.pid() == pid)
++            .ok_or(ENOENT)?;
++        if entry.quarantined || cpu < 0 {
++            return Err(EINVAL);
++        }
++        entry.procfs.as_ref().cloned().ok_or(EIO)
++    }
++
+     pub(crate) fn publish(
+         &self,
+         cpu: i32,

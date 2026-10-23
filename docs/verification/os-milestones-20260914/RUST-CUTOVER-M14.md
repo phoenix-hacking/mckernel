@@ -165,3 +165,25 @@ At normal checkpoints report practical check closures separately from M14 Rust i
 ## Actual pinned host full Rust crate — 2026-10-23
 
 The exact production Rust recipe, pinned nightly compiler and80 source inputs compiled on HOST in15.412s. The13,632,104-byte object exports all ten selected idle/current-CPU/memory symbols once; independent actual-consumer review passes.49 compiler warnings and an auxiliary cfg-source-location metadata failure remain retained. This advances partial production-consumer evidence for M14-02-04 and M14-05-03. Default C TU/final-image linkage/native proof and all area/file closures remain open; functional29/35 unchanged. Evidence: [actual host consumer review](../evidence/compute-idle-rust-cutover-20261023-1/production-combined-2/ordinary-fullcrate-evidence-1/INDEPENDENT-ACTUAL-HOST-CONSUMER-REVIEW.json).
+
+
+M14-05-03-S03 adds the source-integrated `x86_clear_page_unmap_bridge`
+callback. The Rust export calls the existing public `page_unmap` ABI once,
+preserving its pointer and signed return without adding a null policy. The
+original C fallback is retained; `kernel/mem.c` still owns the public wrapper
+and private context, which remain C debt. All42 actual fixture vectors pass:
+28 original-C/Rust argument/return comparisons and14 comparisons through the
+unchanged Rust page-unmap body. See [source integration](../evidence/compute-idle-rust-cutover-20261023-1/page-unmap-callback-2/CANONICAL-INTEGRATION.json)
+and [fixture evidence](../evidence/compute-idle-rust-cutover-20261023-1/page-unmap-callback-2/RESULT.json).
+
+The updated callback compiles in the actual pinned production Rust crate in
+14.253s, with all11 expected exports defined once in object
+`a125e872882f8a90e44ba28d344b1d751942732992ea620fe133ba63587963b4`
+(13,632,672bytes). The current closure individually binds82 inputs, including
+two existing external module files added after preserving the80-only closure
+blocker. This does not retroactively extend the earlier80-row binding or replace
+object `54449c60` and its accepted ten-export proof. Focused independent review
+of the new actual HOST consumer evidence passes. See [current full-crate evidence](../evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-fullcrate-callback3-1/FINAL-HOST-CONSUMER-EVIDENCE.json).
+See the [independent HOST consumer review](../evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-fullcrate-callback3-1/INDEPENDENT-ACTUAL-HOST-CONSUMER-REVIEW.json).
+Actual default C consumers, final image link, native proof and all area/file
+closures remain open; practical35 counts are unchanged.

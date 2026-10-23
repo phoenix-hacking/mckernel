@@ -1,0 +1,44 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_CANDIDATE_NINE_ACTUAL_BODY_TESTS_PASS_NATIVE_PENDING",
+  "canonical_edits": false,
+  "compute_c_changes": false,
+  "native_acceptance": false,
+  "source_files_inspected": {
+    "host-kernel/native-rust/current_fork_control.rs": "81228204d50bd5e95bcad7671d4c6bb272ef9c516d0163b2b39a0f6a5c23a126",
+    "host-kernel/native-rust/mcctrl_process.rs": "8bf30cd8ae79cc778bd91816f30aaf7a37ccc2aab59822ca2a03587426a212b8",
+    "host-kernel/native-rust/mcctrl_vm.rs": "ba957d7349a45cda47ba135dd265885516cf40c00872658ca8309a98aa8d19c1",
+    "host-kernel/native-rust/smp_application.rs": "3dcfeb5fb00b1aeffcef784d600566c3553f74cf7bc1ccb4109ab3ececcee73f",
+    "host-kernel/native-rust/current_fork_host.rs": "5a68633144eb60f941a73ceff9f2d5b0d30c7b9c1c1d0c25d5e8135dfde959b4",
+    "host-kernel/native-rust/smp_service.rs": "dae95a5e91577134e00d38050db1605ef568b11eaa829270bb47a257885188e5",
+    "host-kernel/native-rust/smp_application_syscall.rs": "b99874d9c1a80720f154086d40f4427f83732824dad85d8d391cc3a8a4de4360",
+    "host-kernel/native-rust/smp_procfs.rs": "4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea",
+    "host-kernel/native-rust/application_rpc.rs": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39",
+    "kernel/rust/fork_control_guest.rs": "26797f574fa1ba7006eb27ff3a1a7750ec04b83f71a2e90b8c35c4c536b33acd",
+    "kernel/rust/fork_final_ack.rs": "093f742dfe4969d78b2ca6b8b643df94042945e890d26003dec9d1818c34826b",
+    "kernel/rust/fork_runnable_child.rs": "a9387ae13b85785176b95fc6ddc79b08bd31dd7960b0730307b41b5a05b5d137",
+    "kernel/rust/fork_child_credits.rs": "63b82c97cc6e1204585cfaf2b89ef378b88c1d207a8e82c2f1400bc352f9c98d",
+    "kernel/rust/fork_constructed_credits.rs": "4c1e96ef4fbf5cb66acc54d900d37fcd68fb4d50dd1337c4428b3f5e2ecd1972",
+    "kernel/rust/process_helpers.rs": "526baf9363a0845ad50aade7e9b2296d27c8840527f3510d95a1105fc626d8d3",
+    "kernel/rust/syscall_policy.rs": "4edf51b9c391ddca12fd4505ac1c6b51f6a73e3919f3f1cd49b3ebcb87a38a69",
+    "kernel/rust/procfs.rs": "6a3609c3ced73cafdffec032e3f2876e08eee5628ba2470137729ca7a804c90e",
+    "kernel/rust/object_helpers.rs": "7444ec38a30cdb2b0505b939f02eacb5018d3732a97fcd12b3eba189133f0f06",
+    "kernel/procfs.c": "bed2ba5f5f786d1198c93bcc8d0bb7f608ad0a70e57ab6c3fa0caa99228306da"
+  },
+  "candidate_files": {
+    "smp_application.rs": "f5c56d83a13f10a712a4555849f52078c2d410254080150d34408011daf527a5",
+    "smp_service.rs": "ffefabadb349f55ecc4d474f6463e73e0c6b432aea6c41eb973a91f115ded0f7"
+  },
+  "native_serial": {
+    "path": "/home/holden/mckernel-work/scratch/n235t1/p/attempt-a7ca2abdb6a44f5894da415aa1cf4453/serial.log",
+    "sha256": "72921f15e78066729e6c17657a2d5964285d2aaaec362d6a335d0992cb67b964"
+  },
+  "tests": {
+    "passed": 9,
+    "failed": 0,
+    "source": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-lifecycle-epipe-repair-1/actual_lifecycle_tests.rs",
+    "source_sha256": "926e2014d3446ba51ef1278525274c99b8fd0c94ff44ac87db9db83679c4a2c3"
+  },
+  "cpu6_released": true,
+  "blocking_next": "independent ownership/source review, root integration and full-crate binding; separately reviewed fresh native run"
+}
