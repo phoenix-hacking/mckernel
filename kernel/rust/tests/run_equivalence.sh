@@ -90970,6 +90970,9 @@ extern unsigned long x86_set_pte_value_result(unsigned long, unsigned long,
 					      unsigned long);
 extern void set_pte(unsigned long *, unsigned long, unsigned long)
 	__attribute__((weak));
+extern unsigned long x86_init_text_map_kernel_start_bridge(void)
+	__attribute__((weak));
+extern const unsigned long x86_map_kernel_start_geometry;
 extern int set_pt_large_page(void *, void *, unsigned long, unsigned long)
 	__attribute__((weak));
 extern int x86_init_normal_set_large_bridge(void *, unsigned long, unsigned long, unsigned long)
@@ -93948,6 +93951,9 @@ int main(void)
 		set_pte(&slot, 0x12345000UL, PTATTR_WRITABLE | PTATTR_USER);
 		require(slot == expected);
 	}
+	if (x86_init_text_map_kernel_start_bridge)
+		require(x86_init_text_map_kernel_start_bridge() ==
+				x86_map_kernel_start_geometry);
 	if (set_pt_large_page && ihk_mc_pt_set_large_page &&
 			ihk_mc_pt_set_page) {
 		x86_rust_stub_pt_set_page_calls = 0;
@@ -142866,10 +142872,7 @@ void x86_init_text_log_bridge(int event, unsigned long a,
 	(void)b;
 	(void)c;
 }
-unsigned long x86_init_text_map_kernel_start_bridge(void)
-{
-	return 0xfffffe0000000000UL;
-}
+const unsigned long x86_map_kernel_start_geometry = 0xfffffe0000000000UL;
 unsigned long x86_init_text_end_bridge(void)
 {
 	return 0xfffffe0000200000UL;
@@ -145462,7 +145465,9 @@ grep -Eq 'U x86_init_linux_get_memory_chunk_bridge' "${tmpdir}/out/rust.undefine
 grep -Eq 'U x86_init_linux_log_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_init_linux_panic_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_init_text_log_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U x86_init_text_map_kernel_start_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq ' T x86_init_text_map_kernel_start_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq 'U x86_map_kernel_start_geometry$' "${tmpdir}/out/rust.undefined"
+! grep -Eq 'U x86_init_text_map_kernel_start_bridge$' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_init_text_end_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_init_text_panic_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_init_low_panic_bridge' "${tmpdir}/out/rust.undefined"

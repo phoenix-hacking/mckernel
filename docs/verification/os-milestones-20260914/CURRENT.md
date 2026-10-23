@@ -1,3 +1,28 @@
+## Normal build retirement accepted; final LONG admission next — 2026-10-23 14:21 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical34/35,whole11/14; LONG0/100launches and0/60actualmixedminutes. ActualM14
+normalcleanupPASS0/6.286825s, independentphysical0e9346c8: exactCID0a0d591dremoved,
+2originalrecordinodes/hashes/modes/ownerspreserved,9journalevents/9completePROC
+reports/publishers[]/oldowner+7clientsabsent, protectedinventories/source/output
+unchanged. Finalmutex0/.135276s/8fdd27:4/eightpathsabsent. HOLDcleared; no more
+cleanup/diagnostic/replay needed. Alloriginalfailedmutex/source/parser evidence
+retained; archive+atomictransactionnormalAPI, no rawunlink. Current_live_postjoin
+COMPLETE nonNULLrecord0e934/7652B. ExactLONGpost-M14freshquerysource0bd5427/observer
+522efunchangedbody/configsidecar+newcaptureonly, operationb313/profile82ff/rootargv
+c1e544 readyfocusedreview/publication. Rootterminalownerpreparedfixedrelease/
+requestschema/digestorder; rootboot/expiry+finalreview/digests pending. Nextheavy
+is finalLONGoncefreshquery/exactreleased; no competingbuildadmitted.
+M14candidate5defaultlink386947 imagec13f405e13exportsaccepted; nativeopen. Second
+canonicaltextmapRustgetter08f1dddf sourceABI+26leafcaptures+78-inputRustcompile
+PASSf601ae, originalpostcompileobserverfailurecorrectedwithoutcompilerreplay.
+Cimmutablegeometrydataonly/noCimplementationexpansion, exactfallbackretained.
+WholeC TU/defaultkernel/nativepending; frozen5/6/currentfunctionalimageunchanged.
+Candidate6actualmaterialization4c56+fullpureconsumer82d7PASS37.075s andindependent
+source/profile/namespaceacceptance; futurebuildoperation6500ea NOTRELEASED, waits
+functionalLONGpriority. M07privateappcompiled/sourceABIaccepted, nostateexecution.
+Included-only100%/servicechecksactive; noresize/reservelowering/speedupclaim.
+
 ## Actual Rust default build accepted; normal retirement pending — 2026-10-23 13:43 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

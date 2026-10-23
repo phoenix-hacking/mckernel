@@ -1021,7 +1021,7 @@
           "status": "partial",
           "owner": "dispatcher integrated /root/m14_actual_consumer_fix reviewed bridge slice",
           "remaining_c_functions": null,
-          "rust_consumer": "Canonical x86_init_normal_set_large_bridge Rustexport forwards to existing Rust set_pt_large_page under existing PUBLIC selection; fallbackC preserved.",
+          "rust_consumer": "Canonical Rust large-page forwarding bridge and text-map-start getter; existingPUBLICselection, originalfallbacks retained.",
           "next_action": "Compile changed whole memory.c in a future coherently staged production candidate, prove default kernel unique Rustprovider and relevant native behavior. Candidate5/build2 snapshots retain previous frozen sources; no wholearea/file credit.",
           "proof": {
             "implementation": {
@@ -1031,6 +1031,11 @@
                   "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/init-large-page-bridge-rust-20261023-1/CANONICAL-BRIDGE-INTEGRATION.json",
                   "sha256": "13756e06a676ac833d53bbf0c83346aed99391b621d22012adf990d254c24934",
                   "size": 2259
+                },
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/CANONICAL-TEXTMAP-BRIDGE-INTEGRATION.json",
+                  "sha256": "08f1dddf049a40469a1b5eb2054c592a34b92b946829897b2a17be86dcde4fbf",
+                  "size": 1503
                 }
               ]
             },
@@ -1041,6 +1046,11 @@
                   "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/init-large-page-bridge-rust-20261023-1/CANONICAL-BRIDGE-INTEGRATION.json",
                   "sha256": "13756e06a676ac833d53bbf0c83346aed99391b621d22012adf990d254c24934",
                   "size": 2259
+                },
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/CANONICAL-TEXTMAP-BRIDGE-INTEGRATION.json",
+                  "sha256": "08f1dddf049a40469a1b5eb2054c592a34b92b946829897b2a17be86dcde4fbf",
+                  "size": 1503
                 }
               ]
             },
@@ -1062,6 +1072,19 @@
                 "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/init-large-page-bridge-rust-20261023-1/CANONICAL-BRIDGE-INTEGRATION.json",
                 "sha256": "13756e06a676ac833d53bbf0c83346aed99391b621d22012adf990d254c24934",
                 "size": 2259
+              },
+              "production_whole_C_TU": false,
+              "default_link": false,
+              "native": false
+            },
+            {
+              "body": "x86_init_text_map_kernel_start_bridge",
+              "implementation": "Canonical Rustgetter reads PUBLICimmutable declarativeCgeometry; exactfallbackC retained",
+              "focused_checks": "7originalC/Rustgeometrycases,realheaderABI,26leafcaptures,78-inputproductionRustprivatecompileoneT/noUgetter/Ugeometry",
+              "evidence": {
+                "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/CANONICAL-TEXTMAP-BRIDGE-INTEGRATION.json",
+                "sha256": "08f1dddf049a40469a1b5eb2054c592a34b92b946829897b2a17be86dcde4fbf",
+                "size": 1503
               },
               "production_whole_C_TU": false,
               "default_link": false,
@@ -1652,6 +1675,17 @@
       },
       "native": false,
       "whole_file_or_area_retirement": false
+    },
+    {
+      "date": "2026-10-23",
+      "area": "M14-05-01",
+      "status": "partial_canonical_textmap_bridge_and_private_production_Rust_consumer",
+      "evidence": {
+        "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/CANONICAL-TEXTMAP-BRIDGE-INTEGRATION.json",
+        "sha256": "08f1dddf049a40469a1b5eb2054c592a34b92b946829897b2a17be86dcde4fbf",
+        "size": 1503
+      },
+      "default_kernel_or_native": false
     }
   ]
 }
