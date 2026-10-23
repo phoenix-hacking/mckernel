@@ -1,3 +1,28 @@
+## Corrected cohort actual PASS; preserved-evidence query correction in review — 2026-10-23 16:24 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical34/35,whole12/14; no newclosure. Checkpoint10a43f7dd8642abd8d94032a6abc075a3cbfb748
+pushed/fetched134blobs proofb920a37e. current_live_postjoin stays nonNULL
+CANCELLED_LONG_POSITIVELY_RETIRED via independent591cdb07. NextLONG nonce
+ dfbb3adb1c7d45b689a899140f3afffc; HOSTl12b1/p and scratchp12s5l2/m.json0c0c
+publishedUID1000/exclusive; actualcohort1436d66a0/.440473s/joined/gone/closed,
+full156source/artifact/SELF/NONEguardsPASS. Initialfixture-only APIreturnshape
+FAIL preserved; corrected withoutrepublishing. Rootquerybc6583 NOTEXECUTED:
+reviewfound retainedhistoricalowner directory erroneously in freshoutputabsence.
+Additive querydc336276/profile8fa0266e separates historicalevidence from allfresh
+outputcollisionguards, independentreview+actualpredicatefixture next. No deletion,
+cleanup, guest, release minting or expiredreuse. Actual canonicalLF functions reused;
+full realclockvalidate_release remainsNULL untilgenuine finalrelease. case227_stage
+owns correction/serializationpayload; native235_release_review exactrootqueryreview.
+Correctedcollector linked/stagedaccepted; next actualguest is critical dependency.
+LONG accepted0/100launches,0/60actualmixedminutes; oldobservedcountsUNKNOWN.
+M07capsule39a5 and coherenttypedsourceff7f independentlyaccepted (175controlled
+sourceguards, NOTnativecases); runtime/admission/native stillOPEN. M14candidate9
+source+completepure033a0ee0 PASS43.540s/19GiBguardactuallyenforced; request54453e1e,
+no compiler/defaultlink/native. Separate highreview active. New small process.c
+spin_sleep_or_schedule wrapper privateimplementation uses existingRustbody;
+canonical unchanged. CPU6leaf grant queued after candidate9 actualwholejoin.
+
 ## Cancelled LONG positively retired; corrected capsule staged — 2026-10-23 16:14 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

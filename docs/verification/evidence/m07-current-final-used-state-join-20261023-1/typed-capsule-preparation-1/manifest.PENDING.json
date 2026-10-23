@@ -1,0 +1,186 @@
+{
+  "artifacts": {
+    "bzImage": {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+      "sha256": "032653ee0661b059c325e2a0911a9d492805f1a889c4df515473d69a8be105bc",
+      "size": 16130048
+    },
+    "initramfs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/coherent-successor-preparation-1/actual-stage-successor-1/base.cpio.gz",
+      "sha256": "d9c1c4d8c538594d89807c4acc6150f01a0af7854270b4699ffeda316da25b41",
+      "size": 15593372,
+      "mode": 33152
+    },
+    "libc": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-preparation-20261017-2/stage/root/lib64/libc.so.6",
+      "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+      "size": 2339896
+    },
+    "loader": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-preparation-20261017-2/stage/root/lib64/ld-linux-x86-64.so.2",
+      "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+      "size": 930600
+    },
+    "mcexec": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/launcher-runtime-snapshot-1/mcexec",
+      "sha256": "dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954",
+      "size": 394648
+    },
+    "mckernel_image": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/mckernel.img",
+      "sha256": "10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2",
+      "size": 8439816
+    },
+    "native_boot": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel/scratch/m05-a-261021-1/native-boot-4312-0755",
+      "sha256": "4312f9a8f53d8db7b2b6be4c7d5e409f5c0f82cf8215728209be0f6ff4a5d5c5",
+      "size": 35784
+    },
+    "payload": {
+      "path": "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/state-app",
+      "sha256": "fdf4661f2da7b1002327c26e3a8473b35e57288abd3d13c9b8f0ab5ca217d023",
+      "size": 5670936,
+      "mode": 33216
+    },
+    "root_base": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/coherent-successor-preparation-1/actual-stage-successor-1/base.cpio.gz",
+      "sha256": "d9c1c4d8c538594d89807c4acc6150f01a0af7854270b4699ffeda316da25b41",
+      "size": 15593372,
+      "mode": 33152
+    }
+  },
+  "case_id": "m07.private-used-state-3-4-9",
+  "kind": "native-diagnostic-manifest",
+  "modules": [
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/module-runtime-snapshots-1/ihk.ko",
+      "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+      "size": 1527808
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/runtime-inputs/ihk-smp-x86_64.ko",
+      "sha256": "2eb3e8e6d7e43f55ca262cb455212e205831e26980f10d4ce8ef99556fd2269d",
+      "size": 12944152
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/terminal-control-native-successor-1/runtime-inputs/mcctrl.ko",
+      "sha256": "06e8b9b571f21b41821aa03a32ebf4ae20ae19cf4b110c3af2c81b491b92ef86",
+      "size": 2662320
+    }
+  ],
+  "payload": {
+    "cwd": "/case/work",
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "env": {
+      "PATH": "/usr/bin:/bin",
+      "COKERNEL_PATH": "/apps",
+      "PAIR_CPU": "0"
+    },
+    "oracle": {
+      "stdout_hex": "",
+      "stderr_hex": "",
+      "exit_code": 0,
+      "stdout_typed": {
+        "kind": "m07-private-used-state-fdf466-v1",
+        "required_mask": "0000000000000218",
+        "app_sha256": "fdf4661f2da7b1002327c26e3a8473b35e57288abd3d13c9b8f0ab5ca217d023"
+      }
+    },
+    "stdout_limit_bytes": 4096,
+    "stderr_limit_bytes": 4096
+  },
+  "profile": {
+    "memory_mib": 8192,
+    "name": "native-diagnostic-4vcpu-8192mib",
+    "numa_nodes": 2,
+    "vcpus": 4
+  },
+  "schema_version": 1,
+  "staging": {
+    "base_initramfs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/coherent-successor-preparation-1/actual-stage-successor-1/base.cpio.gz",
+      "sha256": "d9c1c4d8c538594d89807c4acc6150f01a0af7854270b4699ffeda316da25b41",
+      "size": 15593372,
+      "mode": 33152
+    },
+    "collector": {
+      "path": "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/native-execution-preparation-1/typed-state-consumer-1/state-case-binding-1/collector.init",
+      "sha256": "f4054bf9ef59ae5d215195591c85bf1b17f8a68609dca1ee5acb1b3d4bb85fc3",
+      "size": 1025728,
+      "mode": 33216
+    },
+    "derived_initramfs": {
+      "path": "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/typed-capsule-preparation-1/actual-stage-1/lifecycle.cpio.gz",
+      "sha256": null,
+      "size": null,
+      "mode": null
+    },
+    "overlay_manifest": {
+      "path": "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/typed-capsule-preparation-1/actual-stage-1/overlay-manifest.json",
+      "sha256": null,
+      "size": null,
+      "mode": null
+    },
+    "overlay_source": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_overlay.py",
+      "sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d",
+      "size": 26579
+    }
+  },
+  "cleanup_profile": {
+    "child_trace_cases": [
+      "P-M06-01-process-exec-wait-235B",
+      "P-M01-02-child-SIGTERM-and-exec-recovery-227B"
+    ],
+    "consumer": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-1/mcctrl_process.rs",
+      "sha256": "8bf30cd8ae79cc778bd91816f30aaf7a37ccc2aab59822ca2a03587426a212b8",
+      "size": 54854
+    },
+    "id": "begin-cleanup-real-ack-parent-clone-v2",
+    "modules": [
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/module-runtime-snapshots-1/ihk.ko",
+        "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+        "size": 1527808
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/runtime-inputs/ihk-smp-x86_64.ko",
+        "sha256": "2eb3e8e6d7e43f55ca262cb455212e205831e26980f10d4ce8ef99556fd2269d",
+        "size": 12944152
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/terminal-control-native-successor-1/runtime-inputs/mcctrl.ko",
+        "sha256": "06e8b9b571f21b41821aa03a32ebf4ae20ae19cf4b110c3af2c81b491b92ef86",
+        "size": 2662320
+      }
+    ],
+    "provider": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-lifecycle-epipe-repair-1/smp_application.rs",
+      "sha256": "f5c56d83a13f10a712a4555849f52078c2d410254080150d34408011daf527a5",
+      "size": 72744
+    },
+    "schema_version": 1
+  }
+}

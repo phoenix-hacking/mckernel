@@ -1,0 +1,58 @@
+{
+  "AS_bytes": 2147483648,
+  "CPU": [
+    7
+  ],
+  "CPU_seconds": 30,
+  "FSIZE_bytes": 33554432,
+  "NOFILE": 256,
+  "capture_directory": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/capsule-successor-preparation-1/coherent-source-successor-1/admission-bounded-correction-1/actual-fresh-root-admission-1",
+  "core": 0,
+  "input_sources": [
+    {
+      "bytes": 13693,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/capsule-successor-preparation-1/coherent-source-successor-1/admission-bounded-correction-1/read_only_LONG_HOST_admission.py",
+      "sha256": "dc3362762416263908ff070545146bd5488919414e3be33fba4a05069fcefe1a"
+    },
+    {
+      "bytes": 29749,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/capsule-successor-preparation-1/coherent-source-successor-1/admission-bounded-correction-1/QUERY-INPUTS.json",
+      "sha256": "5fe8bfb085a5f8737aa45a61a068072d3a83aab38c26a5243a3b4af3e92f48ef"
+    }
+  ],
+  "mutation": false,
+  "query_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/capsule-successor-preparation-1/coherent-source-successor-1/admission-bounded-correction-1/read_only_LONG_HOST_admission.py",
+    "dc3362762416263908ff070545146bd5488919414e3be33fba4a05069fcefe1a"
+  ],
+  "retirement_grace_seconds": 6,
+  "root_release": null,
+  "runner": {
+    "bytes": 3789,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/capsule-successor-preparation-1/coherent-source-successor-1/admission-bounded-correction-1/run_root_LONG_admission_capture.py",
+    "sha256": "522ef331dba4e84f45b2f2bc0965c0bb58490127154eb169f469da98619528bf"
+  },
+  "schema": "mckernel.exact-readonly-owned-capture-profile.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "supervisor": {
+    "entry": "owned_capture exactASTextract no main",
+    "same_root_observer_and_child_authority": true,
+    "sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8",
+    "signal_registration": "Exact accepted run_three_readonly TERM/INT/ALRM -> loadedns.stop, ITIMER_REAL60 then cleared after actual owned_capture join",
+    "source": "/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py"
+  },
+  "wall_seconds": 60
+}

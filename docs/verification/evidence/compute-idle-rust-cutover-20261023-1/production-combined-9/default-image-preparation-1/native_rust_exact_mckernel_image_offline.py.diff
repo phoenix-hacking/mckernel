@@ -1,0 +1,149 @@
+--- frozen8/native_rust_exact_mckernel_image_offline.py
++++ future9/native_rust_exact_mckernel_image_offline.py
+@@ -27,7 +27,7 @@
+ import native_rust_exact_build_offline as provenance
+ 
+ # Authenticate the neighboring provenance selected by this exact driver capsule.
+-EXPECTED_PROVENANCE_SHA256 = 'e2d5176d457217bb8f16f32bd6fea5cabd48ca16deb20b649b62f57151ef070b'
++EXPECTED_PROVENANCE_SHA256 = '1701cdc138485af6b5c0a7483ae45d492f6ddbefc116f3d896400a95d265021b'
+ _EXPECTED_PROVENANCE_PATH = Path(__file__).with_name("native_rust_exact_build_offline.py").resolve()
+ if (Path(provenance.__file__).resolve() != _EXPECTED_PROVENANCE_PATH or
+         hashlib.sha256(_EXPECTED_PROVENANCE_PATH.read_bytes()).hexdigest() != EXPECTED_PROVENANCE_SHA256):
+@@ -1446,16 +1446,16 @@
+ 
+ 
+ # One exact accepted-current successor; historical producer remains immutable.
+-OWNED_FORK_CURRENT_SOURCE_PINS = {'kernel/syscall.c': 'ebcafd68cc98f31553bdb1674e1be80c2eac26f6a8436ee73978fe2288bb5c61', 'kernel/rust/fork_control_guest.rs': '26797f574fa1ba7006eb27ff3a1a7750ec04b83f71a2e90b8c35c4c536b33acd', 'kernel/rust/fork_child_credits.rs': '63b82c97cc6e1204585cfaf2b89ef378b88c1d207a8e82c2f1400bc352f9c98d', 'kernel/rust/fork_constructed_credits.rs': '4c1e96ef4fbf5cb66acc54d900d37fcd68fb4d50dd1337c4428b3f5e2ecd1972', 'kernel/rust/process_helpers.rs': '526baf9363a0845ad50aade7e9b2296d27c8840527f3510d95a1105fc626d8d3', 'kernel/rust/sched_helpers.rs': '449df570965855f992a0fe024fca7cd6527b20622b4b8e3b33af04900b02e923', 'kernel/CMakeLists.txt': 'af2758e8cad6fd4baa3c067d23cc81ab483aa71d666ca6249d54e8ccfd2701e5', 'kernel/rust/syscall_policy.rs': '4edf51b9c391ddca12fd4505ac1c6b51f6a73e3919f3f1cd49b3ebcb87a38a69', 'kernel/rust/fork_runnable_child.rs': 'a9387ae13b85785176b95fc6ddc79b08bd31dd7960b0730307b41b5a05b5d137', 'kernel/rust/fork_final_ack.rs': '093f742dfe4969d78b2ca6b8b643df94042945e890d26003dec9d1818c34826b', 'kernel/rust/fork_control_registry.rs': 'a2f92bb11cba42fef0d95e1f1e1a4c526351ff90860baed7913fa26c91137ba5', '.kernel-sdk/include/generated/uapi/linux/version.h': '3cc5d7cfe76eb7db13aac6d42be01cd2c5f8da0caaae154798a8d0115bb95571', '.phase5-current-runtime/RETIREMENT-SOURCE-CLOSURE.json': '693518046e937a53a65999f551f1160db28d21fe0cc941da4ee606c49abf0e97'}
++OWNED_FORK_CURRENT_SOURCE_PINS = {'kernel/syscall.c': 'ebcafd68cc98f31553bdb1674e1be80c2eac26f6a8436ee73978fe2288bb5c61', 'kernel/rust/fork_control_guest.rs': '26797f574fa1ba7006eb27ff3a1a7750ec04b83f71a2e90b8c35c4c536b33acd', 'kernel/rust/fork_child_credits.rs': '63b82c97cc6e1204585cfaf2b89ef378b88c1d207a8e82c2f1400bc352f9c98d', 'kernel/rust/fork_constructed_credits.rs': '4c1e96ef4fbf5cb66acc54d900d37fcd68fb4d50dd1337c4428b3f5e2ecd1972', 'kernel/rust/process_helpers.rs': '526baf9363a0845ad50aade7e9b2296d27c8840527f3510d95a1105fc626d8d3', 'kernel/rust/sched_helpers.rs': '700a9e20349df5ae18ceea8c9195e38078a6bb05b81c79f7368fbdf6fc14abcc', 'kernel/CMakeLists.txt': 'af2758e8cad6fd4baa3c067d23cc81ab483aa71d666ca6249d54e8ccfd2701e5', 'kernel/rust/syscall_policy.rs': '4edf51b9c391ddca12fd4505ac1c6b51f6a73e3919f3f1cd49b3ebcb87a38a69', 'kernel/rust/fork_runnable_child.rs': 'a9387ae13b85785176b95fc6ddc79b08bd31dd7960b0730307b41b5a05b5d137', 'kernel/rust/fork_final_ack.rs': '093f742dfe4969d78b2ca6b8b643df94042945e890d26003dec9d1818c34826b', 'kernel/rust/fork_control_registry.rs': 'a2f92bb11cba42fef0d95e1f1e1a4c526351ff90860baed7913fa26c91137ba5', '.kernel-sdk/include/generated/uapi/linux/version.h': '3cc5d7cfe76eb7db13aac6d42be01cd2c5f8da0caaae154798a8d0115bb95571', '.phase5-current-runtime/RETIREMENT-SOURCE-CLOSURE.json': '693518046e937a53a65999f551f1160db28d21fe0cc941da4ee606c49abf0e97'}
+ 
+ # Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ # Inserted into the existing pinned image driver; uses its owned command/capture path.
+ M14_SOURCE_PINS = {
+-    'kernel/rust/tests/run_equivalence.sh': 'fce1f3b9a5606eedb245996d4b88b5e93022ae56145729592c9d675ecb267386',
++    'kernel/rust/tests/run_equivalence.sh': '5df92eff793c7ff0358567340a35b3d9e36188b142186c4fe962a40370490822',
+     'kernel/mem.c': 'bac5d4fb766b5cb80e036457465e215743a1cb31622ff11c5b5b605749f3d7fe',
+     'kernel/rust/page_helpers.rs': 'cfc64f72bf9b94c65417bc8f4e29d65b81f98239fe52ab2a7dd0352ebdfc3f70',
+-    'kernel/process.c': '7203019d2ba8143f9240a03d11bc8c5cfcd495d89183aa7ab643c6159a6bd02d',
+-    'kernel/rust/sched_helpers.rs': '449df570965855f992a0fe024fca7cd6527b20622b4b8e3b33af04900b02e923',
++    'kernel/process.c': '55872d7235a06364565ec7732b7a67c918ed7c006b1e55ababa88dbe42e2a93a',
++    'kernel/rust/sched_helpers.rs': '700a9e20349df5ae18ceea8c9195e38078a6bb05b81c79f7368fbdf6fc14abcc',
+     'kernel/include/sched_helpers.h': '9712a3df59eb0251f517ce01254e4576119868924b35f7da6fbee294bff966ae',
+     'arch/x86_64/kernel/memory.c': '3dccbb04986c7fb4c1c47bad1a382372c19cd270861501cf064ce95f36d46c32',
+     'kernel/rust/x86_memory_helpers.rs': 'f88ca6d45b1395b74c0c86565b5a391d01124fa3fb30486a7e4eb31c85d9eff8',
+@@ -1465,7 +1465,10 @@
+                       'x86_clear_page_unmap_bridge', 'x86_clear_free_pages_user_bridge')
+ M14_C_RETIRED_MEMORY_BODIES = ('clear_range_old_action', 'x86_init_normal_set_large_bridge',
+                                'x86_init_text_map_kernel_start_bridge', 'x86_init_text_end_bridge')
+-M14_RUST_EXPORTS = M14_IDLE_IMPORTS + M14_MEMORY_IMPORTS + ('page_unmap', 'x86_init_normal_set_large_bridge', 'x86_init_text_map_kernel_start_bridge', 'x86_init_text_end_bridge') + (
++M14_TIMER_CALLBACKS = ('process_timer_spin_lock_bridge', 'process_timer_spin_unlock_bridge',
++                       'process_timer_lapic_enable_bridge', 'process_timer_lapic_disable_bridge')
++M14_RUST_EXPORTS = ('set_timer', 'get_this_cpu_local_var', 'timer_set_timer_body_result',
++                    'process_sched_set_timer_bridge') + M14_IDLE_IMPORTS + M14_MEMORY_IMPORTS + ('page_unmap', 'x86_init_normal_set_large_bridge', 'x86_init_text_map_kernel_start_bridge', 'x86_init_text_end_bridge') + (
+     'sched_idle_begin_body_result', 'sched_idle_iteration_body_result',
+     'sched_idle_runqueue_has_running_result', 'process_sched_cpu_local_bridge',
+     'get_cpu_local_var', 'ihk_mc_get_processor_id')
+@@ -1572,6 +1575,75 @@
+                 geometry='x86_map_kernel_start_geometry', immutable_geometry_bytes=8,
+                 text_end_getter='x86_init_text_end_bridge', Rust_end_import=True, final_end_defined=True,
+                 native=False)
++
++
++# Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++def _m14_check_set_timer_symbols(process_symbols, rust_symbols, image_symbols):
++    def rows(text, symbol):
++        return [line.split() for line in text.splitlines() if line.split()[-1:] == [symbol]]
++    def unique(text, symbol, kind, size=None):
++        found = rows(text, symbol)
++        _fail(len(found) == 1 and found[0][-2] == kind, 'M14 set_timer provider type/count: '+symbol)
++        if size is not None:
++            _fail(len(found[0]) == 4 and int(found[0][1], 16) == size, 'M14 set_timer provider width: '+symbol)
++    _fail(not any(row[-2] in ('T','t') for row in rows(process_symbols, 'set_timer')),
++          'M14 original C set_timer body selected')
++    for symbol in ('set_timer','get_this_cpu_local_var','timer_set_timer_body_result','process_sched_set_timer_bridge'):
++        unique(rust_symbols, symbol, 'T')
++        unique(image_symbols, symbol, 'T')
++    unique(process_symbols, 'process_timer_runtime_offsets', 'R', 120)
++    unique(rust_symbols, 'process_timer_runtime_offsets', 'U')
++    unique(image_symbols, 'process_timer_runtime_offsets', 'R', 120)
++    unique(process_symbols, 'time_sharing', 'D', 4)
++    unique(rust_symbols, 'time_sharing', 'U')
++    unique(image_symbols, 'time_sharing', 'D', 4)
++    for symbol in M14_TIMER_CALLBACKS:
++        unique(process_symbols, symbol, 'T')
++        unique(rust_symbols, symbol, 'U')
++        unique(image_symbols, symbol, 'T')
++
++
++def _validate_m14_set_timer_contract(source_root, build, tools, env, timeout, command_rows, objects):
++    row, args = _m14_selected_row(source_root, build, 'kernel/process.c', 'MCKERNEL_RUST_PROCESS_HELPERS', tools)
++    out = build/'m14-production'
++    oi = args.index('-o')
++    pp = _m14_observe(args[:oi]+['-E', str(source_root/'kernel/process.c')],
++                      'selected-process-set-timer-preprocess', out, tools, env, timeout, command_rows)
++    _fail(re.search(r'\bvoid\s+set_timer\s*\([^;{}]*\)\s*\{',pp,re.S) is None and
++          re.search(r'\bvoid\s+set_timer\s*\([^;{}]*\)\s*;',pp,re.S) is not None,
++          'M14 selected set_timer declaration/body exclusion')
++    fields = ('thread_status_offset','thread_sched_list_offset','thread_spin_sleep_lock_offset',
++              'thread_spin_sleep_offset','thread_itimer_enabled_offset','cpu_runq_lock_offset',
++              'cpu_runq_offset','cpu_runq_len_offset','cpu_current_offset','cpu_timer_enabled_offset',
++              'cpu_backlog_list_offset','timer_timeout_offset','timer_waitq_offset','timer_list_offset','timer_thread_offset')
++    witness = ['_Static_assert(sizeof(int)==4 && sizeof(unsigned long)==8,"timer LP64");',
++               '_Static_assert(sizeof(struct timer_runtime_offsets)==120 && _Alignof(struct timer_runtime_offsets)==8,"timer descriptor ABI");',
++               '_Static_assert(__builtin_types_compatible_p(__typeof__(&set_timer),void(*)(int)),"set_timer ABI");']
++    for index, field in enumerate(fields):
++        witness.append('_Static_assert(__builtin_offsetof(struct timer_runtime_offsets,'+field+')=='+str(index*8)+',"timer field layout");')
++        witness.append('_Static_assert(__builtin_types_compatible_p(__typeof__(((struct timer_runtime_offsets*)0)->'+field+'),unsigned long),"timer field type");')
++    for name, prototype in (('process_timer_spin_lock_bridge','unsigned long(*)(unsigned long)'),
++                            ('process_timer_spin_unlock_bridge','void(*)(unsigned long,unsigned long)'),
++                            ('process_timer_lapic_enable_bridge','void(*)(unsigned int)'),
++                            ('process_timer_lapic_disable_bridge','void(*)(void)')):
++        witness.append('_Static_assert(__builtin_types_compatible_p(__typeof__(&'+name+'),'+prototype+'),"timer callback ABI");')
++    abi_source=out/'actual-process-set-timer-ABI.c'
++    abi_source.write_text((source_root/'kernel/process.c').read_text()+'\n'+'\n'.join(witness)+'\n')
++    selected=args.copy();selected[oi+1]=str(out/'actual-process-set-timer-ABI.o');selected[-1]=str(abi_source)
++    phase=dict(scope='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.',
++               phase='m14-selected-complete-process-TU-timer-ABI',argv=selected,cwd=row['directory'],exit_code=None)
++    command_rows.append(phase)
++    phase['exit_code']=_run_process(selected,Path(row['directory']),env,out/'process-timer-ABI.stdout',out/'process-timer-ABI.stderr',timeout,phase['phase'])
++    _fail(phase['exit_code']==0,'M14 actual whole process.c timer ABI witness compile')
++    texts=[]
++    for path,label in ((Path(objects['kernel/process.c']['path']),'default-process-timer-ownership'),
++                       (build/'kernel/rust/mckernel_rust.o','Rust-timer-ownership'),
++                       (build/'kernel/mckernel.img','image-timer-ownership')):
++        texts.append(_m14_observe([tools['tools']['nm']['path'],'-S','-g',str(path)],label,out,tools,env,timeout,command_rows))
++    _m14_check_set_timer_symbols(*texts)
++    return dict(provider='set_timer',C_body_excluded=True,C_import_required=False,
++                descriptor_bytes=120,descriptor_align=8,fields=fields,callbacks=M14_TIMER_CALLBACKS,
++                time_sharing_bytes=4,actual_whole_process_ABI_compile=phase,native=False)
+ 
+ 
+ def _validate_m14_source_pins(source_root):
+@@ -1681,8 +1753,9 @@
+           'M14 bridge unresolved in full production Rust object')
+     page_unmap_proof = _validate_m14_page_unmap_contract(source_root, build, tools, env, timeout, command_rows, objects)
+     textmap_proof = _validate_m14_textmap_contract(build, tools, env, timeout, command_rows, objects)
++    set_timer_proof = _validate_m14_set_timer_contract(source_root, build, tools, env, timeout, command_rows, objects)
+     proof = dict(status='PASS_PINNED_FULLCRATE_DEFAULT_C_CONSUMERS_AND_FINAL_LINK_ONLY',
+-        source_pins=M14_SOURCE_PINS, objects=objects, page_unmap_public_contract=page_unmap_proof, textmap_contract=textmap_proof, idle_imports=M14_IDLE_IMPORTS,
++        source_pins=M14_SOURCE_PINS, objects=objects, page_unmap_public_contract=page_unmap_proof, textmap_contract=textmap_proof, set_timer_contract=set_timer_proof, idle_imports=M14_IDLE_IMPORTS,
+         memory_imports=M14_MEMORY_IMPORTS, unique_Rust_and_image_exports=M14_RUST_EXPORTS,
+         native=False, whole_M14_area_retired=False)
+     _revalidate_m14_objects(proof)
+@@ -2085,7 +2158,7 @@
+     """Affected actual process TU and already-compiled real native/legacy crates."""
+     rows = json.loads((build / 'compile_commands.json').read_text())
+     process = source_root / 'kernel/process.c'
+-    _fail(_sha256(process) == '7203019d2ba8143f9240a03d11bc8c5cfcd495d89183aa7ab643c6159a6bd02d', 'actual integrated process source drift')
++    _fail(_sha256(process) == '55872d7235a06364565ec7732b7a67c918ed7c006b1e55ababa88dbe42e2a93a', 'actual integrated process source drift')
+     _fail(_sha256(source_root / 'kernel/rust/process_helpers.rs') == '526baf9363a0845ad50aade7e9b2296d27c8840527f3510d95a1105fc626d8d3', 'actual current lifecycle/Rust source drift')
+     matches = [r for r in rows if Path(r['file']).resolve() == process.resolve()]
+     _fail(len(matches) == 1, 'release TID actual process compile row count')
+@@ -2179,7 +2252,7 @@
+ AFFINITY_SYMBOLS = ['sched_clone_affinity_snapshot_result','sched_clone_affinity_inherit_result','sched_setaffinity_body_result','process_clone_thread_base_state_body_result']
+ AFFINITY_C_ASSERTIONS = '/* Included after the ACTUAL full syscall.c TU; no local ABI declarations. */\n#ifdef MCKERNEL_RUST_SCHED_POLICY_HELPERS\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sched_clone_affinity_snapshot_result),int(*)(unsigned long,unsigned long,unsigned long,size_t,int)),"clone snapshot ABI");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sched_clone_affinity_inherit_result),int(*)(unsigned long,unsigned long,size_t)),"clone inherit ABI");\n#endif\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sched_setaffinity_body_result),long(*)(int,size_t,unsigned long,unsigned long,unsigned long,unsigned long,size_t,int,const struct sched_syscall_offsets*,sched_find_thread_fn_t,sched_thread_unlock_fn_t,sched_hold_thread_fn_t,sched_release_thread_fn_t,syscall_copy_from_user_fn_t,sched_request_migrate_fn_t)),"actual setaffinity ABI");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&process_clone_thread_base_state_body_result),int(*)(void*,const void*,unsigned long,unsigned long,unsigned long)),"actual base initializer ABI");\n_Static_assert(sizeof(unsigned long)==8,"native unsigned long");\n_Static_assert(sizeof(size_t)==8,"native size_t");\n_Static_assert(sizeof(cpu_set_t)==128,"native CPU mask bytes");\n_Static_assert(_Alignof(cpu_set_t)==8,"native CPU mask alignment");\n_Static_assert(sizeof(struct sched_syscall_offsets)==72,"scheduler offset aggregate size");\n_Static_assert(_Alignof(struct sched_syscall_offsets)==8,"scheduler offset aggregate align");\n'
+ AFFINITY_LAYOUT_CELLS = [('sizeof(cpu_set_t)', 'core::mem::size_of::<abi::CpuSet>()'), ('_Alignof(cpu_set_t)', 'core::mem::align_of::<abi::CpuSet>()'), ('sizeof(struct thread)', 'core::mem::size_of::<abi::Thread>()'), ('_Alignof(struct thread)', 'core::mem::align_of::<abi::Thread>()'), ('sizeof(struct process)', 'core::mem::size_of::<abi::Process>()'), ('_Alignof(struct process)', 'core::mem::align_of::<abi::Process>()'), ('__builtin_offsetof(struct thread,proc)', 'core::mem::offset_of!(abi::Thread,proc)'), ('__builtin_offsetof(struct thread,sched_param)', 'core::mem::offset_of!(abi::Thread,sched_param)'), ('__builtin_offsetof(struct thread,sched_policy)', 'core::mem::offset_of!(abi::Thread,sched_policy)'), ('__builtin_offsetof(struct thread,cpu_id)', 'core::mem::offset_of!(abi::Thread,cpu_id)'), ('__builtin_offsetof(struct thread,cpu_set)', 'core::mem::offset_of!(abi::Thread,cpu_set)'), ('__builtin_offsetof(struct thread,in_kernel)', 'core::mem::offset_of!(abi::Thread,in_kernel)'), ('__builtin_offsetof(struct process,pid)', 'core::mem::offset_of!(abi::Process,pid)'), ('__builtin_offsetof(struct process,ruid)', 'core::mem::offset_of!(abi::Process,ruid)'), ('__builtin_offsetof(struct process,euid)', 'core::mem::offset_of!(abi::Process,euid)'), ('__builtin_offsetof(struct process,cpu_set)', 'core::mem::offset_of!(abi::Process,cpu_set)'), ('sizeof(struct sched_syscall_offsets)', 'core::mem::size_of::<SchedSyscallOffsets>()'), ('_Alignof(struct sched_syscall_offsets)', 'core::mem::align_of::<SchedSyscallOffsets>()'), ('__builtin_offsetof(struct sched_syscall_offsets,thread_proc_offset)', 'core::mem::offset_of!(SchedSyscallOffsets,thread_proc_offset)'), ('__builtin_offsetof(struct sched_syscall_offsets,thread_sched_param_offset)', 'core::mem::offset_of!(SchedSyscallOffsets,thread_sched_param_offset)'), ('__builtin_offsetof(struct sched_syscall_offsets,thread_sched_policy_offset)', 'core::mem::offset_of!(SchedSyscallOffsets,thread_sched_policy_offset)'), ('__builtin_offsetof(struct sched_syscall_offsets,thread_cpu_id_offset)', 'core::mem::offset_of!(SchedSyscallOffsets,thread_cpu_id_offset)'), ('__builtin_offsetof(struct sched_syscall_offsets,thread_cpu_set_offset)', 'core::mem::offset_of!(SchedSyscallOffsets,thread_cpu_set_offset)'), ('__builtin_offsetof(struct sched_syscall_offsets,proc_pid_offset)', 'core::mem::offset_of!(SchedSyscallOffsets,proc_pid_offset)'), ('__builtin_offsetof(struct sched_syscall_offsets,proc_ruid_offset)', 'core::mem::offset_of!(SchedSyscallOffsets,proc_ruid_offset)'), ('__builtin_offsetof(struct sched_syscall_offsets,proc_euid_offset)', 'core::mem::offset_of!(SchedSyscallOffsets,proc_euid_offset)'), ('__builtin_offsetof(struct sched_syscall_offsets,proc_cpu_set_offset)', 'core::mem::offset_of!(SchedSyscallOffsets,proc_cpu_set_offset)')]
+-AFFINITY_SOURCE_PINS = {'kernel/syscall.c': 'ebcafd68cc98f31553bdb1674e1be80c2eac26f6a8436ee73978fe2288bb5c61', 'kernel/rust/sched_helpers.rs': '449df570965855f992a0fe024fca7cd6527b20622b4b8e3b33af04900b02e923', 'kernel/rust/process_helpers.rs': '526baf9363a0845ad50aade7e9b2296d27c8840527f3510d95a1105fc626d8d3', 'kernel/rust/abi.rs': 'ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e', 'kernel/rust/syscall_policy.rs': '4edf51b9c391ddca12fd4505ac1c6b51f6a73e3919f3f1cd49b3ebcb87a38a69'}
++AFFINITY_SOURCE_PINS = {'kernel/syscall.c': 'ebcafd68cc98f31553bdb1674e1be80c2eac26f6a8436ee73978fe2288bb5c61', 'kernel/rust/sched_helpers.rs': '700a9e20349df5ae18ceea8c9195e38078a6bb05b81c79f7368fbdf6fc14abcc', 'kernel/rust/process_helpers.rs': '526baf9363a0845ad50aade7e9b2296d27c8840527f3510d95a1105fc626d8d3', 'kernel/rust/abi.rs': 'ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e', 'kernel/rust/syscall_policy.rs': '4edf51b9c391ddca12fd4505ac1c6b51f6a73e3919f3f1cd49b3ebcb87a38a69'}
+ 
+ def _validate_clone_affinity_production(source_root, build, tools, evidence, env, stdout, stderr, timeout, command_rows):
+     """Fresh205 source graph: actual full syscall TU, actual layouts and full crates."""
