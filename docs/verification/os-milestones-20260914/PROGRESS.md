@@ -72,11 +72,11 @@ Closure states below are recorded assessments. Unassessed does not mean no engin
 
 ### Next practical work
 
-- Four remaining practical checks: P-M05-03 ten complete current-tuple cycles; P-M08-02 changed used ABI; P-M09-02 changed consumed Rust/C/assembly boundaries; P-M12-01 actual final session. Practical31/35, whole8/14. M14 full Rust cutover remains separate and active.
-- Execute independently released first full V3 restoration on accepted SDK5/image10972/launcher dca025 using reviewed M05 owner3ff7/runnerc557 and strict BEGIN consumers. Actual published8c03 manifest and real hook binding pass; fresh root admission and guard pass. Final one-shot execution review remains required. Reuse accepted235 and additive original227 evidence.
-- Bind first V3 restoration and physical review once to M08/M09 finite observations, then reviewed ten-cycle batch with zero carried final-profile credit. Preserve original app/resource oracles.
-- P12 actual LONG Rust producer implementation and complete storage admission are pending. NONE transport/current110 source variants accepted; no hour/launch credit until real accepted session. Preserve floors/full sparse gap and filesystem reserves.
-- M14 selected default image candidate/source profile accepted, fresh identity facts captured; final HOST-output budget/namespace/aggregate reservation and exact build release remain required. Separate private public page_unmap Rust body fixture164 invocations passes, source/default-link/native still pending.
+- Four remaining practical checks: P-M05-03 ten complete current-tuple cycles; P-M08-02 changed used ABI; P-M09-02 changed consumed Rust/C/assembly boundaries; P-M12-01 actual final session. Practical31/35, whole8/14; M14 separate and active.
+- First SDK5/image10972 V3 two-generation restoration and physical retirement independently accepted12a05b2d/1f3c1830: one matching cycle. Execute reviewed ordered ten-case batch after exact source publication, fresh admission and independent per-case/batch release; new batch carries zero previous cycle credit.
+- Use accepted235,227 and firstV3 literal observations under finite b8bb0fb6 M08/M09 map; remaining ABI/changed-boundary coverage stays open until qualified matching evidence.
+- P12 actual LONG producer558198, app variants and coherent current110 manifest6c3c/owner0ef2 are source/actual-consumer accepted. Real tiny NONE admission passed, exact smoke execution/review remains. Complete final LONG capture/budget/release then genuine launch/hour session; no launch/time credit yet.
+- M14 candidate5 first build attempt failed preflight schema before Docker/compiler; retained token retired through independently reviewed normal API, physical1fc26075. Three-membership schema correction dbbf and complete6959-entry pure validator8checks accepted. Prepare fresh successor namespace/request and execute reviewed default build while functional image10972 remains frozen.
 
 Original formal qualification is **historical / DEFERRED**. Deferred does not mean passed; its counters below do not define practical completion.
 
@@ -99,8 +99,8 @@ M14 closes only with final default Rust/assembly ownership and applicable native
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-10-23T12:05:06+00:00`
-- Launcher state heartbeat: `2026-10-23T12:04:55.920553+00:00`
+- Dashboard refreshed: `2026-10-23T12:28:15+00:00`
+- Launcher state heartbeat: `2026-10-23T12:28:02.965593+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
 - Worker PID: `3582171`; server PID: `3582173`
 - Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261023T080841Z-85724d49`

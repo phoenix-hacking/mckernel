@@ -1,0 +1,14 @@
+--- retained/bridge_fixture.c
++++ expert/bridge_fixture.c
+@@ -21,9 +21,10 @@
+           "application SCHEDULE os=0 generation=1 pid=%d cpu=%d\n"
+           "application procfs published os=0 generation=1 pid=%d tid=%d\n"
+           "application_syscall=delivered os=0 generation=1 pid=%d worker=%d delivery=1 cpu=%d number=1\n"
++          "application_syscall=return_route os=0 generation=1 pid=%d worker=%d delivery=1 launcher_cpu=%d guest_cpu=%d\n"
+           "application_syscall=returned os=0 generation=1 pid=%d worker=%d delivery=1 cpu=%d value=0\n"
+           "application_syscall=delivered os=0 generation=1 pid=%d worker=%d delivery=2 cpu=%d number=231\n",
+-          pid,i,pid,pid,pid,100+i,i,pid,100+i,i,pid,100+i,i);
++          pid,i,pid,pid,pid,100+i,i,pid,100+i,1-i,i,pid,100+i,i,pid,100+i,i);
+         if(n<0 || n>=size-used)return -1;used+=n;
+         if(controlled_mode!=1) {
+             n=snprintf(out+used,size-used,"application_process=cleanup_requested os=0 generation=1 pid=%d intent_errno=%d\n",pid,controlled_mode==2?-1:0);

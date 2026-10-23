@@ -1,0 +1,20 @@
+[
+  "/usr/bin/sudo",
+  "-A",
+  "/usr/bin/taskset",
+  "-c",
+  "7",
+  "/usr/bin/prlimit",
+  "--as=536870912:536870912",
+  "--cpu=unlimited:unlimited",
+  "--fsize=402653184:402653184",
+  "--core=0:0",
+  "--nofile=4096:4096",
+  "--",
+  "/usr/bin/python3",
+  "-I",
+  "-B",
+  "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/capture_root.NOT-RELEASED.py",
+  "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/CAPTURE-REQUEST.NOT-RELEASED.json",
+  "b73b8e8ee9f33e55548a99a5d66e82b0a13ce41b9d112c063a114acb3838828e"
+]

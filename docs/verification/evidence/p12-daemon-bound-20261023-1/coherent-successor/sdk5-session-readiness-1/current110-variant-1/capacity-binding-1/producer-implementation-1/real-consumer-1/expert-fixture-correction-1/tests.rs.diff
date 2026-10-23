@@ -1,0 +1,10 @@
+--- retained/tests.rs
++++ expert/tests.rs
+@@ -224,5 +224,5 @@
+     let root=std::env::var("REAL_WIRE_ROOT").unwrap();
+     let mut f=Fixture::new();f.fail="real-wire";
+     let (code,s)=f.execute();assert_eq!(code,0);assert_eq!(s.completed,1);
+-    std::fs::write(std::path::Path::new(&root).join("../actual-rust-full-consumer-wire"),&f.serial).unwrap();
+-}
++    std::fs::write(std::path::Path::new(&root).join("../actual-rust-full-consumer-wire-data"),&f.serial).unwrap();
++}

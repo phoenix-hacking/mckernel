@@ -1,0 +1,13 @@
+--- frozen-current110/native_diagnostic.py
++++ private-correction/native_diagnostic.py
+@@ -1054,7 +1054,9 @@
+     final=json.loads(Path(base["staging"]["overlay_manifest"]["path"]).read_text(),object_pairs_hook=_pairs)["final_map"]
+     _need(set(final)==set(old)|{"apps/app0","apps/app1"},"exact pair overlay membership")
+     changed={n for n in old if old[n]!=final[n]}
+-    _need(changed <= {"init","apps/app","bin/native-boot","images/mckernel.img","modules/ihk.ko","modules/ihk-smp-x86_64.ko","modules/mcctrl.ko"},"only retained pair changes and exact composite module members")
++    if "bin/mcexec" in changed:
++        module_binding.validate_launcher_member(base,final["bin/mcexec"])
++    _need(changed <= {"init","apps/app","bin/native-boot","images/mckernel.img","modules/ihk.ko","modules/ihk-smp-x86_64.ko","modules/mcctrl.ko","bin/mcexec"},"only retained pair changes and exact composite module members")
+     for n in old:
+         _need({k:v for k,v in old[n].items() if k not in {"sha256","size"}}=={k:v for k,v in final[n].items() if k not in {"sha256","size"}},"retained metadata "+n)
+     _need(type(p["apps"]) is list and len(p["apps"])==2,"exactly two apps")

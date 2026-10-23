@@ -1,0 +1,23 @@
+NATIVE_PAIR_CPU os=0 generation=1 assigned_host=1,2 logical=0,1 default_ikc_linux=0
+control accepted os=0 generation=1 port=501 guest_cpu=0 linux_cpu=1 cookie=1 receive=10000 send=20000 bytes=16384 reference=0 remote_cookie=30000
+control accepted os=0 generation=1 port=501 guest_cpu=1 linux_cpu=2 cookie=2 receive=40000 send=50000 bytes=16384 reference=0 remote_cookie=60000
+application SCHEDULE os=0 generation=1 pid=3657310 cpu=0
+application procfs published os=0 generation=1 pid=3657310 tid=3657310
+application_syscall=delivered os=0 generation=1 pid=3657310 worker=100 delivery=1 cpu=0 number=1
+application_syscall=return_route os=0 generation=1 pid=3657310 worker=100 delivery=1 launcher_cpu=1 guest_cpu=0
+application_syscall=returned os=0 generation=1 pid=3657310 worker=100 delivery=1 cpu=0 value=0
+application_syscall=delivered os=0 generation=1 pid=3657310 worker=100 delivery=2 cpu=0 number=231
+application_process=cleanup_requested os=0 generation=1 pid=3657310 intent_errno=0
+application cleanup ACK os=0 generation=1 pid=3657310 token=1000 errno=0 abandoned=0
+application retirement os=0 generation=1 pid=3657310 token=2000 errno=0
+application procfs deleted os=0 generation=1 pid=3657310 tid=3657310
+application SCHEDULE os=0 generation=1 pid=3657309 cpu=1
+application procfs published os=0 generation=1 pid=3657309 tid=3657309
+application_syscall=delivered os=0 generation=1 pid=3657309 worker=101 delivery=1 cpu=1 number=1
+application_syscall=return_route os=0 generation=1 pid=3657309 worker=101 delivery=1 launcher_cpu=0 guest_cpu=1
+application_syscall=returned os=0 generation=1 pid=3657309 worker=101 delivery=1 cpu=1 value=0
+application_syscall=delivered os=0 generation=1 pid=3657309 worker=101 delivery=2 cpu=1 number=231
+application_process=cleanup_requested os=0 generation=1 pid=3657309 intent_errno=0
+application cleanup ACK os=0 generation=1 pid=3657309 token=1001 errno=0 abandoned=0
+application retirement os=0 generation=1 pid=3657309 token=2001 errno=0
+application procfs deleted os=0 generation=1 pid=3657309 tid=3657309

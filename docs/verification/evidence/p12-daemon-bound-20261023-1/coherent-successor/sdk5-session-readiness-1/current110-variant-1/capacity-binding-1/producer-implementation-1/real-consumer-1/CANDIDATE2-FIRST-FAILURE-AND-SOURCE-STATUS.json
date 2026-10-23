@@ -1,0 +1,123 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "STOPPED_FIRST_CANDIDATE2_FIXTURE_FAILURE_EXPERT_REQUIRED",
+  "frozen_producer_evidence_sha256": "1ca1c5bb92d989c138280838f16ee424c46fee0793449e30eb8b3668b7f1413a",
+  "source_pins": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/pair_long_producer.rs",
+      "sha256": "4aa18ec12638183f6fab19ef0e2e45b02569abd17c7f496d3ca4be2ac55303c3",
+      "size": 12001
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/long_bridge.inc",
+      "sha256": "8b5c0358a8406bc8de4def3da3b899e930e25cc7fd369bc3df4d41b6bd7fa476",
+      "size": 5273
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/long_support.inc",
+      "sha256": "b0e4dffda81f23a015b5fcc3e3baf5c6a44f747e2fc2d7c8f18aa71d4f6108ad",
+      "size": 9313
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/long_trace_retention.inc",
+      "sha256": "66ad73a4b7da9ccb775247c2d32a803f445e93a1e5b8762cabc5a4968adf099f",
+      "size": 6588
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/pair_collector.c",
+      "sha256": "02b07c6442bb36d22e3d1fe0f3c28d084580cdcb8c559e4644abccda83079289",
+      "size": 24900
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/bridge_fixture.c",
+      "sha256": "82463cd99c5a777b0eccee707bb5b5d44c986f0165a416bb269b91b76e467c17",
+      "size": 4162
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/old_trace_witness.c",
+      "sha256": "5a05c23309c5821821494f72c31cc048b968b777c11d70a1655cbfbf5a673fb2",
+      "size": 558
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/tests.rs",
+      "sha256": "1a5ef633b7e7761979d9106144b790a7b6db317d283f7296e425619f3be56fa5",
+      "size": 11005
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/run_real_consumer_tests.py",
+      "sha256": "d68e30477599cdc1d21915d7f924aad665be6e1d41d4f7c7d8c17849ffc0b6d5",
+      "size": 4572
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/check_consumer.py",
+      "sha256": "dd5c1c4b7442847cb32a325955d818351921e665800f0025342752746bd36a14",
+      "size": 3617
+    }
+  ],
+  "actual_result": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/candidate2-attempt-1/RESULT.json",
+    "sha256": "27d16d999dcac51ac287608d82a62a618b38cea91beb4d06ed71783ee0536290",
+    "size": 9511
+  },
+  "actual_commands_completed": 7,
+  "all_completed_commands_whole_join": true,
+  "cpu6_released": true,
+  "passed": [
+    "GCC9 controlled Linux launcher build",
+    "GCC9 actual retained bridge body build",
+    "GCC9 unchanged old trace body build",
+    "Rust1.92 loop linked to actual C bridge build",
+    "12 loop/ownership/deadline regressions",
+    "actual BEGIN bridge mode0 (retained supervise/fork/exec/reap/EOF/load/full report/strict trace)"
+  ],
+  "failed": {
+    "label": "actual-bridge-mode-1",
+    "returncode": 101,
+    "witness_code": 86,
+    "source": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/candidate2-attempt-1/bridge_fixture.c",
+      "sha256": "82463cd99c5a777b0eccee707bb5b5d44c986f0165a416bb269b91b76e467c17",
+      "size": 4162
+    },
+    "stdout": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/candidate2-attempt-1/actual-bridge-mode-1/stdout",
+      "sha256": "2f51d4cfec4ab9474853e5d420fc5c6d09ac10076f3b3ec7004daf0ac21a40a1",
+      "size": 778
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/candidate2-attempt-1/actual-bridge-mode-1/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "result": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/candidate2-attempt-1/actual-bridge-mode-1/result.json",
+      "sha256": "94d935f7ca2cb5993d4d42909da9cc834ae150d8806f5a0fa0ec825451d03f16",
+      "size": 1265
+    },
+    "cause": "Controlled legacy fixture emits release before successful retirement. Original unchanged old trace body rejects that order.",
+    "expert_proposal": "Fixture mode1 only: omit early release and append exact release after successful retirement; preserve all production candidate bytes and old/new gate bodies."
+  },
+  "not_executed": [
+    "remaining controlled bridge negatives",
+    "unchanged full per-pair Python consumer",
+    "actual Rust full-report LONG wire compatibility consumer"
+  ],
+  "production_ready": false,
+  "actual_hour_workload": false,
+  "native_acceptance": false,
+  "seed_linked_ELF": null,
+  "pinned_image_build": null,
+  "fixture_profile": {
+    "cpu": 6,
+    "jobs": 1,
+    "address_space_bytes": 2147483648,
+    "cpu_seconds": 60,
+    "wall_seconds": 90,
+    "retirement_seconds": 6,
+    "fsize_bytes": 33554432,
+    "nofile": 256,
+    "core": 0,
+    "rust_stack": 2097152,
+    "compiler": "Rust1.92/GCC9 ordinary HOST fixture only"
+  }
+}

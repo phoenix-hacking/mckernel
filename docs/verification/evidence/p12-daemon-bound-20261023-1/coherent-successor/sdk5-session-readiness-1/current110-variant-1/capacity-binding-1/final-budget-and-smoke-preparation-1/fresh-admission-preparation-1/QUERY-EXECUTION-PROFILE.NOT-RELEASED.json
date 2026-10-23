@@ -1,0 +1,62 @@
+{
+  "AS_bytes": 2147483648,
+  "CPU_seconds": 30,
+  "FSIZE_bytes": 33554432,
+  "NOFILE": 256,
+  "actual_root_query": null,
+  "core": 0,
+  "cpu": [
+    0
+  ],
+  "inputs": {
+    "bytes": 22005,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/fresh-admission-preparation-1/QUERY-INPUTS.json",
+    "sha256": "3bd65f3e1330d2194a18e318a5e7726322b9e79078dd3d3b3564fbbeeb25bce0"
+  },
+  "native_acceptance": null,
+  "purpose": "Fresh read-only tiny NONE admission; no container creation or native execution",
+  "queries": [
+    "pinned PROC_CODE read-only publisher census",
+    "findmnt UUID",
+    "docker ps exact retired CID/name/label and fresh nonce name/label; running container list",
+    "docker version and info (no create/start/logs)",
+    "docker image inspect accepted image"
+  ],
+  "query_source": {
+    "bytes": 12962,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/fresh-admission-preparation-1/read_only_p12_tiny_HOST_admission.py",
+    "sha256": "203c441f7102eb5ae6e588fff12c51eadc34dd4d3b5e159f6b1a15d7fc0a3600"
+  },
+  "retirement_grace_seconds": 6,
+  "root_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/fresh-admission-preparation-1/read_only_p12_tiny_HOST_admission.py",
+    "203c441f7102eb5ae6e588fff12c51eadc34dd4d3b5e159f6b1a15d7fc0a3600"
+  ],
+  "root_release": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PREPARED_QUERY_ONLY_NOT_RELEASED",
+  "supervisor_authority": {
+    "entry": "owned_capture AST extraction, no main; dispatcher root owns capture and direct-child retirement",
+    "path": "/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py",
+    "sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+  },
+  "transient_mutex_flock": "existing read-only FD, exclusive nonblocking, closed beforereturn",
+  "uid": 0,
+  "wall_seconds": 90,
+  "writes_or_signals_in_query": false
+}

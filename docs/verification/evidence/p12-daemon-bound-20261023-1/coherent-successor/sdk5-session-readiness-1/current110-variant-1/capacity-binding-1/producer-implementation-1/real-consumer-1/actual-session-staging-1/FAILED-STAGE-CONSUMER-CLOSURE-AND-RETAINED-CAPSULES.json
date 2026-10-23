@@ -1,0 +1,115 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXPERT_REQUIRED_MISSING_ACTUAL_CURRENT110_CONSUMER_JSON_DEPENDENCY_AFTER_ONE_BOUNDED_CORRECTION",
+  "first_failure": {
+    "result": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/actual-session-staging-1/attempt-1/RESULT.json",
+      "sha256": "a251d284c1df6272dbf46b47d8405dd77e1852c71ec6e84dc9f499b97502224b",
+      "size": 2884
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/actual-session-staging-1/attempt-1/actual-HOST-stage/stderr",
+      "sha256": "d92a471b3a55d8d85ca2eb8d78ddbbb66c3479aead00e67dbdb205cf7925d212",
+      "size": 739
+    },
+    "cause": "Producer descriptor uses bytes; stage selected-ref contract uses size. Failed before output creation."
+  },
+  "bounded_correction": {
+    "note": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/actual-session-staging-1/bounded-correction-1/BOUNDED-CORRECTION-NOTE.json",
+      "sha256": "4a495a612c60301b069c5c464bcfdb11766ad69ca3748da7d09032d62df10524",
+      "size": 1133
+    },
+    "result": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/actual-session-staging-1/bounded-correction-1/attempt-1/RESULT.json",
+      "sha256": "53fab9acf0b472d1340eb0084f8055336c945345129a78e6e0ec0f32e6f0e55c",
+      "size": 2968
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/actual-session-staging-1/bounded-correction-1/attempt-1/actual-HOST-stage/stderr",
+      "sha256": "8fa1b7850b37bd43a4e564063d375d0670fce767067c36a2614cd028413f9151",
+      "size": 2552
+    },
+    "cause": "Actual native.load_manifest needs adjacent COMPOSITE-MODULE-BINDING.json missing from current110 runtime source cohort. No consumer bypass/rewrite was attempted.",
+    "missing_path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/source/COMPOSITE-MODULE-BINDING.json"
+  },
+  "actual_fixture": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/actual-session-staging-1/bounded-correction-1/FIXTURE-RESULT.json",
+    "sha256": "53d47c13f02df201fece9e02dc74c1e64f7619b4731124540f33daf70811bc47",
+    "size": 17647
+  },
+  "actual_capsule_transform": {
+    "old_raw_bytes": 59421248,
+    "new_raw_bytes": 62584512,
+    "old_base_end": 40886024,
+    "new_base_end": 43449360,
+    "member_count": 62,
+    "changed_members": [
+      "apps/app",
+      "apps/app0",
+      "apps/app1",
+      "bin/mcexec",
+      "images/mckernel.img",
+      "init",
+      "modules/ihk-smp-x86_64.ko",
+      "modules/ihk.ko",
+      "modules/mcctrl.ko"
+    ],
+    "unchanged_members": 53,
+    "negative_tests": 7
+  },
+  "generated_artifacts_UNACCEPTED": {
+    "collector": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/actual-session-staging-1/bounded-correction-1/actual-stage-1/collector-long-0755",
+      "size": 1628432,
+      "mode": 33261,
+      "sha256": "558198defafaf16481785d87627f7ccff83a8ebca303346c6051ca192a4dc6ca"
+    },
+    "base": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/actual-session-staging-1/bounded-correction-1/actual-stage-1/base-sdk5.cpio.gz",
+      "size": 13277353,
+      "mode": 33152,
+      "sha256": "c3aa22b2e28785577fdf3b13f41c2315b52472473a8a086aa5872ffa9e481abc"
+    },
+    "capsule": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/actual-session-staging-1/bounded-correction-1/actual-stage-1/lifecycle-long.cpio.gz",
+      "size": 19421185,
+      "mode": 33152,
+      "sha256": "ed884c28a889632679b20ed24e7f1b88037ec107a06e5000811460b4147b7f97"
+    },
+    "overlay_manifest": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/actual-session-staging-1/bounded-correction-1/actual-stage-1/overlay-manifest.json",
+      "size": 20307,
+      "mode": 33152,
+      "sha256": "d6dea5f5cba4377d0e94b0414ad43eaa181b0bc8bc299f0322b3f72107a21f2c"
+    },
+    "manifest": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/actual-session-staging-1/bounded-correction-1/actual-stage-1/manifest.json",
+      "sha256": "6c3c80bff36af0f96ce05f73294c37f035a3e12d7fdc3aeeef88fc7532c11471",
+      "size": 13419
+    }
+  },
+  "actual_current110_strict_consumer_pass": false,
+  "stage_result_receipt": null,
+  "all_four_commands_whole_join": true,
+  "CPU6_released": true,
+  "actual_profile": {
+    "CPU": 6,
+    "jobs": 1,
+    "AS_bytes": 536870912,
+    "CPU_seconds": 30,
+    "wall_seconds": 120,
+    "retirement_seconds": 6,
+    "FSIZE_bytes": 134217728,
+    "NOFILE": 256,
+    "core": 0
+  },
+  "next_exact_executable": "Expert binds exact retained SDK5/current110 COMPOSITE-MODULE-BINDING.json dependency into a fresh coherent consumer cohort and runs strict load_manifest against already-produced immutable capsule/manifest. No third recompression/copy or manufactured module binding. Other source-relative consumer JSON dependencies must remain explicit.",
+  "capacity_admission": null,
+  "emergency_bytes": null,
+  "campaign_bytes": null,
+  "scratch_input_growth_bytes": null,
+  "runtime_release": null,
+  "native_acceptance": false,
+  "no_scratch_writes": true
+}

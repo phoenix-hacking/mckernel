@@ -1,3 +1,28 @@
+## Ten-cycle release and real NONE smoke are next — 2026-10-23 12:28 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+31/35,8/14; no newlyclosedIDs. AcceptedmatchingV3cycles1; orderedtenbatch0/10;
+finalLONGlaunches0/100 andactualmixedminutes0/60. FirstV3formal12a05/physical1f3c
+accepted; strict235/227 acceptedresultsreused. Ten-parenta874/source3b99 actual
+namespace20IDs and correctedtypedderiverc559 accepted. Exacttenoperation/batch
+packetb1a65 awaits sourcepublication/freshglobaladmission/finalindependentrelease.
+No previouscyclecredittransferred. M08/M09literalobservedjoins acceptedonly,
+remainingcoverageopen. Rootnextheavyeligible smallNONEsmoke ororderedtenbatch.
+P12realrootreadonlyqueryPASS0/.383s actualPython3.8/statusPASS_FRESH_READ_ONLY_P12_
+TINY_NONE_ADMISSION; finalexacttinyexecutionfactsownerterminalrepair. LONGproducer
+558198/source+Linuxappvariants andsavedmanifest6c3c fullconsumeraccepted; coherent
+owner0ef2/156maps/39roots andactualfullhooksfixturePASS.501s independentlyaccepted.
+No native/hour credit. M14firstreleasedactualbuildFAILED1/.686s source-manifest
+schema beforecommon/lease/Docker/compiler, butsharedtokenacquiredbeforevalidation.
+NormalAPIpreflightphysical-onlyreconciliationPASS0/.309, tokenabsent/mutex27:4 and
+independentphysical1fc26075. BuildFAILpreserved, no rawunlink/no buildPASS. Expert
+three schema memberships dbbf preserveallsource/derivative/gitlink/libdwarfchecks;
+actualfullpurevalidator8cases/6959entriesPASS35.278s exactbuildPython3.9. Initial
+fixturePython3.8failurepreserved. Newactualbuildnamespace/request2 preparationowner
+m14_production_stage; no buildretry/guestapproved.19GiBtotalplanningreservation
+includesowner/capture/coordination, below22.5259GiBcap; oneheavyserialized.
+Included-only100%/servicechecksactive; no resize/reservelowering/speedupclaim.
+
 ## First full V3 restoration accepted — 2026-10-23 12:05 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

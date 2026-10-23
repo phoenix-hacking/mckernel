@@ -1,0 +1,71 @@
+{
+  "FINAL_request": {
+    "bytes": 26525756,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/image-request.FINAL.json",
+    "sha256": "377e6be0f6225246d60fea55b38d300922e47d210497e1ac7b62d110e9973349"
+  },
+  "already_executed": false,
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/release-assembly-1/final-build-release-preparation-1/capture_m14_image_owner.PENDING.py",
+    "--operation",
+    "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/release-assembly-1/final-build-release-preparation-1/EXACT-IMAGE-OWNER-OPERATION.PENDING.json",
+    "--sha256",
+    "9a0e40b797764471239b8176526061485c9a9c59860f0527e51ad96cc40d6cd5"
+  ],
+  "capture": {
+    "bytes": 2511,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/release-assembly-1/final-build-release-preparation-1/capture_m14_image_owner.PENDING.py",
+    "sha256": "c6790af13090c306c7a01642e70aa1b57afae3fec941e0d155f081b45dc5d8da"
+  },
+  "capture_count_max": 1,
+  "independent_binding_review": {
+    "bytes": 911,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/release-assembly-1/final-build-release-preparation-1/INDEPENDENT-SOURCE-PROFILE-CAPTURE-REVIEW.ROOT-RECORD.json",
+    "sha256": "210dbfd82cc0f6d197f567f0e677f5f26295333326433123e87fa49d9fcf760c"
+  },
+  "independent_execution_release": null,
+  "operation": {
+    "bytes": 8000,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/release-assembly-1/final-build-release-preparation-1/EXACT-IMAGE-OWNER-OPERATION.PENDING.json",
+    "sha256": "9a0e40b797764471239b8176526061485c9a9c59860f0527e51ad96cc40d6cd5"
+  },
+  "profile": {
+    "AST_nodes": 37,
+    "CPU1_excluded": true,
+    "CPUs": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "at_ns": 1792757106619712501,
+    "capture_sha256": "c6790af13090c306c7a01642e70aa1b57afae3fec941e0d155f081b45dc5d8da",
+    "capture_tail": "a6ce818b exact directwait/join/flush/fsync/close/groupabsence/stableFDhash",
+    "changed_AST_nodes": [
+      0,
+      12
+    ],
+    "j": 4,
+    "memory_bytes": 12884901888,
+    "native_acceptance": false,
+    "network": "none",
+    "new_heavy_release": false,
+    "operation_sha256": "9a0e40b797764471239b8176526061485c9a9c59860f0527e51ad96cc40d6cd5",
+    "provenance": "Independent agent final decision recorded by dispatcher.",
+    "recorded_by": "/root",
+    "reviewer": "/root/m14_build_release_review",
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "status": "PASS_SOURCE_PROFILE_CAPTURE_BINDING",
+    "tasks": 512,
+    "verified_direct_bindings": 42
+  },
+  "root_final_admission": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "REVIEWED_LITERAL_CAPTURE_ARGV_NOT_EXECUTION_RELEASE"
+}

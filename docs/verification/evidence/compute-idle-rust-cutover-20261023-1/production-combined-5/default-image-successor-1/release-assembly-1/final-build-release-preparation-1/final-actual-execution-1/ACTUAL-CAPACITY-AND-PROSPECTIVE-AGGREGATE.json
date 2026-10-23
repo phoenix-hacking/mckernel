@@ -1,0 +1,96 @@
+{
+  "actual_readonly_result": {
+    "bytes": 4977,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/release-assembly-1/fresh-post-M05-readonly-1/ACTUAL-THREE-READONLY-RESULT.json",
+    "sha256": "1e89723122e126108263fcecca2b614679642d6b7330bd5c030c118e6d831044"
+  },
+  "available_memory_bytes": 28332662784,
+  "fresh_root_loop_association": {
+    "association": {
+      "autoclear": true,
+      "back-file": "/home/holden/mckernel-work/scratch.ext4",
+      "dio": false,
+      "log-sec": 512,
+      "name": "/dev/loop36",
+      "offset": 0,
+      "ro": false,
+      "sizelimit": 0
+    },
+    "matches_prior_unprivileged_findmnt_stat": true,
+    "receipt": {
+      "bytes": 711,
+      "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/release-assembly-1/final-build-facts-preparation-1/actual-root-loop-association-1/receipt.json",
+      "sha256": "8869a4099ca9d4a17f822812757f2b74ff1b157996590169347fd73979ea6fd3"
+    },
+    "stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/release-assembly-1/final-build-facts-preparation-1/actual-root-loop-association-1/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout": {
+      "bytes": 198,
+      "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/release-assembly-1/final-build-facts-preparation-1/actual-root-loop-association-1/stdout",
+      "sha256": "406d2ba88a35b38f86ebebf6caeea9298a65a23cf1b72ba3578c068d00b915aa"
+    }
+  },
+  "fresh_stat": {
+    "allocated_bytes": 102271246336,
+    "backing": "/home/holden/mckernel-work/scratch.ext4",
+    "dev": 66306,
+    "full_bytes": 118111600640,
+    "full_sparse_gap_bytes": 15840354304,
+    "inode": 47468427
+  },
+  "mount": {
+    "fstype": "ext4",
+    "maj:min": "7:36",
+    "options": "rw,nosuid,nodev,relatime",
+    "source": "/dev/loop36",
+    "target": "/home/holden/mckernel-work/scratch",
+    "uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52"
+  },
+  "per_filesystem": {
+    "host": {
+      "adopted_budget": {
+        "compiler_and_control_growth_bytes": 16106090496,
+        "emergency_reserve_bytes": 679477248,
+        "floor_bytes": 17179869184,
+        "full_remaining_sparse_backing_growth_bytes": 15840354304,
+        "postbuild_growth_bytes": 377487360
+      },
+      "measured_available_bytes": 172340510720,
+      "measured_margin_bytes": 122157232128,
+      "required_bytes": 50183278592
+    },
+    "scratch": {
+      "adopted_budget": {
+        "compiler_and_control_growth_bytes": 67108864,
+        "emergency_reserve_bytes": 679477248,
+        "floor_bytes": 12884901888,
+        "full_remaining_sparse_backing_growth_bytes": 0,
+        "postbuild_growth_bytes": 0
+      },
+      "measured_available_bytes": 14103748608,
+      "measured_margin_bytes": 472260608,
+      "required_bytes": 13631488000
+    }
+  },
+  "prospective_aggregate": {
+    "conservative_total_jobs": 7,
+    "conservative_total_memory_bytes": 17179869184,
+    "heavy_CPUs": "2-5",
+    "heavy_jobs": 4,
+    "heavy_memory_bytes": 12884901888,
+    "heavy_network": "none",
+    "heavy_swap_extra_bytes": 0,
+    "heavy_tasks": 512,
+    "ordinary_CPU0_reserved_bytes": 2147483648,
+    "ordinary_CPU6_reserved_bytes": 2147483648,
+    "root_actual_complete_grant_ledger_and_reservation": null,
+    "total_includes_one_controller_job": true
+  },
+  "root_final_aggregate_and_capacity_acceptance": null,
+  "root_reported_loop_continuity": "Root confirms no remount/resize/loopmutation; loop36/offset0/sizelimit0 association unchanged.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_NUMERIC_POST_M05_CAPACITY_WITH_FIXED_ADOPTED_BUDGET_PENDING_ROOT_ADMISSION"
+}

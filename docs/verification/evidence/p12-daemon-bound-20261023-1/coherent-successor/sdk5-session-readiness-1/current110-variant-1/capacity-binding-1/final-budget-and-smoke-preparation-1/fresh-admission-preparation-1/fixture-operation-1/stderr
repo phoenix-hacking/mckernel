@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/fresh-admission-preparation-1/check_query.py", line 54, in <module>
+    ('zero_emergency',lambda x:x['admission'].update(emergency_bytes=0))]:run(name,change)
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/fresh-admission-preparation-1/check_query.py", line 21, in run
+    try:q.validate(x,c,g)
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/fresh-admission-preparation-1/read_only_p12_tiny_HOST_admission.py", line 63, in validate
+    required=growth.require_growth(f['admission'],f['HOST_available'],f['scratch_available'],f['backing']['gap'])
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/source/long_transport.py", line 209, in require_growth
+    need(host_available >= required['host_required_bytes'], 'HOST floor plus complete physical growth')
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/source/long_transport.py", line 55, in need
+    raise ValueError(why)
+ValueError: HOST floor plus complete physical growth

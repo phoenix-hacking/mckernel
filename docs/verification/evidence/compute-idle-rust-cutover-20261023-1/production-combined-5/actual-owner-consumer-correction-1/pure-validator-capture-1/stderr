@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/test_actual_pure_validator.py", line 34, in <module>
+    bound=owner._validate_request(request)
+  File "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/native_rust_exact_mckernel_image_container_owner.py", line 1155, in _validate_request
+    _validate_authenticated_source(source, source_doc, candidate, ihk, source_tools, provenance)
+  File "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/native_rust_exact_mckernel_image_container_owner.py", line 868, in _validate_authenticated_source
+    provenance.validate_thin_source(source, manifest, candidate, ihk)
+  File "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/native_rust_exact_build_offline.py", line 757, in validate_thin_source
+    _thin_real_parents(source,p)
+  File "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/native_rust_exact_build_offline.py", line 693, in _thin_real_parents
+    _thin_require(path.is_relative_to(source), 'path escapes source')
+AttributeError: 'PosixPath' object has no attribute 'is_relative_to'

@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/session-staging-preparation-1/actual-session-staging-1/expert-composite-binding-1/validate_existing_stage.py", line 43, in <module>
+    accepted=native.load_manifest(str(MANIFEST))
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/session-staging-preparation-1/actual-session-staging-1/expert-composite-binding-1/source/native_diagnostic.py", line 207, in load_manifest
+    return _validate_manifest(obj)
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/session-staging-preparation-1/actual-session-staging-1/expert-composite-binding-1/source/native_diagnostic.py", line 1445, in _validate_manifest
+    value=_short_transport_validate_manifest({k:v for k,v in obj.items() if k!='pair_long_session'})
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/session-staging-preparation-1/actual-session-staging-1/expert-composite-binding-1/source/native_diagnostic.py", line 1356, in _validate_manifest
+    validated=_legacy_cleanup_validate_manifest(base)
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/session-staging-preparation-1/actual-session-staging-1/expert-composite-binding-1/source/native_diagnostic.py", line 1057, in _validate_manifest
+    _need(changed <= {"init","apps/app","bin/native-boot","images/mckernel.img","modules/ihk.ko","modules/ihk-smp-x86_64.ko","modules/mcctrl.ko"},"only retained pair changes and exact composite module members")
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/session-staging-preparation-1/actual-session-staging-1/expert-composite-binding-1/source/native_diagnostic.py", line 72, in _need
+    raise DiagnosticError(message)
+private_current110_native_diagnostic.DiagnosticError: only retained pair changes and exact composite module members

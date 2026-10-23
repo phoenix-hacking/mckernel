@@ -1,0 +1,118 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_EXPERT_CONTROLLED_FULL_PAIR_AND_LONG_CONSUMER_COMPATIBILITY_ONLY",
+  "first_expert_candidate": true,
+  "bounded_correction_used": false,
+  "prior_failures_preserved": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/CANDIDATE2-FIRST-FAILURE-AND-SOURCE-STATUS.json",
+      "sha256": "e1f8ae19d0f756533fb5358b01496fcc23944ad057b920430069f742138b6fb9",
+      "size": 6744
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/FIXTURE-CORRECTION-FULL-CONSUMER-FAILURE.json",
+      "sha256": "5f255bad89e62d4fcb17c539efc9983be8fae55095e5fdaa6f1731e48ea36478",
+      "size": 3727
+    }
+  ],
+  "actual_result": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/expert-fixture-correction-1/attempt-1/RESULT.json",
+    "sha256": "56a25f2d3fb7547b51ee460f5d9f42da58d66e6c687d20715fbd486935474995",
+    "size": 23365
+  },
+  "closed_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/expert-fixture-correction-1/attempt-1/CLOSED-RECEIPT.json",
+    "sha256": "814209c76beca8b605a6517fed0eb03f64a86f2abe45772a4161c240899084d3",
+    "size": 188
+  },
+  "source_guard": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/expert-fixture-correction-1/attempt-1/SOURCE-GUARD.json",
+    "sha256": "4f614b6de62bd88c86564eaaf3f0b4600abcc25586f321165e59092da5cf3615",
+    "size": 3086
+  },
+  "pre_execution_source_command_binding": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/expert-fixture-correction-1/attempt-1/EXECUTION-REQUEST.json",
+    "sha256": "7cb5f0a20b34d9ef553f8365f6de3004f00c6906cc641d8c1d043ee1e651d5ec",
+    "size": 903
+  },
+  "contract_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/expert-fixture-correction-1/attempt-1/FULL-CONTRACT-REVIEW.json",
+    "sha256": "d4f464a3d19e871853ec997df81b142cf4d59ed47d9e44e0dbd75be34639630b",
+    "size": 2030
+  },
+  "commands_completed": 17,
+  "all_commands_zero_and_whole_join": true,
+  "tests": {
+    "rust_loop_regressions": 12,
+    "actual_controlled_linux_bridge_cases": 9,
+    "unchanged_full_pair_positive": "PASS",
+    "actual_rust_LONG_wire_emission": "PASS",
+    "unchanged_full_LONG_consumer": "PASS",
+    "strict_LONG_negative_mutations": 4
+  },
+  "observed_LONG_protocol_metrics": {
+    "status": "PROTOCOL_PASS",
+    "application_acceptance": false,
+    "native_acceptance": false,
+    "successful_launches": 720,
+    "successful_rounds": 360,
+    "actual_mixed_work_ns": 3600000000000,
+    "elapsed_work_span_ns": 3600000000000,
+    "trace_bytes": 573196,
+    "physical_retirement_accepted": false
+  },
+  "measurements": {
+    "actual_hour_workload": false,
+    "actual_native_launches": 0,
+    "cpu6_released_after_exit": true,
+    "cpu_seconds": 6.376087,
+    "seconds": 6.567306834971532,
+    "status": "PASS",
+    "whole_join": true
+  },
+  "source_delta": {
+    "fixture_only_files": [
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/expert-fixture-correction-1/bridge_fixture.c",
+        "sha256": "84f4bdf86e397fc6a5f3c4b464f16383d2acbec3ab9328821e5ed11d242e5fc8",
+        "size": 4424
+      },
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/expert-fixture-correction-1/tests.rs",
+        "sha256": "d0497404c6b62c3c37857689f3141d421db8adb4b6a974c4de16f2861947d7a8",
+        "size": 11010
+      },
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/expert-fixture-correction-1/check_consumer.py",
+        "sha256": "21e92d8b890887deb40644b0e5364da50c618324747c98df74144a43d595096d",
+        "size": 3724
+      },
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/expert-fixture-correction-1/run_real_consumer_tests.py",
+        "sha256": "814ef115af38112a71e9ededc74f4068251aade321cee8e81cf89919c9d897f9",
+        "size": 7479
+      }
+    ],
+    "changes": [
+      "matched same-worker/delivery return_route between ordinary delivered and returned, opposite launcher CPU",
+      "use returned successful_launches metric key in fixture assertion",
+      "separate Rust wire-data filename from command capture directory",
+      "single-pass PID/tid mapping of controlled derivative traces",
+      "AST-extract accepted owned_capture helpers; per-command exact bindings and whole join receipts"
+    ],
+    "production_Rust_C_and_old_new_gates": "byte-identical to retained candidate2-fixture-correction-1; SOURCE-GUARD.json covers every C/Rust/header/include input except permitted fixture/test path edits"
+  },
+  "truthful_limitations": [
+    "Linux launcher is a controlled output-only provider, not either real McKernel application",
+    "kernel CPU/channel/schedule/syscall/route/ACK/retirement/procfs records and empty state are controlled fixture values",
+    "360 LONG reports/traces derive from one positive controlled Linux pair using explicitly synthetic PID/token/time fields",
+    "LONG fake-clock work does not measure an actual hour; successful_launches=720 is protocol-only",
+    "no root/module/guest/native execution or production acceptance was performed"
+  ],
+  "native_acceptance": false,
+  "application_acceptance": false,
+  "actual_hour_workload": false,
+  "native_launch_credit": 0,
+  "practical_check_or_M14_retirement_credit": 0,
+  "next_prerequisite": "Dispatcher independent source/fixture review and remaining real integration/release prerequisites; no guest or pinned-image build authorized by this fixture result."
+}

@@ -1,0 +1,74 @@
+"""Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual query validator/main/source-pin tests; modeled observations, never root admission.
+"""
+import ast,contextlib,copy,hashlib,importlib.util,io,json,os,sys,tempfile
+from pathlib import Path
+D=Path(__file__).resolve().parent
+p=D/'read_only_p12_tiny_HOST_admission.py'
+spec=importlib.util.spec_from_file_location('query_under_test',p);q=importlib.util.module_from_spec(spec);spec.loader.exec_module(q)
+c=q.inputs();gsp=importlib.util.spec_from_file_location('growth_under_test',c['growth']['path']);g=importlib.util.module_from_spec(gsp);gsp.loader.exec_module(g)
+budget=json.loads(Path(c['budget']['path']).read_bytes());physical=json.loads(Path(c['physical']['path']).read_bytes())
+for row in c['pins']:
+ f=q.filepin(Path(row['path']),2**20);assert f['sha256']==row['sha256'] and f['size']==row['bytes']
+# Python3.8 actual parser on all new executable files; imports run no query.
+for name in ('read_only_p12_tiny_HOST_admission.py','check_query.py'):
+ ast.parse((D/name).read_bytes(),filename=name,feature_version=(3,8))
+f=dict(uid=0,euid=0,affinity=[0],proc=dict(status='COMPLETE',failure=None,publishers=[],snapshots=[{},{}]),physical=physical,parent=dict(directory=True,uid=1000,gid=1000,mode=0o700,children=[]),output_paths_exist={'capture':False,'owner':False,'attempt':False},ownership_paths_exist={'lease':False},lock=[27,4,0,0,1],locks=[],lock_acquired=True,docker_running='',docker_identities={'oldID':'','newname':'','newlabel':''},server={'Version':'26.1.3'},docker_info={'ServerVersion':'26.1.3'},daemon_binding={'mode':'none','source_package':'docker.io-app=26.1.3-0ubuntu1~20.04.1','container_source_sha256':'6ed6a9d2a3a32ecf6cbb91eaefdb5925c1316e8ea35e0856b7bb85530d143739'},image_ok=True,mounts_ok=True,cgroup=c['owner_constants']['CGROUP'],allowed_container_cpus=True,memory_available=32*2**30,launcher_phase='running',launcher_stop_reason=None,backing=dict(inode=47468427,size=110*2**30,regular=True,canonical=True,host_device=1,gap=110*2**30),HOST_device=1,scratch_device=2,uuid_device=2,loop_backing='/home/holden/mckernel-work/scratch.ext4',mount=[dict(target='/home/holden/mckernel-work/scratch',uuid='2a5768c8-718d-4914-bdc0-6b32c5a92a52')],HOST_available=140534349824,scratch_available=13899923456,admission=budget['capacity_admission_proposal'])
+checks=[]
+def run(name,change=None):
+ x=copy.deepcopy(f)
+ if change:change(x)
+ try:q.validate(x,c,g)
+ except RuntimeError as e:
+  assert change is not None,(name,str(e));checks.append(dict(name=name,result='PASS_REFUSE',reason=str(e)))
+ else:
+  assert change is None,name;checks.append(dict(name=name,result='PASS'))
+run('exact_full_gap_positive_capacity_boundaries')
+for name,change in [
+ ('dirty_prepared_parent',lambda x:x['parent'].update(children=['leftover'])),
+ ('wrong_parent_owner',lambda x:x['parent'].update(uid=0)),
+ ('wrong_parent_mode',lambda x:x['parent'].update(mode=0o755)),
+ ('existing_nonce_attempt',lambda x:x['output_paths_exist'].update(attempt=True)),
+ ('existing_capture',lambda x:x['output_paths_exist'].update(capture=True)),
+ ('existing_lease',lambda x:x['ownership_paths_exist'].update(lease=True)),
+ ('active_publisher',lambda x:x['proc'].update(publishers=[{'pid':123}])),
+ ('wrong_physical_nonce',lambda x:x['physical'].update(nonce='old')),
+ ('retained_lease_physical',lambda x:x['physical'].update(lease_retained=True)),
+ ('held_mutex',lambda x:x.update(locks=['held'])),
+ ('wrong_mutex_inode',lambda x:x.update(lock=[27,5,0,0,1])),
+ ('competing_container',lambda x:x.update(docker_running='abc\n')),
+ ('nonce_container_present',lambda x:x['docker_identities'].update(newname='abc\n')),
+ ('daemon_drift',lambda x:x['server'].update(Version='27.0')),
+ ('NONE_source_binding_drift',lambda x:x['daemon_binding'].update(mode='local')),
+ ('missing_mount',lambda x:x.update(mounts_ok=False)),
+ ('cgroup_drift',lambda x:x['cgroup'].update({'/sys/fs/cgroup/pids/mckernel-dev/pids.max':'1024'})),
+ ('cpu_unavailable',lambda x:x.update(allowed_container_cpus=False)),
+ ('memory_short',lambda x:x.update(memory_available=12*2**30)),
+ ('backing_inode_drift',lambda x:x['backing'].update(inode=5)),
+ ('wrong_loop',lambda x:x.update(loop_backing='/other')),
+ ('wrong_UUID',lambda x:x['mount'][0].update(uuid='foreign')),
+ ('HOST_one_byte_short',lambda x:x.update(HOST_available=140534349823)),
+ ('scratch_one_byte_short',lambda x:x.update(scratch_available=13899923455)),
+ ('gap_exceeds_allowance',lambda x:x['backing'].update(gap=110*2**30+1)),
+ ('zero_campaign',lambda x:x['admission'].update(campaign_bytes=0)),
+ ('zero_emergency',lambda x:x['admission'].update(emergency_bytes=0))]:run(name,change)
+# Real unprivileged target body checks on fixture-owned dirs and files.
+with tempfile.TemporaryDirectory(dir=D,prefix='fixture-parent-') as td:
+ parent=Path(td);parent.chmod(0o700);fact=q.parent_fact(parent)
+ assert fact['directory'] and fact['uid']==os.getuid() and fact['mode']==0o700 and fact['children']==[]
+ (parent/'retained').write_text('x');assert q.parent_fact(parent)['children']==['retained']
+ symlink=parent/'link';symlink.symlink_to(p)
+ try:q.filepin(symlink,65536)
+ except OSError:pass
+ else:raise AssertionError('filepin accepted symlink')
+checks.append(dict(name='actual_parent_fact_and_symlink_filepin',result='PASS'))
+# Actual main consumer with explicitly modeled collect output: no host observations invented.
+saved=q.collect;q.collect=lambda config:(copy.deepcopy(f),q.validate(copy.deepcopy(f),config,g))
+oldargv=sys.argv;sys.argv=[str(p),hashlib.sha256(p.read_bytes()).hexdigest()]
+try:
+ out=io.StringIO()
+ with contextlib.redirect_stdout(out):q.main()
+ value=json.loads(out.getvalue());assert value['status']=='PASS_FRESH_READ_ONLY_P12_TINY_NONE_ADMISSION' and value['execution_release'] is False and value['native_acceptance'] is False and value['mutation'] is False
+finally:q.collect=saved;sys.argv=oldargv
+checks.append(dict(name='actual_main_consumer_MODELED_collection_only',result='PASS'))
+print(json.dumps(dict(scope=__doc__,status='PASS_UNPRIVILEGED_QUERY_REGRESSION_NOT_ADMISSION',python=sys.version,source_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),checks=checks,actual_small_source_pins=len(c['pins']),host_collection_executed=False,root_queries=0,containers_created=0,native_acceptance=False),sort_keys=True))

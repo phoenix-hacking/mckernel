@@ -1,0 +1,362 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "CONCRETE_SOURCE_STAGE_PLAN_MISSING_LONG_GUEST_PRODUCER_NOT_EXECUTED",
+  "baseline_short_pair_manifest": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/stage-preparation-1/stage-launches-1/manifest.json",
+    "sha256": "ab8cedd248f6d1c8e17a7d5b0ce888042e3e47a3741d77f086de53911a06c8ef",
+    "bytes": 10711
+  },
+  "baseline_overlay_metadata": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/stage-preparation-1/stage-launches-1/overlay-manifest.json",
+    "sha256": "b5cb5b42b423c0b767f29f13d4833c877e2b451119bf563ad7dd31cbc6bcfcbc",
+    "bytes": 20083
+  },
+  "SDK5_tuple": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/SDK5-EXACT-ARTIFACT-TUPLE.NOT-RELEASED.json",
+    "sha256": "165bb59c327160fc99174e8ed30cca3ea94dc41bce2f8cdfb1656d9ad02533a6",
+    "bytes": 5076
+  },
+  "fixed_LONG_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/FINAL-TRANSPORT-PROFILE.NOT-RELEASED.json",
+    "sha256": "5c577ac949c04e2b39a15d6cb10b44167793380c382969d00d34fa3097dbebb7",
+    "bytes": 1214
+  },
+  "producer_profile": {
+    "min_launches": 100,
+    "round_cap": 2048,
+    "trace_cap": 268435456,
+    "version": 1,
+    "wall_ns": 7200000000000,
+    "work_ns": 3600000000000
+  },
+  "payload_pair_oracles_preserved": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stdout_hex": "626174636820626567696e2063617365733d32206d697865645f726f756e64733d330a727573742d66696c652d726f756e647472697020696e697469616c3d3136206f76657277726974653d3420736872696e6b3d31302067726f773d3134207a65726f733d34207461696c3d61616262636320696e76616c69645f7365656b3d323220637572736f723d313420636865636b65645f636c6f73653d312072656d6f7665643d310a6d6978656420726f756e64733d332062797465735f656163683d3831393320636865636b73756d5f746f74616c3d333037323237300a66696c65733d3320636865636b65645f636c6f7365733d362072656f70656e65643d3320656f663d332072656d6f7665643d330a6a6f696e65645f746872656164733d36207475726e735f656163683d31323820636f756e7465725f746f74616c3d3736380a626174636820706173732063617365733d3220636865636b65645f636c6f7365733d372072656d6f7665643d34206a6f696e65645f746872656164733d360a"
+    },
+    "stderr_limit_bytes": 1024,
+    "stdout_limit_bytes": 1024
+  },
+  "pair_contract_preserved": {
+    "apps": [
+      {
+        "argv": [
+          "/bin/mcexec",
+          "-t",
+          "1",
+          "-c",
+          "0",
+          "0",
+          "/apps/app0"
+        ],
+        "cpu": 0,
+        "cwd": "/case/two-app/work0",
+        "env": {
+          "COKERNEL_PATH": "/apps",
+          "PAIR_CPU": "0",
+          "PATH": "/usr/bin:/bin"
+        },
+        "id": 0,
+        "oracle": {
+          "exit_code": 0,
+          "stderr_hex": "",
+          "stdout_hex": "626174636820626567696e2063617365733d32206d697865645f726f756e64733d330a727573742d66696c652d726f756e647472697020696e697469616c3d3136206f76657277726974653d3420736872696e6b3d31302067726f773d3134207a65726f733d34207461696c3d61616262636320696e76616c69645f7365656b3d323220637572736f723d313420636865636b65645f636c6f73653d312072656d6f7665643d310a6d6978656420726f756e64733d332062797465735f656163683d3831393320636865636b73756d5f746f74616c3d333037323237300a66696c65733d3320636865636b65645f636c6f7365733d362072656f70656e65643d3320656f663d332072656d6f7665643d330a6a6f696e65645f746872656164733d36207475726e735f656163683d31323820636f756e7465725f746f74616c3d3736380a626174636820706173732063617365733d3220636865636b65645f636c6f7365733d372072656d6f7665643d34206a6f696e65645f746872656164733d360a"
+        },
+        "payload": {
+          "mode": 33216,
+          "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/app0",
+          "sha256": "024fa5620735622c684283df1a8270c2d7c78f62dd82d294c544f5eb3b197ac4",
+          "size": 5685552
+        },
+        "stderr_limit_bytes": 1024,
+        "stdout_limit_bytes": 1024,
+        "timeout_ms": 10000
+      },
+      {
+        "argv": [
+          "/bin/mcexec",
+          "-t",
+          "1",
+          "-c",
+          "1",
+          "0",
+          "/apps/app1"
+        ],
+        "cpu": 1,
+        "cwd": "/case/two-app/work1",
+        "env": {
+          "COKERNEL_PATH": "/apps",
+          "PAIR_CPU": "1",
+          "PATH": "/usr/bin:/bin"
+        },
+        "id": 1,
+        "oracle": {
+          "exit_code": 0,
+          "stderr_hex": "",
+          "stdout_hex": "465054485245414420763120746872656164733d322073616d655f7065726d69747465645f6370753d312064697374696e63745f7469643d310a7468726561643020726f756e64733d363420796d6d5f6c616e65733d363420706565725f70726f67726573733d3634207969656c645f6d696e3d363420636f6e74726f6c733d303737662f3366383020726573746f7265643d310a7468726561643120726f756e64733d363420796d6d5f6c616e65733d363420706565725f70726f67726573733d3634207969656c645f6d696e3d363420636f6e74726f6c733d306237662f3566383020726573746f7265643d310a465054485245414420504153530a"
+        },
+        "payload": {
+          "mode": 33216,
+          "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/app1",
+          "sha256": "1f51f0e3c8288bc05aabbc0309d1bf84abab1cbc6d8593c4ec7b1460b38163b7",
+          "size": 5666048
+        },
+        "stderr_limit_bytes": 1024,
+        "stdout_limit_bytes": 1024,
+        "timeout_ms": 10000
+      }
+    ],
+    "cpus": [
+      0,
+      1
+    ],
+    "default_ikc_linux": 0,
+    "generation": 1,
+    "host_cpus": [
+      1,
+      2
+    ],
+    "inherited_overlay_manifest": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/stage-matched-FP-modules-1/overlay-manifest.json",
+      "sha256": "ef0fdf9595ec9598dd3656ff608fde4fbc4ee412a7bbff31f894d288982a1dc9",
+      "size": 19433
+    },
+    "os": 0,
+    "source_authority": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1/authority-inputs-fresh8b.json",
+      "sha256": "6a7e06affcf998f9c2c4f767cd2489a657b1547cbcc0a3b5087f21df851c7f66",
+      "size": 2535
+    },
+    "version": 1
+  },
+  "readonly_reused_inputs": {
+    "old_pair_base": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/stage205-current-pair-1/base.cpio.gz",
+      "sha256": "605d5c27c38d3c5e68dba2483bd782939aba7fcea13feb47cab7c3e0a2bb7abd",
+      "size": 12770049
+    },
+    "bzImage": {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+      "sha256": "032653ee0661b059c325e2a0911a9d492805f1a889c4df515473d69a8be105bc",
+      "size": 16130048
+    },
+    "loader": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/lib64/ld-linux-x86-64.so.2",
+      "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+      "size": 930600
+    },
+    "libc": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/lib64/libc.so.6",
+      "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+      "size": 2339896
+    },
+    "pair_payload": {
+      "mode": 33216,
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/app0",
+      "sha256": "024fa5620735622c684283df1a8270c2d7c78f62dd82d294c544f5eb3b197ac4",
+      "size": 5685552
+    },
+    "native_boot_twoCPU": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/native-boot-two-0755",
+      "sha256": "4312f9a8f53d8db7b2b6be4c7d5e409f5c0f82cf8215728209be0f6ff4a5d5c5",
+      "size": 35784
+    },
+    "SDK5_five_replacements": [
+      {
+        "member": "images/mckernel.img",
+        "old_bytes": 7988768,
+        "new_bytes": 8439816,
+        "new_ref": {
+          "mode": 33261,
+          "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/mckernel.img",
+          "sha256": "10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2",
+          "size": 8439816
+        },
+        "newc_padded_payload_delta_bytes": 451048,
+        "copy_new_loose_scratch_file": false,
+        "reuse_actual_existing_source_readonly": true
+      },
+      {
+        "member": "bin/mcexec",
+        "old_bytes": 453352,
+        "new_bytes": 394648,
+        "new_ref": {
+          "mode": 33261,
+          "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/launcher-runtime-snapshot-1/mcexec",
+          "sha256": "dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954",
+          "size": 394648
+        },
+        "newc_padded_payload_delta_bytes": -58704,
+        "copy_new_loose_scratch_file": false,
+        "reuse_actual_existing_source_readonly": true
+      },
+      {
+        "member": "modules/ihk-smp-x86_64.ko",
+        "old_bytes": 11632136,
+        "new_bytes": 12944152,
+        "new_ref": {
+          "bytes": 12944152,
+          "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-9c96ba665d8d4ef19f81420e9fe33814/modules/ihk-smp-x86_64.ko",
+          "sha256": "2eb3e8e6d7e43f55ca262cb455212e205831e26980f10d4ce8ef99556fd2269d"
+        },
+        "newc_padded_payload_delta_bytes": 1312016,
+        "copy_new_loose_scratch_file": false,
+        "reuse_actual_existing_source_readonly": true
+      },
+      {
+        "member": "modules/ihk.ko",
+        "old_bytes": 1475952,
+        "new_bytes": 1527808,
+        "new_ref": {
+          "bytes": 1527808,
+          "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-9c96ba665d8d4ef19f81420e9fe33814/modules/ihk.ko",
+          "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c"
+        },
+        "newc_padded_payload_delta_bytes": 51856,
+        "copy_new_loose_scratch_file": false,
+        "reuse_actual_existing_source_readonly": true
+      },
+      {
+        "member": "modules/mcctrl.ko",
+        "old_bytes": 1913904,
+        "new_bytes": 2662320,
+        "new_ref": {
+          "bytes": 2662320,
+          "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-9c96ba665d8d4ef19f81420e9fe33814/modules/mcctrl.ko",
+          "sha256": "06e8b9b571f21b41821aa03a32ebf4ae20ae19cf4b110c3af2c81b491b92ef86"
+        },
+        "newc_padded_payload_delta_bytes": 748416,
+        "copy_new_loose_scratch_file": false,
+        "reuse_actual_existing_source_readonly": true
+      }
+    ]
+  },
+  "known_exact_newc_retuping_payload_delta_bytes": 2504632,
+  "newc_header_name_padding_unchanged": "Existing accepted final-record transformer preserves all header/name/order/metadata except payload size/hash/requiredpad for each selected member. Collector init additionally changes after its real ELF exists. No cpio read/hash was performed here.",
+  "existing_staging_machinery": {
+    "source": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/stage_m05_two_generation.py",
+      "sha256": "65c01a4f1e4bc7b70350c9705a56fca1c08fb0ed96161a761ad5802f76597193",
+      "bytes": 16074
+    },
+    "reusable_body": "rewrite_last_records + authenticated sources + fixed newc parser/replay + gzip/manifest writers",
+    "required_bounded_successor": "Bind short-pair baseline member count/tuple and six exact final replacements (SDK5five +realLONGinit), retain payload/boot/libc/loader/strictpair contract, drop M05secondboot/epoch-specificconditions in favor of declaredLONGprofile; no weaker source oracles.",
+    "existing_M05_write_ceilings_not_automatic_P12_acceptance": {
+      "host_output_aggregate_bytes": 134217728,
+      "stage_capture_growth_bytes": 16777216,
+      "inflated_base_bytes": 67108864,
+      "patched_cpio_bytes": 100663296
+    }
+  },
+  "planned_new_HOST_files": [
+    {
+      "file": "collector-long-0755",
+      "bytes": null,
+      "why": "Needs actual compiled new LONGguestproducer; existing tenroundELF1043520B is not LONG and may not be substituted."
+    },
+    {
+      "file": "base-sdk5.cpio.gz",
+      "bytes": null,
+      "why": "Actual gzip bytes after exact5tuple rewrite; existing shortbase12770049B is input only."
+    },
+    {
+      "file": "lifecycle-long.cpio.gz",
+      "bytes": null,
+      "why": "Actual init replacement plusSDK5capsule; output grows on HOST, not scratch."
+    },
+    {
+      "file": "overlay-manifest.json",
+      "bytes": null
+    },
+    {
+      "file": "manifest.json",
+      "bytes": null
+    },
+    {
+      "file": "stage-result.json",
+      "bytes": null
+    }
+  ],
+  "new_scratch_files": [
+    {
+      "file": "readonly final LONG manifest publication",
+      "max_source_read_bytes": 4194304,
+      "exact_actual_bytes": null
+    },
+    {
+      "file": "readonly independent LONG release publication",
+      "max_source_read_bytes": 1048576,
+      "exact_actual_bytes": null
+    }
+  ],
+  "scratch_input_copy_plan": "Reuse all existing base/kernel/payload/runtime source/artifact files readonly. Place newcollector/capsule/stage artifacts on HOST under independentlyowned final stage directory; only small exactmanifest+release publication on scratch. No new loose SDK5/image/launcher copy is required by source plan. Physical allocation/metadata overhead still need fresh admission and reviewed budget; do not claimzero scratchgrowth.",
+  "HOST_session_output": "Existing /home/holden/mckernel-work/native-runs/l12a1/p andretentionparent; 4GiB HOSTcapture logicalgrowth, 0 scratch output; do not include stageinput growth in that4GiB withoutreview.",
+  "producer_body_blocker": {
+    "seed_sources": [
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/candidate/pair_collector.c",
+        "sha256": "b4c019d216ab12d41559fcdb9ea3c9f9380201e8f9d4434847ec254118731431",
+        "bytes": 24161
+      },
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/candidate/pair_collector.inc",
+        "sha256": "dcfbb3a9c7199c4d06e014a7b9df9933da7c6f26ed552bc2bdca9e272a082020",
+        "bytes": 4616
+      },
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/candidate/pair_runtime.inc",
+        "sha256": "6fb3c422bd11ecfa2cfdd29eb3665f9d81eb29039cf379ebd415f07087634899",
+        "bytes": 5686
+      },
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/candidate/pair_launch_expansion_support.inc",
+        "sha256": "9348bce5f046b3285547e1348966c18b0f09cbfaa9592d04fcc3c7d2c4a64379",
+        "bytes": 8799
+      },
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/candidate/pair_launch_expansion_run.inc",
+        "sha256": "6a948ebc2a68b9f3e18cb5fded0eb8309a1bc31a94ecf4e1dccdf1bc620dacbd",
+        "bytes": 3340
+      }
+    ],
+    "seed_actual_ELF": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/stage-preparation-1/stage-launches-1/pair-init-0755",
+      "sha256": "6f6e81dc55af36e2d8067e89908490563bac13595cced02d48b6d98978288f0d",
+      "size": 1043520
+    },
+    "missing_body": "pair_run_long_session and bounded LONGtrace/progress/publication path in the init collector. Accepted seed pair_launch_expansion_run.inc::pair_run_launch_expansion loops exactly10 rounds and has no ND_PAIR_LONG_PROFILE/PROGRESS/COMPLETE/TRACE wire path.",
+    "next_implementation": "Add a separate explicitlyselected LONG producer path reusing pair_run/pair_load_results/pair_round_gate/strict per-app outputs andactualprocfs retirement. Own work>=3600s/wall<=7200s/min100launches/roundcap2048/tracecap256MiB and exact progress/completion wire. Preserve fixedten path unchanged. Compile/actualproducer-body tests need a separate ordinarygrant; do not inflate fixed10 inputs as a LONGpass.",
+    "new_ELF_bytes": null,
+    "exact_capsule_sizes_depend_on_real_producer": true
+  },
+  "existing_reserve_selection": {
+    "emergency_bytes": null,
+    "campaign_bytes": null,
+    "scratch_input_growth_bytes": null
+  },
+  "no_probe_copy_compile_test_root_or_guest": true,
+  "142_variant_preserved": true,
+  "planned_new_HOST_output_root": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/long-stage-1",
+  "planned_new_HOST_output_root_created": false
+}

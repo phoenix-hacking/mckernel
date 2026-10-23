@@ -1,0 +1,43 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "actual_controlled_linux_fields": [
+    "fork/exec PIDs",
+    "monotonic begin/reap/end and stream EOF times",
+    "wait statuses",
+    "full stdout/stderr bytes and accounting",
+    "supervisor joins"
+  ],
+  "controlled_fields": [
+    "discover OS/generation/CPU IDs",
+    "procfs-empty result",
+    "kernel syscall/route/cleanup/retirement/procfs trace",
+    "360 derivative reports with mapped PID/tokens/time",
+    "fake monotonic provider for Rust LONG loop"
+  ],
+  "contracts_reviewed": [
+    "pair exact report keys/status/cwd/argv/env/stream bytes/limits/EOF/overlap",
+    "one matched ordinary return_route between delivered and returned, opposite launcher CPU",
+    "BEGIN intent/unique ACK/terminal and ACK before successful retirement/procfs publication-deletion",
+    "two distinct retirement tokens and non-overlapping IKC queues",
+    "LONG exact profile/360 starts-reports-ends-progress/trace byte accounting/unique identities/720 controlled derivative launches/3600s synthetic work"
+  ],
+  "fixture_delta": [
+    "insert matched return_route in controlled snapshot",
+    "use successful_launches result key",
+    "wire data filename separated from command capture directory",
+    "single-pass derivative PID/tid mapping"
+  ],
+  "native_acceptance": false,
+  "actual_hour_workload": false,
+  "native_launch_credit": 0,
+  "frozen_consumers": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/source/native_diagnostic.py",
+      "sha256": "f417a029b43b1d7916e733742946a709584b0a606849f1ca2fc46647bd40dbef"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/source/p12_long_session.py",
+      "sha256": "bff717d885afdda0d82cd0ab05a0930a3e66b242c6200b1295f2173bb4cdc5d3"
+    }
+  ]
+}

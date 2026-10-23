@@ -1,0 +1,26 @@
+--- bb97-deriver
++++ explicit-json-python-reference-roles
+@@ -12,8 +12,12 @@
+ def need(v,m):
+  if not v:raise ValueError(m)
+ def digest(b):return hashlib.sha256(b).hexdigest()
+-def bound(r):
+- p=Path(r['path']);raw=p.read_bytes();need(digest(raw)==r['sha256'],'exact reference drift');return json.loads(raw)
++def bound(r, *, kind='json'):
++ need(kind in ('json', 'python'), 'exact reference role')
++ p=Path(r['path']);raw=p.read_bytes();need(digest(raw)==r['sha256'],'exact reference drift')
++ if kind == 'python':
++  ast.parse(raw, str(p));return raw
++ return json.loads(raw)
+ def main(argv=None):
+  p=argparse.ArgumentParser();p.add_argument('--profile',required=True);args=p.parse_args(argv)
+  raw=Path(args.profile).read_bytes();profile=json.loads(raw)
+@@ -32,7 +36,7 @@
+  source=(OLD/'native_diagnostic_batch.py').read_text();tree=ast.parse(source)
+  names=['operation_ancestry','epoch_authority','resource_decoder','source_cohort','first_restoration_review','release_route','linked_provider','strict_consumer']
+  pins={name:profile[name]['sha256']for name in names}
+- for name in names:bound(profile[name])
++ for name in names:bound(profile[name], kind='python' if name in ('resource_decoder','strict_consumer') else 'json')
+  substitutions=dict(PROFILE_ID=PROFILE_ID,MANIFEST_SHA=profile['manifest']['sha256'],AUTHORITY_SHA=pins)
+  lines=source.splitlines(True)
+  for node in sorted([n for n in tree.body if isinstance(n,ast.Assign)and any(isinstance(z,ast.Name)and z.id in substitutions for z in n.targets)],key=lambda n:n.lineno,reverse=True):

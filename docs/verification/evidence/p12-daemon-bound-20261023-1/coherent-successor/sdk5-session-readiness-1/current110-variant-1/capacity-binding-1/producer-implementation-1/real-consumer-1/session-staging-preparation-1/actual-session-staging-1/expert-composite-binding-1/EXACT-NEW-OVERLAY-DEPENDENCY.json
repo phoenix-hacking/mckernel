@@ -1,0 +1,44 @@
+{
+  "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "changed_names": [
+    "apps/app",
+    "bin/mcexec",
+    "bin/native-boot",
+    "images/mckernel.img",
+    "init",
+    "modules/ihk-smp-x86_64.ko",
+    "modules/ihk.ko",
+    "modules/mcctrl.ko"
+  ],
+  "forbidden_by_frozen_consumer": {
+    "bin/mcexec": {
+      "old": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 0,
+        "size": 453352,
+        "sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      },
+      "new": {
+        "mode": 33261,
+        "uid": 0,
+        "gid": 0,
+        "nlink": 1,
+        "mtime": 0,
+        "size": 394648,
+        "sha256": "dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954",
+        "rdevmajor": 0,
+        "rdevminor": 0
+      }
+    }
+  },
+  "manifest_byte_sha256_unchanged": "6c3c80bff36af0f96ce05f73294c37f035a3e12d7fdc3aeeef88fc7532c11471",
+  "new_names": [
+    "apps/app0",
+    "apps/app1"
+  ]
+}

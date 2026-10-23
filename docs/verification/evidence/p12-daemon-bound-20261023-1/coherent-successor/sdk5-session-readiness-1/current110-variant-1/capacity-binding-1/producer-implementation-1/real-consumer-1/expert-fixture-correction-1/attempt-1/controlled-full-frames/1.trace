@@ -1,0 +1,20 @@
+application SCHEDULE os=0 generation=1 pid=3 cpu=0
+application procfs published os=0 generation=1 pid=3 tid=3
+application_syscall=delivered os=0 generation=1 pid=3 worker=100 delivery=1 cpu=0 number=1
+application_syscall=return_route os=0 generation=1 pid=3 worker=100 delivery=1 launcher_cpu=1 guest_cpu=0
+application_syscall=returned os=0 generation=1 pid=3 worker=100 delivery=1 cpu=0 value=0
+application_syscall=delivered os=0 generation=1 pid=3 worker=100 delivery=2 cpu=0 number=231
+application_process=cleanup_requested os=0 generation=1 pid=3 intent_errno=0
+application cleanup ACK os=0 generation=1 pid=3 token=11000 errno=0 abandoned=0
+application retirement os=0 generation=1 pid=3 token=12000 errno=0
+application procfs deleted os=0 generation=1 pid=3 tid=3
+application SCHEDULE os=0 generation=1 pid=4 cpu=1
+application procfs published os=0 generation=1 pid=4 tid=4
+application_syscall=delivered os=0 generation=1 pid=4 worker=101 delivery=1 cpu=1 number=1
+application_syscall=return_route os=0 generation=1 pid=4 worker=101 delivery=1 launcher_cpu=0 guest_cpu=1
+application_syscall=returned os=0 generation=1 pid=4 worker=101 delivery=1 cpu=1 value=0
+application_syscall=delivered os=0 generation=1 pid=4 worker=101 delivery=2 cpu=1 number=231
+application_process=cleanup_requested os=0 generation=1 pid=4 intent_errno=0
+application cleanup ACK os=0 generation=1 pid=4 token=11001 errno=0 abandoned=0
+application retirement os=0 generation=1 pid=4 token=12001 errno=0
+application procfs deleted os=0 generation=1 pid=4 tid=4

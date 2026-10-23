@@ -1,0 +1,83 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "UNKNOWN_ACTUAL_WORK_RATE_NO_MINIMUM_DURATION_CONTRACT",
+  "matched_manifest": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/stage-preparation-1/stage-launches-1/manifest.json",
+    "sha256": "ab8cedd248f6d1c8e17a7d5b0ce888042e3e47a3741d77f086de53911a06c8ef",
+    "size": 10711
+  },
+  "source_and_original_compiler_commands": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/app0.rs",
+      "sha256": "190579c91a9f6779406071c6076d4c0ef66282c91b6763cba39d56eec7250df1",
+      "size": 10376
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/app1.rs",
+      "sha256": "756a645a1415572d2246ea7ddc03125ff3bed7ec063513072a6f86b010f876df",
+      "size": 6885
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/fp_state.S",
+      "sha256": "99191c5de5f137d14754cd6baab3d2cf4f2d9146d9fe014b7489045e118e5fa0",
+      "size": 4121
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/compile0.status.json",
+      "sha256": "0f387dc9bff9be38aca6196e6fd549d898219cbd2d750cf3828d761cbbd8d49b",
+      "size": 807
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/compile1.status.json",
+      "sha256": "b4827b7de3599170204addcf598f1cb76c7599251465941995c385fd0b29146c",
+      "size": 807
+    }
+  ],
+  "matched_payload_descriptors": [
+    {
+      "mode": 33216,
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/app0",
+      "sha256": "024fa5620735622c684283df1a8270c2d7c78f62dd82d294c544f5eb3b197ac4",
+      "size": 5685552
+    },
+    {
+      "mode": 33216,
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/app1",
+      "sha256": "1f51f0e3c8288bc05aabbc0309d1bf84abab1cbc6d8593c4ec7b1460b38163b7",
+      "size": 5666048
+    }
+  ],
+  "functional_oracles": [
+    {
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stdout_hex": "626174636820626567696e2063617365733d32206d697865645f726f756e64733d330a727573742d66696c652d726f756e647472697020696e697469616c3d3136206f76657277726974653d3420736872696e6b3d31302067726f773d3134207a65726f733d34207461696c3d61616262636320696e76616c69645f7365656b3d323220637572736f723d313420636865636b65645f636c6f73653d312072656d6f7665643d310a6d6978656420726f756e64733d332062797465735f656163683d3831393320636865636b73756d5f746f74616c3d333037323237300a66696c65733d3320636865636b65645f636c6f7365733d362072656f70656e65643d3320656f663d332072656d6f7665643d330a6a6f696e65645f746872656164733d36207475726e735f656163683d31323820636f756e7465725f746f74616c3d3736380a626174636820706173732063617365733d3220636865636b65645f636c6f7365733d372072656d6f7665643d34206a6f696e65645f746872656164733d360a"
+    },
+    {
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stdout_hex": "465054485245414420763120746872656164733d322073616d655f7065726d69747465645f6370753d312064697374696e63745f7469643d310a7468726561643020726f756e64733d363420796d6d5f6c616e65733d363420706565725f70726f67726573733d3634207969656c645f6d696e3d363420636f6e74726f6c733d303737662f3366383020726573746f7265643d310a7468726561643120726f756e64733d363420796d6d5f6c616e65733d363420706565725f70726f67726573733d3634207969656c645f6d696e3d363420636f6e74726f6c733d306237662f3566383020726573746f7265643d310a465054485245414420504153530a"
+    }
+  ],
+  "source_facts": {
+    "app0": "Three 8193-byte mixed memory/file/checksum rounds, two joined threads per round, 128 condition-variable turns per thread, plus original file-roundtrip checks. No timer-based work-duration loop.",
+    "app1": "Two FP/context threads with exactly 64 reviewed-assembly probe rounds, unchanged FP restoration/peer progress/yield and affinity oracles. No minimum wall-duration work loop.",
+    "no_sleep_or_setup_credit": true
+  },
+  "fixed_LONG_profile": {
+    "work_ns": 3600000000000,
+    "wall_ns": 7200000000000,
+    "round_cap": 2048,
+    "min_launches": 100,
+    "per_app_timeout_ns": 10000000000
+  },
+  "required_mean_union_ns_if_all_2048_rounds": 1757812500,
+  "required_mean_union_seconds": 1.7578125,
+  "union_definition": "max(actual app reaped_ns) - min(actual app started_ns), with actual overlap; setup, round drain, sleep and child-stop time receive no work credit.",
+  "matching_actual_strict_pair_report_used": null,
+  "actual_mean_union_ns": null,
+  "predicted_hour_completion": null,
+  "no_broad_timing_search_or_benchmark": true,
+  "next_minimal_provider": "Separately owned genuine Rust LONG mixed-work variants run additional checked memory/file/thread work for a measured >=~2s interval before unchanged original functional body/oracle. Preserve per-app <=10s, actual overlap, no sleeps/quota/cap/deadline changes; retain original payloads unchanged. Source contract and controlled body tests precede separately reviewed native use.",
+  "native_runtime_credit": 0
+}

@@ -1,0 +1,27 @@
+--- /home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/native_rust_exact_mckernel_image_container_owner.py
++++ /home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/native_rust_exact_mckernel_image_container_owner.py
+@@ -894,7 +894,8 @@
+ def _admit_request_gitlink(request, source_doc, source, manifest, candidate, ihk,
+                            allocation_paths, git_descriptor):
+     if source_doc.get('schema') in ('mckernel.native-fp-save-thin-inputs.v1',
+-                                     'mckernel.rust-fpu-sched-cutover-thin-inputs.v1'):
++                                     'mckernel.rust-fpu-sched-cutover-thin-inputs.v1',
++                                     'mckernel.m14-combined-production-thin-inputs.v1'):
+         _fail(request.get('gitlink_manifest') is not None and
+               request.get('gitlink_root') is not None,
+               'thin source requires supplemental libdwarf manifest and root')
+@@ -1060,10 +1061,12 @@
+     _fail(source_doc.get("schema") in ("mckernel.native-exact-mckernel-image-inputs.v1",
+                                         "mckernel.native-exact-build-inputs.v1",
+                                         "mckernel.native-fp-save-thin-inputs.v1",
+-                                        "mckernel.rust-fpu-sched-cutover-thin-inputs.v1"),
++                                        "mckernel.rust-fpu-sched-cutover-thin-inputs.v1",
++                                        "mckernel.m14-combined-production-thin-inputs.v1"),
+           "source manifest schema")
+     if source_doc.get('schema') in ('mckernel.native-fp-save-thin-inputs.v1',
+-                                     'mckernel.rust-fpu-sched-cutover-thin-inputs.v1'):
++                                     'mckernel.rust-fpu-sched-cutover-thin-inputs.v1',
++                                     'mckernel.m14-combined-production-thin-inputs.v1'):
+         _fail(request.get('source_derivative_sha256') == source_doc.get('source_derivative_sha256') and
+               request.get('materialization_sha256') == source_doc.get('materialization_sha256') and
+               request.get('candidate_identity_scope') == 'base_git_commit_only',
