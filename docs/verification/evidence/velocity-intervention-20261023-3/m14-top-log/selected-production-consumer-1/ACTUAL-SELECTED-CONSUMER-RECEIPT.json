@@ -1,0 +1,120 @@
+{
+  "CPU6_released": true,
+  "CPU_seconds": 0.7785859999999999,
+  "C_mem_provider_actual_small_object": {
+    "bytes": 209248,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/production-consumer-1/build/mem.c.o",
+    "sha256": "d53cf2a1135ab74fcfc67a811ac5abecb5b0f20582537b5bfee6a5e1b2deaab1"
+  },
+  "C_provider_count": 2,
+  "Rust_durable_object_NOT_rehashed": {
+    "ctime_ns": 1792787323141921202,
+    "device": 66306,
+    "gid": 1000,
+    "inode": 55988332,
+    "mode": "0o600",
+    "mtime_ns": 1792787323141921202,
+    "nlink": 1,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/production-fullcrate-1/mckernel_rust.o",
+    "sha256": "8abc01d72a0a8af2a98e153c0a3518a55d4170ea7bb8440e450fe8adc2538a22",
+    "size": 13752464,
+    "uid": 1000
+  },
+  "Rust_provider_count": 29,
+  "actual_C_providers": [
+    "remote_flush_tlb_array_cpumask",
+    "x86_clear_range_walk_l4_bridge"
+  ],
+  "actual_Rust_providers": [
+    "process_sched_migrate_log_bridge",
+    "sched_request_migrate",
+    "sched_request_migrate_body_result",
+    "spin_sleep_or_schedule",
+    "sched_spin_sleep_or_schedule_body_result",
+    "set_timer",
+    "get_this_cpu_local_var",
+    "timer_set_timer_body_result",
+    "process_sched_set_timer_bridge",
+    "sched_idle_loop_body_result",
+    "sched_idle_current_cpu_bridge",
+    "x86_clear_old_action_bridge",
+    "x86_clear_phys_to_virt_bridge",
+    "x86_clear_page_unmap_bridge",
+    "x86_clear_free_pages_user_bridge",
+    "page_unmap",
+    "x86_init_normal_set_large_bridge",
+    "x86_init_text_map_kernel_start_bridge",
+    "x86_init_text_end_bridge",
+    "sched_idle_begin_body_result",
+    "sched_idle_iteration_body_result",
+    "sched_idle_runqueue_has_running_result",
+    "process_sched_cpu_local_bridge",
+    "get_cpu_local_var",
+    "ihk_mc_get_processor_id",
+    "ihk_mc_pt_clear_range",
+    "ihk_mc_pt_free_range",
+    "x86_clear_range_public_body",
+    "x86_clear_range_top_log_bridge"
+  ],
+  "all_commands_return0_joined_group_absent_streams_closed": true,
+  "artifacts": {
+    "memory.c.o": {
+      "ctime_ns": 1792787648380490583,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 55988439,
+      "mode": "0o600",
+      "mtime_ns": 1792787648380490583,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/selected-production-consumer-1/memory.c.o",
+      "sha256": "2141c549e9c7fce3d0feced768f3271a54b73b1e2992efc36a0cbf6c333b1ca9",
+      "size": 156240,
+      "uid": 1000
+    },
+    "selected-consumer-provider.o": {
+      "ctime_ns": 1792787648592497444,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 55988472,
+      "mode": "0o600",
+      "mtime_ns": 1792787648592497444,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/selected-production-consumer-1/selected-consumer-provider.o",
+      "sha256": "6aa3f62ae614a9e7f7d00936830338af1f607b96e08b692aa426a9ee3b5bddd8",
+      "size": 14326616,
+      "uid": 1000
+    }
+  },
+  "commands": 8,
+  "current10972_frozen13_canonical_unchanged": true,
+  "default_GCC14_final_image_link_native": false,
+  "driver": {
+    "bytes": 7151,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/selected-production-consumer-1/run_selected_consumer.py",
+    "sha256": "1d40ec359397c5942e87b17ce159151212746390c529561a3bb1a2aa1d76eba6"
+  },
+  "failure_family": "First selectedlogger candidate PASS; no correction. Prior memory twofailures/alias history preserved.",
+  "hosted_formatter_qualification": "179200 hosted fixture pairs use Linux vsnprintf/raw varargs; production Rust formatter/native logging execution remains OPEN.",
+  "recipe": {
+    "bytes": 16969,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/selected-production-consumer-1/PREPARED-ACTUAL-CONSUMER-COMMANDS.json",
+    "sha256": "f1eb5ed05eac4e6733fdccbf630c3333944b9bec72ee07c055c28ef13ad5ae5d"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "seconds": 0.8534406629623845,
+  "status": "PASS_ACTUAL_SELECTED_GCC9_FULL_MEMORY_TU_ABI_C_BODY_EXCLUSION_AND_PARTIAL_LINK",
+  "top_logger": {
+    "C_TU_relocation_rows": [],
+    "C_TU_symbol_rows": [],
+    "C_definition_excluded": true,
+    "partial_unique_T": [
+      "0000000000000000 000000000000004d T x86_clear_range_top_log_bridge"
+    ],
+    "qualification": "Actual C TU does not import logger: Rust clear-range body calls Rust logger within production object; no C import/relocation invented."
+  },
+  "whole_join": {
+    "bytes": 12517,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-top-log/selected-production-consumer-1/actual-owned-capture-1/ACTUAL-WHOLE-JOIN.json",
+    "sha256": "c4061e8a2abff78be6a1659f008f3b97550541a1773f07e613718c6450281ebe"
+  }
+}

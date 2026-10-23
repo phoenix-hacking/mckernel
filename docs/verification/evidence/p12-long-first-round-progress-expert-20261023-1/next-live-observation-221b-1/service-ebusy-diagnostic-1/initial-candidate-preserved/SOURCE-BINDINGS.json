@@ -1,0 +1,79 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_DIAGNOSTIC_CANDIDATE_NOT_REPAIR_NOT_COMPILED",
+  "retained_expert_facts": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/trace-retention-failure-1/FINITE-CAUSE-AND-PROVENANCE.json",
+    "sha256": "105a9a49303e290dd55644f15bce9acc53c0225cca12fc2ea6105658ae343b56",
+    "bytes": 35513
+  },
+  "selected_SDK6_source_identity": "2093e464dd2dfb976016a71197a120929e16bfd830f4d643126b96ea1ea0a2e8",
+  "selected_SDK6_input_map": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk/CURRENT68-PROCFS-DELETE-INPUT-MAP.json",
+    "sha256": "c89b43285c01eb5e8f180b981eb1bec560cc6a6c05e0d491f5609754bdb8796e",
+    "bytes": 35251
+  },
+  "changes": {
+    "smp_service.rs": {
+      "selected_original": {
+        "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk/source-modules/smp_service.rs",
+        "sha256": "f439e780dd179f03813736f1526be0ecddb3b905b106bbcb6b9f9b8be9ce5bb7",
+        "bytes": 49492
+      },
+      "canonical_preimage": {
+        "path": "/home/holden/mckernel/host-kernel/native-rust/smp_service.rs",
+        "sha256": "f439e780dd179f03813736f1526be0ecddb3b905b106bbcb6b9f9b8be9ce5bb7",
+        "bytes": 49492
+      },
+      "private_postimage": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/smp_service.rs",
+        "sha256": "900499c5902d6a5b2b206aeaedd5fc8a0a48a24788bde15d0bb377bad924d094",
+        "bytes": 51196
+      }
+    },
+    "sysfs_memory.rs": {
+      "selected_original": {
+        "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk/source-modules/sysfs_memory.rs",
+        "sha256": "a06bef19cc2f0c847a4e394703f3cb0e9450c8a8453252c46745e324fe83d600",
+        "bytes": 36934
+      },
+      "canonical_preimage": {
+        "path": "/home/holden/mckernel/host-kernel/native-rust/sysfs_memory.rs",
+        "sha256": "a06bef19cc2f0c847a4e394703f3cb0e9450c8a8453252c46745e324fe83d600",
+        "bytes": 36934
+      },
+      "private_postimage": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/sysfs_memory.rs",
+        "sha256": "067b53c460b21ea7e67505992cff667c8154d3ed444e44e00226392da29b1f90",
+        "bytes": 41106
+      }
+    }
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/PRIVATE-DIAGNOSTIC.patch",
+    "sha256": "d5df0fbad18f8aa3928f20911084e8d674f04dfb88c305328280b098d90871ef",
+    "bytes": 15310
+  },
+  "unmodified_error_ownership_modules": {
+    "application_syscall.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk/source-modules/application_syscall.rs",
+      "sha256": "daaa3b0fabb002b40cafdc4d7c74ed6cdfd606e18dc82d3bb32bc3055e1a96e0",
+      "bytes": 20310
+    },
+    "smp_application_syscall.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk/source-modules/smp_application_syscall.rs",
+      "sha256": "b99874d9c1a80720f154086d40f4427f83732824dad85d8d391cc3a8a4de4360",
+      "bytes": 34808
+    },
+    "smp_application.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk/source-modules/smp_application.rs",
+      "sha256": "f5c56d83a13f10a712a4555849f52078c2d410254080150d34408011daf527a5",
+      "bytes": 72744
+    }
+  },
+  "unchanged_policy": "No retries, EBUSY handling, admission decision, claim/tag release, quarantine/ACK/deadline/oracle changes. Ledger conflicts bool predicate original bytes remain. Only diagnostics after decisions/before unchanged failures.",
+  "failure_classification": "Actualround48serviceEBUSY originunknown; firstconflict candidate is not provedcause. No worker/delivery/packetidentity inferred from adjacentvalidrecords.",
+  "diagnostic_budgets": "Separate16-entry saturating counters per Memory and perRuntime, no existingcounters modified",
+  "compiler_jobs": 0,
+  "runtime_jobs": 0,
+  "canonical_mutations": 0
+}

@@ -1,0 +1,26 @@
+--- runner.CPU0
++++ runner.CPU6
+@@ -13,17 +13,17 @@
+  if isinstance(n,(ast.Import,ast.ImportFrom)) or isinstance(n,ast.FunctionDef) and n.name in functions or isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id in assignments for t in n.targets):body.append(n)
+ ns={'__file__':str(SOURCE)};exec(compile(ast.Module(body=body,type_ignores=[]),str(SOURCE),'exec'),ns)
+ for signum in (signal.SIGTERM,signal.SIGINT,signal.SIGALRM):signal.signal(signum,ns['stop'])
+-assert os.getuid()==os.geteuid()==1000 and os.sched_getaffinity(0)=={0}
++assert os.getuid()==os.geteuid()==1000 and os.sched_getaffinity(0)=={6}
+ cap=D/'materialization-and-pure-capture-1';cap.mkdir(mode=0o700)
+ host=os.statvfs(D);scratch=os.statvfs('/home/holden/mckernel-work/scratch');back=os.stat('/home/holden/mckernel-work/scratch.ext4');gap=max(0,back.st_size-512*back.st_blocks)
+ mem=int(next(l.split()[1] for l in Path('/proc/meminfo').read_text().splitlines() if l.startswith('MemAvailable:')))*1024
+ facts=dict(scope=__doc__,HOST_available=host.f_bavail*host.f_frsize,scratch_available=scratch.f_bavail*scratch.f_frsize,backing_size=back.st_size,backing_blocks=back.st_blocks,full_sparse_gap=gap,HOST_required=17179869184+gap+16106090496+377487360+679477248+268435456+16777216,scratch_required=13631488000,MemAvailable=mem,root_reserved_memory=19*1073741824)
+ ns['write'](cap/'ACTUAL-PRE-CAPACITY.json',facts);assert facts['HOST_available']>=facts['HOST_required'] and facts['scratch_available']>=facts['scratch_required'] and mem>=19*1073741824,facts
+-materializer=D/'materialize_source.py';validator=D/'next-build-preparation-1/prepare_and_validate.py'
+-assert hashlib.sha256(materializer.read_bytes()).hexdigest()=='b5c2ff8450b1d7de1f109b9dfb964822d1864026af21a0cbd0ea5579baac5599'
+-assert hashlib.sha256(validator.read_bytes()).hexdigest()=='2869aec125085c0b4eeae8be22f5cbe1ebf8504545a36ab47cfaf40531658c06'
+-commands=[{'purpose':'Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Exact candidate13 source materialization only.','argv':['/usr/bin/taskset','-c','0','/home/holden/anaconda3/bin/python3','-I','-B',str(materializer)]},{'purpose':'Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Exact candidate13 namespace/request derivation and one complete pure validator; never run/acquire.','argv':['/usr/bin/taskset','-c','0','/home/holden/anaconda3/bin/python3','-I','-B',str(validator)]}]
+-ns['write'](cap/'commands.json',{'commands':commands,'materializer_sha256':'b5c2ff8450b1d7de1f109b9dfb964822d1864026af21a0cbd0ea5579baac5599','validator_sha256':'2869aec125085c0b4eeae8be22f5cbe1ebf8504545a36ab47cfaf40531658c06'})
++materializer=D/'materialize_source.CPU6.py';validator=D/'next-build-preparation-1/prepare_and_validate.CPU6.py'
++assert hashlib.sha256(materializer.read_bytes()).hexdigest()=='2c1c9258cf7ec2967d101a3acf35cdbf8fd5d92a8cc7efe4e68815d03c3c3a1c'
++assert hashlib.sha256(validator.read_bytes()).hexdigest()=='dc78e42131a3f0d6af7cf3cee7c52161f984e86526884f5a806b872d109618d0'
++commands=[{'purpose':'Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Exact candidate13 source materialization only.','argv':['/usr/bin/taskset','-c','6','/home/holden/anaconda3/bin/python3','-I','-B',str(materializer)]},{'purpose':'Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Exact candidate13 namespace/request derivation and one complete pure validator; never run/acquire.','argv':['/usr/bin/taskset','-c','6','/home/holden/anaconda3/bin/python3','-I','-B',str(validator)]}]
++ns['write'](cap/'commands.json',{'commands':commands,'materializer_sha256':'2c1c9258cf7ec2967d101a3acf35cdbf8fd5d92a8cc7efe4e68815d03c3c3a1c','validator_sha256':'dc78e42131a3f0d6af7cf3cee7c52161f984e86526884f5a806b872d109618d0'})
+ (D/'source-materialization-attempt-1').mkdir(mode=0o700)
+ execution_start_ns=time.time_ns();begin=time.monotonic();initial=ns['cpu_used']();results=[]
+ for i,command in enumerate(commands,1):

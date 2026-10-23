@@ -1,0 +1,11 @@
+--- validator.CPU0
++++ validator.CPU6
+@@ -12,7 +12,7 @@
+  with (D/n).open('xb') as f:f.write(b);f.flush();os.fsync(f.fileno())
+ def identity(p):
+  s=os.lstat(p);return dict(path=str(p.resolve(strict=True)),dev=s.st_dev,inode=s.st_ino,uid=s.st_uid,gid=s.st_gid,mode=stat.S_IMODE(s.st_mode),file_type=stat.S_IFMT(s.st_mode))
+-assert sys.version_info[:3]==(3,9,12) and os.getuid()==os.geteuid()==1000 and os.sched_getaffinity(0)=={0}
++assert sys.version_info[:3]==(3,9,12) and os.getuid()==os.geteuid()==1000 and os.sched_getaffinity(0)=={6}
+ begin=time.monotonic();host=os.statvfs(D);scratch=os.statvfs('/home/holden/mckernel-work/scratch');back=os.stat('/home/holden/mckernel-work/scratch.ext4');gap=max(0,back.st_size-512*back.st_blocks)
+ mem=int(next(l.split()[1] for l in Path('/proc/meminfo').read_text().splitlines() if l.startswith('MemAvailable:')))*1024
+ capacity=dict(scope=__doc__,HOST_available=host.f_bavail*host.f_frsize,scratch_available=scratch.f_bavail*scratch.f_frsize,backing_size=back.st_size,backing_blocks=back.st_blocks,full_sparse_gap=gap,HOST_required=17179869184+gap+16106090496+377487360+679477248+67108864,scratch_required=13631488000,MemAvailable=mem,root_planning_reservation=19*1073741824)

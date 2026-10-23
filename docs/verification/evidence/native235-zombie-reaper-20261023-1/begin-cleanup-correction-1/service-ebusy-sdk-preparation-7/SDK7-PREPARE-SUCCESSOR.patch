@@ -1,0 +1,74 @@
+--- /home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepare.py
++++ /home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-7/prepare.py
+@@ -13,13 +13,15 @@
+ 
+ R = Path('/home/holden/mckernel')
+ E = Path(__file__).resolve().parent / 'metadata'
+-OLD = Path('/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/prepared-sdk')
+-H = Path('/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk')
++OLD = Path('/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk')
++H = Path('/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-7/prepared-sdk')
+ SCOPE = 'Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
+-ALLOWED_CHANGED_SOURCES = {'smp_service.rs'}
++ALLOWED_CHANGED_SOURCES = {'smp_application.rs', 'sysfs_rpc.rs', 'abi/sysfs_request.rs', 'sysfs_remote.rs', 'smp_service.rs', 'sysfs_zeroing.rs', 'sysfs_memory.rs'}
++FROZEN_CANDIDATES = {'abi/sysfs_request.rs': {'bytes': 9521, 'path': '/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/abi/sysfs_request.rs', 'sha256': '1b89d1261d218c39d531cfe00181a30562d9953deae5ac0956641f407239df0f'}, 'smp_application.rs': {'bytes': 74960, 'path': '/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/smp_application.rs', 'sha256': '6adb4d11e7285caadd699bf22359bf21922f7dbfa4828b12b7a96fb7a1b07be0'}, 'smp_service.rs': {'bytes': 52131, 'path': '/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/smp_service.rs', 'sha256': 'f5e862cf7f833a4a63b27820b4a594f7ce2b64302f08ccfbba9c8bf66ef2b398'}, 'sysfs_memory.rs': {'bytes': 44674, 'path': '/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/sysfs_memory.rs', 'sha256': 'aa98b251e973cee018cec6d69586d99a56c9ea1d208f69c4a645696254af2004'}, 'sysfs_remote.rs': {'bytes': 13048, 'path': '/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/sysfs_remote.rs', 'sha256': 'b9bb72eb6c4986067e2557e15ac625d90cfddcb53f38c8b99cc3648e85f0d117'}, 'sysfs_rpc.rs': {'bytes': 8000, 'path': '/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/sysfs_rpc.rs', 'sha256': '39c5ff87b671c498afffcff9feb10833918d75207559462952803858fb218131'}, 'sysfs_zeroing.rs': {'bytes': 12908, 'path': '/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/source/sysfs_zeroing.rs', 'sha256': '6d35d46758ccf5092db91780bbc35f8e0cacc0e8a3201379d5af95e6bf97f94e'}}
++ACTUAL_TESTS = {'path': '/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/ACTUAL-FIXTURE-RECEIPT.CORRECTION-1.json', 'sha256': '7f1a64908c3e3923a42868bc3195d5101b671b3c229d04da5636c297e9329220'}
+ EXPECTED = None  # Bound only from genuine accepted SOURCE-ACCEPTANCE.INPUT.json at main().
+ 
+-OLD_PINS = {'preparation.json': 'b04df1ec9d82ea0b5eff91ba1570ab1abf5d2035fbe3be9962c893eac37936d5', 'derived-runtime/native_running_external_modules_offline.py': 'bdcdd52cceb789778ab1c1b6ceedc743d030e64241f8a32dc674f60eb5230f1f', 'derived-runtime/native_running_external_modules_owner.py': '67aa07243f6f7e07afdc988b28c5de383cb2da07151886e67b1f6c7e8480f72b'}
++OLD_PINS = {'preparation.json': '19b0c4ced20df432a6e4944c8f38ff13ba509959808eed3b1cc285c589bcb2b6', 'derived-runtime/native_running_external_modules_offline.py': '6f41bd90f352cae9848a9c7877984b05c89b24a830d1a2ad018853079be4e056', 'derived-runtime/native_running_external_modules_owner.py': 'a5b919adfed8ee5e7e3f154e0385ae3063e86ea1314bfc60d50115f4bf0b0ef3'}
+ 
+ def digest(path):
+     return hashlib.sha256(path.read_bytes()).hexdigest()
+@@ -72,7 +74,9 @@
+     gate = json.loads(plain(gate_path).read_text())
+     assert gate['status'] == 'ACCEPTED_FROZEN_SOURCE_READY_FOR_SDK_PREPARATION'
+     candidates = gate['candidates']
+-    assert type(candidates) is dict and candidates and set(candidates) <= ALLOWED_CHANGED_SOURCES
++    assert type(candidates) is dict and set(candidates) == ALLOWED_CHANGED_SOURCES
++    assert candidates == FROZEN_CANDIDATES
++    assert gate['changed_relative_rows'] == sorted(ALLOWED_CHANGED_SOURCES)
+     selected = {}
+     for relative, candidate in candidates.items():
+         assert set(candidate) == {'path', 'sha256', 'bytes'}
+@@ -89,7 +93,7 @@
+     global EXPECTED
+     EXPECTED = {relative: candidate['sha256'] for relative, candidate in candidates.items()}
+     assert review['candidate_sha256_by_relative'] == EXPECTED
+-    assert gate['actual_tests'] is not None and set(gate['actual_tests']) == {'path', 'sha256'}
++    assert gate['actual_tests'] == ACTUAL_TESTS and set(gate['actual_tests']) == {'path', 'sha256'}
+     assert digest(plain(Path(gate['actual_tests']['path']))) == gate['actual_tests']['sha256']
+     E.mkdir(mode=0o700, exist_ok=False)
+     H.mkdir(mode=0o700, exist_ok=False)
+@@ -173,10 +177,10 @@
+         request[key] = None
+     template = H / 'REQUEST.TEMPLATE.PENDING-LIVE-IDENTITIES.json'
+     save(template, request)
+-    stage_source = Path('/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/metadata/stage_bound_successor.py')
++    stage_source = Path('/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/metadata/stage_bound_successor.py')
+     stage = stage_source.read_text().replace(str(OLD), str(H)).replace(OLD_PINS['preparation.json'], digest(prep)).replace(
+-        '9c96ba665d8d4ef19f81420e9fe33814', nonce).replace(
+-        'a54063def7631367ef32427b9c730a3d68ad37c1344e0a338eb8f1dadecd0719', digest(template))
++        '33f4428ac1c74917bcd6715cdbaee963', nonce).replace(
++        '1aa123b41ad92fdff0f0dce0ca0ff9c976d4a35aed9aa1ecb94226ba0b28109f', digest(template))
+     ast.parse(stage)
+     write(E / 'stage_bound_successor.py', stage.encode())
+     write(E / 'MATERIALIZER.patch', ''.join(difflib.unified_diff(
+@@ -224,7 +228,7 @@
+                    Docker_operations=0, scratch_writes=0,
+                    profile_unchanged=dict(container_CPUs='2-5', container_memory_bytes=12*1024**3,
+                                           container_swap=0, container_tasks=512, make_jobs=2, network='none', backing_GiB=110),
+-                   expected_binary_delta=dict(ihk='stable expected; verify actual build', ihk_smp_x86_64='change expected iff accepted smp_application.rs/smp_service.rs/procfs_objects.rs provider delta; actual artifact proof required', mcctrl='stable06e8 expected; actual artifact proof required'),
++                   expected_binary_delta=dict(ihk='stable expected; verify actual build', ihk_smp_x86_64='change expected from accepted seven-file diagnostic source delta; actual artifact proof required', mcctrl='stable06e8 expected; actual artifact proof required'),
+                    required_next=['independent coherent SDK preparation review',
+                                   'root source/input staging and fresh live identities/capacity/leases',
+                                   'independent exact execution release', 'actual module build and artifact/physical review'])
+@@ -232,7 +236,7 @@
+     save(E / 'PREPARATION-RESULT.json', summary)
+     validation = dict(scope=SCOPE, status='PASS_PURE_DERIVED_DRIVER_AND_OWNER_PREPARATION_CHECKS',
+                       actual_pure_bodies=['driver.load_preparation', 'driver.plan', 'owner.validate_preparation'],
+-                      checks=ast_checks + ['exact independently accepted nonempty selected subset of smp_application.rs/smp_service.rs/procfs_objects.rs only; current_fork_control812/mcctrl_vmba95/WAIT8bf and entry aliases unchanged', '15 exact small prepared inputs',
++                      checks=ast_checks + ['exact independently accepted frozen seven-key diagnostic source map only; current_fork_control812/mcctrl_vmba95/WAIT8bf and entry aliases unchanged', '15 exact small prepared inputs',
+                                             'unchanged source dependency sets', 'unchanged compatibility MM sources and all runtime check bodies',
+                                             'unchanged110GiB owner geometry; fresh nonce/output roots', 'accepted predecessor pins unchanged'],
+                       plan=plan, elapsed_seconds=time.time()-started, staging_executed=False,

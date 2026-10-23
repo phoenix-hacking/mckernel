@@ -74,6 +74,42 @@ fn errno(code: i32) -> Error {
     kernel::error::to_result(code).err().unwrap_or(EIO)
 }
 
+// Diagnostic-only types. They carry host-owned route fields or the already
+// decoded message header, never packet padding or an inferred worker/delivery.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum FailureOrigin {
+    Packet { channel: usize, guest_cpu: u32, port: i32, message: i32 },
+    ControlPump,
+    RegularPump,
+    PublishRemote,
+    PublishApplications,
+    PublishSyscalls,
+    AdvanceApplications,
+    PublishProcfs,
+    Metadata,
+    Zeroing,
+}
+
+impl FailureOrigin {
+    fn label(self) -> &'static str {
+        match self {
+            Self::Packet { .. } => "packet_dispatch",
+            Self::ControlPump => "control_pump", Self::RegularPump => "regular_pump",
+            Self::PublishRemote => "publish_remote", Self::PublishApplications => "publish_apps",
+            Self::PublishSyscalls => "publish_syscalls", Self::AdvanceApplications => "advance_apps",
+            Self::PublishProcfs => "publish_procfs", Self::Metadata => "metadata", Self::Zeroing => "zeroing",
+        }
+    }
+}
+
+// A separate saturating diagnostic budget does not change existing counters,
+// admission, ownership, errors, quarantine or the service's work scheduling.
+fn diagnostic_ticket(counter: &AtomicU64) -> Option<u64> {
+    counter.fetch_update(Ordering::Relaxed, Ordering::Relaxed, |old| {
+        if old < 16 { Some(old + 1) } else { None }
+    }).ok().map(|old| old + 1)
+}
+
 struct Metadata {
     claim: memory::Claim,
     request: wire::Request,
@@ -142,6 +178,7 @@ struct Runtime {
     error: AtomicI32,
     completed: AtomicU64,
     rejected: AtomicU64,
+    failure_contexts: AtomicU64,
     zeroed: AtomicU64,
     eventfd_notifications: [AtomicU64; 3],
     #[pin]
@@ -159,7 +196,19 @@ struct Runtime {
 }
 
 impl Runtime {
-    fn fail(&self, error: Error) {
+    fn failure_context(&self, error: Error, origin: FailureOrigin) {
+        if let Some(diag) = diagnostic_ticket(&self.failure_contexts) {
+            pr_err!("IHK-E os={} g={} d={} at={} e={}\n",
+                self.owner.slot(), self.owner.generation(), diag, origin.label(), error.to_errno());
+            if let FailureOrigin::Packet { channel, guest_cpu, port, message } = origin {
+                pr_err!("IHK-P os={} g={} d={} ch={} c={} port={} m={:x}\n",
+                    self.owner.slot(), self.owner.generation(), diag, channel, guest_cpu, port, message);
+            }
+        }
+    }
+
+    fn fail(&self, error: Error, origin: FailureOrigin) {
+        self.failure_context(error, origin);
         if self.application.fail_service(&self.error, error) {
             pr_err!("IHK-SMP: continuing service error os={} generation={} errno={}; workers and all started owners retained\n",
                 self.owner.slot(), self.owner.generation(), error.to_errno());
@@ -466,7 +515,7 @@ impl Runtime {
     fn pump_regular(&self) -> Result {
         for index in 0..self.cpus.len() + 1 {
             for _ in 0..16 {
-                let (port, packet) = {
+                let (port, guest_cpu, packet) = {
                     let mut transport = self.transport.lock();
                     let Some(entry) = transport.channels.get_mut(index) else {
                         break;
@@ -487,7 +536,7 @@ impl Runtime {
                             packet
                         }
                     };
-                    (entry.channel.port, packet)
+                    (entry.channel.port, entry.channel.guest_cpu, packet)
                 };
                 // No channel/tree/resource mutex spans reply completion or
                 // metadata admission. The two workers cannot wait on each
@@ -506,7 +555,10 @@ impl Runtime {
                     .ok_or(EIO)?
                     .pending = None;
                 if let Err(error) = result {
-                    self.fail(error);
+                    self.fail(error, FailureOrigin::Packet {
+                        channel: index, guest_cpu, port,
+                        message: i32::from_le_bytes(packet[8..12].try_into().unwrap()),
+                    });
                 }
             }
         }
@@ -574,25 +626,25 @@ impl Runtime {
         // Handle each result before invoking the next service. An array of
         // Results would eagerly publish later work before recording failure.
         if let Err(error) = self.pump_master() {
-            self.fail(error);
+            self.fail(error, FailureOrigin::ControlPump);
         }
         if let Err(error) = self.pump_regular() {
-            self.fail(error);
+            self.fail(error, FailureOrigin::RegularPump);
         }
         if let Err(error) = self.publish_remote() {
-            self.fail(error);
+            self.fail(error, FailureOrigin::PublishRemote);
         }
         if let Err(error) = self.publish_applications() {
-            self.fail(error);
+            self.fail(error, FailureOrigin::PublishApplications);
         }
         if let Err(error) = self.publish_syscalls() {
-            self.fail(error);
+            self.fail(error, FailureOrigin::PublishSyscalls);
         }
         if let Err(error) = self.application.advance() {
-            self.fail(error);
+            self.fail(error, FailureOrigin::AdvanceApplications);
         }
         if let Err(error) = self.publish_procfs() {
-            self.fail(error);
+            self.fail(error, FailureOrigin::PublishProcfs);
         }
     }
 
@@ -720,12 +772,12 @@ unsafe extern "C" fn run(data: *mut core::ffi::c_void) -> i32 {
             Role::Packets => entry.runtime.pump(),
             Role::Metadata => {
                 if let Err(error) = entry.runtime.metadata() {
-                    entry.runtime.fail(error);
+                    entry.runtime.fail(error, FailureOrigin::Metadata);
                 }
             }
             Role::Zeroing => {
                 if let Err(error) = entry.runtime.zeroing() {
-                    entry.runtime.fail(error);
+                    entry.runtime.fail(error, FailureOrigin::Zeroing);
                 }
             }
         }
@@ -1229,6 +1281,7 @@ pub(super) fn prepare(
             master_receive: receive, master_send: send, master_bytes: queue_bytes,
             status_address,
             error: AtomicI32::new(0), completed: AtomicU64::new(0), rejected: AtomicU64::new(0),
+            failure_contexts: AtomicU64::new(0),
             zeroed: AtomicU64::new(0),
             eventfd_notifications: [AtomicU64::new(0), AtomicU64::new(0), AtomicU64::new(0)],
             transport <- new_mutex!(Transport { channels: Vec::new(), master_reply: None }),

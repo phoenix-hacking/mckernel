@@ -44,6 +44,60 @@ struct Tagged {
     serial: u64,
 }
 
+// Diagnostic snapshots contain only initialized, host-owned ledger fields.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum ConflictKind { Fixed, Request, Payload, Response, ExecPayload, Snoop, Procfs, Zeroing }
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+struct FailureConflict {
+    kind: ConflictKind,
+    slot: usize,
+    member: Option<usize>,
+    serial: Option<u64>,
+    span: Span,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+struct SyscallFailureContext {
+    cpu: i32, pid: i32, requester: i32, target: i32, number: u64,
+    response: u64, response_end: Option<u64>,
+    conflict: Option<FailureConflict>,
+}
+
+fn syscall_failure_context(request: &SyscallRequest, conflict: Option<FailureConflict>) -> SyscallFailureContext {
+    SyscallFailureContext {
+        cpu: request.cpu(), pid: request.pid(), requester: request.requester(),
+        target: request.target(), number: request.number(),
+        response: request.response(), response_end: request.response().checked_add(RESPONSE_BYTES as u64),
+        conflict,
+    }
+}
+
+fn log_conflict(os: u32, generation: u64, diag: u64, conflict: Option<FailureConflict>) {
+    if let Some(old) = conflict {
+        pr_err!("IHK-C os={} g={} d={} k={:?} i={} j={:?} s={:?}\n",
+            os, generation, diag, old.kind, old.slot, old.member, old.serial);
+        pr_err!("IHK-O os={} g={} d={} a={:x} b={:x}\n",
+            os, generation, diag, old.span.physical, old.span.end);
+    } else {
+        pr_err!("IHK-C os={} g={} d={} k=none\n", os, generation, diag);
+    }
+}
+
+fn log_syscall_failure(os: u32, generation: u64, diag: u64, error: Error, context: SyscallFailureContext) {
+    pr_err!("IHK-E os={} g={} d={} at=syscall_claim e={}\n", os, generation, diag, error.to_errno());
+    pr_err!("IHK-P os={} g={} d={} c={} p={} rq={} to={}\n",
+        os, generation, diag, context.cpu, context.pid, context.requester, context.target);
+    if let Some(end) = context.response_end {
+        pr_err!("IHK-S os={} g={} d={} n={:x} a={:x} b={:x}\n",
+            os, generation, diag, context.number, context.response, end);
+    } else {
+        pr_err!("IHK-S os={} g={} d={} n={:x} a={:x} b=none\n",
+            os, generation, diag, context.number, context.response);
+    }
+    log_conflict(os, generation, diag, context.conflict);
+}
+
 struct Ledger {
     fixed: Vec<Span>,
     requests: Vec<Option<Tagged>>,
@@ -81,6 +135,45 @@ impl Ledger {
             || self.zeroing.iter().any(|old| old.span.overlaps(span))
     }
 
+    // Read-only diagnostic traversal after the ORIGINAL conflicts predicate
+    // already chose EBUSY. Keep its first-match order; never use this observer
+    // to admit/reject, retire a tag, acquire a claim or interpret guest bytes.
+    fn diagnostic_conflict(&self, span: Span, snoops: bool) -> Option<FailureConflict> {
+        for (slot, old) in self.fixed.iter().enumerate() {
+            if old.overlaps(span) {
+                return Some(FailureConflict { kind: ConflictKind::Fixed, slot, member: None, serial: None, span: *old });
+            }
+        }
+        for (kind, slots) in [(ConflictKind::Request, &self.requests), (ConflictKind::Payload, &self.payloads), (ConflictKind::Response, &self.responses)] {
+            for (slot, old) in slots.iter().enumerate() {
+                if let Some(old) = old {
+                    if old.span.overlaps(span) {
+                        return Some(FailureConflict { kind, slot, member: None, serial: Some(old.serial), span: old.span });
+                    }
+                }
+            }
+        }
+        for (slot, group) in self.exec_payloads.iter().enumerate() {
+            if let Some(group) = group {
+                for (member, old) in group.iter().enumerate() {
+                    if old.span.overlaps(span) {
+                        return Some(FailureConflict { kind: ConflictKind::ExecPayload, slot, member: Some(member), serial: Some(old.serial), span: old.span });
+                    }
+                }
+            }
+        }
+        for (kind, tags, enabled) in [(ConflictKind::Snoop, &self.snoops, snoops), (ConflictKind::Procfs, &self.procfs, true), (ConflictKind::Zeroing, &self.zeroing, true)] {
+            if enabled {
+                for (slot, old) in tags.iter().enumerate() {
+                    if old.span.overlaps(span) {
+                        return Some(FailureConflict { kind, slot, member: None, serial: Some(old.serial), span: old.span });
+                    }
+                }
+            }
+        }
+        None
+    }
+
     fn tag(&mut self, span: Span) -> Result<Tagged> {
         self.serial = self.serial.checked_add(1).ok_or_else(|| errno(-75))?;
         Ok(Tagged {
@@ -97,6 +190,7 @@ pub(super) struct Memory {
     extents: Vec<MemoryExtent>,
     layout: crate::smp_image::BootLayout,
     numa_nodes: usize,
+    failure_contexts: AtomicU64,
     #[pin]
     ledger: Mutex<Ledger>,
 }
@@ -167,6 +261,7 @@ impl Memory {
         Arc::pin_init(
             pin_init!(Self {
                 owner, direct_map, extents, layout, numa_nodes,
+                failure_contexts: AtomicU64::new(0),
                 ledger <- new_mutex!(Ledger { fixed, requests, responses, payloads, exec_payloads, snoops: Vec::new(), procfs, zeroing: Vec::new(), serial: 0 }),
             }),
             GFP_KERNEL,
@@ -211,6 +306,8 @@ impl Memory {
         let span = Span::new(physical, bytes)?;
         let mut ledger = self.ledger.lock();
         if ledger.conflicts(span, true) {
+            self.diagnostic_conflict_failure("procfs_overlap", span,
+                ledger.diagnostic_conflict(span, true), None, false, None);
             return Err(EBUSY);
         }
         if ledger.procfs.len() == 4096 + METADATA_CAPACITY + 2 {
@@ -220,10 +317,15 @@ impl Memory {
         // CREATE field in a retained owner extent. Holding `ledger` excludes
         // every host alias; the guest shares this field only through atomic
         // accesses, and `from_ptr` creates no borrowed reference.
-        if create
-            && unsafe { AtomicI32::from_ptr(address as *mut i32) }.load(Ordering::Acquire) != 0
-        {
-            return Err(EBUSY);
+        if create {
+            let done = unsafe { AtomicI32::from_ptr(address as *mut i32) }.load(Ordering::Acquire);
+            if done != 0 {
+                if let Some(diag) = super::diagnostic_ticket(&self.failure_contexts) {
+                    pr_err!("IHK-W os={} g={} d={} at=procfs_create a={:x} v={} e=-16\n",
+                        self.owner.slot(), self.owner.generation(), diag, physical, done);
+                }
+                return Err(EBUSY);
+            }
         }
         let tag = ledger.tag(span)?;
         ledger.procfs.push(tag, GFP_KERNEL)?;
@@ -345,43 +447,89 @@ impl Memory {
         })
     }
 
+    fn diagnostic_conflict_failure(&self, at: &'static str, span: Span,
+        conflict: Option<FailureConflict>, own: Option<Tagged>, node_overlap: bool,
+        route: Option<(i32, i32)>) {
+        if let Some(diag) = super::diagnostic_ticket(&self.failure_contexts) {
+            pr_err!("IHK-E os={} g={} d={} at={} e=-16 node={}\n",
+                self.owner.slot(), self.owner.generation(), diag, at, node_overlap as u8);
+            pr_err!("IHK-S os={} g={} d={} a={:x} b={:x}\n",
+                self.owner.slot(), self.owner.generation(), diag, span.physical, span.end);
+            if let Some((pid, cpu)) = route {
+                pr_err!("IHK-P os={} g={} d={} p={} c={}\n",
+                    self.owner.slot(), self.owner.generation(), diag, pid, cpu);
+            }
+            if let Some(own) = own {
+                pr_err!("IHK-T os={} g={} d={} s={} a={:x} b={:x}\n",
+                    self.owner.slot(), self.owner.generation(), diag, own.serial, own.span.physical, own.span.end);
+            }
+            log_conflict(self.owner.slot(), self.owner.generation(), diag, conflict);
+        }
+    }
+
+    fn diagnostic_completion_failure(&self, kind: wire::Kind, tag: Tagged, operation_error: i32, busy: i32) {
+        if let Some(diag) = super::diagnostic_ticket(&self.failure_contexts) {
+            pr_err!("IHK-M os={} g={} d={} k={:?} busy={} op_e={} e=-16\n",
+                self.owner.slot(), self.owner.generation(), diag, kind, busy, operation_error);
+            pr_err!("IHK-T os={} g={} d={} s={} a={:x} b={:x}\n",
+                self.owner.slot(), self.owner.generation(), diag, tag.serial, tag.span.physical, tag.span.end);
+        }
+    }
+
     pub(super) fn syscall(self: &Arc<Self>, request: &SyscallRequest) -> Result<SyscallResponse> {
-        let physical = request.response();
-        if physical % 8 != 0 {
-            return Err(EINVAL);
+        let mut conflict = None;
+        let result = (|| {
+            let physical = request.response();
+            if physical % 8 != 0 {
+                return Err(EINVAL);
+            }
+            let address = self.address(physical, RESPONSE_BYTES)?;
+            let span = Span::new(physical, RESPONSE_BYTES)?;
+            let mut ledger = self.ledger.lock();
+            if ledger.conflicts(span, true) {
+                conflict = ledger.diagnostic_conflict(span, true);
+                return Err(EBUSY);
+            }
+            let slot = ledger
+                .responses
+                .iter()
+                .position(Option::is_none)
+                .ok_or(EAGAIN)?;
+            // SAFETY: The checked exact-generation RAM is aligned and disjoint
+            // from every active service access. The guest owns only atomic state.
+            let status = unsafe { AtomicU64::from_ptr((address as *mut u8).add(8).cast()) };
+            // SAFETY: The same retained, response-sized mapping covers the
+            // eight-byte-aligned state word at offset 16. The held ledger claim
+            // excludes host aliases, while the guest accesses this shared word
+            // atomically; this creates no Rust reference to guest memory.
+            let state = unsafe { AtomicU64::from_ptr((address as *mut u8).add(16).cast()) };
+            if status.load(Ordering::Acquire) != 0 || !matches!(state.load(Ordering::Acquire), 0 | 2) {
+                return Err(errno(-71));
+            }
+            let tag = ledger.tag(span)?;
+            ledger.responses[slot] = Some(tag);
+            Ok(SyscallResponse {
+                memory: self.clone(),
+                address,
+                tag,
+                slot,
+                payload: None,
+                exec_group: None,
+            })
+        
+        })();
+        // The original ledger guard has ended. The copied snapshot has no
+        // borrowed tag/pointer, and this diagnostic runs BEFORE returning the
+        // same error to the unchanged mailbox/Remote quarantine path.
+        if let Err(error) = &result {
+            if *error != EAGAIN {
+                if let Some(diag) = super::diagnostic_ticket(&self.failure_contexts) {
+                    log_syscall_failure(self.owner.slot(), self.owner.generation(), diag,
+                        *error, syscall_failure_context(request, conflict));
+                }
+            }
         }
-        let address = self.address(physical, RESPONSE_BYTES)?;
-        let span = Span::new(physical, RESPONSE_BYTES)?;
-        let mut ledger = self.ledger.lock();
-        if ledger.conflicts(span, true) {
-            return Err(EBUSY);
-        }
-        let slot = ledger
-            .responses
-            .iter()
-            .position(Option::is_none)
-            .ok_or(EAGAIN)?;
-        // SAFETY: The checked exact-generation RAM is aligned and disjoint
-        // from every active service access. The guest owns only atomic state.
-        let status = unsafe { AtomicU64::from_ptr((address as *mut u8).add(8).cast()) };
-        // SAFETY: The same retained, response-sized mapping covers the
-        // eight-byte-aligned state word at offset 16. The held ledger claim
-        // excludes host aliases, while the guest accesses this shared word
-        // atomically; this creates no Rust reference to guest memory.
-        let state = unsafe { AtomicU64::from_ptr((address as *mut u8).add(16).cast()) };
-        if status.load(Ordering::Acquire) != 0 || !matches!(state.load(Ordering::Acquire), 0 | 2) {
-            return Err(errno(-71));
-        }
-        let tag = ledger.tag(span)?;
-        ledger.responses[slot] = Some(tag);
-        Ok(SyscallResponse {
-            memory: self.clone(),
-            address,
-            tag,
-            slot,
-            payload: None,
-            exec_group: None,
-        })
+        result
     }
 
     /// Reserve queue aliases while the caller allocates and stores both owned
@@ -551,7 +699,11 @@ impl Claim {
         // SAFETY: The unique original claim is still excluded by the ledger
         // lock. Completion writes error/handle before its final release store;
         // no guest memory is accessed by us after that store.
-        unsafe { wire::complete(self.kind, self.address as *mut u8, error, handle) }.map_err(errno)
+        unsafe { wire::complete_observed(self.kind, self.address as *mut u8, error, handle, |busy| {
+            // This is the original failed busy load, under the still-held
+            // exclusive ledger mutex, before any final store or peer reuse.
+            self.memory.diagnostic_completion_failure(busy.kind, self.tag, error, busy.value);
+        }) }.map_err(errno)
     }
 
     pub(super) fn complete(mut self, result: Result<Option<u64>>) -> Result {

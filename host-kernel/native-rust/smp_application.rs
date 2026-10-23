@@ -11,7 +11,7 @@ use super::{
     smp_memory::{ProcfsProcess, ProcfsRemote, SyscallResponse},
     smp_resource::OsToken,
 };
-use core::sync::atomic::{AtomicBool, AtomicI32, AtomicUsize, Ordering};
+use core::sync::atomic::{AtomicBool, AtomicI32, AtomicU64, AtomicUsize, Ordering};
 use kernel::{
     bindings,
     prelude::*,
@@ -283,6 +283,7 @@ pub(crate) struct Remote {
     #[pin]
     changed: CondVar,
     syscall_cursor: AtomicUsize,
+    failure_contexts: AtomicU64,
     transport_error: AtomicI32,
     shutdown_closed: AtomicBool,
     pagers: Arc<Pagers>,
@@ -302,7 +303,7 @@ impl Remote {
         }
         Arc::pin_init(
             pin_init!(Self { owner, procfs, slots <- new_mutex!(slots), changed <- new_condvar!(),
-                syscall_cursor: AtomicUsize::new(0), transport_error: AtomicI32::new(0), shutdown_closed: AtomicBool::new(false), pagers, release_token,
+                syscall_cursor: AtomicUsize::new(0), failure_contexts: AtomicU64::new(0), transport_error: AtomicI32::new(0), shutdown_closed: AtomicBool::new(false), pagers, release_token,
                 releases <- new_mutex!(releases) }),
             GFP_KERNEL,
         )
@@ -534,6 +535,27 @@ impl Remote {
         Ok(())
     }
 
+    fn diagnostic_application_failure(&self, at: &'static str, entry: &Entry, cpu: i32, error: Error) {
+        if let Ok(ticket) = self.failure_contexts.fetch_update(Ordering::Relaxed, Ordering::Relaxed,
+            |old| if old < 16 { Some(old + 1) } else { None }) {
+            let diag = ticket + 1;
+            let prepare = entry.prepare.as_ref().and_then(|image| image.result());
+            let revoke = entry.fork_ingress.as_ref().is_some_and(|owner| owner.host_revoke.is_some());
+            let sealed = entry.fork_ingress.as_ref().map(|owner| owner.sealed.load(Ordering::Acquire));
+            pr_err!("IHK-A os={} g={} d={} at={} p={} c={} e={}\n",
+                self.owner.slot(), self.owner.generation(), diag, at, entry.cleanup.pid(), cpu, error.to_errno());
+            pr_err!("IHK-B os={} g={} d={} prep={} ret={:?} rev={} inh={} seal={:?}\n",
+                self.owner.slot(), self.owner.generation(), diag, entry.prepare.is_some() as u8,
+                prepare, revoke as u8, entry.inherited_root.is_some() as u8, sealed);
+            pr_err!("IHK-F os={} g={} d={} need={} sch={} q={} closed={} drain={} res={} ret={:?}\n",
+                self.owner.slot(), self.owner.generation(), diag, entry.needs_cleanup as u8,
+                entry.scheduled as u8, entry.quarantined as u8, entry.closed as u8,
+                entry.syscalls.drained() as u8, entry.cleanup.reserved() as u8, entry.cleanup.result());
+            pr_err!("IHK-K os={} g={} d={} token={:x}\n",
+                self.owner.slot(), self.owner.generation(), diag, entry.cleanup.token().wire());
+        }
+    }
+
     pub(crate) fn procfs_process(&self, pid: i32, cpu: i32) -> Result<Arc<ProcfsProcess>> {
         let slots = self.slots.lock();
         let entry = slots
@@ -541,7 +563,10 @@ impl Remote {
             .flatten()
             .find(|entry| entry.cleanup.pid() == pid)
             .ok_or(ENOENT)?;
-        entry.backend_ready()?;
+        if let Err(error) = entry.backend_ready() {
+            self.diagnostic_application_failure("procfs_backend", entry, cpu, error);
+            return Err(error);
+        }
         if entry.quarantined || cpu < 0 {
             return Err(EINVAL);
         }
@@ -644,7 +669,12 @@ impl Remote {
                             prepare.exchange.token().wire(), prepare.result().unwrap(),
                             prepare.exchange.abandoned() as u8, entry.quarantined as u8);
                         if entry.needs_cleanup && !entry.quarantined {
-                            entry.request_cleanup()?;
+                            if let Err(error) = entry.request_cleanup() {
+                                // Returned sub-guard context only; no inference
+                                // about a delivery or cleanup phase is made.
+                                self.diagnostic_application_failure("prepare_cleanup", entry, entry.cleanup.cpu(), error);
+                                return Err(error);
+                            }
                         }
                         return Ok(());
                     }

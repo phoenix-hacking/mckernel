@@ -1,0 +1,30 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "utc": "2026-10-23T20:15:54.881073+00:00",
+  "reviewer": "/root/m14_build_release_review",
+  "verdict": "PASS_GCC9_SELECTED_WHOLE_MEMORY_TU_ABI_OWNERSHIP_AND_PARTIAL_LINK_ONLY",
+  "actual_receipt": {
+    "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/selected-production-consumer-1/ACTUAL-SELECTED-CONSUMER-RECEIPT.json",
+    "sha256": "66bfde9e222d21587fcae4b44b860ddd38c504208131652b5d7c21e19c791412"
+  },
+  "whole_join_sha256": "d63c8c11566da7e4640b56f7c1e5aa6b320631204248063ee1bf11ec2f7e612e",
+  "observations": [
+    "Eight commands returned zero, directly joined, groups absent, streams closed, empty stderr and null capture/retirement errors.",
+    "Actual PUBLIC preprocessing excludes original C clear/free bodies; complete GCC9 memory TU and real-header six-input/adapters/callback assertions pass.",
+    "C imports x86_clear_range_public_body with R_X86_64_PLTOFF64 relocation; clear/free C imports absent and not required.",
+    "Ordinary three-input ld -r gives unique T and no U for each of 28 Rust and three C providers; 390 other undefined symbols remain.",
+    "Retained c2564 Rust receipt and fresh metadata agree; no Rust recompile or large object rehash."
+  ],
+  "remaining_C": [
+    "remote_flush_tlb_array_cpumask",
+    "x86_clear_range_top_log_bridge",
+    "x86_clear_range_walk_l4_bridge"
+  ],
+  "open": [
+    "GCC14",
+    "default image link",
+    "native behavior",
+    "whole-area retirement"
+  ],
+  "execution_release": false
+}

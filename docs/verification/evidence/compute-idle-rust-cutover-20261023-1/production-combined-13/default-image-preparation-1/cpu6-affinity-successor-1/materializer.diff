@@ -1,0 +1,11 @@
+--- materializer.CPU0
++++ materializer.CPU6
+@@ -45,7 +45,7 @@
+ 
+ def main():
+     begin = time.monotonic()
+-    need(os.getuid() == os.geteuid() == 1000 and os.sched_getaffinity(0) == {0}, 'ordinary CPU0 grant required')
++    need(os.getuid() == os.geteuid() == 1000 and os.sched_getaffinity(0) == {6}, 'ordinary CPU6 grant required')
+     need(not os.path.lexists(DEST), 'fresh coherent destination required')
+     baseline = json.loads((BASE / 'source-inputs.json').read_text())
+     need(sha(canonical(baseline)) == BASE_CANONICAL_SHA, 'accepted exact base source manifest')

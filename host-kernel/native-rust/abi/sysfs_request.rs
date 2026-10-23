@@ -215,11 +215,19 @@ pub(crate) unsafe fn read(kind: Kind, request: *mut u8) -> Result<Request, i32> 
 /// The same claim and complete mapping as read remain live. Namespace effects
 /// and all new owners are published (or failure recorded) before this call.
 /// This must be the final access: the peer can free/reuse RAM after busy=0.
-pub(crate) unsafe fn complete(
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) struct CompletionBusy { pub(crate) kind: Kind, pub(crate) value: i32 }
+
+pub(crate) unsafe fn complete(kind: Kind, request: *mut u8, error: i32, handle: Option<u64>) -> Result<(), i32> {
+    unsafe { complete_observed(kind, request, error, handle, |_| {}) }
+}
+
+pub(crate) unsafe fn complete_observed(
     kind: Kind,
     request: *mut u8,
     error: i32,
     handle: Option<u64>,
+    on_busy: impl FnOnce(CompletionBusy),
 ) -> Result<(), i32> {
     let layout = kind.layout();
     if request.is_null()
@@ -234,7 +242,9 @@ pub(crate) unsafe fn complete(
     // this final response, so `layout.busy` is an aligned, in-bounds AtomicI32
     // field. No Rust reference escapes before its release permits peer reuse.
     let busy = unsafe { AtomicI32::from_ptr(request.add(layout.busy).cast()) };
-    if busy.load(Ordering::Relaxed) != 1 {
+    let value = busy.load(Ordering::Relaxed);
+    if value != 1 {
+        on_busy(CompletionBusy { kind, value });
         return Err(-16);
     }
     if let Some(handle) = handle {

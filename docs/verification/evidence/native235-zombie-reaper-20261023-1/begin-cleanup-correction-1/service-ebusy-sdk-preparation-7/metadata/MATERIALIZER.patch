@@ -1,0 +1,24 @@
+--- /home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/metadata/stage_bound_successor.py
++++ /home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-7/metadata/stage_bound_successor.py
+@@ -5,9 +5,9 @@
+ """
+ from pathlib import Path
+ import argparse,hashlib,json,os,stat,time
+-H=Path('/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk')
+-PREP_SHA='19b0c4ced20df432a6e4944c8f38ff13ba509959808eed3b1cc285c589bcb2b6'
+-NONCE='33f4428ac1c74917bcd6715cdbaee963'
++H=Path('/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-7/prepared-sdk')
++PREP_SHA='cd752255d1d94556bb8236154591f95bda87fe152663408af4b5699e7474a5ef'
++NONCE='43564e4861f0414a8c25b31a7ee7d9dd'
+ ROOT=Path('/home/holden/mckernel-work/scratch')
+ OUTPUT=Path('/home/holden/mckernel-work/host-preparation/native-running-modules-host-output')
+ BASIS=ROOT/'mckernel-exact-candidate-scratch-22-authority3-output'
+@@ -26,7 +26,7 @@
+ def main():
+  args=argparse.ArgumentParser(description=__doc__);args.add_argument('--execute',action='store_true');a=args.parse_args()
+  prep=H/'preparation.json';assert digest(plain(prep))==PREP_SHA;manifest=json.loads(prep.read_text())
+- assert digest(plain(H/'REQUEST.TEMPLATE.PENDING-LIVE-IDENTITIES.json'))=='1aa123b41ad92fdff0f0dce0ca0ff9c976d4a35aed9aa1ecb94226ba0b28109f'
++ assert digest(plain(H/'REQUEST.TEMPLATE.PENDING-LIVE-IDENTITIES.json'))=='1032693dc4b0802cd0a3fc7ad1fdbee79230719c46d36e907d909b71270e5ee8'
+  request=json.loads((H/'REQUEST.TEMPLATE.PENDING-LIVE-IDENTITIES.json').read_text());assert request['nonce']==NONCE
+  candidate=Path(request['candidate_root']);inputs=Path(request['input_root']);evidence=Path(request['owner_evidence_root'])
+  assert candidate==OUTPUT/('native-running-modules-candidate-'+NONCE)

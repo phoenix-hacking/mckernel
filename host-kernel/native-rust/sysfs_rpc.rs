@@ -70,6 +70,14 @@ struct Pending {
     phase: Phase,
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum ReplyFailurePhase { Queued, Published, Complete }
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) struct ReplyFailureContext {
+    pub(crate) message: i32, pub(crate) error: i32, pub(crate) token: u64,
+    pub(crate) result: i64, pub(crate) pending_token: u64, pub(crate) phase: ReplyFailurePhase,
+}
+
 pub(crate) struct Exchange {
     pending: Option<Pending>,
 }
@@ -175,6 +183,20 @@ impl Exchange {
         };
         pending.phase = Phase::Complete(status);
         Ok(())
+    }
+
+    pub(crate) fn reply_failure_context(&self, packet: &[u8]) -> Option<ReplyFailureContext> {
+        if packet.len() != PACKET_BYTES { return None; }
+        let pending = self.pending?;
+        Some(ReplyFailureContext {
+            message: i32::from_le_bytes(packet[8..12].try_into().unwrap()),
+            error: i32::from_le_bytes(packet[12..16].try_into().unwrap()),
+            token: u64::from_le_bytes(packet[24..32].try_into().unwrap()),
+            result: i64::from_le_bytes(packet[32..40].try_into().unwrap()),
+            pending_token: pending.token.wire(),
+            phase: match pending.phase { Phase::Queued => ReplyFailurePhase::Queued,
+                Phase::Published => ReplyFailurePhase::Published, Phase::Complete(_) => ReplyFailurePhase::Complete },
+        })
     }
 
     pub(crate) fn completed(&self, token: Token) -> Result<bool, i32> {

@@ -1,0 +1,64 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXECUTABLE_SOURCE_PREPARATION_ONLY_NOT_COMPILED",
+  "fixture_sources": {
+    "actual_request.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/fixture-correction-1/actual_request.rs",
+      "sha256": "a97cfc26cea562e2f746c7e96d89536d5b35e862580f09035a633c1c8e483b7b",
+      "bytes": 1834
+    },
+    "actual_wire.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/fixture-correction-1/actual_wire.rs",
+      "sha256": "1b89d1261d218c39d531cfe00181a30562d9953deae5ac0956641f407239df0f",
+      "bytes": 9521
+    },
+    "actual_quarantine_branch.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/fixture-correction-1/actual_quarantine_branch.rs",
+      "sha256": "9de0b0793ccd3b3c8233c62c7dc24551fc8dc8d663f02a0e2e85821679c2c7ba",
+      "bytes": 214
+    },
+    "diagnostic.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/fixture-correction-1/diagnostic.rs",
+      "sha256": "6d058f708cd6aaaa97dc8d7c6f076140fb298c41d67d34ab4d88388ccac55fc7",
+      "bytes": 37214
+    },
+    "actual_rpc.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/fixture-correction-1/actual_rpc.rs",
+      "sha256": "39c5ff87b671c498afffcff9feb10833918d75207559462952803858fb218131",
+      "bytes": 8000
+    },
+    "original_rpc.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/fixture-correction-1/original_rpc.rs",
+      "sha256": "d1bb17868dd426b3c6635171f2f8cc53e498b54779973c1abc58968d1d96cc4e",
+      "bytes": 6833
+    },
+    "original_wire.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/fixture-correction-1/original_wire.rs",
+      "sha256": "df5fad1ef6ec305b71c56ea6a89c9ecbce7b089b95730ad591e09909e3ffd8c7",
+      "bytes": 9082
+    }
+  },
+  "actual_extracted_bodies": [
+    "original/instrumented Memory::syscall",
+    "original Ledger::conflicts/tag",
+    "new diagnostic_conflict/context constructor/budget",
+    "original/instrumented Runtime::fail",
+    "actual Request type/decode/getters",
+    "unchanged actual Remote::syscall_request error/quarantine branch",
+    "original/actual whole abi/sysfs_request.rs complete including single busy load and final stores",
+    "original/actual whole sysfs_rpc.rs accept with typed pending phases and remote token24..32",
+    "original/actual sysfs_remote::reply with notification-count comparison",
+    "actual application diagnostic helper with explicit host-state model",
+    "actual memory diagnostic conflict/completion helpers; all static zeroing context branches"
+  ],
+  "models": "stdArc/Mutex/Vec, ownedAtomic backing/address mapping, Runtime.application.fail_service and Remote entry/admit receiver only. No kernel layout/module/runtime proof. Application entry fields and remote lock/data/notifier receiver primitives explicitly modeled. Exact ABI metadata/RPC modules are production source, not modeled layouts.",
+  "tests": "8195 original/instrumented memory error/claim/quarantine pairs,256bucketmasks/halfopen/snoopignore,10originvariants,16ticket saturating budgets,100EAGAINthenEBUSY preservation,existing callcounts/serials/claims/unmodifiederrors. No trace attribution or semantic repair claimed. 90original/observed metadata completions,12original/actualRPCpairs,24original/actualRemote.replypairs, application2origin saturation, allnew log body worstwidth checks with96byteprefix.",
+  "failure_history": {
+    "prior_failure": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/service-ebusy-diagnostic-1/FAILURE-1.json",
+      "sha256": "2ae8224e637424ec94d2bf244a2072a2fbb15718648348f46d69a67bdc425a87",
+      "bytes": 3117
+    },
+    "cause": "Fixture extraction omitted actual REQUEST_MESSAGE constant. No test ran. This is the sole bounded corrected fixture attempt."
+  }
+}

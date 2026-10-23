@@ -9,7 +9,7 @@ use super::{
 };
 use core::{
     ptr,
-    sync::atomic::{AtomicBool, Ordering},
+    sync::atomic::{AtomicBool, AtomicU64, Ordering},
 };
 use kernel::{
     prelude::*,
@@ -51,6 +51,7 @@ struct State {
 #[pin_data]
 pub(crate) struct Remote {
     data: SharedData,
+    failure_contexts: AtomicU64,
     #[pin]
     state: Mutex<State>,
     #[pin]
@@ -78,6 +79,7 @@ impl Remote {
         Arc::pin_init(
             pin_init!(Self {
                 data,
+                failure_contexts: AtomicU64::new(0),
                 state <- new_mutex!(State { exchange: Exchange::new(), caller: false, callbacks: 0, peer_stopped: false }),
                 changed <- new_condvar!(),
             }),
@@ -141,7 +143,21 @@ impl Remote {
         if state.peer_stopped {
             return Err(ENODEV);
         }
-        state.exchange.accept(packet).map_err(errno)?;
+        if let Err(error) = state.exchange.accept(packet) {
+            if error == -16 {
+                if let Some(context) = state.exchange.reply_failure_context(packet) {
+                    if let Ok(diag) = self.failure_contexts.fetch_update(Ordering::Relaxed, Ordering::Relaxed,
+                        |old| if old < 16 { Some(old + 1) } else { None }) {
+                        pr_err!("IHK-R os={} g={} d={} m={:x} t={:x} pt={:x} ph={:?} e=-16\n",
+                            self.data.owner.slot(), self.data.owner.generation(), diag + 1,
+                            context.message, context.token, context.pending_token, context.phase);
+                        pr_err!("IHK-V os={} g={} d={} peer_e={} value={}\n",
+                            self.data.owner.slot(), self.data.owner.generation(), diag + 1, context.error, context.result);
+                    }
+                }
+            }
+            return Err(errno(error));
+        }
         drop(state);
         self.changed.notify_all();
         Ok(())

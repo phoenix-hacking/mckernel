@@ -1,3 +1,46 @@
+## SDK7 freshadmission PASS; staticpublication thenexactbuildrelease — 2026-10-23 20:36 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actualrootquery65aa8b09/d57695a3 returned0/.360021s/joinedgoneclosed/emptyerr:
+no runningcontainers, all8ownershippathsabsent, mutex27:4,110GiB/UUIDsame,
+current_live_postjoin FAILED_SETTLEMENT_LONG_221B_POSITIVELY_RETIRED nonNULL.
+Owner capacity HOST169691889664>=37977894912 inclfullgap15839305728;
+scratch14102061056>=14091616256; Mem28362231808>=19GiB; cgroupsunchanged.
+Source11independentPASS map recorded d975f18f distinctfromhostmodule7verdict.
+Noheavy/build yet. Rootstaticpublication precedes ordinarylastfacts+exactpayload
+executionreview/f64capture once. H7operation1fdf/queryd576/heavytemplate08c9;
+releaseSHA/modulesNULLuntilactual. P-M12-01 stillOPEN,34/35/whole12of14.
+M14private top-log actual78Rust PASS d150/8abc, U561->560/newRustT; selected
+GCC9consumerPASS6a6432a3/29Rust+2C providers (independentreviewpending).
+CanonicalM14memory stillb938/4868 pendingrootexact2loggerintegration; frozen13
+source/pureaccepted only, defaultimage/nativeOPEN. No M14wholeclosure or LONGcredit.
+
+## SDK7 exactsource staged; freshbuildadmission next — 2026-10-23 20:28 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Failed221b remains POSITIVELY_RETIRED/current_live_postjoin nonNULL/noheavy.
+Practical34/35,whole12/14; P-M12-01 and formalLONGcredit unchanged. Original
+48rounds/96launches/255.716mixedseconds remain failedproducer observations only.
+Canonical seven Rust diagnostic postimages integrated exact066beb/source0fc722
+with independent source+actualfixturePASS7f1a/root42c7. Memory8195/metadata90/RPC12/
+remote24 comparisons,22fixedformats max239B incl96prefix; modeledprimitives only.
+Originalcompilefailure/solecorrection preserved. Existing errno/ACK/claims/locks/
+quarantine/publication unchanged; EBUSYcause unknown/no semanticrepair claim.
+Sourceprepare2001edeb0/.277290s/68sources exactly7changed61same,identityb3eb1d8d.
+Independentonceordinary stagePASS: root actual-stage-capture-1 0/.104930s/joined/
+gone/closed/nullerrors. H7prepared-sdk/request.json3878c1fb; nonce43564e4861f0414a8c25b31a7ee7d9dd;
+actualcandidate66306:55988157 and inputs1828:116715,110GiBbackingsame. Rootexecution
+recordinH7/actual-stage-capture-1; terminal_lifecycle_repair owns existingV3fresh
+query/buildoperation successor. No modulecompile/root/build release yet. Root
+stagingprofiles/oncecommand preserved; no unchangedkernel/image/apps rebuild.
+M14candidate13 source+completepure actual47.227737s independentlyaccepted00050f0d/
+3758fa9c; exact2memorypostimages over12,28Rustguards/3Cdebt/defaultlink/nativeOPEN.
+Separate top-log Rustcandidate privatelysource/hostedfixtureaccepted179200pairs
+(d2e61a4e); production78Rustcompile grantCPU6 active/preparing, no canonicallogger
+integration/defaultlink/nativecredit. Frozen13/current10972 unchanged. Source7
+cosmeticwhitespace sysfs_memory519 retained to preserveacceptedpins; diffcheckrc2
+recorded explicitly, not falselyPASS. Latestpushed65e49f54f/fetched229blobs exact.
+
 ## Failed221b retired; diagnostic seven-source candidate and real memory consumer — 2026-10-23 20:14 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

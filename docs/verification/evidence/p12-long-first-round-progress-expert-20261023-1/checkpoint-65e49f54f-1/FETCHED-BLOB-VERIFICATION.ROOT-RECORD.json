@@ -1,0 +1,1157 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "utc": "2026-10-23T20:14:49.686923+00:00",
+  "status": "PASS",
+  "head": "65e49f54f060c2be287c9dd78c9b6e3b7110a6a2",
+  "fetched_head": "65e49f54f060c2be287c9dd78c9b6e3b7110a6a2",
+  "branch": "codex/local-native-staging-repair",
+  "changed_blob_count": 229,
+  "rows": [
+    {
+      "path": "arch/x86_64/kernel/memory.c",
+      "blob": "256644d86010cbf045f469cb795c0fae78e0a617",
+      "fetched_blob": "256644d86010cbf045f469cb795c0fae78e0a617"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/checkpoint-26896501c-1/FETCHED-BLOB-VERIFICATION.ROOT-RECORD.json",
+      "blob": "bc06e4390fa9acb109b35dc781edcd010288c53a",
+      "fetched_blob": "bc06e4390fa9acb109b35dc781edcd010288c53a"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/checkpoint-26896501c-1/fetch.stderr",
+      "blob": "1169f4f8909b44ab66877053d107adce21e406f2",
+      "fetched_blob": "1169f4f8909b44ab66877053d107adce21e406f2"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/checkpoint-26896501c-1/fetch.stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/checkpoint-26896501c-1/push.stderr",
+      "blob": "50245243ed48e3ce0f8973fe2643d13925cdfd36",
+      "fetched_blob": "50245243ed48e3ce0f8973fe2643d13925cdfd36"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/checkpoint-26896501c-1/push.stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/checkpoint-a5a7ef12e-1/FETCHED-BLOB-VERIFICATION.ROOT-RECORD.json",
+      "blob": "aa8b633afe8c15957e165ec550bf4af3d545018a",
+      "fetched_blob": "aa8b633afe8c15957e165ec550bf4af3d545018a"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/checkpoint-a5a7ef12e-1/fetch.stderr",
+      "blob": "1169f4f8909b44ab66877053d107adce21e406f2",
+      "fetched_blob": "1169f4f8909b44ab66877053d107adce21e406f2"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/checkpoint-a5a7ef12e-1/fetch.stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/checkpoint-a5a7ef12e-1/push.stderr",
+      "blob": "5ff8b87a809154aedba9f4ec7472a47d8b0a746a",
+      "fetched_blob": "5ff8b87a809154aedba9f4ec7472a47d8b0a746a"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/checkpoint-a5a7ef12e-1/push.stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/checkpoint-faeca044e-1/FETCHED-BLOB-VERIFICATION.ROOT-RECORD.json",
+      "blob": "b512e64564a9fc5875d988aeae93d37faa3fd370",
+      "fetched_blob": "b512e64564a9fc5875d988aeae93d37faa3fd370"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/checkpoint-faeca044e-1/fetch.stderr",
+      "blob": "1169f4f8909b44ab66877053d107adce21e406f2",
+      "fetched_blob": "1169f4f8909b44ab66877053d107adce21e406f2"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/checkpoint-faeca044e-1/fetch.stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/checkpoint-faeca044e-1/push.stderr",
+      "blob": "579aca695cc5161c549bbe312dccf00a5d480175",
+      "fetched_blob": "579aca695cc5161c549bbe312dccf00a5d480175"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/checkpoint-faeca044e-1/push.stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/ACTUAL-FIRST-LIVE-PROGRESS.ROOT-RECORD.json",
+      "blob": "15b2069c8da7259897200860f56b96d267e05d3d",
+      "fetched_blob": "15b2069c8da7259897200860f56b96d267e05d3d"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/CORRECTED-FAILURE-AND-CLOSED-OWNER.ROOT-RECORD.json",
+      "blob": "5b34d993e527dba9eae87e521cc6555a97219d0b",
+      "fetched_blob": "5b34d993e527dba9eae87e521cc6555a97219d0b"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/RETAINED-READ1-INTERPRETATION.json",
+      "blob": "4dcc3eeb92f61b3a05c548fc0b8da6d068f44e61",
+      "fetched_blob": "4dcc3eeb92f61b3a05c548fc0b8da6d068f44e61"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/RETAINED-READ1-INTERPRETATION.md",
+      "blob": "5e2a9a891350171bb53387c1dc74476ad7e6431a",
+      "fetched_blob": "5e2a9a891350171bb53387c1dc74476ad7e6431a"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/RETAINED-READ2-DIAGNOSTIC.json",
+      "blob": "f89825b56842ef2384cb838d42a8f4851cd88de5",
+      "fetched_blob": "f89825b56842ef2384cb838d42a8f4851cd88de5"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/actual-read-1/HELPER-PRELAUNCH-AND-SCHEDULING-HISTORY.json",
+      "blob": "596c81f0822f95d8d38c433bbe8549d2bcd05ef5",
+      "fetched_blob": "596c81f0822f95d8d38c433bbe8549d2bcd05ef5"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/actual-read-1/RESULT.json",
+      "blob": "391249454d9fffbcef5f039373607c7c1886f384",
+      "fetched_blob": "391249454d9fffbcef5f039373607c7c1886f384"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/actual-read-1/ROOT-READ-TAKEOVER.json",
+      "blob": "31abc9b6cebd201ddf5083b752f06332c5c1be75",
+      "fetched_blob": "31abc9b6cebd201ddf5083b752f06332c5c1be75"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/actual-read-1/command.json",
+      "blob": "cc80de11b0578022170a8e7f35fcdf89e0a3d141",
+      "fetched_blob": "cc80de11b0578022170a8e7f35fcdf89e0a3d141"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/actual-read-1/direct-join.json",
+      "blob": "21600fd9696d8d618dbdbfbe3b397f797ace3c1a",
+      "fetched_blob": "21600fd9696d8d618dbdbfbe3b397f797ace3c1a"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/actual-read-1/direct-wait.json",
+      "blob": "2b073b36a0ad2f32d978a0728fad553358de67dc",
+      "fetched_blob": "2b073b36a0ad2f32d978a0728fad553358de67dc"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/actual-read-1/run_existing_owned_capture.py",
+      "blob": "d54a1838890e7bd3765748c1fa9f46defc9b4b9a",
+      "fetched_blob": "d54a1838890e7bd3765748c1fa9f46defc9b4b9a"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/actual-read-1/started.json",
+      "blob": "0d275b2ea569f9241a80113f3bb8e3eb35d8ec1f",
+      "fetched_blob": "0d275b2ea569f9241a80113f3bb8e3eb35d8ec1f"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/actual-read-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/actual-read-1/stdout",
+      "blob": "07cd4947207fa779b24b98f97962b1d5deff8194",
+      "fetched_blob": "07cd4947207fa779b24b98f97962b1d5deff8194"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/actual-read-2/RESULT.json",
+      "blob": "0b8d1f36d5cfdb08aa4431b426df8e19ab7a6fdd",
+      "fetched_blob": "0b8d1f36d5cfdb08aa4431b426df8e19ab7a6fdd"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/actual-read-2/command.json",
+      "blob": "fa858872796351d36316272d6f8421e846153d21",
+      "fetched_blob": "fa858872796351d36316272d6f8421e846153d21"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/actual-read-2/direct-join.json",
+      "blob": "1f9e31e010b19e778abf6fac0d45f8a95f248057",
+      "fetched_blob": "1f9e31e010b19e778abf6fac0d45f8a95f248057"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/actual-read-2/direct-wait.json",
+      "blob": "c12b23f3935ba061a7212d7bd2ab475fe6a8f768",
+      "fetched_blob": "c12b23f3935ba061a7212d7bd2ab475fe6a8f768"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/actual-read-2/started.json",
+      "blob": "98306a82b1164a4289147b61d94485d14760477d",
+      "fetched_blob": "98306a82b1164a4289147b61d94485d14760477d"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/actual-read-2/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/actual-read-2/stdout",
+      "blob": "569b12acc7d2a9f290433d43c7adc52cf167b960",
+      "fetched_blob": "569b12acc7d2a9f290433d43c7adc52cf167b960"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/observer-clock-correction-1/ACTUAL-OFFLINE-CLOCK-RESULT.json",
+      "blob": "3267ecf5ad7c3c9f77e089271e40c8e198580a48",
+      "fetched_blob": "3267ecf5ad7c3c9f77e089271e40c8e198580a48"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/observer-clock-correction-1/birth_clock.py",
+      "blob": "003aa1c05da2de5e584a83f0d8e8024bda459c65",
+      "fetched_blob": "003aa1c05da2de5e584a83f0d8e8024bda459c65"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/ACTUAL-23-CLIENT-IDENTITIES.json",
+      "blob": "57efc75dc230d20c28af72fe75e068e05bf771ec",
+      "fetched_blob": "57efc75dc230d20c28af72fe75e068e05bf771ec"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/AUTHENTICATED-owner.json",
+      "blob": "47080b985de27c841b8b40b66380659560eb5349",
+      "fetched_blob": "47080b985de27c841b8b40b66380659560eb5349"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/AUTHENTICATED-result.json",
+      "blob": "faa7d8e020c04a2a0e61cacff88ee62e7ee0fa86",
+      "fetched_blob": "faa7d8e020c04a2a0e61cacff88ee62e7ee0fa86"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/EXACT-EXPORT-OPERATION.NOT-RELEASED.json",
+      "blob": "a4760ed25428ef591aab56a54f80d891fe049729",
+      "fetched_blob": "a4760ed25428ef591aab56a54f80d891fe049729"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/EXACT-FINAL-PHYSICAL-OPERATIONS.NOT-RELEASED.json",
+      "blob": "8d8f8e0cfc94259c5297cf69c79002bb3487f42b",
+      "fetched_blob": "8d8f8e0cfc94259c5297cf69c79002bb3487f42b"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/INDEPENDENT-ACTUAL-FAILED221B-PHYSICAL-ACCEPTANCE.ROOT-RECORD.json",
+      "blob": "67b2a28c709561d10bab1dd129957ce67ab31a48",
+      "fetched_blob": "67b2a28c709561d10bab1dd129957ce67ab31a48"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/INDEPENDENT-EXPORT-RELEASE.ROOT-RECORD.json",
+      "blob": "5ff3c49f2996963633858d1873adf846c24e48c3",
+      "fetched_blob": "5ff3c49f2996963633858d1873adf846c24e48c3"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/INDEPENDENT-FINAL-OBSERVATIONS-RELEASE.ROOT-RECORD.json",
+      "blob": "2d3b9592b830bf6d42f1fcdfbeac37d0a800ff46",
+      "fetched_blob": "2d3b9592b830bf6d42f1fcdfbeac37d0a800ff46"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/PHYSICAL-OBSERVATION-PREPARATION.json",
+      "blob": "38ca1bad065cd2684b8c19ba9c1c9009badb5476",
+      "fetched_blob": "38ca1bad065cd2684b8c19ba9c1c9009badb5476"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/ROOT-EXPORT-ARGV.NOT-RELEASED.json",
+      "blob": "8981e57e00e50e573263b594b55a21f6b33b6343",
+      "fetched_blob": "8981e57e00e50e573263b594b55a21f6b33b6343"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/ROOT-FINAL-MUTEX-ARGV.NOT-RELEASED.json",
+      "blob": "294f3f97bb6ccc7403e62e407067cd8f9d6c63c0",
+      "fetched_blob": "294f3f97bb6ccc7403e62e407067cd8f9d6c63c0"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/ROOT-FINAL-PROC-ARGV.NOT-RELEASED.json",
+      "blob": "63e0c8d30970aa72bdd0665f1e3a179205981ee6",
+      "fetched_blob": "63e0c8d30970aa72bdd0665f1e3a179205981ee6"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/actual-final-mutex-1/ACTUAL-CLOSED-CAPTURE.json",
+      "blob": "e2fdb9517d172d1b8c49ec7e86db1b56fc7730ab",
+      "fetched_blob": "e2fdb9517d172d1b8c49ec7e86db1b56fc7730ab"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/actual-final-mutex-1/command.json",
+      "blob": "b17439e1f0d36ee250a1766cfcadc3ba0ba3e963",
+      "fetched_blob": "b17439e1f0d36ee250a1766cfcadc3ba0ba3e963"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/actual-final-mutex-1/started.json",
+      "blob": "bba2fad10d6cc44dad7eb67d7604774c1bf6d607",
+      "fetched_blob": "bba2fad10d6cc44dad7eb67d7604774c1bf6d607"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/actual-final-mutex-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/actual-final-mutex-1/stdout",
+      "blob": "ca2f465596080c88c78bf4d34344a69c16f4edd2",
+      "fetched_blob": "ca2f465596080c88c78bf4d34344a69c16f4edd2"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/actual-final-proc-1/ACTUAL-CLOSED-CAPTURE.json",
+      "blob": "a3b5ddc95dc6b4408310d380395a23c1866db41a",
+      "fetched_blob": "a3b5ddc95dc6b4408310d380395a23c1866db41a"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/actual-final-proc-1/command.json",
+      "blob": "f2ef7e8a677e0653aeabdfbdb3c4fad4bcb3ae08",
+      "fetched_blob": "f2ef7e8a677e0653aeabdfbdb3c4fad4bcb3ae08"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/actual-final-proc-1/started.json",
+      "blob": "d9713b78fa6146b793799bd471e396ce3a2ca77e",
+      "fetched_blob": "d9713b78fa6146b793799bd471e396ce3a2ca77e"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/actual-final-proc-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/actual-final-proc-1/stdout",
+      "blob": "74065e7064165bd81f3f9ff44d44a13aea8d3749",
+      "fetched_blob": "74065e7064165bd81f3f9ff44d44a13aea8d3749"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/actual-retired-owner-export-1/ACTUAL-CLOSED-CAPTURE.json",
+      "blob": "1094c527f256606aff338bb5fe04a0654e81cbbb",
+      "fetched_blob": "1094c527f256606aff338bb5fe04a0654e81cbbb"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/actual-retired-owner-export-1/command.json",
+      "blob": "37b74e0cfcf80123447e6f46602cde622e34c305",
+      "fetched_blob": "37b74e0cfcf80123447e6f46602cde622e34c305"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/actual-retired-owner-export-1/started.json",
+      "blob": "49e1bb83bb036db9b849ef1d658327f417dfdd5b",
+      "fetched_blob": "49e1bb83bb036db9b849ef1d658327f417dfdd5b"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/actual-retired-owner-export-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/actual-retired-owner-export-1/stdout",
+      "blob": "1fa9f9b3c246587f381bf9e72796e7464603a54f",
+      "fetched_blob": "1fa9f9b3c246587f381bf9e72796e7464603a54f"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/001-ps.json",
+      "blob": "f74f6c8ffcd3569edf3ff0e5cf8dfbdf913c3cab",
+      "fetched_blob": "f74f6c8ffcd3569edf3ff0e5cf8dfbdf913c3cab"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/002-ps.json",
+      "blob": "1a36eda336bc507355099d512d5d8eed004c574d",
+      "fetched_blob": "1a36eda336bc507355099d512d5d8eed004c574d"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/003-image.json",
+      "blob": "5e48ea2b2cd1e3d4adcf0cca227f087f94d9beaf",
+      "fetched_blob": "5e48ea2b2cd1e3d4adcf0cca227f087f94d9beaf"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/004-create.json",
+      "blob": "125cafeb3b97d07b248b2b847e84f5a64af49ad5",
+      "fetched_blob": "125cafeb3b97d07b248b2b847e84f5a64af49ad5"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/004-create.stdout",
+      "blob": "4650f5f79140d67348ba5d226e5cce9346f9c65a",
+      "fetched_blob": "4650f5f79140d67348ba5d226e5cce9346f9c65a"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/005-ps.json",
+      "blob": "221397980b62a5e3196e4f7243fab0d90ea31d1b",
+      "fetched_blob": "221397980b62a5e3196e4f7243fab0d90ea31d1b"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/006-ps.json",
+      "blob": "8dd054e7a4a447251e4b3126ab9728ed1be5cddb",
+      "fetched_blob": "8dd054e7a4a447251e4b3126ab9728ed1be5cddb"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/007-ps.json",
+      "blob": "51271c9771b1d5c814859e452b097c791efcc174",
+      "fetched_blob": "51271c9771b1d5c814859e452b097c791efcc174"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/008-inspect.json",
+      "blob": "4f251803c2eb51685ef8e3261a0c190882aa2412",
+      "fetched_blob": "4f251803c2eb51685ef8e3261a0c190882aa2412"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/009-start.json",
+      "blob": "b39e0ba9bd9deceb319cf03423b2e7cc5ae2c9e6",
+      "fetched_blob": "b39e0ba9bd9deceb319cf03423b2e7cc5ae2c9e6"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/010-wait.json",
+      "blob": "ce4df3ad6cb93baf8f94b7b9474716cef523c2ba",
+      "fetched_blob": "ce4df3ad6cb93baf8f94b7b9474716cef523c2ba"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/011-inspect.json",
+      "blob": "fc8f6b8bf495dd445f28d9bc4278be435365d39f",
+      "fetched_blob": "fc8f6b8bf495dd445f28d9bc4278be435365d39f"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/012-ps.json",
+      "blob": "101373748157e6dc8fc143b75b9e00423737525c",
+      "fetched_blob": "101373748157e6dc8fc143b75b9e00423737525c"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/013-ps.json",
+      "blob": "d5dcdd6e124f0b32427019507db32a7124f5275c",
+      "fetched_blob": "d5dcdd6e124f0b32427019507db32a7124f5275c"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/014-ps.json",
+      "blob": "7bd220ffd85f0d4b3b7ea3877fdcb30206a7aaa5",
+      "fetched_blob": "7bd220ffd85f0d4b3b7ea3877fdcb30206a7aaa5"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/015-inspect.json",
+      "blob": "9167ea76cb94465d756f6c3950676aca9b98c103",
+      "fetched_blob": "9167ea76cb94465d756f6c3950676aca9b98c103"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/015-inspect.stdout",
+      "blob": "e96e642e93b69d7867209e1ac3cf3416a030b1a2",
+      "fetched_blob": "e96e642e93b69d7867209e1ac3cf3416a030b1a2"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/016-stop.json",
+      "blob": "a5f31117b0d47cfef7b6af8c117ba86cdaddd79f",
+      "fetched_blob": "a5f31117b0d47cfef7b6af8c117ba86cdaddd79f"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/017-kill.json",
+      "blob": "513cb8d14d00beabe90f61acf1356e9a7b619648",
+      "fetched_blob": "513cb8d14d00beabe90f61acf1356e9a7b619648"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/017-kill.stderr",
+      "blob": "51f3197249d5e7620d958d76ee41c0e60aa6ca32",
+      "fetched_blob": "51f3197249d5e7620d958d76ee41c0e60aa6ca32"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/018-wait.json",
+      "blob": "3d58dd81bbcee625f576be6b935b534f0a82566c",
+      "fetched_blob": "3d58dd81bbcee625f576be6b935b534f0a82566c"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/018-wait.stdout",
+      "blob": "fba7ed526e434d8e4d615d8c9eca14f252c8a0f4",
+      "fetched_blob": "fba7ed526e434d8e4d615d8c9eca14f252c8a0f4"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/019-inspect.json",
+      "blob": "092e722af86dc5291ee385b585eab6b6fc7dee29",
+      "fetched_blob": "092e722af86dc5291ee385b585eab6b6fc7dee29"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/019-inspect.stdout",
+      "blob": "680de5fe3c60c8ef024875c20820e9fe09516488",
+      "fetched_blob": "680de5fe3c60c8ef024875c20820e9fe09516488"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/020-rm.json",
+      "blob": "448aae22cd409b0f8fb7cdc5c8bf282482c92931",
+      "fetched_blob": "448aae22cd409b0f8fb7cdc5c8bf282482c92931"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/020-rm.stdout",
+      "blob": "4650f5f79140d67348ba5d226e5cce9346f9c65a",
+      "fetched_blob": "4650f5f79140d67348ba5d226e5cce9346f9c65a"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/021-ps.json",
+      "blob": "796e120d1af4b9664b9fade7fdaffc469755e4b6",
+      "fetched_blob": "796e120d1af4b9664b9fade7fdaffc469755e4b6"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/021-ps.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/021-ps.stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/022-ps.json",
+      "blob": "37cd523400357f01e16c0fb8d9738e48e29c2680",
+      "fetched_blob": "37cd523400357f01e16c0fb8d9738e48e29c2680"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/022-ps.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/022-ps.stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/023-ps.json",
+      "blob": "2719eaeb0843045e0735fb36552dff9da608c0d6",
+      "fetched_blob": "2719eaeb0843045e0735fb36552dff9da608c0d6"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/023-ps.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/023-ps.stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/EXPORT-BINDING.json",
+      "blob": "ddc1e4ce62e3f65fdd1c21c922f162591e11b8ff",
+      "fetched_blob": "ddc1e4ce62e3f65fdd1c21c922f162591e11b8ff"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/owner.json",
+      "blob": "47080b985de27c841b8b40b66380659560eb5349",
+      "fetched_blob": "47080b985de27c841b8b40b66380659560eb5349"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/authenticated-retired-owner-commands-1/result.json",
+      "blob": "faa7d8e020c04a2a0e61cacff88ee62e7ee0fa86",
+      "fetched_blob": "faa7d8e020c04a2a0e61cacff88ee62e7ee0fa86"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/export.ROOT-only.diff",
+      "blob": "63881a14a21c93730cc107e67debc8186c1ed25e",
+      "fetched_blob": "63881a14a21c93730cc107e67debc8186c1ed25e"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/proc.successor.diff",
+      "blob": "3800169c902644cd9bf30849faab87ea1d92cb76",
+      "fetched_blob": "3800169c902644cd9bf30849faab87ea1d92cb76"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/readonly_current_mutex_paths_positive.py",
+      "blob": "1693d5c7e5a6226efebfedfc04d485ddcf0f071c",
+      "fetched_blob": "1693d5c7e5a6226efebfedfc04d485ddcf0f071c"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/readonly_exact_retired_LONG_proc.py",
+      "blob": "1388140727e0663182a5c56996839e4691fab900",
+      "fetched_blob": "1388140727e0663182a5c56996839e4691fab900"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/physical-preparation-1/readonly_export_exact_retired_owner.py",
+      "blob": "c42758b839f271ebc4a700d8a7b47e53362ed57f",
+      "fetched_blob": "c42758b839f271ebc4a700d8a7b47e53362ed57f"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/retirement-preparation-1/EXPECTED-LITERAL-PROOF.json",
+      "blob": "db2575f0320e06b30db68af5ddec271b93698c2f",
+      "fetched_blob": "db2575f0320e06b30db68af5ddec271b93698c2f"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/retirement-preparation-1/EXPECTED-only.diff",
+      "blob": "0e8957b7009585a0f588dfe83d0fa0e642099e9c",
+      "fetched_blob": "0e8957b7009585a0f588dfe83d0fa0e642099e9c"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/retirement-preparation-1/INDEPENDENT-CANCEL-RELEASE.ROOT-RECORD.json",
+      "blob": "ede053936ec69f1fd9e7cb83f017eb219a69c9af",
+      "fetched_blob": "ede053936ec69f1fd9e7cb83f017eb219a69c9af"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/retirement-preparation-1/NORMAL-FAILURE-RETIREMENT-CALLPATH.json",
+      "blob": "d5cca9b05c33bd8227d41fec78ec977d39cf2a23",
+      "fetched_blob": "d5cca9b05c33bd8227d41fec78ec977d39cf2a23"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/retirement-preparation-1/ONE-EXACT-NORMAL-CANCEL-OPERATION.NOT-RELEASED.json",
+      "blob": "467e3aa9d1cfd1b6099c96251f832ea57c4d70e5",
+      "fetched_blob": "467e3aa9d1cfd1b6099c96251f832ea57c4d70e5"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/retirement-preparation-1/ROOT-ARGV.NOT-RELEASED.json",
+      "blob": "df268f9ff8797686a40a98e8977b228613f04e99",
+      "fetched_blob": "df268f9ff8797686a40a98e8977b228613f04e99"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/retirement-preparation-1/ROOT-CANCEL-PROFILE.NOT-RELEASED.json",
+      "blob": "8b457b4c7415f6bc911f6db77b5dce49ff33e95b",
+      "fetched_blob": "8b457b4c7415f6bc911f6db77b5dce49ff33e95b"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/retirement-preparation-1/actual-root-cancel-1/ACTUAL-CLOSED-CAPTURE.json",
+      "blob": "31fb0f414fda8d0f39cc639a5dfd5f04d4ed845c",
+      "fetched_blob": "31fb0f414fda8d0f39cc639a5dfd5f04d4ed845c"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/retirement-preparation-1/actual-root-cancel-1/command.json",
+      "blob": "3b353e0abb7ca9f1e04785ad415f75488ef7a15b",
+      "fetched_blob": "3b353e0abb7ca9f1e04785ad415f75488ef7a15b"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/retirement-preparation-1/actual-root-cancel-1/started.json",
+      "blob": "c8c5ad5d160f05af11e22499ad85a574c1a915a6",
+      "fetched_blob": "c8c5ad5d160f05af11e22499ad85a574c1a915a6"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/retirement-preparation-1/actual-root-cancel-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/retirement-preparation-1/actual-root-cancel-1/stdout",
+      "blob": "6cb91e73b004276400bf92fe30e79efc4f113bdd",
+      "fetched_blob": "6cb91e73b004276400bf92fe30e79efc4f113bdd"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/retirement-preparation-1/cancel_exact_owner_once.py",
+      "blob": "65f171c9152f9f1abdaba6155f1a096bec17b832",
+      "fetched_blob": "65f171c9152f9f1abdaba6155f1a096bec17b832"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/trace-retention-failure-1/FINITE-CAUSE-AND-PROVENANCE.json",
+      "blob": "a968092255e1e005f943cafcff19481b24c9e3e4",
+      "fetched_blob": "a968092255e1e005f943cafcff19481b24c9e3e4"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/trace-retention-failure-1/FINITE-CAUSE-AND-PROVENANCE.md",
+      "blob": "981e594d02662d0e28f114fc3d8752be5762fa0e",
+      "fetched_blob": "981e594d02662d0e28f114fc3d8752be5762fa0e"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/trace-retention-failure-1/FIRST-SERVICE-EBUSY-CONTEXT.json",
+      "blob": "2c3a15e92f8d951bbf90b9ec3a5f0f506830ff3b",
+      "fetched_blob": "2c3a15e92f8d951bbf90b9ec3a5f0f506830ff3b"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/trace-retention-failure-1/actual-failure-snapshot.CRLF-normalized.log",
+      "blob": "816a9334289cca49f10dd0184c27c5e62bd1b0de",
+      "fetched_blob": "816a9334289cca49f10dd0184c27c5e62bd1b0de"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/read_live_LONG_prefix.py",
+      "blob": "a966dec9a20e464c8322b9463b3f17a60963a99d",
+      "fetched_blob": "a966dec9a20e464c8322b9463b3f17a60963a99d"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/ACTUAL-SETTLEMENT-LONG-START.ROOT-RECORD.json",
+      "blob": "714163394de627c4817d9b25856f27d9eb445d2f",
+      "fetched_blob": "714163394de627c4817d9b25856f27d9eb445d2f"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/actual-root-controller-outer-1/ACTUAL-CLOSED-CAPTURE.json",
+      "blob": "a75426cd4efad4225f29906ca8256a46a742af1e",
+      "fetched_blob": "a75426cd4efad4225f29906ca8256a46a742af1e"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/actual-root-controller-outer-1/command.json",
+      "blob": "9ee507f560314ad86c02764ec91f6fd2dfd2e104",
+      "fetched_blob": "9ee507f560314ad86c02764ec91f6fd2dfd2e104"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/actual-root-controller-outer-1/started.json",
+      "blob": "53ab727174fca86cc8b196c29501cfcf56217986",
+      "fetched_blob": "53ab727174fca86cc8b196c29501cfcf56217986"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/actual-root-controller-outer-1/stderr",
+      "blob": "4ee6ebcfd57e65dee8249e2ae406cf3252762050",
+      "fetched_blob": "4ee6ebcfd57e65dee8249e2ae406cf3252762050"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/actual-root-controller-outer-1/stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/authenticated-started-read-1/ACTUAL-CLOSED-CAPTURE.json",
+      "blob": "1db5eb5ad669da00c17b88d98b510468fe5bced8",
+      "fetched_blob": "1db5eb5ad669da00c17b88d98b510468fe5bced8"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/authenticated-started-read-1/command.json",
+      "blob": "d0e08f85bd425d53af0baafd70efbac514d81066",
+      "fetched_blob": "d0e08f85bd425d53af0baafd70efbac514d81066"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/authenticated-started-read-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/authenticated-started-read-1/stdout",
+      "blob": "6854d1f952c2d1a775c5f4e3cef43123baa5b37a",
+      "fetched_blob": "6854d1f952c2d1a775c5f4e3cef43123baa5b37a"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/authenticated-terminal-readbacks-1/CAPTURE-RESULT.json/ACTUAL-CLOSED-CAPTURE.json",
+      "blob": "8b434e04ea936146a2fab83206dd8ab4c27677a2",
+      "fetched_blob": "8b434e04ea936146a2fab83206dd8ab4c27677a2"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/authenticated-terminal-readbacks-1/CAPTURE-RESULT.json/command.json",
+      "blob": "71cffa99a46262e8931db6cae3ba4f99816ca68b",
+      "fetched_blob": "71cffa99a46262e8931db6cae3ba4f99816ca68b"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/authenticated-terminal-readbacks-1/CAPTURE-RESULT.json/started.json",
+      "blob": "0aa65c45a2d13a15b22613a5feb8375116ab90bd",
+      "fetched_blob": "0aa65c45a2d13a15b22613a5feb8375116ab90bd"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/authenticated-terminal-readbacks-1/CAPTURE-RESULT.json/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/authenticated-terminal-readbacks-1/CAPTURE-RESULT.json/stdout",
+      "blob": "0a2192b712b6a6b4ae7bdcb1234c545d3530c214",
+      "fetched_blob": "0a2192b712b6a6b4ae7bdcb1234c545d3530c214"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/authenticated-terminal-readbacks-1/stderr/ACTUAL-CLOSED-CAPTURE.json",
+      "blob": "8c894d4a9fc04079c9a6a9c160eebd473403832e",
+      "fetched_blob": "8c894d4a9fc04079c9a6a9c160eebd473403832e"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/authenticated-terminal-readbacks-1/stderr/command.json",
+      "blob": "8238e5cee242ffe22e3494638e48564b1a922729",
+      "fetched_blob": "8238e5cee242ffe22e3494638e48564b1a922729"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/authenticated-terminal-readbacks-1/stderr/started.json",
+      "blob": "fbe00c162b652cb3f5afc2f2385a2717bb24e77e",
+      "fetched_blob": "fbe00c162b652cb3f5afc2f2385a2717bb24e77e"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/authenticated-terminal-readbacks-1/stderr/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/authenticated-terminal-readbacks-1/stderr/stdout",
+      "blob": "8a7494191dffc7e6364e19334b431cd88b0fe906",
+      "fetched_blob": "8a7494191dffc7e6364e19334b431cd88b0fe906"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/authenticated-terminal-readbacks-1/stdout/ACTUAL-CLOSED-CAPTURE.json",
+      "blob": "591d9a05522825d9022e5f4c2b47891313dbec8a",
+      "fetched_blob": "591d9a05522825d9022e5f4c2b47891313dbec8a"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/authenticated-terminal-readbacks-1/stdout/command.json",
+      "blob": "a78bf59ec82ae473c8714646cf70c7dfe91a1df3",
+      "fetched_blob": "a78bf59ec82ae473c8714646cf70c7dfe91a1df3"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/authenticated-terminal-readbacks-1/stdout/started.json",
+      "blob": "2e36b40c2ec003446fb10dccdd62b9a56ff78989",
+      "fetched_blob": "2e36b40c2ec003446fb10dccdd62b9a56ff78989"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/authenticated-terminal-readbacks-1/stdout/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/authenticated-terminal-readbacks-1/stdout/stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/finalization-preparation-1/ACTUAL-ROOT-FREEZE-COMMAND.json",
+      "blob": "dd0d76ab4a67d497f92842f3b3a2921a53039901",
+      "fetched_blob": "dd0d76ab4a67d497f92842f3b3a2921a53039901"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/finalization-preparation-1/ACTUAL-ROOT-FREEZE-RESULT.json",
+      "blob": "0af07cbed878d7ff65a5805eaabc42dba49ac784",
+      "fetched_blob": "0af07cbed878d7ff65a5805eaabc42dba49ac784"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/finalization-preparation-1/GENUINE-EXACT-PAYLOAD-REVIEW.json",
+      "blob": "7fb9e252f19301eff9f57b92573c9424e5af923a",
+      "fetched_blob": "7fb9e252f19301eff9f57b92573c9424e5af923a"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/finalization-preparation-1/INDEPENDENT-FINALIZATION-TEMPLATE-ACCEPTANCE.ROOT-RECORD.json",
+      "blob": "b2338ad04f075705130625cb1832fe270ac3b9e7",
+      "fetched_blob": "b2338ad04f075705130625cb1832fe270ac3b9e7"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/finalization-preparation-1/ROOT-BOUND-FINALIZER-NOT-EXECUTED.json",
+      "blob": "b51cd1ab6fe15b3c1c1d878b0a7c34af617ee257",
+      "fetched_blob": "b51cd1ab6fe15b3c1c1d878b0a7c34af617ee257"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/finalization-preparation-1/ROOT-CANONICAL-SETTLEMENT-LONG-PAYLOAD.NOT-RELEASED.json",
+      "blob": "b696d39a3bfb34c685c44b730e14691f137fbd11",
+      "fetched_blob": "b696d39a3bfb34c685c44b730e14691f137fbd11"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/finalization-preparation-1/actual-finalization-1/command.json",
+      "blob": "6f5e80c000d0abc0e72b4f75d4e869e523417d7b",
+      "fetched_blob": "6f5e80c000d0abc0e72b4f75d4e869e523417d7b"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/finalization-preparation-1/actual-finalization-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/finalization-preparation-1/actual-finalization-1/stdout",
+      "blob": "7d90116474db3a34be61944430641526bebe26c3",
+      "fetched_blob": "7d90116474db3a34be61944430641526bebe26c3"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/ACTIVE-RT181-PIN-EXCLUSION.json",
+      "blob": "3ec4080aca400d5a3abdb9bacf0425a97de82a08",
+      "fetched_blob": "3ec4080aca400d5a3abdb9bacf0425a97de82a08"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/CANONICAL-INTEGRATION-PROVIDER-NAME-CLARIFICATION.json",
+      "blob": "3a77c8c378c5ac153e95cad340667bb87aa32d78",
+      "fetched_blob": "3a77c8c378c5ac153e95cad340667bb87aa32d78"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/CANONICAL-INTEGRATION-READY.json",
+      "blob": "4a5b1a2a2a79a1ed61c9521fc23d5800776508eb",
+      "fetched_blob": "4a5b1a2a2a79a1ed61c9521fc23d5800776508eb"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/CANONICAL-INTEGRATION.json",
+      "blob": "e56cdbe244b9ef193734cb6f74fa670f79d7ae67",
+      "fetched_blob": "e56cdbe244b9ef193734cb6f74fa670f79d7ae67"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/PRIVATE-ENTRY-METADATA.json",
+      "blob": "a34f8b5347739826454f941ac58070aea21e1549",
+      "fetched_blob": "a34f8b5347739826454f941ac58070aea21e1549"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/observer-alias-correction-1/ACTUAL-ALIAS-CORRECTION-RECEIPT.json",
+      "blob": "29bead955760ca487381d7e039796256dd050c9e",
+      "fetched_blob": "29bead955760ca487381d7e039796256dd050c9e"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/observer-alias-correction-1/EXACT-LAUNCH.PROFILE.json",
+      "blob": "9c6bae71b8bc2aefff0b999d000ee9b48128f48c",
+      "fetched_blob": "9c6bae71b8bc2aefff0b999d000ee9b48128f48c"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/observer-alias-correction-1/PRE-EXECUTION-SOURCE-AND-OBJECT-BINDING.json",
+      "blob": "d6185c91e6dee5b46ba18bade0b10d95e7e28f2c",
+      "fetched_blob": "d6185c91e6dee5b46ba18bade0b10d95e7e28f2c"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/observer-alias-correction-1/actual-owned-capture-1/1/command.json",
+      "blob": "95df751cc9291dbddb4f0922011311572d65a2c2",
+      "fetched_blob": "95df751cc9291dbddb4f0922011311572d65a2c2"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/observer-alias-correction-1/actual-owned-capture-1/1/direct-join.json",
+      "blob": "7bdfd474201836679b8f8e116068209faa1d5908",
+      "fetched_blob": "7bdfd474201836679b8f8e116068209faa1d5908"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/observer-alias-correction-1/actual-owned-capture-1/1/direct-wait.json",
+      "blob": "ce709d4c4c3872a53c7e0dd72ab3f5630107704d",
+      "fetched_blob": "ce709d4c4c3872a53c7e0dd72ab3f5630107704d"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/observer-alias-correction-1/actual-owned-capture-1/1/started.json",
+      "blob": "8617b1ec2aed4b2e289d79507cdb8024d6d7bfe6",
+      "fetched_blob": "8617b1ec2aed4b2e289d79507cdb8024d6d7bfe6"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/observer-alias-correction-1/actual-owned-capture-1/1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/observer-alias-correction-1/actual-owned-capture-1/1/stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/observer-alias-correction-1/actual-owned-capture-1/1/whole-join.json",
+      "blob": "c330f48c62dc093182e534ef7b3b45e3ca5d6527",
+      "fetched_blob": "c330f48c62dc093182e534ef7b3b45e3ca5d6527"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/observer-alias-correction-1/actual-owned-capture-1/2/command.json",
+      "blob": "fa566ca35aa233f2feebfa416ee3d660e400289b",
+      "fetched_blob": "fa566ca35aa233f2feebfa416ee3d660e400289b"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/observer-alias-correction-1/actual-owned-capture-1/2/direct-join.json",
+      "blob": "ccf4f1fa26ef521d55b326473ae35e97da646ff8",
+      "fetched_blob": "ccf4f1fa26ef521d55b326473ae35e97da646ff8"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/observer-alias-correction-1/actual-owned-capture-1/2/direct-wait.json",
+      "blob": "1a4a8372fe54b3ab741641348ab99ec17ca99e8a",
+      "fetched_blob": "1a4a8372fe54b3ab741641348ab99ec17ca99e8a"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/observer-alias-correction-1/actual-owned-capture-1/2/started.json",
+      "blob": "58cffbcc8e02e6063e768dd879f504c0aa560047",
+      "fetched_blob": "58cffbcc8e02e6063e768dd879f504c0aa560047"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/observer-alias-correction-1/actual-owned-capture-1/2/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/observer-alias-correction-1/actual-owned-capture-1/2/stdout",
+      "blob": "da8a9668f930db87998b03dd459c193413ed2d98",
+      "fetched_blob": "da8a9668f930db87998b03dd459c193413ed2d98"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/observer-alias-correction-1/actual-owned-capture-1/2/whole-join.json",
+      "blob": "35a486e4adfcc7a186c9b256ed2bd64df57c6d82",
+      "fetched_blob": "35a486e4adfcc7a186c9b256ed2bd64df57c6d82"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/observer-alias-correction-1/actual-owned-capture-1/ACTUAL-ELF-BINDING.json",
+      "blob": "7addfb115e531509008f8e13f88a817dd0e1dc16",
+      "fetched_blob": "7addfb115e531509008f8e13f88a817dd0e1dc16"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/observer-alias-correction-1/actual-owned-capture-1/ACTUAL-PRE-CAPACITY.json",
+      "blob": "96c898d709cdf7264459419dde308a87aecafe98",
+      "fetched_blob": "96c898d709cdf7264459419dde308a87aecafe98"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/observer-alias-correction-1/actual-owned-capture-1/ACTUAL-WHOLE-JOIN.json",
+      "blob": "906b248cea86dc7cea6ef009786b4fc761821515",
+      "fetched_blob": "906b248cea86dc7cea6ef009786b4fc761821515"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/observer-alias-correction-1/actual-owned-capture-1/commands.json",
+      "blob": "36112fa833bb882caa318814a779801ef0ac9dbd",
+      "fetched_blob": "36112fa833bb882caa318814a779801ef0ac9dbd"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/observer-alias-correction-1/fixture-alias.diff",
+      "blob": "2ecc83aa31a5e79c73bee3d97dfb975e4e81318c",
+      "fetched_blob": "2ecc83aa31a5e79c73bee3d97dfb975e4e81318c"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/observer-alias-correction-1/fixture.after.c",
+      "blob": "a8f2043b00103b8bca36460272bc5b3dc3e654a7",
+      "fetched_blob": "a8f2043b00103b8bca36460272bc5b3dc3e654a7"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/observer-alias-correction-1/fixture.before.c",
+      "blob": "c408c24912bcb21fb58bd771982cca962ebd0343",
+      "fetched_blob": "c408c24912bcb21fb58bd771982cca962ebd0343"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/observer-alias-correction-1/run_alias_owned.py",
+      "blob": "14a867c4613ad7512fb065b9d4cfb7e934304f2f",
+      "fetched_blob": "14a867c4613ad7512fb065b9d4cfb7e934304f2f"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/ACTUAL-HEADROOM.json",
+      "blob": "3384d3de137360ae5f35f9dfde4e38e0fa8e6be5",
+      "fetched_blob": "3384d3de137360ae5f35f9dfde4e38e0fa8e6be5"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/ACTUAL-PRODUCTION-FULLCRATE-RECEIPT.json",
+      "blob": "b158a7dc607134f561c146e10692d5d80324d46e",
+      "fetched_blob": "b158a7dc607134f561c146e10692d5d80324d46e"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/ACTUAL-PROFILE.json",
+      "blob": "25ab916d40cec2bfc9dfc1e425355f4ae1bfad38",
+      "fetched_blob": "25ab916d40cec2bfc9dfc1e425355f4ae1bfad38"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/COMPILE-OBJECT-RECEIPT.json",
+      "blob": "820b723861d352f67c818f6e50e2620cefd5cc96",
+      "fetched_blob": "820b723861d352f67c818f6e50e2620cefd5cc96"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/EXACT-PRODUCTION-RECIPE.GRANTED.json",
+      "blob": "76087fcd8aa47753892e66d8206c723c28f0066d",
+      "fetched_blob": "76087fcd8aa47753892e66d8206c723c28f0066d"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/INDEPENDENT-ACTUAL-RUST-ACCEPTANCE.ROOT-RECORD.json",
+      "blob": "6f7c395436baf0dba0648a82556a69e14e05284c",
+      "fetched_blob": "6f7c395436baf0dba0648a82556a69e14e05284c"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/PRESERVATION-MANIFEST.json",
+      "blob": "6619727ac610768c8a63788d24702d9ac1e6e27d",
+      "fetched_blob": "6619727ac610768c8a63788d24702d9ac1e6e27d"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/compiler-capture-1/command.json",
+      "blob": "8b312a948becc68ef8bc5e9a3f96f54c0efa2284",
+      "fetched_blob": "8b312a948becc68ef8bc5e9a3f96f54c0efa2284"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/compiler-capture-1/direct-join.json",
+      "blob": "470df1f56c543a791f9bd5221b09720839c925f1",
+      "fetched_blob": "470df1f56c543a791f9bd5221b09720839c925f1"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/compiler-capture-1/direct-wait.json",
+      "blob": "aac2c141dc42344d5a0183fd0601eb6844577021",
+      "fetched_blob": "aac2c141dc42344d5a0183fd0601eb6844577021"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/compiler-capture-1/started.json",
+      "blob": "2660d23e941d3ab380418ad9b2b34aeb3cd5997b",
+      "fetched_blob": "2660d23e941d3ab380418ad9b2b34aeb3cd5997b"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/compiler-capture-1/stderr",
+      "blob": "d54a9690cb8275c04c9e7186a95417cf6db098e0",
+      "fetched_blob": "d54a9690cb8275c04c9e7186a95417cf6db098e0"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/compiler-capture-1/stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/compiler-capture-1/whole-join.json",
+      "blob": "35144eafb2ac46625c737df95b0a8e90cb9c7622",
+      "fetched_blob": "35144eafb2ac46625c737df95b0a8e90cb9c7622"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/nm-capture-1/command.json",
+      "blob": "22042a005d79254d0f11caab1381a6ccce60fc63",
+      "fetched_blob": "22042a005d79254d0f11caab1381a6ccce60fc63"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/nm-capture-1/direct-join.json",
+      "blob": "df2298263b6677dd83deb7e3a75535ad58b8d51a",
+      "fetched_blob": "df2298263b6677dd83deb7e3a75535ad58b8d51a"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/nm-capture-1/direct-wait.json",
+      "blob": "f2d78a70ea66f3b9a50be3ef526fc2be5cf6e099",
+      "fetched_blob": "f2d78a70ea66f3b9a50be3ef526fc2be5cf6e099"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/nm-capture-1/started.json",
+      "blob": "d92e4bceb10e94dd2e4dff2ef9068964628b048e",
+      "fetched_blob": "d92e4bceb10e94dd2e4dff2ef9068964628b048e"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/nm-capture-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/nm-capture-1/stdout",
+      "blob": "c5e813599117df692d1d94d4221ab1385657405e",
+      "fetched_blob": "c5e813599117df692d1d94d4221ab1385657405e"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/nm-capture-1/whole-join.json",
+      "blob": "e98273ea6c8af396f237e38105657a1c5d48a3e5",
+      "fetched_blob": "e98273ea6c8af396f237e38105657a1c5d48a3e5"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/readelf-capture-1/command.json",
+      "blob": "630a1a30126c94fac2d9fb1fb185bb5f92e18ee8",
+      "fetched_blob": "630a1a30126c94fac2d9fb1fb185bb5f92e18ee8"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/readelf-capture-1/direct-join.json",
+      "blob": "a3930ceb22ed79d82f27ef93782d9aee93fede22",
+      "fetched_blob": "a3930ceb22ed79d82f27ef93782d9aee93fede22"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/readelf-capture-1/direct-wait.json",
+      "blob": "c0f56c9357ea57d4c8230748c20af59c6955ad28",
+      "fetched_blob": "c0f56c9357ea57d4c8230748c20af59c6955ad28"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/readelf-capture-1/started.json",
+      "blob": "0b029df68312e5e7bd2f7377c495f237a22acc47",
+      "fetched_blob": "0b029df68312e5e7bd2f7377c495f237a22acc47"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/readelf-capture-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "fetched_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/readelf-capture-1/stdout",
+      "blob": "6596a532389eb53e6a2815bed29c965bbd8b9169",
+      "fetched_blob": "6596a532389eb53e6a2815bed29c965bbd8b9169"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/readelf-capture-1/whole-join.json",
+      "blob": "afcda25ea3515484b8e45ceb88da6f0688f45674",
+      "fetched_blob": "afcda25ea3515484b8e45ceb88da6f0688f45674"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/run_once.py",
+      "blob": "f93089b6ac0b2b1f210d7c4b7b928be74b39a7c2",
+      "fetched_blob": "f93089b6ac0b2b1f210d7c4b7b928be74b39a7c2"
+    },
+    {
+      "path": "docs/verification/evidence/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/source/kernel/rust/x86_memory_helpers.rs",
+      "blob": "343012c30667dc7aa052eb7b0aca7678a5b9c13a",
+      "fetched_blob": "343012c30667dc7aa052eb7b0aca7678a5b9c13a"
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/CURRENT.md",
+      "blob": "59d164a51efdc8064d04f69d44beef4a82cb325a",
+      "fetched_blob": "59d164a51efdc8064d04f69d44beef4a82cb325a"
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/HANDOFF.md",
+      "blob": "36a16c96bef17cbe8a51a35cf0ad8c0fe95258d4",
+      "fetched_blob": "36a16c96bef17cbe8a51a35cf0ad8c0fe95258d4"
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/PROGRESS.md",
+      "blob": "99b64d19aee76acd33dbce852236808e758403f6",
+      "fetched_blob": "99b64d19aee76acd33dbce852236808e758403f6"
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/SESSION-HANDOFF.md",
+      "blob": "df6243b69631db986fbd648cb68a03f6166822c6",
+      "fetched_blob": "df6243b69631db986fbd648cb68a03f6166822c6"
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/VELOCITY.md",
+      "blob": "d7407ef5d09dc7586fc53fae858e6114e1950834",
+      "fetched_blob": "d7407ef5d09dc7586fc53fae858e6114e1950834"
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/rust-cutover-m14.json",
+      "blob": "2f063c6c15119ae2e08a954518e98a3e2a1730b5",
+      "fetched_blob": "2f063c6c15119ae2e08a954518e98a3e2a1730b5"
+    },
+    {
+      "path": "kernel/rust/x86_memory_helpers.rs",
+      "blob": "343012c30667dc7aa052eb7b0aca7678a5b9c13a",
+      "fetched_blob": "343012c30667dc7aa052eb7b0aca7678a5b9c13a"
+    }
+  ],
+  "acceptance": "checkpoint only; practical34/35 unchanged; no runtime release"
+}

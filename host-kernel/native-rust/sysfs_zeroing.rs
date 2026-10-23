@@ -68,6 +68,8 @@ impl Memory {
         {
             let mut ledger = self.ledger.lock();
             if ledger.conflicts(control_span, true) {
+                self.diagnostic_conflict_failure("zero_control", control_span,
+                    ledger.diagnostic_conflict(control_span, true), None, false, Some((request.pid, request.cpu)));
                 return Err(EBUSY);
             }
             // SAFETY: The complete aligned node is in retained OS extents.
@@ -94,6 +96,8 @@ impl Memory {
                     wire::Chunk::header_physical(link, self.direct_map).map_err(errno)?;
                 let header = Span::new(chunk_physical, wire::HEADER_BYTES)?;
                 if header.overlaps(node_span) || ledger.conflicts(header, true) {
+                    self.diagnostic_conflict_failure("zero_header", header,
+                        ledger.diagnostic_conflict(header, true), Some(control), header.overlaps(node_span), Some((request.pid, request.cpu)));
                     return Err(EBUSY);
                 }
                 let chunk_address = self.zero_address(chunk_physical, wire::HEADER_BYTES)?;
@@ -111,6 +115,8 @@ impl Memory {
                     .map_err(errno)?;
                 let span = Span::new(checked.physical, checked.bytes)?;
                 if span.overlaps(node_span) || ledger.conflicts(span, true) {
+                    self.diagnostic_conflict_failure("zero_chunk", span,
+                        ledger.diagnostic_conflict(span, true), Some(control), span.overlaps(node_span), Some((request.pid, request.cpu)));
                     return Err(EBUSY);
                 }
                 let chunk_address = self.zero_address(checked.physical, checked.bytes)?;
@@ -232,6 +238,9 @@ impl Memory {
                     wire::Chunk::header_physical(first, self.direct_map).map_err(errno)?;
                 self.zero_address(physical, wire::HEADER_BYTES)?;
                 if ledger.conflicts(Span::new(physical, wire::HEADER_BYTES)?, true) {
+                    let candidate = Span::new(physical, wire::HEADER_BYTES)?;
+                    self.diagnostic_conflict_failure("zeroed_head", candidate,
+                        ledger.diagnostic_conflict(candidate, true), Some(chunk.tag), false, None);
                     return Err(EBUSY);
                 }
             }
