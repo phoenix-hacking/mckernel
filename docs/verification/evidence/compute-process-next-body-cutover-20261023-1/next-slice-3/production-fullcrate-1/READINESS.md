@@ -1,0 +1,9 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Actual private78input production Rust fullcrate PASS using unchanged accepted pinnednightly1.95/4cfg/CGU1/2externalmodules compiler profile. CPU0 ordinary variant only: affinity/profile/capture/receipt CPU literals differ from prior CPU6 profile. All77 unchanged currentcanonical inputs match accepted migrate baseline; only sched_helpers.rs is replaced by independently reviewed private logging postimage. Compiler ran once15.551730303s, no failures/corrections.32000-pair hosted leaf was not replayed. CPU6 was neverused.
+
+Durable object SHAd2553e6aedf3e2dec8491549d4270cdacc8d1c8e0d333b99abde34fd7c8cdb54,13733024bytes, hashed once before NM/readelf. Object remains private; metadata unchanged after observers, no second large-object hash. Compiler stderr29919bytes/50individual warnings and summary, warning headings identical to accepted migrate. NM/readelf stderr empty.
+
+Actual Rust object supplies one global function process_sched_migrate_log_bridge, with no unresolved log function, and imports only the new declarative Cdescriptor process_sched_migrate_debug in place of the old Ccallback. Undefined560->560 swap removes process_sched_migrate_log_bridge/adds process_sched_migrate_debug, no other ledger change. All migration/timer/spin/memory exports preserved. Compiler/NM/readelf all joined/groupgone/streamsclosed/errorNULL/retirementNULL. CPU0 released; canonical/candidate11 unchanged.
+
+Cdeclarative descriptor data remains to preserve existing Cfile/function/line selectors. This is actual Rust object-consumer proof only. ExactGCC14wholeprocessTU/defaultkernel/defaultlink/native/zeroC remainOPEN. Root owns independent acceptance/canonical integration/heavy/defaultlink/native. See ACTUAL-PRODUCTION-FULLCRATE-RECEIPT.json and PRODUCTION-EXPORT-RECEIPT.json.

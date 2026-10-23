@@ -1,0 +1,73 @@
+--- a/kernel/process.c
++++ b/kernel/process.c
+@@ -414,15 +414,27 @@
+ 			  (waitq_entry_t *)entry_addr);
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++/* Existing diagnostic selector identity from the displaced C callsite.
++ * This is declarative __verbose data consumed by the existing Rust registry. */
++struct ddebug __aligned(8) __attribute__((section("__verbose")))
++process_sched_migrate_debug = {
++    .file = __FILE__,
++    .func = "process_sched_migrate_log_bridge",
++    .line = 422, /* source-bound original dkprintf line; keep control selectors */
++    .flags = DDEBUG_DEFAULT,
++};
++#else
+ PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_migrate_log_bridge(unsigned long thread_addr,
+ 					     int tid, int cpu_id)
+ {
+ 	(void)thread_addr;
+ 	dkprintf("%s: tid: %d -> cpu: %d\n",
+ 		 "sched_request_migrate", tid, cpu_id);
+ }
++#endif
+ 
+ #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+ int process_sched_vector_bridge(int vector_key);
+ void process_sched_interrupt_bridge(int cpu, int vector);
+--- a/kernel/rust/sched_helpers.rs
++++ b/kernel/rust/sched_helpers.rs
+@@ -10,9 +10,9 @@
+ unsafe extern "C" {
+     fn process_sched_waitq_init_bridge(waitq_addr: usize);
+     fn process_sched_waitq_prepare_bridge(waitq_addr: usize, entry_addr: usize, status: CInt);
+     fn process_sched_waitq_finish_bridge(waitq_addr: usize, entry_addr: usize);
+-    fn process_sched_migrate_log_bridge(thread_addr: usize, tid: CInt, cpu_id: CInt);
++    static mut process_sched_migrate_debug: crate::debug::Ddebug;
+     static mut idle_halt: CInt;
+     fn process_sched_irq_restore_bridge(irqstate: CULong);
+     fn process_sched_zero_free_bridge();
+     fn process_sched_pause_bridge();
+@@ -2182,8 +2182,29 @@
+     }
+     0
+ }
+ 
++/// Preserve the existing optional migration diagnostic through Rust logging.
++/// The C declaration owns only the existing __verbose selector data so current
++/// C file/function/line selectors remain stable. Arguments are already evaluated
++/// at the caller boundary even when disabled; thread_addr is never dereferenced.
++#[no_mangle]
++pub unsafe extern "C" fn process_sched_migrate_log_bridge(
++    _thread_addr: usize, tid: CInt, cpu_id: CInt,
++) {
++    let flags = unsafe {
++        read_volatile(core::ptr::addr_of!(process_sched_migrate_debug.line_flags)) >> 24
++    };
++    if flags != 0 {
++        unsafe {
++            kprintf(
++                b"%s: tid: %d -> cpu: %d\n\0".as_ptr().cast(),
++                b"sched_request_migrate\0".as_ptr().cast::<i8>(), tid, cpu_id,
++            );
++        }
++    }
++}
++
+ /// Publish a stack-local migration request using the existing scheduler body.
+ ///
+ /// # Safety
+ /// The caller preserves the existing scheduler/current-CPU contract and supplies

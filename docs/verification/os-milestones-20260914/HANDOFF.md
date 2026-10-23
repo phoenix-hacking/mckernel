@@ -1,3 +1,69 @@
+## SDK6 failed5603 POSITIVELY RETIRED; settlementfixture next — 2026-10-23 19:07 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+IndependentphysicalPASS: originalFAIL661.454s+actual37export043fe8eb/23reapedclients,
+exactCID6263removed+3emptyqueries; freshbdb15286 twoCOMPLETE305/nopublishers/no25
+identities/init3857780absentboth(birthNULL), stableowner71entries/exact23commandrows;
+mutex5e8d2c19 permanent27:4/eightpathsabsent. Both0/joined/gone/closed/emptyerr.
+Current_live_postjoin FAILED_SDK6_LONG_5603_POSITIVELY_RETIRED nonNULL; noheavy/live
+owner, no duplicatecleanup/query. Originalapp0oracleFAIL/OwnerSignal15 preserved.
+P12expert owns deadline-preserving finalretirement settlement+unchangedoracle
+actualfixtures onCPU6; case227stage exactcollector/init-onlynextbuildprepared.
+Nextactualproof oldsnapshotFAIL/constructedsettledPASS/neverSettlesTIMEOUT; noSDK/
+kernel/module/image rebuild, no unchangedreplay or oracle weakening. Practical34/35,
+whole12/14,acceptedLONG0launches/0mixedminutes. M14S05 loggingbodycanonicalintegrated,
+32000pairs+78actualRust accepted; wholeTU/defaultlink/nativeOPEN. Candidate12source
+prep activeindependent. Memorytwoactualfailures retained; parked/noCPUslot.
+
+## SDK6 failedowner CLOSED; physicalrelease pending — 2026-10-23 19:00 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+OneindependentlyreleasedguardedpidfdSIGTERM matched3857698/start57872098, .138794s;
+outeruntargeted. Tool27997 CLOSEDFAIL1/661.454045s/directjoined/groupgone/closed.
+Authorizedterminal3cats once0: innercapturee774cf7c FAIL661.305197s, stdoutempty,
+stderrab6c99cb2850B/OwnerSignal preserved; nokill/signalerrors/unexpectedgroups.
+Current_live_postjoin CLOSED_FAILED_SDK6_PENDING_PHYSICAL(nonNULL); noheavyadmission
+untilactualnormalcleanupreceipt/client/container/lease/mutex+freshphysicalacceptance.
+terminal_lifecycle_repair owns exactexport/postflightprep; foregroundownssettlement
+race correction: genuinefinalretire0 aftersnapshot-11, unchangedoracle/deadline.
+Practical34/35,whole12/14,acceptedLONG0/100launches/0/60mixedminutes. No replay.
+M14log78Rust independentlyaccepted; integrationpreimage/pinexclusionprep active.
+CPU6memoryalias-onlyobserverjobgranted withobjectreuse; furtherunexpectedSTOP.
+
+## SDK6 actualround0 FAILED; normalretirement next — 2026-10-23 18:56 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actualread ce67af79 reachesload/postflight/gate then app0_trace_oracle RustPair-5,
+reportedownership_complete1/rounds0/launches0;97303Btrace saved/ABORT. This is
+failedround, nothealthyhourprogress. EVENTFD101 logs16/no observedENOSYS/WAITfailure;
+cleanupintent0. Tool27997stillrunning, owner3857698/start57872098 outer3857691/
+start57872086; current_live_postjoin ACTIVE_FAILED_SDK6_LONG_OWNER nonNULL.
+Rootterminal_lifecycle_repair prepares exact normalretirement; foregroundpredictor
+owns finiteoracle diagnosis. No unchangedreplay/ownershipcreditbeforephysicalproof.
+Practical34/35,whole12/14; acceptedLONG0launches/0mixedminutes/no literalclosure.
+M14log actual78Rustconsumer independentlyPASS739accc9/eb41955c; canonicalslice3
+unchanged, wholeTU/defaultlink/nativeOPEN. CPU6alias-onlyobserverGCC/run grant
+issued; reusecorrectedRustobjectonlyaftermatchinginputs; furtherunexpectedfailureSTOP.
+
+## ActualSDK6LONG running; firstprogress read next — 2026-10-23 18:49 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Fetchedstatic26896501c0fc61da09c55b46c9dbec9bd3b0e20e/162blobs proof22d152bc.
+Genuinepayload869e8291 approved; attachonlyreview/newrelease06636763/request63909dc5.
+FullUNMODIFIEDrealclockvalidate+04b actualPUBLISHEDrequestprefix bothPASS beforeONE
+420acontrollerinvocation unexpired. Tool27997RUNNING, outer3857691/start57872086;
+authenticatedowner3857698/start57872098 read60360c98/0.154201sjoinedgoneclosedemptyerr.
+current_live_postjoin ACTIVE_SDK6_LONG_OWNER(nonNULL), soleheavy4CPU2-5/12GiB/
+noextraSwap512/netnone/NONE, rootpersistentdirectwait/nooutertimeout/signals/kill.
+Newnonce5603/HOSTl12d1/p/manifest2f4c/capsuled47c/SDK6SMP4489/image10972/launcherdca.
+Firstordinary5603reader scheduled30-60s, lookactualround0load/postflight/gate/report+
+completedprogress2launches; typedEVENTFDalone no completioncredit. Prior91cappsran
+beforequarantine, no startup-failure claim. No newpredictorgate/no speculativecancel.
+Practical34/35,whole12/14,acceptedLONG0/100launches/0/60mixedminutes pendingterminal.
+M14log78RustCPU0PASS15.551730s/uniqueRustTlog/Udescriptordataonlyswap560->560; CPU0
+released,sourceleafaccepted/fullproductionRustreviewnext; GCC14TU/link/nativeOPEN.
+Foregroundmemory onecorrectedjobCPU6 granted same2G60CPU90wall+6limits; privateonly.
+
 ## SDK6 actualadmission PASS; staticpublication beforeexactrelease — 2026-10-23 18:42 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

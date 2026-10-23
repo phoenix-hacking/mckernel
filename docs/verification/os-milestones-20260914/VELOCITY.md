@@ -1,3 +1,20 @@
+## SDK6 first-round feedback and retirement — 2026-10-23 19:00 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+SDK6 LONG owner closed FAIL after661.454045s. Early retainedread reachedactual
+round0 load/postflight/gate, but callbackgate failed app0_trace_oracle withzero
+completedrounds. Genuineapp0retirement0 appears atguest38.082705 afterthefailed
+snapshot ended37.139682 withlastretirement-11. Foreground owns deadline-preserving
+observer settlement correction; no kernel/module rebuild indicated bythese facts.
+Rootreactivation decoded alreadyretainedearlyread insteadofwaitingforhourdeadline;
+onefreshidentity-bound independentlyreviewedpidfdTERM/.138794s returnedcontrolto
+existingnormalcleanup. ActualinnerFAIL661.305197s and allthreeclosedreadbacks retained.
+This661s isfailed completed-ownerwall, notmixedwork/applicationcredit orcompiler
+cost. Exactavoidablefraction isnotmeasured. Concrete nextstrategy: settle genuine
+sameidentityfinalretirement withinexistingdeadline, freeze anewsnapshot, thenrun
+unchangedoracle; preserveoldFAIL andneedfreshqualifiedrelease. Physicalclearance
+stillpending, no competingheavy. Originalvelocitybaseline unchanged/no speedupclaim.
+
 ## Expired final release avoided; shorten publication-to-execution — 2026-10-23 14:42 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

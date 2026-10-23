@@ -1,0 +1,80 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "READY_FOR_ROOT_EXACT_TWO_FILE_INTEGRATION_NOT_EXECUTED",
+  "changes": {
+    "kernel/process.c": {
+      "before": {
+        "path": "/home/holden/mckernel/kernel/process.c",
+        "sha256": "89222734622ac054510b2c2cf6fbce1c83d3aa5dc764a3268e78be5e4c5949fa",
+        "bytes": 161266
+      },
+      "after": {
+        "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-3/source/kernel/process.c",
+        "sha256": "e2f2562b32ec462d9ee78c74dee4222485a69c4a3e2a81a332663fcef7e2b52d",
+        "bytes": 161751
+      }
+    },
+    "kernel/rust/sched_helpers.rs": {
+      "before": {
+        "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "sha256": "75cdf5430eb6ecec8d0cd0c7c10192d678e656427589fda79dd68990fa3d09bd",
+        "bytes": 184886
+      },
+      "after": {
+        "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-3/source/kernel/rust/sched_helpers.rs",
+        "sha256": "d16200db3054d88a83752fda1383d6c101d24de4b787bd78cd42edb46ab251fc",
+        "bytes": 185669
+      }
+    }
+  },
+  "current_canonical_preimages_match": true,
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-3/PRIVATE-PRODUCTION.patch",
+    "sha256": "3c7ec7c4845e1cbe09020f794c7461d52adcf638040e46ebd05aff4c5997955b",
+    "bytes": 2719
+  },
+  "pin_exclusion": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-3/ACTIVE-SDK6-LONG167-PIN-EXCLUSION.json",
+    "sha256": "dd9d05dcad94340232b9dbd8112423aae9d8e9b2d651f6c842b5c7d90cce5c76",
+    "bytes": 23752
+  },
+  "original_actual_leaf": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-3/ACTUAL-LEAF-RECEIPT.json",
+    "sha256": "eaee750a0a524eef7a89c85a53c6b852a597a60b801dd23053bd5a5e6eec5401",
+    "bytes": 26762
+  },
+  "original_leaf_export": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-3/LEAF-EXPORT-RECEIPT.json",
+    "sha256": "ea7a5390e4171d4304ab4368364631f220d93731963928babd8c56d54f94cd84",
+    "bytes": 4040
+  },
+  "original_actual78_Rust": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-3/production-fullcrate-1/ACTUAL-PRODUCTION-FULLCRATE-RECEIPT.json",
+    "sha256": "739accc925947afc864f785b14dc69af3a6618cde861efadbc0fd992c7223607",
+    "bytes": 9299
+  },
+  "independent_source_leaf_acceptance": "Root parent explicit PASS_PRIVATE_MIGRATION_LOG_SOURCE_ABI_AND_ACTUAL_LEAF_ONLY from m14_build_release_review; reused by root actualRust acceptance record",
+  "independent_actual_Rust_acceptance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-process-next-body-cutover-20261023-1/next-slice-3/production-fullcrate-1/INDEPENDENT-ACTUAL-RUST-ACCEPTANCE.ROOT-RECORD.json",
+    "sha256": "afc6da24dbc863f54d8a2697992422a74ee269ac74e6584256cf8c210c501fe6",
+    "bytes": 908
+  },
+  "root_only_apply_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport hashlib,json\nroot=Path('/home/holden/mckernel')\nrows={'kernel/process.c': {'before': {'path': '/home/holden/mckernel/kernel/process.c', 'sha256': '89222734622ac054510b2c2cf6fbce1c83d3aa5dc764a3268e78be5e4c5949fa', 'bytes': 161266}, 'after': {'path': '/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-3/source/kernel/process.c', 'sha256': 'e2f2562b32ec462d9ee78c74dee4222485a69c4a3e2a81a332663fcef7e2b52d', 'bytes': 161751}}, 'kernel/rust/sched_helpers.rs': {'before': {'path': '/home/holden/mckernel/kernel/rust/sched_helpers.rs', 'sha256': '75cdf5430eb6ecec8d0cd0c7c10192d678e656427589fda79dd68990fa3d09bd', 'bytes': 184886}, 'after': {'path': '/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-3/source/kernel/rust/sched_helpers.rs', 'sha256': 'd16200db3054d88a83752fda1383d6c101d24de4b787bd78cd42edb46ab251fc', 'bytes': 185669}}}\npayloads={}\nfor rel,row in rows.items():\n target=root/rel;source=Path(row['after']['path']);data=source.read_bytes()\n assert hashlib.sha256(target.read_bytes()).hexdigest()==row['before']['sha256'],('preimage',rel)\n assert hashlib.sha256(data).hexdigest()==row['after']['sha256'],('private postimage',rel)\n payloads[rel]=data\nfor rel,data in payloads.items():\n (root/rel).write_bytes(data)\nfor rel,row in rows.items():\n assert hashlib.sha256((root/rel).read_bytes()).hexdigest()==row['after']['sha256'],('canonical postimage',rel)\nprint(json.dumps({'status':'PASS_EXACT_TWO_CANONICAL_POSTIMAGES','paths':list(rows)}))\n"
+  ],
+  "apply_contract": "Verify both exact canonical preimages and both private postimages BEFORE any writes; write only these2existing paths; verify both exactpostimages. Root owns actual canonical integration receipt/decision. No worker execution.",
+  "remaining": {
+    "C_declarative_data": "Existing C __verbose descriptor data retained to preserve original Cfile/function/line selectors. Selected C runtime helper body replaced by Rust; fallback C body preserved.",
+    "exact_GCC14whole_process_TU": "OPEN",
+    "defaultkernel_defaultlink": "OPEN",
+    "native_logging": "OPEN",
+    "wholefile_or_zeroC_credit": false
+  },
+  "canonical_mutation_executed": false,
+  "compiler_build_guest_root_jobs": 0,
+  "CPU_held": false
+}

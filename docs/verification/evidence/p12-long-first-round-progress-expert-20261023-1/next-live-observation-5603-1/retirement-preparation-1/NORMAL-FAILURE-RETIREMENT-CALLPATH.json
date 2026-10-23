@@ -1,0 +1,36 @@
+{
+  "actual_complete_PROC_mutex_eightpaths_physical_clearance": null,
+  "actual_owner_cleanup": null,
+  "decision": "No immediate producer normal-terminal path follows this failed round. Existing bounded deadlines can eventually trigger normal cleanup, but reviewed one-owner SIGTERM is the accepted explicit normal-retirement trigger for root to elect now.",
+  "operation": {
+    "bytes": 3170,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-5603-1/retirement-preparation-1/ONE-EXACT-NORMAL-CANCEL-OPERATION.NOT-RELEASED.json",
+    "sha256": "4e0694816abb385c72e1565ae21b5f8987638de1859d23d447b8022322d4f52a"
+  },
+  "producer": {
+    "bytes": 25323,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/final-producer-build-preparation-1/production-source/pair_collector.c",
+    "sha256": "5ffe7ef09c601ab3fe13cb25fc4745c538f34f1b8eb3d5858b21a9969f6b0834"
+  },
+  "release_required": "Independent exact operation/source/profile review then root once-only execution; no execution authorisation is asserted by preparation.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_controller": {
+    "bytes": 7706,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk6-successor-1/capture_root_LONG.NOT-RELEASED.py",
+    "sha256": "420a55c44bc32f90910b81f1855cdab521e41a2683f741ac3628cda24564f50d"
+  },
+  "selected_owner": {
+    "bytes": 108359,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk6-successor-1/source/native_diagnostic_container_owner.py",
+    "sha256": "fbedb881439d6db6b0aa13ecea2d7dfa31737607cc1fc1f150a2e65ac4d89ce3"
+  },
+  "signal_receipt_is_not_physical_clearance": true,
+  "source_facts": [
+    "Selected producer pair_collector.c:618 holds PID1 on !good/!safe/!empty/payload.fault/long_complete failure; ND_PAIR_LONG_ABORT is not normal poweroff.",
+    "Owner execute_owner:1177 installs OWNER_SIGNALS before run; first SIGTERM sets signal_number and raises OwnerSignal, subsequent signals ignored during cleanup/recovery.",
+    "Owner run:1103 waits in bounded start --attach with original deadline8100; its finally1118 captures wait/logs/inspect, invokes _cleanup, releases only verified absence, flushes after lock release.",
+    "Owner execute_owner:1193 retains same lock/identity while repeated existing bounded cleanup recovery is necessary; rethrows primary failure.",
+    "Controller:78 owns Popen(start_new_session=True), waits actual owner; original soft bound8100 remains. Inner profile7800 remains; no gate/deadline change."
+  ],
+  "status": "SOURCE_PROOF_OF_EXISTING_NORMAL_FAILURE_RETIREMENT_NOT_ACTUAL_CLEANUP"
+}

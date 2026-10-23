@@ -1,0 +1,102 @@
+# Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+from pathlib import Path
+import hashlib,json,difflib
+R=Path('/home/holden/mckernel');P=Path(__file__).resolve().parent;F=P/'fixture';S=P/'source'
+def pin(p):
+ b=p.read_bytes();return dict(path=str(p),sha256=hashlib.sha256(b).hexdigest(),bytes=len(b))
+def fn(s,mark):
+ lines=s.splitlines(keepends=True);loc=[sum(map(len,lines[:i])) for i,x in enumerate(lines) if x.lstrip().startswith(mark)];assert len(loc)==1,(mark,loc)
+ a=loc[0];b=s.index('{',a);i=b+1;n=1
+ while n:n+=(s[i]=='{')-(s[i]=='}');i+=1
+ return s[a:i]
+def write(p,s):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
+c=(R/'kernel/process.c').read_text();rs=(R/'kernel/rust/sched_helpers.rs').read_text();debug=(R/'kernel/rust/debug.rs').read_text();hdr=(R/'lib/include/ihk/debug.h').read_text()
+original=fn(c,'PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_migrate_log_bridge(');line=c[:c.index(original)].count('\n')+1;callline=line+next(i for i,x in enumerate(original.splitlines()) if x.lstrip().startswith('dkprintf('))
+# Preserve current C diagnostic selector identity including __FILE__ under the
+# actual compiler argv. This is DECLARATIVE descriptor data, no C runtime body.
+data='''/* Existing diagnostic selector identity from the displaced C callsite.
+ * This is declarative __verbose data consumed by the existing Rust registry. */
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_sched_migrate_debug = {
+    .file = __FILE__,
+    .func = "process_sched_migrate_log_bridge",
+    .line = %d, /* source-bound original dkprintf line; keep control selectors */
+    .flags = DDEBUG_DEFAULT,
+};'''%callline
+newc=c.replace(original,'#ifdef MCKERNEL_RUST_PROCESS_HELPERS\n'+data+'\n#else\n'+original+'\n#endif',1)
+olddecl='    fn process_sched_migrate_log_bridge(thread_addr: usize, tid: CInt, cpu_id: CInt);\n';assert olddecl in rs
+newrs=rs.replace(olddecl,'    static mut process_sched_migrate_debug: crate::debug::Ddebug;\n',1)
+body='''/// Preserve the existing optional migration diagnostic through Rust logging.
+/// The C declaration owns only the existing __verbose selector data so current
+/// C file/function/line selectors remain stable. Arguments are already evaluated
+/// at the caller boundary even when disabled; thread_addr is never dereferenced.
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_migrate_log_bridge(
+    _thread_addr: usize, tid: CInt, cpu_id: CInt,
+) {
+    let flags = unsafe {
+        read_volatile(core::ptr::addr_of!(process_sched_migrate_debug.line_flags)) >> 24
+    };
+    if flags != 0 {
+        unsafe {
+            kprintf(
+                b"%s: tid: %d -> cpu: %d\\n\\0".as_ptr().cast(),
+                b"sched_request_migrate\\0".as_ptr().cast::<i8>(), tid, cpu_id,
+            );
+        }
+    }
+}
+
+'''
+a='/// Publish a stack-local migration request using the existing scheduler body.';assert a in newrs;newrs=newrs.replace(a,body+a,1)
+changes={'kernel/process.c':newc,'kernel/rust/sched_helpers.rs':newrs};patch=''
+for rel,text in changes.items():
+ write(S/rel,text);patch+=''.join(difflib.unified_diff((R/rel).read_text().splitlines(True),text.splitlines(True),fromfile='a/'+rel,tofile='b/'+rel,n=4))
+write(P/'PRIVATE-PRODUCTION.patch',patch);write(P/'ORIGINAL-SELECTED-C.c',original+'\n');write(F/'declarative-data.c',data+'\n')
+# Actual existing Rust descriptor type and registry flag-update helpers, unchanged.
+ctype='#[repr(C)]\n'+fn(debug,'pub struct Ddebug {')+'\n'
+write(F/'actual_debug_type.rs',ctype)
+write(F/'actual.rs','''#![no_std]
+#![allow(dead_code)]
+#[path="actual_debug_type.rs"] mod debug;
+type CInt=i32;
+use core::ptr::read_volatile;
+unsafe extern "C" { static mut process_sched_migrate_debug: debug::Ddebug; fn kprintf(format:*const i8,...)->CInt; }
+'''+body+'\n#[no_mangle]\npub static LEAF_DEBUG_LAYOUT:[usize;6]=[core::mem::size_of::<debug::Ddebug>(),core::mem::align_of::<debug::Ddebug>(),core::mem::offset_of!(debug::Ddebug,file),core::mem::offset_of!(debug::Ddebug,func),core::mem::offset_of!(debug::Ddebug,fmt),core::mem::offset_of!(debug::Ddebug,line_flags)];\n'+fn(debug,'unsafe fn set_ddebug_flags(').replace('unsafe fn set_ddebug_flags(', '#[no_mangle]\npub unsafe extern "C" fn leaf_set_ddebug_flags(',1).replace('Ddebug','debug::Ddebug')+'\n')
+# C function identifier is unchanged (for __func__), only its ELF symbol aliases
+# for simultaneous original/Rust linkage. #line supplies the exact production
+# source identity from the retained actual compile-db, not a fake C model.
+oldprod=Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/pinned-full-image-attempt-2/owner-work/evidence/artifacts/compile_commands.json')
+db=json.loads(oldprod.read_text());commands=[x for x in db if x['file'].endswith('/kernel/process.c')];assert len(commands)==1
+filename=commands[0]['file'];fixture='''/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ * Actual selected macro + actual declared descriptor; hosted diagnostic sink only. */
+#include <ihk/debug.h>
+#define PROCESS_SCHED_PUBLIC_BRIDGE
+void process_sched_migrate_log_bridge(unsigned long,int,int) __asm__("leaf_original_migrate_log");
+#line %d "%s"
+'''%(line,filename)+original+'\n#line 1 "private-descriptor-consumer.c"\n'+data.replace('.file = __FILE__,','.file = "'+filename+'",')+'\n'
+write(F/'original-and-data.c',fixture)
+write(F/'main.c','''/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+#include <stdio.h>
+#include <stdint.h>
+#include <stdarg.h>
+#include <stdlib.h>
+#include <string.h>
+struct ddebug;
+extern void leaf_original_migrate_log(unsigned long,int,int);
+extern void leaf_actual_migrate_log(unsigned long,int,int) __asm__("process_sched_migrate_log_bridge");
+extern void leaf_set_ddebug_flags(struct ddebug *,unsigned int);
+extern unsigned long leaf_run_cases(void);
+int leaf_printf_count,leaf_expected_tid,leaf_expected_cpu,leaf_eval_count;
+char leaf_text[160];
+int kprintf(const char *fmt,...) {
+ va_list a;va_start(a,fmt);const char *name=va_arg(a,const char *);int tid=va_arg(a,int),cpu=va_arg(a,int);va_end(a);
+ if(strcmp(fmt,"%s: tid: %d -> cpu: %d\\n")||strcmp(name,"sched_request_migrate")||tid!=leaf_expected_tid||cpu!=leaf_expected_cpu)abort();
+ if(leaf_eval_count!=3)abort();leaf_printf_count++;
+ return snprintf(leaf_text,sizeof(leaf_text),fmt,name,tid,cpu);
+}
+void leaf_fail(unsigned line) { fprintf(stderr,"assertion line=%u\\n",line);exit(1); }
+int main(void) { unsigned long n=leaf_run_cases();if(n!=32000)return 2;printf("PASS pairs=%lu flags=256 real_descriptor_layout_words=6 original_macro_and_actual_Rust; no kernel state execution\\n",n);return 0; }
+''')
+bind=dict(scope='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.',status='SOURCE_ONLY_NOT_COMPILED',changes={rel:dict(before=pin(R/rel),after=pin(S/rel)) for rel in changes},references={rel:pin(R/rel) for rel in ['lib/include/ihk/debug.h','kernel/rust/debug.rs']},existing_Rust_pattern_source=pin(R/'kernel/rust/process_helpers.rs'),selected_C_definition_line=line,original_dkprintf_line=callline,actual_production_compile_database=pin(oldprod),actual_process_compiler_argv=commands[0],descriptor_C_data_only=True,C_runtime_body_selected_default=False,patch=pin(P/'PRIVATE-PRODUCTION.patch'))
+write(P/'SOURCE-BINDINGS.json',json.dumps(bind,indent=2)+'\n');print(json.dumps(dict(patch=pin(P/'PRIVATE-PRODUCTION.patch'),bindings=pin(P/'SOURCE-BINDINGS.json'),original_C_line=line,original_callsite=callline)))

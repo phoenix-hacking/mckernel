@@ -1,0 +1,64 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ACTUAL_CURRENT_SOURCE_AND_PRIVATE_IMPLEMENTATION_POSITIONS",
+  "positions": [
+    {
+      "source": {
+        "path": "/home/holden/mckernel/kernel/process.c",
+        "sha256": "89222734622ac054510b2c2cf6fbce1c83d3aa5dc764a3268e78be5e4c5949fa",
+        "bytes": 161266
+      },
+      "line": 418,
+      "role": "actual selected C body preserved as fallback"
+    },
+    {
+      "source": {
+        "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-3/source/kernel/rust/sched_helpers.rs",
+        "sha256": "d16200db3054d88a83752fda1383d6c101d24de4b787bd78cd42edb46ab251fc",
+        "bytes": 185669
+      },
+      "line": 2191,
+      "role": "private new actualRust body"
+    },
+    {
+      "source": {
+        "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "sha256": "75cdf5430eb6ecec8d0cd0c7c10192d678e656427589fda79dd68990fa3d09bd",
+        "bytes": 184886
+      },
+      "line": 2195,
+      "role": "existing selected Rust consumer/callback"
+    },
+    {
+      "source": {
+        "path": "/home/holden/mckernel/kernel/rust/debug.rs",
+        "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+        "bytes": 13020
+      },
+      "line": 27,
+      "role": "existing real Rust debug descriptor type"
+    },
+    {
+      "source": {
+        "path": "/home/holden/mckernel/kernel/rust/debug.rs",
+        "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+        "bytes": 13020
+      },
+      "line": 88,
+      "role": "existing real Rust sysfs flag mutation body reused unchanged"
+    },
+    {
+      "source": {
+        "path": "/home/holden/mckernel/lib/include/ihk/debug.h",
+        "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc",
+        "bytes": 1294
+      },
+      "line": 27,
+      "role": "actual selected C macro"
+    }
+  ],
+  "original_callsite_line": 422,
+  "original_C_file_from_retained_compile_db": "/src/kernel/process.c",
+  "descriptor_data": "C declarative __verbose data only; no selected C runtime body. Existing sysfs registry consumes actual descriptor and flags.",
+  "whole_TU_defaultlink_native": "OPEN"
+}

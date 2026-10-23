@@ -1,0 +1,53 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "time_utc": "2026-10-23T19:02:22.982609+00:00",
+  "status": "PASS_EXACT_TWO_CANONICAL_POSTIMAGES",
+  "ready_sha256": "e5294d7f88c18340a90267dd73ac5544b598a8f8ee22e5d8236beb68d213ffba",
+  "changes": {
+    "kernel/process.c": {
+      "before": {
+        "path": "/home/holden/mckernel/kernel/process.c",
+        "sha256": "89222734622ac054510b2c2cf6fbce1c83d3aa5dc764a3268e78be5e4c5949fa",
+        "bytes": 161266
+      },
+      "after": {
+        "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-3/source/kernel/process.c",
+        "sha256": "e2f2562b32ec462d9ee78c74dee4222485a69c4a3e2a81a332663fcef7e2b52d",
+        "bytes": 161751
+      }
+    },
+    "kernel/rust/sched_helpers.rs": {
+      "before": {
+        "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "sha256": "75cdf5430eb6ecec8d0cd0c7c10192d678e656427589fda79dd68990fa3d09bd",
+        "bytes": 184886
+      },
+      "after": {
+        "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-3/source/kernel/rust/sched_helpers.rs",
+        "sha256": "d16200db3054d88a83752fda1383d6c101d24de4b787bd78cd42edb46ab251fc",
+        "bytes": 185669
+      }
+    }
+  },
+  "accepted_tests": {
+    "actual_C_Rust_pairs": 32000,
+    "flag_values": 256,
+    "actual_production_Rust_inputs": 78,
+    "production_Rust_seconds": 15.551730303
+  },
+  "active_pin_exclusion": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-3/ACTIVE-SDK6-LONG167-PIN-EXCLUSION.json",
+    "sha256": "dd9d05dcad94340232b9dbd8112423aae9d8e9b2d651f6c842b5c7d90cce5c76",
+    "bytes": 23752
+  },
+  "remaining": {
+    "C_declarative_data": "Existing C __verbose descriptor data retained to preserve original Cfile/function/line selectors. Selected C runtime helper body replaced by Rust; fallback C body preserved.",
+    "exact_GCC14whole_process_TU": "OPEN",
+    "defaultkernel_defaultlink": "OPEN",
+    "native_logging": "OPEN",
+    "wholefile_or_zeroC_credit": false
+  },
+  "native_image_unchanged": true,
+  "practical_closures": []
+}

@@ -1,0 +1,8 @@
+/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-3/fixture/control.c: In function ‘run’:
+/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-3/fixture/control.c:39:2: error: this ‘for’ clause does not guard... [-Werror=misleading-indentation]
+   39 |  for(unsigned i=0;i<sizeof(r.text);i++)r.text[i]=leaf_text[i];return r;
+      |  ^~~
+/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-3/fixture/control.c:39:63: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+   39 |  for(unsigned i=0;i<sizeof(r.text);i++)r.text[i]=leaf_text[i];return r;
+      |                                                               ^~~~~~
+cc1: all warnings being treated as errors

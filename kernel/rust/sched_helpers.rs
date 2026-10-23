@@ -11,7 +11,7 @@ unsafe extern "C" {
     fn process_sched_waitq_init_bridge(waitq_addr: usize);
     fn process_sched_waitq_prepare_bridge(waitq_addr: usize, entry_addr: usize, status: CInt);
     fn process_sched_waitq_finish_bridge(waitq_addr: usize, entry_addr: usize);
-    fn process_sched_migrate_log_bridge(thread_addr: usize, tid: CInt, cpu_id: CInt);
+    static mut process_sched_migrate_debug: crate::debug::Ddebug;
     static mut idle_halt: CInt;
     fn process_sched_irq_restore_bridge(irqstate: CULong);
     fn process_sched_zero_free_bridge();
@@ -2181,6 +2181,27 @@ pub unsafe extern "C" fn sched_idle_runqueue_has_running_result(
         entry = unsafe { list_next(entry) };
     }
     0
+}
+
+/// Preserve the existing optional migration diagnostic through Rust logging.
+/// The C declaration owns only the existing __verbose selector data so current
+/// C file/function/line selectors remain stable. Arguments are already evaluated
+/// at the caller boundary even when disabled; thread_addr is never dereferenced.
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_migrate_log_bridge(
+    _thread_addr: usize, tid: CInt, cpu_id: CInt,
+) {
+    let flags = unsafe {
+        read_volatile(core::ptr::addr_of!(process_sched_migrate_debug.line_flags)) >> 24
+    };
+    if flags != 0 {
+        unsafe {
+            kprintf(
+                b"%s: tid: %d -> cpu: %d\n\0".as_ptr().cast(),
+                b"sched_request_migrate\0".as_ptr().cast::<i8>(), tid, cpu_id,
+            );
+        }
+    }
 }
 
 /// Publish a stack-local migration request using the existing scheduler body.
