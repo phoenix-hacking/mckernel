@@ -1061,14 +1061,14 @@
       "id": "M06",
       "scope_id": "practical-kernel-apps-v1-20261017",
       "title": "Processes, threads and used syscalls",
-      "engineering_state": "partial",
-      "completion_status": "open",
+      "engineering_state": "complete",
+      "completion_status": "complete",
       "exit_condition": "Selected apps have working process creation/exec/wait and thread/syscall semantics.",
       "checks": [
         {
           "id": "P-M06-01",
           "description": "Exercise process creation/exec/wait required by the selected app infrastructure.",
-          "status": "open",
+          "status": "complete",
           "evidence": [
             {
               "path": "docs/verification/evidence/thread-tls-isolation-current942-result-review-20261017-2.json",
@@ -1085,9 +1085,16 @@
               "sha256": "6a6a47b9899e8de45ab650023419b5a1af0596fb34865241cae263e0b19cac2f",
               "size": 2703,
               "scope": "ACTUAL_V3_SDK_MODULE_COMPILE_LINK_AND_HOST_RETIREMENT_NO_MATCHED_LAUNCHER_OR_NATIVE_ACCEPTANCE"
+            },
+            {
+              "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/INDEPENDENT-FORMAL-STRICT235-APPLICATION-ACCEPTANCE.json",
+              "sha256": "de21eb47f58ebb45c23ae2365004ac39fb6032a45c4ac879cb10cd3fc13769d5",
+              "size": 2339,
+              "scope": "FORMAL_ORIGINAL235_PROCESS_EXEC_WAIT_AND_PHYSICAL_ACCEPTANCE"
             }
           ],
-          "assessment_note": "Working pthread fixture launches/joins and process retirement do not establish selected application fork/exec/wait behavior. ActualV3 SDK68 fullproductioncompile/link/currentexports/MM/defaultselection accepted6a6a47b9 after19focusedbodytests; one-shot22.5168s andpositivehostretirement. Matching8f9launcherbuild andfreshstrict235/227 remain; no actualprocesscreation/exec/wait acceptance frommodulecompile."
+          "assessment_note": "Independently accepted matchedSDK5 strict235: original235B/empty stderr/raw exit0, both exec branches/EOF/reap/ECHILD, procfs and real cleanup ACK/final retirement. Exact artifact and physical evidence retained; prior failures preserved. No broad fork/COW or exhaustive syscall claim.",
+          "prior_assessment_before_sdk5_native235": "Working pthread fixture launches/joins and process retirement do not establish selected application fork/exec/wait behavior. ActualV3 SDK68 fullproductioncompile/link/currentexports/MM/defaultselection accepted6a6a47b9 after19focusedbodytests; one-shot22.5168s andpositivehostretirement. Matching8f9launcherbuild andfreshstrict235/227 remain; no actualprocesscreation/exec/wait acceptance frommodulecompile."
         },
         {
           "id": "P-M06-02",
@@ -1153,7 +1160,12 @@
           "literal_reassessment_note": "Independent e837922f accepts only the literal selected tested205/HOST66 unsupported CLONE_IO refusal. The genuine loaded ELF syscall435 dispatch and linked Rust early guard join the frozen app return frame: -1/errno95, exact44B stdout, exit0 and empty stderr; physical471a proves retirement. HOST435 delivery is not expected for this local early rejection. Original generic route-check FAIL/semantic3e92, complete-route-loss ambiguity and positive worker-slot witness remain unresolved and preserved. No exhaustive runtime absence, new native batch/behavior, whole-M06 or Rust/C-retirement credit."
         }
       ],
-      "current_evidence_summary": "P-M06-02 and P-M06-03 literal checks complete on their declared evidence/profile. Selected application process creation/exec/wait P-M06-01 remains open; whole M06 remains open. Original M06 generic route-check failure remains failed separately from the scoped unsupported-operation literal decision."
+      "current_evidence_summary": "P-M06-02 and P-M06-03 literal checks complete on their declared evidence/profile. Selected application process creation/exec/wait P-M06-01 remains open; whole M06 remains open. Original M06 generic route-check failure remains failed separately from the scoped unsupported-operation literal decision.",
+      "completion_evidence": {
+        "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/INDEPENDENT-FORMAL-STRICT235-APPLICATION-ACCEPTANCE.json",
+        "sha256": "de21eb47f58ebb45c23ae2365004ac39fb6032a45c4ac879cb10cd3fc13769d5",
+        "scope": "Literal M06 exit with retained accepted M06-02 and M06-03 evidence; independent reviewer decision."
+      }
     },
     {
       "id": "M07",

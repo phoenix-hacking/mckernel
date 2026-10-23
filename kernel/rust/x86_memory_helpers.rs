@@ -172,6 +172,10 @@ const X86_PT_PRINT_LOG_ENTRY: CInt = 3;
 const X86_PT_PRINT_LOG_LARGE: CInt = 4;
 
 unsafe extern "C" {
+    fn _ihk_mc_free_pages(ptr: *mut c_void, npages: CInt, is_user: CInt, file: *mut i8, line: CInt);
+    static x86_clear_free_pages_user_file: [i8; 1];
+    static x86_clear_free_pages_user_line: CInt;
+    static x86_clear_free_pages_user_flag: CInt;
     fn page_unmap(page: *mut Page) -> CInt;
     fn phys_to_page(phys: CULong) -> *mut Page;
     fn get_this_cpu_local_var() -> *mut CpuLocalVar;
@@ -5185,6 +5189,15 @@ pub unsafe extern "C" fn phys_to_virt(p: CULong) -> *mut c_void {
         MAP_ST_START,
         LINUX_PAGE_OFFSET_BASE,
     )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_free_pages_user_bridge(addr: *mut c_void, nr_pages: CInt) {
+    _ihk_mc_free_pages(
+        addr, nr_pages, x86_clear_free_pages_user_flag,
+        core::ptr::addr_of!(x86_clear_free_pages_user_file).cast::<i8>() as *mut i8,
+        x86_clear_free_pages_user_line,
+    );
 }
 
 #[no_mangle]

@@ -1,0 +1,55 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXACT_READONLY_OWNER_EXPORT_PENDING_ROOT_INDEPENDENT_RELEASE",
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/post-native-preparation-1/readonly_export_exact_owner.py",
+    "sha256": "db0d41e0f525822a626c54c415d889e8e76fe7675e9c738e98fc9affbfc96daa",
+    "bytes": 1638
+  },
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/post-native-preparation-1/readonly_export_exact_owner.py"
+  ],
+  "owner_evidence_root": "/home/holden/mckernel-work/scratch/n235p5/p.owner-7089846b86b14bd4a91615d725be5abf",
+  "nonce": "7089846b86b14bd4a91615d725be5abf",
+  "profile": {
+    "cpu": 7,
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 30,
+    "FSIZE_bytes": 33554432,
+    "nofile": 256,
+    "core": 0,
+    "NPROC": "inherited",
+    "outer_wall_kill": null,
+    "outer_grace_kill": null,
+    "signals": false,
+    "direct_child_join_required": true,
+    "streams_closed_required": true
+  },
+  "capture": "Dispatcher-owned direct O_EXCL regular stdout/stderr files; positive direct-child wait and streams closed; no signals, no outer timeout/kill. Keep root operations serialized after native terminal and independent one-shot read-only release. Existing source-local bounds retained.",
+  "execution_authorized": false,
+  "root_operations": 0,
+  "mutations": 0,
+  "closed_capture": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-235/actual-sdk5-native-owner-capture-1/status.json",
+    "sha256": "5364a9a7141888b8a947db454d6352e291f6023f9c457c0cd137926e90ada583",
+    "bytes": 2179
+  },
+  "source_only_change": "ROOT literal only; normalized AST identical; current ownerroot derived from exactacceptedownerargv/self.evidence method",
+  "execution_review": null
+}

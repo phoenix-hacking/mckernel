@@ -1,3 +1,49 @@
+## Literal process check and whole M06 accepted — 2026-10-23 09:20 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual strict235SDK5 passes original235B/empty stderr/rawstatus0 in37.654495358s.
+Parent255 andchildren258/261 satisfy successfulexec token/argv/env/exit37 and
+ENOENT preservedstate37/exit42; bothEOF/reap/ECHILD, parentcompletechildren2owned0.
+Authentic protectedexport100files/687317B retained; realcleanupACK/procfsDELETE/
+terminalretirement verified. Independentphysical683a686a accepts30clientreaps,
+QEMU/containerretirement/absence/recordrelease/freshPROC/mutex27:4/eightpaths.
+Formal235acceptancede21eb47 satisfies previouslyapprovedprospectivecriteria without
+rewritingrawdiagnosticflags. LiteralP-M06-01 CLOSED:30/35; wholeM06 literalexit
+complete withretainedthread/syscall/refusalproof. No broadfork/COW/exhaustivesyscall
+orwholeOSclaim. No othercheckclosed; finalprofilecycles/launches/mixedminutes0/0/0.
+Nextstrict227alreadyordinary-staged onexactSDK5tuple; conditionalrootpreparation
+reviewinprogress, actualruntime pending. FirstfullV3restoration/batch coherent
+successor ownerterminal_lifecycle_repair. P12SDK5NONEsessionprep ownercase227_stage;
+noFilesystemloggingtheorem. Root ownsGit/admission/oneheavy.
+M14 separate: free-pagescallback private28vectors/sourcePASS, exact82production
+Rustfullcrate14.789s/objectd734b1b8/12exports +GCC9TU/3callbackrelocations/3readonly
+provenanceconstants/partiallink all8commands15.596s independentlyaccepted. Source
+pair25c13c85/35664d46 integrated afterpositive235physicalretirement; frozenimage10972
+unchanged. DefaultGCC14/finalELF/native/file/areaOPEN; noM14closure.
+Priorfailures anddispatcherstatus-observerassertion retained; admissionnotreplayed.
+No resize; included-only100%/servicechecks active; originalvelocitybaseline kept.
+
+## SDK5 actual build and physical retirement accepted — 2026-10-23 08:56 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Original count29/35; newly closed IDs none; final cycles/launches/mixed minutes0/0/0.
+Checkpoint028b51a7 pushed/fetched357blobs. Exact SDK5 source/profile and execution
+release accepted; complete authentication PASS. Actual build21.32616486s PASS,
+outercapture9b46757f positivejoin/groupabsent/closed. NewSMP2eb3e8e6/12944152B;
+IHKdaced2910 andMCCTRL06e8b9b5 unchanged. Independent acceptance8614e3e2 verifies
+107retainedfiles/68sources ba0e1be7, compilerbindings/exports/vermagic/MMproviders,
+14Dockerclients+1admissionclient retired, exactCIDec6d removed, postflight/archive
+recordrelease. Fresh PROC/mutex/name/label fourobservationsall0: completePROC no
+publishers; permanent27:4/eightpathsabsent. No duplicatecleanup needed. Native
+repair acceptance stillfalse. Next source-specific threehelper review and single
+SMP native stage, then fresh strict235→227→V3restoration. No image/launcher rebuild.
+M14 HOST Rust82/fullcrate+11exports independently accepted; selectedGCC9memoryTU/
+threecallbackrelocations and partiallinkagainst actuala125 accepted atbounded
+scope. Original inline postprocessing-failure source/output was not separately
+retained; additiveclarification corrects earlier narrativeclaim. All sixsuccessful
+compile/linkcaptures unchanged. DefaultGCC14/finalELF/native/file closuresOPEN.
+No resize; included-only100%/servicechecks active; original velocitybaseline kept.
+
 ## Procfs lifecycle repair staged; callback full crate passed — 2026-10-23 08:43 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

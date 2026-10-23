@@ -1,0 +1,56 @@
+--- /home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/full-tuple-binding-1/stage_m05_two_generation.py
++++ /home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/stage_m05_two_generation.py
+@@ -9,7 +9,7 @@
+ import argparse, copy, gc, hashlib, importlib.util, json, os, resource, shutil
+ 
+ HERE = Path(__file__).resolve().parent
+-BINDING_SHA256 = '2bf6b9819f9fad2b293cd968884017d630e2e2825fe171771376daf1c802c321'
++BINDING_SHA256 = '96a826240147102f48d7b0fa77df697f0583750819ca1281d6d1883a18be639a'
+ MEMBERS = {'images/mckernel.img', 'bin/mcexec', 'modules/ihk.ko',
+            'modules/ihk-smp-x86_64.ko', 'modules/mcctrl.ko'}
+ 
+@@ -82,18 +82,33 @@
+         need([row['name'] for row in receipt['modules']] == ['ihk.ko','ihk-smp-x86_64.ko','mcctrl.ko'], 'exact snapshot module names')
+         for row in receipt['modules']:
+             need(row['copied'] == binding['replacements']['modules/' + row['name']], 'exact actual V3 snapshot descriptor')
++    elif profile == 'current68-sdk5-build-link-physical':
++        need(binding['authority']['current_SDK_acceptance']['sha256'] == '8614e3e2bbf9e07c01f396079fc83fedbbb4119a3c37b5e311bdcc6cb6099623'
++             and sdk['status'] == 'PASS' and sdk['implementation_ownership'] is False
++             and sdk['decision'] == 'PASS_ACTUAL_SDK5_ARTIFACT_AND_PHYSICAL_ACCEPTANCE'
++             and sdk['physical_acceptance'] is True and sdk['native_acceptance'] is False,
++             'exact independent SDK5 artifact authority')
++        matched = docs['sdk5_matched_manifest']
++        need(binding['authority']['sdk5_matched_manifest']['sha256'] == 'fa8f54d7eb07906b167863314702ed948ed0d120214a8f40570d916baf2bcfae'
++             and matched['modules'] == [binding['replacements'][name] for name in
++                 ('modules/ihk.ko', 'modules/ihk-smp-x86_64.ko', 'modules/mcctrl.ko')]
++             and matched['artifacts']['mckernel_image'] == binding['replacements']['images/mckernel.img']
++             and matched['artifacts']['mcexec'] == binding['replacements']['bin/mcexec'],
++             'exact SDK5 matched module/image/launcher descriptors')
+     else:
+         need(False, 'unknown SDK authority profile')
+     for member, row in binding['replacements'].items():
+         if member.startswith('modules/'):
+-            need(sdk['artifacts'][member.split('/')[-1]] ==
+-                 {'bytes': row['size'], 'sha256': row['sha256']}, 'SDK module descriptor join')
++            artifact = sdk['artifacts'][member.split('/')[-1]]
++            wanted = {'bytes': row['size'], 'sha256': row['sha256']}
++            need(({key: artifact[key] for key in wanted} if profile == 'current68-sdk5-build-link-physical'
++                  else artifact) == wanted, 'SDK module descriptor join')
+ 
+ 
+ def validate_selection(selection, old, binding):
+     need(set(selection) == MEMBERS and selection == binding['replacements'],
+          'exact current image/launcher/three-module tuple')
+-    if binding.get('authority_profile') == 'current68-v3-build-link-physical':
++    if binding.get('authority_profile') in ('current68-v3-build-link-physical', 'current68-sdk5-build-link-physical'):
+         launcher = selection['bin/mcexec']
+         need(type(launcher['sha256']) is str and len(launcher['sha256']) == 64
+              and type(launcher['size']) is int and launcher['size'] > 0,
+@@ -237,6 +252,7 @@
+         write_json(om_path, om)
+         m = old_manifest
+         m['case_id'] = 'native.second-stop.current68.twoCPU.exact67.two-generation'
++        m['cleanup_profile'] = binding['cleanup_profile']
+         m['artifacts']['mckernel_image'] = binding['replacements']['images/mckernel.img']
+         m['artifacts']['mcexec'] = binding['replacements']['bin/mcexec']
+         m['modules'] = [binding['replacements'][name] for name in

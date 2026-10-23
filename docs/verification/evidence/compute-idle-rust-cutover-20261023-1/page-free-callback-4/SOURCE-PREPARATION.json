@@ -1,0 +1,20 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_CANDIDATE_DATA_ONLY_PROVENANCE_DECISION_PENDING_NO_COMPILER",
+  "sources": [
+    {
+      "path": "arch/x86_64/kernel/memory.c",
+      "preimage_sha256": "49244e64283fa51f4ab7a9eed42a388934a9227b640657d34a7eca4d8f18136b",
+      "candidate_sha256": "25c13c856dff0a1219a316ac3cf38cbe40f79c16561813b98a408f8cb62c24ed"
+    },
+    {
+      "path": "kernel/rust/x86_memory_helpers.rs",
+      "preimage_sha256": "dbaefd727a0a9786547d06effeb634782cba17741898d9b5515333c5b7b94297",
+      "candidate_sha256": "35664d46edaa3674d633b3c1ff96e85723fd21e5daf517d53c2438de35d5c4a3"
+    }
+  ],
+  "provenance": "Selected C const metadata initializer occupies exact former callback call line1333, preserving baseline __LINE__ and compilation __FILE__ token semantics without hardcoded1333 in source. Compact three const declarations intentionally share that line. Same IHK_MC_PG_USER macro supplies flag. No runtime C body added. Original fallback function text retained; its naturally shifted diagnostics are not baseline line-identical.",
+  "ABI": "Existing Rust mem_helpers public _ihk_mc_free_pages ABI reused unchanged. No allocator implementation moved.",
+  "pending": "Root provenance/source-approach decision and separate CPU6 compile grant after case227 stage joins.",
+  "prior_failure_limitation": "Selectedcallback3 initial inline metadata assertion original source/output not separately retained; do not repeat that claim. All new executable sources/captures will be saved before execution."
+}

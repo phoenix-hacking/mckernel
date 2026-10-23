@@ -2,7 +2,7 @@
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
-M14 tracks full compute-kernel Rust cutover separately from the existing M00–M13 functional worklist. Practical progress remains **29/35** at this snapshot. M14 is **open** and active in parallel; it does not add to the35-check denominator or block the next functional test.
+M14 tracks full compute-kernel Rust cutover separately from the existing M00–M13 functional worklist. Practical progress is **30/35** at this snapshot; P-M06-01 and whole M06 are closed on their separate functional evidence. M14 is **open** and active in parallel; it does not add to the35-check denominator or block the next functional test.
 
 **Done means:** No live McKernel-owned compute-kernel C implementation remains on the supported default co-booted LWK path; the Rust/reviewed-assembly image works with the existing Linux supporting control plane and the practical application/lifecycle baseline.
 
@@ -187,3 +187,24 @@ of the new actual HOST consumer evidence passes. See [current full-crate evidenc
 See the [independent HOST consumer review](../evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-fullcrate-callback3-1/INDEPENDENT-ACTUAL-HOST-CONSUMER-REVIEW.json).
 Actual default C consumers, final image link, native proof and all area/file
 closures remain open; practical35 counts are unchanged.
+
+
+M14-05-03-S04 adds the integrated user-page free callback. Its Rust body calls
+the existing `_ihk_mc_free_pages` provider once with the unchanged pointer and
+signed page count. Data-only C constants capture USER and diagnostic file/line
+at the replaced callback site; the original C fallback remains. All 28 actual
+boundary/provenance vectors pass. Source integration followed retirement of the
+235 physical attempt; runtime image `10972` remains unchanged. See [integration](../evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/CANONICAL-INTEGRATION.json)
+and [source review](../evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/INDEPENDENT-SOURCE-REVIEW.json).
+
+The exact 82-input production Rust crate compiles in 14.789s to object
+`d734b1b883c9e9ffbb84b7cc02f24250b479f572606a9064453188b490532004`
+(13,633,448 bytes), with 12 unique exports. The selected GCC9 complete memory C
+TU has three callback relocations and unique readonly file/line/flag metadata;
+partial linking resolves the callback and metadata uniquely. All eight commands
+joined with groups absent and streams closed in 15.596s. See [actual results](../evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/RESULT.json)
+and [independent HOST consumer review](../evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/INDEPENDENT-ACTUAL-HOST-CONSUMER-REVIEW.json).
+S01–S03 and their earlier proofs remain preserved. Pinned GCC14/default final
+image linkage, native evidence and every M14 area/file closure remain open.
+The separate functional count is 30/35; this slice closes no practical check or
+M14 milestone.

@@ -1,0 +1,473 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_NINE_ORDINARY_SDK5_STAGE_AND_GENERATED_NATIVE235_RELEASE_PREPARATION_ONLY",
+  "wholejoin": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/NINE-ORDINARY-WHOLE-JOIN.json",
+    "sha256": "b8671cccc28584561d34435163d433784a6c2ccaf8401fa6245b48d6f78791b3",
+    "bytes": 1734
+  },
+  "strict_manifest": {
+    "bytes": 8793,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-235/ACTUAL-V3-NATIVE235-MANIFEST.json",
+    "sha256": "fa8f54d7eb07906b167863314702ed948ed0d120214a8f40570d916baf2bcfae"
+  },
+  "actual_overlay": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-235/sdk5-native235-overlay-1.cpio.gz",
+    "sha256": "75dbfa94626171f6d7dc51cea045a012c97df584d470776cc3de416e911ea73d",
+    "size": 15247470
+  },
+  "actual_overlay_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-235/sdk5-native235-overlay-1.manifest.json",
+    "sha256": "171fd59058bd82ed3601b3416fead4146f2c70aa2184d695e73d35bd349dc88e",
+    "size": 15410
+  },
+  "strict_consumer": {
+    "bytes": 85837,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/runtime-provider-rebind-1/native/native_diagnostic.py",
+    "sha256": "f368324242bfdfb0ad1f3f524a906dcf51730ef0beb311315e6b66f5d585748c"
+  },
+  "single_SMP_patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/ACTUAL-SDK5-SMP-ONE-RECORD-BASE-PATCH-1.json",
+    "sha256": "4b739aad3f7d26ccff06af6fa3599d9a2f54ad0954da6386ac81267ddb46b347",
+    "bytes": 21947
+  },
+  "actual_patched_cpio": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/shared-procfs-delete-final-1.cpio",
+    "sha256": "d8d08bdab4791428fcbea7a22e34d87426528721cdca9518acf3c5935c744bb4",
+    "size": 42542032,
+    "mode": 33152
+  },
+  "actual_patched_gzip": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/shared-procfs-delete-final-1.cpio.gz",
+    "sha256": "d55333848bcb498e4496f338f75fb7d01831a950876c249657639bd5badd21ae",
+    "size": 12911373,
+    "mode": 33152
+  },
+  "actual_changed_members": [
+    "modules/ihk-smp-x86_64.ko"
+  ],
+  "all_other_final_members_identical": true,
+  "first8_elapsed_seconds": 21.061140676029027,
+  "helper2_elapsed_seconds": 0.08390076807700098,
+  "generated_root_packet": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/release-preparation-1/EXACT-NATIVE235-CONDITIONAL-PACKET.PENDING-ROOT.json",
+    "sha256": "77764f9c28feb09c70662fcd8059fd47d1e506dca439b7669de0a1b7529113b9",
+    "bytes": 18644
+  },
+  "exact_next_root_commands": {
+    "read_only_admission": [
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/usr/bin/sudo",
+      "-A",
+      "/usr/bin/prlimit",
+      "--as=2147483648:2147483648",
+      "--cpu=30:30",
+      "--core=0:0",
+      "--fsize=8388608:8388608",
+      "--",
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-235/root-live-admission-terminal-1/read_only_native235_admission.py"
+    ],
+    "metadata_publication": [
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "-c",
+      "from pathlib import Path; import hashlib,os,sys; src=Path(sys.argv[1]); root=Path(sys.argv[2]); digest=sys.argv[3]; raw=src.read_bytes(); assert hashlib.sha256(raw).hexdigest()==digest; assert os.getuid()==os.geteuid()==os.getgid()==os.getegid()==1000; root.mkdir(mode=0o700); (root/'p').mkdir(mode=0o700); f=(root/'m.json').open('xb'); f.write(raw); f.flush(); os.fsync(f.fileno()); f.close(); os.chmod(root/'m.json',0o600); assert hashlib.sha256((root/'m.json').read_bytes()).hexdigest()==digest",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-235/ACTUAL-V3-NATIVE235-MANIFEST.json",
+      "/home/holden/mckernel-work/scratch/n235p5",
+      "fa8f54d7eb07906b167863314702ed948ed0d120214a8f40570d916baf2bcfae"
+    ],
+    "production_guard": [
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/usr/bin/prlimit",
+      "--as=2147483648:2147483648",
+      "--cpu=30:30",
+      "--fsize=8388608",
+      "--core=0:0",
+      "--nofile=256",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "-c",
+      "from pathlib import Path\nimport importlib.util,json,hashlib,os\nB=Path(__import__('sys').argv[1]);P=json.loads(Path(__import__('sys').argv[2]).read_text())\ndef load(n,path):\n s=importlib.util.spec_from_file_location(n,path);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m\no=load('actual_owner',B/'native_diagnostic_container_owner.py');d=load('actual_diagnostic',B/'native_diagnostic.py');parent=Path(P['new_owner_parent']);manifest=Path(P['new_manifest']);need='fa8f54d7eb07906b167863314702ed948ed0d120214a8f40570d916baf2bcfae'\nassert hashlib.sha256((B/'native_diagnostic_container_owner.py').read_bytes()).hexdigest()=='45010e54e1f78e3efcd6572b71342ee6078abeea98961f2c5d49849575dd5048'\nassert hashlib.sha256(manifest.read_bytes()).hexdigest()==need\no.private_parent(str(parent));o._manifest_identity(str(manifest),need);o._manifest_outside_writable_parent(str(manifest),parent)\nattempt=parent/('attempt-'+P['fresh_nonce']);assert not os.path.lexists(attempt)\na=d.expected_qemu_argv(json.loads(manifest.read_text()),attempt);q=P['qmp_socket'];assert a[a.index('-qmp')+1]=='unix:'+q+',server=on,wait=off';assert len(os.fsencode(q))==93\nprint('PASS actual source4d7 parent/scratch manifest/outside-writable guards and actual expected_qemu_argv with93byte QMP socket')",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/runtime-provider-rebind-1/native",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-235/final-runtime-ready-terminal-1/EXACT-GUARD-DATA.json"
+    ],
+    "native_capture": [
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/capture_native199_owner.py",
+      "--operation",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-235/NATIVE-OPERATION.ACTUAL.json",
+      "--sha256",
+      "c683b812c8406daf91b96c9c6deeacb4302c4ca93db4965766f2e9b09d8dd6b9"
+    ]
+  },
+  "required_fresh_bindings": {
+    "current_source_tool_backend_identity_and_fetched_checkpoint": null,
+    "independent_execution_review": null,
+    "metadata_identity_and_closed_capture": null,
+    "one_shot_execution_release": null,
+    "production_guard_closed_capture": null,
+    "root_read_only_admission": null
+  },
+  "selected": [
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/FIRST8-ORDINARY-WHOLE-JOIN.json",
+        "sha256": "c9f0c4a12a3dbd1368d76a760ddca28181ba420af3554fda12bb8d2d440a9b1c",
+        "bytes": 4091
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/FIRST8-ORDINARY-WHOLE-JOIN.json",
+        "sha256": "c9f0c4a12a3dbd1368d76a760ddca28181ba420af3554fda12bb8d2d440a9b1c",
+        "bytes": 4091
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/NINE-ORDINARY-WHOLE-JOIN.json",
+        "sha256": "b8671cccc28584561d34435163d433784a6c2ccaf8401fa6245b48d6f78791b3",
+        "bytes": 1734
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/NINE-ORDINARY-WHOLE-JOIN.json",
+        "sha256": "b8671cccc28584561d34435163d433784a6c2ccaf8401fa6245b48d6f78791b3",
+        "bytes": 1734
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/ROOT-DELIVERED-ORDINARY-SOURCE-REVIEW.json",
+        "sha256": "ffe216fe6da88494e643d33e5951fda8dc604f53485ac0ec35be1ba98d584bd3",
+        "bytes": 1646
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/ROOT-DELIVERED-ORDINARY-SOURCE-REVIEW.json",
+        "sha256": "ffe216fe6da88494e643d33e5951fda8dc604f53485ac0ec35be1ba98d584bd3",
+        "bytes": 1646
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/ORDINARY-RUNLIST.SOURCE-REVIEW-AND-ROOT-GRANT-BOUND.json",
+        "sha256": "603a33e4449449067f63e6d337f8c7444b73d292d3b68d224c71bdf33c64f78a",
+        "bytes": 26511
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/ORDINARY-RUNLIST.SOURCE-REVIEW-AND-ROOT-GRANT-BOUND.json",
+        "sha256": "603a33e4449449067f63e6d337f8c7444b73d292d3b68d224c71bdf33c64f78a",
+        "bytes": 26511
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/PRODUCER-TWO-MODULES.ACTUAL.json",
+        "sha256": "d917122c2f295dd55cdbaa0ee6a9d706bd2934272994c4e425e3a6fa0c56d26d",
+        "bytes": 1758
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/PRODUCER-TWO-MODULES.ACTUAL.json",
+        "sha256": "d917122c2f295dd55cdbaa0ee6a9d706bd2934272994c4e425e3a6fa0c56d26d",
+        "bytes": 1758
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/ACTUAL-SDK5-SMP-ONE-RECORD-BASE-PATCH-1.json",
+        "sha256": "4b739aad3f7d26ccff06af6fa3599d9a2f54ad0954da6386ac81267ddb46b347",
+        "bytes": 21947
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/ACTUAL-SDK5-SMP-ONE-RECORD-BASE-PATCH-1.json",
+        "sha256": "4b739aad3f7d26ccff06af6fa3599d9a2f54ad0954da6386ac81267ddb46b347",
+        "bytes": 21947
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/ACTUAL-BIND-SDK5-CAPTURE-RESULT.json",
+        "sha256": "ff8aa5f6ff39c69b98994f7318ed0b6b24814c894bec6c5bc84bf95b7d8a0f99",
+        "bytes": 3824
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/ACTUAL-BIND-SDK5-CAPTURE-RESULT.json",
+        "sha256": "ff8aa5f6ff39c69b98994f7318ed0b6b24814c894bec6c5bc84bf95b7d8a0f99",
+        "bytes": 3824
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/ACTUAL-MKDIR-CAPTURE-RESULT.json",
+        "sha256": "2de2c9b6758527b6682337500e680161bfbe4869771bb55eedfbd045f32957d5",
+        "bytes": 3779
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/ACTUAL-MKDIR-CAPTURE-RESULT.json",
+        "sha256": "2de2c9b6758527b6682337500e680161bfbe4869771bb55eedfbd045f32957d5",
+        "bytes": 3779
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/ACTUAL-SMP-SNAPSHOT-CAPTURE-RESULT.json",
+        "sha256": "8f5162130c35aab63800e1fd249adba826acf6e98d362d4ac8f6ebd72a37ea5c",
+        "bytes": 6130
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/ACTUAL-SMP-SNAPSHOT-CAPTURE-RESULT.json",
+        "sha256": "8f5162130c35aab63800e1fd249adba826acf6e98d362d4ac8f6ebd72a37ea5c",
+        "bytes": 6130
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/ACTUAL-BIND-SMP-SNAPSHOT-CAPTURE-RESULT.json",
+        "sha256": "df690bc1c54c287616af73073a109d83f7cbe26cac9da35a8e4663a54eee4cab",
+        "bytes": 3845
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/ACTUAL-BIND-SMP-SNAPSHOT-CAPTURE-RESULT.json",
+        "sha256": "df690bc1c54c287616af73073a109d83f7cbe26cac9da35a8e4663a54eee4cab",
+        "bytes": 3845
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/ACTUAL-SMP-ONE-RECORD-PATCH-CAPTURE-RESULT.json",
+        "sha256": "f5a73d6681bea543e9dddd627fab17eb25f7787f344a3a63c1693e0cdccbbda2",
+        "bytes": 7195
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/ACTUAL-SMP-ONE-RECORD-PATCH-CAPTURE-RESULT.json",
+        "sha256": "f5a73d6681bea543e9dddd627fab17eb25f7787f344a3a63c1693e0cdccbbda2",
+        "bytes": 7195
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/ACTUAL-BIND-BASE-CAPTURE-RESULT.json",
+        "sha256": "c578442d72f8df63118e3dc5b556d4abb7e00d847a9c434b0ec788c27771d9ff",
+        "bytes": 3822
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/ACTUAL-BIND-BASE-CAPTURE-RESULT.json",
+        "sha256": "c578442d72f8df63118e3dc5b556d4abb7e00d847a9c434b0ec788c27771d9ff",
+        "bytes": 3822
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/ACTUAL-PREPARE-RELEASE-CAPTURE-RESULT.json",
+        "sha256": "91b6f8fc3e45f8a59dcc2c526d2326be1579bea83bea2e0a70b3bd663f69023a",
+        "bytes": 3855
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/ACTUAL-PREPARE-RELEASE-CAPTURE-RESULT.json",
+        "sha256": "91b6f8fc3e45f8a59dcc2c526d2326be1579bea83bea2e0a70b3bd663f69023a",
+        "bytes": 3855
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-235/ACTUAL-V3-OVERLAY-CAPTURE-RESULT.json",
+        "sha256": "2574ba53a5b3de243fba1c37276ef93c2a356265cc52a1048fa546c09d16c611",
+        "bytes": 5302
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/case-235/ACTUAL-V3-OVERLAY-CAPTURE-RESULT.json",
+        "sha256": "2574ba53a5b3de243fba1c37276ef93c2a356265cc52a1048fa546c09d16c611",
+        "bytes": 5302
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-235/ACTUAL-V3-STRICT-CONSUMER-CAPTURE-RESULT.json",
+        "sha256": "017d389e092029c5b882d0e508ad487da32eb73e29d2f4a6802006cbd00008b2",
+        "bytes": 3865
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/case-235/ACTUAL-V3-STRICT-CONSUMER-CAPTURE-RESULT.json",
+        "sha256": "017d389e092029c5b882d0e508ad487da32eb73e29d2f4a6802006cbd00008b2",
+        "bytes": 3865
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-235/ACTUAL-V3-CASE-ARTIFACT-AND-STRICT-CONSUMER-JOIN.json",
+        "sha256": "b351c8ea4c9376ad927fcf07b32dbfc79ff7f1e46a87e4d3054fb0335ea86b04",
+        "bytes": 6776
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/case-235/ACTUAL-V3-CASE-ARTIFACT-AND-STRICT-CONSUMER-JOIN.json",
+        "sha256": "b351c8ea4c9376ad927fcf07b32dbfc79ff7f1e46a87e4d3054fb0335ea86b04",
+        "bytes": 6776
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-235/ACTUAL-V3-NATIVE235-MANIFEST.json",
+        "sha256": "fa8f54d7eb07906b167863314702ed948ed0d120214a8f40570d916baf2bcfae",
+        "bytes": 8793
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/case-235/ACTUAL-V3-NATIVE235-MANIFEST.json",
+        "sha256": "fa8f54d7eb07906b167863314702ed948ed0d120214a8f40570d916baf2bcfae",
+        "bytes": 8793
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-235/sdk5-native235-overlay-1.manifest.json",
+        "sha256": "171fd59058bd82ed3601b3416fead4146f2c70aa2184d695e73d35bd349dc88e",
+        "bytes": 15410
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/case-235/sdk5-native235-overlay-1.manifest.json",
+        "sha256": "171fd59058bd82ed3601b3416fead4146f2c70aa2184d695e73d35bd349dc88e",
+        "bytes": 15410
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-235/NATIVE-OPERATION.ACTUAL.json",
+        "sha256": "c683b812c8406daf91b96c9c6deeacb4302c4ca93db4965766f2e9b09d8dd6b9",
+        "bytes": 2409
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/case-235/NATIVE-OPERATION.ACTUAL.json",
+        "sha256": "c683b812c8406daf91b96c9c6deeacb4302c4ca93db4965766f2e9b09d8dd6b9",
+        "bytes": 2409
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-235/NATIVE-CAPTURE-ARGV.ACTUAL.json",
+        "sha256": "17d79f26a0fdbf876fbaa1a8b3aa6d5f4f88f37e8402787f9eacfb46a445022c",
+        "bytes": 552
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/case-235/NATIVE-CAPTURE-ARGV.ACTUAL.json",
+        "sha256": "17d79f26a0fdbf876fbaa1a8b3aa6d5f4f88f37e8402787f9eacfb46a445022c",
+        "bytes": 552
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-235/METADATA-PUBLICATION-ARGV.ACTUAL.json",
+        "sha256": "e0ac7ab025f6581a46a7a1e585527815a407e49b628bf5752d87e84872cdab1c",
+        "bytes": 900
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/case-235/METADATA-PUBLICATION-ARGV.ACTUAL.json",
+        "sha256": "e0ac7ab025f6581a46a7a1e585527815a407e49b628bf5752d87e84872cdab1c",
+        "bytes": 900
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-235/CASE-DATA.BASE-BOUND.json",
+        "sha256": "cefc893e9d984b21263f627e496f8e183eb48c68be232948c970fe30dbb574dd",
+        "bytes": 3457
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/case-235/CASE-DATA.BASE-BOUND.json",
+        "sha256": "cefc893e9d984b21263f627e496f8e183eb48c68be232948c970fe30dbb574dd",
+        "bytes": 3457
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/release-preparation-1/EXACT-NATIVE235-CONDITIONAL-PACKET.PENDING-ROOT.json",
+        "sha256": "77764f9c28feb09c70662fcd8059fd47d1e506dca439b7669de0a1b7529113b9",
+        "bytes": 18644
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/release-preparation-1/EXACT-NATIVE235-CONDITIONAL-PACKET.PENDING-ROOT.json",
+        "sha256": "77764f9c28feb09c70662fcd8059fd47d1e506dca439b7669de0a1b7529113b9",
+        "bytes": 18644
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/release-preparation-1/ROOT-EXACT-READONLY-ADMISSION-OPERATION.json",
+        "sha256": "68bd592be8d82d43625b0b221919a83593120c066e81e8a2cb6d15ff89fb76eb",
+        "bytes": 1275
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/release-preparation-1/ROOT-EXACT-READONLY-ADMISSION-OPERATION.json",
+        "sha256": "68bd592be8d82d43625b0b221919a83593120c066e81e8a2cb6d15ff89fb76eb",
+        "bytes": 1275
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/release-preparation-1/CURRENT-LIVE-POSTJOIN.PENDING-ADMISSION.json",
+        "sha256": "f0e0324097419e586e9374ea3793d0368dc65d2caf71a6d51236a7f0eff40ddc",
+        "bytes": 2013
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/release-preparation-1/CURRENT-LIVE-POSTJOIN.PENDING-ADMISSION.json",
+        "sha256": "f0e0324097419e586e9374ea3793d0368dc65d2caf71a6d51236a7f0eff40ddc",
+        "bytes": 2013
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-235/root-live-admission-terminal-1/read_only_native235_admission.py",
+        "sha256": "769c96cd6524f118d99a4e95a2a2ba342f7da9f984f35bb6d7f7707c15ff14a1",
+        "bytes": 6588
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/case-235/root-live-admission-terminal-1/read_only_native235_admission.py",
+        "sha256": "769c96cd6524f118d99a4e95a2a2ba342f7da9f984f35bb6d7f7707c15ff14a1",
+        "bytes": 6588
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-235/final-runtime-ready-terminal-1/EXACT-GUARD-DATA.json",
+        "sha256": "a9dcd5901a4617b8e430654c358daaad0a2ba198a230102ffe9464690a72be7b",
+        "bytes": 308
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/case-235/final-runtime-ready-terminal-1/EXACT-GUARD-DATA.json",
+        "sha256": "a9dcd5901a4617b8e430654c358daaad0a2ba198a230102ffe9464690a72be7b",
+        "bytes": 308
+      }
+    },
+    {
+      "private": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-235/final-runtime-ready-terminal-1/EXACT-PRODUCTION-GUARD-ARGV.json",
+        "sha256": "99f492c45bf9249465948bc97660860b4bb16486927218af2152c484f51f9b8b",
+        "bytes": 1937
+      },
+      "publication": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/case-235/final-runtime-ready-terminal-1/EXACT-PRODUCTION-GUARD-ARGV.json",
+        "sha256": "99f492c45bf9249465948bc97660860b4bb16486927218af2152c484f51f9b8b",
+        "bytes": 1937
+      }
+    }
+  ],
+  "native_execution_authorized": false,
+  "native235_result": null,
+  "case227_runtime": null,
+  "root_operations": 0,
+  "compiler_operations": 0,
+  "Docker_operations": 0,
+  "guest_runs": 0
+}

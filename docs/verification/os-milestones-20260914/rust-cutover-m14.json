@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-23T08:43:53.202037+00:00",
+  "as_of": "2026-10-23T09:19:57.314512+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -1165,6 +1165,37 @@
                   "scope": "Independent PASS of exact 82-source HOST production Rust crate and 11 unique exports; no default C/final link/native/file credit."
                 }
               ]
+            },
+            {
+              "id": "M14-05-03-S04",
+              "title": "User-page free clear-range callback with C provenance metadata",
+              "status": "partial",
+              "source_state": "Independent source-accepted canonical two-file cutover integrated after235physical retirement; Rust callback calls existing _ihk_mc_free_pages once. Data-only C __FILE__/__LINE__/USER metadata supplies exact diagnostic provenance; original fallback body remains.",
+              "focused_checks": "28 actual original-C/Rust boundary/provenance vectors PASS; no changed signed count/null/allocator policy.",
+              "production_link": "Independent HOST consumer PASS: exact82input pinned full Rust crate/12uniqueexports objectd734b1b8; GCC9 selected full C TU/3callback relocations and unique readonly metadata; partialld-r resolves callback+metadata. Actual pinnedGCC14/default final image linkage remains OPEN.",
+              "native_validation": "OPEN; runtimeimage10972 unchanged. No area/file/native/M14 or practical check closure credit.",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/CANONICAL-INTEGRATION.json",
+                  "scope": "Canonical C25c13c85/Rust35664d46 source integrated after235physical retirement; existing PUBLIC selector excludes old callback body. Original fallback preserved; data-only C file/line/USER metadata retained at replaced callback site. Runtimeimage10972 unchanged."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/INDEPENDENT-SOURCE-REVIEW.json",
+                  "scope": "Independent source/ABI/provenance review PASS; actual existing allocator provider reused without new runtime C functionality."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/RESULT.json",
+                  "scope": "28 actual original-C/Rust callback boundary vectors PASS including pointer/signed-count extremes, USER and exact C-origin descriptor provenance. Original-C and descriptor source-site file/line values checked independently; no immutable old-binary line guarantee."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/RESULT.json",
+                  "scope": "Actual exact82input pinned production Rust crate14.789s, objectd734b1b883c9e9ffbb84b7cc02f24250b479f572606a9064453188b490532004 (13633448bytes),12uniqueT exports; selected GCC9 whole memory C TU has3callback relocations and unique readonly file/line/flag metadata. Partial link resolves callback/data uniquely; all8commands joined/closed15.596s."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/INDEPENDENT-ACTUAL-HOST-CONSUMER-REVIEW.json",
+                  "scope": "Independent actual HOST consumer PASS for exact fullcrate/GCC9 selected TU/partial link only. GCC14/default final image/native/whole area/file remain OPEN."
+                }
+              ]
             }
           ]
         },
@@ -1494,6 +1525,11 @@
       "as_of": "2026-10-23T08:43:53.202037+00:00",
       "kind": "page_unmap_callback_source_and_actual_fullcrate_partial",
       "summary": "Added M14-05-03-S03 source-integrated page-unmap callback/42actual fixture vectors and current82input Rust fullcrate14.253s/11uniqueexports objecta125e872. Focused independent actual HOST consumer review PASS. Prior54449c60 proof retained separately; mem.c wrapper/defaultC/final ELF/native/all area/file closures remain open; practical35 counts unchanged."
+    },
+    {
+      "as_of": "2026-10-23T09:19:57.314512+00:00",
+      "kind": "user_page_free_callback_source_and_actual_consumer_partial",
+      "summary": "Added partialS04 canonical free-pages Rust callback with data-only C provenance metadata,28vectors and independently accepted82input fullcrate/12exports/GCC9 TU/partial-link proof. PriorS01\u2013S03 and oldproofs preserved; allM14area/file/native closures remain open. Functional30/35 with P-M06-01 and wholeM06 closed independently; noM14closure."
     }
   ]
 }

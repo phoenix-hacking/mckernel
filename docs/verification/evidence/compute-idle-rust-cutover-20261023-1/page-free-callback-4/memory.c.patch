@@ -1,0 +1,18 @@
+--- a/arch/x86_64/kernel/memory.c
++++ b/arch/x86_64/kernel/memory.c
+@@ -1328,10 +1328,15 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
++extern void x86_clear_free_pages_user_bridge(void *addr, int nr_pages);
++const char x86_clear_free_pages_user_file[] = __FILE__; const int x86_clear_free_pages_user_line = __LINE__; const int x86_clear_free_pages_user_flag = IHK_MC_PG_USER;
++#else
+ static void x86_clear_free_pages_user_bridge(void *addr, int nr_pages)
+ {
+ 	_ihk_mc_free_pages(addr, nr_pages, IHK_MC_PG_USER, __FILE__, __LINE__);
+ }
++#endif
+ 
+ #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+ extern int x86_clear_page_unmap_bridge(void *page);

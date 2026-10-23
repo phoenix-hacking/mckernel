@@ -1,0 +1,646 @@
+{
+  "schema": "literal-process-check-closure-preparation.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ACTUAL_LITERAL_OBSERVATIONS_BOUND_INDEPENDENT_REVIEW_PENDING",
+  "check": "P-M06-01",
+  "literal_description": "Exercise process creation/exec/wait required by the selected app infrastructure.",
+  "canonical_status_changed": false,
+  "check_closure": false,
+  "acceptance_authority": "root and independent reviewer; author of procfs repair does not accept own change",
+  "inputs": {
+    "frozen_app": {
+      "path": "/home/holden/mckernel/scripts/application-tests/practical_process_exec_wait.rs",
+      "sha256": "baa27be71b1ca2e8b3a5856f4e42f5f31aebc51b22350a4b38a8f16eceb16c7d",
+      "bytes": 11038
+    },
+    "original_frozen_app": {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/process_exec_wait.rs",
+      "sha256": "baa27be71b1ca2e8b3a5856f4e42f5f31aebc51b22350a4b38a8f16eceb16c7d",
+      "bytes": 11038
+    },
+    "frozen_oracle": {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/frozen-oracle.json",
+      "sha256": "ba9e4a70d8756830e2d30da877a26bd14ce0f1ebc852d11ecca248f3f7a690c9",
+      "bytes": 1829
+    },
+    "selected_milestone_definitions": [
+      {
+        "id": "M06",
+        "exit_condition": "Selected apps have working process creation/exec/wait and thread/syscall semantics.",
+        "completion_status": "open",
+        "checks": [
+          {
+            "id": "P-M06-01",
+            "description": "Exercise process creation/exec/wait required by the selected app infrastructure.",
+            "status": "open"
+          },
+          {
+            "id": "P-M06-02",
+            "description": "Exercise genuinely overlapping threads/futex contention and required syscall error behavior.",
+            "status": "complete"
+          },
+          {
+            "id": "P-M06-03",
+            "description": "Unsupported optional operations fail clearly and safely.",
+            "status": "complete"
+          }
+        ]
+      },
+      {
+        "id": "M08",
+        "exit_condition": "Matched native modules build/load and used ABI/lifetime paths work.",
+        "completion_status": "open",
+        "checks": [
+          {
+            "id": "P-M08-01",
+            "description": "Build/load matching IHK/SMP/mcctrl modules.",
+            "status": "complete"
+          },
+          {
+            "id": "P-M08-02",
+            "description": "Validate used boot/resource/process/mapping/shutdown ABI paths and changed unsafe boundaries.",
+            "status": "open"
+          }
+        ]
+      },
+      {
+        "id": "M09",
+        "exit_condition": "Existing Rust consumers preserved and changed consumed Rust/C/assembly boundaries validated in the final artifact set; host compatibility exceptions explicit. Complete compute-kernel C retirement is tracked separately by M14.",
+        "completion_status": "open",
+        "checks": [
+          {
+            "id": "P-M09-01",
+            "description": "Keep existing Rust consumers active.",
+            "status": "complete"
+          },
+          {
+            "id": "P-M09-02",
+            "description": "Validate changed consumed Rust/C/assembly boundaries in the final artifact set.",
+            "status": "open"
+          }
+        ]
+      }
+    ],
+    "existing_finite_m08_m09_map": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/six-check-finite-boundary-join-20261023-1/INDEPENDENT-FINITE-M08-M09-OBSERVATION-JOIN.json",
+      "sha256": "5e2b9ea41ffaebb80e7e69a130bfd5bcd824141ec16ec9243c68cc3818fa2700",
+      "bytes": 4813
+    },
+    "sdk5_acceptance": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/INDEPENDENT-ACTUAL-SDK-ARTIFACT-AND-PHYSICAL-ACCEPTANCE.json",
+      "sha256": "8614e3e2bbf9e07c01f396079fc83fedbbb4119a3c37b5e311bdcc6cb6099623",
+      "bytes": 2584
+    },
+    "launcher_production_acceptance": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/current68-launcher-v3-actual-build-20261023-1/actual/INDEPENDENT-ACTUAL-LAUNCHER-PRODUCTION-ARTIFACT-ACCEPTANCE-1.json",
+      "sha256": "5eeb7f2ea4aba4421d7d79ed935946506a12720d0c7711e01d30065cb14dda54",
+      "bytes": 2651
+    },
+    "matched_manifest": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-235/ACTUAL-V3-NATIVE235-MANIFEST.json",
+      "sha256": "fa8f54d7eb07906b167863314702ed948ed0d120214a8f40570d916baf2bcfae",
+      "bytes": 8793
+    },
+    "outer_owner_capture": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-235/actual-sdk5-native-owner-capture-1/status.json",
+      "sha256": "5364a9a7141888b8a947db454d6352e291f6023f9c457c0cd137926e90ada583",
+      "bytes": 2179
+    },
+    "root_authenticated_export": {
+      "receipt_path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/export/receipt.json",
+      "status": "READONLY_EXACT_CLOSED_OWNER_EVIDENCE_EXPORT",
+      "files": 100,
+      "total_source_bytes": 687317,
+      "root_mutations": 0
+    }
+  },
+  "reported_owner_summary": {
+    "status": "PASS",
+    "returncode": 0,
+    "elapsed_seconds": 37.65449535800144,
+    "direct_child_joined": true,
+    "process_group_absent": true,
+    "streams_closed": true
+  },
+  "artifact_identities_from_existing_manifest": {
+    "image": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/mckernel.img",
+      "sha256": "10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2",
+      "size": 8439816
+    },
+    "launcher": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/launcher-runtime-snapshot-1/mcexec",
+      "sha256": "dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954",
+      "size": 394648
+    },
+    "modules": [
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/module-runtime-snapshots-1/ihk.ko",
+        "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+        "size": 1527808
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/runtime-inputs/ihk-smp-x86_64.ko",
+        "sha256": "2eb3e8e6d7e43f55ca262cb455212e205831e26980f10d4ce8ef99556fd2269d",
+        "size": 12944152
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/terminal-control-native-successor-1/runtime-inputs/mcctrl.ko",
+        "sha256": "06e8b9b571f21b41821aa03a32ebf4ae20ae19cf4b110c3af2c81b491b92ef86",
+        "size": 2662320
+      }
+    ],
+    "consumer_sha256": "f368324242bfdfb0ad1f3f524a906dcf51730ef0beb311315e6b66f5d585748c",
+    "owner_sha256": "45010e54e1f78e3efcd6572b71342ee6078abeea98961f2c5d49849575dd5048"
+  },
+  "literal_rows": [
+    {
+      "id": "M06-L1",
+      "literal": "Process creation",
+      "source_assertion": "parent calls run_case twice; each run_case requires fork>=0 and owns returned positive PID.",
+      "required_observation": "Native parent nr56 deliveries with matched positive returned child identities; exactly two application case markers and final children=2.",
+      "reuse_for": [
+        "P-M08-02 process ABI",
+        "P-M09-02 fork/default caller boundary"
+      ],
+      "observation_ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/inner-result.json",
+        "sha256": "49298ff12b7e1cb5482fa28672ce1f4af2d1d27c11403defcd872f5f270e4834",
+        "bytes": 111892,
+        "authenticated_source_path": "/home/holden/mckernel-work/scratch/n235p5/p.owner-7089846b86b14bd4a91615d725be5abf/inner-result.json",
+        "authority": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/export/receipt.json"
+      },
+      "trace_ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/serial.log",
+        "sha256": "bfbfa9a4d47e35b591f8088fcf6ff751e18a3511cafa93a76c895fb59e1b1830",
+        "bytes": 103319,
+        "authenticated_source_path": "/home/holden/mckernel-work/scratch/n235p5/p.owner-7089846b86b14bd4a91615d725be5abf/serial.log",
+        "authority": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/export/receipt.json"
+      },
+      "independent_acceptance_ref": null,
+      "source_ref": {
+        "path": "scripts/application-tests/practical_process_exec_wait.rs",
+        "sha256": "baa27be71b1ca2e8b3a5856f4e42f5f31aebc51b22350a4b38a8f16eceb16c7d",
+        "line": 124
+      }
+    },
+    {
+      "id": "M06-L2",
+      "literal": "Successful exec",
+      "source_assertion": "run_case(false) execve current absolute executable. child_mode checks exact argv[0..3], exact three-entry env plus terminating NULL; only then writes CHILD_OK and exits37.",
+      "required_observation": "Exact child exec success token=fixed-v1 line; parent wait success exit=37 eof=1 reaped=1 echild=1. Join same native child nr59/positive or successful route.",
+      "reuse_for": [
+        "P-M08-02 nr59/EXEC_TRANSFER20/EXEC_USERCOPY_DONE21/CREATE_PPD applicability",
+        "P-M09-02 launcher8f9 and guest exec-reset/caller joins"
+      ],
+      "observation_ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/inner-result.json",
+        "sha256": "49298ff12b7e1cb5482fa28672ce1f4af2d1d27c11403defcd872f5f270e4834",
+        "bytes": 111892,
+        "authenticated_source_path": "/home/holden/mckernel-work/scratch/n235p5/p.owner-7089846b86b14bd4a91615d725be5abf/inner-result.json",
+        "authority": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/export/receipt.json"
+      },
+      "trace_ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/serial.log",
+        "sha256": "bfbfa9a4d47e35b591f8088fcf6ff751e18a3511cafa93a76c895fb59e1b1830",
+        "bytes": 103319,
+        "authenticated_source_path": "/home/holden/mckernel-work/scratch/n235p5/p.owner-7089846b86b14bd4a91615d725be5abf/serial.log",
+        "authority": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/export/receipt.json"
+      },
+      "independent_acceptance_ref": null,
+      "source_ref": {
+        "path": "scripts/application-tests/practical_process_exec_wait.rs",
+        "sha256": "baa27be71b1ca2e8b3a5856f4e42f5f31aebc51b22350a4b38a8f16eceb16c7d",
+        "line": 172
+      }
+    },
+    {
+      "id": "M06-L3",
+      "literal": "Successful child wait",
+      "source_assertion": "run_case loop requires EOF and reaped; exact marker bytes, normal raw status9472, exit37; second wait must return-1/ECHILD10.",
+      "required_observation": "Source-bound exact success line and native parent wait61 returned same child PID. No separate observations.json is needed because selected argv omits --observations.",
+      "reuse_for": [
+        "P-M08-02 parent/child worker/delivery identity"
+      ],
+      "observation_ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/inner-result.json",
+        "sha256": "49298ff12b7e1cb5482fa28672ce1f4af2d1d27c11403defcd872f5f270e4834",
+        "bytes": 111892,
+        "authenticated_source_path": "/home/holden/mckernel-work/scratch/n235p5/p.owner-7089846b86b14bd4a91615d725be5abf/inner-result.json",
+        "authority": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/export/receipt.json"
+      },
+      "trace_ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/serial.log",
+        "sha256": "bfbfa9a4d47e35b591f8088fcf6ff751e18a3511cafa93a76c895fb59e1b1830",
+        "bytes": 103319,
+        "authenticated_source_path": "/home/holden/mckernel-work/scratch/n235p5/p.owner-7089846b86b14bd4a91615d725be5abf/serial.log",
+        "authority": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/export/receipt.json"
+      },
+      "independent_acceptance_ref": null,
+      "source_ref": {
+        "path": "scripts/application-tests/practical_process_exec_wait.rs",
+        "sha256": "baa27be71b1ca2e8b3a5856f4e42f5f31aebc51b22350a4b38a8f16eceb16c7d",
+        "line": 157
+      }
+    },
+    {
+      "id": "M06-L4",
+      "literal": "Failed exec preserves running child",
+      "source_assertion": "run_case(true) selects frozen missing path and accepts only execve=-1/ENOENT2 with private_state37, exact CHILD_ERROR, then exits42.",
+      "required_observation": "Exact child exec error errno=ENOENT state=37 unchanged=1 line; nr59 failed path and subsequent same child execution/wait route.",
+      "reuse_for": [
+        "P-M08-02 changed process/error crossing",
+        "P-M09-02 consumed failedexec Rust/C crossing"
+      ],
+      "observation_ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/inner-result.json",
+        "sha256": "49298ff12b7e1cb5482fa28672ce1f4af2d1d27c11403defcd872f5f270e4834",
+        "bytes": 111892,
+        "authenticated_source_path": "/home/holden/mckernel-work/scratch/n235p5/p.owner-7089846b86b14bd4a91615d725be5abf/inner-result.json",
+        "authority": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/export/receipt.json"
+      },
+      "trace_ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/serial.log",
+        "sha256": "bfbfa9a4d47e35b591f8088fcf6ff751e18a3511cafa93a76c895fb59e1b1830",
+        "bytes": 103319,
+        "authenticated_source_path": "/home/holden/mckernel-work/scratch/n235p5/p.owner-7089846b86b14bd4a91615d725be5abf/serial.log",
+        "authority": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/export/receipt.json"
+      },
+      "independent_acceptance_ref": null,
+      "source_ref": {
+        "path": "scripts/application-tests/practical_process_exec_wait.rs",
+        "sha256": "baa27be71b1ca2e8b3a5856f4e42f5f31aebc51b22350a4b38a8f16eceb16c7d",
+        "line": 134
+      }
+    },
+    {
+      "id": "M06-L5",
+      "literal": "Failed-exec child wait",
+      "source_assertion": "run_case(true) requires EOF, actual reap, normal raw status10752/exit42 and second wait-1/ECHILD10.",
+      "required_observation": "Exact parent wait error exit=42 eof=1 reaped=1 echild=1 line and native parent wait61 returned second child identity.",
+      "reuse_for": [
+        "P-M08-02 process lifetime"
+      ],
+      "observation_ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/inner-result.json",
+        "sha256": "49298ff12b7e1cb5482fa28672ce1f4af2d1d27c11403defcd872f5f270e4834",
+        "bytes": 111892,
+        "authenticated_source_path": "/home/holden/mckernel-work/scratch/n235p5/p.owner-7089846b86b14bd4a91615d725be5abf/inner-result.json",
+        "authority": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/export/receipt.json"
+      },
+      "trace_ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/serial.log",
+        "sha256": "bfbfa9a4d47e35b591f8088fcf6ff751e18a3511cafa93a76c895fb59e1b1830",
+        "bytes": 103319,
+        "authenticated_source_path": "/home/holden/mckernel-work/scratch/n235p5/p.owner-7089846b86b14bd4a91615d725be5abf/serial.log",
+        "authority": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/export/receipt.json"
+      },
+      "independent_acceptance_ref": null,
+      "source_ref": {
+        "path": "scripts/application-tests/practical_process_exec_wait.rs",
+        "sha256": "baa27be71b1ca2e8b3a5856f4e42f5f31aebc51b22350a4b38a8f16eceb16c7d",
+        "line": 165
+      }
+    },
+    {
+      "id": "M06-L6",
+      "literal": "Selected complete application result",
+      "source_assertion": "parent returnsOk only after both run_case results and final output; main emits error stderr/exit1 on any failure.",
+      "required_observation": "Exact235B stdout0e7aa..., empty stderr, raw application status0/exit0, untruncated streams with EOF and procfs_empty. Outer owner return0 alone does not establish these.",
+      "reuse_for": [
+        "P-M08-02 named235 observation",
+        "P-M09-02 final artifact/native result join"
+      ],
+      "observation_ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/inner-result.json",
+        "sha256": "49298ff12b7e1cb5482fa28672ce1f4af2d1d27c11403defcd872f5f270e4834",
+        "bytes": 111892,
+        "authenticated_source_path": "/home/holden/mckernel-work/scratch/n235p5/p.owner-7089846b86b14bd4a91615d725be5abf/inner-result.json",
+        "authority": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/export/receipt.json"
+      },
+      "trace_ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/serial.log",
+        "sha256": "bfbfa9a4d47e35b591f8088fcf6ff751e18a3511cafa93a76c895fb59e1b1830",
+        "bytes": 103319,
+        "authenticated_source_path": "/home/holden/mckernel-work/scratch/n235p5/p.owner-7089846b86b14bd4a91615d725be5abf/serial.log",
+        "authority": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/export/receipt.json"
+      },
+      "independent_acceptance_ref": null,
+      "source_ref": {
+        "path": "scripts/application-tests/practical_process_exec_wait.rs",
+        "sha256": "baa27be71b1ca2e8b3a5856f4e42f5f31aebc51b22350a4b38a8f16eceb16c7d",
+        "line": 198
+      }
+    },
+    {
+      "id": "M06-E1",
+      "literal": "Evidence identity and lifecycle support (not a new functional criterion)",
+      "source_assertion": "Frozen app/oracle, image10972, launcher dca025 and SDK5 module identities are bound by fa8f54 manifest; existing strict consumer applies child route and BEGIN cleanup checks.",
+      "required_observation": "Protected export of actual result/serial, exact parent/child generation/worker/delivery links, real cleanup ACK and terminal-before-retirement0, ordinary trace correspondence, no kernel failure marker; independent result+physical review.",
+      "reuse_for": [
+        "P-M08-02 mapping/cleanup and owned revoke-finalACK applicability",
+        "P-M09-02 exact artifact bindings"
+      ],
+      "observation_ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/inner-result.json",
+        "sha256": "49298ff12b7e1cb5482fa28672ce1f4af2d1d27c11403defcd872f5f270e4834",
+        "bytes": 111892,
+        "authenticated_source_path": "/home/holden/mckernel-work/scratch/n235p5/p.owner-7089846b86b14bd4a91615d725be5abf/inner-result.json",
+        "authority": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/export/receipt.json"
+      },
+      "trace_ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/serial.log",
+        "sha256": "bfbfa9a4d47e35b591f8088fcf6ff751e18a3511cafa93a76c895fb59e1b1830",
+        "bytes": 103319,
+        "authenticated_source_path": "/home/holden/mckernel-work/scratch/n235p5/p.owner-7089846b86b14bd4a91615d725be5abf/serial.log",
+        "authority": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/export/receipt.json"
+      },
+      "independent_acceptance_ref": null,
+      "source_ref": {
+        "path": "scripts/application-tests/practical_process_exec_wait.rs",
+        "sha256": "baa27be71b1ca2e8b3a5856f4e42f5f31aebc51b22350a4b38a8f16eceb16c7d",
+        "line": 211
+      }
+    }
+  ],
+  "actual_observations": {
+    "stdout": {
+      "ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/inner-result.json",
+        "sha256": "49298ff12b7e1cb5482fa28672ce1f4af2d1d27c11403defcd872f5f270e4834",
+        "bytes": 111892,
+        "authenticated_source_path": "/home/holden/mckernel-work/scratch/n235p5/p.owner-7089846b86b14bd4a91615d725be5abf/inner-result.json",
+        "authority": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/export/receipt.json"
+      },
+      "json_pointer": "/guest_report/streams/stdout",
+      "observed": {
+        "discarded": 0,
+        "eof": true,
+        "eof_ns": 33009998101,
+        "hex": "706172656e742073746172740a6368696c642065786563207375636365737320746f6b656e3d66697865642d76310a706172656e742077616974207375636365737320657869743d333720656f663d31207265617065643d3120656368696c643d310a6368696c642065786563206572726f72206572726e6f3d454e4f454e542073746174653d333720756e6368616e6765643d310a706172656e742077616974206572726f7220657869743d343220656f663d31207265617065643d3120656368696c643d310a706172656e7420636f6d706c657465206368696c6472656e3d32206f776e65643d300a",
+        "limit": 1024,
+        "observed": 235,
+        "retained": 235,
+        "truncated": false
+      }
+    },
+    "stderr": {
+      "ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/inner-result.json",
+        "sha256": "49298ff12b7e1cb5482fa28672ce1f4af2d1d27c11403defcd872f5f270e4834",
+        "bytes": 111892,
+        "authenticated_source_path": "/home/holden/mckernel-work/scratch/n235p5/p.owner-7089846b86b14bd4a91615d725be5abf/inner-result.json",
+        "authority": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/export/receipt.json"
+      },
+      "json_pointer": "/guest_report/streams/stderr",
+      "observed": {
+        "discarded": 0,
+        "eof": true,
+        "eof_ns": 33009968489,
+        "hex": "",
+        "limit": 1024,
+        "observed": 0,
+        "retained": 0,
+        "truncated": false
+      }
+    },
+    "application_status": {
+      "ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/inner-result.json",
+        "sha256": "49298ff12b7e1cb5482fa28672ce1f4af2d1d27c11403defcd872f5f270e4834",
+        "bytes": 111892,
+        "authenticated_source_path": "/home/holden/mckernel-work/scratch/n235p5/p.owner-7089846b86b14bd4a91615d725be5abf/inner-result.json",
+        "authority": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/export/receipt.json"
+      },
+      "json_pointer": "/guest_report",
+      "raw_wait_status": 0,
+      "procfs_empty": true,
+      "cleanup": {
+        "errors": [],
+        "reaped": true
+      },
+      "capture_errors": []
+    },
+    "serial_trace": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/serial.log",
+      "sha256": "bfbfa9a4d47e35b591f8088fcf6ff751e18a3511cafa93a76c895fb59e1b1830",
+      "bytes": 103319,
+      "authenticated_source_path": "/home/holden/mckernel-work/scratch/n235p5/p.owner-7089846b86b14bd4a91615d725be5abf/serial.log",
+      "authority": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/export/receipt.json"
+    },
+    "parent_child_routes": {
+      "ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/serial.log",
+        "sha256": "bfbfa9a4d47e35b591f8088fcf6ff751e18a3511cafa93a76c895fb59e1b1830",
+        "bytes": 103319,
+        "authenticated_source_path": "/home/holden/mckernel-work/scratch/n235p5/p.owner-7089846b86b14bd4a91615d725be5abf/serial.log",
+        "authority": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/export/receipt.json"
+      },
+      "os": 0,
+      "generation": 1,
+      "parent": 255,
+      "children": [
+        258,
+        261
+      ],
+      "routes": [
+        {
+          "pid": 255,
+          "worker": 7,
+          "delivery": 31,
+          "nr": 56,
+          "delivered_line": 958,
+          "returned_line": 961,
+          "value": 258
+        },
+        {
+          "pid": 255,
+          "worker": 7,
+          "delivery": 35,
+          "nr": 56,
+          "delivered_line": 962,
+          "returned_line": 964,
+          "value": 0
+        },
+        {
+          "pid": 258,
+          "worker": 34,
+          "delivery": 43,
+          "nr": 59,
+          "delivered_line": 982,
+          "returned_line": 988,
+          "value": 0
+        },
+        {
+          "pid": 258,
+          "worker": 34,
+          "delivery": 59,
+          "nr": 59,
+          "delivered_line": 1005,
+          "returned_line": 1006,
+          "value": 0
+        },
+        {
+          "pid": 255,
+          "worker": 6,
+          "delivery": 102,
+          "nr": 61,
+          "delivered_line": 1103,
+          "returned_line": 1104,
+          "value": 258
+        },
+        {
+          "pid": 255,
+          "worker": 6,
+          "delivery": 112,
+          "nr": 56,
+          "delivered_line": 1125,
+          "returned_line": 1127,
+          "value": 261
+        },
+        {
+          "pid": 255,
+          "worker": 7,
+          "delivery": 116,
+          "nr": 56,
+          "delivered_line": 1128,
+          "returned_line": 1130,
+          "value": 0
+        },
+        {
+          "pid": 261,
+          "worker": 115,
+          "delivery": 124,
+          "nr": 59,
+          "delivered_line": 1148,
+          "returned_line": 1150,
+          "value": 2
+        },
+        {
+          "pid": 255,
+          "worker": 6,
+          "delivery": 134,
+          "nr": 61,
+          "delivered_line": 1176,
+          "returned_line": 1177,
+          "value": 261
+        }
+      ]
+    },
+    "cleanup_and_retirement": {
+      "ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/serial.log",
+        "sha256": "bfbfa9a4d47e35b591f8088fcf6ff751e18a3511cafa93a76c895fb59e1b1830",
+        "bytes": 103319,
+        "authenticated_source_path": "/home/holden/mckernel-work/scratch/n235p5/p.owner-7089846b86b14bd4a91615d725be5abf/serial.log",
+        "authority": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/export/receipt.json"
+      },
+      "rows": [
+        {
+          "line": 1094,
+          "entry": "<6>[   32.725852] mcctrl: application_process=cleanup_requested os=0 generation=1 pid=258 intent_errno=0"
+        },
+        {
+          "line": 1099,
+          "entry": "<6>[   32.733109] ihk_smp_x86_64: IHK-SMP: application cleanup ACK os=0 generation=1 pid=258 token=32 errno=0 abandoned=0"
+        },
+        {
+          "line": 1100,
+          "entry": "<6>[   32.737021] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=1 pid=258 token=100 errno=-11"
+        },
+        {
+          "line": 1105,
+          "entry": "<6>[   32.797172] ihk_smp_x86_64: IHK-SMP: application procfs deleted os=0 generation=1 pid=258 tid=258"
+        },
+        {
+          "line": 1166,
+          "entry": "<6>[   33.019184] mcctrl: application_process=cleanup_requested os=0 generation=1 pid=261 intent_errno=0"
+        },
+        {
+          "line": 1171,
+          "entry": "<6>[   33.026840] ihk_smp_x86_64: IHK-SMP: application cleanup ACK os=0 generation=1 pid=261 token=113 errno=0 abandoned=0"
+        },
+        {
+          "line": 1175,
+          "entry": "<6>[   33.031810] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=1 pid=261 token=132 errno=-11"
+        },
+        {
+          "line": 1179,
+          "entry": "<6>[   33.038965] ihk_smp_x86_64: IHK-SMP: application procfs deleted os=0 generation=1 pid=261 tid=261"
+        },
+        {
+          "line": 1183,
+          "entry": "<6>[   33.070847] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=1 pid=258 token=144 errno=0"
+        },
+        {
+          "line": 1184,
+          "entry": "<6>[   33.072840] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=1 pid=261 token=145 errno=0"
+        },
+        {
+          "line": 1186,
+          "entry": "<6>[   33.073527] mcctrl: application_process=cleanup_requested os=0 generation=1 pid=255 intent_errno=0"
+        },
+        {
+          "line": 1187,
+          "entry": "<6>[   33.078965] ihk_smp_x86_64: IHK-SMP: application cleanup ACK os=0 generation=1 pid=255 token=3 errno=0 abandoned=0"
+        },
+        {
+          "line": 1188,
+          "entry": "<6>[   33.080964] ihk_smp_x86_64: IHK-SMP: application procfs deleted os=0 generation=1 pid=255 tid=255"
+        },
+        {
+          "line": 1189,
+          "entry": "<6>[   33.083994] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=1 pid=255 token=147 errno=0"
+        }
+      ]
+    },
+    "alias_revoke_final_ack": null,
+    "physical_retirement": null,
+    "root_raw_export": {
+      "ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/result.json",
+        "sha256": "b127540b3f359b5f9a169a6ba0da34c866ff672220c9f0803276c49e2967cc19",
+        "bytes": 257,
+        "authenticated_source_path": "/home/holden/mckernel-work/scratch/n235p5/p.owner-7089846b86b14bd4a91615d725be5abf/result.json",
+        "authority": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/export/receipt.json"
+      },
+      "observed": {
+        "absence_verified": true,
+        "application_acceptance": false,
+        "container": "4ce54ca78a066e4f8cee374de339b7bf321d16b39e3dbb718613867ff5286328",
+        "failure": null,
+        "lease_retained": false,
+        "secondary": [],
+        "secondary_omitted": 0,
+        "signal_number": null,
+        "status": "PROTOCOL_PASS"
+      }
+    },
+    "independent_native_result_acceptance": null
+  },
+  "remaining_m08_m09": {
+    "process235": "Bind the required observations above after protected export; exact operation20/21 and CREATE_PPD applicability must use matching production sources/accepted SDK+launcher bindings and actual235 routes; no invented per-operation counter.",
+    "case227": "Still require existing READY->WNOHANG0->SIGTERM15->EOF/reap/ECHILD->new child exec37/reap observation, exact lifetime and route joins.",
+    "full_restoration": "Still require existing full log count tuples(0,1,1)/(0,2,2), exact CPU/interval/NUMA coverage, quiescence, public destroy/RELEASE0, reboot and subsequent workload. One235 never proves this.",
+    "m09": "Bind final exact artifacts to235/227/full-restoration observations, preserve accepted assembly/default and ABI/layout evidence. M14 compute-C retirement is separate.",
+    "terminal_wait_error": "Successful235 does not exercise terminalWAITerror. Preserve accepted source/body/linked scope and explicitly mark native branch unexercised unless existing actual run reaches it."
+  },
+  "join_mechanism": [
+    "Root exports protected result.json/serial.log and raw retention/physical records with exact existing attempt identity; bind their path/hash/bytes without re-running app.",
+    "Independent reviewer joins exact235B/empty stderr/status0 plus source assertions and same-generation parent/twochild routes; attach typed accepted refs to actual_observations and each applicable row.",
+    "Reuse accepted SDK5 8614 and launcher5eeb production facts; root/independent reviewer confirms unchanged image10972 applicability and used boundary joins. Do not upgrade source/module evidence into runtime facts.",
+    "Only root updates P-M06-01 and wholeM06 after independent literal acceptance, preserving already complete P-M06-02/03 and all original failures. P-M08-02/P-M09-02 remain separately mapped to their remaining observations."
+  ],
+  "direct_observations_limits": [
+    "The authentic inner record remains PROTOCOL_PASS with application_acceptance=false and mckernel_application_executed=false pending independent native acceptance; do not rewrite it.",
+    "Actual serial directly identifies parent255 children258/261, fork nr56 positive258/261, selector1 nr56 return0, child nr59 results0/0 and failedexec2, parent wait61 same-child returns258/261, all three procfs deletes and retirement0.",
+    "No dedicated selector2/selector3 ACK line exists in this trace; completed lifecycle has source-bound applicability through frozen guest and SDK5 source, but do not fabricate a direct ACK observation.",
+    "Root result reports absence_verified=true and lease_retained=false. Independent physical acceptance remains NULL until reviewer verdict.",
+    "Old a7ca serviceEBUSY\u2192EPIPE diagnosis remains source-supported inference; new successful235 is a direct observation and does not retrospectively identify the old failing packet."
+  ]
+}

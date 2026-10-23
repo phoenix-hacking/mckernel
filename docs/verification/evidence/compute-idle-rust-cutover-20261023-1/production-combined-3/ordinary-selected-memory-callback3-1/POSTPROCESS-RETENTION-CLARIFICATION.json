@@ -1,0 +1,13 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "as_of": "2026-10-23T08:51:48.261816+00:00",
+  "status": "CLARIFY_UNRETAINED_POSTPROCESS_ASSERTION",
+  "fact": "The initial metadata postprocessing assertion ran in an inline python3 heredoc via exec_command after all six actual compiler/inspection/link commands had passed. It was not part of run_selected.py. It exited1 with AssertionError because it incorrectly expected page_unmap to disappear from C imports; the existing split callback still imports it. A later inline command compared exact import sets and corrected only the report.",
+  "original_failed_source_path": null,
+  "original_failed_output_path": null,
+  "original_failed_bytes_independently_retained": false,
+  "verification_limit": "No standalone exact failed source/output file was retained. The earlier metadata_failure_preserved wording overstated preservation: it retained only a narrative description in RESULT.json. Do not treat that description or this clarification as exact failed-byte evidence. Original transient tool transcript is not asserted to be a stable local artifact.",
+  "actual_commands_repeated": false,
+  "compiler_or_link_failure": false,
+  "actual_success_capture_scope": "Existing six command argv/stdout/stderr/whole-join captures and run_selected.py remain unchanged; no compiler/link rerun."
+}
