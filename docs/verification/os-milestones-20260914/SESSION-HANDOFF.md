@@ -1,3 +1,106 @@
+## Failed221b retired; diagnostic seven-source candidate and real memory consumer — 2026-10-23 20:14 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Current_live_postjoin remains FAILED_SETTLEMENT_LONG_221B_POSITIVELY_RETIRED,
+nonnull; independent physical acceptance retained, no heavy workload or repeated
+cleanup/query. Practical34/35, whole12/14; P-M12-01 remains OPEN. Failed221b
+48 producer rounds/96 launches/255.716 mixed seconds confer zero formal credit.
+First fatal service EBUSY at471.409831 still has unknown offending packet/span.
+Foreground finite decision table consumed by existing diagnostic owner; swallowed
+memory.claim and direct CPU EBUSY hypotheses retracted. Seven-source bounded
+error-only diagnostics are private, with unchanged errors/quarantine/ownership;
+sole corrected fixture pending. SDK7 source gate follows actual changed keys;
+no release, staging or replay approval from source preparation.
+M14 exact memory postimages b9380953/4868d1b5 integrated after source/wrapper
+241920-pair and actual78-Rust acceptance. Actual GCC9 selected whole memory TU,
+real-header ABI/selection/relocation and partial link passed eight commands in
+0.831427s; receipt66bfde9e, independent actual consumer review pending. All28
+Rust and three C providers unique in the partial link; three C providers remain
+live compute-C debt. CPU6 released. Candidate13 source preparation only; no
+whole-image/default-link/native or whole-file retirement credit. Original two
+fixture failures and bounded alias-only correction retained. Frozen image10972
+and candidate12 unchanged. Root clock-domain correction preserves late first
+read history; future birth-age checks use BOOTTIME, not MONOTONIC.
+
+## Failed221b POSITIVELY RETIRED; boundedEBUSYdiagnostic source next — 2026-10-23 19:59 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+IndependentactualphysicalPASS: db8bb7export37/161644B+23reaps/exactCID7fb3removed+3
+emptyqueries, actual41ac3677 twoCOMPLETE303/no publishers/no25identities/init3876757
+absentboth(birthNULL), stableowner71entries/exact23commands; mutex5e8dpermanent27:4/
+eightpathsabsent. Both0/joinedgoneclosedemptyerr. Current_live_postjoin
+FAILED_SETTLEMENT_LONG_221B_POSITIVELY_RETIRED nonNULL/noheavy; no repeatcleanup/query.
+Actualfirstfailure remainsserviceEBUSY-16 at471.409831; packet/origin/spanunknown,
+ledgerconflictunproved. 48reportedcompletedrounds96apps/255.716mixedseconds retained,
+formalcredit0. HostRustdiagnosticcandidate onlysmp_service+sysfs_memory isprivate;
+originalerrors/quarantine/ACK/ownership unchanged, focusedfixtureCPU0grant onready.
+SDK7reused68source/buildprofileprep ready butactual2sourcehashes/acceptance pending;
+no unchangedreplay, no extra kernel/image/launcher build. Practical34/35,whole12/14.
+M14memoryS05 privateclear_range/PUBLICrouting: modeled241920wrapperpairsPASS,
+actual78productionRustcompile14.472939s independentlyaccepted4246f318. Canonical
+integrationchecksactive; GCC14Cprovider/defaultlink/nativeOPEN. Candidate12/old
+image10972 unchanged. Memoryoriginaltwofailedjobs retained/noRustfixture recompile.
+
+## Failed221b CLOSED; firstserviceEBUSY causeunproved — 2026-10-23 19:52 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actualread2 c67b277d reports48completedrounds/96launches/255716059969mixedns then
+round48 callback-launchFAIL/ownership0. pair_stage trace_retention isSTALElastsuccess,
+NOTprovedcapacityfailure. Firstfatal471.409831 continuingserviceEBUSY-16 thenWAIT-32
+andretainedcleanup-71; offendingpacket/span absent, ledgerconflict onlyhypothesis.
+ExactonepidfdTERM0/.172314s matchedinner3876675/birth58130649, outeruntargeted.
+Tool73537CLOSEDFAIL1/957.008307s/directjoined/groupgone/closed; authorized3innercats
+all0,6fc2capturebinds106fcstderr2916B/emptyout/innerFAIL956.878s/no forcekill.
+Actual37exportdb8bb7c2/161644sourceB: FAILOwnerSignal15/secondaryCommandError,
+absence_verifiedtrue/leasefalse/exactCID7fb3...; physicalacceptance stillpending.
+Current_live_postjoin CLOSED_FAILED_SETTLEMENT_221B_PENDING_PHYSICAL nonNULL;
+noheavyadmission/recleanup/replay. Terminalownerbindsactualclients/freshPROC+mutex.
+PrivateHOSTRusterror-context instrumentation lane preservesquarantine/ownership;
+no semanticrepair or ignoredEBUSY withoutproof. Actualtrace1048474B<1MiB andreported
+trace_total11016561<256MiB, no caprelaxation proposed. OriginalallFAILevidencepreserved.
+Practical34/35,whole12/14; formalLONGcredit0. M14memoryaliasobserverGCC+241920modeled
+wrapperpairs PASS.428590s independentlysourceaccepted; actual78RustconsumerCPU6
+inprogress, no canonical/defaultlink/nativecredit. Original2fixturefailures retained.
+
+## CorrectedLONG actualprogress:46launches/121.75mixedseconds — 2026-10-23 19:35 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Firstactualread af8de6820/.136807s/joinedgoneclosed/nullerrors/emptyerr reports
+23completedrounds/46launches/121751000182mixedns/lastcompleteround22, wireerrorNULL,
+owneranchorconsistent. This isLIVEPRODUCERLOWERBOUND, notformalterminalacceptance.
+Readwaslate: delegatedreaderprepstalled; rootpausedlane andexecutedexisting990
+capture directlywithoutduplicatequery. Exactage recorded in221b/ACTUAL-FIRST-LIVE-
+PROGRESS.ROOT-RECORD.json; historypreserved/nextobservationsrootowned.
+Tool73537RUNNING inner3876675/start58130649 outer3876671/start58130639; current_live_
+postjoin ACTIVE_SETTLEMENT_LONG_221B_OWNER nonNULL. Soleheavyprofileunchanged;
+healthyactualwork mustcontinue, no speculativecancel/replay/competingheavy.
+Practical34/35,whole12/14; acceptedLONGcounters remain0untilstrictterminal+physical.
+M14canonicalS05Rust+78actualRust accepted; sourcecandidate12preparedaccepted25Rust
+providers; wholeTU/link/nativeOPEN. AccountingknownC38243incomplete/Rustobject
+679977of853351execB/nonRustORpadding173374NOTCtotal. Memoryparked/noCPUslot.
+
+## ActualcorrectedLONG221b RUNNING; earlyprogress next — 2026-10-23 19:32 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Statica5a7ef12e8f71de4f4e5e9d4ef799446bd07c966/757changedblobs fetchedexactaf8ac0bf.
+Genuinerootpayloadc799c30f/2558canonicalLF+exactreviewPASS; release67451530/request
+b10a5acf publishedexclusively. FullUNMODIFIEDrealclock/defaultbootvalidation and
+actuala755 onACTUALpublishedrequestPASS BEFOREone28deinvocationunexpired.
+Tool73537RUNNING outer3876671/start58130639; actualauthorizedstartedreadec73774e
+0/.113787s/joinedgoneclosedemptyerr confirmsinner3876675/start58130649.
+Current_live_postjoin ACTIVE_SETTLEMENT_LONG_221B_OWNER nonNULL; soleheavy4CPU2-5/
+12GiB/noextraSwap512/netnone/NONE. Persistentdirectwait/nooutertimeout/signals/kill.
+Early30-60s actualread delegatedp12expert/CPU0existingordinaryprofile; readactual
+round0gate/report/completedprogress or preciseerrorpromptly. Old5603FAILphysical
+10c5retained; observer52fixtures+correctedcollector142d/capsulecde77/m33eb areactual
+acceptedchanges, kernel/modules/image10972/launcher/apps/oracles unchanged.
+Practical34/35,whole12/14; acceptedLONG0launches/0mixedminutes pendingstrictterminal.
+M14S05canonicalRustbody+actual78Rust accepted; candidate12source/pureaccepted43.319s,
+wholeTU/link/nativeOPEN. Current10972read-onlyaccounting5001741d: positivelyC38243B
+in5basenamegroups is incomplete; Rustobject679977/853351execB; remainder173374is
+nonRustORpadding, NOTCtotal. No wholeCpercentage/retirement/nativecredit.
+Memorytwoactualfailedjobs preserved; parked/noCPUslot. No competingheavy/resize.
+
 ## Settlement producer/cohort acceptedactualchecks; freshadmission next — 2026-10-23 19:20 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

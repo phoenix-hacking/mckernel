@@ -1382,7 +1382,7 @@ static void x86_clear_effect_log_bridge(int event, unsigned long base,
 	}
 }
 
-static void x86_clear_range_top_log_bridge(int event, void *pt,
+X86_MEMORY_PUBLIC_BRIDGE void x86_clear_range_top_log_bridge(int event, void *pt,
 		unsigned long start, unsigned long end, int free_physical)
 {
 	switch (event) {
@@ -1598,7 +1598,7 @@ static int clear_range_l4(void *args0, pte_t *ptep, uint64_t base,
 			x86_clear_range_walk_l3_bridge);
 }
 
-static int x86_clear_range_walk_l4_bridge(void *pt, unsigned long base,
+X86_MEMORY_PUBLIC_BRIDGE int x86_clear_range_walk_l4_bridge(void *pt, unsigned long base,
 		unsigned long start, unsigned long end, void *args)
 {
 	return walk_pte_l4(pt, base, start, end, &clear_range_l4, args);
@@ -1606,6 +1606,30 @@ static int x86_clear_range_walk_l4_bridge(void *pt, unsigned long base,
 
 #define TLB_INVALID_ARRAY_PAGES	(4)
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+_Static_assert(__builtin_offsetof(struct process_vm, region) == 16,
+		"clear_range process_vm region");
+_Static_assert(__builtin_offsetof(struct process_vm, proc) == 136,
+		"clear_range process_vm proc");
+_Static_assert(__builtin_offsetof(struct vm_regions, user_start) == 104 &&
+		__builtin_offsetof(struct vm_regions, user_end) == 112,
+		"clear_range user bounds");
+_Static_assert(__builtin_offsetof(struct process, straight_va) == 1624 &&
+		__builtin_offsetof(struct process, straight_len) == 1632,
+		"clear_range straight mapping");
+_Static_assert(MF_DEV_FILE == 0x2000 && MF_PREMAP == 0x8000 &&
+		PAGE_SIZE == 4096 && TLB_INVALID_ARRAY_PAGES == 4,
+		"clear_range flags and allocation constants");
+_Static_assert(sizeof(size_t) == 8 && sizeof(unsigned long) == 8,
+		"clear_range length/address conversion");
+extern int x86_clear_range_public_body(void *pt, struct process_vm *vm,
+		unsigned long start, unsigned long end, int free_physical,
+		struct memobj *memobj);
+extern int ihk_mc_pt_clear_range(page_table_t pt, struct process_vm *vm,
+		void *start, void *end);
+extern int ihk_mc_pt_free_range(page_table_t pt, struct process_vm *vm,
+		void *start, void *end, struct memobj *memobj);
+#else
 static int clear_range(struct page_table *pt, struct process_vm *vm,
 		uintptr_t start, uintptr_t end, int free_physical,
 		struct memobj *memobj)
@@ -1651,12 +1675,18 @@ int ihk_mc_pt_free_range(page_table_t pt, struct process_vm *vm,
 	return clear_range(pt, vm, (uintptr_t)start, (uintptr_t)end,
 			FREE_PHYSICAL, memobj);
 }
+#endif
 
 static int x86_set_range_clear_bridge(void *pt, void *vm,
 		unsigned long start, unsigned long end, int free_physical,
 		void *memobj)
 {
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+	return x86_clear_range_public_body(pt, vm, start, end,
+			free_physical, memobj);
+#else
 	return clear_range(pt, vm, start, end, free_physical, memobj);
+#endif
 }
 
 static int x86_set_range_rss_add_bridge(void *range, unsigned long phys,

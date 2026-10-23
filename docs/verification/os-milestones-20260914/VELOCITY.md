@@ -1,3 +1,19 @@
+## Actual957-second failed LONG and next diagnostic loop — 2026-10-23 20:14 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Failed221b completed-owner wall957.008307s produced48 reported complete rounds,
+96 launches and255.716 mixed seconds before fatal serviceEBUSY. Formal credit0.
+The first progress read was221.20s after owner birth, outside the intended30-60s
+window. An incorrect MONOTONIC versus BOOTTIME birth-age comparison and delegated
+preparation delay are preserved; exact split of avoidable time is not measured.
+Use existing direct accepted readback promptly on the next qualified run and
+inspect diagnostic FAIL/ABORT even when progress counters are positive. No new
+monitor or weaker timeout. Physical retirement is independently accepted.
+Next strategy is bounded error-context instrumentation and actual fixture/SDK
+consumer evidence, not speculative quarantine or ordering changes. Independent
+M14 selected memory TU/ABI/partial-link eight-command result passed0.831427s.
+Original2/44.160327s velocity baseline is preserved; no4x or closure-speedup claim.
+
 ## SDK6 first-round feedback and retirement — 2026-10-23 19:00 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

@@ -1,0 +1,25 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "reviewer": "/root/m14_build_release_review",
+  "implementation_ownership": false,
+  "verdict": "PASS_PRIVATE_CLEAR_RANGE_ACTUAL_PRODUCTION_RUST_OBJECT_ONLY",
+  "actual_receipt_sha256": "4246f318057e0561b86e603cc29b8d9659a049c663a381bfcfbf87b05bd7daa7",
+  "input_count": 78,
+  "changed_source": "x86_memory_helpers.rs f88ca6d4 ->4868d1b599ff89dffc5dfe32403927b4e887442001bb93253805ab0d94088a90",
+  "compile_seconds": 14.47293853,
+  "object_sha256": "c2564dc58e15b923ef45fddb99311cc8c6840e7fc5728f0725fbec11e7bc97a0",
+  "object_bytes": 13747328,
+  "unique_new_T": [
+    "ihk_mc_pt_clear_range",
+    "ihk_mc_pt_free_range",
+    "x86_clear_range_public_body"
+  ],
+  "prior_T_preserved": true,
+  "undefined_before": 560,
+  "undefined_after": 561,
+  "warning_count": 50,
+  "compiler_stderr_bytes": 29343,
+  "all_children_joined_gone_closed": true,
+  "qualification": "Objectonly; canonicalintegrationafterexactpreimage/active181pinexclusion. ActualGCC14 Cprovider TU/selection/defaultlink/nativeclearfree OPEN; no runtimeorretirementcredit."
+}

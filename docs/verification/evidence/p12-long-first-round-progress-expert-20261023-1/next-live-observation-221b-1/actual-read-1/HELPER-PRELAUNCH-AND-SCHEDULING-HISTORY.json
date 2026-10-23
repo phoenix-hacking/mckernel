@@ -1,0 +1,72 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ACTUAL_PRELAUNCH_HELPER_FAILURE_NO_READER_CHILD_THEN_ROOT_SINGLE_READER_TAKEOVER",
+  "helper_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/actual-read-1/run_existing_owned_capture.py",
+    "sha256": "ae701047521b960601a9d0697abeb3d6d61448770e0c03316c0e74fbb77bdc26",
+    "bytes": 3042
+  },
+  "own_actual_invocation": {
+    "unified_exec_session": 12633,
+    "command": [
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/actual-read-1/run_existing_owned_capture.py"
+    ],
+    "executed": true,
+    "observed_terminal_exit_code": 1,
+    "actual_failure": "AssertionError at run_existing_owned_capture.py line15: assert time.monotonic()>=581306.49+30",
+    "reached_command_write": true,
+    "reached_owned_capture": false,
+    "reader_child_started": false,
+    "traceback_provenance": "Actual functions.write_stdin session12633 terminal return; transcribed without rerunning helper."
+  },
+  "timing": {
+    "root_brief_birth_ticks": 58130649,
+    "root_brief_start_seconds": 581306.49,
+    "correct_birth_clock": "CLOCK_BOOTTIME/HZ",
+    "incorrect_helper_clock": "time.monotonic CLOCK_MONOTONIC",
+    "retained_local_clock_sample": {
+      "monotonic_seconds": 566118.601979361,
+      "boottime_seconds": 581456.729030312,
+      "offset_seconds": 15338.127050951
+    },
+    "helper_wait_source": "remaining=581306.49+30-time.monotonic(); if positive sleep(min(remaining,30)); assert after wait",
+    "maximum_requested_wait_seconds": 30,
+    "actual_measured_helper_sleep_seconds": null,
+    "helper_begin_or_end_absolute_timestamp": null,
+    "qualification": "No actual helper start/end clock timestamps were captured, so exact wait/end durations are not invented. Incorrect clock-domain comparison left its assertion false even after bounded wait."
+  },
+  "root_takeover": {
+    "actual_reader_count": 1,
+    "read_child_pid": 3878010,
+    "read_child_birth_ticks": 58152769,
+    "read_child_boot_seconds": 581527.69,
+    "owner_birth_ticks": 58130649,
+    "owner_boot_seconds": 581306.49,
+    "read_start_owner_age_seconds": 221.19999999995343,
+    "requested_window_after_owner_start_seconds": [
+      30,
+      60
+    ],
+    "delay_beyond_requested_window_upper_seconds": 161.19999999995343,
+    "age_interval_due_to_HZ_tick_resolution_seconds": [
+      221.19,
+      221.21
+    ],
+    "reader_capture_seconds": 0.13680698699317873,
+    "actual_reader_returncode": 0,
+    "positive_closure": true,
+    "initial_ROOT_READ_TAKEOVER_reason_ref": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-221b-1/actual-read-1/ROOT-READ-TAKEOVER.json",
+      "sha256": "01918345d0c7e867170bfcedbc14a5d1109f68a61b4070239b80cdf380ad9ead",
+      "bytes": 334
+    }
+  },
+  "O_EXCL_failure_in_my_actual_helper_invocation": false,
+  "root_initial_O_EXCL_hypothesis": "Parent explicitly corrected this initial hypothesis; preserve historical takeover note unchanged, but no actual O_EXCL failure is established by my toolhistory.",
+  "future_timing_note": "Use CLOCK_BOOTTIME and HZ for /proc birth baselines, or an actual captured launch CLOCK_MONOTONIC timestamp. Never subtract PID BOOTTIME birth from CLOCK_MONOTONIC.",
+  "no_helper_fix_or_retry": true,
+  "no_additional_live_reader": true
+}

@@ -1,0 +1,24 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "time_utc": "2026-10-23T20:01:21.977056+00:00",
+  "status": "PASS_EXACT_TWO_CANONICAL_MEMORY_POSTIMAGES",
+  "ready_sha256": "a75cbe56289a451d6d2fc7c50e1dd9c0a11e01268b3d49c898434a8674b0ae3d",
+  "independent_source_wrapper_parity": "PASS_PRIVATE_CLEAR_RANGE_SOURCE_ABI_AND_ACTUAL_WRAPPER_PARITY_ONLY",
+  "independent_fullcrate": "PASS_PRIVATE_CLEAR_RANGE_ACTUAL_PRODUCTION_RUST_OBJECT_ONLY",
+  "current_image_10972_unchanged": true,
+  "candidate12_frozen_unchanged": true,
+  "active_181_pin_exclusion": "8b71ae4d (exact descriptor in ready packet)",
+  "canonical_postimages": {
+    "arch/x86_64/kernel/memory.c": "b9380953fd379bb28c8827a402700d415cf604a8e46fbae40a1d7daa483fe75b",
+    "kernel/rust/x86_memory_helpers.rs": "4868d1b599ff89dffc5dfe32403927b4e887442001bb93253805ab0d94088a90"
+  },
+  "C_provider_debt": [
+    "remote_flush_tlb_array_cpumask",
+    "x86_clear_range_top_log",
+    "walk_l4"
+  ],
+  "default_C_TU_link_native": "OPEN",
+  "whole_area_file_retirement": false,
+  "practical_closures": []
+}

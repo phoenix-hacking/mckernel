@@ -1,0 +1,83 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "READY_FOR_ROOT_EXACT_TWO_FILE_INTEGRATION_AFTER_INDEPENDENT_REVIEW_NOT_EXECUTED",
+  "changes": {
+    "arch/x86_64/kernel/memory.c": {
+      "before": {
+        "path": "/home/holden/mckernel/arch/x86_64/kernel/memory.c",
+        "sha256": "3dccbb04986c7fb4c1c47bad1a382372c19cd270861501cf064ce95f36d46c32",
+        "bytes": 84761
+      },
+      "after": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-2/m14-memory-next/candidate/arch/x86_64/kernel/memory.c",
+        "sha256": "b9380953fd379bb28c8827a402700d415cf604a8e46fbae40a1d7daa483fe75b",
+        "bytes": 86177
+      }
+    },
+    "kernel/rust/x86_memory_helpers.rs": {
+      "before": {
+        "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+        "sha256": "f88ca6d45b1395b74c0c86565b5a391d01124fa3fb30486a7e4eb31c85d9eff8",
+        "bytes": 191401
+      },
+      "after": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-2/m14-memory-next/candidate/kernel/rust/x86_memory_helpers.rs",
+        "sha256": "4868d1b599ff89dffc5dfe32403927b4e887442001bb93253805ab0d94088a90",
+        "bytes": 195780
+      }
+    }
+  },
+  "current_preimages_match": true,
+  "reviewed_patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-2/m14-memory-next/cutover.patch",
+    "sha256": "cc75e97bb264b5955d850ea6225586b8c4e338ee040e4e540ce7d58ac3832b20",
+    "bytes": 7996
+  },
+  "pin_exclusion": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-2/m14-memory-next/ACTIVE-RT181-PIN-EXCLUSION.json",
+    "sha256": "8b71ae4d1f8357d1928ef21b3d1844b339b2cfa177e08803a2a168e0cddcb56b",
+    "bytes": 18225
+  },
+  "private_entry_metadata": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-2/m14-memory-next/PRIVATE-ENTRY-METADATA.json",
+    "sha256": "160806cb1497cb80bab7e62bdff7e32c5624cea99638997e99c2a861dc9d0cb7",
+    "bytes": 3842
+  },
+  "source_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-2/m14-memory-next/SOURCE-REVIEW.md",
+    "sha256": "51d4f27fa4b6b8bacf12aa8c3aa197ca92cae5318d3f2667639f6ed3f76af6a4",
+    "bytes": 8691
+  },
+  "actual_parity": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-2/m14-memory-next/observer-alias-correction-1/ACTUAL-ALIAS-CORRECTION-RECEIPT.json",
+    "sha256": "eab6f49fb7bd29053d26567b1b425e08d543515005ef69c2da02364ac1a62fae",
+    "bytes": 9957
+  },
+  "actual78_production_Rust": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-2/m14-memory-next/production-fullcrate-1/ACTUAL-PRODUCTION-FULLCRATE-RECEIPT.json",
+    "sha256": "4246f318057e0561b86e603cc29b8d9659a049c663a381bfcfbf87b05bd7daa7",
+    "bytes": 6676
+  },
+  "root_only_apply_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport hashlib,json\nroot=Path('/home/holden/mckernel')\nrows={'arch/x86_64/kernel/memory.c': {'before': {'path': '/home/holden/mckernel/arch/x86_64/kernel/memory.c', 'sha256': '3dccbb04986c7fb4c1c47bad1a382372c19cd270861501cf064ce95f36d46c32', 'bytes': 84761}, 'after': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-2/m14-memory-next/candidate/arch/x86_64/kernel/memory.c', 'sha256': 'b9380953fd379bb28c8827a402700d415cf604a8e46fbae40a1d7daa483fe75b', 'bytes': 86177}}, 'kernel/rust/x86_memory_helpers.rs': {'before': {'path': '/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs', 'sha256': 'f88ca6d45b1395b74c0c86565b5a391d01124fa3fb30486a7e4eb31c85d9eff8', 'bytes': 191401}, 'after': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-2/m14-memory-next/candidate/kernel/rust/x86_memory_helpers.rs', 'sha256': '4868d1b599ff89dffc5dfe32403927b4e887442001bb93253805ab0d94088a90', 'bytes': 195780}}}\npayloads={}\nfor rel,row in rows.items():\n target=root/rel;source=Path(row['after']['path']);data=source.read_bytes()\n assert hashlib.sha256(target.read_bytes()).hexdigest()==row['before']['sha256'],('preimage',rel)\n assert hashlib.sha256(data).hexdigest()==row['after']['sha256'],('privatepostimage',rel)\n payloads[rel]=data\nfor rel,data in payloads.items(): (root/rel).write_bytes(data)\nfor rel,row in rows.items(): assert hashlib.sha256((root/rel).read_bytes()).hexdigest()==row['after']['sha256'],('postimage',rel)\nprint(json.dumps({'status':'PASS_EXACT_TWO_CANONICAL_POSTIMAGES','paths':list(rows)}))\n"
+  ],
+  "apply_contract": "Root checks currentindependentreview and exclusion/ownership facts; verifyBOTHexactpreimages/privatepostimages before any write; copyONLY2existingcanonicalfiles,verifybothpostimages. No worker canonicalchange.",
+  "C_postimage_spelling_clarification": "Actual reviewed Cb938; eab6 was aliasreceipt, not Cbytes.",
+  "remaining": {
+    "actual_C_providers": "remote_flush_tlb_array_cpumask,x86_clear_range_top_log_bridge,x86_clear_range_walk_l4_bridge remain computeCdebt; no Cglue exemption",
+    "whole_GCC_kernel_TU": "OPEN",
+    "production_default_image_link": "OPEN",
+    "native_clear_free_range": "OPEN",
+    "wholefile_or_zeroC_credit": false
+  },
+  "current_image10972_changed": false,
+  "frozen_candidate12_changed": false,
+  "future_candidate13_stage": "Separate source-only task after actual rootintegration, not prepared/executedhere.",
+  "canonical_mutation_executed": false,
+  "test_compiler_root_guest_Git_operations": 0,
+  "CPU_held": false
+}

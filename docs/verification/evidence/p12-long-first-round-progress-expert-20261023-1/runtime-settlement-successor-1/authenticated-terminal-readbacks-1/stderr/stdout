@@ -1,0 +1,26 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/source/native_diagnostic_container_owner.py", line 1257, in <module>
+    raise SystemExit(main())
+  File "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/source/native_diagnostic_container_owner.py", line 1243, in main
+    execute_owner(DiagnosticOwner(args.attempt_parent, manifest=args.manifest,
+  File "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/source/native_diagnostic_container_owner.py", line 1222, in execute_owner
+    raise owner.failure
+  File "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/source/native_diagnostic_container_owner.py", line 1190, in execute_owner
+    owner.run()
+  File "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/source/native_diagnostic_container_owner.py", line 1149, in run
+    raise self.failure
+  File "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/source/native_diagnostic_container_owner.py", line 1103, in run
+    started = self._call(["start", "--attach", self.container], timeout=deadline)
+  File "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/source/native_diagnostic_container_owner.py", line 765, in _call
+    raise failure
+  File "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/source/native_diagnostic_container_owner.py", line 719, in _call
+    result = self.backend.call(command, timeout=timeout)
+  File "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/source/native_diagnostic_container_owner.py", line 552, in call
+    return bounded_command(argv, timeout, env=env, ledger=self.children)
+  File "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/source/native_diagnostic_container_owner.py", line 474, in bounded_command
+    for key, _ in selector.select(min(remaining, 0.1)):
+  File "/home/holden/anaconda3/lib/python3.9/selectors.py", line 469, in select
+    fd_event_list = self._selector.poll(timeout, max_ev)
+  File "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/source/native_diagnostic_container_owner.py", line 1186, in interrupted
+    raise OwnerSignal("outer owner interrupted")
+__main__.OwnerSignal: outer owner interrupted

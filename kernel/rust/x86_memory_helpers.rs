@@ -3,7 +3,7 @@ use core::ptr::{copy_nonoverlapping, read_volatile, write_bytes, write_volatile}
 use core::sync::atomic::{AtomicU64, Ordering};
 
 use crate::abi::{
-    CInt, CLong, CULong, CpuLocalVar, IkcScdPacket, IkcScdPacketTraditional, Memobj, ProcessVm, SizeT,
+    CInt, CLong, CULong, CpuLocalVar, IkcScdPacket, IkcScdPacketTraditional, Memobj, Process, ProcessVm, SizeT,
     Thread,
 };
 
@@ -172,6 +172,11 @@ const X86_PT_PRINT_LOG_ENTRY: CInt = 3;
 const X86_PT_PRINT_LOG_LARGE: CInt = 4;
 
 unsafe extern "C" {
+    fn ihk_mc_get_processor_id() -> CInt;
+    fn remote_flush_tlb_array_cpumask(vm: *mut c_void, addr: *mut CULong, nr_addr: CInt, cpu_id: CInt);
+    fn x86_clear_range_walk_l4_bridge(pt: *mut c_void, base: CULong, start: CULong, end: CULong, args: *mut c_void) -> CInt;
+    fn x86_clear_range_top_log_bridge(event: CInt, pt: *mut c_void, start: CULong, end: CULong, requested_free: CInt);
+    fn kprintf(format: *const i8, ...) -> CInt;
     fn _ihk_mc_free_pages(ptr: *mut c_void, npages: CInt, is_user: CInt, file: *mut i8, line: CInt);
     static x86_clear_free_pages_user_file: [i8; 1];
     static x86_clear_free_pages_user_line: CInt;
@@ -3259,6 +3264,98 @@ pub unsafe extern "C" fn x86_set_range_map_entry_result(
     }
 
     0
+}
+
+// Preserve the existing optional clear_range entry event through the same
+// dynamic-debug descriptor ABI already used by the Rust CPU/process consumers.
+#[used]
+#[link_section = "__verbose"]
+static mut CLEAR_RANGE_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+    file: concat!(file!(), "\0").as_ptr().cast(),
+    func: b"clear_range\0".as_ptr().cast(),
+    fmt: core::ptr::null(),
+    line_flags: line!() & 0x00ff_ffff,
+};
+
+const _: () = {
+    assert!(core::mem::size_of::<SizeT>() == 8 && core::mem::size_of::<CULong>() == 8);
+    assert!(core::mem::offset_of!(ProcessVm, region) == 16);
+    assert!(core::mem::offset_of!(ProcessVm, proc) == 136);
+    assert!(core::mem::offset_of!(crate::abi::VmRegions, user_start) == 104);
+    assert!(core::mem::offset_of!(crate::abi::VmRegions, user_end) == 112);
+    assert!(core::mem::offset_of!(Process, straight_va) == 1624);
+    assert!(core::mem::offset_of!(Process, straight_len) == 1632);
+};
+
+// The caller retains the original clear/free-range VM, process and memobj
+// lifetime/locking requirements. The established top helper owns allocation,
+// walk, final flush and release, including failures; no new ownership is added.
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_range_public_body(
+    pt: *mut c_void,
+    vm: *mut ProcessVm,
+    start: CULong,
+    end: CULong,
+    requested_free: CInt,
+    memobj: *mut Memobj,
+) -> CInt {
+    const MF_DEV_FILE: u32 = 0x2000;
+    const MF_PREMAP: u32 = 0x8000;
+    const TLB_INVALID_ARRAY_PAGES: CInt = 4;
+
+    let debug_flags = unsafe {
+        read_volatile(core::ptr::addr_of!(CLEAR_RANGE_DEBUG.line_flags)) >> 24
+    };
+    if debug_flags != 0 {
+        unsafe {
+            kprintf(
+                b"%s: %p,%lx,%lx,%d,%p\n\0".as_ptr().cast(),
+                b"clear_range\0".as_ptr().cast::<i8>(),
+                pt, start, end, requested_free, memobj,
+            );
+        }
+    }
+    let user_start = unsafe { (*vm).region.user_start };
+    let user_end = unsafe { (*vm).region.user_end };
+    let flags = if memobj.is_null() { 0 } else { unsafe { (*memobj).flags } };
+    let proc = unsafe { (*vm).proc.cast::<Process>() };
+    let straight_va = unsafe { (*proc).straight_va as CULong };
+    let is_straight_main = straight_va != 0 && start == straight_va
+        && end == straight_va.wrapping_add(unsafe { (*proc).straight_len } as CULong);
+    let mut storage = core::mem::MaybeUninit::<X86ClearRangeArgs>::uninit();
+    let args = storage.as_mut_ptr();
+    unsafe {
+        x86_clear_range_top_result(
+            pt, vm.cast(), start, end, user_start, user_end, requested_free,
+            ((flags & MF_DEV_FILE) != 0) as CInt,
+            ((flags & MF_PREMAP) != 0) as CInt, is_straight_main as CInt,
+            memobj.cast(), core::ptr::addr_of_mut!((*args).addr),
+            core::ptr::addr_of_mut!((*args).nr_addr),
+            core::ptr::addr_of_mut!((*args).max_nr_addr),
+            core::ptr::addr_of_mut!((*args).free_physical),
+            core::ptr::addr_of_mut!((*args).memobj).cast(),
+            core::ptr::addr_of_mut!((*args).vm),
+            TLB_INVALID_ARRAY_PAGES, PTL1_SIZE, args.cast(),
+            Some(x86_pt_alloc_pages_bridge), Some(x86_pt_free_pages_bridge),
+            Some(x86_clear_range_walk_l4_bridge), Some(remote_flush_tlb_array_cpumask),
+            ihk_mc_get_processor_id(), Some(x86_clear_range_top_log_bridge),
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_pt_clear_range(
+    pt: *mut c_void, vm: *mut ProcessVm, start: *mut c_void, end: *mut c_void,
+) -> CInt {
+    unsafe { x86_clear_range_public_body(pt, vm, start as CULong, end as CULong, 0, core::ptr::null_mut()) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_pt_free_range(
+    pt: *mut c_void, vm: *mut ProcessVm, start: *mut c_void, end: *mut c_void,
+    memobj: *mut Memobj,
+) -> CInt {
+    unsafe { x86_clear_range_public_body(pt, vm, start as CULong, end as CULong, 1, memobj) }
 }
 
 #[no_mangle]
