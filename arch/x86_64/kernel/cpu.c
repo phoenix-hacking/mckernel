@@ -1052,13 +1052,13 @@ x86_current_cpu_bridge(void)
 	return ihk_mc_get_processor_id();
 }
 
-static int
+int
 x86_running_on_kvm_bridge(void)
 {
 	return running_on_kvm();
 }
 
-static void
+void
 x86_cpuid6_bridge(unsigned long *eaxp, unsigned long *ecxp)
 {
 	unsigned long eax, ecx;
@@ -1366,15 +1366,11 @@ void print_msr(int idx)
 }
 
 
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+void init_pstate_and_turbo(void);
+#else
 void init_pstate_and_turbo(void)
 {
-#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-	x86_init_pstate_turbo_body_result(no_turbo, MSR_PLATFORM_INFO,
-			MSR_NHM_TURBO_RATIO_LIMIT, MSR_IA32_PERF_CTL,
-			MSR_IA32_ENERGY_PERF_BIAS, x86_running_on_kvm_bridge,
-			x86_cpuid6_bridge, x86_read_msr_bridge,
-			x86_write_msr_bridge);
-#else
 	uint64_t value;
 	uint64_t eax, ecx;
 
@@ -1440,8 +1436,8 @@ void init_pstate_and_turbo(void)
 	//print_msr(MSR_IA32_MISC_ENABLE);
 	//print_msr(MSR_IA32_PERF_CTL);
 	//print_msr(MSR_IA32_ENERGY_PERF_BIAS);
-#endif
 }
+#endif
 
 enum {
 	PAT_UC = 0,		/* uncached */

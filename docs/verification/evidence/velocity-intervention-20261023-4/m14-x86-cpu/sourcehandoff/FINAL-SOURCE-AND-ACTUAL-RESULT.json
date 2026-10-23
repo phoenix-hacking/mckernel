@@ -1,0 +1,169 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_BOUNDED_PSTATE_ENTRY_FUNCTIONAL_FIXTURE_COMPLETE_GCC9_TU_HEADER_ABI_PARTIAL_LINK_REVIEW_READY",
+  "entry": "init_pstate_and_turbo(void)",
+  "final_full_integration_patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/patch/PRIVATE-CORRECTED-PSTATE-ENTRY-CUTOVER.patch",
+    "sha256": "4eddfb4f699888920093a3f428d795ce4286a943fbe8350fcc384b559e2d4b2e",
+    "bytes": 2752
+  },
+  "additive_linkname_delta": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/bounded-correction-1/BOUNDED-LINK-NAME-ONLY.patch",
+    "sha256": "7d33eda0ea79c2b6ae18f28ccbb5b81b74de6f67af4e74043465f8e965e42641",
+    "bytes": 1673
+  },
+  "source_binding": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/bounded-correction-1/SOURCE-AND-FIXTURE-BINDINGS.json",
+    "sha256": "46758133fdce9fe9ca4d4db4ffd1a158edfdf584340800a7c41d77de5eb0e63c",
+    "bytes": 10412
+  },
+  "production_preimages": {
+    "arch/x86_64/kernel/cpu.c": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "sha256": "67dd7ea590ad9c1470ce34434770efa5e8cd7449b5f28d3b4ee5d3e0c96eb348",
+      "bytes": 95486
+    },
+    "kernel/rust/x86_cpu_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "59d0723c5d4d35ba63120b59c0422d6bc357246e1146d6cbbd010fe2d727a651",
+      "bytes": 89419
+    }
+  },
+  "final_production_inputs": {
+    "arch/x86_64/kernel/cpu.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/candidate/arch/x86_64/kernel/cpu.c",
+      "sha256": "8c71fe79e003f7aa7ef0f7faf2b31ebf11e65e747abdb0969dc77dbafbd839e9",
+      "bytes": 95267
+    },
+    "kernel/rust/x86_cpu_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/candidate/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "a6e7465d7924755c97e5d72919a97c2985aacd35cf9db417c4ee981b4d5d071a",
+      "bytes": 90445
+    }
+  },
+  "current_Rust_helper_body_byteexact": true,
+  "current_C_fallback_body_byteexact": true,
+  "existing_C_boot_data_ABI": "no_turbo int; Rust X86_NO_TURBO uses link_name=no_turbo",
+  "remaining_C_callbacks": [
+    "x86_running_on_kvm_bridge",
+    "x86_cpuid6_bridge",
+    "x86_read_msr_bridge",
+    "x86_write_msr_bridge"
+  ],
+  "actual_wholejoin": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/bounded-correction-1/ACTUAL-BOUNDED-CORRECTION-WHOLE-JOIN.json",
+    "sha256": "d13abdf6dc42552163421cc2c3551ba7b12662353444e3ef7cab4f5ba20205a9",
+    "bytes": 18845
+  },
+  "actual_profile": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/bounded-correction-1/ACTUAL-PROFILE.json",
+    "sha256": "fb5650b114a10faa6e4cbbcf6092f99659a1b7454c921ec16848b004842e6cd6",
+    "bytes": 1201
+  },
+  "headroom": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/bounded-correction-1/ACTUAL-HEADROOM.json",
+    "sha256": "c9fc9360c5109882a6eb80c2d4d2276d57472e8fd50a34e2df013afefcfa8193",
+    "bytes": 382
+  },
+  "helper_prerequisites": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/bounded-correction-1/HELPER-GLOBAL-DEPENDENCY-CHECK.json",
+    "sha256": "5cc423b9840c6c000d54acfef57187dded47a7eee3de186bb5201f16e942864e",
+    "bytes": 1220
+  },
+  "hosted_memset_preflight": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/bounded-correction-1/HOSTED-MEMSET-SOURCE-PREFLIGHT.json",
+    "sha256": "6da6cefe7a483ce7d6702b39eb98d743cf07f52cfd294e252d4d8bbb792e774d",
+    "bytes": 1190
+  },
+  "actual_objects": {
+    "C_complete": {
+      "ctime_ns": 1792793880866514618,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 56000960,
+      "mode": "0o600",
+      "mtime_ns": 1792793880866514618,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-bounded-correction-1/cpu.c.o",
+      "sha256": "c4c538f17156e314f26406d92b88fddb69593405d0b2a7b78ce5b5e3fe8eda8b",
+      "size": 139360,
+      "uid": 1000
+    },
+    "Rust_leaf": {
+      "ctime_ns": 1792793880282496126,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 56000919,
+      "mode": "0o600",
+      "mtime_ns": 1792793880282496126,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-bounded-correction-1/actual-entry.o",
+      "sha256": "e4396355c7514f430861ff96bc2e7d9139cbb70609439a961a298607ee217034",
+      "size": 2104,
+      "uid": 1000
+    },
+    "partial": {
+      "ctime_ns": 1792793880982518291,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 56000986,
+      "mode": "0o600",
+      "mtime_ns": 1792793880982518291,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-bounded-correction-1/cpu-rust-partial.o",
+      "sha256": "9e516b3d136a54aa494693b5955bf030bf87c33dd52c1a8f777e3d86f92e3030",
+      "size": 186600,
+      "uid": 1000
+    }
+  },
+  "actual_selected_original_C_Rust_entry_pairs": 18432,
+  "actual_original_fallback_Rust_pairs": 18432,
+  "fallback_CPUID_KVM_MSR_primitives": "HOST_MODELED_NOT_NATIVE",
+  "missing_callback_masks": 15,
+  "actual_headers": 55,
+  "complete_selected_GCC9_cpu_TU": true,
+  "partial_unique_Rust_entry": true,
+  "actual_commands": 10,
+  "all_children_wholejoined": true,
+  "seconds": 0.8023626590147614,
+  "observed_outer_tool_exit_code": 0,
+  "CPU6_released": true,
+  "failed_first_candidate": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/FIRST-CANDIDATE-FAILURE-1.json",
+    "sha256": "fb4f94e397dd81dfc94132a817177623fb5dd736a21f30a75ef794d3c014704d",
+    "bytes": 3149
+  },
+  "failed_first_handoff": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/FIRST-CANDIDATE-STOP-AND-HANDOFF.json",
+    "sha256": "87467cf4e6dd5c50abd50563ce4463798cb2be3364134d2de351ad0617eb3107",
+    "bytes": 3814
+  },
+  "failed_Rust_source_preserved": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/bounded-correction-1/FAILED-x86_cpu_helpers.rs",
+    "sha256": "814494daecd3b8f5cebea222406422041051ed7202d33e02aa4453c9aa00f6e5",
+    "bytes": 90407
+  },
+  "failed_fixture_source_preserved": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/bounded-correction-1/FAILED-actual_entry.rs",
+    "sha256": "f936091ba839f8108aeab9964452c6c5ac225afc261a2cd13fac25ed78e29cdf",
+    "bytes": 2670
+  },
+  "original_patch_preserved": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/patch/PRIVATE-PSTATE-ENTRY-CUTOVER.patch",
+    "sha256": "02d4bdea5e0d490f8f65af0c2609c0ca84c31d1dc8e2f8ab93c8aa923eedf73b",
+    "bytes": 2712
+  },
+  "family": {
+    "first_candidates_failed": 1,
+    "product_bounded_corrections_used": 1,
+    "further_failure": "STOP_EXPERT_NO_RETRY"
+  },
+  "canonical_writes": 0,
+  "shared_headers_or_CMake_writes": 0,
+  "SDK8_or_current_image_changes": 0,
+  "whole_production_Rust_crate": false,
+  "default_GCC14_kernel_link": false,
+  "native": false,
+  "file_retired": false,
+  "next_step": "Independent exact delta/source+actual review; root integrates only two pinned production inputs into coherent current fullRust/defaultimage cohort. Preserve all prior CPU correctness fixes and other disjoint patches."
+}

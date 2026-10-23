@@ -17,6 +17,10 @@ const LAPIC_TIMER_DIVIDE: CInt = 0x3e0;
 const LAPIC_SPURIOUS: CInt = 0x0f0;
 const LAPIC_EOI: CInt = 0x0b0;
 const MSR_IA32_APIC_BASE: CInt = 0x1b;
+const MSR_PLATFORM_INFO: CInt = 0xce;
+const MSR_NHM_TURBO_RATIO_LIMIT: CInt = 0x1ad;
+const MSR_IA32_PERF_CTL: CInt = 0x199;
+const MSR_IA32_ENERGY_PERF_BIAS: CInt = 0x1b0;
 const X2APIC_ENABLE: CULong = 1 << 10;
 const LOCAL_TIMER_VECTOR: CUInt = 0xef;
 const LOCAL_PERF_VECTOR: CUInt = 0xf0;
@@ -94,6 +98,10 @@ type X86StackFrameLogFn = unsafe extern "C" fn(CULong, CULong, CULong);
 type X86PrintStackFn = unsafe extern "C" fn(*mut c_void, CULong);
 
 extern "C" {
+    #[link_name = "no_turbo"]
+    static mut X86_NO_TURBO: CInt;
+    fn x86_running_on_kvm_bridge() -> CInt;
+    fn x86_cpuid6_bridge(eaxp: *mut CULong, ecxp: *mut CULong);
     fn kprintf(format: *const i8, ...) -> CInt;
     fn arch_delay(us: CInt);
     fn do_arch_prctl(code: CULong, address: CULong) -> CLong;
@@ -2039,6 +2047,26 @@ pub unsafe extern "C" fn x86_init_pstate_turbo_body_result(
     }
     0
 }
+
+/// Preserve the selected x86 CPU initialization entry and its ordered MSR callbacks.
+/// The boot CPU initializes `no_turbo` before entering this serialized setup path.
+#[no_mangle]
+pub unsafe extern "C" fn init_pstate_and_turbo() {
+    let _ = unsafe {
+        x86_init_pstate_turbo_body_result(
+            read_volatile(core::ptr::addr_of!(X86_NO_TURBO)),
+            MSR_PLATFORM_INFO,
+            MSR_NHM_TURBO_RATIO_LIMIT,
+            MSR_IA32_PERF_CTL,
+            MSR_IA32_ENERGY_PERF_BIAS,
+            Some(x86_running_on_kvm_bridge),
+            Some(x86_cpuid6_bridge),
+            Some(x86_read_msr_bridge),
+            Some(x86_write_msr_bridge),
+        )
+    };
+}
+
 
 #[no_mangle]
 pub unsafe extern "C" fn x86_init_pat_body_result(

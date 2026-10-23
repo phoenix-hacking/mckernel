@@ -1,0 +1,160 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_F04_ACTUAL_COHERENT78_PRODUCTION_RUST_AND_REUSED_COMPLETE_GCC9_CPU_TU_ABI_RELOCATION_PARTIAL_LINK_REVIEW_READY",
+  "source_ready": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/production-consumer-preparation-1/PRODUCTION-CONSUMER-READY.json",
+    "sha256": "73127a92e6e7f6754bc58f83833d8b78fe4b2aef8f284dbcbd3e8673f0c51db5",
+    "bytes": 3505
+  },
+  "Rust_recipe": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/production-consumer-preparation-1/EXACT-PRODUCTION-RUST-RECIPE.GRANTED-WHEN-READY.json",
+    "sha256": "d1ce570bc2201a75e3381a6b73d702448cff4019452cc63aef49c071e1c02af0",
+    "bytes": 88756
+  },
+  "C_reuse_recipe": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/production-consumer-preparation-1/EXACT-REUSED-GCC9-CPU-CONSUMER.GRANTED-WHEN-READY.json",
+    "sha256": "c1dae39a1a2edf7c3b0014098ae8463e374ffd1e8169516eb8eb1f929fdfe017",
+    "bytes": 51369
+  },
+  "exact_command": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/production-consumer-preparation-1/EXACT-GRANTED-COMMAND.json",
+    "sha256": "14d03ea3c3d50387387f1dc9e88d2214e65de8dfee0fa3c7995a1365050354b8",
+    "bytes": 1896
+  },
+  "driver": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/production-consumer-preparation-1/run_production_consumer_once.py",
+    "sha256": "f2a0fedd7a7eb7e86e8e4c40df99da83e0e3e39afb4c9678bbe70392bcbba6c6",
+    "bytes": 12308
+  },
+  "compile_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/production-consumer-preparation-1/COMPILE-OBJECT-RECEIPT.json",
+    "sha256": "e1f3774e8a86ffc72b975f1d79f1d495d4694daeff7852aee6e3751c93d22ec7",
+    "bytes": 2760
+  },
+  "actual_Rust_consumer": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/production-consumer-preparation-1/ACTUAL-RUST-CONSUMER-RECEIPT.json",
+    "sha256": "d76552a324e15d1c3e4d0fc330ab45d06a3b5fb7e698792cd45487b83d621961",
+    "bytes": 5634
+  },
+  "actual_wholejoin": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/production-consumer-preparation-1/ACTUAL-PRODUCTION-WHOLE-JOIN.json",
+    "sha256": "158a5b0bd8462a53c1aa91074c8d82fdba0fc2d35cc3c09b5ae523e8a5f3d877",
+    "bytes": 18104
+  },
+  "headroom": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/production-consumer-preparation-1/ACTUAL-HEADROOM.json",
+    "sha256": "55451072d8a8bee8a7f4be6a6af732a6e265478d28c4557e07ae240d2653a353",
+    "bytes": 550
+  },
+  "profile": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/production-consumer-preparation-1/ACTUAL-PROFILE.json",
+    "sha256": "64288be8514c4ef8dca00f509be49bf0636fb33c67cc63659f8f99f01da3efde",
+    "bytes": 2748
+  },
+  "helper_prerequisite": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/production-consumer-preparation-1/HELPER-GLOBAL-DEPENDENCY-CHECK.json",
+    "sha256": "f5950189cb7c4cbd696bae6de346837bf0a52e24f6ec55897056532fa37a19a7",
+    "bytes": 803
+  },
+  "production_inputs": {
+    "C": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/bounded-correction-1/ACTUAL-BOUNDED-CORRECTION-WHOLE-JOIN.json",
+      "sha256": "d13abdf6dc42552163421cc2c3551ba7b12662353444e3ef7cab4f5ba20205a9",
+      "bytes": 18845
+    },
+    "Rust": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/candidate/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "a6e7465d7924755c97e5d72919a97c2985aacd35cf9db417c4ee981b4d5d071a",
+      "bytes": 90445
+    }
+  },
+  "full_production_source_count": 78,
+  "source_identity": "b99632ddc4ce839480a76e5690b6bba35d029048bd2dbbf2593d520dd75e6971",
+  "only_override": "kernel/rust/x86_cpu_helpers.rs accepteda6e7465d",
+  "actual_compiler_invocations": 1,
+  "actual_compile_seconds": 21.135810303967446,
+  "exact_U_delta": {
+    "added": [
+      "x86_cpuid6_bridge",
+      "x86_running_on_kvm_bridge"
+    ],
+    "after": 575,
+    "before": 573,
+    "removed": []
+  },
+  "all_prior_Rust_T_preserved": true,
+  "new_unique_Rust_entry": "init_pstate_and_turbo",
+  "C_turbo_data_ABI": "no_turbo int4bytes; Rust X86_NO_TURBO has exact link_name",
+  "Rust_helper_param_and_body_unchanged": true,
+  "retained_C_complete_object_stat_unchanged": true,
+  "repeated_C_TU_compiles": 0,
+  "repeated_C_object_content_hashes": 0,
+  "new_objects": {
+    "C_cpu": {
+      "ctime_ns": 1792793880866514618,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 56000960,
+      "mode": "0o600",
+      "mtime_ns": 1792793880866514618,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-bounded-correction-1/cpu.c.o",
+      "sha256": "c4c538f17156e314f26406d92b88fddb69593405d0b2a7b78ce5b5e3fe8eda8b",
+      "size": 139360,
+      "uid": 1000
+    },
+    "Rust": {
+      "ctime_ns": 1792794858829287872,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 56001893,
+      "mode": "0o600",
+      "mtime_ns": 1792794858829287872,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/production-consumer-preparation-1/output-1/mckernel_rust.o",
+      "sha256": "174deb4480be64f7cdf5ecba570a966da559786faee87644fcdeb073bf80153a",
+      "size": 13764360,
+      "uid": 1000
+    },
+    "partial": {
+      "ctime_ns": 1792794859429306689,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 56001949,
+      "mode": "0o600",
+      "mtime_ns": 1792794859429306689,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/production-consumer-preparation-1/output-1/cpu-rust-partial.o",
+      "sha256": "627631f52e18efae0bb03b3091b5cadf0159fa2d0f5b7a6985656b3869892ba3",
+      "size": 14026944,
+      "uid": 1000
+    }
+  },
+  "actual_commands": 9,
+  "all_children_joined_group_absent_closed": true,
+  "seconds": 21.829112711013295,
+  "observed_outer_tool_exit_code": 0,
+  "CPU6_released": true,
+  "accepted_actual10": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/bounded-correction-1/ACTUAL-BOUNDED-CORRECTION-WHOLE-JOIN.json",
+    "sha256": "d13abdf6dc42552163421cc2c3551ba7b12662353444e3ef7cab4f5ba20205a9",
+    "bytes": 18845
+  },
+  "accepted_corrected_source_handoff": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/FINAL-SOURCE-AND-ACTUAL-RESULT.json",
+    "sha256": "9dd57a75dca68d910a36697f2e9ae78e4461128e42c77b0de8b6882a81e67360",
+    "bytes": 8068
+  },
+  "first_E0530_failure_preserved": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/FIRST-CANDIDATE-FAILURE-1.json",
+    "sha256": "fb4f94e397dd81dfc94132a817177623fb5dd736a21f30a75ef794d3c014704d",
+    "bytes": 3149
+  },
+  "remaining_C_callbacks": 4,
+  "canonical_writes": 0,
+  "no_walk_or_other_source_refresh_was_needed": true,
+  "exact_GCC14_default_kernel_link": false,
+  "native": false,
+  "file_retired": false,
+  "next": "Independent fullproductionconsumer review; root may integrate accepted exactpatch/currentmodule into coherent defaultimage. Next process lane may reuse accepted78snapshot/recipe; root ownsqueue/currentmemoryintegration."
+}

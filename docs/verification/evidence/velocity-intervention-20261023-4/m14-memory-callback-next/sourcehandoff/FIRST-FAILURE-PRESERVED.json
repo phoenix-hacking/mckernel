@@ -1,0 +1,122 @@
+{
+  "CPU6_released": true,
+  "cause": "Actual existing Rust phys_to_virt reads extern unsigned long linux_page_offset_base; fixture omitted this existing bootdata provider. RustPASS; GCClinkFAIL; no parity/header tests ran.",
+  "corrections_executed": 0,
+  "driver": {
+    "bytes": 6352,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/actual-fixture-cohort-1/original-sources/sourcehandoff/run_actual_once.py",
+    "sha256": "9af9d0061a092d7f7b3c88994dc79c768648ca7bc21c298a0f8396d0c9522589"
+  },
+  "joins": [
+    {
+      "captures": {
+        "stderr": {
+          "ctime_ns": 1792794963368565826,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 56002432,
+          "mode": "0o600",
+          "mtime_ns": 1792794963368565826,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/actual-fixture-cohort-1/1/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792794963368565826,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 56002431,
+          "mode": "0o600",
+          "mtime_ns": 1792794963368565826,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/actual-fixture-cohort-1/1/stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        }
+      },
+      "closed_streams": true,
+      "direct_child_joined": true,
+      "error": null,
+      "group_absent": true,
+      "pid": 3955219,
+      "remaining_group_members": [],
+      "retirement_error": null,
+      "returncode": 0,
+      "seconds": 1.1589285789523274,
+      "start": 59240807,
+      "timed_out": false,
+      "unexpected_group_members": []
+    },
+    {
+      "captures": {
+        "stderr": {
+          "ctime_ns": 1792794964676606835,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 56002442,
+          "mode": "0o600",
+          "mtime_ns": 1792794964676606835,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/actual-fixture-cohort-1/2/stderr",
+          "sha256": "42a8b1b95041f969acb1d8d1eb1f80c6e60eed4e6ab37ec0ee459a06d75b8773",
+          "size": 441,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792794964532602321,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 56002441,
+          "mode": "0o600",
+          "mtime_ns": 1792794964532602321,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/actual-fixture-cohort-1/2/stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        }
+      },
+      "closed_streams": true,
+      "direct_child_joined": true,
+      "error": null,
+      "group_absent": true,
+      "pid": 3955227,
+      "remaining_group_members": [],
+      "retirement_error": null,
+      "returncode": 1,
+      "seconds": 0.19263532292097807,
+      "start": 59240923,
+      "timed_out": false,
+      "unexpected_group_members": []
+    }
+  ],
+  "no_retry": true,
+  "original_ready": {
+    "bytes": 15731,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/sourcehandoff/EXECUTABLE-READY.NOT-EXECUTED.json",
+    "sha256": "9828c929abaff238c4a31ff83dfcdbe6488ac2588b953c2487255ff4b3b5225c"
+  },
+  "production_candidate_unchanged": [
+    {
+      "bytes": 87143,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/candidate/arch/x86_64/kernel/memory.c",
+      "sha256": "2b285359ee00dac9e6281d112743e4f39247b9d661d0b5d00993e74d17a0739e"
+    },
+    {
+      "bytes": 197568,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "2994b6fe46feb6d0f6dd1390cd4a4efc550f8dfee66c067e506eba16b00029d7"
+    }
+  ],
+  "production_provider": "ihk/cokernel/smp/x86_64/setup.c unsigned long linux_page_offset_base (BSS0), assigned boot_param->page_offset_base in smp_ihk_arch_init",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FIRST_CANDIDATE_RUST_PASS_GCC_LINK_MISSING_EXISTING_DATA_PROVIDER_STOP",
+  "stderr": {
+    "bytes": 441,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/actual-fixture-cohort-1/2/stderr",
+    "sha256": "42a8b1b95041f969acb1d8d1eb1f80c6e60eed4e6ab37ec0ee459a06d75b8773"
+  }
+}

@@ -79,8 +79,12 @@ extern void save_debugreg(unsigned long *debugreg);
 extern void restore_debugreg(unsigned long *debugreg);
 extern void clear_debugreg(void);
 extern void clear_single_step(struct thread *proc);
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int vm_range_insert(struct process_vm *vm, struct vm_range *newrange);
+#else
 static int vm_range_insert(struct process_vm *vm,
 		struct vm_range *newrange);
+#endif
 static struct vm_range *vm_range_find(struct process_vm *vm,
 		unsigned long addr);
 static int copy_user_ranges(struct process_vm *vm, struct process_vm *orgvm);
@@ -2069,7 +2073,7 @@ int remove_process_memory_range(struct process_vm *vm,
 }
 #endif
 
-static void vm_range_insert_log_bridge(int event, struct process_vm *vm,
+PROCESS_SCHED_PUBLIC_BRIDGE void vm_range_insert_log_bridge(int event, struct process_vm *vm,
 				       struct vm_range *newrange,
 				       struct vm_range *range)
 {
@@ -2085,16 +2089,18 @@ static void vm_range_insert_log_bridge(int event, struct process_vm *vm,
 	}
 }
 
-static void vm_range_insert_dump_bridge(struct process_vm *vm)
+PROCESS_SCHED_PUBLIC_BRIDGE void vm_range_insert_dump_bridge(struct process_vm *vm)
 {
 	dump_tree(vm);
 }
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 static int vm_range_insert(struct process_vm *vm, struct vm_range *newrange)
 {
 	return process_vm_range_insert_result(&vm->vm_range_tree, newrange, vm,
 			vm_range_insert_log_bridge, vm_range_insert_dump_bridge);
 }
+#endif
 
 void process_range_public_log_bridge(int event, struct process_vm *vm,
 				     struct vm_range *range,

@@ -1,0 +1,167 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_OBSERVER_CORRECTION_RETAINED_ELF_SECTIONS_AND_LIVE_RELOCATIONS",
+  "observer_only": true,
+  "compiler_invocations": 0,
+  "linker_invocations": 0,
+  "previous_14_commands_replayed": false,
+  "product_sources_changed": false,
+  "full_crate_proven": false,
+  "complete_C_TU_proven": false,
+  "default_image_link_proven": false,
+  "native_proven": false,
+  "original_extra_relocations": [
+    {
+      "relocation_section": ".rela.ltext.rb_first_safe",
+      "section": ".ltext.rb_first_safe",
+      "offset": 20,
+      "type": 1,
+      "addend": 0,
+      "symbol": "virt_to_phys",
+      "undefined": true
+    },
+    {
+      "relocation_section": ".rela.ltext.rb_first_safe",
+      "section": ".ltext.rb_first_safe",
+      "offset": 36,
+      "type": 1,
+      "addend": 0,
+      "symbol": "ihk_mc_chk_page_address",
+      "undefined": true
+    },
+    {
+      "relocation_section": ".rela.ltext.rb_next_safe",
+      "section": ".ltext.rb_next_safe",
+      "offset": 32,
+      "type": 1,
+      "addend": 0,
+      "symbol": "virt_to_phys",
+      "undefined": true
+    },
+    {
+      "relocation_section": ".rela.ltext.rb_next_safe",
+      "section": ".ltext.rb_next_safe",
+      "offset": 48,
+      "type": 1,
+      "addend": 0,
+      "symbol": "ihk_mc_chk_page_address",
+      "undefined": true
+    }
+  ],
+  "discarded_safe_sections": [
+    ".ltext.rb_first_safe",
+    ".ltext.rb_next_safe"
+  ],
+  "raw_undefined_names_preserved": [
+    "ihk_mc_chk_page_address",
+    "virt_to_phys",
+    "vm_range_insert_dump_bridge",
+    "vm_range_insert_log_bridge"
+  ],
+  "retained_extra_relocations": [],
+  "all_retained_undefined_relocations": [
+    {
+      "relocation_section": ".rela.ltext.vm_range_insert",
+      "section": ".ltext.vm_range_insert",
+      "offset": 91,
+      "type": 1,
+      "addend": 0,
+      "symbol": "vm_range_insert_log_bridge",
+      "undefined": true
+    },
+    {
+      "relocation_section": ".rela.ltext.vm_range_insert",
+      "section": ".ltext.vm_range_insert",
+      "offset": 141,
+      "type": 1,
+      "addend": 0,
+      "symbol": "vm_range_insert_log_bridge",
+      "undefined": true
+    },
+    {
+      "relocation_section": ".rela.ltext.vm_range_insert",
+      "section": ".ltext.vm_range_insert",
+      "offset": 166,
+      "type": 1,
+      "addend": 0,
+      "symbol": "vm_range_insert_dump_bridge",
+      "undefined": true
+    }
+  ],
+  "unique_Rust_entry": true,
+  "actual_unchanged_callers": [
+    {
+      "name": "process_split_range_insert_bridge",
+      "bytes": 48,
+      "sha256": "4e738adf02134872249992eaffaacd195dc47efaaee5942ddfc9203d267a0c90",
+      "relocations": [
+        {
+          "relative_offset": 36,
+          "type": 1,
+          "addend": 0,
+          "symbol": "vm_range_insert"
+        }
+      ]
+    },
+    {
+      "name": "process_add_range_insert_bridge",
+      "bytes": 48,
+      "sha256": "4e738adf02134872249992eaffaacd195dc47efaaee5942ddfc9203d267a0c90",
+      "relocations": [
+        {
+          "relative_offset": 36,
+          "type": 1,
+          "addend": 0,
+          "symbol": "vm_range_insert"
+        }
+      ]
+    }
+  ],
+  "successful_prior_actual_body_comparisons": 1088,
+  "retained_C_diagnostic_callback_debt": [
+    "vm_range_insert_dump_bridge",
+    "vm_range_insert_log_bridge"
+  ],
+  "accepted_fulltree_provider_references": [
+    {
+      "symbol": "virt_to_phys",
+      "receipt_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/production-consumer-preparation-1/ACTUAL-RUST-CONSUMER-RECEIPT.json",
+      "receipt_sha256": "d3bfcd21e64b89715866a3b2a7ebdcbc6c7f66f4be967b39dd273e08f3787ff5",
+      "raw_symbols_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/production-consumer-preparation-1/actual-production-capture-1/01-production-Rust-NM/stdout",
+      "raw_symbols_sha256": "1c5ef1fc6760e48158fcc547aff68a235af433b9d7b9f913f45f53dddd54a622",
+      "exact_row": "0000000000000000 T virt_to_phys",
+      "accepted_object_sha256": "6e91528d6fecf3e58454a91c9b9006a809413301ee227253dd6a04780af5b648",
+      "accepted_object_bytes": 13762408,
+      "accepted_object_rehashed": false,
+      "fresh_provider_execution": false
+    },
+    {
+      "symbol": "ihk_mc_chk_page_address",
+      "receipt_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/production-consumer-preparation-1/expert-observer-correction-1/ACTUAL-PRODUCTION-WHOLE-JOIN.json",
+      "receipt_sha256": "72211a29e13036fd6cc0eb96250d42458d80213483fcdc44aa55ea33a010614b",
+      "raw_symbols_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/production-consumer-preparation-1/expert-observer-correction-1/actual-production-capture-1/selected-mem-symbols/stdout",
+      "raw_symbols_sha256": "188c2cf4ca2725f9eb3c44ec7424dbe23b805a015102197f1de21d2ea0e576b9",
+      "exact_row": "0000000000002ee0 0000000000000050 T ihk_mc_chk_page_address",
+      "accepted_object_sha256": "3a5d27157940d7ef0db7193b07774ad202f5ba6c2c810a58f0141a2232ee1d3f",
+      "accepted_object_bytes": 208200,
+      "accepted_object_rehashed": false,
+      "fresh_provider_execution": false
+    }
+  ],
+  "precise_scope": "Same already compiled original/partial objects; discarded safe-iterator UND rows are not live imports. Existing full-tree providers remain separate production closure references; no new fullcrate/default/native proof.",
+  "bound_inputs": {
+    "fixture/ordinary-attempt-1/actual_provider.o": "cda7e35b33802cc2bdc345d8abf039cb71169e68e461fe9f284048989c22bce4",
+    "fixture/ordinary-attempt-1/actual_selected_leaf_link.o": "dd552e2bd07c620751fbce454d83230222bb0eb1ac4f75c27b4c7b1e76455b9b",
+    "fixture/ordinary-attempt-1/actual_default_consumers.o": "5e3be43c3eef97504f9a72494dcb40de329bcb6a33b70bf9c91e8e4dbe97935b",
+    "fixture/ordinary-attempt-1/actual-selected-leaf-undefined.stdout": "e3d18c366f13f8f4c617e251e324ab92092e0416d5a324440023bf82268a3319",
+    "fixture/ordinary-attempt-1/actual-parity-execute.stdout": "8253a210bac18b640f4931673d73007bd47f9d46958b6409bb1cb70866697df6",
+    "sourcehandoff/OBSERVED-FIRST-FAILURE.json": "9195010898d16264eb65b03c1b60fb6a71934081a225a1b18fa58d9422d4c23f",
+    "sourcehandoff/EXECUTABLE-READY.corrected-host-memset-1.json": "7288a8d9682d30ee6a7be4a0ae70a754d03aab4b977b3a3254d4acbbaac1592d",
+    "candidate/process.c": "64af918855ea361bd850d6ad7480d304634c28814e04127fe3dec8c013f21044",
+    "candidate/process_helpers.rs": "3f2c3dc03445147addee47d77e3ad2b31207fb3bfaa591ad99b6d0d9c897932e",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/production-consumer-preparation-1/ACTUAL-RUST-CONSUMER-RECEIPT.json": "d3bfcd21e64b89715866a3b2a7ebdcbc6c7f66f4be967b39dd273e08f3787ff5",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/production-consumer-preparation-1/actual-production-capture-1/01-production-Rust-NM/stdout": "1c5ef1fc6760e48158fcc547aff68a235af433b9d7b9f913f45f53dddd54a622",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/production-consumer-preparation-1/expert-observer-correction-1/ACTUAL-PRODUCTION-WHOLE-JOIN.json": "72211a29e13036fd6cc0eb96250d42458d80213483fcdc44aa55ea33a010614b",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/production-consumer-preparation-1/expert-observer-correction-1/actual-production-capture-1/selected-mem-symbols/stdout": "188c2cf4ca2725f9eb3c44ec7424dbe23b805a015102197f1de21d2ea0e576b9"
+  }
+}

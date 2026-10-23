@@ -1,0 +1,322 @@
+{
+  "candidate_postimages": [
+    {
+      "bytes": 87143,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/candidate/arch/x86_64/kernel/memory.c",
+      "sha256": "2b285359ee00dac9e6281d112743e4f39247b9d661d0b5d00993e74d17a0739e"
+    },
+    {
+      "bytes": 197568,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "2994b6fe46feb6d0f6dd1390cd4a4efc550f8dfee66c067e506eba16b00029d7"
+    }
+  ],
+  "canonical_observed": [
+    {
+      "bytes": 86355,
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/memory.c",
+      "sha256": "e52b056f783641ab8b48a5a0d6cec793b89c764f8a5ba3b0f16550eac2fd615f"
+    },
+    {
+      "bytes": 196605,
+      "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "8d9cf2a72a5fcca67edf25e99f20c84fb2aaac4d6c7f95ec73a8e7de9d46b1cc"
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-name",
+        "m14_clear_range_l4_fixture",
+        "--crate-type=lib",
+        "--emit=obj",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "panic=abort",
+        "fixture.rs",
+        "-o",
+        "fixture-rust.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/fixture",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. full actual candidate Rust1.92 object with root/phys/walk production providers",
+      "role": "full actual candidate Rust1.92 object with root/phys/walk production providers"
+    },
+    {
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=c11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "fixture.c",
+        "fixture-rust.o",
+        "-Wl,--gc-sections",
+        "-o",
+        "fixture"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/fixture",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. GCC9 exact original C callback+walker and actual Rust bodies, typed retained L3 callback provider",
+      "role": "GCC9 exact original C callback+walker and actual Rust bodies, typed retained L3 callback provider"
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/fixture/fixture"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/fixture",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 1792 complete callback +28 actual default walker pairs; 1820 total",
+      "role": "1792 complete callback +28 actual default walker pairs; 1820 total"
+    },
+    {
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_RUST_X86_MEMORY_PUBLIC",
+        "-DMCKERNEL_RUST_X86_USER_COPY_PUBLIC",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/include",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel/ihk/ikc/include",
+        "-I/home/holden/mckernel/ihk/linux/include",
+        "-I/home/holden/mckernel/lib/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-fsyntax-only",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/fixture/real-header-ABI.c"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/fixture",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. actual PUBLIC complete memory header and typed immutable callback ABI",
+      "role": "actual PUBLIC complete memory header and typed immutable callback ABI"
+    },
+    {
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_RUST_X86_USER_COPY_PUBLIC",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/include",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel/ihk/ikc/include",
+        "-I/home/holden/mckernel/ihk/linux/include",
+        "-I/home/holden/mckernel/lib/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-fsyntax-only",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/fixture/real-header-ABI.c"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/fixture",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. actual fallback complete memory header ABI",
+      "role": "actual fallback complete memory header ABI"
+    }
+  ],
+  "compiler_runs": 0,
+  "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/fixture",
+  "default_GCC14_finalimage_native": "OPEN",
+  "execution_grant": null,
+  "expected_default_walker_pairs_NOT_ACTUAL": 28,
+  "expected_direct_pairs_NOT_ACTUAL": 1792,
+  "expected_total_pairs_NOT_ACTUAL": 1820,
+  "failure_family": "Distinct complete-clear_range_l4 callback zeroattempts; one failed candidate plusoneboundedcorrection thenexpert. All previous memory/logger/walk failures retained; noreset.",
+  "fixture_qualification": "Exact original C callback+original C walk wrapper vs full Rust callbacks/walkers; real existing Rust root+phys+walk bodies. Only actual private L3 provider and boot loaded-state provider are controlled. 1792 direct and28 default-consumer pairs cover nullentry/nullPTE/physmask/signedchildreturns/fullargbits/childmutation/lifetime/order; no native/fullL3/free/flush proof.",
+  "patch": {
+    "bytes": 2856,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/patch/cutover.patch",
+    "sha256": "4cafe5b494d97aed63f8f48f270717ef50dfb41e6404eabf69ee796b3cf8c79c"
+  },
+  "prior_evidence_reused": {
+    "clear_range_wrapper_pairs": 241920,
+    "top_log_pairs": 179200,
+    "walkL4_pairs": 224,
+    "walk_actual78_and_GCC9": {
+      "bytes": 17554,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-walk-l4/production-consumer-preparation-1/ACTUAL-PRODUCTION-CONSUMER-RECEIPT.json",
+      "sha256": "698ba7dc5bda25827fcaa35da21db3174d1673c0fadfedf08d88bf4cddd731e3"
+    },
+    "walk_corrected_fixture": {
+      "bytes": 6449,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-walk-l4/fixture/bounded-correction-1/ACTUAL-CORRECTED-FIXTURE-RECEIPT.json",
+      "sha256": "573c720f04eaa99b6e5b82204555ee78d39949fffe4a23def44da3250f79ce8e"
+    },
+    "walk_first_failure": {
+      "bytes": 6764,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-walk-l4/sourcehandoff/FIRST-FAILURE-PRESERVED.json",
+      "sha256": "70ee28b4f3fb32fb243aa67cbe7367fc923ba6c7c3a96c3015d1ebe6c708d62a"
+    }
+  },
+  "profile": {
+    "AS_bytes": 2147483648,
+    "CPU": "Root chooses free explicit slot; none held",
+    "CPU_seconds": 60,
+    "FSIZE_bytes": 33554432,
+    "NOFILE": 256,
+    "RUST_MIN_STACK": 2097152,
+    "capture_helper_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8",
+    "core": 0,
+    "jobs": 1,
+    "retirement_seconds": 6,
+    "wall_seconds": 90
+  },
+  "remaining_C_debt": [
+    "private x86_clear_range_walk_l3_bridge",
+    "clear_range_l3",
+    "x86_clear_range_walk_l2_bridge",
+    "clear_range_l2",
+    "x86_clear_range_walk_l1_bridge",
+    "clear_range_l1",
+    "remaining effect/log/free/flush callbacks; separate owners maintain their source"
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_before_coding": true,
+  "semantic_proposal": "Entire former clear_range_l4 callback is Rust export using existing root_body_result with same actual Rust physbridge and exact private C l3bridge supplied by immutable typed declaration. Accepted L4 callbackdata initializer nowpointsRustbody. Original Cbody retained fallback unchanged. No args retention, new null/error/filter/flush/free/log policy.",
+  "sources": [
+    {
+      "bytes": 197568,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "2994b6fe46feb6d0f6dd1390cd4a4efc550f8dfee66c067e506eba16b00029d7"
+    },
+    {
+      "bytes": 87143,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/candidate/arch/x86_64/kernel/memory.c",
+      "sha256": "2b285359ee00dac9e6281d112743e4f39247b9d661d0b5d00993e74d17a0739e"
+    },
+    {
+      "bytes": 867,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/fixture/real-header-ABI.c",
+      "sha256": "0dddf525c5c121ad2a8a8eef9d9d628a685bd67a78600b241c4c60ba775cb52a"
+    },
+    {
+      "bytes": 4255,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/fixture/fixture.c",
+      "sha256": "84d94eee052cae28aff1e822635808b0f0fd5e33689f9a166f47b3ee6959c838"
+    },
+    {
+      "bytes": 711,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/fixture/fixture.rs",
+      "sha256": "69e70383818d2b7d41ebcbf6da084c7b812fa4adb152f44d04de7849ed372c3c"
+    },
+    {
+      "bytes": 321,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/fixture/original-body.inc",
+      "sha256": "5ce4ecf187f5a562638353319e6ba39590a71f5e6297b1724167da51e422b839"
+    },
+    {
+      "bytes": 184,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/fixture/original-walker.inc",
+      "sha256": "b4e84351dbc1f16b8cb75ae2ac3464ead56ce0be0b4e35e1c631ba840d947b29"
+    },
+    {
+      "bytes": 2856,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/patch/cutover.patch",
+      "sha256": "4cafe5b494d97aed63f8f48f270717ef50dfb41e6404eabf69ee796b3cf8c79c"
+    },
+    {
+      "bytes": 17367,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/sourcehandoff/baseline/page_helpers.rs",
+      "sha256": "cfc64f72bf9b94c65417bc8f4e29d65b81f98239fe52ab2a7dd0352ebdfc3f70"
+    },
+    {
+      "bytes": 76151,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/sourcehandoff/baseline/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    }
+  ],
+  "status": "EXACT_COMPLETE_CLEAR_RANGE_L4_CALLBACK_PRIVATE_SOURCE_FIXTURE_READY_NO_JOB_GRANT",
+  "successor_base": [
+    {
+      "bytes": 86744,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-walk-l4/candidate/arch/x86_64/kernel/memory.c",
+      "sha256": "0da70d7cbc80dc96fe4a6643374c8b0e00c0b3dc02796551115d3d97cf0e3889"
+    },
+    {
+      "bytes": 196974,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-walk-l4/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "ec83294bfbdb9b649b6cc313c017d0eef934dbfc638a0a84b257b50b30539c0d"
+    }
+  ],
+  "target": "static clear_range_l4 complete callback body in arch/x86_64/kernel/memory.c",
+  "test_runs": 0,
+  "write_scope": "Private and matching owned evidence only; no canonical/sharedheader/CMake/mem.c/mem_helpers.rs/currentLONG/SDK/frozen writes."
+}

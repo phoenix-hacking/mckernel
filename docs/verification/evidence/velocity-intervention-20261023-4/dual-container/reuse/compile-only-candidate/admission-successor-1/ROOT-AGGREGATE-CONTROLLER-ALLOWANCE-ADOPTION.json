@@ -1,0 +1,51 @@
+{
+  "at": "2026-10-23T22:45:05.910240+00:00",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "named_base": "19GiB_7jobs_P12_12G_compile4G_controller2G_client_coord1G",
+  "supplement": {
+    "live_P12_owner_AS_bytes": 2147483648,
+    "live_native_capture_controller_AS_bytes": 536870912
+  },
+  "aggregate_reservation_bytes": 23085449216,
+  "hard_aggregate_GiB": 22.5259,
+  "jobs_cap": 7,
+  "native": {
+    "cpus": "2-5",
+    "memory": 12884901888,
+    "memory_swap": 12884901888,
+    "pids": 512,
+    "sole_native": true,
+    "owner": [
+      3951805,
+      59198725
+    ],
+    "capture_controller": [
+      3951801,
+      59198713
+    ]
+  },
+  "compiler": {
+    "cpu": "6",
+    "cpus": 1,
+    "memory": 4294967296,
+    "memory_swap": 4294967296,
+    "pids": 128,
+    "jobs": 1,
+    "HOST_only_writable": true,
+    "no_native_or_scratch_mutation": true
+  },
+  "compile_control_pool": {
+    "cpu": 0,
+    "AS_bytes": 2147483648,
+    "includes_existing_tiny_timer": true
+  },
+  "root_client_coordination_pool_bytes": 1073741824,
+  "CPU6_exclusivity": "No ordinary CPU6 compiler may run during admitted compile container; actual latest ordinary wholejoin authority required before query; no reserved observer outside pools",
+  "root_observer_limits_note": "Read-only admission runs before compile starts under2GiBAS existing ordinary profile. During build, any extra observer needs explicit shared-pool accounting; no automatic2GiBadditional job.",
+  "fresh_min_MemAvailable": 25769803776,
+  "capacity": "HOST16GiB + full sparse gap + full operation budgets/emergency; scratch12GiB + retained capture/emergency requirements; unchanged observer enforces",
+  "independent_reviewer": "/root/native235_release_review",
+  "review_verdict": "PASS_SOURCE_PROFILE_AND_CONDITIONAL_ONE_READONLY_ADMISSION",
+  "authority": "Reservation bookkeeping adoption only. No actual resource admission or compiler launch; seven actual-context declarations and one independent exact build release remain pending."
+}

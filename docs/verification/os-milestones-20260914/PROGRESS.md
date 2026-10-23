@@ -90,17 +90,17 @@ File rows contain existing partial Rust work. Unassessed subgoals do not mean ze
 | --- | --- | --- | --- |
 | M14-F01 | kernel/mem.c | 0/5 complete | open |
 | M14-F02 | kernel/process.c | 0/5 complete | partial |
-| M14-F03 | kernel/syscall.c | assessment pending (5 listed) | open |
-| M14-F04 | arch/x86_64/kernel/cpu.c | assessment pending (5 listed) | open |
+| M14-F03 | kernel/syscall.c | 0/5 complete | open |
+| M14-F04 | arch/x86_64/kernel/cpu.c | 0/5 complete | open |
 | M14-F05 | arch/x86_64/kernel/memory.c | 0/5 complete | partial |
-| M14-F06 | arch/x86_64/kernel/syscall.c | assessment pending (5 listed) | open |
+| M14-F06 | arch/x86_64/kernel/syscall.c | 0/5 complete | open |
 
 M14 closes only with final default Rust/assembly ownership and applicable native functional proof. Practical 35/35 alone does not establish that result.
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-10-23T22:18:28+00:00`
-- Launcher state heartbeat: `2026-10-23T22:18:27.750190+00:00`
+- Dashboard refreshed: `2026-10-23T22:49:14+00:00`
+- Launcher state heartbeat: `2026-10-23T22:49:08.944573+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
 - Worker PID: `3582171`; server PID: `3582173`
 - Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261023T080841Z-85724d49`

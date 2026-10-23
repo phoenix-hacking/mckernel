@@ -1,0 +1,82 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_AND_EXECUTABLE_RECIPES_READY_NO_JOB_STARTED",
+  "Rust_recipe": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/production-consumer-preparation-1/EXACT-PRODUCTION-RUST-RECIPE.GRANTED-WHEN-READY.json",
+    "sha256": "d1ce570bc2201a75e3381a6b73d702448cff4019452cc63aef49c071e1c02af0",
+    "bytes": 88756
+  },
+  "C_recipe": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/production-consumer-preparation-1/EXACT-REUSED-GCC9-CPU-CONSUMER.GRANTED-WHEN-READY.json",
+    "sha256": "c1dae39a1a2edf7c3b0014098ae8463e374ffd1e8169516eb8eb1f929fdfe017",
+    "bytes": 51369
+  },
+  "source_count": 78,
+  "source_identity": "b99632ddc4ce839480a76e5690b6bba35d029048bd2dbbf2593d520dd75e6971",
+  "only_private_override": "kernel/rust/x86_cpu_helpers.rs",
+  "all_current_other77_equal_accepted_baseline": true,
+  "all_actual_flags_unchanged_except_source_output": true,
+  "expected_U_delta": {
+    "before": 573,
+    "after": 575,
+    "removed": [],
+    "added": [
+      "x86_cpuid6_bridge",
+      "x86_running_on_kvm_bridge"
+    ]
+  },
+  "header_closure_count": 55,
+  "retained_C_object": {
+    "ctime_ns": 1792793880866514618,
+    "device": 66306,
+    "gid": 1000,
+    "inode": 56000960,
+    "mode": "0o600",
+    "mtime_ns": 1792793880866514618,
+    "nlink": 1,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-bounded-correction-1/cpu.c.o",
+    "sha256": "c4c538f17156e314f26406d92b88fddb69593405d0b2a7b78ce5b5e3fe8eda8b",
+    "size": 139360,
+    "uid": 1000
+  },
+  "retained_object_not_rehashed": true,
+  "accepted_actual10": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/bounded-correction-1/ACTUAL-BOUNDED-CORRECTION-WHOLE-JOIN.json",
+    "sha256": "d13abdf6dc42552163421cc2c3551ba7b12662353444e3ef7cab4f5ba20205a9",
+    "bytes": 18845
+  },
+  "accepted_handoff": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/FINAL-SOURCE-AND-ACTUAL-RESULT.json",
+    "sha256": "9dd57a75dca68d910a36697f2e9ae78e4461128e42c77b0de8b6882a81e67360",
+    "bytes": 8068
+  },
+  "failure_history": {
+    "first_E0530": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/FIRST-CANDIDATE-FAILURE-1.json",
+      "sha256": "fb4f94e397dd81dfc94132a817177623fb5dd736a21f30a75ef794d3c014704d",
+      "bytes": 3149
+    },
+    "bounded_correction_and_actual10": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/bounded-correction-1/ACTUAL-BOUNDED-CORRECTION-WHOLE-JOIN.json",
+      "sha256": "d13abdf6dc42552163421cc2c3551ba7b12662353444e3ef7cab4f5ba20205a9",
+      "bytes": 18845
+    },
+    "family": "Actual production consumer first attempt; first unexpected failure STOP, no self-correction or family reset."
+  },
+  "profile": {
+    "CPU": 6,
+    "jobs": 1,
+    "AS": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 90,
+    "retirement_seconds": 6,
+    "FSIZE": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "RUST_MIN_STACK": 2097152
+  },
+  "canonical_mutations": 0,
+  "compiler_jobs": 0,
+  "CPU_slots_held": 0,
+  "exact_GCC14_default_kernel_link_native": false
+}

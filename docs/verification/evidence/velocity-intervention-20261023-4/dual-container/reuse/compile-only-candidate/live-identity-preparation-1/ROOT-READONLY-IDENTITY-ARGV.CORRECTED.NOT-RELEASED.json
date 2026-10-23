@@ -1,0 +1,18 @@
+[
+  "/usr/bin/sudo",
+  "-A",
+  "/usr/bin/taskset",
+  "-c",
+  "7",
+  "/usr/bin/prlimit",
+  "--as=2147483648:2147483648",
+  "--cpu=30:30",
+  "--fsize=33554432:33554432",
+  "--nofile=256:256",
+  "--core=0:0",
+  "--",
+  "/home/holden/anaconda3/bin/python3",
+  "-I",
+  "-B",
+  "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/live-identity-preparation-1/read_existing_P12_identity.corrected.py"
+]

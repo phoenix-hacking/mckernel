@@ -1,3 +1,69 @@
+## Canonical process range entry integrated; combined syscall transport failure — 2026-10-23T22:49:14.515057+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Process vm_range_insert canonical64af/3f2c after independent11a772 actual12commands
+CURRENT78Rust/wholeGCC9processTU/73headers/ABI/callerrelocs/partialPASS22.314s.
+TwoCdiagnostics/defaultGCC14/native remainOPEN; currentLONGimage10972 unchanged.
+Combinedsyscallfull78Rust PASSf3bb, then originalfullTU ABIwitness failed before
+assertion on missing relative ../executer/include/uti.h. All3childrenjoined/
+groupgone/closed, CPU6released ded40; failure81c200retained, notABIdefectproof.
+Reviewer maps exactinclude transport; no unchangedretry/productsourcerelaxation.
+Compile-onlyfreshadmissionNOTRUN: rootcontext41fe8 binds latestded40join and
+explicit21.5GiBtotal(named19+liveP12controllers2.5) underhard22.5259GiB/7jobs;
+actual>=24GiBcapacity/fullgrowth checks and exactrelease stillpending. No Docker
+compiler started. P12latest0bd reports67rounds/134launches/361.609315106mixedsec
+provisionalonly; practical34/35/newclosedIDsnone. Staticcheckpointpreparing.
+
+## P12 actual134 launches provisional; two new canonical Rust entries — 2026-10-23T22:42:02.683703+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Latestread0bd613bc/.149156s joined/gone/closed reports67complete rounds/134launches/
+361.609315106mixedseconds, wireerrorNULL/noobservedFAILorABORT. Producerreports
+only: 60mixedminutes/terminal/formal/physical acceptanceOPEN. Tool75130 retains
+sole nativeheavy; owner3951805/59198725, outer3951801/59198713. No fifthreadgrant.
+M14walk0da70/ec832 andCPU8c71/a6e canonicallyintegratedafteracceptedfull78/GCC9
+partialproof; runningimage10972/capsuleunchanged. CPUactual78precededwalkintegration,
+so coherentcombinedimageproof notclaimed. Nextclear_range_l4 actual7280pairs+64phys
+passed690720/ABI/source independentPASS; lowerCcallbacks remain. Process1088+leaf
+observerPASS, full78/wholeTUgrantedCPU6 afterexplicitcurrentCPU/walkrefresh. Combined
+syscallsource/23+11340fixturesaccepted, productionclosurea6erefreshneeded.
+Compile-only liveidentity32d404 actualPASS: CID8058/init3951889/59198794, config87d7/
+HostConfigbaf5 preserved. Actual>=24Gfreshadmission/controllerallowance/CPU6retirement
+stillpending, no buildcontainer launched. Practical34/35/newclosedIDsnone; M14no
+wholearea/file/nativeclosure. Engineeringreview2240recorded; timer3938622unchanged.
+
+## Diagnostic LONG actual first rounds; M14 consumer increments — 2026-10-23T22:32:53.177825+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Diagnostic releaseef0a39/requestaae432 passed full real-clock + publishedrequest
+consumer; one controller tool75130 live, outer3951801/59198713, inner3951805/59198725
+authenticated1aa125a2. Firstrawread5fc at40.9s reachedround0gate withcountersNULL.
+Second20a3de4f reports11complete rounds/22launches/56.550128293mixedseconds, wireerror
+NULL/noobservedFAILorABORT. ProvisionalproducerreportsONLY; terminal/physical OPEN.
+M14walk production698ba7dc actual11commands/22.313191s/78Rust/wholeGCC9+partial31T
+independentlyaccepted; atomiccanonicalintegrationprepared separately. CPUfull78
+jobsoleCPU6active. Process1088/14commands success plusobserver9d58 accepted, no
+recompilation/replay; wholeproductionpreparation next. Archptrace11340/fivecommands
+PASSd25e1ad1/.255296s; combinesprivatelywithsignalfd23PASSwithoutclobberingsharedRust.
+No defaultGCC14/finalimage/native/fullfileRustretirementclaimed. Practical34/35,
+newclosedIDsnone. One live nativeheavy only; permanent27:4 retained. Cadence600s
+monitor3938622/start59029100 unchanged; latestengineeringreview2230 recorded.
+
+## Fresh diagnostic admission passed; M14 actual consumer work — 2026-10-23T22:26:55.651181+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+New diagnostic root admission560ab7c8 PASS/.338713s; outer/.510843s, all joined/gone/closed.
+Source checkpoint3e94 fetched1206 exact before query. Release/expiry still NULL.
+Terminal binds actual facts; native235 reviews admission/templates; case227 prepares
+early read before launch. Failed SDK8 remains positively retired a685, original
+21 rounds/42 launches/112.956787512 mixed seconds are failed-run reports only.
+M14 CPU corrected10 commands/.802363s independently accepted source/GCC9 partial;
+full78/default/native OPEN. Process1088 comparisons/14 commands passed but final
+undefined assertion FAIL on two real rbtree dependencies; bounded focused review,
+no retry. CPU6 released and transferred solely to walk_l4 production consumer.
+Practical34/35 unchanged, new closed IDs none; M14 remains separate. Timer identity
+3938622/start59029100 and600s cadence preserved. See engineering review2220 record.
+
 ## Diagnostic tuple accepted; runtime admission next; ten-minute steering live — 2026-10-23T22:18:28.146426+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

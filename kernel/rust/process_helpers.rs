@@ -17,6 +17,13 @@ use crate::rbtree::{
 };
 
 unsafe extern "C" {
+    fn vm_range_insert_log_bridge(
+        event: CInt,
+        vm: *mut c_void,
+        newrange: *mut VmRange,
+        range: *mut VmRange,
+    );
+    fn vm_range_insert_dump_bridge(vm: *mut c_void);
     fn __ihk_mc_spinlock_lock(lock: *mut IhkSpinlock) -> CULong;
     fn __ihk_mc_spinlock_unlock(lock: *mut IhkSpinlock, flags: CULong);
     fn __ihk_mc_spinlock_lock_noirq(lock: *mut IhkSpinlock);
@@ -1521,6 +1528,23 @@ pub unsafe extern "C" fn process_vm_range_insert_result(
     rb_insert_color(node, root);
 
     0
+}
+
+/// Own the selected process.c insertion entry in Rust. The caller holds the
+/// existing VM range exclusion and supplies a live ProcessVm, exactly as for
+/// the former C wrapper; the helper retains all tree mutation and error order.
+#[no_mangle]
+pub unsafe extern "C" fn vm_range_insert(
+    vm: *mut ProcessVm,
+    newrange: *mut VmRange,
+) -> CInt {
+    process_vm_range_insert_result(
+        (&raw mut (*vm).vm_range_tree).cast::<RbRoot>(),
+        newrange,
+        vm.cast(),
+        Some(vm_range_insert_log_bridge),
+        Some(vm_range_insert_dump_bridge),
+    )
 }
 
 #[no_mangle]

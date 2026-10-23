@@ -1,0 +1,119 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ROOT_READY_EXACT2_ATOMIC_SOURCE_INTEGRATION_NOT_EXECUTED",
+  "copyset": [
+    {
+      "target": "/home/holden/mckernel/arch/x86_64/kernel/memory.c",
+      "preimage": {
+        "path": "/home/holden/mckernel/arch/x86_64/kernel/memory.c",
+        "sha256": "e52b056f783641ab8b48a5a0d6cec793b89c764f8a5ba3b0f16550eac2fd615f",
+        "bytes": 86355
+      },
+      "staged_postimage": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-walk-l4/canonical-integration-preparation-1/staged/arch/x86_64/kernel/memory.c",
+        "sha256": "0da70d7cbc80dc96fe4a6643374c8b0e00c0b3dc02796551115d3d97cf0e3889",
+        "bytes": 86744
+      },
+      "mode": 384,
+      "old_inode": {
+        "device": 66306,
+        "inode": 47459703,
+        "nlink": 1,
+        "uid": 1000,
+        "gid": 1000
+      }
+    },
+    {
+      "target": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+      "preimage": {
+        "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+        "sha256": "8d9cf2a72a5fcca67edf25e99f20c84fb2aaac4d6c7f95ec73a8e7de9d46b1cc",
+        "bytes": 196605
+      },
+      "staged_postimage": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-walk-l4/canonical-integration-preparation-1/staged/kernel/rust/x86_memory_helpers.rs",
+        "sha256": "ec83294bfbdb9b649b6cc313c017d0eef934dbfc638a0a84b257b50b30539c0d",
+        "bytes": 196974
+      },
+      "mode": 384,
+      "old_inode": {
+        "device": 66306,
+        "inode": 47459989,
+        "nlink": 1,
+        "uid": 1000,
+        "gid": 1000
+      }
+    }
+  ],
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-walk-l4/patch/cutover.patch",
+    "sha256": "0c64c968ded9ad4961dbc97eee7de901f66283547e6446bd2740db7dee6887c1",
+    "bytes": 2164
+  },
+  "patch_preparation": {
+    "argv": [
+      "/usr/bin/patch",
+      "--batch",
+      "--fuzz=0",
+      "--forward",
+      "--no-backup-if-mismatch",
+      "--strip=1",
+      "--directory",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-walk-l4/canonical-integration-preparation-1/staged",
+      "--input",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-walk-l4/patch/cutover.patch"
+    ],
+    "returncode": 0,
+    "stdout": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-walk-l4/canonical-integration-preparation-1/patch-source-preparation.stdout",
+      "sha256": "667bd0754dba37af116049b21c3b19d2f0b11f47226b125c80e8ff7b7bf707fe",
+      "bytes": 90
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-walk-l4/canonical-integration-preparation-1/patch-source-preparation.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "zero_fuzz_zero_offset": true,
+    "only_private_staging_written": true
+  },
+  "active_consumer_exclusion": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-walk-l4/canonical-integration-preparation-1/ACTIVE-CONSUMER-EXCLUSION.json",
+    "sha256": "383508495dac9df07774e9194c22e32938c6fae441b1b9903e71ce1c9d58c052",
+    "bytes": 2206
+  },
+  "active_source_hold_required": false,
+  "actual_production_evidence": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-walk-l4/production-consumer-preparation-1/ACTUAL-PRODUCTION-CONSUMER-RECEIPT.json",
+    "sha256": "698ba7dc5bda25827fcaa35da21db3174d1673c0fadfedf08d88bf4cddd731e3",
+    "bytes": 17554
+  },
+  "independent_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-3/m14-walk-l4/INDEPENDENT-ACTUAL-PRODUCTION-CONSUMER.ROOT-RECORD.json",
+    "sha256": "d57c6d5c009e2561d027f0138bebfa5da7872c70a81a481bd7c0815956fe0d98",
+    "bytes": 707
+  },
+  "root_operation": {
+    "argv": [
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-walk-l4/canonical-integration-preparation-1/ROOT-ATOMIC-INTEGRATE.py"
+    ],
+    "script": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-walk-l4/canonical-integration-preparation-1/ROOT-ATOMIC-INTEGRATE.py",
+      "sha256": "baae5c15be72101e3da78355d711f3c58534dc95a043c4b15999d621cecab91c",
+      "bytes": 3992
+    },
+    "executed": false,
+    "sequence": "Recheck exact2preimages/2stagedpostimages andselectedauthorityhashes; createfsyncedsiblingswithmodes; recheckbothpreimagesbeforefirstwrite; os.replaceeachcanonicalpathandfsyncparent; verifybothpostimages. Oldhardlinksremainoldbytes. Anyerrorstopsandretainsstate; noautomaticrollback/replay.",
+    "dispatcher_prerequisite": "Rootconfirms these remainactive selectedauthority or reconciles positivephysicalretirement; no sourcebindingconflict may be bypassed."
+  },
+  "remaining_debt": "Immutable C callback data stillpoints to privateclear_range_l4/l3/l2/l1/effect/log chain; allcallbacks remaincomputeCdebt. No fullfile/defaultGCC14/native/zeroC claim.",
+  "canonical_mutations": 0,
+  "compiler_jobs": 0,
+  "test_jobs": 0,
+  "root_Docker_or_workload_jobs": 0,
+  "CPU_slots_held": 0,
+  "prior_failure_history": "Originalwalkfixture70ee/corrected573c and allremote source/fixture/observer failures retained; no familyreset. Memscalar recipeff08 remains sourceonly/noexecutiongrant."
+}

@@ -1603,11 +1603,19 @@ static int clear_range_l4(void *args0, pte_t *ptep, uint64_t base,
 			x86_clear_range_walk_l3_bridge);
 }
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+/* Immutable callback identity; the retained private C callback chain remains C debt. */
+int (*const x86_clear_range_l4_callback)(void *, pte_t *, uint64_t,
+        uint64_t, uint64_t) = &clear_range_l4;
+extern int x86_clear_range_walk_l4_bridge(void *pt, unsigned long base,
+        unsigned long start, unsigned long end, void *args);
+#else
 X86_MEMORY_PUBLIC_BRIDGE int x86_clear_range_walk_l4_bridge(void *pt, unsigned long base,
 		unsigned long start, unsigned long end, void *args)
 {
 	return walk_pte_l4(pt, base, start, end, &clear_range_l4, args);
 }
+#endif
 
 #define TLB_INVALID_ARRAY_PAGES	(4)
 

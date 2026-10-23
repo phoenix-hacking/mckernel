@@ -1,0 +1,100 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_COMPLETE_ENTRY_CUTOVER_AND_FIXTURE_SOURCES_READY_NOT_COMPILED",
+  "entry": "init_pstate_and_turbo(void)",
+  "preimages": {
+    "arch/x86_64/kernel/cpu.c": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "sha256": "67dd7ea590ad9c1470ce34434770efa5e8cd7449b5f28d3b4ee5d3e0c96eb348",
+      "bytes": 95486
+    },
+    "kernel/rust/x86_cpu_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "59d0723c5d4d35ba63120b59c0422d6bc357246e1146d6cbbd010fe2d727a651",
+      "bytes": 89419
+    }
+  },
+  "postimages": {
+    "arch/x86_64/kernel/cpu.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/candidate/arch/x86_64/kernel/cpu.c",
+      "sha256": "8c71fe79e003f7aa7ef0f7faf2b31ebf11e65e747abdb0969dc77dbafbd839e9",
+      "bytes": 95267
+    },
+    "kernel/rust/x86_cpu_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/candidate/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "814494daecd3b8f5cebea222406422041051ed7202d33e02aa4453c9aa00f6e5",
+      "bytes": 90407
+    }
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/patch/PRIVATE-PSTATE-ENTRY-CUTOVER.patch",
+    "sha256": "02d4bdea5e0d490f8f65af0c2609c0ca84c31d1dc8e2f8ab93c8aa923eedf73b",
+    "bytes": 2712
+  },
+  "original_complete_C_entry": "void init_pstate_and_turbo(void)\n{\n#ifdef MCKERNEL_RUST_X86_CPU_HELPERS\n\tx86_init_pstate_turbo_body_result(no_turbo, MSR_PLATFORM_INFO,\n\t\t\tMSR_NHM_TURBO_RATIO_LIMIT, MSR_IA32_PERF_CTL,\n\t\t\tMSR_IA32_ENERGY_PERF_BIAS, x86_running_on_kvm_bridge,\n\t\t\tx86_cpuid6_bridge, x86_read_msr_bridge,\n\t\t\tx86_write_msr_bridge);\n#else\n\tuint64_t value;\n\tuint64_t eax, ecx;\n\n\tif (running_on_kvm()) return;\n\n\tasm volatile(\"cpuid\" : \"=a\" (eax), \"=c\" (ecx) : \"a\" (0x6) : \"%rbx\", \"%rdx\");\n\tif (!(ecx & 0x01)) {\n\t\t/* P-states and/or Turbo Boost are not supported. */\n\t\treturn;\n\t}\n\n\t/* Query and set max pstate value: \n\t *\n\t * IA32_PERF_CTL (0x199H) bit 15:0:\n\t * Target performance State Value\n\t *\n\t * The base operating ratio can be read \n\t * from MSR_PLATFORM_INFO[15:8].\n\t */\n\tvalue = rdmsr(MSR_PLATFORM_INFO);\n\tvalue &= 0xFF00;\n\n\t/* Turbo boost setting:\n\t * Bit 1 of EAX in Leaf 06H (i.e. CPUID.06H:EAX[1]) indicates opportunistic \n\t * processor performance operation, such as IDA, has been enabled by BIOS.\n\t *\n\t * IA32_PERF_CTL (0x199H) bit 32: IDA (i.e., turbo boost) Engage. (R/W)\n\t * When set to 1: disengages IDA\n\t * When set to 0: enables IDA\n\t */\n\tif ((eax & (1 << 1))) {\n\t\tif (!no_turbo) {\n\t\t\tuint64_t turbo_value;\n\n\t\t\tturbo_value = rdmsr(MSR_NHM_TURBO_RATIO_LIMIT);\n\t\t\tturbo_value &= 0xFF;\n\t\t\tvalue = turbo_value << 8;\n\n\t\t\t/* Enable turbo boost */\n\t\t\tvalue &= ~((uint64_t)1 << 32);\n\t\t}\n\t\t/* Turbo boost feature is supported, but requested to be turned off */\n\t\telse {\n\t\t\t/* Disable turbo boost */\n\t\t\tvalue |= (uint64_t)1 << 32; \n\t\t}\n\t}\n\n\twrmsr(MSR_IA32_PERF_CTL, value);\n\n\t/* IA32_ENERGY_PERF_BIAS (0x1B0H) bit 3:0:\n\t * (The processor supports this capability if CPUID.06H:ECX.SETBH[bit 3] is set.)\n\t * Power Policy Preference:\n\t * 0 indicates preference to highest performance.\n\t * 15 indicates preference to maximize energy saving.\n\t *\n\t * Set energy/perf bias to high performance \n\t */ \n\tif (ecx & (1 << 3)) {\n\t\twrmsr(MSR_IA32_ENERGY_PERF_BIAS, 0);\n\t}\n\t\n\t//print_msr(MSR_IA32_MISC_ENABLE);\n\t//print_msr(MSR_IA32_PERF_CTL);\n\t//print_msr(MSR_IA32_ENERGY_PERF_BIAS);\n#endif\n}",
+  "original_selected_C_body": "\tx86_init_pstate_turbo_body_result(no_turbo, MSR_PLATFORM_INFO,\n\t\t\tMSR_NHM_TURBO_RATIO_LIMIT, MSR_IA32_PERF_CTL,\n\t\t\tMSR_IA32_ENERGY_PERF_BIAS, x86_running_on_kvm_bridge,\n\t\t\tx86_cpuid6_bridge, x86_read_msr_bridge,\n\t\t\tx86_write_msr_bridge);\n",
+  "original_fallback_C_body": "\tuint64_t value;\n\tuint64_t eax, ecx;\n\n\tif (running_on_kvm()) return;\n\n\tasm volatile(\"cpuid\" : \"=a\" (eax), \"=c\" (ecx) : \"a\" (0x6) : \"%rbx\", \"%rdx\");\n\tif (!(ecx & 0x01)) {\n\t\t/* P-states and/or Turbo Boost are not supported. */\n\t\treturn;\n\t}\n\n\t/* Query and set max pstate value: \n\t *\n\t * IA32_PERF_CTL (0x199H) bit 15:0:\n\t * Target performance State Value\n\t *\n\t * The base operating ratio can be read \n\t * from MSR_PLATFORM_INFO[15:8].\n\t */\n\tvalue = rdmsr(MSR_PLATFORM_INFO);\n\tvalue &= 0xFF00;\n\n\t/* Turbo boost setting:\n\t * Bit 1 of EAX in Leaf 06H (i.e. CPUID.06H:EAX[1]) indicates opportunistic \n\t * processor performance operation, such as IDA, has been enabled by BIOS.\n\t *\n\t * IA32_PERF_CTL (0x199H) bit 32: IDA (i.e., turbo boost) Engage. (R/W)\n\t * When set to 1: disengages IDA\n\t * When set to 0: enables IDA\n\t */\n\tif ((eax & (1 << 1))) {\n\t\tif (!no_turbo) {\n\t\t\tuint64_t turbo_value;\n\n\t\t\tturbo_value = rdmsr(MSR_NHM_TURBO_RATIO_LIMIT);\n\t\t\tturbo_value &= 0xFF;\n\t\t\tvalue = turbo_value << 8;\n\n\t\t\t/* Enable turbo boost */\n\t\t\tvalue &= ~((uint64_t)1 << 32);\n\t\t}\n\t\t/* Turbo boost feature is supported, but requested to be turned off */\n\t\telse {\n\t\t\t/* Disable turbo boost */\n\t\t\tvalue |= (uint64_t)1 << 32; \n\t\t}\n\t}\n\n\twrmsr(MSR_IA32_PERF_CTL, value);\n\n\t/* IA32_ENERGY_PERF_BIAS (0x1B0H) bit 3:0:\n\t * (The processor supports this capability if CPUID.06H:ECX.SETBH[bit 3] is set.)\n\t * Power Policy Preference:\n\t * 0 indicates preference to highest performance.\n\t * 15 indicates preference to maximize energy saving.\n\t *\n\t * Set energy/perf bias to high performance \n\t */ \n\tif (ecx & (1 << 3)) {\n\t\twrmsr(MSR_IA32_ENERGY_PERF_BIAS, 0);\n\t}\n\t\n\t//print_msr(MSR_IA32_MISC_ENABLE);\n\t//print_msr(MSR_IA32_PERF_CTL);\n\t//print_msr(MSR_IA32_ENERGY_PERF_BIAS);\n",
+  "fallback_body_byte_identical_in_candidate": true,
+  "existing_Rust_body_sha256": "da550a2c946f0f484aa902d1829b1338f0f4a6122e9b137c8f0e03eb289c4dd7",
+  "existing_Rust_body_unchanged": true,
+  "register_definitions": {
+    "path": "/home/holden/mckernel/arch/x86_64/kernel/include/registers.h",
+    "sha256": "43fd6d2e278953684574224927fe65bc514a88c5529d97f688e1e21b1864a6fc",
+    "bytes": 5778
+  },
+  "constant_lines": [
+    "#define MSR_PLATFORM_INFO  0x000000ce",
+    "#define MSR_IA32_PERF_CTL  0x00000199",
+    "#define MSR_IA32_ENERGY_PERF_BIAS\t0x000001b0",
+    "#define MSR_NHM_TURBO_RATIO_LIMIT\t0x000001ad"
+  ],
+  "selected_C_callbacks_retained": [
+    "x86_running_on_kvm_bridge",
+    "x86_cpuid6_bridge",
+    "x86_read_msr_bridge",
+    "x86_write_msr_bridge"
+  ],
+  "new_C_callbacks": 0,
+  "new_C_getters": 0,
+  "new_compute_C_functionality": 0,
+  "existing_static_to_global_bridge_changes": [
+    "x86_running_on_kvm_bridge",
+    "x86_cpuid6_bridge"
+  ],
+  "existing_data": "no_turbo existing global initialized1/early boot argument parsing",
+  "call_order": "Snapshot no_turbo, KVM query, optional CPUID6, optional platform/turbo reads, perf write, optional energy bias write; exact current helper unchanged.",
+  "fixture_inputs": {
+    "original_selected.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/fixture/original_selected.inc",
+      "sha256": "5521bf7db553c3f96a1379bbe0cb1e5925a36b877f62e4a7d8f9cc08f50bf4a6",
+      "bytes": 294
+    },
+    "compare_entry.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/fixture/compare_entry.c",
+      "sha256": "0e466b18fbce19e6b4c70c951b1bfbef99051d6fa208775178634ed30c23d7d2",
+      "bytes": 3384
+    },
+    "original_fallback_modeled_cpuid.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/fixture/original_fallback_modeled_cpuid.inc",
+      "sha256": "b51663a4be48be354ec7273d871edcea66446802fcf4385d9205fb6bcaca5fb7",
+      "bytes": 1748
+    },
+    "actual_entry.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/fixture/actual_entry.rs",
+      "sha256": "f936091ba839f8108aeab9964452c6c5ac225afc261a2cd13fac25ed78e29cdf",
+      "bytes": 2670
+    },
+    "actual_msr_constants.h": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/fixture/actual_msr_constants.h",
+      "sha256": "e00b337d6517c4746f4087b96f77e3d25e71acc18a8fd303f993bc77646cbc0e",
+      "bytes": 166
+    }
+  },
+  "proposed_cases": 18432,
+  "proposed_fallback_cases": 18432,
+  "proposed_missing_callback_masks": 15,
+  "compiler_jobs": 0,
+  "file_retirement": false,
+  "default_consumer_link": false,
+  "native": false
+}

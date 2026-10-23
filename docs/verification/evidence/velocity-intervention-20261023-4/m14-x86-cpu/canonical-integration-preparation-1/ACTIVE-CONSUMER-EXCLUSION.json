@@ -1,0 +1,41 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_EXACT_CPU_TWO_PATH_EXCLUSION_ACTIVE256_AND_FINITE_SELECTED_REFS",
+  "owner": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-diagnostic-collector-successor-1/source/native_diagnostic_container_owner.py",
+    "sha256": "626bef088a1c8d60c5c41afb88d59faeb55c025c3f11c9d47c649c571e05e2eb",
+    "bytes": 139652
+  },
+  "cohort": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-diagnostic-collector-successor-1/COHORT-BINDINGS.json",
+    "sha256": "e746c77878591125fc7ad87a90cab5e3ada208f539cccbb06af0b43b8be66b85",
+    "bytes": 3249
+  },
+  "footprint": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-diagnostic-collector-successor-1/ACTUAL-MOUNT-AND-OPEN-FOOTPRINT-RESULT.json",
+    "sha256": "93d2ff8e8c183a6deb5550a3a736ab318bea0f45e598eb9231fb7529189496ca",
+    "bytes": 197652
+  },
+  "guarded_pin_count": 256,
+  "SOURCE_HASHES_line": 41,
+  "bound_manifest_line": 577,
+  "bound_manifest_source_sha256": "d65b222eca29d027cbe5ed0a940a739abd4966137fa38946569bcc25d0e8231a",
+  "checks": {
+    "/home/holden/mckernel/arch/x86_64/kernel/cpu.c": {
+      "exact_guarded_pin": false,
+      "normalized_guarded_pin": false,
+      "exact_cohort_ref": false,
+      "exact_mount_open_artifact_ref": false
+    },
+    "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs": {
+      "exact_guarded_pin": false,
+      "normalized_guarded_pin": false,
+      "exact_cohort_ref": false,
+      "exact_mount_open_artifact_ref": false
+    }
+  },
+  "active_source_hold_required": false,
+  "method": "ASTliteral sourcepins only/no import; finite selected COHORT andmount-open footprint exactpathrefs. No recursiveaudit or runtimeprobe.",
+  "controller_f744": "Rootidentifiedf744 ascontrollerhash, not COHORT. Exactcontrollerpathnotprovided andnotpresentasCOHORT/256SOURCE_HASHES hash; no fabricatedpath/hashingclaim. Rootmustconfirmcurrentcontroller selection beforeactualintegration.",
+  "physical_retirement_or_native_credit": false
+}

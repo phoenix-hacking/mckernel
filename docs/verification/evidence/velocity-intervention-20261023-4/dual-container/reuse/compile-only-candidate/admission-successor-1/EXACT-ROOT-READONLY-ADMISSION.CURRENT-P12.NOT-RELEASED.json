@@ -1,0 +1,261 @@
+{
+  "actual_context": null,
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/admission-successor-1/observe_admission.py",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/admission-successor-1/ROOT-CONTEXT.ACTUAL.json",
+    null
+  ],
+  "authorities": {
+    "fake19tests": {
+      "bytes": 3210,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/ACTUAL-FIXTURE-RESULT.json",
+      "sha256": "5a1300b7f0d5c9c74ce47914498db071ebc60d4c48d895849656098f42ad8567"
+    },
+    "helper": {
+      "bytes": 39351,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile_host_helper.py",
+      "sha256": "8ffc9a09e2f2e9e9c9cc09af559d707bf6c4b989fc4f9d3ad51fe88a8e5b6083"
+    },
+    "independent_review_record": {
+      "bytes": 776,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/compile-only-review/REVIEW.json",
+      "sha256": "5c6fcf46b8b1ae65d6791fb06de76897ae6921d75ec5baa8f1a3b1b4967586e7"
+    },
+    "independent_source_review": {
+      "bytes": 6252,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/compile-only-review/INDEPENDENT-REVIEW.md",
+      "sha256": "c0d2ae5a95ce03ddb60aff5a535dd293c5ded13031d83febd121113d9cdd12bc"
+    },
+    "owner": {
+      "bytes": 111651,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile_image_owner.py",
+      "sha256": "8cd5a1948fc973461e15c17cdea604932b723f839f00646ec7df35c31647d555"
+    },
+    "profile": {
+      "bytes": 2095,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/COMPILE-PROFILE.json",
+      "sha256": "9b78e4ec49f163a333a3fd7e9cf0dc6b05dbdc097a0b785c20cf741aaa6e23fa"
+    }
+  },
+  "capacity": {
+    "HOST_required_formula": "16GiB + fresh(backing_size-512*blocks if positive) + 16106090496 compiler/output + 377487360 postcapture + 679477248 emergency",
+    "MemAvailable_minimum": 25769803776,
+    "admission_max_age_ns": 120000000000,
+    "backing_size": 118111600640,
+    "scratch_required": 13631488000
+  },
+  "compiler_profile": {
+    "activation": "COMPILE_LINK_ONLY_NO_GUEST_OR_KERNEL_ACTIVATION",
+    "admission_max_age_ns": 120000000000,
+    "container_name": "mckernel-m14-compile-95f3c1f79ec040ddbb7065ff9f5ca536",
+    "driver_sha256": "7d30085edda4d1272f923b19e8632e9ab8b259874623974c2da53dbe4c3c5be0",
+    "host_helper_sha256": "8ffc9a09e2f2e9e9c9cc09af559d707bf6c4b989fc4f9d3ad51fe88a8e5b6083",
+    "image_id": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+    "jobs": 1,
+    "lease_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/operation-1/compile-lease.json",
+    "limits": {
+      "CpusetCpus": "6",
+      "Memory": 4294967296,
+      "MemorySwap": 4294967296,
+      "NanoCpus": 1000000000,
+      "NetworkMode": "none",
+      "PidsLimit": 128
+    },
+    "materialization_sha256": "3c0c7e48058afda716d622056cc555b027d27177d5019499cab992f74899dc7f",
+    "minimum_MemAvailable": 25769803776,
+    "namespace": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/operation-1",
+    "operation": "M14_CANDIDATE14_HOST_COMPILE_LINK_ONLY_V1",
+    "owner_nonce": "95f3c1f79ec040ddbb7065ff9f5ca536",
+    "provenance_sha256": "453dd998e4ef1e2ed21b0818771d97197d77f98c90ca8c6c67cc8ab019063044",
+    "reserved_native_profile": {
+      "CpusetCpus": "2-5",
+      "Memory": 12884901888,
+      "MemorySwap": 12884901888,
+      "NanoCpus": 4000000000,
+      "NetworkMode": "none",
+      "PidsLimit": 512
+    },
+    "schema": "mckernel.m14-candidate14-compile-link-profile.v1",
+    "sole_rw_mount_target": "/work",
+    "source_derivative_sha256": "caa690b06ff078828ecab2ae9d70adfd98072073be2acae7955efd8a48bce3ba",
+    "source_manifest_sha256": "bf3096e00f9f176c308604332ac276abc30c2576b2c7c3052c837ccf7e640b47",
+    "source_root": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/source-materialization-attempt-1/materialized-source",
+    "toolchain_manifest_sha256": "a68e02b3b66b8bfbae96bf742dc8702b6e81dd97b92189b87437c3d08fccdf72"
+  },
+  "no_execution": true,
+  "no_lease_access": true,
+  "no_native_27_4_or_heavy_record_access": true,
+  "observer_profile": {
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 30,
+    "FSIZE_bytes": 33554432,
+    "NOFILE": 256,
+    "affinity": [
+      0
+    ],
+    "core": 0,
+    "jobs": 1,
+    "owned_capture_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8",
+    "privileged_client_wall_seconds": 30,
+    "retirement_seconds": 6,
+    "signal_handlers": [
+      "SIGTERM",
+      "SIGINT",
+      "SIGALRM"
+    ],
+    "wall_seconds": 60
+  },
+  "observer_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/admission-successor-1/observe_admission.py",
+    "sha256": "6a5babfeb11b9a6788516d12f6af3fba08e86e758e5db6b15e27cc8e7c7c4251",
+    "bytes": 8277
+  },
+  "outputs": {
+    "admission_candidate": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/admission-successor-1/actual-readonly-admission-1/ROOT-ADMISSION.CANDIDATE.json",
+    "capture": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/admission-successor-1/actual-readonly-admission-1",
+    "compile_execution": null,
+    "finalized_request": null,
+    "root_admission": null,
+    "root_release": null
+  },
+  "owner_required_admission_keys": [
+    "HOST_available",
+    "HOST_required",
+    "MemAvailable",
+    "P12",
+    "P12_limits",
+    "P12_rw_roots",
+    "P12_sole_native_heavy",
+    "boot_id",
+    "capacity_verdict",
+    "compile_limits",
+    "controller_allowance_reviewed",
+    "cpu6_consumer_joined",
+    "native_cgroups_unchanged",
+    "observed_boottime_ns",
+    "operation",
+    "profile_sha256",
+    "request_core_sha256",
+    "schema",
+    "scratch_available",
+    "scratch_required"
+  ],
+  "pending_context": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/admission-successor-1/ROOT-CONTEXT.OBSERVED-P12.PENDING-ROOT-DECLARATIONS.json",
+    "sha256": "02123a22c7c4e90a9b12ff690357c3da7ff715bfd2570ea5fecf25d2a7576b7d",
+    "bytes": 1424
+  },
+  "prepared_request_authority": {
+    "authority": "Accepted foreground request; no duplicate large rehash",
+    "bytes": 26525773,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile-request.PREPARED.json",
+    "sha256": "92bcb96713c498bf2397bb24c3473a2ffbeb61f45dfa423a6ae8b99f4a4ffe4f"
+  },
+  "privileged_readonly_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/docker",
+    "--host=unix:///var/run/docker.sock",
+    "inspect",
+    "8058df15ca4d0c5616c0150f8b88f815bff66b6c33fe758cc51fd24d8b2793b6"
+  ],
+  "proposed_planning_reservation": {
+    "P12": {
+      "CPUs": "2-5",
+      "bytes": 12884901888,
+      "jobs": 4
+    },
+    "client_and_root_coordination_pool": {
+      "client_CPUs": "0",
+      "coordinator_CPUs": "7",
+      "jobs": 1,
+      "total_bytes": 1073741824
+    },
+    "compile": {
+      "CPUs": "6",
+      "bytes": 4294967296,
+      "jobs": 1
+    },
+    "controller": {
+      "AS_bytes": 2147483648,
+      "CPUs": "0",
+      "jobs": 1
+    },
+    "maximum_jobs": 7,
+    "other_ordinary_jobs": "No additional unreserved overlapping jobs; exact live ledger root declaration required",
+    "root_adoption": null,
+    "total_bytes": 20401094656
+  },
+  "publication_contract": "Observer writes UID1000 candidate and finite sidecar only. Root separately reviews and publishes sealed root-owned ROOT-ADMISSION.json and ROOT-RELEASE.json through independently released publication operation; finalize only compile_only_release ref then complete pure validation. No root publication/release is authorized here.",
+  "remaining_blockers": [
+    "Root author declarations/continuity and adoptedresourcebudget",
+    "GenuineCPU6retirement/consumerjoined authority; no freeclaim inferred from previousfailedfixture",
+    "Independent exactquery release +rootexclusiveUID1000publication ofROOT-CONTEXT.ACTUAL.json then genuinecontextsha substitution",
+    "Actualfresh unchangedadmission mustPASS owner/init beforeafterbirth/config/rootisolation/fullgap andMemAvailable>=24GiB; no compilerrelease yet"
+  ],
+  "request_core_sha256": "1a93ac79346055cff43e18afa9b4f358cc9ff9f9328976d37c724b28b020ab2c",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "COHERENT_CURRENT_P12_IDENTITY_BOUND_QUERY_PENDING_ROOT_DECLARATIONS_AND_RELEASE",
+  "supplemental_sidecar_fields": [
+    "P12_owner pid/starttime",
+    "P12_container_init pid/starttime equals Docker State.Pid",
+    "root authority references",
+    "full backing gap and size/blocks",
+    "root-adopted controller/client pool"
+  ],
+  "actual_identity_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/live-identity-preparation-1/root-owned-actual-live-identity-1/stdout",
+    "sha256": "32d404e1c9d4c336ae31b3b9042afbdaca535c6b4a527cc212b33075501efbfc",
+    "bytes": 72477
+  },
+  "existing_observer_byte_identical": true,
+  "identity_binding": {
+    "config_sha256": "87d759e42b382e8f7f667b4138c8dead023175d0ca87e36bb9649508e3d0a676",
+    "host_config_sha256": "baf579fcfc304c629b963a8f1b96ccb3d4cd4f216d1c6f10bde91e59c2ab81ea",
+    "id": "8058df15ca4d0c5616c0150f8b88f815bff66b6c33fe758cc51fd24d8b2793b6",
+    "name": "/mckernel-native-diagnostic-b7d8049b46414a86a4fd2b320ba85a62",
+    "owner_label_key": "mckernel.native-diagnostic.owner",
+    "owner_label_value": "b7d8049b46414a86a4fd2b320ba85a62"
+  },
+  "actual_owner": {
+    "pid": 3951805,
+    "starttime": 59198725
+  },
+  "actual_outer": {
+    "pid": 3951801,
+    "starttime": 59198713
+  },
+  "actual_init": {
+    "pid": 3951889,
+    "starttime": 59198794
+  },
+  "actual_cgroup_facts": {
+    "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us": "100000",
+    "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us": "400000",
+    "/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes": "12884901888",
+    "/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy": "1",
+    "/sys/fs/cgroup/pids/mckernel-dev/pids.max": "512"
+  },
+  "root_declarations_pending": [
+    "CPU6_retirement_authority",
+    "P12_sole_native_heavy",
+    "controller_allowance_reviewed",
+    "cpu6_consumer_joined",
+    "native_cgroups_unchanged",
+    "reservation_adopted",
+    "root_continuity_authority"
+  ]
+}

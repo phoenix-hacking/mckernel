@@ -1,0 +1,620 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXECUTABLE_RECIPE_READY_NOT_GRANTED_NOT_EXECUTED",
+  "source_bindings": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/sourcehandoff/SOURCE-AND-FIXTURE-BINDINGS.json",
+    "sha256": "53bf6482be65122b4ac6cd9d968ae6d2fedb85a071cab8b73bc9c2e5fdbc0e4b",
+    "bytes": 8906
+  },
+  "fixture_sources": {
+    "original_selected.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/fixture/original_selected.inc",
+      "sha256": "5521bf7db553c3f96a1379bbe0cb1e5925a36b877f62e4a7d8f9cc08f50bf4a6",
+      "bytes": 294
+    },
+    "compare_entry.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/fixture/compare_entry.c",
+      "sha256": "0e466b18fbce19e6b4c70c951b1bfbef99051d6fa208775178634ed30c23d7d2",
+      "bytes": 3384
+    },
+    "original_fallback_modeled_cpuid.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/fixture/original_fallback_modeled_cpuid.inc",
+      "sha256": "b51663a4be48be354ec7273d871edcea66446802fcf4385d9205fb6bcaca5fb7",
+      "bytes": 1748
+    },
+    "actual_entry.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/fixture/actual_entry.rs",
+      "sha256": "f936091ba839f8108aeab9964452c6c5ac225afc261a2cd13fac25ed78e29cdf",
+      "bytes": 2670
+    },
+    "actual_header_ABI.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/fixture/actual_header_ABI.c",
+      "sha256": "9e872f33217b966a12cb42bf5fa527a7c31817c2036908125959f3b75ead1885",
+      "bytes": 859
+    },
+    "actual_msr_constants.h": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/fixture/actual_msr_constants.h",
+      "sha256": "e00b337d6517c4746f4087b96f77e3d25e71acc18a8fd303f993bc77646cbc0e",
+      "bytes": 166
+    }
+  },
+  "tools": {
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc": {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1",
+      "bytes": 654904
+    },
+    "/usr/bin/gcc-9": {
+      "path": "/usr/bin/gcc-9",
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+      "bytes": 1158288
+    },
+    "/usr/bin/nm": {
+      "path": "/usr/bin/nm",
+      "sha256": "5fb0dd8acc18e3f348ed0acbcada0580dbdddd1eb5de3c8323613af13580032b",
+      "bytes": 52664
+    },
+    "/usr/bin/ld": {
+      "path": "/usr/bin/ld",
+      "sha256": "476b24d5cc1fef54f80412d06e7430b2dcf4e2b6f1525ee17e6eaaf16b28a00f",
+      "bytes": 1732192
+    }
+  },
+  "header_closure": {
+    "/home/holden/mckernel/lib/include/ihk/cpu.h": {
+      "path": "/home/holden/mckernel/lib/include/ihk/cpu.h",
+      "sha256": "a25efd9095efe3f357efb2a2d7d810e2a6d1ed0aea3c6e1d4fac2c0ee8a83c81",
+      "bytes": 5479
+    },
+    "/home/holden/mckernel/lib/include/list.h": {
+      "path": "/home/holden/mckernel/lib/include/list.h",
+      "sha256": "4ddb20f524e073fb69b6fcb1268121c76c653c4007d914437555a4d17af48440",
+      "bytes": 2870
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/context.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/context.h",
+      "sha256": "13a67bcf26c512ac27ece4ab801e5e96976b88ec505d9f549e53755b431171f8",
+      "bytes": 2286
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/include/registers.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/registers.h",
+      "sha256": "43fd6d2e278953684574224927fe65bc514a88c5529d97f688e1e21b1864a6fc",
+      "bytes": 5778
+    },
+    "/home/holden/mckernel/lib/include/types.h": {
+      "path": "/home/holden/mckernel/lib/include/types.h",
+      "sha256": "72179c1e931fdfdfa700d2ecfe745e344027ac0b4af299e8a9ec17957fc9a399",
+      "bytes": 515
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/types.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/types.h",
+      "sha256": "c37a7c748f2439ddfd847725a4d559c008f2aca09c45114fb07e73337013f449",
+      "bytes": 1074
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/include/arch/cpu.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch/cpu.h",
+      "sha256": "2130ac820f72c6349cab63f6d456cd0ff23fb00a99a745681e56a7ec4eb9b187",
+      "bytes": 913
+    },
+    "/home/holden/mckernel/lib/include/mc_perf_event.h": {
+      "path": "/home/holden/mckernel/lib/include/mc_perf_event.h",
+      "sha256": "8a9978dcab179a63b3aff3b66641a4814bacaf86cf4631ecdf39e32df45ea5dd",
+      "bytes": 8775
+    },
+    "/home/holden/mckernel/ihk/cokernel/smp/x86_64/include/march.h": {
+      "path": "/home/holden/mckernel/ihk/cokernel/smp/x86_64/include/march.h",
+      "sha256": "32984f29c20133f89b2410c922fc291cd675f2942b6128cea55d0e0ff3826f49",
+      "bytes": 1174
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/atomic.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/atomic.h",
+      "sha256": "829c76b8e61efd50e6cbc968c6eac56fc7b151c9da4143fd40bde176117ef78d",
+      "bytes": 2680
+    },
+    "/home/holden/mckernel/kernel/include/lwk/compiler.h": {
+      "path": "/home/holden/mckernel/kernel/include/lwk/compiler.h",
+      "sha256": "eeb3c5b9d47dc32d73908c9048002a34ef77e5d6bdc03346b27b494ded5b49dd",
+      "bytes": 17894
+    },
+    "/home/holden/mckernel/kernel/include/lwk/compiler-gcc.h": {
+      "path": "/home/holden/mckernel/kernel/include/lwk/compiler-gcc.h",
+      "sha256": "1a2693ab50b3768ca2ca362bb0e6773bdabc12425ad4061802b3aca20dbe47a2",
+      "bytes": 11651
+    },
+    "/home/holden/mckernel/lib/include/ihk/mm.h": {
+      "path": "/home/holden/mckernel/lib/include/ihk/mm.h",
+      "sha256": "a1b412608df7512a1b7295c6f19b3ec5a77e6364e8f24b208ab1a29e7556e5b1",
+      "bytes": 9548
+    },
+    "/home/holden/mckernel/lib/include/memory.h": {
+      "path": "/home/holden/mckernel/lib/include/memory.h",
+      "sha256": "42c0c943511a9eb26133c9f1ca132ade5eb10606ae43c96f6d81d59a69ffeca2",
+      "bytes": 1377
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/include/arch-memory.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-memory.h",
+      "sha256": "1704ac32bf55f421c802df661c844b496a1660b8b89e5d12cc2d994d835b5b49",
+      "bytes": 8996
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/include/errno.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/errno.h",
+      "sha256": "79e1671f269b7dab1f2e1ea672c402bc03738b85029b6f3b3031efe22dde9157",
+      "bytes": 5167
+    },
+    "/home/holden/mckernel/lib/include/generic-errno.h": {
+      "path": "/home/holden/mckernel/lib/include/generic-errno.h",
+      "sha256": "7dca1a209f95dbc287627f3b590621762063acc080b65709aea88d3f48c8bfe4",
+      "bytes": 2497
+    },
+    "/home/holden/mckernel/lib/include/ihk/lock.h": {
+      "path": "/home/holden/mckernel/lib/include/ihk/lock.h",
+      "sha256": "fd34fe3adae00d309fc48e4a8f8c4170edfdfc6bfffd5b37db13f5391ed84f6f",
+      "bytes": 2907
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/include/arch-lock.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-lock.h",
+      "sha256": "ca8baa66ed77634cd6319a918211b3eb8fe80fc7dcb2ac0110ab6bfbd0c1b81b",
+      "bytes": 4603
+    },
+    "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/config.h": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/config.h",
+      "sha256": "da78d6a8c94b274adad3159b1cc373b00e5de7fea6cc2ae7955a700078db6b2f",
+      "bytes": 1055
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/include/arch/mm.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch/mm.h",
+      "sha256": "9d8faad8307f160b596b51cd482bcc6dd5c38a62b848ec6bc6c09dd714d4cdfe",
+      "bytes": 141
+    },
+    "/home/holden/mckernel/kernel/include/page.h": {
+      "path": "/home/holden/mckernel/kernel/include/page.h",
+      "sha256": "c8f3f5e7804c71430c814395ea14a1ee93267180713caeb39880b662cc9cd0dc",
+      "bytes": 1647
+    },
+    "/home/holden/mckernel/lib/include/ihk/debug.h": {
+      "path": "/home/holden/mckernel/lib/include/ihk/debug.h",
+      "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc",
+      "bytes": 1294
+    },
+    "/home/holden/mckernel/lib/include/string.h": {
+      "path": "/home/holden/mckernel/lib/include/string.h",
+      "sha256": "f612dad80dd16ff0d4d6232f155cc879522de6203ce015afa3ef0c36c3dd5636",
+      "bytes": 1588
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/include/arch-string.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-string.h",
+      "sha256": "98fe2c9021167e9b08d75dbe5ffc6b25bc84d708a8baeaf60d16fcb88e5b3831",
+      "bytes": 238
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/include/cpulocal.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/cpulocal.h",
+      "sha256": "9c717afdbf8c77744c8f1ca9a8c00e4ffa2eb623f310905799b9c1b07bd685b2",
+      "bytes": 1299
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/include/signal.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/signal.h",
+      "sha256": "3cea81b9b2f723fbff2cafa634761d50316a397d06df2c12f94fe5f0dae03752",
+      "bytes": 7474
+    },
+    "/home/holden/mckernel/kernel/include/process.h": {
+      "path": "/home/holden/mckernel/kernel/include/process.h",
+      "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649",
+      "bytes": 26602
+    },
+    "/home/holden/mckernel/kernel/include/rbtree.h": {
+      "path": "/home/holden/mckernel/kernel/include/rbtree.h",
+      "sha256": "86022fb1a246c7ba43bb66913ca4c6a6e9a7d896607c6364ea941b5304ae5332",
+      "bytes": 3107
+    },
+    "/home/holden/mckernel/kernel/include/lwk/stddef.h": {
+      "path": "/home/holden/mckernel/kernel/include/lwk/stddef.h",
+      "sha256": "2e915a7ca2a67b2c57690836bcf2bc37639ae657f5e294ee3309cb13652a4b3b",
+      "bytes": 358
+    },
+    "/home/holden/mckernel/kernel/include/memobj.h": {
+      "path": "/home/holden/mckernel/kernel/include/memobj.h",
+      "sha256": "7d587411f1b6957c6fcc6f61d8f03b052d875cfd774f602aefe05ff99f536bb9",
+      "bytes": 3957
+    },
+    "/home/holden/mckernel/kernel/include/pager.h": {
+      "path": "/home/holden/mckernel/kernel/include/pager.h",
+      "sha256": "24460cdc45191c6ad0905f10a8e2cb89d4fd4b347cffc1ec3914ce51104bed7f",
+      "bytes": 1223
+    },
+    "/home/holden/mckernel/lib/include/limits.h": {
+      "path": "/home/holden/mckernel/lib/include/limits.h",
+      "sha256": "b71fc4ae02cfb82c474b61012bd55375ec7e0b0826a3280755ddb3631cc0a6ee",
+      "bytes": 1358
+    },
+    "/home/holden/mckernel/kernel/include/object_helpers.h": {
+      "path": "/home/holden/mckernel/kernel/include/object_helpers.h",
+      "sha256": "0131700fc9f5bfdae8e1210664befb8a20f7655ba96b55a7d64abbe7703f517a",
+      "bytes": 61009
+    },
+    "/home/holden/mckernel/kernel/include/affinity.h": {
+      "path": "/home/holden/mckernel/kernel/include/affinity.h",
+      "sha256": "9f7dbbeebedd2f74961bfe6833c75ebb2306e9eb072d69ee8ce3486f0a0f82c7",
+      "bytes": 1801
+    },
+    "/home/holden/mckernel/kernel/include/syscall.h": {
+      "path": "/home/holden/mckernel/kernel/include/syscall.h",
+      "sha256": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa",
+      "bytes": 20836
+    },
+    "/home/holden/mckernel/ihk/cokernel/smp/x86_64/include/ihk/memconst.h": {
+      "path": "/home/holden/mckernel/ihk/cokernel/smp/x86_64/include/ihk/memconst.h",
+      "sha256": "38b25a9fedbcf50d9eae799681aff60705d6e2e5e3559bcb721b0541ce98dc61",
+      "bytes": 198
+    },
+    "/home/holden/mckernel/ihk/linux/include/ihk/ikc.h": {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/ikc.h",
+      "sha256": "a7a03e3f661eac44cbef67fa41bf398adda43fc37df1c0d9fa88427d6c69127b",
+      "bytes": 312
+    },
+    "/home/holden/mckernel/ihk/ikc/include/ikc/ihk.h": {
+      "path": "/home/holden/mckernel/ihk/ikc/include/ikc/ihk.h",
+      "sha256": "0ddad6947192b527be6a6f9560718c98fb70b50cb2cbb838094d0ca6ce199e3e",
+      "bytes": 4138
+    },
+    "/home/holden/mckernel/ihk/ikc/include/ikc/queue.h": {
+      "path": "/home/holden/mckernel/ihk/ikc/include/ikc/queue.h",
+      "sha256": "0acb85aee2d3b0b7620a0b222461815c6c96c530c5b7182fe60e8ae52ec4e461",
+      "bytes": 4501
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/include/rlimit.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/rlimit.h",
+      "sha256": "c5c9b7255c09d56766d2c2bec72b6261579e51e2925457fcc8c098fe08cd907a",
+      "bytes": 2508
+    },
+    "/home/holden/mckernel/kernel/include/generic-rlimit.h": {
+      "path": "/home/holden/mckernel/kernel/include/generic-rlimit.h",
+      "sha256": "94bca7ac86e30806385aea32eeba1c6a39dea32a6d8f5c79167c3473bc3dffbb",
+      "bytes": 445
+    },
+    "/home/holden/mckernel/kernel/include/time.h": {
+      "path": "/home/holden/mckernel/kernel/include/time.h",
+      "sha256": "6d5ec6fd43f6632b5772fbdd99c96957d842951052034a3e355aa63c13ba56d7",
+      "bytes": 1780
+    },
+    "/home/holden/mckernel/kernel/include/profile.h": {
+      "path": "/home/holden/mckernel/kernel/include/profile.h",
+      "sha256": "a3185194bca3733304a30c08b70de466ecdcf1da223ab5053687d4cd125171ec",
+      "bytes": 3241
+    },
+    "/home/holden/mckernel/lib/include/bitops.h": {
+      "path": "/home/holden/mckernel/lib/include/bitops.h",
+      "sha256": "85c1781bb49918a97d8e04c48b3723927377e6d157824f4bd79e38243d6809ff",
+      "bytes": 1149
+    },
+    "/home/holden/mckernel/lib/include/bitops-test_bit.h": {
+      "path": "/home/holden/mckernel/lib/include/bitops-test_bit.h",
+      "sha256": "1f2fdb9a3a7d2b22d897df29955ea9c8c94fe0a78d3262aa762a7990f47ce635",
+      "bytes": 117
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/include/arch-bitops.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-bitops.h",
+      "sha256": "c4a9e5067fb84742e5bb411b1a373bed1a4917abb17dc618e8d2630bd6f2d79a",
+      "bytes": 598
+    },
+    "/home/holden/mckernel/kernel/include/waitq.h": {
+      "path": "/home/holden/mckernel/kernel/include/waitq.h",
+      "sha256": "f3fc8247a033a77efa407f6fe365a2b1bcad404e96de2cbf845f407a2e5946ff",
+      "bytes": 1847
+    },
+    "/home/holden/mckernel/kernel/include/futex.h": {
+      "path": "/home/holden/mckernel/kernel/include/futex.h",
+      "sha256": "75acd5b0a0e542777c9fb86c5f75ab9e4a1f9d4df5e59fd516cf854614725407",
+      "bytes": 6087
+    },
+    "/home/holden/mckernel/kernel/include/plist.h": {
+      "path": "/home/holden/mckernel/kernel/include/plist.h",
+      "sha256": "d66b1a000f5226a06ef28f3ba75f34a0acea9cd4cd5a93c8113ca5764d9b2a29",
+      "bytes": 4349
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/include/arch-futex.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-futex.h",
+      "sha256": "1229adc72ebf596abc31ee9daad76ee005072ebb0aa29b3d71835ccfe95feb55",
+      "bytes": 424
+    },
+    "/home/holden/mckernel/kernel/include/cls.h": {
+      "path": "/home/holden/mckernel/kernel/include/cls.h",
+      "sha256": "19719fe663c33bc3aec62875baa7f1b8d4a0e0042b5a8aae94fe7b6c9799a4c1",
+      "bytes": 2984
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/include/prctl.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/prctl.h",
+      "sha256": "e8aa2802f0ea3948242f335513f22c6741f3028b67228298d9c14df8ce242a70",
+      "bytes": 319
+    },
+    "/home/holden/mckernel/kernel/include/kmalloc.h": {
+      "path": "/home/holden/mckernel/kernel/include/kmalloc.h",
+      "sha256": "fff00b6875c3f87a0d9c4bdfeadf3c3d3eb731d843dc0650f6364352ac2b1144",
+      "bytes": 1171
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/include/cas.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/cas.h",
+      "sha256": "d03e8e36c861102f71364cbc11f3b108e17075fa3ebc7aab400c1dcea61977c6",
+      "bytes": 488
+    }
+  },
+  "actual_C_profile_derivation": {
+    "flags": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/flags.make",
+      "sha256": "3578431e960b77ded2f4d70159f6e8d419a2dc158b0838d754564782dc48b1e1",
+      "bytes": 3638
+    },
+    "dependency_file": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o.d",
+      "sha256": "74d895d0e7efc67dc9fb2e7aab885ae45be7ab77c5c6efd03e7b64fa6f84ff94",
+      "bytes": 2129
+    },
+    "generated_build_make": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/build.make",
+      "sha256": "c4caedd368baac9fadc8e658ceab75bb9fd6ea1dfa16d7581d8e9deb4045d7bd",
+      "bytes": 28075
+    },
+    "literal_source_rule": "cpu.c compiled with MCKERNEL_RUST_X86_CPU_HELPERS",
+    "compiler_difference": "GCC9 ordinary witness replaces original image GCC14; exact GCC14/default link remains open."
+  },
+  "commands": [
+    {
+      "name": "00-actual-Rust-entry-body-compile",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 00-actual-Rust-entry-body-compile",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=lib",
+        "--emit=obj=/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-1/actual-entry.o",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "panic=abort",
+        "-C",
+        "codegen-units=1",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/fixture/actual_entry.rs"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-1"
+    },
+    {
+      "name": "01-actual-original-C-entry-fixture-compile",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 01-actual-original-C-entry-fixture-compile",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-c",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/fixture/compare_entry.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-1/compare-entry.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-1"
+    },
+    {
+      "name": "02-original-C-Rust-fixture-link",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 02-original-C-Rust-fixture-link",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-1/compare-entry.o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-1/actual-entry.o",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-1/compare-entry"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-1"
+    },
+    {
+      "name": "03-functional-original-C-Rust-entry-pairs",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 03-functional-original-C-Rust-entry-pairs",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-1/compare-entry"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-1"
+    },
+    {
+      "name": "04-real-current-header-ABI",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 04-real-current-header-ABI",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/include",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel/ihk/ikc/include",
+        "-I/home/holden/mckernel/ihk/linux/include",
+        "-I/home/holden/mckernel/lib/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-Werror=incompatible-pointer-types",
+        "-fsyntax-only",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/fixture/actual_header_ABI.c"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-1"
+    },
+    {
+      "name": "05-complete-selected-cpu-TU-compile",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 05-complete-selected-cpu-TU-compile",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/include",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel/ihk/ikc/include",
+        "-I/home/holden/mckernel/ihk/linux/include",
+        "-I/home/holden/mckernel/lib/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-Werror=incompatible-pointer-types",
+        "-c",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/candidate/arch/x86_64/kernel/cpu.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-1/cpu.c.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-1"
+    },
+    {
+      "name": "06-selected-complete-cpu-symbols",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 06-selected-complete-cpu-symbols",
+      "argv": [
+        "/usr/bin/nm",
+        "-g",
+        "-S",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-1/cpu.c.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-1"
+    },
+    {
+      "name": "07-leaf-Rust-symbols",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 07-leaf-Rust-symbols",
+      "argv": [
+        "/usr/bin/nm",
+        "-g",
+        "-S",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-1/actual-entry.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-1"
+    },
+    {
+      "name": "08-selected-complete-cpu-entry-partial-link",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 08-selected-complete-cpu-entry-partial-link",
+      "argv": [
+        "/usr/bin/ld",
+        "-r",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-1/cpu.c.o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-1/actual-entry.o",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-1/cpu-rust-partial.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-1"
+    },
+    {
+      "name": "09-partial-entry-symbols",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 09-partial-entry-symbols",
+      "argv": [
+        "/usr/bin/nm",
+        "-g",
+        "-S",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-1/cpu-rust-partial.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/output-1"
+    }
+  ],
+  "proposed_profile": {
+    "CPU": "ROOT_ASSIGN",
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 90,
+    "retirement_seconds": 6,
+    "FSIZE_bytes": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "CGU": 1,
+    "RUST_MIN_STACK": 2097152,
+    "owned_capture_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+  },
+  "expected_pairs": 18432,
+  "expected_original_fallback_pairs": 18432,
+  "missing_callback_masks": 15,
+  "expected_symbols": {
+    "selected_C_entry": "U init_pstate_and_turbo",
+    "Rust_entry": "T init_pstate_and_turbo",
+    "partial_entry": "single T init_pstate_and_turbo",
+    "C_bridge_providers": [
+      "x86_running_on_kvm_bridge",
+      "x86_cpuid6_bridge",
+      "x86_read_msr_bridge",
+      "x86_write_msr_bridge"
+    ],
+    "C_data": "D no_turbo with4bytes"
+  },
+  "fullcrate_and_default_image_source_contract": {
+    "existing_production_recipe": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-3/m14-remote-flush/production-consumer-preparation-1/EXACT-PRODUCTION-RUST-RECIPE.NOT-EXECUTED.json",
+    "selected_override": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/candidate/kernel/rust/x86_cpu_helpers.rs",
+    "preserve_other_77_current_coherent_inputs": true,
+    "gate": "Actual whole-crate unique Rust entry + complete C TU imports + partial link then root coordinated default image; no source-only acceptance."
+  },
+  "canonical_writes": 0,
+  "native": false,
+  "first_unexpected_failure": "STOP preserve exact first failure; root manages one candidate+one correction, no resets."
+}
