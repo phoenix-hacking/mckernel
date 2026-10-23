@@ -8,6 +8,10 @@ use crate::abi::{
 };
 
 unsafe extern "C" {
+    fn process_sched_waitq_init_bridge(waitq_addr: usize);
+    fn process_sched_waitq_prepare_bridge(waitq_addr: usize, entry_addr: usize, status: CInt);
+    fn process_sched_waitq_finish_bridge(waitq_addr: usize, entry_addr: usize);
+    fn process_sched_migrate_log_bridge(thread_addr: usize, tid: CInt, cpu_id: CInt);
     static mut idle_halt: CInt;
     fn process_sched_irq_restore_bridge(irqstate: CULong);
     fn process_sched_zero_free_bridge();
@@ -210,6 +214,7 @@ const ERESTARTSYS: i64 = 512;
 const ENOSYS: CInt = 38;
 const EFAULT: CInt = 14;
 const PS_RUNNING: CInt = 0x1;
+const PS_UNINTERRUPTIBLE: CInt = 0x4;
 const PS_EXITED: CInt = 0x10;
 const CPU_FLAG_NEED_RESCHED: u32 = 0x1;
 const CPU_FLAG_NEED_MIGRATE: u32 = 0x2;
@@ -2176,6 +2181,55 @@ pub unsafe extern "C" fn sched_idle_runqueue_has_running_result(
         entry = unsafe { list_next(entry) };
     }
     0
+}
+
+/// Publish a stack-local migration request using the existing scheduler body.
+///
+/// # Safety
+/// The caller preserves the existing scheduler/current-CPU contract and supplies
+/// a live thread and CPU. As in the C wrapper, schedule completes the request
+/// before returning; waitq_finish then detaches the entry before either stack
+/// object expires. The body acquires migq_lock before runq_lock and retains it
+/// through target notification. Callbacks must not retain the offset table.
+#[no_mangle]
+pub unsafe extern "C" fn sched_request_migrate(cpu_id: CInt, thread: *mut Thread) {
+    let cpu = unsafe { process_sched_cpu_local_bridge(cpu_id) };
+    let mut request = MaybeUninit::<SchedMigrateRequest>::uninit();
+    let mut entry = MaybeUninit::<crate::waitq::WaitqEntry>::uninit();
+    unsafe {
+        crate::waitq::waitq_init_locked_entry(
+            entry.as_mut_ptr(), (*get_this_cpu_local_var()).current.cast(),
+        );
+    }
+    let current_cpu_id = unsafe { ihk_mc_get_processor_id() };
+    let offsets = SchedMigrateOffsets {
+        req_list_offset: offset_of!(SchedMigrateRequest, list),
+        req_thread_offset: offset_of!(SchedMigrateRequest, thread),
+        req_wq_offset: offset_of!(SchedMigrateRequest, wq),
+        thread_cpu_id_offset: offset_of!(Thread, cpu_id),
+        thread_tid_offset: offset_of!(Thread, tid),
+        cpu_migq_lock_offset: offset_of!(CpuLocalVar, migq_lock),
+        cpu_migq_offset: offset_of!(CpuLocalVar, migq),
+        cpu_runq_lock_offset: offset_of!(CpuLocalVar, runq_lock),
+        cpu_flags_offset: offset_of!(CpuLocalVar, flags),
+        cpu_status_offset: offset_of!(CpuLocalVar, status),
+    };
+    let _ = unsafe {
+        sched_request_migrate_body_result(
+            cpu_id, cpu, request.as_mut_ptr() as usize, entry.as_mut_ptr() as usize,
+            thread as usize, current_cpu_id, PS_UNINTERRUPTIBLE, CPU_FLAG_NEED_RESCHED,
+            CPU_FLAG_NEED_MIGRATE, CPU_STATUS_RUNNING, IHK_GV_IKC, &offsets,
+            Some(sched_process_spin_lock_bridge),
+            Some(sched_process_spin_unlock_bridge),
+            Some(sched_process_noirq_lock_bridge),
+            Some(sched_process_noirq_unlock_bridge),
+            Some(process_sched_waitq_init_bridge),
+            Some(process_sched_waitq_prepare_bridge),
+            Some(process_sched_waitq_finish_bridge),
+            Some(process_sched_vector_bridge), Some(process_sched_interrupt_bridge),
+            Some(process_sched_schedule_bridge), Some(process_sched_migrate_log_bridge),
+        )
+    };
 }
 
 #[no_mangle]

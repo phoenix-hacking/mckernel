@@ -1,0 +1,46 @@
+--- /home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/expert-controller-binding-repair-1/source/composite_module_binding.py
++++ /home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-next-native-preparation-1/authority-successor-1/composite_module_binding.py
+@@ -1,5 +1,5 @@
+ """Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+-Private SDK5 successor for the stale composite64 module authority boundary.
++Private SDK6 successor for the stale composite64 module authority boundary.
+ Genuine accepted artifact/source/physical receipts are mandatory; snapshot paths
+ may differ only when their actual bytes match that exact accepted three-tuple.
+ """
+@@ -11,20 +11,27 @@
+     spec=importlib.util.spec_from_file_location('private_current68_source_authority',D/'repaired_image_authority.py')
+     module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);return module
+ def validate_module_binding(base):
+-    a=authority();value=a.links();sdk=a.read(value['proofs']['SDK5_acceptance'])
+-    a.need(sdk['status']=='PASS' and sdk['decision']=='PASS_ACTUAL_SDK5_ARTIFACT_AND_PHYSICAL_ACCEPTANCE' and sdk['physical_acceptance'] is True and sdk['native_acceptance'] is False,'genuine SDK5 artifact/physical acceptance')
+-    a.need(sdk['source_identity']==value['SDK5_source_identity'] and sdk['observed']['required_exports_vermagic_MM_unique_linkage'] is True,'genuine SDK5 source/export/MM join')
++    a=authority();value=a.links()
++    a.need(value['SDK6_source_identity']=='2093e464dd2dfb976016a71197a120929e16bfd830f4d643126b96ea1ea0a2e8','exact selected SDK6 source identity')
++    source=a.read(value['proofs']['SDK6_source_preparation'])
++    a.need(source['status']=='PASS_ACTUAL_SDK6_SOURCE_PREPARATION_AND_ONCE_ONLY_STAGING_NO_COMPILER' and source['source_identity']==value['SDK6_source_identity'] and source['source_files']==68 and source['source_deltas']==[{'relative':'smp_service.rs','old':'ffefabadb349f55ecc4d474f6463e73e0c6b432aea6c41eb973a91f115ded0f7','new':'f439e780dd179f03813736f1526be0ecddb3b905b106bbcb6b9f9b8be9ce5bb7','bytes':49492}],'actual SDK6 one-source closure')
++    review=a.read(value['proofs']['EVENTFD_source_and_nine_fixture_review'])
++    a.need(review['verdict']=='PASS_EVENTFD_SOURCE_ABI_AND_ACTUAL_FOCUSED_FIXTURES' and review['implementation_ownership'] is False and review['candidate_sha256']=='f439e780dd179f03813736f1526be0ecddb3b905b106bbcb6b9f9b8be9ce5bb7' and review['tests']==9,'genuine EVENTFD source/nine-fixture review only')
++    a.need(value['proofs']['SDK6_acceptance'] is not None,'genuine actual SDK6 artifact/physical acceptance missing')
++    sdk=a.read(value['proofs']['SDK6_acceptance'])
++    a.need(sdk['status']=='PASS' and sdk['decision']=='PASS_ACTUAL_SDK6_ARTIFACT_AND_PHYSICAL_ACCEPTANCE' and sdk['physical_acceptance'] is True and sdk['native_acceptance'] is False,'genuine SDK6 artifact/physical acceptance')
++    a.need(sdk['source_identity']==value['SDK6_source_identity'] and sdk['observed']['required_exports_vermagic_MM_unique_linkage'] is True,'genuine SDK6 source/export/MM join')
+     actual=a.read(sdk['actual_reads']);owner=a.read(sdk['owner_receipt'])
+-    a.need(actual['source_identity']==sdk['source_identity'] and actual['nonce']==sdk['nonce']==owner['owner_nonce'] and actual['artifacts']==sdk['artifacts'],'SDK5 actual read/source/owner/artifact join')
+-    a.need(owner['status']=='PASS' and owner['build_status']=='PASS' and owner['cleanup_status']=='PASS_OWNED_REMOVAL_AND_RECORD_RELEASE' and owner['retired'] is True and owner['wait_exit_code']==0,'SDK5 actual owner/compiler/retirement join')
++    a.need(actual['source_identity']==sdk['source_identity'] and actual['nonce']==sdk['nonce']==owner['owner_nonce'] and actual['artifacts']==sdk['artifacts'],'SDK6 actual read/source/owner/artifact join')
++    a.need(owner['status']=='PASS' and owner['build_status']=='PASS' and owner['cleanup_status']=='PASS_OWNED_REMOVAL_AND_RECORD_RELEASE' and owner['retired'] is True and owner['wait_exit_code']==0,'SDK6 actual owner/compiler/retirement join')
+     driver=owner['driver_receipt']
+-    a.need(driver['status']=='BUILD_ARTIFACT_CHECKS_PASS' and driver['make_returncode']==0 and driver['source_candidate_sha']==sdk['source_identity'],'SDK5 actual compiler source receipt')
++    a.need(driver['status']=='BUILD_ARTIFACT_CHECKS_PASS' and driver['make_returncode']==0 and driver['source_candidate_sha']==sdk['source_identity'],'SDK6 actual compiler source receipt')
+     modules=base['modules']
+-    a.need(type(modules) is list and len(modules)==3 and tuple(Path(r['path']).name for r in modules)==NAMES and set(sdk['artifacts'])==set(NAMES),'exact ordered SDK5 three-module inventory')
++    a.need(type(modules) is list and len(modules)==3 and tuple(Path(r['path']).name for r in modules)==NAMES and set(sdk['artifacts'])==set(NAMES),'exact ordered SDK6 three-module inventory')
+     for name,reference in zip(NAMES,modules):
+         accepted=sdk['artifacts'][name];produced=driver['artifacts'][Path(name).stem]
+-        a.need(produced['sha256']==accepted['sha256'] and produced['bytes']==accepted['bytes'],'actual SDK5 produced artifact join')
+-        a.need(produced['modinfo']['vermagic']=='6.12.0-211.44.1.el10_2.mckernel1.x86_64 SMP preempt mod_unload ','actual SDK5 Linux ABI')
++        a.need(produced['sha256']==accepted['sha256'] and produced['bytes']==accepted['bytes'],'actual SDK6 produced artifact join')
++        a.need(produced['modinfo']['vermagic']=='6.12.0-211.44.1.el10_2.mckernel1.x86_64 SMP preempt mod_unload ','actual SDK6 Linux ABI')
+         a.artifact(reference,accepted)
+     launcher=a.read(value['proofs']['launcher_build_acceptance']);receipt=a.read(launcher['receipt'])
+     a.need(launcher['decision']=='PASS_ACTUAL_M06_LAUNCHER_PRODUCTION_ARTIFACT_ONLY' and launcher['native_acceptance'] is False and receipt['status']=='PASS' and receipt['launcher_source_sha256']==launcher['launcher_source_sha256'],'actual current launcher source/production receipt')

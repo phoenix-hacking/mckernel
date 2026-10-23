@@ -415,7 +415,7 @@ static void process_sched_waitq_finish_bridge(unsigned long waitq_addr,
 }
 #endif
 
-static void process_sched_migrate_log_bridge(unsigned long thread_addr,
+PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_migrate_log_bridge(unsigned long thread_addr,
 					     int tid, int cpu_id)
 {
 	(void)thread_addr;
@@ -4087,6 +4087,7 @@ void sched_init(void)
 }
 #endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 struct migrate_request {
 	struct list_head list;
 	struct thread *thread;
@@ -4107,6 +4108,7 @@ static const struct sched_migrate_offsets process_sched_migrate_offsets = {
 	.cpu_flags_offset = __builtin_offsetof(struct cpu_local_var, flags),
 	.cpu_status_offset = __builtin_offsetof(struct cpu_local_var, status),
 };
+#endif
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 static const struct sched_do_migrate_offsets process_sched_do_migrate_offsets = {
@@ -4915,6 +4917,7 @@ int sched_wakeup_thread(struct thread *thread, int valid_states)
  * 3. Do migration
  * 4. Wake up this thread
  */
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void sched_request_migrate(int cpu_id, struct thread *thread)
 {
 	struct cpu_local_var *v = get_cpu_local_var(cpu_id);
@@ -4947,6 +4950,7 @@ void sched_request_migrate(int cpu_id, struct thread *thread)
 			process_sched_schedule_bridge,
 			process_sched_migrate_log_bridge);
 }
+#endif
 
 /* Runq lock must be held here */
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS

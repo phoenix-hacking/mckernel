@@ -1,0 +1,34 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXACT_ROOT_FREEZE_COMMAND_NOT_EXECUTED_BY_WORKER",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport hashlib,json,os\ns=Path('/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/execution-preparation-1/RELEASE-PAYLOAD.ALL-REFS-BOUND.NOT-FROZEN.json'); raw=s.read_bytes(); assert hashlib.sha256(raw).hexdigest()=='c6bc5900d49981f5b7174f9b797308425efcc83b8b61b058e2095d3d379d9064'\np=json.loads(raw)\nfor key in ('request','source_review','current_Git_fetched_proof','dispatcher_preinvoke_measurement','current_live_postjoin','fresh_root_admission'):\n r=p[key]; assert hashlib.sha256(Path(r['path']).read_bytes()).hexdigest()==r['sha256'],key\nassert p['status']=='PROPOSED_PAYLOAD_NOT_EXECUTION_RELEASE' and 'execution_review' not in p\np['status']='PASS_EXECUTION_RELEASE'\n# Unsigned exact payload for independent execution review; this is not release.json.\nb=(json.dumps(p,sort_keys=True,separators=(',',':'),allow_nan=False)+'\\n').encode()\nf=Path('/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/execution-preparation-1/RELEASE-PAYLOAD.CANONICAL.PENDING-EXECUTION-REVIEW.json')\nfd=os.open(f,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600)\nwith os.fdopen(fd,'wb') as out: out.write(b);out.flush();os.fsync(out.fileno())\nprint(json.dumps({'path':str(f),'sha256':hashlib.sha256(b).hexdigest(),'bytes':len(b),'unsigned_payload_only':True}))\n"
+  ],
+  "bound_pending_input": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/execution-preparation-1/RELEASE-PAYLOAD.ALL-REFS-BOUND.NOT-FROZEN.json",
+    "sha256": "c6bc5900d49981f5b7174f9b797308425efcc83b8b61b058e2095d3d379d9064"
+  },
+  "output_path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/execution-preparation-1/RELEASE-PAYLOAD.CANONICAL.PENDING-EXECUTION-REVIEW.json",
+  "output_sha256": null,
+  "independent_execution_review": null,
+  "release_json": null,
+  "execution_release": null,
+  "expiry": null,
+  "next": "Root executes freeze once; independent executionreview binds exact canonicalpayload SHA. Root alone adds genuine executionreview ref, publishes release.json, fills soleNULLreleaseSHA in operation template, persists final operation.json andhash, fills capture --sha256 and invokes unchanged capture once.",
+  "capture_template": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/execution-preparation-1/CAPTURE-ARGV.NOT-RELEASED.json",
+    "sha256": "df97c79b5531450cc5bb03c90dc6214fb2dc1b0adbf19fd413c234d5b8a2b570"
+  },
+  "owner_operation_template": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/execution-preparation-1/OPERATION.EXACT-REQUEST.NOT-RELEASED.json",
+    "sha256": "bcfd7d15dde158e5ef1f5d50c5ec9d665f0fa3f59ed105442577172babb819a4"
+  },
+  "additional_root_queries_required": false
+}

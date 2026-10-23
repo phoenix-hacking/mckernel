@@ -675,6 +675,38 @@
                   "scope": "Candidate10 actual materialization+completepurevalidation47.653706s/40.636642CPU, exactly3spinpostimages over9; no compilation/link/native."
                 }
               ]
+            },
+            {
+              "id": "M14-02-04-S04",
+              "title": "sched_request_migrate request/wait-entry orchestration",
+              "status": "partial",
+              "rust_consumer": "kernel/rust/sched_helpers.rs::sched_request_migrate -> existing sched_request_migrate_body_result; existing syscall migration bridge consumer",
+              "implementation": "Canonical selected C body replaced by Rust wrapper reusing existing body/actualWaitqEntry. Existing C logging callback exposed with established PUBLIC ABI macro; exact C fallback preserved. No frozen guest image changed.",
+              "focused_checks": "37500originalC/actualRust modeled callback/lifetime cases/18realheaderlayoutwords and selected/fallbacksymbols accepted; actual78input pinnednightly1.95 productionRust compile once14.278037s plus NM/readelf independentlyaccepted. Compiler50priorwarningheadings retained.",
+              "production_link": "OPEN for exact GCC14 wholeprocess selected TU/defaultlink. ActualRustglobalexport proven; onlynewU process_sched_migrate_log_bridge has existingPUBLIC C source/realheaderfragment provider, wholeTU unresolved untilreal consumer.",
+              "native_validation": "OPEN; actualmigration completion/locks/IRQs/scheduling not proved by modeled leaf. Currentfunctionalimage10972 unchanged.",
+              "remaining_dependencies": "Actual GCC14 wholeprocess consumer/publicC logbridge provider; unique final defaultlink ownership; matchingnative migration/completion proof. Wholearea/file/native notcomplete. The existing C log callback remains compute-C debt; PUBLIC ABI exposure is not an M14 C-glue exemption.",
+              "next_action": "Prepare coherent candidate11 fromacceptedcandidate10 with exact2canonicalpostimages and existingconsumer guard delta; no in-place historical rewrite or competingheavy whileP12admitted.",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/next-slice-2/CANONICAL-INTEGRATION.json",
+                  "sha256": "b00734b0704a24039dea9ef11d432cdf87969362368d21c6056b4482802671eb",
+                  "size": 1829,
+                  "scope": "Exact two-file canonical integration after independent source/leaf and actualproductionRust acceptance; frozenimage10972 unchanged."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/next-slice-2/ACTUAL-LEAF-RECEIPT.json",
+                  "sha256": "5aac2393faf4b2d56af021787f369eb0c6a8a5bbec712a4c8074f56912fc400a",
+                  "size": 20227,
+                  "scope": "37500C/Rustpairs/18real-layoutwords/PUBLICfallbacksymbols; locks/IRQs/schedule/completion modeled. Onefixturemacrocorrection preserved; Rustonce."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/next-slice-2/production-fullcrate-1/ACTUAL-PRODUCTION-FULLCRATE-RECEIPT.json",
+                  "sha256": "30f0f80d85d860941c729e5b085078f2388ae041e7e6912c9d412dbebad3f970",
+                  "size": 8965,
+                  "scope": "Actual78input productionRust compileONCE14.278037s; U559\u2192560 ONLYexisting C logbridge added, Tmigration wrapper/body, retainedtimer/spin/memory. WholeC/finalprovider/defaultlink/native OPEN."
+                }
+              ]
             }
           ]
         },

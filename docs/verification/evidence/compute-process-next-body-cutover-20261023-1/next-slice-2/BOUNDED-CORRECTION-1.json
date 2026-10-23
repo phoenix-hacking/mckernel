@@ -1,0 +1,202 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ONE_BOUNDED_FIXTURE_CORRECTION_NOT_YET_EXECUTED",
+  "failure": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-2/FAILURE-1.json",
+    "sha256": "03af1d54c0cc8b755bb25c20cacd5557b3c5663615568bf9b91a3727edb370e8",
+    "bytes": 8894
+  },
+  "original_recipe": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-2/EXACT-NEXT-LEAF-RECIPE.NOT-EXECUTED.json",
+    "sha256": "9c671ba298e2e49220dbc73af1f784d69dd6ca8fe3959f22e01d56b1226275cd",
+    "bytes": 63674
+  },
+  "reason": "Remove only redundant fixture dkprintf macro; actual current debug.h already defines it. Original Rust/compiler artifact and37500-pair execution are reused without replay.",
+  "before": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-2/failure-1-preserved/fixture/selected-fragment.c",
+    "sha256": "6f98072850c4c2a9d6acb358019c378937b3f4e0b376a06fbd55b788b37cb145",
+    "bytes": 3388
+  },
+  "after": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-2/fixture/selected-fragment.c",
+    "sha256": "cdd2d964a5733d65557072e95077555e8a8fcd2d31df134156f6f5b957a1b377",
+    "bytes": 3370
+  },
+  "commands": [
+    {
+      "name": "04-selected-PUBLIC-C-fragment",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-9/default-image-preparation-1/source-materialization-attempt-1/materialized-source/kernel/include",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_RUST_PROCESS_HELPERS",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-9/default-image-preparation-1/source-materialization-attempt-1/materialized-source/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-9/default-image-preparation-1/source-materialization-attempt-1/materialized-source/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-9/default-image-preparation-1/source-materialization-attempt-1/materialized-source/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-9/default-image-preparation-1/source-materialization-attempt-1/materialized-source/ihk/ikc/include",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-9/default-image-preparation-1/source-materialization-attempt-1/materialized-source/ihk/linux/include",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-9/default-image-preparation-1/source-materialization-attempt-1/materialized-source/lib/include",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-9/default-image-preparation-1/source-materialization-attempt-1/materialized-source/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-fno-pie",
+        "-Werror",
+        "-c",
+        "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-2/fixture/selected-fragment.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-2/leaf-output-1/public.o"
+      ]
+    },
+    {
+      "name": "05-fallback-C-fragment",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-9/default-image-preparation-1/source-materialization-attempt-1/materialized-source/kernel/include",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-9/default-image-preparation-1/source-materialization-attempt-1/materialized-source/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-9/default-image-preparation-1/source-materialization-attempt-1/materialized-source/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-9/default-image-preparation-1/source-materialization-attempt-1/materialized-source/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-9/default-image-preparation-1/source-materialization-attempt-1/materialized-source/ihk/ikc/include",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-9/default-image-preparation-1/source-materialization-attempt-1/materialized-source/ihk/linux/include",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-9/default-image-preparation-1/source-materialization-attempt-1/materialized-source/lib/include",
+        "-I/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-9/default-image-preparation-1/source-materialization-attempt-1/materialized-source/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-fno-pie",
+        "-Werror",
+        "-c",
+        "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-2/fixture/selected-fragment.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-2/leaf-output-1/fallback.o"
+      ]
+    },
+    {
+      "name": "actual-nm",
+      "argv": [
+        "/usr/bin/nm",
+        "-g",
+        "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-2/leaf-output-1/actual.o"
+      ]
+    },
+    {
+      "name": "actual-readelf",
+      "argv": [
+        "/usr/bin/readelf",
+        "--wide",
+        "--relocs",
+        "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-2/leaf-output-1/actual.o"
+      ]
+    },
+    {
+      "name": "public-nm",
+      "argv": [
+        "/usr/bin/nm",
+        "-g",
+        "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-2/leaf-output-1/public.o"
+      ]
+    },
+    {
+      "name": "public-readelf",
+      "argv": [
+        "/usr/bin/readelf",
+        "--wide",
+        "--relocs",
+        "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-2/leaf-output-1/public.o"
+      ]
+    },
+    {
+      "name": "fallback-nm",
+      "argv": [
+        "/usr/bin/nm",
+        "-g",
+        "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-2/leaf-output-1/fallback.o"
+      ]
+    },
+    {
+      "name": "fallback-readelf",
+      "argv": [
+        "/usr/bin/readelf",
+        "--wide",
+        "--relocs",
+        "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-2/leaf-output-1/fallback.o"
+      ]
+    }
+  ],
+  "Rust_recompile": false,
+  "passed_fixture_replay": false,
+  "production_patch_changed": false
+}

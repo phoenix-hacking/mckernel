@@ -1,0 +1,71 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nExact granted78-input production Rust compile ONCE; read-only NM/readelf afterwards.\nNo root/Docker/guest/kernel link/canonical/frozen-candidate mutation.\nExisting37500-pair leaf not replayed; schedule/completion there remains mocked.\n",
+  "status": "PASS_ACTUAL_PRIVATE_PRODUCTION_RUST_FULLCRATE_OBJECT_ONLY_READY_FOR_INDEPENDENT_REVIEW",
+  "actual_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-2/production-fullcrate-1/ACTUAL-PRODUCTION-FULLCRATE-RECEIPT.json",
+    "sha256": "30f0f80d85d860941c729e5b085078f2388ae041e7e6912c9d412dbebad3f970",
+    "bytes": 8965
+  },
+  "durable_object_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-2/production-fullcrate-1/COMPILE-OBJECT-RECEIPT.json",
+    "sha256": "4a87ff2b3e816452cd2544bb876bc73fdac05c44bccdab4c6b0bedbb68ecb91b",
+    "bytes": 2353
+  },
+  "object_identity_already_hashed_once": {
+    "ctime_ns": 1792779119415992715,
+    "device": 66306,
+    "gid": 1000,
+    "inode": 55725807,
+    "mode": "0o600",
+    "mtime_ns": 1792779119415992715,
+    "nlink": 1,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-2/production-fullcrate-1/mckernel_rust.o",
+    "sha256": "1734d2e5570b76ad9d58bec760f6332623c4ddb70c94bf04f7a33db2abaf61b3",
+    "size": 13730880,
+    "uid": 1000
+  },
+  "source_recipe": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-2/production-fullcrate-1/EXACT-PRODUCTION-RUST-RECIPE.GRANTED.json",
+    "sha256": "a60dac19734040cb967b14ecdd002c4c44537aeb4cd8209e058fb9ab202c81cc",
+    "bytes": 76502
+  },
+  "actual_profile": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-2/production-fullcrate-1/ACTUAL-FULLCRATE-PROFILE.json",
+    "sha256": "b6a69fb483f939c1e289b9d110397129940917a78f6429f364f315d9750c86bc",
+    "bytes": 2351
+  },
+  "capacity": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-2/production-fullcrate-1/ACTUAL-CAPACITY-BEFORE-COMPILER.json",
+    "sha256": "b74b55383f4c4220c48cfddb996115f2689bf9bbc524be680d9c133153f961ed",
+    "bytes": 564
+  },
+  "source_count": 78,
+  "canonical_current_closure_matches_accepted_spin_except_private_sched_helpers": true,
+  "only_Rust_delta": "kernel/rust/sched_helpers.rs",
+  "compiler_invocations": 1,
+  "compiler_failures": 0,
+  "observer_failures": 0,
+  "corrections": 0,
+  "compiler_seconds": 14.278036774951033,
+  "compiler_stderr_bytes": 29919,
+  "individual_warning_count": 50,
+  "warning_headings_identical_to_accepted_spin": true,
+  "production_U_delta": {
+    "added": [
+      "process_sched_migrate_log_bridge"
+    ],
+    "after": 560,
+    "before": 559,
+    "removed": []
+  },
+  "all_direct_children_joined": true,
+  "all_groups_absent": true,
+  "all_streams_closed": true,
+  "all_error_and_retirement_error_fields_null": true,
+  "CPU6_released": true,
+  "all_canonical_inputs_unchanged": true,
+  "leaf37500_replayed": false,
+  "exact_GCC14_whole_process_TU_defaultkernel_link_native": "OPEN",
+  "source_leaf_qualification": "Existing real-header37500-pair fixture uses mocked schedule/completion/callback lifetimes, not production migration execution. This new result proves actual Rust compiler/object consumer only.",
+  "independent_acceptance": "OPEN_ROOT_OWNS"
+}

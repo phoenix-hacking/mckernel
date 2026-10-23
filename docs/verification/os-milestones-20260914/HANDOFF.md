@@ -1,3 +1,83 @@
+## AcceptedSDK6 capsule published; coherent runtime binding next — 2026-10-23 18:27 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+GenuineSDK6combinedartifact/physical9159dcbd accepted: onlySMP4489changed/68sources
+and11runtimebindings proved. Current_live_postjoin SDK6_BUILD_POSITIVELY_RETIRED
+(nonNULL), rootcontinuity/noheavy. Actualauthority993d7a26/0.115084s+stage20.994839s
+fullyqualified independenta445PASS; fullstrict88loader succeeds. Newcapsuled47c53c7/
+19427260B, manifest2f4c5c6d/13051B; final62membermap onlySMPchanged61identicalvsprior
+actualcapsule, alloriginalapps/oracles/init/image10972/launcherdca preserved.
+Immutablemanifest scratch/p12s6l1/m.json0600/dev1828/inode116710/singlelink published.
+Rootreserved freshnonce5603c55a294240fdb86c3613ec42e293/HOSTl12d1/pdev66306/inode55725983,
+releasep12s6l1/r.jsonNOTpublished. terminal_lifecycle_repair ownscoherentSDK6runtime
+source9/sixcontrollerliterals/147historical+newrequiredpins/actualopenfootprint and
+actualcreateargvROancestorcoverage, actual18pre-effectfixtures nextCPU0. No root/
+Docker/guest untilfrozen source+realguards/freshadmission/exactindependentrelease.
+Practical34/35,whole12/14; acceptedLONG0/100launches/0/60mixedminutes; nocheckclosure.
+M14sched_request_migrate exact2canonicalpostimages integratedafter37500leaf+actual
+78Rustconsumer14.278s independentacceptance. ClogcallbackremainscomputeCdebt, no
+Cglue exemption. WholeGCC14TU/defaultlink/nativeOPEN. Candidate11source+pureactual
+PASS42.669489s/35.691536CPU/twochildrenjoinedgoneclosed/CPU6released, no compiler.
+
+## SDK6 positively retired; actualartifact and strictauthority review — 2026-10-23 18:11 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+IndependentSDK6physicalPASS: closed4a674 owner0/22.047687s,14Docker+1admission
+reaped/groupsgone/exactCID667106removed+3emptyqueries/recordsreleased. Freshpostjoin
+da381eca2COMPLETE304/no publishers/ownerand15clientsabsent; mutex8fdd42ef permanent
+27:4/eightpathsabsent; both0/joined/gone/closed/emptyerr. Rootcontinuityuninterrupted;
+current_live_postjoin SDK6_BUILD_POSITIVELY_RETIRED(nonNULL), noheavy/duplicatecleanup.
+Actualartifact/sourceextract a1fe1201 binds68sources/exact11runtime/fullsavedRust
+commands/dependencysets/LD/MODPOST. ONLYSMP changedto4489c873327e1f09e32ed9caccceb29d11294f927c9f60db27e44011f503cde3/12955392B;
+IHKdaced291/1527808B andMCCTRL06e8b9b5/2662320B unchanged. m14_callback_review now
+independentartifactacceptance, no nativecredit; no repeatmodulehashes.
+StrictSDK6authoritysource successor/actual18controlledfixtures d53d9255PASS0/.105838s,
+missing/SDK5/stale/inconsistentgraphsrefuse; realSDK6acceptancerefNULL untilgenuine.
+native235_release_review ownsfiniteauthoritysource review; no fabricatedSDK5credit.
+Next acceptedSDK6graph→oneSMPcapsulestage61unchanged→coherentP12sourcebindings/fresh
+admission/exactrelease→actualfullLONG withunchangedoracles. Practical34/35,whole12/14,
+LONGaccepted0/100launches/0/60minutes/no literalclosure. M14migrateleaf37500/18+symbols
+independentlyaccepted; actual78input productionRustconsumer CPU6 nowgranted, compiler
+pinnednightly1.95/profileunchanged. WholeGCC14TU/defaultlink/native remainOPEN.
+
+## ActualSDK6build PASS; artifact/physical joins next — 2026-10-23 18:06 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Tool84225 CLOSED PASS0/22.047687s owner3838054/start57597269 directjoined/groupgone/
+closed/stdout76694B/stderr0; source68onlySMPeventfdchanged/SDK6noimagebuild. Actual
+owner buildPASS/cleanupPASS_OWNED_REMOVAL_AND_RECORD_RELEASE,14clients+1admission
+reaped/CID667106ac removed/name-label-IDabsent/ownedrecordsarchivedreleased. This
+is awaitingindependentphysical/artifactacceptance; current_live_postjoin
+CLOSED_SDK6_PENDING_PHYSICAL(nonNULL), rootretainsheavy admission untilaccepted.
+native235_release_review ownsactualpostflight+closedcapturephysicaljoin; no
+repeatedcleanup. m14_callback extractsactualartifact/link/sourcebindings and small
+proof; case227_stage preparesstrictSDK6authorityconsumer withunknownartifactsNULL.
+No source/nativeacceptancefabrication. NextgenuineSDK6artifact+physicalacceptance,
+thenoneSMPcapsulesuccessor/61unchanged/unchangedfullLONGoracles/freshadmissionrelease.
+Practical34/35,whole12/14/no newclosure; LONGaccepted0/100launches/0/60mixedminutes.
+M14sched_request_migrate37500C/Rustpairs/18layout+PUBLIC/fallback/symbolchecksPASS,
+CPU0released; m14_build_release_review active unsafeABI/sourceleafreview, no current
+canonicalintegration/fullproductionconsumer/defaultlink/native orwholefilecredit.
+
+## SDK6 affected module build actually running — 2026-10-23 18:02 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Staticb8fcb58804a897d471659fe85e3e7961fe17893f fetched312/proof56b7f1e3.
+Actualfreshadmission8abe9e02 PASS0/.398567s joined/gone/closed/emptyerr. Genuine
+independentexactpayload60feace7 approved; attachedonlyreview/finalrelease5be4538b/
+operationac2ff9d3. ActualUNMODIFIEDowner.authenticate PASS beforeONEexistingSDK6
+captureinvocation. Tool84225 RUNNING, childstart {"pid": 3838054, "proc_start_ticks": "57597269", "process_group": 3838054}.
+current_live_postjoin ACTIVE_SDK6_OWNER(nonNULL), prior91cpositivephysical retained;
+soleheavy4CPU2-5/12GiB/noextraSwap512/netnone/makej2, UID1000ownerCPU7AS2GiB/
+FSIZE32M/CPUunlimited, nooutertimeout/signals/kill. No competingheavy/resize.
+68sourceclosure onlyacceptedSMPffef->f439 changed, image10972/launcherunchanged.
+Next actualmoduleartifact+current-source/physicalreview, then coherentSDK6native.
+Practical34/35,whole12/14,no newliteralclosure, LONGaccepted0/100launches/0/60mixedminutes.
+M14nextsched_request_migrate actual37500C/Rustcomparisons/18realheaderlayoutwords
+andPUBLIC/fallback/NM/readelfchecks PASS; onefixturemacro-onlycorrection retained,
+RustcompiledONCE/nosemanticreplay/CPU0released. Newsource unsafeABIreview/fullcrate/
+wholeTU/defaultlink/nativeOPEN. No wholearea/file or practical retirement credit.
+
 ## Failed91c positively retired; accepted RustEVENTFD repair advances SDK6 — 2026-10-23 17:49 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
