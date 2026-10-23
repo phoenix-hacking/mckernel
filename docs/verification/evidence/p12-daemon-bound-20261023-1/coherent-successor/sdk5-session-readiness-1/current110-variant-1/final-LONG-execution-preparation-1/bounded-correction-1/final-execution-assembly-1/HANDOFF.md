@@ -1,0 +1,13 @@
+# Exact LONG fresh query and final execution closure
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Authoritative packet: FINAL-EXECUTION-ASSEMBLY-RESULT.json7cd24ca2. The exact next operation is ROOT-FRESH-QUERY-ARGV.NOT-RELEASED.json7719e9f4, running concreteobserver522ef331 with profilec62a125e. This is source preparation only; independentqueryrelease and actualquery remain NULL. Earlier unexecuted CPU0/90s and observerhandler metadata are preserved in named preimage subdirectories; they are not execution inputs.
+
+Rootobserver and actualquery run pinnedAnaconda onCPU7/AS2GiB/CPU30/wall60+6/FSIZE32MiB/NOFILE256/core0. It reuses exact990807 owned_capture AST body, registers the accepted TERM/INT/ALRM stophandler plus60s timer beforeowned_capture, retains rootauthority through directchildjoin/groupabsence/closedstreams, and authenticates actualquery JSON status. Exact runner/profile/query/input/argv/capture names are bound; no missing observerprofile dependency remains. The query source0a3f54d4 reuses accepted current110/tiny algorithms with actualHOSTl12a1 output_parent(fresh=True), full110GiB sparsegap/floors/positive budgetd91d, currentcohort sources and nonce, mutex27:4/leases/globalpublisher/containerabsence, acceptedimage39readonlyroots/cgroups/CPU/RAM/daemonNONEsourceversion. Future readonlyr.json and finalrequest must be absent at this boundary; no stale tinyparent check is used.
+
+Genuine tenphysical125669 supplies nonNULL current_live_postjoin; tenformal+literal75eec and correctedLONGsource+39consumer acceptancee4b7 are bound. Rootcheckpoint0a0eb01e/fetched339proof remains historical sourcepublication of its exactbytes; this new finalassembly still needs normal publication. No HEADguard is introduced.
+
+EXACT-CLOSURE-ORDER.NOT-RELEASED.json7f80bc2a binds unchanged100launches/3600mixedseconds/7200sessionwall/7800inner/8100outer/4GiBHOSTcapture and originaloracles. Rootfills currentboot/expiry<=600s/author and independentcanonicalreview payload, publishes readonlyrelease to fixedr.json, gets releaseSHA, fills finalrequest's two matchingreleaseSHA locations and status, publishes fixedrequest, gets requestSHA, fills finalrootargv. No sourceorquotachange or digestcycle is required.
+
+Remaining NULLs: freshqueryrelease/result/capacity, dispatchercontinuity/aggregateoneheavy/sourcepublication, finalcurrentbootrelease+independentreview/publicationhashes, finalrootexecutionrelease/grant, actualLONGsession/physical/applicationacceptance. No root/query/Docker/guest/compiler/runtime/testjob ran in this preparation; no CPUslot held.

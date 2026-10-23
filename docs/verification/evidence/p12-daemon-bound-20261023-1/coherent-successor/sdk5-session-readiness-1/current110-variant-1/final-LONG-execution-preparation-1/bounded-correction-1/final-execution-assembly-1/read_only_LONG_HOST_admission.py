@@ -5,7 +5,7 @@ No signals, daemon creation, storage mutation or owner cleanup. Transient mutex 
 import ast,fcntl,hashlib,importlib.util,json,os,resource,stat,subprocess,sys,time
 from pathlib import Path
 D=Path(__file__).resolve().parent
-CONFIG_SHA='283cae5d0b25caebb6a5d7c36a69030158b795c9ec10f59777fa45ed9918eb8d'
+CONFIG_SHA='eac7fa41467eacd92f4f7d31790c2146f9634c947f413e4168cc9979361d219f'
 ENGINE=Path('/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/cleanup_pass_image.py')
 ENGINE_SHA='59efab0bc29fa5784dc855743cec397237552821bc150b60ea1d6c2e5f7ac00d'
 def need(v,m):
@@ -45,7 +45,7 @@ def parent_fact(path):
  finally:os.close(fd)
 
 def validate(f,c,growth):
- need(f['uid']==f['euid']==0 and f['affinity']==[0],'root query CPU0')
+ need(f['uid']==f['euid']==0 and f['affinity']==[7],'root query CPU7')
  need(f['proc']['status']=='COMPLETE' and f['proc']['failure'] is None and f['proc']['publishers']==[] and len(f['proc']['snapshots'])==2,'complete publisher-free census')
  need(f['physical']['status']=='PASS_ACTUAL_TEN_BATCH_PHYSICAL_RETIREMENT_ONLY' and f['physical']['distinct_exact_container_removals']==10 and f['physical']['direct_docker_client_reaps']==300 and f['physical']['current_live_postjoin']['mutex_identity']==[27,4] and f['physical']['current_live_postjoin']['no_uncertain_owner'] is True and f['physical']['current_live_postjoin']['all_leases_retained'] is False,'latest positive physical receipt')
  p=f['parent'];need(p['directory'] and p['uid']==p['gid']==1000 and p['mode']==0o700 and p['children']==[],'fresh private HOST LONG parent exists empty UID1000 mode700')
@@ -66,7 +66,7 @@ def validate(f,c,growth):
 
 def collect(c):
  need(os.getuid()==os.geteuid()==0,'authenticated root read-only query')
- need(os.sched_getaffinity(0)=={0},'root query CPU0')
+ need(os.sched_getaffinity(0)=={7},'root query CPU7')
  source_pins=[]
  for row in c['pins']:
   fact=filepin(Path(row['path']),2**20);need(fact['sha256']==row['sha256'] and fact['size']==row['bytes'],'exact source/input pin');source_pins.append(fact)
