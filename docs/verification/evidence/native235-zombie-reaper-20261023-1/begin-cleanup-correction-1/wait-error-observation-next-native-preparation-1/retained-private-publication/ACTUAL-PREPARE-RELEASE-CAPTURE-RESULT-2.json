@@ -1,0 +1,124 @@
+{
+  "application_acceptance": false,
+  "argv": [
+    "/usr/bin/taskset",
+    "--cpu-list",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--core=0",
+    "--fsize=134217728",
+    "--nofile=256",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-next-native-preparation-1/prepare_release_data.wait-observer.CORRECTION1.py"
+  ],
+  "cleanup_complete": true,
+  "cleanup_timeout_seconds": 3.0,
+  "cwd": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/wait-error-observation-native-successor-1",
+  "descendant_records_omitted": 0,
+  "descendants": [],
+  "elapsed_seconds": 0.03642811602912843,
+  "env": {
+    "HOME": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/wait-error-observation-native-successor-1",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin:/bin",
+    "TMPDIR": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/wait-error-observation-native-successor-1"
+  },
+  "events": [
+    {
+      "kind": "cleanup_started",
+      "monotonic": 521778.583487928,
+      "reason": "leader_exited"
+    }
+  ],
+  "executable": {
+    "path": "/usr/bin/taskset",
+    "sha256": "28f2dd426247d7d1d794c0fb8a723efc6a1ae3c56393a238b180fe9a0dc32f1c",
+    "size": 35048
+  },
+  "executable_path": "/usr/bin/taskset",
+  "fd_setup": {
+    "close_fds": true,
+    "pass_fds": [],
+    "stderr": "separate owned pipe",
+    "stdin": "regular file or /dev/null",
+    "stdout": "owned pipe"
+  },
+  "gid": 1000,
+  "groups": [
+    4,
+    20,
+    24,
+    27,
+    30,
+    46,
+    120,
+    131,
+    132,
+    133,
+    1000
+  ],
+  "monotonic_finished": 521778.585073577,
+  "monotonic_started": 521778.548645461,
+  "payload_completion_observed_monotonic": 521778.583481327,
+  "payload_monotonic_deadline": 521808.548980384,
+  "payload_monotonic_started": 521778.548980384,
+  "process": {
+    "pgid": 3560915,
+    "pid": 3560915,
+    "ppid": 3560914,
+    "session": 3560915,
+    "starttime_ticks": 53711667,
+    "state": "R"
+  },
+  "provenance": "Linux process collection only; no McKernel evidence",
+  "raw_wait_status": 0,
+  "schema_version": 1,
+  "status": "COMPLETED",
+  "stderr_limit_bytes": 8388608,
+  "stdin": {
+    "kind": "devnull"
+  },
+  "stdin_path": null,
+  "stdout_limit_bytes": 8388608,
+  "streams": {
+    "stderr": {
+      "artifact": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/wait-error-observation-native-successor-1/actual-prepare-release-capture-2/stderr.bin",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "bytes_observed": 0,
+      "bytes_retained": 0,
+      "discarded_observed_bytes": 0,
+      "eof": true,
+      "limit_bytes": 8388608,
+      "truncated": false
+    },
+    "stdout": {
+      "artifact": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/wait-error-observation-native-successor-1/actual-prepare-release-capture-2/stdout.bin",
+        "sha256": "0f8827a752a2d82670b65cbff8074ea397dd766794a77533d77091e3d3c27455",
+        "size": 1055
+      },
+      "bytes_observed": 1055,
+      "bytes_retained": 1055,
+      "discarded_observed_bytes": 0,
+      "eof": true,
+      "limit_bytes": 8388608,
+      "truncated": false
+    }
+  },
+  "supervisor_pid": 3560914,
+  "timeout_seconds": 30.0,
+  "uid": 1000,
+  "umask": "0077",
+  "wait_status": {
+    "code": 0,
+    "kind": "exited"
+  }
+}

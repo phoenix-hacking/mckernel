@@ -1,0 +1,62 @@
+{
+  "argv": [
+    "/usr/bin/nm",
+    "-g",
+    "--defined-only",
+    "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-2/ordinary-exact-fullcrate-attempt-1/mckernel_rust.o"
+  ],
+  "capture_requirements": [
+    "direct_child_joined",
+    "group_absent",
+    "closed_streams",
+    "error null",
+    "retirement_error null",
+    "stable closed streams and unchanged object identity/hash"
+  ],
+  "execution_granted": false,
+  "expected_unique_exports": [
+    "sched_idle_loop_body_result",
+    "sched_idle_current_cpu_bridge",
+    "sched_idle_begin_body_result",
+    "sched_idle_iteration_body_result",
+    "sched_idle_runqueue_has_running_result",
+    "process_sched_cpu_local_bridge",
+    "x86_clear_old_action_bridge",
+    "x86_clear_phys_to_virt_bridge"
+  ],
+  "fresh_capture_directory": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-2/ordinary-fullcrate-evidence-1/nm-capture-1",
+  "object": {
+    "ctime_ns": 1792740838778187729,
+    "device": 66306,
+    "gid": 1000,
+    "inode": 48790258,
+    "mode": "0o600",
+    "mtime_ns": 1792740838778187729,
+    "nlink": 1,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-2/ordinary-exact-fullcrate-attempt-1/mckernel_rust.o",
+    "sha256": "54449c60ed1afe9f18d49968d3b879493f64cecded27e845481162bdd86d867c",
+    "size": 13632104,
+    "uid": 1000
+  },
+  "owned_capture_helper_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8",
+  "proposed_profile": {
+    "as_bytes": 2147483648,
+    "core": 0,
+    "cpu": 0,
+    "cpu_seconds": 30,
+    "fsize_bytes": 33554432,
+    "jobs": 1,
+    "nofile": 256,
+    "termination_grace_seconds": 6,
+    "wall_seconds": 35
+  },
+  "purpose": "Inspect actual emitted full-crate ELF exports for selected idle and memory providers; this cannot establish selected C relocation/defaultlink or native behavior.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "shell": false,
+  "source": {
+    "reviewed_driver": "correction1/native_rust_exact_mckernel_image_offline.py",
+    "source_lines": "1460-1465 exact required export tuples"
+  },
+  "status": "PROPOSED_SEPARATE_COMMAND_NOT_EXECUTED",
+  "stop_on_failure": true
+}

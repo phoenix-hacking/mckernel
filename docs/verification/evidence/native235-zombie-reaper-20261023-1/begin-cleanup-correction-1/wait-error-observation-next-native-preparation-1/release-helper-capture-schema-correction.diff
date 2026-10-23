@@ -1,0 +1,11 @@
+--- 
++++ 
+@@ -17,7 +17,7 @@
+  producer=load(F/'PRODUCER-ONE-MODULES.ACTUAL.json');sdk=producer['sdk_independent_artifact_acceptance'];accepted=load(Path(sdk['path']));assert ref(Path(sdk['path']))==sdk and accepted['status']=='PASS'and accepted['physical_acceptance']is True
+  ownerpath=Path(producer['sdk_actual_build_receipt']['path']);assert ref(ownerpath)==producer['sdk_actual_build_receipt'];owner=load(ownerpath)
+  # Actual SDK retained root receipts are adjacent to the accepted owner receipt.
+- B=ownerpath.parent;post=load(B/'postflight-proof.json');closedpath=Path(accepted['capture']['path']);assert ref(closedpath)==accepted['capture'];closed=load(closedpath)
++ B=ownerpath.parent;readsref=accepted['actual_reads'];assert ref(Path(readsref['path']))==readsref;reads=load(Path(readsref['path']));evidence=reads['evidence'];assert evidence['owner_receipt']==accepted['owner_receipt']==producer['sdk_actual_build_receipt'];postref=evidence['postflight'];assert Path(postref['path'])==B/'postflight-proof.json' and ref(Path(postref['path']))==postref;post=load(Path(postref['path']));releasedref=evidence['record_release'];assert Path(releasedref['path'])==B/'record-release-complete.json' and ref(Path(releasedref['path']))==releasedref;released=load(Path(releasedref['path']));assert released['status']=='OWNED_RECORDS_RELEASED' and released['nonce']==accepted['nonce'];captureref=evidence['capture_status'];closedpath=Path(captureref['path']);assert ref(closedpath)==captureref;closed=load(closedpath);assert closed['status']=='PASS' and closed['streams_closed']is True and closed['stderr']['bytes']==0
+  assert post['all_clients_reaped']is True and post['container_absent']is True and owner['retired']is True and owner['terminal_container_retained']is False and closed['process_group_absent']is True and closed['direct_child_joined']is True and closed['returncode']==0
+  assert (B/'record-release-complete.json').is_file()
+  case=load(C/'CASE-DATA.BASE-BOUND.json');manifest=C/'ACTUAL-V3-NATIVE235-MANIFEST.json';mr=ref(manifest);m=load(manifest);join=load(C/'ACTUAL-V3-CASE-ARTIFACT-AND-STRICT-CONSUMER-JOIN.json');assert join['native_manifest']==mr and join['qmp_encoded_bytes']==93

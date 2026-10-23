@@ -1,0 +1,23 @@
+{
+  "actual_harness_sha256": "bd15eea04608f9e8e66426ec25eb87e69ba201585351fd9442627277c9919d1a",
+  "actual_tests": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-next-native-preparation-1/ebusy-repair-1/ACTUAL-WHOLE-JOIN-2.json",
+    "sha256": "6e77a04c60f017c0ea6509368c051477ba4f85f160da7719348ca4e268aca9a6"
+  },
+  "affected_modules": [
+    "ihk-smp-x86_64.ko",
+    "mcctrl.ko"
+  ],
+  "candidate_sha256_by_relative": {
+    "current_fork_control.rs": "81228204d50bd5e95bcad7671d4c6bb272ef9c516d0163b2b39a0f6a5c23a126",
+    "mcctrl_vm.rs": "ba957d7349a45cda47ba135dd265885516cf40c00872658ca8309a98aa8d19c1"
+  },
+  "decision": "PASS_SOURCE",
+  "implementation_ownership": false,
+  "limits": "Full ACK/phase/publication tail preserved bytewise, not executed by14fixtures; source acceptance only, actual build/native separate.",
+  "no_new_C_or_MM_wrappers": true,
+  "production_consumer_proof_sha256": "8e92a60729c6872e4d39adf336536599f82c098fc7c9a9d5d390dc2cc8ff8a3d",
+  "reviewer": "/root/p12_identity_review",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS"
+}

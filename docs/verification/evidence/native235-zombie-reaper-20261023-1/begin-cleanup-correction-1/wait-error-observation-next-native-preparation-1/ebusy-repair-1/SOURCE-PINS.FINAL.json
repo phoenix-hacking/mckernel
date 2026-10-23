@@ -1,0 +1,75 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FROZEN_TWO_FILE_CANDIDATE_ACTUAL_FIXTURES_PASS_PENDING_INDEPENDENT_REVIEW",
+  "sources": [
+    {
+      "preimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-next-native-preparation-1/ebusy-repair-1/current_fork_control.preimage.rs",
+        "sha256": "89e3c6a26826ef48c2d5420759e462cebe12e2ffe437b9cb5a83627d37699304",
+        "bytes": 10580
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-next-native-preparation-1/ebusy-repair-1/current_fork_control.rs",
+        "sha256": "81228204d50bd5e95bcad7671d4c6bb272ef9c516d0163b2b39a0f6a5c23a126",
+        "bytes": 10725
+      }
+    },
+    {
+      "preimage": {
+        "path": "/home/holden/mckernel-work/host-preparation/native235-wait-error-observation-sdk-successor-20261023-3/source-modules/mcctrl_vm.rs",
+        "sha256": "50e0a20a032cf137ab93f2b19f392577fd1a3f48990b4e368ac415134002bf92",
+        "bytes": 30315
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-next-native-preparation-1/ebusy-repair-1/mcctrl_vm.rs",
+        "sha256": "ba957d7349a45cda47ba135dd265885516cf40c00872658ca8309a98aa8d19c1",
+        "bytes": 31131
+      }
+    }
+  ],
+  "expert_decision": "p12_identity_review exact zero-users plus wholeMMempty-under-existing-write-lock; never zero alone, no new C/wrappers, no syntheticACK/credit release.",
+  "preserved": "Private selector frame/identity/firstpublication/capsule validation and all postguardcode; live-MM revoke path; allordinary admissions; WAITobserver8bf3; original235app/oracles.",
+  "actual_harness": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-next-native-preparation-1/ebusy-repair-1/actual_terminal_tests-ordinary.rs",
+    "sha256": "bd15eea04608f9e8e66426ec25eb87e69ba201585351fd9442627277c9919d1a",
+    "bytes": 23458
+  },
+  "actual_results": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-next-native-preparation-1/ebusy-repair-1/ACTUAL-WHOLE-JOIN-2.json",
+    "sha256": "6e77a04c60f017c0ea6509368c051477ba4f85f160da7719348ca4e268aca9a6",
+    "bytes": 923
+  },
+  "extraction_qualification": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-next-native-preparation-1/ebusy-repair-1/EXTRACTION.json",
+    "sha256": "a402ee01df9e6bcd7b141831bd09a3ad11cac21f77c41fd870b306869dcad7f2",
+    "bytes": 643
+  },
+  "production_consumer_link": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-next-native-preparation-1/ebusy-repair-1/ACTUAL-PRODUCTION-CONSUMER-LINK.json",
+    "sha256": "8e92a60729c6872e4d39adf336536599f82c098fc7c9a9d5d390dc2cc8ff8a3d",
+    "bytes": 3955
+  },
+  "failure_evidence": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-next-native-preparation-1/ebusy-repair-1/actual-cbd55-failure/serial.log",
+      "sha256": "dc8f4c4ea7c2fdc41d2dfcb41387ba5f7f34c4a0c5842b844327d53b5bd2798c",
+      "bytes": 94209
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-next-native-preparation-1/ebusy-repair-1/actual-cbd55-failure/result.json",
+      "sha256": "b7965813a9181847d8b7b8cc8e3ed0c5c580c64b5c33a99f9ce236912de1f845",
+      "bytes": 2957
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-next-native-preparation-1/ebusy-repair-1/actual-cbd55-failure/first-failure.jsonl",
+      "sha256": "23941a7f3df58655aa803f6704cbc1e87d3702c366cf201ff11a9da5c6562721",
+      "bytes": 82
+    }
+  ],
+  "actual_decisive_lines": [
+    "<6>[   32.750937] mcctrl: application_process=cleanup_requested os=0 generation=1 pid=258 intent_errno=0",
+    "<6>[   32.800708] mcctrl: application_syscall=returned os=0 generation=1 pid=255 worker=6 delivery=105 cpu=0 value=258",
+    "<6>[   32.806919] mcctrl: application_wait=failed os=0 generation=1 pid=255 phase=operation errno=-16"
+  ],
+  "test_qualification": "14actualtests: entirecandidate/preimageMirrorbody, actualcandidate/preimagecontroladmissionprefix, unchangedcompleteordinaryWAIT/worker bodies. ExistingcontrolACKtail remainsbyteidentical; no newdestructorACK/fullcredit/native claim."
+}

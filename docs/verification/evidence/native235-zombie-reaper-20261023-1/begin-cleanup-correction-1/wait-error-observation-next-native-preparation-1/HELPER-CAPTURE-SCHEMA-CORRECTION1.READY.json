@@ -1,0 +1,36 @@
+{
+  "scope": "Functional OS work only; no security testing.",
+  "status": "BOUNDED_SOURCE_CORRECTION_PENDING_EXACT_REVIEW_AND_GRANT",
+  "original_failure": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/wait-error-observation-native-successor-1/ACTUAL-PREPARE-RELEASE-CAPTURE-RESULT.json",
+    "sha256": "0f87e947577e5d38e6c1f67431fb12f00244678a952ae6a498d35587237e345c",
+    "bytes": 3663
+  },
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-next-native-preparation-1/prepare_release_data.wait-observer.CORRECTION1.py",
+    "sha256": "812cbb79447ec43a67ac7d5cdc78b429a525772b6c7fc3349adf591aa89142fc",
+    "bytes": 10698
+  },
+  "diff": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-next-native-preparation-1/release-helper-capture-schema-correction.diff",
+    "sha256": "07d18d077f247667773d38fab572b08c15fd8e88b36fc90b5e94ffc19901ee8d",
+    "bytes": 2198
+  },
+  "argv": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/wait-error-observation-native-successor-1/PREPARE-RELEASE-ARGV.CORRECTION1.json",
+    "sha256": "d7e815fde9aa00136f0e177be2c99ef5989efa448148b71b3e27bfc6a462aa8d",
+    "bytes": 420
+  },
+  "caller": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/wait-error-observation-native-successor-1/run-prepare-release.CORRECTION1.py",
+    "sha256": "56f378a2a9f862d27a6d98ee2f6274494916784c01a1179154d9a93b3f71fb74",
+    "bytes": 944
+  },
+  "execute": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/wait-error-observation-native-successor-1/run-prepare-release.CORRECTION1.py"
+  ],
+  "change": "Consolidated actual b589 schema: authenticate actual_reads plus evidence.capture_status,owner_receipt,postflight,record_release; check exact real status/streams/join/group/retirement/nonce. All accepted accesses are real providedkeys, no schema fallback; no7stage rerun."
+}

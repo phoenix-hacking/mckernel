@@ -1,0 +1,11 @@
+--- /home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-2/native_rust_exact_mckernel_image_offline.py
++++ /home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-2/correction1/native_rust_exact_mckernel_image_offline.py
+@@ -1490,7 +1490,7 @@
+                phase='m14-' + name, argv=command, cwd=str(out), exit_code=None)
+     command_rows.append(row)
+     row['exit_code'] = _run_process(command, out, env, stdout, stderr, timeout,
+-                                    row['phase'], output_fsize=32 << 20)
++                                    row['phase'], output_fsize=1 << 20)
+     _fail(row['exit_code'] == 0 and stderr.stat().st_size == 0, 'M14 observer failed: ' + name)
+     row.update(stdout_sha256=_sha256(stdout), stderr_sha256=_sha256(stderr))
+     return stdout.read_text()

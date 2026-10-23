@@ -1,0 +1,76 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_ACCEPTED_COMPILER_DEPENDENCY_AND_DISPATCH_CHAIN",
+  "sdk_source_identity": "6a3314024fba61f72ad633508b65dd60d79da4db3c5bd113ae35118cb60482a5",
+  "compiler_dependency_receipts": [
+    {
+      "original": {
+        "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-56bc171c4a724f9b81060ae6713e9a1c/modules/.ihk_smp_x86_64.o.cmd",
+        "sha256": "d1949eb35c6dd3dfca38f9b967bc55f8613f8452c2ede8568f72333ff743ec1c",
+        "bytes": 4281
+      },
+      "retained": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-next-native-preparation-1/ebusy-repair-1/ihk_smp_x86_64.o.cmd.ACCEPTED-SDK3",
+        "sha256": "d1949eb35c6dd3dfca38f9b967bc55f8613f8452c2ede8568f72333ff743ec1c",
+        "bytes": 4281
+      },
+      "required_dependency": "current_fork_control.rs",
+      "matching_lines": [
+        "  /candidate/modules/current_fork_control.rs \\"
+      ]
+    },
+    {
+      "original": {
+        "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-56bc171c4a724f9b81060ae6713e9a1c/modules/.mcctrl_rust.o.cmd",
+        "sha256": "9cda1e193cbed3ddfab5e7409695ffac4867314e2322e62efd23057dbac361fe",
+        "bytes": 2392
+      },
+      "retained": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-next-native-preparation-1/ebusy-repair-1/mcctrl_rust.o.cmd.ACCEPTED-SDK3",
+        "sha256": "9cda1e193cbed3ddfab5e7409695ffac4867314e2322e62efd23057dbac361fe",
+        "bytes": 2392
+      },
+      "required_dependency": "mcctrl_vm.rs",
+      "matching_lines": [
+        "  /candidate/modules/mcctrl_vm.rs \\"
+      ]
+    }
+  ],
+  "driver_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-wait-error-observation-sdk-successor-20261023-3/derived-runtime/native_running_external_modules_offline.py",
+    "sha256": "e7c2bd4c96f4ec2072b4354fcc602ad8d5ff4ff1f7dcfeae57616a795628afc7",
+    "bytes": 37676
+  },
+  "dependency_set_membership": {
+    "ihk_smp_x86_64/current_fork_control.rs": true,
+    "mcctrl/current_fork_control.rs": false,
+    "mcctrl/mcctrl_vm.rs": true
+  },
+  "dispatch_chain": [
+    {
+      "source": {
+        "path": "/home/holden/mckernel-work/host-preparation/native235-wait-error-observation-sdk-successor-20261023-3/source-modules/ihk_smp_x86_64.rs",
+        "sha256": "aa5752bfcf737c013a3721dcb3c454232acf72dcd477cdb210c1cfeb6efc1ac0",
+        "bytes": 36940
+      },
+      "entry": "ihk_os_application_fork_control_current_v1\u2192application.fork_control_current(child,call)"
+    },
+    {
+      "source": {
+        "path": "/home/holden/mckernel-work/host-preparation/native235-wait-error-observation-sdk-successor-20261023-3/source-modules/smp_service.rs",
+        "sha256": "dae95a5e91577134e00d38050db1605ef568b11eaa829270bb47a257885188e5",
+        "bytes": 47662
+      },
+      "entry": "Application::fork_control_current\u2192self.started.runtime.application.fork_control_current(self.token,child.token,call)"
+    },
+    {
+      "source": {
+        "path": "/home/holden/mckernel-work/host-preparation/native235-wait-error-observation-sdk-successor-20261023-3/source-modules/smp_application.rs",
+        "sha256": "3dcfeb5fb00b1aeffcef784d600566c3553f74cf7bc1ccb4109ab3ececcee73f",
+        "bytes": 72000
+      },
+      "entry": "#[path=\"current_fork_control.rs\"] mod current_fork_control; impl Remote selected by exact import"
+    }
+  ],
+  "qualification": "Source+actual acceptedSDK3 compilerdep membership proves production provider and MM path selected. New2filecandidate still needs realmodule compilation/native evidence."
+}

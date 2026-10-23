@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/wait-error-observation-native-successor-1/runtime-wait-observation-1/native_diagnostic_container_owner.py", line 1203, in <module>
+    raise SystemExit(main())
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/wait-error-observation-native-successor-1/runtime-wait-observation-1/native_diagnostic_container_owner.py", line 1197, in main
+    execute_owner(DiagnosticOwner(args.attempt_parent, manifest=args.manifest,
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/wait-error-observation-native-successor-1/runtime-wait-observation-1/native_diagnostic_container_owner.py", line 1179, in execute_owner
+    raise owner.failure
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/wait-error-observation-native-successor-1/runtime-wait-observation-1/native_diagnostic_container_owner.py", line 1147, in execute_owner
+    owner.run()
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/wait-error-observation-native-successor-1/runtime-wait-observation-1/native_diagnostic_container_owner.py", line 1112, in run
+    raise self.failure
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/wait-error-observation-native-successor-1/runtime-wait-observation-1/native_diagnostic_container_owner.py", line 1066, in run
+    started = self._call(["start", "--attach", self.container], timeout=deadline)
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/wait-error-observation-native-successor-1/runtime-wait-observation-1/native_diagnostic_container_owner.py", line 753, in _call
+    raise failure
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/wait-error-observation-native-successor-1/runtime-wait-observation-1/native_diagnostic_container_owner.py", line 716, in _call
+    raise OwnerError("docker command failed: " + argv[0])
+__main__.OwnerError: docker command failed: start

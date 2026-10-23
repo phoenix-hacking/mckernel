@@ -1,0 +1,30 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--core=0:0",
+    "--fsize=8388608:8388608",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/wait-error-observation-native-successor-1/case-235/root-live-admission-wait-1/read_only_native235_admission.py"
+  ],
+  "reviewer": "/root/p12_identity_review",
+  "review_decision": "PASS_EXECUTION_READONLY_ADMISSION_ONCE",
+  "operation_sha256": "7914ec0095e3b5c05fe2ccc8bbceaffb67ebe51b1da9c2353420d50c7943a326",
+  "pid": 3561652,
+  "returncode": 0,
+  "elapsed_seconds": 0.27318389498395845,
+  "direct_child_joined": true,
+  "streams_closed": true,
+  "stdout_bytes": 42220,
+  "stderr_bytes": 0
+}

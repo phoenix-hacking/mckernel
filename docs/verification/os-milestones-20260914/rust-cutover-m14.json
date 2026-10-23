@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-23T05:29:38+00:00",
+  "as_of": "2026-10-23T07:40:53.604496+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -318,7 +318,7 @@
         "kernel/rust/abi.rs"
       ],
       "known_partial_cutovers": [
-        "Canonical idle() now calls sched_idle_runqueue_has_running_result under MCKERNEL_RUST_PROCESS_HELPERS at3914–3937; C loop fallback remains and lock/halt logic remains C.",
+        "Canonical idle() now calls sched_idle_runqueue_has_running_result under MCKERNEL_RUST_PROCESS_HELPERS at3914\u20133937; C loop fallback remains and lock/halt logic remains C.",
         "Idle helper is in kernel/rust/sched_helpers.rs:1949 (not process_helpers.rs). C verifies int/i32 status and list-next layout then passes production offsetof values.",
         "CURRENT retained source checkpoint6f367112 reports80 original C/Rust parity cases, alternate layout and selected/fallback link plus focused ABI review; production TU ABI/default link/new image/native remained pending in that record.",
         "Rust process_helpers exports process add-range orchestration, release/lookup/VM body helpers; accepted FP/post-switch C fixes remain functional requirements.",
@@ -413,7 +413,7 @@
           "owner": "campaign:/root/scratch_growth_prepare",
           "remaining_c_functions": null,
           "rust_consumer": "kernel/rust/sched_helpers.rs::sched_idle_loop_body_result",
-          "next_action": "Complete the already prepared pinned production process TU/full Rust crate and default linked image/current-CPU bridge proof, then applicable native idle/wakeup behavior under normal admission. Preserve current frozen235 image until a coherent cutover candidate is ready.",
+          "next_action": "Run the prepared pinned default C TU/final image link observations and applicable native proof at a reviewed heavy boundary; preserve frozen functional image until cutover candidate accepted.",
           "proof": {
             "implementation": {
               "status": "partial",
@@ -434,8 +434,13 @@
               ]
             },
             "production_link": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "partial",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-2/ordinary-fullcrate-evidence-1/INDEPENDENT-ACTUAL-HOST-CONSUMER-REVIEW.json",
+                  "scope": "Exact pinned nightly production Rust flags/80-source host fullcrate compile exit0/15.412s; ten unique object exports. Default C/final ELF/native remain open."
+                }
+              ]
             },
             "native_validation": {
               "status": "unassessed",
@@ -449,7 +454,7 @@
               "status": "partial",
               "implementation": "source integrated after focused independent acceptance",
               "focused_checks": "108 actual-C/Rust host comparisons and default/fallback consumer checks passed",
-              "production_link": "pending actual pinned whole TU/fullcrate/default image and current-CPU bridge",
+              "production_link": "Exact pinned host full Rust crate and selected object exports PASS; actual default C consumers/final image link/current native proof remain OPEN.",
               "native_validation": "pending matching native idle/wakeup behavior",
               "remaining_dependencies": "C ABI producer and primitive callback bodies remain explicit debt; rest of M14-02-04 and whole file not complete.",
               "evidence": [
@@ -460,6 +465,10 @@
                 {
                   "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/idle-orchestration-1/ACTUAL-BODY-RESULT-3.json",
                   "scope": "108 actual original-C/Rust byte-state and callback-order comparisons plus host default/fallback consumer checks; no production image or native proof."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-2/ordinary-fullcrate-evidence-1/INDEPENDENT-ACTUAL-HOST-CONSUMER-REVIEW.json",
+                  "scope": "Exact pinned nightly production Rust flags/80-source host fullcrate compile exit0/15.412s; ten unique object exports. Default C/final ELF/native remain open."
                 }
               ]
             }
@@ -1017,7 +1026,7 @@
           "owner": "foreground:/root/m14_memory_cutover",
           "remaining_c_functions": null,
           "rust_consumer": "kernel/rust/x86_memory_helpers.rs::x86_clear_old_action_bridge",
-          "next_action": "Run pinned GCC14 selected TU and production Rust/default matched link on the combined idle+memory derivative, then relevant native clear/free-range proof. Frozen functional235 image unchanged.",
+          "next_action": "Run the prepared pinned default C TU/final image link observations and applicable native proof at a reviewed heavy boundary; preserve frozen functional image until cutover candidate accepted.",
           "proof": {
             "implementation": {
               "status": "partial",
@@ -1062,8 +1071,13 @@
               ]
             },
             "production_link": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "partial",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-2/ordinary-fullcrate-evidence-1/INDEPENDENT-ACTUAL-HOST-CONSUMER-REVIEW.json",
+                  "scope": "Exact pinned nightly production Rust flags/80-source host fullcrate compile exit0/15.412s; ten unique object exports. Default C/final ELF/native remain open."
+                }
+              ]
             },
             "native_validation": {
               "status": "unassessed",
@@ -1085,7 +1099,7 @@
               "status": "partial",
               "source_state": "Exact reviewed two-file Rust/default-selection postimages integrated canonically; frozen functional image unchanged.",
               "focused_checks": "129888 original-C/Rust comparisons plus complete selected GCC9 TU/ABI/three callback relocations PASS; groups joined.",
-              "production_link": "Pending pinned GCC14 TU, full production Rust and matched default link.",
+              "production_link": "Exact pinned host full Rust crate and selected object exports PASS; actual default C consumers/final image link/current native proof remain OPEN.",
               "native_validation": "pending matching clear/free-range behavior",
               "evidence": [
                 {
@@ -1099,6 +1113,10 @@
                 {
                   "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/memory-combined-preparation-1/CANONICAL-MEMORY-INTEGRATION.json",
                   "scope": "Canonical source increment; no native/file/area closure."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-2/ordinary-fullcrate-evidence-1/INDEPENDENT-ACTUAL-HOST-CONSUMER-REVIEW.json",
+                  "scope": "Exact pinned nightly production Rust flags/80-source host fullcrate compile exit0/15.412s; ten unique object exports. Default C/final ELF/native remain open."
                 }
               ]
             },
@@ -1108,12 +1126,16 @@
               "status": "partial",
               "source_state": "Canonical two-file reviewed callback cutover integrated; selected C body excluded and existing Rust callee reused.",
               "focused_checks": "Actual selected GCC9 C TU, complete Rust module ABI/provider and partial-link resolution pass; four callsites preserved.",
-              "production_link": "PinnedGCC14/fullcrate/defaultkernel open.",
+              "production_link": "Exact pinned host full Rust crate and selected object exports PASS; actual default C consumers/final image link/current native proof remain OPEN.",
               "native_validation": "Matching native proof open; frozen functional image unchanged.",
               "evidence": [
                 {
                   "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/CANONICAL-INTEGRATION.json",
                   "scope": "Canonical selected C physical-address callback body replaced by Rust export calling existing Rust phys_to_virt. Exact reviewed ABI/default selector; fallback old body remains. Frozen10972 unchanged."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-2/ordinary-fullcrate-evidence-1/INDEPENDENT-ACTUAL-HOST-CONSUMER-REVIEW.json",
+                  "scope": "Exact pinned nightly production Rust flags/80-source host fullcrate compile exit0/15.412s; ten unique object exports. Default C/final ELF/native remain open."
                 }
               ]
             }
@@ -1435,6 +1457,11 @@
       "as_of": "2026-10-23T05:27:12+00:00",
       "kind": "private_code_and_fixture",
       "summary": "M14-05-03 old-PTE body/adapter private Rust candidate and129888 original-C/Rust fixtures pass. No new canonical, production, native, whole-file or practical closure."
+    },
+    {
+      "as_of": "2026-10-23T07:40:53.604496+00:00",
+      "kind": "actual_fullcrate_consumer_partial",
+      "summary": "Pinned host full production Rust crate compiled and ten selected exports independently accepted. M14-02-04/M14-05-03 remain PARTIAL; default C/final ELF/native and all area/file closures stay open. Functional35 unchanged29/35."
     }
   ]
 }

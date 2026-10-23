@@ -1,3 +1,29 @@
+## Terminal-control Rust repair integrated; M14 full crate accepted — 2026-10-23 07:45 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Original checks29/35; no new closed IDs; final cycles/launches/actualmixedminutes0/0/0.
+ActualWAITobservernativecbd55 failed37.186s/raw256/13Bparentstart, nowcaptured exact
+application_wait phaseoperationerrno-16 forparent255. Originalfailedraw14files341135B
+retained. Independentphysicale1afa72c accepts77rootfiles/25clientreaps/ownedCIDremoval/
+releasedrecords/freshcompletePROC+27:4+8paths+emptyname/label; no duplicatecleanup.
+Private terminalcontrol selectors2/3 ce.needs_cleanup gate conflicts with post-BEGIN
+revoke; postreap mm_users0 also rejected alias revoke despite structural pin. Coherent
+Rusttwofilefix81228204/current_fork_control +ba957d73/mcctrl_vm independentlySOURCE
+PASS andcanonicalintegrated. FourteenactualbodyfixturesPASS with explicitadapters;
+realACK/publicationtail unchanged, no syntheticrelease. Exactzero-users branch requires
+retainedMMpin+write-lock/recheck0/no foreignalias/WHOLEtreeempty; otherwiseholds.
+ActualsavedcompilerdepsbindSMPprovider andMCCTRL; bothmodulesaffected, IHKstable.
+Next ownerbegin_cleanup_provider executes SDK4prep/stage underacceptedordinaryCPU0;
+source/profile/exactbuildrelease and actualnative proof stillpending. Image10972/
+launcher/original235app preserved; no replay of oldfailedinputs.
+M14 independently advances: pinnedHOSTproductionRustfullcrateactual0/15.412s,80bound
+Rustinputs/object13632104B54449c60; actualnm0/.0526s/alltenselectedexportsoneT. Both
+groupsretired; independenthostconsumerreviewPASS.49warnings30532B and auxiliary
+cfgtextlocationparserfailure retained. This advances M14-02-04/05-03 partialconsumer
+proof only; defaultC/finalELF/native/file/area closures stayopen. ExactGCC14hostfeasibility
+lookupindependent; no optionalaudit/extraimagebuild. No resize performed; included-only
+100% guard/servicechecks remain. Originalvelocitybaselinepreserved; no speedupclaim.
+
 ## WAIT-observer SDK accepted; actual native stage complete — 2026-10-23 07:13 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

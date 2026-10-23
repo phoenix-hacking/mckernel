@@ -1,0 +1,167 @@
+{
+  "actual_runner_body_unchanged": true,
+  "admitted_selected_M14_cap_bytes": 1048576,
+  "cases": 13,
+  "children": [
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "-c",
+        "import resource; a=resource.getrlimit(resource.RLIMIT_FSIZE); assert a==(1048576,1048576),a; print(\"PASS_CHILD_FSIZE_1048576\")"
+      ],
+      "direct_child_joined": true,
+      "pid": 3557777,
+      "returncode": 0,
+      "start": 53664660,
+      "whole_group_absent": true
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-rW",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o"
+      ],
+      "direct_child_joined": true,
+      "pid": 3557778,
+      "returncode": 0,
+      "start": 53664667,
+      "whole_group_absent": true
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "-c",
+        "import resource; a=resource.getrlimit(resource.RLIMIT_FSIZE); assert a==(33554432,33554432),a; print(\"PASS_CHILD_FSIZE_33554432\")"
+      ],
+      "direct_child_joined": true,
+      "pid": 3557779,
+      "returncode": 0,
+      "start": 53664672,
+      "whole_group_absent": true
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "-c",
+        "import resource; a=resource.getrlimit(resource.RLIMIT_FSIZE); assert a==(4096,4096),a; print(\"PASS_CHILD_FSIZE_4096\")"
+      ],
+      "direct_child_joined": true,
+      "pid": 3557780,
+      "returncode": 0,
+      "start": 53664677,
+      "whole_group_absent": true
+    }
+  ],
+  "command_rows": [
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "-c",
+        "import resource; a=resource.getrlimit(resource.RLIMIT_FSIZE); assert a==(1048576,1048576),a; print(\"PASS_CHILD_FSIZE_1048576\")"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-2/correction1/actual-permission-fixture-1",
+      "exit_code": null,
+      "phase": "m14-original32-rejected",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing."
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "-c",
+        "import resource; a=resource.getrlimit(resource.RLIMIT_FSIZE); assert a==(1048576,1048576),a; print(\"PASS_CHILD_FSIZE_1048576\")"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-2/correction1/actual-permission-fixture-1",
+      "exit_code": 0,
+      "phase": "m14-corrected1MiB-permitted",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "5c0da1c608b339a7a79f1674175cc5b672af42f8a113e3a45787aa4b5e5eadc4"
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-rW",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-2/correction1/actual-permission-fixture-1",
+      "exit_code": 0,
+      "phase": "m14-actual-baseline-process-relocations",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "ac78892425cb18de457514f7656b0dfb317e68ac1b1e86d44836f9dca1a98850"
+    }
+  ],
+  "new_driver_sha256": "1d1d600cdd1f3a1236c89b736c0d57f4c52b148b2dda30b99afe00b4fcf2724c",
+  "old_driver_sha256": "46b426530bbde4054d19af52fc815aece237e20b84031a2594c1575a0dbe5942",
+  "production_compilers": 0,
+  "real_commands": 4,
+  "root_Docker_guests": 0,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_M14_PERMISSION_BODY_AND_UNCHANGED_RUNNER_CAP",
+  "tests": [
+    {
+      "case": "original_M14_32MiB_refused_before_launch",
+      "pass_": true
+    },
+    {
+      "case": "corrected_M14_1MiB_real_child_limit_and_command",
+      "pass_": true
+    },
+    {
+      "bytes": 485588,
+      "case": "real_baseline_process_relocation_output_fits1MiB",
+      "pass_": true
+    },
+    {
+      "case": "normal-none_unchanged_real_child_limit",
+      "pass_": true
+    },
+    {
+      "case": "normal4096_unchanged_real_child_limit",
+      "pass_": true
+    },
+    {
+      "case": "unrelated_invalid_cap_0",
+      "pass_": true
+    },
+    {
+      "case": "unrelated_invalid_cap_-1",
+      "pass_": true
+    },
+    {
+      "case": "unrelated_invalid_cap_1048577",
+      "pass_": true
+    },
+    {
+      "case": "unrelated_invalid_cap_33554432",
+      "pass_": true
+    },
+    {
+      "case": "unrelated_invalid_cap_True",
+      "pass_": true
+    },
+    {
+      "case": "unrelated_invalid_cap_False",
+      "pass_": true
+    },
+    {
+      "case": "unrelated_invalid_cap_'1048576'",
+      "pass_": true
+    },
+    {
+      "case": "unrelated_invalid_cap_1.0",
+      "pass_": true
+    }
+  ],
+  "unrelated_guard_remains_max1MiB": true
+}

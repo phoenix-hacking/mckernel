@@ -57,7 +57,9 @@ impl Remote {
             let c=slots.iter().position(|e|e.as_ref().is_some_and(|e|e.key()==child)).ok_or(ENOENT)?;
             if p==c{return Err(EINVAL);}
             let pe=slots[p].as_ref().unwrap();let ce=slots[c].as_ref().unwrap();
-            if pe.closed||pe.needs_cleanup||pe.quarantined||ce.closed||ce.needs_cleanup||ce.quarantined{return Err(EBUSY);}
+            // Child terminal intent closes ordinary admissions but must not block
+            // this exact retained selector2/3 revoke and destructor-ACK route.
+            if pe.closed||pe.needs_cleanup||pe.quarantined||ce.closed||ce.quarantined{return Err(EBUSY);}
             let owner=ce.fork_ingress.as_ref().ok_or(EACCES)?;let image=ce.inherited_root.as_ref().ok_or(EACCES)?;
             if owner.parent!=parent||owner.child!=child||!owner.sealed.load(Ordering::Acquire)
                 ||!owner.first_return_published{return Err(EACCES);}
