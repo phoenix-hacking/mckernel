@@ -1,0 +1,34 @@
+{
+  "schema": "mckernel.p12.owner-aware-host-capture.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "NOT_RELEASED_NOT_EXECUTED",
+  "wrapper_sha256": "7e83cdc3a6714a8000ca8e89eacbc30f1116d967be9a97b191ce31f797bf4e59",
+  "command_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/smoke.NOT-RELEASED.py",
+    "sha256": "df938a0f5275c62b83d0624180a36ec9df961b1aca11fac3595e77bea5a987d8",
+    "bytes": 5566
+  },
+  "capture_directory": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/actual-capture-1",
+  "soft_wall_seconds": 60,
+  "command_count": 1,
+  "stream_slots": 2,
+  "retained_copies": 1,
+  "stream_file_bytes": 402653184,
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=unlimited:unlimited",
+    "--fsize=402653184:402653184",
+    "--core=0:0",
+    "--nofile=4096:4096",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/smoke.NOT-RELEASED.py",
+    "df938a0f5275c62b83d0624180a36ec9df961b1aca11fac3595e77bea5a987d8"
+  ]
+}

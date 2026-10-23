@@ -1,0 +1,16 @@
+--- frozen-owner-a156.py
++++ private-source/native_diagnostic_container_owner.py
+@@ -355,7 +355,12 @@
+                 if pid:
+                     # Cancellation stays deferred through exact reap ownership.
+                     self.reaped = True
+-                    self.returncode = os.waitstatus_to_exitcode(status)
++                    if os.WIFEXITED(status):
++                        self.returncode = os.WEXITSTATUS(status)
++                    elif os.WIFSIGNALED(status):
++                        self.returncode = -os.WTERMSIG(status)
++                    else:
++                        raise ValueError("wait status does not describe an exited or signaled process")
+             finally:
+                 signal.pthread_sigmask(signal.SIG_SETMASK, mask)
+             if not self.reaped:

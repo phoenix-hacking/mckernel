@@ -1419,6 +1419,28 @@ static void x86_clear_range_log_bridge(int event, void *args,
 	}
 }
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+/* Private clear-range layout consumed by the Rust old-entry callback. */
+_Static_assert(sizeof(struct clear_range_args) == 40, "clear_range_args size");
+_Static_assert(__alignof__(struct clear_range_args) == 8, "clear_range_args alignment");
+_Static_assert(__builtin_offsetof(struct clear_range_args, free_physical) == 0,
+		"clear_range_args free_physical");
+_Static_assert(__builtin_offsetof(struct clear_range_args, memobj) == 8,
+		"clear_range_args memobj");
+_Static_assert(__builtin_offsetof(struct clear_range_args, vm) == 16,
+		"clear_range_args vm");
+_Static_assert(__builtin_offsetof(struct clear_range_args, addr) == 24,
+		"clear_range_args addr");
+_Static_assert(__builtin_offsetof(struct clear_range_args, nr_addr) == 32,
+		"clear_range_args nr_addr");
+_Static_assert(__builtin_offsetof(struct clear_range_args, max_nr_addr) == 36,
+		"clear_range_args max_nr_addr");
+_Static_assert(MF_ZEROFILL == 0x0010 && MF_PRIVATE == 0x200000 && MF_XPMEM == 0x10000,
+		"clear-range memobj flags");
+extern int x86_clear_old_action_bridge(void *args0, unsigned long old,
+		size_t pgsize, unsigned long *physp, void **pagep,
+		int *fileoffp);
+#else
 static int clear_range_old_action(struct clear_range_args *args, pte_t old,
 		size_t pgsize, unsigned long *physp, struct page **pagep,
 		int *fileoffp)
@@ -1462,6 +1484,7 @@ static int x86_clear_old_action_bridge(void *args0, unsigned long old,
 
 	return ret;
 }
+#endif
 
 static int clear_range_l1(void *args0, pte_t *ptep, uint64_t base,
 		uint64_t start, uint64_t end)

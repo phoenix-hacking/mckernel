@@ -13,7 +13,7 @@ def fixture():
  m.SDK_SUCCESSOR_PATH=sdkpath;m.SDK_SUCCESSOR_SHA=sdksha;m.SDK_SUCCESSOR_DECISION='EXPLICIT_FIXTURE_ACCEPTANCE';m.SNAPSHOT_BINDING_SHA=patchsha
  b['authority']['current_SDK_acceptance']=dict(path=sdkpath,sha256=sdksha,size=1,mode=33152);b['authority']['begin_snapshot_binding']=dict(path=m.SNAPSHOT_BINDING_PATH,sha256=patchsha,size=1,mode=33152)
  for member,sha in [('modules/ihk-smp-x86_64.ko','a'*64),('modules/mcctrl.ko','b'*64)]:b['replacements'][member].update(sha256=sha,size=1234)
- sdk=dict(status='PASS',implementation_ownership=False,decision=m.SDK_SUCCESSOR_DECISION,physical_acceptance=True,native_acceptance=False,source_identity='db7f2ac4ddc023874ddf6b2b8de2c86c41bbf6efb601f33d4d0f501aa1957598',artifacts={Path(k).name:dict(bytes:v['size'],sha256=v['sha256'])for k,v in b['replacements'].items()if k.startswith('modules/')})
+ sdk=dict(status='PASS',implementation_ownership=False,decision=m.SDK_SUCCESSOR_DECISION,physical_acceptance=True,native_acceptance=False,source_identity='db7f2ac4ddc023874ddf6b2b8de2c86c41bbf6efb601f33d4d0f501aa1957598',artifacts={Path(k).name:dict(bytes=v['size'],sha256=v['sha256'])for k,v in b['replacements'].items()if k.startswith('modules/')})
  patch=dict(matched_artifact_acceptance=dict(sdk=dict(path=sdkpath,sha256=sdksha)),changed_record_allowlist=['modules/ihk-smp-x86_64.ko','modules/mcctrl.ko'],new_runtime_tuple={k:copy.deepcopy(b['replacements'][k])for k in ['modules/ihk-smp-x86_64.ko','modules/mcctrl.ko']})
  docs=dict(current_SDK_acceptance=sdk,begin_snapshot_binding=patch,v3_snapshot_receipt=load(b['authority']['v3_snapshot_receipt']['path']))
  old=load(b['authority']['baseline_overlay_manifest']['path'])['final_map']

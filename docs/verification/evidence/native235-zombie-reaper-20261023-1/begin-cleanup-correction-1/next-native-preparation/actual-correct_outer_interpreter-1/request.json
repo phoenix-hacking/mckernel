@@ -1,0 +1,32 @@
+{
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/next-native-preparation/correct_outer_interpreter.py"
+  ],
+  "cleanup_timeout_seconds": 6.0,
+  "cwd": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/next-native-preparation",
+  "env": {
+    "HOME": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/next-native-preparation",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin:/bin",
+    "TMPDIR": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/next-native-preparation"
+  },
+  "executable_path": "/usr/bin/taskset",
+  "schema_version": 1,
+  "stderr_limit_bytes": 8388608,
+  "stdin_path": null,
+  "stdout_limit_bytes": 8388608,
+  "timeout_seconds": 90.0
+}

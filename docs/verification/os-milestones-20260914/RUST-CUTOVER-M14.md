@@ -16,7 +16,7 @@ Use [rust-cutover-m14.json](rust-cutover-m14.json) as the editable worklist. The
 | M14-F02 | `kernel/process.c` | 5 | partial idle source/host proof; production/native open |
 | M14-F03 | `kernel/syscall.c` | 5 | open; partial Rust already exists |
 | M14-F04 | `arch/x86_64/kernel/cpu.c` | 5 | open; partial Rust already exists |
-| M14-F05 | `arch/x86_64/kernel/memory.c` | 5 | partial private memory body/host checks; production/native open |
+| M14-F05 | `arch/x86_64/kernel/memory.c` | 5 | partial canonical memory body/host TU checks; production/native open |
 | M14-F06 | `arch/x86_64/kernel/syscall.c` | 5 | open; partial Rust already exists |
 
 ## Recorded implementation progress — 2026-10-23
@@ -29,13 +29,18 @@ and [actual-body result](../evidence/compute-idle-rust-cutover-20261023-1/idle-o
 Actual pinned whole-TU/fullcrate/default-link/current-CPU bridge and native proof
 remain pending; the frozen235 image and whole-file retirement count are unchanged.
 
-M14-05-03 is **partial**: a private Rust replacement now owns the live
-`clear_range_old_action` orchestration and its adapter, reusing existing Rust
-helpers. The unchanged original-C/Rust fixture passes129,888 vectors, including
-callback/output ordering and independent expectations. CPU6 exited/joined and
-was released. See the [handoff](/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-1/m14-memory/REPORT.md).
-Canonical integration, actual selected production compile/link and native proof
-remain pending; no whole-area/file or practical closure is claimed.
+M14-05-03 is **partial**: the reviewed two-file Rust replacement for
+`clear_range_old_action` orchestration and its adapter is integrated in canonical
+source, reusing existing Rust helpers. The original-C/Rust fixture passes129,888
+vectors, including callback/output ordering and independent expectations. The
+complete selected GCC9 C translation unit also passes its layout witnesses:
+both original C definitions are excluded and the object has one Rust callback
+import with three relocations. All ordinary compiler groups joined. See the
+[source integration](../evidence/compute-idle-rust-cutover-20261023-1/memory-combined-preparation-1/CANONICAL-MEMORY-INTEGRATION.json)
+and [actual selected-TU evidence](../evidence/compute-idle-rust-cutover-20261023-1/memory-combined-preparation-1/ACTUAL-ORDINARY-RESULT.md).
+Pinned GCC14 production Rust/default-link and native proof remain open. The
+frozen functional image is unchanged; no whole-area/file or practical closure
+is claimed.
 
 ## M14-F01: `kernel/mem.c`
 

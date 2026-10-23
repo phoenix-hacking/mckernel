@@ -1,3 +1,36 @@
+## Actual BEGIN SDK/native result; physical clearance — 2026-10-23 06:03 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Original checks29/35, no new literal closure. Final-profile cycles/launches/actual
+mixed minutes0/0/0. New BEGIN SDK56d2 actualbuildPASS22.775s; independent artifact
+and physical acceptance3c1b517b: IHKdaced291 unchanged, SMP1053fc9f, mcctrl20fbc505.
+First release metadata attempt failed before admission on extra source_review.bytes;
+original preserved, one bounded correction passed actual authenticate .0022s before
+successful guarded build. No unchanged kernel/image/launcher rebuild.
+Nine actual ordinary235 stages passed21.867s plus139current source bindings verified.
+Fresh root admissionPASS.298s, metadataPASS.035s, guardPASS.180s; strictmanifestbd558564.
+Actual native235 aeae FAILED36.832s: wrong payload exit1, not deadline. ND report
+raw status256,13Bparentstart,stderr0/EOF/nontruncated/procfs_emptytrue in~1.395s.
+Child data34+EOF and prompt wait4return259 observed; child+parent BEGINintent0 and
+real cleanup ACK observed. Post-wait assertion/captured status under focused diagnosis;
+no new kernel cause presumed and no unchanged replay. Source6test success is not
+native acceptance. Raw13files335912B retained with original failure and retention-map
+at begin-cleanup-correction-1/next-native-preparation/failed-native-aeae-raw-2/.
+Independent physical acceptance dd247f88: all25clients reaped, ownedCID removed,
+complete publisher-freePROC, positive27:4 and8pathabsence, freshname/label empty.
+No extra IDquery or duplicate cleanup needed. Critical next owner native235_zombie_fix
+reads exact failed app/serial/status to identify the first failed assertion;227 staysheld.
+Private Python3.8 direct wait decoder2525d252 passes actual0/37/SIGTERM consumer
+checks and independentSOURCE PASS; futuretinyNONE operation ready, notexecuted.
+M14 separately advances: canonical idle3files+108comparisons and CPUbridge6cases;
+canonical memory2files exactreviewedclear-old-action Rustbody+129888vectors plus
+complete selectedGCC9 TU/layout/import/three relocations PASS. PinnedGCC14/Rust
+production defaultlink/native remain open, frozen10972 unchanged. No file/area or
+practical closure from those partial increments. Growth110→142 remains authorized;
+exactmaintenance preparation reuses finalsource/reviews at this retired boundary,
+without overlap with workloads. No resize yet. Original velocity baseline preserved;
+no closure-speedup or 4x claim.
+
 ## P12 owner physically retired; BEGIN SDK ready — 2026-10-23 05:30 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

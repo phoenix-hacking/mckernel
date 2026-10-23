@@ -1,0 +1,147 @@
+--- a/arch/x86_64/kernel/memory.c
++++ b/arch/x86_64/kernel/memory.c
+@@ -1419,6 +1419,28 @@
+ 	}
+ }
+ 
++#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
++/* Private clear-range layout consumed by the Rust old-entry callback. */
++_Static_assert(sizeof(struct clear_range_args) == 40, "clear_range_args size");
++_Static_assert(__alignof__(struct clear_range_args) == 8, "clear_range_args alignment");
++_Static_assert(__builtin_offsetof(struct clear_range_args, free_physical) == 0,
++		"clear_range_args free_physical");
++_Static_assert(__builtin_offsetof(struct clear_range_args, memobj) == 8,
++		"clear_range_args memobj");
++_Static_assert(__builtin_offsetof(struct clear_range_args, vm) == 16,
++		"clear_range_args vm");
++_Static_assert(__builtin_offsetof(struct clear_range_args, addr) == 24,
++		"clear_range_args addr");
++_Static_assert(__builtin_offsetof(struct clear_range_args, nr_addr) == 32,
++		"clear_range_args nr_addr");
++_Static_assert(__builtin_offsetof(struct clear_range_args, max_nr_addr) == 36,
++		"clear_range_args max_nr_addr");
++_Static_assert(MF_ZEROFILL == 0x0010 && MF_PRIVATE == 0x200000 && MF_XPMEM == 0x10000,
++		"clear-range memobj flags");
++extern int x86_clear_old_action_bridge(void *args0, unsigned long old,
++		size_t pgsize, unsigned long *physp, void **pagep,
++		int *fileoffp);
++#else
+ static int clear_range_old_action(struct clear_range_args *args, pte_t old,
+ 		size_t pgsize, unsigned long *physp, struct page **pagep,
+ 		int *fileoffp)
+@@ -1462,6 +1484,7 @@
+ 
+ 	return ret;
+ }
++#endif
+ 
+ static int clear_range_l1(void *args0, pte_t *ptep, uint64_t base,
+ 		uint64_t start, uint64_t end)
+--- a/kernel/rust/x86_memory_helpers.rs
++++ b/kernel/rust/x86_memory_helpers.rs
+@@ -3,9 +3,11 @@
+ use core::sync::atomic::{AtomicU64, Ordering};
+ 
+ use crate::abi::{
+-    CInt, CLong, CULong, CpuLocalVar, IkcScdPacket, IkcScdPacketTraditional, ProcessVm, SizeT,
++    CInt, CLong, CULong, CpuLocalVar, IkcScdPacket, IkcScdPacketTraditional, Memobj, ProcessVm, SizeT,
+     Thread,
+ };
++
++use crate::page_helpers::{page_is_in_memobj, Page};
+ 
+ const PTATTR_ACTIVE: CULong = 0x01;
+ const PTATTR_WRITABLE: CULong = 0x02;
+@@ -170,6 +172,7 @@
+ const X86_PT_PRINT_LOG_LARGE: CInt = 4;
+ 
+ unsafe extern "C" {
++    fn phys_to_page(phys: CULong) -> *mut Page;
+     fn get_this_cpu_local_var() -> *mut CpuLocalVar;
+     fn x86_addr_init_pt_loaded_bridge() -> CInt;
+     fn x86_addr_log_bridge(event: CInt, value: CULong);
+@@ -2301,6 +2304,84 @@
+     }
+ }
+ 
++// Matches memory.c's private clear_range_args; paired C witnesses guard this ABI.
++#[repr(C)]
++struct X86ClearRangeArgs {
++    free_physical: CInt,
++    memobj: *mut Memobj,
++    vm: *mut c_void,
++    addr: *mut CULong,
++    nr_addr: CInt,
++    max_nr_addr: CInt,
++}
++
++const _: () = {
++    assert!(core::mem::size_of::<X86ClearRangeArgs>() == 40);
++    assert!(core::mem::align_of::<X86ClearRangeArgs>() == 8);
++    assert!(core::mem::offset_of!(X86ClearRangeArgs, free_physical) == 0);
++    assert!(core::mem::offset_of!(X86ClearRangeArgs, memobj) == 8);
++    assert!(core::mem::offset_of!(X86ClearRangeArgs, vm) == 16);
++    assert!(core::mem::offset_of!(X86ClearRangeArgs, addr) == 24);
++    assert!(core::mem::offset_of!(X86ClearRangeArgs, nr_addr) == 32);
++    assert!(core::mem::offset_of!(X86ClearRangeArgs, max_nr_addr) == 36);
++};
++
++// Retires the selected C clear_range_old_action and its output adapter. The
++// caller guarantees args0/physp are valid; pagep/fileoffp remain optional.
++#[no_mangle]
++pub unsafe extern "C" fn x86_clear_old_action_bridge(
++    args0: *mut c_void,
++    old: CULong,
++    pgsize: CULong,
++    physp: *mut CULong,
++    pagep: *mut *mut c_void,
++    fileoffp: *mut CInt,
++) -> CInt {
++    const MF_ZEROFILL: u32 = 0x0010;
++    const MF_PRIVATE: u32 = 0x200000;
++    const MF_XPMEM: u32 = 0x10000;
++
++    let args = args0.cast::<X86ClearRangeArgs>();
++    // C snapshots flags before decoding/publishing outputs and page lookup.
++    let memobj = unsafe { (*args).memobj };
++    let memobj_flags = if memobj.is_null() {
++        0
++    } else {
++        unsafe { (*memobj).flags }
++    };
++    let mut is_fileoff = 0;
++    let mut is_dirty = 0;
++    unsafe {
++        x86_clear_range_old_entry_result(old, pgsize, physp, &mut is_fileoff, &mut is_dirty);
++        if !fileoffp.is_null() {
++            *fileoffp = is_fileoff;
++        }
++    }
++
++    let page = if is_fileoff == 0 {
++        unsafe { phys_to_page(*physp) }
++    } else {
++        core::ptr::null_mut()
++    };
++    let has_page = !page.is_null();
++    let page_in_memobj = has_page && unsafe { page_is_in_memobj(page) } != 0;
++    let action = x86_clear_range_old_action_result(
++        is_fileoff,
++        unsafe { (*args).free_physical },
++        has_page as CInt,
++        page_in_memobj as CInt,
++        is_dirty,
++        unsafe { !(*args).memobj.is_null() } as CInt,
++        (memobj_flags & (MF_ZEROFILL | MF_PRIVATE)) as CInt,
++        (memobj_flags & MF_XPMEM) as CInt,
++    );
++    // The former C adapter publishes the page only after action selection.
++    if !pagep.is_null() {
++        unsafe { *pagep = page.cast() };
++    }
++    action
++}
++
+ #[no_mangle]
+ pub extern "C" fn x86_clear_range_old_action_result(
+     is_fileoff: i32,

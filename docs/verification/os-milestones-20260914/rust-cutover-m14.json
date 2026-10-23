@@ -318,7 +318,7 @@
         "kernel/rust/abi.rs"
       ],
       "known_partial_cutovers": [
-        "Canonical idle() now calls sched_idle_runqueue_has_running_result under MCKERNEL_RUST_PROCESS_HELPERS at3914\u20133937; C loop fallback remains and lock/halt logic remains C.",
+        "Canonical idle() now calls sched_idle_runqueue_has_running_result under MCKERNEL_RUST_PROCESS_HELPERS at3914–3937; C loop fallback remains and lock/halt logic remains C.",
         "Idle helper is in kernel/rust/sched_helpers.rs:1949 (not process_helpers.rs). C verifies int/i32 status and list-next layout then passes production offsetof values.",
         "CURRENT retained source checkpoint6f367112 reports80 original C/Rust parity cases, alternate layout and selected/fallback link plus focused ABI review; production TU ABI/default link/new image/native remained pending in that record.",
         "Rust process_helpers exports process add-range orchestration, release/lookup/VM body helpers; accepted FP/post-switch C fixes remain functional requirements.",
@@ -1017,7 +1017,7 @@
           "owner": "foreground:/root/m14_memory_cutover",
           "remaining_c_functions": null,
           "rust_consumer": "kernel/rust/x86_memory_helpers.rs::x86_clear_old_action_bridge",
-          "next_action": "Reuse the completed private two-file patch and independent source review; prepare actual selected memory.c ABI/relocation and production Rust ownership checks under a fresh appropriate grant, then a coherent successor link and applicable native clear/free-range proof. Keep current235 image unchanged.",
+          "next_action": "Run pinned GCC14 selected TU and production Rust/default matched link on the combined idle+memory derivative, then relevant native clear/free-range proof. Frozen functional235 image unchanged.",
           "proof": {
             "implementation": {
               "status": "partial",
@@ -1033,6 +1033,10 @@
                 {
                   "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-1/m14-memory/SOURCE-REVIEW.md",
                   "scope": "Independent source PASS for exact two-file bounded old-PTE body/adapter; no production or native credit."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/memory-combined-preparation-1/CANONICAL-MEMORY-INTEGRATION.json",
+                  "scope": "Exact independently reviewed two-file postimages integrated canonically after all preimages verified. Frozen10972 unchanged; whole file/area remains open."
                 }
               ]
             },
@@ -1042,6 +1046,10 @@
                 {
                   "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-1/m14-memory/fixture-receipt.json",
                   "scope": "129888 exact original-C/Rust host vectors including independent expectations and callback/output order,1.017s/exit0/emptyerr/groupabsent. No actual selected production TU/link/native proof."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/memory-combined-preparation-1/ORDINARY-SELECTED-MEMORY-RESULT-1.json",
+                  "scope": "Complete selected GCC9 memory.c TU/layout witnesses PASS, both old C definitions excluded, unique Rust callback import and three relocations. Whole group joined. Pinned production Rust/link/native remain open."
                 }
               ]
             },
@@ -1056,7 +1064,7 @@
           },
           "work_assignment": {
             "function": "clear_range_old_action and its existing clear-old-action bridge",
-            "phase": "Private code and original-C/Rust fixture independently source-accepted; canonical production/native work remains pending.",
+            "phase": "Canonical bounded slice integrated after independent source acceptance and ordinary complete-TU check; pinned production/default-link/native open.",
             "source_scope": "Exact supported default C body and existing Rust action-classification consumer; preserve side-effect and short-circuit order.",
             "private_root": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-1/m14-memory/",
             "ordinary_profile_grant": "Background dispatcher05:20UTC: CPU6 one job, AS2GiB, CPU60s, wall90s+6s cleanup, FSIZE32MiB,NOFILE256,core0; no root/full production build/image change/guest.",
@@ -1067,9 +1075,9 @@
               "id": "M14-05-03-S01",
               "title": "Old-PTE clear-range action and adapter",
               "status": "partial",
-              "source_state": "Private two-file Rust/default-selection candidate independently source-accepted; canonical source unchanged.",
-              "focused_checks": "129888 actual original-C/Rust comparisons pass; CPU6 released after whole join",
-              "production_link": "pending actual selected memory TU/Rust/full matched link",
+              "source_state": "Exact reviewed two-file Rust/default-selection postimages integrated canonically; frozen functional image unchanged.",
+              "focused_checks": "129888 original-C/Rust comparisons plus complete selected GCC9 TU/ABI/three callback relocations PASS; groups joined.",
+              "production_link": "Pending pinned GCC14 TU, full production Rust and matched default link.",
               "native_validation": "pending matching clear/free-range behavior",
               "evidence": [
                 {
@@ -1079,6 +1087,10 @@
                 {
                   "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-1/m14-memory/fixture-receipt.json",
                   "scope": "129888 exact original-C/Rust host vectors including independent expectations and callback/output order,1.017s/exit0/emptyerr/groupabsent. No actual selected production TU/link/native proof."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/memory-combined-preparation-1/CANONICAL-MEMORY-INTEGRATION.json",
+                  "scope": "Canonical source increment; no native/file/area closure."
                 }
               ]
             }
