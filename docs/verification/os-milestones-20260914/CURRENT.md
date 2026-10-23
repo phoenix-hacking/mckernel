@@ -1,3 +1,81 @@
+## Failed91c positively retired; accepted RustEVENTFD repair advances SDK6 — 2026-10-23 17:49 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Independent actualphysicalPASS: 37fileaa232export/23directreaps, exactCID765ec4removed
+andthreeemptyqueries; fresh97c1f319 twoCOMPLETE305/no publishers/all25identitiesabsent,
+observedinit3824358absentboth/birthNULL; mutex5e8d permanent27:4/eightpathsabsent.
+Both0/joined/gone/closed/emptyerr. Rootuninterruptedcontinuity; current_live_postjoin
+FAILED_EXPERT91C_LONG_POSITIVELY_RETIRED (nonNULL), physical_clearance true/noheavy.
+OriginalFAILOwnerSignal15/secondaryCommandError preserved; no duplicatecleanup.
+ExacttypedEVENTFD Rustsource f439e780 integrated canonicalhost-kernel/native-rust/
+smp_service.rs fromffef after independentPASS real128BABI/payload24/legacyemptylist
+semantics and9actualRust1.92tests (.163763compile/.030556run); onefixturewrapperport
+correctionpreserved, candidateunchanged. Unknown/foreign/malformedfailures retained,
+no inventedACK/subscriber/cleanupcredit. Actualguesttype/trigger/panicUNKNOWN.
+Next existingSDK6affectedSMP source/stage preparation m14_callback, CPU6ordinary;
+fullcrate/module/native unproven. No unchangedimage/launcher rebuild/replay.
+Practical34/35,whole12/14/acceptedLONG0launches0mixedminutes; no literalclosure.
+M14 realGCC9layout130+26+15 andcandidate10actualsource/pure47.654s independently
+accepted; GCC14frontend/defaultlink/nativeOPEN. m14_actual_consumer_fix owns next
+bounded actualprocessCbody/Rustslice private next-slice-2 sourcework, nocompilergrant.
+
+## Failed91c controller closed; physical clearance pending — 2026-10-23 17:42 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+current_live_postjoin CLOSED_EXPERT91C_PENDING_PHYSICAL (nonNULL); rootretainsheavy.
+Independentb56operation/source35 exactpidfdguards released. ActualcancelONCE PASS0/
+.175314s; receipt64c5e569 oneSIGTERMtoowner3824275/start57416693 only; outeruntargeted.
+Tool7054 CLOSED originalFAIL1/487.087798s, outer3824271 joined/groupabsent/streams
+closed/nooutertimeout/signals/kill. Threeauthorizedinnercats eachPASS0joined/gone/
+closed; actualinnerFAIL1/486.943064s ownerjoined/groupabsent/closed/no forcekill or
+signalerrors/controllerTERM. Authenticatedinnerstderr4b01f1782960B containsOwnerSignal
+inselector; originalfailure/capturesretained. This is NOT fullphysicalclearance.
+terminal_lifecycle_repair owns exactnormalcleanup/clientledger export+existingfresh
+PROC/mutexsuccessor; native235_release_review owns exactexportoperationreview.
+No duplicatecleanup/cancel/probe/unchangedruntime. Earliesttrace EVENTFD0x46 service
+ENOSYS(-38) thenWAIT EPIPE(-32), cleanupEPROTO(-71); typednotification Rustrepair/
+actualfixtures case227_stage, exactguesttypeUNKNOWN/p12expertretainedlookup.
+Practical34/35,whole12/14; actualLONG0acceptedlaunches/0mixedminutes unchanged.
+M14candidate10 source+completepurevalidation PASS47.653706s/40.636642CPU, both19GiB
+checks and source8.803964/validator38.842782 childrenjoined/gone/closed/emptyerr,
+CPU6released. ProductionGCC14/frontend/defaultlink/native stillOPEN; no compiler.
+
+## Actual91c roundzero failure exported; normal retirement next — 2026-10-23 17:36 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Tool7054 remains active, owner3824275/start57416693 and outer3824271/start57416682.
+current_live_postjoin FAILED_EXPERT91C_PENDING_NORMAL_RETIREMENT (nonNULL); root
+retainssoleheavy. Two ordinary reads >60s apart both exact7d4c18d7/128531Bprefix,
+identitysame; no repeatreads. Retained diagnostic5da3df4b: round0returned Rust
+Failure::Pair(-5), callback-launch/pairsetup, ownership_complete0/rounds0/launches0;
+not Linuxerrno-5 or proof callbackstillblocked. ABORT emitted;97414B failuretrace
+BEGIN/END saved1, no snapshoterror. Tail pid259 cleanup_requested intent_errno-71,
+unserviced port503/message46; causeUNPROVEN. Unchangedproducer holds unsafePID1
+whenownership0; no fakeACK/leaseunlink/forcekill. terminal_lifecycle_repair prepares
+sameaccepted pidfdnormalSIGTERM operation boundtofresh91c; independent reviewer
+native235_release_review checks exactoperation. case227_stage diagnoses actual
+retainedtrace/source. No unchangedreplay or acceptance; practical34/35,whole12/14,
+acceptedLONG0/100launches/0/60mixedminutes. SDK5/image10972/oracles unchanged.
+M14 actual130+26+15GCC9header/Rustlayout accepted; exactGCC14processTU preparation
+c6e12e8c sourceprofile review active, no productioncompiler/defaultlink/nativeyet.
+
+## Repaired expert91c LONG actually running — 2026-10-23 17:32 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Static75129a3b3c2d1248a65f8d17290857d0669b1fe4 fetched203blobs proof1463b373.
+Genuine727348payload approved independently; final67e53release/2a114request.
+Full unmodifiedrealclock release validation AND actual20868publishedrequestguard
+PASS0/.086669s; joined/gone/closed/emptyerr. ONE848controllerinvoked unexpired,
+tool7054 RUNNING; sudoanchor3824271/start57416682, authenticatedinner owner3824275/
+start57416693 via oneauthorizedstartedread0/.146351s joined/gone/closed/emptyerr.
+current_live_postjoin ACTIVE_EXPERT91C_LONG_OWNER (nonNULL), soleheavyoccupied.
+No outertimeout/signal/kill. Permanent27:4 neverunlinked; no competingheavy/resize.
+Next ordinary bounded livecapture read; strict terminal and physicalreview later.
+Practical34/35,whole12/14 unchanged. AcceptedLONG0/100launches/0/60mixedminutes;
+no elapsed-wall/appcredit. FrozenSDK5/image10972/launcher/apps/oracles unchanged.
+M14 realGCC9header/type layout130+26+15 independentlyaccepted d6ac77fe; GCC14whole
+process consumer preparation active/private; defaultlink/native/wholeareasOPEN.
+
 ## Expert controller correction and fresh91c admission accepted — 2026-10-23 17:27 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

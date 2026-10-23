@@ -620,11 +620,11 @@
               "status": "partial",
               "rust_consumer": "kernel/rust/sched_helpers.rs::spin_sleep_or_schedule -> sched_spin_sleep_or_schedule_body_result; caller kernel/rust/futex.rs::futex_wait_schedule_direct_bridge",
               "implementation": "Canonical selected PUBLIC C forwarding wrapper replaced by Rust export reusing existing sharedABI offset constructor, lock adapters and body; exact complete C fallback and all other accepted process fixes preserved. No new C provider/data/layout.",
-              "focused_checks": "129750 modeled C/Rust state/callback-order comparisons incl64875 extracted actual futex callback cases and actual headerABI compile; exact78input productionRust object PASS15.242227s/NM/readelf/productionU560->559; independent acceptance reused.",
-              "production_link": "OPEN for this slice: actual whole process.c selected TU/currentCpuLocal layout+offset witness and matched default kernel link not executed. Prior idle and set_timer evidence remain separate.",
+              "focused_checks": "129750 modeled C/Rust state/callback-order comparisons incl64875 extracted actual futex callback cases and actual headerABI compile; exact78input productionRust object PASS15.242227s/NM/readelf/productionU560->559; independent acceptance reused. Actual real GCC9 header/config/Rust-type layout witness independently passes130facts plus26spin/15timer offset values; current offset7848 and CpuLocalVar size8128 measured without model structs.",
+              "production_link": "OPEN: real GCC9 header/config versus pinned Rust type layout verified, qualified to that compiler scope. Exact GCC14 whole process.c TU and matched default kernel link remain unexecuted for this slice.",
               "native_validation": "OPEN for matching native futex/spin/wakeup/scheduler behavior; functional image unchanged.",
-              "remaining_dependencies": "Actual whole C/layout/currentCpuLocal offsets, default unique final Rust provider/callback ownership and matching native functional proof; no whole-area/file/native retirement credit.",
-              "next_action": "Prepare coherent private successor from retained candidate9 with this exact three-file canonical delta and real selected consumer/layout/link guards; no in-place frozen candidate9 edit or runtime claim.",
+              "remaining_dependencies": "Exact GCC14 whole process.c consumer, default unique final Rust provider/callback ownership and matching native functional proof; no whole-area/file/native retirement credit.",
+              "next_action": "Candidate10 coherent source and complete pure validation accepted; execute existing reviewed GCC14 production consumer and default link only after fresh exclusive admission and independent heavy release. SDK6 functional repair retains priority.",
               "evidence": [
                 {
                   "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/next-slice-1/CANONICAL-INTEGRATION.json",
@@ -655,6 +655,24 @@
                   "sha256": "aedadb96da3395ced78cd27dc3f6a2afaa9df545c63703e7c3d69738ab2dd9fe",
                   "size": 783,
                   "scope": "Independent actual productionRust object consumer acceptance; compiler diagnostics retained29983B/50warnings with unchanged warning headings, NM/readelf stderr empty; whole C/layout/defaultlink/native OPEN."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/next-slice-1/production-abi-layout-1/ACTUAL-LAYOUT-RECEIPT.json",
+                  "sha256": "d6ac77fe557bf78c49ee916d84055dfa1af62cf479c37f0f4fc1c46bdbdfd27f",
+                  "size": 13354,
+                  "scope": "Actual GCC9 production-header/config versus actual Rust type witness:130facts/26spin/15timer values equal; current7848,size8128. Qualified compiler scope; GCC14wholeTU/defaultlink/native OPEN."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/next-slice-1/production-abi-layout-1/INDEPENDENT-LAYOUT-REVIEW.ROOT-RECORD.json",
+                  "sha256": "2b4c139fee2d84460afcc288526b77a84a951e64ab722b0aa7ab57a627321f71",
+                  "size": 646,
+                  "scope": "Independent smallELF data decode agrees all values; source/real-header scope only."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-10/default-image-preparation-1/next-build-preparation-1/INDEPENDENT-ACTUAL-PREPARATION.ROOT-RECORD.json",
+                  "sha256": "5908e496c2624139dc20b2657128a9bb52f30a1259d023f83903a7cb9be3d0b2",
+                  "size": 805,
+                  "scope": "Candidate10 actual materialization+completepurevalidation47.653706s/40.636642CPU, exactly3spinpostimages over9; no compilation/link/native."
                 }
               ]
             }

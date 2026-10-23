@@ -1,0 +1,7 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+The earliest observed failure is host continuing-service rejection of guest EVENTFD (message0x46), not cleanup intent-71. Retained serial lines1312–1315 show unsupported0x46→serviceENOSYS→two WAIT EPIPEs; lines1381/1392 show later cleanup EPROTO. SelectedSDK5 smp_service ffef has no notification branch and reaches sysfs Kind::from_message; fail_service quarantines both applications, making later BEGIN returnEPROTO. LONG -5 is Rust Failure::Pair, not Linuxerrno.
+
+The private Rust candidate retains valid OOM0/STATUS2/KMSG101 one-way notifications as typed counters and bounded logs. The existing native IHK surface does not admit eventfd subscribers; legacy empty-subscriber notification is harmless. No guestACK, subscriberdelivery, cleanup or acceptance is fabricated. Unknownmessages still failENOSYS; invalidtypes and foreignports refuse. Other code restores byteexactly toffef when this delta is removed.
+
+Actual Rust1.92 fixtures:9PASS; compilation0.163763s/tests0.030556s; directjoined/groupgone/streamsclosed, CPU0released. Raw firstfixture compilefail(port scaffold) and bounded fixtureonlycorrection retained. This is source/focused consumer evidence; fullcrate/build/link/native remain open. The actual91c notification subtype and underlying guesttrigger remainUNKNOWN: hosttrace has neither packet.eventfd_type nor guestkmsg. Existing strict guestkmsg/app/retirement oracles remain unchanged.

@@ -1,0 +1,62 @@
+{
+  "CPU0_released": true,
+  "SDK6_artifact": null,
+  "actual_eventfd_subtype": null,
+  "actual_tests": {
+    "bytes": 3718,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/expert-controller-binding-repair-1/failed91c-diagnosis-1/fixture-bounded-correction-1/ACTUAL-RUST-FIXTURE-RESULT.json",
+    "sha256": "11baa99763d52bf7abc01ab707585658032acee8921be2f7c423d722fec33288"
+  },
+  "bounded_fixture_correction": "Extraction wrapper omittedport used by actual original logexpression; addedportparameter503 only. Candidatef439 source unchanged. Firstfailure preserved; no morecorrection permitted without expert.",
+  "build_scope": "Focused actual decoder/dispatch prefix+actual originalsysfsfallthrough compiled Rust1.92. Fullkernelcrate/link/newmodule/native NOTtested oraccepted.",
+  "byte_restoration_to_preimage_verified": true,
+  "candidate": {
+    "bytes": 49492,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/expert-controller-binding-repair-1/failed91c-diagnosis-1/smp_service.rs",
+    "sha256": "f439e780dd179f03813736f1526be0ecddb3b905b106bbcb6b9f9b8be9ce5bb7"
+  },
+  "delta": "One typedEVENTFD decoder+dispatch branch and3runtimeAtomicU64 counters/initialization. Valid types0/2/101 are observed without subscriber/guestACK invention; exact no-subscriber semantics. Badtypes refuseEINVAL, foreignport503guard unchanged, unknownmessages retain originalENOSYS; all other sourcebytes unchanged.",
+  "durable_fixture_ELF": {
+    "bytes": 1141,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/expert-controller-binding-repair-1/failed91c-diagnosis-1/fixture-bounded-correction-1/DURABLE-COMPILED-FIXTURE-RECEIPT.json",
+    "sha256": "521d0911346dfc3ec624f20e5df5ad7f6b0888ddf412d1fc7111b8b86c4c4e30"
+  },
+  "earliest_observed_failure": {
+    "followed_by_WAIT_errno": -32,
+    "host_timestamp": 33.869492,
+    "later_BEGIN_CLEANUP_errno": -71,
+    "message_hex": "0x46",
+    "next_line_service_errno": -38,
+    "port": 503,
+    "retained_serial_line": 1312
+  },
+  "first_fixture_compile_failure": {
+    "bytes": 430,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/expert-controller-binding-repair-1/failed91c-diagnosis-1/compile-1/stderr",
+    "sha256": "8b4dfd4a6008150820a9602b53eaba4be6696127a1bc148b8577ca0b7bb245c2"
+  },
+  "fixture": {
+    "bytes": 5529,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/expert-controller-binding-repair-1/failed91c-diagnosis-1/fixture-bounded-correction-1/actual_eventfd_tests.rs",
+    "sha256": "9eea317d821669c21c6895219e704cc3c7c8e5c28ca915cbc2d567603e9488e7"
+  },
+  "fixtures_passed": 9,
+  "independent_source_review": null,
+  "native_execution": null,
+  "original_strict_guest_kmsg_and_application_oracles_unchanged": true,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_preimage": {
+    "bytes": 47957,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/expert-controller-binding-repair-1/failed91c-diagnosis-1/smp_service.rs.preimage",
+    "sha256": "ffefabadb349f55ecc4d474f6463e73e0c6b432aea6c41eb973a91f115ded0f7"
+  },
+  "source_causal_chain": [
+    "Selected ffef Runtime::dispatch(port503) has noEVENTFD handler; falls through Kind::from_message toENOSYS(-38).",
+    "Runtime::fail\u2192application.fail_service\u2192quarantine_transport marks all applicationentries and their syscall/procfs/release ledgers quarantined.",
+    "Waiting258/259 returnEPIPE; later begin_cleanup\u2192Entry::request_cleanup sees quarantined and returnsEPROTO(-71).",
+    "Rust LONG failurecode-5 is Failure::Pair; pair_stage=setup is initial pair_fail_phase, not a Linuxerrno or proofof failure before applications schedule. Trace proves both258/259prepared/scheduled and several syscalls returned before transportfailure."
+  ],
+  "status": "PRIVATE_RUST_EVENTFD_NOTIFICATION_REPAIR_WITH_ACTUAL_NINE_FIXTURES_PASS_PENDING_INDEPENDENT_REVIEW",
+  "trigger_limit": "Retained Linux klog serial does not containpacket.eventfd_type or guestkmsg. KMSG101, STATUS2(panic notification before panicprint),OOM0 all possible. No guestcause/panic exclusion claim.",
+  "upstream_guest_trigger": null
+}

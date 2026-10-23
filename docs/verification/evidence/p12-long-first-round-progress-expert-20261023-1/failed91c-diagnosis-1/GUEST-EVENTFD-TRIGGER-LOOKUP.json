@@ -1,0 +1,169 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "COMPLETE_BOUNDED_RETAINED_TRACE_AND_SELECTED_IMAGE_SOURCE_LOOKUP",
+  "selected_image_sha256": "10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2",
+  "image_not_rehashed": true,
+  "image_build_authority": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/INDEPENDENT-ACTUAL-MATCHED-IMAGE-ARTIFACT-REVIEW-1.json",
+    "sha256": "47050d75307bd365841f528c769fe7c42d1766a7aafa1f705890da020b9eff57"
+  },
+  "image_source_derivative": "5cffcc1b23dc5ca377baa055aab0417b0daac7ddcac0e2281903260f0ebd79e3",
+  "image_materialization": "d7e24b4c0d3174b3479e33796d712d439444bae82902482448890b9d8142d43d",
+  "retained_capture": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/next-live-observation-91c-1/actual-read-1/stdout",
+    "sha256": "7d4c18d774ace221e7d6fac9391b93b28be309daab7c529bd81ec6d80f93d8d0",
+    "bytes": 173225
+  },
+  "exported_trace": {
+    "bytes_declared": 97414,
+    "saved_reported": 1,
+    "BEGIN_END_counts_match": true,
+    "serialized_section_bytes": 98393,
+    "CRLF_normalized_bytes": 97414,
+    "normalized_count_matches_declared": true,
+    "normalized_sha256": "56d15e1561c1b0aea21ff85f0b078152943e87741789a15092591b470dbab653",
+    "line_count": 979,
+    "source": "Linux klogctl(3), not McKernel guest kmsg ring",
+    "normalization": "Retained serial contains CRLF. Only CRLF-to-LF normalization makes serialized section match declared raw97414B; retained bytes remain unchanged."
+  },
+  "earliest_relevant_record": {
+    "trace_line": 881,
+    "serial_line": 1312,
+    "text": "<6>[   33.869492] ihk_smp_x86_64: IHK-SMP: unserviced continuing request os=0 generation=1 port=503 message=46"
+  },
+  "first_host_service_error": {
+    "trace_line": 882,
+    "serial_line": 1313,
+    "text": "<3>[   33.869890] ihk_smp_x86_64: IHK-SMP: continuing service error os=0 generation=1 errno=-38; workers and all started owners retained"
+  },
+  "last_record_before_event": {
+    "trace_line": 880,
+    "serial_line": 1311,
+    "text": "<6>[   33.749674] mcctrl: application_syscall=returned os=0 generation=1 pid=258 worker=9 delivery=282 cpu=1 value=0"
+  },
+  "pre_first_service_diagnostic_matches": {
+    "panic_diagnostic": [],
+    "OOM_rusage_diagnostic": [],
+    "panic_monitor_status99": [],
+    "explicit_eventfd_subtype": []
+  },
+  "boot_commandline_panic_parameter_is_not_panic_evidence": true,
+  "observed_eventfd_subtype": null,
+  "recorded_guest_panic_OOM_status_trigger": null,
+  "source_refs": {
+    "kernel/include/syscall.h": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/kernel/include/syscall.h",
+      "sha256": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa",
+      "bytes": 20836,
+      "exact_materialization_journal_match": true
+    },
+    "kernel/syscall.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/kernel/syscall.c",
+      "sha256": "ebcafd68cc98f31553bdb1674e1be80c2eac26f6a8436ee73978fe2288bb5c61",
+      "bytes": 842954,
+      "exact_materialization_journal_match": true
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/kernel/rust/syscall_policy.rs",
+      "sha256": "4edf51b9c391ddca12fd4505ac1c6b51f6a73e3919f3f1cd49b3ebcb87a38a69",
+      "bytes": 709680,
+      "exact_materialization_journal_match": true
+    },
+    "kernel/rust/abi.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151,
+      "exact_materialization_journal_match": true
+    },
+    "kernel/rust/debug.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/kernel/rust/debug.rs",
+      "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+      "bytes": 13020,
+      "exact_materialization_journal_match": true
+    },
+    "kernel/rust/abort.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/kernel/rust/abort.rs",
+      "sha256": "443c480129b1191c0cd2b7ccf3663e185f5cb7cb386512854286404e11236d2a",
+      "bytes": 1554,
+      "exact_materialization_journal_match": true
+    },
+    "kernel/rust/mem_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/kernel/rust/mem_helpers.rs",
+      "sha256": "5b1716af8c1f0381001199ed2332efb58562cb983143b0e58c2658abaabfcb3c",
+      "bytes": 200432,
+      "exact_materialization_journal_match": true
+    },
+    "ihk/linux/include/ihk/ihklib.h": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/ihk/linux/include/ihk/ihklib.h",
+      "sha256": "00b5bc8a195fbb94e2b14f73c6925bb85621da8a33aa349d32f20c70dcc4055a",
+      "bytes": 5025,
+      "exact_materialization_journal_match": true
+    },
+    "ihk/linux/user/ihkosctl.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/ihk/linux/user/ihkosctl.c",
+      "sha256": "6dc0bbf535c144a69137adb3829d5a65f726368f8178866ade16227836bdc634",
+      "bytes": 18312,
+      "exact_materialization_journal_match": true
+    },
+    "ihk/linux/user/ihklib.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/ihk/linux/user/ihklib.c",
+      "sha256": "6f2c7321667f405b3dc483c089eb5119db0d0a758c8e17a86460f9aad8dcdeab",
+      "bytes": 103430,
+      "exact_materialization_journal_match": true
+    }
+  },
+  "source_facts": [
+    {
+      "kind": "eventfd packet",
+      "source": "kernel/include/syscall.h:82,322; kernel/syscall.c:5409; kernel/rust/syscall_policy.rs:3096,3116",
+      "meaning": "SCD_MSG_EVENTFD=0x46 carries a separate eventfd_type union field. eventfd routes via CPU-local ikc2linux; Rust zeroes packet, writes msg and eventfd_type, then sends. Message number alone cannot identify type."
+    },
+    {
+      "kind": "KMSG",
+      "type": 101,
+      "source": "kernel/rust/debug.rs:10-13,167-170,204,241",
+      "meaning": "After kputs/vkprintf append and unlock, notification occurs if interrupts enabled and used guest kmsg bytes exceed(4MiB-4096)/2=2095104; sends101 then delays400us. Possible source, not observed subtype."
+    },
+    {
+      "kind": "STATUS panic",
+      "type": 2,
+      "source": "kernel/rust/abort.rs:30-45",
+      "meaning": "panic first calls publish_panic_status: set monitor status99 and send2 if clv nonnull, then disable interrupts and print panic text/stack. Notification precedes panic text; lack of HOST text cannot exclude this path."
+    },
+    {
+      "kind": "OOM",
+      "type": 0,
+      "source": "kernel/rust/mem_helpers.rs:1513-1531",
+      "meaning": "Enabled-rusage overflow prints rusage_check_oom memory used/available into guest kmsg, then sends0; user allocation returns-ENOMEM. No matching retained HOST diagnostic."
+    },
+    {
+      "kind": "enum and existing guest kmsg capture",
+      "source": "ihk/linux/include/ihk/ihklib.h:18-21,119-121; ihk/linux/user/ihkosctl.c:693-717; ihk/linux/user/ihklib.c:3132-3167",
+      "meaning": "Existing types0/2/101 and ihk_os_kmsg(index,buffer,IHK_KMSG_SIZE), exposed as ihkosctl0kmsg via IHK_OS_READ_KMSG, access guest ring; separate clear_kmsg API exists."
+    }
+  ],
+  "conclusion": "Earliest recorded relevant host trigger is rejection of an untyped-in-log0x46 request. Retained HOST klog records no preceding guest subtype or guest panic/OOM/status reason. Do not infer type from0x46 or frequency.",
+  "finite_next_evidence": {
+    "subtype": "Preserve actual eventfd_type payload at existing host notification path already owned by case227_stage; no duplicate implementation/tests.",
+    "guest_reason": "If needed under separately released future diagnostic capture, retain existing ihk_os_kmsg(0,buffer,IHK_KMSG_SIZE) or ihkosctl0kmsg output before normal retirement, preserving raw bytes/rc. Current failure export captures Linux klogctl only. This lookup authorizes no live read or replay.",
+    "future_capture_executed": false,
+    "additional_gate": false
+  },
+  "source_edits": 0,
+  "compiler_tests": 0,
+  "live_files_PROC_root_Docker_QMP_probes_signals": 0,
+  "native_acceptance": false,
+  "physical_clearance": false,
+  "boot_configuration_panic_mentions": [
+    {
+      "trace_line": 2,
+      "text": "<6>[    0.000000] Command line: console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
+    },
+    {
+      "trace_line": 121,
+      "text": "<5>[    0.215522] Kernel command line: console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
+    }
+  ],
+  "panic_diagnostic_exclusion": "The two panic=-1 boot command-line configuration mentions are retained separately and are not panic events.",
+  "execution": "Source/retained-data lookup only; every invoked ordinary command completed, no background child/session/job remains; no compiler/test/live operation."
+}

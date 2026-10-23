@@ -1,0 +1,119 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "HOST_SOURCE_AND_DERIVED_RUNTIME_PREPARED_NO_BUILD_NO_RELEASE",
+  "host_root": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk",
+  "source_identity": "2093e464dd2dfb976016a71197a120929e16bfd830f4d643126b96ea1ea0a2e8",
+  "predecessor_identity": "ba0e1be79e6cd6b06fe0b7cbd1c2c3c689e86579439e13deea9b3f3776069120",
+  "source_files": 68,
+  "source_bytes": 1360624,
+  "deltas": [
+    {
+      "relative": "smp_service.rs",
+      "old": "ffefabadb349f55ecc4d474f6463e73e0c6b432aea6c41eb973a91f115ded0f7",
+      "new": "f439e780dd179f03813736f1526be0ecddb3b905b106bbcb6b9f9b8be9ce5bb7",
+      "bytes": 49492
+    }
+  ],
+  "nonce_reserved_not_executed": "33f4428ac1c74917bcd6715cdbaee963",
+  "preparation": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk/preparation.json",
+    "sha256": "19b0c4ced20df432a6e4944c8f38ff13ba509959808eed3b1cc285c589bcb2b6",
+    "bytes": 52799
+  },
+  "derived_driver": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk/derived-runtime/native_running_external_modules_offline.py",
+    "sha256": "6f41bd90f352cae9848a9c7877984b05c89b24a830d1a2ad018853079be4e056",
+    "bytes": 37676
+  },
+  "derived_owner": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk/derived-runtime/native_running_external_modules_owner.py",
+    "sha256": "a5b919adfed8ee5e7e3f154e0385ae3063e86ea1314bfc60d50115f4bf0b0ef3",
+    "bytes": 54960
+  },
+  "runtime_cohort": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk/RUNTIME-COHORT.json",
+    "sha256": "f83b00540beab89e9960fcf0ba16a77596cdf55359830e172e01c966a12a4d02",
+    "bytes": 3041
+  },
+  "request_template": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/prepared-sdk/REQUEST.TEMPLATE.PENDING-LIVE-IDENTITIES.json",
+    "sha256": "1aa123b41ad92fdff0f0dce0ca0ff9c976d4a35aed9aa1ecb94226ba0b28109f",
+    "bytes": 2068
+  },
+  "materializer": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/metadata/stage_bound_successor.py",
+    "sha256": "9da8d12f9acd49296ac1cddf995dbe489834d1d9d3197d92ddc500743664e32b",
+    "bytes": 5563
+  },
+  "external_command": [
+    "/usr/bin/env",
+    "-i",
+    "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER=mckernel",
+    "KBUILD_BUILD_VERSION=1",
+    "SOURCE_DATE_EPOCH=1786434034",
+    "PATH=/usr/bin:/bin",
+    "LANG=C",
+    "LC_ALL=C",
+    "TZ=UTC",
+    "BASH_ENV=",
+    "ENV=",
+    "GNUMAKEFLAGS=",
+    "MAKEFILES=",
+    "MAKEFLAGS=",
+    "MAKEOVERRIDES=",
+    "MFLAGS=",
+    "LD_LIBRARY_PATH=",
+    "LD_PRELOAD=",
+    "HOME=/candidate/home",
+    "TMPDIR=/candidate/tmp",
+    "/usr/bin/make",
+    "-C",
+    "/out/source/linux-6.12.0-211.44.1.el10_2",
+    "O=/out/build",
+    "M=/candidate/modules",
+    "ARCH=x86_64",
+    "LLVM=1",
+    "LOCALVERSION=-211.44.1.el10_2.mckernel1.x86_64",
+    "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER=mckernel",
+    "KBUILD_BUILD_VERSION=1",
+    "SOURCE_DATE_EPOCH=1786434034",
+    "MCKERNEL_CURRENT_FORK_ADOPTION_OPT_IN=1",
+    "--jobserver-style=pipe",
+    "-j2",
+    "modules"
+  ],
+  "source_acceptance": null,
+  "source_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/eventfd-sdk-preparation-6/SOURCE-REVIEW.NORMALIZED-ROOT-RECORD.json",
+    "sha256": "b3749e0c690037c6677bf03432e81919559d24bf9ea7d1b884d8ff53e67114c6"
+  },
+  "execution_release": null,
+  "compiler_runs": 0,
+  "root_operations": 0,
+  "Docker_operations": 0,
+  "scratch_writes": 0,
+  "profile_unchanged": {
+    "container_CPUs": "2-5",
+    "container_memory_bytes": 12884901888,
+    "container_swap": 0,
+    "container_tasks": 512,
+    "make_jobs": 2,
+    "network": "none",
+    "backing_GiB": 110
+  },
+  "expected_binary_delta": {
+    "ihk": "stable expected; verify actual build",
+    "ihk_smp_x86_64": "change expected iff accepted smp_application.rs/smp_service.rs/procfs_objects.rs provider delta; actual artifact proof required",
+    "mcctrl": "stable06e8 expected; actual artifact proof required"
+  },
+  "required_next": [
+    "independent coherent SDK preparation review",
+    "root source/input staging and fresh live identities/capacity/leases",
+    "independent exact execution release",
+    "actual module build and artifact/physical review"
+  ]
+}

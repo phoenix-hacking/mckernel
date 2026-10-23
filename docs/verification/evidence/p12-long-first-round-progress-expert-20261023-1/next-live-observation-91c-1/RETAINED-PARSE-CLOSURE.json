@@ -1,0 +1,31 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_BOUNDED_RETAINED_READ1_DIAGNOSTIC_PARSE",
+  "report": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-91c-1/RETAINED-READ1-DIAGNOSTIC.json",
+    "sha256": "5da3df4b8ed9ca115cbae149c0df3ad758108f1b912201502e5a6e39289a0b38"
+  },
+  "whole_capture": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/next-live-observation-91c-1/actual-retained-parse-1/RESULT.json",
+    "sha256": "5a77483c5eee732de34400e23cb155ac08356b2f842a7127027ae4d515dac4d9",
+    "returncode": 0,
+    "seconds": 0.0773402489721775,
+    "direct_child_joined": true,
+    "group_absent": true,
+    "closed_streams": true
+  },
+  "source_meaning": [
+    "Rust result-5 is Failure::Pair, not Linux errno-5.",
+    "P12_LONG_FAILURE is emitted only after long_dispatch/Rust returns, so retained wire proves first-round failure returned; it does not describe an unresolved callback that has not returned.",
+    "Last pair callback phase callback-launch, followed by Failure::Pair, means launch returned nonzero or uncertain-safe before load; captured summary ownership0 keeps main on its unchanged unsafe hold path.",
+    "ABORT precedes actual raw snapshot export; trace END present, so retained failure export completed.",
+    "Underlying app/cleanup/syscall cause remains unknown; kernel tail literals alone do not establish causality."
+  ],
+  "CPU0_released": true,
+  "actual_live_reads": 0,
+  "live_PROC": 0,
+  "root": 0,
+  "signals": 0,
+  "physical_clearance": false,
+  "native_acceptance": false
+}
