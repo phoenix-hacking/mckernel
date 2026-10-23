@@ -90973,6 +90973,9 @@ extern void set_pte(unsigned long *, unsigned long, unsigned long)
 extern unsigned long x86_init_text_map_kernel_start_bridge(void)
 	__attribute__((weak));
 extern const unsigned long x86_map_kernel_start_geometry;
+extern unsigned long x86_init_text_end_bridge(void)
+	__attribute__((weak));
+extern char _end[];
 extern int set_pt_large_page(void *, void *, unsigned long, unsigned long)
 	__attribute__((weak));
 extern int x86_init_normal_set_large_bridge(void *, unsigned long, unsigned long, unsigned long)
@@ -93954,6 +93957,8 @@ int main(void)
 	if (x86_init_text_map_kernel_start_bridge)
 		require(x86_init_text_map_kernel_start_bridge() ==
 				x86_map_kernel_start_geometry);
+	if (x86_init_text_end_bridge)
+		require(x86_init_text_end_bridge() == (unsigned long)_end);
 	if (set_pt_large_page && ihk_mc_pt_set_large_page &&
 			ihk_mc_pt_set_page) {
 		x86_rust_stub_pt_set_page_calls = 0;
@@ -142873,10 +142878,6 @@ void x86_init_text_log_bridge(int event, unsigned long a,
 	(void)c;
 }
 const unsigned long x86_map_kernel_start_geometry = 0xfffffe0000000000UL;
-unsigned long x86_init_text_end_bridge(void)
-{
-	return 0xfffffe0000200000UL;
-}
 void x86_init_text_panic_bridge(void)
 {
 }
@@ -145468,7 +145469,9 @@ grep -Eq 'U x86_init_text_log_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq ' T x86_init_text_map_kernel_start_bridge$' "${tmpdir}/out/rust.global"
 grep -Eq 'U x86_map_kernel_start_geometry$' "${tmpdir}/out/rust.undefined"
 ! grep -Eq 'U x86_init_text_map_kernel_start_bridge$' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U x86_init_text_end_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq ' T x86_init_text_end_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq 'U _end$' "${tmpdir}/out/rust.undefined"
+! grep -Eq 'U x86_init_text_end_bridge$' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_init_text_panic_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_init_low_panic_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_init_fixed_panic_bridge' "${tmpdir}/out/rust.undefined"

@@ -1021,8 +1021,8 @@
           "status": "partial",
           "owner": "dispatcher integrated /root/m14_actual_consumer_fix reviewed bridge slice",
           "remaining_c_functions": null,
-          "rust_consumer": "Canonical Rust large-page forwarding bridge and text-map-start getter; existingPUBLICselection, originalfallbacks retained.",
-          "next_action": "Compile changed whole memory.c in a future coherently staged production candidate, prove default kernel unique Rustprovider and relevant native behavior. Candidate5/build2 snapshots retain previous frozen sources; no wholearea/file credit.",
+          "rust_consumer": "Canonical Rust large-page forwarder, text-map-start getter and linker_end address getter; existing PUBLIC selection, exact C fallbacks retained.",
+          "next_action": "Coherently stage all three canonical bridge slices for actual whole memory.c/default-kernel link and relevant native proof after functional LONG physicalretirement. Frozen candidate7 includes only firsttwo; no wholearea/file credit.",
           "proof": {
             "implementation": {
               "status": "partial",
@@ -1036,6 +1036,11 @@
                   "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/CANONICAL-TEXTMAP-BRIDGE-INTEGRATION.json",
                   "sha256": "08f1dddf049a40469a1b5eb2054c592a34b92b946829897b2a17be86dcde4fbf",
                   "size": 1503
+                },
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/CANONICAL-INTEGRATION.json",
+                  "sha256": "c07d47d1cf2eaf12ab14354fa92584e0d202d08898a75c2a6e46326ccf5d68e5",
+                  "size": 1762
                 }
               ]
             },
@@ -1051,6 +1056,21 @@
                   "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/CANONICAL-TEXTMAP-BRIDGE-INTEGRATION.json",
                   "sha256": "08f1dddf049a40469a1b5eb2054c592a34b92b946829897b2a17be86dcde4fbf",
                   "size": 1503
+                },
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/ACTUAL-LEAF-RECEIPT.json",
+                  "sha256": "101ed5f4d4422148b6b9d59f66146d2f0773ab68bbca8fc137e734977e7e1ed4",
+                  "size": 18797
+                },
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/ACTUAL-PRODUCTION-FULLCRATE-RECEIPT.json",
+                  "sha256": "0997088697285bce8a5cf30512a9f6eed91a472b7153271198159f6a4e32e261",
+                  "size": 7302
+                },
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/INDEPENDENT-SOURCE-ABI-ACCEPTANCE.ROOT-RECORD.json",
+                  "sha256": "bf1f3b9000bdef6c0e9c9e679bf66e1fb6cc18dacc99155d49d00f43c0b1046a",
+                  "size": 1563
                 }
               ]
             },
@@ -1085,6 +1105,19 @@
                 "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/CANONICAL-TEXTMAP-BRIDGE-INTEGRATION.json",
                 "sha256": "08f1dddf049a40469a1b5eb2054c592a34b92b946829897b2a17be86dcde4fbf",
                 "size": 1503
+              },
+              "production_whole_C_TU": false,
+              "default_link": false,
+              "native": false
+            },
+            {
+              "body": "x86_init_text_end_bridge",
+              "implementation": "Canonical Rust addr_of!(linker_end) address-only getter; PUBLIC C body excluded in source, unchanged C fallback retained.",
+              "focused_checks": "17 originalC/Rust realELF_end/ABI/relocation/selection captures plus complete78input productionRustcompileONCE14.189922s, Tgetter/noUgetter/U_end. Independent sourceABI acceptance.",
+              "evidence": {
+                "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/CANONICAL-INTEGRATION.json",
+                "sha256": "c07d47d1cf2eaf12ab14354fa92584e0d202d08898a75c2a6e46326ccf5d68e5",
+                "size": 1762
               },
               "production_whole_C_TU": false,
               "default_link": false,
@@ -1686,6 +1719,17 @@
         "size": 1503
       },
       "default_kernel_or_native": false
+    },
+    {
+      "at": "2026-10-23T15:08:18.365531+00:00",
+      "scope": "M14-05-01 bounded third bridge slice only",
+      "evidence": {
+        "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/CANONICAL-INTEGRATION.json",
+        "sha256": "c07d47d1cf2eaf12ab14354fa92584e0d202d08898a75c2a6e46326ccf5d68e5",
+        "size": 1762
+      },
+      "practical_count_changed": false,
+      "native_or_file_completion": false
     }
   ]
 }

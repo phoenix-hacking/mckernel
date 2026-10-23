@@ -1,0 +1,365 @@
+{
+  "C_selection": "exact original body retained under !MCKERNEL_RUST_X86_MEMORY_PUBLIC; PUBLIC has no C body; no C data/functionality added",
+  "Rust_implementation": "same exported getter computes core::ptr::addr_of!(extern linker _end u8) as existing CULong; no reference/value read from one-past boundary",
+  "actual_commands_and_inputs": {
+    "bytes": 6713,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/ACTUAL-LEAF-COMMANDS.json",
+    "sha256": "faa43a1255471233a44913fc9e479674c231e469109969e75cd1a6929db64343"
+  },
+  "actual_observations": {
+    "ABI": "actual arch-memory.h/IHK types, unsignedlong8/pointer8, address/integer roundtrip",
+    "PUBLIC_original_C_vs_Rust_stdout": "PASS original-C/selected-provider real_ELF_end=0000000000404040 ulong=8 pointer=8 address_only=1\n",
+    "Rust_machine_body": "movabs R_X86_64_64 _end +0; ret; no memory load",
+    "comparison_scope": "each executable own actual linker _end; addresses are not compared between different executables",
+    "fallback_stdout": "PASS original-C/selected-provider real_ELF_end=0000000000404038 ulong=8 pointer=8 address_only=1\n",
+    "symbols": {
+      "ELF": [
+        "defined actual linker _end"
+      ],
+      "PUBLIC_C": [
+        "U getter",
+        "no C body"
+      ],
+      "Rust": [
+        "T getter",
+        "U _end"
+      ],
+      "fallback_C": [
+        "local t getter",
+        "U _end"
+      ],
+      "partial_link": [
+        "one T getter",
+        "U linker _end"
+      ]
+    }
+  },
+  "actual_profile": {
+    "bytes": 994,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/ACTUAL-LEAF-PROFILE.json",
+    "sha256": "fa0ae2dc091d78379c9556e2361e982bbf66baaff54e85f3b960d4397d5ded12"
+  },
+  "actual_result": {
+    "bytes": 25090,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/ACTUAL-LEAF-RESULT.json",
+    "sha256": "019ac13148afaec38d73dbd85a0bab8aea83e08d44a36209f863edbecd3941f9"
+  },
+  "actual_runner": {
+    "bytes": 6594,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/run_leaf.py",
+    "sha256": "afba5cb46e22703d0be7f6d824506b772b13b354899442307a61cb8e9bcea6e5"
+  },
+  "artifacts": {
+    "fallback-consumer.o": {
+      "bytes": 1568,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/fallback-consumer.o",
+      "sha256": "c36d07d1ba8c345ca53bc1b9226ab2b398090fa1b068d776fe6943873693c9fd"
+    },
+    "fixture-fallback": {
+      "bytes": 15984,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/fixture-fallback",
+      "sha256": "f7bdbce1d6aab60ff58412b2201df85e55bb6f3e277cba4d56ec253a198f1ff5"
+    },
+    "fixture-public": {
+      "bytes": 16192,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/fixture-public",
+      "sha256": "838e35e6dd3218082e5b376b12377489cdfc22dd88582cd11841d0b244007910"
+    },
+    "fixture-rust.o": {
+      "bytes": 1120,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/fixture-rust.o",
+      "sha256": "dce9dd9f704958e3122efc8d5fe34a8fd34712110d43402341e2a1364e271244"
+    },
+    "public-consumer.o": {
+      "bytes": 1440,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/public-consumer.o",
+      "sha256": "d9f8b2c4084b96fb978f26640857e8ef8327d94ba32da8b93f0251639dda4062"
+    },
+    "public-rust-bound.o": {
+      "bytes": 1840,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/public-rust-bound.o",
+      "sha256": "2df016a331b44bd4cfbc3f2acf0353a261aebfa925fc1a07be5783b19c098e11"
+    }
+  },
+  "canonical_or_frozen_sources_changed_by_worker": 0,
+  "capture_count": 17,
+  "captures": [
+    {
+      "command": {
+        "bytes": 779,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-1/command.json",
+        "sha256": "0c545828e221661c160413e2cea1a3d924c1c49eaa40e9e6d5d2cbe57b6917ed"
+      },
+      "label": "Rust-actual-address-getter",
+      "seconds": 0.05549572210293263,
+      "whole_join": {
+        "bytes": 1126,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-1/whole-join.json",
+        "sha256": "12180a3fc62cae82ec51d9433559f1673616f7eca56125cf681576fe53fc3b22"
+      }
+    },
+    {
+      "command": {
+        "bytes": 712,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-2/command.json",
+        "sha256": "bf8ff7201b2622248fb67335548a8235f1879d3a89dbd43e58c201a60f002eee"
+      },
+      "label": "GCC-original-C-vs-Rust-real-ELF-end",
+      "seconds": 0.05575040099211037,
+      "whole_join": {
+        "bytes": 1126,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-2/whole-join.json",
+        "sha256": "93caaa354452eebc0660c899504edb9cfaa6437da4cfc472c134246173898326"
+      }
+    },
+    {
+      "command": {
+        "bytes": 587,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-3/command.json",
+        "sha256": "fce250c40c31740c4df1355b0fe4dd3496580920a9c965412c8fab17c6c34bc2"
+      },
+      "label": "run-original-C-vs-Rust-real-ELF-end",
+      "seconds": 0.02313431305810809,
+      "whole_join": {
+        "bytes": 1127,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-3/whole-join.json",
+        "sha256": "c41bff9e94cf71b53cc4b3352986ee6ccb4c9ab8eacd0a83b24bc49a9ddb374e"
+      }
+    },
+    {
+      "command": {
+        "bytes": 651,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-4/command.json",
+        "sha256": "e6755db47fe1cf9282d61457b678660022a0165e7e26262a1a070bc87db947a2"
+      },
+      "label": "GCC-C-fallback-real-ELF-end",
+      "seconds": 0.054141493048518896,
+      "whole_join": {
+        "bytes": 1127,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-4/whole-join.json",
+        "sha256": "9243ca3bfab32cac21c5a403c82a62e7b4910a569098696e19815ae3b558ddda"
+      }
+    },
+    {
+      "command": {
+        "bytes": 581,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-5/command.json",
+        "sha256": "88a6191bb84b0d08b754469f1617653a3fdac45fbf4cb8929b4aa6f636da8da7"
+      },
+      "label": "run-C-fallback-real-ELF-end",
+      "seconds": 0.023028408992104232,
+      "whole_join": {
+        "bytes": 1128,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-5/whole-join.json",
+        "sha256": "433c6dcd18e9b20888d164043d8d2cbbe89c50bc63a46ad3d1f3fe21ebe2c1be"
+      }
+    },
+    {
+      "command": {
+        "bytes": 695,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-6/command.json",
+        "sha256": "2224a120f352cfd995c40753e8dc8a5fd945f6d424599f0ca9f5fc30a66f229e"
+      },
+      "label": "GCC-PUBLIC-consumer",
+      "seconds": 0.04673814098350704,
+      "whole_join": {
+        "bytes": 1126,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-6/whole-join.json",
+        "sha256": "70ddcd11d74591faf4dc5b9fc72130a90d676f9517ed19a6e56f64d60e441c1e"
+      }
+    },
+    {
+      "command": {
+        "bytes": 664,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-7/command.json",
+        "sha256": "e89c0a237624b13e8588789179fa901df900866186e76b1b79272924e8d8d469"
+      },
+      "label": "GCC-C-fallback-consumer",
+      "seconds": 0.04735598701518029,
+      "whole_join": {
+        "bytes": 1126,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-7/whole-join.json",
+        "sha256": "7216d94d78d47d4cf2af5523fda7f87662bbe299c635e88d85b7fd80a887158b"
+      }
+    },
+    {
+      "command": {
+        "bytes": 544,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-8/command.json",
+        "sha256": "5eb20d94dfd257f3aa3fffb61f38ee8edb10674d05978ed1da5edcd19135ccfe"
+      },
+      "label": "partial-link-actual-default-selection",
+      "seconds": 0.028013351024128497,
+      "whole_join": {
+        "bytes": 1127,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-8/whole-join.json",
+        "sha256": "b82db03eb0f479e89761f56fe347b1803ae4c9a8752024d4c8588ee809c367c6"
+      }
+    },
+    {
+      "command": {
+        "bytes": 458,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-9/command.json",
+        "sha256": "63492f838699c4a4ad13ccb2e7127332680a51451b0ae621d73afcaa238b7350"
+      },
+      "label": "nm-Rust",
+      "seconds": 0.04109363304451108,
+      "whole_join": {
+        "bytes": 1127,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-9/whole-join.json",
+        "sha256": "471fe50309dc517483165189b3d8c16ef64a599c3a675ff41943f6b7433ca7f3"
+      }
+    },
+    {
+      "command": {
+        "bytes": 465,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-10/command.json",
+        "sha256": "c3d31a189416625071cd8bef628d2dcc28fff3ad47a89179d521c93a1aac318d"
+      },
+      "label": "nm-PUBLIC-C",
+      "seconds": 0.04053186904639006,
+      "whole_join": {
+        "bytes": 1129,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-10/whole-join.json",
+        "sha256": "9d159a615f690f2380dfa7db49245d4f8a0d3fdc0f278e355f30ab0c9e221af6"
+      }
+    },
+    {
+      "command": {
+        "bytes": 469,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-11/command.json",
+        "sha256": "6f1c163208bfd0d7e19c9bf6b6e44d9d1c92a9d4f21b378794659750e997fcb7"
+      },
+      "label": "nm-fallback-C",
+      "seconds": 0.04075022996403277,
+      "whole_join": {
+        "bytes": 1130,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-11/whole-join.json",
+        "sha256": "2001f4739ac032feae2c006fb5a7807119ecf5404fa4027ba71f77a446f66566"
+      }
+    },
+    {
+      "command": {
+        "bytes": 464,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-12/command.json",
+        "sha256": "534790d36a95533b6b6cfbaecb055d4a40452a29a822205a3869d598248eaa1b"
+      },
+      "label": "nm-bound",
+      "seconds": 0.04074795497581363,
+      "whole_join": {
+        "bytes": 1130,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-12/whole-join.json",
+        "sha256": "1ee734c8dee6cdc8938bbf677be5b6eb3f19c9b40d8ec376584f7f89529db0d0"
+      }
+    },
+    {
+      "command": {
+        "bytes": 481,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-13/command.json",
+        "sha256": "0cbde34b47d1fe25ea4b8b28c9e836da6ab38a96bd52adfb1b903e184bb3742f"
+      },
+      "label": "Rust-relocations64",
+      "seconds": 0.020442791050300002,
+      "whole_join": {
+        "bytes": 1131,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-13/whole-join.json",
+        "sha256": "85eab6cb013cf45bf376880e28c7445b19c8174c4f16ddcc37330aac912f11f1"
+      }
+    },
+    {
+      "command": {
+        "bytes": 535,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-14/command.json",
+        "sha256": "60c05be28f59d80d8b7dcca7393da68bb386ab3e007cad59fc571095ea87ad04"
+      },
+      "label": "actual-Rust-getter-disassembly",
+      "seconds": 0.03080131602473557,
+      "whole_join": {
+        "bytes": 1130,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-14/whole-join.json",
+        "sha256": "01174b2c233554c7857d2a7b0e907458702d93ed0f3e0b98da11d2cdbda8b3be"
+      }
+    },
+    {
+      "command": {
+        "bytes": 471,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-15/command.json",
+        "sha256": "fac1d4a43fe67ae1f9a6b5add45794114adf13b54bb9ad316641507c4e3478ff"
+      },
+      "label": "nm-real-ELF-provider",
+      "seconds": 0.04435735801234841,
+      "whole_join": {
+        "bytes": 1131,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-15/whole-join.json",
+        "sha256": "77bd3fd950170f1847cde6b98e29a0b26f56d4a05e6f8b6c7ba764de41253de2"
+      }
+    },
+    {
+      "command": {
+        "bytes": 516,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-16/command.json",
+        "sha256": "beea5039ffc6f03174d596ffeda18851a9b32daa2618eff8a5ad32024e8ce4ec"
+      },
+      "label": "finite-source-reversal",
+      "seconds": 0.07130432897247374,
+      "whole_join": {
+        "bytes": 1130,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-16/whole-join.json",
+        "sha256": "557b29c6bc84f685522e37f98e3e3b11558b2d3b2bfb7aeb3d33b729e3e4bd96"
+      }
+    },
+    {
+      "command": {
+        "bytes": 506,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-17/command.json",
+        "sha256": "63395faf29dc064779f4737d943b0947889d091cd1f50787ef19650a7b935db2"
+      },
+      "label": "harness-bash-syntax",
+      "seconds": 0.06229433405678719,
+      "whole_join": {
+        "bytes": 1128,
+        "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/leaf-attempt-1-step-17/whole-join.json",
+        "sha256": "534a79d897d0b4d80729be684c91809f4d5644a1bc75443b827e75c9e2094d46"
+      }
+    }
+  ],
+  "choice": "live x86_init_text_end_bridge returns (unsigned long)_end; existing default Rust init_text_area consumes it; actual prior current crate Ugetter retained as source-pinned consumer proof",
+  "compiler_failures": 0,
+  "exact_original_C_body": "X86_MEMORY_PUBLIC_BRIDGE unsigned long x86_init_text_end_bridge(void)\n{\n\treturn (unsigned long)_end;\n}",
+  "failure_family_history": "initial candidate passed all17 captures; no correction/replay",
+  "harness_coherence": "only this getter duplicate literal stub removed; real linker _end declaration/direct getter check; getter U->T plus U_end, total undefined unchanged; finite exact reverse and bash syntax pass; monolithic runtime still open",
+  "next_production_Rust_recipe": {
+    "bytes": 50505,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/NEXT-PRODUCTION-RUST-RECIPE.NOT-EXECUTED.json",
+    "sha256": "77952aa032e2c88ff04a3c9e0c937f2a86f610c67d0e8b51c6ab485ab5a1af9a"
+  },
+  "no_executions": [
+    "full production Rust crate compile",
+    "kernel/heavy/root/Docker/guest",
+    "target state instruction tests"
+  ],
+  "open": [
+    "independent source/ABI review including actual linker boundary identity",
+    "actual full production Rust crate compile under separate grant",
+    "actual whole memory.c PUBLIC TU/default kernel image link",
+    "native init_text_area consumer run",
+    "whole C file/image retirement"
+  ],
+  "production_patch": {
+    "bytes": 3326,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/production.patch",
+    "sha256": "5682493f1717b80bbd61399b33601e27e110147da9d12a05505bb6af61cfc2ee"
+  },
+  "retirement": "all17 owned990 captures return0/directjoined/groupabsent/closed with null errors; CPU6 released",
+  "schema": "mckernel.next-memory-end-bridge-rust-leaf.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "seconds": 0.8039841109421104,
+  "source_corrections": 0,
+  "source_pins": {
+    "bytes": 4169,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/source-pins.json",
+    "sha256": "ebb56a9384f0221eb4a3d097a761b2b46a697634a746c7ded7555a09586efecd"
+  },
+  "status": "PASS_ACTUAL_ORIGINAL_C_RUST_REAL_ELF_ADDRESS_ABI_RELOCATION_SELECTION_ONLY",
+  "wholefile_or_native_credit": false
+}

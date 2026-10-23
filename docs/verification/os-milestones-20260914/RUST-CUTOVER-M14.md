@@ -1,3 +1,13 @@
+## Current increment: linker-end getter in Rust — 2026-10-23 15:08 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M14-05-01 now has three canonical bridge slices. The new text-end address getter
+uses Rust addr_of! on the existing linker symbol, with exact C fallback retained.
+17 focused C/Rust/ABI/relocation captures and one78-input production Rust compile
+pass; independent source/ABI review accepts bounded integration. Actual changed
+whole C/default kernel link and native consumer execution remain open. Frozen
+functional image10972 and candidate7 are unchanged; no whole area/file closure.
+
 # M14: complete Rust and assembly McKernel LWK
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

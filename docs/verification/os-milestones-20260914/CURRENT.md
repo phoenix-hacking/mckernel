@@ -1,3 +1,25 @@
+## LONG actual preflight FAIL; canonical serialization correction — 2026-10-23 15:01 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical34/35,whole12/14. Actualreleasedrootcontroller invokedoncebeforeexpiry
+with r293fc5c6/requestceef230a. OuterPID3760768/start56486267 FAIL1/.539158s,
+directjoined/groupabsent/closed/noouterkill. Authenticatedinnercapture FAIL1/
+.380653s/directjoin/groupabsent/closed/noTERM/KILL/stdoutempty/stderr26095b3151B.
+Owner_preflight long_transport.validate_release line275 refused independent exact
+review hash: root+review used compactJSON withoutnewline, productioncanonical
+includesnewline. No kernel/appresult or launch/workcredit. Root acknowledges
+manualserializationerror; failed artifactsimmutable. No validatorweakening or
+unchangedreplay. terminal_lifecycle_repair owns minimalimmutable correction and
+actual fullproductionreleaseconsumer underexactinterpreter; m14_callback_review
+independently reviews it. Freshquery must positively reconcile oldowner/lease
+facts before corrected runtime; absence of outer alone doesnotclearheavy.
+Current_live_postjoin is PREVIOUS_M14_COMPLETE0e934_PLUS_FAILED_LONG_PENDING_FRESH
+_CLEARANCE, notNULLornewclearance. Priorunused15enonce nowconsumed; usefreshidentity.
+Next: exactserializedproductionconsumerPASS, correctedsourcepublication, fresh
+query/physicaldecision, final600second actualcanonical release and onecorrectedrun.
+M14next_endgetter17actualleafcapturesPASS; privatefullcrateCPU6inprogress, no
+canonical/defaultkernel/nativecredit. Candidate7source/pureaccepted, nobuild.
+
 ## Literal M13 delivery accepted; final LONG successor preparing — 2026-10-23 14:51 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

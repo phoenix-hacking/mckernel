@@ -1,0 +1,28 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE_ABI_LEAF_AND_ACTUAL_RUST_CRATE_CONSUMER_ONLY",
+  "reviewer": "/root/m14_build_release_review",
+  "implementation_ownership": false,
+  "patch": {
+    "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/production.patch",
+    "sha256": "5682493f1717b80bbd61399b33601e27e110147da9d12a05505bb6af61cfc2ee",
+    "bytes": 3326
+  },
+  "leaf": {
+    "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/ACTUAL-LEAF-RECEIPT.json",
+    "sha256": "101ed5f4d4422148b6b9d59f66146d2f0773ab68bbca8fc137e734977e7e1ed4",
+    "bytes": 18797
+  },
+  "production_rust": {
+    "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/ACTUAL-PRODUCTION-FULLCRATE-RECEIPT.json",
+    "sha256": "0997088697285bce8a5cf30512a9f6eed91a472b7153271198159f6a4e32e261",
+    "bytes": 7302
+  },
+  "decision": "addr_of! linker_end preserves address-only C result without reference/load. PUBLIC C body excluded, fallback exact; existing Rust init_text_area consumes getter. 17 leaf captures and complete78input Rustcrate/onecompiler14.189922s/Tgetter/noUgetter/U_end accepted. Permits bounded canonical integration against reviewedpreimages.",
+  "remaining": [
+    "Broad harness runtime",
+    "Actual whole C/default kernel linker_end link",
+    "Native consumer execution",
+    "Whole file/area retirement"
+  ]
+}

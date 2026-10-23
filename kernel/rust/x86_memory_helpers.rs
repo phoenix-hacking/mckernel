@@ -260,7 +260,6 @@ unsafe extern "C" {
     );
     fn x86_init_linux_panic_bridge();
     fn x86_init_text_log_bridge(event: CInt, a: CULong, b: CULong, c: CULong);
-    fn x86_init_text_end_bridge() -> CULong;
     fn x86_init_text_panic_bridge();
     fn x86_init_low_panic_bridge();
     fn x86_init_fixed_panic_bridge();
@@ -272,6 +271,8 @@ unsafe extern "C" {
     static mut X86_ATTR_MASK: CULong;
     #[link_name = "x86_map_kernel_start_geometry"]
     static X86_MAP_KERNEL_START_GEOMETRY: CULong;
+    #[link_name = "_end"]
+    static X86_END: u8;
     #[link_name = "_head"]
     static mut X86_HEAD: u8;
     #[link_name = "ap_trampoline"]
@@ -4862,6 +4863,12 @@ pub unsafe extern "C" fn x86_init_text_area_body_result(
 pub extern "C" fn x86_init_text_map_kernel_start_bridge() -> CULong {
     // Preserve the build-resolved address; never duplicate its numeric value.
     unsafe { X86_MAP_KERNEL_START_GEOMETRY }
+}
+
+#[no_mangle]
+pub extern "C" fn x86_init_text_end_bridge() -> CULong {
+    // The linker boundary may be one-past storage: form its address, never read it.
+    core::ptr::addr_of!(X86_END) as CULong
 }
 
 #[no_mangle]

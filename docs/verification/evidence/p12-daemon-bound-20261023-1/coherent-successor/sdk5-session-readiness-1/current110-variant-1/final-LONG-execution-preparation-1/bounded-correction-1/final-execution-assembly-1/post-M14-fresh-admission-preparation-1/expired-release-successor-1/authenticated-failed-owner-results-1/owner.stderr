@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/source/native_diagnostic_container_owner.py", line 1257, in <module>
+    raise SystemExit(main())
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/source/native_diagnostic_container_owner.py", line 1243, in main
+    execute_owner(DiagnosticOwner(args.attempt_parent, manifest=args.manifest,
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/source/native_diagnostic_container_owner.py", line 1222, in execute_owner
+    raise owner.failure
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/source/native_diagnostic_container_owner.py", line 1190, in execute_owner
+    owner.run()
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/source/native_diagnostic_container_owner.py", line 1064, in run
+    retained = self._preflight()
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/source/native_diagnostic_container_owner.py", line 913, in _preflight
+    release = _long_transport().validate_release(self.long_release,self.long_release_sha,self.manifest_path,self.nonce,self.parent)
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/source/long_transport.py", line 275, in validate_release
+    need(type(review) is dict and set(review) == {'status', 'reviewer', 'implementation_ownership', 'payload_sha256'} and
+  File "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/source/long_transport.py", line 55, in need
+    raise ValueError(why)
+ValueError: independent exact long release review

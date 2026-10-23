@@ -1,0 +1,50 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "CANONICAL_SOURCE_INTEGRATED_BOUNDED_SLICE",
+  "recorded_utc": "2026-10-23T15:07:11.001865+00:00",
+  "independent_review": {
+    "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/INDEPENDENT-SOURCE-ABI-ACCEPTANCE.ROOT-RECORD.json",
+    "sha256": "bf1f3b9000bdef6c0e9c9e679bf66e1fb6cc18dacc99155d49d00f43c0b1046a",
+    "bytes": 1563
+  },
+  "before": [
+    {
+      "path": "arch/x86_64/kernel/memory.c",
+      "sha256": "935dce935e814974a85729fafde9b3912e9fbff816d9074f6044fa63102370cb",
+      "bytes": 84714
+    },
+    {
+      "path": "kernel/rust/x86_memory_helpers.rs",
+      "sha256": "19919d35402c84540336b1983e7ac031397bc5f2d7855a7ae901a35dcedbf3f9",
+      "bytes": 191195
+    },
+    {
+      "path": "kernel/rust/tests/run_equivalence.sh",
+      "sha256": "2e1aa8e4299480ce31282f85e303a463034a475abbf20fb21fae95990230ed23",
+      "bytes": 5008441
+    }
+  ],
+  "after": [
+    {
+      "path": "arch/x86_64/kernel/memory.c",
+      "sha256": "3dccbb04986c7fb4c1c47bad1a382372c19cd270861501cf064ce95f36d46c32",
+      "bytes": 84761
+    },
+    {
+      "path": "kernel/rust/x86_memory_helpers.rs",
+      "sha256": "f88ca6d45b1395b74c0c86565b5a391d01124fa3fb30486a7e4eb31c85d9eff8",
+      "bytes": 191401
+    },
+    {
+      "path": "kernel/rust/tests/run_equivalence.sh",
+      "sha256": "fce1f3b9a5606eedb245996d4b88b5e93022ae56145729592c9d675ecb267386",
+      "bytes": 5008672
+    }
+  ],
+  "actual_runtime_changed": false,
+  "frozen_functional_image_10972_unchanged": true,
+  "candidate7_frozen_unchanged": true,
+  "default_kernel_link": null,
+  "native": null,
+  "whole_file_complete": false
+}
