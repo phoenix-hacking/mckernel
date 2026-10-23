@@ -92,6 +92,35 @@ def practical_panel(doc: dict) -> list[str]:
                     "its counters below do not define practical completion.", ""]
 
 
+def rust_cutover_panel(doc: dict) -> list[str]:
+    """Keep full LWK conversion visible outside the practical check denominator."""
+    if doc.get("id") != "M14":
+        return []
+
+    def cell(value):
+        return str(value).replace("|", "\\|").replace("\n", "<br>")
+
+    lines = ["## Separate active milestone: M14 Rust/assembly cutover", "",
+             "See [RUST-CUTOVER-M14.md](RUST-CUTOVER-M14.md) and "
+             "[rust-cutover-m14.json](rust-cutover-m14.json). This milestone is "
+             "separate from the 35 practical functional checks and remains active in parallel.", "",
+             "File rows contain existing partial Rust work. Unassessed subgoals do not mean "
+             "zero engineering progress; no conversion percentage is inferred.", "",
+             "| File goal | Compute C translation unit | Functional subgoals | File state |",
+             "| --- | --- | --- | --- |"]
+    for item in doc.get("files", []):
+        subgoals = item.get("functional_subgoals", [])
+        completed = sum(goal.get("status") == "complete" for goal in subgoals)
+        progress = ("assessment pending (" + str(len(subgoals)) + " listed)"
+                    if all(goal.get("status") == "unassessed" for goal in subgoals)
+                    else str(completed) + "/" + str(len(subgoals)) + " complete")
+        lines.append("| " + " | ".join(cell(value) for value in
+                     (item.get("id", "unassessed"), item.get("c_file", "unassessed"),
+                      progress, item.get("status", "unassessed"))) + " |")
+    return lines + ["", "M14 closes only with final default Rust/assembly ownership and applicable "
+                    "native functional proof. Practical 35/35 alone does not establish that result.", ""]
+
+
 def render(core_doc=None) -> str:
     if core_doc is None:
         core_doc = stable_core_tracker.load_tracker()
@@ -219,9 +248,10 @@ def render(core_doc=None) -> str:
         # Keep the established launcher/core content and legacy counter values.
         # Only the reporting priority and qualification labels change.
         position = lines.index("## Snapshot")
-        lines[position:position] = practical_panel(practical)
-        lines[3] = "> Active completion follows `PRACTICAL-GOAL.md` and `practical-milestones.json`; " \
-                   "original formal contracts and scores remain historical / DEFERRED."
+        cutover = read_json(TRACKER_DIR / "rust-cutover-m14.json", {})
+        lines[position:position] = practical_panel(practical) + rust_cutover_panel(cutover)
+        lines[3] = "> Practical completion follows `PRACTICAL-GOAL.md` and `practical-milestones.json`; " \
+                   "the separate active Rust cutover follows M14. Original formal qualification remains DEFERRED."
         renamed = {"## Acceptance Bars": "## Historical / DEFERRED qualification counters",
                    "## Intermediary Goal Ladder": "## Historical / DEFERRED qualification ladder",
                    "## Detailed Work Queue": "## Historical / DEFERRED qualification queue",
@@ -237,7 +267,9 @@ def render(core_doc=None) -> str:
                                "they do not define the active practical completion condition."
         position = lines.index("## Source Of Truth") + 2
         lines[position:position] = ["- `PRACTICAL-GOAL.md` and `practical-milestones.json` - active scoped "
-                                   "completion requirements, recorded check states, evidence and next work."]
+                                   "completion requirements, recorded check states, evidence and next work.",
+                                   "- `RUST-CUTOVER-M14.md` and `rust-cutover-m14.json` - separate active "
+                                   "file-by-file compute-kernel Rust/assembly cutover; outside the 35 checks."]
     return "\n".join(lines)
 
 

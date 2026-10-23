@@ -1,0 +1,40 @@
+--- /home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-235/final-runtime-ready-1/root-live-admission-1/read_only_native235_admission.py
++++ /home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/zombie-sdk-native-successor-1/case-235/root-live-admission-zombie-1/read_only_native235_admission.py
+@@ -1,3 +1,6 @@
++"""Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++Fresh read-only admission for the repaired host SDK tuple; no native authorization.
++"""
+ import fcntl
+ import ast,hashlib,json,os,subprocess,sys,time
+ from pathlib import Path
+@@ -15,7 +18,7 @@
+ b=ENGINE.read_bytes();need(hashlib.sha256(b).hexdigest()==EXPECTED,'accepted census source')
+ code=next(ast.literal_eval(n.value) for n in ast.parse(b).body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='PROC_CODE' for t in n.targets))
+ pid=os.getpid();start=Path('/proc/self/stat').read_text().rpartition(') ')[2].split()[19]
+-proc=json.loads(run(['/usr/bin/python3','-I','-B','-c',code,'v3-native235-current-live-admission-20261023-1',str(pid),start]))
++proc=json.loads(run(['/usr/bin/python3','-I','-B','-c',code,'zombie-sdk-native235-current-live-admission-20261023-1',str(pid),start]))
+ need(proc['status']=='COMPLETE' and proc['failure'] is None and proc['publishers']==[] and len(proc['snapshots'])==2,'complete publisher-free census')
+ root=Path('/home/holden/mckernel-work/scratch');backing=Path('/home/holden/mckernel-work/scratch.ext4');bs=backing.stat();host=os.statvfs('/home/holden/mckernel');scratch=os.statvfs(root)
+ need(bs.st_ino==47468427 and bs.st_size==118111600640,'110GiB backing identity')
+@@ -26,11 +29,11 @@
+ locks=[l for l in Path('/proc/locks').read_text().splitlines() if key in l.split()];need(not locks,'permanent mutex currently held')
+ mutex_fd=os.open('/run/lock/mckernel-development.lock',os.O_RDONLY|os.O_CLOEXEC|os.O_NOFOLLOW);need((os.fstat(mutex_fd).st_dev,os.fstat(mutex_fd).st_ino)==(27,4),'stable27:4FD');fcntl.flock(mutex_fd,fcntl.LOCK_EX|fcntl.LOCK_NB)
+ paths=['/home/holden/mckernel-work/scratch/native-running-external-modules.lease.json', '/home/holden/mckernel-work/scratch/native-running-external-modules-operational-exclusion.json', '/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18-image-1.json', '/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock', '/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/common-exclusion.json', '/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/lease.json', '/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/common-exclusion.json', '/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/image-lease.json'];need(all(not os.path.lexists(p) for p in paths),'fresh exact current SDK/image/launcher ownership paths absent')
+-cid='6959890602bd9c84ba3741b4aa37fc9ea29cb24a86ac93637315b852169074af'
++cid='6013f2e5649a330f03674f488b5d107a139c8fefd6630579545b05cc508a00f2'
+ need(run(['/usr/bin/docker','ps','-aq','--no-trunc','--filter','id='+cid])=='','latest retired container absent')
+-need(run(['/usr/bin/docker','ps','-aq','--no-trunc','--filter','name=^/mckernel-native-diagnostic-8646cb69db21440ca31573ab1b3d0691$'])=='','fresh exactnonce name absent')
+-need(run(['/usr/bin/docker','ps','-aq','--no-trunc','--filter','label=mckernel.native-diagnostic.owner=8646cb69db21440ca31573ab1b3d0691'])=='','fresh exactnonce label absent')
+-need(not os.path.lexists('/home/holden/mckernel-work/scratch/n235v1'),'fresh metadata parent absent')
++need(run(['/usr/bin/docker','ps','-aq','--no-trunc','--filter','name=^/mckernel-native-diagnostic-58b3c4c49a9143e1b32cd97ae38870d1$'])=='','fresh exactnonce name absent')
++need(run(['/usr/bin/docker','ps','-aq','--no-trunc','--filter','label=mckernel.native-diagnostic.owner=58b3c4c49a9143e1b32cd97ae38870d1'])=='','fresh exactnonce label absent')
++need(not os.path.lexists('/home/holden/mckernel-work/scratch/n235z1'),'fresh metadata parent absent')
+ running=run(['/usr/bin/docker','ps','-q','--no-trunc']);need(not running,'competing running container')
+ freehost=host.f_bavail*host.f_frsize;freescratch=scratch.f_bavail*scratch.f_frsize;growth=bs.st_size-bs.st_blocks*512;minimum=16*2**30+growth+536870912+679477248
+ need(freehost>=minimum and freescratch>=14101250048,'full capacity growth/reserves')
+@@ -39,4 +42,4 @@
+ state=json.loads(Path('/home/holden/mckernel/.git/os-autopilot/state.json').read_text());need(state['phase']=='running' and state['stop_reason'] is None,'launcher active')
+ expected_cgroup={'/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us': '100000', '/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us': '400000', '/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes': '12884901888', '/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy': '1', '/sys/fs/cgroup/pids/mckernel-dev/pids.max': '512'}
+ cgroup={p:Path(p).read_text().strip() for p in expected_cgroup};need(cgroup==expected_cgroup,'unchanged reviewed cgroup profile')
+-print(json.dumps(dict(status='PASS_FRESH_READ_ONLY_NATIVE235_CURRENT_LIVE_ADMISSION',sdk_predecessor={'path': '/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/INDEPENDENT-ACTUAL-SDK68-V3-ARTIFACT-AND-PHYSICAL-ACCEPTANCE-1.json', 'sha256': '6a6a47b9899e8de45ab650023419b5a1af0596fb34865241cae263e0b19cac2f', 'bytes': 2703},host_device=os.stat('/home/holden/mckernel').st_dev,scratch_device=root.stat().st_dev,proc=proc,mount=mount,backing=dict(dev=bs.st_dev,inode=bs.st_ino,size=bs.st_size,allocated=bs.st_blocks*512),host_available=freehost,scratch_available=freescratch,minimum_host=minimum,memory_available=mem,affinity=sorted(os.sched_getaffinity(0)),root_lock=[lock.st_dev,lock.st_ino],ownership_paths_absent=paths,running_containers=[],cgroup=cgroup,mutation=False,at_unix=time.time()),sort_keys=True))
++print(json.dumps(dict(status='PASS_FRESH_READ_ONLY_NATIVE235_CURRENT_LIVE_ADMISSION',sdk_predecessor={'path': '/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/sdk-build-release/INDEPENDENT-ACTUAL-SDK-ARTIFACT-AND-PHYSICAL-ACCEPTANCE.json', 'sha256': '5df70b4414fe418e73b3e01650380ecf58d7a085642cce95b94c611a1a0d9189', 'bytes': 2250},host_device=os.stat('/home/holden/mckernel').st_dev,scratch_device=root.stat().st_dev,proc=proc,mount=mount,backing=dict(dev=bs.st_dev,inode=bs.st_ino,size=bs.st_size,allocated=bs.st_blocks*512),host_available=freehost,scratch_available=freescratch,minimum_host=minimum,memory_available=mem,affinity=sorted(os.sched_getaffinity(0)),root_lock=[lock.st_dev,lock.st_ino],ownership_paths_absent=paths,running_containers=[],cgroup=cgroup,mutation=False,at_unix=time.time()),sort_keys=True))

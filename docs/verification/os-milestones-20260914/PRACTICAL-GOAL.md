@@ -24,6 +24,16 @@ the three mcctrl_vm_write_compat.c MM API thunks are host glue. Report any furth
 concrete exception before integration. First ports are the live FPU copy path
 and scheduler FPU admission; process/scheduling retirement continues afterward.
 
+Separate milestone, explicit user instruction on 2026-10-23: track the entire
+co-booted LWK Rust/reviewed-assembly cutover in [M14](RUST-CUTOVER-M14.md), with
+[file-by-file subgoals](rust-cutover-m14.json). Linux remains its permitted
+control-plane dependency. M09/P-M09-02 retain their practical preservation and
+changed-boundary validation scope; the35-check functional count is unchanged.
+Practical35/35 and M14 completion are separate results. Both objectives remain
+active in parallel;35/35 does not imply all-Rust completion, and M14 is not a new
+prerequisite for the next functional test. The earlier same-day expansion of
+P-M09-02 is superseded, with its wording retained as history in the worklist.
+
 
 Effective 2026-10-17, scope `practical-kernel-apps-v1-20261017`.
 
@@ -107,7 +117,7 @@ Its scope ID distinguishes these exit checks from the preserved original IDs.
 | M06 | Process creation/exec/wait, thread/futex and syscall behavior required by the selected apps | Complete ptrace, credential, device and optional-network feature parity |
 | M07 | State preservation for vector/FPU features actually used across threads/syscalls/signals | AVX-512 and broad MPI/OpenMP/QLMPI/UTI/HPC qualification |
 | M08 | Matched native modules build/load and used ABI/lifetime paths work | Exhaustive export/interface/topology mapping |
-| M09 | Preserve Rust consumers and validate changed Rust/C/assembly boundaries | Whole-image zero-C migration and all seven language certifications |
+| M09 | Preserve Rust consumers and validate changed Rust/C/assembly boundaries; complete compute-C retirement has its own active M14 | Broader host/tool/vendor conversion and all seven language certifications |
 | M10 | One pinned clean build/replay yields runnable artifacts and a usable recipe | Full RPM/signing/Secure Boot/update/downgrade certification |
 | M11 | Integrated regressions, targeted negatives and useful failure diagnostics | Every sanitizer/failure site and whole-host pressure certification |
 | M12 | The bounded repeatability/60-minute mixed run above, with resource trends | 100,000 fuzz VM-hours, 30,000 node-hours, 168-hour per-class soaks, 100,000-cycle and billion-operation quotas |

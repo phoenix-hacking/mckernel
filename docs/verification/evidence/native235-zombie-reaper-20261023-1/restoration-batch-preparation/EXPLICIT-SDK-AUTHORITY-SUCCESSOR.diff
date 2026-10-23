@@ -1,0 +1,61 @@
+--- /home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/full-tuple-binding-1/stage_m05_two_generation.py
++++ /home/holden/mckernel-work/host-preparation/native235-zombie-sdk-successor-20261023-1/restoration-batch-preparation/stage-binding/stage_m05_two_generation.py
+@@ -9,7 +9,11 @@
+ import argparse, copy, gc, hashlib, importlib.util, json, os, resource, shutil
+ 
+ HERE = Path(__file__).resolve().parent
+-BINDING_SHA256 = '2bf6b9819f9fad2b293cd968884017d630e2e2825fe171771376daf1c802c321'
++BINDING_SHA256 = 'cd417a65ed6dc110796478e8e31a0511f4b8388c6686e1c57209b728b470e085'
++SDK_SUCCESSOR_PATH = '/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/sdk-build-release/INDEPENDENT-ACTUAL-SDK-ARTIFACT-AND-PHYSICAL-ACCEPTANCE.json'
++SDK_SUCCESSOR_SHA = '5df70b4414fe418e73b3e01650380ecf58d7a085642cce95b94c611a1a0d9189'
++SNAPSHOT_BINDING_PATH = '/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/zombie-sdk-native-successor-1/ONE-RECORD-BASE-PATCH-INPUTS.ACTUAL.json'
++SNAPSHOT_BINDING_SHA = 'cb226e76055112afcb7b613b22a06655603786be6a39df9ab2a7a8dddd118d13'
+ MEMBERS = {'images/mckernel.img', 'bin/mcexec', 'modules/ihk.ko',
+            'modules/ihk-smp-x86_64.ko', 'modules/mcctrl.ko'}
+ 
+@@ -82,18 +86,43 @@
+         need([row['name'] for row in receipt['modules']] == ['ihk.ko','ihk-smp-x86_64.ko','mcctrl.ko'], 'exact snapshot module names')
+         for row in receipt['modules']:
+             need(row['copied'] == binding['replacements']['modules/' + row['name']], 'exact actual V3 snapshot descriptor')
++    elif profile == 'current68-zombie-reaper-build-link-physical':
++        need(binding['authority']['current_SDK_acceptance']['path'] == SDK_SUCCESSOR_PATH
++             and binding['authority']['current_SDK_acceptance']['sha256'] == SDK_SUCCESSOR_SHA
++             and sdk['status'] == 'PASS' and sdk['implementation_ownership'] is False
++             and sdk['decision'] == 'ACCEPT_ACTUAL_SDK_SUCCESSOR_ARTIFACTS_AND_HOST_PHYSICAL_RETIREMENT'
++             and sdk['physical_acceptance'] is True and sdk['native_acceptance'] is False
++             and sdk['source_identity'] == '15334501928a36becca541c8cd8beeead3da0acd8737f955abaf98f34cece515',
++             'exact independent zombie-reaper SDK authority')
++        patched = docs['zombie_snapshot_binding']
++        need(binding['authority']['zombie_snapshot_binding']['path'] == SNAPSHOT_BINDING_PATH
++             and binding['authority']['zombie_snapshot_binding']['sha256'] == SNAPSHOT_BINDING_SHA
++             and patched['matched_artifact_acceptance']['sdk']['sha256'] == SDK_SUCCESSOR_SHA
++             and patched['changed_record_allowlist'] == ['modules/mcctrl.ko']
++             and patched['new_runtime_tuple']['modules/mcctrl.ko'] == binding['replacements']['modules/mcctrl.ko'],
++             'exact accepted changed mcctrl snapshot join')
++        receipt = docs['v3_snapshot_receipt']
++        need(binding['authority']['v3_snapshot_receipt']['sha256'] == '7eaaffb59663f27943c2f766ff4d737d790ade99349574349ba9453afa5cd33d'
++             and receipt['status'] == 'PASS_THREE_ACTUAL_EXCLUSIVE_MODULE_RUNTIME_SNAPSHOTS',
++             'unchanged accepted ihk snapshots')
++        for row in receipt['modules']:
++            if row['name'] != 'mcctrl.ko':
++                need(row['name'] in ('ihk.ko', 'ihk-smp-x86_64.ko')
++                     and row['copied'] == binding['replacements']['modules/' + row['name']],
++                     'exact unchanged SDK module snapshot')
+     else:
+         need(False, 'unknown SDK authority profile')
+     for member, row in binding['replacements'].items():
+         if member.startswith('modules/'):
+-            need(sdk['artifacts'][member.split('/')[-1]] ==
++            need(({k: sdk['artifacts'][member.split('/')[-1]][k] for k in ('bytes', 'sha256')}
++                  if profile == 'current68-zombie-reaper-build-link-physical' else sdk['artifacts'][member.split('/')[-1]]) ==
+                  {'bytes': row['size'], 'sha256': row['sha256']}, 'SDK module descriptor join')
+ 
+ 
+ def validate_selection(selection, old, binding):
+     need(set(selection) == MEMBERS and selection == binding['replacements'],
+          'exact current image/launcher/three-module tuple')
+-    if binding.get('authority_profile') == 'current68-v3-build-link-physical':
++    if binding.get('authority_profile') in ('current68-v3-build-link-physical', 'current68-zombie-reaper-build-link-physical'):
+         launcher = selection['bin/mcexec']
+         need(type(launcher['sha256']) is str and len(launcher['sha256']) == 64
+              and type(launcher['size']) is int and launcher['size'] > 0,

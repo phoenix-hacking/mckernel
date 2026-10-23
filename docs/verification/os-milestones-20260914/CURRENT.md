@@ -1,3 +1,72 @@
+## Physical clearance and independent work — 2026-10-23 04:31 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Independent actual58b3 host physical acceptance d7d25138 now complete: all25clients
+reaped, ownedCID8782108f removed, freshCID/name/label empty, completepublisher-free
+PROC, positive27:4 and8pathsENOENT. No duplicate cleanup. Actual235 remainsFAIL;
+no unchanged replay.14failed raw guest/outer files412528B retained in next-native-
+preparation/retirement-readiness/FAILED-NATIVE-RAW-RETENTION-MAP.json. Repair owner
+native235_zombie_fix investigates real cleanup/reap/retirement ordering.
+Candidate3 maintenance read-only query2PASS0/.279s with closed/joined captures and
+emptyerr; no resize performed. p12_capture_budget binds actualvendor/reservefacts
+while native repair proceeds. P12 NONE focused source review/tinyattach smoke is
+next independent ready runtime only after its separate release; no competing guest.
+29/35 original functional checks;0newclosures; qualifying V3cycles/launches/minutes0/0/0.
+
+## Actual repaired-SDK native235 failure — 2026-10-23 04:29 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+29/35 original functional checks; no new closure. Final-profile V3 cycles/launches/
+actual mixed minutes remain0/0/0. Separate active M14 is outside that denominator.
+Actual fresh235 nonce58b3 started04:25:44.661Z; ownerFAILED47.825s, parent47.880s,
+joined/groupabsent/closed. Strict235 not accepted: guest collector payload report
+missing/duplicate/oversize. Owner start--attach returned nonzero, secondary wrapper
+error. Serial observes child259 actual cleanup ACK, parent256 wait4 returns259,
+child retirement eventuallyerrno0; preceding cleanup timed out(-110) after repeated
+retirementEAGAIN, parent retirement stillEAGAIN before powerdown. This differs from
+the prior never-reap failure; cause remains under diagnosis, no unchanged replay.
+Allraw retained: ../evidence/native235-zombie-reaper-20261023-1/next-native-preparation/
+native235-release-preparation/ and private case235 actual-zombie-native235-owner-capture-1.
+Exact owner exportPASS0/.151s,77files188510B,282803Bencoded. Independent review finds
+ownedCID8782108f removed, allclientsreaped, absence_verifiedtrue/lease_retainedfalse.
+Fresh current PROC/mutex/8paths and exactCID/name/label read-only observations still
+pending exact release; no duplicate cleanup or nextheavy until positive acceptance.
+Native235_zombie_fix owns trace/source diagnosis, p12_identity_review physical facts,
+root execution.227/restoration/batch successor source preparation continues independently.
+Stage-to-native elapsed712.661s includes actual preparation/review; stale guard binding
+caused avoidable serial correction and was caught before execution. Keep exact wait
+record, no claim this entire elapsed interval was idle. P12 NONE source40+8checksPASS;
+real tiny attach/retirement smoke and owner-aware externalcapture binding still needed.
+Onepass current10972 C accounting0/6.188s:431 C-attributed spans38243B, but most bytes
+unknown/CGU-only. Partial lower attribution only, no complete remainingC/Rustpercentage.
+M14 canonical per-file plan supplied by foreground; keep independent02-04 implementation.
+
+## Active closure-first cursor — 2026-10-23 04:19 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical checks remain29/35; current qualifying V3 cycles/launches/mixed minutes0/0/0.
+Actual successor SDK build PASS in27.487s; independent artifact+host physical
+acceptance5df70b44. Only mcctrl changed to d8d8c4a; image10972 and launcher unchanged.
+All seven actual ordinary fresh235 stages passed, including one-record base patch
+9.473s, overlay11.225s and strict manifest join.307s. No guest run yet on this tuple.
+Evidence: ../evidence/native235-zombie-reaper-20261023-1/next-native-preparation/
+ACTUAL-ORDINARY-STAGE-SUMMARY.json. Original235 failure and physical acceptance
+remain preserved. Next executable is fresh235 admission/metadata and exact native
+release: native235_zombie_fix prepares, p12_identity_review reviews, root executes.
+No unchanged kernel/image/launcher rebuild is needed. p12_capture_budget prepares
+227/restoration/batch successor; case227_stage_review maps finite M08/M09 evidence
+joins. P12 source owner and independent reviewer now choose a simpler finite
+capture/logging budget rather than pursue the unsupported96MiB target indefinitely.
+Maintenance candidate3 parser correction and one fresh read-only query independently
+accepted; no query2 or resize executed. Maintenance stays off235 critical path.
+Foreground owns separate active M14 per-file Rust tracking, restoring original M09
+functional scope and preserving35IDs/status/evidence. Full compute Rust implementation
+remains active independently. scratch_growth_prepare executes one bounded current10972
+read-only residual-C inventory on ordinaryCPU6; no image/build/runtime change.
+Service-resolution receipt remains active; stop on any NEW rejection. No speedup,
+whole-Rust or native repair success claimed. Latest pushed/fetched5d41341d; preserve
+original velocity baselines and permanent mutex27:4/scratch21.
+
 ## Active repair/build cursor — 2026-10-23 03:40 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

@@ -11,6 +11,12 @@ Current user scope (2026-10-17): [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md) and
 qualification as the active completion target. Read them after GOAL.md. Preserve
 the old roadmap as deferred scope; do not recreate long-exposure prerequisites.
 
+Latest user instruction, 2026-10-23: keep the35 functional checks separate from
+the full Rust cutover. Read [M14](RUST-CUTOVER-M14.md) and only the selected file
+subgoals from [rust-cutover-m14.json](rust-cutover-m14.json) for cutover work.
+M14 remains active alongside functional closure; it does not postpone the next
+native test. Report both tracks separately and reuse matching evidence.
+
 Preparation on 2026-09-27 leaves the campaign stopped. A later normal launcher
 invocation is explicit authorization to resume; this preparation hold does not
 stop that invocation. Dedicated-computer scheduling supersedes older

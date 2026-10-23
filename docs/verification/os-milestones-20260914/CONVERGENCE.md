@@ -15,6 +15,15 @@ this document is not a claim that the Python harness enforces it.
 
 ## Authority and scope
 
+Explicit user instruction, 2026-10-23: full supported LWK Rust/assembly cutover
+has its own active [M14](RUST-CUTOVER-M14.md) and [per-file worklist](rust-cutover-m14.json).
+Keep M09/P-M09-02 at practical preservation/changed-boundary validation and the
+original35-check denominator unchanged. Report M14 separately; do not make its
+whole-image retirement a new prerequisite for the next functional case. Assign
+bounded disjoint implementation slices using existing Rust and record actual
+production/default-link/native proof. Linux control-plane compatibility C remains
+allowed. No runtime, resource, retry or ownership rule is relaxed by this split.
+
 The user's explicit 2026-10-17 scope revision makes
 [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md) and
 [practical-milestones.json](practical-milestones.json) the active completion
@@ -100,7 +109,7 @@ native acceptance to move the counter.
 | P-M08-02 | Reuse that matched module/lifecycle/process batch to validate the changed used ABI boundaries, with its own exact evidence mapping. |
 | P-M05-03 | After complete restoration is established, perform the remaining matching ten-cycle budget and required failure/recovery observations. |
 | P-M12-01 | Overlap qualifying lifecycle cycles, two boots, 100 real launches and 60 mixed-workload minutes on the declared matching profile; retain separate counters and reuse matching valid evidence. |
-| P-M09-02 | Validate changed default Rust/C/assembly consumer, ABI, link, fallback and applicable native boundaries in the declared artifact set. Keep full live compute-C retirement status explicit and deferred qualification separate. |
+| P-M09-02 | Validate changed default Rust/C/assembly consumer, ABI, link, fallback and applicable native boundaries in the declared artifact set. Full live compute-C retirement is the separate active M14; deferred qualification remains separate. |
 | P-M13-03 | Complete focused final correctness/ownership review against the actual delivered artifacts and results; announce only the accepted scope. |
 
 The retained-owner cleanup and M07 census/guard repairs remain shared runtime

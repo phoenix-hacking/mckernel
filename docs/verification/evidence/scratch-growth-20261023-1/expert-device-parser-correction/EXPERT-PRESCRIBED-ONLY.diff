@@ -1,0 +1,28 @@
+--- candidate2/grow_scratch.py
++++ candidate3/grow_scratch.py
+@@ -163,6 +163,13 @@
+             'Flex block group size': '16', 'First inode': '11',
+             'Journal features': 'journal_incompat_revoke journal_64bit journal_checksum_v3',
+             'Reserved blocks uid': '0 (user root)', 'Reserved blocks gid': '0 (group root)'}
++
++
++def parse_major_minor(value):
++    require(type(value) is str and len(value) <= 64, 'typed bounded major:minor required')
++    matched = re.fullmatch(r'[ \t]*([0-9]+):([0-9]+)[ \t]*', value, re.ASCII)
++    require(matched is not None, 'ASCII decimal major:minor required')
++    return int(matched.group(1), 10), int(matched.group(2), 10)
+ 
+ 
+ def snapshot(run, sizes):
+@@ -190,9 +197,9 @@
+     require(len(loops) == 1, 'loop count changed')
+     loop = loops[0]
+     require(loop['name'] == device and loop['back-file'] == str(BACKING)
+-            and loop['maj:min'] == '%d:%d' % (os.major(devmeta.st_rdev), os.minor(devmeta.st_rdev))
++            and parse_major_minor(loop['maj:min']) == (os.major(devmeta.st_rdev), os.minor(devmeta.st_rdev))
+             and type(loop['back-ino']) is int and loop['back-ino'] == meta.st_ino
+-            and loop['back-maj:min'] == '%d:%d' % (os.major(meta.st_dev), os.minor(meta.st_dev))
++            and parse_major_minor(loop['back-maj:min']) == (os.major(meta.st_dev), os.minor(meta.st_dev))
+             and int(loop['offset']) == 0 and int(loop['sizelimit']) == 0
+             and loop['autoclear'] is True and loop['ro'] is False, 'loop binding changed')
+     for name, expected in [('loop/backing_file', str(BACKING)), ('loop/offset', '0'),

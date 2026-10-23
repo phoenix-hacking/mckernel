@@ -1,0 +1,27 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "argv": [
+    "/usr/bin/taskset",
+    "--cpu-list",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--core=0",
+    "--fsize=134217728",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/next-native-preparation/materialize_bound_metadata.py",
+    "--execute"
+  ],
+  "returncode": 0,
+  "direct_child_pid": 3487612,
+  "direct_child_joined": true,
+  "streams_closed": true,
+  "elapsed_seconds": 0.08019555796636268,
+  "stdout_bytes": 487,
+  "stderr_bytes": 0
+}

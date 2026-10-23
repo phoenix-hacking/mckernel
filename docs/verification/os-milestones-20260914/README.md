@@ -1,5 +1,11 @@
 # Remaining OS work and economical agent dispatch
 
+Current scope, 2026-10-23: [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md) and its35-check
+worklist define functional completion. Full supported LWK Rust/assembly cutover
+is the separate active [M14](RUST-CUTOVER-M14.md), with [per-C-file subgoals](rust-cutover-m14.json).
+Advance and report both tracks separately. The original roadmap below is retained
+as historical/deferred qualification; it does not replace these current scopes.
+
 Prepared 2026-09-14 against `9d90b588bae761a6cea6596827f8cc296a3ee642`
 and the existing untracked work recorded in `source-index.json`.
 

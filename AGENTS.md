@@ -32,6 +32,18 @@ work. Preserve functional memory/ownership/resource checks. A service classifier
 flag is not evidence that a security task was assigned; report the actual task
 and exact service error. Scope clarification does not clear a service hold.
 
+## Separate M14 Rust cutover — user instruction 2026-10-23
+
+Track full supported McKernel LWK Rust/reviewed-assembly conversion in
+`docs/verification/os-milestones-20260914/RUST-CUTOVER-M14.md` and its
+`rust-cutover-m14.json` worklist. Enumerate each remaining runtime C file and
+its functional subgoals. M09 retains changed-boundary integration validation;
+do not expand the existing35 functional checks to include all of M14. Report
+the practical count and M14 implementation/link/native progress separately.
+Both remain active in parallel. M14 does not block the next functional test or
+the already authorized post35 seeded Rust workloads. Linux control-plane C and
+reviewed assembly remain allowed. Reuse existing Rust and accepted evidence.
+
 ## User-authorized scratch capacity growth — 2026-10-23
 
 The user explicitly authorizes expanding the scratch image when space is tight,

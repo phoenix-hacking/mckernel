@@ -1,0 +1,25 @@
+--- accepted-four-record-wrapper
++++ mcctrl-only-wrapper
+@@ -2,7 +2,7 @@
+ import contextlib,hashlib,importlib.util,json,sys,gzip
+ def load(name,path):
+  spec=importlib.util.spec_from_file_location(name,path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);return module
+-D=json.loads(Path(sys.argv[1]).read_bytes());allowed={'bin/mcexec','modules/ihk.ko','modules/ihk-smp-x86_64.ko','modules/mcctrl.ko'}
++D=json.loads(Path(sys.argv[1]).read_bytes());allowed={'modules/mcctrl.ko'}
+ assert set(D['new_runtime_tuple'])==allowed and set(D['changed_record_allowlist'])==allowed and D['matched_artifact_acceptance']is not None
+ assert all(isinstance(v,dict)and all(v.get(k)is not None for k in('path','sha256','size','mode'))for v in D['new_runtime_tuple'].values())
+ assert hashlib.sha256(Path(sys.argv[2]).read_bytes()).hexdigest()==sys.argv[3]and hashlib.sha256(Path(sys.argv[4]).read_bytes()).hexdigest()==sys.argv[5]
+@@ -15,11 +15,11 @@
+  replacements={k:(s.data,D['old_record_sha256'][k])for k,s in sources.items()};derived,proof=p.derive_base_payloads(ov,base.data,replacements)
+  old=ov._manifest(ov._replay_records(ov.parse_newc(base.data)[0]));new=ov._manifest(ov._replay_records(ov.parse_newc(derived)[0]));assert set(old)==set(new)and all(old[k]==new[k]for k in old if k not in allowed)
+  for k,s in sources.items():assert new[k]['sha256']==s.sha256 and new[k]['size']==len(s.data)and all(old[k][f]==new[k][f]for f in old[k]if f not in('sha256','size'))
+- assert new['images/mckernel.img']['sha256']==D['unchanged_image_sha256']and new['bin/native-boot']['sha256']==D['unchanged_helper_sha256']
++ assert new['images/mckernel.img']['sha256']==D['unchanged_image_sha256']and new['bin/native-boot']['sha256']==D['unchanged_helper_sha256']and new['bin/mcexec']['sha256']==D['unchanged_launcher_sha256']
+  base.verify()
+  for s in sources.values():s.verify()
+  p.write(Path(D['patched_cpio']),derived);p.write(Path(D['patched_gzip']),ov._gzip(derived));assert gzip.decompress(Path(D['patched_gzip']).read_bytes())==derived
+  base.verify()
+  for s in sources.values():s.verify()
+- result=dict(status='PASS_FOUR_RECORD_TUPLE_PATCH_ONLY_NO_NATIVE',inputs=D,sources={k:s.manifest()for k,s in sources.items()},raw_header_proof=proof,changed_record_allowlist=sorted(allowed),actual_changed_members=sorted(k for k in old if old[k]!=new[k]),all_other_final_members_identical=True,all_original_record_order_metadata_preserved=True,patched_cpio=p.ref(D['patched_cpio']),patched_gzip=p.ref(D['patched_gzip']),final_map=new,actual_new_rawtree_created=False,guest_runs=0)
++ result=dict(status='PASS_ONE_MCCTRL_RECORD_PATCH_ONLY_NO_NATIVE',inputs=D,sources={k:s.manifest()for k,s in sources.items()},raw_header_proof=proof,changed_record_allowlist=sorted(allowed),actual_changed_members=sorted(k for k in old if old[k]!=new[k]),all_other_final_members_identical=True,all_original_record_order_metadata_preserved=True,patched_cpio=p.ref(D['patched_cpio']),patched_gzip=p.ref(D['patched_gzip']),final_map=new,actual_new_rawtree_created=False,guest_runs=0)
+  p.js(Path(D['patch_receipt']),result);print(json.dumps(result,sort_keys=True))

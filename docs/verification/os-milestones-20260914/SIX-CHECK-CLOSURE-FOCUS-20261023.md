@@ -17,7 +17,7 @@ build retirement is being completed. These are prerequisites, not native accepta
 | P-M01-02 cancellation/recovery | Actual strict 227-byte cancellation/recovery result, including EOF/reap, subsequent child execution and genuine ownership retirement. | Follow process-case success on the same matched artifact set, with the existing separate case admission and oracle. Diagnose any failure before replay. |
 | P-M05-03 ten lifecycle cycles and failed-stop recovery | First full V3 restoration, then ten qualifying lifecycle cycles with exact CPU/memory restoration, complete retirement, and supported failed-stop retention/recovery. | lifecycle_missing_recovery prepares the already staged V3 consumer; finish the fixed-profile production batch adapter and use it after its existing review/admission. Old-profile cycles remain historical. |
 | P-M08-02 used ABI/lifetime paths | Exact remaining used boot/resource/process/mapping/shutdown and changed boundary obligations on the selected artifact set. | Assign one existing boundary owner to list only the literal missing observations; reuse qualified process/recovery/restoration captures and matching accepted evidence. Avoid a fresh repository-wide audit. |
-| P-M09-02 changed consumed Rust/C/assembly boundaries | Actual default-selection/link/native joins for the finite changed boundary set in the final artifacts. | Perform the focused join alongside process and lifecycle execution. Separate this practical check from the broader whole-kernel language-retirement objective; neither is satisfied by an unbuilt patch. |
+| P-M09-02 changed consumed Rust/C/assembly boundaries | Actual default-selection/link/native joins for the finite changed boundary set in the final artifacts. | Perform the focused join alongside process and lifecycle execution. Full supported compute-kernel C retirement is the separate active M14; practical35/35 does not complete M14. |
 | P-M12-01 bounded final regression | Two fresh boots, ten complete native cycles, 100 successful selected-suite launches, and 60 actual mixed-workload minutes on the declared final profile. | p12_coupled_long_profile completes the existing HOST-output/log-growth coupling in parallel. Freeze the matching set once functional prerequisites pass; overlap valid quotas and launch the reviewed hour promptly after its actual prerequisites and release. |
 
 Keep heavy work serialized in the existing four-CPU/12-GiB/no-swap/512-task
@@ -110,6 +110,47 @@ agent count. If an admitted ordinary slot is idle for more than five minutes,
 name its missing dependency and redirect only dependency-ready independent work.
 Review the changed source once, carry unchanged accepted bindings forward, and
 reuse qualified captures across the six checks. This adds no new execution gate.
+
+## Separate Rust cutover milestone — explicit user instruction 2026-10-23
+
+The earlier same-day expansion of P-M09-02 is superseded. M09 retains its
+practical changed-boundary scope and the35 functional checks keep their IDs,
+statuses and evidence. Full supported LWK Rust/reviewed-assembly implementation
+is the separate active [M14](RUST-CUTOVER-M14.md), with each runtime C file and
+its functional subgoals enumerated in [rust-cutover-m14.json](rust-cutover-m14.json).
+Report practical closure and M14 implementation/integration/native proof
+separately. At M14 completion, zero live McKernel-owned compute C bodies may
+remain on the supported default path; Linux control-plane glue and reviewed
+assembly remain allowed. Keep bounded cutovers moving alongside the functional
+repair. Reuse the matched-image inventory across checkpoints, not per run.
+
+## Morning functional closure priority — user instruction 2026-10-23
+
+Target all 35 functional checks by the user's next morning in America/Los_Angeles;
+this is a scheduling target, not authority to waive a failing observation. Keep
+M14 separate. At04:04UTC the repaired SDK artifacts and host retirement were
+independently accepted; the changed mcctrl module is the only replacement needed.
+Next-case bindings were ready04:11 and root staging completed04:13. Minimize the
+handoff interval to the actual fresh235 native result, then227 recovery. Reuse
+the unchanged image/launcher and accepted bindings; no general rebuild or audit.
+
+Use completed qualified workers for next-case/lifecycle-batch preparation,
+P12's coherent session, and finite M08/M09 joins in parallel. Root retains live
+admission/execution. After process/recovery success, obtain first fullV3 resource
+restoration, then overlap valid cycle/boot/launch/mixed-minute budgets. Reuse one
+qualified observation for every applicable literal check. Do not make a newly
+chosen tight capture allowance or a full kernel-filesystem allocation theorem a
+milestone requirement; if it stalls, prepare a simpler existing-runner or
+generously budgeted monitored HOST capture profile for focused review. Preserve
+actual resource/failure/ownership controls and all application/session contracts.
+
+At each existing 30-minute checkpoint record: actual235/227 outcomes, first
+restoration, current matching cycle/launch/mixed-minute counters, newly closed
+check IDs, longest ready-to-start wait and its owner/action. If the next eligible
+operation waits more than10minutes, resolve its specific implementation/profile/
+review dependency or redirect useful independent capacity. Ample CPU/RAM alone
+does not improve closure; shorten code-to-native feedback. Resize is authorized
+but should block a small native case only if its fresh actual budget needs it.
 
 ## Next user-authorized phase
 

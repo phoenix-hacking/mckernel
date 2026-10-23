@@ -88,9 +88,23 @@
       "integration_estimates_are_not_language_conversion_scores": true,
       "earlier_whole_image_zero_C_deferral_does_not_postpone_compute_cutover": true,
       "host_linux_C_compatibility": "Three mcctrl_vm_write_compat.c MM thunks allowed; any further exception reported before integration",
-      "completion_requires": "Production default consumer, linked ownership and applicable native proof; source/mock success insufficient"
+      "completion_requires": "Production default consumer, linked ownership and applicable native proof; source/mock success insufficient",
+      "separate_milestone": "M14",
+      "worklist": "rust-cutover-m14.json",
+      "independent_of_practical_35_check_count": true
     }
   },
+  "separate_active_milestones": [
+    {
+      "id": "M14",
+      "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
+      "worklist": "rust-cutover-m14.json",
+      "guide": "RUST-CUTOVER-M14.md",
+      "status": "open",
+      "counted_in_practical_35": false,
+      "authority": "2026-10-23 explicit user instruction: track whole compute-kernel Rust cutover as its own milestone, enumerating each C file and its subgoals."
+    }
+  ],
   "milestones": [
     {
       "id": "M00",
@@ -1453,7 +1467,14 @@
       "title": "Rust and assembly integration",
       "engineering_state": "partial",
       "completion_status": "open",
-      "exit_condition": "Existing Rust consumers preserved; live McKernel compute C retired into Rust/reviewed assembly through production default consumers, linked artifacts and native proof; host compatibility exceptions explicit.",
+      "exit_condition": "Existing Rust consumers preserved and changed consumed Rust/C/assembly boundaries validated in the final artifact set; host compatibility exceptions explicit. Complete compute-kernel C retirement is tracked separately by M14.",
+      "scope_separation_20261023": {
+        "authority": "User explicitly requests a separate file-by-file Rust-cutover milestone instead of adding the entire cutover to M09.",
+        "prior_exit_condition_preserved": "Existing Rust consumers preserved; live McKernel compute C retired into Rust/reviewed assembly through production default consumers, linked artifacts and native proof; host compatibility exceptions explicit.",
+        "retirement_milestone": "M14",
+        "worklist": "rust-cutover-m14.json",
+        "practical_check_ids_statuses_and_evidence_unchanged": true
+      },
       "checks": [
         {
           "id": "P-M09-01",
@@ -1563,6 +1584,19 @@
         {
           "id": "P-M09-02",
           "description": "Validate changed consumed Rust/C/assembly boundaries in the final artifact set.",
+          "scope_alignment_20261023": {
+            "status": "superseded_by_explicit_user_separation_into_M14",
+            "superseded_description_preserved": "Retire live McKernel-owned compute-kernel C implementation bodies from the supported default LWK path into Rust/reviewed assembly, and validate the consumed boundaries in the final artifact set.",
+            "replacement_worklist": "rust-cutover-m14.json",
+            "functional_check_scope_restored": true,
+            "authority": "Existing active user instruction of 2026-10-18, reaffirmed 2026-10-23: functional co-booted McKernel LWK entirely in Rust/reviewed assembly; Linux control-plane dependency remains allowed.",
+            "prior_description_preserved": "Validate changed consumed Rust/C/assembly boundaries in the final artifact set.",
+            "reason": "Align this open check with the existing M09 exit_condition; selected changed-boundary evidence alone cannot establish whole compute-kernel retirement.",
+            "completion_requirement": "No live McKernel-owned C implementation body remains on the supported default compute-kernel path. Bind production selection and linked ownership to the final image and apply relevant native functional proof. Unknown implementation ownership remains unresolved.",
+            "permitted": "Reviewed assembly; Linux control-plane compatibility C; non-executable ABI declarations; retained C reference/fallback sources excluded from the supported default compute-kernel implementation.",
+            "evidence_preservation": "Existing accepted Rust paths, historical scores, original evidence and failures remain unchanged. This wording correction changes no status or check count and requires no replay of unchanged qualified evidence.",
+            "current_whole_compute_c_accounting": "Not currently established by the selected-path evidence; a historical image attribution is not a current inventory."
+          },
           "status": "open",
           "evidence": [
             {
@@ -1645,7 +1679,7 @@
           "assessment_note": "Current5f7 production40713d52 validates selected SAVE/RESTORE default ABI/link/scalar bodies and preserves previous accepted Rust bodies. Full final artifact set/native/fallback/legacy/hardware remains open. Original syscall-DWARF13 failed and all14passed=false; required ABI facts instead established by successful complete process-DWARF14 plus actual compiled C assertions. No failed check relabeled PASS."
         }
       ],
-      "current_evidence_summary": "21 selected production Rust paths/18 applicable native paths after actual named insert/clear default caller/object/ELF joins and representative current053d NUMA native acceptance. First-node insertion and clear-entry empty-tree scope only; nonempty branches/full final boundary set and whole-kernel C retirement remain open."
+      "current_evidence_summary": "21 selected production Rust paths/18 applicable native paths after actual named insert/clear default caller/object/ELF joins and representative current053d NUMA native acceptance. First-node insertion and clear-entry empty-tree scope only; nonempty branches/full final boundary set remain open. Whole compute-kernel C retirement remains active and is tracked separately by M14."
     },
     {
       "id": "M10",

@@ -6,6 +6,17 @@ scope in [AGENTS.md](../../../AGENTS.md) to every worker brief. Keep functional
 correctness and resource/ownership checks. This note does not resume the stopped
 campaign or clear its service-policy hold.
 
+## Current scope separation — explicit user instruction 2026-10-23
+
+Keep the original35 practical functional checks in practical-milestones.json.
+Track full supported compute-kernel Rust/reviewed-assembly conversion as separate
+active [M14](RUST-CUTOVER-M14.md), with each C file and its subgoals in
+[rust-cutover-m14.json](rust-cutover-m14.json). M09 remains preservation and
+changed-boundary integration validation. Practical35/35 and M14 are distinct
+results; neither implies the other. Advance both in parallel, prioritizing the
+current native functional critical path. Retain Linux as the supporting control
+plane. Preserve old scope/evidence; no launcher objective or state is rewritten.
+
 ## Current — FP file native accepted; literal M04-02 closed (2026-10-18 23:06 UTC)
 
 Continuous functional OS/apps plus Rust/reviewed-assembly migration remains active.

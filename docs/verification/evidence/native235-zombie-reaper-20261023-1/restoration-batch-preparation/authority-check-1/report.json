@@ -1,0 +1,126 @@
+{
+  "application_acceptance": false,
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=536870912:536870912",
+    "--cpu=60:60",
+    "--core=0:0",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/native235-zombie-sdk-successor-20261023-1/restoration-batch-preparation/stage-binding/check_authority_only.py"
+  ],
+  "cleanup_complete": true,
+  "cleanup_error": "[Errno 10] No child processes",
+  "cleanup_timeout_seconds": 6.0,
+  "cwd": "/home/holden/mckernel-work/host-preparation/native235-zombie-sdk-successor-20261023-1/restoration-batch-preparation/stage-binding",
+  "descendant_records_omitted": 0,
+  "descendants": [],
+  "elapsed_seconds": 0.11011597898323089,
+  "env": {
+    "HOME": "/home/holden/mckernel-work/host-preparation/native235-zombie-sdk-successor-20261023-1/restoration-batch-preparation/stage-binding",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin:/bin",
+    "TMPDIR": "/home/holden/mckernel-work/host-preparation/native235-zombie-sdk-successor-20261023-1/restoration-batch-preparation/stage-binding"
+  },
+  "error": "AttributeError: module 'os' has no attribute 'waitstatus_to_exitcode'",
+  "events": [
+    {
+      "kind": "cleanup_started",
+      "monotonic": 511503.764560082,
+      "reason": "leader_exited"
+    }
+  ],
+  "executable": {
+    "path": "/usr/bin/taskset",
+    "sha256": "28f2dd426247d7d1d794c0fb8a723efc6a1ae3c56393a238b180fe9a0dc32f1c",
+    "size": 35048
+  },
+  "executable_path": "/usr/bin/taskset",
+  "fd_setup": {
+    "close_fds": true,
+    "pass_fds": [],
+    "stderr": "separate owned pipe",
+    "stdin": "regular file or /dev/null",
+    "stdout": "owned pipe"
+  },
+  "gid": 1000,
+  "groups": [
+    4,
+    20,
+    24,
+    27,
+    30,
+    46,
+    120,
+    131,
+    132,
+    133,
+    1000
+  ],
+  "monotonic_finished": 511503.771131025,
+  "monotonic_started": 511503.661015046,
+  "payload_completion_observed_monotonic": 511503.764522142,
+  "payload_monotonic_deadline": 511593.661417615,
+  "payload_monotonic_started": 511503.661417615,
+  "process": {
+    "pgid": 3491790,
+    "pid": 3491790,
+    "ppid": 3491789,
+    "session": 3491790,
+    "starttime_ticks": 52684178,
+    "state": "R"
+  },
+  "provenance": "Linux process collection only; no McKernel evidence",
+  "raw_wait_status": 0,
+  "schema_version": 1,
+  "status": "SUPERVISOR_ERROR",
+  "stderr_limit_bytes": 33554432,
+  "stdin": {
+    "kind": "devnull"
+  },
+  "stdin_path": null,
+  "stdout_limit_bytes": 33554432,
+  "streams": {
+    "stderr": {
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/restoration-batch-preparation/authority-check-1/stderr.bin",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "bytes_observed": 0,
+      "bytes_retained": 0,
+      "discarded_observed_bytes": 0,
+      "eof": true,
+      "limit_bytes": 33554432,
+      "truncated": false
+    },
+    "stdout": {
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/restoration-batch-preparation/authority-check-1/stdout.bin",
+        "sha256": "8bf7b03830d8087bb5551c19d2514579c517ceba79e8f8b7806317cdcbf651c2",
+        "size": 640
+      },
+      "bytes_observed": 640,
+      "bytes_retained": 640,
+      "discarded_observed_bytes": 0,
+      "eof": true,
+      "limit_bytes": 33554432,
+      "truncated": false
+    }
+  },
+  "supervisor_pid": 3491789,
+  "timeout_seconds": 90.0,
+  "uid": 1000,
+  "umask": "0077",
+  "wait_status": {
+    "code": 0,
+    "kind": "exited"
+  }
+}
