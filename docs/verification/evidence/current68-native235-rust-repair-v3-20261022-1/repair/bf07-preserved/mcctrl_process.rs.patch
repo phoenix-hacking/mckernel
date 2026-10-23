@@ -1,0 +1,51 @@
+--- a/mcctrl_process.rs
++++ b/mcctrl_process.rs
+@@ -1177,6 +1177,48 @@
+         Ok(0)
+     }
+ 
++    // Same advisory predicate as legacy mcctrl_get_num_pool_threads: count
++    // Linux threads in this OS's registered launcher groups, limit above 128
++    // per online Linux CPU. PID references exclude numeric identity reuse.
++    pub(super) fn pool_thread_limit(&self) -> Result<isize> {
++        let _registration=self.registered()?;
++        let mut threads=0usize;
++        {
++            let entries=table().lock();
++            for entry in entries.iter() {
++                let process=&entry.process;
++                if process.slot!=self.slot||process.generation!=self.generation
++                    ||process.registration.lock().is_none(){continue;}
++                // SAFETY: the owned PID yields an owned task. Its signal is
++                // live until put_task_struct; match get_nr_threads READ_ONCE.
++                unsafe {
++                    let task=bindings::get_pid_task(process.pid.0.as_ptr(),bindings::pid_type_PIDTYPE_TGID);
++                    if task.is_null(){continue;}
++                    let signal=(*task).signal;
++                    let count=ptr::read_volatile(ptr::addr_of!((*signal).nr_threads));
++                    bindings::put_task_struct(task);
++                    threads=threads.saturating_add(count.max(0) as usize);
++                }
++            }
++        }
++        // SAFETY: CPU hotplug read exclusion keeps the online bitmap stable.
++        // Bounds use its actual generated array and Linux's CPU-ID limit.
++        let online=unsafe {
++            bindings::cpus_read_lock();
++            let words=ptr::addr_of!(bindings::__cpu_online_mask.bits);
++            let limit=(bindings::nr_cpu_ids as usize).min((&*words).len()*64);
++            let mut count=0usize;
++            for cpu in 0..limit {
++                let mask=ptr::read_volatile(words.cast::<u64>().add(cpu/64));
++                count+=usize::from(mask&(1u64<<(cpu%64))!=0);
++            }
++            bindings::cpus_read_unlock();
++            count
++        };
++        if online==0{return Err(EIO);}
++        Ok(isize::from(threads>online.saturating_mul(128)))
++    }
++
+     fn registered(&self) -> Result<Arc<Registration>> {
+         let process = self.process()?;
+         let registration = process.registration.lock().clone().ok_or(EINVAL)?;

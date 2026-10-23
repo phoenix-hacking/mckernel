@@ -1,0 +1,27 @@
+warning: unused import: `std::ffi::c_void`
+ --> /home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-launcher.rs:2:53
+  |
+2 | type c_int=i32;type c_long=i64;type c_ulong=u64;use std::ffi::c_void;
+  |                                                     ^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
+
+warning: type `McexecThreadData` is more private than the item `act_main_loop_body`
+  --> /home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-launcher.rs:12:1
+   |
+12 | / pub unsafe extern "C" fn act_main_loop_body(
+13 | |     my_thread: *mut McexecThreadData,
+14 | |     fd: c_int,
+15 | |     is_child: c_int,
+16 | | ) -> c_int {
+   | |__________^ function `act_main_loop_body` is reachable at visibility `pub`
+   |
+note: but type `McexecThreadData` is only usable at visibility `pub(crate)`
+  --> /home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-launcher.rs:4:1
+   |
+4  | struct McexecThreadData{cpu:c_int,remote_tid:c_int}
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = note: `#[warn(private_interfaces)]` on by default
+
+warning: 2 warnings emitted
+

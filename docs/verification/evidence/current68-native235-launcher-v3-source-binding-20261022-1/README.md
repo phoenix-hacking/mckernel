@@ -1,0 +1,9 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+This capsule retains the exact reviewed launcher Rust source8f9fbe47, cumulative da71-to-8f9 patch64603f00, genuine source integration review745309b5, and mechanically coupled owner/driver/plan/source maps. The original990 predecessor and selected0d774a14 launcher remain retained. Accepted V3 body evidence is upstream evidence; no test, compiler, link or native run was performed for this binding.
+
+The new terminal-WAIT path shuts down command servers and takes the existing process exit1 bridge; EINTR still retries. Production linking and native behavior remain unproved. The owner and driver keep their source/review/provider/resource/ownership guards. This final step changes only their expected review digest and resulting pointers/hashes; pending preimages are preserved.
+
+SOURCE-RESTORE-INDEX.json records exact original paths, retained paths, SHA256, sizes and modes. The complete26.5MB private request remains protected outside this small capsule. Its exact reconstruction recipe preserves the full original backup inventory and clears old per-run disk/release/grant authority. External base source, configured build, toolchain, gitlink and backup inputs remain required.
+
+READY-PINNED-LAUNCHER-SUCCESSOR.REVIEWED.json supplies the exact owner/capture argv and source pins. Root must first obtain positive P05 physical retirement, fresh capacity/full sparse-growth/floors and isolation admission, create fresh private work/evidence roots, and authenticate one exact production-build execution release. It then fills the final request and ROOT-FINAL-REQUEST-BINDING-1.json from the retained template. This capsule authorizes no execution. Docker CPUs2-5/12GiB/no-swap/512tasks/networknone and -j1 are unchanged; host UID NPROC remains inherited. Reserve576 approval remains pending.

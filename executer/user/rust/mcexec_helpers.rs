@@ -3000,7 +3000,14 @@ pub unsafe extern "C" fn act_main_loop_body(
         break;
     }
 
-    unsafe { mcexec_main_loop_timeout_bridge() };
+    unsafe {
+        mcexec_main_loop_timeout_bridge();
+        // A terminal WAIT failure otherwise disappears when the joining main
+        // discards this worker return and exits zero. Preserve the existing
+        // fatal launcher exit path; retained kernel ownership stays retained.
+        mcexec_exit_cmd_servers_bridge();
+        mcexec_exit_process_bridge(1);
+    }
     1
 }
 

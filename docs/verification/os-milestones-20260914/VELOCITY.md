@@ -1,3 +1,16 @@
+## Actual closure checkpoint — 2026-10-23 00:18 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ActualP05 owner62.225843903s plus readonlywhole.480594391s and IDquery.127270688s
+produced accepted firstrestoration+ONErebootcycle and literalP-M05-02 closure:
+28→29/35, wholemilestone delta0. Two actual40B workloads are accepted on exact
+20352 tuple; failed235 stillzero. SourceV3 nineteenfocusedtests and SDK/launcher
+sourcebindings are preparation, not newnative acceptance. NewV3 cyclequotas cannot
+inherit this predecessor-profile observation. Original2/44.160327s baseline retained;
+no comparable2x/4x or milestone-speedup claim. Next bottleneck removal: consume
+alreadyreviewed exactSDK/static/materializer/one-shotbuild and pinnedlauncher, then
+minimalnewtuple235/227 without unchangedreviews/suites or kernelimage rebuild.
+
 ## Strategy checkpoint — 2026-10-22 23:45 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

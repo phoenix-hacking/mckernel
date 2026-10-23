@@ -1,0 +1,26 @@
+{
+  "operation": {
+    "name": "run-v3-correction-start",
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/prlimit",
+      "--as=2147483648:2147483648",
+      "--cpu=30:30",
+      "--fsize=8388608:8388608",
+      "--nofile=4096:4096",
+      "--",
+      "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v3-correction-start",
+      "--test-threads=1"
+    ],
+    "expected_exit": 0,
+    "executable_pin": "Require fresh v3 compiled hash recorded before run"
+  },
+  "compiled_binary_pin": {
+    "path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v3-correction-start",
+    "sha256": "a9a6c784e1779a9ab6f26e9224835b7b1507efba576ae8673bd5da0929d90568",
+    "bytes": 6649640
+  },
+  "aggregate_remaining_seconds": 23.52724494296126
+}

@@ -1,0 +1,10 @@
+--- a/mcctrl.rs
++++ b/mcctrl.rs
+@@ -94,6 +94,7 @@
+     // live until final close and shared safely by concurrent ioctl borrows.
+     let context = unsafe { &*context.cast::<FileContext>() };
+     let operation = match command {
++        abi::MCEXEC_UP_GET_NUM_POOL_THREADS => Some(context.pool_thread_limit()),
+         abi::MCEXEC_UP_GET_CREDV => Some(mcctrl_exec::credentials(argument as usize)),
+         abi::MCEXEC_UP_STRNCPY_FROM_USER => {
+             Some(mcctrl_exec::copy_string(argument as usize, compat == 1))

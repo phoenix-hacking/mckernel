@@ -1,0 +1,72 @@
+{
+  "status": "RELEASED_ONE_EXACT_P05_SHORT32_TWO_GENERATION_RESTORATION",
+  "at": "2026-10-22T23:56:45.429975+00:00",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "review": "INDEPENDENT-P05-SHORT32-LOG-EXECUTION-REVIEW-1.json",
+  "admission": "ROOT-FRESH-P05-ADMISSION-1.json",
+  "operation_sha256": "4f4cb03b36bafd38ec01039f95e160492468ddf0d5c43cd0faaabd25a4ab7b4a",
+  "source_cohort_sha256": "00aae2752198ab274bb555e7894279ba5af02cf9d92d6534e10cfc17527b08db",
+  "published_fetched_commit": "da600972538f65ff9c78da064bf204c0d49fd1d6",
+  "nonce": "be5b3a70eeb641df92878acfe335735c",
+  "profile": {
+    "container_CPU": "2-5",
+    "CPU_count": 4,
+    "memory": 12884901888,
+    "swap": 0,
+    "pids": 512,
+    "network": "none",
+    "oneheavy": true,
+    "qualified_M05_container_ulimits": [
+      {
+        "Name": "core",
+        "Soft": 0,
+        "Hard": 0
+      },
+      {
+        "Name": "fsize",
+        "Soft": 33554432,
+        "Hard": 33554432
+      },
+      {
+        "Name": "nofile",
+        "Soft": 4096,
+        "Hard": 4096
+      }
+    ],
+    "outer_AS": 2147483648,
+    "outer_fsize": 33554432,
+    "outer_CPU": 7,
+    "hostUID_NPROC": "inherited",
+    "capture_profile": "Root binds exact genericwholecapture/streamlimits under native release; no automaticone-shot timeout/kill",
+    "live_FSIZElimits": {
+      "outer_owner": [
+        33554432,
+        33554432
+      ],
+      "Docker_config_and_inside_owner": [
+        33554432,
+        33554432
+      ],
+      "runner_and_diagnostic": [
+        33554432,
+        33554432
+      ],
+      "QEMU_backend_preacquire_and_prespawn": [
+        33554432,
+        33554432
+      ]
+    },
+    "Docker_LogConfig": {
+      "Type": "json-file",
+      "Config": {
+        "max-size": "16m",
+        "max-file": "2"
+      }
+    }
+  },
+  "capture_profile": "Exacte41/a6ce directwait/EOF/group/hash32MiBstreams, noouterkill, inheritedCPUunlimited/NPROC126258, ownerAS2GiB/CPU7; insideDocker4CPU2-5/12GiB/512/noSwap/networknone/FSIZE32/json-file16m2.",
+  "prior_physical_acceptance_sha256": "60a051120b116d8fc732f3003997fc597edc1fddcfc59ee14569d3203232799e",
+  "failure_policy": "Oneinvocation, preservefirstfailure/noautomaticretry; source/runtime/oracles unchanged. No subsequentheavybeforeactualretirement.",
+  "native_acceptance": false,
+  "cycle_or_check_credit": false
+}

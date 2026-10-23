@@ -1,0 +1,15 @@
+error[E0599]: no method named `to_errno` found for type `i32` in the current scope
+   --> /home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v3-start.rs:148:75
+    |
+148 |                 .publish(cpu, |packet| send(packet).map_err(|error| error.to_errno()))
+    |                                                                           ^^^^^^^^ method not found in `i32`
+
+error[E0599]: no method named `to_errno` found for type `i32` in the current scope
+   --> /home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v3-start.rs:161:63
+    |
+161 |             .publish(cpu, |packet| send(packet).map_err(|e| e.to_errno()))
+    |                                                               ^^^^^^^^ method not found in `i32`
+
+error: aborting due to 2 previous errors
+
+For more information about this error, try `rustc --explain E0599`.

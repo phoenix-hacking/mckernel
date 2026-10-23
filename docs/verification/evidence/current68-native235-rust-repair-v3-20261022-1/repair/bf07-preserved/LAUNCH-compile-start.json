@@ -1,0 +1,26 @@
+{
+  "operation": {
+    "name": "compile-start",
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/prlimit",
+      "--as=2147483648:2147483648",
+      "--cpu=30:30",
+      "--fsize=8388608:8388608",
+      "--nofile=4096:4096",
+      "--",
+      "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "--test",
+      "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-start.rs",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-start"
+    ],
+    "source_sha256": "9bedc1538ee87a8b875bec5a267e9f65f5c545c64445edee5b62fde2c379011e",
+    "expected_exit": 0
+  },
+  "compiled_binary_pin": null,
+  "aggregate_remaining_seconds": 23.999962085974403
+}

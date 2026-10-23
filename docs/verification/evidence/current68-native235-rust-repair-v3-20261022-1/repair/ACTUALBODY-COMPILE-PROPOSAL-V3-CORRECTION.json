@@ -1,0 +1,97 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PROPOSED_NOT_EXECUTED",
+  "compiler": {
+    "path": "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+    "sha256": "f8d033fd72e878ec60493788c8bffec2e6c154dcab6f0cb4c145af8ada26a7ed",
+    "version_authority": "dispatcher verified 1.85.1; actualbody only; SDK 1.92 full module compile remains required"
+  },
+  "supervisor": {
+    "path": "/home/holden/mckernel/scripts/application-tests/supervisor.py",
+    "sha256": "8b8700175e6673c3a6b652d4a93bd18b56def83dfa3ac4ec821d4ae6c554e873",
+    "api": "run_supervised; unchanged accepted source8b870; no replacement harness"
+  },
+  "profile": {
+    "affinity": [
+      6
+    ],
+    "jobs": 1,
+    "rlimit_as": 2147483648,
+    "rlimit_cpu": 30,
+    "rlimit_fsize": 8388608,
+    "rlimit_nofile": 4096,
+    "rlimit_nproc": "inherited unchanged",
+    "timeout_seconds": 24,
+    "cleanup_timeout_seconds": 6,
+    "whole_seconds": 30,
+    "output_growth_limit_bytes": 67108864,
+    "stdout_limit_bytes": 1048576,
+    "stderr_limit_bytes": 1048576,
+    "root": false,
+    "docker": false,
+    "network": false,
+    "heavy": false
+  },
+  "cwd": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1",
+  "env": {
+    "HOME": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/home",
+    "TMPDIR": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/tmp",
+    "PATH": "/usr/bin:/bin",
+    "LC_ALL": "C"
+  },
+  "operations": [
+    {
+      "name": "compile-v3-correction-start",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=8388608:8388608",
+        "--nofile=4096:4096",
+        "--",
+        "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--test",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v3-correction-start.rs",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v3-correction-start"
+      ],
+      "source_sha256": "052346fdf2ab76a5136ad03f943e6e9e4eb90601a0012cafaba4003c357dfa3e",
+      "expected_exit": 0
+    },
+    {
+      "name": "run-v3-correction-start",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=8388608:8388608",
+        "--nofile=4096:4096",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v3-correction-start",
+        "--test-threads=1"
+      ],
+      "expected_exit": 0,
+      "executable_pin": "Require fresh v3 compiled hash recorded before run"
+    }
+  ],
+  "gating": "Requires dispatcher amended correction grant. This is the one bounded correction for v3 extracted-whole-publisher fixture Error glue; stop and escalate any further compile/test failure. No remaining capture-family retry. Production sources are unchanged; no SDK/native acceptance.",
+  "caller_python": {
+    "path": "/home/holden/anaconda3/bin/python3",
+    "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+    "version": "Python3.9.12 (python3 PATH resolves same installed tree); supplies os.waitstatus_to_exitcode required by unchanged supervisor",
+    "replaces_failed_caller": "/usr/bin/python3 is3.8; supervisor collection failed after rustc exit0; retained completeoriginal"
+  },
+  "supersedes_proposal_sha256": "baa90c9620c0c195c70946c13754830f6be78f639e10bb5ef5c7575e41e19e11",
+  "changes": "ONE bounded correction of fixture compile E0599: add fixture-only i32.to_errno analogue of kernel::Error. Exact whole extracted publisher and all production sources unchanged. Original failed fixture/compiler capture retained; zero unchanged replay.",
+  "candidate_source_pins_sha256": "275ca2bc6c204b13c703f1f5de9e12117368635f30312100715504276e435957",
+  "actualbody_source_binding_sha256": "a3b6cd7ba6ef930bf174a75bd24302f4ef7a97e23c3161b440da494363fc0937",
+  "capture_namespace": "actualbody-owned-capture-4-{operation}; fresh binary actualbody-v3-correction-start",
+  "candidate_directory": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/candidate-v3"
+}

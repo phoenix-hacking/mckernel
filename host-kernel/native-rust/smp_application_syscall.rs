@@ -402,6 +402,18 @@ impl<M: ResponseMemory> Mailbox<M> {
         if call.cancelled{Self::cancel_call(call)?;}Ok(())
     }
 
+    /// Read-only observation of this exact owned worker/delivery route. It
+    /// neither transfers a Response nor changes the delivery or parked state.
+    pub(crate) fn delivered_fork_request(&self,handle:u64,serial:u64)->Result<Option<Request>> {
+        if self.closed||self.quarantined{return Err(-32);}
+        let worker=self.workers.iter().flatten().find(|state|state.worker.wire()==handle).ok_or(-2)?;
+        if worker.delivery.map(Token::wire)!=Some(serial){return Err(-16);}
+        let call=self.calls.iter().flatten().find(|call|call.delivery.serial().wire()==serial).ok_or(-2)?;
+        call.delivery.check_return(worker.worker,call.delivery.request().cpu() as i64)?;
+        let request=call.delivery.request();
+        Ok(if request.number()==56{Some(request.clone())}else{None})
+    }
+
     /// The caller must already own the authenticated parent connection and
     /// referenced child task/MM. Matching geometry is never that authority.
     pub(crate) fn unique_delivered_fork(

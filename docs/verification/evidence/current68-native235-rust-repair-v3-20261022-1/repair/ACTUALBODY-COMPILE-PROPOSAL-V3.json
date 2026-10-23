@@ -1,0 +1,97 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PROPOSED_NOT_EXECUTED",
+  "compiler": {
+    "path": "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+    "sha256": "f8d033fd72e878ec60493788c8bffec2e6c154dcab6f0cb4c145af8ada26a7ed",
+    "version_authority": "dispatcher verified 1.85.1; actualbody only; SDK 1.92 full module compile remains required"
+  },
+  "supervisor": {
+    "path": "/home/holden/mckernel/scripts/application-tests/supervisor.py",
+    "sha256": "8b8700175e6673c3a6b652d4a93bd18b56def83dfa3ac4ec821d4ae6c554e873",
+    "api": "run_supervised; unchanged accepted source8b870; no replacement harness"
+  },
+  "profile": {
+    "affinity": [
+      6
+    ],
+    "jobs": 1,
+    "rlimit_as": 2147483648,
+    "rlimit_cpu": 30,
+    "rlimit_fsize": 8388608,
+    "rlimit_nofile": 4096,
+    "rlimit_nproc": "inherited unchanged",
+    "timeout_seconds": 24,
+    "cleanup_timeout_seconds": 6,
+    "whole_seconds": 30,
+    "output_growth_limit_bytes": 67108864,
+    "stdout_limit_bytes": 1048576,
+    "stderr_limit_bytes": 1048576,
+    "root": false,
+    "docker": false,
+    "network": false,
+    "heavy": false
+  },
+  "cwd": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1",
+  "env": {
+    "HOME": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/home",
+    "TMPDIR": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/tmp",
+    "PATH": "/usr/bin:/bin",
+    "LC_ALL": "C"
+  },
+  "operations": [
+    {
+      "name": "compile-v3-start",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=8388608:8388608",
+        "--nofile=4096:4096",
+        "--",
+        "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--test",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v3-start.rs",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v3-start"
+      ],
+      "source_sha256": "1ed6a73e5013012b44298369a067b89418745e2c24e69f0ec8eb0fed1461e6a6",
+      "expected_exit": 0
+    },
+    {
+      "name": "run-v3-start",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=8388608:8388608",
+        "--nofile=4096:4096",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v3-start",
+        "--test-threads=1"
+      ],
+      "expected_exit": 0,
+      "executable_pin": "Require fresh v3 compiled hash recorded before run"
+    }
+  ],
+  "gating": "Requires amended exact v3 dispatcher grant. Capture-family correction already consumed by interpreter selection; any new capture failure stops. One v3 candidate/source correction for precise first-publication race; no production or native acceptance.",
+  "caller_python": {
+    "path": "/home/holden/anaconda3/bin/python3",
+    "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+    "version": "Python3.9.12 (python3 PATH resolves same installed tree); supplies os.waitstatus_to_exitcode required by unchanged supervisor",
+    "replaces_failed_caller": "/usr/bin/python3 is3.8; supervisor collection failed after rustc exit0; retained completeoriginal"
+  },
+  "supersedes_proposal_sha256": "8189702e60b04ed1c7fa803f78eb62b4900138806184694d7afc8204ed6e6562",
+  "changes": "One bounded source correction for reviewer-observed publication race: first_return_published moves from delayed RET waiter into same-lock actual successful parent response publisher, before any other host-worker admission. Actual whole publish_syscall and finish_publication bodies extracted with deterministic notify-held-lock + selector1-before-waiter regression and negative controls. Reuses unchanged pool/dispatch/launcher v2 evidence; no repeated unchanged compilation.",
+  "candidate_source_pins_sha256": "275ca2bc6c204b13c703f1f5de9e12117368635f30312100715504276e435957",
+  "actualbody_source_binding_sha256": "252a0fa62e36bf79d375acb500efe5faa2d06c68c561e4a46277ae7d38594894",
+  "capture_namespace": "actualbody-owned-capture-3-{operation}; fresh binary actualbody-v3-start",
+  "candidate_directory": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/candidate-v3"
+}

@@ -1,0 +1,1753 @@
+{
+  "schema": "mckernel.native235-rust-repair-capsule.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXACT_SELECTED_SOURCE_TEST_REVIEW_CAPSULE",
+  "copied_files": [
+    {
+      "capsule_path": "repair/ACTUALBODY-COMPILE-PROPOSAL-V3-CORRECTION.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/ACTUALBODY-COMPILE-PROPOSAL-V3-CORRECTION.json",
+      "sha256": "d4801d0096302ca86715ca832bcee357015ebf45b799395987869fd0f63280bb",
+      "bytes": 4585,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/ACTUALBODY-COMPILE-PROPOSAL-V3.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/ACTUALBODY-COMPILE-PROPOSAL-V3.json",
+      "sha256": "baa90c9620c0c195c70946c13754830f6be78f639e10bb5ef5c7575e41e19e11",
+      "bytes": 4715,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/ACTUALBODY-COMPILE-PROPOSAL.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/ACTUALBODY-COMPILE-PROPOSAL.json",
+      "sha256": "8189702e60b04ed1c7fa803f78eb62b4900138806184694d7afc8204ed6e6562",
+      "bytes": 8590,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/ACTUALBODY-RESULT-1.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/ACTUALBODY-RESULT-1.json",
+      "sha256": "3d7221b3ae22dca0178b03f2b348458ec7c9d38f51c08e6df78f7c877d96bc0c",
+      "bytes": 740,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/ACTUALBODY-RESULT-2.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/ACTUALBODY-RESULT-2.json",
+      "sha256": "825818c568d35fafc956eecf2f676703d959ca098f66a15ccf704089655b7899",
+      "bytes": 6648,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/ACTUALBODY-RESULT-3.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/ACTUALBODY-RESULT-3.json",
+      "sha256": "b5495f6040bdefee2106c20a8c8015195a0beb1bddb0eb13817c93acdd833a22",
+      "bytes": 1154,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/ACTUALBODY-RESULT-4.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/ACTUALBODY-RESULT-4.json",
+      "sha256": "f6187e9ebc3a7bc6eae557dfdc7152470429ae32fbfb5f6a441c3ec8d249b431",
+      "bytes": 2169,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/ACTUALBODY-SOURCE-BINDING-V3-CORRECTION.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/ACTUALBODY-SOURCE-BINDING-V3-CORRECTION.json",
+      "sha256": "a3b6cd7ba6ef930bf174a75bd24302f4ef7a97e23c3161b440da494363fc0937",
+      "bytes": 1215,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/ACTUALBODY-SOURCE-BINDING-V3.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/ACTUALBODY-SOURCE-BINDING-V3.json",
+      "sha256": "252a0fa62e36bf79d375acb500efe5faa2d06c68c561e4a46277ae7d38594894",
+      "bytes": 1008,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/ACTUALBODY-SOURCE-BINDING.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/ACTUALBODY-SOURCE-BINDING.json",
+      "sha256": "ed86bccdafb6245827ca50a458d98feb071b6cb24fa547c2eb8d2a425a2c3077",
+      "bytes": 1227,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/FINDINGS.md",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/FINDINGS.md",
+      "sha256": "6f4fced1d10b9a8d7559baeca3651fdc6ed9e4e8d1ca51fc98e5ddb9ecec4cb9",
+      "bytes": 3739,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/FIRST-CAPTURE-RETIREMENT.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/FIRST-CAPTURE-RETIREMENT.json",
+      "sha256": "2f8183bac1f53717cc0a7cd33760547557169c3af612635035433d69e9a9a040",
+      "bytes": 797,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/HANDOFF-2.md",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/HANDOFF-2.md",
+      "sha256": "3967c6e666f452dcf4750eca2600a1467a78c177052904ec936b3b6469d4964d",
+      "bytes": 3830,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/HANDOFF-V3.md",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/HANDOFF-V3.md",
+      "sha256": "7637a0518af3a3280fa5755e8ef2f9c640c8a25825bc295396081b9d22fb88d4",
+      "bytes": 3580,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/INDEPENDENT-V3-PRODUCTION-READY-REVIEW-1.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/INDEPENDENT-V3-PRODUCTION-READY-REVIEW-1.json",
+      "sha256": "8424d97ec37aea7ce8276988e1a6c2792f7e4e91106eb8eae596c2bcd1982a1f",
+      "bytes": 2239,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/LAUNCH-compile-start.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/LAUNCH-compile-start.json",
+      "sha256": "abee3313dab5481c20b2b15c1b8c36df907d87bf599759c2f135a8d9850d21d3",
+      "bytes": 853,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/LAUNCH-compile-v3-correction-start.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/LAUNCH-compile-v3-correction-start.json",
+      "sha256": "ff9355e2c9a2da0581dcc885b98f0c20ed41eb9d61e876180cdaf37ceeaf3230",
+      "bytes": 894,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/LAUNCH-compile-v3-start.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/LAUNCH-compile-v3-start.json",
+      "sha256": "34ae55eeb1e30837111ed77a5ef65b6d740c0f4174f85aa21f8b413615622954",
+      "bytes": 861,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/LAUNCH-run-v3-correction-start.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/LAUNCH-run-v3-correction-start.json",
+      "sha256": "b9eefc1439821dec2648fe2aaede526b142de582e461fc472c714ff3b6643aee",
+      "bytes": 875,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/LAUNCH-v2-compile-dispatch.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/LAUNCH-v2-compile-dispatch.json",
+      "sha256": "4bbe9215ec45034b94f8aeeef24169a3a3e80356baaed578fe557881ec730ccd",
+      "bytes": 865,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/LAUNCH-v2-compile-launcher.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/LAUNCH-v2-compile-launcher.json",
+      "sha256": "2b84c7b838cd14108c4e5347ebee9574cc7abbf40926b4af5a8ed75b8a1664cf",
+      "bytes": 848,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/LAUNCH-v2-compile-pool.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/LAUNCH-v2-compile-pool.json",
+      "sha256": "ffb0bcd8dac978215d0ad5102cb40a12ed84c5c9989fc8ff4286535723e00518",
+      "bytes": 853,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/LAUNCH-v2-compile-start.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/LAUNCH-v2-compile-start.json",
+      "sha256": "6e38b19b327f9da2fdbf44132aeb786db99b98d8b9563e1530c6c1f97c78a6bb",
+      "bytes": 855,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/LAUNCH-v2-run-dispatch.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/LAUNCH-v2-run-dispatch.json",
+      "sha256": "1a908c5670b08d5eaaaf2b28f7f6fe699450e21d5d4acdc2b516bb5cd46d5f57",
+      "bytes": 881,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/LAUNCH-v2-run-launcher.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/LAUNCH-v2-run-launcher.json",
+      "sha256": "716f3eab1bc64afacd75a0965ce9f21e3fc28dfbcd9bce4684fe4a592443346a",
+      "bytes": 855,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/LAUNCH-v2-run-pool.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/LAUNCH-v2-run-pool.json",
+      "sha256": "c26de5d03ed933ac32b2f9eafc09a2503eaf30926c282b18241270a43e73329d",
+      "bytes": 869,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/LAUNCH-v2-run-start.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/LAUNCH-v2-run-start.json",
+      "sha256": "bfae9a13abea481148cfb6cf6bf4e481afc27a7ce1e54a2ba9a32dee63c3ef11",
+      "bytes": 871,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/RACE-CORRECTION-V3.md",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/RACE-CORRECTION-V3.md",
+      "sha256": "6deadc923b2a1b3c89a858b80e1a8653cdf888989f9cb8943c2a1946fe96b782",
+      "bytes": 2693,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/REVISION-MAP-V3.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/REVISION-MAP-V3.json",
+      "sha256": "58db33a2f26ef1c22bf2e16da14fe0d59acfbe9c0b7669969c57c784d2b876a6",
+      "bytes": 4442,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/ROOT-ACTUALBODY-ORDINARY-GRANT-1.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/ROOT-ACTUALBODY-ORDINARY-GRANT-1.json",
+      "sha256": "bd72a27bfa2f13a8127ed9515ba081a149da5b871c2abf78edd33f9cd7c28f62",
+      "bytes": 2003,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/ROOT-ACTUALBODY-ORDINARY-GRANT-2.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/ROOT-ACTUALBODY-ORDINARY-GRANT-2.json",
+      "sha256": "099f009ed0d0bb3612c4f9b5502b7e647e12e21b8ebfffbe4e8b233f4ced45bc",
+      "bytes": 1750,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/ROOT-ACTUALBODY-ORDINARY-GRANT-3.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/ROOT-ACTUALBODY-ORDINARY-GRANT-3.json",
+      "sha256": "15ff8302059561df30837f4881b056aecc186dce95294bc63f9ee7546f2ffcb8",
+      "bytes": 1290,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/ROOT-ACTUALBODY-ORDINARY-GRANT-4.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/ROOT-ACTUALBODY-ORDINARY-GRANT-4.json",
+      "sha256": "974335126e3a9d9b008b1292f1a843653af49694b79ad9246984b3c1f9ad3172",
+      "bytes": 1248,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/ROOT-EXACT-V3-INTEGRATION-1.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/ROOT-EXACT-V3-INTEGRATION-1.json",
+      "sha256": "b91d66360447f5f1e7c6122b73dc3276c9eff899d94f34ceb6f28ea9c152e2e7",
+      "bytes": 2461,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/SOURCE-PINS-V3.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/SOURCE-PINS-V3.json",
+      "sha256": "275ca2bc6c204b13c703f1f5de9e12117368635f30312100715504276e435957",
+      "bytes": 1540,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/SOURCE-PINS.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/SOURCE-PINS.json",
+      "sha256": "c39c6e39e72660da0a587753f42c41882b310c41ee783031f3f2bf3f8d766cbc",
+      "bytes": 1065,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/STATUS-2.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/STATUS-2.json",
+      "sha256": "f483cfc112bf2cd6eef58199e95688b80986d30b551dfb5d33d5d5bb9da17a3c",
+      "bytes": 6037,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/STATUS-V3.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/STATUS-V3.json",
+      "sha256": "3cfaa79e8219fa82324c19f7f18cde2ad6206c34a42c22537d248db0f0e35570",
+      "bytes": 4406,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/STATUS.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/STATUS.json",
+      "sha256": "b2902944a8e91b64e8c3af1965c04c44dc8820614e3c6a2608f6ba47f915b07e",
+      "bytes": 4914,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/SUPERSEDED-BF07-PREIMAGE-RESTORATION-MAP.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/SUPERSEDED-BF07-PREIMAGE-RESTORATION-MAP.json",
+      "sha256": "f864f6c8c19c0fb8c911ddcfaf06f0332630598d7e264d64b6d5acde68c8b905",
+      "bytes": 15819,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-dispatch.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-dispatch.rs",
+      "sha256": "108d3aa20b11049d0aee4f82b04afe0cca1b9dc73f57a2a0271fd6f369d6e387",
+      "bytes": 5243,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-launcher.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-launcher.rs",
+      "sha256": "cc2d5aa0ac429bdcb552e164edfffe057a204669a6873a6527cdba5fcfa90610",
+      "bytes": 2917,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-1-compile-start/report.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-1-compile-start/report.json",
+      "sha256": "3d77fa376af8e1df7f48f38065a4314324b46231e53bf2e6f3447d3975c22349",
+      "bytes": 3756,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-1-compile-start/request.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-1-compile-start/request.json",
+      "sha256": "6e47844c001cc31c6b0e324092cbde3acddc6a1ea82c4aca32d5dde7e0c47b2f",
+      "bytes": 1197,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-1-compile-start/stderr.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-1-compile-start/stderr.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-1-compile-start/stdout.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-1-compile-start/stdout.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-1-compile-start/worker.stderr",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-1-compile-start/worker.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-compile-dispatch/report.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-compile-dispatch/report.json",
+      "sha256": "90a8226c1df3fc8dad5412213726ddf0fc26d84a7bd196bc807dd1ea2f191175",
+      "bytes": 3628,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-compile-dispatch/request.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-compile-dispatch/request.json",
+      "sha256": "bdf29b1478326102cd228b02965cc0cf02badfa07a1dee0af0485c99c1f9f243",
+      "bytes": 1206,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-compile-dispatch/stderr.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-compile-dispatch/stderr.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-compile-dispatch/stdout.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-compile-dispatch/stdout.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-compile-dispatch/worker.stderr",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-compile-dispatch/worker.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-compile-launcher/report.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-compile-launcher/report.json",
+      "sha256": "bfb1429af5cc5e885e96694d11dbe314bd81f8f27a53ad8e68effa34cab9cff9",
+      "bytes": 3623,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-compile-launcher/request.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-compile-launcher/request.json",
+      "sha256": "95c80811b65dcd018a5a2429ca1fc2d3f544de7e7b0ea1c92b3a5afee6763dab",
+      "bytes": 1191,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-compile-launcher/stderr.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-compile-launcher/stderr.bin",
+      "sha256": "4006ec4073081b3a83cc9d0f8b2a1bcf3912472fb7c16946cf02db674c7726e7",
+      "bytes": 1225,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-compile-launcher/stdout.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-compile-launcher/stdout.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-compile-launcher/worker.stderr",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-compile-launcher/worker.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-compile-pool/report.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-compile-pool/report.json",
+      "sha256": "8949bc7261537081d2a3fb6bad7714ed313404dee01173c01750b2e849cc7f75",
+      "bytes": 3612,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-compile-pool/request.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-compile-pool/request.json",
+      "sha256": "8a9fa435d82718ac8a7273dac043e68d5f370fb78c813ab789e086956b1acfe6",
+      "bytes": 1198,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-compile-pool/stderr.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-compile-pool/stderr.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-compile-pool/stdout.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-compile-pool/stdout.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-compile-pool/worker.stderr",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-compile-pool/worker.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-compile-start/report.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-compile-start/report.json",
+      "sha256": "4dfa01b5c8254ee827209ea081fe3935beae64af73bd0958f9cf17f0580ea23e",
+      "bytes": 3614,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-compile-start/request.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-compile-start/request.json",
+      "sha256": "d45c6045ee4b0be75fd4c33cc6651144f4ec876c2da1033b9a6626c7e5265c2b",
+      "bytes": 1199,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-compile-start/stderr.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-compile-start/stderr.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-compile-start/stdout.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-compile-start/stdout.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-compile-start/worker.stderr",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-compile-start/worker.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-run-dispatch/report.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-run-dispatch/report.json",
+      "sha256": "1d03367815f7ac786e3f4cddf56d0ef5bd3eb0183767bcb60e208e831d0da185",
+      "bytes": 3402,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-run-dispatch/request.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-run-dispatch/request.json",
+      "sha256": "8a20bdcf89d053e0fe5e63a84fd33f0589a471cdc6c09c6cd993933b0e6ffbe0",
+      "bytes": 979,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-run-dispatch/stderr.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-run-dispatch/stderr.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-run-dispatch/stdout.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-run-dispatch/stdout.bin",
+      "sha256": "376b071b2ff96902299f32e5f787bff323cdd64aa9a385db46aa3b3e6fc09345",
+      "bytes": 269,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-run-dispatch/worker.stderr",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-run-dispatch/worker.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-run-launcher/report.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-run-launcher/report.json",
+      "sha256": "f2f053db28869adbf36f0f0c4fd1287d5ebeb350e4627c7f1a537f1dca3f6934",
+      "bytes": 3372,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-run-launcher/request.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-run-launcher/request.json",
+      "sha256": "f8ff8b9fe631af85bccbfc8a13ff088e757f913dc50ce6f75a33eea411c6e776",
+      "bytes": 955,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-run-launcher/stderr.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-run-launcher/stderr.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-run-launcher/stdout.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-run-launcher/stdout.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-run-launcher/worker.stderr",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-run-launcher/worker.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-run-pool/report.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-run-pool/report.json",
+      "sha256": "75a2e0bf1c988043eb668b0720e27f5a4df8a7ad869c0c43e380a15940b4a085",
+      "bytes": 3390,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-run-pool/request.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-run-pool/request.json",
+      "sha256": "5dfd1e22518f8eaab707e6ebcb0e6c2443cf8718b47277ff85b2f28ddce61a39",
+      "bytes": 975,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-run-pool/stderr.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-run-pool/stderr.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-run-pool/stdout.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-run-pool/stdout.bin",
+      "sha256": "a5a296796ef0432820ec62775e9da5220f8ecaca22ed4ce6276cb29b59ebe9ac",
+      "bytes": 208,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-run-pool/worker.stderr",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-run-pool/worker.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-run-start/report.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-run-start/report.json",
+      "sha256": "fa1370f7a87283d6dc5c3242bb53abd30dbcf9afeb1866568063f6dea5f8c323",
+      "bytes": 3388,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-run-start/request.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-run-start/request.json",
+      "sha256": "d434bca78a060a08667f18bf5b752ee929e16cc73cfe831e509cfcd584d98364",
+      "bytes": 975,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-run-start/stderr.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-run-start/stderr.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-run-start/stdout.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-run-start/stdout.bin",
+      "sha256": "5a5f03446f74dcc02e028aa3d1924ca700650672a7094d1f1ad218c22aeae7be",
+      "bytes": 708,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-2-run-start/worker.stderr",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-2-run-start/worker.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-3-compile-v3-start/report.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-3-compile-v3-start/report.json",
+      "sha256": "ee640dabd851a5d6de8b0411ea36bb30880b9894ad4760570214912ed49c7022",
+      "bytes": 3634,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-3-compile-v3-start/request.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-3-compile-v3-start/request.json",
+      "sha256": "cb8f1e44a97e6286bfb7f99912ef4f0630e0994e9b764ba453eb66bd0c813281",
+      "bytes": 1202,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-3-compile-v3-start/stderr.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-3-compile-v3-start/stderr.bin",
+      "sha256": "488f8de33be35d7ceece875f5802308a1f2aef21c30589c518f7fbe497ad7836",
+      "bytes": 944,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-3-compile-v3-start/stdout.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-3-compile-v3-start/stdout.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-3-compile-v3-start/worker.stderr",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-3-compile-v3-start/worker.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-4-compile-v3-correction-start/report.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-4-compile-v3-correction-start/report.json",
+      "sha256": "2874e819918a001f896a8e15b5afad87ff409758889e618d5497e28e973a96af",
+      "bytes": 3677,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-4-compile-v3-correction-start/request.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-4-compile-v3-correction-start/request.json",
+      "sha256": "8f7fd1e6522555ff32dac1f382f27badc1ffd3f9ad7b514d5c2d378adc87a5ec",
+      "bytes": 1224,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-4-compile-v3-correction-start/stderr.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-4-compile-v3-correction-start/stderr.bin",
+      "sha256": "61afa73e35121176031fe8f80eab0085a9360982b6b6eb42e3313e70e73ea3bd",
+      "bytes": 439,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-4-compile-v3-correction-start/stdout.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-4-compile-v3-correction-start/stdout.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-4-compile-v3-correction-start/worker.stderr",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-4-compile-v3-correction-start/worker.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-4-run-v3-correction-start/report.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-4-run-v3-correction-start/report.json",
+      "sha256": "449ba4ff9ae83e52de08721fa5895c981e1cc989d342d108efc5c9fd4a4a697a",
+      "bytes": 3435,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-4-run-v3-correction-start/request.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-4-run-v3-correction-start/request.json",
+      "sha256": "d2798b8427d99aa04b4c98edf5bab073b56a3f93d92e1514a171a0bac49a7bda",
+      "bytes": 986,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-4-run-v3-correction-start/stderr.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-4-run-v3-correction-start/stderr.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-4-run-v3-correction-start/stdout.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-4-run-v3-correction-start/stdout.bin",
+      "sha256": "c6ced2e9a5ce25dd7efad4f856b19b5b8b762c563197ce7f1290b1f6f545a3ff",
+      "bytes": 1010,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-owned-capture-4-run-v3-correction-start/worker.stderr",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-owned-capture-4-run-v3-correction-start/worker.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-pool.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-pool.rs",
+      "sha256": "d795572a52285282e9c6f79069a724e48955d48ac9f6fd3c2f409b749a381f5a",
+      "bytes": 4709,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-start.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-start.rs",
+      "sha256": "a9191b4b73ed85e2494ce1bf17083c4252c08c7b5f8288566a23768f65ba9ca2",
+      "bytes": 10877,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-v3-correction-start.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v3-correction-start.rs",
+      "sha256": "052346fdf2ab76a5136ad03f943e6e9e4eb90601a0012cafaba4003c357dfa3e",
+      "bytes": 20232,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/actualbody-v3-start.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v3-start.rs",
+      "sha256": "1ed6a73e5013012b44298369a067b89418745e2c24e69f0ec8eb0fed1461e6a6",
+      "bytes": 20036,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/bf07-preserved/ACTUALBODY-COMPILE-PROPOSAL.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/bf07-preserved/ACTUALBODY-COMPILE-PROPOSAL.json",
+      "sha256": "bf07a3bf91e53417b02bcfc20edd8422cf5372054ffcfc9d02365be203f39802",
+      "bytes": 7348,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/bf07-preserved/ACTUALBODY-RESULT-1.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/bf07-preserved/ACTUALBODY-RESULT-1.json",
+      "sha256": "3d7221b3ae22dca0178b03f2b348458ec7c9d38f51c08e6df78f7c877d96bc0c",
+      "bytes": 740,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/bf07-preserved/ACTUALBODY-SOURCE-BINDING.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/bf07-preserved/ACTUALBODY-SOURCE-BINDING.json",
+      "sha256": "7d40b2e553829678efa562084b45904ed95ae18821b2781ba21fc077e8612c3a",
+      "bytes": 1024,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/bf07-preserved/FINDINGS.md",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/bf07-preserved/FINDINGS.md",
+      "sha256": "6f4fced1d10b9a8d7559baeca3651fdc6ed9e4e8d1ca51fc98e5ddb9ecec4cb9",
+      "bytes": 3739,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/bf07-preserved/LAUNCH-compile-start.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/bf07-preserved/LAUNCH-compile-start.json",
+      "sha256": "abee3313dab5481c20b2b15c1b8c36df907d87bf599759c2f135a8d9850d21d3",
+      "bytes": 853,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/bf07-preserved/ROOT-ACTUALBODY-ORDINARY-GRANT-1.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/bf07-preserved/ROOT-ACTUALBODY-ORDINARY-GRANT-1.json",
+      "sha256": "bd72a27bfa2f13a8127ed9515ba081a149da5b871c2abf78edd33f9cd7c28f62",
+      "bytes": 2003,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/bf07-preserved/SOURCE-PINS.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/bf07-preserved/SOURCE-PINS.json",
+      "sha256": "03030c79df557220d39f45f3644e527ba52304098b3e994234c1596f1c8c5a12",
+      "bytes": 844,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/bf07-preserved/STATUS.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/bf07-preserved/STATUS.json",
+      "sha256": "b2902944a8e91b64e8c3af1965c04c44dc8820614e3c6a2608f6ba47f915b07e",
+      "bytes": 4914,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/bf07-preserved/actualbody-dispatch.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/bf07-preserved/actualbody-dispatch.rs",
+      "sha256": "108d3aa20b11049d0aee4f82b04afe0cca1b9dc73f57a2a0271fd6f369d6e387",
+      "bytes": 5243,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/bf07-preserved/actualbody-launcher.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/bf07-preserved/actualbody-launcher.rs",
+      "sha256": "cc2d5aa0ac429bdcb552e164edfffe057a204669a6873a6527cdba5fcfa90610",
+      "bytes": 2917,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/bf07-preserved/actualbody-pool.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/bf07-preserved/actualbody-pool.rs",
+      "sha256": "d795572a52285282e9c6f79069a724e48955d48ac9f6fd3c2f409b749a381f5a",
+      "bytes": 4709,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/bf07-preserved/actualbody-start.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/bf07-preserved/actualbody-start.rs",
+      "sha256": "9bedc1538ee87a8b875bec5a267e9f65f5c545c64445edee5b62fde2c379011e",
+      "bytes": 7659,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/bf07-preserved/candidate/mcctrl.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/bf07-preserved/candidate/mcctrl.rs",
+      "sha256": "1871d5fc2bd352228dc167a7460a6f687e1a5b8228410cbf394be90c010c325e",
+      "bytes": 9074,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/bf07-preserved/candidate/mcctrl_process.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/bf07-preserved/candidate/mcctrl_process.rs",
+      "sha256": "b2e635f6590d401e2d37646486c2d3a5a52fece210d569533001f354d0537d23",
+      "bytes": 52600,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/bf07-preserved/candidate/mcexec_helpers.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/bf07-preserved/candidate/mcexec_helpers.rs",
+      "sha256": "8f9fbe474220433118e6662c9f2517f73a547730575b83ffb73255d06e9b40d7",
+      "bytes": 254806,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/bf07-preserved/candidate/smp_application.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/bf07-preserved/candidate/smp_application.rs",
+      "sha256": "058a74a34e15bc4f39b85c9736abb4b7e2f076bd9bee54fb7a321691d4df67e8",
+      "bytes": 70362,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/bf07-preserved/mcctrl.rs.patch",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/bf07-preserved/mcctrl.rs.patch",
+      "sha256": "f2b6f2693cd3051f7d4bc85781ea556ef0e275129af7cc10d60aa5719de1c311",
+      "bytes": 522,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/bf07-preserved/mcctrl_process.rs.patch",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/bf07-preserved/mcctrl_process.rs.patch",
+      "sha256": "1049bdec059946c69113b72dfdd49f1dc1e88cbb9dd85c82506e8d8d45be537b",
+      "bytes": 2384,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/bf07-preserved/mcexec_helpers.rs.patch",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/bf07-preserved/mcexec_helpers.rs.patch",
+      "sha256": "7434079bf29be603d45e1a105f30e93b4cd5715dd96f44e5fbcb8ea261576776",
+      "bytes": 544,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/bf07-preserved/prepare_actualbody.py",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/bf07-preserved/prepare_actualbody.py",
+      "sha256": "2f0f45f409bfa2a25e8a1d1d134df4e341d9765211ab82ad657e7dadde552b94",
+      "bytes": 13625,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/bf07-preserved/prepare_candidate.py",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/bf07-preserved/prepare_candidate.py",
+      "sha256": "973fed837c81504e4399019288a7556a62a417cb3004416337dcfbddf5f6ff77",
+      "bytes": 7995,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/bf07-preserved/smp_application.rs.patch",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/bf07-preserved/smp_application.rs.patch",
+      "sha256": "c66170385be5a2cb4bc6ec8207e9535c8c868e6610c017923c70fa347b534078",
+      "bytes": 5272,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/candidate/mcctrl.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/candidate/mcctrl.rs",
+      "sha256": "1871d5fc2bd352228dc167a7460a6f687e1a5b8228410cbf394be90c010c325e",
+      "bytes": 9074,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/candidate/mcctrl_process.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/candidate/mcctrl_process.rs",
+      "sha256": "b2e635f6590d401e2d37646486c2d3a5a52fece210d569533001f354d0537d23",
+      "bytes": 52600,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/candidate/mcexec_helpers.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/candidate/mcexec_helpers.rs",
+      "sha256": "8f9fbe474220433118e6662c9f2517f73a547730575b83ffb73255d06e9b40d7",
+      "bytes": 254806,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/candidate/smp_application.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/candidate/smp_application.rs",
+      "sha256": "105e06fbdd15e70d44a95e4deb1bb3e7e27157f65905365121e538ea2edc38a1",
+      "bytes": 70288,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/candidate/smp_application_syscall.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/candidate/smp_application_syscall.rs",
+      "sha256": "b99874d9c1a80720f154086d40f4427f83732824dad85d8d391cc3a8a4de4360",
+      "bytes": 34808,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/candidate-v3/mcctrl.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/candidate-v3/mcctrl.rs",
+      "sha256": "1871d5fc2bd352228dc167a7460a6f687e1a5b8228410cbf394be90c010c325e",
+      "bytes": 9074,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/candidate-v3/mcctrl_process.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/candidate-v3/mcctrl_process.rs",
+      "sha256": "b2e635f6590d401e2d37646486c2d3a5a52fece210d569533001f354d0537d23",
+      "bytes": 52600,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/candidate-v3/mcexec_helpers.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/candidate-v3/mcexec_helpers.rs",
+      "sha256": "8f9fbe474220433118e6662c9f2517f73a547730575b83ffb73255d06e9b40d7",
+      "bytes": 254806,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/candidate-v3/smp_application.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/candidate-v3/smp_application.rs",
+      "sha256": "426f7c32d262f42da37454bb7008163aa2ab9da202476c606169be0c1b647871",
+      "bytes": 71432,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/candidate-v3/smp_application_syscall.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/candidate-v3/smp_application_syscall.rs",
+      "sha256": "b99874d9c1a80720f154086d40f4427f83732824dad85d8d391cc3a8a4de4360",
+      "bytes": 34808,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/mcctrl.rs.patch",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/mcctrl.rs.patch",
+      "sha256": "f2b6f2693cd3051f7d4bc85781ea556ef0e275129af7cc10d60aa5719de1c311",
+      "bytes": 522,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/mcctrl_process.rs.patch",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/mcctrl_process.rs.patch",
+      "sha256": "1049bdec059946c69113b72dfdd49f1dc1e88cbb9dd85c82506e8d8d45be537b",
+      "bytes": 2384,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/mcexec_helpers.rs.patch",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/mcexec_helpers.rs.patch",
+      "sha256": "7434079bf29be603d45e1a105f30e93b4cd5715dd96f44e5fbcb8ea261576776",
+      "bytes": 544,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/prepare_actualbody.py",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/prepare_actualbody.py",
+      "sha256": "8744f1ca997dd2636a4ce5d56d04509da5d25efcc29b472a2d372ba3b8962e60",
+      "bytes": 16930,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/prepare_actualbody_v3.py",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/prepare_actualbody_v3.py",
+      "sha256": "cba13f19269a736a286522ac22ed471b859a9334533a3493d805bbc0cfa94d66",
+      "bytes": 5880,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/prepare_candidate.py",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/prepare_candidate.py",
+      "sha256": "e4fd94acd37c9a05dbe07cba8452fa24f2b23c1d893754c84f8a7576309f1d0e",
+      "bytes": 9027,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/prepare_v3.py",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/prepare_v3.py",
+      "sha256": "6267af439552cfe37f520e929c4e7e9a144e89daeca1984fa4847f48bbe93d6a",
+      "bytes": 3240,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/smp_application.production-to-v3.patch",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/smp_application.production-to-v3.patch",
+      "sha256": "24e267f45955b04c8c15857b7e2ea99688b289740aedf44a5703add03fba8693",
+      "bytes": 6919,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/smp_application.rs.patch",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/smp_application.rs.patch",
+      "sha256": "68acf40f354bff262407f86b32ebba321c550d91db95a2cbabfbfb1c9a340b1c",
+      "bytes": 5197,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/smp_application.v2-to-v3.patch",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/smp_application.v2-to-v3.patch",
+      "sha256": "807e3c8022f7ad2fc7f04c771720ab67d4a3a04bb669856ac40da8e435e3e4d6",
+      "bytes": 2233,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "repair/smp_application_syscall.rs.patch",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/smp_application_syscall.rs.patch",
+      "sha256": "f91b38d9353cde522dbc16a14d8e333b47033cc44cbe7fa41bddf5682b6ce112",
+      "bytes": 1171,
+      "original_mode": "0o600",
+      "role": "repair source/fixture/grant/review/integration or complete bounded capture"
+    },
+    {
+      "capsule_path": "tested-preimages/mcctrl.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-current-source-bundle-20261022-1/source-modules/mcctrl.rs",
+      "sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+      "bytes": 8992,
+      "original_mode": "0o644",
+      "role": "exact tested production preimage"
+    },
+    {
+      "capsule_path": "tested-preimages/mcctrl_process.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-current-source-bundle-20261022-1/source-modules/mcctrl_process.rs",
+      "sha256": "7e8572f10af6e5e38b76186c246abe672ec06f63df71e5aaa889b3a09f4fb035",
+      "bytes": 50530,
+      "original_mode": "0o600",
+      "role": "exact tested production preimage"
+    },
+    {
+      "capsule_path": "tested-preimages/smp_application.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-current-source-bundle-20261022-1/source-modules/smp_application.rs",
+      "sha256": "c3e95e0b51ded304497001bedc31699afcee18033f7f099b0989750571d65f61",
+      "bytes": 67246,
+      "original_mode": "0o600",
+      "role": "exact tested production preimage"
+    },
+    {
+      "capsule_path": "tested-preimages/mcexec_helpers.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/p-m06-01-pinned-launcher-process-inputs-20261022-1/source-packet/executer/user/rust/mcexec_helpers.rs",
+      "sha256": "9901615acc98ec710d23afa57423d59eee802cde1981752805436b1bf535c463",
+      "bytes": 254479,
+      "original_mode": "0o600",
+      "role": "exact tested production preimage"
+    },
+    {
+      "capsule_path": "tested-preimages/smp_application_syscall.rs",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-current-source-bundle-20261022-1/source-modules/smp_application_syscall.rs",
+      "sha256": "eaecdf66839854c3d2a6461cc7b2e2166f5738ba523af1063df4bc5b0e2b4a3a",
+      "bytes": 34002,
+      "original_mode": "0o600",
+      "role": "exact tested production preimage"
+    },
+    {
+      "capsule_path": "original-native235/guest-terminal/debugcon.log",
+      "private_original_path": "/home/holden/mckernel-work/scratch/n235a1/p/attempt-96b6b07d17d149f799c3ebf4e6b95e35/debugcon.log",
+      "sha256": "bd87db779e6878802fa64fdee99f2eb08dee1529bbea800a65356f051e186685",
+      "bytes": 152,
+      "original_mode": "0o600",
+      "role": "original failed native235 guest terminal"
+    },
+    {
+      "capsule_path": "original-native235/guest-terminal/first-failure.jsonl",
+      "private_original_path": "/home/holden/mckernel-work/scratch/n235a1/p/attempt-96b6b07d17d149f799c3ebf4e6b95e35/first-failure.jsonl",
+      "sha256": "b216e9e94e9697be9facf4b5d455ba0ae8280faa565dd0d6533d4c567e8b8ba5",
+      "bytes": 85,
+      "original_mode": "0o600",
+      "role": "original failed native235 guest terminal"
+    },
+    {
+      "capsule_path": "original-native235/guest-terminal/qemu.stderr",
+      "private_original_path": "/home/holden/mckernel-work/scratch/n235a1/p/attempt-96b6b07d17d149f799c3ebf4e6b95e35/qemu.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "original failed native235 guest terminal"
+    },
+    {
+      "capsule_path": "original-native235/guest-terminal/qemu.stdout",
+      "private_original_path": "/home/holden/mckernel-work/scratch/n235a1/p/attempt-96b6b07d17d149f799c3ebf4e6b95e35/qemu.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "original failed native235 guest terminal"
+    },
+    {
+      "capsule_path": "original-native235/guest-terminal/qmp.transcript.json",
+      "private_original_path": "/home/holden/mckernel-work/scratch/n235a1/p/attempt-96b6b07d17d149f799c3ebf4e6b95e35/qmp.transcript.json",
+      "sha256": "0f59a24ed799c86cc11ee0577aa3613a11dc6aaa795ebcf0c1c5ff9674292735",
+      "bytes": 234810,
+      "original_mode": "0o644",
+      "role": "original failed native235 guest terminal"
+    },
+    {
+      "capsule_path": "original-native235/guest-terminal/result.json",
+      "private_original_path": "/home/holden/mckernel-work/scratch/n235a1/p/attempt-96b6b07d17d149f799c3ebf4e6b95e35/result.json",
+      "sha256": "94a4197d8c1f4c3b67641ab988edaeae541afc8f946d6b24d6620f4dfe097bcd",
+      "bytes": 3010,
+      "original_mode": "0o600",
+      "role": "original failed native235 guest terminal"
+    },
+    {
+      "capsule_path": "original-native235/guest-terminal/serial.log",
+      "private_original_path": "/home/holden/mckernel-work/scratch/n235a1/p/attempt-96b6b07d17d149f799c3ebf4e6b95e35/serial.log",
+      "sha256": "eae7c68a82464ce7eeccb10c83091df703048b9bf860b6a5a3dd5ccb009a62aa",
+      "bytes": 75947,
+      "original_mode": "0o600",
+      "role": "original failed native235 guest terminal"
+    },
+    {
+      "capsule_path": "original-native235/closed-owner/case-binding.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/actual-native235-owner-capture-1/case-binding.json",
+      "sha256": "15529d7e0ab2c4e17340b9b8b1f004d4d22c21c15e4bdd3ed0a21a56868a7248",
+      "bytes": 1347,
+      "original_mode": "0o600",
+      "role": "original failed native235 closed owner capture"
+    },
+    {
+      "capsule_path": "original-native235/closed-owner/child-start.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/actual-native235-owner-capture-1/child-start.json",
+      "sha256": "27301c26358c2a91807bf21c66da3f4d89df200d26377cee8dd26812fb1bfa51",
+      "bytes": 899,
+      "original_mode": "0o600",
+      "role": "original failed native235 closed owner capture"
+    },
+    {
+      "capsule_path": "original-native235/closed-owner/direct-join.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/actual-native235-owner-capture-1/direct-join.json",
+      "sha256": "26cb5be652859c445730af70c63da41023a2edcdb2bff747c71a13e8a6846935",
+      "bytes": 145,
+      "original_mode": "0o600",
+      "role": "original failed native235 closed owner capture"
+    },
+    {
+      "capsule_path": "original-native235/closed-owner/status.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/actual-native235-owner-capture-1/status.json",
+      "sha256": "3204d2b15db37eeab188d491cefa5719cce474d0a52f0822c23e423cfeec9679",
+      "bytes": 2135,
+      "original_mode": "0o600",
+      "role": "original failed native235 closed owner capture"
+    },
+    {
+      "capsule_path": "original-native235/closed-owner/stderr",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/actual-native235-owner-capture-1/stderr",
+      "sha256": "9f1e325cd452f4fcfe640a71226621974f581c9dda4816806767310a46c2adf9",
+      "bytes": 1882,
+      "original_mode": "0o600",
+      "role": "original failed native235 closed owner capture"
+    },
+    {
+      "capsule_path": "original-native235/closed-owner/stdout",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/actual-native235-owner-capture-1/stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "original failed native235 closed owner capture"
+    },
+    {
+      "capsule_path": "original-native235/closed-owner/stream-and-group-close.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/actual-native235-owner-capture-1/stream-and-group-close.json",
+      "sha256": "0b64f9a993b5d79aa6cac6a03f593fb11887fb7bd7004b3db2db4747c107faa7",
+      "bytes": 79,
+      "original_mode": "0o600",
+      "role": "original failed native235 closed owner capture"
+    },
+    {
+      "capsule_path": "original-native235/authority/ACTUAL-NATIVE235-ABI2-C020-MANIFEST.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/ACTUAL-NATIVE235-ABI2-C020-MANIFEST.json",
+      "sha256": "3864bc52bf4d45761fbc6649bae0c864897a885adf74ea95fb4920400584d66d",
+      "bytes": 6690,
+      "original_mode": "0o600",
+      "role": "original failed native tuple/release/oracle authority"
+    },
+    {
+      "capsule_path": "original-native235/authority/ROOT-EXACT-NATIVE235-RELEASE-1.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/ROOT-EXACT-NATIVE235-RELEASE-1.json",
+      "sha256": "365dad60c2b25b6b96edf47e44962fdddc7dc02bbb3f6f8fba420f580e9c820c",
+      "bytes": 1495,
+      "original_mode": "0o600",
+      "role": "original failed native tuple/release/oracle authority"
+    },
+    {
+      "capsule_path": "original-native235/authority/ACTUAL-CASE-ARTIFACT-AND-STRICT-CONSUMER-JOIN.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/ACTUAL-CASE-ARTIFACT-AND-STRICT-CONSUMER-JOIN.json",
+      "sha256": "6e68f340778966b3d4dd8cb829bfa8b43c4f397f383c7343f29c16e7f51691a5",
+      "bytes": 7889,
+      "original_mode": "0o600",
+      "role": "original failed native tuple/release/oracle authority"
+    },
+    {
+      "capsule_path": "original-native235/authority/actual-strict-join.stderr",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/actual-strict-join.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original_mode": "0o600",
+      "role": "original failed native tuple/release/oracle authority"
+    },
+    {
+      "capsule_path": "original-native235/retention/retention-ACTUAL-FAILED235-FINAL-HANDOFF.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/retirement-preparation-1/retention-ACTUAL-FAILED235-FINAL-HANDOFF.json",
+      "sha256": "60e432c455c204bca897e7120080106440354138e9ed99d05e7c3b5853e99c77",
+      "bytes": 11216,
+      "original_mode": "0o600",
+      "role": "original failed native physical-retirement/restoration authority"
+    },
+    {
+      "capsule_path": "original-native235/retention/retention-COMPLETE-SOURCE-MAP.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/retirement-preparation-1/retention-COMPLETE-SOURCE-MAP.json",
+      "sha256": "a262068cb6a042c1e059c9a431003eadb1a69ec191e763e90cb881d7eb978908",
+      "bytes": 152755,
+      "original_mode": "0o600",
+      "role": "original failed native physical-retirement/restoration authority"
+    },
+    {
+      "capsule_path": "original-native235/retention/INDEPENDENT-FAILED-NATIVE235-PHYSICAL-ACCEPTANCE-1.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/retirement-preparation-1/INDEPENDENT-FAILED-NATIVE235-PHYSICAL-ACCEPTANCE-1.json",
+      "sha256": "60a051120b116d8fc732f3003997fc597edc1fddcfc59ee14569d3203232799e",
+      "bytes": 2408,
+      "original_mode": "0o600",
+      "role": "original failed native physical-retirement/restoration authority"
+    },
+    {
+      "capsule_path": "original-native235/retention/ROOT-READONLY-OWNER-EXPORT-RESULT.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/retirement-preparation-1/ROOT-READONLY-OWNER-EXPORT-RESULT.json",
+      "sha256": "ea3c5d7279bcc464985d6d40752d2a70d567f53b5992b044224939808963fe77",
+      "bytes": 1481,
+      "original_mode": "0o600",
+      "role": "original failed native physical-retirement/restoration authority"
+    },
+    {
+      "capsule_path": "original-native235/retention/ROOT-READONLY-235-RELEASE-1.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/retirement-preparation-1/ROOT-READONLY-235-RELEASE-1.json",
+      "sha256": "c96d28dddde4286568a63310e49f2b0893bcfe1dce9e2ca4d9a7282337320beb",
+      "bytes": 258,
+      "original_mode": "0o600",
+      "role": "original failed native physical-retirement/restoration authority"
+    },
+    {
+      "capsule_path": "original-native235/retention/root-owner-export-1.stdout.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/retirement-preparation-1/root-owner-export-1.stdout.json",
+      "sha256": "0a4af648e204732d00da8b9567ca5009f0cb4e49cea544ab2574702181681a1e",
+      "bytes": 282701,
+      "original_mode": "0o600",
+      "role": "original failed native physical-retirement/restoration authority"
+    },
+    {
+      "capsule_path": "original-native235/retention/retention-ACTUAL-ND-PAYLOAD-frame.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/retirement-preparation-1/retention-ACTUAL-ND-PAYLOAD-frame.bin",
+      "sha256": "11ba1140e8f033196858a0a53e745eb5985926840a40efa2903b2db14aaa9ff1",
+      "bytes": 608,
+      "original_mode": "0o600",
+      "role": "original failed native physical-retirement/restoration authority"
+    },
+    {
+      "capsule_path": "original-native235/retention/retention-ACTUAL-app-stderr.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/retirement-preparation-1/retention-ACTUAL-app-stderr.bin",
+      "sha256": "5d666ed02f9c0a54b77bc6963c6ce4b1c0bde3d5147c52d9c3ad716971888ad1",
+      "bytes": 35,
+      "original_mode": "0o600",
+      "role": "original failed native physical-retirement/restoration authority"
+    },
+    {
+      "capsule_path": "original-native235/retention/retention-ACTUAL-app-stdout.bin",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/retirement-preparation-1/retention-ACTUAL-app-stdout.bin",
+      "sha256": "13ee039041858d10ed51846a9cf195f65069cbe5e4d6ae3ab8f56977427e7d81",
+      "bytes": 13,
+      "original_mode": "0o600",
+      "role": "original failed native physical-retirement/restoration authority"
+    },
+    {
+      "capsule_path": "original-native235/retention/retention-extraction-field-failure-1.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/retirement-preparation-1/retention-extraction-field-failure-1.json",
+      "sha256": "f75251105ab76af040939c1cc1c56414b8743a918a063391c1001cf33fc7c189",
+      "bytes": 363,
+      "original_mode": "0o600",
+      "role": "original failed native physical-retirement/restoration authority"
+    },
+    {
+      "capsule_path": "original-native235/retention/current-name-label-closure/result.json",
+      "private_original_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/retirement-preparation-1/actual-current-name-label-closure-1/result.json",
+      "sha256": "e1392fcb56774652805a24a3f0423ba5f436be0ad2f773293f3e7025a24de489",
+      "bytes": 3836,
+      "original_mode": "0o600",
+      "role": "accepted exact original-owner physical-retirement observation"
+    },
+    {
+      "capsule_path": "tools/supervisor.py",
+      "private_original_path": "/home/holden/mckernel/scripts/application-tests/supervisor.py",
+      "sha256": "8b8700175e6673c3a6b652d4a93bd18b56def83dfa3ac4ec821d4ae6c554e873",
+      "bytes": 24564,
+      "original_mode": "0o664",
+      "role": "unchanged accepted actualbody supervisor"
+    }
+  ],
+  "omitted_artifacts": [
+    {
+      "private_retained_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v2-start",
+      "sha256": "961be834584939e30347ac107de94cf9ae4ec3daecac4658ea1f7cec2895e00b",
+      "bytes": 6546352,
+      "hash_authority_capsule_path": "repair/ACTUALBODY-RESULT-2.json",
+      "fresh_large_file_hash_performed": false,
+      "restoration": "Keep original private retained bytes, or materialize exact recorded source paths/toolchain and rebuild under a new dispatcher release. This map authorizes no replay or overwrite.",
+      "private_path_exists": true,
+      "observed_size": 6546352,
+      "reproduction_command_authority": "repair/ACTUALBODY-COMPILE-PROPOSAL.json"
+    },
+    {
+      "private_retained_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v2-pool",
+      "sha256": "01113cc6c66ce31950a817c5383d09633ad1a72d3e9ae9a0cbe53f7eb483a0ea",
+      "bytes": 6483624,
+      "hash_authority_capsule_path": "repair/ACTUALBODY-RESULT-2.json",
+      "fresh_large_file_hash_performed": false,
+      "restoration": "Keep original private retained bytes, or materialize exact recorded source paths/toolchain and rebuild under a new dispatcher release. This map authorizes no replay or overwrite.",
+      "private_path_exists": true,
+      "observed_size": 6483624,
+      "reproduction_command_authority": "repair/ACTUALBODY-COMPILE-PROPOSAL.json"
+    },
+    {
+      "private_retained_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v2-dispatch",
+      "sha256": "97609c5102a841fca6f0e1c144ef42a6382186d61fb12439d7d5eb32242b7ee1",
+      "bytes": 6468224,
+      "hash_authority_capsule_path": "repair/ACTUALBODY-RESULT-2.json",
+      "fresh_large_file_hash_performed": false,
+      "restoration": "Keep original private retained bytes, or materialize exact recorded source paths/toolchain and rebuild under a new dispatcher release. This map authorizes no replay or overwrite.",
+      "private_path_exists": true,
+      "observed_size": 6468224,
+      "reproduction_command_authority": "repair/ACTUALBODY-COMPILE-PROPOSAL.json"
+    },
+    {
+      "private_retained_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v2-launcher",
+      "sha256": "0b4e3e3e7a1c98d69882ea28ec3f15d0f3e2bf61a080076d586e279764a9cf09",
+      "bytes": 3975232,
+      "hash_authority_capsule_path": "repair/ACTUALBODY-RESULT-2.json",
+      "fresh_large_file_hash_performed": false,
+      "restoration": "Keep original private retained bytes, or materialize exact recorded source paths/toolchain and rebuild under a new dispatcher release. This map authorizes no replay or overwrite.",
+      "private_path_exists": true,
+      "observed_size": 3975232,
+      "reproduction_command_authority": "repair/ACTUALBODY-COMPILE-PROPOSAL.json"
+    },
+    {
+      "private_retained_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v3-correction-start",
+      "sha256": "a9a6c784e1779a9ab6f26e9224835b7b1507efba576ae8673bd5da0929d90568",
+      "bytes": 6649640,
+      "hash_authority_capsule_path": "repair/ACTUALBODY-RESULT-4.json",
+      "fresh_large_file_hash_performed": false,
+      "restoration": "Keep original private retained bytes, or materialize exact recorded source paths/toolchain and rebuild under a new dispatcher release. This map authorizes no replay or overwrite.",
+      "private_path_exists": true,
+      "observed_size": 6649640,
+      "reproduction_command_authority": "repair/ACTUALBODY-COMPILE-PROPOSAL-V3-CORRECTION.json"
+    },
+    {
+      "private_retained_path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/bf07-preserved/actualbody-start",
+      "sha256": "72ca6e49edbba853cc467e489a40ecd3fd197b59f17a2c8549d9f2c3a602afee",
+      "bytes": 6516912,
+      "hash_authority_capsule_path": "repair/FIRST-CAPTURE-RETIREMENT.json",
+      "fresh_large_file_hash_performed": false,
+      "restoration": "Keep original private retained bytes, or materialize exact recorded source paths/toolchain and rebuild under a new dispatcher release. This map authorizes no replay or overwrite.",
+      "private_path_exists": true,
+      "observed_size": 6516912,
+      "reproduction_command_authority": "repair/bf07-preserved/ACTUALBODY-COMPILE-PROPOSAL.json"
+    },
+    {
+      "private_retained_path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+      "sha256": "032653ee0661b059c325e2a0911a9d492805f1a889c4df515473d69a8be105bc",
+      "bytes": 16130048,
+      "hash_authority_capsule_path": "original-native235/retention/retention-ACTUAL-FAILED235-FINAL-HANDOFF.json",
+      "fresh_large_file_hash_performed": false,
+      "restoration": "Keep original private retained bytes, or materialize exact recorded source paths/toolchain and rebuild under a new dispatcher release. This map authorizes no replay or overwrite.",
+      "private_path_exists": true,
+      "observed_size": 16130048
+    },
+    {
+      "private_retained_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/abi2-boothelper-substitution-1/actual-abi2-base-1.cpio.gz",
+      "sha256": "5bb15bb3dc557f54fad11e1b2fea8800c38dd8b43ca94afc76ee92d1788697ab",
+      "bytes": 12884811,
+      "hash_authority_capsule_path": "original-native235/retention/retention-ACTUAL-FAILED235-FINAL-HANDOFF.json",
+      "fresh_large_file_hash_performed": false,
+      "restoration": "Keep original private retained bytes, or materialize exact recorded source paths/toolchain and rebuild under a new dispatcher release. This map authorizes no replay or overwrite.",
+      "private_path_exists": true,
+      "observed_size": 12884811
+    },
+    {
+      "private_retained_path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64/libc.so.6",
+      "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+      "bytes": 2339896,
+      "hash_authority_capsule_path": "original-native235/retention/retention-ACTUAL-FAILED235-FINAL-HANDOFF.json",
+      "fresh_large_file_hash_performed": false,
+      "restoration": "Keep original private retained bytes, or materialize exact recorded source paths/toolchain and rebuild under a new dispatcher release. This map authorizes no replay or overwrite.",
+      "private_path_exists": true,
+      "observed_size": 2339896
+    },
+    {
+      "private_retained_path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64/ld-linux-x86-64.so.2",
+      "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+      "bytes": 930600,
+      "hash_authority_capsule_path": "original-native235/retention/retention-ACTUAL-FAILED235-FINAL-HANDOFF.json",
+      "fresh_large_file_hash_performed": false,
+      "restoration": "Keep original private retained bytes, or materialize exact recorded source paths/toolchain and rebuild under a new dispatcher release. This map authorizes no replay or overwrite.",
+      "private_path_exists": true,
+      "observed_size": 930600
+    },
+    {
+      "private_retained_path": "/home/holden/mckernel-work/host-preparation/p-m06-01-pinned-launcher-process-inputs-20261022-1/pinned-launcher-attempt-1/owner-work/evidence/artifacts/mcexec",
+      "sha256": "0d774a14c08bdd4abcd0368060ca8eafba18bf44244dafba5459f895c5d78a7a",
+      "bytes": 394640,
+      "hash_authority_capsule_path": "original-native235/retention/retention-ACTUAL-FAILED235-FINAL-HANDOFF.json",
+      "fresh_large_file_hash_performed": false,
+      "restoration": "Keep original private retained bytes, or materialize exact recorded source paths/toolchain and rebuild under a new dispatcher release. This map authorizes no replay or overwrite.",
+      "private_path_exists": true,
+      "observed_size": 394640
+    },
+    {
+      "private_retained_path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/mckernel.img",
+      "sha256": "10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2",
+      "bytes": 8439816,
+      "hash_authority_capsule_path": "original-native235/retention/retention-ACTUAL-FAILED235-FINAL-HANDOFF.json",
+      "fresh_large_file_hash_performed": false,
+      "restoration": "Keep original private retained bytes, or materialize exact recorded source paths/toolchain and rebuild under a new dispatcher release. This map authorizes no replay or overwrite.",
+      "private_path_exists": true,
+      "observed_size": 8439816
+    },
+    {
+      "private_retained_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/abi2-boothelper-substitution-1/native-boot.callback-abi2.runtime",
+      "sha256": "cccbf269ce80d92a4c16256f5189a65bc7cbc83044d70f752e4910a92c2b45ec",
+      "bytes": 31000,
+      "hash_authority_capsule_path": "original-native235/retention/retention-ACTUAL-FAILED235-FINAL-HANDOFF.json",
+      "fresh_large_file_hash_performed": false,
+      "restoration": "Keep original private retained bytes, or materialize exact recorded source paths/toolchain and rebuild under a new dispatcher release. This map authorizes no replay or overwrite.",
+      "private_path_exists": true,
+      "observed_size": 31000
+    },
+    {
+      "private_retained_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/payload.snapshot",
+      "sha256": "537cb22b2af1f7fca1202afaf45b017364823c185c2ec47474093e51647ba5b8",
+      "bytes": 5628568,
+      "hash_authority_capsule_path": "original-native235/retention/retention-ACTUAL-FAILED235-FINAL-HANDOFF.json",
+      "fresh_large_file_hash_performed": false,
+      "restoration": "Keep original private retained bytes, or materialize exact recorded source paths/toolchain and rebuild under a new dispatcher release. This map authorizes no replay or overwrite.",
+      "private_path_exists": true,
+      "observed_size": 5628568
+    },
+    {
+      "private_retained_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/abi2-boothelper-substitution-1/actual-abi2-base-1.cpio.gz",
+      "sha256": "5bb15bb3dc557f54fad11e1b2fea8800c38dd8b43ca94afc76ee92d1788697ab",
+      "bytes": 12884811,
+      "hash_authority_capsule_path": "original-native235/retention/retention-ACTUAL-FAILED235-FINAL-HANDOFF.json",
+      "fresh_large_file_hash_performed": false,
+      "restoration": "Keep original private retained bytes, or materialize exact recorded source paths/toolchain and rebuild under a new dispatcher release. This map authorizes no replay or overwrite.",
+      "private_path_exists": true,
+      "observed_size": 12884811
+    },
+    {
+      "private_retained_path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-20352dabb9c94403a03c224ec2826ff2/modules/ihk.ko",
+      "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+      "bytes": 1527808,
+      "hash_authority_capsule_path": "original-native235/retention/retention-ACTUAL-FAILED235-FINAL-HANDOFF.json",
+      "fresh_large_file_hash_performed": false,
+      "restoration": "Keep original private retained bytes, or materialize exact recorded source paths/toolchain and rebuild under a new dispatcher release. This map authorizes no replay or overwrite.",
+      "private_path_exists": true,
+      "observed_size": 1527808
+    },
+    {
+      "private_retained_path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-20352dabb9c94403a03c224ec2826ff2/modules/ihk-smp-x86_64.ko",
+      "sha256": "50f6e2bc822dcff45b99aa2fc8da2c00e1469c3d0d10f1ec510ae82aea80e581",
+      "bytes": 12799928,
+      "hash_authority_capsule_path": "original-native235/retention/retention-ACTUAL-FAILED235-FINAL-HANDOFF.json",
+      "fresh_large_file_hash_performed": false,
+      "restoration": "Keep original private retained bytes, or materialize exact recorded source paths/toolchain and rebuild under a new dispatcher release. This map authorizes no replay or overwrite.",
+      "private_path_exists": true,
+      "observed_size": 12799928
+    },
+    {
+      "private_retained_path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-20352dabb9c94403a03c224ec2826ff2/modules/mcctrl.ko",
+      "sha256": "bff603a5d7ff1a9a3498bf0fe32b2c017170764d17d0d42103e82539576824af",
+      "bytes": 2637656,
+      "hash_authority_capsule_path": "original-native235/retention/retention-ACTUAL-FAILED235-FINAL-HANDOFF.json",
+      "fresh_large_file_hash_performed": false,
+      "restoration": "Keep original private retained bytes, or materialize exact recorded source paths/toolchain and rebuild under a new dispatcher release. This map authorizes no replay or overwrite.",
+      "private_path_exists": true,
+      "observed_size": 2637656
+    },
+    {
+      "private_retained_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/abi2-boothelper-substitution-1/actual-abi2-base-1.cpio.gz",
+      "sha256": "5bb15bb3dc557f54fad11e1b2fea8800c38dd8b43ca94afc76ee92d1788697ab",
+      "bytes": 12884811,
+      "hash_authority_capsule_path": "original-native235/retention/retention-ACTUAL-FAILED235-FINAL-HANDOFF.json",
+      "fresh_large_file_hash_performed": false,
+      "restoration": "Keep original private retained bytes, or materialize exact recorded source paths/toolchain and rebuild under a new dispatcher release. This map authorizes no replay or overwrite.",
+      "private_path_exists": true,
+      "observed_size": 12884811
+    },
+    {
+      "private_retained_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/collector-helper-diagnostic",
+      "sha256": "c020a8e0ab43e222caf901d92bfecb2a8d8cf20ea0b539910a17a578f1fd12fc",
+      "bytes": 1021320,
+      "hash_authority_capsule_path": "original-native235/retention/retention-ACTUAL-FAILED235-FINAL-HANDOFF.json",
+      "fresh_large_file_hash_performed": false,
+      "restoration": "Keep original private retained bytes, or materialize exact recorded source paths/toolchain and rebuild under a new dispatcher release. This map authorizes no replay or overwrite.",
+      "private_path_exists": true,
+      "observed_size": 1021320
+    },
+    {
+      "private_retained_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/actual-native235-abi2-c020-overlay-1.cpio.gz",
+      "sha256": "5b3fab8a1d167c305b4355bbf7c29973d3e657c9aefb5137cc1ab1c02abee00f",
+      "bytes": 15219072,
+      "hash_authority_capsule_path": "original-native235/retention/retention-ACTUAL-FAILED235-FINAL-HANDOFF.json",
+      "fresh_large_file_hash_performed": false,
+      "restoration": "Keep original private retained bytes, or materialize exact recorded source paths/toolchain and rebuild under a new dispatcher release. This map authorizes no replay or overwrite.",
+      "private_path_exists": true,
+      "observed_size": 15219072
+    },
+    {
+      "private_retained_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/actual-native235-abi2-c020-overlay-1.manifest.json",
+      "sha256": "268b7b31b600c9327d15ea92dbc8fe77a208ea0a5e02406124c18c506fbecc2b",
+      "bytes": 15353,
+      "hash_authority_capsule_path": "original-native235/retention/retention-ACTUAL-FAILED235-FINAL-HANDOFF.json",
+      "fresh_large_file_hash_performed": false,
+      "restoration": "Keep original private retained bytes, or materialize exact recorded source paths/toolchain and rebuild under a new dispatcher release. This map authorizes no replay or overwrite.",
+      "private_path_exists": true,
+      "observed_size": 15353
+    },
+    {
+      "private_retained_path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_overlay.py",
+      "sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d",
+      "bytes": 26579,
+      "hash_authority_capsule_path": "original-native235/retention/retention-ACTUAL-FAILED235-FINAL-HANDOFF.json",
+      "fresh_large_file_hash_performed": false,
+      "restoration": "Keep original private retained bytes, or materialize exact recorded source paths/toolchain and rebuild under a new dispatcher release. This map authorizes no replay or overwrite.",
+      "private_path_exists": true,
+      "observed_size": 26579
+    },
+    {
+      "private_retained_path": "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+      "sha256": "f8d033fd72e878ec60493788c8bffec2e6c154dcab6f0cb4c145af8ada26a7ed",
+      "bytes": null,
+      "hash_authority_capsule_path": "repair/ACTUALBODY-COMPILE-PROPOSAL-V3-CORRECTION.json",
+      "fresh_large_file_hash_performed": false,
+      "restoration": "Keep original private retained bytes, or materialize exact recorded source paths/toolchain and rebuild under a new dispatcher release. This map authorizes no replay or overwrite.",
+      "private_path_exists": true,
+      "observed_size": 643384
+    },
+    {
+      "private_retained_path": "/home/holden/anaconda3/bin/python3",
+      "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+      "bytes": null,
+      "hash_authority_capsule_path": "repair/ACTUALBODY-COMPILE-PROPOSAL-V3-CORRECTION.json",
+      "fresh_large_file_hash_performed": false,
+      "restoration": "Keep original private retained bytes, or materialize exact recorded source paths/toolchain and rebuild under a new dispatcher release. This map authorizes no replay or overwrite.",
+      "private_path_exists": true,
+      "observed_size": 15880080
+    }
+  ],
+  "private_repair_root": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1",
+  "instructions": [
+    "Restore a copied file by its capsule_path only into a fresh destination mapped from private_original_path; require exact SHA256 and preserve the original mode. Do not overwrite current live/private evidence or canonical sources automatically.",
+    "Older bf07 paths later superseded in place are mapped additively in repair/SUPERSEDED-BF07-PREIMAGE-RESTORATION-MAP.json; its immutable bf07-preserved preimages are included. V2/V3 fresh-path revisions are in repair/REVISION-MAP-V3.json.",
+    "The original native235 complete77-file owner export is included as original-native235/retention/root-owner-export-1.stdout.json, with its accepted length/hash/source map and physical-retirement review; original guest terminal and closed outer owner files are copied directly.",
+    "Large artifact hashes are reused from retained accepted receipts and were not recomputed. Omission is not deletion; all original private bytes remain. Compiler or native replay needs its separate dispatcher release."
+  ],
+  "acceptance_limits": {
+    "focused_tests": 19,
+    "terminal_wait_model_exit": 1,
+    "independent_source_review": "READY_FOR_PRODUCTION_COMPILE",
+    "canonical_integration": "INTEGRATED_EXACT_REVIEWED_V3",
+    "production_sdk192_compile": false,
+    "new_fullcrate_acceptance": false,
+    "native_application_acceptance": false
+  }
+}

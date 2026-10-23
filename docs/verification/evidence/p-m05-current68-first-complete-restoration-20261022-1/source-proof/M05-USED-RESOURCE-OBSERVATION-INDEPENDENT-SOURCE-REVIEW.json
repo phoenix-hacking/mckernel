@@ -1,0 +1,36 @@
+{
+  "decision": "SOURCE_INTEGRATION_ELIGIBLE_ONLY",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "findings": [],
+  "accepted": [
+    "Exact private smp_cpu.rs postimage f65f3aea00dfdd0a7905d3dd396e67684fd428c71cf34dd6e15a56896c73f912",
+    "Exact private smp_memory.rs postimage 60758aeafac150bd8aac62455844e3f4e4200a082f82f80ce66c3c871d4909be",
+    "Exact resource_observation.py decoder 978a0b8b42e8370adde81d1d79eed77d807b1199b09e655b09b4f46ef5a7cc64"
+  ],
+  "reasoning": [
+    "reconcile_shutdown_boot observes copied CPU identities under the existing CPU mutex and device-hotplug exclusion. The CPU read guard ends before logging. No new pointer dereference, reference escape, ownership transfer or IRQ callback is introduced.",
+    "finish_shutdown_claim observes memory under its existing mutex and the same live ShutdownBoot claim. Prepared records precede fallible preflight/IRQ release; committed records follow the coupled policy commit. Retained failures cannot form the decoder's required complete sequence.",
+    "Claim-owned epoch and Started references remain live through observation and final unlock. The additions do not change existing destruction ordering.",
+    "The decoder requires explicit expected owner and epoch, complete ordered blocks, identical CPU identities, and exact pointwise memory coverage/NUMA/disposition while preserving other owners. Missing, truncated, oversized or incomplete inventories remain unknown.",
+    "Public assigned-resource queries still return EBUSY through closed admission; EBUSY supplies no zero-use evidence."
+  ],
+  "evidence_checked": {
+    "raw_body_output": "[21 extracted-body tests passed](/home/holden/mckernel-work/host-preparation/m05-used-resource-retirement-observation-20261022-1/actual-check-3/body-run/stdout)",
+    "raw_observation": "[Actual fixture-emitted successful sequence](/home/holden/mckernel-work/host-preparation/m05-used-resource-retirement-observation-20261022-1/actual-check-3/logs/good.log)",
+    "decoder": "[Actual-log positive, synthetic coalescing positive and 21 negatives](/home/holden/mckernel-work/host-preparation/m05-used-resource-retirement-observation-20261022-1/actual-check-3/logs/decoder-result.json)",
+    "receipts": "[Compile/body/decoder receipt references](/home/holden/mckernel-work/host-preparation/m05-used-resource-retirement-observation-20261022-1/actual-check-3/RESULT.json)",
+    "receipt_validation": "Inspected raw outputs, command records and joined receipts; their recorded hashes match. Compile/body/decoder returned 0 with joined children, closed streams and absent groups.",
+    "baseline": "Live CPU 356853344bffaa5b3d625c97eb3928b8908d45abbc94d16902e19bdef45ea90c and memory 8785b1be4dffe2ef24bc54dc8f861c290418ce13773d46177692c709d69fb525 still match SOURCE-PINS."
+  },
+  "conditions": [
+    "Integration must preserve the reviewed postimages or obtain review of any rebase changes.",
+    "Before native acceptance, the caller must independently bind each exact boot owner/epoch and select its complete observation sequence from the full multiboot kernel.log. Deriving expected identity from the observation itself is insufficient.",
+    "Keep the SDK66 capacity gate at 14159970304 bytes; this review authorizes no workaround."
+  ],
+  "limitations": [
+    "The fixture uses deterministic CPU/memory tables, hardware, lock and thread adapters plus a replacement logging macro. It proves extracted-body behavior, not kernel printk execution or native locking/reentrancy.",
+    "No full-module build, native execution, complete cycle, Linux physical-page release, mapping/callback/reference/frame retirement, API acceptance, source-counter credit or whole-M05 acceptance follows.",
+    "Next production boundary: separately authorized module build and native capture using the unchanged collector, followed by independently bound per-boot decoding."
+  ],
+  "review_actions": "Read-only inspection; no edits, tests, builds, guests or agents."
+}

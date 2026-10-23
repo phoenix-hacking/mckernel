@@ -1,0 +1,59 @@
+{
+  "decision": "PASS_P_M05_02_FIRST_RESTORATION_SEMANTICS_PHYSICAL_PENDING",
+  "reviewer": "/root/m07_final_closure_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual supported current68 P05 tuple only.",
+  "findings": [],
+  "result_sha256": "9a8187a62ce188a3b5eee95be44d514b48b5c45af44997ad7fb99ac7b7adce07",
+  "serial_sha256": "8a2e5eb9e0617c5f80f99c5e853a7a4fedf93a2e7310e6b70b49997dad517182",
+  "manifest_sha256": "b8366ba7b8b7878bd3743858816be96d34877429967cc9a3aea911d67726a257",
+  "linked_provider_acceptance_sha256": "1471eb15683255085a824714c1b3ca98d7a4902654330608541a9c689bec33ca",
+  "source_enforced_release_route_sha256": "8213d12dbe1bebc22f185a145f0805e1458c8f5ff3bbaad8ebb79d270204cebd",
+  "first_restoration": {
+    "owner_epoch": [
+      0,
+      1,
+      1
+    ],
+    "kernel_prefix_sha256": "79e69ac404e0d431fdcb6845a686f6446254e7a93e4ac635bcadd42a79efcc8c",
+    "cpu_identities_returned_online_unowned": [
+      [
+        1,
+        1,
+        0
+      ],
+      [
+        2,
+        2,
+        1
+      ]
+    ],
+    "memory_extents_returned_unowned": [
+      [
+        4328521728,
+        117440512,
+        0
+      ],
+      [
+        4563402752,
+        16777216,
+        0
+      ]
+    ],
+    "returned_bytes": 134217728,
+    "public_destroy_return": 0,
+    "public_release_mem_return": 0,
+    "final_reserved_memory_bytes": 0,
+    "complete_restoration_semantics_verified": true
+  },
+  "basis": "Actual committed resource records and public calls join the exact linked provider. Successful reconcile requires worker/process/ledger quiescence and callback rundown. Successful nonempty RELEASE_MEM requires complete original PageOwner interval coverage and synchronous original-allocation freeing before return. This combines observed execution with enforced postconditions; source alone supplies no runtime credit.",
+  "workloads": "Two exact40B outputs, empty stderr, exit0 and empty application procfs; strict second boot and second public stop/release observed.",
+  "restore_then_reboot_boundaries_proved": 1,
+  "second_complete_restoration_claimed": false,
+  "second_restoration_limitation": "The saved post-reboot prefix ends before second shutdown; its coupled committed resource sequence is absent.",
+  "original_false_acceptance_fields_preserved": true,
+  "physical_acceptance_pending": true,
+  "cycle_quota_credit_eligible_after_physical_acceptance": 1,
+  "tracker_credit_authorized": false,
+  "new_execution_authorized": false
+}

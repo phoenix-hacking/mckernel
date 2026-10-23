@@ -1,0 +1,865 @@
+{
+  "actual_protocol_records": {
+    "ND_LIFECYCLE": [
+      {
+        "argv": [
+          "/bin/native-lifecycle-probe",
+          "0"
+        ],
+        "child_errno": 0,
+        "child_stage": 0,
+        "clean": 1,
+        "fault": 0,
+        "finished_ns": 32210349409,
+        "helper_result": 0,
+        "raw_wait_status": 0,
+        "reaped_ns": 32210243809,
+        "started_ns": 31985009317,
+        "timeout": 0
+      }
+    ],
+    "ND_REBOOT": [
+      {
+        "argv": [
+          "/bin/native-boot-second"
+        ],
+        "boot_attempted": 1,
+        "child_errno": 0,
+        "child_stage": 0,
+        "clean": 1,
+        "fault": 0,
+        "finished_ns": 55966864829,
+        "helper_result": 0,
+        "raw_wait_status": 0,
+        "reaped_ns": 55966714252,
+        "resource_finished_ns": 32354621656,
+        "result": 0,
+        "started_ns": 32378909659,
+        "timeout": 0
+      }
+    ],
+    "ND_REBOOT_LOG": [
+      {
+        "count": 46603,
+        "errno": 0,
+        "limit": 262144,
+        "name": "before"
+      },
+      {
+        "count": 53847,
+        "errno": 0,
+        "limit": 262144,
+        "name": "after"
+      }
+    ],
+    "ND_RESOURCE": [
+      {
+        "argv": [
+          "/bin/native-resource-release-probe"
+        ],
+        "child_errno": 0,
+        "child_stage": 0,
+        "clean": 1,
+        "fault": 0,
+        "finished_ns": 32354621656,
+        "helper_result": 0,
+        "raw_wait_status": 0,
+        "reaped_ns": 32354511027,
+        "started_ns": 32216474489,
+        "timeout": 0
+      }
+    ],
+    "ND_SECOND_LIFECYCLE": [
+      {
+        "argv": [
+          "/bin/native-lifecycle-probe",
+          "0"
+        ],
+        "child_errno": 0,
+        "child_stage": 0,
+        "clean": 1,
+        "fault": 0,
+        "finished_ns": 56529388837,
+        "helper_result": 0,
+        "raw_wait_status": 0,
+        "reaped_ns": 56529293294,
+        "started_ns": 56341637880,
+        "timeout": 0
+      }
+    ],
+    "ND_SECOND_RESOURCE": [
+      {
+        "argv": [
+          "/bin/native-resource-release-probe"
+        ],
+        "child_errno": 0,
+        "child_stage": 0,
+        "clean": 1,
+        "fault": 0,
+        "finished_ns": 56647351316,
+        "helper_result": 0,
+        "raw_wait_status": 0,
+        "reaped_ns": 56647249348,
+        "started_ns": 56531219238,
+        "timeout": 0
+      }
+    ]
+  },
+  "actual_resource_policy_serial_records": [
+    {
+      "serial_line_1based": 958,
+      "text": "<6>[   32.190587] ihk_smp_x86_64: IHK-SMP: resource-cpu-v1 os=0 generation=1 epoch=1 phase=prepared rows=2 emitted=2 complete=1"
+    },
+    {
+      "serial_line_1based": 959,
+      "text": "<6>[   32.190793] ihk_smp_x86_64: IHK-SMP: resource-cpu-row-v1 os=0 generation=1 epoch=1 phase=prepared index=0 cpu=1 hardware=1 numa=0 state=Assigned owner_none=0 owner_slot=0 owner_generation=1"
+    },
+    {
+      "serial_line_1based": 960,
+      "text": "<6>[   32.190872] ihk_smp_x86_64: IHK-SMP: resource-cpu-row-v1 os=0 generation=1 epoch=1 phase=prepared index=1 cpu=2 hardware=2 numa=1 state=Assigned owner_none=0 owner_slot=0 owner_generation=1"
+    },
+    {
+      "serial_line_1based": 961,
+      "text": "<6>[   32.191891] ihk_smp_x86_64: IHK-SMP: resource-memory-v1 os=0 generation=1 epoch=1 phase=prepared rows=2 emitted=2 complete=1"
+    },
+    {
+      "serial_line_1based": 962,
+      "text": "<6>[   32.191952] ihk_smp_x86_64: IHK-SMP: resource-memory-row-v1 os=0 generation=1 epoch=1 phase=prepared index=0 start=4328521728 bytes=117440512 numa=0 owner_none=0 owner_slot=0 owner_generation=1"
+    },
+    {
+      "serial_line_1based": 963,
+      "text": "<6>[   32.191952] ihk_smp_x86_64: IHK-SMP: resource-memory-row-v1 os=0 generation=1 epoch=1 phase=prepared index=1 start=4563402752 bytes=16777216 numa=0 owner_none=0 owner_slot=0 owner_generation=1"
+    },
+    {
+      "serial_line_1based": 964,
+      "text": "<6>[   32.191952] ihk_smp_x86_64: IHK-SMP: resource-memory-v1 os=0 generation=1 epoch=1 phase=committed rows=2 emitted=2 complete=1"
+    },
+    {
+      "serial_line_1based": 965,
+      "text": "<6>[   32.191952] ihk_smp_x86_64: IHK-SMP: resource-memory-row-v1 os=0 generation=1 epoch=1 phase=committed index=0 start=4328521728 bytes=117440512 numa=0 owner_none=1 owner_slot=0 owner_generation=0"
+    },
+    {
+      "serial_line_1based": 966,
+      "text": "<6>[   32.191952] ihk_smp_x86_64: IHK-SMP: resource-memory-row-v1 os=0 generation=1 epoch=1 phase=committed index=1 start=4563402752 bytes=16777216 numa=0 owner_none=1 owner_slot=0 owner_generation=0"
+    },
+    {
+      "serial_line_1based": 967,
+      "text": "<6>[   32.191952] ihk_smp_x86_64: IHK-SMP: resource-cpu-v1 os=0 generation=1 epoch=1 phase=committed rows=2 emitted=2 complete=1"
+    },
+    {
+      "serial_line_1based": 968,
+      "text": "<6>[   32.191952] ihk_smp_x86_64: IHK-SMP: resource-cpu-row-v1 os=0 generation=1 epoch=1 phase=committed index=0 cpu=1 hardware=1 numa=0 state=Online owner_none=1 owner_slot=0 owner_generation=0"
+    },
+    {
+      "serial_line_1based": 969,
+      "text": "<6>[   32.191952] ihk_smp_x86_64: IHK-SMP: resource-cpu-row-v1 os=0 generation=1 epoch=1 phase=committed index=1 cpu=2 hardware=2 numa=1 state=Online owner_none=1 owner_slot=0 owner_generation=0"
+    },
+    {
+      "serial_line_1based": 1062,
+      "text": "<6>[   56.514442] ihk_smp_x86_64: IHK-SMP: resource-cpu-v1 os=0 generation=2 epoch=2 phase=prepared rows=2 emitted=2 complete=1"
+    },
+    {
+      "serial_line_1based": 1063,
+      "text": "<6>[   56.514512] ihk_smp_x86_64: IHK-SMP: resource-cpu-row-v1 os=0 generation=2 epoch=2 phase=prepared index=0 cpu=1 hardware=1 numa=0 state=Assigned owner_none=0 owner_slot=0 owner_generation=2"
+    },
+    {
+      "serial_line_1based": 1064,
+      "text": "<6>[   56.514542] ihk_smp_x86_64: IHK-SMP: resource-cpu-row-v1 os=0 generation=2 epoch=2 phase=prepared index=1 cpu=2 hardware=2 numa=1 state=Assigned owner_none=0 owner_slot=0 owner_generation=2"
+    },
+    {
+      "serial_line_1based": 1065,
+      "text": "<6>[   56.514864] ihk_smp_x86_64: IHK-SMP: resource-memory-v1 os=0 generation=2 epoch=2 phase=prepared rows=2 emitted=2 complete=1"
+    },
+    {
+      "serial_line_1based": 1066,
+      "text": "<6>[   56.514889] ihk_smp_x86_64: IHK-SMP: resource-memory-row-v1 os=0 generation=2 epoch=2 phase=prepared index=0 start=4328521728 bytes=117440512 numa=0 owner_none=0 owner_slot=0 owner_generation=2"
+    },
+    {
+      "serial_line_1based": 1067,
+      "text": "<6>[   56.514990] ihk_smp_x86_64: IHK-SMP: resource-memory-row-v1 os=0 generation=2 epoch=2 phase=prepared index=1 start=4563402752 bytes=16777216 numa=0 owner_none=0 owner_slot=0 owner_generation=2"
+    },
+    {
+      "serial_line_1based": 1068,
+      "text": "<6>[   56.515855] ihk_smp_x86_64: IHK-SMP: resource-memory-v1 os=0 generation=2 epoch=2 phase=committed rows=2 emitted=2 complete=1"
+    },
+    {
+      "serial_line_1based": 1069,
+      "text": "<6>[   56.515880] ihk_smp_x86_64: IHK-SMP: resource-memory-row-v1 os=0 generation=2 epoch=2 phase=committed index=0 start=4328521728 bytes=117440512 numa=0 owner_none=1 owner_slot=0 owner_generation=0"
+    },
+    {
+      "serial_line_1based": 1070,
+      "text": "<6>[   56.516021] ihk_smp_x86_64: IHK-SMP: resource-memory-row-v1 os=0 generation=2 epoch=2 phase=committed index=1 start=4563402752 bytes=16777216 numa=0 owner_none=1 owner_slot=0 owner_generation=0"
+    },
+    {
+      "serial_line_1based": 1071,
+      "text": "<6>[   56.516053] ihk_smp_x86_64: IHK-SMP: resource-cpu-v1 os=0 generation=2 epoch=2 phase=committed rows=2 emitted=2 complete=1"
+    },
+    {
+      "serial_line_1based": 1072,
+      "text": "<6>[   56.516073] ihk_smp_x86_64: IHK-SMP: resource-cpu-row-v1 os=0 generation=2 epoch=2 phase=committed index=0 cpu=1 hardware=1 numa=0 state=Online owner_none=1 owner_slot=0 owner_generation=0"
+    },
+    {
+      "serial_line_1based": 1073,
+      "text": "<6>[   56.516099] ihk_smp_x86_64: IHK-SMP: resource-cpu-row-v1 os=0 generation=2 epoch=2 phase=committed index=1 cpu=2 hardware=2 numa=1 state=Online owner_none=1 owner_slot=0 owner_generation=0"
+    }
+  ],
+  "actual_result": {
+    "bytes": 333456,
+    "path": "/home/holden/mckernel-work/scratch/nm05a1/p/attempt-be5b3a70eeb641df92878acfe335735c/result.json",
+    "sha256": "9a8187a62ce188a3b5eee95be44d514b48b5c45af44997ad7fb99ac7b7adce07"
+  },
+  "assessment_boundary": "Policy rows return exact CPUs and physical extent coverage to reservedpool. Public RELEASE0 plus linked PageOwner coverage/drop/sourceABI and quiescence proof require independent join; PROTOCOL_PASS alone gives no restoration credit.",
+  "capture_status": {
+    "bytes": 2201,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/logging-revision-1/actual-M05-SHORT32-native-owner-capture-1/status.json",
+    "sha256": "060610e884bf2e1a0af03f7d9a190d105ebac9ddb20355c453511d7fbcb3a098"
+  },
+  "credit": {
+    "independently_accepted_restorations": 0,
+    "ten_cycle_acceptance": false,
+    "two_stop_calls_are_not_two_full_cycles": true
+  },
+  "decoder": {
+    "bytes": 5783,
+    "path": "/home/holden/mckernel/docs/verification/evidence/m05-used-resource-retirement-observation-source-20261022-1/resource_observation.py",
+    "sha256": "978a0b8b42e8370adde81d1d79eed77d807b1199b09e655b09b4f46ef5a7cc64"
+  },
+  "decoder_executed_by_worker": false,
+  "decoder_expected_calls": [
+    "evaluate(authenticated_first_segment,(0,1),1)",
+    "evaluate(authenticated_second_segment,(0,2),2)"
+  ],
+  "expected_tuple_conditions": [
+    "Exact linked pinned current SDK; fresh successful module loads and registry/counter initialization.",
+    "No interposed create/BOOT, failed prepare, or previous live module continuation.",
+    "Exactly qualified first4312/second1a7 helper onecreate/one successfulBOOT each; repeatedBOOT refused beforeprepare.",
+    "Authenticate immutable before/after fullkernelprefix/frontier; never infer expectedvalues from resource rows."
+  ],
+  "first_workload": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "A",
+      "",
+      "B"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "finished_ns": 56882534000,
+    "procfs_empty": true,
+    "raw_wait_status": 0,
+    "reaped_ns": 31979425088,
+    "started_ns": 31524247684,
+    "streams": {
+      "stderr": {
+        "discarded": 0,
+        "eof": true,
+        "eof_ns": 31877811894,
+        "hex": "",
+        "limit": 1024,
+        "observed": 0,
+        "retained": 0,
+        "truncated": false
+      },
+      "stdout": {
+        "discarded": 0,
+        "eof": true,
+        "eof_ns": 31877753227,
+        "hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a",
+        "limit": 1024,
+        "observed": 40,
+        "retained": 40,
+        "truncated": false
+      }
+    }
+  },
+  "independent_expected_tuple_source": {
+    "bytes": 6391,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/INDEPENDENT-EPOCH-PRODUCER-SOURCE-SUCCESSOR.json",
+    "sha256": "f19ab0c617a03a8e631584ca588e36b0665d9cb803f563e9ce159bc705fb36e3"
+  },
+  "independent_expected_tuples": [
+    [
+      0,
+      1,
+      1
+    ],
+    [
+      0,
+      2,
+      2
+    ]
+  ],
+  "public_release_and_synchronous_PageOwner_route": {
+    "bytes": 6763,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/PUBLIC-RELEASE-AND-ORIGINAL-PHYSICAL-COVERAGE-BINDING.json",
+    "sha256": "8213d12dbe1bebc22f185a145f0805e1458c8f5ff3bbaad8ebb79d270204cebd"
+  },
+  "public_release_streams": [
+    {
+      "descriptor": {
+        "bytes": 2520,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/logging-revision-1/terminal-preparation-1/nd_resource_chunk.stdout.jsonl",
+        "sha256": "00ad064343ded754bf1c88955907cbd6211f6245ec9ea8d1758ae7796e88da8a"
+      },
+      "marker": "ND_RESOURCE_CHUNK",
+      "rows": [
+        {
+          "errno": 0,
+          "linux_result": 3,
+          "request": 0,
+          "return": 3,
+          "stage": "open_control"
+        },
+        {
+          "errno": 0,
+          "linux_result": 4,
+          "request": 0,
+          "return": 4,
+          "stage": "open_os"
+        },
+        {
+          "errno": 0,
+          "linux_result": 0,
+          "request": 1124867,
+          "return": 0,
+          "stage": "status_after_external_stop"
+        },
+        {
+          "errno": 0,
+          "linux_result": 5,
+          "request": 0,
+          "return": 5,
+          "stage": "online_before_release"
+        },
+        {
+          "errno": 0,
+          "linux_result": 2,
+          "request": 0,
+          "return": 2,
+          "stage": "cpu_online_read"
+        },
+        {
+          "stage": "cpu_online_value",
+          "value": 1
+        },
+        {
+          "errno": 0,
+          "linux_result": 0,
+          "request": 0,
+          "return": 0,
+          "stage": "cpu_online_close"
+        },
+        {
+          "errno": 0,
+          "linux_result": 0,
+          "request": 1124614,
+          "return": 0,
+          "stage": "reserved_cpu_before"
+        },
+        {
+          "count": 0,
+          "cpus": [],
+          "stage": "cpu_inventory"
+        },
+        {
+          "errno": 0,
+          "linux_result": 0,
+          "request": 1124615,
+          "return": 0,
+          "stage": "reserved_mem_before"
+        },
+        {
+          "bytes": 134217728,
+          "chunks": [
+            [
+              117440512,
+              0
+            ],
+            [
+              16777216,
+              0
+            ]
+          ],
+          "stage": "memory_inventory"
+        },
+        {
+          "errno": 16,
+          "linux_result": -16,
+          "request": 1124902,
+          "return": -1,
+          "stage": "assigned_cpu_unavailable"
+        },
+        {
+          "reason": "closed_admission",
+          "resource": "cpu",
+          "stage": "os_inventory_unavailable"
+        },
+        {
+          "errno": 16,
+          "linux_result": -16,
+          "request": 1124903,
+          "return": -1,
+          "stage": "assigned_mem_unavailable"
+        },
+        {
+          "reason": "closed_admission",
+          "resource": "memory",
+          "stage": "os_inventory_unavailable"
+        },
+        {
+          "errno": 0,
+          "linux_result": 0,
+          "request": 0,
+          "return": 0,
+          "stage": "close_os"
+        },
+        {
+          "errno": 0,
+          "linux_result": 0,
+          "request": 1124609,
+          "return": 0,
+          "stage": "destroy_os"
+        },
+        {
+          "errno": 0,
+          "linux_result": 0,
+          "request": 1124614,
+          "return": 0,
+          "stage": "reserved_cpu_returned"
+        },
+        {
+          "count": 0,
+          "cpus": [],
+          "stage": "cpu_inventory"
+        },
+        {
+          "errno": 0,
+          "linux_result": 0,
+          "request": 1124615,
+          "return": 0,
+          "stage": "reserved_mem_returned"
+        },
+        {
+          "bytes": 134217728,
+          "chunks": [
+            [
+              117440512,
+              0
+            ],
+            [
+              16777216,
+              0
+            ]
+          ],
+          "stage": "memory_inventory"
+        },
+        {
+          "errno": 0,
+          "linux_result": 0,
+          "request": 1124613,
+          "return": 0,
+          "stage": "release_device_mem"
+        },
+        {
+          "errno": 0,
+          "linux_result": 0,
+          "request": 1124614,
+          "return": 0,
+          "stage": "reserved_cpu_final"
+        },
+        {
+          "count": 0,
+          "cpus": [],
+          "stage": "cpu_inventory"
+        },
+        {
+          "errno": 0,
+          "linux_result": 0,
+          "request": 1124615,
+          "return": 0,
+          "stage": "reserved_mem_final"
+        },
+        {
+          "bytes": 0,
+          "chunks": [],
+          "stage": "memory_inventory"
+        },
+        {
+          "errno": 0,
+          "linux_result": 4,
+          "request": 0,
+          "return": 4,
+          "stage": "online_after_release"
+        },
+        {
+          "errno": 0,
+          "linux_result": 2,
+          "request": 0,
+          "return": 2,
+          "stage": "cpu_online_read"
+        },
+        {
+          "stage": "cpu_online_value",
+          "value": 1
+        },
+        {
+          "errno": 0,
+          "linux_result": 0,
+          "request": 0,
+          "return": 0,
+          "stage": "cpu_online_close"
+        },
+        {
+          "errno": 0,
+          "linux_result": 0,
+          "request": 0,
+          "return": 0,
+          "stage": "close_control"
+        },
+        {
+          "generation_verified": false,
+          "physical_identity_verified": false,
+          "reboot_verified": false,
+          "result": "PASS_PUBLIC_RELEASE",
+          "schema": "native-resource-release-v2"
+        }
+      ]
+    },
+    {
+      "descriptor": {
+        "bytes": 2520,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/logging-revision-1/terminal-preparation-1/nd_second_resource_chunk.stdout.jsonl",
+        "sha256": "00ad064343ded754bf1c88955907cbd6211f6245ec9ea8d1758ae7796e88da8a"
+      },
+      "marker": "ND_SECOND_RESOURCE_CHUNK",
+      "rows": [
+        {
+          "errno": 0,
+          "linux_result": 3,
+          "request": 0,
+          "return": 3,
+          "stage": "open_control"
+        },
+        {
+          "errno": 0,
+          "linux_result": 4,
+          "request": 0,
+          "return": 4,
+          "stage": "open_os"
+        },
+        {
+          "errno": 0,
+          "linux_result": 0,
+          "request": 1124867,
+          "return": 0,
+          "stage": "status_after_external_stop"
+        },
+        {
+          "errno": 0,
+          "linux_result": 5,
+          "request": 0,
+          "return": 5,
+          "stage": "online_before_release"
+        },
+        {
+          "errno": 0,
+          "linux_result": 2,
+          "request": 0,
+          "return": 2,
+          "stage": "cpu_online_read"
+        },
+        {
+          "stage": "cpu_online_value",
+          "value": 1
+        },
+        {
+          "errno": 0,
+          "linux_result": 0,
+          "request": 0,
+          "return": 0,
+          "stage": "cpu_online_close"
+        },
+        {
+          "errno": 0,
+          "linux_result": 0,
+          "request": 1124614,
+          "return": 0,
+          "stage": "reserved_cpu_before"
+        },
+        {
+          "count": 0,
+          "cpus": [],
+          "stage": "cpu_inventory"
+        },
+        {
+          "errno": 0,
+          "linux_result": 0,
+          "request": 1124615,
+          "return": 0,
+          "stage": "reserved_mem_before"
+        },
+        {
+          "bytes": 134217728,
+          "chunks": [
+            [
+              117440512,
+              0
+            ],
+            [
+              16777216,
+              0
+            ]
+          ],
+          "stage": "memory_inventory"
+        },
+        {
+          "errno": 16,
+          "linux_result": -16,
+          "request": 1124902,
+          "return": -1,
+          "stage": "assigned_cpu_unavailable"
+        },
+        {
+          "reason": "closed_admission",
+          "resource": "cpu",
+          "stage": "os_inventory_unavailable"
+        },
+        {
+          "errno": 16,
+          "linux_result": -16,
+          "request": 1124903,
+          "return": -1,
+          "stage": "assigned_mem_unavailable"
+        },
+        {
+          "reason": "closed_admission",
+          "resource": "memory",
+          "stage": "os_inventory_unavailable"
+        },
+        {
+          "errno": 0,
+          "linux_result": 0,
+          "request": 0,
+          "return": 0,
+          "stage": "close_os"
+        },
+        {
+          "errno": 0,
+          "linux_result": 0,
+          "request": 1124609,
+          "return": 0,
+          "stage": "destroy_os"
+        },
+        {
+          "errno": 0,
+          "linux_result": 0,
+          "request": 1124614,
+          "return": 0,
+          "stage": "reserved_cpu_returned"
+        },
+        {
+          "count": 0,
+          "cpus": [],
+          "stage": "cpu_inventory"
+        },
+        {
+          "errno": 0,
+          "linux_result": 0,
+          "request": 1124615,
+          "return": 0,
+          "stage": "reserved_mem_returned"
+        },
+        {
+          "bytes": 134217728,
+          "chunks": [
+            [
+              117440512,
+              0
+            ],
+            [
+              16777216,
+              0
+            ]
+          ],
+          "stage": "memory_inventory"
+        },
+        {
+          "errno": 0,
+          "linux_result": 0,
+          "request": 1124613,
+          "return": 0,
+          "stage": "release_device_mem"
+        },
+        {
+          "errno": 0,
+          "linux_result": 0,
+          "request": 1124614,
+          "return": 0,
+          "stage": "reserved_cpu_final"
+        },
+        {
+          "count": 0,
+          "cpus": [],
+          "stage": "cpu_inventory"
+        },
+        {
+          "errno": 0,
+          "linux_result": 0,
+          "request": 1124615,
+          "return": 0,
+          "stage": "reserved_mem_final"
+        },
+        {
+          "bytes": 0,
+          "chunks": [],
+          "stage": "memory_inventory"
+        },
+        {
+          "errno": 0,
+          "linux_result": 4,
+          "request": 0,
+          "return": 4,
+          "stage": "online_after_release"
+        },
+        {
+          "errno": 0,
+          "linux_result": 2,
+          "request": 0,
+          "return": 2,
+          "stage": "cpu_online_read"
+        },
+        {
+          "stage": "cpu_online_value",
+          "value": 1
+        },
+        {
+          "errno": 0,
+          "linux_result": 0,
+          "request": 0,
+          "return": 0,
+          "stage": "cpu_online_close"
+        },
+        {
+          "errno": 0,
+          "linux_result": 0,
+          "request": 0,
+          "return": 0,
+          "stage": "close_control"
+        },
+        {
+          "generation_verified": false,
+          "physical_identity_verified": false,
+          "reboot_verified": false,
+          "result": "PASS_PUBLIC_RELEASE",
+          "schema": "native-resource-release-v2"
+        }
+      ]
+    }
+  ],
+  "raw_acceptance_flags": {
+    "application_acceptance": false,
+    "mckernel_application_executed": false
+  },
+  "raw_status": "PROTOCOL_PASS",
+  "root_owner_journal_missing": {
+    "next": {
+      "bytes": 2852,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/logging-revision-1/terminal-preparation-1/ROOT-READONLY-OWNER-EXPORT-PROPOSAL.json",
+      "sha256": "16ecc5560355aec09db2ddc78687966e8b3318c3946593808d553f9f8b537da7"
+    },
+    "ordinary_read": "PermissionError errno13",
+    "path": "/home/holden/mckernel-work/scratch/nm05a1/p.owner-be5b3a70eeb641df92878acfe335735c/result.json"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "second_stop_protocol": {
+    "complete_restoration_verified": false,
+    "first_workload_protocol": "PROTOCOL_PASS",
+    "full_cycle_verified": false,
+    "native_execution_verified": false,
+    "public_release_then_strict5_boot_protocol": "PASS",
+    "quota_credit": false,
+    "rebooted_os_workload_protocol": "PASS",
+    "second_boot_resources_retained": true,
+    "second_lifecycle_protocol": {
+      "os_destroyed": false,
+      "payload_validation_required": true,
+      "resource_restoration_verified": false,
+      "status": "LIFECYCLE_DIAGNOSTIC_PASS",
+      "status_after": 0,
+      "status_before": 5,
+      "transition_observed": true
+    },
+    "second_public_release_protocol": {
+      "native_execution_verified": false,
+      "public_release_protocol": "PASS",
+      "resource_restoration_verified": false
+    },
+    "second_public_release_verified": true,
+    "second_stop_verified": true,
+    "second_workload": {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "app",
+        "A",
+        "",
+        "B"
+      ],
+      "cwd": "/case/work",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PATH": "/usr/bin:/bin"
+      },
+      "finished_ns": 56341513283,
+      "procfs_empty": true,
+      "raw_wait_status": 0,
+      "reaped_ns": 56339886261,
+      "started_ns": 56001848047,
+      "streams": {
+        "stderr": {
+          "discarded": 0,
+          "eof": true,
+          "eof_ns": 56239642794,
+          "hex": "",
+          "limit": 1024,
+          "observed": 0,
+          "retained": 0,
+          "truncated": false
+        },
+        "stdout": {
+          "discarded": 0,
+          "eof": true,
+          "eof_ns": 56239569601,
+          "hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a",
+          "limit": 1024,
+          "observed": 40,
+          "retained": 40,
+          "truncated": false
+        }
+      }
+    },
+    "snapshot_bytes": {
+      "after": 53847,
+      "before": 46603
+    },
+    "snapshot_sha256": {
+      "after": "8bfe84f91e929b25d8ff2088963b2b34ac56fdabccb08e24497105ff8e93d14f",
+      "before": "79e69ac404e0d431fdcb6845a686f6446254e7a93e4ac635bcadd42a79efcc8c"
+    }
+  },
+  "serial": {
+    "bytes": 320765,
+    "path": "/home/holden/mckernel-work/scratch/nm05a1/p/attempt-be5b3a70eeb641df92878acfe335735c/serial.log",
+    "sha256": "8a2e5eb9e0617c5f80f99c5e853a7a4fedf93a2e7310e6b70b49997dad517182"
+  },
+  "status": "ACTUAL_NATIVE_OBSERVATIONS_MAPPED_PENDING_INDEPENDENT_RESTORATION_AND_PHYSICAL_ASSESSMENT"
+}

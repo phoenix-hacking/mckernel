@@ -1,3 +1,62 @@
+## Current — P-M05-02 accepted;29/35 practical checks (2026-10-23 00:18 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Weekly included only; reserve576 unanswered. Six checks remain P-M01-02/P-M05-03/
+P-M06-01/P-M08-02/P-M09-02/P-M12-01. Whole goal remains OPEN.
+
+Independent5ef7ba02 accepts actual current68 first complete restoration and matching
+host retirement: exact CPU1/2 identities online/unowned, original128MiB physical
+coverage returned, observed successful shutdown/publicrelease joined to linked
+quiescence/PageOwner-freeing postconditions, strictfreshsecondboot and two exact40B
+workloads. Original PROTOCOL_PASS/falsefields stay unchanged. ONE qualified reboot
+cycle on image10972/SDK20352/launcher0d77; second fullrestoration absent from saved
+prefix. Capsule ../evidence/p-m05-current68-first-complete-restoration-20261022-1/.
+Ten-cycle and later matching finalprofile budgets remain open; no quota transfer.
+All100ownerfiles authenticated;30Dockerclients/QEMU/container/owner retired, fresh
+name/label/IDempty, sixcanonicalrecords absent under permanentmutex27:4.
+
+Reviewed5sourceRustV3 repair is integrated;19focused actualbody tests+modeledWAITexit1
+accepted, noSDK1.92/fullcrate/native claim. SDKreview accepts exact68/1353815B source
+identityb3f80c34, mcctrl aliasbothrows, correctedcurrentexports and unchangedstrict
+allthree-moduleworkflow. Canonicalowner543e43a9/driver2f34764c/newprepc10aa8e7 installed
+against exactpreimages afterP05physicalclearance. Source capsules current68-native235-
+{rust-repair-v3,sdk-v3-source-binding,launcher-v3-source-binding}-20261022-1/.
+
+Next root: publish/fetch exactsourcecheckpoint, freshfullcapacity/source11admission,
+static→one materialization→actual68static, then exactfreshone-shotSDKbuildrelease.
+Pinnedlauncher reviewedsource745309b5/coupledbinding15c44cb9 ready independently;
+serialize its productionbuild withSDK. m07_closure_join prepares minimal235/227
+newtuple snapshots/overlay using unchangedimage/helpercccb/C020/oracles and fresh
+names. Actualnewmodules/launcher stay unbound until acceptedbuildoutputs. Preserve
+failed235 and allprevious failures; no oldSDK replay. P12longHOSTboundary remains
+ready for firstrestoration of frozenmatching finaltuple plus separatelongrelease.
+
+## Current — P05 two-generation result; reviewed Rust repair integrated (2026-10-23 00:05 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Weekly included only; reserve576 unanswered. Practical28/35 and seven open checks
+remain unchanged pending actual acceptance. Original velocity baseline preserved.
+
+P05 exact SHORT32 owner completed rc0 in62.225843903s, capture060610e8. Both real
+workloads produced exact40B/emptystderr/exit0 across publicstop/release/reboot and
+secondstop/release. Original PROTOCOL_PASS/false restoration-credit fields remain
+unchanged. lifecycle_missing_recovery prepares actual root-journal export/current
+identity query; m07_final_closure_review assesses actual resource/epoch/provider
+proof against literalP-M05-02. No new heavy release before positive host clearance.
+
+Five-source V3 Rust fork repair is root-integrated against exact tested preimages:
+mcctrl poolquery dispatch, exact child-start publication handoff/mailbox selection,
+and terminalWAIT failure exit propagation. Independent READY_FOR_PRODUCTION_COMPILE
+pins275ca2bc/resultf6187e9e accepts19focused actualbody tests plus modeled fatalexit1;
+original race/fixture failures retained. SDK1.92/full-crate/link/native remain open.
+Private receipt: host-preparation/current68-native235-threadpool-failure-20261022-1/
+ROOT-EXACT-V3-INTEGRATION-1.json. sdk_host_profile_candidate prepares coherent68-source
+SDK successor (both mcctrl.rs/mcctrl_rust.rs aliases); m07_closure_join prepares
+pinnedlauncher successor separately. Next admitted productionbuilds then fresh strict
+235/227 with matching artifacts; preserve original failed235 and no unchanged replay.
+P12 long producer/transport/HOST boundary remain ready for qualified final-profile
+restoration and separate long release. No source-only check/cycle/native uplift.
+
 ## Current — self-exec accepted; native fork failure isolated (2026-10-22 23:45 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

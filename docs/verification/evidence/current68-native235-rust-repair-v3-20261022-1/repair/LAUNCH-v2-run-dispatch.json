@@ -1,0 +1,26 @@
+{
+  "operation": {
+    "name": "run-dispatch",
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/prlimit",
+      "--as=2147483648:2147483648",
+      "--cpu=30:30",
+      "--fsize=8388608:8388608",
+      "--nofile=4096:4096",
+      "--",
+      "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v2-dispatch",
+      "--test-threads=1"
+    ],
+    "expected_exit": 0,
+    "executable_pin": "Require fresh compiled binary hash recorded after preceding compile and before run"
+  },
+  "compiled_binary_pin": {
+    "path": "/home/holden/mckernel-work/host-preparation/current68-native235-threadpool-failure-20261022-1/actualbody-v2-dispatch",
+    "sha256": "97609c5102a841fca6f0e1c144ef42a6382186d61fb12439d7d5eb32242b7ee1",
+    "bytes": 6468224
+  },
+  "aggregate_remaining_seconds": 22.944925502000842
+}
