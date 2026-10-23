@@ -1,3 +1,29 @@
+## Literal M13 delivery accepted; final LONG successor preparing — 2026-10-23 14:51 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical34/35 unchanged; whole12/14 after independent current SDK5 delivery review
+PASS_LITERAL_M13_EXIT (7f49b78e6105). Runnable artifacts/exact commands/limits/focused
+review delivered; M13 complete without new runtime or language credit. M07 whole
+and P-M12-01/M12 remain open, M14 separate active. LONG0/100,0/60; no workload
+started. Expired release preserved; coherent literal successor39actualconsumer
+checks PASS0/.741826s/exactAnaconda3.9, joined/gone/closed, CPU6 released.
+Source/query focusedreview and staticpublication next, then freshadmission and
+late-authored600second release for immediateexecution. No cleanup replay.
+Candidate7 source/materialization+pureconsumer PASS42.378s, CPU0released; no build.
+
+## Final LONG release expired before invocation; no workload started — 2026-10-23 14:41 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical34/35, whole11/14; LONG0/100 launches,0/60 actualmixedminutes.
+Checkpoint a34747e668 pushed/fetched17blobs; final released r ab800621/request21fdf915
+published immutable. Final timecheck1792766425.822 exceeded expiry1792766399.145 by26.677s
+after continuation compaction; NO root workload argv executed. Never reuse expired release.
+Normal M14 physical0e934 remains accepted, no new cleanup needed; root holds sole heavy
+reservation. terminal_lifecycle_repair prepares minimal immutable successor, independent
+m14_callback_review handles exact renewal decision. m14_production_stage prepares
+source-only candidate7 including both canonical bridges; no competing heavy/build.
+M14 partial productionlink accepted386947, newer bridges source/privatecrate only.
+
 ## Normal build retirement accepted; final LONG admission next — 2026-10-23 14:21 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

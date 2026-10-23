@@ -1,3 +1,16 @@
+## Expired final release avoided; shorten publication-to-execution — 2026-10-23 14:42 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+No LONG workload started. Static source/query review and final metadata checkpoint
+a34747e668 were completed, but continuation compaction consumed the remaining
+600second release window. Final pre-Popen timecheck was26.677s after expiry and
+refused execution. Preserve old release/request; minimal immutable path successor
+is necessary because controller binds the old release path. Correction: publish
+static source before minting expiry, reserve reviewer availability, then finalize
+digests and immediately invoke; checkpoint final metadata during healthy run.
+This is a measured scheduling failure, not compiler/runtime cost or acceptance.
+Practical34/35 and M14 partial link evidence remain unchanged; no speedup claim.
+
 ## Ten native cycles and next Rust default build — 2026-10-23 13:38 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

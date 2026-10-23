@@ -24,7 +24,7 @@ Closure states below are recorded assessments. Unassessed does not mean no engin
 | M10 | Repeatable runnable build | complete | complete | Pinned recipe replays a matched runnable artifact set. | Independent8c3b7389 directly accepts M10 exact tested205 pinned recipe replay against cleanf735/fa398 build and matching currentd67 image/module native replay. Final delivery, other profiles and whole Rust migration remain separate; all future launches still need fresh admission. |
 | M11 | Integrated functional regression | complete | complete | Relevant regressions and negatives pass without unexplained corruption or retained owners. | Independent literal review closes P-M11-02 and P-M11-03 for the declared current053d selected regression scope, together with complete P-M11-01: wholeM11 COMPLETE. Current six strict launches and NUMA have separate genuine app/physical acceptance; historical failure dispositions are preserved. Known shared-sighand exec source defect remains mandatory M06/overall work; M05/M12 full restoration/session budgets remain separate. |
 | M12 | Bounded repeatability and stress | unmeasured | open | Two fresh boots, ten native cycles, 100 app launches and 60-minute mixed workload pass. | Closed accepted twenty-launch batch records actual launches/resource retirement separately from model vectors; app-throughput4x target passed at6.332426x on its bound profile. This is not the full final-profile session budget. Two fresh boots/ten complete native cycles/100launches/60-minute mixed run remain unproved as a matched final-profile set. |
-| M13 | Practical delivery | not_started | open | Runnable artifacts, exact commands, capability limits and focused final review are delivered. | Practical worklist now reconciled once with existing evidence. Final runnable package, capability statement and correctness/ownership review remain open. |
+| M13 | Practical delivery | complete | complete | Runnable artifacts, exact commands, capability limits and focused final review are delivered. | Independent current SDK5 scoped delivery review accepts literal M13 exit: runnable artifacts, exact consumed commands, supported/unsupported capabilities and limitations, focused ownership/correctness review delivered. Actual235/227/V3/ten-cycle and subsequent physical0e934 joined. LONG/P-M12-01, whole M07 and separate M14 remain open; no runtime or language-retirement credit added. |
 
 ### Practical exit checks
 
@@ -99,8 +99,8 @@ M14 closes only with final default Rust/assembly ownership and applicable native
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-10-23T14:21:43+00:00`
-- Launcher state heartbeat: `2026-10-23T14:21:36.276008+00:00`
+- Dashboard refreshed: `2026-10-23T14:49:29+00:00`
+- Launcher state heartbeat: `2026-10-23T14:49:16.870202+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
 - Worker PID: `3582171`; server PID: `3582173`
 - Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261023T080841Z-85724d49`

@@ -1,0 +1,88 @@
+--- candidate6/native_rust_exact_mckernel_image_offline.py
++++ candidate7/native_rust_exact_mckernel_image_offline.py
+@@ -27,7 +27,7 @@
+ import native_rust_exact_build_offline as provenance
+ 
+ # Authenticate the neighboring provenance selected by this exact driver capsule.
+-EXPECTED_PROVENANCE_SHA256 = '31bef4c84b10e5a6567aef322a21df98e7b4db3af912f7e315bd0623e557993b'
++EXPECTED_PROVENANCE_SHA256 = 'dbe2a604df56b4e90eaa11716ba290c5d23d3eaaf7da017be52620f29687bb7a'
+ _EXPECTED_PROVENANCE_PATH = Path(__file__).with_name("native_rust_exact_build_offline.py").resolve()
+ if (Path(provenance.__file__).resolve() != _EXPECTED_PROVENANCE_PATH or
+         hashlib.sha256(_EXPECTED_PROVENANCE_PATH.read_bytes()).hexdigest() != EXPECTED_PROVENANCE_SHA256):
+@@ -1451,20 +1451,21 @@
+ # Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ # Inserted into the existing pinned image driver; uses its owned command/capture path.
+ M14_SOURCE_PINS = {
+-    'kernel/rust/tests/run_equivalence.sh': '7bebd850bc4f2262cbac2cf0eefcaad932a9b66aabd089dee7cbea7026b93224',
++    'kernel/rust/tests/run_equivalence.sh': '2e1aa8e4299480ce31282f85e303a463034a475abbf20fb21fae95990230ed23',
+     'kernel/mem.c': 'bac5d4fb766b5cb80e036457465e215743a1cb31622ff11c5b5b605749f3d7fe',
+     'kernel/rust/page_helpers.rs': 'cfc64f72bf9b94c65417bc8f4e29d65b81f98239fe52ab2a7dd0352ebdfc3f70',
+     'kernel/process.c': '7203019d2ba8143f9240a03d11bc8c5cfcd495d89183aa7ab643c6159a6bd02d',
+     'kernel/rust/sched_helpers.rs': '449df570965855f992a0fe024fca7cd6527b20622b4b8e3b33af04900b02e923',
+     'kernel/include/sched_helpers.h': '9712a3df59eb0251f517ce01254e4576119868924b35f7da6fbee294bff966ae',
+-    'arch/x86_64/kernel/memory.c': 'd17a62c07102a6f015c05dff88b5594805ae4b2b871bffeddd7b1286802f8503',
+-    'kernel/rust/x86_memory_helpers.rs': '5a9b4effe230fb4a322441950fa7f6588f2165c7ee2a33f62c273089466e65d6',
++    'arch/x86_64/kernel/memory.c': '935dce935e814974a85729fafde9b3912e9fbff816d9074f6044fa63102370cb',
++    'kernel/rust/x86_memory_helpers.rs': '19919d35402c84540336b1983e7ac031397bc5f2d7855a7ae901a35dcedbf3f9',
+ }
+ M14_IDLE_IMPORTS = ('sched_idle_loop_body_result', 'sched_idle_current_cpu_bridge')
+ M14_MEMORY_IMPORTS = ('x86_clear_old_action_bridge', 'x86_clear_phys_to_virt_bridge',
+                       'x86_clear_page_unmap_bridge', 'x86_clear_free_pages_user_bridge')
+-M14_C_RETIRED_MEMORY_BODIES = ('clear_range_old_action', 'x86_init_normal_set_large_bridge')
+-M14_RUST_EXPORTS = M14_IDLE_IMPORTS + M14_MEMORY_IMPORTS + ('page_unmap', 'x86_init_normal_set_large_bridge') + (
++M14_C_RETIRED_MEMORY_BODIES = ('clear_range_old_action', 'x86_init_normal_set_large_bridge',
++                               'x86_init_text_map_kernel_start_bridge')
++M14_RUST_EXPORTS = M14_IDLE_IMPORTS + M14_MEMORY_IMPORTS + ('page_unmap', 'x86_init_normal_set_large_bridge', 'x86_init_text_map_kernel_start_bridge') + (
+     'sched_idle_begin_body_result', 'sched_idle_iteration_body_result',
+     'sched_idle_runqueue_has_running_result', 'process_sched_cpu_local_bridge',
+     'get_cpu_local_var', 'ihk_mc_get_processor_id')
+@@ -1526,6 +1527,38 @@
+                                            'page_unmap_lock_stride': 8},
+                 callbacks=('page_hash_lock_bridge', 'page_hash_unlock_bridge', 'page_unmap_log_bridge'),
+                 default_mem_object=objects['kernel/mem.c'], native=False)
++
++
++def _m14_check_textmap_symbols(memory_symbols, rust_symbols, image_symbols):
++    def rows(text, symbol):
++        return [line.split() for line in text.splitlines() if line.split()[-1:] == [symbol]]
++    getter = 'x86_init_text_map_kernel_start_bridge'
++    geometry = 'x86_map_kernel_start_geometry'
++    _fail(not rows(memory_symbols, getter), 'M14 textmap original C getter selected')
++    for text in (rust_symbols, image_symbols):
++        found = rows(text, getter)
++        _fail(len(found) == 1 and found[0][-2] == 'T', 'M14 textmap unique Rust getter owner')
++    for text in (memory_symbols, image_symbols):
++        found = rows(text, geometry)
++        _fail(len(found) == 1 and len(found[0]) == 4 and found[0][-2] == 'R' and
++              int(found[0][1], 16) == 8, 'M14 textmap immutable LP64 geometry provider')
++    found = rows(rust_symbols, geometry)
++    _fail(len(found) == 1 and found[0][-2] == 'U', 'M14 textmap Rust geometry consumer')
++    _fail(not any(row[-2] == 'U' for row in rows(rust_symbols, getter)), 'M14 textmap unresolved Rust getter')
++
++
++def _validate_m14_textmap_contract(build, tools, env, timeout, command_rows, objects):
++    out = build / 'm14-production'
++    texts = []
++    for path, label in ((Path(objects['arch/x86_64/kernel/memory.c']['path']), 'default-memory-textmap-ownership'),
++                        (build/'kernel/rust/mckernel_rust.o', 'Rust-textmap-ownership'),
++                        (build/'kernel/mckernel.img', 'image-textmap-ownership')):
++        texts.append(_m14_observe([tools['tools']['nm']['path'], '-S', '-g', str(path)],
++                                 label, out, tools, env, timeout, command_rows))
++    _m14_check_textmap_symbols(*texts)
++    return dict(getter='x86_init_text_map_kernel_start_bridge', C_getter_excluded=True,
++                geometry='x86_map_kernel_start_geometry', immutable_geometry_bytes=8,
++                native=False)
+ 
+ 
+ def _validate_m14_source_pins(source_root):
+@@ -1634,8 +1667,9 @@
+     _fail(not any(line.split()[-1:] == ['x86_init_normal_set_large_bridge'] for line in rust_undefined.splitlines()),
+           'M14 bridge unresolved in full production Rust object')
+     page_unmap_proof = _validate_m14_page_unmap_contract(source_root, build, tools, env, timeout, command_rows, objects)
++    textmap_proof = _validate_m14_textmap_contract(build, tools, env, timeout, command_rows, objects)
+     proof = dict(status='PASS_PINNED_FULLCRATE_DEFAULT_C_CONSUMERS_AND_FINAL_LINK_ONLY',
+-        source_pins=M14_SOURCE_PINS, objects=objects, page_unmap_public_contract=page_unmap_proof, idle_imports=M14_IDLE_IMPORTS,
++        source_pins=M14_SOURCE_PINS, objects=objects, page_unmap_public_contract=page_unmap_proof, textmap_contract=textmap_proof, idle_imports=M14_IDLE_IMPORTS,
+         memory_imports=M14_MEMORY_IMPORTS, unique_Rust_and_image_exports=M14_RUST_EXPORTS,
+         native=False, whole_M14_area_retired=False)
+     _revalidate_m14_objects(proof)
