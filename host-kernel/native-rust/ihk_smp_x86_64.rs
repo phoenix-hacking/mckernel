@@ -277,6 +277,12 @@ unsafe extern "C" fn application_invoke(
                 unsafe {application.fork_control_current(child,call)}
             }
         }
+    } else if command == application_abi::BEGIN_CLEANUP {
+        if buffer.is_null() && bytes == 0 {
+            application.begin_cleanup()
+        } else {
+            Err(EINVAL)
+        }
     } else if command == application_abi::CLEANUP && buffer.is_null() && bytes == 0 {
         application.cleanup()
     } else if !buffer.is_null()

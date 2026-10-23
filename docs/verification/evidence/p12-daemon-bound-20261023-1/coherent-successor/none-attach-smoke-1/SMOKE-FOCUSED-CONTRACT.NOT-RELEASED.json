@@ -1,0 +1,146 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PREPARED_ONLY_SEPARATE_FOCUSED_INDEPENDENT_RELEASE_AND_ROOT_GRANT_REQUIRED",
+  "request": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/CAPTURE-REQUEST.NOT-RELEASED.json",
+    "sha256": "2383c5bf9f99f5c31864793eaea9daaa5d8866abd7f970c55f120018ae6d3f51",
+    "bytes": 1383
+  },
+  "smoke": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/smoke.NOT-RELEASED.py",
+    "sha256": "f0b344881c1bf89c6db88102ef37ae072233c1d6dad0989bba0163d0de92abb1",
+    "bytes": 5573
+  },
+  "capture_wrapper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/capture_owned_smoke.NOT-RELEASED.py",
+    "sha256": "0acff65183e4be88d616b9655fb61098ab13c442fffad2491598ef4d7d4cba58",
+    "bytes": 6049
+  },
+  "cohort": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/COHERENT-NINE-FILE-SOURCE-COHORT.NOT-RELEASED.json",
+    "sha256": "5f3965acc767073ac24ca80c1e78986ac63cefd9b0aa10a16fbed8d28557f112",
+    "bytes": 7907
+  },
+  "ordinary_observation": {
+    "mem_available_bytes": 27754258432,
+    "filesystems": {
+      "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor": {
+        "available_bytes": 175691780096,
+        "fragment_bytes": 4096,
+        "device": 66306
+      },
+      "/home/holden/mckernel-work/scratch": {
+        "available_bytes": 14113214464,
+        "fragment_bytes": 4096,
+        "device": 1828
+      }
+    },
+    "fresh_measurement_required_at_release": true
+  },
+  "profile": {
+    "parent_cpu": [
+      7
+    ],
+    "parent_as_bytes": 536870912,
+    "root_cpu": [
+      7
+    ],
+    "root_as_bytes": 2147483648,
+    "root_hard_fsize_bytes": 402653184,
+    "root_nofile": 4096,
+    "root_core": 0,
+    "soft_wall_seconds": 60,
+    "container_cpus": "2-5",
+    "container_memory_bytes": 12884901888,
+    "container_swap_bytes": 0,
+    "container_pids": 512,
+    "network": "none",
+    "log_driver": "none",
+    "log_options": {},
+    "parent_cpu_limit": [
+      -1,
+      -1
+    ],
+    "root_cpu_limit": [
+      -1,
+      -1
+    ]
+  },
+  "storage": {
+    "worst_external_payload_bytes": 805306368,
+    "owner_queue_capacity_bytes": 536870912,
+    "metadata_allowance_bytes": 33554432,
+    "smoke_actual_expected_attached_payload_bytes": 32,
+    "host_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888,
+    "whole_LONG_reservation_bytes": 4294967296,
+    "retained_copies": 1
+  },
+  "root_actions": [
+    "authenticate exact pinned accepted image/config",
+    "hold permanent development mutex (never unlink)",
+    "create exactly1fresh named/labelled container",
+    "inspect exact original4CPU12GiB profile with none logger before start",
+    "start --attach fixed tiny Python writes stdout16B/stderr16B",
+    "wait exit0 and inspect exited/noOOM/Pid0",
+    "inherited authenticated stop/kill/wait/inspect/rm cleanup",
+    "positive exact absence and local client retirement before unlock/evidence flush"
+  ],
+  "preconditions": [
+    "235 positive physical retirement d7d25138 accepted; no overlap. Native235 application success is not required for this independent smoke.",
+    "focused NONE source acceptance",
+    "focused exact smoke/capture release, fresh live aggregate capacity and root grant",
+    "all output paths fresh, original permanent mutex identity unchanged",
+    "no existing container owner lease can be bypassed"
+  ],
+  "invariants": [
+    "all strict P12/app sources and oracles unchanged",
+    "smoke grants no guest/native/application/milestone credit",
+    "TERM once on deadline/stop; never SIGKILL a live owner",
+    "persistent owner recovery may outlive soft wall; retain lease/capture and wait for actual retirement",
+    "one root command, two384MiB direct regular files, one retained set; no retries/copies"
+  ],
+  "ordinary_tests": {
+    "source_compile": "PASS both new programs",
+    "tiny_program_only": {
+      "returncode": 0,
+      "stdout": "P12_NONE_STDOUT\n",
+      "stderr": "P12_NONE_STDERR\n",
+      "Docker": 0,
+      "root": 0,
+      "guest": 0
+    },
+    "corrected_CPU_fence": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/CPU-PROFILE-FIXTURE-RESULT.json",
+      "sha256": "f2fdaa7a0f8f98e849e3c3fb35df99216b091dac7de57194f3534cf41618319b",
+      "bytes": 545
+    }
+  },
+  "execution_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=536870912:536870912",
+    "--cpu=unlimited:unlimited",
+    "--fsize=402653184:402653184",
+    "--core=0:0",
+    "--nofile=4096:4096",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/capture_owned_smoke.NOT-RELEASED.py",
+    "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/CAPTURE-REQUEST.NOT-RELEASED.json",
+    "2383c5bf9f99f5c31864793eaea9daaa5d8866abd7f970c55f120018ae6d3f51"
+  ],
+  "correction": {
+    "family": "tiny smoke CPU profile",
+    "finding": "CPU60 hard cap could kill persistent retirement, conflicting with no-forcekill owner lifecycle.",
+    "bounded_correction": 1,
+    "approved_profile": "Reuse existing nativeowner unlimitedCPU(-1,-1) for parent/root; all other resource controls unchanged.",
+    "original_candidate": "retained-cpu60-smoke-unexecuted",
+    "original_executed": false,
+    "corrected_profile_fixture": "PASS_ACTUAL_CAPTURE_CPU_FENCE"
+  }
+}

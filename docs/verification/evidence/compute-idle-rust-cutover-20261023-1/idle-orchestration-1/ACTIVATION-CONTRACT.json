@@ -1,0 +1,38 @@
+{
+  "candidate_identity_sha256": "f99a62a71ce3223a62b51fe5030f17be2d233de061fe101ffdbbc4dfd71ff399",
+  "canonical_integration_authorized": false,
+  "canonical_preimage_scope": "Already integrated idle-scan sources only; require exact SOURCE-MAP beforehash before any canonical write",
+  "identity": {
+    "base_image_sha256": "10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2",
+    "base_materialization_sha256": "d7e24b4c0d3174b3479e33796d712d439444bae82902482448890b9d8142d43d",
+    "base_source_derivative_sha256": "5cffcc1b23dc5ca377baa055aab0417b0daac7ddcac0e2281903260f0ebd79e3",
+    "files": [
+      {
+        "canonical_base_sha256": "910771e0908d3fc69fcad13e94a2f0da13a964ce0293911fa2dcd5180b6e9ca7",
+        "path": "kernel/process.c",
+        "private_after_sha256": "7203019d2ba8143f9240a03d11bc8c5cfcd495d89183aa7ab643c6159a6bd02d",
+        "selected10972_before_sha256": "a400590c51d4badeca9af7f75fa2aaca2c15a7182020380fed79bdf9d007ac33"
+      },
+      {
+        "canonical_base_sha256": "8b5c15fe52c59964105561d560bca5c648464872a44ead44b672e180c44acbd1",
+        "path": "kernel/rust/sched_helpers.rs",
+        "private_after_sha256": "449df570965855f992a0fe024fca7cd6527b20622b4b8e3b33af04900b02e923",
+        "selected10972_before_sha256": "a5b8ed0f048adcfa6908094f7b8b5d459b9b14aa0ed4b75e5250abe6f8387c57"
+      },
+      {
+        "canonical_base_sha256": "15e506c4a6e6bd359e704a29e89bff20ea65a14ea69f24171aeb43024847d474",
+        "path": "kernel/include/sched_helpers.h",
+        "private_after_sha256": "9712a3df59eb0251f517ce01254e4576119868924b35f7da6fbee294bff966ae",
+        "selected10972_before_sha256": "a11c196aef4398cb39694258889da2586ae9203df1c177afd7bd93418d184493"
+      }
+    ],
+    "new_materialized_file_map_sha256": "2ac008dec8146213d88d44972219b6e061e9740c6d7a83263f9fe2e0ca3a3e01"
+  },
+  "native_authorized": false,
+  "private_postimage_root": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/idle-orchestration-1/postimage",
+  "production_build_authorized": false,
+  "remaining_runtime_c": "Selected private idle remains a thin C producer entry; existing primitive dependencies remain. No zero-C or full M14-02-04 claim.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_and_host_tests_do_not_retire_C": true,
+  "status": "PRIVATE_IMPLEMENTATION_READY_FOR_FOCUSED_REVIEW_NOT_RELEASED"
+}

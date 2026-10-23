@@ -1,0 +1,320 @@
+--- a/kernel/process.c
++++ b/kernel/process.c
+@@ -3854,6 +3854,60 @@
+ static void do_migrate(void);
+ #endif
+ 
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++static const struct sched_idle_offsets process_idle_offsets = {
++	.cpu_runq_lock_offset = offsetof(struct cpu_local_var, runq_lock),
++	.cpu_runq_irqstate_offset = offsetof(struct cpu_local_var, runq_irqstate),
++	.cpu_current_offset = offsetof(struct cpu_local_var, current),
++	.cpu_flags_offset = offsetof(struct cpu_local_var, flags),
++	.cpu_status_offset = offsetof(struct cpu_local_var, status),
++	.cpu_runq_offset = offsetof(struct cpu_local_var, runq),
++	.thread_sched_list_offset = offsetof(struct thread, sched_list),
++	.thread_status_offset = offsetof(struct thread, status),
++	.monitor_status_offset = offsetof(struct ihk_os_cpu_monitor, status),
++	.monitor_counter_offset = offsetof(struct ihk_os_cpu_monitor, counter),
++};
++static const struct sched_idle_values process_idle_values = {
++	.cpu_running = CPU_STATUS_RUNNING, .cpu_idle = CPU_STATUS_IDLE,
++	.cpu_reserved = CPU_STATUS_RESERVED, .thread_running = PS_RUNNING,
++	.thread_stopped = PS_STOPPED, .thread_interruptible = PS_INTERRUPTIBLE,
++	.need_migrate = CPU_FLAG_NEED_MIGRATE,
++	.monitor_idle = IHK_OS_MONITOR_IDLE, .monitor_kernel = IHK_OS_MONITOR_KERNEL,
++};
++static const struct sched_idle_callbacks process_idle_callbacks = {
++	.current_cpu = sched_idle_current_cpu_bridge,
++	.lock = process_spin_lock_bridge, .unlock = process_spin_unlock_bridge,
++	.enable_interrupt = cpu_enable_interrupt, .disable_interrupt = cpu_disable_interrupt,
++	.schedule = schedule, .migrate = sched_do_migrate_public,
++	.consolidate = kmalloc_consolidate_free_list,
++	.zero_free = process_sched_zero_free_bridge, .safe_halt = cpu_safe_halt,
++};
++_Static_assert(sizeof(unsigned long) == 8 && sizeof(void *) == 8,
++	"idle callback ABI requires supported LP64");
++_Static_assert(__builtin_types_compatible_p(__typeof__(((struct thread *)0)->status), int)
++	&& sizeof(((struct thread *)0)->status) == 4, "idle thread status is C int/i32");
++_Static_assert(__builtin_types_compatible_p(__typeof__(((struct cpu_local_var *)0)->status), int)
++	&& sizeof(((struct cpu_local_var *)0)->status) == 4, "idle CPU status is C int/i32");
++_Static_assert(__builtin_types_compatible_p(__typeof__(((struct cpu_local_var *)0)->flags), unsigned int)
++	&& sizeof(((struct cpu_local_var *)0)->flags) == 4, "idle CPU flags are u32");
++_Static_assert(__builtin_types_compatible_p(__typeof__(((struct ihk_os_cpu_monitor *)0)->status), int)
++	&& sizeof(((struct ihk_os_cpu_monitor *)0)->status) == 4, "idle monitor status is C int/i32");
++_Static_assert(__builtin_types_compatible_p(__typeof__(((struct ihk_os_cpu_monitor *)0)->counter), unsigned long),
++	"idle monitor counter is unsigned long");
++_Static_assert(offsetof(struct list_head, next) == 0, "idle scan requires leading next");
++_Static_assert(sizeof(struct sched_idle_offsets) == 80, "idle offsets ABI size");
++_Static_assert(sizeof(struct sched_idle_values) == 36, "idle constants ABI size");
++_Static_assert(sizeof(struct sched_idle_callbacks) == 80, "idle callback ABI size");
++
++static void idle(void)
++{
++	struct cpu_local_var *v = get_this_cpu_local_var();
++	struct ihk_os_cpu_monitor *monitor = v->monitor;
++
++	sched_idle_loop_body_result((unsigned long)v, (unsigned long)monitor,
++		&process_idle_offsets, &process_idle_values, &process_idle_callbacks);
++}
++#else
+ static void idle(void)
+ {
+ 	struct cpu_local_var *v = get_this_cpu_local_var();
+@@ -3952,6 +4006,7 @@
+ 		}
+ 	}
+ }
++#endif
+ 
+ void process_sched_init_context_bridge(void *thread_arg)
+ {
+--- a/kernel/rust/sched_helpers.rs
++++ b/kernel/rust/sched_helpers.rs
+@@ -1938,6 +1938,182 @@
+     num_running
+ }
+ 
++#[repr(C)]
++pub struct SchedIdleOffsets {
++    pub cpu_runq_lock_offset: usize,
++    pub cpu_runq_irqstate_offset: usize,
++    pub cpu_current_offset: usize,
++    pub cpu_flags_offset: usize,
++    pub cpu_status_offset: usize,
++    pub cpu_runq_offset: usize,
++    pub thread_sched_list_offset: usize,
++    pub thread_status_offset: usize,
++    pub monitor_status_offset: usize,
++    pub monitor_counter_offset: usize,
++}
++
++#[repr(C)]
++pub struct SchedIdleValues {
++    pub cpu_running: CInt,
++    pub cpu_idle: CInt,
++    pub cpu_reserved: CInt,
++    pub thread_running: CInt,
++    pub thread_stopped: CInt,
++    pub thread_interruptible: CInt,
++    pub need_migrate: u32,
++    pub monitor_idle: CInt,
++    pub monitor_kernel: CInt,
++}
++
++#[repr(C)]
++pub struct SchedIdleCallbacks {
++    pub current_cpu: unsafe extern "C" fn() -> usize,
++    pub lock: unsafe extern "C" fn(usize) -> CULong,
++    pub unlock: unsafe extern "C" fn(usize, CULong),
++    pub enable_interrupt: unsafe extern "C" fn(),
++    pub disable_interrupt: unsafe extern "C" fn(),
++    pub schedule: unsafe extern "C" fn(),
++    pub migrate: unsafe extern "C" fn(),
++    pub consolidate: unsafe extern "C" fn(),
++    pub zero_free: unsafe extern "C" fn(),
++    pub safe_halt: unsafe extern "C" fn(),
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn sched_idle_current_cpu_bridge() -> usize {
++    unsafe { process_sched_cpu_local_bridge(ihk_mc_get_processor_id()) }
++}
++
++unsafe fn sched_idle_write_current_status(
++    offsets: &SchedIdleOffsets,
++    callbacks: &SchedIdleCallbacks,
++    status: CInt,
++) {
++    let current_cpu = unsafe { (callbacks.current_cpu)() };
++    let thread = unsafe {
++        read_volatile(current_cpu.wrapping_add(offsets.cpu_current_offset) as *const usize)
++    };
++    unsafe {
++        write_volatile(thread.wrapping_add(offsets.thread_status_offset) as *mut CInt, status);
++    }
++}
++
++/// Release the initial idle runqueue handoff, then enable interrupts.
++///
++/// # Safety
++/// CPU fields, all descriptor tables, and non-null callbacks have the original
++/// idle() lifetimes/ABI. The current CPU owns the inherited runqueue lock with
++/// its saved irqstate. Descriptors remain immutable; mutable kernel objects are
++/// accessed only through raw pointers. No pointer ownership is transferred.
++#[no_mangle]
++pub unsafe extern "C" fn sched_idle_begin_body_result(
++    cpu_addr: usize,
++    offsets: *const SchedIdleOffsets,
++    values: *const SchedIdleValues,
++    callbacks: *const SchedIdleCallbacks,
++) {
++    let (offsets, values, callbacks) = unsafe { (&*offsets, &*values, &*callbacks) };
++    let current_cpu = unsafe { (callbacks.current_cpu)() };
++    let irqstate = unsafe {
++        read_volatile(current_cpu.wrapping_add(offsets.cpu_runq_irqstate_offset) as *const CULong)
++    };
++    unsafe { (callbacks.unlock)(current_cpu.wrapping_add(offsets.cpu_runq_lock_offset), irqstate) };
++    let status_addr = cpu_addr.wrapping_add(offsets.cpu_status_offset) as *mut CInt;
++    if unsafe { read_volatile(status_addr) } == values.cpu_running {
++        unsafe { write_volatile(status_addr, values.cpu_idle) };
++    }
++    unsafe { (callbacks.enable_interrupt)() };
++}
++
++/// Execute exactly one existing idle-loop iteration in its original order.
++///
++/// # Safety
++/// Same valid immutable descriptor and CPU/monitor/current-thread lifetimes as
++/// sched_idle_begin_body_result. Scheduler/migration/IRQ callbacks implement the
++/// original primitive contracts. Current-thread lookup is repeated after each
++/// schedule/halt boundary. The captured CPU and monitor remain valid throughout;
++/// the queue scan is performed only while the supplied runqueue lock is held.
++#[no_mangle]
++pub unsafe extern "C" fn sched_idle_iteration_body_result(
++    cpu_addr: usize,
++    monitor_addr: usize,
++    offsets: *const SchedIdleOffsets,
++    values: *const SchedIdleValues,
++    callbacks: *const SchedIdleCallbacks,
++) {
++    let (offsets, values, callbacks) = unsafe { (&*offsets, &*values, &*callbacks) };
++    unsafe {
++        sched_idle_write_current_status(offsets, callbacks, values.thread_stopped);
++        (callbacks.schedule)();
++        sched_idle_write_current_status(offsets, callbacks, values.thread_running);
++        (callbacks.disable_interrupt)();
++    }
++    let flags_addr = cpu_addr.wrapping_add(offsets.cpu_flags_offset) as *mut u32;
++    if unsafe { read_volatile(flags_addr) } & values.need_migrate != 0 {
++        unsafe { (callbacks.migrate)() };
++        // Migration can change flags: clear only the requested bit in its NEW value.
++        let flags = unsafe { read_volatile(flags_addr) };
++        unsafe { write_volatile(flags_addr, flags & !values.need_migrate) };
++    }
++    let status_addr = cpu_addr.wrapping_add(offsets.cpu_status_offset) as *mut CInt;
++    let status = unsafe { read_volatile(status_addr) };
++    if status == values.cpu_idle || status == values.cpu_reserved {
++        let lock_addr = cpu_addr.wrapping_add(offsets.cpu_runq_lock_offset);
++        let irqstate = unsafe { (callbacks.lock)(lock_addr) };
++        if unsafe {
++            sched_idle_runqueue_has_running_result(
++                cpu_addr.wrapping_add(offsets.cpu_runq_offset),
++                offsets.thread_sched_list_offset,
++                offsets.thread_status_offset,
++                values.thread_running,
++            )
++        } != 0 {
++            unsafe { write_volatile(status_addr, values.cpu_running) };
++        }
++        unsafe { (callbacks.unlock)(lock_addr, irqstate) };
++    }
++    // Unlock/migration can affect CPU status: decide from a fresh observation.
++    let status = unsafe { read_volatile(status_addr) };
++    if status == values.cpu_idle || status == values.cpu_reserved {
++        unsafe {
++            (callbacks.consolidate)();
++            (callbacks.zero_free)();
++            write_volatile(monitor_addr.wrapping_add(offsets.monitor_status_offset) as *mut CInt,
++                           values.monitor_idle);
++            sched_idle_write_current_status(offsets, callbacks, values.thread_interruptible);
++            (callbacks.safe_halt)();
++            write_volatile(monitor_addr.wrapping_add(offsets.monitor_status_offset) as *mut CInt,
++                           values.monitor_kernel);
++        }
++        let counter = monitor_addr.wrapping_add(offsets.monitor_counter_offset) as *mut CULong;
++        unsafe {
++            write_volatile(counter, read_volatile(counter).wrapping_add(1));
++            sched_idle_write_current_status(offsets, callbacks, values.thread_running);
++        }
++    } else {
++        unsafe { (callbacks.enable_interrupt)() };
++    }
++}
++
++/// Own the existing infinite idle control loop; no callback/data is retained.
++///
++/// # Safety
++/// All begin/iteration preconditions hold for the complete lifetime of idle().
++#[no_mangle]
++pub unsafe extern "C" fn sched_idle_loop_body_result(
++    cpu_addr: usize,
++    monitor_addr: usize,
++    offsets: *const SchedIdleOffsets,
++    values: *const SchedIdleValues,
++    callbacks: *const SchedIdleCallbacks,
++) -> ! {
++    unsafe { sched_idle_begin_body_result(cpu_addr, offsets, values, callbacks) };
++    loop {
++        unsafe { sched_idle_iteration_body_result(cpu_addr, monitor_addr, offsets, values, callbacks) };
++    }
++}
++
++
+ /// Returns one iff a locked idle runqueue contains a thread exactly running.
+ ///
+ /// # Safety
+--- a/kernel/include/sched_helpers.h
++++ b/kernel/include/sched_helpers.h
+@@ -3,6 +3,61 @@
+ #define MCKERNEL_SCHED_HELPERS_H
+ 
+ #include <types.h>
++
++/* Caller preserves the existing idle lifetime/IRQ/runqueue contract. */
++struct sched_idle_offsets {
++	unsigned long cpu_runq_lock_offset;
++	unsigned long cpu_runq_irqstate_offset;
++	unsigned long cpu_current_offset;
++	unsigned long cpu_flags_offset;
++	unsigned long cpu_status_offset;
++	unsigned long cpu_runq_offset;
++	unsigned long thread_sched_list_offset;
++	unsigned long thread_status_offset;
++	unsigned long monitor_status_offset;
++	unsigned long monitor_counter_offset;
++};
++
++struct sched_idle_values {
++	int cpu_running;
++	int cpu_idle;
++	int cpu_reserved;
++	int thread_running;
++	int thread_stopped;
++	int thread_interruptible;
++	unsigned int need_migrate;
++	int monitor_idle;
++	int monitor_kernel;
++};
++
++struct sched_idle_callbacks {
++	unsigned long (*current_cpu)(void);
++	unsigned long (*lock)(unsigned long lock_addr);
++	void (*unlock)(unsigned long lock_addr, unsigned long irqstate);
++	void (*enable_interrupt)(void);
++	void (*disable_interrupt)(void);
++	void (*schedule)(void);
++	void (*migrate)(void);
++	void (*consolidate)(void);
++	void (*zero_free)(void);
++	void (*safe_halt)(void);
++};
++
++unsigned long sched_idle_current_cpu_bridge(void);
++void process_sched_zero_free_bridge(void);
++void sched_idle_begin_body_result(unsigned long cpu_addr,
++	const struct sched_idle_offsets *offsets,
++	const struct sched_idle_values *values,
++	const struct sched_idle_callbacks *callbacks);
++void sched_idle_iteration_body_result(unsigned long cpu_addr,
++	unsigned long monitor_addr, const struct sched_idle_offsets *offsets,
++	const struct sched_idle_values *values,
++	const struct sched_idle_callbacks *callbacks);
++void sched_idle_loop_body_result(unsigned long cpu_addr,
++	unsigned long monitor_addr, const struct sched_idle_offsets *offsets,
++	const struct sched_idle_values *values,
++	const struct sched_idle_callbacks *callbacks) __attribute__((noreturn));
++
+ 
+ /* Caller holds runq_lock; list nodes and C-produced offsets stay valid. */
+ int sched_idle_runqueue_has_running_result(unsigned long runq_head,

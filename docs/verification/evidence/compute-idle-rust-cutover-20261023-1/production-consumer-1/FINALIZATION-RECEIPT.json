@@ -1,0 +1,50 @@
+{
+  "compiler_versions_scope": "Rust1.92 version stream retained; GCC9 include path retained. Host tools are not pinned GCC14/nightly production acceptance.",
+  "finalization_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648",
+    "--cpu=60",
+    "--fsize=33554432",
+    "--core=0",
+    "--nofile=256",
+    "--",
+    "/usr/bin/timeout",
+    "--kill-after=6s",
+    "90s",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-consumer-1/finalize_preparation.py"
+  ],
+  "operation": "source/metadata finalization only; no new compiler/test after CPU0 hold",
+  "ordinary_bridge_tool_bindings": {
+    "ordinary-gcc": {
+      "argv_path": "/usr/bin/gcc",
+      "bytes": 1158288,
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-gcc-9",
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+    },
+    "ordinary-nm": {
+      "argv_path": "/usr/bin/nm",
+      "bytes": 52664,
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-nm",
+      "sha256": "5fb0dd8acc18e3f348ed0acbcada0580dbdddd1eb5de3c8323613af13580032b"
+    },
+    "ordinary-rustc": {
+      "argv_path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "bytes": 654904,
+      "resolved_path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1"
+    }
+  },
+  "ready_sha256": "285e106b088f515c0b85aad813172be5be4d56190732a8a921ca7c285d4e71a0",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "stderr": "",
+  "stdout": "",
+  "tool_observed_exit_code": 0,
+  "tool_observed_wall_seconds": 0.257937335,
+  "whole_direct_command_completed": true
+}

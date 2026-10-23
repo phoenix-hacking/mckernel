@@ -1,0 +1,124 @@
+{
+  "application_acceptance": false,
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=536870912:536870912",
+    "--cpu=30:30",
+    "--core=0:0",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/diagnostic-consumer-successor/test_consumers.py"
+  ],
+  "cleanup_complete": true,
+  "cleanup_timeout_seconds": 3.0,
+  "cwd": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/diagnostic-consumer-successor",
+  "descendant_records_omitted": 0,
+  "descendants": [],
+  "elapsed_seconds": 0.11470831598853692,
+  "env": {
+    "HOME": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/diagnostic-consumer-successor",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin:/bin",
+    "TMPDIR": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/diagnostic-consumer-successor"
+  },
+  "events": [
+    {
+      "kind": "cleanup_started",
+      "monotonic": 515449.301254308,
+      "reason": "leader_exited"
+    }
+  ],
+  "executable": {
+    "path": "/usr/bin/taskset",
+    "sha256": "28f2dd426247d7d1d794c0fb8a723efc6a1ae3c56393a238b180fe9a0dc32f1c",
+    "size": 35048
+  },
+  "executable_path": "/usr/bin/taskset",
+  "fd_setup": {
+    "close_fds": true,
+    "pass_fds": [],
+    "stderr": "separate owned pipe",
+    "stdin": "regular file or /dev/null",
+    "stdout": "owned pipe"
+  },
+  "gid": 1000,
+  "groups": [
+    4,
+    20,
+    24,
+    27,
+    30,
+    46,
+    120,
+    131,
+    132,
+    133,
+    1000
+  ],
+  "monotonic_finished": 515449.3129901,
+  "monotonic_started": 515449.198281784,
+  "payload_completion_observed_monotonic": 515449.301244878,
+  "payload_monotonic_deadline": 515484.198662514,
+  "payload_monotonic_started": 515449.198662514,
+  "process": {
+    "pgid": 3518205,
+    "pid": 3518205,
+    "ppid": 3518204,
+    "session": 3518205,
+    "starttime_ticks": 53078732,
+    "state": "R"
+  },
+  "provenance": "Linux process collection only; no McKernel evidence",
+  "raw_wait_status": 0,
+  "schema_version": 1,
+  "status": "COMPLETED",
+  "stderr_limit_bytes": 33554432,
+  "stdin": {
+    "kind": "devnull"
+  },
+  "stdin_path": null,
+  "stdout_limit_bytes": 33554432,
+  "streams": {
+    "stderr": {
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/diagnostic-consumer-successor/actual-consumer-fixtures-1/stderr.bin",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "bytes_observed": 0,
+      "bytes_retained": 0,
+      "discarded_observed_bytes": 0,
+      "eof": true,
+      "limit_bytes": 33554432,
+      "truncated": false
+    },
+    "stdout": {
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/diagnostic-consumer-successor/actual-consumer-fixtures-1/stdout.bin",
+        "sha256": "09fc72b48d477dd053219ef191473ba3fce83644444ff0c62ad188eed1fe212d",
+        "size": 6558
+      },
+      "bytes_observed": 6558,
+      "bytes_retained": 6558,
+      "discarded_observed_bytes": 0,
+      "eof": true,
+      "limit_bytes": 33554432,
+      "truncated": false
+    }
+  },
+  "supervisor_pid": 3518204,
+  "timeout_seconds": 35.0,
+  "uid": 1000,
+  "umask": "0077",
+  "wait_status": {
+    "code": 0,
+    "kind": "exited"
+  }
+}

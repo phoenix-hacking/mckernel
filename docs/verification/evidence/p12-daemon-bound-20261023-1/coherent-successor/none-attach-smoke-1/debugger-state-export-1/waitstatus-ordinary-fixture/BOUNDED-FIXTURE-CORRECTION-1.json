@@ -1,0 +1,10 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "finding": "Fixture owner path climbed one ancestor too far; FileNotFoundError before imports/install/children.",
+  "correction": "parents[3] to parents[2]; exact shim and owner source untouched.",
+  "failed_candidates": 1,
+  "bounded_corrections": 1,
+  "root": 0,
+  "Docker": 0,
+  "historical_statuses_reconstructed": false
+}

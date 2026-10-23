@@ -1,0 +1,18 @@
+--- accepted-one-record-inline
++++ new-two-record-inline
+@@ -2,7 +2,7 @@
+ import contextlib,hashlib,importlib.util,json,sys,gzip
+ def load(name,path):
+  spec=importlib.util.spec_from_file_location(name,path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);return module
+-D=json.loads(Path(sys.argv[1]).read_bytes());allowed={'modules/mcctrl.ko'}
++D=json.loads(Path(sys.argv[1]).read_bytes());allowed={'modules/ihk-smp-x86_64.ko','modules/mcctrl.ko'}
+ assert set(D['new_runtime_tuple'])==allowed and set(D['changed_record_allowlist'])==allowed and D['matched_artifact_acceptance']is not None
+ assert all(isinstance(v,dict)and all(v.get(k)is not None for k in('path','sha256','size','mode'))for v in D['new_runtime_tuple'].values())
+ assert hashlib.sha256(Path(sys.argv[2]).read_bytes()).hexdigest()==sys.argv[3]and hashlib.sha256(Path(sys.argv[4]).read_bytes()).hexdigest()==sys.argv[5]
+@@ -21,5 +21,5 @@
+  p.write(Path(D['patched_cpio']),derived);p.write(Path(D['patched_gzip']),ov._gzip(derived));assert gzip.decompress(Path(D['patched_gzip']).read_bytes())==derived
+  base.verify()
+  for s in sources.values():s.verify()
+- result=dict(status='PASS_ONE_MCCTRL_RECORD_PATCH_ONLY_NO_NATIVE',inputs=D,sources={k:s.manifest()for k,s in sources.items()},raw_header_proof=proof,changed_record_allowlist=sorted(allowed),actual_changed_members=sorted(k for k in old if old[k]!=new[k]),all_other_final_members_identical=True,all_original_record_order_metadata_preserved=True,patched_cpio=p.ref(D['patched_cpio']),patched_gzip=p.ref(D['patched_gzip']),final_map=new,actual_new_rawtree_created=False,guest_runs=0)
++ result=dict(status='PASS_TWO_SMP_MCCTRL_RECORD_PATCH_ONLY_NO_NATIVE',inputs=D,sources={k:s.manifest()for k,s in sources.items()},raw_header_proof=proof,changed_record_allowlist=sorted(allowed),actual_changed_members=sorted(k for k in old if old[k]!=new[k]),all_other_final_members_identical=True,all_original_record_order_metadata_preserved=True,patched_cpio=p.ref(D['patched_cpio']),patched_gzip=p.ref(D['patched_gzip']),final_map=new,actual_new_rawtree_created=False,guest_runs=0)
+  p.js(Path(D['patch_receipt']),result);print(json.dumps(result,sort_keys=True))

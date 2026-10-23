@@ -99,6 +99,7 @@ pub(super) struct Registration {
     generation: u64,
     pid: i32,
     armed: AtomicBool,
+    cleanup_requested: AtomicBool,
     reap_error: AtomicI32,
     trace_budget: AtomicI32,
     operation: Pin<Box<Mutex<()>>>,
@@ -156,6 +157,7 @@ impl Registration {
                 generation,
                 pid,
                 armed: AtomicBool::new(false),
+                cleanup_requested: AtomicBool::new(false),
                 reap_error: AtomicI32::new(0),
                 trace_budget: AtomicI32::new(64),
                 operation,
@@ -641,28 +643,41 @@ fn zero_bytes(length: usize) -> Result<Vec<u8>> {
     Ok(bytes)
 }
 
-impl Drop for Registration {
-    fn drop(&mut self) {
-        if self.armed.load(Ordering::Acquire) {
-            // SAFETY: The process's PID and this connection remain owned until
-            // cleanup finishes. The continuing service owns any request whose
-            // acknowledgement arrives after the bounded waiter has departed.
+impl Registration {
+    /// Send nonblocking terminal intent independently of final Arc destruction.
+    /// Paired fork routes can retain this connection after its last binding
+    /// closes. BEGIN_CLEANUP records intent only; the continuing provider owns
+    /// cancellation/publication and retirement. Every error retains armed state,
+    /// routes, mappings and credits; no same-attempt retry is inferred.
+    fn request_cleanup(&self) {
+        if self.armed.load(Ordering::Acquire)
+            && !self.cleanup_requested.swap(true, Ordering::AcqRel)
+        {
+            // SAFETY: This retained connection authenticates its own token.
+            // The provider records cleanup intent without waiting for Linux
+            // task exit or guest retirement, which final file close must allow.
             let status = unsafe {
                 ihk_os_application_invoke_v1(
                     self.context.as_ptr(),
-                    super::application_abi::CLEANUP,
+                    super::application_abi::BEGIN_CLEANUP,
                     ptr::null_mut(),
                     0,
                 )
             };
             pr_info!(
-                "application_process=release os={} generation={} pid={} cleanup_errno={}\n",
+                "application_process=cleanup_requested os={} generation={} pid={} intent_errno={}\n",
                 self.slot,
                 self.generation,
                 self.pid,
                 status
             );
         }
+    }
+}
+
+impl Drop for Registration {
+    fn drop(&mut self) {
+        self.request_cleanup();
         // SAFETY: Return exactly the successful connection after invocation.
         // A failed/racing publication remains unarmed and cancels only its own
         // reserved descriptor; it cannot clean up the winning registration.
@@ -691,23 +706,29 @@ impl ProcessId {
     }
 
     fn thread_alive(&self) -> bool {
-        self.alive(bindings::pid_type_PIDTYPE_PID)
+        self.alive(bindings::pid_type_PIDTYPE_PID, true)
     }
 
     fn group_alive(&self) -> bool {
-        self.alive(bindings::pid_type_PIDTYPE_TGID)
+        // An exited leader can still have executing siblings. Preserve this
+        // conservative group identity check; only per-worker tasks retire here.
+        self.alive(bindings::pid_type_PIDTYPE_TGID, false)
     }
 
-    fn alive(&self, kind: bindings::pid_type) -> bool {
+    fn alive(&self, kind: bindings::pid_type, executing: bool) -> bool {
         // SAFETY: The referenced PID excludes object reuse. Linux checks its
         // task link under RCU and returns an owned task reference on success.
         let task = unsafe { bindings::get_pid_task(self.0.as_ptr(), kind) };
         if task.is_null() {
             return false;
         }
-        // SAFETY: Balance exactly get_pid_task's task reference.
+        // SAFETY: get_pid_task owns the task_struct through this aligned scalar
+        // volatile read (READ_ONCE semantics). exit_state is terminal and cannot
+        // return to zero; ordinary runnable/sleeping tasks keep exit_state zero.
+        let alive = !executing || unsafe { ptr::read_volatile(ptr::addr_of!((*task).exit_state)) } == 0;
+        // SAFETY: Balance exactly get_pid_task's task reference after inspection.
         unsafe { bindings::put_task_struct(task) };
-        true
+        alive
     }
     fn same(&self, other: &Self) -> bool {
         self.0 == other.0
@@ -775,6 +796,11 @@ impl Process {
         // Reaper snapshots retain only Process identity. Real VMAs and active
         // invocations still own independent Registration references.
         drop(executable);
+        if let Some(owner) = &registration {
+            // No process/table/MM lock spans backend cancellation or waiting.
+            // Keep the connection live even when its fork pair suppresses Drop.
+            owner.request_cleanup();
+        }
         drop(registration);
     }
 

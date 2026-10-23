@@ -1589,6 +1589,22 @@ impl Remote {
         use_image(prepare)
     }
 
+    // Request cleanup without waiting for publication, ACK or retirement.
+    // The retained entry and independent packet pump own those transitions.
+    pub(crate) fn begin_cleanup(&self, token: Token) -> Result {
+        let result = (|| {
+            let mut slots = self.slots.lock();
+            let entry = slots
+                .iter_mut()
+                .flatten()
+                .find(|entry| entry.key() == token)
+                .ok_or(ENOENT)?;
+            entry.request_cleanup()
+        })();
+        self.changed.notify_all();
+        result
+    }
+
     pub(crate) fn cleanup(&self, token: Token) -> Result {
         {
             let mut slots = self.slots.lock();

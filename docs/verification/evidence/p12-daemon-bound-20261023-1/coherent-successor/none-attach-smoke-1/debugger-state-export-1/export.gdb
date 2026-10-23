@@ -1,0 +1,23 @@
+set pagination off
+set confirm off
+set auto-load off
+set debug-file-directory /nonexistent
+python
+import gdb,json
+gil=None
+failure=None
+rc=None
+try:
+    gil=int(gdb.parse_and_eval('(int)PyGILState_Ensure()'))
+    rc=int(gdb.parse_and_eval('(int)PyRun_SimpleString("exec(compile(\\"# Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\\\\nimport sys,os,json,hashlib,base64,traceback\\\\nOUTPUT=\'/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/debugger-state-export-1/TARGET-STATE.json\'\\\\ntry:\\\\n assert os.getpid()==3502879\\\\n st=open(\'/proc/self/stat\').read().rpartition(\') \')[2].split();assert int(st[19])==52840595\\\\n assert len(os.listdir(\'/proc/self/task\'))==1\\\\n frames=[]\\\\n for f in sys._current_frames().values():\\\\n  for _ in range(128):\\\\n   if f is None:break\\\\n   if f.f_code.co_name==\'execute_owner\' and f.f_globals.get(\'__file__\')==\'/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/source/native_diagnostic_container_owner.py\':frames.append(f)\\\\n   f=f.f_back\\\\n assert len(frames)==1\\\\n f=frames[0];owner=f.f_locals[\'owner\'];v=vars(owner)\\\\n assert v[\'nonce\']==\'7247e16d234147afa148cd0ef24206d4\' and v[\'owner_sha\']==\'a15680bb1a50d05bc8ee167ca20b0c1d3e34b8dc5fc1d1bdd593f4dc4f31eefe\'\\\\n assert type(v[\'lock\']) is int\\\\n lock=os.fstat(v[\'lock\']);assert (lock.st_dev,lock.st_ino)==(27,4)\\\\n pending=v[\'pending_evidence\'];assert type(pending) is list and len(pending)<=4096 and v[\'pending_bytes\']<=8*2**20\\\\n records=[];total=0\\\\n for path,raw in pending:\\\\n  assert type(raw) is bytes;total+=len(raw);assert total<=8*2**20\\\\n  records.append({\'path\':str(path),\'bytes\':len(raw),\'sha256\':hashlib.sha256(raw).hexdigest(),\'base64\':base64.b64encode(raw).decode(\'ascii\')})\\\\n failure=v[\'failure\'];trace=\'\'.join(traceback.format_exception(type(failure),failure,failure.__traceback__)) if failure is not None else None\\\\n assert trace is None or len(trace)<=65536\\\\n backend=vars(v[\'backend\']);ledger=vars(backend[\'children\'])\\\\n clients=[]\\\\n for child in ledger[\'pending\']:\\\\n  cv=vars(child);row={}\\\\n  for key in (\'pid\',\'identity\',\'initial_observation\'):\\\\n   value=cv.get(key)\\\\n   if value is None or type(value) in (int,str,dict,list,tuple):row[key]=value\\\\n  clients.append(row)\\\\n assert len(clients)<=512\\\\n state={\'scope\':\'Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\',\'status\':\'DIAGNOSTIC_STATE_EXPORTED_NO_OWNER_METHODS_OR_FLAG_CHANGES\',\'pid\':os.getpid(),\'start\':int(st[19]),\'nonce\':v[\'nonce\'],\'failure_type\':type(failure).__name__,\'failure_message\':str(failure)[:65536],\'failure_traceback\':trace,\'fields\':{k:v.get(k) for k in (\'create_issued\',\'create_completed\',\'container\',\'sequence\',\'absent\',\'may_exist\',\'cleaning\',\'command_deadline\',\'pending_bytes\',\'retirement_sequence\',\'owner_queued\',\'signal_number\')},\'lock\':{\'fd\':v[\'lock\'],\'device\':lock.st_dev,\'inode\':lock.st_ino},\'recovery\':{k:f.f_locals.get(k) for k in (\'delay\',\'recoveries\')},\'pending_clients\':clients,\'reap_records\':ledger[\'final_reap_records\'],\'ledger_errors\':[str(x)[:4096] for x in ledger[\'errors\']],\'retained_pending_evidence\':records,\'retained_pending_bytes\':total,\'physical_clearance\':False,\'owner_methods_invoked\':0,\'owner_flags_changed\':0}\\\\n raw=(json.dumps(state,sort_keys=True)+\'\\\\\\\\n\').encode();assert len(raw)<=16*2**20\\\\nexcept BaseException:\\\\n raw=(json.dumps({\'status\':\'DIAGNOSTIC_ERROR_NO_OWNER_FLAGS_CHANGED\',\'traceback\':traceback.format_exc()})+\'\\\\\\\\n\').encode()\\\\nfd=os.open(OUTPUT,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600)\\\\ntry:\\\\n with os.fdopen(fd,\'wb\',closefd=False) as h:h.write(raw);h.flush();os.fsync(h.fileno())\\\\nfinally:os.close(fd)\\\\n\\",\'<mckernel-owned-state-diagnostic>\',\'exec\'))")'))
+except BaseException as exc:
+    failure=str(exc)
+finally:
+    if gil is not None:
+        gdb.parse_and_eval('(void)PyGILState_Release(%d)' % gil)
+    gdb.execute('detach')
+print(json.dumps({'diagnostic_returncode':rc,'debugger_error':failure,'gil_released':gil is not None,'detach_command_completed':True}))
+if failure is not None or rc != 0:
+    raise gdb.GdbError('exact target diagnostic did not complete')
+end
+quit

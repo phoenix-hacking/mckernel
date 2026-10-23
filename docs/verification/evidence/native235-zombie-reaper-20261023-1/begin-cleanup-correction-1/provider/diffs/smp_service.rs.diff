@@ -1,0 +1,13 @@
+--- preimages/smp_service.rs
++++ smp_service.rs
+@@ -989,6 +989,10 @@
+         call:&mut super::super::application_abi::ForkControlCallV1)->Result {
+         if !Arc::ptr_eq(&self.started.runtime,&child.started.runtime){return Err(EACCES);}
+         unsafe {self.started.runtime.application.fork_control_current(self.token,child.token,call)}
++    }
++
++    pub(in super::super) fn begin_cleanup(&self) -> Result {
++        self.started.runtime.application.begin_cleanup(self.token)
+     }
+ 
+     pub(in super::super) fn cleanup(&self) -> Result {

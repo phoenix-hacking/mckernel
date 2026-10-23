@@ -1,0 +1,28 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=536870912:536870912",
+    "--cpu=30:30",
+    "--fsize=134217728:134217728",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=3",
+    "35",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/next-native-preparation/prepare_pending.py"
+  ],
+  "cwd": "/home/holden/mckernel",
+  "returncode": 1,
+  "retained_source": "prepare_pending.failed1.py",
+  "stderr": "PREPARATION-FAILURE1.stderr",
+  "retention": "Raw traceback copied from actual tool output; no replay."
+}

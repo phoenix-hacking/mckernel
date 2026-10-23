@@ -5,6 +5,8 @@ use core::ffi::c_void;
 
 pub(crate) const VERSION: u32 = 1;
 pub(crate) const CLEANUP: u32 = 1;
+// Start cleanup on the live connection; the independent pump retains completion.
+pub(crate) const BEGIN_CLEANUP: u32 = 22;
 pub(crate) const PREPARE: u32 = 2;
 pub(crate) const LOOKUP: u32 = 3;
 pub(crate) const TRANSFER: u32 = 4;

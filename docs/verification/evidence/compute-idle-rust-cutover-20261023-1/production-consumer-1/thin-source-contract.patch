@@ -1,0 +1,13 @@
+--- /home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/thin_source_contract.py
++++ /home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-consumer-1/thin_source_contract.py
+@@ -211,8 +211,8 @@
+             'ihk_status':'byte_bound_exact_overlay_and_metadata'}
+ 
+ 
+-THIN_SCHEMA = 'mckernel.rust-fpu-sched-cutover-thin-inputs.v1'
+-EXPECTED_SUCCESSOR_CANONICAL_SHA256 = '28a6c1dededda19d2da07279f9a59d542996ae77bd96d176567cc86f0c5a8459'
++THIN_SCHEMA = 'mckernel.idle-orchestration-production-consumer-thin-inputs.v1'
++EXPECTED_SUCCESSOR_CANONICAL_SHA256 = '7dc3bbf0dca602a1085dab30d304b7a59f9c765acfdc36a0abf744c2dc1a5f31'
+ def validate_thin_document(document,candidate,ihk):
+     _thin_require(candidate==BASE_CANDIDATE and ihk==BASE_IHK and document.get("candidate_sha")==candidate and document.get("ihk_sha")==ihk,"cutover base identities")
+     _thin_require(document.get("schema")==THIN_SCHEMA and _thin_digest(_thin_canonical(document))==EXPECTED_SUCCESSOR_CANONICAL_SHA256,"exact independently reviewed cutover authority required")

@@ -290,7 +290,7 @@ class CampaignTests(unittest.TestCase):
                                             ("complete", "open", "open", "unassessed")]}]}))
             report = launcher.progress_report(self.directory, self.directory)
             self.assertTrue(report.startswith("Practical exit checks (recorded): 1 complete, 2 open, 1 unassessed, 4 total."))
-            self.assertIn("active child agents: 1/8", report)
+            self.assertIn("recorded active child agents: 1/8", report)
             self.assertIn("filesystem time; not an evidence date", report)
             self.assertIn("Source: " + str(tracker), report)
             self.assertIn("Historical / DEFERRED qualification", report)
@@ -306,10 +306,33 @@ class CampaignTests(unittest.TestCase):
                     tracker.write_text(contents)
                 report = launcher.progress_report(self.directory, self.directory)
                 self.assertTrue(report.startswith("Practical exit checks: unavailable"))
-                self.assertIn("active child agents: 1/8", report)
+                self.assertIn("recorded active child agents: 1/8", report)
                 self.assertNotIn("6/130", report)
         finally:
             campaign.output.close()
+
+    def test_progress_report_distinguishes_stale_turns_and_real_heartbeat(self):
+        state = {"phase": "stopped", "goal": goal("paused"),
+                 "thread_id": "test-thread",
+                 "active_turns": {"test-thread": "old-parent", "child": "old-child"},
+                 "settings": {"resources": {"max_agents": 8}},
+                 "heartbeat_at": "heartbeat-time", "updated_at": "later-save-time"}
+        state_path = self.directory / "state.json"
+        state_path.write_text(json.dumps(state))
+        report = launcher.progress_report(self.directory, self.directory)
+        self.assertIn("historical child turns (runner inactive): 1/8", report)
+        self.assertNotIn("active child agents", report)
+        self.assertIn("Last heartbeat: heartbeat-time", report)
+        self.assertIn("State last updated: later-save-time", report)
+        state["phase"] = "running"
+        state_path.write_text(json.dumps(state))
+        report = launcher.progress_report(self.directory, self.directory)
+        self.assertIn("recorded active child agents: 1/8", report)
+        del state["heartbeat_at"]
+        state_path.write_text(json.dumps(state))
+        report = launcher.progress_report(self.directory, self.directory)
+        self.assertIn("Last heartbeat: none", report)
+        self.assertNotIn("Last heartbeat: later-save-time", report)
 
     def test_default_run_has_no_deadline_or_recovery_limit(self):
         self.args = launcher.arguments([])

@@ -6,18 +6,36 @@ M14 tracks full compute-kernel Rust cutover separately from the existing M00–M
 
 **Done means:** No live McKernel-owned compute-kernel C implementation remains on the supported default co-booted LWK path; the Rust/reviewed-assembly image works with the existing Linux supporting control plane and the practical application/lifecycle baseline.
 
-Use [rust-cutover-m14.json](rust-cutover-m14.json) as the editable worklist. The [initial file inventory](rust-cutover-m14-inventory-20261023.json) is bound to image `10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2`. It identifies six runtime C translation units, not six entirely unported files. Existing Rust bodies and native results remain credited at their actual scope. Surviving C bytes/functions have not yet been measured; initial unassessed states are not a0% engineering estimate.
+Use [rust-cutover-m14.json](rust-cutover-m14.json) as the editable worklist. The [initial file inventory](rust-cutover-m14-inventory-20261023.json) is bound to image `10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2`. It identifies six runtime C translation units, not six entirely unported files. Existing Rust bodies and native results remain credited at their actual scope. Complete surviving C byte/function totals are not yet established; unassessed states are not a 0% engineering estimate.
 
 ## File worklist
 
 | File goal | Current C file | Functional subgoals | Closure |
 | --- | --- | --- | --- |
 | M14-F01 | `kernel/mem.c` | 5 | open; partial Rust already exists |
-| M14-F02 | `kernel/process.c` | 5 | open; partial Rust already exists |
+| M14-F02 | `kernel/process.c` | 5 | partial idle source/host proof; production/native open |
 | M14-F03 | `kernel/syscall.c` | 5 | open; partial Rust already exists |
 | M14-F04 | `arch/x86_64/kernel/cpu.c` | 5 | open; partial Rust already exists |
-| M14-F05 | `arch/x86_64/kernel/memory.c` | 5 | open; partial Rust already exists |
+| M14-F05 | `arch/x86_64/kernel/memory.c` | 5 | partial private memory body/host checks; production/native open |
 | M14-F06 | `arch/x86_64/kernel/syscall.c` | 5 | open; partial Rust already exists |
+
+## Recorded implementation progress — 2026-10-23
+
+M14-02-04 is **partial**: Rust idle initialization and loop orchestration are
+integrated in three canonical source files after independent source acceptance.
+The actual original-C/Rust host fixture passes108 state/callback-order comparisons
+and default/fallback consumer checks. See the [source integration](../evidence/compute-idle-rust-cutover-20261023-1/idle-orchestration-1/CANONICAL-INTEGRATION.json)
+and [actual-body result](../evidence/compute-idle-rust-cutover-20261023-1/idle-orchestration-1/ACTUAL-BODY-RESULT-3.json).
+Actual pinned whole-TU/fullcrate/default-link/current-CPU bridge and native proof
+remain pending; the frozen235 image and whole-file retirement count are unchanged.
+
+M14-05-03 is **partial**: a private Rust replacement now owns the live
+`clear_range_old_action` orchestration and its adapter, reusing existing Rust
+helpers. The unchanged original-C/Rust fixture passes129,888 vectors, including
+callback/output ordering and independent expectations. CPU6 exited/joined and
+was released. See the [handoff](/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-1/m14-memory/REPORT.md).
+Canonical integration, actual selected production compile/link and native proof
+remain pending; no whole-area/file or practical closure is claimed.
 
 ## M14-F01: `kernel/mem.c`
 

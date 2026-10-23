@@ -1,0 +1,49 @@
+{
+  "exact_existing_cpu_lookup_body": "pub unsafe extern \"C\" fn get_cpu_local_var(id: CInt) -> *mut CpuLocalVar {\n    clv.add(id as usize)\n}",
+  "exact_existing_process_bridge_body": "pub unsafe extern \"C\" fn process_sched_cpu_local_bridge(cpu_id: CInt) -> CULong {\n    get_cpu_local_var(cpu_id) as CULong\n}",
+  "exact_existing_this_cpu_lookup_body": "pub unsafe extern \"C\" fn get_this_cpu_local_var() -> *mut CpuLocalVar {\n    this_cpu_local_var()\n}",
+  "exact_new_bridge_body": "pub unsafe extern \"C\" fn sched_idle_current_cpu_bridge() -> usize {\n    unsafe { process_sched_cpu_local_bridge(ihk_mc_get_processor_id()) }\n}",
+  "existing_selected_image_provider_rows": {
+    "rust-object-symbols.txt": {
+      "get_cpu_local_var": [
+        "0000000000000000 T get_cpu_local_var"
+      ],
+      "ihk_mc_get_processor_id": [
+        "0000000000000000 T ihk_mc_get_processor_id"
+      ],
+      "process_sched_cpu_local_bridge": [
+        "0000000000000000 T process_sched_cpu_local_bridge"
+      ]
+    },
+    "symbols.txt": {
+      "get_cpu_local_var": [
+        "fffffffffe862e20 T get_cpu_local_var"
+      ],
+      "ihk_mc_get_processor_id": [
+        "fffffffffe86d4a0 T ihk_mc_get_processor_id"
+      ],
+      "process_sched_cpu_local_bridge": [
+        "fffffffffe88fd90 T process_sched_cpu_local_bridge"
+      ]
+    }
+  },
+  "materialization_sha256": "631f17ef309c06ea634027785f75a7db21b1a4839d04711ae8775d932f8ea67e",
+  "production_privileged_CPU_ID": "x86_local::ihk_mc_get_processor_id default !mckernel_equivalence branch uses MSR_GS_BASE and gs:0; unchanged, not executed here",
+  "real_crate_module_members": [
+    "abi",
+    "cls",
+    "process_helpers",
+    "sched_helpers",
+    "x86_local"
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_root": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-consumer-1/materialized-source",
+  "source_sha256": {
+    "kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "kernel/rust/cls.rs": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba",
+    "kernel/rust/lib.rs": "4e8d34dc3173aa1c9402ffd437738c6074fcec8a354dc91b6aa8f79d5348ba9c",
+    "kernel/rust/process_helpers.rs": "526baf9363a0845ad50aade7e9b2296d27c8840527f3510d95a1105fc626d8d3",
+    "kernel/rust/sched_helpers.rs": "449df570965855f992a0fe024fca7cd6527b20622b4b8e3b33af04900b02e923",
+    "kernel/rust/x86_local.rs": "9f102654a22895615da854b08ea8e043a6c17b9157e4b77e5b58783e70abeb3f"
+  }
+}

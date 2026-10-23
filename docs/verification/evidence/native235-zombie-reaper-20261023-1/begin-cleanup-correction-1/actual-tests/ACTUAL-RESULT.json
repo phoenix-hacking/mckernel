@@ -1,0 +1,110 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ACTUAL_BODY_TESTS_PASS",
+  "consumer_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/consumer/mcctrl_process.rs",
+    "sha256": "2e88cc1777a635eb3599e0ac4c66129f3c2c77a19e421c95373f044d823a87be",
+    "bytes": 54077
+  },
+  "provider_source_pins": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/provider/SOURCE-PINS.json",
+    "sha256": "b0a0df1bc73ba898bf6d7219e7d97668699379bd9447d425dd4627f7a5e87e38",
+    "bytes": 1912
+  },
+  "harness": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/actual-tests/begin-actual.rs",
+    "sha256": "2202dc313be843d05cc8dbf5dd9c10aa55938da7129a0137b1935e2621df0ba9",
+    "bytes": 32033
+  },
+  "source_pins": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/actual-tests/SOURCE-PINS.json",
+    "sha256": "a0393881da44e361f3dce94e031aec2f12d1e369f36730320f9c524309db8aa0",
+    "bytes": 2692
+  },
+  "reused_unchanged_sdk_module_authority": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/TESTED-SDK-MODULE-PINS.json",
+    "sha256": "65270384b1aca3b13d9fc260e63a1a41d4fb8ef284629890034bd6f7700efa25",
+    "bytes": 3009
+  },
+  "compile": {
+    "exit": 0,
+    "elapsed": 0.7827195989666507,
+    "stop_reason": null,
+    "direct_join": true,
+    "streams_closed": true,
+    "process_group_absent": true,
+    "output_bytes": {
+      "stdout": 0,
+      "stderr": 0
+    },
+    "maxrss_kib": 171696
+  },
+  "tests": {
+    "exit": 0,
+    "elapsed": 0.10211922804592177,
+    "stop_reason": null,
+    "direct_join": true,
+    "streams_closed": true,
+    "process_group_absent": true,
+    "output_bytes": {
+      "stdout": 556,
+      "stderr": 0
+    },
+    "maxrss_kib": 171696
+  },
+  "actual_tests": 6,
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/actual-tests/compile-begin-actual-1.command.json",
+      "sha256": "3c089a816fcebf801b17fed729a6ada821966cea085fea136bca7a66e18b11d3",
+      "bytes": 1355
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/actual-tests/compile-begin-actual-1.status.json",
+      "sha256": "d2be0e3181cbd69ee0039210e0d138c18dbb2613d3fbe7d66025e231058f4d07",
+      "bytes": 235
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/actual-tests/compile-begin-actual-1.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/actual-tests/compile-begin-actual-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/actual-tests/run-begin-actual-1.command.json",
+      "sha256": "6f422b7795f2e06e4b94c9f2462906ea198b7112e0dcb18f8f23349557401f96",
+      "bytes": 1075
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/actual-tests/run-begin-actual-1.status.json",
+      "sha256": "442c652de97e3c6f78217cad99089e243889b2b73d81197901425e706cac0268",
+      "bytes": 238
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/actual-tests/run-begin-actual-1.stdout",
+      "sha256": "b333661bb279edd17d9cc34b1d79561050f27a1a8f3a7b2298feaa628e8896b9",
+      "bytes": 556
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/actual-tests/run-begin-actual-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  ],
+  "invariants": [
+    "Two retained pair children with independent mailboxes and an extra VMA-lifetime adapter return from last Binding drops while both actual release_ready bodies remain false and parent_slot_pins stay one.",
+    "Actual Entry.request_cleanup closes real mailbox admission; failed RET publication retains pending claim/status0, successful real publish sets status1 and releases only mailbox claim. Parent slot pins and full retirement do not change.",
+    "Consumer onceflag and armed logic preserve pair/mapping/context after error; stale token and malformed BEGIN null/length cases use actual new dispatch before any slice. Notify asserts slots unlocked on success and lookup/request errors.",
+    "Existing reaper worker cancellation and final unique connection close order remain covered."
+  ],
+  "limits": [
+    "Linux API/FFI/whole SDK compilation and native timing remain required.",
+    "Preparation/procfs/clock/Linux task/module pin implementations are explicit harness adapters, not native proofs.",
+    "No synthetic guest cleanup ACK, parent-slot-pin release or cyclic full-credit restoration is claimed.",
+    "Existing five liveness tests are reused from prior accepted compound consumer; the BEGIN correction does not change liveness body."
+  ]
+}

@@ -230,9 +230,13 @@ def progress_report(directory, repo):
     primary = state.get("thread_id")
     children = len(active) - int(primary in active)
     agents = ((state.get("settings") or {}).get("resources") or {}).get("max_agents", "?")
-    lines = ["Runner: {} | goal: {} | active child agents: {}/{}".format(
-        state.get("phase", "not_started"), goal.get("status", "none"), children, agents),
-        "Last heartbeat: {}".format(state.get("updated_at", "none"))]
+    phase = state.get("phase", "not_started")
+    activity = ("recorded active child agents" if phase == "running"
+                else "historical child turns (runner inactive)")
+    lines = ["Runner: {} | goal: {} | {}: {}/{}".format(
+        phase, goal.get("status", "none"), activity, children, agents),
+        "Last heartbeat: {}".format(state.get("heartbeat_at", "none")),
+        "State last updated: {}".format(state.get("updated_at", "none"))]
     for progress in state.get('capture_progress', []):
         lines.append('Capture progress (nonterminal; no clearance): ' + json.dumps(progress, sort_keys=True))
     control = directory / "instructions"

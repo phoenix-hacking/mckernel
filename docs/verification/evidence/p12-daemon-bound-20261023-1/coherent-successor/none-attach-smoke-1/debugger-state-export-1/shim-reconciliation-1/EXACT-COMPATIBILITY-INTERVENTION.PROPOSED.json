@@ -1,0 +1,79 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PREPARED_EXACT_COMPATIBILITY_INSTALL_NOT_RELEASED",
+  "pid": 3502879,
+  "start": 52840595,
+  "parent_pid": 3502874,
+  "parent_start": 52840587,
+  "nonce": "7247e16d234147afa148cd0ef24206d4",
+  "python_sha256": "298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06",
+  "gdb_sha256": "ee638c585936025f85a5f0f967e3929c9b36cb286d37ef662b23705682e31e2a",
+  "sources": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/debugger-state-export-1/shim-reconciliation-1/waitstatus_compat.py",
+      "sha256": "bbe91fe030b93f7c0d88b7d2bd8e53aa5c6bb2e7212510af6b92cf48df812cd7",
+      "bytes": 1538
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/debugger-state-export-1/shim-reconciliation-1/install_live_compatibility.py",
+      "sha256": "ea0dc43a6817ddd231e38612abbb5daaf24a43a490f53c4782dd6b332a8e130e",
+      "bytes": 5257
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/debugger-state-export-1/shim-reconciliation-1/export.gdb",
+      "sha256": "c5fcab2c90219c4d84e142c5f14ad351e33ffbb060b7ef29237f2a76071746cf",
+      "bytes": 7290
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/debugger-state-export-1/shim-reconciliation-1/run_exact_diagnostic.py",
+      "sha256": "7cb79809db78fafe1720d2458b530ff04367b31c6ab47bf8449c392e1177a1b7",
+      "bytes": 3770
+    }
+  ],
+  "gdb_argv": [
+    "/usr/bin/gdb",
+    "--nx",
+    "--nh",
+    "--batch",
+    "-iex",
+    "set auto-load off",
+    "-p",
+    "3502879",
+    "-x",
+    "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/debugger-state-export-1/shim-reconciliation-1/export.gdb"
+  ],
+  "root_profile": {
+    "cpu": 7,
+    "AS_bytes": 2147483648,
+    "CPU": "unlimited",
+    "FSIZE_bytes": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "outer_signals": false,
+    "outer_timeout": null
+  },
+  "invariants": "Only liveprocess missingos.waitstatus converter installed per exactforegroundcandidate; unchangedownerflags/primaryerror/pendingevidence checkedbeforeafter. No cleanup/release/ACK/signals/history repair. SameGILpair/detach/controller checks. Allow normal existing<=60srecovery toperformauthenticlookups/release/FAILflush/exit.",
+  "root_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=unlimited:unlimited",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/debugger-state-export-1/shim-reconciliation-1/run_exact_diagnostic.py"
+  ],
+  "capture": "OrdinarydirectfileO_EXCL stdout/stderr, no signals/nooutertimeout, directrootcontrollerjoin thenclose; rootcontroller positivelyjoinsdebugger, recordsdetach/targetstat.",
+  "ordinary_fixture": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/debugger-state-export-1/waitstatus-ordinary-fixture/RESULT.json",
+    "sha256": "83fb9aa601903552794ad3237c289596ecb1d77ff6e606bd2f728133e0801bff"
+  }
+}

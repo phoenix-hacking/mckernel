@@ -1,0 +1,14 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "python": "3.8.10 (default, Mar 18 2025, 20:04:55) \n[GCC 9.4.0]",
+  "owner_source_sha256": "a15680bb1a50d05bc8ee167ca20b0c1d3e34b8dc5fc1d1bdd593f4dc4f31eefe",
+  "shim_sha256": "bbe91fe030b93f7c0d88b7d2bd8e53aa5c6bb2e7212510af6b92cf48df812cd7",
+  "root": 0,
+  "live_owner": 0,
+  "Docker": 0,
+  "historical_statuses_reconstructed": false,
+  "status": "FAIL_FIRST_CANDIDATE_PRESERVED",
+  "cases": [],
+  "traceback": "Traceback (most recent call last):\n  File \"docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/debugger-state-export-1/waitstatus-ordinary-fixture/run_fixture.py\", line 19, in <module>\n    o=load(OWNER,'actual_failed_owner_wait_consumer',OWNER_SHA);shim=load(SHIM,'exact_waitstatus_shim',SHIM_SHA)\n  File \"docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/debugger-state-export-1/waitstatus-ordinary-fixture/run_fixture.py\", line 13, in load\n    raw=path.read_bytes();assert hashlib.sha256(raw).hexdigest()==sha\n  File \"/usr/lib/python3.8/pathlib.py\", line 1229, in read_bytes\n    with self.open(mode='rb') as f:\n  File \"/usr/lib/python3.8/pathlib.py\", line 1222, in open\n    return io.open(self, mode, buffering, encoding, errors, newline,\n  File \"/usr/lib/python3.8/pathlib.py\", line 1078, in _opener\n    return self._accessor.open(self, flags, mode)\nFileNotFoundError: [Errno 2] No such file or directory: '/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/source/native_diagnostic_container_owner.py'\n",
+  "seconds": 0.00030915800016373396
+}

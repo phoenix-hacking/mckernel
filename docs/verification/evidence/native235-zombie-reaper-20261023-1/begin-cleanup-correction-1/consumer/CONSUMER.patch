@@ -1,0 +1,40 @@
+--- /home/holden/mckernel-work/host-preparation/native235-zombie-sdk-successor-20261023-1/source-modules/mcctrl_process.rs
++++ docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/consumer/mcctrl_process.rs
+@@ -644,27 +644,28 @@
+ }
+ 
+ impl Registration {
+-    /// Send terminal intent independently of final Arc destruction. Paired fork
+-    /// routes can retain this connection after its last process binding closes.
+-    /// The existing backend owns cancellation/publication after this bounded
+-    /// caller departs. Errors retain armed state, routes, mappings and credits.
++    /// Send nonblocking terminal intent independently of final Arc destruction.
++    /// Paired fork routes can retain this connection after its last binding
++    /// closes. BEGIN_CLEANUP records intent only; the continuing provider owns
++    /// cancellation/publication and retirement. Every error retains armed state,
++    /// routes, mappings and credits; no same-attempt retry is inferred.
+     fn request_cleanup(&self) {
+         if self.armed.load(Ordering::Acquire)
+             && !self.cleanup_requested.swap(true, Ordering::AcqRel)
+         {
+-            // SAFETY: The process's PID and this connection remain owned until
+-            // cleanup finishes. The continuing service owns any request whose
+-            // acknowledgement arrives after the bounded waiter has departed.
++            // SAFETY: This retained connection authenticates its own token.
++            // The provider records cleanup intent without waiting for Linux
++            // task exit or guest retirement, which final file close must allow.
+             let status = unsafe {
+                 ihk_os_application_invoke_v1(
+                     self.context.as_ptr(),
+-                    super::application_abi::CLEANUP,
++                    super::application_abi::BEGIN_CLEANUP,
+                     ptr::null_mut(),
+                     0,
+                 )
+             };
+             pr_info!(
+-                "application_process=release os={} generation={} pid={} cleanup_errno={}\n",
++                "application_process=cleanup_requested os={} generation={} pid={} intent_errno={}\n",
+                 self.slot,
+                 self.generation,
+                 self.pid,

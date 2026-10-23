@@ -1,0 +1,33 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/case227_stage_review",
+  "decision": "SOURCE_PASS_EXACT_THREE_FILE_CANONICAL_INTEGRATION",
+  "candidate_identity": "f99a62a71ce3223a62b51fe5030f17be2d233de061fe101ffdbbc4dfd71ff399",
+  "actual_parity_cases": 108,
+  "files": [
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "private_source": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/idle-orchestration-1/postimage/kernel/process.c",
+      "before_sha256": "910771e0908d3fc69fcad13e94a2f0da13a964ce0293911fa2dcd5180b6e9ca7",
+      "sha256": "7203019d2ba8143f9240a03d11bc8c5cfcd495d89183aa7ab643c6159a6bd02d",
+      "bytes": 161630
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "private_source": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/idle-orchestration-1/postimage/kernel/rust/sched_helpers.rs",
+      "before_sha256": "8b5c15fe52c59964105561d560bca5c648464872a44ead44b672e180c44acbd1",
+      "sha256": "449df570965855f992a0fe024fca7cd6527b20622b4b8e3b33af04900b02e923",
+      "bytes": 178661
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/sched_helpers.h",
+      "private_source": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/idle-orchestration-1/postimage/kernel/include/sched_helpers.h",
+      "before_sha256": "15e506c4a6e6bd359e704a29e89bff20ea65a14ea69f24171aeb43024847d474",
+      "sha256": "9712a3df59eb0251f517ce01254e4576119868924b35f7da6fbee294bff966ae",
+      "bytes": 34428
+    }
+  ],
+  "current_image_changed": false,
+  "retirement_credit": 0,
+  "qualification": "Rust idleorchestration body integrated; Cproducer and primitive dependencies remain explicit debt. PinnedproductionwholeTU/fullcrate/defaultlink/currentCPUbridge/native stillOPEN; fullM14area/file remainsOPEN."
+}

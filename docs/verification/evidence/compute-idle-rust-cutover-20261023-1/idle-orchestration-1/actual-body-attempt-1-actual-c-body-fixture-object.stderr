@@ -1,0 +1,15 @@
+/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/idle-orchestration-1/actual-body-attempt-1/actual_body_parity.c:10:34: error: conflicting types for ‘monitor’
+   10 | static struct ihk_os_cpu_monitor monitor;
+      |                                  ^~~~~~~
+In file included from /home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/idle-orchestration-1/actual-body-attempt-1/actual_body_parity.c:5:
+/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/lib/include/ihk/monitor.h:6:31: note: previous declaration of ‘monitor’ was here
+    6 | extern struct ihk_os_monitor *monitor;
+      |                               ^~~~~~~
+/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/idle-orchestration-1/actual-body-attempt-1/actual_body_parity.c:117:3: error: ‘const struct sched_idle_callbacks’ has no member named ‘test_schedule’; did you mean ‘schedule’?
+  117 |  .test_schedule = test_schedule, .migrate = test_migrate,
+      |   ^~~~~~~~~~~~~
+      |   schedule
+/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/idle-orchestration-1/actual-body-attempt-1/actual_body_parity.c: In function ‘original_begin’:
+/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/idle-orchestration-1/actual-body-attempt-1/actual_body_parity.c:176:29: warning: unused variable ‘monitor’ [-Wunused-variable]
+  176 |  struct ihk_os_cpu_monitor *monitor = v->monitor;
+      |                             ^~~~~~~

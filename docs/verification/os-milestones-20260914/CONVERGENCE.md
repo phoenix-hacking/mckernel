@@ -15,6 +15,40 @@ this document is not a claim that the Python harness enforces it.
 
 ## Authority and scope
 
+### Continuous steering of functional closure and M14 — 2026-10-23
+
+At normal checkpoints and worker completion, reconcile the existing live agent
+list once before calling lanes active. Give new work to completed/idle workers
+with followup_task; a message, saved turn, last-event text or heartbeat does not
+start a worker. Keep ready results awaiting integration separate from running
+turns. The --progress view reports recorded state, not a fresh server census.
+
+Record two outcomes: the accepted practical35 count and next closure observation;
+and M14's active file/function slice with implementation, focused checks,
+production-link and native proof. Credit existing partial Rust accurately without
+calling it a retired file. Reuse the existing progress renderer and ledgers.
+Keep routine command output near 1,000 tokens: retain full raw captures in their
+owned evidence files and print only the result, changed bindings and next action.
+Read selected receipt fields or failure excerpts instead of entire inventories,
+source trees or serial logs. Expand only when a specific diagnosis needs it.
+
+Name one current critical dependency, owner, last executable result and next
+action/release condition. Delegate disjoint ready Rust work while the dispatcher
+handles shared/privileged integration. Before freezing Python commands, exercise
+the actual helper/input path under the exact intended interpreter within its
+reviewed ordinary profile. A fixture on a different interpreter does not qualify
+that consumer.
+
+Retain failure-family identity across continuations. Do not repeat unchanged
+deterministic attempts while holding the heavy lease. A new attempt needs a
+concrete correction or bounded transient hypothesis; use the existing escalation
+rule after one failed candidate and one correction. After two dispatch cycles
+without an executable result, change the strategy. Unknown retirement preserves
+its owner and blocks competing heavy work. For unchanged external facts, name
+one recheck condition/time and wait at least60seconds between observations while
+independent work advances. This is coordinator supervision, not a new daemon,
+auto-resume policy or workload release. Preserve healthy long runs and deadlines.
+
 Explicit user instruction, 2026-10-23: full supported LWK Rust/assembly cutover
 has its own active [M14](RUST-CUTOVER-M14.md) and [per-file worklist](rust-cutover-m14.json).
 Keep M09/P-M09-02 at practical preservation/changed-boundary validation and the

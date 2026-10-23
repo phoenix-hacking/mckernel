@@ -1,0 +1,112 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "python": "3.8.10 (default, Mar 18 2025, 20:04:55) \n[GCC 9.4.0]",
+  "root": 0,
+  "live_owner": 0,
+  "Docker": 0,
+  "child_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/debugger-state-export-1/debugger-ordinary-fixture/child.py",
+    "sha256": "3a69349c40ce2c36b8c52e048018e67a3957dee4570391152d6bdd6810af6e09",
+    "bytes": 1521
+  },
+  "export_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/debugger-state-export-1/export_target_state.py",
+    "sha256": "a0afee6806fe7ea4d287555d6aae5523eafbf37fb43e671c2e7730a2ad893932",
+    "bytes": 3369
+  },
+  "gdb_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/debugger-state-export-1/export.gdb",
+    "sha256": "decedbc40fae8c6393e40c8c6f7a2035369a06e9f66053c154ce1831a4df2643",
+    "bytes": 4465
+  },
+  "gdb_argv": [
+    "/usr/bin/gdb",
+    "-q",
+    "-nx",
+    "-nh",
+    "-batch",
+    "-iex",
+    "set auto-load off",
+    "-x",
+    "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/debugger-state-export-1/debugger-ordinary-fixture/export.gdb",
+    "-p",
+    "3509156"
+  ],
+  "gdb_returncode": 0,
+  "gdb_seconds": 0.4707159149693325,
+  "ready": {
+    "pid": 3509156,
+    "parent": 3509155,
+    "start": 52943557,
+    "lock_device": 66306,
+    "lock_inode": 48765032
+  },
+  "adapted_export": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/debugger-state-export-1/debugger-ordinary-fixture/export_target_state.py",
+    "sha256": "e16ac8db8c1cd71699558f5a21185d16d1fedc202a4dd0a5fff24bb9beff4524",
+    "bytes": 3405
+  },
+  "adapted_gdb": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/debugger-state-export-1/debugger-ordinary-fixture/export.gdb",
+    "sha256": "2ea858fa7f2a1fc2e09654b5bc2871f5cbd51ab9ee42a93b5b09501663cb1551",
+    "bytes": 4501
+  },
+  "child_alive_after_detach": true,
+  "exported_file": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/debugger-state-export-1/debugger-ordinary-fixture/TARGET-STATE.json",
+    "sha256": "2d293e4f48cefad9248c443f845dd0f933f24deb236214c51047b171a4cbe92f",
+    "bytes": 1300
+  },
+  "export_status": "DIAGNOSTIC_STATE_EXPORTED_NO_OWNER_METHODS_OR_FLAG_CHANGES",
+  "exported_state": {
+    "failure_message": "controlled fixture failure",
+    "failure_traceback": "ValueError: controlled fixture failure\n",
+    "failure_type": "ValueError",
+    "fields": {
+      "absent": false,
+      "cleaning": false,
+      "command_deadline": null,
+      "container": null,
+      "create_completed": false,
+      "create_issued": true,
+      "may_exist": true,
+      "owner_queued": true,
+      "pending_bytes": 24,
+      "retirement_sequence": 0,
+      "sequence": 7,
+      "signal_number": null
+    },
+    "ledger_errors": [],
+    "lock": {
+      "device": 66306,
+      "fd": 3,
+      "inode": 48765032
+    },
+    "nonce": "7247e16d234147afa148cd0ef24206d4",
+    "owner_flags_changed": 0,
+    "owner_methods_invoked": 0,
+    "pending_clients": [],
+    "physical_clearance": false,
+    "pid": 3509156,
+    "reap_records": [],
+    "recovery": {
+      "delay": 1,
+      "recoveries": 2
+    },
+    "retained_pending_bytes": 24,
+    "retained_pending_evidence": [
+      {
+        "base64": "Y29udHJvbGxlZCBmaXh0dXJlIGJ5dGVz",
+        "bytes": 24,
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/debugger-state-export-1/debugger-ordinary-fixture/fixture-evidence",
+        "sha256": "340ac4c5935ff5859c9447a9b7012916d28d3245e8aeaf3f6897cb8916384cd7"
+      }
+    ],
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "start": 52943557,
+    "status": "DIAGNOSTIC_STATE_EXPORTED_NO_OWNER_METHODS_OR_FLAG_CHANGES"
+  },
+  "status": "PASS",
+  "fixture_child_returncode": -15,
+  "fixture_child_joined": true
+}

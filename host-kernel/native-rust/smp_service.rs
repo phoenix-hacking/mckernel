@@ -991,6 +991,10 @@ impl Application {
         unsafe {self.started.runtime.application.fork_control_current(self.token,child.token,call)}
     }
 
+    pub(in super::super) fn begin_cleanup(&self) -> Result {
+        self.started.runtime.application.begin_cleanup(self.token)
+    }
+
     pub(in super::super) fn cleanup(&self) -> Result {
         self.started.runtime.application.cleanup(self.token)
     }

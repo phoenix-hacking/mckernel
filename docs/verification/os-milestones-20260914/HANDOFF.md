@@ -1,3 +1,28 @@
+## P12 owner physically retired; BEGIN SDK ready — 2026-10-23 05:30 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Original functional checks29/35; no new closed IDs. Final-profile cycles/launches/
+actual mixed minutes0/0/0. Retained P12 Python3.8 owner failed on missing
+os.waitstatus_to_exitcode after waitpid; exact independently reviewed shim installed
+only that missing decoder. Existing normal recovery completed original FAIL,
+36retries, absence_verifiedtrue/lease_retainedfalse; lost statuses remain NULL.
+Independent physical acceptance f9de28cc verifies126 exported files, four actual
+terminal command reaps, owner/sudo positiveENOENT, complete PROC no publishers,
+permanent mutex27:4 and eight path absences, fresh name/label empty. No smoke pass.
+Non-null current_live_postjoin e9d5494a is bound to those real captures. No diagnostic,
+shim or failed smoke replay. Next operation: existing staged SDK56d2 exact execution
+release/build, then unchanged strict235 and227 on actual accepted module tuple.
+Five BEGIN Rust sources integrated; six actual body tests passed dde47cfe. SDK staging
+PASS0/.063s; no actual SDK build yet. Diagnostic schema successor passed62fixtures;
+independent changed-consumer review pending, not an SDK build prerequisite.
+M14 separate: idle orchestration three canonical files +108comparisons; real current
+CPU bridge six cases pass, production fullTU/crate/defaultlink/native remain open.
+Private memory clear_range_old_action Rust candidate independently SOURCE PASS and
+129888 actual C/Rust vectors pass; canonical memory/image unchanged. Both are PARTIAL,
+not file/area/native or practical closure. Foreground progress-display fix two offline
+tests passed; no launcher/runtime/state change. Original velocity baseline retained;
+no speedup claim. User scope files released for checkpoint. No resize performed.
+
 ## Physical clearance and independent work — 2026-10-23 04:31 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

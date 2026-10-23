@@ -1,0 +1,77 @@
+In file included from /home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/kernel/include/lwk/compiler.h:60,
+                 from /home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/arch/x86_64/kernel/include/ihk/atomic.h:16,
+                 from /home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/lib/include/mc_perf_event.h:7,
+                 from /home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/lib/include/ihk/cpu.h:20,
+                 from /home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/kernel/include/process.h:18,
+                 from /home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/actual-check-1/actual_production_headers_probe.c:1:
+/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/kernel/include/lwk/compiler-gcc.h:166:2: error: invalid use of undefined type ‘struct cpu_local_var’
+  166 |  __builtin_offsetof(a, b)
+      |  ^~~~~~~~~~~~~~~~~~
+/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/kernel/include/lwk/stddef.h:20:18: note: in expansion of macro ‘__compiler_offsetof’
+   20 | #define offsetof __compiler_offsetof
+      |                  ^~~~~~~~~~~~~~~~~~~
+/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/actual-check-1/actual_production_headers_probe.c:6:40: note: in expansion of macro ‘offsetof’
+    6 |  sizeof(((struct thread *)0)->status), offsetof(struct cpu_local_var, runq),
+      |                                        ^~~~~~~~
+/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/kernel/include/lwk/compiler-gcc.h:166:2: error: invalid use of undefined type ‘struct cpu_local_var’
+  166 |  __builtin_offsetof(a, b)
+      |  ^~~~~~~~~~~~~~~~~~
+/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source/kernel/include/lwk/stddef.h:20:18: note: in expansion of macro ‘__compiler_offsetof’
+   20 | #define offsetof __compiler_offsetof
+      |                  ^~~~~~~~~~~~~~~~~~~
+/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/actual-check-1/actual_production_headers_probe.c:7:2: note: in expansion of macro ‘offsetof’
+    7 |  offsetof(struct cpu_local_var, status), sizeof(unsigned long), sizeof(void *),
+      |  ^~~~~~~~
+/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/actual-check-1/actual_production_headers_probe.c:8:14: error: ‘CPU_STATUS_IDLE’ undeclared here (not in a function)
+    8 |  PS_RUNNING, CPU_STATUS_IDLE, CPU_STATUS_RESERVED, CPU_STATUS_RUNNING
+      |              ^~~~~~~~~~~~~~~
+/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/actual-check-1/actual_production_headers_probe.c:8:31: error: ‘CPU_STATUS_RESERVED’ undeclared here (not in a function)
+    8 |  PS_RUNNING, CPU_STATUS_IDLE, CPU_STATUS_RESERVED, CPU_STATUS_RUNNING
+      |                               ^~~~~~~~~~~~~~~~~~~
+/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/actual-check-1/actual_production_headers_probe.c:8:52: error: ‘CPU_STATUS_RUNNING’ undeclared here (not in a function); did you mean ‘PROCFS_STATUS_RUNNING’?
+    8 |  PS_RUNNING, CPU_STATUS_IDLE, CPU_STATUS_RESERVED, CPU_STATUS_RUNNING
+      |                                                    ^~~~~~~~~~~~~~~~~~
+      |                                                    PROCFS_STATUS_RUNNING
+/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/actual-check-1/actual_production_headers_probe.c: In function ‘idle_actual_header_consumer’:
+/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/actual-check-1/actual_production_headers_probe.c:19:22: error: dereferencing pointer to incomplete type ‘struct cpu_local_var’
+   19 |     (unsigned long)&v->runq,
+      |                      ^~
+/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/actual-check-1/actual_production_headers_probe.c: In function ‘main’:
+/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/actual-check-1/actual_production_headers_probe.c:29:5: error: invalid use of undefined type ‘struct cpu_local_var’
+   29 |  cpu.runq.next=&cpu.runq; cpu.runq.prev=&cpu.runq;
+      |     ^
+/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/actual-check-1/actual_production_headers_probe.c:29:20: error: invalid use of undefined type ‘struct cpu_local_var’
+   29 |  cpu.runq.next=&cpu.runq; cpu.runq.prev=&cpu.runq;
+      |                    ^
+/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/actual-check-1/actual_production_headers_probe.c:29:30: error: invalid use of undefined type ‘struct cpu_local_var’
+   29 |  cpu.runq.next=&cpu.runq; cpu.runq.prev=&cpu.runq;
+      |                              ^
+/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/actual-check-1/actual_production_headers_probe.c:29:45: error: invalid use of undefined type ‘struct cpu_local_var’
+   29 |  cpu.runq.next=&cpu.runq; cpu.runq.prev=&cpu.runq;
+      |                                             ^
+/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/actual-check-1/actual_production_headers_probe.c:30:5: error: invalid use of undefined type ‘struct cpu_local_var’
+   30 |  cpu.status=CPU_STATUS_IDLE;
+      |     ^
+/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/actual-check-1/actual_production_headers_probe.c:32:5: error: invalid use of undefined type ‘struct cpu_local_var’
+   32 |  cpu.runq.next=&thread.sched_list; cpu.runq.prev=&thread.sched_list;
+      |     ^
+/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/actual-check-1/actual_production_headers_probe.c:32:39: error: invalid use of undefined type ‘struct cpu_local_var’
+   32 |  cpu.runq.next=&thread.sched_list; cpu.runq.prev=&thread.sched_list;
+      |                                       ^
+/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/actual-check-1/actual_production_headers_probe.c:33:29: error: invalid use of undefined type ‘struct cpu_local_var’
+   33 |  thread.sched_list.next=&cpu.runq; thread.sched_list.prev=&cpu.runq;
+      |                             ^
+/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/actual-check-1/actual_production_headers_probe.c:33:63: error: invalid use of undefined type ‘struct cpu_local_var’
+   33 |  thread.sched_list.next=&cpu.runq; thread.sched_list.prev=&cpu.runq;
+      |                                                               ^
+/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/actual-check-1/actual_production_headers_probe.c:34:52: error: invalid use of undefined type ‘struct cpu_local_var’
+   34 |  thread.status=PS_STOPPED; thread.spin_sleep=1; cpu.status=CPU_STATUS_RESERVED;
+      |                                                    ^
+/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/actual-check-1/actual_production_headers_probe.c: At top level:
+/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/actual-check-1/actual_production_headers_probe.c:26:29: error: storage size of ‘cpu’ isn’t known
+   26 | static struct cpu_local_var cpu;
+      |                             ^~~
+/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/actual-check-1/actual_production_headers_probe.c: In function ‘idle_actual_header_consumer’:
+/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/actual-check-1/actual_production_headers_probe.c:25:1: warning: control reaches end of non-void function [-Wreturn-type]
+   25 | }
+      | ^
