@@ -2341,12 +2341,14 @@ X86_MEMORY_PUBLIC_BRIDGE unsigned long x86_init_normal_get_memory_address_bridge
 	return ihk_mc_get_memory_address(type, arg);
 }
 
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 X86_MEMORY_PUBLIC_BRIDGE int x86_init_normal_set_large_bridge(void *pt, unsigned long virt,
 		unsigned long phys, unsigned long attr)
 {
 	return set_pt_large_page(pt, (void *)virt, phys,
 			(enum ihk_mc_pt_attribute)attr);
 }
+#endif
 
 X86_MEMORY_PUBLIC_BRIDGE void x86_init_normal_log_bridge(int event, unsigned long a,
 		unsigned long b, unsigned long c)

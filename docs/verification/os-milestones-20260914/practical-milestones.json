@@ -938,8 +938,8 @@
       "id": "M05",
       "scope_id": "practical-kernel-apps-v1-20261017",
       "title": "Native lifecycle and restoration",
-      "engineering_state": "partial",
-      "completion_status": "open",
+      "engineering_state": "complete",
+      "completion_status": "complete",
       "exit_condition": "Actual native boot/workload/stop/destroy/release/boot restores resources.",
       "checks": [
         {
@@ -1052,7 +1052,7 @@
         {
           "id": "P-M05-03",
           "description": "Complete ten native lifecycle cycles; failures retain ownership and block reuse.",
-          "status": "open",
+          "status": "complete",
           "evidence": [
             {
               "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
@@ -1083,12 +1083,26 @@
               "path": "docs/verification/evidence/current053d-m05-second-public-stop-20261022-1/reviews/M05-CURRENT-SECOND-STOP-ACTUAL-PHYSICAL-RETIREMENT-ACCEPTANCE.json",
               "sha256": "3140f538fea792c4ac43935a66803f482af44c218ab1ab5e1106d2b06edc32cc",
               "size": 1373
+            },
+            {
+              "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/actual-post-batch-readonly2-1/INDEPENDENT-FORMAL-TEN-CYCLE-AND-LITERAL-M05-ACCEPTANCE.json",
+              "sha256": "75eecabf4a12cff6839f2356dbed98f130d7283cf73366fe8ac01de22a3aa3f2",
+              "size": 2843
             }
           ],
-          "assessment_note": "One of ten complete public native lifecycle cycles accepted with full owner/client/QEMU retirement. First CPU-reacquisition failure and cycle2 pinned-consumer PRI mismatch preserved; version3 consumer correction independently accepts unchanged actual capture. Nine additional cycles and specified failure/recovery obligations remain open. Second distinct public lifecycle diagnostic now accepted with post-reboot workload; final-profile repetition quota not credited. Current053d/33f two-CPU observation now independently accepts two exact40B signal workloads across generations1/2 and two public shutdown/destroy/128MiB-release protocols. Strict67 intervening boot and process retirement pass. Assigned inventories report EBUSY; no empty inventory inference. Complete mapping/callback/ref/frame/physical-identity restoration remains unobserved; zero complete-cycle quota credit."
+          "assessment_note": "Ten new current SDK5/image10972/launcher dca025 two-generation native restoration/application cycles independently accepted. Twenty exact40B/exit0/EOF/procfs-empty workloads; each generation returns its prepared twoCPU/hardware/NUMA+128MiBextents with ownershipcleared. Successful intent/ACK/delete/finalretirement0, strictstop/destroy/publicrelease/reboot/secondworkload established. All1000files/300clients/10CIDs/QEMU/captures authenticate and retire; finalcompletePROC/mutex27:4/eightpaths clear. Zero priorcyclecredit; rawflags/failures preserved.",
+          "prior_assessment_20261023_before_ten": "One of ten complete public native lifecycle cycles accepted with full owner/client/QEMU retirement. First CPU-reacquisition failure and cycle2 pinned-consumer PRI mismatch preserved; version3 consumer correction independently accepts unchanged actual capture. Nine additional cycles and specified failure/recovery obligations remain open. Second distinct public lifecycle diagnostic now accepted with post-reboot workload; final-profile repetition quota not credited. Current053d/33f two-CPU observation now independently accepts two exact40B signal workloads across generations1/2 and two public shutdown/destroy/128MiB-release protocols. Strict67 intervening boot and process retirement pass. Assigned inventories report EBUSY; no empty inventory inference. Complete mapping/callback/ref/frame/physical-identity restoration remains unobserved; zero complete-cycle quota credit."
         }
       ],
-      "current_evidence_summary": "Actual current68 first complete restoration independently accepted5ef7ba02: exact CPU identities and128MiB physical coverage return, source-enforced worker/process/mapping/callback/ref retirement with observed successful shutdown/release, strict fresh secondboot/workload and positive host retirement. P-M05-02 complete; ONE matching restore/reboot cycle only. Ten cycles and wholeM05 remain open; second complete restoration not captured and newV3 profile has separate native obligations."
+      "current_evidence_summary": "Ten new current SDK5/image10972/launcher dca025 two-generation native restoration/application cycles independently accepted. Twenty exact40B/exit0/EOF/procfs-empty workloads; each generation returns its prepared twoCPU/hardware/NUMA+128MiBextents with ownershipcleared. Successful intent/ACK/delete/finalretirement0, strictstop/destroy/publicrelease/reboot/secondworkload established. All1000files/300clients/10CIDs/QEMU/captures authenticate and retire; finalcompletePROC/mutex27:4/eightpaths clear. Zero priorcyclecredit; rawflags/failures preserved.",
+      "prior_current_evidence_summary_before_ten_20261023": "Actual current68 first complete restoration independently accepted5ef7ba02: exact CPU identities and128MiB physical coverage return, source-enforced worker/process/mapping/callback/ref retirement with observed successful shutdown/release, strict fresh secondboot/workload and positive host retirement. P-M05-02 complete; ONE matching restore/reboot cycle only. Ten cycles and wholeM05 remain open; second complete restoration not captured and newV3 profile has separate native obligations.",
+      "completion_evidence": [
+        {
+          "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/actual-post-batch-readonly2-1/INDEPENDENT-FORMAL-TEN-CYCLE-AND-LITERAL-M05-ACCEPTANCE.json",
+          "sha256": "75eecabf4a12cff6839f2356dbed98f130d7283cf73366fe8ac01de22a3aa3f2",
+          "size": 2843
+        }
+      ]
     },
     {
       "id": "M06",
@@ -2460,11 +2474,11 @@
     "signed production/repository/independent external release qualification"
   ],
   "next_actions": [
-    "Two remaining practical checks: P-M05-03 ten complete current-tuple cycles and P-M12-01 actual final session. Practical33/35, whole10/14; M14 separate and active. P-M08-02/M08 and P-M09-02/M09 independently closed on supported current artifact set; preserve scope limitations.",
-    "First SDK5/image10972 V3 two-generation restoration and physical retirement independently accepted12a05b2d/1f3c1830: one matching cycle. Execute reviewed ordered ten-case batch after exact source publication, fresh admission and independent per-case/batch release; new batch carries zero previous cycle credit.",
-    "Use accepted235,227 and firstV3 literal observations under finite b8bb0fb6 M08/M09 map; remaining ABI/changed-boundary coverage stays open until qualified matching evidence.",
-    "P12 actual LONG producer558198, app variants and coherent current110 manifest6c3c/owner0ef2 are source/actual-consumer accepted. Real tiny NONE admission passed, exact smoke execution/review remains. Complete final LONG capture/budget/release then genuine launch/hour session; no launch/time credit yet.",
-    "M14 candidate5 first build attempt failed preflight schema before Docker/compiler; retained token retired through independently reviewed normal API, physical1fc26075. Three-membership schema correction dbbf and complete6959-entry pure validator8checks accepted. Prepare fresh successor namespace/request and execute reviewed default build while functional image10972 remains frozen."
+    "Practical34/35; whole11/14. P-M05-03/M05 independently closed on ten new current-tuple cycles. Only P-M12-01 remains among35 checks: final session100launches and60actualmixedminutes, with matching twofreshboots/tenacceptedcycles reused. LONGcounters0/100 and0/60 untilactualexecution.",
+    "Finalize reviewed corrected LONG controller/owner/transport bindings and39actualconsumerchecks; fresh postbatch capacity/identity and independent exact release then genuine finalsession. Actual tinyNONE accepted15827 but is not LONGcredit.",
+    "WholeM07 still open for bounded MPX3/4+PKRU9 applicability-to-preservation item; bothliteralrows remaincomplete. WholeM13 finalscoped delivery remainsopen. M14separateactive, not a functional prerequisite.",
+    "M14 successor2 f7e1/request28caca frozenprivatecandidate5 source/profile/pureconsumer accepted. Freshnamespace observation literal correction pending, then exactfreshadmission/release/defaultbuild as heavyslotpermits. Currentfunctionalimage10972 unchanged.",
+    "M14 x86_init_normal_set_large_bridge Rustexport integrated afterquiescence/independentsourceABIreview;123480C/Rustobservations and78-inputprivatecrate pass. ChangedwholeC TU/defaultkerneluniqueprovider/native remainopen."
   ],
   "evidence_reconciliation": {
     "date": "2026-10-17",

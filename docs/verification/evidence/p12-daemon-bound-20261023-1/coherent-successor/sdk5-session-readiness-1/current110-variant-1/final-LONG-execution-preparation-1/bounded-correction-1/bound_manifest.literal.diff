@@ -1,0 +1,11 @@
+--- candidate1/bound_manifest
++++ bounded-correction-1/bound_manifest
+@@ -2,7 +2,7 @@
+     _manifest_identity(path, digest)
+     for source, expected in SOURCE_HASHES.items():
+         need(_digest(source) == expected, "source identity drift: " + source)
+-    source = '/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/session-staging-preparation-1/runtime-coherent-source-integration-1/source/native_diagnostic.py'
++    source = '/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/source/native_diagnostic.py'
+     spec = importlib.util.spec_from_file_location("owner_bound_diagnostic", source)
+     module = importlib.util.module_from_spec(spec)
+     spec.loader.exec_module(module)

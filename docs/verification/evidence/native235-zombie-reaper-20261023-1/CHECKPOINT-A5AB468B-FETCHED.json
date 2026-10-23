@@ -1,0 +1,911 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_FETCHED_COMMIT_AND_LOCAL_BLOB_VERIFICATION",
+  "commit": "a5ab468b24b9104b1b4a8059049121a53a24c81c",
+  "fetched_commit": "a5ab468b24b9104b1b4a8059049121a53a24c81c",
+  "since_commit": "4abd2c80f64797f00ed29f8d009756d7759f32d5",
+  "checked_files": 180,
+  "files": [
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/ACTUAL-NAMESPACE-AND-REQUEST.json",
+      "git_blob": "d8c2a6946eed07d74f1d5d07605f55869c295237",
+      "bytes": 6647
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/ACTUAL-PURE-CONSUMER-RECEIPT.json",
+      "git_blob": "54cd7dddefb31c6ef3befa4c9508f75707e0ad90",
+      "bytes": 12781
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/NEXT-BUILD-OPERATION.READY-FOR-REVIEW.json",
+      "git_blob": "91c766ab2a1e1cd0930f9dda72bc342fb9fcc81b",
+      "bytes": 6281
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/NEXT-CAPTURE-ARGV.PENDING.json",
+      "git_blob": "2f22efb774981d9d4d12b9ba9a1fbf0be6040f34",
+      "bytes": 1659
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/NEXT-CAPTURE-ARGV.READY.json",
+      "git_blob": "1af8f8d4eeace82d4fad2eacd996bdf3af42534d",
+      "bytes": 2015
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/NEXT-IMAGE-OWNER-OPERATION.PENDING.json",
+      "git_blob": "0687b3cef735c484f1f0dc1f9e49a972abcad1c1",
+      "bytes": 5455
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/PURE-VALIDATOR-COMMAND.PREPARED.json",
+      "git_blob": "f83326cafbfb15039c67ab7ecfcb3937f428a9f0",
+      "bytes": 856
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/READY.md",
+      "git_blob": "a91134f57e61063021984175f9ee17179feaf148",
+      "bytes": 2103
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/WHOLE-SUCCESSOR2-HANDOFF.json",
+      "git_blob": "d9eef34a0a07530a9262fe42b9386211961d175f",
+      "bytes": 4343
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/namespace-owner.diff",
+      "git_blob": "828c643842f810b0a074f2f8816c22c89b0ea17b",
+      "bytes": 2098
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/native_rust_exact_mckernel_image_container_owner.py",
+      "git_blob": "d61662cc5c2e6db8077c4bbbb41afd024b3b27ff",
+      "bytes": 90527
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/prepare_successor2.py",
+      "git_blob": "05dd1fbc23111945ef6010c56b1f5f50cc3fe24c",
+      "bytes": 5794
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/pure-validator-capture-1/command.json",
+      "git_blob": "655475126f7c5f10fd8971d0ff400bf43b0422a5",
+      "bytes": 520
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/pure-validator-capture-1/direct-join.json",
+      "git_blob": "32e129a49a0f6600cb2c0dc19f9c25740b4ec677",
+      "bytes": 258
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/pure-validator-capture-1/direct-wait.json",
+      "git_blob": "f137cc5dc36ca56ea5ccf2f639a59d036462d906",
+      "bytes": 82
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/pure-validator-capture-1/started.json",
+      "git_blob": "60217204450df3348e68350974e7195339347425",
+      "bytes": 36
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/pure-validator-capture-1/stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/pure-validator-capture-1/stdout",
+      "git_blob": "7dce1dac2a7a41808f19254a61c1fa5917d5e7e0",
+      "bytes": 7463
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/pure-validator-capture-1/whole-join.json",
+      "git_blob": "5a024900afdb0ab260b8d3f456cc836d63a3fc62",
+      "bytes": 1227
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/run_owned_validation.py",
+      "git_blob": "1e4ea7c567fef74dfc460ee542a271a755941519",
+      "bytes": 2081
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/validate_successor2.py",
+      "git_blob": "1b959ae6d41edf050965409a10fd9ce7e52d1128",
+      "bytes": 2247
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/CHECKPOINT-4ABD2C80-FETCHED.json",
+      "git_blob": "167390c2e90594644a28246f79fa0cba4cbef094",
+      "bytes": 646155
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/EXACT-TEN-CASE-SPEC.RELEASED.json",
+      "git_blob": "099c13baa06070cce981dacacfd8cdb57f2139c6",
+      "bytes": 18079
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/EXACT-TEN-EXECUTION-REVIEW-PACKET.ROOT.json",
+      "git_blob": "3ff9ba99d2720a6c3121008fe202d653aabd158c",
+      "bytes": 28294
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/GENUINE-TEN-CASE-RELEASE-AND-SPEC-RECORD.json",
+      "git_blob": "4551231f87c70c54901f30c15b9214f5d811496d",
+      "bytes": 5936
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/ORDERED-TEN-BATCH-RELEASE.CANDIDATE.CORRECTED1.json",
+      "git_blob": "2c9ab0a90a5e3749cb80191b1578ad1fc0745f41",
+      "bytes": 17690
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/ORDERED-TEN-BATCH-RELEASE.CANDIDATE.json",
+      "git_blob": "afbdb31d32909798a3f9b5edec3a24e1409f9c1f",
+      "bytes": 17582
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/ORDERED-TEN-BATCH-RELEASE.json",
+      "git_blob": "b29bc7f4dfaaf8674b0cd7921a05f384bd855692",
+      "bytes": 17686
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/ROOT-ORDERED-TEN-BATCH-EXECUTION-RELEASE.json",
+      "git_blob": "151f57408e7862820535f1fb59b25fc220afb2e1",
+      "bytes": 2738
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/actual-fresh-global-admission-1/ACTUAL-CLOSED-CAPTURE.json",
+      "git_blob": "17143834cfe94c05ea0e1ffca59d18a6df80d4d8",
+      "bytes": 503
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/actual-fresh-global-admission-1/ROOT-QUERY-RELEASE.json",
+      "git_blob": "49998a290fafde2ed094cf7e9b936bbdfa4ab465",
+      "bytes": 535
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/actual-fresh-global-admission-1/stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/actual-fresh-global-admission-1/stdout",
+      "git_blob": "f117d468edab871958f8bd047a98429ca45a5f1d",
+      "bytes": 41883
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/actual-fresh-global-admission-2/ACTUAL-CLOSED-CAPTURE.json",
+      "git_blob": "cc09d39dba8eba6491206ba5637cd564fb357868",
+      "bytes": 477
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/actual-fresh-global-admission-2/ROOT-QUERY2-RELEASE.json",
+      "git_blob": "72d4d559d0504cf6eb431edb7a74bcb0a5e50642",
+      "bytes": 507
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/actual-fresh-global-admission-2/stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/actual-fresh-global-admission-2/stdout",
+      "git_blob": "9e54603ba8772e87602af859ec922826292426d3",
+      "bytes": 42391
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/case-releases/case-01.RELEASE.json",
+      "git_blob": "7054f571a5b602a17086851ae26b78fdbc91e909",
+      "bytes": 5386
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/case-releases/case-02.RELEASE.json",
+      "git_blob": "c62493578ff3b4a8619bd5ba1441f4b969274b35",
+      "bytes": 5386
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/case-releases/case-03.RELEASE.json",
+      "git_blob": "3a146506302d1ff9137109bc6ed32070fb2d482d",
+      "bytes": 5386
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/case-releases/case-04.RELEASE.json",
+      "git_blob": "a72bab24256ec1d7b8563d89847d435fcba8a76b",
+      "bytes": 5386
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/case-releases/case-05.RELEASE.json",
+      "git_blob": "6a2154acfdc393e8217ddc09a78c839898407902",
+      "bytes": 5386
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/case-releases/case-06.RELEASE.json",
+      "git_blob": "2dfb215ae206c6483793f7b962c042c56e16e3c8",
+      "bytes": 5386
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/case-releases/case-07.RELEASE.json",
+      "git_blob": "d22dd9871918334943224ed4865576c7ec2676d6",
+      "bytes": 5386
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/case-releases/case-08.RELEASE.json",
+      "git_blob": "c259b7ad456149c23c77bd6b835b8d8926c82e58",
+      "bytes": 5386
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/case-releases/case-09.RELEASE.json",
+      "git_blob": "0a5ef2cc4d0fd141a8e002c0b953a08e2c792998",
+      "bytes": 5386
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/case-releases/case-10.RELEASE.json",
+      "git_blob": "7315e404f11a72ecfe9a44028372abfc29c0d3df",
+      "bytes": 5386
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m08-m09-actual-first-v3-literal-join-1/ACTIVE-LITERAL-CONTRACT-AND-STALE-MAP-COMPARISON.json",
+      "git_blob": "146dd583e1d3a90e80f81d2bcb1149007050b4bf",
+      "bytes": 7768
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m08-m09-actual-first-v3-literal-join-1/ACTUAL-USED-ABI-CLAUSE-OBSERVATIONS.json",
+      "git_blob": "3acaed31fe6eefb0d059a1a3d98e1ce191d6afa9",
+      "bytes": 21585
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m08-m09-actual-first-v3-literal-join-1/CHANGED-CONSUMED-SOURCE-BOUNDARY-JOIN.json",
+      "git_blob": "91ec48d39f42f45ab58be6878d8b543f33217a23",
+      "bytes": 13751
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m08-m09-actual-first-v3-literal-join-1/INDEPENDENT-LITERAL-M08-M09-ACCEPTANCE.json",
+      "git_blob": "6bb735abe7d2eee80e75a48b49a6e96dd9554854",
+      "bytes": 1654
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m08-m09-actual-first-v3-literal-join-1/LITERAL-M08-M09-REVIEW-READY.json",
+      "git_blob": "f0c676571a911447186e2536bd59153bbf06ae4a",
+      "bytes": 3537
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m08-m09-actual-first-v3-literal-join-1/join_literal_evidence.py",
+      "git_blob": "f53908c1d8ff4eeaf40ba9e624f1697a9aa6a757",
+      "bytes": 16032
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/EXACT-TINY-EXECUTE-NEXT.ROOT.json",
+      "git_blob": "7e3eff4b36440240caa5b8ba4e10272937ee6bd7",
+      "bytes": 15041
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/actual-root-tiny-execution-1/ACTUAL-CLOSED-CAPTURE.json",
+      "git_blob": "d712347456b5b9d536442e33418e479bef00e932",
+      "bytes": 500
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/actual-root-tiny-execution-1/ROOT-ONE-SHOT-TINY-RELEASE.json",
+      "git_blob": "05143a12a290d42d566d05f77f570ec2a31e1d6d",
+      "bytes": 700
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/actual-root-tiny-execution-1/started.json",
+      "git_blob": "55b17510b284bdc8f481980497291087ce410d62",
+      "bytes": 801
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/actual-root-tiny-execution-1/stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/actual-root-tiny-execution-1/stdout",
+      "git_blob": "202f54558d31f8779388e41e6b823b73263f9d28",
+      "bytes": 930
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/EXACT-POST-TINY-READONLY-OPERATIONS.NOT-RELEASED.json",
+      "git_blob": "7661781f0d8003c152875ddf36b6ba9c36e16aa8",
+      "bytes": 13103
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/HANDOFF.md",
+      "git_blob": "d1ffdf2265796019dd2c09d1cef75e0b28a5daf9",
+      "bytes": 1706
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/RESULT.json",
+      "git_blob": "7b3c20ec6980c0dbdafce2f0b306cc3983c1b84e",
+      "bytes": 2024
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/ROOT-LITERAL-AST-PROOF.json",
+      "git_blob": "d80a992da1afff62f43d8589a34ee916d36ffa57",
+      "bytes": 4596
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/AUTHENTICATED-RETENTION.json",
+      "git_blob": "9ce8355068df6cb2702ae40f925ed4793d701460",
+      "bytes": 91308
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/INDEPENDENT-ACTUAL-TINY-NONE-FUNCTIONAL-PHYSICAL-ACCEPTANCE.json",
+      "git_blob": "212ca025825bde82a4f13af0514d2357d6b497a5",
+      "bytes": 1543
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/ROOT-READONLY6-RELEASE.json",
+      "git_blob": "f80e5e6d11602ba1c377612cbef333ab1d9938e2",
+      "bytes": 408
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/current-label/ACTUAL-CLOSED-CAPTURE.json",
+      "git_blob": "4228566d2b55f72d441cfb65f3be65d58b6b2871",
+      "bytes": 1058
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/current-label/stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/current-label/stdout",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/current-name/ACTUAL-CLOSED-CAPTURE.json",
+      "git_blob": "2519e0c84b48ba08eac14b384177ecd51171885e",
+      "bytes": 1054
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/current-name/stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/current-name/stdout",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-capture-authenticated/CAPTURE-RESULT.json",
+      "git_blob": "9b754cc9fd4dce831e3524f61c5424da0ff864e9",
+      "bytes": 831
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-capture-authenticated/command.json",
+      "git_blob": "34f5f43977cff2c967acf4f7c12ec12e86587236",
+      "bytes": 1342
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-capture-authenticated/started.json",
+      "git_blob": "7ecffa6ae2e320f09b57d512b64482a1c23b3288",
+      "bytes": 36
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-capture-authenticated/stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-capture-authenticated/stdout",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-capture/ACTUAL-CLOSED-CAPTURE.json",
+      "git_blob": "998b2b25175ac06df44995f4b9bfe41c6c6e9b1a",
+      "bytes": 1120
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-capture/stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-capture/stdout",
+      "git_blob": "03c67c5a9c1a3ed0edcdcac8332828bab6cc297a",
+      "bytes": 5812
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/001-ps.json",
+      "git_blob": "15f397d8ae849311747f620777d84d97df764efc",
+      "bytes": 308
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/001-ps.stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/001-ps.stdout",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/002-ps.json",
+      "git_blob": "dbb334739c4dfac6470784bae0ed16df1c8103f0",
+      "bytes": 312
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/002-ps.stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/002-ps.stdout",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/003-image.json",
+      "git_blob": "4cf5a4ae22619b4c90b63ef376ec5e45f1e7c4bd",
+      "bytes": 295
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/003-image.stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/003-image.stdout",
+      "git_blob": "749448e26dffec34a4bfce2e9876988136bb6ab9",
+      "bytes": 4785
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/004-create.json",
+      "git_blob": "5f0586bfacf90728e3f77f830a2c524cfdf2786b",
+      "bytes": 8948
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/004-create.stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/004-create.stdout",
+      "git_blob": "5ad820830e4897b5725819a6006e237914c001ef",
+      "bytes": 65
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/005-ps.json",
+      "git_blob": "560ab509643bea598dec6f04de36ddccb422ef12",
+      "bytes": 308
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/005-ps.stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/005-ps.stdout",
+      "git_blob": "5ad820830e4897b5725819a6006e237914c001ef",
+      "bytes": 65
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/006-ps.json",
+      "git_blob": "6d608784c2540280151849729685fc49f43932f7",
+      "bytes": 312
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/006-ps.stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/006-ps.stdout",
+      "git_blob": "5ad820830e4897b5725819a6006e237914c001ef",
+      "bytes": 65
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/007-ps.json",
+      "git_blob": "3b0c5856569c8694a7a14d82b39e9c841301cc68",
+      "bytes": 308
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/007-ps.stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/007-ps.stdout",
+      "git_blob": "5ad820830e4897b5725819a6006e237914c001ef",
+      "bytes": 65
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/008-inspect.json",
+      "git_blob": "5e6fd674991a982a3a975e50e139fae9137cfe77",
+      "bytes": 280
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/008-inspect.stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/008-inspect.stdout",
+      "git_blob": "3a5e178ef6bb0e826237f047d2dda1933fec9fad",
+      "bytes": 34175
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/009-start.json",
+      "git_blob": "69653c4b58a624a53fd36897d102aeba9e8fe275",
+      "bytes": 289
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/009-start.stderr",
+      "git_blob": "7759c4eb2ae3d5bc8737e51d6e841784ece80748",
+      "bytes": 16
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/009-start.stdout",
+      "git_blob": "40c0a254673c074d92aa203e7e95f95bcb78563f",
+      "bytes": 16
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/010-wait.json",
+      "git_blob": "666a1cae658c674820ba6dd51ddb96790e27b44a",
+      "bytes": 276
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/010-wait.stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/010-wait.stdout",
+      "git_blob": "573541ac9702dd3969c9bc859d2b91ec1f7e6e56",
+      "bytes": 2
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/011-ps.json",
+      "git_blob": "af612773992d99c5a18eb0068820d432ff521836",
+      "bytes": 308
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/011-ps.stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/011-ps.stdout",
+      "git_blob": "5ad820830e4897b5725819a6006e237914c001ef",
+      "bytes": 65
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/012-ps.json",
+      "git_blob": "982aca20afe446272d52e82cf01c94b58919d742",
+      "bytes": 312
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/012-ps.stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/012-ps.stdout",
+      "git_blob": "5ad820830e4897b5725819a6006e237914c001ef",
+      "bytes": 65
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/013-ps.json",
+      "git_blob": "eefcdb5ececd9b39cb545ed86c0b74a17f4fe46a",
+      "bytes": 308
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/013-ps.stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/013-ps.stdout",
+      "git_blob": "5ad820830e4897b5725819a6006e237914c001ef",
+      "bytes": 65
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/014-inspect.json",
+      "git_blob": "b17447d8faef52f3303abb6bcd56ae9da3e8c0fd",
+      "bytes": 280
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/014-inspect.stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/014-inspect.stdout",
+      "git_blob": "48e28fc67f25347c5570c9420dc86dcebdc7f8d1",
+      "bytes": 34670
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/015-ps.json",
+      "git_blob": "d8def867189c17de0cb0b817d3817125e7bedf26",
+      "bytes": 308
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/015-ps.stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/015-ps.stdout",
+      "git_blob": "5ad820830e4897b5725819a6006e237914c001ef",
+      "bytes": 65
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/016-ps.json",
+      "git_blob": "ecbec5f3c1990e4c16ed63b8bc1d899f2048b23c",
+      "bytes": 312
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/016-ps.stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/016-ps.stdout",
+      "git_blob": "5ad820830e4897b5725819a6006e237914c001ef",
+      "bytes": 65
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/017-ps.json",
+      "git_blob": "43ff7f8bf685c59bad3d74842316d6981179511d",
+      "bytes": 308
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/017-ps.stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/017-ps.stdout",
+      "git_blob": "5ad820830e4897b5725819a6006e237914c001ef",
+      "bytes": 65
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/018-inspect.json",
+      "git_blob": "2a19faaa4f899572d3df017d132cedcc1184afbe",
+      "bytes": 280
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/018-inspect.stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/018-inspect.stdout",
+      "git_blob": "a42923d45b597bf4809613e90ab90d8f823f5cb3",
+      "bytes": 34670
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/019-stop.json",
+      "git_blob": "471cce7246ec4cfa0095b36e783cb7f794771766",
+      "bytes": 287
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/019-stop.stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/019-stop.stdout",
+      "git_blob": "5ad820830e4897b5725819a6006e237914c001ef",
+      "bytes": 65
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/020-kill.json",
+      "git_blob": "7ee2e50932d333441993d8ea082706faf07c886d",
+      "bytes": 276
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/020-kill.stderr",
+      "git_blob": "c146130680113d14f1bbf3cf842fa909f4844346",
+      "bytes": 207
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/020-kill.stdout",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/021-wait.json",
+      "git_blob": "6589353613dac53e08a4c64f507d5ce15afe2061",
+      "bytes": 276
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/021-wait.stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/021-wait.stdout",
+      "git_blob": "573541ac9702dd3969c9bc859d2b91ec1f7e6e56",
+      "bytes": 2
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/022-inspect.json",
+      "git_blob": "dd297c88a06a83950b42cffc47f6d4f15f32c994",
+      "bytes": 279
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/022-inspect.stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/022-inspect.stdout",
+      "git_blob": "760a5005573dba1e8e4d9334f7aeda53c780c030",
+      "bytes": 34670
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/023-rm.json",
+      "git_blob": "b6002093e5e2ad4998480b439ea2f492c544dc57",
+      "bytes": 284
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/023-rm.stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/023-rm.stdout",
+      "git_blob": "5ad820830e4897b5725819a6006e237914c001ef",
+      "bytes": 65
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/024-ps.json",
+      "git_blob": "0a408cf0041f9d6e7b92c3ff3e6b255c5a6d30aa",
+      "bytes": 308
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/024-ps.stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/024-ps.stdout",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/025-ps.json",
+      "git_blob": "b4890b4294d394fd88b76129a25561b0c06a730d",
+      "bytes": 312
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/025-ps.stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/025-ps.stdout",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/026-ps.json",
+      "git_blob": "eb0e2b3f36379c99eea43b60cb360f18c6aae69a",
+      "bytes": 308
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/026-ps.stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/026-ps.stdout",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/attach-observation.json",
+      "git_blob": "06a408298a43a0e2ad0d8004ae3db45d1e1ed353",
+      "bytes": 145
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/owner.json",
+      "git_blob": "e7faeb5a35b4d9972dc7e659b71a15ffad423caa",
+      "bytes": 594
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/result.json",
+      "git_blob": "5e523b245292876a69e02d464b8024225dd3bcd5",
+      "bytes": 257
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner-authenticated/state.json",
+      "git_blob": "1f4ea811e8a7dbba3a1d8b87ff45cab5c7b8372f",
+      "bytes": 224
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner/ACTUAL-CLOSED-CAPTURE.json",
+      "git_blob": "4d66c5f4d99d9ee0ba92034f0b2f9822d091aab3",
+      "bytes": 1120
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner/stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/export-current-owner/stdout",
+      "git_blob": "5b1e0ac5afa49fddafb37d1dbd732c90fef205e0",
+      "bytes": 257965
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/fresh-mutex/ACTUAL-CLOSED-CAPTURE.json",
+      "git_blob": "a33de34b8d3086d990b03506dd70e05ca67c5ba4",
+      "bytes": 960
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/fresh-mutex/stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/fresh-mutex/stdout",
+      "git_blob": "115d341277be7260d2d8247003d5a57cac3f140a",
+      "bytes": 1172
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/fresh-proc/ACTUAL-CLOSED-CAPTURE.json",
+      "git_blob": "966a07b846f6d60e3df786afde9ce561a2ac64cb",
+      "bytes": 945
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/fresh-proc/stderr",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/actual-post-tiny-readonly-1/fresh-proc/stdout",
+      "git_blob": "37ee732a34f4c747c36285b67011815fae7a12f8",
+      "bytes": 39949
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/readonly_export_current_capture.py",
+      "git_blob": "56f0023d7e0d0c48cda7e84d8ad50d9e9ce92218",
+      "bytes": 1720
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/readonly_export_current_capture.py.diff",
+      "git_blob": "713769b211ab0ae6d0430299707fc942302cc5d5",
+      "bytes": 1093
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/readonly_export_current_owner.py",
+      "git_blob": "210f4c0166a8f053e4f7906bf3d113041ef61510",
+      "bytes": 1744
+    },
+    {
+      "path": "docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/readonly_export_current_owner.py.diff",
+      "git_blob": "358f69da0750abab159e69c9f1a4e2fc3b411aba",
+      "bytes": 1115
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/CURRENT.md",
+      "git_blob": "9c3aa32e8532f57408e6e7e273623e6a44cf9f28",
+      "bytes": 1648960
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/HANDOFF.md",
+      "git_blob": "a3d009f26c22f2cb658b148b616b285a5591ac78",
+      "bytes": 814873
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/PROGRESS.md",
+      "git_blob": "ea88a1da0380bd38f66019b58c38e159cdc93193",
+      "bytes": 74693
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/SESSION-HANDOFF.md",
+      "git_blob": "b4c38aaab414c6a83bddc85a1eea5ec617ecfce6",
+      "bytes": 579780
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/practical-milestones.json",
+      "git_blob": "36645ca1bd919c6ffdd838ecc4b3d3d10b4a30e5",
+      "bytes": 196748
+    }
+  ],
+  "runtime_acceptance": false
+}

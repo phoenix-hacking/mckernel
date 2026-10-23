@@ -1,0 +1,44 @@
+{
+  "body": "x86_init_normal_set_large_bridge default PUBLIC Rust export replaces guarded C forwarding body; original fallback preserved",
+  "changed_files": [
+    {
+      "bytes": 84432,
+      "path": "arch/x86_64/kernel/memory.c",
+      "postimage_sha256": "d17a62c07102a6f015c05dff88b5594805ae4b2b871bffeddd7b1286802f8503",
+      "preimage_sha256": "25c13c856dff0a1219a316ac3cf38cbe40f79c16561813b98a408f8cb62c24ed"
+    },
+    {
+      "bytes": 190942,
+      "path": "kernel/rust/x86_memory_helpers.rs",
+      "postimage_sha256": "5a9b4effe230fb4a322441950fa7f6588f2165c7ee2a33f62c273089466e65d6",
+      "preimage_sha256": "35664d46edaa3674d633b3c1ff96e85723fd21e5daf517d53c2438de35d5c4a3"
+    },
+    {
+      "bytes": 5008020,
+      "path": "kernel/rust/tests/run_equivalence.sh",
+      "postimage_sha256": "7bebd850bc4f2262cbac2cf0eefcaad932a9b66aabd089dee7cbea7026b93224",
+      "preimage_sha256": "2f95bf133e7322a9a6f2fd9a9102013f2154f506d099f5c570c752a8e1711a7a"
+    }
+  ],
+  "checks": [
+    "all ten source preimage identities match",
+    "git apply --check",
+    "exact accepted patch applied",
+    "three canonical postimages byte-identical to tested private postimages",
+    "focused git diff --check"
+  ],
+  "current_private_Rust_crate_inputs": 78,
+  "frozen_bindings": "LONG 156-row source map does not consume these canonical paths; candidate5/build2 source root is exclusively private immutable materialization validated by retained manifest. Neither frozen runtime nor build2 snapshot was changed.",
+  "independent_source_review_sha256": "d98d267c6219de51dd46b3c35be4d99edbc37346093b1c493abad9bf0cc5eb5f",
+  "native": false,
+  "original_C_Rust_observations": 123480,
+  "patch_sha256": "6a311794e300e44687a5d5b54b9b7fd34d2b95a36517a618ef1e762cf87384ca",
+  "production_default_kernel_link": false,
+  "production_whole_C_TU": false,
+  "quiescent_physical_acceptance_sha256": "125669544b15492d33c15cb408a2e48124532f20184d6c9cac959072764f9445",
+  "recorded_utc": "2026-10-23T13:20:46.207659+00:00",
+  "schema": "m14-canonical-bounded-source-integration-v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PARTIAL_CANONICAL_SOURCE_INTEGRATED",
+  "whole_file_or_area_retirement": false
+}

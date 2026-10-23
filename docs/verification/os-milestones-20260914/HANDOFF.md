@@ -1,3 +1,32 @@
+## Ten complete native cycles accepted;34/35 — 2026-10-23 13:24 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+NEW literalclosure P-M05-03 andwholeM05 independentlyPASS75eecabf: tenNEW
+SDK5/image10972/launcherdca two-generationcycles,20exact40B/exit0/EOF/procfsempty
+apps, eachgenerationexacttwoCPU/hardware/NUMA+128MiBextentsreturn/ownershipclear,
+intent/ACK/delete/finalretirement0/strict5-to0stop/destroy/publicrelease/reboot.
+Batchactual650.614390s/0,outerPID3709403/start55796135joined/groupabsent/closed;
+1000authfiles13241183B/300clients/10CIDs/QEMUretired; finalcompletePROC2b328/no
+publishers andmutex8fdd27:4/eightpathsabsent. Physical125669 nonNULLcurrent_live_
+postjoin. No priorcyclecredit; originalrawfalseflags/failuresretained. Practical
+34/35,whole11/14; ONLYP-M12-01checkopen. LONGlaunches0/100/actualmixedminutes0/60.
+WholeM07MPX3/4+PKRU9applicability/preservationandfinalM13deliveryremainopen;
+M14separateactive. LONGfouractualconsumerfamilies39checksPASS837b20a0/.794306s
+exactAnaconda3.9.12, independentlyaccepted; correctedowner a1be/controller e386/
+transport e644 preservequotas/oracles/retirement. StalereachedsourcepathandHOST
+TESTONLYguardfailuresretained; boundedliteral/product andfixturepathcorrections.
+NextactualLONGcapacity/identity/rootexecutionassembly ownerterminal_lifecycle_
+repair; no guest/hourcredit. M14bridge canonicalintegration13756e06 afterphysical
+clearance: realx86_init_normal_set_large_bridgeRustexport,123480C/Rustcomparison
+and78-inputprivatecrateoneT/noU; changedwholeCTU/defaultkernel/nativeopen. Frozen
+functionalimage/candidate5build2privateinputsunchanged. Successor2defaultbuild
+f7e1/request28caca pureconsumeraccepted; namespace8literalcorrectioncd88 accepted,
+exactobserverprofile/capturebindingowner m14_production_stage remainsnextbuild
+admissionblocker. Oneheavyserialized; noresize/reservechange/speedupclaim.
+Included-only100%/servicechecksactive. Executiontime650.614s; postbatchformal+
+physicalreview/finalLONGprofileassembly arecurrentwait, withrealconsumerchecks
+completedinparallel. NexteligibleheavyLONGorboundeddefaultbuild afterexactrelease.
+
 ## Literal M08/M09 closed;33/35 — 2026-10-23 12:53 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

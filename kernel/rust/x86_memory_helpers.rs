@@ -240,12 +240,6 @@ unsafe extern "C" {
     fn x86_pt_set_page_bridge(pt: *mut c_void, virt: CULong, phys: CULong, attr: CULong) -> CInt;
     fn x86_move_flush_tlb_bridge();
     fn x86_init_normal_get_memory_address_bridge(type_: CInt, arg: CInt) -> CULong;
-    fn x86_init_normal_set_large_bridge(
-        pt: *mut c_void,
-        virt: CULong,
-        phys: CULong,
-        attr: CULong,
-    ) -> CInt;
     fn x86_init_normal_log_bridge(event: CInt, a: CULong, b: CULong, c: CULong);
     fn x86_init_normal_panic_bridge();
     fn x86_init_linux_find_command_line_bridge(name: *mut i8) -> *mut i8;
@@ -1104,6 +1098,17 @@ pub unsafe extern "C" fn set_pt_large_page(
             attr | PTATTR_LARGEPAGE | PTATTR_ACTIVE,
         )
     }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_normal_set_large_bridge(
+    pt: *mut c_void,
+    virt: CULong,
+    phys: CULong,
+    attr: CULong,
+) -> CInt {
+    // x86_64's ihk_mc_pt_attribute has the same u64 ABI as CULong.
+    unsafe { set_pt_large_page(pt, virt as *mut c_void, phys, attr) }
 }
 
 #[no_mangle]

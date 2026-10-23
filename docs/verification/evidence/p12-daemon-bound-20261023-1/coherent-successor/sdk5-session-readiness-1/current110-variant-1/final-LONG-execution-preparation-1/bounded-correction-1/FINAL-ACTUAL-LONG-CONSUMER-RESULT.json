@@ -1,0 +1,213 @@
+{
+  "CPU0_released": true,
+  "Docker_calls": 0,
+  "LONG_native_acceptance": null,
+  "actual_consumer": {
+    "bytes": 10062,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/ACTUAL-LONG-CONSUMER-RESULT2.json",
+    "sha256": "09e980aae3f8f1ed338d955a5fe4239f4057de94faa69bb0c9d0c0e7b6fc6d08"
+  },
+  "actual_prelaunch_command": {
+    "bytes": 3654,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/actual-consumer-fixture-2/command.json",
+    "sha256": "c031b4927add62cad3f549b53a2b4573299f0fb37f85de11db70d24db4541212"
+  },
+  "actual_prelaunch_driver": {
+    "bytes": 2034,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/run_LONG_fixture_owned.py",
+    "sha256": "ae6969cb4371a8c12808a79a89e0e64a19fdc6e43a0ec858ee30647a8a73c6f1"
+  },
+  "actual_prelaunch_fixture": {
+    "bytes": 12821,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/fixture_LONG_consumers.py",
+    "sha256": "4037e3270efdb2a4404c092f7da1fcb7458c0cf93b5e2d057b1646802f90dd3a"
+  },
+  "actual_stdout": {
+    "bytes": 8212,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/actual-consumer-fixture-2/stdout",
+    "sha256": "845d8d4711d72c61b7d3ec058ffea0f2f807881dfeac22c744ada1ce61ef083d"
+  },
+  "builds": 0,
+  "canonical_memory_inputs": {
+    "arch/x86_64/kernel/memory.c": false,
+    "kernel/rust/tests/run_equivalence.sh": false,
+    "kernel/rust/x86_memory_helpers.rs": false
+  },
+  "check_count": 39,
+  "closed_streams": true,
+  "controller": {
+    "bytes": 7736,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/capture_root_LONG.NOT-RELEASED.py",
+    "sha256": "e386ac40399ff0620496d9aafe4735f4c8deac1862559b157fd48485530590a9"
+  },
+  "direct_child_joined": true,
+  "error": null,
+  "executable": "/home/holden/anaconda3/bin/python3",
+  "families": [
+    {
+      "backend_calls": 0,
+      "name": "actual_bound_manifest_and_builders",
+      "readonly_roots": 39,
+      "source_hash_rows": 156,
+      "status": "PASS"
+    },
+    {
+      "name": "actual_validate_release",
+      "qualification": "All author/review/boot/time data TESTONLY and isolated; actual source/archive/hash functions execute; no live execution authority published",
+      "status": "PASS"
+    },
+    {
+      "name": "actual_controller_prefix",
+      "privileged_statements_omitted": [
+        "need(os.getuid()==os.geteuid()==0 and os.sched_getaffinity(0)=={7},'root CPU7 capture controller owns signal authority')",
+        "need(resource.getrlimit(resource.RLIMIT_FSIZE)==(CAP,CAP),'parent384MiB hard FSIZE')",
+        "need(resource.getrlimit(resource.RLIMIT_CPU)==(resource.RLIM_INFINITY,resource.RLIM_INFINITY),'parent unlimited CPU retirement profile')"
+      ],
+      "qualification": "No mocked UID/rlimit checks. These3 privileged guards are preserved byte-identically but not executed here. All other actual main statements through capturepath guard run; execution stops before mkdir/Popen/signals.",
+      "status": "PASS"
+    },
+    {
+      "all_reaped_ECHILD": true,
+      "children": [
+        {
+          "case": "exit0",
+          "echild": true,
+          "identity_absent": true,
+          "pending_ledger": 0,
+          "record": {
+            "pgid": 3718559,
+            "pid": 3718559,
+            "proc_starttime": 55892565,
+            "reaped": true,
+            "returncode": 0,
+            "sid": 3718556
+          },
+          "returncode": 0,
+          "stderr": "fixture-err",
+          "stdout": "fixture-out"
+        },
+        {
+          "case": "nonzero37",
+          "echild": true,
+          "identity_absent": true,
+          "pending_ledger": 0,
+          "record": {
+            "pgid": 3718560,
+            "pid": 3718560,
+            "proc_starttime": 55892572,
+            "reaped": true,
+            "returncode": 37,
+            "sid": 3718556
+          },
+          "returncode": 37,
+          "stderr": "fixture-err",
+          "stdout": "fixture-out"
+        },
+        {
+          "case": "signaledTERM",
+          "echild": true,
+          "identity_absent": true,
+          "pending_ledger": 0,
+          "record": {
+            "pgid": 3718561,
+            "pid": 3718561,
+            "proc_starttime": 55892579,
+            "reaped": true,
+            "returncode": -15,
+            "sid": 3718556
+          },
+          "returncode": -15,
+          "stderr": "fixture-err",
+          "stdout": "fixture-out"
+        }
+      ],
+      "name": "actual_Anaconda_terminal_child_waits",
+      "status": "PASS",
+      "wait_implementation": "Unmodified actual CommandChild.wait/bounded_command; no wrapper or substitute"
+    }
+  ],
+  "fixture_failure_history": {
+    "HOST_readonly_guard_failure": {
+      "bytes": 4917,
+      "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/ACTUAL-LONG-CONSUMER-RESULT.json",
+      "sha256": "fac92b624815868385e898160a28720d01fa71c077b17c2dd6674fbce8c3ba4a"
+    },
+    "bounded_fixture_correction_count": 1,
+    "correction": "Rootauthorized exclusive UID1000/0700 scratch TESTONLY directory, retained<=128KiB; no guard/product change or mock.",
+    "family": "First actualrelease fixture incorrectly placed TESTONLY input on HOST; unchanged readonly_input requires canonical scratch.",
+    "retention": {
+      "bytes": 14405,
+      "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/TESTONLY-SCRATCH-RETENTION.json",
+      "sha256": "8566cac41a68a47c0094f4554a6685d04c76df221a1696e3ad76dbde1ab74832"
+    }
+  },
+  "fresh_runtime_admission": null,
+  "future_ORDEREDTEN_actual": null,
+  "future_ORDEREDTEN_formal": null,
+  "future_ORDEREDTEN_physical": null,
+  "group_absent": true,
+  "guest_runs": 0,
+  "negative_checks": 31,
+  "positive_checks": 8,
+  "product_failure_history": {
+    "bounded_product_correction_count": 1,
+    "cause": "Candidate1 rebound sourceconstants/hashmap but missed actual bound_manifest local diagnostic pathliteral. Fullconsumer exposed oldcohort selection.",
+    "corrected_reached_diagnostic_path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/source/native_diagnostic.py",
+    "correction": "Only reached bound_manifest local sourcepathliteral changed beyond alreadyreviewed bindings; normalizedAST identical, allotherfunctions/classes unchanged; coherent sourcepath/hash changes preserved separately.",
+    "old_reached_diagnostic_path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/session-staging-preparation-1/runtime-coherent-source-integration-1/source/native_diagnostic.py",
+    "original_fullconsumer_failure": {
+      "bytes": 2147,
+      "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/ACTUAL-LONG-CONSUMER-RESULT.json",
+      "sha256": "1b6aa059710016d8f9d8e576cbecdcc2b64b3da1baf38daac1b6a03d703f5351"
+    }
+  },
+  "python": "3.9.12 (main, Apr  5 2022, 06:56:58) \n[GCC 7.5.0]",
+  "quotas_and_oracles_unchanged": true,
+  "retirement_error": null,
+  "returncode": 0,
+  "root_execution_release": null,
+  "root_privileged_controller_guards_qualification": "UID/euid/rootCPU7 and actual384MiB/unlimitedCPU rlimit guards preserved unchanged but explicitly omitted from this unprivileged prefix AST. No mocks substitute for them; this fixture supplies no privileged admission. Actual remaining source/request/argv/path frontend statements execute unchanged.",
+  "root_queries": 0,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "seconds": 0.7943063679849729,
+  "selected_preparation": {
+    "bytes": 3212,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/RESULT.json",
+    "sha256": "d17b20d843b6010b7d0458cfd7a37e980cbf28d531fbf4a72ae551e5ae198db8"
+  },
+  "selected_sources": {
+    "long_transport.py": {
+      "bytes": 17100,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/source/long_transport.py",
+      "sha256": "e644dded231039b17c27dd440fec9dd636d1206bba973ebe75e390fa3a17c2ab"
+    },
+    "native_diagnostic.py": {
+      "bytes": 88446,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/source/native_diagnostic.py",
+      "sha256": "88a07d6224f388805552d57b16a671007a1b21ecf099ba1e7b00938a2512ca23"
+    },
+    "native_diagnostic_container_owner.py": {
+      "bytes": 105020,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/source/native_diagnostic_container_owner.py",
+      "sha256": "a1be6160398e8be250e51b5169666039e1f3bd922ef694b0224b1c6b42abd4a6"
+    },
+    "native_diagnostic_runner.py": {
+      "bytes": 7500,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/source/native_diagnostic_runner.py",
+      "sha256": "d3cbf307b619e347c994503e2765da9d1962d0affe42baf54482529a4f372094"
+    }
+  },
+  "source_delta": {
+    "bytes": 2396,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/SOURCE-DELTA-PROOF.json",
+    "sha256": "b09244041850f74b78473100d82136ff3230a93b148ee6627b83668dfc674694"
+  },
+  "source_independent_acceptance": null,
+  "status": "PASS_FOUR_ACTUAL_LONG_CONSUMER_FAMILIES_PENDING_FOCUSED_INDEPENDENT_REVIEW",
+  "stderr_bytes": 0,
+  "wholejoin": {
+    "bytes": 1222,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/actual-consumer-fixture-2/RESULT.json",
+    "sha256": "1ad2cf678a946f3a20c86a255f7b0881394d53f3834e42a3bb181d67d3561273"
+  }
+}

@@ -1,0 +1,1164 @@
+{
+  "BEGIN_retirement_clause_rows": [
+    {
+      "ACK": {
+        "line": 954,
+        "text": "<6>[   32.210267] ihk_smp_x86_64: IHK-SMP: application cleanup ACK os=0 generation=1 pid=254 token=3 errno=0 abandoned=0"
+      },
+      "distinct_final_zero": {
+        "line": 956,
+        "text": "<6>[   32.231215] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=1 pid=254 token=21 errno=0"
+      },
+      "generation": 1,
+      "intent": {
+        "line": 953,
+        "text": "<6>[   32.203386] mcctrl: application_process=cleanup_requested os=0 generation=1 pid=254 intent_errno=0"
+      },
+      "pending": null
+    },
+    {
+      "ACK": {
+        "line": 1063,
+        "text": "<6>[   56.469088] ihk_smp_x86_64: IHK-SMP: application cleanup ACK os=0 generation=2 pid=265 token=24 errno=0 abandoned=1"
+      },
+      "distinct_final_zero": {
+        "line": 1066,
+        "text": "<6>[   57.073056] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=2 pid=265 token=43 errno=0"
+      },
+      "generation": 2,
+      "intent": {
+        "line": 1062,
+        "text": "<6>[   56.462553] mcctrl: application_process=cleanup_requested os=0 generation=2 pid=265 intent_errno=0"
+      },
+      "pending": {
+        "line": 1064,
+        "text": "<6>[   56.473154] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=2 pid=265 token=42 errno=-11"
+      }
+    }
+  ],
+  "QMP_terminal": {
+    "status": "shutdown"
+  },
+  "admission": {
+    "aggregate_admitted": true,
+    "canonical_exclusions_absent": true,
+    "command_sha256": "fd1ba02ecf374283e54f079365abc54b9b55e6a80b39d1c4f01f089d8902cc2e",
+    "expected_epochs": [
+      [
+        0,
+        1,
+        1
+      ],
+      [
+        0,
+        2,
+        2
+      ]
+    ],
+    "expires_ns": 543109306373050,
+    "fresh_identity": true,
+    "fresh_module_lifetime": true,
+    "no_interposed_boot_or_prepare": true,
+    "nonce": "bfe3824803d7439c972c33b070198003",
+    "observed_ns": 543079306373050,
+    "permanent_mutex_identity": [
+      27,
+      4
+    ],
+    "previous_owner_retired": true,
+    "previous_retirement_sha256": "8eeb82c36edf9f299e7c6b60577e32fce7c8a88d3a58b3c516da16bc691023a9",
+    "profile_sha256": "b118211182c206ba9a268356b55decfe7cfeeb10d90728c86ed97e096d22cfca",
+    "resource_profile_sha256": "557069506d11b6ac18ba715c98242adfe594a9bfd365c68aacaec41c31d9520a",
+    "resources_admitted": true
+  },
+  "authenticated_Docker_clients_reaped": 30,
+  "authenticated_export": {
+    "bytes": 1808465,
+    "identity": {
+      "st_ctime_ns": 1792761036501202219,
+      "st_dev": 66306,
+      "st_gid": 1000,
+      "st_ino": 48907401,
+      "st_mode": 33152,
+      "st_mtime_ns": 1792761036501202219,
+      "st_nlink": 1,
+      "st_size": 1808465,
+      "st_uid": 1000
+    },
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/actual-ten-cycle-output-1/bfe3824803d7439c972c33b070198003-export/stdout",
+    "sha256": "0af2d91f924362c119154738c1cf508109ea7bde8e82fd591370385233b311ef"
+  },
+  "authenticated_file_entries": [
+    {
+      "bytes": 308,
+      "name": "001-ps.json",
+      "sha256": "2fa67b85787e1c0dce38e33d7b8065e335043d01aa043f6c368347984731ff64",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/001-ps.json"
+    },
+    {
+      "bytes": 0,
+      "name": "001-ps.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/001-ps.stderr"
+    },
+    {
+      "bytes": 0,
+      "name": "001-ps.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/001-ps.stdout"
+    },
+    {
+      "bytes": 312,
+      "name": "002-ps.json",
+      "sha256": "95e14fcab21e44eb1f2144a14e7802f55995e474b06ff74166d4bdc066c9a1da",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/002-ps.json"
+    },
+    {
+      "bytes": 0,
+      "name": "002-ps.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/002-ps.stderr"
+    },
+    {
+      "bytes": 0,
+      "name": "002-ps.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/002-ps.stdout"
+    },
+    {
+      "bytes": 295,
+      "name": "003-image.json",
+      "sha256": "9d03336447cc29659a6274235f5673337e8b8d6210adf84a6b676f4d6f2a046a",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/003-image.json"
+    },
+    {
+      "bytes": 0,
+      "name": "003-image.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/003-image.stderr"
+    },
+    {
+      "bytes": 4785,
+      "name": "003-image.stdout",
+      "sha256": "c881faf78539b1698aa9cfe24e0b82562442a58de18666bf59a447b72607e95a",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/003-image.stdout"
+    },
+    {
+      "bytes": 12572,
+      "name": "004-create.json",
+      "sha256": "64ecc9b12cf74da7ebad78ee6a29b216a5cb440eb1d1ac3411cadfd7367efa4b",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/004-create.json"
+    },
+    {
+      "bytes": 0,
+      "name": "004-create.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/004-create.stderr"
+    },
+    {
+      "bytes": 65,
+      "name": "004-create.stdout",
+      "sha256": "7f13bad23aca0d801e044f6c61f18ddc41efbeca49b0496f4d6aa5e7ef51569c",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/004-create.stdout"
+    },
+    {
+      "bytes": 308,
+      "name": "005-ps.json",
+      "sha256": "5600b382f57b1adea5bbeb63a35f8cadcec5196dd0cf4eb1955d99e28e6aca0a",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/005-ps.json"
+    },
+    {
+      "bytes": 0,
+      "name": "005-ps.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/005-ps.stderr"
+    },
+    {
+      "bytes": 65,
+      "name": "005-ps.stdout",
+      "sha256": "7f13bad23aca0d801e044f6c61f18ddc41efbeca49b0496f4d6aa5e7ef51569c",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/005-ps.stdout"
+    },
+    {
+      "bytes": 312,
+      "name": "006-ps.json",
+      "sha256": "507e4d08867b85f816e77a5bc1a15d171c118b884bab38434330346d975f7b06",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/006-ps.json"
+    },
+    {
+      "bytes": 0,
+      "name": "006-ps.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/006-ps.stderr"
+    },
+    {
+      "bytes": 65,
+      "name": "006-ps.stdout",
+      "sha256": "7f13bad23aca0d801e044f6c61f18ddc41efbeca49b0496f4d6aa5e7ef51569c",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/006-ps.stdout"
+    },
+    {
+      "bytes": 308,
+      "name": "007-ps.json",
+      "sha256": "a7cefc4e905449914fb65d504579f88a2828f97c6d4beeb4e65f6341a4b9aec2",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/007-ps.json"
+    },
+    {
+      "bytes": 0,
+      "name": "007-ps.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/007-ps.stderr"
+    },
+    {
+      "bytes": 65,
+      "name": "007-ps.stdout",
+      "sha256": "7f13bad23aca0d801e044f6c61f18ddc41efbeca49b0496f4d6aa5e7ef51569c",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/007-ps.stdout"
+    },
+    {
+      "bytes": 280,
+      "name": "008-inspect.json",
+      "sha256": "9c07c30211c4709273436af7022484caf167a1651f224286abeda3950f42c23d",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/008-inspect.json"
+    },
+    {
+      "bytes": 0,
+      "name": "008-inspect.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/008-inspect.stderr"
+    },
+    {
+      "bytes": 45053,
+      "name": "008-inspect.stdout",
+      "sha256": "dba1ef6be6abd58f8f0ca4b3f48da660951e65e3c451246cba0f9fb9bbb7ec2d",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/008-inspect.stdout"
+    },
+    {
+      "bytes": 290,
+      "name": "009-start.json",
+      "sha256": "d489e3695ed383b4280c64ed728cf6de9612f3c9e8eeacbbab44a12c34fe8e99",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/009-start.json"
+    },
+    {
+      "bytes": 0,
+      "name": "009-start.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/009-start.stderr"
+    },
+    {
+      "bytes": 151,
+      "name": "009-start.stdout",
+      "sha256": "2bb2b5682b3a654ae7caab0c498764e46998573ca193b7a12f1416a3361d5cf0",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/009-start.stdout"
+    },
+    {
+      "bytes": 276,
+      "name": "010-wait.json",
+      "sha256": "a585aa8c01dfa8129d7a8faf5ca59ad0a03f14f1c9a64d80abdb449a8b44ab2c",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/010-wait.json"
+    },
+    {
+      "bytes": 0,
+      "name": "010-wait.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/010-wait.stderr"
+    },
+    {
+      "bytes": 2,
+      "name": "010-wait.stdout",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/010-wait.stdout"
+    },
+    {
+      "bytes": 308,
+      "name": "011-ps.json",
+      "sha256": "f0c9aab5a380ef373f144c120942a7286c54943832c52e1339e43f35df52f226",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/011-ps.json"
+    },
+    {
+      "bytes": 0,
+      "name": "011-ps.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/011-ps.stderr"
+    },
+    {
+      "bytes": 65,
+      "name": "011-ps.stdout",
+      "sha256": "7f13bad23aca0d801e044f6c61f18ddc41efbeca49b0496f4d6aa5e7ef51569c",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/011-ps.stdout"
+    },
+    {
+      "bytes": 312,
+      "name": "012-ps.json",
+      "sha256": "073b56ac1d747245784e865c82cc7ca2b057d38f1b806678ae21a9b677faf438",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/012-ps.json"
+    },
+    {
+      "bytes": 0,
+      "name": "012-ps.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/012-ps.stderr"
+    },
+    {
+      "bytes": 65,
+      "name": "012-ps.stdout",
+      "sha256": "7f13bad23aca0d801e044f6c61f18ddc41efbeca49b0496f4d6aa5e7ef51569c",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/012-ps.stdout"
+    },
+    {
+      "bytes": 308,
+      "name": "013-ps.json",
+      "sha256": "8855ba2a64085274907400043f2f5da3b6bef7c4206a06e1af2b4afffc09c517",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/013-ps.json"
+    },
+    {
+      "bytes": 0,
+      "name": "013-ps.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/013-ps.stderr"
+    },
+    {
+      "bytes": 65,
+      "name": "013-ps.stdout",
+      "sha256": "7f13bad23aca0d801e044f6c61f18ddc41efbeca49b0496f4d6aa5e7ef51569c",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/013-ps.stdout"
+    },
+    {
+      "bytes": 280,
+      "name": "014-inspect.json",
+      "sha256": "c4979af88c74b88e723745568c03ba3b8772342c539585947f3dc59aba19c882",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/014-inspect.json"
+    },
+    {
+      "bytes": 0,
+      "name": "014-inspect.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/014-inspect.stderr"
+    },
+    {
+      "bytes": 45713,
+      "name": "014-inspect.stdout",
+      "sha256": "e55b2565945513e01d63635c15f287083fe0e0e777f0189c91a580bf8ff1c94a",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/014-inspect.stdout"
+    },
+    {
+      "bytes": 276,
+      "name": "015-wait.json",
+      "sha256": "f29abc289865adff1ba307d34bf81e86d02ea6b08fb6aa4dd23a459836f566ef",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/015-wait.json"
+    },
+    {
+      "bytes": 0,
+      "name": "015-wait.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/015-wait.stderr"
+    },
+    {
+      "bytes": 2,
+      "name": "015-wait.stdout",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/015-wait.stdout"
+    },
+    {
+      "bytes": 291,
+      "name": "016-logs.json",
+      "sha256": "b2822bb7466b9dc6f2191e9e2c1240bf4249fa0f6554382afe7c44d1219f134a",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/016-logs.json"
+    },
+    {
+      "bytes": 0,
+      "name": "016-logs.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/016-logs.stderr"
+    },
+    {
+      "bytes": 182,
+      "name": "016-logs.stdout",
+      "sha256": "5038fb36ab11c6eee4bafe2ac62b998fe9141bb96f599371fdd4ee2b95b3ea5a",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/016-logs.stdout"
+    },
+    {
+      "bytes": 279,
+      "name": "017-inspect.json",
+      "sha256": "9c0db87667167ac395a8342b4c2da14e0f81bd71739ea969a485e678573c28c5",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/017-inspect.json"
+    },
+    {
+      "bytes": 0,
+      "name": "017-inspect.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/017-inspect.stderr"
+    },
+    {
+      "bytes": 45713,
+      "name": "017-inspect.stdout",
+      "sha256": "e55b2565945513e01d63635c15f287083fe0e0e777f0189c91a580bf8ff1c94a",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/017-inspect.stdout"
+    },
+    {
+      "bytes": 308,
+      "name": "018-ps.json",
+      "sha256": "bd065a917b074b8b2007aa98a9d0cc7a837345a2bee38fd412e1c0a016cf3359",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/018-ps.json"
+    },
+    {
+      "bytes": 0,
+      "name": "018-ps.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/018-ps.stderr"
+    },
+    {
+      "bytes": 65,
+      "name": "018-ps.stdout",
+      "sha256": "7f13bad23aca0d801e044f6c61f18ddc41efbeca49b0496f4d6aa5e7ef51569c",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/018-ps.stdout"
+    },
+    {
+      "bytes": 312,
+      "name": "019-ps.json",
+      "sha256": "1b5d6a54bfe6b27780cc17dfa0f0ba28d529de656af53cb67982a9e602f09a15",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/019-ps.json"
+    },
+    {
+      "bytes": 0,
+      "name": "019-ps.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/019-ps.stderr"
+    },
+    {
+      "bytes": 65,
+      "name": "019-ps.stdout",
+      "sha256": "7f13bad23aca0d801e044f6c61f18ddc41efbeca49b0496f4d6aa5e7ef51569c",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/019-ps.stdout"
+    },
+    {
+      "bytes": 308,
+      "name": "020-ps.json",
+      "sha256": "0acb5d82e6b6e6ffd6efdf1aaeb840541fc026ecacc39348682bac47353dc351",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/020-ps.json"
+    },
+    {
+      "bytes": 0,
+      "name": "020-ps.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/020-ps.stderr"
+    },
+    {
+      "bytes": 65,
+      "name": "020-ps.stdout",
+      "sha256": "7f13bad23aca0d801e044f6c61f18ddc41efbeca49b0496f4d6aa5e7ef51569c",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/020-ps.stdout"
+    },
+    {
+      "bytes": 280,
+      "name": "021-inspect.json",
+      "sha256": "61b1977e9492c99e4151bc47608b3c2174a56e6d0abd5bf454d2c87ef06bf4dd",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/021-inspect.json"
+    },
+    {
+      "bytes": 0,
+      "name": "021-inspect.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/021-inspect.stderr"
+    },
+    {
+      "bytes": 45713,
+      "name": "021-inspect.stdout",
+      "sha256": "f85770e3f4efc7d49623bb93fd7be9cdb26a08892a2832b41bbadb229bd4559c",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/021-inspect.stdout"
+    },
+    {
+      "bytes": 287,
+      "name": "022-stop.json",
+      "sha256": "221d9b01f9f873378614c8c5d7c7c3721cbc7cb6bf088196f71aedee85d414f1",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/022-stop.json"
+    },
+    {
+      "bytes": 0,
+      "name": "022-stop.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/022-stop.stderr"
+    },
+    {
+      "bytes": 65,
+      "name": "022-stop.stdout",
+      "sha256": "7f13bad23aca0d801e044f6c61f18ddc41efbeca49b0496f4d6aa5e7ef51569c",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/022-stop.stdout"
+    },
+    {
+      "bytes": 276,
+      "name": "023-kill.json",
+      "sha256": "77c122c0f3135b6342afb7b97f12225619e56053b6719eb5ec53f5b2e1eb1f6b",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/023-kill.json"
+    },
+    {
+      "bytes": 207,
+      "name": "023-kill.stderr",
+      "sha256": "d4812fa9646b5434c3df4dda056edb69fbd69e82dcbe6180ea9e9603eee2133e",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/023-kill.stderr"
+    },
+    {
+      "bytes": 0,
+      "name": "023-kill.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/023-kill.stdout"
+    },
+    {
+      "bytes": 276,
+      "name": "024-wait.json",
+      "sha256": "57fe9f0351552a221508e632bdb520cff18ca18d9c1ad2106680ecb6762f9a0f",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/024-wait.json"
+    },
+    {
+      "bytes": 0,
+      "name": "024-wait.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/024-wait.stderr"
+    },
+    {
+      "bytes": 2,
+      "name": "024-wait.stdout",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/024-wait.stdout"
+    },
+    {
+      "bytes": 291,
+      "name": "025-logs.json",
+      "sha256": "3187731f0e3b39c7d6b12b2aecbc011ddfeb3993ad3b57248e92727efc436b04",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/025-logs.json"
+    },
+    {
+      "bytes": 0,
+      "name": "025-logs.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/025-logs.stderr"
+    },
+    {
+      "bytes": 182,
+      "name": "025-logs.stdout",
+      "sha256": "5038fb36ab11c6eee4bafe2ac62b998fe9141bb96f599371fdd4ee2b95b3ea5a",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/025-logs.stdout"
+    },
+    {
+      "bytes": 279,
+      "name": "026-inspect.json",
+      "sha256": "479ef58ad0d7e4d0d2702eb911254a8529c39e8adac2749e1e2e6b4a0a333134",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/026-inspect.json"
+    },
+    {
+      "bytes": 0,
+      "name": "026-inspect.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/026-inspect.stderr"
+    },
+    {
+      "bytes": 45713,
+      "name": "026-inspect.stdout",
+      "sha256": "c4d3af2c6902f0ba5e9ca0f411b9efcfaf0e8cd67a50b9840f1d9c652f7b26d6",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/026-inspect.stdout"
+    },
+    {
+      "bytes": 284,
+      "name": "027-rm.json",
+      "sha256": "caadff7fa1e1b403d20ce0961551d5a735969d912d7a7d7b9bcabd82d4b5b1b5",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/027-rm.json"
+    },
+    {
+      "bytes": 0,
+      "name": "027-rm.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/027-rm.stderr"
+    },
+    {
+      "bytes": 65,
+      "name": "027-rm.stdout",
+      "sha256": "7f13bad23aca0d801e044f6c61f18ddc41efbeca49b0496f4d6aa5e7ef51569c",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/027-rm.stdout"
+    },
+    {
+      "bytes": 308,
+      "name": "028-ps.json",
+      "sha256": "cf88e3b34f6568c8c3f5129343d929ba91f67e73caca3ac4bdd83b2ccfc23f38",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/028-ps.json"
+    },
+    {
+      "bytes": 0,
+      "name": "028-ps.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/028-ps.stderr"
+    },
+    {
+      "bytes": 0,
+      "name": "028-ps.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/028-ps.stdout"
+    },
+    {
+      "bytes": 312,
+      "name": "029-ps.json",
+      "sha256": "afdc0298054b6eba2617b24d730a316d70e45c607befdb11ab7adb67ebfc205a",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/029-ps.json"
+    },
+    {
+      "bytes": 0,
+      "name": "029-ps.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/029-ps.stderr"
+    },
+    {
+      "bytes": 0,
+      "name": "029-ps.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/029-ps.stdout"
+    },
+    {
+      "bytes": 308,
+      "name": "030-ps.json",
+      "sha256": "aaa1852a2942c55b712a93575c20086cdba979eb1e7b2c2c2ca8bed3cdb9bacb",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/030-ps.json"
+    },
+    {
+      "bytes": 0,
+      "name": "030-ps.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/030-ps.stderr"
+    },
+    {
+      "bytes": 0,
+      "name": "030-ps.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/030-ps.stdout"
+    },
+    {
+      "bytes": 527,
+      "name": "capture-bindings.json",
+      "sha256": "190a2806ba88a29de95983f9eeb3e8c795d9e811e6cb95a83f98f22188ab78d5",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/capture-bindings.json"
+    },
+    {
+      "bytes": 304,
+      "name": "debugcon.log",
+      "sha256": "fc580a7baf51898bd23ce761d8bb85138d9e4efd48da72de589f0c28674491ac",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/debugcon.log"
+    },
+    {
+      "bytes": 336820,
+      "name": "inner-result.json",
+      "sha256": "3fed863064bcb16d2f708c02851921b1f687ed614267e3667915228f56f001fa",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/inner-result.json"
+    },
+    {
+      "bytes": 794,
+      "name": "owner.json",
+      "sha256": "c85b37b84b91e653361a8f6baa7eec8512fafca68512a8b4a627770201abb160",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/owner.json"
+    },
+    {
+      "bytes": 0,
+      "name": "qemu.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/qemu.stderr"
+    },
+    {
+      "bytes": 0,
+      "name": "qemu.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/qemu.stdout"
+    },
+    {
+      "bytes": 407243,
+      "name": "qmp.transcript.json",
+      "sha256": "6a7481252d5783bd118e974e227ee9feaa9886e337d0968ca3dc1d458896b529",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/qmp.transcript.json"
+    },
+    {
+      "bytes": 257,
+      "name": "result.json",
+      "sha256": "366d7f2ab7337705f34e8c31e50332171d6156b8319b44dca78b939e0eeead11",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/result.json"
+    },
+    {
+      "bytes": 323820,
+      "name": "serial.log",
+      "sha256": "0485736a488c5b18499eef34bb395e864bd47c1a4a56b72109ae5fadbe2d0ba1",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/serial.log"
+    },
+    {
+      "bytes": 224,
+      "name": "state.json",
+      "sha256": "621e8b29ab7f046e3361720206c60e9025ef7a03c5d6c7678723868440861050",
+      "source_path": "/home/holden/mckernel-work/native-runs/m5b08/p.owner-bfe3824803d7439c972c33b070198003/state.json"
+    }
+  ],
+  "authenticated_owner_file_count": 100,
+  "authenticated_source_bytes": 1325331,
+  "case_id": "m05-sdk5-024c-full-restoration-08",
+  "container": "3f250abb541adcdb8ab64d07c18ad3d48e1e5062dbb8685d6470ffc23713a551",
+  "fresh_exact_absence_queries": [
+    {
+      "direct_join": {
+        "bytes": 259,
+        "identity": {
+          "st_ctime_ns": 1792761036977217004,
+          "st_dev": 66306,
+          "st_gid": 1000,
+          "st_ino": 48907411,
+          "st_mode": 33152,
+          "st_mtime_ns": 1792761036977217004,
+          "st_nlink": 1,
+          "st_size": 259,
+          "st_uid": 1000
+        },
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/actual-ten-cycle-output-1/bfe3824803d7439c972c33b070198003-query0/direct-join.json",
+        "sha256": "43e21a7c112bcc6d2b1f510bae19f540d0a5f1b592f0b4f71c77194f0f002e47"
+      },
+      "kind": "name",
+      "stderr": {
+        "bytes": 0,
+        "identity": {
+          "st_ctime_ns": 1792761036841212780,
+          "st_dev": 66306,
+          "st_gid": 1000,
+          "st_ino": 48907408,
+          "st_mode": 33152,
+          "st_mtime_ns": 1792761036841212780,
+          "st_nlink": 1,
+          "st_size": 0,
+          "st_uid": 1000
+        },
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/actual-ten-cycle-output-1/bfe3824803d7439c972c33b070198003-query0/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 0,
+        "identity": {
+          "st_ctime_ns": 1792761036841212780,
+          "st_dev": 66306,
+          "st_gid": 1000,
+          "st_ino": 48907407,
+          "st_mode": 33152,
+          "st_mtime_ns": 1792761036841212780,
+          "st_nlink": 1,
+          "st_size": 0,
+          "st_uid": 1000
+        },
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/actual-ten-cycle-output-1/bfe3824803d7439c972c33b070198003-query0/stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "direct_join": {
+        "bytes": 260,
+        "identity": {
+          "st_ctime_ns": 1792761037109221105,
+          "st_dev": 66306,
+          "st_gid": 1000,
+          "st_ino": 48907417,
+          "st_mode": 33152,
+          "st_mtime_ns": 1792761037109221105,
+          "st_nlink": 1,
+          "st_size": 260,
+          "st_uid": 1000
+        },
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/actual-ten-cycle-output-1/bfe3824803d7439c972c33b070198003-query1/direct-join.json",
+        "sha256": "c238979753e955676a8a683f1a7ad7fedaa74aab15f20e1e216c9491029d722f"
+      },
+      "kind": "label",
+      "stderr": {
+        "bytes": 0,
+        "identity": {
+          "st_ctime_ns": 1792761036977217004,
+          "st_dev": 66306,
+          "st_gid": 1000,
+          "st_ino": 48907414,
+          "st_mode": 33152,
+          "st_mtime_ns": 1792761036977217004,
+          "st_nlink": 1,
+          "st_size": 0,
+          "st_uid": 1000
+        },
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/actual-ten-cycle-output-1/bfe3824803d7439c972c33b070198003-query1/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 0,
+        "identity": {
+          "st_ctime_ns": 1792761036977217004,
+          "st_dev": 66306,
+          "st_gid": 1000,
+          "st_ino": 48907413,
+          "st_mode": 33152,
+          "st_mtime_ns": 1792761036977217004,
+          "st_nlink": 1,
+          "st_size": 0,
+          "st_uid": 1000
+        },
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/actual-ten-cycle-output-1/bfe3824803d7439c972c33b070198003-query1/stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "direct_join": {
+        "bytes": 259,
+        "identity": {
+          "st_ctime_ns": 1792761037249225453,
+          "st_dev": 66306,
+          "st_gid": 1000,
+          "st_ino": 48907423,
+          "st_mode": 33152,
+          "st_mtime_ns": 1792761037249225453,
+          "st_nlink": 1,
+          "st_size": 259,
+          "st_uid": 1000
+        },
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/actual-ten-cycle-output-1/bfe3824803d7439c972c33b070198003-query2/direct-join.json",
+        "sha256": "349b0f10b75657e9c493d1cbdd13a9cc009709da896db9691a960012351e659d"
+      },
+      "kind": "ID",
+      "stderr": {
+        "bytes": 0,
+        "identity": {
+          "st_ctime_ns": 1792761037113221229,
+          "st_dev": 66306,
+          "st_gid": 1000,
+          "st_ino": 48907420,
+          "st_mode": 33152,
+          "st_mtime_ns": 1792761037113221229,
+          "st_nlink": 1,
+          "st_size": 0,
+          "st_uid": 1000
+        },
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/actual-ten-cycle-output-1/bfe3824803d7439c972c33b070198003-query2/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 0,
+        "identity": {
+          "st_ctime_ns": 1792761037113221229,
+          "st_dev": 66306,
+          "st_gid": 1000,
+          "st_ino": 48907419,
+          "st_mode": 33152,
+          "st_mtime_ns": 1792761037113221229,
+          "st_nlink": 1,
+          "st_size": 0,
+          "st_uid": 1000
+        },
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/actual-ten-cycle-output-1/bfe3824803d7439c972c33b070198003-query2/stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "index": 8,
+  "native_closed_capture": {
+    "bytes": 2479,
+    "identity": {
+      "st_ctime_ns": 1792761036321196628,
+      "st_dev": 66306,
+      "st_gid": 1000,
+      "st_ino": 48907398,
+      "st_mode": 33152,
+      "st_mtime_ns": 1792761036321196628,
+      "st_nlink": 1,
+      "st_size": 2479,
+      "st_uid": 1000
+    },
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/actual-case-08-native-owner/status.json",
+    "sha256": "d4222c130578c80a3de064dd3355f91ae81c81e4d4025c308e1e672f16a2a012"
+  },
+  "nonce": "bfe3824803d7439c972c33b070198003",
+  "operation": {
+    "bytes": 3091,
+    "identity": {
+      "st_ctime_ns": 1792758285280108221,
+      "st_dev": 66306,
+      "st_gid": 1000,
+      "st_ino": 48905354,
+      "st_mode": 33152,
+      "st_mtime_ns": 1792758285280108221,
+      "st_nlink": 1,
+      "st_size": 3091,
+      "st_uid": 1000
+    },
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/operations/case-08.NATIVE-OPERATION.json",
+    "sha256": "951031cbfe3ff17878cdf278bfc527335782ba9a4de20d38bbb31b8395b123c7"
+  },
+  "original_strict_protocol": {
+    "complete_restoration_verified": false,
+    "first_workload_protocol": "PROTOCOL_PASS",
+    "full_cycle_verified": false,
+    "native_execution_verified": false,
+    "public_release_then_strict5_boot_protocol": "PASS",
+    "quota_credit": false,
+    "rebooted_os_workload_protocol": "PASS",
+    "second_boot_resources_retained": true,
+    "second_lifecycle_protocol": {
+      "os_destroyed": false,
+      "payload_validation_required": true,
+      "resource_restoration_verified": false,
+      "status": "LIFECYCLE_DIAGNOSTIC_PASS",
+      "status_after": 0,
+      "status_before": 5,
+      "transition_observed": true
+    },
+    "second_public_release_protocol": {
+      "native_execution_verified": false,
+      "public_release_protocol": "PASS",
+      "resource_restoration_verified": false
+    },
+    "second_public_release_verified": true,
+    "second_stop_verified": true,
+    "second_workload": {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "app",
+        "A",
+        "",
+        "B"
+      ],
+      "cwd": "/case/work",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PATH": "/usr/bin:/bin"
+      },
+      "finished_ns": 57025948695,
+      "procfs_empty": true,
+      "raw_wait_status": 0,
+      "reaped_ns": 56497334304,
+      "started_ns": 56180924537,
+      "streams": {
+        "stderr": {
+          "discarded": 0,
+          "eof": true,
+          "eof_ns": 56396816501,
+          "hex": "",
+          "limit": 1024,
+          "observed": 0,
+          "retained": 0,
+          "truncated": false
+        },
+        "stdout": {
+          "discarded": 0,
+          "eof": true,
+          "eof_ns": 56396764818,
+          "hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a",
+          "limit": 1024,
+          "observed": 40,
+          "retained": 40,
+          "truncated": false
+        }
+      }
+    },
+    "snapshot_bytes": {
+      "after": 54234,
+      "before": 46984
+    },
+    "snapshot_sha256": {
+      "after": "7ab850ebc41af909e7ce3d6fe5bafd9a8a330793cc7361c22db645be9a699424",
+      "before": "81878560399d9e760771618002a347bede4690294205b8fbd7731eccdfcd8fcf"
+    }
+  },
+  "physical_scope": "Six canonical exclusions from accepted per-case hooks; mutex27:4; exact fresh name/label/ID reads. Final broader completePROC/eight-path census is separate and not invented.",
+  "qemu_returncode": -9,
+  "qualified_observation_count": 8,
+  "release": {
+    "bytes": 5386,
+    "identity": {
+      "st_ctime_ns": 1792760193123037771,
+      "st_dev": 66306,
+      "st_gid": 1000,
+      "st_ino": 48906191,
+      "st_mode": 33152,
+      "st_mtime_ns": 1792760193123037771,
+      "st_nlink": 1,
+      "st_size": 5386,
+      "st_uid": 1000
+    },
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/case-releases/case-08.RELEASE.json",
+    "sha256": "659726dfbfab56310b6ccabe68dd39a7fd996fab877e51144b58d3c4d2008a89"
+  },
+  "resource_policy": {
+    "boot_epoch": 1,
+    "complete_cycle_verified": false,
+    "cpu_identities": [
+      [
+        1,
+        1,
+        0
+      ],
+      [
+        2,
+        2,
+        1
+      ]
+    ],
+    "linux_page_release_verified": false,
+    "mapping_callback_reference_frame_retirement_verified": false,
+    "owner": [
+      0,
+      1
+    ],
+    "resource_policy_return_verified": true,
+    "returned_memory_bytes": 134217728,
+    "returned_memory_extents": [
+      [
+        4328521728,
+        4194304,
+        0
+      ],
+      [
+        4341104640,
+        109051904,
+        0
+      ],
+      [
+        4563402752,
+        20971520,
+        0
+      ]
+    ],
+    "schema": "native-resource-policy-observation-v1"
+  },
+  "retirement": {
+    "receipt": {
+      "authenticated_docker_reaps": 30,
+      "authenticated_owner_files": 100,
+      "canonical_exclusions_absent": true,
+      "command_sha256": "fd1ba02ecf374283e54f079365abc54b9b55e6a80b39d1c4f01f089d8902cc2e",
+      "container_id_absent": true,
+      "container_label_absent": true,
+      "container_name_absent": true,
+      "direct_child_joined": true,
+      "docker_clients_reaped": true,
+      "group_absent": true,
+      "lease_retained": false,
+      "nonce": "bfe3824803d7439c972c33b070198003",
+      "permanent_mutex_identity": [
+        27,
+        4
+      ],
+      "profile_sha256": "b118211182c206ba9a268356b55decfe7cfeeb10d90728c86ed97e096d22cfca",
+      "qemu_reaped": true,
+      "retired_ns": 543143822384018,
+      "streams_closed": true
+    },
+    "sha256": "64f5cc4483199a9e0a2a1971af2ab71c116c549fd8d593dd456ae1171e682c1a"
+  },
+  "row": {
+    "bytes": 4807,
+    "identity": {
+      "st_ctime_ns": 1792761037253225577,
+      "st_dev": 66306,
+      "st_gid": 1000,
+      "st_ino": 48907424,
+      "st_mode": 33152,
+      "st_mtime_ns": 1792761037249225453,
+      "st_nlink": 1,
+      "st_size": 4807,
+      "st_uid": 1000
+    },
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/actual-ten-cycle-output-1/case-08.json",
+    "sha256": "a85675890f465acf6af30f9f309dfc911058239eb843aca4d9425b4c01309b5f"
+  },
+  "source_false_flags": {
+    "batch_semantics_automatic_native_acceptance": false,
+    "batch_semantics_automatic_quota_credit": false,
+    "inner_application_acceptance": false,
+    "inner_mckernel_application_executed": false,
+    "owner_application_acceptance": false
+  },
+  "teardown": true,
+  "two_exact_workloads": [
+    {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "app",
+        "A",
+        "",
+        "B"
+      ],
+      "cwd": "/case/work",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PATH": "/usr/bin:/bin"
+      },
+      "finished_ns": 57567659722,
+      "procfs_empty": true,
+      "raw_wait_status": 0,
+      "reaped_ns": 32239557131,
+      "started_ns": 31830180241,
+      "streams": {
+        "stderr": {
+          "discarded": 0,
+          "eof": true,
+          "eof_ns": 32137803137,
+          "hex": "",
+          "limit": 1024,
+          "observed": 0,
+          "retained": 0,
+          "truncated": false
+        },
+        "stdout": {
+          "discarded": 0,
+          "eof": true,
+          "eof_ns": 32137752014,
+          "hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a",
+          "limit": 1024,
+          "observed": 40,
+          "retained": 40,
+          "truncated": false
+        }
+      }
+    },
+    {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "app",
+        "A",
+        "",
+        "B"
+      ],
+      "cwd": "/case/work",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PATH": "/usr/bin:/bin"
+      },
+      "finished_ns": 57025948695,
+      "procfs_empty": true,
+      "raw_wait_status": 0,
+      "reaped_ns": 56497334304,
+      "started_ns": 56180924537,
+      "streams": {
+        "stderr": {
+          "discarded": 0,
+          "eof": true,
+          "eof_ns": 56396816501,
+          "hex": "",
+          "limit": 1024,
+          "observed": 0,
+          "retained": 0,
+          "truncated": false
+        },
+        "stdout": {
+          "discarded": 0,
+          "eof": true,
+          "eof_ns": 56396764818,
+          "hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a",
+          "limit": 1024,
+          "observed": 40,
+          "retained": 40,
+          "truncated": false
+        }
+      }
+    }
+  ]
+}

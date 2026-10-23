@@ -1006,19 +1006,31 @@
         {
           "id": "M14-05-01",
           "title": "Early allocation and boot page-table construction, normal/fixed/Linux/vsyscall mapping regions and page-table destruction.",
-          "status": "unassessed",
-          "owner": null,
+          "status": "partial",
+          "owner": "dispatcher integrated /root/m14_actual_consumer_fix reviewed bridge slice",
           "remaining_c_functions": null,
-          "rust_consumer": null,
-          "next_action": "Reconcile this area with the current matched consumer and already accepted Rust bodies; implement only the actual remaining C behavior.",
+          "rust_consumer": "Canonical x86_init_normal_set_large_bridge Rustexport forwards to existing Rust set_pt_large_page under existing PUBLIC selection; fallbackC preserved.",
+          "next_action": "Compile changed whole memory.c in a future coherently staged production candidate, prove default kernel unique Rustprovider and relevant native behavior. Candidate5/build2 snapshots retain previous frozen sources; no wholearea/file credit.",
           "proof": {
             "implementation": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "partial",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/init-large-page-bridge-rust-20261023-1/CANONICAL-BRIDGE-INTEGRATION.json",
+                  "sha256": "13756e06a676ac833d53bbf0c83346aed99391b621d22012adf990d254c24934",
+                  "size": 2259
+                }
+              ]
             },
             "focused_checks": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "partial",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/init-large-page-bridge-rust-20261023-1/CANONICAL-BRIDGE-INTEGRATION.json",
+                  "sha256": "13756e06a676ac833d53bbf0c83346aed99391b621d22012adf990d254c24934",
+                  "size": 2259
+                }
+              ]
             },
             "production_link": {
               "status": "unassessed",
@@ -1028,7 +1040,22 @@
               "status": "unassessed",
               "evidence": []
             }
-          }
+          },
+          "slices": [
+            {
+              "body": "x86_init_normal_set_large_bridge",
+              "implementation": "canonical Rust export and PUBLIC C selection integrated",
+              "focused_checks": "123480 originalC/Rust/provider comparisons; actualheaderenum64 ABI; partialC/Rustsymbolselection;78-inputprivateRustcrateoneT/noU",
+              "evidence": {
+                "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/init-large-page-bridge-rust-20261023-1/CANONICAL-BRIDGE-INTEGRATION.json",
+                "sha256": "13756e06a676ac833d53bbf0c83346aed99391b621d22012adf990d254c24934",
+                "size": 2259
+              },
+              "production_whole_C_TU": false,
+              "default_link": false,
+              "native": false
+            }
+          ]
         },
         {
           "id": "M14-05-02",
@@ -1578,6 +1605,18 @@
       },
       "practical_check_increment": 0,
       "whole_M14_subgoal_increment": 0
+    },
+    {
+      "date": "2026-10-23",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "area": "M14-05-01",
+      "status": "partial",
+      "evidence": {
+        "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/init-large-page-bridge-rust-20261023-1/CANONICAL-BRIDGE-INTEGRATION.json",
+        "sha256": "13756e06a676ac833d53bbf0c83346aed99391b621d22012adf990d254c24934",
+        "size": 2259
+      },
+      "note": "Actual one C forwarding body moved to canonical Rust selection after independentreview+quiescentphysicalclearance. Fullproduction/native remainopen."
     }
   ]
 }

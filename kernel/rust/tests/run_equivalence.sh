@@ -90972,6 +90972,8 @@ extern void set_pte(unsigned long *, unsigned long, unsigned long)
 	__attribute__((weak));
 extern int set_pt_large_page(void *, void *, unsigned long, unsigned long)
 	__attribute__((weak));
+extern int x86_init_normal_set_large_bridge(void *, unsigned long, unsigned long, unsigned long)
+	__attribute__((weak));
 extern int ihk_mc_pt_set_large_page(void *, void *, unsigned long, unsigned long)
 	__attribute__((weak));
 extern int ihk_mc_pt_set_page(void *, void *, unsigned long, unsigned long)
@@ -93983,6 +93985,19 @@ int main(void)
 		require(x86_rust_stub_pt_set_page_phys == 0x99990000UL);
 		require(x86_rust_stub_pt_set_page_attr ==
 				(PTATTR_USER | PTATTR_ACTIVE));
+		if (x86_init_normal_set_large_bridge) {
+			x86_rust_stub_pt_set_page_calls = 0;
+			require(x86_init_normal_set_large_bridge((void *)0xaaaaUL,
+					~0UL, 0xdddd0000UL,
+					PTATTR_NO_EXECUTE | PTATTR_WRITABLE) == -5);
+			require(x86_rust_stub_pt_set_page_calls == 1);
+			require(x86_rust_stub_pt_set_page_pt == (void *)0xaaaaUL);
+			require(x86_rust_stub_pt_set_page_virt == ~0UL);
+			require(x86_rust_stub_pt_set_page_phys == 0xdddd0000UL);
+			require(x86_rust_stub_pt_set_page_attr ==
+					(PTATTR_NO_EXECUTE | PTATTR_WRITABLE |
+					PTATTR_LARGEPAGE | PTATTR_ACTIVE));
+		}
 		x86_rust_stub_pt_set_page_rc = 0;
 	}
 	size_t sizes[] = {
@@ -142801,15 +142816,6 @@ unsigned long x86_init_normal_get_memory_address_bridge(int type, int arg)
 	(void)arg;
 	return type ? 0x400000UL : 0x200000UL;
 }
-int x86_init_normal_set_large_bridge(void *pt, unsigned long virt,
-		unsigned long phys, unsigned long attr)
-{
-	(void)pt;
-	(void)virt;
-	(void)phys;
-	(void)attr;
-	return 0;
-}
 void x86_init_normal_log_bridge(int event, unsigned long a,
 		unsigned long b, unsigned long c)
 {
@@ -145446,7 +145452,8 @@ grep -Eq 'U x86_map_fixed_area_log_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_pt_set_page_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_move_flush_tlb_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_init_normal_get_memory_address_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U x86_init_normal_set_large_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq ' T x86_init_normal_set_large_bridge$' "${tmpdir}/out/rust.global"
+! grep -Eq 'U x86_init_normal_set_large_bridge$' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_init_normal_log_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_init_normal_panic_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_init_linux_find_command_line_bridge' "${tmpdir}/out/rust.undefined"
@@ -145471,7 +145478,7 @@ grep -Eq 'U x86_xsave_size_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_xsave_mask_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U xpmem_page_in_remote_on_attach' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U uti_desc' "${tmpdir}/out/rust.undefined"
-test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 594
+test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 593
 
 python3 - "${repo_root}/kernel/rust/syscall_policy.rs" <<'PY'
 import sys

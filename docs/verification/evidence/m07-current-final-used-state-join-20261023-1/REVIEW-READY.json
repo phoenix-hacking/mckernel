@@ -1,0 +1,154 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "REVIEW_READY_WHOLE_M07_OPEN_ONE_FINITE_REQUIREMENTS_TO_PRESERVATION_GAP",
+  "literal_exit": "Actually used vector/FPU state survives switching, syscalls and signals.",
+  "canonical_ledger": {
+    "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/practical-milestones.json",
+    "sha256": "b6dc05841e60b2b7c87875f4082cd3fd971bef4ee11abec7cf30545e262660a5",
+    "size": 196748
+  },
+  "prior_independent_whole_assessment": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/current053d-m07-vector-native12-20261022-1/INDEPENDENT-CURRENT-WHOLE-M07-LITERAL-ASSESSMENT-1.json",
+    "sha256": "0d97ef507ede3bee63e903f9eedd0cc26389eb0dd7d87f9e5467ebb3de1e6d3a",
+    "size": 3808
+  },
+  "completed_row_checks_preserved": [
+    "P-M07-01",
+    "P-M07-02"
+  ],
+  "whole_M07_recommended_status": "open",
+  "existing_actual_used_state_evidence": {
+    "application_acceptance": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/current053d-m07-vector-native12-20261022-1/INDEPENDENT-CURRENT-M07-FUNCTIONAL-APPLICATION-ACCEPTANCE-1.json",
+      "sha256": "af412abf4ec347f1e0331ef3b1cded5e4cf2298448e0ee3a2663959d0b2f3bf0",
+      "size": 3704
+    },
+    "physical_acceptance": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/current053d-m07-vector-native12-20261022-1/INDEPENDENT-CURRENT-M07-NATIVE-PHYSICAL-ACCEPTANCE-1.json",
+      "sha256": "c3572c300b4eb1673a6baf2f31e09d4eaf6ec97b104c0a9800780fc4eb841f11",
+      "size": 4088
+    },
+    "retained_report": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/current053d-m07-vector-native12-20261022-1/ROOT-MECHANICAL-ACTUAL-CURRENT-M07-NATIVE-PHYSICAL-REPORT-1.json",
+      "sha256": "87f988a81eb0fcff882bcf5d5f2224ade2065bf8ea69d7bd450c13fabaec4348",
+      "size": 229711
+    },
+    "actual_stdout": "ENABLED_CPUID1 ecx=fef8320b edx=1fcbfbfd\nENABLED_XCR0 hi=00000000 lo=0000021f\nENABLED_CPUIDD0 eax=0000021f ebx=00000a88 ecx=00000a88 edx=00000000\nENABLED_CPUID7 ebx=219c43a9 ecx=8040020c edx=00000010\nENABLED_AUXV hwcap=0000000000000002 hwcap2=0000000000000000\nENABLED_REQUIRED_XCR0=0000000000000007\nENABLED_SYSCALL_PASS\nENABLED_FUTEX_PASS\nENABLED_SIGNAL_PASS\nENABLED_PROFILE_PASS\n",
+    "observed_component_ids": [
+      0,
+      1,
+      2
+    ],
+    "actual_boundary_scope": "Actual current McKernel application execution satisfies the accepted oracle for selected x87 control-word, MXCSR and YMM preservation across its syscall, futex and signal boundaries, within the admitted two-McKernel-CPU profile.",
+    "stdout_bytes": 380,
+    "stderr_bytes": 0,
+    "exit_status": 0,
+    "supported_two_McKernel_CPU_observation": true
+  },
+  "finite_existing_eligibility_facts": {
+    "XCR0_hex": "0x21f",
+    "enabled_user_component_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      9
+    ],
+    "CPUID_D0_standard_extent_bytes": 2696,
+    "CPUID7_EBX_hex": "219c43a9",
+    "CPUID7_ECX_hex": "8040020c",
+    "CPUID7_MPX_bit14": true,
+    "CPUID7_PKU_bit3": true,
+    "CPUID7_OSPKE_bit4": false,
+    "tested_application_required_mask_hex": "0x7",
+    "eligibility_limit": "MPX advertised and MPX/PKRU xstate enabled do not prove actual use. PKU advertised with OSPKE clear is not an empirical PKRU preservation test or a bounded whole-workload nonuse proof. No claim of executing unavailable instructions."
+  },
+  "existing_requirements_source": {
+    "declaration": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-m07-used-state-declaration-20261020-1/CONSERVATIVE-STATE-DECLARATION.json",
+      "sha256": "c18d0f14be9ba16a4e1495ebe69f33fc7a497caa17ce5819db5f62cf6c21ad1e",
+      "size": 13075
+    },
+    "independent_declaration_decision": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-m07-used-state-declaration-20261020-1/decision.json",
+      "sha256": "c0399202d46c2d2172e06bb0853d9f37082603b3488fad9efb6cf5eb58a107e3",
+      "size": 8349
+    },
+    "bounded_requirements_review": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-m07-current-requirements-review-20261018-1.json",
+      "sha256": "37d72a774354fac3eb9190132b5c6ad8ac6685327d3be768821519378a8bf47a",
+      "size": 11284
+    },
+    "accepted_rule": "For every selected application/library path, require preservation of every enabled user xstate component represented by the process XCR0 readback; the known exposed0x21f profile gives R={0:x87,1:SSE/MXCSR,2:YMM upper,3:MPX BNDREGS,4:MPX BNDCSR,9:PKRU}. This is a justified architectural upper bound, not evidence that exposure implies execution. It includes all state of every legal eligible dispatch variant under that profile.",
+    "scoped_direct_app_compiler_facts": {
+      "baseline_C": "Retained GCC14.3.1 -O2/-pthread dynamic build; missing explicit AVX flags does not constrain prebuilt libc. Original metadata is in baseline requirements reference.",
+      "Rust": "Baseline and current205 apps retain Rust1.92 x86_64-unknown-linux-gnu, opt-level1, codegen-units1, +crt-static, static relocation/no-pie. Exact current compile argv: evening-two-app-batch-20261019-1/compile0.status.json and compile1.status.json. No compiler/payload execution here.",
+      "FP_thread": "Exact current app1.rs includes fp_state.S, which directly loads/stores YMM0..15 and changes/restores x87 CW and MXCSR. It gates AVX/XSAVE/OSXSAVE and XCR0 bits0..2. This is positive known use within R, not a bound on libc.",
+      "new_distinct_ELF_checks": "In each baseline6d1865a0/current024fa562/current1f51f0e3 ELF, directly inspected memchr detect installs that ELF own find_sse2. Current two find_sse2 target bodies were independently read and contain scalar/SSE instructions with no MPX/PKRU. Each ELF memmove resolver independently offers SSE/SSSE3/ERMS/AVX/AVX512 target names. These are scoped direct observations, not a transfer of old findings or a whole-library state closure."
+    },
+    "bounded_libc_facts": {
+      "pkru_candidates": "Dynamic libc pkey_get@0x106c00 contains RDPKRU@0x106c0b; pkey_set@0x106c80 contains RDPKRU@0x106c92 and WRPKRU@0x106cad. Baseline C imports no pkey API, but that alone does not prove transitive library non-use.",
+      "entry_scope": "Selected dynamic libc startup/early-init/pthread-create/start-thread/create-thread/clone-internal and loader startup/TLS/CPU-feature entry bodies inspected directly show no MPX/PKRU instructions. They have transitive/indirect calls; their absence is not extrapolated to all library code.",
+      "stop": "Conservative all-enabled-state declaration removes the need to chase those calls solely to prove non-use. No broader callgraph/library audit proposed."
+    },
+    "meaning": "Direct selected body/entry observations and no direct pkey imports do not close transitive/indirect libc applicability. Compiler flags do not bound all prebuilt libc paths. No new disassembly/library census performed."
+  },
+  "current_final_identity_context": {
+    "first_V3_formal": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/coherent-successor-preparation-1/next-native-preparation-1/actual-post-physical-1/INDEPENDENT-FORMAL-FIRST-V3-RESTORATION-AND-APPLICATION-ACCEPTANCE.json",
+      "sha256": "12a05b2ddd7b3628511f7b5a6e414e08e1d6a4a3e462b1a51228e8a668ec5b5b",
+      "size": 2483
+    },
+    "image_sha256": "10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2",
+    "launcher_sha256": "dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954",
+    "SDK5_acceptance": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/INDEPENDENT-ACTUAL-SDK-ARTIFACT-AND-PHYSICAL-ACCEPTANCE.json",
+      "sha256": "8614e3e2bbf9e07c01f396079fc83fedbbb4119a3c37b5e311bdcc6cb6099623",
+      "size": 2584
+    },
+    "SDK5_source_identity": "ba0e1be79e6cd6b06fe0b7cbd1c2c3c689e86579439e13deea9b3f3776069120",
+    "SDK5_module_hashes": {
+      "ihk-smp-x86_64.ko": "2eb3e8e6d7e43f55ca262cb455212e205831e26980f10d4ce8ef99556fd2269d",
+      "ihk.ko": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+      "mcctrl.ko": "06e8b9b571f21b41821aa03a32ebf4ae20ae19cf4b110c3af2c81b491b92ef86"
+    },
+    "LONG_apps_reference": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p12-long-mixed-apps-20261023-1/FINAL-LONG-APPS-RECEIPT.json",
+      "sha256": "40957d4ffed1c3407ad22f67ac48c311c97253ae61478b7af049beec61990ddb",
+      "size": 5492
+    },
+    "current_use_join_limit": "Current SDK5 lifecycle/provider work, unchanged10972 kernel/dca launcher and accepted application/LONG source/Linux results add no retained observation of noninitial MPX3/4 or PKRU9 across switching/syscalls/signals and supply no new bounded applicability exclusion. Older observed CPUID values are identified as retained M07 facts, not relabeled fresh currentSDK5 measurements."
+  },
+  "one_exact_unproven_item": {
+    "id": "M07-MPX3-4-PKRU9-REQUIREMENTS-TO-PRESERVATION",
+    "component_ids": [
+      3,
+      4,
+      9
+    ],
+    "statement": "For the fixed supported compiler/libc/application inputs, MPX BNDREGS/BNDCSR and PKRU remain conservatively possible-required; neither a bounded actual applicable exclusion nor preservation of noninitial state across switching/syscalls/signals is retained.",
+    "why_existing_mechanism_is_not_the_missing_fact": "Accepted full runtime XSAVE mask/extent save/copy/restore supports these components structurally; it neither shows actual requirement/nonuse nor empirical noninitial preservation.",
+    "no_new_optional_gate": "No exact IFUNC offsets, whole-library callgraph, ISA census, AVX512, new CPU profile, M14 completion or unconditional guest replay is required."
+  },
+  "smallest_next_functional_observation_if_retained_exclusion_is_unavailable": {
+    "scope": "One focused extension of the existing state-preservation application on unchanged supported profile, limited to components3/4/9. Separate source/ABI and execution review required.",
+    "eligibility_first": "Record exact CPUID/XCR0 and user-instruction eligibility for MPX and PKRU before touching their state; preserve an architecturally justified inapplicable branch as not-executed, never a preservation PASS.",
+    "for_each_required_and_executable_component": "Seed architecturally valid noninitial state, read it back, exercise the existing actual syscall, blocking futex handoff and signal boundaries, compare state after each, then restore original state before exit.",
+    "alternative_bounded_resolution": "A retained relevant application/compiler/libc path/eligibility proof excluding these possible requirements may close the same single item without new runtime; current named inputs do not provide it.",
+    "unchanged_x87_SSE_YMM_evidence": "Reuse accepted checks; do not replay them unchanged or create an unrelated qualification matrix.",
+    "runtime_authorized_by_this_record": false
+  },
+  "accounting": {
+    "canonical_or_source_edits": 0,
+    "new_guests": 0,
+    "new_tests": 0,
+    "new_probes": 0,
+    "new_compilers": 0,
+    "new_root_Docker_operations": 0,
+    "big_artifact_hashes": 0,
+    "new_hardware_preservation_credit": 0,
+    "new_check_or_milestone_closures": 0
+  },
+  "independent_verdict": null
+}

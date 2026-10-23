@@ -2,7 +2,7 @@
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
-M14 tracks full compute-kernel Rust cutover separately from the existing M00–M13 functional worklist. Practical progress is **30/35** at this snapshot; P-M06-01 and whole M06 are closed on their separate functional evidence. M14 is **open** and active in parallel; it does not add to the35-check denominator or block the next functional test.
+M14 tracks full compute-kernel Rust cutover separately from the existing M00–M13 functional worklist. Practical progress is **34/35** at this snapshot; P-M06-01 and whole M06 are closed on their separate functional evidence. M14 is **open** and active in parallel; it does not add to the35-check denominator or block the next functional test.
 
 **Done means:** No live McKernel-owned compute-kernel C implementation remains on the supported default co-booted LWK path; the Rust/reviewed-assembly image works with the existing Linux supporting control plane and the practical application/lifecycle baseline.
 
@@ -220,3 +220,5 @@ Evidence: `../evidence/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/`.
 Current image10972 and prior default-image candidate remain unchanged. Default
 GCC14/final-ELF ownership and relevant native proof remain open; no whole area,
 file or practical-check credit is added.
+
+M14-05-01 is **partial**: `x86_init_normal_set_large_bridge` now selects a canonical Rust export forwarding to the existing Rust large-page provider. Independent source/ABI review accepted123,480 original-C/Rust observations and the current78-input private Rust crate (one definition/no unresolved bridge). [Canonical integration](../evidence/compute-idle-rust-cutover-20261023-1/init-large-page-bridge-rust-20261023-1/CANONICAL-BRIDGE-INTEGRATION.json) preserves fallback C and frozen candidate5/build2 inputs. Changed whole C translation unit, default kernel link and native proof remain open; no whole area/file retirement.

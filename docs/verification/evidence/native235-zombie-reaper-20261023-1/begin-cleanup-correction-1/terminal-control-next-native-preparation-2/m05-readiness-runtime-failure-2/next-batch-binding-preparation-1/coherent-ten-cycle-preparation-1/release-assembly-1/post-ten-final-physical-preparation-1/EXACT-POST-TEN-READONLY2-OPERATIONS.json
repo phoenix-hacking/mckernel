@@ -1,0 +1,116 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXACT_EXISTING_POST_BATCH_READONLY2_DATA_PACKET_READY_FOR_ROOT_CAPTURE",
+  "accepted_contract": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/coherent-successor-preparation-1/next-native-preparation-1/POST-NATIVE-PHYSICAL-OPERATIONS.PENDING.json",
+    "sha256": "a114fee2737f6ca9d021aba5539dcbf43527392ad27b9f049d038cf8f3782d23",
+    "operation_indices": [
+      1,
+      2
+    ]
+  },
+  "root_reported_independent_release": "PASS_EXACT_POST_BATCH_READONLY2_RELEASE",
+  "operations": [
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=33554432:33554432",
+        "--core=0:0",
+        "--nofile=256",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/retirement-preparation/readonly_current_proc.py"
+      ],
+      "name": "proc",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Read-only proc observation after terminal capture.",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/retirement-preparation/readonly_current_proc.py",
+        "sha256": "a24a82383e83e7363b2a1833f9bdee942e8590ca1a369f44a5af59baf3cce097",
+        "bytes": 1724
+      },
+      "capture": {
+        "stdout": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/release-assembly-1/post-ten-final-physical-preparation-1/actual-post-ten-readonly-capture-1/proc.stdout",
+        "stderr": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/release-assembly-1/post-ten-final-physical-preparation-1/actual-post-ten-readonly-capture-1/proc.stderr",
+        "create_flags": "O_WRONLY|O_CREAT|O_EXCL|O_CLOEXEC regular files; positive direct wait, then close streams; no signal/kill/outer timeout"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=33554432:33554432",
+        "--core=0:0",
+        "--nofile=256",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/retirement-preparation/readonly_current_mutex_paths_positive.py"
+      ],
+      "name": "mutex",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Read-only mutex observation after terminal capture.",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/retirement-preparation/readonly_current_mutex_paths_positive.py",
+        "sha256": "ca4226a4b7afe068db63b086177333d5662331d0c6ab0d9ef2ad322015a36418",
+        "bytes": 2288
+      },
+      "capture": {
+        "stdout": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/release-assembly-1/post-ten-final-physical-preparation-1/actual-post-ten-readonly-capture-1/mutex.stdout",
+        "stderr": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/release-assembly-1/post-ten-final-physical-preparation-1/actual-post-ten-readonly-capture-1/mutex.stderr",
+        "create_flags": "O_WRONLY|O_CREAT|O_EXCL|O_CLOEXEC regular files; positive direct wait, then close streams; no signal/kill/outer timeout"
+      }
+    }
+  ],
+  "capture_profile": {
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 30,
+    "FSIZE_bytes": 33554432,
+    "NPROC": "inherited",
+    "core": 0,
+    "cpu": 7,
+    "direct_child_join_required": true,
+    "jobs": 1,
+    "nofile": 256,
+    "outer_grace_kill": null,
+    "outer_wall_kill": null,
+    "signals": false,
+    "streams_closed_required": true
+  },
+  "preceding_batch_result": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/actual-ten-cycle-output-1/batch-result.json",
+    "sha256": "ab623e287a2f8a4b133c8a73fd87bfb48131bebd760c6219001b8260f8f63638",
+    "bytes": 776
+  },
+  "owner_PID_binding": "Existing PROC wrapper uses its own fresh os.getpid() and exact /proc/self/stat starttime, passes both to pinned PROC_CODE; no stale batch-owner PID is substituted. Mutex wrapper positively pins27:4.",
+  "PROC_engine": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/cleanup_pass_image.py",
+    "sha256": "59efab0bc29fa5784dc855743cec397237552821bc150b60ea1d6c2e5f7ac00d"
+  },
+  "expected_results": [
+    "proc: COMPLETE, failure None, publishers [], exactly two snapshots",
+    "mutex: PASS_CURRENT_FAILED235_27_4_AND_8_PATH_ABSENCE, stable permanent27:4 and all8 positivelyabsent"
+  ],
+  "source_changes": false,
+  "query2_first_attempt_assertion": false,
+  "export_or_ID_or_cleanup_operations": false,
+  "actual_observations": null,
+  "actual_admission": null,
+  "actual_result": null,
+  "physical_acceptance": false,
+  "execution_by_preparation_worker": false
+}
