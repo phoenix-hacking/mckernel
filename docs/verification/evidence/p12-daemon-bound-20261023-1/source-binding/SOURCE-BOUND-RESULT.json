@@ -1,0 +1,60 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXACT_DISTRO_SOURCE_LOGICAL_BOUND_PROVED_PHYSICAL_BOUND_CONDITIONAL",
+  "installed_binary_package": "docker.io 26.1.3-0ubuntu1~20.04.1",
+  "dpkg_source_package": "docker.io-app 26.1.3-0ubuntu1~20.04.1",
+  "source_binding": {
+    "descriptor": "docker.io-app_26.1.3-0ubuntu1~20.04.1.dsc",
+    "archive_checksums_match_descriptor": [
+      "docker.io-app_26.1.3.orig.tar.gz",
+      "docker.io-app_26.1.3-0ubuntu1~20.04.1.debian.tar.xz"
+    ],
+    "distribution_patch_members": [],
+    "distribution_patch_qualification": "Exact debian tar member inventory contains no debian/patches; format is 3.0 (quilt). Analysis uses distro orig archive bytes, not assumed upstream tag equivalence.",
+    "authenticity": "HTTPS Ubuntu archive download and SHA256 descriptor matching; OpenPGP signature not independently validated. Installed source/version metadata does not establish executing daemon binary identity.",
+    "installed_binary_byte_binding": "BINARY-SOURCE-BINDING.json: downloaded exact .deb dockerd equals installed /usr/bin/dockerd; SHA256 d9f25328687bb23bbe445a1f1bad90342388eace2723d4745903cd49cd1b2b66. .deb matches apt-cache exact-version SHA256."
+  },
+  "record_bound": {
+    "input_chunk_bytes": 16384,
+    "defensive_appended_bytes": 1,
+    "max_encoded_bytes_per_input_byte": 6,
+    "fixed_fields_allowance_bytes": 128,
+    "encoded_record_upper_bound_bytes": 98438,
+    "calculation": "6 * (16384 + 1) + 128 = 98438. Fixed UTC stdout/stderr JSON fields are <=69B; 128B allowance is conservative.",
+    "premises": [
+      "Ordinary container startLogging -> NewCopier stdout/stderr -> JSONFileLogger; no direct arbitrary Logger.Log producer.",
+      "Exact effective config is only max-size16m/max-file2; no labels/env/tag attrs. JSONFileLogger has no BufSize override.",
+      "Copier timestamps are UTC. JSON-file drops partial metadata from encoded records."
+    ],
+    "attrs_proof": "container/container.go394-408 passes cfg.Config directly into Info. loginfo.go30-95 initializes empty attrs; insertion requires labels/labels-regex/env/env-regex Config selectors. loggerutils/log_tag.go15-21 resolves absent tag to empty default. jsonfilelog.go84-105 inserts tag only if nonempty, marshals RawAttrs only if map nonempty. Exact effective16m2 Config has none of these selectors: attrs encoded bytes=0.",
+    "encoding_proof": "jsonlogbytes.go64-140: ASCII control/<>& =>6 bytes; quote/backslash/newline/CR=>2; invalid UTF8 one-byte error =>6 (\\ufffd); U+2028/U+2029 three input bytes=>6; other UTF8 <=input bytes. <=6x for every byte. marshalMessage outputs only Log/Stream/Created/RawAttrs; PLogMetaData not encoded. UTC timestamp<=32 bytes including quotes, stdout/stderr6 bytes, fixed JSON overhead<=69B; conservative128B."
+  },
+  "rotation": {
+    "max_size_16m_bytes": 16000000,
+    "unit_qualification": "FromHumanSize uses decimalMap; m = 1000*1000, not MiB. Using 16MiB would be conservative.",
+    "max_named_files": 2,
+    "compress_default": false,
+    "per_file_logical_upper_bound_bytes": 16098437,
+    "two_named_file_logical_upper_bound_bytes": 32196874,
+    "calculation": "Each write starts below capacity, adds <=98438B; bound C-1+B. Two named files <=2*(16000000-1+98438).",
+    "transient_named_copy": "None in successful uncompressed rotation: unlink oldest .1, rename current to .1, open empty current. Rotation/write serialization uses w.mu/rotateMu; no compression goroutine.",
+    "failed_rotation": "Writer attempts truncating current even if rotation unlink/rename failed; ordinary initial-empty/source-controlled premise remains required."
+  },
+  "physical_bound_missing_premises": [
+    "Actual selected/running daemon must bind to this distro implementation.",
+    "Bound daemon and external readers that retain unlinked file descriptions, or establish no readers during growth plus positive retirement. ReadLogs opens current plus rotated files and defers close; there is no source-wide bound on independent readers. A named-file bound alone is not a physical bound.",
+    "Bind filesystem allocation/preallocation/delayed-free/metadata behavior and full growth accounting for retained blocks. Source logical size alone does not establish st_blocks/transient physical storage upper bound.",
+    "Bind effective source path/config and no unrelated writers/extra files for this container log directory."
+  ],
+  "owner_observation": "Prepared owner invokes logs after normal exited state, or after stop/kill in cleanup. This helps but by itself does not bound independent readers or prove no logging/drain overlap after exit.",
+  "96MiB_decision": "Named-file logical payload fits 96MiB by a wide margin; 96MiB total physical ceiling is NOT PROVED by this source inspection.",
+  "actions": {
+    "docker_commands": 0,
+    "root_commands": 0,
+    "guest_or_build_or_stress": 0,
+    "native_practical_credit": 0,
+    "first_fetch_failure": "fetch-dsc-1.json: HTTP404 incorrect binary-name source path; source package metadata correction then fetched exact docker.io-app source. No service/auth/policy error encountered."
+  },
+  "next_executable_observation": "Read-only actual daemon executable/package binding and bounded-reader/filesystem allocation evidence, under separately authorized scope. No admission or execution release supplied.",
+  "conditional_96MiB_feasibility": "Let P=16098437B per file. If exactly two named files plus at most K distinct retained unlinked log inodes exist, payload <=(2+K)*P. K<=4 gives96590622B, leaving4072674B within96MiB for all allocation/metadata/transient overhead. K<=2 gives64393748B, leaving36269548B. These are sufficient arithmetic conditions, NOT established reader/allocation premises; unbounded independent readers defeat any fixed max-file physical cap."
+}

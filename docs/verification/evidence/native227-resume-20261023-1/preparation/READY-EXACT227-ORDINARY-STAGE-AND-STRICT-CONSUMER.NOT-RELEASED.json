@@ -1,0 +1,217 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "utc": "2026-10-23T03:01:52.616038+00:00",
+  "status": "EXACT227_ORDINARY_OVERLAY_AND_STRICT_BINDING_PREPARED_NOT_EXECUTED",
+  "case_id": "P-M01-02-child-SIGTERM-and-exec-recovery-227B",
+  "read_only_existing_inputs": true,
+  "source_changed": false,
+  "service_resolution_receipt": {
+    "path": "docs/verification/os-milestones-20260914/USER-SERVICE-RESOLUTION-20261023.json",
+    "sha256": "6a2da136c8b71cfcfcee5f3fcf590d0312b1439c7f94f1e6e12de7228c3cfe8a",
+    "bytes": 942
+  },
+  "next_executable_steps": [
+    {
+      "purpose": "Functional227 OS recovery staging only; no security testing. Once fresh ordinary grant exists, exact existing overlay parent argv once.",
+      "argv_file": "NEXT-OVERLAY-PARENT-ARGV.NOT-EXECUTED.json",
+      "child_argv_file": "NEXT-OVERLAY-CHILD-ARGV.NOT-EXECUTED.json",
+      "writes": [
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-227/v3-native227-overlay-1.cpio.gz",
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-227/actual-v3-overlay-capture-1",
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-227/ACTUAL-V3-OVERLAY-CAPTURE-RESULT.json"
+      ]
+    },
+    {
+      "purpose": "Functional227 strict manifest/QMP consumer binding only; no security testing. Only after clean closed overlay success, exact existing strict parent argv once.",
+      "argv_file": "NEXT-STRICT-PARENT-ARGV.NOT-EXECUTED.json",
+      "child_argv_file": "NEXT-STRICT-CHILD-ARGV.NOT-EXECUTED.json",
+      "writes": [
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-227/v3-native227-overlay-1.manifest.json",
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-227/actual-v3-strict-consumer-capture-1",
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-227/ACTUAL-V3-STRICT-CONSUMER-CAPTURE-RESULT.json",
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-227/ACTUAL-V3-NATIVE227-MANIFEST.json",
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-227/NATIVE-OPERATION.ACTUAL.json",
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-227/METADATA-PUBLICATION-ARGV.ACTUAL.json",
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-227/NATIVE-CAPTURE-ARGV.ACTUAL.json",
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-227/ACTUAL-V3-CASE-ARTIFACT-AND-STRICT-CONSUMER-JOIN.json"
+      ]
+    }
+  ],
+  "profile": {
+    "AS_bytes": 536870912,
+    "CPU": [
+      6
+    ],
+    "CPU_seconds": 30,
+    "FSIZE_bytes": 134217728,
+    "NPROC": "inherited",
+    "cleanup_seconds": 3,
+    "core_bytes": 0,
+    "heavy_native_profile": "Unchanged single4CPU2-5/12GiB/no-swap/512task/networknone; native containerFSIZE32MiB",
+    "jobs": 1,
+    "nofile": 256,
+    "stderr_limit_bytes": 8388608,
+    "stdout_limit_bytes": 8388608,
+    "supervisor_wall_seconds": 30
+  },
+  "storage": {
+    "finite_host_upper_bytes": 705691648,
+    "fresh_full_sparse_growth_and16GiB_host12GiB_scratch_floors_required": true,
+    "host_parts_bytes": {
+      "emergency": 134217728,
+      "four_snapshots": 33554432,
+      "gzip_base": 68157440,
+      "metadata": 16777216,
+      "raw_base": 67108864,
+      "seven_command_dual_captures": 117440512,
+      "two_overlays": 268435456
+    },
+    "host_reservation_bytes": 1073741824,
+    "payload_recopies": 0,
+    "rawtree_growth": 0,
+    "reserve576_used": false,
+    "scratch_staging_growth": 0
+  },
+  "source_review_reuse": {
+    "accepted_source_review": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/INDEPENDENT-235-OVERLAY-AND-STRICT-CONSUMER-EXECUTION-REVIEW-1.json",
+      "sha256": "422e8e135be5d89ad10924f5e6824022d33499da9fd59581f912ad98a963327f",
+      "bytes": 1736
+    },
+    "binder_exact_accepted_sha256": "1bd397b832ae076e9617bed79bd4d8a70bc34bfbf37be1eee1896acdc8d0569c",
+    "old_review_explicitly_authorizes227": false,
+    "needed": "Focused227 data/output allowlist execution grant and fresh ordinary capacity; do not repeat valid source review or rebuild unchanged SDK/image/helper."
+  },
+  "matched235_tuple": {
+    "equal_artifact_keys": [
+      "mcexec",
+      "mckernel_image",
+      "native_boot",
+      "root_base",
+      "bzImage",
+      "libc",
+      "loader"
+    ],
+    "equal_three_modules": true,
+    "sdk_launcher_acceptance": {
+      "launcher": {
+        "bytes": 2651,
+        "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/INDEPENDENT-ACTUAL-LAUNCHER-PRODUCTION-ARTIFACT-ACCEPTANCE-1.json",
+        "sha256": "5eeb7f2ea4aba4421d7d79ed935946506a12720d0c7711e01d30065cb14dda54"
+      },
+      "launcher_physical_retirement": null,
+      "sdk": {
+        "bytes": 2703,
+        "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/INDEPENDENT-ACTUAL-SDK68-V3-ARTIFACT-AND-PHYSICAL-ACCEPTANCE-1.json",
+        "sha256": "6a6a47b9899e8de45ab650023419b5a1af0596fb34865241cae263e0b19cac2f"
+      },
+      "status": "DATA_JOIN_OF_TWO_GENUINE_INDEPENDENT_ARTIFACT_ACCEPTANCES_NOT_NEW_REVIEW"
+    },
+    "unchanged_base": {
+      "cpio": {
+        "mode": 33152,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/shared-v3-matched-base-1.cpio",
+        "sha256": "3f385a5b7615cdc17400d4bffe58489cef6e55c375215e56d5f6dd3e4228a0e7",
+        "size": 42508248
+      },
+      "gzip": {
+        "mode": 33152,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/shared-v3-matched-base-1.cpio.gz",
+        "sha256": "8059b462f84964e6ab4a8aecb001d83f9a68f8aada14372155ae99c8d83e2984",
+        "size": 12909057
+      },
+      "receipt": {
+        "bytes": 26515,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/ACTUAL-FOUR-RECORD-BASE-PATCH-1.json",
+        "sha256": "c3011936f35643bd880cd31e819d07437d063b233f9eb6057cd5ddafa43be966"
+      }
+    },
+    "payload": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-227/payload.snapshot",
+      "sha256": "6abb5e9046444c64d72139f85fcae9e4796eff7ceb5cc2dd1e5b1a47ef3695a5",
+      "size": 5631824
+    },
+    "production_consumer_sha256": "69d7bdb600309a4aea02f38746ba17438bf6e4758def35d6c2f90264c3ee75e3"
+  },
+  "source139_guard": {
+    "bytes": 1245,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/TARGETED-RUNTIME-SOURCE-GUARD-JOIN.json",
+    "sha256": "2ebf544b8604779e8ad36f857d451c03b7c7ab073b00b21eac62e8724c5c0d9c"
+  },
+  "exact_absent_outputs_observed": {
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-227/v3-native227-overlay-1.cpio.gz": true,
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-227/v3-native227-overlay-1.manifest.json": true,
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-227/actual-v3-overlay-capture-1": true,
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-227/ACTUAL-V3-OVERLAY-CAPTURE-RESULT.json": true,
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-227/actual-v3-strict-consumer-capture-1": true,
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-227/ACTUAL-V3-STRICT-CONSUMER-CAPTURE-RESULT.json": true,
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-227/ACTUAL-V3-NATIVE227-MANIFEST.json": true,
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-227/NATIVE-OPERATION.ACTUAL.json": true,
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-227/METADATA-PUBLICATION-ARGV.ACTUAL.json": true,
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-227/NATIVE-CAPTURE-ARGV.ACTUAL.json": true,
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-227/ACTUAL-V3-CASE-ARTIFACT-AND-STRICT-CONSUMER-JOIN.json": true
+  },
+  "native_nonce": "7fae149d349248aaa7dd329979069457",
+  "native_attempt": "/home/holden/mckernel-work/scratch/n227v1/p/attempt-7fae149d349248aaa7dd329979069457",
+  "qmp_socket_bytes": 93,
+  "strict_oracle": {
+    "exit_code": 0,
+    "stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-recovery-batch-prerequisite-20261022-1/expected.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr_bytes_hex": "",
+    "stdout": {
+      "bytes": 227,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-recovery-batch-prerequisite-20261022-1/expected.stdout",
+      "sha256": "4eba8ea20e13ebe307fe67b771c200de36305e787ec31590b05e92dcb67ac9d6"
+    },
+    "stdout_bytes_hex": "7265636f7665727920706172656e742073746172740a706172656e742063616e63656c207369676e616c3d31352072656164793d3120707265726561703d3020656f663d31207265617065643d3120656368696c643d31206f776e65643d300a6368696c642065786563207375636365737320746f6b656e3d66697865642d76310a706172656e74207265636f76657279206578656320657869743d333720656f663d31207265617065643d3120656368696c643d310a706172656e74207265636f7665727920636f6d706c657465206368696c6472656e3d32206f776e65643d300a"
+  },
+  "invariant": "Cancellation SIGTERM15 readiness1/prereap0, EOF/reaped/ECHILD each1, owned0; next child exec exits37 with EOF/reap/ECHILD1; total children2/owned0. Credits retained until actual ACK; stdout does not invent unobserved kernel ACK.",
+  "native_prerequisites": [
+    "Current235 strict success AND positive physical retirement before227 native.",
+    "Bind actual227 overlay/manifest hashes from successful strict consumer; fresh exactcase independent native execution release.",
+    "Current live postjoin repaired nonnull, positive prior workload retirement, permanent mutex27:4 and exclusions/leases, exactnonce/containerabsence, metadata publication and source guards, fresh source/tool/artifact identities/capacity/fullgrowth floors, single-heavy budget.",
+    "Use pending227 native operation only after actual hashes bound; never reuse failed235 or old unused227 release."
+  ],
+  "native_profile": {
+    "container_CPU_affinity": "2-5",
+    "container_CPU_count": 4,
+    "container_fsize": [
+      33554432,
+      33554432
+    ],
+    "container_memory_bytes": 12884901888,
+    "container_network": "none",
+    "container_swap_bytes": 0,
+    "container_tasks": 512,
+    "cpu": 7,
+    "host_UID_NPROC": "inherited126258:126258; no per-UID512",
+    "jobs": 1,
+    "outer_grace_kill": null,
+    "outer_wall_kill": null,
+    "owner_CPU_limits": [
+      -1,
+      -1
+    ],
+    "owner_as_bytes": [
+      2147483648,
+      2147483648
+    ],
+    "payload_timeout_ms": 10000,
+    "required_inherited_cpu_limits": [
+      -1,
+      -1
+    ],
+    "runner_timeout_seconds": 300,
+    "stream_fsize": 33554432
+  },
+  "ordinary_execution_authorized_by_this_packet": false,
+  "native_execution_authorized": false,
+  "native_acceptance": false,
+  "stage_or_build_executions": 0,
+  "failure_history": "No227 actual overlay attempts found; accepted source reused. Prior235 poolquery/childsched repaired SDK6a6a and launcher5eeb; current235 not inferred successful."
+}

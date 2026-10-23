@@ -16,6 +16,39 @@ assembly. Keep functional memory, ownership, lifecycle and resource checks.
 Do not relabel security work as functional testing. This scope instruction does
 not clear a service-policy hold, authorize automatic retries or start a campaign.
 
+## Functional OS scope reaffirmed — 2026-10-23
+
+For every worker brief and each command's human-readable purpose, explicitly
+state functional OS work only; no security testing. Verify the actual task fits
+that scope. Keep frozen command argv/source bindings exact; scope statements do
+not clear restrictions or change the meaning of a rejected request.
+
+The user again explicitly limits this campaign to making McKernel and its
+application infrastructure work. Current priorities are native process/exec/wait,
+cancellation/recovery, resource restoration, lifecycle repetition and the final
+functional session. After35/35, seeded Rust workloads check ordinary correctness;
+syzkaller integration is later. Do not add security-testing or security-audit
+work. Preserve functional memory/ownership/resource checks. A service classifier
+flag is not evidence that a security task was assigned; report the actual task
+and exact service error. Scope clarification does not clear a service hold.
+
+## User-authorized scratch capacity growth — 2026-10-23
+
+The user explicitly authorizes expanding the scratch image when space is tight,
+using the newly available host capacity. This supersedes the older blanket
+"Do not resize" instruction for necessary growth of
+/home/holden/mckernel-work/scratch.ext4 only. It authorizes no deletion or shrink.
+Current13.15GiB free is only1.15GiB above the12GiB floor. Prepare a reviewed
+reasonable growth (currently proposed110to142GiB) with fresh live UUID/loop/backing
+identity, actual full-growth HOST capacity, quiescence and exclusive ownership.
+The running campaign owns the mutation. Before changing size reconcile active
+110GiB-pinned consumers as coherent successors; retain original sources/evidence.
+Preserve UUID, mounted data, scratch21, permanentmutex and existing workflow floors.
+Do not separately lower filesystem reserves. Capture/qualify expected ext4 reserve
+behavior as part of growth; uncertain effects retain ownership and stop. Apply
+between workloads after the normal independent operation review. This user
+instruction supplies resize authorization; do not ask again for that same action.
+
 ## Active agent dispatch rule — 2026-10-22
 
 New work for a completed or idle agent MUST use `followup_task` to start a new

@@ -1,0 +1,32 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PREPARED_NOT_RELEASED",
+  "source_sha256": "f5d3aa232291af6f718397661357f192f0a3d87b5773668814e7e345df7ad64d",
+  "argv": [
+    "sudo",
+    "-A",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2",
+    "20",
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/python3",
+    "-I",
+    "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/identity-query/query.py"
+  ],
+  "effect": "Read only proc2036 stat/exe/root and installed /usr/bin/dockerd; bounded hashes and stdout, no Docker API/workload/mutation.",
+  "limits": {
+    "cpu": 0,
+    "wall_seconds": 20,
+    "cpu_seconds": 10,
+    "AS_bytes": 536870912,
+    "FSIZE_bytes": 0,
+    "core_bytes": 0,
+    "max_read_file_bytes": 268435456,
+    "stdout_expected_max": 4096
+  },
+  "failure_history": "Unprivileged proc exe read EACCES retained; no privileged candidate attempted.",
+  "service_hold": "native235 remains held; this distinct read-only identity query is not admission."
+}

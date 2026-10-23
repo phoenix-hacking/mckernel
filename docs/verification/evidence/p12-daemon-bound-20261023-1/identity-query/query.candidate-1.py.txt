@@ -1,0 +1,75 @@
+"""Functional McKernel OS resource proof only; no security testing.
+Read-only identity observation; no Docker API, admission, or workload.
+"""
+import hashlib
+import json
+import os
+import resource
+import stat
+import time
+
+PID = 2036
+EXPECTED_START = '1513'
+resource.setrlimit(resource.RLIMIT_AS, (512 * 1024**2,) * 2)
+resource.setrlimit(resource.RLIMIT_CPU, (10, 10))
+resource.setrlimit(resource.RLIMIT_FSIZE, (0, 0))
+resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
+
+
+def identity():
+    data = open('/proc/%d/stat' % PID).read(8192)
+    end = data.rfind(')')
+    fields = data[end + 2:].split()
+    if data[data.index('(') + 1:end] != 'dockerd' or fields[19] != EXPECTED_START:
+        raise RuntimeError('daemon identity changed')
+    return {'pid': PID, 'starttime': fields[19]}
+
+
+def digest(path):
+    with open(path, 'rb', buffering=0) as stream:
+        before = os.fstat(stream.fileno())
+        if not stat.S_ISREG(before.st_mode) or before.st_size > 256 * 1024**2:
+            raise RuntimeError('unexpected executable type/size')
+        h = hashlib.sha256()
+        size = 0
+        while True:
+            block = stream.read(1024**2)
+            if not block:
+                break
+            size += len(block)
+            if size > before.st_size:
+                raise RuntimeError('executable grew')
+            h.update(block)
+        after = os.fstat(stream.fileno())
+        attrs = ('st_dev', 'st_ino', 'st_size', 'st_mtime_ns', 'st_ctime_ns')
+        if any(getattr(before, k) != getattr(after, k) for k in attrs) or size != before.st_size:
+            raise RuntimeError('executable changed')
+        return dict(path=path, sha256=h.hexdigest(), bytes=size,
+                    device=before.st_dev, inode=before.st_ino)
+
+
+def main():
+    before = identity()
+    exe = os.readlink('/proc/%d/exe' % PID)
+    if exe != '/usr/bin/dockerd':
+        raise RuntimeError('unexpected daemon executable')
+    root = os.stat('/proc/%d/root' % PID)
+    host_root = os.stat('/')
+    if (root.st_dev, root.st_ino) != (host_root.st_dev, host_root.st_ino):
+        raise RuntimeError('daemon root differs from host')
+    running = digest('/proc/%d/exe' % PID)
+    installed = digest('/usr/bin/dockerd')
+    if (running['device'], running['inode'], running['sha256']) != (installed['device'], installed['inode'], installed['sha256']):
+        raise RuntimeError('daemon differs from installed binary')
+    if identity() != before or os.readlink('/proc/%d/exe' % PID) != exe:
+        raise RuntimeError('daemon changed during query')
+    print(json.dumps({'schema': 'mckernel.p12.daemon-identity.v1',
+        'scope': 'Functional McKernel OS/apps and Rust/assembly migration only; no security testing.',
+        'observed_unix_ns': time.time_ns(), 'identity': before,
+        'running': running, 'installed': installed,
+        'host_root_matches': True, 'workloads': 0,
+        'service_hold_resolved': False}, sort_keys=True))
+
+
+if __name__ == '__main__':
+    main()

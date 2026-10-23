@@ -1,0 +1,57 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "purpose": "Focused source-only finite96MiB physical log bound decision on observed HOST filesystem.",
+  "status": "96MiB_PHYSICAL_BOUND_NOT_ESTABLISHED",
+  "source_binding": "SOURCE-BOUND-RESULT.json; BINARY-SOURCE-BINDING.json",
+  "filesystem_observation": "HOST-FILESYSTEM-OBSERVATION.json: closest existing HOST ancestor ext4, 4096B allocation units. Intended output directory absent; no mkdir. This does not by itself locate Docker Root Dir/logfile or prove allocation bound there.",
+  "owner_sha256": "c342d1492e957c3ebdfc142b7fce7d10fbadcae8b64565f4d7ad0e336f1219ec",
+  "ordering_findings": [
+    {
+      "lines": "1092-1115",
+      "fact": "Normal success waits for exit and checks exited state before finally logs. On start/wait/inspect failure finally still attempts wait then logs, each exception caught. A failed wait is not a producer-stop certificate."
+    },
+    {
+      "lines": "958-991",
+      "fact": "Cleanup runs stop,kill,wait,logs,inspect,rm in order but catches each failure; allow_failure=True accepts nonzero stop/kill/wait, so logs can run while producer remains alive."
+    },
+    {
+      "lines": "444-505,708-768",
+      "fact": "Local calls are sequential and refuse unresolved prior local command retirement; this bounds local clients, not daemon-side ReadLogs FD lifetime."
+    },
+    {
+      "lines": "1109,979",
+      "fact": "At most2 source-level logs CLI invocations/container in one Owner.run path, no follow option. This is not a proved bound on daemon request multiplicity absent client/transport binding."
+    }
+  ],
+  "reader_lifetime": {
+    "daemon_logs_go": "ReadLogs creates async watcher; goroutine defer ConsumerGone on ctx cancellation/stream completion. No synchronous return-to-local-client proof of raw-fd close.",
+    "logfile_go": "readLogsLocked opens currentFile and defers Close; openRotatedFiles max-file2 opens at most1 rotated file; files closed after tailFiles. A blocked reader can retain up to2 original inodes as they become unlinked. ReadConfig.Follow=false limits continuing reads but cannot certify a hard close deadline.",
+    "missing_premise": "No active reader during every growth interval is not established by current owner ordering; local client join is not positive daemon reader retirement."
+  },
+  "conditional_payload_arithmetic": {
+    "per_inode_bytes": 16098437,
+    "no_extra_unlinked_payload_bytes": 32196874,
+    "no_extra_unlinked_remaining_within96MiB": 68466422,
+    "two_readers_up_to4_extra_unlinked_payload_bytes": 96590622,
+    "two_readers_remaining_within96MiB": 4072674,
+    "rounding_only_6_inodes_4096B": 96608256,
+    "qualification": "4096B rounding only is NOT an upper bound on ext4 preallocation, delayed allocations, extent-tree/bitmap/journal metadata, or delayed release."
+  },
+  "whole_bound_repair_spec": {
+    "owner_ordering": "Before either logs call, obtain affirmative producer/log-copier completion with current container identity. Stop/kill return status alone insufficient; after failure omit logs while retaining its command/error evidence. Final pre-cleanup logs must not precede this completion check. This is a proposed source change, not implemented here.",
+    "reader_condition": "Exclusive campaign ownership must cover daemon log consumers/raw-FD readers, not merely command scheduling. If reads overlap growth, bind maximum actual daemon ReadLogs requests and positively account their raw-FD lifetimes; retain all uncertain inodes until positive retirement.",
+    "allocation_condition": "For actual Docker log filesystem, prove conservative total physical growth including preallocation and metadata <=96MiB. With zero unlinked readers the proved payload is32196874B and overhead allowance68466422B; with4 pinned inodes overhead allowance4072674B. Need exact running filesystem/kernel allocation behavior and relevant tunables, or an independently enforced hard allocation cap with bounded backing growth. statvfs unit rounding is insufficient.",
+    "admission_condition": "Bind actual Docker Root Dir/log path and same filesystem identity; preserve16GiBHOST/12GiBscratch floors plus full backing growth. No admission from this report."
+  },
+  "exact_missing_hard_premise": "A source/implementation-bound maximum for physical ext4 allocation beyond the two named log files (or beyond bounded retained inodes), including transient allocation/metadata, on the actual Docker log filesystem; additionally current source does not establish zero active readers during growth. Thus source logical rotation limits plus statvfs cannot prove96MiB physical bound.",
+  "actions": {
+    "root": 0,
+    "docker": 0,
+    "guest": 0,
+    "build": 0,
+    "stress": 0,
+    "new_source_download": 0,
+    "native_practical_credit": 0,
+    "service_hold": "unchanged"
+  }
+}

@@ -1,3 +1,135 @@
+## Active execution — fresh native235 admission PASS (2026-10-23 03:04 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+User-reported service resolution receipt is active; original rejection retained,
+all current service checks remain enabled and any new rejection stops its lane.
+Fresh exact native235 read-only admission passed exit0 in0.324312s, empty stderr,
+direct child3457351/start52192017 joined and streams closed. Evidence:
+../evidence/native235-resume-20261023-1/admission/. HOST176169959424B >=34243420160B;
+scratch14115536896B >=14101250048B. This is a sample, not a workload reservation.
+No native guest or practical closure yet:29/35, V3 qualifying0cycles/0launches/0minutes.
+
+Critical path: exact235 metadata/guard and one-shot independent release, then
+strict235 result/physical retirement,227 recovery, firstV3 restoration and batch.
+227 ordinary overlay/strict-consumer packet is ready for focused data/profile grant.
+Dedicated p12_bound_successor owns daemon physical-log/capture integration;
+exact distro record bound98438B/named-file bound32196874B proved, physical96MiB
+still conditional. Capture actual-body regression passes; prospective separate
+768MiB external allowance raises logical growth to4GiB;142GiB geometry reader8
+fixtures pass. First daemon identity query exit120 empty: FSIZE0 direct capture
+failure reproduced locally; pipe correction remains unexecuted, not identity proof.
+
+User-authorized110→142GiB maintenance source has14mock passes; no resize occurred.
+Current235 admission also pins110GiB, so run it before growth or use reviewed exact
+successor later. All old pins/evidence retained; no reserve lowering. Root owns
+maintenance/release, scratch21/permanent27:4 preserved. Original velocity baseline
+2/44.160327s unchanged; no throughput or milestone-speedup claim.
+
+## User reports service issue resolved — resume six-check execution (2026-10-23)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+The user explicitly answered "Yes, it has been resolved" to the question whether
+the OpenAI service/account restriction has been resolved since the stop. Source:
+[USER-SERVICE-RESOLUTION-20261023.json](USER-SERVICE-RESOLUTION-20261023.json).
+This is a user-reported external-state change, not proof a new request passed.
+Keep original rejection/evidence intact and current service checks active.
+The earlier unresolved-status banners below are historical. The user repeatedly
+instructs continuation, dedicates the computer to this work and prioritizes closing
+all six literal checks. Continue actual current235 process,227recovery,V3restore,
+reviewedfixedbatch andqualifyingP12session with fresh admission/exact releases.
+Stop/preserve any NEW service rejection; do not replay expired releases or infer
+native acceptance from this receipt.35/35 requires genuine literal evidence.
+
+User also authorizes necessary scratch growth. Foreground proposals and completed
+independent reviews are in /home/holden/mckernel-work/host-preparation/scratch-growth-
+20261023-1/. Proposed110to142GiB, fresh identities/capacity/exclusive maintenance
+and exact operation review required. The sole mapped110GiB size check is private
+uninstalled/unreleased P12long_transport.py; canonical launcher/resource/session
+scripts have no size pin. Retain predecessors and prepare coherent142GiB successor.
+Native5.15 and legacyresize2fs reserve behaviors differ; review that operation
+choice before effects. Avoid making this maintenance block a currently admissible
+native case: run it between fully retired workloads as needed. No image/helper/
+module rebuild is implied. Keep the existing resource floors and ownership.
+
+## Explicit fresh session — independent functional OS task, prior rejection retained (2026-10-23 02:45 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+The user explicitly requests a fresh conversation, preserving all engineering,
+with this scope stated for every command. Use the supported archival launcher;
+retain dirty worktree, evidence, budgets and original service failure. A new
+conversation is NOT clearance to retry the rejected native235 admission or
+bypass service checks. Earlier whole-conversation/context history need not be
+loaded; its exact state and logs remain preserved by the launcher archive.
+
+Current accepted baseline:29/35, six literal checks still open. Read the latest
+CURRENT/HANDOFF and SIX-CHECK-CLOSURE-FOCUS-20261023.md for accepted tuples and
+existing controls. No unchanged image/SDK/helper rebuild or validation replay.
+
+START WITH THIS DISTINCT READY OS TASK: finish the existing P12 bounded logging
+and disk-growth correctness proof. This is separate from rejected native235
+admission. Source review at docs/verification/evidence/p12-coupled-resource-review-
+20261023-1/INDEPENDENT-RESOURCE-BOUNDARY-REVIEW-1.json has one concrete finding:
+96MiBDocker-log allowance/3489660928Btotal lacks a binding to the actual daemon's
+encoded-record/peak-rotation implementation. Nine source pins, exact json-file
+16m2 checks, four384MiBfile limits and64consumer checks already passed in their
+scope. Reuse those results. The exact local package observed is docker.io
+26.1.3-0ubuntu1~20.04.1; an upstream tag alone does not establish distro daemon
+identity. The unprivileged /proc/exe read was denied; no privileged identity
+observation was attempted. Prepare/review one bounded read-only identity query
+under an existing suitable profile, then bind the selected implementation and
+prove or repair the finite bound. Account for final external capture storage.
+No daemon reconfiguration, stress probe, new container/guest or filesystem change
+is required for this source/resource task. Use concrete independently useful
+source/test lanes with disjoint owners; do not create broad audits or filler.
+Existing root/ordinary admission and independent review controls still apply.
+
+Prior service notice remains unresolved and must stay visible: original thread
+01a1626a-eaa3-7282-a47b-3292178e2cca, rejected turn
+01a164fb-31aa-7763-87f5-7e84e9507332,02:02:28UTC, last_error.codexErrorInfo=cyberPolicy.
+The exact notice says content was flagged for possible cybersecurity risk and
+identifies individual DaybreakBlue account setup/compatible FIDO2 hardware-key
+requirements at https://chatgpt.com/cyber. Preserve that notice and its exact
+original state/log; do not infer resolution from a fresh cursor or absent error
+field. This fresh task does not replay the rejected request. Rejected native235
+admission remains held pending the supported service/account review path.
+
+Every worker brief and human-readable command purpose must explicitly state
+functional OS scope/no security testing; actual work must match. Keep frozen
+shell argv and source bindings exact. Scoping text is communication, not a way
+to alter classification or reinterpret a blocked request.
+
+Use GPT6.1 medium/high as appropriate, weekly included usage only with100%stop,
+one-heavy4CPU/12GiB/noSwap/512tasks, CPU1 excluded, ordinary6/7grants and CPU0
+coordination,16GiBHOST/12GiBscratch floors plus full growth. Preserve scratch21,
+permanentmutex27:4, all ownership and failures. Stop/retain on a new service
+rejection; no automatic fresh-session retry of policy/auth/quota stops. Do not
+mark35/35 or goalcomplete without actual evidence. After genuine35/35, seeded
+Rust workloads are first; syzkaller integration is a later separate task.
+
+## Foreground status — functional-only scope reaffirmed; campaign stopped (2026-10-23 02:39 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+User reaffirmed that all work must focus on a functional OS. AGENTS.md now names
+the six-check delivery work explicitly; no security-testing lane is authorized.
+The original02:02 service rejection occurred while preparing the native235
+process-test admission, not during an observed security-test execution. Its exact
+trigger is unknown. A classifier notice alone does not identify such a task.
+
+The02:17 explicit same-thread resume was accepted and produced independent source
+prerequisites plus verified checkpointa2d037dc, but no native235/recovery/restore
+workload. Dispatcher marked goalblocked and stopped at02:35 after the recorded
+service issue remained unresolved. Latest state: stopped, blocked, exit20;
+last_failure still identifies the original02:02 rejected turn.29/35 unchanged.
+No agents or workloads were started by this foreground update; state and evidence
+remain preserved. For suspected unrelated-activity false positives, the official
+[OpenAI guidance](https://learn.chatgpt.com/docs/cyber-safety#false-positives)
+recommends Codex /feedback when available. Preserved thread:
+01a1626a-eaa3-7282-a47b-3292178e2cca; original rejected turn:
+01a164fb-31aa-7763-87f5-7e84e9507332.
+
 ## Current — independent prerequisites advanced; native policy hold preserved (2026-10-23 02:32 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

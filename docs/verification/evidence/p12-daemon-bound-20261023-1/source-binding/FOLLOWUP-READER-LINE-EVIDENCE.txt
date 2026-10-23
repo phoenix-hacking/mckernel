@@ -1,0 +1,262 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Focused owner/reader lifetime source excerpts.
+
+docs/verification/evidence/p12-coupled-resource-review-20261023-1/source/native_diagnostic_container_owner.py
+SHA256 c342d1492e957c3ebdfc142b7fce7d10fbadcae8b64565f4d7ad0e336f1219ec
+444: def bounded_command(argv, timeout, *, env=None, ledger=None):
+445:     """Drain bounded pipes without communicate()'s unbounded memory capture."""
+446:     need(type(timeout) in (int, float) and math.isfinite(timeout) and timeout > 0, "command deadline")
+447:     end = time.monotonic() + timeout
+448:     output = [bytearray(), bytearray()]
+449:     child = CommandChild()
+450:     ledger = COMMAND_LEDGER if ledger is None else ledger
+451:     need(not ledger.pending, "previous command child retirement unresolved")
+452:     failure = None
+453:     mask = signal.pthread_sigmask(signal.SIG_BLOCK, OWNER_SIGNALS)
+454:     try:
+455:         ledger.pending.add(child)
+
+958:     def _cleanup(self):
+959:         """One 15-second cleanup attempt; retain the lock on uncertainty."""
+960:         self.absent = False
+961:         end = self.clock() + 15
+962:         self.cleaning, self.command_deadline = True, end
+963:         try:
+964:             self.backend.children.retire_pending(timeout=min(1, end - self.clock()))
+965:             reaps = self.backend.children.peek_final_reap_records()
+966:             if reaps:
+967:                 next_sequence = self.retirement_sequence + 1
+968:                 self._save("command-retirements-%03d.json" % next_sequence, reaps)
+969:                 self.backend.children.ack_final_reap_records(reaps)
+970:                 self.retirement_sequence = next_sequence
+971:             row = self._lookup()
+972:             if row is not None:
+973:                 self.container = row["Id"]
+974:                 # Authentication of the exact name, label and ID resolves an
+975:                 # issued create even when its client response was lost.
+976:                 self.create_completed = True
+977:                 removed = False
+978:                 for args, allowance in ((["stop", "--time=2"], 4), (["kill"], 2),
+979:                                         (["wait"], 1), (["logs", "--timestamps"], 1),
+980:                                         (["inspect"], 1), (["rm", "--force"], 4)):
+981:                     try:
+982:                         need(self.clock() < end, "cleanup deadline")
+983:                         result = self._call(args + [self.container], timeout=min(allowance, end - self.clock()), allow_failure=True)
+984:                         # stop/kill return nonzero for an already stopped container;
+985:                         # rm and final absence remain authoritative.
+986:                         if args[0] == "rm":
+987:                             need(result.returncode == 0, "container removal failed")
+988:                             removed = True
+989:                     except BaseException as exc:
+990:                         self._remember(exc)
+991:                 need(removed, "authenticated container removal incomplete")
+
+1090:             self._profile(row, image)
+1091:             need(row.get("State", {}).get("Status") == "created" and row["State"].get("Running") is False, "container started before verification")
+1092:             started = self._call(["start", "--attach", self.container], timeout=deadline)
+1093:             waited = self._call(["wait", self.container], timeout=5)
+1094:             need(waited.stdout == b"0\n" and waited.stderr == b"", "container wait status")
+1095:             final = self._lookup()
+1096:             need(final is not None, "final container missing")
+1097:             self._profile(final, image)
+1098:             state = final.get("State", {})
+1099:             self._save("state.json", state)
+1100:             need(state.get("Status") == "exited" and all(state.get(k) is False for k in
+1101:                  ("Running", "Paused", "Restarting", "OOMKilled", "Dead")) and state.get("Error", "") == "" and
+1102:                  same(state.get("ExitCode"), 0), "container state failed")
+1103:         except BaseException as exc:
+1104:             self._remember(exc)
+1105:         finally:
+1106:             if self.may_exist and self.lock is not None:
+1107:                 # Capture is attempted even after timeout, start or inspect failure.
+1108:                 if self.container is not None:
+1109:                     for args in (["wait", self.container], ["logs", "--timestamps", self.container], ["inspect", self.container]):
+1110:                         try:
+1111:                             self._call(args, timeout=3)
+1112:                         except BaseException as exc:
+1113:                             self._remember(exc)
+1114:                 self._cleanup()
+1115:             else:
+1116:                 # Acquisition failed; we have no authority to assert absence.
+
+/home/holden/mckernel-work/host-preparation/p12-daemon-source-cache-20261023-1/extracted/engine/daemon/logs.go
+SHA256 1b4c800134a5d194efabe781aa5ba0d50fd60fd318f9ec44bd25e6a1b2cb3ed7
+68: 	follow := config.Follow && !cLogCreated
+69: 	tailLines, err := strconv.Atoi(config.Tail)
+70: 	if err != nil {
+71: 		tailLines = -1
+72: 	}
+73: 
+74: 	var since time.Time
+75: 	if config.Since != "" {
+76: 		s, n, err := timetypes.ParseTimestamps(config.Since, 0)
+77: 		if err != nil {
+78: 			return nil, false, err
+79: 		}
+80: 		since = time.Unix(s, n)
+81: 	}
+82: 
+83: 	var until time.Time
+84: 	if config.Until != "" && config.Until != "0" {
+85: 		s, n, err := timetypes.ParseTimestamps(config.Until, 0)
+86: 		if err != nil {
+87: 			return nil, false, err
+88: 		}
+89: 		until = time.Unix(s, n)
+90: 	}
+91: 
+92: 	readConfig := logger.ReadConfig{
+93: 		Since:  since,
+94: 		Until:  until,
+95: 		Tail:   tailLines,
+96: 		Follow: follow,
+97: 	}
+98: 
+99: 	logs := logReader.ReadLogs(readConfig)
+100: 
+
+103: 	// (if the caller wants to give up on logs, they have to cancel the context)
+104: 	// this goroutine functions as a shim between the logger and the caller.
+105: 	messageChan := make(chan *backend.LogMessage, 1)
+106: 	go func() {
+107: 		if cLogCreated {
+108: 			defer func() {
+109: 				if err = cLog.Close(); err != nil {
+110: 					log.G(ctx).Errorf("Error closing logger: %v", err)
+111: 				}
+112: 			}()
+113: 		}
+114: 		// signal that the log reader is gone
+115: 		defer logs.ConsumerGone()
+116: 
+117: 		// close the messages channel. closing is the only way to signal above
+118: 		// that we're doing with logs (other than context cancel i guess).
+119: 		defer close(messageChan)
+120: 
+121: 		lg.Debug("begin logs")
+122: 		defer lg.Debugf("end logs (%v)", ctx.Err())
+123: 
+124: 		for {
+125: 			select {
+126: 			// i do not believe as the system is currently designed any error
+127: 			// is possible, but we should be prepared to handle it anyway. if
+128: 			// we do get an error, copy only the error field to a new object so
+129: 			// we don't end up with partial data in the other fields
+130: 			case err := <-logs.Err:
+131: 				lg.Errorf("Error streaming logs: %v", err)
+132: 				select {
+133: 				case <-ctx.Done():
+134: 				case messageChan <- &backend.LogMessage{Err: err}:
+135: 				}
+136: 				return
+137: 			case <-ctx.Done():
+138: 				return
+139: 			case msg, ok := <-logs.Msg:
+140: 				// there is some kind of pool or ring buffer in the logger that
+
+/home/holden/mckernel-work/host-preparation/p12-daemon-source-cache-20261023-1/extracted/engine/daemon/logger/loggerutils/logfile.go
+SHA256 540b32158973f4cf9011aabc61dc47c1aa185ecdcd743082e92466f80b68b7af
+400: func (w *LogFile) readLogsLocked(currentPos logPos, config logger.ReadConfig, watcher *logger.LogWatcher) {
+401: 	defer close(watcher.Msg)
+402: 
+403: 	currentFile, err := open(w.f.Name())
+404: 	if err != nil {
+405: 		watcher.Err <- err
+406: 		return
+407: 	}
+408: 	defer currentFile.Close()
+409: 
+410: 	dec := w.createDecoder(nil)
+411: 	defer dec.Close()
+412: 
+413: 	currentChunk := io.NewSectionReader(currentFile, 0, currentPos.size)
+414: 	fwd := newForwarder(config)
+415: 
+416: 	if config.Tail != 0 {
+417: 		// TODO(@cpuguy83): Instead of opening every file, only get the files which
+418: 		// are needed to tail.
+419: 		// This is especially costly when compression is enabled.
+420: 		files, err := w.openRotatedFiles(config)
+421: 		if err != nil {
+422: 			watcher.Err <- err
+423: 			return
+424: 		}
+425: 
+426: 		closeFiles := func() {
+427: 			for _, f := range files {
+428: 				f.Close()
+429: 			}
+430: 		}
+431: 
+432: 		readers := make([]SizeReaderAt, 0, len(files)+1)
+433: 		for _, f := range files {
+434: 			switch ff := f.(type) {
+435: 			case SizeReaderAt:
+436: 				readers = append(readers, ff)
+437: 			case interface{ Stat() (fs.FileInfo, error) }:
+438: 				stat, err := ff.Stat()
+439: 				if err != nil {
+440: 					watcher.Err <- errors.Wrap(err, "error reading size of rotated file")
+441: 					closeFiles()
+442: 					return
+443: 				}
+444: 				readers = append(readers, io.NewSectionReader(f, 0, stat.Size()))
+445: 			default:
+446: 				panic(fmt.Errorf("rotated file value %#v (%[1]T) has neither Size() nor Stat() methods", f))
+447: 			}
+448: 		}
+449: 		if currentChunk.Size() > 0 {
+450: 			readers = append(readers, currentChunk)
+451: 		}
+452: 
+453: 		ok := tailFiles(readers, watcher, dec, w.getTailReader, config.Tail, fwd)
+454: 		closeFiles()
+455: 		if !ok {
+
+479: 	type rotatedFile struct {
+480: 		f          *os.File
+481: 		compressed bool
+482: 	}
+483: 
+484: 	var q []rotatedFile
+485: 	defer func() {
+486: 		if err != nil {
+487: 			for _, qq := range q {
+488: 				qq.f.Close()
+489: 			}
+490: 			for _, f := range files {
+491: 				f.Close()
+492: 			}
+493: 		}
+494: 	}()
+495: 
+496: 	q, err = func() (q []rotatedFile, err error) {
+497: 		defer w.fsopMu.RUnlock()
+498: 
+499: 		q = make([]rotatedFile, 0, w.maxFiles)
+500: 		for i := w.maxFiles; i > 1; i-- {
+501: 			var f rotatedFile
+502: 			f.f, err = open(fmt.Sprintf("%s.%d", w.f.Name(), i-1))
+503: 			if err != nil {
+504: 				if !errors.Is(err, fs.ErrNotExist) {
+505: 					return nil, errors.Wrap(err, "error opening rotated log file")
+506: 				}
+507: 				f.compressed = true
+508: 				f.f, err = open(fmt.Sprintf("%s.%d.gz", w.f.Name(), i-1))
+509: 				if err != nil {
+510: 					if !errors.Is(err, fs.ErrNotExist) {
+511: 						return nil, errors.Wrap(err, "error opening file for decompression")
+512: 					}
+513: 					continue
+514: 				}
+515: 			}
+516: 			q = append(q, f)
+517: 		}
+518: 		return q, nil
+519: 	}()
+520: 	if err != nil {
+521: 		return nil, err
+522: 	}
+523: 
+524: 	for len(q) > 0 {
+

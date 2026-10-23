@@ -1,0 +1,27 @@
+{
+  "reviewer": "/root/p12_identity_review",
+  "decision": "PASS_ONE_READ_ONLY_INVOCATION",
+  "source_sha256": "2f88ff1f515ca3c8dbfa8b76718751a5e65f3842f4f187b3a387b0d776181cf9",
+  "profile_sha256": "6819fbdd862013e3a4382ac00fc3128f72aab480b9073d76cd28738e3231ca4e",
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2",
+    "20",
+    "sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/python3",
+    "-I",
+    "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/identity-query/query.py"
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "limitations": [
+    "Sampled identity only",
+    "No Docker API, admission or workload",
+    "native235 remains held",
+    "No retry authority"
+  ]
+}

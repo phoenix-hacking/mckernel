@@ -1,0 +1,34 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PREPARED_NOT_RELEASED",
+  "source_sha256": "2f88ff1f515ca3c8dbfa8b76718751a5e65f3842f4f187b3a387b0d776181cf9",
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2",
+    "20",
+    "sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/python3",
+    "-I",
+    "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/identity-query/query.py"
+  ],
+  "effect": "Read only proc2036 stat/exe/root and installed /usr/bin/dockerd; bounded hashes and stdout, no Docker API/workload/mutation.",
+  "limits": {
+    "cpu": 0,
+    "wall_seconds": 22,
+    "cpu_seconds": 10,
+    "AS_bytes": 536870912,
+    "FSIZE_bytes": 0,
+    "core_bytes": 0,
+    "max_read_file_bytes": 268435456,
+    "stdout_expected_max": 4096,
+    "term_after_seconds": 20,
+    "kill_grace_seconds": 2
+  },
+  "failure_history": "Candidate1 source/profile review identified timeout exclusion of sudo and extra-block growth read. One bounded correction: timeout includes sudo/askpass and digest reads at most initial size. No privileged attempt.",
+  "service_hold": "native235 remains held; this distinct read-only identity query is not admission."
+}

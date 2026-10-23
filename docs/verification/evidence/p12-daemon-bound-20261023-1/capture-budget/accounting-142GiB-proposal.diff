@@ -1,0 +1,14 @@
+--- long_transport.accounting-proposal.py
++++ long_transport.accounting-142GiB-proposal.py
+@@ -220,9 +220,9 @@
+     fd = os.open(backing, os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC)
+     try:
+         info = os.fstat(fd)
+-        need(stat.S_ISREG(info.st_mode) and info.st_size == 110 * 2**30 and
++        need(stat.S_ISREG(info.st_mode) and info.st_size == 142 * 2**30 and
+              info.st_dev == Path(parent).stat().st_dev and info.st_dev != device,
+-             'unchanged110GiB host sparse backing and distinct output filesystem')
++             'exact142GiB host sparse backing and distinct output filesystem')
+         gap = max(0, info.st_size - info.st_blocks * 512)
+     finally:
+         os.close(fd)
