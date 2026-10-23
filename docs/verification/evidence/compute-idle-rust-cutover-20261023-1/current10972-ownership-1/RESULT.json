@@ -1,0 +1,121 @@
+{
+  "combined_cpu_seconds": 6.146498,
+  "error": null,
+  "language_bytes": {
+    "assembly": 0,
+    "c": 38243,
+    "other": 779738,
+    "rust": 0
+  },
+  "limitations": [
+    "Alias-deduplicated nonzero T/t symbol spans, attributed by symbol-start addr2line source suffix; excludes unsized/gap/padding text.",
+    "Assembly/other are not C. Header-origin/inlined/mixed-language code may classify as other or symbol-start source.",
+    "C-only function counts not reported by existing CLI; all-symbol counts are not C function counts.",
+    "Current10972 image only; newer canonical memory/idle ports are not installed. No language-retirement or native-coverage credit."
+  ],
+  "report": {
+    "bytes": 18713,
+    "path": "/home/holden/mckernel-work/host-preparation/current10972-compute-ownership-20261023-1/symbol-language.json",
+    "sha256": "2b80b7dd23299734e3fc5e39fce304e11bb7181d3a0f4e8f890747e19e7827e1"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "seconds": 6.125786271994002,
+  "source_bytes": [
+    {
+      "bytes": 652139,
+      "language": "other",
+      "source": "??"
+    },
+    {
+      "bytes": 127599,
+      "language": "other",
+      "source": "mckernel_rust.8afe63fe1da445c1-cgu.0"
+    },
+    {
+      "bytes": 19452,
+      "language": "c",
+      "source": "syscall.c"
+    },
+    {
+      "bytes": 8617,
+      "language": "c",
+      "source": "mem.c"
+    },
+    {
+      "bytes": 4295,
+      "language": "c",
+      "source": "memory.c"
+    },
+    {
+      "bytes": 3556,
+      "language": "c",
+      "source": "process.c"
+    },
+    {
+      "bytes": 2323,
+      "language": "c",
+      "source": "cpu.c"
+    }
+  ],
+  "source_derivative": {
+    "base_git": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "materialization": "d7e24b4c0d3174b3479e33796d712d439444bae82902482448890b9d8142d43d",
+    "source_derivative": "5cffcc1b23dc5ca377baa055aab0417b0daac7ddcac0e2281903260f0ebd79e3",
+    "source_manifest": "28a6c1dededda19d2da07279f9a59d542996ae77bd96d176567cc86f0c5a8459",
+    "source_root_fresh_stat": {
+      "ctime_ns": 1792700291518049611,
+      "dev": 66306,
+      "inode": 48651056,
+      "mode": 16832,
+      "mtime_ns": 1792700291518049611,
+      "nlink": 19,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/source-materialization-1/materialized-source",
+      "size": 4096
+    }
+  },
+  "status": "PASS_ONE_TIME_CURRENT10972_SYMBOL_START_ATTRIBUTION",
+  "symbol_count": 4246,
+  "unique_symbol_span_count": 3867,
+  "whole_join": {
+    "captures": {
+      "stderr": {
+        "ctime_ns": 1792750760270953905,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48801498,
+        "mode": "0o600",
+        "mtime_ns": 1792750760270953905,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/current10972-compute-ownership-20261023-1/inventory-capture-1/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "uid": 1000
+      },
+      "stdout": {
+        "ctime_ns": 1792750766335141590,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48801497,
+        "mode": "0o600",
+        "mtime_ns": 1792750766335141590,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/current10972-compute-ownership-20261023-1/inventory-capture-1/stdout",
+        "sha256": "2b80b7dd23299734e3fc5e39fce304e11bb7181d3a0f4e8f890747e19e7827e1",
+        "size": 18713,
+        "uid": 1000
+      }
+    },
+    "closed_streams": true,
+    "direct_child_joined": true,
+    "error": null,
+    "group_absent": true,
+    "pid": 3635120,
+    "remaining_group_members": [],
+    "retirement_error": null,
+    "returncode": 0,
+    "seconds": 6.116474412032403,
+    "start": 54820496,
+    "timed_out": false,
+    "unexpected_group_members": []
+  }
+}

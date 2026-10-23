@@ -1,0 +1,30 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "retention_status": "PASS_STABLE_ORDINARY_UID1000_FAILED_RUN_RETENTION",
+  "raw_status": "FAIL",
+  "raw_failure": {
+    "error": "cancelled worker route history",
+    "phase": "evaluation",
+    "type": "DiagnosticError"
+  },
+  "raw_application_acceptance": false,
+  "raw_mckernel_application_executed": false,
+  "observed_payload_records": [
+    {
+      "raw_wait_status": 0,
+      "stdout": "recovery parent start\nparent cancel signal=15 ready=1 prereap=0 eof=1 reaped=1 echild=1 owned=0\nchild exec success token=fixed-v1\nparent recovery exec exit=37 eof=1 reaped=1 echild=1\nparent recovery complete children=2 owned=0\n",
+      "stderr": "",
+      "stdout_eof": true,
+      "stderr_eof": true,
+      "procfs_empty": true
+    }
+  ],
+  "guest_cleanup": {
+    "errors": [],
+    "reaped": true
+  },
+  "formal_acceptance": false,
+  "raw_sources_unchanged": true,
+  "retained_copies": 14,
+  "retained_bytes": 458097
+}

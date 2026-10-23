@@ -1,0 +1,34 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/observer227-successor-preparation-1/post-native-preparation-1/readonly_export_exact_owner.py"
+  ],
+  "pid": 3637540,
+  "returncode": 0,
+  "elapsed_seconds": 0.10431267693638802,
+  "direct_child_joined": true,
+  "streams_closed": true,
+  "stdout": {
+    "bytes": 283229,
+    "sha256": "4d17dd6927d15e329eb722165c8feb977b8c1576280a24f70744478c6813d8c5"
+  },
+  "stderr": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

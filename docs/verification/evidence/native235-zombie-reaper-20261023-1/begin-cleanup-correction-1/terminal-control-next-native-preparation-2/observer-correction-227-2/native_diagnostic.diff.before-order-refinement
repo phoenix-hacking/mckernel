@@ -1,0 +1,15 @@
+--- accepted-e1b1/native_diagnostic.py
++++ /home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer-correction-227-2/native_diagnostic.py
+@@ -1421,9 +1421,9 @@
+             _need(cpu==0 and begin>publication[0],"child CPU/publication order")
+             if key in terminals:continue
+             if key in cancelled:
+-                # Slot0 has no return_route. Require its earlier completed rows
+-                # to establish this SAME worker's slot before terminal closure.
+-                _need(workers.get(key[0])==0, "cancelled worker route history")
++                # The canceled poll has no RET/route row. Require earlier
++                # completed rows to establish this SAME worker's valid slot.
++                _need(workers.get(key[0]) in (0,1), "cancelled worker route history")
+                 continue
+             (retcpu,_),end=returned[key]
+             _need(retcpu==0 and begin<end and (terminal is None or end<terminal),"child syscall/terminal order")

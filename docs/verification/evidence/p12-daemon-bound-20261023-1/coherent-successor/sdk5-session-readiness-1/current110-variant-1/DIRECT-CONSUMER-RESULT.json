@@ -1,0 +1,107 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "python": "3.8.10 (default, Mar 18 2025, 20:04:55) \n[GCC 9.4.0]",
+  "owner_source_sha256": "34b680365f9015d8180046421cc5048d349ca59e59df860c24754ba87480d980",
+  "reused_fixture_receipt_sha256": "83fb9aa601903552794ad3237c289596ecb1d77ff6e606bd2f728133e0801bff",
+  "root": 0,
+  "live_owner": 0,
+  "Docker": 0,
+  "historical_statuses_reconstructed": false,
+  "shim_installed": false,
+  "status": "PASS_3_ACTUAL_PYTHON38_WAIT_BOUNDED_COMMAND_LEDGER_CONSUMERS",
+  "cases": [
+    {
+      "case": "exit0",
+      "returncode": 0,
+      "stdout": "fixture-out",
+      "stderr": "fixture-err",
+      "record": {
+        "pid": 3632107,
+        "pgid": 3632107,
+        "sid": 3632105,
+        "proc_starttime": 54774382,
+        "reaped": true,
+        "returncode": 0
+      },
+      "echild": true,
+      "child_identity_absent": true,
+      "pending_ledger": 0,
+      "ledger_errors": [],
+      "retirement_consumer": "actual CommandLedger.retire_pending + peek/ack completed"
+    },
+    {
+      "case": "nonzero37",
+      "returncode": 37,
+      "stdout": "fixture-out",
+      "stderr": "fixture-err",
+      "record": {
+        "pid": 3632108,
+        "pgid": 3632108,
+        "sid": 3632105,
+        "proc_starttime": 54774388,
+        "reaped": true,
+        "returncode": 37
+      },
+      "echild": true,
+      "child_identity_absent": true,
+      "pending_ledger": 0,
+      "ledger_errors": [],
+      "retirement_consumer": "actual CommandLedger.retire_pending + peek/ack completed"
+    },
+    {
+      "case": "signaledTERM",
+      "returncode": -15,
+      "stdout": "fixture-out",
+      "stderr": "fixture-err",
+      "record": {
+        "pid": 3632109,
+        "pgid": 3632109,
+        "sid": 3632105,
+        "proc_starttime": 54774393,
+        "reaped": true,
+        "returncode": -15
+      },
+      "echild": true,
+      "child_identity_absent": true,
+      "pending_ledger": 0,
+      "ledger_errors": [],
+      "retirement_consumer": "actual CommandLedger.retire_pending + peek/ack completed"
+    }
+  ],
+  "actual_wait_observations": [
+    {
+      "record": {
+        "pid": 3632107,
+        "pgid": 3632107,
+        "sid": 3632105,
+        "proc_starttime": 54774382,
+        "reaped": true,
+        "returncode": 0
+      },
+      "returncode": 0
+    },
+    {
+      "record": {
+        "pid": 3632108,
+        "pgid": 3632108,
+        "sid": 3632105,
+        "proc_starttime": 54774388,
+        "reaped": true,
+        "returncode": 37
+      },
+      "returncode": 37
+    },
+    {
+      "record": {
+        "pid": 3632109,
+        "pgid": 3632109,
+        "sid": 3632105,
+        "proc_starttime": 54774393,
+        "reaped": true,
+        "returncode": -15
+      },
+      "returncode": -15
+    }
+  ],
+  "seconds": 0.1862771069863811
+}

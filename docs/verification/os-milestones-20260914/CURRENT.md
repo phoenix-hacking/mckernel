@@ -1,3 +1,30 @@
+## Fresh227 observer failure physically retired — 2026-10-23 10:29 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical30/35,7/14 whole milestones; newly closed IDs none. Final-profile cycles,
+launches,actualmixedminutes0/0/0. Strict235/P-M06-01/M06 acceptance remains valid.
+Fresh2275b643 ran37.415s: original app reports cancellation/reap/ECHILD and recovery
+exec37, but collector FAIL cancelled worker route history; raw flags unchanged.
+Actual observation retained: same worker33 has completed slot1 routes39/41/46
+before cancelled poll48, followed by other worker34 terminal50. Independent expert
+confirmed observer's slot0-only assertion is wrong. Narrow correction owner
+terminal_lifecycle_repair; require proven same-worker slot0 OR slot1 history and
+RET preceding poll, retain all lifecycle/oracle guards and negative tests.
+Independent physical review PASS:25 Docker clients/QEMU reaped, exact container
+removed, owned final ID/name/label empty; five fresh read-only observations pass,
+complete PROC/no publishers, permanent27:4/eight paths absent. No duplicate cleanup.
+Evidence: native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/
+terminal-control-next-native-preparation-2/observer227-actual-post-physical-2/.
+M05 coherent owner3ff7/runnerc557 independently source accepted;8 fixtures pass.
+Actual exclusive manifest publication8c03 succeeded0/.045s; positive real hook
+binding ownercase227_stage, then firstV3restoration remains pending strict227.
+P12 current110 source variant independently accepted; actual scratch growth and
+separately reviewed emergency/campaign inputs remain unresolved, no live capacity
+claim. M14 current10972 one-time inventory completed6.13s:38243B attributed C,
+779738B other includes127599B Rust codegen label; no reliable whole-image Rust
+percentage. Default-image candidate ready/source accepted, no build/native credit.
+Included-only100% and service checks retained; no resize or speedup claim.
+
 ## Observer correction accepted; fresh227 admission passed — 2026-10-23 10:09 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

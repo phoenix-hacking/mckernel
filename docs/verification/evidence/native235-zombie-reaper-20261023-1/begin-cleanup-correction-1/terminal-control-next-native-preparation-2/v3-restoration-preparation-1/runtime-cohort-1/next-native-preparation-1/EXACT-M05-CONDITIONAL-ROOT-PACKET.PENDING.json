@@ -1,0 +1,178 @@
+{
+  "capture_mechanisms": {
+    "native": "Existing capture_native199_owner.py accepted a6ce directjoin/closedstreams/group/FD-hash tail; no outer timeout/kill",
+    "ordinary_binding": "owned_capture990807; completed8e6a",
+    "post": "Existing serialized O_EXCL capture profile unchanged"
+  },
+  "current_live_postjoin": null,
+  "expected_actual_admission_status": "PASS_FRESH_READ_ONLY_NATIVE235_CURRENT_LIVE_ADMISSION",
+  "failure_history": "Preserve all SDK4/SDK5 and227 failed captures. Latest227 5b643 failed cancelled worker route history; physical retirement accepted only. M05 prerequisite strict227 remains NULL. No replay or native credit.",
+  "fetched_checkpoint_and_current_identity": null,
+  "fresh_root_admission": null,
+  "independent_execution_release": null,
+  "independent_source_operation_review": null,
+  "logging_policy": "Actual owner uses daemon default; _profile accepts json-file/local with empty Config. No16m/2 policy claim.",
+  "metadata_parent": "/home/holden/mckernel-work/scratch/nm05p5a1",
+  "native_capture_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/capture_native199_owner.py",
+    "--operation",
+    "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/runtime-cohort-1/next-native-preparation-1/NATIVE-OPERATION.PENDING.json",
+    "--sha256",
+    "33c4255d7695fc82c7887847895c0e453f9ffc059b294ae12c947c7d246169e8"
+  ],
+  "native_execution_authorized": false,
+  "nonce": "495e2edd278e4733ae4d17476cb93831",
+  "owner_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--fsize=33554432",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/runtime-cohort-1/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/nm05p5a1/p",
+    "--nonce",
+    "495e2edd278e4733ae4d17476cb93831",
+    "--owner-sha256",
+    "3ff7fc05b7e52fbc4491142d703d525f6d50b76a60b7e64eeab47d304ab4cbe0",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/nm05p5a1/m.json",
+    "--manifest-sha256",
+    "8c03e5570b98a99db009f74f6dea9bf27ad9f046abeeea44d66ec561cbe708d7"
+  ],
+  "owner_evidence_root": "/home/holden/mckernel-work/scratch/nm05p5a1/p.owner-495e2edd278e4733ae4d17476cb93831",
+  "production_guard_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=8388608",
+    "--core=0:0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport importlib.util,json,hashlib,os\nB=Path(__import__('sys').argv[1]);P=json.loads(Path(__import__('sys').argv[2]).read_text())\ndef load(n,path):\n s=importlib.util.spec_from_file_location(n,path);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m\no=load('actual_owner',B/'native_diagnostic_container_owner.py');d=load('actual_diagnostic',B/'native_diagnostic.py');parent=Path(P['new_owner_parent']);manifest=Path(P['new_manifest']);need='8c03e5570b98a99db009f74f6dea9bf27ad9f046abeeea44d66ec561cbe708d7'\nassert hashlib.sha256((B/'native_diagnostic_container_owner.py').read_bytes()).hexdigest()=='3ff7fc05b7e52fbc4491142d703d525f6d50b76a60b7e64eeab47d304ab4cbe0'\nassert hashlib.sha256(manifest.read_bytes()).hexdigest()==need\no.private_parent(str(parent));o._manifest_identity(str(manifest),need);o._manifest_outside_writable_parent(str(manifest),parent)\nattempt=parent/('attempt-'+P['fresh_nonce']);assert not os.path.lexists(attempt)\na=d.expected_qemu_argv(json.loads(manifest.read_text()),attempt);q=P['qmp_socket'];assert a[a.index('-qmp')+1]=='unix:'+q+',server=on,wait=off';assert len(os.fsencode(q))==95\nprint('PASS actual source4d7 parent/scratch manifest/outside-writable guards and actual expected_qemu_argv with95byte QMP socket')",
+    "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/runtime-cohort-1",
+    "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/runtime-cohort-1/next-native-preparation-1/EXACT-GUARD-DATA.json"
+  ],
+  "profile": {
+    "container_CPU_affinity": "2-5",
+    "container_CPU_count": 4,
+    "container_fsize": [
+      33554432,
+      33554432
+    ],
+    "container_memory_bytes": 12884901888,
+    "container_network": "none",
+    "container_swap_bytes": 0,
+    "container_tasks": 512,
+    "cpu": 7,
+    "guest_memory_mib": 8192,
+    "guest_numa_nodes": 2,
+    "guest_vcpus": 4,
+    "host_UID_NPROC": "inherited126258:126258; no per-UID512",
+    "jobs": 1,
+    "outer_grace_kill": null,
+    "outer_wall_kill": null,
+    "owner_CPU_limits": [
+      -1,
+      -1
+    ],
+    "owner_as_bytes": [
+      2147483648,
+      2147483648
+    ],
+    "payload_timeout_ms": 10000,
+    "required_inherited_cpu_limits": [
+      -1,
+      -1
+    ],
+    "runner_timeout_seconds": 300,
+    "stream_fsize": 33554432
+  },
+  "qmp_encoded_bytes": 95,
+  "qmp_socket": "/home/holden/mckernel-work/scratch/nm05p5a1/p/attempt-495e2edd278e4733ae4d17476cb93831/qmp.sock",
+  "read_only_admission_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--core=0:0",
+    "--fsize=8388608:8388608",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/runtime-cohort-1/next-native-preparation-1/read_only_m05_admission.py"
+  ],
+  "references": {
+    "accepted235_formal": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/INDEPENDENT-FORMAL-STRICT235-APPLICATION-ACCEPTANCE.json",
+      "sha256": "de21eb47f58ebb45c23ae2365004ac39fb6032a45c4ac879cb10cd3fc13769d5"
+    },
+    "accepted235_physical": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/INDEPENDENT-ACTUAL-PHYSICAL-ACCEPTANCE.json",
+      "sha256": "683a686ae88536a9c8c7e3b84cbe435ea4f180b88b7d004ec0bafe7c92b7af46"
+    },
+    "accepted_SDK5": {
+      "bytes": 2584,
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/INDEPENDENT-ACTUAL-SDK-ARTIFACT-AND-PHYSICAL-ACCEPTANCE.json",
+      "sha256": "8614e3e2bbf9e07c01f396079fc83fedbbb4119a3c37b5e311bdcc6cb6099623"
+    },
+    "actual_metadata_publication": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/v3-restoration-preparation-1/runtime-cohort-1/actual-metadata-publication-1/receipt.json",
+      "sha256": "704808de8a712d766bf4c73a921f0f250150bb3b828f655847ab441e3276565c"
+    },
+    "admission_operation": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/runtime-cohort-1/next-native-preparation-1/ROOT-EXACT-READONLY-ADMISSION-OPERATION.PENDING.json",
+      "sha256": "2298d1ee63a6a842ac2acf2e78b027e66636e918aec311901369878f1a2d25a3"
+    },
+    "independent_source_and_fixture_review": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/v3-restoration-preparation-1/runtime-cohort-1/INDEPENDENT-SOURCE-AND-FIXTURE-REVIEW.json",
+      "sha256": "6e55af4f26a6f16e723956c2d4cb90690329f8ca1a7f86308c964de26937d88b"
+    },
+    "latest227_physical": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/observer227-actual-post-physical-2/INDEPENDENT-ACTUAL-PHYSICAL-ACCEPTANCE.json",
+      "sha256": "5e4d36ece9a75ca77ae8977f0b2a345d1202ccb961a5d738c92e0bdeba641504"
+    },
+    "native_operation": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/runtime-cohort-1/next-native-preparation-1/NATIVE-OPERATION.PENDING.json",
+      "sha256": "33c4255d7695fc82c7887847895c0e453f9ffc059b294ae12c947c7d246169e8"
+    },
+    "positive_real_manifest_binding": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/v3-restoration-preparation-1/runtime-cohort-1/positive-bound-manifest-1/ACTUAL-POSITIVE-BINDING-WHOLE-JOIN.json",
+      "sha256": "8e6a50b146584a1e9f1ed766d66bb69b03142150fa3f11da963bf714a1fbcd55"
+    },
+    "runtime_cohort": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/runtime-cohort-1/EXACT-M05-RUNTIME-COHORT.json",
+      "sha256": "e4f92098f960b82664310133ec92ae0bbcf71f35c23dd05ad438d98fe2f358fa"
+    }
+  },
+  "restoration_credit": 0,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_BOUND_M05_PREPARATION_ONLY_PENDING_STRICT227_AND_ROOT_RELEASE",
+  "strict227_formal_acceptance": null
+}

@@ -1,0 +1,59 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_DECLARED110_GEOMETRY_AND_UNCHANGED_GROWTH_CONTRACTS_TEST_ONLY",
+  "python": "3.8.10 (default, Mar 18 2025, 20:04:55) \n[GCC 9.4.0]",
+  "declared_geometry_GiB": 110,
+  "cases": [
+    {
+      "case": "actual_live_growth_accepts_declared110_with_complete_supplied_budgets",
+      "supplied_test_only_required_bytes": {
+        "host_required_bytes": 27917287424,
+        "scratch_required_bytes": 16106127360
+      }
+    },
+    {
+      "case": "142geometry_mismatch_refused",
+      "error": "exact110GiB host sparse backing and distinct output filesystem"
+    },
+    {
+      "case": "insufficient_HOST_by_one_byte_refused",
+      "error": "HOST floor plus complete physical growth"
+    },
+    {
+      "case": "insufficient_scratch_by_one_byte_refused",
+      "error": "scratch floor plus remaining input growth"
+    },
+    {
+      "case": "full_sparse_gap_underbudget_refused",
+      "error": "full live sparse backing gap required"
+    },
+    {
+      "case": "HOST_floor_reduction_refused",
+      "error": "preserved storage floors and separately reviewed reserves"
+    },
+    {
+      "case": "scratch_floor_reduction_refused",
+      "error": "preserved storage floors and separately reviewed reserves"
+    },
+    {
+      "case": "zero_emergency_refused",
+      "error": "preserved storage floors and separately reviewed reserves"
+    },
+    {
+      "case": "task13_1GiB_context_cannot_satisfy_TEST_ONLY15GiB_vector",
+      "error": "scratch floor plus remaining input growth"
+    }
+  ],
+  "actual_capacity": null,
+  "actual_storage_admission": null,
+  "EXTERNAL_CAPTURE_BINDING": null,
+  "capacity_claim": false,
+  "actual_probes": 0,
+  "root": 0,
+  "Docker": 0,
+  "guest": 0,
+  "compiler": 0,
+  "scratch_formula": "12GiB + scratch_input_growth_bytes + emergency_bytes + campaign_bytes",
+  "HOST_formula": "16GiB + remaining_backing_growth_bytes(full live sparse gap or greater) +4GiBHOSTcapture +emergency_bytes+campaign_bytes",
+  "reserve_input_values": "Syntheticfixturevector only; no dispatchercurrentreserves chosen/lowered"
+}
