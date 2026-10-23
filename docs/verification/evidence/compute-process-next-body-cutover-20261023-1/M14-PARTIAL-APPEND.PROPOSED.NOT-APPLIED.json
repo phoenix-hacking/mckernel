@@ -1,0 +1,34 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PROPOSAL_ONLY_AFTER_ROOT_CANONICAL_INTEGRATION",
+  "worklist_preparation_identity": {
+    "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/rust-cutover-m14.json",
+    "sha256": "b2ebbc00449eaa908cfab8a717afb5c05a0dbe9e8d7ac8826b14db7e122fad14",
+    "bytes": 90071
+  },
+  "file_id": "M14-F02",
+  "subgoal_id": "M14-02-04",
+  "subgoal_title": "Runqueue selection, wakeups, idle transitions, migration/affinity and post-switch release sequencing.",
+  "preserve_existing_subgoal_status": "partial",
+  "preserve_existing_idle_defaultlink_evidence": true,
+  "append_implementation_evidence": {
+    "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/CANONICAL-INTEGRATION.ROOT-RECEIPT.json",
+    "scope": "After exact root integration only: set_timer public C orchestration wrapper moved into existing Rust scheduler/timer body; exact C fallback and4Cprimitive callbacks retained. Bounded partial slice only."
+  },
+  "append_focused_evidence": [
+    {
+      "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/ACTUAL-LEAF-RECEIPT.json",
+      "sha256": "1b1d55a3bc57d3122607dc026b29c446a244977130597c5480f2541ab93241d7",
+      "scope": "25750 actual originalC/Rust wrapper/state/callback comparisons and realheaderABI; host fixture only."
+    },
+    {
+      "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/ACTUAL-PRODUCTION-FULLCRATE-RECEIPT.json",
+      "sha256": "7f2e8d83fe83067e64cdd6628cfb6dcc704d3ff99ef2c5d763faef9afe5969d3",
+      "scope": "Exact78input productionRust object; Tset_timer/noUset_timer, exact5providerimports and existingmemoryexports; observer-only correction preserved; no wholeC/defaultkernel/native."
+    }
+  ],
+  "new_slice_production_link": "OPEN",
+  "new_slice_native": "OPEN",
+  "wholefile_retirement_credit": false,
+  "do_not_replace_existing_rust_consumer": "Keep idle consumer and append sched_helpers.rs::set_timer as another partial consumer."
+}

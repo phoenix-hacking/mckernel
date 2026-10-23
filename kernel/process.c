@@ -88,7 +88,7 @@ extern void __runq_add_proc(struct thread *proc, int cpu_id);
 extern void lapic_timer_enable(unsigned int clocks);
 extern void lapic_timer_disable();
 
-static const struct timer_runtime_offsets process_timer_runtime_offsets = {
+PROCESS_SCHED_PUBLIC_BRIDGE const struct timer_runtime_offsets process_timer_runtime_offsets = {
 	.thread_status_offset = __builtin_offsetof(struct thread, status),
 	.thread_sched_list_offset = __builtin_offsetof(struct thread, sched_list),
 	.thread_spin_sleep_lock_offset =
@@ -110,23 +110,23 @@ static const struct timer_runtime_offsets process_timer_runtime_offsets = {
 	.timer_thread_offset = __builtin_offsetof(struct timer, thread),
 };
 
-static unsigned long process_timer_spin_lock_bridge(unsigned long lock_addr)
+PROCESS_SCHED_PUBLIC_BRIDGE unsigned long process_timer_spin_lock_bridge(unsigned long lock_addr)
 {
 	return ihk_mc_spinlock_lock((ihk_spinlock_t *)lock_addr);
 }
 
-static void process_timer_spin_unlock_bridge(unsigned long lock_addr,
+PROCESS_SCHED_PUBLIC_BRIDGE void process_timer_spin_unlock_bridge(unsigned long lock_addr,
 					     unsigned long irqstate)
 {
 	ihk_mc_spinlock_unlock((ihk_spinlock_t *)lock_addr, irqstate);
 }
 
-static void process_timer_lapic_enable_bridge(unsigned int clocks)
+PROCESS_SCHED_PUBLIC_BRIDGE void process_timer_lapic_enable_bridge(unsigned int clocks)
 {
 	lapic_timer_enable(clocks);
 }
 
-static void process_timer_lapic_disable_bridge(void)
+PROCESS_SCHED_PUBLIC_BRIDGE void process_timer_lapic_disable_bridge(void)
 {
 	lapic_timer_disable();
 }
@@ -4348,6 +4348,7 @@ static void do_migrate(void)
 }
 #endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void set_timer(int runq_locked)
 {
 	struct cpu_local_var *v = get_this_cpu_local_var();
@@ -4359,6 +4360,7 @@ void set_timer(int runq_locked)
 			process_timer_lapic_enable_bridge,
 			process_timer_lapic_disable_bridge);
 }
+#endif
 
 /*
  * NOTE: it is assumed that a wait-queue (or futex queue) is

@@ -366,7 +366,8 @@
         "Idle helper is in kernel/rust/sched_helpers.rs:1949 (not process_helpers.rs). C verifies int/i32 status and list-next layout then passes production offsetof values.",
         "CURRENT retained source checkpoint6f367112 reports80 original C/Rust parity cases, alternate layout and selected/fallback link plus focused ABI review; production TU ABI/default link/new image/native remained pending in that record.",
         "Rust process_helpers exports process add-range orchestration, release/lookup/VM body helpers; accepted FP/post-switch C fixes remain functional requirements.",
-        "Source checkpoint f99a62a7 integrates Rust idle initialization/iteration/infinite-loop orchestration in three canonical files after independent source acceptance and108 original-C/Rust state/callback comparisons. The frozen native235 image is unchanged; pinned whole-TU/fullcrate/default-link/currentCPUbridge/native proof and primitive dependencies remain open."
+        "Source checkpoint f99a62a7 integrates Rust idle initialization/iteration/infinite-loop orchestration in three canonical files after independent source acceptance and108 original-C/Rust state/callback comparisons. The frozen native235 image is unchanged; pinned whole-TU/fullcrate/default-link/currentCPUbridge/native proof and primitive dependencies remain open.",
+        "Canonical set_timer wrapper now exports from existing Rust scheduler/timer body after independent review:25750 originalC/Rust comparisons and78-input productionRust object passed; exact C fallback and immutable offset/four primitive C callback providers remain. Slice M14-02-04-S02 whole C/defaultlink/native OPEN; no whole-file credit."
       ],
       "functional_subgoals": [
         {
@@ -457,7 +458,7 @@
           "owner": "campaign:/root/scratch_growth_prepare",
           "remaining_c_functions": null,
           "rust_consumer": "kernel/rust/sched_helpers.rs::sched_idle_loop_body_result",
-          "next_action": "Preserve accepted actual default-consumer/link evidence for bounded slice; normal build-owner cleanup/physicalclearance, then relevant native proof under separately reviewed new-image profile. Remaining area C bodies stayopen.",
+          "next_action": "Preserve accepted actual default-consumer/link evidence for bounded slice; normal build-owner cleanup/physicalclearance, then relevant native proof under separately reviewed new-image profile. Remaining area C bodies stayopen. For set_timer S02, prepare a separate coherent successor of frozen candidate8 with exact three canonical overlays and selected process.c ABI/symbol/relocation guards; no in-place candidate8 edit or new defaultlink/native credit.",
           "proof": {
             "implementation": {
               "status": "partial",
@@ -465,6 +466,12 @@
                 {
                   "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/idle-orchestration-1/CANONICAL-INTEGRATION.json",
                   "scope": "Independent exact three-file Rust idle orchestration source integration only; unchanged current image; zero retirement credit."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/CANONICAL-INTEGRATION.json",
+                  "sha256": "fc641655391f9ee414ecb79fd8b6f3a31cd9c086a665d38131146a26f342317e",
+                  "size": 2295,
+                  "scope": "Exact three-file canonical set_timer wrapper source integration after independent ABI review; unchanged functional image; no retirement credit."
                 }
               ]
             },
@@ -474,6 +481,24 @@
                 {
                   "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/idle-orchestration-1/ACTUAL-BODY-RESULT-3.json",
                   "scope": "108 actual original-C/Rust byte-state and callback-order comparisons plus host default/fallback consumer checks; no production image or native proof."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/ACTUAL-LEAF-RECEIPT.json",
+                  "sha256": "1b1d55a3bc57d3122607dc026b29c446a244977130597c5480f2541ab93241d7",
+                  "size": 4831,
+                  "scope": "25750 original-C/actual-Rust wrapper and existing timer-body comparisons: state, callback identity/order, lock ownership, mutable-global read order, ignored signed returns; actual timer header ABI compile. Host model only."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/ACTUAL-PRODUCTION-FULLCRATE-RECEIPT.json",
+                  "sha256": "7f2e8d83fe83067e64cdd6628cfb6dcc704d3ff99ef2c5d763faef9afe5969d3",
+                  "size": 6494,
+                  "scope": "Actual78-input pinned nightly production Rust object compiled once17.651s: unique Tset_timer/noUset_timer, currentCPU/timer providers and descriptor/four callback imports; prior memory exports preserved. One observer-only U-count correction preserved; production U556->560 distinct from broad harness593->597. No whole C TU/default link/native."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/INDEPENDENT-SOURCE-ABI-ACCEPTANCE.ROOT-RECORD.json",
+                  "sha256": "7b4382c28686032125b466595e73a2ed38643f8c2532488ede7c1790510c722f",
+                  "size": 1203,
+                  "scope": "Independent source/ABI and actual Rust object consumer acceptance only; whole C TU/default image/native/retirement OPEN."
                 }
               ]
             },
@@ -519,6 +544,43 @@
                 {
                   "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-2/ordinary-fullcrate-evidence-1/INDEPENDENT-ACTUAL-HOST-CONSUMER-REVIEW.json",
                   "scope": "Exact pinned nightly production Rust flags/80-source host fullcrate compile exit0/15.412s; ten unique object exports. Default C/final ELF/native remain open."
+                }
+              ]
+            },
+            {
+              "id": "M14-02-04-S02",
+              "title": "set_timer current-CPU and timer callback orchestration",
+              "status": "partial",
+              "rust_consumer": "kernel/rust/sched_helpers.rs::set_timer -> timer_set_timer_body_result",
+              "implementation": "Canonical Rust export replaces only PUBLIC set_timer C wrapper; exact C fallback remains. Immutable C offset producer and four unchanged C primitive callbacks remain explicit dependencies.",
+              "focused_checks": "25750 originalC/Rust comparisons, current-headerABI compile and exact78-input productionRust object passed; independent source/ABI acceptance reused.",
+              "production_link": "OPEN for this slice: actual whole process.c selected TU and matched final default kernel set_timer/provider link have not run. Existing idle slice production-link evidence is separate and preserved.",
+              "native_validation": "OPEN for matching native timer/scheduler call path; current functional image unchanged.",
+              "remaining_dependencies": "Whole C TU selection/ABI/relocations, unique final Rust set_timer and matching callback/data providers, then applicable native proof; no whole-area/file retirement credit.",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/CANONICAL-INTEGRATION.json",
+                  "sha256": "fc641655391f9ee414ecb79fd8b6f3a31cd9c086a665d38131146a26f342317e",
+                  "size": 2295,
+                  "scope": "Exact three-file canonical set_timer wrapper source integration after independent ABI review; unchanged functional image; no retirement credit."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/ACTUAL-LEAF-RECEIPT.json",
+                  "sha256": "1b1d55a3bc57d3122607dc026b29c446a244977130597c5480f2541ab93241d7",
+                  "size": 4831,
+                  "scope": "25750 original-C/actual-Rust wrapper and existing timer-body comparisons: state, callback identity/order, lock ownership, mutable-global read order, ignored signed returns; actual timer header ABI compile. Host model only."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/ACTUAL-PRODUCTION-FULLCRATE-RECEIPT.json",
+                  "sha256": "7f2e8d83fe83067e64cdd6628cfb6dcc704d3ff99ef2c5d763faef9afe5969d3",
+                  "size": 6494,
+                  "scope": "Actual78-input pinned nightly production Rust object compiled once17.651s: unique Tset_timer/noUset_timer, currentCPU/timer providers and descriptor/four callback imports; prior memory exports preserved. One observer-only U-count correction preserved; production U556->560 distinct from broad harness593->597. No whole C TU/default link/native."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/INDEPENDENT-SOURCE-ABI-ACCEPTANCE.ROOT-RECORD.json",
+                  "sha256": "7b4382c28686032125b466595e73a2ed38643f8c2532488ede7c1790510c722f",
+                  "size": 1203,
+                  "scope": "Independent source/ABI and actual Rust object consumer acceptance only; whole C TU/default image/native/retirement OPEN."
                 }
               ]
             }

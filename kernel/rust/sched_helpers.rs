@@ -8,6 +8,13 @@ use crate::abi::{
 };
 
 unsafe extern "C" {
+    fn get_this_cpu_local_var() -> *mut CpuLocalVar;
+    static mut time_sharing: CInt;
+    static process_timer_runtime_offsets: TimerRuntimeOffsets;
+    fn process_timer_spin_lock_bridge(lock_addr: usize) -> CULong;
+    fn process_timer_spin_unlock_bridge(lock_addr: usize, irqstate: CULong);
+    fn process_timer_lapic_enable_bridge(clocks: u32);
+    fn process_timer_lapic_disable_bridge();
     fn arch_flush_icache_all();
     fn release_thread(thread: *mut core::ffi::c_void);
     fn rusage_num_threads_dec();
@@ -1847,6 +1854,30 @@ pub unsafe extern "C" fn timer_wake_loop_body_result(
             return ticks;
         }
     }
+}
+
+/// Preserve the process.c timer entry boundary using the existing timer body.
+///
+/// # Safety
+/// The caller runs on the current CPU under the original scheduler/IRQ contract;
+/// runq_locked describes ownership of its runqueue lock. C owns the immutable
+/// descriptor and callback providers; no pointer or lock ownership is transferred.
+#[no_mangle]
+pub unsafe extern "C" fn set_timer(runq_locked: CInt) {
+    let v = unsafe { get_this_cpu_local_var() };
+    let sharing = unsafe { core::ptr::read(core::ptr::addr_of!(time_sharing)) };
+    let _ = unsafe {
+        timer_set_timer_body_result(
+            v as usize,
+            sharing,
+            runq_locked,
+            core::ptr::addr_of!(process_timer_runtime_offsets),
+            Some(process_timer_spin_lock_bridge),
+            Some(process_timer_spin_unlock_bridge),
+            Some(process_timer_lapic_enable_bridge),
+            Some(process_timer_lapic_disable_bridge),
+        )
+    };
 }
 
 #[no_mangle]

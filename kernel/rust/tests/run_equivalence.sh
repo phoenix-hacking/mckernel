@@ -141531,7 +141531,32 @@ __attribute__((weak)) void smp_store_release_int(int *p, int value)
 }
 __attribute__((weak)) void arch_delay(int us) { (void)us; }
 __attribute__((weak)) void ihk_mc_delay_us(int us) { (void)us; }
-__attribute__((weak)) void set_timer(int runq_locked) { (void)runq_locked; }
+struct timer_runtime_offsets {
+	unsigned long thread_status_offset;
+	unsigned long thread_sched_list_offset;
+	unsigned long thread_spin_sleep_lock_offset;
+	unsigned long thread_spin_sleep_offset;
+	unsigned long thread_itimer_enabled_offset;
+	unsigned long cpu_runq_lock_offset;
+	unsigned long cpu_runq_offset;
+	unsigned long cpu_runq_len_offset;
+	unsigned long cpu_current_offset;
+	unsigned long cpu_timer_enabled_offset;
+	unsigned long cpu_backlog_list_offset;
+	unsigned long timer_timeout_offset;
+	unsigned long timer_waitq_offset;
+	unsigned long timer_list_offset;
+	unsigned long timer_thread_offset;
+};
+/* Only host equivalence bindings; production providers remain process.c. */
+__attribute__((weak)) const struct timer_runtime_offsets process_timer_runtime_offsets;
+__attribute__((weak)) unsigned long process_timer_spin_lock_bridge(unsigned long p)
+{ (void)p; return 0; }
+__attribute__((weak)) void process_timer_spin_unlock_bridge(unsigned long p, unsigned long s)
+{ (void)p; (void)s; }
+__attribute__((weak)) void process_timer_lapic_enable_bridge(unsigned int c) { (void)c; }
+__attribute__((weak)) void process_timer_lapic_disable_bridge(void) {}
+
 __attribute__((weak)) int ihk_ikc_send(void *channel, void *packet, int opt)
 {
 	(void)channel;
@@ -145256,7 +145281,13 @@ grep -Eq 'U ihk_mc_register_interrupt_handler' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_unregister_interrupt_handler' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U init_process_stack' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U kmalloc_init' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U set_timer' "${tmpdir}/out/rust.undefined"
+grep -Eq ' T set_timer$' "${tmpdir}/out/rust.global"
+! grep -Eq 'U set_timer$' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_timer_runtime_offsets$' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_timer_spin_lock_bridge$' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_timer_spin_unlock_bridge$' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_timer_lapic_enable_bridge$' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_timer_lapic_disable_bridge$' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U pvti$' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U pvti_npages' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U pvti_msr' "${tmpdir}/out/rust.undefined"
@@ -145486,7 +145517,7 @@ grep -Eq 'U x86_xsave_size_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_xsave_mask_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U xpmem_page_in_remote_on_attach' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U uti_desc' "${tmpdir}/out/rust.undefined"
-test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 593
+test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 597
 
 python3 - "${repo_root}/kernel/rust/syscall_policy.rs" <<'PY'
 import sys

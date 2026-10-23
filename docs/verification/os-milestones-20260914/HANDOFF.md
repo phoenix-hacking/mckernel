@@ -1,3 +1,64 @@
+## Cancelled LONG positively retired; corrected capsule staged — 2026-10-23 16:14 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical34/35,whole12/14 unchanged. Independent physical verdict PASS_ACTUAL_
+CANCELLED_LONG_PHYSICAL_RETIREMENT_AND_CURRENT_POSTJOIN: normal cleanup37file
+exportf9a17316/23clientsreaped/containerremoved+3exactemptyqueries; freshCOMPLETE
+currentboot two305rowPROC snapshotsc4bf0a92/all25owner-clientidentities+former
+containerinitabsent; mutex5e8d2c19 permanent27:4free+8sharedpathsabsent; captures0/
+joined/gone/closed/emptyerr. Rootrecord INDEPENDENT-ACTUAL-CANCELLED-LONG-PHYSICAL-ACCEPTANCE.ROOT-RECORD.json.
+current_live_postjoin CANCELLED_LONG_POSITIVELY_RETIRED (nonNULL). Old110fFAIL
+OwnerSignal15/secondaryCommandError preserved; ZEROapp/hour/restorationcredit.
+Fresh admission/separate release required; no newcleanup/signals/expiredreuse.
+Corrected collector capsule actual97541aa5 PASS21.055s/strictloader; manifest
+0c0c6e3b/capsule0d8ef089/onlyinit changed61unchanged. case227_stage owns next
+sourcecohort/admission/controllerbinding; m14_callback_review artifactreview.
+AcceptedLONG counters0/100launches,0/60mixedminutes; observedoldcountsUNKNOWN.
+M14set_timer canonicalfc641655 exact3files integrated after7b4382c2 independent
+sourceABIreview;25750leaf+78inputRustcratePASS, wholeC/defaultlink/nativeOPEN.
+M14metadata owner m14_actual_consumer_fix; no practicalclosurecredit.
+M07typedcapsule ordinaryCPU0grant now; no guest/runtimeacceptance or heavyoverlap.
+
+## Closed LONG cleanup evidence consumed; exact physical observations next — 2026-10-23 16:07 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical34/35,whole12/14; no newcheckclosure. Actualsixauthenticatedrootreads
+all0/directjoined/groupgone/closed/err0 preserved under p12-long-normal-cancel-
+20261023-1/authenticated-retired-owner-results-1. Normalowner result7fcad8fa:
+FAIL OwnerSignal15, absence_verified=true, lease_retained=false; containerbc2c061d.
+Inner43e42d3a confirms FAIL1/2252.55384s joined/gone/closed. Originalfailure retained.
+This is NOTphysicalclearance: current_live_postjoin remains
+CANCEL_TERMINAL_PENDING_PHYSICAL, soleheavy retained. terminal_lifecycle_repair
+prepares exact23clientJSON/selectednormalcleanupreadback then freshPROC/container/
+mutex27:4/shared8paths; native235_release_review owns focused independentrelease.
+No additionalsignal/cleanup/replay. case227_stage prepares correctedcollector
+capsule using accepted SDK5/image10972/unchangedapps+quotas. Independent linkedELF
+cb3bfbcd acceptance rootrecordbb90c903; capsule/staging/runtimeOPEN. AcceptedLONG
+launches0/100, actualmixedminutes0/60; actualobservedcountsUNKNOWN, noelapsedcredit.
+M14set_timer420patch/25750leaf/78inputRustactual17.651s independentlyPASS7b4382c2;
+m14_actual_consumer_fix prepares exactpreimage/activepin integration handoff.
+WholeC/defaultlink/native stillOPEN. No competingheavy/resize; sourceworkparallel.
+
+## Normal cancellation sent; LONG controller closed; physical review pending — 2026-10-23 16:00 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical34/35,whole12/14. Sourcecheckpoint90fcf8998533c2d65456c69ff4cdfb14faba344b
+pushed/fetched718blobs proofb812f394. Reviewed950b pidfdhelper invokedONCE exact
+342argv: PASS0/.166949s, sender3785240/start56837806 joined/gone/closed/err0,
+stdoutdb9f3d325cc0 718B ONE_SIGTERM_SENT_TO_EXACT_OWNER_ONLY: target3769329/
+56612906/UID0/PGID=SID matched, signalcalls1. No extra helpercleanup/ACK. Existing
+ownercleanup unchanged. Tool2203 CLOSED: outer3769325/start56612895 FAIL1 after
+2252.701218s/directjoin/groupabsent/closed/nooutertimeout/signal/kill. Original
+serialround0/unknowncause andallfailures retained; no launch/work/nativecredit.
+Current_live_postjoin CANCEL_TERMINAL_PENDING_PHYSICAL (nonNULL; notcleared).
+InnerCAPTURE/ownerresult+clientledgers andfreshfinalPROC/mutex read/reviewnext;
+rootretainssoleheavy untilpositivephysicalclearance. No duplicatecleanup/signal
+or unchangedruntime replay. P12diagnosticproducernewELFcb3bfbcd source2Cchanges
+actual5commandstaticlink/NM/readelf/strictconsumerPASS, Rustarchiveunchanged.
+Futurecapsule/manifest/cohort/freshruntime stillOPEN. M07typed26+collector accepted
+sourceprofile/nonnative; M14timer25750leaf+78inputRustcratePASS/sourceABIreview
+pending, canonicalprocessunchanged. No competingheavy/resize.
+
 ## Silent first-round LONG; reviewed normal cancellation next — 2026-10-23 15:55 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

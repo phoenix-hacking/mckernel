@@ -1,0 +1,50 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "CANONICAL_BOUNDED_SET_TIMER_SOURCE_INTEGRATED",
+  "at": "2026-10-23T16:11:43.787747+00:00",
+  "inputs": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "sha256": "7203019d2ba8143f9240a03d11bc8c5cfcd495d89183aa7ab643c6159a6bd02d",
+      "bytes": 161630
+    },
+    "kernel/rust/sched_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "sha256": "449df570965855f992a0fe024fca7cd6527b20622b4b8e3b33af04900b02e923",
+      "bytes": 178661
+    },
+    "kernel/rust/tests/run_equivalence.sh": {
+      "path": "/home/holden/mckernel/kernel/rust/tests/run_equivalence.sh",
+      "sha256": "fce1f3b9a5606eedb245996d4b88b5e93022ae56145729592c9d675ecb267386",
+      "bytes": 5008672
+    }
+  },
+  "outputs": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/source/kernel/process.c",
+      "sha256": "55872d7235a06364565ec7732b7a67c918ed7c006b1e55ababa88dbe42e2a93a",
+      "bytes": 161780
+    },
+    "kernel/rust/sched_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/source/kernel/rust/sched_helpers.rs",
+      "sha256": "700a9e20349df5ae18ceea8c9195e38078a6bb05b81c79f7368fbdf6fc14abcc",
+      "bytes": 180017
+    },
+    "kernel/rust/tests/run_equivalence.sh": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/source/kernel/rust/tests/run_equivalence.sh",
+      "sha256": "5df92eff793c7ff0358567340a35b3d9e36188b142186c4fe962a40370490822",
+      "bytes": 5010196
+    }
+  },
+  "active_source_pin_check": "ROOT-INTEGRATION-HANDOFF.NOT-EXECUTED.json: exact3paths excluded from156 LONG source authority/query/cohort/11 selected transitive authorities/runtime manifest",
+  "independent_source_review": "INDEPENDENT-SOURCE-ABI-ACCEPTANCE.ROOT-RECORD.json",
+  "focused_evidence": [
+    "ACTUAL-LEAF-RECEIPT.json",
+    "ACTUAL-PRODUCTION-FULLCRATE-RECEIPT.json"
+  ],
+  "whole_C_TU": "OPEN",
+  "default_kernel_link": "OPEN",
+  "native": "OPEN",
+  "whole_file_retirement": false,
+  "functional_check_closures": []
+}
