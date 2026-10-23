@@ -5187,6 +5187,11 @@ pub unsafe extern "C" fn phys_to_virt(p: CULong) -> *mut c_void {
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn x86_clear_phys_to_virt_bridge(phys: CULong) -> *mut c_void {
+    phys_to_virt(phys)
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn x86_reserve_arch_pages_body_result(
     pa_allocator: *mut c_void,
     start: CULong,

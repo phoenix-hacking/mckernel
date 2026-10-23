@@ -1,0 +1,96 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "CONCRETE_CAUSE_UNSELECTED_OBSERVATIONAL_WAIT_ERROR_CANDIDATE",
+  "raw_artifacts": [
+    {
+      "original": "/home/holden/mckernel-work/scratch/n235d1/p/attempt-2b6fdb9f623f48f484a24331f6b522d5/serial.log",
+      "retained": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-1/actual-diagnostic-payload-failure/serial.log",
+        "sha256": "b1da2c4eb5b5784f912b54ed15f5002ca8d007d705a4c3999bd470ab19f2da70",
+        "bytes": 93831
+      }
+    },
+    {
+      "original": "/home/holden/mckernel-work/scratch/n235d1/p/attempt-2b6fdb9f623f48f484a24331f6b522d5/result.json",
+      "retained": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-1/actual-diagnostic-payload-failure/result.json",
+        "sha256": "7f1de61170665e91f08a02b842d51b88a40889306c33018b444b6fb7012e4b53",
+        "bytes": 2969
+      }
+    },
+    {
+      "original": "/home/holden/mckernel-work/scratch/n235d1/p/attempt-2b6fdb9f623f48f484a24331f6b522d5/first-failure.jsonl",
+      "retained": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-1/actual-diagnostic-payload-failure/first-failure.jsonl",
+        "sha256": "23941a7f3df58655aa803f6704cbc1e87d3702c366cf201ff11a9da5c6562721",
+        "bytes": 82
+      }
+    }
+  ],
+  "payload_report": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "PATH": "/usr/bin:/bin",
+      "COKERNEL_PATH": "/apps"
+    },
+    "raw_wait_status": 256,
+    "started_ns": 31445430336,
+    "reaped_ns": 32632475896,
+    "finished_ns": 32844503682,
+    "streams": {
+      "stdout": {
+        "hex": "706172656e742073746172740a",
+        "eof": true,
+        "truncated": false,
+        "observed": 13,
+        "retained": 13,
+        "discarded": 0,
+        "limit": 1024,
+        "eof_ns": 32531932391
+      },
+      "stderr": {
+        "hex": "",
+        "eof": true,
+        "truncated": false,
+        "observed": 0,
+        "retained": 0,
+        "discarded": 0,
+        "limit": 1024,
+        "eof_ns": 32531905014
+      }
+    },
+    "procfs_empty": true
+  },
+  "collector_own_elapsed_ns": {
+    "started_to_reaped": 1187045560,
+    "started_to_finished": 1399073346
+  },
+  "trace_parent_wait102_and_exit231": [
+    "<6>[   32.594377] mcctrl: application_syscall=delivered os=0 generation=1 pid=255 worker=7 delivery=102 cpu=0 number=61",
+    "<6>[   32.596519] mcctrl: application_syscall=return_route os=0 generation=1 pid=255 worker=7 delivery=102 launcher_cpu=1 guest_cpu=0",
+    "<6>[   32.597137] mcctrl: application_syscall=returned os=0 generation=1 pid=255 worker=7 delivery=102 cpu=0 value=258"
+  ],
+  "diagnostic_payload_archive_member": {
+    "archive": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/begin-cleanup-native-successor-2/app-predicate-diagnostic-1/predicate-diagnostic-overlay-1.cpio.gz",
+    "last_apps_app_sha256": "9dc0e8f601e4c039a41628201a774b1eb9376badb1e8d6efa90bbfe723387d31",
+    "last_apps_app_size": 5630232,
+    "newc_data_offset": 43545500,
+    "method": "Read-only complete decompression/newc scan; final member replaces originalbase apps/app."
+  },
+  "facts": [
+    "ND raw_wait_status256 is Linux launcher exit1; it does not select an instrumented guest app failure.",
+    "No parent exit_group delivery is present; accepted mcctrl logs all exit_group deliveries independent of trace budget.",
+    "Consumer returned log occurs only after provider RETURN has observed actual syscalls.returned; wait102 is published, not merely software queued.",
+    "Accepted Rust launcher terminal non-EINTR WAIT ioctl error path calls debug-only timeoutbridge and exits1. Existing trace does not retain actual WAIT errno."
+  ],
+  "clock_limit": "Collector Linux CLOCK_MONOTONIC and printk local_clock have no calibration join; no prematureEOF inference.",
+  "observation": "8bf3 diagnostic-only Context::wait_syscall logs non-EINTR error phase,known os/gen,pid or explicitunknown,errno; Result/lifecycle/publication paths unchanged.",
+  "native_acceptance": false
+}

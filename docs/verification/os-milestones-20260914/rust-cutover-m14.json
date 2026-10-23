@@ -1037,6 +1037,10 @@
                 {
                   "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/memory-combined-preparation-1/CANONICAL-MEMORY-INTEGRATION.json",
                   "scope": "Exact independently reviewed two-file postimages integrated canonically after all preimages verified. Frozen10972 unchanged; whole file/area remains open."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/CANONICAL-INTEGRATION.json",
+                  "scope": "Canonical selected C physical-address callback body replaced by Rust export calling existing Rust phys_to_virt. Exact reviewed ABI/default selector; fallback old body remains. Frozen10972 unchanged."
                 }
               ]
             },
@@ -1050,6 +1054,10 @@
                 {
                   "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/memory-combined-preparation-1/ORDINARY-SELECTED-MEMORY-RESULT-1.json",
                   "scope": "Complete selected GCC9 memory.c TU/layout witnesses PASS, both old C definitions excluded, unique Rust callback import and three relocations. Whole group joined. Pinned production Rust/link/native remain open."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/ACTUAL-CONSUMER-PROVIDER-RESULT-1.json",
+                  "scope": "Complete selected GCC9 C TU: callback U1/noT and4relocations; complete Rust module/ABI witness uniqueT; partialld-r T1/noU; allcapturesjoined/closed. PinnedGCC14/fullcrate/defaultimage/native open."
                 }
               ]
             },
@@ -1091,6 +1099,21 @@
                 {
                   "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/memory-combined-preparation-1/CANONICAL-MEMORY-INTEGRATION.json",
                   "scope": "Canonical source increment; no native/file/area closure."
+                }
+              ]
+            },
+            {
+              "id": "M14-05-03-S02",
+              "title": "Physical-address clear-range callback",
+              "status": "partial",
+              "source_state": "Canonical two-file reviewed callback cutover integrated; selected C body excluded and existing Rust callee reused.",
+              "focused_checks": "Actual selected GCC9 C TU, complete Rust module ABI/provider and partial-link resolution pass; four callsites preserved.",
+              "production_link": "PinnedGCC14/fullcrate/defaultkernel open.",
+              "native_validation": "Matching native proof open; frozen functional image unchanged.",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/CANONICAL-INTEGRATION.json",
+                  "scope": "Canonical selected C physical-address callback body replaced by Rust export calling existing Rust phys_to_virt. Exact reviewed ABI/default selector; fallback old body remains. Frozen10972 unchanged."
                 }
               ]
             }

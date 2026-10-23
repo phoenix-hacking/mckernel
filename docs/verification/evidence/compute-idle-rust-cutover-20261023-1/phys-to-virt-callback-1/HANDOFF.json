@@ -1,0 +1,54 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_CALLBACK_ACTUAL_SELECTED_TU_RUST_PROVIDER_ABI_PARTIAL_LINK_PASS_REVIEW_PENDING",
+  "source_bindings": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/SOURCE-BINDINGS.json",
+    "sha256": "f419dc0b1d5cb59d07e7050b5d89aac8cf924c9caad13369e0bc71a07f22dee0",
+    "bytes": 2105
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/cutover.patch",
+    "sha256": "46bfdbbaa1576461389d374b0d0833455d96147811539a3f1212f1b1a31ce34a",
+    "bytes": 802
+  },
+  "commands": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/PREPARED-COMMANDS.NOT-EXECUTED.json",
+    "sha256": "1541ff504756c340186905b5324cb8996b564da104420bd449995ae5fbf32d1e",
+    "bytes": 10646
+  },
+  "check_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/check_selected_consumer_provider.NOT-EXECUTED.py",
+    "sha256": "02beb545e86e668b9deee9961c406ed935385cae2749eb5f2baff0942c724aef",
+    "bytes": 2960
+  },
+  "actual_provider": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/actual_provider.rs",
+    "sha256": "095d0fee668ef3e7fda97a817f18f22f3f5f300cd9ee81ef8e2e620741cd1ef2",
+    "bytes": 556
+  },
+  "baseline_abi_inputs": {
+    "abi.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/baseline/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    "page_helpers.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/baseline/kernel/rust/page_helpers.rs",
+      "sha256": "fa2f68c00a1568acf6e9ebc4bbdfb0b2bf13e2e5eff758b9048acb06a6aec597",
+      "bytes": 16412
+    }
+  },
+  "source_selection": "C PUBLIC branch declares external Rust callback; old static body exactfallback. Four actual clear_range callsites retain same callback identifier.",
+  "minimality": "Only two productionfiles changed; no C function expansion, ABI/state/allocator/effect change.",
+  "compile_grant": "ParentCPU0onejobAS2GiBCPU60wall90+6FSIZE32MiBnofile256core0",
+  "checks_executed": "9sequentialcommandobservations, selectedCactualTU and completeRustmodule compilation/ABI andpartiallink; no behaviorvectorreruns.",
+  "default_artifact": null,
+  "native": null,
+  "file_closure": false,
+  "next": "Independent focused source/ABI review, dispatcher integration, productionGCC14/fullcrate/defaultimage link and nativecallback-path evidence remain.",
+  "actual_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/ACTUAL-CONSUMER-PROVIDER-RESULT-1.json",
+    "sha256": "8d54b99673573d5eecd388a1b2d1ceeadb85bcfd1f7e7bffe4a339c0235271fc",
+    "bytes": 6276
+  }
+}

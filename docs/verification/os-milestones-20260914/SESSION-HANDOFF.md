@@ -1,3 +1,28 @@
+## WAIT-error observation staged; diagnostic retired — 2026-10-23 06:55 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Original functional checks29/35; closed IDs none; final-profile cycles/launches/
+actual mixed minutes0/0/0. BEGIN SDK native aeae and predicate diagnostic2b6f both
+failed raw exit1/13Bparentstart after child data34+EOF and prompt host wait return.
+No parent exit231 is observed. Diagnostic physical retirement independently accepted
+87381d7c:25clients reaped, owned container removed, complete publisher-free PROC,
+permanent27:4 and eight path absences; no duplicate cleanup needed. Guest/collector
+clock domains are uncalibrated, so cross-clock timestamp ordering proves no FD cause.
+Next diagnostic adds only non-EINTR WAIT lookup/operation error logging to existing
+Rust Context::wait_syscall, preserving original results/ownership/lifecycle. Six actual
+body tests pass; canonical source8bf30cd8 independently SOURCE PASS. SDK3 staged
+PASS .058s,68sources1357089B with67unchanged; source/profile independently accepted.
+Actual SDK3 build not run. Exact execution assembly first failed metadata assertion
+against physical report schema; preserved, one bounded schema correction in progress.
+Root owns release/build; next native prep and coherent consumer source-binding owners
+run independently. No unchanged kernel/image/launcher rebuild or acceptance waiver.
+M14 separate partial increments: canonical memory Rust phys-to-virt callback now has
+complete selected GCC9 TU four relocations, Rust provider and partial-link resolution;
+prior clear-old-action129888 and idle108 comparisons retained. Full production GCC14/
+Rust/default-image/native remain open. Combined five-postimage pinned production
+preparation ready for focused review, not execution. No area/file/native closure.
+No resize performed. No service stop bypass or speedup claim. Included-only100% guard.
+
 ## Actual BEGIN SDK/native result; physical clearance — 2026-10-23 06:03 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

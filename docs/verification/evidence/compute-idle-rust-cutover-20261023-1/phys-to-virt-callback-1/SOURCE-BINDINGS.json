@@ -1,0 +1,44 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_SOURCE_ONLY_COMPILE_GRANT_REQUIRED",
+  "baseline": {
+    "arch/x86_64/kernel/memory.c": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/memory.c",
+      "sha256": "4818be5c7277621ce41dae1d261dec97e7e0c65b6054a6e8511a4d64d555c68f",
+      "bytes": 83873
+    },
+    "kernel/rust/x86_memory_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "9cba23c3b1e9ba94205c5b8234c5be0408d8c41722b5a0e094ca5a0d1211d067",
+      "bytes": 189912
+    }
+  },
+  "candidate": {
+    "arch/x86_64/kernel/memory.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/candidate/arch/x86_64/kernel/memory.c",
+      "sha256": "95bb6a4a916a802e98eb9f7eac98eef990d6f75a3e42b06f29ac0a73ef2a452b",
+      "bytes": 83989
+    },
+    "kernel/rust/x86_memory_helpers.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "689b9741821609a7c2e3aadb8cd46b0dbc57948090b38758f0b3eb120a5297fb",
+      "bytes": 190037
+    }
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/cutover.patch",
+    "sha256": "46bfdbbaa1576461389d374b0d0833455d96147811539a3f1212f1b1a31ce34a",
+    "bytes": 802
+  },
+  "selector": "MCKERNEL_RUST_X86_MEMORY_PUBLIC",
+  "selected_behavior": "C declaration selects Rust x86_clear_phys_to_virt_bridge as actual callback passed at4clear_range_l1/l2/l3 sites. Rustexport directly invokes existing Rust phys_to_virt.",
+  "fallback": "Exact original static C body retained under #else.",
+  "ABI": "unsafe extern C (CULong)->*mut c_void matches C(void*(*)(unsigned long)); no layout/state/effect changes.",
+  "native_credit": false,
+  "file_closure": false,
+  "canonical_edits": 0,
+  "compile": 0,
+  "root": 0,
+  "Docker": 0,
+  "guest": 0
+}

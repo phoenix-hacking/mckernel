@@ -1319,10 +1319,14 @@ static void x86_clear_memobj_flush_bridge(void *memobj, unsigned long phys,
 	memobj_flush_page(memobj, phys, pgsize);
 }
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+extern void *x86_clear_phys_to_virt_bridge(unsigned long phys);
+#else
 static void *x86_clear_phys_to_virt_bridge(unsigned long phys)
 {
 	return phys_to_virt(phys);
 }
+#endif
 
 static void x86_clear_free_pages_user_bridge(void *addr, int nr_pages)
 {

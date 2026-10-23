@@ -1,0 +1,207 @@
+--- /home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/native_rust_exact_mckernel_image_offline.py
++++ /home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-2/native_rust_exact_mckernel_image_offline.py
+@@ -27,7 +27,7 @@
+ import native_rust_exact_build_offline as provenance
+ 
+ # Authenticate the neighboring provenance selected by this exact driver capsule.
+-EXPECTED_PROVENANCE_SHA256 = '4865b6c91aae8e9f0b30027c9e63c1551ea37ad23ae13cff952eaf2f5ca541f9'
++EXPECTED_PROVENANCE_SHA256 = '1be3a017e2ae47a0d1ecfcd4e1d22d7d8d569808e495d2b6d055c851d0582ae2'
+ _EXPECTED_PROVENANCE_PATH = Path(__file__).with_name("native_rust_exact_build_offline.py").resolve()
+ if (Path(provenance.__file__).resolve() != _EXPECTED_PROVENANCE_PATH or
+         hashlib.sha256(_EXPECTED_PROVENANCE_PATH.read_bytes()).hexdigest() != EXPECTED_PROVENANCE_SHA256):
+@@ -1446,7 +1446,137 @@
+ 
+ 
+ # One exact accepted-current successor; historical producer remains immutable.
+-OWNED_FORK_CURRENT_SOURCE_PINS = {'kernel/syscall.c': 'ebcafd68cc98f31553bdb1674e1be80c2eac26f6a8436ee73978fe2288bb5c61', 'kernel/rust/fork_control_guest.rs': '26797f574fa1ba7006eb27ff3a1a7750ec04b83f71a2e90b8c35c4c536b33acd', 'kernel/rust/fork_child_credits.rs': '63b82c97cc6e1204585cfaf2b89ef378b88c1d207a8e82c2f1400bc352f9c98d', 'kernel/rust/fork_constructed_credits.rs': '4c1e96ef4fbf5cb66acc54d900d37fcd68fb4d50dd1337c4428b3f5e2ecd1972', 'kernel/rust/process_helpers.rs': '526baf9363a0845ad50aade7e9b2296d27c8840527f3510d95a1105fc626d8d3', 'kernel/rust/sched_helpers.rs': 'a5b8ed0f048adcfa6908094f7b8b5d459b9b14aa0ed4b75e5250abe6f8387c57', 'kernel/CMakeLists.txt': 'af2758e8cad6fd4baa3c067d23cc81ab483aa71d666ca6249d54e8ccfd2701e5', 'kernel/rust/syscall_policy.rs': '4edf51b9c391ddca12fd4505ac1c6b51f6a73e3919f3f1cd49b3ebcb87a38a69', 'kernel/rust/fork_runnable_child.rs': 'a9387ae13b85785176b95fc6ddc79b08bd31dd7960b0730307b41b5a05b5d137', 'kernel/rust/fork_final_ack.rs': '093f742dfe4969d78b2ca6b8b643df94042945e890d26003dec9d1818c34826b', 'kernel/rust/fork_control_registry.rs': 'a2f92bb11cba42fef0d95e1f1e1a4c526351ff90860baed7913fa26c91137ba5', '.kernel-sdk/include/generated/uapi/linux/version.h': '3cc5d7cfe76eb7db13aac6d42be01cd2c5f8da0caaae154798a8d0115bb95571', '.phase5-current-runtime/RETIREMENT-SOURCE-CLOSURE.json': '693518046e937a53a65999f551f1160db28d21fe0cc941da4ee606c49abf0e97'}
++OWNED_FORK_CURRENT_SOURCE_PINS = {'kernel/syscall.c': 'ebcafd68cc98f31553bdb1674e1be80c2eac26f6a8436ee73978fe2288bb5c61', 'kernel/rust/fork_control_guest.rs': '26797f574fa1ba7006eb27ff3a1a7750ec04b83f71a2e90b8c35c4c536b33acd', 'kernel/rust/fork_child_credits.rs': '63b82c97cc6e1204585cfaf2b89ef378b88c1d207a8e82c2f1400bc352f9c98d', 'kernel/rust/fork_constructed_credits.rs': '4c1e96ef4fbf5cb66acc54d900d37fcd68fb4d50dd1337c4428b3f5e2ecd1972', 'kernel/rust/process_helpers.rs': '526baf9363a0845ad50aade7e9b2296d27c8840527f3510d95a1105fc626d8d3', 'kernel/rust/sched_helpers.rs': '449df570965855f992a0fe024fca7cd6527b20622b4b8e3b33af04900b02e923', 'kernel/CMakeLists.txt': 'af2758e8cad6fd4baa3c067d23cc81ab483aa71d666ca6249d54e8ccfd2701e5', 'kernel/rust/syscall_policy.rs': '4edf51b9c391ddca12fd4505ac1c6b51f6a73e3919f3f1cd49b3ebcb87a38a69', 'kernel/rust/fork_runnable_child.rs': 'a9387ae13b85785176b95fc6ddc79b08bd31dd7960b0730307b41b5a05b5d137', 'kernel/rust/fork_final_ack.rs': '093f742dfe4969d78b2ca6b8b643df94042945e890d26003dec9d1818c34826b', 'kernel/rust/fork_control_registry.rs': 'a2f92bb11cba42fef0d95e1f1e1a4c526351ff90860baed7913fa26c91137ba5', '.kernel-sdk/include/generated/uapi/linux/version.h': '3cc5d7cfe76eb7db13aac6d42be01cd2c5f8da0caaae154798a8d0115bb95571', '.phase5-current-runtime/RETIREMENT-SOURCE-CLOSURE.json': '693518046e937a53a65999f551f1160db28d21fe0cc941da4ee606c49abf0e97'}
++
++# Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++# Inserted into the existing pinned image driver; uses its owned command/capture path.
++M14_SOURCE_PINS = {
++    'kernel/process.c': '7203019d2ba8143f9240a03d11bc8c5cfcd495d89183aa7ab643c6159a6bd02d',
++    'kernel/rust/sched_helpers.rs': '449df570965855f992a0fe024fca7cd6527b20622b4b8e3b33af04900b02e923',
++    'kernel/include/sched_helpers.h': '9712a3df59eb0251f517ce01254e4576119868924b35f7da6fbee294bff966ae',
++    'arch/x86_64/kernel/memory.c': '95bb6a4a916a802e98eb9f7eac98eef990d6f75a3e42b06f29ac0a73ef2a452b',
++    'kernel/rust/x86_memory_helpers.rs': '689b9741821609a7c2e3aadb8cd46b0dbc57948090b38758f0b3eb120a5297fb',
++}
++M14_IDLE_IMPORTS = ('sched_idle_loop_body_result', 'sched_idle_current_cpu_bridge')
++M14_MEMORY_IMPORTS = ('x86_clear_old_action_bridge', 'x86_clear_phys_to_virt_bridge')
++M14_RUST_EXPORTS = M14_IDLE_IMPORTS + M14_MEMORY_IMPORTS + (
++    'sched_idle_begin_body_result', 'sched_idle_iteration_body_result',
++    'sched_idle_runqueue_has_running_result', 'process_sched_cpu_local_bridge',
++    'get_cpu_local_var', 'ihk_mc_get_processor_id')
++
++
++def _validate_m14_source_pins(source_root):
++    for relative, checksum in M14_SOURCE_PINS.items():
++        _fail(_sha256(_regular(source_root / relative, 'M14 selected source')) == checksum,
++              'M14 exact postimage differs: ' + relative)
++
++
++def _m14_selected_row(source_root, build, relative, macro, tools):
++    rows = json.loads((build / 'compile_commands.json').read_text())
++    selected = [r for r in rows if r.get('file') == str(source_root / relative)]
++    _fail(len(selected) == 1, 'M14 unique actual compile row: ' + relative)
++    row = selected[0]
++    args = list(row['arguments']) if 'arguments' in row else shlex.split(row['command'])
++    _fail(args[0] == tools['tools']['cc']['path'] and '14.3.1' in tools['tools']['cc']['version'],
++          'M14 pinned GCC14 actual compiler differs')
++    _fail(args.count('-D' + macro) == 1 and args.count('-o') == 1 and
++          args[-2:] == ['-c', str(source_root / relative)], 'M14 exact selected C flags')
++    return row, args
++
++
++def _m14_observe(command, name, out, tools, env, timeout, command_rows):
++    stdout, stderr = out / (name + '.stdout'), out / (name + '.stderr')
++    row = dict(scope='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.',
++               phase='m14-' + name, argv=command, cwd=str(out), exit_code=None)
++    command_rows.append(row)
++    row['exit_code'] = _run_process(command, out, env, stdout, stderr, timeout,
++                                    row['phase'], output_fsize=32 << 20)
++    _fail(row['exit_code'] == 0 and stderr.stat().st_size == 0, 'M14 observer failed: ' + name)
++    row.update(stdout_sha256=_sha256(stdout), stderr_sha256=_sha256(stderr))
++    return stdout.read_text()
++
++
++def _validate_m14_selected_memory_TU(source_root, build, tools, evidence, env, stdout, stderr, timeout, command_rows):
++    _validate_m14_source_pins(source_root)
++    row, args = _m14_selected_row(source_root, build, 'arch/x86_64/kernel/memory.c',
++                                'MCKERNEL_RUST_X86_MEMORY_PUBLIC', tools)
++    out = build / 'm14-production'
++    out.mkdir(mode=0o700)
++    oi = args.index('-o')
++    pp = _m14_observe(args[:oi] + ['-E', str(source_root / 'arch/x86_64/kernel/memory.c')],
++                      'selected-memory-preprocess', out, tools, env, timeout, command_rows)
++    for name in ('clear_range_old_action',) + M14_MEMORY_IMPORTS:
++        _fail(re.search(r'\b' + name + r'\s*\([^;{}]*\)\s*\{', pp, re.S) is None,
++              'M14 original C definition selected: ' + name)
++    _fail(all('extern ' in pp[max(0, match.start()-20):match.start()]
++              for match in [re.search(r'\b'+name+r'\s*\(', pp) for name in M14_MEMORY_IMPORTS]
++              if match is not None) and all(re.search(r'\b'+name+r'\s*\(', pp) is not None
++                                          for name in M14_MEMORY_IMPORTS),
++          'M14 selected external Rust declarations missing')
++    selected = args.copy()
++    selected[oi+1] = str(out / 'selected-memory.o')
++    phase = dict(phase='m14-selected-complete-memory-TU', argv=selected,
++                 cwd=row['directory'], source_sha256=M14_SOURCE_PINS['arch/x86_64/kernel/memory.c'], exit_code=None)
++    command_rows.append(phase)
++    phase['exit_code'] = _run_process(selected, Path(row['directory']), env, stdout, stderr,
++                                      timeout, phase['phase'])
++    _fail(phase['exit_code'] == 0, 'M14 selected actual memory TU failed')
++    _atomic_json(evidence / 'm14-selected-memory-TU.json', dict(status='PASS_PINNED_MEMORY_TU_ONLY',
++        compile=phase, object=_artifact(out/'selected-memory.o', 'selected memory object'),
++        actual_default_link='PENDING', native=False))
++
++
++def _validate_m14_default_link(source_root, build, tools, evidence, env, timeout, command_rows):
++    _validate_m14_source_pins(source_root)
++    out = build / 'm14-production'
++    objects = {}
++    for relative, macro, imports in (
++        ('kernel/process.c', 'MCKERNEL_RUST_PROCESS_HELPERS', M14_IDLE_IMPORTS),
++        ('arch/x86_64/kernel/memory.c', 'MCKERNEL_RUST_X86_MEMORY_PUBLIC', M14_MEMORY_IMPORTS)):
++        row, args = _m14_selected_row(source_root, build, relative, macro, tools)
++        obj = Path(row['directory']) / args[args.index('-o')+1]
++        obj = obj.resolve(strict=True)
++        objects[relative] = _artifact(obj, 'M14 actual default C object')
++        label = 'default-process' if relative == 'kernel/process.c' else 'default-memory'
++        nm = _m14_observe([tools['tools']['nm']['path'], '-u', str(obj)], label+'-imports', out,
++                          tools, env, timeout, command_rows)
++        reloc = _m14_observe([tools['tools']['readelf']['path'], '-rW', str(obj)], label+'-relocations', out,
++                             tools, env, timeout, command_rows)
++        for name in imports:
++            _fail(sum(line.split()[-1:] == [name] for line in nm.splitlines()) == 1 and
++                  any(name in line for line in reloc.splitlines()), 'M14 default C import/relocation: '+name)
++    makefile = (build/'kernel/CMakeFiles/mckernel_rust_obj.dir/build.make').read_text()
++    _fail(all('--cfg '+cfg in makefile for cfg in
++              ('native_linux_irq_work_v6_12','enable_profile','enable_perf','enable_rusage')),
++          'M14 full production Rust configuration differs')
++    _fail('mckernel_equivalence' not in makefile, 'M14 test equivalence CPU provider selected')
++    for filename, name in [('kernel/rust/mckernel_rust.o','Rust object'),('kernel/mckernel.img','final image')]:
++        path = build/filename
++        objects[filename] = _artifact(path, 'M14 '+name)
++        text = _m14_observe([tools['tools']['nm']['path'], '-g', '--defined-only', str(path)],
++                            'Rust-definitions' if filename.endswith('.o') else 'image-definitions', out,
++                            tools, env, timeout, command_rows)
++        for symbol in M14_RUST_EXPORTS:
++            found = [line.split() for line in text.splitlines() if line.split()[-1:] == [symbol]]
++            _fail(len(found) == 1 and found[0][-2] == 'T', 'M14 unique Rust/final owner missing: '+symbol)
++    undefined = _m14_observe([tools['tools']['nm']['path'], '-u', str(build/'kernel/mckernel.img')],
++                             'final-undefined', out, tools, env, timeout, command_rows)
++    _fail(undefined.strip() == '', 'M14 final unresolved provider')
++    proof = dict(status='PASS_PINNED_FULLCRATE_DEFAULT_C_CONSUMERS_AND_FINAL_LINK_ONLY',
++        source_pins=M14_SOURCE_PINS, objects=objects, idle_imports=M14_IDLE_IMPORTS,
++        memory_imports=M14_MEMORY_IMPORTS, unique_Rust_and_image_exports=M14_RUST_EXPORTS,
++        native=False, whole_M14_area_retired=False)
++    _revalidate_m14_objects(proof)
++    _atomic_json(evidence/'m14-combined-default-link.json', proof)
++    return proof
++
++
++def _revalidate_m14_objects(proof):
++    for item in proof['objects'].values():
++        _fail(_artifact(Path(item['path']), 'M14 final stable object') == item,
++              'M14 default object changed before publication')
++
++
+ 
+ def _validate_owned_fork_current_sources(source_root):
+     for relative, expected in OWNED_FORK_CURRENT_SOURCE_PINS.items():
+@@ -1463,6 +1593,7 @@
+     _fail(isinstance(timeout, int) and not isinstance(timeout, bool) and 1 <= timeout <= MAX_TIMEOUT,
+           "timeout is outside bound")
+     source_root = _canonical(source_root, "source root")
++    _validate_m14_source_pins(source_root)
+     if native_fork_owned_transaction:
+         _validate_owned_fork_current_sources(source_root)
+     manifest = _canonical(manifest, "source manifest")
+@@ -1561,11 +1692,13 @@
+                 _validate_release_fp_regs_production(source_root, build, tools, evidence, env, stdout, stderr, timeout, command_rows)
+                 _validate_release_tid_production(source_root, build, tools, evidence, env, stdout, stderr, timeout, command_rows)
+                 _validate_clone_affinity_production(source_root, build, tools, evidence, env, stdout, stderr, timeout, command_rows)
++                _validate_m14_selected_memory_TU(source_root, build, tools, evidence, env, stdout, stderr, timeout, command_rows)
+         progress["phase"] = "artifact-validation"
+         _check_signal()
+         _atomic_json(evidence / "progress.json", progress)
+         artifacts, link_snapshot = _validate_image(build, tools, evidence,
+             native_fork_owned_transaction=native_fork_owned_transaction, source_root=source_root)
++        m14_proof = _validate_m14_default_link(source_root, build, tools, evidence, env, timeout, command_rows)
+         source_after = _validate_source(source_root, candidate_sha, ihk_sha, manifest,
+                                         tools["tools"]["git"])
+         if gitlink_manifest is not None:
+@@ -1592,7 +1725,7 @@
+         _atomic_json(evidence / "progress.json", progress)
+         _fail(production_rust_proof['object']['sha256']==artifacts['mckernel_rust.o']['sha256'],
+               'final image Rust object differs from prelink panic-reference proof')
+-        result = {"production_rust_core_panic_reference_proof":production_rust_proof,
++        result = {"m14_combined_production_linkage":m14_proof, "production_rust_core_panic_reference_proof":production_rust_proof,
+                   "status": "PASS", "phase": "complete", "candidate_sha": candidate_sha,
+                   "ihk_sha": ihk_sha, "source_manifest_sha256": source["manifest_sha256"],
+                   "toolchain_manifest_sha256": tools["manifest_sha256"],
+@@ -1653,6 +1786,7 @@
+             # Publication is the last boundary: inventory and all source/tool
+             # checks and artifact copies must precede this immutable recheck.
+             _revalidate_link_contract_snapshots(build, evidence, link_snapshot)
++            _revalidate_m14_objects(m14_proof)
+         _atomic_json(evidence / "receipt.json", result)
+     except ImageBuildError as exc:
+         result.update(status="FAIL", error=str(exc))
+@@ -1832,7 +1966,7 @@
+     """Affected actual process TU and already-compiled real native/legacy crates."""
+     rows = json.loads((build / 'compile_commands.json').read_text())
+     process = source_root / 'kernel/process.c'
+-    _fail(_sha256(process) == 'a400590c51d4badeca9af7f75fa2aaca2c15a7182020380fed79bdf9d007ac33', 'actual integrated process source drift')
++    _fail(_sha256(process) == '7203019d2ba8143f9240a03d11bc8c5cfcd495d89183aa7ab643c6159a6bd02d', 'actual integrated process source drift')
+     _fail(_sha256(source_root / 'kernel/rust/process_helpers.rs') == '526baf9363a0845ad50aade7e9b2296d27c8840527f3510d95a1105fc626d8d3', 'actual current lifecycle/Rust source drift')
+     matches = [r for r in rows if Path(r['file']).resolve() == process.resolve()]
+     _fail(len(matches) == 1, 'release TID actual process compile row count')
+@@ -1926,7 +2060,7 @@
+ AFFINITY_SYMBOLS = ['sched_clone_affinity_snapshot_result','sched_clone_affinity_inherit_result','sched_setaffinity_body_result','process_clone_thread_base_state_body_result']
+ AFFINITY_C_ASSERTIONS = '/* Included after the ACTUAL full syscall.c TU; no local ABI declarations. */\n#ifdef MCKERNEL_RUST_SCHED_POLICY_HELPERS\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sched_clone_affinity_snapshot_result),int(*)(unsigned long,unsigned long,unsigned long,size_t,int)),"clone snapshot ABI");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sched_clone_affinity_inherit_result),int(*)(unsigned long,unsigned long,size_t)),"clone inherit ABI");\n#endif\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sched_setaffinity_body_result),long(*)(int,size_t,unsigned long,unsigned long,unsigned long,unsigned long,size_t,int,const struct sched_syscall_offsets*,sched_find_thread_fn_t,sched_thread_unlock_fn_t,sched_hold_thread_fn_t,sched_release_thread_fn_t,syscall_copy_from_user_fn_t,sched_request_migrate_fn_t)),"actual setaffinity ABI");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&process_clone_thread_base_state_body_result),int(*)(void*,const void*,unsigned long,unsigned long,unsigned long)),"actual base initializer ABI");\n_Static_assert(sizeof(unsigned long)==8,"native unsigned long");\n_Static_assert(sizeof(size_t)==8,"native size_t");\n_Static_assert(sizeof(cpu_set_t)==128,"native CPU mask bytes");\n_Static_assert(_Alignof(cpu_set_t)==8,"native CPU mask alignment");\n_Static_assert(sizeof(struct sched_syscall_offsets)==72,"scheduler offset aggregate size");\n_Static_assert(_Alignof(struct sched_syscall_offsets)==8,"scheduler offset aggregate align");\n'
+ AFFINITY_LAYOUT_CELLS = [('sizeof(cpu_set_t)', 'core::mem::size_of::<abi::CpuSet>()'), ('_Alignof(cpu_set_t)', 'core::mem::align_of::<abi::CpuSet>()'), ('sizeof(struct thread)', 'core::mem::size_of::<abi::Thread>()'), ('_Alignof(struct thread)', 'core::mem::align_of::<abi::Thread>()'), ('sizeof(struct process)', 'core::mem::size_of::<abi::Process>()'), ('_Alignof(struct process)', 'core::mem::align_of::<abi::Process>()'), ('__builtin_offsetof(struct thread,proc)', 'core::mem::offset_of!(abi::Thread,proc)'), ('__builtin_offsetof(struct thread,sched_param)', 'core::mem::offset_of!(abi::Thread,sched_param)'), ('__builtin_offsetof(struct thread,sched_policy)', 'core::mem::offset_of!(abi::Thread,sched_policy)'), ('__builtin_offsetof(struct thread,cpu_id)', 'core::mem::offset_of!(abi::Thread,cpu_id)'), ('__builtin_offsetof(struct thread,cpu_set)', 'core::mem::offset_of!(abi::Thread,cpu_set)'), ('__builtin_offsetof(struct thread,in_kernel)', 'core::mem::offset_of!(abi::Thread,in_kernel)'), ('__builtin_offsetof(struct process,pid)', 'core::mem::offset_of!(abi::Process,pid)'), ('__builtin_offsetof(struct process,ruid)', 'core::mem::offset_of!(abi::Process,ruid)'), ('__builtin_offsetof(struct process,euid)', 'core::mem::offset_of!(abi::Process,euid)'), ('__builtin_offsetof(struct process,cpu_set)', 'core::mem::offset_of!(abi::Process,cpu_set)'), ('sizeof(struct sched_syscall_offsets)', 'core::mem::size_of::<SchedSyscallOffsets>()'), ('_Alignof(struct sched_syscall_offsets)', 'core::mem::align_of::<SchedSyscallOffsets>()'), ('__builtin_offsetof(struct sched_syscall_offsets,thread_proc_offset)', 'core::mem::offset_of!(SchedSyscallOffsets,thread_proc_offset)'), ('__builtin_offsetof(struct sched_syscall_offsets,thread_sched_param_offset)', 'core::mem::offset_of!(SchedSyscallOffsets,thread_sched_param_offset)'), ('__builtin_offsetof(struct sched_syscall_offsets,thread_sched_policy_offset)', 'core::mem::offset_of!(SchedSyscallOffsets,thread_sched_policy_offset)'), ('__builtin_offsetof(struct sched_syscall_offsets,thread_cpu_id_offset)', 'core::mem::offset_of!(SchedSyscallOffsets,thread_cpu_id_offset)'), ('__builtin_offsetof(struct sched_syscall_offsets,thread_cpu_set_offset)', 'core::mem::offset_of!(SchedSyscallOffsets,thread_cpu_set_offset)'), ('__builtin_offsetof(struct sched_syscall_offsets,proc_pid_offset)', 'core::mem::offset_of!(SchedSyscallOffsets,proc_pid_offset)'), ('__builtin_offsetof(struct sched_syscall_offsets,proc_ruid_offset)', 'core::mem::offset_of!(SchedSyscallOffsets,proc_ruid_offset)'), ('__builtin_offsetof(struct sched_syscall_offsets,proc_euid_offset)', 'core::mem::offset_of!(SchedSyscallOffsets,proc_euid_offset)'), ('__builtin_offsetof(struct sched_syscall_offsets,proc_cpu_set_offset)', 'core::mem::offset_of!(SchedSyscallOffsets,proc_cpu_set_offset)')]
+-AFFINITY_SOURCE_PINS = {'kernel/syscall.c': 'ebcafd68cc98f31553bdb1674e1be80c2eac26f6a8436ee73978fe2288bb5c61', 'kernel/rust/sched_helpers.rs': 'a5b8ed0f048adcfa6908094f7b8b5d459b9b14aa0ed4b75e5250abe6f8387c57', 'kernel/rust/process_helpers.rs': '526baf9363a0845ad50aade7e9b2296d27c8840527f3510d95a1105fc626d8d3', 'kernel/rust/abi.rs': 'ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e', 'kernel/rust/syscall_policy.rs': '4edf51b9c391ddca12fd4505ac1c6b51f6a73e3919f3f1cd49b3ebcb87a38a69'}
++AFFINITY_SOURCE_PINS = {'kernel/syscall.c': 'ebcafd68cc98f31553bdb1674e1be80c2eac26f6a8436ee73978fe2288bb5c61', 'kernel/rust/sched_helpers.rs': '449df570965855f992a0fe024fca7cd6527b20622b4b8e3b33af04900b02e923', 'kernel/rust/process_helpers.rs': '526baf9363a0845ad50aade7e9b2296d27c8840527f3510d95a1105fc626d8d3', 'kernel/rust/abi.rs': 'ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e', 'kernel/rust/syscall_policy.rs': '4edf51b9c391ddca12fd4505ac1c6b51f6a73e3919f3f1cd49b3ebcb87a38a69'}
+ 
+ def _validate_clone_affinity_production(source_root, build, tools, evidence, env, stdout, stderr, timeout, command_rows):
+     """Fresh205 source graph: actual full syscall TU, actual layouts and full crates."""

@@ -42,6 +42,13 @@ Pinned GCC14 production Rust/default-link and native proof remain open. The
 frozen functional image is unchanged; no whole-area/file or practical closure
 is claimed.
 
+The selected `x86_clear_phys_to_virt_bridge` C callback is also replaced in
+canonical source by a Rust export calling existing Rust `phys_to_virt`. Its four
+callback sites are unchanged. Selected GCC9 C TU and complete Rust-module ABI/
+provider checks pass; a partial link resolves the callback uniquely. See its
+[integration and exact proof scope](../evidence/compute-idle-rust-cutover-20261023-1/phys-to-virt-callback-1/CANONICAL-INTEGRATION.json).
+This additional partial slice has no default-image or native credit.
+
 ## M14-F01: `kernel/mem.c`
 
 Reuse: `kernel/rust/mem_helpers.rs`, `kernel/rust/page_alloc.rs`, `kernel/rust/page_helpers.rs`, `kernel/rust/refcount_helpers.rs`, `kernel/rust/object_helpers.rs`, `kernel/rust/abi.rs`.

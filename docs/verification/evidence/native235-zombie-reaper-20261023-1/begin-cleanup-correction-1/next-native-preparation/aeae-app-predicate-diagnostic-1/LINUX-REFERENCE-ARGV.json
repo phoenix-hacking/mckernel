@@ -1,0 +1,21 @@
+[
+  "/usr/bin/taskset",
+  "--cpu-list",
+  "6",
+  "/usr/bin/prlimit",
+  "--as=2147483648",
+  "--cpu=60",
+  "--core=0",
+  "--fsize=33554432",
+  "--nofile=256",
+  "--",
+  "/usr/bin/strace",
+  "-f",
+  "-e",
+  "trace=clone,fork,vfork,execve,wait4,exit,exit_group",
+  "-o",
+  "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/begin-cleanup-native-successor-2/app-predicate-diagnostic-1/linux-process.trace",
+  "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/begin-cleanup-native-successor-2/app-predicate-diagnostic-1/process_exec_wait_diagnostic",
+  "--observations",
+  "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/begin-cleanup-native-successor-2/app-predicate-diagnostic-1/observations.json"
+]

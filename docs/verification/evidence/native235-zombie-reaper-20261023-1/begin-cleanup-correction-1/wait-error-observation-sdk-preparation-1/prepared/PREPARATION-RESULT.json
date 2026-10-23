@@ -1,0 +1,119 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "HOST_SOURCE_AND_DERIVED_RUNTIME_PREPARED_NO_BUILD_NO_RELEASE",
+  "host_root": "/home/holden/mckernel-work/host-preparation/native235-wait-error-observation-sdk-successor-20261023-3",
+  "source_identity": "6a3314024fba61f72ad633508b65dd60d79da4db3c5bd113ae35118cb60482a5",
+  "predecessor_identity": "db7f2ac4ddc023874ddf6b2b8de2c86c41bbf6efb601f33d4d0f501aa1957598",
+  "source_files": 68,
+  "source_bytes": 1357089,
+  "deltas": [
+    {
+      "relative": "mcctrl_process.rs",
+      "old": "2e88cc1777a635eb3599e0ac4c66129f3c2c77a19e421c95373f044d823a87be",
+      "new": "8bf30cd8ae79cc778bd91816f30aaf7a37ccc2aab59822ca2a03587426a212b8",
+      "bytes": 54854
+    }
+  ],
+  "nonce_reserved_not_executed": "56bc171c4a724f9b81060ae6713e9a1c",
+  "preparation": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-wait-error-observation-sdk-successor-20261023-3/preparation.json",
+    "sha256": "bf9a71e398ce058703c3de0ad552860d2ba23b785e2ee710e1549264d8d9fb6f",
+    "bytes": 49239
+  },
+  "derived_driver": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-wait-error-observation-sdk-successor-20261023-3/derived-runtime/native_running_external_modules_offline.py",
+    "sha256": "e7c2bd4c96f4ec2072b4354fcc602ad8d5ff4ff1f7dcfeae57616a795628afc7",
+    "bytes": 37676
+  },
+  "derived_owner": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-wait-error-observation-sdk-successor-20261023-3/derived-runtime/native_running_external_modules_owner.py",
+    "sha256": "1a7083948edd848e6be1d6a283eeee63aa34d62164eaf13251d821c3b1417d4a",
+    "bytes": 54788
+  },
+  "runtime_cohort": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-wait-error-observation-sdk-successor-20261023-3/RUNTIME-COHORT.json",
+    "sha256": "ad96abbe4e062f34f1d9f583e31586bded05d10787e9685997fdb799fe74b5b2",
+    "bytes": 2955
+  },
+  "request_template": {
+    "path": "/home/holden/mckernel-work/host-preparation/native235-wait-error-observation-sdk-successor-20261023-3/REQUEST.TEMPLATE.PENDING-LIVE-IDENTITIES.json",
+    "sha256": "6bcd200e235699b0f7aac6e1734cf0ba99ed4836ff60c429510a382291fc3222",
+    "bytes": 1939
+  },
+  "materializer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-sdk-preparation-1/prepared/stage_bound_successor.py",
+    "sha256": "ace5e403b35da3517cf34814573eae1debf40edab412d6de93706f72a8a10466",
+    "bytes": 5520
+  },
+  "external_command": [
+    "/usr/bin/env",
+    "-i",
+    "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER=mckernel",
+    "KBUILD_BUILD_VERSION=1",
+    "SOURCE_DATE_EPOCH=1786434034",
+    "PATH=/usr/bin:/bin",
+    "LANG=C",
+    "LC_ALL=C",
+    "TZ=UTC",
+    "BASH_ENV=",
+    "ENV=",
+    "GNUMAKEFLAGS=",
+    "MAKEFILES=",
+    "MAKEFLAGS=",
+    "MAKEOVERRIDES=",
+    "MFLAGS=",
+    "LD_LIBRARY_PATH=",
+    "LD_PRELOAD=",
+    "HOME=/candidate/home",
+    "TMPDIR=/candidate/tmp",
+    "/usr/bin/make",
+    "-C",
+    "/out/source/linux-6.12.0-211.44.1.el10_2",
+    "O=/out/build",
+    "M=/candidate/modules",
+    "ARCH=x86_64",
+    "LLVM=1",
+    "LOCALVERSION=-211.44.1.el10_2.mckernel1.x86_64",
+    "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER=mckernel",
+    "KBUILD_BUILD_VERSION=1",
+    "SOURCE_DATE_EPOCH=1786434034",
+    "MCKERNEL_CURRENT_FORK_ADOPTION_OPT_IN=1",
+    "--jobserver-style=pipe",
+    "-j2",
+    "modules"
+  ],
+  "source_acceptance": null,
+  "source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-sdk-preparation-1/INDEPENDENT-SOURCE-REVIEW.INPUT.json",
+    "sha256": "7e11d6f4c9dbec032b7752940ebcfbbe5c39d5cb654ec861e5049697a82a1bee"
+  },
+  "execution_release": null,
+  "compiler_runs": 0,
+  "root_operations": 0,
+  "Docker_operations": 0,
+  "scratch_writes": 0,
+  "profile_unchanged": {
+    "container_CPUs": "2-5",
+    "container_memory_bytes": 12884901888,
+    "container_swap": 0,
+    "container_tasks": 512,
+    "make_jobs": 2,
+    "network": "none",
+    "backing_GiB": 110
+  },
+  "expected_binary_delta": {
+    "ihk": "stable expected; verify actual build",
+    "ihk_smp_x86_64": "stable expected; verify actual build",
+    "mcctrl": "change expected"
+  },
+  "required_next": [
+    "independent coherent SDK preparation review",
+    "root source/input staging and fresh live identities/capacity/leases",
+    "independent exact execution release",
+    "actual module build and artifact/physical review"
+  ]
+}
