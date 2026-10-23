@@ -1,0 +1,528 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXECUTABLE_READY_NO_COMPILER_GRANT_NOT_EXECUTED",
+  "source_contract": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/SOURCE-CONTRACT-AND-PATCH.json",
+    "sha256": "afa1ace2d073d231b460fb33477e04b2b06c6991d937c2ef3b791badc8548b3c",
+    "bytes": 13434
+  },
+  "actual_round90_facts": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/ACTUAL-ROUND90-FACTS.json",
+    "sha256": "5e37692fa8aa7fe866f4cb4a17c6ff4bc6eeeb50a9558fdf641be4e01840b82b",
+    "bytes": 1277
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/PRIVATE-VALID-READ-ALL-BOUNDARY.patch",
+    "sha256": "fa5e9f0a2ed0bc961f1e1f4164b41312910496182e162b277faf827c35fd44dc",
+    "bytes": 1507
+  },
+  "source_inputs": {
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/long_empty.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/long_empty.inc",
+      "sha256": "829151c8080deeeaf56de7b71c5c7493ecbc73cb83e8c010bac38bcafb23a588",
+      "bytes": 448
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/pair_runtime.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/pair_runtime.inc",
+      "sha256": "6fb3c422bd11ecfa2cfdd29eb3665f9d81eb29039cf379ebd415f07087634899",
+      "bytes": 5686
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/long_support.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/long_support.inc",
+      "sha256": "1eb80bf416ec15d108c48ab3be1e4c5e3f8f159e01eb3e85ee0864e646d0db44",
+      "bytes": 10893
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/long_bridge.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/long_bridge.inc",
+      "sha256": "3a44fcde12be393c00d0ab971e0a3e20f2cf0da918eba5150a8985f167c3918e",
+      "bytes": 10780
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/pair_long_producer.h": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/pair_long_producer.h",
+      "sha256": "c929df9548b9660857c55fb6c01886df5a7363e7f992f7032941c81a054ef599",
+      "bytes": 1432
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/retirement_settlement.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/retirement_settlement.inc",
+      "sha256": "05f3119bc7a55f7b8602b54715a4ba7d913221ce9c672f6a24caf7e706c4fdaa",
+      "bytes": 3479
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/pair_launch_expansion_support.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/pair_launch_expansion_support.inc",
+      "sha256": "9348bce5f046b3285547e1348966c18b0f09cbfaa9592d04fcc3c7d2c4a64379",
+      "bytes": 8799
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/pair_assignment.h": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/pair_assignment.h",
+      "sha256": "29963c5088598368fe7565a6fba88f5712cece4105314e4d1f2205c6a936b643",
+      "bytes": 3010
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/pair_launch_expansion_run.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/pair_launch_expansion_run.inc",
+      "sha256": "6a948ebc2a68b9f3e18cb5fded0eb8309a1bc31a94ecf4e1dccdf1bc620dacbd",
+      "bytes": 3340
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/pair_trace_retention.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/pair_trace_retention.inc",
+      "sha256": "5b59e01a608740b8e830c5cf2fb94a1610163b961324bce31a0f3d7295856a8d",
+      "bytes": 11255
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/pair_round_oracles.h": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/pair_round_oracles.h",
+      "sha256": "4f7fbd55ffa528e59bdb2445bb74ee681fab4e2cd4ca4e5a016d7c0d525d7bbc",
+      "bytes": 2469
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/long_trace_retention.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/long_trace_retention.inc",
+      "sha256": "66ad73a4b7da9ccb775247c2d32a803f445e93a1e5b8762cabc5a4968adf099f",
+      "bytes": 6588
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/pair_collector.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/pair_collector.c",
+      "sha256": "5ffe7ef09c601ab3fe13cb25fc4745c538f34f1b8eb3d5858b21a9969f6b0834",
+      "bytes": 25323
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/pair_collector.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/pair_collector.inc",
+      "sha256": "dcfbb3a9c7199c4d06e014a7b9df9933da7c6f26ed552bc2bdca9e272a082020",
+      "bytes": 4616
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/long_provider_decl.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/preimage/long_provider_decl.inc",
+      "sha256": "92d4da589e28f1177c0edcedb71206220bc0185a1fa5282a8021bdba181bf836",
+      "bytes": 224
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/long_empty.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/long_empty.inc",
+      "sha256": "829151c8080deeeaf56de7b71c5c7493ecbc73cb83e8c010bac38bcafb23a588",
+      "bytes": 448
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/pair_runtime.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/pair_runtime.inc",
+      "sha256": "6fb3c422bd11ecfa2cfdd29eb3665f9d81eb29039cf379ebd415f07087634899",
+      "bytes": 5686
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/long_support.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/long_support.inc",
+      "sha256": "1eb80bf416ec15d108c48ab3be1e4c5e3f8f159e01eb3e85ee0864e646d0db44",
+      "bytes": 10893
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/long_bridge.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/long_bridge.inc",
+      "sha256": "b08d71a4f19ccb286060917cfcf7e21151b109faaabadf6a33ddd9159071944a",
+      "bytes": 10779
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/pair_long_producer.h": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/pair_long_producer.h",
+      "sha256": "c929df9548b9660857c55fb6c01886df5a7363e7f992f7032941c81a054ef599",
+      "bytes": 1432
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/retirement_settlement.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/retirement_settlement.inc",
+      "sha256": "175091f1a0be6e332ded88fbcd2b0c7a5d0b54d528c7b6fa28c97d5493b81883",
+      "bytes": 3478
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/pair_launch_expansion_support.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/pair_launch_expansion_support.inc",
+      "sha256": "9348bce5f046b3285547e1348966c18b0f09cbfaa9592d04fcc3c7d2c4a64379",
+      "bytes": 8799
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/pair_assignment.h": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/pair_assignment.h",
+      "sha256": "29963c5088598368fe7565a6fba88f5712cece4105314e4d1f2205c6a936b643",
+      "bytes": 3010
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/pair_launch_expansion_run.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/pair_launch_expansion_run.inc",
+      "sha256": "6a948ebc2a68b9f3e18cb5fded0eb8309a1bc31a94ecf4e1dccdf1bc620dacbd",
+      "bytes": 3340
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/pair_trace_retention.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/pair_trace_retention.inc",
+      "sha256": "5b59e01a608740b8e830c5cf2fb94a1610163b961324bce31a0f3d7295856a8d",
+      "bytes": 11255
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/pair_round_oracles.h": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/pair_round_oracles.h",
+      "sha256": "4f7fbd55ffa528e59bdb2445bb74ee681fab4e2cd4ca4e5a016d7c0d525d7bbc",
+      "bytes": 2469
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/long_trace_retention.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/long_trace_retention.inc",
+      "sha256": "66ad73a4b7da9ccb775247c2d32a803f445e93a1e5b8762cabc5a4968adf099f",
+      "bytes": 6588
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/pair_collector.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/pair_collector.c",
+      "sha256": "57717b8cac052f21e30e048a2e3479b398c1a4863758cfdea88e7471cbe9e0f1",
+      "bytes": 25411
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/pair_collector.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/pair_collector.inc",
+      "sha256": "dcfbb3a9c7199c4d06e014a7b9df9933da7c6f26ed552bc2bdca9e272a082020",
+      "bytes": 4616
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/long_provider_decl.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/candidate/long_provider_decl.inc",
+      "sha256": "92d4da589e28f1177c0edcedb71206220bc0185a1fa5282a8021bdba181bf836",
+      "bytes": 224
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained/actual-failure-snapshot.normalized.log": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained/actual-failure-snapshot.normalized.log",
+      "sha256": "d6a2111663d8e9fc07024baa1729d7cd8602c0fded1dd629e50ae77342563fa4",
+      "bytes": 97303
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained/actual-later-retirement.serial-record.log": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained/actual-later-retirement.serial-record.log",
+      "sha256": "f473426370246f6fcfaef41b73e31f75523724f05084625568545a46f5c55817",
+      "bytes": 108
+    },
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/fixture_capacity.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/fixture_capacity.c",
+      "sha256": "b78be6d9ec730493c716ea6e0a13baf9f6fbc77c9ecdff178ec88f8bf3edebd2",
+      "bytes": 7903
+    }
+  },
+  "tools": {
+    "/usr/bin/gcc-9": {
+      "path": "/usr/bin/gcc-9",
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+      "bytes": 1158288
+    }
+  },
+  "commands": [
+    {
+      "name": "build-original",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Compile exact selected C consumer with controlled snapshot/time and forbidden live klog provider.",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O1",
+        "-g0",
+        "-Wall",
+        "-Wextra",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-DPAIR_ROOT=\".\"",
+        "-DCAPACITY_FIX=0",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/fixture_capacity.c",
+        "-Wl,--gc-sections",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/capacity-original"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1"
+    },
+    {
+      "name": "build-candidate",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Compile exact selected C consumer with controlled snapshot/time and forbidden live klog provider.",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O1",
+        "-g0",
+        "-Wall",
+        "-Wextra",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-DPAIR_ROOT=\".\"",
+        "-DCAPACITY_FIX=1",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/fixture_capacity.c",
+        "-Wl,--gc-sections",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/capacity-candidate"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1"
+    },
+    {
+      "name": "original-mode-0",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual strict consumer source; constructed full valid suffix or exact controlled negative. No actualround90 data or native credit.",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/capacity-original",
+        "0",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/original-mode-0",
+      "create_fresh_cwd": true
+    },
+    {
+      "name": "original-mode-20",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual strict consumer source; constructed full valid suffix or exact controlled negative. No actualround90 data or native credit.",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/capacity-original",
+        "20",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/original-mode-20",
+      "create_fresh_cwd": true
+    },
+    {
+      "name": "candidate-mode-0",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual strict consumer source; constructed full valid suffix or exact controlled negative. No actualround90 data or native credit.",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/capacity-candidate",
+        "0",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/candidate-mode-0",
+      "create_fresh_cwd": true
+    },
+    {
+      "name": "candidate-mode-1",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual strict consumer source; constructed full valid suffix or exact controlled negative. No actualround90 data or native credit.",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/capacity-candidate",
+        "1",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/candidate-mode-1",
+      "create_fresh_cwd": true
+    },
+    {
+      "name": "candidate-mode-2",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual strict consumer source; constructed full valid suffix or exact controlled negative. No actualround90 data or native credit.",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/capacity-candidate",
+        "2",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/candidate-mode-2",
+      "create_fresh_cwd": true
+    },
+    {
+      "name": "candidate-mode-3",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual strict consumer source; constructed full valid suffix or exact controlled negative. No actualround90 data or native credit.",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/capacity-candidate",
+        "3",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/candidate-mode-3",
+      "create_fresh_cwd": true
+    },
+    {
+      "name": "candidate-mode-4",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual strict consumer source; constructed full valid suffix or exact controlled negative. No actualround90 data or native credit.",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/capacity-candidate",
+        "4",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/candidate-mode-4",
+      "create_fresh_cwd": true
+    },
+    {
+      "name": "candidate-mode-5",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual strict consumer source; constructed full valid suffix or exact controlled negative. No actualround90 data or native credit.",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/capacity-candidate",
+        "5",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/candidate-mode-5",
+      "create_fresh_cwd": true
+    },
+    {
+      "name": "candidate-mode-6",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual strict consumer source; constructed full valid suffix or exact controlled negative. No actualround90 data or native credit.",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/capacity-candidate",
+        "6",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/candidate-mode-6",
+      "create_fresh_cwd": true
+    },
+    {
+      "name": "candidate-mode-7",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual strict consumer source; constructed full valid suffix or exact controlled negative. No actualround90 data or native credit.",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/capacity-candidate",
+        "7",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/candidate-mode-7",
+      "create_fresh_cwd": true
+    },
+    {
+      "name": "candidate-mode-8",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual strict consumer source; constructed full valid suffix or exact controlled negative. No actualround90 data or native credit.",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/capacity-candidate",
+        "8",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/candidate-mode-8",
+      "create_fresh_cwd": true
+    },
+    {
+      "name": "candidate-mode-9",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual strict consumer source; constructed full valid suffix or exact controlled negative. No actualround90 data or native credit.",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/capacity-candidate",
+        "9",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/candidate-mode-9",
+      "create_fresh_cwd": true
+    },
+    {
+      "name": "candidate-mode-10",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual strict consumer source; constructed full valid suffix or exact controlled negative. No actualround90 data or native credit.",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/capacity-candidate",
+        "10",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/candidate-mode-10",
+      "create_fresh_cwd": true
+    },
+    {
+      "name": "candidate-mode-11",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual strict consumer source; constructed full valid suffix or exact controlled negative. No actualround90 data or native credit.",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/capacity-candidate",
+        "11",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/candidate-mode-11",
+      "create_fresh_cwd": true
+    },
+    {
+      "name": "candidate-mode-12",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual strict consumer source; constructed full valid suffix or exact controlled negative. No actualround90 data or native credit.",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/capacity-candidate",
+        "12",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/candidate-mode-12",
+      "create_fresh_cwd": true
+    },
+    {
+      "name": "candidate-mode-13",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual strict consumer source; constructed full valid suffix or exact controlled negative. No actualround90 data or native credit.",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/capacity-candidate",
+        "13",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/candidate-mode-13",
+      "create_fresh_cwd": true
+    },
+    {
+      "name": "candidate-mode-14",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual strict consumer source; constructed full valid suffix or exact controlled negative. No actualround90 data or native credit.",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/capacity-candidate",
+        "14",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/candidate-mode-14",
+      "create_fresh_cwd": true
+    },
+    {
+      "name": "candidate-mode-15",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual strict consumer source; constructed full valid suffix or exact controlled negative. No actualround90 data or native credit.",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/capacity-candidate",
+        "15",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/candidate-mode-15",
+      "create_fresh_cwd": true
+    },
+    {
+      "name": "candidate-mode-16",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual strict consumer source; constructed full valid suffix or exact controlled negative. No actualround90 data or native credit.",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/capacity-candidate",
+        "16",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/candidate-mode-16",
+      "create_fresh_cwd": true
+    },
+    {
+      "name": "candidate-mode-20",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual strict consumer source; constructed full valid suffix or exact controlled negative. No actualround90 data or native credit.",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/capacity-candidate",
+        "20",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/candidate-mode-20",
+      "create_fresh_cwd": true
+    },
+    {
+      "name": "candidate-mode-21",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual strict consumer source; constructed full valid suffix or exact controlled negative. No actualround90 data or native credit.",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/capacity-candidate",
+        "21",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/candidate-mode-21",
+      "create_fresh_cwd": true
+    },
+    {
+      "name": "candidate-mode-22",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual strict consumer source; constructed full valid suffix or exact controlled negative. No actualround90 data or native credit.",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/capacity-candidate",
+        "22",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/candidate-mode-22",
+      "create_fresh_cwd": true
+    },
+    {
+      "name": "candidate-mode-23",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual strict consumer source; constructed full valid suffix or exact controlled negative. No actualround90 data or native credit.",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/capacity-candidate",
+        "23",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/retained"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/output-1/candidate-mode-23",
+      "create_fresh_cwd": true
+    }
+  ],
+  "profile": {
+    "CPU": "ROOT_ASSIGN",
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 90,
+    "retirement_seconds": 6,
+    "FSIZE_bytes": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "owned_capture_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+  },
+  "mandatory_controls": {
+    "original_full_guard": "original-mode-0 expected original actualguard FAIL with valid boundedfullcount, binaryreturn0 means expectedreject observed",
+    "candidate_full": "candidate-mode-0 CONSTRUCTED padded genuine record combination strictgate ONCE PASS",
+    "negative_provider": "mode1-EACCES refusal/mode2-zero/mode3-overcap",
+    "identity": "mode4 wronggeneration/mode5 wrongPID/mode6 zerotoken/mode7 duplicatetoken/mode13 duplicatecurrentPID",
+    "missing_required": "mode8 missingACK/mode9 missingSCHEDULE",
+    "malformed": "mode14 retirementafterfinal0/mode15 malformedretirement errno/mode16 incompletefinalnonapplication record",
+    "neverSettles": "mode10 actualreal5s bound withfullvalidpendingcurrentpair suffix",
+    "outer_deadline": "mode12 actualreal80ms outerdeadline minpreserved",
+    "deadline_overrun": "mode11 controlledpostcallbackclockoverrun",
+    "failure_export": "old-mode20fullcountreject/new-mode20actualbounded1MiBsaveandBEGIN/END; negative/overcap/zeroerror modes21..23"
+  },
+  "qualifications": [
+    "Wholevalidsuffix count==cap is supported READ_ALL data, not full-ring completeness.",
+    "Genuine preserved records are combined with separately retained final0 and constructed padding. No claim this was an actual new snapshot.",
+    "No snapshot bytes exist from failedround90; its retirement cause remains UNKNOWN.",
+    "All original strictcurrentPID/gen/token/ACK/procfs/syscall/publication/schedule/exit predicates and ledgers unchanged; single gate invocation perfixture process.",
+    "Existing 5s/outerdeadline and all memory/trace/output bounds unchanged."
+  ],
+  "old_failure_history": [
+    "SDK8round21 missing errno/providerfacts remains preserved separately.",
+    "New actualb7 round90 n==1048576 classification failure facts c077/5e376 retained."
+  ],
+  "compiler_jobs": 0,
+  "actual_results": null,
+  "first_unexpected_failure": "STOP preserve no automatic correction/retry or family reset."
+}

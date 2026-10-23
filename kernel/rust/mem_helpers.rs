@@ -5509,6 +5509,26 @@ pub unsafe extern "C" fn mem_lookup_node_body_result(
     phys_to_nid_cb(*ptep & PT_PHYSMASK)
 }
 
+/// Preserve the original single-address stack-local handoff to the array entry.
+///
+/// # Safety
+/// The caller retains vm under the original TLB contract. The initialized local
+/// lives through the synchronous array call, just as the C unsigned-long local
+/// did. The existing array/body completion and lock protocol must finish every
+/// use before this local expires. This entry does not dereference vm or retain
+/// an additional pointer; neither callback nor shared-vector ownership changes.
+#[no_mangle]
+pub unsafe extern "C" fn remote_flush_tlb_cpumask(
+    vm: *mut ProcessVm, addr: CULong, cpu_id: CInt,
+) {
+    let mut local_addr = addr;
+    unsafe {
+        remote_flush_tlb_array_cpumask(
+            vm, core::ptr::addr_of_mut!(local_addr), 1, cpu_id,
+        )
+    }
+}
+
 /// Keep the original synchronous TLB request and callback ownership boundary.
 ///
 /// # Safety

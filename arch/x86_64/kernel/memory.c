@@ -1593,6 +1593,13 @@ static int x86_clear_range_walk_l3_bridge(void *pt, unsigned long base,
 	return walk_pte_l3(pt, base, start, end, &clear_range_l3, args);
 }
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+/* Borrow the existing L3 callback synchronously; its C body remains debt. */
+int (*const x86_clear_range_l3_callback)(void *, unsigned long,
+        unsigned long, unsigned long, void *) = &x86_clear_range_walk_l3_bridge;
+extern int x86_clear_range_l4_body(void *args0, pte_t *ptep, uint64_t base,
+        uint64_t start, uint64_t end);
+#else
 static int clear_range_l4(void *args0, pte_t *ptep, uint64_t base,
 		uint64_t start, uint64_t end)
 {
@@ -1602,11 +1609,12 @@ static int clear_range_l4(void *args0, pte_t *ptep, uint64_t base,
 			x86_clear_phys_to_virt_bridge,
 			x86_clear_range_walk_l3_bridge);
 }
+#endif
 
 #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 /* Immutable callback identity; the retained private C callback chain remains C debt. */
 int (*const x86_clear_range_l4_callback)(void *, pte_t *, uint64_t,
-        uint64_t, uint64_t) = &clear_range_l4;
+        uint64_t, uint64_t) = &x86_clear_range_l4_body;
 extern int x86_clear_range_walk_l4_bridge(void *pt, unsigned long base,
         unsigned long start, unsigned long end, void *args);
 #else

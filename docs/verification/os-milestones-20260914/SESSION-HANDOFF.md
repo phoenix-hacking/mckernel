@@ -1,3 +1,68 @@
+## Scalar Rust body integrated; P12 capsule passed — 2026-10-23T23:32:36.419304+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical34/35, new closed IDs none. Scalar remote_flush_tlb_cpumask is canonical
+638788/4635 after independent current78 Rust/completeGCC9/realarch/partial proof;
+13 C callbacks and default/native remain open. Frozen candidate15 unchanged; its
+complete pure validation passed34.768s, focused build review/admission preparation
+active. P12 capsule30db/manifest9dfe passed20.982s and independent strict-stage
+review; init-only delta,61same. Namespace publication precedes coherent runtime
+fixture and late fresh release; no new LONG yet. Failedb7 physically retired a492.
+Processlog1101/13commands PASS. L3fivecommands/5184comparisons PASS but finalreceipt
+writer KeyError is retained; expert resolves metadata only, no compiler replay.
+See engineering2330 for exact owner/blocker/next result. No fullfile/native credit.
+
+## Collector accepted; M14 current production and candidate15 validation advance — 2026-10-23T23:29:40.059258+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical34/35; new closed IDs none. Failed b7d804 positively physically retired
+(a492); original90 rounds/180 launches/490.687874238 mixed seconds remain failed-run
+reports with zero formal hour credit. New collector bff842 actual17commands PASS
+3.204s and10 controlled terminal cases independently accepted; CPU6 now stages its
+init-only capsule via unchanged builder. No new LONG launched or kernel rebuild.
+M14 clear_range_l4 canonical after coherent78/GCC9/section-specific0971 proof;
+scalar production12/12 PASS16.621s, independent review/integration preparation next.
+Candidate15 frozen11changes/6959entries source materialized; complete request and
+actual retained ELF consumer PASS34.768s, focused driver/profile review now running.
+No new GCC14 default image/native/file retirement credit. Ready process log fixture
+gets released CPU7; lowerL3 candidate stays source-ready without reservation.
+One existing timer3938622/start59029100/600s; no duplicate. See engineering2320.
+
+## Failed diagnostic LONG positively physically retired — 2026-10-23T23:04:58.021222+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Genuine independentphysicalPASS nowrecordsFAILED_DIAGNOSTIC_B7D804_POSITIVELY_RETIRED:
+PROC5066 twoCOMPLETEpublisherfree snapshots/all26identitiesabsent inclknowninit
+3951889/59198794; exact23commandcoverage, mutex5e8d permanent27:4/eightexclusions.
+Export72b61/client57f0/CID8058normalremove+threeemptyqueries/closedowner+outer
+joined. Current_live_postjoin NONNULLpositivephysicalauthority; no furtherquery
+orcleanup needed. Preserveoriginalround90FAIL/180reportedlaunches/490.687874238
+mixedsec/OwnerSignal+secondaryCommandError; formalhourcreditZERO/practical34/35.
+No newworkloadreleasefromclearance. RootpreparesnextcoherentM14build viaexisting
+heavyprofile whileP12collectorcapacityfixprivatefixturesprogress; no unchanged
+LONGreplay and no speculativekernel/module/deadlinechange. FiveRustentrysource
+integrations andtheirboundedGCC9proof remainseparatefromdefaultGCC14/image/native.
+
+## Five new canonical Rust entries; failed LONG physical review progresses — 2026-10-23T23:03:02.575774+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M14 combinedsyscall3files nowcanonical103562/57fb/f1f786 afterdd60 retained78Rust/
+bothwholeGCC9TUs/realABI/oneexactarch_ptracereloc/partial accepted. Thisproofusesold
+process526bcohort; currentprocess3f2c union/defaultGCC14/native notclaimed. Together
+withnewprocess/CPU/walkentries fivecanonicalbodyentries addedinthischeckpoint;
+wholefile/CcallbackchainretirementOPEN. Scalar4896/fiveABI/15commands PASS44653/
+.821754s independentlyaccepted, fullmemproductionnext. MemoryclearL4 private7280+64
+accepted; coherentcurrent78/wholeGCC9job grantedafterprocess+syscallinputrefresh.
+P12originalFAILc077/90rounds180launch490.687874238mixedseconds retained, zeroformal
+hourcredit. klogctl3formattedREAD_ALLsuffix capacitybranch observed at1MiB; n==cap
+isnotAPIerror byitself. Expertprivateobserverproposalpreservesstrictgate/deadline.
+NormalTERM56b275 completedowner/outerFAIL; actual37closedexport72b61 PASS/.149081s,
+ownerabsenceTRUE/leaseFALSE/23positiveclientbirths/reaps/CID8058normalremove+three
+emptyqueries bounddd1cac. FreshPROC/mutex9ab2 sourceprepared, independentrelease
+next; physicalacceptancePENDING/current_live_postjoinNONNULL. No newheavy orreplay.
+Practical34/35/newclosedIDsnone. ExistingM14candidate15sourceprep starts using
+acceptedheavyprofile; newcompile-onlymodeparked/noquery/build. Timerunchanged.
+
 ## Canonical process range entry integrated; combined syscall transport failure — 2026-10-23T22:49:14.515057+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

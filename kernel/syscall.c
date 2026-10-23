@@ -19866,6 +19866,7 @@ syscall_signalfd_create_bridge(int syscall_nr, int flags)
 	return do_syscall(&request, ihk_mc_get_processor_id());
 }
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long
 syscall_signalfd_publish_bridge(void *threadp, int fd,
 		const unsigned long *maskp, int create)
@@ -19900,6 +19901,7 @@ syscall_signalfd_publish_bridge(void *threadp, int fd,
 	ihk_mc_spinlock_unlock(&proc->mckfd_lock, irqstate);
 	return sfd->fd;
 }
+#endif /* !MCKERNEL_RUST_SYSCALL_POLICY_HELPERS: retained C fallback */
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_epoll_pwait(int n, ihk_mc_user_context_t *ctx);

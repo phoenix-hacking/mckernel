@@ -1726,6 +1726,7 @@ ptrace_arch_prctl(int pid, long code, long addr)
 }
 #endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long
 arch_ptrace(long request, int pid, long addr, long data)
 {
@@ -1739,6 +1740,7 @@ arch_ptrace(long request, int pid, long addr, long data)
 	}
 	return -EOPNOTSUPP;
 }
+#endif
 
 static int
 isrestart(int num, unsigned long rc, int sig, int restart)

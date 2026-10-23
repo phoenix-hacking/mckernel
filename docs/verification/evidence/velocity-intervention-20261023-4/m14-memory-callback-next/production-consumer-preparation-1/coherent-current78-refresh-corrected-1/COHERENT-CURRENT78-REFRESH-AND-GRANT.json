@@ -1,0 +1,105 @@
+{
+  "C_override_unchanged": {
+    "bytes": 87143,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/candidate/arch/x86_64/kernel/memory.c",
+    "sha256": "2b285359ee00dac9e6281d112743e4f39247b9d661d0b5d00993e74d17a0739e"
+  },
+  "C_recipe": {
+    "bytes": 33248,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/production-consumer-preparation-1/coherent-current78-refresh-corrected-1/EXACT-SELECTED-GCC9-ARCHMEMORY-CONSUMER.GRANTED.json",
+    "sha256": "7ea72905534b5fd4a7772e05d8510cea800ab9c7e6147836b6720e22a2d3a4ce"
+  },
+  "Rust_recipe": {
+    "bytes": 304538,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/production-consumer-preparation-1/coherent-current78-refresh-corrected-1/EXACT-PRODUCTION-RUST-RECIPE.GRANTED.json",
+    "sha256": "061bf24a099120c5995be23ded373392b56cd6c9a295ba6569a9355690d07e45"
+  },
+  "actual_symbol_union": {
+    "actual_CPU": 575,
+    "actual_process": 577,
+    "actual_syscall": 574,
+    "actual_walk": 573,
+    "after": 577,
+    "coherent_walkCPU": 575,
+    "combined_vs_CPU_added": [
+      "x86_clear_range_l4_callback"
+    ],
+    "combined_vs_CPU_removed": [
+      "syscall_signalfd_publish_bridge",
+      "x86_clear_range_walk_l4_bridge"
+    ],
+    "private_added": [
+      "x86_clear_range_l3_callback"
+    ],
+    "process_added": [
+      "vm_range_insert_dump_bridge",
+      "vm_range_insert_log_bridge"
+    ],
+    "process_removed": []
+  },
+  "expected_U_exact_set_count": 577,
+  "other76_canonical_preimages_match": true,
+  "outputs_until_actualrun": null,
+  "preparation_driver": {
+    "bytes": 5240,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/production-consumer-preparation-1/prepare_current_refresh_corrected.py",
+    "sha256": "69579e43d148835a9085af36a76df2028fdfc87bb0d56b00c4313bb204ff7d11"
+  },
+  "preserved_original_ready": {
+    "bytes": 1810,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/production-consumer-preparation-1/PRODUCTION-CONSUMER-READY.json",
+    "sha256": "cedc4777ce83707d24cc5c250ddf1868fc9c4e80e4b0702cdf2dddd23a617583"
+  },
+  "private_override_unchanged": {
+    "bytes": 197568,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/candidate/kernel/rust/x86_memory_helpers.rs",
+    "sha256": "2994b6fe46feb6d0f6dd1390cd4a4efc550f8dfee66c067e506eba16b00029d7"
+  },
+  "profile": {
+    "AS": 2147483648,
+    "CPU": 6,
+    "CPU_seconds": 60,
+    "FSIZE": 33554432,
+    "NOFILE": 256,
+    "RUST_MIN_STACK": 2097152,
+    "core": 0,
+    "jobs": 1,
+    "retirement_seconds": 6,
+    "wall_seconds": 90
+  },
+  "refresh": [
+    {
+      "after": {
+        "bytes": 352627,
+        "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+        "sha256": "3f2c3dc03445147addee47d77e3ad2b31207fb3bfaa591ad99b6d0d9c897932e"
+      },
+      "before": {
+        "bytes": 351847,
+        "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+        "sha256": "526baf9363a0845ad50aade7e9b2296d27c8840527f3510d95a1105fc626d8d3"
+      },
+      "key": "kernel/rust/process_helpers.rs"
+    },
+    {
+      "after": {
+        "bytes": 711734,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "f1f7866c0f2ccc8e1b0024dfb632ec7359dd2a0a4bcd8e22deb957d48ef6d770"
+      },
+      "before": {
+        "bytes": 709680,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "4edf51b9c391ddca12fd4505ac1c6b51f6a73e3919f3f1cd49b3ebcb87a38a69"
+      },
+      "key": "kernel/rust/syscall_policy.rs"
+    }
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_key_prep_failure": {
+    "bytes": 995,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/production-consumer-preparation-1/coherent-current78-refresh-1/PREPARATION-KEY-ASSERTION.STOP.json",
+    "sha256": "d0b20fb62660ff3c4d2ed34bb62619986699a32a8470441ba66db32c443dc6ee"
+  },
+  "status": "ROOT_GRANTED_ADDITIVE_CURRENT78_TWO_INPUT_REFRESH"
+}

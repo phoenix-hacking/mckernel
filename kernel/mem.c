@@ -4377,12 +4377,14 @@ MEM_TLB_PUBLIC_BRIDGE void mem_tlb_pause_bridge(void)
 
 #undef MEM_TLB_PUBLIC_BRIDGE
 
+#ifndef MCKERNEL_RUST_MEM_HELPERS
 void remote_flush_tlb_cpumask(struct process_vm *vm,
 		unsigned long addr, int cpu_id)
 {
 	unsigned long __addr = addr;
 	return remote_flush_tlb_array_cpumask(vm, &__addr, 1, cpu_id);
 }
+#endif /* C fallback; default Rust single-address entry. */
 
 #ifndef MCKERNEL_RUST_MEM_HELPERS
 void remote_flush_tlb_array_cpumask(struct process_vm *vm,

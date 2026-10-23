@@ -1,0 +1,43 @@
+--- /home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-diagnostic-collector-successor-1/prepare_runtime_diagnostic_successor.py
++++ /home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/prepare_runtime_snapshot_equality_successor.PENDING.py
+@@ -3,7 +3,7 @@
+ """
+ import ast,hashlib,json,difflib,shutil
+ from pathlib import Path
+-D=Path(__file__).resolve().parent;B=D.parent/'runtime-sdk8-successor-1';S=D/'source';R=Path('/home/holden/mckernel/docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-diagnostic-collector-successor-1')
++D=Path(__file__).resolve().parent;B=D.parent/'runtime-sdk8-diagnostic-collector-successor-1';S=D/'source';R=D/'source-evidence-copy-1'
+ def ref(p):
+  p=Path(p);b=p.read_bytes();return dict(path=str(p),sha256=hashlib.sha256(b).hexdigest(),bytes=len(b))
+ def write(name,raw):
+@@ -17,7 +17,7 @@
+ def replace(s,key,v):
+  n=next(n for n in ast.parse(s).body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id==key for t in n.targets));return s.replace(ast.get_source_segment(s,n),key+' = '+repr(v),1)
+ def funcs(s):return {n.name:ast.dump(n,include_attributes=False) for n in ast.parse(s).body if isinstance(n,(ast.FunctionDef,ast.ClassDef))}
+-n=json.loads((D/'ROOT-SUCCESSOR-NAMESPACE.json').read_bytes());h=json.loads((D/'ACTUAL-DIAGNOSTIC-CASE-STAGE-BINDING.json').read_bytes());assert n['author']=='/root' and n['nonce'] and n['host_identity'] and h['actual_complete_wholejoin'] is True
++n=json.loads((D/'ROOT-SUCCESSOR-NAMESPACE.json').read_bytes());h=json.loads((D/'ACTUAL-SNAPSHOT-EQUALITY-CASE-STAGE-BINDING.json').read_bytes());assert n['author']=='/root' and n['nonce'] and n['host_identity'] and h['actual_complete_wholejoin'] is True
+ assert ref(h['actual_handoff']['path'])==h['actual_handoff'];assert ref(h['manifest']['path'])['sha256']==h['manifest']['sha256']
+ newpins=h['additional_actual_source_pins']
+ for row in newpins:assert ref(row['path'])==row
+@@ -36,7 +36,7 @@
+ told=(B/'source/long_transport.py').read_text();host=lit(told,'HOST_OUTPUT');host.update(parent=n['host_parent'],retention_parent=str(Path(n['host_parent']).parent));external=lit(told,'EXTERNAL_CAPTURE_BINDING');external.update(controller_path=str(D/'capture_root_LONG.NOT-RELEASED.py'),controller_sha256=ref(D/'capture_root_LONG.NOT-RELEASED.py')['sha256'],request_path=str(D/'CAPTURE-REQUEST.json'),capture_directory=request['capture_directory'],command_source_path=request['command_source']['path']);transport=replace(replace(told,'HOST_OUTPUT',host),'EXTERNAL_CAPTURE_BINDING',external);assert funcs(told)==funcs(transport)
+ write('source/long_transport.py',transport.encode())
+ aold=(B/'source/native_diagnostic_container_owner.py').read_text();oldhashes=lit(aold,'SOURCE_HASHES');hashes={k:v for k,v in oldhashes.items() if not k.startswith(str(B/'source')+'/')};preserved=dict(hashes)
+-assert len(oldhashes)==207 and len(hashes)==198
++assert len(oldhashes)==256 and len(hashes)==247
+ for q in sorted(S.iterdir()):
+  if q.is_file():hashes[str(q)]=ref(q)['sha256']
+ for row in newpins:
+@@ -54,10 +54,10 @@
+ test=json.loads(json.dumps(request));test['long_profile_release']['sha256']='0'*64;test['argv'][-1]='0'*64;test['status']='TESTONLY_PRE_EFFECT_GUARDS_NOT_EXECUTABLE';emit('TESTONLY-CORRECTED-REQUEST.json',test)
+ release=json.loads((B/'LONG-RELEASE.PROTOTYPE.NOT-EXECUTABLE.json').read_bytes());release.update(manifest=dict(path=n['manifest_path'],sha256=h['manifest']['sha256']),nonce=n['nonce'],attempt_parent=n['host_parent']);release['profile']['host_output']=host;release['source_sha256']={k:cohort[k]['sha256'] for k in release['source_sha256']};emit('LONG-RELEASE.PROTOTYPE.NOT-EXECUTABLE.json',release)
+ required=set(json.loads((B/'PRECISE-SDK6-CONSUMED-PATHS.json').read_bytes())['required_paths']);required={str(S/('CURRENT68-SDK8-AUTHORITY-LINKS.json' if Path(k).name=='CURRENT68-SDK6-AUTHORITY-LINKS.json' else Path(k).name)) if k.startswith(str(B/'source')+'/') else k for k in required};required.update(hashes);required.update(row['path'] for row in newpins);required.update(row['path'] for row in h['stage_files']);required.add(n['manifest_path'])
+-emit('PRECISE-SDK6-CONSUMED-PATHS.json',dict(scope=__doc__,required_paths=sorted(required),new_source_pins=newpins,preserved_nonlocal198=True,source_hash_rows=len(hashes),readonly_roots=len(roots),actual_stage_handoff=h['actual_handoff']))
+-emit('SOURCE-TO-REQUEST-BINDING-MATRIX.json',dict(scope=__doc__,status='SDK8_ACTUAL_DATA_BOUND_NOT_FIXTURE_OR_RUNTIME_ACCEPTED',controller=ref(D/'capture_root_LONG.NOT-RELEASED.py'),controller_functions_AST_identical=True,controller_constant_matrix=[dict(constant=k,corrected_value=v,origin='ONEfutureactualrequestmodel') for k,v in bindings.items()],source_hash_rows=len(hashes),historical147unchanged=True,preserved_nonlocal198=True,readonly_roots=len(roots),actual_stage_manifest=h['manifest'],prospective_immutable_manifest=dict(path=n['manifest_path'],sha256=h['manifest']['sha256'],publication_observation=None),stage_handoff=h['actual_handoff'],transport_functions_AST_identical=True,owner_only_function_AST_delta='bound_manifest localdiagnostic sourcepath',actual_consumer=None,fresh_admission=None,runtime_release=None,native_acceptance=None))
++emit('PRECISE-SDK6-CONSUMED-PATHS.json',dict(scope=__doc__,required_paths=sorted(required),new_source_pins=newpins,preserved_nonlocal247=True,source_hash_rows=len(hashes),readonly_roots=len(roots),actual_stage_handoff=h['actual_handoff']))
++emit('SOURCE-TO-REQUEST-BINDING-MATRIX.json',dict(scope=__doc__,status='SDK8_ACTUAL_DATA_BOUND_NOT_FIXTURE_OR_RUNTIME_ACCEPTED',controller=ref(D/'capture_root_LONG.NOT-RELEASED.py'),controller_functions_AST_identical=True,controller_constant_matrix=[dict(constant=k,corrected_value=v,origin='ONEfutureactualrequestmodel') for k,v in bindings.items()],source_hash_rows=len(hashes),historical147unchanged=True,preserved_nonlocal247=True,readonly_roots=len(roots),actual_stage_manifest=h['manifest'],prospective_immutable_manifest=dict(path=n['manifest_path'],sha256=h['manifest']['sha256'],publication_observation=None),stage_handoff=h['actual_handoff'],transport_functions_AST_identical=True,owner_only_function_AST_delta='bound_manifest localdiagnostic sourcepath',actual_consumer=None,fresh_admission=None,runtime_release=None,native_acceptance=None))
+ consumer=(B/'controller_pre_effect_consumer.py').read_text().replace(ref(B/'capture_root_LONG.NOT-RELEASED.py')['sha256'],ref(D/'capture_root_LONG.NOT-RELEASED.py')['sha256']);write('controller_pre_effect_consumer.py',consumer.encode())
+ for name in ['fixture_actual_controller_guards.py','run_actual_guard_fixture_owned.py']:write(name,(B/name).read_bytes())
+-for name,left,right in [('controller',old,controller),('transport',told,transport),('owner',aold,owner)]:write(name+'.literal.diff',''.join(difflib.unified_diff(left.splitlines(True),right.splitlines(True),fromfile='frozen-settlement/'+name,tofile='SDK8-successor/'+name)).encode())
++for name,left,right in [('controller',old,controller),('transport',told,transport),('owner',aold,owner)]:write(name+'.literal.diff',''.join(difflib.unified_diff(left.splitlines(True),right.splitlines(True),fromfile='frozen-diagnostic/'+name,tofile='snapshot-equality-successor/'+name)).encode())
+ emit('NEXT-ACTUAL-FIXTURE-ARGV.NOT-RELEASED.json',dict(scope=__doc__,argv=['/home/holden/anaconda3/bin/python3','-I','-B',str(D/'run_actual_guard_fixture_owned.py')],profile=dict(cpu=[6],AS=2147483648,CPU=60,wall=120,grace=6,FSIZE=33554432,NOFILE=256,core=0),root_grant=None,immutable_manifest_publication=None,source=ref(D/'run_actual_guard_fixture_owned.py')))
+ print(json.dumps(dict(controller=ref(D/'capture_root_LONG.NOT-RELEASED.py'),owner=cohort['native_diagnostic_container_owner.py'],transport=cohort['long_transport.py'],source_hash_rows=len(hashes),readonly_roots=len(roots)),sort_keys=True))

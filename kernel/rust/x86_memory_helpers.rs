@@ -175,6 +175,7 @@ unsafe extern "C" {
     fn ihk_mc_get_processor_id() -> CInt;
     fn remote_flush_tlb_array_cpumask(vm: *mut c_void, addr: *mut CULong, nr_addr: CInt, cpu_id: CInt);
     static x86_clear_range_l4_callback: X86WalkPteCallback;
+    static x86_clear_range_l3_callback: X86ClearChildWalkFn;
     fn kprintf(format: *const i8, ...) -> CInt;
     fn _ihk_mc_free_pages(ptr: *mut c_void, npages: CInt, is_user: CInt, file: *mut i8, line: CInt);
     static x86_clear_free_pages_user_file: [i8; 1];
@@ -3267,8 +3268,26 @@ pub unsafe extern "C" fn x86_set_range_map_entry_result(
 
 // Error logging preserves the original unconditional ekprintf -> kprintf
 // call, format bytes and C varargs payload. Unknown events remain silent.
+/// Complete former clear_range_l4 callback, using the same root/phys provider
+/// and synchronously borrowing the retained private C L3 walker callback.
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_range_l4_body(
+    args: *mut c_void,
+    ptep: *mut CULong,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+) -> CInt {
+    unsafe {
+        x86_clear_range_root_body_result(
+            args, ptep, base, start, end,
+            Some(x86_clear_phys_to_virt_bridge), Some(x86_clear_range_l3_callback),
+        )
+    }
+}
+
 /// Exact default clear-range L4 walker body. The immutable callback borrows
-/// the existing C callback synchronously; no callback or args pointer is retained.
+/// the existing typed callback synchronously; no callback or args pointer is retained.
 #[no_mangle]
 pub unsafe extern "C" fn x86_clear_range_walk_l4_bridge(
     pt: *mut c_void,

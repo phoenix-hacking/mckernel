@@ -1,0 +1,62 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_SCALAR_4896_PAIRS_FIVE_ABI_WORDS_AND_CURRENT_WALK_CONSUMER_PARTIAL_LINK_ONLY",
+  "whole_join": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/ACTUAL-SCALAR-WHOLE-JOIN.json",
+    "sha256": "44653fdbce56b4d93884bf0b9304fc799e2e3f9dd44ee4970a5a984d1dcf8314",
+    "bytes": 18419
+  },
+  "observation": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/ACTUAL-ABI-CONSUMER-OBSERVATION.json",
+    "sha256": "906c6b727522a1379bcbbc172a65a791ac9e76527dc5a9e48e65064e29dd7688",
+    "bytes": 619
+  },
+  "frozen_recipe": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/EXACT-SINGLE-ENTRY-RECIPE.CURRENT-WALK-CONSUMER.NOT-EXECUTED.json",
+    "sha256": "f0e9110d04534a777b1851de6d0a69d5060af1a8aa88492d1ac3136162656c09",
+    "bytes": 71455
+  },
+  "driver": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/run_granted_scalar_once.py",
+    "sha256": "ca4f5c5b063ddc2dc9d0b5519b5cdac8d07b2baa7320804e580f0c8ac226c777",
+    "bytes": 7623
+  },
+  "additive_attribution": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/CURRENT78-COHERENCE.PROCESS-SUCCESSOR.ATTRIBUTION-ONLY.json",
+    "sha256": "9ebe328995735b5c3220c3fc2aa73039e76935f6897e3c64c85ffce4775759e2",
+    "bytes": 22927
+  },
+  "product_sources": {
+    "candidate/kernel/mem.c": {
+      "line": 4381,
+      "source": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/candidate/kernel/mem.c",
+        "sha256": "638788c79fb96c1edb229d016fa678a02c0fcde6e1b56c7fa45d33b5490354d4",
+        "bytes": 226806
+      }
+    },
+    "candidate/kernel/rust/mem_helpers.rs": {
+      "line": 5521,
+      "source": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/candidate/kernel/rust/mem_helpers.rs",
+        "sha256": "4635a252332cd369e36384f04a414e2b4c2d79726a4f95caafcf1d3ed1a56b4d",
+        "bytes": 203495
+      }
+    }
+  },
+  "actual_pairs": 4896,
+  "actual_ABI_words": 5,
+  "all_15_commands_return0": true,
+  "all_children_joined_groups_absent_streams_closed": true,
+  "all_capture_error_and_retirement_error_NULL": true,
+  "elapsed_seconds": 0.8217543630162254,
+  "CPU6_released": true,
+  "remaining_C_callback_bodies": 13,
+  "qualifications": [
+    "Focused actual original C scalar wrapper versus actual Rust export, synchronous controlled array recorder; no VM pointer dereference or target TLB/IRQ instructions executed.",
+    "Selected C region/fallback and actual retained complete GCC9 arch consumer partial link; whole current mem.c TU and complete production Rust not compiled in this run.",
+    "No exact GCC14/default kernel link/native or whole-file retirement credit.",
+    "Original recipe/source/attribution and all historical failure families retained; this scalar first actual candidate PASS without correction."
+  ],
+  "next_operation": "Independent source/ABI and actual leaf evidence review, then exact existing production Rust/full selected mem.c TU consumer grant; root alone canonical integration."
+}

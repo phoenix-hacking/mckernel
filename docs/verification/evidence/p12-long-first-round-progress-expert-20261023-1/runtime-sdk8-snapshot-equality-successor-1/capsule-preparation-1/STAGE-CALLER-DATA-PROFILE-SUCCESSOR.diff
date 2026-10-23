@@ -1,0 +1,29 @@
+--- /home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-diagnostic-collector-successor-1/capsule-preparation-1/run_actual_capsule_stage.py
++++ /home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/capsule-preparation-1/run_actual_capsule_stage.py
+@@ -2,7 +2,7 @@
+ from pathlib import Path
+ import ast,hashlib,json,os,resource,shutil,signal,sys,time
+ D=Path(__file__).resolve().parent
+-E=Path('/home/holden/mckernel/docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-diagnostic-collector-successor-1/capsule-preparation-1')
++E=D/'evidence-copy-1'
+ assert sys.version.startswith('3.9.12 ')
+ mem_available=int(next(x.split()[1] for x in Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemAvailable:')))*1024;assert mem_available>=19<<30
+ usage=json.loads(Path('/home/holden/mckernel/.git/os-autopilot/state.json').read_bytes())['last_rate_limits']['primary']['usedPercent'];assert usage<100
+@@ -14,7 +14,7 @@
+ for label in ('producer_review','application_review','reviewed_stage_profile','diagnostic_source','baseline_manifest','baseline_overlay_manifest'):
+  row=binding[label];raw=Path(row['path']).read_bytes();assert hashlib.sha256(raw).hexdigest()==row['sha256']
+ os.sched_setaffinity(0,{6})
+-for k,v in [(resource.RLIMIT_AS,512<<20),(resource.RLIMIT_CPU,30),(resource.RLIMIT_FSIZE,128<<20),(resource.RLIMIT_NOFILE,256),(resource.RLIMIT_CORE,0)]:resource.setrlimit(k,(v,v))
++for k,v in [(resource.RLIMIT_AS,2<<30),(resource.RLIMIT_CPU,60),(resource.RLIMIT_FSIZE,32<<20),(resource.RLIMIT_NOFILE,256),(resource.RLIMIT_CORE,0)]:resource.setrlimit(k,(v,v))
+ # Reuse the selected positive budget arithmetic conservatively, including the
+ # entire backing length as a bound on sparse growth (never a smaller estimate).
+ budgetpath=Path('/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/EXACT-POSITIVE-BUDGET.PROPOSED.json')
+@@ -28,7 +28,7 @@
+ result={'scope':__doc__,'status':'REFUSED_CAPACITY_BEFORE_CHILD','capacity':capacity,'whole_join':None,'actual_stage':None,'error':None,'CPU6_released':True,'runtime_acceptance':False}
+ if capacity['PASS']:
+  cap=D/'actual-capsule-stage-1';cap.mkdir();command={'argv':['/home/holden/anaconda3/bin/python3','-I','-B',str(D/'stage_long_session.py'),'--binding',str(D/'CAPSULE-BINDING.READY.json')],'cwd':str(D),'purpose':__doc__,'shell':False,'source_sha256':'b37c545987bc7643db063575b6de5b4dbb1e83e176b178762b05a57044b0eb0f'}
+- ns['write'](cap/'command.json',command);joined=ns['owned_capture'](command,cap,120,lambda:None);ns['write'](cap/'whole-join.json',joined);result['whole_join']=joined
++ ns['write'](cap/'command.json',command);joined=ns['owned_capture'](command,cap,90,lambda:None);ns['write'](cap/'whole-join.json',joined);result['whole_join']=joined
+  ok=joined['returncode']==0 and joined['direct_child_joined'] and joined['group_absent'] and joined['closed_streams'] and not joined['error'] and not joined['retirement_error']
+  result['status']='PASS_ACTUAL_CAPSULE_STAGE_AND_STRICT_LOADER' if ok else 'FAIL_FIRST_STAGE_CAPTURE_RETAINED';result['CPU6_released']=joined['direct_child_joined'] and joined['group_absent'] and joined['closed_streams']
+  if ok:

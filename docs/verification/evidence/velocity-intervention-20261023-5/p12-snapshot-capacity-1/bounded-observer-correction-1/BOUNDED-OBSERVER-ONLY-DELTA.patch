@@ -1,0 +1,73 @@
+--- failed-attempt/run_owned_actual_consumer.py
++++ bounded-correction/run_owned_remaining22.py
+@@ -3,17 +3,24 @@
+ """
+ from pathlib import Path
+ import ast,builtins,dis,hashlib,json,os,resource,signal,stat,subprocess,time,sys
+-A=Path(__file__).resolve().parent;B=A.parent;RF=B/'EXACT-ACTUAL-CONSUMER-FIXTURE.NOT-GRANTED.json'
++A=Path(__file__).resolve().parent;B=A.parent;RF=A/'EXACT-REMAINING22-CONSUMER.GRANTED.json'
+ records=[];started=False
+ def pin(p):
+  data=p.read_bytes();return dict(path=str(p),sha256=hashlib.sha256(data).hexdigest(),bytes=len(data))
+ def write(p,v):
+  with p.open('x') as f:json.dump(v,f,sort_keys=True);f.write(chr(10))
+ try:
+- assert pin(RF)['sha256']=='84ada557981d3ca1c0a4260ca65e6ba275d202b9e8f1d051395a216aea31409a'
++ assert pin(RF)['sha256']=='62f5468126302d36e711b3387be49052842c9affed6b1bed88c8072c61527c89'
+  assert pin(B/'EXECUTABLE-READY.json')['sha256']=='03481794425af3b89adbe36ebe946531ca48f711189e050a24c78a96e6454ebc'
+  recipe=json.loads(RF.read_text())
+  for row in [*recipe['source_inputs'].values(),*recipe['tools'].values(),recipe['source_contract'],recipe['actual_round90_facts'],recipe['patch']]:assert pin(Path(row['path']))==row,row['path']
++ retained={}
++ for receipt in recipe['observer_correction']['compiled_binaries']:
++  assert pin(Path(receipt['path']))==receipt
++  row=json.loads(Path(receipt['path']).read_text())['binary'];st=Path(row['path']).stat()
++  assert (st.st_dev,st.st_ino,st.st_size,st.st_mtime_ns,st.st_ctime_ns,st.st_uid,st.st_gid,oct(stat.S_IMODE(st.st_mode)),st.st_nlink)==(row['device'],row['inode'],row['size'],row['mtime_ns'],row['ctime_ns'],row['uid'],row['gid'],row['mode'],row['nlink'])
++  retained[row['path']]=row
++ write(A/'REUSED-BINARY-IDENTITIES.json',dict(compiled_receipts=recipe['observer_correction']['compiled_binaries'],objects=retained,binary_content_reads_or_hashes=0,compiler_invocations=0))
+  assert os.getuid()==os.geteuid()==1000 and sys.executable=='/home/holden/anaconda3/bin/python3' and sys.version_info[:2]==(3,9)
+  helper=Path('/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py');raw=helper.read_bytes();assert pin(helper)['sha256']=='990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8'
+  names={'need','write','hashed','stop','cpu_used','members','process_start','terminal_unreaped','wait_terminal','owned_capture'};assign={'FIELDS','stopping','CENSUS_SOURCE','CENSUS_SHA','_CENSUS','STOP_SIGNALS'}
+@@ -34,24 +41,32 @@
+  capacity=dict(MemAvailable=mem,aggregate_required=19<<30,HOST_available=hs.f_bavail*hs.f_frsize,HOST_required=(16<<30)+gap+(128<<20)+679477248,scratch_available=ss.f_bavail*ss.f_frsize,scratch_required=(12<<30)+679477248,full_backing_gap=gap,backing_size=bs.st_size,backing_device=bs.st_dev,backing_inode=bs.st_ino,campaign_emergency_preserved=679477248)
+  used=json.loads(Path('/home/holden/mckernel/.git/os-autopilot/state.json').read_text())['last_rate_limits']['primary']['usedPercent'];capacity['included_usage_percent']=used;assert used<100
+  write(A/'ACTUAL-HEADROOM.json',capacity);assert mem>=capacity['aggregate_required'] and capacity['HOST_available']>=capacity['HOST_required'] and capacity['scratch_available']>=capacity['scratch_required'],capacity
+- O=B/'output-1';O.mkdir(mode=0o700);CAP=A/'captures';CAP.mkdir(mode=0o700);os.chdir(O);os.sched_setaffinity(0,{6})
++ initial_cwd=os.getcwd();(A/'cases').mkdir(mode=0o700);CAP=A/'captures';CAP.mkdir(mode=0o700);os.sched_setaffinity(0,{6})
+  for sig in ns['STOP_SIGNALS']:signal.signal(sig,ns['stop'])
+  for k,v in [(resource.RLIMIT_AS,2<<30),(resource.RLIMIT_CPU,60),(resource.RLIMIT_FSIZE,32<<20),(resource.RLIMIT_NOFILE,256),(resource.RLIMIT_CORE,0)]:resource.setrlimit(k,(v,v))
+- profile=dict(scope=__doc__,authority='Root one exclusiveCPU6 ready03481794/recipe84ada557; AS2G60CPU90wall+6FSIZE32MFD256core0/GCC9/h990/fresh19Gfloorsfullgap; firstunexpectedfailureSTOPno retry',CPU=6,jobs=1,AS_bytes=2<<30,CPU_seconds=60,wall_seconds=90,retirement_seconds=6,FSIZE_bytes=32<<20,NOFILE=256,core=0,recipe=pin(RF),driver=pin(Path(__file__)))
++ profile=dict(scope=__doc__,authority='Root sole bounded observerCWDcorrection/remaining22cases; reusableAS2G60CPU90wall+6FSIZE32MFD256core0/runtimefrozenbinaries/h990/fresh19Gfloorsfullgap; no compiler/hash/replaycase0; furtherunexpectedfailureSTOPexpert',CPU=6,jobs=1,AS_bytes=2<<30,CPU_seconds=60,wall_seconds=90,retirement_seconds=6,FSIZE_bytes=32<<20,NOFILE=256,core=0,recipe=pin(RF),driver=pin(Path(__file__)))
+  write(A/'ACTUAL-PROFILE.json',profile);begin=time.monotonic();signal.setitimer(signal.ITIMER_REAL,96);started=True
+  for command in recipe['commands']:
+   if command.get('create_fresh_cwd'):Path(command['cwd']).mkdir(mode=0o700)
+-  cap=CAP/command['name'];cap.mkdir(mode=0o700);cmd=dict(scope=recipe['scope'],purpose=command['purpose'],argv=command['argv'],cwd=command['cwd'],profile=pin(A/'ACTUAL-PROFILE.json'));write(cap/'command.json',cmd)
+-  remaining=90-(time.monotonic()-begin);assert remaining>0
+-  j=ns['owned_capture'](cmd,cap,remaining,lambda:None);write(cap/'whole-join.json',j);records.append(dict(name=command['name'],command=pin(cap/'command.json'),join=j))
++  cap=CAP/command['name'];cap.mkdir(mode=0o700)
++  previous_cwd=os.getcwd();os.chdir(command['cwd'])
++  try:
++   actual_cwd=os.getcwd();assert actual_cwd==command['cwd']
++   cmd=dict(scope=recipe['scope'],purpose=command['purpose'],argv=command['argv'],cwd=command['cwd'],actual_cwd=actual_cwd,profile=pin(A/'ACTUAL-PROFILE.json'));write(cap/'command.json',cmd)
++   remaining=90-(time.monotonic()-begin);assert remaining>0
++   j=ns['owned_capture'](cmd,cap,remaining,lambda:None);write(cap/'whole-join.json',j);records.append(dict(name=command['name'],command=pin(cap/'command.json'),join=j))
++  finally:
++   os.chdir(previous_cwd);write(cap/'CWD-RESTORED.json',dict(actual_child_cwd=command['cwd'],previous_cwd=previous_cwd,restored_cwd=os.getcwd(),restored=os.getcwd()==previous_cwd))
+   assert j['returncode']==0 and j['direct_child_joined'] and j['group_absent'] and j['closed_streams'] and j['error'] is None and j['retirement_error'] is None and not j['timed_out'],j
+-  if command['name'].startswith('build-'):
+-   name='capacity-candidate' if command['name']=='build-candidate' else 'capacity-original';write(A/('DURABLE-'+name+'.json'),dict(scope=recipe['scope'],binary=ns['hashed'](O/name,32<<20),command_join=records[-1]))
+-  else:assert (cap/'stdout').read_text().startswith('PASS ')
+- assert len(records)==25 and all(pin(Path(row['path']))==row for row in recipe['source_inputs'].values()) and ns['cpu_used']()<=60
+- result=dict(scope=recipe['scope'],status='PASS_ACTUAL_CONTROLLED_READ_ALL_BOUNDARY_25_COMMANDS_UNCHANGED_STRICT_GATE',recipe=pin(RF),ready=pin(B/'EXECUTABLE-READY.json'),profile=pin(A/'ACTUAL-PROFILE.json'),headroom=pin(A/'ACTUAL-HEADROOM.json'),records=records,compiler_invocations=2,actual_controlled_consumers=23,strict_gate_byteexact=True,construct_full_valid_suffix_bytes=1048576,constructed_suffix_is_not_round90=True,actual_round90_retirement='UNKNOWN_BUFFER_NOT_EXPORTED',caps_deadlines_ledgers_unchanged=True,actual_real5s_neverSettles=True,actual_real80ms_outerdeadline=True,total_CPU_seconds=ns['cpu_used'](),seconds=time.monotonic()-begin,CPU6_released=True,canonical_mutations=0,live_klog_calls=0,native=False)
++  assert (cap/'stdout').read_text().startswith('PASS ')
++ assert len(records)==22 and all(pin(Path(row['path']))==row for row in recipe['source_inputs'].values()) and ns['cpu_used']()<=60
++ for path,row in retained.items():
++  st=Path(path).stat();assert (st.st_dev,st.st_ino,st.st_size,st.st_mtime_ns,st.st_ctime_ns)==(row['device'],row['inode'],row['size'],row['mtime_ns'],row['ctime_ns'])
++ assert os.getcwd()==initial_cwd
++ result=dict(scope=recipe['scope'],status='PASS_ACTUAL_REMAINING22_CONTROLLED_READ_ALL_BOUNDARY_CWD_CORRECTION_UNCHANGED_STRICT_GATE',recipe=pin(RF),ready=pin(B/'EXECUTABLE-READY.json'),profile=pin(A/'ACTUAL-PROFILE.json'),headroom=pin(A/'ACTUAL-HEADROOM.json'),records=records,compiler_invocations=0,reused_compiler_invocations=2,actual_controlled_consumers=22,prior_original_mode0_reused=True,observer_corrections=1,original_failure_preserved=recipe['observer_correction']['prior_failure'],binary_content_hashes=0,strict_gate_byteexact=True,construct_full_valid_suffix_bytes=1048576,constructed_suffix_is_not_round90=True,actual_round90_retirement='UNKNOWN_BUFFER_NOT_EXPORTED',caps_deadlines_ledgers_unchanged=True,actual_real5s_neverSettles=True,actual_real80ms_outerdeadline=True,total_CPU_seconds=ns['cpu_used'](),seconds=time.monotonic()-begin,CPU6_released=True,canonical_mutations=0,live_klog_calls=0,native=False)
+  write(A/'ACTUAL-WHOLE-JOIN.json',result);print(json.dumps(dict(status=result['status'],receipt=pin(A/'ACTUAL-WHOLE-JOIN.json'),seconds=result['seconds'],CPU6_released=True)))
+ except BaseException as exc:
+- write(A/'FAILURE-1.json',dict(scope=__doc__,status='STOP_FIRST_UNEXPECTED_FAILURE_PRESERVED_NO_RETRY',error=type(exc).__name__+': '+str(exc),records=records,CPU6_released=all(x['join']['direct_child_joined'] and x['join']['group_absent'] and x['join']['closed_streams'] for x in records)));raise
++ write(A/'FAILURE-1.json',dict(scope=__doc__,status='STOP_FURTHER_UNEXPECTED_FAILURE_EXPERT_NO_RETRY',error=type(exc).__name__+': '+str(exc),records=records,CPU6_released=all(x['join']['direct_child_joined'] and x['join']['group_absent'] and x['join']['closed_streams'] for x in records)));raise
+ finally:
+  if started:signal.setitimer(signal.ITIMER_REAL,0)
++ if 'initial_cwd' in globals():os.chdir(initial_cwd)
