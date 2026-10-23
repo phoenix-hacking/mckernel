@@ -1,0 +1,20 @@
+--- acceptedSDK6settlementquery
++++ SDK8currentpostjoinquery
+@@ -5,7 +5,7 @@
+ import ast,fcntl,hashlib,importlib.util,json,os,resource,stat,subprocess,sys,time
+ from pathlib import Path
+ D=Path(__file__).resolve().parent
+-CONFIG_SHA = '3b60e875c6378db2b5288d30c86e70499b6719615a0179e5ab6f3f21a527825e'
++CONFIG_SHA = 'bc4d9a765c87405909e20a869fffd8db996d480677426abded6240080fca8a2a'
+ ENGINE=Path('/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/cleanup_pass_image.py')
+ ENGINE_SHA='59efab0bc29fa5784dc855743cec397237552821bc150b60ea1d6c2e5f7ac00d'
+ def need(v,m):
+@@ -47,7 +47,7 @@
+ def validate(f,c,growth):
+  need(f['uid']==f['euid']==0 and f['affinity']==[7],'root query CPU7')
+  need(f['proc']['status']=='COMPLETE' and f['proc']['failure'] is None and f['proc']['publishers']==[] and len(f['proc']['snapshots'])==2,'complete publisher-free census')
+- need(f['physical']['verdict']=='PASS_ACTUAL_FAILED5603_SDK6_LONG_PHYSICAL_RETIREMENT_AND_CURRENT_POSTJOIN' and f['physical']['current_live_postjoin']=='FAILED_SDK6_LONG_5603_POSITIVELY_RETIRED' and f['physical']['physical_clearance'] is True and f['physical']['owner']=={'pid':3857698,'start':57872098} and f['physical']['outer']['pid']==3857691 and f['physical']['outer']['start']==57872086 and f['physical']['outer']['joined'] is True and f['physical']['outer']['group_absent'] is True and f['physical']['outer']['streams_closed'] is True and f['physical']['client_reaps']==23 and f['physical']['container_removed_and_three_empty_queries'] is True and f['physical']['exact_identities_absent']==25 and f['physical']['init_pid']==3857780 and f['physical']['init_birth'] is None and f['physical']['init_absent_both'] is True and f['physical']['directory_command_rows']==23 and f['physical']['permanent_mutex']=='27:4' and f['physical']['ownership_paths_absent']==8,'actual failed5603 SDK6 LONG positive physical/current postjoin')
++ need(f['physical']['verdict']=='PASS_ACTUAL_SDK8_PHYSICAL_RETIREMENT_ONLY' and f['physical']['state']=='SDK8_BUILD_POSITIVELY_RETIRED' and f['physical']['physical_clearance'] is True and f['physical']['current_live_postjoin']['sha256']=='0575e4e15408627b22ab42d2b9cc1260c4795d84347705e88ff2f09b73d5658f' and f['physical']['proc_sha256']=='c8c258a2b15e03d3c05b20757d28e7143e3ac66eba4511cd87a1cf542a10cd9c' and f['physical']['mutex_sha256']=='8fdd42efcf374210fc9eb4c6295874ef3067cb7a0475c5b2f9bbfd52b55e80ba' and f['physical']['native_acceptance'] is False,'actual SDK8 positive physical/current postjoin')
+  p=f['parent'];need(p['directory'] and p['uid']==p['gid']==1000 and p['mode']==0o700 and p['children']==[] and p['dev']==c['operation']['HOST_identity']['dev'] and p['ino']==c['operation']['HOST_identity']['inode'],'fresh exact private HOST LONG parent exists empty UID1000 mode700')
+  need(not any(f['output_paths_exist'].values()),'fresh LONG capture owner attempt and unpublished release/request paths absent')
+  need(not any(f['ownership_paths_exist'].values()),'exact SDK image launcher ownership paths absent')

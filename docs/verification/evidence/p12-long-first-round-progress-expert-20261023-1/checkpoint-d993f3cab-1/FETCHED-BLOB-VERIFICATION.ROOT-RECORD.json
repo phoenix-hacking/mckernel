@@ -1,0 +1,890 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "commit": "d993f3cab273ee4fd8aa8914e9a73078e0eda8b9",
+  "branch": "codex/local-native-staging-repair",
+  "fetched_commit": "d993f3cab273ee4fd8aa8914e9a73078e0eda8b9",
+  "changed_paths": 220,
+  "all_changed_blob_entries_equal": true,
+  "paths": [
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/ACTUAL-CAPACITY-BEFORE-STAGE.json",
+      "tree_entry": "100644 blob bdc6a5c614d9157a20ab2784d7db39753e8a717e\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/ACTUAL-CAPACITY-BEFORE-STAGE.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/ACTUAL-CAPSULE-STAGE-WHOLE-JOIN.json",
+      "tree_entry": "100644 blob b97ab062c963985e31af6a4f693c7fccd7c1897b\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/ACTUAL-CAPSULE-STAGE-WHOLE-JOIN.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/ACTUAL-SDK8-CAPSULE-AND-STRICT-CONSUMER-HANDOFF.json",
+      "tree_entry": "100644 blob c39f4c6069dcd0e3039514a6805c1cee70fde0a4\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/ACTUAL-SDK8-CAPSULE-AND-STRICT-CONSUMER-HANDOFF.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/CAPSULE-BINDING.READY.json",
+      "tree_entry": "100644 blob 1b61dc97a806bff8b32e5a1c0ed3a2acef330570\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/CAPSULE-BINDING.READY.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/CAPSULE-BINDING.SDK8.PENDING.json",
+      "tree_entry": "100644 blob 300fb002affc9080816840102284c3085186b8a2\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/CAPSULE-BINDING.SDK8.PENDING.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/ROOT-ORDINARY-STAGE-GRANT.json",
+      "tree_entry": "100644 blob 043d0da3ff33055e670b55f5df341420368c3628\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/ROOT-ORDINARY-STAGE-GRANT.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/SDK8-MODULE-ONLY-CAPSULE-AND-AUTHORITY.PENDING.json",
+      "tree_entry": "100644 blob 8131a28859b159f7d43144a4c92519346dfeedb0\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/SDK8-MODULE-ONLY-CAPSULE-AND-AUTHORITY.PENDING.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/actual-capsule-stage-1/command.json",
+      "tree_entry": "100644 blob 53c5962d04d76972e1643f66833d16421269fa5f\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/actual-capsule-stage-1/command.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/actual-capsule-stage-1/direct-join.json",
+      "tree_entry": "100644 blob 639f2ab2eae50e2dc039dabba8a1fd3ef471838c\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/actual-capsule-stage-1/direct-join.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/actual-capsule-stage-1/direct-wait.json",
+      "tree_entry": "100644 blob 3f736fd61667d8523ec2fed36bacbd5b331dc33d\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/actual-capsule-stage-1/direct-wait.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/actual-capsule-stage-1/started.json",
+      "tree_entry": "100644 blob 64901d98d92fa8b0a65a88a38fbe568c5405283c\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/actual-capsule-stage-1/started.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/actual-capsule-stage-1/stderr",
+      "tree_entry": "100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/actual-capsule-stage-1/stderr"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/actual-capsule-stage-1/stdout",
+      "tree_entry": "100644 blob 4264441a473db7ac6ad5a96b4689c707e416c241\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/actual-capsule-stage-1/stdout"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/actual-capsule-stage-1/whole-join.json",
+      "tree_entry": "100644 blob 5154524cf502948ca00d6cae9c2c8d9bed9f8c1e\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/actual-capsule-stage-1/whole-join.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/actual-stage-1/manifest.json",
+      "tree_entry": "100644 blob 111de3bdb3934ee418c508964dd7009f4dee2f22\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/actual-stage-1/manifest.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/actual-stage-1/overlay-manifest.json",
+      "tree_entry": "100644 blob 28e5ef0343e6cc8cad2f1651957163e1906bdaac\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/actual-stage-1/overlay-manifest.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/actual-stage-1/stage-result.json",
+      "tree_entry": "100644 blob 5646aeb2be329a9e909025cb79a65b59e8496fe4\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/actual-stage-1/stage-result.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/run_actual_capsule_stage.py",
+      "tree_entry": "100644 blob f5b201bcaf3e2cd90c910f3f41972fa7a7e9d4b4\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/run_actual_capsule_stage.py"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/stage_long_session.py",
+      "tree_entry": "100644 blob 24e6c07a8428d7169064c9ba61fb96a4f2ae4f5c\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/stage_long_session.py"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/strict-loader-sources/CURRENT68-SDK8-AUTHORITY-LINKS.json",
+      "tree_entry": "100644 blob c08ffce432603a036230ecad716ae23dc544b177\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/strict-loader-sources/CURRENT68-SDK8-AUTHORITY-LINKS.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/strict-loader-sources/composite_module_binding.py",
+      "tree_entry": "100644 blob efb20d5545c948abca24067614996b02bc22ac2e\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/strict-loader-sources/composite_module_binding.py"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/strict-loader-sources/long_transport.py",
+      "tree_entry": "100644 blob 6df02c098d0f0723ca701fe8f485d27f8650b50b\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/strict-loader-sources/long_transport.py"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/strict-loader-sources/native_diagnostic.py",
+      "tree_entry": "100644 blob 92209c2084b7bcd577d52c69f62d29b972e3097f\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/strict-loader-sources/native_diagnostic.py"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/strict-loader-sources/p12_long_session.py",
+      "tree_entry": "100644 blob 817450066945a0a956e408d075fe4525109f409a\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/strict-loader-sources/p12_long_session.py"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/strict-loader-sources/repaired_image_authority.py",
+      "tree_entry": "100644 blob c21b553abe791215b5252c1e2df3c04f355c1ff5\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/SDK8postbuild-capsule-preparation-1/strict-loader-sources/repaired_image_authority.py"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/ACTUAL-FINAL-AUTHENTICATE.json",
+      "tree_entry": "100644 blob 2eaa06af22fdbe8ffcb16479742d6390b747a2d1\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/ACTUAL-FINAL-AUTHENTICATE.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/CAPTURE-ARGV.FINAL.ROOT-RECORD.json",
+      "tree_entry": "100644 blob 78af6ff5a1a9295e3159d9dc143481d7ac109051\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/CAPTURE-ARGV.FINAL.ROOT-RECORD.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/EXECUTION-REVIEW.ROOT-RECORD.json",
+      "tree_entry": "100644 blob eabc8f87ad792730270fddc0d77895c800e6cdcd\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/EXECUTION-REVIEW.ROOT-RECORD.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/RELEASE-PAYLOAD.CANONICAL.PENDING-EXECUTION-REVIEW.json",
+      "tree_entry": "100644 blob 244acb596acbdec44300eea16405d46565634933\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/RELEASE-PAYLOAD.CANONICAL.PENDING-EXECUTION-REVIEW.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/actual-final-facts-1/ACTUAL-CLOSED-CAPTURE.json",
+      "tree_entry": "100644 blob 2c462678660aebc588946d42e0f7961506cd6c82\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/actual-final-facts-1/ACTUAL-CLOSED-CAPTURE.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/actual-final-facts-1/command.json",
+      "tree_entry": "100644 blob 2fea6ce4fc43cb55ca802611d672685b4f5388a9\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/actual-final-facts-1/command.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/actual-final-facts-1/started.json",
+      "tree_entry": "100644 blob 2629cde7c7b991f3dbb6a3b9539df963e8bfc634\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/actual-final-facts-1/started.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/actual-final-facts-1/stderr",
+      "tree_entry": "100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/actual-final-facts-1/stderr"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/actual-final-facts-1/stdout",
+      "tree_entry": "100644 blob 33ca0740a4a1fc174e9d3f607c86d3f7bd27a285\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/actual-final-facts-1/stdout"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/actual-fresh-root-admission-1/ACTUAL-CLOSED-CAPTURE.json",
+      "tree_entry": "100644 blob 89e3e24a17e1d47ecb9e24080f908a11ec52d93e\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/actual-fresh-root-admission-1/ACTUAL-CLOSED-CAPTURE.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/actual-fresh-root-admission-1/command.json",
+      "tree_entry": "100644 blob 13e72845372d9a42c6b34194ab5f3909224a4557\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/actual-fresh-root-admission-1/command.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/actual-fresh-root-admission-1/started.json",
+      "tree_entry": "100644 blob 1aa155bc639bb7bb8f2759713f98988183222347\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/actual-fresh-root-admission-1/started.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/actual-fresh-root-admission-1/stderr",
+      "tree_entry": "100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/actual-fresh-root-admission-1/stderr"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/actual-fresh-root-admission-1/stdout",
+      "tree_entry": "100644 blob ef32ae7b4f28c141a8d43a2f1e7d216b2835f629\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/actual-fresh-root-admission-1/stdout"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/operation.json",
+      "tree_entry": "100644 blob 1fc202f6749cd60e3f4c9076877d345bbbf78d57\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/operation.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/owner-capture-1/case-binding.json",
+      "tree_entry": "100644 blob fdaad955c4e9939e8f0f8898525d9ae990e8aca7\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/owner-capture-1/case-binding.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/owner-capture-1/child-start.json",
+      "tree_entry": "100644 blob d06edcf4fff7b7f22f3a2d70e62f38e5c5803cb4\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/owner-capture-1/child-start.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/owner-capture-1/direct-join.json",
+      "tree_entry": "100644 blob b15d5bbda194206865729fd9773777e3c13cbbc2\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/owner-capture-1/direct-join.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/owner-capture-1/status.json",
+      "tree_entry": "100644 blob e7d2c66236c4d3a5d668b96bff309467e031f6e9\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/owner-capture-1/status.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/owner-capture-1/stderr",
+      "tree_entry": "100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/owner-capture-1/stderr"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/owner-capture-1/stdout",
+      "tree_entry": "100644 blob d08c9adcb9979b2deade8dda4f0f4a7353dc95bb\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/owner-capture-1/stdout"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/owner-capture-1/stream-and-group-close.json",
+      "tree_entry": "100644 blob 50800a020043294e848eb76c26a7b401d0cdb6c8\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/owner-capture-1/stream-and-group-close.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/release.json",
+      "tree_entry": "100644 blob 10d580ea5b2aee8216adfac4fe2a0bfbf6cd3ef4\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/execution-preparation-1/release.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/ACTUAL-STAGED-SDK8-OWNER-OPERATION.NOT-RELEASED.json",
+      "tree_entry": "100644 blob 7559c7f37fe49416c73452bf0c0b5d2fc5371b86\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/ACTUAL-STAGED-SDK8-OWNER-OPERATION.NOT-RELEASED.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/CAPTURE-ARGV.NOT-RELEASED.json",
+      "tree_entry": "100644 blob 0e4d63d83f427eac512286f7617115d9fc79721d\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/CAPTURE-ARGV.NOT-RELEASED.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/EXACT-ACTUAL-SDK8-READONLY-ADMISSION.NOT-RELEASED.json",
+      "tree_entry": "100644 blob be794fa6729431572fe613d1f91130677bc737da\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/EXACT-ACTUAL-SDK8-READONLY-ADMISSION.NOT-RELEASED.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/FINAL-FACTS-ARGV.NOT-RELEASED.json",
+      "tree_entry": "100644 blob 9b4d7e6d8e3d5124dbf8db4adde3dd7dba97a6b9\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/FINAL-FACTS-ARGV.NOT-RELEASED.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/FINAL-FACTS-ARGV.PENDING-STAGE.json",
+      "tree_entry": "100644 blob 4f4ffc04e7298fd97d260895c81fbf0097cb0ced\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/FINAL-FACTS-ARGV.PENDING-STAGE.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/RELEASE-PAYLOAD.FINAL-FACTS-PENDING.json",
+      "tree_entry": "100644 blob c06f4fe1436ba2cb8c4d23773ca29dbaafb36821\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/RELEASE-PAYLOAD.FINAL-FACTS-PENDING.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/RELEASE-PAYLOAD.PENDING-STAGE-AND-FINAL-FACTS.json",
+      "tree_entry": "100644 blob 5bd7157e7fcf40116e47b4408cffe6ab69308283\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/RELEASE-PAYLOAD.PENDING-STAGE-AND-FINAL-FACTS.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/ROOT-FREEZE-COMMAND.NOT-EXECUTED.json",
+      "tree_entry": "100644 blob 21d630d73146e264d2bf955cfdd1bf4fa7c02bc6\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/ROOT-FREEZE-COMMAND.NOT-EXECUTED.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/ROOT-FREEZE-COMMAND.PENDING-STAGE.NOT-EXECUTED.json",
+      "tree_entry": "100644 blob 8cacc4ff96056213e887df7b5a7b7c676bfbc2b9\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/ROOT-FREEZE-COMMAND.PENDING-STAGE.NOT-EXECUTED.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/ROOT-SDK8-ADMISSION-ARGV.NOT-RELEASED.json",
+      "tree_entry": "100644 blob b822d029ab2949ed0587cea5fbe2623cc8dd5d2e\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/ROOT-SDK8-ADMISSION-ARGV.NOT-RELEASED.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/ROOT-SDK8-ADMISSION-ARGV.PENDING-STAGE.json",
+      "tree_entry": "100644 blob 2052853960f9e92a40fccd1c51c364f1f6b5461a\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/ROOT-SDK8-ADMISSION-ARGV.PENDING-STAGE.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/SDK8-ACTUAL-STAGE-BOUND-PIPELINE-READY.NOT-RELEASED.json",
+      "tree_entry": "100644 blob d91c45ebc1756ccabbb7e7df2ca04c8fa74ec337\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/SDK8-ACTUAL-STAGE-BOUND-PIPELINE-READY.NOT-RELEASED.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/SDK8-OPERATION-AND-FINALIZATION-PREPARATION.PENDING-STAGE.json",
+      "tree_entry": "100644 blob dd28195bbce394961e75f28d9bb5dfcea71607e5\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/SDK8-OPERATION-AND-FINALIZATION-PREPARATION.PENDING-STAGE.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/SDK8-OWNER-OPERATION.PENDING-STAGE.NOT-RELEASED.json",
+      "tree_entry": "100644 blob 75ecffc8bf0108d104a3403351db3cdd9538364f\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/SDK8-OWNER-OPERATION.PENDING-STAGE.NOT-RELEASED.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/read_only_sdk8_admission.PENDING.py",
+      "tree_entry": "100644 blob 7274139634bac6ae58916df00445ac999f19a3c2\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/read_only_sdk8_admission.PENDING.py"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/read_only_sdk8_admission.PENDING.py.data-only.diff",
+      "tree_entry": "100644 blob 3827184e219116f9996c15f801b86bcf469bcf9d\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/read_only_sdk8_admission.PENDING.py.data-only.diff"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/read_only_sdk8_admission.py",
+      "tree_entry": "100644 blob 71e8ee996a1f4ba2130cf6e5f706220c6cc2cc19\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/read_only_sdk8_admission.py"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/read_only_sdk8_final_facts.PENDING.py",
+      "tree_entry": "100644 blob 8048b4340592b2643b2ff644359543a4c0fa67d7\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/read_only_sdk8_final_facts.PENDING.py"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/read_only_sdk8_final_facts.PENDING.py.data-only.diff",
+      "tree_entry": "100644 blob 02eb1e38c762bc9e99a02e00b3d49e4612e24b01\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/read_only_sdk8_final_facts.PENDING.py.data-only.diff"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/read_only_sdk8_final_facts.py",
+      "tree_entry": "100644 blob ac2b88ae184b6783d664852236306b326311fd6a\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/operation-preparation-1/read_only_sdk8_final_facts.py"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/ACTUAL-SDK8-ARTIFACT-AND-CURRENT-SOURCE-READS.json",
+      "tree_entry": "100644 blob 4b657a9c6efed3481bef6465b5985957d034e9d9\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/ACTUAL-SDK8-ARTIFACT-AND-CURRENT-SOURCE-READS.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/ACTUAL-SDK8-ARTIFACT-READ-AND-POSTBUILD-PHYSICAL-READY.json",
+      "tree_entry": "100644 blob 853f65013d1a81721954bc7d693f78059da18314\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/ACTUAL-SDK8-ARTIFACT-READ-AND-POSTBUILD-PHYSICAL-READY.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/ACTUAL-SDK8-OWNER-CLIENT-RETIREMENT-BINDING.json",
+      "tree_entry": "100644 blob 14e7fddee41ecfa2ef18d7b8e2d1aa6c69d234ea\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/ACTUAL-SDK8-OWNER-CLIENT-RETIREMENT-BINDING.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/ADDITIONAL-CLOSED-CLIENT-PROOF-PRESERVATION.json",
+      "tree_entry": "100644 blob 87ea5214e7699143de31f52e554d5901b3b9d31c\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/ADDITIONAL-CLOSED-CLIENT-PROOF-PRESERVATION.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/ARTIFACT-READ-ROUTE.PENDING-CLOSURE.NOT-RELEASED.json",
+      "tree_entry": "100644 blob 58cce4ff9935448eb6dadeeb24120b654261f9f1\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/ARTIFACT-READ-ROUTE.PENDING-CLOSURE.NOT-RELEASED.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/EXACT-TWO-SDK8-POSTBUILD-PHYSICAL-OPERATIONS.NOT-RELEASED.json",
+      "tree_entry": "100644 blob 398c105d85581f6b91f8e6641fbdebd1b59cb56c\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/EXACT-TWO-SDK8-POSTBUILD-PHYSICAL-OPERATIONS.NOT-RELEASED.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/INDEPENDENT-ACTUAL-SDK8-ARTIFACT-AND-PHYSICAL-ACCEPTANCE.ROOT-RECORD.json",
+      "tree_entry": "100644 blob a2c3325fc1909b5adbbdb93b35bfe2cd94ca1aa1\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/INDEPENDENT-ACTUAL-SDK8-ARTIFACT-AND-PHYSICAL-ACCEPTANCE.ROOT-RECORD.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/INDEPENDENT-ACTUAL-SDK8-PHYSICAL-ACCEPTANCE.ROOT-RECORD.json",
+      "tree_entry": "100644 blob 391f9aedd0d3fc94566b2a6a521a48673ea4bff4\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/INDEPENDENT-ACTUAL-SDK8-PHYSICAL-ACCEPTANCE.ROOT-RECORD.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/ROOT-MUTEX-ARGV.NOT-RELEASED.json",
+      "tree_entry": "100644 blob 98ce2721a300be4d9cad675b5b879c63e4dd5142\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/ROOT-MUTEX-ARGV.NOT-RELEASED.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/ROOT-MUTEX-ARGV.PENDING-CLOSURE.NOT-RELEASED.json",
+      "tree_entry": "100644 blob 98ce2721a300be4d9cad675b5b879c63e4dd5142\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/ROOT-MUTEX-ARGV.PENDING-CLOSURE.NOT-RELEASED.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/ROOT-PROC-ARGV.NOT-RELEASED.json",
+      "tree_entry": "100644 blob 7ab4b8ce226286eacdd81b694fb85e9a81a958ce\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/ROOT-PROC-ARGV.NOT-RELEASED.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/ROOT-PROC-ARGV.PENDING-CLOSURE.NOT-RELEASED.json",
+      "tree_entry": "100644 blob 7ab4b8ce226286eacdd81b694fb85e9a81a958ce\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/ROOT-PROC-ARGV.PENDING-CLOSURE.NOT-RELEASED.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/SDK8-ACTUAL-READS-WITH-BOUND-NONCE.json",
+      "tree_entry": "100644 blob 3a0cf68250dc44b64169164fcce4ab5420a91ed4\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/SDK8-ACTUAL-READS-WITH-BOUND-NONCE.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/SDK8-POSTBUILD-PREPARATION.PENDING-CLOSURE.json",
+      "tree_entry": "100644 blob 8ff11b9af59646179aa5b8d1953aae173c57d4e0\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/SDK8-POSTBUILD-PREPARATION.PENDING-CLOSURE.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/SMALL-ACTUAL-PROOF-PRESERVATION.json",
+      "tree_entry": "100644 blob d55b74326846c1a2187455058c984ff079b9988b\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/SMALL-ACTUAL-PROOF-PRESERVATION.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/TWO-ORIGINAL-V3-POSTBUILD-OPERATIONS.PENDING-CLOSURE.NOT-RELEASED.json",
+      "tree_entry": "100644 blob 10771df77aab0fc22d22911115a1d414527135fb\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/TWO-ORIGINAL-V3-POSTBUILD-OPERATIONS.PENDING-CLOSURE.NOT-RELEASED.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-extraction-capture-1/FROZEN-SOURCES.json",
+      "tree_entry": "100644 blob 8a1083c5601cb71c1875d26bea19046dd8759847\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-extraction-capture-1/FROZEN-SOURCES.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-extraction-capture-1/RESULT.json",
+      "tree_entry": "100644 blob ea49d66dc6b3031776efdaf8e14546029f8a7b80\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-extraction-capture-1/RESULT.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-extraction-capture-1/command.json",
+      "tree_entry": "100644 blob b2f6ad390c73198af7abd1ef8dcb233297473fcd\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-extraction-capture-1/command.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-extraction-capture-1/direct-join.json",
+      "tree_entry": "100644 blob cd194cb50e818db689ffb8fb0de93812d32f8284\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-extraction-capture-1/direct-join.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-extraction-capture-1/direct-wait.json",
+      "tree_entry": "100644 blob 7085e9bc074b262d49d04fcd5a895e5d02047901\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-extraction-capture-1/direct-wait.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-extraction-capture-1/started.json",
+      "tree_entry": "100644 blob 5980a5151bb957aec7bb70a06f4c13e57146e46f\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-extraction-capture-1/started.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-extraction-capture-1/stderr",
+      "tree_entry": "100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-extraction-capture-1/stderr"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-extraction-capture-1/stdout",
+      "tree_entry": "100644 blob c77721fdb5cd7fe3e0baed54927c1a6808f8e48b\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-extraction-capture-1/stdout"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-post-physical-1/ACTUAL-TWO-OBSERVATIONS.ROOT-RECORD.json",
+      "tree_entry": "100644 blob 1a92b7344734530ef0259b53d0fa783d68e5eccb\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-post-physical-1/ACTUAL-TWO-OBSERVATIONS.ROOT-RECORD.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-post-physical-1/mutex/ACTUAL-CLOSED-CAPTURE.json",
+      "tree_entry": "100644 blob 76afafeaad26ac6e3ace6b26e8b67ce1cf7804e0\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-post-physical-1/mutex/ACTUAL-CLOSED-CAPTURE.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-post-physical-1/mutex/command.json",
+      "tree_entry": "100644 blob 86284bcd8ce97653b77b55a0fc5bd9bc9b6e121e\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-post-physical-1/mutex/command.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-post-physical-1/mutex/started.json",
+      "tree_entry": "100644 blob c58449d0faa0e34ee0282c51108c0d2b4a25bb5c\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-post-physical-1/mutex/started.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-post-physical-1/mutex/stderr",
+      "tree_entry": "100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-post-physical-1/mutex/stderr"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-post-physical-1/mutex/stdout",
+      "tree_entry": "100644 blob 115d341277be7260d2d8247003d5a57cac3f140a\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-post-physical-1/mutex/stdout"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-post-physical-1/proc/ACTUAL-CLOSED-CAPTURE.json",
+      "tree_entry": "100644 blob 560453cc941c3952a1042683cdada6f4a0cfa338\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-post-physical-1/proc/ACTUAL-CLOSED-CAPTURE.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-post-physical-1/proc/command.json",
+      "tree_entry": "100644 blob ef11485d6300eba17a470f1acf9a0a8d35933b70\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-post-physical-1/proc/command.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-post-physical-1/proc/started.json",
+      "tree_entry": "100644 blob 959448a6191845574679093db8b7ada883243758\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-post-physical-1/proc/started.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-post-physical-1/proc/stderr",
+      "tree_entry": "100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-post-physical-1/proc/stderr"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-post-physical-1/proc/stdout",
+      "tree_entry": "100644 blob aea083c20dafde7361e623ce0a374498c05b1e8f\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/actual-post-physical-1/proc/stdout"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/extract_actual.data-only.diff",
+      "tree_entry": "100644 blob 006fc72c3eb5d66e501490b761a0b20905560edf\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/extract_actual.data-only.diff"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/extract_actual.py",
+      "tree_entry": "100644 blob d1aefd81af9f84dfdaf771bf0ffb14c4757738df\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/extract_actual.py"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/00-make.stderr",
+      "tree_entry": "100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/00-make.stderr"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/01-make.stdout",
+      "tree_entry": "100644 blob 81986bea1ff0f2141e1db0463c94801464fdba92\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/01-make.stdout"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/02-receipt.json",
+      "tree_entry": "100644 blob 0fb79d3dc50764f2348ac6b218a6512a75e63a9f\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/02-receipt.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/03-.ihk-smp-x86_64.ko.cmd",
+      "tree_entry": "100644 blob 6f26d40d410cd75a6aed84aed74d11e09e8f9ef5\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/03-.ihk-smp-x86_64.ko.cmd"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/04-.ihk.ko.cmd",
+      "tree_entry": "100644 blob 8e57cf0d3e4927e3fa4b116d85991705149fa752\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/04-.ihk.ko.cmd"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/05-.ihk.o.cmd",
+      "tree_entry": "100644 blob ef24aeebdd7dd226cc01d59178bf933978e85a61\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/05-.ihk.o.cmd"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/06-.ihk_smp_x86_64.o.cmd",
+      "tree_entry": "100644 blob ef51e4b4302d722430c7326d6ca00bfc168dff8f\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/06-.ihk_smp_x86_64.o.cmd"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/07-.mcctrl.ko.cmd",
+      "tree_entry": "100644 blob 380fec780a69ddd8f3bd587f8c4ed47706204e11\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/07-.mcctrl.ko.cmd"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/08-.mcctrl_rust.o.cmd",
+      "tree_entry": "100644 blob b39594abd3e9d4347ddb7ac16c5564d9c4e9ba59\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/08-.mcctrl_rust.o.cmd"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/09-Module.symvers",
+      "tree_entry": "100644 blob 1205176b0e680bda22bb2864b36de8d8012b6e80\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/09-Module.symvers"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/10-owner-receipt.json",
+      "tree_entry": "100644 blob 7e7f24e3ddb8ed7c134a0acf6f70e637356e060a\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/10-owner-receipt.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/11-ownership-archive.json",
+      "tree_entry": "100644 blob d53f6b1a74d6a403003a7159ab7cfcbed7cf2c0f\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/11-ownership-archive.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/12-postflight-proof.json",
+      "tree_entry": "100644 blob 3e920d355bf85d637a13bee2f141fbf0546e619d\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/12-postflight-proof.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/13-record-release-complete.json",
+      "tree_entry": "100644 blob 14e090bc48dbbe4a1f5b1fbd43a22475df0dcdc8\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/13-record-release-complete.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/14-status.json",
+      "tree_entry": "100644 blob e7d2c66236c4d3a5d668b96bff309467e031f6e9\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/14-status.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/15-stderr",
+      "tree_entry": "100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/15-stderr"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/16-stdout",
+      "tree_entry": "100644 blob d08c9adcb9979b2deade8dda4f0f4a7353dc95bb\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retained/16-stdout"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/00-child-start.json",
+      "tree_entry": "100644 blob d06edcf4fff7b7f22f3a2d70e62f38e5c5803cb4\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/00-child-start.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/01-status.json",
+      "tree_entry": "100644 blob bae4e60a0d10be11c10ffe37162ec5655b04162c\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/01-status.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/02-status.json",
+      "tree_entry": "100644 blob 87cc00612047b55c7000697ce52e6dc7ee17dd1c\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/02-status.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/03-status.json",
+      "tree_entry": "100644 blob 5a0b89c97b2156c11befd298099010c9fc62e775\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/03-status.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/04-status.json",
+      "tree_entry": "100644 blob 5749109624e399f8b0dc68195d55a87a4846f0c5\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/04-status.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/05-status.json",
+      "tree_entry": "100644 blob 9d26ed0673ae50f97d83def3a80617cdadb9e490\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/05-status.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/06-status.json",
+      "tree_entry": "100644 blob c29fd85c2677fcceee022e51ac98850c93515a7b\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/06-status.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/07-status.json",
+      "tree_entry": "100644 blob c05e2b37db5872b8fbed3877728283a2af637766\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/07-status.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/08-status.json",
+      "tree_entry": "100644 blob a430f248ad558d444f38b1714adfecd7754869ea\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/08-status.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/09-status.json",
+      "tree_entry": "100644 blob 093055e49bf985f1261d338259454954e10c7e9e\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/09-status.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/10-status.json",
+      "tree_entry": "100644 blob 0969cc082b5c246f516d01b1b90e42c07e31d3e3\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/10-status.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/11-status.json",
+      "tree_entry": "100644 blob aaea66c7f2b2477a2d97f2e9282ac99a91d9b4fe\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/11-status.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/12-status.json",
+      "tree_entry": "100644 blob b1304d548add2fbb319f21e90f06e93d330635fd\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/12-status.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/13-status.json",
+      "tree_entry": "100644 blob 9afc15a5a4b605d9ead3ddb5944c3b5fe788dd08\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/13-status.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/14-status.json",
+      "tree_entry": "100644 blob 7b9bc179256741864b245a75d188525008d5598b\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/14-status.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/15-status.json",
+      "tree_entry": "100644 blob 9a03fd0cfd9797dc752817368fb9877d9594f895\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/15-status.json"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/16-stdout",
+      "tree_entry": "100644 blob 212545c615b4607e10c25df337a2f3472ff6ec89\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/16-stdout"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/17-stdout",
+      "tree_entry": "100644 blob fcc01548a7bc4e47db7c489ff3ba2f0bda783deb\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/17-stdout"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/18-stdout",
+      "tree_entry": "100644 blob 97187b8d287e1229d14720f5ac99503fd57b92d4\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/retirement-retained/18-stdout"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/run_extract.py",
+      "tree_entry": "100644 blob b5abd847989aeccd63c944de0e21b907a73d965c\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/postbuild-preparation-1/run_extract.py"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/prepared-sdk/prepared-inputs/baseline-ihk.o.cmd",
+      "tree_entry": "100644 blob 582e5c8d300ef57851bd6e5333d0259afb210d87\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/prepared-sdk/prepared-inputs/baseline-ihk.o.cmd"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/prepared-sdk/prepared-inputs/baseline-ihk_smp_x86_64.o.cmd",
+      "tree_entry": "100644 blob 9b0ebdfbf4e22a0bc24f3ad8af91f2cea4f5c63b\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/prepared-sdk/prepared-inputs/baseline-ihk_smp_x86_64.o.cmd"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/prepared-sdk/prepared-inputs/baseline-mcctrl.o.cmd",
+      "tree_entry": "100644 blob ea4037dcb5ae154f469a1e3cc99a040798a3ca55\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/prepared-sdk/prepared-inputs/baseline-mcctrl.o.cmd"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/prepared-sdk/source-modules/Kbuild",
+      "tree_entry": "100644 blob 6b6831eec633acf773f198123cf366b1e5a0fef1\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/prepared-sdk/source-modules/Kbuild"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/prepared-sdk/source-modules/ihk-compat-build-id.bin",
+      "tree_entry": "100644 blob 8911ea4e5d09b5c7b610cbaaca94dbae7722a377\tdocs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/service-ebusy-sdk-preparation-8/prepared-sdk/source-modules/ihk-compat-build-id.bin"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/ACTUAL-CONTROLLER-GUARD-RESULT.json",
+      "tree_entry": "100644 blob daac27e6222a218e53342cefd8713f28de12062a\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/ACTUAL-CONTROLLER-GUARD-RESULT.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/ACTUAL-MOUNT-AND-OPEN-FOOTPRINT-RESULT.json",
+      "tree_entry": "100644 blob a04485ee17bd786d2a3b369466a91da678baecc6\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/ACTUAL-MOUNT-AND-OPEN-FOOTPRINT-RESULT.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/ACTUAL-ORDINARY-CAPACITY-BEFORE-FIXTURE.json",
+      "tree_entry": "100644 blob 46da6e23ea2c267f3bfcd40fae49276e6542e2c6\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/ACTUAL-ORDINARY-CAPACITY-BEFORE-FIXTURE.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/ACTUAL-SDK8-CASE-STAGE-BINDING.json",
+      "tree_entry": "100644 blob 55c2f3f07626d7b8eb8587d8850953d040ef522b\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/ACTUAL-SDK8-CASE-STAGE-BINDING.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/ACTUAL-SDK8-COHORT-FIXTURE-RECEIPT.json",
+      "tree_entry": "100644 blob c24230d6dde90a78fe6ef37dce933a221131db9c\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/ACTUAL-SDK8-COHORT-FIXTURE-RECEIPT.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/CAPTURE-REQUEST.PROTOTYPE.NOT-EXECUTABLE.json",
+      "tree_entry": "100644 blob ff704383b627dc7aa02c3c68d397bbf19389bc28\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/CAPTURE-REQUEST.PROTOTYPE.NOT-EXECUTABLE.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/COHORT-BINDINGS.json",
+      "tree_entry": "100644 blob 79c0993cc1645290103f9c7f49a604736a08bc39\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/COHORT-BINDINGS.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/EXISTING-HOST-RETENTION-LAYOUT-CONSTRAINT.json",
+      "tree_entry": "100644 blob 7e88f3a84670b6597cf04cf409b2ab6a14a2c3df\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/EXISTING-HOST-RETENTION-LAYOUT-CONSTRAINT.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/INDEPENDENT-ACTUAL-SDK8-CAPSULE-ACCEPTANCE.ROOT-RECORD.json",
+      "tree_entry": "100644 blob 77be0593b1f37e8868cbcc36d5f8c5c04e225105\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/INDEPENDENT-ACTUAL-SDK8-CAPSULE-ACCEPTANCE.ROOT-RECORD.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/LONG-RELEASE.PROTOTYPE.NOT-EXECUTABLE.json",
+      "tree_entry": "100644 blob 91c01abec1f5e7dd93915dbf17ba353c30e1d107\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/LONG-RELEASE.PROTOTYPE.NOT-EXECUTABLE.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/NAMESPACE-AND-MANIFEST-PUBLICATION.ROOT-RECORD.json",
+      "tree_entry": "100644 blob 5a3725e239b3f58a022a99cb2d22080fdfa1008a\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/NAMESPACE-AND-MANIFEST-PUBLICATION.ROOT-RECORD.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/NAMESPACE-HOST-PARENT-CORRECTION.ROOT-RECORD.json",
+      "tree_entry": "100644 blob 38088b1a0141798034c296c3605d839bd31025eb\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/NAMESPACE-HOST-PARENT-CORRECTION.ROOT-RECORD.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/NEXT-ACTUAL-FIXTURE-ARGV.NOT-RELEASED.json",
+      "tree_entry": "100644 blob 4e351ff539cdba473ce07c9d406f4b17c4f02090\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/NEXT-ACTUAL-FIXTURE-ARGV.NOT-RELEASED.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/PRECISE-SDK6-CONSUMED-PATHS.json",
+      "tree_entry": "100644 blob 4c66a149d24e43d9522fac1ef436d577739da4f8\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/PRECISE-SDK6-CONSUMED-PATHS.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/PROPOSED-SUCCESSOR-NAMESPACE.NOT-RESERVED.json",
+      "tree_entry": "100644 blob 0dcd15f087ca213d8e59fa3a7dafa49e080031e1\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/PROPOSED-SUCCESSOR-NAMESPACE.NOT-RESERVED.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/PROSPECTIVE-REQUEST-MODEL.NOT-EXECUTABLE.json",
+      "tree_entry": "100644 blob ff704383b627dc7aa02c3c68d397bbf19389bc28\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/PROSPECTIVE-REQUEST-MODEL.NOT-EXECUTABLE.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/ROOT-SUCCESSOR-NAMESPACE.json",
+      "tree_entry": "100644 blob 11ea832ac88a64b3e92d72d3b7326216859fc657\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/ROOT-SUCCESSOR-NAMESPACE.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/SDK8-RUNTIME-SOURCE-AND-ACTUAL-FIXTURE-READY.json",
+      "tree_entry": "100644 blob 0d4370d55046195a02e948ade6ed5c672984f031\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/SDK8-RUNTIME-SOURCE-AND-ACTUAL-FIXTURE-READY.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/SOURCE-TO-REQUEST-BINDING-MATRIX.json",
+      "tree_entry": "100644 blob fbc33b6343ed8d6d1dc245a8eb6bd4e55dafd2b8\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/SOURCE-TO-REQUEST-BINDING-MATRIX.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/STATIC-CHECKPOINT-DIFF-CHECK.ROOT-RECORD.json",
+      "tree_entry": "100644 blob 62e7ab94c604ba91be8bb37b8574627ffbc6800b\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/STATIC-CHECKPOINT-DIFF-CHECK.ROOT-RECORD.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-CORRECTED-REQUEST.json",
+      "tree_entry": "100644 blob e842cc23446b3975c5afd8483b64f2492d71af1d\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-CORRECTED-REQUEST.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-01.json",
+      "tree_entry": "100644 blob 97c5b1e0f708b6666173220ca75e71203e6b95c3\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-01.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-02.json",
+      "tree_entry": "100644 blob 389f966b48db7ff4dd2ca956e9c7391b2b0603c5\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-02.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-03.json",
+      "tree_entry": "100644 blob 6ac40118daaae5ee60e091758b0028633323f962\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-03.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-04.json",
+      "tree_entry": "100644 blob bf2b98e25f49f6350e5fe04a6bdf402fcfd249e3\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-04.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-05.json",
+      "tree_entry": "100644 blob 7b69ada87247a8cb119d8b9f6b439d1b8586f565\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-05.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-06.json",
+      "tree_entry": "100644 blob 9f8b9027a2d1ffbbe91dc7bbed105dc4bdcd6698\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-06.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-07.json",
+      "tree_entry": "100644 blob eb987d0b547ad972f4e9732d69e51c128fa24e72\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-07.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-08.json",
+      "tree_entry": "100644 blob 5b019ae7183caf56cadb51528ece2189e0b5b96b\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-08.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-09.json",
+      "tree_entry": "100644 blob cd33efb2090662ec1db818c97b95c8b8a55810d4\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-09.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-10.json",
+      "tree_entry": "100644 blob 8285052045e059cbdb7592956cdd801bef2398b2\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-10.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-11.json",
+      "tree_entry": "100644 blob 69ccff7b5236cab7c29104db8fef3ef0292a4f84\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-11.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-12.json",
+      "tree_entry": "100644 blob a9e46eb17a1c06ae14cd7667ccd1a3af2e3b5a9f\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-12.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-13.json",
+      "tree_entry": "100644 blob 1b5f8934eef640e71f5c05081875323826cf7111\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-13.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-14.json",
+      "tree_entry": "100644 blob 258857948ac10cd60776c65c93441dbdc119e910\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-14.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-15.json",
+      "tree_entry": "100644 blob 6d77422bee971ab06e0eee263c99131eb70359f0\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-15.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-16.json",
+      "tree_entry": "100644 blob bcedecc647e824d5fd35ce44b78e21092b641be5\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/TESTONLY-request-16.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/actual-controller-guard-fixture-1/RESULT.json",
+      "tree_entry": "100644 blob f407269fce07b8c2512971052734dd7af5d50902\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/actual-controller-guard-fixture-1/RESULT.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/actual-controller-guard-fixture-1/command.json",
+      "tree_entry": "100644 blob 918f4748146db39300aa18e82692515f74b2506e\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/actual-controller-guard-fixture-1/command.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/actual-controller-guard-fixture-1/direct-join.json",
+      "tree_entry": "100644 blob 78a28fa5e7f1c7da045ede71a805c6d1ad4f7833\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/actual-controller-guard-fixture-1/direct-join.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/actual-controller-guard-fixture-1/direct-wait.json",
+      "tree_entry": "100644 blob f2e7bec3e1335095e3660629a47e3f72fbe33668\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/actual-controller-guard-fixture-1/direct-wait.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/actual-controller-guard-fixture-1/started.json",
+      "tree_entry": "100644 blob 85274a5786f70872487878b3c7750d606ffe3228\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/actual-controller-guard-fixture-1/started.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/actual-controller-guard-fixture-1/stderr",
+      "tree_entry": "100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/actual-controller-guard-fixture-1/stderr"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/actual-controller-guard-fixture-1/stdout",
+      "tree_entry": "100644 blob 2bcc81d3edd8ad7f7bfd159a5679c7a4a2839081\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/actual-controller-guard-fixture-1/stdout"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/capture_root_LONG.NOT-RELEASED.py",
+      "tree_entry": "100644 blob b84f3851cb84b9dd6f479ee0c58456e00ff33e00\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/capture_root_LONG.NOT-RELEASED.py"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/controller.literal.diff",
+      "tree_entry": "100644 blob d48d7ef61dcb87161bac82330a7d18f8003965b0\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/controller.literal.diff"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/controller_pre_effect_consumer.py",
+      "tree_entry": "100644 blob 78cb004d4fd0233366fe42bbf828b8b840b471f5\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/controller_pre_effect_consumer.py"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/fixture_actual_controller_guards.py",
+      "tree_entry": "100644 blob c7a223789fb4f58d62986dc9293a4d10959f21a2\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/fixture_actual_controller_guards.py"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/guard-vectors-1/TESTONLY-stale-controller-HOST_PARENT.py",
+      "tree_entry": "100644 blob 5e1090fe0e7055affe727d2305087392bb4bb36e\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/guard-vectors-1/TESTONLY-stale-controller-HOST_PARENT.py"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/guard-vectors-1/TESTONLY-stale-controller-MANIFEST_PATH.py",
+      "tree_entry": "100644 blob 0951339bd673c4355a252e6c8e1cc3eb80a1f9ec\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/guard-vectors-1/TESTONLY-stale-controller-MANIFEST_PATH.py"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/guard-vectors-1/TESTONLY-stale-controller-MANIFEST_SHA.py",
+      "tree_entry": "100644 blob 992febd75c35965d645676023bc63c53d551efc5\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/guard-vectors-1/TESTONLY-stale-controller-MANIFEST_SHA.py"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/guard-vectors-1/TESTONLY-stale-controller-NONCE.py",
+      "tree_entry": "100644 blob 5993dea0b41a24fcfa092f79edfe3cfa5ee0f5ec\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/guard-vectors-1/TESTONLY-stale-controller-NONCE.py"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/guard-vectors-1/TESTONLY-stale-controller-OWNER_PATH.py",
+      "tree_entry": "100644 blob 5091a7f2e0b0ce6f1ae93b98cd50afd852ebc97a\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/guard-vectors-1/TESTONLY-stale-controller-OWNER_PATH.py"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/guard-vectors-1/TESTONLY-stale-controller-RELEASE_PATH.py",
+      "tree_entry": "100644 blob a84393e2b26a02f5269065959814c1822d2ade43\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/guard-vectors-1/TESTONLY-stale-controller-RELEASE_PATH.py"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/owner.literal.diff",
+      "tree_entry": "100644 blob 2cd93d4f460385da5db7745c007c753a4035e28a\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/owner.literal.diff"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/prepare_runtime_sdk8.py",
+      "tree_entry": "100644 blob ea397f78f03369602e450f1e96a8522f006a518f\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/prepare_runtime_sdk8.py"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/prepare_sdk8_admission.py",
+      "tree_entry": "100644 blob b3dad69dcf8360be0df6ca3cddd2e1e355e72eb9\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/prepare_sdk8_admission.py"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/run_actual_guard_fixture_owned.py",
+      "tree_entry": "100644 blob ae3375721a403c7da578f33c1a4d9f5802738789\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/run_actual_guard_fixture_owned.py"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/source/CURRENT68-SDK8-AUTHORITY-LINKS.json",
+      "tree_entry": "100644 blob c08ffce432603a036230ecad716ae23dc544b177\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/source/CURRENT68-SDK8-AUTHORITY-LINKS.json"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/source/composite_module_binding.py",
+      "tree_entry": "100644 blob efb20d5545c948abca24067614996b02bc22ac2e\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/source/composite_module_binding.py"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/source/long_transport.py",
+      "tree_entry": "100644 blob 26e1a8efaf8ef743280cd66099df1b38978b0883\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/source/long_transport.py"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/source/native_diagnostic.py",
+      "tree_entry": "100644 blob 92209c2084b7bcd577d52c69f62d29b972e3097f\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/source/native_diagnostic.py"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/source/native_diagnostic_backend.py",
+      "tree_entry": "100644 blob 41da20e5e12c253178d0fbacbf0fea726b84988a\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/source/native_diagnostic_backend.py"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/source/native_diagnostic_container_owner.py",
+      "tree_entry": "100644 blob b0fc5d252ca4ec9a0031207085589a3fee5ee549\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/source/native_diagnostic_container_owner.py"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/source/native_diagnostic_runner.py",
+      "tree_entry": "100644 blob 7bc0ade882af0695cd66a8867382d3212bc237c6\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/source/native_diagnostic_runner.py"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/source/p12_long_session.py",
+      "tree_entry": "100644 blob 817450066945a0a956e408d075fe4525109f409a\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/source/p12_long_session.py"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/source/qmp_capture.py",
+      "tree_entry": "100644 blob 99956cb81b570d24d66f4673fb04c375c5783a13\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/source/qmp_capture.py"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/source/repaired_image_authority.py",
+      "tree_entry": "100644 blob c21b553abe791215b5252c1e2df3c04f355c1ff5\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/source/repaired_image_authority.py"
+    },
+    {
+      "path": "docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/transport.literal.diff",
+      "tree_entry": "100644 blob 970ef2ca2c2ee969fd843df8c190c2ef2144bf0c\tdocs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/transport.literal.diff"
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/CURRENT.md",
+      "tree_entry": "100644 blob d28fb7c1ada9eefdca4bea1a58c77738d547b0dd\tdocs/verification/os-milestones-20260914/CURRENT.md"
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/HANDOFF.md",
+      "tree_entry": "100644 blob ee9cfa6ab7a93fe3c88ded0f5f1f4f5f5a4c1d07\tdocs/verification/os-milestones-20260914/HANDOFF.md"
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/PROGRESS.md",
+      "tree_entry": "100644 blob db97271edae138433d4e3483e1b13cccf5a0b64b\tdocs/verification/os-milestones-20260914/PROGRESS.md"
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/SESSION-HANDOFF.md",
+      "tree_entry": "100644 blob b0470cf4e7d876b805635cda3826aff8f59eff78\tdocs/verification/os-milestones-20260914/SESSION-HANDOFF.md"
+    }
+  ]
+}
