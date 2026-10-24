@@ -1129,6 +1129,11 @@ x86_enable_ptattr_no_execute_bridge(void)
 	enable_ptattr_no_execute();
 }
 
+#endif /* MCKERNEL_RUST_X86_CPU_HELPERS: preceding callbacks */
+
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+void x86_cpu_ulong_log_bridge(int event, unsigned long value);
+#else
 static void
 x86_cpu_ulong_log_bridge(int event, unsigned long value)
 {
@@ -1145,6 +1150,10 @@ x86_cpu_ulong_log_bridge(int event, unsigned long value)
 		break;
 	}
 }
+
+#endif
+
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
 
 static int
 x86_cpu_info_ncpus_bridge(void)

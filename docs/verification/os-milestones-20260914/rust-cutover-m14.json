@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-23T23:03:02.575774+00:00",
+  "as_of": "2026-10-24T00:29:28.290006+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -84,7 +84,7 @@
       "c_file": "kernel/mem.c",
       "title": "Generic VM, allocation and memory ownership",
       "status": "open",
-      "owner": "dispatcher + terminal_lifecycle_repair; production consumer m14_production_stage",
+      "owner": "/root/m14_callback",
       "inventory_basis": "Exact current image compile database and final link contract; surviving body counts still unmeasured.",
       "object_output": "kernel/CMakeFiles/mckernel.img.dir/mem.c.o",
       "source_dependency_file": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o.d",
@@ -367,6 +367,17 @@
         "residual_c_bytes": null,
         "residual_c_functions": null,
         "evidence": []
+      },
+      "active_lane_20261024": {
+        "confirmed_at": "2026-10-24T00:29:28.290006+00:00",
+        "dispatch": "followup_task; fresh collaboration.list_agents confirmed running",
+        "backend_turn_id": null,
+        "backend_turn_id_note": "Not exposed by collaboration tool; no invented identifier.",
+        "private_root": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/",
+        "next_body_or_check": "TLB currentCPU/vector/interrupt callbacks ready12557; next remaining callback source",
+        "observed_status": "running_source",
+        "canonical_integration": "dispatcher",
+        "native_credit": false
       }
     },
     {
@@ -374,7 +385,7 @@
       "c_file": "kernel/process.c",
       "title": "Process, thread, address-space and scheduling lifecycle",
       "status": "partial",
-      "owner": "campaign dispatcher; idle implementation by /root/scratch_growth_prepare",
+      "owner": "/root/m14_process_cutover",
       "inventory_basis": "Exact current image compile database and final link contract; surviving body counts still unmeasured.",
       "object_output": "kernel/CMakeFiles/mckernel.img.dir/process.c.o",
       "source_dependency_file": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o.d",
@@ -867,6 +878,17 @@
         "residual_c_bytes": null,
         "residual_c_functions": null,
         "evidence": []
+      },
+      "active_lane_20261024": {
+        "confirmed_at": "2026-10-24T00:29:28.290006+00:00",
+        "dispatch": "followup_task; fresh collaboration.list_agents confirmed running",
+        "backend_turn_id": null,
+        "backend_turn_id_note": "Not exposed by collaboration tool; no invented identifier.",
+        "private_root": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/",
+        "next_body_or_check": "dump bridge/tree Rust:20 commands PASS,433 comparisons; next independent process body source",
+        "observed_status": "running_source_after_fixture",
+        "canonical_integration": "dispatcher",
+        "native_credit": false
       }
     },
     {
@@ -874,7 +896,7 @@
       "c_file": "kernel/syscall.c",
       "title": "Generic syscall, process lifecycle and memory syscall orchestration",
       "status": "open",
-      "owner": null,
+      "owner": "/root/p12_consumer_fixture_expert",
       "inventory_basis": "Exact current image compile database and final link contract; surviving body counts still unmeasured.",
       "object_output": "kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
       "source_dependency_file": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o.d",
@@ -1110,6 +1132,17 @@
         "residual_c_bytes": null,
         "residual_c_functions": null,
         "evidence": []
+      },
+      "active_lane_20261024": {
+        "confirmed_at": "2026-10-24T00:29:28.290006+00:00",
+        "dispatch": "followup_task; fresh collaboration.list_agents confirmed running",
+        "backend_turn_id": null,
+        "backend_turn_id_note": "Not exposed by collaboration tool; no invented identifier.",
+        "private_root": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/",
+        "next_body_or_check": "signalfd request-create Rust; one CPU6 fixture grant,4005 planned cases",
+        "observed_status": "running_fixture_granted",
+        "canonical_integration": "dispatcher",
+        "native_credit": false
       }
     },
     {
@@ -1117,7 +1150,7 @@
       "c_file": "arch/x86_64/kernel/cpu.c",
       "title": "x86 CPU, interrupt, processor state and context support",
       "status": "open",
-      "owner": null,
+      "owner": "/root/m14_actual_consumer_fix",
       "inventory_basis": "Exact current image compile database and final link contract; surviving body counts still unmeasured.",
       "object_output": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
       "source_dependency_file": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o.d",
@@ -1343,6 +1376,17 @@
         "residual_c_bytes": null,
         "residual_c_functions": null,
         "evidence": []
+      },
+      "active_lane_20261024": {
+        "confirmed_at": "2026-10-24T00:29:28.290006+00:00",
+        "dispatch": "followup_task; fresh collaboration.list_agents confirmed running",
+        "backend_turn_id": null,
+        "backend_turn_id_note": "Not exposed by collaboration tool; no invented identifier.",
+        "private_root": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/",
+        "next_body_or_check": "accepted CPUlogger integration preparation; context logger12240-case fixture queued",
+        "observed_status": "running_source",
+        "canonical_integration": "dispatcher",
+        "native_credit": false
       }
     },
     {
@@ -1350,7 +1394,7 @@
       "c_file": "arch/x86_64/kernel/memory.c",
       "title": "x86 page-table, address translation and user-copy support",
       "status": "partial",
-      "owner": "campaign dispatcher; private memory candidate by foreground:/root/m14_memory_cutover",
+      "owner": "/root/m14_production_stage",
       "inventory_basis": "Exact current image compile database and final link contract; surviving body counts still unmeasured.",
       "object_output": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
       "source_dependency_file": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o.d",
@@ -1908,6 +1952,17 @@
         "residual_c_bytes": null,
         "residual_c_functions": null,
         "evidence": []
+      },
+      "active_lane_20261024": {
+        "confirmed_at": "2026-10-24T00:29:28.290006+00:00",
+        "dispatch": "followup_task; fresh collaboration.list_agents confirmed running",
+        "backend_turn_id": null,
+        "backend_turn_id_note": "Not exposed by collaboration tool; no invented identifier.",
+        "private_root": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/",
+        "next_body_or_check": "L2 actual1728 PASS; L1 fixture queued; coherent production/source preparation",
+        "observed_status": "running_source",
+        "canonical_integration": "dispatcher",
+        "native_credit": false
       }
     },
     {
@@ -1915,7 +1970,7 @@
       "c_file": "arch/x86_64/kernel/syscall.c",
       "title": "x86 syscall ABI, signal frame, ptrace and architecture memory operations",
       "status": "open",
-      "owner": null,
+      "owner": "/root/terminal_lifecycle_repair",
       "inventory_basis": "Exact current image compile database and final link contract; surviving body counts still unmeasured.",
       "object_output": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
       "source_dependency_file": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o.d",
@@ -2143,6 +2198,17 @@
         "residual_c_bytes": null,
         "residual_c_functions": null,
         "evidence": []
+      },
+      "active_lane_20261024": {
+        "confirmed_at": "2026-10-24T00:29:28.290006+00:00",
+        "dispatch": "followup_task; fresh collaboration.list_agents confirmed running",
+        "backend_turn_id": null,
+        "backend_turn_id_note": "Not exposed by collaboration tool; no invented identifier.",
+        "private_root": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/",
+        "next_body_or_check": "ptrace public entry/adapter609-case fixture queued; next body source",
+        "observed_status": "running_source",
+        "canonical_integration": "dispatcher",
+        "native_credit": false
       }
     }
   ],
@@ -2396,6 +2462,39 @@
       "practical_check_closures": [],
       "native_credit": false,
       "file_retirement": false
+    },
+    {
+      "date": "2026-10-24T00:29:28.290006+00:00",
+      "kind": "SIX_PERSISTENT_FILE_OWNERS_ACTUAL_RUNNING_CENSUS",
+      "owners": {
+        "M14-F01": "/root/m14_callback",
+        "M14-F02": "/root/m14_process_cutover",
+        "M14-F03": "/root/p12_consumer_fixture_expert",
+        "M14-F04": "/root/m14_actual_consumer_fix",
+        "M14-F05": "/root/m14_production_stage",
+        "M14-F06": "/root/terminal_lifecycle_repair"
+      },
+      "practical_check_closures": [],
+      "native_credit": false,
+      "file_retirement": false
+    },
+    {
+      "date": "2026-10-24T00:30:50.926303+00:00",
+      "kind": "CANONICAL_CPU_ULONG_LOGGER_INTEGRATION_AFTER_ACCEPTED_ACTUAL_PRODUCTION",
+      "file": "M14-F04",
+      "evidence": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/cpu-ulong-canonical-integration-preparation-1/ROOT-INTEGRATION-RESULT.json",
+      "source_pre": [
+        "8c71fe79",
+        "a6e7465d"
+      ],
+      "source_post": [
+        "2d29bca5",
+        "26180e00"
+      ],
+      "actual_production": "6ae4c5c6db9db6a75708a55d9a729288a10cec11e32272d58d37b5d7a1f6b77e",
+      "native_credit": false,
+      "file_retirement": false,
+      "practical_check_closures": []
     }
   ]
 }

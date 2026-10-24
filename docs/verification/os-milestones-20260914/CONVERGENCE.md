@@ -15,6 +15,40 @@ this document is not a claim that the Python harness enforces it.
 
 ## Authority and scope
 
+### Six active M14 file implementation lanes — user instruction 2026-10-24 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The user explicitly requests one implementation agent per remaining M14 file:
+kernel/mem.c, kernel/process.c, kernel/syscall.c, arch/x86_64/kernel/cpu.c,
+arch/x86_64/kernel/memory.c and arch/x86_64/kernel/syscall.c. Use six existing
+workers within the eleven-thread campaign cap, retaining support capacity for
+P12, integration and specific blocking independent reviews. Confirm actual new
+turns once after followup_task; recorded completed workers are not active lanes.
+
+Each owner selects the next substantive remaining live C body or callback from
+existing selected inputs, implements it in a disjoint private Rust/assembly
+candidate and prepares the smallest real fixture/ABI/consumer check. Reuse the
+already accepted body and compiler results. Source work proceeds while compiler
+slots or the heavy lane are occupied; only actual execution waits for its grant.
+After a result, integrate when ready and start the next dependency-ready body.
+Give a precise blocker when no useful source work remains; do not leave workers
+idle solely because the coordinator is handling an unrelated cleanup correction.
+
+Keep mem_helpers/page-allocation changes with the generic-memory owner,
+process_helpers/sched_helpers with the process owner, x86_cpu_helpers with the CPU
+owner and x86_memory_helpers with the architecture-memory owner. Kernel/architecture
+syscall owners supply private nonoverlapping fragments for shared syscall_policy
+or ABI changes; root integrates shared/canonical files and coordinates independent
+review. Preserve frozen live-image inputs, existing fixtures and all evidence.
+
+At each ten-minute review record the six file owners and actual turns, source
+bodies implemented/integrated, focused and production checks passed, file/native
+closures, queue wait and the next executable result. Measure code-to-check and
+integration delay; do not infer speedup from thread count or fixture vector count.
+Retain actual ordinary CPU grants and one reviewed native/heavy ownership domain.
+The separately reviewed compile-only exception remains conditional on its real
+admission; this instruction grants no extra Docker/native or resource release.
+
 ### Latest user scheduling: parallel M14 and P12, ten-minute steering — 2026-10-23
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

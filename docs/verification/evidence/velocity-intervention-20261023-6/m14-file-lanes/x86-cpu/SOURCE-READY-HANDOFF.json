@@ -1,0 +1,139 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "COMPLETE_PRIVATE_CONTEXT_LOG_IMPLEMENTATION_AND_EXECUTABLE_LEAF_SOURCE_READY_NO_GRANT",
+  "recipe": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/EXECUTABLE-READY.NOT-EXECUTED.json",
+    "sha256": "31dcc3f2f36978d174e1109975020a07ef0ccd12569dadeac486f0f26c11faba",
+    "bytes": 27984
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/PRIVATE-COMPLETE-CONTEXT-LOGGER.patch",
+    "sha256": "2ca29fb6e086e0545fb2a896a02322259f55c34b890923cffc81e311e4dec19b",
+    "bytes": 3423
+  },
+  "accepted_private_base": {
+    "C": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-cpu-log-next/candidate/arch/x86_64/kernel/cpu.c",
+      "sha256": "2d29bca555936a213f0a7296a302ec57b55c575536c33a58285b07b203390eca",
+      "bytes": 95484
+    },
+    "Rust": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-cpu-log-next/candidate/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "26180e00c1d6673aa600f0ec9afed5d100ca6e0c39af803c3328e58f8cc88fb9",
+      "bytes": 91270
+    },
+    "actual_CPUlog_consumer": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-cpu-log-next/production-consumer-preparation-1/bounded-header-transport-correction-1/FINAL-ACTUAL-PRODUCTION-HANDOFF.json",
+      "sha256": "6ae4c5c6db9db6a75708a55d9a729288a10cec11e32272d58d37b5d7a1f6b77e",
+      "bytes": 9307
+    }
+  },
+  "observed_canonical": {
+    "C": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "sha256": "8c71fe79e003f7aa7ef0f7faf2b31ebf11e65e747abdb0969dc77dbafbd839e9",
+      "bytes": 95267
+    },
+    "Rust": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "a6e7465d7924755c97e5d72919a97c2985aacd35cf9db417c4ee981b4d5d071a",
+      "bytes": 90445
+    }
+  },
+  "await_root_actual_CPUlog_integration_notice": true,
+  "production_source_positions": {
+    "arch/x86_64/kernel/cpu.c": {
+      "source": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/candidate/arch/x86_64/kernel/cpu.c",
+        "sha256": "c779079fb6de66991c861c823dca06b2a9ceec16ac4c984995200b668d7e78ce",
+        "bytes": 95605
+      },
+      "first_target_line": 2809
+    },
+    "kernel/rust/x86_cpu_helpers.rs": {
+      "source": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/candidate/kernel/rust/x86_cpu_helpers.rs",
+        "sha256": "98914e1ff4d50c2f42ccbdeb1f4f338024b7a9a2143fbad2f59ebd6f6b50dd0b",
+        "bytes": 93305
+      },
+      "first_target_line": 3108
+    }
+  },
+  "bounded_body": "Only complete x86_context_line_log_bridge int+fourunsignedlong callback,9events1..6/20..22; separate stacklogger unchanged.",
+  "existing_provider_boundary": "debug.rs::__kprintf/kprintf Rustexports. SelectedCforwarddeclaration; exactoriginalCbody nonselectedfallback. RemovedoldRustextern beforeaddingglobalexport, existingcallerbodies/lockspan preserved.",
+  "full_signature_fixture": "Original completeCbody versus actualRustbody, ordered typedvariadicprovider/format/count/value tape. ActualunchangedRustuser/interruptcontext callers additionally exercise controlledlock/unlock bracket+flags and realabi.rs contexttypes.",
+  "actual_source_formats_and_calls_retained": 14,
+  "planned_direct_pairs_not_acceptance": 10880,
+  "planned_actual_Rust_caller_lock_span_pairs_not_acceptance": 1360,
+  "planned_total_pairs_not_acceptance": 12240,
+  "commands": 13,
+  "witness_header_closure": {
+    "/home/holden/mckernel/lib/include/types.h": {
+      "path": "/home/holden/mckernel/lib/include/types.h",
+      "sha256": "72179c1e931fdfdfa700d2ecfe745e344027ac0b4af299e8a9ec17957fc9a399",
+      "bytes": 515
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/types.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/types.h",
+      "sha256": "c37a7c748f2439ddfd847725a4d559c008f2aca09c45114fb07e73337013f449",
+      "bytes": 1074
+    },
+    "/home/holden/mckernel/lib/include/ihk/debug.h": {
+      "path": "/home/holden/mckernel/lib/include/ihk/debug.h",
+      "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc",
+      "bytes": 1294
+    },
+    "/home/holden/mckernel/kernel/include/lwk/compiler.h": {
+      "path": "/home/holden/mckernel/kernel/include/lwk/compiler.h",
+      "sha256": "eeb3c5b9d47dc32d73908c9048002a34ef77e5d6bdc03346b27b494ded5b49dd",
+      "bytes": 17894
+    },
+    "/home/holden/mckernel/kernel/include/lwk/compiler-gcc.h": {
+      "path": "/home/holden/mckernel/kernel/include/lwk/compiler-gcc.h",
+      "sha256": "1a2693ab50b3768ca2ca362bb0e6773bdabc12425ad4061802b3aca20dbe47a2",
+      "bytes": 11651
+    }
+  },
+  "witness_include_graph": {
+    "fixture": [
+      "types.h",
+      "ihk/debug.h",
+      "selected-body.inc"
+    ],
+    "types.h": [
+      "ihk/types.h"
+    ],
+    "ihk/debug.h": [
+      "lwk/compiler.h"
+    ],
+    "lwk/compiler.h": [
+      "types.h",
+      "lwk/compiler-gcc.h under __KERNEL__+GCC9"
+    ],
+    "lwk/compiler-gcc.h": []
+  },
+  "header_scope": "Actual ihk/debug.h declaresbothordinary/unlockedprintproviders; recursivelyboundtypes/compilerheaders underexactGCC9profile. No kmsg.h include dependency introduced. EarlierCPUloggerkmsgfailureaa036/254a closedandpreserved.",
+  "profile": {
+    "CPU": "ROOT_ASSIGN",
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 90,
+    "retirement_seconds": 6,
+    "FSIZE_bytes": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "CGU": 1,
+    "RUST_MIN_STACK": 2097152,
+    "owned_capture_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+  },
+  "next_operation": "Rootassignoneordinaryslotafteractualreadygrant; fresh19GiB/7jobs/floors/fullgap; acceptedRust1.92/GCC9/CGU1/2MiBstack/2GiBAS60CPU90+6FSIZE32MiBFD256core0/h990dict+handlers/directwholejoins; executeonlyfrozen13leafcommands once andstopfirstunexpectedfailure.",
+  "compiler_jobs": 0,
+  "test_jobs": 0,
+  "CPU_slots_held": 0,
+  "canonical_sharedABI_CMake_frozenimage_P12_Git_writes": 0,
+  "source_only_no_formatter_or_production_native_claim": true,
+  "actual_formatter_execution": false,
+  "production_full78_wholeCPU_TU_defaultkernel_link_native": "OPEN",
+  "failure_family": "Newboundedcompletecontextlogger slice, firstcandidate notexecuted; rootmanagedoneboundedcorrection thenexpert. All priorCPUlogkmsg failure histories remain preserved separately."
+}

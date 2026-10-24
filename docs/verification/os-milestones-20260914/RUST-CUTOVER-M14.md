@@ -1,3 +1,15 @@
+## Six-file parallel implementation — explicit user instruction 2026-10-24 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Maintain one active implementation owner for each remaining runtime C file in the
+file worklist below. Use private disjoint patches and coordinate shared Rust/ABI
+integration centrally. Keep source work ready while compiler slots and P12 are
+occupied; dispatch the next substantive remaining body after each accepted result.
+[CONVERGENCE.md](CONVERGENCE.md) defines ownership, actual-turn confirmation,
+resource limits and ten-minute measurements. This scheduling requirement changes
+no proof stage, completion count or evidence status. Root records actual current
+owner assignments in rust-cutover-m14.json and the normal handoff.
+
 ## Latest scheduling: Rust cutover and hour session in parallel — 2026-10-23
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

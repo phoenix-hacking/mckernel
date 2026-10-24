@@ -32,6 +32,26 @@ work. Preserve functional memory/ownership/resource checks. A service classifier
 flag is not evidence that a security task was assigned; report the actual task
 and exact service error. Scope clarification does not clear a service hold.
 
+## Six parallel M14 file implementers — explicit user instruction 2026-10-24 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Assign one actual implementation worker to each of the six remaining runtime C
+files in the M14 worklist. Start new turns with followup_task for completed/idle
+workers; an assigned name or message is not active execution. Keep six source-ready
+file lanes advancing alongside P12 and the concrete integration/cleanup critical
+path, within the existing eleven-thread campaign cap. Source implementation does
+not wait for a compiler slot. Reuse accepted ports and dispatch the next substantive
+remaining body after each result. Do not fill these lanes with broad audits.
+
+Use disjoint private C/Rust candidate patches. Coordinate shared syscall_policy,
+x86 helpers, ABI declarations and canonical integration centrally; never allow
+concurrent writers to the same shared file. Ordinary compiler jobs retain their
+actual slot grants; heavy builds/native runs retain their reviewed resource and
+ownership controls. Six implementation agents do not imply six heavy workloads.
+Record actual file-owner turns, integrated Rust bodies, executable results and
+blocked time at each ten-minute review. Leave whole-file/native credit open until
+its matching proof passes. See CONVERGENCE.md and RUST-CUTOVER-M14.md.
+
 ## Separate M14 Rust cutover — user instruction 2026-10-23
 
 Track full supported McKernel LWK Rust/reviewed-assembly conversion in

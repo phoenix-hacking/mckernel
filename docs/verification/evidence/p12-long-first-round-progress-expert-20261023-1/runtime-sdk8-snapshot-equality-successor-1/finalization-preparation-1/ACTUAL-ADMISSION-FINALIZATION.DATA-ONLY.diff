@@ -1,0 +1,22 @@
+--- preserved-freeze
++++ actual-admission-freeze
+@@ -4,7 +4,7 @@
+ assert len(sys.argv)==3 and os.getuid()==os.geteuid()==1000 and sys.version_info[:3]==(3,9,12)
+ s=importlib.util.spec_from_file_location('frozen_expert_selected_transport',D/'source/long_transport.py');g=importlib.util.module_from_spec(s);s.loader.exec_module(g)
+ assert g.digest(g.stable(D/'source/long_transport.py'))=='b08e4aef7ed2984e84196f3c603abd19e093b5db372b1854f88ee8b75aee9b46'
+-qraw=g.stable(Path(None));assert g.digest(qraw)==None;q=json.loads(qraw);assert q['status']=='PASS_FRESH_READ_ONLY_P12_LONG_ADMISSION'
++qraw=g.stable(Path('/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/admission-preparation-1/owned-actual-fresh-admission-readbacks-1/stdout/stdout'));assert g.digest(qraw)=='5a1e036d22674c5d7d384bfbe8cd43fac9ba068e62f8ae123fe9e483a4245eaa';q=json.loads(qraw);assert q['status']=='PASS_FRESH_READ_ONLY_P12_LONG_ADMISSION'
+ value=json.loads(g.stable(D/'LONG-RELEASE.PROTOTYPE.ACTUAL-STAGE.NOT-EXECUTABLE.json'));value.pop('independent_review',None)
+ value['profile']=g.TRANSPORT;value['storage_admission']=q['observations']['admission'];value['boot_id']=Path('/proc/sys/kernel/random/boot_id').read_text().strip();value['author']=sys.argv[2];assert value['author']=='/root'
+ value['status']='PASS_EXECUTION_RELEASE';value['execution_count']=1;value['expires_unix']=time.time()+590
+--- preserved-attach
++++ actual-manifest-attach
+@@ -16,7 +16,7 @@
+ payloadraw=g.stable(payloadpath);assert g.digest(payloadraw)==payloadsha;value=json.loads(payloadraw);assert 'independent_review' not in value and g.canonical(value)==payloadraw and payloadraw.endswith(b'\n')
+ review=json.loads(g.stable(reviewpath));assert set(review)=={'status','reviewer','implementation_ownership','payload_sha256'} and review['status']=='PASS' and review['implementation_ownership'] is False and review['reviewer']!=value['author'] and review['payload_sha256']==g.digest(payloadraw)
+ assert value['profile']==g.TRANSPORT and value['storage_admission']==q['observations']['admission'] and value['boot_id']==Path('/proc/sys/kernel/random/boot_id').read_text().strip()
+-assert value['nonce']=='63bdc7731c34491eb430ddb34b094d5b' and value['attempt_parent']=='/home/holden/mckernel-work/l12s8e1/p' and value['manifest']=={'path':'/home/holden/mckernel-work/scratch/p12s8e1/m.json','sha256':'27cfb26595556035995ace767d233ca4a71e3e6432f7ba0adb67c7a6f9025169'}
++assert value['nonce']=='63bdc7731c34491eb430ddb34b094d5b' and value['attempt_parent']=='/home/holden/mckernel-work/l12s8e1/p' and value['manifest']=={'path':'/home/holden/mckernel-work/scratch/p12s8e1/m.json','sha256':'9dfead8648d68c90e798973b384a1c41bc5493fe5390e237b4868ecfa4b33abe'}
+ now=time.time();assert now<=value['expires_unix']<=now+600 and value['execution_count']==1
+ value['independent_review']=review;raw=g.canonical(value);release=Path('/home/holden/mckernel-work/scratch/p12s8e1/r.json');exclusive(release,raw);release_sha=g.digest(raw)
+ # No clock or boot override: full unmodified production validation on published bytes.

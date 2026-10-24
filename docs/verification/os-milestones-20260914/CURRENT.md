@@ -1,3 +1,45 @@
+## Six live implementation lanes; fresh P12 admission PASS — 2026-10-24T00:29:28.290006+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical34/35; newly closed IDs none. Candidate15 failed build is positively
+physically retired908fe/current_live_postjoin b58, preserving original failures.
+Fresh exact P12 query PASS0/.360s, joined/group absent/streams closed/stderr0;
+actual finalization owner case227_stage binds its genuine5a1e observation and
+corrects stale template manifest27cf to selected9dfe before late-clock release.
+No new LONG launched. Six file owners confirmed running via fresh census:
+
+| File | Owner | Next body/check |
+|---|---|---|
+| kernel/mem.c | m14_callback | TLB currentCPU/vector/interrupt callbacks ready12557; next remaining callback source |
+| kernel/process.c | m14_process_cutover | dump bridge/tree Rust:20 commands PASS,433 comparisons; next independent process body source |
+| kernel/syscall.c | p12_consumer_fixture_expert | signalfd request-create Rust; one CPU6 fixture grant,4005 planned cases |
+| arch/x86_64/kernel/cpu.c | m14_actual_consumer_fix | accepted CPUlogger integration preparation; context logger12240-case fixture queued |
+| arch/x86_64/kernel/memory.c | m14_production_stage | L2 actual1728 PASS; L1 fixture queued; coherent production/source preparation |
+| arch/x86_64/kernel/syscall.c | terminal_lifecycle_repair | ptrace public entry/adapter609-case fixture queued; next body source |
+
+F02 actual433/20commands PASS1.189s and F05 L2 actual1728 PASS are bounded
+proof only. L3/process log canonical; CPUlogger accepted production remains
+pending integration. Default-image/native/file closure remain open. Existing
+timer3938622/start59029100/600s unchanged; M15 foreground scoping is independent.
+See velocity-intervention-20261023-6/ENGINEERING-REVIEW-20261024T0020.ROOT-RECORD.json.
+
+## Actual candidate15 observer failure; P12 source fixture accepted — 2026-10-23T23:43:59.044194+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical34/35, new closed IDs none. Candidate15 actual owner closed FAIL1 after
+203.844s. Configure/Rust/image-build commands returned0; CPU ABI command also0,
+but new observer rejected1519B of four pre-existing packed-member warnings. Expert
+prepares exact retained-only warning-bound consumer and remaining validation;
+originalFAIL preserved, no rebuild/replay authorized or default/native credit.
+StoppedCIDec1c/shared116763/common56120231 retained underFAILcontract; physical
+clearance not accepted. ExistingPASS-only normalcleanup helper cannot consumeFAIL;
+owner prepares narrow truthfulFAIL-retired specialization for independent review.
+P12 actual214d/ff2e eighteen-guard/fullmanifest/mount fixture PASS1.423s accepted;
+namespace8078 published, late release remainsNULL pending currentbuildclearance.
+Processlog fullcrate duplicatekprintf failure retained2fb3; soledeclarationcorrection
+preparing. L3 fullproduction CPU6 active after accepted5184leaf cases. CPUlogger
+private body implementation independent. See engineering2340; no hourcredit.
+
 ## Scalar Rust body integrated; P12 capsule passed — 2026-10-23T23:32:36.419304+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
