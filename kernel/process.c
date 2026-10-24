@@ -1669,10 +1669,16 @@ void process_split_shm_log_bridge(int event, int error)
 	}
 }
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+unsigned long process_split_page_pgshift_offset_bridge(void);
+#else
+#line 1672
 unsigned long process_split_page_pgshift_offset_bridge(void)
 {
 	return __builtin_offsetof(struct page, pgshift);
 }
+#endif
+#line 1676
 
 int process_split_range_insert_bridge(struct process_vm *vm,
 		struct vm_range *range)
@@ -2695,10 +2701,14 @@ int process_pte_is_fileoff_bridge(void *ptep, size_t pgsize)
 	return pte_is_fileoff((pte_t *)ptep, pgsize);
 }
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+uintptr_t process_pte_get_phys_bridge(void *ptep);
+#else
 uintptr_t process_pte_get_phys_bridge(void *ptep)
 {
 	return pte_get_phys((pte_t *)ptep);
 }
+#endif
 
 void *process_phys_to_page_bridge(uintptr_t phys)
 {
@@ -2824,6 +2834,170 @@ int invalidate_process_memory_range(struct process_vm *vm,
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_page_fault_cow_copy_body_result(void *, uintptr_t, size_t);
+#endif
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+const char *const process_page_fault_cow_alloc_file = __FILE__;
+const int process_page_fault_cow_alloc_line = 3145;
+int process_page_fault_cow_allocate_body_result(struct process_vm *, struct vm_range *,
+        struct page *, size_t, int, uintptr_t, uint64_t, void **, int *);
+#endif
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+/* Original allocation tracking identities retain static storage lifetime. */
+const char *const process_page_fault_anon_alloc_file = __FILE__;
+const int process_page_fault_anon_alloc_line = 3058;
+int process_page_fault_anon_allocate_body_result(struct process_vm *, struct vm_range *,
+        uintptr_t, uint64_t, pte_t **, void **, size_t *, int *, void **, int *);
+#endif
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+unsigned long process_page_fault_mapping_state_body_result(struct vm_range *, uintptr_t,
+        unsigned long, uint64_t, pte_t *, struct page **);
+#endif
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_profile_path_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 2952, .flags = DDEBUG_DEFAULT,
+};
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_entry_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 2959, .flags = DDEBUG_DEFAULT,
+};
+void process_page_fault_entry_log_body_result(struct process_vm *, struct vm_range *,
+        uintptr_t, uint64_t);
+#endif
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+unsigned long process_page_fault_shared_permission_body_result(struct vm_range *, unsigned long);
+#endif
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_pte_state_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 3006, .flags = DDEBUG_DEFAULT,
+};
+void process_page_fault_pte_state_log_bridge(pte_t *, size_t);
+#endif
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_page_state_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 3219, .flags = DDEBUG_DEFAULT,
+};
+void process_page_fault_page_state_log_bridge(struct page *);
+#endif
+
+#line 2831
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+/* Original page-fault bounds diagnostic: static ABI data, Rust computation. */
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_prepare_bounds_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 2873, .flags = DDEBUG_DEFAULT,
+};
+int process_page_fault_prepare_body_result(struct process_vm *, struct vm_range *,
+        uintptr_t, uint64_t, pte_t **, void **, size_t *, int *, int *);
+#endif
+
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_page_fault_memobj_get_body_result(struct vm_range *, void *, uintptr_t,
+        pte_t *, size_t, int, uintptr_t *, unsigned long *, int *);
+#endif
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_page_fault_cow_classify_body_result(struct vm_range *, uint64_t, struct page *);
+#endif
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_cow_rss_add_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 3071, .flags = DDEBUG_DEFAULT,
+};
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_cow_rss_sub_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 3076, .flags = DDEBUG_DEFAULT,
+};
+void process_page_fault_cow_commit_body_result(struct vm_range *,uintptr_t *,
+        size_t,void *,struct page **,struct ddebug *,struct ddebug *);
+#endif
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_set_pte_rss_add_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 3118, .flags = DDEBUG_DEFAULT,
+};
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_set_pte_rss_skip_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 3121, .flags = DDEBUG_DEFAULT,
+};
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_set_pte_attr_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 3125, .flags = DDEBUG_DEFAULT,
+};
+int process_page_fault_set_pte_body_result(struct process_vm *,struct vm_range *,
+    uintptr_t,uint64_t,pte_t *,size_t,uintptr_t,enum ihk_mc_pt_attribute,int *,
+    int (*)(page_table_t,pte_t *,size_t,uintptr_t,enum ihk_mc_pt_attribute),
+    struct ddebug *,struct ddebug *,struct ddebug *);
+#endif
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_page_fault_set_range_body_result(struct process_vm *,struct vm_range *,
+    uintptr_t,uint64_t,void *,size_t,uintptr_t,enum ihk_mc_pt_attribute,int *,
+    int (*)(page_table_t,struct process_vm *,void *,void *,uintptr_t,
+            enum ihk_mc_pt_attribute,int,struct vm_range *,int));
+void process_page_fault_finish_body_result(uintptr_t,int *,struct page **);
+#endif
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_out_stray_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 3202, .flags = DDEBUG_DEFAULT,
+};
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_out_rss_sub_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 3206, .flags = DDEBUG_DEFAULT,
+};
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_out_return_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 3210, .flags = DDEBUG_DEFAULT,
+};
+int process_page_fault_out_body_result(struct process_vm *,struct vm_range *,
+    uintptr_t,uint64_t,const size_t *,struct page *,int,
+    struct ddebug *,struct ddebug *,struct ddebug *);
+#endif
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_anon_clear_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 3059, .flags = DDEBUG_DEFAULT,
+};
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_anon_map_debug = {
+    .file = __FILE__, .func = "page_fault_process_memory_range",
+    .line = 3067, .flags = DDEBUG_DEFAULT,
+};
+void process_page_fault_anon_clear_body_result(struct vm_range *,void *,size_t,void *,
+    struct page *,uintptr_t,uint64_t,uintptr_t *,int,int,struct ddebug *,struct ddebug *);
+#endif
+
 int page_fault_process_memory_range(struct process_vm *vm,
 				    struct vm_range *range,
 				    uintptr_t fault_addr, uint64_t reason)
@@ -2837,9 +3011,15 @@ int page_fault_process_memory_range(struct process_vm *vm,
 	uintptr_t phys;
 	struct page *page = NULL;
 	unsigned long memobj_flag = 0;
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 	int private_range, patching_to_rdonly;
 	int devfile_or_hugetlbfs_or_premap, regfile_or_shm;
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+    process_page_fault_entry_log_body_result(vm, range, fault_addr, reason);
+#else
+#line 2951
 	if (get_this_cpu_local_var()->current->profile) {
 		dkprintf("%s: 0x%lx @ %s\n",
 				__func__, fault_addr,
@@ -2849,6 +3029,15 @@ int page_fault_process_memory_range(struct process_vm *vm,
 	}
 
 	dkprintf("page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx)\n", vm, range->start, range->end, range->flag, fault_addr, reason);
+#endif
+#line 2960
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+    /* Both Rust outcomes retain this same lock for the unchanged out: path.
+     * CONTINUE0 supplies original locals; GOTO_OUT1 also supplies error. */
+    if (process_page_fault_prepare_body_result(vm, range, fault_addr, reason,
+            &ptep, &pgaddr, &pgsize, &p2align, &error))
+        goto out;
+#else
 	ihk_mc_spinlock_lock_noirq(&vm->page_table_lock);
 	/*****/
 	ptep = ihk_mc_pt_lookup_pte(vm->address_space->page_table,
@@ -2885,9 +3074,34 @@ int page_fault_process_memory_range(struct process_vm *vm,
 	arch_adjust_allocate_page_size(vm->address_space->page_table,
 				       fault_addr, ptep, &pgaddr, &pgsize);
 
+#endif
+
 	/*****/
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+    process_page_fault_pte_state_log_bridge(ptep, pgsize);
+#else
+#line 3006
 	dkprintf("%s: ptep=%lx,pte_is_null=%d,pte_is_fileoff=%d\n", __FUNCTION__, ptep, ptep ? pte_is_null(ptep) : -1, ptep ? pte_is_fileoff(ptep, pgsize) : -1);
+#endif
+#line 3007
 	if (!ptep || pte_is_null(ptep) || pte_is_fileoff(ptep, pgsize)) {
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+        /* Rust returns the existing signed-error predicate, not a new release
+         * policy. Preserve the owning zeroobj error branch here verbatim. */
+        if (process_page_fault_memobj_get_body_result(range, pgaddr,
+                fault_addr, ptep, pgsize, p2align, &phys, &memobj_flag, &error)) {
+				struct memobj *obj;
+
+				if (zeroobj_create(&obj)) {
+					panic("PFPMR: zeroobj_crate");
+				}
+
+				if (range->memobj != obj) {
+					goto out;
+				}
+			
+        }
+#else
 		phys = NOPHYS;
 		if (range->memobj) {
 			off_t off;
@@ -2913,8 +3127,16 @@ int page_fault_process_memory_range(struct process_vm *vm,
 			}
 			// memory_stat_rss_add() is called downstream, i.e. memobj_get_page() to check page->count
 		}
+#endif
 		if (phys == NOPHYS) {
 			void *virt = NULL;
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+            if (process_page_fault_anon_allocate_body_result(vm, range,
+                    fault_addr, reason, &ptep, &pgaddr, &pgsize, &p2align,
+                    &virt, &error))
+                goto out;
+#else
+#line 3053
 			size_t npages;
 
 retry:
@@ -2936,6 +3158,19 @@ retry:
 				kprintf("page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx):cannot allocate new page. %d\n", vm, range->start, range->end, range->flag, fault_addr, reason, error);
 				goto out;
 			}
+#endif
+#line 3074
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+            process_page_fault_anon_clear_body_result(range, pgaddr, pgsize,
+                virt, page, fault_addr, reason, &phys,
+#ifdef PROFILE_ENABLE
+                1, PROFILE_page_fault_anon_clr,
+#else
+                0, 0,
+#endif
+                &process_page_fault_anon_clear_debug,
+                &process_page_fault_anon_map_debug);
+#else
 			dkprintf("%s: clearing 0x%lx:%lu\n",
 					__FUNCTION__, pgaddr, pgsize);
 #ifdef PROFILE_ENABLE
@@ -2950,18 +3185,36 @@ retry:
 				
 				page_map(phys_to_page(phys));
 			}
+#endif
 		}
 	}
+#line 3102
 	else {
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+        phys = process_pte_get_phys_bridge(ptep);
+#else
+#line 3103
 		phys = pte_get_phys(ptep);
+#endif
+#line 3104
 	}
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+    attr = process_page_fault_mapping_state_body_result(range, phys, memobj_flag,
+            reason, ptep, &page);
+#else
+#line 3106
 	page = phys_to_page(phys);
 
 	attr = arch_vrflag_to_ptattr(range->flag | memobj_flag, reason, ptep);
+#endif
+#line 3109
 
 	/* Copy on write */
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+    if (process_page_fault_cow_classify_body_result(range, reason, page)) {
+#else
 	private_range = (range->flag & VR_PRIVATE);
 	patching_to_rdonly =
 		((reason & PF_PATCH) && !(range->flag & VR_PROT_WRITE));
@@ -2978,12 +3231,19 @@ retry:
 
 	if ((private_range || patching_to_rdonly) &&
 	    (devfile_or_hugetlbfs_or_premap || regfile_or_shm)) {
+#endif
 
 		if (!(attr & PTATTR_DIRTY)) {
 			attr &= ~PTATTR_WRITABLE;
 		}
 		else {
 			void *virt;
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+            if (process_page_fault_cow_allocate_body_result(vm, range, page,
+                    pgsize, p2align, fault_addr, reason, &virt, &error))
+                goto out;
+#else
+#line 3138
 			size_t npages;
 
 			if (!page) {
@@ -2997,10 +3257,23 @@ retry:
 				kprintf("page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx):cannot allocate copy page. %d\n", vm, range->start, range->end, range->flag, fault_addr, reason, error);
 				goto out;
 			}
+#endif
+#line 3151
 			dkprintf("%s: cow,copying virt:%lx<-%lx,phys:%lx<-%lx,pgsize=%lu\n",
 					 __FUNCTION__, virt, phys_to_virt(phys), virt_to_phys(virt), phys, pgsize);
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+            process_page_fault_cow_copy_body_result(virt, phys, pgsize);
+#else
+#line 3153
 			memcpy(virt, phys_to_virt(phys), pgsize);
+#endif
+#line 3154
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+            process_page_fault_cow_commit_body_result(range, &phys, pgsize,
+                virt, &page, &process_page_fault_cow_rss_add_debug,
+                &process_page_fault_cow_rss_sub_debug);
+#else
 			/* Count COW-source pointed-to by only fileobj
 			 *  The steps in test/rusage/005:
 			 *  (1) Private-map regular file
@@ -3021,8 +3294,15 @@ retry:
 			}
 			phys = virt_to_phys(virt);
 			page = phys_to_page(phys);
+#endif
 		}
 	}
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+    else {
+        attr = process_page_fault_shared_permission_body_result(range, attr);
+    }
+#else
+#line 3183
 	else if (!(range->flag & VR_PRIVATE)) { /*VR_SHARED*/
 		if (!(attr & PTATTR_DIRTY)) {
 			if (!(range->flag & VR_STACK)) {
@@ -3030,9 +3310,19 @@ retry:
 			}
 		}
 	}
+#endif
+#line 3190
 
 	/*****/
 	if (ptep && !pgsize_is_contiguous(pgsize)) {
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+        if (process_page_fault_set_pte_body_result(vm, range, fault_addr, reason,
+                ptep, pgsize, phys, attr, &error, ihk_mc_pt_set_pte,
+                &process_page_fault_set_pte_rss_add_debug,
+                &process_page_fault_set_pte_rss_skip_debug,
+                &process_page_fault_set_pte_attr_debug))
+            goto out;
+#else
 		if (!(reason & PF_PATCH) &&
 		    rusage_memory_stat_add(range, phys, pgsize, pgsize)) {
 			/* on-demand paging, phys pages are obtained by ihk_mc_alloc_aligned_pages_user() or get_page() */
@@ -3050,9 +3340,21 @@ retry:
 			kprintf("page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx):set_pte failed. %d\n", vm, range->start, range->end, range->flag, fault_addr, reason, error);
 			goto out;
 		}
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+        process_page_fault_page_state_log_bridge(page);
+#else
+#line 3219
 		dkprintf("%s: non-NULL pte,page=%lx,page_is_in_memobj=%d,page->count=%d\n", __FUNCTION__, page, page ? page_is_in_memobj(page) : 0, page ? ihk_atomic_read(&page->count) : 0);
+#endif
+#line 3220
 	}
 	else {
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+        if (process_page_fault_set_range_body_result(vm, range, fault_addr,
+                reason, pgaddr, pgsize, phys, attr, &error, ihk_mc_pt_set_range))
+            goto out;
+#else
 		error = ihk_mc_pt_set_range(vm->address_space->page_table, vm,
 		                            pgaddr, pgaddr + pgsize, phys,
 					    attr, range->pgshift, range, 1);
@@ -3060,14 +3362,24 @@ retry:
 			kprintf("page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx):set_range failed. %d\n", vm, range->start, range->end, range->flag, fault_addr, reason, error);
 			goto out;
 		}
+#endif
 		// memory_stat_rss_add() is called in downstream with !memobj check
 	}
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+    process_page_fault_finish_body_result(fault_addr, &error, &page);
+#else
 	flush_tlb_single(fault_addr);
 
 	error = 0;
 	page = NULL;
+#endif
 
 out:
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+    return process_page_fault_out_body_result(vm, range, fault_addr, reason,
+        &pgsize, page, error, &process_page_fault_out_stray_debug,
+        &process_page_fault_out_rss_sub_debug, &process_page_fault_out_return_debug);
+#else
 	ihk_mc_spinlock_unlock_noirq(&vm->page_table_lock);
 	if (page) {
 		/* Unmap stray struct page */
@@ -3081,6 +3393,7 @@ out:
 	}
 	dkprintf("page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx): %d\n", vm, range->start, range->end, range->flag, fault_addr, reason, error);
 	return error;
+#endif
 }
 
 int process_zeroobj_match_bridge(void *memobj)
@@ -3303,6 +3616,39 @@ int init_process_stack(struct thread *thread, struct program_load_desc *pn,
 }
 
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_extend_region_exists_debug = {
+    .file = __FILE__, .func = "extend_process_region",
+    .line = 3394, .flags = DDEBUG_DEFAULT,
+};
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_extend_region_alloc_debug = {
+    .file = __FILE__, .func = "extend_process_region",
+    .line = 3411, .flags = DDEBUG_DEFAULT,
+};
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_extend_region_success_debug = {
+    .file = __FILE__, .func = "extend_process_region",
+    .line = 3428, .flags = DDEBUG_DEFAULT,
+};
+unsigned long process_extend_region_body_result(
+    struct process_vm *,unsigned long,unsigned long,unsigned long,
+    size_t,int,unsigned long,size_t,unsigned long,unsigned long,unsigned long,
+    int,unsigned long,unsigned long,unsigned long,int,const char *,int,int,
+    struct ddebug *,struct ddebug *,struct ddebug *);
+unsigned long extend_process_region(struct process_vm *vm,
+        unsigned long end_allocated,unsigned long address,unsigned long flag)
+{
+    return process_extend_region_body_result(vm,end_allocated,address,flag,
+        PAGE_SIZE,PAGE_SHIFT,PAGE_MASK,LARGE_PAGE_SIZE,LARGE_PAGE_MASK,
+        LARGE_PAGE_P2ALIGN,PAGE_P2ALIGN,LARGE_PAGE_SHIFT,MPOL_NO_HEAP,
+        IHK_MC_AP_NOWAIT,IHK_MC_AP_USER,IHK_MC_PG_USER,__FILE__,3408,3423,
+        &process_extend_region_exists_debug,&process_extend_region_alloc_debug,
+        &process_extend_region_success_debug);
+}
+#else
+#line 3364
 unsigned long extend_process_region(struct process_vm *vm,
 		unsigned long end_allocated,
 		unsigned long address, unsigned long flag)
@@ -3372,6 +3718,9 @@ unsigned long extend_process_region(struct process_vm *vm,
 
 	return new_end_allocated;
 }
+#endif
+#line 3432
+
 
 // Original version retained because dcfa (src/mccmd/client/ibmic/main.c) calls this
 int process_remove_region_clear_bridge(void *page_table,

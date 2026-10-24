@@ -2482,6 +2482,7 @@ done:
 	return rc;
 }
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 set_signal(int sig, void *regs0, siginfo_t *info)
 {
@@ -2502,6 +2503,7 @@ set_signal(int sig, void *regs0, siginfo_t *info)
 	}
 	do_kill(thread, thread->proc->pid, thread->tid, sig, info, 0);
 }
+#endif /* complete set_signal public entry is selected from Rust */
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 extern long sys_mmap(int n, ihk_mc_user_context_t *ctx);

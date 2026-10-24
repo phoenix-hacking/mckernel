@@ -1,3 +1,15 @@
+## Canonical candidate integration — 2026-10-24
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Root applied the independently reviewed exact14-file qualified source candidate.
+F03 policy plus only F06 compiled caller fragment is preserved; F01 fullPage
+contains F02's exactprovider subset; CPU81 module and F05 logger declarations
+coexist. Both hardlinked Page files were atomically replaced, old inodes were
+not written. Individual component proofs do not qualify this union. Next: actual
+coherent81Rust/sixwholeC/ABI/allocated/partial check, then GCC14/default/native.
+M12 remains35/35; M14/M15 OPEN; no native/wholefile retirement credited.
+Record: docs/verification/evidence/m14-qualified-source-integration-20261024-1/ROOT-ACTUAL-INTEGRATION.json.
+
 ## Qualified source-cohort checkpoint — 2026-10-24T15:00:50Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

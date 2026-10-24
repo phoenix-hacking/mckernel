@@ -127,6 +127,7 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/waitq.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_coredump.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_cpu_helpers.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_cpu_log_providers.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_local.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_memory_helpers.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_memory_logger_bridges.rs"

@@ -225,7 +225,6 @@ unsafe extern "C" {
     fn ihk_mc_get_processor_id() -> CInt;
     fn do_syscall(request: *mut SyscallRequest, cpu: CInt) -> CLong;
     fn kprintf(format: *const i8, ...) -> CInt;
-    fn check_sig_pending();
     fn schedule();
     fn cpu_pause();
     fn cpu_disable_interrupt_save() -> CULong;
@@ -334,20 +333,7 @@ unsafe extern "C" {
         arg2: CULong,
     ) -> CLong;
     fn syscall_policy_forward_context_bridge(syscall_nr: CInt, ctx: *mut c_void) -> CLong;
-    fn syscall_settimeofday_lock_bridge(lock: *mut c_void);
-    fn syscall_settimeofday_unlock_bridge(lock: *mut c_void);
-    fn syscall_atomic64_read_bridge(value: *mut c_void) -> CLong;
-    fn syscall_atomic64_inc_bridge(value: *mut c_void);
-    fn syscall_wmb_bridge();
     fn syscall_settimeofday_panic_bridge();
-    fn syscall_settimeofday_log_bridge(
-        event: CInt,
-        utv: CULong,
-        utz: CULong,
-        sec: CLong,
-        nsec: CLong,
-        error: CLong,
-    );
     fn do_pageout(filename: *const c_void, workarea: *mut c_void, size: SizeT, flag: CInt) -> CInt;
     fn do_pagein(flag: CInt) -> CInt;
     fn syscall_swapout_log_bridge(fname: *const c_void, buf: *mut c_void, size: SizeT, flag: CInt);
@@ -389,13 +375,9 @@ unsafe extern "C" {
     fn syscall_timespec_to_jiffy_bridge(ts: *const TimeSpec) -> CULong;
     fn syscall_ts_add_bridge(dst: *mut TimeSpec, src: *const TimeSpec);
     fn syscall_gettime_bridge(ts: *mut TimeSpec);
-    fn syscall_rdtsc_bridge() -> CULong;
-    fn syscall_ns_per_tsc_bridge() -> CULong;
-    fn syscall_has_sigpending_bridge(thread: *mut c_void) -> CInt;
     fn syscall_threads_reader_lock_bridge(proc: *mut c_void, lock_arg: *mut c_void);
     fn syscall_threads_reader_unlock_bridge(proc: *mut c_void, lock_arg: *mut c_void);
     fn syscall_interrupt_cpu_bridge(cpu_id: CInt);
-    fn syscall_cpu_pause_bridge();
     fn syscall_set_timer_bridge(runq_locked: CInt);
     fn syscall_find_process_bridge(pid: CInt, lock_arg: *mut c_void) -> *mut c_void;
     fn syscall_process_unlock_bridge(proc: *mut c_void, lock_arg: *mut c_void);
@@ -407,142 +389,12 @@ unsafe extern "C" {
     ) -> CLong;
     fn syscall_get_processor_id_bridge() -> CInt;
     fn syscall_get_numa_id_bridge() -> CInt;
-    fn syscall_mlockall_log_bridge(flags: CInt, error: CInt);
-    fn syscall_munlockall_log_bridge(value: CInt, error: CInt);
     fn syscall_linux_mlock_log_bridge(addr: CULong, len: SizeT);
-    fn memlock_write_lock_bridge(lock: *mut c_void);
-    fn memlock_write_unlock_bridge(lock: *mut c_void);
-    fn memlock_lookup_range_bridge(vm: *mut c_void, start: CULong, end: CULong) -> *mut c_void;
-    fn memlock_next_range_bridge(vm: *mut c_void, range: *mut c_void) -> *mut c_void;
-    fn memlock_split_range_bridge(
-        vm: *mut c_void,
-        range: *mut c_void,
-        addr: CULong,
-        new_range: *mut *mut c_void,
-    ) -> CInt;
-    fn memlock_join_range_bridge(vm: *mut c_void, left: *mut c_void, right: *mut c_void) -> CInt;
-    fn memlock_populate_bridge(vm: *mut c_void, start: CULong, len: SizeT) -> CInt;
-    fn memlock_log_bridge(record: *const MemlockLogRecord);
-    fn mprotect_flush_nfo_bridge();
-    fn remap_file_pages_callable_bridge(memobj: *mut c_void) -> CInt;
-    fn remap_file_pages_remap_bridge(
-        vm: *mut c_void,
-        range: *mut c_void,
-        start: CULong,
-        end: CULong,
-        off: CLong,
-    ) -> CInt;
-    fn remap_file_pages_clear_host_bridge(start: CULong, size: SizeT, holding_lock: CInt);
-    fn remap_file_pages_log_bridge(record: *const RemapFilePagesLogRecord);
-    fn mremap_extend_bridge(vm: *mut c_void, range: *mut c_void, newend: CULong) -> CInt;
-    fn mremap_search_bridge(size: SizeT, pgshift: CULong, newstartp: *mut CULong) -> CInt;
-    fn mremap_memobj_ref_bridge(memobj: *mut c_void);
-    fn mremap_memobj_unref_bridge(memobj: *mut c_void);
-    fn mremap_add_range_bridge(
-        vm: *mut c_void,
-        start: CULong,
-        end: CULong,
-        pgshift: CLong,
-        flags: CULong,
-        memobj: *mut c_void,
-        objoff: CULong,
-    ) -> CInt;
-    fn mremap_pte_lock_bridge(lock: *mut c_void);
-    fn mremap_pte_unlock_bridge(lock: *mut c_void);
-    fn mremap_move_pte_bridge(
-        page_table: *mut c_void,
-        vm: *mut c_void,
-        oldstart: *mut c_void,
-        newstart: *mut c_void,
-        size: SizeT,
-        range: *mut c_void,
-    ) -> CInt;
-    fn mremap_log_bridge(record: *const MremapLogRecord);
-    fn msync_read_lock_bridge(lock: *mut c_void);
-    fn msync_read_unlock_bridge(lock: *mut c_void);
-    fn msync_lookup_range_bridge(vm: *mut c_void, start: CULong, end: CULong) -> *mut c_void;
-    fn msync_next_range_bridge(vm: *mut c_void, range: *mut c_void) -> *mut c_void;
-    fn msync_has_pager_bridge(memobj: *mut c_void) -> CInt;
-    fn msync_sync_range_bridge(
-        vm: *mut c_void,
-        range: *mut c_void,
-        start: CULong,
-        end: CULong,
-    ) -> CInt;
-    fn msync_invalidate_range_bridge(
-        vm: *mut c_void,
-        range: *mut c_void,
-        start: CULong,
-        end: CULong,
-    ) -> CInt;
-    fn msync_log_bridge(event: CInt, start: CULong, len: SizeT, flags: CInt, error: CInt);
-    fn syscall_mbind_entry_log_bridge(
-        addr: CULong,
-        len: CULong,
-        mode: CInt,
-        nodemask_addr: CULong,
-        flags: CULong,
-    );
-    fn syscall_mbind_write_lock_bridge(lock: *mut c_void);
-    fn syscall_mbind_write_unlock_bridge(lock: *mut c_void);
-    fn syscall_mbind_lookup_range_bridge(
-        vm: *mut ProcessVm,
-        start: CULong,
-        end: CULong,
-    ) -> *mut VmRange;
-    fn syscall_mbind_policy_search_bridge(
-        vm: *mut ProcessVm,
-        addr: CULong,
-    ) -> *mut VmRangeNumaPolicy;
-    fn syscall_mbind_clear_range_bridge(vm: *mut ProcessVm, start: CULong, end: CULong) -> CInt;
-    fn syscall_mbind_policy_alloc_bridge(size: SizeT, flags: CULong) -> *mut c_void;
-    fn syscall_mbind_policy_rb_clear_bridge(range_policy: *mut VmRangeNumaPolicy);
-    fn syscall_mbind_policy_insert_bridge(
-        vm: *mut ProcessVm,
-        range_policy: *mut VmRangeNumaPolicy,
-    ) -> CInt;
-    fn syscall_mbind_log_bridge(event: CInt, arg0: CULong, arg1: CULong, arg2: CInt);
-    fn syscall_set_mempolicy_log_bridge(event: CInt, value: CInt, pid: CInt);
-    fn syscall_get_mempolicy_read_lock_bridge(lock: *mut c_void);
-    fn syscall_get_mempolicy_read_unlock_bridge(lock: *mut c_void);
-    fn syscall_get_mempolicy_lookup_range_bridge(
-        vm: *mut ProcessVm,
-        start: CULong,
-        end: CULong,
-    ) -> *mut VmRange;
-    fn syscall_get_mempolicy_policy_search_bridge(
-        vm: *mut ProcessVm,
-        addr: CULong,
-    ) -> *mut VmRangeNumaPolicy;
-    fn syscall_get_mempolicy_lookup_node_bridge(vm: *mut ProcessVm, addr: *mut c_void) -> CInt;
-    fn syscall_get_mempolicy_log_bridge(event: CInt, addr: CULong, value: CInt);
-    fn syscall_madvise_log_bridge(cpu: CInt, start: CULong, len: SizeT, advice: CInt);
-    fn syscall_migrate_pages_log_bridge();
     fn syscall_util_register_desc_log_bridge(tid: CInt, desc: CULong);
     fn exit_do_exit_bridge(code: CInt);
     fn exit_group_current_pid_bridge() -> CInt;
     fn exit_group_log_bridge(pid: CInt);
     fn exit_group_terminate_bridge(status: CInt, group: CInt);
-    fn munmap_write_lock_bridge(lock: *mut c_void);
-    fn munmap_write_unlock_bridge(lock: *mut c_void);
-    fn munmap_do_bridge(addr: *mut c_void, len: SizeT, holding_lock: CInt) -> CInt;
-    fn munmap_log_bridge(event: CInt, cpu: CInt, addr: CULong, len: SizeT, error: CInt);
-    fn brk_flush_bridge();
-    fn brk_write_lock_bridge(lock: *mut c_void);
-    fn brk_write_unlock_bridge(lock: *mut c_void);
-    fn brk_extend_bridge(
-        vm: *mut c_void,
-        old_end: CULong,
-        address: CULong,
-        vrflag: CULong,
-    ) -> CULong;
-    fn brk_log_bridge(event: CInt, cpu: CInt, brk_start: CULong, brk_end: CULong, value: CULong);
-    fn wait4_do_wait_bridge(
-        pid: CInt,
-        status: *mut CInt,
-        options: CInt,
-        usage: *mut RUsage,
-    ) -> CInt;
     fn sched_find_thread_bridge(pid: CInt) -> usize;
     fn sched_thread_unlock_bridge(thread_addr: usize);
     fn sched_apply_scheduler_bridge(thread_addr: usize, policy: CInt, param_addr: usize) -> CInt;
@@ -550,9 +402,6 @@ unsafe extern "C" {
     fn sched_release_thread_bridge(thread_addr: usize);
     fn sched_request_migrate_bridge(cpu_id: CInt, thread_addr: usize);
     fn sched_setparam_log_bridge(pid: CInt, uparam_addr: CULong);
-    fn sched_yield_lock_bridge(lock: *mut c_void) -> CLong;
-    fn sched_yield_unlock_bridge(lock: *mut c_void, irqstate: CLong);
-    fn sched_yield_schedule_bridge();
     fn do_process_vm_read_writev(
         pid: CInt,
         local_iov: *const c_void,
@@ -23949,4 +23798,6043 @@ pub unsafe extern "C" fn ptrace_report_signal(thread: *mut Thread, sig: CInt) {
             Some(f06_ptrace_report_signal_log),
         );
     }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+/// # Safety
+/// vm and its memory_range_lock/range tree retain the original current-thread
+/// ownership contract. The range pointer is used only under the same reader lock;
+/// no reference or range ownership escapes. filename is converted to address only.
+#[no_mangle]
+pub unsafe extern "C" fn f03_execveat_filename_admission_v1(
+    vm: *mut ProcessVm, filename: *const c_void,
+) -> CInt {
+    let lock = addr_of_mut!((*vm).memory_range_lock)
+        .cast::<crate::lock_helpers::IhkRwSpinlock>();
+    crate::lock_helpers::ihk_rwspinlock_read_lock_noirq(lock);
+    let start = filename as CULong;
+    let range = crate::process_helpers::lookup_process_memory_range(
+        vm, start, start.wrapping_add(1),
+    );
+    if range.is_null() || ((*range).flag & 0x0001_0000) == 0 {
+        crate::lock_helpers::ihk_rwspinlock_read_unlock_noirq(lock);
+        kprintf(c"execve(): ERROR: filename is bad address\n".as_ptr().cast());
+        return -EFAULT;
+    }
+    crate::lock_helpers::ihk_rwspinlock_read_unlock_noirq(lock);
+    0
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+/// # Safety
+/// file is the original static C source string; source_line identifies the bound
+/// allocation origin. error points to the live C local, written only on failure.
+/// Genuine tracked allocator owns initialization; on success the caller receives
+/// exactly four owned kernel pages, all zeroed before return. No context/request
+/// fields are touched and no ownership escapes on allocation failure.
+#[no_mangle]
+pub unsafe extern "C" fn f03_execveat_allocate_descriptor_v1(
+    file: *const i8, source_line: CInt, error: *mut CInt,
+) -> *mut c_void {
+    let descriptor = crate::mem_helpers::_ihk_mc_alloc_aligned_pages_node(
+        4, 0, 0x000002, -1, 0, CULong::MAX, file.cast_mut(), source_line,
+    );
+    if descriptor.is_null() {
+        kprintf(c"execve(): ERROR: allocating program descriptor\n".as_ptr().cast());
+        core::ptr::write(error, -ENOMEM);
+        return descriptor;
+    }
+    crate::string::memset(descriptor, 0, 4 * 4096);
+    descriptor
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Defined do_execveat end-label ownership slice; not the full exec lifecycle.
+/// # Safety
+/// Non-null envp_flat/argv_flat are the distinct owned kmalloc allocations from
+/// the original flatten calls; descriptor owns exactly four kernel pages. Each
+/// handle is consumed exactly once in the original envp/argv/descriptor order.
+/// `file` is the original static NUL-terminated C source string, and the three
+/// source-line values identify the byte-bound C preimage tracking sites. No
+/// handle may be accessed after return; original C locals remain unused/dangling.
+#[no_mangle]
+pub unsafe extern "C" fn f03_execveat_release_temporaries_v1(
+    envp_flat: *mut c_void,
+    argv_flat: *mut c_void,
+    descriptor: *mut c_void,
+    file: *const i8,
+    envp_line: CInt,
+    argv_line: CInt,
+    descriptor_line: CInt,
+) {
+    if !envp_flat.is_null() {
+        crate::mem_helpers::kfree_tracked(envp_flat, file.cast_mut(), envp_line);
+    }
+    if !argv_flat.is_null() {
+        crate::mem_helpers::kfree_tracked(argv_flat, file.cast_mut(), argv_line);
+    }
+    crate::mem_helpers::_ihk_mc_free_pages(descriptor, 4, 0, file.cast_mut(), descriptor_line);
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Private syscall_policy fragment only; lifetime ownership is unchanged.
+/// # Safety
+/// Original clone error label owns the mod argument and retains new/thread/VM.
+/// Free consumes the existing allocation once; VM decrement is only the original
+/// atomic counter operation, not destruction, final-retirement proof or ACK.
+#[no_mangle]
+pub unsafe extern "C" fn f03_clone_release_mod_argument_v1(
+    new:*mut Thread,file:*const i8,origin_line:CInt,
+) {
+    crate::mem_helpers::kfree_tracked((*new).mod_clone_arg,file.cast_mut(),origin_line);
+    (*new).mod_clone_arg=null_mut();
+    crate::atomic_helpers::ihk_atomic_dec(addr_of_mut!((*(*new).vm).refcount).cast());
+}
+/// # Safety
+/// The original CLONE_VM release_ids edge retains proc and its table owner.
+/// Only an entry-created table with no published TIDs is reclaimed; an existing
+/// or populated table remains owned by Process exactly as before.
+#[no_mangle]
+pub unsafe extern "C" fn f03_clone_release_empty_tid_table_v1(
+    proc:*mut Process,table_created:CInt,file:*const i8,origin_line:CInt,
+) {
+    if table_created!=0 && (*proc).nr_tids==0 {
+        crate::mem_helpers::kfree_tracked((*proc).tids,file.cast_mut(),origin_line);
+        (*proc).tids=null_mut();
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+/// Initialize the original held child's TLS, parent CPU and execution fields.
+///
+/// # Safety
+/// `new` and its prepared user context remain live and exclusively held before
+/// chain_thread. `old` is live when TLS is inherited. The debug descriptor is a
+/// live C static. Neither parent/child reference nor runnable ownership transfers.
+#[no_mangle]
+pub unsafe extern "C" fn f03_clone_initialize_execution_state_v1(
+    old: *mut Thread,
+    new: *mut Thread,
+    flags: CInt,
+    tls: CULong,
+    parent_cpuid: CInt,
+    debug: *mut crate::debug::Ddebug,
+) {
+    if clone_tls_source_result(flags) == CLONE_TLS_SOURCE_ARGUMENT {
+        // SAFETY: The caller supplies the original live, aligned C debug record.
+        let enabled = unsafe { read_volatile(addr_of!((*debug).line_flags)) >> 24 != 0 };
+        if enabled {
+            // SAFETY: The literal and unsigned-long argument match the C varargs ABI.
+            unsafe {
+                kprintf(c"clone_flags & CLONE_SETTLS: 0x%lX\n".as_ptr().cast(), tls);
+            }
+        }
+        // SAFETY: The held child owns this scalar field; no reference is formed.
+        unsafe { addr_of_mut!((*new).tlsblock_base).write(tls) };
+    } else {
+        // SAFETY: The parent field is live; the held child destination is distinct.
+        let inherited_tls = unsafe { addr_of!((*old).tlsblock_base).read() };
+        unsafe { addr_of_mut!((*new).tlsblock_base).write(inherited_tls) };
+    }
+
+    // SAFETY: These are the original held child's fields. Context storage was
+    // prepared before this call; the genuine setter keeps its original ABI.
+    unsafe {
+        addr_of_mut!((*new).parent_cpuid).write(parent_cpuid);
+        let context = addr_of!((*new).uctx).read();
+        crate::x86_cpu_helpers::ihk_mc_syscall_set_ret(context, 0);
+        addr_of_mut!((*new).status).write(PS_RUNNING);
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+const F03_SPAWNING_TO_REMOTE: CInt = 1001;
+
+/// Claim the original remote-spawn mode and prepare its optional owned argument.
+///
+/// # Safety
+/// Parent mode is synchronized by the genuine compare-exchange. Parent argument
+/// storage remains live through allocation/copy. The held child is distinct and
+/// its fresh allocation cannot overlap the parent's UtiAttr representation.
+/// `error` is the live C local and `file` is its static source string. Return1
+/// preserves release_ids; no mode rollback or runnable ownership is invented.
+#[no_mangle]
+pub unsafe extern "C" fn f03_clone_prepare_remote_argument_v1(
+    old: *mut Thread,
+    new: *mut Thread,
+    error: *mut CInt,
+    file: *const i8,
+    origin_line: CInt,
+) -> CInt {
+    // SAFETY: This is the same aligned, live mode word and SeqCst provider used by C.
+    let previous = unsafe {
+        crate::atomic_helpers::atomic_cmpxchg_int(
+            addr_of_mut!((*old).mod_clone),
+            SPAWN_TO_REMOTE,
+            SPAWN_TO_LOCAL,
+        )
+    };
+    if clone_remote_spawn_result(previous) == 0 {
+        return 0;
+    }
+
+    // SAFETY: The held child owns this scalar; parent argument ownership stays live.
+    unsafe { addr_of_mut!((*new).mod_clone).write(F03_SPAWNING_TO_REMOTE) };
+    let has_argument = unsafe { !addr_of!((*old).mod_clone_arg).read().is_null() };
+    if !has_argument {
+        return 0;
+    }
+
+    // SAFETY: The original tracked allocator receives the exact UtiAttr extent,
+    // NOWAIT flag and caller-origin data. The result is not exposed as runnable.
+    let allocated = unsafe {
+        crate::mem_helpers::kmalloc_tracked(
+            size_of::<UtiAttr>() as CInt,
+            2,
+            file.cast_mut(),
+            origin_line,
+        )
+    };
+    unsafe { addr_of_mut!((*new).mod_clone_arg).write(allocated) };
+    if allocated.is_null() {
+        // SAFETY: Literal format/name and signed-int result match the original ABI.
+        unsafe {
+            kprintf(
+                c"%s: error: allocating mod_clone_arg\n".as_ptr().cast(),
+                c"do_fork".as_ptr(),
+            );
+            error.write(-ENOMEM);
+        }
+        return 1;
+    }
+
+    // SAFETY: Re-read the original source field AFTER allocation, as C does.
+    // Copy object representation through MaybeUninit bytes: this neither invents
+    // initialization nor reads arbitrary attribute/padding bytes as typed values.
+    // The two owned extents are valid, disjoint and each spans sizeof(UtiAttr).
+    unsafe {
+        let source = addr_of!((*old).mod_clone_arg).read();
+        let destination = addr_of!((*new).mod_clone_arg).read();
+        core::ptr::copy_nonoverlapping(
+            source.cast::<MaybeUninit<u8>>(),
+            destination.cast::<MaybeUninit<u8>>(),
+            size_of::<UtiAttr>(),
+        );
+    }
+    0
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+/// Publish the prepared clone thread, then its distinct process when required.
+///
+/// # Safety
+/// `new` is the original live, fully prepared child accepted by chain_thread.
+/// In the non-CLONE_VM branch, `oldproc` and `newproc` are live and distinct;
+/// the caller still owns the original process-construction writes. Parent links
+/// and the current CPU resource set obey the existing do_fork lifetime contract.
+/// No runnable enqueue or host ACK occurs here. Publication is irreversible
+/// here, exactly as in C; the void chaining providers retain their own behavior.
+#[no_mangle]
+pub unsafe extern "C" fn f03_clone_publish_thread_process_v1(
+    new: *mut Thread,
+    oldproc: *mut Process,
+    newproc: *mut Process,
+    flags: CInt,
+) {
+    // SAFETY: The original constructor retained the child through this point;
+    // use the genuine void provider, including its ignored checked-result path.
+    unsafe { crate::process_helpers::chain_thread(new) };
+    if flags & CLONE_VM != 0 {
+        return;
+    }
+
+    // SAFETY: The constructor owns the process status write at this exact point.
+    unsafe { addr_of_mut!((*newproc).status).write(PS_RUNNING) };
+    if flags & CLONE_PARENT == 0 {
+        // SAFETY: The existing new-process parent link remains live and valid.
+        unsafe { crate::process_helpers::chain_process(newproc) };
+        return;
+    }
+
+    let mut old_node = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+    let mut parent_node = MaybeUninit::<McsRwlockNode>::uninit();
+    // SAFETY: update_lock has the genuine ABI lock layout. Its IRQ-saving
+    // provider initializes old_node before the corresponding unlock reads it.
+    // No reference to either full Process is created across lock acquisition.
+    unsafe {
+        crate::lock_helpers::__mcs_rwlock_reader_lock(
+            addr_of_mut!((*oldproc).update_lock).cast(),
+            old_node.as_mut_ptr(),
+        );
+    }
+
+    // SAFETY: The old process update lock stabilizes its original parent edge;
+    // that edge retains a live parent until its own update lock is acquired.
+    let mut parent = unsafe { addr_of!((*oldproc).ppid_parent).read() };
+    unsafe {
+        crate::lock_helpers::__mcs_rwlock_reader_lock_noirq(
+            addr_of_mut!((*parent).update_lock).cast(),
+            parent_node.as_mut_ptr().cast(),
+        );
+    }
+    // SAFETY: The parent status is inspected under the same lock as in C.
+    let parent_status = unsafe { addr_of!((*parent).status).read() };
+    if clone_parent_use_pid1_result(parent_status) != 0 {
+        // SAFETY: Release the old parent before switching. The old process
+        // IRQ-saving lock stays held; noirq providers never read parent_node.
+        unsafe {
+            crate::lock_helpers::__mcs_rwlock_reader_unlock_noirq(
+                addr_of_mut!((*parent).update_lock).cast(),
+                parent_node.as_mut_ptr().cast(),
+            );
+            let local = get_this_cpu_local_var();
+            let resources = addr_of!((*local).resource_set).read();
+            parent = addr_of!((*resources).pid1).read();
+            crate::lock_helpers::__mcs_rwlock_reader_lock_noirq(
+                addr_of_mut!((*parent).update_lock).cast(),
+                parent_node.as_mut_ptr().cast(),
+            );
+        }
+    }
+
+    // SAFETY: The selected parent is locked and live. These are the original
+    // constructor-owned links, committed before the genuine list/hash publisher.
+    unsafe {
+        addr_of_mut!((*newproc).parent).write(parent);
+        addr_of_mut!((*newproc).ppid_parent).write(parent);
+        addr_of_mut!((*newproc).nowait).write(1);
+        crate::process_helpers::chain_process(newproc);
+        crate::lock_helpers::__mcs_rwlock_reader_unlock_noirq(
+            addr_of_mut!((*parent).update_lock).cast(),
+            parent_node.as_mut_ptr().cast(),
+        );
+        crate::lock_helpers::__mcs_rwlock_reader_unlock(
+            addr_of_mut!((*oldproc).update_lock).cast(),
+            old_node.as_mut_ptr(),
+        );
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+/// Select the first deliverable pending signal, optionally detaching its node.
+///
+/// # Safety
+/// `thread`, its SigCommon and both circular lists remain live. Each pending node
+/// belongs to the locked list, with a nonzero mask selecting a valid action slot,
+/// matching the original C indexing domain. Queue mutation follows the same lock
+/// protocol; a returned node's lifetime follows the existing caller contract.
+/// Deleting transfers list membership only, with no free or signal delivery here.
+#[no_mangle]
+pub unsafe extern "C" fn getsigpending(
+    thread: *mut Thread,
+    delflag: CInt,
+) -> *mut crate::abi::SigPending {
+    // SAFETY: These live scalar/pointer fields are read before queue locking in C.
+    let blocked = unsafe { addr_of!((*thread).sigmask.val[0]).read() };
+    let common = unsafe { addr_of!((*thread).sigcommon).read().cast::<SigCommon>() };
+    let mut lock = unsafe { addr_of_mut!((*common).lock) };
+    let mut head = unsafe { addr_of_mut!((*common).sigpending) };
+    let private_lock = unsafe { addr_of_mut!((*thread).sigpendinglock) };
+    let mut node = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+
+    loop {
+        // SAFETY: The actual lock initializes node's IRQ-save slot before unlock.
+        unsafe { f03_pending_queue_lock(lock, node.as_mut_ptr(), delflag) };
+        // SAFETY: The queue is circular and locked. Stay in list-node pointers
+        // until a real non-sentinel element is known; never borrow the full graph.
+        let mut entry = unsafe { addr_of!((*head).next).read() };
+        while entry != head {
+            let pending = entry.cast::<u8>().wrapping_sub(
+                offset_of!(crate::abi::SigPending, list),
+            ).cast::<crate::abi::SigPending>();
+            // SAFETY: pending is the live container of this genuine list node.
+            // Preserve next-before-predicate ordering from the C safe iterator.
+            let next = unsafe { addr_of!((*entry).next).read() };
+            let mask = unsafe { addr_of!((*pending).sigmask.val[0]).read() };
+            let sig = sigmask_to_signal_number(mask);
+            // SAFETY: The original legal-mask domain guarantees sig in 1..=64.
+            // Raw indexing preserves that domain without new bounds checks/panic.
+            let action = unsafe {
+                addr_of!((*common).action).cast::<KSigAction>().add((sig - 1) as usize)
+            };
+            let handler = unsafe { addr_of!((*action).sa.sa_handler).read() as CULong };
+            if signal_pending_deliverable_result(delflag, sig, handler, mask, blocked) != 0 {
+                // SAFETY: Removing membership is permitted only under the writer
+                // lock. The genuine detach provider keeps its poison semantics.
+                unsafe {
+                    if delflag != 0 {
+                        crate::process_helpers::process_list_detach_result(entry);
+                    }
+                    f03_pending_queue_unlock(lock, node.as_mut_ptr(), delflag);
+                }
+                return pending;
+            }
+            entry = next;
+        }
+        // SAFETY: Match the lock mode and IRQ-save node on every exhausted queue.
+        unsafe { f03_pending_queue_unlock(lock, node.as_mut_ptr(), delflag) };
+        if lock == private_lock {
+            return null_mut();
+        }
+        lock = private_lock;
+        head = unsafe { addr_of_mut!((*thread).sigpending) };
+    }
+}
+
+// SAFETY (callers): lock/node are the live genuine layouts. The matching unlock
+// consumes only the IRQ slot initialized by the selected lock provider.
+unsafe fn f03_pending_queue_lock(
+    lock: *mut crate::abi::McsRwlockLock,
+    node: *mut McsRwlockNodeIrqsave,
+    delflag: CInt,
+) {
+    unsafe {
+        if delflag != 0 {
+            crate::lock_helpers::__mcs_rwlock_writer_lock(lock.cast(), node);
+        } else {
+            crate::lock_helpers::__mcs_rwlock_reader_lock(lock.cast(), node);
+        }
+    }
+}
+
+unsafe fn f03_pending_queue_unlock(
+    lock: *mut crate::abi::McsRwlockLock,
+    node: *mut McsRwlockNodeIrqsave,
+    delflag: CInt,
+) {
+    // SAFETY: The only callers hold this lock using this exact initialized node.
+    unsafe {
+        if delflag != 0 {
+            crate::lock_helpers::__mcs_rwlock_writer_unlock(lock.cast(), node);
+        } else {
+            crate::lock_helpers::__mcs_rwlock_reader_unlock(lock.cast(), node);
+        }
+    }
+}
+
+/// Probe both pending lists before the existing nondeleting selection transaction.
+///
+/// # Safety
+/// The original caller retains thread/common/list storage. This preliminary
+/// lockless empty probe keeps its existing synchronization and lifetime contract;
+/// it does not retain a selected node or make a delivery guarantee.
+#[no_mangle]
+pub unsafe extern "C" fn hassigpending(thread: *mut Thread) -> *mut crate::abi::SigPending {
+    // SAFETY: AbiListHead and ListHead share the bound C next/prev layout. Reuse
+    // the genuine volatile empty helper and its original short-circuit ordering.
+    let private_empty = unsafe {
+        crate::list_helpers::list_empty(addr_of!((*thread).sigpending).cast()) != 0
+    };
+    if private_empty {
+        let common = unsafe { addr_of!((*thread).sigcommon).read().cast::<SigCommon>() };
+        let common_empty = unsafe {
+            crate::list_helpers::list_empty(addr_of!((*common).sigpending).cast()) != 0
+        };
+        if common_empty {
+            return null_mut();
+        }
+    }
+    // SAFETY: The same live queue contract is passed to the nondeleting selector.
+    unsafe { getsigpending(thread, 0) }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+// Existing C endpoints stay explicit debt: no request context is manufactured.
+extern "C" {
+    #[link_name = "terminate_mcexec"]
+    fn f03_pending_terminate_mcexec(rc: CInt, sig: CInt);
+    #[link_name = "interrupt_syscall"]
+    fn f03_pending_interrupt_syscall(thread: *mut Thread, sig: CInt);
+}
+
+/// Scan common/private queues for an offloaded syscall interruption action.
+///
+/// # Safety
+/// The original per-CPU entry context owns the live current-thread access. Thread,
+/// process, common state and legal nonzero-mask list nodes retain their original
+/// lifetimes and synchronization. C's interrupted write under a reader lock is
+/// preserved; this establishes no additional concurrency guarantee. Existing C
+/// termination/interrupt endpoints retain their contracts and forwarding HOLD.
+#[no_mangle]
+pub unsafe extern "C" fn check_sig_pending() {
+    // SAFETY: Inspect the genuine global before the original CPU-local lookup.
+    if unsafe { addr_of!(crate::cls::clv).read().is_null() } {
+        return;
+    }
+    let local = unsafe { get_this_cpu_local_var() };
+    let thread = unsafe { addr_of!((*local).current).read() };
+    if thread.is_null() {
+        return;
+    }
+    // SAFETY: Preserve the second getter only for a non-null current thread.
+    let idle_local = unsafe { get_this_cpu_local_var() };
+    if thread == unsafe { addr_of_mut!((*idle_local).idle) } {
+        return;
+    }
+    if unsafe { addr_of!((*thread).in_syscall_offload).read() } == 0 {
+        return;
+    }
+    let proc = unsafe { addr_of!((*thread).proc).read() };
+    if unsafe { addr_of!((*proc).group_exit_status).read() } & 0x0000_0001_0000_0000 != 0 {
+        return;
+    }
+
+    // SAFETY: Original live fields are sampled before taking the queue lock.
+    let blocked = unsafe { addr_of!((*thread).sigmask.val[0]).read() };
+    let common = unsafe { addr_of!((*thread).sigcommon).read().cast::<SigCommon>() };
+    let mut lock = unsafe { addr_of_mut!((*common).lock) };
+    let mut head = unsafe { addr_of_mut!((*common).sigpending) };
+    let private_lock = unsafe { addr_of_mut!((*thread).sigpendinglock) };
+    let mut node = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+    let mut found = 0;
+    let mut sig = 0;
+    loop {
+        // SAFETY: The preceding queue-selector helpers use the genuine reader
+        // lock and initialize the IRQ slot consumed by the matching unlock.
+        unsafe { f03_pending_queue_lock(lock, node.as_mut_ptr(), 0) };
+        let mut entry = unsafe { addr_of!((*head).next).read() };
+        while entry != head {
+            let pending = entry.cast::<u8>().wrapping_sub(
+                offset_of!(crate::abi::SigPending, list),
+            ).cast::<crate::abi::SigPending>();
+            // SAFETY: Legal locked nodes retain the C indexing domain. Read
+            // next before the predicate exactly as the original safe iterator.
+            let next = unsafe { addr_of!((*entry).next).read() };
+            let mask = unsafe { addr_of!((*pending).sigmask.val[0]).read() };
+            sig = sigmask_to_signal_number(mask);
+            let action = unsafe {
+                addr_of!((*common).action).cast::<KSigAction>().add((sig - 1) as usize)
+            };
+            let handler = unsafe { addr_of!((*action).sa.sa_handler).read() as CULong };
+            let interrupted = unsafe { addr_of!((*pending).interrupted).read() };
+            // C overwrites found on every visited node; do not make it sticky.
+            found = signal_pending_interrupt_action_result(
+                sig, handler, mask, blocked, interrupted,
+            );
+            if found != 0 {
+                // SAFETY: Preserve C's raw reader-locked write without creating
+                // a broader Rust reference or claiming extra synchronization.
+                unsafe { addr_of_mut!((*pending).interrupted).write(1) };
+                if found == 2 {
+                    break;
+                }
+            }
+            entry = next;
+        }
+        // SAFETY: Release this reader lock before queue switches or effects.
+        unsafe { f03_pending_queue_unlock(lock, node.as_mut_ptr(), 0) };
+        if found == 2 || lock == private_lock {
+            break;
+        }
+        lock = private_lock;
+        head = unsafe { addr_of_mut!((*thread).sigpending) };
+    }
+
+    if found == 2 {
+        // SAFETY: Preserve the original post-unlock call and exact selected sig.
+        unsafe { f03_pending_terminate_mcexec(0, sig) };
+    } else if found == 1 {
+        // SAFETY: The caller retains the current thread. Its C endpoint's
+        // partial-context forwarding remains debt, not repaired here.
+        unsafe { f03_pending_interrupt_syscall(thread, 0) };
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+extern "C" {
+    // C supplies only its genuine lexical __FILE__ as declarative static data.
+    #[link_name = "f03_rt_sigtimedwait_source_file"]
+    static F03_SIGTIMEDWAIT_SOURCE_FILE: u8;
+    #[link_name = "do_signal"]
+    fn f03_sigtimedwait_do_signal(
+        rc: CULong, regs: *mut c_void, thread: *mut Thread,
+        pending: *mut crate::abi::SigPending, num: CInt,
+    ) -> CInt;
+}
+
+// Caller holds the queue writer lock and retains all circular-list nodes.
+unsafe fn f03_sigtimedwait_find_locked(
+    head: *mut AbiListHead,
+    mask: CULong,
+) -> *mut crate::abi::SigPending {
+    // SAFETY: Traverse genuine list nodes without forming references to the graph.
+    let mut entry = unsafe { addr_of!((*head).next).read() };
+    while entry != head {
+        let pending = entry.cast::<u8>().wrapping_sub(
+            offset_of!(crate::abi::SigPending, list),
+        ).cast::<crate::abi::SigPending>();
+        if unsafe { addr_of!((*pending).sigmask.val[0]).read() } & mask != 0 {
+            return pending;
+        }
+        entry = unsafe { addr_of!((*entry).next).read() };
+    }
+    null_mut()
+}
+
+// Caller owns current-thread mask changes. Return one detached node, or null;
+// always release the selected queue lock and restore its saved IRQ state first.
+unsafe fn f03_sigtimedwait_take_pending(
+    thread: *mut Thread,
+    mask: CULong,
+    original_mask: CULong,
+) -> *mut crate::abi::SigPending {
+    let mut node = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+    // SAFETY: The original current thread retains common/list storage throughout.
+    let common = unsafe { addr_of!((*thread).sigcommon).read().cast::<SigCommon>() };
+    let mut lock = unsafe { addr_of_mut!((*common).lock) };
+    let common_head = unsafe { addr_of_mut!((*common).sigpending) };
+    // SAFETY: Genuine writer lock initializes the matching IRQ-save node.
+    unsafe { crate::lock_helpers::__mcs_rwlock_writer_lock(lock.cast(), node.as_mut_ptr()) };
+    let mut pending = unsafe { f03_sigtimedwait_find_locked(common_head, mask) };
+    if pending.is_null() {
+        // SAFETY: Unlock common before acquiring private, exactly as in C.
+        unsafe {
+            crate::lock_helpers::__mcs_rwlock_writer_unlock(lock.cast(), node.as_mut_ptr());
+            lock = addr_of_mut!((*thread).sigpendinglock);
+            crate::lock_helpers::__mcs_rwlock_writer_lock(lock.cast(), node.as_mut_ptr());
+            pending = f03_sigtimedwait_find_locked(addr_of_mut!((*thread).sigpending), mask);
+        }
+    }
+    if !pending.is_null() {
+        // SAFETY: Writer ownership permits genuine detach; restore the mask before
+        // releasing this lock. The caller then owns this detached pending node.
+        unsafe {
+            crate::process_helpers::process_list_detach_result(addr_of_mut!((*pending).list));
+            addr_of_mut!((*thread).sigmask.val[0]).write(original_mask);
+        }
+    }
+    // SAFETY: Every branch retains the corresponding initialized node and lock.
+    unsafe { crate::lock_helpers::__mcs_rwlock_writer_unlock(lock.cast(), node.as_mut_ptr()) };
+    pending
+}
+
+/// Wait for a selected signal or dispatch one unblocked interrupting signal.
+///
+/// # Safety
+/// `ctx` is the original live syscall context. Genuine usercopy controls all user
+/// accesses. Current thread/monitor/common/list storage and synchronization remain
+/// valid across polling. A detached node transfers to do_signal or tracked free
+/// exactly once. Existing timeout mask/status behavior is preserved, not repaired.
+#[no_mangle]
+pub unsafe extern "C" fn sys_rt_sigtimedwait(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    // SAFETY: Read only the four actual argument registers consumed by C.
+    let set = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg0(ctx) };
+    let info = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg1(ctx) };
+    let timeout = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg2(ctx) };
+    let sigsetsize = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg3(ctx) } as SizeT;
+    let local = unsafe { get_this_cpu_local_var() };
+    let thread = unsafe { addr_of!((*local).current).read() };
+    // SAFETY: Preserve the original second CPU lookup and monitor write before
+    // validation. The active syscall owns this current-thread accounting context.
+    let monitor_local = unsafe { get_this_cpu_local_var() };
+    let monitor = unsafe { addr_of!((*monitor_local).monitor).read() };
+    unsafe { addr_of_mut!((*monitor).status).write(IHK_OS_MONITOR_KERNEL_HEAVY) };
+    let error = rt_sigtimedwait_prepare(sigsetsize, size_of::<SigSet>(), (set != 0) as CInt);
+    if error != 0 {
+        return error as CLong;
+    }
+
+    let mut winfo = MaybeUninit::<SigInfo>::uninit();
+    let mut wait_set = MaybeUninit::<CULong>::uninit();
+    let mut timeout_value = MaybeUninit::<TimeSpec>::uninit();
+    // SAFETY: Preserve the original zero of unused local winfo. Usercopy success
+    // must initialize the full requested scalar before it is read below.
+    unsafe { crate::string::memset(winfo.as_mut_ptr().cast(), 0, size_of::<SigInfo>()) };
+    if unsafe {
+        syscall_copy_from_user_bridge(wait_set.as_mut_ptr().cast(), set, size_of::<CULong>())
+    } != 0 {
+        return -(EFAULT as CLong);
+    }
+    if timeout != 0 {
+        if unsafe {
+            syscall_copy_from_user_bridge(
+                timeout_value.as_mut_ptr().cast(), timeout, size_of::<TimeSpec>(),
+            )
+        } != 0 {
+            return -(EFAULT as CLong);
+        }
+        // SAFETY: Full successful copy initializes both integer TimeSpec fields.
+        let value = unsafe { timeout_value.assume_init_ref() };
+        let error = rt_sigtimedwait_timeout_result(
+            value.tv_sec, value.tv_nsec, unsafe { gettime_local_support },
+        );
+        if error != 0 {
+            return error as CLong;
+        }
+    }
+    // SAFETY: Successful scalar copy and live current mask establish these values.
+    let mut wait_set = unsafe { wait_set.assume_init() };
+    let original_mask = unsafe { addr_of!((*thread).sigmask.val[0]).read() };
+    let mut blocked = MaybeUninit::<CULong>::uninit();
+    let mut interrupt_set = MaybeUninit::<CULong>::uninit();
+    unsafe {
+        rt_sigtimedwait_prepare_masks(
+            wait_set, original_mask, addr_of_mut!(wait_set),
+            blocked.as_mut_ptr(), interrupt_set.as_mut_ptr(),
+        );
+        addr_of_mut!((*thread).sigmask.val[0]).write(blocked.assume_init());
+    }
+    // SAFETY: The genuine mask helper unconditionally writes this scalar output.
+    let interrupt_set = unsafe { interrupt_set.assume_init() };
+    let mut now = MaybeUninit::<TimeSpec>::uninit();
+    let mut deadline = MaybeUninit::<TimeSpec>::uninit();
+    if timeout != 0 {
+        if unsafe { gettime_local_support } != 0 {
+            // SAFETY: Genuine time producer initializes the full TimeSpec for a
+            // non-null output. Timeout was fully copied and validated above.
+            unsafe {
+                calculate_time_from_tsc(deadline.as_mut_ptr());
+                let value = timeout_value.assume_init_ref();
+                rt_sigtimedwait_deadline(
+                    addr_of!((*deadline.as_ptr()).tv_sec).read(),
+                    addr_of!((*deadline.as_ptr()).tv_nsec).read(),
+                    value.tv_sec, value.tv_nsec,
+                    addr_of_mut!((*deadline.as_mut_ptr()).tv_sec),
+                    addr_of_mut!((*deadline.as_mut_ptr()).tv_nsec),
+                );
+            }
+        } else {
+            // SAFETY: This is the exact original unsupported-local-clock branch.
+            unsafe {
+                crate::string::memset(now.as_mut_ptr().cast(), 0, size_of::<TimeSpec>());
+                crate::string::memset(deadline.as_mut_ptr().cast(), 0, size_of::<TimeSpec>());
+            }
+        }
+    }
+
+    // SAFETY: sigevent is volatile in the genuine C header. Preserve that access.
+    unsafe { write_volatile(addr_of_mut!((*thread).sigevent), 1) };
+    let selected;
+    loop {
+        while unsafe { read_volatile(addr_of!((*thread).sigevent)) } == 0 {
+            unsafe { addr_of_mut!((*thread).status).write(PS_INTERRUPTIBLE) };
+            if timeout != 0 {
+                if unsafe { gettime_local_support } != 0 {
+                    unsafe { calculate_time_from_tsc(now.as_mut_ptr()) };
+                }
+                // SAFETY: Each timed branch initialized both time structures.
+                let expired = unsafe {
+                    rt_sigtimedwait_timeout_expired(
+                        addr_of!((*now.as_ptr()).tv_sec).read(),
+                        addr_of!((*now.as_ptr()).tv_nsec).read(),
+                        addr_of!((*deadline.as_ptr()).tv_sec).read(),
+                        addr_of!((*deadline.as_ptr()).tv_nsec).read(),
+                    )
+                };
+                if expired != 0 {
+                    // Preserve C's early return: no mask/status restoration here.
+                    return -11; // EAGAIN, genuine generic-errno.h value.
+                }
+            }
+            unsafe { cpu_pause() };
+        }
+        unsafe {
+            write_volatile(addr_of_mut!((*thread).sigevent), 0);
+            addr_of_mut!((*thread).status).write(PS_RUNNING);
+        }
+        let pending = unsafe { f03_sigtimedwait_take_pending(thread, wait_set, original_mask) };
+        if !pending.is_null() {
+            selected = pending;
+            break;
+        }
+        let pending = unsafe {
+            f03_sigtimedwait_take_pending(thread, interrupt_set, original_mask)
+        };
+        if !pending.is_null() {
+            // SAFETY: This transfers the detached node to the existing C delivery
+            // endpoint. It may free it; no pointer access follows this call.
+            unsafe {
+                let _ = f03_sigtimedwait_do_signal(
+                    (-(EINTR as CLong)) as CULong, null_mut(), thread, pending, -1,
+                );
+            }
+            return -(EINTR as CLong);
+        }
+    }
+
+    let source_file = addr_of!(F03_SIGTIMEDWAIT_SOURCE_FILE).cast::<i8>().cast_mut();
+    if info != 0 {
+        // SAFETY: Selected is detached and retained until this full copy/free.
+        if unsafe {
+            syscall_copy_to_user_bridge(
+                info, addr_of!((*selected).info).cast(), size_of::<SigInfo>(),
+            )
+        } != 0 {
+            unsafe {
+                crate::mem_helpers::kfree_tracked(selected.cast(), source_file, 20898);
+            }
+            return -(EFAULT as CLong);
+        }
+    }
+    // SAFETY: Read before the one genuine free; never access selected afterward.
+    let mask = unsafe { addr_of!((*selected).sigmask.val[0]).read() };
+    let sig = sigmask_to_signal_number(mask);
+    unsafe {
+        crate::mem_helpers::kfree_tracked(selected.cast(), source_file, 20904);
+    }
+    sig as CLong
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+extern "C" {
+    #[link_name = "f03_check_signal_empty_debug"]
+    static mut F03_CHECK_SIGNAL_EMPTY_DEBUG: crate::debug::Ddebug;
+    #[link_name = "do_signal"]
+    fn f03_check_signal_do_signal(
+        rc: CULong, regs: *mut c_void, thread: *mut Thread,
+        pending: *mut crate::abi::SigPending, num: CInt,
+    ) -> CInt;
+}
+
+// Caller supplies the original per-CPU signal-check execution context. Queue
+// selectors retain their source-bound lifetime/locking contract. Delivery may
+// consume the pending node; the dispatcher never accesses it afterward.
+unsafe fn f03_check_signal_dispatch(
+    rc: CULong,
+    regs: *mut c_void,
+    mut num: CInt,
+    irq_disabled: CInt,
+) {
+    // SAFETY: Preserve the preinitialization guard on the genuine Rust clv global.
+    if unsafe { addr_of!(crate::cls::clv).read().is_null() } {
+        return;
+    }
+    let local = unsafe { get_this_cpu_local_var() };
+    let thread = unsafe { addr_of!((*local).current).read() };
+    let idle = thread.is_null() || unsafe {
+        let proc = addr_of!((*thread).proc).read();
+        addr_of!((*proc).pid).read() == 0
+    };
+    if idle {
+        // SAFETY: The original idle path disables IRQ before taking the real
+        // runqueue lock. Preserve C's int truncation and later sign conversion.
+        let irqstate = unsafe { cpu_disable_interrupt_save() } as CInt;
+        let lock_cpu = unsafe { get_this_cpu_local_var() };
+        unsafe {
+            crate::spinlock_helpers::__ihk_mc_spinlock_lock_noirq(
+                addr_of_mut!((*lock_cpu).runq_lock).cast(),
+            );
+        }
+        let initial_cpu = unsafe { get_this_cpu_local_var() };
+        let mut entry = unsafe { addr_of!((*initial_cpu).runq.next).read() };
+        loop {
+            // Keep the original CPU getter in the loop condition, rather than
+            // silently assuming its call placement can be cached across hooks.
+            let condition_cpu = unsafe { get_this_cpu_local_var() };
+            if entry == unsafe { addr_of_mut!((*condition_cpu).runq) } {
+                break;
+            }
+            let candidate = entry.cast::<u8>().wrapping_sub(
+                offset_of!(Thread, sched_list),
+            ).cast::<Thread>();
+            // SAFETY: The real runqueue lock retains live member/thread/process
+            // nodes. Signal probing uses its original nested-lock contract.
+            let proc = unsafe { addr_of!((*candidate).proc).read() };
+            if unsafe { addr_of!((*proc).pid).read() } > 0
+                && unsafe { addr_of!((*candidate).status).read() } == PS_INTERRUPTIBLE
+                && !unsafe { hassigpending(candidate) }.is_null()
+            {
+                unsafe { addr_of_mut!((*candidate).status).write(PS_RUNNING) };
+                break;
+            }
+            entry = unsafe { addr_of!((*entry).next).read() };
+        }
+        let unlock_cpu = unsafe { get_this_cpu_local_var() };
+        unsafe {
+            crate::spinlock_helpers::__ihk_mc_spinlock_unlock_noirq(
+                addr_of_mut!((*unlock_cpu).runq_lock).cast(),
+            );
+            cpu_restore_interrupt(irqstate as CULong);
+        }
+        return;
+    }
+    if !regs.is_null() && unsafe { interrupt_from_user(regs) } == 0 {
+        return;
+    }
+    // SAFETY: Retained thread/common heads have the real shared list layout.
+    let private_empty = unsafe {
+        crate::list_helpers::list_empty(addr_of!((*thread).sigpending).cast()) != 0
+    };
+    if private_empty {
+        let common = unsafe { addr_of!((*thread).sigcommon).read().cast::<SigCommon>() };
+        if unsafe { crate::list_helpers::list_empty(addr_of!((*common).sigpending).cast()) } != 0 {
+            return;
+        }
+    }
+    loop {
+        // C restores this saved int only after a selected pending node. The
+        // empty-queue return of IRQ-disabled entry deliberately leaves IRQ off.
+        let saved = if irq_disabled == 1 {
+            Some(unsafe { cpu_disable_interrupt_save() } as CInt)
+        } else {
+            None
+        };
+        let pending = unsafe { getsigpending(thread, 1) };
+        if pending.is_null() {
+            // SAFETY: The C static owns original lexical metadata and flag bits.
+            let flags = unsafe {
+                read_volatile(addr_of!(F03_CHECK_SIGNAL_EMPTY_DEBUG.line_flags)) >> 24
+            };
+            if flags != 0 {
+                unsafe { kprintf(c"check_signal,queue is empty\n".as_ptr().cast()) };
+            }
+            return;
+        }
+        if let Some(irqstate) = saved {
+            unsafe { cpu_restore_interrupt(irqstate as CULong) };
+        }
+        // SAFETY: Selection detached this node and released its queue lock. The
+        // original delivery endpoint consumes it; never inspect it after return.
+        if unsafe { f03_check_signal_do_signal(rc, regs, thread, pending, num) } != 0 {
+            num = -1;
+        }
+    }
+}
+
+/// Check pending signals from the original ordinary signal-check context.
+///
+/// # Safety
+/// Per-CPU/current/runqueue and user context obey the original check_signal
+/// contract. The retained C do_signal endpoint owns frame/delivery semantics.
+#[no_mangle]
+pub unsafe extern "C" fn check_signal(rc: CULong, regs: *mut c_void, num: CInt) {
+    // SAFETY: Forward the unchanged caller contract with the ordinary IRQ mode.
+    unsafe { f03_check_signal_dispatch(rc, regs, num, 0) };
+}
+
+/// Check signals while preserving the original IRQ-disabled empty-return rule.
+///
+/// # Safety
+/// The original caller supplies IRQ-disabled context and the same live storage
+/// contract as check_signal. No fabricated restoration or acknowledgement occurs.
+#[no_mangle]
+pub unsafe extern "C" fn check_signal_irq_disabled(
+    rc: CULong,
+    regs: *mut c_void,
+    num: CInt,
+) {
+    unsafe { f03_check_signal_dispatch(rc, regs, num, 1) };
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+// These six C providers are retained genuine debt. The C table is declarative
+// only; no visibility promotion, new host forwarding or fake core provider.
+#[repr(C)]
+#[derive(Clone, Copy)]
+struct F03WaitCDependencies {
+    host_wait4: Option<WaitHostWait4Fn>,
+    stopped: Option<WaitStatusFn>,
+    continued: Option<WaitStatusFn>,
+    ptrace_detach: Option<WaitThreadSideEffectFn>,
+    zombie_log: Option<WaitZombieLogFn>,
+    wait_log: Option<WaitLogFn>,
+}
+
+extern "C" {
+    #[link_name = "f03_wait_c_dependencies"]
+    static F03_WAIT_C_DEPENDENCIES: F03WaitCDependencies;
+}
+
+static F03_WAIT_SCAN_OFFSETS: WaitScanOffsets = WaitScanOffsets {
+    thread_proc_offset: offset_of!(Thread, proc),
+    thread_tid_offset: offset_of!(Thread, tid),
+    thread_status_offset: offset_of!(Thread, status),
+    thread_ptrace_offset: offset_of!(Thread, ptrace),
+    thread_signal_flags_offset: offset_of!(Thread, signal_flags),
+    thread_termsig_offset: offset_of!(Thread, termsig),
+    thread_report_siblings_list_offset: offset_of!(Thread, report_siblings_list),
+    thread_siblings_list_offset: offset_of!(Thread, siblings_list),
+    proc_pid_offset: offset_of!(Process, pid),
+    proc_pgid_offset: offset_of!(Process, pgid),
+    proc_status_offset: offset_of!(Process, status),
+    proc_children_lock_offset: offset_of!(Process, children_lock),
+    proc_threads_lock_offset: offset_of!(Process, threads_lock),
+    proc_children_list_offset: offset_of!(Process, children_list),
+    proc_ptraced_children_list_offset: offset_of!(Process, ptraced_children_list),
+    proc_siblings_list_offset: offset_of!(Process, siblings_list),
+    proc_ptraced_siblings_list_offset: offset_of!(Process, ptraced_siblings_list),
+    proc_report_threads_list_offset: offset_of!(Process, report_threads_list),
+    proc_threads_list_offset: offset_of!(Process, threads_list),
+    proc_main_thread_offset: offset_of!(Process, main_thread),
+};
+
+static F03_WAIT_ZOMBIE_OFFSETS: WaitZombieOffsets = WaitZombieOffsets {
+    thread_ptrace_offset: offset_of!(Thread, ptrace),
+    proc_pid_offset: offset_of!(Process, pid),
+    proc_ppid_parent_offset: offset_of!(Process, ppid_parent),
+    proc_parent_offset: offset_of!(Process, parent),
+    proc_status_offset: offset_of!(Process, status),
+    proc_group_exit_status_offset: offset_of!(Process, group_exit_status),
+    proc_nowait_offset: offset_of!(Process, nowait),
+    proc_update_lock_offset: offset_of!(Process, update_lock),
+    proc_children_lock_offset: offset_of!(Process, children_lock),
+    proc_threads_lock_offset: offset_of!(Process, threads_lock),
+    proc_siblings_list_offset: offset_of!(Process, siblings_list),
+    proc_children_list_offset: offset_of!(Process, children_list),
+    proc_main_thread_offset: offset_of!(Process, main_thread),
+    proc_stime_offset: offset_of!(Process, stime),
+    proc_utime_offset: offset_of!(Process, utime),
+    proc_stime_children_offset: offset_of!(Process, stime_children),
+    proc_utime_children_offset: offset_of!(Process, utime_children),
+    proc_maxrss_offset: offset_of!(Process, maxrss),
+    proc_maxrss_children_offset: offset_of!(Process, maxrss_children),
+};
+
+// SAFETY (adapter callers): each pointer/node is the genuine locked/live object
+// supplied by the existing full scan or wait body. Do not substitute checked
+// alternatives for the original public void release operations.
+unsafe extern "C" fn f03_wait_writer_lock(lock: *mut c_void, node: *mut c_void) {
+    unsafe { crate::lock_helpers::__mcs_rwlock_writer_lock_noirq(lock.cast(), node) };
+}
+unsafe extern "C" fn f03_wait_writer_unlock(lock: *mut c_void, node: *mut c_void) {
+    unsafe { crate::lock_helpers::__mcs_rwlock_writer_unlock_noirq(lock.cast(), node) };
+}
+unsafe extern "C" fn f03_wait_list_detach(entry: *mut c_void) {
+    unsafe { crate::process_helpers::process_list_detach_result(entry.cast()) };
+}
+unsafe extern "C" fn f03_wait_list_add_tail(entry: *mut c_void, head: *mut c_void) {
+    unsafe { crate::process_helpers::process_list_add_tail_result(entry.cast(), head.cast()) };
+}
+unsafe extern "C" fn f03_wait_release_process(proc: *mut c_void) {
+    unsafe { crate::process_helpers::release_process(proc.cast()) };
+}
+unsafe extern "C" fn f03_wait_release_thread(thread: *mut c_void) {
+    unsafe { crate::process_helpers::release_thread(thread.cast()) };
+}
+unsafe extern "C" fn f03_wait_report_detach(thread: *mut c_void) {
+    let thread = thread.cast::<Thread>();
+    // SAFETY: Full scan holds the original report-list ownership and lock.
+    unsafe {
+        let _ = crate::process_helpers::process_thread_report_detach_result(
+            thread.cast(), offset_of!(Thread, report_proc) as CULong, null_mut(),
+            addr_of_mut!((*thread).report_siblings_list),
+        );
+    }
+}
+unsafe extern "C" fn f03_wait_init(entry: *mut c_void, thread: *mut c_void) {
+    unsafe { crate::waitq::waitq_init_entry(entry.cast(), thread) };
+}
+unsafe extern "C" fn f03_wait_prepare(waitq: *mut c_void, entry: *mut c_void, status: CInt) {
+    unsafe { crate::waitq::waitq_prepare_to_wait(waitq.cast(), entry.cast(), status) };
+}
+unsafe extern "C" fn f03_wait_finish(waitq: *mut c_void, entry: *mut c_void) {
+    unsafe { crate::waitq::waitq_finish_wait(waitq.cast(), entry.cast()) };
+}
+unsafe extern "C" fn f03_wait_has_signal(thread: *mut c_void) -> CInt {
+    unsafe { (!hassigpending(thread.cast()).is_null()) as CInt }
+}
+
+unsafe extern "C" fn f03_wait_process_scan(
+    pid: CInt, status: *mut CInt, options: CInt, usage: *mut c_void, empty: *mut CInt,
+) -> CInt {
+    // SAFETY: Preserve the two original CPU lookups and retained current graph.
+    let cpu = unsafe { get_this_cpu_local_var() };
+    let thread = unsafe { addr_of!((*cpu).current).read() };
+    let proc = unsafe { addr_of!((*thread).proc).read() };
+    let pid1_cpu = unsafe { get_this_cpu_local_var() };
+    let resources = unsafe { addr_of!((*pid1_cpu).resource_set).read() };
+    let pid1 = unsafe { addr_of!((*resources).pid1).read() };
+    let mut parent_children = MaybeUninit::<McsRwlockNode>::uninit();
+    let mut child_threads = MaybeUninit::<McsRwlockNode>::uninit();
+    let mut parent_update = MaybeUninit::<McsRwlockNode>::uninit();
+    let mut child_update = MaybeUninit::<McsRwlockNode>::uninit();
+    let mut pid1_children = MaybeUninit::<McsRwlockNode>::uninit();
+    // SAFETY: The actual immutable C initializer supplies six typed function
+    // pointers. Its layout is witnessed; no arbitrary pointer is manufactured.
+    let c = unsafe { addr_of!(F03_WAIT_C_DEPENDENCIES).read() };
+    // SAFETY: Reuse the complete existing process scan and its original ownership
+    // transitions. Actual noirq lock providers ignore node contents on this profile.
+    unsafe {
+        wait_process_scan_body_result(
+            pid, status, options, usage, empty, thread.cast(), proc.cast(), pid1.cast(),
+            addr_of!(F03_WAIT_SCAN_OFFSETS), addr_of!(F03_WAIT_ZOMBIE_OFFSETS),
+            Some(f03_wait_writer_lock), Some(f03_wait_writer_unlock), c.host_wait4,
+            Some(f03_wait_list_detach), Some(f03_wait_list_add_tail), c.ptrace_detach,
+            Some(f03_wait_release_process), c.zombie_log, c.stopped, c.continued,
+            Some(crate::process_helpers::process_thread_signal_flags_reap_result),
+            parent_children.as_mut_ptr().cast(), child_threads.as_mut_ptr().cast(),
+            parent_update.as_mut_ptr().cast(), child_update.as_mut_ptr().cast(),
+            pid1_children.as_mut_ptr().cast(),
+        )
+    }
+}
+
+unsafe extern "C" fn f03_wait_thread_scan(
+    tid: CInt, status: *mut CInt, options: CInt, usage: *mut c_void, empty: *mut CInt,
+) -> CInt {
+    let cpu = unsafe { get_this_cpu_local_var() };
+    let thread = unsafe { addr_of!((*cpu).current).read() };
+    let proc = unsafe { addr_of!((*thread).proc).read() };
+    let mut node = MaybeUninit::<McsRwlockNode>::uninit();
+    let c = unsafe { addr_of!(F03_WAIT_C_DEPENDENCIES).read() };
+    // SAFETY: Existing full Rust thread scan gets genuine graph offsets/providers;
+    // its detach, ptrace and final-release ordering remains unchanged.
+    unsafe {
+        wait_thread_scan_body_result(
+            tid, status, options, usage, empty, thread.cast(), proc.cast(),
+            addr_of!(F03_WAIT_SCAN_OFFSETS), Some(f03_wait_writer_lock),
+            Some(f03_wait_writer_unlock), c.stopped, c.continued,
+            Some(crate::process_helpers::process_thread_signal_flags_reap_result),
+            Some(f03_wait_report_detach), c.ptrace_detach, Some(f03_wait_release_thread),
+            node.as_mut_ptr().cast(),
+        )
+    }
+}
+
+/// Enter the complete existing wait scan/sleep transaction from wait4/waitid.
+///
+/// # Safety
+/// Status/usage follow the existing caller's writable storage contract. Current
+/// Thread/Process/waitq remain live across sleep. Existing scan helpers and typed
+/// C dependencies own their exact reap, ptrace, host request and release contracts.
+/// The host-wait4 partial-request HOLD is retained; no ACK or fields are invented.
+#[no_mangle]
+pub unsafe extern "C" fn wait4_do_wait_bridge(
+    pid: CInt, status: *mut CInt, options: CInt, usage: *mut RUsage,
+) -> CInt {
+    let cpu = unsafe { get_this_cpu_local_var() };
+    let thread = unsafe { addr_of!((*cpu).current).read() };
+    let mut entry = MaybeUninit::<WaitqEntry>::uninit();
+    let c = unsafe { addr_of!(F03_WAIT_C_DEPENDENCIES).read() };
+    // SAFETY: Actual init always initializes the wait entry before prepare/use.
+    // The full existing helper finishes it before each return/sleep iteration.
+    unsafe {
+        do_wait_body_result(
+            pid, status, options, usage.cast(), thread.cast(), entry.as_mut_ptr().cast(),
+            offset_of!(Thread, proc) as CULong, offset_of!(Process, pid) as CULong,
+            offset_of!(Process, waitpid_q) as CULong, PS_INTERRUPTIBLE,
+            Some(f03_wait_process_scan), Some(f03_wait_thread_scan), Some(f03_wait_init),
+            Some(f03_wait_prepare), Some(f03_wait_finish), Some(f03_wait_has_signal),
+            Some(schedule), c.wait_log,
+        )
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+extern "C" {
+    #[link_name = "f03_wait_state_debug"]
+    static mut F03_WAIT_STATE_DEBUG: [crate::debug::Ddebug; 3];
+}
+
+// Only fixed internal indices are supplied. Preserve independent actual C debug
+// flags and their lexical metadata without introducing a logging callback body.
+unsafe fn f03_wait_state_debug_enabled(index: usize) -> bool {
+    // SAFETY: The bound C array contains exactly three aligned genuine Ddebug
+    // records; caller indices 0..3 select them without extending a reference.
+    let debug = unsafe { addr_of!(F03_WAIT_STATE_DEBUG).cast::<crate::debug::Ddebug>().add(index) };
+    unsafe { read_volatile(addr_of!((*debug).line_flags)) >> 24 != 0 }
+}
+
+/// Complete stopped-state status/reap reporting using the existing full Rust body.
+///
+/// # Safety
+/// Original scan locks retain thread, child, optional child thread and writable
+/// status when present. Original exit-status reaping ownership remains unchanged.
+/// Debug-enabled reads obey the same live-object contract as the C entry.
+#[no_mangle]
+pub unsafe extern "C" fn f03_wait_stopped_v1(
+    thread: *mut c_void,
+    child: *mut c_void,
+    child_thread: *mut c_void,
+    status: *mut CInt,
+    options: CInt,
+) -> CInt {
+    if unsafe { f03_wait_state_debug_enabled(0) } {
+        let thread = thread.cast::<Thread>();
+        // SAFETY: Evaluate debug arguments only if that original site is enabled.
+        let proc = unsafe { addr_of!((*thread).proc).read() };
+        let current_pid = unsafe { addr_of!((*proc).pid).read() };
+        let child_pid = unsafe { addr_of!((*child.cast::<Process>()).pid).read() };
+        unsafe {
+            kprintf(c"wait_stopped,proc->pid=%d,child->pid=%d,options=%08x\n".as_ptr().cast(),
+                current_pid, child_pid, options);
+        }
+    }
+    // SAFETY: Supply actual layout offsets and genuine exit-status reap provider,
+    // preserving its WNOWAIT/non-owning behavior and source selection exactly.
+    let result = unsafe {
+        wait_stopped_body_result(
+            child_thread, child, status, options,
+            offset_of!(Process, pid) as CULong, offset_of!(Process, status) as CULong,
+            offset_of!(Process, group_exit_status) as CULong,
+            offset_of!(Process, main_thread) as CULong, offset_of!(Thread, tid) as CULong,
+            offset_of!(Thread, exit_status) as CULong,
+            Some(crate::process_helpers::process_wait_exit_status_reap_result),
+        )
+    };
+    if unsafe { f03_wait_state_debug_enabled(1) } {
+        let child_pid = unsafe { addr_of!((*child.cast::<Process>()).pid).read() };
+        let reported_status = if status.is_null() { -1 } else { unsafe { status.read() } };
+        unsafe {
+            kprintf(c"wait_stopped,child->pid=%d,status=%08x\n".as_ptr().cast(),
+                child_pid, reported_status);
+        }
+    }
+    result
+}
+
+/// Complete continued-state status/reap reporting using the genuine Rust body.
+///
+/// # Safety
+/// Existing scan locks retain child/optional child thread and status storage.
+/// The original signal-flags reap contract controls any mutation; no new release
+/// or host wait is performed here, and WNOWAIT remains handled by that provider.
+#[no_mangle]
+pub unsafe extern "C" fn f03_wait_continued_v1(
+    _thread: *mut c_void,
+    child: *mut c_void,
+    child_thread: *mut c_void,
+    status: *mut CInt,
+    options: CInt,
+) -> CInt {
+    // SAFETY: Actual offsets and exact existing signal-flags reap body, with no
+    // invented zero flags, ownership transfer or substitute provider.
+    let result = unsafe {
+        wait_continued_body_result(
+            child_thread, child, status, options,
+            offset_of!(Process, pid) as CULong, offset_of!(Process, main_thread) as CULong,
+            offset_of!(Thread, tid) as CULong, offset_of!(Thread, signal_flags) as CULong,
+            crate::process_helpers::process_thread_signal_flags_reap_result,
+        )
+    };
+    if unsafe { f03_wait_state_debug_enabled(2) } {
+        let child_pid = unsafe { addr_of!((*child.cast::<Process>()).pid).read() };
+        let reported_status = if status.is_null() { -1 } else { unsafe { status.read() } };
+        unsafe {
+            kprintf(c"wait4,SIGNAL_STOP_CONTINUED,pid=%d,status=%08x\n".as_ptr().cast(),
+                child_pid, reported_status);
+        }
+    }
+    result
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+extern "C" {
+    #[link_name = "f03_exit_notify_debug"]
+    static mut F03_EXIT_NOTIFY_DEBUG: [crate::debug::Ddebug; 2];
+}
+
+unsafe fn f03_exit_notify_debug_enabled(index: usize) -> bool {
+    // SAFETY: Callers supply fixed indices0/1 into two genuine aligned C records.
+    let record = unsafe {
+        addr_of!(F03_EXIT_NOTIFY_DEBUG).cast::<crate::debug::Ddebug>().add(index)
+    };
+    unsafe { read_volatile(addr_of!((*record).line_flags)) >> 24 != 0 }
+}
+
+unsafe extern "C" fn f03_exit_notify_wake(waitq: *mut c_void) {
+    // SAFETY: The full helper retains the owning process and actual wait queue.
+    unsafe { crate::waitq::waitq_wakeup(waitq.cast()) };
+}
+
+unsafe extern "C" fn f03_exit_notify_log(sig: CInt, error: CLong) {
+    if unsafe { f03_exit_notify_debug_enabled(0) } {
+        // SAFETY: Exact original int/long varargs and static format string.
+        unsafe { kprintf(c"terminate,klll %d,error=%ld\n".as_ptr().cast(), sig, error) };
+    }
+}
+
+unsafe extern "C" fn f03_exit_notify_wakeup_log() {
+    if unsafe { f03_exit_notify_debug_enabled(1) } {
+        unsafe { kprintf(c"terminate,wakeup\n".as_ptr().cast()) };
+    }
+}
+
+unsafe extern "C" fn f03_finalize_writer_lock(lock: *mut c_void, node: *mut c_void) {
+    // SAFETY: Actual lock/node layouts and unchanged selected noirq provider.
+    unsafe { crate::lock_helpers::__mcs_rwlock_writer_lock_noirq(lock.cast(), node) };
+}
+
+unsafe extern "C" fn f03_finalize_writer_unlock(lock: *mut c_void, node: *mut c_void) {
+    // SAFETY: The full helper holds this same lock using the corresponding node.
+    unsafe { crate::lock_helpers::__mcs_rwlock_writer_unlock_noirq(lock.cast(), node) };
+}
+
+unsafe extern "C" fn f03_finalize_release(proc: *mut c_void) {
+    // SAFETY: Real helper selected the original release edge after unlocking.
+    // Preserve public void release rather than the internal checked alternative.
+    unsafe { crate::process_helpers::release_process(proc.cast()) };
+}
+
+/// Deliver the original optional thread-exit notification to its report process.
+///
+/// # Safety
+/// A non-null thread retains its report-process edge through the original exit
+/// contract. The complete helper owns siginfo initialization, time conversion,
+/// kill and wake order. Null keeps the helper's ignored-error behavior. No extra
+/// reference, destructor, delivery acknowledgement or host result is introduced.
+#[no_mangle]
+pub unsafe extern "C" fn f03_thread_exit_signal_v1(thread: *mut Thread) {
+    // SAFETY: Exact actual-layout offsets and complete genuine Rust helper.
+    // Existing typed C do_kill bridge remains a delivery endpoint dependency.
+    unsafe {
+        let _ = thread_exit_signal_body_result(
+            thread.cast(), offset_of!(Thread, report_proc), offset_of!(Thread, ptrace),
+            offset_of!(Thread, termsig), offset_of!(Thread, exit_status),
+            offset_of!(Thread, tid), offset_of!(Thread, user_tsc), offset_of!(Thread, system_tsc),
+            offset_of!(Process, pid), offset_of!(Process, waitpid_q),
+            Some(tsc_to_ts), Some(timespec_to_jiffy), Some(syscall_do_kill_thread_bridge),
+            Some(f03_exit_notify_wake), Some(f03_exit_notify_log),
+        );
+    }
+}
+
+/// Finalize process state and preserve the original parent-specific release edge.
+///
+/// # Safety
+/// Current CPU resource-set/pid1 and proc's parent edge retain their original
+/// lifetimes. The complete helper controls update-lock ownership, PS_ZOMBIE and
+/// genuine release. No proc access follows release here; parent notification
+/// introduces no invented completion, ownership transfer or acknowledgement.
+#[no_mangle]
+pub unsafe extern "C" fn f03_finalize_process_v1(proc: *mut Process) {
+    // SAFETY: Preserve the original CPU/resource lookup before the full helper,
+    // including when its optional invalid-proc result is ignored by the void ABI.
+    let cpu = unsafe { get_this_cpu_local_var() };
+    let resources = unsafe { addr_of!((*cpu).resource_set).read() };
+    let pid1 = unsafe { addr_of!((*resources).pid1).read() };
+    let mut node = MaybeUninit::<McsRwlockNode>::uninit();
+    unsafe {
+        let _ = finalize_process_body_result(
+            proc.cast(), pid1.cast(), node.as_mut_ptr().cast(),
+            offset_of!(Process, parent), offset_of!(Process, status),
+            offset_of!(Process, update_lock), offset_of!(Process, pid),
+            offset_of!(Process, group_exit_status), offset_of!(Process, termsig),
+            offset_of!(Process, utime), offset_of!(Process, stime), offset_of!(Process, waitpid_q),
+            Some(f03_finalize_writer_lock), Some(f03_finalize_writer_unlock),
+            Some(f03_finalize_release), Some(f03_exit_notify_wakeup_log), Some(timespec_to_jiffy),
+            Some(syscall_do_kill_thread_bridge), Some(f03_exit_notify_wake),
+            Some(f03_exit_notify_log),
+        );
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+extern "C" {
+    #[link_name = "f03_ptrace_detach_source_file"]
+    static F03_PTRACE_DETACH_SOURCE_FILE: u8;
+}
+
+static F03_PTRACE_DETACH_OFFSETS: PtraceDetachOffsets = PtraceDetachOffsets {
+    thread_proc_offset: offset_of!(Thread, proc),
+    thread_termsig_offset: offset_of!(Thread, termsig),
+    thread_status_offset: offset_of!(Thread, status),
+    thread_tid_offset: offset_of!(Thread, tid),
+    thread_report_proc_offset: offset_of!(Thread, report_proc),
+    thread_report_siblings_list_offset: offset_of!(Thread, report_siblings_list),
+    thread_ptrace_offset: offset_of!(Thread, ptrace),
+    thread_ptrace_saved_uctx_valid_offset: offset_of!(Thread, ptrace_saved_uctx_valid),
+    thread_ptrace_debugreg_offset: offset_of!(Thread, ptrace_debugreg),
+    proc_pid_offset: offset_of!(Process, pid),
+    proc_status_offset: offset_of!(Process, status),
+    proc_parent_offset: offset_of!(Process, parent),
+    proc_ppid_parent_offset: offset_of!(Process, ppid_parent),
+    proc_main_thread_offset: offset_of!(Process, main_thread),
+    proc_children_lock_offset: offset_of!(Process, children_lock),
+    proc_threads_lock_offset: offset_of!(Process, threads_lock),
+    proc_children_list_offset: offset_of!(Process, children_list),
+    proc_siblings_list_offset: offset_of!(Process, siblings_list),
+    proc_ptraced_siblings_list_offset: offset_of!(Process, ptraced_siblings_list),
+    proc_report_threads_list_offset: offset_of!(Process, report_threads_list),
+};
+
+// SAFETY (adapter callers): the full genuine detach helper owns the corresponding
+// live graph/lock edge and supplies actual ABI node/list storage without broad refs.
+unsafe extern "C" fn f03_detach_reader_lock(lock: *mut c_void, node: *mut c_void) {
+    unsafe { crate::lock_helpers::__mcs_rwlock_reader_lock(lock.cast(), node.cast()) };
+}
+unsafe extern "C" fn f03_detach_reader_unlock(lock: *mut c_void, node: *mut c_void) {
+    unsafe { crate::lock_helpers::__mcs_rwlock_reader_unlock(lock.cast(), node.cast()) };
+}
+unsafe extern "C" fn f03_detach_list(entry: *mut c_void) {
+    unsafe { crate::process_helpers::process_list_detach_result(entry.cast()) };
+}
+unsafe extern "C" fn f03_detach_main_reparent(
+    proc: *mut c_void, parent_offset: CULong, parent: *mut c_void,
+    ptraced: *mut c_void, sibling: *mut c_void, children: *mut c_void,
+) -> CInt {
+    unsafe {
+        crate::process_helpers::process_ptrace_main_detach_reparent_result(
+            proc, parent_offset, parent, ptraced.cast(), sibling.cast(), children.cast(),
+        )
+    }
+}
+unsafe extern "C" fn f03_detach_report(
+    thread: *mut c_void, offset: CULong, proc: *mut c_void, entry: *mut c_void,
+) -> CInt {
+    unsafe {
+        crate::process_helpers::process_thread_report_detach_result(
+            thread, offset, proc, entry.cast(),
+        )
+    }
+}
+unsafe extern "C" fn f03_detach_free(ptr: *mut c_void) {
+    // SAFETY: Actual cleanup returned the tracked debugreg owner. Retain genuine
+    // NULL handling and the bound original C tracked-free file/line identity.
+    let file = addr_of!(F03_PTRACE_DETACH_SOURCE_FILE).cast::<i8>().cast_mut();
+    unsafe { crate::mem_helpers::kfree_tracked(ptr, file, 4537) };
+}
+unsafe extern "C" fn f03_detach_clear_step(thread: *mut c_void) {
+    unsafe { clear_single_step(thread.cast()) };
+}
+unsafe extern "C" fn f03_detach_attach_report(
+    thread: *mut c_void, termsig_offset: CULong, update_termsig: CInt, termsig: CInt,
+    report_offset: CULong, report_proc: *mut c_void, entry: *mut c_void, head: *mut c_void,
+) -> CInt {
+    unsafe {
+        crate::process_helpers::process_thread_report_attach_result(
+            thread, termsig_offset, update_termsig, termsig, report_offset,
+            report_proc, entry.cast(), head.cast(),
+        )
+    }
+}
+unsafe extern "C" fn f03_detach_exit_signal(thread: *mut c_void) {
+    unsafe { f03_thread_exit_signal_v1(thread.cast()) };
+}
+unsafe extern "C" fn f03_detach_wake(thread: *mut c_void, states: CInt) {
+    // SAFETY: The original helper retains this thread until the subsequent release.
+    unsafe { let _ = crate::sched_helpers::sched_wakeup_thread(thread.cast(), states); }
+}
+unsafe extern "C" fn f03_detach_release(thread: *mut c_void) {
+    unsafe { crate::process_helpers::release_thread(thread.cast()) };
+}
+unsafe extern "C" fn f03_detach_finalize(proc: *mut c_void) {
+    // SAFETY: The original helper selected a retained term_proc edge; its genuine
+    // graph must keep Process live across release_thread. No ref is invented here.
+    unsafe { f03_finalize_process_v1(proc.cast()) };
+}
+
+/// Detach a tracee using the complete existing reparent/cleanup/release body.
+///
+/// # Safety
+/// The original caller owns tracee and process/report-list lifetimes and locking
+/// context. The genuine helper controls cleanup and release, including term_proc
+/// validity across thread release before finalization. This entry introduces no
+/// ownership edge or synchronization claim and never inspects released storage.
+#[no_mangle]
+pub unsafe extern "C" fn f03_ptrace_detach_thread_v1(thread: *mut Thread, data: CInt) {
+    // SAFETY: Preserve original two CPU lookups and resource/current process reads.
+    let resource_cpu = unsafe { get_this_cpu_local_var() };
+    let resources = unsafe { addr_of!((*resource_cpu).resource_set).read() };
+    let pid1 = unsafe { addr_of!((*resources).pid1).read() };
+    let current_cpu = unsafe { get_this_cpu_local_var() };
+    let current = unsafe { addr_of!((*current_cpu).current).read() };
+    let proc = unsafe { addr_of!((*current).proc).read() };
+    let mut node = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+    // SAFETY: Full actual helper/providers retain original reader/list/release
+    // ordering; its ignored result matches the original C void entry.
+    unsafe {
+        let _ = ptrace_detach_thread_body_result(
+            thread.cast(), data, current.cast(), proc.cast(), pid1.cast(),
+            addr_of!(F03_PTRACE_DETACH_OFFSETS), Some(f03_detach_reader_lock),
+            Some(f03_detach_reader_unlock), Some(f03_detach_list),
+            Some(f03_detach_main_reparent), Some(f03_detach_report),
+            Some(crate::process_helpers::process_thread_ptrace_cleanup_result),
+            Some(f03_detach_free), Some(f03_detach_clear_step), Some(f03_detach_attach_report),
+            Some(f03_detach_exit_signal), Some(syscall_do_kill_thread_bridge),
+            Some(f03_detach_wake), Some(f03_detach_release), Some(f03_detach_finalize),
+            node.as_mut_ptr().cast(),
+        );
+    }
+}
+
+/// Preserve the exact existing wait-scan detach callback ABI and data value.
+///
+/// # Safety
+/// Same live graph/release contract as the original wait-thread ptrace bridge.
+#[no_mangle]
+pub unsafe extern "C" fn f03_ptrace_detach_wait_callback_v1(thread: *mut c_void) {
+    unsafe { f03_ptrace_detach_thread_v1(thread.cast(), 0) };
+}
+
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+static F03_PTRACE_IO_OFFSETS: PtraceIoOffsets = PtraceIoOffsets {
+    thread_proc_offset: offset_of!(Thread, proc),
+    thread_status_offset: offset_of!(Thread, status),
+    thread_vm_offset: offset_of!(Thread, vm),
+    thread_ptrace_offset: offset_of!(Thread, ptrace),
+    thread_ptrace_eventmsg_offset: offset_of!(Thread, ptrace_eventmsg),
+    thread_ptrace_recvsig_offset: offset_of!(Thread, ptrace_recvsig),
+    thread_ptrace_sendsig_offset: offset_of!(Thread, ptrace_sendsig),
+    thread_report_proc_offset: offset_of!(Thread, report_proc),
+    thread_ptrace_saved_uctx_valid_offset: offset_of!(Thread, ptrace_saved_uctx_valid),
+    proc_pid_offset: offset_of!(Process, pid),
+    proc_update_lock_offset: offset_of!(Process, update_lock),
+};
+
+// SAFETY (adapter callers): complete existing I/O bodies control the retained
+// find/unlock edge and valid thread/context provider use. No checked-release or
+// fabricated reference is substituted for the actual public provider contract.
+unsafe extern "C" fn f03_ptrace_io_find(tgid: CInt, tid: CInt) -> CULong {
+    unsafe { crate::process_helpers::find_thread(tgid, tid) as CULong }
+}
+unsafe extern "C" fn f03_ptrace_io_unlock(thread: CULong) {
+    unsafe { crate::process_helpers::thread_unlock(thread as *mut Thread) };
+}
+unsafe extern "C" fn f03_ptrace_io_read(
+    thread: CULong, addr: CLong, value: *mut CULong,
+) -> CLong {
+    unsafe { ptrace_read_user(thread as *mut Thread, addr, value) }
+}
+unsafe extern "C" fn f03_ptrace_io_write(
+    thread: CULong, addr: CLong, value: CULong,
+) -> CLong {
+    unsafe { ptrace_write_user(thread as *mut Thread, addr, value) }
+}
+
+/// Read the complete original user register image through genuine providers.
+///
+/// # Safety
+/// The existing helper owns find/unlock and status validation. User destination
+/// remains an integer address until the actual usercopy bridge validates/copies.
+/// Genuine register-word providers retain the tracee context lifetime contract.
+#[no_mangle]
+pub unsafe extern "C" fn f03_ptrace_getregs_v1(pid: CInt, data: CLong) -> CLong {
+    let mut scratch = MaybeUninit::<UserRegsStruct>::uninit();
+    // SAFETY: Full helper zeroes scratch before reading/writing its words, and
+    // never copies out failed register data. Actual ABI size/alignment is used.
+    unsafe {
+        ptrace_getregs_body_result(
+            pid, data, scratch.as_mut_ptr().cast(), size_of::<UserRegsStruct>(),
+            addr_of!(F03_PTRACE_IO_OFFSETS), Some(f03_ptrace_io_find),
+            Some(f03_ptrace_io_unlock), Some(f03_ptrace_io_read),
+            Some(syscall_copy_to_user_bridge),
+        )
+    }
+}
+
+/// Write the original complete user register image with unchanged copy failures.
+///
+/// # Safety
+/// Existing helper owns tracee acquisition/unlock. A failed actual full usercopy
+/// never permits reading scratch. Register writes use the genuine architecture
+/// provider and its existing state/context checks; no local context is invented.
+#[no_mangle]
+pub unsafe extern "C" fn f03_ptrace_setregs_v1(pid: CInt, data: CLong) -> CLong {
+    let mut scratch = MaybeUninit::<UserRegsStruct>::uninit();
+    unsafe {
+        ptrace_setregs_body_result(
+            pid, data, scratch.as_mut_ptr().cast(), size_of::<UserRegsStruct>(),
+            addr_of!(F03_PTRACE_IO_OFFSETS), Some(f03_ptrace_io_find),
+            Some(f03_ptrace_io_unlock), Some(f03_ptrace_io_write),
+            Some(syscall_copy_from_user_bridge),
+        )
+    }
+}
+
+/// Read one original user-area word and copy it through the actual usercopy path.
+///
+/// # Safety
+/// Full helper preserves address-range/status errors and exactly one paired
+/// tracee unlock. User output is never directly dereferenced by this entry.
+#[no_mangle]
+pub unsafe extern "C" fn f03_ptrace_peekuser_v1(
+    pid: CInt, addr: CLong, data: CLong,
+) -> CLong {
+    unsafe {
+        ptrace_peekuser_body_result(
+            pid, addr, data, size_of::<User>() as CULong, addr_of!(F03_PTRACE_IO_OFFSETS),
+            Some(f03_ptrace_io_find), Some(f03_ptrace_io_unlock), Some(f03_ptrace_io_read),
+            Some(syscall_copy_to_user_bridge),
+        )
+    }
+}
+
+/// Write one original user-area word through the full existing Rust transaction.
+///
+/// # Safety
+/// Existing address/status validation and architecture register/debug-state
+/// ownership apply. This entry supplies no new storage or unchecked user access.
+#[no_mangle]
+pub unsafe extern "C" fn f03_ptrace_pokeuser_v1(
+    pid: CInt, addr: CLong, data: CLong,
+) -> CLong {
+    unsafe {
+        ptrace_pokeuser_body_result(
+            pid, addr, data, size_of::<User>() as CULong, addr_of!(F03_PTRACE_IO_OFFSETS),
+            Some(f03_ptrace_io_find), Some(f03_ptrace_io_unlock), Some(f03_ptrace_io_write),
+        )
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+// These adapters replace the exact C casts to already-selected genuine Rust
+// architecture providers. Full helpers own find/unlock and all status/usercopy
+// failure paths. No alternate FP storage or assumed usercopy success is supplied.
+unsafe extern "C" fn f03_ptrace_fp_read(thread: CULong, data: CULong) -> CLong {
+    unsafe { ptrace_read_fpregs(thread as *mut Thread, data as *mut c_void) }
+}
+unsafe extern "C" fn f03_ptrace_fp_write(thread: CULong, data: CULong) -> CLong {
+    unsafe { ptrace_write_fpregs(thread as *mut Thread, data as *mut c_void) }
+}
+unsafe extern "C" fn f03_ptrace_regset_read(
+    thread: CULong, regset_type: CLong, iov: *mut u8,
+) -> CLong {
+    unsafe { ptrace_read_regset(thread as *mut Thread, regset_type, iov.cast()) }
+}
+unsafe extern "C" fn f03_ptrace_regset_write(
+    thread: CULong, regset_type: CLong, iov: *mut u8,
+) -> CLong {
+    unsafe { ptrace_write_regset(thread as *mut Thread, regset_type, iov.cast()) }
+}
+
+/// Read the original FP register view through the full genuine I/O transaction.
+///
+/// # Safety
+/// The helper's retained tracee and actual architecture FP/usercopy contracts
+/// apply; the user address remains an integer until those providers consume it.
+#[no_mangle]
+pub unsafe extern "C" fn f03_ptrace_getfpregs_v1(pid: CInt, data: CLong) -> CLong {
+    unsafe {
+        ptrace_fpregs_body_result(
+            pid, data, addr_of!(F03_PTRACE_IO_OFFSETS), Some(f03_ptrace_io_find),
+            Some(f03_ptrace_io_unlock), Some(f03_ptrace_fp_read),
+        )
+    }
+}
+
+/// Write the original FP register view with unchanged provider failures.
+///
+/// # Safety
+/// Existing full helper/FP provider owns status checks, writable FP storage and
+/// actual usercopy semantics. No new buffer initialization or reference is added.
+#[no_mangle]
+pub unsafe extern "C" fn f03_ptrace_setfpregs_v1(pid: CInt, data: CLong) -> CLong {
+    unsafe {
+        ptrace_fpregs_body_result(
+            pid, data, addr_of!(F03_PTRACE_IO_OFFSETS), Some(f03_ptrace_io_find),
+            Some(f03_ptrace_io_unlock), Some(f03_ptrace_fp_write),
+        )
+    }
+}
+
+/// Read a register set, preserving copied iovec length and exact error ordering.
+///
+/// # Safety
+/// Full helper owns tracee acquisition/unlock. Genuine full usercopy initializes
+/// iovec before any field read; the architecture provider owns all register/xstate
+/// accesses and length changes. No user memory is directly dereferenced here.
+#[no_mangle]
+pub unsafe extern "C" fn f03_ptrace_getregset_v1(
+    pid: CInt, regset_type: CLong, data: CLong,
+) -> CLong {
+    let mut iov = MaybeUninit::<Iovec>::uninit();
+    // SAFETY: Actual body reads iovec only after successful full copy and preserves
+    // the original length-only output copy and all failure/unlock paths.
+    unsafe {
+        ptrace_regset_body_result(
+            pid, regset_type, data, iov.as_mut_ptr().cast(), size_of::<Iovec>(),
+            offset_of!(Iovec, iov_len), size_of::<SizeT>(), addr_of!(F03_PTRACE_IO_OFFSETS),
+            Some(f03_ptrace_io_find), Some(f03_ptrace_io_unlock),
+            Some(syscall_copy_from_user_bridge), Some(f03_ptrace_regset_read),
+            Some(syscall_copy_to_user_bridge),
+        )
+    }
+}
+
+/// Write a register set through the complete original copy/I/O/length transaction.
+///
+/// # Safety
+/// Same real iovec, tracee and architecture register/xstate contracts as the
+/// original write provider. Failure never permits reading uninitialized iovec.
+#[no_mangle]
+pub unsafe extern "C" fn f03_ptrace_setregset_v1(
+    pid: CInt, regset_type: CLong, data: CLong,
+) -> CLong {
+    let mut iov = MaybeUninit::<Iovec>::uninit();
+    unsafe {
+        ptrace_regset_body_result(
+            pid, regset_type, data, iov.as_mut_ptr().cast(), size_of::<Iovec>(),
+            offset_of!(Iovec, iov_len), size_of::<SizeT>(), addr_of!(F03_PTRACE_IO_OFFSETS),
+            Some(f03_ptrace_io_find), Some(f03_ptrace_io_unlock),
+            Some(syscall_copy_from_user_bridge), Some(f03_ptrace_regset_write),
+            Some(syscall_copy_to_user_bridge),
+        )
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+extern "C" {
+    #[link_name = "f03_ptrace_text_debug"]
+    static mut F03_PTRACE_TEXT_DEBUG: [crate::debug::Ddebug; 2];
+}
+
+unsafe extern "C" fn f03_ptrace_vm_read(
+    vm: CULong, addr: CULong, value: *mut CULong,
+) -> CLong {
+    // SAFETY: Actual full helper retains VM and a writable one-word destination.
+    // Preserve the genuine provider's C int -> C long sign extension.
+    unsafe {
+        crate::x86_memory_helpers::read_process_vm(
+            vm as *mut ProcessVm, value.cast(), addr as *const c_void, size_of::<CULong>(),
+        ) as CLong
+    }
+}
+unsafe extern "C" fn f03_ptrace_vm_write(
+    vm: CULong, addr: CULong, value: CULong,
+) -> CLong {
+    // SAFETY: An initialized local word remains live through the actual patch;
+    // no guessed mapping/Page getter or additional VM reference is introduced.
+    unsafe {
+        crate::x86_memory_helpers::patch_process_vm(
+            vm as *mut ProcessVm, addr as *mut c_void,
+            addr_of!(value).cast(), size_of::<CULong>(),
+        ) as CLong
+    }
+}
+unsafe extern "C" fn f03_ptrace_text_log(event: CInt, addr: CULong) {
+    let index = if event == 1 { 0 } else if event == 2 { 1 } else { return };
+    // SAFETY: Only fixed indices0/1 select genuine aligned C lexical records.
+    let debug = unsafe {
+        addr_of!(F03_PTRACE_TEXT_DEBUG).cast::<crate::debug::Ddebug>().add(index)
+    };
+    if unsafe { read_volatile(addr_of!((*debug).line_flags)) >> 24 } == 0 {
+        return;
+    }
+    // SAFETY: Original unsigned-long operand and literal format (including llx)
+    // retain their original C ABI width; evaluate only the enabled log site.
+    unsafe {
+        if event == 1 {
+            kprintf(c"ptrace_peektext: bad area  addr=0x%llx\n".as_ptr().cast(), addr);
+        } else {
+            kprintf(c"ptrace_poketext: bad address 0x%llx\n".as_ptr().cast(), addr);
+        }
+    }
+}
+
+/// Read one actual tracee VM word, then copy it with the original usercopy path.
+///
+/// # Safety
+/// Full helper owns tracee find/unlock and state validation. Genuine VM provider
+/// owns mappings/page-fault/copy lifetime; destination user address is never
+/// dereferenced directly by this entry. Provider errors keep original semantics.
+#[no_mangle]
+pub unsafe extern "C" fn f03_ptrace_peektext_v1(
+    pid: CInt, addr: CLong, data: CLong,
+) -> CLong {
+    unsafe {
+        ptrace_peektext_body_result(
+            pid, addr, data, addr_of!(F03_PTRACE_IO_OFFSETS), Some(f03_ptrace_io_find),
+            Some(f03_ptrace_io_unlock), Some(f03_ptrace_vm_read),
+            Some(syscall_copy_to_user_bridge), Some(f03_ptrace_text_log),
+        )
+    }
+}
+
+/// Patch one actual tracee VM word with unchanged provider errors and unlock.
+///
+/// # Safety
+/// The same genuine VM/tracee ownership contract as original C applies. No new
+/// storage, protection guarantee, fault policy or mapping reference is invented.
+#[no_mangle]
+pub unsafe extern "C" fn f03_ptrace_poketext_v1(
+    pid: CInt, addr: CLong, data: CLong,
+) -> CLong {
+    unsafe {
+        ptrace_poketext_body_result(
+            pid, addr, data, addr_of!(F03_PTRACE_IO_OFFSETS), Some(f03_ptrace_io_find),
+            Some(f03_ptrace_io_unlock), Some(f03_ptrace_vm_write), Some(f03_ptrace_text_log),
+        )
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+/// Read the original one-word ptrace event message with unchanged copy errors.
+///
+/// # Safety
+/// Full helper retains tracee through actual find/unlock and status validation.
+/// Data stays an integer user address until the genuine usercopy bridge consumes
+/// it. No new event-message initialization or ownership guarantee is introduced.
+#[no_mangle]
+pub unsafe extern "C" fn f03_ptrace_geteventmsg_v1(pid: CInt, data: CLong) -> CLong {
+    unsafe {
+        ptrace_geteventmsg_body_result(
+            pid, data, size_of::<CULong>(), addr_of!(F03_PTRACE_IO_OFFSETS),
+            Some(f03_ptrace_io_find), Some(f03_ptrace_io_unlock),
+            Some(syscall_copy_to_user_bridge),
+        )
+    }
+}
+
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+extern "C" {
+    #[link_name = "f03_ptrace_control_debug"]
+    static mut F03_PTRACE_CONTROL_DEBUG: [crate::debug::Ddebug; 2];
+}
+fn f03_ptrace_flag_text(
+    flags: CInt, bit: CInt, text: &'static core::ffi::CStr,
+) -> *const i8 {
+    if flags & bit != 0 { text.as_ptr() } else { c"".as_ptr() }
+}
+unsafe fn f03_ptrace_control_debug_enabled(index: usize) -> bool {
+    // SAFETY: Fixed internal indices0/1 into actual aligned C debug records.
+    let debug = unsafe {
+        addr_of!(F03_PTRACE_CONTROL_DEBUG).cast::<crate::debug::Ddebug>().add(index)
+    };
+    unsafe { read_volatile(addr_of!((*debug).line_flags)) >> 24 != 0 }
+}
+
+/// Preserve the actual shared control formatter and original ABI operands.
+///
+/// # Safety
+/// Full original helpers supply int event/value/result. The debug storage is
+/// genuine C lexical data; no graph, ownership edge or user pointer is consumed.
+#[no_mangle]
+pub unsafe extern "C" fn f03_ptrace_control_log_v1(event: CInt, value: CInt, result: CInt) {
+    if event == PTRACE_CONTROL_LOG_SETOPTIONS_UNSUPPORTED {
+        unsafe {
+            kprintf(c"ptrace_setoptions: not supported flag %x\n".as_ptr().cast(), value);
+        }
+    } else if event == PTRACE_CONTROL_LOG_SETOPTIONS_APPLIED {
+        if unsafe { f03_ptrace_control_debug_enabled(0) } {
+            let good = f03_ptrace_flag_text(
+                value, PTRACE_O_TRACESYSGOOD, c"|PTRACE_O_TRACESYSGOOD",
+            );
+            let fork = f03_ptrace_flag_text(value, PTRACE_O_TRACEFORK, c"|PTRACE_O_TRACEFORK");
+            let vfork = f03_ptrace_flag_text(value, PTRACE_O_TRACEVFORK, c"|PTRACE_O_TRACEVFORK");
+            let clone = f03_ptrace_flag_text(value, PTRACE_O_TRACECLONE, c"|PTRACE_O_TRACECLONE");
+            let exec = f03_ptrace_flag_text(value, PTRACE_O_TRACEEXEC, c"|PTRACE_O_TRACEEXEC");
+            let vfork_done = f03_ptrace_flag_text(
+                value, PTRACE_O_TRACEVFORKDONE, c"|PTRACE_O_TRACEVFORKDONE",
+            );
+            let exit = f03_ptrace_flag_text(value, PTRACE_O_TRACEEXIT, c"|PTRACE_O_TRACEEXIT");
+            // SAFETY: Preserve exact7 flags for6suffix slots, including the final
+            // extra TRACEEXIT argument. This port does not silently fix output.
+            unsafe {
+                kprintf(c"%s: (PT_TRACED%s%s%s%s%s%s)\n".as_ptr().cast(),
+                    c"ptrace_setoptions".as_ptr(), good, fork, vfork, clone, exec,
+                    vfork_done, exit);
+            }
+        }
+    } else if event == PTRACE_CONTROL_LOG_ATTACH_RETURN {
+        if unsafe { f03_ptrace_control_debug_enabled(1) } {
+            unsafe {
+                kprintf(c"ptrace_attach,returning,error=%d\n".as_ptr().cast(), result);
+            }
+        }
+    }
+}
+
+unsafe extern "C" fn f03_ptrace_detach_call(thread: CULong, data: CInt) {
+    // SAFETY: Original outer helper retains the find edge in addition to the
+    // tracing edge consumed by the genuine detach lifecycle. No ref is invented.
+    unsafe { f03_ptrace_detach_thread_v1(thread as *mut Thread, data) };
+}
+
+/// Apply supported ptrace options through the complete genuine Rust body.
+///
+/// # Safety
+/// Actual find/unlock owns tracee lifetime and its existing ptrace-state contract.
+/// No new flags, lock, reference or substituted error behavior is introduced.
+#[no_mangle]
+pub unsafe extern "C" fn f03_ptrace_setoptions_v1(pid: CInt, flags: CInt) -> CInt {
+    unsafe {
+        ptrace_setoptions_body_result(
+            pid, flags, addr_of!(F03_PTRACE_IO_OFFSETS), Some(f03_ptrace_io_find),
+            Some(f03_ptrace_io_unlock), Some(f03_ptrace_control_log_v1),
+        )
+    }
+}
+
+/// Detach a child with unchanged outer find/unlock and lifecycle ordering.
+///
+/// # Safety
+/// Original current-thread/process and distinct tracing/find ownership edges
+/// apply. Actual full helper/lifecycle consume those edges as before; this entry
+/// adds no reference to avoid release and does not change the final paired unlock.
+#[no_mangle]
+pub unsafe extern "C" fn ptrace_detach(pid: CInt, data: CInt) -> CInt {
+    let cpu = unsafe { get_this_cpu_local_var() };
+    let thread = unsafe { addr_of!((*cpu).current).read() };
+    let proc = unsafe { addr_of!((*thread).proc).read() };
+    unsafe {
+        ptrace_detach_body_result(
+            pid, data, proc as CULong, addr_of!(F03_PTRACE_IO_OFFSETS),
+            Some(f03_ptrace_io_find), Some(f03_ptrace_io_unlock), Some(f03_ptrace_detach_call),
+        )
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+extern "C" {
+    #[link_name = "f03_ptrace_attach_parent_debug"]
+    static mut F03_PTRACE_ATTACH_PARENT_DEBUG: crate::debug::Ddebug;
+}
+
+static F03_PTRACE_ATTACH_OFFSETS: crate::process_helpers::ProcessPtraceAttachOffsets =
+    crate::process_helpers::ProcessPtraceAttachOffsets {
+        thread_proc_offset: offset_of!(Thread, proc) as CULong,
+        thread_report_proc_offset: offset_of!(Thread, report_proc) as CULong,
+        thread_report_siblings_list_offset: offset_of!(Thread, report_siblings_list) as CULong,
+        thread_ptrace_debugreg_offset: offset_of!(Thread, ptrace_debugreg) as CULong,
+        proc_pid_offset: offset_of!(Process, pid) as CULong,
+        proc_parent_offset: offset_of!(Process, parent) as CULong,
+        proc_main_thread_offset: offset_of!(Process, main_thread) as CULong,
+        proc_children_lock_offset: offset_of!(Process, children_lock) as CULong,
+        proc_threads_lock_offset: offset_of!(Process, threads_lock) as CULong,
+        proc_children_list_offset: offset_of!(Process, children_list) as CULong,
+        proc_siblings_list_offset: offset_of!(Process, siblings_list) as CULong,
+        proc_ptraced_siblings_list_offset: offset_of!(Process, ptraced_siblings_list) as CULong,
+        proc_ptraced_children_list_offset: offset_of!(Process, ptraced_children_list) as CULong,
+        proc_report_threads_list_offset: offset_of!(Process, report_threads_list) as CULong,
+    };
+
+// SAFETY (adapter callers): actual full attach helper retains the owning graph
+// and supplies genuine lock/node/thread layouts. No fake allocation or ref edge.
+unsafe extern "C" fn f03_attach_lock(lock: CULong, node: *mut c_void) {
+    unsafe { crate::lock_helpers::__mcs_rwlock_writer_lock(lock as *mut _, node.cast()) };
+}
+unsafe extern "C" fn f03_attach_unlock(lock: CULong, node: *mut c_void) {
+    unsafe { crate::lock_helpers::__mcs_rwlock_writer_unlock(lock as *mut _, node.cast()) };
+}
+unsafe extern "C" fn f03_attach_alloc_debug(thread: *mut c_void) -> CInt {
+    unsafe { alloc_debugreg(thread.cast()) as CInt }
+}
+unsafe extern "C" fn f03_attach_clear_step(thread: *mut c_void) {
+    unsafe { clear_single_step(thread.cast()) };
+}
+unsafe extern "C" fn f03_attach_hold(thread: *mut c_void) {
+    unsafe { let _ = crate::process_helpers::hold_thread(thread.cast()); }
+}
+unsafe extern "C" fn f03_attach_parent_log(
+    event: CInt, pid: CInt, _value: CULong, _error: CInt,
+) {
+    // Actual process helper's PROCESS_PTRACE_TRACEME_LOG_PARENT value is2.
+    if event != 2 {
+        return;
+    }
+    let enabled = unsafe {
+        read_volatile(addr_of!(F03_PTRACE_ATTACH_PARENT_DEBUG.line_flags)) >> 24 != 0
+    };
+    if enabled {
+        unsafe { kprintf(c"ptrace_attach() parent->pid=%d\n".as_ptr().cast(), pid) };
+    }
+}
+
+/// Link report/reparent state, then allocate and retain the original tracing edge.
+///
+/// # Safety
+/// Caller retains actual child/tracer graph and synchronization contract. Complete
+/// helper owns report/list updates and debug allocation. If allocation fails,
+/// original prior list mutations remain committed; no rollback/ref is invented.
+#[no_mangle]
+pub unsafe extern "C" fn f03_ptrace_attach_thread_v1(
+    thread: *mut Thread, proc: *mut Process,
+) -> CInt {
+    let mut node = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+    unsafe {
+        crate::process_helpers::process_ptrace_attach_thread_body_result(
+            thread.cast(), proc.cast(), addr_of!(F03_PTRACE_ATTACH_OFFSETS),
+            node.as_mut_ptr().cast(), Some(f03_attach_lock), Some(f03_attach_unlock),
+            Some(f03_attach_alloc_debug), Some(f03_attach_clear_step), Some(f03_attach_hold),
+            Some(f03_attach_parent_log),
+        )
+    }
+}
+
+/// Preserve the existing unsigned-address callback ABI used by clone reporting.
+///
+/// # Safety
+/// Same original live child/tracer and tracing ownership contract as typed entry.
+#[no_mangle]
+pub unsafe extern "C" fn f03_ptrace_attach_thread_addr_v1(
+    thread: CULong, proc: CULong,
+) -> CInt {
+    unsafe { f03_ptrace_attach_thread_v1(thread as *mut Thread, proc as *mut Process) }
+}
+
+/// Complete original ptrace-attach policy, inner link operation and stop signal.
+///
+/// # Safety
+/// Current/child objects and actual find/unlock/release contracts remain valid.
+/// Full original helper intentionally ignores inner attach error, unlocks then
+/// sends its initialized stop info, returning that delivery result as before.
+#[no_mangle]
+pub unsafe extern "C" fn f03_ptrace_attach_v1(pid: CInt) -> CInt {
+    let cpu = unsafe { get_this_cpu_local_var() };
+    let current = unsafe { addr_of!((*cpu).current).read() };
+    let proc = unsafe { addr_of!((*current).proc).read() };
+    unsafe {
+        ptrace_attach_body_result(
+            pid, current as CULong, proc as CULong, addr_of!(F03_PTRACE_IO_OFFSETS),
+            Some(f03_ptrace_io_find), Some(f03_ptrace_io_unlock),
+            Some(f03_ptrace_attach_thread_addr_v1), Some(syscall_do_kill_thread_bridge),
+            Some(f03_ptrace_control_log_v1),
+        )
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+unsafe extern "C" fn f03_eventfd_send(
+    channel: *mut c_void, packet: *mut c_void, opt: CInt,
+) -> CInt {
+    // SAFETY: Full existing packet helper supplies an initialized IkcScdPacket.
+    // Channel is the unchanged CPU0 channel, borrowed through this synchronous send.
+    unsafe { crate::ikc_manycore::ihk_ikc_send(channel.cast(), packet, opt) }
+}
+
+/// Send the original CPU0 event notification with the original ignored result.
+///
+/// # Safety
+/// CPU-local storage and its CPU0 channel must remain live under the same kernel
+/// initialization/lifetime contract as the original entry. Actual send retains its
+/// existing IRQ/queue semantics; this entry adds no delivery acknowledgement.
+#[no_mangle]
+pub unsafe extern "C" fn eventfd(eventfd_type: CInt) {
+    // SAFETY: Use the same CPU0 lookup, channel field and packet-preparation helper
+    // as C. The helper initializes every packet byte before the real Rust send.
+    let cpu0 = unsafe { crate::cls::get_cpu_local_var(0) };
+    let channel = unsafe { (*cpu0).ikc2linux };
+    let _ = unsafe {
+        syscall_eventfd_send_result(channel, 0x46, eventfd_type, Some(f03_eventfd_send))
+    };
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+type F03FutexLinuxPrintk = unsafe extern "C" fn(*const i8, ...) -> CInt;
+type F03FutexLinuxWait = unsafe extern "C" fn(*mut c_void, CULong) -> CLong;
+
+#[repr(C)]
+struct F03FutexRetainedProviders {
+    syscall_time: Option<FutexSyscallTimeFn>,
+    ns_per_tsc: Option<FutexNsPerTscFn>,
+    log: Option<FutexLogFn>,
+}
+
+unsafe extern "C" {
+    #[link_name = "linux_printk"]
+    static mut F03_FUTEX_LINUX_PRINTK: Option<F03FutexLinuxPrintk>;
+    #[link_name = "linux_wait_event"]
+    static mut F03_FUTEX_LINUX_WAIT: Option<F03FutexLinuxWait>;
+    #[link_name = "linux_clock_gettime"]
+    static mut F03_FUTEX_LINUX_CLOCK: Option<FutexLinuxTimeFn>;
+    static f03_futex_retained_providers_v1: F03FutexRetainedProviders;
+}
+
+unsafe extern "C" fn f03_futex_local_time(ts: *mut TimeSpec) {
+    // SAFETY: Full existing helper supplies writable TimeSpec storage. Reuse the
+    // actual cfg-selected Rust clock implementation, without adding a clock sample.
+    unsafe { calculate_time_from_tsc(ts) };
+}
+
+unsafe extern "C" fn f03_futex_linux_time(clock_id: CInt, ts: *mut TimeSpec) -> CInt {
+    // SAFETY: Linux function-slot initialization must be serialized by the actual
+    // caller contract; this retains the original null refusal and exact invocation.
+    let clock = unsafe { F03_FUTEX_LINUX_CLOCK };
+    match clock {
+        Some(clock) => unsafe { clock(clock_id, ts) },
+        None => -EFAULT,
+    }
+}
+
+unsafe extern "C" fn f03_futex_dispatch(
+    uaddr: CULong, op: CInt, val: u32, timeout: u64,
+    uaddr2: CULong, val2: u32, val3: u32, fshared: CInt,
+) -> CInt {
+    // SAFETY: Keep addresses opaque until the genuine Rust futex implementation,
+    // which retains its established access/atomic/queue and lifetime requirements.
+    unsafe {
+        crate::futex::futex(
+            uaddr as *mut u32, op, val, timeout, uaddr2 as *mut u32,
+            val2, val3, fshared,
+        )
+    }
+}
+
+/// Execute the complete existing futex transaction after original UTI setup.
+///
+/// # Safety
+/// Context, CPU-local state and monitor must remain live. Non-null Linux entry
+/// addresses must have their exact declared function types. The original global
+/// lazy initialization requires genuine serialized caller ownership: this source
+/// port does not establish it, and concurrent initialization remains unqualified.
+/// Actual full helper and providers retain usercopy, wait/IRQ and futex contracts.
+#[no_mangle]
+pub unsafe extern "C" fn do_futex(
+    n: CInt,
+    arg0: CULong,
+    arg1: CULong,
+    arg2: CULong,
+    arg3: CULong,
+    arg4: CULong,
+    arg5: CULong,
+    uti_clv_addr: CULong,
+    uti_futex_resp: *mut c_void,
+    linux_wait: *mut c_void,
+    linux_printk: *mut c_void,
+    linux_clock: *mut c_void,
+) -> CLong {
+    // SAFETY: Caller-supplied non-null values name genuine functions. Preserve
+    // printk -> wait -> clock order, and never overwrite an existing function.
+    if !linux_printk.is_null() && unsafe { F03_FUTEX_LINUX_PRINTK }.is_none() {
+        let print = unsafe {
+            core::mem::transmute::<*mut c_void, F03FutexLinuxPrintk>(linux_printk)
+        };
+        unsafe { F03_FUTEX_LINUX_PRINTK = Some(print) };
+    }
+    if !linux_wait.is_null() && unsafe { F03_FUTEX_LINUX_WAIT }.is_none() {
+        let wait = unsafe {
+            core::mem::transmute::<*mut c_void, F03FutexLinuxWait>(linux_wait)
+        };
+        unsafe { F03_FUTEX_LINUX_WAIT = Some(wait) };
+    }
+    if !linux_clock.is_null() && unsafe { F03_FUTEX_LINUX_CLOCK }.is_none() {
+        let clock = unsafe {
+            core::mem::transmute::<*mut c_void, FutexLinuxTimeFn>(linux_clock)
+        };
+        unsafe { F03_FUTEX_LINUX_CLOCK = Some(clock) };
+    }
+
+    let uti_clv = uti_clv_addr as *mut CpuLocalVar;
+    if !uti_clv.is_null() {
+        // SAFETY: Caller retains this actual UTI CpuLocalVar and response endpoint.
+        unsafe { (*uti_clv).uti_futex_resp = uti_futex_resp };
+    } else {
+        // SAFETY: Same current CPU-local lookup/monitor field as the original C.
+        let cpu = unsafe { crate::cls::get_this_cpu_local_var() };
+        let monitor = unsafe { (*cpu).monitor };
+        unsafe { (*monitor).status = IHK_OS_MONITOR_KERNEL_HEAVY };
+    }
+
+    // SAFETY: Immutable C data retains genuine delegated-clock/calibration/log
+    // function pointers. Direct replacements use actual already-selected Rust.
+    unsafe {
+        do_futex_body_result(
+            n, arg0, arg1, arg2, arg3, arg4, arg5,
+            (!uti_clv.is_null()) as CInt, gettime_local_support,
+            f03_futex_retained_providers_v1.syscall_time, Some(f03_futex_local_time),
+            Some(f03_futex_linux_time), f03_futex_retained_providers_v1.ns_per_tsc,
+            Some(f03_futex_dispatch), f03_futex_retained_providers_v1.log,
+        )
+    }
+}
+
+/// Decode all six genuine syscall arguments and invoke the non-UTI entry.
+///
+/// # Safety
+/// ctx must point to the initialized user context supplied to this real syscall.
+/// Actual getter functions read only their selected registers. Full futex entry
+/// retains all user-address and blocking requirements described above.
+#[no_mangle]
+pub unsafe extern "C" fn sys_futex(n: CInt, ctx: *mut X86UserContext) -> CLong {
+    // SAFETY: Six real getters, original argument order, absent UTI/Linux endpoints.
+    unsafe {
+        do_futex(
+            n,
+            crate::x86_cpu_helpers::ihk_mc_syscall_arg0(ctx),
+            crate::x86_cpu_helpers::ihk_mc_syscall_arg1(ctx),
+            crate::x86_cpu_helpers::ihk_mc_syscall_arg2(ctx),
+            crate::x86_cpu_helpers::ihk_mc_syscall_arg3(ctx),
+            crate::x86_cpu_helpers::ihk_mc_syscall_arg4(ctx),
+            crate::x86_cpu_helpers::ihk_mc_syscall_arg5(ctx),
+            0, null_mut(), null_mut(), null_mut(), null_mut(),
+        )
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+unsafe extern "C" {
+    static mut f03_process_cleanup_missing_debug_v1: crate::debug::Ddebug;
+}
+
+#[cfg(enable_tofu)]
+unsafe extern "C" {
+    #[link_name = "tof_utofu_release_fd"]
+    fn f03_process_cleanup_tofu_release(proc: *mut Process, fd: CInt);
+    static mut f03_process_cleanup_release_debug_v1: crate::debug::Ddebug;
+    static f03_process_cleanup_source_file_v1: u8;
+    static f03_process_cleanup_free_line_v1: CInt;
+}
+
+unsafe extern "C" fn f03_process_cleanup_find(pid: CInt, lock: *mut c_void) -> *mut c_void {
+    // SAFETY: Full helper supplies its actual writable MCS IRQ-save node. Genuine
+    // lookup retains the original process-hash read-lock scope until paired unlock.
+    unsafe { crate::process_helpers::find_process(pid, lock.cast()).cast() }
+}
+
+unsafe extern "C" fn f03_process_cleanup_unlock(proc: *mut c_void, lock: *mut c_void) {
+    // SAFETY: Actual process/node pair from the genuine lookup, released once by
+    // the unchanged complete helper. This does not invent a process reference.
+    unsafe { crate::process_helpers::process_unlock(proc.cast(), lock.cast()) };
+}
+
+unsafe extern "C" fn f03_process_cleanup_missing_log(pid: CInt) {
+    // SAFETY: Genuine aligned C lexical debug storage; preserve original flag gate.
+    let enabled = unsafe {
+        read_volatile(addr_of!(f03_process_cleanup_missing_debug_v1.line_flags)) >> 24 != 0
+    };
+    if enabled {
+        unsafe {
+            kprintf(
+                c"%s: PID %d couldn't be found\n".as_ptr().cast(),
+                c"process_cleanup_fd".as_ptr(), pid,
+            );
+        }
+    }
+}
+
+unsafe extern "C" fn f03_process_cleanup_one(proc: *mut c_void, fd: CInt) -> CLong {
+    // SAFETY: Original complete cleanup helper owns lookup lock and fd range.
+    unsafe { __process_cleanup_fd(proc.cast(), fd) as CLong }
+}
+
+/// Release one original optional Tofu descriptor and its tracked path ownership.
+///
+/// # Safety
+/// With enable_tofu, proc must be live under original caller ownership and fd must
+/// be within its actual 1024-entry arrays. Tofu release and path storage require
+/// the original synchronization contract. No new validation/ref/serialization is
+/// introduced. Without enable_tofu the original entry accesses neither argument.
+#[no_mangle]
+pub unsafe extern "C" fn __process_cleanup_fd(proc: *mut Process, fd: CInt) -> CInt {
+    #[cfg(enable_tofu)]
+    {
+        // SAFETY: Original process and descriptor preconditions stated above.
+        if process_cleanup_tofu_needed_result(unsafe { (*proc).enable_tofu }) != 0 {
+            let path_slot = unsafe {
+                addr_of_mut!((*proc).fd_path).cast::<*mut i8>().wrapping_add(fd as usize)
+            };
+            let data_slot = unsafe {
+                addr_of_mut!((*proc).fd_pde_data)
+                    .cast::<*mut c_void>().wrapping_add(fd as usize)
+            };
+            let enabled = unsafe {
+                read_volatile(addr_of!(f03_process_cleanup_release_debug_v1.line_flags)) >> 24 != 0
+            };
+            if enabled {
+                // SAFETY: Read the original path before release only for this
+                // original debug call. The actual formatter retains its null case.
+                let path = unsafe { path_slot.read() };
+                unsafe {
+                    kprintf(
+                        c"%s: -> tof_utofu_release_fd() @ fd: %d (%s)\n".as_ptr().cast(),
+                        c"__process_cleanup_fd".as_ptr(), fd, path,
+                    );
+                }
+            }
+            // SAFETY: Genuine existing Tofu endpoint, unchanged call-before-clear.
+            unsafe { f03_process_cleanup_tofu_release(proc, fd) };
+            unsafe { data_slot.write(null_mut()) };
+            // Read AFTER the external endpoint, as C does; do not free a cached
+            // pre-call pointer if that endpoint changes the descriptor path.
+            let path = unsafe { path_slot.read() };
+            if process_cleanup_fd_path_free_needed_result(path.cast()) != 0 {
+                // SAFETY: Actual tracked ownership and original lexical free
+                // origin. Clear only after free, preserving original ordering.
+                unsafe {
+                    crate::mem_helpers::kfree_tracked(
+                        path.cast(), addr_of!(f03_process_cleanup_source_file_v1).cast_mut().cast(),
+                        f03_process_cleanup_free_line_v1,
+                    );
+                    path_slot.write(null_mut());
+                }
+            }
+        }
+    }
+    #[cfg(not(enable_tofu))]
+    let _ = (proc, fd);
+    0
+}
+
+/// Look up and clean one descriptor with the original paired hash unlock.
+///
+/// # Safety
+/// Genuine process lookup/callback providers retain their original hash, descriptor
+/// and optional Tofu lifetime contracts. Missing processes remain successful no-op.
+#[no_mangle]
+pub unsafe extern "C" fn process_cleanup_fd(pid: CInt, fd: CInt) -> CInt {
+    let mut lock = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+    // SAFETY: Actual complete helper owns lookup→cleanup→unlock; node is filled by
+    // the genuine MCS provider before it is consumed. No invented process ref.
+    unsafe {
+        process_cleanup_fd_body_result(
+            pid, fd, lock.as_mut_ptr().cast(), Some(f03_process_cleanup_find),
+            Some(f03_process_cleanup_unlock), Some(f03_process_cleanup_one),
+            Some(f03_process_cleanup_missing_log),
+        ) as CInt
+    }
+}
+
+/// Clean original descriptors2..1024 before termination when Tofu is compiled in.
+///
+/// # Safety
+/// Original process/descriptor ownership and optional Tofu endpoint contracts apply.
+/// Complete helper retains one lookup/unlock transaction and ignores inner results.
+#[no_mangle]
+pub unsafe extern "C" fn process_cleanup_before_terminate(pid: CInt) -> CInt {
+    let mut lock = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+    #[cfg(enable_tofu)]
+    let (enable, max_fd) = (1, 1024);
+    #[cfg(not(enable_tofu))]
+    let (enable, max_fd) = (0, 2);
+    // SAFETY: Same genuine lookup lock and original half-open descriptor interval.
+    unsafe {
+        process_cleanup_before_terminate_body_result(
+            pid, lock.as_mut_ptr().cast(), enable, 2, max_fd,
+            Some(f03_process_cleanup_find), Some(f03_process_cleanup_unlock),
+            Some(f03_process_cleanup_one),
+        ) as CInt
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+#[cfg(enable_perf)]
+mod f03_perf_counter_control_v1 {
+    use core::ffi::c_void;
+    use core::mem::offset_of;
+
+    use crate::abi::{CInt, Process, SizeT, Thread};
+
+    use super::{
+        perf_counter_set_entry_body_result, perf_reset_body_result, perf_start_body_result,
+        perf_stop_body_result, PerfCounterAttrFlagsFn, PerfCounterExtraSetFn,
+        PerfCounterInitRawFn, PerfCounterMaskCheckFn, PerfCounterStartFn, PerfCounterStopFn,
+        PerfEventIntFn, PerfEventUpdateFn, PerfReadValueFn, SyncChildAtomic64SetFn,
+    };
+
+    #[repr(C)]
+    struct EventLayout {
+        group_leader: SizeT,
+        sibling_list: SizeT,
+        group_entry: SizeT,
+        counter_id: SizeT,
+        state: SizeT,
+        use_invariant_tsc: SizeT,
+        base_user_tsc: SizeT,
+        stopped_user_tsc: SizeT,
+        user_accum_count: SizeT,
+        base_system_tsc: SizeT,
+        stopped_system_tsc: SizeT,
+        system_accum_count: SizeT,
+        count: SizeT,
+        attr: SizeT,
+        hw_config: SizeT,
+        extra_reg_reg: SizeT,
+        kernel_mode: CInt,
+        user_mode: CInt,
+        inactive_state: CInt,
+        active_state: CInt,
+        pp_count: CInt,
+        pp_none: CInt,
+    }
+
+    #[repr(C)]
+    struct Providers {
+        attr_flags: Option<PerfCounterAttrFlagsFn>,
+        extra_set: Option<PerfCounterExtraSetFn>,
+        init_raw: Option<PerfCounterInitRawFn>,
+        mask_check: Option<PerfCounterMaskCheckFn>,
+        set_period: Option<PerfEventIntFn>,
+        counter_start: Option<PerfCounterStartFn>,
+        counter_stop: Option<PerfCounterStopFn>,
+        event_update: Option<PerfEventUpdateFn>,
+        read_value: Option<PerfReadValueFn>,
+        atomic_set: Option<SyncChildAtomic64SetFn>,
+    }
+
+    unsafe extern "C" {
+        static f03_perf_event_layout_v1: EventLayout;
+        static f03_perf_counter_providers_v1: Providers;
+    }
+
+    unsafe fn current_thread() -> *mut Thread {
+        // SAFETY: Same live current CPU-local lookup as the original entries.
+        let cpu = unsafe { crate::cls::get_this_cpu_local_var() };
+        unsafe { (*cpu).current }
+    }
+
+    unsafe extern "C" fn counter_set(event: *mut c_void) -> CInt {
+        // SAFETY: Complete start helper supplies the same live event it owns.
+        unsafe { perf_counter_set(event) }
+    }
+
+    /// Configure the original complete counter body through genuine providers.
+    ///
+    /// # Safety
+    /// Event must obey the original perf lifetime and hardware-access contracts.
+    /// Actual C header data supplies all offsets/bitfield boundaries and modes;
+    /// no private Rust layout or getter is invented for the perf event structure.
+    #[no_mangle]
+    pub unsafe extern "C" fn perf_counter_set(event: *mut c_void) -> CInt {
+        // SAFETY: Immutable source-bound actual C offset/provider data, cfg-matched.
+        unsafe {
+            perf_counter_set_entry_body_result(
+                event, f03_perf_event_layout_v1.attr, f03_perf_event_layout_v1.counter_id,
+                f03_perf_event_layout_v1.hw_config, f03_perf_event_layout_v1.extra_reg_reg,
+                f03_perf_event_layout_v1.kernel_mode, f03_perf_event_layout_v1.user_mode,
+                f03_perf_counter_providers_v1.attr_flags,
+                f03_perf_counter_providers_v1.extra_set,
+                f03_perf_counter_providers_v1.init_raw,
+            )
+        }
+    }
+
+    /// Start the original leader/sibling transaction and ignore its result as C did.
+    ///
+    /// # Safety
+    /// Event/group/current thread ownership and counter programming serialization
+    /// must match the original complete helper. No extra ref or lock is introduced.
+    #[no_mangle]
+    pub unsafe extern "C" fn perf_start(event: *mut c_void) {
+        let thread = unsafe { current_thread() };
+        // SAFETY: Real layouts, original providers and unchanged full helper order.
+        let _ = unsafe {
+            perf_start_body_result(
+                event, thread.cast(), f03_perf_event_layout_v1.group_leader,
+                f03_perf_event_layout_v1.sibling_list, f03_perf_event_layout_v1.group_entry,
+                f03_perf_event_layout_v1.counter_id, f03_perf_event_layout_v1.state,
+                f03_perf_event_layout_v1.use_invariant_tsc,
+                f03_perf_event_layout_v1.base_user_tsc,
+                f03_perf_event_layout_v1.stopped_user_tsc,
+                f03_perf_event_layout_v1.user_accum_count,
+                f03_perf_event_layout_v1.base_system_tsc,
+                f03_perf_event_layout_v1.stopped_system_tsc,
+                f03_perf_event_layout_v1.system_accum_count,
+                offset_of!(Thread, user_tsc), offset_of!(Thread, system_tsc),
+                offset_of!(Thread, proc), offset_of!(Process, perf_status),
+                f03_perf_event_layout_v1.inactive_state, f03_perf_event_layout_v1.active_state,
+                f03_perf_event_layout_v1.pp_count,
+                f03_perf_counter_providers_v1.mask_check,
+                f03_perf_counter_providers_v1.set_period, Some(counter_set),
+                f03_perf_counter_providers_v1.counter_start,
+            )
+        };
+    }
+
+    /// Reset complete original leader/sibling state and keep the original void ABI.
+    ///
+    /// # Safety
+    /// Actual event/group lifetime, accounting and atomic backend contracts apply.
+    /// Complete helper and existing value reader preserve original effect order.
+    #[no_mangle]
+    pub unsafe extern "C" fn perf_reset(event: *mut c_void) {
+        let thread = unsafe { current_thread() };
+        // SAFETY: Actual C event offsets and genuine Thread layout/provider data.
+        let _ = unsafe {
+            perf_reset_body_result(
+                event, thread.cast(), f03_perf_event_layout_v1.group_leader,
+                f03_perf_event_layout_v1.sibling_list, f03_perf_event_layout_v1.group_entry,
+                f03_perf_event_layout_v1.counter_id, f03_perf_event_layout_v1.use_invariant_tsc,
+                f03_perf_event_layout_v1.base_user_tsc,
+                f03_perf_event_layout_v1.stopped_user_tsc,
+                f03_perf_event_layout_v1.user_accum_count,
+                f03_perf_event_layout_v1.base_system_tsc,
+                f03_perf_event_layout_v1.stopped_system_tsc,
+                f03_perf_event_layout_v1.system_accum_count, f03_perf_event_layout_v1.count,
+                offset_of!(Thread, user_tsc), offset_of!(Thread, system_tsc),
+                f03_perf_counter_providers_v1.mask_check,
+                f03_perf_counter_providers_v1.read_value,
+                f03_perf_counter_providers_v1.atomic_set,
+            )
+        };
+    }
+
+    /// Stop the original bounded group transaction with its unchanged void result.
+    ///
+    /// # Safety
+    /// Complete helper retains its existing group bounds, state and hardware
+    /// serialization requirements. Its fixed stop-event capacity is unchanged.
+    #[no_mangle]
+    pub unsafe extern "C" fn f03_perf_stop_v1(event: *mut c_void) {
+        let thread = unsafe { current_thread() };
+        // SAFETY: Exact real offsets/providers and original active/inactive states.
+        let _ = unsafe {
+            perf_stop_body_result(
+                event, thread.cast(), f03_perf_event_layout_v1.group_leader,
+                f03_perf_event_layout_v1.sibling_list, f03_perf_event_layout_v1.group_entry,
+                f03_perf_event_layout_v1.counter_id, f03_perf_event_layout_v1.state,
+                f03_perf_event_layout_v1.use_invariant_tsc,
+                f03_perf_event_layout_v1.stopped_user_tsc,
+                f03_perf_event_layout_v1.stopped_system_tsc,
+                offset_of!(Thread, user_tsc), offset_of!(Thread, system_tsc),
+                offset_of!(Thread, proc), offset_of!(Process, monitoring_event),
+                offset_of!(Process, perf_status), f03_perf_event_layout_v1.active_state,
+                f03_perf_event_layout_v1.inactive_state, f03_perf_event_layout_v1.pp_none,
+                0, f03_perf_counter_providers_v1.mask_check,
+                f03_perf_counter_providers_v1.counter_stop,
+                f03_perf_counter_providers_v1.event_update,
+            )
+        };
+    }
+
+    /// Genuine callback adapters retain the existing ioctl dispatch ABI.
+    ///
+    /// # Safety
+    /// The actual ioctl helper supplies a live event under its original ownership.
+    #[no_mangle]
+    pub unsafe extern "C" fn f03_perf_start_bridge_v1(event: *mut c_void) {
+        unsafe { perf_start(event) };
+    }
+
+    /// # Safety
+    /// Same original event/group ownership as the complete stop transaction.
+    #[no_mangle]
+    pub unsafe extern "C" fn f03_perf_stop_bridge_v1(event: *mut c_void) {
+        unsafe { f03_perf_stop_v1(event) };
+    }
+
+    /// # Safety
+    /// Same original event/group ownership as the complete reset transaction.
+    #[no_mangle]
+    pub unsafe extern "C" fn f03_perf_reset_bridge_v1(event: *mut c_void) {
+        unsafe { perf_reset(event) };
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+#[cfg(enable_perf)]
+mod f03_perf_descriptor_entries_v1 {
+    use core::ffi::c_void;
+    use core::mem::offset_of;
+
+    use crate::abi::{CInt, CLong, Mckfd, SizeT, Thread, X86UserContext};
+
+    use super::{
+        perf_close_body_result, perf_fcntl_body_result, syscall_mckfd_free_bridge,
+        SyscallForwardContextFn,
+    };
+
+    #[repr(C)]
+    struct CloseLayout {
+        counter_id: SizeT,
+        extra_reg_reg: SizeT,
+        extra_reg_idx: SizeT,
+        fcntl_nr: CInt,
+        forward: Option<SyscallForwardContextFn>,
+    }
+
+    unsafe extern "C" {
+        static f03_perf_descriptor_layout_v1: CloseLayout;
+    }
+
+    /// Close the actual event and release its original counter allocation maps.
+    ///
+    /// # Safety
+    /// sfd must be the live descriptor supplied to the original close operation.
+    /// Its event and current-thread map ownership must obey original synchronization.
+    /// The genuine tracked-free provider consumes the event exactly as before.
+    #[no_mangle]
+    pub unsafe extern "C" fn f03_perf_close_v1(
+        sfd: *mut Mckfd, _ctx: *mut X86UserContext,
+    ) -> CInt {
+        // SAFETY: Actual descriptor field and live current CPU-local/thread lookup.
+        // ctx remains unused; no descriptor data clearing or extra ref is invented.
+        let event = unsafe { (*sfd).data } as *mut c_void;
+        let cpu = unsafe { crate::cls::get_this_cpu_local_var() };
+        let thread = unsafe { (*cpu).current };
+        unsafe {
+            perf_close_body_result(
+                event, thread.cast(), f03_perf_descriptor_layout_v1.counter_id,
+                f03_perf_descriptor_layout_v1.extra_reg_reg,
+                f03_perf_descriptor_layout_v1.extra_reg_idx,
+                offset_of!(Thread, pmc_alloc_map), offset_of!(Thread, extra_reg_alloc_map),
+                Some(syscall_mckfd_free_bridge),
+            ) as CInt
+        }
+    }
+
+    /// Apply original signal-number state before forwarding the initialized context.
+    ///
+    /// # Safety
+    /// sfd and ctx must be genuine live callback inputs. ctx contains the initialized
+    /// full syscall registers; this entry does not construct a partial context.
+    /// Existing forwarding retains its original ownership and return/error behavior.
+    #[no_mangle]
+    pub unsafe extern "C" fn f03_perf_fcntl_v1(
+        sfd: *mut Mckfd, ctx: *mut X86UserContext,
+    ) -> CInt {
+        // SAFETY: Read only the original two argument registers through real getters.
+        let cmd = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg1(ctx) } as CInt;
+        let arg = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg2(ctx) } as CLong;
+        unsafe {
+            perf_fcntl_body_result(
+                sfd.cast(), ctx.cast(), cmd, arg, f03_perf_descriptor_layout_v1.fcntl_nr,
+                10, 0xf, offset_of!(Mckfd, padding), f03_perf_descriptor_layout_v1.forward,
+            ) as CInt
+        }
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+#[cfg(enable_perf)]
+mod f03_perf_read_entries_v1 {
+    use core::ffi::c_void;
+    use core::mem::offset_of;
+
+    use crate::abi::{CInt, CLong, CULong, Mckfd, SizeT, Thread, X86UserContext};
+
+    use super::{
+        perf_event_read_group_body_result, perf_event_read_one_body_result,
+        perf_event_read_value_entry_body_result, perf_read_body_result,
+        syscall_copy_to_user_bridge, PerfEventUpdateFn, PerfReadAttrFlagsFn,
+        SyscallAtomic64ReadFn,
+    };
+
+    #[repr(C)]
+    struct ReadLayout {
+        attr: SizeT,
+        pid: SizeT,
+        use_invariant_tsc: SizeT,
+        count: SizeT,
+        child_count_total: SizeT,
+        base_user_tsc: SizeT,
+        stopped_user_tsc: SizeT,
+        user_accum_count: SizeT,
+        base_system_tsc: SizeT,
+        stopped_system_tsc: SizeT,
+        system_accum_count: SizeT,
+        group_leader: SizeT,
+        nr_siblings: SizeT,
+        sibling_list: SizeT,
+        group_entry: SizeT,
+        read_format: SizeT,
+        group_flag: CULong,
+    }
+
+    #[repr(C)]
+    struct ReadProviders {
+        attr_flags: Option<PerfReadAttrFlagsFn>,
+        update: Option<PerfEventUpdateFn>,
+        atomic_read: Option<SyscallAtomic64ReadFn>,
+    }
+
+    unsafe extern "C" {
+        static f03_perf_read_layout_v1: ReadLayout;
+        static f03_perf_read_providers_v1: ReadProviders;
+    }
+
+    /// Read the actual event accounting through the complete existing Rust body.
+    ///
+    /// # Safety
+    /// The event, its parent/group and current thread must obey original perf
+    /// lifetime and synchronization contracts. Actual C data retains bitfield,
+    /// event-update and atomic-read providers; no guessed perf layout is read.
+    #[no_mangle]
+    pub unsafe extern "C" fn perf_event_read_value(event: *mut c_void) -> CULong {
+        // SAFETY: Same live current thread and actual C layout/provider authority.
+        let cpu = unsafe { crate::cls::get_this_cpu_local_var() };
+        let thread = unsafe { (*cpu).current };
+        unsafe {
+            perf_event_read_value_entry_body_result(
+                event, thread.cast(), f03_perf_read_layout_v1.attr,
+                f03_perf_read_layout_v1.pid, f03_perf_read_layout_v1.use_invariant_tsc,
+                f03_perf_read_layout_v1.count, f03_perf_read_layout_v1.child_count_total,
+                f03_perf_read_layout_v1.base_user_tsc,
+                f03_perf_read_layout_v1.stopped_user_tsc,
+                f03_perf_read_layout_v1.user_accum_count,
+                f03_perf_read_layout_v1.base_system_tsc,
+                f03_perf_read_layout_v1.stopped_system_tsc,
+                f03_perf_read_layout_v1.system_accum_count,
+                offset_of!(Thread, user_tsc), offset_of!(Thread, system_tsc),
+                f03_perf_read_providers_v1.attr_flags,
+                f03_perf_read_providers_v1.update, f03_perf_read_providers_v1.atomic_read,
+            )
+        }
+    }
+
+    /// # Safety
+    /// Callback receives the same live event owned by its complete helper caller.
+    #[no_mangle]
+    pub unsafe extern "C" fn f03_perf_read_value_bridge_v1(event: *mut c_void) -> CULong {
+        unsafe { perf_event_read_value(event) }
+    }
+
+    /// Read the original group stream, retaining original int result truncation.
+    ///
+    /// # Safety
+    /// Group/list ownership and user destination obey original helper contracts.
+    /// The real usercopy endpoint consumes buf; this entry does not dereference it.
+    #[no_mangle]
+    pub unsafe extern "C" fn f03_perf_read_group_v1(
+        event: *mut c_void, _read_format: CULong, buf: *mut i8,
+    ) -> CInt {
+        // SAFETY: Original complete group iterator and actual header offsets.
+        unsafe {
+            perf_event_read_group_body_result(
+                event, buf as CULong, f03_perf_read_layout_v1.group_leader,
+                f03_perf_read_layout_v1.nr_siblings, f03_perf_read_layout_v1.sibling_list,
+                f03_perf_read_layout_v1.group_entry, Some(f03_perf_read_value_bridge_v1),
+                Some(syscall_copy_to_user_bridge),
+            ) as CInt
+        }
+    }
+
+    /// Read one original event word and retain its int return ABI.
+    ///
+    /// # Safety
+    /// Original live-event and actual usercopy destination requirements apply.
+    #[no_mangle]
+    pub unsafe extern "C" fn f03_perf_read_one_v1(
+        event: *mut c_void, _read_format: CULong, buf: *mut i8,
+    ) -> CInt {
+        unsafe {
+            perf_event_read_one_body_result(
+                event, buf as CULong, Some(f03_perf_read_value_bridge_v1),
+                Some(syscall_copy_to_user_bridge),
+            ) as CInt
+        }
+    }
+
+    /// # Safety
+    /// Same genuine event/list and destination contracts as the group entry.
+    #[no_mangle]
+    pub unsafe extern "C" fn f03_perf_read_group_bridge_v1(
+        event: *mut c_void, read_format: CULong, buf_addr: CULong,
+    ) -> CLong {
+        // SAFETY: Preserve the original int intermediary before long extension.
+        unsafe { f03_perf_read_group_v1(event, read_format, buf_addr as *mut i8) as CLong }
+    }
+
+    /// # Safety
+    /// Same genuine event and destination contracts as the one-word entry.
+    #[no_mangle]
+    pub unsafe extern "C" fn f03_perf_read_one_bridge_v1(
+        event: *mut c_void, read_format: CULong, buf_addr: CULong,
+    ) -> CLong {
+        unsafe { f03_perf_read_one_v1(event, read_format, buf_addr as *mut i8) as CLong }
+    }
+
+    /// Decode the original descriptor/user argument and select the complete reader.
+    ///
+    /// # Safety
+    /// sfd/ctx must be actual live callback inputs with a live perf event. Its
+    /// read_format field must be initialized and synchronized under the original
+    /// contract. No descriptor/event reference or new NULL acceptance is added.
+    #[no_mangle]
+    pub unsafe extern "C" fn f03_perf_read_v1(
+        sfd: *mut Mckfd, ctx: *mut X86UserContext,
+    ) -> CLong {
+        // SAFETY: Same actual register/long descriptor storage as the C entry.
+        let buf_addr = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg1(ctx) };
+        let event = unsafe { (*sfd).data } as *mut c_void;
+        // SAFETY: Genuine C header offset into the initialized event attr field.
+        let read_format = unsafe {
+            event.cast::<u8>().add(f03_perf_read_layout_v1.read_format).cast::<CULong>().read()
+        };
+        unsafe {
+            perf_read_body_result(
+                event, buf_addr, read_format, f03_perf_read_layout_v1.group_flag,
+                Some(f03_perf_read_group_bridge_v1), Some(f03_perf_read_one_bridge_v1),
+            )
+        }
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+#[cfg(enable_perf)]
+mod f03_perf_ioctl_entry_v1 {
+    use core::mem::{offset_of, MaybeUninit};
+
+    use crate::abi::{CInt, CULong, Mckfd, Process, SizeT, X86UserContext};
+    use crate::lock_helpers::McsRwlockNodeIrqsave;
+
+    use super::f03_perf_counter_control_v1::{
+        f03_perf_reset_bridge_v1, f03_perf_start_bridge_v1, f03_perf_stop_bridge_v1,
+    };
+    use super::{
+        f03_process_cleanup_find, f03_process_cleanup_unlock, perf_ioctl_body_result,
+        PerfReadAttrFlagsFn,
+    };
+
+    #[repr(C)]
+    struct IoctlData {
+        event_pid: SizeT,
+        enable: CULong,
+        disable: CULong,
+        reset: CULong,
+        refresh: CULong,
+        pp_reset: CInt,
+        attr: SizeT,
+        attr_flags: Option<PerfReadAttrFlagsFn>,
+    }
+
+    unsafe extern "C" {
+        static f03_perf_ioctl_data_v1: IoctlData;
+    }
+
+    /// Apply the original complete ioctl state/lookup transaction.
+    ///
+    /// # Safety
+    /// sfd/ctx and optional event must be genuine live callback inputs. The actual
+    /// perf bitfield reader must retain its original complete-attr contract. Event,
+    /// group and process state synchronization/ownership are unchanged requirements.
+    #[no_mangle]
+    pub unsafe extern "C" fn f03_perf_ioctl_v1(
+        sfd: *mut Mckfd, ctx: *mut X86UserContext,
+    ) -> CInt {
+        // SAFETY: Exact unsigned-int narrowing before promotion to the helper ABI.
+        let cmd = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg1(ctx) } as u32;
+        let event = unsafe { (*sfd).data } as *mut core::ffi::c_void;
+        let cpu = unsafe { crate::cls::get_this_cpu_local_var() };
+        let thread = unsafe { (*cpu).current };
+        let proc = unsafe { (*thread).proc };
+        let mut lock = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+        let mut inherit = 0;
+        if !event.is_null() {
+            let mut exclude_user = 0;
+            let mut exclude_kernel = 0;
+            // SAFETY: Use an existing genuine C bitfield reader, not a guessed
+            // Rust bitfield layout or new C getter. Actual immutable data is Some.
+            let Some(flags) = (unsafe { f03_perf_ioctl_data_v1.attr_flags }) else {
+                return -super::EINVAL;
+            };
+            let attr = unsafe { event.cast::<u8>().add(f03_perf_ioctl_data_v1.attr) };
+            let rc = unsafe {
+                flags(attr.cast(), &mut exclude_user, &mut exclude_kernel, &mut inherit)
+            };
+            if rc != 0 {
+                return rc;
+            }
+        }
+        // SAFETY: Actual full helper and the genuine already-selected Rust control
+        // callbacks, process hash lookup/unlock and real C command/offset data.
+        unsafe {
+            perf_ioctl_body_result(
+                event, proc.cast(), lock.as_mut_ptr().cast(), cmd as CULong, inherit,
+                f03_perf_ioctl_data_v1.enable, f03_perf_ioctl_data_v1.disable,
+                f03_perf_ioctl_data_v1.reset, f03_perf_ioctl_data_v1.refresh,
+                f03_perf_ioctl_data_v1.pp_reset, f03_perf_ioctl_data_v1.event_pid,
+                offset_of!(Process, monitoring_event), offset_of!(Process, perf_status),
+                Some(f03_perf_start_bridge_v1), Some(f03_perf_stop_bridge_v1),
+                Some(f03_perf_reset_bridge_v1), Some(f03_process_cleanup_find),
+                Some(f03_process_cleanup_unlock),
+            ) as CInt
+        }
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+unsafe extern "C" {
+    static f03_vm_policy_insert_log_provider_v1: Option<SyscallPolicyInsertLogFn>;
+}
+
+unsafe extern "C" fn f03_vm_policy_rb_link(
+    node: *mut AbiRbNode, parent: *mut AbiRbNode, slot: *mut *mut AbiRbNode,
+) {
+    // SAFETY: Actual repr(C) ABI and rbtree nodes share the genuine C field layout;
+    // no references are formed. Full helper owns the unpublished node and slot
+    // under the caller's existing exclusive tree lock throughout link/color.
+    unsafe { crate::rbtree::rb_link_node(node.cast(), parent.cast(), slot.cast()) };
+}
+
+unsafe extern "C" fn f03_vm_policy_rb_color(node: *mut AbiRbNode, root: *mut AbiRbRoot) {
+    // SAFETY: Same actual node/root layouts and original lock/lifetime contract.
+    unsafe { crate::rbtree::rb_insert_color(node.cast(), root.cast()) };
+}
+
+/// Search the real NUMA-policy tree using the complete existing Rust body.
+///
+/// # Safety
+/// vm and nodes must be live with the actual C layouts; the caller keeps the tree
+/// stable under its original lock. A returned node remains borrowed from that tree.
+#[no_mangle]
+pub unsafe extern "C" fn vm_range_policy_search(
+    vm: *mut ProcessVm, addr: CULong,
+) -> *mut VmRangeNumaPolicy {
+    unsafe { syscall_vm_range_policy_search_body_result(vm, addr) }
+}
+
+/// Insert the original whole policy range transaction with real Rust RB providers.
+///
+/// # Safety
+/// Caller must hold its existing exclusive policy-tree lock. vm, newrange and all
+/// traversed nodes have their genuine layouts/lifetimes. newrange is unpublished
+/// and does not alias an existing tree node. Only the real link/color providers
+/// mutate the tree; the original logger borrows its operands without consuming them.
+#[no_mangle]
+pub unsafe extern "C" fn f03_vm_policy_insert_v1(
+    vm: *mut ProcessVm, newrange: *mut VmRangeNumaPolicy,
+) -> CInt {
+    // SAFETY: Same complete helper/order/overlap errno and original formatter
+    // callback. No allocation, release, new lock or ownership edge is introduced.
+    unsafe {
+        syscall_vm_policy_insert_body_result(
+            vm, newrange, Some(f03_vm_policy_rb_link), Some(f03_vm_policy_rb_color),
+            f03_vm_policy_insert_log_provider_v1,
+        )
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+unsafe extern "C" {
+    static f03_vm_policy_clear_source_file_v1: u8;
+    static f03_vm_policy_clear_alloc_line_v1: CInt;
+    static f03_vm_policy_clear_free_line_v1: CInt;
+    static mut f03_vm_policy_clear_alloc_debug_v1: crate::debug::Ddebug;
+}
+
+unsafe extern "C" fn f03_vm_policy_clear_alloc(size: SizeT, flags: CULong) -> *mut c_void {
+    // SAFETY: Actual tracked allocator/provider and original lexical origin.
+    // Preserve C's size_t-to-int conversion at this genuine allocation ABI.
+    unsafe {
+        crate::mem_helpers::kmalloc_tracked(
+            size as CInt, flags,
+            addr_of!(f03_vm_policy_clear_source_file_v1).cast_mut().cast(),
+            f03_vm_policy_clear_alloc_line_v1,
+        )
+    }
+}
+
+unsafe extern "C" fn f03_vm_policy_clear_free(ptr: *mut c_void) {
+    // SAFETY: Full existing helper has erased this exact owned policy node before
+    // free. The actual tracked backend receives the original C free origin.
+    unsafe {
+        crate::mem_helpers::kfree_tracked(
+            ptr, addr_of!(f03_vm_policy_clear_source_file_v1).cast_mut().cast(),
+            f03_vm_policy_clear_free_line_v1,
+        );
+    }
+}
+
+unsafe extern "C" fn f03_vm_policy_clear_rb(policy: *mut VmRangeNumaPolicy) {
+    // SAFETY: Fresh aligned policy allocation, actual node offset and repr(C)
+    // layouts. Existing real RB provider sets only its original parent/color word.
+    let node = unsafe { addr_of_mut!((*policy).policy_rb_node) };
+    unsafe { crate::rbtree::rb_clear_node(node.cast()) };
+}
+
+unsafe extern "C" fn f03_vm_policy_clear_erase(node: *mut AbiRbNode, root: *mut AbiRbRoot) {
+    // SAFETY: Caller owns exclusive tree mutation; actual C/Rust RB layouts match.
+    unsafe { crate::rbtree::rb_erase(node.cast(), root.cast()) };
+}
+
+unsafe extern "C" fn f03_vm_policy_clear_first(root: *const AbiRbRoot) -> *mut AbiRbNode {
+    // SAFETY: Stable actual tree under the full helper's original exclusive lock.
+    unsafe { crate::rbtree::rb_first(root.cast()).cast() }
+}
+
+unsafe extern "C" fn f03_vm_policy_clear_next(node: *const AbiRbNode) -> *mut AbiRbNode {
+    // SAFETY: The iterator node remains linked/live until this call finishes. Full
+    // helper restarts from first after erase/free and never advances a freed node.
+    unsafe { crate::rbtree::rb_next(node.cast()).cast() }
+}
+
+unsafe extern "C" fn f03_vm_policy_clear_log(event: CInt, error: CInt) {
+    if event == 0 {
+        // SAFETY: Genuine aligned lexical debug data and original flag gate.
+        let enabled = unsafe {
+            read_volatile(addr_of!(f03_vm_policy_clear_alloc_debug_v1.line_flags)) >> 24 != 0
+        };
+        if enabled {
+            unsafe {
+                kprintf(
+                    c"%s: error allocating range_policy\n".as_ptr().cast(),
+                    c"vm_policy_clear_range".as_ptr(),
+                );
+            }
+        }
+    } else {
+        // SAFETY: Same original unconditional formatter for every nonzero event.
+        unsafe {
+            kprintf(
+                c"%s: ERROR: could not insert range: %d\n".as_ptr().cast(),
+                c"vm_policy_clear_range".as_ptr(), error,
+            );
+        }
+    }
+}
+
+/// Execute the complete existing legal-range policy clear/erase/free transaction.
+///
+/// # Safety
+/// start < end; caller owns the existing exclusive lock over a valid disjoint
+/// half-open-range tree. vm/nodes must have their real layouts/lifetimes. Genuine
+/// allocator returns fresh disjoint storage; insert publishes only on success.
+/// Preserve the full helper's original partial-mutation/no-rollback semantics on
+/// allocation failure. Invalid/reversed/wrapped ranges and rejected insertion can
+/// retain inherited unpublished-tail ownership debt; this entry does not fix it.
+#[no_mangle]
+pub unsafe extern "C" fn f03_vm_policy_clear_range_v1(
+    vm: *mut ProcessVm, start: CULong, end: CULong,
+) -> CInt {
+    // SAFETY: Actual full helper and genuine tracked allocation/RB/insert/free
+    // providers. Its existing tail-cursor initialization and fixed mask copy are
+    // unchanged; no fresh policy/page getter, constructor or ref is fabricated.
+    unsafe {
+        syscall_vm_policy_clear_range_body_result(
+            vm, start, end, size_of::<VmRangeNumaPolicy>(), IHK_MC_AP_NOWAIT,
+            Some(f03_vm_policy_clear_alloc), Some(f03_vm_policy_clear_rb),
+            Some(f03_vm_policy_insert_v1), Some(f03_vm_policy_clear_erase),
+            Some(f03_vm_policy_clear_free), Some(f03_vm_policy_clear_first),
+            Some(f03_vm_policy_clear_next), Some(f03_vm_policy_clear_log),
+        )
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+#[repr(C)]
+struct F03MprotectProviders {
+    lock: Option<SyscallRwlockFn>,
+    unlock: Option<SyscallRwlockFn>,
+    lookup: Option<MsyncLookupRangeFn>,
+    next: Option<MsyncNextRangeFn>,
+    split: Option<MemlockSplitFn>,
+    join: Option<MemlockJoinFn>,
+    change: Option<MprotectChangeFn>,
+    set_host_vma: Option<MprotectSetHostVmaFn>,
+    flush_nfo: Option<MprotectFlushFn>,
+    flush_tlb: Option<MprotectFlushFn>,
+    log: Option<MprotectLogFn>,
+}
+
+unsafe extern "C" {
+    static f03_mprotect_providers_v1: F03MprotectProviders;
+}
+
+/// Decode and execute the original complete VM-protection transaction.
+///
+/// # Safety
+/// ctx is the actual initialized syscall context; CPU-local/thread/process/VM
+/// state must be live. The genuine full helper and its original providers retain
+/// all VM range-lock, split/join, host-VMA, page-table/TLB and user-range contracts.
+/// This entry adds no private range/page getter, lock or reference ownership.
+#[no_mangle]
+pub unsafe extern "C" fn sys_mprotect(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    // SAFETY: Same three real argument getters and exact int protection narrowing.
+    let start = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg0(ctx) };
+    let len = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg1(ctx) } as SizeT;
+    let prot = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg2(ctx) } as CInt;
+    let cpu_local = unsafe { crate::cls::get_this_cpu_local_var() };
+    let thread = unsafe { (*cpu_local).current };
+    let vm = unsafe { (*thread).vm };
+    let proc = unsafe { (*thread).proc };
+    // SAFETY: Genuine live fields and original immutable callback data. The actual
+    // full helper owns every acquired range lock and preserves all error ordering.
+    unsafe {
+        mprotect_body_result(
+            vm.cast(), addr_of_mut!((*vm).memory_range_lock).cast(), start, len, prot,
+            (*vm).region.user_start, (*vm).region.user_end,
+            (*proc).straight_va as CULong, (*proc).straight_len, ihk_mc_get_processor_id(),
+            offset_of!(VmRange, start), offset_of!(VmRange, end), offset_of!(VmRange, flag),
+            f03_mprotect_providers_v1.lock, f03_mprotect_providers_v1.unlock,
+            f03_mprotect_providers_v1.lookup, f03_mprotect_providers_v1.next,
+            f03_mprotect_providers_v1.split, f03_mprotect_providers_v1.join,
+            f03_mprotect_providers_v1.change, f03_mprotect_providers_v1.set_host_vma,
+            f03_mprotect_providers_v1.flush_nfo, f03_mprotect_providers_v1.flush_tlb,
+            f03_mprotect_providers_v1.log,
+        ) as CLong
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+#[repr(C)]
+struct F03ShmdtData {
+    memobj_flags: SizeT,
+    ok_flag: CULong,
+}
+
+unsafe extern "C" {
+    static f03_shmdt_data_v1: F03ShmdtData;
+    static mut f03_shmdt_debug_v1: [crate::debug::Ddebug; 3];
+    #[link_name = "munmap_do_bridge"]
+    fn f03_shmdt_original_munmap(addr: *mut c_void, len: SizeT, holding_lock: CInt) -> CInt;
+}
+
+unsafe extern "C" fn f03_shmdt_write_lock(lock: *mut c_void) {
+    // SAFETY: Actual helper supplies the live VM memory-range lock. Genuine Rust
+    // provider has the same original noirq writer-lock contract and real layout.
+    unsafe { crate::lock_helpers::ihk_rwspinlock_write_lock_noirq(lock.cast()) };
+}
+
+unsafe extern "C" fn f03_shmdt_write_unlock(lock: *mut c_void) {
+    // SAFETY: Paired by the unchanged full helper on the original acquired lock.
+    unsafe { crate::lock_helpers::ihk_rwspinlock_write_unlock_noirq(lock.cast()) };
+}
+
+unsafe extern "C" fn f03_shmdt_lookup(
+    vm: *mut c_void, start: CULong, end: CULong,
+) -> *mut c_void {
+    // SAFETY: Genuine Rust lookup under the original full helper's range lock.
+    unsafe { crate::process_helpers::lookup_process_memory_range(vm.cast(), start, end).cast() }
+}
+
+unsafe extern "C" fn f03_shmdt_log(event: CInt, addr: CULong, error: CInt) {
+    let index = match event {
+        SHMDT_LOG_ENTER => 0,
+        SHMDT_LOG_INVALID => 1,
+        SHMDT_LOG_EXIT => 2,
+        _ => return,
+    };
+    // SAFETY: Fixed internal index into actual aligned C lexical debug records.
+    let debug = unsafe { addr_of!(f03_shmdt_debug_v1).cast::<crate::debug::Ddebug>().add(index) };
+    if unsafe { read_volatile(addr_of!((*debug).line_flags)) >> 24 == 0 } {
+        return;
+    }
+    // SAFETY: Exact original format and pointer/int operands, no addr dereference.
+    unsafe {
+        match event {
+            SHMDT_LOG_ENTER => kprintf(c"shmdt(%p)\n".as_ptr().cast(), addr as *const c_void),
+            SHMDT_LOG_INVALID => {
+                kprintf(c"shmdt(%p): -EINVAL\n".as_ptr().cast(), addr as *const c_void)
+            }
+            _ => kprintf(c"shmdt(%p): %d\n".as_ptr().cast(), addr as *const c_void, error),
+        };
+    }
+}
+
+/// Detach the original complete shared-memory mapping transaction.
+///
+/// # Safety
+/// ctx and live current thread/VM obey the real syscall contract. Complete helper
+/// owns its original range writer lock; lookup returns borrowed live range/memobj
+/// state until the genuine munmap provider consumes the mapping under that lock.
+/// Actual C memobj.flags offset/width is required; no private object/page getter.
+#[no_mangle]
+pub unsafe extern "C" fn sys_shmdt(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    // SAFETY: Original arg0 only; genuine CPU-local and VM fields remain live.
+    let addr = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg0(ctx) };
+    let cpu = unsafe { crate::cls::get_this_cpu_local_var() };
+    let thread = unsafe { (*cpu).current };
+    let vm = unsafe { (*thread).vm };
+    unsafe {
+        shmdt_body_result(
+            vm.cast(), addr_of_mut!((*vm).memory_range_lock).cast(), addr,
+            offset_of!(VmRange, start), offset_of!(VmRange, end), offset_of!(VmRange, memobj),
+            f03_shmdt_data_v1.memobj_flags, f03_shmdt_data_v1.ok_flag,
+            Some(f03_shmdt_write_lock), Some(f03_shmdt_write_unlock),
+            Some(f03_shmdt_lookup), Some(f03_shmdt_original_munmap), Some(f03_shmdt_log),
+        ) as CLong
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+/// Acquire the original shared VM writer lock through its real Rust provider.
+///
+/// # Safety
+/// lock names a live, correctly aligned IhkRwSpinlock. Caller obeys the original
+/// noirq/preemption state, ordering and paired-unlock requirements. No HOST call.
+#[no_mangle]
+pub unsafe extern "C" fn munmap_write_lock_bridge(lock: *mut c_void) {
+    unsafe { crate::lock_helpers::ihk_rwspinlock_write_lock_noirq(lock.cast()) };
+}
+
+/// Release the same acquired VM lock, including original preemption restoration.
+///
+/// # Safety
+/// Caller owns the matching writer lock under its genuine kernel noirq contract.
+#[no_mangle]
+pub unsafe extern "C" fn munmap_write_unlock_bridge(lock: *mut c_void) {
+    unsafe { crate::lock_helpers::ihk_rwspinlock_write_unlock_noirq(lock.cast()) };
+}
+
+/// # Safety
+/// vm/tree is live and stable under the caller's original range lock. The returned
+/// range is borrowed; this adapter does not acquire a new reference or ownership.
+#[no_mangle]
+pub unsafe extern "C" fn f03_mprotect_lookup_bridge_v1(
+    vm: *mut ProcessVm, start: CULong, end: CULong,
+) -> *mut VmRange {
+    unsafe { crate::process_helpers::lookup_process_memory_range(vm, start, end) }
+}
+
+/// # Safety
+/// vm/range and its tree remain live/stable under the original caller's lock.
+#[no_mangle]
+pub unsafe extern "C" fn f03_mprotect_next_bridge_v1(
+    vm: *mut ProcessVm, range: *mut VmRange,
+) -> *mut VmRange {
+    unsafe { crate::process_helpers::next_process_memory_range(vm, range) }
+}
+
+/// # Safety
+/// Original exclusive range/tree ownership, initialized live nodes and writable
+/// new_range output apply. The genuine provider owns its allocation/error paths.
+#[no_mangle]
+pub unsafe extern "C" fn f03_mprotect_split_bridge_v1(
+    vm: *mut ProcessVm, range: *mut VmRange, addr: CULong, new_range: *mut *mut VmRange,
+) -> CInt {
+    unsafe { crate::process_helpers::split_process_memory_range(vm, range, addr, new_range) }
+}
+
+/// # Safety
+/// Original exclusive ownership of adjacent live ranges and their VM applies.
+/// The real provider may consume the merging node; no post-call node access here.
+#[no_mangle]
+pub unsafe extern "C" fn f03_mprotect_join_bridge_v1(
+    vm: *mut ProcessVm, left: *mut VmRange, right: *mut VmRange,
+) -> CInt {
+    unsafe { crate::process_helpers::join_process_memory_range(vm, left, right) }
+}
+
+/// # Safety
+/// Actual VM/range/page-table ownership and protection-bit contracts of the genuine
+/// provider apply. This adapter performs no private page/range access or extra lock.
+#[no_mangle]
+pub unsafe extern "C" fn f03_mprotect_change_bridge_v1(
+    vm: *mut ProcessVm, range: *mut VmRange, protflags: CULong,
+) -> CInt {
+    unsafe { crate::process_helpers::change_prot_process_memory_range(vm, range, protflags) }
+}
+
+/// Retain the actual supported-profile no-flush operation through existing Rust.
+///
+/// # Safety
+/// Kernel caller keeps the original architecture/profile selection. This does not
+/// stand in for the separate real flush_tlb operation or invent a synchronization.
+#[no_mangle]
+pub unsafe extern "C" fn mprotect_flush_nfo_bridge() {
+    crate::x86_memory_helpers::flush_nfo_tlb();
+}
+
+/// # Safety
+/// This is a genuine kernel-only privileged TLB effect. Caller satisfies the real
+/// architecture/CPU/page-table contract. Never execute this entry on HOST fixtures.
+#[no_mangle]
+pub unsafe extern "C" fn f03_mprotect_flush_tlb_bridge_v1() {
+    unsafe { crate::x86_memory_helpers::flush_tlb() };
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+unsafe extern "C" {
+    static mut f03_mprotect_debug_v1: [crate::debug::Ddebug; 2];
+}
+
+unsafe fn f03_mprotect_debug_enabled(index: usize) -> bool {
+    // SAFETY: Only fixed internal indices0/1 into actual aligned C debug records.
+    let debug = unsafe {
+        addr_of!(f03_mprotect_debug_v1).cast::<crate::debug::Ddebug>().add(index)
+    };
+    unsafe { read_volatile(addr_of!((*debug).line_flags)) >> 24 != 0 }
+}
+
+/// Format the original complete protection diagnostic record without changing it.
+///
+/// # Safety
+/// Non-null record must point to its actual C layout, with each field read by the
+/// selected branch initialized and live. No reference to the entire record is
+/// formed and disabled/unknown branches do not read unused fields. Genuine full
+/// producer initializes every semantic field; C padding is never consumed.
+#[no_mangle]
+pub unsafe extern "C" fn f03_mprotect_log_bridge_v1(record: *const MprotectLogRecord) {
+    if record.is_null() {
+        return;
+    }
+    // SAFETY: Each branch reads only the exact original C fields/ABI operands.
+    // Logger borrows them; it never follows range/user pointers or changes state.
+    unsafe {
+        match (*record).event {
+            MPROTECT_LOG_ENTER => {
+                if f03_mprotect_debug_enabled(0) {
+                    kprintf(
+                        c"[%d]sys_mprotect(%lx,%lx,%x)\n".as_ptr().cast(),
+                        (*record).cpu, (*record).start, (*record).len, (*record).prot,
+                    );
+                }
+            }
+            MPROTECT_LOG_INVALID_RANGE => {
+                if (*record).error == -EINVAL {
+                    kprintf(
+                        c"[%d]sys_mprotect(%lx,%lx,%x): -EINVAL\n".as_ptr().cast(),
+                        (*record).cpu, (*record).start, (*record).len, (*record).prot,
+                    );
+                } else if (*record).error == -ENOMEM {
+                    kprintf(
+                        c"[%d]sys_mprotect(%lx,%lx,%x): -ENOMEM\n".as_ptr().cast(),
+                        (*record).cpu, (*record).start, (*record).len, (*record).prot,
+                    );
+                } else {
+                    kprintf(
+                        c"[%d]sys_mprotect(%lx,%lx,%x): %d\n".as_ptr().cast(),
+                        (*record).cpu, (*record).start, (*record).len, (*record).prot,
+                        (*record).error,
+                    );
+                }
+            }
+            MPROTECT_LOG_STRAIGHT_IGNORED => {
+                kprintf(
+                    c"%s: ignored for straight mapping 0x%lx\n".as_ptr().cast(),
+                    c"sys_mprotect".as_ptr(), (*record).start,
+                );
+            }
+            MPROTECT_LOG_NOT_CONTIG => {
+                kprintf(
+                    c"sys_mprotect(%lx,%lx,%x):not contiguous\n".as_ptr().cast(),
+                    (*record).start, (*record).len, (*record).prot,
+                );
+            }
+            MPROTECT_LOG_DENIED => {
+                kprintf(
+                    c"sys_mprotect(%lx,%lx,%x):denied %lx. %lx %lx\n".as_ptr().cast(),
+                    (*record).start, (*record).len, (*record).prot,
+                    (*record).denied, (*record).protflags, (*record).range_flags,
+                );
+            }
+            MPROTECT_LOG_CANNOT_CHANGE => {
+                kprintf(
+                    c"sys_mprotect(%lx,%lx,%x):cannot change\n".as_ptr().cast(),
+                    (*record).start, (*record).len, (*record).prot,
+                );
+            }
+            MPROTECT_LOG_SPLIT_FAILED => {
+                kprintf(
+                    c"sys_mprotect(%lx,%lx,%x):split failed. %d\n".as_ptr().cast(),
+                    (*record).start, (*record).len, (*record).prot, (*record).error,
+                );
+            }
+            MPROTECT_LOG_CHANGE_FAILED => {
+                kprintf(
+                    c"sys_mprotect(%lx,%lx,%x):change failed. %d\n".as_ptr().cast(),
+                    (*record).start, (*record).len, (*record).prot, (*record).error,
+                );
+            }
+            MPROTECT_LOG_JOIN_FAILED => {
+                kprintf(
+                    c"sys_mprotect(%lx,%lx,%x):join failed. %d\n".as_ptr().cast(),
+                    (*record).start, (*record).len, (*record).prot, (*record).error,
+                );
+            }
+            MPROTECT_LOG_SET_HOST_FAILED => {
+                kprintf(
+                    c"sys_mprotect:set_host_vma failed. %d\n".as_ptr().cast(), (*record).error,
+                );
+            }
+            MPROTECT_LOG_EXIT => {
+                if f03_mprotect_debug_enabled(1) {
+                    kprintf(
+                        c"[%d]sys_mprotect(%lx,%lx,%x): %d\n".as_ptr().cast(),
+                        (*record).cpu, (*record).start, (*record).len, (*record).prot,
+                        (*record).error,
+                    );
+                }
+            }
+            _ => {}
+        }
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+#[repr(C)]
+struct F03ShmatData {
+    pgshift: SizeT,
+    real_segsz: SizeT,
+    memobj: SizeT,
+    uid: SizeT,
+    cuid: SizeT,
+    gid: SizeT,
+    cgid: SizeT,
+    mode: SizeT,
+    list_lock: Option<ShmatVoidFn>,
+    list_unlock: Option<ShmatVoidFn>,
+    lookup_obj: Option<ShmatLookupObjFn>,
+    unref: Option<ShmatMemobjFn>,
+    range_lock: Option<SyscallRwlockFn>,
+    range_unlock: Option<SyscallRwlockFn>,
+    lookup_range: Option<MsyncLookupRangeFn>,
+    search_free: Option<ShmatSearchFn>,
+    set_host_vma: Option<MprotectSetHostVmaFn>,
+    add_range: Option<ShmatAddRangeFn>,
+    log: Option<ShmatLogFn>,
+}
+
+unsafe extern "C" {
+    static f03_shmat_data_v1: F03ShmatData;
+}
+
+/// Decode the original attach request and execute its complete existing Rust body.
+///
+/// # Safety
+/// ctx/CPU-local/thread/process/VM are genuine live syscall inputs. Actual shared
+/// memory objects use the C header layout supplied by immutable data. Full helper
+/// and providers retain original list/range lock, object reference, mapping and
+/// rollback ordering. No private object/page getter or new lifetime is introduced.
+#[no_mangle]
+pub unsafe extern "C" fn sys_shmat(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    // SAFETY: Same three original argument reads and int narrowing. Original
+    // signed credential fields convert to unsigned helper inputs exactly as C.
+    let shmid = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg0(ctx) } as CInt;
+    let addr = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg1(ctx) };
+    let flags = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg2(ctx) } as CInt;
+    let cpu = unsafe { crate::cls::get_this_cpu_local_var() };
+    let thread = unsafe { (*cpu).current };
+    let proc = unsafe { (*thread).proc };
+    let vm = unsafe { (*thread).vm };
+    // SAFETY: Exact actual C offsets/function pointers and existing complete helper.
+    // Existing host-VMA provider remains its original explicit contract/debt.
+    unsafe {
+        shmat_body_result(
+            shmid, addr, flags, (*proc).euid as u32, (*proc).egid as u32,
+            vm.cast(), addr_of_mut!((*vm).memory_range_lock).cast(),
+            f03_shmat_data_v1.pgshift, f03_shmat_data_v1.real_segsz,
+            f03_shmat_data_v1.memobj, f03_shmat_data_v1.uid, f03_shmat_data_v1.cuid,
+            f03_shmat_data_v1.gid, f03_shmat_data_v1.cgid, f03_shmat_data_v1.mode,
+            f03_shmat_data_v1.list_lock, f03_shmat_data_v1.list_unlock,
+            f03_shmat_data_v1.lookup_obj, f03_shmat_data_v1.unref,
+            f03_shmat_data_v1.range_lock, f03_shmat_data_v1.range_unlock,
+            f03_shmat_data_v1.lookup_range, f03_shmat_data_v1.search_free,
+            f03_shmat_data_v1.set_host_vma, f03_shmat_data_v1.add_range,
+            f03_shmat_data_v1.log,
+        )
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+#[repr(C)]
+struct F03ShmctlProviders {
+    list_lock: Option<ShmatVoidFn>,
+    list_unlock: Option<ShmatVoidFn>,
+    lookup_obj: Option<ShmatLookupObjFn>,
+    lookup_index: Option<ShmatLookupObjFn>,
+    unref: Option<ShmatMemobjFn>,
+    copy_from: Option<SyscallCopyFromUserFn>,
+    copy_to: Option<SyscallCopyToUserFn>,
+    max_index: Option<ShmctlGetMaxIndexFn>,
+    users_lock: Option<ShmatVoidFn>,
+    users_unlock: Option<ShmatVoidFn>,
+    user_get: Option<ShmctlShmlockUserGetFn>,
+    user_free: Option<ShmatMemobjFn>,
+    refcnt_read: Option<ShmctlMemobjRefcntReadFn>,
+    log: Option<ShmctlLogFn>,
+}
+
+unsafe extern "C" {
+    static f03_shmctl_offsets_v1: ShmctlOffsets;
+    static f03_shmctl_providers_v1: F03ShmctlProviders;
+    // Address-only declarations for original mutable C data objects. Actual C
+    // sizes/layouts come from ShmctlOffsets; no Rust-private aggregate is invented.
+    #[link_name = "the_shminfo"]
+    static mut F03_SHMCTL_SHMINFO_FIRST_BYTE: u8;
+    #[link_name = "the_shm_info"]
+    static mut F03_SHMCTL_SHM_INFO_FIRST_BYTE: u8;
+}
+
+/// Decode and execute the complete original shared-memory control transaction.
+///
+/// # Safety
+/// ctx and current thread/process must be genuine live syscall state. Actual
+/// credentials/limits, original C info objects, locks, references and usercopy
+/// endpoints retain the full helper's existing synchronization/lifetime contract.
+/// Only addresses of info data are formed; no private shm object/page getter.
+#[no_mangle]
+pub unsafe extern "C" fn sys_shmctl(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    // SAFETY: Original three real argument reads, exact int narrowing, opaque user
+    // address, current thread/process and actual fixed memlock-limit resource.
+    let shmid = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg0(ctx) } as CInt;
+    let cmd = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg1(ctx) } as CInt;
+    let buf = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg2(ctx) };
+    let cpu = unsafe { crate::cls::get_this_cpu_local_var() };
+    let thread = unsafe { (*cpu).current };
+    let proc = unsafe { (*thread).proc };
+    // SAFETY: Actual capability/time providers and byte-identical complete body;
+    // credentials/limit convert to original unsigned ABI without new validation.
+    // No ordering beyond C's unspecified function-argument evaluation is claimed.
+    unsafe {
+        shmctl_body_result(
+            shmid, cmd, buf, (*proc).euid as u32, (*proc).egid as u32, (*proc).ruid as u32,
+            (*proc).rlimit[MCK_RLIMIT_MEMLOCK as usize].rlim_cur,
+            time(), crate::process_helpers::has_cap_sys_admin(thread),
+            crate::process_helpers::has_cap_ipc_lock(thread),
+            addr_of!(f03_shmctl_offsets_v1),
+            addr_of!(F03_SHMCTL_SHMINFO_FIRST_BYTE).cast(),
+            addr_of!(F03_SHMCTL_SHM_INFO_FIRST_BYTE).cast(),
+            f03_shmctl_providers_v1.list_lock, f03_shmctl_providers_v1.list_unlock,
+            f03_shmctl_providers_v1.lookup_obj, f03_shmctl_providers_v1.lookup_index,
+            f03_shmctl_providers_v1.unref, f03_shmctl_providers_v1.copy_from,
+            f03_shmctl_providers_v1.copy_to, f03_shmctl_providers_v1.max_index,
+            f03_shmctl_providers_v1.users_lock, f03_shmctl_providers_v1.users_unlock,
+            f03_shmctl_providers_v1.user_get, f03_shmctl_providers_v1.user_free,
+            f03_shmctl_providers_v1.refcnt_read, f03_shmctl_providers_v1.log,
+        )
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+#[repr(C)]
+struct F03ShmobjLookupData {
+    chain: SizeT,
+    index: SizeT,
+    seq: SizeT,
+    key: SizeT,
+    mode: SizeT,
+    memobj: SizeT,
+    destroyed_flag: CInt,
+    eidrm: CInt,
+}
+
+unsafe extern "C" {
+    static f03_shmobj_lookup_data_v1: F03ShmobjLookupData;
+    #[link_name = "kds_list"]
+    static mut F03_SHMOBJ_KDS_LIST: AbiListHead;
+}
+
+unsafe fn f03_shmobj_find_index(index: CInt) -> *mut u8 {
+    // SAFETY: Caller keeps the actual non-corrupt intrusive list stable under its
+    // existing shared-memory list lock. Form container pointers only for real
+    // nodes, never for the sentinel, and retain only a borrowed object pointer.
+    let head = addr_of_mut!(F03_SHMOBJ_KDS_LIST);
+    let mut node = unsafe { (*head).next };
+    while node != head {
+        let object = unsafe { node.cast::<u8>().sub(f03_shmobj_lookup_data_v1.chain) };
+        let object_index = unsafe {
+            object.add(f03_shmobj_lookup_data_v1.index).cast::<CInt>().read()
+        };
+        if object_index == index {
+            return object;
+        }
+        node = unsafe { (*node).next };
+    }
+    null_mut()
+}
+
+unsafe fn f03_shmobj_publish_lookup(object: *mut u8, out: *mut *mut c_void) {
+    // SAFETY: Object is live/borrowed under the original list lock. Increment the
+    // same genuine embedded memobj reference BEFORE publishing the output slot.
+    // Actual C layout data and refcount provider retain their checked prefix ABI.
+    let memobj = unsafe { object.add(f03_shmobj_lookup_data_v1.memobj) };
+    let _ = unsafe { crate::refcount_helpers::memobj_ref(memobj.cast()) };
+    // SAFETY: Actual caller supplies a valid writable pointer-sized output slot.
+    unsafe { out.write(object.cast()) };
+}
+
+/// Look up the first matching index, then enforce its original SHMID generation.
+///
+/// # Safety
+/// Caller holds the original object-list lock, maintaining real object/node/field
+/// lifetimes and a valid non-null-linked circular list. out is writable on success.
+/// Lookup failure leaves out unchanged and acquires no object reference.
+#[no_mangle]
+pub unsafe extern "C" fn shmobj_list_lookup(shmid: CInt, out: *mut *mut c_void) -> CInt {
+    let index = crate::shmid_helpers::shmid_to_index(shmid);
+    let seq = crate::shmid_helpers::shmid_to_seq(shmid);
+    let object = unsafe { f03_shmobj_find_index(index) };
+    if object.is_null() {
+        return -EINVAL;
+    }
+    // SAFETY: Actual seq is uint16_t, promoted to int exactly as C. A stale first
+    // match returns EIDRM; it must not search later duplicate-index nodes.
+    let object_seq = unsafe {
+        object.add(f03_shmobj_lookup_data_v1.seq).cast::<u16>().read()
+    };
+    if CInt::from(object_seq) != seq {
+        return unsafe { -f03_shmobj_lookup_data_v1.eidrm };
+    }
+    unsafe { f03_shmobj_publish_lookup(object, out) };
+    0
+}
+
+/// Look up the first live key match, skipping nodes marked for destruction.
+///
+/// # Safety
+/// Same genuine list-lock/object/output lifetime requirements as ID lookup. Actual
+/// key_t is signed32 and mode is uint16_t; no new C getter or private object model.
+#[no_mangle]
+pub unsafe extern "C" fn shmobj_list_lookup_by_key(key: CInt, out: *mut *mut c_void) -> CInt {
+    let head = addr_of_mut!(F03_SHMOBJ_KDS_LIST);
+    let mut node = unsafe { (*head).next };
+    while node != head {
+        // SAFETY: Same stable real-node/container and actual C field data contract.
+        let object = unsafe { node.cast::<u8>().sub(f03_shmobj_lookup_data_v1.chain) };
+        let object_key = unsafe {
+            object.add(f03_shmobj_lookup_data_v1.key).cast::<CInt>().read()
+        };
+        if object_key == key {
+            let mode = unsafe {
+                object.add(f03_shmobj_lookup_data_v1.mode).cast::<u16>().read()
+            };
+            if CInt::from(mode) & unsafe { f03_shmobj_lookup_data_v1.destroyed_flag } == 0 {
+                unsafe { f03_shmobj_publish_lookup(object, out) };
+                return 0;
+            }
+        }
+        node = unsafe { (*node).next };
+    }
+    -EINVAL
+}
+
+/// Look up the first matching raw index without adding a generation check.
+///
+/// # Safety
+/// Same actual list-lock/object/output contract as ID lookup. The genuine memobj
+/// increment transfers exactly one original lookup reference to a successful caller.
+#[no_mangle]
+pub unsafe extern "C" fn shmobj_list_lookup_by_index(index: CInt, out: *mut *mut c_void) -> CInt {
+    let object = unsafe { f03_shmobj_find_index(index) };
+    if object.is_null() {
+        return -EINVAL;
+    }
+    unsafe { f03_shmobj_publish_lookup(object, out) };
+    0
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+/// # Safety
+/// Original shared-memory list lock/IRQ/preemption and global-init contract applies.
+#[no_mangle]
+pub unsafe extern "C" fn f03_shmat_list_lock_v1() {
+    unsafe { crate::shmobj::shmobj_list_lock() };
+}
+
+/// # Safety
+/// Caller owns the genuine shared-memory list lock paired with this unlock.
+#[no_mangle]
+pub unsafe extern "C" fn f03_shmat_list_unlock_v1() {
+    unsafe { crate::shmobj::shmobj_list_unlock() };
+}
+
+/// Preserve the original local-output lookup and conditional caller publication.
+///
+/// # Safety
+/// Caller holds the actual list lock; successful lookup acquires its original
+/// memobj reference. Output is writable when non-null. A null output retains the
+/// original no-publication behavior; no invented reference release is added.
+#[no_mangle]
+pub unsafe extern "C" fn f03_shmat_lookup_obj_v1(shmid: CInt, out: *mut *mut c_void) -> CInt {
+    let mut object = null_mut();
+    let error = unsafe { shmobj_list_lookup(shmid, &mut object) };
+    if error == 0 && !out.is_null() {
+        unsafe { out.write(object) };
+    }
+    error
+}
+
+/// # Safety
+/// Caller transfers its genuine object reference to the real refcount provider;
+/// final decrement may invoke the original object destructor. No post-call access.
+#[no_mangle]
+pub unsafe extern "C" fn f03_shmat_memobj_unref_v1(memobj: *mut c_void) {
+    let _ = unsafe { crate::refcount_helpers::memobj_unref(memobj.cast()) };
+}
+
+/// Forward complete mapping ownership to the genuine existing Rust range provider.
+///
+/// # Safety
+/// VM/range/object/physical mapping inputs satisfy the original add-range provider
+/// contract. The same two absent private/output endpoints are passed as C did.
+#[no_mangle]
+pub unsafe extern "C" fn f03_shmat_add_range_v1(
+    vm: *mut ProcessVm, start: CULong, end: CULong, phys: CULong, flags: CULong,
+    memobj: *mut c_void, objoff: CLong, pgshift: CInt,
+) -> CInt {
+    unsafe {
+        crate::process_helpers::add_process_memory_range(
+            vm, start, end, phys, flags, memobj, objoff, pgshift, null_mut(), null_mut(),
+        )
+    }
+}
+
+/// # Safety
+/// Same original list-lock/output/reference contract as the by-ID adapter.
+#[no_mangle]
+pub unsafe extern "C" fn f03_shmctl_lookup_index_v1(index: CInt, out: *mut *mut c_void) -> CInt {
+    let mut object = null_mut();
+    let error = unsafe { shmobj_list_lookup_by_index(index, &mut object) };
+    if error == 0 && !out.is_null() {
+        unsafe { out.write(object) };
+    }
+    error
+}
+
+/// # Safety
+/// Transfer exactly the original owned memobj reference; destructor may consume it.
+#[no_mangle]
+pub unsafe extern "C" fn f03_shmctl_memobj_unref_v1(memobj: *mut c_void) {
+    let _ = unsafe { crate::refcount_helpers::memobj_unref(memobj.cast()) };
+}
+
+/// # Safety
+/// Actual shm-lock-user list lock and original kernel IRQ context contract apply.
+#[no_mangle]
+pub unsafe extern "C" fn f03_shmctl_users_lock_v1() {
+    unsafe { crate::shmobj::shmlock_users_lock() };
+}
+
+/// # Safety
+/// Caller owns the matching genuine shm-lock-user list lock.
+#[no_mangle]
+pub unsafe extern "C" fn f03_shmctl_users_unlock_v1() {
+    unsafe { crate::shmobj::shmlock_users_unlock() };
+}
+
+/// Obtain the actual user-accounting object with unchanged output/error ordering.
+///
+/// # Safety
+/// Original user-list lock, allocator and initialized object ownership apply.
+/// Genuine provider creates/returns the real ABI ShmLockUser; no fake constructor.
+#[no_mangle]
+pub unsafe extern "C" fn f03_shmctl_user_get_v1(ruid: u32, out: *mut *mut c_void) -> CInt {
+    let mut user: *mut crate::abi::ShmLockUser = null_mut();
+    let error = unsafe { crate::shmobj::shmlock_user_get(ruid, &mut user) };
+    if error == 0 && !out.is_null() {
+        unsafe { out.write(user.cast()) };
+    }
+    error
+}
+
+/// # Safety
+/// Actual provider requires original user-list ownership and locked==0 before
+/// consuming the user. Its genuine panic/free behavior is not bypassed or modeled.
+#[no_mangle]
+pub unsafe extern "C" fn f03_shmctl_user_free_v1(user: *mut c_void) {
+    unsafe { crate::shmobj::shmlock_user_free(user.cast()) };
+}
+
+/// Read the real atomic object-reference count through its existing Rust provider.
+///
+/// # Safety
+/// Object is live and has the genuine initialized Memobj ABI/refcnt alignment.
+/// This forms only a raw field address, not a new Rust-private object/page getter.
+#[no_mangle]
+pub unsafe extern "C" fn f03_shmctl_refcnt_read_v1(memobj: *mut c_void) -> CInt {
+    let counter = unsafe { addr_of!((*memobj.cast::<crate::abi::Memobj>()).refcnt) };
+    unsafe { crate::atomic_helpers::ihk_atomic_read(counter.cast()) }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+unsafe extern "C" {
+    static mut f03_search_debug_v1: [crate::debug::Ddebug; 2];
+}
+
+unsafe fn f03_search_debug_enabled(index: usize) -> bool {
+    // SAFETY: Only internal indices 0/1 into genuine aligned C debug metadata.
+    let record = unsafe {
+        addr_of!(f03_search_debug_v1).cast::<crate::debug::Ddebug>().add(index)
+    };
+    unsafe { read_volatile(addr_of!((*record).line_flags)) >> 24 != 0 }
+}
+
+unsafe extern "C" fn f03_search_log(
+    event: CInt, len: SizeT, pgshift: CInt, addr: CULong, _error: CInt,
+) {
+    // SAFETY: Scalar-only original diagnostic arguments; no user pointer followed.
+    unsafe {
+        match event {
+            SEARCH_FREE_SPACE_LOG_ENTER if f03_search_debug_enabled(0) => {
+                kprintf(c"%s: len: %lu, pgshift: %d\n".as_ptr().cast(),
+                    c"search_free_space".as_ptr(), len, pgshift);
+            }
+            SEARCH_FREE_SPACE_LOG_OUTSIDE => {
+                kprintf(c"%s: error: addr 0x%lx is outside the user region\n".as_ptr().cast(),
+                    c"search_free_space".as_ptr(), addr);
+            }
+            SEARCH_FREE_SPACE_LOG_EXIT if f03_search_debug_enabled(1) => {
+                kprintf(c"%s: len: %lu, pgshift: %d, addr: 0x%lx\n".as_ptr().cast(),
+                    c"search_free_space".as_ptr(), len, pgshift, addr);
+            }
+            _ => {}
+        }
+    }
+}
+
+unsafe extern "C" fn f03_search_lookup(
+    vm: *mut c_void, start: CULong, end: CULong,
+) -> *mut c_void {
+    // SAFETY: Same borrowed live VM/tree and caller-owned range guard as original.
+    unsafe { crate::process_helpers::lookup_process_memory_range(vm.cast(), start, end).cast() }
+}
+
+/// Execute the complete existing search algorithm with the genuine current VM.
+///
+/// # Safety
+/// Current CPU/thread/VM and range tree must be live under the original caller's
+/// synchronization. Non-null addrp is initialized/readable/writable and does not
+/// alias the VM fields mutated by the helper. No extra guard or reference is made.
+#[no_mangle]
+pub unsafe extern "C" fn f03_search_free_space_v1(
+    len: SizeT, pgshift: CInt, addrp: *mut CULong,
+) -> CInt {
+    // SAFETY: Same CPU-local resolution and optional input read as the C caller.
+    let thread = unsafe { (*crate::cls::get_this_cpu_local_var()).current };
+    let vm = unsafe { (*thread).vm };
+    let region = unsafe { addr_of_mut!((*vm).region) };
+    let mut addr = if addrp.is_null() { 0 } else { unsafe { addrp.read() } };
+    // SAFETY: Real repr(C) fields are checked against actual headers by the witness.
+    // Helper always gets an initialized local output, even when outer addrp is null.
+    let error = unsafe {
+        search_free_space_body_result(
+            vm.cast(), region.cast(), len, pgshift, &mut addr,
+            offset_of!(VmRegions, user_end), offset_of!(VmRegions, map_end),
+            offset_of!(VmRange, end), Some(f03_search_lookup), Some(f03_search_log),
+        )
+    };
+    if !addrp.is_null() {
+        // SAFETY: Original outer caller writes its local result even on an error.
+        unsafe { addrp.write(addr) };
+    }
+    error
+}
+
+/// Preserve the SHMAT zero-initialized search and unconditional optional output.
+///
+/// # Safety
+/// Original current VM/tree ownership applies. Non-null output is writable and
+/// disjoint from VM state. Errors still publish the resulting initialized address.
+#[no_mangle]
+pub unsafe extern "C" fn f03_shmat_search_free_v1(
+    len: SizeT, pgshift: CInt, addrp: *mut CULong,
+) -> CInt {
+    let mut addr = 0;
+    let error = unsafe { f03_search_free_space_v1(len, pgshift, &mut addr) };
+    if !addrp.is_null() {
+        unsafe { addrp.write(addr) };
+    }
+    error
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+#[repr(C)]
+struct F03ShmgetConstants {
+    private_key: CInt,
+    create: CInt,
+    exclusive: CInt,
+    exists: CInt,
+    no_space: CInt,
+}
+
+unsafe extern "C" {
+    static f03_shmget_constants_v1: F03ShmgetConstants;
+    static mut f03_shmget_debug_v1: [crate::debug::Ddebug; 11];
+    #[link_name = "the_shminfo"]
+    static mut F03_SHMGET_LIMITS: crate::abi::ShmInfoLimit;
+    #[link_name = "the_shm_info"]
+    static mut F03_SHMGET_INFO: crate::abi::ShmInfo;
+}
+
+unsafe fn f03_shmget_log(event: usize, key: CInt, size: SizeT, flags: CInt, result: CInt) {
+    // SAFETY: Internal fixed indices correspond to the original eleven dkprintf
+    // records. Preserve actual C variadic argument widths, including signed key_t.
+    let debug = unsafe {
+        addr_of!(f03_shmget_debug_v1).cast::<crate::debug::Ddebug>().add(event)
+    };
+    if unsafe { read_volatile(addr_of!((*debug).line_flags)) >> 24 } == 0 {
+        return;
+    }
+    unsafe {
+        match event {
+            0 => { kprintf(c"do_shmget(%#lx,%#lx,%#x)\n".as_ptr().cast(), key, size, flags); }
+            1 | 5 | 6 => {
+                kprintf(c"do_shmget(%#lx,%#lx,%#x): -EINVAL\n".as_ptr().cast(), key, size, flags);
+            }
+            2 => {
+                kprintf(c"do_shmget(%#lx,%#lx,%#x): lookup: %d\n".as_ptr().cast(),
+                    key, size, flags, result);
+            }
+            3 => {
+                kprintf(c"do_shmget(%#lx,%#lx,%#x): -ENOENT\n".as_ptr().cast(), key, size, flags);
+            }
+            4 => {
+                kprintf(c"do_shmget(%#lx,%#lx,%#x): -EEXIST\n".as_ptr().cast(), key, size, flags);
+            }
+            7 | 10 => {
+                kprintf(c"do_shmget(%#lx,%#lx,%#x): %d\n".as_ptr().cast(),
+                    key, size, flags, result);
+            }
+            8 => {
+                kprintf(c"do_shmget(%#lx,%#lx,%#x): -ENOSPC\n".as_ptr().cast(), key, size, flags);
+            }
+            9 => {
+                kprintf(c"do_shmget(%#lx,%#lx,%#x): shmobj_create: %d\n".as_ptr().cast(),
+                    key, size, flags, result);
+            }
+            _ => {}
+        }
+    }
+}
+
+unsafe fn f03_shmget_drop_lookup(object: *mut crate::abi::ShmObj) {
+    // SAFETY: Exactly one successful lookup reference is owned, and the list lock
+    // has already been released. The actual destructor may consume this object.
+    let _ = unsafe {
+        crate::refcount_helpers::memobj_unref(addr_of_mut!((*object).memobj).cast())
+    };
+}
+
+/// Create or find a shared segment using the original complete SHM transaction.
+///
+/// # Safety
+/// Current CPU/thread/process and genuine initialized SHM globals/providers are
+/// live under their original kernel contract. List lock protects lookup, object
+/// metadata, ID allocation and publication. No object pointer escapes a dropped
+/// lookup reference; successful creation transfers the original list ownership.
+#[no_mangle]
+pub unsafe extern "C" fn do_shmget(key: CInt, size: SizeT, flags: CInt) -> CInt {
+    // SAFETY: Resolve original current process and time before first diagnostic.
+    let thread = unsafe { (*crate::cls::get_this_cpu_local_var()).current };
+    let proc = unsafe { (*thread).proc };
+    let now = unsafe { time() };
+    unsafe { f03_shmget_log(0, key, size, flags, 0) };
+    if (size as CULong) < unsafe { (*addr_of!(F03_SHMGET_LIMITS)).shmmin } {
+        unsafe { f03_shmget_log(1, key, size, flags, -EINVAL) };
+        return -EINVAL;
+    }
+
+    unsafe { crate::shmobj::shmobj_list_lock() };
+    let mut object: *mut crate::abi::ShmObj = null_mut();
+    if key != unsafe { f03_shmget_constants_v1.private_key } {
+        let mut raw = null_mut();
+        let error = unsafe { shmobj_list_lookup_by_key(key, &mut raw) };
+        if error == -EINVAL {
+            object = null_mut();
+        } else if error != 0 {
+            unsafe {
+                crate::shmobj::shmobj_list_unlock();
+                f03_shmget_log(2, key, size, flags, error);
+            }
+            return error;
+        } else {
+            object = raw.cast();
+        }
+        if object.is_null() && flags & unsafe { f03_shmget_constants_v1.create } == 0 {
+            unsafe {
+                crate::shmobj::shmobj_list_unlock();
+                f03_shmget_log(3, key, size, flags, -ENOENT);
+            }
+            return -ENOENT;
+        }
+        if !object.is_null()
+            && flags & unsafe { f03_shmget_constants_v1.create } != 0
+            && flags & unsafe { f03_shmget_constants_v1.exclusive } != 0
+        {
+            let error = unsafe { -f03_shmget_constants_v1.exists };
+            unsafe {
+                crate::shmobj::shmobj_list_unlock();
+                f03_shmget_drop_lookup(object);
+                f03_shmget_log(4, key, size, flags, error);
+            }
+            return error;
+        }
+    }
+
+    if !object.is_null() {
+        // SAFETY: Object metadata is borrowed under the real list lock; credential
+        // conversions and permission helper match the original uid_t/gid_t ABI.
+        let error = unsafe {
+            crate::shmid_helpers::shmget_existing_access_result(
+                (*proc).euid as u32, (*proc).egid as u32, flags,
+                (*object).ds.shm_perm.uid, (*object).ds.shm_perm.cuid,
+                (*object).ds.shm_perm.gid, (*object).ds.shm_perm.cgid,
+                (*object).ds.shm_perm.mode,
+            )
+        };
+        if error != 0 {
+            unsafe {
+                crate::shmobj::shmobj_list_unlock();
+                f03_shmget_drop_lookup(object);
+                f03_shmget_log(5, key, size, flags, error);
+            }
+            return error;
+        }
+        if unsafe { (*object).ds.shm_segsz } < size {
+            unsafe {
+                crate::shmobj::shmobj_list_unlock();
+                f03_shmget_drop_lookup(object);
+                f03_shmget_log(6, key, size, flags, -EINVAL);
+            }
+            return -EINVAL;
+        }
+        let id = unsafe { crate::shmid_helpers::make_shmid(object.cast()) };
+        unsafe {
+            crate::shmobj::shmobj_list_unlock();
+            f03_shmget_drop_lookup(object);
+            f03_shmget_log(7, key, size, flags, id);
+        }
+        return id;
+    }
+
+    if unsafe { (*addr_of!(F03_SHMGET_INFO)).used_ids as CULong }
+        >= unsafe { (*addr_of!(F03_SHMGET_LIMITS)).shmmni }
+    {
+        let error = unsafe { -f03_shmget_constants_v1.no_space };
+        unsafe {
+            crate::shmobj::shmobj_list_unlock();
+            f03_shmget_log(8, key, size, flags, error);
+        }
+        return error;
+    }
+    let pgshift;
+    if flags & SHM_HUGETLB != 0 {
+        let requested = (flags >> SHM_HUGE_SHIFT) & 0x3f;
+        pgshift = if requested == 0 {
+            unsafe { ihk_mc_get_linux_default_huge_page_shift() }
+        } else {
+            requested
+        };
+    } else if unsafe { (*proc).thp_disable } != 0 {
+        pgshift = PAGE_SHIFT as CInt;
+    } else if size > PAGE_SIZE as SizeT {
+        let mut page_size: SizeT = 0;
+        let mut alignment: CInt = 0;
+        let error = unsafe {
+            crate::x86_memory_helpers::arch_get_smaller_page_size(
+                null_mut(), size.wrapping_add(1), &mut page_size, &mut alignment,
+            )
+        };
+        if error != 0 {
+            unsafe {
+                kprintf(
+                    c"%s: WARNING: arch_get_smaller_page_size failed. size: %ld, error: %d\n"
+                        .as_ptr().cast(), c"do_shmget".as_ptr(), size, error,
+                );
+            }
+            pgshift = PAGE_SHIFT as CInt;
+        } else {
+            pgshift = alignment.wrapping_add(PAGE_SHIFT as CInt);
+        }
+    } else {
+        pgshift = PAGE_SHIFT as CInt;
+    }
+
+    // SAFETY: Match memset over the entire actual C descriptor, including padding.
+    // Only initialized fields are then written before its genuine constructor.
+    let mut descriptor = MaybeUninit::<crate::abi::ShmidDs>::uninit();
+    let ads = descriptor.as_mut_ptr();
+    unsafe {
+        crate::string::memset(ads.cast(), 0, size_of::<crate::abi::ShmidDs>());
+        (*ads).shm_perm.key = key;
+        (*ads).shm_perm.uid = (*proc).euid as u32;
+        (*ads).shm_perm.cuid = (*proc).euid as u32;
+        (*ads).shm_perm.gid = (*proc).egid as u32;
+        (*ads).shm_perm.cgid = (*proc).egid as u32;
+        (*ads).shm_perm.mode = (flags & 0o777) as u16;
+        (*ads).shm_segsz = size;
+        (*ads).shm_ctime = now;
+        (*ads).shm_cpid = (*proc).pid;
+        (*ads).init_pgshift = pgshift;
+    }
+    let error = unsafe { crate::shmobj::shmobj_create_indexed(ads, &mut object) };
+    if error != 0 {
+        unsafe {
+            crate::shmobj::shmobj_list_unlock();
+            f03_shmget_log(9, key, size, flags, error);
+        }
+        return error;
+    }
+    // SAFETY: Constructor returned exclusive initialized object ownership while
+    // list lock remains held. Publish only after assigning the real bitmap ID.
+    unsafe {
+        (*object).index = crate::shmid_helpers::get_shmid_index();
+        crate::list_helpers::list_add(
+            addr_of_mut!((*object).chain).cast(), addr_of_mut!(F03_SHMOBJ_KDS_LIST).cast(),
+        );
+        let used = addr_of_mut!(F03_SHMGET_INFO.used_ids);
+        used.write(used.read().wrapping_add(1));
+        let id = crate::shmid_helpers::make_shmid(object.cast());
+        crate::shmobj::shmobj_list_unlock();
+        f03_shmget_log(10, key, size, flags, id);
+        id
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+unsafe fn f03_shm_debug_enabled(record: *const crate::debug::Ddebug, index: usize) -> bool {
+    // SAFETY: Private callers use only fixed valid indices into their exact array.
+    unsafe { read_volatile(addr_of!((*record.add(index)).line_flags)) >> 24 != 0 }
+}
+
+unsafe extern "C" {
+    static mut f03_shmat_log_bridge_debug_v1: [crate::debug::Ddebug; 9];
+}
+
+/// Format the complete original scalar diagnostic contract.
+///
+/// # Safety
+/// Genuine debug metadata/kprintf are live. No user/object pointer is dereferenced
+/// and no ownership is changed. Scalar operands keep their original C widths.
+#[no_mangle]
+pub unsafe extern "C" fn f03_shmat_log_bridge_v1(
+    event: CInt, shmid: CInt, shmaddr: CULong, shmflg: CInt, error: CLong,
+) {
+    // SAFETY: Actual C metadata and fixed branch indices/scalar variadic operands.
+    unsafe {
+        let records = addr_of!(f03_shmat_log_bridge_debug_v1).cast();
+        match event {
+            SHMAT_LOG_ENTER if f03_shm_debug_enabled(records, 0) => {
+                kprintf(
+                    c"shmat(%#x,%p,%#x)\n"
+                        .as_ptr().cast(),
+                    shmid, shmaddr as *mut c_void, shmflg,
+                );
+            }
+            SHMAT_LOG_LOOKUP_FAILED if f03_shm_debug_enabled(records, 1) => {
+                kprintf(
+                    c"shmat(%#x,%p,%#x): lookup: %ld\n"
+                        .as_ptr().cast(),
+                    shmid, shmaddr as *mut c_void, shmflg, error,
+                );
+            }
+            SHMAT_LOG_INVALID_ADDR if f03_shm_debug_enabled(records, 2) => {
+                kprintf(
+                    c"shmat(%#x,%p,%#x): -EINVAL\n"
+                        .as_ptr().cast(),
+                    shmid, shmaddr as *mut c_void, shmflg,
+                );
+            }
+            SHMAT_LOG_ACCESS_FAILED if f03_shm_debug_enabled(records, 3) => {
+                kprintf(
+                    c"shmat(%#x,%p,%#x): access: %ld\n"
+                        .as_ptr().cast(),
+                    shmid, shmaddr as *mut c_void, shmflg, error,
+                );
+            }
+            SHMAT_LOG_RANGE_BUSY if f03_shm_debug_enabled(records, 4) => {
+                kprintf(
+                    c"shmat(%#x,%p,%#x):lookup_process_memory_range succeeded. %ld\n"
+                        .as_ptr().cast(),
+                    shmid, shmaddr as *mut c_void, shmflg, error,
+                );
+            }
+            SHMAT_LOG_SEARCH_FAILED if f03_shm_debug_enabled(records, 5) => {
+                kprintf(
+                    c"shmat(%#x,%p,%#x):search_free_space failed. %ld\n"
+                        .as_ptr().cast(),
+                    shmid, shmaddr as *mut c_void, shmflg, error,
+                );
+            }
+            SHMAT_LOG_SET_HOST_FAILED if f03_shm_debug_enabled(records, 6) => {
+                kprintf(
+                    c"shmat(%#x,%p,%#x):set_host_vma failed. %ld\n"
+                        .as_ptr().cast(),
+                    shmid, shmaddr as *mut c_void, shmflg, error,
+                );
+            }
+            SHMAT_LOG_ADD_FAILED if f03_shm_debug_enabled(records, 7) => {
+                kprintf(
+                    c"shmat(%#x,%p,%#x):add_process_memory_range failed. %ld\n"
+                        .as_ptr().cast(),
+                    shmid, shmaddr as *mut c_void, shmflg, error,
+                );
+            }
+            SHMAT_LOG_EXIT if f03_shm_debug_enabled(records, 8) => {
+                kprintf(
+                    c"shmat(%#x,%p,%#x): 0x%lx. %ld\n"
+                        .as_ptr().cast(),
+                    shmid, shmaddr as *mut c_void, shmflg, error, error,
+                );
+            }
+            _ => {}
+        }
+    }
+}
+
+unsafe extern "C" {
+    static mut f03_shmctl_log_bridge_debug_v1: [crate::debug::Ddebug; 10];
+}
+
+/// Format the complete original scalar diagnostic contract.
+///
+/// # Safety
+/// Genuine debug metadata/kprintf are live. No user/object pointer is dereferenced
+/// and no ownership is changed. Scalar operands keep their original C widths.
+#[no_mangle]
+pub unsafe extern "C" fn f03_shmctl_log_bridge_v1(
+    event: CInt, shmid: CInt, cmd: CInt, buf_addr: CULong, error: CLong,
+) {
+    // SAFETY: Actual C metadata and fixed branch indices/scalar variadic operands.
+    unsafe {
+        let records = addr_of!(f03_shmctl_log_bridge_debug_v1).cast();
+        match event {
+            SHMCTL_LOG_ENTER if f03_shm_debug_enabled(records, 0) => {
+                kprintf(
+                    c"shmctl(%#x,%d,%p)\n"
+                        .as_ptr().cast(),
+                    shmid, cmd, buf_addr as *mut c_void,
+                );
+            }
+            SHMCTL_LOG_LOOKUP if f03_shm_debug_enabled(records, 1) => {
+                kprintf(
+                    c"shmctl(%#x,%d,%p): lookup: %ld\n"
+                        .as_ptr().cast(),
+                    shmid, cmd, buf_addr as *mut c_void, error,
+                );
+            }
+            SHMCTL_LOG_EPERM if f03_shm_debug_enabled(records, 2) => {
+                kprintf(
+                    c"shmctl(%#x,%d,%p): -EPERM\n"
+                        .as_ptr().cast(),
+                    shmid, cmd, buf_addr as *mut c_void,
+                );
+            }
+            SHMCTL_LOG_COPY if f03_shm_debug_enabled(records, 3) => {
+                kprintf(
+                    c"shmctl(%#x,%d,%p): %ld\n"
+                        .as_ptr().cast(),
+                    shmid, cmd, buf_addr as *mut c_void, error,
+                );
+            }
+            SHMCTL_LOG_EXIT if f03_shm_debug_enabled(records, 4) => {
+                kprintf(
+                    c"shmctl(%#x,%d,%p): %ld\n"
+                        .as_ptr().cast(),
+                    shmid, cmd, buf_addr as *mut c_void, error,
+                );
+            }
+            SHMCTL_LOG_EACCES if f03_shm_debug_enabled(records, 5) => {
+                kprintf(
+                    c"shmctl(%#x,%d,%p): -EACCES\n"
+                        .as_ptr().cast(),
+                    shmid, cmd, buf_addr as *mut c_void,
+                );
+            }
+            SHMCTL_LOG_PERM_SHM if f03_shm_debug_enabled(records, 6) => {
+                kprintf(
+                    c"shmctl(%#x,%d,%p): perm shm: %ld\n"
+                        .as_ptr().cast(),
+                    shmid, cmd, buf_addr as *mut c_void, error,
+                );
+            }
+            SHMCTL_LOG_PERM_PROC if f03_shm_debug_enabled(records, 7) => {
+                kprintf(
+                    c"shmctl(%#x,%d,%p): perm proc: %ld\n"
+                        .as_ptr().cast(),
+                    shmid, cmd, buf_addr as *mut c_void, error,
+                );
+            }
+            SHMCTL_LOG_USER_LOOKUP => {
+                kprintf(
+                    c"shmctl(%#x,%d,%p): user lookup: %ld\n"
+                        .as_ptr().cast(),
+                    shmid, cmd, buf_addr as *mut c_void, error,
+                );
+            }
+            SHMCTL_LOG_TOO_LARGE if f03_shm_debug_enabled(records, 8) => {
+                kprintf(
+                    c"shmctl(%#x,%d,%p): too large: %ld\n"
+                        .as_ptr().cast(),
+                    shmid, cmd, buf_addr as *mut c_void, error,
+                );
+            }
+            SHMCTL_LOG_EINVAL if f03_shm_debug_enabled(records, 9) => {
+                kprintf(
+                    c"shmctl(%#x,%d,%p): EINVAL\n"
+                        .as_ptr().cast(),
+                    shmid, cmd, buf_addr as *mut c_void,
+                );
+            }
+            _ => {}
+        }
+    }
+}
+
+unsafe extern "C" {
+    static mut f03_shmdt_log_bridge_debug_v1: [crate::debug::Ddebug; 3];
+}
+
+/// Format the complete original scalar diagnostic contract.
+///
+/// # Safety
+/// Genuine debug metadata/kprintf are live. No user/object pointer is dereferenced
+/// and no ownership is changed. Scalar operands keep their original C widths.
+#[no_mangle]
+pub unsafe extern "C" fn f03_shmdt_log_bridge_v1(
+    event: CInt, addr: CULong, error: CInt,
+) {
+    // SAFETY: Actual C metadata and fixed branch indices/scalar variadic operands.
+    unsafe {
+        let records = addr_of!(f03_shmdt_log_bridge_debug_v1).cast();
+        match event {
+            SHMDT_LOG_ENTER if f03_shm_debug_enabled(records, 0) => {
+                kprintf(
+                    c"shmdt(%p)\n"
+                        .as_ptr().cast(),
+                    addr as *mut c_void,
+                );
+            }
+            SHMDT_LOG_INVALID if f03_shm_debug_enabled(records, 1) => {
+                kprintf(
+                    c"shmdt(%p): -EINVAL\n"
+                        .as_ptr().cast(),
+                    addr as *mut c_void,
+                );
+            }
+            SHMDT_LOG_EXIT if f03_shm_debug_enabled(records, 2) => {
+                kprintf(
+                    c"shmdt(%p): %d\n"
+                        .as_ptr().cast(),
+                    addr as *mut c_void, error,
+                );
+            }
+            _ => {}
+        }
+    }
+}
+
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+unsafe extern "C" {
+    #[link_name = "move_pte_range"]
+    fn f03_existing_arch_move_pte_range(
+        page_table: *mut c_void, vm: *mut ProcessVm, oldstart: *mut c_void,
+        newstart: *mut c_void, size: SizeT, range: *mut VmRange,
+    ) -> CInt;
+}
+
+/// Extend through the genuine existing range provider, retaining its error paths.
+///
+/// # Safety
+/// VM/range and caller's original exclusive tree ownership remain live. The
+/// provider may update range/tree/page mappings; no added ownership is claimed.
+#[no_mangle]
+pub unsafe extern "C" fn mremap_extend_bridge(
+    vm: *mut c_void, range: *mut c_void, newend: CULong,
+) -> CInt {
+    unsafe {
+        crate::process_helpers::extend_up_process_memory_range(vm.cast(), range.cast(), newend)
+    }
+}
+
+/// Preserve zero-start search and the original unsigned-long to int narrowing.
+///
+/// # Safety
+/// Same current VM/range guard as the complete search entry. Non-null output is
+/// writable and disjoint from mutated VM state, including on an error return.
+#[no_mangle]
+pub unsafe extern "C" fn mremap_search_bridge(
+    size: SizeT, pgshift: CULong, newstartp: *mut CULong,
+) -> CInt {
+    let mut start = 0;
+    let error = unsafe { f03_search_free_space_v1(size, pgshift as CInt, &mut start) };
+    if !newstartp.is_null() {
+        unsafe { newstartp.write(start) };
+    }
+    error
+}
+
+/// # Safety
+/// memobj names the original live referenced allocation with the actual checked
+/// MemObj prefix. Increment the existing provider; do not transfer a new owner.
+#[no_mangle]
+pub unsafe extern "C" fn mremap_memobj_ref_bridge(memobj: *mut c_void) {
+    let _ = unsafe { crate::refcount_helpers::memobj_ref(memobj.cast()) };
+}
+
+/// # Safety
+/// Caller owns the reference being dropped. Genuine provider may run the actual
+/// final destructor; neither this entry nor caller may access a consumed object.
+#[no_mangle]
+pub unsafe extern "C" fn mremap_memobj_unref_bridge(memobj: *mut c_void) {
+    let _ = unsafe { crate::refcount_helpers::memobj_unref(memobj.cast()) };
+}
+
+/// # Safety
+/// Retain actual VM/range allocator/provider ownership and caller's original lock.
+/// Despite its old name, pgshift is passed as the provider's physical argument;
+/// the provider's real pgshift argument remains exactly zero. Do not reinterpret it.
+#[no_mangle]
+pub unsafe extern "C" fn mremap_add_range_bridge(
+    vm: *mut c_void, start: CULong, end: CULong, pgshift: CLong,
+    flags: CULong, memobj: *mut c_void, objoff: CULong,
+) -> CInt {
+    unsafe {
+        crate::process_helpers::add_process_memory_range(
+            vm.cast(), start, end, pgshift as CULong, flags, memobj, objoff as CLong,
+            0, null_mut(), null_mut(),
+        )
+    }
+}
+
+/// # Safety
+/// Actual aligned spinlock, noirq/preemption state, lock ordering and eventual
+/// paired unlock requirements apply. This entry must not be called from HOST.
+#[no_mangle]
+pub unsafe extern "C" fn mremap_pte_lock_bridge(lock: *mut c_void) {
+    unsafe { crate::spinlock_helpers::__ihk_mc_spinlock_lock_noirq(lock.cast()) };
+}
+
+/// # Safety
+/// Caller owns the matching genuine ticket lock; actual preemption restoration
+/// remains in the existing provider. No new IRQ or state transition is introduced.
+#[no_mangle]
+pub unsafe extern "C" fn mremap_pte_unlock_bridge(lock: *mut c_void) {
+    unsafe { crate::spinlock_helpers::__ihk_mc_spinlock_unlock_noirq(lock.cast()) };
+}
+
+/// # Safety
+/// Preserve complete actual architecture page-table/range ownership, spinlock and
+/// TLB obligations. Existing architecture C caller remains explicit debt; this
+/// wrapper does not duplicate its Rust helper or invent private move_args layout.
+#[no_mangle]
+pub unsafe extern "C" fn mremap_move_pte_bridge(
+    page_table: *mut c_void, vm: *mut c_void, oldstart: *mut c_void,
+    newstart: *mut c_void, size: SizeT, range: *mut c_void,
+) -> CInt {
+    unsafe {
+        f03_existing_arch_move_pte_range(
+            page_table, vm.cast(), oldstart, newstart, size, range.cast(),
+        )
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+unsafe extern "C" {
+    static mut f03_mremap_debug_v1: [crate::debug::Ddebug; 2];
+}
+
+/// Format the complete original mremap record without consuming padding/state.
+///
+/// # Safety
+/// Non-null record has the actual C layout with only the selected branch's fields
+/// required initialized. No whole-record Rust reference is formed. The borrowed
+/// record and genuine debug/kprintf metadata remain live during this call.
+#[no_mangle]
+pub unsafe extern "C" fn mremap_log_bridge(record: *const MremapLogRecord) {
+    if record.is_null() {
+        return;
+    }
+    // SAFETY: Per-branch initialized fields only; disabled diagnostics read no
+    // operands, and pointer arguments are formatting scalars, never dereferenced.
+    unsafe {
+        let records = addr_of!(f03_mremap_debug_v1).cast();
+        match (*record).event {
+            MREMAP_LOG_ENTER if f03_shm_debug_enabled(records, 0) => {
+                kprintf(
+                    c"sys_mremap(%#lx,%#lx,%#lx,%#x,%#lx)\n"
+                        .as_ptr().cast(),
+                    (*record).oldaddr,
+                    (*record).oldsize0,
+                    (*record).newsize0,
+                    (*record).flags,
+                    (*record).newaddr,
+                );
+            }
+            MREMAP_LOG_STRAIGHT_REJECT => {
+                kprintf(
+                    c"sys_mremap: reject for straight range 0x%lx\n"
+                        .as_ptr().cast(),
+                    (*record).oldaddr,
+                );
+            }
+            MREMAP_LOG_INVALID => {
+                kprintf(
+                    c"sys_mremap(%#lx,%#lx,%#lx,%#x,%#lx):invalid. %d\n"
+                        .as_ptr().cast(),
+                    (*record).oldaddr,
+                    (*record).oldsize0,
+                    (*record).newsize0,
+                    (*record).flags,
+                    (*record).newaddr,
+                    (*record).error,
+                );
+            }
+            MREMAP_LOG_ALLOCATE_FAILED => {
+                kprintf(
+                    c"sys_mremap(%#lx,%#lx,%#lx,%#x,%#lx):cannot allocate. %d\n"
+                        .as_ptr().cast(),
+                    (*record).oldaddr,
+                    (*record).oldsize0,
+                    (*record).newsize0,
+                    (*record).flags,
+                    (*record).newaddr,
+                    (*record).error,
+                );
+            }
+            MREMAP_LOG_LOOKUP_FAILED => {
+                kprintf(
+                    c"sys_mremap(%#lx,%#lx,%#lx,%#x,%#lx):lookup failed. %d %p %#lx-%#lx %#lx\n"
+                        .as_ptr().cast(),
+                    (*record).oldaddr,
+                    (*record).oldsize0,
+                    (*record).newsize0,
+                    (*record).flags,
+                    (*record).newaddr,
+                    (*record).error,
+                    null_mut::<c_void>(),
+                    (*record).range_start,
+                    (*record).range_end,
+                    (*record).range_flags,
+                );
+            }
+            MREMAP_LOG_FIXED_MIN_ADDR => {
+                kprintf(
+                    c"sys_mremap(%#lx,%#lx,%#lx,%#x,%#lx):mmap_min_addr %#lx. %d\n"
+                        .as_ptr().cast(),
+                    (*record).oldaddr,
+                    (*record).oldsize0,
+                    (*record).newsize0,
+                    (*record).flags,
+                    (*record).newaddr,
+                    (*record).range_start,
+                    (*record).error,
+                );
+            }
+            MREMAP_LOG_FIXED_OVERLAP => {
+                kprintf(
+                    c"sys_mremap(%#lx,%#lx,%#lx,%#x,%#lx):fixed:overlapped. %d\n"
+                        .as_ptr().cast(),
+                    (*record).oldaddr,
+                    (*record).oldsize0,
+                    (*record).newsize0,
+                    (*record).flags,
+                    (*record).newaddr,
+                    (*record).error,
+                );
+            }
+            MREMAP_LOG_CANNOT_RELOCATE => {
+                kprintf(
+                    c"sys_mremap(%#lx,%#lx,%#lx,%#x,%#lx):cannot relocate. %d\n"
+                        .as_ptr().cast(),
+                    (*record).oldaddr,
+                    (*record).oldsize0,
+                    (*record).newsize0,
+                    (*record).flags,
+                    (*record).newaddr,
+                    (*record).error,
+                );
+            }
+            MREMAP_LOG_SEARCH_FAILED => {
+                kprintf(
+                    c"sys_mremap(%#lx,%#lx,%#lx,%#x,%#lx):search failed. %d\n"
+                        .as_ptr().cast(),
+                    (*record).oldaddr,
+                    (*record).oldsize0,
+                    (*record).newsize0,
+                    (*record).flags,
+                    (*record).newaddr,
+                    (*record).error,
+                );
+            }
+            MREMAP_LOG_FIXED_MUNMAP_FAILED => {
+                kprintf(
+                    c"sys_mremap(%#lx,%#lx,%#lx,%#x,%#lx):fixed:munmap failed. %d\n"
+                        .as_ptr().cast(),
+                    (*record).oldaddr,
+                    (*record).oldsize0,
+                    (*record).newsize0,
+                    (*record).flags,
+                    (*record).newaddr,
+                    (*record).error,
+                );
+            }
+            MREMAP_LOG_ADD_FAILED => {
+                kprintf(
+                    c"sys_mremap(%#lx,%#lx,%#lx,%#x,%#lx):add failed. %d\n"
+                        .as_ptr().cast(),
+                    (*record).oldaddr,
+                    (*record).oldsize0,
+                    (*record).newsize0,
+                    (*record).flags,
+                    (*record).newaddr,
+                    (*record).error,
+                );
+            }
+            MREMAP_LOG_SPLIT_FAILED => {
+                kprintf(
+                    c"sys_mremap(%#lx,%#lx,%#lx,%#x,%#lx):split range failed. %d\n"
+                        .as_ptr().cast(),
+                    (*record).oldaddr,
+                    (*record).oldsize0,
+                    (*record).newsize0,
+                    (*record).flags,
+                    (*record).newaddr,
+                    (*record).error,
+                );
+            }
+            MREMAP_LOG_MOVE_FAILED => {
+                kprintf(
+                    c"sys_mremap(%#lx,%#lx,%#lx,%#x,%#lx):move failed. %d\n"
+                        .as_ptr().cast(),
+                    (*record).oldaddr,
+                    (*record).oldsize0,
+                    (*record).newsize0,
+                    (*record).flags,
+                    (*record).newaddr,
+                    (*record).error,
+                );
+            }
+            MREMAP_LOG_RELOCATE_MUNMAP_FAILED => {
+                kprintf(
+                    c"sys_mremap(%#lx,%#lx,%#lx,%#x,%#lx):relocate:munmap failed. %d\n"
+                        .as_ptr().cast(),
+                    (*record).oldaddr,
+                    (*record).oldsize0,
+                    (*record).newsize0,
+                    (*record).flags,
+                    (*record).newaddr,
+                    (*record).error,
+                );
+            }
+            MREMAP_LOG_SHRINK_MUNMAP_FAILED => {
+                kprintf(
+                    c"sys_mremap(%#lx,%#lx,%#lx,%#x,%#lx):shrink:munmap failed. %d\n"
+                        .as_ptr().cast(),
+                    (*record).oldaddr,
+                    (*record).oldsize0,
+                    (*record).newsize0,
+                    (*record).flags,
+                    (*record).newaddr,
+                    (*record).error,
+                );
+            }
+            MREMAP_LOG_POPULATE_FAILED => {
+                kprintf(
+                    c"sys_mremap(%#lx,%#lx,%#lx,%#x,%#lx):populate failed. %d %#lx-%#lx\n"
+                        .as_ptr().cast(),
+                    (*record).oldaddr,
+                    (*record).oldsize0,
+                    (*record).newsize0,
+                    (*record).flags,
+                    (*record).newaddr,
+                    (*record).error,
+                    (*record).lckstart,
+                    (*record).lckend,
+                );
+            }
+            MREMAP_LOG_EXIT if f03_shm_debug_enabled(records, 1) => {
+                kprintf(
+                    c"sys_mremap(%#lx,%#lx,%#lx,%#x,%#lx):%d %#lx\n"
+                        .as_ptr().cast(),
+                    (*record).oldaddr,
+                    (*record).oldsize0,
+                    (*record).newsize0,
+                    (*record).flags,
+                    (*record).newaddr,
+                    (*record).error,
+                    if (*record).error != 0 {
+                        (*record).error as CULong
+                    } else {
+                        (*record).newstart
+                    },
+                );
+            }
+            _ => {}
+        }
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+unsafe extern "C" {
+    static mut f03_msync_debug_v1: [crate::debug::Ddebug; 3];
+}
+
+/// # Safety
+/// Actual aligned reader lock/original noirq/preemption and paired release apply.
+/// No HOST privileged effects, added ownership, reference or synchronization.
+#[no_mangle]
+pub unsafe extern "C" fn msync_read_lock_bridge(
+    lock: *mut c_void,
+) {
+    // SAFETY: Preserve the original genuine provider and its complete contract.
+    unsafe {
+        crate::lock_helpers::ihk_rwspinlock_read_lock_noirq(lock.cast())
+    }
+}
+
+/// # Safety
+/// Caller owns matching genuine reader lock; original provider restores preemption.
+/// No HOST privileged effects, added ownership, reference or synchronization.
+#[no_mangle]
+pub unsafe extern "C" fn msync_read_unlock_bridge(
+    lock: *mut c_void,
+) {
+    // SAFETY: Preserve the original genuine provider and its complete contract.
+    unsafe {
+        crate::lock_helpers::ihk_rwspinlock_read_unlock_noirq(lock.cast())
+    }
+}
+
+/// # Safety
+/// Actual VM/tree stable under original read guard; output borrowed, no extra ref.
+/// No HOST privileged effects, added ownership, reference or synchronization.
+#[no_mangle]
+pub unsafe extern "C" fn msync_lookup_range_bridge(
+    vm: *mut c_void, start: CULong, end: CULong,
+) -> *mut c_void {
+    // SAFETY: Preserve the original genuine provider and its complete contract.
+    unsafe {
+        crate::process_helpers::lookup_process_memory_range(vm.cast(), start, end).cast()
+    }
+}
+
+/// # Safety
+/// Actual VM/range/tree live and stable under original read guard; borrowed output.
+/// No HOST privileged effects, added ownership, reference or synchronization.
+#[no_mangle]
+pub unsafe extern "C" fn msync_next_range_bridge(
+    vm: *mut c_void, range: *mut c_void,
+) -> *mut c_void {
+    // SAFETY: Preserve the original genuine provider and its complete contract.
+    unsafe {
+        crate::process_helpers::next_process_memory_range(vm.cast(), range.cast()).cast()
+    }
+}
+
+/// # Safety
+/// Genuine referenced object and actual Rust pager implementation lifetime apply.
+/// No HOST privileged effects, added ownership, reference or synchronization.
+#[no_mangle]
+pub unsafe extern "C" fn msync_has_pager_bridge(
+    object: *mut c_void,
+) -> CInt {
+    // SAFETY: Preserve the original genuine provider and its complete contract.
+    unsafe {
+        crate::object_helpers::memobj_has_pager(object.cast())
+    }
+}
+
+/// # Safety
+/// Actual VM/range/pager ownership and original read guard/provider effects apply.
+/// No HOST privileged effects, added ownership, reference or synchronization.
+#[no_mangle]
+pub unsafe extern "C" fn msync_sync_range_bridge(
+    vm: *mut c_void, range: *mut c_void, start: CULong, end: CULong,
+) -> CInt {
+    // SAFETY: Preserve the original genuine provider and its complete contract.
+    unsafe {
+        crate::process_helpers::sync_process_memory_range(vm.cast(), range.cast(), start, end)
+    }
+}
+
+/// # Safety
+/// Actual VM/range/pager lifetimes and original read guard/provider effects apply.
+/// No HOST privileged effects, added ownership, reference or synchronization.
+#[no_mangle]
+pub unsafe extern "C" fn msync_invalidate_range_bridge(
+    vm: *mut c_void, range: *mut c_void, start: CULong, end: CULong,
+) -> CInt {
+    // SAFETY: Preserve the original genuine provider and its complete contract.
+    unsafe {
+        crate::process_helpers::invalidate_process_memory_range(vm.cast(), range.cast(), start, end)
+    }
+}
+
+/// # Safety
+/// Exact initialized debug/kprintf metadata and scalar C widths. No pointer read
+/// or state change. Preserve original three debug gates and ungated error logs.
+#[no_mangle]
+pub unsafe extern "C" fn msync_log_bridge(
+    event: CInt, start: CULong, len: SizeT, flags: CInt, error: CInt,
+) {
+    // SAFETY: Private fixed debug indices and original typed scalar operands.
+    unsafe {
+        let records = addr_of!(f03_msync_debug_v1).cast();
+        match event {
+            MSYNC_LOG_ENTER if f03_shm_debug_enabled(records, 0) => {
+                kprintf(
+                    c"sys_msync(%#lx,%#lx,%#x)\n"
+                        .as_ptr().cast(), start, len, flags,
+                );
+            }
+            MSYNC_LOG_INVALID_ARGS => {
+                kprintf(
+                    c"sys_msync(%#lx,%#lx,%#x):invalid args. %d\n"
+                        .as_ptr().cast(), start, len, flags, error,
+                );
+            }
+            MSYNC_LOG_INVALID_VMR => {
+                kprintf(
+                    c"sys_msync(%#lx,%#lx,%#x):invalid VMR %d\n"
+                        .as_ptr().cast(), start, len, flags, error,
+                );
+            }
+            MSYNC_LOG_LOCKED_VMR => {
+                kprintf(
+                    c"sys_msync(%#lx,%#lx,%#x):locked VMR %d\n"
+                        .as_ptr().cast(), start, len, flags, error,
+                );
+            }
+            MSYNC_LOG_UNSYNCABLE_VMR if f03_shm_debug_enabled(records, 1) => {
+                kprintf(
+                    c"sys_msync(%#lx,%#lx,%#x):unsyncable VMR\n"
+                        .as_ptr().cast(), start, len, flags,
+                );
+            }
+            MSYNC_LOG_SYNC_FAILED => {
+                kprintf(
+                    c"sys_msync(%#lx,%#lx,%#x):sync failed. %d\n"
+                        .as_ptr().cast(), start, len, flags, error,
+                );
+            }
+            MSYNC_LOG_INVALIDATE_FAILED => {
+                kprintf(
+                    c"sys_msync(%#lx,%#lx,%#x):invalidate failed. %d\n"
+                        .as_ptr().cast(), start, len, flags, error,
+                );
+            }
+            MSYNC_LOG_EXIT if f03_shm_debug_enabled(records, 2) => {
+                kprintf(
+                    c"sys_msync(%#lx,%#lx,%#x):%d\n"
+                        .as_ptr().cast(), start, len, flags, error,
+                );
+            }
+            _ => {}
+        }
+    }
+}
+
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+/// # Safety
+/// Actual writer lock/noirq/preemption state and paired unlock apply.
+/// Preserve genuine provider lifetime/errors; no added reference or HOST effects.
+#[no_mangle]
+pub unsafe extern "C" fn memlock_write_lock_bridge(
+    lock: *mut c_void,
+) {
+    // SAFETY: Same typed inputs and original complete provider contract.
+    unsafe {
+        crate::lock_helpers::ihk_rwspinlock_write_lock_noirq(lock.cast())
+    }
+}
+
+/// # Safety
+/// Caller owns matching writer lock; provider restores original preemption.
+/// Preserve genuine provider lifetime/errors; no added reference or HOST effects.
+#[no_mangle]
+pub unsafe extern "C" fn memlock_write_unlock_bridge(
+    lock: *mut c_void,
+) {
+    // SAFETY: Same typed inputs and original complete provider contract.
+    unsafe {
+        crate::lock_helpers::ihk_rwspinlock_write_unlock_noirq(lock.cast())
+    }
+}
+
+/// # Safety
+/// Actual live tree is stable under original guard; result is borrowed.
+/// Preserve genuine provider lifetime/errors; no added reference or HOST effects.
+#[no_mangle]
+pub unsafe extern "C" fn memlock_lookup_range_bridge(
+    vm: *mut c_void, start: CULong, end: CULong,
+) -> *mut c_void {
+    // SAFETY: Same typed inputs and original complete provider contract.
+    unsafe {
+        crate::process_helpers::lookup_process_memory_range(vm.cast(), start, end).cast()
+    }
+}
+
+/// # Safety
+/// Actual live tree/range and original guard apply; result is borrowed.
+/// Preserve genuine provider lifetime/errors; no added reference or HOST effects.
+#[no_mangle]
+pub unsafe extern "C" fn memlock_next_range_bridge(
+    vm: *mut c_void, range: *mut c_void,
+) -> *mut c_void {
+    // SAFETY: Same typed inputs and original complete provider contract.
+    unsafe {
+        crate::process_helpers::next_process_memory_range(vm.cast(), range.cast()).cast()
+    }
+}
+
+/// # Safety
+/// Original exclusive tree ownership and writable split output are required.
+/// Preserve genuine provider lifetime/errors; no added reference or HOST effects.
+#[no_mangle]
+pub unsafe extern "C" fn memlock_split_range_bridge(
+    vm: *mut c_void, range: *mut c_void, addr: CULong, new_range: *mut *mut c_void,
+) -> CInt {
+    // SAFETY: Same typed inputs and original complete provider contract.
+    unsafe {
+        crate::process_helpers::split_process_memory_range(
+            vm.cast(), range.cast(), addr, new_range.cast(),
+        )
+    }
+}
+
+/// # Safety
+/// Original exclusive tree ownership applies; genuine provider may consume a node.
+/// Preserve genuine provider lifetime/errors; no added reference or HOST effects.
+#[no_mangle]
+pub unsafe extern "C" fn memlock_join_range_bridge(
+    vm: *mut c_void, left: *mut c_void, right: *mut c_void,
+) -> CInt {
+    // SAFETY: Same typed inputs and original complete provider contract.
+    unsafe {
+        crate::process_helpers::join_process_memory_range(vm.cast(), left.cast(), right.cast())
+    }
+}
+
+/// # Safety
+/// Actual VM/current-thread/page-fault ownership and provider lock scope apply.
+/// Preserve genuine provider lifetime/errors; no added reference or HOST effects.
+#[no_mangle]
+pub unsafe extern "C" fn memlock_populate_bridge(
+    vm: *mut c_void, start: CULong, len: SizeT,
+) -> CInt {
+    // SAFETY: Same typed inputs and original complete provider contract.
+    unsafe {
+        crate::process_helpers::populate_process_memory(vm.cast(), start as *mut c_void, len)
+    }
+}
+
+unsafe extern "C" {
+    static mut f03_memlock_debug_v1: [crate::debug::Ddebug; 4];
+}
+
+/// Format the original complete lock/unlock record, including original read order.
+///
+/// # Safety
+/// record is non-null, aligned and all semantic fields are initialized/live as the
+/// original C formatter requires, even for disabled/unknown events. No padding or
+/// whole-record reference is read. Genuine debug/kprintf metadata remains live.
+#[no_mangle]
+pub unsafe extern "C" fn memlock_log_bridge(record: *const MemlockLogRecord) {
+    // SAFETY: Preserve original eager scalar field reads; do not copy padding or
+    // extend a borrow into the caller's mutable VM/range state.
+    unsafe {
+        let event = (*record).event;
+        let op = (*record).op;
+        let cpu = (*record).cpu;
+        let start = (*record).start;
+        let len = (*record).len;
+        let addr = (*record).addr;
+        let range_start = (*record).range_start;
+        let range_end = (*record).range_end;
+        let error = (*record).error;
+        let name = if op == MEMLOCK_OP_UNLOCK {
+            c"munlock".as_ptr()
+        } else {
+            c"mlock".as_ptr()
+        };
+        let records = addr_of!(f03_memlock_debug_v1).cast();
+        match event {
+            MEMLOCK_LOG_ENTER if f03_shm_debug_enabled(records, 0) => {
+                kprintf(
+                    c"[%d]sys_%s(%lx,%lx)\n"
+                        .as_ptr().cast(),
+                    cpu, name, start, len,
+                );
+            }
+            MEMLOCK_LOG_NOT_CONTIG if f03_shm_debug_enabled(records, 1) => {
+                kprintf(
+                    c"[%d]sys_%s(%lx,%lx):not contiguous. %lx [%lx-%lx)\n"
+                        .as_ptr().cast(),
+                    cpu, name, start, len, addr, range_start, range_end,
+                );
+            }
+            MEMLOCK_LOG_CANNOT_CHANGE => {
+                kprintf(
+                    c"[%d]sys_%s(%lx,%lx):cannot change. [%lx-%lx)\n"
+                        .as_ptr().cast(),
+                    cpu, name, start, len, range_start, range_end,
+                );
+            }
+            MEMLOCK_LOG_SPLIT_FAILED => {
+                kprintf(
+                    c"[%d]sys_%s(%lx,%lx):split failed. [%lx-%lx) %lx %d\n"
+                        .as_ptr().cast(),
+                    cpu, name, start, len, range_start, range_end, addr, error,
+                );
+            }
+            MEMLOCK_LOG_JOIN_FAILED if f03_shm_debug_enabled(records, 2) => {
+                kprintf(
+                    c"[%d]sys_%s(%lx,%lx):join failed. %d\n"
+                        .as_ptr().cast(),
+                    cpu, name, start, len, error,
+                );
+            }
+            MEMLOCK_LOG_POPULATE_FAILED => {
+                kprintf(
+                    c"sys_%s(%lx,%lx):populate failed. %d\n"
+                        .as_ptr().cast(),
+                    name, start, len, error,
+                );
+            }
+            MEMLOCK_LOG_EXIT if f03_shm_debug_enabled(records, 3) => {
+                kprintf(
+                    c"[%d]sys_%s(%lx,%lx): %d\n"
+                        .as_ptr().cast(),
+                    cpu, name, start, len, error,
+                );
+            }
+            _ => {}
+        }
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+/// # Safety
+/// Genuine referenced object/provider lifetime; no private flags model/new owner.
+#[no_mangle]
+pub unsafe extern "C" fn remap_file_pages_callable_bridge(memobj: *mut c_void) -> CInt {
+    unsafe { crate::object_helpers::is_callable_remap_file_pages(memobj.cast()) }
+}
+
+/// # Safety
+/// Actual VM/range ownership and original writer lock apply. Genuine complete
+/// provider retains signed off_t width, page-table effects and exact error paths.
+#[no_mangle]
+pub unsafe extern "C" fn remap_file_pages_remap_bridge(
+    vm: *mut c_void, range: *mut c_void, start: CULong, end: CULong, off: CLong,
+) -> CInt {
+    unsafe {
+        crate::process_helpers::remap_process_memory_range(vm.cast(), range.cast(), start, end, off)
+    }
+}
+
+/// # Safety
+/// Original current-VM/host/range ownership applies. Discard result exactly as C;
+/// actual partial C forwarding provider initialization HOLD remains unchanged.
+#[no_mangle]
+pub unsafe extern "C" fn remap_file_pages_clear_host_bridge(
+    start: CULong, size: SizeT, holding_lock: CInt,
+) {
+    let _ = unsafe { clear_host_pte(start, size, holding_lock) };
+}
+
+unsafe extern "C" {
+    static mut f03_remap_file_debug_v1: [crate::debug::Ddebug; 2];
+}
+
+/// Format the full original remap record without copying padding or unused fields.
+///
+/// # Safety
+/// Non-null record has actual C layout and selected branch fields initialized/live.
+/// Genuine debug/kprintf metadata is live. Printed pointers are not dereferenced.
+#[no_mangle]
+pub unsafe extern "C" fn remap_file_pages_log_bridge(record: *const RemapFilePagesLogRecord) {
+    if record.is_null() {
+        return;
+    }
+    // SAFETY: Exact per-branch field reads and original debug gates; no whole
+    // record reference, padding read or extended VM/range ownership/borrow.
+    unsafe {
+        let records = addr_of!(f03_remap_file_debug_v1).cast();
+        match (*record).event {
+            REMAP_FILE_PAGES_LOG_ENTER
+                if f03_shm_debug_enabled(records, 0) => {
+                kprintf(
+                    c"sys_remap_file_pages(%#lx,%#lx,%#x,%#lx,%#x)\n"
+                        .as_ptr().cast(),
+                    (*record).start0,
+                    (*record).size,
+                    (*record).prot,
+                    (*record).pgoff,
+                    (*record).flags,
+                );
+            }
+            REMAP_FILE_PAGES_LOG_INVALID_ARGS => {
+                kprintf(
+                    c"sys_remap_file_pages(%#lx,%#lx,%#x,%#lx,%#x):invalid args\n"
+                        .as_ptr().cast(),
+                    (*record).start0,
+                    (*record).size,
+                    (*record).prot,
+                    (*record).pgoff,
+                    (*record).flags,
+                );
+            }
+            REMAP_FILE_PAGES_LOG_INVALID_VMR => {
+                kprintf(
+                    c"sys_remap_file_pages(%#lx,%#lx,%#x,%#lx,%#x):invalid VMR:[%#lx-%#lx) %#lx %p\n"
+                        .as_ptr().cast(),
+                    (*record).start0,
+                    (*record).size,
+                    (*record).prot,
+                    (*record).pgoff,
+                    (*record).flags,
+                    (*record).range_start,
+                    (*record).range_end,
+                    (*record).range_flags,
+                    (*record).memobj,
+                );
+            }
+            REMAP_FILE_PAGES_LOG_REMAP_FAILED => {
+                kprintf(
+                    c"sys_remap_file_pages(%#lx,%#lx,%#x,%#lx,%#x):remap failed %d\n"
+                        .as_ptr().cast(),
+                    (*record).start0,
+                    (*record).size,
+                    (*record).prot,
+                    (*record).pgoff,
+                    (*record).flags,
+                    (*record).error,
+                );
+            }
+            REMAP_FILE_PAGES_LOG_POPULATE_FAILED => {
+                kprintf(
+                    c"sys_remap_file_pages(%#lx,%#lx,%#x,%#lx,%#x):populate failed %d\n"
+                        .as_ptr().cast(),
+                    (*record).start0,
+                    (*record).size,
+                    (*record).prot,
+                    (*record).pgoff,
+                    (*record).flags,
+                    (*record).error,
+                );
+            }
+            REMAP_FILE_PAGES_LOG_EXIT
+                if f03_shm_debug_enabled(records, 1) => {
+                kprintf(
+                    c"sys_remap_file_pages(%#lx,%#lx,%#x,%#lx,%#x): %d\n"
+                        .as_ptr().cast(),
+                    (*record).start0,
+                    (*record).size,
+                    (*record).prot,
+                    (*record).pgoff,
+                    (*record).flags,
+                    (*record).error,
+                );
+            }
+            _ => {}
+        }
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+unsafe extern "C" fn f03_unmap_all_free_ranges(vm: *mut c_void) {
+    // SAFETY: Original current VM lifetime/exclusive teardown ownership applies.
+    // Outer traversal has released its writer lock before this complete genuine
+    // provider reacquires it and consumes remaining range nodes/pages.
+    unsafe { crate::process_helpers::free_process_memory_ranges(vm.cast()) };
+}
+
+unsafe extern "C" fn f03_unmap_all_log(addr: CULong, len: SizeT, error: CInt) {
+    // SAFETY: Original scalar-only error format; never dereference printed addr.
+    unsafe {
+        kprintf(c"munmap_all():do_munmap(%p,%lx) failed. %d\n".as_ptr().cast(),
+            addr as *mut c_void, len, error);
+    }
+}
+
+/// Execute the entire original current-VM unmap-all teardown transaction.
+///
+/// # Safety
+/// Original exec/teardown authority keeps current thread/VM/tree live, with no
+/// concurrent unqualified user of consumed range pointers. Unchanged complete
+/// helper owns the writer lock, prefetches next before removal, preserves errors,
+/// unlocks before final free-ranges and resets map_end only after that cleanup.
+/// Underlying host forwarding/set-host initialization HOLD remains explicit.
+#[no_mangle]
+pub unsafe extern "C" fn f03_munmap_all_current_v1() {
+    let thread = unsafe { (*crate::cls::get_this_cpu_local_var()).current };
+    let vm = unsafe { (*thread).vm };
+    // SAFETY: Actual repr(C) fields/offsets are witnessed against genuine headers.
+    // These are existing complete providers, not stand-ins for their ownership.
+    unsafe {
+        munmap_all_body_result(
+            vm.cast(), addr_of_mut!((*vm).memory_range_lock).cast(),
+            addr_of_mut!((*vm).region).cast(), offset_of!(VmRange, start),
+            offset_of!(VmRange, end), offset_of!(VmRegions, map_start),
+            offset_of!(VmRegions, map_end), Some(memlock_write_lock_bridge),
+            Some(memlock_write_unlock_bridge), Some(memlock_lookup_range_bridge),
+            Some(memlock_next_range_bridge), Some(do_munmap),
+            Some(f03_unmap_all_free_ranges), Some(f03_unmap_all_log),
+        );
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+unsafe extern "C" {
+    static mut f03_munmap_public_debug_v1: [crate::debug::Ddebug; 2];
+}
+
+/// # Safety
+/// Actual current VM/range/unmap ownership applies. Preserve the complete genuine
+/// unmap transaction and host initialization HOLD; no new ref, ACK or lock assumed.
+#[no_mangle]
+pub unsafe extern "C" fn munmap_do_bridge(
+    addr: *mut c_void, len: SizeT, holding_lock: CInt,
+) -> CInt {
+    unsafe { do_munmap(addr, len, holding_lock) }
+}
+
+/// # Safety
+/// Scalar-only C ABI operands and genuine debug/kprintf metadata. No pointer is
+/// dereferenced. Preserve optional Fugaku-only error branch and lexical function.
+#[no_mangle]
+pub unsafe extern "C" fn munmap_log_bridge(
+    event: CInt, cpu: CInt, addr: CULong, len: SizeT, error: CInt,
+) {
+    // SAFETY: Fixed internal metadata indices, exact original scalar formats.
+    unsafe {
+        let records = addr_of!(f03_munmap_public_debug_v1).cast();
+        match event {
+            MUNMAP_LOG_ENTER if f03_shm_debug_enabled(records, 0) => {
+                kprintf(c"[%d]sys_munmap(%lx,%lx)\n".as_ptr().cast(), cpu, addr, len);
+            }
+            MUNMAP_LOG_EXIT if f03_shm_debug_enabled(records, 1) => {
+                kprintf(c"[%d]sys_munmap(%lx,%lx): %d\n".as_ptr().cast(), cpu, addr, len, error);
+            }
+            #[cfg(enable_fugaku_hacks)]
+            MUNMAP_LOG_ERROR => {
+                kprintf(c"%s: error: %d\n".as_ptr().cast(), c"munmap_log_bridge".as_ptr(), error);
+            }
+            _ => {}
+        }
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+unsafe extern "C" {
+    #[link_name = "extend_process_region"]
+    fn f03_existing_extend_process_region(
+        vm: *mut ProcessVm, old_end: CULong, address: CULong, flags: CULong,
+    ) -> CULong;
+    static mut f03_brk_debug_v1: [crate::debug::Ddebug; 2];
+}
+
+/// Retain the actual supported-profile NFO operation, distinct from flush_tlb.
+///
+/// # Safety
+/// Original kernel architecture/profile and caller ordering remain selected.
+#[no_mangle]
+pub unsafe extern "C" fn brk_flush_bridge() {
+    crate::x86_memory_helpers::flush_nfo_tlb();
+}
+
+/// # Safety
+/// Actual live writer lock and original noirq/preemption/paired-unlock contract.
+#[no_mangle]
+pub unsafe extern "C" fn brk_write_lock_bridge(lock: *mut c_void) {
+    unsafe { crate::lock_helpers::ihk_rwspinlock_write_lock_noirq(lock.cast()) };
+}
+
+/// # Safety
+/// Caller owns matching writer lock; genuine provider restores preemption.
+#[no_mangle]
+pub unsafe extern "C" fn brk_write_unlock_bridge(lock: *mut c_void) {
+    unsafe { crate::lock_helpers::ihk_rwspinlock_write_unlock_noirq(lock.cast()) };
+}
+
+/// # Safety
+/// Original VM/tree/allocator ownership and writer guard remain required. Genuine
+/// existing process C entry remains explicit separate-owner debt, not replaced by
+/// an incomplete helper, fake allocation, new private getter or new authority.
+#[no_mangle]
+pub unsafe extern "C" fn brk_extend_bridge(
+    vm: *mut c_void, old_end: CULong, address: CULong, vrflag: CULong,
+) -> CULong {
+    unsafe { f03_existing_extend_process_region(vm.cast(), old_end, address, vrflag) }
+}
+
+/// # Safety
+/// Genuine initialized debug/kprintf metadata and exact scalar C ABI arguments.
+/// No pointer dereference, added references or VM state writes are performed.
+#[no_mangle]
+pub unsafe extern "C" fn brk_log_bridge(
+    event: CInt, cpu: CInt, brk_start: CULong, brk_end: CULong, value: CULong,
+) {
+    // SAFETY: Only fixed valid debug indices and original scalar formats.
+    unsafe {
+        let records = addr_of!(f03_brk_debug_v1).cast();
+        match event {
+            BRK_LOG_ENTER if f03_shm_debug_enabled(records, 0) => {
+                kprintf(c"SC(%d)[sys_brk] brk_start=%lx,end=%lx\n".as_ptr().cast(),
+                    cpu, brk_start, brk_end);
+            }
+            BRK_LOG_SET_END if f03_shm_debug_enabled(records, 1) => {
+                kprintf(c"SC(%d)[sys_brk] brk_end set to %lx\n".as_ptr().cast(), cpu, value);
+            }
+            _ => {}
+        }
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+/// # Safety
+/// Actual kprintf provider is live; flags/error preserve original int widths.
+/// No user pointer, allocation, state update or additional syscall is performed.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_mlockall_log_bridge(flags: CInt, error: CInt) {
+    // SAFETY: Same ordered errno tests and exact original scalar formats.
+    unsafe {
+        if error == -EINVAL {
+            kprintf(c"mlockall(0x%x):invalid flags: EINVAL\n".as_ptr().cast(), flags);
+        } else if error == 0 {
+            kprintf(c"mlockall(0x%x):priv user: 0\n".as_ptr().cast(), flags);
+        } else if error == -ENOMEM {
+            kprintf(c"mlockall(0x%x):limits exists: ENOMEM\n".as_ptr().cast(), flags);
+        } else {
+            kprintf(c"mlockall(0x%x):no lock permitted: EPERM\n".as_ptr().cast(), flags);
+        }
+    }
+}
+
+/// # Safety
+/// Actual scalar diagnostic provider is live; original unused arguments ignored.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_munlockall_log_bridge(_value: CInt, _error: CInt) {
+    unsafe { kprintf(c"munlockall(): 0\n".as_ptr().cast()) };
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+unsafe extern "C" {
+    static f03_mbind_alloc_source_file_v1: u8;
+    static f03_mbind_alloc_source_line_v1: CInt;
+}
+
+/// # Safety
+/// Actual writer lock, original noirq/preemption/lock ordering and paired unlock.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_mbind_write_lock_bridge(lock: *mut c_void) {
+    unsafe { crate::lock_helpers::ihk_rwspinlock_write_lock_noirq(lock.cast()) };
+}
+
+/// # Safety
+/// Caller owns the matching genuine writer lock; provider restores preemption.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_mbind_write_unlock_bridge(lock: *mut c_void) {
+    unsafe { crate::lock_helpers::ihk_rwspinlock_write_unlock_noirq(lock.cast()) };
+}
+
+/// # Safety
+/// VM/tree is live and stable under original range guard. Result is borrowed.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_mbind_lookup_range_bridge(
+    vm: *mut ProcessVm, start: CULong, end: CULong,
+) -> *mut VmRange {
+    unsafe { crate::process_helpers::lookup_process_memory_range(vm, start, end) }
+}
+
+/// # Safety
+/// Actual live policy tree remains stable under caller's genuine existing guard.
+/// Returned policy remains borrowed; no allocation/reference/ownership is added.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_mbind_policy_search_bridge(
+    vm: *mut ProcessVm, addr: CULong,
+) -> *mut VmRangeNumaPolicy {
+    unsafe { vm_range_policy_search(vm, addr) }
+}
+
+/// # Safety
+/// Same original exclusive valid half-open policy-range/tree ownership as the
+/// complete private clear entry. Preserve partial mutation/error/no-rollback and
+/// inherited invalid-range/unpublished-tail HOLD; no new cleanup is invented.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_mbind_clear_range_bridge(
+    vm: *mut ProcessVm, start: CULong, end: CULong,
+) -> CInt {
+    unsafe { f03_vm_policy_clear_range_v1(vm, start, end) }
+}
+
+/// # Safety
+/// Genuine tracked allocator state and original flags apply. Output is fresh
+/// unpublished storage or null, with ownership passed to the existing caller.
+/// Preserve original size_t→int conversion and actual C allocation origin.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_mbind_policy_alloc_bridge(
+    size: SizeT, flags: CULong,
+) -> *mut c_void {
+    unsafe {
+        crate::mem_helpers::kmalloc_tracked(
+            size as CInt, flags, addr_of!(f03_mbind_alloc_source_file_v1).cast_mut().cast(),
+            f03_mbind_alloc_source_line_v1,
+        )
+    }
+}
+
+/// # Safety
+/// Caller owns fresh aligned policy storage with actual C/Rust node layout.
+/// Genuine RB_CLEAR_NODE provider initializes only the original parent/color word.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_mbind_policy_rb_clear_bridge(policy: *mut VmRangeNumaPolicy) {
+    let node = unsafe { addr_of_mut!((*policy).policy_rb_node) };
+    unsafe { crate::rbtree::rb_clear_node(node.cast()) };
+}
+
+/// # Safety
+/// Actual exclusive policy-tree lock and unpublished/disjoint live policy node
+/// are required. Full insertion helper keeps original error/publication behavior.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_mbind_policy_insert_bridge(
+    vm: *mut ProcessVm, policy: *mut VmRangeNumaPolicy,
+) -> CInt {
+    unsafe { f03_vm_policy_insert_v1(vm, policy) }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+fn f03_mempolicy_mode_name(value: CInt) -> *const core::ffi::c_char {
+    match value {
+        MPOL_DEFAULT => c"MPOL_DEFAULT".as_ptr(),
+        MPOL_INTERLEAVE => c"MPOL_INTERLEAVE".as_ptr(),
+        MPOL_BIND => c"MPOL_BIND".as_ptr(),
+        MPOL_PREFERRED => c"MPOL_PREFERRED".as_ptr(),
+        _ => c"unknown".as_ptr(),
+    }
+}
+
+unsafe extern "C" {
+    static mut f03_syscall_mbind_log_bridge_debug_v1:
+        [crate::debug::Ddebug; 10];
+}
+
+/// # Safety
+/// Exact scalar C widths and genuine initialized debug/kprintf metadata. Printed
+/// addresses remain scalars; no pointer/state/ref/lock or ownership is changed.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_mbind_log_bridge(
+    event: CInt, arg0: CULong, arg1: CULong, arg2: CInt,
+) {
+    // SAFETY: Fixed valid debug indices and original scalar/constant operands.
+    unsafe {
+        let records =
+            addr_of!(f03_syscall_mbind_log_bridge_debug_v1).cast();
+        match event {
+            MBIND_LOG_NODEMASK_BITS_TOO_BIG => {
+                if f03_shm_debug_enabled(records, 0) {
+                    kprintf(
+                        c"%s: ERROR: nodemask_bits bigger than PAGE_SIZE bits\n"
+                            .as_ptr().cast(),
+                        c"sys_mbind".as_ptr(),
+                    );
+                }
+            }
+            MBIND_LOG_CLAMPED => {
+                if f03_shm_debug_enabled(records, 1) {
+                    kprintf(
+                        c"%s: WARNING: process NUMA mask bits is insufficient\n"
+                            .as_ptr().cast(),
+                        c"sys_mbind".as_ptr(),
+                    );
+                }
+            }
+            MBIND_LOG_INVALID_MODE_FLAGS => {
+                if f03_shm_debug_enabled(records, 2) {
+                    kprintf(
+                        c"%s: error: invalid mode/flags combination\n"
+                            .as_ptr().cast(),
+                        c"sys_mbind".as_ptr(),
+                    );
+                }
+            }
+            MBIND_LOG_COPY_FROM_NUMA_MASK => {
+                if f03_shm_debug_enabled(records, 3) {
+                    kprintf(
+                        c"%s: error: copy_from_user numa_mask\n"
+                            .as_ptr().cast(),
+                        c"sys_mbind".as_ptr(),
+                    );
+                }
+            }
+            MBIND_LOG_DEFAULT_MASK_NOT_EMPTY => {
+                if f03_shm_debug_enabled(records, 4) {
+                    kprintf(
+                        c"%s: ERROR: nodemask not empty for MPOL_DEFAULT\n"
+                            .as_ptr().cast(),
+                        c"sys_mbind".as_ptr(),
+                    );
+                }
+            }
+            MBIND_LOG_NODEMASK_NOT_SPECIFIED => {
+                if f03_shm_debug_enabled(records, 5) {
+                    kprintf(
+                        c"%s: ERROR: nodemask not specified\n"
+                            .as_ptr().cast(),
+                        c"sys_mbind".as_ptr(),
+                    );
+                }
+            }
+            MBIND_LOG_NODE_TOO_LARGE => {
+                if f03_shm_debug_enabled(records, 6) {
+                    kprintf(
+                        c"%s: %lu is bigger than # of NUMA nodes\n"
+                            .as_ptr().cast(),
+                        c"sys_mbind".as_ptr(),
+                        arg1,
+                    );
+                }
+            }
+            MBIND_LOG_INVALID_RANGE => {
+                if f03_shm_debug_enabled(records, 7) {
+                    kprintf(
+                        c"%s: ERROR: range is invalid\n"
+                            .as_ptr().cast(),
+                        c"sys_mbind".as_ptr(),
+                    );
+                }
+            }
+            MBIND_LOG_CLEAR_POLICY_RANGE => {
+                kprintf(
+                    c"%s: ERROR: clear policy_range\n"
+                        .as_ptr().cast(),
+                    c"sys_mbind".as_ptr(),
+                );
+            }
+            MBIND_LOG_ALLOC_POLICY => {
+                if f03_shm_debug_enabled(records, 8) {
+                    kprintf(
+                        c"%s: error allocating range_policy\n"
+                            .as_ptr().cast(),
+                        c"sys_mbind".as_ptr(),
+                    );
+                }
+            }
+            MBIND_LOG_INSERT_POLICY => {
+                kprintf(
+                    c"%s: ERROR: could not insert range: %d\n"
+                        .as_ptr().cast(),
+                    c"sys_mbind".as_ptr(),
+                    arg2,
+                );
+            }
+            _ => {
+                if f03_shm_debug_enabled(records, 9) {
+                    kprintf(
+                        c"%s: event=%d arg0=%#lx arg1=%#lx arg2=%d\n"
+                            .as_ptr().cast(),
+                        c"sys_mbind".as_ptr(),
+                        event,
+                        arg0,
+                        arg1,
+                        arg2,
+                    );
+                }
+            }
+        }
+    }
+}
+
+unsafe extern "C" {
+    static mut f03_syscall_mbind_entry_log_bridge_debug_v1:
+        [crate::debug::Ddebug; 1];
+}
+
+/// # Safety
+/// Exact scalar C widths and genuine initialized debug/kprintf metadata. Printed
+/// addresses remain scalars; no pointer/state/ref/lock or ownership is changed.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_mbind_entry_log_bridge(
+    addr: CULong, len: CULong, mode: CInt, nodemask_addr: CULong, flags: CULong,
+) {
+    // SAFETY: Fixed valid debug indices and original scalar/constant operands.
+    unsafe {
+        let records =
+            addr_of!(f03_syscall_mbind_entry_log_bridge_debug_v1).cast();
+        if f03_shm_debug_enabled(records, 0) {
+            kprintf(
+                c"%s: addr: 0x%lx, len: %lu, mode: 0x%x, nodemask: 0x%lx, flags: %lx\n"
+                    .as_ptr().cast(),
+                c"sys_mbind".as_ptr(),
+                addr,
+                len,
+                mode,
+                nodemask_addr,
+                flags,
+            );
+        }
+    }
+}
+
+unsafe extern "C" {
+    static mut f03_syscall_set_mempolicy_log_bridge_debug_v1:
+        [crate::debug::Ddebug; 8];
+}
+
+/// # Safety
+/// Exact scalar C widths and genuine initialized debug/kprintf metadata. Printed
+/// addresses remain scalars; no pointer/state/ref/lock or ownership is changed.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_set_mempolicy_log_bridge(
+    event: CInt, value: CInt, pid: CInt,
+) {
+    // SAFETY: Fixed valid debug indices and original scalar/constant operands.
+    unsafe {
+        let records =
+            addr_of!(f03_syscall_set_mempolicy_log_bridge_debug_v1).cast();
+        match event {
+            SET_MEMPOLICY_LOG_NODEMASK_BITS_TOO_BIG => {
+                if f03_shm_debug_enabled(records, 0) {
+                    kprintf(
+                        c"%s: ERROR: nodemask_bits bigger than PAGE_SIZE bits\n"
+                            .as_ptr().cast(),
+                        c"sys_set_mempolicy".as_ptr(),
+                    );
+                }
+            }
+            SET_MEMPOLICY_LOG_CLAMPED => {
+                if f03_shm_debug_enabled(records, 1) {
+                    kprintf(
+                        c"%s: WARNING: process NUMA mask bits is insufficient\n"
+                            .as_ptr().cast(),
+                        c"sys_set_mempolicy".as_ptr(),
+                    );
+                }
+            }
+            SET_MEMPOLICY_LOG_DEFAULT_MASK_NOT_EMPTY => {
+                if f03_shm_debug_enabled(records, 2) {
+                    kprintf(
+                        c"%s: ERROR: nodemask not empty for MPOL_DEFAULT\n"
+                            .as_ptr().cast(),
+                        c"sys_set_mempolicy".as_ptr(),
+                    );
+                }
+            }
+            SET_MEMPOLICY_LOG_NODEMASK_NOT_SPECIFIED => {
+                if f03_shm_debug_enabled(records, 3) {
+                    kprintf(
+                        c"%s: ERROR: nodemask not specified\n"
+                            .as_ptr().cast(),
+                        c"sys_set_mempolicy".as_ptr(),
+                    );
+                }
+            }
+            SET_MEMPOLICY_LOG_NODE_TOO_LARGE => {
+                if f03_shm_debug_enabled(records, 4) {
+                    kprintf(
+                        c"%s: %d is bigger than # of NUMA nodes\n"
+                            .as_ptr().cast(),
+                        c"sys_set_mempolicy".as_ptr(),
+                        value,
+                    );
+                }
+            }
+            SET_MEMPOLICY_LOG_INVALID_NODEMASK => {
+                if f03_shm_debug_enabled(records, 5) {
+                    kprintf(
+                        c"%s: ERROR: invalid nodemask\n"
+                            .as_ptr().cast(),
+                        c"sys_set_mempolicy".as_ptr(),
+                    );
+                }
+            }
+            SET_MEMPOLICY_LOG_SET => {
+                if f03_shm_debug_enabled(records, 6) {
+                    kprintf(
+                        c"%s: %s set for PID %d\n"
+                            .as_ptr().cast(),
+                        c"sys_set_mempolicy".as_ptr(),
+                        f03_mempolicy_mode_name(value),
+                        pid,
+                    );
+                }
+            }
+            _ => {
+                if f03_shm_debug_enabled(records, 7) {
+                    kprintf(
+                        c"%s: event=%d value=%d pid=%d\n"
+                            .as_ptr().cast(),
+                        c"sys_set_mempolicy".as_ptr(),
+                        event,
+                        value,
+                        pid,
+                    );
+                }
+            }
+        }
+    }
+}
+
+unsafe extern "C" {
+    static mut f03_syscall_get_mempolicy_log_bridge_debug_v1:
+        [crate::debug::Ddebug; 3];
+}
+
+/// # Safety
+/// Exact scalar C widths and genuine initialized debug/kprintf metadata. Printed
+/// addresses remain scalars; no pointer/state/ref/lock or ownership is changed.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_get_mempolicy_log_bridge(
+    event: CInt, addr: CULong, value: CInt,
+) {
+    // SAFETY: Fixed valid debug indices and original scalar/constant operands.
+    unsafe {
+        let records =
+            addr_of!(f03_syscall_get_mempolicy_log_bridge_debug_v1).cast();
+        match event {
+            1 => {
+                if f03_shm_debug_enabled(records, 0) {
+                    kprintf(
+                        c"%s: WARNING: process NUMA mask bits is insufficient\n"
+                            .as_ptr().cast(),
+                        c"sys_get_mempolicy".as_ptr(),
+                    );
+                }
+            }
+            2 => {
+                if f03_shm_debug_enabled(records, 1) {
+                    kprintf(
+                        c"%s: ERROR: range is invalid\n"
+                            .as_ptr().cast(),
+                        c"sys_get_mempolicy".as_ptr(),
+                    );
+                }
+            }
+            _ => {
+                if f03_shm_debug_enabled(records, 2) {
+                    kprintf(
+                        c"%s: event=%d addr=%#lx value=%d\n"
+                            .as_ptr().cast(),
+                        c"sys_get_mempolicy".as_ptr(),
+                        event,
+                        addr,
+                        value,
+                    );
+                }
+            }
+        }
+    }
+}
+
+unsafe extern "C" {
+    static mut f03_syscall_migrate_pages_log_bridge_debug_v1:
+        [crate::debug::Ddebug; 1];
+}
+
+/// # Safety
+/// Exact scalar C widths and genuine initialized debug/kprintf metadata. Printed
+/// addresses remain scalars; no pointer/state/ref/lock or ownership is changed.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_migrate_pages_log_bridge(
+) {
+    // SAFETY: Fixed valid debug indices and original scalar/constant operands.
+    unsafe {
+        let records =
+            addr_of!(f03_syscall_migrate_pages_log_bridge_debug_v1).cast();
+        if f03_shm_debug_enabled(records, 0) {
+            kprintf(
+                c"sys_migrate_pages\n"
+                    .as_ptr().cast(),
+            );
+        }
+    }
+}
+
+unsafe extern "C" {
+    static mut f03_syscall_madvise_log_bridge_debug_v1:
+        [crate::debug::Ddebug; 1];
+}
+
+/// # Safety
+/// Exact scalar C widths and genuine initialized debug/kprintf metadata. Printed
+/// addresses remain scalars; no pointer/state/ref/lock or ownership is changed.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_madvise_log_bridge(
+    cpu: CInt, start: CULong, len0: SizeT, advice: CInt,
+) {
+    // SAFETY: Fixed valid debug indices and original scalar/constant operands.
+    unsafe {
+        let records =
+            addr_of!(f03_syscall_madvise_log_bridge_debug_v1).cast();
+        if f03_shm_debug_enabled(records, 0) {
+            kprintf(
+                c"[%d]sys_madvise(%lx,%lx,%x)\n"
+                    .as_ptr().cast(),
+                cpu,
+                start,
+                len0,
+                advice,
+            );
+        }
+    }
+}
+
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+/// # Safety
+/// Genuine read lock/noirq/preemption/lock order and paired-unlock contract apply.
+/// No added reference/guard, private page getter or invented synchronization.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_get_mempolicy_read_lock_bridge(
+    lock: *mut c_void,
+) {
+    // SAFETY: Preserve actual complete provider and its original typed inputs.
+    unsafe {
+        crate::lock_helpers::ihk_rwspinlock_read_lock_noirq(lock.cast())
+    }
+}
+
+/// # Safety
+/// Caller owns matching real reader lock; actual provider restores preemption.
+/// No added reference/guard, private page getter or invented synchronization.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_get_mempolicy_read_unlock_bridge(
+    lock: *mut c_void,
+) {
+    // SAFETY: Preserve actual complete provider and its original typed inputs.
+    unsafe {
+        crate::lock_helpers::ihk_rwspinlock_read_unlock_noirq(lock.cast())
+    }
+}
+
+/// # Safety
+/// Actual live VM/tree under original read guard; returned range stays borrowed.
+/// No added reference/guard, private page getter or invented synchronization.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_get_mempolicy_lookup_range_bridge(
+    vm: *mut ProcessVm, start: CULong, end: CULong,
+) -> *mut VmRange {
+    // SAFETY: Preserve actual complete provider and its original typed inputs.
+    unsafe {
+        crate::process_helpers::lookup_process_memory_range(vm, start, end)
+    }
+}
+
+/// # Safety
+/// Actual live policy tree under original read guard; result remains borrowed.
+/// No added reference/guard, private page getter or invented synchronization.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_get_mempolicy_policy_search_bridge(
+    vm: *mut ProcessVm, addr: CULong,
+) -> *mut VmRangeNumaPolicy {
+    // SAFETY: Preserve actual complete provider and its original typed inputs.
+    unsafe {
+        vm_range_policy_search(vm, addr)
+    }
+}
+
+/// # Safety
+/// Original VM/page-table/page-fault authority applies to genuine full node lookup.
+/// No added reference/guard, private page getter or invented synchronization.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_get_mempolicy_lookup_node_bridge(
+    vm: *mut ProcessVm, addr: *mut c_void,
+) -> CInt {
+    // SAFETY: Preserve actual complete provider and its original typed inputs.
+    unsafe {
+        crate::mem_helpers::lookup_node(vm, addr)
+    }
+}
+
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+unsafe extern "C" {
+    #[link_name = "hassigpending"]
+    fn f03_existing_hassigpending(thread: *mut Thread) -> *mut c_void;
+}
+
+/// # Safety
+/// Original supported x86 CPU/time ordering applies; no extra serialization added.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_rdtsc_bridge() -> CULong {
+    unsafe { crate::x86_cpu_helpers::rdtsc() }
+}
+
+/// # Safety
+/// Genuine boot parameters are initialized and live under their actual contract.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_ns_per_tsc_bridge() -> CULong {
+    unsafe { crate::x86_setup::ihk_mc_get_ns_per_tsc() }
+}
+
+/// # Safety
+/// Thread/pending state and original observation synchronization remain valid.
+/// Genuine existing C hassigpending remains explicit separate signal-state debt;
+/// this adapter only tests its result, without dereferencing/retaining the node.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_has_sigpending_bridge(thread: *mut c_void) -> CInt {
+    (!unsafe { f03_existing_hassigpending(thread.cast()) }.is_null()) as CInt
+}
+
+/// # Safety
+/// Original CPU/profile caller applies. No scheduler or signal state is changed.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_cpu_pause_bridge() {
+    unsafe { crate::x86_cpu_helpers::cpu_pause() };
+}
+
+/// # Safety
+/// Genuine ticket lock, IRQ/preemption state and original acquisition order apply.
+/// Return preserves unsigned IRQ bits converted to signed long by the C wrapper.
+#[no_mangle]
+pub unsafe extern "C" fn sched_yield_lock_bridge(lock: *mut c_void) -> CLong {
+    (unsafe { crate::spinlock_helpers::__ihk_mc_spinlock_lock(lock.cast()) }) as CLong
+}
+
+/// # Safety
+/// Caller owns matching lock and the exact saved IRQ state. Conversion restores
+/// the original unsigned bit pattern; genuine provider owns unlock/IRQ restoration.
+#[no_mangle]
+pub unsafe extern "C" fn sched_yield_unlock_bridge(lock: *mut c_void, irqstate: CLong) {
+    unsafe { crate::spinlock_helpers::__ihk_mc_spinlock_unlock(lock.cast(), irqstate as CULong) };
+}
+
+/// # Safety
+/// Same genuine current-thread/runqueue/preemption authority as original schedule.
+/// Existing scheduler entry remains independently owned; no new reservation/state.
+#[no_mangle]
+pub unsafe extern "C" fn sched_yield_schedule_bridge() {
+    unsafe { schedule() };
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+/// # Safety
+/// Actual ticket lock/noirq/preemption state and matching release are required.
+/// No additional lock/reference/state or HOST privileged effect is introduced.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_settimeofday_lock_bridge(
+    lock: *mut c_void,
+) {
+    // SAFETY: Same original actual provider and precise ABI inputs/effects.
+    unsafe {
+        crate::spinlock_helpers::__ihk_mc_spinlock_lock_noirq(lock.cast())
+    }
+}
+
+/// # Safety
+/// Caller owns matching actual ticket lock; provider restores preemption.
+/// No additional lock/reference/state or HOST privileged effect is introduced.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_settimeofday_unlock_bridge(
+    lock: *mut c_void,
+) {
+    // SAFETY: Same original actual provider and precise ABI inputs/effects.
+    unsafe {
+        crate::spinlock_helpers::__ihk_mc_spinlock_unlock_noirq(lock.cast())
+    }
+}
+
+/// # Safety
+/// Actual aligned live initialized atomic64 value/original observation contract.
+/// No additional lock/reference/state or HOST privileged effect is introduced.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_atomic64_read_bridge(
+    value: *mut c_void,
+) -> CLong {
+    // SAFETY: Same original actual provider and precise ABI inputs/effects.
+    unsafe {
+        crate::atomic_helpers::ihk_atomic64_read(value.cast())
+    }
+}
+
+/// # Safety
+/// Actual aligned live initialized atomic64 state/original writer contract.
+/// No additional lock/reference/state or HOST privileged effect is introduced.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_atomic64_inc_bridge(
+    value: *mut c_void,
+) {
+    // SAFETY: Same original actual provider and precise ABI inputs/effects.
+    unsafe {
+        crate::atomic_helpers::ihk_atomic64_inc(value.cast())
+    }
+}
+
+/// # Safety
+/// Original supported x86 profile/order applies; preserve actual fence provider.
+/// No additional lock/reference/state or HOST privileged effect is introduced.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_wmb_bridge(
+) {
+    // SAFETY: Same original actual provider and precise ABI inputs/effects.
+    unsafe {
+        crate::x86_cpu_helpers::wmb()
+    }
+}
+
+unsafe extern "C" {
+    static mut f03_settimeofday_debug_v1: [crate::debug::Ddebug; 3];
+}
+
+/// # Safety
+/// Actual initialized debug/kprintf records and original pointer/scalar widths.
+/// Printed user addresses are never followed; no clock/pointer state is changed.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_settimeofday_log_bridge(
+    event: CInt, utv: CULong, utz: CULong, sec: CLong, nsec: CLong, error: CLong,
+) {
+    // SAFETY: Exact original scalar variadic operands and fixed debug indices.
+    unsafe {
+        let records = addr_of!(f03_settimeofday_debug_v1).cast();
+        match event {
+            SETTIMEOFDAY_LOG_ENTER if f03_shm_debug_enabled(records, 0) => {
+                kprintf(c"sys_settimeofday(%p,%p)\n".as_ptr().cast(),
+                    utv as *mut c_void, utz as *mut c_void);
+            }
+            SETTIMEOFDAY_LOG_ORIGIN if f03_shm_debug_enabled(records, 1) => {
+                kprintf(c"sys_settimeofday(%p,%p):origin <-- %ld.%ld\n".as_ptr().cast(),
+                    utv as *mut c_void, utz as *mut c_void, sec, nsec);
+            }
+            SETTIMEOFDAY_LOG_EXIT if f03_shm_debug_enabled(records, 2) => {
+                kprintf(c"sys_settimeofday(%p,%p): %ld\n".as_ptr().cast(),
+                    utv as *mut c_void, utz as *mut c_void, error);
+            }
+            _ => {}
+        }
+    }
+}
+
+// Root-approved original C provider bindings; partial-initialization HOLD unchanged.
+unsafe extern "C" {
+    fn do_munmap(addr: *mut c_void, len: SizeT, holding_lock: CInt) -> CInt;
+    fn clear_host_pte(addr: CULong, len: SizeT, holding_lock: CInt) -> CLong;
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Compile-time LP64 and nominal-field witness, paired with real C witness 038.
+// Both actual compilers derive the signal slot from pointer + actual fd width;
+// no hardcoded offset or alternate Mckfd layout is substituted.
+const _: () = {
+    assert!(core::mem::size_of::<SizeT>() == core::mem::size_of::<CULong>());
+    assert!(core::mem::size_of::<CInt>() * 2 == core::mem::size_of::<CLong>());
+    assert!(core::mem::align_of::<CInt>() == core::mem::size_of::<CInt>());
+    assert!(offset_of!(Mckfd, fd) == core::mem::size_of::<*mut Mckfd>());
+    assert!(offset_of!(Mckfd, padding) == offset_of!(Mckfd, fd) + size_of::<CInt>());
+    assert!(offset_of!(Mckfd, data) == offset_of!(Mckfd, padding) + size_of::<CInt>());
+};
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Complete set_signal public entry; native failure/termination providers unchanged.
+unsafe extern "C" {
+    #[link_name = "ihk_mc_debug_show_interrupt_context"]
+    fn f06_set_signal_show_context(regs: *const c_void);
+    #[link_name = "panic"]
+    fn f06_set_signal_kernel_panic(message: *const i8);
+    #[link_name = "coredump"]
+    fn f06_set_signal_coredump(thread: *mut Thread, regs: *mut c_void, sig: CInt) -> CInt;
+    #[link_name = "terminate"]
+    fn f06_set_signal_terminate(rc: CInt, sig: CInt);
+    #[link_name = "do_kill"]
+    fn f06_set_signal_do_kill(
+        thread: *mut Thread, pid: CInt, tid: CInt, sig: CInt,
+        info: *mut SigInfo, ptracecont: CInt,
+    ) -> CULong;
+}
+
+/// Borrow the current thread, context and caller's siginfo synchronously. No
+/// pending node/refcount/IRQ state is acquired by this entry. The existing
+/// do_kill provider owns any eventual pending allocation/queue transfer.
+#[no_mangle]
+pub unsafe extern "C" fn set_signal(sig: CInt, regs: *mut c_void, info: *mut SigInfo) {
+    let thread = (*crate::cls::get_this_cpu_local_var()).current;
+    if thread.is_null() || (*(*thread).proc).pid == 0 {
+        return;
+    }
+    if interrupt_from_user(regs) == 0 {
+        f06_set_signal_show_context(regs.cast_const());
+        f06_set_signal_kernel_panic(b"panic: kernel mode signal\0".as_ptr().cast());
+        // Real native panic normally stops. Its declared C ABI is void, however:
+        // preserve the original fallthrough if an explicitly controlled endpoint
+        // returns; do not introduce unreachable or assume a Rust panic handler.
+    }
+    if __sigmask(sig as CULong) & (*thread).sigmask.val[0] != 0 {
+        let core_result = f06_set_signal_coredump(thread, regs, sig);
+        // A genuine abort/error is not a successful dump. Keep fatal signal and
+        // termination rc0; only provider success0 authorizes the original bit.
+        let core_status = if core_result == 0 { 0x80 } else { 0 };
+        f06_set_signal_terminate(0, sig | core_status);
+        // Likewise preserve the C void terminate contract if the provider returns.
+    }
+    let _ = f06_set_signal_do_kill(
+        thread, (*(*thread).proc).pid, (*thread).tid, sig, info, 0,
+    );
 }

@@ -56,20 +56,41 @@
 #define DDEBUG_DEFAULT DDEBUG_PRINT
 #endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern unsigned long pa_start, pa_end;
+extern struct ihk_mc_numa_node memory_nodes[512];
+#else
 static unsigned long pa_start, pa_end;
 static struct ihk_mc_numa_node memory_nodes[512];
+#endif /* exact original C-owned data fallback */
 
 extern int ihk_mc_pt_print_pte(struct page_table *pt, void *virt);
 extern int interrupt_from_user(void *);
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct tlb_flush_entry tlb_flush_vector[IHK_TLB_FLUSH_IRQ_VECTOR_SIZE];
+#else
 struct tlb_flush_entry tlb_flush_vector[IHK_TLB_FLUSH_IRQ_VECTOR_SIZE];
+#endif /* exact original C-owned data fallback */
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern int anon_on_demand;
+#else
 int anon_on_demand = 0;
+#endif /* exact original C-owned data fallback */
 #ifdef ENABLE_FUGAKU_HACKS
 int hugetlbfs_on_demand;
 #endif
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern int xpmem_page_in_remote_on_attach;
+#else
 int xpmem_page_in_remote_on_attach;
+#endif /* exact original C-owned data fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern int sysctl_overcommit_memory;
+#else
 int sysctl_overcommit_memory = OVERCOMMIT_ALWAYS;
+#endif /* exact original C-owned data fallback */
 
 #ifndef MCKERNEL_RUST_RUSAGE_PRIVATE_HELPERS
 #ifdef ENABLE_RUSAGE
@@ -672,7 +693,11 @@ extern void *early_alloc_pages(int nr_pages);
 extern void early_alloc_invalidate(void);
 
 #ifdef MCKERNEL_RUST_MEM_HELPERS
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern char *memdebug;
+#else
 char *memdebug = NULL;
+#endif /* exact original C-owned data fallback */
 #else
 static char *memdebug = NULL;
 #endif
@@ -732,8 +757,13 @@ memobj_unref(struct memobj *obj)
 }
 #endif /* MCKERNEL_RUST_REFCOUNT_HELPERS */
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+void *___kmalloc(int size, ihk_mc_ap_flag flag);
+void ___kfree(void *ptr);
+#else
 static void *___kmalloc(int size, ihk_mc_ap_flag flag);
 static void ___kfree(void *ptr);
+#endif
 
 #ifdef MCKERNEL_RUST_MEM_HELPERS
 void *___ihk_mc_alloc_aligned_pages_node(int npages, int p2align,
@@ -916,7 +946,11 @@ typedef struct cpu_local_var *(*mem_get_this_cpu_local_var_fn_t)(void);
 #define MEM_NUMA_INIT_LOG_NODE 2
 
 extern int cpu_local_var_initialized;
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+int mem_current_numa_id_bridge(void);
+#else
 static int mem_current_numa_id_bridge(void);
+#endif
 
 #ifdef MCKERNEL_RUST_MEM_HELPERS
 extern int mem_set_page_allocator_result(struct ihk_mc_pa_ops **pa_ops_slot,
@@ -2457,14 +2491,38 @@ extern unsigned long ihk_mc_get_ns_per_tsc(void);
 #define PAGEALLOC_TRACK_HASH_SIZE   (1 << PAGEALLOC_TRACK_HASH_SHIFT)
 #define PAGEALLOC_TRACK_HASH_MASK   (PAGEALLOC_TRACK_HASH_SIZE - 1)
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct list_head pagealloc_track_hash[PAGEALLOC_TRACK_HASH_SIZE];
+#else
 struct list_head pagealloc_track_hash[PAGEALLOC_TRACK_HASH_SIZE];
+#endif /* exact original C-owned data fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern ihk_spinlock_t pagealloc_track_hash_locks[PAGEALLOC_TRACK_HASH_SIZE];
+#else
 ihk_spinlock_t pagealloc_track_hash_locks[PAGEALLOC_TRACK_HASH_SIZE];
+#endif /* exact original C-owned data fallback */
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct list_head pagealloc_addr_hash[PAGEALLOC_TRACK_HASH_SIZE];
+#else
 struct list_head pagealloc_addr_hash[PAGEALLOC_TRACK_HASH_SIZE];
+#endif /* exact original C-owned data fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern ihk_spinlock_t pagealloc_addr_hash_locks[PAGEALLOC_TRACK_HASH_SIZE];
+#else
 ihk_spinlock_t pagealloc_addr_hash_locks[PAGEALLOC_TRACK_HASH_SIZE];
+#endif /* exact original C-owned data fallback */
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern int pagealloc_track_initialized;
+#else
 int pagealloc_track_initialized = 0;
+#endif /* exact original C-owned data fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern int pagealloc_runcount;
+#else
 int pagealloc_runcount = 0;
+#endif /* exact original C-owned data fallback */
 
 struct pagealloc_track_addr_entry {
 	void *addr;
@@ -2557,140 +2615,132 @@ extern int pagealloc_memcheck_result(struct list_head *track_hash,
 		mem_pagealloc_track_noirq_unlock_fn_t noirq_unlock_fn,
 		mem_track_leak_log_fn_t log_fn);
 
-void *mem_pagealloc_track_base_alloc_bridge(int npages, int p2align,
-		ihk_mc_ap_flag flag, int node, int is_user, uintptr_t virt_addr)
-{
-	return ___ihk_mc_alloc_aligned_pages_node(npages, p2align, flag, node,
-			is_user, virt_addr);
-}
+extern void *mem_pagealloc_track_base_alloc_bridge(int npages, int p2align,
+		ihk_mc_ap_flag flag, int node, int is_user, uintptr_t virt_addr);
 
-void mem_pagealloc_track_base_free_bridge(void *ptr, int npages,
-		int is_user)
-{
-	___ihk_mc_free_pages(ptr, npages, is_user);
-}
+extern void mem_pagealloc_track_base_free_bridge(void *ptr, int npages,
+		int is_user);
 
-void *mem_pagealloc_track_meta_alloc_bridge(int size,
-		ihk_mc_ap_flag flag)
-{
-	return ___kmalloc(size, flag);
-}
+extern void *mem_pagealloc_track_meta_alloc_bridge(int size,
+		ihk_mc_ap_flag flag);
 
-void mem_pagealloc_track_meta_free_bridge(void *ptr)
-{
-	___kfree(ptr);
-}
+extern void mem_pagealloc_track_meta_free_bridge(void *ptr);
 
-unsigned long mem_pagealloc_track_lock_bridge(unsigned long lock_addr)
-{
-	return ihk_mc_spinlock_lock((ihk_spinlock_t *)lock_addr);
-}
+extern unsigned long mem_pagealloc_track_lock_bridge(unsigned long lock_addr);
 
-void mem_pagealloc_track_unlock_bridge(unsigned long lock_addr,
-		unsigned long irqflags)
-{
-	ihk_mc_spinlock_unlock((ihk_spinlock_t *)lock_addr, irqflags);
-}
+extern void mem_pagealloc_track_unlock_bridge(unsigned long lock_addr,
+		unsigned long irqflags);
 
-void mem_pagealloc_track_noirq_lock_bridge(unsigned long lock_addr)
-{
-	ihk_mc_spinlock_lock_noirq((ihk_spinlock_t *)lock_addr);
-}
+extern void mem_pagealloc_track_noirq_lock_bridge(unsigned long lock_addr);
 
-void mem_pagealloc_track_noirq_unlock_bridge(unsigned long lock_addr)
-{
-	ihk_mc_spinlock_unlock_noirq((ihk_spinlock_t *)lock_addr);
-}
+extern void mem_pagealloc_track_noirq_unlock_bridge(unsigned long lock_addr);
 
-void mem_pagealloc_track_spin_init_bridge(unsigned long lock_addr)
-{
-	ihk_mc_spinlock_init((ihk_spinlock_t *)lock_addr);
-}
+extern void mem_pagealloc_track_spin_init_bridge(unsigned long lock_addr);
 
-void mem_pagealloc_track_log_bridge(int event, void *ptr, char *file,
-		int line, int npages)
-{
-	switch (event) {
-	case PAGEALLOC_TRACK_LOG_ENTRY_ALLOC_FAILED:
-		kprintf("%s: ERROR: allocating tracking entry\n",
-				"_ihk_mc_alloc_aligned_pages_node");
-		break;
-	case PAGEALLOC_TRACK_LOG_FILE_ALLOC_FAILED:
-		kprintf("%s: ERROR: allocating file string\n",
-				"_ihk_mc_alloc_aligned_pages_node");
-		break;
-	case PAGEALLOC_TRACK_LOG_ENTRY_ADDED:
-		dkprintf("%s entry %s:%d npages: %d added\n",
-				"_ihk_mc_alloc_aligned_pages_node",
-				file, line, npages);
-		break;
-	case PAGEALLOC_TRACK_LOG_ADDR_ALLOC_FAILED:
-		kprintf("%s: ERROR: allocating addr entry\n",
-				"_ihk_mc_alloc_aligned_pages_node");
-		break;
-	case PAGEALLOC_TRACK_LOG_ADDR_ADDED:
-		dkprintf("%s addr_entry %p added\n",
-				"_ihk_mc_alloc_aligned_pages_node", ptr);
-		break;
-	case PAGEALLOC_TRACK_LOG_ADDR_REMOVED:
-		dkprintf("%s addr_entry %p removed\n", "_ihk_mc_free_pages",
-				ptr);
-		break;
-	case PAGEALLOC_TRACK_LOG_ENTRY_REMOVED:
-		dkprintf("%s entry %s:%d removed\n", "_ihk_mc_free_pages",
-				file, line);
-		break;
-	case PAGEALLOC_TRACK_LOG_COVERING_FOUND:
-		dkprintf("%s: found covering addr_entry: 0x%lx:%d\n",
-				"_ihk_mc_free_pages", ptr, npages);
-		break;
-	case PAGEALLOC_TRACK_LOG_ADDR_NEXT_ADDED:
-		dkprintf("%s: addr_entry_next: 0x%lx:%d\n",
-				"_ihk_mc_free_pages", ptr, npages);
-		break;
-	case PAGEALLOC_TRACK_LOG_ADDR_MODIFIED:
-		dkprintf("%s: modified addr_entry: 0x%lx:%d\n",
-				"_ihk_mc_free_pages", ptr, npages);
-		break;
-	default:
-		break;
-	}
-}
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_pagealloc_track_log_bridge_debug_record_0;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_pagealloc_track_log_bridge_debug_record_0 = {
+ .file = __FILE__, .func = "mem_pagealloc_track_log_bridge",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_pagealloc_track_log_bridge_debug_record_1;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_pagealloc_track_log_bridge_debug_record_1 = {
+ .file = __FILE__, .func = "mem_pagealloc_track_log_bridge",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_pagealloc_track_log_bridge_debug_record_2;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_pagealloc_track_log_bridge_debug_record_2 = {
+ .file = __FILE__, .func = "mem_pagealloc_track_log_bridge",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_pagealloc_track_log_bridge_debug_record_3;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_pagealloc_track_log_bridge_debug_record_3 = {
+ .file = __FILE__, .func = "mem_pagealloc_track_log_bridge",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_pagealloc_track_log_bridge_debug_record_4;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_pagealloc_track_log_bridge_debug_record_4 = {
+ .file = __FILE__, .func = "mem_pagealloc_track_log_bridge",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_pagealloc_track_log_bridge_debug_record_5;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_pagealloc_track_log_bridge_debug_record_5 = {
+ .file = __FILE__, .func = "mem_pagealloc_track_log_bridge",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_pagealloc_track_log_bridge_debug_record_6;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_pagealloc_track_log_bridge_debug_record_6 = {
+ .file = __FILE__, .func = "mem_pagealloc_track_log_bridge",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+struct mem_pagealloc_track_log_bridge_debug_metadata {
+ struct ddebug *records[7];
+ unsigned long flags_byte;
+};
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_pagealloc_track_log_bridge_debug_metadata mem_pagealloc_track_log_bridge_debug_metadata;
+#else
+const struct mem_pagealloc_track_log_bridge_debug_metadata mem_pagealloc_track_log_bridge_debug_metadata = {
+ { &mem_pagealloc_track_log_bridge_debug_record_0, &mem_pagealloc_track_log_bridge_debug_record_1, &mem_pagealloc_track_log_bridge_debug_record_2, &mem_pagealloc_track_log_bridge_debug_record_3, &mem_pagealloc_track_log_bridge_debug_record_4, &mem_pagealloc_track_log_bridge_debug_record_5, &mem_pagealloc_track_log_bridge_debug_record_6 }, 27
+};
+#endif /* exact original immutable Caddress metadata fallback */
+extern void mem_pagealloc_track_log_bridge(int event, void *ptr, char *file,
+		int line, int npages);
 
-void mem_pagealloc_invalid_free_bridge(void *ptr, char *file, int line)
-{
-	kprintf("%s: ERROR: invalid deallocation for addr: 0x%lx @ %s:%d\n",
-			"_ihk_mc_free_pages", ptr, file, line);
-	panic("panic: invalid deallocation");
-}
+extern void mem_pagealloc_invalid_free_bridge(void *ptr, char *file, int line);
 
-void mem_pagealloc_invalid_size_bridge(void *ptr, int npages,
-		int alloc_npages, char *file, int line)
-{
-	kprintf("%s: ERROR: trying to deallocate %d pages"
-			" for a %d pages allocation at %s:%d\n",
-			"_ihk_mc_free_pages", npages, alloc_npages, file, line);
-	panic("invalid deallocation");
-}
+extern void mem_pagealloc_invalid_size_bridge(void *ptr, int npages,
+		int alloc_npages, char *file, int line);
 
-void mem_pagealloc_leak_log_bridge(int event, void *ptr, char *file,
-		int line, int size, int count, int runcount)
-{
-	(void)size;
-
-	switch (event) {
-	case MEM_TRACK_LEAK_DETAIL:
-		dkprintf("%s memory leak: %p @ %s:%d runcount: %d\n",
-				"pagealloc_memcheck", ptr, file, line, runcount);
-		break;
-	case MEM_TRACK_LEAK_SUMMARY:
-		kprintf("%s memory leak: %s:%d cnt: %d, runcount: %d\n",
-				"pagealloc_memcheck", file, line, count, runcount);
-		break;
-	default:
-		break;
-	}
-}
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_pagealloc_leak_log_bridge_debug_record_0;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_pagealloc_leak_log_bridge_debug_record_0 = {
+ .file = __FILE__, .func = "mem_pagealloc_leak_log_bridge",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+struct mem_pagealloc_leak_log_bridge_debug_metadata {
+ struct ddebug *records[1];
+ unsigned long flags_byte;
+};
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_pagealloc_leak_log_bridge_debug_metadata mem_pagealloc_leak_log_bridge_debug_metadata;
+#else
+const struct mem_pagealloc_leak_log_bridge_debug_metadata mem_pagealloc_leak_log_bridge_debug_metadata = {
+ { &mem_pagealloc_leak_log_bridge_debug_record_0 }, 27
+};
+#endif /* exact original immutable Caddress metadata fallback */
+extern void mem_pagealloc_leak_log_bridge(int event, void *ptr, char *file,
+		int line, int size, int count, int runcount);
 #endif
 
 struct dump_pase_info {
@@ -3456,25 +3506,65 @@ void ihk_mc_set_page_allocator(struct ihk_mc_pa_ops *ops)
 #endif
 
 /* Internal allocation routines */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+/* Actual GCC9 ddebug witness22c1; default GCC14 qualification remains pending. */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_reserve_pages_debug_record;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_reserve_pages_debug_record = {
+ .file = __FILE__, .func = "mem_reserve_pages_log_bridge",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct {
+ struct ddebug *record;
+ unsigned long flags_byte;
+} mem_reserve_pages_debug_metadata;
+#else
+const struct {
+ struct ddebug *record;
+ unsigned long flags_byte;
+} mem_reserve_pages_debug_metadata = {&mem_reserve_pages_debug_record,27};
+#endif /* exact original immutable Caddress metadata fallback */
+extern void mem_reserve_pages_log_bridge(unsigned long start,
+		unsigned long end, unsigned long pages);
+#else
 static void mem_reserve_pages_log_bridge(unsigned long start,
 		unsigned long end, unsigned long pages)
 {
 	dkprintf("reserve: %016lx - %016lx (%ld pages)\n", start, end,
 	        pages);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern void mem_reserve_pages_range_bridge(
+		struct ihk_page_allocator_desc *pa_allocator,
+		unsigned long start, unsigned long end);
+#else
 static void mem_reserve_pages_range_bridge(
 		struct ihk_page_allocator_desc *pa_allocator,
 		unsigned long start, unsigned long end)
 {
 	ihk_pagealloc_reserve(pa_allocator, start, end);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern void mem_reserve_pages_panic_bridge(void);
+#else
 static void mem_reserve_pages_panic_bridge(void)
 {
 	panic("reserve_pages: helper failed");
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern void reserve_pages(struct ihk_page_allocator_desc *pa_allocator,
+		unsigned long start, unsigned long end, int type);
+#else
 static void reserve_pages(struct ihk_page_allocator_desc *pa_allocator,
 		unsigned long start, unsigned long end, int type)
 {
@@ -3487,26 +3577,50 @@ static void reserve_pages(struct ihk_page_allocator_desc *pa_allocator,
 			mem_reserve_pages_body_result,
 			mem_reserve_pages_panic_bridge);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+/* Compiler-bound existing process NUMA mask extent, no C behavior/getter. */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const int mem_interleave_nodes_mask_bits;
+#else
+const int mem_interleave_nodes_mask_bits = PROCESS_NUMA_MASK_BITS;
+#endif /* exact original C configuration fallback */
+int interleave_nodes(int off, unsigned long *numa_mask);
+#else
 static int interleave_nodes(int off, unsigned long *numa_mask)
 {
 	return mem_interleave_nodes_result(off, numa_mask,
 			PROCESS_NUMA_MASK_BITS);
 }
+#endif
 
 #ifdef IHK_RBTREE_ALLOCATOR
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+int mem_rusage_check_oom_bridge(int numa_id, int npages, int is_user);
+#else
 static int mem_rusage_check_oom_bridge(int numa_id, int npages, int is_user)
 {
 	return rusage_check_oom(numa_id, npages, is_user);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+unsigned long mem_numa_alloc_node_bridge(
+		struct ihk_mc_numa_node *node, int npages, int p2align);
+#else
 static unsigned long mem_numa_alloc_node_bridge(
 		struct ihk_mc_numa_node *node, int npages, int p2align)
 {
 	return ihk_numa_alloc_pages(node, npages, p2align);
 }
 #endif
+#endif
 
+#if defined(MCKERNEL_RUST_MEM_HELPERS) && defined(IHK_RBTREE_ALLOCATOR)
+unsigned long mem_try_alloc_node_bridge(int numa_id, int npages,
+		int p2align, int is_user, int *oomp);
+#else
 static unsigned long mem_try_alloc_node_bridge(int numa_id, int npages,
 		int p2align, int is_user, int *oomp)
 {
@@ -3538,162 +3652,203 @@ static unsigned long mem_try_alloc_node_bridge(int numa_id, int npages,
 	return pa;
 #endif
 }
+#endif
 
-static int mem_distance_id_bridge(int base_node, int index)
-{
-	return mem_distance_id_public_result(memory_nodes, base_node, index,
-			ihk_mc_get_nr_numa_nodes);
-}
+extern int mem_distance_id_bridge(int base_node, int index);
 
-static int mem_mask_test_bridge(int numa_id, unsigned long *numa_mask)
-{
-	return mem_mask_test_result(numa_id, numa_mask,
-			PROCESS_NUMA_MASK_BITS);
-}
+extern int mem_mask_test_bridge(int numa_id, unsigned long *numa_mask);
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+void mem_rusage_page_add_bridge(int numa_id, int npages, int is_user);
+#else
 static void mem_rusage_page_add_bridge(int numa_id, int npages, int is_user)
 {
 	rusage_page_add(numa_id, npages, is_user);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+void *mem_phys_to_virt_bridge(unsigned long pa);
+#else
 static void *mem_phys_to_virt_bridge(unsigned long pa)
 {
 	return phys_to_virt(pa);
 }
+#endif
 
-static void mem_mckernel_alloc_log_bridge(int event, int current_node,
-		int numa_id, int npages)
-{
-	switch (event) {
-	case MEM_ALLOC_LOG_EXPLICIT_OK:
-		dkprintf("%s: explicit (node: %d) CPU @ node %d allocated "
-				"%d pages from node %d\n",
-				"mckernel_allocate_aligned_pages_node",
-				numa_id, current_node, npages, current_node);
-		break;
-	case MEM_ALLOC_LOG_EXPLICIT_MISS:
+/* Exact C feature/enum facts and callsite-owned mutable debug records. */
 #ifdef PROFILE_ENABLE
-		profile_event_add(PROFILE_mpol_alloc_missed,
-				  npages * PAGE_SIZE);
+_Static_assert(__builtin_types_compatible_p(enum profile_event_type,unsigned int),
+ "profile event unsigned int ABI");
 #endif
-		dkprintf("%s: couldn't fulfill explicit NUMA request for %d pages\n",
-				"mckernel_allocate_aligned_pages_node", npages);
-		break;
-	case MEM_ALLOC_LOG_POLICY_OK:
-		dkprintf("%s: policy: CPU @ node %d allocated "
-				"%d pages from node %d\n",
-				"mckernel_allocate_aligned_pages_node",
-				current_node, npages, current_node);
-		break;
-	case MEM_ALLOC_LOG_POLICY_MISS:
-#ifdef PROFILE_ENABLE
-		profile_event_add(PROFILE_mpol_alloc_missed,
-				  npages * PAGE_SIZE);
-#endif
-		dkprintf("%s: couldn't fulfill user policy for %d pages\n",
-			"mckernel_allocate_aligned_pages_node", npages);
-		break;
-	case MEM_ALLOC_LOG_DISTANCE_OK:
-		dkprintf("%s: distance: CPU @ node %d allocated "
-				"%d pages from node %d\n",
-				"mckernel_allocate_aligned_pages_node",
-				current_node, npages, numa_id);
-		break;
-	case MEM_ALLOC_LOG_DISTANCE_FIRST_MISS:
-#ifndef ENABLE_FUGAKU_HACKS
-		kprintf("%s: distance: CPU @ node %d failed to allocate "
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_allocation_log_record_0;
 #else
-		dkprintf("%s: distance: CPU @ node %d failed to allocate "
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_allocation_log_record_0 = {
+ .file = __FILE__, .func = "mem_mckernel_alloc_log_bridge",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_allocation_log_record_1;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_allocation_log_record_1 = {
+ .file = __FILE__, .func = "mem_mckernel_alloc_log_bridge",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_allocation_log_record_2;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_allocation_log_record_2 = {
+ .file = __FILE__, .func = "mem_mckernel_alloc_log_bridge",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_allocation_log_record_3;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_allocation_log_record_3 = {
+ .file = __FILE__, .func = "mem_mckernel_alloc_log_bridge",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_allocation_log_record_4;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_allocation_log_record_4 = {
+ .file = __FILE__, .func = "mem_mckernel_alloc_log_bridge",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+#ifdef ENABLE_FUGAKU_HACKS
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_allocation_log_record_5 = {
+ .file = __FILE__, .func = "mem_mckernel_alloc_log_bridge",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
 #endif
-				"%d pages from node %d\n",
-				"mckernel_allocate_aligned_pages_node",
-				current_node, npages, numa_id);
-		break;
-	case MEM_ALLOC_LOG_OOM:
-		dkprintf("OOM\n", "mckernel_allocate_aligned_pages_node");
-		break;
-	default:
-		break;
-	}
-}
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_allocation_log_record_6;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_allocation_log_record_6 = {
+ .file = __FILE__, .func = "mem_mckernel_alloc_log_bridge",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct {
+ struct ddebug *records[7];
+ unsigned long flags_byte;
+ void (*profile_add)(unsigned int,uint64_t);
+ unsigned int profile_event;
+ int fugaku;
+} mem_allocation_log_metadata;
+#else
+const struct {
+ struct ddebug *records[7];
+ unsigned long flags_byte;
+ void (*profile_add)(unsigned int,uint64_t);
+ unsigned int profile_event;
+ int fugaku;
+} mem_allocation_log_metadata = {
+ {&mem_allocation_log_record_0,&mem_allocation_log_record_1,
+  &mem_allocation_log_record_2,&mem_allocation_log_record_3,
+  &mem_allocation_log_record_4,
+#ifdef ENABLE_FUGAKU_HACKS
+  &mem_allocation_log_record_5,
+#else
+  0,
+#endif
+  &mem_allocation_log_record_6},
+ 27,
+#ifdef PROFILE_ENABLE
+ profile_event_add, PROFILE_mpol_alloc_missed,
+#else
+ 0,0,
+#endif
+#ifdef ENABLE_FUGAKU_HACKS
+ 1
+#else
+ 0
+#endif
+};
+#endif /* exact original Ccallback/configuration data fallback */
+extern void mem_mckernel_alloc_log_bridge(int event, int current_node,
+		int numa_id, int npages);
 
 #ifdef MCKERNEL_RUST_MEM_HELPERS
-static void *mem_current_vm_bridge(void)
-{
-	struct thread *thread = NULL;
-	void *vm = NULL;
+extern void *mem_current_vm_bridge(void);
 
-	if (cpu_local_var_initialized) {
-		thread = get_this_cpu_local_var()->current;
-		if (thread)
-			vm = thread->vm;
-	}
+extern void *mem_range_policy_search_bridge(void *vm, unsigned long virt_addr);
 
-	return mem_current_vm_result(cpu_local_var_initialized, thread, vm);
-}
+extern void *mem_lookup_memory_range_bridge(void *vm, unsigned long start,
+		unsigned long end);
 
-static void *mem_range_policy_search_bridge(void *vm, unsigned long virt_addr)
-{
-	return vm_range_policy_search((struct process_vm *)vm, virt_addr);
-}
+extern int mem_range_is_shm_bridge(void *range);
 
-static void *mem_lookup_memory_range_bridge(void *vm, unsigned long start,
-		unsigned long end)
-{
-	return lookup_process_memory_range((struct process_vm *)vm, start, end);
-}
+extern void mem_range_policy_fields_bridge(void *policy,
+		int *numa_mem_policy, unsigned long **numa_mask, int **il_prev);
 
-static int mem_range_is_shm_bridge(void *range)
-{
-	struct vm_range *vm_range = range;
+extern void mem_vm_policy_fields_bridge(void *vm, int *numa_mem_policy,
+		unsigned long **numa_mask, int **il_prev);
 
-	if (!vm_range)
-		return mem_range_is_shm_result(0, 0, 0);
-	if (!vm_range->memobj)
-		return mem_range_is_shm_result(1, 0, 0);
-
-	return mem_range_is_shm_result(1, 1, vm_range->memobj->flags);
-}
-
-static void mem_range_policy_fields_bridge(void *policy,
-		int *numa_mem_policy, unsigned long **numa_mask, int **il_prev)
-{
-	struct vm_range_numa_policy *range_policy = policy;
-
-	mem_policy_fields_result(!!range_policy,
-			range_policy ? range_policy->numa_mem_policy : -1,
-			range_policy ? range_policy->numa_mask : NULL,
-			range_policy ? &range_policy->il_prev : NULL,
-			numa_mem_policy, numa_mask, il_prev);
-}
-
-static void mem_vm_policy_fields_bridge(void *vm, int *numa_mem_policy,
-		unsigned long **numa_mask, int **il_prev)
-{
-	struct process_vm *process_vm = vm;
-
-	mem_policy_fields_result(!!process_vm,
-			process_vm ? process_vm->numa_mem_policy : -1,
-			process_vm ? process_vm->numa_mask : NULL,
-			process_vm ? &process_vm->il_prev : NULL,
-			numa_mem_policy, numa_mask, il_prev);
-}
-
-static void *mem_mckernel_alloc_policy_bridge(int npages, int p2align,
+struct mem_remaining_alloc_policy_metadata {
+ mem_try_alloc_node_fn_t try_alloc;
+ mem_rusage_add_fn_t rusage_add;
+ mem_phys_to_virt_fn_t phys_to_virt;
+ mem_alloc_log_fn_t log;
+};
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_remaining_alloc_policy_metadata mem_remaining_alloc_policy_metadata;
+#else
+const struct mem_remaining_alloc_policy_metadata mem_remaining_alloc_policy_metadata = {
+ mem_try_alloc_node_bridge, mem_rusage_page_add_bridge,
+ mem_phys_to_virt_bridge, mem_mckernel_alloc_log_bridge
+};
+#endif /* exact original Ccallback/configuration data fallback */
+extern void *mem_mckernel_alloc_policy_bridge(int npages, int p2align,
 		ihk_mc_ap_flag flag, int pref_node, int is_user,
 		int current_node, int nr_nodes, int numa_mem_policy,
-		int chk_shm, unsigned long *numa_mask, int *il_prevp)
-{
-	return mem_mckernel_alloc_policy_result(npages, p2align, flag,
-			pref_node, is_user, current_node, nr_nodes,
-			numa_mem_policy, chk_shm, numa_mask, il_prevp,
-			mem_try_alloc_node_bridge, mem_distance_id_bridge,
-			mem_mask_test_bridge, interleave_nodes,
-			mem_rusage_page_add_bridge, mem_phys_to_virt_bridge,
-			mem_mckernel_alloc_log_bridge);
-}
+		int chk_shm, unsigned long *numa_mask, int *il_prevp);
 #endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+struct mem_whole_allocation_metadata {
+ mem_get_nr_numa_nodes_fn_t nr_nodes;
+ mem_current_vm_fn_t current_vm;
+ mem_range_policy_search_fn_t range_policy_search;
+ mem_lookup_memory_range_fn_t lookup_memory_range;
+ mem_range_is_shm_fn_t range_is_shm;
+ mem_policy_fields_fn_t range_policy_fields;
+ mem_policy_fields_fn_t vm_policy_fields;
+ mem_current_numa_id_fn_t current_numa;
+ mem_mckernel_alloc_policy_fn_t alloc_policy;
+};
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_whole_allocation_metadata mem_whole_allocation_metadata;
+#else
+const struct mem_whole_allocation_metadata mem_whole_allocation_metadata = {
+ .nr_nodes = ihk_mc_get_nr_numa_nodes,
+ .current_vm = mem_current_vm_bridge,
+ .range_policy_search = mem_range_policy_search_bridge,
+ .lookup_memory_range = mem_lookup_memory_range_bridge,
+ .range_is_shm = mem_range_is_shm_bridge,
+ .range_policy_fields = mem_range_policy_fields_bridge,
+ .vm_policy_fields = mem_vm_policy_fields_bridge,
+ .current_numa = mem_current_numa_id_bridge,
+ .alloc_policy = mem_mckernel_alloc_policy_bridge,
+};
+#endif /* exact original Ccallback/configuration data fallback */
+void *mckernel_allocate_aligned_pages_node(int npages, int p2align,
+		ihk_mc_ap_flag flag, int pref_node, int is_user, uintptr_t virt_addr);
+#else
 static void *mckernel_allocate_aligned_pages_node(int npages, int p2align,
 		ihk_mc_ap_flag flag, int pref_node, int is_user, uintptr_t virt_addr)
 {
@@ -3776,15 +3931,16 @@ allocate:
 			mem_mckernel_alloc_log_bridge);
 #endif
 }
+#endif
 
-static int mem_current_numa_id_bridge(void)
-{
-	return ihk_mc_get_numa_id();
-}
+extern int mem_current_numa_id_bridge(void);
 
 /*
  * Get NUMA node structure offsetted by index in the order of distance
  */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+struct ihk_mc_numa_node *ihk_mc_get_numa_node_by_distance(int i);
+#else
 struct ihk_mc_numa_node *ihk_mc_get_numa_node_by_distance(int i)
 {
 #ifdef MCKERNEL_RUST_MEM_HELPERS
@@ -3797,30 +3953,43 @@ struct ihk_mc_numa_node *ihk_mc_get_numa_node_by_distance(int i)
 			i, mem_current_numa_id_bridge);
 #endif
 }
+#endif
 
 #ifdef MCKERNEL_RUST_MEM_HELPERS
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+unsigned long mem_virt_to_phys_bridge(void *va);
+#else
 static unsigned long mem_virt_to_phys_bridge(void *va)
 {
 	return virt_to_phys(va);
 }
+#endif
 
-static void *mem_get_numa_node_bridge(int numa_id)
-{
-	return mem_get_numa_node_public_result(memory_nodes,
-			ihk_mc_get_nr_numa_nodes(), numa_id);
-}
+extern void *mem_get_numa_node_bridge(int numa_id);
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+void mem_numa_free_bridge(void *node, unsigned long addr, int npages);
+#else
 static void mem_numa_free_bridge(void *node, unsigned long addr, int npages)
 {
 	ihk_numa_free_pages((struct ihk_mc_numa_node *)node, addr, npages);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+void mem_rusage_page_sub_bridge(int numa_id, int npages, int is_user);
+#else
 static void mem_rusage_page_sub_bridge(int numa_id, int npages, int is_user)
 {
 	rusage_page_sub(numa_id, npages, is_user);
 }
 #endif
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+void __mckernel_free_pages_in_allocator(void *va, int npages,
+                                               int is_user);
+#else
 static void __mckernel_free_pages_in_allocator(void *va, int npages,
                                                int is_user)
 {
@@ -3867,30 +4036,55 @@ static void __mckernel_free_pages_in_allocator(void *va, int npages,
 #endif
 #endif
 }
+#endif
 
 #ifdef MCKERNEL_RUST_MEM_HELPERS
-static void mem_pending_free_warn_bridge(unsigned long phys)
-{
-	kprintf("%s: WARNING: page phys 0x%lx is not PM_NONE",
-			"mckernel_free_pages", phys);
-}
+extern void mem_pending_free_warn_bridge(unsigned long phys);
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct page *mem_phys_to_page_bridge(unsigned long phys);
+#else
 static struct page *mem_phys_to_page_bridge(unsigned long phys)
 {
 	return phys_to_page(phys);
 }
+#endif /* exact original callback reference; normal C whole-free fallback is unchanged */
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+void mem_free_in_allocator_bridge(void *va, int npages, int is_user);
+#else
 static void mem_free_in_allocator_bridge(void *va, int npages, int is_user)
 {
 	__mckernel_free_pages_in_allocator(va, npages, is_user);
 }
-
-struct list_head *mem_pending_free_pages_bridge(void)
-{
-	return &get_this_cpu_local_var()->pending_free_pages;
-}
 #endif
 
+extern struct list_head *mem_pending_free_pages_bridge(void);
+#endif
+
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+struct mem_whole_free_metadata {
+ mem_pending_pages_fn_t pending_pages;
+ mem_virt_to_phys_fn_t virt_to_phys;
+ mem_phys_to_page_fn_t phys_to_page;
+ mem_free_in_allocator_fn_t free_in_allocator;
+ mem_pending_warn_fn_t warn;
+ mem_mckernel_free_pages_body_fn_t free_body;
+};
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_whole_free_metadata mem_whole_free_metadata;
+#else
+const struct mem_whole_free_metadata mem_whole_free_metadata = {
+ .pending_pages = mem_pending_free_pages_bridge,
+ .virt_to_phys = mem_virt_to_phys_bridge,
+ .phys_to_page = mem_phys_to_page_bridge,
+ .free_in_allocator = mem_free_in_allocator_bridge,
+ .warn = mem_pending_free_warn_bridge,
+ .free_body = mem_mckernel_free_pages_body_result,
+};
+#endif /* exact original Ccallback/configuration data fallback */
+void mckernel_free_pages(void *va, int npages, int is_user);
+#else
 static void mckernel_free_pages(void *va, int npages, int is_user)
 {
 #ifdef MCKERNEL_RUST_MEM_HELPERS
@@ -3921,6 +4115,7 @@ static void mckernel_free_pages(void *va, int npages, int is_user)
 	__mckernel_free_pages_in_allocator(va, npages, is_user);
 #endif
 }
+#endif
 
 #ifdef MCKERNEL_RUST_MEM_HELPERS
 void mem_begin_free_pages_pending_panic_bridge(void);
@@ -3938,22 +4133,21 @@ void begin_free_pages_pending(void) {
 #endif
 
 #ifdef MCKERNEL_RUST_MEM_HELPERS
-void mem_begin_free_pages_pending_panic_bridge(void)
-{
-	panic("begin_free_pages_pending");
-}
+extern void mem_begin_free_pages_pending_panic_bridge(void);
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+void mem_pending_free_bridge(unsigned long phys, int npages,
+		int is_user);
+#else
 void mem_pending_free_bridge(unsigned long phys, int npages,
 		int is_user)
 {
 	__mckernel_free_pages_in_allocator(phys_to_virt(phys), npages,
 			is_user);
 }
+#endif
 
-void mem_finish_free_pages_pending_panic_bridge(void)
-{
-	panic("free_pending_pages:not PM_PENDING_FREE");
-}
+extern void mem_finish_free_pages_pending_panic_bridge(void);
 #else
 void finish_free_pages_pending(void)
 {
@@ -3984,15 +4178,32 @@ void finish_free_pages_pending(void)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ihk_mc_pa_ops allocator;
+#else
 static struct ihk_mc_pa_ops allocator = {
 	.alloc_page = mckernel_allocate_aligned_pages_node,
 	.free_page = mckernel_free_pages,
 };
+#endif /* exact original C-owned data fallback */
 
 void sbox_write(int offset, unsigned int value);
 
+#ifdef MCKERNEL_RUST_PAGE_HELPERS
+extern int page_hash_count_pages(void);
+#else
 static int page_hash_count_pages(void);
+#endif
 #ifdef MCKERNEL_RUST_MEM_HELPERS
+/* Existing C-owned static node array; immutable address, no C getter. */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ihk_mc_numa_node *const mem_query_free_nodes;
+#else
+struct ihk_mc_numa_node *const mem_query_free_nodes = memory_nodes;
+#endif /* exact original Caddress/data fallback */
+#ifdef IHK_RBTREE_ALLOCATOR
+extern int mem_query_free_node_pages_bridge(int node);
+#else
 static int mem_query_free_node_pages_bridge(int node)
 {
 	int pages = 0;
@@ -4018,40 +4229,77 @@ static int mem_query_free_node_pages_bridge(int node)
 
 	return pages;
 }
+#endif
 
-static void mem_query_free_total_log_bridge(int pages)
-{
-	kprintf("McKernel free pages in total: %d\n", pages);
-}
+extern void mem_query_free_total_log_bridge(int pages);
 
-static void mem_query_free_panic_bridge(void)
-{
-	panic("PANIC");
-}
+extern void mem_query_free_panic_bridge(void);
 
-static void mem_query_free_kmalloc_memcheck_bridge(void)
-{
-	extern void kmalloc_memcheck(void);
+extern void mem_query_free_kmalloc_memcheck_bridge(void);
 
-	kmalloc_memcheck();
-}
+extern void mem_query_free_page_hash_log_bridge(int pages);
 
-static void mem_query_free_page_hash_log_bridge(int pages)
-{
-	kprintf("Page hash: %d pages active\n", pages);
-}
-
-static void mem_query_free_sbox_write_bridge(int offset, unsigned int value)
-{
+/* Exact original C feature and mutable base-slot address; data only. */
+struct mem_sbox_access_metadata {
+ int attached;
+ void **base_slot;
+};
 #ifdef ATTACHED_MIC
-	sbox_write(offset, value);
+extern void *sbox_base;
+const struct mem_sbox_access_metadata mem_sbox_access_metadata = {1,&sbox_base};
 #else
-	(void)offset;
-	(void)value;
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_sbox_access_metadata mem_sbox_access_metadata;
+#else
+const struct mem_sbox_access_metadata mem_sbox_access_metadata = {0,0};
+#endif /* exact original Caddress/data fallback */
 #endif
-}
+extern void mem_query_free_sbox_write_bridge(int offset, unsigned int value);
 #endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+/* Declarative original profile values and callback addresses, no C getter. */
+struct mem_query_free_interrupt_metadata {
+ int fugaku_panic, attached_mic, sbox_scratch0, sbox_scratch1;
+ mem_get_nr_numa_nodes_fn_t nr_nodes;
+ mem_query_free_node_pages_fn_t node_pages;
+ mem_query_free_log_fn_t total_log;
+ mem_lifecycle_void_fn_t panic_fn;
+ mem_find_command_line_fn_t find_command_line;
+ mem_lifecycle_void_fn_t kmalloc_memcheck_fn;
+ mem_lifecycle_void_fn_t pagealloc_memcheck_fn;
+ mem_query_page_hash_count_fn_t page_hash_count;
+ mem_query_free_log_fn_t page_hash_log;
+ mem_query_sbox_write_fn_t sbox_write;
+};
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_query_free_interrupt_metadata mem_query_free_interrupt_metadata;
+#else
+const struct mem_query_free_interrupt_metadata mem_query_free_interrupt_metadata = {
+#ifdef ENABLE_FUGAKU_HACKS
+ .fugaku_panic = 1,
+#else
+ .fugaku_panic = 0,
+#endif
+#ifdef ATTACHED_MIC
+ .attached_mic = 1, .sbox_scratch0 = SBOX_SCRATCH0, .sbox_scratch1 = SBOX_SCRATCH1,
+#else
+ .attached_mic = 0, .sbox_scratch0 = 0, .sbox_scratch1 = 0,
+#endif
+ .nr_nodes = ihk_mc_get_nr_numa_nodes,
+ .node_pages = mem_query_free_node_pages_bridge,
+ .total_log = mem_query_free_total_log_bridge,
+ .panic_fn = mem_query_free_panic_bridge,
+ .find_command_line = find_command_line,
+ .kmalloc_memcheck_fn = mem_query_free_kmalloc_memcheck_bridge,
+ .pagealloc_memcheck_fn = pagealloc_memcheck,
+ .page_hash_count = page_hash_count_pages,
+ .page_hash_log = mem_query_free_page_hash_log_bridge,
+ .sbox_write = mem_query_free_sbox_write_bridge,
+};
+#endif /* exact original Ccallback/configuration data fallback */
+void query_free_mem_interrupt_handler(void *priv);
+#else
 static void query_free_mem_interrupt_handler(void *priv)
 {
 #ifdef MCKERNEL_RUST_MEM_HELPERS
@@ -4120,11 +4368,16 @@ static void query_free_mem_interrupt_handler(void *priv)
 #endif
 #endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ihk_mc_interrupt_handler query_free_mem_handler;
+#else
 static struct ihk_mc_interrupt_handler query_free_mem_handler = {
 	.func = query_free_mem_interrupt_handler,
 	.priv = NULL,
 };
+#endif /* exact original Caddress/data fallback */
 
 int gencore(struct process *proc, struct coretable **coretable,
 	    int *chunks, char *cmdline, int sig);
@@ -4134,6 +4387,46 @@ typedef struct siginfo siginfo_t;
 unsigned long do_kill(struct thread *thread, int pid, int tid,
 			int sig, siginfo_t *info, int ptracecont);
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+/* Actual macro/status owners and original two independent log callsites. */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_coredump_wait_sleep_record;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_coredump_wait_sleep_record = {
+ .file = __FILE__, .func = "coredump_wait", .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_coredump_wait_resume_record;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_coredump_wait_resume_record = {
+ .file = __FILE__, .func = "coredump_wait", .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct {
+ int running;
+ int descheduled;
+ int interruptible;
+ struct ddebug *records[2];
+ unsigned long flags_byte;
+} mem_coredump_wait_metadata;
+#else
+const struct {
+ int running;
+ int descheduled;
+ int interruptible;
+ struct ddebug *records[2];
+ unsigned long flags_byte;
+} mem_coredump_wait_metadata = {
+ COREDUMP_RUNNING,COREDUMP_DESCHEDULED,PS_INTERRUPTIBLE,
+ {&mem_coredump_wait_sleep_record,&mem_coredump_wait_resume_record},27
+};
+#endif /* exact original immutable Caddress metadata fallback */
+extern void coredump_wait(struct thread *thread);
+#else
 void coredump_wait(struct thread *thread)
 {
 	unsigned long flags;
@@ -4156,7 +4449,40 @@ void coredump_wait(struct thread *thread)
 		dkprintf("%s: woken up,tid=%d\n", __func__, thread->tid);
 	}
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+/* Actual original status constants and mutable logging record; no Cgetter. */
+_Static_assert(__builtin_types_compatible_p(
+ typeof(((struct thread *)0)->coredump_status),int),"corestatus int ABI");
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_coredump_wakeup_debug_record;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_coredump_wakeup_debug_record = {
+ .file = __FILE__, .func = "coredump_wakeup",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct {
+ int descheduled;
+ int to_be_woken;
+ struct ddebug *record;
+ unsigned long flags_byte;
+} mem_coredump_wakeup_metadata;
+#else
+const struct {
+ int descheduled;
+ int to_be_woken;
+ struct ddebug *record;
+ unsigned long flags_byte;
+} mem_coredump_wakeup_metadata = {
+ COREDUMP_DESCHEDULED,COREDUMP_TO_BE_WOKEN,&mem_coredump_wakeup_debug_record,27
+};
+#endif /* exact original immutable Caddress metadata fallback */
+extern void coredump_wakeup(struct thread *thread);
+#else
 void coredump_wakeup(struct thread *thread)
 {
 	if (__sync_bool_compare_and_swap(&thread->coredump_status,
@@ -4166,6 +4492,7 @@ void coredump_wakeup(struct thread *thread)
 		waitq_wakeup(&thread->coredump_wq);
 	}
 }
+#endif
 
 /**
  * \brief Generate a core file and tell the host to write it out.
@@ -4174,6 +4501,53 @@ void coredump_wakeup(struct thread *thread)
  * \param regs A pointer to a x86_regs structure.
  */
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+/* Real supported-profile lock and request ABI; no new C runtime helper. */
+#ifndef SPINLOCK_IN_MCS_RWLOCK
+#error "The staged coredump protocol requires the actual reviewed exclusive reader implementation"
+#endif
+_Static_assert(sizeof(int)==4,"coredump arrival/abort word ABI");
+struct mem_coredump_request_abi { struct syscall_request request IHK_DMA_ALIGN; };
+_Static_assert(__alignof__(struct mem_coredump_request_abi)==
+ __alignof__(struct syscall_request),"reviewed SMP IHK_DMA_ALIGN is empty");
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_coredump_debug_0;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_coredump_debug_0 = {
+ .file=__FILE__,.func="coredump",.line=__LINE__,.flags=DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_coredump_debug_1;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_coredump_debug_1 = {
+ .file=__FILE__,.func="coredump",.line=__LINE__,.flags=DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+struct mem_coredump_metadata {
+ unsigned long core_limit_index;
+ int busy,nomem;
+ unsigned long nowait,syscall_number;
+ char *alloc_file;
+ int alloc_line;
+ char *free_file;
+ int free_line;
+ struct ddebug *records[2];
+ unsigned long flags_byte;
+};
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_coredump_metadata mem_coredump_metadata;
+#else
+const struct mem_coredump_metadata mem_coredump_metadata = {
+ MCK_RLIMIT_CORE,-EBUSY,-ENOMEM,IHK_MC_AP_NOWAIT,__NR_coredump,
+ (char *)__FILE__,__LINE__,(char *)__FILE__,__LINE__,
+ { &mem_coredump_debug_0,&mem_coredump_debug_1 },27
+};
+#endif /* exact original Cprovenance metadata fallback */
+extern int coredump(struct thread *thread, void *regs, int sig);
+#else
 int coredump(struct thread *thread, void *regs, int sig)
 {
 	struct process *proc = thread->proc;
@@ -4299,12 +4673,17 @@ int coredump(struct thread *thread, void *regs, int sig)
 	kfree_tracked(ids, __FILE__, __LINE__);
 	return ret;
 }
+#endif
 
 /* Immutable source-header geometry; no new C runtime implementation. */
 #ifdef MCKERNEL_RUST_MEM_HELPERS
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const int mem_remote_tlb_geometry[3];
+#else
 const int mem_remote_tlb_geometry[3] = {
 	IHK_TLB_FLUSH_IRQ_VECTOR_SIZE, IHK_TLB_FLUSH_IRQ_VECTOR_START, CPU_SETSIZE
 };
+#endif /* exact original C configuration fallback */
 #define MEM_TLB_PUBLIC_BRIDGE
 #else
 #define MEM_TLB_PUBLIC_BRIDGE static
@@ -4456,6 +4835,25 @@ void remote_flush_tlb_array_cpumask(struct process_vm *vm,
 }
 #endif /* C fallback; default Rust entry owns this symbol. */
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+/* Original profile configuration and callback address only; no runtime C helper. */
+struct mem_tlb_handler_profile_metadata {
+ unsigned int event;
+ void (*add)(enum profile_event_type, uint64_t);
+};
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_tlb_handler_profile_metadata mem_tlb_handler_profile_metadata;
+#else
+const struct mem_tlb_handler_profile_metadata mem_tlb_handler_profile_metadata = {
+#ifdef PROFILE_ENABLE
+ PROFILE_tlb_invalidate,profile_event_add
+#else
+ 0,0
+#endif
+};
+#endif /* exact original Ccallback/configuration data fallback */
+extern void tlb_flush_handler(int vector);
+#else
 void tlb_flush_handler(int vector)
 {
 #ifdef PROFILE_ENABLE
@@ -4481,10 +4879,50 @@ void tlb_flush_handler(int vector)
 	}
 #endif // PROFILE_ENABLE
 }
+#endif
 #ifdef ENABLE_FUGAKU_HACKS
 extern unsigned long arch_get_instruction_address(const void *reg);
 #endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+struct mem_unhandled_fault_metadata {
+ uint64_t pf_prot,pf_write,pf_user,pf_reserved,pf_instruction;
+ unsigned int mf_regular_file;
+ int fugaku;
+ int debug_stack;
+ unsigned long (*instruction_address)(const void *);
+ unsigned long (*stack_address)(const void *);
+};
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_unhandled_fault_metadata mem_unhandled_fault_metadata;
+#else
+const struct mem_unhandled_fault_metadata mem_unhandled_fault_metadata = {
+ PF_PROT,PF_WRITE,PF_USER,PF_RSVD,PF_INSTR,MF_REG_FILE,
+#ifdef ENABLE_FUGAKU_HACKS
+ 1,
+#else
+ 0,
+#endif
+#ifdef DEBUG_PRINT_MEM
+ 1,
+#else
+ 0,
+#endif
+#ifdef ENABLE_FUGAKU_HACKS
+ arch_get_instruction_address,
+#else
+ 0,
+#endif
+#ifdef DEBUG_PRINT_MEM
+ REGS_GET_STACK_POINTER
+#else
+ 0
+#endif
+};
+#endif /* exact original C configuration fallback */
+extern void unhandled_page_fault(struct thread *thread,void *fault_addr,
+ uint64_t reason,void *regs);
+#else
 static void unhandled_page_fault(struct thread *thread, void *fault_addr,
 				 uint64_t reason, void *regs)
 {
@@ -4559,8 +4997,18 @@ static void unhandled_page_fault(struct thread *thread, void *fault_addr,
 	}
 #endif
 }
+#endif
 
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+/* Header/selected-build geometry only; original usercopy owns fault policy. */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const unsigned long mem_fatal_user_bytes_geometry[2];
+#else
+const unsigned long mem_fatal_user_bytes_geometry[2] = {PAGE_SIZE,MAP_KERNEL_START};
+#endif /* exact original C configuration fallback */
+extern void mcexec_v10_dump_user_bytes(const char *name,unsigned long addr);
+#else
 static void mcexec_v10_dump_user_bytes(const char *name, unsigned long addr)
 {
 	unsigned char bytes[16];
@@ -4595,7 +5043,151 @@ static void mcexec_v10_dump_user_bytes(const char *name, unsigned long addr)
 		bytes[12], bytes[13], bytes[14], bytes[15],
 		ascii);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+/* Original ordinary diagnostic words now borrow permanent typed Rust storage. */
+extern int mem_page_fault_log_count;
+extern int mem_page_fault_log_pid;
+_Static_assert(__builtin_types_compatible_p(enum set_cputime_mode,unsigned int),
+ "set_cputime enum ABI");
+#ifdef PROFILE_ENABLE
+_Static_assert(__builtin_types_compatible_p(enum profile_event_type,unsigned int),
+ "profile event enum ABI");
+#endif
+#ifdef ENABLE_TOFU
+extern int ihk_mc_linux_pt_virt_to_phys_size(struct page_table *,const void *,
+ unsigned long *,unsigned long *);
+#endif
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_page_fault_debug_0;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_page_fault_debug_0 = {
+ .file=__FILE__,.func="page_fault_handler",.line=__LINE__,.flags=DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+#ifdef ENABLE_TOFU
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_page_fault_debug_1 = {
+ .file=__FILE__,.func="page_fault_handler",.line=__LINE__,.flags=DDEBUG_DEFAULT,
+};
+#endif
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_page_fault_debug_2;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_page_fault_debug_2 = {
+ .file=__FILE__,.func="page_fault_handler",.line=__LINE__,.flags=DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_page_fault_debug_3;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_page_fault_debug_3 = {
+ .file=__FILE__,.func="page_fault_handler",.line=__LINE__,.flags=DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+struct mem_page_fault_entry_metadata {
+ int * log_count;
+ int * log_pid;
+ unsigned long page_size;
+ unsigned long kernel_start;
+ uint64_t pf_user;
+ int invalid;
+ int canceled;
+ int range_error;
+ int busy;
+ int sigsegv;
+ int sigbus;
+ int sigstop;
+ int map_error;
+ int access_error;
+ int bus_address_error;
+ unsigned int time_u2k;
+ unsigned int time_k2kin;
+ unsigned int time_k2u;
+ unsigned int time_k2kout;
+ int tofu;
+ int fugaku_debug;
+ unsigned long tofu_attr;
+ struct ddebug *records[4];
+ unsigned long flags_byte;
+ void (*unhandled)(struct thread *,void *,uint64_t,void *);
+ int (*linux_resolve)(struct page_table *,const void *,unsigned long *,unsigned long *);
+ void *(*linux_pgt)(void);
+ int (*clear_kernel_range)(void *,void *);
+ unsigned long (*do_kill)(struct thread *,int,int,int,struct siginfo *,int);
+ void (*profile_add)(unsigned int,uint64_t);
+ unsigned int profile_event;
+};
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_page_fault_entry_metadata mem_page_fault_entry_metadata;
+#else
+const struct mem_page_fault_entry_metadata mem_page_fault_entry_metadata = {
+ &mem_page_fault_log_count,
+ &mem_page_fault_log_pid,
+ PAGE_SIZE,
+ MAP_KERNEL_START,
+ PF_USER,
+ -EINVAL,
+ -ECANCELED,
+ -ERANGE,
+ -EBUSY,
+ SIGSEGV,
+ SIGBUS,
+ SIGSTOP,
+ SEGV_MAPERR,
+ SEGV_ACCERR,
+ BUS_ADRERR,
+ CPUTIME_MODE_U2K,
+ CPUTIME_MODE_K2K_IN,
+ CPUTIME_MODE_K2U,
+ CPUTIME_MODE_K2K_OUT,
+#ifdef ENABLE_TOFU
+ 1,
+#else
+ 0,
+#endif
+#ifdef ENABLE_FUGAKU_DEBUG
+ 1,
+#else
+ 0,
+#endif
+ PTATTR_WRITABLE|PTATTR_ACTIVE,
+ {&mem_page_fault_debug_0,
+#ifdef ENABLE_TOFU
+ &mem_page_fault_debug_1,
+#else
+ 0,
+#endif
+ &mem_page_fault_debug_2,&mem_page_fault_debug_3},27,
+ unhandled_page_fault,
+#ifdef ENABLE_TOFU
+ ihk_mc_linux_pt_virt_to_phys_size,
+#else
+ 0,
+#endif
+#ifdef ENABLE_TOFU
+ ihk_mc_get_linux_kernel_pgt,ihk_mc_clear_kernel_range,
+#else
+ 0,0,
+#endif
+#ifdef ENABLE_FUGAKU_DEBUG
+ do_kill,
+#else
+ 0,
+#endif
+#ifdef PROFILE_ENABLE
+ profile_event_add,PROFILE_page_fault
+#else
+ 0,0
+#endif
+};
+#endif /* exact original Ccallback/configuration data fallback */
+extern void page_fault_handler(void *fault_addr,uint64_t reason,void *regs);
+#else
 static void page_fault_handler(void *fault_addr, uint64_t reason, void *regs)
 {
 	struct thread *thread = get_this_cpu_local_var()->current;
@@ -4834,7 +5426,39 @@ out:
 #endif // PROFILE_ENABLE
 	return;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+/* Original private state addresses and genuine compiler header geometry only. */
+struct mem_page_allocator_initialization_metadata {
+ unsigned long *pa_start_slot;
+ unsigned long *pa_end_slot;
+ char *kernel_end;
+ unsigned long page_size;
+ unsigned long page_mask;
+ int attached_mic;
+ int reserved_count_type;
+ int reserved_start_type;
+ int reserved_end_type;
+};
+extern char _end[];
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_page_allocator_initialization_metadata
+mem_page_allocator_initialization_metadata;
+#else
+const struct mem_page_allocator_initialization_metadata
+mem_page_allocator_initialization_metadata = {
+ &pa_start,&pa_end,_end,PAGE_SIZE,PAGE_MASK,
+#ifdef ATTACHED_MIC
+ 1,
+#else
+ 0,
+#endif
+ IHK_MC_NR_RESERVED_AREAS,IHK_MC_RESERVED_AREA_START,IHK_MC_RESERVED_AREA_END
+};
+#endif /* exact original Ccallback/configuration data fallback */
+extern struct ihk_page_allocator_desc *page_allocator_init(uint64_t start,uint64_t end);
+#else
 static struct ihk_page_allocator_desc *page_allocator_init(uint64_t start, 
 		uint64_t end)
 {
@@ -4888,14 +5512,24 @@ static struct ihk_page_allocator_desc *page_allocator_init(uint64_t start,
 
 	return pa_allocator;
 }
+#endif
 
 #ifdef MCKERNEL_RUST_MEM_HELPERS
+#if defined(MCKERNEL_RUST_MEM_HELPERS)
+int mem_numa_get_node_info_bridge(int node, int *linux_numa_id,
+		int *type);
+#else
 static int mem_numa_get_node_info_bridge(int node, int *linux_numa_id,
 		int *type)
 {
 	return ihk_mc_get_numa_node(node, linux_numa_id, type);
 }
+#endif
 
+#if defined(MCKERNEL_RUST_MEM_HELPERS) && defined(IHK_RBTREE_ALLOCATOR)
+void mem_numa_node_init_bridge(struct ihk_mc_numa_node *node,
+		int rbtree_allocator);
+#else
 static void mem_numa_node_init_bridge(struct ihk_mc_numa_node *node,
 		int rbtree_allocator)
 {
@@ -4916,7 +5550,12 @@ static void mem_numa_node_init_bridge(struct ihk_mc_numa_node *node,
 	}
 #endif
 }
+#endif
 
+#if defined(MCKERNEL_RUST_MEM_HELPERS) && defined(IHK_RBTREE_ALLOCATOR)
+void mem_numa_add_free_pages_bridge(struct ihk_mc_numa_node *node,
+		unsigned long start, unsigned long len);
+#else
 static void mem_numa_add_free_pages_bridge(struct ihk_mc_numa_node *node,
 		unsigned long start, unsigned long len)
 {
@@ -4928,68 +5567,78 @@ static void mem_numa_add_free_pages_bridge(struct ihk_mc_numa_node *node,
 	(void)len;
 #endif
 }
+#endif
 
-static void *mem_numa_page_allocator_init_bridge(unsigned long start,
-		unsigned long end)
-{
-	return page_allocator_init(start, end);
-}
+extern void *mem_numa_page_allocator_init_bridge(unsigned long start,
+		unsigned long end);
 
-static void mem_numa_list_allocator_bridge(void *allocator,
-		struct ihk_mc_numa_node *node)
-{
-	struct ihk_page_allocator_desc *desc = allocator;
+extern void mem_numa_list_allocator_bridge(void *allocator,
+		struct ihk_mc_numa_node *node);
 
-	if (desc && node)
-		list_add_tail(&desc->list, &node->allocators);
-}
-
+#if defined(MCKERNEL_RUST_MEM_HELPERS)
+unsigned long mem_numa_pagealloc_count_bridge(void *allocator);
+#else
 static unsigned long mem_numa_pagealloc_count_bridge(void *allocator)
 {
 	return allocator ? ihk_pagealloc_count(allocator) : 0;
 }
+#endif
 
-static void mem_numa_rusage_total_add_bridge(unsigned long bytes)
-{
-	rusage_total_memory_add(bytes);
-}
+extern void mem_numa_rusage_total_add_bridge(unsigned long bytes);
 
-static void mem_numa_init_log_bridge(int event, int node, int linux_numa_id,
-		int type, unsigned long start, unsigned long end,
-		unsigned long bytes, int pages, int rbtree_allocator)
-{
-	switch (event) {
-	case MEM_NUMA_INIT_LOG_CHUNK:
-		kprintf("Physical memory: 0x%lx - 0x%lx, %lu bytes, "
-				"%d pages available @ NUMA: %d\n",
-				start, end, bytes, pages, node);
-		break;
-	case MEM_NUMA_INIT_LOG_NODE:
+/* Data-only selected C preprocessor fact; no runtime provider/getter. */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const int mem_numa_log_rbtree_enabled;
+#else
+const int mem_numa_log_rbtree_enabled =
 #ifdef IHK_RBTREE_ALLOCATOR
-		if (rbtree_allocator) {
-			kprintf("NUMA: %d, Linux NUMA: %d, type: %d, "
-					"available bytes: %lu, pages: %d\n",
-					node, linux_numa_id, type, bytes, pages);
-			break;
-		}
+ 1;
+#else
+ 0;
 #endif
-		(void)rbtree_allocator;
-		kprintf("NUMA: %d, Linux NUMA: %d, type: %d\n",
-				node, linux_numa_id, type);
-		break;
-	default:
-		break;
-	}
-}
+#endif /* exact original C configuration fallback */
+extern void mem_numa_init_log_bridge(int event, int node, int linux_numa_id,
+		int type, unsigned long start, unsigned long end,
+		unsigned long bytes, int pages, int rbtree_allocator);
 
-static void mem_numa_panic_bridge(int node)
-{
-	kprintf("%s: error: obtaining NUMA info for node %d\n",
-			"numa_init", node);
-	panic("");
-}
+extern void mem_numa_panic_bridge(int node);
 #endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+/* Immutable original callback owners and real Cconfiguration; no Cgetter. */
+struct mem_numa_initialization_metadata {
+ struct ihk_mc_numa_node *nodes;
+ int rbtree_allocator;
+ mem_get_numa_node_info_fn_t get_node_info;
+ mem_get_memory_chunk_fn_t get_chunk;
+ mem_numa_node_init_fn_t init_node;
+ mem_numa_add_free_pages_fn_t add_free;
+ mem_page_allocator_init_fn_t init_allocator;
+ mem_numa_list_allocator_fn_t list_allocator;
+ mem_pagealloc_count_fn_t count_pages;
+ mem_rusage_total_add_fn_t add_total;
+ mem_numa_init_log_fn_t log;
+ mem_numa_panic_fn_t panic_fn;
+};
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_numa_initialization_metadata mem_numa_initialization_metadata;
+#else
+const struct mem_numa_initialization_metadata mem_numa_initialization_metadata = {
+ memory_nodes,
+#ifdef IHK_RBTREE_ALLOCATOR
+ 1,
+#else
+ 0,
+#endif
+ mem_numa_get_node_info_bridge,ihk_mc_get_memory_chunk,
+ mem_numa_node_init_bridge,mem_numa_add_free_pages_bridge,
+ mem_numa_page_allocator_init_bridge,mem_numa_list_allocator_bridge,
+ mem_numa_pagealloc_count_bridge,mem_numa_rusage_total_add_bridge,
+ mem_numa_init_log_bridge,mem_numa_panic_bridge
+};
+#endif /* exact original Ccallback/configuration data fallback */
+extern void numa_init(void);
+#else
 static void numa_init(void)
 {
 #ifdef MCKERNEL_RUST_MEM_HELPERS
@@ -5098,38 +5747,49 @@ static void numa_init(void)
 	}
 #endif
 }
-
-#ifdef MCKERNEL_RUST_MEM_HELPERS
-static struct node_distance *mem_numa_distances_alloc_bridge(int npages,
-		unsigned long flag)
-{
-	return _ihk_mc_alloc_aligned_pages_node(npages, PAGE_P2ALIGN, flag, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
-}
-
-static void mem_numa_distances_alloc_fail_log_bridge(int node)
-{
-	kprintf("%s: error: allocating nodes_by_distance\n",
-			"numa_distances_init");
-}
-
-static void mem_numa_distances_log_bridge(int node,
-		struct node_distance *distances, int nr_nodes)
-{
-	char buf[1024];
-	char *pbuf = buf;
-	int j;
-
-	pbuf += snprintf(pbuf, 1024, "NUMA %d distances: ", node);
-	for (j = 0; j < nr_nodes; ++j) {
-		pbuf += snprintf(pbuf, 1024 - (pbuf - buf),
-				"%d (%d), ",
-				distances[j].id,
-				distances[j].distance);
-	}
-	kprintf("%s\n", buf);
-}
 #endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+/* Actual C diagnostic provenance at the replaced allocation callsite. */
+struct mem_numa_distance_allocation_origin {
+ const char *file;
+ int line;
+};
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_numa_distance_allocation_origin mem_numa_distance_allocation_origin;
+#else
+const struct mem_numa_distance_allocation_origin mem_numa_distance_allocation_origin = {
+ __FILE__, __LINE__
+};
+#endif /* exact original Cprovenance metadata fallback */
+extern struct node_distance *mem_numa_distances_alloc_bridge(int npages,
+		unsigned long flag);
+
+extern void mem_numa_distances_alloc_fail_log_bridge(int node);
+
+extern void mem_numa_distances_log_bridge(int node,
+		struct node_distance *distances, int nr_nodes);
+#endif
+
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+struct mem_distance_entry_metadata {
+ mem_get_nr_numa_nodes_fn_t nr_nodes;
+ mem_numa_distance_alloc_fn_t alloc;
+ mem_numa_distance_fn_t distance;
+ mem_numa_distance_alloc_fail_log_fn_t alloc_fail;
+ mem_numa_distance_log_fn_t log;
+};
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_distance_entry_metadata mem_distance_entry_metadata;
+#else
+const struct mem_distance_entry_metadata mem_distance_entry_metadata = {
+ ihk_mc_get_nr_numa_nodes, mem_numa_distances_alloc_bridge,
+ ihk_mc_get_numa_distance, mem_numa_distances_alloc_fail_log_bridge,
+ mem_numa_distances_log_bridge
+};
+#endif /* exact original Ccallback/configuration data fallback */
+void numa_distances_init(void);
+#else
 static void numa_distances_init()
 {
 #ifdef MCKERNEL_RUST_MEM_HELPERS
@@ -5204,7 +5864,32 @@ static void numa_distances_init()
 	}
 #endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+struct mem_numa_sysfs_show_geometry {
+ int rbtree;
+ unsigned int kb_shift;
+};
+_Static_assert(__builtin_types_compatible_p(
+ typeof(((struct ihk_mc_numa_node *)0)->nr_pages),unsigned long),"node pages word ABI");
+_Static_assert(__builtin_types_compatible_p(
+ typeof(((struct ihk_mc_numa_node *)0)->nr_free_pages),unsigned long),"node free pages word ABI");
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_numa_sysfs_show_geometry mem_numa_sysfs_show_geometry;
+#else
+const struct mem_numa_sysfs_show_geometry mem_numa_sysfs_show_geometry = {
+#ifdef IHK_RBTREE_ALLOCATOR
+ 1,
+#else
+ 0,
+#endif
+ PAGE_SHIFT-10
+};
+#endif /* exact original C configuration fallback */
+extern ssize_t numa_sysfs_show_meminfo(struct sysfs_ops *ops,
+ void *instance,void *buf,size_t size);
+#else
 static ssize_t numa_sysfs_show_meminfo(struct sysfs_ops *ops,
 		void *instance, void *buf, size_t size)
 {
@@ -5230,11 +5915,32 @@ static ssize_t numa_sysfs_show_meminfo(struct sysfs_ops *ops,
 
 	return len;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct sysfs_ops numa_sysfs_meminfo;
+#else
 struct sysfs_ops numa_sysfs_meminfo = {
 	.show = &numa_sysfs_show_meminfo,
 };
+#endif /* exact original C-owned data fallback */
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+/* These static owners outlive all registered sysfs callbacks. */
+_Static_assert(PATH_MAX == 4096, "actual Rust ABI PATH_MAX");
+struct mem_numa_sysfs_registration_metadata {
+ struct sysfs_ops *ops;
+ struct ihk_mc_numa_node *nodes;
+};
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_numa_sysfs_registration_metadata mem_numa_sysfs_registration_metadata;
+#else
+const struct mem_numa_sysfs_registration_metadata mem_numa_sysfs_registration_metadata = {
+ &numa_sysfs_meminfo,memory_nodes
+};
+#endif /* exact original Caddress/data fallback */
+extern void numa_sysfs_setup(void);
+#else
 void numa_sysfs_setup(void) {
 	int i;
 	int error;
@@ -5251,6 +5957,7 @@ void numa_sysfs_setup(void) {
 		}
 	}
 }
+#endif
 
 #define PHYS_PAGE_HASH_SHIFT	(10)
 #define PHYS_PAGE_HASH_SIZE     (1 << PHYS_PAGE_HASH_SHIFT)
@@ -5260,8 +5967,16 @@ void numa_sysfs_setup(void) {
  * Page hash only tracks pages that are mapped in non-anymous mappings
  * and thus it is initially empty.
  */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct list_head page_hash[PHYS_PAGE_HASH_SIZE];
+#else
 struct list_head page_hash[PHYS_PAGE_HASH_SIZE];
+#endif /* exact original C-owned data fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern ihk_spinlock_t page_hash_locks[PHYS_PAGE_HASH_SIZE];
+#else
 ihk_spinlock_t page_hash_locks[PHYS_PAGE_HASH_SIZE];
+#endif /* exact original C-owned data fallback */
 
 typedef unsigned long (*page_hash_lock_fn_t)(unsigned long lock_addr);
 typedef void (*page_hash_unlock_fn_t)(unsigned long lock_addr,
@@ -5359,27 +6074,65 @@ int page_unmap_body_result(struct page *page,
 #define PAGE_UNMAP_PUBLIC_BRIDGE static
 #endif
 
+#ifdef MCKERNEL_RUST_PAGE_HELPERS
+extern unsigned long page_hash_lock_bridge(unsigned long lock_addr);
+#else
 PAGE_UNMAP_PUBLIC_BRIDGE unsigned long page_hash_lock_bridge(unsigned long lock_addr)
 {
 	return ihk_mc_spinlock_lock((ihk_spinlock_t *)lock_addr);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_PAGE_HELPERS
+extern void page_hash_unlock_bridge(unsigned long lock_addr,
+		unsigned long flags);
+#else
 PAGE_UNMAP_PUBLIC_BRIDGE void page_hash_unlock_bridge(unsigned long lock_addr,
 		unsigned long flags)
 {
 	ihk_mc_spinlock_unlock((ihk_spinlock_t *)lock_addr, flags);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_PAGE_HELPERS
+extern void page_hash_lock_init_bridge(unsigned long lock_addr);
+#else
 static void page_hash_lock_init_bridge(unsigned long lock_addr)
 {
 	ihk_mc_spinlock_init((ihk_spinlock_t *)lock_addr);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_PAGE_HELPERS
+extern struct page *page_hash_alloc_bridge(unsigned long size, int flag);
+/* Diagnostic origin belongs to this former allocation callback site. */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const char page_hash_alloc_file[209];
+extern const int page_hash_alloc_line;
+#else
+const char page_hash_alloc_file[] = __FILE__; const int page_hash_alloc_line = __LINE__;
+#endif /* exact original Cprovenance metadata fallback */
+#else
 static struct page *page_hash_alloc_bridge(unsigned long size, int flag)
 {
 	return kmalloc_tracked(size, flag, __FILE__, __LINE__);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_PAGE_HELPERS
+/* Geometry from the existing arrays; no C accessor or runtime initialization. */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const int page_init_hash_bucket_count;
+#else
+const int page_init_hash_bucket_count = PHYS_PAGE_HASH_SIZE;
+#endif /* exact original C configuration fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const unsigned long page_init_hash_head_stride;
+#else
+const unsigned long page_init_hash_head_stride = sizeof(page_hash[0]);
+#endif /* exact original C configuration fallback */
+extern void page_init(void);
+#else
 static void page_init(void)
 {
 	page_hash_tables_init_body_result((unsigned long)page_hash,
@@ -5387,7 +6140,11 @@ static void page_init(void)
 			sizeof(page_hash[0]), sizeof(page_hash_locks[0]),
 			page_hash_lock_init_bridge, page_hash_bucket_init_result);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_PAGE_HELPERS
+extern int page_hash_count_pages(void);
+#else
 static int page_hash_count_pages(void)
 {
 	return page_hash_count_pages_body_result((unsigned long)page_hash,
@@ -5396,7 +6153,11 @@ static int page_hash_count_pages(void)
 			page_hash_lock_bridge, page_hash_unlock_bridge,
 			page_hash_count_all_result);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_PAGE_HELPERS
+extern struct page *phys_to_page(uintptr_t phys);
+#else
 struct page *phys_to_page(uintptr_t phys)
 {
 	return phys_to_page_lookup_body_result(phys,
@@ -5406,6 +6167,7 @@ struct page *phys_to_page(uintptr_t phys)
 			page_hash_unlock_bridge,
 			phys_to_page_lookup_orchestrate_result);
 }
+#endif
 
 #ifdef MCKERNEL_RUST_PAGE_HELPERS
 extern uintptr_t page_to_phys(struct page *page);
@@ -5816,12 +6578,19 @@ int page_unmap_body_result(struct page *page,
  * NOTE: page->count is zero for new pages and the caller
  * is responsible to increase it.
  */
+#ifdef MCKERNEL_RUST_PAGE_HELPERS
+extern void phys_to_page_insert_hash_log_bridge(uint64_t phys);
+#else
 static void phys_to_page_insert_hash_log_bridge(uint64_t phys)
 {
 	(void)phys;
 	kprintf("%s: error allocating page\n", "phys_to_page_insert_hash");
 }
+#endif
 
+#ifdef MCKERNEL_RUST_PAGE_HELPERS
+extern struct page *phys_to_page_insert_hash(uint64_t phys);
+#else
 struct page *phys_to_page_insert_hash(uint64_t phys)
 {
 	return phys_to_page_insert_hash_body_result(phys,
@@ -5833,7 +6602,57 @@ struct page *phys_to_page_insert_hash(uint64_t phys)
 			phys_to_page_insert_hash_orchestrate_result,
 			phys_to_page_insert_hash_log_bridge);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_PAGE_HELPERS
+/* GCC9 actual12case ddebug witness: size32/align8/flagsbyte27. DefaultGCC14
+ * still requires its actual ABI consumer. These are compiler-origin mutable
+ * __verbose records, not runtime C getters or copies of their flag state.
+ * The genuine dkprintf macro leaves fmt NULL; preserve that field behavior.
+ */
+_Static_assert(sizeof(struct ddebug) == 32 && _Alignof(struct ddebug) == 8,
+               "actual GCC9 ddebug shape");
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug page_unmap_debug_enter;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+page_unmap_debug_enter = {
+ .file = __FILE__, .func = "page_unmap_log_bridge",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug page_unmap_debug_still_mapped;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+page_unmap_debug_still_mapped = {
+ .file = __FILE__, .func = "page_unmap_log_bridge",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug page_unmap_debug_unmapped;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+page_unmap_debug_unmapped = {
+ .file = __FILE__, .func = "page_unmap_log_bridge",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+struct page_unmap_debug_metadata {
+ struct ddebug *records[3];
+ unsigned long flags_byte;
+};
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct page_unmap_debug_metadata page_unmap_debug_metadata;
+#else
+const struct page_unmap_debug_metadata page_unmap_debug_metadata = {
+ { &page_unmap_debug_enter, &page_unmap_debug_still_mapped, &page_unmap_debug_unmapped },
+ 27
+};
+#endif /* exact original immutable Caddress metadata fallback */
+void page_unmap_log_bridge(int event, struct page *page, int ret);
+#else
 PAGE_UNMAP_PUBLIC_BRIDGE void page_unmap_log_bridge(int event, struct page *page, int ret)
 {
 	switch (event) {
@@ -5854,12 +6673,25 @@ PAGE_UNMAP_PUBLIC_BRIDGE void page_unmap_log_bridge(int event, struct page *page
 		break;
 	}
 }
+#endif
 
 #ifdef MCKERNEL_RUST_PAGE_HELPERS
 /* Immutable C ABI geometry; the public wrapper executes in Rust. */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const int page_unmap_hash_shift;
+#else
 const int page_unmap_hash_shift = PAGE_SHIFT;
+#endif /* exact original C configuration fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const unsigned long page_unmap_hash_mask;
+#else
 const unsigned long page_unmap_hash_mask = PHYS_PAGE_HASH_MASK;
+#endif /* exact original C configuration fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const unsigned long page_unmap_lock_stride;
+#else
 const unsigned long page_unmap_lock_stride = sizeof(page_hash_locks[0]);
+#endif /* exact original C configuration fallback */
 int page_unmap(struct page *page);
 #else
 int page_unmap(struct page *page)
@@ -5872,6 +6704,24 @@ int page_unmap(struct page *page)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+/* Immutable addresses of existing private allocator and original providers. */
+struct mem_register_kmalloc_metadata {
+ struct ihk_mc_pa_ops *allocator;
+ mem_register_alloc_fn_t debug_alloc;
+ mem_register_free_fn_t debug_free;
+ mem_register_alloc_fn_t base_alloc;
+ mem_register_free_fn_t base_free;
+};
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_register_kmalloc_metadata mem_register_kmalloc_metadata;
+#else
+const struct mem_register_kmalloc_metadata mem_register_kmalloc_metadata = {
+ &allocator, __kmalloc, __kfree, ___kmalloc, ___kfree
+};
+#endif /* exact original Ccallback/configuration data fallback */
+void register_kmalloc(void);
+#else
 void register_kmalloc(void)
 {
 #ifdef MCKERNEL_RUST_MEM_HELPERS
@@ -5888,61 +6738,68 @@ void register_kmalloc(void)
 	}
 #endif
 }
-
-static struct ihk_page_allocator_desc *vmap_allocator;
-
-#ifdef MCKERNEL_RUST_MEM_HELPERS
-void *mem_vmap_allocator_bridge(void)
-{
-	return vmap_allocator;
-}
-
-static void *mem_vmap_init_bridge(unsigned long start, unsigned long size,
-		unsigned long unit)
-{
-	return ihk_pagealloc_init(start, size, unit);
-}
-
-static int mem_pt_prepare_map_bridge(page_table_t pt, void *virt,
-		unsigned long size, enum ihk_mc_pt_prepare_flag flag)
-{
-	return ihk_mc_pt_prepare_map(pt, virt, size, flag);
-}
-
-unsigned long mem_vmap_alloc_bridge(void *desc, int npages,
-		int p2align)
-{
-	return ihk_pagealloc_alloc(desc, npages, p2align);
-}
-
-void mem_vmap_free_bridge(void *desc, unsigned long address,
-		int npages)
-{
-	ihk_pagealloc_free(desc, address, npages);
-}
-
-int mem_pt_set_page_bridge(page_table_t pt, void *virt,
-		unsigned long phys, enum ihk_mc_pt_attribute attr)
-{
-	return ihk_mc_pt_set_page(pt, virt, phys, attr);
-}
-
-int mem_pt_clear_page_bridge(page_table_t pt, void *virt)
-{
-	return ihk_mc_pt_clear_page(pt, virt);
-}
-
-void mem_flush_tlb_single_bridge(unsigned long addr)
-{
-	flush_tlb_single(addr);
-}
-
-void mem_barrier_bridge(void)
-{
-	barrier();
-}
 #endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ihk_page_allocator_desc *vmap_allocator;
+#else
+static struct ihk_page_allocator_desc *vmap_allocator;
+#endif /* exact original C-owned data fallback */
+
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+/* Existing C-owned pointer slot; immutable address/configuration only. */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ihk_page_allocator_desc **const mem_vmap_allocator_slot;
+#else
+struct ihk_page_allocator_desc **const mem_vmap_allocator_slot = &vmap_allocator;
+#endif /* exact original Caddress/data fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const unsigned long mem_vmap_init_start;
+#else
+const unsigned long mem_vmap_init_start = MAP_VMAP_START;
+#endif /* exact original C configuration fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const unsigned long mem_vmap_init_size;
+#else
+const unsigned long mem_vmap_init_size = MAP_VMAP_SIZE;
+#endif /* exact original C configuration fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const unsigned long mem_vmap_init_unit;
+#else
+const unsigned long mem_vmap_init_unit = PAGE_SIZE;
+#endif /* exact original C configuration fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const int mem_vmap_init_first_level;
+#else
+const int mem_vmap_init_first_level = IHK_MC_PT_FIRST_LEVEL;
+#endif /* exact original C configuration fallback */
+extern void *mem_vmap_allocator_bridge(void);
+
+extern void *mem_vmap_init_bridge(unsigned long start, unsigned long size,
+		unsigned long unit);
+
+extern int mem_pt_prepare_map_bridge(page_table_t pt, void *virt,
+		unsigned long size, enum ihk_mc_pt_prepare_flag flag);
+
+extern unsigned long mem_vmap_alloc_bridge(void *desc, int npages,
+		int p2align);
+
+extern void mem_vmap_free_bridge(void *desc, unsigned long address,
+		int npages);
+
+extern int mem_pt_set_page_bridge(page_table_t pt, void *virt,
+		unsigned long phys, enum ihk_mc_pt_attribute attr);
+
+extern int mem_pt_clear_page_bridge(page_table_t pt, void *virt);
+
+extern void mem_flush_tlb_single_bridge(unsigned long addr);
+
+extern void mem_barrier_bridge(void);
+#endif
+
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern void virtual_allocator_init(void);
+#else
 static void virtual_allocator_init(void)
 {
 #ifdef MCKERNEL_RUST_MEM_HELPERS
@@ -5958,6 +6815,7 @@ static void virtual_allocator_init(void)
 	                      IHK_MC_PT_FIRST_LEVEL);
 #endif
 }
+#endif
 
 #ifdef MCKERNEL_RUST_MEM_HELPERS
 extern void *ihk_mc_map_virtual(unsigned long phys, int npages,
@@ -6017,14 +6875,22 @@ void ihk_mc_unmap_virtual(void *va, int npages)
 #ifdef ATTACHED_MIC
 /* moved from ihk_knc/manycore/mic/setup.c */
 /*static*/ void *sbox_base = (void *)SBOX_BASE;
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern void sbox_write(int offset, unsigned int value);
+#else
 void sbox_write(int offset, unsigned int value)
 {
 	*(volatile unsigned int *)(sbox_base + offset) = value;
 }
+#endif
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern unsigned int sbox_read(int offset);
+#else
 unsigned int sbox_read(int offset)
 {
 	return *(volatile unsigned int *)(sbox_base + offset);
 }
+#endif
 
 /* insert entry into map which maps mic physical address to host physical address */
 
@@ -6067,17 +6933,54 @@ void ihk_mc_clean_micpa(void){
 #endif
 
 #ifdef MCKERNEL_RUST_MEM_HELPERS
-static void mem_rusage_init_panic_bridge(void)
-{
-	panic("rusage_init: PANIC: ihk_mc_get_cpu_info returned NULL");
-}
+extern void mem_rusage_init_panic_bridge(void);
 
-static void mem_rusage_init_log_bridge(unsigned long total_memory)
-{
-	dkprintf("%s: rusage.total_memory=%ld\n", "rusage_init", total_memory);
-}
+/* Actual GCC9 layout witness22c1 binds flags byte27; GCC14 still OPEN. */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_rusage_init_debug_record;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_rusage_init_debug_record = {
+ .file = __FILE__, .func = "mem_rusage_init_log_bridge",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct {
+ struct ddebug *records[1];
+ unsigned long flags_byte;
+} mem_rusage_init_debug_metadata;
+#else
+const struct {
+ struct ddebug *records[1];
+ unsigned long flags_byte;
+} mem_rusage_init_debug_metadata = {{&mem_rusage_init_debug_record},27};
+#endif /* exact original immutable Caddress metadata fallback */
+extern void mem_rusage_init_log_bridge(unsigned long total_memory);
 #endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+struct mem_rusage_entry_metadata {
+ unsigned long state_bytes;
+ mem_get_cpu_info_fn_t cpu_info;
+ mem_get_nr_numa_nodes_fn_t nr_nodes;
+ mem_get_ns_per_tsc_fn_t ns_per_tsc;
+ mem_virt_to_phys_fn_t virt_to_phys;
+ mem_set_rusage_fn_t set_rusage;
+ mem_lifecycle_void_fn_t panic_fn;
+ mem_rusage_init_log_fn_t log;
+};
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_rusage_entry_metadata mem_rusage_entry_metadata;
+#else
+const struct mem_rusage_entry_metadata mem_rusage_entry_metadata = {
+ sizeof(struct rusage_global), ihk_mc_get_cpu_info,
+ ihk_mc_get_nr_numa_nodes, ihk_mc_get_ns_per_tsc, virt_to_phys,
+ ihk_set_rusage, mem_rusage_init_panic_bridge, mem_rusage_init_log_bridge
+};
+#endif /* exact original Ccallback/configuration data fallback */
+void rusage_init(void);
+#else
 static void rusage_init()
 {
 #ifdef MCKERNEL_RUST_MEM_HELPERS
@@ -6103,113 +7006,70 @@ static void rusage_init()
 	dkprintf("%s: rusage.total_memory=%ld\n", __FUNCTION__, rusage.total_memory);
 #endif
 }
+#endif
 
 extern void monitor_init(void);
 
 #ifdef MCKERNEL_RUST_MEM_HELPERS
-struct ihk_mc_pa_ops *mem_init_allocator_bridge(void)
-{
-	return &allocator;
-}
+extern struct ihk_mc_pa_ops *mem_init_allocator_bridge(void);
 
-unsigned long mem_init_page_fault_handler_bridge(void)
-{
-	return (unsigned long)page_fault_handler;
-}
-
-unsigned long mem_init_query_free_handler_bridge(void)
-{
-	return (unsigned long)&query_free_mem_handler;
-}
-
-int *mem_init_anon_on_demand_bridge(void)
-{
-	return &anon_on_demand;
-}
-
-int *mem_init_xpmem_remote_bridge(void)
-{
-	return &xpmem_page_in_remote_on_attach;
-}
-
-int *mem_init_hugetlbfs_on_demand_bridge(void)
-{
-#ifdef ENABLE_FUGAKU_HACKS
-	return &hugetlbfs_on_demand;
+/* Immutable addresses preserve private C state/handler owners, no C getters. */
+struct mem_static_boot_address_metadata {
+ unsigned long page_fault_handler_address;
+ unsigned long query_free_handler_address;
+ int *anon_on_demand_slot;
+ int *xpmem_remote_slot;
+ int *hugetlbfs_on_demand_slot;
+};
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_static_boot_address_metadata mem_static_boot_address_metadata;
 #else
-	return NULL;
+const struct mem_static_boot_address_metadata mem_static_boot_address_metadata = {
+ (unsigned long)page_fault_handler, (unsigned long)&query_free_mem_handler,
+ &anon_on_demand, &xpmem_page_in_remote_on_attach,
+#ifdef ENABLE_FUGAKU_HACKS
+ &hugetlbfs_on_demand
+#else
+ NULL
 #endif
-}
+};
+#endif /* exact original Caddress/data fallback */
+extern unsigned long mem_init_page_fault_handler_bridge(void);
 
-void mem_monitor_init_bridge(void)
-{
-	monitor_init();
-}
+extern unsigned long mem_init_query_free_handler_bridge(void);
 
-void mem_rusage_init_bridge(void)
-{
-	rusage_init();
-}
+extern int *mem_init_anon_on_demand_bridge(void);
 
-void mem_numa_init_bridge(void)
-{
-	numa_init();
-}
+extern int *mem_init_xpmem_remote_bridge(void);
 
-void mem_page_init_bridge(void)
-{
-	page_init();
-}
+extern int *mem_init_hugetlbfs_on_demand_bridge(void);
 
-void mem_virtual_allocator_init_bridge(void)
-{
-	virtual_allocator_init();
-}
+extern void mem_monitor_init_bridge(void);
 
-char *mem_find_command_line_bridge(char *name)
-{
-	return find_command_line(name);
-}
+extern void mem_rusage_init_bridge(void);
 
-void mem_numa_distances_init_bridge(void)
-{
-	numa_distances_init();
-}
+extern void mem_numa_init_bridge(void);
 
-void mem_set_page_fault_handler_bridge(unsigned long handler)
-{
-	ihk_mc_set_page_fault_handler(
-			(void (*)(void *, uint64_t, void *))handler);
-}
+extern void mem_page_init_bridge(void);
 
-int mem_get_vector_bridge(int type)
-{
-	return ihk_mc_get_vector((enum ihk_mc_gv_type)type);
-}
+extern void mem_virtual_allocator_init_bridge(void);
 
-int mem_register_interrupt_handler_bridge(int vector,
-		unsigned long handler)
-{
-	return ihk_mc_register_interrupt_handler(vector,
-			(struct ihk_mc_interrupt_handler *)handler);
-}
+extern char *mem_find_command_line_bridge(char *name);
 
-void mem_init_log_bridge(int event)
-{
-	switch (event) {
-	case MEM_INIT_LOG_ANON_ON_DEMAND:
-		kprintf("Demand paging on ANONYMOUS mappings enabled.\n");
-		break;
-	case MEM_INIT_LOG_XPMEM_PAGE_IN_REMOTE:
-		kprintf("Demand paging on XPMEM remote mappings enabled.\n");
-		break;
-	case MEM_INIT_LOG_HUGETLBFS_ON_DEMAND:
-		kprintf("Demand paging on hugetlbfs mappings enabled.\n");
-		break;
-	default:
-		break;
-	}
-}
+extern void mem_numa_distances_init_bridge(void);
+
+extern void mem_set_page_fault_handler_bridge(unsigned long handler);
+
+/* Exact supported enum provider ABI; reject incompatible frontend options. */
+_Static_assert(__builtin_types_compatible_p(enum ihk_mc_gv_type, unsigned int),
+ "ihk_mc_gv_type unsigned int ABI");
+_Static_assert(sizeof(enum ihk_mc_gv_type) == 4, "ihk_mc_gv_type width ABI");
+extern int mem_get_vector_bridge(int type);
+
+extern int mem_register_interrupt_handler_bridge(int vector,
+		unsigned long handler);
+
+extern void mem_init_log_bridge(int event);
 #endif
 
 #ifdef MCKERNEL_RUST_MEM_HELPERS
@@ -6267,14 +7127,38 @@ void mem_init(void)
 #define KMALLOC_TRACK_HASH_SIZE     (1 << KMALLOC_TRACK_HASH_SHIFT)
 #define KMALLOC_TRACK_HASH_MASK     (KMALLOC_TRACK_HASH_SIZE - 1)
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct list_head kmalloc_track_hash[KMALLOC_TRACK_HASH_SIZE];
+#else
 struct list_head kmalloc_track_hash[KMALLOC_TRACK_HASH_SIZE];
+#endif /* exact original C-owned data fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern ihk_spinlock_t kmalloc_track_hash_locks[KMALLOC_TRACK_HASH_SIZE];
+#else
 ihk_spinlock_t kmalloc_track_hash_locks[KMALLOC_TRACK_HASH_SIZE];
+#endif /* exact original C-owned data fallback */
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct list_head kmalloc_addr_hash[KMALLOC_TRACK_HASH_SIZE];
+#else
 struct list_head kmalloc_addr_hash[KMALLOC_TRACK_HASH_SIZE];
+#endif /* exact original C-owned data fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern ihk_spinlock_t kmalloc_addr_hash_locks[KMALLOC_TRACK_HASH_SIZE];
+#else
 ihk_spinlock_t kmalloc_addr_hash_locks[KMALLOC_TRACK_HASH_SIZE];
+#endif /* exact original C-owned data fallback */
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern int kmalloc_track_initialized;
+#else
 int kmalloc_track_initialized = 0;
+#endif /* exact original C-owned data fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern int kmalloc_runcount;
+#else
 int kmalloc_runcount = 0;
+#endif /* exact original C-owned data fallback */
 
 struct kmalloc_track_addr_entry {
 	void *addr;
@@ -6348,91 +7232,91 @@ extern int mem_kmalloc_init_body_result(char **memdebug_slot,
 		mem_find_command_line_fn_t find_command_line_fn,
 		mem_kmalloc_track_spin_init_fn_t spin_init_fn);
 
-void *mem_kmalloc_track_base_alloc_bridge(int size, ihk_mc_ap_flag flag)
-{
-	return ___kmalloc(size, flag);
-}
+extern void *mem_kmalloc_track_base_alloc_bridge(int size, ihk_mc_ap_flag flag);
 
-void mem_kmalloc_track_base_free_bridge(void *ptr)
-{
-	___kfree(ptr);
-}
+extern void mem_kmalloc_track_base_free_bridge(void *ptr);
 
-unsigned long mem_kmalloc_track_lock_bridge(unsigned long lock_addr)
-{
-	return ihk_mc_spinlock_lock((ihk_spinlock_t *)lock_addr);
-}
+extern unsigned long mem_kmalloc_track_lock_bridge(unsigned long lock_addr);
 
-void mem_kmalloc_track_unlock_bridge(unsigned long lock_addr,
-		unsigned long irqflags)
-{
-	ihk_mc_spinlock_unlock((ihk_spinlock_t *)lock_addr, irqflags);
-}
+extern void mem_kmalloc_track_unlock_bridge(unsigned long lock_addr,
+		unsigned long irqflags);
 
-void mem_kmalloc_track_spin_init_bridge(unsigned long lock_addr)
-{
-	ihk_mc_spinlock_init((ihk_spinlock_t *)lock_addr);
-}
+extern void mem_kmalloc_track_spin_init_bridge(unsigned long lock_addr);
 
-void mem_kmalloc_track_log_bridge(int event, void *ptr, char *file,
-		int line, int size)
-{
-	switch (event) {
-	case KMALLOC_TRACK_LOG_ENTRY_ALLOC_FAILED:
-		kprintf("%s: ERROR: allocating tracking entry\n", "_kmalloc");
-		break;
-	case KMALLOC_TRACK_LOG_FILE_ALLOC_FAILED:
-		kprintf("%s: ERROR: allocating file string\n", "_kmalloc");
-		break;
-	case KMALLOC_TRACK_LOG_ENTRY_ADDED:
-		dkprintf("%s entry %s:%d size: %d added\n", "_kmalloc",
-				file, line, size);
-		break;
-	case KMALLOC_TRACK_LOG_ADDR_ALLOC_FAILED:
-		kprintf("%s: ERROR: allocating addr entry\n", "_kmalloc");
-		break;
-	case KMALLOC_TRACK_LOG_ADDR_ADDED:
-		dkprintf("%s addr_entry %p added\n", "_kmalloc", ptr);
-		break;
-	case KMALLOC_TRACK_LOG_ADDR_REMOVED:
-		dkprintf("%s addr_entry %p removed\n", "_kfree", ptr);
-		break;
-	case KMALLOC_TRACK_LOG_ENTRY_REMOVED:
-		dkprintf("%s entry %s:%d size: %d removed\n", "_kfree",
-				file, line, size);
-		break;
-	default:
-		break;
-	}
-}
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_kmalloc_track_log_bridge_debug_record_0;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_kmalloc_track_log_bridge_debug_record_0 = {
+ .file = __FILE__, .func = "mem_kmalloc_track_log_bridge",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_kmalloc_track_log_bridge_debug_record_1;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_kmalloc_track_log_bridge_debug_record_1 = {
+ .file = __FILE__, .func = "mem_kmalloc_track_log_bridge",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_kmalloc_track_log_bridge_debug_record_2;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_kmalloc_track_log_bridge_debug_record_2 = {
+ .file = __FILE__, .func = "mem_kmalloc_track_log_bridge",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_kmalloc_track_log_bridge_debug_record_3;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_kmalloc_track_log_bridge_debug_record_3 = {
+ .file = __FILE__, .func = "mem_kmalloc_track_log_bridge",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+struct mem_kmalloc_track_log_bridge_debug_metadata {
+ struct ddebug *records[4];
+ unsigned long flags_byte;
+};
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_kmalloc_track_log_bridge_debug_metadata mem_kmalloc_track_log_bridge_debug_metadata;
+#else
+const struct mem_kmalloc_track_log_bridge_debug_metadata mem_kmalloc_track_log_bridge_debug_metadata = {
+ { &mem_kmalloc_track_log_bridge_debug_record_0, &mem_kmalloc_track_log_bridge_debug_record_1, &mem_kmalloc_track_log_bridge_debug_record_2, &mem_kmalloc_track_log_bridge_debug_record_3 }, 27
+};
+#endif /* exact original immutable Caddress metadata fallback */
+extern void mem_kmalloc_track_log_bridge(int event, void *ptr, char *file,
+		int line, int size);
 
-void mem_kmalloc_invalid_free_bridge(void *ptr, char *file, int line)
-{
-	kprintf("%s: ERROR: kfree()ing invalid pointer at %s:%d\n",
-			"_kfree", file, line);
-	panic("panic");
-}
+extern void mem_kmalloc_invalid_free_bridge(void *ptr, char *file, int line);
 
-void mem_kmalloc_leak_log_bridge(int event, void *ptr, char *file,
-		int line, int size, int count, int runcount)
-{
-	switch (event) {
-	case MEM_TRACK_LEAK_DETAIL:
-		(void)count;
-		dkprintf("%s memory leak: %p @ %s:%d size: %d runcount: %d\n",
-				"kmalloc_memcheck", ptr, file, line, size,
-				runcount);
-		break;
-	case MEM_TRACK_LEAK_SUMMARY:
-		(void)ptr;
-		kprintf("%s memory leak: %s:%d size: %d cnt: %d, runcount: %d\n",
-				"kmalloc_memcheck", file, line, size, count,
-				runcount);
-		break;
-	default:
-		break;
-	}
-}
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_kmalloc_leak_log_bridge_debug_record_0;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_kmalloc_leak_log_bridge_debug_record_0 = {
+ .file = __FILE__, .func = "mem_kmalloc_leak_log_bridge",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+struct mem_kmalloc_leak_log_bridge_debug_metadata {
+ struct ddebug *records[1];
+ unsigned long flags_byte;
+};
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_kmalloc_leak_log_bridge_debug_metadata mem_kmalloc_leak_log_bridge_debug_metadata;
+#else
+const struct mem_kmalloc_leak_log_bridge_debug_metadata mem_kmalloc_leak_log_bridge_debug_metadata = {
+ { &mem_kmalloc_leak_log_bridge_debug_record_0 }, 27
+};
+#endif /* exact original immutable Caddress metadata fallback */
+extern void mem_kmalloc_leak_log_bridge(int event, void *ptr, char *file,
+		int line, int size, int count, int runcount);
 
 static struct cpu_local_var *mem_get_this_cpu_local_var_bridge(void)
 {
@@ -6440,6 +7324,9 @@ static struct cpu_local_var *mem_get_this_cpu_local_var_bridge(void)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+void kmalloc_init(void);
+#else
 void kmalloc_init(void)
 {
 #ifdef MCKERNEL_RUST_MEM_HELPERS
@@ -6475,6 +7362,7 @@ void kmalloc_init(void)
 	}
 #endif
 }
+#endif
 
 /* NOTE: Hash lock must be held */
 #ifdef MCKERNEL_RUST_MEM_HELPERS
@@ -6746,15 +7634,41 @@ void kmalloc_memcheck(void)
 #endif
 
 /* Redirection routines registered in alloc structure */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+struct mem_tracked_redirection_source {
+ const char *file;
+ int line;
+};
+#endif
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+/* Compiler-origin diagnostics at the replaced C call site; not Rust file!/line!. */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_tracked_redirection_source mem_tracked_alloc_redirection_source;
+#else
+const struct mem_tracked_redirection_source mem_tracked_alloc_redirection_source = { __FILE__, __LINE__ };
+#endif /* exact original Cprovenance metadata fallback */
+void *__kmalloc(int size, ihk_mc_ap_flag flag);
+#else
 void *__kmalloc(int size, ihk_mc_ap_flag flag)
 {
 	return kmalloc_tracked(size, flag, __FILE__, __LINE__);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+/* Compiler-origin diagnostics at the replaced C call site; not Rust file!/line!. */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_tracked_redirection_source mem_tracked_free_redirection_source;
+#else
+const struct mem_tracked_redirection_source mem_tracked_free_redirection_source = { __FILE__, __LINE__ };
+#endif /* exact original Cprovenance metadata fallback */
+void __kfree(void *ptr);
+#else
 void __kfree(void *ptr)
 {
 	kfree_tracked(ptr, __FILE__, __LINE__);
 }
+#endif
 
 
 #ifdef MCKERNEL_RUST_MEM_HELPERS
@@ -6856,43 +7770,21 @@ reiterate:
 #endif
 
 #ifdef MCKERNEL_RUST_MEM_HELPERS
-static unsigned long mem_kmalloc_irq_save_bridge(void)
-{
-	return cpu_disable_interrupt_save();
-}
+extern unsigned long mem_kmalloc_irq_save_bridge(void);
 
-static void mem_kmalloc_irq_restore_bridge(unsigned long flags)
-{
-	cpu_restore_interrupt(flags);
-}
+extern void mem_kmalloc_irq_restore_bridge(unsigned long flags);
 
-static void *mem_kmalloc_alloc_pages_bridge(int npages, ihk_mc_ap_flag flag,
-		int is_user)
-{
-	return ___ihk_mc_alloc_pages(npages, flag, is_user);
-}
+extern void *mem_kmalloc_alloc_pages_bridge(int npages, ihk_mc_ap_flag flag,
+		int is_user);
 
-static void *mem_kmalloc_get_cpu_local_var_bridge(int cpu)
-{
-	return get_cpu_local_var(cpu);
-}
+extern void *mem_kmalloc_get_cpu_local_var_bridge(int cpu);
 
-static unsigned long mem_kmalloc_remote_lock_bridge(unsigned long lock_addr)
-{
-	return ihk_mc_spinlock_lock((ihk_spinlock_t *)lock_addr);
-}
+extern unsigned long mem_kmalloc_remote_lock_bridge(unsigned long lock_addr);
 
-static void mem_kmalloc_remote_unlock_bridge(unsigned long lock_addr,
-		unsigned long flags)
-{
-	ihk_mc_spinlock_unlock((ihk_spinlock_t *)lock_addr, flags);
-}
+extern void mem_kmalloc_remote_unlock_bridge(unsigned long lock_addr,
+		unsigned long flags);
 
-static void mem_kmalloc_corruption_bridge(void *ptr)
-{
-	kprintf("%s: memory corruption at address 0x%p\n", "___kfree", ptr);
-	panic("panic");
-}
+extern void mem_kmalloc_corruption_bridge(void *ptr);
 #endif
 
 #define KMALLOC_CACHE_LOG_NO_CACHE 1
@@ -6900,30 +7792,14 @@ static void mem_kmalloc_corruption_bridge(void *ptr)
 #define KMALLOC_CACHE_LOG_PREALLOC 3
 
 #ifdef MCKERNEL_RUST_MEM_HELPERS
-void *kmalloc_cache_alloc_bridge(size_t size, ihk_mc_ap_flag flag)
-{
-	return kmalloc_tracked(size, flag, __FILE__, __LINE__);
-}
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_tracked_redirection_source mem_cache_alloc_redirection_source;
+#else
+const struct mem_tracked_redirection_source mem_cache_alloc_redirection_source = { __FILE__, __LINE__ };
+#endif /* exact original Cprovenance metadata fallback */
+void *kmalloc_cache_alloc_bridge(size_t size, ihk_mc_ap_flag flag);
 
-void kmalloc_cache_log(int event, void *ptr)
-{
-	switch (event) {
-	case KMALLOC_CACHE_LOG_NO_CACHE:
-		kprintf("%s: WARNING: no cache for 0x%lx\n",
-				"kmalloc_cache_free", ptr);
-		break;
-	case KMALLOC_CACHE_LOG_ALLOC_FAILED:
-		kprintf("%s: ERROR: allocating cache element\n",
-				"kmalloc_cache_prealloc");
-		break;
-	case KMALLOC_CACHE_LOG_PREALLOC:
-		kprintf("%s: calling pre-alloc for 0x%lx...\n",
-				"kmalloc_cache_alloc", ptr);
-		break;
-	default:
-		break;
-	}
-}
+extern void kmalloc_cache_log(int event, void *ptr);
 #else
 void kmalloc_cache_free(void *elem)
 {
@@ -7014,6 +7890,9 @@ retry:
 #endif
 
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern void kmalloc_consolidate_free_list(void);
+#else
 void kmalloc_consolidate_free_list(void)
 {
 #ifdef MCKERNEL_RUST_MEM_HELPERS
@@ -7040,12 +7919,42 @@ void kmalloc_consolidate_free_list(void)
 	ihk_mc_spinlock_unlock(&get_this_cpu_local_var()->remote_free_list_lock, irqflags);
 #endif
 }
+#endif
 
 #define KMALLOC_MIN_SHIFT   (5)
 #define KMALLOC_MIN_SIZE    (1 << KMALLOC_MIN_SHIFT)
 #define KMALLOC_MIN_MASK    (KMALLOC_MIN_SIZE - 1)
 
 /* Actual low-level allocation routines */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+/* Immutable original provider addresses and real compiler field geometry. */
+struct mem_lowlevel_kmalloc_metadata {
+ unsigned long remote_lock_offset;
+ unsigned long remote_list_offset;
+ mem_kmalloc_irq_save_fn_t irq_save;
+ mem_kmalloc_irq_restore_fn_t irq_restore;
+ mem_kmalloc_alloc_pages_fn_t alloc_pages;
+ mem_kmalloc_get_cpu_local_var_fn_t get_cpu_local;
+ mem_kmalloc_spinlock_fn_t remote_lock;
+ mem_kmalloc_spinunlock_fn_t remote_unlock;
+ mem_kmalloc_corruption_fn_t corruption;
+};
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_lowlevel_kmalloc_metadata mem_lowlevel_kmalloc_metadata;
+#else
+const struct mem_lowlevel_kmalloc_metadata mem_lowlevel_kmalloc_metadata = {
+ __builtin_offsetof(struct cpu_local_var, remote_free_list_lock),
+ __builtin_offsetof(struct cpu_local_var, remote_free_list),
+ mem_kmalloc_irq_save_bridge, mem_kmalloc_irq_restore_bridge,
+ mem_kmalloc_alloc_pages_bridge, mem_kmalloc_get_cpu_local_var_bridge,
+ mem_kmalloc_remote_lock_bridge, mem_kmalloc_remote_unlock_bridge,
+ mem_kmalloc_corruption_bridge
+};
+#endif /* exact original Ccallback/configuration data fallback */
+#endif
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+void *___kmalloc(int size, ihk_mc_ap_flag flag);
+#else
 static void *___kmalloc(int size, ihk_mc_ap_flag flag)
 {
 #ifdef MCKERNEL_RUST_MEM_HELPERS
@@ -7113,7 +8022,11 @@ split_and_return:
 	goto split_and_return;
 #endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+void ___kfree(void *ptr);
+#else
 static void ___kfree(void *ptr)
 {
 #ifdef MCKERNEL_RUST_MEM_HELPERS
@@ -7162,8 +8075,12 @@ static void ___kfree(void *ptr)
 	cpu_restore_interrupt(kmalloc_irq_flags);
 #endif
 }
+#endif
 
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+void ___kmalloc_print_free_list(struct list_head *list);
+#else
 void ___kmalloc_print_free_list(struct list_head *list)
 {
 	struct kmalloc_header *chunk_iter;
@@ -7180,6 +8097,7 @@ void ___kmalloc_print_free_list(struct list_head *list)
 	__kprintf("%s: ] \n", __FUNCTION__);
 	kprintf_unlock(irqflags);
 }
+#endif
 
 #ifdef MCKERNEL_RUST_MEM_HELPERS
 extern int is_mckernel_memory(unsigned long start, unsigned long end);
@@ -7224,84 +8142,104 @@ int is_mckernel_memory(unsigned long start, unsigned long end)
 #endif /* MCKERNEL_RUST_MEM_HELPERS */
 
 #ifdef MCKERNEL_RUST_MEM_HELPERS
-int mem_num_processors_bridge(void)
-{
-	return num_processors;
-}
+extern int mem_num_processors_bridge(void);
 
-int mem_dump_level_bridge(void)
-{
-	return ihk_mc_get_dump_level();
-}
+extern int mem_dump_level_bridge(void);
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+struct ihk_dump_page_set *mem_get_dump_page_set_bridge(void);
+#else
 struct ihk_dump_page_set *mem_get_dump_page_set_bridge(void)
 {
 	return ihk_mc_get_dump_page_set();
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+struct ihk_dump_page *mem_get_dump_page_bridge(void);
+#else
 struct ihk_dump_page *mem_get_dump_page_bridge(void)
 {
 	return ihk_mc_get_dump_page();
 }
+#endif
 
-struct list_head *mem_process_hash_lists_bridge(void)
-{
-	struct resource_set *rset = get_this_cpu_local_var()->resource_set;
-	struct process_hash *phash = rset->process_hash;
+extern struct list_head *mem_process_hash_lists_bridge(void);
 
-	return phash ? phash->list : NULL;
-}
+/* Same actual GCC9 structddebug layout proven by actual12case witness22c1. */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct ddebug mem_dump_complete_debug_record;
+#else
+static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+mem_dump_complete_debug_record = {
+ .file = __FILE__, .func = "mem_dump_complete_log_bridge",
+ .line = __LINE__, .flags = DDEBUG_DEFAULT,
+};
+#endif /* exact original Cdescriptor fallback */
+struct mem_dump_complete_debug_metadata {
+ struct ddebug *record;
+ unsigned long flags_byte;
+};
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern const struct mem_dump_complete_debug_metadata mem_dump_complete_debug_metadata;
+#else
+const struct mem_dump_complete_debug_metadata mem_dump_complete_debug_metadata = {
+ &mem_dump_complete_debug_record, 27
+};
+#endif /* exact original immutable Caddress metadata fallback */
+extern void mem_dump_complete_log_bridge(void);
 
-void mem_dump_complete_log_bridge(void)
-{
-	dkprintf("%s: IHK_DUMP_PAGE_SET_COMPLETED\n",
-			"ihk_mc_query_mem_areas");
-}
-
-void mem_dump_warn_bridge(int kind, unsigned long map_count,
+extern void mem_dump_warn_bridge(int kind, unsigned long map_count,
 		unsigned long map_index, unsigned long map_start,
-		unsigned long map_end, unsigned long page_index)
-{
-	if (kind == 0) {
-		kprintf("%s:free page is out of range(max:%d): %ld "
-				"(map_start:0x%lx, map_end:0x%lx) k(0x%lx)\n",
-				"ihk_mc_query_mem_free_page", (int)map_count,
-				map_index, map_start, map_end, page_index);
-	} else {
-		kprintf("%s:user page is out of range(max:%d): %ld "
-				"(map_start:0x%lx, map_end:0x%lx) j(0x%lx)\n",
-				"ihk_mc_get_mem_user_page", (int)map_count,
-				map_index, map_start, map_end, page_index);
-	}
-}
+		unsigned long map_end, unsigned long page_index);
 
 #ifdef IHK_RBTREE_ALLOCATOR
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+unsigned long mem_dump_free_pages_bridge(int node);
+#else
 unsigned long mem_dump_free_pages_bridge(int node)
 {
 	return mem_dump_free_pages_public_result(memory_nodes, node,
 			ihk_mc_get_nr_numa_nodes);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+void *mem_dump_first_free_chunk_bridge(int node);
+#else
 void *mem_dump_first_free_chunk_bridge(int node)
 {
 	return mem_dump_first_free_chunk_public_result(memory_nodes, node,
 			ihk_mc_get_nr_numa_nodes);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+void *mem_dump_next_free_chunk_bridge(void *chunk);
+#else
 void *mem_dump_next_free_chunk_bridge(void *chunk)
 {
 	return mem_dump_next_free_chunk_result(chunk);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+unsigned long mem_dump_chunk_addr_bridge(void *chunk);
+#else
 unsigned long mem_dump_chunk_addr_bridge(void *chunk)
 {
 	return mem_dump_chunk_addr_result(chunk);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+unsigned long mem_dump_chunk_size_bridge(void *chunk);
+#else
 unsigned long mem_dump_chunk_size_bridge(void *chunk)
 {
 	return mem_dump_chunk_size_result(chunk);
 }
+#endif
 #endif
 #endif
 
@@ -7344,6 +8282,9 @@ void ihk_mc_query_mem_areas(void){
 }
 #endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+void ihk_mc_clear_dump_page_completion(void);
+#else
 void ihk_mc_clear_dump_page_completion(void)
 {
 #ifdef MCKERNEL_RUST_MEM_HELPERS
@@ -7355,6 +8296,7 @@ void ihk_mc_clear_dump_page_completion(void)
 	dump_page_set->completion_flag = IHK_DUMP_PAGE_SET_INCOMPLETE;
 #endif
 }
+#endif
 
 #ifdef MCKERNEL_RUST_MEM_HELPERS
 void ihk_mc_query_mem_user_page(void *dump_pase_info);
@@ -7463,6 +8405,9 @@ void ihk_mc_query_mem_free_page(void *dump_pase_info) {
 }
 #endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+int ihk_mc_chk_page_address(pte_t mem_addr);
+#else
 int ihk_mc_chk_page_address(pte_t mem_addr){
 #ifdef MCKERNEL_RUST_MEM_HELPERS
 	return mem_chk_page_address_result(mem_addr, ihk_mc_get_nr_memory_chunks,
@@ -7481,7 +8426,11 @@ int ihk_mc_chk_page_address(pte_t mem_addr){
 	return -1;
 #endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+int ihk_mc_get_mem_user_page(void *arg0, page_table_t pt, pte_t *ptep, void *pgaddr, int pgshift);
+#else
 int ihk_mc_get_mem_user_page(void *arg0, page_table_t pt, pte_t *ptep, void *pgaddr, int pgshift)
 {
 #ifdef MCKERNEL_RUST_MEM_HELPERS
@@ -7550,6 +8499,7 @@ int ihk_mc_get_mem_user_page(void *arg0, page_table_t pt, pte_t *ptep, void *pga
 	return 0;
 #endif
 }
+#endif
 
 #ifdef MCKERNEL_RUST_MEM_HELPERS
 extern pte_t *ihk_mc_pt_lookup_fault_pte(struct process_vm *vm, void *virt,

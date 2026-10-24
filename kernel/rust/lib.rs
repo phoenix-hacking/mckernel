@@ -73,6 +73,7 @@ mod ubsan;
 mod waitq;
 mod x86_coredump;
 mod x86_cpu_helpers;
+mod x86_cpu_log_providers;
 mod x86_local;
 mod x86_memory_helpers;
 mod x86_memory_loggers;

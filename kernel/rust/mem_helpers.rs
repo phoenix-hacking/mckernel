@@ -50,25 +50,6 @@ unsafe extern "C" {
     fn ihk_mc_get_processor_id() -> CInt;
     fn ihk_mc_get_vector(type_: CInt) -> CInt;
     fn ihk_mc_interrupt_cpu(cpu: CInt, vector: CInt) -> CInt;
-    fn mem_num_processors_bridge() -> CInt;
-    fn mem_dump_level_bridge() -> CInt;
-    fn mem_get_dump_page_set_bridge() -> *mut IhkDumpPageSet;
-    fn mem_get_dump_page_bridge() -> *mut IhkDumpPage;
-    fn mem_process_hash_lists_bridge() -> *mut AbiListHead;
-    fn mem_dump_complete_log_bridge();
-    fn mem_dump_free_pages_bridge(node: CInt) -> CULong;
-    fn mem_dump_first_free_chunk_bridge(node: CInt) -> *mut c_void;
-    fn mem_dump_next_free_chunk_bridge(chunk: *mut c_void) -> *mut c_void;
-    fn mem_dump_chunk_addr_bridge(chunk: *mut c_void) -> CULong;
-    fn mem_dump_chunk_size_bridge(chunk: *mut c_void) -> CULong;
-    fn mem_dump_warn_bridge(
-        kind: CInt,
-        map_count: CULong,
-        map_index: CULong,
-        map_start: CULong,
-        map_end: CULong,
-        page_index: CULong,
-    );
     fn visit_pte_range_safe(
         pt: *mut c_void,
         start: *mut c_void,
@@ -78,115 +59,9 @@ unsafe extern "C" {
         visitor: Option<MemPteVisitorFn>,
         arg: *mut c_void,
     ) -> CInt;
-    fn ihk_mc_get_mem_user_page(
-        arg0: *mut c_void,
-        pt: *mut c_void,
-        ptep: *mut CULong,
-        pgaddr: *mut c_void,
-        pgshift: CInt,
-    ) -> CInt;
     fn get_this_cpu_local_var() -> *mut CpuLocalVar;
-    #[allow(clashing_extern_declarations)]
-    fn phys_to_page(phys: CULong) -> *mut MemPage;
     fn kprintf(format: *const i8, ...) -> CInt;
-    fn kmalloc_cache_alloc_bridge(size: SizeT, flag: CULong) -> *mut c_void;
-    fn kmalloc_cache_log(event: CInt, ptr: *mut c_void);
     fn eventfd(type_: CInt);
-    fn mem_pagealloc_track_base_alloc_bridge(
-        npages: CInt,
-        p2align: CInt,
-        flag: CULong,
-        node: CInt,
-        is_user: CInt,
-        virt_addr: CULong,
-    ) -> *mut c_void;
-    fn mem_pagealloc_track_base_free_bridge(ptr: *mut c_void, npages: CInt, is_user: CInt);
-    fn mem_pagealloc_track_meta_alloc_bridge(size: CInt, flag: CULong) -> *mut c_void;
-    fn mem_pagealloc_track_meta_free_bridge(ptr: *mut c_void);
-    fn mem_pagealloc_track_lock_bridge(lock_addr: CULong) -> CULong;
-    fn mem_pagealloc_track_unlock_bridge(lock_addr: CULong, irqflags: CULong);
-    fn mem_pagealloc_track_noirq_lock_bridge(lock_addr: CULong);
-    fn mem_pagealloc_track_noirq_unlock_bridge(lock_addr: CULong);
-    fn mem_pagealloc_track_spin_init_bridge(lock_addr: CULong);
-    fn mem_pagealloc_track_log_bridge(
-        event: CInt,
-        ptr: *mut c_void,
-        file: *mut i8,
-        line: CInt,
-        npages: CInt,
-    );
-    fn mem_pagealloc_invalid_free_bridge(ptr: *mut c_void, file: *mut i8, line: CInt);
-    fn mem_pagealloc_invalid_size_bridge(
-        ptr: *mut c_void,
-        npages: CInt,
-        alloc_npages: CInt,
-        file: *mut i8,
-        line: CInt,
-    );
-    fn mem_pagealloc_leak_log_bridge(
-        event: CInt,
-        ptr: *mut c_void,
-        file: *mut i8,
-        line: CInt,
-        size: CInt,
-        count: CInt,
-        runcount: CInt,
-    );
-    fn mem_init_allocator_bridge() -> *mut IhkMcPaOps;
-    fn mem_init_page_fault_handler_bridge() -> CULong;
-    fn mem_init_query_free_handler_bridge() -> CULong;
-    fn mem_init_anon_on_demand_bridge() -> *mut CInt;
-    fn mem_init_xpmem_remote_bridge() -> *mut CInt;
-    fn mem_init_hugetlbfs_on_demand_bridge() -> *mut CInt;
-    fn mem_monitor_init_bridge();
-    fn mem_rusage_init_bridge();
-    fn mem_numa_init_bridge();
-    fn mem_set_page_fault_handler_bridge(handler: CULong);
-    fn mem_get_vector_bridge(type_: CInt) -> CInt;
-    fn mem_register_interrupt_handler_bridge(vector: CInt, handler: CULong) -> CInt;
-    fn mem_page_init_bridge();
-    fn mem_virtual_allocator_init_bridge();
-    fn mem_find_command_line_bridge(name: *mut i8) -> *mut i8;
-    fn mem_numa_distances_init_bridge();
-    fn mem_init_log_bridge(event: CInt);
-    fn mem_kmalloc_track_base_alloc_bridge(size: CInt, flag: CULong) -> *mut c_void;
-    fn mem_kmalloc_track_base_free_bridge(ptr: *mut c_void);
-    fn mem_kmalloc_track_lock_bridge(lock_addr: CULong) -> CULong;
-    fn mem_kmalloc_track_unlock_bridge(lock_addr: CULong, irqflags: CULong);
-    fn mem_kmalloc_track_spin_init_bridge(lock_addr: CULong);
-    fn mem_kmalloc_track_log_bridge(
-        event: CInt,
-        ptr: *mut c_void,
-        file: *mut i8,
-        line: CInt,
-        size: CInt,
-    );
-    fn mem_kmalloc_invalid_free_bridge(ptr: *mut c_void, file: *mut i8, line: CInt);
-    fn mem_kmalloc_leak_log_bridge(
-        event: CInt,
-        ptr: *mut c_void,
-        file: *mut i8,
-        line: CInt,
-        size: CInt,
-        count: CInt,
-        runcount: CInt,
-    );
-    fn mem_pending_free_pages_bridge() -> *mut AbiListHead;
-    fn mem_begin_free_pages_pending_panic_bridge();
-    fn mem_pending_free_bridge(phys: CULong, npages: CInt, is_user: CInt);
-    fn mem_finish_free_pages_pending_panic_bridge();
-    fn mem_vmap_allocator_bridge() -> *mut c_void;
-    fn mem_vmap_alloc_bridge(desc: *mut c_void, npages: CInt, p2align: CInt) -> CULong;
-    fn mem_vmap_free_bridge(desc: *mut c_void, address: CULong, npages: CInt);
-    fn mem_pt_set_page_bridge(
-        pt: *mut c_void,
-        virt: *mut c_void,
-        phys: CULong,
-        attr: IhkMcPtAttribute,
-    ) -> CInt;
-    fn mem_pt_clear_page_bridge(pt: *mut c_void, virt: *mut c_void) -> CInt;
-    fn mem_flush_tlb_single_bridge(addr: CULong);
-    fn mem_barrier_bridge();
 
     static mut sysctl_overcommit_memory: CInt;
     #[link_name = "memdebug"]
@@ -5658,6 +5533,37 @@ pub unsafe extern "C" fn ihk_mc_pt_lookup_fault_pte(
     }
 }
 
+/// Exact existing physical-page hash IRQ-save ticket-lock provider.
+/// Caller retains the initialized aligned lock; saved flags are returned unchanged.
+#[no_mangle]
+pub unsafe extern "C" fn page_hash_lock_bridge(lock_addr: CULong) -> CULong {
+    unsafe {
+        crate::spinlock_helpers::__ihk_mc_spinlock_lock(
+            lock_addr as *mut crate::spinlock_helpers::IhkSpinlock,
+        )
+    }
+}
+
+/// Same release/preempt-enable/IRQ-restore provider and exact captured flags.
+#[no_mangle]
+pub unsafe extern "C" fn page_hash_unlock_bridge(lock_addr: CULong, flags: CULong) {
+    unsafe {
+        crate::spinlock_helpers::__ihk_mc_spinlock_unlock(
+            lock_addr as *mut crate::spinlock_helpers::IhkSpinlock, flags,
+        )
+    }
+}
+
+/// Exact existing lock initialization; no allocator or bucket ownership changes.
+#[no_mangle]
+pub unsafe extern "C" fn page_hash_lock_init_bridge(lock_addr: CULong) {
+    unsafe {
+        crate::spinlock_helpers::ihk_mc_spinlock_init(
+            lock_addr as *mut crate::spinlock_helpers::IhkSpinlock,
+        )
+    }
+}
+
 /// Preserve the original single-address stack-local handoff to the array entry.
 ///
 /// # Safety
@@ -6861,4 +6767,5835 @@ mod pending_free_batch_tests {
             assert_eq!(bad.list.prev, &raw mut source);
         }
     }
+}
+
+// C data-only diagnostic origin at the former callback callsite. This does
+// not acquire, allocate, dereference a Page or create another C provider.
+unsafe extern "C" {
+    static page_hash_alloc_file: [i8; 1];
+    static page_hash_alloc_line: CInt;
+}
+
+/// Exact page-hash allocation adapter to the existing tracked allocator.
+/// The C callback's unsigned-long -> int size conversion and signed-int ->
+/// unsigned-long allocation-flag conversion are intentional and unchanged.
+#[no_mangle]
+pub unsafe extern "C" fn page_hash_alloc_bridge(
+    size: CULong,
+    flag: CInt,
+) -> *mut crate::page_helpers::Page {
+    unsafe {
+        kmalloc_tracked(
+            size as CInt,
+            flag as CULong,
+            core::ptr::addr_of!(page_hash_alloc_file).cast::<i8>() as *mut i8,
+            page_hash_alloc_line,
+        ).cast::<crate::page_helpers::Page>()
+    }
+}
+
+// Existing C arrays and immutable ABI geometry. Each [u8;1] names only its
+// first byte; the C count/strides define bounds, never a Rust-invented extent.
+unsafe extern "C" {
+    #[link_name = "page_hash"]
+    static PAGE_INIT_HASH_FIRST: [u8; 1];
+    #[link_name = "page_hash_locks"]
+    static PAGE_INIT_LOCK_FIRST: [u8; 1];
+    static page_init_hash_bucket_count: CInt;
+    static page_init_hash_head_stride: SizeT;
+    // Already exported for the existing page_unmap public Rust consumer.
+    static page_unmap_lock_stride: SizeT;
+    // Existing selected provider, declared using the existing helper's usize
+    // address ABI (unsigned long on this supported x86_64 profile).
+    #[link_name = "page_hash_lock_init_bridge"]
+    fn page_init_lock_callback(lock_addr: usize);
+}
+
+/// Initialize the existing page hash through the unchanged Rust orchestrator.
+/// Same synchronous boot-owned arrays/callbacks/order; C void wrapper ignored
+/// the helper's result, so this entry intentionally discards it as well.
+#[no_mangle]
+pub unsafe extern "C" fn page_init() {
+    unsafe {
+        let _ = crate::page_helpers::page_hash_tables_init_body_result(
+            core::ptr::addr_of!(PAGE_INIT_HASH_FIRST) as usize,
+            core::ptr::addr_of!(PAGE_INIT_LOCK_FIRST) as usize,
+            page_init_hash_bucket_count,
+            page_init_hash_head_stride,
+            page_unmap_lock_stride,
+            Some(page_init_lock_callback),
+            Some(crate::page_helpers::page_hash_bucket_init_result),
+        );
+    }
+}
+
+// Same already-selected Rust provider symbols, declared with the existing
+// page_helpers usize address ABI (unsigned long on supported x86_64).
+unsafe extern "C" {
+    #[link_name = "page_hash_lock_bridge"]
+    fn page_count_lock_callback(lock_addr: usize) -> CULong;
+    #[link_name = "page_hash_unlock_bridge"]
+    fn page_count_unlock_callback(lock_addr: usize, flags: CULong);
+}
+
+/// Count through the unchanged Rust orchestrator and exact existing geometry.
+#[no_mangle]
+pub unsafe extern "C" fn page_hash_count_pages() -> CInt {
+    unsafe {
+        crate::page_helpers::page_hash_count_pages_body_result(
+            core::ptr::addr_of!(PAGE_INIT_HASH_FIRST) as usize,
+            core::ptr::addr_of!(PAGE_INIT_LOCK_FIRST) as usize,
+            page_init_hash_bucket_count,
+            page_init_hash_head_stride,
+            page_unmap_lock_stride,
+            Some(page_count_lock_callback),
+            Some(page_count_unlock_callback),
+            Some(crate::page_helpers::page_hash_count_all_result),
+        )
+    }
+}
+
+unsafe extern "C" {
+    // Existing statically owned 512-node array. The provider's runtime node
+    // count remains the original validity bound; no new extent/null policy.
+    static mem_query_free_nodes: *mut MemNumaNode;
+}
+
+/// Complete supported IHK_RBTREE_ALLOCATOR accounting callback.
+/// Reuse the existing typed guard/read helper; narrowing to int matches the
+/// original unsigned-long counter assignment to the callback's int result.
+#[no_mangle]
+pub unsafe extern "C" fn mem_query_free_node_pages_bridge(node: CInt) -> CInt {
+    unsafe {
+        mem_dump_free_pages_public_result(
+            mem_query_free_nodes,
+            node,
+            Some(ihk_mc_get_nr_numa_nodes),
+        ) as CInt
+    }
+}
+
+/// Exact ordinary (not dkprintf) total-accounting event and int argument.
+#[no_mangle]
+pub unsafe extern "C" fn mem_query_free_total_log_bridge(pages: CInt) {
+    unsafe { kprintf(b"McKernel free pages in total: %d\n\0".as_ptr().cast::<i8>(), pages); }
+}
+
+/// Exact page-hash accounting event, preserving signed count and newline.
+#[no_mangle]
+pub unsafe extern "C" fn mem_query_free_page_hash_log_bridge(pages: CInt) {
+    unsafe { kprintf(b"Page hash: %d pages active\n\0".as_ptr().cast::<i8>(), pages); }
+}
+
+/// Same already-Rust tracked-allocator checker. The interrupt consumer still
+/// decides whether memdebug enables it; no new lock, scan or lifetime action.
+#[no_mangle]
+pub unsafe extern "C" fn mem_query_free_kmalloc_memcheck_bridge() {
+    unsafe { kmalloc_memcheck() }
+}
+
+/// Declarative C addresses retain the existing private allocator/provider owners.
+#[repr(C)]
+struct MemRegisterKmallocMetadata {
+    allocator: *mut IhkMcPaOps,
+    debug_alloc: Option<MemRegisterAllocFn>,
+    debug_free: Option<MemRegisterFreeFn>,
+    base_alloc: Option<MemRegisterAllocFn>,
+    base_free: Option<MemRegisterFreeFn>,
+}
+unsafe extern "C" {
+    static mem_register_kmalloc_metadata: MemRegisterKmallocMetadata;
+}
+
+/// Same selected C entry: sample memdebug, then assign alloc and free in order.
+#[no_mangle]
+pub unsafe extern "C" fn register_kmalloc() {
+    unsafe {
+        let metadata = &mem_register_kmalloc_metadata;
+        let _ = mem_register_kmalloc_result(
+            metadata.allocator, (!MEMDEBUG.is_null()) as CInt,
+            metadata.debug_alloc, metadata.debug_free,
+            metadata.base_alloc, metadata.base_free,
+        );
+    }
+}
+
+/// Immutable original C-source diagnostic identity, never Rust file!/line!.
+#[repr(C)]
+struct MemTrackedRedirectionSource {
+    file: *const i8,
+    line: CInt,
+}
+unsafe extern "C" {
+    static mem_tracked_alloc_redirection_source: MemTrackedRedirectionSource;
+    static mem_tracked_free_redirection_source: MemTrackedRedirectionSource;
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn __kmalloc(size: CInt, flag: CULong) -> *mut c_void {
+    unsafe {
+        let source = &mem_tracked_alloc_redirection_source;
+        kmalloc_tracked(size, flag, source.file.cast_mut(), source.line)
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn __kfree(ptr: *mut c_void) {
+    unsafe {
+        let source = &mem_tracked_free_redirection_source;
+        kfree_tracked(ptr, source.file.cast_mut(), source.line)
+    }
+}
+
+unsafe extern "C" {
+    static mem_cache_alloc_redirection_source: MemTrackedRedirectionSource;
+}
+/// Exact existing C size_t-to-int conversion at tracked allocation boundary.
+#[no_mangle]
+pub unsafe extern "C" fn kmalloc_cache_alloc_bridge(size: SizeT, flag: CULong) -> *mut c_void {
+    unsafe {
+        let source = &mem_cache_alloc_redirection_source;
+        kmalloc_tracked(size as CInt, flag, source.file.cast_mut(), source.line)
+    }
+}
+
+#[repr(C)]
+struct MemLowlevelKmallocMetadata {
+    remote_lock_offset: CULong,
+    remote_list_offset: CULong,
+    irq_save: Option<MemKmallocIrqSaveFn>,
+    irq_restore: Option<MemKmallocIrqRestoreFn>,
+    alloc_pages: Option<MemKmallocAllocPagesFn>,
+    get_cpu_local: Option<MemKmallocGetCpuLocalVarFn>,
+    remote_lock: Option<MemKmallocSpinLockFn>,
+    remote_unlock: Option<MemKmallocSpinUnlockFn>,
+    corruption: Option<MemKmallocCorruptionFn>,
+}
+unsafe extern "C" {
+    static mem_lowlevel_kmalloc_metadata: MemLowlevelKmallocMetadata;
+}
+
+/// Original selected C computes its CPU-local free-list before the body call.
+#[no_mangle]
+pub unsafe extern "C" fn ___kmalloc(size: CInt, flag: CULong) -> *mut c_void {
+    unsafe {
+        let free_list = core::ptr::addr_of_mut!((*get_this_cpu_local_var()).free_list);
+        let m = &mem_lowlevel_kmalloc_metadata;
+        ___kmalloc_body_result(size, flag, free_list,
+            m.irq_save, m.irq_restore, m.alloc_pages)
+    }
+}
+
+/// Even NULL preserves the selected C CPU-local lookup before the Rust no-op.
+#[no_mangle]
+pub unsafe extern "C" fn ___kfree(ptr: *mut c_void) {
+    unsafe {
+        let free_list = core::ptr::addr_of_mut!((*get_this_cpu_local_var()).free_list);
+        let m = &mem_lowlevel_kmalloc_metadata;
+        let _ = ___kfree_body_result(ptr, free_list,
+            m.remote_lock_offset, m.remote_list_offset,
+            m.irq_save, m.irq_restore, m.get_cpu_local,
+            m.remote_lock, m.remote_unlock, m.corruption);
+    }
+}
+
+/// Same existing reviewed assembly endpoint; no added IRQ or fence policy.
+#[no_mangle]
+pub unsafe extern "C" fn mem_kmalloc_irq_save_bridge() -> CULong {
+    unsafe { crate::x86_cpu_helpers::cpu_disable_interrupt_save() }
+}
+#[no_mangle]
+pub unsafe extern "C" fn mem_kmalloc_irq_restore_bridge(flags: CULong) {
+    unsafe { crate::x86_cpu_helpers::cpu_restore_interrupt(flags) }
+}
+#[no_mangle]
+pub unsafe extern "C" fn mem_kmalloc_alloc_pages_bridge(
+    npages: CInt, flag: CULong, is_user: CInt,
+) -> *mut c_void {
+    unsafe { ___ihk_mc_alloc_pages(npages, flag, is_user) }
+}
+#[no_mangle]
+pub unsafe extern "C" fn mem_kmalloc_get_cpu_local_var_bridge(cpu: CInt) -> *mut c_void {
+    unsafe { crate::cls::get_cpu_local_var(cpu).cast::<c_void>() }
+}
+
+/// Exact arch-lock.h selected ihk_mc_spinlock_lock macro target.
+#[no_mangle]
+pub unsafe extern "C" fn mem_kmalloc_remote_lock_bridge(lock_addr: CULong) -> CULong {
+    unsafe {
+        crate::spinlock_helpers::__ihk_mc_spinlock_lock(
+            lock_addr as *mut crate::spinlock_helpers::IhkSpinlock)
+    }
+}
+/// Same ticket release/preempt-enable followed by original full IRQ restore.
+#[no_mangle]
+pub unsafe extern "C" fn mem_kmalloc_remote_unlock_bridge(lock_addr: CULong, flags: CULong) {
+    unsafe {
+        crate::spinlock_helpers::__ihk_mc_spinlock_unlock(
+            lock_addr as *mut crate::spinlock_helpers::IhkSpinlock, flags)
+    }
+}
+
+unsafe extern "C" {
+    // The genuine ihk/debug.h ABI is void panic(const char *), not a Rust ! ABI.
+    #[link_name = "panic"]
+    fn mem_kmalloc_panic(message: *const i8);
+}
+
+/// Preserve the low-level free corruption diagnostic and panic endpoint order.
+///
+/// # Safety
+/// The caller retains the original allocator IRQ/ownership context. `ptr` is
+/// formatted as an address and is never dereferenced by this wrapper. The
+/// existing logging and panic providers must obey their genuine C ABIs.
+#[no_mangle]
+pub unsafe extern "C" fn mem_kmalloc_corruption_bridge(ptr: *mut c_void) {
+    // SAFETY: Both strings have static lifetime and terminating NUL bytes. The
+    // varargs retain the original const-char-pointer and void-pointer types.
+    // No IRQ restoration, list operation or pointer dereference is inserted.
+    unsafe {
+        kprintf(
+            b"%s: memory corruption at address 0x%p\n\0".as_ptr().cast::<i8>(),
+            b"___kfree\0".as_ptr().cast::<i8>(),
+            ptr,
+        );
+        mem_kmalloc_panic(b"panic\0".as_ptr().cast::<i8>());
+    }
+}
+
+unsafe extern "C" {
+    // Existing C-owned tracking state, already externally linked in mem.c.
+    #[link_name = "kmalloc_track_initialized"]
+    static mut MEM_KMALLOC_TRACK_INITIALIZED: CInt;
+}
+
+/// Initialize the current CPU allocator and first-use tracking tables.
+///
+/// # Safety
+/// The caller must retain the original boot/per-CPU initialization exclusion.
+/// Existing C-owned arrays and state must remain valid and exclusively writable
+/// for initialization. The CPU-local provider and allocator callbacks retain
+/// their original lifetime, IRQ and ownership contracts.
+#[no_mangle]
+pub unsafe extern "C" fn kmalloc_init() {
+    // SAFETY: Raw addresses name the same C-owned slots and existing typed arrays
+    // as the selected C wrapper. They create no references or ownership transfer.
+    // The unchanged helper registers callbacks before first-use memdebug lookup,
+    // initializes CPU lists on every call, and gates global table initialization.
+    unsafe {
+        let _ = mem_kmalloc_init_body_result(
+            &raw mut MEMDEBUG,
+            &raw mut MEM_KMALLOC_TRACK_INITIALIZED,
+            (&raw mut KMALLOC_TRACK_HASH).cast::<AbiListHead>(),
+            (&raw mut KMALLOC_TRACK_HASH_LOCKS).cast::<IhkSpinlock>(),
+            (&raw mut KMALLOC_ADDR_HASH).cast::<AbiListHead>(),
+            (&raw mut KMALLOC_ADDR_HASH_LOCKS).cast::<IhkSpinlock>(),
+            KMALLOC_TRACK_HASH_SIZE as CInt,
+            Some(get_this_cpu_local_var),
+            Some(register_kmalloc),
+            Some(find_command_line),
+            Some(mem_kmalloc_track_spin_init_bridge),
+        );
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mem_vmap_init_bridge(start: CULong, size: CULong, unit: CULong) -> *mut c_void {
+    unsafe { crate::page_alloc::ihk_pagealloc_init(start, size, unit) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mem_vmap_alloc_bridge(desc: *mut c_void, npages: CInt, p2align: CInt) -> CULong {
+    unsafe { crate::page_alloc::ihk_pagealloc_alloc(desc, npages, p2align) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mem_vmap_free_bridge(desc: *mut c_void, address: CULong, npages: CInt) {
+    unsafe { crate::page_alloc::ihk_pagealloc_free(desc, address, npages) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mem_pt_prepare_map_bridge(
+    pt: *mut c_void,
+    virt: *mut c_void,
+    size: CULong,
+    flag: CInt,
+) -> CInt {
+    unsafe { crate::x86_memory_helpers::ihk_mc_pt_prepare_map(pt, virt, size, flag) }
+}
+
+#[repr(C)]
+struct MemQueryFreeInterruptMetadata {
+    fugaku_panic: CInt,
+    attached_mic: CInt,
+    sbox_scratch0: CInt,
+    sbox_scratch1: CInt,
+    nr_nodes: Option<MemGetNrNumaNodesFn>,
+    node_pages: Option<MemQueryFreeNodePagesFn>,
+    total_log: Option<MemQueryFreeLogFn>,
+    panic_fn: Option<MemVoidFn>,
+    find_command_line: Option<MemFindCommandLineFn>,
+    kmalloc_memcheck_fn: Option<MemVoidFn>,
+    pagealloc_memcheck_fn: Option<MemVoidFn>,
+    page_hash_count: Option<MemQueryPageHashCountFn>,
+    page_hash_log: Option<MemQueryFreeLogFn>,
+    sbox_write: Option<MemQuerySboxWriteFn>,
+}
+
+unsafe extern "C" {
+    static mem_query_free_interrupt_metadata: MemQueryFreeInterruptMetadata;
+}
+
+/// Run the original synchronous free-memory interrupt orchestration.
+///
+/// # Safety
+/// The caller must retain the original interrupt lifetime and accounting
+/// exclusion. Immutable C metadata must name the same valid callbacks/profile.
+/// This entry transfers no page, allocator or private-argument ownership.
+#[no_mangle]
+pub unsafe extern "C" fn query_free_mem_interrupt_handler(priv_arg: *mut c_void) {
+    // SAFETY: Metadata is immutable C-owned static data. The unchanged helper
+    // retains node enumeration, logging/checker order and conditional effects.
+    // The command-name literal has static lifetime; its original lookup API
+    // accepts a mutable char pointer but does not receive ownership here.
+    unsafe {
+        let metadata = &mem_query_free_interrupt_metadata;
+        let _ = mem_query_free_mem_interrupt_public_body_result(
+            priv_arg,
+            metadata.nr_nodes,
+            b"memdebug\0".as_ptr().cast::<i8>().cast_mut(),
+            metadata.fugaku_panic,
+            metadata.attached_mic,
+            metadata.sbox_scratch0,
+            metadata.sbox_scratch1,
+            metadata.node_pages,
+            metadata.total_log,
+            metadata.panic_fn,
+            metadata.find_command_line,
+            metadata.kmalloc_memcheck_fn,
+            metadata.pagealloc_memcheck_fn,
+            metadata.page_hash_count,
+            metadata.page_hash_log,
+            metadata.sbox_write,
+        );
+    }
+}
+
+/// Check the original inclusive physical chunk interval without taking ownership.
+///
+/// # Safety
+/// Existing chunk callbacks must retain their normal synchronous output-buffer
+/// and memory-topology contracts. This wrapper adds no pointer dereference.
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_chk_page_address(mem_addr: CULong) -> CInt {
+    // SAFETY: These are the exact existing providers used by the selected C
+    // entry. The unchanged helper owns local output slots and preserves -1/0.
+    unsafe {
+        mem_chk_page_address_result(
+            mem_addr,
+            Some(ihk_mc_get_nr_memory_chunks),
+            Some(ihk_mc_get_memory_chunk),
+        )
+    }
+}
+
+/// Mark a user mapping in the caller-owned dump bitmap using the existing helper.
+///
+/// # Safety
+/// `arg0` must retain the original dump descriptor/buffer lifetime and exclusion.
+/// When active/user processing applies, `ptep` and the dump records must satisfy
+/// the existing PTE and bitmap layout contracts. No Page reference is acquired.
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_get_mem_user_page(
+    arg0: *mut c_void,
+    _pt: *mut c_void,
+    ptep: *mut CULong,
+    _pgaddr: *mut c_void,
+    pgshift: CInt,
+) -> CInt {
+    // SAFETY: The opaque descriptor and PTE pointer are cast exactly as in the
+    // selected C entry. The existing helper retains its early guards, physical
+    // mask, bitmap writes, warning callback and integer return convention.
+    unsafe {
+        mem_get_mem_user_page_result(
+            arg0.cast::<DumpPaseInfo>(),
+            ptep,
+            pgshift,
+            Some(ihk_mc_chk_page_address),
+            Some(mem_dump_warn_bridge),
+        )
+    }
+}
+
+unsafe extern "C" {
+    static mem_interleave_nodes_mask_bits: CInt;
+}
+
+/// Select the next allowed NUMA node with the original wraparound helper.
+///
+/// # Safety
+/// A non-null `numa_mask` must remain readable for the original process mask
+/// extent under the caller's existing memory-policy exclusion. This entry
+/// borrows the mask synchronously and never changes its words or ownership.
+#[no_mangle]
+pub unsafe extern "C" fn interleave_nodes(off: CInt, numa_mask: *mut CULong) -> CInt {
+    // SAFETY: The immutable C constant is generated from the actual process
+    // mask definition. The unchanged helper retains negative-offset handling,
+    // wraparound, empty-mask sentinel and its original null-pointer behavior.
+    unsafe { mem_interleave_nodes_result(off, numa_mask, mem_interleave_nodes_mask_bits) }
+}
+
+#[repr(C)]
+struct MemWholeAllocationMetadata {
+    nr_nodes: Option<MemGetNrNumaNodesFn>,
+    current_vm: Option<MemCurrentVmFn>,
+    range_policy_search: Option<MemRangePolicySearchFn>,
+    lookup_memory_range: Option<MemLookupMemoryRangeFn>,
+    range_is_shm: Option<MemRangeIsShmFn>,
+    range_policy_fields: Option<MemPolicyFieldsFn>,
+    vm_policy_fields: Option<MemPolicyFieldsFn>,
+    current_numa: Option<MemCurrentNumaIdFn>,
+    alloc_policy: Option<MemMckernelAllocPolicyFn>,
+}
+
+#[repr(C)]
+struct MemWholeFreeMetadata {
+    pending_pages: Option<MemPendingPagesFn>,
+    virt_to_phys: Option<MemVirtToPhysFn>,
+    phys_to_page: Option<MemPhysToPageFn>,
+    free_in_allocator: Option<MemFreeInAllocatorFn>,
+    warn: Option<MemPendingWarnFn>,
+    free_body: Option<MemMckernelFreePagesBodyFn>,
+}
+
+unsafe extern "C" {
+    static mem_whole_allocation_metadata: MemWholeAllocationMetadata;
+    static mem_whole_free_metadata: MemWholeFreeMetadata;
+    #[link_name = "cpu_local_var_initialized"]
+    static mut MEM_CPU_LOCAL_INITIALIZED: CInt;
+}
+
+/// Allocate using the original VM policy and NUMA accounting orchestration.
+///
+/// # Safety
+/// The caller must retain the original CPU/VM policy and allocator exclusion.
+/// Borrowed VM/range/mask state remains owned by its existing providers, and
+/// the returned allocation transfers exactly the original allocator ownership.
+#[no_mangle]
+pub unsafe extern "C" fn mckernel_allocate_aligned_pages_node(
+    npages: CInt,
+    p2align: CInt,
+    flag: CULong,
+    pref_node: CInt,
+    is_user: CInt,
+    virt_addr: CULong,
+) -> *mut c_void {
+    // SAFETY: Immutable metadata names the exact original selected C callbacks.
+    // The initialization flag is sampled once as before, without new locking.
+    // The unchanged helper retains argument guards, policy selection and errors.
+    unsafe {
+        let metadata = &mem_whole_allocation_metadata;
+        mem_mckernel_allocate_aligned_pages_node_public_body_result(
+            npages,
+            p2align,
+            flag,
+            pref_node,
+            is_user,
+            virt_addr,
+            MEM_CPU_LOCAL_INITIALIZED,
+            metadata.nr_nodes,
+            metadata.current_vm,
+            metadata.range_policy_search,
+            metadata.lookup_memory_range,
+            metadata.range_is_shm,
+            metadata.range_policy_fields,
+            metadata.vm_policy_fields,
+            metadata.current_numa,
+            metadata.alloc_policy,
+        )
+    }
+}
+
+/// Free or defer exactly the caller-owned page batch through the original helper.
+///
+/// # Safety
+/// `va`, `npages` and `is_user` must satisfy the existing allocator/Page ownership
+/// contract. The caller retains pending-ring and physical-page lifetime guards.
+/// This wrapper creates no Page references and introduces no completion ACK.
+#[no_mangle]
+pub unsafe extern "C" fn mckernel_free_pages(va: *mut c_void, npages: CInt, is_user: CInt) {
+    // SAFETY: These static callback addresses retain their original synchronous
+    // lifetimes. The unchanged helper owns pending/free choice and Page updates;
+    // its status is discarded exactly as by the original void C entry.
+    unsafe {
+        let metadata = &mem_whole_free_metadata;
+        let _ = mem_mckernel_free_pages_public_body_result(
+            va,
+            npages,
+            is_user,
+            metadata.pending_pages,
+            metadata.virt_to_phys,
+            metadata.phys_to_page,
+            metadata.free_in_allocator,
+            metadata.warn,
+            metadata.free_body,
+        );
+    }
+}
+
+/// Borrow the original current VM without acquiring a reference.
+///
+/// # Safety
+/// The caller retains the existing CPU-local/current-thread lifetime guards.
+/// Initialized CPU state must provide the same valid CPU-local record as C.
+#[no_mangle]
+pub unsafe extern "C" fn mem_current_vm_bridge() -> *mut c_void {
+    // SAFETY: Preserve the original initialization guards and two flag reads.
+    // CPU/thread/VM pointers are only read and returned as synchronous borrows.
+    unsafe {
+        let mut thread = null_mut::<crate::abi::Thread>();
+        let mut vm = null_mut();
+        if MEM_CPU_LOCAL_INITIALIZED != 0 {
+            thread = (*get_this_cpu_local_var()).current;
+            if !thread.is_null() {
+                vm = (*thread).vm.cast::<c_void>();
+            }
+        }
+        mem_current_vm_result(MEM_CPU_LOCAL_INITIALIZED, thread.cast::<c_void>(), vm)
+    }
+}
+
+/// Apply the existing exact shared-memory flag predicate to a borrowed range.
+///
+/// # Safety
+/// A non-null range and its non-null memobj must remain valid under the caller's
+/// existing VM-range/memobj lifetime and memory-policy exclusion.
+#[no_mangle]
+pub unsafe extern "C" fn mem_range_is_shm_bridge(range: *mut c_void) -> CInt {
+    // SAFETY: Match the original range and memobj guards before each field load.
+    // The unsigned memobj flags are widened without changing their bits.
+    unsafe {
+        let range = range.cast::<VmRange>();
+        if range.is_null() {
+            return mem_range_is_shm_result(0, 0, 0);
+        }
+        let memobj = (*range).memobj.cast::<Memobj>();
+        if memobj.is_null() {
+            return mem_range_is_shm_result(1, 0, 0);
+        }
+        mem_range_is_shm_result(1, 1, (*memobj).flags as CULong)
+    }
+}
+
+/// Expose the existing range-policy fields as synchronous borrowed addresses.
+///
+/// # Safety
+/// A non-null policy must be a live real VmRangeNumaPolicy. Non-null output
+/// slots must be writable exactly as for the existing C helper call. The caller
+/// retains all policy/list lifetime and synchronization guards.
+#[no_mangle]
+pub unsafe extern "C" fn mem_range_policy_fields_bridge(
+    policy: *mut c_void,
+    numa_mem_policy: *mut CInt,
+    numa_mask: *mut *mut CULong,
+    il_prev: *mut *mut CInt,
+) {
+    // SAFETY: No references or policy ownership are created. Read scalar input
+    // before the unchanged helper writes any possibly aliased output slots.
+    unsafe {
+        let policy = policy.cast::<crate::abi::VmRangeNumaPolicy>();
+        let (value, mask, previous) = if policy.is_null() {
+            (-1, null_mut(), null_mut())
+        } else {
+            (
+                (*policy).numa_mem_policy,
+                core::ptr::addr_of_mut!((*policy).numa_mask).cast::<CULong>(),
+                core::ptr::addr_of_mut!((*policy).il_prev),
+            )
+        };
+        let _ = mem_policy_fields_result(
+            (!policy.is_null()) as CInt,
+            value,
+            mask,
+            previous,
+            numa_mem_policy,
+            numa_mask,
+            il_prev,
+        );
+    }
+}
+
+/// Expose the process policy fields without taking VM or mask ownership.
+///
+/// # Safety
+/// A non-null VM must remain live under the original policy exclusion.
+/// Non-null output slots must satisfy the existing writable/aliasing contract.
+#[no_mangle]
+pub unsafe extern "C" fn mem_vm_policy_fields_bridge(
+    vm: *mut c_void,
+    numa_mem_policy: *mut CInt,
+    numa_mask: *mut *mut CULong,
+    il_prev: *mut *mut CInt,
+) {
+    // SAFETY: Match the original null guard and scalar/address evaluation before
+    // helper writes. The returned addresses borrow the same existing fields.
+    unsafe {
+        let vm = vm.cast::<ProcessVm>();
+        let (value, mask, previous) = if vm.is_null() {
+            (-1, null_mut(), null_mut())
+        } else {
+            (
+                (*vm).numa_mem_policy,
+                core::ptr::addr_of_mut!((*vm).numa_mask).cast::<CULong>(),
+                core::ptr::addr_of_mut!((*vm).il_prev),
+            )
+        };
+        let _ = mem_policy_fields_result(
+            (!vm.is_null()) as CInt,
+            value,
+            mask,
+            previous,
+            numa_mem_policy,
+            numa_mask,
+            il_prev,
+        );
+    }
+}
+
+unsafe extern "C" {
+    fn ihk_mc_get_numa_id() -> CInt;
+}
+
+/// Borrow the original distance-table node identifier.
+///
+/// # Safety
+/// The existing node array and distance tables must remain initialized/live
+/// under the caller's original topology lifetime exclusion.
+#[no_mangle]
+pub unsafe extern "C" fn mem_distance_id_bridge(base_node: CInt, index: CInt) -> CInt {
+    // SAFETY: The existing immutable C array pointer names the same memory_nodes;
+    // the unchanged helper retains all bounds and missing-table guards.
+    unsafe {
+        mem_distance_id_public_result(
+            mem_query_free_nodes,
+            base_node,
+            index,
+            Some(ihk_mc_get_nr_numa_nodes),
+        )
+    }
+}
+
+/// Read one allowed-node bit through the existing process-mask helper.
+///
+/// # Safety
+/// A non-null mask must remain readable for the original process mask extent
+/// under existing memory-policy synchronization. The mask remains borrowed.
+#[no_mangle]
+pub unsafe extern "C" fn mem_mask_test_bridge(numa_id: CInt, mask: *mut CULong) -> CInt {
+    // SAFETY: Exact C-generated geometry and the original guarded helper.
+    unsafe { mem_mask_test_result(numa_id, mask, mem_interleave_nodes_mask_bits) }
+}
+
+/// Preserve the original current-CPU NUMA provider call.
+///
+/// # Safety
+/// The caller must retain the original CPU-local execution context.
+#[no_mangle]
+pub unsafe extern "C" fn mem_current_numa_id_bridge() -> CInt {
+    // SAFETY: This is exactly the preexisting C ABI provider, without caching
+    // the CPU id, changing affinity or adding preemption/IRQ operations.
+    unsafe { ihk_mc_get_numa_id() }
+}
+
+/// Borrow the node selected by the original current-node distance ordering.
+///
+/// # Safety
+/// CPU initialization state and node/distance tables retain their existing
+/// lifetime and topology synchronization. No reference is acquired.
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_get_numa_node_by_distance(index: CInt) -> *mut MemNumaNode {
+    // SAFETY: Same array, one state snapshot and the exact original helpers.
+    unsafe {
+        mem_get_numa_node_by_distance_public_result(
+            mem_query_free_nodes,
+            MEM_CPU_LOCAL_INITIALIZED,
+            index,
+            Some(ihk_mc_get_nr_numa_nodes),
+            Some(mem_current_numa_id_bridge),
+        )
+    }
+}
+
+/// Return the existing node record as a synchronous opaque borrow.
+///
+/// # Safety
+/// The topology provider and C-owned array must retain their original lifetime.
+#[no_mangle]
+pub unsafe extern "C" fn mem_get_numa_node_bridge(numa_id: CInt) -> *mut c_void {
+    // SAFETY: The helper retains its signed bounds checks; no new guard/refcount.
+    unsafe {
+        mem_get_numa_node_public_result(
+            mem_query_free_nodes,
+            ihk_mc_get_nr_numa_nodes(),
+            numa_id,
+        )
+        .cast::<c_void>()
+    }
+}
+
+#[repr(C)]
+struct MemRemainingAllocPolicyMetadata {
+    try_alloc: Option<MemTryAllocNodeFn>,
+    rusage_add: Option<MemRusageAddFn>,
+    phys_to_virt: Option<MemPhysToVirtFn>,
+    log: Option<MemAllocLogFn>,
+}
+
+unsafe extern "C" {
+    static mem_remaining_alloc_policy_metadata: MemRemainingAllocPolicyMetadata;
+}
+
+/// Execute the original complete NUMA policy and accounting orchestration.
+///
+/// # Safety
+/// The caller must retain the original allocation, policy-mask and interleave
+/// cursor ownership/exclusion. Returned memory has exactly the existing
+/// allocator ownership; this wrapper acquires no Page or VM references.
+#[no_mangle]
+pub unsafe extern "C" fn mem_mckernel_alloc_policy_bridge(
+    npages: CInt,
+    p2align: CInt,
+    flag: CULong,
+    pref_node: CInt,
+    is_user: CInt,
+    current_node: CInt,
+    nr_nodes: CInt,
+    numa_mem_policy: CInt,
+    chk_shm: CInt,
+    numa_mask: *mut CULong,
+    il_prevp: *mut CInt,
+) -> *mut c_void {
+    // SAFETY: The four immutable addresses are the exact remaining C providers.
+    // Three already-ported callbacks name their same Rust algorithms directly.
+    // The unchanged policy helper owns retry/order/accounting/error behavior.
+    unsafe {
+        let metadata = &mem_remaining_alloc_policy_metadata;
+        mem_mckernel_alloc_policy_result(
+            npages,
+            p2align,
+            flag,
+            pref_node,
+            is_user,
+            current_node,
+            nr_nodes,
+            numa_mem_policy,
+            chk_shm,
+            numa_mask,
+            il_prevp,
+            metadata.try_alloc,
+            Some(mem_distance_id_bridge),
+            Some(mem_mask_test_bridge),
+            Some(interleave_nodes),
+            metadata.rusage_add,
+            metadata.phys_to_virt,
+            metadata.log,
+        )
+    }
+}
+
+/// Convert the original physical address using the existing selected mapping.
+///
+/// # Safety
+/// The caller retains the original address-space/bootstrap mapping context.
+#[no_mangle]
+pub unsafe extern "C" fn mem_phys_to_virt_bridge(pa: CULong) -> *mut c_void {
+    // SAFETY: Same existing mapping provider and unchanged unsigned address.
+    unsafe { crate::x86_memory_helpers::phys_to_virt(pa) }
+}
+
+/// Convert the original raw virtual address without acquiring memory ownership.
+///
+/// # Safety
+/// The original address classification and mapping context must remain valid.
+#[no_mangle]
+pub unsafe extern "C" fn mem_virt_to_phys_bridge(va: *mut c_void) -> CULong {
+    // SAFETY: Same selected provider; its own mapping/diagnostic guards remain.
+    unsafe { crate::x86_memory_helpers::virt_to_phys(va) }
+}
+
+/// Preserve the C int-to-unsigned-long page conversion at the OOM provider.
+///
+/// # Safety
+/// The original rusage accounting state and execution exclusion must hold.
+#[no_mangle]
+pub unsafe extern "C" fn mem_rusage_check_oom_bridge(
+    numa_id: CInt,
+    npages: CInt,
+    is_user: CInt,
+) -> CInt {
+    // SAFETY: This matches the genuine rusage_private.h ulong pages prototype.
+    unsafe { rusage_check_oom(numa_id, npages as CULong, is_user) }
+}
+
+/// Add exactly the original page amount to existing rusage accounting.
+///
+/// # Safety
+/// The caller retains the existing allocation/accounting ownership contract.
+#[no_mangle]
+pub unsafe extern "C" fn mem_rusage_page_add_bridge(
+    numa_id: CInt,
+    npages: CInt,
+    is_user: CInt,
+) {
+    // SAFETY: Same integer conversion and actual atomic/accounting provider.
+    unsafe { rusage_page_add(numa_id, npages as CULong, is_user) }
+}
+
+/// Subtract the original page amount after the existing release operation.
+///
+/// # Safety
+/// The caller must own the released batch and existing accounting exclusion.
+#[no_mangle]
+pub unsafe extern "C" fn mem_rusage_page_sub_bridge(
+    numa_id: CInt,
+    npages: CInt,
+    is_user: CInt,
+) {
+    // SAFETY: Preserve even the original signed-to-ulong conversion, without
+    // inserting a clamp, added accounting update or new error convention.
+    unsafe { rusage_page_sub(numa_id, npages as CULong, is_user) }
+}
+
+/// Allocate from the same actual NUMA-node provider.
+///
+/// # Safety
+/// `node` must be the original live C-layout NUMA record under its existing
+/// allocator synchronization. Returned physical pages retain original ownership.
+#[no_mangle]
+pub unsafe extern "C" fn mem_numa_alloc_node_bridge(
+    node: *mut MemNumaNode,
+    npages: CInt,
+    p2align: CInt,
+) -> CULong {
+    // SAFETY: Both real Rust node representations bind the same C256/align64
+    // record. The provider retains all cache, locking and allocation semantics.
+    unsafe {
+        crate::page_alloc::ihk_numa_alloc_pages(
+            node.cast::<crate::page_alloc::IhkMcNumaNode>(),
+            npages,
+            p2align,
+        )
+    }
+}
+
+/// Release exactly the original batch through the actual NUMA provider.
+///
+/// # Safety
+/// The node, physical address and page count retain the original allocator
+/// ownership and caller exclusion. No Page reference is acquired by this entry.
+#[no_mangle]
+pub unsafe extern "C" fn mem_numa_free_bridge(node: *mut c_void, addr: CULong, npages: CInt) {
+    // SAFETY: The same opaque C pointer now names the actual typed Rust provider;
+    // no layout is copied or dereferenced by this forwarding wrapper.
+    unsafe {
+        crate::page_alloc::ihk_numa_free_pages(
+            node.cast::<crate::page_alloc::IhkMcNumaNode>(),
+            addr,
+            npages,
+        );
+    }
+}
+
+/// Find the original physical chunk, release the batch and subtract accounting.
+///
+/// # Safety
+/// The caller must retain its original page-batch ownership and topology/node
+/// lifetime guards. The existing helper decides whether any chunk owns the span.
+#[no_mangle]
+pub unsafe extern "C" fn __mckernel_free_pages_in_allocator(
+    va: *mut c_void,
+    npages: CInt,
+    is_user: CInt,
+) {
+    // SAFETY: Exact original selected helper and callback providers. Its status
+    // is discarded as by the void C entry; release and accounting order remain.
+    unsafe {
+        let _ = mem_free_pages_in_allocator_rbtree_result(
+            va,
+            npages,
+            is_user,
+            Some(ihk_mc_get_nr_memory_chunks),
+            Some(ihk_mc_get_memory_chunk),
+            Some(mem_virt_to_phys_bridge),
+            Some(mem_get_numa_node_bridge),
+            Some(mem_numa_free_bridge),
+            Some(mem_rusage_page_sub_bridge),
+        );
+    }
+}
+
+/// Preserve the synchronous physical allocator-free callback.
+///
+/// # Safety
+/// The original batch ownership and physical allocator contract must hold.
+#[no_mangle]
+pub unsafe extern "C" fn mem_free_in_allocator_bridge(
+    va: *mut c_void,
+    npages: CInt,
+    is_user: CInt,
+) {
+    // SAFETY: Direct same entry, with no extra release or completion action.
+    unsafe { __mckernel_free_pages_in_allocator(va, npages, is_user) }
+}
+
+/// Convert and free the same detached pending batch without inventing an ACK.
+///
+/// # Safety
+/// The caller must have detached/owned the original pending Page batch and
+/// retained its physical mapping lifetime until this synchronous free returns.
+#[no_mangle]
+pub unsafe extern "C" fn mem_pending_free_bridge(phys: CULong, npages: CInt, is_user: CInt) {
+    // SAFETY: Preserve conversion-before-free exactly; no Page field writes,
+    // refcount changes, IRQ changes or second accounting update are inserted.
+    unsafe {
+        let va = crate::x86_memory_helpers::phys_to_virt(phys);
+        __mckernel_free_pages_in_allocator(va, npages, is_user);
+    }
+}
+
+unsafe extern "C" {
+    fn ihk_mc_get_numa_node(node: CInt, linux_numa_id: *mut CInt, node_type: *mut CInt) -> CInt;
+}
+
+/// Try the original RBTREE node allocator and preserve its OOM output convention.
+///
+/// # Safety
+/// The topology and node allocator must retain their original lifetimes and
+/// locks. A non-null `oomp` must be a writable caller-owned C int slot.
+#[no_mangle]
+pub unsafe extern "C" fn mem_try_alloc_node_bridge(
+    numa_id: CInt,
+    npages: CInt,
+    p2align: CInt,
+    is_user: CInt,
+    oomp: *mut CInt,
+) -> CULong {
+    // SAFETY: Same node array and unchanged helper/provider bounds, accounting
+    // and OOM semantics. No new allocation claim or output policy is inserted.
+    unsafe {
+        mem_try_alloc_node_public_result(
+            mem_query_free_nodes,
+            numa_id,
+            npages,
+            p2align,
+            is_user,
+            oomp,
+            Some(ihk_mc_get_nr_numa_nodes),
+            Some(mem_rusage_check_oom_bridge),
+            Some(mem_numa_alloc_node_bridge),
+        )
+    }
+}
+
+/// Initialize the original RBTREE-only node fields under boot exclusion.
+///
+/// # Safety
+/// If `rbtree_allocator` is nonzero, `node` must be a valid exclusively owned
+/// real NUMA node during initialization. Zero preserves the original no-access
+/// path, including when the pointer is null. This is not runtime node reset.
+#[no_mangle]
+pub unsafe extern "C" fn mem_numa_node_init_bridge(node: *mut MemNumaNode, rbtree_allocator: CInt) {
+    if rbtree_allocator == 0 {
+        return;
+    }
+    // SAFETY: The caller's initialization exclusion covers all fields. Real
+    // ABI atomic/MCS/list representations have the same C layout; use the
+    // existing selected atomic, list and MCS initialization providers in order.
+    unsafe {
+        crate::atomic_helpers::ihk_atomic_set(
+            core::ptr::addr_of_mut!((*node).zeroing_workers)
+                .cast::<crate::atomic_helpers::IhkAtomic>(),
+            0,
+        );
+        crate::atomic_helpers::ihk_atomic_set(
+            core::ptr::addr_of_mut!((*node).nr_to_zero_pages)
+                .cast::<crate::atomic_helpers::IhkAtomic>(),
+            0,
+        );
+        (*node).free_chunks.rb_node = null_mut();
+        crate::llist::init_llist_head(core::ptr::addr_of_mut!((*node).zeroed_list));
+        crate::llist::init_llist_head(core::ptr::addr_of_mut!((*node).to_zero_list));
+        crate::lock_helpers::mcs_lock_init(
+            core::ptr::addr_of_mut!((*node).lock).cast::<crate::lock_helpers::McsLockNode>(),
+        );
+        (*node).min_addr = CULong::MAX;
+        (*node).max_addr = 0;
+        (*node).nr_pages = 0;
+        (*node).nr_free_pages = 0;
+    }
+}
+
+/// Add the original physical span through the existing actual NUMA provider.
+///
+/// # Safety
+/// The node and range retain the original boot/allocator ownership and guards.
+#[no_mangle]
+pub unsafe extern "C" fn mem_numa_add_free_pages_bridge(
+    node: *mut MemNumaNode,
+    start: CULong,
+    len: CULong,
+) {
+    // SAFETY: Same real C-layout node and exact span; existing provider owns
+    // page geometry, zeroing, list/RBTREE synchronization and errors.
+    unsafe {
+        crate::page_alloc::ihk_numa_add_free_pages(
+            node.cast::<crate::page_alloc::IhkMcNumaNode>(),
+            start,
+            len,
+        );
+    }
+}
+
+/// Preserve the original null allocator guard before reading the page count.
+///
+/// # Safety
+/// A non-null descriptor must be the original live actual allocator object.
+#[no_mangle]
+pub unsafe extern "C" fn mem_numa_pagealloc_count_bridge(allocator: *mut c_void) -> CULong {
+    if allocator.is_null() {
+        return 0;
+    }
+    // SAFETY: Exactly the existing actual Rust descriptor/count provider.
+    unsafe { crate::page_alloc::ihk_pagealloc_count(allocator) }
+}
+
+/// Forward the original topology-query outputs and status without new policy.
+///
+/// # Safety
+/// Output pointers must satisfy the genuine topology provider's C ABI contract.
+#[no_mangle]
+pub unsafe extern "C" fn mem_numa_get_node_info_bridge(
+    node: CInt,
+    linux_numa_id: *mut CInt,
+    node_type: *mut CInt,
+) -> CInt {
+    // SAFETY: Same existing ihk/mm.h provider and unmodified caller pointers.
+    unsafe { ihk_mc_get_numa_node(node, linux_numa_id, node_type) }
+}
+
+#[repr(C)]
+struct MemRusageEntryMetadata {
+    state_bytes: CULong,
+    cpu_info: Option<MemGetCpuInfoFn>,
+    nr_nodes: Option<MemGetNrNumaNodesFn>,
+    ns_per_tsc: Option<MemGetNsPerTscFn>,
+    virt_to_phys: Option<MemVirtToPhysFn>,
+    set_rusage: Option<MemSetRusageFn>,
+    panic_fn: Option<MemVoidFn>,
+    log: Option<MemRusageInitLogFn>,
+}
+
+#[repr(C)]
+struct MemDistanceEntryMetadata {
+    nr_nodes: Option<MemGetNrNumaNodesFn>,
+    alloc: Option<MemNumaDistanceAllocFn>,
+    distance: Option<MemNumaDistanceFn>,
+    alloc_fail: Option<MemNumaDistanceAllocFailLogFn>,
+    log: Option<MemNumaDistanceLogFn>,
+}
+
+unsafe extern "C" {
+    static mem_rusage_entry_metadata: MemRusageEntryMetadata;
+    static mem_distance_entry_metadata: MemDistanceEntryMetadata;
+    #[link_name = "monitor_init"]
+    fn mem_existing_monitor_init();
+}
+
+/// Initialize and publish the original C-owned rusage state through its helper.
+///
+/// # Safety
+/// The original boot/init exclusion must cover RUSAGE and all provider calls.
+/// The publication endpoint retains its existing ownership and physical mapping.
+#[no_mangle]
+pub unsafe extern "C" fn rusage_init() {
+    // SAFETY: Exact C-generated object size and original callback addresses.
+    // Raw global address avoids references; the unchanged helper preserves
+    // CPU-info/panic, clear/populate, physical publication and logging order.
+    unsafe {
+        let metadata = &mem_rusage_entry_metadata;
+        let _ = mem_rusage_init_body_result(
+            &raw mut RUSAGE,
+            metadata.state_bytes,
+            metadata.cpu_info,
+            metadata.nr_nodes,
+            metadata.ns_per_tsc,
+            metadata.virt_to_phys,
+            metadata.set_rusage,
+            metadata.panic_fn,
+            metadata.log,
+        );
+    }
+}
+
+/// Allocate and order the original per-node distance tables.
+///
+/// # Safety
+/// Node topology and distance table storage must retain the original boot
+/// initialization exclusion, allocation ownership and diagnostic lifetimes.
+#[no_mangle]
+pub unsafe extern "C" fn numa_distances_init() {
+    // SAFETY: Same static node-array borrow and unchanged selected sorting/
+    // allocation helper. The void entry discards status as the original C did.
+    unsafe {
+        let metadata = &mem_distance_entry_metadata;
+        let _ = mem_numa_distances_init_public_result(
+            mem_query_free_nodes,
+            metadata.nr_nodes,
+            metadata.alloc,
+            metadata.distance,
+            metadata.alloc_fail,
+            metadata.log,
+        );
+    }
+}
+
+/// Borrow the same C-owned allocator object for the existing boot entry.
+///
+/// # Safety
+/// The caller must retain the existing static allocator initialization order.
+#[no_mangle]
+pub unsafe extern "C" fn mem_init_allocator_bridge() -> *mut IhkMcPaOps {
+    // SAFETY: Metadata already names the exact private allocator address; this
+    // returns a borrow only and does not register, initialize or clone it.
+    unsafe { mem_register_kmalloc_metadata.allocator }
+}
+
+/// Forward the existing monitor initialization without changing its owner.
+///
+/// # Safety
+/// The original monitor initialization prerequisites must hold.
+#[no_mangle]
+pub unsafe extern "C" fn mem_monitor_init_bridge() {
+    // SAFETY: Same preexisting C ABI provider; its body remains explicit debt.
+    unsafe { mem_existing_monitor_init() }
+}
+
+/// Invoke the same rusage initialization entry synchronously.
+///
+/// # Safety
+/// The original rusage boot exclusion and publication prerequisites must hold.
+#[no_mangle]
+pub unsafe extern "C" fn mem_rusage_init_bridge() {
+    // SAFETY: Exactly the existing initialization operation, once.
+    unsafe { rusage_init() }
+}
+
+/// Invoke the existing actual Rust page-table hash initialization entry.
+///
+/// # Safety
+/// The original page-hash initialization exclusion and storage must hold.
+#[no_mangle]
+pub unsafe extern "C" fn mem_page_init_bridge() {
+    // SAFETY: Same already-passed page_init body and initialization lifetime.
+    unsafe { page_init() }
+}
+
+/// Delegate to the still-C-selected virtual allocator initialization entry.
+///
+/// # Safety
+/// The original virtual allocator initialization order and ownership must hold.
+#[no_mangle]
+pub unsafe extern "C" fn mem_virtual_allocator_init_bridge() {
+    // SAFETY: Same synchronous boot entry now delegates to the coherent private
+    // whole Rust initializer. No duplicate init, new lifetime or status policy.
+    unsafe { virtual_allocator_init() }
+}
+
+/// Return the same borrowed command-line match from the existing Rust parser.
+///
+/// # Safety
+/// The caller's name pointer must satisfy the original find_command_line ABI.
+#[no_mangle]
+pub unsafe extern "C" fn mem_find_command_line_bridge(name: *mut i8) -> *mut i8 {
+    // SAFETY: Same pointer, provider and returned borrow; no string ownership.
+    unsafe { find_command_line(name) }
+}
+
+/// Invoke the same distance-table initialization entry once.
+///
+/// # Safety
+/// The original topology/table initialization exclusion must hold.
+#[no_mangle]
+pub unsafe extern "C" fn mem_numa_distances_init_bridge() {
+    // SAFETY: No extra allocation, logging, lock or ownership operation.
+    unsafe { numa_distances_init() }
+}
+
+unsafe extern "C" {
+    fn kprintf_lock() -> CULong;
+    fn kprintf_unlock(irqflags: CULong);
+    fn __kprintf(format: *const i8, ...) -> CInt;
+}
+
+/// Print the original current-CPU free list under the existing output lock.
+///
+/// # Safety
+/// The current CPU record and traversed chunks must retain the original valid
+/// free-list lifetime/stability assumptions. The output lock serializes logging;
+/// this wrapper does not claim it supplies a new allocator ownership lock.
+/// The original `list` parameter remains intentionally unused.
+#[no_mangle]
+pub unsafe extern "C" fn ___kmalloc_print_free_list(_list: *mut AbiListHead) {
+    // SAFETY: Exact existing logging ABIs and static NUL-terminated formats.
+    // Traverse the real list without references or field writes. Preserve the
+    // C initial CPU lookup and one lookup on every loop-condition evaluation;
+    // do not cache a CPU pointer or add preemption/IRQ operations around it.
+    unsafe {
+        let irqflags = kprintf_lock();
+        let name = b"___kmalloc_print_free_list\0".as_ptr().cast::<i8>();
+        __kprintf(b"%s: [ \n\0".as_ptr().cast::<i8>(), name);
+        let mut node = (*get_this_cpu_local_var()).free_list.next;
+        loop {
+            let head = core::ptr::addr_of_mut!((*get_this_cpu_local_var()).free_list);
+            if node == head {
+                break;
+            }
+            let chunk = list_to_kmalloc_header(node);
+            let address = chunk as CULong;
+            __kprintf(
+                b"%s: 0x%lx:%d (VA PFN: %lu, off: %lu)\n\0".as_ptr().cast::<i8>(),
+                name,
+                address,
+                (*chunk).size,
+                address >> PAGE_SHIFT,
+                address % PAGE_SIZE,
+            );
+            node = (*node).next;
+        }
+        __kprintf(b"%s: ] \n\0".as_ptr().cast::<i8>(), name);
+        kprintf_unlock(irqflags);
+    }
+}
+
+#[repr(C)]
+struct MemStaticBootAddressMetadata {
+    page_fault_handler_address: CULong,
+    query_free_handler_address: CULong,
+    anon_on_demand_slot: *mut CInt,
+    xpmem_remote_slot: *mut CInt,
+    hugetlbfs_on_demand_slot: *mut CInt,
+}
+
+unsafe extern "C" {
+    static mem_static_boot_address_metadata: MemStaticBootAddressMetadata;
+}
+
+/// Return the original C handler address without changing its code or ownership.
+///
+/// # Safety
+/// The caller must retain the original boot-registration and function ABI checks.
+#[no_mangle]
+pub unsafe extern "C" fn mem_init_page_fault_handler_bridge() -> CULong {
+    // SAFETY: This immutable integer is the exact C-generated function-address
+    // conversion. The still-C handler is not invoked or retyped by this getter.
+    unsafe { mem_static_boot_address_metadata.page_fault_handler_address }
+}
+
+/// Borrow the existing private interrupt registration object address.
+///
+/// # Safety
+/// The caller retains its original registration-object lifetime and exclusion.
+#[no_mangle]
+pub unsafe extern "C" fn mem_init_query_free_handler_bridge() -> CULong {
+    // SAFETY: The immutable C address names the same original static object.
+    unsafe { mem_static_boot_address_metadata.query_free_handler_address }
+}
+
+/// Borrow the original anonymous-demand policy slot without reading its value.
+///
+/// # Safety
+/// The caller must retain the original boot policy-slot lifetime and exclusion.
+#[no_mangle]
+pub unsafe extern "C" fn mem_init_anon_on_demand_bridge() -> *mut CInt {
+    // SAFETY: Return the C-owned slot address only, without creating a reference.
+    unsafe { mem_static_boot_address_metadata.anon_on_demand_slot }
+}
+
+/// Borrow the original remote XPMEM policy slot without new lifetime ownership.
+///
+/// # Safety
+/// The original policy-slot lifetime and initialization exclusion must hold.
+#[no_mangle]
+pub unsafe extern "C" fn mem_init_xpmem_remote_bridge() -> *mut CInt {
+    // SAFETY: Same static C-owned address, no value access or new synchronization.
+    unsafe { mem_static_boot_address_metadata.xpmem_remote_slot }
+}
+
+/// Return the original profile-selected huge-page policy slot or null.
+///
+/// # Safety
+/// A non-null result retains the original profile's static policy-slot contract.
+#[no_mangle]
+pub unsafe extern "C" fn mem_init_hugetlbfs_on_demand_bridge() -> *mut CInt {
+    // SAFETY: The genuine C configuration selects this pointer; Rust does not
+    // invent an optional field, dereference it or substitute a configuration.
+    unsafe { mem_static_boot_address_metadata.hugetlbfs_on_demand_slot }
+}
+
+/// Allocate tracking storage through the unchanged low-level allocator entry.
+///
+/// # Safety
+/// The caller retains its original tracking/allocator IRQ and ownership context.
+/// Returned storage has exactly the existing low-level allocation ownership.
+#[no_mangle]
+pub unsafe extern "C" fn mem_kmalloc_track_base_alloc_bridge(
+    size: CInt,
+    flag: CULong,
+) -> *mut c_void {
+    // SAFETY: Same signed size, flag bits and actual low-level allocator entry.
+    unsafe { ___kmalloc(size, flag) }
+}
+
+/// Free the original tracking-storage pointer through the same low-level entry.
+///
+/// # Safety
+/// The caller must own the pointer under the original low-level free contract.
+#[no_mangle]
+pub unsafe extern "C" fn mem_kmalloc_track_base_free_bridge(ptr: *mut c_void) {
+    // SAFETY: No extra guard, release or IRQ action; even null follows the same
+    // low-level entry and its original CPU-local lookup/no-op behavior.
+    unsafe { ___kfree(ptr) }
+}
+
+/// Acquire the original tracking lock with its existing IRQ-save semantics.
+///
+/// # Safety
+/// `lock_addr` must name the original live aligned spinlock; caller lock ordering
+/// and eventual release obligations remain unchanged.
+#[no_mangle]
+pub unsafe extern "C" fn mem_kmalloc_track_lock_bridge(lock_addr: CULong) -> CULong {
+    // SAFETY: Exact arch-lock.h selected macro target and real spinlock layout.
+    unsafe {
+        crate::spinlock_helpers::__ihk_mc_spinlock_lock(
+            lock_addr as *mut crate::spinlock_helpers::IhkSpinlock,
+        )
+    }
+}
+
+/// Release the original tracking lock and restore its full saved IRQ flags.
+///
+/// # Safety
+/// The caller must own the matching lock and supply its original saved flags.
+#[no_mangle]
+pub unsafe extern "C" fn mem_kmalloc_track_unlock_bridge(lock_addr: CULong, irqflags: CULong) {
+    // SAFETY: Same selected release/preemption/IRQ restore provider and arguments.
+    unsafe {
+        crate::spinlock_helpers::__ihk_mc_spinlock_unlock(
+            lock_addr as *mut crate::spinlock_helpers::IhkSpinlock,
+            irqflags,
+        );
+    }
+}
+
+/// Initialize the original tracking spinlock under initialization exclusion.
+///
+/// # Safety
+/// The lock must be exclusively owned for initialization and have real alignment.
+#[no_mangle]
+pub unsafe extern "C" fn mem_kmalloc_track_spin_init_bridge(lock_addr: CULong) {
+    // SAFETY: Exact existing selected Rust ticket-lock initialization operation.
+    unsafe {
+        crate::spinlock_helpers::ihk_mc_spinlock_init(
+            lock_addr as *mut crate::spinlock_helpers::IhkSpinlock,
+        );
+    }
+}
+
+/// Preserve the underlying page batch allocation without tracking recursion.
+///
+/// # Safety
+/// The caller retains the original page allocator, NUMA-policy and tracking
+/// ownership/exclusion. Returned pages follow exactly the original provider.
+#[no_mangle]
+pub unsafe extern "C" fn mem_pagealloc_track_base_alloc_bridge(
+    npages: CInt,
+    p2align: CInt,
+    flag: CULong,
+    node: CInt,
+    is_user: CInt,
+    virt_addr: CULong,
+) -> *mut c_void {
+    // SAFETY: Exact original low-level page entry and unmodified batch tuple.
+    unsafe { ___ihk_mc_alloc_aligned_pages_node(npages, p2align, flag, node, is_user, virt_addr) }
+}
+
+/// Release the original tracked page batch through its untracked base entry.
+///
+/// # Safety
+/// The caller owns the same batch and retains the original release contract.
+#[no_mangle]
+pub unsafe extern "C" fn mem_pagealloc_track_base_free_bridge(
+    ptr: *mut c_void,
+    npages: CInt,
+    is_user: CInt,
+) {
+    // SAFETY: Same provider and values, no new reference or completion ACK.
+    unsafe { ___ihk_mc_free_pages(ptr, npages, is_user) }
+}
+
+/// Allocate the same bookkeeping bytes through the existing low-level heap.
+///
+/// # Safety
+/// The original tracking/heap lock and IRQ contract must hold.
+#[no_mangle]
+pub unsafe extern "C" fn mem_pagealloc_track_meta_alloc_bridge(
+    size: CInt,
+    flag: CULong,
+) -> *mut c_void {
+    // SAFETY: Original signed size and complete flag bits forwarded once.
+    unsafe { ___kmalloc(size, flag) }
+}
+
+/// Free exactly the original bookkeeping allocation.
+///
+/// # Safety
+/// The pointer must satisfy the original low-level free ownership contract.
+#[no_mangle]
+pub unsafe extern "C" fn mem_pagealloc_track_meta_free_bridge(ptr: *mut c_void) {
+    // SAFETY: Same low-level free, including its original null behavior.
+    unsafe { ___kfree(ptr) }
+}
+
+/// Acquire the original tracking spinlock with IRQ save.
+///
+/// # Safety
+/// The address must name the original live aligned lock with valid lock ordering.
+#[no_mangle]
+pub unsafe extern "C" fn mem_pagealloc_track_lock_bridge(lock_addr: CULong) -> CULong {
+    // SAFETY: Same selected architecture macro target and actual Rust lock type.
+    unsafe {
+        crate::spinlock_helpers::__ihk_mc_spinlock_lock(
+            lock_addr as *mut crate::spinlock_helpers::IhkSpinlock,
+        )
+    }
+}
+
+/// Release the matching tracking lock and restore the original full IRQ flags.
+///
+/// # Safety
+/// The caller must hold this lock and supply its matching saved flags.
+#[no_mangle]
+pub unsafe extern "C" fn mem_pagealloc_track_unlock_bridge(lock_addr: CULong, irqflags: CULong) {
+    // SAFETY: Same release/preemption/IRQ-restore sequence as the C provider.
+    unsafe {
+        crate::spinlock_helpers::__ihk_mc_spinlock_unlock(
+            lock_addr as *mut crate::spinlock_helpers::IhkSpinlock,
+            irqflags,
+        );
+    }
+}
+
+/// Acquire the original no-IRQ tracking lock without adding IRQ operations.
+///
+/// # Safety
+/// The original caller IRQ/preemption and lock ownership prerequisites must hold.
+#[no_mangle]
+pub unsafe extern "C" fn mem_pagealloc_track_noirq_lock_bridge(lock_addr: CULong) {
+    // SAFETY: Exact no-IRQ selected helper; its existing preemption semantics
+    // remain, with no substitution by the IRQ-saving helper.
+    unsafe {
+        crate::spinlock_helpers::__ihk_mc_spinlock_lock_noirq(
+            lock_addr as *mut crate::spinlock_helpers::IhkSpinlock,
+        );
+    }
+}
+
+/// Release the matching no-IRQ tracking lock without restoring flags.
+///
+/// # Safety
+/// The caller must own the same no-IRQ lock under its original IRQ context.
+#[no_mangle]
+pub unsafe extern "C" fn mem_pagealloc_track_noirq_unlock_bridge(lock_addr: CULong) {
+    // SAFETY: Same ticket-release/preempt-enable endpoint, no new IRQ action.
+    unsafe {
+        crate::spinlock_helpers::__ihk_mc_spinlock_unlock_noirq(
+            lock_addr as *mut crate::spinlock_helpers::IhkSpinlock,
+        );
+    }
+}
+
+/// Initialize the original tracking lock under exclusive initialization.
+///
+/// # Safety
+/// The lock must be valid, aligned and exclusively owned for initialization.
+#[no_mangle]
+pub unsafe extern "C" fn mem_pagealloc_track_spin_init_bridge(lock_addr: CULong) {
+    // SAFETY: Same actual ticket-lock initialization provider and address.
+    unsafe {
+        crate::spinlock_helpers::ihk_mc_spinlock_init(
+            lock_addr as *mut crate::spinlock_helpers::IhkSpinlock,
+        );
+    }
+}
+
+unsafe extern "C" {
+    fn ihk_mc_get_dump_page_set() -> *mut IhkDumpPageSet;
+    fn ihk_mc_get_dump_page() -> *mut IhkDumpPage;
+}
+
+/// Reset the existing dump completion field using the original guarded helper.
+///
+/// # Safety
+/// The original dump-set publication lifetime and reset exclusion must hold.
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_clear_dump_page_completion() {
+    // SAFETY: Same genuine provider and existing volatile-field update helper.
+    // The void entry discards its status exactly as the selected C wrapper.
+    unsafe {
+        let _ = mem_clear_dump_page_completion_result(Some(ihk_mc_get_dump_page_set));
+    }
+}
+
+/// Borrow the original published dump record, without taking buffer ownership.
+///
+/// # Safety
+/// The caller must retain the provider's dump-record lifetime/exclusion.
+#[no_mangle]
+pub unsafe extern "C" fn mem_get_dump_page_bridge() -> *mut IhkDumpPage {
+    // SAFETY: Exact original ihk/mm.h provider, no dereference or new null policy.
+    unsafe { ihk_mc_get_dump_page() }
+}
+
+/// Borrow the original published dump-set descriptor.
+///
+/// # Safety
+/// The caller retains the same dump-set lifetime and publication contract.
+#[no_mangle]
+pub unsafe extern "C" fn mem_get_dump_page_set_bridge() -> *mut IhkDumpPageSet {
+    // SAFETY: Same provider and returned raw borrow, no added reference.
+    unsafe { ihk_mc_get_dump_page_set() }
+}
+
+/// Read the original free-page total through the actual node-array helper.
+///
+/// # Safety
+/// The topology and node accounting must retain their original snapshot guards.
+#[no_mangle]
+pub unsafe extern "C" fn mem_dump_free_pages_bridge(node: CInt) -> CULong {
+    // SAFETY: Same array and topology callback, with unchanged bounds behavior.
+    unsafe {
+        mem_dump_free_pages_public_result(
+            mem_query_free_nodes,
+            node,
+            Some(ihk_mc_get_nr_numa_nodes),
+        )
+    }
+}
+
+/// Borrow the first free chunk under the original dump traversal contract.
+///
+/// # Safety
+/// The caller retains the original RBTREE/topology traversal exclusion/lifetime.
+#[no_mangle]
+pub unsafe extern "C" fn mem_dump_first_free_chunk_bridge(node: CInt) -> *mut c_void {
+    // SAFETY: Same actual helper, including signed bounds and null root guards.
+    unsafe {
+        mem_dump_first_free_chunk_public_result(
+            mem_query_free_nodes,
+            node,
+            Some(ihk_mc_get_nr_numa_nodes),
+        )
+    }
+}
+
+/// Borrow the next chunk without retaining or unlinking the current one.
+///
+/// # Safety
+/// A non-null chunk must retain the original free-tree traversal lifetime.
+#[no_mangle]
+pub unsafe extern "C" fn mem_dump_next_free_chunk_bridge(chunk: *mut c_void) -> *mut c_void {
+    // SAFETY: Existing guarded iterator helper only; no new lock or ownership.
+    unsafe { mem_dump_next_free_chunk_result(chunk) }
+}
+
+/// Read the same free-chunk physical address.
+///
+/// # Safety
+/// A non-null chunk must be the original live actual free-chunk record.
+#[no_mangle]
+pub unsafe extern "C" fn mem_dump_chunk_addr_bridge(chunk: *mut c_void) -> CULong {
+    // SAFETY: Same actual typed-field helper and null behavior.
+    unsafe { mem_dump_chunk_addr_result(chunk) }
+}
+
+/// Read the same free-chunk size without changing its accounting.
+///
+/// # Safety
+/// A non-null chunk must retain its original lifetime and snapshot exclusion.
+#[no_mangle]
+pub unsafe extern "C" fn mem_dump_chunk_size_bridge(chunk: *mut c_void) -> CULong {
+    // SAFETY: Same actual typed-field helper, no allocation or Page reference.
+    unsafe { mem_dump_chunk_size_result(chunk) }
+}
+
+#[repr(C)]
+struct MemDumpCompleteDebugMetadata {
+    record: *mut u8,
+    flags_byte: usize,
+}
+
+unsafe extern "C" {
+    fn ihk_mc_get_dump_level() -> u32;
+    static mem_dump_complete_debug_metadata: MemDumpCompleteDebugMetadata;
+}
+
+/// Preserve the original dump bitmap-boundary diagnostic and argument widths.
+///
+/// # Safety
+/// The caller retains the original logging/provider context. No bitmap or Page
+/// pointer is dereferenced or retained by this value-only diagnostic callback.
+#[no_mangle]
+pub unsafe extern "C" fn mem_dump_warn_bridge(
+    kind: CInt,
+    map_count: CULong,
+    map_index: CULong,
+    map_start: CULong,
+    map_end: CULong,
+    page_index: CULong,
+) {
+    // SAFETY: Static NUL-terminated strings and exact original vararg types.
+    // The genuine C callback narrows map_count to int; other words stay ulong,
+    // including the original %ld representation of the unsigned map index.
+    unsafe {
+        if kind == 0 {
+            kprintf(
+                b"%s:free page is out of range(max:%d): %ld (map_start:0x%lx, map_end:0x%lx) k(0x%lx)\n\0".as_ptr().cast::<i8>(),
+                b"ihk_mc_query_mem_free_page\0".as_ptr().cast::<i8>(),
+                map_count as CInt,
+                map_index,
+                map_start,
+                map_end,
+                page_index,
+            );
+        } else {
+            kprintf(
+                b"%s:user page is out of range(max:%d): %ld (map_start:0x%lx, map_end:0x%lx) j(0x%lx)\n\0".as_ptr().cast::<i8>(),
+                b"ihk_mc_get_mem_user_page\0".as_ptr().cast::<i8>(),
+                map_count as CInt,
+                map_index,
+                map_start,
+                map_end,
+                page_index,
+            );
+        }
+    }
+}
+
+/// Return the original unsigned provider level through its C int callback ABI.
+///
+/// # Safety
+/// The existing dump-level provider and publication context must remain valid.
+#[no_mangle]
+pub unsafe extern "C" fn mem_dump_level_bridge() -> CInt {
+    // SAFETY: Genuine ihk/mm.h declares unsigned int; this retains the original
+    // supported compiler's same-width int conversion, without range clamping.
+    unsafe { ihk_mc_get_dump_level() as CInt }
+}
+
+/// Emit the original optional dump-completion event after its mutable flag gate.
+///
+/// # Safety
+/// The caller retains the original dynamic-debug record access discipline and
+/// logging context. This callback publishes no new completion or ownership ACK.
+#[no_mangle]
+pub unsafe extern "C" fn mem_dump_complete_log_bridge() {
+    // SAFETY: Same mutable C __verbose record with actual-GCC9-bound flags byte.
+    // Plain one-byte read preserves the original access policy; no cached copy,
+    // atomic strengthening or unconditional log replaces the gate.
+    unsafe {
+        let metadata = &mem_dump_complete_debug_metadata;
+        if core::ptr::read(metadata.record.add(metadata.flags_byte)) != 0 {
+            kprintf(
+                b"%s: IHK_DUMP_PAGE_SET_COMPLETED\n\0".as_ptr().cast::<i8>(),
+                b"ihk_mc_query_mem_areas\0".as_ptr().cast::<i8>(),
+            );
+        }
+    }
+}
+
+/// Preserve the three original ordinary boot-configuration messages.
+///
+/// # Safety
+/// The caller retains the existing logging initialization/provider context.
+#[no_mangle]
+pub unsafe extern "C" fn mem_init_log_bridge(event: CInt) {
+    // SAFETY: Exact original static messages. Unknown events have no effects.
+    unsafe {
+        match event {
+            MEM_INIT_LOG_ANON_ON_DEMAND => {
+                kprintf(b"Demand paging on ANONYMOUS mappings enabled.\n\0".as_ptr().cast());
+            }
+            MEM_INIT_LOG_XPMEM_PAGE_IN_REMOTE => {
+                kprintf(b"Demand paging on XPMEM remote mappings enabled.\n\0".as_ptr().cast());
+            }
+            MEM_INIT_LOG_HUGETLBFS_ON_DEMAND => {
+                kprintf(b"Demand paging on hugetlbfs mappings enabled.\n\0".as_ptr().cast());
+            }
+            _ => {}
+        }
+    }
+}
+
+/// Preserve the original distance-allocation failure message and ignored node.
+///
+/// # Safety
+/// The caller retains its original initialization and logging context.
+#[no_mangle]
+pub unsafe extern "C" fn mem_numa_distances_alloc_fail_log_bridge(_node: CInt) {
+    // SAFETY: Same exact static varargs, no node lookup/allocation/retry added.
+    unsafe {
+        kprintf(
+            b"%s: error: allocating nodes_by_distance\n\0".as_ptr().cast::<i8>(),
+            b"numa_distances_init\0".as_ptr().cast::<i8>(),
+        );
+    }
+}
+
+/// Diagnose the original invalid heap release without freeing or unlocking.
+///
+/// # Safety
+/// The caller retains the original tracking/IRQ context. `file` must satisfy
+/// the existing logging string lifetime contract. No pointer is dereferenced.
+#[no_mangle]
+pub unsafe extern "C" fn mem_kmalloc_invalid_free_bridge(
+    _ptr: *mut c_void,
+    file: *mut i8,
+    line: CInt,
+) {
+    // SAFETY: Exact original varargs and genuine void panic ABI. The pointer
+    // argument remains ignored; no invented release, IRQ restore or trap follows.
+    unsafe {
+        kprintf(
+            b"%s: ERROR: kfree()ing invalid pointer at %s:%d\n\0".as_ptr().cast::<i8>(),
+            b"_kfree\0".as_ptr().cast::<i8>(),
+            file,
+            line,
+        );
+        mem_kmalloc_panic(b"panic\0".as_ptr().cast::<i8>());
+    }
+}
+
+/// Diagnose the original invalid page-batch release using the caller provenance.
+///
+/// # Safety
+/// The original release/tracking context and logging string lifetime must hold.
+#[no_mangle]
+pub unsafe extern "C" fn mem_pagealloc_invalid_free_bridge(
+    ptr: *mut c_void,
+    file: *mut i8,
+    line: CInt,
+) {
+    // SAFETY: Preserve the genuine raw-pointer vararg passed to the old %lx
+    // format, exact borrowed file/line and log-before-void-panic sequence.
+    unsafe {
+        kprintf(
+            b"%s: ERROR: invalid deallocation for addr: 0x%lx @ %s:%d\n\0".as_ptr().cast(),
+            b"_ihk_mc_free_pages\0".as_ptr().cast::<i8>(),
+            ptr,
+            file,
+            line,
+        );
+        mem_kmalloc_panic(b"panic: invalid deallocation\0".as_ptr().cast::<i8>());
+    }
+}
+
+/// Diagnose the original mismatched page count without altering the batch.
+///
+/// # Safety
+/// The original tracking context and caller provenance string must remain valid.
+#[no_mangle]
+pub unsafe extern "C" fn mem_pagealloc_invalid_size_bridge(
+    _ptr: *mut c_void,
+    npages: CInt,
+    alloc_npages: CInt,
+    file: *mut i8,
+    line: CInt,
+) {
+    // SAFETY: Exact original signed counts and string/int varargs, then the
+    // same genuine void panic endpoint. No clamp, cleanup or ACK is introduced.
+    unsafe {
+        kprintf(
+            b"%s: ERROR: trying to deallocate %d pages for a %d pages allocation at %s:%d\n\0"
+                .as_ptr()
+                .cast::<i8>(),
+            b"_ihk_mc_free_pages\0".as_ptr().cast::<i8>(),
+            npages,
+            alloc_npages,
+            file,
+            line,
+        );
+        mem_kmalloc_panic(b"invalid deallocation\0".as_ptr().cast::<i8>());
+    }
+}
+
+#[repr(C)]
+struct MemTrackingDebugRecords1 {
+    records: [*mut u8; 1],
+    flags_byte: usize,
+}
+
+#[repr(C)]
+struct MemTrackingDebugRecords4 {
+    records: [*mut u8; 4],
+    flags_byte: usize,
+}
+
+#[repr(C)]
+struct MemTrackingDebugRecords7 {
+    records: [*mut u8; 7],
+    flags_byte: usize,
+}
+
+unsafe extern "C" {
+    static mem_kmalloc_track_log_bridge_debug_metadata: MemTrackingDebugRecords4;
+    static mem_pagealloc_track_log_bridge_debug_metadata: MemTrackingDebugRecords7;
+    static mem_kmalloc_leak_log_bridge_debug_metadata: MemTrackingDebugRecords1;
+    static mem_pagealloc_leak_log_bridge_debug_metadata: MemTrackingDebugRecords1;
+}
+
+/// Read the original ordinary flag byte from a live C-owned __verbose record.
+///
+/// # Safety
+/// `record` must name the real valid ddebug object and `flags_byte` its
+/// actual-GCC9-bound byte within that object. Original debug-control access
+/// discipline applies; this is neither an atomic upgrade nor a copied flag.
+unsafe fn mem_tracking_debug_enabled(record: *mut u8, flags_byte: usize) -> bool {
+    // SAFETY: The immutable descriptor binds actual object extent and byte27;
+    // the pointed record remains mutable C-owned storage throughout the call.
+    unsafe { core::ptr::read(record.add(flags_byte)) != 0 }
+}
+
+/// Preserve the complete original tracking diagnostic switch and flag gates.
+///
+/// # Safety
+/// The caller retains the original tracking/IRQ context and borrowed file-string
+/// lifetime when its event is enabled. Debug-record access discipline is the
+/// original one; this callback changes no allocation, list or reference state.
+#[no_mangle]
+pub unsafe extern "C" fn mem_kmalloc_track_log_bridge(
+    event: CInt,
+    ptr: *mut c_void,
+    file: *mut i8,
+    line: CInt,
+    size: CInt,
+) {
+    // SAFETY: Exact C-derived static formats and original scalar/pointer varargs.
+    // Only dynamic cases read their own live mutable __verbose flag byte, and
+    // no disabled/unknown event dereferences the incoming file or data pointer.
+    unsafe {
+        match event {
+            KMALLOC_TRACK_LOG_ENTRY_ALLOC_FAILED => {
+                kprintf(
+                    b"%s: ERROR: allocating tracking entry\n\0".as_ptr().cast::<i8>(),
+                    b"_kmalloc\0".as_ptr().cast::<i8>(),
+                );
+            }
+            KMALLOC_TRACK_LOG_FILE_ALLOC_FAILED => {
+                kprintf(
+                    b"%s: ERROR: allocating file string\n\0".as_ptr().cast::<i8>(),
+                    b"_kmalloc\0".as_ptr().cast::<i8>(),
+                );
+            }
+            KMALLOC_TRACK_LOG_ENTRY_ADDED => {
+                let metadata = &mem_kmalloc_track_log_bridge_debug_metadata;
+                if mem_tracking_debug_enabled(metadata.records[0], metadata.flags_byte) {
+                    kprintf(
+                        b"%s entry %s:%d size: %d added\n\0".as_ptr().cast::<i8>(),
+                        b"_kmalloc\0".as_ptr().cast::<i8>(),
+                        file,
+                        line,
+                        size,
+                    );
+                }
+            }
+            KMALLOC_TRACK_LOG_ADDR_ALLOC_FAILED => {
+                kprintf(
+                    b"%s: ERROR: allocating addr entry\n\0".as_ptr().cast::<i8>(),
+                    b"_kmalloc\0".as_ptr().cast::<i8>(),
+                );
+            }
+            KMALLOC_TRACK_LOG_ADDR_ADDED => {
+                let metadata = &mem_kmalloc_track_log_bridge_debug_metadata;
+                if mem_tracking_debug_enabled(metadata.records[1], metadata.flags_byte) {
+                    kprintf(
+                        b"%s addr_entry %p added\n\0".as_ptr().cast::<i8>(),
+                        b"_kmalloc\0".as_ptr().cast::<i8>(),
+                        ptr,
+                    );
+                }
+            }
+            KMALLOC_TRACK_LOG_ADDR_REMOVED => {
+                let metadata = &mem_kmalloc_track_log_bridge_debug_metadata;
+                if mem_tracking_debug_enabled(metadata.records[2], metadata.flags_byte) {
+                    kprintf(
+                        b"%s addr_entry %p removed\n\0".as_ptr().cast::<i8>(),
+                        b"_kfree\0".as_ptr().cast::<i8>(),
+                        ptr,
+                    );
+                }
+            }
+            KMALLOC_TRACK_LOG_ENTRY_REMOVED => {
+                let metadata = &mem_kmalloc_track_log_bridge_debug_metadata;
+                if mem_tracking_debug_enabled(metadata.records[3], metadata.flags_byte) {
+                    kprintf(
+                        b"%s entry %s:%d size: %d removed\n\0".as_ptr().cast::<i8>(),
+                        b"_kfree\0".as_ptr().cast::<i8>(),
+                        file,
+                        line,
+                        size,
+                    );
+                }
+            }
+            _ => {}
+        }
+    }
+}
+/// Preserve the complete original tracking diagnostic switch and flag gates.
+///
+/// # Safety
+/// The caller retains the original tracking/IRQ context and borrowed file-string
+/// lifetime when its event is enabled. Debug-record access discipline is the
+/// original one; this callback changes no allocation, list or reference state.
+#[no_mangle]
+pub unsafe extern "C" fn mem_pagealloc_track_log_bridge(
+    event: CInt,
+    ptr: *mut c_void,
+    file: *mut i8,
+    line: CInt,
+    npages: CInt,
+) {
+    // SAFETY: Exact C-derived static formats and original scalar/pointer varargs.
+    // Only dynamic cases read their own live mutable __verbose flag byte, and
+    // no disabled/unknown event dereferences the incoming file or data pointer.
+    unsafe {
+        match event {
+            PAGEALLOC_TRACK_LOG_ENTRY_ALLOC_FAILED => {
+                kprintf(
+                    b"%s: ERROR: allocating tracking entry\n\0".as_ptr().cast::<i8>(),
+                    b"_ihk_mc_alloc_aligned_pages_node\0".as_ptr().cast::<i8>(),
+                );
+            }
+            PAGEALLOC_TRACK_LOG_FILE_ALLOC_FAILED => {
+                kprintf(
+                    b"%s: ERROR: allocating file string\n\0".as_ptr().cast::<i8>(),
+                    b"_ihk_mc_alloc_aligned_pages_node\0".as_ptr().cast::<i8>(),
+                );
+            }
+            PAGEALLOC_TRACK_LOG_ENTRY_ADDED => {
+                let metadata = &mem_pagealloc_track_log_bridge_debug_metadata;
+                if mem_tracking_debug_enabled(metadata.records[0], metadata.flags_byte) {
+                    kprintf(
+                        b"%s entry %s:%d npages: %d added\n\0".as_ptr().cast::<i8>(),
+                        b"_ihk_mc_alloc_aligned_pages_node\0".as_ptr().cast::<i8>(),
+                        file,
+                        line,
+                        npages,
+                    );
+                }
+            }
+            PAGEALLOC_TRACK_LOG_ADDR_ALLOC_FAILED => {
+                kprintf(
+                    b"%s: ERROR: allocating addr entry\n\0".as_ptr().cast::<i8>(),
+                    b"_ihk_mc_alloc_aligned_pages_node\0".as_ptr().cast::<i8>(),
+                );
+            }
+            PAGEALLOC_TRACK_LOG_ADDR_ADDED => {
+                let metadata = &mem_pagealloc_track_log_bridge_debug_metadata;
+                if mem_tracking_debug_enabled(metadata.records[1], metadata.flags_byte) {
+                    kprintf(
+                        b"%s addr_entry %p added\n\0".as_ptr().cast::<i8>(),
+                        b"_ihk_mc_alloc_aligned_pages_node\0".as_ptr().cast::<i8>(),
+                        ptr,
+                    );
+                }
+            }
+            PAGEALLOC_TRACK_LOG_ADDR_REMOVED => {
+                let metadata = &mem_pagealloc_track_log_bridge_debug_metadata;
+                if mem_tracking_debug_enabled(metadata.records[2], metadata.flags_byte) {
+                    kprintf(
+                        b"%s addr_entry %p removed\n\0".as_ptr().cast::<i8>(),
+                        b"_ihk_mc_free_pages\0".as_ptr().cast::<i8>(),
+                        ptr,
+                    );
+                }
+            }
+            PAGEALLOC_TRACK_LOG_ENTRY_REMOVED => {
+                let metadata = &mem_pagealloc_track_log_bridge_debug_metadata;
+                if mem_tracking_debug_enabled(metadata.records[3], metadata.flags_byte) {
+                    kprintf(
+                        b"%s entry %s:%d removed\n\0".as_ptr().cast::<i8>(),
+                        b"_ihk_mc_free_pages\0".as_ptr().cast::<i8>(),
+                        file,
+                        line,
+                    );
+                }
+            }
+            PAGEALLOC_TRACK_LOG_COVERING_FOUND => {
+                let metadata = &mem_pagealloc_track_log_bridge_debug_metadata;
+                if mem_tracking_debug_enabled(metadata.records[4], metadata.flags_byte) {
+                    kprintf(
+                        b"%s: found covering addr_entry: 0x%lx:%d\n\0".as_ptr().cast::<i8>(),
+                        b"_ihk_mc_free_pages\0".as_ptr().cast::<i8>(),
+                        ptr,
+                        npages,
+                    );
+                }
+            }
+            PAGEALLOC_TRACK_LOG_ADDR_NEXT_ADDED => {
+                let metadata = &mem_pagealloc_track_log_bridge_debug_metadata;
+                if mem_tracking_debug_enabled(metadata.records[5], metadata.flags_byte) {
+                    kprintf(
+                        b"%s: addr_entry_next: 0x%lx:%d\n\0".as_ptr().cast::<i8>(),
+                        b"_ihk_mc_free_pages\0".as_ptr().cast::<i8>(),
+                        ptr,
+                        npages,
+                    );
+                }
+            }
+            PAGEALLOC_TRACK_LOG_ADDR_MODIFIED => {
+                let metadata = &mem_pagealloc_track_log_bridge_debug_metadata;
+                if mem_tracking_debug_enabled(metadata.records[6], metadata.flags_byte) {
+                    kprintf(
+                        b"%s: modified addr_entry: 0x%lx:%d\n\0".as_ptr().cast::<i8>(),
+                        b"_ihk_mc_free_pages\0".as_ptr().cast::<i8>(),
+                        ptr,
+                        npages,
+                    );
+                }
+            }
+            _ => {}
+        }
+    }
+}
+/// Preserve the complete original tracking diagnostic switch and flag gates.
+///
+/// # Safety
+/// The caller retains the original tracking/IRQ context and borrowed file-string
+/// lifetime when its event is enabled. Debug-record access discipline is the
+/// original one; this callback changes no allocation, list or reference state.
+#[no_mangle]
+pub unsafe extern "C" fn mem_kmalloc_leak_log_bridge(
+    event: CInt,
+    ptr: *mut c_void,
+    file: *mut i8,
+    line: CInt,
+    size: CInt,
+    count: CInt,
+    runcount: CInt,
+) {
+    // SAFETY: Exact C-derived static formats and original scalar/pointer varargs.
+    // Only dynamic cases read their own live mutable __verbose flag byte, and
+    // no disabled/unknown event dereferences the incoming file or data pointer.
+    unsafe {
+        match event {
+            MEM_TRACK_LEAK_DETAIL => {
+                let metadata = &mem_kmalloc_leak_log_bridge_debug_metadata;
+                if mem_tracking_debug_enabled(metadata.records[0], metadata.flags_byte) {
+                    kprintf(
+                        b"%s memory leak: %p @ %s:%d size: %d runcount: %d\n\0".as_ptr().cast::<i8>(),
+                        b"kmalloc_memcheck\0".as_ptr().cast::<i8>(),
+                        ptr,
+                        file,
+                        line,
+                        size,
+                        runcount,
+                    );
+                }
+            }
+            MEM_TRACK_LEAK_SUMMARY => {
+                kprintf(
+                    b"%s memory leak: %s:%d size: %d cnt: %d, runcount: %d\n\0".as_ptr().cast::<i8>(),
+                    b"kmalloc_memcheck\0".as_ptr().cast::<i8>(),
+                    file,
+                    line,
+                    size,
+                    count,
+                    runcount,
+                );
+            }
+            _ => {}
+        }
+    }
+}
+/// Preserve the complete original tracking diagnostic switch and flag gates.
+///
+/// # Safety
+/// The caller retains the original tracking/IRQ context and borrowed file-string
+/// lifetime when its event is enabled. Debug-record access discipline is the
+/// original one; this callback changes no allocation, list or reference state.
+#[no_mangle]
+pub unsafe extern "C" fn mem_pagealloc_leak_log_bridge(
+    event: CInt,
+    ptr: *mut c_void,
+    file: *mut i8,
+    line: CInt,
+    _size: CInt,
+    count: CInt,
+    runcount: CInt,
+) {
+    // SAFETY: Exact C-derived static formats and original scalar/pointer varargs.
+    // Only dynamic cases read their own live mutable __verbose flag byte, and
+    // no disabled/unknown event dereferences the incoming file or data pointer.
+    unsafe {
+        match event {
+            MEM_TRACK_LEAK_DETAIL => {
+                let metadata = &mem_pagealloc_leak_log_bridge_debug_metadata;
+                if mem_tracking_debug_enabled(metadata.records[0], metadata.flags_byte) {
+                    kprintf(
+                        b"%s memory leak: %p @ %s:%d runcount: %d\n\0".as_ptr().cast::<i8>(),
+                        b"pagealloc_memcheck\0".as_ptr().cast::<i8>(),
+                        ptr,
+                        file,
+                        line,
+                        runcount,
+                    );
+                }
+            }
+            MEM_TRACK_LEAK_SUMMARY => {
+                kprintf(
+                    b"%s memory leak: %s:%d cnt: %d, runcount: %d\n\0".as_ptr().cast::<i8>(),
+                    b"pagealloc_memcheck\0".as_ptr().cast::<i8>(),
+                    file,
+                    line,
+                    count,
+                    runcount,
+                );
+            }
+            _ => {}
+        }
+    }
+}
+
+unsafe extern "C" {
+    #[link_name = "lookup_process_memory_range"]
+    fn mem_lookup_process_memory_range_provider(
+        vm: *mut ProcessVm,
+        start: CULong,
+        end: CULong,
+    ) -> *mut VmRange;
+
+    #[link_name = "ihk_mc_register_interrupt_handler"]
+    fn mem_register_interrupt_handler_provider(vector: CInt, handler: *mut c_void) -> CInt;
+}
+
+/// Delegate a borrowed VM range lookup without changing range ownership.
+///
+/// # Safety
+/// The caller must retain the same VM lifetime and range-lock discipline required
+/// by lookup_process_memory_range. The returned raw range keeps its original
+/// borrowed lifetime; this adapter acquires no lock or reference.
+#[no_mangle]
+pub unsafe extern "C" fn mem_lookup_memory_range_bridge(
+    vm: *mut c_void,
+    start: CULong,
+    end: CULong,
+) -> *mut c_void {
+    // SAFETY: The original provider receives the same VM and unmodified bounds.
+    // No local dereference, null policy, normalization or ownership transfer occurs.
+    unsafe { mem_lookup_process_memory_range_provider(vm.cast(), start, end).cast() }
+}
+
+/// Register the caller-owned interrupt descriptor through the existing provider.
+///
+/// # Safety
+/// handler must represent the original ihk_mc_interrupt_handler pointer, including
+/// its original list state, callback lifetime and registration synchronization.
+/// These obligations remain with the caller/provider; no descriptor is copied.
+#[no_mangle]
+pub unsafe extern "C" fn mem_register_interrupt_handler_bridge(
+    vector: CInt,
+    handler: CULong,
+) -> CInt {
+    // SAFETY: Supported x86_64 unsigned-long to pointer conversion preserves the
+    // same descriptor bits. The genuine provider retains its exact result/order.
+    unsafe { mem_register_interrupt_handler_provider(vector, handler as *mut c_void) }
+}
+
+unsafe extern "C" {
+    static mem_rusage_init_debug_metadata: MemTrackingDebugRecords1;
+}
+
+/// Preserve the NUMA initialization failure diagnostic and genuine void panic.
+///
+/// # Safety
+/// The caller retains its original initialization and logging context. This
+/// callback does not release partially initialized nodes or alter IRQ state.
+#[no_mangle]
+pub unsafe extern "C" fn mem_numa_panic_bridge(node: CInt) {
+    // SAFETY: Static strings, exact signed node, log before the existing panic.
+    // panic retains its genuine void ABI; no trap or unreachable is invented.
+    unsafe {
+        kprintf(
+            b"%s: error: obtaining NUMA info for node %d\n\0".as_ptr().cast::<i8>(),
+            b"numa_init\0".as_ptr().cast::<i8>(),
+            node,
+        );
+        mem_kmalloc_panic(b"\0".as_ptr().cast::<i8>());
+    }
+}
+
+/// Preserve the original missing CPU-info panic during resource initialization.
+///
+/// # Safety
+/// The original initialization and genuine panic provider context must hold.
+#[no_mangle]
+pub unsafe extern "C" fn mem_rusage_init_panic_bridge() {
+    // SAFETY: Exact original static diagnostic and void panic ABI; no cleanup,
+    // synthetic initialization success or new completion publication follows.
+    unsafe {
+        mem_kmalloc_panic(
+            b"rusage_init: PANIC: ihk_mc_get_cpu_info returned NULL\0".as_ptr().cast(),
+        );
+    }
+}
+
+/// Retain the mutable dynamic-debug gate and original total-memory word format.
+///
+/// # Safety
+/// The caller retains the original debug-record access discipline and logging
+/// context. The word is diagnostic only and no resource accounting is changed.
+#[no_mangle]
+pub unsafe extern "C" fn mem_rusage_init_log_bridge(total_memory: CULong) {
+    // SAFETY: The descriptor names the actual mutable C record and actual-GCC9
+    // flags-byte witness. Plain read and any-nonzero predicate match original C.
+    unsafe {
+        let metadata = &mem_rusage_init_debug_metadata;
+        if mem_tracking_debug_enabled(metadata.records[0], metadata.flags_byte) {
+            kprintf(
+                b"%s: rusage.total_memory=%ld\n\0".as_ptr().cast::<i8>(),
+                b"rusage_init\0".as_ptr().cast::<i8>(),
+                total_memory,
+            );
+        }
+    }
+}
+
+#[repr(C)]
+struct MemNumaDistanceAllocationOrigin {
+    file: *const i8,
+    line: CInt,
+}
+
+unsafe extern "C" {
+    static mem_numa_log_rbtree_enabled: CInt;
+    static mem_numa_distance_allocation_origin: MemNumaDistanceAllocationOrigin;
+}
+
+/// Retain the existing resource-accounting provider and its configuration gate.
+///
+/// # Safety
+/// Caller must retain the original boot/accounting serialization. This wrapper
+/// does not make the ordinary resource total update atomic or acquire a lock.
+#[no_mangle]
+pub unsafe extern "C" fn mem_numa_rusage_total_add_bridge(bytes: CULong) {
+    // SAFETY: Reuse the existing Rust provider with the exact unsigned word.
+    // Its enable_rusage gate and wrapping arithmetic remain authoritative.
+    unsafe { rusage_total_memory_add(bytes) }
+}
+
+/// Preserve the complete NUMA initialization diagnostic switch.
+///
+/// # Safety
+/// Original boot logging context must hold. All values remain diagnostic only;
+/// no node, range, page or allocation pointer is dereferenced or retained here.
+#[no_mangle]
+pub unsafe extern "C" fn mem_numa_init_log_bridge(
+    event: CInt,
+    node: CInt,
+    linux_numa_id: CInt,
+    node_type: CInt,
+    start: CULong,
+    end: CULong,
+    bytes: CULong,
+    pages: CInt,
+    rbtree_allocator: CInt,
+) {
+    // SAFETY: Exact static format bytes and original signed/unsigned varargs.
+    // The immutable C configuration datum retains the original preprocessor arm.
+    unsafe {
+        match event {
+            MEM_NUMA_INIT_LOG_CHUNK => {
+                kprintf(
+                    b"Physical memory: 0x%lx - 0x%lx, %lu bytes, %d pages available @ NUMA: %d\n\0"
+                        .as_ptr().cast::<i8>(),
+                    start, end, bytes, pages, node,
+                );
+            }
+            MEM_NUMA_INIT_LOG_NODE => {
+                if mem_numa_log_rbtree_enabled != 0 && rbtree_allocator != 0 {
+                    kprintf(
+                        b"NUMA: %d, Linux NUMA: %d, type: %d, available bytes: %lu, pages: %d\n\0"
+                            .as_ptr().cast::<i8>(),
+                        node, linux_numa_id, node_type, bytes, pages,
+                    );
+                } else {
+                    kprintf(
+                        b"NUMA: %d, Linux NUMA: %d, type: %d\n\0".as_ptr().cast::<i8>(),
+                        node, linux_numa_id, node_type,
+                    );
+                }
+            }
+            _ => {}
+        }
+    }
+}
+
+/// Allocate the original distance array with the tracked caller provenance.
+///
+/// # Safety
+/// The original boot allocator, page-tracking and node-selection context must
+/// hold. The caller owns the returned batch exactly as before, including NULL.
+#[no_mangle]
+pub unsafe extern "C" fn mem_numa_distances_alloc_bridge(
+    npages: CInt,
+    flag: CULong,
+) -> *mut c_void {
+    // SAFETY: Immutable C metadata captures the original language's file/line
+    // origin at the replaced callsite. No Rust file!/line! or new C shim is used.
+    // The same tracked allocator receives all eight arguments once, in order.
+    unsafe {
+        let origin = &mem_numa_distance_allocation_origin;
+        _ihk_mc_alloc_aligned_pages_node(
+            npages,
+            PAGE_P2ALIGN,
+            flag,
+            -1,
+            IHK_MC_PG_KERNEL,
+            CULong::MAX,
+            origin.file as *mut i8,
+            origin.line,
+        )
+    }
+}
+
+type MemPageFaultHandler = unsafe extern "C" fn(*mut c_void, u64, *mut c_void);
+
+unsafe extern "C" {
+    #[link_name = "ihk_mc_set_page_fault_handler"]
+    fn mem_set_page_fault_handler_provider(handler: Option<MemPageFaultHandler>);
+}
+
+/// Install the same fault-handler address through the existing public provider.
+///
+/// # Safety
+/// The word must satisfy the original supported x86_64 unsigned-long to function
+/// pointer conversion contract. A nonzero address must name a live callback with
+/// the genuine void(void *, uint64_t, void *) ABI for its entire installed life.
+/// The caller retains original initialization and publication synchronization.
+#[no_mangle]
+pub unsafe extern "C" fn mem_set_page_fault_handler_bridge(handler: CULong) {
+    // SAFETY: Supported ABI has equal-sized word and function pointer; nullable
+    // function pointers use the zero representation. transmute preserves every
+    // incoming bit without dereferencing/invoking the callback, inventing a null
+    // rejection, retaining a new reference or adding publication/ACK behavior.
+    unsafe {
+        let callback = core::mem::transmute::<CULong, Option<MemPageFaultHandler>>(handler);
+        mem_set_page_fault_handler_provider(callback);
+    }
+}
+
+unsafe extern "C" {
+    #[link_name = "ihk_mc_get_vector"]
+    fn mem_get_vector_provider(vector_type: u32) -> CInt;
+    #[link_name = "vm_range_policy_search"]
+    fn mem_range_policy_search_provider(
+        vm: *mut ProcessVm,
+        address: CULong,
+    ) -> *mut crate::abi::VmRangeNumaPolicy;
+}
+
+/// Forward the original int-to-enum conversion to the public vector provider.
+///
+/// # Safety
+/// The caller must retain the original provider initialization context. The
+/// selected C consumer must prove the exact four-byte unsigned enum ABI; an
+/// incompatible compiler option is rejected by its genuine-header witness.
+#[no_mangle]
+pub unsafe extern "C" fn mem_get_vector_bridge(vector_type: CInt) -> CInt {
+    // SAFETY: The original explicit C enum cast preserves all int bits in its
+    // unsigned underlying type. No validation, default vector or clamp is added.
+    unsafe { mem_get_vector_provider(vector_type as u32) }
+}
+
+/// Return the original borrowed VM range-policy search result.
+///
+/// # Safety
+/// The VM, policy tree and returned raw policy must retain the caller/provider's
+/// original lifetime and lock discipline. No Rust reference extends that life.
+#[no_mangle]
+pub unsafe extern "C" fn mem_range_policy_search_bridge(
+    vm: *mut c_void,
+    virt_addr: CULong,
+) -> *mut c_void {
+    // SAFETY: Genuine syscall.h declares precisely this VM/address/result ABI.
+    // The adapter does not dereference, normalize, lock, refcount or copy policy.
+    unsafe { mem_range_policy_search_provider(vm.cast(), virt_addr).cast() }
+}
+
+unsafe extern "C" {
+    #[link_name = "snprintf"]
+    fn mem_distance_snprintf(buffer: *mut i8, size: SizeT, format: *const i8, ...) -> CInt;
+}
+
+/// Format the original complete NUMA-distance line through the existing formatter.
+///
+/// # Safety
+/// Positive nr_nodes requires that many readable live MemNodeDistance entries.
+/// Original C defined-behavior bounds must hold: each snprintf return advances
+/// the cursor within the same 1024-byte buffer, and each remaining-size argument
+/// must describe writable storage there. Callers must retain the boot logging
+/// context. No new truncation, clamp, negative-size or overflow policy is added.
+#[no_mangle]
+pub unsafe extern "C" fn mem_numa_distances_log_bridge(
+    node: CInt,
+    distances: *mut MemNodeDistance,
+    nr_nodes: CInt,
+) {
+    let mut buffer = core::mem::MaybeUninit::<[u8; 1024]>::uninit();
+    let base = buffer.as_mut_ptr().cast::<i8>();
+
+    // SAFETY: Genuine snprintf initializes its written prefix and NUL terminator;
+    // only that initialized string is passed to kprintf. Unwritten stack bytes
+    // are not read or silently zeroed. Cursor arithmetic mirrors original C,
+    // subject to its same within-buffer precondition rather than a new policy.
+    unsafe {
+        let prefix = mem_distance_snprintf(
+            base,
+            1024,
+            b"NUMA %d distances: \0".as_ptr().cast(),
+            node,
+        );
+        let mut cursor = base.offset(prefix as isize);
+        let mut index: CInt = 0;
+        while index < nr_nodes {
+            let remaining = 1024_isize.wrapping_sub(cursor.offset_from(base)) as SizeT;
+            let distance = distances.add(index as usize);
+            let written = mem_distance_snprintf(
+                cursor,
+                remaining,
+                b"%d (%d), \0".as_ptr().cast(),
+                (*distance).id,
+                (*distance).distance,
+            );
+            cursor = cursor.offset(written as isize);
+            index += 1;
+        }
+        kprintf(b"%s\n\0".as_ptr().cast::<i8>(), base);
+    }
+}
+
+#[repr(C)]
+struct MemAllocationLogMetadata {
+    records: [*mut u8; 7],
+    flags_byte: usize,
+    profile_add: Option<unsafe extern "C" fn(u32, u64)>,
+    profile_event: u32,
+    fugaku: CInt,
+}
+
+unsafe extern "C" {
+    static mem_allocation_log_metadata: MemAllocationLogMetadata;
+}
+
+/// Preserve the complete allocation diagnostic and profile-event switch.
+///
+/// # Safety
+/// The caller retains the original allocation/thread profile context and mutable
+/// debug-record access discipline. This callback does not change allocation,
+/// IRQ, CPU selection, page ownership or the selected profile provider lifetime.
+#[no_mangle]
+pub unsafe extern "C" fn mem_mckernel_alloc_log_bridge(
+    event: CInt,
+    current_node: CInt,
+    numa_id: CInt,
+    npages: CInt,
+) {
+    // SAFETY: Immutable C metadata captures original feature arms/event ABI and
+    // genuine selected provider. Each debug callsite retains its own live record.
+    unsafe {
+        let metadata = &mem_allocation_log_metadata;
+        match event {
+            MEM_ALLOC_LOG_EXPLICIT_OK => {
+                if mem_tracking_debug_enabled(metadata.records[0], metadata.flags_byte) {
+                    kprintf(
+                        b"%s: explicit (node: %d) CPU @ node %d allocated %d pages from node %d\n\0".as_ptr().cast::<i8>(),
+                        b"mckernel_allocate_aligned_pages_node\0".as_ptr().cast::<i8>(),
+                        numa_id,
+                        current_node,
+                        npages,
+                        current_node,
+                    );
+                }
+            }
+            MEM_ALLOC_LOG_EXPLICIT_MISS => {
+                if let Some(add) = metadata.profile_add {
+                    // Original npages * PAGE_SIZE is unsigned-word arithmetic;
+                    // profile accounting precedes the optional debug log.
+                    add(metadata.profile_event, (npages as CULong).wrapping_mul(PAGE_SIZE) as u64);
+                }
+                if mem_tracking_debug_enabled(metadata.records[1], metadata.flags_byte) {
+                    kprintf(
+                        b"%s: couldn't fulfill explicit NUMA request for %d pages\n\0".as_ptr().cast::<i8>(),
+                        b"mckernel_allocate_aligned_pages_node\0".as_ptr().cast::<i8>(),
+                        npages,
+                    );
+                }
+            }
+            MEM_ALLOC_LOG_POLICY_OK => {
+                if mem_tracking_debug_enabled(metadata.records[2], metadata.flags_byte) {
+                    kprintf(
+                        b"%s: policy: CPU @ node %d allocated %d pages from node %d\n\0".as_ptr().cast::<i8>(),
+                        b"mckernel_allocate_aligned_pages_node\0".as_ptr().cast::<i8>(),
+                        current_node,
+                        npages,
+                        current_node,
+                    );
+                }
+            }
+            MEM_ALLOC_LOG_POLICY_MISS => {
+                if let Some(add) = metadata.profile_add {
+                    // Original npages * PAGE_SIZE is unsigned-word arithmetic;
+                    // profile accounting precedes the optional debug log.
+                    add(metadata.profile_event, (npages as CULong).wrapping_mul(PAGE_SIZE) as u64);
+                }
+                if mem_tracking_debug_enabled(metadata.records[3], metadata.flags_byte) {
+                    kprintf(
+                        b"%s: couldn't fulfill user policy for %d pages\n\0".as_ptr().cast::<i8>(),
+                        b"mckernel_allocate_aligned_pages_node\0".as_ptr().cast::<i8>(),
+                        npages,
+                    );
+                }
+            }
+            MEM_ALLOC_LOG_DISTANCE_OK => {
+                if mem_tracking_debug_enabled(metadata.records[4], metadata.flags_byte) {
+                    kprintf(
+                        b"%s: distance: CPU @ node %d allocated %d pages from node %d\n\0".as_ptr().cast::<i8>(),
+                        b"mckernel_allocate_aligned_pages_node\0".as_ptr().cast::<i8>(),
+                        current_node,
+                        npages,
+                        numa_id,
+                    );
+                }
+            }
+            MEM_ALLOC_LOG_DISTANCE_FIRST_MISS => {
+                if metadata.fugaku == 0 || mem_tracking_debug_enabled(metadata.records[5], metadata.flags_byte) {
+                    kprintf(
+                        b"%s: distance: CPU @ node %d failed to allocate %d pages from node %d\n\0".as_ptr().cast::<i8>(),
+                        b"mckernel_allocate_aligned_pages_node\0".as_ptr().cast::<i8>(),
+                        current_node,
+                        npages,
+                        numa_id,
+                    );
+                }
+            }
+            MEM_ALLOC_LOG_OOM => {
+                if mem_tracking_debug_enabled(metadata.records[6], metadata.flags_byte) {
+                    kprintf(
+                        b"OOM\n\0".as_ptr().cast::<i8>(),
+                        b"mckernel_allocate_aligned_pages_node\0".as_ptr().cast::<i8>(),
+                    );
+                }
+            }
+            _ => {}
+        }
+    }
+}
+
+#[repr(C)]
+struct MemNumaInitializationMetadata {
+    nodes: *mut MemNumaNode,
+    rbtree_allocator: CInt,
+    get_node_info: MemGetNumaNodeInfoFn,
+    get_chunk: MemGetMemoryChunkFn,
+    init_node: MemNumaNodeInitFn,
+    add_free: MemNumaAddFreePagesFn,
+    init_allocator: MemPageAllocatorInitFn,
+    list_allocator: MemNumaListAllocatorFn,
+    count_pages: MemPageallocCountFn,
+    add_total: MemRusageTotalAddFn,
+    log: MemNumaInitLogFn,
+    panic_fn: MemNumaPanicFn,
+}
+
+unsafe extern "C" {
+    static mem_numa_initialization_metadata: MemNumaInitializationMetadata;
+}
+
+/// Run the complete selected NUMA initialization through the existing Rust body.
+///
+/// # Safety
+/// The original single-owner boot context must hold: stable boot topology,
+/// exclusive node-array initialization and live allocator/architecture providers.
+/// The last-early-heap slot retains its existing volatile access discipline.
+#[no_mangle]
+pub unsafe extern "C" fn numa_init() {
+    // SAFETY: The two topology getters only read distinct stable boot fields.
+    // Neither writes, allocates, logs nor changes the early-heap slot, so they
+    // commute with the sole effectful argument chain below. Preserve exactly one
+    // volatile heap read, its address-conversion/log effect, then the Rust body.
+    unsafe {
+        let metadata = &mem_numa_initialization_metadata;
+        let nr_nodes = ihk_mc_get_nr_numa_nodes();
+        let nr_chunks = ihk_mc_get_nr_memory_chunks();
+        let heap = crate::x86_memory_helpers::get_last_early_heap();
+        let heap_phys = crate::x86_memory_helpers::virt_to_phys(heap);
+        let _ = mem_numa_init_body_result(
+            metadata.nodes,
+            nr_nodes,
+            nr_chunks,
+            metadata.rbtree_allocator,
+            heap_phys,
+            Some(metadata.get_node_info),
+            Some(metadata.get_chunk),
+            Some(metadata.init_node),
+            Some(metadata.add_free),
+            Some(metadata.init_allocator),
+            Some(metadata.list_allocator),
+            Some(metadata.count_pages),
+            Some(metadata.add_total),
+            Some(metadata.log),
+            Some(metadata.panic_fn),
+        );
+    }
+}
+
+/// Preserve the original boot callback entry without another initialization.
+///
+/// # Safety
+/// The same exclusive initialization obligations as numa_init must hold.
+#[no_mangle]
+pub unsafe extern "C" fn mem_numa_init_bridge() {
+    // SAFETY: Same synchronous single call and discarded void result.
+    unsafe { numa_init() }
+}
+
+#[repr(C)]
+struct MemNumaSysfsRegistrationMetadata {
+    ops: *mut crate::abi::SysfsOps,
+    nodes: *mut MemNumaNode,
+}
+
+unsafe extern "C" {
+    static mem_numa_sysfs_registration_metadata: MemNumaSysfsRegistrationMetadata;
+}
+
+/// Register the original per-node sysfs file through the existing Rust provider.
+///
+/// # Safety
+/// The original setup context must hold. The C-owned ops table and node array
+/// remain live for every subsequent registered callback, and the boot node count
+/// stays within the actual array extent. The stack path is borrowed only for
+/// the synchronous create call; the genuine provider formats its own owned copy.
+#[no_mangle]
+pub unsafe extern "C" fn numa_sysfs_setup() {
+    let mut path = core::mem::MaybeUninit::<[i8; crate::abi::PATH_MAX]>::uninit();
+    let path_pointer = path.as_mut_ptr().cast::<i8>();
+    let mut index: CInt = 0;
+
+    // SAFETY: Each iteration mirrors original formatting/create/error order.
+    // Only initialized formatted bytes are read. No raw stack path is retained
+    // by the genuine create provider; persistent ops/instance are C-owned globals.
+    unsafe {
+        let metadata = &mem_numa_sysfs_registration_metadata;
+        while index < ihk_mc_get_nr_numa_nodes() {
+            mem_distance_snprintf(
+                path_pointer,
+                crate::abi::PATH_MAX,
+                b"/sys/devices/system/node/node%d/meminfo\0".as_ptr().cast(),
+                index,
+            );
+            let error = crate::sysfs::sysfs_createf(
+                metadata.ops,
+                metadata.nodes.add(index as usize).cast(),
+                0o444,
+                path_pointer,
+            );
+            if error != 0 {
+                kprintf(
+                    b"%s: ERROR: creating %s\n\0".as_ptr().cast::<i8>(),
+                    b"numa_sysfs_setup\0".as_ptr().cast::<i8>(),
+                    path_pointer,
+                );
+            }
+            index += 1;
+        }
+    }
+}
+
+unsafe extern "C" {
+    static mem_fatal_user_bytes_geometry: [CULong; 2];
+}
+
+/// Emit the complete original bounded fatal-user-byte diagnostic.
+///
+/// # Safety
+/// Caller must retain the original current-thread/user-copy/fault logging context.
+/// For an address admitted by the original range check, name must remain a valid
+/// logging string. User mapping access/fault policy remains with copy_from_user;
+/// this wrapper never directly dereferences the supplied user address.
+#[no_mangle]
+pub unsafe extern "C" fn mcexec_v10_dump_user_bytes(name: *const i8, addr: CULong) {
+    // SAFETY: Real C compile/header geometry retains the exact original address
+    // gate. Rejected values return before usercopy or logging/name access.
+    unsafe {
+        if addr < mem_fatal_user_bytes_geometry[0] || addr >= mem_fatal_user_bytes_geometry[1] {
+            return;
+        }
+        let mut storage = core::mem::MaybeUninit::<[u8; 16]>::uninit();
+        let error = crate::x86_memory_helpers::copy_from_user(
+            storage.as_mut_ptr().cast(),
+            addr as *const c_void,
+            16,
+        );
+        if error != 0 {
+            kprintf(
+                b"mcexec_v10: fatal_user_bytes %s=0x%lx copy_failed=%d\n\0"
+                    .as_ptr().cast::<i8>(),
+                name,
+                addr,
+                error,
+            );
+            return;
+        }
+
+        // SAFETY: Genuine usercopy returns0 only after all sixteen output bytes
+        // are initialized. The failed/partial path above never reads that storage.
+        let bytes = storage.assume_init();
+        let mut ascii = core::mem::MaybeUninit::<[u8; 17]>::uninit();
+        let ascii_pointer = ascii.as_mut_ptr().cast::<u8>();
+        let mut index = 0;
+        while index < 16 {
+            let byte = bytes[index];
+            core::ptr::write(
+                ascii_pointer.add(index),
+                if (0x20..=0x7e).contains(&byte) { byte } else { b'.' },
+            );
+            index += 1;
+        }
+        core::ptr::write(ascii_pointer.add(16), 0);
+
+        // SAFETY: All ASCII bytes/NUL are initialized and live synchronously.
+        // Original unsigned chars undergo int promotion for every %02x; the
+        // same positive CInt arguments preserve values0..255 and exact format.
+        kprintf(
+            b"mcexec_v10: fatal_user_bytes %s=0x%lx b=%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x ascii=\"%s\"\n\0"
+                .as_ptr().cast::<i8>(),
+            name,
+            addr,
+            bytes[0] as CInt,
+            bytes[1] as CInt,
+            bytes[2] as CInt,
+            bytes[3] as CInt,
+            bytes[4] as CInt,
+            bytes[5] as CInt,
+            bytes[6] as CInt,
+            bytes[7] as CInt,
+            bytes[8] as CInt,
+            bytes[9] as CInt,
+            bytes[10] as CInt,
+            bytes[11] as CInt,
+            bytes[12] as CInt,
+            bytes[13] as CInt,
+            bytes[14] as CInt,
+            bytes[15] as CInt,
+            ascii_pointer.cast::<i8>(),
+        );
+    }
+}
+
+/// Consolidate the current CPU lists using the observed original getter order.
+///
+/// # Safety
+/// Each CPU lookup must meet the original current-context/lifetime contract for
+/// its returned CpuLocalVar. Distinct returns are preserved: no same-CPU or
+/// preemption-disabled assumption is added before the existing remote-list lock.
+#[no_mangle]
+pub unsafe extern "C" fn kmalloc_consolidate_free_list() {
+    // SAFETY: Actual selected GCC9 assembly evaluates lock CPU first, free-list
+    // CPU second and remote-list CPU third, then passes those three field
+    // addresses to the existing helper. Keep three independent calls; the CPU
+    // getter contains real architectural reads and must not be cached or merged.
+    unsafe {
+        let lock_cpu = get_this_cpu_local_var();
+        let free_cpu = get_this_cpu_local_var();
+        let remote_cpu = get_this_cpu_local_var();
+        let _ = kmalloc_consolidate_free_list_result(
+            core::ptr::addr_of_mut!((*remote_cpu).remote_free_list),
+            core::ptr::addr_of_mut!((*free_cpu).free_list),
+            core::ptr::addr_of_mut!((*lock_cpu).remote_free_list_lock),
+            Some(mem_kmalloc_remote_lock_bridge),
+            Some(mem_kmalloc_remote_unlock_bridge),
+        );
+    }
+}
+
+#[repr(C)]
+struct MemNumaSysfsShowGeometry {
+    rbtree: CInt,
+    kb_shift: u32,
+}
+
+unsafe extern "C" {
+    static mem_numa_sysfs_show_geometry: MemNumaSysfsShowGeometry;
+}
+
+/// Preserve the complete original per-node meminfo formatting callback.
+///
+/// # Safety
+/// In the RBTREE arm, instance must name the original live NUMA node and buf
+/// writable storage for size bytes. Retain the caller's original counter-read
+/// synchronization/lifetime discipline. Each snprintf cursor and cumulative int
+/// length must stay in the original C defined-behavior domain; no clamp, extra
+/// lock, atomic/volatile upgrade or stronger snapshot guarantee is introduced.
+#[no_mangle]
+pub unsafe extern "C" fn numa_sysfs_show_meminfo(
+    _ops: *mut crate::abi::SysfsOps,
+    instance: *mut c_void,
+    buf: *mut c_void,
+    size: SizeT,
+) -> crate::abi::SSizeT {
+    // SAFETY: Immutable metadata binds the genuine Cconfiguration and shift.
+    // The original non-RBTREE arm returns0 without reading node/buffer pointers.
+    unsafe {
+        let geometry = &mem_numa_sysfs_show_geometry;
+        if geometry.rbtree == 0 {
+            return 0;
+        }
+        let node = instance.cast::<MemNumaNode>();
+        let buffer = buf.cast::<i8>();
+        let mut length: CInt = 0;
+
+        // Each call performs its own original plain counter reads; do not cache
+        // a new node snapshot across calls. Original C passes unsigned long
+        // counter arithmetic to %d, so retain that raw vararg representation.
+        let written = mem_distance_snprintf(
+            buffer.offset(length as isize),
+            size.wrapping_sub(length as SizeT),
+            b"Node %d MemTotal:%15d kB\n\0".as_ptr().cast(),
+            (*node).id,
+            (*node).nr_pages.wrapping_shl(geometry.kb_shift),
+        );
+        length = length.wrapping_add(written);
+        let written = mem_distance_snprintf(
+            buffer.offset(length as isize),
+            size.wrapping_sub(length as SizeT),
+            b"Node %d MemFree:%16d kB\n\0".as_ptr().cast(),
+            (*node).id,
+            (*node).nr_free_pages.wrapping_shl(geometry.kb_shift),
+        );
+        length = length.wrapping_add(written);
+        let written = mem_distance_snprintf(
+            buffer.offset(length as isize),
+            size.wrapping_sub(length as SizeT),
+            b"Node %d MemUsed:%16d kB\n\0".as_ptr().cast(),
+            (*node).id,
+            (*node).nr_pages
+                .wrapping_sub((*node).nr_free_pages)
+                .wrapping_shl(geometry.kb_shift),
+        );
+        length = length.wrapping_add(written);
+        length as crate::abi::SSizeT
+    }
+}
+
+#[repr(C)]
+struct MemCoredumpWakeupMetadata {
+    descheduled: CInt,
+    to_be_woken: CInt,
+    record: *mut u8,
+    flags_byte: usize,
+}
+
+unsafe extern "C" {
+    static mem_coredump_wakeup_metadata: MemCoredumpWakeupMetadata;
+}
+
+/// Preserve the complete original status-CAS and wait-queue wakeup entry.
+///
+/// # Safety
+/// thread must be live and its naturally aligned status/queue storage must retain
+/// the original coredump protocol ownership and synchronization for the entire
+/// call. No thread reference is acquired here. This port does not strengthen the
+/// separate wait-entry initialization, scheduler or coredump-barrier protocol.
+#[no_mangle]
+pub unsafe extern "C" fn coredump_wakeup(thread: *mut crate::abi::Thread) {
+    // SAFETY: Same aligned int word as original __sync_bool_compare_and_swap.
+    // SeqCst success AND failure retain the full-barrier CAS access policy;
+    // no load/store approximation, retry loop or synthetic success is introduced.
+    unsafe {
+        let metadata = &mem_coredump_wakeup_metadata;
+        let status = &*core::ptr::addr_of_mut!((*thread).coredump_status).cast::<AtomicI32>();
+        if status
+            .compare_exchange(
+                metadata.descheduled,
+                metadata.to_be_woken,
+                Ordering::SeqCst,
+                Ordering::SeqCst,
+            )
+            .is_ok()
+        {
+            // Same flag gate precedes the plain tid read; disabled logging does
+            // not read tid. Wake the original embedded queue after optional log.
+            if mem_tracking_debug_enabled(metadata.record, metadata.flags_byte) {
+                kprintf(
+                    b"%s: waking up tid %d\n\0".as_ptr().cast::<i8>(),
+                    b"coredump_wakeup\0".as_ptr().cast::<i8>(),
+                    (*thread).tid,
+                );
+            }
+            crate::waitq::waitq_wakeup(
+                core::ptr::addr_of_mut!((*thread).coredump_wq).cast::<crate::waitq::Waitq>(),
+            );
+        }
+    }
+}
+
+#[repr(C)]
+struct MemCoredumpWaitMetadata {
+    running: CInt,
+    descheduled: CInt,
+    interruptible: CInt,
+    records: [*mut u8; 2],
+    flags_byte: usize,
+}
+
+// The queue publishes this address while schedule suspends the current frame.
+// Pin prohibits moving the stack storage until the original finish_wait unlinks
+// it. MaybeUninit permits genuine waitq_init_entry to initialize its private type.
+struct MemPinnedCoredumpWaitEntry {
+    entry: core::mem::MaybeUninit<crate::waitq::WaitqEntry>,
+    _pin: PhantomPinned,
+}
+
+unsafe extern "C" {
+    static mem_coredump_wait_metadata: MemCoredumpWaitMetadata;
+    #[link_name = "cpu_disable_interrupt_save"]
+    fn mem_coredump_disable_interrupt_save() -> CULong;
+    #[link_name = "cpu_restore_interrupt"]
+    fn mem_coredump_restore_interrupt(flags: CULong);
+    #[link_name = "schedule"]
+    fn mem_coredump_schedule();
+}
+
+/// Preserve the complete original pinned wait-entry and scheduling transaction.
+///
+/// # Safety
+/// The original live thread/status/embedded-queue and current-thread contexts
+/// must hold. schedule must suspend and resume this same live stack frame; the
+/// kernel must retain that stack until finish_wait unlinks the local entry.
+/// The separate caller's coredump/barrier protocol remains responsible for wake
+/// ordering; no new thread reference, initialized-queue ACK or race repair exists.
+#[no_mangle]
+pub unsafe extern "C" fn coredump_wait(thread: *mut crate::abi::Thread) {
+    let mut storage = core::pin::pin!(MemPinnedCoredumpWaitEntry {
+        entry: core::mem::MaybeUninit::uninit(),
+        _pin: PhantomPinned,
+    });
+
+    // SAFETY: Project the field of the pinned stack wrapper without moving it.
+    // No typed WaitqEntry read occurs before the genuine initializer writes it.
+    unsafe {
+        let entry = core::ptr::addr_of_mut!(Pin::as_mut(&mut storage).get_unchecked_mut().entry)
+            .cast::<crate::waitq::WaitqEntry>();
+        let current = (*get_this_cpu_local_var()).current.cast::<c_void>();
+        crate::waitq::waitq_init_entry(entry, current);
+
+        let metadata = &mem_coredump_wait_metadata;
+        let status = core::ptr::addr_of_mut!((*thread).coredump_status);
+        // Same original single full-barrier CAS, even if it fails. The temporary
+        // atomic view ends here, before the original later plain status store.
+        let descheduled = (&*status.cast::<AtomicI32>())
+            .compare_exchange(
+                metadata.running,
+                metadata.descheduled,
+                Ordering::SeqCst,
+                Ordering::SeqCst,
+            )
+            .is_ok();
+        if descheduled {
+            let flags = mem_coredump_disable_interrupt_save();
+            if mem_tracking_debug_enabled(metadata.records[0], metadata.flags_byte) {
+                kprintf(
+                    b"%s: sleeping,tid=%d\n\0".as_ptr().cast::<i8>(),
+                    b"coredump_wait\0".as_ptr().cast::<i8>(),
+                    (*thread).tid,
+                );
+            }
+            let queue = core::ptr::addr_of_mut!((*thread).coredump_wq)
+                .cast::<crate::waitq::Waitq>();
+            crate::waitq::waitq_init(queue);
+            crate::waitq::waitq_prepare_to_wait(queue, entry, metadata.interruptible);
+            mem_coredump_restore_interrupt(flags);
+            mem_coredump_schedule();
+
+            // SAFETY: Stack storage remains pinned and live across schedule.
+            // Finish unlinks the exact same entry before its frame is released.
+            crate::waitq::waitq_finish_wait(queue, entry);
+            core::ptr::write(status, metadata.running);
+            if mem_tracking_debug_enabled(metadata.records[1], metadata.flags_byte) {
+                kprintf(
+                    b"%s: woken up,tid=%d\n\0".as_ptr().cast::<i8>(),
+                    b"coredump_wait\0".as_ptr().cast::<i8>(),
+                    (*thread).tid,
+                );
+            }
+        }
+    }
+}
+
+// C retains the existing private allocator slot; immutable address/geometry
+// metadata below is the exact held source ABI, not a new runtime C provider.
+unsafe extern "C" {
+    static mem_vmap_allocator_slot: *mut *mut c_void;
+    static mem_vmap_init_start: CULong;
+    static mem_vmap_init_size: CULong;
+    static mem_vmap_init_unit: CULong;
+    static mem_vmap_init_first_level: CInt;
+}
+
+/// Return the same borrowed allocator pointer with its original plain access.
+///
+/// # Safety
+/// The caller must retain the original slot publication and allocator lifetime
+/// discipline. No reference or new ownership is acquired, including for NULL.
+#[no_mangle]
+pub unsafe extern "C" fn mem_vmap_allocator_bridge() -> *mut c_void {
+    unsafe { core::ptr::read(mem_vmap_allocator_slot) }
+}
+
+/// Initialize and publish the allocator before preparing first-level mappings.
+///
+/// # Safety
+/// Original exclusive boot slot ownership, mapped geometry and page-table
+/// initialization context must hold. Existing provider callbacks are synchronous
+/// and retain their original lifetime; ignored helper status remains ignored.
+#[no_mangle]
+pub unsafe extern "C" fn virtual_allocator_init() {
+    unsafe {
+        let _ = mem_virtual_allocator_init_body_result(
+            mem_vmap_allocator_slot,
+            mem_vmap_init_start,
+            mem_vmap_init_size,
+            mem_vmap_init_unit,
+            mem_vmap_init_first_level,
+            Some(mem_vmap_init_bridge),
+            Some(mem_pt_prepare_map_bridge),
+        );
+    }
+}
+
+#[repr(C)]
+struct MemPageFaultEntryMetadata {
+    log_count: *mut CInt,
+    log_pid: *mut CInt,
+    page_size: CULong,
+    kernel_start: CULong,
+    pf_user: u64,
+    invalid: CInt,
+    canceled: CInt,
+    range_error: CInt,
+    busy: CInt,
+    sigsegv: CInt,
+    sigbus: CInt,
+    sigstop: CInt,
+    map_error: CInt,
+    access_error: CInt,
+    bus_address_error: CInt,
+    time_u2k: u32,
+    time_k2kin: u32,
+    time_k2u: u32,
+    time_k2kout: u32,
+    tofu: CInt,
+    fugaku_debug: CInt,
+    tofu_attr: CULong,
+    records: [*mut u8; 4],
+    flags_byte: usize,
+    unhandled: unsafe extern "C" fn(*mut crate::abi::Thread, *mut c_void, u64, *mut c_void),
+    linux_resolve: Option<unsafe extern "C" fn(
+        *mut c_void, *const c_void, *mut CULong, *mut CULong,
+    ) -> CInt>,
+    linux_pgt: Option<unsafe extern "C" fn() -> *mut c_void>,
+    clear_kernel_range: Option<unsafe extern "C" fn(*mut c_void, *mut c_void) -> CInt>,
+    do_kill: Option<unsafe extern "C" fn(
+        *mut crate::abi::Thread, CInt, CInt, CInt, *mut crate::abi::SigInfo, CInt,
+    ) -> CULong>,
+    profile_add: Option<unsafe extern "C" fn(u32, u64)>,
+    profile_event: u32,
+}
+
+unsafe extern "C" {
+    static mem_page_fault_entry_metadata: MemPageFaultEntryMetadata;
+    #[link_name = "interrupt_from_user"]
+    fn mem_pf_interrupt_from_user(regs: *mut c_void) -> CInt;
+    #[link_name = "set_cputime"]
+    fn mem_pf_set_cputime(mode: u32);
+    #[link_name = "ihk_mc_get_processor_id"]
+    fn mem_pf_processor_id() -> CInt;
+    #[link_name = "preempt_disable"]
+    fn mem_pf_preempt_disable();
+    #[link_name = "preempt_enable"]
+    fn mem_pf_preempt_enable();
+    #[link_name = "cpu_disable_interrupt"]
+    fn mem_pf_disable_interrupt();
+    #[link_name = "cpu_enable_interrupt"]
+    fn mem_pf_enable_interrupt();
+    #[link_name = "terminate"]
+    fn mem_pf_terminate(status: CInt, signal: CInt);
+    #[link_name = "set_signal"]
+    fn mem_pf_set_signal(signal: CInt, regs: *mut c_void, info: *mut crate::abi::SigInfo);
+    #[link_name = "check_need_resched"]
+    fn mem_pf_check_need_resched();
+    #[link_name = "check_signal"]
+    fn mem_pf_check_signal(rc: CULong, regs: *mut c_void, number: CInt);
+}
+
+/// Execute the complete original page-fault entry through existing providers.
+///
+/// # Safety
+/// Retain the original fault CPU/frame/current-thread/VM/signal lifetime context.
+/// Raw thread/frame pointers must remain valid whenever the original providers
+/// return here; providers that terminate or transfer control must obey their
+/// actual existing ABI. No new reference keeps a thread/VM/frame alive. Original
+/// diagnostic-state read discipline, nested-fault panic semantics and privileged
+/// IRQ/preemption context remain required; this port adds no recovery or ACK.
+#[no_mangle]
+pub unsafe extern "C" fn page_fault_handler(
+    fault_addr: *mut c_void,
+    reason: u64,
+    regs: *mut c_void,
+) {
+    // SAFETY: Typed raw fields preserve the original conditional accesses and
+    // synchronous callback lifetimes. Avoid Rust borrows across scheduling,
+    // signal/termination or VM providers; all user reads use existing usercopy.
+    unsafe {
+        let metadata = &mem_page_fault_entry_metadata;
+        let thread = (*get_this_cpu_local_var()).current;
+        let pid = if !thread.is_null() && !(*thread).proc.is_null() {
+            (*(*thread).proc).pid
+        } else {
+            -1
+        };
+        let mut start_tsc: u64 = 0;
+        if metadata.profile_add.is_some() && !thread.is_null() && (*thread).profile != 0 {
+            start_tsc = rdtsc() as u64;
+        }
+        mem_pf_set_cputime(if mem_pf_interrupt_from_user(regs) != 0 {
+            metadata.time_u2k
+        } else {
+            metadata.time_k2kin
+        });
+        if mem_tracking_debug_enabled(metadata.records[0], metadata.flags_byte) {
+            kprintf(
+                b"%s: addr: %p, reason: %lx, regs: %p\n\0".as_ptr().cast::<i8>(),
+                b"page_fault_handler\0".as_ptr().cast::<i8>(),
+                fault_addr,
+                reason,
+                regs,
+            );
+        }
+        if pid != core::ptr::read(metadata.log_pid) {
+            core::ptr::write(metadata.log_pid, pid);
+            core::ptr::write(metadata.log_count, 0);
+        }
+        if reason & metadata.pf_user != 0 && core::ptr::read(metadata.log_count) < 128 {
+            let context = regs.cast::<crate::abi::X86UserContext>();
+            kprintf(
+                b"mcexec_v10: page_fault cpu=%d pid=%d tid=%d addr=0x%lx reason=0x%lx rip=0x%lx sp=0x%lx error=0x%lx\n\0".as_ptr().cast::<i8>(),
+                mem_pf_processor_id(),
+                pid,
+                if thread.is_null() { -1 } else { (*thread).tid },
+                fault_addr as CULong,
+                reason,
+                if context.is_null() { 0 } else { (*context).gpr.rip },
+                if context.is_null() { 0 } else { (*context).gpr.rsp },
+                if context.is_null() { 0 } else { (*context).gpr.orig_rax },
+            );
+            let count = core::ptr::read(metadata.log_count);
+            core::ptr::write(metadata.log_count, count.wrapping_add(1));
+        }
+
+        mem_pf_preempt_disable();
+        // Preserve separate CPU lookups at each original sequenced statement.
+        let nesting_cpu = get_this_cpu_local_var();
+        let nesting = core::ptr::addr_of_mut!((*nesting_cpu).in_page_fault);
+        core::ptr::write(nesting, core::ptr::read(nesting).wrapping_add(1));
+        if (*get_this_cpu_local_var()).in_page_fault > 1 {
+            kprintf(
+                b"%s: PF in PF??\n\0".as_ptr().cast::<i8>(),
+                b"page_fault_handler\0".as_ptr().cast::<i8>(),
+            );
+            mem_pf_disable_interrupt();
+            if reason & metadata.pf_user == 0 {
+                (*get_this_cpu_local_var()).kernel_mode_pf_regs = regs;
+                mem_kmalloc_panic(b"panic: kernel mode PF in PF\0".as_ptr().cast());
+            }
+            loop {
+                mem_kmalloc_panic(b"PANIC\0".as_ptr().cast());
+            }
+        }
+        mem_pf_enable_interrupt();
+
+        let address = fault_addr as CULong;
+        let mut linux_mapping_ready = false;
+        if metadata.tofu != 0
+            && reason & metadata.pf_user == 0
+            && address > 0xffff_0000_0000_0000
+            && address < 0xffff_8000_0000_0000
+        {
+            // SAFETY: Cmetadata binds Some(actual provider) iff ENABLE_TOFU.
+            // No invented missing-provider error/ACK replaces the original ABI.
+            let resolve = metadata.linux_resolve.unwrap_unchecked();
+            let mut phys = core::mem::MaybeUninit::<CULong>::uninit();
+            let mut size = core::mem::MaybeUninit::<CULong>::uninit();
+            let resolve_error = resolve(
+                (metadata.linux_pgt.unwrap_unchecked())(), fault_addr, phys.as_mut_ptr(), size.as_mut_ptr(),
+            );
+            if resolve_error < 0 {
+                kprintf(
+                    b"%s: failed to resolve 0x%lx from Linux PT..\n\0".as_ptr().cast::<i8>(),
+                    b"page_fault_handler\0".as_ptr().cast::<i8>(),
+                    address,
+                );
+            } else {
+                // Original successful provider initializes phys; size remains
+                // ignored just as in C. Failure never reads either output.
+                let phys = phys.assume_init();
+                loop {
+                    let mapping_error = crate::x86_memory_helpers::ihk_mc_pt_set_page(
+                        core::ptr::null_mut(), fault_addr, phys, metadata.tofu_attr,
+                    );
+                    if mapping_error < 0 {
+                        if mapping_error == metadata.busy {
+                            kprintf(
+                                b"%s: WARNING: updating 0x%lx -> 0x%lx to reflect Linux kernel mapping..\n\0".as_ptr().cast::<i8>(),
+                                b"page_fault_handler\0".as_ptr().cast::<i8>(),
+                                address,
+                                phys,
+                            );
+                            let _ = (metadata.clear_kernel_range.unwrap_unchecked())(
+                                fault_addr,
+                                fault_addr.cast::<u8>()
+                                    .wrapping_add(metadata.page_size as usize).cast(),
+                            );
+                            continue;
+                        }
+                        kprintf(
+                            b"%s: failed to set up 0x%lx -> 0x%lx Linux kernel mapping..\n\0".as_ptr().cast::<i8>(),
+                            b"page_fault_handler\0".as_ptr().cast::<i8>(),
+                            address,
+                            phys,
+                        );
+                        break;
+                    }
+                    if mem_tracking_debug_enabled(metadata.records[1], metadata.flags_byte) {
+                        kprintf(
+                            b"%s: Linux kernel mapping 0x%lx -> 0x%lx set\n\0".as_ptr().cast::<i8>(),
+                            b"page_fault_handler\0".as_ptr().cast::<i8>(),
+                            address,
+                            phys,
+                        );
+                    }
+                    linux_mapping_ready = true;
+                    break;
+                }
+            }
+        }
+
+        let mut error = 0;
+        if !linux_mapping_ready {
+            error = if address < metadata.page_size || thread.is_null() {
+                metadata.invalid
+            } else {
+                page_fault_process_vm((*thread).vm.cast(), fault_addr, reason as CULong)
+            };
+        }
+        if error != 0 {
+            if error == metadata.canceled {
+                if mem_tracking_debug_enabled(metadata.records[2], metadata.flags_byte) {
+                    kprintf(
+                        b"process is exiting, terminate.\n\0".as_ptr().cast::<i8>(),
+                    );
+                }
+                mem_pf_preempt_enable();
+                // Genuine Cterminate ABI is void. Preserve original continuation
+                // if a controlled provider returns, rather than inventing !/trap.
+                mem_pf_terminate(0, metadata.sigsegv);
+            }
+            kprintf(
+                b"%s fault VM failed for TID: %d, addr: 0x%lx, reason: %d, error: %d\n\0".as_ptr().cast::<i8>(),
+                b"page_fault_handler\0".as_ptr().cast::<i8>(),
+                if thread.is_null() { -1 } else { (*thread).tid },
+                fault_addr,
+                reason,
+                error,
+            );
+            if reason & metadata.pf_user != 0 {
+                let context = regs.cast::<crate::abi::X86UserContext>();
+                kprintf(
+                    b"mcexec_v10: fatal_page_fault cpu=%d pid=%d tid=%d addr=0x%lx reason=0x%lx fault_error=%d rip=0x%lx sp=0x%lx rax=0x%lx rdi=0x%lx rsi=0x%lx rdx=0x%lx r10=0x%lx\n\0".as_ptr().cast::<i8>(),
+                    mem_pf_processor_id(),
+                    pid,
+                    if thread.is_null() { -1 } else { (*thread).tid },
+                    fault_addr as CULong,
+                    reason,
+                    error,
+                    if context.is_null() { 0 } else { (*context).gpr.rip },
+                    if context.is_null() { 0 } else { (*context).gpr.rsp },
+                    if context.is_null() { 0 } else { (*context).gpr.rax },
+                    if context.is_null() { 0 } else { (*context).gpr.rdi },
+                    if context.is_null() { 0 } else { (*context).gpr.rsi },
+                    if context.is_null() { 0 } else { (*context).gpr.rdx },
+                    if context.is_null() { 0 } else { (*context).gpr.r10 },
+                );
+                if !context.is_null() {
+                    kprintf(
+                        b"mcexec_v10: fatal_regs2 cpu=%d pid=%d tid=%d rbx=0x%lx rcx=0x%lx r8=0x%lx r9=0x%lx r11=0x%lx r12=0x%lx r13=0x%lx r14=0x%lx r15=0x%lx\n\0".as_ptr().cast::<i8>(),
+                        mem_pf_processor_id(),
+                        pid,
+                        if thread.is_null() { -1 } else { (*thread).tid },
+                        (*context).gpr.rbx,
+                        (*context).gpr.rcx,
+                        (*context).gpr.r8,
+                        (*context).gpr.r9,
+                        (*context).gpr.r11,
+                        (*context).gpr.r12,
+                        (*context).gpr.r13,
+                        (*context).gpr.r14,
+                        (*context).gpr.r15,
+                    );
+                    mcexec_v10_dump_user_bytes(b"rsi\0".as_ptr().cast(), (*context).gpr.rsi);
+                    mcexec_v10_dump_user_bytes(b"rdx\0".as_ptr().cast(), (*context).gpr.rdx);
+                    mcexec_v10_dump_user_bytes(b"r10\0".as_ptr().cast(), (*context).gpr.r10);
+                    mcexec_v10_dump_user_bytes(b"r11\0".as_ptr().cast(), (*context).gpr.r11);
+                }
+                if !context.is_null()
+                    && (*context).gpr.rsp >= metadata.page_size
+                    && (*context).gpr.rsp < metadata.kernel_start
+                {
+                    let mut words = core::mem::MaybeUninit::<[CULong; 8]>::uninit();
+                    let stack_error = crate::x86_memory_helpers::copy_from_user(
+                        words.as_mut_ptr().cast(),
+                        (*context).gpr.rsp as *const c_void,
+                        core::mem::size_of::<[CULong; 8]>(),
+                    );
+                    if stack_error == 0 {
+                        // Complete usercopy success initializes all eight words.
+                        let words = words.assume_init();
+                        kprintf(
+                            b"mcexec_v10: fatal_stack sp=0x%lx q0=0x%lx q1=0x%lx q2=0x%lx q3=0x%lx q4=0x%lx q5=0x%lx q6=0x%lx q7=0x%lx\n\0".as_ptr().cast::<i8>(),
+                            (*context).gpr.rsp,
+                            words[0],
+                            words[1],
+                            words[2],
+                            words[3],
+                            words[4],
+                            words[5],
+                            words[6],
+                            words[7],
+                        );
+                        let labels: [&[u8]; 8] = [
+                            b"q0\0", b"q1\0", b"q2\0", b"q3\0",
+                            b"q4\0", b"q5\0", b"q6\0", b"q7\0",
+                        ];
+                        let mut index = 0;
+                        while index < 8 {
+                            mcexec_v10_dump_user_bytes(labels[index].as_ptr().cast(), words[index]);
+                            index += 1;
+                        }
+                    } else {
+                        kprintf(
+                            b"mcexec_v10: fatal_stack sp=0x%lx copy_failed=%d\n\0".as_ptr().cast::<i8>(),
+                            (*context).gpr.rsp,
+                            stack_error,
+                        );
+                    }
+                }
+            }
+            (metadata.unhandled)(thread, fault_addr, reason, regs);
+            let cpu = get_this_cpu_local_var();
+            let nesting = core::ptr::addr_of_mut!((*cpu).in_page_fault);
+            core::ptr::write(nesting, core::ptr::read(nesting).wrapping_sub(1));
+            mem_pf_preempt_enable();
+
+            if metadata.fugaku_debug != 0 {
+                kprintf(
+                    b"%s: sending SIGSTOP to TID: %d\n\0".as_ptr().cast::<i8>(),
+                    b"page_fault_handler\0".as_ptr().cast::<i8>(),
+                    (*thread).tid,
+                );
+                let _ = (metadata.do_kill.unwrap_unchecked())(
+                    thread, (*(*thread).proc).pid, (*thread).tid,
+                    metadata.sigstop, core::ptr::null_mut(), 0,
+                );
+            } else {
+                // SAFETY: Genuine SigInfo is integer/raw-pointer Cdata; all-zero
+                // initialization matches original memset, including unused union.
+                let mut info = core::mem::MaybeUninit::<crate::abi::SigInfo>::zeroed()
+                    .assume_init();
+                if error == metadata.range_error {
+                    info.si_signo = metadata.sigbus;
+                    info.si_code = metadata.bus_address_error;
+                    info.sifields.sigfault = core::mem::ManuallyDrop::new(
+                        crate::abi::SigInfoFault { si_addr: fault_addr },
+                    );
+                    mem_pf_set_signal(metadata.sigbus, regs, &mut info);
+                } else {
+                    info.si_signo = metadata.sigsegv;
+                    info.si_code = metadata.map_error;
+                    let mut range = core::ptr::null_mut();
+                    if !thread.is_null() {
+                        range = mem_lookup_process_memory_range_provider(
+                            (*thread).vm, address, address.wrapping_add(1),
+                        );
+                    }
+                    if !range.is_null() {
+                        info.si_code = metadata.access_error;
+                    }
+                    info.sifields.sigfault = core::mem::ManuallyDrop::new(
+                        crate::abi::SigInfoFault { si_addr: fault_addr },
+                    );
+                    mem_pf_set_signal(metadata.sigsegv, regs, &mut info);
+                }
+            }
+        } else {
+            // Includes original out_ok after a successful TOFU mapping.
+            let cpu = get_this_cpu_local_var();
+            let nesting = core::ptr::addr_of_mut!((*cpu).in_page_fault);
+            core::ptr::write(nesting, core::ptr::read(nesting).wrapping_sub(1));
+            mem_pf_preempt_enable();
+        }
+        if mem_tracking_debug_enabled(metadata.records[3], metadata.flags_byte) {
+            kprintf(
+                b"%s: addr: %p, reason: %lx, regs: %p -> error: %d\n\0".as_ptr().cast::<i8>(),
+                b"page_fault_handler\0".as_ptr().cast::<i8>(),
+                fault_addr,
+                reason,
+                regs,
+                error,
+            );
+        }
+        if mem_pf_interrupt_from_user(regs) != 0 {
+            mem_pf_enable_interrupt();
+            mem_pf_check_need_resched();
+            mem_pf_check_signal(0, regs, -1);
+        }
+        // Original calls interrupt_from_user again here, do not cache its result.
+        mem_pf_set_cputime(if mem_pf_interrupt_from_user(regs) != 0 {
+            metadata.time_k2u
+        } else {
+            metadata.time_k2kout
+        });
+        if let Some(add) = metadata.profile_add {
+            if !thread.is_null() && (*thread).profile != 0 {
+                add(metadata.profile_event, (rdtsc() as u64).wrapping_sub(start_tsc));
+            }
+        }
+    }
+}
+
+#[repr(C)]
+struct MemUnhandledFaultMetadata {
+    pf_prot: u64,
+    pf_write: u64,
+    pf_user: u64,
+    pf_reserved: u64,
+    pf_instruction: u64,
+    mf_regular_file: u32,
+    fugaku: CInt,
+    debug_stack: CInt,
+    instruction_address: Option<unsafe extern "C" fn(*const c_void) -> CULong>,
+    stack_address: Option<unsafe extern "C" fn(*const c_void) -> CULong>,
+}
+
+unsafe extern "C" {
+    static mem_unhandled_fault_metadata: MemUnhandledFaultMetadata;
+    #[link_name = "kprintf_lock"]
+    fn mem_unhandled_kprintf_lock() -> CULong;
+    #[link_name = "kprintf_unlock"]
+    fn mem_unhandled_kprintf_unlock(flags: CULong);
+    #[link_name = "__kprintf"]
+    fn mem_unhandled_locked_printf(format: *const i8, ...) -> CInt;
+    #[link_name = "ihk_mc_debug_show_interrupt_context"]
+    fn mem_unhandled_show_context(regs: *const c_void);
+}
+
+/// Emit the complete original locked unhandled-fault diagnostic and panic path.
+///
+/// # Safety
+/// The original non-null live thread/VM/range/memobj and frame access discipline
+/// must hold for borrowed raw fields. This port does not acquire VM references
+/// or repair the original NULL-thread error route. Lock/IRQ and context/panic
+/// providers retain original ABI; optional raw stack reads require original
+/// readable stack storage. No reference survives a callback or panic boundary.
+#[no_mangle]
+pub unsafe extern "C" fn unhandled_page_fault(
+    thread: *mut crate::abi::Thread,
+    fault_addr: *mut c_void,
+    reason: u64,
+    regs: *mut c_void,
+) {
+    // SAFETY: Retain the exact logger lock span and borrowed pointer operations.
+    // Unlocked kprintf is used only at original sites after lock release.
+    unsafe {
+        let metadata = &mem_unhandled_fault_metadata;
+        let address = fault_addr as CULong;
+        let vm = (*thread).vm;
+        let flags = mem_unhandled_kprintf_lock();
+        mem_unhandled_locked_printf(
+            b"Page fault for 0x%lx\n\0".as_ptr().cast::<i8>(),
+            address,
+        );
+        mem_unhandled_locked_printf(
+            b"%s for %s access in %s mode (reserved bit %s set), it %s an instruction fetch\n\0".as_ptr().cast::<i8>(),
+            if reason & metadata.pf_prot != 0 { b"protection fault\0".as_ptr().cast::<i8>() } else { b"no page found\0".as_ptr().cast::<i8>() },
+            if reason & metadata.pf_write != 0 { b"write\0".as_ptr().cast::<i8>() } else { b"read\0".as_ptr().cast::<i8>() },
+            if reason & metadata.pf_user != 0 { b"user\0".as_ptr().cast::<i8>() } else { b"kernel\0".as_ptr().cast::<i8>() },
+            if reason & metadata.pf_reserved != 0 { b"was\0".as_ptr().cast::<i8>() } else { b"wasn't\0".as_ptr().cast::<i8>() },
+            if reason & metadata.pf_instruction != 0 { b"was\0".as_ptr().cast::<i8>() } else { b"wasn't\0".as_ptr().cast::<i8>() },
+        );
+        let range = mem_lookup_process_memory_range_provider(vm, address, address.wrapping_add(1));
+        if !range.is_null() {
+            mem_unhandled_locked_printf(
+                b"address is in range, flag: 0x%lx (%s)\n\0".as_ptr().cast::<i8>(),
+                (*range).flag,
+                if !(*range).memobj.is_null() { (*(*range).memobj.cast::<Memobj>()).path } else { b"\0".as_ptr() as *mut i8 },
+            );
+            let _ = crate::x86_memory_helpers::ihk_mc_pt_print_pte(
+                (*(*vm).address_space).page_table,
+                address as *mut c_void,
+            );
+        } else {
+            mem_unhandled_locked_printf(
+                b"address is out of range!\n\0".as_ptr().cast::<i8>(),
+            );
+        }
+
+        if metadata.fugaku != 0 {
+            // SAFETY: Cmetadata binds this actual provider only in the original
+            // enabled feature arm. There is no inactive-feature direct import.
+            let pc = (metadata.instruction_address.unwrap_unchecked())(regs);
+            let range = mem_lookup_process_memory_range_provider(vm, pc, pc.wrapping_add(1));
+            if !range.is_null() {
+                let offset = if !(*range).memobj.is_null()
+                    && (*(*range).memobj.cast::<Memobj>()).flags & metadata.mf_regular_file != 0
+                {
+                    pc.wrapping_sub((*range).start).wrapping_add((*range).objoff as CULong)
+                } else {
+                    pc.wrapping_sub((*range).start)
+                };
+                let path = if !(*range).memobj.is_null()
+                    && !(*(*range).memobj.cast::<Memobj>()).path.is_null()
+                {
+                    (*(*range).memobj.cast::<Memobj>()).path
+                } else {
+                    b"(unknown)\0".as_ptr() as *mut i8
+                };
+                mem_unhandled_locked_printf(
+                    b"PC: 0x%lx (%lx in %s)\n\0".as_ptr().cast::<i8>(),
+                    pc,
+                    offset,
+                    path,
+                );
+            }
+        }
+        mem_unhandled_kprintf_unlock(flags);
+        mem_unhandled_show_context(regs);
+
+        if reason & metadata.pf_user == 0 {
+            (*get_this_cpu_local_var()).kernel_mode_pf_regs = regs;
+            if metadata.fugaku == 0 {
+                // Original genuine void panic ABI; do not invent !/unreachable
+                // or a return when a controlled panic provider returns.
+                mem_kmalloc_panic(b"panic: kernel mode PF\0".as_ptr().cast());
+            } else {
+                kprintf(
+                    b"panic: kernel mode PF\0".as_ptr().cast::<i8>(),
+                );
+                loop {
+                    cpu_pause();
+                }
+            }
+        }
+
+        if metadata.debug_stack != 0 {
+            // SAFETY: Same original optional direct four-word stack read. No
+            // usercopy/null/range policy is silently substituted by this port.
+            let stack = (metadata.stack_address.unwrap_unchecked())(regs) as *const u64;
+            kprintf(
+                b"*rsp:%lx,*rsp+8:%lx,*rsp+16:%lx,*rsp+24:%lx,\n\0".as_ptr().cast::<i8>(),
+                *stack.add(0),
+                *stack.add(1),
+                *stack.add(2),
+                *stack.add(3),
+            );
+        }
+    }
+}
+
+/// Reuse the exact held VM mapping effect callback implementation.
+///
+/// # Safety
+/// The caller must retain the original page-table/address and mapping ownership
+/// context, including CPU affinity for the privileged flush endpoint. No new
+/// reference, lock, retry, null policy or hardware fence is introduced here.
+#[no_mangle]
+pub unsafe extern "C" fn mem_pt_set_page_bridge(
+    pt: *mut c_void,
+    virt: *mut c_void,
+    phys: CULong,
+    attr: IhkMcPtAttribute,
+) -> CInt {
+    unsafe { crate::x86_memory_helpers::ihk_mc_pt_set_page(pt, virt, phys, attr) }
+}
+
+/// Reuse the exact held VM mapping effect callback implementation.
+///
+/// # Safety
+/// The caller must retain the original page-table/address and mapping ownership
+/// context, including CPU affinity for the privileged flush endpoint. No new
+/// reference, lock, retry, null policy or hardware fence is introduced here.
+#[no_mangle]
+pub unsafe extern "C" fn mem_pt_clear_page_bridge(pt: *mut c_void, virt: *mut c_void) -> CInt {
+    unsafe { crate::x86_memory_helpers::ihk_mc_pt_clear_page(pt, virt) }
+}
+
+/// Reuse the exact held VM mapping effect callback implementation.
+///
+/// # Safety
+/// The caller must retain the original page-table/address and mapping ownership
+/// context, including CPU affinity for the privileged flush endpoint. No new
+/// reference, lock, retry, null policy or hardware fence is introduced here.
+#[no_mangle]
+pub unsafe extern "C" fn mem_flush_tlb_single_bridge(addr: CULong) {
+    unsafe { mem_tlb_flush_single_bridge(addr) }
+}
+
+/// Reuse the exact held VM mapping effect callback implementation.
+///
+/// # Safety
+/// The caller must retain the original page-table/address and mapping ownership
+/// context, including CPU affinity for the privileged flush endpoint. No new
+/// reference, lock, retry, null policy or hardware fence is introduced here.
+#[no_mangle]
+pub unsafe extern "C" fn mem_barrier_bridge() {
+    unsafe { crate::x86_cpu_helpers::arch_barrier() }
+}
+
+
+// Existing C geometry is already provided for page_unmap. The same page
+// shift/mask/stride and same borrowed arrays are used for this lookup.
+unsafe extern "C" {
+    static page_unmap_hash_shift: CInt;
+    static page_unmap_hash_mask: CULong;
+}
+
+/// Look up the original physical-address value through the existing hash.
+///
+/// # Safety
+/// The caller must keep hash storage, bucket locks and returned Page storage live
+/// under its original mapping ownership. This function acquires no Page reference.
+/// No reference is acquired: the existing synchronous lookup locks its bucket,
+/// finds the matching Page, unlocks with the captured flags, and returns the
+/// same borrowed pointer (or null). The caller keeps its original lifetime duty.
+#[no_mangle]
+pub unsafe extern "C" fn phys_to_page(phys: CULong) -> *mut MemPage {
+    unsafe {
+        crate::page_helpers::phys_to_page_lookup_body_result(
+            phys,
+            core::ptr::addr_of!(PAGE_INIT_HASH_FIRST) as usize,
+            core::ptr::addr_of!(PAGE_INIT_LOCK_FIRST) as usize,
+            page_unmap_hash_shift,
+            page_unmap_hash_mask,
+            page_init_hash_head_stride,
+            page_unmap_lock_stride,
+            Some(page_count_lock_callback),
+            Some(page_count_unlock_callback),
+            Some(crate::page_helpers::phys_to_page_lookup_orchestrate_result),
+        ).cast::<MemPage>()
+    }
+}
+
+// Exact IHK_MC_AP_CRITICAL value from existing lib/include/ihk/mm.h.
+const PAGE_INSERT_ALLOC_CRITICAL: CInt = 0x000001;
+
+unsafe extern "C" {
+    // Existing tracked-allocation callback symbol; usize is the helper's
+    // unsigned-long address/size ABI on the supported 64-bit profile.
+    #[link_name = "page_hash_alloc_bridge"]
+    fn page_insert_alloc_callback(size: usize, flag: CInt) -> *mut crate::page_helpers::Page;
+}
+
+/// Same NULL-only insertion failure event; phys was ignored by original C.
+///
+/// # Safety
+/// The synchronous caller must retain the original kernel formatter context.
+#[no_mangle]
+pub unsafe extern "C" fn phys_to_page_insert_hash_log_bridge(_phys: CULong) {
+    unsafe {
+        kprintf(
+            b"%s: error allocating page\n\0".as_ptr().cast::<i8>(),
+            b"phys_to_page_insert_hash\0".as_ptr().cast::<i8>(),
+        );
+    }
+}
+
+/// Preserve the existing bucket ownership and zero initial Page count.
+///
+/// # Safety
+/// The original hash, lock and tracked-allocation providers must remain initialized
+/// and live. Caller ownership must retain existing/new Page storage after unlock;
+/// this routine neither acquires its reference nor changes the allocator context.
+/// Existing pages are returned without allocation/reference changes; a new
+/// Page remains count==0 and the caller must retain its original increment.
+#[no_mangle]
+pub unsafe extern "C" fn phys_to_page_insert_hash(phys: CULong) -> *mut crate::page_helpers::Page {
+    unsafe {
+        crate::page_helpers::phys_to_page_insert_hash_body_result(
+            phys,
+            core::ptr::addr_of!(PAGE_INIT_HASH_FIRST) as usize,
+            core::ptr::addr_of!(PAGE_INIT_LOCK_FIRST) as usize,
+            page_unmap_hash_shift,
+            page_unmap_hash_mask,
+            page_init_hash_head_stride,
+            page_unmap_lock_stride,
+            size_of::<crate::page_helpers::Page>(),
+            PAGE_INSERT_ALLOC_CRITICAL,
+            Some(page_count_lock_callback),
+            Some(page_count_unlock_callback),
+            Some(page_insert_alloc_callback),
+            Some(crate::page_helpers::phys_to_page_insert_hash_orchestrate_result),
+            Some(phys_to_page_insert_hash_log_bridge),
+        )
+    }
+}
+
+#[repr(C)]
+struct MemTlbHandlerProfileMetadata {
+    event: u32,
+    add: Option<unsafe extern "C" fn(u32, u64)>,
+}
+
+unsafe extern "C" {
+    static mem_tlb_handler_profile_metadata: MemTlbHandlerProfileMetadata;
+}
+
+/// Run the existing complete TLB handler and preserve its profile accounting.
+///
+/// # Safety
+/// The original interrupt CPU/vector context and initialized shared TLB entry
+/// must remain valid for this synchronous handler. Its address array and pending
+/// counter retain their original request-owner lifetime until completion. The
+/// optional profile metadata names the original provider under PROFILE_ENABLE;
+/// each fresh current-thread lookup retains the original live-thread invariant.
+/// This entry adds no acknowledgement, scheduling, lock or null policy.
+#[no_mangle]
+pub unsafe extern "C" fn tlb_flush_handler(vector: CInt) {
+    // SAFETY: The immutable metadata has the real C profile gate and provider.
+    let profile = unsafe { &mem_tlb_handler_profile_metadata };
+    let mut start = 0;
+    if profile.add.is_some() {
+        // SAFETY: Original interrupt context guarantees the same live CPU-local
+        // and current-thread pointers that the C profile branch dereferences.
+        let current = unsafe { (*get_this_cpu_local_var()).current };
+        if unsafe { (*current).profile } != 0 {
+            start = unsafe { rdtsc() };
+        }
+    }
+    // SAFETY: The existing immutable geometry and complete shared entry are
+    // unchanged. Actual Rust IRQ/flush/completion providers preserve the old
+    // save -> flush(es) -> completion decrement -> IRQ restore sequence.
+    unsafe {
+        let geometry = core::ptr::read(core::ptr::addr_of!(mem_remote_tlb_geometry));
+        let _ = mem_tlb_flush_handler_body_result(
+            vector,
+            core::ptr::addr_of_mut!(MEM_TLB_FLUSH_VECTOR_FIRST),
+            geometry[0],
+            geometry[1],
+            Some(crate::x86_cpu_helpers::cpu_disable_interrupt_save),
+            Some(crate::x86_cpu_helpers::cpu_restore_interrupt),
+            Some(mem_tlb_flush_single_bridge),
+            Some(mem_tlb_flush_all_bridge),
+            Some(mem_tlb_atomic_dec_bridge),
+        );
+    }
+    if let Some(add) = profile.add {
+        // SAFETY: Preserve the second current-thread lookup after the complete
+        // handler and IRQ restoration; do not reuse the pre-handler pointer.
+        let current = unsafe { (*get_this_cpu_local_var()).current };
+        if unsafe { (*current).profile } != 0 {
+            let end = unsafe { rdtsc() };
+            let elapsed = end.wrapping_sub(start);
+            unsafe { add(profile.event, elapsed as u64) };
+            // SAFETY: Original C performs a third CPU/current lookup after the
+            // profile callback. Read/write only that thread's plain elapsed slot
+            // under the same interrupt/profile ownership, with unsigned wrap.
+            let current = unsafe { (*get_this_cpu_local_var()).current };
+            unsafe {
+                let slot = core::ptr::addr_of_mut!((*current).profile_elapsed_ts);
+                slot.write(slot.read().wrapping_add(elapsed));
+            }
+        }
+    }
+}
+
+/// Return the original plain processor-count observation.
+///
+/// # Safety
+/// The existing boot/runtime publication discipline for num_processors must hold;
+/// this read neither establishes a snapshot nor changes CPU ownership.
+#[no_mangle]
+pub unsafe extern "C" fn mem_num_processors_bridge() -> CInt {
+    // SAFETY: Reuse the genuine defining ap module's existing CInt slot with the
+    // same plain access as original C, without a new atomic/volatile policy.
+    unsafe { core::ptr::addr_of!(crate::ap::num_processors).read() }
+}
+
+/// Return the current resource set's original borrowed process-hash list base.
+///
+/// # Safety
+/// The caller must retain the original CPU/current resource-set lifetime and
+/// synchronization. CPU-local storage and resource_set must be non-null/live as
+/// in the C owner. A non-null process_hash remains borrowed after this return;
+/// no reference, lock, snapshot or resource-set lifetime extension is acquired.
+#[no_mangle]
+pub unsafe extern "C" fn mem_process_hash_lists_bridge() -> *mut AbiListHead {
+    // SAFETY: Preserve the single current-CPU lookup and ordered raw field reads.
+    unsafe {
+        let resource_set = (*get_this_cpu_local_var()).resource_set;
+        let process_hash = (*resource_set).process_hash;
+        if process_hash.is_null() {
+            core::ptr::null_mut()
+        } else {
+            core::ptr::addr_of_mut!((*process_hash).list).cast::<AbiListHead>()
+        }
+    }
+}
+
+/// Return the original current-CPU pending-free list's borrowed address.
+///
+/// # Safety
+/// The caller retains the original CPU affinity, pending-list lock/IRQ ownership
+/// and CPU-local storage lifetime. This function takes no list/reference lock and
+/// adds no null policy or ownership transfer.
+#[no_mangle]
+pub unsafe extern "C" fn mem_pending_free_pages_bridge() -> *mut AbiListHead {
+    // SAFETY: The live current CPU-local storage owns this initialized list head;
+    // form its raw address without creating a Rust reference to shared list data.
+    unsafe { core::ptr::addr_of_mut!((*get_this_cpu_local_var()).pending_free_pages) }
+}
+
+/// Preserve the complete original kmalloc cache diagnostic event switch.
+///
+/// # Safety
+/// The caller retains the original synchronous kernel formatter/allocator context.
+/// ptr is diagnostic bytes only: this callback never dereferences or owns it.
+/// Its raw pointer vararg is retained for the original %lx formatter contract.
+#[no_mangle]
+pub unsafe extern "C" fn kmalloc_cache_log(event: CInt, ptr: *mut c_void) {
+    // SAFETY: The original NUL-terminated formats and C-promoted arguments are
+    // supplied unchanged to the existing formatter; unknown events have no effect.
+    unsafe {
+        match event {
+            KMALLOC_CACHE_LOG_NO_CACHE => {
+                kprintf(
+                    b"%s: WARNING: no cache for 0x%lx\n\0".as_ptr().cast::<i8>(),
+                    b"kmalloc_cache_free\0".as_ptr().cast::<i8>(),
+                    ptr,
+                );
+            }
+            KMALLOC_CACHE_LOG_ALLOC_FAILED => {
+                kprintf(
+                    b"%s: ERROR: allocating cache element\n\0".as_ptr().cast::<i8>(),
+                    b"kmalloc_cache_prealloc\0".as_ptr().cast::<i8>(),
+                );
+            }
+            KMALLOC_CACHE_LOG_PREALLOC => {
+                kprintf(
+                    b"%s: calling pre-alloc for 0x%lx...\n\0".as_ptr().cast::<i8>(),
+                    b"kmalloc_cache_alloc\0".as_ptr().cast::<i8>(),
+                    ptr,
+                );
+            }
+            _ => {}
+        }
+    }
+}
+
+/// Emit the exact pending-free warning, including its lack of a final newline.
+///
+/// # Safety
+/// The caller retains the original kernel formatter and pending-free context.
+/// No Page field, reference, list or IRQ state is accessed by this diagnostic.
+#[no_mangle]
+pub unsafe extern "C" fn mem_pending_free_warn_bridge(phys: CULong) {
+    // SAFETY: The original %lx receives the same unsigned-long physical value.
+    unsafe {
+        kprintf(
+            b"%s: WARNING: page phys 0x%lx is not PM_NONE\0".as_ptr().cast::<i8>(),
+            b"mckernel_free_pages\0".as_ptr().cast::<i8>(),
+            phys,
+        );
+    }
+}
+
+/// Preserve the original begin-pending failure's genuine void panic callback.
+///
+/// # Safety
+/// The existing pending-list ownership and caller IRQ context must remain valid.
+/// This wrapper does not restore IRQs, unlock, publish completion or return an ACK.
+#[no_mangle]
+pub unsafe extern "C" fn mem_begin_free_pages_pending_panic_bridge() {
+    // SAFETY: Call the actual void panic(const char *) ABI with its original
+    // immutable string. Do not invent a Rust never-returning type or recovery.
+    unsafe { mem_kmalloc_panic(b"begin_free_pages_pending\0".as_ptr().cast::<i8>()) };
+}
+
+/// Preserve the original finish-pending failure and its exact panic message.
+///
+/// # Safety
+/// The caller retains the original pending-list/Page/IRQ ownership on failure;
+/// this wrapper adds no rollback, reference release or completion guarantee.
+#[no_mangle]
+pub unsafe extern "C" fn mem_finish_free_pages_pending_panic_bridge() {
+    // SAFETY: The unchanged NUL-terminated bytes target the genuine void provider.
+    unsafe { mem_kmalloc_panic(b"free_pending_pages:not PM_PENDING_FREE\0".as_ptr().cast()) };
+}
+
+/// Preserve the free-memory query's original panic callback.
+///
+/// # Safety
+/// The original query/formatter context and its failure ownership must hold.
+/// Genuine panic behavior remains provider-owned; no lock/IRQ policy is changed.
+#[no_mangle]
+pub unsafe extern "C" fn mem_query_free_panic_bridge() {
+    // SAFETY: Exact original message and void C ABI, without invented termination.
+    unsafe { mem_kmalloc_panic(b"PANIC\0".as_ptr().cast::<i8>()) };
+}
+
+#[repr(C)]
+struct MemSboxAccessMetadata {
+    attached: CInt,
+    base_slot: *mut *mut c_void,
+}
+
+unsafe extern "C" {
+    static mem_sbox_access_metadata: MemSboxAccessMetadata;
+}
+
+/// Perform the original single 32-bit volatile SBOX store.
+///
+/// # Safety
+/// This endpoint may only be called in the original ATTACHED_MIC profile after
+/// its C-owned sbox_base mapping is established. The signed byte offset must
+/// select an aligned, accessible 32-bit MMIO register under the original device
+/// ownership. No ordinary Rust allocation/reference is manufactured for MMIO.
+/// Volatile preserves the original access, not an atomic or completion protocol.
+#[no_mangle]
+pub unsafe extern "C" fn sbox_write(offset: CInt, value: u32) {
+    // SAFETY: The active profile supplies a live, aligned pointer slot. Keep its
+    // original plain read; the register operation itself is the volatile store.
+    let base = unsafe { mem_sbox_access_metadata.base_slot.read() };
+    let register = base.cast::<u8>().wrapping_offset(offset as isize).cast::<u32>();
+    // SAFETY: Caller guarantees a valid aligned MMIO register for one u32 store.
+    // Signed C int byte arithmetic is retained without bounds/NULL policy changes.
+    unsafe { core::ptr::write_volatile(register, value) };
+}
+
+/// Perform the original single 32-bit volatile SBOX read.
+///
+/// # Safety
+/// The original ATTACHED_MIC mapping, register alignment/accessibility and device
+/// read-side-effect ownership must hold exactly as for sbox_write. This returns
+/// the actual volatile register value, with no new barrier, retry or ACK.
+#[no_mangle]
+pub unsafe extern "C" fn sbox_read(offset: CInt) -> u32 {
+    // SAFETY: Same genuine C-owned mapping slot and caller-owned MMIO lifetime.
+    let base = unsafe { mem_sbox_access_metadata.base_slot.read() };
+    let register = base.cast::<u8>().wrapping_offset(offset as isize).cast::<u32>();
+    // SAFETY: Caller guarantees one valid aligned 32-bit MMIO load. No reference
+    // aliases ordinary Rust storage and no speculative extra read is introduced.
+    unsafe { core::ptr::read_volatile(register) }
+}
+
+/// Preserve the original compile-profile-gated mailbox diagnostic write.
+///
+/// # Safety
+/// When ATTACHED_MIC is enabled, retain the original live SBOX mapping/device
+/// ownership and offset/value contract. Otherwise the callback is a no-op with
+/// no slot read or MMIO access, matching the original empty C feature branch.
+#[no_mangle]
+pub unsafe extern "C" fn mem_query_free_sbox_write_bridge(offset: CInt, value: u32) {
+    // SAFETY: Immutable C metadata encodes the actual original feature, avoiding
+    // an undefined sbox_base import in the ordinary non-MIC source profile.
+    if unsafe { mem_sbox_access_metadata.attached } != 0 {
+        unsafe { sbox_write(offset, value) };
+    }
+}
+
+// The existing arrival word also gates clone_flags_result (any nonzero rejects).
+// INT_MIN is a transient staging state under the existing exclusive core lock;
+// a negative errno is a terminal pre-enrollment failure, never a fake arrival.
+const MEM_CORE_STAGING: CInt = CInt::MIN;
+
+#[repr(C)]
+struct MemCoredumpMetadata {
+    core_limit_index: CULong,
+    busy: CInt,
+    nomem: CInt,
+    nowait: CULong,
+    syscall_number: CULong,
+    alloc_file: *mut i8,
+    alloc_line: CInt,
+    free_file: *mut i8,
+    free_line: CInt,
+    records: [*mut u8; 2],
+    flags_byte: usize,
+}
+
+enum MemCoreAdmission {
+    StageLeader,
+    Follower(CInt),
+    Aborted(CInt),
+}
+
+unsafe extern "C" {
+    static mem_coredump_metadata: MemCoredumpMetadata;
+    #[link_name = "do_kill"]
+    fn mem_core_signal(
+        thread: *mut crate::abi::Thread, pid: CInt, tid: CInt, signal: CInt,
+        info: *mut crate::abi::SigInfo, ptrace_continue: CInt,
+    ) -> CULong;
+    #[link_name = "do_syscall"]
+    fn mem_core_syscall(request: *mut crate::abi::SyscallRequest, cpu: CInt) -> CLong;
+}
+
+/// # Safety
+/// The caller owns the genuine exclusive IRQsave coredump lock. This word is
+/// initialized once to zero for the live Process; no completed/aborted generation
+/// is reused before that terminal process is destroyed. Other clone consumers
+/// retain their original any-nonzero rejection. No caller may enter while another
+/// owner holds the lock in MEM_CORE_STAGING.
+unsafe fn mem_core_admit_locked(word: *mut CInt) -> MemCoreAdmission {
+    // SAFETY: Genuine aligned Process CInt, accessed through existing atomic ABI.
+    let count = unsafe { AtomicI32::from_ptr(word) };
+    let observed = count.load(Ordering::SeqCst);
+    if observed == 0 {
+        count.store(MEM_CORE_STAGING, Ordering::SeqCst);
+        MemCoreAdmission::StageLeader
+    } else if observed < 0 {
+        // A published failure remains a failure; never reset or turn it into ACK.
+        MemCoreAdmission::Aborted(observed)
+    } else {
+        MemCoreAdmission::Follower(count.fetch_add(1, Ordering::SeqCst))
+    }
+}
+
+/// # Safety
+/// Caller owns the same exclusive lock and exactly one uncommitted stage. A
+/// positive publication is the leader's first REAL arrival; a negative result
+/// publishes only its genuine pre-enrollment error. Barrier2 remains untouched.
+unsafe fn mem_core_publish_stage(word: *mut CInt, result: CInt) {
+    unsafe { AtomicI32::from_ptr(word) }.store(result, Ordering::SeqCst);
+}
+
+/// # Safety
+/// link is a live actual Thread.siblings_list, retained by the original threads
+/// list ownership. No Rust reference or new thread reference count is acquired.
+unsafe fn mem_core_thread_from_link(link: *mut AbiListHead) -> *mut crate::abi::Thread {
+    link.cast::<u8>()
+        .wrapping_sub(offset_of!(crate::abi::Thread, siblings_list))
+        .cast::<crate::abi::Thread>()
+}
+
+/// Execute the whole original core protocol with fail-closed ENOMEM admission.
+///
+/// # Safety
+/// Retain the original live thread/Process/frame and fatal-signal context. The
+/// genuine supported-profile coredump reader lock is an exclusive IRQsave spin
+/// lock; staging and every admission must use it. Process counters start at zero
+/// and describe one terminal process-lifetime generation, never a reusable epoch.
+/// Existing thread-list, wake/schedule, gencore/coretable, syscall/DMA and caller
+/// termination contracts remain required. This fixes the exact rank0 tid-table
+/// failure before enrollment; it does not invent signal, barrier or dump ACKs.
+#[no_mangle]
+pub unsafe extern "C" fn coredump(
+    thread: *mut crate::abi::Thread, _regs: *mut c_void, signal: CInt,
+) -> CInt {
+    // SAFETY: Original synchronous owner provides live raw fields and initialized
+    // intrusive lists. Avoid references across signal/schedule/offload providers.
+    unsafe {
+        let metadata = &mem_coredump_metadata;
+        let process = (*thread).proc;
+        let first = core::ptr::addr_of_mut!((*process).coredump_barrier_count);
+        let second = core::ptr::addr_of_mut!((*process).coredump_barrier_count2);
+        let head = core::ptr::addr_of_mut!((*process).threads_list);
+        let core_lock = core::ptr::addr_of_mut!((*process).coredump_lock)
+            .cast::<crate::lock_helpers::McsRwlockLock>();
+        let threads_lock = core::ptr::addr_of_mut!((*process).threads_lock)
+            .cast::<crate::lock_helpers::McsRwlockLock>();
+        let mut core_node = core::mem::MaybeUninit::<
+            crate::lock_helpers::McsRwlockNodeIrqsave,
+        >::uninit();
+        let mut list_node = core::mem::MaybeUninit::<
+            crate::lock_helpers::McsRwlockNodeIrqsave,
+        >::uninit();
+        let mut ids: *mut CInt = core::ptr::null_mut();
+        let mut result: CInt;
+        if mem_tracking_debug_enabled(metadata.records[0], metadata.flags_byte) {
+            kprintf(
+                b"%s: pid=%d,tid=%d,coredump_barrier_count=%d\n\0".as_ptr().cast(),
+                b"coredump\0".as_ptr().cast::<i8>(),
+                (*process).pid, (*thread).tid, AtomicI32::from_ptr(first).load(Ordering::SeqCst),
+            );
+        }
+        'dump: {
+            if (*process).rlimit[metadata.core_limit_index as usize].rlim_cur == 0 {
+                result = metadata.busy;
+                break 'dump;
+            }
+            crate::lock_helpers::__mcs_rwlock_reader_lock(core_lock, core_node.as_mut_ptr());
+            let rank;
+            match mem_core_admit_locked(first) {
+                MemCoreAdmission::Aborted(error) => {
+                    // Exactly this acquisition is released; no barrier enrolled.
+                    crate::lock_helpers::__mcs_rwlock_reader_unlock(
+                        core_lock, core_node.as_mut_ptr(),
+                    );
+                    result = error;
+                    break 'dump;
+                }
+                MemCoreAdmission::Follower(arrival_rank) => rank = arrival_rank,
+                MemCoreAdmission::StageLeader => {
+                    rank = 0;
+                    let mut peers: CInt = 0;
+                    crate::lock_helpers::__mcs_rwlock_reader_lock(
+                        threads_lock, list_node.as_mut_ptr(),
+                    );
+                    let mut link = (*head).next;
+                    while link != head {
+                        if mem_core_thread_from_link(link) != thread {
+                            peers = peers.wrapping_add(1);
+                        }
+                        link = (*link).next;
+                    }
+                    if peers != 0 {
+                        let bytes = size_of::<CInt>().wrapping_mul(peers as usize) as CInt;
+                        ids = kmalloc_tracked(
+                            bytes, metadata.nowait, metadata.alloc_file, metadata.alloc_line,
+                        ).cast::<CInt>();
+                        if ids.is_null() {
+                            // This is BEFORE any real arrival publication. The
+                            // same lock excludes every possible core follower.
+                            crate::lock_helpers::__mcs_rwlock_reader_unlock(
+                                threads_lock, list_node.as_mut_ptr(),
+                            );
+                            mem_core_publish_stage(first, metadata.nomem);
+                            crate::lock_helpers::__mcs_rwlock_reader_unlock(
+                                core_lock, core_node.as_mut_ptr(),
+                            );
+                            kprintf(
+                                b"%s: ERROR: allocating tid table\n\0".as_ptr().cast(),
+                                b"coredump\0".as_ptr().cast::<i8>(),
+                            );
+                            result = metadata.nomem;
+                            break 'dump;
+                        }
+                        let mut index = 0;
+                        link = (*head).next;
+                        while link != head {
+                            let peer = mem_core_thread_from_link(link);
+                            if peer != thread {
+                                ids.add(index).write((*peer).tid);
+                                index += 1;
+                            }
+                            link = (*link).next;
+                        }
+                    }
+                    crate::lock_helpers::__mcs_rwlock_reader_unlock(
+                        threads_lock, list_node.as_mut_ptr(),
+                    );
+                    // Allocation/staging succeeded: publish the genuine leader
+                    // arrival BEFORE signaling, never a fabricated peer count.
+                    mem_core_publish_stage(first, 1);
+                    let mut index = 0;
+                    while index < peers as usize {
+                        let tid = ids.add(index).read();
+                        if mem_tracking_debug_enabled(metadata.records[1], metadata.flags_byte) {
+                            kprintf(
+                                b"%s: calling do_kill, target tid=%d\n\0".as_ptr().cast(),
+                                b"coredump\0".as_ptr().cast::<i8>(), tid,
+                            );
+                        }
+                        let _ = mem_core_signal(
+                            thread, (*process).pid, tid, signal, core::ptr::null_mut(), 0,
+                        );
+                        index += 1;
+                    }
+                }
+            }
+            crate::lock_helpers::__mcs_rwlock_reader_unlock(core_lock, core_node.as_mut_ptr());
+            let participants;
+            loop {
+                let mut live: CInt = 0;
+                crate::lock_helpers::__mcs_rwlock_reader_lock(
+                    threads_lock, list_node.as_mut_ptr(),
+                );
+                let mut link = (*head).next;
+                while link != head {
+                    live = live.wrapping_add(1);
+                    link = (*link).next;
+                }
+                crate::lock_helpers::__mcs_rwlock_reader_unlock(
+                    threads_lock, list_node.as_mut_ptr(),
+                );
+                if live == AtomicI32::from_ptr(first).load(Ordering::SeqCst) {
+                    link = (*head).next;
+                    while link != head {
+                        coredump_wakeup(mem_core_thread_from_link(link));
+                        link = (*link).next;
+                    }
+                    participants = live;
+                    break;
+                }
+                coredump_wait(thread);
+            }
+            if rank != 0 {
+                // Original follower return convention retained; this is not a
+                // new claim that rank0's gencore/offload succeeded.
+                result = 0;
+            } else {
+                let mut table: *mut crate::abi::Coretable = core::ptr::null_mut();
+                let mut chunks = core::mem::MaybeUninit::<CInt>::uninit();
+                result = crate::gencore::gencore(
+                    process, &raw mut table, chunks.as_mut_ptr(),
+                    (*process).saved_cmdline, signal,
+                );
+                if result != 0 {
+                    kprintf(
+                        b"%s: ERROR: gencore returned %d\n\0".as_ptr().cast(),
+                        b"coredump\0".as_ptr().cast::<i8>(), result,
+                    );
+                } else {
+                    // The actual SMP IHK_DMA_ALIGN macro is empty; native
+                    // SyscallRequest alignment is retained, not invented64B.
+                    let mut request = core::mem::MaybeUninit::<
+                        crate::abi::SyscallRequest,
+                    >::uninit();
+                    let request = request.as_mut_ptr();
+                    core::ptr::addr_of_mut!((*request).number).write(metadata.syscall_number);
+                    let args = core::ptr::addr_of_mut!((*request).args).cast::<CULong>();
+                    args.add(0).write(chunks.assume_init() as CULong);
+                    args.add(1).write(mem_virt_to_phys_bridge(table.cast()));
+                    args.add(2).write(mem_virt_to_phys_bridge((*(*thread).proc).saved_cmdline.cast()));
+                    args.add(3).write((*(*thread).proc).saved_cmdline_len as CULong);
+                    result = mem_core_syscall(request, (*thread).cpu_id) as CInt;
+                    if result == 0 {
+                        kprintf(
+                            b"%s: INFO: coredump done\n\0".as_ptr().cast(),
+                            b"coredump\0".as_ptr().cast::<i8>(),
+                        );
+                    } else {
+                        kprintf(
+                            b"%s: ERROR: do_syscall failed (%d)\n\0".as_ptr().cast(),
+                            b"coredump\0".as_ptr().cast::<i8>(), result,
+                        );
+                    }
+                    crate::gencore::freecore(&raw mut table);
+                }
+            }
+            AtomicI32::from_ptr(second).fetch_add(1, Ordering::SeqCst);
+            loop {
+                if participants == AtomicI32::from_ptr(second).load(Ordering::SeqCst) {
+                    let mut link = (*head).next;
+                    while link != head {
+                        coredump_wakeup(mem_core_thread_from_link(link));
+                        link = (*link).next;
+                    }
+                    break;
+                }
+                coredump_wait(thread);
+            }
+        }
+        // Exactly once on every returning path, including NULL abort/follower ids.
+        kfree_tracked(ids.cast(), metadata.free_file, metadata.free_line);
+        result
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+/// Delegate the actual whole-free callback to its existing physical-page lookup.
+///
+/// # Safety
+/// Keep the original hash/bucket-lock/Page lifetime contract of phys_to_page.
+/// The returned pointer remains borrowed; this adapter acquires no Page reference
+/// and adds no null check, physical conversion, retry or accounting operation.
+#[no_mangle]
+pub unsafe extern "C" fn mem_phys_to_page_bridge(phys: CULong) -> *mut MemPage {
+    // SAFETY: The synchronous caller supplies the same physical value and retains
+    // all lookup/storage ownership required by the already-qualified Rust entry.
+    unsafe { phys_to_page(phys) }
+}
+
+// Defining storage only. Consumers retain the original plain CInt load/store
+// discipline and page-fault diagnostic lifetime. These are deliberately not
+// AtomicI32: this port does not introduce synchronization or a new thread owner.
+mod owned_page_fault_diagnostic_state {
+    use super::CInt;
+
+    #[export_name = "mem_page_fault_log_count"]
+    static mut COUNT: CInt = 0;
+
+    #[export_name = "mem_page_fault_log_pid"]
+    static mut PID: CInt = -1;
+
+    const _: () = {
+        assert!(core::mem::size_of::<CInt>() == 4);
+        assert!(core::mem::align_of::<CInt>() == 4);
+    };
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Permanent defining storage. No getter, constructor, lock, reference transfer,
+// initialization reordering or atomic upgrade is introduced. Existing consumers
+// continue their original raw field/list/atomic access under the same owners.
+mod owned_mem_runtime_data {
+    use super::{AbiListHead, CInt, CULong, IhkMcPaOps, IhkSpinlock, MemNumaNode};
+    use super::{mckernel_allocate_aligned_pages_node, mckernel_free_pages};
+    use super::numa_sysfs_show_meminfo;
+    use crate::abi::{SysfsOps, TlbFlushEntry};
+
+    // GCC9's retained COMMON objects have 32-byte symbol alignment. The wrapper
+    // preserves that actual placement; field0 has offset0 and identical array
+    // stride/extent. It does not add a per-element alignment or padding change.
+    #[repr(C, align(32))]
+    struct CommonArray<T>(T);
+
+    #[export_name = "pa_start"]
+    static mut PA_START: CULong = 0;
+    #[export_name = "pa_end"]
+    static mut PA_END: CULong = 0;
+
+    #[export_name = "memory_nodes"]
+    static mut MEMORY_NODES: [MemNumaNode; 512] = [const {
+        // SAFETY: This genuine repr(C) node contains only C integer/atomic words,
+        // raw pointers and intrusive list/lock storage, all valid when zeroed.
+        // Boot code, not this initializer, later establishes live list topology.
+        unsafe { core::mem::zeroed() }
+    }; 512];
+
+    #[export_name = "tlb_flush_vector"]
+    static mut TLB_FLUSH_VECTOR: [TlbFlushEntry; 64] = [const {
+        // SAFETY: Genuine repr(C,align64) entry has raw pointers and integer lock/
+        // atomic words. All-zero exactly preserves the original static storage;
+        // actual setup/publication and pending accounting remain in their owners.
+        unsafe { core::mem::zeroed() }
+    }; 64];
+
+    #[export_name = "anon_on_demand"]
+    static mut ANON_ON_DEMAND: CInt = 0;
+    #[export_name = "xpmem_page_in_remote_on_attach"]
+    static mut XPMEM_PAGE_IN_REMOTE_ON_ATTACH: CInt = 0;
+    #[export_name = "sysctl_overcommit_memory"]
+    static mut SYSCTL_OVERCOMMIT_MEMORY: CInt = 1;
+    #[export_name = "memdebug"]
+    static mut MEMDEBUG: *mut i8 = core::ptr::null_mut();
+
+    #[export_name = "vmap_allocator"]
+    static mut VMAP_ALLOCATOR: *mut crate::page_alloc::IhkPageAllocatorDesc =
+        core::ptr::null_mut();
+
+    #[export_name = "allocator"]
+    static mut ALLOCATOR: IhkMcPaOps = IhkMcPaOps {
+        alloc_page: Some(mckernel_allocate_aligned_pages_node),
+        free_page: Some(mckernel_free_pages),
+        alloc: core::ptr::null_mut(),
+        free: core::ptr::null_mut(),
+    };
+
+    #[export_name = "numa_sysfs_meminfo"]
+    static mut NUMA_SYSFS_MEMINFO: SysfsOps = SysfsOps {
+        show: Some(numa_sysfs_show_meminfo),
+        store: None,
+        release: None,
+    };
+
+    #[export_name = "pagealloc_track_hash"]
+    static mut PAGEALLOC_TRACK_HASH: CommonArray<[AbiListHead; 256]> = CommonArray([const {
+        AbiListHead { next: core::ptr::null_mut(), prev: core::ptr::null_mut() }
+    }; 256]);
+
+    #[export_name = "pagealloc_track_hash_locks"]
+    static mut PAGEALLOC_TRACK_HASH_LOCKS: CommonArray<[IhkSpinlock; 256]> = CommonArray([const {
+        IhkSpinlock { head_tail: 0 }
+    }; 256]);
+
+    #[export_name = "pagealloc_addr_hash"]
+    static mut PAGEALLOC_ADDR_HASH: CommonArray<[AbiListHead; 256]> = CommonArray([const {
+        AbiListHead { next: core::ptr::null_mut(), prev: core::ptr::null_mut() }
+    }; 256]);
+
+    #[export_name = "pagealloc_addr_hash_locks"]
+    static mut PAGEALLOC_ADDR_HASH_LOCKS: CommonArray<[IhkSpinlock; 256]> = CommonArray([const {
+        IhkSpinlock { head_tail: 0 }
+    }; 256]);
+
+    #[export_name = "pagealloc_track_initialized"]
+    static mut PAGEALLOC_TRACK_INITIALIZED: CInt = 0;
+
+    #[export_name = "pagealloc_runcount"]
+    static mut PAGEALLOC_RUNCOUNT: CInt = 0;
+
+    #[export_name = "kmalloc_track_hash"]
+    static mut KMALLOC_TRACK_HASH: CommonArray<[AbiListHead; 256]> = CommonArray([const {
+        AbiListHead { next: core::ptr::null_mut(), prev: core::ptr::null_mut() }
+    }; 256]);
+
+    #[export_name = "kmalloc_track_hash_locks"]
+    static mut KMALLOC_TRACK_HASH_LOCKS: CommonArray<[IhkSpinlock; 256]> = CommonArray([const {
+        IhkSpinlock { head_tail: 0 }
+    }; 256]);
+
+    #[export_name = "kmalloc_addr_hash"]
+    static mut KMALLOC_ADDR_HASH: CommonArray<[AbiListHead; 256]> = CommonArray([const {
+        AbiListHead { next: core::ptr::null_mut(), prev: core::ptr::null_mut() }
+    }; 256]);
+
+    #[export_name = "kmalloc_addr_hash_locks"]
+    static mut KMALLOC_ADDR_HASH_LOCKS: CommonArray<[IhkSpinlock; 256]> = CommonArray([const {
+        IhkSpinlock { head_tail: 0 }
+    }; 256]);
+
+    #[export_name = "kmalloc_track_initialized"]
+    static mut KMALLOC_TRACK_INITIALIZED: CInt = 0;
+
+    #[export_name = "kmalloc_runcount"]
+    static mut KMALLOC_RUNCOUNT: CInt = 0;
+
+    #[export_name = "page_hash"]
+    static mut PAGE_HASH: CommonArray<[AbiListHead; 1024]> = CommonArray([const {
+        AbiListHead { next: core::ptr::null_mut(), prev: core::ptr::null_mut() }
+    }; 1024]);
+
+    #[export_name = "page_hash_locks"]
+    static mut PAGE_HASH_LOCKS: CommonArray<[IhkSpinlock; 1024]> = CommonArray([const {
+        IhkSpinlock { head_tail: 0 }
+    }; 1024]);
+
+    const _: () = {
+        use core::mem::{align_of, offset_of, size_of};
+        assert!(size_of::<CInt>() == 4 && align_of::<CInt>() == 4);
+        assert!(size_of::<CULong>() == 8 && align_of::<CULong>() == 8);
+        assert!(size_of::<MemNumaNode>() == 256 && align_of::<MemNumaNode>() == 64);
+        assert!(size_of::<[MemNumaNode; 512]>() == 0x20000);
+        assert!(size_of::<TlbFlushEntry>() == 64 && align_of::<TlbFlushEntry>() == 64);
+        assert!(size_of::<[TlbFlushEntry; 64]>() == 4096);
+        assert!(size_of::<IhkMcPaOps>() == 32 && align_of::<IhkMcPaOps>() == 8);
+        assert!(size_of::<SysfsOps>() == 24 && align_of::<SysfsOps>() == 8);
+        assert!(size_of::<CommonArray<[AbiListHead; 256]>>() == 4096);
+        assert!(size_of::<CommonArray<[IhkSpinlock; 256]>>() == 1024);
+        assert!(size_of::<CommonArray<[AbiListHead; 1024]>>() == 16384);
+        assert!(size_of::<CommonArray<[IhkSpinlock; 1024]>>() == 4096);
+        assert!(align_of::<CommonArray<[AbiListHead; 256]>>() == 32);
+        assert!(offset_of!(CommonArray<[AbiListHead; 256]>, 0) == 0);
+    };
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Exact supported-profile configuration values from the retained real C headers
+// and production argv. The real-C witness rejects any different config rather
+// than silently reusing this static data in another architecture/feature profile.
+mod owned_mem_geometry {
+    use super::{CInt, CULong, MemNumaSysfsShowGeometry, MemUnhandledFaultMetadata};
+
+    #[export_name = "mem_interleave_nodes_mask_bits"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    static MEM_INTERLEAVE_NODES_MASK_BITS: CInt = 256;
+
+    #[export_name = "mem_vmap_init_start"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    static MEM_VMAP_INIT_START: CULong = 0xffff_8500_0000_0000;
+
+    #[export_name = "mem_vmap_init_size"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    static MEM_VMAP_INIT_SIZE: CULong = 0x0000_0001_0000_0000;
+
+    #[export_name = "mem_vmap_init_unit"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    static MEM_VMAP_INIT_UNIT: CULong = super::PAGE_SIZE;
+
+    #[export_name = "mem_vmap_init_first_level"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    static MEM_VMAP_INIT_FIRST_LEVEL: CInt = 0;
+
+    #[export_name = "page_init_hash_bucket_count"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    static PAGE_INIT_HASH_BUCKET_COUNT: CInt = 1024;
+
+    #[export_name = "page_init_hash_head_stride"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    static PAGE_INIT_HASH_HEAD_STRIDE: CULong = core::mem::size_of::<super::AbiListHead>() as CULong;
+
+    #[export_name = "page_unmap_hash_mask"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    static PAGE_UNMAP_HASH_MASK: CULong = 1023;
+
+    #[export_name = "page_unmap_hash_shift"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    static PAGE_UNMAP_HASH_SHIFT: CInt = super::PAGE_SHIFT as CInt;
+
+    #[export_name = "page_unmap_lock_stride"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    static PAGE_UNMAP_LOCK_STRIDE: CULong = core::mem::size_of::<super::IhkSpinlock>() as CULong;
+
+    #[export_name = "mem_fatal_user_bytes_geometry"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    static FATAL_USER_BYTES_GEOMETRY: [CULong; 2] = [super::PAGE_SIZE, 0xffff_ffff_fe80_0000];
+
+    #[export_name = "mem_remote_tlb_geometry"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    static REMOTE_TLB_GEOMETRY: [CInt; 3] = [64, 68, 1024];
+
+    #[export_name = "mem_numa_log_rbtree_enabled"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    static NUMA_LOG_RBTREE_ENABLED: CInt = 1;
+
+    #[export_name = "mem_numa_sysfs_show_geometry"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    static NUMA_SYSFS_SHOW_GEOMETRY: MemNumaSysfsShowGeometry = MemNumaSysfsShowGeometry {
+        rbtree: 1,
+        kb_shift: (super::PAGE_SHIFT - 10) as u32,
+    };
+
+    #[export_name = "mem_unhandled_fault_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    static UNHANDLED_FAULT_METADATA: MemUnhandledFaultMetadata = MemUnhandledFaultMetadata {
+        pf_prot: 1 << 0,
+        pf_write: 1 << 1,
+        pf_user: 1 << 2,
+        pf_reserved: 1 << 3,
+        pf_instruction: 1 << 4,
+        mf_regular_file: super::MF_REG_FILE as u32,
+        fugaku: 0,
+        debug_stack: 0,
+        instruction_address: None,
+        stack_address: None,
+    };
+
+    const _: () = {
+        use core::mem::{align_of, offset_of, size_of};
+        assert!(size_of::<MemNumaSysfsShowGeometry>() == 8);
+        assert!(align_of::<MemNumaSysfsShowGeometry>() == 4);
+        assert!(offset_of!(MemNumaSysfsShowGeometry, kb_shift) == 4);
+        assert!(size_of::<MemUnhandledFaultMetadata>() == 72);
+        assert!(align_of::<MemUnhandledFaultMetadata>() == 8);
+        assert!(offset_of!(MemUnhandledFaultMetadata, instruction_address) == 56);
+        assert!(offset_of!(MemUnhandledFaultMetadata, stack_address) == 64);
+    };
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Actual Cdescriptor provenance is frozen from the successful current80 producer's
+// retained preprocessed source. It is an origin snapshot, not a claim that later
+// source edits retain the same current line or that Rust file!/line! means C.
+// This matches the accepted F05 typed Ddebug data-ownership mechanism.
+mod owned_mem_debug_records {
+    use crate::debug::Ddebug;
+
+    static TRACE_FILE: [u8; 209] = [
+        47, 104, 111, 109, 101, 47, 104, 111, 108, 100, 101, 110, 47, 109, 99, 107, 101, 114,
+        110, 101, 108, 45, 119, 111, 114, 107, 47, 104, 111, 115, 116, 45, 112, 114, 101, 112,
+        97, 114, 97, 116, 105, 111, 110, 47, 118, 101, 108, 111, 99, 105, 116, 121, 45, 105,
+        110, 116, 101, 114, 118, 101, 110, 116, 105, 111, 110, 45, 50, 48, 50, 54, 49, 48,
+        50, 51, 45, 54, 47, 109, 49, 52, 45, 102, 105, 108, 101, 45, 108, 97, 110, 101,
+        115, 47, 107, 101, 114, 110, 101, 108, 45, 109, 101, 109, 47, 110, 101, 120, 116, 49,
+        51, 45, 113, 117, 97, 108, 105, 102, 105, 101, 100, 45, 99, 111, 114, 101, 45, 99,
+        117, 114, 114, 101, 110, 116, 45, 112, 114, 111, 100, 117, 99, 116, 105, 111, 110, 45,
+        112, 114, 111, 112, 111, 115, 97, 108, 45, 49, 47, 99, 97, 110, 111, 110, 105, 99,
+        97, 108, 56, 48, 45, 70, 48, 53, 45, 99, 108, 111, 115, 117, 114, 101, 45, 114,
+        101, 102, 114, 101, 115, 104, 45, 49, 47, 115, 111, 117, 114, 99, 101, 47, 107, 101,
+        114, 110, 101, 108, 47, 109, 101, 109, 46, 99, 0,
+    ];
+
+    #[export_name = "mem_dump_complete_debug_record"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_DUMP_COMPLETE_DEBUG_RECORD: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"mem_dump_complete_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 7727 | (0 << 24),
+    };
+
+    #[export_name = "mem_kmalloc_leak_log_bridge_debug_record_0"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_KMALLOC_LEAK_LOG_BRIDGE_DEBUG_RECORD_0: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"mem_kmalloc_leak_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 6879 | (0 << 24),
+    };
+
+    #[export_name = "mem_kmalloc_track_log_bridge_debug_record_0"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_KMALLOC_TRACK_LOG_BRIDGE_DEBUG_RECORD_0: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"mem_kmalloc_track_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 6847 | (0 << 24),
+    };
+
+    #[export_name = "mem_kmalloc_track_log_bridge_debug_record_1"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_KMALLOC_TRACK_LOG_BRIDGE_DEBUG_RECORD_1: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"mem_kmalloc_track_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 6852 | (0 << 24),
+    };
+
+    #[export_name = "mem_kmalloc_track_log_bridge_debug_record_2"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_KMALLOC_TRACK_LOG_BRIDGE_DEBUG_RECORD_2: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"mem_kmalloc_track_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 6857 | (0 << 24),
+    };
+
+    #[export_name = "mem_kmalloc_track_log_bridge_debug_record_3"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_KMALLOC_TRACK_LOG_BRIDGE_DEBUG_RECORD_3: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"mem_kmalloc_track_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 6862 | (0 << 24),
+    };
+
+    #[export_name = "mem_rusage_init_debug_record"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_RUSAGE_INIT_DEBUG_RECORD: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"mem_rusage_init_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 6583 | (0 << 24),
+    };
+
+    #[export_name = "page_unmap_debug_enter"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut PAGE_UNMAP_DEBUG_ENTER: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"page_unmap_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 6315 | (0 << 24),
+    };
+
+    #[export_name = "page_unmap_debug_still_mapped"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut PAGE_UNMAP_DEBUG_STILL_MAPPED: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"page_unmap_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 6320 | (0 << 24),
+    };
+
+    #[export_name = "page_unmap_debug_unmapped"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut PAGE_UNMAP_DEBUG_UNMAPPED: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"page_unmap_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 6325 | (0 << 24),
+    };
+
+    #[export_name = "mem_page_fault_debug_0"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_PAGE_FAULT_DEBUG_0: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"page_fault_handler\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 4831 | (0 << 24),
+    };
+
+    #[export_name = "mem_page_fault_debug_2"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_PAGE_FAULT_DEBUG_2: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"page_fault_handler\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 4841 | (0 << 24),
+    };
+
+    #[export_name = "mem_page_fault_debug_3"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_PAGE_FAULT_DEBUG_3: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"page_fault_handler\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 4845 | (0 << 24),
+    };
+
+    #[export_name = "mem_coredump_debug_0"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_COREDUMP_DEBUG_0: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"coredump\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 4310 | (0 << 24),
+    };
+
+    #[export_name = "mem_coredump_debug_1"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_COREDUMP_DEBUG_1: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"coredump\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 4314 | (0 << 24),
+    };
+
+    #[export_name = "mem_coredump_wakeup_debug_record"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_COREDUMP_WAKEUP_DEBUG_RECORD: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"coredump_wakeup\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 4269 | (0 << 24),
+    };
+
+    #[export_name = "mem_coredump_wait_sleep_record"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_COREDUMP_WAIT_SLEEP_RECORD: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"coredump_wait\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 4220 | (0 << 24),
+    };
+
+    #[export_name = "mem_coredump_wait_resume_record"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_COREDUMP_WAIT_RESUME_RECORD: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"coredump_wait\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 4224 | (0 << 24),
+    };
+
+    #[export_name = "mem_allocation_log_record_0"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_ALLOCATION_LOG_RECORD_0: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"mem_mckernel_alloc_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 3583 | (0 << 24),
+    };
+
+    #[export_name = "mem_allocation_log_record_1"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_ALLOCATION_LOG_RECORD_1: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"mem_mckernel_alloc_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 3588 | (0 << 24),
+    };
+
+    #[export_name = "mem_allocation_log_record_2"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_ALLOCATION_LOG_RECORD_2: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"mem_mckernel_alloc_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 3593 | (0 << 24),
+    };
+
+    #[export_name = "mem_allocation_log_record_3"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_ALLOCATION_LOG_RECORD_3: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"mem_mckernel_alloc_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 3598 | (0 << 24),
+    };
+
+    #[export_name = "mem_allocation_log_record_4"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_ALLOCATION_LOG_RECORD_4: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"mem_mckernel_alloc_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 3603 | (0 << 24),
+    };
+
+    #[export_name = "mem_allocation_log_record_6"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_ALLOCATION_LOG_RECORD_6: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"mem_mckernel_alloc_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 3615 | (0 << 24),
+    };
+
+    #[export_name = "mem_reserve_pages_debug_record"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_RESERVE_PAGES_DEBUG_RECORD: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"mem_reserve_pages_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 3425 | (0 << 24),
+    };
+
+    #[export_name = "mem_pagealloc_leak_log_bridge_debug_record_0"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_PAGEALLOC_LEAK_LOG_BRIDGE_DEBUG_RECORD_0: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"mem_pagealloc_leak_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 2644 | (0 << 24),
+    };
+
+    #[export_name = "mem_pagealloc_track_log_bridge_debug_record_0"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_PAGEALLOC_TRACK_LOG_BRIDGE_DEBUG_RECORD_0: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"mem_pagealloc_track_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 2594 | (0 << 24),
+    };
+
+    #[export_name = "mem_pagealloc_track_log_bridge_debug_record_1"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_PAGEALLOC_TRACK_LOG_BRIDGE_DEBUG_RECORD_1: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"mem_pagealloc_track_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 2599 | (0 << 24),
+    };
+
+    #[export_name = "mem_pagealloc_track_log_bridge_debug_record_2"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_PAGEALLOC_TRACK_LOG_BRIDGE_DEBUG_RECORD_2: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"mem_pagealloc_track_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 2604 | (0 << 24),
+    };
+
+    #[export_name = "mem_pagealloc_track_log_bridge_debug_record_3"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_PAGEALLOC_TRACK_LOG_BRIDGE_DEBUG_RECORD_3: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"mem_pagealloc_track_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 2609 | (0 << 24),
+    };
+
+    #[export_name = "mem_pagealloc_track_log_bridge_debug_record_4"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_PAGEALLOC_TRACK_LOG_BRIDGE_DEBUG_RECORD_4: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"mem_pagealloc_track_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 2614 | (0 << 24),
+    };
+
+    #[export_name = "mem_pagealloc_track_log_bridge_debug_record_5"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_PAGEALLOC_TRACK_LOG_BRIDGE_DEBUG_RECORD_5: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"mem_pagealloc_track_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 2619 | (0 << 24),
+    };
+
+    #[export_name = "mem_pagealloc_track_log_bridge_debug_record_6"]
+    #[used]
+    #[link_section = "__verbose"]
+    static mut MEM_PAGEALLOC_TRACK_LOG_BRIDGE_DEBUG_RECORD_6: Ddebug = Ddebug {
+        file: TRACE_FILE.as_ptr().cast(),
+        func: b"mem_pagealloc_track_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 2624 | (0 << 24),
+    };
+
+    const _: () = {
+        use core::mem::{align_of, offset_of, size_of};
+        assert!(size_of::<Ddebug>() == 32 && align_of::<Ddebug>() == 8);
+        assert!(offset_of!(Ddebug, file) == 0);
+        assert!(offset_of!(Ddebug, func) == 8);
+        assert!(offset_of!(Ddebug, fmt) == 16);
+        assert!(offset_of!(Ddebug, line_flags) == 24);
+    };
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Immutable address/config containers only. Pointee flags remain mutable under
+// original debug-control rules; publishing these addresses grants no reference,
+// synchronization, new lifetime or permission to mutate through a safe API.
+mod owned_mem_debug_addresses {
+    use super::{
+        MemCoredumpWaitMetadata,
+        MemCoredumpWakeupMetadata,
+        MemDumpCompleteDebugMetadata,
+        MemTrackingDebugRecords1,
+        MemTrackingDebugRecords4,
+        MemTrackingDebugRecords7,
+    };
+    use crate::debug::Ddebug;
+
+    #[repr(C)]
+    struct OwnedThreeRecordAddresses {
+        records: [*mut u8; 3],
+        flags_byte: usize,
+    }
+
+    // SAFETY: This exact repr(C) container has only scalar configuration and
+    // permanent raw record addresses. It is immutable and exposes no safe
+    // dereference; record accesses retain their original external discipline.
+    unsafe impl Sync for MemCoredumpWaitMetadata {}
+
+    // SAFETY: This exact repr(C) container has only scalar configuration and
+    // permanent raw record addresses. It is immutable and exposes no safe
+    // dereference; record accesses retain their original external discipline.
+    unsafe impl Sync for MemCoredumpWakeupMetadata {}
+
+    // SAFETY: This exact repr(C) container has only scalar configuration and
+    // permanent raw record addresses. It is immutable and exposes no safe
+    // dereference; record accesses retain their original external discipline.
+    unsafe impl Sync for MemDumpCompleteDebugMetadata {}
+
+    // SAFETY: This exact repr(C) container has only scalar configuration and
+    // permanent raw record addresses. It is immutable and exposes no safe
+    // dereference; record accesses retain their original external discipline.
+    unsafe impl Sync for MemTrackingDebugRecords1 {}
+
+    // SAFETY: This exact repr(C) container has only scalar configuration and
+    // permanent raw record addresses. It is immutable and exposes no safe
+    // dereference; record accesses retain their original external discipline.
+    unsafe impl Sync for MemTrackingDebugRecords4 {}
+
+    // SAFETY: This exact repr(C) container has only scalar configuration and
+    // permanent raw record addresses. It is immutable and exposes no safe
+    // dereference; record accesses retain their original external discipline.
+    unsafe impl Sync for MemTrackingDebugRecords7 {}
+
+    // SAFETY: This exact repr(C) container has only scalar configuration and
+    // permanent raw record addresses. It is immutable and exposes no safe
+    // dereference; record accesses retain their original external discipline.
+    unsafe impl Sync for OwnedThreeRecordAddresses {}
+
+    unsafe extern "C" {
+        #[link_name = "mem_coredump_wait_resume_record"]
+        static mut RECORD_0: Ddebug;
+        #[link_name = "mem_coredump_wait_sleep_record"]
+        static mut RECORD_1: Ddebug;
+        #[link_name = "mem_coredump_wakeup_debug_record"]
+        static mut RECORD_2: Ddebug;
+        #[link_name = "mem_dump_complete_debug_record"]
+        static mut RECORD_3: Ddebug;
+        #[link_name = "mem_kmalloc_leak_log_bridge_debug_record_0"]
+        static mut RECORD_4: Ddebug;
+        #[link_name = "mem_kmalloc_track_log_bridge_debug_record_0"]
+        static mut RECORD_5: Ddebug;
+        #[link_name = "mem_kmalloc_track_log_bridge_debug_record_1"]
+        static mut RECORD_6: Ddebug;
+        #[link_name = "mem_kmalloc_track_log_bridge_debug_record_2"]
+        static mut RECORD_7: Ddebug;
+        #[link_name = "mem_kmalloc_track_log_bridge_debug_record_3"]
+        static mut RECORD_8: Ddebug;
+        #[link_name = "mem_pagealloc_leak_log_bridge_debug_record_0"]
+        static mut RECORD_9: Ddebug;
+        #[link_name = "mem_pagealloc_track_log_bridge_debug_record_0"]
+        static mut RECORD_10: Ddebug;
+        #[link_name = "mem_pagealloc_track_log_bridge_debug_record_1"]
+        static mut RECORD_11: Ddebug;
+        #[link_name = "mem_pagealloc_track_log_bridge_debug_record_2"]
+        static mut RECORD_12: Ddebug;
+        #[link_name = "mem_pagealloc_track_log_bridge_debug_record_3"]
+        static mut RECORD_13: Ddebug;
+        #[link_name = "mem_pagealloc_track_log_bridge_debug_record_4"]
+        static mut RECORD_14: Ddebug;
+        #[link_name = "mem_pagealloc_track_log_bridge_debug_record_5"]
+        static mut RECORD_15: Ddebug;
+        #[link_name = "mem_pagealloc_track_log_bridge_debug_record_6"]
+        static mut RECORD_16: Ddebug;
+        #[link_name = "mem_reserve_pages_debug_record"]
+        static mut RECORD_17: Ddebug;
+        #[link_name = "mem_rusage_init_debug_record"]
+        static mut RECORD_18: Ddebug;
+        #[link_name = "page_unmap_debug_enter"]
+        static mut RECORD_19: Ddebug;
+        #[link_name = "page_unmap_debug_still_mapped"]
+        static mut RECORD_20: Ddebug;
+        #[link_name = "page_unmap_debug_unmapped"]
+        static mut RECORD_21: Ddebug;
+    }
+
+    #[export_name = "mem_dump_complete_debug_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static MEM_DUMP_COMPLETE_DEBUG_METADATA: MemDumpCompleteDebugMetadata = MemDumpCompleteDebugMetadata {
+        // SAFETY: Permanent typed Rust Ddebug definitions are linked by the
+        // exact Cmetadata symbol names; this forms addresses without access.
+        record: unsafe { core::ptr::addr_of_mut!(RECORD_3).cast::<u8>() },
+        flags_byte: 27,
+    };
+
+    #[export_name = "mem_kmalloc_leak_log_bridge_debug_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static MEM_KMALLOC_LEAK_LOG_BRIDGE_DEBUG_METADATA: MemTrackingDebugRecords1 = MemTrackingDebugRecords1 {
+        // SAFETY: Permanent typed Rust Ddebug definitions are linked by the
+        // exact Cmetadata symbol names; this forms addresses without access.
+        records: [
+            unsafe { core::ptr::addr_of_mut!(RECORD_4).cast::<u8>() },
+        ],
+        flags_byte: 27,
+    };
+
+    #[export_name = "mem_kmalloc_track_log_bridge_debug_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static MEM_KMALLOC_TRACK_LOG_BRIDGE_DEBUG_METADATA: MemTrackingDebugRecords4 = MemTrackingDebugRecords4 {
+        // SAFETY: Permanent typed Rust Ddebug definitions are linked by the
+        // exact Cmetadata symbol names; this forms addresses without access.
+        records: [
+            unsafe { core::ptr::addr_of_mut!(RECORD_5).cast::<u8>() },
+            unsafe { core::ptr::addr_of_mut!(RECORD_6).cast::<u8>() },
+            unsafe { core::ptr::addr_of_mut!(RECORD_7).cast::<u8>() },
+            unsafe { core::ptr::addr_of_mut!(RECORD_8).cast::<u8>() },
+        ],
+        flags_byte: 27,
+    };
+
+    #[export_name = "mem_pagealloc_leak_log_bridge_debug_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static MEM_PAGEALLOC_LEAK_LOG_BRIDGE_DEBUG_METADATA: MemTrackingDebugRecords1 = MemTrackingDebugRecords1 {
+        // SAFETY: Permanent typed Rust Ddebug definitions are linked by the
+        // exact Cmetadata symbol names; this forms addresses without access.
+        records: [
+            unsafe { core::ptr::addr_of_mut!(RECORD_9).cast::<u8>() },
+        ],
+        flags_byte: 27,
+    };
+
+    #[export_name = "mem_pagealloc_track_log_bridge_debug_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static MEM_PAGEALLOC_TRACK_LOG_BRIDGE_DEBUG_METADATA: MemTrackingDebugRecords7 = MemTrackingDebugRecords7 {
+        // SAFETY: Permanent typed Rust Ddebug definitions are linked by the
+        // exact Cmetadata symbol names; this forms addresses without access.
+        records: [
+            unsafe { core::ptr::addr_of_mut!(RECORD_10).cast::<u8>() },
+            unsafe { core::ptr::addr_of_mut!(RECORD_11).cast::<u8>() },
+            unsafe { core::ptr::addr_of_mut!(RECORD_12).cast::<u8>() },
+            unsafe { core::ptr::addr_of_mut!(RECORD_13).cast::<u8>() },
+            unsafe { core::ptr::addr_of_mut!(RECORD_14).cast::<u8>() },
+            unsafe { core::ptr::addr_of_mut!(RECORD_15).cast::<u8>() },
+            unsafe { core::ptr::addr_of_mut!(RECORD_16).cast::<u8>() },
+        ],
+        flags_byte: 27,
+    };
+
+    #[export_name = "mem_rusage_init_debug_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static MEM_RUSAGE_INIT_DEBUG_METADATA: MemTrackingDebugRecords1 = MemTrackingDebugRecords1 {
+        // SAFETY: Permanent typed Rust Ddebug definitions are linked by the
+        // exact Cmetadata symbol names; this forms addresses without access.
+        records: [
+            unsafe { core::ptr::addr_of_mut!(RECORD_18).cast::<u8>() },
+        ],
+        flags_byte: 27,
+    };
+
+    #[export_name = "mem_reserve_pages_debug_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static MEM_RESERVE_PAGES_DEBUG_METADATA: MemDumpCompleteDebugMetadata = MemDumpCompleteDebugMetadata {
+        // SAFETY: Permanent typed Rust Ddebug definitions are linked by the
+        // exact Cmetadata symbol names; this forms addresses without access.
+        record: unsafe { core::ptr::addr_of_mut!(RECORD_17).cast::<u8>() },
+        flags_byte: 27,
+    };
+
+    #[export_name = "page_unmap_debug_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static PAGE_UNMAP_DEBUG_METADATA: OwnedThreeRecordAddresses = OwnedThreeRecordAddresses {
+        // SAFETY: Permanent typed Rust Ddebug definitions are linked by the
+        // exact Cmetadata symbol names; this forms addresses without access.
+        records: [
+            unsafe { core::ptr::addr_of_mut!(RECORD_19).cast::<u8>() },
+            unsafe { core::ptr::addr_of_mut!(RECORD_20).cast::<u8>() },
+            unsafe { core::ptr::addr_of_mut!(RECORD_21).cast::<u8>() },
+        ],
+        flags_byte: 27,
+    };
+
+    #[export_name = "mem_coredump_wakeup_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static MEM_COREDUMP_WAKEUP_METADATA: MemCoredumpWakeupMetadata = MemCoredumpWakeupMetadata {
+        descheduled: 1,
+        to_be_woken: 2,
+        // SAFETY: Permanent typed Rust Ddebug definitions are linked by the
+        // exact Cmetadata symbol names; this forms addresses without access.
+        record: unsafe { core::ptr::addr_of_mut!(RECORD_2).cast::<u8>() },
+        flags_byte: 27,
+    };
+
+    #[export_name = "mem_coredump_wait_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static MEM_COREDUMP_WAIT_METADATA: MemCoredumpWaitMetadata = MemCoredumpWaitMetadata {
+        running: 0,
+        descheduled: 1,
+        interruptible: 2,
+        // SAFETY: Permanent typed Rust Ddebug definitions are linked by the
+        // exact Cmetadata symbol names; this forms addresses without access.
+        records: [
+            unsafe { core::ptr::addr_of_mut!(RECORD_1).cast::<u8>() },
+            unsafe { core::ptr::addr_of_mut!(RECORD_0).cast::<u8>() },
+        ],
+        flags_byte: 27,
+    };
+
+    const _: () = {
+        use core::mem::{align_of, offset_of, size_of};
+        assert!(size_of::<MemDumpCompleteDebugMetadata>() == 16);
+        assert!(size_of::<MemTrackingDebugRecords1>() == 16);
+        assert!(size_of::<MemTrackingDebugRecords4>() == 40);
+        assert!(size_of::<MemTrackingDebugRecords7>() == 64);
+        assert!(size_of::<OwnedThreeRecordAddresses>() == 32);
+        assert!(offset_of!(OwnedThreeRecordAddresses, flags_byte) == 24);
+        assert!(size_of::<MemCoredumpWakeupMetadata>() == 24);
+        assert!(offset_of!(MemCoredumpWakeupMetadata, record) == 8);
+        assert!(size_of::<MemCoredumpWaitMetadata>() == 40);
+        assert!(offset_of!(MemCoredumpWaitMetadata, records) == 16);
+        assert!(align_of::<MemCoredumpWaitMetadata>() == 8);
+    };
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Typed permanent owners and immutable addresses; no C getter or constructor.
+mod owned_mem_static_addresses {
+    use super::{AbiListHead, CInt, MemNumaNode, MemNumaSysfsRegistrationMetadata};
+    use super::{MemSboxAccessMetadata, c_void, page_fault_handler};
+    use super::query_free_mem_interrupt_handler;
+    use crate::abi::SysfsOps;
+
+    #[repr(transparent)]
+    struct ImmutableAddress<T>(*mut T);
+    // SAFETY: Only a permanent raw address is published, with no safe reference
+    // or dereference API. Every pointee access retains its original owner/locks.
+    unsafe impl<T> Sync for ImmutableAddress<T> {}
+
+    // SAFETY: These exact readonly containers consist of scalar config and raw
+    // permanent addresses. They expose no safe pointee access or mutation.
+    unsafe impl Sync for MemNumaSysfsRegistrationMetadata {}
+    unsafe impl Sync for MemSboxAccessMetadata {}
+
+    #[repr(C)]
+    struct InterruptHandler {
+        list: AbiListHead,
+        func: Option<unsafe extern "C" fn(*mut c_void)>,
+        private: *mut c_void,
+    }
+    #[repr(C, align(32))]
+    struct InterruptStorage(InterruptHandler);
+
+    #[export_name = "query_free_mem_handler"]
+    static mut QUERY_FREE_MEM_HANDLER: InterruptStorage = InterruptStorage(InterruptHandler {
+        list: AbiListHead { next: core::ptr::null_mut(), prev: core::ptr::null_mut() },
+        func: Some(query_free_mem_interrupt_handler),
+        private: core::ptr::null_mut(),
+    });
+
+    // Pointer storage represents exactly the C address-to-ulong relocations. No
+    // pointer-to-integer const evaluation or invented numeric runtime address is
+    // used. Existing integer-view getters read the same LP64 address bytes.
+    #[repr(C)]
+    struct BootAddresses {
+        page_fault_handler: *const c_void,
+        query_free_handler: *const c_void,
+        anon_slot: *mut CInt,
+        xpmem_slot: *mut CInt,
+        hugetlbfs_slot: *mut CInt,
+    }
+    // SAFETY: Only immutable code/static raw addresses, no safe dereference API.
+    unsafe impl Sync for BootAddresses {}
+
+    unsafe extern "C" {
+        #[link_name = "anon_on_demand"]
+        static mut ANON_ON_DEMAND: CInt;
+        #[link_name = "xpmem_page_in_remote_on_attach"]
+        static mut XPMEM_PAGE_IN_REMOTE_ON_ATTACH: CInt;
+        #[link_name = "memory_nodes"]
+        static mut MEMORY_NODES: [MemNumaNode; 512];
+        #[link_name = "numa_sysfs_meminfo"]
+        static mut NUMA_SYSFS_MEMINFO: SysfsOps;
+        #[link_name = "vmap_allocator"]
+        static mut VMAP_ALLOCATOR: *mut crate::page_alloc::IhkPageAllocatorDesc;
+    }
+
+    #[export_name = "mem_static_boot_address_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static STATIC_BOOT_ADDRESS_METADATA: BootAddresses = BootAddresses {
+        page_fault_handler: page_fault_handler as *const () as *const c_void,
+        // SAFETY: Permanent owned handler storage, field0 has the exact Cpayload.
+        query_free_handler: unsafe { core::ptr::addr_of!(QUERY_FREE_MEM_HANDLER).cast() },
+        // SAFETY: Permanent typed Rust words, no borrow/access when forming address.
+        anon_slot: unsafe { core::ptr::addr_of_mut!(ANON_ON_DEMAND) },
+        xpmem_slot: unsafe { core::ptr::addr_of_mut!(XPMEM_PAGE_IN_REMOTE_ON_ATTACH) },
+        hugetlbfs_slot: core::ptr::null_mut(),
+    };
+
+    #[export_name = "mem_query_free_nodes"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static QUERY_FREE_NODES: ImmutableAddress<MemNumaNode> = ImmutableAddress(
+        // SAFETY: Permanent owned node array, exact first-element address only.
+        unsafe { core::ptr::addr_of_mut!(MEMORY_NODES).cast() },
+    );
+
+    #[export_name = "mem_vmap_allocator_slot"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static VMAP_ALLOCATOR_SLOT: ImmutableAddress<*mut crate::page_alloc::IhkPageAllocatorDesc> =
+        ImmutableAddress(
+            // SAFETY: Permanent mutable pointer word, no pointee read or new owner.
+            unsafe { core::ptr::addr_of_mut!(VMAP_ALLOCATOR) },
+        );
+
+    #[export_name = "mem_numa_sysfs_registration_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static NUMA_SYSFS_REGISTRATION_METADATA: MemNumaSysfsRegistrationMetadata =
+        MemNumaSysfsRegistrationMetadata {
+            // SAFETY: Both registered table and nodes remain permanently owned.
+            ops: unsafe { core::ptr::addr_of_mut!(NUMA_SYSFS_MEMINFO) },
+            nodes: unsafe { core::ptr::addr_of_mut!(MEMORY_NODES).cast() },
+        };
+
+    #[export_name = "mem_sbox_access_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    static SBOX_ACCESS_METADATA: MemSboxAccessMetadata = MemSboxAccessMetadata {
+        attached: 0,
+        base_slot: core::ptr::null_mut(),
+    };
+
+    const _: () = {
+        use core::mem::{align_of, offset_of, size_of};
+        assert!(size_of::<InterruptHandler>() == 32 && align_of::<InterruptHandler>() == 8);
+        assert!(offset_of!(InterruptHandler, list) == 0);
+        assert!(offset_of!(InterruptHandler, func) == 16);
+        assert!(offset_of!(InterruptHandler, private) == 24);
+        assert!(size_of::<InterruptStorage>() == 32 && align_of::<InterruptStorage>() == 32);
+        assert!(offset_of!(InterruptStorage, 0) == 0);
+        assert!(size_of::<BootAddresses>() == 40 && align_of::<BootAddresses>() == 8);
+        assert!(offset_of!(BootAddresses, query_free_handler) == 8);
+        assert!(offset_of!(BootAddresses, anon_slot) == 16);
+        assert!(offset_of!(BootAddresses, xpmem_slot) == 24);
+        assert!(offset_of!(BootAddresses, hugetlbfs_slot) == 32);
+        assert!(size_of::<ImmutableAddress<MemNumaNode>>() == 8);
+        assert!(size_of::<MemNumaSysfsRegistrationMetadata>() == 16);
+        assert!(size_of::<MemSboxAccessMetadata>() == 16);
+    };
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Exact diagnostic/allocation provenance from successful current80 Cproducer.
+// Like accepted F05 data ownership, preserve the captured origin as data: no
+// Rust file!/line!, invented numeric addresses, #line or artificial Cpadding.
+mod owned_mem_origin_and_core_metadata {
+    use super::{CInt, MemCoredumpMetadata, MemNumaDistanceAllocationOrigin};
+    use super::MemTrackedRedirectionSource;
+    use crate::debug::Ddebug;
+
+    // SAFETY: Immutable scalar configuration plus permanent raw string/record
+    // addresses only; no safe dereference or pointee mutability guarantee.
+    unsafe impl Sync for MemTrackedRedirectionSource {}
+
+    // SAFETY: Immutable scalar configuration plus permanent raw string/record
+    // addresses only; no safe dereference or pointee mutability guarantee.
+    unsafe impl Sync for MemNumaDistanceAllocationOrigin {}
+
+    // SAFETY: Immutable scalar configuration plus permanent raw string/record
+    // addresses only; no safe dereference or pointee mutability guarantee.
+    unsafe impl Sync for MemCoredumpMetadata {}
+
+    static TRACE_FILE: [u8; 209] = [
+        47, 104, 111, 109, 101, 47, 104, 111, 108, 100, 101, 110, 47, 109, 99, 107, 101, 114,
+        110, 101, 108, 45, 119, 111, 114, 107, 47, 104, 111, 115, 116, 45, 112, 114, 101, 112,
+        97, 114, 97, 116, 105, 111, 110, 47, 118, 101, 108, 111, 99, 105, 116, 121, 45, 105,
+        110, 116, 101, 114, 118, 101, 110, 116, 105, 111, 110, 45, 50, 48, 50, 54, 49, 48,
+        50, 51, 45, 54, 47, 109, 49, 52, 45, 102, 105, 108, 101, 45, 108, 97, 110, 101,
+        115, 47, 107, 101, 114, 110, 101, 108, 45, 109, 101, 109, 47, 110, 101, 120, 116, 49,
+        51, 45, 113, 117, 97, 108, 105, 102, 105, 101, 100, 45, 99, 111, 114, 101, 45, 99,
+        117, 114, 114, 101, 110, 116, 45, 112, 114, 111, 100, 117, 99, 116, 105, 111, 110, 45,
+        112, 114, 111, 112, 111, 115, 97, 108, 45, 49, 47, 99, 97, 110, 111, 110, 105, 99,
+        97, 108, 56, 48, 45, 70, 48, 53, 45, 99, 108, 111, 115, 117, 114, 101, 45, 114,
+        101, 102, 114, 101, 115, 104, 45, 49, 47, 115, 111, 117, 114, 99, 101, 47, 107, 101,
+        114, 110, 101, 108, 47, 109, 101, 109, 46, 99, 0,
+    ];
+
+    #[export_name = "page_hash_alloc_file"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    static PAGE_HASH_ALLOC_FILE: [u8; 209] = TRACE_FILE;
+
+    #[export_name = "page_hash_alloc_line"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    static PAGE_HASH_ALLOC_LINE: CInt = 5819;
+
+    #[export_name = "mem_tracked_alloc_redirection_source"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    static MEM_TRACKED_ALLOC_REDIRECTION_SOURCE: MemTrackedRedirectionSource = MemTrackedRedirectionSource {
+        file: TRACE_FILE.as_ptr().cast(),
+        line: 7215,
+    };
+
+    #[export_name = "mem_tracked_free_redirection_source"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    static MEM_TRACKED_FREE_REDIRECTION_SOURCE: MemTrackedRedirectionSource = MemTrackedRedirectionSource {
+        file: TRACE_FILE.as_ptr().cast(),
+        line: 7226,
+    };
+
+    #[export_name = "mem_cache_alloc_redirection_source"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    static MEM_CACHE_ALLOC_REDIRECTION_SOURCE: MemTrackedRedirectionSource = MemTrackedRedirectionSource {
+        file: TRACE_FILE.as_ptr().cast(),
+        line: 7357,
+    };
+
+    #[export_name = "mem_numa_distance_allocation_origin"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    static MEM_NUMA_DISTANCE_ALLOCATION_ORIGIN: MemNumaDistanceAllocationOrigin = MemNumaDistanceAllocationOrigin {
+        file: TRACE_FILE.as_ptr().cast(),
+        line: 5497,
+    };
+
+    unsafe extern "C" {
+        #[link_name = "mem_coredump_debug_0"]
+        static mut CORE_DEBUG_0: Ddebug;
+        #[link_name = "mem_coredump_debug_1"]
+        static mut CORE_DEBUG_1: Ddebug;
+    }
+
+    #[export_name = "mem_coredump_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static COREDUMP_METADATA: MemCoredumpMetadata = MemCoredumpMetadata {
+        core_limit_index: 1,
+        busy: -16,
+        nomem: -12,
+        nowait: 2,
+        syscall_number: 999,
+        alloc_file: TRACE_FILE.as_ptr().cast_mut().cast(),
+        alloc_line: 4329,
+        free_file: TRACE_FILE.as_ptr().cast_mut().cast(),
+        free_line: 4329,
+        // SAFETY: Permanent typed Ddebug owners; form raw addresses only.
+        records: [
+            unsafe { core::ptr::addr_of_mut!(CORE_DEBUG_0).cast() },
+            unsafe { core::ptr::addr_of_mut!(CORE_DEBUG_1).cast() },
+        ],
+        flags_byte: 27,
+    };
+
+    const _: () = {
+        use core::mem::{align_of, offset_of, size_of};
+        assert!(size_of::<MemTrackedRedirectionSource>() == 16);
+        assert!(align_of::<MemTrackedRedirectionSource>() == 8);
+        assert!(offset_of!(MemTrackedRedirectionSource, line) == 8);
+        assert!(size_of::<MemNumaDistanceAllocationOrigin>() == 16);
+        assert!(offset_of!(MemNumaDistanceAllocationOrigin, line) == 8);
+        assert!(size_of::<MemCoredumpMetadata>() == 88);
+        assert!(align_of::<MemCoredumpMetadata>() == 8);
+        assert!(offset_of!(MemCoredumpMetadata, alloc_file) == 32);
+        assert!(offset_of!(MemCoredumpMetadata, alloc_line) == 40);
+        assert!(offset_of!(MemCoredumpMetadata, free_file) == 48);
+        assert!(offset_of!(MemCoredumpMetadata, free_line) == 56);
+        assert!(offset_of!(MemCoredumpMetadata, records) == 64);
+        assert!(offset_of!(MemCoredumpMetadata, flags_byte) == 80);
+    };
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Defining immutable callback/configuration data only; no function, getter,
+// constructor, control-flow effect, ownership transfer or callback replacement.
+mod owned_mem_callback_configuration {
+    use super::*;
+    use crate::debug::Ddebug;
+
+    // SAFETY: This exact immutable repr(C) container holds scalar configuration,
+    // code pointers and permanent raw storage addresses. No safe dereference or
+    // pointee Sync/ownership promise is exposed; existing callback duties remain.
+    unsafe impl Sync for MemLowlevelKmallocMetadata {}
+
+    // SAFETY: This exact immutable repr(C) container holds scalar configuration,
+    // code pointers and permanent raw storage addresses. No safe dereference or
+    // pointee Sync/ownership promise is exposed; existing callback duties remain.
+    unsafe impl Sync for MemRusageEntryMetadata {}
+
+    // SAFETY: This exact immutable repr(C) container holds scalar configuration,
+    // code pointers and permanent raw storage addresses. No safe dereference or
+    // pointee Sync/ownership promise is exposed; existing callback duties remain.
+    unsafe impl Sync for MemRegisterKmallocMetadata {}
+
+    // SAFETY: This exact immutable repr(C) container holds scalar configuration,
+    // code pointers and permanent raw storage addresses. No safe dereference or
+    // pointee Sync/ownership promise is exposed; existing callback duties remain.
+    unsafe impl Sync for MemDistanceEntryMetadata {}
+
+    // SAFETY: This exact immutable repr(C) container holds scalar configuration,
+    // code pointers and permanent raw storage addresses. No safe dereference or
+    // pointee Sync/ownership promise is exposed; existing callback duties remain.
+    unsafe impl Sync for MemNumaInitializationMetadata {}
+
+    // SAFETY: This exact immutable repr(C) container holds scalar configuration,
+    // code pointers and permanent raw storage addresses. No safe dereference or
+    // pointee Sync/ownership promise is exposed; existing callback duties remain.
+    unsafe impl Sync for MemPageFaultEntryMetadata {}
+
+    // SAFETY: This exact immutable repr(C) container holds scalar configuration,
+    // code pointers and permanent raw storage addresses. No safe dereference or
+    // pointee Sync/ownership promise is exposed; existing callback duties remain.
+    unsafe impl Sync for MemTlbHandlerProfileMetadata {}
+
+    // SAFETY: This exact immutable repr(C) container holds scalar configuration,
+    // code pointers and permanent raw storage addresses. No safe dereference or
+    // pointee Sync/ownership promise is exposed; existing callback duties remain.
+    unsafe impl Sync for MemQueryFreeInterruptMetadata {}
+
+    // SAFETY: This exact immutable repr(C) container holds scalar configuration,
+    // code pointers and permanent raw storage addresses. No safe dereference or
+    // pointee Sync/ownership promise is exposed; existing callback duties remain.
+    unsafe impl Sync for MemWholeFreeMetadata {}
+
+    // SAFETY: This exact immutable repr(C) container holds scalar configuration,
+    // code pointers and permanent raw storage addresses. No safe dereference or
+    // pointee Sync/ownership promise is exposed; existing callback duties remain.
+    unsafe impl Sync for MemWholeAllocationMetadata {}
+
+    // SAFETY: This exact immutable repr(C) container holds scalar configuration,
+    // code pointers and permanent raw storage addresses. No safe dereference or
+    // pointee Sync/ownership promise is exposed; existing callback duties remain.
+    unsafe impl Sync for MemRemainingAllocPolicyMetadata {}
+
+    // SAFETY: This exact immutable repr(C) container holds scalar configuration,
+    // code pointers and permanent raw storage addresses. No safe dereference or
+    // pointee Sync/ownership promise is exposed; existing callback duties remain.
+    unsafe impl Sync for MemAllocationLogMetadata {}
+
+    unsafe extern "C" {
+        // Exact original public C declaration views. These bind the existing
+        // unique Rust producers; differing private Rust pointer types are not a
+        // new ABI, casted call, runtime wrapper or duplicated implementation.
+        #[link_name = "ihk_mc_get_cpu_info"]
+        fn ORIGINAL_CPU_INFO() -> *mut IhkCpuInfo;
+        #[link_name = "mem_numa_list_allocator_bridge"]
+        fn ORIGINAL_LIST_ALLOCATOR(allocator: *mut c_void, node: *mut MemNumaNode);
+        // Same allocator symbol viewed through its genuine original C prototype.
+        // The allocated node-distance storage and ownership remain unchanged.
+        #[link_name = "mem_numa_distances_alloc_bridge"]
+        fn ORIGINAL_NUMA_DISTANCES_ALLOC(npages: CInt, flag: CULong) -> *mut MemNodeDistance;
+
+        #[link_name = "allocator"]
+        static mut ALLOCATOR: IhkMcPaOps;
+        #[link_name = "memory_nodes"]
+        static mut MEMORY_NODES: [MemNumaNode; 512];
+        #[link_name = "mem_page_fault_log_count"]
+        static mut PAGE_FAULT_LOG_COUNT: CInt;
+        #[link_name = "mem_page_fault_log_pid"]
+        static mut PAGE_FAULT_LOG_PID: CInt;
+
+        // Exact original public C ABI declarations bind existing unique providers,
+        // never new shims. profile's unsigned C enum carries only the same valid
+        // positive event4000/4001/4007 values to the existing Rust CInt producer.
+        #[link_name = "virt_to_phys"]
+        fn ORIGINAL_VIRT_TO_PHYS(address: *mut c_void) -> CULong;
+        #[link_name = "ihk_mc_get_numa_distance"]
+        fn ORIGINAL_NUMA_DISTANCE(first: CInt, second: CInt) -> CInt;
+        #[link_name = "profile_event_add"]
+        fn ORIGINAL_PROFILE_EVENT_ADD(event: u32, clocks: u64);
+        #[link_name = "mem_page_fault_debug_0"]
+        static mut RECORD_0: Ddebug;
+        #[link_name = "mem_page_fault_debug_2"]
+        static mut RECORD_1: Ddebug;
+        #[link_name = "mem_page_fault_debug_3"]
+        static mut RECORD_2: Ddebug;
+        #[link_name = "mem_allocation_log_record_0"]
+        static mut RECORD_3: Ddebug;
+        #[link_name = "mem_allocation_log_record_1"]
+        static mut RECORD_4: Ddebug;
+        #[link_name = "mem_allocation_log_record_2"]
+        static mut RECORD_5: Ddebug;
+        #[link_name = "mem_allocation_log_record_3"]
+        static mut RECORD_6: Ddebug;
+        #[link_name = "mem_allocation_log_record_4"]
+        static mut RECORD_7: Ddebug;
+        #[link_name = "mem_allocation_log_record_6"]
+        static mut RECORD_8: Ddebug;
+    }
+
+    #[export_name = "mem_lowlevel_kmalloc_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static MEM_LOWLEVEL_KMALLOC_METADATA: MemLowlevelKmallocMetadata = MemLowlevelKmallocMetadata {
+        remote_lock_offset: offset_of!(CpuLocalVar, remote_free_list_lock) as CULong,
+        remote_list_offset: offset_of!(CpuLocalVar, remote_free_list) as CULong,
+        irq_save: Some(mem_kmalloc_irq_save_bridge),
+        irq_restore: Some(mem_kmalloc_irq_restore_bridge),
+        alloc_pages: Some(mem_kmalloc_alloc_pages_bridge),
+        get_cpu_local: Some(mem_kmalloc_get_cpu_local_var_bridge),
+        remote_lock: Some(mem_kmalloc_remote_lock_bridge),
+        remote_unlock: Some(mem_kmalloc_remote_unlock_bridge),
+        corruption: Some(mem_kmalloc_corruption_bridge),
+    };
+
+    #[export_name = "mem_rusage_entry_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static MEM_RUSAGE_ENTRY_METADATA: MemRusageEntryMetadata = MemRusageEntryMetadata {
+        state_bytes: size_of::<RusageGlobal>() as CULong,
+        cpu_info: Some(ORIGINAL_CPU_INFO),
+        nr_nodes: Some(ihk_mc_get_nr_numa_nodes),
+        ns_per_tsc: Some(crate::x86_setup::ihk_mc_get_ns_per_tsc),
+        virt_to_phys: Some(ORIGINAL_VIRT_TO_PHYS),
+        set_rusage: Some(crate::x86_setup::ihk_set_rusage),
+        panic_fn: Some(mem_rusage_init_panic_bridge),
+        log: Some(mem_rusage_init_log_bridge),
+    };
+
+    #[export_name = "mem_register_kmalloc_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static MEM_REGISTER_KMALLOC_METADATA: MemRegisterKmallocMetadata = MemRegisterKmallocMetadata {
+        // SAFETY: Permanent typed allocator table; form its address without access.
+        allocator: unsafe { core::ptr::addr_of_mut!(ALLOCATOR) },
+        debug_alloc: Some(__kmalloc),
+        debug_free: Some(__kfree),
+        base_alloc: Some(___kmalloc),
+        base_free: Some(___kfree),
+    };
+
+    #[export_name = "mem_distance_entry_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static MEM_DISTANCE_ENTRY_METADATA: MemDistanceEntryMetadata = MemDistanceEntryMetadata {
+        nr_nodes: Some(ihk_mc_get_nr_numa_nodes),
+        alloc: Some(ORIGINAL_NUMA_DISTANCES_ALLOC),
+        distance: Some(ORIGINAL_NUMA_DISTANCE),
+        alloc_fail: Some(mem_numa_distances_alloc_fail_log_bridge),
+        log: Some(mem_numa_distances_log_bridge),
+    };
+
+    #[export_name = "mem_numa_initialization_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static MEM_NUMA_INITIALIZATION_METADATA: MemNumaInitializationMetadata = MemNumaInitializationMetadata {
+        // SAFETY: Same permanent typed node array; no borrow or initialization here.
+        nodes: unsafe { core::ptr::addr_of_mut!(MEMORY_NODES).cast() },
+        rbtree_allocator: 1,
+        get_node_info: mem_numa_get_node_info_bridge,
+        get_chunk: ihk_mc_get_memory_chunk,
+        init_node: mem_numa_node_init_bridge,
+        add_free: mem_numa_add_free_pages_bridge,
+        init_allocator: crate::page_alloc::mem_numa_page_allocator_init_bridge,
+        list_allocator: ORIGINAL_LIST_ALLOCATOR,
+        count_pages: mem_numa_pagealloc_count_bridge,
+        add_total: mem_numa_rusage_total_add_bridge,
+        log: mem_numa_init_log_bridge,
+        panic_fn: mem_numa_panic_bridge,
+    };
+
+    #[export_name = "mem_page_fault_entry_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static MEM_PAGE_FAULT_ENTRY_METADATA: MemPageFaultEntryMetadata = MemPageFaultEntryMetadata {
+        // SAFETY: Same permanent CInt diagnostic words, no load/store or atomic change.
+        log_count: unsafe { core::ptr::addr_of_mut!(PAGE_FAULT_LOG_COUNT) },
+        log_pid: unsafe { core::ptr::addr_of_mut!(PAGE_FAULT_LOG_PID) },
+        page_size: PAGE_SIZE,
+        kernel_start: 0xffff_ffff_fe80_0000,
+        pf_user: 4,
+        invalid: -22,
+        canceled: -125,
+        range_error: -34,
+        busy: -16,
+        sigsegv: 11,
+        sigbus: 7,
+        sigstop: 19,
+        map_error: 1,
+        access_error: 2,
+        bus_address_error: 2,
+        time_u2k: 1,
+        time_k2kin: 2,
+        time_k2u: 0,
+        time_k2kout: 3,
+        tofu: 0,
+        fugaku_debug: 0,
+        tofu_attr: 3,
+        // SAFETY: Permanent real descriptors; absent TOFU record stays exactly NULL.
+        records: [
+            unsafe { core::ptr::addr_of_mut!(RECORD_0).cast() },
+            core::ptr::null_mut(),
+            unsafe { core::ptr::addr_of_mut!(RECORD_1).cast() },
+            unsafe { core::ptr::addr_of_mut!(RECORD_2).cast() },
+        ],
+        flags_byte: 27,
+        unhandled: unhandled_page_fault,
+        linux_resolve: None,
+        linux_pgt: None,
+        clear_kernel_range: None,
+        do_kill: None,
+        profile_add: Some(ORIGINAL_PROFILE_EVENT_ADD),
+        profile_event: 4001,
+    };
+
+    #[export_name = "mem_tlb_handler_profile_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static MEM_TLB_HANDLER_PROFILE_METADATA: MemTlbHandlerProfileMetadata = MemTlbHandlerProfileMetadata {
+        event: 4000,
+        add: Some(ORIGINAL_PROFILE_EVENT_ADD),
+    };
+
+    #[export_name = "mem_query_free_interrupt_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static MEM_QUERY_FREE_INTERRUPT_METADATA: MemQueryFreeInterruptMetadata = MemQueryFreeInterruptMetadata {
+        fugaku_panic: 0,
+        attached_mic: 0,
+        sbox_scratch0: 0,
+        sbox_scratch1: 0,
+        nr_nodes: Some(ihk_mc_get_nr_numa_nodes),
+        node_pages: Some(mem_query_free_node_pages_bridge),
+        total_log: Some(mem_query_free_total_log_bridge),
+        panic_fn: Some(mem_query_free_panic_bridge),
+        find_command_line: Some(find_command_line),
+        kmalloc_memcheck_fn: Some(mem_query_free_kmalloc_memcheck_bridge),
+        pagealloc_memcheck_fn: Some(pagealloc_memcheck),
+        page_hash_count: Some(page_hash_count_pages),
+        page_hash_log: Some(mem_query_free_page_hash_log_bridge),
+        sbox_write: Some(mem_query_free_sbox_write_bridge),
+    };
+
+    #[export_name = "mem_whole_free_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static MEM_WHOLE_FREE_METADATA: MemWholeFreeMetadata = MemWholeFreeMetadata {
+        pending_pages: Some(mem_pending_free_pages_bridge),
+        virt_to_phys: Some(mem_virt_to_phys_bridge),
+        phys_to_page: Some(mem_phys_to_page_bridge),
+        free_in_allocator: Some(mem_free_in_allocator_bridge),
+        warn: Some(mem_pending_free_warn_bridge),
+        free_body: Some(mem_mckernel_free_pages_body_result),
+    };
+
+    #[export_name = "mem_whole_allocation_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static MEM_WHOLE_ALLOCATION_METADATA: MemWholeAllocationMetadata = MemWholeAllocationMetadata {
+        nr_nodes: Some(ihk_mc_get_nr_numa_nodes),
+        current_vm: Some(mem_current_vm_bridge),
+        range_policy_search: Some(mem_range_policy_search_bridge),
+        lookup_memory_range: Some(mem_lookup_memory_range_bridge),
+        range_is_shm: Some(mem_range_is_shm_bridge),
+        range_policy_fields: Some(mem_range_policy_fields_bridge),
+        vm_policy_fields: Some(mem_vm_policy_fields_bridge),
+        current_numa: Some(mem_current_numa_id_bridge),
+        alloc_policy: Some(mem_mckernel_alloc_policy_bridge),
+    };
+
+    #[export_name = "mem_remaining_alloc_policy_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static MEM_REMAINING_ALLOC_POLICY_METADATA: MemRemainingAllocPolicyMetadata = MemRemainingAllocPolicyMetadata {
+        try_alloc: Some(mem_try_alloc_node_bridge),
+        rusage_add: Some(mem_rusage_page_add_bridge),
+        phys_to_virt: Some(mem_phys_to_virt_bridge),
+        log: Some(mem_mckernel_alloc_log_bridge),
+    };
+
+    #[export_name = "mem_allocation_log_metadata"]
+    #[link_section = ".rodata.mem_owned_metadata"]
+    #[used]
+    static MEM_ALLOCATION_LOG_METADATA: MemAllocationLogMetadata = MemAllocationLogMetadata {
+        // SAFETY: Same permanent records/ordering; absent FUGAKU record stays NULL.
+        records: [
+            unsafe { core::ptr::addr_of_mut!(RECORD_3).cast() },
+            unsafe { core::ptr::addr_of_mut!(RECORD_4).cast() },
+            unsafe { core::ptr::addr_of_mut!(RECORD_5).cast() },
+            unsafe { core::ptr::addr_of_mut!(RECORD_6).cast() },
+            unsafe { core::ptr::addr_of_mut!(RECORD_7).cast() },
+            core::ptr::null_mut(),
+            unsafe { core::ptr::addr_of_mut!(RECORD_8).cast() },
+        ],
+        flags_byte: 27,
+        profile_add: Some(ORIGINAL_PROFILE_EVENT_ADD),
+        profile_event: 4007,
+        fugaku: 0,
+    };
+
+    const _: () = {
+        assert!(size_of::<MemLowlevelKmallocMetadata>() == 72);
+        assert!(size_of::<MemRusageEntryMetadata>() == 64);
+        assert!(size_of::<MemRegisterKmallocMetadata>() == 40);
+        assert!(size_of::<MemDistanceEntryMetadata>() == 40);
+        assert!(size_of::<MemNumaInitializationMetadata>() == 96);
+        assert!(size_of::<MemPageFaultEntryMetadata>() == 208);
+        assert!(offset_of!(MemPageFaultEntryMetadata, records) == 112);
+        assert!(offset_of!(MemPageFaultEntryMetadata, unhandled) == 152);
+        assert!(offset_of!(MemPageFaultEntryMetadata, profile_add) == 192);
+        assert!(size_of::<MemTlbHandlerProfileMetadata>() == 16);
+        assert!(size_of::<MemQueryFreeInterruptMetadata>() == 96);
+        assert!(size_of::<MemWholeFreeMetadata>() == 48);
+        assert!(size_of::<MemWholeAllocationMetadata>() == 72);
+        assert!(size_of::<MemRemainingAllocPolicyMetadata>() == 32);
+        assert!(size_of::<MemAllocationLogMetadata>() == 80);
+    };
 }

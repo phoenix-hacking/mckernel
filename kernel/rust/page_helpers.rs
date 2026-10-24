@@ -194,6 +194,17 @@ pub unsafe extern "C" fn page_is_multi_mapped(page: *mut Page) -> CInt {
     unsafe { page_is_multi_mapped_body_result(page) }
 }
 
+/// Read the offset of the caller's live, borrowed page.
+///
+/// # Safety
+/// `page` must point to a valid initialized `Page` for this synchronous read.
+/// The caller retains the existing page-table lock/memobj lifetime; this
+/// accessor acquires no reference and supplies no null-pointer policy.
+#[no_mangle]
+pub unsafe extern "C" fn page_get_offset(page: *const Page) -> OffT {
+    unsafe { (*page).offset }
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn page_to_phys(page: *mut Page) -> CULong {
     if page.is_null() {
@@ -652,7 +663,6 @@ unsafe extern "C" {
     static page_unmap_lock_stride: usize;
     fn page_hash_lock_bridge(lock_addr: usize) -> CULong;
     fn page_hash_unlock_bridge(lock_addr: usize, flags: CULong);
-    fn page_unmap_log_bridge(event: CInt, page: *mut Page, ret: CInt);
 }
 
 #[no_mangle]
@@ -680,4 +690,113 @@ pub unsafe extern "C" fn is_splitable(page: *mut Page, memobj_flags: u32) -> CIn
     }
 
     1
+}
+
+#[repr(C)]
+struct PageUnmapDebugMetadata {
+    records: [*mut u8; 3],
+    flags_byte: usize,
+}
+
+unsafe extern "C" {
+    static page_unmap_debug_metadata: PageUnmapDebugMetadata;
+    #[link_name = "kprintf"]
+    fn page_unmap_debug_kprintf(format: *const i8, ...) -> CInt;
+}
+
+/// Emit the original optional page-unmap diagnostic after its mutable flag gate.
+///
+/// # Safety
+/// For a recognized event whose selected debug flag is nonzero, `page` must
+/// remain a live initialized Page under the original caller's lifetime guards.
+/// Disabled/unknown events do not read Page fields. The original debug-control
+/// synchronization must cover the mutable C records; this adds no atomic policy.
+#[no_mangle]
+pub unsafe extern "C" fn page_unmap_log_bridge(event: CInt, page: *mut Page, ret: CInt) {
+    let index = match event {
+        PAGE_UNMAP_LOG_ENTER => 0,
+        PAGE_UNMAP_LOG_STILL_MAPPED => 1,
+        PAGE_UNMAP_LOG_UNMAPPED => 2,
+        _ => return,
+    };
+
+    // SAFETY: Immutable metadata points to the three actual C-owned mutable
+    // __verbose records. Its byte offset is bound to the genuine GCC9 witness,
+    // not an assumed Rust bitfield or a wider speculative flags load.
+    unsafe {
+        let metadata = &page_unmap_debug_metadata;
+        let flags = core::ptr::read(metadata.records[index].add(metadata.flags_byte));
+        if flags == 0 {
+            return;
+        }
+
+        // SAFETY: The caller's Page validity is required only after the enabled
+        // gate. Plain field reads preserve the old C promotion/counter sample;
+        // do not strengthen this diagnostic into an atomic snapshot or borrow.
+        let mode = core::ptr::read(core::ptr::addr_of!((*page).mode)) as CInt;
+        let count = core::ptr::read(core::ptr::addr_of!((*page).count.counter));
+        match event {
+            PAGE_UNMAP_LOG_ENTER => {
+                page_unmap_debug_kprintf(
+                    b"page_unmap(%p %x %d)\n\0".as_ptr().cast::<i8>(),
+                    page,
+                    mode,
+                    count,
+                );
+            }
+            PAGE_UNMAP_LOG_STILL_MAPPED => {
+                page_unmap_debug_kprintf(
+                    b"page_unmap(%p %x %d): 0\n\0".as_ptr().cast::<i8>(),
+                    page,
+                    mode,
+                    count,
+                );
+            }
+            PAGE_UNMAP_LOG_UNMAPPED => {
+                page_unmap_debug_kprintf(
+                    b"page_unmap(%p %x %d): %d\n\0".as_ptr().cast::<i8>(),
+                    page,
+                    mode,
+                    count,
+                    ret,
+                );
+            }
+            _ => {}
+        }
+    }
+}
+
+/// Return the defining Page type's pgshift offset for the unchanged C ABI.
+///
+/// This is layout metadata only: it receives no Page pointer, performs no field
+/// read, creates no reference and changes no ownership, lock, atomic or lifetime
+/// behavior. The process consumer keeps its original borrowed plain CInt read.
+#[export_name = "process_split_page_pgshift_offset_bridge"]
+pub extern "C" fn page_pgshift_offset() -> CULong {
+    offset_of!(Page, pgshift) as CULong
+}
+
+// Both repr(C) count wrappers have the genuine C ihk_atomic_t representation.
+const _: () = {
+    assert!(size_of::<IhkAtomic>() == size_of::<crate::atomic_helpers::IhkAtomic>());
+    assert!(align_of::<IhkAtomic>() == align_of::<crate::atomic_helpers::IhkAtomic>());
+    assert!(offset_of!(IhkAtomic, counter) == 0);
+};
+
+/// Read the existing Page count with the original ihk_atomic_read ordering.
+///
+/// # Safety
+/// The caller must supply a non-null, aligned, live Page retained by the original
+/// page-table/memobj ownership. Its count must remain initialized and accessible
+/// for this synchronous atomic read. The caller retains the debug gate and null
+/// ternary; this provider acquires no Page reference and changes no ownership.
+#[no_mangle]
+pub unsafe extern "C" fn page_get_count_atomic(page: *const Page) -> CInt {
+    // SAFETY: The caller keeps Page and count live. Taking the raw field address
+    // creates no reference; repr(C), the assertions above and the atomic module's
+    // counter-at-zero assertion preserve the genuine ihk_atomic_t representation.
+    let count = unsafe { core::ptr::addr_of!((*page).count) };
+    // SAFETY: The original C contract permits an aligned atomic read of count.
+    // The existing provider performs exactly one AtomicI32 SeqCst load.
+    unsafe { crate::atomic_helpers::ihk_atomic_read(count.cast()) }
 }

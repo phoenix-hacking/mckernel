@@ -250,7 +250,6 @@ unsafe extern "C" {
     );
     fn process_pte_is_null_bridge(ptep: *mut c_void) -> CInt;
     fn process_pte_is_fileoff_bridge(ptep: *mut c_void, pgsize: SizeT) -> CInt;
-    fn process_pte_get_phys_bridge(ptep: *mut c_void) -> CULong;
     fn process_phys_to_page_bridge(phys: CULong) -> *mut c_void;
     fn process_page_offset_bridge(page: *mut c_void) -> OffT;
     fn process_pte_make_fileoff_bridge(off: OffT, pgsize: SizeT, ptep: *mut c_void);
@@ -12088,4 +12087,974 @@ pub unsafe extern "C" fn process_release_final_cleanup_bridge(resource_set_arg: 
             lock.as_mut_ptr().cast(),
         );
     }
+}
+
+unsafe extern "C" {
+    static mut process_page_fault_prepare_bounds_debug: crate::debug::Ddebug;
+    fn ihk_mc_pt_lookup_pte(
+        page_table: *mut c_void, virt: *mut c_void, pgshift: CInt,
+        basep: *mut *mut c_void, sizep: *mut SizeT, p2alignp: *mut CInt,
+    ) -> *mut CULong;
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_page_fault_prepare_body_result(
+    vm: *mut ProcessVm,
+    range: *mut VmRange,
+    fault_addr: CULong,
+    reason: CULong,
+    ptep_out: *mut *mut CULong,
+    pgaddr_out: *mut *mut c_void,
+    pgsize_out: *mut SizeT,
+    p2align_out: *mut CInt,
+    error_out: *mut CInt,
+) -> CInt {
+    // Match the original valid borrowed inputs; add no NULL/error policy.
+    __ihk_mc_spinlock_lock_noirq(
+        &raw mut (*vm).page_table_lock,
+    );
+    *ptep_out = ihk_mc_pt_lookup_pte(
+        (*(*vm).address_space).page_table,
+        fault_addr as *mut c_void,
+        (*range).pgshift,
+        pgaddr_out, pgsize_out, p2align_out,
+    );
+    if reason & (1 | PF_PATCH) == 0 && !(*ptep_out).is_null()
+        && crate::pte_helpers::pte_is_null(*ptep_out) == 0
+        && crate::pte_helpers::pte_is_fileoff(*ptep_out, *pgsize_out) == 0
+    {
+        if crate::pte_helpers::pte_is_present(*ptep_out) == 0 {
+            *error_out = -EFAULT;
+            let _ = kprintf(
+                b"page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx):PROT_NONE. %d\n\0".as_ptr().cast(),
+                vm, (*range).start, (*range).end, (*range).flag,
+                fault_addr, reason, *error_out,
+            );
+            return 1;
+        }
+        *error_out = 0;
+        return 1;
+    }
+    if reason & 1 != 0 && ((*ptep_out).is_null()
+        || crate::pte_helpers::pte_is_present(*ptep_out) == 0)
+    {
+        crate::x86_memory_helpers::flush_tlb_single(fault_addr);
+        *error_out = 0;
+        return 1;
+    }
+    if core::ptr::read_volatile(core::ptr::addr_of!(
+        process_page_fault_prepare_bounds_debug.line_flags
+    )) >> 24 != 0 {
+        let _ = kprintf(
+            b"%s: pgaddr=%lx,range->start=%lx,range->end=%lx,pgaddr+pgsize=%lx\n\0".as_ptr().cast(),
+            b"page_fault_process_memory_range\0".as_ptr().cast::<i8>(),
+            *pgaddr_out, (*range).start, (*range).end,
+            (*pgaddr_out as CULong).wrapping_add(*pgsize_out as CULong) as *mut c_void,
+        );
+    }
+    while (*pgaddr_out as CULong) < (*range).start
+        || (*range).end < (*pgaddr_out as CULong).wrapping_add(*pgsize_out as CULong)
+    {
+        *ptep_out = null_mut();
+        *error_out = crate::x86_memory_helpers::arch_get_smaller_page_size(
+            null_mut(), *pgsize_out, pgsize_out, p2align_out,
+        );
+        if *error_out != 0 {
+            let _ = kprintf(
+                b"page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx):arch_get_smaller_page_size(pte) failed. %d\n\0".as_ptr().cast(),
+                vm, (*range).start, (*range).end, (*range).flag,
+                fault_addr, reason, *error_out,
+            );
+            return 1;
+        }
+        *pgaddr_out = (fault_addr & !((*pgsize_out as CULong).wrapping_sub(1))) as *mut c_void;
+    }
+    crate::pte_helpers::arch_adjust_allocate_page_size(
+        (*(*vm).address_space).page_table, fault_addr, *ptep_out,
+        pgaddr_out, pgsize_out,
+    );
+    0
+}
+
+// Memobj result publication; zeroobj owning-reference policy remains C.
+#[no_mangle]
+pub unsafe extern "C" fn process_page_fault_memobj_get_body_result(
+    range: *mut VmRange,
+    pgaddr: *mut c_void,
+    fault_addr: CULong,
+    ptep: *mut CULong,
+    pgsize: SizeT,
+    p2align: CInt,
+    phys_out: *mut CULong,
+    memobj_flag_out: *mut CULong,
+    error_out: *mut CInt,
+) -> CInt {
+    *phys_out = NOPHYS;
+    if (*range).memobj.is_null() {
+        // The original no-memobj path does not overwrite flags or error.
+        return 0;
+    }
+    let off = if ptep.is_null()
+        || crate::pte_helpers::pte_is_fileoff(ptep, pgsize) == 0
+    {
+        ((*range).objoff as CULong)
+            .wrapping_add((pgaddr as CULong).wrapping_sub((*range).start)) as OffT
+    } else {
+        crate::pte_helpers::pte_get_off(ptep, pgsize)
+    };
+    *error_out = crate::object_helpers::memobj_get_page(
+        (*range).memobj.cast::<Memobj>(), off, p2align,
+        phys_out, memobj_flag_out, fault_addr,
+    );
+    // The unchanged C caller owns zeroobj/panic/comparison handling. This
+    // predicate preserves every positive/negative provider error unchanged.
+    (*error_out != 0) as CInt
+}
+
+// Borrowed COW classification only; allocation and cleanup retain their owner.
+#[no_mangle]
+pub unsafe extern "C" fn process_page_fault_cow_classify_body_result(
+    range: *mut VmRange,
+    reason: CULong,
+    page: *mut c_void,
+) -> CInt {
+    let private_range = ((*range).flag & VR_PRIVATE) != 0;
+    let patching_to_rdonly =
+        (reason & PF_PATCH) != 0 && ((*range).flag & VR_PROT_WRITE) == 0;
+    // Preserve the original OR, including its existing zeroobj behavior.
+    // This port does not reinterpret it as the often-expected bitwise AND.
+    let devfile_or_hugetlbfs_or_premap = page.is_null()
+        && !(*range).memobj.is_null()
+        && (((*(*range).memobj.cast::<Memobj>()).flags | 0x20000) == 0);
+    // Original C evaluates this Page classification before the final private/
+    // patch predicate. Preserve both short-circuit order and borrowed lifetime.
+    let regfile_or_shm = !page.is_null()
+        && (crate::page_helpers::page_is_in_memobj(
+                page.cast::<crate::page_helpers::Page>()) != 0
+            || crate::page_helpers::page_is_multi_mapped(
+                page.cast::<crate::page_helpers::Page>()) != 0);
+    ((private_range || patching_to_rdonly)
+        && (devfile_or_hugetlbfs_or_premap || regfile_or_shm)) as CInt
+}
+
+// Complete region extension orchestration; existing providers retain ownership.
+#[no_mangle]
+pub unsafe extern "C" fn process_extend_region_body_result(
+    vm: *mut ProcessVm,
+    end_allocated: CULong,
+    address: CULong,
+    mut flag: CULong,
+    page_size: SizeT,
+    page_shift: CInt,
+    page_mask: CULong,
+    large_page_size: SizeT,
+    large_page_mask: CULong,
+    large_page_p2align: CULong,
+    page_p2align: CULong,
+    large_page_shift: CInt,
+    mpol_no_heap: CULong,
+    ap_nowait: CULong,
+    ap_user: CULong,
+    pg_user: CInt,
+    file: *const i8,
+    alloc_line: CInt,
+    free_line: CInt,
+    exists_debug: *mut crate::debug::Ddebug,
+    alloc_debug: *mut crate::debug::Ddebug,
+    success_debug: *mut crate::debug::Ddebug,
+) -> CULong {
+    let align_size = if (*(*vm).proc.cast::<Process>()).heap_extension > page_size as CULong {
+        large_page_size
+    } else { page_size };
+    let align_mask = if (*(*vm).proc.cast::<Process>()).heap_extension > page_size as CULong {
+        large_page_mask
+    } else { page_mask };
+    let align_p2align = if (*(*vm).proc.cast::<Process>()).heap_extension > page_size as CULong {
+        large_page_p2align
+    } else { page_p2align };
+    let align_shift = if (*(*vm).proc.cast::<Process>()).heap_extension > page_size as CULong {
+        large_page_shift
+    } else { page_shift };
+    let mut new_end_allocated =
+        address.wrapping_add((page_size as CULong).wrapping_sub(1)) & page_mask;
+    if new_end_allocated.wrapping_sub(end_allocated)
+        < (*(*vm).proc.cast::<Process>()).heap_extension
+    {
+        new_end_allocated = end_allocated
+            .wrapping_add((*(*vm).proc.cast::<Process>()).heap_extension)
+            .wrapping_add((align_size as CULong).wrapping_sub(1)) & align_mask;
+    }
+    let range = lookup_process_memory_range(vm, end_allocated, new_end_allocated);
+    if !range.is_null() {
+        if core::ptr::read_volatile(core::ptr::addr_of!((*exists_debug).line_flags)) >> 24 != 0 {
+            let _ = kprintf(
+                b"%s: warning: vm_range for extension already exists\n\0".as_ptr().cast(),
+                b"extend_process_region\0".as_ptr().cast::<i8>(),
+            );
+        }
+        return end_allocated;
+    }
+    let len = new_end_allocated.wrapping_sub(end_allocated) as SizeT;
+    let npages = (len >> page_shift) as CInt;
+    let p = if flag & VR_DEMAND_PAGING != 0 {
+        null_mut()
+    } else {
+        let p = crate::mem_helpers::_ihk_mc_alloc_aligned_pages_node(
+            npages, align_p2align as CInt,
+            ap_nowait | if (*(*vm).proc.cast::<Process>()).mpol_flags & mpol_no_heap == 0 {
+                ap_user
+            } else { 0 },
+            -1, pg_user, end_allocated, file.cast_mut(), alloc_line,
+        );
+        if p.is_null() {
+            if core::ptr::read_volatile(core::ptr::addr_of!((*alloc_debug).line_flags)) >> 24 != 0 {
+                let _ = kprintf(
+                    b"%s: warning: failed to allocate %d contiguous pages  (bytes: %lu, pgshift: %d), enabling demand paging\n\0".as_ptr().cast(),
+                    b"extend_process_region\0".as_ptr().cast::<i8>(),
+                    npages, len, align_p2align,
+                );
+            }
+            flag |= VR_DEMAND_PAGING;
+        }
+        p
+    };
+    let phys = if p.is_null() { 0 } else {
+        crate::x86_memory_helpers::virt_to_phys(p)
+    };
+    let rc = add_process_memory_range(
+        vm, end_allocated, new_end_allocated, phys, flag, null_mut(),
+        0, align_shift, null_mut(), null_mut(),
+    );
+    if rc != 0 {
+        // The original error path frees even a NULL pointer from demand paging.
+        // Do not infer a new NULL policy or transfer ownership on failure.
+        crate::mem_helpers::_ihk_mc_free_pages(
+            p, npages, pg_user, file.cast_mut(), free_line,
+        );
+        return end_allocated;
+    }
+    // Successful add owns any allocated pages; the caller must not free them.
+    if core::ptr::read_volatile(core::ptr::addr_of!((*success_debug).line_flags)) >> 24 != 0 {
+        let _ = kprintf(
+            b"%s: new_end_allocated: 0x%lx, align_size: %lu, align_mask: %lx\n\0".as_ptr().cast(),
+            b"extend_process_region\0".as_ptr().cast::<i8>(),
+            new_end_allocated, align_size, align_mask,
+        );
+    }
+    new_end_allocated
+}
+
+// COW post-copy RSS/unmap/result handoff under the original caller lock.
+#[no_mangle]
+pub unsafe extern "C" fn process_page_fault_cow_commit_body_result(
+    range: *mut VmRange,
+    phys_out: *mut CULong,
+    pgsize: SizeT,
+    virt: *mut c_void,
+    page_out: *mut *mut crate::page_helpers::Page,
+    rss_add_debug: *mut crate::debug::Ddebug,
+    rss_sub_debug: *mut crate::debug::Ddebug,
+) {
+    // The original caller still holds page_table_lock and owns the fresh copy.
+    // The old Page reference is consumed only by the same existing unmap call.
+    let old_phys = *phys_out;
+    if crate::mem_helpers::rusage_memory_stat_add(
+        range, old_phys, pgsize as CULong, pgsize as CInt,
+    ) != 0 {
+        if core::ptr::read_volatile(core::ptr::addr_of!((*rss_add_debug).line_flags)) >> 24 != 0 {
+            let _ = kprintf(
+                b"%lx+,%s: COW-source pointed-to by only fileobj, calling memory_stat_rss_add(),pgsize=%ld\n\0".as_ptr().cast(),
+                old_phys, b"page_fault_process_memory_range\0".as_ptr().cast::<i8>(), pgsize,
+            );
+        }
+    }
+    if !(*page_out).is_null() {
+        if crate::page_helpers::page_unmap(*page_out) != 0 {
+            if core::ptr::read_volatile(core::ptr::addr_of!((*rss_sub_debug).line_flags)) >> 24 != 0 {
+                let _ = kprintf(
+                    b"%lx-,%s: cow,calling memory_stat_rss_sub(),size=%ld,pgsize=%ld\n\0".as_ptr().cast(),
+                    old_phys, b"page_fault_process_memory_range\0".as_ptr().cast::<i8>(), pgsize, pgsize,
+                );
+            }
+            // Read memobj after unmap and its diagnostic, as in original C.
+            crate::mem_helpers::rusage_memory_stat_sub(
+                (*range).memobj.cast::<Memobj>(), pgsize as CULong, pgsize as CInt,
+            );
+        }
+    }
+    // Publish the same new physical result before the Page provider call.
+    // Leave the old Page pointer visible until that call returns; no guessed
+    // reference release, new-page unmap, free, lock change or success ACK.
+    *phys_out = crate::x86_memory_helpers::virt_to_phys(virt);
+    *page_out = phys_to_page(*phys_out);
+}
+
+// Single-PTE install/accounting/error handback to unchanged caller ownership.
+type ProcessFaultSetPteFn = unsafe extern "C" fn(
+    *mut c_void, *mut CULong, SizeT, CULong, CULong,
+) -> CInt;
+
+#[no_mangle]
+pub unsafe extern "C" fn process_page_fault_set_pte_body_result(
+    vm: *mut ProcessVm,
+    range: *mut VmRange,
+    fault_addr: CULong,
+    reason: CULong,
+    ptep: *mut CULong,
+    pgsize: SizeT,
+    phys: CULong,
+    attr: CULong,
+    error_out: *mut CInt,
+    set_pte: ProcessFaultSetPteFn,
+    rss_add_debug: *mut crate::debug::Ddebug,
+    rss_skip_debug: *mut crate::debug::Ddebug,
+    attr_debug: *mut crate::debug::Ddebug,
+) -> CInt {
+    // Original non-NULL, non-contiguous PTE branch only. The caller retains
+    // its same lock, Page pointer, owning allocation and out: error cleanup.
+    if (reason & PF_PATCH) == 0
+        && crate::mem_helpers::rusage_memory_stat_add(
+            range, phys, pgsize as CULong, pgsize as CInt,
+        ) != 0
+    {
+        if core::ptr::read_volatile(core::ptr::addr_of!((*rss_add_debug).line_flags)) >> 24 != 0 {
+            let _ = kprintf(
+                b"%lx+,%s: (on-demand paging && first map) || cow,calling memory_stat_rss_add(),phys=%lx,pgsize=%ld\n\0".as_ptr().cast(),
+                phys, b"page_fault_process_memory_range\0".as_ptr().cast::<i8>(), phys, pgsize,
+            );
+        }
+    } else {
+        if core::ptr::read_volatile(core::ptr::addr_of!((*rss_skip_debug).line_flags)) >> 24 != 0 {
+            let _ = kprintf(
+                b"%s: !calling memory_stat_rss_add(),phys=%lx,pgsize=%ld\n\0".as_ptr().cast(),
+                b"page_fault_process_memory_range\0".as_ptr().cast::<i8>(), phys, pgsize,
+            );
+        }
+    }
+    if core::ptr::read_volatile(core::ptr::addr_of!((*attr_debug).line_flags)) >> 24 != 0 {
+        let _ = kprintf(
+            b"%s: attr=%x\n\0".as_ptr().cast(),
+            b"page_fault_process_memory_range\0".as_ptr().cast::<i8>(), attr,
+        );
+    }
+    // Do not cache address_space/page_table before provider/log callbacks.
+    // The same existing public set-PTE entry preserves its real diagnostics,
+    // panic and selected Rust implementation; this port adds no C bridge.
+    *error_out = set_pte((*(*vm).address_space).page_table, ptep, pgsize, phys, attr);
+    if *error_out != 0 {
+        let _ = kprintf(
+            b"page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx):set_pte failed. %d\n\0".as_ptr().cast(),
+            vm, (*range).start, (*range).end, (*range).flag,
+            fault_addr, reason, *error_out,
+        );
+        return 1;
+    }
+    0
+}
+
+// Range-install/error and post-install TLB/success handback, same caller owner.
+type ProcessFaultSetRangeFn = unsafe extern "C" fn(
+    *mut c_void, *mut ProcessVm, *mut c_void, *mut c_void,
+    CULong, CULong, CInt, *mut VmRange, CInt,
+) -> CInt;
+
+#[no_mangle]
+pub unsafe extern "C" fn process_page_fault_set_range_body_result(
+    vm: *mut ProcessVm,
+    range: *mut VmRange,
+    fault_addr: CULong,
+    reason: CULong,
+    pgaddr: *mut c_void,
+    pgsize: SizeT,
+    phys: CULong,
+    attr: CULong,
+    error_out: *mut CInt,
+    set_range: ProcessFaultSetRangeFn,
+) -> CInt {
+    // GNU C void-pointer addition is byte addition in the supported ABI.
+    // Preserve address-bit wrapping without introducing Rust pointer.add
+    // provenance/in-bounds requirements absent from this original mapping API.
+    let end = (pgaddr as CULong).wrapping_add(pgsize as CULong) as *mut c_void;
+    *error_out = set_range(
+        (*(*vm).address_space).page_table, vm, pgaddr, end, phys, attr,
+        (*range).pgshift, range, 1,
+    );
+    if *error_out != 0 {
+        let _ = kprintf(
+            b"page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx):set_range failed. %d\n\0".as_ptr().cast(),
+            vm, (*range).start, (*range).end, (*range).flag,
+            fault_addr, reason, *error_out,
+        );
+        return 1;
+    }
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_page_fault_finish_body_result(
+    fault_addr: CULong,
+    error_out: *mut CInt,
+    page_out: *mut *mut crate::page_helpers::Page,
+) {
+    // Same reviewed Rust/assembly TLB provider. The caller's original success
+    // state is published only after it returns, never as a guessed ACK.
+    crate::x86_memory_helpers::flush_tlb_single(fault_addr);
+    *error_out = 0;
+    *page_out = null_mut();
+}
+
+// Entire original out: unlock/stray-Page/RSS/diagnostic/return handoff.
+#[no_mangle]
+pub unsafe extern "C" fn process_page_fault_out_body_result(
+    vm: *mut ProcessVm,
+    range: *mut VmRange,
+    fault_addr: CULong,
+    reason: CULong,
+    pgsize_ptr: *const SizeT,
+    page: *mut crate::page_helpers::Page,
+    error: CInt,
+    stray_debug: *mut crate::debug::Ddebug,
+    rss_sub_debug: *mut crate::debug::Ddebug,
+    return_debug: *mut crate::debug::Ddebug,
+) -> CInt {
+    // Same unconditional unlock is first. Use the existing C-ABI declaration
+    // with abi::IhkSpinlock, not a distinct module-private Rust lock type.
+    __ihk_mc_spinlock_unlock_noirq(core::ptr::addr_of_mut!((*vm).page_table_lock));
+    // Page==NULL and page_unmap==0 paths never read the caller's possibly
+    // uninitialized size, exactly as original C. Merely borrowing its address
+    // does not create an initialized-value requirement on those paths.
+    if !page.is_null() {
+        if core::ptr::read_volatile(core::ptr::addr_of!((*stray_debug).line_flags)) >> 24 != 0 {
+            let _ = kprintf(
+                b"%s: out,phys=%lx,vmr(%lx-%lx),flag=%x,fa=%lx,reason=%x\n\0".as_ptr().cast(),
+                b"page_fault_process_memory_range\0".as_ptr().cast::<i8>(),
+                crate::page_helpers::page_to_phys(page),
+                (*range).start, (*range).end, (*range).flag, fault_addr, reason,
+            );
+        }
+        if crate::page_helpers::page_unmap(page) != 0 {
+            if core::ptr::read_volatile(core::ptr::addr_of!((*rss_sub_debug).line_flags)) >> 24 != 0 {
+                let _ = kprintf(
+                    b"%lx-,%s: out,calling memory_stat_rss_sub(),size=%ld,pgsize=%ld\n\0".as_ptr().cast(),
+                    // Keep the original fresh post-unmap physical read.
+                    crate::page_helpers::page_to_phys(page),
+                    b"page_fault_process_memory_range\0".as_ptr().cast::<i8>(), *pgsize_ptr, *pgsize_ptr,
+                );
+            }
+            // The original obtains memobj only after unmap and its log.
+            crate::mem_helpers::rusage_memory_stat_sub(
+                (*range).memobj.cast::<Memobj>(), *pgsize_ptr as CULong, *pgsize_ptr as CInt,
+            );
+        }
+    }
+    if core::ptr::read_volatile(core::ptr::addr_of!((*return_debug).line_flags)) >> 24 != 0 {
+        let _ = kprintf(
+            b"page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx): %d\n\0".as_ptr().cast(),
+            vm, (*range).start, (*range).end, (*range).flag, fault_addr, reason, error,
+        );
+    }
+    error
+}
+
+// Anonymous clear/profile/map handoff; allocation/install ownership unchanged.
+#[no_mangle]
+pub unsafe extern "C" fn process_page_fault_anon_clear_body_result(
+    range: *mut VmRange,
+    pgaddr: *mut c_void,
+    pgsize: SizeT,
+    virt: *mut c_void,
+    original_page: *mut crate::page_helpers::Page,
+    fault_addr: CULong,
+    reason: CULong,
+    phys_out: *mut CULong,
+    profile_enabled: CInt,
+    profile_event: CInt,
+    clear_debug: *mut crate::debug::Ddebug,
+    map_debug: *mut crate::debug::Ddebug,
+) {
+    // The original successful allocator/caller still owns virt and its size.
+    // Do not allocate/free or convert the borrowed Page into an owning ref.
+    if core::ptr::read_volatile(core::ptr::addr_of!((*clear_debug).line_flags)) >> 24 != 0 {
+        let _ = kprintf(
+            b"%s: clearing 0x%lx:%lu\n\0".as_ptr().cast(),
+            b"page_fault_process_memory_range\0".as_ptr().cast::<i8>(), pgaddr, pgsize,
+        );
+    }
+    if profile_enabled != 0 {
+        crate::profile::profile_event_add(profile_event, pgsize as u64);
+    }
+    // lib/include/string.h selects memset -> this same existing Rust export.
+    // Retain its exact ordered volatile zero writes, not a new C/intrinsic path.
+    let _ = crate::string::__inline_memset(virt, 0, pgsize);
+    *phys_out = crate::x86_memory_helpers::virt_to_phys(virt);
+    if !phys_to_page(*phys_out).is_null() {
+        if core::ptr::read_volatile(core::ptr::addr_of!((*map_debug).line_flags)) >> 24 != 0 {
+            let _ = kprintf(
+                b"%s: NOPHYS,phys=%lx,vmr(%lx-%lx),flag=%x,fa=%lx,reason=%x\n\0".as_ptr().cast(),
+                b"page_fault_process_memory_range\0".as_ptr().cast::<i8>(),
+                // Preserve the original diagnostic's preexisting Page input.
+                // Do not substitute the newly looked-up Page or physical value.
+                crate::page_helpers::page_to_phys(original_page),
+                (*range).start, (*range).end, (*range).flag, fault_addr, reason,
+            );
+        }
+        // Original performs a second lookup after its diagnostic, then maps
+        // that exact result. Do not cache first lookup or add a NULL guard.
+        crate::page_helpers::page_map(phys_to_page(*phys_out));
+    }
+}
+
+unsafe fn process_copy_pte_debug_enabled(debug: *mut crate::debug::Ddebug) -> bool {
+    // SAFETY: Each pointer is an original persistent C descriptor supplied by the
+    // selected entry. This raw load preserves the existing dynamic-debug contract.
+    unsafe { core::ptr::read_volatile(core::ptr::addr_of!((*debug).line_flags)) >> 24 != 0 }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+unsafe extern "C" {
+    static mut process_page_fault_page_state_debug: crate::debug::Ddebug;
+}
+
+/// Emit the original successful-PTE Page-state diagnostic.
+///
+/// # Safety
+/// A non-NULL `page` remains borrowed, aligned and live under the unchanged fault
+/// owner's page-table/memobj guards for this call. The persistent descriptor has
+/// the original dynamic-debug storage/update contract. No reference is acquired
+/// or released, and NULL is handled before calling either non-NULL Page provider.
+#[no_mangle]
+pub unsafe extern "C" fn process_page_fault_page_state_log_bridge(
+    page: *mut crate::page_helpers::Page,
+) {
+    // SAFETY: The descriptor is persistent real C ABI data. Preserve the original
+    // gate before any Page read, including the NULL/non-NULL provider branches.
+    if !unsafe {
+        process_copy_pte_debug_enabled(core::ptr::addr_of_mut!(process_page_fault_page_state_debug))
+    } {
+        return;
+    }
+
+    let (in_memobj, count) = if page.is_null() {
+        (0, 0)
+    } else {
+        // SAFETY: The fault owner retains the original borrowed Page lifetime.
+        // Both providers read only: mode predicate then one genuine SeqCst count
+        // read. C leaves their relative evaluation order unspecified; neither
+        // operation mutates the other's input or transfers ownership.
+        unsafe {
+            (
+                crate::page_helpers::page_is_in_memobj(page),
+                crate::page_helpers::page_get_count_atomic(page.cast_const()),
+            )
+        }
+    };
+    // SAFETY: Original format/function bytes and variadic types are retained,
+    // including the original Page pointer argument associated with `%lx`.
+    unsafe {
+        let _ = kprintf(
+            b"%s: non-NULL pte,page=%lx,page_is_in_memobj=%d,page->count=%d\n\0"
+                .as_ptr().cast(),
+            b"page_fault_process_memory_range\0".as_ptr().cast::<i8>(),
+            page,
+            in_memobj,
+            count,
+        );
+    }
+}
+
+const _: unsafe extern "C" fn(*mut crate::page_helpers::Page) =
+    process_page_fault_page_state_log_bridge;
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+unsafe extern "C" {
+    static mut process_page_fault_pte_state_debug: crate::debug::Ddebug;
+}
+
+/// Emit the original pre-allocation PTE-state diagnostic.
+///
+/// # Safety
+/// A non-NULL PTE is aligned and readable under the unchanged fault owner's
+/// page-table guard. `pgsize` is the original lookup/adjustment result. The debug
+/// descriptor remains persistent with its original flag-update contract.
+#[no_mangle]
+pub unsafe extern "C" fn process_page_fault_pte_state_log_bridge(
+    ptep: *mut CULong,
+    pgsize: SizeT,
+) {
+    // SAFETY: The descriptor is real persistent C data. No PTE load occurs until
+    // the same dynamic-debug flag gate passes; NULL preserves both -1 values.
+    if !unsafe {
+        process_copy_pte_debug_enabled(core::ptr::addr_of_mut!(process_page_fault_pte_state_debug))
+    } {
+        return;
+    }
+    let (is_null, is_fileoff) = if ptep.is_null() {
+        (-1, -1)
+    } else {
+        // SAFETY: The original owner still holds its page-table lock. Retain two
+        // distinct genuine predicate loads, not a synthesized combined snapshot.
+        // Their inputs are unchanged and neither predicate mutates the PTE.
+        unsafe {
+            (
+                crate::pte_helpers::pte_is_null(ptep),
+                crate::pte_helpers::pte_is_fileoff(ptep, pgsize),
+            )
+        }
+    };
+    // SAFETY: Preserve the original Page-table pointer vararg (including `%lx`),
+    // both promoted C ints, format and owning C function string.
+    unsafe {
+        let _ = kprintf(
+            b"%s: ptep=%lx,pte_is_null=%d,pte_is_fileoff=%d\n\0".as_ptr().cast(),
+            b"page_fault_process_memory_range\0".as_ptr().cast::<i8>(),
+            ptep,
+            is_null,
+            is_fileoff,
+        );
+    }
+}
+
+const _: unsafe extern "C" fn(*mut CULong, SizeT) = process_page_fault_pte_state_log_bridge;
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Exact architecture enum value; genuine-header witness retains this binding.
+const PROCESS_FAULT_PTATTR_DIRTY: CULong = 0x40;
+
+/// Preserve the complete non-COW shared-mapping permission decision.
+///
+/// # Safety
+/// `range` is the original live borrowed VM range under the unchanged fault
+/// owner's guards. Call only on the original else branch after COW classification.
+/// The return value is the same architecture PT-attribute bitset representation.
+#[no_mangle]
+pub unsafe extern "C" fn process_page_fault_shared_permission_body_result(
+    range: *mut VmRange,
+    mut attr: CULong,
+) -> CULong {
+    // SAFETY: The unchanged owner retains the range lifetime. Preserve the
+    // original short-circuit order and both field reads; no references escape.
+    if unsafe { (*range).flag } & VR_PRIVATE == 0
+        && attr & PROCESS_FAULT_PTATTR_DIRTY == 0
+        && unsafe { (*range).flag } & VR_STACK == 0
+    {
+        attr &= !PTATTR_WRITABLE;
+    }
+    attr
+}
+
+const _: unsafe extern "C" fn(*mut VmRange, CULong) -> CULong =
+    process_page_fault_shared_permission_body_result;
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+unsafe extern "C" {
+    static mut process_page_fault_profile_path_debug: crate::debug::Ddebug;
+    static mut process_page_fault_entry_debug: crate::debug::Ddebug;
+}
+
+/// Preserve the full original profile/path and ordinary entry diagnostics.
+///
+/// # Safety
+/// The original fault caller supplies a live borrowed range/VM and the current
+/// CPU/thread context. As in C, the current thread is non-NULL. If the profile
+/// log is enabled, the caller keeps any selected memobj/path string live through
+/// formatting. These are the original pre-page-table-lock lifetimes; this helper
+/// adds no reference, lock, NULL policy, publication or ownership transfer.
+#[no_mangle]
+pub unsafe extern "C" fn process_page_fault_entry_log_body_result(
+    vm: *mut ProcessVm,
+    range: *mut VmRange,
+    fault_addr: CULong,
+    reason: CULong,
+) {
+    // SAFETY: Call the existing current-CPU provider exactly once, before the
+    // profile descriptor test, as C does. Preserve the real raw Thread borrow.
+    let profiled = unsafe { (*(*get_this_cpu_local_var()).current).profile != 0 };
+    if profiled
+        && unsafe {
+            process_copy_pte_debug_enabled(core::ptr::addr_of_mut!(
+                process_page_fault_profile_path_debug
+            ))
+        }
+    {
+        // SAFETY: Preserve the original nested short-circuit raw loads and
+        // memobj/path/private_data preference. No reference to uninitialized
+        // memory is formed and no eager path load occurs before the debug gate.
+        let path = unsafe {
+            if !(*range).memobj.is_null()
+                && !(*(*range).memobj.cast::<Memobj>()).path.is_null()
+            {
+                (*(*range).memobj.cast::<Memobj>()).path.cast_const()
+            } else if !(*range).private_data.is_null() {
+                b"XPMEM\0".as_ptr().cast::<i8>()
+            } else {
+                b"<unknown>\0".as_ptr().cast::<i8>()
+            }
+        };
+        // SAFETY: Selected string stays borrowed/live through the original
+        // variadic formatter; function and fault-address types are unchanged.
+        unsafe {
+            let _ = kprintf(
+                b"%s: 0x%lx @ %s\n\0".as_ptr().cast(),
+                b"page_fault_process_memory_range\0".as_ptr().cast::<i8>(),
+                fault_addr,
+                path,
+            );
+        }
+    }
+    // SAFETY: This second descriptor is read after the entire profile event,
+    // including its formatter callback, and independently of profile being zero.
+    if unsafe {
+        process_copy_pte_debug_enabled(core::ptr::addr_of_mut!(process_page_fault_entry_debug))
+    } {
+        // SAFETY: Preserve fresh post-profile-log range loads and exact original
+        // pointer/unsigned-long variadic arguments. Do not cache them above.
+        unsafe {
+            let _ = kprintf(
+                b"page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx)\n\0"
+                    .as_ptr().cast(),
+                vm,
+                (*range).start,
+                (*range).end,
+                (*range).flag,
+                fault_addr,
+                reason,
+            );
+        }
+    }
+}
+
+const _: unsafe extern "C" fn(*mut ProcessVm, *mut VmRange, CULong, CULong) =
+    process_page_fault_entry_log_body_result;
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+/// Acquire the borrowed mapping Page and derive attributes in original order.
+///
+/// # Safety
+/// The original fault owner retains the live range/PTE and page-table guard.
+/// `page_out` points to writable raw Page-pointer storage owned by that caller;
+/// this function initializes it without reading its prior value or making an
+/// initialized `&mut` reference. The existing Page lookup may return NULL.
+#[no_mangle]
+pub unsafe extern "C" fn process_page_fault_mapping_state_body_result(
+    range: *mut VmRange,
+    phys: CULong,
+    memobj_flag: CULong,
+    reason: CULong,
+    ptep: *mut CULong,
+    page_out: *mut *mut crate::page_helpers::Page,
+) -> CULong {
+    // SAFETY: The same genuine physical-Page provider preserves its borrowed
+    // return/lifetime semantics. Raw write publishes the original local Page
+    // value before attribute conversion, without acquiring or releasing a ref.
+    unsafe { core::ptr::write(page_out, phys_to_page(phys)) };
+    // SAFETY: Load range flags only after Page lookup returns. The original
+    // architecture entry receives the same OR flags, reason and PTE pointer;
+    // its existing common-attribute dependency remains explicit provider debt.
+    unsafe {
+        crate::x86_memory_helpers::arch_vrflag_to_ptattr(
+            (*range).flag | memobj_flag,
+            reason,
+            ptep,
+        )
+    }
+}
+
+const _: unsafe extern "C" fn(
+    *mut VmRange, CULong, CULong, CULong, *mut CULong,
+    *mut *mut crate::page_helpers::Page,
+) -> CULong = process_page_fault_mapping_state_body_result;
+
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Exact held anonymous retry body4071bfa0 reused; no allocator reimplementation.
+unsafe extern "C" {
+    static process_page_fault_anon_alloc_file: *const i8;
+    static process_page_fault_anon_alloc_line: CInt;
+}
+
+/// Execute the original anonymous allocation/shrink/retry transaction.
+///
+/// # Safety
+/// The unchanged fault owner holds its page-table lock. Range, size/alignment,
+/// PTE and address outputs are live initialized raw scalar/pointer storage from
+/// the successful prepare stage. `virt_out` is writable original NULL storage;
+/// `error_out` may be uninitialized and is read only after this helper writes it.
+/// Success transfers exactly the existing allocation pointer to the original
+/// clear/map tail; failure owns no allocation and leaves the lock for `out:`.
+#[no_mangle]
+pub unsafe extern "C" fn process_page_fault_anon_allocate_body_result(
+    vm: *mut ProcessVm,
+    range: *mut VmRange,
+    fault_addr: CULong,
+    reason: CULong,
+    ptep_out: *mut *mut CULong,
+    pgaddr_out: *mut *mut c_void,
+    pgsize_out: *mut SizeT,
+    p2align_out: *mut CInt,
+    virt_out: *mut *mut c_void,
+    error_out: *mut CInt,
+) -> CInt {
+    // Existing caller owns the page-table lock throughout. No allocation has
+    // succeeded on entry; success transfers its virtual pointer to that caller.
+    loop {
+        let npages = (*pgsize_out / PAGE_SIZE as SizeT) as CInt;
+        *virt_out = crate::mem_helpers::_ihk_mc_alloc_aligned_pages_node(
+            npages, *p2align_out,
+            IHK_MC_AP_NOWAIT | if (*range).flag & VR_AP_USER != 0 { 0x001000 } else { 0 },
+            -1, 1, fault_addr,
+            process_page_fault_anon_alloc_file as *mut i8,
+            process_page_fault_anon_alloc_line,
+        );
+        if !(*virt_out).is_null() {
+            return 0;
+        }
+        // Reload pgshift after the allocator, exactly as in the original.
+        if (*range).pgshift == 0 && *pgsize_out != PAGE_SIZE as SizeT {
+            *error_out = crate::x86_memory_helpers::arch_get_smaller_page_size(
+                null_mut(), *pgsize_out, pgsize_out, p2align_out,
+            );
+            if *error_out != 0 {
+                let _ = kprintf(
+                    b"page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx):arch_get_smaller_page_size(anon) failed. %d\n\0".as_ptr().cast(),
+                    vm, (*range).start, (*range).end, (*range).flag,
+                    fault_addr, reason, *error_out,
+                );
+                return 1;
+            }
+            // Unlike the prepare slice, the original clears ptep only AFTER
+            // a successful shrink; on shrink failure it preserves old ptep.
+            *ptep_out = null_mut();
+            *pgaddr_out = (fault_addr & !((*pgsize_out as CULong).wrapping_sub(1))) as *mut c_void;
+            continue;
+        }
+        *error_out = -ENOMEM;
+        let _ = kprintf(
+            b"page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx):cannot allocate new page. %d\n\0".as_ptr().cast(),
+            vm, (*range).start, (*range).end, (*range).flag,
+            fault_addr, reason, *error_out,
+        );
+        return 1;
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+unsafe extern "C" {
+    static process_page_fault_cow_alloc_file: *const i8;
+    static process_page_fault_cow_alloc_line: CInt;
+}
+
+/// Allocate the destination for the original dirty COW branch.
+///
+/// # Safety
+/// The caller holds the unchanged fault page-table guard and live VM/range.
+/// `page` is the original optional borrowed source Page and is only compared to
+/// NULL here. `virt_out` is writable raw pointer storage which may be uninitialized;
+/// `error_out` is writable raw signed-int storage which may be uninitialized.
+/// Success initializes only the allocation output; failure initializes error and
+/// retains source Page/lock ownership for the original `out:` cleanup.
+#[no_mangle]
+pub unsafe extern "C" fn process_page_fault_cow_allocate_body_result(
+    vm: *mut ProcessVm,
+    range: *mut VmRange,
+    page: *mut crate::page_helpers::Page,
+    pgsize: SizeT,
+    p2align: CInt,
+    fault_addr: CULong,
+    reason: CULong,
+    virt_out: *mut *mut c_void,
+    error_out: *mut CInt,
+) -> CInt {
+    if page.is_null() {
+        // SAFETY: Exact original warning precedes allocation and has no Page
+        // dereference. Preserve its unconditional formatter call/return discard.
+        unsafe {
+            let _ = kprintf(
+                b"%s: WARNING: cow on non-struct-page-managed page\n\0".as_ptr().cast(),
+                b"page_fault_process_memory_range\0".as_ptr().cast::<i8>(),
+            );
+        }
+    }
+    // C performs size_t division followed by the allocator's signed-int narrowing.
+    let npages = (pgsize / PAGE_SIZE as SizeT) as CInt;
+    // SAFETY: Reuse the existing allocator with exactly the original fixed flags,
+    // current-owner static tracking identity and arguments. Do not acquire any
+    // source-Page reference, or construct &mut to uninitialized output storage.
+    let allocated = unsafe {
+        crate::mem_helpers::_ihk_mc_alloc_aligned_pages_node(
+            npages,
+            p2align,
+            IHK_MC_AP_NOWAIT,
+            -1,
+            1,
+            fault_addr,
+            process_page_fault_cow_alloc_file as *mut i8,
+            process_page_fault_cow_alloc_line,
+        )
+    };
+    // SAFETY: Raw initialize the same original C local before its NULL test.
+    unsafe { core::ptr::write(virt_out, allocated) };
+    if !allocated.is_null() {
+        return 0;
+    }
+    // SAFETY: Failed allocator owns no destination; write original -ENOMEM before
+    // logging. Reload range fields after warning/allocator callbacks, as C does.
+    unsafe {
+        core::ptr::write(error_out, -ENOMEM);
+        let _ = kprintf(
+            b"page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx):cannot allocate copy page. %d\n\0"
+                .as_ptr().cast(),
+            vm,
+            (*range).start,
+            (*range).end,
+            (*range).flag,
+            fault_addr,
+            reason,
+            *error_out,
+        );
+    }
+    // Original caller takes goto out with unchanged source Page and lock.
+    1
+}
+
+const _: unsafe extern "C" fn(
+    *mut ProcessVm, *mut VmRange, *mut crate::page_helpers::Page, SizeT,
+    CInt, CULong, CULong, *mut *mut c_void, *mut CInt,
+) -> CInt = process_page_fault_cow_allocate_body_result;
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+/// Copy the COW data after the unchanged original C diagnostic completes.
+///
+/// # Safety
+/// `destination` is the successful destination allocation owned by the unchanged
+/// fault caller. The existing physical mapping provider yields a non-NULL source
+/// readable for `length` bytes; the destination is writable for that length and
+/// the ranges do not overlap. These are the original memcpy valid-input duties.
+/// The source mapping/Page and destination stay live under the original owner's
+/// guard until the unchanged commit/cleanup tail. No reference or ACK is added.
+#[no_mangle]
+pub unsafe extern "C" fn process_page_fault_cow_copy_body_result(
+    destination: *mut c_void,
+    source_phys: CULong,
+    length: SizeT,
+) {
+    // SAFETY: Perform a fresh original physical mapping lookup AFTER the C
+    // diagnostic/its converter and formatter effects. Do not cache log arguments.
+    let source = unsafe { crate::x86_memory_helpers::phys_to_virt(source_phys) };
+    // SAFETY: Reuse the existing Rust buffer-copy body with wipe=0. On the
+    // original memcpy valid-input domain both pointers are non-NULL, so its
+    // validation cannot produce an error; no new error/NULL handling is invented.
+    // The same intrinsic copies nonoverlapping bytes without ownership changes.
+    let _ = unsafe {
+        process_copy_user_pte_buffer_body_result(destination, source.cast_const(), length, 0)
+    };
+}
+
+const _: unsafe extern "C" fn(*mut c_void, CULong, SizeT) =
+    process_page_fault_cow_copy_body_result;
+
+#[no_mangle]
+pub unsafe extern "C" fn process_pte_get_phys_bridge(ptep: *mut c_void) -> CULong {
+    crate::pte_helpers::pte_get_phys(ptep.cast::<CULong>())
 }
