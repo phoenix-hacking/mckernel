@@ -1,3 +1,18 @@
+## Engineering cursor — 2026-10-24T15:48Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains35/35; M14/M15 OPEN, percentages unmeasured. Current81 Rust/all6C,
+7NM and strict partiallink/NM commands00–15 PASS; retained allocated observers
+need exact compressed-debug logical-bound correction, no recompilation. Actual
+newdefault source stage6962entries/49symlinks PASS8.903287409wall/2.381010CPU;
+normalbuilder ownership-oracle adoption pending, no newimage/native acceptance.
+SDK mountcandidate stoppedpretargets at toolFD rule; experttool-only fix+12pure
+fakeFD testsPASS, actualSDKbuild pending. COPY5 stoppedPREVALIDATION: ownercommon
+attempt4 vsrequestattempt5. Sharedheavy token189516/start65397349 remainsretained;
+no Docker/common/attempt created. No newheavy release until reviewed existing
+prevalidation reconcile API+positivephysical acceptance; never rawunlink token.
+Currentpreparations/actualfailures: evidence/rust-cutover-engineering-checkpoint-20261024-1548/REVIEW.json.
+
 ## Engineering cursor — 2026-10-24T15:25Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
