@@ -1,3 +1,26 @@
+## Actual HOST library and whole-memory compiler progress — 2026-10-24 10:12 review
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains 35/35. Whole70 HOST Rust libihk passed all 17 compiler/header/shared-library
+and retained CLI link commands in 1.746776614s outer wall; scope receipt6977373e.
+No C runtime TU was selected for that HOST library. Rocky/default/native remain open.
+Whole-memory80 Rust/header/C/partial-link passed all10 commands, including zero C
+STT_FUNC and zero allocated executable bytes. Final callback storage check FAIL:
+ET_REL pointers reside in ALLOC|WRITE sections. Exact binding proof can be retained
+separately; read-only/default/native obligations remain open. No C retirement credit.
+
+Current stopped retained-validator retirement completed normally (tool12311 exit0,
+result77b3fc41 PASS_EXECUTED). Independent review accepted the actual transaction.
+Fresh postjoin passed1.655854394s with clean joins and independent physical acceptance;
+current postjoin aaf30a94 is non-NULL. Old2444 clearance remains historical.
+Next exact root action: reviewed current postjoin reader, then copy2 fresh-observation
+validator admission/release, reusing retained image rather than rebuilding it.
+SDK operation is source-approved/published and waits for sole-heavy release.
+CPU/process/library/memory source owners were reactivated with actual new tasks;
+ordinary queued jobs reuse successful objects after current clearance. No new native
+qualification, wholefile retirement or defensible engineering percentage.
+See evidence/rust-cutover-engineering-checkpoint-20261024-1012/REVIEW.json.
+
 ## Retained validator stopped on appended captures; ordinary checks advanced — 2026-10-24 09:30 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

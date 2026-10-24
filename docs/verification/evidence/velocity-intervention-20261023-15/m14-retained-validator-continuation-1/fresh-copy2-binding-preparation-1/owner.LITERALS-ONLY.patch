@@ -1,0 +1,31 @@
+--- owner.original
++++ owner.copy2
+@@ -30,8 +30,8 @@
+ REQUEST_SCHEMA = "mckernel.native-exact-mckernel-image-container-request.v1"
+ RECEIPT_SCHEMA = "mckernel.native-exact-mckernel-image-container-receipt.v1"
+ OWNER_RECEIPT_NAME = "owner-receipt.json"
+-EXPECTED_DRIVER_SHA256 = 'e3c932282458b348538d6367fd9b01de568cbd6595b249f2dc6bcfd1bd02a718'
+-EXPECTED_RETAINED_COPY_BINDING_SHA256 = '80b7b5594a49ae97d94e9089b17ef3f7435791512d771010394210f946a36b52'
++EXPECTED_DRIVER_SHA256 = 'e0728b22c6488c2343178f556d2d492c446ee7f22935a16881981cf5f9d548af'
++EXPECTED_RETAINED_COPY_BINDING_SHA256 = 'bd38ddffca4423b5f45061328807f5328d70c701251fe10037f224096246c002'
+ EXPECTED_PROVENANCE_SHA256 = '68e1c97a16d849ab7d8d1b87fd6ffaf104f632e87f8e0d7a9fd21ca77d75460b'
+ EXPECTED_HOST_OWNER_SHA256 = "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+ EXPECTED_HEAVY_ENTRY_CONTRACT_SHA256 = "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1"
+@@ -39,7 +39,7 @@
+ # exclusions explicit: accepting one of these would allow a request to race a
+ # retired build candidate.  Tests may replace COMMON_EXCLUSION with a private
+ # fixture, so the rejection list remains separate from the active value.
+-COMMON_EXCLUSION = '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/retained-validation-attempt-1/common-exclusion.json'
++COMMON_EXCLUSION = '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/retained-validation-attempt-2/common-exclusion.json'
+ RETIRED_COMMON_EXCLUSIONS = frozenset(
+     "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-" + suffix + ".json"
+     for suffix in (
+@@ -1056,7 +1056,7 @@
+     _fail(output.is_dir() and not output.is_symlink(), "retained output missing")
+     _fail(not evidence.exists() and not evidence.is_symlink(), "evidence root must be fresh")
+     _fail(output.parent.is_dir() and evidence.parent.is_dir(), "output/evidence parent missing")
+-    binding = _regular(output / "retained-copy-binding.json", "retained copy binding")
++    binding = _regular(output / "retained-copy-binding.POSTBOUND.json", "retained copy binding")
+     _fail(_sha256(binding) == EXPECTED_RETAINED_COPY_BINDING_SHA256,
+           "retained copy binding identity")
+     _fail(set(work_root.iterdir()) == {output}, "dedicated work contains unbound entries")

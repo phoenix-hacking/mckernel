@@ -1,0 +1,23 @@
+--- validator.original
++++ validator.copy2
+@@ -2635,9 +2635,9 @@
+ 
+ # Functional OS/Rust only; no security testing. No execution release.
+ # New root-owned copy must be authenticated; old80b7 is historical only.
+-RETAINED_COPY_BINDING_SHA256 = None
++RETAINED_COPY_BINDING_SHA256 = 'bd38ddffca4423b5f45061328807f5328d70c701251fe10037f224096246c002'
+ RETAINED_ORIGINAL_DRIVER_SHA256 = '8be1ad0ed225cd66565c7aad084956e5f5b298d156e21315813a8040bfe8feba'
+-RETAINED_CORRECTED_DRIVER_SHA256 = '4506f1d75162d49b60b07aebc075ed121536b58e6fd31b5e295f808ebb39cc98'
++RETAINED_CORRECTED_DRIVER_SHA256 = '9b694040f13ffab54337a894ead30c073db5938cb0be937a7976ed5880c4b155'
+ RETAINED_ORIGINAL_RECEIPT_SHA256 = '89e00c744143fea8fad6dbb1279b1e6213d3ee1fa4b10a587adee08758e46de9'
+ RETAINED_PRODUCTION_RUST_PROOF = {'clone_thread_undefined': 1, 'command': {'actual_generated_make_sha256': '4b95928d2d27f8b1295c993a5e52ef2ad537bdeb2e03b1f9c5213534add4f481', 'argv': ['/usr/bin/nm', '--undefined-only', '--demangle', '/work/output/build/kernel/rust/mckernel_rust.o'], 'cwd': '/work/output/build', 'exit_code': 0, 'phase': 'production-rust-core-panic-reference-check'}, 'forbidden': [], 'nm_stderr': {'ctime_ns': 1792825231637647788, 'device': 66306, 'inode': 56365442, 'mode': 420, 'mtime_ns': 1792825231637647788, 'path': '/work/evidence/production-rust-undefined.nm.stderr', 'sha256': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', 'size': 0}, 'nm_stdout': {'ctime_ns': 1792825231653648272, 'device': 66306, 'inode': 56364906, 'mode': 420, 'mtime_ns': 1792825231653648272, 'path': '/work/evidence/production-rust-undefined.nm', 'sha256': 'a14941b58488c2749461c09d1c821653e0962df820580be0b277fb80eef66e7a', 'size': 26957}, 'object': {'ctime_ns': 1792825231541644881, 'device': 66306, 'inode': 56365448, 'mode': 420, 'mtime_ns': 1792825231541644881, 'path': '/work/output/build/kernel/rust/mckernel_rust.o', 'sha256': '1da773737d4008e1dd994ba0e49534821fb6cfcc3ede62837280e8d99c859106', 'size': 14015800}, 'status': 'PASS_PRODUCTION_RUST_NO_TARGETED_CORE_PANIC_REFS', 'undefined_count': 574}
+ 
+@@ -2662,7 +2662,7 @@
+     _fail(not evidence.exists() and not evidence.is_symlink(), "evidence must be fresh")
+     _disjoint((source_root, output, evidence, manifest, toolchain))
+     _fail(RETAINED_COPY_BINDING_SHA256 is not None, "root retained-copy binding not frozen")
+-    binding_path = output / "retained-copy-binding.json"
++    binding_path = output / "retained-copy-binding.POSTBOUND.json"
+     _fail(_sha256(binding_path) == RETAINED_COPY_BINDING_SHA256, "retained copy binding digest")
+     binding = _json(binding_path, "root retained copy binding")
+     _fail(binding["scope"] == "RETAINED_ARTIFACT_VALIDATION_ONLY", "retained scope")
