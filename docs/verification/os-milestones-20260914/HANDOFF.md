@@ -1,3 +1,21 @@
+## Engineering cursor — 2026-10-24T21:35Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains COMPLETE35/35; M14/M15 remain OPEN. Combined F02/F06 current81 five
+commands PASS21.459607s, independently accepted: Rust3698T/378U, partial3942T/
+exact19U, ABI250+10+45 and31metadata. Exact process C71b1/Rustf763 pair integrated
+as source WIP while F06bb8/3260/bd2 and initializer fixes remain unchanged.
+Default/native/lifetime/ACK/effect and final COMMON allocation remain OPEN.
+
+Copy2 originalartifactFAIL remains; genuine normal physical retirementf30e and
+NONNULL currentpostjoin6393 accepted. Heavy slot is clear. Fresh linked-prefix
+copy3 PASS.492894s (435files/69335881B); new executor-only suffix purecontrols PASS
+.188504s. Full kernel/Rust outputs will be reused; no unchanged image rebuild.
+M15 current15file authority overlay published, original66source archive unchanged.
+Next: fetchedoverlay+freshquery/exactrelease and actual sourceSDK11 soleheavy;
+M14 suffix pure-validation and executor-only queue continue in parallel.
+Evidence: `evidence/rust-cutover-engineering-checkpoint-20261024-2135/REVIEW.json`.
+
 ## Engineering cursor — 2026-10-24T21:25Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
