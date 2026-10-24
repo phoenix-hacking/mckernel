@@ -1,0 +1,97 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_COMPLETE_LIVE_GPE_ORCHESTRATION_SOURCE_ONLY",
+  "target": "arch/x86_64/kernel/cpu.c::gpe_handler",
+  "patch_preimages": {
+    "C": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/candidate/arch/x86_64/kernel/cpu.c",
+      "sha256": "c779079fb6de66991c861c823dca06b2a9ceec16ac4c984995200b668d7e78ce",
+      "bytes": 95605
+    },
+    "Rust": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/candidate/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "98914e1ff4d50c2f42ccbdeb1f4f338024b7a9a2143fbad2f59ebd6f6b50dd0b",
+      "bytes": 93305
+    }
+  },
+  "observed_canonical_only": {
+    "/home/holden/mckernel/arch/x86_64/kernel/cpu.c": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "sha256": "c779079fb6de66991c861c823dca06b2a9ceec16ac4c984995200b668d7e78ce",
+      "bytes": 95605
+    },
+    "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "98914e1ff4d50c2f42ccbdeb1f4f338024b7a9a2143fbad2f59ebd6f6b50dd0b",
+      "bytes": 93305
+    }
+  },
+  "postimages": {
+    "arch/x86_64/kernel/cpu.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-gpe-handler-source-only-1/candidate/arch/x86_64/kernel/cpu.c",
+      "sha256": "11ea5dc2bb8c29ad357a221ceafada6c35c1ce8425e701d232cefa4f5adced57",
+      "bytes": 95704
+    },
+    "kernel/rust/x86_cpu_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-gpe-handler-source-only-1/candidate/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "08453142a1b0808155d5203efb8595024668e4f7918620771cff95e726f386a2",
+      "bytes": 95856
+    }
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-gpe-handler-source-only-1/PRIVATE-COMPLETE-GPE-HANDLER.patch",
+    "sha256": "c2cf81c7da856b842f9daca99eb3d489481495ac0a16cb67a1b394a2b7ba44c3",
+    "bytes": 3491
+  },
+  "original_C": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-gpe-handler-source-only-1/ORIGINAL-C-BODY.inc",
+    "sha256": "a9346459d56fc7e14c0396a0c196c516bfd529d2e458eca1d1164642a4e1ef35",
+    "bytes": 503
+  },
+  "actual_Rust": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-gpe-handler-source-only-1/ACTUAL-RUST-BODY.rs",
+    "sha256": "4083372f36e4ce0c3199e3e5f8716937ff3616bb1119d16470b6451fd69e6433",
+    "bytes": 1916
+  },
+  "provider_declarations": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-gpe-handler-source-only-1/ACTUAL-RUST-PROVIDER-DECLARATIONS.inc",
+    "sha256": "a4cefafaf534ad766ea1de2370d13f6662523b51b48ea0402384fb041d01a84a",
+    "bytes": 634
+  },
+  "consumer_plan": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-gpe-handler-source-only-1/SOURCE-CONSUMER-PLAN.json",
+    "sha256": "e846d0d910472456973975414a04125afedd2607d32579cb9d05efcafeea0d99",
+    "bytes": 5731
+  },
+  "fragment_files": {
+    "fixture-source-fragment/real-header-ABI.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-gpe-handler-source-only-1/fixture-source-fragment/real-header-ABI.c",
+      "sha256": "93bd31d22fe049e268a6b5e1b796917775aec8fcec3f16ed692a430eec4641ea",
+      "bytes": 2135
+    },
+    "fixture-source-fragment/actual-Rust-ABI.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-gpe-handler-source-only-1/fixture-source-fragment/actual-Rust-ABI.inc",
+      "sha256": "6d7d837a06c78fe975e34972f38bac0daed8e8ed1e5b4ff5feb2d0e095c9234e",
+      "bytes": 689
+    },
+    "fixture-source-fragment/recorded-boundaries.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-gpe-handler-source-only-1/fixture-source-fragment/recorded-boundaries.c",
+      "sha256": "db42de971130408df52a28706c410b0e6eb2022b85a85accd607cb6775eb14f2",
+      "bytes": 4169
+    }
+  },
+  "invariants": [
+    "Cfallbackliteralcompletebodyunchanged; onlyexistingselectedguard/declarationandRustcompleteentryadded.",
+    "Classify\u2192timing\u2192exactlog\u2192actualcontextprovider\u2192reloadCS\u2192kernelterminalpanic OR signal\u2192interrupt_exit\u2192reclassify\u2192timing\u2192terminalGPF.",
+    "Originalcaller-ownedframe, noRustreferenceacrosscalls, noNULLguard, allocation, newlock, IRQinstruction, retry, Cgetter ornewcomputeCfunction.",
+    "SelectedactualRustpanicneverreturns; fixturepanicmustterminal_exit ratherthanreturn orforeignunwind.",
+    "Acceptedcontextandulongcodeunchanged; stack/NMI/interruptexitbatchsources andsolequeue untouched."
+  ],
+  "actual_leaf_production_defaultlink_native": null,
+  "wholefile_retirement": false,
+  "compiler_jobs": 0,
+  "test_jobs": 0,
+  "CPU_slots_held": 0,
+  "canonical_shared_P12_Git_writes": 0,
+  "failure_history": "PriorCPUloggerkmsg/firstcontext8MiBprofile/boundedcorrection andallotherfailuresretained. Thisbody hasnotcompiled/tested."
+}

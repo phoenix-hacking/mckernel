@@ -1,0 +1,620 @@
+"""Host process and QMP adapters for the native diagnostic lifecycle.
+
+This is source-only infrastructure.  In particular, importing this module does
+not stage an image or enable native_diagnostic.run_diagnostic.
+"""
+
+import math
+import os
+import signal
+import socket
+import stat
+import subprocess
+import time
+import errno
+from collections import deque
+from pathlib import Path
+
+from qmp_capture import QmpError, QmpSession
+
+QEMU = "/usr/libexec/qemu-kvm"
+
+
+class ProcessAcquisitionFailure(RuntimeError):
+    """Trusted carrier for evidence acquired before ProcessOwner transfer.
+
+    The original exception remains the cause and is explicitly retained for
+    lifecycle first-failure reporting; unlike arbitrary exception instances,
+    this carrier always has writable trusted storage for primitive evidence.
+    """
+    def __init__(self, original, evidence):
+        super().__init__("QEMU ownership transfer failed")
+        self._mckernel_acquisition_original = original
+        self._mckernel_qemu_acquisition_evidence = evidence
+
+
+def _proc_starttime_ticks(pid):
+    """Read Linux ``/proc/<pid>/stat`` field 22 without trusting comm text."""
+    if type(pid) is not int or pid <= 0:
+        raise ValueError("positive process PID required")
+    raw = Path("/proc") / str(pid) / "stat"
+    data = raw.read_bytes()
+    # comm is parenthesized and may itself contain ')'; the final ')' before
+    # the state field is the delimiter, so no whitespace split can be used.
+    close = data.rfind(b")")
+    if close < 0:
+        raise ValueError("malformed process stat")
+    fields = data[close + 1:].split()
+    # fields[0] is state (field 3), hence starttime (field 22) is index 19.
+    if len(fields) <= 19 or not fields[19].isdigit():
+        raise ValueError("malformed process stat starttime")
+    ticks = int(fields[19])
+    if ticks <= 0:
+        raise ValueError("invalid process stat starttime")
+    return ticks
+
+
+def _capture_process_identity(pid, observed=None):
+    """Capture immutable direct-child identity before ownership transfer.
+
+    ``observed`` is deliberately a caller-owned primitive ledger.  Identity
+    acquisition is fail-closed, but a later read or validation failure must
+    retain the fields already observed; consulting procfs after retirement
+    would no longer be evidence about this child.
+    """
+    if observed is None:
+        observed = {}
+    if type(pid) is int and pid > 0:
+        observed["pid"] = pid
+    pgid = os.getpgid(pid)
+    observed["pgid"] = pgid
+    sid = os.getsid(pid)
+    observed["sid"] = sid
+    starttime_ticks = _proc_starttime_ticks(pid)
+    observed["starttime_ticks"] = starttime_ticks
+    if (type(pgid) is not int or type(sid) is not int or pgid != pid or sid != pid):
+        raise ValueError("QEMU process group/session identity mismatch")
+    return pid, pgid, sid, starttime_ticks
+
+
+def _deadline(timeout):
+    if type(timeout) not in (int, float) or not math.isfinite(timeout) or timeout <= 0:
+        raise ValueError("positive finite timeout required")
+    deadline = time.monotonic() + timeout
+    if not math.isfinite(deadline) or deadline <= time.monotonic():
+        raise ValueError("invalid absolute deadline")
+    return deadline
+
+
+def _remaining(deadline):
+    remaining = deadline - time.monotonic()
+    if remaining <= 0:
+        raise TimeoutError("backend absolute deadline expired")
+    return remaining
+
+
+_SECONDARY_ERROR_FALLBACK = deque(maxlen=256)
+
+
+def _secondary_message(label, error):
+    """Return cleanup context without allowing hostile exception formatting."""
+    try:
+        try:
+            detail = repr(error)
+        except BaseException:
+            detail = "<unrepresentable cleanup exception>"
+        # Do not ask exception classes for names, or use string-subclass hooks.
+        if type(label) is not str or type(detail) is not str:
+            return "cleanup failure"
+        return label[:128] + ": " + detail[:1024]
+    except BaseException:
+        return "cleanup failure"
+
+
+def _record_secondary_error(failure, label, error):
+    """Record cleanup context without changing or replacing *failure*.
+
+    ``BaseException.add_note`` was added after the Python 3.9 runtimes used by
+    the host campaign.  Keep the normal notes when available, and retain a
+    readable attribute (or last-resort module record) when it is not.  Cleanup
+    diagnostics must never become a new cleanup failure.
+    """
+    try:
+        message = _secondary_message(label, error)
+        add_note = getattr(failure, "add_note", None)
+        if callable(add_note):
+            try:
+                add_note(message)
+                return
+            except BaseException:
+                pass
+        details = getattr(failure, "_mckernel_secondary_errors", None)
+        if details is None:
+            details = []
+            setattr(failure, "_mckernel_secondary_errors", details)
+        details.append(message)
+        return
+    except BaseException:
+        # Exception instances normally have a __dict__, but recording must
+        # remain nonthrowing even for unusual BaseException subclasses.
+        try:
+            # Fixed-size text only: no formatting, property reads, exception
+            # references, or traceback retention on this last-resort path.
+            _SECONDARY_ERROR_FALLBACK.append("cleanup diagnostic unavailable")
+        except BaseException:
+            pass
+
+
+def _has_errno(error, expected):
+    """An exception's errno property is untrusted during recovery too."""
+    try:
+        value = error.errno if isinstance(error, OSError) else None
+        return type(value) is int and value == expected
+    except BaseException:
+        return False
+
+
+class ProcessOwner:
+    """Own QEMU's new session and bounded file-backed host streams."""
+
+    def __init__(self, child, stdout_path, stderr_path, identities=None,
+                 process_identity=None, command=None):
+        self.child = child
+        self.pid = child.pid if child is not None else None
+        self.stdout_path = Path(stdout_path)
+        self.stderr_path = Path(stderr_path)
+        self.identities = identities
+        if command is None:
+            self.command = None
+        else:
+            if (type(command) not in (tuple, list) or
+                    any(type(item) is not str for item in command)):
+                raise ValueError("QEMU command must contain primitive strings")
+            self.command = tuple(command)
+        if process_identity is None:
+            self.identity_pid = self.pgid = self.sid = self.starttime_ticks = None
+        else:
+            self.identity_pid, self.pgid, self.sid, self.starttime_ticks = process_identity
+        self.reaped = False
+        self.returncode = None
+
+    def process_identity(self):
+        if (type(self.identity_pid) is not int or type(self.pgid) is not int or
+                type(self.sid) is not int or type(self.starttime_ticks) is not int):
+            raise RuntimeError("QEMU process identity unavailable")
+        return {"pid": self.identity_pid, "pgid": self.pgid, "sid": self.sid,
+                "starttime_ticks": self.starttime_ticks}
+
+    def _signal_group(self, signum, *, allow_absent=False):
+        # A numeric PGID alone is unsafe after retirement and reuse.  Join it
+        # to this still-owned direct child immediately before each signal.
+        if self.reaped:
+            raise RuntimeError("QEMU child reaped before group retirement")
+        try:
+            if os.getpgid(self.pid) != self.pid:
+                raise RuntimeError("QEMU process group ownership changed")
+            os.killpg(self.pid, signum)
+        except ProcessLookupError:
+            if not allow_absent:
+                raise RuntimeError("QEMU group identity disappeared before signal")
+
+    def terminate(self):
+        import signal
+        try:
+            self._signal_group(signal.SIGTERM)
+        except BaseException as failure:
+            try:
+                self._signal_group(signal.SIGKILL, allow_absent=True)
+            except BaseException as secondary:
+                _record_secondary_error(failure, "group KILL", secondary)
+            raise
+        # Kill the entire group before wait() reaps its leader. A descendant
+        # may ignore TERM even when QEMU itself exits promptly.
+        self._signal_group(signal.SIGKILL, allow_absent=True)
+
+    def kill(self):
+        import signal
+        self._signal_group(signal.SIGKILL, allow_absent=True)
+
+    def wait(self, timeout):
+        result = self.child.wait(timeout=timeout)
+        if type(result) is not int:
+            raise RuntimeError("QEMU wait returned non-integer status")
+        self.returncode = result
+        self.reaped = True
+        return result
+
+    def qemu_evidence(self):
+        """Return immutable command/identity/status evidence after exact reap."""
+        if not self.reaped or type(self.returncode) is not int:
+            raise RuntimeError("QEMU process was not exactly reaped")
+        if self.command is None or any(type(item) is not str for item in self.command):
+            raise RuntimeError("QEMU command unavailable")
+        identity = self.process_identity()
+        return {"argv": list(self.command), **identity, "returncode": self.returncode}
+
+    def communicate(self, timeout):
+        _deadline(timeout)
+        if not self.reaped:
+            raise RuntimeError("QEMU child has not been reaped")
+        # Existing files are the primary evidence.  Read only a bounded prefix;
+        # the caller checks the overflow byte and keeps both original files.
+        def read(path, expected):
+            fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC)
+            with os.fdopen(fd, "rb") as stream:
+                item = os.fstat(stream.fileno())
+                if (not stat.S_ISREG(item.st_mode) or item.st_uid != os.getuid() or
+                        (expected is not None and (item.st_dev, item.st_ino) != expected)):
+                    raise RuntimeError("QEMU evidence file identity changed")
+                return stream.read(4 * 1024 * 1024 + 1)
+        stdout = read(self.stdout_path, self.identities[0] if self.identities else None)
+        stderr = read(self.stderr_path, self.identities[1] if self.identities else None)
+        return stdout, stderr
+
+
+def _private_directory(path):
+    parent = os.stat(path, follow_symlinks=False)
+    if (not stat.S_ISDIR(parent.st_mode) or parent.st_uid != os.getuid() or
+            parent.st_mode & 0o077 or os.path.realpath(path) != path):
+        raise ValueError("private canonical owned attempt cwd required")
+    return parent.st_dev, parent.st_ino
+
+
+def _retire_untransferred(child, failure):
+    """Retire a returned Popen whose ownership never reached the caller.
+
+    WNOWAIT keeps the leader's PID reserved until the whole group is killed.
+    An outstanding lifecycle alarm must not interrupt this recovery, nor may
+    cleanup replace the original exception. Each cleanup action is independent.
+    """
+    def attempt(label, action):
+        try:
+            return action()
+        except BaseException as exc:
+            _record_secondary_error(failure, label, exc)
+
+    outcome = {"reaped": False, "returncode": None}
+    mask = None
+    try:
+        mask = attempt("block alarm", lambda: signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGALRM}))
+        attempt("cancel alarm", lambda: signal.setitimer(signal.ITIMER_REAL, 0))
+        def group(signum):
+            try:
+                pid = child.pid
+                if os.getpgid(pid) != pid:
+                    raise RuntimeError("untransferred child process group ownership changed")
+                os.killpg(pid, signum)
+            except ProcessLookupError:
+                pass
+        attempt("group TERM", lambda: group(signal.SIGTERM))
+        def observe_exit():
+            pid = child.pid
+            end = time.monotonic() + 0.2
+            while time.monotonic() < end:
+                if os.waitid(os.P_PID, pid, os.WEXITED | os.WNOHANG | os.WNOWAIT) is not None:
+                    return
+                time.sleep(0.01)
+        attempt("wait without reaping", observe_exit)
+        attempt("group KILL", lambda: group(signal.SIGKILL))
+        status = attempt("reap", lambda: child.wait(timeout=2))
+        if type(status) is int:
+            outcome["reaped"] = True
+            outcome["returncode"] = status
+    finally:
+        # Consume any alarm that became pending before cancellation. Restoring
+        # the mask must not replace the first failure with a second timeout.
+        attempt("consume alarm", lambda: signal.sigtimedwait({signal.SIGALRM}, 0))
+        if mask is not None:
+            attempt("restore alarm mask", lambda: signal.pthread_sigmask(signal.SIG_SETMASK, mask))
+    return outcome
+
+
+def _acquisition_evidence(command, child, process_identity, outcome, observed=None):
+    """Primitive evidence for a child retired before ownership transfer.
+
+    This deliberately records absence as ``None`` rather than attempting a
+    post-retirement procfs lookup.  The child object is trusted only for the
+    direct PID returned by Popen; every other identity component is present
+    only if it was captured before the acquisition failure.
+    """
+    observed = observed if type(observed) is dict else {}
+    pid = observed.get("pid")
+    if type(pid) is not int or pid <= 0:
+        # The Popen PID is a primitive already returned by acquisition; this
+        # fallback does not inspect the retired process.
+        try:
+            candidate = child.pid
+            if type(candidate) is int and candidate > 0:
+                pid = candidate
+        except BaseException:
+            pid = None
+    pgid = observed.get("pgid")
+    sid = observed.get("sid")
+    starttime_ticks = observed.get("starttime_ticks")
+    if (type(process_identity) is tuple and len(process_identity) == 4 and
+            all(type(item) is int and item > 0 for item in process_identity)):
+        captured_pid, captured_pgid, captured_sid, captured_starttime = process_identity
+        if pid is None:
+            pid = captured_pid
+        elif pid != captured_pid:
+            # The direct PID remains the observed Popen fact; the other
+            # fields are incomplete rather than joined to a conflicting PID.
+            pgid = sid = starttime_ticks = None
+        else:
+            pgid = captured_pgid if pgid is None else pgid
+            sid = captured_sid if sid is None else sid
+            starttime_ticks = captured_starttime if starttime_ticks is None else starttime_ticks
+    return {"argv": list(command), "pid": pid, "pgid": pgid, "sid": sid,
+            "starttime_ticks": starttime_ticks,
+            "identity_complete": pid is not None and pid == pgid == sid and
+            type(starttime_ticks) is int and starttime_ticks > 0,
+            "reaped": outcome["reaped"], "returncode": outcome["returncode"]}
+
+
+def _close_fds(fds, *, failure=None):
+    """Close every retained descriptor, preserving the first observed error."""
+    first = failure
+    for fd, identity in fds:
+        try:
+            entry = os.fstat(fd)
+            if identity is not None and (entry.st_dev, entry.st_ino) != identity:
+                raise RuntimeError("owned descriptor identity changed")
+            os.close(fd)
+        except BaseException as exc:
+            if first is None:
+                first = exc
+            elif exc is not first:
+                _record_secondary_error(first, "descriptor close", exc)
+            # A signal can interrupt before close, or immediately after it.
+            # Retry only if this descriptor still denotes our own file.
+            try:
+                entry = os.fstat(fd)
+                if identity is None or (entry.st_dev, entry.st_ino) == identity:
+                    os.close(fd)
+            except BaseException as retry:
+                if not _has_errno(retry, errno.EBADF):
+                    _record_secondary_error(first, "descriptor close retry", retry)
+    fds.clear()
+    if failure is None and first is not None:
+        raise first
+
+
+def process_factory(argv, cwd, *, popen_factory=subprocess.Popen, long_profile=None):
+    """Return a lifecycle factory for a reviewed direct-QEMU command.
+
+    The caller must supply the already bound build_command argv and attempt
+    directory.  No ambient environment, inherited descriptor, shell, or
+    standard-input stream is passed to the child.
+    """
+    if long_profile is not None:
+        import importlib.util
+        spec = importlib.util.spec_from_file_location('p12_backend_long_transport', Path(__file__).resolve().parent / 'long_transport.py')
+        transport = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(transport)
+        if transport.canonical(long_profile) != transport.canonical(transport.TRANSPORT):
+            raise ValueError("exact explicit long backend profile required")
+        transport.require_fsize(True)
+    if (type(argv) not in (tuple, list) or not argv or
+            any(type(arg) is not str or "\0" in arg for arg in argv) or
+            argv[0] != QEMU):
+        raise ValueError("exact direct-QEMU argv required")
+    cwd = os.fspath(cwd)
+    if not os.path.isabs(cwd):
+        raise ValueError("absolute attempt cwd required")
+    if long_profile is not None:
+        transport.output_attempt(cwd)
+    parent_identity = _private_directory(cwd)
+    command = tuple(argv)
+    qmp_path = os.path.join(cwd, "qmp.sock")
+    if (command.count("-qmp") != 1 or command.index("-qmp") + 1 == len(command) or
+            command[command.index("-qmp") + 1] != "unix:" + qmp_path + ",server=on,wait=off"):
+        raise ValueError("QMP must use the private attempt socket")
+
+    def spawn(*, timeout):
+        if long_profile is not None and not (type(timeout) in (int, float) and math.isfinite(timeout) and 0 < timeout <= transport.TRANSPORT["inner_seconds"]):
+            raise ValueError("bounded long backend remaining deadline required")
+        if long_profile is not None:
+            transport.output_attempt(cwd)
+        deadline = _deadline(timeout)
+        if _private_directory(cwd) != parent_identity:
+            raise ValueError("attempt directory identity changed")
+        if os.path.lexists(qmp_path):
+            raise ValueError("QMP socket path exists before spawn")
+        out_path = Path(cwd) / "qemu.stdout"
+        err_path = Path(cwd) / "qemu.stderr"
+        flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW | os.O_CLOEXEC
+        fds = []
+        child = None
+        process_identity = None
+        observed_identity = {}
+        try:
+            out_fd = os.open(out_path, flags, 0o600)
+            fds.append((out_fd, None))
+            entry = os.fstat(out_fd)
+            fds[-1] = (out_fd, (entry.st_dev, entry.st_ino))
+            err_fd = os.open(err_path, flags, 0o600)
+            fds.append((err_fd, None))
+            entry = os.fstat(err_fd)
+            fds[-1] = (err_fd, (entry.st_dev, entry.st_ino))
+            # Construct all owner metadata before Popen can create a child.
+            owner = ProcessOwner(None, out_path, err_path, tuple(item[1] for item in fds),
+                                 command=command)
+            _remaining(deadline)
+            if _private_directory(cwd) != parent_identity or os.path.lexists(qmp_path):
+                raise ValueError("attempt/QMP identity changed before spawn")
+            child = popen_factory(command, stdin=subprocess.DEVNULL,
+                                  stdout=out_fd, stderr=err_fd,
+                                  shell=False, cwd=cwd, env={"LC_ALL": "C"},
+                                  close_fds=True, pass_fds=(), start_new_session=True)
+            process_identity = _capture_process_identity(child.pid, observed_identity)
+            owner.child = child
+            owner.pid = child.pid
+            owner.identity_pid, owner.pgid, owner.sid, owner.starttime_ticks = process_identity
+            _close_fds(fds)
+            fds.clear()
+            _remaining(deadline)
+            return owner
+        except BaseException as failure:
+            if child is not None:
+                try:
+                    outcome = _retire_untransferred(child, failure)
+                except BaseException as cleanup_failure:
+                    _record_secondary_error(failure, "spawn retirement failed", cleanup_failure)
+                    outcome = {"reaped": False, "returncode": None}
+                evidence = _acquisition_evidence(command, child, process_identity, outcome,
+                                                 observed_identity)
+            _close_fds(fds, failure=failure)
+            if child is not None:
+                raise ProcessAcquisitionFailure(failure, evidence) from failure
+            raise
+
+    return spawn
+
+
+class QmpBackend:
+    """Deadline-bound QMP methods expected by exercise_lifecycle."""
+
+    def __init__(self, path, *, socket_factory=socket.socket, stat_factory=os.lstat,
+                 transcript_limit=8 * 1024 * 1024, transcript_capture_limit=None, transcript_record_limit=None):
+        self.path = os.fspath(path)
+        if not os.path.isabs(self.path):
+            raise ValueError("absolute QMP socket path required")
+        self.socket_factory = socket_factory
+        self.stat_factory = stat_factory
+        self.transcript_limit = transcript_limit
+        self.transcript_capture_limit = transcript_capture_limit
+        self.transcript_record_limit = transcript_record_limit
+        self.session = None
+        self.negotiated = False
+        self.parent_identity = _private_directory(os.path.dirname(self.path))
+
+    def _socket_identity(self):
+        if _private_directory(os.path.dirname(self.path)) != self.parent_identity:
+            raise QmpError("QMP parent identity changed")
+        entry = self.stat_factory(self.path)
+        if not stat.S_ISSOCK(entry.st_mode) or entry.st_uid != os.getuid():
+            raise QmpError("QMP path is not an owned socket")
+        return (entry.st_dev, entry.st_ino)
+
+    def _execute(self, command, deadline):
+        if not self.negotiated or self.session is None:
+            raise QmpError("QMP capabilities not negotiated")
+        self.session.timeout = min(30.0, _remaining(deadline))
+        result = self.session.execute(command)
+        _remaining(deadline)
+        return result
+
+    def negotiate(self, timeout):
+        deadline = _deadline(timeout)
+        if self.session is not None:
+            raise QmpError("QMP session already opened")
+        owned_identity = None
+        while True:
+            _remaining(deadline)
+            try:
+                identity = self._socket_identity()
+            except FileNotFoundError:
+                if owned_identity is not None:
+                    raise QmpError("QMP socket identity disappeared")
+                time.sleep(min(0.05, _remaining(deadline)))
+                continue
+            if owned_identity is None:
+                owned_identity = identity
+            elif owned_identity != identity:
+                raise QmpError("QMP socket identity changed during readiness")
+            connection = self.socket_factory(socket.AF_UNIX, socket.SOCK_STREAM)
+            try:
+                connection.settimeout(min(30.0, _remaining(deadline)))
+                connection.connect(self.path)
+            except BaseException as error:
+                try:
+                    connection.close()
+                except BaseException as secondary:
+                    _record_secondary_error(error, "QMP connection close", secondary)
+                if not _has_errno(error, errno.ECONNREFUSED):
+                    raise
+                if self._socket_identity() != owned_identity:
+                    raise QmpError("QMP socket identity changed during refusal") from error
+                time.sleep(min(0.05, _remaining(deadline)))
+                continue
+            try:
+                _remaining(deadline)
+                if self._socket_identity() != identity:
+                    raise QmpError("QMP socket identity changed during connect")
+                self.session = QmpSession(connection, timeout_seconds=min(30.0, _remaining(deadline)),
+                                          transcript_limit=self.transcript_limit,
+                                          transcript_capture_limit=self.transcript_capture_limit,
+                                          transcript_record_limit=self.transcript_record_limit)
+                greeting = self.session._receive(deadline)
+                if "QMP" not in greeting:
+                    raise QmpError("missing QMP greeting")
+                self.session.timeout = min(30.0, _remaining(deadline))
+                self.session.execute("qmp_capabilities")
+                _remaining(deadline)
+                self.negotiated = True
+                return
+            except BaseException as failure:
+                # Session remains owned for independently reported close. If
+                # identity failed before session assignment, close the socket
+                # while retaining the original failure.
+                if self.session is None:
+                    try:
+                        connection.close()
+                    except BaseException as secondary:
+                        _record_secondary_error(failure, "QMP connection close", secondary)
+                raise
+
+    def resume(self, timeout):
+        return self._execute("cont", _deadline(timeout))
+
+    def wait_shutdown(self, timeout):
+        deadline = _deadline(timeout)
+        while True:
+            state = self._execute("query-status", deadline)
+            if type(state) is not dict or type(state.get("status")) is not str or type(state.get("running")) is not bool:
+                raise QmpError("malformed QMP status")
+            if state["status"] == "shutdown" and state["running"] is False:
+                return {"status": "shutdown"}
+            if state["status"] != "running" or state["running"] is not True:
+                raise QmpError("unexpected QMP status")
+            time.sleep(min(0.05, _remaining(deadline)))
+
+    def terminate(self, timeout):
+        deadline = _deadline(timeout)
+        if self.session is None or not self.negotiated:
+            return None
+        # Terminal control shares the existing bounded recovery reserve. An
+        # exhausted ordinary evidence budget must not itself suppress quit.
+        previous = self.session.recovering
+        self.session.recovering = True
+        try:
+            return self._execute("quit", deadline)
+        finally:
+            self.session.recovering = previous
+
+    def close(self, timeout):
+        deadline = _deadline(timeout)
+        if self.session is None:
+            return None
+        result = self.session.close()
+        _remaining(deadline)
+        return result
+
+
+def qmp_factory(path, *, socket_factory=socket.socket, stat_factory=os.lstat, long_profile=None):
+    """Return a lifecycle factory; opening the socket occurs at negotiate."""
+    budgets = {}
+    if long_profile is not None:
+        import importlib.util
+        spec = importlib.util.spec_from_file_location('p12_qmp_long_transport', Path(__file__).resolve().parent / 'long_transport.py')
+        transport = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(transport)
+        if transport.canonical(long_profile) != transport.canonical(transport.TRANSPORT):
+            raise ValueError("exact explicit long QMP profile required")
+        budgets = dict(transcript_limit=long_profile['qmp_raw_bytes'],
+                       transcript_capture_limit=long_profile['qmp_ordinary_capture_bytes'],
+                       transcript_record_limit=long_profile['qmp_record_limit'])
+    def open_backend(*, timeout):
+        _deadline(timeout)
+        return QmpBackend(path, socket_factory=socket_factory, stat_factory=stat_factory, **budgets)
+    return open_backend

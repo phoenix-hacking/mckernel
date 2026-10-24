@@ -1,0 +1,111 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "COHESIVE_PRIVATE_FOUR_BODY_PRODUCTION_SOURCE_BATCH_NOT_COMPILED_OR_EXECUTABLE_READY",
+  "selected_bodies": [
+    "vm_range_insert_dump_bridge plus dtree/dump_tree computation",
+    "sync_one_page",
+    "process_sync_range_log_bridge",
+    "remap_one_page"
+  ],
+  "canonical_preimages": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "sha256": "08c238a08066a6eda5f346bbd6e6f87333bd505d8d598276dc9c52cd43568a45",
+      "bytes": 162457
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "sha256": "d04b48c887c834edd6380e3ae06fccdef7dfafaf67196fd28af7f9571993bd6d",
+      "bytes": 353812
+    }
+  },
+  "private_postimages": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/batch-source-preparation-1/candidate/kernel/process.c",
+      "sha256": "7ab29dad607ac06e9548065f4395c6e870359558a2777844c1052d67e046ca13",
+      "bytes": 164210
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/batch-source-preparation-1/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "49f61c90967bf2d79324cbec946b3c22931b79d54638abf8fb3c647bf679b9b2",
+      "bytes": 361670
+    }
+  },
+  "patches": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/batch-source-preparation-1/patch/process.c.diff",
+      "sha256": "e5ade5df2f987c6253b55c58255a87501f53eb22a98cb23fced8c66b7b1c7649",
+      "bytes": 3567
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/batch-source-preparation-1/patch/process_helpers.rs.diff",
+      "sha256": "828a91bfa7dc28b8c70926c3cb4b0af6b1163504c2860e9665354a7d84044a14",
+      "bytes": 10153
+    }
+  },
+  "batch_source_identity": "03eb6711deb8314045f69cdf7e5cdc14ebc941425a40443899d7fbc1a0688f41",
+  "identity_qualification": "Two-file source bundle identity only, not a full78 production cohort or linked artifact.",
+  "source_lineage": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/sourcehandoff/SOURCE-CANDIDATE-AND-ABI.json",
+      "sha256": "80ca929836471ee420ea2efd08d6f735d6e6bb644c73cec073ca71f86662fd71",
+      "bytes": 3172
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/sourcehandoff/SOURCE-NEXT-BODY.json",
+      "sha256": "30de340ad7b9be2af0ba46a5828ca058879bea0e53b113d3f13920262ce3e163",
+      "bytes": 5220
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-range-log/sourcehandoff/SOURCE-NEXT-BODY.json",
+      "sha256": "64d7d837a71979dc1a83ee4f26a435df6df13944f4f0a95a183b0a5d1a0af4fa",
+      "bytes": 3722
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-remap-one-page/sourcehandoff/SOURCE-NEXT-BODY.json",
+      "sha256": "71430d0d0811c222cfcac54f85488bd75ca65d4ce5301225633fe8bb17b93361",
+      "bytes": 9519
+    }
+  ],
+  "accepted_dump_production": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-consumer-preparation-1/bounded-observer-correction-1/OBSERVER-RESULT.json",
+    "sha256": "e48c889656069b23094e13c81bec9ec5fd68fe04b6a174c5ee8bfe2f575c2f8d",
+    "bytes": 7975
+  },
+  "only_executable_queue": {
+    "EXECUTABLE-READY.NOT-GRANTED.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/sourcehandoff/EXECUTABLE-READY.NOT-GRANTED.json",
+      "sha256": "9a64c27953f622dac3eac1f1d65c95b80ae8f2d558e83f951016ba1ac8aa43be",
+      "bytes": 3243
+    },
+    "EXACT-FUNCTIONAL-FIXTURE-AND-CONSUMER.NOT-GRANTED.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/sourcehandoff/EXACT-FUNCTIONAL-FIXTURE-AND-CONSUMER.NOT-GRANTED.json",
+      "sha256": "1391be5c805be84a46e570d70c5e680ce26f3173c33504ad948205afffa2475d",
+      "bytes": 98359
+    },
+    "run_owned_first_candidate.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/sourcehandoff/run_owned_first_candidate.py",
+      "sha256": "b619922e059f0a685136235e2f22e4c633b9ec7a313e71fda9f0c1d55cdf4b37",
+      "bytes": 13254
+    }
+  },
+  "frozen_sync_inputs_unmodified": true,
+  "fixture_extension": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/batch-source-preparation-1/sourcehandoff/FIXTURE-EXTENSION-SOURCE-ONLY.json",
+    "sha256": "df0c0ba16d6986e5764a8df638d1043a3cb7772b0b9333465dadc2243b16d3f2",
+    "bytes": 3722
+  },
+  "fallback": "Exact original source bodies preserved byte-for-byte in C fallback, including original dtree/dump_tree; selected C adds only original gate/debug/tracked-free static identity data. No new C helper computation.",
+  "ownership": "Existing actual Rust sync/remap owner helpers, VM PT exclusion and memobj ref/unref order unchanged. Remap still captures atomic old PTE, ignores flush errors, unmaps/frees only last mapping then logs/subtracts RSS, no page access after unmap/free. Range logger remains after owner unlock and sync failure only. No new references/locks/ACKs.",
+  "ABI_and_provider_limits": "Exact original C/Rust full signatures retained; ProcessRemapArgs and Page source layout bound with uncompiled header witness. Public phys_to_page C forwarding provider remains explicit debt (Rust lookup underneath), plus existing backend lock/log/free callbacks; static C identity data retained. Host fixture adapters do not prove native/provider algorithms.",
+  "prior_failure_history": "E0428 2fb3/e9a correctedaccepted7a; original retained-GOT observerc774 plus accepted84ef/e48c; source-extraction prep failure retained under sync. No histories reset or new tests attempted.",
+  "requires": "Root complete queued sync fixture and independently review batch/extension, stage coherent pending provider sources, then bind a fresh full production cohort before any batch compile. Root owns canonical integration and full default/native validation.",
+  "compiler_jobs": 0,
+  "test_jobs": 0,
+  "CPU_reservations": 0,
+  "executable_recipes_created": 0,
+  "drivers_created": 0,
+  "canonical_or_shared_mutations": 0,
+  "source_correctness_claim": false,
+  "fullcrate_default_native_file_credit": false
+}

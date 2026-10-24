@@ -1504,6 +1504,10 @@ static int x86_clear_old_action_bridge(void *args0, unsigned long old,
 }
 #endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+extern int clear_range_l1(void *args0, pte_t *ptep, uint64_t base,
+        uint64_t start, uint64_t end);
+#else
 static int clear_range_l1(void *args0, pte_t *ptep, uint64_t base,
 		uint64_t start, uint64_t end)
 {
@@ -1524,6 +1528,7 @@ static int clear_range_l1(void *args0, pte_t *ptep, uint64_t base,
 			x86_clear_memobj_rss_sub_bridge,
 			x86_clear_effect_log_bridge);
 }
+#endif
 
 static int x86_clear_range_walk_l1_bridge(void *pt, unsigned long base,
 		unsigned long start, unsigned long end, void *args)
@@ -1531,6 +1536,12 @@ static int x86_clear_range_walk_l1_bridge(void *pt, unsigned long base,
 	return walk_pte_l1(pt, base, start, end, &clear_range_l1, args);
 }
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+/* Synchronous existing L1 C walker identity; its lower chain remains C debt. */
+x86_clear_child_walk_fn_t const x86_clear_l2_child_walk = &x86_clear_range_walk_l1_bridge;
+extern int clear_range_l2(void *args0, pte_t *ptep, uint64_t base,
+        uint64_t start, uint64_t end);
+#else
 static int clear_range_l2(void *args0, pte_t *ptep, uint64_t base,
 		uint64_t start, uint64_t end)
 {
@@ -1555,6 +1566,7 @@ static int clear_range_l2(void *args0, pte_t *ptep, uint64_t base,
 			x86_clear_range_log_bridge,
 			x86_clear_effect_log_bridge);
 }
+#endif
 
 static int x86_clear_range_walk_l2_bridge(void *pt, unsigned long base,
 		unsigned long start, unsigned long end, void *args)

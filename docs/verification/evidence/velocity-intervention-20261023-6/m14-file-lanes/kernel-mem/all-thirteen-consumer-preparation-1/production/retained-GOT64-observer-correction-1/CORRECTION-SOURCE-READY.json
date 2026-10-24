@@ -1,0 +1,32 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "RETAINED_ONLY_CORRECTION_SOURCE_READY_NOT_EXECUTED",
+  "original_observer": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/all-thirteen-consumer-preparation-1/production/observe_exact_production.py",
+    "sha256": "771e55e74fc978ea6333d675ec7ae19f883e457d72beca8b46bc5453a3cbc1b1"
+  },
+  "corrected_observer": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/all-thirteen-consumer-preparation-1/production/retained-GOT64-observer-correction-1/observe_exact_production_corrected.py",
+    "sha256": "45be82ded0272cd721a5f6d30ec07f75a3ebf111aaff8b7ef12a906330a5b810"
+  },
+  "original_FAIL": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/all-thirteen-consumer-preparation-1/production/actual-production-capture-1/FAILURE.json",
+    "sha256": "0365f26a27773c3da490c1bd6273c5a99064ce1055942b6da624ecd9bf64849b"
+  },
+  "original_contract_error": "Required type1 direct64 without evidence that accepted large-modelGCC9flags disable compiler defaultPIE/GOT addressing; current accepted flags contain -mcmodel=large and do not contain -fno-pie/-fno-pic. Actual symbol pointer loaded through GOT64, an ELF64 valid64bit GOTentryoffset relocation.",
+  "actual_record_bound": {
+    "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/all-thirteen-consumer-preparation-1/production/actual-production-capture-1/07/stdout",
+    "row": "0000000000004683  000001a70000001b R_X86_64_GOT64         0000000000000000 mem_tlb_atomic_dec_bridge + 0",
+    "allocatedtarget": ".text index1",
+    "relasection": ".rela.text index2 SHT_RELA.sh_info1",
+    "symbol": "423 GLOBAL NOTYPE UND mem_tlb_atomic_dec_bridge",
+    "addend": 0,
+    "partial_symbol": "uniqueT mem_tlb_atomic_dec_bridge size9, noU"
+  },
+  "exact_not_whitelist": "Require exactlyone selected relocation and exact sectionindices/names/allocatedflag/offset18051/type27/bindingGLOBAL/typeNOTYPE/UND/addend0. No fallback type1 and no arbitrarytypes. Preserve all other originalobserverparsing/NM exactsets/Cexclusion/provider/priorT/partialuniqueness.",
+  "local_definition": {
+    "path": "/usr/include/elf.h",
+    "line3375": "#define R_X86_64_GOT64 27 /* 64-bit GOT entry offset */"
+  },
+  "execution": null
+}

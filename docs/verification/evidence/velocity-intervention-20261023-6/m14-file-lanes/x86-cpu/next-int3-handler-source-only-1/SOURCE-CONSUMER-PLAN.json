@@ -1,0 +1,86 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_FRAGMENT_ONLY_NO_SECOND_EXECUTABLE_QUEUE",
+  "actual_live_caller": "interrupt.S::int3_exception pusheserror0/PUSH_ALL_REGS,passes%rsp,callint3_handler247. No assemblychangedornewISA.",
+  "C_selection": "ExistingMCKERNEL_RUST_X86_CPU_HELPERSselectsRustdeclarationonly; fulloriginalCbodypreserved#else. ActualCPU Cneednotimportselectedentry; realcallerassemblymustU/reloc.",
+  "declarative_data_explicit_C_debt": {
+    "symbol": "x86_int3_debug_print_enabled",
+    "kind_expected": "R",
+    "size_expected": 4,
+    "semantics": "Value0 iffDEBUG_PRINT_CPUundefined; value1 wheneverdefined, includingdefined0. ReadonlyscalarwitnessreusesactualCcompilegatewithoutnewRustcfg/compilerprofile/headerorCfunction.",
+    "Rust_expected": "OneUdata,exactactualheaderunsigned32transport; no newCgetter."
+  },
+  "existing_Rust_reused": [
+    "syscall_policy::interrupt_from_user",
+    "debug::kprintf",
+    "x86_cpu_helpers::arch_show_interrupt_context",
+    "realabi::X86UserContext/SigInfo"
+  ],
+  "remaining_C_callbacks": [
+    "kernel/syscall.c::set_cputime",
+    "arch/x86_64/kernel/syscall.c::set_signal",
+    "currentinterrupt_exituntilqueuedRustbodyactuallyaccepted/integrated"
+  ],
+  "exact_effect_order": "classifier\u2192timing\u2192optionalexactlog/context\u2192zeroallrealSigInfobytes\u2192TRAP_BRKPT\u2192set_signal(SIGTRAP,originalregs,liveinfo)\u2192interrupt_exit\u2192reclassify\u2192timing.",
+  "future_fixture_vectors": [
+    "SameactualRustleafobjectboundtoimmutabledebugdata0or1; originalCcompiledwithcorrespondingundefined/defined0/defined1gates.",
+    "ULboundaryfields/RSPbit63classes, ignoredsignedkprintfreturns, postexitRSPmutationprovessecondclassification.",
+    "Exactsizeof128signalbyteszeroexceptactualsi_codeTRAP_BRKPT, pointeronlyduringcallback; callbackmutationdoesnotescapebyborrow.",
+    "RealC/RustSigInfosize/align/si_code/unionoffset andactualframeRSPoffset; actualenumtransport/constants.",
+    "Terminalreturncount/calls/effects, nocachedclassifierorunconditionaldebuglogging."
+  ],
+  "fixture_provider_boundary": "Recordedexistingproviderendpoints; no actualsignal/scheduler/IRQexecution. CmemsetandRustwrite_bytesmaylower tohostedlibcforfixtureonly, notproductionzeroingproviderproof. Ifkernelstring.haliasesmemset to__inline_memset, useexplicitfixtureonlyundef afterheaders forhostedlibc, preserveoriginalbodybytes.",
+  "future_production": "DeriveexactTs/Usfromselectedcurrent78baseline; expectRustTint3, noCdefinition, realassemblyU+reloc, readonlyR4witnessandRustUdata. No fictionalCimportorfullkernelclaim.",
+  "stop_conditions": [
+    "Enumtransport/witnesslayout mismatch:STOP,noheaderrelaxation/newCgetter.",
+    "Unexpectednonimmutableconfigdataorunavailableprovider:STOPfinitefinding.",
+    "KnownNMINULLandkernelstackgapsunchanged; no speculativefix."
+  ],
+  "source_pins": {
+    "/home/holden/mckernel/kernel/rust/abi.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    "/home/holden/mckernel/kernel/rust/syscall_policy.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "3ef8288617db7bcc26c56039491295d3f48c53d4f76d111b68dfcc3186546f7d",
+      "bytes": 713471
+    },
+    "/home/holden/mckernel/kernel/rust/debug.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+      "bytes": 13020
+    },
+    "/home/holden/mckernel/kernel/include/syscall.h": {
+      "path": "/home/holden/mckernel/kernel/include/syscall.h",
+      "sha256": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa",
+      "bytes": 20836
+    },
+    "/home/holden/mckernel/kernel/include/process.h": {
+      "path": "/home/holden/mckernel/kernel/include/process.h",
+      "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649",
+      "bytes": 26602
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/include/signal.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/signal.h",
+      "sha256": "3cea81b9b2f723fbff2cafa634761d50316a397d06df2c12f94fe5f0dae03752",
+      "bytes": 7474
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/context.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/context.h",
+      "sha256": "13a67bcf26c512ac27ece4ab801e5e96976b88ec505d9f549e53755b431171f8",
+      "bytes": 2286
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/interrupt.S": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/interrupt.S",
+      "sha256": "9cffbeb01046a7215cbbca2bb1cf580611269d27d4fa317151cdb19441a15f61",
+      "bytes": 5678
+    }
+  },
+  "sourceonly_fixture_results": null,
+  "compiler_jobs": 0,
+  "test_jobs": 0,
+  "CPU_slots_held": 0,
+  "sole_executable_queue": "Frozen8000/16next-body-batch-source-1, rootexecutorscope; thisfragmentnotqueued."
+}

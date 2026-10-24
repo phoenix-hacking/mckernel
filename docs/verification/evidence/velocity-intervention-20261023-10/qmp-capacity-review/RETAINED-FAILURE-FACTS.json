@@ -1,0 +1,56 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_only": true,
+  "failed_attempt": "/home/holden/mckernel-work/l12s8e1/p/attempt-63bdc7731c34491eb430ddb34b094d5b",
+  "actual_status": "FAIL",
+  "actual_failure": {
+    "error": "QMP ordinary transcript budget exceeded",
+    "phase": "lifecycle",
+    "type": "QmpError"
+  },
+  "capture_errors": [
+    {
+      "error": "QMP transcript capture limit",
+      "phase": "qmp-transcript",
+      "type": "DiagnosticError"
+    }
+  ],
+  "cleanup": {
+    "errors": [
+      {
+        "error": "QMP ordinary transcript budget exceeded",
+        "phase": "qmp-quit",
+        "type": "QmpError"
+      }
+    ],
+    "reaped": true
+  },
+  "QMP_transcript_file_exists": false,
+  "retained_progress": {
+    "records": 364,
+    "last": {
+      "round": 363,
+      "work_ns": 6119950161,
+      "cumulative_work_ns": 2008862221651,
+      "launches": 728
+    },
+    "first_round_start": {
+      "round": 0,
+      "time_ns": 32986675343,
+      "procfs_empty": true
+    },
+    "last_round_start": {
+      "round": 364,
+      "time_ns": 4140492530506,
+      "procfs_empty": true
+    },
+    "last_round_end": {
+      "round": 363,
+      "time_ns": 4140475926999,
+      "procfs_empty": true
+    }
+  },
+  "proof_accounting": "Failure retained only. No partial-time, P12, kernel-PASS, application or retirement credit.",
+  "candidate_source_review": "PENDING_SOLE_AUTHOR_POSTIMAGE",
+  "compiler_tests_root_guest_or_release_calls": 0
+}

@@ -103,6 +103,7 @@ extern "C" {
     fn x86_running_on_kvm_bridge() -> CInt;
     fn x86_cpuid6_bridge(eaxp: *mut CULong, ecxp: *mut CULong);
     fn kprintf(format: *const i8, ...) -> CInt;
+    fn __kprintf(format: *const i8, ...) -> CInt;
     fn arch_delay(us: CInt);
     fn do_arch_prctl(code: CULong, address: CULong) -> CLong;
     fn x86_lapic_write_bridge(reg: CInt, value: CUInt);
@@ -135,7 +136,6 @@ extern "C" {
     fn x86_current_cpu_bridge() -> CInt;
     fn x86_kprintf_lock_bridge() -> CULong;
     fn x86_kprintf_unlock_bridge(flags: CULong);
-    fn x86_context_line_log_bridge(event: CInt, a: CULong, b: CULong, c: CULong, d: CULong);
     fn x86_stack_frame_log_bridge(ip: CULong, sp: CULong, fp: CULong);
     fn x86_print_stack_bridge(rbp: *mut c_void, first: CULong);
     fn x86_cpu_boot_status_slot_bridge() -> *mut CInt;
@@ -3095,6 +3095,51 @@ pub unsafe extern "C" fn x86_cpu_ulong_log_bridge(event: CInt, value: CULong) {
                 b"arch_save_panic_regs: in user-space: %p\n\0".as_ptr().cast(),
                 value as *mut c_void,
             );
+        },
+        _ => {},
+    }
+}
+
+/// Preserve complete context diagnostics using the existing Rust print providers.
+/// The caller owns any outer print lock. Events 1..6 use __kprintf without
+/// acquiring that lock again; 20..22 retain the original kprintf calls. All
+/// arguments are integer values, no context pointer or callback is retained.
+#[no_mangle]
+pub unsafe extern "C" fn x86_context_line_log_bridge(
+    event: CInt, a: CULong, b: CULong, c: CULong, d: CULong,
+) {
+    match event {
+        1 => unsafe {
+            __kprintf(b"CS:RIP = %4lx:%16lx\n\0".as_ptr().cast(), a, b);
+        },
+        2 => unsafe {
+            __kprintf(b"             RAX              RBX              RCX              RDX\n\0".as_ptr().cast());
+            __kprintf(b"%16lx %16lx %16lx %16lx\n\0".as_ptr().cast(), a, b, c, d);
+        },
+        3 => unsafe {
+            __kprintf(b"             RSI              RDI              RSP              RBP\n\0".as_ptr().cast());
+            __kprintf(b"%16lx %16lx %16lx %16lx\n\0".as_ptr().cast(), a, b, c, d);
+        },
+        4 => unsafe {
+            __kprintf(b"              R8               R9              R10              R11\n\0".as_ptr().cast());
+            __kprintf(b"%16lx %16lx %16lx %16lx\n\0".as_ptr().cast(), a, b, c, d);
+        },
+        5 => unsafe {
+            __kprintf(b"             R12              R13              R14              R15\n\0".as_ptr().cast());
+            __kprintf(b"%16lx %16lx %16lx %16lx\n\0".as_ptr().cast(), a, b, c, d);
+        },
+        6 => unsafe {
+            __kprintf(b"              CS               SS           RFLAGS            ERROR\n\0".as_ptr().cast());
+            __kprintf(b"%16lx %16lx %16lx %16lx\n\0".as_ptr().cast(), a, b, c, d);
+        },
+        20 => unsafe {
+            kprintf(b"CS:RIP = %04lx:%16lx\n\0".as_ptr().cast(), a, b);
+        },
+        21 => unsafe {
+            kprintf(b"%16lx %16lx %16lx %16lx\n\0".as_ptr().cast(), a, b, c, d);
+        },
+        22 => unsafe {
+            kprintf(b"%16lx %16lx %16lx\n\0".as_ptr().cast(), a, b, c);
         },
         _ => {},
     }

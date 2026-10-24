@@ -1,0 +1,21 @@
+--- a/kernel/rust/x86_memory_helpers.rs
++++ b/kernel/rust/x86_memory_helpers.rs
+@@ -205,7 +205,6 @@
+     fn x86_user_copy_log_bridge(event: CInt, vm: *mut c_void, a: CULong, b: CULong, error: CInt);
+     fn x86_user_map_kernel_start_bridge() -> CULong;
+     fn x86_pt_virt_to_phys_bridge(addr: *mut c_void) -> CULong;
+-    fn x86_pt_phys_to_virt_bridge(phys: CULong) -> *mut c_void;
+     fn x86_pt_print_log_bridge(event: CInt, level: CInt, value: CULong, index: CInt);
+     fn x86_arch_mem_virt_to_phys_bridge(addr: *mut c_void) -> CULong;
+     fn x86_arch_mem_phys_to_virt_bridge(phys: CULong) -> *mut c_void;
+@@ -7488,3 +7487,10 @@
+         Some(x86_user_copy_log_bridge),
+     )
+ }
++
++// The existing translator samples init_pt_loaded and performs the established
++// wrapping direct-map calculation. This provider takes no page ownership.
++#[no_mangle]
++pub unsafe extern "C" fn x86_pt_phys_to_virt_bridge(phys: CULong) -> *mut c_void {
++    unsafe { phys_to_virt(phys) }
++}

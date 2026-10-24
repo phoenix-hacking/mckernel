@@ -1,0 +1,7 @@
+test_memory_os_equivalence.c: In function ‘main’:
+test_memory_os_equivalence.c:70:3: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+   70 |   if(fail==1)s.access_fail=1;if(fail==2)s.access_fail=2;if(fail==3)s.open_fail=1;if(fail>=4&&fail<=7)s.alloc_fail=fail-3;if(fail>=8)s.io_fail=fail-7;
+      |   ^~
+test_memory_os_equivalence.c:70:30: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   70 |   if(fail==1)s.access_fail=1;if(fail==2)s.access_fail=2;if(fail==3)s.open_fail=1;if(fail>=4&&fail<=7)s.alloc_fail=fail-3;if(fail>=8)s.io_fail=fail-7;
+      |                              ^~

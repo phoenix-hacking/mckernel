@@ -4310,70 +4310,122 @@ const int mem_remote_tlb_geometry[3] = {
 #define MEM_TLB_PUBLIC_BRIDGE static
 #endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern unsigned long mem_tlb_rdtsc_bridge(void);
+#else
 MEM_TLB_PUBLIC_BRIDGE unsigned long mem_tlb_rdtsc_bridge(void)
 {
 	return rdtsc();
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern int mem_tlb_current_cpu_bridge(void);
+#else
 MEM_TLB_PUBLIC_BRIDGE int mem_tlb_current_cpu_bridge(void)
 {
 	return ihk_mc_get_processor_id();
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern void mem_tlb_noirq_lock_bridge(unsigned long lock_addr);
+#else
 MEM_TLB_PUBLIC_BRIDGE void mem_tlb_noirq_lock_bridge(unsigned long lock_addr)
 {
 	ihk_mc_spinlock_lock_noirq((ihk_spinlock_t *)lock_addr);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern void mem_tlb_noirq_unlock_bridge(unsigned long lock_addr);
+#else
 MEM_TLB_PUBLIC_BRIDGE void mem_tlb_noirq_unlock_bridge(unsigned long lock_addr)
 {
 	ihk_mc_spinlock_unlock_noirq((ihk_spinlock_t *)lock_addr);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern void mem_tlb_atomic_set_bridge(unsigned long atomic_addr, int value);
+#else
 MEM_TLB_PUBLIC_BRIDGE void mem_tlb_atomic_set_bridge(unsigned long atomic_addr, int value)
 {
 	ihk_atomic_set((ihk_atomic_t *)atomic_addr, value);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern void mem_tlb_atomic_inc_bridge(unsigned long atomic_addr);
+#else
 MEM_TLB_PUBLIC_BRIDGE void mem_tlb_atomic_inc_bridge(unsigned long atomic_addr)
 {
 	ihk_atomic_inc((ihk_atomic_t *)atomic_addr);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern void mem_tlb_atomic_dec_bridge(unsigned long atomic_addr);
+#else
 static void mem_tlb_atomic_dec_bridge(unsigned long atomic_addr)
 {
 	ihk_atomic_dec((ihk_atomic_t *)atomic_addr);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern int mem_tlb_atomic_read_bridge(unsigned long atomic_addr);
+#else
 MEM_TLB_PUBLIC_BRIDGE int mem_tlb_atomic_read_bridge(unsigned long atomic_addr)
 {
 	return ihk_atomic_read((ihk_atomic_t *)atomic_addr);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern int mem_tlb_get_vector_bridge(int type);
+#else
 MEM_TLB_PUBLIC_BRIDGE int mem_tlb_get_vector_bridge(int type)
 {
 	return ihk_mc_get_vector(type);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern void mem_tlb_interrupt_cpu_bridge(int cpu, int vector);
+#else
 MEM_TLB_PUBLIC_BRIDGE void mem_tlb_interrupt_cpu_bridge(int cpu, int vector)
 {
 	ihk_mc_interrupt_cpu(cpu, vector);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern void mem_tlb_flush_single_bridge(unsigned long addr);
+#else
 MEM_TLB_PUBLIC_BRIDGE void mem_tlb_flush_single_bridge(unsigned long addr)
 {
 	flush_tlb_single(addr);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern void mem_tlb_flush_all_bridge(void);
+#else
 MEM_TLB_PUBLIC_BRIDGE void mem_tlb_flush_all_bridge(void)
 {
 	flush_tlb();
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern void mem_tlb_pause_bridge(void);
+#else
 MEM_TLB_PUBLIC_BRIDGE void mem_tlb_pause_bridge(void)
 {
 	cpu_pause();
 }
+#endif
 
 #undef MEM_TLB_PUBLIC_BRIDGE
 

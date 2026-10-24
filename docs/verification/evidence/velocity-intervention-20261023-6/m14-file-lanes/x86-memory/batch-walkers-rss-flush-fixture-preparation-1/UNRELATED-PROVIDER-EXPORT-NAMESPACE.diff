@@ -1,0 +1,20 @@
+--- actual_mem_helpers.rs
++++ fixture_mem_helpers.rs
+@@ -4120,7 +4120,7 @@
+     mem_pa_free_pages_result(MEM_PA_OPS, ptr, npages, is_user);
+ }
+ 
+-#[no_mangle]
++#[export_name = "fixture_unexecuted_actual__ihk_mc_free_pages"]
+ pub unsafe extern "C" fn _ihk_mc_free_pages(
+     ptr: *mut c_void,
+     npages: CInt,
+@@ -5536,7 +5536,7 @@
+ /// Existing callbacks preserve current-CPU, vector, IRQ and lock semantics. C
+ /// owns the shared vector and immutable geometry; no pointer is retained by this
+ /// entry beyond the original body, and its integer return remains ignored.
+-#[no_mangle]
++#[export_name = "fixture_unexecuted_actual_remote_flush_tlb_array_cpumask"]
+ pub unsafe extern "C" fn remote_flush_tlb_array_cpumask(
+     vm: *mut ProcessVm, addr: *mut CULong, nr_addr: CInt, cpu_id: CInt,
+ ) {

@@ -1,0 +1,125 @@
+{
+  "CPU_reserved": false,
+  "actual_delta": "Current arch C equals previously accepted private F06overlay912fb. Current policy3ef equals that overlay plus accepted F03signalfd-create implementation/declaration retirement only. Both current accepted entry selections leave all prepared VDSO/ptrace_signal bodies byte-identical.",
+  "actual_test": null,
+  "algorithm_changes": false,
+  "compiler_grant": null,
+  "current_canonical": [
+    {
+      "bytes": 113504,
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "sha256": "912fb97a58cc797407979ce835c422578949ff876ac519193d2ebc4855cce791"
+    },
+    {
+      "bytes": 713471,
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "3ef8288617db7bcc26c56039491295d3f48c53d4f76d111b68dfcc3186546f7d"
+    }
+  ],
+  "delta": {
+    "bytes": 1370,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-batch-actual-consumer-preparation-1/current-entry-qualification-1/CURRENT-ACCEPTED-ENTRY-ONLY-DELTA.diff",
+    "sha256": "39ccd3a34634c83558d217a4414da31fc4c28ed9962733fbe24fda2706ba7e8e"
+  },
+  "frozen_tested_body_checks": [
+    {
+      "current_body_sha256": "614ff5fa57c969126b3839dfe37440046ef1c9365266aba9727717032c2fe87c",
+      "equal": true,
+      "frozen": {
+        "bytes": 1381,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-batch-actual-consumer-preparation-1/vdso/actual_original_vdso_map_global_pages.inc",
+        "sha256": "7407b1ce943d03825ce5c4ddc3d3afef134173728ddf6ee40be17e5f5bec6a7d"
+      },
+      "name": "C-vdso-original"
+    },
+    {
+      "current_body_sha256": "5cef85adb47726b7ce17ab6a06caa9d0cdf23252ec48605d5a804450555d7791",
+      "equal": true,
+      "frozen": {
+        "bytes": 3209,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-batch-actual-consumer-preparation-1/ptrace-signal/original-entry.ACTUAL.inc",
+        "sha256": "491d0e4dcf0f22c4e104ce2716c84c2ffddc3c7ad5c3c7cd1d2b81bbb21e20f6"
+      },
+      "name": "C-ptrace-signal-original"
+    },
+    {
+      "current_body_sha256": "4647011c23482dfefc730650ee709c1370214f115022b2989437eb7138d1c1b7",
+      "equal": true,
+      "frozen": {
+        "bytes": 5578,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-batch-actual-consumer-preparation-1/ptrace-signal/existing-body.ACTUAL.inc",
+        "sha256": "d414621cacc8ebab48c3b468496a2103991b86fdfc869ab59feb54bea7a8710a"
+      },
+      "name": "Rust-ptrace-signal-existing-body"
+    },
+    {
+      "current_body_sha256": "8baccd2f221fd9ecf03e1958f832720e695cf1186d2a629cb10f7d49fb40d1d4",
+      "equal": true,
+      "frozen": {
+        "bytes": 13151,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-batch-actual-consumer-preparation-1/vdso/selected_Rust_unit.rs",
+        "sha256": "88416c7e9d07b4a077dce277a42aa63c25078297457422a2770a914b76acf9ca"
+      },
+      "name": "Rust-ArchVdso"
+    },
+    {
+      "current_body_sha256": "bb82a9d0c53667733915a69b2bb2bbabd32d7c677d0b2608bd041bb0211170cb",
+      "equal": true,
+      "frozen": {
+        "bytes": 13151,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-batch-actual-consumer-preparation-1/vdso/selected_Rust_unit.rs",
+        "sha256": "88416c7e9d07b4a077dce277a42aa63c25078297457422a2770a914b76acf9ca"
+      },
+      "name": "Rust-vdso-state"
+    },
+    {
+      "current_body_sha256": "5b1707c89f83cdf07a6fd25234c7ee2a82ba8d367c637e718f6986cbb1c4cb5f",
+      "equal": true,
+      "frozen": {
+        "bytes": 13151,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-batch-actual-consumer-preparation-1/vdso/selected_Rust_unit.rs",
+        "sha256": "88416c7e9d07b4a077dce277a42aa63c25078297457422a2770a914b76acf9ca"
+      },
+      "name": "Rust-pvclock-setup"
+    },
+    {
+      "current_body_sha256": "05f1fea6285f1a659ccff3b905b99c3042e4ce3c390944ddebbd9b7db75d0b47",
+      "equal": true,
+      "frozen": {
+        "bytes": 13151,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-batch-actual-consumer-preparation-1/vdso/selected_Rust_unit.rs",
+        "sha256": "88416c7e9d07b4a077dce277a42aa63c25078297457422a2770a914b76acf9ca"
+      },
+      "name": "Rust-virt-physical"
+    },
+    {
+      "current_body_sha256": "389666824e2e338f36f20bc6b4c74cbbcd7a8d185580d64760e28d026c429ac7",
+      "equal": true,
+      "frozen": {
+        "bytes": 13151,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-batch-actual-consumer-preparation-1/vdso/selected_Rust_unit.rs",
+        "sha256": "88416c7e9d07b4a077dce277a42aa63c25078297457422a2770a914b76acf9ca"
+      },
+      "name": "Rust-page-map-wrapper"
+    },
+    {
+      "current": {
+        "bytes": 76151,
+        "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+        "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+      },
+      "equal": true,
+      "frozen": {
+        "bytes": 76151,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-batch-actual-consumer-preparation-1/ptrace-signal/abi.ACTUAL-FULL.rs",
+        "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+      },
+      "name": "whole-real-ABI"
+    }
+  ],
+  "original_queue_direct_mutable_canonical_pins": false,
+  "original_queue_has_old57fb_f1f_precheck": false,
+  "original_queue_unmodified": true,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_CURRENT_ENTRY_DELTA_QUALIFIED_NO_TEST_RUN"
+}

@@ -1,0 +1,136 @@
+static void
+arch_process_vm_rw_read_lock_bridge(void *vm)
+{
+	ihk_rwspinlock_read_lock_noirq(
+			&((struct process_vm *)vm)->memory_range_lock);
+}
+
+static void
+arch_process_vm_rw_read_unlock_bridge(void *vm)
+{
+	ihk_rwspinlock_read_unlock_noirq(
+			&((struct process_vm *)vm)->memory_range_lock);
+}
+
+static struct vm_range *
+arch_process_vm_rw_lookup_range_bridge(void *vm, unsigned long start,
+		unsigned long end)
+{
+	return lookup_process_memory_range((struct process_vm *)vm, start, end);
+}
+
+static struct process *
+arch_process_vm_rw_find_process_bridge(int pid, void *lock_node)
+{
+	return find_process(pid, (struct mcs_rwlock_node_irqsave *)lock_node);
+}
+
+static void
+arch_process_vm_rw_process_unlock_bridge(void *proc, void *lock_node)
+{
+	process_unlock((struct process *)proc,
+			(struct mcs_rwlock_node_irqsave *)lock_node);
+}
+
+static void
+arch_process_vm_rw_update_lock_bridge(void *proc, void *lock_node)
+{
+	mcs_rwlock_reader_lock_noirq(&((struct process *)proc)->update_lock,
+			(struct mcs_rwlock_node *)lock_node);
+}
+
+static void
+arch_process_vm_rw_update_unlock_bridge(void *proc, void *lock_node)
+{
+	mcs_rwlock_reader_unlock_noirq(&((struct process *)proc)->update_lock,
+			(struct mcs_rwlock_node *)lock_node);
+}
+
+static void
+arch_process_vm_rw_hold_vm_bridge(void *vm)
+{
+	hold_process_vm((struct process_vm *)vm);
+}
+
+static void
+arch_process_vm_rw_release_vm_bridge(void *vm)
+{
+	release_process_vm((struct process_vm *)vm);
+}
+
+static int
+arch_process_vm_rw_vtop_bridge(void *page_table, unsigned long virt,
+		unsigned long *phys, unsigned long *psize)
+{
+	return ihk_mc_pt_virt_to_phys_size((struct page_table *)page_table,
+			(const void *)virt, phys, psize);
+}
+
+static int
+arch_process_vm_rw_page_fault_bridge(void *vm, unsigned long addr,
+		unsigned long reason)
+{
+	return page_fault_process_vm((struct process_vm *)vm, (void *)addr,
+			reason);
+}
+
+static void *
+arch_process_vm_rw_phys_to_virt_bridge(unsigned long phys)
+{
+	return phys_to_virt(phys);
+}
+
+static void
+arch_process_vm_rw_memcpy_bridge(void *dst, const void *src, size_t bytes)
+{
+	fast_memcpy(dst, src, bytes);
+}
+
+static void
+arch_process_vm_rw_log_bridge(const struct arch_process_vm_rw_log_record *record)
+{
+	switch (record->event) {
+	case 1:
+		dkprintf("local_iov[%d].iov_base: 0x%lx, len: %lu\n",
+				record->x, record->a, record->b);
+		break;
+	case 2:
+		dkprintf("remote_iov[%d].iov_base: 0x%lx, len: %lu\n",
+				record->x, record->a, record->b);
+		break;
+	case 3:
+		dkprintf("pid %d found, doing %s: liovcnt: %d, riovcnt: %d \n",
+				record->x, (record->y == PROCESS_VM_READ) ?
+				"PROCESS_VM_READ" : "PROCESS_VM_WRITE",
+				(int)record->a, (int)record->b);
+		break;
+	case 4:
+		dkprintf("local_iov[%d]: 0x%lx %s remote_iov[%d]: 0x%lx, %lu copied, psize: %lu, rpage_left: %lu\n",
+				record->x, record->a,
+				(record->z == PROCESS_VM_READ) ? "<-" : "->",
+				record->y, record->b, record->c, record->d,
+				record->e);
+		break;
+	default:
+		break;
+	}
+}
+
+static const struct arch_process_vm_rw_offsets arch_process_vm_rw_kernel_offsets = {
+	.thread_proc_offset = __builtin_offsetof(struct thread, proc),
+	.thread_vm_offset = __builtin_offsetof(struct thread, vm),
+	.proc_vm_offset = __builtin_offsetof(struct process, vm),
+	.proc_status_offset = __builtin_offsetof(struct process, status),
+	.proc_ruid_offset = __builtin_offsetof(struct process, ruid),
+	.proc_euid_offset = __builtin_offsetof(struct process, euid),
+	.proc_suid_offset = __builtin_offsetof(struct process, suid),
+	.proc_rgid_offset = __builtin_offsetof(struct process, rgid),
+	.proc_egid_offset = __builtin_offsetof(struct process, egid),
+	.proc_sgid_offset = __builtin_offsetof(struct process, sgid),
+	.process_vm_address_space_offset =
+		__builtin_offsetof(struct process_vm, address_space),
+	.address_space_page_table_offset =
+		__builtin_offsetof(struct address_space, page_table),
+	.vm_range_flag_offset = __builtin_offsetof(struct vm_range, flag),
+};
+

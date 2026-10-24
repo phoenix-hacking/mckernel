@@ -1,0 +1,15 @@
+--- a/arch/x86_64/kernel/memory.c
++++ b/arch/x86_64/kernel/memory.c
+@@ -797,10 +797,12 @@
+ }
+ #endif
+ 
++#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+ X86_MEMORY_PUBLIC_BRIDGE void *x86_pt_phys_to_virt_bridge(unsigned long phys)
+ {
+ 	return phys_to_virt(phys);
+ }
++#endif
+ 
+ X86_MEMORY_PUBLIC_BRIDGE void x86_pt_free_pages_bridge(void *pt, int nr_pages)
+ {

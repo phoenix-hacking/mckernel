@@ -1,0 +1,105 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXACT_CURRENT_ACCEPTED_CANONICAL_DUMP_TO_CORRECTED_SYNC_RELATION",
+  "authority": "Root reports independently reviewed11-file canonical union integrated; process1ecbc287/process_helpers70015d71 are accepted dump-only canonical. Older08c/d04 references remain historical preimages, not current assertions.",
+  "current_canonical_preimages": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "sha256": "1ecbc287f2e704e738cc4e9fbe18289226b5aadadc9da88d226dc0ad0bb57234",
+      "bytes": 162758
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "sha256": "70015d712c29e416881e2fbaccd67026ee15ac7eb915cb80e828485d6f34d71f",
+      "bytes": 355120
+    }
+  },
+  "corrected_postimages": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/bounded-source-correction-1/candidate/kernel/process.c",
+      "sha256": "c5d0e24c22c6e66660221c6bc303237f02957b45ed74f196bcaf398a20d9cef2",
+      "bytes": 163277
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/bounded-source-correction-1/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "9e13b0b718e4ba812e32ee4ddf779a5fc3eb92ce59adcf32870e1f87aae7de09",
+      "bytes": 357363
+    }
+  },
+  "original_failed_candidate": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/candidate/kernel/rust/process_helpers.rs",
+    "sha256": "268fe3e0120a587203aba50f55158646d8ca06282cf03d779d6b4eb437de10ad",
+    "bytes": 357365
+  },
+  "source_delta": [
+    {
+      "relative": "candidate/kernel/rust/process_helpers.rs",
+      "before": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/candidate/kernel/rust/process_helpers.rs",
+        "sha256": "268fe3e0120a587203aba50f55158646d8ca06282cf03d779d6b4eb437de10ad",
+        "bytes": 357365
+      },
+      "after": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/bounded-source-correction-1/candidate/kernel/rust/process_helpers.rs",
+        "sha256": "9e13b0b718e4ba812e32ee4ddf779a5fc3eb92ce59adcf32870e1f87aae7de09",
+        "bytes": 357363
+      },
+      "removed_bytes": 2,
+      "only_two_commas": true
+    },
+    {
+      "relative": "fixture/sync.ACTUAL-RUST-BODY.inc",
+      "before": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/fixture/sync.ACTUAL-RUST-BODY.inc",
+        "sha256": "31e2b3b0d2e48d1feb2777649b22522d7ab1b9536f91fbe879a0ba9fdd78e1ac",
+        "bytes": 2277
+      },
+      "after": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/bounded-source-correction-1/fixture/sync.ACTUAL-RUST-BODY.inc",
+        "sha256": "ff3f3f0c073f3a1233a269621bc10fbc4d2bb41183a8bfa1ff7688c640991700",
+        "bytes": 2275
+      },
+      "removed_bytes": 2,
+      "only_two_commas": true
+    },
+    {
+      "relative": "fixture/actual_provider.rs",
+      "before": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/fixture/actual_provider.rs",
+        "sha256": "b2d84389c90e029cb6878a2b0c10937229153da1c8cdd458181c29736ae645ef",
+        "bytes": 3871
+      },
+      "after": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/bounded-source-correction-1/fixture/actual_provider.rs",
+        "sha256": "49be8c6ef89715fffd9633cafcdf2fbf5e02feb3b1e620e3f4945effb6ebc3c9",
+        "bytes": 3869
+      },
+      "removed_bytes": 2,
+      "only_two_commas": true
+    },
+    {
+      "relative": "fixture/hosted_production_leaf_provider.rs",
+      "before": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/fixture/hosted_production_leaf_provider.rs",
+        "sha256": "feaebd35a237db53e9f2beccf95a32d8cc65f6538e29bbaf74f430cf13822b0d",
+        "bytes": 3333
+      },
+      "after": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/bounded-source-correction-1/fixture/hosted_production_leaf_provider.rs",
+        "sha256": "11d8828131d8d30c92eee76840401a43817821e6890726b6beaa17ea416eda0c",
+        "bytes": 3331
+      },
+      "removed_bytes": 2,
+      "only_two_commas": true
+    }
+  ],
+  "corrected_generator_template": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/bounded-source-correction-1/sourcehandoff/prepare_sync_source.CORRECTED-TEMPLATE-NOT-EXECUTED.py",
+    "sha256": "cb911cd8de11f4a358abc65d268151946759898a554c562f7f4f3fa3f8467cff",
+    "bytes": 8718
+  },
+  "C_algorithm_and_fallback_unchanged": true,
+  "Rust_algorithm_signature_oracles_unchanged": true,
+  "original795_comparisons_still_planned": true,
+  "source_correctness_claim": false
+}

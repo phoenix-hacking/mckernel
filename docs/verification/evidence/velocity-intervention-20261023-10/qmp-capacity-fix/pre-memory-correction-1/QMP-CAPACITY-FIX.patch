@@ -1,0 +1,437 @@
+--- a/scripts/application-tests/qmp_capture.py
++++ b/scripts/application-tests/qmp_capture.py
+@@ -8,6 +8,11 @@
+ import math
+ import socket
+ import time
++
++
++RECOVERY_BYTES = 2 * 1024 * 1024
++RECOVERY_CAPTURE_BYTES = 8 * 1024 * 1024
++RECOVERY_RECORDS = 4096
+ 
+ 
+ class QmpError(RuntimeError):
+@@ -43,12 +48,23 @@
+ 
+ class QmpSession:
+     def __init__(self, connection, timeout_seconds=5.0, frame_limit=1024 * 1024,
+-                 transcript_limit=8 * 1024 * 1024):
++                 transcript_limit=8 * 1024 * 1024, transcript_capture_limit=None,
++                 transcript_record_limit=None):
+         if (type(timeout_seconds) not in (int, float) or not 0 < timeout_seconds <= 30
+                 or type(frame_limit) is not int or not 256 <= frame_limit <= 1024 * 1024):
+             raise ValueError("invalid QMP limits")
+-        if type(transcript_limit) is not int or not frame_limit <= transcript_limit <= 16 * 1024 * 1024:
++        if type(transcript_limit) is not int or not frame_limit <= transcript_limit <= 32 * 1024 * 1024:
+             raise ValueError("invalid transcript limit")
++        if (transcript_capture_limit is not None and
++                (type(transcript_capture_limit) is not int or
++                 not 2 * transcript_limit <= transcript_capture_limit <= 128 * 1024 * 1024)):
++            raise ValueError("invalid encoded transcript limit")
++        if (transcript_record_limit is not None and
++                (type(transcript_record_limit) is not int or not 1 <= transcript_record_limit <= 1048576)):
++            raise ValueError("invalid transcript record limit")
++        self.transcript_record_limit = transcript_record_limit
++        self.transcript_capture_limit = transcript_capture_limit
++        self.transcript_serialized_bytes = 2  # Exact json.dumps list brackets.
+         self.connection = connection
+         self.timeout = float(timeout_seconds)
+         self.frame_limit = frame_limit
+@@ -87,12 +103,28 @@
+         # Reserve bounded recording space for cont/query-status even when the
+         # ordinary capture reaches its transcript cap. Retain the offending
+         # read before failing, rather than losing the last received bytes.
+-        if self.transcript_bytes > self.transcript_limit + 2 * 1024 * 1024:
++        if self.transcript_bytes > self.transcript_limit + RECOVERY_BYTES:
+             raise QmpError("QMP transcript limit exceeded")
+-        self.transcript.append({"direction": direction, "monotonic": time.monotonic(),
+-                                "raw_hex": raw.hex()})
++        if (self.transcript_record_limit is not None and
++                len(self.transcript) >= self.transcript_record_limit + RECOVERY_RECORDS):
++            raise QmpError("QMP transcript recovery record limit exceeded")
++        row = {"direction": direction, "monotonic": time.monotonic(), "raw_hex": raw.hex()}
++        encoded = 0
++        if self.transcript_capture_limit is not None:
++            encoded = len(json.dumps(row, sort_keys=True, allow_nan=False).encode("utf-8"))
++            encoded += 2 if self.transcript else 0  # json.dumps default list separator.
++            if self.transcript_serialized_bytes + encoded > self.transcript_capture_limit + RECOVERY_CAPTURE_BYTES:
++                raise QmpError("QMP encoded transcript recovery limit exceeded")
++        self.transcript.append(row)
++        self.transcript_serialized_bytes += encoded
++        if (not self.recovering and self.transcript_record_limit is not None and
++                len(self.transcript) > self.transcript_record_limit):
++            raise QmpError("QMP ordinary transcript record budget exceeded")
+         if not self.recovering and self.transcript_bytes > self.transcript_limit:
+             raise QmpError("QMP ordinary transcript budget exceeded")
++        if (not self.recovering and self.transcript_capture_limit is not None and
++                self.transcript_serialized_bytes > self.transcript_capture_limit):
++            raise QmpError("QMP ordinary encoded transcript budget exceeded")
+ 
+     def _remaining(self, deadline):
+         remaining = deadline - time.monotonic()
+--- a/scripts/application-tests/native_diagnostic_backend.py
++++ b/scripts/application-tests/native_diagnostic_backend.py
+@@ -474,12 +474,16 @@
+ class QmpBackend:
+     """Deadline-bound QMP methods expected by exercise_lifecycle."""
+ 
+-    def __init__(self, path, *, socket_factory=socket.socket, stat_factory=os.lstat):
++    def __init__(self, path, *, socket_factory=socket.socket, stat_factory=os.lstat,
++                 transcript_limit=8 * 1024 * 1024, transcript_capture_limit=None, transcript_record_limit=None):
+         self.path = os.fspath(path)
+         if not os.path.isabs(self.path):
+             raise ValueError("absolute QMP socket path required")
+         self.socket_factory = socket_factory
+         self.stat_factory = stat_factory
++        self.transcript_limit = transcript_limit
++        self.transcript_capture_limit = transcript_capture_limit
++        self.transcript_record_limit = transcript_record_limit
+         self.session = None
+         self.negotiated = False
+         self.parent_identity = _private_directory(os.path.dirname(self.path))
+@@ -537,7 +541,10 @@
+                 _remaining(deadline)
+                 if self._socket_identity() != identity:
+                     raise QmpError("QMP socket identity changed during connect")
+-                self.session = QmpSession(connection, timeout_seconds=min(30.0, _remaining(deadline)))
++                self.session = QmpSession(connection, timeout_seconds=min(30.0, _remaining(deadline)),
++                                          transcript_limit=self.transcript_limit,
++                                          transcript_capture_limit=self.transcript_capture_limit,
++                                          transcript_record_limit=self.transcript_record_limit)
+                 greeting = self.session._receive(deadline)
+                 if "QMP" not in greeting:
+                     raise QmpError("missing QMP greeting")
+@@ -576,7 +583,14 @@
+         deadline = _deadline(timeout)
+         if self.session is None or not self.negotiated:
+             return None
+-        return self._execute("quit", deadline)
++        # Terminal control shares the existing bounded recovery reserve. An
++        # exhausted ordinary evidence budget must not itself suppress quit.
++        previous = self.session.recovering
++        self.session.recovering = True
++        try:
++            return self._execute("quit", deadline)
++        finally:
++            self.session.recovering = previous
+ 
+     def close(self, timeout):
+         deadline = _deadline(timeout)
+@@ -587,9 +601,20 @@
+         return result
+ 
+ 
+-def qmp_factory(path, *, socket_factory=socket.socket, stat_factory=os.lstat):
++def qmp_factory(path, *, socket_factory=socket.socket, stat_factory=os.lstat, long_profile=None):
+     """Return a lifecycle factory; opening the socket occurs at negotiate."""
++    budgets = {}
++    if long_profile is not None:
++        import importlib.util
++        spec = importlib.util.spec_from_file_location('p12_qmp_long_transport', Path(__file__).resolve().parent / 'long_transport.py')
++        transport = importlib.util.module_from_spec(spec)
++        spec.loader.exec_module(transport)
++        if transport.canonical(long_profile) != transport.canonical(transport.TRANSPORT):
++            raise ValueError("exact explicit long QMP profile required")
++        budgets = dict(transcript_limit=long_profile['qmp_raw_bytes'],
++                       transcript_capture_limit=long_profile['qmp_ordinary_capture_bytes'],
++                       transcript_record_limit=long_profile['qmp_record_limit'])
+     def open_backend(*, timeout):
+         _deadline(timeout)
+-        return QmpBackend(path, socket_factory=socket_factory, stat_factory=stat_factory)
++        return QmpBackend(path, socket_factory=socket_factory, stat_factory=stat_factory, **budgets)
+     return open_backend
+--- a/scripts/application-tests/native_diagnostic_runner.py
++++ b/scripts/application-tests/native_diagnostic_runner.py
+@@ -141,7 +141,8 @@
+         plan = diagnostic.build_command(manifest, attempt)
+         process = (backend.process_factory(plan["argv"], str(attempt), long_profile=_long_transport().TRANSPORT)
+                    if requested_long else backend.process_factory(plan["argv"], str(attempt)))
+-        qmp = backend.qmp_factory(plan["qmp_socket"])
++        qmp = (backend.qmp_factory(plan["qmp_socket"], long_profile=_long_transport().TRANSPORT)
++               if requested_long else backend.qmp_factory(plan["qmp_socket"]))
+     except BaseException as exc:
+         _record_setup_failure(diagnostic, attempt, exc)
+         raise
+--- a/scripts/application-tests/native_diagnostic.py
++++ b/scripts/application-tests/native_diagnostic.py
+@@ -754,6 +754,14 @@
+         return method(timeout=remaining) if accepts_timeout else method()
+ 
+ 
++def _qmp_transcript_bytes(transcript, long_profile=None):
++    """Serialize every retained row under the profile's independent file cap."""
++    raw = json.dumps(transcript, sort_keys=True, allow_nan=False).encode("utf-8")
++    _need(len(raw) <= (long_profile["qmp_bytes"] if long_profile is not None else 24 * 1024 * 1024),
++          "QMP transcript capture limit")
++    return raw
++
++
+ def _cleanup(process, qmp):
+     """Keep each cleanup step independent; QMP errors cannot skip reaping."""
+     deadline = time.monotonic() + 5
+@@ -897,11 +905,10 @@
+         capture_errors.append(qemu_evidence_error)
+     if qmp is not None:
+         try:
+-            with _alarm(time.monotonic() + 2):
++            with _alarm(time.monotonic() + (long_profile['qmp_capture_seconds'] if long_profile is not None else 2)):
+                 session = getattr(qmp, "session", None)
+                 transcript = getattr(session, "transcript", []) if session is not None else []
+-                raw = json.dumps(transcript, sort_keys=True, allow_nan=False).encode("utf-8")
+-                _need(len(raw) <= 24 * 1024 * 1024, "QMP transcript capture limit")
++                raw = _qmp_transcript_bytes(transcript, long_profile)
+                 with (Path(attempt) / "qmp.transcript.json").open("xb") as stream:
+                     stream.write(raw)
+         except BaseException as exc:
+--- a/scripts/application-tests/native_diagnostic_container_owner.py
++++ b/scripts/application-tests/native_diagnostic_container_owner.py
+@@ -6,6 +6,7 @@
+ cleanup; it never returns an uncertain lease to the caller.
+ """
+ import argparse
++from contextlib import nullcontext
+ import fcntl
+ import hashlib
+ import importlib.util
+@@ -1029,14 +1030,20 @@
+             captures = {}
+             texts = {}
+             for name in ("serial.log", "debugcon.log", "qemu.stdout", "qemu.stderr", "qmp.transcript.json"):
+-                cap=(_long_transport().TRANSPORT["serial_bytes"] if self.long_requested and name=="serial.log" else 24 * 1024 * 1024 if name=="qmp.transcript.json" else LIMIT)
+-                data = regular(self.attempt / name, cap)
+-                self._queue(self.evidence / name, data)
+-                captures[name] = {"size": len(data), "sha256": hashlib.sha256(data).hexdigest()}
+-                if name in ("serial.log", "debugcon.log"):
+-                    texts[name[:-4]] = data.decode("utf-8")
+-                if name == "qmp.transcript.json":
+-                    need(type(strict_json(data)) is list, "QMP transcript shape")
++                cap=(_long_transport().TRANSPORT["serial_bytes"] if self.long_requested and name=="serial.log" else (_long_transport().TRANSPORT["qmp_bytes"] if self.long_requested else 24 * 1024 * 1024) if name=="qmp.transcript.json" else LIMIT)
++                # Evidence readback follows positive removal/release. Reuse
++                # the existing sibling diagnostic alarm only for LONG QMP;
++                # never spend cleanup's independent control deadline here.
++                guard = (self.diagnostic._alarm(time.monotonic() + _long_transport().TRANSPORT["qmp_readback_seconds"])
++                         if self.long_requested and name == "qmp.transcript.json" else nullcontext())
++                with guard:
++                    data = regular(self.attempt / name, cap)
++                    self._queue(self.evidence / name, data)
++                    captures[name] = {"size": len(data), "sha256": hashlib.sha256(data).hexdigest()}
++                    if name in ("serial.log", "debugcon.log"):
++                        texts[name[:-4]] = data.decode("utf-8")
++                    if name == "qmp.transcript.json":
++                        need(type(strict_json(data)) is list, "QMP transcript shape")
+             observation = result.get("observation", {})
+             if self.long_requested:observation=_long_transport().hydrate_observation(observation,texts)
+             need(observation.get("serial") == texts["serial"] and observation.get("debugcon") == texts["debugcon"] and
+--- a/scripts/application-tests/long_transport.py
++++ b/scripts/application-tests/long_transport.py
+@@ -33,13 +33,16 @@
+ EXTERNAL_CAPTURE_BINDING = {'schema': 'mckernel.p12.exact-LONG-owner-capture-binding.v1', 'controller_path': '/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/capture_root_LONG.NOT-RELEASED.py', 'controller_sha256': '15a084b17463a50b4a5460d67e41227e26b9de814cf866e49414145329aea1e8', 'request_path': '/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/CAPTURE-REQUEST.json', 'capture_directory': '/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/actual-capture-1', 'command_source_path': '/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/source/native_diagnostic_container_owner.py', 'command_interpreter': '/home/holden/anaconda3/bin/python3', 'controller_interpreter': '/home/holden/anaconda3/bin/python3', 'command_count': 1, 'stream_slots': 2, 'stream_file_bytes': 402653184, 'retained_copies': 1, 'soft_wall_seconds': 8100, 'no_forcekill': True, 'persistent_retirement_wait': True, 'owner_runtime_release_digest': 'Bound after independent release by finalrequest+exactownerargv; omitted here to avoid source/release digest cycle', 'owner_digest': 'Bound after source freeze by finalrequest/ownerCLI; omitted here to avoid selfdigest cycle'}
+ TRANSPORT = dict(docker_log=DOCKER_LOG, docker_log_bytes=DOCKER_LOG_BYTES, unused_slack_bytes=UNUSED_SLACK_BYTES, host_output=HOST_OUTPUT, schema='mckernel.p12.long-transport-profile.v2',
+                  producer=PROFILE, inner_seconds=7800, outer_seconds=8100,
+-                 serial_bytes=384 * 2**20, shared_capture_bytes=512 * 2**20,
++                 serial_bytes=384 * 2**20, shared_capture_bytes=640 * 2**20,
+                  trace_bytes=256 * 2**20, other_stream_bytes=4 * 2**20,
+-                 qmp_bytes=24 * 2**20, per_app_bytes=1024, per_app_timeout_ms=10000,
++                 qmp_raw_bytes=32 * 2**20, qmp_ordinary_capture_bytes=128 * 2**20,
++                 qmp_recovery_bytes=2 * 2**20, qmp_recovery_capture_bytes=8 * 2**20,
++                 qmp_record_limit=1048576, qmp_recovery_records=4096,
++                 qmp_bytes=136 * 2**20, qmp_capture_seconds=10, qmp_readback_seconds=10, per_app_bytes=1024, per_app_timeout_ms=10000,
+                  file_bytes=384 * 2**20, attempt_file_slots=7,
+                  metadata_bytes=32 * 2**20, external_capture=EXTERNAL_CAPTURE,
+                  external_capture_bytes=EXTERNAL_CAPTURE_BYTES,
+-                 logical_growth_bytes=(7 * 384 + 512 + 32) * 2**20 + UNUSED_SLACK_BYTES + DOCKER_LOG_BYTES + EXTERNAL_CAPTURE_BYTES)
++                 logical_growth_bytes=(7 * 384 + 640 + 32) * 2**20 + UNUSED_SLACK_BYTES + DOCKER_LOG_BYTES + EXTERNAL_CAPTURE_BYTES)
+ FILES = ('native_diagnostic.py', 'native_diagnostic_runner.py',
+          'native_diagnostic_backend.py', 'native_diagnostic_container_owner.py',
+          'qmp_capture.py', 'repaired_image_authority.py', 'composite_module_binding.py',
+--- a/scripts/tests/test_qmp_capture.py
++++ b/scripts/tests/test_qmp_capture.py
+@@ -235,5 +235,186 @@
+             self.assertLess(time.monotonic() - begin, 0.3)
+ 
+ 
+-if __name__ == "__main__":
++
++
++class LongCapacityTests(unittest.TestCase):
++    """Functional capacity fixtures only: fake sockets and small in-memory caps."""
++    @classmethod
++    def setUpClass(cls):
++        import sys
++        root = PATH.parent
++        def load(name, filename):
++            spec = importlib.util.spec_from_file_location(name, root / filename)
++            module = importlib.util.module_from_spec(spec)
++            spec.loader.exec_module(module)
++            return module
++        with patch.dict(sys.modules, {'qmp_capture': qmp}):
++            cls.backend = load('capacity_backend', 'native_diagnostic_backend.py')
++        cls.transport = load('capacity_transport', 'long_transport.py')
++        cls.diagnostic = load('capacity_diagnostic', 'native_diagnostic.py')
++
++    def backend_for(self, session):
++        backend = object.__new__(self.backend.QmpBackend)
++        backend.session = session
++        backend.negotiated = True
++        return backend
++
++    def test_short_defaults_unchanged_and_no_encoded_work(self):
++        session = qmp.QmpSession(None)
++        self.assertEqual(session.transcript_limit, 8 * 2**20)
++        self.assertIsNone(session.transcript_capture_limit)
++        self.assertIsNone(session.transcript_record_limit)
++        with patch.object(qmp.json, 'dumps', side_effect=AssertionError('short encoded accounting')):
++            session._retain('received', b'x')
++        self.assertEqual(session.transcript[0]['raw_hex'], '78')
++
++    def test_old_raw_exact_boundary_and_offending_byte_retained(self):
++        session = qmp.QmpSession(None, frame_limit=256, transcript_limit=256)
++        session._retain('received', b'x' * 256)
++        with self.assertRaisesRegex(qmp.QmpError, 'ordinary transcript budget'):
++            session._retain('received', b'y')
++        self.assertEqual(session.transcript_bytes, 257)
++        self.assertEqual(session.transcript[-1]['raw_hex'], '79')
++
++    def test_encoded_exact_boundary_and_one_over_record_retained(self):
++        row = {'direction': 'received', 'monotonic': 1.0, 'raw_hex': '78'}
++        bound = len(json.dumps([row] * 10, sort_keys=True, allow_nan=False).encode())
++        session = qmp.QmpSession(None, frame_limit=256, transcript_limit=256,
++                                 transcript_capture_limit=bound)
++        with patch.object(qmp.time, 'monotonic', return_value=1.0):
++            for unused in range(10):
++                session._retain('received', b'x')
++            self.assertEqual(session.transcript_serialized_bytes, bound)
++            with self.assertRaisesRegex(qmp.QmpError, 'ordinary encoded'):
++                session._retain('received', b'x')
++        self.assertEqual(len(session.transcript), 11)
++        serialized = self.diagnostic._qmp_transcript_bytes(session.transcript,
++                      {'qmp_bytes': session.transcript_serialized_bytes})
++        self.assertEqual(len(serialized), session.transcript_serialized_bytes)
++        with self.assertRaisesRegex(self.diagnostic.DiagnosticError, 'QMP transcript capture limit'):
++            self.diagnostic._qmp_transcript_bytes(session.transcript, {'qmp_bytes': len(serialized)-1})
++        self.assertEqual(json.loads(serialized), session.transcript)
++
++    def test_tiny_fragment_row_limit_and_terminal_record_reserve(self):
++        session = qmp.QmpSession(None, frame_limit=256, transcript_limit=2**20,
++                                 transcript_capture_limit=2 * 2**20, transcript_record_limit=3)
++        for unused in range(3):
++            session._retain('received', b'x')
++        with self.assertRaisesRegex(qmp.QmpError, 'ordinary transcript record'):
++            session._retain('received', b'x')
++        self.assertEqual(len(session.transcript), 4)
++        session.recovering = True
++        for unused in range(4095):
++            session._retain('received', b'x')
++        self.assertEqual(len(session.transcript), 4099)
++        with self.assertRaisesRegex(qmp.QmpError, 'recovery record limit'):
++            session._retain('received', b'x')
++        self.assertEqual(len(session.transcript), 4099)
++
++    def test_raw_hard_reserve_cannot_be_widened_by_recovery(self):
++        session = qmp.QmpSession(None, frame_limit=256, transcript_limit=256)
++        session.recovering = True
++        with self.assertRaisesRegex(qmp.QmpError, 'transcript limit exceeded'):
++            session._retain('received', b'x' * (2 * 2**20 + 257))
++        self.assertEqual(session.transcript, [])
++
++    def test_encoded_hard_reserve_and_invalid_limits(self):
++        session = qmp.QmpSession(None, frame_limit=256, transcript_limit=256,
++                                 transcript_capture_limit=512)
++        session.recovering = True
++        # Scale only the reserve constant to exercise the exact hard bound
++        # without a multi-megabyte record fixture.
++        with patch.object(qmp, 'RECOVERY_CAPTURE_BYTES', 64):
++            with self.assertRaisesRegex(qmp.QmpError, 'encoded transcript recovery'):
++                session._retain('received', b'x' * 300)
++        self.assertEqual(session.transcript, [])
++        for kwargs in ({'transcript_record_limit': True}, {'transcript_record_limit': 1048577},
++                       {'transcript_capture_limit': True}, {'transcript_capture_limit': 129 * 2**20}):
++            with self.subTest(kwargs=kwargs), self.assertRaises(ValueError):
++                qmp.QmpSession(None, **kwargs)
++
++    def test_terminal_quit_after_ordinary_raw_exhaustion_consumes_reserved_control(self):
++        def respond(request, peer):
++            if request['execute'] == 'large':
++                return {'return': 'x' * 180, 'id': request['id']}
++            return normal(request, peer)
++        with Peer(respond, frame_limit=256, transcript_limit=256) as peer:
++            peer.session._retain('received', b'x' * 50)
++            with self.assertRaisesRegex(qmp.QmpError, 'ordinary transcript budget'):
++                peer.session.execute('large')
++            original_rows = len(peer.session.transcript)
++            self.backend_for(peer.session).terminate(timeout=1)
++            self.assertFalse(peer.session.recovering)
++            self.assertGreater(len(peer.session.transcript), original_rows)
++            self.assertEqual([r['id'] for r in peer.session.stale_recovery_replies], [1])
++        self.assertEqual(peer.commands, ['large', 'quit'])
++
++    def test_terminal_quit_after_encoded_exhaustion_and_state_restore_on_error(self):
++        with Peer(normal, frame_limit=256, transcript_limit=256,
++                  transcript_capture_limit=512) as peer:
++            with self.assertRaisesRegex(qmp.QmpError, 'ordinary encoded'):
++                while True:
++                    peer.session._retain('received', b'x')
++            backend = self.backend_for(peer.session)
++            backend.terminate(timeout=1)
++            self.assertFalse(peer.session.recovering)
++            with patch.object(backend, '_execute', side_effect=qmp.QmpError('terminal rejected')):
++                with self.assertRaisesRegex(qmp.QmpError, 'terminal rejected'):
++                    backend.terminate(timeout=1)
++            self.assertFalse(peer.session.recovering)
++        self.assertEqual(peer.commands, ['quit'])
++
++    def test_long_factory_profile_propagation_and_profile_drift_rejection(self):
++        profile = self.transport.TRANSPORT
++        with patch.object(self.backend, 'QmpBackend') as factory:
++            self.backend.qmp_factory('/not-opened', long_profile=profile)(timeout=1)
++            self.assertEqual(factory.call_args.kwargs['transcript_limit'], 32 * 2**20)
++            self.assertEqual(factory.call_args.kwargs['transcript_capture_limit'], 128 * 2**20)
++            self.assertEqual(factory.call_args.kwargs['transcript_record_limit'], 1048576)
++            factory.reset_mock()
++            self.backend.qmp_factory('/not-opened')(timeout=1)
++            self.assertNotIn('transcript_limit', factory.call_args.kwargs)
++        altered = dict(profile, qmp_bytes=profile['qmp_bytes']+1)
++        with self.assertRaisesRegex(ValueError, 'exact explicit long QMP profile'):
++            self.backend.qmp_factory('/not-opened', long_profile=altered)
++
++    def test_full_7800_second_unchanged_cadence_fits_all_finite_caps(self):
++        profile = self.transport.TRANSPORT
++        polls = int(profile['inner_seconds'] / 0.05) + 64
++        # Budget each normal query/status pair at192raw bytes, plus1MiB
++        # greeting/startup allowance; metadata at96bytes for each of2rows.
++        raw = polls * 192 + 2**20
++        encoded = 2 * raw + polls * 2 * 96 + 2
++        self.assertLess(raw, profile['qmp_raw_bytes'])
++        self.assertLess(encoded, profile['qmp_ordinary_capture_bytes'])
++        self.assertLess(polls * 2, profile['qmp_record_limit'])
++        self.assertGreater(profile['qmp_record_limit'], polls * 2 * 3)
++        self.assertEqual(profile['qmp_recovery_bytes'], qmp.RECOVERY_BYTES)
++        self.assertEqual(profile['qmp_recovery_capture_bytes'], qmp.RECOVERY_CAPTURE_BYTES)
++        self.assertEqual(profile['qmp_recovery_records'], qmp.RECOVERY_RECORDS)
++        self.assertEqual(profile['qmp_bytes'], profile['qmp_ordinary_capture_bytes'] + profile['qmp_recovery_capture_bytes'])
++        total = profile['serial_bytes'] + profile['qmp_bytes'] + 3 * profile['other_stream_bytes'] + profile['metadata_bytes']
++        self.assertLess(total, profile['shared_capture_bytes'])
++        self.assertEqual(profile['logical_growth_bytes'], 4224 * 2**20)
++        self.assertEqual(profile['file_bytes'], 384 * 2**20)
++        self.assertEqual(profile['producer']['work_ns'], 3600 * 10**9)
++        self.assertEqual(profile['producer']['wall_ns'], 7200 * 10**9)
++        sample = {'execute': 'query-status', 'id': polls}
++        request = (json.dumps(sample, separators=(',', ':')) + '\n').encode()
++        response = (json.dumps({'return': {'status': 'running', 'running': True, 'singlestep': False}, 'id': polls})+'\r\n').encode()
++        self.assertLessEqual(len(request) + len(response), 192)
++
++    def test_exact_interpreter_row_memory_model(self):
++        import sys
++        row = json.loads(json.dumps({'direction': 'received', 'monotonic': time.monotonic(), 'raw_hex': '78'}))
++        # Include dict, distinct decoded keys, values, list reference; exclude
++        # hex payload characters, separately bounded by2*34MiB for allrows.
++        overhead = (sys.getsizeof(row) + sum(sys.getsizeof(k) for k in row) +
++                    sum(sys.getsizeof(v) for v in row.values()) - len(row['raw_hex']) + 8)
++        self.assertLessEqual(overhead, 512)
++        encoded_overhead = len(json.dumps(row, sort_keys=True).encode()) - len(row['raw_hex'])
++        self.assertLessEqual(encoded_overhead, 96)
++
++
++if __name__ == '__main__':
+     unittest.main()

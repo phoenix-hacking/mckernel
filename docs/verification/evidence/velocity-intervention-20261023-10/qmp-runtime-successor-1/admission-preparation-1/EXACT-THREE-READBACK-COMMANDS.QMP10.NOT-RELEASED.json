@@ -1,0 +1,87 @@
+{
+  "accepted_helper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py",
+    "sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+  },
+  "actual_readbacks": null,
+  "commands": [
+    {
+      "actual": null,
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=33554432:33554432",
+        "--core=0:0",
+        "--nofile=256:256",
+        "--",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-runtime-successor-1/admission-preparation-1/actual-fresh-root-admission-1/ACTUAL-CLOSED-CAPTURE.json"
+      ],
+      "capture_directory": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-runtime-successor-1/admission-preparation-1/owned-actual-fresh-admission-readbacks-1/ACTUAL-CLOSED-CAPTURE.json",
+      "name": "ACTUAL-CLOSED-CAPTURE.json"
+    },
+    {
+      "actual": null,
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=33554432:33554432",
+        "--core=0:0",
+        "--nofile=256:256",
+        "--",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-runtime-successor-1/admission-preparation-1/actual-fresh-root-admission-1/stdout"
+      ],
+      "capture_directory": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-runtime-successor-1/admission-preparation-1/owned-actual-fresh-admission-readbacks-1/stdout",
+      "name": "stdout"
+    },
+    {
+      "actual": null,
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=33554432:33554432",
+        "--core=0:0",
+        "--nofile=256:256",
+        "--",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-runtime-successor-1/admission-preparation-1/actual-fresh-root-admission-1/stderr"
+      ],
+      "capture_directory": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-runtime-successor-1/admission-preparation-1/owned-actual-fresh-admission-readbacks-1/stderr",
+      "name": "stderr"
+    }
+  ],
+  "profile": {
+    "AS_bytes": 2147483648,
+    "CPU": [
+      7
+    ],
+    "CPU_seconds": 30,
+    "FSIZE_bytes": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "retirement_grace_seconds": 6,
+    "wall_seconds": 60
+  },
+  "root_release": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXACT_DATA_ONLY_READBACK_COMMANDS_NOT_RELEASED_NOT_EXECUTED"
+}

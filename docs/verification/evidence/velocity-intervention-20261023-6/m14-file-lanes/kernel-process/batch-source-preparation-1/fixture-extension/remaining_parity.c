@@ -1,0 +1,212 @@
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ * Source-only extension. Link future retained sync actual_provider.o; do not replay
+ * its795 tests. All TLB/page/free/RSS/address effects below are explicit host models.
+ */
+#include <process.h>
+#include <process_helpers.h>
+#include <memobj.h>
+#include <rusage_private.h>
+#include <ihk/debug.h>
+#include <string.h>
+#undef memset
+extern int printf(const char *,...);
+extern void exit(int);
+extern int fixture_rust_remap_one_page(void *,page_table_t,pte_t *,void *,int);
+extern void fixture_rust_process_sync_range_log_bridge(struct process_vm *,struct vm_range *,unsigned long,unsigned long,int);
+extern void fixture_remap_layout(unsigned long *);
+struct rfp_args {
+	off_t off;
+	uintptr_t start;
+	struct memobj *memobj;
+};
+
+#line 1 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-range-log/candidate/kernel/process.c"
+/* Preserve displaced remap diagnostics and tracked-free source identity as
+ * static C ABI data only. Rust owns the complete callback computation. */
+const char *const process_remap_free_file = __FILE__;
+const int process_remap_free_line = 2469;
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_remap_one_page_entry_debug = {
+    .file = __FILE__, .func = "remap_one_page",
+    .line = 2448, .flags = DDEBUG_DEFAULT,
+};
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_remap_one_page_rss_debug = {
+    .file = __FILE__, .func = "remap_one_page",
+    .line = 2470, .flags = DDEBUG_DEFAULT,
+};
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_remap_one_page_exit_debug = {
+    .file = __FILE__, .func = "remap_one_page",
+    .line = 2476, .flags = DDEBUG_DEFAULT,
+};
+
+#line 1 "remaining_parity.c"
+/* Retained sync provider closure only; no sync callback is called here. */
+struct ddebug process_sync_one_page_entry_debug;
+struct ddebug process_sync_one_page_exit_debug;
+struct event { int kind,index,count,value;unsigned long pte,phys,size; };
+struct result { int count,returned;unsigned long pte;struct event events[16]; };
+static struct result tape;
+static struct rfp_args args;
+static struct memobj objects[4];static struct memobj_ops operations;
+static struct page page;
+static pte_t pte;
+static int active,shift,mutation,page_present,unmap_result,flush_error,comparisons,range_comparisons,logger_return;
+static const unsigned long addr=0x800012345000UL,mask=0x000ffffffffff000UL;
+static const char entryfmt[]="remap_one_page(%p,%p,%p %#lx,%p,%d)\n";
+static const char exitfmt[]="remap_one_page(%p,%p,%p %#lx,%p,%d): %d\n";
+static const char rssfmt[]="%lx-,%s: calling memory_stat_rss_sub(),size=%ld,pgsize=%ld\n";
+static const char rangefmt[]="sync_process_memory_range(%p,%p,%#lx,%#lx):visit failed%d\n";
+static const char logical_file[]="/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-range-log/candidate/kernel/process.c";
+static unsigned long range_start,range_end;static int range_error,range_live;
+static struct process_vm *range_vm;static struct vm_range *range_pointer;
+static void need(int yes,int line) {
+ if(!yes){printf("FAIL functional remaining remap/log line=%d comparisons=%d shift=%d mutation=%d\n",line,comparisons,shift,mutation);exit(1);}
+}
+#define CHECK(x) need(!!(x),__LINE__)
+static int index_of(struct memobj *p){CHECK(p>=objects&&p<objects+4);return p-objects;}
+static void event(int kind,int index,int count,int value,unsigned long phys,unsigned long size){
+ CHECK(active&&tape.count<16);tape.events[tape.count++]=(struct event){kind,index,count,value,pte,phys,size};
+}
+void fixture_tlb_effect(unsigned long address){CHECK(address==addr);event(2,0,0,0,0,0);if(mutation&2)pte=0x10101001UL;}
+void flush_tlb_single(unsigned long address){fixture_tlb_effect(address);}
+static int flush(struct memobj *obj,unsigned long phys,size_t pgsize){
+ CHECK(pgsize==(1UL<<shift));event(3,index_of(obj),0,0,phys,pgsize);
+ if(mutation&4){pte=0x20202001UL;args.memobj=&objects[1];}return flush_error;
+}
+struct page *phys_to_page(unsigned long phys){event(4,0,0,0,phys,0);if(mutation&8){pte=0x30303001UL;args.memobj=&objects[2];}return page_present?&page:0;}
+int fixture_page_unmap_effect(struct page *p){CHECK(p==&page);event(5,0,0,unmap_result,0,0);if(mutation&16){pte=0x40404001UL;args.memobj=&objects[3];}return unmap_result;}
+int page_unmap(struct page *p){return fixture_page_unmap_effect(p);}
+void *fixture_phys_to_virt_effect(unsigned long phys){event(6,0,0,0,phys,0);return (void *)(phys^0xffff800000000000UL);}
+void *phys_to_virt(unsigned long phys){return fixture_phys_to_virt_effect(phys);}
+void fixture_free_effect(void *pointer,int npages,int user,char *file,int line){
+ CHECK(user==IHK_MC_PG_USER&&line==2469&&!strcmp(file,logical_file));
+ unsigned long phys=(unsigned long)pointer^0xffff800000000000UL;CHECK(npages==(int)((1UL<<shift)/4096));event(7,0,npages,user,phys,0);
+ if(mutation&32){pte=0x50505001UL;args.memobj=&objects[1];}
+}
+void _ihk_mc_free_pages(void *p,int n,int user,char *file,int line){fixture_free_effect(p,n,user,file,line);}
+void fixture_rss_effect(struct memobj *obj,unsigned long size,int pgsize){CHECK(size==(1UL<<shift)&&pgsize==(int)size);event(9,index_of(obj),pgsize,0,0,size);if(mutation&128)pte=0x60606001UL;}
+void rusage_memory_stat_sub(struct memobj *obj,unsigned long size,int pgsize){fixture_rss_effect(obj,size,pgsize);}
+int kprintf(const char *format,...){
+ __builtin_va_list ap;__builtin_va_start(ap,format);
+ if(!strcmp(format,rangefmt)){
+  CHECK(range_live);CHECK(__builtin_va_arg(ap,struct process_vm *)==range_vm);CHECK(__builtin_va_arg(ap,struct vm_range *)==range_pointer);
+  CHECK(__builtin_va_arg(ap,unsigned long)==range_start);CHECK(__builtin_va_arg(ap,unsigned long)==range_end);CHECK(__builtin_va_arg(ap,int)==range_error);range_live++;
+ }else if(!strcmp(format,rssfmt)){
+  unsigned long phys=__builtin_va_arg(ap,unsigned long);CHECK(!strcmp(__builtin_va_arg(ap,const char *),"remap_one_page"));
+  unsigned long size=__builtin_va_arg(ap,unsigned long);CHECK(size==(1UL<<shift)&&__builtin_va_arg(ap,unsigned long)==size);event(8,0,0,0,phys,size);
+  if(mutation&64){pte=0x70707001UL;args.memobj=&objects[2];}
+ }else{
+  CHECK(__builtin_va_arg(ap,void *)==&args);CHECK(__builtin_va_arg(ap,page_table_t)==(page_table_t)0x34567000UL);
+  CHECK(__builtin_va_arg(ap,pte_t *)==&pte);CHECK(__builtin_va_arg(ap,unsigned long)==pte);CHECK(__builtin_va_arg(ap,void *)==(void *)addr);CHECK(__builtin_va_arg(ap,int)==shift);
+  if(!strcmp(format,entryfmt)){event(1,0,0,0,0,0);if(mutation&1){args.off=-4097;args.start=addr-0x2ffe;pte=0x77777041UL;}}
+  else {CHECK(!strcmp(format,exitfmt));CHECK(__builtin_va_arg(ap,int)==0);event(10,0,0,0,0,0);if(mutation&256)pte=0x80808001UL;}
+ }
+ __builtin_va_end(ap);return logger_return;
+}
+#undef dkprintf
+#define dkprintf(fmt,args...) do{if(!strcmp((fmt),entryfmt)?process_remap_one_page_entry_debug.flags:(!strcmp((fmt),rssfmt)?process_remap_one_page_rss_debug.flags:process_remap_one_page_exit_debug.flags))kprintf(fmt,##args);}while(0)
+#line 2437 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-range-log/candidate/kernel/process.c"
+int remap_one_page(void *arg0, page_table_t pt, pte_t *ptep,
+		   void *pgaddr, int pgshift)
+{
+	struct rfp_args * const args = arg0;
+	const size_t pgsize = (size_t)1 << pgshift;
+	int error;
+	off_t off;
+	pte_t apte = PTE_NULL;
+	uintptr_t phys;
+	struct page *page;
+
+	dkprintf("remap_one_page(%p,%p,%p %#lx,%p,%d)\n",
+			arg0, pt, ptep, *ptep, pgaddr, pgshift);
+
+	off = args->off + ((uintptr_t)pgaddr - args->start);
+	pte_make_fileoff(off, 0, pgsize, &apte);
+
+	pte_xchg(ptep, &apte);
+	flush_tlb_single((uintptr_t)pgaddr);	/* XXX: TLB flush */
+
+	if (pte_is_null(&apte) || pte_is_fileoff(&apte, pgsize)) {
+		error = 0;
+		goto out;
+	}
+	phys = pte_get_phys(&apte);
+
+	if (pte_is_dirty(&apte, pgsize)) {
+		memobj_flush_page(args->memobj, phys, pgsize);	/* XXX: in lock period */
+	}
+
+	page = phys_to_page(phys);
+	if (page && page_unmap(page)) {
+		_ihk_mc_free_pages(phys_to_virt(phys), pgsize/PAGE_SIZE, IHK_MC_PG_USER, __FILE__, __LINE__);
+		dkprintf("%lx-,%s: calling memory_stat_rss_sub(),size=%ld,pgsize=%ld\n", phys, __FUNCTION__, pgsize, pgsize);
+		rusage_memory_stat_sub(args->memobj, pgsize, pgsize); 
+	}
+
+	error = 0;
+out:
+	dkprintf("remap_one_page(%p,%p,%p %#lx,%p,%d): %d\n",
+			arg0, pt, ptep, *ptep, pgaddr, pgshift, error);
+	return error;
+}
+
+#line 1 "remaining_parity.c"
+void process_sync_range_log_bridge(struct process_vm *vm,
+				   struct vm_range *range, unsigned long start,
+				   unsigned long end, int error)
+{
+	ekprintf("sync_process_memory_range(%p,%p,%#lx,%#lx):"
+			"visit failed%d\n", vm, range, start, end, error);
+}
+
+static void setup(unsigned long value,int entry,int rss,int leave){
+ memset(&tape,0,sizeof(tape));memset(objects,0,sizeof(objects));memset(&operations,0,sizeof(operations));memset(&page,0,sizeof(page));operations.flush_page=flush;
+ for(int i=0;i<4;i++)objects[i].ops=&operations;
+ args.off=-8193;args.start=addr-0x3000;args.memobj=&objects[0];pte=value;
+ process_remap_one_page_entry_debug.flags=entry;process_remap_one_page_rss_debug.flags=rss;process_remap_one_page_exit_debug.flags=leave;
+}
+static void invoke(int rust,unsigned long value,int entry,int rss,int leave,struct result *out){
+ setup(value,entry,rss,leave);active=1;
+ tape.returned=rust?fixture_rust_remap_one_page(&args,(page_table_t)0x34567000UL,&pte,(void *)addr,shift):remap_one_page(&args,(page_table_t)0x34567000UL,&pte,(void *)addr,shift);
+ tape.pte=pte;active=0;memcpy(out,&tape,sizeof(tape));
+}
+static void expected_event(struct result *out,int kind,int index,int count,int value,unsigned long live,unsigned long phys,unsigned long size){CHECK(out->count<16);out->events[out->count++]=(struct event){kind,index,count,value,live,phys,size};}
+static void oracle(unsigned long value,int entry,int rss,int leave,struct result *out){
+ memset(out,0,sizeof(*out));unsigned long old=value,live=value,offset=0xfffUL;int obj=0;
+ if(entry){expected_event(out,1,0,0,0,live,0,0);if(mutation&1){old=live=0x77777041UL;offset=0x1ffdUL;}}
+ live=(offset&~0xfffUL)|0x800UL|((shift==21||shift==30)?0x80UL:0);
+ expected_event(out,2,0,0,0,live,0,0);if(mutation&2)live=0x10101001UL;
+ if(old&&!(old&0x800UL)){
+  unsigned long phys=old&mask;
+  if(old&0x40UL){expected_event(out,3,obj,0,0,live,phys,1UL<<shift);if(mutation&4){live=0x20202001UL;obj=1;}}
+  expected_event(out,4,0,0,0,live,phys,0);if(mutation&8){live=0x30303001UL;obj=2;}
+  if(page_present){
+   expected_event(out,5,0,0,unmap_result,live,0,0);if(mutation&16){live=0x40404001UL;obj=3;}
+   if(unmap_result){
+    expected_event(out,6,0,0,0,live,phys,0);expected_event(out,7,0,(int)((1UL<<shift)/4096),1,live,phys,0);if(mutation&32){live=0x50505001UL;obj=1;}
+    if(rss){expected_event(out,8,0,0,0,live,phys,1UL<<shift);if(mutation&64){live=0x70707001UL;obj=2;}}
+    expected_event(out,9,obj,(int)(1UL<<shift),0,live,0,1UL<<shift);if(mutation&128)live=0x60606001UL;
+   }
+  }
+ }
+ if(leave){expected_event(out,10,0,0,0,live,0,0);if(mutation&256)live=0x80808001UL;}
+ out->pte=live;
+}
+static void compare(unsigned long value,int entry,int rss,int leave){struct result c,r,w;invoke(0,value,entry,rss,leave,&c);invoke(1,value,entry,rss,leave,&r);oracle(value,entry,rss,leave,&w);CHECK(!memcmp(&c,&r,sizeof(c)));CHECK(!memcmp(&c,&w,sizeof(c)));comparisons++;}
+int main(void){
+ unsigned long layout[7],wanted[7]={sizeof(struct rfp_args),__alignof__(struct rfp_args),__builtin_offsetof(struct rfp_args,off),__builtin_offsetof(struct rfp_args,start),__builtin_offsetof(struct rfp_args,memobj),sizeof(struct page),sizeof(struct ddebug)};fixture_remap_layout(layout);CHECK(!memcmp(layout,wanted,sizeof(layout)));
+ const unsigned long values[]={0,0x800,0x12345001,0x12345041};const int flags[][3]={{0,0,0},{1,0,0},{0,128,255},{255,255,255}};const int errors[]={0,-5,7};
+ shift=12;mutation=0;
+ for(int s=0;s<4;s++)for(int d=0;d<4;d++)for(int p=0;p<4;p++)for(int e=0;e<3;e++){page_present=p!=0;unmap_result=p==3?-1:p==2?1:0;flush_error=errors[e];logger_return=-77;compare(values[s],flags[d][0],flags[d][1],flags[d][2]);}
+ for(int size=21;size<=30;size+=9)for(int s=0;s<4;s++)for(int p=0;p<4;p++){shift=size;page_present=p!=0;unmap_result=p==3?-1:p==2?1:0;flush_error=-5;compare(values[s],255,128,1);}
+ const int changes[]={1,2,4,8,16,32,64,128,256,511};shift=12;
+ for(int m=0;m<10;m++)for(int p=0;p<4;p++)for(int e=0;e<3;e++){mutation=changes[m];page_present=p!=0;unmap_result=p==3?-1:p==2?1:0;flush_error=errors[e];compare(0x12345041,255,255,255);}
+ const unsigned long bounds[]={0,0x7fffffffffffffffUL,0x8000000000000000UL,~0UL};const int signed_errors[]={0,-5,7,(-2147483647-1),2147483647};
+ for(int b=0;b<4;b++)for(int e=0;e<5;e++)for(int ret=0;ret<3;ret++){
+  range_vm=b&1?0:(struct process_vm *)0x12345000UL;range_pointer=b&2?0:(struct vm_range *)0x56789000UL;range_start=bounds[b];range_end=bounds[3-b];range_error=signed_errors[e];logger_return=ret==0?0:ret==1?-77:17;
+  range_live=1;process_sync_range_log_bridge(range_vm,range_pointer,range_start,range_end,range_error);CHECK(range_live==2);range_live=1;fixture_rust_process_sync_range_log_bridge(range_vm,range_pointer,range_start,range_end,range_error);CHECK(range_live==2);range_live=0;range_comparisons++;
+ }
+ printf("remaining_actual_C_Rust_remap_comparisons=%d range_log_comparisons=%d typed_host_effects_only=1\n",comparisons,range_comparisons);return 0;
+}

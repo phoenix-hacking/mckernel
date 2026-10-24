@@ -531,12 +531,6 @@ arch_ptrace_signal_log_bridge(int event, int value, int result)
 	}
 }
 
-static void
-arch_ptrace_syscall_event_bridge(void *thread, int unused)
-{
-	(void)unused;
-	ptrace_syscall_event((struct thread *)thread);
-}
 
 static void
 arch_process_vm_rw_read_lock_bridge(void *vm)
@@ -4129,6 +4123,7 @@ void calculate_time_from_tsc(struct timespec *ts)
 #endif
 
 extern void ptrace_syscall_event(struct thread *thread);
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long arch_ptrace_syscall_event(struct thread *thread,
 				ihk_mc_user_context_t *ctx, long setret)
 {
@@ -4142,4 +4137,5 @@ long arch_ptrace_syscall_event(struct thread *thread,
 	return ihk_mc_syscall_ret(ctx);
 #endif
 }
+#endif /* public arch_ptrace_syscall_event is owned by Rust */
 /*** End of File ***/

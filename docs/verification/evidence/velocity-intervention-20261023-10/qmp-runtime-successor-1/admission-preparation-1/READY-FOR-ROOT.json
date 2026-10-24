@@ -1,0 +1,118 @@
+{
+  "actual_admission": null,
+  "actual_query": null,
+  "actual_release": null,
+  "actual_review": null,
+  "backing": "Fresh stable FD110GiB inode47468427; UUID/loop/device observed during actual query; no obsolete loop/device assumed",
+  "current_live_postjoin": {
+    "bytes": 1206,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/p12-normal-retirement/physical-preparation-1/CURRENT-LIVE-POSTJOIN.ROOT-RECORD.json",
+    "sha256": "001983ee4261456307db8da23d66457df20d16ad62beb68d106cd09443491230"
+  },
+  "current_physical": {
+    "bytes": 3022,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/p12-normal-retirement/physical-preparation-1/POSITIVE-PHYSICAL-ACCEPTANCE.ROOT-RECORD.json",
+    "sha256": "8d55411d1aa421650fb211ec3ce0eb2ccabb0e71e2647a4f10e1173d751854a2"
+  },
+  "current_ten_role_cohort": {
+    "bytes": 2890,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-runtime-successor-1/COHORT-BINDINGS.json",
+    "sha256": "d748b69b3707587d3d21146f5c84e733d3019f8784669f2c0cbf5650567e588d"
+  },
+  "final_expiry": null,
+  "first_source_generation_failure": {
+    "bytes": 543,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-runtime-successor-1/admission-preparation-1/SOURCE-PREPARATION-FAILURE-1.json",
+    "sha256": "085880ba8d10ae5bfdef7bc901c4a24fedc1d71d644c3de8a7ddd769f3887101"
+  },
+  "host_required_bytes": 140668567552,
+  "inputs": {
+    "bytes": 76008,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-runtime-successor-1/admission-preparation-1/QUERY-INPUTS.QMP10.POSTJOIN.json",
+    "sha256": "aced237590bb25cc1bfddb491dc7adf3db476321a1aa9c14f2c8d99d932b4268"
+  },
+  "namespace": {
+    "bytes": 2083,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-runtime-successor-1/ROOT-NAMESPACE-PUBLICATION.ROOT-RECORD.json",
+    "sha256": "745aab7f5f883cb3b5d36598430a66572f5b0111587f850c3e2342239501a6aa"
+  },
+  "next_root_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-runtime-successor-1/admission-preparation-1/run_root_LONG_admission_capture.py",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-runtime-successor-1/admission-preparation-1/ROOT-FRESH-QUERY-PROFILE.QMP10.NOT-RELEASED.json",
+    "ccddf828fc14e03960ce249f1b17d2e17c955c47435506d9f683373887a456e7"
+  ],
+  "next_root_argv_file": {
+    "bytes": 687,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-runtime-successor-1/admission-preparation-1/ROOT-FRESH-OBSERVER-ARGV.QMP10.NOT-RELEASED.json",
+    "sha256": "cc7c47e590b91196e1e755768e2c1ee688beae989fc6ef30763d1fe0e8303375"
+  },
+  "nonce": "4a76457e33f34ba9a6805115bd121eb0",
+  "one_next_blocker": "No independently released fresh query exists for nonce4a764; root alone executes exact next_root_argv after current guard whole join and static publication.",
+  "preserved_provider_authority": {
+    "bytes": 3272,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-runtime-successor-1/PROVIDER-AND-RUNTIME-AUTHORITY.json",
+    "sha256": "107bc759154d3d6b30b25dad27dbfb06e45df941fd75cdfb5dbe266ccce98c22"
+  },
+  "profile": {
+    "bytes": 2669,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-runtime-successor-1/admission-preparation-1/ROOT-FRESH-QUERY-PROFILE.QMP10.NOT-RELEASED.json",
+    "sha256": "ccddf828fc14e03960ce249f1b17d2e17c955c47435506d9f683373887a456e7"
+  },
+  "query": {
+    "bytes": 14911,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-runtime-successor-1/admission-preparation-1/read_only_LONG_HOST_admission.QMP10.POSTJOIN.py",
+    "sha256": "242da879f8c50b10854e917dbdbe2a39cbe3bfd0ca97255a07912484364588f1"
+  },
+  "readbacks": {
+    "bytes": 3118,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-runtime-successor-1/admission-preparation-1/EXACT-THREE-READBACK-COMMANDS.QMP10.NOT-RELEASED.json",
+    "sha256": "6b8c10c513643daddb173408e87e108fb5b1a9293f95b138f78318e36fa353b8"
+  },
+  "remaining_inputs": [
+    "Root18-guard CPU6 actual whole join and independent current cohort/profile/guards review; no absence inferred from namespace files",
+    "Static source publication and independent query profile/argv release before any root invocation",
+    "Actual fresh ordinary-root query complete stdout plus closed capture and authenticated bounded readbacks",
+    "Exact independent finalization-source/template review before late facts and mint",
+    "Genuine canonical payload SHA and independent exact four-key PASS review, then full actual real-clock production consumer and published-request pre-effect consumer; query age<=120 seconds"
+  ],
+  "retained_controls": "permanent mutex27:4; scratch21 and exclusions57687/57688; eight original ownership paths; no cleanup replay or rebuild",
+  "root_execution": false,
+  "runner": {
+    "bytes": 3789,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-runtime-successor-1/admission-preparation-1/run_root_LONG_admission_capture.py",
+    "sha256": "522ef331dba4e84f45b2f2bc0965c0bb58490127154eb169f469da98619528bf"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "scratch_required_bytes": 13899923456,
+  "selected_profile": {
+    "bytes": 1459,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-runtime-successor-1/LONG-PROFILE.PREPARED.json",
+    "sha256": "bdbace13d5cb8685a821078433de5ae0666d7ee318159bff0c9809275b5e3ab8"
+  },
+  "source_checks": {
+    "bytes": 4798,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-runtime-successor-1/admission-preparation-1/SOURCE-ONLY-AST-AND-BINDING-CHECKS.json",
+    "sha256": "7f7cccc0142a2439d7d518acf7434e5d85e1e500c93e331c7fd9f69df8793dbd"
+  },
+  "source_delta": {
+    "bytes": 13239,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-runtime-successor-1/admission-preparation-1/QUERY-SOURCE-DELTA.diff",
+    "sha256": "40d84efe635286e9846f04c3d0b9c076cd79fe17c89408061e16dee101e555fb"
+  },
+  "status": "SOURCE_ONLY_READY_FOR_INDEPENDENT_QUERY_PROFILE_AND_FINALIZATION_SOURCE_REVIEW"
+}

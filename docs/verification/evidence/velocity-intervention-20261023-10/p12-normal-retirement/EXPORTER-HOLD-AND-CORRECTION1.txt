@@ -1,0 +1,17 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Parent reported independent native235 HOLD before execution: generated line8
+contained a bare all_ name instead of the original all_names initialization.
+The source-generation substring search matched names= inside all_names=.
+Undefined all_ would fail, and later all_names references had no assignment.
+
+Exact first-reviewed a9d6 source and d8b operation bytes are retained under
+reviewed-first-held.py / OPERATION.FIRST-HELD.json. The final documentation-header
+variant5fb4 and its cd69 operation are also retained as pre-list-correction copies.
+No version was executed as an exporter by this owner.
+
+ONE bounded source correction restores exactly:
+all_names=sorted(os.listdir(ROOT));assert len(all_names)<=4096
+followed by the existing separate comment. No ROOT, selection, stable-FD or cap
+changes are made. Only compiler-free Python AST/name/source checks are authorized.
+Any further same-family failure must be retained and escalated; no silent retry,
+cap broadening, new wrapper or cleanup is authorized.

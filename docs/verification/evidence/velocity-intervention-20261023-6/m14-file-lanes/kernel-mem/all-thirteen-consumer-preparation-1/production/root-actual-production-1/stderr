@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/all-thirteen-consumer-preparation-1/production/run_frozen_production_once.py", line 40, in <module>
+    relocation=o.allocated_callback_relocations(D/'output-1/mem.c.o',names);c.write(A/'ACTUAL-ALLOCATED-CALLBACK-RELOCATIONS.json',relocation)
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/all-thirteen-consumer-preparation-1/production/observe_exact_production.py", line 39, in allocated_callback_relocations
+    assert selected and all(x['symbol_shndx']==0 and x['symbol_binding']==1 and x['type']==1 and x['addend']==0 for x in selected),selected
+AssertionError: [{'symbol': 'mem_tlb_atomic_dec_bridge', 'symbol_binding': 1, 'symbol_type': 0, 'symbol_shndx': 0, 'relocation_section_index': 2, 'relocation_section': '.rela.text', 'target_section_index': 1, 'target_section': '.text', 'target_allocated': True, 'offset': 18051, 'type': 27, 'addend': 0}]

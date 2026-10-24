@@ -1,3 +1,67 @@
+## Retired QMP failure; fresh namespace18guards PASS — 2026-10-24T02:24:40.304052+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical34/35; newlyclosedIDs none. Failed63bd remainsFAIL:364 rounds/728 reported
+launches/2008.862221651mixed seconds, no hourcredit/kernelcrashclaim. Normalcleanup
+and strict currentPROC+27:4/8path observations independentlyPASS; physical8d55411d
+and nonnull current_live_postjoin001983ee. No cleanup replay/furtheroldquery needed.
+Newsource-only nonce4a76457e33f34ba9a6805115bd121eb0 HOSTl12q1/p scratchp12q1/m.json
+reuses exactimage10972/modules/apps/collector/capsule. ActualQMP24testsPASS.640s after
+one coherent640Bmodelcorrection; first542>512 failurepreserved. Freshnamespace
+actual18guardsPASS2.133s, currentcohortd748b69b/profilebdbace13 independentlyaccepted,
+including actualmoduleorigins and333pathmountcoverage/negatives. Firstreadsource
+prepared withNULLnewowneranchors. NEWLONG NOT STARTED. Exactfreshrootquery242da879/
+profileccddf828/runner522ef331 prepared; source review/staticpublication then actual
+admission and separatelyreviewed late-realclock request/release remainnext.
+
+M14 eleven canonical sourcefiles integrated afterfullRust29.168s+sixCpartial/
+independentreviews,3251sizedRustT/t unique. Defaultimage/native/wholefiles OPEN.
+Additionalsync795/16commandsPASS2.013s; M15memoryOS655PASS.781s using genuineRustcore
+staticlib (firstmissing-providerfailurepreserved), CLI188+3 andlibCPU4608 stand.
+F03three-bodyfixture stoppedaftersecondscaffold/linkfailure; differentexpert binds
+sevenactualRustproviders in companion, no thirdjobwithoutrootgrant. F04batch
+kernel-thread falsepositive thenemitpathobserverfailure stopped/escalationrequired;
+Rustonecommandpassed, all8000runtimecountsUNRUN. F01VMRustpassed/Cstubuint64type
+failure retained, solecorrectionready/no rerun. F05new937/F06new40332 sourcequeues
+prepared/notexecuted. These failures are fixture/observer facts, no kerneldefect
+ornativeclosure inferred. Puredefault-imageconsumer13regressionsPASS.401s;
+actualstaging/build/admission remainunreleased. ExistingM14sixsourceowners andM15
+libowner continue disjointcode/productionpreparation; no idleCPUreservation.
+
+## Current LONG FAILED at QMP capture budget; Rust union integrated — 2026-10-24 01:55 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+CURRENT attempt63bdc failed: QMP ordinary transcript budget exceeded; diagnostic
+capture also reports QMP transcript capture limit. Last completed producer round363
+means364 complete rounds/728 reported launches/2008.862221651 mixed seconds
+(33m28.862). No continuous-hour credit; practical34/35, newlyclosedIDs none.
+No proven kernel crash. QEMU cleanup reports reaped/return-9; that is not host
+physical clearance. Controller6754 closed exit1; genuine root owner capture
+return1/4152.062308519s, directjoined/groupabsent/streamsclosed, term_sentfalse,
+forcekillfalse. Three bounded closed-file exports joined and hashes match:
+runtime-sdk8-snapshot-equality-successor-1/terminal-owned-readbacks-1/READBACK-JOIN.json.
+Owner4007173/start59944315 and controller4007172/start59944311 are HISTORICAL
+identities. Do not infer current liveness from earlier integration identity fields.
+
+Normal-retirement owner m15_bfd_compile_owner prepares exact closed private-ledger
+export; source-only first exporter HOLD for missing directory-list initialization,
+correction/review pending; no cleanup replay or newguest. Sole foreground QMP
+capacity author owns velocity10/qmp-capacity-fix. Root actual24tests:23pass,
+one memory-model FAIL: Python3.9 row542B exceeds512B assumption. Result retained
+root-actual-qmp-fixture-1; coherent model correction required, no blind assertion
+relaxation. Same image/modules/apps intended for fresh strict session after
+physical acceptance/newcohort/release; partial time never cumulative credit.
+
+M14: independent union+F01GOT64 correction accepted;11 canonical files integrated
+from exact reviewed private union. Full Rust compile29.168s and six-C/Rust partial
+pass, all3251 sized RustT/t providers unique. Actual defaultGCC14 image/native and
+wholefile retirement OPEN. Source relation/preimages/actual receipts in velocity6/
+root-union-preparation-1. Additional sync_one_page bounded correction16commands/
+795 comparisons PASS2.013s/4e2d6368, production/fullimage/native still open.
+M15 actual ihkconfig188+3 and libCPU4608 passes stand; memory/OS first link FAIL
+missing core division-panic providers, coherent staticlib correction ready/notrun.
+BFD publisher correction9puretests PASS; no concurrentBFDcontainer launched.
+
 ## Fresh actual LONG read and engineering checkpoint — 2026-10-24 01:33 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

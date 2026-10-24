@@ -1,0 +1,143 @@
+{
+  "C_patch": {
+    "bytes": 4719,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-process-vm-rw-source-1/patch/syscall.c.diff",
+    "sha256": "9172a1dc10fda1a8e083308311069751c1de94944d848b9b830ee5b321d16f51"
+  },
+  "C_preimage": {
+    "bytes": 113504,
+    "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+    "sha256": "912fb97a58cc797407979ce835c422578949ff876ac519193d2ebc4855cce791"
+  },
+  "Rust_fragment_merge_patch": {
+    "bytes": 9986,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-process-vm-rw-source-1/patch/syscall_policy.process_vm_rw.REMOVE-ONE-EXTERN-APPEND.diff",
+    "sha256": "50383ac2c6a8276ebadd2c6dc2701b56cebe6baa8e084aa4eb2b765a5a9e1901"
+  },
+  "Rust_preimage": {
+    "bytes": 713471,
+    "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+    "sha256": "3ef8288617db7bcc26c56039491295d3f48c53d4f76d111b68dfcc3186546f7d"
+  },
+  "actual_fixture": null,
+  "actual_selected_callers": [
+    "Rust sys_process_vm_readv -> process_vm_rw_body_result -> Some(do_process_vm_read_writev)",
+    "Rust sys_process_vm_writev -> process_vm_rw_body_result -> Some(do_process_vm_read_writev)"
+  ],
+  "candidate": {
+    "bytes": 109839,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-process-vm-rw-source-1/candidate/syscall.c",
+    "sha256": "e5403dd49a22030e09913618493911dcb8a698f8587a32005b978b8d9be88b0c"
+  },
+  "canonical_writes": 0,
+  "compiler_jobs": 0,
+  "default_consumer": null,
+  "fragment": {
+    "bytes": 9251,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-process-vm-rw-source-1/candidate/syscall_policy.process_vm_rw.FRAGMENT.rs",
+    "sha256": "3f9ecdfa165680224b983928939d5d81015cc9a075fae25210deafb7f9c1c3b5"
+  },
+  "fullcrate": null,
+  "future_fixture_sources": [
+    {
+      "bytes": 11378,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-process-vm-rw-source-1/future-fixture-source-only/existing-Rust-body.ACTUAL.inc",
+      "sha256": "28ce65df02b662f932960ae3b87d11d705a06ff7d27ea22f7af6a8134be27fac"
+    },
+    {
+      "bytes": 228,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-process-vm-rw-source-1/future-fixture-source-only/old-extern.ACTUAL.inc",
+      "sha256": "dc65d10f733ca67faa974b9b2b4242490d77b1693ed8f59a1e84ebce6ba05104"
+    },
+    {
+      "bytes": 3911,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-process-vm-rw-source-1/future-fixture-source-only/original-adapters-and-offsets.ACTUAL.inc",
+      "sha256": "005ce7cc1ea4ac7592bffb5018d662f2a8083a091ee816ec12be1390257d9447"
+    },
+    {
+      "bytes": 7494,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-process-vm-rw-source-1/future-fixture-source-only/original-entry.ACTUAL.inc",
+      "sha256": "c3b05acdaa3098b5f727ec8ddc128497c70656b0cb0f0c9ff2d62678536fb443"
+    },
+    {
+      "bytes": 993,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-process-vm-rw-source-1/future-fixture-source-only/real-ABI-Rust-facts.inc",
+      "sha256": "c75ba2642c76ff235342046a627f43ef5c15b34aebb268336397b31d69db78f6"
+    },
+    {
+      "bytes": 2858,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-process-vm-rw-source-1/future-fixture-source-only/real-ABI-and-validation-caller.c",
+      "sha256": "708e4cc9231084c623cc5c3ae61230a9755f3e184eee9bd4dac2e56bfe01457e"
+    }
+  ],
+  "invariants": [
+    "same existing flags/count/length/error checks and signedCInt result; no algorithm/policy changes",
+    "current read before entering argument-validation body sameasC",
+    "two distinct actual64align lock nodes staylive across every callback and fullbody return",
+    "same local memory_range lock/unlock before remote process find/update/hold/release sequence",
+    "VMhold/release and every early error cleanup stillsole existing Rustbody responsibility; no new ownership references",
+    "same vtop/fault/retry/protection/page-boundary/copy-order semantics delegatedunchanged",
+    "fast_memcpy routes to actual existing Rust __inline_memcpy->memcpy volatilebytes; no new copy implementation",
+    "log callback reads only fields initialized for actual event; exact4strings/conditionaldebugflags",
+    "C fallback complete body untouched; remove justold extern by privatepatch beforeappend"
+  ],
+  "native": null,
+  "provider_ABI_source_checks": {
+    "C_original_fallback_fullbody_retained": true,
+    "all14_callback_signatures_match_existing_Rust_type_aliases": true,
+    "compiler_verified": false,
+    "full_unmodified_body_copied_for_future_fixture": true,
+    "lookup_and_find_use_explicit_typed_pointer_to_void_casts": true,
+    "two_existing_lock_node_types_reused": true
+  },
+  "providers": [
+    {
+      "bytes": 76151,
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "bytes": 355120,
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "sha256": "70015d712c29e416881e2fbaccd67026ee15ac7eb915cb80e828485d6f34d71f"
+    },
+    {
+      "bytes": 12202,
+      "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+    },
+    {
+      "bytes": 7877,
+      "path": "/home/holden/mckernel/kernel/rust/cls.rs",
+      "sha256": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba"
+    },
+    {
+      "bytes": 201809,
+      "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "800a18bb4db0e28bf76441fca783b3f8d47066260240fb5107967c23775aa494"
+    },
+    {
+      "bytes": 13172,
+      "path": "/home/holden/mckernel/kernel/rust/string.rs",
+      "sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3"
+    },
+    {
+      "bytes": 13020,
+      "path": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16"
+    },
+    {
+      "bytes": 4603,
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-lock.h",
+      "sha256": "ca8baa66ed77634cd6319a918211b3eb8fe80fc7dcb2ac0110ab6bfbd0c1b81b"
+    }
+  ],
+  "remaining_provider_ABI_blocker": null,
+  "required_next_observation": "Future actual-C-selected/publicRust fullsignature differential fixture with realheaders/fullABI13offsets+two64alignnode shapes; callbacks controlled, no second ready compiler cohort or runner created",
+  "retirement_scope": "C entry/current-thread+two lock-node+13offset binding and14single-use adapters/4debug messages; existing Rust algorithm unchanged",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_boundary": "int do_process_vm_read_writev(pid,local_iov,liovcnt,remote_iov,riovcnt,flags,op)",
+  "smallest_future_fixture": "Real-header C prototype/node/22-layout caller plus Rust ABI facts and actual early-validation original-C/public-Rust comparison sources. Full controlled-provider fixture and driver deliberately not prepared as second queue.",
+  "source_implementation_refinement": "Typed Rust callbacks require *mut c_void return for lookup/find (underlying providers return typed pointers); explicit casts preserve unchanged C ABI. Source-only firstdraft9a4d retained, no compiler or actual failure.",
+  "status": "SOURCE_IMPLEMENTATION_ONLY_NO_SECOND_READY_QUEUE_NO_DRIVER"
+}

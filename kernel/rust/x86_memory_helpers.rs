@@ -177,6 +177,7 @@ unsafe extern "C" {
     fn remote_flush_tlb_array_cpumask(vm: *mut c_void, addr: *mut CULong, nr_addr: CInt, cpu_id: CInt);
     static x86_clear_range_l4_callback: X86WalkPteCallback;
     static x86_clear_range_l3_callback: X86ClearChildWalkFn;
+    static x86_clear_l2_child_walk: X86ClearChildWalkFn;
     static x86_clear_l3_child_walk: X86ClearChildWalkFn;
     static x86_clear_l3_memobj_flush: X86ClearFlushMemobjFn;
     static x86_clear_l3_rss_sub: X86ClearRssSubFn;
@@ -3276,6 +3277,62 @@ pub unsafe extern "C" fn x86_set_range_map_entry_result(
 
 // Error logging preserves the original unconditional ekprintf -> kprintf
 // call, format bytes and C varargs payload. Unknown events remain silent.
+/// Complete former C L1 callback. The existing leaf helper owns old-entry,
+/// flush/free/page-unmap/RSS effects; raw args and count pointers remain borrowed.
+#[no_mangle]
+pub unsafe extern "C" fn clear_range_l1(
+    args0: *mut c_void,
+    ptep: *mut CULong,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+) -> CInt {
+    let args = args0.cast::<X86ClearRangeArgs>();
+    unsafe {
+        x86_clear_range_leaf_body_result(
+            args0, ptep, base, start, end,
+            (*args).vm, (*args).addr, core::ptr::addr_of_mut!((*args).nr_addr),
+            (*args).max_nr_addr, ihk_mc_get_processor_id(),
+            (*args).free_physical, (*args).memobj.cast(),
+            Some(x86_clear_old_action_bridge), Some(remote_flush_tlb_array_cpumask),
+            Some(x86_clear_l3_memobj_flush), Some(x86_clear_phys_to_virt_bridge),
+            Some(x86_clear_free_pages_user_bridge), Some(x86_clear_page_unmap_bridge),
+            Some(x86_clear_l3_rss_sub), Some(x86_clear_l3_memobj_rss_sub),
+            Some(x86_clear_l3_effect_log),
+        )
+    }
+}
+
+/// Complete former C L2 callback. Raw borrowed args/PTE/count storage is
+/// reread only as in the original call; no Rust reference spans C callbacks.
+/// L2 large pages are always enabled, independent of the live L3 1GB flag.
+#[no_mangle]
+pub unsafe extern "C" fn clear_range_l2(
+    args0: *mut c_void,
+    ptep: *mut CULong,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+) -> CInt {
+    let args = args0.cast::<X86ClearRangeArgs>();
+    // Caller-valid args0 is evaluated even if the shared helper rejects ptep.
+    unsafe {
+        x86_clear_range_level_body_result(
+            args0, ptep, base, start, end,
+            PTL2_SHIFT, PTL2_SIZE, PFL2_SIZE, 1,
+            (*args).vm, (*args).addr, core::ptr::addr_of_mut!((*args).nr_addr),
+            (*args).max_nr_addr, ihk_mc_get_processor_id(),
+            (*args).free_physical, (*args).memobj.cast(),
+            Some(x86_clear_old_action_bridge), Some(x86_clear_phys_to_virt_bridge),
+            Some(x86_clear_l2_child_walk), Some(remote_flush_tlb_array_cpumask),
+            Some(x86_pt_free_pages_bridge), Some(x86_clear_l3_memobj_flush),
+            Some(x86_clear_free_pages_user_bridge), Some(x86_clear_page_unmap_bridge),
+            Some(x86_clear_l3_rss_sub), Some(x86_clear_l3_memobj_rss_sub),
+            Some(x86_clear_l3_range_log), Some(x86_clear_l3_effect_log),
+        )
+    }
+}
+
 /// Complete former C L3 callback. Args remain raw borrowed storage: callbacks
 /// may synchronously update nr_addr/PTEs, so no exclusive Rust reference survives.
 #[no_mangle]

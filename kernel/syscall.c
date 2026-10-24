@@ -19854,6 +19854,9 @@ syscall_pending_mask_bridge(void *threadp)
 	return mask;
 }
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+long syscall_signalfd_create_bridge(int syscall_nr, int flags);
+#else
 long
 syscall_signalfd_create_bridge(int syscall_nr, int flags)
 {
@@ -19865,6 +19868,7 @@ syscall_signalfd_create_bridge(int syscall_nr, int flags)
 	request.args[1] = flags;
 	return do_syscall(&request, ihk_mc_get_processor_id());
 }
+#endif /* !MCKERNEL_RUST_SYSCALL_POLICY_HELPERS: retained C fallback */
 
 #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long

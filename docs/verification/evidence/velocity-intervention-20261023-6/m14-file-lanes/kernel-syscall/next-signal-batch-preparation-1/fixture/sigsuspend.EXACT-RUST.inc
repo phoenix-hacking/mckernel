@@ -1,0 +1,102 @@
+// M14-F03 source slice: synchronous sigsuspend wait/selection/ownership body.
+// Current Thread/SigCommon/CPU/monitor remain live as required by the old C body.
+// Selected pending ownership transfers only after detach and unlock to do_signal.
+#[inline]
+unsafe fn syscall_sigsuspend_find_pending_locked_f03(
+    head: *mut AbiListHead,
+    wset: CULong,
+) -> *mut crate::abi::SigPending {
+    let mut entry = (*head).next;
+    while entry != head {
+        let pending = entry
+            .cast::<u8>()
+            .wrapping_sub(offset_of!(crate::abi::SigPending, list))
+            .cast::<crate::abi::SigPending>();
+        if sigsuspend_pending_matches((*pending).sigmask.val[0], wset) != 0 {
+            return pending;
+        }
+        entry = (*pending).list.next;
+    }
+    null_mut()
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn syscall_sigsuspend_bridge(
+    threadp: *mut c_void,
+    setp: *mut c_void,
+) -> CLong {
+    unsafe extern "C" {
+        #[link_name = "do_signal"]
+        fn syscall_sigsuspend_do_signal_f03(
+            rc: CULong,
+            regs: *mut c_void,
+            thread: *mut Thread,
+            pending: *mut crate::abi::SigPending,
+            num: CInt,
+        ) -> CInt;
+    }
+    let thread = threadp.cast::<Thread>();
+    let set = setp.cast::<SigSet>();
+    let mut node = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+    let monitor = (*get_this_cpu_local_var()).monitor;
+    (*monitor).status = IHK_OS_MONITOR_KERNEL_HEAVY;
+    let wset = sigsuspend_prepare_mask((*set).val[0]);
+    let bset = (*thread).sigmask.val[0];
+    (*thread).sigmask.val[0] = wset;
+    write_volatile(addr_of_mut!((*thread).sigevent), 1);
+    loop {
+        while read_volatile(addr_of!((*thread).sigevent)) == 0 {
+            (*thread).status = PS_INTERRUPTIBLE;
+            let runq_irqstate = cpu_disable_interrupt_save();
+            let lock_cpu = get_this_cpu_local_var();
+            crate::spinlock_helpers::__ihk_mc_spinlock_lock_noirq(
+                addr_of_mut!((*lock_cpu).runq_lock).cast(),
+            );
+            let cpu = get_this_cpu_local_var();
+            let do_schedule = ((*cpu).flags & CPU_FLAG_NEED_RESCHED) != 0;
+            if do_schedule {
+                (*cpu).flags &= !CPU_FLAG_NEED_RESCHED;
+            }
+            crate::spinlock_helpers::__ihk_mc_spinlock_unlock_noirq(
+                addr_of_mut!((*cpu).runq_lock).cast(),
+            );
+            cpu_restore_interrupt(runq_irqstate);
+            if do_schedule {
+                schedule();
+            } else {
+                cpu_pause();
+            }
+        }
+        // Match the volatile C write before either protected pending-list scan.
+        write_volatile(addr_of_mut!((*thread).sigevent), 0);
+        (*thread).status = PS_RUNNING;
+        let common = (*thread).sigcommon.cast::<SigCommon>();
+        let mut lock = addr_of_mut!((*common).lock).cast();
+        let common_head = addr_of_mut!((*common).sigpending);
+        crate::lock_helpers::__mcs_rwlock_writer_lock(lock, node.as_mut_ptr());
+        let mut pending = syscall_sigsuspend_find_pending_locked_f03(common_head, wset);
+        if pending.is_null() {
+            crate::lock_helpers::__mcs_rwlock_writer_unlock(lock, node.as_mut_ptr());
+            lock = addr_of_mut!((*thread).sigpendinglock).cast();
+            let thread_head = addr_of_mut!((*thread).sigpending);
+            crate::lock_helpers::__mcs_rwlock_writer_lock(lock, node.as_mut_ptr());
+            pending = syscall_sigsuspend_find_pending_locked_f03(thread_head, wset);
+        }
+        if pending.is_null() {
+            crate::lock_helpers::__mcs_rwlock_writer_unlock(lock, node.as_mut_ptr());
+            continue;
+        }
+        crate::process_helpers::process_list_detach_result(addr_of_mut!((*pending).list));
+        crate::lock_helpers::__mcs_rwlock_writer_unlock(lock, node.as_mut_ptr());
+        (*thread).sigmask.val[0] = bset;
+        let _ = syscall_sigsuspend_do_signal_f03(
+            (-(EINTR as CLong)) as CULong,
+            null_mut(),
+            thread,
+            pending,
+            -1,
+        );
+        // do_signal may consume/free the detached node: never access it again.
+        return -(EINTR as CLong);
+    }
+}

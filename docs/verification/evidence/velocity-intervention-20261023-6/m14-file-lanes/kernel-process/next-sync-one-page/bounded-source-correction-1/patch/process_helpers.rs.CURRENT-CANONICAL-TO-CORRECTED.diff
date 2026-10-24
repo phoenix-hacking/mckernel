@@ -1,0 +1,80 @@
+--- a/kernel/rust/process_helpers.rs
++++ b/kernel/rust/process_helpers.rs
+@@ -199,13 +199,8 @@
+         pgaddr: *mut c_void,
+         pgshift: CInt,
+     ) -> CInt;
+-    fn sync_one_page(
+-        arg0: *mut c_void,
+-        page_table: *mut c_void,
+-        ptep: *mut c_void,
+-        pgaddr: *mut c_void,
+-        pgshift: CInt,
+-    ) -> CInt;
++    static mut process_sync_one_page_entry_debug: crate::debug::Ddebug;
++    static mut process_sync_one_page_exit_debug: crate::debug::Ddebug;
+     fn process_visit_pte_range_bridge(
+         page_table: *mut c_void,
+         start: CULong,
+@@ -4231,6 +4226,61 @@
+     0
+ }
+ 
++/// Own the actual former C sync callback. The caller retains the live PTE,
++/// args/memobj and existing page-table exclusion for the synchronous visit.
++/// Valid pgshift is the original supported 0..63 domain. No new error policy,
++/// ownership transfer, allocation or lock is introduced.
++#[no_mangle]
++pub unsafe extern "C" fn sync_one_page(
++    arg0: *mut c_void,
++    page_table: *mut c_void,
++    ptep: *mut c_void,
++    pgaddr: *mut c_void,
++    pgshift: CInt,
++) -> CInt {
++    let pgsize = (1 as SizeT).wrapping_shl(pgshift as u32);
++    let pte = ptep.cast::<CULong>();
++    let mut error = 0;
++    if core::ptr::read_volatile(core::ptr::addr_of!(
++        process_sync_one_page_entry_debug.line_flags
++    )) >> 24 != 0 {
++        let _ = kprintf(
++            b"sync_one_page(%p,%p,%p %#lx,%p,%d)\n\0".as_ptr().cast(),
++            arg0, page_table, ptep, *pte, pgaddr, pgshift,
++        );
++    }
++    if crate::pte_helpers::pte_is_null(pte) == 0
++        && crate::pte_helpers::pte_is_fileoff(pte, pgsize) == 0
++        && crate::pte_helpers::pte_is_dirty(pte, pgsize) != 0
++    {
++        crate::pte_helpers::pte_clear_dirty(pte, pgsize);
++        crate::x86_memory_helpers::flush_tlb_single(pgaddr as CULong);
++        // Original ordering: read physical PTE after the TLB-effect callback,
++        // then inspect zero-fill flags before the existing memobj operation.
++        let phys = crate::pte_helpers::pte_get_phys(pte);
++        let memobj = (*arg0.cast::<ProcessSyncArgs>()).memobj;
++        if (*memobj).flags & MF_ZEROFILL == 0 {
++            error = crate::object_helpers::memobj_flush_page(memobj, phys, pgsize);
++            if error != 0 {
++                let _ = kprintf(
++                    b"sync_one_page(%p,%p,%p %#lx,%p,%d):flush failed. %d\n\0".as_ptr().cast(),
++                    arg0, page_table, ptep, *pte, pgaddr, pgshift, error,
++                );
++                crate::pte_helpers::pte_set_dirty(pte, pgsize);
++            }
++        }
++    }
++    if core::ptr::read_volatile(core::ptr::addr_of!(
++        process_sync_one_page_exit_debug.line_flags
++    )) >> 24 != 0 {
++        let _ = kprintf(
++            b"sync_one_page(%p,%p,%p %#lx,%p,%d):%d\n\0".as_ptr().cast(),
++            arg0, page_table, ptep, *pte, pgaddr, pgshift, error,
++        );
++    }
++    error
++}
++
+ #[no_mangle]
+ pub unsafe extern "C" fn process_sync_memory_range_body_result(
+     vm: *mut ProcessVm,

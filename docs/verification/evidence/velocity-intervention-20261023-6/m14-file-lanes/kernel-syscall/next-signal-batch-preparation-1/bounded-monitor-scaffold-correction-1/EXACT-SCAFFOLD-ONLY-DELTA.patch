@@ -1,0 +1,55 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-signal-batch-preparation-1/fixture/signal_batch_actual.c
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-signal-batch-preparation-1/bounded-monitor-scaffold-correction-1/fixture/signal_batch_actual.CORRECTED.c
+@@ -32,7 +32,7 @@
+ static struct thread th;
+ static struct sig_common common;
+ static struct cpu_local_var cpu;
+-static struct ihk_os_cpu_monitor monitor;
++static struct ihk_os_cpu_monitor fixture_cpu_monitor;
+ static struct sig_pending nodes[8];
+ static struct k_sigaction input_act,output_act;
+ static struct event events[128];static size_t nevents;
+@@ -51,7 +51,7 @@
+ static void wake_after_wait(int schedule_path){
+  CHECK(!held_lock&&!runq_held&&!irq_disabled&&!injected);
+  CHECK(th.status==PS_INTERRUPTIBLE&&th.sigevent==0&&th.sigmask.__val[0]==wait_mask);
+- CHECK(monitor.status==IHK_OS_MONITOR_KERNEL_HEAVY);
++ CHECK(fixture_cpu_monitor.status==IHK_OS_MONITOR_KERNEL_HEAVY);
+  CHECK(schedule_path==(wait_mode==2));CHECK(!(cpu.flags&CPU_FLAG_NEED_RESCHED));
+  log_event(8,schedule_path,th.status,th.sigmask.__val[0]);
+  if(placement!=1)append(&common.sigpending,&nodes[2]);
+@@ -63,7 +63,7 @@
+ int do_signal(unsigned long rc,void*regs,struct thread*t,struct sig_pending*p,int n){
+  CHECK(rc==(unsigned long)-EINTR&&!regs&&t==&th&&n==-1);
+  CHECK(!held_lock&&!runq_held&&!irq_disabled&&th.sigmask.__val[0]==saved_mask);
+- CHECK(th.status==PS_RUNNING&&th.sigevent==0&&monitor.status==IHK_OS_MONITOR_KERNEL_HEAVY);
++ CHECK(th.status==PS_RUNNING&&th.sigevent==0&&fixture_cpu_monitor.status==IHK_OS_MONITOR_KERNEL_HEAVY);
+  int id=p==&nodes[2]?2:p==&nodes[3]?3:-1;CHECK(id==(placement==1?3:2));CHECK(consumed==-1);
+  CHECK(p->list.next==(void*)0x00100129&&p->list.prev==(void*)0x00200229);
+  consumed=id;log_event(9,id,rc,n);
+@@ -82,6 +82,8 @@
+ #define mcs_rwlock_writer_unlock fixture_writer_unlock
+ #define cpu_disable_interrupt_save fixture_disable_irq
+ #define cpu_restore_interrupt fixture_restore_irq
++#undef ihk_mc_spinlock_lock_noirq
++#undef ihk_mc_spinlock_unlock_noirq
+ #define ihk_mc_spinlock_lock_noirq fixture_runq_lock
+ #define ihk_mc_spinlock_unlock_noirq fixture_runq_unlock
+ #define schedule fixture_schedule
+@@ -121,13 +123,13 @@
+ 
+ static void init_list(struct list_head*h){h->next=h->prev=h;}
+ static void reset(void){
+- bytes_clear(&th,sizeof(th));bytes_clear(&common,sizeof(common));bytes_clear(&cpu,sizeof(cpu));bytes_clear(&monitor,sizeof(monitor));bytes_clear(nodes,sizeof(nodes));bytes_clear(events,sizeof(events));bytes_clear(&input_act,sizeof(input_act));bytes_clear(&output_act,sizeof(output_act));
+- th.sigcommon=&common;cpu.current=&th;cpu.monitor=&monitor;init_list(&common.sigpending);init_list(&th.sigpending);
++ bytes_clear(&th,sizeof(th));bytes_clear(&common,sizeof(common));bytes_clear(&cpu,sizeof(cpu));bytes_clear(&fixture_cpu_monitor,sizeof(fixture_cpu_monitor));bytes_clear(nodes,sizeof(nodes));bytes_clear(events,sizeof(events));bytes_clear(&input_act,sizeof(input_act));bytes_clear(&output_act,sizeof(output_act));
++ th.sigcommon=&common;cpu.current=&th;cpu.monitor=&fixture_cpu_monitor;init_list(&common.sigpending);init_list(&th.sigpending);
+  nevents=0;held_lock=held_node=0;irq_disabled=runq_held=injected=0;consumed=-1;forward_return=0;forward_sig=0;
+ }
+ struct snapshot {long result;struct thread t;struct sig_common c;struct cpu_local_var v;struct ihk_os_cpu_monitor m;struct sig_pending p[8];struct k_sigaction in,out;struct event e[128];size_t n;int consumed,irq,runq,injected;};
+ static struct snapshot a,b;
+-static void save(struct snapshot*s,long result){bytes_clear(s,sizeof(*s));s->result=result;bytes_copy(&s->t,&th,sizeof(th));bytes_copy(&s->c,&common,sizeof(common));bytes_copy(&s->v,&cpu,sizeof(cpu));bytes_copy(&s->m,&monitor,sizeof(monitor));bytes_copy(s->p,nodes,sizeof(nodes));bytes_copy(&s->in,&input_act,sizeof(input_act));bytes_copy(&s->out,&output_act,sizeof(output_act));bytes_copy(s->e,events,sizeof(events));s->n=nevents;s->consumed=consumed;s->irq=irq_disabled;s->runq=runq_held;s->injected=injected;CHECK(!held_lock&&!irq_disabled&&!runq_held);}
++static void save(struct snapshot*s,long result){bytes_clear(s,sizeof(*s));s->result=result;bytes_copy(&s->t,&th,sizeof(th));bytes_copy(&s->c,&common,sizeof(common));bytes_copy(&s->v,&cpu,sizeof(cpu));bytes_copy(&s->m,&fixture_cpu_monitor,sizeof(fixture_cpu_monitor));bytes_copy(s->p,nodes,sizeof(nodes));bytes_copy(&s->in,&input_act,sizeof(input_act));bytes_copy(&s->out,&output_act,sizeof(output_act));bytes_copy(s->e,events,sizeof(events));s->n=nevents;s->consumed=consumed;s->irq=irq_disabled;s->runq=runq_held;s->injected=injected;CHECK(!held_lock&&!irq_disabled&&!runq_held);}
+ static void equivalent(void){if(memcmp(&a,&b,sizeof(a))){printf("MISMATCH case=%lu C_rc=%ld Rust_rc=%ld C_events=%lu Rust_events=%lu C_consumed=%d Rust_consumed=%d\n",case_id,a.result,b.result,a.n,b.n,a.consumed,b.consumed);for(size_t i=0;i<a.n||i<b.n;i++)printf("event%lu C=%d,%d,%lx,%lx Rust=%d,%d,%lx,%lx\n",i,a.e[i].kind,a.e[i].id,a.e[i].a,a.e[i].b,b.e[i].kind,b.e[i].id,b.e[i].a,b.e[i].b);for(size_t i=0;i<sizeof(a);i++)if(((unsigned char*)&a)[i]!=((unsigned char*)&b)[i]){printf("first_differing_snapshot_byte=%lu C=%u Rust=%u\n",i,((unsigned char*)&a)[i],((unsigned char*)&b)[i]);break;}abort();}}
+ static const unsigned long patterns[8]={0,1,1UL<<8,1UL<<18,1UL<<63,~0UL,0x5555555555555555UL,0xaaaaaaaaaaaaaaaaUL};
+ static void abi_check(void){

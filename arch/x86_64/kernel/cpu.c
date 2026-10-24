@@ -2807,6 +2807,9 @@ void x86_kprintf_unlock_bridge(unsigned long flags)
 }
 
 void x86_context_line_log_bridge(int event, unsigned long a,
+		unsigned long b, unsigned long c, unsigned long d);
+#else
+void x86_context_line_log_bridge(int event, unsigned long a,
 		unsigned long b, unsigned long c, unsigned long d)
 {
 	switch (event) {

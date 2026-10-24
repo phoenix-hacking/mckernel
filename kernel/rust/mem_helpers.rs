@@ -16,23 +16,16 @@ use crate::rbtree::{rb_first_safe, rb_next_safe, RbNode, RbRoot};
 use crate::string::{strcmp, strcpy, strlen, strstr};
 
 unsafe extern "C" {
+    // Same public Rust/reviewed-assembly providers used by the original C adapters.
+    fn rdtsc() -> CULong;
+    fn flush_tlb_single(addr: CULong);
+    fn flush_tlb();
+    fn cpu_pause();
     // C owns the complete vector array; this names its first element only.
     // No array extent is invented: the immutable header geometry supplies it.
     #[link_name = "tlb_flush_vector"]
     static mut MEM_TLB_FLUSH_VECTOR_FIRST: TlbFlushEntry;
     static mem_remote_tlb_geometry: [CInt; 3];
-    fn mem_tlb_rdtsc_bridge() -> CULong;
-    fn mem_tlb_current_cpu_bridge() -> CInt;
-    fn mem_tlb_get_vector_bridge(type_: CInt) -> CInt;
-    fn mem_tlb_interrupt_cpu_bridge(cpu: CInt, vector: CInt);
-    fn mem_tlb_noirq_lock_bridge(lock_addr: CULong);
-    fn mem_tlb_noirq_unlock_bridge(lock_addr: CULong);
-    fn mem_tlb_atomic_set_bridge(atomic_addr: CULong, value: CInt);
-    fn mem_tlb_atomic_inc_bridge(atomic_addr: CULong);
-    fn mem_tlb_atomic_read_bridge(atomic_addr: CULong) -> CInt;
-    fn mem_tlb_flush_single_bridge(addr: CULong);
-    fn mem_tlb_flush_all_bridge();
-    fn mem_tlb_pause_bridge();
 
     #[link_name = "rusage"]
     static mut RUSAGE: RusageGlobal;
@@ -49,6 +42,8 @@ unsafe extern "C" {
     fn ihk_mc_get_nr_numa_nodes() -> CInt;
     fn ihk_get_kargs() -> *mut i8;
     fn ihk_mc_get_processor_id() -> CInt;
+    fn ihk_mc_get_vector(type_: CInt) -> CInt;
+    fn ihk_mc_interrupt_cpu(cpu: CInt, vector: CInt) -> CInt;
     fn mem_num_processors_bridge() -> CInt;
     fn mem_dump_level_bridge() -> CInt;
     fn mem_get_dump_page_set_bridge() -> *mut IhkDumpPageSet;
@@ -5507,6 +5502,101 @@ pub unsafe extern "C" fn mem_lookup_node_body_result(
     }
 
     phys_to_nid_cb(*ptep & PT_PHYSMASK)
+}
+
+/// Exact TLB target-selection provider: preserve the current public CPU ABI.
+#[no_mangle]
+pub unsafe extern "C" fn mem_tlb_current_cpu_bridge() -> CInt {
+    unsafe { ihk_mc_get_processor_id() }
+}
+
+/// Exact public vector translation, including every signed type/result bit.
+#[no_mangle]
+pub unsafe extern "C" fn mem_tlb_get_vector_bridge(type_: CInt) -> CInt {
+    unsafe { ihk_mc_get_vector(type_) }
+}
+
+/// Preserve one interrupt call and the original void/ignored-result contract.
+/// No completion/ACK is inferred from the public provider's return value.
+#[no_mangle]
+pub unsafe extern "C" fn mem_tlb_interrupt_cpu_bridge(cpu: CInt, vector: CInt) {
+    let _ = unsafe { ihk_mc_interrupt_cpu(cpu, vector) };
+}
+
+/// Preserve the existing TLB pending-counter provider and its atomic ordering.
+///
+/// # Safety
+/// atomic_addr is the same live, aligned ihk_atomic_t owned by the synchronous
+/// TLB protocol. No null policy, reference retention, or completion is invented.
+#[no_mangle]
+pub unsafe extern "C" fn mem_tlb_atomic_set_bridge(atomic_addr: CULong, value: CInt) {
+    unsafe { crate::atomic_helpers::ihk_atomic_set(atomic_addr as *mut crate::atomic_helpers::IhkAtomic, value) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mem_tlb_atomic_inc_bridge(atomic_addr: CULong) {
+    unsafe { crate::atomic_helpers::ihk_atomic_inc(atomic_addr as *mut crate::atomic_helpers::IhkAtomic) }
+}
+
+/// Called only at the existing handler's actual completion point.
+#[no_mangle]
+pub unsafe extern "C" fn mem_tlb_atomic_dec_bridge(atomic_addr: CULong) {
+    unsafe { crate::atomic_helpers::ihk_atomic_dec(atomic_addr as *mut crate::atomic_helpers::IhkAtomic) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mem_tlb_atomic_read_bridge(atomic_addr: CULong) -> CInt {
+    unsafe { crate::atomic_helpers::ihk_atomic_read(atomic_addr as *const crate::atomic_helpers::IhkAtomic) }
+}
+
+/// Exact no-IRQ ticket-lock callback; the original live lock remains caller-owned.
+///
+/// # Safety
+/// lock_addr is the original aligned, initialized ihk_spinlock_t, retained for the
+/// entire synchronous TLB protocol. The same provider owns preemption and ticket
+/// ordering; this adapter neither changes IRQ state nor retains the pointer.
+#[no_mangle]
+pub unsafe extern "C" fn mem_tlb_noirq_lock_bridge(lock_addr: CULong) {
+    unsafe {
+        crate::spinlock_helpers::__ihk_mc_spinlock_lock_noirq(
+            lock_addr as *mut crate::spinlock_helpers::IhkSpinlock,
+        )
+    }
+}
+
+/// Exact no-IRQ release callback; release precedes the provider's preempt-enable.
+#[no_mangle]
+pub unsafe extern "C" fn mem_tlb_noirq_unlock_bridge(lock_addr: CULong) {
+    unsafe {
+        crate::spinlock_helpers::__ihk_mc_spinlock_unlock_noirq(
+            lock_addr as *mut crate::spinlock_helpers::IhkSpinlock,
+        )
+    }
+}
+
+/// Exact existing timestamp instruction provider; no serialization is added.
+#[no_mangle]
+pub unsafe extern "C" fn mem_tlb_rdtsc_bridge() -> CULong {
+    unsafe { rdtsc() }
+}
+
+/// The same privileged invalidation provider consumes all address bits once.
+/// Caller owns the original CPU/IRQ/address-space execution context.
+#[no_mangle]
+pub unsafe extern "C" fn mem_tlb_flush_single_bridge(addr: CULong) {
+    unsafe { flush_tlb_single(addr) }
+}
+
+/// Preserve the existing CR3 flush provider and its instruction/memory ordering.
+#[no_mangle]
+pub unsafe extern "C" fn mem_tlb_flush_all_bridge() {
+    unsafe { flush_tlb() }
+}
+
+/// Exact existing PAUSE provider; no yield, sleep, or completion is invented.
+#[no_mangle]
+pub unsafe extern "C" fn mem_tlb_pause_bridge() {
+    unsafe { cpu_pause() }
 }
 
 /// Preserve the original single-address stack-local handoff to the array entry.

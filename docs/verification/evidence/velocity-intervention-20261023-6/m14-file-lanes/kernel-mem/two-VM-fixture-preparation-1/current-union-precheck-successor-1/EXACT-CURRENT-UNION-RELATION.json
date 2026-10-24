@@ -1,0 +1,75 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXACT_ACCEPTED_TLB13_ONLY_CURRENT_RELATION_VM_BODIES_UNCHANGED",
+  "root_integration": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/root-union-preparation-1/CANONICAL-INTEGRATION.json",
+    "sha256": "fdc721a4d72df1b15cea2e1479e26de548af527772b11bb0b4524d6647456e4c"
+  },
+  "current_C_sha256": "9d53106e7228b5a7654f4250bab58e20e7bc47a28f8ad9675b1c9ac92599b976",
+  "current_Rust_sha256": "6a527f7a55930d72d6d72c775ee0261c3550e2bd0094fe01031f3aa3238aefd6",
+  "historical_C_sha256": "638788c79fb96c1edb229d016fa678a02c0fcde6e1b56c7fa45d33b5490354d4",
+  "historical_Rust_sha256": "4635a252332cd369e36384f04a414e2b4c2d79726a4f95caafcf1d3ed1a56b4d",
+  "current_equals_accepted_private_TLB13_exact": true,
+  "C_outside_TLB_region_exact_equal": true,
+  "Rust_except_accepted_extern_declarations_and_TLB13_added_block_exact_equal": true,
+  "VM_complete_functions_unchanged": [
+    {
+      "language": "C",
+      "marker": "static pte_t *mem_lookup_fault_pte_bridge(",
+      "exact_body_unchanged": true,
+      "sha256": "68ccf7158eea7f1a2bd9a90b5a22f18e70d1d1bdc2618287565bb6cf2fa9f375",
+      "bytes": 206
+    },
+    {
+      "language": "C",
+      "marker": "static int mem_page_fault_process_vm_bridge(",
+      "exact_body_unchanged": true,
+      "sha256": "d4293375507efb2db5101c5e7cac5d67df5389080db61cdc4af2398957e64912",
+      "bytes": 155
+    },
+    {
+      "language": "C",
+      "marker": "static void mem_lookup_fault_log_bridge(",
+      "exact_body_unchanged": true,
+      "sha256": "dcf35ba5fca0bc9f3e8a76981dbd69db68f859d1741b3b862bd60e2f8ef65a1d",
+      "bytes": 155
+    },
+    {
+      "language": "C",
+      "marker": "pte_t *ihk_mc_pt_lookup_fault_pte(",
+      "exact_body_unchanged": true,
+      "sha256": "e02abd80f6fdffd1cfcbad2209fe15ec89bba45091f6d5c3e26d2dceb3724874",
+      "bytes": 903
+    },
+    {
+      "language": "C",
+      "marker": "int lookup_node(",
+      "exact_body_unchanged": true,
+      "sha256": "2d7a020f2860bc12353d884810b931c289341edce767b9bc5f1b630d7b3df27b",
+      "bytes": 736
+    },
+    {
+      "language": "Rust",
+      "marker": "unsafe fn mem_vm_page_table(",
+      "exact_body_unchanged": true,
+      "sha256": "a91bfcbee18642116ceb1cbc2c1afdeea007de1307d7a9e918c942862d64791e",
+      "bytes": 501
+    },
+    {
+      "language": "Rust",
+      "marker": "pub unsafe extern \"C\" fn mem_lookup_node_body_result(",
+      "exact_body_unchanged": true,
+      "sha256": "9fe72d8e6141608944478165ba11ba2f7cbaadd80ae2e403102d8e0e3d569b03",
+      "bytes": 943
+    },
+    {
+      "language": "Rust",
+      "marker": "pub unsafe extern \"C\" fn mem_pt_lookup_fault_pte_body_result(",
+      "exact_body_unchanged": true,
+      "sha256": "439035a5959a5dd4ae6fd2b1c9b2be9dfeccbc88d74806b9bced438d4a9ce846",
+      "bytes": 1123
+    }
+  ],
+  "candidate_fixture_oracles_unchanged": true,
+  "actual_execution": null
+}

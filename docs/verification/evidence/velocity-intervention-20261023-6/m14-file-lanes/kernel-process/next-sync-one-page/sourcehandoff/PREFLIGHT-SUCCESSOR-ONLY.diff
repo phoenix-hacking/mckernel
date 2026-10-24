@@ -1,0 +1,32 @@
+--- preserved/run_owned_first_candidate.py
++++ run_owned_preflight_successor_once.py
+@@ -3,7 +3,7 @@
+ """
+ from pathlib import Path
+ import ast,builtins,dis,hashlib,json,os,resource,signal,stat,subprocess,time,sys
+-B=Path(__file__).resolve().parents[1];H=B/'sourcehandoff';RF=H/'EXACT-FUNCTIONAL-FIXTURE-AND-CONSUMER.NOT-GRANTED.json';READY=H/'EXECUTABLE-READY.NOT-GRANTED.json'
++B=Path(__file__).resolve().parents[1];H=B/'sourcehandoff';RF=H/'EXACT-FUNCTIONAL-FIXTURE-AND-CONSUMER.NOT-GRANTED.json';READY=H/'EXECUTABLE-READY.PREFLIGHT-SUCCESSOR.NOT-GRANTED.json'
+ SCOPE='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
+ started=False;records=[];durable={}
+ def pin(p):
+@@ -14,8 +14,12 @@
+ def unique(symbols,name,kinds):
+  found=[row for row in symbols if row[-1]==name];assert len(found)==1 and found[0][-2] in kinds,(name,kinds,found);return found[0]
+ try:
++ # Refuse any previous command output/capture/result or successor failure.
++ for path in (B/'output-first-candidate-1',H/'actual-first-candidate-capture-1',H/'ACTUAL-FIRST-CANDIDATE-WHOLE-JOIN.json',H/'PREFLIGHT-SUCCESSOR-FAILURE-1.json'):
++  assert not path.exists(),('existing_output_or_successor_failure',str(path))
+  grant=json.loads((H/'ROOT-GRANT.json').read_text());assert grant['scope']==SCOPE and grant['CPU']==6 and grant['ordinary_jobs']==1 and grant['ready_sha256']==pin(READY)['sha256']
+  ready=json.loads(READY.read_text());assert pin(RF)==ready['recipe'] and pin(Path(__file__))==ready['driver']
++ for row in ready['preflight_history_bindings']:assert pin(Path(row['path']))==row,row['path']
+  r=json.loads(RF.read_text());assert len(r['commands'])==16
+  for row in [*r['input_bindings'].values(),*r['tools'].values(),*r['actual_header_closure'].values(),*r['current_canonical_header_preimages'].values(),*r['current_provider_pins'].values(),r['accepted_real_C_profile'],r['accepted_prior_production']]:assert pin(Path(row['path']))==row,row['path']
+  assert os.getuid()==os.geteuid()==1000 and sys.executable=='/home/holden/anaconda3/bin/python3' and sys.version_info[:2]==(3,9)
+@@ -101,6 +105,6 @@
+  result=dict(scope=SCOPE,status='PASS_F02_ACTUAL_SYNC_ONE_PAGE_C_RUST_795_REAL_ABI_ACTUAL_RUST_CALLER_SELECTED_FALLBACK',recipe=pin(RF),ready=pin(READY),grant=pin(H/'ROOT-GRANT.json'),records=records,objects=durable,actual_commands=16,actual_original_C_Rust_comparisons=795,real_Rust_PTE_atomics_and_memobj_dispatch=True,controlled_host_TLB_effect_only=True,native_asm_executed=False,exact_final_state_event_vararg_oracles=True,error_log_before_redirty=True,entry_TLB_flush_error_exit_mutation_cases=True,shortcircuit_NULL_args=True,actual_existing_Rust_caller=caller_witnesses,actual_debug_selector_metadata=selector_evidence,selected_C_callback_compute_excluded=True,exact_original_C_fallback=True,actual_partial_U_names=unresolved,remaining_provider_debt=r['remaining_provider_debt'],seconds=time.monotonic()-begin,CPU_seconds=ns['cpu_used'](),CPU6_released=True,canonical_mutations=0,full_current78=False,complete_selected_C_TU=False,default_image_native=False,file_retired=False,failure_history=r['failure_history'])
+  write(H/'ACTUAL-FIRST-CANDIDATE-WHOLE-JOIN.json',result);print(json.dumps(dict(status=result['status'],receipt=pin(H/'ACTUAL-FIRST-CANDIDATE-WHOLE-JOIN.json'),seconds=result['seconds'],CPU6_released=True)))
+ except BaseException as error:
+- write(H/'FIRST-CANDIDATE-FAILURE-1.json',dict(scope=SCOPE,status='STOP_FIRST_UNEXPECTED_RESULT_NO_RETRY',error=type(error).__name__+': '+str(error),records=records,durable_objects=durable,CPU6_released=all(row['join']['direct_child_joined'] and row['join']['group_absent'] and row['join']['closed_streams'] for row in records)));raise
++ write(H/'PREFLIGHT-SUCCESSOR-FAILURE-1.json',dict(scope=SCOPE,status='STOP_FIRST_UNEXPECTED_RESULT_NO_RETRY',error=type(error).__name__+': '+str(error),records=records,durable_objects=durable,CPU6_released=all(row['join']['direct_child_joined'] and row['join']['group_absent'] and row['join']['closed_streams'] for row in records)));raise
+ finally:
+  if started:signal.setitimer(signal.ITIMER_REAL,0)

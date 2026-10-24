@@ -1,0 +1,47 @@
+--- preserved-uncompiled-batch49f/process_helpers.rs
++++ accepted-sync-plus-remap-syntax-correction/process_helpers.rs
+@@ -4251,7 +4251,7 @@
+     let pte = ptep.cast::<CULong>();
+     let mut error = 0;
+     if core::ptr::read_volatile(core::ptr::addr_of!(
+-        process_sync_one_page_entry_debug.line_flags,
++        process_sync_one_page_entry_debug.line_flags
+     )) >> 24 != 0 {
+         let _ = kprintf(
+             b"sync_one_page(%p,%p,%p %#lx,%p,%d)\n\0".as_ptr().cast(),
+@@ -4280,7 +4280,7 @@
+         }
+     }
+     if core::ptr::read_volatile(core::ptr::addr_of!(
+-        process_sync_one_page_exit_debug.line_flags,
++        process_sync_one_page_exit_debug.line_flags
+     )) >> 24 != 0 {
+         let _ = kprintf(
+             b"sync_one_page(%p,%p,%p %#lx,%p,%d):%d\n\0".as_ptr().cast(),
+@@ -4307,7 +4307,7 @@
+     let pte = ptep.cast::<CULong>();
+     let mut old_pte: CULong = 0;
+     if core::ptr::read_volatile(core::ptr::addr_of!(
+-        process_remap_one_page_entry_debug.line_flags,
++        process_remap_one_page_entry_debug.line_flags
+     )) >> 24 != 0 {
+         let _ = kprintf(
+             b"remap_one_page(%p,%p,%p %#lx,%p,%d)\n\0".as_ptr().cast(),
+@@ -4345,7 +4345,7 @@
+                 process_remap_free_line,
+             );
+             if core::ptr::read_volatile(core::ptr::addr_of!(
+-                process_remap_one_page_rss_debug.line_flags,
++                process_remap_one_page_rss_debug.line_flags
+             )) >> 24 != 0 {
+                 // Original %ld payloads are the unsigned size_t values.
+                 let _ = kprintf(
+@@ -4359,7 +4359,7 @@
+         }
+     }
+     if core::ptr::read_volatile(core::ptr::addr_of!(
+-        process_remap_one_page_exit_debug.line_flags,
++        process_remap_one_page_exit_debug.line_flags
+     )) >> 24 != 0 {
+         let _ = kprintf(
+             b"remap_one_page(%p,%p,%p %#lx,%p,%d): %d\n\0".as_ptr().cast(),

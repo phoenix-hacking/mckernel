@@ -1,0 +1,45 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "recorded_at": "2026-10-24T00:42:28.687642+00:00",
+  "observation_source": "dispatcher messages2026-10-24T00:39:48-51Z from actual LONG read",
+  "practical_complete": 34,
+  "practical_total": 35,
+  "new_practical_closures_since_0001": 0,
+  "M14_current_batches": {
+    "passing": [
+      "F02 dump/tree",
+      "F03 signalfd",
+      "F04 context logging",
+      "F06 ptrace"
+    ],
+    "fixture_correction": [
+      "F01",
+      "F05"
+    ],
+    "not_whole_M14_completion": true
+  },
+  "LONG_reported": {
+    "completed_rounds": 36,
+    "application_launches": 72,
+    "mixed_work_seconds": 200.604,
+    "owner_wall_seconds": 376.7,
+    "reported_launches_per_owner_wall_minute": 11.468011680382267,
+    "no_FAIL_ABORT_wire_or_snapshot_error_in_observation": true,
+    "terminal_acceptance": false,
+    "mixed_work_wall_ratio_is_not_host_CPU_utilization": true
+  },
+  "M15_lanes": {
+    "MM_Rust_ASM": "foreground:/root/ihk_rust_scope",
+    "CLI_and_runtime_programs": "foreground:/root/project_runtime_rust_scope",
+    "BFD_adapters": "foreground:/root/m15_bfd_rust_cutover",
+    "libihk": "background:/root/case227_stage"
+  },
+  "M15_ihkconfig": {
+    "Rust_candidate_ready": true,
+    "equivalence_cases_prepared": 188,
+    "Rust_defined_behavior_cases_prepared": 3,
+    "compiler_or_fixture_executed": false,
+    "ready_queue_id": "20261024T003956183758Z-ade0d52cbadf463f88d738dad04a0a4a"
+  },
+  "efficiency_next_measure": "Candidate-ready to first real fixture and canonical integration delays; avoid duplicate source implementations and idle model lanes. No speedup multiplier from thread/vector counts."
+}

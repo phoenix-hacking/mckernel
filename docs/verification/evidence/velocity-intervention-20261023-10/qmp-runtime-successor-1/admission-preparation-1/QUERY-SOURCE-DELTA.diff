@@ -1,0 +1,85 @@
+--- accepted-sdk8-actual-postjoin-query
++++ qmp10-postjoin-query
+@@ -5,7 +5,7 @@
+ import ast,fcntl,hashlib,importlib.util,json,os,resource,stat,subprocess,sys,time
+ from pathlib import Path
+ D=Path(__file__).resolve().parent
+-CONFIG_SHA = 'bb82eb87711222470db1ef4be3fb9dd48dffdfb027f8ec00401c53f4071b351a'
++CONFIG_SHA = 'aced237590bb25cc1bfddb491dc7adf3db476321a1aa9c14f2c8d99d932b4268'
+ ENGINE=Path('/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/cleanup_pass_image.py')
+ ENGINE_SHA='59efab0bc29fa5784dc855743cec397237552821bc150b60ea1d6c2e5f7ac00d'
+ def need(v,m):
+@@ -32,7 +32,7 @@
+     finally:os.close(fd)
+ 
+ def inputs():
+- raw=(D/'QUERY-INPUTS.ACTUAL-POSTJOIN.json').read_bytes();need(hashlib.sha256(raw).hexdigest()==CONFIG_SHA,'exact query input binding')
++ raw=(D/'QUERY-INPUTS.QMP10.POSTJOIN.json').read_bytes();need(hashlib.sha256(raw).hexdigest()==CONFIG_SHA,'exact query input binding')
+  return json.loads(raw)
+ 
+ def parent_fact(path):
+@@ -47,7 +47,10 @@
+ def validate(f,c,growth):
+  need(f['uid']==f['euid']==0 and f['affinity']==[7],'root query CPU7')
+  need(f['proc']['status']=='COMPLETE' and f['proc']['failure'] is None and f['proc']['publishers']==[] and len(f['proc']['snapshots'])==2,'complete publisher-free census')
+- need(f['physical']['verdict']=='PASS_POSITIVE_PHYSICAL_RETIREMENT_CANDIDATE15_FAILED_IMAGE' and f['physical']['status']=='M14_CANDIDATE15_FAILED_IMAGE_POSITIVELY_RETIRED' and f['physical']['physical_clearance'] is True and f['physical']['permanent_mutex']=='27:4' and f['physical']['CID']=='ec1c6109dfc4db4df71e9de0344aa75b6122903326cc53e71d52d7676f56cb0e' and f['physical']['actual_normal_cleanup']['exit']==0 and f['physical']['actual_normal_cleanup']['direct_join_group_absence_closed_streams'] is True and f['physical']['actual_mutex']['exit']==0 and c['current_live_postjoin']['status']=='M14_CANDIDATE15_FAILED_IMAGE_POSITIVELY_RETIRED' and c['current_live_postjoin']['authority']==c['physical'] and c['current_live_postjoin']['physical_clearance'] is True,'genuine candidate15 failed-image positive physical retirement and current postjoin')
++ ph=f['physical'];pj=f['current_live_postjoin']
++ need(ph['status']=='PASS_POSITIVE_PHYSICAL_RETIREMENT' and ph['nonce']=='63bdc7731c34491eb430ddb34b094d5b' and ph['independent_reviewer']=='/root/native235_release_review' and ph['permanent_mutex']==[27,4] and ph['exact_reaped_client_count']==23 and ph['positive_identity_count']==26 and ph['cleanup_replayed'] is False and ph['native_outcome']=='FAIL_QMP_CAPTURE_CAPACITY' and ph['formal_hour_credit']==0,'genuine accepted63bd normal positive physical retirement')
++ need(pj['status']=='PASS_CURRENT_LIVE_POSTJOIN_FAILED_P12_PHYSICALLY_RETIRED' and pj['physical_acceptance']==c['physical'] and pj['current_live_postjoin']['status']=='PASS' and pj['current_live_postjoin']['strict_PROC_join']==ph['strict_PROC_join'] and pj['current_live_postjoin']['mutex_join']==ph['mutex_join'],'genuine63bd current postjoin joins exact physical authority')
++ need(growth.TRANSPORT==json.loads(Path(c['selected_profile']['path']).read_bytes()) and growth.TRANSPORT['qmp_bytes']==136*2**20 and growth.TRANSPORT['shared_capture_bytes']==640*2**20 and growth.TRANSPORT['logical_growth_bytes']==4224*2**20 and growth.TRANSPORT['file_bytes']==384*2**20,'exact reviewed QMP10 transport profile')
+  p=f['parent'];need(p['directory'] and p['uid']==p['gid']==1000 and p['mode']==0o700 and p['children']==[] and p['dev']==c['operation']['HOST_identity']['dev'] and p['ino']==c['operation']['HOST_identity']['inode'],'fresh exact private HOST LONG parent exists empty UID1000 mode700')
+  need(not any(f['output_paths_exist'].values()),'fresh LONG capture owner attempt and unpublished release/request paths absent')
+  need(not any(f['ownership_paths_exist'].values()),'exact SDK image launcher ownership paths absent')
+@@ -61,7 +64,7 @@
+  need(f['backing']['inode']==47468427 and f['backing']['size']==110*2**30 and f['backing']['regular'] and f['backing']['canonical'] and f['backing']['host_device']==f['HOST_device'] and f['HOST_device']!=f['scratch_device'],'exact110GiB HOST backing identity')
+  need(f['mount']==[dict(target='/home/holden/mckernel-work/scratch',uuid='2a5768c8-718d-4914-bdc0-6b32c5a92a52')] and f['uuid_device']==f['scratch_device'] and f['loop_backing']=='/home/holden/mckernel-work/scratch.ext4','fresh UUID loop backing identity')
+  required=growth.require_growth(f['admission'],f['HOST_available'],f['scratch_available'],f['backing']['gap'])
+- need(required=={'host_required_bytes':140534349824,'scratch_required_bytes':13899923456},'exact positive budgetd91d arithmetic')
++ need(required=={'host_required_bytes':140668567552,'scratch_required_bytes':13899923456},'exact preserved budgetd91d terms plus QMP10 logical growth arithmetic')
+  return required
+ 
+ def collect(c):
+@@ -71,17 +74,17 @@
+  for row in c['pins']:
+   fact=filepin(Path(row['path']),2**20);need(fact['sha256']==row['sha256'] and fact['size']==row['bytes'],'exact source/input pin');source_pins.append(fact)
+  budget=json.loads(Path(c['budget']['path']).read_bytes());admission=budget['capacity_admission_proposal']
+- physical=json.loads(Path(c['physical']['path']).read_bytes())
++ physical=json.loads(Path(c['physical']['path']).read_bytes());postjoin=json.loads(Path(c['current_live_postjoin']['path']).read_bytes())
+  growth_spec=importlib.util.spec_from_file_location('accepted_current110_growth',c['growth']['path']);growth=importlib.util.module_from_spec(growth_spec);growth_spec.loader.exec_module(growth)
+  raw=ENGINE.read_bytes();need(hashlib.sha256(raw).hexdigest()==ENGINE_SHA,'accepted census source')
+  code=next(ast.literal_eval(n.value) for n in ast.parse(raw).body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='PROC_CODE' for t in n.targets))
+  start=Path('/proc/self/stat').read_text().rpartition(') ')[2].split()[19]
+- proc=json.loads(run(['/usr/bin/python3','-I','-B','-c',code,'p12-LONG-current-live-admission-20261023-1',str(os.getpid()),start]))
++ proc=json.loads(run(['/usr/bin/python3','-I','-B','-c',code,'p12-QMP10-current-live-admission-20261024-1',str(os.getpid()),start]))
+  sd=Path(c['operation']['controller']['path']).parent;parent=Path(c['operation']['HOST_parent'])
+  g_parent=growth.output_parent(str(parent),fresh=True)
+  parent_info=parent_fact(parent)
+  outputs={str(p):os.path.lexists(p) for p in [Path(c['operation']['capture_directory']),parent.with_name(parent.name+'.owner-'+c['operation']['nonce']),parent/('attempt-'+c['operation']['nonce']),Path(c['operation']['future_release_path']),Path(c['operation']['future_request_path'])]}
+- # Retained prior-owner evidence remains historical; failed5603 physical10c5 is current authority. Only prospective outputs require absence.
++ # All prior-owner evidence remains retained. Accepted63bd8d554/001983 is current physical authority; only prospective outputs require absence.
+  # Exact lease/exclusion list inherited unchanged from accepted M05 query.
+  leases=['/home/holden/mckernel-work/scratch/native-running-external-modules.lease.json', '/home/holden/mckernel-work/scratch/native-running-external-modules-operational-exclusion.json', '/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18-image-1.json', '/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock', '/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/common-exclusion.json', '/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/lease.json', '/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/common-exclusion.json', '/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/driver-hash-correction-1/pinned-launcher-attempt-1/image-lease.json']
+  lock=Path('/run/lock/mckernel-development.lock').stat();key='%02x:%02x:%d'%(os.major(lock.st_dev),os.minor(lock.st_dev),lock.st_ino)
+@@ -89,7 +92,12 @@
+  fd=os.open('/run/lock/mckernel-development.lock',os.O_RDONLY|os.O_CLOEXEC|os.O_NOFOLLOW)
+  try:
+   need((os.fstat(fd).st_dev,os.fstat(fd).st_ino)==(27,4),'stable27:4 FD');fcntl.flock(fd,fcntl.LOCK_EX|fcntl.LOCK_NB)
+-  bs=Path('/home/holden/mckernel-work/scratch.ext4').stat();scratch=Path('/home/holden/mckernel-work/scratch');device=scratch.stat().st_dev;host_device=sd.stat().st_dev
++  backing_path=Path('/home/holden/mckernel-work/scratch.ext4');backing_fd=os.open(backing_path,os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC)
++  try:
++   bs=os.fstat(backing_fd);named=os.lstat(backing_path);after=os.fstat(backing_fd)
++   need(all(getattr(bs,k)==getattr(named,k)==getattr(after,k) for k in ('st_dev','st_ino','st_size','st_blocks','st_mtime_ns','st_ctime_ns')),'fresh stable backing FD identity')
++  finally:os.close(backing_fd)
++  scratch=Path('/home/holden/mckernel-work/scratch');device=scratch.stat().st_dev;host_device=sd.stat().st_dev
+   uuid=Path('/dev/disk/by-uuid/2a5768c8-718d-4914-bdc0-6b32c5a92a52').stat();need(stat.S_ISBLK(uuid.st_mode),'UUID block device')
+   host=os.statvfs(sd);other=os.statvfs(scratch)
+   mount=json.loads(run(['/usr/bin/findmnt','-J','-o','TARGET,UUID','-T',str(scratch)]))['filesystems']
+@@ -110,7 +118,7 @@
+   cpus=Path('/sys/devices/system/cpu/online').read_text().strip();online=set()
+   for item in cpus.split(','):
+    ends=item.split('-');online.update(range(int(ends[0]),int(ends[-1])+1))
+-  f=dict(uid=os.getuid(),euid=os.geteuid(),affinity=sorted(os.sched_getaffinity(0)),proc=proc,physical=physical,parent=parent_info,output_paths_exist=outputs,ownership_paths_exist={p:os.path.lexists(p) for p in leases},lock=[lock.st_dev,lock.st_ino,lock.st_uid,lock.st_gid,lock.st_nlink],locks=locks,lock_acquired=True,docker_running=run(['/usr/bin/docker','ps','-q','--no-trunc']),docker_identities=identities,server=server,docker_info=info,daemon_binding=daemon,image_ok=image.get('Id')==c['owner_constants']['IMAGE'] and image.get('Architecture')=='amd64' and image.get('Os')=='linux' and image.get('Config')==retained.get('Config') and image.get('RootFS')==retained.get('RootFS'),mounts_ok=all(r['path']==r['resolved'] for r in mount_facts),mount_facts=mount_facts,cgroup={p:Path(p).read_text().strip() for p in c['owner_constants']['CGROUP']},allowed_container_cpus={2,3,4,5}<=online,memory_available=int(next(l for l in Path('/proc/meminfo').read_text().splitlines() if l.startswith('MemAvailable:')).split()[1])*1024,launcher_phase=state['phase'],launcher_stop_reason=state['stop_reason'],backing=dict(inode=bs.st_ino,size=bs.st_size,allocated=bs.st_blocks*512,gap=max(0,bs.st_size-bs.st_blocks*512),regular=stat.S_ISREG(bs.st_mode),canonical=Path('/home/holden/mckernel-work/scratch.ext4').resolve(strict=True)==Path('/home/holden/mckernel-work/scratch.ext4'),host_device=bs.st_dev),HOST_device=host_device,scratch_device=device,uuid_device=uuid.st_rdev,loop_backing=Path('/sys/dev/block/%d:%d/loop/backing_file'%(os.major(device),os.minor(device))).read_text().strip(),mount=mount,HOST_available=host.f_bavail*host.f_frsize,scratch_available=other.f_bavail*other.f_frsize,admission=admission,source_pins=source_pins)
++  f=dict(uid=os.getuid(),euid=os.geteuid(),affinity=sorted(os.sched_getaffinity(0)),proc=proc,physical=physical,current_live_postjoin=postjoin,parent=parent_info,output_paths_exist=outputs,ownership_paths_exist={p:os.path.lexists(p) for p in leases},lock=[lock.st_dev,lock.st_ino,lock.st_uid,lock.st_gid,lock.st_nlink],locks=locks,lock_acquired=True,docker_running=run(['/usr/bin/docker','ps','-q','--no-trunc']),docker_identities=identities,server=server,docker_info=info,daemon_binding=daemon,image_ok=image.get('Id')==c['owner_constants']['IMAGE'] and image.get('Architecture')=='amd64' and image.get('Os')=='linux' and image.get('Config')==retained.get('Config') and image.get('RootFS')==retained.get('RootFS'),mounts_ok=all(r['path']==r['resolved'] for r in mount_facts),mount_facts=mount_facts,cgroup={p:Path(p).read_text().strip() for p in c['owner_constants']['CGROUP']},allowed_container_cpus={2,3,4,5}<=online,memory_available=int(next(l for l in Path('/proc/meminfo').read_text().splitlines() if l.startswith('MemAvailable:')).split()[1])*1024,launcher_phase=state['phase'],launcher_stop_reason=state['stop_reason'],backing=dict(inode=bs.st_ino,size=bs.st_size,allocated=bs.st_blocks*512,gap=max(0,bs.st_size-bs.st_blocks*512),regular=stat.S_ISREG(bs.st_mode),canonical=Path('/home/holden/mckernel-work/scratch.ext4').resolve(strict=True)==Path('/home/holden/mckernel-work/scratch.ext4'),host_device=bs.st_dev),HOST_device=host_device,scratch_device=device,uuid_device=uuid.st_rdev,loop_backing=Path('/sys/dev/block/%d:%d/loop/backing_file'%(os.major(device),os.minor(device))).read_text().strip(),mount=mount,HOST_available=host.f_bavail*host.f_frsize,scratch_available=other.f_bavail*other.f_frsize,admission=admission,source_pins=source_pins)
+   required=validate(f,c,growth)
+  finally:os.close(fd)
+  return f,required

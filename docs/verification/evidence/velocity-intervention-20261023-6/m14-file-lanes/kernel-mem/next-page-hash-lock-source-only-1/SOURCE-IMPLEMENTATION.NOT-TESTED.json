@@ -1,0 +1,42 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "THREE_COMPLETE_LIVE_PAGEHASH_LOCK_PROVIDERS_SOURCE_ONLY_NOT_READY",
+  "base": {
+    "coherent_VM_source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/coherent-TLB13-VM-source-only-1",
+    "patch_sha256": "fddcc2fdd907c6b16afd9eed6a29381b9196ad3afa5aeaae2fe483bbbc90e5d4"
+  },
+  "postimages": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/next-page-hash-lock-source-only-1/candidate/kernel/mem.c",
+      "sha256": "4b3671e8d26607f3bb9fbc10322060160ee3166164027e3f9672abd689732581",
+      "bytes": 227757
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/next-page-hash-lock-source-only-1/candidate/kernel/rust/mem_helpers.rs",
+      "sha256": "430361f8c652574f7c5c06f2529b333327a5dbd669550d1ab9a45d2ca45e09f3",
+      "bytes": 210365
+    }
+  ],
+  "patch_sha256": "629b6e79d1949db7bf82807d8ef6d05aff6c67ce2f925981dd92d6807351f4de",
+  "provider_reuse": "arch-lock.h ihk_mc_spinlock_lock/unlock macros exactly __ihk_mc_spinlock_lock/unlock. Existing Rust spinlock_helpers savesIRQ then disablespreempt/acquires; release advanceshead then enablespreempt then restores exactflags. Init usesexistingSeqCststore. No new computeC/function/data ABI.",
+  "ABI": "unsignedlong address/flags/return64, same liveinitialized4B-aligned4 ticketlock. No newnullpolicy/ownership/ref/lifetime. Existing PAGE_HELPERS selector preserves exactCfallback; Rustexports in existingmem_helpers module.",
+  "source_provider_pins": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-lock.h",
+      "sha256": "ca8baa66ed77634cd6319a918211b3eb8fe80fc7dcb2ac0110ab6bfbd0c1b81b"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/page_helpers.rs",
+      "sha256": "cfc64f72bf9b94c65417bc8f4e29d65b81f98239fe52ab2a7dd0352ebdfc3f70"
+    }
+  ],
+  "remaining_debt": "page_hash_alloc_bridge C allocation+diagnosticprovenance, page_init/count/physicalpage wrapperorchestration, pageunmaplog and otherphysicalmapping/accountingproviders. No Cfile/defaultlink/nativeclosure.",
+  "actual": null,
+  "execution": null,
+  "CPU_reservation": null,
+  "one_queued_fixture": "Root-ownedcurrentVM079e; this futurefragment is not another executablecohort."
+}

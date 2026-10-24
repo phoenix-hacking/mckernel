@@ -1,0 +1,28 @@
+--- /home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/physical-preparation-1/readonly_exact_retired_LONG_proc.py
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/p12-normal-retirement/physical-preparation-1/readonly_exact_retired_LONG_proc.py
+@@ -15,10 +15,10 @@
+ b=ENGINE.read_bytes();need(hashlib.sha256(b).hexdigest()==EXPECTED,'accepted census source')
+ code=next(ast.literal_eval(n.value) for n in ast.parse(b).body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='PROC_CODE' for t in n.targets))
+ pid=os.getpid();start=Path('/proc/self/stat').read_text().rpartition(') ')[2].split()[19]
+-proc=json.loads(run(['/usr/bin/python3','-I','-B','-c',code,'retired-LONG-SDK8-599bd7-final-physical-20261023-1',str(pid),start]))
++proc=json.loads(run(['/usr/bin/python3','-I','-B','-c',code,'retired-LONG-63bdc773-final-physical-20261024-1',str(pid),start]))
+ need(proc['status']=='COMPLETE' and proc['failure'] is None and proc['publishers']==[] and len(proc['snapshots'])==2,'complete publisher-free census')
+-bound_path=Path('/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-successor-1/retirement-preparation-1/physical-preparation-1/ACTUAL-23-CLIENT-IDENTITIES.json');bound_raw=bound_path.read_bytes()
+-need(hashlib.sha256(bound_raw).hexdigest()=='17fe6cb61f6b808cb24b7aa698219d5dfad172839849cc673c9fbc441d66257d','exact authenticated23client binding')
++bound_path=Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/p12-normal-retirement/physical-preparation-1/ACTUAL-23-CLIENT-IDENTITIES.json');bound_raw=bound_path.read_bytes()
++need(hashlib.sha256(bound_raw).hexdigest()=='5396a64cf969c902bf49446be5010affc4837e02a1f82668bf2b143033de08bd','exact authenticated23client binding')
+ facts=json.loads(bound_raw);need(len(facts['clients'])==23 and proc['boot_id']==facts['boot_id'],'exact23clients/currentboot')
+ # One bounded retained directory listing supplies exact command-ledger completeness.
+ root=Path(facts['owner_evidence_root']);root_fd=os.open(root,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC)
+@@ -30,9 +30,9 @@
+  command_names=sorted(name for name in directory_names if name.endswith('.json') and name.partition('-')[0].isdigit())
+  need(command_names==sorted(row['name'] for row in facts['clients']),'complete exact23command client ledger; additional or missing command identity')
+ finally:os.close(root_fd)
+-identities=[facts['outer_anchor'],facts['inner_owner']]+facts['clients']
++identities=[facts['outer_anchor'],facts['inner_owner'],facts['outer_sudo']]+facts['clients']
+ for identity in identities:
+  need(not any(row[0]==identity['pid'] and str(row[2])==str(identity['proc_starttime']) for snapshot in proc['snapshots'] for row in snapshot),'retired exact owner/client identity remains in fresh completePROC')
+ for observed_pid in facts['container_init_observation']['positive_retained_pids']:
+  need(not any(row[0]==observed_pid for snapshot in proc['snapshots'] for row in snapshot),'observed containerinit PID with unknownbirth remains in fresh completePROC')
+-print(json.dumps(dict(scope='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.',status='CURRENT_RETIRED_LONG_COMPLETE_PROC_AND_23_CLIENT_OBSERVATION',proc=proc,bound_client_facts_sha256='17fe6cb61f6b808cb24b7aa698219d5dfad172839849cc673c9fbc441d66257d',exact_identities_checked=[dict(pid=x['pid'],proc_starttime=x['proc_starttime']) for x in identities],observed_container_init_PID_absence_checked=facts['container_init_observation']['positive_retained_pids'],container_init_birth=None,retained_owner_directory_listing=directory_names,exact_command_names=command_names,retained_owner_directory_identity={'dev':before.st_dev,'inode':before.st_ino},physical_clearance=False),sort_keys=True))
++print(json.dumps(dict(scope='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.',status='CURRENT_RETIRED_LONG_COMPLETE_PROC_AND_23_CLIENT_OBSERVATION',proc=proc,bound_client_facts_sha256='5396a64cf969c902bf49446be5010affc4837e02a1f82668bf2b143033de08bd',exact_identities_checked=[dict(pid=x['pid'],proc_starttime=x['proc_starttime']) for x in identities],observed_container_init_PID_absence_checked=facts['container_init_observation']['positive_retained_pids'],container_init_birth=None,retained_owner_directory_listing=directory_names,exact_command_names=command_names,retained_owner_directory_identity={'dev':before.st_dev,'inode':before.st_ino},physical_clearance=False),sort_keys=True))

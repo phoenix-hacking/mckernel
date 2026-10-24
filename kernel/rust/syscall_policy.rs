@@ -358,7 +358,6 @@ unsafe extern "C" {
     fn syscall_copy_int_to_user_bridge(dst_addr: CULong, src: *const CInt) -> CLong;
     fn syscall_forward_rt_sigprocmask_bridge(sigmask: CULong) -> CLong;
     fn syscall_pending_mask_bridge(thread: *mut c_void) -> CULong;
-    fn syscall_signalfd_create_bridge(syscall_nr: CInt, flags: CInt) -> CLong;
     fn syscall_do_kill_thread_bridge(
         thread: *mut c_void,
         pid: CInt,
@@ -1983,6 +1982,23 @@ pub unsafe extern "C" fn rt_sigpending_body_result(
         return -(EFAULT as CLong);
     }
     0
+}
+
+// M14-F03: retire the selected signalfd host-FD request/admission callback.
+// Supported x86 IHK_DMA_ALIGN is empty; SyscallRequest retains its repr(C)
+// natural alignment. The synchronous do_syscall ownership contract is unchanged.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_signalfd_create_bridge(
+    syscall_nr: CInt,
+    flags: CInt,
+) -> CLong {
+    let mut request = MaybeUninit::<SyscallRequest>::zeroed();
+    let requestp = request.as_mut_ptr();
+    (*requestp).number = syscall_nr as CULong;
+    (*requestp).args[0] = 0;
+    (*requestp).args[1] = flags as CULong;
+    let cpu = ihk_mc_get_processor_id();
+    do_syscall(requestp, cpu)
 }
 
 // M14-F03: replace the remaining C callback consumed by Rust sys_signalfd4.
@@ -23433,4 +23449,35 @@ pub unsafe extern "C" fn syscall_vm_policy_clear_range_body_result(
         if !removed { break; }
     }
     0
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// F06: complete public x86 ptrace syscall-event entry and its synchronous adapter.
+// Insert adjacent to arch_ptrace_syscall_event_body_result. No shared ABI edit.
+extern "C" {
+    #[link_name = "ptrace_syscall_event"]
+    fn arch_ptrace_public_syscall_event(thread: *mut Thread);
+}
+
+unsafe extern "C" fn arch_ptrace_syscall_event_notify(thread: *mut c_void, _unused: CInt) {
+    unsafe { arch_ptrace_public_syscall_event(thread.cast::<Thread>()) };
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn arch_ptrace_syscall_event(
+    thread: *mut Thread,
+    ctx: *mut X86UserContext,
+    setret: CLong,
+) -> CLong {
+    // The existing body checks ctx before dereferencing it, stores before the
+    // callback, and rereads RAX after the callback. Thread is forwarded as-is.
+    unsafe {
+        arch_ptrace_syscall_event_body_result(
+            thread.cast::<c_void>(),
+            ctx.cast::<c_void>(),
+            setret,
+            offset_of!(X86UserContext, gpr) + offset_of!(crate::abi::X86BasicRegs, rax),
+            Some(arch_ptrace_syscall_event_notify),
+        )
+    }
 }

@@ -1,0 +1,39 @@
+--- /home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/materialize_source.CPU7.L4-SUCCESSOR.py
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-default-image-preparation-1/materialize_current_source.CPU7.py
+@@ -13,13 +13,13 @@
+ import time
+ 
+ REPO = Path('/home/holden/mckernel')
+-OUT = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/source-materialization-attempt-1')
+-BASE = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/source-materialization-attempt-1')
++OUT = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-default-image-preparation-1/source-materialization-attempt-1')
++BASE = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/source-materialization-attempt-1')
+ SOURCE = BASE / 'materialized-source'
+ DEST = OUT / 'materialized-source'
+-AUTHORITY = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/CANONICAL-SOURCE-SUCCESSOR-BASIS.L4-SUCCESSOR.json')
+-BASE_CANONICAL_SHA = 'bf3096e00f9f176c308604332ac276abc30c2576b2c7c3052c837ccf7e640b47'
+-POST = {'arch/x86_64/kernel/cpu.c': '8c71fe79e003f7aa7ef0f7faf2b31ebf11e65e747abdb0969dc77dbafbd839e9', 'arch/x86_64/kernel/memory.c': '2b285359ee00dac9e6281d112743e4f39247b9d661d0b5d00993e74d17a0739e', 'arch/x86_64/kernel/syscall.c': '57fb0080088276317e531982769cfe56c44a7467db220be0b0060a5ae5c6162f', 'kernel/mem.c': '7498e7c930a55bdcde5ecd12f4498c47c5573d690355c8f09a7b9f957ffe00a2', 'kernel/process.c': '64af918855ea361bd850d6ad7480d304634c28814e04127fe3dec8c013f21044', 'kernel/rust/mem_helpers.rs': 'c0e7f8bd0b117c9b4e0a4e3690ef5ed5cb01bdc6b16f7225de973eba039d72d5', 'kernel/rust/process_helpers.rs': '3f2c3dc03445147addee47d77e3ad2b31207fb3bfaa591ad99b6d0d9c897932e', 'kernel/rust/syscall_policy.rs': 'f1f7866c0f2ccc8e1b0024dfb632ec7359dd2a0a4bcd8e22deb957d48ef6d770', 'kernel/rust/x86_cpu_helpers.rs': 'a6e7465d7924755c97e5d72919a97c2985aacd35cf9db417c4ee981b4d5d071a', 'kernel/rust/x86_memory_helpers.rs': '2994b6fe46feb6d0f6dd1390cd4a4efc550f8dfee66c067e506eba16b00029d7', 'kernel/syscall.c': '1035622a96a5441a85d60a9db15d3ac452b60266d1f8123eb807ce3849c41081'}
++AUTHORITY = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-default-image-preparation-1/CANONICAL-SOURCE-SUCCESSOR-BASIS.json')
++BASE_CANONICAL_SHA = '77fd79cde7d48ceb65aaf9de2ff8be78005274f22031fe12c58d8309173c58a4'
++POST = {'kernel/mem.c': '9d53106e7228b5a7654f4250bab58e20e7bc47a28f8ad9675b1c9ac92599b976', 'kernel/rust/mem_helpers.rs': '6a527f7a55930d72d6d72c775ee0261c3550e2bd0094fe01031f3aa3238aefd6', 'kernel/process.c': '1ecbc287f2e704e738cc4e9fbe18289226b5aadadc9da88d226dc0ad0bb57234', 'kernel/rust/process_helpers.rs': '70015d712c29e416881e2fbaccd67026ee15ac7eb915cb80e828485d6f34d71f', 'kernel/syscall.c': '34ec8a08c5790aa7533e5a8e3905d1dd1d4989bf0f431b8517ae6d50bbaa54f4', 'arch/x86_64/kernel/cpu.c': 'c779079fb6de66991c861c823dca06b2a9ceec16ac4c984995200b668d7e78ce', 'kernel/rust/x86_cpu_helpers.rs': '98914e1ff4d50c2f42ccbdeb1f4f338024b7a9a2143fbad2f59ebd6f6b50dd0b', 'arch/x86_64/kernel/memory.c': '93df0ac24de8163cc5a7e2cce277d3a46c89a607b924c1937f2413e12edf0f66', 'kernel/rust/x86_memory_helpers.rs': '800a18bb4db0e28bf76441fca783b3f8d47066260240fb5107967c23775aa494', 'arch/x86_64/kernel/syscall.c': '912fb97a58cc797407979ce835c422578949ff876ac519193d2ebc4855cce791', 'kernel/rust/syscall_policy.rs': '3ef8288617db7bcc26c56039491295d3f48c53d4f76d111b68dfcc3186546f7d'}
+ MAX_GROWTH = 256 << 20
+ EXTRA = 16 << 20
+ SCOPE = 'Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
+@@ -50,7 +50,7 @@
+     baseline = json.loads((BASE / 'source-inputs.json').read_text())
+     need(sha(canonical(baseline)) == BASE_CANONICAL_SHA, 'accepted exact base source manifest')
+     authority_raw = AUTHORITY.read_bytes();authority = json.loads(authority_raw)
+-    need(authority['status'] == 'EXACT_ELEVEN_CANONICAL_SOURCE_POSTIMAGES_SELECTED_FOR_CANDIDATE15_PREPARATION' and {p:row['after']['sha256'] for p,row in authority['changes'].items()} == POST,
++    need(authority['status'] == 'EXACT_ELEVEN_CURRENT_UNION_POSTIMAGES_SELECTED_FOR_DEFAULT_IMAGE_SUCCESSOR_PREPARATION' and {p:row['after']['sha256'] for p,row in authority['changes'].items()} == POST,
+          'root-bound eleven accepted canonical postimages; ordinary execution grant separate')
+     document = copy.deepcopy(baseline)
+     changed = []
+@@ -144,7 +144,7 @@
+         destination=DEST/relative;target=destination.parent/row['target']
+         need(target.is_file() and not target.is_symlink() and row['target_path'] in expected
+              and expected[row['target_path']]==row['target_sha256'], 'tracked symlink targets use copied verified files')
+-    result = dict(scope=SCOPE, status='PASS_COHERENT_LATEST_FIVE_POSTIMAGE_SOURCE_MATERIALIZATION_ONLY',
++    result = dict(scope=SCOPE, status='PASS_COHERENT_CURRENT_ELEVEN_UNION_SOURCE_MATERIALIZATION_ONLY',
+                   source_root=str(DEST), source_entries=len(expected), regular_files=len(expected)-len(links),
+                   tracked_symlinks=len(links), copied_bytes=copied, source_derivative_sha256=document['source_derivative_sha256'],
+                   materialization_sha256=document['materialization_sha256'],source_manifest_canonical_sha256=sha(canonical(document)),

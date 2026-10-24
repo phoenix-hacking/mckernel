@@ -1,0 +1,11 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/two-VM-fixture-preparation-1/fixture/fixture.c
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/two-VM-fixture-preparation-1/bounded-provider-uint64-correction-1/fixture/fixture.c
+@@ -11,7 +11,7 @@
+ struct event{unsigned long code,a,b,c,d,e;};static struct event trace[16],saved[16];static unsigned n;
+ static void event(unsigned long code,unsigned long a,unsigned long b,unsigned long c,unsigned long d,unsigned long e){if(n>=16)abort();trace[n++]=(struct event){code,a,b,c,d,e};}
+ pte_t *ihk_mc_pt_lookup_pte(page_table_t pt,void *addr,int shift,void **basep,size_t *sizep,int *p2alignp){int i=lookups++;if(i>1)abort();event(1,(unsigned long)pt,(unsigned long)addr,(unsigned long)(long)shift,basep!=0,(sizep!=0)|((p2alignp!=0)<<1));if(basep)*basep=(void*)0x12345000UL;if(sizep)*sizep=8192;if(p2alignp)*p2alignp=5;return states[i]?&ptes[i]:0;}
+-int page_fault_process_vm(struct process_vm *v,void *addr,unsigned long reason){event(2,(unsigned long)v,(unsigned long)addr,reason,(unsigned long)(long)faultret,0);return faultret;}
++int page_fault_process_vm(struct process_vm *v,void *addr,uint64_t reason){event(2,(unsigned long)v,(unsigned long)addr,reason,(unsigned long)(long)faultret,0);return faultret;}
+ int phys_to_nid(unsigned long phys){event(3,phys,(unsigned long)(long)node_return,0,0,0);return node_return;}
+ int kprintf(const char *format,...){__builtin_va_list ap;__builtin_va_start(ap,format);const char *name=__builtin_va_arg(ap,const char*);unsigned long address=__builtin_va_arg(ap,unsigned long);__builtin_va_end(ap);if(strcmp(format,"%s: successfully faulted 0x%lx\n")||strcmp(name,"ihk_mc_pt_lookup_fault_pte"))abort();event(4,address,0,0,0,0);return -37;}
+ #include "original-C-default-wrappers-and-log.inc"

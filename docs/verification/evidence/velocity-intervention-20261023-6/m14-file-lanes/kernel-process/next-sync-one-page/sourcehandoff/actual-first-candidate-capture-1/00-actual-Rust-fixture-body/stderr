@@ -1,0 +1,31 @@
+warning: target feature `sse2` must be enabled to ensure that the ABI of the current target can be implemented correctly
+  |
+  = note: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+  = note: for more information, see issue #116344 <https://github.com/rust-lang/rust/issues/116344>
+
+error: no rules expected `,`
+    --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/fixture/actual_provider.rs:49:53
+     |
+  49 |         process_sync_one_page_entry_debug.line_flags,
+     |                                                     ^ no rules expected this token in macro call
+     |
+note: while trying to match meta-variable `$place:expr`
+    --> /home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs:2684:19
+     |
+2684 | pub macro addr_of($place:expr) {
+     |                   ^^^^^^^^^^^
+
+error: no rules expected `,`
+    --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/fixture/actual_provider.rs:78:52
+     |
+  78 |         process_sync_one_page_exit_debug.line_flags,
+     |                                                    ^ no rules expected this token in macro call
+     |
+note: while trying to match meta-variable `$place:expr`
+    --> /home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs:2684:19
+     |
+2684 | pub macro addr_of($place:expr) {
+     |                   ^^^^^^^^^^^
+
+error: aborting due to 2 previous errors; 1 warning emitted
+

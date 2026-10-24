@@ -1,0 +1,40 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "CURRENT_DRIVER_AND_13_PURE_REGRESSIONS_SOURCE_READY_NOT_EXECUTED",
+  "driver": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-default-image-preparation-1/native_rust_exact_mckernel_image_offline.py",
+    "sha256": "3483fbc17d1093b3dcb626a5a87aa42febea651d5c193f015545229a8b0ced40"
+  },
+  "tests": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-default-image-preparation-1/test_current_consumer_source_only.py",
+    "sha256": "1e3479388b4c799bedf4a930cff6c37d2a75aee31674d5cb4b1de1c6be358f06",
+    "planned_cases": 13,
+    "actual_cases": null
+  },
+  "argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-default-image-preparation-1/test_current_consumer_source_only.py"
+  ],
+  "proposed_profile": {
+    "CPU": "ROOT_ASSIGN",
+    "AS": 536870912,
+    "CPU_seconds": 10,
+    "wall_seconds": 15,
+    "retire_seconds": 6,
+    "FSIZE": 8388608,
+    "NOFILE": 128,
+    "core": 0
+  },
+  "retained_source_stager": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-default-image-preparation-1/materialize_current_source.CPU7.py",
+    "sha256": "d68f2dc05d6b2aee0a69694f769b997b2c32c6fda395870c69434411b8e1ac2c"
+  },
+  "actual_source_copy": null,
+  "actual_heavy_build": null,
+  "P12_physical_acceptance": null,
+  "fresh_admission": null,
+  "independent_execution_release": null,
+  "VMfixture_lane_separate": true
+}
