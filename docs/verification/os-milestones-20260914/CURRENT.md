@@ -1,3 +1,17 @@
+## Engineering cursor — 2026-10-24T15:25Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains35/35; M14/M15 OPEN, percentages unmeasured. Canonical14-file candidate
+is committed/fetched bf7f13c91; combined81/sixC has not compiled yet: first attempt
+stopped prechild on genuine preexisting vdso.rs nlink2, expert input-binding
+correction pending. SDK library actual run failed beforetargets on absent /nightly
+mount; preserve pinned compiler, author correcting exact RO mount contract.
+SDK normal removal plus independent fresh PROC/mutex/exclusion proof PASS,
+current_live_postjoin NONNULL at root-sdk-library-failed-toolpath-postjoin-1/.
+COPY5 finite559copy, small-data publication and24-member sourcearchive allPASS;
+final retained-artifact observer NOT RUN. No new default/native/C-retirement credit.
+Checkpoint: evidence/rust-cutover-engineering-checkpoint-20261024-1523/REVIEW.json.
+
 ## Canonical candidate integration — 2026-10-24
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
