@@ -1,0 +1,48 @@
+{
+  "F06_only_expected": {
+    "T": {
+      "added": [
+        "ptrace_report_signal",
+        "vdso_map_global_pages",
+        "vdso_map_global_pages_body_result"
+      ],
+      "after": 3068,
+      "removed": []
+    },
+    "U": {
+      "added": [],
+      "after": 571,
+      "removed": [
+        "vdso_map_global_pages"
+      ]
+    }
+  },
+  "actual_baseline_NM": {
+    "bytes": 414930,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/root-union-preparation-1/actual-six-C-partial-1/0/stdout",
+    "sha256": "bcc898048fb3d4f91a0746b9701a57de2710f30a4adeb7417eada0749f95a586"
+  },
+  "actual_baseline_NM_command": {
+    "bytes": 260,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/root-union-preparation-1/actual-six-C-partial-1/0/command.json",
+    "sha256": "7fc9fd392f5ae4e2c99b4354d77517f333b0f6875d56a9786ca6c27c41f5d139"
+  },
+  "actual_baseline_NM_result": {
+    "bytes": 1109,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/root-union-preparation-1/actual-six-C-partial-1/0/RESULT.json",
+    "sha256": "f920bf57c08e653c3f0ac4839a54dd7aae58d7977cba31bb3b875679649918e7"
+  },
+  "actual_new_object": null,
+  "already_existing_imports": [
+    "do_kill",
+    "pvti",
+    "pvti_npages"
+  ],
+  "baseline_T": 3065,
+  "baseline_U": 572,
+  "future_combined_union_expected_total": null,
+  "other_lane_approved_delta_join": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_reason": "Two public Rust entries and new VDSO body_result; retire only old vdso import. Existing ptrace body_result/CPU/memory/lock/wait helpers retained. No other-lane symbol deltas inferred.",
+  "status": "SOURCE_DERIVED_EXPECTATION_NOT_ACTUAL_NEW_OBJECT"
+}

@@ -1,0 +1,39 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "utc": "2026-10-24T03:40:50.056999+00:00",
+  "independent_review_sha256": "5a380b1de0248d3f7b25ebb8c34f9bb3cfbb83098ac28ce2f07f0e59709d6f58",
+  "mode": "A_TWO_ORDINARY_LANES_ONLY",
+  "CPU0": "coordination/no compiler currently",
+  "CPU6": "exclusive F01 actual48",
+  "CPU7": "nativecontrolonly",
+  "aggregate_cap_bytes": 21206401024,
+  "MemAvailable": 26262085632,
+  "physical_reserve_bytes": 4294967296,
+  "host_available": 166519074816,
+  "scratch_available": 14101127168,
+  "full_sparse_gap": 15838785536,
+  "ordinary_compiler_slots": [
+    "CPU0",
+    "CPU6"
+  ],
+  "compile_container": "not launched/no grant",
+  "native": "unchangedCPU2-5/12GiB/512/noSwap",
+  "new_cpu7_compiler": false,
+  "commands": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--stack=2097152:2097152",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/pagehash-offset-four-provider-fixture-preparation-1/run_four_provider_fixture_once.py"
+  ]
+}

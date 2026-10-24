@@ -1,0 +1,455 @@
+// SPDX-License-Identifier: GPL-2.0
+//! Native vDSO exchange shared by the Linux adapter and McKernel.
+//!
+//! This is a separate allocation from the legacy 88-byte descriptor. Native
+//! boot note revision 3 identifies its consumer; the IKC packet stays unchanged.
+
+use core::mem::{align_of, offset_of, size_of};
+use core::ptr::{addr_of, read_volatile, write_volatile};
+use core::sync::atomic::{AtomicU64, Ordering};
+
+pub(crate) const NATIVE_BOOT_ABI_VERSION: u32 = 3;
+pub(crate) const VERSION: u32 = 1;
+pub(crate) const BYTES: usize = 128;
+pub(crate) const TEXT_PAGES: usize = 2;
+pub(crate) const DATA_PAGES: usize = 6;
+pub(crate) const PAGE_BYTES: u64 = 4096;
+pub(crate) const PHYSICAL_LIMIT: u64 = 256 << 30;
+pub(crate) const CLOCK_LAYOUT_GENERIC_OVERFLOW_V1: u32 = 1;
+pub(crate) const TIME_PAGE: usize = 0;
+pub(crate) const RNG_PAGE: usize = 2;
+pub(crate) const PVCLOCK_PAGE: usize = 4;
+pub(crate) const HVCLOCK_PAGE: usize = 5;
+pub(crate) const CLOCK_NONE: i32 = 0;
+pub(crate) const CLOCK_TSC: i32 = 1;
+pub(crate) const CLOCK_PVCLOCK: i32 = 2;
+pub(crate) const CLOCK_HVCLOCK: i32 = 3;
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum Error {
+    InProgress,
+    Version,
+    Size,
+    HostStatus(i32),
+    Pages,
+    ClockLayout,
+    Reserved,
+    Request,
+    Alignment,
+}
+
+/// Publish the reply payload before completion, without borrowing peer memory.
+///
+/// # Safety
+/// The caller owns the whole writable, 8-aligned request in a retained peer
+/// generation. It is disjoint from queues and other writers. The peer has
+/// published exactly `Descriptor::request()` and only polls the atomic busy
+/// word until completion. There is one responder and no subsequent host write.
+pub(crate) unsafe fn complete(destination: *mut u8, response: &Descriptor) -> Result<(), Error> {
+    if destination.is_null() || destination as usize % 8 != 0 {
+        return Err(Error::Alignment);
+    }
+    response.validate_response()?;
+    let busy = unsafe { AtomicU64::from_ptr(destination.cast::<u64>()) };
+    let mut request = [0; BYTES];
+    request[..8].copy_from_slice(&busy.load(Ordering::Acquire).to_le_bytes());
+    for (offset, byte) in request.iter_mut().enumerate().skip(8) {
+        // SAFETY: The caller retains all BYTES of the aligned exchange and
+        // this sole responder owns the request while busy is one. `offset` is
+        // 8..BYTES, so destination.add(offset) stays in that live mapping.
+        *byte = unsafe { read_volatile(destination.add(offset)) };
+    }
+    Descriptor::decode(&request).validate_request()?;
+    let encoded = response.encode();
+    for (offset, byte) in encoded.iter().copied().enumerate().skip(8) {
+        // SAFETY: The same exclusive, live BYTES-byte exchange contains this
+        // in-bounds response byte. The peer only polls busy; the release below
+        // publishes all volatile payload writes before it may inspect them.
+        unsafe { write_volatile(destination.add(offset), byte) };
+    }
+    busy.store(0, Ordering::Release);
+    Ok(())
+}
+
+/// # Safety
+/// The caller retains the complete aligned exchange and only the sole host
+/// responder may write it. Completion is its final release operation.
+pub(crate) unsafe fn read_response(source: *const u8) -> Result<Descriptor, Error> {
+    if source.is_null() || source as usize % 8 != 0 {
+        return Err(Error::Alignment);
+    }
+    let busy = unsafe { AtomicU64::from_ptr(source.cast_mut().cast::<u64>()) };
+    if busy.load(Ordering::Acquire) != 0 {
+        return Err(Error::InProgress);
+    }
+    let mut bytes = [0; BYTES];
+    for (offset, byte) in bytes.iter_mut().enumerate().skip(8) {
+        // SAFETY: `source` names the retained, aligned BYTES-byte exchange.
+        // Its acquire observation of the responder's busy=0 release makes the
+        // in-bounds response payload observable before this raw scalar copy.
+        *byte = unsafe { read_volatile(source.add(offset)) };
+    }
+    let response = Descriptor::decode(&bytes);
+    response.validate_response()?;
+    Ok(response)
+}
+
+#[repr(C)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) struct Descriptor {
+    pub(crate) busy: u64,
+    pub(crate) version: u32,
+    pub(crate) bytes: u32,
+    pub(crate) status: i32,
+    pub(crate) text_pages: u32,
+    pub(crate) data_pages: u32,
+    pub(crate) clock_layout: u32,
+    pub(crate) text_physical: [u64; TEXT_PAGES],
+    pub(crate) data_physical: [u64; DATA_PAGES],
+    pub(crate) reserved: [u64; 4],
+}
+
+impl Descriptor {
+    pub(crate) const fn request() -> Self {
+        Self {
+            busy: 1,
+            version: VERSION,
+            bytes: BYTES as u32,
+            status: -115,
+            text_pages: 0,
+            data_pages: 0,
+            clock_layout: 0,
+            text_physical: [0; TEXT_PAGES],
+            data_physical: [0; DATA_PAGES],
+            reserved: [0; 4],
+        }
+    }
+
+    pub(crate) fn validate_request(&self) -> Result<(), Error> {
+        if self.busy == 1
+            && self.version == VERSION
+            && self.bytes == BYTES as u32
+            && self.status == -115
+            && self.text_pages == 0
+            && self.data_pages == 0
+            && self.clock_layout == 0
+            && self
+                .text_physical
+                .iter()
+                .chain(self.data_physical.iter())
+                .chain(self.reserved.iter())
+                .fold(0, |bits, word| bits | word)
+                == 0
+        {
+            Ok(())
+        } else {
+            Err(Error::Request)
+        }
+    }
+
+    pub(crate) fn response(
+        text_pages: u32,
+        text: [u64; TEXT_PAGES],
+        data: [u64; DATA_PAGES],
+    ) -> Result<Self, Error> {
+        let response = Self {
+            busy: 0,
+            version: VERSION,
+            bytes: BYTES as u32,
+            status: 0,
+            text_pages,
+            data_pages: DATA_PAGES as u32,
+            clock_layout: CLOCK_LAYOUT_GENERIC_OVERFLOW_V1,
+            text_physical: text,
+            data_physical: data,
+            reserved: [0; 4],
+        };
+        response.validate_response()?;
+        Ok(response)
+    }
+
+    pub(crate) fn validate_response(&self) -> Result<(), Error> {
+        if self.busy != 0 {
+            return Err(Error::InProgress);
+        }
+        if self.version != VERSION {
+            return Err(Error::Version);
+        }
+        if self.bytes as usize != BYTES {
+            return Err(Error::Size);
+        }
+        if self.status != 0 {
+            return Err(Error::HostStatus(self.status));
+        }
+        if self.clock_layout != CLOCK_LAYOUT_GENERIC_OVERFLOW_V1 {
+            return Err(Error::ClockLayout);
+        }
+        if self.reserved.iter().fold(0, |bits, word| bits | word) != 0 {
+            return Err(Error::Reserved);
+        }
+        if self.text_pages == 0
+            || self.text_pages as usize > TEXT_PAGES
+            || self.data_pages as usize != DATA_PAGES
+            || self.data_physical[TIME_PAGE] == 0
+            || self.data_physical[RNG_PAGE] == 0
+            || self.data_physical[1] != 0
+            || self.data_physical[3] != 0
+        {
+            return Err(Error::Pages);
+        }
+        let mut seen = [0_u64; TEXT_PAGES + DATA_PAGES];
+        let mut count = 0;
+        for (index, physical) in self
+            .text_physical
+            .iter()
+            .chain(self.data_physical.iter())
+            .copied()
+            .enumerate()
+        {
+            if index < TEXT_PAGES && (index < self.text_pages as usize) != (physical != 0) {
+                return Err(Error::Pages);
+            }
+            if physical == 0 {
+                continue;
+            }
+            if physical % PAGE_BYTES != 0
+                || physical > PHYSICAL_LIMIT - PAGE_BYTES
+                || seen.contains(&physical)
+            {
+                return Err(Error::Pages);
+            }
+            *seen.get_mut(count).ok_or(Error::Pages)? = physical;
+            count += 1;
+        }
+        Ok(())
+    }
+
+    /// Explicit wire encoding avoids uninitialized padding and borrowed views
+    /// of a descriptor that another kernel may be publishing.
+    pub(crate) fn encode(&self) -> [u8; BYTES] {
+        let mut bytes = [0_u8; BYTES];
+        let words = [
+            self.busy,
+            self.version as u64 | ((self.bytes as u64) << 32),
+            self.status as u32 as u64 | ((self.text_pages as u64) << 32),
+            self.data_pages as u64 | ((self.clock_layout as u64) << 32),
+            self.text_physical[0],
+            self.text_physical[1],
+            self.data_physical[0],
+            self.data_physical[1],
+            self.data_physical[2],
+            self.data_physical[3],
+            self.data_physical[4],
+            self.data_physical[5],
+            self.reserved[0],
+            self.reserved[1],
+            self.reserved[2],
+            self.reserved[3],
+        ];
+        for (chunk, word) in bytes.chunks_exact_mut(8).zip(words) {
+            for (slot, byte) in chunk.iter_mut().zip(word.to_le_bytes()) {
+                *slot = byte;
+            }
+        }
+        bytes
+    }
+
+    pub(crate) fn decode(bytes: &[u8; BYTES]) -> Self {
+        let mut words = [0_u64; BYTES / 8];
+        for (word, chunk) in words.iter_mut().zip(bytes.chunks_exact(8)) {
+            // Exactly eight steps assemble little-endian bytes, with no
+            // dynamic slice/index panic dependency in the standalone guest.
+            *word = chunk
+                .iter()
+                .fold(0, |value, byte| (value >> 8) | ((*byte as u64) << 56));
+        }
+        Self {
+            busy: words[0],
+            version: words[1] as u32,
+            bytes: (words[1] >> 32) as u32,
+            status: words[2] as i32,
+            text_pages: (words[2] >> 32) as u32,
+            data_pages: words[3] as u32,
+            clock_layout: (words[3] >> 32) as u32,
+            text_physical: [words[4], words[5]],
+            data_physical: [words[6], words[7], words[8], words[9], words[10], words[11]],
+            reserved: [words[12], words[13], words[14], words[15]],
+        }
+    }
+}
+
+#[repr(C)]
+pub(crate) struct Timestamp {
+    pub(crate) sec: u64,
+    pub(crate) nsec: u64,
+}
+
+/// Exact generic-overflow layout witnessed against the pinned Linux headers.
+/// Consumers use raw scalar reads under the Linux sequence protocol.
+#[repr(C)]
+pub(crate) struct Clock {
+    pub(crate) seq: u32,
+    pub(crate) clock_mode: i32,
+    pub(crate) cycle_last: u64,
+    pub(crate) max_cycles: u64,
+    pub(crate) mask: u64,
+    pub(crate) mult: u32,
+    pub(crate) shift: u32,
+    pub(crate) basetime: [Timestamp; 12],
+}
+
+#[repr(C, align(64))]
+pub(crate) struct TimeData {
+    pub(crate) clock_data: [Clock; 2],
+    pub(crate) tz_minuteswest: i32,
+    pub(crate) tz_dsttime: i32,
+    pub(crate) hrtimer_res: u32,
+    pub(crate) unused: u32,
+}
+
+/// Exact x86 vdso_calc_ns arithmetic from the pinned Linux implementation.
+/// `cycles` has already passed x86's S64_MAX counter mask. Invalid shifts fail
+/// instead of invoking an undefined shift. The wide path returns the low u64
+/// just like Linux's mul_u64_u32_add_u64_shr helper.
+pub(crate) fn tsc_nanoseconds(
+    cycles: u64,
+    last: u64,
+    max: u64,
+    mult: u32,
+    shift: u32,
+    base: u64,
+) -> Option<u64> {
+    if shift >= 64 || cycles > i64::MAX as u64 {
+        return None;
+    }
+    let delta = cycles.wrapping_sub(last);
+    if delta > max {
+        if delta & (1 << 62) != 0 {
+            return Some(base >> shift);
+        }
+        return Some(
+            (((delta & i64::MAX as u64) as u128 * mult as u128 + base as u128) >> shift) as u64,
+        );
+    }
+    Some(delta.wrapping_mul(mult as u64).wrapping_add(base) >> shift)
+}
+
+#[inline(always)]
+fn read_barrier() {
+    // Match Linux's read-begin/read-retry barriers, including compiler order.
+    // SAFETY: `lfence` has no operands or memory addresses, preserves flags,
+    // does not adjust the stack, and is valid in this x86 kernel context. The
+    // compiler-visible fence orders only the surrounding raw time-page reads.
+    unsafe { core::arch::asm!("lfence", options(nostack, preserves_flags)) };
+}
+
+/// Read a coherent initial-namespace Linux timestamp. Coarse clocks do not
+/// need a hardware counter. High-resolution clocks require the actual TSC
+/// mode; PV/HV/NONE fall back to the existing Linux syscall transport.
+///
+/// # Safety
+/// `data` is Linux's permanent, correctly aligned generic-overflow time page,
+/// retained and mapped read-only by the caller. Only Linux updates its scalar
+/// fields under the witnessed sequence protocol. `cycles` is an ordered TSC
+/// read, never a user-controlled callback in production.
+pub(crate) unsafe fn read_clock(
+    data: *const TimeData,
+    clock_id: i32,
+    mut cycles: impl FnMut() -> u64,
+) -> Option<(i64, i64)> {
+    if data.is_null() || data as usize % align_of::<TimeData>() != 0 {
+        return None;
+    }
+    let coarse = matches!(clock_id, 5 | 6);
+    if !coarse && !matches!(clock_id, 0 | 1 | 4 | 7 | 11) {
+        return None;
+    }
+    // SAFETY: `data` satisfies the function's retained, aligned TimeData
+    // contract. `clock_data` has exactly two Clock elements and the boolean
+    // index is zero or one; addr_of! forms no reference into concurrently
+    // updated Linux storage, and the resulting pointer stays in that mapping.
+    let clock = unsafe {
+        addr_of!((*data).clock_data)
+            .cast::<Clock>()
+            .add((clock_id == 4) as usize)
+    };
+    // A bounded retry permits the normal syscall fallback if a host update
+    // remains in progress. It never publishes a sample from an odd sequence.
+    for _ in 0..1024 {
+        // SAFETY: `clock` is one in-bounds Clock in the retained time page.
+        // Linux may update its scalar fields, so this raw, aligned volatile
+        // read is used under the sequence protocol without creating a borrow.
+        let seq = unsafe { read_volatile(addr_of!((*clock).seq)) };
+        if seq & 1 != 0 {
+            core::hint::spin_loop();
+            continue;
+        }
+        read_barrier();
+        // SAFETY: `clock_mode` is an aligned in-bounds scalar of the same
+        // retained Clock. The even sequence was sampled immediately before;
+        // retry discards this snapshot if Linux changes it concurrently.
+        let mode = unsafe { read_volatile(addr_of!((*clock).clock_mode)) };
+        if mode == i32::MAX || (!coarse && mode != CLOCK_TSC) {
+            return None;
+        }
+        // SAFETY: `basetime` contains exactly twelve Timestamp elements and
+        // accepted clock IDs are 0, 1, 4, 5, 6, 7, or 11. Each is therefore
+        // an in-bounds index; addr_of! avoids making a reference to Linux data.
+        let timestamp = unsafe {
+            addr_of!((*clock).basetime)
+                .cast::<Timestamp>()
+                .add(clock_id as usize)
+        };
+        // SAFETY: `timestamp` is the in-bounds, aligned element derived above
+        // from retained TimeData. Volatile scalar access is synchronized by
+        // the surrounding sequence retry and creates no shared reference.
+        let sec = unsafe { read_volatile(addr_of!((*timestamp).sec)) };
+        // SAFETY: `nsec` is the other aligned scalar in the same valid
+        // Timestamp. A changed sequence below rejects this pair before use.
+        let base = unsafe { read_volatile(addr_of!((*timestamp).nsec)) };
+        let nsec = if coarse {
+            base
+        } else {
+            // SAFETY: `cycle_last` is an aligned, in-bounds Clock scalar in
+            // retained Linux storage; the final sequence comparison validates
+            // this volatile sample against concurrent Linux publication.
+            let last = unsafe { read_volatile(addr_of!((*clock).cycle_last)) };
+            // SAFETY: `max_cycles` is the next in-bounds aligned Clock scalar
+            // under the same sequence snapshot and is read without a borrow.
+            let max = unsafe { read_volatile(addr_of!((*clock).max_cycles)) };
+            // SAFETY: `mult` is an aligned in-bounds scalar of `clock`; Linux
+            // updates are detected by the retry rather than assumed absent.
+            let mult = unsafe { read_volatile(addr_of!((*clock).mult)) };
+            // SAFETY: `shift` is an aligned in-bounds scalar in the retained
+            // Clock. tsc_nanoseconds rejects values that would make shifting
+            // invalid after this sequence-governed volatile read.
+            let shift = unsafe { read_volatile(addr_of!((*clock).shift)) };
+            tsc_nanoseconds(cycles() & i64::MAX as u64, last, max, mult, shift, base)?
+        };
+        read_barrier();
+        // SAFETY: This repeats the aligned in-bounds sequence scalar read from
+        // the retained Clock. Its volatile value detects an overlapping Linux
+        // update before this loop returns any fields sampled above.
+        if seq != unsafe { read_volatile(addr_of!((*clock).seq)) } {
+            continue;
+        }
+        if coarse && nsec >= 1_000_000_000 {
+            return None;
+        }
+        let seconds = sec.checked_add(nsec / 1_000_000_000)?;
+        return Some((i64::try_from(seconds).ok()?, (nsec % 1_000_000_000) as i64));
+    }
+    None
+}
+
+const _: () = {
+    assert!(size_of::<Descriptor>() == BYTES && align_of::<Descriptor>() == 8);
+    assert!(offset_of!(Descriptor, version) == 8);
+    assert!(offset_of!(Descriptor, text_physical) == 32);
+    assert!(offset_of!(Descriptor, data_physical) == 48);
+    assert!(offset_of!(Descriptor, reserved) == 96);
+    assert!(size_of::<Clock>() == 232 && align_of::<Clock>() == 8);
+    assert!(offset_of!(Clock, cycle_last) == 8 && offset_of!(Clock, max_cycles) == 16);
+    assert!(offset_of!(Clock, basetime) == 40);
+    assert!(size_of::<TimeData>() == 512 && align_of::<TimeData>() == 64);
+};

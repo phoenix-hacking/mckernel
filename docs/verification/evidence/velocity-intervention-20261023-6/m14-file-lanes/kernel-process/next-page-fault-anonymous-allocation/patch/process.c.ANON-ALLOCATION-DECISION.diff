@@ -1,0 +1,40 @@
+--- a/kernel/process.c
++++ b/kernel/process.c
+@@ -2875,6 +2875,14 @@
+         uintptr_t, uint64_t, pte_t **, void **, size_t *, int *, int *);
+ #endif
+ 
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++/* Existing allocator retains these borrowed static tracking identities. */
++const char *const process_page_fault_anon_alloc_file = __FILE__;
++const int process_page_fault_anon_alloc_line = 2982;
++int process_page_fault_anon_allocate_body_result(struct process_vm *, struct vm_range *,
++        uintptr_t, uint64_t, pte_t **, void **, size_t *, int *, void **, int *);
++#endif
++
+ int page_fault_process_memory_range(struct process_vm *vm,
+ 				    struct vm_range *range,
+ 				    uintptr_t fault_addr, uint64_t reason)
+@@ -2974,6 +2982,14 @@
+ 		}
+ 		if (phys == NOPHYS) {
+ 			void *virt = NULL;
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++            /* A successful pointer passes to the existing zero/map tail.
++             * Error1 passes to the existing out: unlock, with no page. */
++            if (process_page_fault_anon_allocate_body_result(vm, range,
++                    fault_addr, reason, &ptep, &pgaddr, &pgsize, &p2align,
++                    &virt, &error))
++                goto out;
++#else
+ 			size_t npages;
+ 
+ retry:
+@@ -2995,6 +3011,7 @@
+ 				kprintf("page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx):cannot allocate new page. %d\n", vm, range->start, range->end, range->flag, fault_addr, reason, error);
+ 				goto out;
+ 			}
++#endif
+ 			dkprintf("%s: clearing 0x%lx:%lu\n",
+ 					__FUNCTION__, pgaddr, pgsize);
+ #ifdef PROFILE_ENABLE

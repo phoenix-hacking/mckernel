@@ -1,0 +1,88 @@
+{
+  "schema": "mckernel.independent-delivery-window-bridge-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ACCEPT_FROZEN_SOURCE_FOR_ONE_ROOT_GRANTED_OFFLINE_REGRESSION_CONDITIONAL_BEFORE_ARM",
+  "report": "FINAL-CONDITIONAL-REVIEW.md",
+  "markers": {
+    "SOURCE-READY.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/SOURCE-READY.json",
+      "bytes": 5633,
+      "sha256": "734c02f706a01e1e78d53db54931a0a0d2645aa5cffe6e1bd30a3074589b61d1"
+    },
+    "FROZEN-PACKET.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/FROZEN-PACKET.json",
+      "bytes": 948,
+      "sha256": "696567f33cb232cdb77c184290138d4b256b6113c129c3c078bf930c6b811026"
+    }
+  },
+  "private_pins": {
+    "CONFIG.json": "5fc7872e5dc22144b039dddc927fe4e17b9fd3469e897c1b580bce194824f683",
+    "CURRENT-INVOCATION.txt": "9f2c46d5bcebae0d987a294d28cf0918614781c835f30d40fcff9b37d6061c3e",
+    "bridge.py": "bd417d8e1cfe25e028c4b7653183bcf5b169d3f83ab0e88f5872592d94decd9a",
+    "finite_launcher.py": "a74411302daab86d7845c771d34c4cdbb13e4ed4292656ecf26a6e9fba7f3b56",
+    "test_bridge.py": "d0220bfb0d854af92b797eeddaff053f0a4a1c5bccd24b4bab4af5e0e88472ed"
+  },
+  "canonical_pins": {
+    "os_goal_credits.py": "adf5187240ed8199746eef3b59b79d4d38c4ae8ac5821c8d8324833926b21ec3",
+    "run_os_goal.py": "009d00f1aa2c07d0d4c50fd1eace64c1a04afe8d33a0b691968b877d4310b3f5",
+    "watch_os_goal.py": "182ffe05bbef52a01b7f7519052fa10cfd06cd642c4acbaea2be3fcbfd749947"
+  },
+  "deadline_UTC": "2026-10-25T00:00:00Z",
+  "fixed_credit_run_id": "7f4af94a83b14cc08f97401f5891d965",
+  "finite_credit_ceiling": "57774.852125",
+  "source_corrections_closed": [
+    "Persistent earlier future UTC/BOOTTIME cutoff, distinct launched-watcher MONOTONIC cutoff",
+    "Existing guardian survives clock/source/transition holds and rearm drift",
+    "Trusted watcher identity is not replaced by a foreign watcher publication",
+    "Owned replacement child is polled/reaped",
+    "Frozen source/startup digests enforced at actual bridge/adapter boundaries",
+    "Unknown negative exit does not replay from stale recoverable metadata"
+  ],
+  "declared_offline_mock_cases": 24,
+  "next_test_command": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=6s",
+    "90s",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/test_bridge.py"
+  ],
+  "production_arm_command_not_executed": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/bridge.py",
+    "--run",
+    "--packet-sha256",
+    "696567f33cb232cdb77c184290138d4b256b6113c129c3c078bf930c6b811026"
+  ],
+  "remaining_arm_conditions": [
+    "Actual root-granted offline test PASS with source-bound command and positive owned retirement",
+    "Actual target-Python own-process pidfd_open/signal0/close and CLOCK_BOOTTIME capability receipt",
+    "Root-owned installation and fresh exact current model identity/lease checks; no healthy LONG interruption merely for billing",
+    "Current exact managed handoff permit if that route is used; no service/auth/billing/user-stop replay",
+    "Normal physical/resource clearance remains mandatory for later new workloads, not for retirement-only model reconciliation"
+  ],
+  "reviewer_product_import_test_subprocess_root_signal_billing_model_runtime_or_canonical_edit_calls": 0,
+  "actual_offline_test_acceptance": false,
+  "actual_host_capability_acceptance": false,
+  "armed_or_runtime_acceptance": false,
+  "candidate_modified_by_reviewer": false,
+  "healthy_workload_touched": false,
+  "runtime_files_absent_at_review": true
+}

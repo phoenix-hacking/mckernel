@@ -1,0 +1,20 @@
+--- original-failed-fixture.c
++++ corrected-fixture.c
+@@ -9,6 +9,8 @@
+ extern int page_hash_tables_init_body_result(unsigned long,unsigned long,int,unsigned long,unsigned long,void(*)(unsigned long),int(*)(struct list_head*));
+ extern int page_hash_count_all_result(unsigned long,unsigned long,int,unsigned long,unsigned long,unsigned long(*)(unsigned long),void(*)(unsigned long,unsigned long));
+ extern int page_hash_count_pages_body_result(unsigned long,unsigned long,int,unsigned long,unsigned long,unsigned long(*)(unsigned long),void(*)(unsigned long,unsigned long),int(*)(unsigned long,unsigned long,int,unsigned long,unsigned long,unsigned long(*)(unsigned long),void(*)(unsigned long,unsigned long)));
++/* Exact provider declaration from original mem.c:5302; Rust definition reused. */
++int page_hash_bucket_init_result(struct list_head *hash_head);
+ #include "actual-C-geometry-and-origin.inc"
+ #include "actual-original-three-untested-bodies.inc"
+ struct observation{int size;unsigned long flag;char *file;int line;unsigned calls;};
+@@ -26,7 +28,7 @@
+  struct observation first;allocation_result=r?&allocated[r-1]:0;memset(&observed,0,sizeof observed);
+  struct page *a=original_page_hash_alloc_bridge(size,flag);first=observed;memset(&observed,0,sizeof observed);
+  struct page *b=page_hash_alloc_bridge(size,flag);
+- return a!=allocation_result||b!=a||first.calls!=1||observed.calls!=1||first.size!=(int)size||observed.size!=first.size||first.flag!=(unsigned long)flag||observed.flag!=first.flag||strcmp(first.file,"/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/pagehash-alloc-init-count-batch-preparation-1/fixture/actual-original-three-untested-bodies.inc")||first.line!=3||observed.file!=page_hash_alloc_file||observed.line!=page_hash_alloc_line;
++ return a!=allocation_result||b!=a||first.calls!=1||observed.calls!=1||first.size!=(int)size||observed.size!=first.size||first.flag!=(unsigned long)flag||observed.flag!=first.flag||strcmp(first.file,"/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/pagehash-alloc-init-count-batch-preparation-1/bounded-original-C-closure-correction-1/fixture/actual-original-three-untested-bodies.inc")||first.line!=3||observed.file!=page_hash_alloc_file||observed.line!=page_hash_alloc_line;
+ }
+ static int check_initialized(void){for(int i=0;i<PHYS_PAGE_HASH_SIZE;i++)if(page_hash[i].next!=&page_hash[i]||page_hash[i].prev!=&page_hash[i]||page_hash_locks[i].head_tail)return 1;return 0;}
+ static int init_pair(unsigned char dirty){memset(page_hash,dirty,sizeof page_hash);memset(page_hash_locks,dirty,sizeof page_hash_locks);original_page_init();if(check_initialized())return 1;memcpy(saved_heads,page_hash,sizeof page_hash);memcpy(saved_locks,page_hash_locks,sizeof page_hash_locks);memset(page_hash,dirty,sizeof page_hash);memset(page_hash_locks,dirty,sizeof page_hash_locks);page_init();return check_initialized()||memcmp(saved_heads,page_hash,sizeof page_hash)||memcmp(saved_locks,page_hash_locks,sizeof page_hash_locks);}

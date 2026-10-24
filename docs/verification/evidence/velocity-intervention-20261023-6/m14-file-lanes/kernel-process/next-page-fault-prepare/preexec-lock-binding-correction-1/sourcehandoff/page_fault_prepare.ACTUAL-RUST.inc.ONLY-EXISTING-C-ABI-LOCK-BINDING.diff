@@ -1,0 +1,11 @@
+--- unrun-module-qualified-source/fixture/page_fault_prepare.ACTUAL-RUST.inc
++++ existing-C-ABI-symbol/fixture/page_fault_prepare.ACTUAL-RUST.inc
+@@ -11,7 +11,7 @@
+     error_out: *mut CInt,
+ ) -> CInt {
+     // Match the original valid borrowed inputs; add no NULL/error policy.
+-    crate::spinlock_helpers::__ihk_mc_spinlock_lock_noirq(
++    __ihk_mc_spinlock_lock_noirq(
+         &raw mut (*vm).page_table_lock,
+     );
+     *ptep_out = ihk_mc_pt_lookup_pte(

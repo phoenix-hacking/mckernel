@@ -3277,6 +3277,80 @@ pub unsafe extern "C" fn x86_set_range_map_entry_result(
 
 // Error logging preserves the original unconditional ekprintf -> kprintf
 // call, format bytes and C varargs payload. Unknown events remain silent.
+/// Complete former C memobj flush callback. Reuse the existing Rust memobj
+/// operation dispatch and discard its int result exactly as the void C wrapper
+/// did. No object/page ownership or asynchronous retention is introduced.
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_memobj_flush_bridge(
+    memobj: *mut c_void,
+    phys: CULong,
+    pgsize: CULong,
+) {
+    let _ = unsafe {
+        crate::object_helpers::memobj_flush_page(memobj.cast::<Memobj>(), phys, pgsize as SizeT)
+    };
+}
+
+/// Complete former C RSS callback. Preserve its size_t callback ABI and the
+/// original C conversion to the existing accounting function's int pgsize.
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_rss_sub_bridge(size: CULong, pgsize: CULong) {
+    unsafe { crate::mem_helpers::memory_stat_rss_sub(size, pgsize as CInt) }
+}
+
+/// Complete former C memobj RSS callback. The existing Rust accounting path
+/// retains feature gating, memobj flags and atomic counter ownership. The
+/// wrapper only forwards the same borrowed pointer and C integer conversion.
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_memobj_rss_sub_bridge(
+    memobj: *mut c_void,
+    size: CULong,
+    pgsize: CULong,
+) {
+    unsafe {
+        crate::mem_helpers::rusage_memory_stat_sub(memobj.cast::<Memobj>(), size, pgsize as CInt)
+    }
+}
+
+/// Exact former C L3 walker dispatcher. Existing walk_pte_l3 retains all
+/// range bounds/error aggregation and borrows args only for synchronous calls.
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_range_walk_l3_bridge(
+    pt: *mut c_void,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+    args: *mut c_void,
+) -> CInt {
+    unsafe { walk_pte_l3(pt, base, start, end, Some(clear_range_l3), args) }
+}
+
+/// Exact former C L2 walker dispatcher. The existing Rust walker retains
+/// bounds/error aggregation and synchronously borrows the same callback args.
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_range_walk_l2_bridge(
+    pt: *mut c_void,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+    args: *mut c_void,
+) -> CInt {
+    unsafe { walk_pte_l2(pt, base, start, end, Some(clear_range_l2), args) }
+}
+
+/// Exact former C L1 walker dispatcher. The existing Rust walker owns bounds
+/// and short-circuit order; callback args remain synchronously borrowed.
+#[no_mangle]
+pub unsafe extern "C" fn x86_clear_range_walk_l1_bridge(
+    pt: *mut c_void,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+    args: *mut c_void,
+) -> CInt {
+    unsafe { walk_pte_l1(pt, base, start, end, Some(clear_range_l1), args) }
+}
+
 /// Complete former C L1 callback. The existing leaf helper owns old-entry,
 /// flush/free/page-unmap/RSS effects; raw args and count pointers remain borrowed.
 #[no_mangle]

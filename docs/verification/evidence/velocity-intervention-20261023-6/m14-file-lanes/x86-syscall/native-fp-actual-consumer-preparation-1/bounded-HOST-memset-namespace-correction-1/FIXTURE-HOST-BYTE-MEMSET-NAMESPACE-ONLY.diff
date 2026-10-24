@@ -1,0 +1,20 @@
+--- original/source/fp-compare.c
++++ bounded/source/fp-compare.c
+@@ -8,7 +8,7 @@
+ #include <memory.h>
+ extern int printf(const char *,...);
+ extern void *memcpy(void *,const void *,size_t);
+-extern void *memset(void *,int,size_t);
++extern void *fixture_host_byte_memset(void *,int,size_t) __asm__("memset");
+ extern int memcmp(const void *,const void *,size_t);
+ extern long arch_native_signal_restore_fp_bridge(unsigned long,int);
+ extern unsigned long fixture_fp_actual_Rust_ABI(unsigned long);
+@@ -81,7 +81,7 @@
+ }
+ static void prepare(void)
+ {
+- memset(&obs,0,sizeof obs);memset(arena,0xa5,sizeof arena);memset(user_bytes,0,sizeof user_bytes);
++ fixture_host_byte_memset(&obs,0,sizeof obs);fixture_host_byte_memset(arena,0xa5,sizeof arena);fixture_host_byte_memset(user_bytes,0,sizeof user_bytes);
+  owned=0;owned_base=NULL;expected_aligned=NULL;expected_bytes=cfg.configured>=576 && cfg.configured<=65536?(unsigned long)cfg.configured:0;
+  user_bytes[24]=0x80;user_bytes[25]=0x1f;user_bytes[512]=3;
+  if(cfg.bad_header==1)user_bytes[26]=1;

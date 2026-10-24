@@ -1,0 +1,87 @@
+{
+  "schema": "mckernel.independent-window-pidfd-compatibility-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ACCEPT_NARROW_PIDFD_SOURCE_DELTA_FOR_FRESH_OFFLINE_SUITE_CONDITIONAL_BEFORE_FOREGROUND_ARM",
+  "report": "PIDFD-COMPATIBILITY-REVIEW.md",
+  "markers": {
+    "SOURCE-READY.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/SOURCE-READY.json",
+      "sha256": "e8fec9a1adfe8814183ebcce57d323b2da91192d2513ddadb18a9853070b7a2f"
+    },
+    "FROZEN-PACKET.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/FROZEN-PACKET.json",
+      "sha256": "fd28d66e4d93e3154bbd3d89e09b909c6997a7a0925b0d88f094a46f7343ea54"
+    }
+  },
+  "packet_sha256": "fd28d66e4d93e3154bbd3d89e09b909c6997a7a0925b0d88f094a46f7343ea54",
+  "product_existing_functions_changed": [
+    "stop_worker: wrapper call substitutions only"
+  ],
+  "new_helpers": [
+    "_linux_pidfd_syscall",
+    "pidfd_open",
+    "pidfd_send_signal"
+  ],
+  "clock_lifecycle_credit_startup_source_acceptance_reused": true,
+  "unchanged_finite_adapter_sha256": "a74411302daab86d7845c771d34c4cdbb13e4ed4292656ecf26a6e9fba7f3b56",
+  "reviewed_test_source_sha256": "2962a311135125164e8baad2184f15ad081617c46c408764a61a638b66e93329",
+  "declared_offline_cases": 30,
+  "prior_wording_only_correction_preserves_ownership_and_stop_oracles": true,
+  "fallback_ABI": {
+    "system": "Linux",
+    "machine": "x86_64",
+    "pointer_bytes": 8,
+    "pidfd_open": 434,
+    "pidfd_send_signal": 424,
+    "return_and_number": "ctypes.c_long",
+    "PID_fd_signal": "ctypes.c_int",
+    "flags": "ctypes.c_uint(0)",
+    "siginfo": "ctypes.c_void_p(NULL)",
+    "errno": "CDLL(use_errno=True), set_errno(0), immediate get_errno on-1",
+    "raw_PID_signal_fallback": false
+  },
+  "previous_real_platform_receipt": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-review-1/FOREGROUND-SELF-SYSCALL-CAPABILITY.json",
+  "previous_receipt_scope": "Own-process raw syscalls only; actual reviewed-wrapper observation still required.",
+  "next_offline_command": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=6s",
+    "90s",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/test_bridge.py"
+  ],
+  "next_foreground_self_wrapper_command": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "import importlib.util,json,os,signal,sys,time\nfrom pathlib import Path\npath=Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1/bridge.py')\nspec=importlib.util.spec_from_file_location('reviewed_bridge_self_capability',path)\nb=importlib.util.module_from_spec(spec);spec.loader.exec_module(b)\nb.verify_packet(sys.argv[1])\nfd=b.pidfd_open(os.getpid())\ntry:\n    b.pidfd_send_signal(fd,0)\n    boot=time.clock_gettime(time.CLOCK_BOOTTIME)\nfinally:\n    os.close(fd)\nprint(json.dumps(dict(status='PASS_REVIEWED_WRAPPER_OWN_PIDFD_SIGNAL0_AND_BOOTTIME',scope='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.',python=sys.version,architecture=os.uname().machine,pid=os.getpid(),packet_sha256=sys.argv[1],clock_boottime=boot,pidfd_closed=True,signal_zero_to_own_process_only=True,campaign_signals=0,guest_actions=0)))\n",
+    "fd28d66e4d93e3154bbd3d89e09b909c6997a7a0925b0d88f094a46f7343ea54"
+  ],
+  "remaining_arm_conditions": [
+    "Actual full updated offline test PASS with command/source/owned-retirement captures",
+    "Actual own-process signal0 and CLOCK_BOOTTIME receipt through exact reviewed wrappers and packet check",
+    "Foreground parent only may authorize actual controller arm under current user window; background included-only authority remains unchanged",
+    "Existing exact model identities, unique controller, frozen source and normal handoff/physical controls remain required"
+  ],
+  "reviewer_product_import_test_syscall_signal_billing_model_runtime_or_canonical_edit_calls": 0,
+  "actual_full_suite_acceptance_from_this_review": false,
+  "actual_new_wrapper_capability_acceptance_from_this_review": false,
+  "production_arm_acceptance_from_this_review": false,
+  "healthy_LONG_touched": false
+}

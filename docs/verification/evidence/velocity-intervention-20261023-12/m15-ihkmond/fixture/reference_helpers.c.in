@@ -1,0 +1,15 @@
+/* TEST ONLY: include unchanged reference with renamed entry, invoke its actual
+ * kmsg file/syslog helpers directly. Functional OS only; no security testing. */
+#define main retained_daemon_main
+#include "ihkmond.fixture.c"
+#undef main
+int main(int argc,char **argv){
+ (void)argc;(void)argv;
+ FILE *files[IHKMOND_NUM_FILEBUF_SLOTS]={0};int sizes[IHKMOND_NUM_FILEBUF_SLOTS]={0};int prod=0;
+ int dev=ihklib_device_open(0);struct ihk_device_get_kmsg_buf_desc get={.os_index=0};
+ if(ioctl(dev,IHK_DEVICE_GET_KMSG_BUF,&get)<0){close(dev);return 1;}close(dev);
+ for(int i=0;i<3;i++)if(fwrite_kmsg(0,get.handle,0,files,sizes,&prod,1)<0)return 1;
+ if(syslog_kmsg(files,prod)<0)return 1;
+ dev=ihklib_device_open(0);int ret=ioctl(dev,IHK_DEVICE_RELEASE_KMSG_BUF,get.handle);close(dev);
+ for(int i=0;i<IHKMOND_NUM_FILEBUF_SLOTS;i++)if(files[i])fclose(files[i]);return ret?1:0;
+}

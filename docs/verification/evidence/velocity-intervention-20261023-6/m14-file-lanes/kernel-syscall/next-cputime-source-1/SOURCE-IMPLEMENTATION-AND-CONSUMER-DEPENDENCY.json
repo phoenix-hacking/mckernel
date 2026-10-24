@@ -1,0 +1,137 @@
+{
+  "C_debt": "Existing syscall_do_kill_thread_bridge forwards exact do_kill(thread,pid,tid,sig,NULL,0); no new C provider introduced.",
+  "actual_result": null,
+  "canonical_preimages": {
+    "ABI": {
+      "bytes": 76151,
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "C": {
+      "bytes": 843257,
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "sha256": "34ec8a08c5790aa7533e5a8e3905d1dd1d4989bf0f431b8517ae6d50bbaa54f4"
+    },
+    "policy": {
+      "bytes": 713471,
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "3ef8288617db7bcc26c56039491295d3f48c53d4f76d111b68dfcc3186546f7d"
+    }
+  },
+  "compiler_jobs": 0,
+  "default_link": false,
+  "defined_contract": [
+    "Same livecurrentCPU/thread/monitor/rusage/proc ownership as original",
+    "same nonzero tod_data.clocks_per_sec precondition in actual existing tsc_to_ts",
+    "TimeSpec scratch fullywritten by actual tsc_to_ts before reads; TimeVal scratch fullywritten by actual ts_to_tv before reads",
+    "No context or partial-forwarding path introduced"
+  ],
+  "driver": null,
+  "engineering_percentage": null,
+  "fallback": "Complete original two C bodies byteexact under #else; no shared/canonical writes",
+  "file_retired": false,
+  "fixture_proposal": "fixture-source-only/ACTUAL-EQUIVALENCE-PROPOSAL.md",
+  "forwarding_hold": {
+    "bytes": 1948,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-forward-sigaction-source-decision-1/PARTIAL-CONTEXT-FORWARDING.HOLD.json",
+    "sha256": "048dce0dae63bec8792f4a399ee9eac2c502a5acf9966b3442bc50b8fe11fa97"
+  },
+  "native": false,
+  "next_executable_check": "After explicit grant: actual originalC two bodies versus exact Rust fragment with controlled CPU/IRQ/clock/signal/timer boundary effects; reuse actual byteexact Rust timehelpers and actual ABI, compare all touched fields and ordered effects; real selected TU ABI/selection and allocated reset/set caller references, then full78/partial proof. No job or driver queued.",
+  "outputs": {
+    "candidate/syscall.c": {
+      "bytes": 843386,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/candidate/syscall.c",
+      "sha256": "ca7d8face54d4cabe48c78c3c8e1080cc37e7af5943a4576753a5e6af9a574ac"
+    },
+    "cputime.C-SELECTION-FRAGMENT.inc": {
+      "bytes": 3149,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/cputime.C-SELECTION-FRAGMENT.inc",
+      "sha256": "307a62ef4e1022143032e89393fd8bb0c4336383f55565c9e70dd7827ca36210"
+    },
+    "cputime.NONOVERLAPPING-SOURCE.patch": {
+      "bytes": 6346,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/cputime.NONOVERLAPPING-SOURCE.patch",
+      "sha256": "32bc61e86c07b540c0a2b7507d659547a07cdf2e414fcee3a99ea5e35b1bf407"
+    },
+    "cputime.ORIGINAL-C.inc": {
+      "bytes": 3020,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/cputime.ORIGINAL-C.inc",
+      "sha256": "9cb2ccf66fb656df21919bbca0799899f63d9845c4829b16d77d54febf6c3fbc"
+    },
+    "cputime.REAL-TU-ABI.SOURCE-ONLY.c": {
+      "bytes": 1272,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/cputime.REAL-TU-ABI.SOURCE-ONLY.c",
+      "sha256": "98cf02bcbefed4158e7eebc285067d7ccf5ce755b3b74adc4340db29acb07643"
+    },
+    "cputime.RUST-FRAGMENT.rs.inc": {
+      "bytes": 5726,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/cputime.RUST-FRAGMENT.rs.inc",
+      "sha256": "9b9c8906da22585e0f94ea995e74a603a0b8f96ef985cced7cb12ead9c6da962"
+    },
+    "fixture-source-only/ts_add.UNCHANGED-RUST.inc": {
+      "bytes": 431,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/fixture-source-only/ts_add.UNCHANGED-RUST.inc",
+      "sha256": "053a3af82c0fc97dd124f3e7c7b0d9b2911522a3e93403e5f3b7b2c48363ccd5"
+    },
+    "fixture-source-only/ts_to_tv.UNCHANGED-RUST.inc": {
+      "bytes": 198,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/fixture-source-only/ts_to_tv.UNCHANGED-RUST.inc",
+      "sha256": "d06b1c993ba01a29fd327697e5e20851206661cdf5bfe5a031f2b14ebb146cac"
+    },
+    "fixture-source-only/tsc_to_ts.UNCHANGED-RUST.inc": {
+      "bytes": 603,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/fixture-source-only/tsc_to_ts.UNCHANGED-RUST.inc",
+      "sha256": "2516ef1dd99ab921181a5245f8855fc179e1838c8c572e219a3af236187cbea1"
+    },
+    "fixture-source-only/tv_sub.UNCHANGED-RUST.inc": {
+      "bytes": 419,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/fixture-source-only/tv_sub.UNCHANGED-RUST.inc",
+      "sha256": "92b7bee12852163268ddccc060b9f5eff064d54f06fa400d80b4cfc52b8696b0"
+    }
+  },
+  "preserved_order": [
+    "clv/current/idle guards precede monitor access",
+    "monitor counter/status updates precede unsupportedclock earlyreturn",
+    "IRQsave thenrdtsc; base0 bypass; unsignedwrapping accounting; usermode versus allothermode timer updates",
+    "base_tsc/times_update/in_kernel writes precede itimer handling",
+    "strict-positive expiry; equaldeadline does not signal; virtual beforeprof; resetaccumulator/loadinterval before do_kill",
+    "fresh field reads after do_kill preserve callback-visible mutations; ignored signalreturn preserved",
+    "set_timer(0) only afteranexpiry whenbothnexttimerszero; IRQrestorelast"
+  ],
+  "queued_recipe": null,
+  "reused_actual_Rust_helpers": {
+    "ts_add": {
+      "bytes": 431,
+      "sha256": "053a3af82c0fc97dd124f3e7c7b0d9b2911522a3e93403e5f3b7b2c48363ccd5",
+      "source": "/home/holden/mckernel/kernel/rust/timer.rs"
+    },
+    "ts_to_tv": {
+      "bytes": 198,
+      "sha256": "d06b1c993ba01a29fd327697e5e20851206661cdf5bfe5a031f2b14ebb146cac",
+      "source": "/home/holden/mckernel/kernel/rust/timer.rs"
+    },
+    "tsc_to_ts": {
+      "bytes": 603,
+      "sha256": "2516ef1dd99ab921181a5245f8855fc179e1838c8c572e219a3af236187cbea1",
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs"
+    },
+    "tv_sub": {
+      "bytes": 419,
+      "sha256": "92b7bee12852163268ddccc060b9f5eff064d54f06fa400d80b4cfc52b8696b0",
+      "source": "/home/holden/mckernel/kernel/rust/timer.rs"
+    }
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_live_bodies": [
+    "kernel/syscall.c::reset_cputime",
+    "kernel/syscall.c::set_cputime"
+  ],
+  "status": "IMPLEMENTED_PRIVATE_COMPLETE_CPUTIME_BODIES_SOURCE_ONLY",
+  "unchanged_provider_boundaries": [
+    "cls::clv/get_this_cpu_local_var",
+    "x86_cpu_helpers::rdtsc",
+    "existing IRQ save/restore ABI",
+    "sched_helpers::set_timer"
+  ]
+}

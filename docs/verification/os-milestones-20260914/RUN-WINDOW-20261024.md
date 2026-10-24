@@ -2,6 +2,36 @@
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
+## Runtime control armed — October 24, 2026, 04:17 UTC
+
+The foreground controller independently armed the reviewed window bridge using
+the user's current authorization. PID **4097829**, start tick **61282610**,
+survived detachment, is pinned to CPU0 and used about16.3MiB RSS at verification.
+Its action is `WAIT_RESIDENT_UNCHANGED`. The original watcher3451635,
+worker3582171, server3582173 and native owner4056308/start60669407 remain intact.
+The resident invocation remains included-only; its own higher-priority restriction
+has not been modified. The external bridge can perform the separately authorized
+prepaid transition after a genuine local weekly-usage stop and positive old
+launcher retirement. No paid launcher, early handoff or campaign signal occurred
+while arming. It also owns the original invocation's absolute deadline guard.
+
+The corrected source passed all30 offline regression cases and an actual
+own-process signal0 capability check through its reviewed pidfd wrappers. The
+host's Python3.9 build lacks the builtin pidfd APIs; the reviewed Linuxx86_64
+compatibility path passed that real check. Exact source, review, test and arm
+receipts are retained under
+`/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/`:
+`run-until-controller-1/foreground-arm-1/POST-DETACH-VERIFICATION.json` and
+`run-until-review-1/PIDFD-COMPATIBILITY-REVIEW.json`.
+The frozen packet SHA is
+`fd28d66e4d93e3154bbd3d89e09b909c6997a7a0925b0d88f094a46f7343ea54`.
+Keep the private controller inputs and its three pinned canonical launcher/credit
+modules unchanged while it owns this window; proposed changes need a coherent
+successor retaining the same deadline and credit accounting. The runtime journal
+is `run-until-controller-1/journal.json`; its input CONFIG remains historical
+`PREPARED_NOT_ARMED` because it is frozen. Judge activity from the live process
+and runtime receipts, not that frozen preparation field.
+
 The user's October 23 instruction authorizes continuous useful work until
 **Saturday, October 24, 2026 at 17:00 America/Los_Angeles (PDT)**, which is
 **2026-10-25T00:00:00Z**. Finish the original functional goal, M14 compute-kernel

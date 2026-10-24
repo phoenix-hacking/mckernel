@@ -1,0 +1,207 @@
+{
+  "C_lifecycle_debt": "do_execveat and existing syscall_execveat_bridge body unchanged; only static storage removed under Rust selection to expose same provider. VM/locks/allocations/load rollback/exec ownership remain C debt, no new C functionality.",
+  "actual_result": null,
+  "canonical_input_snapshots": {
+    "ABI": {
+      "bytes": 76151,
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "C": {
+      "bytes": 843257,
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "sha256": "34ec8a08c5790aa7533e5a8e3905d1dd1d4989bf0f431b8517ae6d50bbaa54f4"
+    },
+    "CPU_helpers": {
+      "bytes": 93305,
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "98914e1ff4d50c2f42ccbdeb1f4f338024b7a9a2143fbad2f59ebd6f6b50dd0b"
+    },
+    "policy": {
+      "bytes": 713471,
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "3ef8288617db7bcc26c56039491295d3f48c53d4f76d111b68dfcc3186546f7d"
+    }
+  },
+  "chosen_live_bodies": [
+    "kernel/syscall.c::sys_execve",
+    "kernel/syscall.c::sys_execveat"
+  ],
+  "compiler_jobs": 0,
+  "default_link": false,
+  "driver": null,
+  "engineering_percentage": null,
+  "existing_Rust_reuse": [
+    "execve_body_result",
+    "execveat_body_result",
+    "execveat_policy_result",
+    "real x86_syscall_read plus five actual getter exports, all selector/null helper semantics intact"
+  ],
+  "file_retired": false,
+  "fixture_scope": "Actual original C entry+exact C fallback helper sources versus new Rust entries+exact existing Rust helpers; share unchanged C bridge with controlled full exec lifecycle effect, actual getter providers and real layouts. Fragments only, no driver/recipe/output or second queue.",
+  "guaranteed_entry_order": "execveat reads arg0, arg1, arg4 in three successive local declarations, then evaluates remaining args and first filename byte before helper/policy. Original C call-argument relative evaluation order is unspecified; do not claim an order beyond those guaranteed statements. Stable current-context/readable-filename contract applies.",
+  "native": false,
+  "next_check": "Differential valid-readable filename cases/flags-dirfd precedence/callback identity and return+context mutations; actual C/Rust width/offset witness; real selected C no public bodies, Rust unique T, real syscall-table allocated references and partiallink after a fresh explicit grant.",
+  "outputs": {
+    "candidate/syscall.c": {
+      "bytes": 843683,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/candidate/syscall.c",
+      "sha256": "8bafb28bb2a66e7558863672e3c302e2dbe7fc251efe5bbde31b4ef0d3360ba7"
+    },
+    "exec-entries.NONOVERLAPPING-SOURCE.patch": {
+      "bytes": 3334,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/exec-entries.NONOVERLAPPING-SOURCE.patch",
+      "sha256": "ffee82eb2ba41bbd63eace15faf904664514bd7fd56fee113b2f0ed7a3e39d88"
+    },
+    "exec_entries.REAL-TU-ABI.SOURCE-ONLY.c": {
+      "bytes": 914,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/exec_entries.REAL-TU-ABI.SOURCE-ONLY.c",
+      "sha256": "ecf8e43fec51a057d1ecb67fbcc4641f052eeb1620312098303a44e6288e38e7"
+    },
+    "exec_entries.RUST-FRAGMENT.rs.inc": {
+      "bytes": 1953,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/exec_entries.RUST-FRAGMENT.rs.inc",
+      "sha256": "323ec363a7c27aa4c8e2382ecb170382f16216f9c5795372807b3e2962f695a9"
+    },
+    "execve.C-SELECTION-FRAGMENT.inc": {
+      "bytes": 763,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/execve.C-SELECTION-FRAGMENT.inc",
+      "sha256": "e66cd07b41af035cbffebec05aa510e38f55fd064fb1f8808d8271e1cf7759de"
+    },
+    "execve_provider.ORIGINAL-STATIC-C.inc": {
+      "bytes": 212,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/execve_provider.ORIGINAL-STATIC-C.inc",
+      "sha256": "c3c7fccde0081d5498036210e2e0d16de22da9cb52a81fe6b8066a46435670db"
+    },
+    "execve_provider.SELECTED-C.inc": {
+      "bytes": 205,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/execve_provider.SELECTED-C.inc",
+      "sha256": "19d09d565928960f5865668a78fd4077bbcbebbd3bf9204f0d7232636db761db"
+    },
+    "execveat.C-SELECTION-FRAGMENT.inc": {
+      "bytes": 497,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/execveat.C-SELECTION-FRAGMENT.inc",
+      "sha256": "658ff607f26702dbf4b4e4c1659fbebc84e9549187c4b6c8da7b0125bfa8b45d"
+    },
+    "fixture-fragments-only/ExecveatFn.EXACT-C.inc": {
+      "bytes": 121,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/fixture-fragments-only/ExecveatFn.EXACT-C.inc",
+      "sha256": "fe5f939393b51c67d6ccf01c4d37ebbb74a1b993246b168a8e01b2c0f1f4cb09"
+    },
+    "fixture-fragments-only/ExecveatFn.EXACT-RUST.inc": {
+      "bytes": 151,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/fixture-fragments-only/ExecveatFn.EXACT-RUST.inc",
+      "sha256": "eded19b1ce0997a40ee48f51c933693d01a59be98892e605d882daf2f6f63312"
+    },
+    "fixture-fragments-only/exec_entries_actual.C-FIXTURE-FRAGMENT.inc": {
+      "bytes": 1177,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/fixture-fragments-only/exec_entries_actual.C-FIXTURE-FRAGMENT.inc",
+      "sha256": "156ab1f344a167e55fd8c97b33e8f6314a10fd766292bf157891bf3c4385efd9"
+    },
+    "fixture-fragments-only/exec_entries_actual.RUST-FIXTURE-FRAGMENT.rs.inc": {
+      "bytes": 1016,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/fixture-fragments-only/exec_entries_actual.RUST-FIXTURE-FRAGMENT.rs.inc",
+      "sha256": "245e89bf30a1d7033da3b2023060ce441667841a40d149f6efb068531106aac8"
+    },
+    "fixture-fragments-only/execve_body_result.ORIGINAL-C.inc": {
+      "bytes": 256,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/fixture-fragments-only/execve_body_result.ORIGINAL-C.inc",
+      "sha256": "83203219342d5ce1357a9c809369635272bdab35036a432346e6b9287407ead5"
+    },
+    "fixture-fragments-only/execve_body_result.UNCHANGED-RUST.inc": {
+      "bytes": 366,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/fixture-fragments-only/execve_body_result.UNCHANGED-RUST.inc",
+      "sha256": "a0b4cab4e8d23975eabac19ec2687803545e5d33f9af68547869acde76646269"
+    },
+    "fixture-fragments-only/execveat_body_result.ORIGINAL-C.inc": {
+      "bytes": 404,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/fixture-fragments-only/execveat_body_result.ORIGINAL-C.inc",
+      "sha256": "4426deb6c49bb2b7811e89e1fdba3ca089f55f239e5b04e61428811939a29a8e"
+    },
+    "fixture-fragments-only/execveat_body_result.UNCHANGED-RUST.inc": {
+      "bytes": 556,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/fixture-fragments-only/execveat_body_result.UNCHANGED-RUST.inc",
+      "sha256": "27e8b343c91cea9948019a646a95a0316a37a872514eec72db1494d8b9836e52"
+    },
+    "fixture-fragments-only/execveat_policy_result.ORIGINAL-C.inc": {
+      "bytes": 302,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/fixture-fragments-only/execveat_policy_result.ORIGINAL-C.inc",
+      "sha256": "4f59d4970b24d88e345b5f51f5718ae630e536c3acf9fefa8c09b2cca84f7e58"
+    },
+    "fixture-fragments-only/execveat_policy_result.UNCHANGED-RUST.inc": {
+      "bytes": 348,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/fixture-fragments-only/execveat_policy_result.UNCHANGED-RUST.inc",
+      "sha256": "5eaf1f8a0c12c8c796a872dbb068bd599ade4505699a3f994cb114d193ff0802"
+    },
+    "fixture-fragments-only/ihk_mc_syscall_arg0.UNCHANGED-RUST.inc": {
+      "bytes": 142,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/fixture-fragments-only/ihk_mc_syscall_arg0.UNCHANGED-RUST.inc",
+      "sha256": "927c2cfd0199d1079a9250002a45680f0999cbab5280c6db13c20b0d909a6310"
+    },
+    "fixture-fragments-only/ihk_mc_syscall_arg1.UNCHANGED-RUST.inc": {
+      "bytes": 142,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/fixture-fragments-only/ihk_mc_syscall_arg1.UNCHANGED-RUST.inc",
+      "sha256": "ea80adeb780fa7c85d7c1977518934a57c72f51d2df0ddcb15abb7deafec22b9"
+    },
+    "fixture-fragments-only/ihk_mc_syscall_arg2.UNCHANGED-RUST.inc": {
+      "bytes": 142,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/fixture-fragments-only/ihk_mc_syscall_arg2.UNCHANGED-RUST.inc",
+      "sha256": "24e6d83be131705ed3ccd0cc4ae3531cc69576c2b4e2961935b5e60a7092d7ea"
+    },
+    "fixture-fragments-only/ihk_mc_syscall_arg3.UNCHANGED-RUST.inc": {
+      "bytes": 142,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/fixture-fragments-only/ihk_mc_syscall_arg3.UNCHANGED-RUST.inc",
+      "sha256": "6ff86710f6f7187791d23461eb832f584e2d9ebc09aca94f1986009cd7c7fb22"
+    },
+    "fixture-fragments-only/ihk_mc_syscall_arg4.UNCHANGED-RUST.inc": {
+      "bytes": 142,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/fixture-fragments-only/ihk_mc_syscall_arg4.UNCHANGED-RUST.inc",
+      "sha256": "f675cfba1da2f58ffbe13777cb7ccd27b723b0f1343ae028fbca63c80d32daf8"
+    },
+    "fixture-fragments-only/x86_syscall_read.UNCHANGED-RUST.inc": {
+      "bytes": 730,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/fixture-fragments-only/x86_syscall_read.UNCHANGED-RUST.inc",
+      "sha256": "249c46ef0fd69070a0e175bff1e6a66a8c8a19f7702680cb709b15492c896378"
+    },
+    "sys_execve.ORIGINAL-C.inc": {
+      "bytes": 235,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/sys_execve.ORIGINAL-C.inc",
+      "sha256": "870c6097b50a0d12d50ef3902bc843aedcf19e33a731a6f862bc610746df9e50"
+    },
+    "sys_execveat.ORIGINAL-C.inc": {
+      "bytes": 386,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/sys_execveat.ORIGINAL-C.inc",
+      "sha256": "580c012f1081ef75d133890f10a9f4517568108eb3be92568de1f1a16147dda9"
+    }
+  },
+  "preserved_behavior": [
+    "Same context pointer, raw argv/envp identity and full context passed to existing provider",
+    "int casts for dirfd/flags and signed-char first-byte promotion match x86_64 C",
+    "No new nullctx/filename guards or zeroing; original first-byte pre-read before policy retained, invalid-pointer handling unproven",
+    "Same actual Rust flags/dirfd policy, error precedence and CInt callback result sign-extension to CLong",
+    "Complete original C bridge+execve region and original execveat body byteexact in fallback"
+  ],
+  "prlimit_hold": {
+    "bytes": 2367,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-prlimit-source-decision-1/PARTIAL-CONTEXT-RESOURCE-FORWARDING.HOLD.json",
+    "sha256": "4557e85862f3198c009e7aad04641eaab59fdb75403d34899fb44a8250361e24"
+  },
+  "queued_recipe": null,
+  "quote_materialization": {
+    "closure": [],
+    "literal": "../executer/include/uti.h",
+    "original": {
+      "bytes": 1747,
+      "path": "/home/holden/mckernel/executer/include/uti.h",
+      "sha256": "0787fcf51f5c5f5a702196e891cede5e570bb472e2b0a1a1041566b59e784fb7"
+    },
+    "private": {
+      "bytes": 1747,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/executer/include/uti.h",
+      "sha256": "0787fcf51f5c5f5a702196e891cede5e570bb472e2b0a1a1041566b59e784fb7"
+    }
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "shared_policy": "Append only sys_execve/sys_execveat exports and unique f03_execveat_existing_C_provider alias. No existing ABI/import/sharedpolicy edits; root central integration only.",
+  "status": "IMPLEMENTED_PRIVATE_COMPLETE_EXEC_SYSCALL_ENTRIES_SOURCE_ONLY"
+}

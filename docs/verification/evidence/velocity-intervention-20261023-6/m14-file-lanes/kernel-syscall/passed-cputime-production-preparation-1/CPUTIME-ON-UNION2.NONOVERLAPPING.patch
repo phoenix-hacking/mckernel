@@ -1,0 +1,160 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -27126,6 +27126,10 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++void reset_cputime(void);
++void set_cputime(enum set_cputime_mode mode);
++#else
+ void
+ reset_cputime()
+ {
+@@ -27249,6 +27253,7 @@
+ 	}
+ 	cpu_restore_interrupt(irq_flags);
+ }
++#endif
+ 
+ long syscall(int num, ihk_mc_user_context_t *ctx)
+ {
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -23950,3 +23950,136 @@
+         );
+     }
+ }
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// F03 private complete CPU-time entry bodies; original current-CPU/IRQ contract applies.
++const F03_CPUTIME_MODE_K2U: CInt = 0;
++const F03_CPUTIME_MODE_U2K: CInt = 1;
++const F03_CPUTIME_MONITOR_USER: CInt = 2;
++const F03_CPUTIME_MONITOR_KERNEL: CInt = 3;
++const F03_CPUTIME_SIGVTALRM: CInt = 26;
++const F03_CPUTIME_SIGPROF: CInt = 27;
++
++/// # Safety
++/// Preserve the original current-CPU ownership/preemption contract. Once clv is
++/// initialized, get_this_cpu_local_var supplies a live current CPU-local block.
++#[no_mangle]
++pub unsafe extern "C" fn reset_cputime() {
++    if crate::cls::clv.is_null() {
++        return;
++    }
++    let thread = (*get_this_cpu_local_var()).current;
++    if thread.is_null() {
++        return;
++    }
++    (*thread).base_tsc = 0;
++}
++
++/// # Safety
++/// Current CPU/thread/monitor/rusage/process pointers retain their original live
++/// ownership. IRQ save/restore, timer and do_kill providers obey their existing
++/// contracts. No pointer ownership transfers or additional null guards occur.
++/// tsc_to_ts requires the same nonzero clocks_per_sec as the original C body.
++#[no_mangle]
++pub unsafe extern "C" fn set_cputime(mode: CInt) {
++    if crate::cls::clv.is_null() {
++        return;
++    }
++    let v = get_this_cpu_local_var();
++    let thread = (*v).current;
++    if thread.is_null() {
++        return;
++    }
++    if thread == addr_of_mut!((*v).idle) {
++        return;
++    }
++    let monitor = (*v).monitor;
++    if mode == F03_CPUTIME_MODE_K2U {
++        (*monitor).status = F03_CPUTIME_MONITOR_USER;
++    } else if mode == F03_CPUTIME_MODE_U2K {
++        (*monitor).counter = (*monitor).counter.wrapping_add(1);
++        (*monitor).status = F03_CPUTIME_MONITOR_KERNEL;
++    }
++    if gettime_local_support == 0 {
++        (*thread).times_update = 1;
++        return;
++    }
++
++    let irq_flags = cpu_disable_interrupt_save();
++    let tsc = crate::x86_cpu_helpers::rdtsc();
++    if (*thread).base_tsc != 0 {
++        let dtsc = tsc.wrapping_sub((*thread).base_tsc);
++        let mut dts = MaybeUninit::<TimeSpec>::uninit();
++        // Existing tsc_to_ts initializes both integer fields before timer reads.
++        tsc_to_ts(dtsc, dts.as_mut_ptr());
++        if mode == F03_CPUTIME_MODE_U2K {
++            (*thread).user_tsc = (*thread).user_tsc.wrapping_add(dtsc);
++            (*(*v).rusage).user_tsc = (*(*v).rusage).user_tsc.wrapping_add(dtsc);
++            crate::timer::ts_add(addr_of_mut!((*thread).itimer_virtual_value), dts.as_ptr());
++            crate::timer::ts_add(addr_of_mut!((*thread).itimer_prof_value), dts.as_ptr());
++        } else {
++            (*thread).system_tsc = (*thread).system_tsc.wrapping_add(dtsc);
++            (*(*v).rusage).system_tsc = (*(*v).rusage).system_tsc.wrapping_add(dtsc);
++            crate::timer::ts_add(addr_of_mut!((*thread).itimer_prof_value), dts.as_ptr());
++        }
++    }
++    (*thread).base_tsc = tsc;
++    (*thread).times_update = 1;
++    (*thread).in_kernel = mode;
++
++    if (*thread).itimer_enabled != 0 {
++        let mut tv = MaybeUninit::<TimeVal>::uninit();
++        let mut ev = false;
++        if (*thread).itimer_virtual.it_value.tv_sec != 0
++            || (*thread).itimer_virtual.it_value.tv_usec != 0
++        {
++            // Existing ts_to_tv initializes both integer fields before tv_sub/read.
++            crate::timer::ts_to_tv(tv.as_mut_ptr(), addr_of!((*thread).itimer_virtual_value));
++            crate::timer::tv_sub(tv.as_mut_ptr(), addr_of!((*thread).itimer_virtual.it_value));
++            let elapsed = tv.as_ptr();
++            if (*elapsed).tv_sec > 0
++                || ((*elapsed).tv_sec == 0 && (*elapsed).tv_usec > 0)
++            {
++                (*thread).itimer_virtual_value.tv_sec = 0;
++                (*thread).itimer_virtual_value.tv_nsec = 0;
++                (*thread).itimer_virtual.it_value.tv_sec = (*thread).itimer_virtual.it_interval.tv_sec;
++                (*thread).itimer_virtual.it_value.tv_usec = (*thread).itimer_virtual.it_interval.tv_usec;
++                let _ = syscall_do_kill_thread_bridge(
++                    thread.cast(), (*(*thread).proc).pid, (*thread).tid,
++                    F03_CPUTIME_SIGVTALRM, core::ptr::null(), 0,
++                );
++                ev = true;
++            }
++        }
++        if (*thread).itimer_prof.it_value.tv_sec != 0
++            || (*thread).itimer_prof.it_value.tv_usec != 0
++        {
++            crate::timer::ts_to_tv(tv.as_mut_ptr(), addr_of!((*thread).itimer_prof_value));
++            crate::timer::tv_sub(tv.as_mut_ptr(), addr_of!((*thread).itimer_prof.it_value));
++            let elapsed = tv.as_ptr();
++            if (*elapsed).tv_sec > 0
++                || ((*elapsed).tv_sec == 0 && (*elapsed).tv_usec > 0)
++            {
++                (*thread).itimer_prof_value.tv_sec = 0;
++                (*thread).itimer_prof_value.tv_nsec = 0;
++                (*thread).itimer_prof.it_value.tv_sec = (*thread).itimer_prof.it_interval.tv_sec;
++                (*thread).itimer_prof.it_value.tv_usec = (*thread).itimer_prof.it_interval.tv_usec;
++                let _ = syscall_do_kill_thread_bridge(
++                    thread.cast(), (*(*thread).proc).pid, (*thread).tid,
++                    F03_CPUTIME_SIGPROF, core::ptr::null(), 0,
++                );
++                ev = true;
++            }
++        }
++        if ev
++            && (*thread).itimer_virtual.it_value.tv_sec == 0
++            && (*thread).itimer_virtual.it_value.tv_usec == 0
++            && (*thread).itimer_prof.it_value.tv_sec == 0
++            && (*thread).itimer_prof.it_value.tv_usec == 0
++        {
++            (*thread).itimer_enabled = 0;
++            crate::sched_helpers::set_timer(0);
++        }
++    }
++    cpu_restore_interrupt(irq_flags);
++}

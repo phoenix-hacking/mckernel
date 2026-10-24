@@ -1,0 +1,41 @@
+{
+  "C": {
+    "bytes": 843257,
+    "path": "/home/holden/mckernel/kernel/syscall.c",
+    "sha256": "34ec8a08c5790aa7533e5a8e3905d1dd1d4989bf0f431b8517ae6d50bbaa54f4"
+  },
+  "actual_Rust_consumer": {
+    "bytes": 1568,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-forward-sigaction-source-decision-1/syscall_generic_forwarding.CURRENT-UNCHANGED-RUST.inc",
+    "sha256": "b104cb96128b6bb26fe8e07d58c945cfd280c96cacd18a30ac23bdc7d7c86948"
+  },
+  "actual_job": null,
+  "additional_actual_reads": [
+    "gpr.r10 via getter3",
+    "gpr.r8 via getter4",
+    "gpr.r9 via getter5"
+  ],
+  "decision_needed": "Independent intended Linux request/upper-argument semantics decision before port; do not label preservation of undefined reads as equivalence.",
+  "finding": "Existing C local ctx0 has no initialization of upper3 arguments, but actual Rust generic forwarding reads all6. Pointer-only MaybeUninit does not define those reads.",
+  "initialized_fields": [
+    "gpr.rdi via setter0",
+    "gpr.rsi via setter1",
+    "gpr.rdx via setter2"
+  ],
+  "native_cause_proven": false,
+  "no_zero_fill_or_fabricated_upperargs": true,
+  "original_C_unchanged": true,
+  "original_forward": {
+    "bytes": 374,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-forward-sigaction-source-decision-1/forward_sigaction.ORIGINAL-C.UNCHANGED.inc",
+    "sha256": "c006c3354e179c0dcbd29a6afea092cd211400a44b06a7ef229edc43dbde3542"
+  },
+  "policy": {
+    "bytes": 713471,
+    "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+    "sha256": "3ef8288617db7bcc26c56039491295d3f48c53d4f76d111b68dfcc3186546f7d"
+  },
+  "proposed_Rust": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "HOLD_UNINITIALIZED_PARTIAL_CONTEXT_NO_NEW_FORWARDING_RUST"
+}

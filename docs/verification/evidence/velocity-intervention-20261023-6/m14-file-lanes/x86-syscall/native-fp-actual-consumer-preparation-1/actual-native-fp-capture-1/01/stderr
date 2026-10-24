@@ -1,0 +1,24 @@
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/ihk/ikc/include/ikc/ihk.h:38,
+                 from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/ihk/linux/include/ihk/ikc.h:11,
+                 from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/kernel/include/syscall.h:20,
+                 from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/kernel/include/process.h:26,
+                 from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/kernel/include/cls.h:16,
+                 from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/kernel/include/kmalloc.h:17,
+                 from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/native-fp-actual-consumer-preparation-1/source/fp-compare.c:6:
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/lib/include/string.h:41:16: error: conflicting types for ‘__inline_memset’
+   41 | #define memset __inline_memset
+      |                ^~~~~~~~~~~~~~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/native-fp-actual-consumer-preparation-1/source/fp-compare.c:11:14: note: in expansion of macro ‘memset’
+   11 | extern void *memset(void *,int,size_t);
+      |              ^~~~~~
+In file included from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/lib/include/string.h:17,
+                 from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/ihk/ikc/include/ikc/ihk.h:38,
+                 from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/ihk/linux/include/ihk/ikc.h:11,
+                 from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/kernel/include/syscall.h:20,
+                 from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/kernel/include/process.h:26,
+                 from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/kernel/include/cls.h:16,
+                 from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/kernel/include/kmalloc.h:17,
+                 from /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/native-fp-actual-consumer-preparation-1/source/fp-compare.c:6:
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/arch/x86_64/kernel/include/arch-string.h:10:7: note: previous declaration of ‘__inline_memset’ was here
+   10 | void *__inline_memset(void *s, unsigned long c, size_t count);
+      |       ^~~~~~~~~~~~~~~

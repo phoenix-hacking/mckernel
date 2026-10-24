@@ -7552,37 +7552,12 @@ int ihk_mc_get_mem_user_page(void *arg0, page_table_t pt, pte_t *ptep, void *pga
 }
 
 #ifdef MCKERNEL_RUST_MEM_HELPERS
-static pte_t *mem_lookup_fault_pte_bridge(page_table_t pt, void *virt,
-		int pgshift, void **basep, size_t *sizep, int *p2alignp)
-{
-	return ihk_mc_pt_lookup_pte(pt, virt, pgshift, basep, sizep, p2alignp);
-}
-
-static int mem_page_fault_process_vm_bridge(struct process_vm *vm,
-		void *virt, unsigned long reason)
-{
-	return page_fault_process_vm(vm, virt, reason);
-}
-
-static void mem_lookup_fault_log_bridge(void *virt)
-{
-	kprintf("%s: successfully faulted 0x%lx\n",
-			"ihk_mc_pt_lookup_fault_pte", (unsigned long)virt);
-}
-#endif
-
-pte_t *ihk_mc_pt_lookup_fault_pte(struct process_vm *vm, void *virt,
-		int pgshift, void **basep, size_t *sizep, int *p2alignp)
-{
-#ifdef MCKERNEL_RUST_MEM_HELPERS
-	return mem_pt_lookup_fault_pte_body_result(vm, virt, pgshift, basep,
-			sizep, p2alignp,
-			__builtin_offsetof(struct process_vm, address_space),
-			__builtin_offsetof(struct address_space, page_table),
-			mem_lookup_fault_pte_bridge,
-			mem_page_fault_process_vm_bridge,
-			mem_lookup_fault_log_bridge);
+extern pte_t *ihk_mc_pt_lookup_fault_pte(struct process_vm *vm, void *virt,
+        int pgshift, void **basep, size_t *sizep, int *p2alignp);
 #else
+pte_t *ihk_mc_pt_lookup_fault_pte(struct process_vm *vm, void *virt,
+        int pgshift, void **basep, size_t *sizep, int *p2alignp)
+{
 	int faulted = 0;
 	pte_t *ptep;
 
@@ -7600,9 +7575,8 @@ retry:
 	}
 
 	return ptep;
-#endif
 }
-
+#endif /* Exact C fallback; default fault/PTE entry and callbacks execute in Rust. */
 #ifdef MCKERNEL_RUST_MEM_HELPERS
 extern int phys_to_nid(unsigned long p);
 #else
@@ -7625,15 +7599,11 @@ out:
 }
 #endif /* MCKERNEL_RUST_MEM_HELPERS */
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern int lookup_node(struct process_vm *vm, void *addr);
+#else
 int lookup_node(struct process_vm *vm, void *addr)
 {
-#ifdef MCKERNEL_RUST_MEM_HELPERS
-	return mem_lookup_node_body_result(vm, addr,
-			__builtin_offsetof(struct process_vm, address_space),
-			__builtin_offsetof(struct address_space, page_table),
-			mem_lookup_fault_pte_bridge,
-			mem_page_fault_process_vm_bridge, phys_to_nid);
-#else
 	int node, err, reason = PF_POPULATE | PF_USER;
 	pte_t *ptep;
 
@@ -7653,8 +7623,8 @@ int lookup_node(struct process_vm *vm, void *addr)
 	node = phys_to_nid(pte_get_phys(ptep));
 out:
 	return node;
-#endif
 }
+#endif /* Exact C fallback; default Rust owns the public VM lookup. */
 
 #ifdef MCKERNEL_RUST_PAGE_HELPERS
 extern int is_splitable(struct page *page, uint32_t memobj_flags);

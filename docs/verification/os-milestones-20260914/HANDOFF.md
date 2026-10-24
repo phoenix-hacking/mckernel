@@ -1,3 +1,58 @@
+## Canonical Rust union2 and actual LONG read13 — 2026-10-24T04:22:02.536749+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual04:21:13UTC:561rounds/1122launches/3147.137916618mixed seconds
+(52m27.138 of60),6424.038ownerwall. UncappedFAIL[]/ABORT0/trace/parser[]/wireNULL,
+owner4056308/start60669407 matched. Terminal/hour acceptance stillOPEN; practical
+34/35, newlyclosedIDs none. Read14 remains approved, no automaticread15.
+
+ROOT integrated exactly11reviewed union2 sources afterfreshpreimages/ordinary
+quiescence/P12SOURCE_HASHES287 NONOVERLAP. Full78Rust23.248s T3086/U574 and
+sixC/Rustpartial T3681/U19 unique pass all15commands/realABI/4allocatedRELA groups;
+independentreview48c6b1a2. Include-path and noinline-macro witness failures retained,
+expert-only spelling corrected without product/recompile/oracle change. Realdefault
+image/native/fullCfile retirement remainOPEN. Prepared nextimage stage needs this
+checkpoint, reuses Linux/toolchains; no newheavy/container admission fromsourceproof.
+
+Newbody checks: F01locks/offset48 and allocation/init/count167; F02pagefaultprepare96;
+F03cputime3255+48layouts plus realGCC9TU/partial; F04exceptions/stop4623 plus34ABIwords
+and realPUBLIC/fallbackGCC9TU/partial; F05allocator468 and PTfree/loggers1497; F06FP336
+using genuineHOSTruntime. All scoped controlled tests, not native/newimage credit.
+Original Rust/C extraction, fieldalias, HOSTmemoryABI, lexicalfunctioncontext and
+quotedheader failures retained; successful objects reused, no failure-family reset.
+M15IKC2865 and HOSTshared/CLIlink plus priorihkconfig188+3/mcps23 stand; default/native
+remainOPEN. Ihkosctl fixture stop-owner TERM/INT/ALRM actualPASS, shared6sdeadline
+successor review/test pending before186+5 CLI cases; daemon source22scenariosUNRUN.
+
+Current six-file owners continue privatecoherent source/production suffixes. Future
+union3Rustidentity slotsNULL; rootcentralmerge/build once avoids sixduplicatecrates.
+ExistingRust reused; overall M14/M15engineering_percentage remainsnull. Lastavoidable
+wait was exactimage-stage source checkpoint; thischeckpoint supplies it. ModeAonly
+CPU0/6ordinary, CPU7control, freshRAM>=25501368320/full19.75GiB+4GiBhostreserve.
+Permanent27:4/native2–5/12GiB/noSwap/512/scratch21 unchanged.
+
+Latestplatform-compatible windowcontroller30offline testsPASS.097s/root-owned job
+joined/closed. Earlier24 run23PASS1messageassertFAIL retained. Foreground independently
+armedexternalbridge4097829/start61282610 underseparateuserauthorization; current
+invocationincluded-only guard remainsintact and ROOTdidnotarm/changebudget/launcher.
+No newpaid inference claimed; actualauthority underRUN-WINDOW-20261024.md/fore receipts.
+
+## Actual read8 and ordinary fixture increments — 2026-10-24 03:42 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Read8 actual03:41:11:357 rounds/714 launches/1999.689238503mixed seconds
+(33m19.689),4022.187ownerwall; uncappedFAIL[]ABORT0trace/parser[]wireNULL.
+No terminal acceptance; practical34/35/no new closed IDs. Read9–14 remain finite
+approved, no read15. Nativecontroller25780 unchanged.
+ActualF01 pagehash/Pageoffset48comparisons+real-header selection PASS0.878s,
+receiptb6fb78a5, outergroup joined/gone/closed; CPU6released. Rootdirectoffline
+deadline bridge16mocktests PASS.002s/alljoined; NO runtime/billing/launcher change.
+Two ordinary lanes CPU0/6 only independently accepted with freshMemAvailable
+>=25,501,368,320B/full19.75GiB reservations+4GiBphysicalreserve; CPU7controlonly.
+Originalthree-lane proposal NOTadmitted. Six-source union staging delegated,
+all6implementation turns ongoing separately. Git55397eb90 pushed/fetched fulltree
+matches. Canonical source not altered by this evidence checkpoint.
+
 ## Actual LONG read7 and six-file implementation dispatch — 2026-10-24 03:39 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

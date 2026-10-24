@@ -1,0 +1,70 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PREEXEC_SOURCE_TYPE_BINDING_CORRECTION_NO_COMPILER_OR_JOB",
+  "original_unrun_ready": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/sourcehandoff/EXECUTABLE-READY.PAGE-FAULT-PREPARE96.NOT-GRANTED.json",
+    "sha256": "fce078ca8da0cea8def5e2cc0ef80579042733af363419b46eb4cb5111ba72d3",
+    "bytes": 3689
+  },
+  "original_unrun_driver": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/sourcehandoff/run_owned_page_fault_prepare96_once.py",
+    "sha256": "c798c584776443c8643764333b8ab5fefeab5071b0586a65e54ccb05b8371e03",
+    "bytes": 10203
+  },
+  "finding": "spinlock_helpers::IhkSpinlock and abi::IhkSpinlock are distinct Rust types. The original C macro selects __ihk_mc_spinlock_lock_noirq, and process_helpers already declares that same C ABI symbol with *mut abi::IhkSpinlock.",
+  "disposition": "Use existing unconditional extern declaration and same selected Rust-exported symbol. No new pointer cast, getter, C helper, lock implementation, lock/ref/ownership/ABI/ordering policy.",
+  "exact_source_changes": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/candidate/kernel/rust/process_helpers.rs",
+      "before": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/candidate/kernel/rust/process_helpers.rs",
+        "sha256": "fda0d4c74fd9448178c7c488ecaaa25719808e9e5b546003d56a2d2e7a623f94",
+        "bytes": 366501
+      },
+      "after": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/candidate/kernel/rust/process_helpers.rs",
+        "sha256": "035a629fd72d0ac95f4c9f518e583401a69fb790259c4b357b8bb15977062ead",
+        "bytes": 366476
+      }
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/page_fault_prepare.ACTUAL-RUST.inc",
+      "before": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/fixture/page_fault_prepare.ACTUAL-RUST.inc",
+        "sha256": "34592cbf528ff524bcfa4f540460d529d31f765091bef15c8a58467012ca04b1",
+        "bytes": 3026
+      },
+      "after": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/page_fault_prepare.ACTUAL-RUST.inc",
+        "sha256": "50e8f52e5d919b10ad58658833405f3b597ca1703360d67e73e9f6c2d2c90ea3",
+        "bytes": 3001
+      }
+    }
+  ],
+  "fixture_binding": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/actual_provider.rs",
+    "sha256": "37f03149bc79e64f6eb9c626a1a23d00c47425074f484b20553d32b2078c5f83",
+    "bytes": 1779
+  },
+  "lock_argument": "The original &vm->page_table_lock address and lifetime are unchanged. All preparation outcomes retain it for the original C out: unlock.",
+  "candidate_C": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/candidate/kernel/process.c",
+    "sha256": "60065b0b2a9d542d74cd980d98951f36ec9917bd4160700056059c4eaaf710ac",
+    "bytes": 166125
+  },
+  "candidate_Rust": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/candidate/kernel/rust/process_helpers.rs",
+    "sha256": "035a629fd72d0ac95f4c9f518e583401a69fb790259c4b357b8bb15977062ead",
+    "bytes": 366476
+  },
+  "F01_getter_dependency": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/sourcehandoff/F01-TYPED-PROVIDER-DEPENDENCY.json",
+    "sha256": "1efc3bffa26d69eb611803f8d48885951e475f80620e05bf3449c4a1b5ac87c1",
+    "bytes": 1422
+  },
+  "original96_cases_oracles_commands_unchanged": true,
+  "old_unrun_ready_not_an_executable_queue": true,
+  "compiler_jobs": 0,
+  "CPU_reservations": 0,
+  "next_unexpected": "STOP_EXPERT_ESCALATION_NO_AUTOMATIC_RETRY"
+}

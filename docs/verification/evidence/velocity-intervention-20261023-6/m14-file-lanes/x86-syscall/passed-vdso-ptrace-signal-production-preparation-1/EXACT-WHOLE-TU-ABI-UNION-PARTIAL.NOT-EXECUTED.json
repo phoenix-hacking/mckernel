@@ -1,0 +1,414 @@
+{
+  "ELF64_exact_helper": {
+    "bytes": 1329,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/accepted_ELF64_symtab_RELA.ACTUAL-FUNCTION.py",
+    "sha256": "874bd6814dc73b51d7a81676657b05b0dcb9f976c183267fd19063ab583c8126"
+  },
+  "RELA_rules": "Unmodified accepted ELF64 helper874b; exact symtab names, sec.sh_info SHF_ALLOC target; positive counts observed not invented. Witness object excluded from partial to avoid duplicate TU definitions.",
+  "actual_results": null,
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+        "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/generated/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/generated/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/generated",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/ihk/ikc/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/ihk/linux/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/lib/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/output-1/arch-syscall.o",
+        "-c",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/candidate/syscall.c"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/output-1",
+      "label": "arch-whole-GCC9-selected-TU",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. arch-whole-GCC9-selected-TU"
+    },
+    {
+      "argv": [
+        "/usr/bin/nm",
+        "-a",
+        "-S",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/output-1/arch-syscall.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/output-1",
+      "label": "arch-exact-NM",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. arch-exact-NM"
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-rW",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/output-1/arch-syscall.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/output-1",
+      "label": "arch-exact-RELA",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. arch-exact-RELA"
+    },
+    {
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+        "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/generated/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/generated/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/generated",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/ihk/ikc/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/ihk/linux/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/lib/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/output-1/actual-ABI-and-callers.o",
+        "-c",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/actual-two-boundaries-full-TU-ABI-and-callers.c"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/output-1",
+      "label": "real-header-ABI-and-allocated-C-callers",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. real-header-ABI-and-allocated-C-callers"
+    },
+    {
+      "argv": [
+        "/usr/bin/nm",
+        "-a",
+        "-S",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/output-1/actual-ABI-and-callers.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/output-1",
+      "label": "ABI-callers-NM",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. ABI-callers-NM"
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-rW",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/output-1/actual-ABI-and-callers.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/output-1",
+      "label": "ABI-callers-RELA",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. ABI-callers-RELA"
+    },
+    {
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+        "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/generated/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/generated/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/generated",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/ihk/ikc/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/ihk/linux/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/lib/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-E",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/candidate/syscall.c"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/output-1",
+      "label": "default-selected-preprocess",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. default-selected-preprocess"
+    },
+    {
+      "argv": [
+        "/usr/bin/nm",
+        "-g",
+        "-S",
+        null
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/output-1",
+      "label": "genuine-ROOTunion-Rust-NM",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. genuine-ROOTunion-Rust-NM"
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-rW",
+        null
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/output-1",
+      "label": "genuine-ROOTunion-Rust-RELA",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. genuine-ROOTunion-Rust-RELA"
+    },
+    {
+      "argv": [
+        "/usr/bin/ld",
+        "-r",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/output-1/arch-syscall.o",
+        null,
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/output-1/two-boundaries-partial.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/output-1",
+      "label": "actual-arch-and-ROOTunion-partial",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. actual-arch-and-ROOTunion-partial"
+    },
+    {
+      "argv": [
+        "/usr/bin/nm",
+        "-g",
+        "-S",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/output-1/two-boundaries-partial.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/output-1",
+      "label": "partial-global-NM",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. partial-global-NM"
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-rW",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/output-1/two-boundaries-partial.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/output-1",
+      "label": "partial-RELA",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. partial-RELA"
+    }
+  ],
+  "expected_baseline_TU_map": null,
+  "expected_exact_symbols": {
+    "C_T_or_t_absent": [
+      "vdso_map_global_pages",
+      "ptrace_report_signal",
+      "arch_ptrace_signal_lock_bridge",
+      "arch_ptrace_signal_unlock_bridge",
+      "arch_ptrace_save_debugreg_bridge",
+      "arch_ptrace_waitq_wake_bridge",
+      "arch_ptrace_do_kill_bridge",
+      "arch_ptrace_schedule_bridge",
+      "arch_ptrace_signal_log_bridge"
+    ],
+    "C_witness_U_once": [
+      "vdso_map_global_pages",
+      "ptrace_report_signal"
+    ],
+    "Rust_T_once": [
+      "vdso_map_global_pages",
+      "vdso_map_global_pages_body_result",
+      "ptrace_report_signal",
+      "ptrace_report_signal_body_result",
+      "arch_ptrace_syscall_event"
+    ],
+    "Rust_U_absent": [
+      "vdso_map_global_pages",
+      "ptrace_report_signal"
+    ],
+    "partial_T_once": [
+      "vdso_map_global_pages",
+      "ptrace_report_signal"
+    ],
+    "partial_U_absent": [
+      "vdso_map_global_pages",
+      "ptrace_report_signal"
+    ],
+    "plain_arch_U_once": [
+      "ptrace_report_signal"
+    ]
+  },
+  "header_roots_unchanged": true,
+  "native_default_image": null,
+  "prechild_refuse_if": [
+    "any argv element is NULL",
+    "any root_union binding remains NULL",
+    "actual union78 source map is not compiler-receipt-bound to actual object",
+    "F06 fragments changed or old vdso extern remains",
+    "unaccepted other-lane source delta",
+    "actual header/tool/preimage pins changed",
+    "output exists or root ordinary grant absent",
+    "fresh aggregate/floors/full sparse gap failed"
+  ],
+  "predecessor_driver": {
+    "bytes": 8343,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/run_private_current78_consumer_once.py",
+    "sha256": "797552a4eacff1a34b7857a071b27f203d76ee037ca2aa2f2501ed2b6fd1c5f3"
+  },
+  "predecessor_recipe": {
+    "bytes": 25595,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/EXACT-PRIVATE-CURRENT78-F06-PRODUCTION-CONSUMER.NOT-EXECUTED.json",
+    "sha256": "3e2eac6955e81e86279f6049fbe16028e1b95501f0ce3f96c19b7aaee057cce8"
+  },
+  "profile": {
+    "AS": 2147483648,
+    "CPU": 6,
+    "CPU_seconds": 60,
+    "FSIZE": 33554432,
+    "NOFILE": 256,
+    "RUST_MIN_STACK": 2097152,
+    "core": 0,
+    "jobs": 1,
+    "retirement_seconds": 6,
+    "wall_seconds": 90
+  },
+  "real_ABI_and_callers": {
+    "bytes": 1545,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/actual-two-boundaries-full-TU-ABI-and-callers.c",
+    "sha256": "b74e062757fce0e06ef9050f8e35a6bfac03a02f42b6fd349639dd1eb33c8d33"
+  },
+  "required_allocated_RELA": {
+    "partial": [
+      "vdso_map_global_pages",
+      "ptrace_report_signal"
+    ],
+    "plain_arch": [
+      "ptrace_report_signal"
+    ],
+    "real_header_C_callers": [
+      "vdso_map_global_pages",
+      "ptrace_report_signal"
+    ],
+    "root_union_Rust": [
+      "vdso_map_global_pages",
+      "do_kill"
+    ]
+  },
+  "root_grant": null,
+  "root_union": {
+    "accepted_other_lane_deltas": null,
+    "actual_full_crate_receipt": null,
+    "compiler_provenance": null,
+    "independent_source_verdict": null,
+    "must_include_unchanged_F06_fragments": [
+      {
+        "bytes": 7023,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-vdso-global-pages-1/candidate/syscall_policy.vdso_map_global_pages.FRAGMENT.rs",
+        "sha256": "23e605075458d7519e6ce351d1b6384c97722a05eed3384426356be4c28760af"
+      },
+      {
+        "bytes": 5854,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-ptrace-report-signal-source-1/candidate/syscall_policy.ptrace_report_signal.FRAGMENT.rs",
+        "sha256": "a2cbfbf3596973167a1b2e7f5be41122c36810d73953922913e7c584c10837b7"
+      }
+    ],
+    "object": null,
+    "old_leaf_signal_HOST_object_accepted_as_production": false,
+    "source_map78": null
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_join": {
+    "bytes": 47505,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-vdso-ptrace-signal-production-preparation-1/sourcehandoff/TWO-POSTIMAGES-AND-INTEGRATION.json",
+    "sha256": "30617f647101e1e4e068bd0c2f5911d1d464ccb7683e7bcf3bfcf0d3b5414b41"
+  },
+  "status": "SOURCE_ONLY_FUTURE_ROOT_UNION_OBJECT_REFUSED_UNTIL_ACTUAL"
+}

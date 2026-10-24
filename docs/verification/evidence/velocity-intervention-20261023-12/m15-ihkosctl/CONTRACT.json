@@ -1,0 +1,171 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "milestone": "M15-F07",
+  "owner": "project_runtime_rust_scope lane2",
+  "delivery_window": "2026-10-25T00:00:00Z target; engineering acceptance still requires actual checks",
+  "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkosctl/ihkosctl.rs",
+  "source_lines": 223,
+  "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkosctl/reference/ihkosctl.c",
+  "original_lines": 874,
+  "implementation": "complete no_std Linux x86_64 Rust C-main CLI, every current action plus configured dump path; existing library functions reused through their ABI, not duplicated in CLI",
+  "reuse": [
+    "ihkconfig C-main/libc ABI, request/layout, diagnostic and exit-code patterns",
+    "current shared libihk CPU/MEM/IKC parser and formatter providers; sysfs query/status/kmsg/makedumpfile providers",
+    "same libc GNU getopt_long/time/localtime/strftime behavior for dump",
+    "unchanged previously prepared owned-process capture/join helper"
+  ],
+  "actions": [
+    "load",
+    "boot",
+    "shutdown",
+    "alloc",
+    "reserve_cpu",
+    "reserve_mem",
+    "assign",
+    "release",
+    "set ikc_map",
+    "get status",
+    "get ikc_map",
+    "get buildid",
+    "query cpu|mem",
+    "query_free_mem",
+    "kargs",
+    "kmsg",
+    "clear_kmsg",
+    "intr",
+    "ioctl",
+    "dump"
+  ],
+  "behavior_preserved": [
+    "all original argc/action dispatch and index parsing; no new help parser",
+    "index-only get/dump/kmsg run before opening a device; remaining commands open /dev/mcosN O_RDONLY first",
+    "legacy default load pathname, alloc defaults and suffix handling, legacy CPU/MEM request layouts",
+    "CPU/MEM/IKC private helper contracts and existing diagnostics including original typos",
+    "intr returns0 even if ioctl failed; unknown action returns0 after successful device open; negative returns reach shell modulo256",
+    "dump GNU option permutation, levels/interactivity, explicit/default timestamp filename and library return code",
+    "configured BUILDID capacity and ENABLE_MEMDUMP feature supplied by build-time config adapter"
+  ],
+  "ABI_consumers": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkosctl/ABI-CONSUMERS.json",
+  "providers": {
+    "count": 13,
+    "public": 3,
+    "existing_private": 10,
+    "owner": "background case227_stage",
+    "readiness": "exact current header declarations located and forwarded to root; matched Rust exported-provider/link closure unverified",
+    "temporary_C_debt": "current libihk may temporarily provide the same ABI; Rust CLI alone does not retire project library C",
+    "ownership": "formatters return libc-free-compatible allocations; parsers write caller-owned arrays/counts; strings must be NUL-terminated within supplied capacity; no private API change"
+  },
+  "correctness_proposals_separate_from_C_parity": [
+    {
+      "case": "get ikc_map early cleanup",
+      "C": "uninitialized request pointers freed after open/first calloc failure",
+      "Rust": "zero-initialized request; no indeterminate free",
+      "fixture": "two Rust-only defined cases; C undefined paths never executed"
+    },
+    {
+      "case": "get ikc_map fd lifecycle",
+      "C": "never closes opened fd",
+      "Rust": "closes after every owned path",
+      "fixture": "C/Rust stdout/status/ioctl trace parity with only this exact extra final close normalized; raw traces and explicit correction observed separately"
+    },
+    {
+      "case": "reserve_cpu failed allocation and lifetime",
+      "C": "unchecked malloc then dereference and leaked request on success",
+      "Rust": "returns-ENOMEM on failure and frees request after ioctl",
+      "fixture": "Rust-only OOM proposal; normal defined request/output/status comparison retained"
+    },
+    {
+      "case": "buildid and query_free_mem termination",
+      "C": "provider missing NUL may expose indeterminate/out-of-bounds data",
+      "Rust": "zeroed bounded buffers, forced final NUL",
+      "fixture": "Rust-only buildid missing-NUL case; native provider termination contract still required"
+    },
+    {
+      "case": "kmsg capacity terminator",
+      "C": "buf[ret] can write past capacity when ret==IHK_KMSG_SIZE",
+      "Rust": "extra sentinel byte, ABI capacity unchanged, terminator bounded",
+      "fixture": "Rust-only capacity-boundary return case; actual C path is not executed"
+    },
+    {
+      "case": "negative/oversized interrupt arithmetic",
+      "C": "signed left shift may be undefined",
+      "Rust": "wrapping shift for packed argument",
+      "fixture": "defined ordinary IRQ cases only; no overflow equivalence claim"
+    }
+  ],
+  "fixture": {
+    "driver": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkosctl/fixture/run_equivalence.py",
+    "C_oracle_helpers": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkosctl/reference/ihklib_helpers.c",
+    "stub": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkosctl/fixture/abi_stub.c",
+    "comparisons": 186,
+    "separate_Rust_defined_cases": 5,
+    "profiles": "default ENABLE_MEMDUMP=ON; optional no-memdump/both in separately granted retained successor",
+    "observations": [
+      "raw stdout/stderr bytes",
+      "shell exit status",
+      "open/close/ioctl and public-lib argument traces",
+      "dump time/option/filename trace",
+      "static C/Rust ABI layout checks"
+    ],
+    "limits": "one explicitly labeled IKC close normalization only; no C crash/signaled exit counts as parity PASS; private C helpers shared by both are an original-reference test oracle, not evidence of Rust library parity",
+    "isolation": "every direct device function is --wrap stub; library status/kmsg/dump/sysfs are synthetic ABI providers; actual private parse/format C bodies are test-only; no /dev/custom modules/workloads",
+    "command": "/usr/bin/python3 -I /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkosctl/fixture/run_equivalence.py --execute --profile default --cc /usr/bin/cc --rustc /home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+    "profile": {
+      "cpu_count": 1,
+      "cpu_binding": "fresh root-assigned eligible ordinary CPU; none reserved",
+      "memory_mib": 1024,
+      "tasks_max": 64,
+      "wall_seconds": 160,
+      "driver_work_seconds": 150,
+      "bounded_cleanup_seconds": 6,
+      "storage_mib": 64,
+      "jobs": 1,
+      "root": "none",
+      "Docker": "none",
+      "guest": "none",
+      "process_admission": "unprivileged child-subreaper and self-children reads/join helper; no CLI grandchildren expected"
+    },
+    "retention": "existing fixture-output refuses overwrite; every command, stdout/stderr, raw trace and failure retained; no automatic retries"
+  },
+  "selector": {
+    "proposal": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkosctl/CMake-selection-proposal.cmake",
+    "adapter": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkosctl/build_ihkosctl.py",
+    "scope": "replace only add_executable(ihkosctl ihkosctl.c), retain existing link/PIC/install settings",
+    "default": "Rust selected on supported x86_64 when integrated; no silent C fallback; reference fallback explicit",
+    "shared_canonical_owner": "root coordinates ihkconfig/libihk CMake changes; no shared file edits here"
+  },
+  "checks_run": [
+    "Python AST for build adapter/driver/owned-process helper",
+    "JSON data parse and matrix counts",
+    "bounded exact original C and five ABI header pins/snapshots",
+    "source/ABI review"
+  ],
+  "checks_not_run": [
+    "C/Rust compiler",
+    "driver even preparation-only mode",
+    "C/Rust CLI or subprocess fixture",
+    "provider link/native behavior",
+    "Docker/root/guest/workload"
+  ],
+  "remaining": [
+    "fresh ordinary root grant for smallest exact host fixture",
+    "compile/link or fixture failures if any must be retained and corrected from actual evidence",
+    "root/library owner must prove the13 exact Rust providers and libc-compatible allocation ownership",
+    "review separated defined-behavior/resource corrections",
+    "match configured production default selector/object/library ABI/link and native lifecycle/application/dump boundaries"
+  ],
+  "accounting": {
+    "source_ready": true,
+    "compiler_pass": false,
+    "fixture_pass": false,
+    "canonical_selected": false,
+    "provider_Rust_closure": false,
+    "native_acceptance": false,
+    "whole_file_retired": false,
+    "language_acceptance_credit": 0,
+    "functional35_changed": false,
+    "M14_changed": false,
+    "earlier_packages_changed": false
+  },
+  "controller": "Root owns actual ordinary grants, publication, canonical integration and next body dispatch."
+}

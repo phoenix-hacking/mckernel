@@ -19399,19 +19399,7 @@ long sys_set_robust_list(int n, ihk_mc_user_context_t *ctx)
 #endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-static void
-syscall_sigcommon_writer_lock_bridge(void *lock, void *node)
-{
-	mcs_rwlock_writer_lock(lock, node);
-}
-
-static void
-syscall_sigcommon_writer_unlock_bridge(void *lock, void *node)
-{
-	mcs_rwlock_writer_unlock(lock, node);
-}
-
-static long
+long
 syscall_forward_sigaction_update_bridge(int sig, const void *actp)
 {
 	const struct k_sigaction *act = actp;
@@ -19423,23 +19411,13 @@ syscall_forward_sigaction_update_bridge(int sig, const void *actp)
 	ihk_mc_syscall_set_arg2(&ctx0, act->sa.sa_flags);
 	return syscall_generic_forwarding(__NR_rt_sigaction, &ctx0);
 }
-#endif
 
+int do_sigaction(int sig, struct k_sigaction *act, struct k_sigaction *oact);
+#else
 int
 do_sigaction(int sig, struct k_sigaction *act, struct k_sigaction *oact)
 {
 	struct thread *thread = get_this_cpu_local_var()->current;
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-	struct mcs_rwlock_node_irqsave mcs_rw_node;
-
-	return do_sigaction_body_result(sig, act, oact, thread->sigcommon,
-			__builtin_offsetof(struct sig_common, action),
-			sizeof(struct k_sigaction),
-			__builtin_offsetof(struct sig_common, lock),
-			&mcs_rw_node, syscall_sigcommon_writer_lock_bridge,
-			syscall_sigcommon_writer_unlock_bridge,
-			syscall_forward_sigaction_update_bridge);
-#else
 	struct k_sigaction *k;
 	struct mcs_rwlock_node_irqsave mcs_rw_node;
 	ihk_mc_user_context_t ctx0;
@@ -19465,8 +19443,8 @@ do_sigaction(int sig, struct k_sigaction *act, struct k_sigaction *oact)
 		syscall_generic_forwarding(__NR_rt_sigaction, &ctx0);
 	}
 	return 0;
-#endif
 }
+#endif
 
 #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static const struct syscall_mckfd_offsets syscall_mckfd_offsets = {
@@ -19825,6 +19803,9 @@ syscall_tofu_close_bridge(void *threadp, int fd)
 #endif
 }
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+unsigned long syscall_pending_mask_bridge(void *threadp);
+#else
 unsigned long
 syscall_pending_mask_bridge(void *threadp)
 {
@@ -19853,6 +19834,8 @@ syscall_pending_mask_bridge(void *threadp)
 
 	return mask;
 }
+#endif /* !MCKERNEL_RUST_SYSCALL_POLICY_HELPERS: retained C fallback */
+
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long syscall_signalfd_create_bridge(int syscall_nr, int flags);
@@ -20945,6 +20928,7 @@ long sys_rt_sigqueueinfo(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int
 do_sigsuspend(struct thread *thread, const sigset_t *set)
 {
@@ -21038,6 +21022,7 @@ syscall_sigsuspend_bridge(void *thread, void *set)
 {
 	return do_sigsuspend(thread, set);
 }
+#endif /* !MCKERNEL_RUST_SYSCALL_POLICY_HELPERS: retained C fallback */
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_pause(int n, ihk_mc_user_context_t *ctx);
@@ -21068,11 +21053,15 @@ long sys_rt_sigsuspend(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+int syscall_do_sigaction_bridge(int sig, void *act, void *oact);
+#else
 int
 syscall_do_sigaction_bridge(int sig, void *act, void *oact)
 {
 	return do_sigaction(sig, act, oact);
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_rt_sigaction(int n, ihk_mc_user_context_t *ctx);

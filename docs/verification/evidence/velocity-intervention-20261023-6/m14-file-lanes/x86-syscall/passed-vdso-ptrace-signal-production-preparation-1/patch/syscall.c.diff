@@ -1,0 +1,101 @@
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -477,62 +477,6 @@
+ #endif
+ 
+ static void
+-arch_ptrace_signal_lock_bridge(void *lock, void *node)
+-{
+-	mcs_rwlock_writer_lock((struct mcs_rwlock_lock *)lock,
+-			(struct mcs_rwlock_node_irqsave *)node);
+-}
+-
+-static void
+-arch_ptrace_signal_unlock_bridge(void *lock, void *node)
+-{
+-	mcs_rwlock_writer_unlock((struct mcs_rwlock_lock *)lock,
+-			(struct mcs_rwlock_node_irqsave *)node);
+-}
+-
+-static void
+-arch_ptrace_save_debugreg_bridge(void *debugreg)
+-{
+-	save_debugreg((unsigned long *)debugreg);
+-}
+-
+-static void
+-arch_ptrace_waitq_wake_bridge(void *waitq)
+-{
+-	waitq_wakeup((waitq_t *)waitq);
+-}
+-
+-static long
+-arch_ptrace_do_kill_bridge(void *thread, int pid, int tid, int sig,
+-		const void *info, int ptracecont)
+-{
+-	return do_kill((struct thread *)thread, pid, tid, sig,
+-			(struct siginfo *)info, ptracecont);
+-}
+-
+-static void
+-arch_ptrace_schedule_bridge(void)
+-{
+-	schedule();
+-}
+-
+-static void
+-arch_ptrace_signal_log_bridge(int event, int value, int result)
+-{
+-	if (event == 8) {
+-		dkprintf("ptrace_report_signal, tid=%d, pid=%d\n",
+-				value, result);
+-	}
+-	else if (event == 9) {
+-		dkprintf("ptrace_report_signal,sleeping\n");
+-	}
+-	else if (event == 10) {
+-		dkprintf("ptrace_report_signal,wake up\n");
+-	}
+-}
+-
+-
+-static void
+ arch_process_vm_rw_read_lock_bridge(void *vm)
+ {
+ 	ihk_rwspinlock_read_lock_noirq(
+@@ -1563,6 +1507,9 @@
+ 
+ extern int coredump(struct thread *thread, void *regs, int sig);
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern void ptrace_report_signal(struct thread *thread, int sig);
++#else
+ void ptrace_report_signal(struct thread *thread, int sig)
+ {
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+@@ -1662,6 +1609,7 @@
+ 	dkprintf("ptrace_report_signal,wake up\n");
+ #endif
+ }
++#endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ extern long ptrace_arch_prctl(int pid, long code, long addr);
+@@ -2904,6 +2852,9 @@
+ 	return error;
+ } /* vdso_get_vdso_info() */
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern int vdso_map_global_pages(void);
++#else
+ int vdso_map_global_pages(void)
+ {
+ 	int error;
+@@ -2955,6 +2906,7 @@
+ 	dkprintf("vdso_map_global_pages(): %d\n", error);
+ 	return error;
+ } /* vdso_map_global_pages() */
++#endif /* complete global VDSO mapping orchestration is Rust-selected */
+ 
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ static void vdso_calc_container_size(void)

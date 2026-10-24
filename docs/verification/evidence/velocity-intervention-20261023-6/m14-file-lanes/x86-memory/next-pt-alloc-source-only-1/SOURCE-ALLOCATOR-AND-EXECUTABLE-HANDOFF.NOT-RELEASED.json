@@ -1,0 +1,67 @@
+{
+  "CPU_reservation": null,
+  "C_fallback_body_byte_identical": true,
+  "actual_fixture_outputs": null,
+  "actual_production_GCC14_default_native": null,
+  "actual_trace_file": "C __FILE__ static metadata; no Rust file!()/line!() replacement",
+  "allocation_semantics": "One existing Rust tracked-allocator ABI call. Exact count/alignment/flag/node-1/kernel0/virtULONG_MAX/file/line750. Propagate NULL and every raw return unchanged; no zeroing, free, rollback, refcount, second allocation, lock, validation or panic added.",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-pt-alloc-source-only-1/run_actual_once.NOT-RELEASED.py"
+  ],
+  "driver": {
+    "bytes": 7135,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-pt-alloc-source-only-1/run_actual_once.NOT-RELEASED.py",
+    "sha256": "315dea66abe5f18d25d277dc1e0da84cf3bb27231463fdfe06ea5b446abab540"
+  },
+  "engineering_percentage": null,
+  "execution_grant": null,
+  "existing_PTfree_and_logging_trace_anchors_retained": true,
+  "failure_history": "Retain first937CWD338e and successful bounded correction7b799; no replay of old tests; first unexpected new execution STOP/expert.",
+  "flag_conversion": "CInt as CULong directly, including negative values modulo2^64; no intermediate u32/zero-extension",
+  "held_residuals": "PTfree/logger sources still need executable proof; untested phys translator stays separate. Known next error callback: x86_pt_destroy_panic_bridge using existing Rust panic. Higher difficulty remains allocator backing/page ownership; logging selector and metadata verification moderate; translator/error wrapper narrower. No new inventory.",
+  "ownership": "Existing tracked allocator/provider chain retains allocation, tracking, early-allocation, failure and ownership policy. Wrapper returns ownership/result exactly as original; controlled leaf backend does not prove real allocation.",
+  "patch": {
+    "bytes": 2685,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-pt-alloc-source-only-1/EXACT-PT-ALLOC-SOURCE.patch",
+    "sha256": "429405354dbfc9974d6af0840fd62d5da3dd906337caf6e9472b24d879f9b825"
+  },
+  "postimages": [
+    {
+      "bytes": 91644,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-pt-alloc-source-only-1/candidate/arch/x86_64/kernel/memory.c",
+      "sha256": "b8c04e1f9fd6b240bc21575d4f6e64d50feef95a022ffe28d810e8bad0bad001"
+    },
+    {
+      "bytes": 209288,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-pt-alloc-source-only-1/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "f13cc54797f1b16d77e784e3f8339b2b632d1889ec2cb76cf56305fb91ce928a"
+    }
+  ],
+  "preimages": [
+    {
+      "bytes": 91300,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-clear-logging-source-only-1/candidate/arch/x86_64/kernel/memory.c",
+      "sha256": "564f786adabfc9f0e6d3593ff734b19afc622e4d6c691f11c3995e061a83f220"
+    },
+    {
+      "bytes": 208505,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-clear-logging-source-only-1/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "2d96bc6a916387cbe896f4f80e64d2dab45047ba920c4a90c2fad993144a1d54"
+    }
+  ],
+  "recipe": {
+    "bytes": 26854,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-pt-alloc-source-only-1/ALLOCATOR-FIXTURE-RECIPE.NOT-EXECUTED.json",
+    "sha256": "4fe3ca5b36c663ef54c6a4e5d142258b82cc4d20ee4bcef17cef96a471926f80"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nSource-only allocator callback cutover and bounded original-C/Rust observer recipe.\n",
+  "source_original_allocation_line": 750,
+  "status": "SOURCE_IMPLEMENTATION_AND_SINGLE_LEAF_RECIPE_READY_NOT_RELEASED",
+  "subsequent_physical_resume_directives_rebased_only": true
+}

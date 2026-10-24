@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Rust-IKC-HOST-std-staticlib",
+    "argv": [
+      "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "--crate-type=staticlib",
+      "--crate-name",
+      "ihklib_ikc_fixture",
+      "--cfg",
+      "ihklib_ikc_fixture",
+      "-C",
+      "panic=abort",
+      "-C",
+      "codegen-units=1",
+      "-C",
+      "relocation-model=pic",
+      "-C",
+      "opt-level=2",
+      "--print",
+      "native-static-libs",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/next-ikc-public-source-1/fixture_root.rs",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/next-ikc-public-source-1/libihklib_ikc.fixture.a"
+    ]
+  },
+  {
+    "name": "original-C-reference",
+    "argv": [
+      "/usr/bin/gcc-9",
+      "-std=gnu11",
+      "-O2",
+      "-fPIC",
+      "-I/home/holden/mckernel/ihk/linux/include",
+      "-c",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/next-ikc-public-source-1/original_c_reference.c",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/next-ikc-public-source-1/original_c_reference.o"
+    ]
+  },
+  {
+    "name": "public-header-ABI-and-parity-link",
+    "argv": [
+      "/usr/bin/gcc-9",
+      "-std=gnu11",
+      "-O2",
+      "-I/home/holden/mckernel/ihk/linux/include",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/next-ikc-public-source-1/test_ikc.c",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/next-ikc-public-source-1/original_c_reference.o",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/next-ikc-public-source-1/libihklib_ikc.fixture.a",
+      "-Wl,--wrap=malloc",
+      "-Wl,--wrap=calloc",
+      "-Wl,--gc-sections",
+      "-lgcc_s",
+      "-lutil",
+      "-lrt",
+      "-lpthread",
+      "-lm",
+      "-ldl",
+      "-lc",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/next-ikc-public-source-1/ihklib_ikc.fixture"
+    ],
+    "precondition": "Actual Rust compiler native-static-libs report must equal these known pinned1.92 HOST flags; otherwise STOP, do not substitute."
+  },
+  {
+    "name": "actual-IKC-consumer-parity",
+    "argv": [
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/next-ikc-public-source-1/ihklib_ikc.fixture"
+    ]
+  }
+]

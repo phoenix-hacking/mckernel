@@ -1,0 +1,158 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "milestone": "M15-F08",
+  "owner": "project_runtime_rust_scope lane2",
+  "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkmond/ihkmond.rs",
+  "source_lines": 225,
+  "original": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkmond/reference/ihkmond.c",
+  "implementation": [
+    "real Rust daemon with baseline libc daemon(1,0), GNU option parsing and original defaults",
+    "hungup worker waits for add, probes /dev/mcos0, periodically uses IHK_DEVICE_DETECT_HUNGUP, handles remove and repeats",
+    "kmsg worker acquires/refers a kernel kmsg lease, registers STATUS/KMSG eventfd providers, consumes notifications, reads shifts, flushes status/remove, releases lease and endpoints",
+    "64-slot1MiB ring retains raw kmsg file bytes and sends nonempty lines to syslog at LOG_INFO, configured LOCAL0..7 facility/logid",
+    "selected one-OS udev mcos add/remove dispatch, no independent library parser/sysfs API",
+    "SIGINT/SIGTERM signalfd, cooperative worker wake/stop, joined threads and deterministic partial-initialization cleanup",
+    "optional ENABLE_KMSG_REDIRECT Rust body writes baseline /dev/kmsg without retained project C callbacks"
+  ],
+  "default_profile": "Linux x86_64; OS0/dev0; non-debug; ENABLE_KMSG_REDIRECT=OFF matches retained default. Redirect and actual daemonized deployment need matching separate proof.",
+  "ABI_consumers": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkmond/ABI-CONSUMERS.json",
+  "provider_status": "Only2 current libihk exports needed: ihklib_device_open(int) and ihk_os_get_eventfd(int,int). Both return caller-owned fds or negative failure. Exact Rust provider/export/link closure remains for case227_stage/root; current C library is temporary separate debt.",
+  "reference_preservation": [
+    "same CLI/default facility LOCAL6,kmsg1,interval600; actual options f:k:i: and help continues as original",
+    "same selected OS0/dev0 paths and DETECT/GET/READ/RELEASE UAPI descriptors; no duplicate library providers",
+    "same normal kmsg shift1 bytes, normal rotate-before-write policy, raw ring file naming, LOG_INFO syslog nonempty lines,200us line pacing",
+    "udev monitor owns its returned fd; native full lifecycle/resource evidence still needed",
+    "relevant original diagnostics/statuses retained; new stop/init primitives and corrected invalid paths are separately classified"
+  ],
+  "explicit_correctness_changes": [
+    {
+      "reference": "detached threads retain stack args; no stop/join; cleanup can race them",
+      "Rust": "owned Arc state, condvars/eventfd wakes, all workers stop and join; SIGTERM/SIGINT clean path; worker failure surfaced to main",
+      "proof": "Rust mock stop, active stop, partial setup and final task-count/resource receipts; real daemon fork/native proof open"
+    },
+    {
+      "reference": "udev devices never unref; monitor fd unref then separately closed",
+      "Rust": "device RAII unref, borrowed monitor fd closed once by monitor; scoped epoll/ctx",
+      "proof": "defined C startup observations retain their leak/double-close receipt; Rust alone must close/refcount zero"
+    },
+    {
+      "reference": "partial kmsg setup/failure can leak acquired handle or open files; ignored write errors",
+      "Rust": "lease release attempted once on every owned exit; file handles drop, write errors fail; failed release logs dev/os/opaque handle and is not called restored",
+      "proof": "provider/eventfd/epoll/read failure cases; forced release failure intentionally expects one unreleased handle and failure status, no restoration credit"
+    },
+    {
+      "reference": "node+4 parsing misroutes full /dev/mcosN names; null/invalid node/action can fault or index outside single entry",
+      "Rust": "accept exact mcos0 basename only, validate pointers, ignore unsupported nodes, unref every received device",
+      "proof": "selected normal OS0 event mock; invalid/multi-OS/native behavior not fully qualified"
+    },
+    {
+      "reference": "main epoll failure can spin silently; worker ret is never collected",
+      "Rust": "epoll error returns and joins; worker completion/status wakes supervisor",
+      "proof": "main epoll failure and worker partial-failure contracts"
+    },
+    {
+      "reference": "syslog reads only SLOT-1 bytes and assumes missing slots start at0; oversized reads can skip all active data",
+      "Rust": "bounded-size chunks for oversized reads, chronological active-slot queue, full-file read and close on consume",
+      "proof": "normal actual C ring-helper parity; separate Rust oversized-read byte-count proposal, not C parity"
+    },
+    {
+      "reference": "unterminated/empty redirect buffer and missing argv0 slash can use indeterminate pointers/data",
+      "Rust": "returned-length-bounded raw-byte redirection and safe basename",
+      "proof": "default ordinary profile only; optional redirect/native branch not yet executed"
+    }
+  ],
+  "fixture": {
+    "driver": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkmond/fixture/run_fixture.py",
+    "backend": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkmond/fixture/mock.c",
+    "cases": 22,
+    "defined_original_comparisons": 8,
+    "additional": [
+      "direct retained C fwrite_kmsg/syslog_kmsg versus actual Rust Ring/Lease helper",
+      "Rust-only oversized-read preservation proposal"
+    ],
+    "method": "synthetic thread-safe udev/epoll/eventfd/ioctl/providers with real Rust threads and private real ring files; baseline daemon is wrapped so no fork/background process is launched",
+    "reference_bindings": [
+      "retain original C bytes unchanged",
+      "only IHKMOND_TMP literal rebound to private path for executable fixture",
+      "diagnostic printk macro routed to test log sink in minimal header projection",
+      "reference full main runs only defined startup/CLI cases with both workers disabled",
+      "reference kmsg data path invoked directly from retained static helper bodies; unsafe detached-worker cleanup is not executed as an oracle"
+    ],
+    "observations": [
+      "raw stdout/stderr/exit",
+      "kprint/syslog bytes",
+      "udev event/ABI protocol trace",
+      "owned fd/handle/ref counts and duplicate close",
+      "final live task count1",
+      "ring file bytes",
+      "release attempt count and explicit unrestored identity"
+    ],
+    "never_claims": [
+      "full C/Rust lifetime parity for buggy detached cleanup",
+      "native udev/epoll/daemon fork proof",
+      "Rust libihk provider parity",
+      "restoration after forced release failure",
+      "language retirement from a mock PASS"
+    ],
+    "command": "/usr/bin/python3 -I /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkmond/fixture/run_fixture.py --execute --cc /usr/bin/cc --rustc /home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+    "profile": {
+      "cpu_count": 1,
+      "cpu_binding": "fresh controller-assigned eligible ordinary CPU; no reservation",
+      "memory_mib": 1024,
+      "tasks_max": 64,
+      "wall_seconds": 190,
+      "driver_work_seconds": 180,
+      "bounded_cleanup_seconds": 6,
+      "storage_mib": 64,
+      "jobs": 1,
+      "root": "none",
+      "Docker": "none",
+      "guest": "none",
+      "real_udev_or_custom_devices": "none",
+      "threading": "real Rust worker threads against synthetic event endpoints",
+      "process_controls": "existing unprivileged child-subreaper/self-children capture/join helper; daemon call is a test stub"
+    },
+    "retention": "existing fixture-output refuses overwrite; all command/stdout/stderr/trace/resource receipts/files/failures retained; no retries"
+  },
+  "selector": {
+    "proposal": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkmond/CMake-selection-proposal.cmake",
+    "target": "same ihkmond build target/default ALL output",
+    "install": "same ${CMAKE_INSTALL_SBINDIR}/ihkmond basename via install(PROGRAMS); remove only ihkmond from existing install(TARGETS) list",
+    "libraries": "matched target ihklib and baseline selected LIBUDEV, Rust std/platform libc",
+    "production_cfg": "no ihkmond_fixture helper or C mock selected; optional redirect flag forwarded",
+    "wiring": "private proposal only; root coordinates shared CMake/libihk ownership"
+  },
+  "substantive_remaining": [
+    "fresh ordinary compile/link and concrete mock fixture may reveal source/runtime defects; none run yet",
+    "case227_stage/root prove the2 provider exports and caller-owned descriptor semantics",
+    "review explicit lifetime/resource/ring corrections rather than promote reference defects to an oracle",
+    "match libudev, Linux user ABI, libihk and module/kmsg handle protocol with installed production artifact",
+    "real daemon fork/child identity, actual signals, udev events, log service/redirect, repeated OS lifecycle and resource restoration need native qualification",
+    "full64-slot wrap, long-line/rotation combinations, optional debug/redirect and unsupported OS-index inputs not fully covered by first fixture"
+  ],
+  "checks_run": [
+    "AST parsing of driver/owned-process source",
+    "JSON matrix and ABI manifest parse",
+    "bounded original-source equality and source-only ABI/layout review"
+  ],
+  "checks_not_run": [
+    "compiler",
+    "driver even preparation-only invocation",
+    "daemon/subprocess/thread fixture",
+    "PTY/Docker/root/guest/native work"
+  ],
+  "accounting": {
+    "source_ready": true,
+    "compiler_pass": false,
+    "fixture_pass": false,
+    "default_canonical_selected": false,
+    "Rust_provider_closure": false,
+    "native_acceptance": false,
+    "file_retired": false,
+    "functional35_changed": false,
+    "M14_changed": false,
+    "prior_packages_changed": false,
+    "acceptance_credit": 0
+  },
+  "controller": "Root owns actual grant/publication/canonical integration and next body dispatch."
+}

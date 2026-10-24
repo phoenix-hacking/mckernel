@@ -1,0 +1,632 @@
+{
+  "Rust_compiler_invocations": 0,
+  "Rust_tool": {
+    "bytes": 645792,
+    "path": "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+    "sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09"
+  },
+  "actual_arithmetic": [
+    "byteexact tsc_to_ts",
+    "byteexact ts_add",
+    "byteexact ts_to_tv",
+    "byteexact tv_sub"
+  ],
+  "actual_result": null,
+  "allowed_Rust_undefined": [
+    "clv",
+    "gettime_local_support",
+    "tod_data",
+    "get_this_cpu_local_var",
+    "fixture_disable_irq",
+    "fixture_restore_irq",
+    "fixture_rdtsc",
+    "fixture_set_timer",
+    "fixture_do_kill",
+    "memcpy",
+    "memset",
+    "memmove"
+  ],
+  "argv_output_substitutions": {
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/output-1/selected-cputime-plus-Rust.o": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/bounded-quoted-header-correction-1/output-1/selected-cputime-plus-Rust.o",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/output-1/selected-cputime-syscall.o": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/bounded-quoted-header-correction-1/output-1/selected-cputime-syscall.o"
+  },
+  "body_relation": {
+    "fixture_C_original": {
+      "bytes": 3020,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/fixture/cputime.ORIGINAL-C.inc",
+      "sha256": "9cb2ccf66fb656df21919bbca0799899f63d9845c4829b16d77d54febf6c3fbc"
+    },
+    "fixture_Rust": {
+      "bytes": 5726,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/fixture/cputime.RUST-FRAGMENT.rs.inc",
+      "sha256": "9b9c8906da22585e0f94ea995e74a603a0b8f96ef985cced7cb12ead9c6da962"
+    },
+    "original_C": {
+      "bytes": 3020,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/cputime.ORIGINAL-C.inc",
+      "sha256": "9cb2ccf66fb656df21919bbca0799899f63d9845c4829b16d77d54febf6c3fbc"
+    },
+    "production_Rust": {
+      "bytes": 5726,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/cputime.RUST-FRAGMENT.rs.inc",
+      "sha256": "9b9c8906da22585e0f94ea995e74a603a0b8f96ef985cced7cb12ead9c6da962"
+    }
+  },
+  "canonical": {
+    "C": {
+      "bytes": 843257,
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "sha256": "34ec8a08c5790aa7533e5a8e3905d1dd1d4989bf0f431b8517ae6d50bbaa54f4"
+    },
+    "policy": {
+      "bytes": 713471,
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "3ef8288617db7bcc26c56039491295d3f48c53d4f76d111b68dfcc3186546f7d"
+    }
+  },
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_NATIVE_FORK_OWNED_TRANSACTION",
+        "-DMCKERNEL_RUST_RLIMIT_HELPERS",
+        "-DMCKERNEL_RUST_SCHED_POLICY_HELPERS",
+        "-DMCKERNEL_RUST_SCHED_PRIO_HELPERS",
+        "-DMCKERNEL_RUST_SHMID_HELPERS",
+        "-DMCKERNEL_RUST_SHM_PERM_HELPERS",
+        "-DMCKERNEL_RUST_SIGNAL_HELPERS",
+        "-DMCKERNEL_RUST_SYSCALL_OFFLOAD",
+        "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/include",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel/ihk/ikc/include",
+        "-I/home/holden/mckernel/ihk/linux/include",
+        "-I/home/holden/mckernel/lib/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-fsyntax-only",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/fixture/selected_REAL_ABI.c"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1",
+      "label": "05-selected-real-TU-ABI",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual original-C/Rust reset/set CPU-time equivalence, controlled OS-effects only, real layouts/wholeGCC9 selection/partial consumer."
+    },
+    {
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_NATIVE_FORK_OWNED_TRANSACTION",
+        "-DMCKERNEL_RUST_RLIMIT_HELPERS",
+        "-DMCKERNEL_RUST_SCHED_POLICY_HELPERS",
+        "-DMCKERNEL_RUST_SCHED_PRIO_HELPERS",
+        "-DMCKERNEL_RUST_SHMID_HELPERS",
+        "-DMCKERNEL_RUST_SHM_PERM_HELPERS",
+        "-DMCKERNEL_RUST_SIGNAL_HELPERS",
+        "-DMCKERNEL_RUST_SYSCALL_OFFLOAD",
+        "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/include",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel/ihk/ikc/include",
+        "-I/home/holden/mckernel/ihk/linux/include",
+        "-I/home/holden/mckernel/lib/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-E",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/candidate/syscall.c"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1",
+      "label": "06-selected-complete-TU-preprocess",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual original-C/Rust reset/set CPU-time equivalence, controlled OS-effects only, real layouts/wholeGCC9 selection/partial consumer."
+    },
+    {
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_NATIVE_FORK_OWNED_TRANSACTION",
+        "-DMCKERNEL_RUST_RLIMIT_HELPERS",
+        "-DMCKERNEL_RUST_SCHED_POLICY_HELPERS",
+        "-DMCKERNEL_RUST_SCHED_PRIO_HELPERS",
+        "-DMCKERNEL_RUST_SHMID_HELPERS",
+        "-DMCKERNEL_RUST_SHM_PERM_HELPERS",
+        "-DMCKERNEL_RUST_SIGNAL_HELPERS",
+        "-DMCKERNEL_RUST_SYSCALL_OFFLOAD",
+        "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/include",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel/ihk/ikc/include",
+        "-I/home/holden/mckernel/ihk/linux/include",
+        "-I/home/holden/mckernel/lib/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-c",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/candidate/syscall.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/bounded-quoted-header-correction-1/output-1/selected-cputime-syscall.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1",
+      "label": "07-selected-complete-C-TU",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual original-C/Rust reset/set CPU-time equivalence, controlled OS-effects only, real layouts/wholeGCC9 selection/partial consumer."
+    },
+    {
+      "argv": [
+        "/usr/bin/nm",
+        "-a",
+        "-S",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/bounded-quoted-header-correction-1/output-1/selected-cputime-syscall.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1",
+      "label": "08-selected-C-symbols",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual original-C/Rust reset/set CPU-time equivalence, controlled OS-effects only, real layouts/wholeGCC9 selection/partial consumer."
+    },
+    {
+      "argv": [
+        "/usr/bin/nm",
+        "-a",
+        "-S",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/output-1/cputime_actual.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1",
+      "label": "09-actual-Rust-provider-closure",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual original-C/Rust reset/set CPU-time equivalence, controlled OS-effects only, real layouts/wholeGCC9 selection/partial consumer."
+    },
+    {
+      "argv": [
+        "/usr/bin/ld",
+        "-r",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/bounded-quoted-header-correction-1/output-1/selected-cputime-plus-Rust.o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/bounded-quoted-header-correction-1/output-1/selected-cputime-syscall.o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/output-1/cputime_actual.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1",
+      "label": "10-selected-C-plus-Rust-partial",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual original-C/Rust reset/set CPU-time equivalence, controlled OS-effects only, real layouts/wholeGCC9 selection/partial consumer."
+    },
+    {
+      "argv": [
+        "/usr/bin/nm",
+        "-a",
+        "-S",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/bounded-quoted-header-correction-1/output-1/selected-cputime-plus-Rust.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1",
+      "label": "11-partial-symbols",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual original-C/Rust reset/set CPU-time equivalence, controlled OS-effects only, real layouts/wholeGCC9 selection/partial consumer."
+    }
+  ],
+  "controlled_effects": [
+    "CPU-local acquisition",
+    "IRQsave/restore",
+    "rdtsc value",
+    "existing do_kill bridge effect",
+    "existing set_timer effect"
+  ],
+  "corrected_quote_transport_authority": {
+    "bytes": 38748,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-signal-batch-preparation-1/bounded-monitor-scaffold-correction-1/EXACT-REMAINING11.SCAFFOLD-CORRECTION.NOT-GRANTED.json",
+    "sha256": "b69bade299ea945fd62cac5c71c669d1ee3a172d3dc5014b2f1d41cad8254be1"
+  },
+  "default_link": false,
+  "engineering_percentage": null,
+  "expected_Rust_exports": [
+    "reset_cputime",
+    "set_cputime",
+    "tsc_to_ts",
+    "ts_add",
+    "ts_to_tv",
+    "tv_sub",
+    "fixture_rust_layout"
+  ],
+  "expected_stdout": "PASS_F03_ACTUAL_C_RUST_CPUTIME reset=12 set=3243 total=3255 real_layout_fields=48 controlled_OS_effects_only=1\n",
+  "file_retired": false,
+  "first_failed_stderr": {
+    "bytes": 576,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/actual-fixture-1/05-selected-real-TU-ABI/stderr",
+    "sha256": "14497a2d947fc96aecec04a9d7b4f8df565f12208a02f45c1a8c038e321796ea"
+  },
+  "first_failure": {
+    "bytes": 13059,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/actual-fixture-1/FAILURE-1.json",
+    "sha256": "9445b5ba4a5ff39fed8701c4d035ae61019c590ef694bf50f5aa19f642582240"
+  },
+  "forwarding_HOLD": {
+    "bytes": 1948,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-forward-sigaction-source-decision-1/PARTIAL-CONTEXT-FORWARDING.HOLD.json",
+    "sha256": "048dce0dae63bec8792f4a399ee9eac2c502a5acf9966b3442bc50b8fe11fa97"
+  },
+  "headers": {
+    "bytes": 30316,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/BOUND-REAL-HEADER-INPUTS.json",
+    "sha256": "50cfd889f399199409e88ee00186c19fb5295e6e46cce949ca05465d57fabe88"
+  },
+  "inputs": {
+    "BOUND-REAL-HEADER-INPUTS.json": {
+      "bytes": 30316,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/BOUND-REAL-HEADER-INPUTS.json",
+      "sha256": "50cfd889f399199409e88ee00186c19fb5295e6e46cce949ca05465d57fabe88"
+    },
+    "LAYOUT-MAPPING.json": {
+      "bytes": 3701,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/LAYOUT-MAPPING.json",
+      "sha256": "b8aed2c70a536b059bff720cfa7ab2c955be510bffbc6547c74a08a2f5b9ce54"
+    },
+    "candidate/do_sigaction.EXACT-ORIGINAL-C.inc": {
+      "bytes": 1964,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/candidate/do_sigaction.EXACT-ORIGINAL-C.inc",
+      "sha256": "5e77ed16ad75c93adcf8d39ebc7320d0256fb9f7514f345dad05e0580326eafb"
+    },
+    "candidate/do_sigaction_body_result.EXACT-ORIGINAL-C.inc": {
+      "bytes": 1225,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/candidate/do_sigaction_body_result.EXACT-ORIGINAL-C.inc",
+      "sha256": "34b0759ec27aef9d555b34d01cf52aaeabcd4b30cc5c892a33ae08ca3d6b8867"
+    },
+    "candidate/pending_mask.EXACT-ORIGINAL-C.inc": {
+      "bytes": 1115,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/candidate/pending_mask.EXACT-ORIGINAL-C.inc",
+      "sha256": "7efcdcde5ee6d10b30b34316ae2b801e2456e596d76921208eab06eba3050b42"
+    },
+    "candidate/sigaction_validate.EXACT-ORIGINAL-C.inc": {
+      "bytes": 222,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/candidate/sigaction_validate.EXACT-ORIGINAL-C.inc",
+      "sha256": "e48cacf15a71ae98604f27bdd55f5a63031b0551eb9e3621f55445699d0e965a"
+    },
+    "candidate/sigsuspend.EXACT-ORIGINAL-C.inc": {
+      "bytes": 2588,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/candidate/sigsuspend.EXACT-ORIGINAL-C.inc",
+      "sha256": "c33b77a62f53afc72a2c603c28663a627ef7e534b6633c90c4841cd723ec43bb"
+    },
+    "candidate/sigsuspend_pending_matches.EXACT-ORIGINAL-C.inc": {
+      "bytes": 159,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/candidate/sigsuspend_pending_matches.EXACT-ORIGINAL-C.inc",
+      "sha256": "bc50608c376f45b10a1c50f25a0a4debee7676f52f9ff5b7a84b19c24adbe78d"
+    },
+    "candidate/sigsuspend_prepare_mask.EXACT-ORIGINAL-C.inc": {
+      "bytes": 180,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/candidate/sigsuspend_prepare_mask.EXACT-ORIGINAL-C.inc",
+      "sha256": "4e627c8d766110feb306e4010a468d01a298c75404eb7db2926b73a078506541"
+    },
+    "candidate/syscall.c": {
+      "bytes": 843386,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/candidate/syscall.c",
+      "sha256": "ca7d8face54d4cabe48c78c3c8e1080cc37e7af5943a4576753a5e6af9a574ac"
+    },
+    "candidate/valid_signal.EXACT-ORIGINAL-C.inc": {
+      "bytes": 70,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/candidate/valid_signal.EXACT-ORIGINAL-C.inc",
+      "sha256": "2a6ffe8bdf9ffaa7bd2a39463bdee939c42ae9298f0222bbf4d1cd5cd5b33934"
+    },
+    "exact_physical_quoted_header": {
+      "bytes": 1747,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/executer/include/uti.h",
+      "sha256": "0787fcf51f5c5f5a702196e891cede5e570bb472e2b0a1a1041566b59e784fb7"
+    },
+    "fixture/abi.rs": {
+      "bytes": 76151,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/fixture/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "fixture/cputime.ORIGINAL-C.inc": {
+      "bytes": 3020,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/fixture/cputime.ORIGINAL-C.inc",
+      "sha256": "9cb2ccf66fb656df21919bbca0799899f63d9845c4829b16d77d54febf6c3fbc"
+    },
+    "fixture/cputime.RUST-FRAGMENT.rs.inc": {
+      "bytes": 5726,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/fixture/cputime.RUST-FRAGMENT.rs.inc",
+      "sha256": "9b9c8906da22585e0f94ea995e74a603a0b8f96ef985cced7cb12ead9c6da962"
+    },
+    "fixture/cputime_actual.c": {
+      "bytes": 14374,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/fixture/cputime_actual.c",
+      "sha256": "f02ac5784bdae5523425b6e263ff455d61b5ff7ba34e455db3c6e2b9506fb664"
+    },
+    "fixture/cputime_actual.rs": {
+      "bytes": 3173,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/fixture/cputime_actual.rs",
+      "sha256": "ec171742aff1a4c224bbdb7c8c61669f4705d258e8a973167cec0c90a89ac33d"
+    },
+    "fixture/original_REAL_ABI.c": {
+      "bytes": 1162,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/fixture/original_REAL_ABI.c",
+      "sha256": "bab1dec58910b1db468f1153d7a1436590a27c4a970c2e407df9c9f029bce10c"
+    },
+    "fixture/selected_REAL_ABI.c": {
+      "bytes": 1301,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/fixture/selected_REAL_ABI.c",
+      "sha256": "d751b740808084732e8026bb995db1a28718efc765019c1b232ae1882619f2d9"
+    },
+    "fixture/ts_add.UNCHANGED-RUST.inc": {
+      "bytes": 431,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/fixture/ts_add.UNCHANGED-RUST.inc",
+      "sha256": "053a3af82c0fc97dd124f3e7c7b0d9b2911522a3e93403e5f3b7b2c48363ccd5"
+    },
+    "fixture/ts_to_tv.UNCHANGED-RUST.inc": {
+      "bytes": 198,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/fixture/ts_to_tv.UNCHANGED-RUST.inc",
+      "sha256": "d06b1c993ba01a29fd327697e5e20851206661cdf5bfe5a031f2b14ebb146cac"
+    },
+    "fixture/tsc_to_ts.UNCHANGED-RUST.inc": {
+      "bytes": 603,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/fixture/tsc_to_ts.UNCHANGED-RUST.inc",
+      "sha256": "2516ef1dd99ab921181a5245f8855fc179e1838c8c572e219a3af236187cbea1"
+    },
+    "fixture/tv_sub.UNCHANGED-RUST.inc": {
+      "bytes": 419,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/fixture/tv_sub.UNCHANGED-RUST.inc",
+      "sha256": "92b7bee12852163268ddccc060b9f5eff064d54f06fa400d80b4cfc52b8696b0"
+    }
+  },
+  "materialization": {
+    "bytes": 1860,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/bounded-quoted-header-correction-1/EXACT-QUOTE-MATERIALIZATION.json",
+    "sha256": "26fd4ab22f46a6b357dc9c61d5d94c6c0237c66df335e206c5d2c2a04c931d4c"
+  },
+  "native": false,
+  "no_fake_panic_or_core_provider": true,
+  "old00through04_replays": 0,
+  "original_profile": {
+    "bytes": 36158,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-signal-batch-preparation-1/EXACT-THREE-BODY-FIXTURE.NOT-GRANTED.json",
+    "sha256": "7685f0966d390f84217be194d8b48d9db42fe0963192c82ad1157dc414ccc588"
+  },
+  "original_recipe": {
+    "bytes": 39832,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/EXACT-CPUTIME-FIXTURE.NOT-GRANTED.json",
+    "sha256": "552ccf575fbd196ccdd81f371e3cd7a3ef3b1c985ef30bd373733941b1092820"
+  },
+  "other_sources_excluded": [
+    "sys_move_pages",
+    "move_pages_log_bridge",
+    "all F06 untested fragments"
+  ],
+  "prior_failure_history": {
+    "bytes": 21155,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-signal-batch-preparation-1/ACTUAL-THREE-SIGNAL-BODIES-QUALIFIED-HANDOFF.json",
+    "sha256": "deed8323ea1b24805778dc1add0cbd5ec09391ec369eb929dcb2687b330d590a"
+  },
+  "production_source_handoff": {
+    "bytes": 1848,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/SOURCE-HANDOFF.json",
+    "sha256": "378dffce6bf192d89428b9021a72a02ad6dc143a08b1fb6d1b6579a6d40f11a9"
+  },
+  "profile": {
+    "AS": 2147483648,
+    "CGU": 1,
+    "CPU": 6,
+    "CPU_seconds": 60,
+    "FSIZE": 33554432,
+    "NOFILE": 256,
+    "RUST_MIN_STACK": 2097152,
+    "core": 0,
+    "jobs": 1,
+    "retirement_seconds": 6,
+    "stack": 2097152,
+    "wall_seconds": 90
+  },
+  "provider_sources": {
+    "/home/holden/mckernel/kernel/rust/abi.rs": {
+      "bytes": 76151,
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "/home/holden/mckernel/kernel/rust/cls.rs": {
+      "bytes": 7877,
+      "path": "/home/holden/mckernel/kernel/rust/cls.rs",
+      "sha256": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba"
+    },
+    "/home/holden/mckernel/kernel/rust/sched_helpers.rs": {
+      "bytes": 185669,
+      "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "sha256": "d16200db3054d88a83752fda1383d6c101d24de4b787bd78cd42edb46ab251fc"
+    },
+    "/home/holden/mckernel/kernel/rust/syscall_policy.rs": {
+      "bytes": 713471,
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "3ef8288617db7bcc26c56039491295d3f48c53d4f76d111b68dfcc3186546f7d"
+    },
+    "/home/holden/mckernel/kernel/rust/timer.rs": {
+      "bytes": 8090,
+      "path": "/home/holden/mckernel/kernel/rust/timer.rs",
+      "sha256": "6f1b4789d52cd402b4707d66a929bdac25fc6235dcf3c5fd34b9f17a33e22d5a"
+    },
+    "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs": {
+      "bytes": 93305,
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "98914e1ff4d50c2f42ccbdeb1f4f338024b7a9a2143fbad2f59ebd6f6b50dd0b"
+    }
+  },
+  "retained_objects": {
+    "cputime_actual": {
+      "ctime_ns": 1792814628352575955,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 56246803,
+      "mode": "0o700",
+      "mtime_ns": 1792814628352575955,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/output-1/cputime_actual",
+      "sha256": "21244933a5e20ec78a2f51af4f2a408ef31bb2a5bf39e2f7878cbfba812b634a",
+      "size": 79056,
+      "uid": 1000
+    },
+    "cputime_actual.o": {
+      "ctime_ns": 1792814627784558195,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 56246786,
+      "mode": "0o600",
+      "mtime_ns": 1792814627784558195,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/output-1/cputime_actual.o",
+      "sha256": "070c020ee03118dab277d81c8f8a9d098a9c291ad1cc1dd020d0df61a46f2f26",
+      "size": 5056,
+      "uid": 1000
+    },
+    "cputime_actual_C.o": {
+      "ctime_ns": 1792814628276573579,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 56246793,
+      "mode": "0o600",
+      "mtime_ns": 1792814628276573579,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/output-1/cputime_actual_C.o",
+      "sha256": "3ed10b9e68112de4e47c23303943daa72673fb127656c2f9c4daece719a60b90",
+      "size": 85048,
+      "uid": 1000
+    }
+  },
+  "retained_positive": {
+    "bytes": 13903,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/bounded-quoted-header-correction-1/RETAINED-POSITIVE-00-THROUGH-04.json",
+    "sha256": "64744e77db397ecba5c20324f4cb0659bf5da0bf434c03e67ed918c32451fd69"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual original-C/Rust reset/set CPU-time equivalence, controlled OS-effects only, real layouts/wholeGCC9 selection/partial consumer.",
+  "status": "ONE_BOUNDED_QUOTED_HEADER_CORRECTION_SUFFIX_ONLY_NOT_GRANTED",
+  "tool_reason": "Exact tsc_to_ts requires core_intrinsics; reuse accepted nightly70eb production compiler with feature, no arithmetic rewrite/fake panic ABI.",
+  "tools": {
+    "/home/holden/anaconda3/bin/python3": {
+      "bytes": 15880080,
+      "path": "/home/holden/anaconda3/bin/python3",
+      "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb"
+    },
+    "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc": {
+      "bytes": 645792,
+      "path": "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+      "sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09"
+    },
+    "/usr/bin/gcc-9": {
+      "bytes": 1158288,
+      "path": "/usr/bin/gcc-9",
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+    },
+    "/usr/bin/ld": {
+      "bytes": 1732192,
+      "path": "/usr/bin/ld",
+      "sha256": "476b24d5cc1fef54f80412d06e7430b2dcf4e2b6f1525ee17e6eaaf16b28a00f"
+    },
+    "/usr/bin/nm": {
+      "bytes": 52664,
+      "path": "/usr/bin/nm",
+      "sha256": "5fb0dd8acc18e3f348ed0acbcada0580dbdddd1eb5de3c8323613af13580032b"
+    }
+  }
+}

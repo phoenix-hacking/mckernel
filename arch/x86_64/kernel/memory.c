@@ -1313,11 +1313,16 @@ struct clear_range_args {
 	int max_nr_addr;
 };
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+extern void x86_clear_memobj_flush_bridge(void *memobj, unsigned long phys,
+        size_t pgsize);
+#else
 static void x86_clear_memobj_flush_bridge(void *memobj, unsigned long phys,
 		size_t pgsize)
 {
 	memobj_flush_page(memobj, phys, pgsize);
 }
+#endif
 
 #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 extern void *x86_clear_phys_to_virt_bridge(unsigned long phys);
@@ -1347,16 +1352,25 @@ static int x86_clear_page_unmap_bridge(void *page)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+extern void x86_clear_rss_sub_bridge(size_t size, size_t pgsize);
+#else
 static void x86_clear_rss_sub_bridge(size_t size, size_t pgsize)
 {
 	memory_stat_rss_sub(size, pgsize);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+extern void x86_clear_memobj_rss_sub_bridge(void *memobj, size_t size,
+        size_t pgsize);
+#else
 static void x86_clear_memobj_rss_sub_bridge(void *memobj, size_t size,
 		size_t pgsize)
 {
 	rusage_memory_stat_sub(memobj, size, pgsize);
 }
+#endif
 
 static void x86_clear_effect_log_bridge(int event, unsigned long base,
 		unsigned long phys, size_t pgsize)
@@ -1530,11 +1544,16 @@ static int clear_range_l1(void *args0, pte_t *ptep, uint64_t base,
 }
 #endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+extern int x86_clear_range_walk_l1_bridge(void *pt, unsigned long base,
+        unsigned long start, unsigned long end, void *args);
+#else
 static int x86_clear_range_walk_l1_bridge(void *pt, unsigned long base,
 		unsigned long start, unsigned long end, void *args)
 {
 	return walk_pte_l1(pt, base, start, end, &clear_range_l1, args);
 }
+#endif
 
 #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 /* Synchronous existing L1 C walker identity; its lower chain remains C debt. */
@@ -1568,14 +1587,19 @@ static int clear_range_l2(void *args0, pte_t *ptep, uint64_t base,
 }
 #endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+extern int x86_clear_range_walk_l2_bridge(void *pt, unsigned long base,
+        unsigned long start, unsigned long end, void *args);
+#else
 static int x86_clear_range_walk_l2_bridge(void *pt, unsigned long base,
 		unsigned long start, unsigned long end, void *args)
 {
 	return walk_pte_l2(pt, base, start, end, &clear_range_l2, args);
 }
+#endif
 
 #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
-/* Typed immutable identities; these existing lower C callbacks remain debt. */
+/* Typed immutable identities; remaining C providers are tracked independently. */
 x86_clear_child_walk_fn_t const x86_clear_l3_child_walk = &x86_clear_range_walk_l2_bridge;
 x86_clear_flush_memobj_fn_t const x86_clear_l3_memobj_flush = &x86_clear_memobj_flush_bridge;
 x86_clear_rss_sub_fn_t const x86_clear_l3_rss_sub = &x86_clear_rss_sub_bridge;
@@ -1612,14 +1636,19 @@ static int clear_range_l3(void *args0, pte_t *ptep, uint64_t base,
 }
 #endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+extern int x86_clear_range_walk_l3_bridge(void *pt, unsigned long base,
+        unsigned long start, unsigned long end, void *args);
+#else
 static int x86_clear_range_walk_l3_bridge(void *pt, unsigned long base,
 		unsigned long start, unsigned long end, void *args)
 {
 	return walk_pte_l3(pt, base, start, end, &clear_range_l3, args);
 }
+#endif
 
 #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
-/* Borrow the existing L3 callback synchronously; its C body remains debt. */
+/* Same synchronous L3 walker identity; the default body is supplied by Rust. */
 int (*const x86_clear_range_l3_callback)(void *, unsigned long,
         unsigned long, unsigned long, void *) = &x86_clear_range_walk_l3_bridge;
 extern int x86_clear_range_l4_body(void *args0, pte_t *ptep, uint64_t base,

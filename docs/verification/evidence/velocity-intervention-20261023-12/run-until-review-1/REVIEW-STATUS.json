@@ -1,0 +1,26 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "AWAIT_FROZEN_PRIVATE_BRIDGE_CANDIDATE",
+  "deadline_UTC": "2026-10-25T00:00:00Z",
+  "user_authority": "RUN-WINDOW-20261024.md authorizes existing prepaid credits after included allowance; no purchase, automatic top-up or API-key billing.",
+  "reviewed_existing_boundaries": [
+    {
+      "path": "/home/holden/mckernel/scripts/watch_os_goal.py",
+      "finding": "supervise retains one monotonic hours deadline across its internal recoveries; should_restart refuses usage/credit/auth/policy and explicit signal/time stops."
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/os_goal_credits.py",
+      "finding": "CreditBudget retains fixed ID/budget and counts cumulative account-wide downward balance steps. Missing recovered ledger is refused; upward snapshots do not refund allowance."
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/run_os_goal.py",
+      "finding": "Explicit current startup instruction supports a saved paused/blocked goal resume. First worker signal starts normal checkpoint; a second signal requests immediate stop."
+    }
+  ],
+  "specific_candidate_race_to_check": "At expiry or a clock step, avoid a duplicate external SIGTERM against an already checkpointing worker or the finite-hour watcher drain. Signal only an exact PIDfd-bound worker, never watcher/group/guest.",
+  "physical_gate_boundary": "Model resume may perform retirement reconciliation/source work before physical clearance; no new guest/workload until normal independent clearance.",
+  "candidate_root": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/run-until-controller-1",
+  "live_process_state_inspected": false,
+  "reviewer_product_import_test_subprocess_root_signal_billing_model_runtime_or_canonical_edit_calls": 0,
+  "source_or_execution_acceptance": false
+}

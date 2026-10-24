@@ -103,7 +103,15 @@ extern "C" {
     fn x86_running_on_kvm_bridge() -> CInt;
     fn x86_cpuid6_bridge(eaxp: *mut CULong, ecxp: *mut CULong);
     fn kprintf(format: *const i8, ...) -> CInt;
+    // Existing providers; the Rust-local alias adds no exported C helper.
+    fn interrupt_from_user(regs: *mut c_void) -> CInt;
+    #[link_name = "cpu_enable_interrupt"]
+    fn x86_interrupt_exit_enable_interrupt();
+    fn check_sig_pending();
+    fn check_need_resched();
+    fn check_signal(rc: CULong, regs: *mut c_void, num: CInt);
     fn __kprintf(format: *const i8, ...) -> CInt;
+    fn snprintf(buf: *mut i8, size: usize, format: *const i8, ...) -> CInt;
     fn arch_delay(us: CInt);
     fn do_arch_prctl(code: CULong, address: CULong) -> CLong;
     fn x86_lapic_write_bridge(reg: CInt, value: CUInt);
@@ -3142,5 +3150,96 @@ pub unsafe extern "C" fn x86_context_line_log_bridge(
             kprintf(b"%16lx %16lx %16lx\n\0".as_ptr().cast(), a, b, c);
         },
         _ => {},
+    }
+}
+
+
+/// Build the existing single addr2line stack diagnostic with existing Rust
+/// snprintf and unlocked-print providers. The caller supplies the same live
+/// two-word C stack frames; no frame/context or local-buffer pointer is retained.
+/// Frame reads stay separated by snprintf as in C so a provider may affect the
+/// next-link word before that word is read.
+#[no_mangle]
+pub unsafe extern "C" fn __print_stack(mut rbp: *mut CULong, first: CULong) {
+    // Exact existing C STACK_BUF_LEN: 1024-sizeof("[  0]: ").
+    const BUF_LEN: usize = 1024 - b"[  0]: \0".len();
+    let mut buf = [0i8; BUF_LEN];
+    let out = buf.as_mut_ptr();
+    let mut len = unsafe {
+        snprintf(
+            out, BUF_LEN,
+            b"addr2line -e smp-x86/kernel/mckernel.img -fpia\0".as_ptr().cast(),
+        )
+    } as usize;
+    if first != 0 {
+        len = len.wrapping_add(unsafe {
+            snprintf(
+                out.wrapping_add(len), BUF_LEN.wrapping_sub(len),
+                b" %#16lx\0".as_ptr().cast(), first,
+            )
+        } as usize);
+    }
+    while (rbp as CULong) > 0xffff880000000000
+        && BUF_LEN.wrapping_sub(len) > b" 0x0123456789abcdef\0".len()
+    {
+        let ip = unsafe { rbp.add(1).read() };
+        len = len.wrapping_add(unsafe {
+            snprintf(
+                out.wrapping_add(len), BUF_LEN.wrapping_sub(len),
+                b" %#16lx\0".as_ptr().cast(), ip,
+            )
+        } as usize);
+        rbp = unsafe { rbp.read() } as *mut CULong;
+    }
+    unsafe { __kprintf(b"%s\n\0".as_ptr().cast(), out); }
+}
+
+
+/// Preserve the complete existing NMI frame rewrite. The caller owns a live,
+/// aligned writable span of at least 27 C unsigned-long words. This forward
+/// overlapping copy and the final five fields exactly match the C producer;
+/// the supplied function is stored as a return address and is never invoked.
+#[no_mangle]
+pub unsafe extern "C" fn mod_nmi_ctx(
+    nmi_ctx: *mut c_void,
+    func: Option<unsafe extern "C" fn()>,
+) {
+    let flags: CULong;
+    // Same pushfq/pop read used by existing cpu_interrupt_disabled. Default
+    // memory/flags clobbers retain the original C "memory","cc" barrier.
+    unsafe { core::arch::asm!("pushfq", "pop {flags}", flags = lateout(reg) flags); }
+    let words = nmi_ctx.cast::<CULong>();
+    let mut i = 0usize;
+    while i < 22 {
+        let value = unsafe { core::ptr::read_volatile(words.add(i + 5)) };
+        unsafe { core::ptr::write_volatile(words.add(i), value); }
+        i += 1;
+    }
+    let return_address = func.map_or(0, |entry| entry as CULong);
+    unsafe {
+        words.add(22).write(return_address);
+        words.add(23).write(0x20);
+        // Actual registers.h RFLAGS_IF=(1<<9); same mask is already used by
+        // existing Rust cpu_interrupt_disabled. No IRQ state is changed here.
+        words.add(24).write(flags & !(1 << 9));
+        words.add(25).write(words.add(27) as CULong);
+        words.add(26).write(0x28);
+    }
+}
+
+/// Complete interrupt-return orchestration for the caller-owned context.
+///
+/// The classifier and callbacks retain their original contract. In particular,
+/// interrupt enable precedes pending-signal and reschedule handling. No context
+/// pointer or callback state is retained, and no new null/error policy is added.
+#[no_mangle]
+pub unsafe extern "C" fn interrupt_exit(regs: *mut X86UserContext) {
+    unsafe {
+        if interrupt_from_user(regs.cast::<c_void>()) != 0 {
+            x86_interrupt_exit_enable_interrupt();
+            check_sig_pending();
+            check_need_resched();
+            check_signal(0, regs.cast::<c_void>(), -1);
+        }
     }
 }

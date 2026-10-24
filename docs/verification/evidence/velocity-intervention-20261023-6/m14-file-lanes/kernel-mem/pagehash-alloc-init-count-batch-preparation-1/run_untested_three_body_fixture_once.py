@@ -1,0 +1,36 @@
+"""Functional McKernel OS/apps and Rust/assembly migration only; no security testing."""
+from pathlib import Path
+import hashlib,importlib.util,json,os,re,resource,signal,sys,time
+D=Path(__file__).resolve().parent
+
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+READY=D/'EXECUTABLE-READY.NOT-EXECUTED.json'
+# Frozen source/command recipe; root separately binds this driver before launch.
+assert sha(READY)=='2feef0da82d7e17de22f2df0998365f9de5a110c6e88c5893105c73bb578251f'
+p=json.loads(READY.read_bytes())
+H=Path(p['capture_helper']['path']);assert sha(H)==p['capture_helper']['sha256']
+s=importlib.util.spec_from_file_location('capture',H);c=importlib.util.module_from_spec(s);s.loader.exec_module(c)
+for n in (signal.SIGTERM,signal.SIGINT,signal.SIGALRM):signal.signal(n,c.stop)
+os.umask(0o077);os.chdir(D);os.sched_setaffinity(0,{6});os.environ['RUST_MIN_STACK']='2097152'
+for k,v in [(resource.RLIMIT_AS,2<<30),(resource.RLIMIT_CPU,60),(resource.RLIMIT_FSIZE,32<<20),(resource.RLIMIT_NOFILE,256),(resource.RLIMIT_CORE,0)]:resource.setrlimit(k,(v,v))
+A=D/'actual-untested-three-body-capture-1';A.mkdir(mode=0o700);results=[];durable={};begin=time.monotonic()
+try:
+ assert Path(sys.executable).resolve()==Path('/home/holden/anaconda3/bin/python3').resolve() and sys.version_info[:2]==(3,9)
+ for row in p['frozen_inputs']:assert sha(Path(row['path']))==row['sha256'],row['path']
+ mem=int(next(x.split()[1] for x in Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemAvailable:')))*1024
+ host=os.statvfs('/home/holden');scratch=os.statvfs('/home/holden/mckernel-work/scratch');bs=Path('/home/holden/mckernel-work/scratch.ext4').stat();gap=max(0,bs.st_size-bs.st_blocks*512)
+ facts={'memory_available':mem,'host_available':host.f_bavail*host.f_frsize,'scratch_available':scratch.f_bavail*scratch.f_frsize,'full_sparse_gap':gap}
+ c.write(A/'HEADROOM.json',facts);assert mem>=19<<30 and facts['host_available']>=(16<<30)+gap+(128<<20)+679477248 and facts['scratch_available']>=(12<<30)+679477248
+ (D/'output-1').mkdir(mode=0o700);signal.setitimer(signal.ITIMER_REAL,96)
+ for i,cmd in enumerate(p['commands']):
+  C=A/str(i);C.mkdir(mode=0o700);c.write(C/'command.json',cmd);remaining=90-(time.monotonic()-begin);assert remaining>0
+  r=c.owned_capture(cmd,C,remaining,lambda:None);c.write(C/'whole-join.json',r);results.append(r)
+  assert r['returncode']==0 and r['direct_child_joined'] and r['group_absent'] and r['closed_streams'] and not r['timed_out'] and r['error'] is None and r['retirement_error'] is None,r
+  if i==0:durable['Rust']=c.hashed(D/'output-1/fixture-rust.o',32<<20);c.write(A/'DURABLE-RUST.json',durable['Rust'])
+ assert (A/'4/stdout').read_bytes()==b'PASS actualOriginalC_Rust alloc=144 init=2 count=21 total=167\n'
+ for row in p['frozen_inputs']:assert sha(Path(row['path']))==row['sha256'],row['path']
+ receipt={'scope':__doc__,'status':'PASS_ACTUAL167_ALLOC_INIT_COUNT_BODY_PAIRS_AND_WHOLE_HEADER_SELECTION_ONLY','captures':results,'actual_pairs':167,'durable_objects':durable,'limits':p['limits'],'CPU_seconds':c.cpu_used(),'wall_seconds':time.monotonic()-begin,'CPU6_released':True,'native_default_file_acceptance':None}
+ c.write(A/'FINAL-ACTUAL-RECEIPT.json',receipt);print(json.dumps(receipt))
+except BaseException as e:
+ c.write(A/'FAILURE.json',{'scope':__doc__,'error':repr(e),'captures':results,'durable_objects':durable,'STOP_no_retry':True,'CPU6_released':True});raise
+finally:signal.setitimer(signal.ITIMER_REAL,0)

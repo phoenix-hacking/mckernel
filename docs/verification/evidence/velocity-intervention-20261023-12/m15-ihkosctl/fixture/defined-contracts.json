@@ -1,0 +1,71 @@
+[
+  {
+    "name": "ikc-open-failure-no-uninitialized-free",
+    "args": [
+      "0",
+      "get",
+      "ikc_map"
+    ],
+    "env": {
+      "IHKOS_FAIL_OPEN": "1"
+    },
+    "status": 255,
+    "stdout": "",
+    "stderr": "open: No such file or directory\n"
+  },
+  {
+    "name": "ikc-first-allocation-failure-closes",
+    "args": [
+      "0",
+      "get",
+      "ikc_map"
+    ],
+    "env": {
+      "IHKOS_FAIL_CALLOC": "1"
+    },
+    "status": 255,
+    "stdout": "do_get_ikc_map,allocate request space failed\n",
+    "stderr": ""
+  },
+  {
+    "name": "reserve-cpu-allocation-failure",
+    "args": [
+      "0",
+      "reserve_cpu",
+      "1"
+    ],
+    "env": {
+      "IHKOS_FAIL_MALLOC": "1"
+    },
+    "status": 244,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "name": "buildid-missing-terminator-bounded",
+    "args": [
+      "0",
+      "get",
+      "buildid"
+    ],
+    "env": {
+      "IHKOS_BUILDID_NO_NUL": "1"
+    },
+    "status": 0,
+    "stdout": "xxxxxxxxxxxxx\n",
+    "stderr": ""
+  },
+  {
+    "name": "kmsg-capacity-result-has-sentinel",
+    "args": [
+      "0",
+      "kmsg"
+    ],
+    "env": {
+      "IHKOS_KMSG_RET": "4190208"
+    },
+    "status": 0,
+    "stdout": "fixture kmsg\n",
+    "stderr": ""
+  }
+]

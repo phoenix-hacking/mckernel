@@ -1,0 +1,64 @@
+--- a/kernel/mem.c
++++ b/kernel/mem.c
+@@ -5399,6 +5399,12 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_PAGE_HELPERS
++/* Geometry from the existing arrays; no C accessor or runtime initialization. */
++const int page_init_hash_bucket_count = PHYS_PAGE_HASH_SIZE;
++const unsigned long page_init_hash_head_stride = sizeof(page_hash[0]);
++extern void page_init(void);
++#else
+ static void page_init(void)
+ {
+ 	page_hash_tables_init_body_result((unsigned long)page_hash,
+@@ -5406,6 +5412,7 @@
+ 			sizeof(page_hash[0]), sizeof(page_hash_locks[0]),
+ 			page_hash_lock_init_bridge, page_hash_bucket_init_result);
+ }
++#endif
+ 
+ static int page_hash_count_pages(void)
+ {
+--- a/kernel/rust/mem_helpers.rs
++++ b/kernel/rust/mem_helpers.rs
+@@ -6918,3 +6918,38 @@
+         ).cast::<crate::page_helpers::Page>()
+     }
+ }
++
++// Existing C arrays and immutable ABI geometry. Each [u8;1] names only its
++// first byte; the C count/strides define bounds, never a Rust-invented extent.
++unsafe extern "C" {
++    #[link_name = "page_hash"]
++    static PAGE_INIT_HASH_FIRST: [u8; 1];
++    #[link_name = "page_hash_locks"]
++    static PAGE_INIT_LOCK_FIRST: [u8; 1];
++    static page_init_hash_bucket_count: CInt;
++    static page_init_hash_head_stride: SizeT;
++    // Already exported for the existing page_unmap public Rust consumer.
++    static page_unmap_lock_stride: SizeT;
++    // Existing selected provider, declared using the existing helper's usize
++    // address ABI (unsigned long on this supported x86_64 profile).
++    #[link_name = "page_hash_lock_init_bridge"]
++    fn page_init_lock_callback(lock_addr: usize);
++}
++
++/// Initialize the existing page hash through the unchanged Rust orchestrator.
++/// Same synchronous boot-owned arrays/callbacks/order; C void wrapper ignored
++/// the helper's result, so this entry intentionally discards it as well.
++#[no_mangle]
++pub unsafe extern "C" fn page_init() {
++    unsafe {
++        let _ = crate::page_helpers::page_hash_tables_init_body_result(
++            core::ptr::addr_of!(PAGE_INIT_HASH_FIRST) as usize,
++            core::ptr::addr_of!(PAGE_INIT_LOCK_FIRST) as usize,
++            page_init_hash_bucket_count,
++            page_init_hash_head_stride,
++            page_unmap_lock_stride,
++            Some(page_init_lock_callback),
++            Some(crate::page_helpers::page_hash_bucket_init_result),
++        );
++    }
++}

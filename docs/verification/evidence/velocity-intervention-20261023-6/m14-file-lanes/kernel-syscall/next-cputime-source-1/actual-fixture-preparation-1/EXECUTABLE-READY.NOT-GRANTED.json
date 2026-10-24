@@ -1,0 +1,90 @@
+{
+  "CPU_reserved": false,
+  "Rust_tool": {
+    "bytes": 645792,
+    "path": "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+    "sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09"
+  },
+  "actual_result": null,
+  "argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/run_cputime_fixture_once.NOT-GRANTED.py"
+  ],
+  "compiler_or_fixture_jobs": 0,
+  "controlled_effects": [
+    "CPU-local acquisition",
+    "IRQsave/restore",
+    "rdtsc value",
+    "existing do_kill bridge effect",
+    "existing set_timer effect"
+  ],
+  "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1",
+  "default_link": false,
+  "driver": {
+    "bytes": 11363,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/run_cputime_fixture_once.NOT-GRANTED.py",
+    "sha256": "b236fd89ec424b1b9ebd16cd84661768d16b2317147726b2c67a29f940ef53cb"
+  },
+  "engineering_percentage": null,
+  "excluded": [
+    "sys_move_pages",
+    "move_pages_log_bridge",
+    "all F06 untested fragments"
+  ],
+  "file_retired": false,
+  "forwarding_HOLD": {
+    "bytes": 1948,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-forward-sigaction-source-decision-1/PARTIAL-CONTEXT-FORWARDING.HOLD.json",
+    "sha256": "048dce0dae63bec8792f4a399ee9eac2c502a5acf9966b3442bc50b8fe11fa97"
+  },
+  "native": false,
+  "next_observable": "Actual original-C/Rust runtime outcome and full real-header/selected wholeTU/partial consumer, stopped at first unexpected result.",
+  "no_fake_panic_or_core_provider": true,
+  "prior_failure_history": {
+    "bytes": 21155,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-signal-batch-preparation-1/ACTUAL-THREE-SIGNAL-BODIES-QUALIFIED-HANDOFF.json",
+    "sha256": "deed8323ea1b24805778dc1add0cbd5ec09391ec369eb929dcb2687b330d590a"
+  },
+  "production_source_handoff": {
+    "bytes": 1848,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/SOURCE-HANDOFF.json",
+    "sha256": "378dffce6bf192d89428b9021a72a02ad6dc143a08b1fb6d1b6579a6d40f11a9"
+  },
+  "profile": {
+    "AS": 2147483648,
+    "CGU": 1,
+    "CPU": 6,
+    "CPU_seconds": 60,
+    "FSIZE": 33554432,
+    "NOFILE": 256,
+    "RUST_MIN_STACK": 2097152,
+    "core": 0,
+    "jobs": 1,
+    "retirement_seconds": 6,
+    "stack": 2097152,
+    "wall_seconds": 90
+  },
+  "real_arithmetic": [
+    "byteexact tsc_to_ts",
+    "byteexact ts_add",
+    "byteexact ts_to_tv",
+    "byteexact tv_sub"
+  ],
+  "real_layout_checks": 48,
+  "recipe": {
+    "bytes": 39832,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-cputime-source-1/actual-fixture-preparation-1/EXACT-CPUTIME-FIXTURE.NOT-GRANTED.json",
+    "sha256": "552ccf575fbd196ccdd81f371e3cd7a3ef3b1c985ef30bd373733941b1092820"
+  },
+  "runtime_pairs": {
+    "reset": 12,
+    "set": 3243,
+    "total": 3255
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_preflight": "Python AST parsed only; every frozen input rebound; outputs/captures absent; actual compiler and runtime acceptance remain NULL",
+  "status": "ONE_EXECUTABLE_READY_CPUTIME_FIXTURE_NOT_GRANTED_NOT_EXECUTED",
+  "tool_reason": "Exact tsc_to_ts requires core_intrinsics; reuse accepted nightly70eb production compiler with feature, no arithmetic rewrite/fake panic ABI."
+}

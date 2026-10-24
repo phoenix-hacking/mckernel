@@ -1,0 +1,112 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_EXACT_WITNESS_ONLY_ATTRIBUTE_SPELLING_CORRECTION_SOURCE_SPEC",
+  "reviewer": "m14_build_release_review",
+  "failed_witness": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/root-union-preparation-2/source/F06-real-header-ABI-and-callers.path-correction1.c",
+    "sha256": "be298ece3033952f6a2298211cac4d4a472afae19498afefac6930ff85fe54e2",
+    "bytes": 1554
+  },
+  "actual_failure": {
+    "result": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/root-union-preparation-2/abi-include-path-correction-1/root-actual-suffix-1/00/RESULT.json",
+      "sha256": "8687cbf397c0daacc4db7e4f684a5c6c6f7508c37239966dc1781d37e1ee22b3",
+      "bytes": 1165
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/root-union-preparation-2/abi-include-path-correction-1/root-actual-suffix-1/00/stderr",
+      "sha256": "e8daa275a3fd37ee7c605d0ad89aa52724cffb4de73c54699651c90296639968",
+      "bytes": 1538
+    },
+    "command": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/root-union-preparation-2/abi-include-path-correction-1/root-actual-suffix-1/00/command.json",
+      "sha256": "14d6939a24c2d62894b7ed2093f122c5d07ade4269d27236a4a33ac9b30bc905",
+      "bytes": 3402
+    },
+    "pid": 4090653,
+    "start": 61178455,
+    "returncode": 1,
+    "seconds": 0.12113138602580875,
+    "direct_child_joined": true,
+    "group_absent": true,
+    "streams_closed": true,
+    "capture_and_retirement_errors": null
+  },
+  "selected_header_inputs": {
+    "process.h": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/kernel/include/process.h",
+      "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649",
+      "bytes": 26602
+    },
+    "rbtree.h": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/kernel/include/rbtree.h",
+      "sha256": "86022fb1a246c7ba43bb66913ca4c6a6e9a7d896607c6364ea941b5304ae5332",
+      "bytes": 3107
+    },
+    "lwk/compiler.h": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/kernel/include/lwk/compiler.h",
+      "sha256": "eeb3c5b9d47dc32d73908c9048002a34ef77e5d6bdc03346b27b494ded5b49dd",
+      "bytes": 17894
+    },
+    "lwk/compiler-gcc.h": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/source/kernel/include/lwk/compiler-gcc.h",
+      "sha256": "1a2693ab50b3768ca2ca362bb0e6773bdabc12425ad4061802b3aca20dbe47a2",
+      "bytes": 11651
+    }
+  },
+  "concrete_cause": {
+    "include_chain": [
+      "selected syscall TU includes process.h",
+      "process.h includes rbtree.h",
+      "rbtree.h line33 includes lwk/compiler.h",
+      "with actual -D__KERNEL__ and GCC9, lwk/compiler.h includes lwk/compiler-gcc.h",
+      "compiler-gcc.h line89 defines noinline as __attribute__((noinline))"
+    ],
+    "source_locations": [
+      18,
+      19
+    ],
+    "input": "__attribute__((noinline,used))",
+    "expanded_invalid_token_structure": "__attribute__((__attribute__((noinline)),used))",
+    "diagnosis": "Header macro collision within witness attribute list; not a port ABI or whole-TU compiler failure."
+  },
+  "exact_author_correction": {
+    "occurrences": 2,
+    "replace": "__attribute__((noinline,used))",
+    "with": "__attribute__((__noinline__,__used__))",
+    "corrected_witness_sha256_COMPUTED_ONLY_NOT_WRITTEN": "3bcf909aaaf6f1190f08d33d630dd9d2a5121ca79a02bb7fcbb72047f1bf009f",
+    "replacement_reason": "GNU reserved attribute spellings retain noinline and used while avoiding the selected noinline macro. Existing compiler-gcc.h141/164 already uses __used__; selected headers define neither __noinline__ nor __used__ macros.",
+    "all_static_assertions_byte_preserved": true,
+    "caller_names_signatures_bodies_byte_preserved": true,
+    "corrected_include_byte_preserved": true,
+    "compiler_argv_flags_unchanged_except_new_source_and_exclusive_output_bindings": true,
+    "forbidden_changes": [
+      "No undef/redefinition of production macros",
+      "No attribute deletion",
+      "No flag/suppression/oracle weakening",
+      "No production C/Rust port edits",
+      "No caller/ABI/relocation/provider predicate removal"
+    ]
+  },
+  "required_retention": [
+    "Original missing-include failure and sources",
+    "This macro-collision failure and sources/captures",
+    "Already successful fullcombinedRust00 and wholeF06C04 outputs; do not replay unchanged producers",
+    "Fresh additive witness/source/command/output bindings for any separately granted remaining suffix"
+  ],
+  "next_operation": "Author may prepare exact additive two-site witness correction. Root independently grants only necessary remaining suffix under existing resource/profile/retirement controls. This record authorizes no invocation.",
+  "proof_limits": [
+    "Source/scaffold diagnosis only; corrected witness not compiled by reviewer",
+    "No actual default GCC14/image/native/whole-file credit",
+    "Do not link a witness containing the complete TU together with the separate plain whole-TU object"
+  ],
+  "reviewer_execution": {
+    "compiler": false,
+    "test": false,
+    "root": false,
+    "runtime": false,
+    "object_hash": false,
+    "source_edit": false
+  },
+  "execution_release": null
+}

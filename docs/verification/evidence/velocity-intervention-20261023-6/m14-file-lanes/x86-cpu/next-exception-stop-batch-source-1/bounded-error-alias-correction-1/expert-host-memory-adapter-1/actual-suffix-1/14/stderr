@@ -1,0 +1,7 @@
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-exception-stop-batch-source-1/bounded-error-alias-correction-1/candidate/arch/x86_64/kernel/cpu.c: In function ‘arch_save_panic_regs’:
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-exception-stop-batch-source-1/bounded-error-alias-correction-1/candidate/arch/x86_64/kernel/cpu.c:3802:34: warning: taking address of packed member of ‘struct x86_cpu_local_variables’ may result in an unaligned pointer value [-Waddress-of-packed-member]
+ 3802 |   sregs = (struct segment_regs *)&x86v->panic_regs[17];
+      |                                  ^~~~~~~~~~~~~~~~~~~~~
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-exception-stop-batch-source-1/bounded-error-alias-correction-1/candidate/arch/x86_64/kernel/cpu.c:3831:34: warning: taking address of packed member of ‘struct x86_cpu_local_variables’ may result in an unaligned pointer value [-Waddress-of-packed-member]
+ 3831 |   sregs = (struct segment_regs *)&x86v->panic_regs[17];
+      |                                  ^~~~~~~~~~~~~~~~~~~~~

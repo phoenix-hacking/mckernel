@@ -2434,6 +2434,27 @@ struct rfp_args {
 	struct memobj *memobj;
 };
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+/* Preserve displaced remap diagnostics and tracked-free source identity as
+ * static C ABI data only. Rust owns the complete callback computation. */
+const char *const process_remap_free_file = __FILE__;
+const int process_remap_free_line = 2469;
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_remap_one_page_entry_debug = {
+    .file = __FILE__, .func = "remap_one_page",
+    .line = 2448, .flags = DDEBUG_DEFAULT,
+};
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_remap_one_page_rss_debug = {
+    .file = __FILE__, .func = "remap_one_page",
+    .line = 2470, .flags = DDEBUG_DEFAULT,
+};
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_remap_one_page_exit_debug = {
+    .file = __FILE__, .func = "remap_one_page",
+    .line = 2476, .flags = DDEBUG_DEFAULT,
+};
+#else
 int remap_one_page(void *arg0, page_table_t pt, pte_t *ptep,
 		   void *pgaddr, int pgshift)
 {
@@ -2477,6 +2498,7 @@ out:
 			arg0, pt, ptep, *ptep, pgaddr, pgshift, error);
 	return error;
 }
+#endif
 
 int process_visit_pte_range_bridge(void *page_table, unsigned long start,
 				   unsigned long end, int pgshift, int flags,
@@ -2535,6 +2557,19 @@ struct sync_args {
 	struct memobj *memobj;
 };
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+/* Displaced sync callback dynamic-debug selectors: declarative data only. */
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_sync_one_page_entry_debug = {
+    .file = __FILE__, .func = "sync_one_page",
+    .line = 2546, .flags = DDEBUG_DEFAULT,
+};
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_sync_one_page_exit_debug = {
+    .file = __FILE__, .func = "sync_one_page",
+    .line = 2574, .flags = DDEBUG_DEFAULT,
+};
+#else
 int sync_one_page(void *arg0, page_table_t pt, pte_t *ptep,
 		  void *pgaddr, int pgshift)
 {
@@ -2575,7 +2610,9 @@ out:
 			arg0, pt, ptep, *ptep, pgaddr, pgshift, error);
 	return error;
 }
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void process_sync_range_log_bridge(struct process_vm *vm,
 				   struct vm_range *range, unsigned long start,
 				   unsigned long end, int error)
@@ -2583,6 +2620,7 @@ void process_sync_range_log_bridge(struct process_vm *vm,
 	ekprintf("sync_process_memory_range(%p,%p,%#lx,%#lx):"
 			"visit failed%d\n", vm, range, start, end, error);
 }
+#endif
 
 void *process_lookup_pte_bridge(void *page_table, unsigned long addr,
 		int pgshift, size_t *pgsizep)

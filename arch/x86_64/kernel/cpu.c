@@ -2056,6 +2056,9 @@ void __show_context_stack(struct thread *thread,
 }
 #endif
 
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+void interrupt_exit(struct x86_user_context *regs);
+#else
 void interrupt_exit(struct x86_user_context *regs)
 {
 	if (interrupt_from_user(regs)) {
@@ -2065,6 +2068,7 @@ void interrupt_exit(struct x86_user_context *regs)
 		check_signal(0, regs, -1);
 	}
 }
+#endif
 
 void handle_interrupt(int vector, struct x86_user_context *regs)
 {
@@ -2913,6 +2917,9 @@ struct stack {
 
 /* KPRINTF_LOCAL_BUF_LEN is 1024, useless to go further */
 #define STACK_BUF_LEN (1024-sizeof("[  0]: "))
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+void __print_stack(struct stack *rbp, unsigned long first);
+#else
 static void __print_stack(struct stack *rbp, unsigned long first) {
 	char buf[STACK_BUF_LEN];
 	size_t len;
@@ -2933,6 +2940,8 @@ static void __print_stack(struct stack *rbp, unsigned long first) {
 	}
 	__kprintf("%s\n", buf);
 }
+
+#endif
 
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
 void x86_stack_frame_log_bridge(unsigned long ip, unsigned long sp,
@@ -3692,6 +3701,9 @@ int running_on_kvm(void) {
 }
 #endif
 
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+void mod_nmi_ctx(void *nmi_ctx, void (*func)());
+#else
 void
 mod_nmi_ctx(void *nmi_ctx, void (*func)())
 {
@@ -3708,6 +3720,8 @@ mod_nmi_ctx(void *nmi_ctx, void (*func)())
 	l[i++] = (unsigned long)(l + 27);	// ols rsp
 	l[i++] = 0x28;				// KERNEL DS
 }
+
+#endif
 
 void arch_save_panic_regs(void *irq_regs)
 {

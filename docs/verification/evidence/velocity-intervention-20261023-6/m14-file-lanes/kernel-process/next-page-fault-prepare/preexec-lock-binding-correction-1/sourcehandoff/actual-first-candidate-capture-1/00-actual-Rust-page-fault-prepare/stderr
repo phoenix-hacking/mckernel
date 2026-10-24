@@ -1,0 +1,185 @@
+warning: target feature `sse2` must be enabled to ensure that the ABI of the current target can be implemented correctly
+  |
+  = note: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+  = note: for more information, see issue #116344 <https://github.com/rust-lang/rust/issues/116344>
+
+warning: unused import: `write_volatile`
+ --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:1:32
+  |
+1 | use core::ptr::{read_volatile, write_volatile};
+  |                                ^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `AtomicU64` and `Ordering`
+ --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:2:26
+  |
+2 | use core::sync::atomic::{AtomicU64, Ordering};
+  |                          ^^^^^^^^^  ^^^^^^^^
+
+warning: unused imports: `OffT` and `VmRegions`
+ --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:4:32
+  |
+4 | use crate::abi::{CInt, CULong, OffT, SizeT, VmRegions};
+  |                                ^^^^         ^^^^^^^^^
+
+warning: constant `PAGE_SHIFT` is never used
+ --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:6:7
+  |
+6 | const PAGE_SHIFT: u32 = 12;
+  |       ^^^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `PAGE_SIZE` is never used
+ --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:7:7
+  |
+7 | const PAGE_SIZE: CULong = 1 << PAGE_SHIFT;
+  |       ^^^^^^^^^
+
+warning: constant `PAGE_MASK` is never used
+ --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:8:7
+  |
+8 | const PAGE_MASK: CULong = !(PAGE_SIZE - 1);
+  |       ^^^^^^^^^
+
+warning: constant `PM_STATUS_OFFSET` is never used
+ --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:9:7
+  |
+9 | const PM_STATUS_OFFSET: u32 = 61;
+  |       ^^^^^^^^^^^^^^^^
+
+warning: constant `PM_STATUS_MASK` is never used
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:10:7
+   |
+10 | const PM_STATUS_MASK: CULong = 0xe000_0000_0000_0000;
+   |       ^^^^^^^^^^^^^^
+
+warning: constant `PM_PSHIFT_OFFSET` is never used
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:11:7
+   |
+11 | const PM_PSHIFT_OFFSET: u32 = 55;
+   |       ^^^^^^^^^^^^^^^^
+
+warning: constant `PM_PSHIFT_MASK` is never used
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:12:7
+   |
+12 | const PM_PSHIFT_MASK: CULong = 0x1f80_0000_0000_0000;
+   |       ^^^^^^^^^^^^^^
+
+warning: constant `PM_PFRAME_MASK` is never used
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:13:7
+   |
+13 | const PM_PFRAME_MASK: CULong = 0x007f_ffff_ffff_ffff;
+   |       ^^^^^^^^^^^^^^
+
+warning: constant `PTL4_SHIFT` is never used
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:15:7
+   |
+15 | const PTL4_SHIFT: u32 = 39;
+   |       ^^^^^^^^^^
+
+warning: constant `PTL4_SIZE` is never used
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:19:7
+   |
+19 | const PTL4_SIZE: SizeT = 1 << PTL4_SHIFT;
+   |       ^^^^^^^^^
+
+warning: constant `PT_PHYSMASK` is never used
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:24:7
+   |
+24 | const PT_PHYSMASK: CULong = ((1u64 << 52) - 1) & PAGE_MASK;
+   |       ^^^^^^^^^^^
+
+warning: constant `PF_WRITABLE` is never used
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:27:7
+   |
+27 | const PF_WRITABLE: CULong = 0x02;
+   |       ^^^^^^^^^^^
+
+warning: constant `PFLX_PWT` is never used
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:28:7
+   |
+28 | const PFLX_PWT: CULong = 0x08;
+   |       ^^^^^^^^
+
+warning: constant `PFLX_PCD` is never used
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:29:7
+   |
+29 | const PFLX_PCD: CULong = 0x10;
+   |       ^^^^^^^^
+
+warning: constant `PFL1_PWT` is never used
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:30:7
+   |
+30 | const PFL1_PWT: CULong = PFLX_PWT;
+   |       ^^^^^^^^
+
+warning: constant `PFL1_PCD` is never used
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:31:7
+   |
+31 | const PFL1_PCD: CULong = PFLX_PCD;
+   |       ^^^^^^^^
+
+warning: constant `PFL1_DIRTY` is never used
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:32:7
+   |
+32 | const PFL1_DIRTY: CULong = 0x40;
+   |       ^^^^^^^^^^
+
+warning: constant `PFL2_DIRTY` is never used
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:34:7
+   |
+34 | const PFL2_DIRTY: CULong = 0x40;
+   |       ^^^^^^^^^^
+
+warning: constant `PFL2_SIZE` is never used
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:35:7
+   |
+35 | const PFL2_SIZE: CULong = 0x80;
+   |       ^^^^^^^^^
+
+warning: constant `PFL3_DIRTY` is never used
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:37:7
+   |
+37 | const PFL3_DIRTY: CULong = 0x40;
+   |       ^^^^^^^^^^
+
+warning: constant `PFL3_SIZE` is never used
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:38:7
+   |
+38 | const PFL3_SIZE: CULong = 0x80;
+   |       ^^^^^^^^^
+
+warning: constant `PTATTR_DIRTY` is never used
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:41:7
+   |
+41 | const PTATTR_DIRTY: CULong = 0x40;
+   |       ^^^^^^^^^^^^
+
+warning: constant `PTATTR_LARGEPAGE` is never used
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:42:7
+   |
+42 | const PTATTR_LARGEPAGE: CULong = 0x80;
+   |       ^^^^^^^^^^^^^^^^
+
+warning: constant `PTATTR_UNCACHABLE` is never used
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:44:7
+   |
+44 | const PTATTR_UNCACHABLE: CULong = 0x10000;
+   |       ^^^^^^^^^^^^^^^^^
+
+warning: constant `PTATTR_WRITE_COMBINED` is never used
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:45:7
+   |
+45 | const PTATTR_WRITE_COMBINED: CULong = 0x40000;
+   |       ^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `EINVAL` is never used
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/preexec-lock-binding-correction-1/fixture/pte_provider.ACTUAL-RUST.inc:46:7
+   |
+46 | const EINVAL: CInt = 22;
+   |       ^^^^^^
+
+warning: 30 warnings emitted
+

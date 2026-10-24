@@ -1,0 +1,59 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SUBSTANTIVE_ACTUAL_PAGE_FAULT_PREPARATION_SLICE_AND_TYPED_OFFSET_SOURCE_ONLY",
+  "predecessor": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/phys-size-extension-1/candidate/kernel/process.c",
+      "sha256": "b7ba75d2c83228adbf273e2b2bc82a5552014b6c665b96e3be8bb55ea8da6a2b",
+      "bytes": 165177
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/phys-size-extension-1/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "2b70399e3c48332aef387a06e75ec8ba1678843c68190c2a8f80d6e9f2a66c5b",
+      "bytes": 362997
+    }
+  },
+  "postimages": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/candidate/kernel/process.c",
+      "sha256": "60065b0b2a9d542d74cd980d98951f36ec9917bd4160700056059c4eaaf710ac",
+      "bytes": 166125
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "fda0d4c74fd9448178c7c488ecaaa25719808e9e5b546003d56a2d2e7a623f94",
+      "bytes": 366501
+    }
+  },
+  "original_block": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/fixture/original_page_fault_prepare.ACTUAL-C-BLOCK.inc",
+    "sha256": "c73e0827801ebe96630129a30e573a68753f3616ca9c24701dc589fee43a7c4e",
+    "bytes": 1394
+  },
+  "actual_Rust": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/fixture/page_fault_prepare.ACTUAL-RUST.inc",
+    "sha256": "34592cbf528ff524bcfa4f540460d529d31f765091bef15c8a58467012ca04b1",
+    "bytes": 3026
+  },
+  "original_C_fallback_exact": true,
+  "bounds_debug_original_line": 2835,
+  "F01_dependency": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-prepare/sourcehandoff/F01-TYPED-PROVIDER-DEPENDENCY.json",
+    "sha256": "1efc3bffa26d69eb611803f8d48885951e475f80620e05bf3449c4a1b5ac87c1",
+    "bytes": 1422
+  },
+  "owner_invariant": "Lock acquisition is moved exactly, not added: all Rust outcomes keep the existing page_table_lock held. CONTINUE0 writes the same PTE/address/size/alignment locals before the unchanged C tail; GOTO_OUT1 also writes the same signed error before the unchanged C out: unlock. No Page/allocation/refcount/notification transfer occurs in preparation. Profile/entry debug and anonymous/COW/install/cleanup tail remain original C.",
+  "provider_debt": [
+    "Existing ihk_mc_pt_lookup_pte C public wrapper and its diagnostic/provider callbacks retained",
+    "Existing arch_get_smaller_page_size Rust provider includes existing use_1gb_page callback",
+    "Hosted lock/lookup/TLB/adjust hooks prove ordering, not native behavior",
+    "F01 Page accessor source is required before a coherent fullcrate includes the separate offset adapter",
+    "Original page-fault anonymous/memobj/COW/PTE-install/unlock/stray-page cleanup C tail remains"
+  ],
+  "known_remaining_and_difficulty": "Finite lower-risk invalidate wrappers remain; F01 typed offset boundary is now consumed source-only. Page-fault preparation is bounded with explicit lock handback; later allocation/COW/accounting/cleanup orchestration has higher ownership/error uncertainty. Default image/provider activation and native acceptance remain broader separate prerequisites. No numeric estimate.",
+  "compiler_jobs": 0,
+  "tests_executed": 0,
+  "CPU_reservations": 0,
+  "new_executable_queues": 0,
+  "native_default_credit": false
+}
