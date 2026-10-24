@@ -1,0 +1,30 @@
+{
+  "actual_archive_creation": null,
+  "actual_authority": "helper prepare_release and archive_paths at future root operation",
+  "bound_ARCHIVE_NAMES": [
+    "m14-retained-normal-prefix-failed-image-retirement-20261024-1.attempt.archive",
+    "m14-retained-normal-prefix-failed-image-retirement-20261024-1.shared.archive"
+  ],
+  "bound_original_records": [
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-qualified-source-integration-1/current81-default-image-preparation/next-normal-cfg-only-source-preparation-1/namespace-request-preparation-cfg-only-1/bounded-runtime-import-binding-correction-1/expert-current-process-TID-source-identity-correction-1/retained-normal-prefix-continuation-preparation-1/retained-normal-prefix-attempt-1/common-exclusion.json",
+    "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock"
+  ],
+  "cleanup_authorized": false,
+  "correct_archive_paths": [
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-qualified-source-integration-1/current81-default-image-preparation/next-normal-cfg-only-source-preparation-1/namespace-request-preparation-cfg-only-1/bounded-runtime-import-binding-correction-1/expert-current-process-TID-source-identity-correction-1/retained-normal-prefix-continuation-preparation-1/retained-normal-prefix-attempt-1/m14-retained-normal-prefix-failed-image-retirement-20261024-1.attempt.archive",
+    "/home/holden/mckernel-work/scratch/m14-retained-normal-prefix-failed-image-retirement-20261024-1.shared.archive"
+  ],
+  "original_READY_preserved": {
+    "bytes": 8602,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-qualified-source-integration-1/current81-default-image-preparation/next-normal-cfg-only-source-preparation-1/namespace-request-preparation-cfg-only-1/bounded-runtime-import-binding-correction-1/expert-current-process-TID-source-identity-correction-1/retained-normal-prefix-continuation-preparation-1/retained-normal-prefix-failed-image-retirement-preparation-1/RETAINED-NORMAL-FAILED-IMAGE-RETIREMENT.SOURCE-READY.NOT-RELEASED.json",
+    "sha256": "4e484681f3c07d6539fd545cee33da8c7782eef91cd06b686464b4db1526e393"
+  },
+  "runtime_helper_unchanged": {
+    "bytes": 127667,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-qualified-source-integration-1/current81-default-image-preparation/next-normal-cfg-only-source-preparation-1/namespace-request-preparation-cfg-only-1/bounded-runtime-import-binding-correction-1/expert-current-process-TID-source-identity-correction-1/retained-normal-prefix-continuation-preparation-1/retained-normal-prefix-failed-image-retirement-preparation-1/cleanup_failed_retained_normal_prefix_image.py",
+    "sha256": "aa38847c8ffdad1c50c2f54902345592905344d43c3893f43e18880dba799adc"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_function": "def archive_paths():\n    # renameat2 exchange requires both names on the same filesystem. Each\n    # ownership record retains its archive beside its exact original parent.\n    return tuple(path.parent / name for path, name in zip((ATTEMPT, SHARED), ARCHIVE_NAMES))",
+  "status": "ADDITIVE_METADATA_CORRECTION_NOT_RELEASED"
+}
