@@ -1,0 +1,64 @@
+--- /home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/postjoin_readback.py
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-default-build-retirement-preparation-1/honest-cli-proof-correction-1/current-failed-observer-1/receipt-schema-correction-1/postjoin-preparation-1/postjoin_current_failed_default_image.py
+@@ -1,14 +1,22 @@
+ #!/home/holden/anaconda3/bin/python3
+-"""Finite exact terminal readback, only after independently released joined cleanup."""
++"""Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++Finite current postjoin after genuine terminal cleanup, with fresh known-PID absence.
++Unknown historical outer birth/group stays NULL; no cleanup is executed.
++"""
+ import base64,fcntl,hashlib,json,os,resource,stat,subprocess,sys,types
+ from pathlib import Path
+ ROOT=Path('/home/holden/mckernel-work/scratch')
+-ENGINE = Path('/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/cleanup_pass_image.py')
+-ENGINE_SHA = '59efab0bc29fa5784dc855743cec397237552821bc150b60ea1d6c2e5f7ac00d'
+-OBSERVER = Path('/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/observe_current_pass_image_retirement.py')
+-OBSERVER_SHA = '656230a896322bab3982529d1c5aacec91309eba840988ff5f1d7fd09c0d7027'
+-CAP=128*2**20
++ENGINE = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-default-build-retirement-preparation-1/honest-cli-proof-correction-1/current-failed-observer-1/cleanup_failed_default_image.py')
++ENGINE_SHA = 'd42875af0e5f43d31d0be9011b201d4e3c12e9f8e487d2c5de30d3910de89115'
++OBSERVER = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-default-build-retirement-preparation-1/honest-cli-proof-correction-1/current-failed-observer-1/receipt-schema-correction-1/observe_current_failed_image_retirement.RECEIPT-SCHEMA-CORRECTED.py')
++OBSERVER_SHA = '9f6de9e98212f537be1a7aeec6931e302f3e8f90cf807458af4d56df0c4a0409'
++CAP=32*2**20
+ DIAGNOSTIC_CAP=65536
++RESULT_PATH = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-default-build-retirement-preparation-1/honest-cli-proof-correction-1/current-failed-observer-1/receipt-schema-correction-1/actual-root-normal-retirement-AS-corrected-1/stdout')
++RESULT_SHA = '136248f6decc491a13fc0e2fe5fe97a841bf1de9e1892155a939500d23461e7a'
++RELEASE_PATH = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-default-build-retirement-preparation-1/honest-cli-proof-correction-1/current-failed-observer-1/receipt-schema-correction-1/ROOT-CLEANUP-RELEASE-AS-CORRECTED.json')
++RELEASE_SHA = 'a2ebb9814c349bc7a92034c3a5b0e8dc8b0953211b43f4da99b71cd617e71617'
++CLEANUP_CALLER = (11080, "62777677")
+ 
+ def need(ok,why):
+     if not ok:raise RuntimeError(why)
+@@ -90,10 +98,12 @@
+     need(os.getuid()==os.geteuid()==0,'released root readback required')
+     resource.setrlimit(resource.RLIMIT_AS,(1073741824,2147483648));resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_FSIZE,(CAP,CAP))
+     release,sha,resultpath=sys.argv[1:];release=Path(release)
+-    raw=release.read_bytes();need(hashlib.sha256(raw).hexdigest()==sha,'exact release hash differs')
++    raw=release.read_bytes();need(release==RELEASE_PATH and sha==RELEASE_SHA and hashlib.sha256(raw).hexdigest()==sha,'exact release hash differs')
+     r=json.loads(raw);need(r['status']=='PASS_EXECUTION_RELEASE','independent release required');obs=r['observation'];target=obs['target']
+     m=load(ENGINE,ENGINE_SHA);install_failure_diagnostics(m);o=load(OBSERVER,OBSERVER_SHA)
+-    result=json.loads(Path(resultpath).read_bytes())
++    result_raw=Path(resultpath).read_bytes();need(Path(resultpath)==RESULT_PATH and hashlib.sha256(result_raw).hexdigest()==RESULT_SHA,'genuine exact cleanup result required')
++    result=json.loads(result_raw)
++    need(len(result['process_reports'])==9 and all(row['caller']==list(CLEANUP_CALLER) for row in result['process_reports']),'actual nine cleanup caller identities required')
+     need(result['status']=='PASS_EXECUTED' and result['terminal'] and result['container_absent'],'joined positive execution result required')
+     need(result['container_id']==target['container_id'] and result['release_sha256']==m.digest(m.canonical(r)),'exact result release/CID binding')
+     parent,_=m.directory(m.ROOT_LOCK.parent);lock=os.open(m.ROOT_LOCK.name,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK,dir_fd=parent)
+@@ -101,7 +111,7 @@
+         need((os.fstat(lock).st_dev,os.fstat(lock).st_ino)==(27,4),'root lock differs')
+         fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+         need(Path('/proc/sys/kernel/random/boot_id').read_text().strip()==obs['boot_id']==o.BOOT,'boot differs')
+-        m.BOOT_ID=obs['boot_id'];m.OWNER_PID=target['owner_pid'];m.OWNER_START=target['owner_starttime'];m.WAITER_PIDS=tuple(x['pid'] for x in obs['client_ledger'])
++        m.BOOT_ID=obs['boot_id'];m.OWNER_PID=target['owner_pid'];m.OWNER_START=target['owner_starttime'];m.WAITER_PIDS=tuple(x['pid'] for x in obs['client_ledger'])+(CLEANUP_CALLER[0],)
+         m.CONTAINER=target['container_id'];m.CONTAINER_NAME=target['container_name'];m.OWNER_NONCE=target['owner_nonce'];m.EXPECTED_EXIT=target['exit_code'];m.EXPECTED_CONTAINER=obs['container_inspect']
+         bind_readback(m,r);need(not census_at_2g(m),'original CID reappeared')
+         need(not os.path.lexists(m.QUARANTINE) and not os.path.lexists(m.ATTEMPT) and not os.path.lexists(m.SHARED) and not os.path.lexists(m.LEASE),'released names/lease/quarantine not absent')
+@@ -135,7 +145,7 @@
+         need(cp.returncode==0 and not cp.stderr,'default nondereferencing tar failed')
+         need(snapshot()==before and objects()==actual and not census_at_2g(m),'postcheck drift')
+         m.protected_files()
+-        sys.stderr.write(json.dumps(dict(status='PASS_CLEANUP_POSTJOIN_READBACK_ONLY',members=5,process_reports=m.PROCESS_REPORTS,actual_object_rows=actual,application_acceptance=False),sort_keys=True)+'\n');sys.stderr.flush()
++        sys.stderr.write(json.dumps(dict(status='PASS_CLEANUP_POSTJOIN_READBACK_ONLY',members=5,process_reports=m.PROCESS_REPORTS,actual_object_rows=actual,cleanup_known_caller=list(CLEANUP_CALLER),historical_outer_identity=None,historical_outer_group_absent=None,application_acceptance=False),sort_keys=True)+'\n');sys.stderr.flush()
+     finally:fcntl.flock(lock,fcntl.LOCK_UN);os.close(lock);os.close(parent)
+ 
+ if __name__=='__main__':main()

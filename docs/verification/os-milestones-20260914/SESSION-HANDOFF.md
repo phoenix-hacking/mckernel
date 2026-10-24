@@ -1,3 +1,24 @@
+## Retained image physical clearance accepted; validation next — 2026-10-24 08:40 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains35/35 accepted; M14/M15 open, effort percentage unknown.
+Normal failed-image retirement PASS_EXECUTED; exact container57c8 removed and
+ownership records archived with original inodes/bytes. First preflight Go memory
+refusal retained; only AS soft512MiB→2GiB changed within approved2GiB hard limit.
+Actual postjoin1.701129s cleanjoin passed strict owner/client/cleanupPID absence,
+archive/journal/protecteddata and permanent27:4 checks. Independent physical8a7cdd7c
+and nonNULL currentpostjoin6adae5c1 accepted. Original image observerFAIL preserved.
+Next root action: fresh retained-validator admission517421, exactoneheavy release
+owner dcb48/validator e3c932/request6ab978;452file63MiBcopy80b7 retained, no rebuild.
+Actual M15eventfd900 correctness PASS.381125s; previous960 parity remains scoped.
+Foreground toolcohort7 HOSTcommands PASS CPU.577132s with13transitiveprojectCimports;
+no target/default/native credit. Executor links passed; metadata observer failed
+beforebehavior; correctedobserver3 has freshforegroundCPU0grant, no outcome yet.
+All6sourceowners had actualnewturns; archmemorywholefileclosure first. Its wide-enum
+sourcefix is explicit behavior correction, still uncompiled; not old-C-top parity.
+Finite worklists are reuse/implementation indexes, never percentages. SDK coherent
+3delta source53ab34a9 approved byparent; actual soleheavy operation remains queued.
+
 ## M14 retained image validation and productive ordinary queue — 2026-10-24 07:59 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
