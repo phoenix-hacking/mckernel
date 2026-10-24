@@ -16,6 +16,17 @@ selectors under the retained smp-x86 / Rust-user-tools=ON / QLMPI=OFF / UTI=OFF
 configuration. It is not a complete final ELF or deployment manifest. Record
 unknown ownership honestly and add any further selected custom runtime found.
 
+## Actual SDK library link — 2026-10-24 18:38 UTC
+
+The retained ten compiler-prefix commands plus five fresh SDK suffix commands pass.
+The resulting `libihk.so` (SHA256 `546dbe7604e8911e36ae9c10f07dee0dc279ae88d1d4584a0da5d1232be6db6e`,
+12,095,032 bytes) uniquely defines all70 required text and6 data providers. Strict
+real-BFD linking and unresolved-provider checks pass. The prior diagnostic failure
+remains preserved; its compiled archive was reused without recompilation or rehash.
+Independent artifact review and normal physical retirement pass. Actual target
+CMake default selection, CLI execution and matching native proof remain open.
+[Retained proof](../evidence/m15-sdk-library-whole70-link-qualification-20261024-1/RETENTION.json).
+
 ## Existing Rust work is reused
 
 The project already has native Rust module roots:

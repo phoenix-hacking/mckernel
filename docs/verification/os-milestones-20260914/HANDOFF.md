@@ -1,3 +1,20 @@
+## Engineering cursor — 2026-10-24T18:38Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains35/35; M14/M15 OPEN. SDK whole70 library link actual5 suffix PASS,
+retainedprefix10 reused. libihk.so546dbe76/12095032B:70text+6data requiredproviders,
+strict real-BFD link/no selectedproject orRustpanic unresolved. Independentartifact
+acceptance; no CLI/default/native credit. Fivecapturewall .421187s/container.710632s;
+actualCPU/peakRSS unknown. Normalownerretirement+freshindependentphysical PASSd28b7a87,
+current_live_postjoin NONNULL22aa8d69. Accepted root-source and actualfailurehistory
+retained; no wholearchive recompile/rehash. Target CMake/toolqualifications next.
+Whole do_mmap first realcompile failed2E0308 (int vs genuineunsigned-long faultarg),
+clean2.896s; boundedtwo-call correction assigned. F02 finalcallbackobserverexpert
+found SECTION+addend exactlocalfunction identities; coherent correction inprogress.
+CanonicalCPU10964 remains held until F02 observerbinding clears; approvedtwo-cfg
+post47804 alreadypassesnative/legacy and nextnormalstageplan199a90db prepared.
+Evidence: evidence/m15-sdk-library-whole70-link-qualification-20261024-1/RETENTION.json.
+
 ## Engineering cursor — 2026-10-24T18:30Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
