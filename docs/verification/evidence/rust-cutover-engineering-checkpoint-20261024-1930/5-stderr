@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-daemon-fixture-qualification-preparation-1/adequate-stack-successor-1/run_single_thread_fixture.NOT-GRANTED.py", line 212, in <module>
+    main()
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-daemon-fixture-qualification-preparation-1/adequate-stack-successor-1/run_single_thread_fixture.NOT-GRANTED.py", line 187, in main
+    result, resource, trace = execute(binary, 'ring-' + language, 'ring', helper=language == 'Rust')
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-daemon-fixture-qualification-preparation-1/adequate-stack-successor-1/run_single_thread_fixture.NOT-GRANTED.py", line 134, in execute
+    result = run([str(invocation)] + list(arguments), label, child_env)
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-daemon-fixture-qualification-preparation-1/adequate-stack-successor-1/run_single_thread_fixture.NOT-GRANTED.py", line 77, in run
+    result = owner.run(argv, child_env or env, D, min(60, remaining), label)
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-daemon-fixture-qualification-preparation-1/adequate-stack-successor-1/fixture/owned_process.py", line 92, in run
+    target.mkdir(mode=0o700)
+  File "/home/holden/anaconda3/lib/python3.9/pathlib.py", line 1323, in mkdir
+    self._accessor.mkdir(self, mode)
+FileExistsError: [Errno 17] File exists: '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-daemon-fixture-qualification-preparation-1/adequate-stack-successor-1/actual-adequate-stack-fixture-1/ring-C'

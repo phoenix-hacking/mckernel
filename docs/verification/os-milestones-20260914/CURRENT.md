@@ -1,3 +1,23 @@
+## Engineering cursor — 2026-10-24T19:30Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains complete at35/35; M14 and M15 remain open. The corrected normal M14
+attempt passed both native and legacy full-crate compilers, then failed the
+production validator's fixed process.c hash check. No final image was produced.
+The stopped container is retained pending normal reviewed retirement. The source
+owner and independent reviewer are checking the finite current process contract;
+successful compiler outputs will be reused where their bindings permit.
+
+The daemon fixture completed37 children, including26 controlled behavior runs,
+then stopped before ring-C because its capture path collided with the executable.
+All children joined in4.148044s. A bounded correction reuses this prefix and runs
+only the three remaining ring/oversize cases. The target-tool configure failure
+is separately retained; the genuine libdwarf RO-source/mountpoint correction is
+under focused review. Whole70 library link acceptance remains valid at its scope.
+No new native proof or complete C-file retirement is claimed. The stale12:13Z
+monitor snapshot is not live authority; current actual receipts drive scheduling.
+Checkpoint: evidence/rust-cutover-engineering-checkpoint-20261024-1930/REVIEW.json.
+
 ## Engineering cursor — 2026-10-24T18:44Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
