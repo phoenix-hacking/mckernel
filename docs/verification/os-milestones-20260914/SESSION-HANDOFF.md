@@ -1,3 +1,18 @@
+## Engineering cursor — 2026-10-24T18:44Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+F02 actualretainedobserver+33newcontrols PASS3.250617s, independentlyaccepted:
+250ABI/29metadata/fullconfig/STACK9+CLONE2/functionbytes/strictpartial3914T19U;
+COMMON8 remains symboliconly. Its closed oldCPUbinding clears rootintegration.
+Canonical x86_cpu_helpers.rs now atomic10964→47804: exactlytwo nativefunctioncfgs,
+other17sourcepins unchanged. Bothnative/legacy actualcompilers hadalreadyPASS;
+no newdefaultimage/native credit. Newnormalstage199a90db/4fce3ccd nextafterfetched
+codecheckpoint. Whole do_mmap boundedtype correction all9PASS19.6554s, accepted
+52ABI/31typed/partial3912T19U scope only; lifetime/effect/default/nativeHOLDSremain.
+SDKlibraryartifact+physicalacceptance pushed/fetchedc26ec842b; nexttargettools
+source35e522 uses realnightly1.95 and actualDSO, no HOSTcompilerassumption.
+Cfg integration proof: evidence/m14-native-signal-cfg-integration-20261024-1/RETENTION.json.
+
 ## Engineering cursor — 2026-10-24T18:38Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

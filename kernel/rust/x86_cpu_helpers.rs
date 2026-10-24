@@ -4851,6 +4851,7 @@ mod state_bridge_entries {
     /// # Safety
     /// The supported native-signal CPU/SSE and no-FP/SIMD compiler contracts of
     /// the existing core must hold. This is not a HOST register-state operation.
+    #[cfg(native_linux_irq_work_v6_12)]
     #[no_mangle]
     pub unsafe extern "C" fn arch_native_signal_mxcsr_mask_bridge() -> u32 {
         // SAFETY: The actual C SSE selection is unchanged; the existing core
@@ -4863,6 +4864,7 @@ mod state_bridge_entries {
     /// # Safety
     /// The caller must retain the existing pinned CPU/IRQ, initial-image,
     /// OSXSAVE/XCR0/mask and no-FP/SIMD profile contracts through the reset.
+    #[cfg(native_linux_irq_work_v6_12)]
     #[no_mangle]
     pub unsafe extern "C" fn arch_native_signal_reset_fp_bridge() -> CLong {
         // SAFETY: The same boot-stable real state/buffer and actual C config are
