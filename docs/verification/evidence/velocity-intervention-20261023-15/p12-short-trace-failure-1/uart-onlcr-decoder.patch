@@ -1,0 +1,15 @@
+--- a/p12_long_session.py
++++ b/p12_long_session.py
+@@ -74,6 +74,12 @@
+     # short malformed lines must remain within the outer12GiB envelope.
+     need(serial.count("\n") <= LINE_COUNT_CAP, "serial line-count cap")
+     rows = {key: [] for key in MARKERS}
++    # Linux console ONLCR adds one CR before each LF. Keep raw capture hashes,
++    # caps and observation bytes unchanged; decode only this local parser view.
++    if "\r" in serial:
++        need(serial.count("\r\n") == serial.count("\r") == serial.count("\n"),
++             "uniform UART CRLF framing")
++        serial = serial.replace("\r\n", "\n")
+     lines = serial.splitlines(keepends=True)
+     for index, line in enumerate(lines):
+         need(line.endswith("\n") and len(line) < LINE_CAP, "partial/oversize wire line")

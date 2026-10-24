@@ -1,3 +1,38 @@
+## M12 COMPLETE — all35 practical checks complete — 2026-10-24 06:52 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Independent final review accepted M12/P-M12-01 under the user-authorized V2
+cumulative criterion:3612095869878ns =60m12.095869878s mixed work,646 completed
+rounds/1292 launches. Qualified629-round prefix plus strict17-round retained replay,
+exact common artifacts, compatible accepted two-boot/ten-cycle restoration and
+current physical f0d0aded/nonNULL postjoin f2e4489b are bound. Real cumulative
+reduction959aacc2 PASS .430441s/cleanjoin; accounting10tests PASS. Original old
+Deadline FAIL and short HOST trace-byte FAIL remain unchanged; UART adjudicated
+SEGMENT_PASS is separate, full-prefix HOST rawtrace qualification remains incomplete.
+Evidence: ../evidence/velocity-intervention-20261023-15/M12-V2-FINAL-ACCEPTANCE.json.
+M14/M15 remain active with unknown effort percentage/default/native obligations;
+wholeM07 remains separate. No further M12 guest/session required. F01 retained45
+plus correctedABI and F06 group/pending1272+18 actual suffixes PASS this checkpoint.
+Six M14 file owners received productive new turns; next heavy is existing reviewed
+M14 union2 default image build with fresh admission, preserving one heavy controller.
+
+## Actual completed continuation, accepted replay and physical retirement — 2026-10-24 06:44 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The afcf017e segment completed17 rounds/34 launches/92404920166ns mixed.
+Original HOST FAIL `trace exact bytes/cap` is retained: uniform UART CRLF expanded
+29791 bytes. Exact retained replay through the source-bound decoder and unchanged
+strict pair checker PASS all17 rounds. Root accounting10 tests PASS .235896s with
+clean wholejoin; independent source review accepts the explicit adjudication.
+Current actual physical acceptance f0d0aded and nonnull postjoin f2e4489b PASS.
+SDK5-to-SDK8 compatible reuse of accepted two-boot/ten-cycle restoration evidence
+also PASS; this does not claim ten SDK8 executions or transfer old app payloads.
+M12 remains OPEN/34 of35 until actual bound cumulative reduction and final evidence
+review complete. Expected actual total3612095869878ns/1292 launches; no new guest
+or full-hour replay is needed. Original uninterrupted FAIL and original short HOST
+FAIL remain unchanged. M14/M15 continue separately; six file owners have actual
+new source turns, with immutable compiled batches and default/native debt explicit.
+
 ## Actual runtime3 guards and pending short continuation — 2026-10-24 06:15 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
