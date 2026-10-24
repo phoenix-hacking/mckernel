@@ -1,3 +1,11 @@
+## Complete project scope alongside M15 — 2026-10-24 UTC
+
+M14 retains its six-file supported compute-kernel scope. The user's full custom
+runtime requirement also covers Linux-loadable modules, executors, libraries and
+tools in separate [M15](RUST-CUTOVER-M15.md). Earlier exclusion of host compatibility
+C from M14 is a scope separation, not a permanent exemption from the project Rust
+goal. Keep working C until matching Rust successors qualify; original35 unchanged.
+
 ## Six-file parallel implementation — explicit user instruction 2026-10-24 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

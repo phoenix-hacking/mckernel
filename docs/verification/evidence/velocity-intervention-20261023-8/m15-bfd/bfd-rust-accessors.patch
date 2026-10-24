@@ -1,0 +1,184 @@
+--- a/executer/user/CMakeLists.txt
++++ b/executer/user/CMakeLists.txt
+@@ -74,6 +74,7 @@
+ if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
+ 	find_program(RUSTC rustc)
+ 	if (RUSTC)
++		include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/BfdRustAccessors.cmake")
+ 		set(MCINSPECT_RUST_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rust/mcinspect_helpers.o")
+ 		add_custom_command(
+ 			OUTPUT "${MCINSPECT_RUST_OBJ}"
+@@ -97,14 +98,15 @@
+ 		set_source_files_properties("${MCINSPECT_RUST_OBJ}"
+ 			PROPERTIES EXTERNAL_OBJECT TRUE GENERATED TRUE)
+ 		list(REMOVE_ITEM MCINSPECT_SRCS mcinspect.c)
+-		list(APPEND MCINSPECT_SRCS mcinspect_bfd_shim.c)
++		list(APPEND MCINSPECT_SRCS "${BFD_RUST_OBJ}")
+ 		list(APPEND MCINSPECT_SRCS "${MCINSPECT_RUST_OBJ}")
+ 	endif()
+ endif()
+ 
+ add_executable(mcinspect ${MCINSPECT_SRCS})
+ if (TARGET mcinspect_rust_helpers)
+-	add_dependencies(mcinspect mcinspect_rust_helpers)
++	add_dependencies(mcinspect mcinspect_rust_helpers bfd_rust_accessors)
++	set_target_properties(mcinspect PROPERTIES LINKER_LANGUAGE C)
+ 	target_compile_definitions(mcinspect PRIVATE MCINSPECT_RUST_HELPERS)
+ endif()
+ if (NOT LIBDWARF)
+@@ -169,7 +171,7 @@
+ 			PROPERTIES EXTERNAL_OBJECT TRUE GENERATED TRUE)
+ 		list(REMOVE_ITEM ECLAIR_SRCS eclair.c)
+ 		list(REMOVE_ITEM ECLAIR_SRCS arch/${ARCH}/arch-eclair.c)
+-		list(APPEND ECLAIR_SRCS eclair_bfd_shim.c)
++		list(APPEND ECLAIR_SRCS "${BFD_RUST_OBJ}")
+ 		list(APPEND ECLAIR_SRCS "${ECLAIR_RUST_OBJ}")
+ 		list(APPEND ECLAIR_SRCS "${ECLAIR_ARCH_RUST_OBJ}")
+ 	endif()
+@@ -177,7 +179,8 @@
+ 
+ add_executable(eclair ${ECLAIR_SRCS})
+ if (TARGET eclair_rust_helpers)
+-	add_dependencies(eclair eclair_rust_helpers)
++	add_dependencies(eclair eclair_rust_helpers bfd_rust_accessors)
++	set_target_properties(eclair PROPERTIES LINKER_LANGUAGE C)
+ 	target_compile_definitions(eclair PRIVATE ECLAIR_RUST_HELPERS)
+ endif()
+ if (TARGET eclair_arch_rust)
+--- /dev/null
++++ b/executer/user/rust/bfd_accessors.rs
+@@ -0,0 +1,47 @@
++//! Rust implementation of the four former project C BFD macro wrappers.
++//! Offsets come from the selected, pinned BFD header via a nonshipped witness.
++#![no_std]
++use core::ffi::{c_long, c_void};
++include!(env!("MCKERNEL_BFD_LAYOUT_RS"));
++
++#[cfg(not(all(target_arch = "x86_64", target_os = "linux", target_pointer_width = "64")))]
++compile_error!("BFD accessor qualification covers x86_64 Linux LP64 only");
++const _: [(); 8] = [(); core::mem::size_of::<c_long>()];
++const _: [(); 8] = [(); core::mem::size_of::<*const c_void>()];
++type Upper = unsafe extern "C" fn(*mut c_void) -> c_long;
++type Canonicalize = unsafe extern "C" fn(*mut c_void, *mut *mut c_void) -> c_long;
++const _: [(); 8] = [(); core::mem::size_of::<Upper>()];
++const _: [(); 8] = [(); core::mem::size_of::<Canonicalize>()];
++
++// Same preconditions as BFD_SEND: abfd denotes a live, properly initialized BFD,
++// xvec denotes its live target, and the selected target callback is valid.
++// Raw reads borrow neither object as Rust references and invent no ownership.
++// The library receives the original pointers, including a null location if the
++// caller supplied one. Its return value and BFD error state pass through intact.
++unsafe fn upper(abfd: *mut c_void) -> c_long {
++    let xvec = unsafe { abfd.cast::<u8>().add(BFD_XVEC_OFFSET).cast::<*const u8>().read() };
++    let callback = unsafe { xvec.add(BFD_UPPER_OFFSET).cast::<Upper>().read() };
++    unsafe { callback(abfd) }
++}
++unsafe fn canonicalize(abfd: *mut c_void, location: *mut *mut c_void) -> c_long {
++    let xvec = unsafe { abfd.cast::<u8>().add(BFD_XVEC_OFFSET).cast::<*const u8>().read() };
++    let callback = unsafe { xvec.add(BFD_CANONICALIZE_OFFSET).cast::<Canonicalize>().read() };
++    unsafe { callback(abfd, location) }
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcinspect_bfd_get_symtab_upper_bound_bridge(abfd: *mut c_void) -> c_long {
++    unsafe { upper(abfd) }
++}
++#[no_mangle]
++pub unsafe extern "C" fn eclair_bfd_get_symtab_upper_bound_bridge(abfd: *mut c_void) -> c_long {
++    unsafe { upper(abfd) }
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcinspect_bfd_canonicalize_symtab_bridge(abfd: *mut c_void, location: *mut *mut c_void) -> c_long {
++    unsafe { canonicalize(abfd, location) }
++}
++#[no_mangle]
++pub unsafe extern "C" fn eclair_bfd_canonicalize_symtab_bridge(abfd: *mut c_void, location: *mut *mut c_void) -> c_long {
++    unsafe { canonicalize(abfd, location) }
++}
+--- /dev/null
++++ b/executer/user/cmake/bfd_layout_witness.c
+@@ -0,0 +1,35 @@
++/* NONSHIPPED configure/test orchestration, never linked into production. */
++#include "/usr/include/bfd.h"
++#include <limits.h>
++#include <stddef.h>
++#include <stdio.h>
++#ifdef DEBUG_BFD_SEND
++#error DEBUG_BFD_SEND is outside the qualified accessor contract
++#endif
++#if !defined(__x86_64__) || !defined(__linux__)
++#error qualified platform is x86_64 Linux
++#endif
++_Static_assert(CHAR_BIT == 8 && sizeof(long) == 8 && sizeof(void *) == 8, "LP64 ABI");
++typedef long (*upper_type)(bfd *);
++typedef long (*canonicalize_type)(bfd *, asymbol **);
++_Static_assert(_Generic(((bfd_target *)0)->_bfd_get_symtab_upper_bound,
++                       upper_type: 1, default: 0), "upper callback ABI");
++_Static_assert(_Generic(((bfd_target *)0)->_bfd_canonicalize_symtab,
++                       canonicalize_type: 1, default: 0), "canonicalize callback ABI");
++_Static_assert(sizeof(upper_type) == 8 && sizeof(canonicalize_type) == 8, "function pointer ABI");
++_Static_assert(_Alignof(upper_type) == 8 && _Alignof(canonicalize_type) == 8, "callback alignment");
++_Static_assert(offsetof(bfd, xvec) % 8 == 0, "xvec alignment");
++_Static_assert(offsetof(bfd_target, _bfd_get_symtab_upper_bound) % 8 == 0, "upper alignment");
++_Static_assert(offsetof(bfd_target, _bfd_canonicalize_symtab) % 8 == 0, "canonicalize alignment");
++/* Preprocess these two separately to retain the actual BFD_SEND expansion. */
++long witness_upper(bfd *b) { return bfd_get_symtab_upper_bound(b); }
++long witness_canonicalize(bfd *b, asymbol **s) { return bfd_canonicalize_symtab(b, s); }
++int main(void) {
++    printf("// Generated from selected pinned BFD header; not a portable BFD layout.\n");
++    printf("pub const BFD_XVEC_OFFSET: usize = %zu;\n", offsetof(bfd, xvec));
++    printf("pub const BFD_UPPER_OFFSET: usize = %zu;\n", offsetof(bfd_target, _bfd_get_symtab_upper_bound));
++    printf("pub const BFD_CANONICALIZE_OFFSET: usize = %zu;\n", offsetof(bfd_target, _bfd_canonicalize_symtab));
++    printf("// sizeof(bfd)=%zu align=%zu; sizeof(bfd_target)=%zu align=%zu\n",
++           sizeof(bfd), _Alignof(bfd), sizeof(bfd_target), _Alignof(bfd_target));
++    return 0;
++}
+--- /dev/null
++++ b/executer/user/cmake/BfdRustAccessors.cmake
+@@ -0,0 +1,46 @@
++# NONSHIPPED build orchestration. Production gets only bfd_accessors.o (Rust).
++# This pinned qualification deliberately fails on other BFD/ABI selections.
++if(CMAKE_CROSSCOMPILING)
++  message(FATAL_ERROR "BFD Rust accessor needs a separately qualified native layout witness")
++endif()
++if(NOT "${LIBBFD}" STREQUAL "/usr/lib64/libbfd.so")
++  message(FATAL_ERROR "BFD Rust accessor: unqualified library selector")
++endif()
++file(SHA256 "/usr/include/bfd.h" _bfd_header_sha)
++file(SHA256 "${LIBBFD}" _bfd_library_sha)
++file(SHA256 "${CMAKE_C_COMPILER}" _bfd_cc_sha)
++if(NOT _bfd_header_sha STREQUAL "de900a9fe4ac94543ee1382cebc3063c3d7e20d16bc934fc816133dd55fe2432" OR
++   NOT _bfd_library_sha STREQUAL "6cfd31804974c248c9512879e7b77a94862f92150c2171d901140464ea936ab3" OR
++   NOT _bfd_cc_sha STREQUAL "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2")
++  message(FATAL_ERROR "BFD Rust accessor: selected Rocky header/library/compiler pin mismatch")
++endif()
++set(_bfd_witness "${CMAKE_CURRENT_SOURCE_DIR}/cmake/bfd_layout_witness.c")
++set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
++  "${_bfd_witness}" "/usr/include/bfd.h" "${LIBBFD}")
++# Do not reuse cached try_run output across header/configuration changes.
++unset(_bfd_run CACHE)
++unset(_bfd_compile CACHE)
++try_run(_bfd_run _bfd_compile "${CMAKE_CURRENT_BINARY_DIR}/bfd-layout-probe"
++  "${_bfd_witness}"
++  CMAKE_FLAGS "-DCMAKE_C_STANDARD=11" "-DCMAKE_C_STANDARD_REQUIRED=ON"
++  LINK_LIBRARIES "${LIBBFD}"
++  RUN_OUTPUT_VARIABLE _bfd_layout
++  COMPILE_OUTPUT_VARIABLE _bfd_compile_log)
++if(NOT _bfd_compile OR NOT "${_bfd_run}" STREQUAL "0")
++  message(FATAL_ERROR "BFD typed layout witness failed: ${_bfd_compile_log}")
++endif()
++file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/rust")
++set(_bfd_layout_rs "${CMAKE_CURRENT_BINARY_DIR}/rust/bfd_layout.rs")
++file(WRITE "${_bfd_layout_rs}" "${_bfd_layout}")
++set(BFD_RUST_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rust/bfd_accessors.o")
++add_custom_command(OUTPUT "${BFD_RUST_OBJ}"
++  COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= "MCKERNEL_BFD_LAYOUT_RS=${_bfd_layout_rs}" ${RUSTC}
++    --crate-name bfd_accessors --crate-type lib --edition=2021
++    -C panic=abort -C opt-level=2 -C debuginfo=1 -C force-unwind-tables=no
++    --emit=obj=${BFD_RUST_OBJ}
++    "${CMAKE_CURRENT_SOURCE_DIR}/rust/bfd_accessors.rs"
++  DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/bfd_accessors.rs" "${_bfd_layout_rs}"
++  COMMENT "Building Rust BFD accessors from checked selected-header layout"
++  VERBATIM)
++add_custom_target(bfd_rust_accessors DEPENDS "${BFD_RUST_OBJ}")
++set_source_files_properties("${BFD_RUST_OBJ}" PROPERTIES EXTERNAL_OBJECT TRUE GENERATED TRUE)

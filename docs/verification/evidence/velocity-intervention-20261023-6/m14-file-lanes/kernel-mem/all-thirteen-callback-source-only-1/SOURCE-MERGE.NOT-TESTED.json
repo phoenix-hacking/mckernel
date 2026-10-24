@@ -1,0 +1,71 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "THIRTEEN_COMPLETE_TLB_C_ADAPTER_BODIES_PRIVATE_SOURCE_ONLY_NOT_TESTED",
+  "postimages": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/all-thirteen-callback-source-only-1/candidate/kernel/mem.c",
+      "sha256": "9d53106e7228b5a7654f4250bab58e20e7bc47a28f8ad9675b1c9ac92599b976",
+      "bytes": 228159
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/all-thirteen-callback-source-only-1/candidate/kernel/rust/mem_helpers.rs",
+      "sha256": "6a527f7a55930d72d6d72c775ee0261c3550e2bd0094fe01031f3aa3238aefd6",
+      "bytes": 206768
+    }
+  ],
+  "patch_sha256": "88e852eba922e70f35992d08542c6b289dadef1ce89509eb8d21f1f93acf5b50",
+  "new_four": [
+    "mem_tlb_rdtsc_bridge",
+    "mem_tlb_flush_single_bridge",
+    "mem_tlb_flush_all_bridge",
+    "mem_tlb_pause_bridge"
+  ],
+  "mechanism_pins": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "26180e00c1d6673aa600f0ec9afed5d100ca6e0c39af803c3328e58f8cc88fb9",
+      "bytes": 91270
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "245faf1198d9b7715714d236238172330257f4291776aced4e7cee6c3c518ce2",
+      "bytes": 199322
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/registers.h",
+      "sha256": "43fd6d2e278953684574224927fe65bc514a88c5529d97f688e1e21b1864a6fc",
+      "bytes": 5778
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-memory.h",
+      "sha256": "1704ac32bf55f421c802df661c844b496a1660b8b89e5d12cc2d994d835b5b49",
+      "bytes": 8996
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ihk/cpu.h",
+      "sha256": "a25efd9095efe3f357efb2a2d7d810e2a6d1ed0aea3c6e1d4fac2c0ee8a83c81",
+      "bytes": 5479
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+      "sha256": "4e8d34dc3173aa1c9402ffd437738c6074fcec8a354dc91b6aa8f79d5348ba9c",
+      "bytes": 2012
+    }
+  ],
+  "mechanism_reuse": {
+    "rdtsc": "x86_cpu_helpers::rdtsc existing EDX:EAX rdtsc ASM, no new serialization",
+    "cpu_pause": "x86_cpu_helpers::cpu_pause existing PAUSE ASM under production not(mckernel_equivalence), same public ABI link",
+    "flush_single": "x86_memory_helpers::flush_tlb_single -> existing x86_flush_tlb_single_result IN V L P G (invlpg) ASM",
+    "flush_all": "x86_memory_helpers::flush_tlb -> existing x86_flush_tlb_result -> existing read/load CR3 body"
+  },
+  "consumer_invariant": "Only original complete C adapters replaced under existing selector. Exact public ABI forwards all bits once, same return/void, no pointer dereference in adapters. CPU affinity, IRQ/preemption, timestamps, spin/wait order, VM/address lifetime and actual handler completion protocol unchanged. Fallback original bodies preserved.",
+  "remaining_callback_C_debt": "No selected adapter body remains C in this private thirteen-body branch; all untested lower producers, C tlb_flush_handler orchestration/profiling and other mem.c bodies remain explicit debt. No linked/default/native/file retirement claimed.",
+  "actual_three": null,
+  "actual_atomic": null,
+  "actual_noirq": null,
+  "actual_four": null,
+  "production_fullcrate_default_TU_link_native": null,
+  "execution": null,
+  "CPU_reservation": null,
+  "fixture_policy": "No second executable-ready fixture/cohort; queued three-target fixture awaits expert missing-c_void disposition; no target ISA instructions executed on HOST."
+}

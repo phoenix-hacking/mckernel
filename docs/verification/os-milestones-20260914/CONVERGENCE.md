@@ -15,6 +15,35 @@ this document is not a claim that the Python harness enforces it.
 
 ## Authority and scope
 
+### Complete project runtime boundary: M14 and M15 — 2026-10-24 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Track all project-owned production runtime code: M14 is the supported compute
+kernel; [M15](RUST-CUTOVER-M15.md) includes custom Linux modules and user-space
+executors/libraries/tools. Existing IHK/SMP/mcctrl Rust code is reuse, not a new
+rewrite. Classify selected C from actual build targets and available artifact
+commands; source presence or an old Rust-only module cannot prove current link
+ownership. Record missing link evidence honestly. Project C compatibility wrappers
+remain migration debt under this new scope, with current functional behavior
+preserved until a successor qualifies. Linux APIs, their synchronization/tracing
+semantics and real per-config ABI must be retained.
+
+Keep original35, M14 and M15 completion independent. Reuse matching application,
+MM, module-load and retirement proof; do not reinstate deferred exposure quotas.
+Do not let a blocked MM-wrapper port stop independent M14/tool work. At each
+existing ten-minute review report M15 candidate/remaining C evidence alongside
+six-file M14 occupancy. The normal resource, review and ownership controls remain.
+
+The user explicitly requests four dedicated M15 implementation lanes. Keep one
+owner for MM Rust/assembly adapters, one for Rust management CLIs/installed
+programs, one for both BFD adapters around existing Rust tools, and one for the
+public libihk API. Reuse existing Rust and already prepared candidates before
+writing an equivalent body. Coordinate public API/ABI consumers and disjoint
+private paths across foreground and background teams. Record actual active
+turns separately from source-ready results waiting for compiler/integration.
+Use existing reviewed execution slots and measured aggregate resource caps;
+four additional source workers grant no extra Docker or native workload.
+
 ### Six active M14 file implementation lanes — user instruction 2026-10-24 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

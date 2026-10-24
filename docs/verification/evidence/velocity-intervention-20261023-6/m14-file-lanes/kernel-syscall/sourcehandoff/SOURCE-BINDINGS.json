@@ -1,0 +1,71 @@
+{
+  "ABI_edits": false,
+  "C_allocator_primitive_remaining": "syscall_alloc_bridge->kmalloc_tracked remains explicit computeC debt; no allocator API added",
+  "IHK_DMA_ALIGN": "empty in supported actual x86 memconst.h; realheader proof still pending",
+  "Rust_nonoverlapping_fragment": {
+    "bytes": 653,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/candidate/signalfd_create.RUST-FRAGMENT.rs.inc",
+    "sha256": "9432164cfb0d0643b03d2d1dd690f0d26f8006cf4bce679a965360187e775ea4"
+  },
+  "canonical_changes": false,
+  "compiler_invocations": 0,
+  "current_C": {
+    "bytes": 843071,
+    "path": "/home/holden/mckernel/kernel/syscall.c",
+    "sha256": "1035622a96a5441a85d60a9db15d3ac452b60266d1f8123eb807ce3849c41081"
+  },
+  "current_Rust_ABI": {
+    "bytes": 76151,
+    "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "current_Rust_policy": {
+    "bytes": 711734,
+    "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+    "sha256": "f1f7866c0f2ccc8e1b0024dfb632ec7359dd2a0a4bcd8e22deb957d48ef6d770"
+  },
+  "default_link": false,
+  "expected_integrated_Rust_policy_sha256": "dc5c5f264e7acb28416253a38023c3588735baec842b625b7d18711a2314f942",
+  "file_retired": false,
+  "hostFD_failure_contract": "signalfd4_body_result unchanged: negative create result bypasses publish; successful hostFD followed by publish -ENOMEM remains -ENOMEM with original no-extra-close behavior",
+  "native": false,
+  "next_observation": "Root-granted originalC/Rust actualbody requestbytes/callback-order/error parity + realheader/fullselectedCconsumer fixture",
+  "original_C_body": {
+    "bytes": 289,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/fixture/original_create.ACTUAL-C-BODY.inc",
+    "sha256": "3b9289adcbce7fcdfc59a2119a2fe2750307c4357660bd8013c51de83a9de7f8"
+  },
+  "patch": {
+    "bytes": 1882,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/patch/signalfd-create-selected-body.patch",
+    "sha256": "fdbce89fb4eabde537910db8ad6c6b41e198ebc42886408e3cb0f50d1322166c"
+  },
+  "private_C": {
+    "bytes": 843257,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/candidate/syscall.c",
+    "sha256": "34ec8a08c5790aa7533e5a8e3905d1dd1d4989bf0f431b8517ae6d50bbaa54f4"
+  },
+  "request_contract": "zero all72bytes; number=int\u2192ulong,args0=0,args1=flagsint\u2192ulong; currentCPU exactlyonce before do_syscall exactlyonce; longreturn unchanged",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_body": "syscall_signalfd_create_bridge",
+  "shared_Rust_full_candidate_written": false,
+  "status": "PRIVATE_IMPLEMENTATION_SOURCE_ONLY_NOT_TESTED",
+  "tests_run": 0,
+  "unchanged_signalfd4_helper_functions": [
+    {
+      "bytes": 219,
+      "name": "signalfd4_sigsetsize_result",
+      "sha256": "3e521cb18ce6323813ef20e2a754e5946504047abe351b862742673362b4a9e6"
+    },
+    {
+      "bytes": 178,
+      "name": "signalfd4_flags_result",
+      "sha256": "526cbab2833c9d43d9b6e20131be5bf62f20e5112e79acac35e1570ad71acde9"
+    },
+    {
+      "bytes": 1505,
+      "name": "signalfd4_body_result",
+      "sha256": "69a7be039a0053c6ed28a9ba0261f3f5c751fbf6170fa4592b57c6a87d9f6258"
+    }
+  ]
+}

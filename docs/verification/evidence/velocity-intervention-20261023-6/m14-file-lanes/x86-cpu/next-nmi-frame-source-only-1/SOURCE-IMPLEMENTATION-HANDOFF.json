@@ -1,0 +1,82 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "INDEPENDENT_ACTUAL_NMI_FRAME_BODY_IMPLEMENTED_SOURCE_ONLY_NO_FIXTURE_QUEUE",
+  "target": "arch/x86_64/kernel/cpu.c::mod_nmi_ctx complete27word NMIframe rewrite",
+  "preimages": {
+    "C": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "sha256": "2d29bca555936a213f0a7296a302ec57b55c575536c33a58285b07b203390eca",
+      "bytes": 95484
+    },
+    "Rust": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "26180e00c1d6673aa600f0ec9afed5d100ca6e0c39af803c3328e58f8cc88fb9",
+      "bytes": 91270
+    }
+  },
+  "postimages": {
+    "arch/x86_64/kernel/cpu.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-nmi-frame-source-only-1/candidate/arch/x86_64/kernel/cpu.c",
+      "sha256": "a5ee1eace2512d45c495afdda7db6d7950e8729a8695b815901cbd09907f5220",
+      "bytes": 95584
+    },
+    "kernel/rust/x86_cpu_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-nmi-frame-source-only-1/candidate/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "2c91e27b776454018b888f86f49afac812a94e7a08be8be97270192116e74b3d",
+      "bytes": 92634
+    }
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-nmi-frame-source-only-1/PRIVATE-NMI-FRAME-REWRITE.patch",
+    "sha256": "bcf7ce2be84ded0d40ab7c62d00b33333081b099614afa6cbdb1fe48090ca10f",
+    "bytes": 1930
+  },
+  "original_C": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-nmi-frame-source-only-1/ORIGINAL-C-BODY.inc",
+    "sha256": "0f7b261217f8d28cfa7383527bb2cd6cc3d4740f39c114aefae870a122a2a5db",
+    "bytes": 443
+  },
+  "actual_Rust": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-nmi-frame-source-only-1/ACTUAL-RUST-BODY.rs",
+    "sha256": "add421390e7ef74ff671f847811966eb02f113e7b09692b5db9ca220b3c16420",
+    "bytes": 1363
+  },
+  "actual_selected_C_symbol_authority": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-cpu-log-next/production-consumer-preparation-1/bounded-header-transport-correction-1/actual-remaining-capture-1/06-selected-complete-CPU-symbols/stdout",
+    "sha256": "d84911c11ef5ed5a9498c55fe62ec1d3ef467e3be69dbefed28cc242a7b3ae3c",
+    "bytes": 15909
+  },
+  "actual_existing_C_definition_row": [
+    "0000000000003d50 0000000000000062 T mod_nmi_ctx"
+  ],
+  "not_already_Rust": true,
+  "mask_header": {
+    "path": "/home/holden/mckernel/arch/x86_64/kernel/include/registers.h",
+    "sha256": "43fd6d2e278953684574224927fe65bc514a88c5529d97f688e1e21b1864a6fc",
+    "bytes": 5778
+  },
+  "actual_mask_macro": "#define RFLAGS_IF      (1 << 9)",
+  "existing_Rust_flags_read_mechanism_source": "pub unsafe extern \"C\" fn cpu_interrupt_disabled() -> CInt {\n    let flags: CULong;\n\n    core::arch::asm!(\n        \"pushfq\",\n        \"pop {flags}\",\n        flags = lateout(reg) flags,\n        options(preserves_flags),\n    );\n\n    if flags & 0x200 == 0 {\n        1\n    } else {\n        0\n    }\n}\n",
+  "semantics": [
+    "Readflags via existingpushfq/pop mechanism beforememorycopy; noCLI/STI or IRQstatechange.",
+    "Forward overlapping22wordcopy fromindices5..26 to0..21.",
+    "Storefunctionvalue at22 withoutcallingit; CS0x20 at23, flagsclearedIF at24, originalbase+27wordaddress at25, DS0x28 at26.",
+    "Samecaller-owned27wordborrow, noadditionalnull/cycle/bounds/alignment/errorpolicy; no allocation, locks or retainedpointer.",
+    "Existing MCKERNEL_RUST_X86_CPU_HELPERS selects Rustentry/declaration; exactoriginalCbody preserved as fallback."
+  ],
+  "ABI_and_assembly_review_needed": [
+    "ExactC void(*func)() to Option<unsafeexternCfn()> pointerABI/null representation under supportedx86_64profile; function is never invoked.",
+    "Actual27word writableproducer span/caller lifetime and IFmask/header equality requirefocusedsourceABI review beforeexecution.",
+    "Newasm uses existingreviewedpushfq/pop pattern, defaultmemory/flags clobber; acceptedproductionno-redzone profile required, no host/registerinstructions run here."
+  ],
+  "relationship": "Independentcanonical2d29/26180base; neitherqueuedcontext noruntestedstackformatter merged into this candidate. LaterrootcancombineEOFexports aftersource/ABI acceptance.",
+  "executable_fixture_created": false,
+  "compiler_jobs": 0,
+  "test_jobs": 0,
+  "CPU_slots_held": 0,
+  "canonical_sharedABI_CMake_P12_frozen15_mutations": 0,
+  "actual_body_tests": null,
+  "production_fullcrate_C_TU_defaultlink_native": null,
+  "wholefile_retirement": false,
+  "failure_histories": "All CPUlogger priorfailures retained; thisNMIbody has notcompiled/executed anddoesnotresetcontext/stack families."
+}

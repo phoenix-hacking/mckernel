@@ -1,0 +1,8 @@
+open /dev/mcd0 flags=2
+ioctl fd=17 request=112907
+mem_query count=0 sizes=0 nodes=0
+ioctl fd=17 request=112907
+mem_query count=0 sizes=1 nodes=1
+ioctl fd=17 request=112905
+mem_release count=0 min=0 ratio=0 timeout=0
+close 17

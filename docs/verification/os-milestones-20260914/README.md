@@ -3,6 +3,10 @@
 Current scope, 2026-10-23: [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md) and its35-check
 worklist define functional completion. Full supported LWK Rust/assembly cutover
 is the separate active [M14](RUST-CUTOVER-M14.md), with [per-C-file subgoals](rust-cutover-m14.json).
+The explicit 2026-10-24 language boundary also includes custom Linux modules,
+executors, libraries and user tools in separate [M15](RUST-CUTOVER-M15.md), with
+[residual C subgoals](rust-cutover-m15.json). Existing native Rust IHK/SMP/mcctrl
+implementations are reused. Report practical35, M14 and M15 separately.
 Advance and report both tracks separately. The original roadmap below is retained
 as historical/deferred qualification; it does not replace these current scopes.
 

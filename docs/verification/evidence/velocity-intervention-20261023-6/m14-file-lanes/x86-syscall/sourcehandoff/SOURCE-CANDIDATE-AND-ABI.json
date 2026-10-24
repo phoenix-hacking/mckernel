@@ -1,0 +1,69 @@
+{
+  "C_selection_patch": {
+    "bytes": 700,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/patch/syscall.c.diff",
+    "sha256": "69b697947539efb0ffab6300309df822edbf26def3ce8ca8edfdaa00098d064f"
+  },
+  "Centroid_retirement": "Selected C public entry + static two-arg event adapter; existing algorithm already Rust. No whole-file zero-C claim.",
+  "Rust_function_dependencies": [
+    "arch_ptrace_syscall_event_body_result existing actual body unchanged",
+    "crate::abi::{Thread,X86UserContext,X86BasicRegs}, repr(C)",
+    "unchanged public ptrace_syscall_event(thread) owned by kernel/syscall.c"
+  ],
+  "actual_ABI_preimage": {
+    "bytes": 76151,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/sourcehandoff/abi.rs.PREIMAGE",
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "actual_result": null,
+  "canonical_edits": false,
+  "compiler_jobs": 0,
+  "default_fullfile_consumer": null,
+  "failure_family": "First source candidate; no test/compiler attempt yet.",
+  "fixture": {
+    "C": {
+      "bytes": 4747,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/fixture/arch_event_actual.c",
+      "sha256": "0208c4d667bea1e814979cc9b1b8e0bccba88d9856e40dff37706d85609e5466"
+    },
+    "Rust": {
+      "bytes": 994,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/fixture/arch_event_actual.rs",
+      "sha256": "6e603d448d52a389aa1042993959f689346bdbfc6a3d7ad4f9ae6f3a17152b57"
+    },
+    "actual_context_C_headers": "Exact four-header closure; no model register struct.",
+    "actual_context_Rust_ABI": "Exact entire current abi.rs snapshot; no replica types.",
+    "callback_scope": "Real controlled C symbol provider; does not requalify kernel ptrace signal/scheduler internals.",
+    "default_selection": "Actual candidate public block included with selectionmacro; any remainingCexport conflicts with actualRust public export atlink.",
+    "full_signature_vectors": 588,
+    "nullctx_vectors": 21
+  },
+  "fullcrate_link": null,
+  "native": null,
+  "preserved": [
+    "ctxNULL returns-EFAULT before event or thread access in selected profile",
+    "volatile setret store then exact one synchronous publicevent(thread)",
+    "readvolatile RAX after callback, preserving event-written result and signed cast",
+    "nullthread forwarded unchanged for nonnullctx; no added pointer policy",
+    "original Cfallback fullbody retained under !MCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+    "no allocation/lock/reference ownership changes"
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_C_candidate": {
+    "bytes": 113504,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/candidate/syscall.c",
+    "sha256": "912fb97a58cc797407979ce835c422578949ff876ac519193d2ebc4855cce791"
+  },
+  "selected_entry": "arch_ptrace_syscall_event(struct thread*,ihk_mc_user_context_t*,long)",
+  "shared_Rust_fragment_only": {
+    "bytes": 1161,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/candidate/syscall_policy.arch_ptrace_syscall_event.FRAGMENT.rs",
+    "sha256": "47df2112d0d701ad45b56130327b7902e94038f159c15412c31b2b2cfe9bbaa1"
+  },
+  "source_preimage": {
+    "bytes": 113534,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/sourcehandoff/syscall.c.PREIMAGE",
+    "sha256": "57fb0080088276317e531982769cfe56c44a7467db220be0b0060a5ae5c6162f"
+  },
+  "status": "PRIVATE_IMPLEMENTATION_AND_ACTUAL_BODY_FIXTURE_SOURCE_READY_NO_COMPILER_GRANT"
+}

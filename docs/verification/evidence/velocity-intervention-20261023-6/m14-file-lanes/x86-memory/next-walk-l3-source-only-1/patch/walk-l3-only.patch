@@ -1,0 +1,45 @@
+--- a/arch/x86_64/kernel/memory.c
++++ b/arch/x86_64/kernel/memory.c
+@@ -1622,14 +1622,19 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
++extern int x86_clear_range_walk_l3_bridge(void *pt, unsigned long base,
++        unsigned long start, unsigned long end, void *args);
++#else
+ static int x86_clear_range_walk_l3_bridge(void *pt, unsigned long base,
+ 		unsigned long start, unsigned long end, void *args)
+ {
+ 	return walk_pte_l3(pt, base, start, end, &clear_range_l3, args);
+ }
++#endif
+ 
+ #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+-/* Borrow the existing L3 callback synchronously; its C body remains debt. */
++/* Same synchronous L3 walker identity; the default body is supplied by Rust. */
+ int (*const x86_clear_range_l3_callback)(void *, unsigned long,
+         unsigned long, unsigned long, void *) = &x86_clear_range_walk_l3_bridge;
+ extern int x86_clear_range_l4_body(void *args0, pte_t *ptep, uint64_t base,
+--- a/kernel/rust/x86_memory_helpers.rs
++++ b/kernel/rust/x86_memory_helpers.rs
+@@ -3277,6 +3277,19 @@
+ 
+ // Error logging preserves the original unconditional ekprintf -> kprintf
+ // call, format bytes and C varargs payload. Unknown events remain silent.
++/// Exact former C L3 walker dispatcher. Existing walk_pte_l3 retains all
++/// range bounds/error aggregation and borrows args only for synchronous calls.
++#[no_mangle]
++pub unsafe extern "C" fn x86_clear_range_walk_l3_bridge(
++    pt: *mut c_void,
++    base: CULong,
++    start: CULong,
++    end: CULong,
++    args: *mut c_void,
++) -> CInt {
++    unsafe { walk_pte_l3(pt, base, start, end, Some(clear_range_l3), args) }
++}
++
+ /// Exact former C L2 walker dispatcher. The existing Rust walker retains
+ /// bounds/error aggregation and synchronously borrows the same callback args.
+ #[no_mangle]

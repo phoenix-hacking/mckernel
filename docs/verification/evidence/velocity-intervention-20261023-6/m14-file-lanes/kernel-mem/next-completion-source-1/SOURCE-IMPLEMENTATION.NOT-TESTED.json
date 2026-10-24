@@ -1,0 +1,73 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_IMPLEMENTED_NOT_EXECUTABLE_READY_NOT_TESTED",
+  "independent_base": {
+    "kernel/mem.c": "638788c79fb96c1edb229d016fa678a02c0fcde6e1b56c7fa45d33b5490354d4",
+    "kernel/rust/mem_helpers.rs": "4635a252332cd369e36384f04a414e2b4c2d79726a4f95caafcf1d3ed1a56b4d"
+  },
+  "selected_complete_bodies": [
+    "extern void mem_tlb_atomic_set_bridge(unsigned long atomic_addr, int value);",
+    "extern void mem_tlb_atomic_inc_bridge(unsigned long atomic_addr);",
+    "extern void mem_tlb_atomic_dec_bridge(unsigned long atomic_addr);",
+    "extern int mem_tlb_atomic_read_bridge(unsigned long atomic_addr);"
+  ],
+  "source_bindings": [
+    {
+      "path": "/home/holden/mckernel/kernel/mem.c",
+      "sha256": "638788c79fb96c1edb229d016fa678a02c0fcde6e1b56c7fa45d33b5490354d4",
+      "bytes": 226806
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "sha256": "4635a252332cd369e36384f04a414e2b4c2d79726a4f95caafcf1d3ed1a56b4d",
+      "bytes": 203495
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/atomic_helpers.rs",
+      "sha256": "8acf10a907cede816da8300d36bf967d938cc672dd75dbb3ecc8f3992ec42941",
+      "bytes": 6207
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+      "sha256": "4e8d34dc3173aa1c9402ffd437738c6074fcec8a354dc91b6aa8f79d5348ba9c",
+      "bytes": 2012
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "sha256": "b141d09ad4d717171d9fca51b8ffefec65573f266652bc0d93129bd2a03ec40e",
+      "bytes": 23076
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/atomic.h",
+      "sha256": "829c76b8e61efd50e6cbc968c6eac56fc7b151c9da4143fd40bde176117ef78d",
+      "bytes": 2680
+    }
+  ],
+  "postimages": {
+    "kernel/mem.c": {
+      "sha256": "08c3b604149e8df10a7bd3daac4abedf26fe0534efcd92db1cace4bde3276d41",
+      "bytes": 227265
+    },
+    "kernel/rust/mem_helpers.rs": {
+      "sha256": "85b7728335607461e827030ad75dbaed8ebe94a73b05b3788f0f13a3cffb02a4",
+      "bytes": 204454
+    }
+  },
+  "patch_sha256": "7e841e12f9bfdcbb98d1036afc8f8179e99fc359b9b0f1645b67b852cff5e881",
+  "queued_candidate_unchanged": "12557b00ab25e0959dabeffd82c99cf9089fe2ce5d30a506451ca6dfbc8e57fd",
+  "consumer_invariant": "Identical pointer bit pattern and signed value to identical existing Rust ihk_atomic provider exactly once. Existing handler alone decrements pending after real flush. All VM/stack/lock/interrupt/profiling ownership and quarantine remain unchanged.",
+  "abi": "C ihk_atomic_t and provider Rust IhkAtomic are 4-byte aligned 4-byte structs, counter offset0. Callback ABI unsigned long address; set int value; read int result. Atomic operations reuse exact existing SeqCst implementation, no new ordering implementation.",
+  "future_fixture": {
+    "status": "NOT_PREPARED_NO_SECOND_EXECUTABLE_READY_QUEUE",
+    "required": "Actual original C callbacks against real atomic_helpers providers; signed/wrapping boundary counters; actual array plus handler completion path; real C headers size/alignment/offset and PUBLIC/fallback signatures; pending zero only after actual handler, no invented ACK. Null is outside live-pointer contract, never dereferenced for fixture.",
+    "execution": null
+  },
+  "remaining_C_debt": "All other 9 providers remain on this independent base, including 3 queued target-selection wrappers; queued candidate not incorporated. Whole mem.c and native/default linked retirement OPEN.",
+  "CPU_grant": null,
+  "runtime_acceptance": null
+}

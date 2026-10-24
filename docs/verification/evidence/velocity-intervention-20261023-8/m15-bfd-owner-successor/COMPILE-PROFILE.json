@@ -1,0 +1,70 @@
+{
+  "activation": "COMPILE_LINK_ONLY_NO_GUEST_OR_KERNEL_ACTIVATION",
+  "admission_max_age_ns": 120000000000,
+  "candidate_identity": {
+    "dev": 66306,
+    "file_type": 16384,
+    "gid": 1000,
+    "inode": 56125093,
+    "mode": 509,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd",
+    "uid": 1000
+  },
+  "candidate_root": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd",
+  "command": [
+    "/usr/bin/env",
+    "-i",
+    "PATH=/nightly/bin:/usr/bin:/bin",
+    "LANG=C",
+    "LC_ALL=C",
+    "/usr/bin/python3",
+    "/candidate/orchestration/qualify.py",
+    "--repo",
+    "/src",
+    "--output",
+    "/work/qualification-1"
+  ],
+  "container_name": "mckernel-m15-bfd-compile-bf69b996f71f4cb1bb0a50d7aa43aaa8",
+  "host_helper_sha256": "76ff839a839a2f55cd7d537d22221cb1b053390e2b6052b8be2b5d8b20990e63",
+  "image_id": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+  "input_manifest": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd-owner-successor/BFD-INPUTS.json",
+  "input_manifest_sha256": "aed4fd1dc6d49e83320714e683ea4adb360614efc9633fe93b3e96254d587bc8",
+  "jobs": 1,
+  "lease_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd-owner-successor/operation-1/compile-lease.json",
+  "limits": {
+    "CpusetCpus": "6",
+    "Memory": 2147483648,
+    "MemorySwap": 2147483648,
+    "NanoCpus": 1000000000,
+    "NetworkMode": "none",
+    "PidsLimit": 128
+  },
+  "minimum_MemAvailable": 25769803776,
+  "namespace": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd-owner-successor/operation-1",
+  "operation": "M15_BFD_PINNED_SELECTED_USER_TOOLS_COMPILE_ONLY_V1",
+  "owner_nonce": "bf69b996f71f4cb1bb0a50d7aa43aaa8",
+  "reserved_native_profile": {
+    "CpusetCpus": "2-5",
+    "Memory": 12884901888,
+    "MemorySwap": 12884901888,
+    "NanoCpus": 4000000000,
+    "NetworkMode": "none",
+    "PidsLimit": 512
+  },
+  "retained_request": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile-request.PREPARED.json",
+  "retained_request_sha256": "92bcb96713c498bf2397bb24c3473a2ffbeb61f45dfa423a6ae8b99f4a4ffe4f",
+  "schema": "mckernel.m15-bfd-compile-link-profile.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "sole_rw_mount_target": "/work",
+  "source_identity": {
+    "dev": 66306,
+    "file_type": 16384,
+    "gid": 1000,
+    "inode": 47459795,
+    "mode": 509,
+    "path": "/home/holden/mckernel",
+    "uid": 1000
+  },
+  "source_root": "/home/holden/mckernel",
+  "toolchain_manifest_sha256": "a68e02b3b66b8bfbae96bf742dc8702b6e81dd97b92189b87437c3d08fccdf72"
+}

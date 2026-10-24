@@ -1,0 +1,89 @@
+--- a/kernel/mem.c
++++ b/kernel/mem.c
+@@ -4315,10 +4315,14 @@
+ 	return rdtsc();
+ }
+ 
++#ifdef MCKERNEL_RUST_MEM_HELPERS
++extern int mem_tlb_current_cpu_bridge(void);
++#else
+ MEM_TLB_PUBLIC_BRIDGE int mem_tlb_current_cpu_bridge(void)
+ {
+ 	return ihk_mc_get_processor_id();
+ }
++#endif
+ 
+ MEM_TLB_PUBLIC_BRIDGE void mem_tlb_noirq_lock_bridge(unsigned long lock_addr)
+ {
+@@ -4350,15 +4354,23 @@
+ 	return ihk_atomic_read((ihk_atomic_t *)atomic_addr);
+ }
+ 
++#ifdef MCKERNEL_RUST_MEM_HELPERS
++extern int mem_tlb_get_vector_bridge(int type);
++#else
+ MEM_TLB_PUBLIC_BRIDGE int mem_tlb_get_vector_bridge(int type)
+ {
+ 	return ihk_mc_get_vector(type);
+ }
+-
++#endif
++
++#ifdef MCKERNEL_RUST_MEM_HELPERS
++extern void mem_tlb_interrupt_cpu_bridge(int cpu, int vector);
++#else
+ MEM_TLB_PUBLIC_BRIDGE void mem_tlb_interrupt_cpu_bridge(int cpu, int vector)
+ {
+ 	ihk_mc_interrupt_cpu(cpu, vector);
+ }
++#endif
+ 
+ MEM_TLB_PUBLIC_BRIDGE void mem_tlb_flush_single_bridge(unsigned long addr)
+ {
+--- a/kernel/rust/mem_helpers.rs
++++ b/kernel/rust/mem_helpers.rs
+@@ -22,9 +22,6 @@
+     static mut MEM_TLB_FLUSH_VECTOR_FIRST: TlbFlushEntry;
+     static mem_remote_tlb_geometry: [CInt; 3];
+     fn mem_tlb_rdtsc_bridge() -> CULong;
+-    fn mem_tlb_current_cpu_bridge() -> CInt;
+-    fn mem_tlb_get_vector_bridge(type_: CInt) -> CInt;
+-    fn mem_tlb_interrupt_cpu_bridge(cpu: CInt, vector: CInt);
+     fn mem_tlb_noirq_lock_bridge(lock_addr: CULong);
+     fn mem_tlb_noirq_unlock_bridge(lock_addr: CULong);
+     fn mem_tlb_atomic_set_bridge(atomic_addr: CULong, value: CInt);
+@@ -49,6 +46,8 @@
+     fn ihk_mc_get_nr_numa_nodes() -> CInt;
+     fn ihk_get_kargs() -> *mut i8;
+     fn ihk_mc_get_processor_id() -> CInt;
++    fn ihk_mc_get_vector(type_: CInt) -> CInt;
++    fn ihk_mc_interrupt_cpu(cpu: CInt, vector: CInt) -> CInt;
+     fn mem_num_processors_bridge() -> CInt;
+     fn mem_dump_level_bridge() -> CInt;
+     fn mem_get_dump_page_set_bridge() -> *mut IhkDumpPageSet;
+@@ -5509,6 +5508,25 @@
+     phys_to_nid_cb(*ptep & PT_PHYSMASK)
+ }
+ 
++/// Exact TLB target-selection provider: preserve the current public CPU ABI.
++#[no_mangle]
++pub unsafe extern "C" fn mem_tlb_current_cpu_bridge() -> CInt {
++    unsafe { ihk_mc_get_processor_id() }
++}
++
++/// Exact public vector translation, including every signed type/result bit.
++#[no_mangle]
++pub unsafe extern "C" fn mem_tlb_get_vector_bridge(type_: CInt) -> CInt {
++    unsafe { ihk_mc_get_vector(type_) }
++}
++
++/// Preserve one interrupt call and the original void/ignored-result contract.
++/// No completion/ACK is inferred from the public provider's return value.
++#[no_mangle]
++pub unsafe extern "C" fn mem_tlb_interrupt_cpu_bridge(cpu: CInt, vector: CInt) {
++    let _ = unsafe { ihk_mc_interrupt_cpu(cpu, vector) };
++}
++
+ /// Preserve the original single-address stack-local handoff to the array entry.
+ ///
+ /// # Safety

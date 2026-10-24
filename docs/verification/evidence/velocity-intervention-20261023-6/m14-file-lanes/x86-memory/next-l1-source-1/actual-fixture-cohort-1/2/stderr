@@ -1,0 +1,7 @@
+In file included from fixture.c:80:
+original-body.inc: In function ‘original_clear_range_l1’:
+original-body.inc:8:9: error: implicit declaration of function ‘x86_clear_range_leaf_body_result’; did you mean ‘x86_clear_range_level_body_result’? [-Werror=implicit-function-declaration]
+    8 |  return x86_clear_range_leaf_body_result(args0, ptep, base, start, end,
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |         x86_clear_range_level_body_result
+cc1: all warnings being treated as errors

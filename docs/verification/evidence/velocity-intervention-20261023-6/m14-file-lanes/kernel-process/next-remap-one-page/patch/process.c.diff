@@ -1,0 +1,38 @@
+--- sync-log-predecessor/kernel/process.c
++++ remap-successor/kernel/process.c
+@@ -2434,6 +2434,27 @@
+ 	struct memobj *memobj;
+ };
+ 
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++/* Preserve displaced remap diagnostics and tracked-free source identity as
++ * static C ABI data only. Rust owns the complete callback computation. */
++const char *const process_remap_free_file = __FILE__;
++const int process_remap_free_line = 2469;
++struct ddebug __aligned(8) __attribute__((section("__verbose")))
++process_remap_one_page_entry_debug = {
++    .file = __FILE__, .func = "remap_one_page",
++    .line = 2448, .flags = DDEBUG_DEFAULT,
++};
++struct ddebug __aligned(8) __attribute__((section("__verbose")))
++process_remap_one_page_rss_debug = {
++    .file = __FILE__, .func = "remap_one_page",
++    .line = 2470, .flags = DDEBUG_DEFAULT,
++};
++struct ddebug __aligned(8) __attribute__((section("__verbose")))
++process_remap_one_page_exit_debug = {
++    .file = __FILE__, .func = "remap_one_page",
++    .line = 2476, .flags = DDEBUG_DEFAULT,
++};
++#else
+ int remap_one_page(void *arg0, page_table_t pt, pte_t *ptep,
+ 		   void *pgaddr, int pgshift)
+ {
+@@ -2477,6 +2498,7 @@
+ 			arg0, pt, ptep, *ptep, pgaddr, pgshift, error);
+ 	return error;
+ }
++#endif
+ 
+ int process_visit_pte_range_bridge(void *page_table, unsigned long start,
+ 				   unsigned long end, int pgshift, int flags,

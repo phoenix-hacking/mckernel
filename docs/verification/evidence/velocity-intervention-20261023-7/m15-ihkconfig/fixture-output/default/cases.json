@@ -1,0 +1,2665 @@
+[
+  {
+    "args": [],
+    "env": {},
+    "expected_status": 1,
+    "number": 0,
+    "equal": true,
+    "reference_status": 1,
+    "rust_status": 1
+  },
+  {
+    "args": [
+      "--help"
+    ],
+    "env": {},
+    "expected_status": 1,
+    "number": 1,
+    "equal": true,
+    "reference_status": 1,
+    "rust_status": 1
+  },
+  {
+    "args": [
+      "0"
+    ],
+    "env": {},
+    "expected_status": 1,
+    "number": 2,
+    "equal": true,
+    "reference_status": 1,
+    "rust_status": 1
+  },
+  {
+    "args": [
+      "0",
+      "--help"
+    ],
+    "env": {},
+    "expected_status": 0,
+    "number": 3,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "create"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 4,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "abc",
+      "create"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 5,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "-1",
+      "create"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 6,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "17junk",
+      "create"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 7,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "destroy"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 8,
+    "equal": true,
+    "reference_status": 1,
+    "rust_status": 1
+  },
+  {
+    "args": [
+      "0",
+      "destroy",
+      "7"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 9,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "destroy",
+      "-1"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 10,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "destroy",
+      "junk"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 11,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "scratch"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 12,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "sbox"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 13,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "sbox",
+      "10"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 14,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "sbox",
+      "junk"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 15,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "ioctl"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 16,
+    "equal": true,
+    "reference_status": 1,
+    "rust_status": 1
+  },
+  {
+    "args": [
+      "0",
+      "ioctl",
+      "feed"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 17,
+    "equal": true,
+    "reference_status": 1,
+    "rust_status": 1
+  },
+  {
+    "args": [
+      "0",
+      "ioctl",
+      "feed",
+      "ffffffffffffffff"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 18,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "ioctl",
+      "garbage",
+      "garbage"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 19,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "unknown"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 20,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "create",
+      "ignored"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 21,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "read"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 22,
+    "equal": true,
+    "reference_status": 1,
+    "rust_status": 1
+  },
+  {
+    "args": [
+      "0",
+      "read",
+      "1000"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 23,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "read",
+      "junk"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 24,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "read",
+      "-1"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 25,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "mmap"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 26,
+    "equal": true,
+    "reference_status": 1,
+    "rust_status": 1
+  },
+  {
+    "args": [
+      "0",
+      "mmap",
+      "1000"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 27,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "mmap",
+      "junk"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 28,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "mmap",
+      "-1"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 29,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "clear_kmsg"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 30,
+    "equal": true,
+    "reference_status": 1,
+    "rust_status": 1
+  },
+  {
+    "args": [
+      "0",
+      "clear_kmsg",
+      "1000"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 31,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "clear_kmsg",
+      "junk"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 32,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "clear_kmsg",
+      "-1"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 33,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "clear_kmsg_write"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 34,
+    "equal": true,
+    "reference_status": 1,
+    "rust_status": 1
+  },
+  {
+    "args": [
+      "0",
+      "clear_kmsg_write",
+      "1000"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 35,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "clear_kmsg_write",
+      "junk"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 36,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "clear_kmsg_write",
+      "-1"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 37,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "reserve"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 38,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "cpu"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 39,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "mem"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 40,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "other",
+      "1"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 41,
+    "equal": true,
+    "reference_status": 234,
+    "rust_status": 234
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "cpu",
+      "1,3-5"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 42,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "cpu",
+      "0,2"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 43,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "cpu",
+      "1,1"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 44,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "cpu",
+      "2-1"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 45,
+    "equal": true,
+    "reference_status": 234,
+    "rust_status": 234
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "cpu",
+      "-1"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 46,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "cpu",
+      "1-"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 47,
+    "equal": true,
+    "reference_status": 234,
+    "rust_status": 234
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "cpu",
+      "bad"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 48,
+    "equal": true,
+    "reference_status": 234,
+    "rust_status": 234
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "cpu",
+      "1x"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 49,
+    "equal": true,
+    "reference_status": 234,
+    "rust_status": 234
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "cpu",
+      ""
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 50,
+    "equal": true,
+    "reference_status": 234,
+    "rust_status": 234
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "cpu",
+      ",1"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 51,
+    "equal": true,
+    "reference_status": 234,
+    "rust_status": 234
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "cpu",
+      "1,"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 52,
+    "equal": true,
+    "reference_status": 234,
+    "rust_status": 234
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "cpu",
+      "1,,2"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 53,
+    "equal": true,
+    "reference_status": 234,
+    "rust_status": 234
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "mem",
+      "4096"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 54,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "mem",
+      "1K@0,2M@1"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 55,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "mem",
+      "1KB@2"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 56,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "mem",
+      "all"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 57,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "mem",
+      "ALL@1"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 58,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "mem",
+      "0"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 59,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "mem",
+      "bad"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 60,
+    "equal": true,
+    "reference_status": 234,
+    "rust_status": 234
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "mem",
+      "@0"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 61,
+    "equal": true,
+    "reference_status": 234,
+    "rust_status": 234
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "mem",
+      "1K@"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 62,
+    "equal": true,
+    "reference_status": 234,
+    "rust_status": 234
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "mem",
+      "1K@bad"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 63,
+    "equal": true,
+    "reference_status": 234,
+    "rust_status": 234
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "mem",
+      "1K@1@2"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 64,
+    "equal": true,
+    "reference_status": 234,
+    "rust_status": 234
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "mem",
+      "1K,"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 65,
+    "equal": true,
+    "reference_status": 234,
+    "rust_status": 234
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "mem",
+      ""
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 66,
+    "equal": true,
+    "reference_status": 234,
+    "rust_status": 234
+  },
+  {
+    "args": [
+      "0",
+      "release"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 67,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "cpu"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 68,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "mem"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 69,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "other",
+      "1"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 70,
+    "equal": true,
+    "reference_status": 234,
+    "rust_status": 234
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "cpu",
+      "1,3-5"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 71,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "cpu",
+      "0,2"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 72,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "cpu",
+      "1,1"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 73,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "cpu",
+      "2-1"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 74,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "cpu",
+      "-1"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 75,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "cpu",
+      "1-"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 76,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "cpu",
+      "bad"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 77,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "cpu",
+      "1x"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 78,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "cpu",
+      ""
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 79,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "cpu",
+      ",1"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 80,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "cpu",
+      "1,"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 81,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "cpu",
+      "1,,2"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 82,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "mem",
+      "4096"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 83,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "mem",
+      "1K@0,2M@1"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 84,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "mem",
+      "1KB@2"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 85,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "mem",
+      "all"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 86,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "mem",
+      "ALL@1"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 87,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "mem",
+      "0"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 88,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "mem",
+      "bad"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 89,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "mem",
+      "@0"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 90,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "mem",
+      "1K@"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 91,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "mem",
+      "1K@bad"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 92,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "mem",
+      "1K@1@2"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 93,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "mem",
+      "1K,"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 94,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "mem",
+      ""
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 95,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "query"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 96,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "query",
+      "cpu"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 97,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "query",
+      "mem"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 98,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "query",
+      "other"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 99,
+    "equal": true,
+    "reference_status": 234,
+    "rust_status": 234
+  },
+  {
+    "args": [
+      "0",
+      "get"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 100,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "get",
+      "os_instances"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 101,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "get",
+      "buildid"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 102,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "get",
+      "other"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 103,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "reserve_mem_max_ratio"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 104,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "reserve_mem_max_ratio",
+      "50"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 105,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "reserve_mem_max_ratio",
+      "junk"
+    ],
+    "env": {},
+    "expected_status": null,
+    "number": 106,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "create"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_OPEN": "1"
+    },
+    "expected_status": 1,
+    "number": 107,
+    "equal": true,
+    "reference_status": 1,
+    "rust_status": 1
+  },
+  {
+    "args": [
+      "0",
+      "destroy"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_OPEN": "1"
+    },
+    "expected_status": 1,
+    "number": 108,
+    "equal": true,
+    "reference_status": 1,
+    "rust_status": 1
+  },
+  {
+    "args": [
+      "0",
+      "query"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_OPEN": "1"
+    },
+    "expected_status": 1,
+    "number": 109,
+    "equal": true,
+    "reference_status": 1,
+    "rust_status": 1
+  },
+  {
+    "args": [
+      "0",
+      "release"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_OPEN": "1"
+    },
+    "expected_status": 1,
+    "number": 110,
+    "equal": true,
+    "reference_status": 1,
+    "rust_status": 1
+  },
+  {
+    "args": [
+      "0",
+      "unknown"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_OPEN": "1"
+    },
+    "expected_status": 1,
+    "number": 111,
+    "equal": true,
+    "reference_status": 1,
+    "rust_status": 1
+  },
+  {
+    "args": [
+      "0",
+      "get",
+      "buildid"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_OPEN": "1"
+    },
+    "expected_status": 255,
+    "number": 112,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "create"
+    ],
+    "env": {
+      "IHK_FIXTURE_IOCTL_RET": "-1"
+    },
+    "expected_status": null,
+    "number": 113,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "destroy",
+      "7"
+    ],
+    "env": {
+      "IHK_FIXTURE_IOCTL_RET": "-1"
+    },
+    "expected_status": null,
+    "number": 114,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "scratch"
+    ],
+    "env": {
+      "IHK_FIXTURE_IOCTL_RET": "-1"
+    },
+    "expected_status": null,
+    "number": 115,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "sbox"
+    ],
+    "env": {
+      "IHK_FIXTURE_IOCTL_RET": "-1"
+    },
+    "expected_status": null,
+    "number": 116,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "ioctl",
+      "feed",
+      "1"
+    ],
+    "env": {
+      "IHK_FIXTURE_IOCTL_RET": "-1"
+    },
+    "expected_status": null,
+    "number": 117,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "cpu",
+      "1-3"
+    ],
+    "env": {
+      "IHK_FIXTURE_IOCTL_RET": "-1"
+    },
+    "expected_status": null,
+    "number": 118,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "mem",
+      "4096@0"
+    ],
+    "env": {
+      "IHK_FIXTURE_IOCTL_RET": "-1"
+    },
+    "expected_status": null,
+    "number": 119,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "mem",
+      "all"
+    ],
+    "env": {
+      "IHK_FIXTURE_IOCTL_RET": "-1"
+    },
+    "expected_status": null,
+    "number": 120,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "query",
+      "cpu"
+    ],
+    "env": {
+      "IHK_FIXTURE_IOCTL_RET": "-1"
+    },
+    "expected_status": null,
+    "number": 121,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "query",
+      "mem"
+    ],
+    "env": {
+      "IHK_FIXTURE_IOCTL_RET": "-1"
+    },
+    "expected_status": null,
+    "number": 122,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "get",
+      "buildid"
+    ],
+    "env": {
+      "IHK_FIXTURE_IOCTL_RET": "-1"
+    },
+    "expected_status": null,
+    "number": 123,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "read",
+      "1000"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_PREAD": "1"
+    },
+    "expected_status": 1,
+    "number": 124,
+    "equal": true,
+    "reference_status": 1,
+    "rust_status": 1
+  },
+  {
+    "args": [
+      "0",
+      "clear_kmsg_write",
+      "1000"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_PWRITE": "1"
+    },
+    "expected_status": 1,
+    "number": 125,
+    "equal": true,
+    "reference_status": 1,
+    "rust_status": 1
+  },
+  {
+    "args": [
+      "0",
+      "mmap",
+      "1000"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_MMAP": "1"
+    },
+    "expected_status": 1,
+    "number": 126,
+    "equal": true,
+    "reference_status": 1,
+    "rust_status": 1
+  },
+  {
+    "args": [
+      "0",
+      "clear_kmsg",
+      "1000"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_MMAP": "1"
+    },
+    "expected_status": 1,
+    "number": 127,
+    "equal": true,
+    "reference_status": 1,
+    "rust_status": 1
+  },
+  {
+    "args": [
+      "0",
+      "clear_kmsg_write",
+      "1000"
+    ],
+    "env": {
+      "IHK_FIXTURE_PWRITE_COUNT": "0"
+    },
+    "expected_status": 0,
+    "number": 128,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "cpu",
+      "1-3"
+    ],
+    "env": {
+      "IHK_FIXTURE_LIB_RET": "-22"
+    },
+    "expected_status": null,
+    "number": 129,
+    "equal": true,
+    "reference_status": 234,
+    "rust_status": 234
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "mem",
+      "1K@1"
+    ],
+    "env": {
+      "IHK_FIXTURE_LIB_RET": "-22"
+    },
+    "expected_status": null,
+    "number": 130,
+    "equal": true,
+    "reference_status": 234,
+    "rust_status": 234
+  },
+  {
+    "args": [
+      "0",
+      "get",
+      "os_instances"
+    ],
+    "env": {
+      "IHK_FIXTURE_LIB_RET": "-22"
+    },
+    "expected_status": null,
+    "number": 131,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "cpu",
+      "1-3"
+    ],
+    "env": {
+      "IHK_FIXTURE_LIB_RET": "-12"
+    },
+    "expected_status": null,
+    "number": 132,
+    "equal": true,
+    "reference_status": 244,
+    "rust_status": 244
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "mem",
+      "1K@1"
+    ],
+    "env": {
+      "IHK_FIXTURE_LIB_RET": "-12"
+    },
+    "expected_status": null,
+    "number": 133,
+    "equal": true,
+    "reference_status": 244,
+    "rust_status": 244
+  },
+  {
+    "args": [
+      "0",
+      "get",
+      "os_instances"
+    ],
+    "env": {
+      "IHK_FIXTURE_LIB_RET": "-12"
+    },
+    "expected_status": null,
+    "number": 134,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "cpu",
+      "1-3"
+    ],
+    "env": {
+      "IHK_FIXTURE_LIB_RET": "7"
+    },
+    "expected_status": null,
+    "number": 135,
+    "equal": true,
+    "reference_status": 7,
+    "rust_status": 7
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "mem",
+      "1K@1"
+    ],
+    "env": {
+      "IHK_FIXTURE_LIB_RET": "7"
+    },
+    "expected_status": null,
+    "number": 136,
+    "equal": true,
+    "reference_status": 7,
+    "rust_status": 7
+  },
+  {
+    "args": [
+      "0",
+      "get",
+      "os_instances"
+    ],
+    "env": {
+      "IHK_FIXTURE_LIB_RET": "7"
+    },
+    "expected_status": null,
+    "number": 137,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "get",
+      "os_instances"
+    ],
+    "env": {
+      "IHK_FIXTURE_OS_COUNT": "0"
+    },
+    "expected_status": null,
+    "number": 138,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "get",
+      "os_instances"
+    ],
+    "env": {
+      "IHK_FIXTURE_OS_COUNT": "-1"
+    },
+    "expected_status": null,
+    "number": 139,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "query",
+      "cpu"
+    ],
+    "env": {
+      "IHK_FIXTURE_CPU_COUNT": "0"
+    },
+    "expected_status": null,
+    "number": 140,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "query",
+      "cpu"
+    ],
+    "env": {
+      "IHK_FIXTURE_CPU_COUNT": "-1"
+    },
+    "expected_status": null,
+    "number": 141,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "query",
+      "cpu"
+    ],
+    "env": {
+      "IHK_FIXTURE_CPU_COUNT": "80"
+    },
+    "expected_status": null,
+    "number": 142,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "query",
+      "cpu"
+    ],
+    "env": {
+      "IHK_FIXTURE_CPU_GAPPED": "1"
+    },
+    "expected_status": null,
+    "number": 143,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "query",
+      "mem"
+    ],
+    "env": {
+      "IHK_FIXTURE_MEM_COUNT": "0"
+    },
+    "expected_status": null,
+    "number": 144,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "query",
+      "mem"
+    ],
+    "env": {
+      "IHK_FIXTURE_MEM_COUNT": "20"
+    },
+    "expected_status": null,
+    "number": 145,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "query",
+      "cpu"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_REQUEST": "0x11290c"
+    },
+    "expected_status": null,
+    "number": 146,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "query",
+      "cpu"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_REQUEST": "0x112906"
+    },
+    "expected_status": null,
+    "number": 147,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "query",
+      "mem"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_REQUEST": "0x112907"
+    },
+    "expected_status": null,
+    "number": 148,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "mem",
+      "all"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_REQUEST": "0x112907"
+    },
+    "expected_status": null,
+    "number": 149,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "cpu",
+      "1-3"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_CALLOC": "1"
+    },
+    "expected_status": null,
+    "number": 150,
+    "equal": true,
+    "reference_status": 244,
+    "rust_status": 244
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "cpu",
+      "1-3"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_CALLOC": "2"
+    },
+    "expected_status": null,
+    "number": 151,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "cpu",
+      "1-3"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_CALLOC": "3"
+    },
+    "expected_status": null,
+    "number": 152,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "mem",
+      "1K@1"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_CALLOC": "1"
+    },
+    "expected_status": null,
+    "number": 153,
+    "equal": true,
+    "reference_status": 244,
+    "rust_status": 244
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "mem",
+      "1K@1"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_CALLOC": "2"
+    },
+    "expected_status": null,
+    "number": 154,
+    "equal": true,
+    "reference_status": 244,
+    "rust_status": 244
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "mem",
+      "1K@1"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_CALLOC": "3"
+    },
+    "expected_status": null,
+    "number": 155,
+    "equal": true,
+    "reference_status": 244,
+    "rust_status": 244
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "cpu",
+      "1-3"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_CALLOC": "1"
+    },
+    "expected_status": null,
+    "number": 156,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "cpu",
+      "1-3"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_CALLOC": "2"
+    },
+    "expected_status": null,
+    "number": 157,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "cpu",
+      "1-3"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_CALLOC": "3"
+    },
+    "expected_status": null,
+    "number": 158,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "mem",
+      "1K@1"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_CALLOC": "1"
+    },
+    "expected_status": null,
+    "number": 159,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "mem",
+      "1K@1"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_CALLOC": "2"
+    },
+    "expected_status": null,
+    "number": 160,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "mem",
+      "1K@1"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_CALLOC": "3"
+    },
+    "expected_status": null,
+    "number": 161,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "mem",
+      "all"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_CALLOC": "1"
+    },
+    "expected_status": null,
+    "number": 162,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "mem",
+      "all"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_CALLOC": "2"
+    },
+    "expected_status": null,
+    "number": 163,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "mem",
+      "all"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_CALLOC": "3"
+    },
+    "expected_status": null,
+    "number": 164,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "query",
+      "cpu"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_CALLOC": "1"
+    },
+    "expected_status": null,
+    "number": 165,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "query",
+      "cpu"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_CALLOC": "2"
+    },
+    "expected_status": null,
+    "number": 166,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "query",
+      "cpu"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_CALLOC": "3"
+    },
+    "expected_status": null,
+    "number": 167,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "query",
+      "mem"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_CALLOC": "1"
+    },
+    "expected_status": null,
+    "number": 168,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "query",
+      "mem"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_CALLOC": "2"
+    },
+    "expected_status": null,
+    "number": 169,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "query",
+      "mem"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_CALLOC": "3"
+    },
+    "expected_status": null,
+    "number": 170,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "get",
+      "os_instances"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_CALLOC": "1"
+    },
+    "expected_status": null,
+    "number": 171,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "get",
+      "os_instances"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_CALLOC": "2"
+    },
+    "expected_status": null,
+    "number": 172,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "get",
+      "os_instances"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_CALLOC": "3"
+    },
+    "expected_status": null,
+    "number": 173,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "cpu",
+      "1-3"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_STRDUP": "1"
+    },
+    "expected_status": null,
+    "number": 174,
+    "equal": true,
+    "reference_status": 234,
+    "rust_status": 234
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "cpu",
+      "1-3"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_STRDUP": "2"
+    },
+    "expected_status": null,
+    "number": 175,
+    "equal": true,
+    "reference_status": 234,
+    "rust_status": 234
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "cpu",
+      "1-3"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_STRDUP": "3"
+    },
+    "expected_status": null,
+    "number": 176,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "mem",
+      "1K@1"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_STRDUP": "1"
+    },
+    "expected_status": null,
+    "number": 177,
+    "equal": true,
+    "reference_status": 234,
+    "rust_status": 234
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "mem",
+      "1K@1"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_STRDUP": "2"
+    },
+    "expected_status": null,
+    "number": 178,
+    "equal": true,
+    "reference_status": 244,
+    "rust_status": 244
+  },
+  {
+    "args": [
+      "0",
+      "reserve",
+      "mem",
+      "1K@1"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_STRDUP": "3"
+    },
+    "expected_status": null,
+    "number": 179,
+    "equal": true,
+    "reference_status": 244,
+    "rust_status": 244
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "cpu",
+      "1-3"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_STRDUP": "1"
+    },
+    "expected_status": null,
+    "number": 180,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "cpu",
+      "1-3"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_STRDUP": "2"
+    },
+    "expected_status": null,
+    "number": 181,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "cpu",
+      "1-3"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_STRDUP": "3"
+    },
+    "expected_status": null,
+    "number": 182,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "mem",
+      "1K@1"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_STRDUP": "1"
+    },
+    "expected_status": null,
+    "number": 183,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "mem",
+      "1K@1"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_STRDUP": "2"
+    },
+    "expected_status": null,
+    "number": 184,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "release",
+      "mem",
+      "1K@1"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_STRDUP": "3"
+    },
+    "expected_status": null,
+    "number": 185,
+    "equal": true,
+    "reference_status": 255,
+    "rust_status": 255
+  },
+  {
+    "args": [
+      "0",
+      "query",
+      "cpu"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_MALLOC": "1"
+    },
+    "expected_status": null,
+    "number": 186,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  },
+  {
+    "args": [
+      "0",
+      "query",
+      "mem"
+    ],
+    "env": {
+      "IHK_FIXTURE_FAIL_MALLOC": "1"
+    },
+    "expected_status": null,
+    "number": 187,
+    "equal": true,
+    "reference_status": 0,
+    "rust_status": 0
+  }
+]

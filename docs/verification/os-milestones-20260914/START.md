@@ -17,6 +17,14 @@ subgoals from [rust-cutover-m14.json](rust-cutover-m14.json) for cutover work.
 M14 remains active alongside functional closure; it does not postpone the next
 native test. Report both tracks separately and reuse matching evidence.
 
+Latest language boundary, 2026-10-24 UTC: read [M15](RUST-CUTOVER-M15.md) and
+[rust-cutover-m15.json](rust-cutover-m15.json) for project-owned runtime outside
+M14, including Linux modules, executors, libraries and tools. Credit already
+implemented Rust drivers and matching evidence, enumerate residual selected C,
+and preserve working C until qualified Rust replacements are integrated. This
+adds a separate active language milestone, without changing the35 functional
+checks or resource/workload authority.
+
 Preparation on 2026-09-27 leaves the campaign stopped. A later normal launcher
 invocation is explicit authorization to resume; this preparation hold does not
 stop that invocation. Dedicated-computer scheduling supersedes older

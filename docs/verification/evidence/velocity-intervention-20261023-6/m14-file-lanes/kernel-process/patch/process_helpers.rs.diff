@@ -1,0 +1,51 @@
+--- a/kernel/rust/process_helpers.rs
++++ b/kernel/rust/process_helpers.rs
+@@ -18,7 +18,7 @@
+ 
+ unsafe extern "C" {
+     static mut process_vm_range_insert_debug: crate::debug::Ddebug;
+-    fn vm_range_insert_dump_bridge(vm: *mut c_void);
++    static process_dump_tree_enabled: CInt;
+     fn __ihk_mc_spinlock_lock(lock: *mut IhkSpinlock) -> CULong;
+     fn __ihk_mc_spinlock_unlock(lock: *mut IhkSpinlock, flags: CULong);
+     fn __ihk_mc_spinlock_lock_noirq(lock: *mut IhkSpinlock);
+@@ -1498,6 +1498,39 @@
+     0
+ }
+ 
++// Same synchronous in-order diagnostic traversal as the displaced dtree.
++// The existing VM/range exclusion keeps every visited node live. Field reads
++// and the right-child load remain after left traversal and the logger call.
++unsafe fn process_dump_tree_node(node: *mut RbNode, level: CInt) {
++    if node.is_null() {
++        return;
++    }
++    let range = vm_range_from_rb_node(node);
++    process_dump_tree_node((*node).rb_left, level.wrapping_add(1));
++    let _ = kprintf(
++        b"dtree: %0*d, %p: %lx-%lx\n\0".as_ptr().cast(),
++        level,
++        0 as CInt,
++        range,
++        (*range).start,
++        (*range).end,
++    );
++    process_dump_tree_node((*node).rb_right, level.wrapping_add(1));
++}
++
++/// Preserve DEBUG_PRINT_PROCESS gating without retaining C dump computation.
++/// Disabled dumping never dereferences vm. Enabled dumping logs the header
++/// before loading the root, then synchronously visits the borrowed live tree.
++#[no_mangle]
++pub unsafe extern "C" fn vm_range_insert_dump_bridge(vm: *mut c_void) {
++    if core::ptr::read_volatile(core::ptr::addr_of!(process_dump_tree_enabled)) == 0 {
++        return;
++    }
++    let _ = kprintf(b"dump_tree %p\n\0".as_ptr().cast(), vm);
++    let root = (*vm.cast::<ProcessVm>()).vm_range_tree.rb_node.cast::<RbNode>();
++    process_dump_tree_node(root, 1);
++}
++
+ #[no_mangle]
+ pub unsafe extern "C" fn process_vm_range_insert_dump_result(
+     vm: *mut c_void,

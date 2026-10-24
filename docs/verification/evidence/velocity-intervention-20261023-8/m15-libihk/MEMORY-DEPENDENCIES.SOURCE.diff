@@ -1,0 +1,134 @@
+--- preserved-b490d85c-memory-os
++++ private-Rust-memory-dependencies
+@@ -31,9 +31,10 @@
+ };
+ unsafe extern "C" {
+     static mut reserve_mem_conf: ReserveMemConf;
+-    fn ihk_get_num_reserved_mem_chunks(index: c_int) -> c_int;
+-    fn ihk_query_mem(index: c_int, chunks: *mut IhkMemChunk, count: c_int) -> c_int;
+-    fn ihk_release_mem(index: c_int, chunks: *mut IhkMemChunk, count: c_int) -> c_int;
++    static loglevel: c_int;
++    fn open(path: *const c_char, flags: c_int, ...) -> c_int;
++    fn write(fd: c_int, bytes: *const c_void, count: usize) -> isize;
++    fn strnlen(value: *const c_char, max: usize) -> usize;
+     fn calloc(count: usize, size: usize) -> *mut c_void;
+     fn free(p: *mut c_void);
+     fn access(path: *const c_char, mode: c_int) -> c_int;
+@@ -227,3 +228,117 @@
+     }
+     result
+ }
++
++// Complete Rust public memory dependencies used by ihk_reserve_mem.
++// This diagnostic is part of the existing eprintf/printk contract, not a new log.
++unsafe fn report_mem_count_open_failure(fd: c_int) {
++    if unsafe { loglevel } < 1 { return; }
++    if unsafe { geteuid() } != 0 { return; }
++    let mut contents = [0 as c_char; 3840];
++    unsafe { snprintf(contents.as_mut_ptr(), contents.len(),
++        b"ihk_get_num_reserved_mem_chunks: ihklib_device_open failed with %d\n\0".as_ptr().cast(), fd); }
++    let output = unsafe { open(b"/dev/kmsg\0".as_ptr().cast(), 1) };
++    let len = unsafe { strnlen(contents.as_ptr(), contents.len() - 1) } + 1;
++    let mut offset = 0usize;
++    while offset < len {
++        let written = unsafe { write(output, contents.as_ptr().add(offset).cast(), len - offset) };
++        if written <= 0 { break; }
++        offset += written as usize;
++    }
++    unsafe { close(output); }
++}
++#[no_mangle]
++pub unsafe extern "C" fn ihk_get_num_reserved_mem_chunks(index: c_int) -> c_int {
++    let mut storage = core::mem::MaybeUninit::<MemReq>::zeroed();
++    let req = unsafe { &mut *storage.as_mut_ptr() };
++    let fd = unsafe { super::ihklib_device_open(index) };
++    let result = if fd < 0 {
++        unsafe { report_mem_count_open_failure(fd); }
++        fd
++    } else {
++        req.num_chunks = 0;
++        let ret = unsafe { ioctl(fd, 0x112907 as c_ulong, req as *mut MemReq) };
++        if ret != 0 { unsafe { errno_negative() } } else { req.num_chunks }
++    };
++    // Preserve the original !=-1 condition even for negative errno descriptors.
++    if fd != -1 { unsafe { close(fd); } }
++    result
++}
++#[no_mangle]
++pub unsafe extern "C" fn ihk_query_mem(index: c_int, chunks: *mut IhkMemChunk, requested: c_int) -> c_int {
++    let mut storage = core::mem::MaybeUninit::<MemReq>::zeroed();
++    let req = unsafe { &mut *storage.as_mut_ptr() };
++    let mut fd = -1;
++    let result = (|| -> c_int {
++        let ret = unsafe { readable(index) };
++        if ret != 0 { return ret; }
++        if requested < 0 || requested > 2048 { return -22; }
++        if requested != 0 && chunks.is_null() { return -14; }
++        let count = unsafe { ihk_get_num_reserved_mem_chunks(index) };
++        if count < 0 { return count; }
++        if count != requested { return -22; }
++        if count == 0 { return 0; }
++        req.sizes = unsafe { calloc(count as usize, core::mem::size_of::<usize>()).cast() };
++        if req.sizes.is_null() { return -12; }
++        req.numa_ids = unsafe { calloc(count as usize, core::mem::size_of::<c_int>()).cast() };
++        if req.numa_ids.is_null() { return -12; }
++        req.num_chunks = count;
++        fd = unsafe { super::ihklib_device_open(index) };
++        if fd < 0 { return fd; }
++        let ret = unsafe { ioctl(fd, 0x112907 as c_ulong, req as *mut MemReq) };
++        if ret != 0 { return unsafe { errno_negative() }; }
++        for i in 0..count as usize {
++            // Field assignments preserve caller padding exactly as the C assignments do.
++            unsafe {
++                core::ptr::addr_of_mut!((*chunks.add(i)).size).write(req.sizes.add(i).read() as c_ulong);
++                core::ptr::addr_of_mut!((*chunks.add(i)).numa_node_number).write(req.numa_ids.add(i).read());
++            }
++        }
++        ret
++    })();
++    if fd != -1 { unsafe { close(fd); } }
++    unsafe { free(req.sizes.cast()); free(req.numa_ids.cast()); }
++    result
++}
++#[no_mangle]
++pub unsafe extern "C" fn ihk_release_mem(index: c_int, mut chunks: *mut IhkMemChunk, mut count: c_int) -> c_int {
++    let mut storage = core::mem::MaybeUninit::<MemReq>::zeroed();
++    let req = unsafe { &mut *storage.as_mut_ptr() };
++    let mut fd = -1;
++    let mut query_chunks: *mut IhkMemChunk = core::ptr::null_mut();
++    let result = (|| -> c_int {
++        let ret = unsafe { readable(index) };
++        if ret != 0 { return ret; }
++        if count < 0 || count > 2048 { return -22; }
++        if count != 0 && chunks.is_null() { return -14; }
++        if count == 0 { return 0; }
++        if unsafe { (*chunks).size } == c_ulong::MAX {
++            count = unsafe { ihk_get_num_reserved_mem_chunks(index) };
++            // Match C conversion and calloc(0,...) semantics; no fabricated empty shortcut.
++            query_chunks = unsafe { calloc(count as usize, core::mem::size_of::<IhkMemChunk>()).cast() };
++            if query_chunks.is_null() { return -12; }
++            let ret = unsafe { ihk_query_mem(index, query_chunks, count) };
++            if ret != 0 { return ret; }
++            chunks = query_chunks;
++        }
++        req.sizes = unsafe { calloc(count as usize, core::mem::size_of::<usize>()).cast() };
++        if req.sizes.is_null() { return -12; }
++        req.numa_ids = unsafe { calloc(count as usize, core::mem::size_of::<c_int>()).cast() };
++        if req.numa_ids.is_null() { return -12; }
++        for i in 0..count {
++            let i = i as usize;
++            unsafe {
++                req.sizes.add(i).write((*chunks.add(i)).size as usize);
++                req.numa_ids.add(i).write((*chunks.add(i)).numa_node_number);
++            }
++        }
++        req.num_chunks = count;
++        fd = unsafe { super::ihklib_device_open(index) };
++        if fd < 0 { return fd; }
++        let ret = unsafe { ioctl(fd, 0x112905 as c_ulong, req as *mut MemReq) };
++        if ret != 0 { unsafe { errno_negative() } } else { ret }
++    })();
++    if fd != -1 { unsafe { close(fd); } }
++    unsafe { free(query_chunks.cast()); free(req.sizes.cast()); free(req.numa_ids.cast()); }
++    result
++}

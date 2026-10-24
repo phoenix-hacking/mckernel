@@ -1,0 +1,133 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "NMI_ACTUAL_BODY_FIXTURE_SOURCE_ONLY_NO_EXECUTABLE_COHORT_NO_COMMANDS",
+  "product_handoff": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-nmi-frame-source-only-1/SOURCE-IMPLEMENTATION-HANDOFF.json",
+    "sha256": "6d93944019e032a015436f1a5fdf7ad39207a6d7b4506591164541f06d4c2294",
+    "bytes": 5040
+  },
+  "product_sources_unchanged": {
+    "arch/x86_64/kernel/cpu.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-nmi-frame-source-only-1/candidate/arch/x86_64/kernel/cpu.c",
+      "sha256": "a5ee1eace2512d45c495afdda7db6d7950e8729a8695b815901cbd09907f5220",
+      "bytes": 95584
+    },
+    "kernel/rust/x86_cpu_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-nmi-frame-source-only-1/candidate/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "2c91e27b776454018b888f86f49afac812a94e7a08be8be97270192116e74b3d",
+      "bytes": 92634
+    }
+  },
+  "fixture_sources": {
+    "actual_abi.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-nmi-frame-source-only-1/fixture-source-only-1/actual_abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    "real-header-ABI.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-nmi-frame-source-only-1/fixture-source-only-1/real-header-ABI.c",
+      "sha256": "f8abea76356e158413adb85ff2e4be955a40414fe2fe68a0b71641e7b225454f",
+      "bytes": 1369
+    },
+    "original_raw.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-nmi-frame-source-only-1/fixture-source-only-1/original_raw.c",
+      "sha256": "243ace0faa958156ccb1d1b32694fac5541521c8e3f9bf11eb6b5e60ecec88cb",
+      "bytes": 475
+    },
+    "actual_pure_capture.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-nmi-frame-source-only-1/fixture-source-only-1/actual_pure_capture.rs",
+      "sha256": "ba496013179c2f8ed2cf8b75faa12db0ecc9f4caef5abb32ad6c312107b6cecb",
+      "bytes": 2139
+    },
+    "nmi_body_fixture.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-nmi-frame-source-only-1/fixture-source-only-1/nmi_body_fixture.c",
+      "sha256": "b3784724f82faf81e98c410f27ee68f6ed99f033a84c73b67a580cf482b5fc04",
+      "bytes": 5613
+    },
+    "original_pure_capture.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-nmi-frame-source-only-1/fixture-source-only-1/original_pure_capture.c",
+      "sha256": "308ad677865a9d1f7b53f8c2c50966e5f21f441d7d64fa53e10499cc9772290a",
+      "bytes": 503
+    },
+    "actual_raw.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-nmi-frame-source-only-1/fixture-source-only-1/actual_raw.rs",
+      "sha256": "7d191fa906b74de6d2f064073d3cd8c2d79aed280217a5d5099c42dce8c9db4c",
+      "bytes": 1452
+    }
+  },
+  "capture_boundary_replacements": {
+    "C": {
+      "before": "asm volatile(\"pushf; pop %0\" : \"=r\"(flags) : : \"memory\", \"cc\");",
+      "after": "flags = fixture_nmi_capture_flags();"
+    },
+    "Rust": {
+      "before": "unsafe { core::arch::asm!(\"pushfq\", \"pop {flags}\", flags = lateout(reg) flags); }",
+      "after": "flags = unsafe { fixture_nmi_capture_flags() };"
+    }
+  },
+  "raw_variants": "Exact original C and actual Rust bodies, exportnamealias only; asm retained and notexecuted.",
+  "pure_variants": "Exact original frame algorithms after replacing only flags capture by one controlledtypedprovider. Allflagvalueshereare pureinputs, never executed machineRFLAGS.",
+  "independent_oracle": "Immutable postcapture snapshot indices5..26\u21920..21 plus5explicitfieldidentities; prefix/suffixguards and actual28thword unchanged; differentstackbaseaddresses normalized onlyfor storedRSP. Capturechecksinitialframe beforewrite andoptionalcontrolledmutationforcespostcapturereads. No overlapping memcpy invoked.",
+  "real_header_closure": {
+    "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/context.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/context.h",
+      "sha256": "13a67bcf26c512ac27ece4ab801e5e96976b88ec505d9f549e53755b431171f8",
+      "bytes": 2286
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/include/registers.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/registers.h",
+      "sha256": "43fd6d2e278953684574224927fe65bc514a88c5529d97f688e1e21b1864a6fc",
+      "bytes": 5778
+    },
+    "/home/holden/mckernel/lib/include/types.h": {
+      "path": "/home/holden/mckernel/lib/include/types.h",
+      "sha256": "72179c1e931fdfdfa700d2ecfe745e344027ac0b4af299e8a9ec17957fc9a399",
+      "bytes": 515
+    },
+    "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/types.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/types.h",
+      "sha256": "c37a7c748f2439ddfd847725a4d559c008f2aca09c45114fb07e73337013f449",
+      "bytes": 1074
+    }
+  },
+  "actual_Rust_types": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-nmi-frame-source-only-1/fixture-source-only-1/actual_abi.rs",
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "bytes": 76151
+  },
+  "real_layout": "Actualx86_user_context is28words/224bytes, x86_basic_regs21words/168bytes; C/RustABIarrays andstaticasserts prepared but notcompiled. 27words is algorithmwriteextent, not a fabricatedheaderstruct.",
+  "actual_caller": {
+    "freeze": {
+      "path": "/home/holden/mckernel/kernel/freeze.c",
+      "sha256": "7d62dfbaf5038b9e35903c1113eee69b185121c2ce4e6bf8eced534c11346b41",
+      "bytes": 1896
+    },
+    "CPU": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "sha256": "2d29bca555936a213f0a7296a302ec57b55c575536c33a58285b07b203390eca",
+      "bytes": 95484
+    },
+    "NMI_assembly": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/interrupt.S",
+      "sha256": "9cffbeb01046a7215cbbca2bb1cf580611269d27d4fa317151cdb19441a15f61",
+      "bytes": 5678
+    },
+    "path": "interrupt.S nmi_handler passes%rsp into multi_nm_interrupt_handler; cpu.c freeze branch currently calls freeze_thaw(NULL), whose multi_intr_mode==1 branch calls mod_nmi_ctx(nmi_ctx,__freeze).",
+    "valid27word_producer_span_proven": null,
+    "NULL_forwarding_gap": "Retained sourcefact; no speculativeownership/caller/semantic repair in this fixture. Realnativeexecution/branchconditions unproven."
+  },
+  "assembly_platform_distinction": "RawC/Rust capturedflags are distinct observations; do not assert full equality acrosscompilerprologues. StoredCS0x20/DS0x28 are memoryvalues only. No IRET/CSload/callbackjump/IRQstatechange byfixture; neverclaimuserCSas kernelproof.",
+  "actual_pure_test_result": null,
+  "actual_raw_asm_result": null,
+  "actual_header_ABI_result": null,
+  "current_platform_RFLAGS_comparison": null,
+  "kernel_selector_execution": null,
+  "native_NMI_freeze_return": null,
+  "compiler_jobs": 0,
+  "test_jobs": 0,
+  "CPU_slots_held": 0,
+  "executable_argv_or_profile_created": false,
+  "sole_existing_ready_queue": "Contextproductiond21c only; no second executablefixture/productioncohort prepared.",
+  "future_review": "Independent exactasm/functionpointerABI/caller-span review before anycompiler/rawflagcapture/native observation. Purecaptured-state fixture must be labeled separately from rawmachineflag andnative observations. Existingordinaryprofile may be proposed later byroot; no executionauthorizedhere.",
+  "failure_history": "CPUloggerkmsgfailureaa036/254a/1fa99 retained; contextactuald5aff passed independently; noNMIattempt/correctionexecuted."
+}

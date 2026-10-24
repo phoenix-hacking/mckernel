@@ -1,0 +1,174 @@
+def _bfd_inventory(root, selected=None):
+    """Fixed consumed closure; Git metadata and Python caches are not inputs."""
+    root = Path(root)
+    rows = {}
+    def walk(path):
+        relative = path.relative_to(root).as_posix()
+        info = path.lstat()
+        row = {"mode": stat.S_IMODE(info.st_mode)}
+        if stat.S_ISLNK(info.st_mode):
+            target = path.resolve(strict=True)
+            _fail(root in target.parents, "BFD source link escapes read-only source")
+            _fail(target.is_file() or target.is_dir(), "BFD special link unsupported")
+            row.update(type="symlink", target=os.readlink(path),
+                       resolved=target.relative_to(root).as_posix(), target_type="directory" if target.is_dir() else "file")
+            if target.is_file():
+                row["sha256"] = _sha256(target)
+        elif stat.S_ISDIR(info.st_mode):
+            row["type"] = "directory"
+            for child in sorted(path.iterdir()):
+                if child.name not in (".git", "__pycache__"):
+                    walk(child)
+        else:
+            _fail(stat.S_ISREG(info.st_mode), "BFD input contains special file")
+            row.update(type="file", size=info.st_size, sha256=_sha256(path))
+        if relative != ".":
+            rows[relative] = row
+    if selected is None:
+        walk(root)
+    else:
+        for relative in selected:
+            walk(root / relative)
+    for row in rows.values():
+        if row["type"] == "symlink" and row["target_type"] == "directory":
+            _fail(row["resolved"] in rows and rows[row["resolved"]]["type"] == "directory",
+                  "BFD directory link target is outside inventoried closure")
+    return rows
+
+
+def _retained_toolchain_request():
+    path = _regular(COMPILE_PROFILE["retained_request"], "retained toolchain request")
+    _fail(_sha256(path) == COMPILE_PROFILE["retained_request_sha256"], "retained toolchain request changed")
+    retained = _load_json(path, "retained toolchain request")
+    _fail(retained["image_id"] == COMPILE_PROFILE["image_id"], "retained image changed")
+    return retained
+
+
+def _validate_request(request):
+    _validate_compile_domain(request)
+    _fail(request.get("schema") == REQUEST_SCHEMA, "BFD request schema")
+    _fail(type(request.get("timeout")) is int and 1 <= request["timeout"] <= MAX_TIMEOUT,
+          "BFD timeout exceeds retained bound")
+    source = _canonical(request["source_root"], "BFD original source", directory=True)
+    candidate = _canonical(request["candidate_root"], "BFD proposal", directory=True)
+    work = _canonical(request["work_root"], "BFD HOST work", directory=True)
+    owner_evidence = _canonical(request["owner_evidence_root"], "BFD owner evidence", directory=True)
+    for path in (source, candidate, work, owner_evidence):
+        _no_symlink_parents(path, "BFD input/output root")
+    _fail(stat.S_IMODE(work.stat().st_mode) == 0o700 and not any(work.iterdir()),
+          "BFD HOST work must be private and empty")
+    _fail(not any(owner_evidence.iterdir()), "BFD owner evidence must be fresh")
+    attempt = _confined_path(request["attempt_root"], "BFD attempt")
+    output = _confined_path(request["output_root"], "BFD qualification output")
+    for path in (attempt, output, owner_evidence / OWNER_RECEIPT_NAME):
+        _fail(not path.exists() and not path.is_symlink(), "BFD output/receipt already exists")
+    _disjoint((source, candidate, work, owner_evidence))
+    retained = _retained_toolchain_request()
+    toolchain = _regular(retained["toolchain_manifest"], "retained SDK toolchain")
+    _fail(_sha256(toolchain) == COMPILE_PROFILE["toolchain_manifest_sha256"], "retained SDK manifest changed")
+    toolchain_doc = _load_json(toolchain, "retained SDK toolchain")
+    mounts = _v2_mount_roots(retained, toolchain_doc)
+    _validate_v2_image_tools(retained, toolchain_doc)
+    _disjoint((source, candidate, work, owner_evidence, *mounts.values()))
+    roots = [source, candidate, *mounts.values()]
+    _fail(request.get("memory_allocation_roots") == [str(p) for p in roots], "BFD allocation roots differ")
+    _fail(request.get("memory_backed_bytes") == 0, "BFD inputs must be disk-backed")
+    disk = request.get("disk_admission")
+    _fail(isinstance(disk, dict) and disk.get("host_free_floor") == 16 * 2**30 and
+          disk.get("scratch_free_floor") == 12 * 2**30, "BFD disk floors differ")
+    for key in ("host", "scratch"):
+        measured = _canonical(disk.get(key + "_root", ""), key + " measurement root", directory=True)
+        _fail(measured.stat().st_dev == disk.get(key + "_device"), key + " measurement device changed")
+    bound = {"source": source, "candidate": candidate, "work": work,
+             "output": output, "evidence": output, "owner_evidence": owner_evidence,
+             "attempt": attempt, "host_owner": _HOST_OWNER, "host_owner_path": _HOST_OWNER_PATH,
+             "allocation_roots": roots, "mounts_by_target": mounts}
+    _revalidate_inputs(bound, request)
+    bound["measurement"] = _HOST_OWNER.measure(disk["host_root"], disk["scratch_root"],
+        16 * 2**30, 12 * 2**30, source_root=source, output_root=work, memory_allocation_roots=roots)
+    _fail(bound["measurement"]["memory_allocation_memory_backed_bytes"] == 0 and
+          bound["measurement"]["aggregate_memory_required"] == LIMITS["Memory"], "BFD allocation measurement changed")
+    return bound
+
+
+def _revalidate_inputs(bound, request):
+    _validate_compile_domain(request)
+    _check_identity(bound["source"], COMPILE_PROFILE["source_identity"], "BFD source root")
+    _check_identity(bound["candidate"], COMPILE_PROFILE["candidate_identity"], "BFD proposal root")
+    manifest = _regular(COMPILE_PROFILE["input_manifest"], "BFD fixed inputs")
+    _fail(_sha256(manifest) == COMPILE_PROFILE["input_manifest_sha256"], "BFD fixed input manifest changed")
+    inputs = _load_json(manifest, "BFD fixed inputs")
+    _fail(_bfd_inventory(bound["candidate"]) == inputs["candidate"], "BFD candidate closure changed")
+    _fail(_bfd_inventory(bound["source"], inputs["source_roots"]) == inputs["source"], "BFD consumed source closure changed")
+    binding = _load_json(bound["candidate"] / "SOURCE-BINDING.json", "BFD original source binding")
+    for relative, digest in binding["sources"].items():
+        _fail(_sha256(bound["source"] / relative) == digest, "BFD selected original source changed: " + relative)
+    _fail(_sha256(_HOST_OWNER_PATH) == EXPECTED_HOST_OWNER_SHA256, "BFD host helper changed")
+    retained = _retained_toolchain_request()
+    toolchain = _regular(retained["toolchain_manifest"], "retained SDK toolchain")
+    _fail(_sha256(toolchain) == COMPILE_PROFILE["toolchain_manifest_sha256"], "retained SDK manifest changed")
+    toolchain_doc = _load_json(toolchain, "retained SDK toolchain")
+    _fail(_v2_mount_roots(retained, toolchain_doc) == bound["mounts_by_target"], "retained SDK mounts changed")
+    _validate_v2_image_tools(retained, toolchain_doc)
+
+
+def _validate_driver_result(evidence, output, result, request):
+    output = _safe_directory(output, "BFD qualification output")
+    _fail(evidence == output, "BFD evidence/output contract differs")
+    _fail(result.get("status") == "PASS_PINNED_ABI_AND_SELECTED_USER_TOOL_ARTIFACTS" and
+          result.get("scope") == SCOPE and result.get("native_acceptance") is False and
+          result.get("M15_file_closure") is False, "BFD qualifier result contract differs")
+    pins = _load_json(Path(COMPILE_PROFILE["candidate_root"]) / "PINNED-ABI.json", "BFD pins")
+    _fail(result.get("pins") == pins and isinstance(result.get("layout"), str) and result["layout"], "BFD pin/layout result differs")
+    _fail(not (output / "FAILURE.json").exists(), "BFD failure evidence present")
+    comparisons = result.get("comparisons")
+    _fail(isinstance(comparisons, list) and len(comparisons) == 8, "BFD comparison set incomplete")
+    cases = {"mcinspect": [["--help"], [], ["--kernel=/work/qualification-1/absent.img", "--ps"],
+                           ["--kernel=/work/qualification-1/stripped.o", "--ps"]],
+             "eclair": [["-h"], ["-k", "/work/qualification-1/absent.img", "-d", "/work/qualification-1/absent.dump"],
+                        ["-k", "/work/qualification-1/stripped.o", "-d", "/work/qualification-1/absent.dump"],
+                        ["-k", "/work/qualification-1/fixture.o", "-d", "/work/qualification-1/absent.dump"]]}
+    expected = [(tool, args) for tool in ("mcinspect", "eclair") for args in cases[tool]]
+    _fail([(row.get("tool"), row.get("args")) for row in comparisons] == expected and
+          all(row.get("matched") is True and type(row.get("rc")) is int for row in comparisons), "BFD behavior comparisons differ")
+    for tool in ("mcinspect", "eclair"):
+        for i in range(4):
+            for stream in ("stdout", "stderr"):
+                original = _safe_regular(output / f"{tool}-{i}-original.{stream}", "BFD baseline stream")
+                rust = _safe_regular(output / f"{tool}-{i}-rust.{stream}", "BFD Rust stream")
+                _fail(original.read_bytes() == rust.read_bytes(), "BFD retained behavior streams differ")
+    commands = json.loads(_safe_regular(output / "commands.json", "BFD command capture").read_text())
+    names = ["witness-build", "witness-run", "witness-preprocessed", "rust-build", "mcinspect-original-compile",
+             "eclair-original-compile", "equivalence-link", "fixture-compile", "fixture-strip", "equivalence-run",
+             "rust-symbols", "selected-configure", "selected-build", "mcinspect-baseline-compile", "mcinspect-baseline-link",
+             "mcinspect-dynamic", "mcinspect-symbols", "eclair-baseline-compile", "eclair-baseline-link", "eclair-dynamic", "eclair-symbols"]
+    _fail(isinstance(commands, list) and [row.get("log") for row in commands] == names and
+          all(type(row.get("rc")) is int and row["rc"] == 0 for row in commands), "BFD command capture incomplete/failing")
+    for name in names:
+        for stream in ("stdout", "stderr"):
+            _safe_regular(output / (name + "." + stream), "BFD command stream")
+    symbols = (output / "rust-symbols.stdout").read_text()
+    names = re.findall(r"\bT\s+((?:mcinspect|eclair)_bfd_(?:get_symtab_upper_bound|canonicalize_symtab)_bridge)\b", symbols)
+    expected_symbols = {tool + "_bfd_" + function + "_bridge" for tool in ("mcinspect", "eclair")
+                        for function in ("get_symtab_upper_bound", "canonicalize_symtab")}
+    _fail(len(names) == 4 and set(names) == expected_symbols and not re.search(r"\bU\s+(?:mcinspect|eclair)_bfd_", symbols),
+          "BFD four-definition/no-old-wrapper result differs")
+    for relative in ("bfd_accessors.o", "bfd_layout.rs", "equivalence", "layout-witness", "fixture.o", "stripped.o",
+                     "selected-tools/executer/user/mcinspect", "selected-tools/executer/user/eclair",
+                     "selected-tools/executer/user/CMakeFiles/mcinspect.dir/link.txt",
+                     "selected-tools/executer/user/CMakeFiles/eclair.dir/link.txt"):
+        _fail(_safe_regular(output / relative, "BFD qualification artifact").stat().st_size > 0, "BFD artifact empty")
+
+
+def _compile_mounts(bound):
+    mounts = [(bound["source"], "/src", True), (bound["candidate"], "/candidate", True),
+              (bound["work"], "/work", False)]
+    _fail(set(bound["mounts_by_target"]) == {"/out", "/nightly"}, "retained pinned/nightly mounts required")
+    mounts += [(path, target, True) for target, path in sorted(bound["mounts_by_target"].items())]
+    _fail([(str(path), target) for path, target, ro in mounts if not ro] ==
+          [(str(Path(COMPILE_PROFILE["namespace"]) / "owner-work"), "/work")], "sole HOST RW BFD mount differs")
+    return mounts
+
+
+def _compile_command(bound, request):
+    return list(COMPILE_PROFILE["command"][1:])

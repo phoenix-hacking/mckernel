@@ -1,0 +1,42 @@
+{
+  "schema": "m15-bfd-pinned-abi-v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "image_id": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+  "provenance": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/image-toolchain.json",
+  "configuration": "/home/holden/mckernel/docs/verification/evidence/current68-launcher-v3-actual-build-20261023-1/actual/pinned-launcher-attempt-1/owner-work/output/build/CMakeCache.txt",
+  "header": {
+    "owner": "binutils-devel",
+    "path": "/usr/include/bfd.h",
+    "rpm_nevra": "binutils-devel-0:2.41-63.el10.x86_64",
+    "sha256": "de900a9fe4ac94543ee1382cebc3063c3d7e20d16bc934fc816133dd55fe2432",
+    "target": "/usr/include/bfd.h"
+  },
+  "library": {
+    "owner": "binutils-devel",
+    "path": "/usr/lib64/libbfd.so",
+    "rpm_nevra": "binutils-devel-0:2.41-63.el10.x86_64",
+    "sha256": "6cfd31804974c248c9512879e7b77a94862f92150c2171d901140464ea936ab3",
+    "target": "/usr/lib64/libbfd.so"
+  },
+  "cc": {
+    "path": "/usr/bin/cc",
+    "sha256": "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2",
+    "rpm_nevra": "gcc-0:14.3.1-4.4.el10.x86_64",
+    "version": "cc (GCC) 14.3.1 20251022 (Red Hat 14.3.1-4)\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+  },
+  "rustc": {
+    "path": "/nightly/bin/rustc",
+    "sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09",
+    "version": "rustc 1.95.0-nightly (c04308580 2026-02-18)"
+  },
+  "selector": {
+    "BUILD_TARGET": "smp-x86",
+    "ENABLE_RUST_USER_TOOLS": true,
+    "ENABLE_QLMPI": false,
+    "ENABLE_UTI": false,
+    "LIBDWARF": "LIBDWARF-NOTFOUND",
+    "LIBBFD": "/usr/lib64/libbfd.so"
+  },
+  "limits": "Retained provenance only. Actual selected-header layout, library identity and equivalence are pending the reviewed executable slot.",
+  "image_id_source": "Parent reports exact candidate14 driver image identity; fresh actual image inspection remains the admitting owner obligation."
+}

@@ -1,0 +1,65 @@
+{
+  "schema": "m15-bfd-ready-for-root-v1",
+  "status": "READY_SOURCE_AND_ORDINARY_SLOT_PROPOSAL_ONLY",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "lane": "M15-F03/M15-F04 four BFD wrappers; reuse existing Rust tools",
+  "private_root": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd",
+  "source_paths": [
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd/proposal/executer/user/rust/bfd_accessors.rs",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd/proposal/executer/user/cmake/BfdRustAccessors.cmake",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd/proposal/executer/user/cmake/bfd_layout_witness.c",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd/proposal/executer/user/CMakeLists.txt"
+  ],
+  "patch_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd/bfd-rust-accessors.patch",
+  "test_paths": [
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd/orchestration/qualify.py",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd/orchestration/check_source.py",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd/tests/equivalence.c",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd/tests/fixture.c",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd/tests/tool-project/CMakeLists.txt"
+  ],
+  "review": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd/REVIEW.txt",
+  "pinning": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd/PINNED-ABI.json",
+  "original_sources": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd/SOURCE-BINDING.json",
+  "completed_checks": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd/evidence/STATIC-CHECKS.json",
+  "next_command_context": "ONE reviewed ordinary compiler slot; run inside already pinned SDK image, not on host. /candidate is this private_root read-only; /src is original McKernel source read-only; /work is fresh writable storage confined to this private_root on host; mount /nightly matching PINNED-ABI.json. Existing campaign alone handles admission/container lifecycle. This is the inner job command, not an unreviewed launch request.",
+  "exact_next_command": [
+    "/usr/bin/env",
+    "-i",
+    "PATH=/nightly/bin:/usr/bin:/bin",
+    "LANG=C",
+    "LC_ALL=C",
+    "/usr/bin/python3",
+    "/candidate/orchestration/qualify.py",
+    "--repo",
+    "/src",
+    "--output",
+    "/work/qualification-1"
+  ],
+  "requested_profile": {
+    "count": 1,
+    "kind": "ordinary selected-user-tools compiler job",
+    "build_jobs": 1,
+    "cpu_count": 1,
+    "memory_gib": 2,
+    "image_id": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+    "root_operation": false,
+    "guest": false,
+    "native": false,
+    "full_image_build": false,
+    "launch_authorized_by_this_file": false
+  },
+  "remaining_proof": [
+    "Actual selected Rocky header bytes and native offsetof/type/alignment/macro witness execution.",
+    "Actual four-export original-C/Rust equivalence, BFD errors/errno/pointer/lifetime fixtures and real symbol/no-symbol objects.",
+    "Actual selected user CMake tool artifacts/link closure, reused Rust/vendor-object baseline behavior and ELF dependency capture.",
+    "Independent review, actual root production configuration/install/deployment integration and matching useful McKernel diagnostic behavior; current C retained until qualified.",
+    "Complete delivered-runtime ownership and applicable matching native/module/lifecycle/restoration joins remain open; Original35/M14/M15 independent."
+  ],
+  "compiler_invoked": false,
+  "canonical_files_changed": false,
+  "campaign_state_changed": false,
+  "native_acceptance": false,
+  "new_acceptance_credit": 0,
+  "publish_rule": "This READY file was written after all source/test/review artifacts; queue receipt is recorded separately after handoff."
+}

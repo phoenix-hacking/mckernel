@@ -1,0 +1,1239 @@
+{
+  "schema_version": 1,
+  "id": "M15",
+  "scope_id": "project-owned-runtime-rust-cutover-v1-20261024",
+  "title": "Complete Rust/assembly custom host modules and integration runtime",
+  "as_of": "2026-10-24T00:48:58.796129+00:00",
+  "status": "open",
+  "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "authority": "Explicit user2026-10-24: custom code outside the Rocky/Linux baseline must be Rust, including loadable IHK/project modules; previous reviewed-assembly allowance retained.",
+  "counted_in_practical_35": false,
+  "practical_worklist": "practical-milestones.json",
+  "compute_kernel_worklist": "rust-cutover-m14.json",
+  "guide": "RUST-CUTOVER-M15.md",
+  "inventory_file": "rust-cutover-m15-inventory-20261024.json",
+  "definition_of_done": "All project-owned runtime implementation in the supported delivered system outside M14 is Rust/reviewed assembly, including custom Linux modules, executors, libraries and installed tools. Account for actual selected/linked/deployed code and retain the functional baseline. Linux/third-party/generated boundaries require provenance, not relocation of project C.",
+  "boundary": {
+    "in_scope": [
+      "custom IHK/SMP/mcctrl Linux-loadable modules and transitive project callbacks",
+      "mcexec and project libraries/CLI/diagnostic/monitoring tools",
+      "project-owned installed runtime shell/expect programs",
+      "project-specific runtime helpers even if staged inside Rocky source/build trees"
+    ],
+    "separately_classified": [
+      "Rocky/Linux baseline APIs and legitimate generic platform support",
+      "unmodified third-party libc/BFD/libdwarf/toolchain code",
+      "generated Linux module metadata with no authored project runtime body",
+      "Python campaign/build/test orchestration and test fixtures",
+      "inactive retained C reference/fallback sources"
+    ],
+    "optional_products": "Crash extension, QLMPI/UTI and unsupported configurations need explicit delivery/scope dispositions; disabled is not converted. Final manifest cannot silently omit a delivered optional component.",
+    "working_C_policy": "Keep working C until an equivalent qualified Rust successor exists. Earlier host compatibility exceptions preserve behavior during migration and do not complete M15.",
+    "Linux_control_plane_C": "Explicitly reconfirmed by the user: Rocky/Linux-owned control-plane code may remain C. Project-owned custom runtime is the M14/M15 Rust target."
+  },
+  "existing_rust_modules": [
+    {
+      "target": "ihk.ko",
+      "source": "host-kernel/native-rust/ihk.rs",
+      "status": "existing_Rust_implementation_and_scoped_build_native_evidence",
+      "evidence": "docs/verification/evidence/current-host-pair-205-native-20261019-1/usable-profile-1/USABLE-TESTED-PROFILE-RECIPE.json",
+      "qualification": "Reuse matching evidence only; old module artifact/native proof does not establish current Kbuild C-free ownership or all functionality."
+    },
+    {
+      "target": "ihk-smp-x86_64.ko",
+      "source": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "status": "existing_Rust_implementation_and_scoped_build_native_evidence",
+      "evidence": "docs/verification/evidence/current-host-pair-205-native-20261019-1/usable-profile-1/USABLE-TESTED-PROFILE-RECIPE.json",
+      "qualification": "Reuse matching evidence only; old module artifact/native proof does not establish current Kbuild C-free ownership or all functionality."
+    },
+    {
+      "target": "mcctrl.ko",
+      "source": "host-kernel/native-rust/mcctrl.rs",
+      "status": "existing_Rust_implementation_and_scoped_build_native_evidence",
+      "evidence": "docs/verification/evidence/current-host-pair-205-native-20261019-1/usable-profile-1/USABLE-TESTED-PROFILE-RECIPE.json",
+      "qualification": "Reuse matching evidence only; old module artifact/native proof does not establish current Kbuild C-free ownership or all functionality."
+    }
+  ],
+  "existing_user_rust_or_assembly": [
+    {
+      "target": "sched_yield",
+      "kind": "installed shared library",
+      "selected_c": [],
+      "selected_rust": [
+        "executer/user/rust/libsched_yield.rs"
+      ],
+      "selector": "executer/user/CMakeLists.txt:216",
+      "remaining": "Rust source replaces libsched_yield.c in this configuration.",
+      "proof_gap": [
+        "current exact artifact/default symbol and applicable native proof not independently checked here"
+      ]
+    },
+    {
+      "target": "ldump2mcdump",
+      "kind": "installed shared library",
+      "selected_c": [],
+      "selected_rust": [
+        "executer/user/rust/ldump2mcdump_helpers.rs"
+      ],
+      "selector": "executer/user/CMakeLists.txt:494",
+      "remaining": "Rust source replaces ldump2mcdump.c in this configuration.",
+      "proof_gap": [
+        "current exact artifact/default symbol and applicable native dump conversion proof not independently checked here"
+      ]
+    },
+    {
+      "target": "mcstat",
+      "kind": "installed executable",
+      "selected_c": [],
+      "selected_rust": [
+        "tools/mcstat/rust/mcstat.rs"
+      ],
+      "selector": "tools/mcstat/CMakeLists.txt:36",
+      "remaining": "Rust main replaces mcstat.c, but links ihklib, whose selected implementation remains C.",
+      "proof_gap": [
+        "current exact Rust object/link/native monitoring proof not independently checked here",
+        "transitive ihklib C retirement"
+      ]
+    },
+    {
+      "target": "libmcexec",
+      "kind": "static assembly support library",
+      "selected_c": [],
+      "selected_rust": [],
+      "selected_assembly": [
+        "executer/user/arch/x86_64/archdep.S"
+      ],
+      "selector": "executer/user/CMakeLists.txt:27",
+      "remaining": "Assembly support for launcher; review status not reassessed.",
+      "proof_gap": [
+        "existing reviewed-assembly status and exact linked ABI evidence not independently checked here"
+      ]
+    }
+  ],
+  "files": [
+    {
+      "id": "M15-F01",
+      "path": "host-kernel/native-rust/mcctrl_vm_write_compat.c",
+      "target": "mcctrl.ko",
+      "status": "blocked",
+      "source_selection": "host-kernel/kbuild/Kbuild.in:10",
+      "existing_rust": [
+        "host-kernel/native-rust/mcctrl.rs",
+        "host-kernel/native-rust/mcctrl_vm.rs"
+      ],
+      "functional_subgoals": [
+        {
+          "id": "M15-F01-01",
+          "title": "Rust mmap write-lock semantics",
+          "status": "open",
+          "owner": null,
+          "next_action": "Use the exact pinned Linux MM/tracing/seqcount semantics; retain the C wrapper until a reviewed Rust/assembly successor passes actual checks.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          },
+          "remaining_functions": [
+            "mckernel_inherited_mmap_write_lock"
+          ]
+        },
+        {
+          "id": "M15-F01-02",
+          "title": "Rust mmap write-unlock semantics",
+          "status": "open",
+          "owner": null,
+          "next_action": "Preserve trace, sequence end/VMA release, ordering and RAII unlock against the exact configuration.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          },
+          "remaining_functions": [
+            "mckernel_inherited_mmap_write_unlock"
+          ]
+        },
+        {
+          "id": "M15-F01-03",
+          "title": "Rust VMA start-write semantics",
+          "status": "open",
+          "owner": null,
+          "next_action": "Preserve current-sequence idempotence, VMA rwsem ownership and WRITE_ONCE publication.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          },
+          "remaining_functions": [
+            "mckernel_inherited_vma_start_write"
+          ]
+        }
+      ],
+      "blocker": "Pinned6.12 lacks ready Rust MM/static-key abstractions. Raw down_write/up_write alone is not equivalent; tracing/static-key registration and LKMM access/barrier semantics remain to prove. No kernel change or unsupported substitution is authorized.",
+      "file_closure": {
+        "status": "open",
+        "requirement": "Remove this project C object from actual selected Kbuild/staging only after equivalent Rust successors and matched module proof."
+      },
+      "owner": "foreground:/root/ihk_rust_scope",
+      "source_preparation": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/ihk-rust-module-closure/mm-rust-candidate/BLOCKED-PROPOSAL.md",
+        "status": "source_and_fixture_preparation_only",
+        "Rust_successor_implemented": false,
+        "unresolved": [
+          "Rust/reviewed-assembly static-key and jump-table gate equivalence",
+          "Rust/LKMM raw access, WRITE_ONCE and sequence barrier equivalence",
+          "actual Rust-equivalence fixture, pinned SDK layout/codegen and module link",
+          "matching changed-path native acceptance"
+        ],
+        "compiler_or_native_execution": false
+      }
+    },
+    {
+      "id": "M15-F02",
+      "path": "executer/user/mcexec.c",
+      "target": "mcexec",
+      "status": "open",
+      "source_selection": "executer/user/CMakeLists.txt:33",
+      "existing_rust": [
+        "executer/user/rust/mcexec_helpers.rs"
+      ],
+      "current_increment": "Rust owns main sequencing; C main shim and libc/ioctl/ptrace/syscall/pthread/numa callback surface remain. Full file is not retired.",
+      "proof_gap": [
+        "inventory of selected C callback bodies and ABI equivalents",
+        "C-free default object/link map",
+        "matching native process/exec/wait and resource/lifecycle proof"
+      ],
+      "remaining_selected_body_count": null,
+      "functional_subgoals": [
+        {
+          "id": "M15-F02-01",
+          "title": "Remaining selected C bodies",
+          "status": "open",
+          "owner": null,
+          "next_action": "Enumerate current live bodies/callbacks incrementally from the selected consumer; reuse existing Rust and implement the next substantive body.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        },
+        {
+          "id": "M15-F02-02",
+          "title": "Default Rust consumer and ABI",
+          "status": "open",
+          "owner": null,
+          "next_action": "Select actual Rust implementation while preserving public CLI/library/process interfaces and exact platform ABI.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        },
+        {
+          "id": "M15-F02-03",
+          "title": "Actual artifact and functional behavior",
+          "status": "open",
+          "owner": null,
+          "next_action": "Prove actual linked ownership plus matching application/lifecycle behavior; source-only selection is insufficient.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        }
+      ],
+      "file_closure": {
+        "status": "open",
+        "requirement": "No project-owned C body or callback from this selected target remains in the delivered runtime; preserve third-party ABI and matching native behavior."
+      }
+    },
+    {
+      "id": "M15-F03",
+      "path": "executer/user/mcinspect_bfd_shim.c",
+      "target": "mcinspect",
+      "status": "open",
+      "source_selection": "executer/user/CMakeLists.txt:100",
+      "existing_rust": [
+        "executer/user/rust/mcinspect_helpers.rs"
+      ],
+      "current_increment": "Two BFD accessor wrappers, called by existing Rust; full_body cfg removes mcinspect.c. Bundled libdwarf is selected vendor dependency.",
+      "proof_gap": [
+        "replace BFD macro wrappers using checked Rust binding or reviewed ASM ABI",
+        "C-free project object/link closure",
+        "matched native diagnostic behavior"
+      ],
+      "remaining_selected_body_count": null,
+      "functional_subgoals": [
+        {
+          "id": "M15-F03-01",
+          "title": "Rust BFD get_symtab_upper_bound adapter",
+          "status": "open",
+          "owner": null,
+          "next_action": "Use the pinned BFD ABI and existing Rust tool body; retain error/ownership behavior and prove real link closure.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          },
+          "remaining_functions": [
+            "mcinspect_bfd_get_symtab_upper_bound_bridge"
+          ]
+        },
+        {
+          "id": "M15-F03-02",
+          "title": "Rust BFD canonicalize_symtab adapter",
+          "status": "open",
+          "owner": null,
+          "next_action": "Use the pinned BFD ABI and existing Rust tool body; retain error/ownership behavior and prove real link closure.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          },
+          "remaining_functions": [
+            "mcinspect_bfd_canonicalize_symtab_bridge"
+          ]
+        }
+      ],
+      "file_closure": {
+        "status": "open",
+        "requirement": "No project-owned C body or callback from this selected target remains in the delivered runtime; preserve third-party ABI and matching native behavior."
+      },
+      "owner": "foreground:/root/m15_bfd_rust_cutover"
+    },
+    {
+      "id": "M15-F04",
+      "path": "executer/user/eclair_bfd_shim.c",
+      "target": "eclair",
+      "status": "open",
+      "source_selection": "executer/user/CMakeLists.txt:172",
+      "existing_rust": [
+        "executer/user/rust/eclair_helpers.rs",
+        "executer/user/rust/arch_eclair_x86_64.rs"
+      ],
+      "current_increment": "Two BFD accessor wrappers called by existing Rust; eclair.c and arch/x86_64/arch-eclair.c removed by Rust selector.",
+      "proof_gap": [
+        "replace BFD macro wrappers using checked Rust binding or reviewed ASM ABI",
+        "C-free project object/link closure",
+        "matched native diagnostic behavior"
+      ],
+      "remaining_selected_body_count": null,
+      "functional_subgoals": [
+        {
+          "id": "M15-F04-01",
+          "title": "Rust BFD get_symtab_upper_bound adapter",
+          "status": "open",
+          "owner": null,
+          "next_action": "Use the pinned BFD ABI and existing Rust tool body; retain error/ownership behavior and prove real link closure.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          },
+          "remaining_functions": [
+            "eclair_bfd_get_symtab_upper_bound_bridge"
+          ]
+        },
+        {
+          "id": "M15-F04-02",
+          "title": "Rust BFD canonicalize_symtab adapter",
+          "status": "open",
+          "owner": null,
+          "next_action": "Use the pinned BFD ABI and existing Rust tool body; retain error/ownership behavior and prove real link closure.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          },
+          "remaining_functions": [
+            "eclair_bfd_canonicalize_symtab_bridge"
+          ]
+        }
+      ],
+      "file_closure": {
+        "status": "open",
+        "requirement": "No project-owned C body or callback from this selected target remains in the delivered runtime; preserve third-party ABI and matching native behavior."
+      },
+      "owner": "foreground:/root/m15_bfd_rust_cutover"
+    },
+    {
+      "id": "M15-F05",
+      "path": "ihk/linux/user/ihklib.c",
+      "target": "ihklib",
+      "status": "open",
+      "source_selection": "ihk/linux/user/CMakeLists.txt:21",
+      "existing_rust": [],
+      "current_increment": "Current pinned user library is C; no Rust selector or ihk/linux/user/rust directory. Public exported ABI, request parsing, ioctl/sysfs/resources/BFD paths need reuse recovery or implementation.",
+      "proof_gap": [
+        "recover historically claimed ihklib_helpers.rs at an identified revision or implement against current ABI",
+        "Rust selector and exported libihk ABI parity",
+        "production link plus native lifecycle/resource restoration proof"
+      ],
+      "remaining_selected_body_count": null,
+      "functional_subgoals": [
+        {
+          "id": "M15-F05-01",
+          "title": "Remaining selected C bodies",
+          "status": "open",
+          "owner": null,
+          "next_action": "Enumerate current live bodies/callbacks incrementally from the selected consumer; reuse existing Rust and implement the next substantive body.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        },
+        {
+          "id": "M15-F05-02",
+          "title": "Default Rust consumer and ABI",
+          "status": "open",
+          "owner": null,
+          "next_action": "Select actual Rust implementation while preserving public CLI/library/process interfaces and exact platform ABI.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        },
+        {
+          "id": "M15-F05-03",
+          "title": "Actual artifact and functional behavior",
+          "status": "open",
+          "owner": null,
+          "next_action": "Prove actual linked ownership plus matching application/lifecycle behavior; source-only selection is insufficient.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        }
+      ],
+      "file_closure": {
+        "status": "open",
+        "requirement": "No project-owned C body or callback from this selected target remains in the delivered runtime; preserve third-party ABI and matching native behavior."
+      },
+      "owner": "/root/case227_stage"
+    },
+    {
+      "id": "M15-F06",
+      "path": "ihk/linux/user/ihkconfig.c",
+      "target": "ihkconfig",
+      "status": "open",
+      "source_selection": "ihk/linux/user/CMakeLists.txt:26",
+      "existing_rust": [],
+      "current_increment": "C management CLI; links C ihklib.",
+      "proof_gap": [
+        "Rust CLI/action/exit-code/diagnostic parity",
+        "default Rust selector and link proof",
+        "matched native management operations"
+      ],
+      "remaining_selected_body_count": null,
+      "functional_subgoals": [
+        {
+          "id": "M15-F06-01",
+          "title": "Remaining selected C bodies",
+          "status": "partial",
+          "owner": null,
+          "next_action": "Independent Rust CLI/contract review and actual production library/default selector/link; hoststub is not native proof.",
+          "proof": {
+            "implementation": {
+              "status": "partial",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/velocity-intervention-20261023-7/m15-ihkconfig/root-owned-first-fixture-1/ACTUAL-WHOLE-JOIN.json",
+                  "sha256": "f0e58de58675e5e2fa51c1474ebd98147bc9e06014ef9736b8674671ae45a886",
+                  "size": 3374,
+                  "scope": "Actual defaultstub188 C/Rust parity+3 separatelyidentifieddefinedbehaviorcases PASS; KRM/default installedlink/native unproven."
+                }
+              ]
+            },
+            "focused_checks": {
+              "status": "partial",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/velocity-intervention-20261023-7/m15-ihkconfig/root-owned-first-fixture-1/ACTUAL-WHOLE-JOIN.json",
+                  "sha256": "f0e58de58675e5e2fa51c1474ebd98147bc9e06014ef9736b8674671ae45a886",
+                  "size": 3374,
+                  "scope": "Actual defaultstub188 C/Rust parity+3 separatelyidentifieddefinedbehaviorcases PASS; KRM/default installedlink/native unproven."
+                }
+              ]
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        },
+        {
+          "id": "M15-F06-02",
+          "title": "Default Rust consumer and ABI",
+          "status": "open",
+          "owner": null,
+          "next_action": "Select actual Rust implementation while preserving public CLI/library/process interfaces and exact platform ABI.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        },
+        {
+          "id": "M15-F06-03",
+          "title": "Actual artifact and functional behavior",
+          "status": "open",
+          "owner": null,
+          "next_action": "Prove actual linked ownership plus matching application/lifecycle behavior; source-only selection is insufficient.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        }
+      ],
+      "file_closure": {
+        "status": "open",
+        "requirement": "No project-owned C body or callback from this selected target remains in the delivered runtime; preserve third-party ABI and matching native behavior."
+      },
+      "owner": "foreground:/root/project_runtime_rust_scope",
+      "private_candidate_root": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/m15-ihkconfig",
+      "current_source_work": "Rust CLI successor in progress; existing libihk remains explicit temporary transitive C debt; no compiler/runtime credit."
+    },
+    {
+      "id": "M15-F07",
+      "path": "ihk/linux/user/ihkosctl.c",
+      "target": "ihkosctl",
+      "status": "open",
+      "source_selection": "ihk/linux/user/CMakeLists.txt:31",
+      "existing_rust": [],
+      "current_increment": "C OS control CLI; links C ihklib.",
+      "proof_gap": [
+        "Rust CLI/action/exit-code/diagnostic parity",
+        "default Rust selector and link proof",
+        "matched native OS lifecycle operations"
+      ],
+      "remaining_selected_body_count": null,
+      "functional_subgoals": [
+        {
+          "id": "M15-F07-01",
+          "title": "Remaining selected C bodies",
+          "status": "open",
+          "owner": null,
+          "next_action": "Enumerate current live bodies/callbacks incrementally from the selected consumer; reuse existing Rust and implement the next substantive body.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        },
+        {
+          "id": "M15-F07-02",
+          "title": "Default Rust consumer and ABI",
+          "status": "open",
+          "owner": null,
+          "next_action": "Select actual Rust implementation while preserving public CLI/library/process interfaces and exact platform ABI.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        },
+        {
+          "id": "M15-F07-03",
+          "title": "Actual artifact and functional behavior",
+          "status": "open",
+          "owner": null,
+          "next_action": "Prove actual linked ownership plus matching application/lifecycle behavior; source-only selection is insufficient.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        }
+      ],
+      "file_closure": {
+        "status": "open",
+        "requirement": "No project-owned C body or callback from this selected target remains in the delivered runtime; preserve third-party ABI and matching native behavior."
+      }
+    },
+    {
+      "id": "M15-F08",
+      "path": "ihk/linux/user/ihkmond.c",
+      "target": "ihkmond",
+      "status": "open",
+      "source_selection": "ihk/linux/user/CMakeLists.txt:36",
+      "existing_rust": [],
+      "current_increment": "C udev/epoll/eventfd/pthread monitoring and kmsg lifecycle; no current Rust replacement identified in bounded evidence.",
+      "proof_gap": [
+        "reuse search at identified historical revision or Rust implementation",
+        "daemon callback/thread/event and cleanup ABI parity",
+        "default link plus matched native creation/destruction/recovery behavior"
+      ],
+      "remaining_selected_body_count": null,
+      "functional_subgoals": [
+        {
+          "id": "M15-F08-01",
+          "title": "Remaining selected C bodies",
+          "status": "open",
+          "owner": null,
+          "next_action": "Enumerate current live bodies/callbacks incrementally from the selected consumer; reuse existing Rust and implement the next substantive body.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        },
+        {
+          "id": "M15-F08-02",
+          "title": "Default Rust consumer and ABI",
+          "status": "open",
+          "owner": null,
+          "next_action": "Select actual Rust implementation while preserving public CLI/library/process interfaces and exact platform ABI.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        },
+        {
+          "id": "M15-F08-03",
+          "title": "Actual artifact and functional behavior",
+          "status": "open",
+          "owner": null,
+          "next_action": "Prove actual linked ownership plus matching application/lifecycle behavior; source-only selection is insufficient.",
+          "proof": {
+            "implementation": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "focused_checks": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "production_link": {
+              "status": "unassessed",
+              "evidence": []
+            },
+            "native_validation": {
+              "status": "unassessed",
+              "evidence": []
+            }
+          }
+        }
+      ],
+      "file_closure": {
+        "status": "open",
+        "requirement": "No project-owned C body or callback from this selected target remains in the delivered runtime; preserve third-party ABI and matching native behavior."
+      }
+    }
+  ],
+  "runtime_programs": [
+    {
+      "id": "M15-P01",
+      "path": "scripts/mcreboot-smp.sh.in",
+      "current_interpreter": "#!/bin/bash",
+      "status": "open",
+      "owner": null,
+      "next_action": "Determine exact installed role, preserve command/exit/diagnostic/lifecycle semantics, and replace the shipped custom runtime program with Rust/reviewed assembly under matching tests. The Python campaign harness remains build/test orchestration.",
+      "proof": {
+        "implementation": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "focused_checks": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "production_link": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "native_validation": {
+          "status": "unassessed",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "M15-P02",
+      "path": "scripts/mcstop+release-smp.sh.in",
+      "current_interpreter": "#!/bin/bash",
+      "status": "open",
+      "owner": null,
+      "next_action": "Determine exact installed role, preserve command/exit/diagnostic/lifecycle semantics, and replace the shipped custom runtime program with Rust/reviewed assembly under matching tests. The Python campaign harness remains build/test orchestration.",
+      "proof": {
+        "implementation": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "focused_checks": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "production_link": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "native_validation": {
+          "status": "unassessed",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "M15-P03",
+      "path": "scripts/eclair-dump-backtrace.exp.in",
+      "current_interpreter": "#!/usr/bin/expect",
+      "status": "open",
+      "owner": null,
+      "next_action": "Determine exact installed role, preserve command/exit/diagnostic/lifecycle semantics, and replace the shipped custom runtime program with Rust/reviewed assembly under matching tests. The Python campaign harness remains build/test orchestration.",
+      "proof": {
+        "implementation": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "focused_checks": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "production_link": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "native_validation": {
+          "status": "unassessed",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "M15-P04",
+      "path": "executer/user/vmcore2mckdump.in",
+      "current_interpreter": "#!/bin/sh",
+      "status": "open",
+      "owner": null,
+      "next_action": "Determine exact installed role, preserve command/exit/diagnostic/lifecycle semantics, and replace the shipped custom runtime program with Rust/reviewed assembly under matching tests. The Python campaign harness remains build/test orchestration.",
+      "proof": {
+        "implementation": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "focused_checks": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "production_link": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "native_validation": {
+          "status": "unassessed",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "M15-P05",
+      "path": "executer/user/mcps.in",
+      "current_interpreter": "#!/bin/bash",
+      "status": "open",
+      "owner": null,
+      "next_action": "Determine exact installed role, preserve command/exit/diagnostic/lifecycle semantics, and replace the shipped custom runtime program with Rust/reviewed assembly under matching tests. The Python campaign harness remains build/test orchestration.",
+      "proof": {
+        "implementation": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "focused_checks": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "production_link": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "native_validation": {
+          "status": "unassessed",
+          "evidence": []
+        }
+      }
+    }
+  ],
+  "conditional_targets": [
+    {
+      "target": "mckernel.so crash extension",
+      "selected_by": "tools/crash/mckernel.mk.in:65",
+      "c": [
+        "tools/crash/mckernel.c"
+      ],
+      "rust": [
+        "tools/crash/rust/mckernel_crash_helpers.rs"
+      ],
+      "status": "separate make target; CMake only copies inputs, so not default build or proven deployed; make always compiles C even when Rust found"
+    },
+    {
+      "targets": [
+        "qlmpi",
+        "qlfort",
+        "ql_server",
+        "ql_talker",
+        "ql_mpiexec_start",
+        "ql_mpiexec_finalize"
+      ],
+      "status": "ENABLE_QLMPI=OFF; existing Rust for first four, qlmpi additionally retains qlmpi_mpi_abi.c when enabled; final two directly compile ql_mpiexec_start.c and md5.c; not current selected debt"
+    },
+    {
+      "targets": [
+        "mck_syscall_intercept",
+        "libuti",
+        "syscall_intercept_shared"
+      ],
+      "status": "ENABLE_UTI=OFF; Rust intercept/arch wrappers exist, libuti ExternalProject selector requests --enable-rust when configured; vendor capstone/syscall_intercept and optional libuti not inventoried as live debt"
+    },
+    {
+      "target": "mcstat_runtest",
+      "status": "EXCLUDE_FROM_ALL test target, existing Rust runtest.rs; not production debt"
+    },
+    {
+      "sources": [
+        "scripts/tests/**/*.rs",
+        "test",
+        "ihk/test"
+      ],
+      "status": "fixtures/tests outside production scope; not walked"
+    }
+  ],
+  "final_subgoals": [
+    {
+      "id": "M15-I01",
+      "title": "Complete delivered-runtime ownership manifest",
+      "status": "open",
+      "owner": null,
+      "next_action": "Reconcile selected target sources, included headers, installed programs, project-authored platform helpers, actual link maps and optional-product dispositions. Add any newly found owned runtime C; never hide it through a path/classification change.",
+      "proof": {
+        "implementation": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "focused_checks": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "production_link": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "native_validation": {
+          "status": "unassessed",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "M15-I02",
+      "title": "All three Linux-loadable modules in Rust/assembly",
+      "status": "open",
+      "owner": null,
+      "next_action": "Use pinned CONFIG_RUST kernel/Kbuild; prove exact compiler inputs, module ABI/imports/modpost and generated-only C metadata, with no project C implementation object.",
+      "proof": {
+        "implementation": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "focused_checks": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "production_link": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "native_validation": {
+          "status": "unassessed",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "M15-I03",
+      "title": "Rust executors, libraries and installed tools",
+      "status": "open",
+      "owner": null,
+      "next_action": "Prove selected Rust artifacts, CLI/exported-library ABI, dynamic/static project dependency closure and source/toolchain reproducibility.",
+      "proof": {
+        "implementation": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "focused_checks": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "production_link": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "native_validation": {
+          "status": "unassessed",
+          "evidence": []
+        }
+      }
+    },
+    {
+      "id": "M15-I04",
+      "title": "Matching native applications, module and lifecycle proof",
+      "status": "open",
+      "owner": null,
+      "next_action": "Reuse matching M03/M05/M06/M08/M09/M11/M12 evidence; run changed paths with the exact module/image/tool cohort, including MM lock successors, load/unload, useful apps and resource restoration. No new broad exposure quota.",
+      "proof": {
+        "implementation": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "focused_checks": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "production_link": {
+          "status": "unassessed",
+          "evidence": []
+        },
+        "native_validation": {
+          "status": "unassessed",
+          "evidence": []
+        }
+      }
+    }
+  ],
+  "evidence_limits": [
+    "not a whole repository source walk or complete application/deployment inventory",
+    "seven is configured user/runtime selector coverage, not final ELF composition or all project runtime C count",
+    "M14 six compute C owners and current native IHK/SMP/mcctrl module graph excluded by assignment; compatibility CMake module paths are not credited as deployed native debt without deployment evidence",
+    "no executable-header/body/preprocessor census or ABI equivalence audit",
+    "no claim that native proof is absent globally: only evidence inspected here is classified",
+    "new explicit user all-project-owned Rust/ASM scope overrides older control-plane-C allowance for planning; canonical policy not edited",
+    "practical 35 denominator unchanged; no whole OS/language completion or native acceptance credit"
+  ],
+  "reporting": {
+    "known_selected_project_C_files_outside_M14": 8,
+    "current_module_C_wrapper_functions": 3,
+    "known_installed_non_Rust_runtime_programs": 5,
+    "engineering_percentage": null,
+    "source_selection_is_not_final_ownership": true,
+    "do_not_infer_percentage_from_row_counts": true,
+    "inventory_complete": false
+  },
+  "next_actions": [
+    "Preserve six ready M14 source lanes and qualified P12 work while M15 advances independently.",
+    "Reuse native Rust IHK/SMP/mcctrl instead of implementing the drivers again.",
+    "Prepare exact pinned MM-wrapper replacement/interface proposal; a blocked wrapper must not stall independent user-tool ports.",
+    "Start private ihkconfig Rust CLI successor while retaining libihk as explicitly temporary transitive C debt.",
+    "Complete target/link/deployment ownership with existing artifacts at normal checkpoints; no repetitive broad audit."
+  ],
+  "updates": [
+    {
+      "kind": "initial_bounded_scope",
+      "at": "2026-10-24T00:32:46.264202+00:00",
+      "evidence": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/ihk-rust-module-closure/SCOPING-REVIEW.md",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/project-runtime-rust-scope/report.txt"
+      ],
+      "practical_check_closures": [],
+      "M14_closures": [],
+      "new_native_credit": false
+    },
+    {
+      "at": "2026-10-24T00:35:49.928901+00:00",
+      "kind": "explicit_Linux_C_boundary_and_private_source_assignments",
+      "practical_check_closures": [],
+      "M14_closures": [],
+      "new_native_credit": false
+    },
+    {
+      "date": "2026-10-24T00:48:58.796129+00:00",
+      "kind": "FOUR_IMPLEMENTATION_LANES_AND_EXACT_RESOURCE_QUEUE",
+      "owners": {
+        "M15-F01": "foreground:/root/ihk_rust_scope",
+        "M15-F03": "foreground:/root/m15_bfd_rust_cutover",
+        "M15-F04": "foreground:/root/m15_bfd_rust_cutover",
+        "M15-F05": "/root/case227_stage",
+        "M15-F06": "foreground:/root/project_runtime_rust_scope"
+      },
+      "background_libihk_actual_followup_and_running_census": true,
+      "foreground_actual_turns": "user-confirmed; not root tool census",
+      "support_owner": "/root/m15_bfd_compile_owner private fixed compile-only successor source, no runtime release",
+      "implementation_only_no_closure": true,
+      "practical_check_closures": []
+    },
+    {
+      "date": "2026-10-24T01:27:44.772886+00:00",
+      "kind": "ACTUAL_DEFAULT_IHKCONFIG_HOST_STUB_PASS_AND_LIBIHK_CPU_PASS",
+      "ihkconfig": "velocity-intervention-20261023-7/m15-ihkconfig/root-owned-first-fixture-1/ACTUAL-WHOLE-JOIN.json",
+      "libihk_cpu": "velocity-intervention-20261023-8/m15-libihk/root-cpu-fixture-actual-1/RESULT.json",
+      "counts": "188parity+3separatecontracts;4608CPUAPIvectors",
+      "source_default_native_or_file_closure": false,
+      "practical_check_closures": []
+    }
+  ]
+}

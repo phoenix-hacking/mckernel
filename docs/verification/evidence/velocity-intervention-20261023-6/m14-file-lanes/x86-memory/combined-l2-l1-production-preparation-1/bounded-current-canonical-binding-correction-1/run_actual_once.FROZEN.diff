@@ -1,0 +1,63 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-memory-l3-next/production-consumer-preparation-1/run_actual_once.py
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/combined-l2-l1-production-preparation-1/bounded-current-canonical-binding-correction-1/run_actual_once.FROZEN.NOT-RELEASED.py
+@@ -3,9 +3,15 @@
+ """
+ from pathlib import Path
+ import hashlib,json,os,signal,resource,sys,time,re,importlib.util,struct
+-P=Path(__file__).resolve().parent;R=P/'EXACT-PRODUCTION-RUST-RECIPE.NOT-EXECUTED.json';C=P/'EXACT-SELECTED-GCC9-ARCHMEMORY-CONSUMER.NOT-EXECUTED.json'
++P=Path(__file__).resolve().parent;R=P/'EXACT-PRODUCTION-RUST-RECIPE.FROZEN.NOT-EXECUTED.json';C=P/'EXACT-SELECTED-GCC9-MEMORY-CONSUMER.FROZEN.NOT-EXECUTED.json'
+ def sha(f):return hashlib.sha256(f.read_bytes()).hexdigest()
+-assert sha(R)=='b2693b8240210c01d32d1bab715c28b54a56875df51b473b0480c6ef4e7f0a09';assert sha(C)=='8f9cad11e10ecbb22a7650b0cf68e945ad5473f798784a77076a67183b1aee95';r=json.loads(R.read_bytes());c=json.loads(C.read_bytes())
++assert sha(R)=='561348ecd1b3901594fabb78e3210e88cd3cfdc47fedd79f567b40fb4a88c186';assert sha(C)=='22a481a53da04438fc64fb81db03ed0236f1c04a126f98e5adfbd84dad76abcc';r=json.loads(R.read_bytes());c=json.loads(C.read_bytes())
++# Both real leaf receipts and actual pinned78 staging are mandatory before compilation.
++for key,status,pairs in [('actual_leaf','PASS_ACTUAL_COMPLETE_CLEAR_RANGE_L2_1728_PAIRS_AND_REAL_PUBLIC_FALLBACK_HEADER_ABI',1728),('actual_L1_fixture_receipt','PASS_ACTUAL_COMPLETE_CLEAR_RANGE_L1_432_PAIRS_AND_REAL_PUBLIC_FALLBACK_HEADER_ABI',432)]:
++ ref=r[key];assert ref is not None and sha(Path(ref['path']))==ref['sha256'];leaf=json.loads(Path(ref['path']).read_bytes());assert leaf['status']==status and leaf['actual_pairs']==pairs and leaf['CPU6_released'] is True
++ assert all(j['returncode']==0 and j['direct_child_joined'] and j['group_absent'] and j['closed_streams'] and j['error'] is None and j['retirement_error'] is None for j in leaf['captures'])
++staging_ref=r['actual_source78_materialization'];assert staging_ref is not None and sha(Path(staging_ref['path']))==staging_ref['sha256'];staged=json.loads(Path(staging_ref['path']).read_bytes());assert staged['status']=='PASS_FINITE_PINNED78_SOURCE_STAGING_ONLY' and staged['source_count']==78 and staged['all_current_canonical_pins_equal'] is True and staged['all67_header_pins_equal'] is True
++assert sha(Path(staged['source_manifest']['path']))==staged['source_manifest']['sha256']
+ H=Path('/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py');assert sha(H)=='990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8';spec=importlib.util.spec_from_file_location('capture',H);cap=importlib.util.module_from_spec(spec);spec.loader.exec_module(cap)
+ for sig in (signal.SIGTERM,signal.SIGINT,signal.SIGALRM):signal.signal(sig,cap.stop)
+ assert os.getuid()==os.geteuid()==1000 and os.sched_getaffinity(0)=={6};assert Path(sys.executable).resolve()==Path('/home/holden/anaconda3/bin/python3').resolve() and sys.version_info[:2]==(3,9)
+@@ -39,17 +45,23 @@
+   for trigger,file in [('production-Rust-compile','mckernel_rust.o'),('selected-complete-memory-TU','memory.c.o'),('actual-selected-partial-link','selected-consumer-provider.o')]:
+    if label==trigger:artifacts[file]=cap.hashed(O/file,32<<20);cap.write(d/'DURABLE-OBJECT-BEFORE-OBSERVERS.json',artifacts[file])
+   if label=='production-Rust-NM':
+-   u={line.split()[-1] for line in text.splitlines() if line.split()[-2:-1]==['U']};assert u==set(r['expected_U']) and len(u)==584,(sorted(u-set(r['expected_U'])),sorted(set(r['expected_U'])-u))
++   u={line.split()[-1] for line in text.splitlines() if line.split()[-2:-1]==['U']};assert u==set(r['expected_U']) and len(u)==585,(sorted(u-set(r['expected_U'])),sorted(set(r['expected_U'])-u))
+    for name in r['expected_all_prior_T']+r['expected_T_added']:unique(text,name,'T')
+   if label=='production-Rust-ELF':
+-   found=rows(text,'clear_range_l3');assert len(found)==1 and found[0][3:5]==['FUNC','GLOBAL'],found
++   for name in r['expected_T_added']:
++    found=rows(text,name);assert len(found)==1 and found[0][3:5]==['FUNC','GLOBAL'] and found[0][6]!='UND',found
+   if label=='selected-memory-preprocess':
+-   for name in ['clear_range_l3','clear_range_l4','x86_clear_range_l4_body','x86_clear_range_walk_l4_bridge','x86_clear_range_top_log_bridge']:assert re.search(r'\b'+name+r'\s*\([^;{}]*\)\s*\{',text,re.S) is None,name
++   for name in ['clear_range_l1','clear_range_l2','clear_range_l3','clear_range_l4','x86_clear_range_l4_body','x86_clear_range_walk_l4_bridge','x86_clear_range_top_log_bridge']:assert re.search(r'\b'+name+r'\s*\([^;{}]*\)\s*\{',text,re.S) is None,name
+    for name in c['expected_new_immutable_callback_data']:assert name in text
+   if label=='memory-symbols':
+-   unique(text,'clear_range_l3','U');unique(text,'x86_clear_range_public_body','U')
++   for name in c['expected_C_import']:unique(text,name,'U')
++   unique(text,'x86_clear_range_public_body','U')
+    for name in c['expected_C_no_definition']:assert not any(v[-2] in ('T','t') for v in rows(text,name)),name
+-  if label=='memory-relocations':assert 'clear_range_l3' in text and 'x86_clear_range_public_body' in text
++  if label=='memory-relocations':
++   imported_relocs={}
++   for name in c['expected_C_import']+['x86_clear_range_public_body']:
++    found=[line.split() for line in text.splitlines() if len(line.split())>=5 and line.split()[2].startswith('R_X86_64_') and line.split()[4]==name];assert found,(name,'missing exact-symbol C relocation');imported_relocs[name]=found
++   cap.write(A/'ACTUAL-EXACT-CLEAR-CALLBACK-IMPORT-RELOCATIONS.json',dict(scope=__doc__,exact_symbol_field=4,proof=imported_relocs))
+   if label=='actual-mem-provider-symbols':
+    for name in ['remote_flush_tlb_array_cpumask','remote_flush_tlb_cpumask']:assert not any(v[-2] in ('T','t') for v in rows(text,name)),name
+   if label=='partial-symbols':
+@@ -82,10 +94,11 @@
+    assert target['type']==(1 if targetname=='use_1gb_page' else 2)
+    if targetname=='use_1gb_page':assert target['size']==4
+   proof[ptrname]=dict(pointer=ptr,target=target,section=section,relocation_section=rs,relocation=rel)
+- cap.write(A/'ACTUAL-NINE-CALLBACK-DATA-RELOCATIONS.json',dict(scope=__doc__,status='PASS_EXACT_SYMBOL_SECTION_RELA_SH_INFO_TARGETS_ALL9',proof=proof,section_offset_identity_not_merged=True,qualification='Relocatable object only; no finalimage protection/native claims'))
++ assert len(proof)==10
++ cap.write(A/'ACTUAL-TEN-CALLBACK-DATA-RELOCATIONS.json',dict(scope=__doc__,status='PASS_EXACT_SYMBOL_SECTION_RELA_SH_INFO_TARGETS_ALL10',proof=proof,section_offset_identity_not_merged=True,qualification='Relocatable object only; no finalimage protection/native claims'))
+  sources();stable(memobj)
+  for row in artifacts.values():stable(row)
+- receipt=dict(scope=__doc__,status='PASS_ACTUAL_CURRENT78_L3_FULLCRATE_GCC9_MEMORY_ABI_NINE_TYPED_DATA_RELOCS_AND_PARTIAL_LINK',results=results,seconds=time.monotonic()-begin,CPU_seconds=cap.cpu_used()-initial,artifacts=artifacts,source_count=78,all_current78_sources_unchanged=True,Rust_U_exact_count=584,Rust_U_delta=r['expected_U_delta'],all3043priorT_preserved=True,new_T='clear_range_l3',partial_Rust_unique_T=38,reused_current_scalar_mem_object_not_rehashed=memobj,Rust_recipe_sha256=sha(R),C_recipe_sha256=sha(C),driver_sha256=sha(Path(__file__)),callbacks=proof,all_first_compile_and_writer_failures_preserved=True,canonical_frozen15_P12_changes=0,remaining_C_debt=c['retained_C_debt'],default_GCC14_image_native=False,CPU6_released=True)
++ receipt=dict(scope=__doc__,status='PASS_ACTUAL_CURRENT78_L2_L1_FULLCRATE_GCC9_MEMORY_ABI_TEN_TYPED_DATA_RELOCS_AND_PARTIAL_LINK',results=results,seconds=time.monotonic()-begin,CPU_seconds=cap.cpu_used()-initial,artifacts=artifacts,source_count=78,all_current78_sources_unchanged=True,Rust_U_exact_count=585,Rust_U_delta=r['expected_U_delta'],all3044priorT_preserved=True,new_T=r['expected_T_added'],partial_Rust_unique_T=42,reused_current_scalar_mem_object_not_rehashed=memobj,Rust_recipe_sha256=sha(R),C_recipe_sha256=sha(C),driver_sha256=sha(Path(__file__)),callbacks=proof,all_first_compile_and_writer_failures_preserved=True,canonical_frozen15_P12_changes=0,actual_L2_fixture=r['actual_leaf'],actual_L1_fixture=r['actual_L1_fixture_receipt'],actual_pinned78_staging=staging_ref,remaining_C_debt=c['retained_C_debt'],default_GCC14_image_native=False,CPU6_released=True)
+  cap.write(P/'ACTUAL-PRODUCTION-CONSUMER-RECEIPT.json',receipt);print(json.dumps(dict(status=receipt['status'],seconds=receipt['seconds'],CPU_seconds=receipt['CPU_seconds'],commands=len(results),object=artifacts['mckernel_rust.o'],CPU6_released=True)))
+ except BaseException as e:
+  cap.write(A/'FAILURE.STOP.json',dict(scope=__doc__,error=repr(e),completed_commands=len(results),results=results,artifacts_durable_before_observers=artifacts,CPU6_released=True,no_retry=True));raise

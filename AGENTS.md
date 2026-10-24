@@ -32,6 +32,41 @@ work. Preserve functional memory/ownership/resource checks. A service classifier
 flag is not evidence that a security task was assigned; report the actual task
 and exact service error. Scope clarification does not clear a service hold.
 
+## Project-owned runtime Rust boundary and M15 — user instruction 2026-10-24 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The user requires project-owned production runtime code to use Rust, retaining
+reviewed architecture assembly where already allowed. Rocky/Linux-owned
+control-plane code is explicitly allowed to remain C, as the user reconfirmed. This includes custom code
+loaded into Rocky Linux, plus executors, custom libraries and user tools. M14
+covers the compute kernel; separate M15 covers the remaining custom host/integration
+runtime. Linux/Rocky itself remains the supporting kernel. Unmodified third-party
+libraries, generated Linux metadata, build/test orchestration and retained inactive
+C references are classified separately; they are not proof of a Rust port.
+Project-authored C stays in scope when staged under a kernel, vendor or generated
+path. Replacing a module entry while retaining project C callbacks is incomplete.
+
+Existing native IHK, SMP and mcctrl implementations already use Rust and reviewed
+assembly; reuse their actual source/build/native evidence at its exact scope.
+The selected mcctrl C memory-management wrappers and default-selected executer,
+library and tool C paths are M15 debt. Earlier permission to retain host C glue
+preserves working behavior during migration; it does not complete this new goal.
+Keep current C until the Rust successor passes applicable ABI/behavior/build/link
+and native checks. Do not move C elsewhere, bypass Linux MM APIs, weaken tracing,
+change the pinned kernel silently or relabel reference code to claim retirement.
+
+Track M15 in docs/verification/os-milestones-20260914/RUST-CUTOVER-M15.md and
+rust-cutover-m15.json. Keep the original35 functional checks, M14 and M15 separate.
+Do not turn source-selection counts or unassessed areas into engineering percentages.
+Continue six disjoint M14 file lanes and qualified P12 work while M15 advances.
+The user explicitly requests four additional M15 implementation lanes. Reuse
+existing Rust first; divide MM adapters, user CLIs/programs, BFD adapters and
+libihk API work between disjoint owners. Source-ready results enter the actual
+compiler/integration queue while owners advance the next independent body.
+Coordinate the foreground/background owners explicitly, reuse completed private
+candidates and never implement the same slice twice. Additional model workers
+change no CPU, ownership, compiler-slot or workload release.
+
 ## Six parallel M14 file implementers — explicit user instruction 2026-10-24 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

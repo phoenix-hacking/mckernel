@@ -1,0 +1,31 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/candidate/kernel/rust/mem_helpers.rs",
+  "exact_functions": {
+    "mem_tlb_current_cpu_bridge": {
+      "bytes": 120,
+      "sha256": "587605c212cec078902ed641812d13287b816f5814bb149ce653caeb5e66940b"
+    },
+    "mem_tlb_get_vector_bridge": {
+      "bytes": 129,
+      "sha256": "d35260336be7ecacb5f46483552bc1ee329a33271074229af88cc8051789ecfe"
+    },
+    "mem_tlb_interrupt_cpu_bridge": {
+      "bytes": 154,
+      "sha256": "fff80424472f98469f280e835915b88b833c7f6fdf7a5bd410d33f81440f5921"
+    },
+    "remote_flush_tlb_array_cpumask": {
+      "bytes": 948,
+      "sha256": "366b1b54134665bc4452db73d54d99823b5b829aed2ebfff2ed7ec968fb04006"
+    },
+    "mem_remote_flush_tlb_array_body_result": {
+      "bytes": 4202,
+      "sha256": "19c250319e0311a8cc2c61ced47d8886bed493209539a53a4417fb9d7b222da8"
+    },
+    "mem_tlb_flush_handler_body_result": {
+      "bytes": 1369,
+      "sha256": "46bfaf01307fa5fc7c5109599797d94211b28e646a1795ee1d74cb0ae4ea2ba7"
+    }
+  },
+  "qualification": "Actual production bodies byte-extracted, ABI exactsource copy; surrounding type aliases/FFI declarations are testglue, publicCPU/interrupt provider controlled because targetISA may not execute on HOST."
+}

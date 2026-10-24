@@ -1,0 +1,23 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/sourcehandoff/run_first_fixture_once.py
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/bounded-provider-rebind-1/run_corrected_fixture_once.py
+@@ -1,9 +1,9 @@
+ """Functional McKernel OS/apps and Rust/assembly migration only; no security testing."""
+ from pathlib import Path
+ import hashlib,importlib.util,json,os,resource,signal,sys,time
+-D=Path(__file__).resolve().parent.parent;P=D/'sourcehandoff/EXECUTABLE-READY.NOT-EXECUTED.json'
++D=Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem');P=D/'bounded-provider-rebind-1/CORRECTED-RECIPE.NOT-EXECUTED.json'
+ def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
+-assert sha(P)=='12557b00ab25e0959dabeffd82c99cf9089fe2ce5d30a506451ca6dfbc8e57fd'
++assert sha(P)=='566736b9ba595b3f9f719388943412e62f08b853703738039dde9c985515e379'
+ plan=json.loads(P.read_bytes())
+ H=Path('/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py')
+ assert sha(H)==plan['profile']['helper_sha256']
+@@ -11,7 +11,7 @@
+ for n in (signal.SIGTERM,signal.SIGINT,signal.SIGALRM):signal.signal(n,c.stop)
+ os.umask(0o077);os.chdir(D);os.sched_setaffinity(0,{6});os.environ['RUST_MIN_STACK']='2097152'
+ for k,v in [(resource.RLIMIT_AS,2<<30),(resource.RLIMIT_CPU,60),(resource.RLIMIT_FSIZE,32<<20),(resource.RLIMIT_NOFILE,256),(resource.RLIMIT_CORE,0)]:resource.setrlimit(k,(v,v))
+-A=D/'actual-fixture-cohort-1';A.mkdir(mode=0o700);results=[];begin=time.monotonic()
++A=D/'actual-fixture-cohort-2';A.mkdir(mode=0o700);results=[];begin=time.monotonic()
+ try:
+  assert Path(sys.executable).resolve()==Path('/home/holden/anaconda3/bin/python3').resolve() and sys.version_info[:2]==(3,9)
+  c.write(A/'INTERPRETER.json',{'path':sys.executable,'version':sys.version,'before_child':True})

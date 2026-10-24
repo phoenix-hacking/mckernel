@@ -1,0 +1,49 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_COMPLETE_MEMORY_DEPENDENCY_BODIES_UNCOMPILED",
+  "new_Rust_exports": [
+    "ihk_release_mem",
+    "ihk_get_num_reserved_mem_chunks",
+    "ihk_query_mem"
+  ],
+  "memory_path_remaining_C_runtime_dependencies": [
+    "reserve_mem_conf global storage and configuration setters",
+    "loglevel global storage"
+  ],
+  "runtime_helper_chain_no_longer_C": [
+    "ihk_get_num_reserved_mem_chunks",
+    "ihk_query_mem",
+    "ihk_release_mem"
+  ],
+  "files": {
+    "ihklib_memory_os_dependencies.rs": {
+      "sha256": "fa4e261bccd0353858b188e5d616c7158632ea4923380b9a0b1e88cdd29fdb9a",
+      "bytes": 17224
+    },
+    "libihk_memory_chain.rs": {
+      "sha256": "734d446f5f553ad2cb7b9e2f32c144b5557dbd511008a0b268d292e598631332",
+      "bytes": 5197
+    },
+    "MEMORY-DEPENDENCIES.SOURCE.diff": {
+      "sha256": "850b99c5a842b244275ebc0e41c5659160bd8516973b92b7e836962b46280ca7",
+      "bytes": 6426
+    },
+    "BALANCED-OWNERSHIP-REPAIR.PROPOSED-NOT-SELECTED.diff": {
+      "sha256": "02f94c9cc10d94bebca15c20cfba5ab2493bd52ff6e04961d4263433066ac56c",
+      "bytes": 1758
+    }
+  },
+  "fixture_invariant": [
+    "Count query uses QUERY_MEM with all-zero request and returns mutated num_chunks iff ioctl==0",
+    "Query validates readability/count/pointer before exact actual-count query, allocates sizes then NUMA IDs, only copies outputs after successful second ioctl",
+    "Release-all expands via actual count/query, preserves negative count conversion and calloc(0) behavior, frees query array before request arrays",
+    "Any nonzero memory ioctl maps to captured -errno before close/free; C !=-1 close conditions retained",
+    "Count open failure preserves eprintf/loglevel/root-only /dev/kmsg formatting/write loop/close; no fabricated logging suppression",
+    "Every allocation failure and open/first-or-second ioctl failure leaves same return/output and cleanup sequence",
+    "Ownership proposal separate: tracking allocator proves no lost initial arrays and frees saved balanced query arrays on success and every failure; not parity and not selected"
+  ],
+  "sole_executable_ready_queue": "unchanged CPU batch a8f66/4608; no second fixture created",
+  "compiler_tests_jobs": 0,
+  "canonical_changes": false,
+  "ownership_repair_selected": false
+}

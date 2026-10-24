@@ -1,0 +1,37 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "F02_REAL_DUMP_BODY_EXECUTABLE_SOURCE_READY_NO_GRANT",
+  "source_candidate": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/sourcehandoff/SOURCE-CANDIDATE-AND-ABI.json",
+    "sha256": "80ca929836471ee420ea2efd08d6f735d6e6bb644c73cec073ca71f86662fd71",
+    "bytes": 3172
+  },
+  "recipe": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/sourcehandoff/EXACT-FUNCTIONAL-FIXTURE-AND-CONSUMER.NOT-GRANTED.json",
+    "sha256": "7b6a421e98e319a9dacbbcb15901215514ee1f12df9e8d190539e1ccfd86577d",
+    "bytes": 101620
+  },
+  "postimages": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/candidate/kernel/process.c",
+      "sha256": "1ecbc287f2e704e738cc4e9fbe18289226b5aadadc9da88d226dc0ad0bb57234",
+      "bytes": 162758
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "70015d712c29e416881e2fbaccd67026ee15ac7eb915cb80e828485d6f34d71f",
+      "bytes": 355120
+    }
+  },
+  "selected_slice": "vm_range_insert_dump_bridge plus complete tightly coupled dump_tree/dtree Rust computation",
+  "original_C_fallback_exact": true,
+  "unconditional_kprintf_reused_count": 1,
+  "prepared_commands": 20,
+  "prepared_comparisons": 433,
+  "readonly_C_gate_debt": true,
+  "compiler_jobs": 0,
+  "CPU_reservations": 0,
+  "canonical_or_frozen_image_writes": 0,
+  "cutover_credit_from_source": false,
+  "next_observation": "Independent source/ABI/profile review then exact ordinary root grant before these commands. No packet/root/guest replay."
+}

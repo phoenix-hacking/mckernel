@@ -1,0 +1,16 @@
+pub struct ArchVdso {
+    busy: CLong,
+    vdso_npages: CInt,
+    vvar_is_global: i8,
+    hpet_is_global: i8,
+    pvti_is_global: i8,
+    padding: i8,
+    vdso_physlist: [CLong; 2],
+    vvar_virt: *mut c_void,
+    vvar_phys: CLong,
+    hpet_virt: *mut c_void,
+    hpet_phys: CLong,
+    pvti_virt: *mut c_void,
+    pvti_phys: CLong,
+    vgtod_virt: *mut c_void,
+}

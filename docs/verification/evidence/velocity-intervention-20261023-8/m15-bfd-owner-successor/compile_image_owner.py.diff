@@ -1,0 +1,809 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile_image_owner.py
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd-owner-successor/compile_image_owner.py
+@@ -1,10 +1,9 @@
+ #!/usr/bin/env python3
+-"""Reviewed owner for one isolated current-source McKernel image build.
+-
+-This module is an admission/transport boundary around the offline image
+-driver.  It does not relocate sources, install software, or perform a guest
+-operation.  A root-released invocation creates exactly one private compile-only, read-only-root
+-container on CPU6/1CPU/4GiB under its separate HOST lease; tests inject a fake Docker
++"""Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++
++Fixed private BFD qualification specialization of the reviewed compile-only owner.
++A root-released invocation creates exactly one private compile-only, read-only-root
++container on CPU6/1CPU/2GiB under its separate HOST lease; tests inject a fake Docker
+ transport and never contact Docker.
+ """
+ from __future__ import annotations
+@@ -27,18 +26,19 @@
+ import uuid
+ 
+ 
+-REQUEST_SCHEMA = "mckernel.native-exact-mckernel-image-container-request.v1"
++REQUEST_SCHEMA = "mckernel.m15-bfd-compile-request.v1"
++SCOPE = 'Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
+ RECEIPT_SCHEMA = "mckernel.native-exact-mckernel-image-container-receipt.v1"
+ OWNER_RECEIPT_NAME = "owner-receipt.json"
+ EXPECTED_DRIVER_SHA256 = '7d30085edda4d1272f923b19e8632e9ab8b259874623974c2da53dbe4c3c5be0'
+ EXPECTED_PROVENANCE_SHA256 = '453dd998e4ef1e2ed21b0818771d97197d77f98c90ca8c6c67cc8ab019063044'
+-EXPECTED_HOST_OWNER_SHA256 = '8ffc9a09e2f2e9e9c9cc09af559d707bf6c4b989fc4f9d3ad51fe88a8e5b6083'
++EXPECTED_HOST_OWNER_SHA256 = '76ff839a839a2f55cd7d537d22221cb1b053390e2b6052b8be2b5d8b20990e63'
+ EXPECTED_HEAVY_ENTRY_CONTRACT_SHA256 = "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1"
+ # The image owner advances with the image-candidate namespace.  Keep consumed
+ # exclusions explicit: accepting one of these would allow a request to race a
+ # retired build candidate.  Tests may replace COMMON_EXCLUSION with a private
+ # fixture, so the rejection list remains separate from the active value.
+-COMMON_EXCLUSION = '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/operation-1/compile-lease.json'
++COMMON_EXCLUSION = '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd-owner-successor/operation-1/compile-lease.json'
+ RETIRED_COMMON_EXCLUSIONS = frozenset(
+     "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-" + suffix + ".json"
+     for suffix in (
+@@ -83,11 +83,11 @@
+ 
+ LIMITS = {
+     "NanoCpus": 1_000_000_000, "CpusetCpus": "6",
+-    "Memory": 4 * 2**30, "MemorySwap": 4 * 2**30,
++    "Memory": 2 * 2**30, "MemorySwap": 2 * 2**30,
+     "PidsLimit": 128, "NetworkMode": "none",
+ }
+-RESOURCE_ARGS = ("--cpus=1", "--cpuset-cpus=6", "--memory=4g",
+-                 "--memory-swap=4g", "--pids-limit=128")
++RESOURCE_ARGS = ("--cpus=1", "--cpuset-cpus=6", "--memory=2g",
++                 "--memory-swap=2g", "--pids-limit=128")
+ MAX_TIMEOUT = 19_800
+ LAUNCHER_AGGREGATE_GIB = "16.2158"
+ LAUNCHER_AGGREGATE_BYTES = int(Decimal(LAUNCHER_AGGREGATE_GIB) * 2**30)
+@@ -182,7 +182,7 @@
+         sys.modules.pop(package_name, None)
+ 
+ 
+-_HOST_OWNER_PATH = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile_host_helper.py')
++_HOST_OWNER_PATH = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd-owner-successor/compile_host_helper.py')
+ _HOST_OWNER = _load_reviewed_host_owner(
+     _HOST_OWNER_PATH, EXPECTED_HOST_OWNER_SHA256,
+     Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/native_rust_exact_build_offline.py'),
+@@ -951,285 +951,97 @@
+ 
+ RETIRED_COMMON_EXCLUSIONS = RETIRED_COMMON_EXCLUSIONS | frozenset(('/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/production-preflight-correction-preparation-1/full-image-attempt-2/common-exclusion.json',))
+ 
++def _bfd_inventory(root, selected=None):
++    """Fixed consumed closure; Git metadata and Python caches are not inputs."""
++    root = Path(root)
++    rows = {}
++    def walk(path):
++        relative = path.relative_to(root).as_posix()
++        info = path.lstat()
++        row = {"mode": stat.S_IMODE(info.st_mode)}
++        if stat.S_ISLNK(info.st_mode):
++            target = path.resolve(strict=True)
++            _fail(root in target.parents, "BFD source link escapes read-only source")
++            _fail(target.is_file() or target.is_dir(), "BFD special link unsupported")
++            row.update(type="symlink", target=os.readlink(path),
++                       resolved=target.relative_to(root).as_posix(), target_type="directory" if target.is_dir() else "file")
++            if target.is_file():
++                row["sha256"] = _sha256(target)
++        elif stat.S_ISDIR(info.st_mode):
++            row["type"] = "directory"
++            for child in sorted(path.iterdir()):
++                if child.name not in (".git", "__pycache__"):
++                    walk(child)
++        else:
++            _fail(stat.S_ISREG(info.st_mode), "BFD input contains special file")
++            row.update(type="file", size=info.st_size, sha256=_sha256(path))
++        if relative != ".":
++            rows[relative] = row
++    if selected is None:
++        walk(root)
++    else:
++        for relative in selected:
++            walk(root / relative)
++    for row in rows.values():
++        if row["type"] == "symlink" and row["target_type"] == "directory":
++            _fail(row["resolved"] in rows and rows[row["resolved"]]["type"] == "directory",
++                  "BFD directory link target is outside inventoried closure")
++    return rows
++
++
++def _retained_toolchain_request():
++    path = _regular(COMPILE_PROFILE["retained_request"], "retained toolchain request")
++    _fail(_sha256(path) == COMPILE_PROFILE["retained_request_sha256"], "retained toolchain request changed")
++    retained = _load_json(path, "retained toolchain request")
++    _fail(retained["image_id"] == COMPILE_PROFILE["image_id"], "retained image changed")
++    return retained
++
++
+ def _validate_request(request):
+     _validate_compile_domain(request)
+-    _fail(isinstance(request, dict) and request.get("schema") == REQUEST_SCHEMA,
+-          "request schema")
+-    _fail(isinstance(request.get("native_fork_owned_transaction", False), bool),
+-          "owned native fork opt-in must be Boolean")
+-    candidate = request.get("candidate_sha")
+-    ihk = request.get("ihk_sha")
+-    _fail(isinstance(candidate, str) and re.fullmatch(r"[0-9a-f]{40}", candidate),
+-          "candidate identity")
+-    _fail(isinstance(ihk, str) and re.fullmatch(r"[0-9a-f]{40}", ihk), "IHK identity")
+-    _fail(isinstance(request.get("image_id"), str) and
+-          re.fullmatch(r"sha256:[0-9a-f]{64}", request["image_id"]), "image identity")
+-    _fail(1 <= request.get("jobs", 0) <= 4 and isinstance(request.get("jobs"), int),
+-          "jobs exceed reviewed bound")
+-    _fail(1 <= request.get("timeout", 0) <= MAX_TIMEOUT and isinstance(request.get("timeout"), int),
+-          "timeout exceeds reviewed bound")
+-    _fail(request.get("launcher_aggregate_memory_gib") == LAUNCHER_AGGREGATE_GIB,
+-          "launcher aggregate must be exactly 16.2158 GiB")
+-    memory_effect = request.get("memory_backed_bytes")
+-    _fail(isinstance(memory_effect, int) and not isinstance(memory_effect, bool) and memory_effect == 0,
+-          "memory-backed source bytes are not zero")
+-    aggregate = request.get("aggregate_memory_required")
+-    _fail(aggregate == LIMITS["Memory"] and aggregate + memory_effect <= LAUNCHER_AGGREGATE_BYTES,
+-          "aggregate memory admission failed")
+-    disk_admission = request.get("disk_admission")
+-    _fail(isinstance(disk_admission, dict), "disk admission manifest missing")
+-    _fail(disk_admission.get("host_free_floor") == 16 * 2**30 and
+-          disk_admission.get("scratch_free_floor") == 12 * 2**30,
+-          "disk admission floors differ")
+-    host_measure = _canonical(disk_admission.get("host_root", ""), "host measurement root", directory=True)
+-    scratch_measure = _canonical(disk_admission.get("scratch_root", ""), "scratch measurement root", directory=True)
+-    _fail(shutil.disk_usage(host_measure).free >= 16 * 2**30, "host disk floor failed")
+-    _fail(shutil.disk_usage(scratch_measure).free >= 12 * 2**30, "scratch disk floor failed")
+-    _fail(isinstance(disk_admission.get("host_device"), int) and
+-          os.stat(host_measure).st_dev == disk_admission["host_device"], "host device changed")
+-    _fail(isinstance(disk_admission.get("scratch_device"), int) and
+-          os.stat(scratch_measure).st_dev == disk_admission["scratch_device"], "scratch device changed")
+-    allocation_roots = request.get("memory_allocation_roots")
+-    _fail(isinstance(allocation_roots, list) and allocation_roots,
+-          "memory allocation roots missing")
+-    allocation_paths = [_canonical(item, "memory allocation root", directory=True)
+-                        for item in allocation_roots]
+-    source = _canonical(request.get("source_root", ""), "source root", directory=True)
+-    _fail(source in allocation_paths and len(set(allocation_paths)) == len(allocation_paths),
+-          "memory allocation roots do not bind source")
+-    owner_evidence = _canonical(request.get("owner_evidence_root", ""),
+-                                "owner evidence root", directory=True)
+-    _no_symlink_parents(owner_evidence, "owner evidence root")
+-    _fail(not any(owner_evidence.iterdir()), "owner evidence root must be fresh")
+-    work_root = _canonical(request.get("work_root", ""), "dedicated work root", directory=True)
+-    _fail(stat.S_IMODE(work_root.stat().st_mode) == 0o700,
+-          "dedicated work root must be mode 0700")
+-    attempt = _confined_path(request.get("attempt_root", ""), "attempt root")
+-    _fail(not attempt.exists() and attempt.parent == owner_evidence,
+-          "attempt root must be private and absent")
+-    receipt_path = _confined_path(owner_evidence / OWNER_RECEIPT_NAME, "owner receipt")
+-    _fail(not receipt_path.exists() and not receipt_path.is_symlink(),
+-          "owner receipt must be fresh")
+-    output = _confined_path(request.get("output_root", ""), "output root")
+-    evidence = _confined_path(request.get("evidence_root", ""), "evidence root")
+-    for path, label in ((output, "output root"), (evidence, "evidence root")):
+-        _fail(not path.exists() and not path.is_symlink(), label + " must be fresh")
+-        _fail(path.parent.exists() and path.parent.is_dir(), label + " parent missing")
+-    _fail(not any(work_root.iterdir()), "dedicated work root must be empty")
+-    _fail(output.parent == work_root and evidence.parent == work_root,
+-          "output/evidence must be direct children of dedicated work root")
+-    manifest = _regular(request.get("source_manifest", ""), "source manifest")
+-    toolchain = _regular(request.get("toolchain_manifest", ""), "toolchain manifest")
+-    driver = _regular(request.get("driver_path", ""), "offline driver")
+-    provenance = _regular(request.get("provenance_path", ""), "offline provenance")
+-    host_owner = _regular(request.get("host_owner_path", ""), "host owner")
+-    _fail(request.get("driver_sha256") == EXPECTED_DRIVER_SHA256, "offline driver release hash")
+-    _fail(_sha256(driver) == EXPECTED_DRIVER_SHA256, "offline driver bytes differ")
+-    _fail(isinstance(request.get("provenance_sha256"), str) and
+-          re.fullmatch(r"[0-9a-f]{64}", request["provenance_sha256"]),
+-          "offline provenance hash binding")
+-    _fail(_sha256(provenance) == request["provenance_sha256"],
+-          "offline provenance bytes differ")
+-    _fail(request["provenance_sha256"] == EXPECTED_PROVENANCE_SHA256,
+-          "offline provenance release hash")
+-    _fail(isinstance(request.get("host_owner_sha256"), str) and
+-          re.fullmatch(r"[0-9a-f]{64}", request["host_owner_sha256"]),
+-          "host owner hash binding")
+-    _fail(_sha256(host_owner) == request["host_owner_sha256"],
+-          "host owner bytes differ")
+-    _fail(request["host_owner_sha256"] == EXPECTED_HOST_OWNER_SHA256,
+-          "host owner release hash")
+-    for path, label, key in ((manifest, "source manifest", "source_manifest_sha256"),
+-                             (toolchain, "toolchain manifest", "toolchain_manifest_sha256")):
+-        _fail(isinstance(request.get(key), str) and re.fullmatch(r"[0-9a-f]{64}", request[key]),
+-              label + " hash binding")
+-        _fail(_sha256(path) == request[key], label + " hash drift")
+-    source_doc = _load_json(manifest, "source manifest")
+-    _fail(source_doc.get("candidate_sha") == candidate and source_doc.get("ihk_sha") == ihk,
+-          "source manifest identity differs")
+-    _fail(source_doc.get("schema") in ("mckernel.native-exact-mckernel-image-inputs.v1",
+-                                        "mckernel.native-exact-build-inputs.v1",
+-                                        "mckernel.native-fp-save-thin-inputs.v1",
+-                                        "mckernel.rust-fpu-sched-cutover-thin-inputs.v1",
+-                                        "mckernel.m14-combined-production-thin-inputs.v1"),
+-          "source manifest schema")
+-    if source_doc.get('schema') in ('mckernel.native-fp-save-thin-inputs.v1',
+-                                     'mckernel.rust-fpu-sched-cutover-thin-inputs.v1',
+-                                     'mckernel.m14-combined-production-thin-inputs.v1'):
+-        _fail(request.get('source_derivative_sha256') == source_doc.get('source_derivative_sha256') and
+-              request.get('materialization_sha256') == source_doc.get('materialization_sha256') and
+-              request.get('candidate_identity_scope') == 'base_git_commit_only',
+-              'explicit derivative request identity differs')
+-    else:
+-        _fail(request.get('source_derivative_sha256') is None and
+-              request.get('materialization_sha256') is None and
+-              request.get('candidate_identity_scope') is None,
+-              'thin identity fields on original full-tree request')
+-    _fail(isinstance(request.get("source_identity"), dict), "source identity missing")
+-    _check_identity(source, request["source_identity"], "source root")
+-    disk = request.get("disk_identity")
+-    _fail(isinstance(disk, dict) and disk.get("path") == str(source), "disk identity binding")
+-    _check_identity(source, disk, "disk candidate")
+-    toolchain_doc = _load_json(toolchain, "toolchain manifest")
+-    toolchain_schema = toolchain_doc.get("schema")
+-    _fail(toolchain_schema in ("mckernel.native-exact-mckernel-image-toolchain.v1",
+-                               "mckernel.native-exact-mckernel-image-toolchain.v2"),
+-          "toolchain manifest schema")
+-    if toolchain_schema.endswith(".v2"):
+-        mounts_by_target = _v2_mount_roots(request, toolchain_doc)
+-        roots = list(mounts_by_target.values())
+-        image_tools, mounted_tools = _validate_v2_image_tools(request, toolchain_doc)
+-        host_git = _v2_host_git(request)
+-        tools = {**image_tools, **mounted_tools}
+-    else:
+-        mounts_by_target = None
+-        host_git = None
+-        roots = _toolchain_roots(request)
+-        tools = toolchain_doc.get("tools")
+-        _fail(isinstance(tools, dict) and all(name in tools for name in REQUIRED_TOOLS),
+-              "toolchain tools incomplete")
+-    git_descriptor = host_git if toolchain_schema.endswith(".v2") else tools["git"]
+-    _admit_request_gitlink(request, source_doc, source, manifest, candidate, ihk,
+-                           allocation_paths, git_descriptor)
+-    if toolchain_schema.endswith(".v2"):
+-        kernel_root = mounts_by_target["/out"]
+-        kernel_root, kernel_dir = _validate_kernel_binding(toolchain_doc, kernel_root)
+-        # v2's kernel is deliberately not a second bind: it is part of the
+-        # read-only host_root -> /out translation.
+-    else:
+-        _fail(isinstance(toolchain_doc.get("kernel_dir"), str), "kernel directory binding")
+-        kernel_root = None
+-        kernel_dir = _canonical(toolchain_doc["kernel_dir"], "kernel directory", directory=True)
+-    for name in REQUIRED_TOOLS:
+-        descriptor = tools[name]
+-        _fail(isinstance(descriptor, dict) and isinstance(descriptor.get("path"), str) and
+-              isinstance(descriptor.get("sha256"), str) and
+-              re.fullmatch(r"[0-9a-f]{64}", descriptor["sha256"]) and
+-              isinstance(descriptor.get("version"), str) and descriptor["version"],
+-              "toolchain tool identity incomplete: " + name)
+-        if toolchain_schema.endswith(".v2") and name in mounted_tools:
+-            tool_path = _v2_host_path(descriptor["path"], mounts_by_target, "tool " + name)
+-            _fail(_sha256(tool_path) == descriptor["sha256"], "tool hash drift: " + name)
+-        elif not (toolchain_schema.endswith(".v2") and name in image_tools):
+-            tool_path = _regular(descriptor["path"], "tool " + name)
+-            _fail(_sha256(tool_path) == descriptor["sha256"], "tool hash drift: " + name)
+-    if toolchain_schema.endswith(".v2"):
+-        _fail(toolchain_doc.get("kernel_dir") in (None, "/out/build"),
+-              "container kernel directory binding")
+-    else:
+-        _fail(isinstance(toolchain_doc.get("kernel_inventory"), dict) and
+-              _tree_inventory(kernel_dir) == toolchain_doc["kernel_inventory"],
+-              "kernel inventory differs")
+-    if not toolchain_schema.endswith(".v2"):
+-        _fail(toolchain_doc.get("toolchain_roots") == request.get("toolchain_roots"),
+-              "toolchain root manifest differs")
+-        _fail(toolchain_doc.get("path_dirs") == request.get("path_dirs"),
+-              "PATH manifest differs")
+-    _fail(isinstance(toolchain_doc.get("linux_probe"), dict) and
+-          toolchain_doc["linux_probe"].get("kernel_dir") ==
+-          ("/out/build" if toolchain_schema.endswith(".v2") else str(kernel_dir)),
+-          "Linux probe manifest differs")
+-    _fail(isinstance(toolchain_doc.get("environment"), dict) and not toolchain_doc["environment"],
+-          "toolchain environment is not sealed")
+-    _fail(isinstance(tools.get("rustc"), dict), "toolchain Rust identity")
+-    rust_version = tools["rustc"].get("version", "")
+-    _fail(rust_version == EXPECTED_V2_RUSTC_VERSION,
+-          "toolchain Rust version is not the supported exact nightly")
+-    source_tools = dict(tools)
+-    if toolchain_schema.endswith(".v2"):
+-        # Authentication of the source checkout is a host operation.  Do not
+-        # read image /usr paths here: the container's receipt is their only
+-        # host-side authority.  Git alone is needed by source admission.
+-        source_tools = {"git": host_git}
+-    _validate_authenticated_source(source, source_doc, candidate, ihk, source_tools, provenance)
+-    backup_raw = request.get("backup_root", request.get("source_backup_root"))
+-    backup = _canonical(backup_raw, "source backup", directory=True)
+-    _check_identity(backup, request.get("backup_identity"), "source backup")
+-    _fail(isinstance(request.get("backup_inventory"), dict) and request["backup_inventory"],
+-          "source backup inventory missing")
+-    _fail(_tree_inventory(backup) == request["backup_inventory"],
+-          "source backup inventory differs")
+-    path_dirs = toolchain_doc.get("path_dirs") if toolchain_schema.endswith(".v2") else request.get("path_dirs")
+-    _fail(isinstance(path_dirs, list) and path_dirs, "path_dirs manifest missing")
+-    image_path_dirs = ({str(Path(row["path"]).parent) for row in image_tools.values()}
+-                       if toolchain_schema.endswith(".v2") else set())
+-    for row in path_dirs:
+-        _fail(isinstance(row, str), "path_dirs row")
+-        if toolchain_schema.endswith(".v2"):
+-            if row.startswith(("/out/", "/nightly/")):
+-                path = _v2_host_path(row, mounts_by_target, "path_dirs entry", directory=True)
+-                _fail(path.is_dir(), "PATH directory escapes toolchain roots")
+-            else:
+-                _fail(row in image_path_dirs, "image PATH directory differs")
+-        else:
+-            path = _canonical(row, "path_dirs entry", directory=True)
+-            _fail(path.is_dir() and any(path == other or other in path.parents for other in roots),
+-                  "PATH directory escapes toolchain roots")
+-    nightly = request.get("nightly")
+-    _fail(isinstance(nightly, dict) and isinstance(nightly.get("rustc_version"), str) and
+-          nightly["rustc_version"] == EXPECTED_V2_RUSTC_VERSION and
+-          nightly["rustc_version"] == rust_version, "nightly manifest")
+-    expected_mounts = {"source": "/src", "manifest": "/inputs.json",
+-                                 "toolchain": "/toolchain.json", "driver": "/driver.py",
+-                                 "provenance": "/native_rust_exact_build_offline.py",
+-                                 "work": "/work"}
+-    if request.get("gitlink_manifest") is not None:
+-        expected_mounts.update({"gitlink_manifest": "/libdwarf-inputs.json",
+-                                "gitlink": "/src/executer/user/lib/libdwarf/libdwarf"})
+-    _fail(request.get("mounts") == expected_mounts, "mount manifest differs")
+-    common = request.get("common_exclusion_path")
+-    _fail(common == COMMON_EXCLUSION and common not in RETIRED_COMMON_EXCLUSIONS,
+-          "common exclusion path differs or is retired")
+-    lease = _regular(request.get("lease_path", ""), "lease path") if Path(request.get("lease_path", "")).exists() else Path(request.get("lease_path", ""))
+-    _no_symlink_parents(lease, "lease path")
+-    disjoint_paths = (source, manifest, toolchain, driver, provenance, host_owner,
+-                      owner_evidence, work_root, *roots, backup)
+-    gitlink_root = None
+-    if request.get("gitlink_manifest") is not None:
+-        gitlink_root = _canonical(request.get("gitlink_root", ""), "libdwarf checkout", directory=True)
+-        _disjoint((source, gitlink_root))
+-        disjoint_paths += (gitlink_root, _regular(request["gitlink_manifest"], "gitlink manifest"))
+-    if not toolchain_schema.endswith(".v2"):
+-        disjoint_paths += (kernel_dir,)
+-    _disjoint(disjoint_paths)
+-    _fail(work_root != owner_evidence and work_root not in owner_evidence.parents and
+-          owner_evidence not in work_root.parents, "work/evidence roots overlap")
+-    try:
+-        authenticated_host = _load_reviewed_host_owner(
+-            host_owner, request["host_owner_sha256"], provenance,
+-            request["provenance_sha256"])
+-    except (OSError, RuntimeError, SyntaxError) as exc:
+-        raise OwnerError("authenticated host owner import failed: " + str(exc)) from exc
+-    try:
+-        measurement = authenticated_host.measure(
+-            host_measure, scratch_measure, 16 * 2**30, 12 * 2**30,
+-            source_root=source, output_root=work_root,
+-            memory_allocation_roots=allocation_paths)
+-    except (OSError, RuntimeError, ValueError) as exc:
+-        raise OwnerError("resource/allocation measurement failed: " + str(exc)) from exc
+-    _fail(measurement.get("memory_allocation_memory_backed_bytes") == memory_effect,
+-          "measured memory-backed allocation differs")
+-    _fail(measurement.get("aggregate_memory_required") == aggregate,
+-          "measured aggregate memory differs")
+-    return {"source": source, "manifest": manifest, "toolchain": toolchain,
+-            "driver": driver, "provenance": provenance, "output": output, "evidence": evidence,
+-            "owner_evidence": owner_evidence, "attempt": attempt,
+-            "work": work_root, "backup": backup, "measurement": measurement,
+-            "host_owner": authenticated_host,
+-            "host_owner_path": host_owner, "roots": roots, "kernel": kernel_dir,
+-            "kernel_root": kernel_root, "toolchain_schema": toolchain_schema,
+-            "mounts_by_target": mounts_by_target, "host_git": host_git,
+-            "allocation_roots": allocation_paths,
+-            "gitlink_root": gitlink_root,
+-            "gitlink_manifest": _regular(request["gitlink_manifest"], "gitlink manifest")
+-            if request.get("gitlink_manifest") is not None else None,
+-            "path_dirs": [_v2_host_path(row, mounts_by_target, "PATH directory", directory=True)
+-                          if row.startswith(("/out/", "/nightly/")) else Path(row)
+-                          for row in path_dirs] if toolchain_schema.endswith(".v2") else
+-            [_canonical(row, "PATH directory", directory=True) for row in path_dirs],
+-            "lease": lease}
+-
+-
++    _fail(request.get("schema") == REQUEST_SCHEMA, "BFD request schema")
++    _fail(type(request.get("timeout")) is int and 1 <= request["timeout"] <= MAX_TIMEOUT,
++          "BFD timeout exceeds retained bound")
++    source = _canonical(request["source_root"], "BFD original source", directory=True)
++    candidate = _canonical(request["candidate_root"], "BFD proposal", directory=True)
++    work = _canonical(request["work_root"], "BFD HOST work", directory=True)
++    owner_evidence = _canonical(request["owner_evidence_root"], "BFD owner evidence", directory=True)
++    for path in (source, candidate, work, owner_evidence):
++        _no_symlink_parents(path, "BFD input/output root")
++    _fail(stat.S_IMODE(work.stat().st_mode) == 0o700 and not any(work.iterdir()),
++          "BFD HOST work must be private and empty")
++    _fail(not any(owner_evidence.iterdir()), "BFD owner evidence must be fresh")
++    attempt = _confined_path(request["attempt_root"], "BFD attempt")
++    output = _confined_path(request["output_root"], "BFD qualification output")
++    for path in (attempt, output, owner_evidence / OWNER_RECEIPT_NAME):
++        _fail(not path.exists() and not path.is_symlink(), "BFD output/receipt already exists")
++    _disjoint((source, candidate, work, owner_evidence))
++    retained = _retained_toolchain_request()
++    toolchain = _regular(retained["toolchain_manifest"], "retained SDK toolchain")
++    _fail(_sha256(toolchain) == COMPILE_PROFILE["toolchain_manifest_sha256"], "retained SDK manifest changed")
++    toolchain_doc = _load_json(toolchain, "retained SDK toolchain")
++    mounts = _v2_mount_roots(retained, toolchain_doc)
++    _validate_v2_image_tools(retained, toolchain_doc)
++    _disjoint((source, candidate, work, owner_evidence, *mounts.values()))
++    roots = [source, candidate, *mounts.values()]
++    _fail(request.get("memory_allocation_roots") == [str(p) for p in roots], "BFD allocation roots differ")
++    _fail(request.get("memory_backed_bytes") == 0, "BFD inputs must be disk-backed")
++    disk = request.get("disk_admission")
++    _fail(isinstance(disk, dict) and disk.get("host_free_floor") == 16 * 2**30 and
++          disk.get("scratch_free_floor") == 12 * 2**30, "BFD disk floors differ")
++    for key in ("host", "scratch"):
++        measured = _canonical(disk.get(key + "_root", ""), key + " measurement root", directory=True)
++        _fail(measured.stat().st_dev == disk.get(key + "_device"), key + " measurement device changed")
++    bound = {"source": source, "candidate": candidate, "work": work,
++             "output": output, "evidence": output, "owner_evidence": owner_evidence,
++             "attempt": attempt, "host_owner": _HOST_OWNER, "host_owner_path": _HOST_OWNER_PATH,
++             "allocation_roots": roots, "mounts_by_target": mounts}
++    _revalidate_inputs(bound, request)
++    bound["measurement"] = _HOST_OWNER.measure(disk["host_root"], disk["scratch_root"],
++        16 * 2**30, 12 * 2**30, source_root=source, output_root=work, memory_allocation_roots=roots)
++    _fail(bound["measurement"]["memory_allocation_memory_backed_bytes"] == 0 and
++          bound["measurement"]["aggregate_memory_required"] == LIMITS["Memory"], "BFD allocation measurement changed")
++    return bound
+ 
+ 
+ def _check_profile(info, image, nonce, mounts=None, command=None, user=None,
+@@ -1238,7 +1050,7 @@
+     _fail(info.get("Config", {}).get("Labels", {}).get("mckernel.operation") == COMPILE_PROFILE["operation"], "compile operation label mismatch")
+     config = info.get("Config", {})
+     if command is not None:
+-        _fail(config.get("Entrypoint") == ["/usr/bin/python3"] and config.get("Cmd") == command,
++        _fail(config.get("Entrypoint") == ["/usr/bin/env"] and config.get("Cmd") == command,
+               "effective driver command mismatch")
+     if user is not None:
+         _fail(config.get("User") == user, "effective container user mismatch")
+@@ -1268,147 +1080,78 @@
+ 
+ 
+ def _validate_driver_result(evidence, output, result, request):
+-    evidence = _safe_directory(evidence, "driver evidence root")
+-    output = _safe_directory(output, "driver output root")
+-    _fail(result.get("status") == "PASS", "driver receipt is not PASS")
+-    _fail(result.get("native_fork_owned_transaction", False) is
+-          request.get("native_fork_owned_transaction", False), "owned fork opt-in receipt differs")
+-    _fail(result.get("candidate_sha") == request["candidate_sha"] and
+-          result.get("ihk_sha") == request["ihk_sha"], "driver receipt identity differs")
+-    _fail(result.get("source_manifest_sha256") == request["source_manifest_sha256"] and
+-          result.get("toolchain_manifest_sha256") == request["toolchain_manifest_sha256"],
+-          "driver receipt provenance differs")
+-    if request.get("gitlink_manifest") is not None:
+-        _fail(result.get("gitlink_manifest_sha256") == request["gitlink_manifest_sha256"],
+-              "driver gitlink provenance differs")
+-    if request.get('source_derivative_sha256') is not None:
+-        _fail(result.get('source_derivative_sha256') == request['source_derivative_sha256'] and
+-              result.get('materialization_sha256') == request['materialization_sha256'] and
+-              result.get('candidate_identity_scope') == 'base_git_commit_only',
+-              'driver explicit derivative identity differs')
+-    panic_proof=result.get('production_rust_core_panic_reference_proof')
+-    _fail(isinstance(panic_proof,dict) and panic_proof.get('status')=='PASS_PRODUCTION_RUST_NO_TARGETED_CORE_PANIC_REFS'
+-          and panic_proof.get('forbidden')==[] and panic_proof.get('clone_thread_undefined')==1,
+-          'actual production Rust core-panic reference proof missing')
+-    _fail(panic_proof['object']['sha256']==result['artifacts']['mckernel_rust.o']['sha256'],
+-          'actual final Rust object/core-panic proof differs')
+-    inventory = result.get("inventory")
+-    _fail(isinstance(inventory, dict), "driver evidence inventory missing")
+-    observed_inventory = {}
+-    for item in sorted(evidence.rglob("*")):
+-        st = item.lstat()
+-        _fail(not stat.S_ISLNK(st.st_mode), "driver evidence contains symlink")
+-        _fail(stat.S_ISREG(st.st_mode) or stat.S_ISDIR(st.st_mode),
+-              "driver evidence contains special file")
+-        if item.is_file() and item.relative_to(evidence) != Path("receipt.json"):
+-            relative = item.relative_to(evidence)
+-            _fail(not relative.is_absolute() and ".." not in relative.parts,
+-                  "driver evidence inventory path escapes root")
+-            observed_inventory[str(relative)] = {
+-                "size": item.stat().st_size, "sha256": _sha256(item)}
+-    for relative, metadata in inventory.items():
+-        relative_path = Path(relative)
+-        _fail(not relative_path.is_absolute() and ".." not in relative_path.parts and
+-              str(relative_path) == relative, "driver evidence inventory path is not canonical")
+-        path = _safe_regular(evidence / relative_path, "driver evidence member")
+-        _fail(isinstance(metadata, dict) and metadata.get("size") == path.stat().st_size and
+-              metadata.get("sha256") == _sha256(path), "driver evidence inventory drift")
+-    _fail(set(observed_inventory) == set(inventory),
+-          "driver evidence inventory is incomplete or has unexpected members")
+-    expected = {"mckernel.img", "mckernel.img.map", "CMakeCache.txt", "compile_commands.json",
+-                "mckernel_rust.o", "build.make"}
+-    if request.get("native_fork_owned_transaction", False):
+-        expected.update({"mcexec", "mcexec_helpers.o", "mcexec-rust-build.make"})
+-    copied = result.get("evidence_artifacts")
+-    _fail(isinstance(copied, dict) and set(copied) >= expected,
+-          "driver artifact inventory incomplete")
+-    for name in expected:
+-        relative = name
+-        path = evidence / "artifacts" / relative
+-        row = copied[name]
+-        _safe_regular(path, "driver evidence artifact")
+-        _fail(
+-              str(row.get("path", "")).replace("\\", "/").endswith("/artifacts/" + relative),
+-              "driver artifact path differs: " + name)
+-        _fail(row.get("size") == path.stat().st_size and row.get("sha256") == _sha256(path),
+-              "driver artifact hash differs: " + name)
+-        _fail(row.get("path") == "/work/evidence/artifacts/" + name,
+-              "driver artifact path is not canonical: " + name)
+-    artifacts = result.get("artifacts")
+-    _fail(isinstance(artifacts, dict) and set(artifacts) >= expected,
+-          "driver output artifact inventory incomplete")
+-    output_paths = {"mckernel.img": output / "build/kernel/mckernel.img",
+-                    "mckernel.img.map": output / "build/kernel/mckernel.img.map",
+-                    "CMakeCache.txt": output / "build/CMakeCache.txt",
+-                    "compile_commands.json": output / "build/compile_commands.json",
+-                    "mckernel_rust.o": output / "build/kernel/rust/mckernel_rust.o",
+-                    "build.make": output / "build/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make"}
+-    if request.get("native_fork_owned_transaction", False):
+-        output_paths.update({
+-            "mcexec": output / "build/executer/user/mcexec",
+-            "mcexec_helpers.o": output / "build/executer/user/rust/mcexec_helpers.o",
+-            "mcexec-rust-build.make": output / "build/executer/user/CMakeFiles/mcexec_rust_helpers.dir/build.make",
+-        })
+-    for name, path in output_paths.items():
+-        row = artifacts[name]
+-        output_rel = path.relative_to(output)
+-        _fail(row.get("path") == "/work/output/" + output_rel.as_posix(),
+-              "driver output artifact path is not canonical: " + name)
+-        _safe_regular(path, "driver output artifact")
+-        _fail(row.get("size") == path.stat().st_size and
+-              row.get("sha256") == _sha256(path), "driver output hash differs: " + name)
++    output = _safe_directory(output, "BFD qualification output")
++    _fail(evidence == output, "BFD evidence/output contract differs")
++    _fail(result.get("status") == "PASS_PINNED_ABI_AND_SELECTED_USER_TOOL_ARTIFACTS" and
++          result.get("scope") == SCOPE and result.get("native_acceptance") is False and
++          result.get("M15_file_closure") is False, "BFD qualifier result contract differs")
++    pins = _load_json(Path(COMPILE_PROFILE["candidate_root"]) / "PINNED-ABI.json", "BFD pins")
++    _fail(result.get("pins") == pins and isinstance(result.get("layout"), str) and result["layout"], "BFD pin/layout result differs")
++    _fail(not (output / "FAILURE.json").exists(), "BFD failure evidence present")
++    comparisons = result.get("comparisons")
++    _fail(isinstance(comparisons, list) and len(comparisons) == 8, "BFD comparison set incomplete")
++    cases = {"mcinspect": [["--help"], [], ["--kernel=/work/qualification-1/absent.img", "--ps"],
++                           ["--kernel=/work/qualification-1/stripped.o", "--ps"]],
++             "eclair": [["-h"], ["-k", "/work/qualification-1/absent.img", "-d", "/work/qualification-1/absent.dump"],
++                        ["-k", "/work/qualification-1/stripped.o", "-d", "/work/qualification-1/absent.dump"],
++                        ["-k", "/work/qualification-1/fixture.o", "-d", "/work/qualification-1/absent.dump"]]}
++    expected = [(tool, args) for tool in ("mcinspect", "eclair") for args in cases[tool]]
++    _fail([(row.get("tool"), row.get("args")) for row in comparisons] == expected and
++          all(row.get("matched") is True and type(row.get("rc")) is int for row in comparisons), "BFD behavior comparisons differ")
++    for tool in ("mcinspect", "eclair"):
++        for i in range(4):
++            for stream in ("stdout", "stderr"):
++                original = _safe_regular(output / f"{tool}-{i}-original.{stream}", "BFD baseline stream")
++                rust = _safe_regular(output / f"{tool}-{i}-rust.{stream}", "BFD Rust stream")
++                _fail(original.read_bytes() == rust.read_bytes(), "BFD retained behavior streams differ")
++    commands = json.loads(_safe_regular(output / "commands.json", "BFD command capture").read_text())
++    names = ["witness-build", "witness-run", "witness-preprocessed", "rust-build", "mcinspect-original-compile",
++             "eclair-original-compile", "equivalence-link", "fixture-compile", "fixture-strip", "equivalence-run",
++             "rust-symbols", "selected-configure", "selected-build", "mcinspect-baseline-compile", "mcinspect-baseline-link",
++             "mcinspect-dynamic", "mcinspect-symbols", "eclair-baseline-compile", "eclair-baseline-link", "eclair-dynamic", "eclair-symbols"]
++    _fail(isinstance(commands, list) and [row.get("log") for row in commands] == names and
++          all(type(row.get("rc")) is int and row["rc"] == 0 for row in commands), "BFD command capture incomplete/failing")
++    for name in names:
++        for stream in ("stdout", "stderr"):
++            _safe_regular(output / (name + "." + stream), "BFD command stream")
++    symbols = (output / "rust-symbols.stdout").read_text()
++    names = re.findall(r"\bT\s+((?:mcinspect|eclair)_bfd_(?:get_symtab_upper_bound|canonicalize_symtab)_bridge)\b", symbols)
++    expected_symbols = {tool + "_bfd_" + function + "_bridge" for tool in ("mcinspect", "eclair")
++                        for function in ("get_symtab_upper_bound", "canonicalize_symtab")}
++    _fail(len(names) == 4 and set(names) == expected_symbols and not re.search(r"\bU\s+(?:mcinspect|eclair)_bfd_", symbols),
++          "BFD four-definition/no-old-wrapper result differs")
++    for relative in ("bfd_accessors.o", "bfd_layout.rs", "equivalence", "layout-witness", "fixture.o", "stripped.o",
++                     "selected-tools/executer/user/mcinspect", "selected-tools/executer/user/eclair",
++                     "selected-tools/executer/user/CMakeFiles/mcinspect.dir/link.txt",
++                     "selected-tools/executer/user/CMakeFiles/eclair.dir/link.txt"):
++        _fail(_safe_regular(output / relative, "BFD qualification artifact").stat().st_size > 0, "BFD artifact empty")
+ 
+ 
+ def _revalidate_inputs(bound, request):
+-    _check_identity(bound["source"], request["source_identity"], "source root")
+-    _check_identity(bound["backup"], request["backup_identity"], "source backup")
+-    _fail(_tree_inventory(bound["backup"]) == request["backup_inventory"],
+-          "source backup inventory changed")
+-    _fail(_sha256(bound["manifest"]) == request["source_manifest_sha256"],
+-          "source manifest changed")
+-    _fail(_sha256(bound["toolchain"]) == request["toolchain_manifest_sha256"],
+-          "toolchain manifest changed")
+-    if bound.get("gitlink_manifest") is not None:
+-        _fail(_sha256(bound["gitlink_manifest"]) == request["gitlink_manifest_sha256"],
+-              "gitlink manifest changed")
+-    _fail(_sha256(bound["driver"]) == EXPECTED_DRIVER_SHA256 and
+-          _sha256(bound["provenance"]) == EXPECTED_PROVENANCE_SHA256,
+-          "authenticated helper bytes changed")
+-    _fail(_sha256(bound["host_owner_path"]) == request["host_owner_sha256"],
+-          "authenticated host owner changed")
+-    source_doc = _load_json(bound["manifest"], "source manifest")
+-    toolchain_doc = _load_json(bound["toolchain"], "toolchain manifest")
+-    if bound.get("toolchain_schema", "").endswith(".v2"):
+-        _v2_mount_roots(request, toolchain_doc)
+-        host_root, host_kernel = _validate_kernel_binding(toolchain_doc, bound["kernel_root"])
+-        _fail(host_root == bound["kernel_root"] and host_kernel == bound["kernel"],
+-              "kernel binding changed")
+-        _validate_v2_image_tools(request, toolchain_doc)
+-    if bound.get("toolchain_schema", "").endswith(".v2"):
+-        _validate_v2_image_tools(request, toolchain_doc)
+-        source_tools = {"git": _v2_host_git(request)}
+-    else:
+-        source_tools = toolchain_doc["tools"]
+-    rust_descriptor = (toolchain_doc.get("mounted_tools", {}).get("rustc", {})
+-                       if bound.get("toolchain_schema", "").endswith(".v2")
+-                       else toolchain_doc.get("tools", {}).get("rustc", {}))
+-    rust_version = rust_descriptor.get("version", "")
+-    _fail(rust_version == EXPECTED_V2_RUSTC_VERSION and
+-          request.get("nightly", {}).get("rustc_version") == rust_version,
+-          "toolchain Rust version drifted")
+-    _validate_authenticated_source(bound["source"], source_doc, request["candidate_sha"],
+-                                   request["ihk_sha"], source_tools, bound["provenance"])
+-    if bound.get("gitlink_manifest") is not None:
+-        _validate_gitlink_manifest(_load_json(bound["gitlink_manifest"], "gitlink manifest"),
+-                                   bound["gitlink_manifest"], bound["gitlink_root"],
+-                                   bound["manifest"], request["candidate_sha"],
+-                                   request["ihk_sha"], source_tools["git"])
+-
+-
+-COMPILE_PROFILE = {'activation': 'COMPILE_LINK_ONLY_NO_GUEST_OR_KERNEL_ACTIVATION', 'admission_max_age_ns': 120000000000, 'container_name': 'mckernel-m14-compile-95f3c1f79ec040ddbb7065ff9f5ca536', 'driver_sha256': '7d30085edda4d1272f923b19e8632e9ab8b259874623974c2da53dbe4c3c5be0', 'host_helper_sha256': '8ffc9a09e2f2e9e9c9cc09af559d707bf6c4b989fc4f9d3ad51fe88a8e5b6083', 'image_id': 'sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5', 'jobs': 1, 'lease_path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/operation-1/compile-lease.json', 'limits': {'CpusetCpus': '6', 'Memory': 4294967296, 'MemorySwap': 4294967296, 'NanoCpus': 1000000000, 'NetworkMode': 'none', 'PidsLimit': 128}, 'materialization_sha256': '3c0c7e48058afda716d622056cc555b027d27177d5019499cab992f74899dc7f', 'minimum_MemAvailable': 25769803776, 'namespace': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/operation-1', 'operation': 'M14_CANDIDATE14_HOST_COMPILE_LINK_ONLY_V1', 'owner_nonce': '95f3c1f79ec040ddbb7065ff9f5ca536', 'provenance_sha256': '453dd998e4ef1e2ed21b0818771d97197d77f98c90ca8c6c67cc8ab019063044', 'reserved_native_profile': {'CpusetCpus': '2-5', 'Memory': 12884901888, 'MemorySwap': 12884901888, 'NanoCpus': 4000000000, 'NetworkMode': 'none', 'PidsLimit': 512}, 'schema': 'mckernel.m14-candidate14-compile-link-profile.v1', 'sole_rw_mount_target': '/work', 'source_derivative_sha256': 'caa690b06ff078828ecab2ae9d70adfd98072073be2acae7955efd8a48bce3ba', 'source_manifest_sha256': 'bf3096e00f9f176c308604332ac276abc30c2576b2c7c3052c837ccf7e640b47', 'source_root': '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/source-materialization-attempt-1/materialized-source', 'toolchain_manifest_sha256': 'a68e02b3b66b8bfbae96bf742dc8702b6e81dd97b92189b87437c3d08fccdf72'}
+-COMPILE_PROFILE_PATH = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/COMPILE-PROFILE.json')
+-COMPILE_PROFILE_SHA256 = '9b78e4ec49f163a333a3fd7e9cf0dc6b05dbdc097a0b785c20cf741aaa6e23fa'
+-PRIVATE_ROOT = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate')
++    _validate_compile_domain(request)
++    _check_identity(bound["source"], COMPILE_PROFILE["source_identity"], "BFD source root")
++    _check_identity(bound["candidate"], COMPILE_PROFILE["candidate_identity"], "BFD proposal root")
++    manifest = _regular(COMPILE_PROFILE["input_manifest"], "BFD fixed inputs")
++    _fail(_sha256(manifest) == COMPILE_PROFILE["input_manifest_sha256"], "BFD fixed input manifest changed")
++    inputs = _load_json(manifest, "BFD fixed inputs")
++    _fail(_bfd_inventory(bound["candidate"]) == inputs["candidate"], "BFD candidate closure changed")
++    _fail(_bfd_inventory(bound["source"], inputs["source_roots"]) == inputs["source"], "BFD consumed source closure changed")
++    binding = _load_json(bound["candidate"] / "SOURCE-BINDING.json", "BFD original source binding")
++    for relative, digest in binding["sources"].items():
++        _fail(_sha256(bound["source"] / relative) == digest, "BFD selected original source changed: " + relative)
++    _fail(_sha256(_HOST_OWNER_PATH) == EXPECTED_HOST_OWNER_SHA256, "BFD host helper changed")
++    retained = _retained_toolchain_request()
++    toolchain = _regular(retained["toolchain_manifest"], "retained SDK toolchain")
++    _fail(_sha256(toolchain) == COMPILE_PROFILE["toolchain_manifest_sha256"], "retained SDK manifest changed")
++    toolchain_doc = _load_json(toolchain, "retained SDK toolchain")
++    _fail(_v2_mount_roots(retained, toolchain_doc) == bound["mounts_by_target"], "retained SDK mounts changed")
++    _validate_v2_image_tools(retained, toolchain_doc)
++
++
++COMPILE_PROFILE = {'activation': 'COMPILE_LINK_ONLY_NO_GUEST_OR_KERNEL_ACTIVATION', 'admission_max_age_ns': 120000000000, 'image_id': 'sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5', 'jobs': 1, 'minimum_MemAvailable': 25769803776, 'reserved_native_profile': {'CpusetCpus': '2-5', 'Memory': 12884901888, 'MemorySwap': 12884901888, 'NanoCpus': 4000000000, 'NetworkMode': 'none', 'PidsLimit': 512}, 'sole_rw_mount_target': '/work', 'toolchain_manifest_sha256': 'a68e02b3b66b8bfbae96bf742dc8702b6e81dd97b92189b87437c3d08fccdf72', 'schema': 'mckernel.m15-bfd-compile-link-profile.v1', 'scope': 'Functional McKernel OS/apps and Rust/assembly migration only; no security testing.', 'operation': 'M15_BFD_PINNED_SELECTED_USER_TOOLS_COMPILE_ONLY_V1', 'namespace': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd-owner-successor/operation-1', 'lease_path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd-owner-successor/operation-1/compile-lease.json', 'owner_nonce': 'bf69b996f71f4cb1bb0a50d7aa43aaa8', 'container_name': 'mckernel-m15-bfd-compile-bf69b996f71f4cb1bb0a50d7aa43aaa8', 'host_helper_sha256': '76ff839a839a2f55cd7d537d22221cb1b053390e2b6052b8be2b5d8b20990e63', 'limits': {'CpusetCpus': '6', 'Memory': 2147483648, 'MemorySwap': 2147483648, 'NanoCpus': 1000000000, 'NetworkMode': 'none', 'PidsLimit': 128}, 'candidate_root': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd', 'source_root': '/home/holden/mckernel', 'source_identity': {'path': '/home/holden/mckernel', 'dev': 66306, 'inode': 47459795, 'uid': 1000, 'gid': 1000, 'mode': 509, 'file_type': 16384}, 'candidate_identity': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd', 'dev': 66306, 'inode': 56125093, 'uid': 1000, 'gid': 1000, 'mode': 509, 'file_type': 16384}, 'input_manifest': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd-owner-successor/BFD-INPUTS.json', 'input_manifest_sha256': 'aed4fd1dc6d49e83320714e683ea4adb360614efc9633fe93b3e96254d587bc8', 'retained_request': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile-request.PREPARED.json', 'retained_request_sha256': '92bcb96713c498bf2397bb24c3473a2ffbeb61f45dfa423a6ae8b99f4a4ffe4f', 'command': ['/usr/bin/env', '-i', 'PATH=/nightly/bin:/usr/bin:/bin', 'LANG=C', 'LC_ALL=C', '/usr/bin/python3', '/candidate/orchestration/qualify.py', '--repo', '/src', '--output', '/work/qualification-1']}
++COMPILE_PROFILE_PATH = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd-owner-successor/COMPILE-PROFILE.json')
++COMPILE_PROFILE_SHA256 = 'e25bec3d2864245092c4202e6ce05c20e00ea8914e8a932eacd19f7a3f3e159a'
++PRIVATE_ROOT = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd-owner-successor')
+ 
+ 
+ def _canonical_hash(document):
+@@ -1430,15 +1173,12 @@
+           "private compile owner/helper limits differ")
+     _fail(request.get("jobs") == 1 and request.get("aggregate_memory_required") == LIMITS["Memory"],
+           "compile jobs/aggregate profile mismatch")
+-    _fail(request.get("native_fork_owned_transaction") is True,
+-          "candidate14 build configuration selection changed")
+-    for key in ("source_root", "source_manifest_sha256", "source_derivative_sha256",
+-                "materialization_sha256", "driver_sha256", "provenance_sha256",
+-                "toolchain_manifest_sha256", "image_id"):
+-        _fail(request.get(key) == COMPILE_PROFILE[key], "fixed candidate14 input differs: " + key)
++    for key in ("source_root", "candidate_root", "input_manifest_sha256", "toolchain_manifest_sha256", "image_id"):
++        _fail(request.get(key) == COMPILE_PROFILE[key], "fixed BFD input differs: " + key)
++    _fail(request.get("exact_command") == COMPILE_PROFILE["command"], "fixed BFD command differs")
+     root = Path(COMPILE_PROFILE["namespace"])
+-    expected = {"work_root": root / "owner-work", "output_root": root / "owner-work/output",
+-                "evidence_root": root / "owner-work/evidence", "owner_evidence_root": root / "owner-evidence",
++    expected = {"work_root": root / "owner-work", "output_root": root / "owner-work/qualification-1",
++                "evidence_root": root / "owner-work/qualification-1", "owner_evidence_root": root / "owner-evidence",
+                 "attempt_root": root / "owner-evidence/attempt", "lease_path": root / "compile-lease.json",
+                 "common_exclusion_path": root / "compile-lease.json",
+                 "host_owner_path": _HOST_OWNER_PATH}
+@@ -1486,7 +1226,7 @@
+     """Fail closed until root binds actual live P12 facts and source review."""
+     _validate_compile_domain(request)
+     release = _read_root_document(request.get("compile_only_release"), PRIVATE_ROOT / "ROOT-RELEASE.json", "compile release")
+-    _fail(release.get("status") == "RELEASED_FOR_ONE_COMPILE_ONLY_CANDIDATE14" and
++    _fail(release.get("status") == "RELEASED_FOR_ONE_COMPILE_ONLY_M15_BFD" and
+           release.get("operation") == COMPILE_PROFILE["operation"] and
+           release.get("request_core_sha256") == _request_core_hash(request) and
+           release.get("profile_sha256") == COMPILE_PROFILE_SHA256 and
+@@ -1497,7 +1237,7 @@
+           re.fullmatch(r"[0-9a-f]{64}", release["independent_source_review_sha256"]),
+           "independent source review binding missing")
+     facts = _read_root_document(release.get("root_admission"), PRIVATE_ROOT / "ROOT-ADMISSION.json", "root live admission")
+-    _fail(facts.get("schema") == "mckernel.m14-candidate14-dual-container-admission.v1" and
++    _fail(facts.get("schema") == "mckernel.m15-bfd-dual-container-admission.v1" and
+           facts.get("operation") == COMPILE_PROFILE["operation"] and
+           facts.get("request_core_sha256") == _request_core_hash(request) and
+           facts.get("profile_sha256") == COMPILE_PROFILE_SHA256,
+@@ -1507,7 +1247,7 @@
+     _fail(facts.get("compile_limits") == LIMITS and
+           facts.get("P12_limits") == COMPILE_PROFILE["reserved_native_profile"],
+           "concurrent resource reservation differs")
+-    _fail(facts.get("capacity_verdict") == "PASS_DUAL_CONTAINER_COMPILE_CPU6_4G" and
++    _fail(facts.get("capacity_verdict") == "PASS_DUAL_CONTAINER_COMPILE_CPU6_2G" and
+           facts.get("controller_allowance_reviewed") is True and
+           facts.get("native_cgroups_unchanged") is True, "concurrent capacity/controller agreement missing")
+     for available, required in (("HOST_available", "HOST_required"), ("scratch_available", "scratch_required")):
+@@ -1571,7 +1311,7 @@
+     def __init__(self, request):
+         self.path = Path(request["lease_path"])
+         _fail(str(self.path) == COMPILE_PROFILE["lease_path"], "compile lease domain mismatch")
+-        self.record = {"schema": "mckernel.m14-candidate14-compile-lease.v1", "operation": COMPILE_PROFILE["operation"],
++        self.record = {"schema": "mckernel.m15-bfd-compile-lease.v1", "operation": COMPILE_PROFILE["operation"],
+                        "pid": os.getpid(), "starttime": _proc_starttime(os.getpid()),
+                        "boot_id": Path("/proc/sys/kernel/random/boot_id").read_text().strip(),
+                        "request_core_sha256": _request_core_hash(request), "profile_sha256": COMPILE_PROFILE_SHA256,
+@@ -1691,27 +1431,17 @@
+ 
+ 
+ def _compile_mounts(bound):
+-    mounts = [(bound["source"], "/src", True), (bound["manifest"], "/inputs.json", True),
+-              (bound["gitlink_manifest"], "/libdwarf-inputs.json", True),
+-              (bound["gitlink_root"], "/src/executer/user/lib/libdwarf/libdwarf", True),
+-              (bound["toolchain"], "/toolchain.json", True), (bound["driver"], "/driver.py", True),
+-              (bound["provenance"], "/native_rust_exact_build_offline.py", True),
++    mounts = [(bound["source"], "/src", True), (bound["candidate"], "/candidate", True),
+               (bound["work"], "/work", False)]
+-    _fail(bound["toolchain_schema"].endswith(".v2") and bound["gitlink_root"] is not None,
+-          "fixed candidate14 v2/gitlink closure required")
+-    mounts += [(root, target, True) for target, root in bound["mounts_by_target"].items()]
+-    _fail([(str(src), target) for src, target, ro in mounts if not ro] ==
+-          [(str(Path(COMPILE_PROFILE["namespace"]) / "owner-work"), "/work")], "sole HOST RW compile mount differs")
+-    _fail(len({target for _, target, _ in mounts}) == len(mounts), "duplicate compile mount target")
++    _fail(set(bound["mounts_by_target"]) == {"/out", "/nightly"}, "retained pinned/nightly mounts required")
++    mounts += [(path, target, True) for target, path in sorted(bound["mounts_by_target"].items())]
++    _fail([(str(path), target) for path, target, ro in mounts if not ro] ==
++          [(str(Path(COMPILE_PROFILE["namespace"]) / "owner-work"), "/work")], "sole HOST RW BFD mount differs")
+     return mounts
+ 
+ 
+ def _compile_command(bound, request):
+-    return ["/driver.py", "--source-root", "/src", "--candidate-sha", request["candidate_sha"],
+-            "--ihk-sha", request["ihk_sha"], "--manifest", "/inputs.json", "--toolchain", "/toolchain.json",
+-            "--output", "/work/output", "--evidence", "/work/evidence", "--jobs", "1",
+-            "--timeout", str(request["timeout"]), "--gitlink-manifest", "/libdwarf-inputs.json",
+-            "--native-fork-owned-transaction"]
++    return list(COMPILE_PROFILE["command"][1:])
+ 
+ 
+ def _compile_create_args(bound, request):
+@@ -1723,7 +1453,7 @@
+             "--tmpfs", "/tmp:rw,nodev,nosuid,size=256m"]
+     for source, target, readonly in mounts:
+         args += ["--mount", "type=bind,src=" + str(source) + ",dst=" + target + (",readonly" if readonly else "")]
+-    args += ["--entrypoint", "/usr/bin/python3", request["image_id"], *command]
++    args += ["--entrypoint", "/usr/bin/env", request["image_id"], *command]
+     return args, mounts, command
+ 
+ 
+@@ -1795,15 +1525,15 @@
+         authority = _validate_launch_admission(r)
+         lease = CompileLease(r)
+         lease.acquire()
+-        receipt = {"schema": "mckernel.m14-candidate14-compile-owner-receipt.v1", "status": "FAIL",
++        receipt = {"schema": "mckernel.m15-bfd-compile-owner-receipt.v1", "status": "FAIL",
+                    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+                    "operation": COMPILE_PROFILE["operation"], "profile_sha256": COMPILE_PROFILE_SHA256,
+-                   "request_core_sha256": _request_core_hash(r), "candidate_sha": r["candidate_sha"], "ihk_sha": r["ihk_sha"],
++                   "request_core_sha256": _request_core_hash(r), "input_manifest_sha256": r["input_manifest_sha256"],
+                    "container_name": COMPILE_PROFILE["container_name"], "owner_nonce": COMPILE_PROFILE["owner_nonce"],
+                    "container_id": None, "retired": False, "container_absence_confirmed": False,
+                    "all_docker_clients_joined": False, "cleanup_separately_required": True,
+                    "lease_retained_for_root_acceptance": True, "compile_lease": lease.record,
+-                   "source_derivative_sha256": r["source_derivative_sha256"], "materialization_sha256": r["materialization_sha256"],
++                   "candidate_root": r["candidate_root"], "source_root": r["source_root"],
+                    "native_guest_or_heavy_release": False, "root_release": r["compile_only_release"],
+                    "P12_pre_create": None, "P12_pre_start": None}
+         attempted = False
+@@ -1842,10 +1572,12 @@
+             client.call(["start", cid])
+             waited = client.call(["wait", cid], timeout=r["timeout"])
+             receipt["exit_code"] = int(waited.stdout.strip())
+-            _fail(receipt["exit_code"] == 0, "offline candidate14 image driver failed")
+-            build_receipt = _load_json(_safe_regular(bound["evidence"] / "receipt.json", "driver receipt"), "driver receipt")
++            _fail(receipt["exit_code"] == 0, "BFD qualifier failed; failure evidence retained")
++            build_receipt = _load_json(_safe_regular(bound["evidence"] / "RESULT.json", "BFD qualifier result"), "driver receipt")
+             _validate_driver_result(bound["evidence"], bound["output"], build_receipt, r)
+             _revalidate_inputs(bound, r)
++            receipt["qualification_result_sha256"] = _sha256(bound["output"] / "RESULT.json")
++            receipt["qualification_inventory"] = _closure_inventory(bound["output"], bound["output"], Path("/work/qualification-1"))
+             receipt["status"] = "PASS"
+         except BaseException as exc:
+             receipt["error"] = str(exc)
+@@ -1879,7 +1611,7 @@
+ 
+ 
+ def main(argv=None):
+-    parser = argparse.ArgumentParser(description="Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Fixed candidate14 compile owner.")
++    parser = argparse.ArgumentParser(description="Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Fixed M15 BFD compile-only owner.")
+     parser.add_argument("action", choices=("run", "release-accepted-lease"))
+     parser.add_argument("request", type=Path)
+     args = parser.parse_args(argv)

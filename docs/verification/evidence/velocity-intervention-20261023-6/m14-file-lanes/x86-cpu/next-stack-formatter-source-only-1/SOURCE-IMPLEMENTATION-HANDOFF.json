@@ -1,0 +1,72 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ACTUAL_NEXT_SUBSTANTIVE_BODY_IMPLEMENTED_SOURCE_ONLY_NO_SECOND_FIXTURE_QUEUE",
+  "target": "arch/x86_64/kernel/cpu.c::__print_stack complete address-list builder loop",
+  "preimages": {
+    "C": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "sha256": "2d29bca555936a213f0a7296a302ec57b55c575536c33a58285b07b203390eca",
+      "bytes": 95484
+    },
+    "Rust": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "26180e00c1d6673aa600f0ec9afed5d100ca6e0c39af803c3328e58f8cc88fb9",
+      "bytes": 91270
+    }
+  },
+  "postimages": {
+    "arch/x86_64/kernel/cpu.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-stack-formatter-source-only-1/candidate/arch/x86_64/kernel/cpu.c",
+      "sha256": "cbb8f143b51fdb17adc78fc280c1d2f95593b3a3745e9f280549ee76140757a3",
+      "bytes": 95595
+    },
+    "kernel/rust/x86_cpu_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-stack-formatter-source-only-1/candidate/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "76309e7d1de19e4bf8f9928974db733c76905288b5b5c556f736944bf6fd727b",
+      "bytes": 92954
+    }
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-stack-formatter-source-only-1/PRIVATE-ADDR2LINE-STACK-BODY.patch",
+    "sha256": "f5245212f76fec040a4e41aea104b7f3b2c4dd6ff1ede3e5d1204c51cfe9fb86",
+    "bytes": 2765
+  },
+  "actual_original_C": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-stack-formatter-source-only-1/ORIGINAL-C-BODY.inc",
+    "sha256": "293b069da5d8e09cea9812c05904073545dbd8734cc6ff105fce928128314c7b",
+    "bytes": 578
+  },
+  "actual_Rust_body": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-stack-formatter-source-only-1/ACTUAL-RUST-BODY.rs",
+    "sha256": "7922ac8413b085791c545a25fb3d7d83483627e4447b8ab2b5f908c2e0936fa0",
+    "bytes": 1557
+  },
+  "real_C_stack_type_source": "cpu.c existing struct stack has rbp pointer first and unsigned long eip second; existing Rust x86_show_stack_body_result already reads the same two-word representation. No new reprC/layout/sharedheader introduced. Actual Csizeof/offset witness must precede compileclaim.",
+  "existing_Rust_raw_frame_mechanism": "x86_cpu_helpers.rs::x86_show_stack_body_result reads next=*sp and ip=*sp.add(1); new body uses same rawword representation with next-read after snprintf to preserve original sequencing.",
+  "existing_formatter_provider": {
+    "path": "/home/holden/mckernel/kernel/rust/numparse.rs",
+    "sha256": "2d0aa19a78c86a6ea9a7a25d95aea484f981f6219a215314ddbeaee6d89a46ab",
+    "bytes": 46665
+  },
+  "existing_unlocked_print_provider": {
+    "path": "/home/holden/mckernel/kernel/rust/debug.rs",
+    "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+    "bytes": 13020
+  },
+  "preserved_semantics": [
+    "Exact STACK_BUF_LEN=1024-sizeof(\"[  0]: \")=1016, exact command prefix/appendformat and final%s newline.",
+    "Optional first address appended once; stack lower bound0xffff880000000000 and strict remainingcapacity>sizeof(\" 0x0123456789abcdef\") unchanged.",
+    "size_t lengths use unsigned wrapping add/sub and snprintf CInt-to-usize conversion matching C arithmetic. No new panic/error/cycle/alignment/bounds policy.",
+    "Read eip word before snprintf, next-link word after snprintf; raw pointers only, no exclusive references or contextpointer retention.",
+    "Use existing snprintf/__kprintf exports; no new C implementation/getter, Cfallback exact, existing x86_print_stack_bridge callback/ownership unchanged."
+  ],
+  "lock_span": "Uses __kprintf as original; no additional outer lock, stacklogger/contextlogger unchanged.",
+  "relationship_to_context_candidate": "Independent patch based newly canonical CPUlogger2d29/26180. Does not incorporate or modify queued contextc779/98914; later root must merge common __kprintf declaration once.",
+  "future_meaningful_observation": "After queuedcontextfixture is admitted/completed and root grants a separate profile: actual C/Rust formatting comparison using real snprintf provider and exact Cstruct ABI; actual kernel-high-frame traversal requires target/native evidence. Ordinaryhost pointers cannot satisfy original high kernelbound, so zero-frame hosted results must never claim framewalk/native proof. No second executable-ready fixture created now.",
+  "compiler_jobs": 0,
+  "test_jobs": 0,
+  "CPU_slots_held": 0,
+  "canonical_sharedABI_CMake_P12_frozen15_writes": 0,
+  "wholeCPU_defaultlink_native": "OPEN",
+  "failure_histories": "CPUlogger kmsg closure aa036/254a +solecorrected6ae4 retained; contextfirstcandidate remainsunexecuted. This nextbody has no compiled/tested candidate yet."
+}

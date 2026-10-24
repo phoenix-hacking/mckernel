@@ -1,0 +1,1585 @@
+{
+  "CGU": 1,
+  "GCC14_default_link": null,
+  "accepted_actual4005_and_GCC9": {
+    "bytes": 30617,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/sourcehandoff/ACTUAL-SIGNALFD-CREATE-QUALIFIED-HANDOFF.json",
+    "sha256": "383bc3b8a90185998481db8bc964b059960b2b34b8429d81534cf7ef8644f364"
+  },
+  "actual_result": null,
+  "argv": [
+    "/usr/bin/cmake",
+    "-E",
+    "env",
+    "MAKEFLAGS=",
+    "MCKERNEL_RUST_VERSION=1.8.0",
+    "MCKERNEL_RUST_BUILDID=3114d9e",
+    "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+    "--crate-name",
+    "mckernel_rust",
+    "--crate-type",
+    "lib",
+    "--edition=2021",
+    "-C",
+    "panic=abort",
+    "-C",
+    "opt-level=2",
+    "-C",
+    "debuginfo=2",
+    "-C",
+    "code-model=large",
+    "-C",
+    "relocation-model=static",
+    "-C",
+    "no-redzone=yes",
+    "-C",
+    "force-frame-pointers=yes",
+    "-C",
+    "overflow-checks=off",
+    "-C",
+    "force-unwind-tables=no",
+    "-C",
+    "no-vectorize-loops",
+    "-C",
+    "no-vectorize-slp",
+    "-C",
+    "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+    "--cfg",
+    "native_linux_irq_work_v6_12",
+    "--cfg",
+    "enable_profile",
+    "--cfg",
+    "enable_perf",
+    "--cfg",
+    "enable_rusage",
+    "-C",
+    "codegen-units=1",
+    "--emit=obj=/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/output-1/mckernel_rust.o",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/lib.rs"
+  ],
+  "baseline_accepted_profile": {
+    "bytes": 88756,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/production-consumer-preparation-1/EXACT-PRODUCTION-RUST-RECIPE.GRANTED-WHEN-READY.json",
+    "sha256": "d1ce570bc2201a75e3381a6b73d702448cff4019452cc63aef49c071e1c02af0"
+  },
+  "baseline_actual_NM": {
+    "bytes": 219458,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1/owner-work/output/build/m14-production/Rust-clear-range-ownership.stdout",
+    "sha256": "c3b4f995f02a3bc4f9f422ee88b52addc6f581cac46e5fea9033347b4f9845fa"
+  },
+  "baseline_actual_NM_command_progress": {
+    "bytes": 73548,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1/owner-work/evidence/progress.json",
+    "sha256": "f75b36be68b857db98b8bddf313b9b6db424c2be1144b7accbecb338dbfcf000"
+  },
+  "baseline_actual_NM_receipt": {
+    "bytes": 77077,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1/owner-work/evidence/receipt.json",
+    "sha256": "fb3d4730c0fa8cd9d23bce8112dc2c981c1852e2609b15bb12b7089ef48c0694"
+  },
+  "baseline_driver": {
+    "bytes": 12308,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-x86-cpu/production-consumer-preparation-1/run_production_consumer_once.py",
+    "sha256": "f2a0fedd7a7eb7e86e8e4c40df99da83e0e3e39afb4c9678bbe70392bcbba6c6"
+  },
+  "baseline_object_not_rehashed": true,
+  "cfg_count": 4,
+  "compiler_sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09",
+  "current_root_integrated_inputs": {
+    "kernel/rust/mem_helpers.rs": "4635a252332cd369e36384f04a414e2b4c2d79726a4f95caafcf1d3ed1a56b4d",
+    "kernel/rust/process_helpers.rs": "d04b48c887c834edd6380e3ae06fccdef7dfafaf67196fd28af7f9571993bd6d",
+    "kernel/rust/x86_cpu_helpers.rs": "26180e00c1d6673aa600f0ec9afed5d100ca6e0c39af803c3328e58f8cc88fb9",
+    "kernel/rust/x86_memory_helpers.rs": "245faf1198d9b7715714d236238172330257f4291776aced4e7cee6c3c518ce2"
+  },
+  "delta_derivation": "Compared exactcandidate15 canonical78 source to current78: only CPU26180/processd04/L3245/scalar4635 differ before signalfd overlay. Four unconditional exports added; debugrecord+7L3 Cproviders added, vmrangeCcallback import removed; signalfdentry addsT/removesU. Original unrelatedT/U sets mustremain exact.",
+  "expected_T_delta": {
+    "added": [
+      "remote_flush_tlb_cpumask",
+      "vm_range_insert_log_bridge",
+      "x86_cpu_ulong_log_bridge",
+      "clear_range_l3",
+      "syscall_signalfd_create_bridge"
+    ],
+    "after": 3047,
+    "before": 3042,
+    "removed": []
+  },
+  "expected_U_delta": {
+    "added": [
+      "process_vm_range_insert_debug",
+      "x86_clear_l3_child_walk",
+      "x86_clear_l3_effect_log",
+      "x86_clear_l3_memobj_flush",
+      "x86_clear_l3_memobj_rss_sub",
+      "x86_clear_l3_range_log",
+      "x86_clear_l3_rss_sub",
+      "x86_clear_l3_use_1gb_page"
+    ],
+    "after": 583,
+    "before": 577,
+    "removed": [
+      "syscall_signalfd_create_bridge",
+      "vm_range_insert_log_bridge"
+    ]
+  },
+  "expected_new_exports": [
+    "remote_flush_tlb_cpumask",
+    "vm_range_insert_log_bridge",
+    "x86_cpu_ulong_log_bridge",
+    "clear_range_l3",
+    "syscall_signalfd_create_bridge"
+  ],
+  "full78_Rust_compiler_runs": 0,
+  "grant": null,
+  "native": false,
+  "only_private_Rust_override": "kernel/rust/syscall_policy.rs: canonicalf1f +tested9432createfragment only; pendingmask/sigsuspend/F06 not included",
+  "overlay_C_source": {
+    "bytes": 843257,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/candidate/syscall.c",
+    "sha256": "34ec8a08c5790aa7533e5a8e3905d1dd1d4989bf0f431b8517ae6d50bbaa54f4"
+  },
+  "pendingmask_actual": null,
+  "prior_target_oracles_replayed": false,
+  "profile": {
+    "AS": 2147483648,
+    "CPU": 6,
+    "CPU_seconds": 60,
+    "FSIZE": 33554432,
+    "NOFILE": 256,
+    "RUST_MIN_STACK": 2097152,
+    "core": 0,
+    "jobs": 1,
+    "retirement_seconds": 6,
+    "wall_seconds": 90
+  },
+  "retained_failure_history": [
+    {
+      "bytes": 8806,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/fixture/actual-candidate-1/FAILURE-1.json",
+      "sha256": "2f5cc402846af50436d8d4f2cfbe1261fa26868231f6036393d1b22c81d8dc11"
+    },
+    {
+      "bytes": 386,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/bounded-header-transport-correction-1/actual-remaining8-1/FAILURE-1.json",
+      "sha256": "84538db606a76fda2b83fb7592ef1785ec2f05fe1c7d9cf5e4cce1b5c4be7544"
+    }
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "sigsuspend_actual": null,
+  "source_count": 78,
+  "source_identity": "584e7a804a926b867577e34386daa8b9c6cb14954a42d9bab0913ac52163c3df",
+  "source_identity_rows": [
+    [
+      "host-kernel/native-rust/abi/vdso.rs",
+      "d796e3a0723d6a21096a1455c35a7820437dfc2b99e5bb0e1c1f4db79f1c7d7d",
+      17839
+    ],
+    [
+      "host-kernel/native-rust/zero_pages.rs",
+      "47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def",
+      4354
+    ],
+    [
+      "kernel/rust/abi.rs",
+      "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      76151
+    ],
+    [
+      "kernel/rust/abort.rs",
+      "443c480129b1191c0cd2b7ccf3663e185f5cb7cb386512854286404e11236d2a",
+      1554
+    ],
+    [
+      "kernel/rust/affinity.rs",
+      "99ccbc64101e6c551c8bc033016a616dbcd709ec0c6b46067bffe92e3839ef7e",
+      1909
+    ],
+    [
+      "kernel/rust/ap.rs",
+      "274823af8fcdf10462e9d1c2dff532b251754b63971778f8b412f698093d1137",
+      16148
+    ],
+    [
+      "kernel/rust/atomic_helpers.rs",
+      "8acf10a907cede816da8300d36bf967d938cc672dd75dbb3ecc8f3992ec42941",
+      6207
+    ],
+    [
+      "kernel/rust/bitmap.rs",
+      "9ac9a8be0b412844451ff65fd6a3b519e0372c73b8f920a72c59f528f1786a17",
+      28875
+    ],
+    [
+      "kernel/rust/bitops.rs",
+      "ee6c09e24ecf0d98b49e0608d5cf1f1d75ce20b6c2c9131a5ce1827233dd8f0f",
+      8469
+    ],
+    [
+      "kernel/rust/builtin_dma.rs",
+      "d8f210ea795836bb372a80b1d778aa409f00412f105de6f22e9ddc09d356c2b5",
+      4397
+    ],
+    [
+      "kernel/rust/clone3.rs",
+      "3f7433685512e989f2a82ca213ced344fb5dd5a113733485fcfd724ffe2c9094",
+      4013
+    ],
+    [
+      "kernel/rust/cls.rs",
+      "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba",
+      7877
+    ],
+    [
+      "kernel/rust/cls_helpers.rs",
+      "ab25e420794160eff18989a7e240c602aa9cad2f9836cc87cdfff544bb3e5e0c",
+      2679
+    ],
+    [
+      "kernel/rust/debug.rs",
+      "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16",
+      13020
+    ],
+    [
+      "kernel/rust/devobj.rs",
+      "037942094e57b06c3620d885aeb2816bd0f82c436512b383e852a8041f4163a5",
+      11862
+    ],
+    [
+      "kernel/rust/fileobj.rs",
+      "52836335742d3df2088d87c6454111f3094358b9ba604ea5c32d2f92243681bb",
+      32461
+    ],
+    [
+      "kernel/rust/fork_child_credits.rs",
+      "63b82c97cc6e1204585cfaf2b89ef378b88c1d207a8e82c2f1400bc352f9c98d",
+      28612
+    ],
+    [
+      "kernel/rust/fork_constructed_credits.rs",
+      "4c1e96ef4fbf5cb66acc54d900d37fcd68fb4d50dd1337c4428b3f5e2ecd1972",
+      10534
+    ],
+    [
+      "kernel/rust/fork_control_guest.rs",
+      "26797f574fa1ba7006eb27ff3a1a7750ec04b83f71a2e90b8c35c4c536b33acd",
+      18671
+    ],
+    [
+      "kernel/rust/fork_control_registry.rs",
+      "a2f92bb11cba42fef0d95e1f1e1a4c526351ff90860baed7913fa26c91137ba5",
+      14785
+    ],
+    [
+      "kernel/rust/fork_final_ack.rs",
+      "093f742dfe4969d78b2ca6b8b643df94042945e890d26003dec9d1818c34826b",
+      5506
+    ],
+    [
+      "kernel/rust/fork_runnable_child.rs",
+      "a9387ae13b85785176b95fc6ddc79b08bd31dd7960b0730307b41b5a05b5d137",
+      12855
+    ],
+    [
+      "kernel/rust/freeze.rs",
+      "825144fe47b7f0409e4830c5349c14389d84b48fad0aa464ea09c3f2bd186ae0",
+      2046
+    ],
+    [
+      "kernel/rust/futex.rs",
+      "ecfafb1d08247eec584c429c0bc9cd4fbd75d1bd8f01e10847e5dad796a6b4d7",
+      34480
+    ],
+    [
+      "kernel/rust/gencore.rs",
+      "67754cacf5f7567a526bde5790bbd2114df81d8ddadbd3abc641123729742bdb",
+      12884
+    ],
+    [
+      "kernel/rust/hash.rs",
+      "9dd27922476ed87117500dc130fdce75f389347beb32df8d47b34b014ffe0a03",
+      872
+    ],
+    [
+      "kernel/rust/host_helpers.rs",
+      "79ec492e531d9793206cd9ebc84482ab695fcfdc284675492d81ee5a072eeaac",
+      180826
+    ],
+    [
+      "kernel/rust/hugefileobj.rs",
+      "164579599f8651d0588a35b8951ee5b0d2174bb9da5e9a4c59be9f71dfbfb9a9",
+      14364
+    ],
+    [
+      "kernel/rust/ikc_manycore.rs",
+      "e3f3f3ffee3bc8ac892748123ad7fe40b85c5705969d4204dab15ba37c6de137",
+      10469
+    ],
+    [
+      "kernel/rust/ikc_master.rs",
+      "800a8846a4a58657b4fbef61b5cab9f0319992be96a0011f64bcbf6db7f372be",
+      15978
+    ],
+    [
+      "kernel/rust/ikc_queue.rs",
+      "99d7dbb864955fc43b698a74ae3acaa654ba82daf6e8ff638f5d73371cf59af3",
+      27590
+    ],
+    [
+      "kernel/rust/init.rs",
+      "42ca08af0f1087b3914a58e9c445fff6ae27e3b76da2ee2ee3255181bb4b8886",
+      17659
+    ],
+    [
+      "kernel/rust/lib.rs",
+      "4e8d34dc3173aa1c9402ffd437738c6074fcec8a354dc91b6aa8f79d5348ba9c",
+      2012
+    ],
+    [
+      "kernel/rust/list_helpers.rs",
+      "dac9c2f37c64967eebd8c466426fcdf1bf8d201b5c5ee5f1f466893517feb66a",
+      5770
+    ],
+    [
+      "kernel/rust/listeners.rs",
+      "da1e4d66e7dd5e5d11aa479d18d108f72ef201b1d7014c7670f30e70747a1cef",
+      4517
+    ],
+    [
+      "kernel/rust/llist.rs",
+      "246764fe6b346d78bb3cac84b1773469106dc99ae394cefe0c9317d08b7305f8",
+      2753
+    ],
+    [
+      "kernel/rust/lock_helpers.rs",
+      "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3",
+      12202
+    ],
+    [
+      "kernel/rust/mem_helpers.rs",
+      "4635a252332cd369e36384f04a414e2b4c2d79726a4f95caafcf1d3ed1a56b4d",
+      203495
+    ],
+    [
+      "kernel/rust/mikc.rs",
+      "2907fa6d7ca49a15b737435bd61b2c1f372618ec2396aea570a8d76fd8342024",
+      6093
+    ],
+    [
+      "kernel/rust/native_fault.rs",
+      "771c46717169d52685bea87386dd15afd7f193fc5c9eefbce1544d67788a6025",
+      2089
+    ],
+    [
+      "kernel/rust/native_futex.rs",
+      "62680e8304363c77e287a1ab6bc61dc469a86217e64316e003057b5f126607ad",
+      5413
+    ],
+    [
+      "kernel/rust/native_signal.rs",
+      "aea4bf00889641d831f4cebf5c452924947e0255cf1f5d47437e804bcbadb250",
+      12106
+    ],
+    [
+      "kernel/rust/native_vdso.rs",
+      "c04188e452afb4e597bdf2b1fe63544f85d0fbbe5f8879300d48091311b9667e",
+      3914
+    ],
+    [
+      "kernel/rust/native_xstate.rs",
+      "b0b39e0df8298740f53a6b76c5ce6905dfdd9092328578df18225c4a57e8100e",
+      2237
+    ],
+    [
+      "kernel/rust/numparse.rs",
+      "2d0aa19a78c86a6ea9a7a25d95aea484f981f6219a215314ddbeaee6d89a46ab",
+      46665
+    ],
+    [
+      "kernel/rust/object_helpers.rs",
+      "7444ec38a30cdb2b0505b939f02eacb5018d3732a97fcd12b3eba189133f0f06",
+      235965
+    ],
+    [
+      "kernel/rust/page_alloc.rs",
+      "3e89740f0215d46d83d731fe9338ae70792e2cb2b4cbdafd416dc5d1bb6200fd",
+      85061
+    ],
+    [
+      "kernel/rust/page_helpers.rs",
+      "cfc64f72bf9b94c65417bc8f4e29d65b81f98239fe52ab2a7dd0352ebdfc3f70",
+      17367
+    ],
+    [
+      "kernel/rust/pager.rs",
+      "d0e498292ce0e2ad8c68f7c4e2bdffb3d2f6fa99962ae3340e74bede0cdfb30f",
+      35974
+    ],
+    [
+      "kernel/rust/plist.rs",
+      "27e3cef715e399f28035ba62240e4a9b6c73948e37cfb8578e0614e4ee3141ca",
+      5274
+    ],
+    [
+      "kernel/rust/process_helpers.rs",
+      "d04b48c887c834edd6380e3ae06fccdef7dfafaf67196fd28af7f9571993bd6d",
+      353812
+    ],
+    [
+      "kernel/rust/procfs.rs",
+      "6a3609c3ced73cafdffec032e3f2876e08eee5628ba2470137729ca7a804c90e",
+      36968
+    ],
+    [
+      "kernel/rust/profile.rs",
+      "f7a614cee0c4f301bc8bc21be0782e6912b944992cf06a87673e68694c3c1389",
+      20105
+    ],
+    [
+      "kernel/rust/pte_helpers.rs",
+      "d6117286cc222c27ae6f76773796efd77d9f87b969644555e0a6286721653e62",
+      7855
+    ],
+    [
+      "kernel/rust/rbtree.rs",
+      "114e8dbd0b48abc156879bfd2f019071c30174019e97904c028ccee911840256",
+      22536
+    ],
+    [
+      "kernel/rust/refcount_helpers.rs",
+      "07430d9fe1529bb81a4b76c7a998546b8e54219f1d7c2d91f398ea7c28b618ba",
+      3105
+    ],
+    [
+      "kernel/rust/rlimit_helpers.rs",
+      "7310af0b90bd37d146f7741c4f93fc75e37d00691c6f72ced645879fe21d1c30",
+      2512
+    ],
+    [
+      "kernel/rust/sched_helpers.rs",
+      "d16200db3054d88a83752fda1383d6c101d24de4b787bd78cd42edb46ab251fc",
+      185669
+    ],
+    [
+      "kernel/rust/shmid_helpers.rs",
+      "03961aa8192d7b6dd3958c2dcbf4994c005a158bd932dfd37e1666ba4a96b912",
+      6666
+    ],
+    [
+      "kernel/rust/shmobj.rs",
+      "bfb452f3e28a6e5b649f7128a8f18d17bbc6e04d3c978feca8ef27db82e8e0b5",
+      21670
+    ],
+    [
+      "kernel/rust/smp_ikc.rs",
+      "ef29938daeccad4487971157d61b33f0db61d6a5714a4d11e7e78c62c9c9f289",
+      21408
+    ],
+    [
+      "kernel/rust/spinlock_helpers.rs",
+      "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7",
+      3105
+    ],
+    [
+      "kernel/rust/string.rs",
+      "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3",
+      13172
+    ],
+    [
+      "kernel/rust/syscall_policy.rs",
+      "dc5c5f264e7acb28416253a38023c3588735baec842b625b7d18711a2314f942",
+      712309
+    ],
+    [
+      "kernel/rust/sysfs.rs",
+      "b01664e416e5bab418fb2f8b2d4de6cf061c7f638c1fbce6a04c08d4667ae4f7",
+      25143
+    ],
+    [
+      "kernel/rust/timer.rs",
+      "6f1b4789d52cd402b4707d66a929bdac25fc6235dcf3c5fd34b9f17a33e22d5a",
+      8090
+    ],
+    [
+      "kernel/rust/tofu_uapi.rs",
+      "1fa2b20f7d59e963c4c9cc0c1f5be777f791a1d77f3071e9a1a81e2000d72bbe",
+      83617
+    ],
+    [
+      "kernel/rust/ubsan.rs",
+      "b60d0e76924877f961ea001c501fc3bcfc2fd88f31180db018543cd882b3f501",
+      9830
+    ],
+    [
+      "kernel/rust/waitq.rs",
+      "246a850a7e305d69d55de5903273e35ba62cc204167cc95acc90973c8f0aaefc",
+      10868
+    ],
+    [
+      "kernel/rust/x86_coredump.rs",
+      "ad0b5a20a61f54247b05af1b6d62d8c77e6d060705357bde188d1762635cb631",
+      3426
+    ],
+    [
+      "kernel/rust/x86_cpu_helpers.rs",
+      "26180e00c1d6673aa600f0ec9afed5d100ca6e0c39af803c3328e58f8cc88fb9",
+      91270
+    ],
+    [
+      "kernel/rust/x86_local.rs",
+      "9f102654a22895615da854b08ea8e043a6c17b9157e4b77e5b58783e70abeb3f",
+      4525
+    ],
+    [
+      "kernel/rust/x86_memory_helpers.rs",
+      "245faf1198d9b7715714d236238172330257f4291776aced4e7cee6c3c518ce2",
+      199322
+    ],
+    [
+      "kernel/rust/x86_perfctr.rs",
+      "9cabce0fb4295d421a3f5194b7ebb854bdfa93c4126573a643ab2a08e9d11af7",
+      16091
+    ],
+    [
+      "kernel/rust/x86_setup.rs",
+      "1bf9b326873b22034dfba47165c95bdcc599d41533a112c64de72950e99589fe",
+      29158
+    ],
+    [
+      "kernel/rust/x86_vsyscall.rs",
+      "87a888402b181da0bf9c94c6675b85f20cb21480041bb18c7ea42f0bf12f90d7",
+      2556
+    ],
+    [
+      "kernel/rust/xpmem_helpers.rs",
+      "e8c7970b672c724f14da2eb0a12fdbcd11df62f824422a5f8a98da4364328255",
+      236058
+    ],
+    [
+      "kernel/rust/zeroobj.rs",
+      "eed90e36aceaaa44936a7c9513c0768278cfdd61882eb9327941f0751c9e9b5b",
+      6442
+    ]
+  ],
+  "source_inputs": {
+    "host-kernel/native-rust/abi/vdso.rs": {
+      "canonical_before": {
+        "bytes": 17839,
+        "path": "/home/holden/mckernel/host-kernel/native-rust/abi/vdso.rs",
+        "sha256": "d796e3a0723d6a21096a1455c35a7820437dfc2b99e5bb0e1c1f4db79f1c7d7d"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 17839,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/host-kernel/native-rust/abi/vdso.rs",
+        "sha256": "d796e3a0723d6a21096a1455c35a7820437dfc2b99e5bb0e1c1f4db79f1c7d7d"
+      }
+    },
+    "host-kernel/native-rust/zero_pages.rs": {
+      "canonical_before": {
+        "bytes": 4354,
+        "path": "/home/holden/mckernel/host-kernel/native-rust/zero_pages.rs",
+        "sha256": "47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 4354,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/host-kernel/native-rust/zero_pages.rs",
+        "sha256": "47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def"
+      }
+    },
+    "kernel/rust/abi.rs": {
+      "canonical_before": {
+        "bytes": 76151,
+        "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+        "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 76151,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/abi.rs",
+        "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+      }
+    },
+    "kernel/rust/abort.rs": {
+      "canonical_before": {
+        "bytes": 1554,
+        "path": "/home/holden/mckernel/kernel/rust/abort.rs",
+        "sha256": "443c480129b1191c0cd2b7ccf3663e185f5cb7cb386512854286404e11236d2a"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 1554,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/abort.rs",
+        "sha256": "443c480129b1191c0cd2b7ccf3663e185f5cb7cb386512854286404e11236d2a"
+      }
+    },
+    "kernel/rust/affinity.rs": {
+      "canonical_before": {
+        "bytes": 1909,
+        "path": "/home/holden/mckernel/kernel/rust/affinity.rs",
+        "sha256": "99ccbc64101e6c551c8bc033016a616dbcd709ec0c6b46067bffe92e3839ef7e"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 1909,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/affinity.rs",
+        "sha256": "99ccbc64101e6c551c8bc033016a616dbcd709ec0c6b46067bffe92e3839ef7e"
+      }
+    },
+    "kernel/rust/ap.rs": {
+      "canonical_before": {
+        "bytes": 16148,
+        "path": "/home/holden/mckernel/kernel/rust/ap.rs",
+        "sha256": "274823af8fcdf10462e9d1c2dff532b251754b63971778f8b412f698093d1137"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 16148,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/ap.rs",
+        "sha256": "274823af8fcdf10462e9d1c2dff532b251754b63971778f8b412f698093d1137"
+      }
+    },
+    "kernel/rust/atomic_helpers.rs": {
+      "canonical_before": {
+        "bytes": 6207,
+        "path": "/home/holden/mckernel/kernel/rust/atomic_helpers.rs",
+        "sha256": "8acf10a907cede816da8300d36bf967d938cc672dd75dbb3ecc8f3992ec42941"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 6207,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/atomic_helpers.rs",
+        "sha256": "8acf10a907cede816da8300d36bf967d938cc672dd75dbb3ecc8f3992ec42941"
+      }
+    },
+    "kernel/rust/bitmap.rs": {
+      "canonical_before": {
+        "bytes": 28875,
+        "path": "/home/holden/mckernel/kernel/rust/bitmap.rs",
+        "sha256": "9ac9a8be0b412844451ff65fd6a3b519e0372c73b8f920a72c59f528f1786a17"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 28875,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/bitmap.rs",
+        "sha256": "9ac9a8be0b412844451ff65fd6a3b519e0372c73b8f920a72c59f528f1786a17"
+      }
+    },
+    "kernel/rust/bitops.rs": {
+      "canonical_before": {
+        "bytes": 8469,
+        "path": "/home/holden/mckernel/kernel/rust/bitops.rs",
+        "sha256": "ee6c09e24ecf0d98b49e0608d5cf1f1d75ce20b6c2c9131a5ce1827233dd8f0f"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 8469,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/bitops.rs",
+        "sha256": "ee6c09e24ecf0d98b49e0608d5cf1f1d75ce20b6c2c9131a5ce1827233dd8f0f"
+      }
+    },
+    "kernel/rust/builtin_dma.rs": {
+      "canonical_before": {
+        "bytes": 4397,
+        "path": "/home/holden/mckernel/kernel/rust/builtin_dma.rs",
+        "sha256": "d8f210ea795836bb372a80b1d778aa409f00412f105de6f22e9ddc09d356c2b5"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 4397,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/builtin_dma.rs",
+        "sha256": "d8f210ea795836bb372a80b1d778aa409f00412f105de6f22e9ddc09d356c2b5"
+      }
+    },
+    "kernel/rust/clone3.rs": {
+      "canonical_before": {
+        "bytes": 4013,
+        "path": "/home/holden/mckernel/kernel/rust/clone3.rs",
+        "sha256": "3f7433685512e989f2a82ca213ced344fb5dd5a113733485fcfd724ffe2c9094"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 4013,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/clone3.rs",
+        "sha256": "3f7433685512e989f2a82ca213ced344fb5dd5a113733485fcfd724ffe2c9094"
+      }
+    },
+    "kernel/rust/cls.rs": {
+      "canonical_before": {
+        "bytes": 7877,
+        "path": "/home/holden/mckernel/kernel/rust/cls.rs",
+        "sha256": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 7877,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/cls.rs",
+        "sha256": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba"
+      }
+    },
+    "kernel/rust/cls_helpers.rs": {
+      "canonical_before": {
+        "bytes": 2679,
+        "path": "/home/holden/mckernel/kernel/rust/cls_helpers.rs",
+        "sha256": "ab25e420794160eff18989a7e240c602aa9cad2f9836cc87cdfff544bb3e5e0c"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 2679,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/cls_helpers.rs",
+        "sha256": "ab25e420794160eff18989a7e240c602aa9cad2f9836cc87cdfff544bb3e5e0c"
+      }
+    },
+    "kernel/rust/debug.rs": {
+      "canonical_before": {
+        "bytes": 13020,
+        "path": "/home/holden/mckernel/kernel/rust/debug.rs",
+        "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 13020,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/debug.rs",
+        "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16"
+      }
+    },
+    "kernel/rust/devobj.rs": {
+      "canonical_before": {
+        "bytes": 11862,
+        "path": "/home/holden/mckernel/kernel/rust/devobj.rs",
+        "sha256": "037942094e57b06c3620d885aeb2816bd0f82c436512b383e852a8041f4163a5"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 11862,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/devobj.rs",
+        "sha256": "037942094e57b06c3620d885aeb2816bd0f82c436512b383e852a8041f4163a5"
+      }
+    },
+    "kernel/rust/fileobj.rs": {
+      "canonical_before": {
+        "bytes": 32461,
+        "path": "/home/holden/mckernel/kernel/rust/fileobj.rs",
+        "sha256": "52836335742d3df2088d87c6454111f3094358b9ba604ea5c32d2f92243681bb"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 32461,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/fileobj.rs",
+        "sha256": "52836335742d3df2088d87c6454111f3094358b9ba604ea5c32d2f92243681bb"
+      }
+    },
+    "kernel/rust/fork_child_credits.rs": {
+      "canonical_before": {
+        "bytes": 28612,
+        "path": "/home/holden/mckernel/kernel/rust/fork_child_credits.rs",
+        "sha256": "63b82c97cc6e1204585cfaf2b89ef378b88c1d207a8e82c2f1400bc352f9c98d"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 28612,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/fork_child_credits.rs",
+        "sha256": "63b82c97cc6e1204585cfaf2b89ef378b88c1d207a8e82c2f1400bc352f9c98d"
+      }
+    },
+    "kernel/rust/fork_constructed_credits.rs": {
+      "canonical_before": {
+        "bytes": 10534,
+        "path": "/home/holden/mckernel/kernel/rust/fork_constructed_credits.rs",
+        "sha256": "4c1e96ef4fbf5cb66acc54d900d37fcd68fb4d50dd1337c4428b3f5e2ecd1972"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 10534,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/fork_constructed_credits.rs",
+        "sha256": "4c1e96ef4fbf5cb66acc54d900d37fcd68fb4d50dd1337c4428b3f5e2ecd1972"
+      }
+    },
+    "kernel/rust/fork_control_guest.rs": {
+      "canonical_before": {
+        "bytes": 18671,
+        "path": "/home/holden/mckernel/kernel/rust/fork_control_guest.rs",
+        "sha256": "26797f574fa1ba7006eb27ff3a1a7750ec04b83f71a2e90b8c35c4c536b33acd"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 18671,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/fork_control_guest.rs",
+        "sha256": "26797f574fa1ba7006eb27ff3a1a7750ec04b83f71a2e90b8c35c4c536b33acd"
+      }
+    },
+    "kernel/rust/fork_control_registry.rs": {
+      "canonical_before": {
+        "bytes": 14785,
+        "path": "/home/holden/mckernel/kernel/rust/fork_control_registry.rs",
+        "sha256": "a2f92bb11cba42fef0d95e1f1e1a4c526351ff90860baed7913fa26c91137ba5"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 14785,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/fork_control_registry.rs",
+        "sha256": "a2f92bb11cba42fef0d95e1f1e1a4c526351ff90860baed7913fa26c91137ba5"
+      }
+    },
+    "kernel/rust/fork_final_ack.rs": {
+      "canonical_before": {
+        "bytes": 5506,
+        "path": "/home/holden/mckernel/kernel/rust/fork_final_ack.rs",
+        "sha256": "093f742dfe4969d78b2ca6b8b643df94042945e890d26003dec9d1818c34826b"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 5506,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/fork_final_ack.rs",
+        "sha256": "093f742dfe4969d78b2ca6b8b643df94042945e890d26003dec9d1818c34826b"
+      }
+    },
+    "kernel/rust/fork_runnable_child.rs": {
+      "canonical_before": {
+        "bytes": 12855,
+        "path": "/home/holden/mckernel/kernel/rust/fork_runnable_child.rs",
+        "sha256": "a9387ae13b85785176b95fc6ddc79b08bd31dd7960b0730307b41b5a05b5d137"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 12855,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/fork_runnable_child.rs",
+        "sha256": "a9387ae13b85785176b95fc6ddc79b08bd31dd7960b0730307b41b5a05b5d137"
+      }
+    },
+    "kernel/rust/freeze.rs": {
+      "canonical_before": {
+        "bytes": 2046,
+        "path": "/home/holden/mckernel/kernel/rust/freeze.rs",
+        "sha256": "825144fe47b7f0409e4830c5349c14389d84b48fad0aa464ea09c3f2bd186ae0"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 2046,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/freeze.rs",
+        "sha256": "825144fe47b7f0409e4830c5349c14389d84b48fad0aa464ea09c3f2bd186ae0"
+      }
+    },
+    "kernel/rust/futex.rs": {
+      "canonical_before": {
+        "bytes": 34480,
+        "path": "/home/holden/mckernel/kernel/rust/futex.rs",
+        "sha256": "ecfafb1d08247eec584c429c0bc9cd4fbd75d1bd8f01e10847e5dad796a6b4d7"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 34480,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/futex.rs",
+        "sha256": "ecfafb1d08247eec584c429c0bc9cd4fbd75d1bd8f01e10847e5dad796a6b4d7"
+      }
+    },
+    "kernel/rust/gencore.rs": {
+      "canonical_before": {
+        "bytes": 12884,
+        "path": "/home/holden/mckernel/kernel/rust/gencore.rs",
+        "sha256": "67754cacf5f7567a526bde5790bbd2114df81d8ddadbd3abc641123729742bdb"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 12884,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/gencore.rs",
+        "sha256": "67754cacf5f7567a526bde5790bbd2114df81d8ddadbd3abc641123729742bdb"
+      }
+    },
+    "kernel/rust/hash.rs": {
+      "canonical_before": {
+        "bytes": 872,
+        "path": "/home/holden/mckernel/kernel/rust/hash.rs",
+        "sha256": "9dd27922476ed87117500dc130fdce75f389347beb32df8d47b34b014ffe0a03"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 872,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/hash.rs",
+        "sha256": "9dd27922476ed87117500dc130fdce75f389347beb32df8d47b34b014ffe0a03"
+      }
+    },
+    "kernel/rust/host_helpers.rs": {
+      "canonical_before": {
+        "bytes": 180826,
+        "path": "/home/holden/mckernel/kernel/rust/host_helpers.rs",
+        "sha256": "79ec492e531d9793206cd9ebc84482ab695fcfdc284675492d81ee5a072eeaac"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 180826,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/host_helpers.rs",
+        "sha256": "79ec492e531d9793206cd9ebc84482ab695fcfdc284675492d81ee5a072eeaac"
+      }
+    },
+    "kernel/rust/hugefileobj.rs": {
+      "canonical_before": {
+        "bytes": 14364,
+        "path": "/home/holden/mckernel/kernel/rust/hugefileobj.rs",
+        "sha256": "164579599f8651d0588a35b8951ee5b0d2174bb9da5e9a4c59be9f71dfbfb9a9"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 14364,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/hugefileobj.rs",
+        "sha256": "164579599f8651d0588a35b8951ee5b0d2174bb9da5e9a4c59be9f71dfbfb9a9"
+      }
+    },
+    "kernel/rust/ikc_manycore.rs": {
+      "canonical_before": {
+        "bytes": 10469,
+        "path": "/home/holden/mckernel/kernel/rust/ikc_manycore.rs",
+        "sha256": "e3f3f3ffee3bc8ac892748123ad7fe40b85c5705969d4204dab15ba37c6de137"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 10469,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/ikc_manycore.rs",
+        "sha256": "e3f3f3ffee3bc8ac892748123ad7fe40b85c5705969d4204dab15ba37c6de137"
+      }
+    },
+    "kernel/rust/ikc_master.rs": {
+      "canonical_before": {
+        "bytes": 15978,
+        "path": "/home/holden/mckernel/kernel/rust/ikc_master.rs",
+        "sha256": "800a8846a4a58657b4fbef61b5cab9f0319992be96a0011f64bcbf6db7f372be"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 15978,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/ikc_master.rs",
+        "sha256": "800a8846a4a58657b4fbef61b5cab9f0319992be96a0011f64bcbf6db7f372be"
+      }
+    },
+    "kernel/rust/ikc_queue.rs": {
+      "canonical_before": {
+        "bytes": 27590,
+        "path": "/home/holden/mckernel/kernel/rust/ikc_queue.rs",
+        "sha256": "99d7dbb864955fc43b698a74ae3acaa654ba82daf6e8ff638f5d73371cf59af3"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 27590,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/ikc_queue.rs",
+        "sha256": "99d7dbb864955fc43b698a74ae3acaa654ba82daf6e8ff638f5d73371cf59af3"
+      }
+    },
+    "kernel/rust/init.rs": {
+      "canonical_before": {
+        "bytes": 17659,
+        "path": "/home/holden/mckernel/kernel/rust/init.rs",
+        "sha256": "42ca08af0f1087b3914a58e9c445fff6ae27e3b76da2ee2ee3255181bb4b8886"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 17659,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/init.rs",
+        "sha256": "42ca08af0f1087b3914a58e9c445fff6ae27e3b76da2ee2ee3255181bb4b8886"
+      }
+    },
+    "kernel/rust/lib.rs": {
+      "canonical_before": {
+        "bytes": 2012,
+        "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+        "sha256": "4e8d34dc3173aa1c9402ffd437738c6074fcec8a354dc91b6aa8f79d5348ba9c"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 2012,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/lib.rs",
+        "sha256": "4e8d34dc3173aa1c9402ffd437738c6074fcec8a354dc91b6aa8f79d5348ba9c"
+      }
+    },
+    "kernel/rust/list_helpers.rs": {
+      "canonical_before": {
+        "bytes": 5770,
+        "path": "/home/holden/mckernel/kernel/rust/list_helpers.rs",
+        "sha256": "dac9c2f37c64967eebd8c466426fcdf1bf8d201b5c5ee5f1f466893517feb66a"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 5770,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/list_helpers.rs",
+        "sha256": "dac9c2f37c64967eebd8c466426fcdf1bf8d201b5c5ee5f1f466893517feb66a"
+      }
+    },
+    "kernel/rust/listeners.rs": {
+      "canonical_before": {
+        "bytes": 4517,
+        "path": "/home/holden/mckernel/kernel/rust/listeners.rs",
+        "sha256": "da1e4d66e7dd5e5d11aa479d18d108f72ef201b1d7014c7670f30e70747a1cef"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 4517,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/listeners.rs",
+        "sha256": "da1e4d66e7dd5e5d11aa479d18d108f72ef201b1d7014c7670f30e70747a1cef"
+      }
+    },
+    "kernel/rust/llist.rs": {
+      "canonical_before": {
+        "bytes": 2753,
+        "path": "/home/holden/mckernel/kernel/rust/llist.rs",
+        "sha256": "246764fe6b346d78bb3cac84b1773469106dc99ae394cefe0c9317d08b7305f8"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 2753,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/llist.rs",
+        "sha256": "246764fe6b346d78bb3cac84b1773469106dc99ae394cefe0c9317d08b7305f8"
+      }
+    },
+    "kernel/rust/lock_helpers.rs": {
+      "canonical_before": {
+        "bytes": 12202,
+        "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+        "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 12202,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/lock_helpers.rs",
+        "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+      }
+    },
+    "kernel/rust/mem_helpers.rs": {
+      "canonical_before": {
+        "bytes": 203495,
+        "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+        "sha256": "4635a252332cd369e36384f04a414e2b4c2d79726a4f95caafcf1d3ed1a56b4d"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 203495,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/mem_helpers.rs",
+        "sha256": "4635a252332cd369e36384f04a414e2b4c2d79726a4f95caafcf1d3ed1a56b4d"
+      }
+    },
+    "kernel/rust/mikc.rs": {
+      "canonical_before": {
+        "bytes": 6093,
+        "path": "/home/holden/mckernel/kernel/rust/mikc.rs",
+        "sha256": "2907fa6d7ca49a15b737435bd61b2c1f372618ec2396aea570a8d76fd8342024"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 6093,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/mikc.rs",
+        "sha256": "2907fa6d7ca49a15b737435bd61b2c1f372618ec2396aea570a8d76fd8342024"
+      }
+    },
+    "kernel/rust/native_fault.rs": {
+      "canonical_before": {
+        "bytes": 2089,
+        "path": "/home/holden/mckernel/kernel/rust/native_fault.rs",
+        "sha256": "771c46717169d52685bea87386dd15afd7f193fc5c9eefbce1544d67788a6025"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 2089,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/native_fault.rs",
+        "sha256": "771c46717169d52685bea87386dd15afd7f193fc5c9eefbce1544d67788a6025"
+      }
+    },
+    "kernel/rust/native_futex.rs": {
+      "canonical_before": {
+        "bytes": 5413,
+        "path": "/home/holden/mckernel/kernel/rust/native_futex.rs",
+        "sha256": "62680e8304363c77e287a1ab6bc61dc469a86217e64316e003057b5f126607ad"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 5413,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/native_futex.rs",
+        "sha256": "62680e8304363c77e287a1ab6bc61dc469a86217e64316e003057b5f126607ad"
+      }
+    },
+    "kernel/rust/native_signal.rs": {
+      "canonical_before": {
+        "bytes": 12106,
+        "path": "/home/holden/mckernel/kernel/rust/native_signal.rs",
+        "sha256": "aea4bf00889641d831f4cebf5c452924947e0255cf1f5d47437e804bcbadb250"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 12106,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/native_signal.rs",
+        "sha256": "aea4bf00889641d831f4cebf5c452924947e0255cf1f5d47437e804bcbadb250"
+      }
+    },
+    "kernel/rust/native_vdso.rs": {
+      "canonical_before": {
+        "bytes": 3914,
+        "path": "/home/holden/mckernel/kernel/rust/native_vdso.rs",
+        "sha256": "c04188e452afb4e597bdf2b1fe63544f85d0fbbe5f8879300d48091311b9667e"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 3914,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/native_vdso.rs",
+        "sha256": "c04188e452afb4e597bdf2b1fe63544f85d0fbbe5f8879300d48091311b9667e"
+      }
+    },
+    "kernel/rust/native_xstate.rs": {
+      "canonical_before": {
+        "bytes": 2237,
+        "path": "/home/holden/mckernel/kernel/rust/native_xstate.rs",
+        "sha256": "b0b39e0df8298740f53a6b76c5ce6905dfdd9092328578df18225c4a57e8100e"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 2237,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/native_xstate.rs",
+        "sha256": "b0b39e0df8298740f53a6b76c5ce6905dfdd9092328578df18225c4a57e8100e"
+      }
+    },
+    "kernel/rust/numparse.rs": {
+      "canonical_before": {
+        "bytes": 46665,
+        "path": "/home/holden/mckernel/kernel/rust/numparse.rs",
+        "sha256": "2d0aa19a78c86a6ea9a7a25d95aea484f981f6219a215314ddbeaee6d89a46ab"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 46665,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/numparse.rs",
+        "sha256": "2d0aa19a78c86a6ea9a7a25d95aea484f981f6219a215314ddbeaee6d89a46ab"
+      }
+    },
+    "kernel/rust/object_helpers.rs": {
+      "canonical_before": {
+        "bytes": 235965,
+        "path": "/home/holden/mckernel/kernel/rust/object_helpers.rs",
+        "sha256": "7444ec38a30cdb2b0505b939f02eacb5018d3732a97fcd12b3eba189133f0f06"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 235965,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/object_helpers.rs",
+        "sha256": "7444ec38a30cdb2b0505b939f02eacb5018d3732a97fcd12b3eba189133f0f06"
+      }
+    },
+    "kernel/rust/page_alloc.rs": {
+      "canonical_before": {
+        "bytes": 85061,
+        "path": "/home/holden/mckernel/kernel/rust/page_alloc.rs",
+        "sha256": "3e89740f0215d46d83d731fe9338ae70792e2cb2b4cbdafd416dc5d1bb6200fd"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 85061,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/page_alloc.rs",
+        "sha256": "3e89740f0215d46d83d731fe9338ae70792e2cb2b4cbdafd416dc5d1bb6200fd"
+      }
+    },
+    "kernel/rust/page_helpers.rs": {
+      "canonical_before": {
+        "bytes": 17367,
+        "path": "/home/holden/mckernel/kernel/rust/page_helpers.rs",
+        "sha256": "cfc64f72bf9b94c65417bc8f4e29d65b81f98239fe52ab2a7dd0352ebdfc3f70"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 17367,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/page_helpers.rs",
+        "sha256": "cfc64f72bf9b94c65417bc8f4e29d65b81f98239fe52ab2a7dd0352ebdfc3f70"
+      }
+    },
+    "kernel/rust/pager.rs": {
+      "canonical_before": {
+        "bytes": 35974,
+        "path": "/home/holden/mckernel/kernel/rust/pager.rs",
+        "sha256": "d0e498292ce0e2ad8c68f7c4e2bdffb3d2f6fa99962ae3340e74bede0cdfb30f"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 35974,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/pager.rs",
+        "sha256": "d0e498292ce0e2ad8c68f7c4e2bdffb3d2f6fa99962ae3340e74bede0cdfb30f"
+      }
+    },
+    "kernel/rust/plist.rs": {
+      "canonical_before": {
+        "bytes": 5274,
+        "path": "/home/holden/mckernel/kernel/rust/plist.rs",
+        "sha256": "27e3cef715e399f28035ba62240e4a9b6c73948e37cfb8578e0614e4ee3141ca"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 5274,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/plist.rs",
+        "sha256": "27e3cef715e399f28035ba62240e4a9b6c73948e37cfb8578e0614e4ee3141ca"
+      }
+    },
+    "kernel/rust/process_helpers.rs": {
+      "canonical_before": {
+        "bytes": 353812,
+        "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+        "sha256": "d04b48c887c834edd6380e3ae06fccdef7dfafaf67196fd28af7f9571993bd6d"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 353812,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/process_helpers.rs",
+        "sha256": "d04b48c887c834edd6380e3ae06fccdef7dfafaf67196fd28af7f9571993bd6d"
+      }
+    },
+    "kernel/rust/procfs.rs": {
+      "canonical_before": {
+        "bytes": 36968,
+        "path": "/home/holden/mckernel/kernel/rust/procfs.rs",
+        "sha256": "6a3609c3ced73cafdffec032e3f2876e08eee5628ba2470137729ca7a804c90e"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 36968,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/procfs.rs",
+        "sha256": "6a3609c3ced73cafdffec032e3f2876e08eee5628ba2470137729ca7a804c90e"
+      }
+    },
+    "kernel/rust/profile.rs": {
+      "canonical_before": {
+        "bytes": 20105,
+        "path": "/home/holden/mckernel/kernel/rust/profile.rs",
+        "sha256": "f7a614cee0c4f301bc8bc21be0782e6912b944992cf06a87673e68694c3c1389"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 20105,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/profile.rs",
+        "sha256": "f7a614cee0c4f301bc8bc21be0782e6912b944992cf06a87673e68694c3c1389"
+      }
+    },
+    "kernel/rust/pte_helpers.rs": {
+      "canonical_before": {
+        "bytes": 7855,
+        "path": "/home/holden/mckernel/kernel/rust/pte_helpers.rs",
+        "sha256": "d6117286cc222c27ae6f76773796efd77d9f87b969644555e0a6286721653e62"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 7855,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/pte_helpers.rs",
+        "sha256": "d6117286cc222c27ae6f76773796efd77d9f87b969644555e0a6286721653e62"
+      }
+    },
+    "kernel/rust/rbtree.rs": {
+      "canonical_before": {
+        "bytes": 22536,
+        "path": "/home/holden/mckernel/kernel/rust/rbtree.rs",
+        "sha256": "114e8dbd0b48abc156879bfd2f019071c30174019e97904c028ccee911840256"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 22536,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/rbtree.rs",
+        "sha256": "114e8dbd0b48abc156879bfd2f019071c30174019e97904c028ccee911840256"
+      }
+    },
+    "kernel/rust/refcount_helpers.rs": {
+      "canonical_before": {
+        "bytes": 3105,
+        "path": "/home/holden/mckernel/kernel/rust/refcount_helpers.rs",
+        "sha256": "07430d9fe1529bb81a4b76c7a998546b8e54219f1d7c2d91f398ea7c28b618ba"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 3105,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/refcount_helpers.rs",
+        "sha256": "07430d9fe1529bb81a4b76c7a998546b8e54219f1d7c2d91f398ea7c28b618ba"
+      }
+    },
+    "kernel/rust/rlimit_helpers.rs": {
+      "canonical_before": {
+        "bytes": 2512,
+        "path": "/home/holden/mckernel/kernel/rust/rlimit_helpers.rs",
+        "sha256": "7310af0b90bd37d146f7741c4f93fc75e37d00691c6f72ced645879fe21d1c30"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 2512,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/rlimit_helpers.rs",
+        "sha256": "7310af0b90bd37d146f7741c4f93fc75e37d00691c6f72ced645879fe21d1c30"
+      }
+    },
+    "kernel/rust/sched_helpers.rs": {
+      "canonical_before": {
+        "bytes": 185669,
+        "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "sha256": "d16200db3054d88a83752fda1383d6c101d24de4b787bd78cd42edb46ab251fc"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 185669,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/sched_helpers.rs",
+        "sha256": "d16200db3054d88a83752fda1383d6c101d24de4b787bd78cd42edb46ab251fc"
+      }
+    },
+    "kernel/rust/shmid_helpers.rs": {
+      "canonical_before": {
+        "bytes": 6666,
+        "path": "/home/holden/mckernel/kernel/rust/shmid_helpers.rs",
+        "sha256": "03961aa8192d7b6dd3958c2dcbf4994c005a158bd932dfd37e1666ba4a96b912"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 6666,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/shmid_helpers.rs",
+        "sha256": "03961aa8192d7b6dd3958c2dcbf4994c005a158bd932dfd37e1666ba4a96b912"
+      }
+    },
+    "kernel/rust/shmobj.rs": {
+      "canonical_before": {
+        "bytes": 21670,
+        "path": "/home/holden/mckernel/kernel/rust/shmobj.rs",
+        "sha256": "bfb452f3e28a6e5b649f7128a8f18d17bbc6e04d3c978feca8ef27db82e8e0b5"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 21670,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/shmobj.rs",
+        "sha256": "bfb452f3e28a6e5b649f7128a8f18d17bbc6e04d3c978feca8ef27db82e8e0b5"
+      }
+    },
+    "kernel/rust/smp_ikc.rs": {
+      "canonical_before": {
+        "bytes": 21408,
+        "path": "/home/holden/mckernel/kernel/rust/smp_ikc.rs",
+        "sha256": "ef29938daeccad4487971157d61b33f0db61d6a5714a4d11e7e78c62c9c9f289"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 21408,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/smp_ikc.rs",
+        "sha256": "ef29938daeccad4487971157d61b33f0db61d6a5714a4d11e7e78c62c9c9f289"
+      }
+    },
+    "kernel/rust/spinlock_helpers.rs": {
+      "canonical_before": {
+        "bytes": 3105,
+        "path": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+        "sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 3105,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/spinlock_helpers.rs",
+        "sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7"
+      }
+    },
+    "kernel/rust/string.rs": {
+      "canonical_before": {
+        "bytes": 13172,
+        "path": "/home/holden/mckernel/kernel/rust/string.rs",
+        "sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 13172,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/string.rs",
+        "sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3"
+      }
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "canonical_before": {
+        "bytes": 711734,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "f1f7866c0f2ccc8e1b0024dfb632ec7359dd2a0a4bcd8e22deb957d48ef6d770"
+      },
+      "modified_target": true,
+      "private": {
+        "bytes": 712309,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/syscall_policy.rs",
+        "sha256": "dc5c5f264e7acb28416253a38023c3588735baec842b625b7d18711a2314f942"
+      }
+    },
+    "kernel/rust/sysfs.rs": {
+      "canonical_before": {
+        "bytes": 25143,
+        "path": "/home/holden/mckernel/kernel/rust/sysfs.rs",
+        "sha256": "b01664e416e5bab418fb2f8b2d4de6cf061c7f638c1fbce6a04c08d4667ae4f7"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 25143,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/sysfs.rs",
+        "sha256": "b01664e416e5bab418fb2f8b2d4de6cf061c7f638c1fbce6a04c08d4667ae4f7"
+      }
+    },
+    "kernel/rust/timer.rs": {
+      "canonical_before": {
+        "bytes": 8090,
+        "path": "/home/holden/mckernel/kernel/rust/timer.rs",
+        "sha256": "6f1b4789d52cd402b4707d66a929bdac25fc6235dcf3c5fd34b9f17a33e22d5a"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 8090,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/timer.rs",
+        "sha256": "6f1b4789d52cd402b4707d66a929bdac25fc6235dcf3c5fd34b9f17a33e22d5a"
+      }
+    },
+    "kernel/rust/tofu_uapi.rs": {
+      "canonical_before": {
+        "bytes": 83617,
+        "path": "/home/holden/mckernel/kernel/rust/tofu_uapi.rs",
+        "sha256": "1fa2b20f7d59e963c4c9cc0c1f5be777f791a1d77f3071e9a1a81e2000d72bbe"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 83617,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/tofu_uapi.rs",
+        "sha256": "1fa2b20f7d59e963c4c9cc0c1f5be777f791a1d77f3071e9a1a81e2000d72bbe"
+      }
+    },
+    "kernel/rust/ubsan.rs": {
+      "canonical_before": {
+        "bytes": 9830,
+        "path": "/home/holden/mckernel/kernel/rust/ubsan.rs",
+        "sha256": "b60d0e76924877f961ea001c501fc3bcfc2fd88f31180db018543cd882b3f501"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 9830,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/ubsan.rs",
+        "sha256": "b60d0e76924877f961ea001c501fc3bcfc2fd88f31180db018543cd882b3f501"
+      }
+    },
+    "kernel/rust/waitq.rs": {
+      "canonical_before": {
+        "bytes": 10868,
+        "path": "/home/holden/mckernel/kernel/rust/waitq.rs",
+        "sha256": "246a850a7e305d69d55de5903273e35ba62cc204167cc95acc90973c8f0aaefc"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 10868,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/waitq.rs",
+        "sha256": "246a850a7e305d69d55de5903273e35ba62cc204167cc95acc90973c8f0aaefc"
+      }
+    },
+    "kernel/rust/x86_coredump.rs": {
+      "canonical_before": {
+        "bytes": 3426,
+        "path": "/home/holden/mckernel/kernel/rust/x86_coredump.rs",
+        "sha256": "ad0b5a20a61f54247b05af1b6d62d8c77e6d060705357bde188d1762635cb631"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 3426,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/x86_coredump.rs",
+        "sha256": "ad0b5a20a61f54247b05af1b6d62d8c77e6d060705357bde188d1762635cb631"
+      }
+    },
+    "kernel/rust/x86_cpu_helpers.rs": {
+      "canonical_before": {
+        "bytes": 91270,
+        "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+        "sha256": "26180e00c1d6673aa600f0ec9afed5d100ca6e0c39af803c3328e58f8cc88fb9"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 91270,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/x86_cpu_helpers.rs",
+        "sha256": "26180e00c1d6673aa600f0ec9afed5d100ca6e0c39af803c3328e58f8cc88fb9"
+      }
+    },
+    "kernel/rust/x86_local.rs": {
+      "canonical_before": {
+        "bytes": 4525,
+        "path": "/home/holden/mckernel/kernel/rust/x86_local.rs",
+        "sha256": "9f102654a22895615da854b08ea8e043a6c17b9157e4b77e5b58783e70abeb3f"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 4525,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/x86_local.rs",
+        "sha256": "9f102654a22895615da854b08ea8e043a6c17b9157e4b77e5b58783e70abeb3f"
+      }
+    },
+    "kernel/rust/x86_memory_helpers.rs": {
+      "canonical_before": {
+        "bytes": 199322,
+        "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+        "sha256": "245faf1198d9b7715714d236238172330257f4291776aced4e7cee6c3c518ce2"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 199322,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/x86_memory_helpers.rs",
+        "sha256": "245faf1198d9b7715714d236238172330257f4291776aced4e7cee6c3c518ce2"
+      }
+    },
+    "kernel/rust/x86_perfctr.rs": {
+      "canonical_before": {
+        "bytes": 16091,
+        "path": "/home/holden/mckernel/kernel/rust/x86_perfctr.rs",
+        "sha256": "9cabce0fb4295d421a3f5194b7ebb854bdfa93c4126573a643ab2a08e9d11af7"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 16091,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/x86_perfctr.rs",
+        "sha256": "9cabce0fb4295d421a3f5194b7ebb854bdfa93c4126573a643ab2a08e9d11af7"
+      }
+    },
+    "kernel/rust/x86_setup.rs": {
+      "canonical_before": {
+        "bytes": 29158,
+        "path": "/home/holden/mckernel/kernel/rust/x86_setup.rs",
+        "sha256": "1bf9b326873b22034dfba47165c95bdcc599d41533a112c64de72950e99589fe"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 29158,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/x86_setup.rs",
+        "sha256": "1bf9b326873b22034dfba47165c95bdcc599d41533a112c64de72950e99589fe"
+      }
+    },
+    "kernel/rust/x86_vsyscall.rs": {
+      "canonical_before": {
+        "bytes": 2556,
+        "path": "/home/holden/mckernel/kernel/rust/x86_vsyscall.rs",
+        "sha256": "87a888402b181da0bf9c94c6675b85f20cb21480041bb18c7ea42f0bf12f90d7"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 2556,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/x86_vsyscall.rs",
+        "sha256": "87a888402b181da0bf9c94c6675b85f20cb21480041bb18c7ea42f0bf12f90d7"
+      }
+    },
+    "kernel/rust/xpmem_helpers.rs": {
+      "canonical_before": {
+        "bytes": 236058,
+        "path": "/home/holden/mckernel/kernel/rust/xpmem_helpers.rs",
+        "sha256": "e8c7970b672c724f14da2eb0a12fdbcd11df62f824422a5f8a98da4364328255"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 236058,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/xpmem_helpers.rs",
+        "sha256": "e8c7970b672c724f14da2eb0a12fdbcd11df62f824422a5f8a98da4364328255"
+      }
+    },
+    "kernel/rust/zeroobj.rs": {
+      "canonical_before": {
+        "bytes": 6442,
+        "path": "/home/holden/mckernel/kernel/rust/zeroobj.rs",
+        "sha256": "eed90e36aceaaa44936a7c9513c0768278cfdd61882eb9327941f0751c9e9b5b"
+      },
+      "modified_target": false,
+      "private": {
+        "bytes": 6442,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/source/kernel/rust/zeroobj.rs",
+        "sha256": "eed90e36aceaaa44936a7c9513c0768278cfdd61882eb9327941f0751c9e9b5b"
+      }
+    }
+  },
+  "status": "SOURCE_READY_CURRENT78_SIGNALFD_ONLY_PRODUCTION_OVERLAY_NO_EXECUTION_GRANT",
+  "warning_qualification": {
+    "bytes": 6724,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/sourcehandoff/ACTUAL-GCC9-WARNINGS.QUALIFICATION.json",
+    "sha256": "7871fa2e0758edb8415f5e5d31ba75cdb120f17046e067c6262f9ca2abdb5fda"
+  }
+}

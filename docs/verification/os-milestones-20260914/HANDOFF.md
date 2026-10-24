@@ -1,3 +1,69 @@
+## Fresh actual LONG read and engineering checkpoint — 2026-10-24 01:33 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual read5 at01:33:15.550873UTC:324 complete rounds,648 reported launches,
+1791.975143567 mixed-work seconds. NoFAIL/ABORT/wire/snapshot/diagnostic error;
+round324 callback-launch entered. Same owner4007173/start59944315 before/after.
+Ownerwall at summary3603.991s is distinct from mixedwork. Read child joined,
+group absent, streams closed, stderr empty. No terminal/session acceptance.
+Evidence: velocity-intervention-20261023-6/p12-read5-20261024T013315.
+Practical34/35; newlyclosedIDs none. M14 individual production passes and M15
+actual CLI188+3/libihk4608 remain as below. Six persistent M14 source owners
+reactivated for concrete next coherent fixture batches; root owns ordinary
+execution and coherent union integration. BFD readonly query source review runs
+independently. No new Docker/native launch or compiler reservation.
+
+## Direct compiler queue results and healthy observed LONG — 2026-10-24T01:27:44.772886+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical34/35; new closed IDs none. Latest actual read4:226complete rounds,452
+reportedlaunches,1247.670176098mixedsec/2395.3ownerwall; noFAIL/ABORT/wire/snapshot
+error in thatcapture. Owner4007173/start59944315; controller tool6754 retains
+normal liveownership. No terminal/native/session acceptance from those counters.
+
+Rootdirectcompilerqueue: F01first3callbacks8PASS1944; all13cohort8PASS1983;
+F02dump acceptedfull78/wholeGCC9/partial plusretainedobserver84ef/e48c; F03signalfd
+full78sixPASS20.974s/e390 independentlyaccepted; F04context corrected2MiB11PASS
+22.021s/e2de+observer7f94 independentlyaccepted (old8MiBcohortpreserved/unaccepted
+forprofile); F05L2/L1elevenPASS32.237s/152054 independentlyaccepted; F06ptrace
+twelvePASS25.068s/3c97 independentlyaccepted. CoherentmergedRust/defaultimage/native
+proof remainopen; sourcefragmentintegration isrootowned. ExistingCprovidersdebt
+preserved. See individual velocity6filelane receipts, no wholefile credit.
+
+M15 ihkconfig ACTUAL default188parity+3separatecontractsPASS2.332s alljoined:
+velocity7/m15-ihkconfig/root-owned-first-fixture-1/ACTUAL-WHOLE-JOIN.json. This
+supersedes historicalREADY queue status; no KRM/production/default/native credit.
+Libihk CPU4608vectorsPASS.573s:velocity8/m15-libihk/root-cpu-fixture-actual-1/RESULT.json.
+MM microprobe HOLD (Python3.8/captureprofile/liveLinuxwrite-lockwarning omission);
+preserve warning. BFDfixedcompileonlyowner71381/helper76ff/profilee25b accepted
+24purefixtures; freshliveadmission/release/rootquerypending, no Docker yet.
+
+Avoidablehandoff: grant sent tocompletedF01turn andunacknowledgedforegroundCLI
+grant causedwaiting. CLIgrant expiredunused00:53; rootexecutedfreshownedfixture.
+Dispatcher now executesfrozendrivers directly; sourceworkers mustnotduplicatejobs.
+All ordinaryCPU6jobs currentlyclosed/released; one existingP12nativecontroller,
+permanent27:4 untouched. Existing600stimer3938622/start59029100; no duplicate.
+
+## New matched LONG started; first actual progress — 2026-10-24T00:35:42.368210+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical34/35; new closed IDs none. New snapshot-equality LONG exact payload
+517dcc independently released after fetched0b17 checkpoint, actual full real-clock
+validation and published-request consumer PASS. Releasec1ae/requestf81b, inner
+owner4007173/start59944315 authenticated once from actualrootstartedreceipt. Root
+controller tool6754 remains live; no retirement or terminal acceptance claimed.
+First actual readonly capture PASS0/.120s with sameowneridentity: 2 complete rounds,
+4 launches,10.846179890 producer mixed seconds. Round2 callback-launch entered;
+retained diagnostic parser reports no FAIL/ABORT/snapshoterror. This is progress
+only, not elapsedwall credit or formal acceptance. Early-read1 retained raw.
+M14 F06 actual609/5commands PASS.605s, F02actual433/20PASS independently accepted.
+CPUlogger canonical2d29/26180; F04context job grantedCPU6 afterF06wholejoin.
+F03headertransport and staleindexedpreflight failures retained; finiteexpert
+observercorrection authorized source-only, no thirdexecution yet. F01prechild
+providerpinrefusal0children retained; currentprovider rebind ready. Allwholefile/
+defaultimage/newnativeproof remain open. M15newallcustomruntimeRustscope adopted;
+foregroundownsworklist/sourceproposals; no idlecompilerreservation.
+
 ## Six live implementation lanes; fresh P12 admission PASS — 2026-10-24T00:29:28.290006+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

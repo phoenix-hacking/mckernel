@@ -1,0 +1,92 @@
+--- a/kernel/mem.c
++++ b/kernel/mem.c
+@@ -4330,25 +4330,41 @@
+ 	ihk_mc_spinlock_unlock_noirq((ihk_spinlock_t *)lock_addr);
+ }
+ 
++#ifdef MCKERNEL_RUST_MEM_HELPERS
++extern void mem_tlb_atomic_set_bridge(unsigned long atomic_addr, int value);
++#else
+ MEM_TLB_PUBLIC_BRIDGE void mem_tlb_atomic_set_bridge(unsigned long atomic_addr, int value)
+ {
+ 	ihk_atomic_set((ihk_atomic_t *)atomic_addr, value);
+ }
+-
++#endif
++
++#ifdef MCKERNEL_RUST_MEM_HELPERS
++extern void mem_tlb_atomic_inc_bridge(unsigned long atomic_addr);
++#else
+ MEM_TLB_PUBLIC_BRIDGE void mem_tlb_atomic_inc_bridge(unsigned long atomic_addr)
+ {
+ 	ihk_atomic_inc((ihk_atomic_t *)atomic_addr);
+ }
+-
++#endif
++
++#ifdef MCKERNEL_RUST_MEM_HELPERS
++extern void mem_tlb_atomic_dec_bridge(unsigned long atomic_addr);
++#else
+ static void mem_tlb_atomic_dec_bridge(unsigned long atomic_addr)
+ {
+ 	ihk_atomic_dec((ihk_atomic_t *)atomic_addr);
+ }
+-
++#endif
++
++#ifdef MCKERNEL_RUST_MEM_HELPERS
++extern int mem_tlb_atomic_read_bridge(unsigned long atomic_addr);
++#else
+ MEM_TLB_PUBLIC_BRIDGE int mem_tlb_atomic_read_bridge(unsigned long atomic_addr)
+ {
+ 	return ihk_atomic_read((ihk_atomic_t *)atomic_addr);
+ }
++#endif
+ 
+ MEM_TLB_PUBLIC_BRIDGE int mem_tlb_get_vector_bridge(int type)
+ {
+--- a/kernel/rust/mem_helpers.rs
++++ b/kernel/rust/mem_helpers.rs
+@@ -27,9 +27,6 @@
+     fn mem_tlb_interrupt_cpu_bridge(cpu: CInt, vector: CInt);
+     fn mem_tlb_noirq_lock_bridge(lock_addr: CULong);
+     fn mem_tlb_noirq_unlock_bridge(lock_addr: CULong);
+-    fn mem_tlb_atomic_set_bridge(atomic_addr: CULong, value: CInt);
+-    fn mem_tlb_atomic_inc_bridge(atomic_addr: CULong);
+-    fn mem_tlb_atomic_read_bridge(atomic_addr: CULong) -> CInt;
+     fn mem_tlb_flush_single_bridge(addr: CULong);
+     fn mem_tlb_flush_all_bridge();
+     fn mem_tlb_pause_bridge();
+@@ -5509,6 +5506,32 @@
+     phys_to_nid_cb(*ptep & PT_PHYSMASK)
+ }
+ 
++/// Preserve the existing TLB pending-counter provider and its atomic ordering.
++///
++/// # Safety
++/// atomic_addr is the same live, aligned ihk_atomic_t owned by the synchronous
++/// TLB protocol. No null policy, reference retention, or completion is invented.
++#[no_mangle]
++pub unsafe extern "C" fn mem_tlb_atomic_set_bridge(atomic_addr: CULong, value: CInt) {
++    unsafe { crate::atomic_helpers::ihk_atomic_set(atomic_addr as *mut crate::atomic_helpers::IhkAtomic, value) }
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mem_tlb_atomic_inc_bridge(atomic_addr: CULong) {
++    unsafe { crate::atomic_helpers::ihk_atomic_inc(atomic_addr as *mut crate::atomic_helpers::IhkAtomic) }
++}
++
++/// Called only at the existing handler's actual completion point.
++#[no_mangle]
++pub unsafe extern "C" fn mem_tlb_atomic_dec_bridge(atomic_addr: CULong) {
++    unsafe { crate::atomic_helpers::ihk_atomic_dec(atomic_addr as *mut crate::atomic_helpers::IhkAtomic) }
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mem_tlb_atomic_read_bridge(atomic_addr: CULong) -> CInt {
++    unsafe { crate::atomic_helpers::ihk_atomic_read(atomic_addr as *const crate::atomic_helpers::IhkAtomic) }
++}
++
+ /// Preserve the original single-address stack-local handoff to the array entry.
+ ///
+ /// # Safety

@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-24T00:29:28.290006+00:00",
+  "as_of": "2026-10-24T01:27:44.772886+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -260,7 +260,7 @@
           "owner": "m14_actual_consumer_fix implementation; dispatcher integration; m14_callback_review independent",
           "remaining_c_functions": null,
           "rust_consumer": "Canonical Rust remote_flush_tlb_array_cpumask entry calls existing mem_remote_flush_tlb_array_body_result; exact C fallback remains.",
-          "next_action": "Preserve canonical accepted entry; retire remaining outer wrapper/callback bodies and include in next coherent default image, targeted native checks and matching final session.",
+          "next_action": "Root coherent private union and real default/link/targeted native proof; bounded increment is partial, remaining area C stays open.",
           "proof": {
             "implementation": {
               "status": "partial",
@@ -269,6 +269,12 @@
                   "path": "docs/verification/evidence/velocity-intervention-20261023-3/m14-remote-flush/CANONICAL-INTEGRATION.ROOT-RECORD.json",
                   "sha256": "681464e66c5d316d34281eac34a577a5795b533dee8196312e265e549eb503cb",
                   "size": 2313
+                },
+                {
+                  "path": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/actual-fixture-cohort-3/FINAL-ACTUAL-FIXTURE-RECEIPT.json",
+                  "sha256": "9f6d9f97b9b2616d498a5637f30572d7fe418aff5c35e7cf270930fdca9185e7",
+                  "size": 11334,
+                  "scope": "first3callback1944 actual8PASS, selected/fallback ABI; all13source separate"
                 }
               ],
               "scope": "Complete public entry now canonical Rust; exact fallback and 13Ccallback bodies retained as debt. Source integration is not current image/native retirement."
@@ -285,6 +291,12 @@
                   "path": "docs/verification/evidence/velocity-intervention-20261023-3/m14-remote-flush/INDEPENDENT-ACTUAL-PRODUCTION-CONSUMER-ACCEPTANCE.ROOT-RECORD.json",
                   "sha256": "5bd517d506657593f5a7fab60b1380ace84387c78349ff51cb91312b911c83f6",
                   "size": 777
+                },
+                {
+                  "path": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/actual-fixture-cohort-3/FINAL-ACTUAL-FIXTURE-RECEIPT.json",
+                  "sha256": "9f6d9f97b9b2616d498a5637f30572d7fe418aff5c35e7cf270930fdca9185e7",
+                  "size": 11334,
+                  "scope": "first3callback1944 actual8PASS, selected/fallback ABI; all13source separate"
                 }
               ],
               "scope": "1792 unchanged original-C/Rust forwarding pairs,20arguments,12callbackidentities,8ignoredreturns; actual15commands0/.690091s; realheaderlayouts/PUBLICfallback/selectedleafpartiallink. No actual IRQ/TLB behavior proof."
@@ -463,7 +475,7 @@
           "owner": null,
           "remaining_c_functions": null,
           "rust_consumer": null,
-          "next_action": "Reconcile this area with the current matched consumer and already accepted Rust bodies; implement only the actual remaining C behavior.",
+          "next_action": "Root coherent private union and real default/link/targeted native proof; bounded increment is partial, remaining area C stays open.",
           "proof": {
             "implementation": {
               "status": "partial",
@@ -472,6 +484,12 @@
                   "path": "docs/verification/evidence/velocity-intervention-20261023-4/m14-process-next/CANONICAL-INTEGRATION.ROOT-RECORD.json",
                   "scope": "private complete entry calls existing Rust insertion/tree body; exact C fallback and two diagnostic C callbacks retained",
                   "qualification": "Bounded body only, notwholearea/file/native closure"
+                },
+                {
+                  "path": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-consumer-preparation-1/bounded-observer-correction-1/OBSERVER-RESULT.json",
+                  "sha256": "e48c889656069b23094e13c81bec9ec5fd68fe04b6a174c5ee8bfe2f575c2f8d",
+                  "size": 7975,
+                  "scope": "dump full78/wholeGCC9/ABI/partial accepted84ef; canonical pending"
                 }
               ]
             },
@@ -482,6 +500,12 @@
                   "path": "docs/verification/evidence/velocity-intervention-20261023-4/m14-process-next/INDEPENDENT-ACTUAL-LEAF-OBSERVER-CORRECTION.ROOT-RECORD.json",
                   "scope": "1088 originalC/Rust comparisons and14commands PASS; corrected leaf dependency observer9d58 independentlyPASS; first UNDassertion FAIL preserved",
                   "qualification": "Bounded body only, notwholearea/file/native closure"
+                },
+                {
+                  "path": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-consumer-preparation-1/bounded-observer-correction-1/OBSERVER-RESULT.json",
+                  "sha256": "e48c889656069b23094e13c81bec9ec5fd68fe04b6a174c5ee8bfe2f575c2f8d",
+                  "size": 7975,
+                  "scope": "dump full78/wholeGCC9/ABI/partial accepted84ef; canonical pending"
                 }
               ]
             },
@@ -492,6 +516,12 @@
                   "path": "docs/verification/evidence/velocity-intervention-20261023-4/m14-process-next/CANONICAL-INTEGRATION.ROOT-RECORD.json",
                   "scope": "CURRENT78Rust/wholeGCC9processTU/73headers/ABI/twoactualcallerrelocs/fullRustpartial accepted11a772/12commands22.314s",
                   "qualification": "GCC9 selectedTU/partial only; GCC14/defaultimage/native OPEN"
+                },
+                {
+                  "path": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-consumer-preparation-1/bounded-observer-correction-1/OBSERVER-RESULT.json",
+                  "sha256": "e48c889656069b23094e13c81bec9ec5fd68fe04b6a174c5ee8bfe2f575c2f8d",
+                  "size": 7975,
+                  "scope": "dump full78/wholeGCC9/ABI/partial accepted84ef; canonical pending"
                 }
               ]
             },
@@ -1036,7 +1066,7 @@
           "owner": null,
           "remaining_c_functions": null,
           "rust_consumer": null,
-          "next_action": "Reconcile this area with the current matched consumer and already accepted Rust bodies; implement only the actual remaining C behavior.",
+          "next_action": "Root coherent private union and real default/link/targeted native proof; bounded increment is partial, remaining area C stays open.",
           "proof": {
             "implementation": {
               "status": "partial",
@@ -1045,6 +1075,12 @@
                   "path": "docs/verification/evidence/velocity-intervention-20261023-4/m14-syscall-combined-production-preparation-1/CANONICAL-INTEGRATION.ROOT-RECORD.json",
                   "scope": "private complete publication bridge + existingRust syscallconsumer; original hostFD ENOMEM behavior preserved",
                   "qualification": "Bounded body only, notwholearea/file/native closure"
+                },
+                {
+                  "path": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/ACTUAL-PRODUCTION-WHOLE-JOIN.json",
+                  "sha256": "e3909960444e3633f201bdc708fd2d28644487e4b80d8c463a70733dcf29ead3",
+                  "size": 16967,
+                  "scope": "signalfd actual4005 plus full78/reusedcompleteGCC9/partial accepted; pending/sigsuspend excluded"
                 }
               ]
             },
@@ -1055,6 +1091,12 @@
                   "path": "docs/verification/evidence/velocity-intervention-20261023-3/m14-syscall/root-owned-fixture-capture-1/ACTUAL-WHOLE-JOIN.ROOT-RECORD.json",
                   "scope": "actual23cases/threecommands PASS/.470791s; production combined Rustsource preparation witharchptrace pending",
                   "qualification": "Bounded body only, notwholearea/file/native closure"
+                },
+                {
+                  "path": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/ACTUAL-PRODUCTION-WHOLE-JOIN.json",
+                  "sha256": "e3909960444e3633f201bdc708fd2d28644487e4b80d8c463a70733dcf29ead3",
+                  "size": 16967,
+                  "scope": "signalfd actual4005 plus full78/reusedcompleteGCC9/partial accepted; pending/sigsuspend excluded"
                 }
               ]
             },
@@ -1065,6 +1107,12 @@
                   "path": "docs/verification/evidence/velocity-intervention-20261023-4/m14-syscall-combined-production-preparation-1/CANONICAL-INTEGRATION.ROOT-RECORD.json",
                   "scope": "Retained78Rustf3bb/bothcompleteGCC9TUs/originalfullTUtypes/realheaderABI/oneexactarch_ptracereloc/partial uniqueproviders accepteddd60; historicalprocess526b notcurrent3f2c combinedproof",
                   "qualification": "GCC9 selectedTU/partial only; GCC14/defaultimage/native OPEN"
+                },
+                {
+                  "path": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/production-consumer-preparation-1/ACTUAL-PRODUCTION-WHOLE-JOIN.json",
+                  "sha256": "e3909960444e3633f201bdc708fd2d28644487e4b80d8c463a70733dcf29ead3",
+                  "size": 16967,
+                  "scope": "signalfd actual4005 plus full78/reusedcompleteGCC9/partial accepted; pending/sigsuspend excluded"
                 }
               ]
             },
@@ -1308,7 +1356,7 @@
           "owner": null,
           "remaining_c_functions": null,
           "rust_consumer": null,
-          "next_action": "Reconcile this area with the current matched consumer and already accepted Rust bodies; implement only the actual remaining C behavior.",
+          "next_action": "Root coherent private union and real default/link/targeted native proof; bounded increment is partial, remaining area C stays open.",
           "proof": {
             "implementation": {
               "status": "partial",
@@ -1317,6 +1365,12 @@
                   "path": "docs/verification/evidence/velocity-intervention-20261023-4/m14-x86-cpu/CANONICAL-INTEGRATION.ROOT-RECORD.json",
                   "scope": "private Rustentry replaces selected C entry; no_turbo Cdata and four Ccallbacks retained",
                   "qualification": "Bounded body only, notwholearea/file/native closure"
+                },
+                {
+                  "path": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/production-context-consumer-preparation-1/root-retained-stack2m-observer-1/stdout",
+                  "sha256": "6ce4b7c4d5e6883d6934359a6056b343dcde6ced9b6a3aa55fa2c1a6db45c387",
+                  "size": 20622,
+                  "scope": "context correctedproper2MiBprofile11PASS/12240leaf/full78/completeGCC9/partial; old8MiB cohort not profile accepted"
                 }
               ]
             },
@@ -1327,6 +1381,12 @@
                   "path": "docs/verification/evidence/velocity-intervention-20261023-4/m14-x86-cpu/INDEPENDENT-CORRECTED-SOURCE-AND-ACTUAL-CONSUMER.ROOT-RECORD.json",
                   "scope": "18432 selectedoriginalC/Rust and18432 modeledprimitivefallback comparisons,15missingcallbacks,55ABI/wholeGCC9CPU/partiallink; actual10commands independentlyPASS",
                   "qualification": "Bounded body only, notwholearea/file/native closure"
+                },
+                {
+                  "path": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/production-context-consumer-preparation-1/root-retained-stack2m-observer-1/stdout",
+                  "sha256": "6ce4b7c4d5e6883d6934359a6056b343dcde6ced9b6a3aa55fa2c1a6db45c387",
+                  "size": 20622,
+                  "scope": "context correctedproper2MiBprofile11PASS/12240leaf/full78/completeGCC9/partial; old8MiB cohort not profile accepted"
                 }
               ]
             },
@@ -1337,6 +1397,12 @@
                   "path": "docs/verification/evidence/velocity-intervention-20261023-4/m14-x86-cpu/CANONICAL-INTEGRATION.ROOT-RECORD.json",
                   "scope": "Full78Rust + reusedGCC9CPU/55ABI/reloc/partial uniqueentry accepted4291/158a; ninecommands21.829s",
                   "qualification": "GCC9 selectedTU/partial only; GCC14/defaultimage/native OPEN"
+                },
+                {
+                  "path": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/production-context-consumer-preparation-1/root-retained-stack2m-observer-1/stdout",
+                  "sha256": "6ce4b7c4d5e6883d6934359a6056b343dcde6ced9b6a3aa55fa2c1a6db45c387",
+                  "size": 20622,
+                  "scope": "context correctedproper2MiBprofile11PASS/12240leaf/full78/completeGCC9/partial; old8MiB cohort not profile accepted"
                 }
               ]
             },
@@ -1579,7 +1645,7 @@
           "owner": "foreground:/root/m14_memory_cutover",
           "remaining_c_functions": null,
           "rust_consumer": "kernel/rust/x86_memory_helpers.rs::x86_clear_old_action_bridge",
-          "next_action": "Coherentcandidate13source/selectedCproviderTU/defaultlink validation atreviewedquiescentboundary, thenmatchingnative clear/free proof; wholearea/fileopen.",
+          "next_action": "Root coherent private union and real default/link/targeted native proof; bounded increment is partial, remaining area C stays open.",
           "proof": {
             "implementation": {
               "status": "partial",
@@ -1608,6 +1674,12 @@
                   "path": "docs/verification/evidence/velocity-intervention-20261023-3/m14-walk-l4/CANONICAL-INTEGRATION.ROOT-RECORD.json",
                   "scope": "private complete wrapper Rustbody; immutable typedcallback Cdata points retained Cclear_range_l4, callback chain debt",
                   "qualification": "Bounded body only, notwholearea/file/native closure"
+                },
+                {
+                  "path": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/combined-l2-l1-production-preparation-1/bounded-current-canonical-binding-correction-1/ACTUAL-PRODUCTION-CONSUMER-RECEIPT.json",
+                  "sha256": "1520544228a88f58b5059dcdd6f4088f619e580724ec66b06f7e1239b43b98ab",
+                  "size": 27883,
+                  "scope": "L2/L1 actual1728+432/full78/wholeGCC9/ten typed section relocs/partial accepted; walkers/providers remainC"
                 }
               ]
             },
@@ -1630,6 +1702,12 @@
                   "path": "docs/verification/evidence/velocity-intervention-20261023-3/m14-walk-l4/INDEPENDENT-ACTUAL-PRODUCTION-CONSUMER.ROOT-RECORD.json",
                   "scope": "actual224fixture +11productioncommands/78Rust/fullselectedGCC9TU/headerABI/relocation/partial31RustT independentlyPASS698ba7dc",
                   "qualification": "Bounded body only, notwholearea/file/native closure"
+                },
+                {
+                  "path": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/combined-l2-l1-production-preparation-1/bounded-current-canonical-binding-correction-1/ACTUAL-PRODUCTION-CONSUMER-RECEIPT.json",
+                  "sha256": "1520544228a88f58b5059dcdd6f4088f619e580724ec66b06f7e1239b43b98ab",
+                  "size": 27883,
+                  "scope": "L2/L1 actual1728+432/full78/wholeGCC9/ten typed section relocs/partial accepted; walkers/providers remainC"
                 }
               ]
             },
@@ -1649,6 +1727,12 @@
                   "path": "docs/verification/evidence/velocity-intervention-20261023-3/m14-walk-l4/CANONICAL-INTEGRATION.ROOT-RECORD.json",
                   "scope": "actual224fixture +11productioncommands/78Rust/fullselectedGCC9TU/headerABI/relocation/partial31RustT independentlyPASS698ba7dc",
                   "qualification": "GCC9 selectedTU/partial only; GCC14/defaultimage/native OPEN"
+                },
+                {
+                  "path": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/combined-l2-l1-production-preparation-1/bounded-current-canonical-binding-correction-1/ACTUAL-PRODUCTION-CONSUMER-RECEIPT.json",
+                  "sha256": "1520544228a88f58b5059dcdd6f4088f619e580724ec66b06f7e1239b43b98ab",
+                  "size": 27883,
+                  "scope": "L2/L1 actual1728+432/full78/wholeGCC9/ten typed section relocs/partial accepted; walkers/providers remainC"
                 }
               ],
               "scope": "Actual GCC14 default selected C translation units, complete production Rust crate and final kernel unique Rust providers accepted for retained bounded slices only; native/wholearea remainsopen."
@@ -2076,7 +2160,7 @@
           "owner": null,
           "remaining_c_functions": null,
           "rust_consumer": null,
-          "next_action": "Reconcile this area with the current matched consumer and already accepted Rust bodies; implement only the actual remaining C behavior.",
+          "next_action": "Root coherent private union and real default/link/targeted native proof; bounded increment is partial, remaining area C stays open.",
           "proof": {
             "implementation": {
               "status": "partial",
@@ -2085,6 +2169,12 @@
                   "path": "docs/verification/evidence/velocity-intervention-20261023-4/m14-syscall-combined-production-preparation-1/CANONICAL-INTEGRATION.ROOT-RECORD.json",
                   "scope": "private exact fullsignatureRustdispatcher; request30 uses unchangedexistingptrace_arch_prctl, otherrequests preserve EOPNOTSUPP",
                   "qualification": "Bounded body only, notwholearea/file/native closure"
+                },
+                {
+                  "path": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/ACTUAL-PRODUCTION-CONSUMER-RECEIPT.json",
+                  "sha256": "3c97e74c42dae3d8574e036a2f4cf623d34a22fd489d6aa7ddb254ea93eed864",
+                  "size": 20505,
+                  "scope": "ptrace publicentry+adapter actual609/full78/bothwholeGCC9TUs/ABI/partial accepted; existingCevent provider remains"
                 }
               ]
             },
@@ -2095,6 +2185,12 @@
                   "path": "docs/verification/evidence/velocity-intervention-20261023-4/m14-x86-syscall/fixture/actual-body-fixture-1/ACTUAL-ARCH-PTRACE-BODY-FIXTURE-RECEIPT.json",
                   "scope": "11340actualfullsignaturecases/5commands PASS/.255296s;1260forwarded/10080unsupported",
                   "qualification": "Bounded body only, notwholearea/file/native closure"
+                },
+                {
+                  "path": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/ACTUAL-PRODUCTION-CONSUMER-RECEIPT.json",
+                  "sha256": "3c97e74c42dae3d8574e036a2f4cf623d34a22fd489d6aa7ddb254ea93eed864",
+                  "size": 20505,
+                  "scope": "ptrace publicentry+adapter actual609/full78/bothwholeGCC9TUs/ABI/partial accepted; existingCevent provider remains"
                 }
               ]
             },
@@ -2105,6 +2201,12 @@
                   "path": "docs/verification/evidence/velocity-intervention-20261023-4/m14-syscall-combined-production-preparation-1/CANONICAL-INTEGRATION.ROOT-RECORD.json",
                   "scope": "Retained78Rustf3bb/bothcompleteGCC9TUs/originalfullTUtypes/realheaderABI/oneexactarch_ptracereloc/partial uniqueproviders accepteddd60; historicalprocess526b notcurrent3f2c combinedproof",
                   "qualification": "GCC9 selectedTU/partial only; GCC14/defaultimage/native OPEN"
+                },
+                {
+                  "path": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/production-consumer-preparation-1/ACTUAL-PRODUCTION-CONSUMER-RECEIPT.json",
+                  "sha256": "3c97e74c42dae3d8574e036a2f4cf623d34a22fd489d6aa7ddb254ea93eed864",
+                  "size": 20505,
+                  "scope": "ptrace publicentry+adapter actual609/full78/bothwholeGCC9TUs/ABI/partial accepted; existingCevent provider remains"
                 }
               ]
             },
@@ -2495,6 +2597,21 @@
       "native_credit": false,
       "file_retirement": false,
       "practical_check_closures": []
+    },
+    {
+      "date": "2026-10-24T01:27:44.772886+00:00",
+      "kind": "ACTUAL_BOUNDED_STAGE_INCREMENTS_NO_NATIVE_OR_AREA_CLOSURE",
+      "subgoals": [
+        "M14-01-04",
+        "M14-02-02",
+        "M14-03-04",
+        "M14-04-05",
+        "M14-05-03",
+        "M14-06-03"
+      ],
+      "practical_check_closures": [],
+      "whole_file_closures": [],
+      "native_credit": false
     }
   ]
 }

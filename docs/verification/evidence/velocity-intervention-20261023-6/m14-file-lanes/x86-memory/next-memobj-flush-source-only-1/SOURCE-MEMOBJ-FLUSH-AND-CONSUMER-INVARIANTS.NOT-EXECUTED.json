@@ -1,0 +1,90 @@
+{
+  "actual_L2_receipt": {
+    "bytes": 7902,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/sourcehandoff/ACTUAL-CLEAR-RANGE-L2-FIXTURE-RECEIPT.json",
+    "sha256": "ceea9d6a88bd0b727e3572306f7503b37c17941da3dc973efef847be30d1a312"
+  },
+  "actual_existing_Rust_dispatch": {
+    "bytes": 235965,
+    "path": "/home/holden/mckernel/kernel/rust/object_helpers.rs",
+    "sha256": "7444ec38a30cdb2b0505b939f02eacb5018d3732a97fcd12b3eba189133f0f06"
+  },
+  "actual_existing_Rust_dispatch_body": {
+    "bytes": 338,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-memobj-flush-source-only-1/EXACT-EXISTING-RUST-MEMOBJ-FLUSH-BODY.inc",
+    "sha256": "555b9c1bfd70c7d1477fb03dea688df79d94dfd94adeae2e69b8c676fb578e07"
+  },
+  "canonical_shared_ABI_P12_frozen15_Git_changes": false,
+  "chosen_complete_C_body": "x86_clear_memobj_flush_bridge",
+  "coherent_eight_body_patch": {
+    "bytes": 10371,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-memobj-flush-source-only-1/patch/combined-eight-body-cutover.patch",
+    "sha256": "558297f63ff2d413380b80fed3ec6cd4f242dfb7533a184868fe14ab57f57db2"
+  },
+  "compiler_test_root_Docker_jobs": 0,
+  "consumer_invariants": {
+    "PUBLIC_C_selection": "Original static C provider body excluded; extern exact void(void*,unsigned long,size_t) declaration. No added C getter/provider/functionality.",
+    "Rust_provider": "Unique global Rust T x86_clear_memobj_flush_bridge and no Rust U/selfimport; uses existing actual object_helpers::memobj_flush_page implementation and operation ABI.",
+    "arguments_and_width": "Identical raw Memobj address and physical value; pgsize unsigned64\u2192SizeT preserves all bits on accepted x86_64 eight-byte ABI. No narrowing to int or saturation.",
+    "call_order": "Leaf/level/old-entry/effect flush ordering remains untouched. Only provider body ownership changes.",
+    "errors_and_formats": "Explicitly discard existing memobj_flush_page CInt result (including errors/missing-op default) exactly as original void C callback. No new log/format/call or error policy.",
+    "lifetime_ownership": "No borrow reference, dereference in wrapper, null guard, lock, free, object reference change, callback retention or asynchronous work; existing Rust memobj dispatcher owns synchronous ops lookup/call.",
+    "real_dispatch_debt": "MemobjOps.flush_page implementation selected by the actual object remains independently tracked; moving this wrapper does not retire arbitrary backing-object provider bodies.",
+    "typed_pointer_relocation": "Existing x86_clear_l3_memobj_flush remains same typed const8-byte C data. Require its actual own SHT_RELA.sh_info+symboloffset relocation to global Rust flush provider, unique matching definition in partial output; no invented C call relocation."
+  },
+  "fallback_C_body_byte_identical": true,
+  "future_actual_observation": [
+    "Exact original C callback vs actual existing Rust memobj dispatcher across present/missing op and returned error values; observed callback order/args/ignored result",
+    "Full78 Rust with real object_helpers/abi (no fixture-only substitute) and whole selected C TU/header/section-specific partial link",
+    "All defaultGCC14/native/wholefile credit stays OPEN until separately observed"
+  ],
+  "immutable_callback_identity_byte_identical": true,
+  "new_executable_recipe_or_CPU_reservation": null,
+  "new_source_actual_fixture_TU_partial_native": null,
+  "postimages": [
+    {
+      "bytes": 89444,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-memobj-flush-source-only-1/candidate/arch/x86_64/kernel/memory.c",
+      "sha256": "ceed123214cd293f5afefd21dd071e39aa824cf3424cc6355a841c1ae5467f39"
+    },
+    {
+      "bytes": 204359,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-memobj-flush-source-only-1/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "087240006b3f1b99c844c77c1c645118710bf34f53546637eb12d54215822092"
+    }
+  ],
+  "preimages": [
+    {
+      "bytes": 89292,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-rss-providers-source-only-1/candidate/arch/x86_64/kernel/memory.c",
+      "sha256": "02dbc81d9f52044fdf26a40b87e7048e41e3ab7ebd84da66b74b7a004230afa3"
+    },
+    {
+      "bytes": 203864,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-rss-providers-source-only-1/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "227ee8a3cf6faba86ea4a5544ab884dccf8943e206e72f394fee3c37d54abc1e"
+    }
+  ],
+  "real_memobj_C_header": {
+    "bytes": 3957,
+    "path": "/home/holden/mckernel/kernel/include/memobj.h",
+    "sha256": "7d587411f1b6957c6fcc6f61d8f03b052d875cfd774f602aefe05ff99f536bb9"
+  },
+  "remaining_clear_C_debt": [
+    "range/effect logging providers",
+    "PTfree/allocator providers",
+    "other memory.c runtime functions and backing MemobjOps implementations"
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "sole_queued_L1_remaining4": {
+    "bytes": 5062,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-l1-source-1/observer-leaf-declaration-correction-1/SEALED-SOURCE-RECIPE-DRIVER-HANDOFF.NOT-EXECUTED.json",
+    "sha256": "6b5b7e340da8ea72be5dc51b4b5d3e6a7d43815057c1baea1b2989d9692c40ef"
+  },
+  "standalone_patch": {
+    "bytes": 1459,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-memobj-flush-source-only-1/patch/memobj-flush-only.patch",
+    "sha256": "4d1522a9d0ae80e61c82ea018aa9534bf8347aa8f3c5008f24ccc7cd6246d657"
+  },
+  "status": "ACTUAL_MEMOBJ_FLUSH_PROVIDER_PRIVATE_SOURCE_ONLY_NO_NEW_EXECUTABLE_QUEUE"
+}

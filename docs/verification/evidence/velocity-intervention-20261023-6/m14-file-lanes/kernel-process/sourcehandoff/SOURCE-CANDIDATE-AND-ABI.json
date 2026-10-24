@@ -1,0 +1,60 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_IMPLEMENTATION_PREPARED_NO_COMPILER_TEST_OR_CPU_RESERVATION",
+  "chosen_actual_body": "vm_range_insert_dump_bridge plus tightly coupled dump_tree/dtree computation",
+  "source_preimages": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "sha256": "08c238a08066a6eda5f346bbd6e6f87333bd505d8d598276dc9c52cd43568a45",
+      "bytes": 162457
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "sha256": "d04b48c887c834edd6380e3ae06fccdef7dfafaf67196fd28af7f9571993bd6d",
+      "bytes": 353812
+    },
+    "kernel/include/process_helpers.h": {
+      "path": "/home/holden/mckernel/kernel/include/process_helpers.h",
+      "sha256": "1e4eceec2c06dcd409d86cbd5e24616684d83e828d62d6ca534e08c4e0a20bcb",
+      "bytes": 75149
+    },
+    "kernel/rust/abi.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    "kernel/rust/rbtree.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/rbtree.rs",
+      "sha256": "114e8dbd0b48abc156879bfd2f019071c30174019e97904c028ccee911840256",
+      "bytes": 22536
+    }
+  },
+  "postimages": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/candidate/kernel/process.c",
+      "sha256": "1ecbc287f2e704e738cc4e9fbe18289226b5aadadc9da88d226dc0ad0bb57234",
+      "bytes": 162758
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "70015d712c29e416881e2fbaccd67026ee15ac7eb915cb80e828485d6f34d71f",
+      "bytes": 355120
+    }
+  },
+  "gate": "Same #ifdef DEBUG_PRINT_PROCESS C compile rule exposes readonly process_dump_tree_enabled=1/0; original DDEBUG_DEFAULT update preserved. No C function/getter introduced.",
+  "default_profile": "Gate0 returns without reading vm or tree, exactly original no-op.",
+  "enabled_profile": "Existing kprintf header then root load; exact in-order recursion/typed width0/range pointers/UL fields and formats. Right edge read after node logging; no pointer retained.",
+  "unconditional_kprintf_declaration_reused": true,
+  "kprintf_declaration_count": 1,
+  "prior_E0428_failure": "2fb3a229/e9a1 retained; no duplicate declaration added",
+  "C_compute_dump_helpers_remaining_in_selected_profile": false,
+  "C_fallback_exact_bodies_retained": true,
+  "remaining_C_debt": [
+    "Readonly compile-gate data process_dump_tree_enabled",
+    "Other process.c compute bodies and existing debug selector metadata; no whole file/area credit"
+  ],
+  "ownership": "Same caller-held VM range exclusion and borrowed live tree; no allocation/free/locks/refcount changes. No Rust references to foreign allocations.",
+  "compiler_jobs": 0,
+  "CPU_reservations": 0,
+  "default_image_native": false
+}

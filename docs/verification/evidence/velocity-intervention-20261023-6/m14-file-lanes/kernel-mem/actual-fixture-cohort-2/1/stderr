@@ -1,0 +1,91 @@
+error[E0412]: cannot find type `c_void` in this scope
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/fixture/actual_rust_closure.rs:161:51
+    |
+161 |     lock((&raw mut (*aspace).cpu_set_lock).cast::<c_void>() as CULong);
+    |                                                   ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+  4 + use core::ffi::c_void;
+    |
+
+error[E0412]: cannot find type `c_void` in this scope
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/fixture/actual_rust_closure.rs:168:53
+    |
+168 |     unlock((&raw mut (*aspace).cpu_set_lock).cast::<c_void>() as CULong);
+    |                                                     ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+  4 + use core::ffi::c_void;
+    |
+
+error[E0412]: cannot find type `c_void` in this scope
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/fixture/actual_rust_closure.rs:170:48
+    |
+170 |     lock((&raw mut (*flush_entry).lock).cast::<c_void>() as CULong);
+    |                                                ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+  4 + use core::ffi::c_void;
+    |
+
+error[E0412]: cannot find type `c_void` in this scope
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/fixture/actual_rust_closure.rs:175:50
+    |
+175 |         (&raw mut (*flush_entry).pending).cast::<c_void>() as CULong,
+    |                                                  ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+  4 + use core::ffi::c_void;
+    |
+
+error[E0412]: cannot find type `c_void` in this scope
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/fixture/actual_rust_closure.rs:189:69
+    |
+189 |                 atomic_inc((&raw mut (*flush_entry).pending).cast::<c_void>() as CULong);
+    |                                                                     ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+  4 + use core::ffi::c_void;
+    |
+
+error[E0412]: cannot find type `c_void` in this scope
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/fixture/actual_rust_closure.rs:208:64
+    |
+208 |     while atomic_read((&raw mut (*flush_entry).pending).cast::<c_void>() as CULong) != 0 {
+    |                                                                ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+  4 + use core::ffi::c_void;
+    |
+
+error[E0412]: cannot find type `c_void` in this scope
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/fixture/actual_rust_closure.rs:211:50
+    |
+211 |     unlock((&raw mut (*flush_entry).lock).cast::<c_void>() as CULong);
+    |                                                  ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+  4 + use core::ffi::c_void;
+    |
+
+error[E0412]: cannot find type `c_void` in this scope
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/fixture/actual_rust_closure.rs:259:57
+    |
+259 |     atomic_dec((&raw mut (*flush_entry).pending).cast::<c_void>() as CULong);
+    |                                                         ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+  4 + use core::ffi::c_void;
+    |
+
+error: aborting due to 8 previous errors
+
+For more information about this error, try `rustc --explain E0412`.

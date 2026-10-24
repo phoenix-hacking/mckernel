@@ -1,0 +1,34 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "COHERENT_TWO_VM_PUBLIC_ENTRIES_PLUS_REAL_LOG_CALLBACK_SOURCE_ONLY_NOT_EXECUTABLE_READY",
+  "postimages": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/next-fault-pte-source-1/candidate/kernel/mem.c",
+      "sha256": "d5c1be09f27aa6ba9897e0cd18ef0823a27d76cbf3306207c2fd347019327014",
+      "bytes": 226045
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/next-fault-pte-source-1/candidate/kernel/rust/mem_helpers.rs",
+      "sha256": "474f135d485755f9c970037b7c713d135cf0e29a3b8eec9bbdf940ae3fac3a0f",
+      "bytes": 206024
+    }
+  ],
+  "patch_sha256": "045229b1009806edb4eee0198d8daaf7f9508a8fd2ca7084ea27073302ff42a3",
+  "base": "Private lookup_node source c1e1 patch; cumulative diff against canonical638788/4635, not merged with TLB13 sources.",
+  "new_complete_bodies": [
+    "ihk_mc_pt_lookup_fault_pte default public wrapper",
+    "mem_lookup_fault_log_bridge exact diagnostic callback"
+  ],
+  "removed_selected_C_passthroughs": [
+    "mem_lookup_fault_pte_bridge",
+    "mem_page_fault_process_vm_bridge"
+  ],
+  "mechanism_reuse": "Same existing full mem_pt_lookup_fault_pte_body_result; same ihk_mc_pt_lookup_pte/page_fault_process_vm public providers; exact offsets from reprC VM/aspace. Existing fault helper unchanged.",
+  "consumer_invariant": "First lookup uses identical vm/PT/virt/pgshift/output pointers; absent/inactive PTE triggers exactly one PF_POPULATE|PF_USER fault and second lookup; exact fault return remains ignored; log only if second PTE active; return same PTE pointer. Null VM/PT behavior of selected Rust helper preserved. No callback retained, no new lock/reference/IRQ/lifetime ownership policy. lookup_node retains its separate fault-first errno/NUMA behavior.",
+  "real_logging": "Exact %s: successfully faulted 0x%lx newline format; exact function-name C string; virtual pointer converted unsignedlong. kprintf return ignored as original. Production formatter reused; hosted formatter qualification remains future.",
+  "future_fixture": "No second ready fixture: future actual original C default wrapper+real log versus exact Rust helper/public entry, controlled fault/lookup sequencing and outputs; first active/missing/inactive and postfault states; ignored nonzero fault results; exact logging varargs/bytes; pointer/signedpgshift/output alias patterns; public/fallback actualheader consumers. No target ISA HOST execution.",
+  "production_fullcrate_default_TU_link_native": null,
+  "actual_fixture": null,
+  "execution_grant": null,
+  "remaining_C_debt": "Other VM/page fault handling, TLB handler/profile and all unported mem.c functions; TLB13 private source stays separate/unproven. No file/native retirement."
+}

@@ -1,0 +1,35 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_NEXT_API_SOURCE_IMPLEMENTED_UNCOMPILED_NO_SECOND_FIXTURE",
+  "unchanged_CPU_sha256": "8e898c8da3c4a4b54eb7710cbdb95560e3fa53f26c843bea5a29847291f479bc",
+  "new_exports": [
+    "ihk_reserve_mem",
+    "ihk_get_num_os_instances",
+    "ihk_get_os_instances"
+  ],
+  "files": {
+    "ihklib_memory_os.rs": {
+      "sha256": "b490d85c4f0c611ade028664ece64c1bab055699a77b0c692d4406cbf05c012d",
+      "bytes": 11744
+    },
+    "libihk_next.rs": {
+      "sha256": "034c69c0651d1e790d95af7264e484580de35eb00d35de4a1874663695bc41eb",
+      "bytes": 5152
+    },
+    "MEMORY-OS-SOURCE-DEBT.md": {
+      "sha256": "7b12d893f84e7589abfb673b13c2cc2aa1edbf6513e4400f46a2f2e83ecb3791",
+      "bytes": 1660
+    }
+  },
+  "tests_executed": 0,
+  "compiler_runs": 0,
+  "root_Docker_device_queries": 0,
+  "remaining_C_dependencies": [
+    "reserve_mem_conf",
+    "ihk_get_num_reserved_mem_chunks",
+    "ihk_query_mem",
+    "ihk_release_mem"
+  ],
+  "qualification": null,
+  "canonical_edits": false
+}

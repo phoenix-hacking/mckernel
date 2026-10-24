@@ -1,0 +1,45 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_IMPLEMENTATION_AND_ACTUAL_EQUIVALENCE_FIXTURE_READY_NOT_EXECUTED",
+  "files": {
+    "test_cpu_equivalence.c": {
+      "sha256": "1db8f184c193347b10b29a02ed6cae2684ce85b8a36aeaacdceca1d58c3f7d32",
+      "bytes": 3954
+    },
+    "IMPLEMENTATION.READY-NOT-EXECUTED.json": {
+      "sha256": "94713bdef827a3ee73d9da24b2bb65aefe977171fc47336b8f1309fcdf387f7a",
+      "bytes": 3521
+    },
+    "ihklib_cpu.rs": {
+      "sha256": "8e898c8da3c4a4b54eb7710cbdb95560e3fa53f26c843bea5a29847291f479bc",
+      "bytes": 5129
+    },
+    "reference_cpu.c": {
+      "sha256": "2e90790b5a09d482cbe6a2e17a245148691c35834bcff6f792b07c002ff886ee",
+      "bytes": 6494
+    },
+    "CHECK-RECIPE.NOT-EXECUTED.sh": {
+      "sha256": "231c37380a71700c7fa265e4555427dcb33a5aaa4c0e74fa039cf560a30a47a8",
+      "bytes": 1401
+    }
+  },
+  "actual_compile": null,
+  "actual_fixture": null,
+  "production_selector": null,
+  "production_link": null,
+  "native_proof": null,
+  "proposed_ordinary_profile": {
+    "CPU": "root-selected disjoint ordinary CPU only after grant",
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 120,
+    "retirement_seconds": 6,
+    "FSIZE_bytes": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "compiler": "root-selected actual Rust1.92 CGU1/2MiB-stack + existing granted GCC profile; identities pending"
+  },
+  "no_resource_reservation": true,
+  "request_contract": "same UAPI pointer/count; zeroed request storage including padding; ordered negative errno captured before close",
+  "remaining_apis": "memory and OS-instance APIs, remaining public ihklib and WITH_KRM policy remain C debt"
+}

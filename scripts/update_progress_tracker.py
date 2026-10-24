@@ -121,6 +121,32 @@ def rust_cutover_panel(doc: dict) -> list[str]:
                     "native functional proof. Practical 35/35 alone does not establish that result.", ""]
 
 
+def project_runtime_cutover_panel(doc: dict) -> list[str]:
+    """Expose custom runtime debt without changing functional check counts."""
+    if doc.get("id") != "M15":
+        return []
+
+    def cell(value):
+        return str(value).replace("|", "\\|").replace("\n", "<br>")
+
+    lines = ["## Separate active milestone: M15 custom runtime Rust cutover", "",
+             "See [RUST-CUTOVER-M15.md](RUST-CUTOVER-M15.md) and "
+             "[rust-cutover-m15.json](rust-cutover-m15.json). Existing native "
+             "IHK/SMP/mcctrl Rust implementations are reused. Remaining project "
+             "C adapters, executors, libraries and installed programs stay explicit.", "",
+             "This milestone is outside the 35 functional checks and M14. "
+             "Source selection is not final link/native proof; no completion "
+             "percentage is inferred from these rows.", "",
+             "| Goal | Project runtime source | State |",
+             "| --- | --- | --- |"]
+    for item in doc.get("files", []) + doc.get("runtime_programs", []):
+        lines.append("| " + " | ".join(cell(item.get(key, "unassessed"))
+                     for key in ("id", "path", "status")) + " |")
+    return lines + ["", "M15 closes with the delivered-runtime ownership manifest, "
+                    "actual Rust/assembly project artifacts and matching functional "
+                    "module/application/lifecycle evidence.", ""]
+
+
 def render(core_doc=None) -> str:
     if core_doc is None:
         core_doc = stable_core_tracker.load_tracker()
@@ -249,9 +275,11 @@ def render(core_doc=None) -> str:
         # Only the reporting priority and qualification labels change.
         position = lines.index("## Snapshot")
         cutover = read_json(TRACKER_DIR / "rust-cutover-m14.json", {})
-        lines[position:position] = practical_panel(practical) + rust_cutover_panel(cutover)
+        runtime_cutover = read_json(TRACKER_DIR / "rust-cutover-m15.json", {})
+        lines[position:position] = (practical_panel(practical) + rust_cutover_panel(cutover)
+                                   + project_runtime_cutover_panel(runtime_cutover))
         lines[3] = "> Practical completion follows `PRACTICAL-GOAL.md` and `practical-milestones.json`; " \
-                   "the separate active Rust cutover follows M14. Original formal qualification remains DEFERRED."
+                   "separate active Rust cutovers follow M14/M15. Original formal qualification remains DEFERRED."
         renamed = {"## Acceptance Bars": "## Historical / DEFERRED qualification counters",
                    "## Intermediary Goal Ladder": "## Historical / DEFERRED qualification ladder",
                    "## Detailed Work Queue": "## Historical / DEFERRED qualification queue",
@@ -269,7 +297,9 @@ def render(core_doc=None) -> str:
         lines[position:position] = ["- `PRACTICAL-GOAL.md` and `practical-milestones.json` - active scoped "
                                    "completion requirements, recorded check states, evidence and next work.",
                                    "- `RUST-CUTOVER-M14.md` and `rust-cutover-m14.json` - separate active "
-                                   "file-by-file compute-kernel Rust/assembly cutover; outside the 35 checks."]
+                                   "file-by-file compute-kernel Rust/assembly cutover; outside the 35 checks.",
+                                   "- `RUST-CUTOVER-M15.md` and `rust-cutover-m15.json` - separate custom "
+                                   "module/executor/library/tool Rust cutover; outside the 35 checks."]
     return "\n".join(lines)
 
 

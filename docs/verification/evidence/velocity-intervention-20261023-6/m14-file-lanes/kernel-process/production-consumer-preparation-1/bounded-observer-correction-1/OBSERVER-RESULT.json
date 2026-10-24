@@ -1,0 +1,275 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOLE_OBSERVER_CORRECTION_F02_DUMP_CURRENT78_WHOLE_GCC9_REAL_ABI_RETAINED_CALLERS_FULLRUST_PARTIAL",
+  "first_failure_preserved": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-consumer-preparation-1/PRODUCTION-FIRST-FAILURE-1.json",
+    "sha256": "c7741bfcdfb778cee7a32834b0043c26194b4e4cc6cdc111af537a423915e1fb",
+    "bytes": 24856
+  },
+  "observer_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-consumer-preparation-1/bounded-observer-correction-1/observe_retained_production.py",
+    "sha256": "9a6fe8ae8a3d2eede9953b0eff6e60837bfa7cdd572e2adaeb90916ccf857643",
+    "bytes": 9434
+  },
+  "bindings": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-consumer-preparation-1/bounded-observer-correction-1/INPUT-BINDINGS.json",
+    "sha256": "b8b6bb8960897e6e1a7a6c1caea4355d5388b07edc134b59fc14828bec74339f",
+    "bytes": 39386
+  },
+  "actual14command_whole_joins_preserved": true,
+  "original_command_seconds": 24.135462724254467,
+  "compiled_objects_not_rehashed": {
+    "C": {
+      "ctime_ns": 1792802445683613891,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 56125195,
+      "mode": "0o600",
+      "mtime_ns": 1792802445683613891,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-consumer-preparation-1/output-1/process.c.o",
+      "sha256": "aa3c64281d571b211083abcb9cd81bb6ca657473491516d76f03522b19568a0a",
+      "size": 238448,
+      "uid": 1000
+    },
+    "Rust": {
+      "ctime_ns": 1792802443763554661,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 56125148,
+      "mode": "0o600",
+      "mtime_ns": 1792802443763554661,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-consumer-preparation-1/output-1/mckernel_rust.o",
+      "sha256": "2b83f185416ae089f9c68269dd30ec020af2ecdaadd4cd25b95047f9890aa752",
+      "size": 13796656,
+      "uid": 1000
+    },
+    "partial": {
+      "ctime_ns": 1792802446059625490,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 56125238,
+      "mode": "0o600",
+      "mtime_ns": 1792802446059625490,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-consumer-preparation-1/output-1/process-rust-partial.o",
+      "sha256": "ccd9183a30774bf9acf35341fc61ff4089deb28e0f5b41bb4a75d8a260b376b3",
+      "size": 14202832,
+      "uid": 1000
+    }
+  },
+  "actual_T_U_delta": {
+    "T": {
+      "removed": [],
+      "added": [
+        "clear_range_l3",
+        "vm_range_insert_dump_bridge",
+        "x86_cpu_ulong_log_bridge"
+      ],
+      "before": 3044,
+      "after": 3047
+    },
+    "U": {
+      "removed": [
+        "vm_range_insert_dump_bridge"
+      ],
+      "added": [
+        "process_dump_tree_enabled",
+        "x86_clear_l3_child_walk",
+        "x86_clear_l3_effect_log",
+        "x86_clear_l3_memobj_flush",
+        "x86_clear_l3_memobj_rss_sub",
+        "x86_clear_l3_range_log",
+        "x86_clear_l3_rss_sub",
+        "x86_clear_l3_use_1gb_page"
+      ],
+      "before": 577,
+      "after": 584
+    }
+  },
+  "actual_unchanged_C_callers": [
+    {
+      "name": "process_add_range_insert_bridge",
+      "bytes": 52,
+      "sha256": "5fca502eb591ddc767fd71a76680fe4c563b35f4b13d3307f37fb170e0e7ea2a",
+      "actual_relocations": [
+        {
+          "relative_offset": 10,
+          "type": 29,
+          "addend": 6,
+          "symbol": "_GLOBAL_OFFSET_TABLE_"
+        },
+        {
+          "relative_offset": 21,
+          "type": 31,
+          "addend": 0,
+          "symbol": "vm_range_insert"
+        }
+      ],
+      "actual_vm_range_insert_relocations": [
+        {
+          "relative_offset": 21,
+          "type": 31,
+          "addend": 0,
+          "symbol": "vm_range_insert"
+        }
+      ]
+    },
+    {
+      "name": "process_split_range_insert_bridge",
+      "bytes": 52,
+      "sha256": "5fca502eb591ddc767fd71a76680fe4c563b35f4b13d3307f37fb170e0e7ea2a",
+      "actual_relocations": [
+        {
+          "relative_offset": 10,
+          "type": 29,
+          "addend": 6,
+          "symbol": "_GLOBAL_OFFSET_TABLE_"
+        },
+        {
+          "relative_offset": 21,
+          "type": 31,
+          "addend": 0,
+          "symbol": "vm_range_insert"
+        }
+      ],
+      "actual_vm_range_insert_relocations": [
+        {
+          "relative_offset": 21,
+          "type": 31,
+          "addend": 0,
+          "symbol": "vm_range_insert"
+        }
+      ]
+    }
+  ],
+  "full_GOT_relocations_retained_in_equality": true,
+  "whole_partial_vm_range_insert_target_relocations": 2,
+  "Rust_dump_bytes_and_full_relocations_unchanged": true,
+  "Rust_dump_relocations": [
+    {
+      "relative_offset": 2,
+      "type": 1,
+      "addend": 0,
+      "symbol": "process_dump_tree_enabled"
+    },
+    {
+      "relative_offset": 26,
+      "type": 1,
+      "addend": 13583,
+      "symbol": ""
+    },
+    {
+      "relative_offset": 36,
+      "type": 1,
+      "addend": 0,
+      "symbol": "kprintf"
+    },
+    {
+      "relative_offset": 57,
+      "type": 1,
+      "addend": 0,
+      "symbol": ""
+    }
+  ],
+  "Rust_log_relocations": [
+    {
+      "relative_offset": 34,
+      "type": 1,
+      "addend": 13633,
+      "symbol": ""
+    },
+    {
+      "relative_offset": 44,
+      "type": 1,
+      "addend": 0,
+      "symbol": "kprintf"
+    },
+    {
+      "relative_offset": 81,
+      "type": 1,
+      "addend": 24,
+      "symbol": "process_vm_range_insert_debug"
+    },
+    {
+      "relative_offset": 113,
+      "type": 1,
+      "addend": 13597,
+      "symbol": ""
+    },
+    {
+      "relative_offset": 123,
+      "type": 1,
+      "addend": 0,
+      "symbol": "kprintf"
+    }
+  ],
+  "readonly_gate": {
+    "symbol": {
+      "name": "process_dump_tree_enabled",
+      "bind": 1,
+      "type": 1,
+      "other": 0,
+      "section": 6,
+      "value": 1912,
+      "size": 4
+    },
+    "section": ".rodata",
+    "value": 0
+  },
+  "debug_descriptor": {
+    "symbol": {
+      "name": "process_vm_range_insert_debug",
+      "bind": 1,
+      "type": 1,
+      "other": 0,
+      "section": 9,
+      "value": 1568,
+      "size": 32
+    },
+    "section": "__verbose",
+    "raw": "0000000000000000000000000000000000000000000000002608000000000000",
+    "pointer_relocations": [
+      {
+        "relocation_section": ".rela__verbose",
+        "section": "__verbose",
+        "offset": 1568,
+        "type": 1,
+        "addend": 0,
+        "symbol": "",
+        "undefined": false
+      },
+      {
+        "relocation_section": ".rela__verbose",
+        "section": "__verbose",
+        "offset": 1576,
+        "type": 1,
+        "addend": 915,
+        "symbol": "",
+        "undefined": false
+      }
+    ]
+  },
+  "actual433_leaf_reused": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/sourcehandoff/ACTUAL-FIRST-CANDIDATE-WHOLE-JOIN.json",
+    "sha256": "16fb6f066adb4783c8d5331bd715c5014b76bc555803b32d9ead161be2884859",
+    "bytes": 34838
+  },
+  "source_count": 78,
+  "headers": 73,
+  "source_identity": "1003f481cae91c012256264ea0c4eb960cbaaf66ea1e1616e2bed3b0e7bf177d",
+  "compiler_invocations": 0,
+  "linker_invocations": 0,
+  "NM_readelf_invocations": 0,
+  "old14commands_replayed": false,
+  "product_mutations": 0,
+  "canonical_mutations": 0,
+  "full_default_GCC14_image_link": false,
+  "native": false,
+  "file_retired": false,
+  "retained_C_debt": [
+    "Readonly original dump gate data",
+    "Other process.c compute bodies"
+  ]
+}

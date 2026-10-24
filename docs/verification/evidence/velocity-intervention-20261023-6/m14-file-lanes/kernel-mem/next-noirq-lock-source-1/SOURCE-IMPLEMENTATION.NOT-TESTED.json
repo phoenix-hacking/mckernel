@@ -1,0 +1,66 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_IMPLEMENTED_NOT_EXECUTABLE_READY_NOT_TESTED",
+  "targets": [
+    "mem_tlb_noirq_lock_bridge",
+    "mem_tlb_noirq_unlock_bridge"
+  ],
+  "base": {
+    "kernel/mem.c": "638788c79fb96c1edb229d016fa678a02c0fcde6e1b56c7fa45d33b5490354d4",
+    "kernel/rust/mem_helpers.rs": "4635a252332cd369e36384f04a414e2b4c2d79726a4f95caafcf1d3ed1a56b4d"
+  },
+  "postimages": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/next-noirq-lock-source-1/candidate/kernel/mem.c",
+      "sha256": "2b11c6873dd2d4b7d1ff5664122e627f05a9d45f50f08441110505eee519b85b",
+      "bytes": 227028
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/next-noirq-lock-source-1/candidate/kernel/rust/mem_helpers.rs",
+      "sha256": "25c4b0705626d9faa01a1c4c6db807995a25b5015278f294b5e7f341064bcd8e",
+      "bytes": 204315
+    }
+  ],
+  "patch_sha256": "81ea3a7cdabd5179a763bdf59f6a0999b04d335a9523a80effcdb5a81efaf12a",
+  "provider_header_source_pins": [
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-lock.h",
+      "sha256": "ca8baa66ed77634cd6319a918211b3eb8fe80fc7dcb2ac0110ab6bfbd0c1b81b",
+      "bytes": 4603
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ihk/lock.h",
+      "sha256": "fd34fe3adae00d309fc48e4a8f8c4170edfdfc6bfffd5b37db13f5391ed84f6f",
+      "bytes": 2907
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/spinlock_helpers.rs",
+      "sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7",
+      "bytes": 3105
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+      "sha256": "4e8d34dc3173aa1c9402ffd437738c6074fcec8a354dc91b6aa8f79d5348ba9c",
+      "bytes": 2012
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "sha256": "b141d09ad4d717171d9fca51b8ffefec65573f266652bc0d93129bd2a03ec40e",
+      "bytes": 23076
+    }
+  ],
+  "exact_provider_resolution": "arch-lock.h47/49 maps ihk_mc_spinlock_lock_noirq/unlock_noirq to __ihk_mc_spinlock_lock_noirq/unlock_noirq. Direct existing Rust providers called exactly once; no new C provider, algorithm, null policy, IRQ manipulation, lock lifetime, or preemption logic.",
+  "ABI": "unsigned long lock_addr remains same pointer bits; C ihk_spinlock_t and existing Rust provider IhkSpinlock are 4B aligned4 with head_tail at0. Same original initialized live lock required, no references retained.",
+  "consumer_invariant": "Existing lock provider calls preempt_disable before ticket allocation/acquisition; same release provider advances head before preempt_enable. TLB queue/VM/address-array ownership and quarantine/completion unchanged; no fabricated ACK.",
+  "future_fixture": "Not prepared: original C versus Rust through actual spinlock_helpers providers, real header ABI, controlled preemption/pause hooks including uncontended/wrap and controlled handoff; default/fallback full signature. No privileged lock/IRQ instruction HOST test or concurrency proof claimed.",
+  "queued_ready": "Only corrected566736/b72c eight-command1944 fixture remains executable-ready. Seven-callback source-only merge untouched.",
+  "CPU_grant": null,
+  "actual_fixture": null,
+  "production_default_link_native": null,
+  "remaining_C_debt": "Independent base13 minus2 privately=11; composable seven-source+this pair would leave4 (rdtsc/singleflush/allflush/pause), but no accepted retirement/link/native count."
+}

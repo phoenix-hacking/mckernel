@@ -1,0 +1,88 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -19402,13 +19402 @@
+-static void
+-syscall_sigcommon_writer_lock_bridge(void *lock, void *node)
+-{
+-	mcs_rwlock_writer_lock(lock, node);
+-}
+-
+-static void
+-syscall_sigcommon_writer_unlock_bridge(void *lock, void *node)
+-{
+-	mcs_rwlock_writer_unlock(lock, node);
+-}
+-
+-static long
++long
+@@ -19426,2 +19414,3 @@
+-#endif
+-
++
++int do_sigaction(int sig, struct k_sigaction *act, struct k_sigaction *oact);
++#else
+@@ -19432,11 +19420,0 @@
+-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+-	struct mcs_rwlock_node_irqsave mcs_rw_node;
+-
+-	return do_sigaction_body_result(sig, act, oact, thread->sigcommon,
+-			__builtin_offsetof(struct sig_common, action),
+-			sizeof(struct k_sigaction),
+-			__builtin_offsetof(struct sig_common, lock),
+-			&mcs_rw_node, syscall_sigcommon_writer_lock_bridge,
+-			syscall_sigcommon_writer_unlock_bridge,
+-			syscall_forward_sigaction_update_bridge);
+-#else
+@@ -19467,0 +19446 @@
++}
+@@ -19469 +19447,0 @@
+-}
+@@ -21066,0 +21045,3 @@
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++int syscall_do_sigaction_bridge(int sig, void *act, void *oact);
++#else
+@@ -21071,0 +21053 @@
++#endif
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -372 +371,0 @@
+-    fn syscall_do_sigaction_bridge(sig: CInt, act: *mut KSigAction, oact: *mut KSigAction) -> CInt;
+@@ -10013,0 +10013,38 @@
++// M14-F03 source-only: remaining selected do_sigaction orchestration and
++// public rt_sigaction callback. Existing Rust helper preserves validation,
++// action copies, lock/unlock and forwarding order. C forwarding remains debt.
++extern "C" {
++    #[link_name = "syscall_forward_sigaction_update_bridge"]
++    fn syscall_forward_sigaction_update_f03(sig: CInt, act: *const c_void) -> CLong;
++}
++
++unsafe extern "C" fn syscall_sigaction_writer_lock_f03(lock: *mut c_void, node: *mut c_void) {
++    crate::lock_helpers::__mcs_rwlock_writer_lock(lock.cast(), node.cast());
++}
++
++unsafe extern "C" fn syscall_sigaction_writer_unlock_f03(lock: *mut c_void, node: *mut c_void) {
++    crate::lock_helpers::__mcs_rwlock_writer_unlock(lock.cast(), node.cast());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn do_sigaction(sig: CInt, act: *mut KSigAction, oact: *mut KSigAction) -> CInt {
++    let thread = current_thread_ptr();
++    let common = (*thread).sigcommon;
++    let mut node = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
++    do_sigaction_body_result(
++        sig, act, oact, common.cast::<c_void>(),
++        offset_of!(SigCommon, action), size_of::<KSigAction>(),
++        offset_of!(SigCommon, lock), node.as_mut_ptr().cast::<c_void>(),
++        Some(syscall_sigaction_writer_lock_f03),
++        Some(syscall_sigaction_writer_unlock_f03),
++        Some(syscall_forward_sigaction_update_f03),
++    )
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn syscall_do_sigaction_bridge(
++    sig: CInt, act: *mut KSigAction, oact: *mut KSigAction,
++) -> CInt {
++    do_sigaction(sig, act, oact)
++}
++

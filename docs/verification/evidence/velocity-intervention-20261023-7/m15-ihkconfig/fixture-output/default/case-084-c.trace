@@ -1,0 +1,6 @@
+open /dev/mcd0 flags=2
+ioctl fd=17 request=112905
+mem_release count=2 min=0 ratio=0 timeout=0
+mem[0]=1024@0
+mem[1]=2097152@1
+close 17

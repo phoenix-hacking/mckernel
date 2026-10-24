@@ -1,0 +1,57 @@
+--- a/arch/x86_64/kernel/cpu.c
++++ b/arch/x86_64/kernel/cpu.c
+@@ -2056,6 +2056,9 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
++void interrupt_exit(struct x86_user_context *regs);
++#else
+ void interrupt_exit(struct x86_user_context *regs)
+ {
+ 	if (interrupt_from_user(regs)) {
+@@ -2065,6 +2068,7 @@
+ 		check_signal(0, regs, -1);
+ 	}
+ }
++#endif
+ 
+ void handle_interrupt(int vector, struct x86_user_context *regs)
+ {
+--- a/kernel/rust/x86_cpu_helpers.rs
++++ b/kernel/rust/x86_cpu_helpers.rs
+@@ -103,6 +103,13 @@
+     fn x86_running_on_kvm_bridge() -> CInt;
+     fn x86_cpuid6_bridge(eaxp: *mut CULong, ecxp: *mut CULong);
+     fn kprintf(format: *const i8, ...) -> CInt;
++    // Existing providers; the Rust-local alias adds no exported C helper.
++    fn interrupt_from_user(regs: *mut c_void) -> CInt;
++    #[link_name = "cpu_enable_interrupt"]
++    fn x86_interrupt_exit_enable_interrupt();
++    fn check_sig_pending();
++    fn check_need_resched();
++    fn check_signal(rc: CULong, regs: *mut c_void, num: CInt);
+     fn arch_delay(us: CInt);
+     fn do_arch_prctl(code: CULong, address: CULong) -> CLong;
+     fn x86_lapic_write_bridge(reg: CInt, value: CUInt);
+@@ -3099,3 +3106,20 @@
+         _ => {},
+     }
+ }
++
++/// Complete interrupt-return orchestration for the caller-owned context.
++///
++/// The classifier and callbacks retain their original contract. In particular,
++/// interrupt enable precedes pending-signal and reschedule handling. No context
++/// pointer or callback state is retained, and no new null/error policy is added.
++#[no_mangle]
++pub unsafe extern "C" fn interrupt_exit(regs: *mut X86UserContext) {
++    unsafe {
++        if interrupt_from_user(regs.cast::<c_void>()) != 0 {
++            x86_interrupt_exit_enable_interrupt();
++            check_sig_pending();
++            check_need_resched();
++            check_signal(0, regs.cast::<c_void>(), -1);
++        }
++    }
++}

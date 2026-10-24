@@ -1,0 +1,84 @@
+{
+  "C_debt": {
+    "body": "BYTEEXACT existing helper; only static removed to give existing body external linkage",
+    "reason": "Preserve existing three-initialized-field user-context forwarding contract; do not create Rust reads of formerly unspecified context bytes or silently zero/change unrelated arguments.",
+    "symbol": "syscall_forward_sigaction_update_bridge"
+  },
+  "Rust_reuse": [
+    "do_sigaction_body_result byteexact",
+    "current_thread_ptr",
+    "__mcs_rwlock_writer_lock",
+    "__mcs_rwlock_writer_unlock",
+    "SigCommon/KSigAction/McsRwlockNodeIrqsave existing reprC ABI"
+  ],
+  "actual_results": null,
+  "canonical_writes": 0,
+  "compiler_jobs": 0,
+  "exports": [
+    "do_sigaction",
+    "syscall_do_sigaction_bridge"
+  ],
+  "extern_removal": "fn syscall_do_sigaction_bridge(sig: CInt, act: *mut KSigAction, oact: *mut KSigAction) -> CInt;",
+  "fallback": "Original non-Rust do_sigaction body and bridge retained byteexact (same lexical tokens/body); selected static lock adapters disappear.",
+  "file_retired": false,
+  "future_smallest_actual_consumer": [
+    "extract actual selected C wrapper+unchanged helper and actual Rust export/helper with exact ABI/current-thread/lock/forward controlled callbacks",
+    "compare invalid signals/action combinations; query/update/copy byte equivalence; act/oact alias; lock node and ordered lock/copy/unlock/forward; ignored negative forwarding result",
+    "real current kernel header layout/signature witness; selected preprocessing excludes three C selected bodies; actual GCC9 TU and partial linker unique Rust exports/exact Cforward provider"
+  ],
+  "native": false,
+  "nonoverlap": "Separate private fragment; does not change signalfd/pendingmask/sigsuspend/F06 ptrace or VDSO symbols; root central shared-policy merge only.",
+  "ordering": [
+    "current thread and sigcommon sampled before helper validation exactly as selected C",
+    "same existing helper validates sig/action then lock->oldaction copy->newaction copy->unlock->forward iff act",
+    "same stack-owned uninitialized IRQ-save lock node, initialized by existing lock path; no new ownership",
+    "forward result remains ignored and return remains helper original"
+  ],
+  "queued_fixture": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_live_bodies": [
+    "do_sigaction selected orchestration",
+    "syscall_do_sigaction_bridge",
+    "two private C writer-lock adapter bodies"
+  ],
+  "source_preimages": {
+    "C": {
+      "bytes": 843071,
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "sha256": "1035622a96a5441a85d60a9db15d3ac452b60266d1f8123eb807ce3849c41081"
+    },
+    "Rust": {
+      "bytes": 711734,
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "f1f7866c0f2ccc8e1b0024dfb632ec7359dd2a0a4bcd8e22deb957d48ef6d770"
+    }
+  },
+  "sources": {
+    "do-sigaction.NONOVERLAPPING-FRAGMENT.patch": {
+      "bytes": 2961,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-do-sigaction-source-1/do-sigaction.NONOVERLAPPING-FRAGMENT.patch",
+      "sha256": "0ee8dcd6e26830fcd2b5d278247b4885c696134149e0fdf2818aded3becdcb5d"
+    },
+    "do_sigaction.C-SELECTION-FRAGMENT.inc": {
+      "bytes": 1364,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-do-sigaction-source-1/do_sigaction.C-SELECTION-FRAGMENT.inc",
+      "sha256": "e87587b35974b3a9dcca43c9d4fbdc0aa32b7161ce18e0f786e9490bd2ee6835"
+    },
+    "do_sigaction.RUST-FRAGMENT.rs.inc": {
+      "bytes": 1556,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-do-sigaction-source-1/do_sigaction.RUST-FRAGMENT.rs.inc",
+      "sha256": "bfd8d6efdd763c53d2a93c25c55217a0ca67bc50f78600b77dea54933ac7f7a8"
+    },
+    "original-do-sigaction-and-locks.ACTUAL-C.inc": {
+      "bytes": 1964,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-do-sigaction-source-1/original-do-sigaction-and-locks.ACTUAL-C.inc",
+      "sha256": "5e77ed16ad75c93adcf8d39ebc7320d0256fb9f7514f345dad05e0580326eafb"
+    },
+    "original-sigaction-bridge.ACTUAL-C.inc": {
+      "bytes": 106,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-do-sigaction-source-1/original-sigaction-bridge.ACTUAL-C.inc",
+      "sha256": "7e018fa4427d7ce5259bc2028849142f15e7391f788cee344a6d144789158edc"
+    }
+  },
+  "status": "IMPLEMENTED_SOURCE_ONLY_NO_SECOND_FIXTURE_COHORT"
+}

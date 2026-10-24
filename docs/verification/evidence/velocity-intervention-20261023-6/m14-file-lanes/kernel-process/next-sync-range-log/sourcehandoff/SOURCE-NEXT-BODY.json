@@ -1,0 +1,56 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ACTUAL_NEXT_BODY_SOURCE_ONLY_NO_SECOND_EXECUTABLE_COHORT",
+  "chosen_body": "process_sync_range_log_bridge complete retained unconditional C failure logger",
+  "predecessor": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/candidate/kernel/process.c",
+      "sha256": "c5d0e24c22c6e66660221c6bc303237f02957b45ed74f196bcaf398a20d9cef2",
+      "bytes": 163277
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "268fe3e0120a587203aba50f55158646d8ca06282cf03d779d6b4eb437de10ad",
+      "bytes": 357365
+    }
+  },
+  "postimages": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-range-log/candidate/kernel/process.c",
+      "sha256": "225fa1d28cbb2d7d5d2e1fdab9ff7435362c0b21661a64188e09c02f3eba08af",
+      "bytes": 163322
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-range-log/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "6ecdafee1c6d6817ca0242149f67983871d545768f4873fa19c47e7d5ad6f7f8",
+      "bytes": 357687
+    }
+  },
+  "original_C": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-range-log/fixture/original_log.ACTUAL-C.inc",
+    "sha256": "b2102cc4a5aac8cf3b83799c063521c865af4fa517e53db185a7f0f26df306c1",
+    "bytes": 261
+  },
+  "actual_Rust": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-range-log/fixture/log.ACTUAL-RUST.inc",
+    "sha256": "a07459c2a20d1967b13c73f436b808adc83cf27eb8ba3f4ef88680bd4991a670",
+    "bytes": 487
+  },
+  "unchanged_actual_Rust_caller": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-range-log/fixture/unchanged_actual_Rust_caller.ACTUAL.inc",
+    "sha256": "73d88126eca22abff59834b2ac69bfebc40631c56ed3571c0d6e7ff2c4269962",
+    "bytes": 1479
+  },
+  "ABI": "Existing ProcessSyncRangeLogFn unchanged: (ProcessVm*,VmRange*,unsigned long,unsigned long,int)->void. Exact LP64 pointer/UL/UL/signed-int varargs and original format/event; existing unconditional kprintf declaration reused once.",
+  "order": "Existing helper finishes visit, decrements retained memobj ref and unlocks, then calls this callback only on nonzero error. Body logs once synchronously and ignores signed logger return, returning void as original C.",
+  "pointer_lifetimes": "No dereference or reference creation; original borrowed pointer values exist only for synchronous variadic call.",
+  "original_C_fallback_exact": true,
+  "remaining_C_debt": "No C compute for this bridge in selected profile; other process callbacks and two sync diagnostic metadata rows remain.",
+  "requires": "Dump and sync predecessor acceptance/integration or exact root rebase before any canonical proposal; future real original-C/Rust logger parity/typed ABI and selected consumer compile, no commands prepared here.",
+  "compiler_jobs": 0,
+  "test_jobs": 0,
+  "CPU_reservations": 0,
+  "executable_recipes": 0,
+  "source_correctness_claim": false,
+  "default_native_file_credit": false
+}

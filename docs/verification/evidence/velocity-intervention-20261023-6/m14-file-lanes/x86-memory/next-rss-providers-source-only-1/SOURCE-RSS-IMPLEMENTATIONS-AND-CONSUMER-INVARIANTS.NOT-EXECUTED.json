@@ -1,0 +1,93 @@
+{
+  "ABI_source": {
+    "bytes": 76151,
+    "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "L1_actual_parity": null,
+  "actual_L2_receipt": {
+    "bytes": 7902,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/sourcehandoff/ACTUAL-CLEAR-RANGE-L2-FIXTURE-RECEIPT.json",
+    "sha256": "ceea9d6a88bd0b727e3572306f7503b37c17941da3dc973efef847be30d1a312"
+  },
+  "canonical_shared_ABI_P12_frozen15_Git_mutations": false,
+  "chosen_complete_C_bodies": [
+    "x86_clear_rss_sub_bridge",
+    "x86_clear_memobj_rss_sub_bridge"
+  ],
+  "combined_seven_body_patch": {
+    "bytes": 9321,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-rss-providers-source-only-1/patch/combined-seven-body-cutover.patch",
+    "sha256": "72fd868c83882f2833ff74a8fac0830dfd392ae36f335d9fabfca2ab78651c9b"
+  },
+  "compiler_test_root_Docker_jobs": 0,
+  "consumer_invariants": {
+    "R_pointer_data": "Exact x86_clear_l3_rss_sub and x86_clear_l3_memobj_rss_sub const pointer objects retain their byte-spelling/type/storage. Their own SHT_RELA.sh_info+symboloffset entries must target new global Rust RSS/memobjRSS T providers; do not invent a C call relocation.",
+    "Rust": "Two unique global Rust T providers, no Rust U/self-import for them; call existing crate::mem_helpers accounting bodies, not a new C stub or duplicated counter algorithm.",
+    "effects_order": "No flush/free/page_unmap/log or RSS ordering moved in existing clear-level/leaf/effect engine; only callback provider ownership changes.",
+    "fallback": "Both complete original C callback bodies byte-identical under !PUBLIC; exact void callback prototypes retained under PUBLIC.",
+    "feature_cfg": "Reuse both existing mem_helpers functions including enable_rusage/noop branches; no new rusage mode or feature flag.",
+    "integer_ABI": "Incoming callback size_t operands remain unsigned64 on accepted x86_64 ABI; size forwards unchanged and pgsize as CInt explicitly preserves original C size_t-to-int conversion before accounting. No saturating/range/error policy added.",
+    "memobj_alias_lifetime": "Raw pointer cast to existing Memobj ABI only; wrapper neither dereferences, retains, frees nor obtains an exclusive reference. Existing accounting body owns flag access/atomics under the same enable_rusage cfg."
+  },
+  "exact_existing_Rust_dependency": {
+    "bytes": 203495,
+    "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+    "sha256": "4635a252332cd369e36384f04a414e2b4c2d79726a4f95caafcf1d3ed1a56b4d"
+  },
+  "new_fixture_recipe_or_CPU_reservation": null,
+  "postimages": [
+    {
+      "bytes": 89292,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-rss-providers-source-only-1/candidate/arch/x86_64/kernel/memory.c",
+      "sha256": "02dbc81d9f52044fdf26a40b87e7048e41e3ab7ebd84da66b74b7a004230afa3"
+    },
+    {
+      "bytes": 203864,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-rss-providers-source-only-1/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "227ee8a3cf6faba86ea4a5544ab884dccf8943e206e72f394fee3c37d54abc1e"
+    }
+  ],
+  "preimages": [
+    {
+      "bytes": 89024,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-walk-l3-source-only-1/candidate/arch/x86_64/kernel/memory.c",
+      "sha256": "40c904d08e2c835b9bb09656fd0b6a105ab7c1729dbefd17426bc204fd6da88a"
+    },
+    {
+      "bytes": 203048,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-walk-l3-source-only-1/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "c6af248abbee2547848c4d8935fdd07335cf27c64b47e905fc47730e8ff43ca5"
+    }
+  ],
+  "production_default_native_or_wholefile_credit": false,
+  "real_C_accounting_prototypes": {
+    "bytes": 3262,
+    "path": "/home/holden/mckernel/kernel/include/rusage_private.h",
+    "sha256": "9cc30af76f445517a70fbbaa2bc6d2a48dee12bc8fd08bc0e1c37d571693d972"
+  },
+  "remaining_C_debt": [
+    "memobj flush provider",
+    "range/effect logging providers",
+    "PTfree/allocator and remaining memory.c bodies",
+    "immutable callback objects remain C data; no whole-file retirement claim"
+  ],
+  "required_future_actual_observation": [
+    "Exact original C callback against actual existing Rust mem_helpers counter state under enable_rusage and off, including pgsize int narrowing and Memobj MF_SHM/mapped-file branches",
+    "Actual full78 crate including real mem_helpers and ABI, whole selected memory.c/header witnesses and section-specific partial link",
+    "No fixture-only fake mem_helpers module or controlled-counter stub may be counted as production accounting proof"
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "sole_queued_L1_correction": {
+    "bytes": 5062,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-l1-source-1/observer-leaf-declaration-correction-1/SEALED-SOURCE-RECIPE-DRIVER-HANDOFF.NOT-EXECUTED.json",
+    "sha256": "6b5b7e340da8ea72be5dc51b4b5d3e6a7d43815057c1baea1b2989d9692c40ef"
+  },
+  "standalone_patch": {
+    "bytes": 2515,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-rss-providers-source-only-1/patch/rss-providers-only.patch",
+    "sha256": "d89b1270add7de34d9d429d488059cfc1b00dc3c03db52ef5a334734dd16b1e9"
+  },
+  "status": "PRIVATE_ACTUAL_RSS_PROVIDER_IMPLEMENTATIONS_SOURCE_ONLY_NO_NEW_EXECUTABLE_QUEUE",
+  "walker_RSS_actual_TU_partial_link": null
+}

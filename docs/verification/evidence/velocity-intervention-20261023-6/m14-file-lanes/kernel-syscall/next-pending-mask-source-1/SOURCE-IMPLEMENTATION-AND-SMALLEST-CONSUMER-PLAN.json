@@ -1,0 +1,109 @@
+{
+  "ABI_changes": false,
+  "CPU_reservation": null,
+  "C_selection_fragment": {
+    "bytes": 1296,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-pending-mask-source-1/pending_mask.C-SELECTION-FRAGMENT.inc",
+    "sha256": "07251bdd30381fa4cdbbc344e34855bf50e7d032751e99c32c31c08ea35c574e"
+  },
+  "Rust_fragment": {
+    "bytes": 1679,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-pending-mask-source-1/pending_mask.RUST-FRAGMENT.rs.inc",
+    "sha256": "79f60afb17469878a3e8e7d676e48176deb1d8afca07ebfe72a1c3b6040acb38"
+  },
+  "actual_x86_lock_macros": {
+    "bytes": 4603,
+    "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-lock.h",
+    "sha256": "ca8baa66ed77634cd6319a918211b3eb8fe80fc7dcb2ac0110ab6bfbd0c1b81b"
+  },
+  "canonical_changes": false,
+  "compiler_invocations": 0,
+  "current_ABI": {
+    "bytes": 76151,
+    "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "current_C": {
+    "bytes": 843071,
+    "path": "/home/holden/mckernel/kernel/syscall.c",
+    "sha256": "1035622a96a5441a85d60a9db15d3ac452b60266d1f8123eb807ce3849c41081"
+  },
+  "current_policy": {
+    "bytes": 711734,
+    "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+    "sha256": "f1f7866c0f2ccc8e1b0024dfb632ec7359dd2a0a4bcd8e22deb957d48ef6d770"
+  },
+  "currently_sole_ready_cohort": "signalfd source60d3; expert-spec remaining8 correction6727 awaitingrootgrant",
+  "default_link": false,
+  "existing_Rust_lock_implementation": {
+    "bytes": 12202,
+    "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+    "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+  },
+  "existing_Rust_reuse": "Actual abi::{Thread,SigCommon,SigPending,AbiListHead}; existing lock_helpers::__mcs_rwlock_writer_lock/unlock and McsRwlockNodeIrqsave (same approach already used by exec_reset_signal_state_current_v1).",
+  "file_retired": false,
+  "invariants": [
+    "shared-list writer lock\u2192OR allshared pending masks\u2192unlock beforethreadlock",
+    "thread-list writer lock\u2192OR allthread pending masks\u2192unlock",
+    "reuse one64Balignirqsave node asC; exact two lock/unlock pairs even empty lists",
+    "read-only list/bitmask operation; no node unlink/free/publication or callback added",
+    "all64maskbits/duplicates preserved, no signal filtering or traversal cap",
+    "live Thread/SigCommon/circular lists and current-call lifetime remain caller obligation as original"
+  ],
+  "native": false,
+  "next_actual_observation": null,
+  "nonoverlap": "No arch ptrace/vDSO or signalfd_create/publication changes; no shared imports/ABI/layout edit. Root central merge only; exact-line removal avoids adjacent extern declaration conflict.",
+  "original_C_body": {
+    "bytes": 1115,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-pending-mask-source-1/original-pending-mask.ACTUAL-C-BODY.inc",
+    "sha256": "7efcdcde5ee6d10b30b34316ae2b801e2456e596d76921208eab06eba3050b42"
+  },
+  "root_merge_operations": [
+    {
+      "remove_exact_line": "    fn syscall_pending_mask_bridge(thread: *mut c_void) -> CULong;\n",
+      "source": "kernel/rust/syscall_policy.rs"
+    },
+    {
+      "fragment": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-pending-mask-source-1/pending_mask.RUST-FRAGMENT.rs.inc",
+      "insert_before_exact_anchor": "#[no_mangle]\npub unsafe extern \"C\" fn rt_sigpending_body_result(",
+      "source": "kernel/rust/syscall_policy.rs"
+    },
+    {
+      "replace_exact_body_sha256": "7efcdcde5ee6d10b30b34316ae2b801e2456e596d76921208eab06eba3050b42",
+      "replacement": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-pending-mask-source-1/pending_mask.C-SELECTION-FRAGMENT.inc",
+      "source": "kernel/syscall.c"
+    }
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_body": "syscall_pending_mask_bridge",
+  "shared_full_policy_copy_written": false,
+  "smallest_future_actual_consumer_plan": {
+    "commands": null,
+    "fixture_cohort_created": false,
+    "grant": null,
+    "inputs": [
+      "bothlists empty",
+      "one shared or thread node",
+      "mixed unique+duplicate masks and highbit/allones",
+      "vary order and multiplelistlengths",
+      "lock-entry hook changes current protected list before scan",
+      "firstunlock hook replaces secondlist beforesecondlock proving serialscope"
+    ],
+    "required_proofs": [
+      "same returnedOR and exact sharedlock/unlock\u2192threadlock/unlock trace",
+      "same nodeidentity reused within bothlockpairs and proper64B alignment/irqrestore flow",
+      "everylistnode andlink unchanged aftercall except explicitcontrolled lockhook mutations",
+      "realheader sizes/offsets forThread.sigcommon/sigpending/lock,SigCommon.lock/sigpending,SigPending.list/mask",
+      "real Cfallback originalexact plus defaultpreprocess body excluded/uniqueRust publicT/wholeTU+partiallink"
+    ],
+    "reuse": "Use actualABI declarations/realheaders and existing fixture/capture profile after signalfd slice accepted; do not invent mirrored runtime layouts.",
+    "scope": "Controlled originalC/Rust actualbody, no realIRQ effects"
+  },
+  "status": "NEXT_SUBSTANTIVE_BODY_IMPLEMENTED_SOURCE_ONLY_NOT_SECOND_FIXTURE_COHORT",
+  "tests_run": 0,
+  "zero_context_patch": {
+    "bytes": 2178,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-pending-mask-source-1/pending-mask.NONOVERLAPPING-FRAGMENT.patch",
+    "sha256": "78e413921a6cbe16d326b3f9a5e7728aab82e8829efa8d6ed23f93735b952646"
+  }
+}

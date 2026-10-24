@@ -1,0 +1,128 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+M15-F03 / M15-F04: private executable-ready source proposal
+
+The production successor is proposal/executer/user/rust/bfd_accessors.rs. It
+provides all four existing export names, so the current mcinspect_helpers.rs,
+eclair_helpers.rs and arch_eclair_x86_64.rs need no edits or rewrites. The CMake
+patch removes only the selected C wrapper objects, adds a shared Rust object,
+and selects the C linker driver explicitly for external Rust object targets.
+The original C sources remain retained and inactive under this proposal. This
+is not yet an authorized canonical selector change.
+
+Selected supported platform
+
+The retained current68 CMake cache selects smp-x86, Rust user tools ON, QLMPI OFF,
+UTI OFF, /nightly/bin/rustc, bundled libdwarf, /usr/lib64/libbfd.so, /usr/bin/cc.
+PINNED-ABI.json records the existing narrow image-toolchain.json evidence for
+Rocky 10.2 GCC 14.3.1-4.4.el10 and binutils-devel 2.41-63.el10. The image identity
+sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5
+was supplied by the parent from the candidate14 driver. None is a new image
+inspection. Actual header/library/compiler/rustc identity is checked again by
+the admitted job. No newer BFD layout or this Ubuntu host's BFD headers are used
+as production ABI evidence. No retained selected bfd.h body was available here.
+
+Exact ABI/layout argument and executable witness
+
+The original functions return BFD macros. Under the supported non-DEBUG_BFD_SEND
+header, each macro evaluates the target callback at abfd->xvec and calls it with
+the original bfd pointer and, for canonicalize, original asymbol**. There is no
+project behavior between the macro call and returning its long value.
+
+Nonshipped cmake/bfd_layout_witness.c includes the pinned absolute Rocky header,
+asserts x86_64 Linux, 8-bit bytes, LP64 and 8-byte pointer/function-pointer
+size/alignment, checks callback types using C11 _Generic, and checks the three
+field offsets are aligned. Its executed output supplies only offsetof(bfd,xvec),
+offsetof(bfd_target,_bfd_get_symtab_upper_bound), and the canonicalize offset to
+Rust. It also reports exact bfd/bfd_target sizes/alignment. The job retains the
+full preprocessed witness and requires the two macro expansions to be precisely
+the ordinary target dispatch expressions, rejecting DEBUG_BFD_SEND or an
+unexpected macro implementation. No constants are guessed or checked in here.
+CMake pins header/library/compiler, rejects cross compilation and DEBUG_BFD_SEND,
+and regenerates the native witness on configure. It adds header/library configure
+dependencies and the generated Rust constants as object dependencies. Native
+qualification separately pins the mounted nightly Rust executable. The witness
+is configure/test orchestration: its C code is never linked into delivered tools.
+
+Rust uses raw pointer reads at those checked field offsets. It forms no Rust
+reference to BFD storage and gives BFD no Rust-owned allocation. Extern C callback
+arguments and c_long returns match LP64 bfd*/asymbol**/long; caller declarations
+using isize are the same 64-bit ABI. No BFD object is copied. All four symbols
+refer directly to the selected third-party BFD callback, with no call to an old
+project wrapper. The original valid-BFD/live-xvec/non-null-callback preconditions
+remain. Null BFD, dead target and invalid buffers remain outside both contracts.
+
+Behavior, errors and ownership
+
+Neither wrapper family allocates, retains, frees, closes, locks, logs or modifies
+BFD state beyond whatever the selected third-party callback does. Negative,
+zero and positive long values pass through; error state and errno pass through.
+The canonicalization callback receives the exact same pointer-to-pointer storage.
+Its symbol ownership remains BFD's, and caller storage remains the caller's.
+The borrowed BFD and target must outlive the callback, and returned symbols must
+remain within their existing BFD lifetime. No source-lifetime extension is added.
+
+Existing tool initialization behavior is intentionally reused byte for byte:
+open/format failures and negative adapter results report existing BFD errors;
+zero upper bounds print existing no-symbol diagnostics; allocations and global
+symbfd/symtab/nsyms assignments retain their original ordering. Existing early
+error resource-retention behavior remains as-is. This lane neither invents new
+cleanup behavior nor claims to resolve existing full-tool lifetime debt.
+
+Tests prepared for one ordinary slot
+
+orchestration/qualify.py checks six narrow source bindings and selected platform
+pins, compiles/runs the typed offset witness, retains macro expansion, builds the
+Rust object, and compares all four exports against the actual unchanged original
+C wrapper sources compiled under renamed test-only symbols. It tests long minima,
+maxima, negative/zero/positive returns, unchanged and changed BFD error/errno,
+exact argument identity, null/non-null canonicalization locations handled by fake
+callbacks, one callback invocation, and a changed live xvec callback. It compares
+real symbols on an ordinary object and zero-symbol results on a stripped object;
+caller arrays are freed before closing BFD, after all borrowed symbol accesses.
+
+It then stages only executer/user privately and overlays this proposal, preserving
+all three existing Rust tool bodies. tests/tool-project/CMakeLists.txt consumes
+the actual staged executer/user/CMakeLists.txt with the retained selectors and
+bundled vendor libdwarf; it is a selected-tool graph check, not a root kernel
+configure/image build. Only targets mcinspect and eclair build, with one job.
+The job asserts the project link objects are the reused Rust bodies plus the new
+Rust accessor object. Vendor libdwarf/libc/libbfd remain legitimate dependencies.
+It links original-C baselines using exactly the same reused Rust/vendor objects,
+then compares exit codes and both output streams for help, missing-kernel,
+stripped-kernel and (eclair) ordinary-symbol input followed by missing dump. These
+cases do not access a McKernel device or a guest. Macro errors are exercised in
+the focused harness; no unrelated functionality/native behavior is inferred.
+
+Artifact link commands, Rust/ELF symbols, dynamic dependencies, compiler logs,
+macro expansion, generated offsets and matched outputs are retained. The shared
+Rust object exports the four definitions and must not depend on old project
+wrapper symbols. Actual symbol/link results remain pending the slot.
+
+Checks actually completed here
+
+Five compiler-free checks pass: Python syntax, patch dry-run against current
+selected CMake, six narrow original-source bindings, changed-source refusal and
+wrong-header refusal before compiler/subprocess or output creation. The last two
+use mocked digests with subprocess calls forbidden. These are preparation checks,
+not a host mock equivalence run and not production Rocky ABI proof. No compiler,
+container, root operation, guest, native run, canonical edit or campaign mutation
+was performed by this lane. No new acceptance/native credit is claimed.
+
+Remaining proof and integration
+
+One campaign-reviewed ordinary slot in the already pinned SDK image is requested;
+no heavy image build/native workload is requested. The prepared next command is
+in READY-FOR-ROOT.json. The background owner must bind read-only candidate and
+original source mounts, a fresh private writable output directory and the mounted
+nightly compiler; honor current P12/resource ownership and existing operation
+review. This proposal does not launch, resume or release any work itself.
+
+On executable PASS, independently review the actual generated offsets, type and
+macro witnesses, exact selected CMake links and original-vs-Rust behavior. Then
+prepare actual root configuration/install/deployment integration at its matching
+scope, and matching McKernel diagnostic sessions against the qualified image and
+real symbols/dumps as applicable. Native/module/lifecycle/resource joins and the
+complete delivered-runtime ownership manifest remain open. Preserve current C
+selection until the replacement is qualified at the applicable acceptance level.
+Original35, M14 and M15 stay separate, with no source-only completion percentage.

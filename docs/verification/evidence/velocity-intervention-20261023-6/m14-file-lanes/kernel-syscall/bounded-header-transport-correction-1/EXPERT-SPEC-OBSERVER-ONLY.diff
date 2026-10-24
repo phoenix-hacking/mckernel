@@ -1,0 +1,22 @@
+--- run_remaining8.NOT-GRANTED.py
++++ run_remaining8.EXPERT-SPEC.NOT-GRANTED.py
+@@ -5,5 +5,5 @@
+ from pathlib import Path
+ import ast,builtins,dis,hashlib,json,os,re,resource,signal,stat,sys,time
+-N=Path(__file__).resolve().parent;D=N.parent;F=D/'fixture';A=N/'actual-remaining8-1';A.mkdir(mode=0o700);RF=N/'EXACT-REMAINING8.HEADER-TRANSPORT.NOT-GRANTED.json'
++N=Path(__file__).resolve().parent;D=N.parent;F=D/'fixture';A=N/'actual-remaining8-2';A.mkdir(mode=0o700);RF=N/'EXACT-REMAINING8.HEADER-TRANSPORT.NOT-GRANTED.json'
+ records=[];armed=False;initial=os.getcwd()
+ def pin(p):
+@@ -35,5 +35,11 @@
+  assert not needed-set(ns)-set(vars(builtins))
+  assert Path(plan['Rust_compiler']).is_file() and Path('/usr/bin/gcc-9').is_file()
+- fixture=(F/'signalfd_create_actual.c').read_text();assert '#include <string.h>' in fixture and not any(a.startswith('-I') for a in plan['commands'][1]['argv']);assert 'IHK_DMA_ALIGN\n' in fixture
++ original_path=F/'EXACT-CANDIDATE-FIXTURE.NOT-GRANTED.json'
++ assert pin(original_path)['sha256']=='35f799dc1eb013623ca5e60d3845ae7f624dbbea291de9a8e8031cc8a3f3b930'
++ original=json.loads(original_path.read_bytes())
++ hosted=[c for c in original['commands'] if c['label']=='01-C-original-body-fixture'];assert len(hosted)==1
++ assert not any(a.startswith('-I') for a in hosted[0]['argv'])
++ assert plan['commands']==original['commands'][4:]
++ fixture=(F/'signalfd_create_actual.c').read_text();assert '#include <string.h>' in fixture;assert 'IHK_DMA_ALIGN\n' in fixture
+  write(A/'HELPER-TOOL-PROVIDER-PREFLIGHT.json',dict(scope=__doc__,helper=pin(helper),missing_globals=[],namespace_dict_API=True,dependencies=sorted(needed),interpreter=sys.executable,version=sys.version,Rust192=plan['Rust_compiler'],gcc9='/usr/bin/gcc-9',kernelstring_memset_dependency_in_hosted_leaf=False,controlled_host_callbacks=True,before_first_child=True))
+  mem=int(next(l.split()[1] for l in Path('/proc/meminfo').read_text().splitlines() if l.startswith('MemAvailable:')))*1024;hs=os.statvfs('/home/holden');ss=os.statvfs('/home/holden/mckernel-work/scratch');bs=Path('/home/holden/mckernel-work/scratch.ext4').stat();gap=max(0,bs.st_size-bs.st_blocks*512)

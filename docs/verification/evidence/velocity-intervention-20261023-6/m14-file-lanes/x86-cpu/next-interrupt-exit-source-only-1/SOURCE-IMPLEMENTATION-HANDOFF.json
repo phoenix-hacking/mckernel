@@ -1,0 +1,70 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "COMPLETE_PRIVATE_INTERRUPT_EXIT_BODY_SOURCE_ONLY",
+  "target": "arch/x86_64/kernel/cpu.c::interrupt_exit",
+  "preimages": {
+    "arch/x86_64/kernel/cpu.c": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "sha256": "2d29bca555936a213f0a7296a302ec57b55c575536c33a58285b07b203390eca",
+      "bytes": 95484
+    },
+    "kernel/rust/x86_cpu_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "26180e00c1d6673aa600f0ec9afed5d100ca6e0c39af803c3328e58f8cc88fb9",
+      "bytes": 91270
+    }
+  },
+  "postimages": {
+    "arch/x86_64/kernel/cpu.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-interrupt-exit-source-only-1/candidate/arch/x86_64/kernel/cpu.c",
+      "sha256": "2180111e92d9c7fe10bbb577e19d258b125e69aea3ad5fae318df81cd740a511",
+      "bytes": 95586
+    },
+    "kernel/rust/x86_cpu_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-interrupt-exit-source-only-1/candidate/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "65c46103fd4c3a32c6dfbb54d0be2ef5d85e0aa8f4e233ab5004880eb4d37de5",
+      "bytes": 92278
+    }
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-interrupt-exit-source-only-1/PRIVATE-COMPLETE-INTERRUPT-EXIT.patch",
+    "sha256": "078d7f84933dc584ada20a14289891ea84e9d3852b252dcd10be89da92f63cbe",
+    "bytes": 1910
+  },
+  "original_C": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-interrupt-exit-source-only-1/ORIGINAL-C-BODY.inc",
+    "sha256": "8bb916e6dfc6fd7aaf6a7a4155045989dbdb841f912c5c07f4724fda5534e445",
+    "bytes": 194
+  },
+  "actual_Rust": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-interrupt-exit-source-only-1/ACTUAL-RUST-BODY.rs",
+    "sha256": "8854bbfa55dd796aef59544da0da8f074e52f153814a4b09254f2b86c8e3e03b",
+    "bytes": 669
+  },
+  "provider_declarations": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-interrupt-exit-source-only-1/ACTUAL-RUST-PROVIDER-DECLARATIONS.inc",
+    "sha256": "898d7632d5dd0498bcebb4e811e9b537e962fc6dd84d9e7b3c3f5951a5d7c544",
+    "bytes": 338
+  },
+  "consumer_plan": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-interrupt-exit-source-only-1/SOURCE-CONSUMER-PLAN.json",
+    "sha256": "9e18643269711e5c75be13d99aea94a2c1aa036af576fc04f95c18cf1ba49b5f",
+    "bytes": 7736
+  },
+  "invariants": [
+    "Original classifier called once; any nonzero result takes original path.",
+    "Exact ordered calls: enable interrupts, pending signals, reschedule, check_signal(0, original regs, -1).",
+    "No frame read/layout invention, NULL guard, retry, allocation, IRQ save/restore, extra lock, error or return-value policy.",
+    "Existing Rust interrupt-enable/classifier/scheduler providers reused; two syscall C signal callbacks remain explicit debt.",
+    "C fallback byte-exact; existing default-selection macro unchanged; no shared header/CMake mutation."
+  ],
+  "relationship": "Standalone successor to actual canonical CPUlogger2d29/26180; contextd21c frozen inputs untouched. Context, stack and NMI private ports not merged or credited.",
+  "failure_history": "All prior CPUlogger/kmsg and other original failures retained unchanged; this new body has not been compiled/tested.",
+  "actual_body_tests": null,
+  "whole_TU_default_link_native": null,
+  "whole_file_retirement": false,
+  "executable_cohort_created": false,
+  "compiler_jobs": 0,
+  "test_jobs": 0,
+  "CPU_slots_held": 0
+}

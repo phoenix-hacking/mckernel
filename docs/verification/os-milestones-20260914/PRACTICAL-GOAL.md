@@ -6,6 +6,19 @@ scope in [AGENTS.md](../../../AGENTS.md) to every worker brief. Keep functional
 correctness and resource/ownership checks. This note does not resume the stopped
 campaign or clear its service-policy hold.
 
+## Complete custom runtime language goal — user instruction 2026-10-24 UTC
+
+The user now requires all project-owned production runtime, including Linux
+modules, executors, custom libraries and user tools, to use Rust/reviewed assembly.
+[M14](RUST-CUTOVER-M14.md) tracks compute-kernel conversion; separate
+[M15](RUST-CUTOVER-M15.md) tracks remaining custom integration runtime. The native
+IHK/SMP/mcctrl implementations already use Rust; current selected C MM wrappers
+and user-space bodies are explicit remaining debt. Existing functional acceptance
+and the35-check denominator do not imply either language milestone is complete.
+Rocky/Linux, legitimate third-party dependencies, generated metadata and inactive
+references remain separately classified. Keep working behavior while qualifying
+Rust successors; do not remove current C or broaden native execution implicitly.
+
 ## Active Rust cutover priority — user instruction 2026-10-18
 
 Functional delivery and retiring live McKernel compute C into Rust plus reviewed

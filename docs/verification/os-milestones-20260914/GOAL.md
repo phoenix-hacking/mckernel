@@ -6,6 +6,19 @@ scope in [AGENTS.md](../../../AGENTS.md) to every worker brief. Keep functional
 correctness and resource/ownership checks. This note does not resume the stopped
 campaign or clear its service-policy hold.
 
+## Complete custom runtime Rust cutover — explicit user instruction 2026-10-24 UTC
+
+All project-owned production runtime code uses Rust/reviewed assembly, including
+custom Linux-loadable modules, executors, libraries and tools. Preserve the
+Rocky/Linux platform and legitimate third-party/generated boundaries. Track the
+compute kernel as [M14](RUST-CUTOVER-M14.md) and remaining custom integration
+runtime as [M15](RUST-CUTOVER-M15.md), with per-file residual worklists. Existing
+native Rust IHK/SMP/mcctrl bodies and accepted proof are reused; the retained C
+IHK source tree is not the selected Rust-driver authority. Current C wrappers
+and user-space paths remain explicit debt until their real successors qualify.
+Original35 functional closure, M14 and M15 remain separate. No new broad exposure
+quota, unsupported configuration matrix or source-only completion credit is added.
+
 ## Current scope separation — explicit user instruction 2026-10-23
 
 Keep the original35 practical functional checks in practical-milestones.json.

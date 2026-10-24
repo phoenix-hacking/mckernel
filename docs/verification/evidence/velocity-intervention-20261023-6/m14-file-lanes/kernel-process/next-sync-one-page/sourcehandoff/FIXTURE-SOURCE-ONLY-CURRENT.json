@@ -1,0 +1,46 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FIXTURE_SOURCE_ONLY_NO_EXECUTABLE_RECIPE_OR_TEST_GRANT",
+  "source_body_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/sourcehandoff/SOURCE-NEXT-BODY.json",
+    "sha256": "30de340ad7b9be2af0ba46a5828ca058879bea0e53b113d3f13920262ce3e163",
+    "bytes": 5220
+  },
+  "fixtures": {
+    "actual_provider.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/fixture/actual_provider.rs",
+      "sha256": "b2d84389c90e029cb6878a2b0c10937229153da1c8cdd458181c29736ae645ef",
+      "bytes": 3871
+    },
+    "actual_parity.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/fixture/actual_parity.c",
+      "sha256": "0ecaba7c466c17fc76cf3e78378e69ac0fed514cfd9e6aa9f522850f57943d01",
+      "bytes": 8244
+    },
+    "pte_providers.ACTUAL-RUST.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/fixture/pte_providers.ACTUAL-RUST.inc",
+      "sha256": "255e083dff8acee357a14dda190e5a9bce47c03ce545007c8d308ee8f146dc05",
+      "bytes": 3149
+    },
+    "memobj_providers.ACTUAL-RUST.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/fixture/memobj_providers.ACTUAL-RUST.inc",
+      "sha256": "d164b9f06e1702e129611265d348cd08b0318bfea00571dd2c9869026f6a2e1c",
+      "bytes": 684
+    },
+    "abi.ACTUAL.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/fixture/abi.ACTUAL.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    }
+  },
+  "actual_original_C_extraction": true,
+  "actual_Rust_algorithm_extraction": true,
+  "real_Rust_PTE_and_memobj_dispatch": true,
+  "host_TLB_adapter": "Only the architecture invlpg effect is replaced with controlled callback; must never execute real invlpg in a hosted fixture.",
+  "oracles": "Final exact PTE/error and independently expected event order/dirty-bit state; exact variadic types and strings; error-before-redirty; entry/TLB/callback/error/exit mutation points; real C/Rust structure layout.",
+  "prepared_compiler_commands": 0,
+  "compiler_or_test_jobs": 0,
+  "CPU_reservations": 0,
+  "requires": "Dump predecessor acceptance/rebase and root source review, then a separate exact executable recipe/grant; production dump is the only ready cohort.",
+  "source_preseal_note": "Original draft misspelled memobj_ops C tag; finite actual memobj.h read corrected before any executable recipe/compile/test. No product behavior change."
+}

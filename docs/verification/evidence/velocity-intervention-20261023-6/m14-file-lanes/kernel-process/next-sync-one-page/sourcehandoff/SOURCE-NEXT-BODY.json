@@ -1,0 +1,92 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_IMPLEMENTED_NOT_EXECUTABLE_READY_PENDING_DUMP_PREDECESSOR_ACCEPTANCE_AND_COHERENT_BINDING",
+  "chosen_body": "sync_one_page complete actual C dirty-page synchronization/error-redirty callback",
+  "base_private_dump_predecessor": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/candidate/kernel/process.c",
+      "sha256": "1ecbc287f2e704e738cc4e9fbe18289226b5aadadc9da88d226dc0ad0bb57234",
+      "bytes": 162758
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "70015d712c29e416881e2fbaccd67026ee15ac7eb915cb80e828485d6f34d71f",
+      "bytes": 355120
+    }
+  },
+  "actual_dump_leaf": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/sourcehandoff/ACTUAL-FIRST-CANDIDATE-WHOLE-JOIN.json",
+    "sha256": "16fb6f066adb4783c8d5331bd715c5014b76bc555803b32d9ead161be2884859",
+    "bytes": 34838
+  },
+  "postimages": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/candidate/kernel/process.c",
+      "sha256": "c5d0e24c22c6e66660221c6bc303237f02957b45ed74f196bcaf398a20d9cef2",
+      "bytes": 163277
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "268fe3e0120a587203aba50f55158646d8ca06282cf03d779d6b4eb437de10ad",
+      "bytes": 357365
+    }
+  },
+  "source_provider_bindings": {
+    "kernel/rust/pte_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/pte_helpers.rs",
+      "sha256": "d6117286cc222c27ae6f76773796efd77d9f87b969644555e0a6286721653e62",
+      "bytes": 7855
+    },
+    "kernel/rust/object_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/object_helpers.rs",
+      "sha256": "7444ec38a30cdb2b0505b939f02eacb5018d3732a97fcd12b3eba189133f0f06",
+      "bytes": 235965
+    },
+    "kernel/rust/x86_memory_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "245faf1198d9b7715714d236238172330257f4291776aced4e7cee6c3c518ce2",
+      "bytes": 199322
+    },
+    "kernel/rust/abi.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    "lib/include/ihk/debug.h": {
+      "path": "/home/holden/mckernel/lib/include/ihk/debug.h",
+      "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc",
+      "bytes": 1294
+    }
+  },
+  "existing_Rust_providers": [
+    "pte_helpers::pte_is_null/pte_is_fileoff/pte_is_dirty/pte_clear_dirty/pte_get_phys/pte_set_dirty",
+    "x86_memory_helpers::flush_tlb_single existing reviewed architecture operation",
+    "object_helpers::memobj_flush_page existing typed operation dispatch",
+    "existing unconditional kprintf declaration exactly once"
+  ],
+  "original_entry_line": 2546,
+  "original_exit_line": 2574,
+  "algorithm": "Entry diagnostic; shortcircuit null/fileoff/clean; atomic dirty clear; TLB flush; physical read; zero-fill bypass; original memobj flush; error diagnostic before atomic dirty restore; exit diagnostic and exact signed result.",
+  "remaining_C_debt": "Only two declarative existing-debug selector data rows for this slice; exact C fallback retained. Existing memobj callback operation may be C or Rust according to its provider, no claim of whole object subsystem retirement.",
+  "fixture_contract": {
+    "next_actual_observation": "Real original C callback + actual Rust callback with actual pure Rust PTE and memobj dispatch providers, controlled functional TLB-effect callback only; never invoke real invlpg on host.",
+    "cases": [
+      "NULL/fileoff/clean skip with no args/memobj read when debug disabled",
+      "Dirty supported4KiB/2MiB/1GiB page success and zero-fill skip after clear+flush",
+      "Positive/negative memobj error; failure logger sees cleared state before dirty restoration; exact error retained",
+      "TLB-effect callback updates PTE physical bits before physical read",
+      "Entry/exit flags independent and high8bits, exact variadic formats/UL/int payloads",
+      "Memobj callback absent/defaultsuccess and present path; no pointer retained after synchronous visit"
+    ],
+    "required_ABI": [
+      "ProcessSyncArgs.memobj and Memobj.flags/ops real structures",
+      "real PTE width/alignment and supported page-shift masks",
+      "Ddebug bitfield and actual C function/callback signatures"
+    ]
+  },
+  "prior_E0428_duplicate_failure": "2fb3/e9a preserved, no duplicate kprintf added",
+  "compile_or_test_jobs": 0,
+  "CPU_reservations": 0,
+  "canonical_or_shared_writes": 0,
+  "cutover_credit": false
+}
