@@ -258,7 +258,7 @@ pub unsafe extern "C" fn rust_x86_save_fp_regs(
 /// XSAVE writes memory and leaves arithmetic flags unchanged. The full 64-bit
 /// requested mask is split exactly across EDX:EAX; no vector operands are used.
 #[inline(always)]
-unsafe fn x86_save_xstate(state: *mut c_void, mask: CULong) {
+pub(crate) unsafe fn x86_save_xstate(state: *mut c_void, mask: CULong) {
     unsafe {
         core::arch::asm!(
             "xsave [{state}]",

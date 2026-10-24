@@ -1,0 +1,72 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "APPLIED_EXACT_REVIEWED_THREE_RUNTIME_SOURCE_WIP",
+  "at": "2026-10-24T21:21:02.938879+00:00",
+  "proposal_sha256": "2fa7d7a3d68b625286d9657adf714268966b9bbcd4771c04ddfc39a7ea982c5c",
+  "runtime": {
+    "arch/x86_64/kernel/syscall.c": {
+      "patch": {
+        "bytes": 730,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-whole-signal-policy277-integration-preparation-1/canonical-merge-proposal-1/patch/arch-whole-signal-context-selectors.diff",
+        "sha256": "f5da7ed70a918e84d03c1d1a6b567aca19f251ac6967171cc9b08b6a12379c57"
+      },
+      "postimage": {
+        "bytes": 112911,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-whole-signal-policy277-integration-preparation-1/canonical-merge-proposal-1/postimages/arch/x86_64/kernel/syscall.c",
+        "sha256": "bd2ea4750d041c5b7aec05c409ed2d34ff1837fe6ee54d05e8e18dbc1a5412f0"
+      },
+      "preimage": {
+        "bytes": 112747,
+        "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+        "sha256": "b8ac28bdaee096e69a2d78afd5455a41e9eb04d376e0eaee884af269b2b0b900"
+      }
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "patch": {
+        "bytes": 68414,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-whole-signal-policy277-integration-preparation-1/canonical-merge-proposal-1/patch/policy.diff",
+        "sha256": "aedc7ad13ad26cbd1be4803b6eb8831be36a3c9a89b1e7ac8902e02aed9fdb71"
+      },
+      "postimage": {
+        "bytes": 1047749,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-whole-signal-policy277-integration-preparation-1/canonical-merge-proposal-1/postimages/kernel/rust/syscall_policy.rs",
+        "sha256": "bb8de96e3b4954ea6c92d521ef7544a6385316213c2dea1ec2df938a9eaad1dd"
+      },
+      "preimage": {
+        "bytes": 981022,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "277c399ffdc9eb2e89aa804319b0b479b105b556236da226ba958f7474765509"
+      }
+    },
+    "kernel/rust/x86_cpu_helpers.rs": {
+      "patch": {
+        "bytes": 485,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-whole-signal-policy277-integration-preparation-1/canonical-merge-proposal-1/patch/CPU-xsave-visibility-only.diff",
+        "sha256": "589778128c314f00558ffdfb918b87aedadbfaacbddae723e3f2dee18f2c5216"
+      },
+      "postimage": {
+        "bytes": 237228,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/passed-whole-signal-policy277-integration-preparation-1/canonical-merge-proposal-1/postimages/kernel/rust/x86_cpu_helpers.rs",
+        "sha256": "3260a1d6f1b7d05debf1e64fff123a133b4dcb6f15070c8d62dba841ef3b9b91"
+      },
+      "preimage": {
+        "bytes": 237217,
+        "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+        "sha256": "47804d09ba52bf21828be399acf6ee44e04c9f83cbba81f0c2ca28d281798ba3"
+      }
+    }
+  },
+  "reviewer": "/root/m14_build_release_review",
+  "actual_four_root_join": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/root-F06-current277-retained-C-four-1/WHOLE-JOIN.json",
+  "local_pre_effect_guard_correction": "Initial root script incorrectly assumed0644; no mutation occurred. Actual600 regular/singlelink/UID1000 exactbytes confirmed,600 preserved for all3.",
+  "excluded": [
+    "HELD CMake selection",
+    "lib.rs compiler witness",
+    "policy type signature const"
+  ],
+  "prior277_initializers_preserved": true,
+  "frozen_M14_copy2_inputs_unchanged": true,
+  "new_default_activation": false,
+  "native_lifetime_whole_file_acceptance": false,
+  "F02_union_qualified": false
+}

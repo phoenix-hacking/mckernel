@@ -1,3 +1,23 @@
+## Engineering cursor — 2026-10-24T21:25Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains COMPLETE35/35; M14/M15 remain OPEN. M14 copy2 passed all15 build
+commands and linked mckernel.img, then full artifact validation FAILED because
+executer/user/mcexec and its three companion artifacts were absent. Retain this
+failure and linked outputs. Normal physical retirement is pending; stopped
+container and owner absence alone supply no clearance. Next source successor
+runs only the genuine current mcexec target and unchanged full validators,
+reusing linked kernel/full Rust and closed prebuild proofs after fresh copying.
+
+F06 current277 four-command retained-C rejoin PASS17.911059s. Reviewed exact three
+runtime-source integration applied: policybb8de96e, CPU3260a1d6, archsyscallbd2ea475;
+initializers preserved. Default selector remains HELD; no native/lifetime/whole-file
+credit. F02 pair still awaits coherent current source union. New M15 sourceSDK11
+66-member operation pushed/fetchedcd9f4f34e; actual producer not run. Retirement
+pure8 PASS.385431s; exact source publication precedes reviewed read-only preflight.
+No queue/peak/retired-C percentage is invented. Evidence:
+`evidence/rust-cutover-engineering-checkpoint-20261024-2125/REVIEW.json`.
+
 ## Engineering cursor — 2026-10-24T21:10Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

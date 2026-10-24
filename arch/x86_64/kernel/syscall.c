@@ -452,7 +452,8 @@ long arch_native_signal_bad_frame_bridge(long error)
 }
 #endif
 
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && \
+    !defined(MCKERNEL_RUST_F06_SIGNAL_CONTEXT)
 void
 arch_rt_sigreturn_context_bridge(struct thread **threadp,
 		struct x86_user_context **regsp, int *xsavesizep)
@@ -1724,6 +1725,7 @@ isrestart(int num, unsigned long rc, int sig, int restart)
 	return 0;
 }
 
+#if !(defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_DO_SIGNAL_WHOLE))
 int
 do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pending *pending, int num)
 {
@@ -2136,6 +2138,7 @@ skip:
 out:
 	return restart;
 }
+#endif
 
 #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int
