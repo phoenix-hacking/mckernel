@@ -1,3 +1,25 @@
+## Engineering cursor — 2026-10-24T23:14Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 COMPLETE35/35; M14/M15 OPEN. COPY4 configure succeeded, then strict cache
+validation stopped: seven identical tool paths changed cache type because the
+producer replayed untyped arguments. No C compile/image relink occurred. Normal
+retirement and independent physical535b6428/current796448bc accepted. One bounded
+seven-argument type correction preserves all validators; COPY5 and complete pure
+validation PASS34.770248s. Next: fetched publication, fresh admission and reviewed
+C-only relink; reuse source65321, Rust objects and current executor.
+
+Controlled NMI12 commands/90 cases PASS.661680s; full current81 static rejoin
+five commands PASS22.227727s, independently accepted. Real NMI/monitor/lifetime,
+default image and native remain OPEN. Process abort model nine schedules PASS
+.059798s; new clone counter layout is source-only and needs fresh full ABI proof.
+M15 source-produced SDK library/tools stay accepted at ABI/link scope; next
+four-artifact install/three loader checks are source-approved, not executed.
+No new C retirement, native credit or engineering percentage. Query-to-entry
+94.383s and owner-entry-to-driver104.494s are measured; peak RSS and compiler
+queue latency remain unmeasured. Evidence:
+`evidence/rust-cutover-engineering-checkpoint-20261024-2314/REVIEW.json`.
+
 ## Complete project scope alongside M15 — 2026-10-24 UTC
 
 M14 retains its six-file supported compute-kernel scope. The user's full custom
