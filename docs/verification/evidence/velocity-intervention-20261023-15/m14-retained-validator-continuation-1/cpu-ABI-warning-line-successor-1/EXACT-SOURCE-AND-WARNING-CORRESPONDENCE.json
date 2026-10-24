@@ -1,0 +1,84 @@
+{
+  "actual_warning": {
+    "bytes": 1519,
+    "sha256": "1e5638689ba3ee7e0bd5ba4d66fd1e004aa4088e23dd1e6ee79005eb34846f2b"
+  },
+  "canonical_actions": 0,
+  "entire_function_body_equal": true,
+  "function": "arch_save_panic_regs",
+  "function_body_sha256": "f09ebe3d5f586feb6a0b5299aa3ed57747aa507beff078288a10bea0e90cac56",
+  "historical_CPU": {
+    "bytes": 95605,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/production-context-consumer-preparation-1/source/arch/x86_64/kernel/cpu.c",
+    "sha256": "c779079fb6de66991c861c823dca06b2a9ceec16ac4c984995200b668d7e78ce"
+  },
+  "materialized_CPU": {
+    "bytes": 95918,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/source-materialization-CPU0-1/materialized-source/arch/x86_64/kernel/cpu.c",
+    "sha256": "5574c151cef8d26fa14e3eac72d54b55703be153e4f147f831c5a9e9b63c70bc"
+  },
+  "materialized_source_request": {
+    "bytes": 26525722,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/fresh-copy2-binding-preparation-1/image-request.FRESH-COPY2.POSTBOUND.PREPARED.NOT-RELEASED.json",
+    "sha256": "124c3ff3af9455efde6983a25c66f7ed4381a75d4a6916a301e4a111295d18a9"
+  },
+  "native": false,
+  "new_compiler_commands": 0,
+  "old_expected_warning": {
+    "bytes": 1519,
+    "sha256": "7d5e343e066dffaf4e4b67a80f0854adf5ea12374f090256f9c9e5601698ac7e"
+  },
+  "old_validator": {
+    "bytes": 240759,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/fresh-copy2-binding-preparation-1/retained_artifact_validator.FRESH-COPY2.POSTBOUND.py",
+    "sha256": "e0728b22c6488c2343178f556d2d492c446ee7f22935a16881981cf5f9d548af"
+  },
+  "only_product_source_delta": "M14_CURRENT_CPU_ABI_WARNINGS exact bytes constant; no other AST change. Existing source pin validation, exact phase equality and all other stderr rules unchanged.",
+  "only_warning_byte_delta": "Eight decimal line-number occurrences; +14 at four diagnostic/caret source locations; all columns, statements, flags, whitespace, function and warning text identical.",
+  "original_failure_receipt": {
+    "bytes": 43795,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/retained-validation-attempt-2/owner-work/evidence/receipt.json",
+    "sha256": "1f9631275869ffc0906e5d9b00fe5fc5da22e879c63046117973eaf1ffed9400"
+  },
+  "retained_commands": 40,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "sites": [
+    {
+      "actual_line": 3746,
+      "columns": [
+        37,
+        51
+      ],
+      "old_line": 3732,
+      "statement": "\t\t\t\tx86v->panic_regs, &x86v->paniced, USER_END,"
+    },
+    {
+      "actual_line": 3772,
+      "columns": [
+        48
+      ],
+      "old_line": 3758,
+      "statement": "\t\tsregs = (struct segment_regs *)&x86v->panic_regs[17];"
+    },
+    {
+      "actual_line": 3801,
+      "columns": [
+        48
+      ],
+      "old_line": 3787,
+      "statement": "\t\tsregs = (struct segment_regs *)&x86v->panic_regs[17];"
+    }
+  ],
+  "source_pin_unchanged": "5574c151cef8d26fa14e3eac72d54b55703be153e4f147f831c5a9e9b63c70bc",
+  "status": "EXACT_MATERIALIZED_SOURCE_WARNING_LINE_CORRESPONDENCE_SOURCE_ONLY",
+  "successor_validator": {
+    "bytes": 240759,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/cpu-ABI-warning-line-successor-1/retained_artifact_validator.CPU-WARNING-LINES.NOT-RELEASED.py",
+    "sha256": "ab5fb5a8ef7b7431731d732d4b3a4eed70c14b1b2c5fcfb73b085d41da2535ce"
+  },
+  "warning_original_capture": {
+    "bytes": 1519,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/retained-validation-attempt-2/owner-work/output/build/m14-production/retained-observations-1/successor-real-ABI-arch-x86_64-kernel-cpu-c.stderr",
+    "sha256": "1e5638689ba3ee7e0bd5ba4d66fd1e004aa4088e23dd1e6ee79005eb34846f2b"
+  }
+}

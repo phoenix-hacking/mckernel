@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-24T10:29:30.733843+00:00",
+  "as_of": "2026-10-24T11:00:44.060056+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -2788,6 +2788,15 @@
       "retired_C_boundaries": [],
       "engineering_percentage": null,
       "evidence": "docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-1012/REVIEW.json"
+    },
+    {
+      "at": "2026-10-24T11:00:44.060056+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "actual_progress": "Packed-stack7commandsPASS64pairs/8ABI/8NULL/orderedcodegen; CPU.378777s.; Whole79 CPU9commandsPASS: fullRust/GCC9ABI/100providers/24allocatedCdatafamilies/partial. Wall16.910203258 CPU16.764962. No default/hardware/native acceptance.; Whole-memory ET_REL exact10pointerbindings qualified; zero selectedC functions/executablebytes. Wall17.875020079, storage WRITEtrue; originalROFAIL retained.; Retainedimage40commands all exit0; exactwarning1519literalstale+14lines caused observerFAIL. Owner68663/CID272448 retained; currentnormalretirementpending. Exactbyte oldFAIL/newPASS+two negatives fixturePASS.152322078.; M15correctedinterpositionobserver STOP after3readonlycommands beforeweakening/behavior; internal unnamedSECTION resolution needs expertcorrection.; Widecorrected-support ldPASS but observerSTOP on unusedU metadata; expert found noallocatedundefinedrelocs; minimalobserver suffix readying.",
+      "native_qualified_delta": 0,
+      "retired_C_boundaries": [],
+      "engineering_percentage": null,
+      "evidence": "docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-1052/REVIEW.json"
     }
   ]
 }

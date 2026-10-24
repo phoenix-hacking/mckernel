@@ -1,3 +1,28 @@
+## Actual CPU whole-crate qualification; retained image warning mismatch — 2026-10-24 10:52 review
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains35/35. Actual CPU79 bounded compiler correction passed all9 commands:
+whole Rust/GCC9 ABI/100provider selections/24allocated C-data families/partial link,
+wall16.910203258s CPU16.764962s. Packed-stack7checks also passed; lifetime/NULLfreeze,
+GCC14 default and hardware/native remain open. Whole-memory retained ET_REL10bindings
+qualified with WRITE=true, zero selected C functions/executablebytes; RO remains FAIL.
+
+Actual retained image owner68663/start63599350 tool67563 exited1. Forty compiler/
+observer commands returned0, but exact1519-byte CPU diagnostic expectation held stale
+line numbers (+14 in actual bound source). Strict source-only constant correction's
+oldFAIL/newPASS/two-negative regression passed; originalFAIL preserved. Current
+CID272448 and tokenc988 remain owned pending normal retirement. Prior b4d/aaf physical
+clearance predates this current run and is not reused. Prepare retained40+ten-command
+suffix with all pure predicates, source/capture/producer bindings; no image rebuild.
+Normal retirement8fixture passed0.216858449s at its exact fixed capture path.
+
+M15 interposition observer stopped before any fixture at a genuine internal unnamed
+SECTION; expert/soleauthor correct exact binding, no guessed provider execution.
+Wide support derivative has no allocated undefined relocation; expert authorized a
+section-aware observer correction before unchanged behavior suffix. All failed
+captures and successful objects remain retained. No new native or C-retirement
+boundary; overall percentages remain unknown. See1052 engineering evidence review.
+
 ## Actual HOST library and whole-memory compiler progress — 2026-10-24 10:12 review
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
