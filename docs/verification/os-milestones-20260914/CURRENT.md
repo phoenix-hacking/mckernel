@@ -1,3 +1,18 @@
+## Live terminal cursor — 2026-10-24T23:59Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+COPY7 tool14527 terminal1, owner413643/start68359948; stopped retained CID
+0e41e2cf1f390c77108eafef7d031a1d1e561485a38ed7524f77d953e0c62d70,
+closed nonce76b2af948f3440219ad33c013fc3fbcb. Three real ABI witness compiles
+returned0; full validation FAIL F02 allocated_C_OBJECT boundary list. No image
+rebuild replay. No artifact/native acceptance. COPY7 normal retirement is pending
+in copy7-normal-image-retirement-preparation-1; prior COPY6 physical3ea72/d815
+is historical and does not clear COPY7. Source owner/reviewer diagnose exact
+object predicate; never delete guard or relabel residual C.
+B7 expert-fixed CWD driver62130b99 source-ready/unrun; no new compiler result
+after original E0080 and precompiler CWD failure. M12 stays35/35; M14/M15 OPEN.
+Preserve all source/failed evidence and publisher quiescence for normal cleanup.
+
 ## Engineering cursor — 2026-10-24T23:52Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
