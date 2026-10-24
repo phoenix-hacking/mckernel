@@ -1,0 +1,55 @@
+--- accepted-QMP10-finalization-code
++++ segment90-bound-code
+@@ -1,20 +1,20 @@
+ from pathlib import Path
+ import importlib.util,json,os,sys,time
+-D=Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-runtime-successor-1')
++D=Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/runtime-successor-2')
+ assert sys.version_info[:3]==(3,9,12) and os.getuid()==os.geteuid()==1000
+ s=importlib.util.spec_from_file_location('actual_selected_production_transport',D/'source/long_transport.py');g=importlib.util.module_from_spec(s);s.loader.exec_module(g)
+-assert g.digest(g.stable(D/'source/long_transport.py'))=='c6b6c88f3d11fb132d198be4c368a1304c39def4f4f935dad8d5916cadaa2044'
++assert g.digest(g.stable(D/'source/long_transport.py'))=='c5a3149b8c7eefa42b37916bb830a26fadddd145b5cb4d6bfcd0bfae1737e254'
+ # Authenticated readback exists ONLY in repository; no private-copy prerequisite.
+ assert len(sys.argv)==6
+ query=Path(sys.argv[4]);querysha=sys.argv[5];qraw=g.stable(query);assert len(querysha)==64 and g.digest(qraw)==querysha;q=json.loads(qraw)
+ assert q['status']=='PASS_FRESH_READ_ONLY_P12_LONG_ADMISSION' and q['mutation'] is False and q['transient_mutex_released'] is True and q['execution_release'] is False and q['native_acceptance'] is False
+ now=time.time();assert type(q['at_unix']) in (int,float) and 0<=now-q['at_unix']<=120
+ assert q['required']=={'host_required_bytes':140668567552,'scratch_required_bytes':13899923456}
+-cohort=json.loads(g.stable(D/'COHORT-BINDINGS.json'));assert g.digest(g.stable(D/'COHORT-BINDINGS.json'))=='d748b69b3707587d3d21146f5c84e733d3019f8784669f2c0cbf5650567e588d'
++cohort=json.loads(g.stable(Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/segment90-admission-finalization-preparation-1/SELECTED-COHORT-BINDINGS.DATA.json')));assert g.digest(g.stable(Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/segment90-admission-finalization-preparation-1/SELECTED-COHORT-BINDINGS.DATA.json')))=='d05582ec07fcd9dce4f3f81fdc322423d5dba0c5d281597d71c5695732042a73'
+ pins={row['path']:(row['sha256'],row['size']) for row in q['observations']['source_pins']}
+ for row in cohort.values():assert pins[row['path']]==(row['sha256'],row['bytes']) and g.digest(g.stable(Path(row['path'])))==row['sha256']
+-assert pins['/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/p12-normal-retirement/physical-preparation-1/POSITIVE-PHYSICAL-ACCEPTANCE.ROOT-RECORD.json']==('8d55411d1aa421650fb211ec3ce0eb2ccabb0e71e2647a4f10e1173d751854a2',3022) and pins['/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/p12-normal-retirement/physical-preparation-1/CURRENT-LIVE-POSTJOIN.ROOT-RECORD.json']==('001983ee4261456307db8da23d66457df20d16ad62beb68d106cd09443491230',1206)
+-assert q['observations']['parent']['dev']==66306 and q['observations']['parent']['ino']==56142339 and q['observations']['parent']['children']==[]
++assert pins['/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/p12-current-normal-retirement-1/physical-preparation-1/ACTUAL-PHYSICAL-ACCEPTANCE.ROOT-RECORD.json']==('e54d603e473af8f26b20ecba91cc6e4c87a61102cdb0ec9707ce7880148f663f', 3523) and pins['/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/p12-current-normal-retirement-1/physical-preparation-1/current_live_postjoin.NONNULL.json']==('7c5d41e6dfe4e79aa08aac1138d46101a10786ef436ab81102060e03e9c8c638', 3023)
++assert q['observations']['parent']['dev']==66306 and q['observations']['parent']['ino']==56138797 and q['observations']['parent']['children']==[]
+ 
+ def exclusive(p,raw):
+  fd=os.open(p,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o600)
+@@ -24,19 +24,19 @@
+ payloadraw=g.stable(payloadpath);assert g.digest(payloadraw)==payloadsha;value=json.loads(payloadraw);assert 'independent_review' not in value and g.canonical(value)==payloadraw and payloadraw.endswith(b'\n')
+ review=json.loads(g.stable(reviewpath));assert set(review)=={'status','reviewer','implementation_ownership','payload_sha256'} and review['status']=='PASS' and review['implementation_ownership'] is False and type(review['reviewer']) is str and review['reviewer'] and review['reviewer']!=value['author'] and review['payload_sha256']==g.digest(payloadraw)
+ assert value['profile']==g.TRANSPORT and value['storage_admission']==q['observations']['admission'] and value['boot_id']==Path('/proc/sys/kernel/random/boot_id').read_text().strip()
+-assert value['nonce']=='4a76457e33f34ba9a6805115bd121eb0' and value['attempt_parent']=='/home/holden/mckernel-work/l12q1/p' and value['manifest']=={'path':'/home/holden/mckernel-work/scratch/p12q1/m.json','sha256':'9dfead8648d68c90e798973b384a1c41bc5493fe5390e237b4868ecfa4b33abe'}
++assert value['nonce']=='afcf017e155344a1ad3fa2c2057dbbf2' and value['attempt_parent']=='/home/holden/mckernel-work/l12c1/p' and value['manifest']=={'path':'/home/holden/mckernel-work/scratch/p12c1/m.json','sha256':'e2e264d97f952bfded2018d284b037aa37dfdb7d26c212a1c777ebc3b9aec98b'}
+ now=time.time();assert now<=value['expires_unix']<=now+600 and value['execution_count']==1
+-value['independent_review']=review;raw=g.canonical(value);release=Path('/home/holden/mckernel-work/scratch/p12q1/r.json');exclusive(release,raw);release_sha=g.digest(raw)
++value['independent_review']=review;raw=g.canonical(value);release=Path('/home/holden/mckernel-work/scratch/p12c1/r.json');exclusive(release,raw);release_sha=g.digest(raw)
+ # No clock or boot override: full unmodified production validation on published bytes.
+ validated=g.validate_release(str(release),release_sha,value['manifest']['path'],value['nonce'],value['attempt_parent'])
+-assert g.digest(g.stable(D/'CAPTURE-REQUEST.PROTOTYPE.NOT-EXECUTABLE.json'))=='c7818165a1dbf18a2efa113c032a2bec7c03555733217ff7ebb87d419be65c23'
+-req=json.loads(g.stable(D/'CAPTURE-REQUEST.PROTOTYPE.NOT-EXECUTABLE.json'));req['long_profile_release']={'path':str(release),'sha256':release_sha};req['argv'][req['argv'].index('--long-profile-release-sha256')+1]=release_sha;req['status']='EXACT_IMMUTABLE_REQUEST_CONDITIONED_ON_APPROVED_PAYLOAD_AND_REALCLOCK_CONSUMER';request_raw=g.canonical(req);exclusive(D/'CAPTURE-REQUEST.json',request_raw);request_sha=g.digest(request_raw)
++assert g.digest(g.stable(Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/segment90-admission-finalization-preparation-1/CAPTURE-REQUEST-PROTOTYPE.SEGMENT90.NOT-EXECUTABLE.json')))=='f094f88bb436387c196f45662570f671e85599b8de871519aa2caa1bbb8e93e1'
++req=json.loads(g.stable(Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/segment90-admission-finalization-preparation-1/CAPTURE-REQUEST-PROTOTYPE.SEGMENT90.NOT-EXECUTABLE.json')));req['long_profile_release']={'path':str(release),'sha256':release_sha};req['argv'][req['argv'].index('--long-profile-release-sha256')+1]=release_sha;req['status']='EXACT_IMMUTABLE_REQUEST_CONDITIONED_ON_APPROVED_PAYLOAD_AND_REALCLOCK_CONSUMER';request_raw=g.canonical(req);exclusive(D/'CAPTURE-REQUEST.json',request_raw);request_sha=g.digest(request_raw)
+ # Mandatory actual published-request consumer BEFORE any controller invocation.
+-consumer=D/'controller_pre_effect_consumer.py';assert g.digest(g.stable(consumer))=='27c9b90ffccc340bad8b377420cd44a17bc9a744b46caea5f2397e1d31a329a5'
++consumer=Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/segment90-admission-finalization-preparation-1/controller_pre_effect_consumer.SEGMENT90.py');assert g.digest(g.stable(consumer))=='50677ee5ef081be342ea5cbe2401d4f7475fac4e7a986dc1114c2910c2099f0b'
+ s=importlib.util.spec_from_file_location('reviewed_actual_published_request_pre_effect_consumer',consumer);p=importlib.util.module_from_spec(s);s.loader.exec_module(p)
+ prior_argv=sys.argv;sys.argv=[str(consumer),str(D/'CAPTURE-REQUEST.json'),request_sha]
+ try:p.main()
+ finally:sys.argv=prior_argv
+-argv=json.loads(g.stable(D/'finalization-preparation-1/ROOT-ARGV.PROTOTYPE.NOT-EXECUTABLE.json'));argv[-1]=request_sha;exclusive(D/'ROOT-ARGV.FINAL.NOT-EXECUTED.json',g.canonical(argv))
+-result={'scope':'Functional OS/apps and Rust/assembly migration only; no security testing.','status':'PASS_PUBLISHED_FINAL_SERIALIZATION_AND_FULL_REALCLOCK_RELEASE_CONSUMER','payload_sha256':g.digest(payloadraw),'release_path':str(release),'release_sha256':release_sha,'request_path':str(D/'CAPTURE-REQUEST.json'),'request_sha256':request_sha,'root_argv_path':str(D/'ROOT-ARGV.FINAL.NOT-EXECUTED.json'),'expires_unix':validated['expires_unix'],'independent_review_source':str(reviewpath),'native_invoked':False,'actual_published_request_pre_effect_consumer_sha256':'27c9b90ffccc340bad8b377420cd44a17bc9a744b46caea5f2397e1d31a329a5','actual_published_request_pre_effect_consumer':'PASS_ACTUAL_FINAL_SERIALIZED_REQUEST_PRE_EFFECT_GUARDS'}
++argv=json.loads(g.stable(Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/segment90-admission-finalization-preparation-1/ROOT-ARGV.PROTOTYPE.SEGMENT90.NOT-EXECUTABLE.json')));argv[-1]=request_sha;exclusive(D/'ROOT-ARGV.FINAL.NOT-EXECUTED.json',g.canonical(argv))
++result={'scope':'Functional OS/apps and Rust/assembly migration only; no security testing.','status':'PASS_PUBLISHED_FINAL_SERIALIZATION_AND_FULL_REALCLOCK_RELEASE_CONSUMER','payload_sha256':g.digest(payloadraw),'release_path':str(release),'release_sha256':release_sha,'request_path':str(D/'CAPTURE-REQUEST.json'),'request_sha256':request_sha,'root_argv_path':str(D/'ROOT-ARGV.FINAL.NOT-EXECUTED.json'),'expires_unix':validated['expires_unix'],'independent_review_source':str(reviewpath),'native_invoked':False,'actual_published_request_pre_effect_consumer_sha256':'50677ee5ef081be342ea5cbe2401d4f7475fac4e7a986dc1114c2910c2099f0b','actual_published_request_pre_effect_consumer':'PASS_ACTUAL_FINAL_SERIALIZED_REQUEST_PRE_EFFECT_GUARDS'}
+ exclusive(D/'ACTUAL-FINAL-SERIALIZATION-AND-REALCLOCK-CONSUMER.json',g.canonical(result));print(json.dumps(result))

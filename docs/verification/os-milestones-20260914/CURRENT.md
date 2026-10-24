@@ -1,3 +1,47 @@
+## Actual runtime3 guards and pending short continuation — 2026-10-24 06:15 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains34/35; shortguest NOTRUN. Runtime3 actual18guards PASS1.562s/cleanjoin:
+326sourcepins,39auditedopens,372ROcoveredpaths,91ROmounts, bothnegativecontrolsPASS.
+Fourpriorfixture/bindingFAILS preserved. Exactly2missingROfileinputs corrected
+withoutRWexpansion; independentnative235 acceptsactualguard qualification.
+FreshrootadmissionqueryPASS.440s; ordinarycanonicalpayloadc981 independentlyPASS.
+Finalattachrefusedqueryage146>120 beforepublishingrelease/request. Originalexpiry
+unchanged; samepayload/review canuse freshquery onlyif allactualfacts match.
+Exactqueryrevalidation+authenticatedreadback+attachbatch prepared forindependent
+review; no newexpiry/fullhour/replay/guest. Physicale54d/postjoin7c5d accepted.
+M14 actual196nodecountPASS; logging45comparisonPASS with finalABIwitnessFAIL
+underboundedcorrection; F05logger256+RSS660 actualPASS. F02extendCOW4480 and
+F03admission1360actualPASS; F04NoWalkFAIL underexpertfirstvectordiagnostic;
+F06Rust/CcompilePASS strictlinkclosureFAIL underexpertsuffix. Allfailures and
+scopes retained; no default/native/Cfileclosurecredit or engineeringpercentage.
+Qualifiedoldprefix3519690949712ns remainsV2exposureonly; uninterruptedFAIL retained.
+
+## Ten-minute engineering review — 2026-10-24T05:52:52.931840+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 still34/35; continuation notrun. Capsule actualPASS20.942s/onlyinitdelta,
+61members unchanged; scratch manifest e2e264 publishedO_EXCL. Runtime2 binds strict
+v2/90work/600wall/720guest/1200inner/1500outer, samekernel/modules/apps. Oldpositive
+physicale54d accepted. Guard fixture firstNameError and boundedrequestparentFAIL
+retained; independentexpert native235 allows only testrequest destination correction
+(no productionpredicate change). Sourceowner prepares exact16testfiles successor;
+case227 prepares existing freshquery/freeze/attach templates inparallel. No expiry
+or runtime release minted, no heavyimagejob competes. Earlyreadprepared; newowner
+PID/start unavailable until real launch. No currentproducer work beyond oldqualified
+3519690949712ns; olduninterruptedDeadlineFAIL unchanged.
+Actualordinary increments: F05corrected498+ABI PASS.373s inner/.455outer; F02
+640extend+3840COW+21fieldvalues PASS6commands/.616outer; F03corrected1360+16
+PASS8commands/.915outer. Allcleanjoined, CPU6released. Initialcompiler/scaffold
+failures and rootzerochildgrantplacement failure preserved; no nativecredit.
+F06correctedRust00PASS, C01fails schedule namespace/list_entry scaffold; stopped
+toindependentexpert, successfulRust retained. Allsixfileowners reactivated on
+substantiveprivatebodies; compiled/default/native and candidate-only stayseparate.
+ExecutorHOSTRust+ASM artifactfd0691af/linkPASS sealedb4b63c8e, no projectCbodylink;
+Rocky/default/native remainopen. Engineeringpercentageunknown. Gitcheckpoint
+8339a182 pushed/fetchedexactcommit+tree; unrelatedWIP preserved. Included-only
+authorityunchanged. Criticaldelay is fixture/data binding, not kernel execution.
+
 ## Engineering checkpoint — 2026-10-24T05:42:42.002457+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

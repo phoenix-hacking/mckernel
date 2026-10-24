@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/guard-fixture-binding-correction-1/fixture_actual_controller_guards.py", line 41, in expect
+    try:consume(controller,p,h)
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/guard-fixture-binding-correction-1/fixture_actual_controller_guards.py", line 37, in consume
+    try:m.main()
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/runtime-successor-2/capture_root_SEGMENT.NOT-RELEASED.py", line 62, in main
+    out=Path(r['capture_directory']);need(out.parent==req.parent and out.name=='actual-capture-1','exact fresh capture path')
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/runtime-successor-2/capture_root_SEGMENT.NOT-RELEASED.py", line 21, in need
+    if not ok:raise RuntimeError(msg)
+RuntimeError: exact fresh capture path
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/guard-fixture-binding-correction-1/fixture_actual_controller_guards.py", line 48, in <module>
+    corrected=json.loads((D/'TESTONLY-CORRECTED-REQUEST.json').read_bytes());p,h=request_file(corrected);expect('corrected_actual_guard_prefix_with_real_sourcefilepins',CONTROLLER,p,h)
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/guard-fixture-binding-correction-1/fixture_actual_controller_guards.py", line 45, in expect
+    assert reason is not None and str(e)==reason,(label,str(e),reason);checks.append(dict(name=label,status='PASS_REFUSE',error=str(e)));return
+AssertionError: ('corrected_actual_guard_prefix_with_real_sourcefilepins', 'exact fresh capture path', None)

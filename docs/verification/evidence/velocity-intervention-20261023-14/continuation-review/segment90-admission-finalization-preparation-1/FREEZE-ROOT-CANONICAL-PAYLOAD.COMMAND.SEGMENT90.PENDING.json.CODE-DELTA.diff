@@ -1,0 +1,36 @@
+--- accepted-QMP10-finalization-code
++++ segment90-bound-code
+@@ -1,25 +1,25 @@
+ from pathlib import Path
+ import importlib.util,json,os,sys,time
+-D=Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-runtime-successor-1')
++D=Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/runtime-successor-2')
+ assert len(sys.argv)==5 and os.getuid()==os.geteuid()==1000 and sys.version_info[:3]==(3,9,12)
+ s=importlib.util.spec_from_file_location('frozen_expert_selected_transport',D/'source/long_transport.py');g=importlib.util.module_from_spec(s);s.loader.exec_module(g)
+-assert g.digest(g.stable(D/'source/long_transport.py'))=='c6b6c88f3d11fb132d198be4c368a1304c39def4f4f935dad8d5916cadaa2044'
++assert g.digest(g.stable(D/'source/long_transport.py'))=='c5a3149b8c7eefa42b37916bb830a26fadddd145b5cb4d6bfcd0bfae1737e254'
+ query=Path(sys.argv[3]);querysha=sys.argv[4];assert query.is_absolute() and len(querysha)==64
+ qraw=g.stable(query);assert g.digest(qraw)==querysha;q=json.loads(qraw)
+ assert q['status']=='PASS_FRESH_READ_ONLY_P12_LONG_ADMISSION' and q['mutation'] is False and q['transient_mutex_released'] is True and q['execution_release'] is False and q['native_acceptance'] is False
+ now=time.time();assert type(q['at_unix']) in (int,float) and 0<=now-q['at_unix']<=120
+ assert q['required']=={'host_required_bytes':140668567552,'scratch_required_bytes':13899923456}
+-cohort=json.loads(g.stable(D/'COHORT-BINDINGS.json'));assert g.digest(g.stable(D/'COHORT-BINDINGS.json'))=='d748b69b3707587d3d21146f5c84e733d3019f8784669f2c0cbf5650567e588d'
++cohort=json.loads(g.stable(Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/segment90-admission-finalization-preparation-1/SELECTED-COHORT-BINDINGS.DATA.json')));assert g.digest(g.stable(Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/segment90-admission-finalization-preparation-1/SELECTED-COHORT-BINDINGS.DATA.json')))=='d05582ec07fcd9dce4f3f81fdc322423d5dba0c5d281597d71c5695732042a73'
+ pins={row['path']:(row['sha256'],row['size']) for row in q['observations']['source_pins']}
+ for row in cohort.values():assert pins[row['path']]==(row['sha256'],row['bytes']) and g.digest(g.stable(Path(row['path'])))==row['sha256']
+-assert pins['/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/p12-normal-retirement/physical-preparation-1/POSITIVE-PHYSICAL-ACCEPTANCE.ROOT-RECORD.json']==('8d55411d1aa421650fb211ec3ce0eb2ccabb0e71e2647a4f10e1173d751854a2',3022) and pins['/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/p12-normal-retirement/physical-preparation-1/CURRENT-LIVE-POSTJOIN.ROOT-RECORD.json']==('001983ee4261456307db8da23d66457df20d16ad62beb68d106cd09443491230',1206)
+-assert q['observations']['parent']['dev']==66306 and q['observations']['parent']['ino']==56142339 and q['observations']['parent']['children']==[]
+-assert g.digest(g.stable(D/'LONG-RELEASE.PROTOTYPE.NOT-EXECUTABLE.json'))=='7a630f20de23d8497341576729a8c74a3a4b75f5b69e0b08cb6023fd3392df69'
+-value=json.loads(g.stable(D/'LONG-RELEASE.PROTOTYPE.NOT-EXECUTABLE.json'));value.pop('independent_review',None)
++assert pins['/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/p12-current-normal-retirement-1/physical-preparation-1/ACTUAL-PHYSICAL-ACCEPTANCE.ROOT-RECORD.json']==('e54d603e473af8f26b20ecba91cc6e4c87a61102cdb0ec9707ce7880148f663f', 3523) and pins['/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/p12-current-normal-retirement-1/physical-preparation-1/current_live_postjoin.NONNULL.json']==('7c5d41e6dfe4e79aa08aac1138d46101a10786ef436ab81102060e03e9c8c638', 3023)
++assert q['observations']['parent']['dev']==66306 and q['observations']['parent']['ino']==56138797 and q['observations']['parent']['children']==[]
++assert g.digest(g.stable(Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/segment90-admission-finalization-preparation-1/RELEASE-PROTOTYPE.SEGMENT90.DATA.NOT-EXECUTABLE.json')))=='68fe9ab197133b02976d5de654a8ab36de579db230df8e4ccc0ca2868e01f6ec'
++value=json.loads(g.stable(Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/segment90-admission-finalization-preparation-1/RELEASE-PROTOTYPE.SEGMENT90.DATA.NOT-EXECUTABLE.json')));value.pop('independent_review',None)
+ value['profile']=g.TRANSPORT;value['storage_admission']=q['observations']['admission'];value['boot_id']=Path('/proc/sys/kernel/random/boot_id').read_text().strip();value['author']=sys.argv[2];assert value['author']=='/root'
+ value['status']='PASS_EXECUTION_RELEASE';value['execution_count']=1;value['expires_unix']=time.time()+590
+ value['source_sha256']={name:g.digest(g.stable(D/'source'/name)) for name in g.FILES}
+-assert value['nonce']=='4a76457e33f34ba9a6805115bd121eb0' and value['attempt_parent']=='/home/holden/mckernel-work/l12q1/p'
++assert value['nonce']=='afcf017e155344a1ad3fa2c2057dbbf2' and value['attempt_parent']=='/home/holden/mckernel-work/l12c1/p'
+ raw=g.canonical(value);assert raw.endswith(b'\n') and 'independent_review' not in json.loads(raw)
+ output=Path(sys.argv[1]);assert output.is_absolute() and output.parent.resolve(strict=True)==output.parent
+ fd=os.open(output,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o600)
