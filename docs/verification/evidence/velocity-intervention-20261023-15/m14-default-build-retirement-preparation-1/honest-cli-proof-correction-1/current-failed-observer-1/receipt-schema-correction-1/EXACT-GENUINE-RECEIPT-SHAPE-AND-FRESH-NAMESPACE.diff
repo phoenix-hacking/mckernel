@@ -1,0 +1,33 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-default-build-retirement-preparation-1/honest-cli-proof-correction-1/current-failed-observer-1/observe_current_failed_image_retirement.RECORD-BOUND.py
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-default-build-retirement-preparation-1/honest-cli-proof-correction-1/current-failed-observer-1/receipt-schema-correction-1/observe_current_failed_image_retirement.RECEIPT-SCHEMA-CORRECTED.py
+@@ -20,7 +20,7 @@
+ FAILURE_CASE_SHA = 'af3b2e3799170cfbdc76ae4d279403d9309433604776788ed0e864e9ae81c5e4'
+ REPO = Path('/home/holden/mckernel')
+ ROOT = Path('/home/holden/mckernel-work/scratch')
+-PREP = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-default-build-retirement-preparation-1/honest-cli-proof-correction-1/current-failed-observer-1')
++PREP = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-default-build-retirement-preparation-1/honest-cli-proof-correction-1/current-failed-observer-1/receipt-schema-correction-1')
+ CASE = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/provenance-authority-correction-1/pinned-full-image-attempt-1')
+ CAPTURE = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/provenance-authority-correction-1/pinned-full-image-attempt-1/owner-evidence/attempt')
+ SOURCE = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-default-build-retirement-preparation-1/honest-cli-proof-correction-1/current-failed-observer-1/cleanup_failed_default_image.py')
+@@ -29,7 +29,7 @@
+ TEST_SHA = '43c6ca5c44e20639e6d6e3994294626cbeb12c2f32f5fb2bcbe687b970c53917'
+ RETIREMENT = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-default-build-retirement-preparation-1/honest-cli-proof-correction-1/ROOT-TOOL73313-TERMINAL-RECORD.json')
+ RETIREMENT_SHA = '3d0247e3134ca6f22d57053eee19f86d87e3acef8ee4e7589161824164cce3ba'
+-NONCE = 'm14-union2-failed-image-observation-20261024-1'
++NONCE = 'm14-union2-failed-image-observation-schema-correction-20261024-1'
+ OUTPUT = PREP / ('root-observation-' + NONCE)
+ BOOT = '7bfc5687-6c04-4d15-84eb-b92ab9a55dcb'
+ PIDS = (4170872, 4168086, 4170864, 4168078, 4168070, 4168142, 4168062)
+@@ -187,7 +187,11 @@
+         row=root_join['captures'][channel];expected=case['finite_roles']['fixture_'+channel]
+         need(row['path']==expected['path'] and row['sha256']==expected['sha256'] and
+              row['size']==expected['bytes'], 'actual30 raw capture binding differs')
+-    need(artifact['schema']=='mckernel.native-exact-mckernel-image-receipt.v1' and
++    need(type(artifact) is dict and set(artifact)=={'candidate_sha','commands','error','evidence_root','finished_at','ihk_sha','inventory','output_root','phase','status'} and
++         all(type(artifact[k]) is str for k in ('candidate_sha','error','evidence_root','ihk_sha','output_root','phase','status')) and
++         type(artifact['commands']) is list and type(artifact['inventory']) is dict and
++         type(artifact['finished_at']) is float and
++         artifact['candidate_sha']==CURRENT_EXPECTED_SOURCE['candidate_sha'] and
+          artifact['status']=='FAIL' and artifact['phase']=='artifact-validation' and
+          artifact['error']=='M14 default C import/relocation: clear_range_l1',
+          'exact current failed artifact-validation authority required')

@@ -1,0 +1,60 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_RUST_EVENTFD_CORRECTNESS_900_CONTROLLED_OWNERSHIP_VECTORS",
+  "result": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/root-m15-eventfd-correctness900-1/RESULT.json",
+    "sha256": "692d606b866c3e329e867bff63c8f4f64d8f26b13f1b0262cb21e525a628a3e7",
+    "bytes": 3385
+  },
+  "ROOT_GRANT": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/root-m15-eventfd-correctness900-1/ROOT-GRANT.json",
+    "sha256": "f8a0719e328c00ce90e6602fcea292527d2d05d0397ac69476408d6713906d3d",
+    "bytes": 445
+  },
+  "actual_stdout": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/root-m15-eventfd-correctness900-1/2/stdout",
+    "sha256": "9eaaf1597e03de0aed7c1f6015f2e448ba180c2671813509d07be12e98fec259",
+    "bytes": 212
+  },
+  "actual_native_flags_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/root-m15-eventfd-correctness900-1/0/stderr",
+    "sha256": "f29d129b7a5f09f04102aef92aa99657108f8fc15f646d0be5550d8251387013",
+    "bytes": 231
+  },
+  "actual_native_static_libs": [
+    "-lgcc_s",
+    "-lutil",
+    "-lrt",
+    "-lpthread",
+    "-lm",
+    "-ldl",
+    "-lc"
+  ],
+  "seconds": 0.3811249299906194,
+  "child_seconds": [
+    0.13725609402172267,
+    0.14514290704391897,
+    0.02452487195841968
+  ],
+  "actual_source_sha256": "77a7a43a2288f5393bf472d353521ca23192df0c2fa886b3018ef879e55b6862",
+  "source_ready": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/eventfd-correctness-successor-1/SOURCE-CORRECTNESS-AND-ACTUAL-FIXTURE.READY-NOT-GRANTED.json",
+    "sha256": "ed1f85fd161c5b3b538755a11b6e858a8251ef4c01db4b958f3e32670b6dd978",
+    "bytes": 5354
+  },
+  "preserved_960_parity": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/EVENTFD960-ACTUAL-CONSUMER-SCOPE.json",
+    "sha256": "0ca17a51a3446a51b60efd0e093d64eee3647375aa307b008e9605d24f81bb96",
+    "bytes": 3112
+  },
+  "changed_semantics": [
+    "negativeencoded OSopen errors neverclosed",
+    "failed eventfd creation skipsioctl andclosesonlyOSdevice",
+    "registrationfailure closes actualcreatedeventfd thenOSdevice exactlyonce",
+    "first error/errno survives cleanupclose failures/EINTR, no close retry",
+    "success transfers originalcreatedFD; actualdriver inputdescriptor isreadonly"
+  ],
+  "actual_scope": "Real Rustbody through controlled syscall/ioctl/close ownershipledger+realheaders; fd0 andpositive; no real device/registration/native/defaultlibrary credit.",
+  "Rust_and_C_binary_rehash": false,
+  "actual_device_and_default_library": false
+}
