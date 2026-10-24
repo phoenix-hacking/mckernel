@@ -1,3 +1,49 @@
+## Retained validator stopped on appended captures; ordinary checks advanced — 2026-10-24 09:30 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains35/35. Corrected-owner tool5061 returned1 after retained validator ran;
+current driver receiptb89b62b9 FAIL sched_idle_loop_body_result import cardinality.
+Independent actual diagnosis: copied NM7811B and relocation451006B files each were
+appended to themselves; current captures15622/902012B are exact doubles. Unique
+C/Rust/ELF ownership requirements remain valid. Sole validator source owner repairs
+fresh exclusive observation paths plus cheap capture regression; no oracle weakening,
+Rust rebuild or relink. Container8c10a1b9 exited1 and remains retained; normal
+retirement source preparation targets owner32193/start63094559, exact actual nonce
+bf7540fae1414f3290425be494d486ad. New token76c4aef4 remains owned; previous2444
+clearance predates this run. No SDK build or new validation release yet.
+
+Actual ordinary delta: F01 corruption12+genuine ddebug12 PASS8commands (GCC9 byte27,
+size32/align8 only); F03 execution/remote576+45layout/partialPASS8commands; F06
+native-retained+expertlegacy controlled6528/58ABI PASS6new+6reused; F04 selected
+CPUdescriptor23ABI/geometry12/callerspartialPASS5new+4reused. All cleanjoined.
+F06 internal elapsed field invalid from loop-variable shadow; original retained,
+rootouter0.843172649s applies only six new commands, combined time unknown.
+No new native qualification or whole-file C retirement. Six source owners continue
+whole-file batches; completed bounded-context owners reactivated with actual followup.
+M15 SDK corrected operation source retained for publication, not execution approval.
+
+## Preflight token reconciled; corrected-owner admission passed — 2026-10-24 09:16 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains35/35. Failed tool18565 stays FAIL with unknown historical outer joins.
+Fresh physical facts430a9e31 passed0.796436764s, independently accepted108bf6d8.
+Normal unchanged c252 API reconciliation passed0.340774526s with clean joins;
+actual durable resultdbcc24f2/token absent/permanent27:4 preserved. Independent
+native235 accepted latest nonnull current_live_postjoin24446720; old8a7 was not
+reused for the new token. Corrected ownerab137 source independently accepted.
+Fresh accepted-query successor7c583622 actualedbd025c passed0.441456274s, cleanjoin:
+RAM28181528576>=25501368320; HOST164532326400>=50248814592; scratch14101053440>=13631488000.
+All namespace/copy guards passed. Exact once retained-validation releasea93aae75
+is in independent final review. No Rust rebuild/image relink or new SDK job ran.
+
+Queued signal-frame fixture attempted once on CPU6 and stopped firstRustcompile
+E0609 sigcommon.lock on c_void; zero behavior comparisons, cleanjoin0.213998833s.
+Owner prepares genuine struct SigCommon typed-schema successor, not a fake lock.
+CPU packed rsp0 offset180 volatile alignment UB independently confirmed; CPUowner
+prepares side-effecting ordered ASM store correction and realABI/codegen fixture.
+Both corrections remain source-only, no native/default/C-retirement credit.
+Review/private authority: velocity15/ENGINEERING-REVIEW-20261024T0912.ADDENDUM.json.
+
 ## Retained validation preflight failed; new token requires reconciliation — 2026-10-24 08:52 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
