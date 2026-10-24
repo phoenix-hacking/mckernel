@@ -1,3 +1,19 @@
+## Engineering checkpoint — 2026-10-24T14:20:35Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains35/35; M14/M15 OPEN, percentages unknown. COPY4 reused43 records and
+passed6 new commands; final readelf dump hit its child1MiB FSIZE (exit-25), not an
+artifact failure proven. Normal physical retirement is pending; COPY3 clearance
+is historical after this operation. Preserve all50 records. Request allocation
+roots also need coherent attempt4 correction before any successor release.
+F03 selected preprocessing/fallback passed, actual ABI compile exposed hidden
+production declarations; expert correction pending. F04 Rust80 compiled but root
+omits five logger providers. F06 Rust/arch/kernel C passed; CPU TU lacks genuine
+cas.h. All three ordinary groups cleanly joined. Successful objects retained.
+F02 process80 Rust/C compiled; C-import observer failed, exact graph diagnosis
+pending. All four ordinary jobs are terminal/cleanjoined; source owners advance. No
+new native/whole-file retirement or milestone credit. Evidence: docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-1420/REVIEW.json.
+
 ## Current compiler/integration cursor — 2026-10-24
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
