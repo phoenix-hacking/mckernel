@@ -1,3 +1,65 @@
+## Complete retained SDK artifact predicates PASS; copy3 entry ready — 2026-10-24 12:13
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+SDK retained complete consumer909aabfb passed all original3module artifact/export/
+source/vermagic/provider predicates, exact delayedobjtool graph and8purevectors;
+root wholebudget .24768075wall/.253506CPU, clean joins. Original build FAIL stays
+historical. Codegen/MM semantics/jumptable/default/native remain OPEN. No rebuild.
+Copy3 compactrequest95bc is26,525,831B withinF32, identicalparsedtree; failedpretty
+partial retained. Independent source/binding PASS: ownera226,validator48b3,header
+e1e70,prefixc669. Exactly40retained commands plus10fresh suffix, not yet executed.
+Memory79 actualCdata nowprivateRust source, uncompiled. Library proofmap/local-size
+adapter needs genuinepureproof regression and remaining-only suffix, no fullreplay.
+M12 remains35/35; no newnative or retiredC credit. See1213 engineering review.
+
+## Engineering cursor — 2026-10-24 11:53 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains COMPLETE35/35. M14/M15 remain OPEN, engineering_percentage=null.
+F01 current78 bounded correction ALL11PASS (17.629107201outer/16.802379CPU),
+F04 current79 ALL9PASS, F05 wide-behavior4PASS (.54798CPU), HOST libihk70
+seventeen-command compile/shared/CLI link PASS; no new default/native/C-retirement.
+Qualified F01 integration must include process pgshift selector aff5 alongside
+Rust Page provider to avoid duplicate canonical C export. Coredump remains selected
+C/HOLD. New cursor grafts are uncompiled and do not inherit qualified-object proof.
+
+Current SDK corrected tool50079 TERMINAL FAIL after all5inertcompile/readback0 and
+actual module make0. All3 modules emitted. Final checker incorrectly requires
+per-leaf objtool although pinned IBT/KLP Kbuild delays objtool to mcctrl composite;
+expert approved retained-only exact graph consumer preparation, no build replay.
+Owner97808/start64008531 CID40993b70 normal+independent physical retirement PASS.
+Current postjoin3923b794 / acceptanceff18c223, not oldowner87608 receipt.
+Private operation: velocity-intervention-20261024-1/resource-parallelism/sdk-operation/
+inert-rust-boilerplate-correction-1. Sole author m15_bfd_compile_owner; expert
+m14_build_release_review. No new runtime released for retained-only checker yet.
+
+Retained image next: root copy3 source prep finite538files (452original stable+
+80prefixcaptures+5genuineCwitness+timerABIobject), preserve40successful commands,
+then10new suffix. Root physical cleared, no image rebuild. m14_production_stage
+prepares exact copy script; timer firsthash belongs to actual rootcopy, no invented
+historicalhash. Original observerFAIL remains. Library behavior case227_stage
+expert-directed retained suffix must explicitly handle calloc, canary fail-only
+exit125, exact notrack local status table; no fixture ran yet. Reuse successful
+objects and real headers, no weakening/fortify suppression. Root owns all actual
+integration/releases/Git. No live heavy workload at this cursor.
+
+Latest pushed/fetched1688bbba9; subsequent1153 evidence/docs not yet checkpointed.
+See docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-1153/REVIEW.json.
+Continue authorized useful work, preserve deadline/launcher/billing/mutex/floors.
+
+## Corrected SDK compile advances; artifact checker FAIL — 2026-10-24 11:53
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Corrected SDK operation tool50079 exited1 after all five inert targets compiled,
+inert readback returned0 and actual module make returned0. Final artifact validation
+FAIL: pinned Kbuild/objtool command not retained: m15_mmap_trace_gates. No module
+acceptance or native credit. All actual objects/logs retained; expert source-bound
+consumer diagnosis required before further correction, no make replay. Normal
+owned cleanup accepted; current owner97808/start64008531+15clients have fresh PROC/
+mutex rc0 clean joins, independent final physical retirement PASS with nonnull
+current postjoin. Old owner
+87608 clearance is historical and not reused. M12 remains35/35; M14/M15 open.
+
 ## Actual F01 compiler correction and memory behavior PASS — 2026-10-24 11:33 continuation
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

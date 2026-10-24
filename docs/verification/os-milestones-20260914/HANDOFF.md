@@ -1,3 +1,38 @@
+## Engineering cursor — 2026-10-24 11:53 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains COMPLETE35/35. M14/M15 remain OPEN, engineering_percentage=null.
+F01 current78 bounded correction ALL11PASS (17.629107201outer/16.802379CPU),
+F04 current79 ALL9PASS, F05 wide-behavior4PASS (.54798CPU), HOST libihk70
+seventeen-command compile/shared/CLI link PASS; no new default/native/C-retirement.
+Qualified F01 integration must include process pgshift selector aff5 alongside
+Rust Page provider to avoid duplicate canonical C export. Coredump remains selected
+C/HOLD. New cursor grafts are uncompiled and do not inherit qualified-object proof.
+
+Current SDK corrected tool50079 TERMINAL FAIL after all5inertcompile/readback0 and
+actual module make0. All3 modules emitted. Final checker incorrectly requires
+per-leaf objtool although pinned IBT/KLP Kbuild delays objtool to mcctrl composite;
+expert approved retained-only exact graph consumer preparation, no build replay.
+Owner97808/start64008531 CID40993b70 normal+independent physical retirement PASS.
+Current postjoin3923b794 / acceptanceff18c223, not oldowner87608 receipt.
+Private operation: velocity-intervention-20261024-1/resource-parallelism/sdk-operation/
+inert-rust-boilerplate-correction-1. Sole author m15_bfd_compile_owner; expert
+m14_build_release_review. No new runtime released for retained-only checker yet.
+
+Retained image next: root copy3 source prep finite538files (452original stable+
+80prefixcaptures+5genuineCwitness+timerABIobject), preserve40successful commands,
+then10new suffix. Root physical cleared, no image rebuild. m14_production_stage
+prepares exact copy script; timer firsthash belongs to actual rootcopy, no invented
+historicalhash. Original observerFAIL remains. Library behavior case227_stage
+expert-directed retained suffix must explicitly handle calloc, canary fail-only
+exit125, exact notrack local status table; no fixture ran yet. Reuse successful
+objects and real headers, no weakening/fortify suppression. Root owns all actual
+integration/releases/Git. No live heavy workload at this cursor.
+
+Latest pushed/fetched1688bbba9; subsequent1153 evidence/docs not yet checkpointed.
+See docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-1153/REVIEW.json.
+Continue authorized useful work, preserve deadline/launcher/billing/mutex/floors.
+
 ## Actual CPU whole-crate qualification; retained image warning mismatch — 2026-10-24 10:52 review
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
