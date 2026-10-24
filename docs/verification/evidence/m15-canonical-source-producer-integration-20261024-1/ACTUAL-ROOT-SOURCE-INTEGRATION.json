@@ -1,0 +1,507 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "APPLIED_REVIEWED_SOURCE_ONLY_UNCOMPILED_PRODUCER",
+  "at": "2026-10-24T20:26:56.196279+00:00",
+  "source_ready_sha256": "659f57a67f9d5e3a437645df24baffdbec5e4a98a7c45645a318a314b7dfebab",
+  "patches": {
+    "main_patch": {
+      "bytes": 6864,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/m15-actual-target-default-integration-proposal-1/mckernel.ACTUALLY-COMPILED-TWO-FILE.patch",
+      "sha256": "626e3acaa9955542ad5a8376d67a933c8cb0f2a16316705fb8c8c6ea6fee7ed9"
+    },
+    "ihk_patch": {
+      "bytes": 265292,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/m15-actual-target-default-integration-proposal-1/canonical-provider-producer-successor-1/diagnostics-source-successor-1/ihk.WHOLE70-PRODUCER-QUALIFIED-DIAGNOSTICS.patch",
+      "sha256": "d24f849082e2b290bc8aac2a8d23f89ff76c49bf7c18b6d428ad0724c675ce88"
+    }
+  },
+  "reviewer": "/root/m15_sdk_library_release_review",
+  "genuine_source_approval": true,
+  "preimages": [
+    {
+      "path": "/home/holden/mckernel/executer/user/CMakeLists.txt",
+      "preimage": {
+        "bytes": 19637,
+        "exists": true,
+        "mode": 420,
+        "sha256": "570a4477c39032fbe7d014fbb24f8cfb0ab562f5fb631fa9e0dc4cdad181025e"
+      },
+      "present": true
+    },
+    {
+      "path": "/home/holden/mckernel/executer/user/rust/mcps.rs",
+      "preimage": {
+        "bytes": null,
+        "exists": false,
+        "mode": null,
+        "sha256": null
+      },
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/CMakeLists.txt",
+      "preimage": {
+        "bytes": 2262,
+        "exists": true,
+        "mode": 436,
+        "sha256": "2f827651e238bc81ee455eeb6b5aaa24425c9736e3c176d6abd3f0018df8f59f"
+      },
+      "present": true
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/build_ihkconfig.py",
+      "preimage": {
+        "bytes": null,
+        "exists": false,
+        "mode": null,
+        "sha256": null
+      },
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/build_ihkosctl.py",
+      "preimage": {
+        "bytes": null,
+        "exists": false,
+        "mode": null,
+        "sha256": null
+      },
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/ihkconfig.rs",
+      "preimage": {
+        "bytes": null,
+        "exists": false,
+        "mode": null,
+        "sha256": null
+      },
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/ihkosctl.rs",
+      "preimage": {
+        "bytes": null,
+        "exists": false,
+        "mode": null,
+        "sha256": null
+      },
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/CMakeLists.txt",
+      "preimage": {
+        "bytes": 2262,
+        "path": "/home/holden/mckernel/ihk/linux/user/CMakeLists.txt",
+        "sha256": "2f827651e238bc81ee455eeb6b5aaa24425c9736e3c176d6abd3f0018df8f59f"
+      },
+      "present": true
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/build_ihkconfig.py",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/build_ihkosctl.py",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/ihkconfig.rs",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/ihkosctl.rs",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/Whole70Producer.cmake",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/abi/combined_selected_SDK_actual_header_ABI.c",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/abi/diagnostic_origins.selected_target_C_witness.c",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/abi/dump_abi_witness.c",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/abi/parser_public_abi_compile_witness.c",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/abi/perf_pages_abi_witness.c",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/abi/runtime_state_actual_header_witness.c",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/abi/rusage_actual_header_witness.c",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/abi/selected_target_stat_dirent_ABI.c",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/accepted_host_root.assigned_memory_dependency_join.rs",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/build_whole70.py",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_cli_parsers_ikc_shared.rs",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_configuration_report.rs",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_create_os_environment.rs",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_dump.rs",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_environment.rs",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_eventfd.rs",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_ikc.rs",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_ikc_map.rs",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_kmsg_control.rs",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_legacy_data.rs",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_mcstat_memory_shared_parser.rs",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_mcstat_shared_readable.rs",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_memory_os_and_os_assigned.rs",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_os_cpu.rs",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_os_instance_lifecycle.rs",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_os_kargs.rs",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_os_load_boot.rs",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_perf.rs",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_raw_strings.rs",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_runtime_state.rs",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_shutdown_freeze.rs",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_status_kmsg.rs",
+      "preimage": null,
+      "present": false
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/libihklib_whole70.rs",
+      "preimage": null,
+      "present": false
+    }
+  ],
+  "postimages": {
+    "/home/holden/mckernel/ihk/linux/user/CMakeLists.txt": {
+      "sha256": "b193917d629382406aa968ceaefea1b9f29f4de741510493f8c54772c025527d",
+      "bytes": 10456,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/build_ihkconfig.py": {
+      "sha256": "5ad48fb3de1349061fddd0c2a561028a35798336693ff1fc1db0086dc90807bc",
+      "bytes": 1341,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/build_ihkosctl.py": {
+      "sha256": "54327b9972cefa0a98e78ad6dcf549a8f154b0323a8e314f372744bd09ba428e",
+      "bytes": 1105,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/ihkconfig.rs": {
+      "sha256": "aa5a5efd598ccd0fbec61dd62aa599fe181e99b66ba70636bd2d3313244a4b2d",
+      "bytes": 23447,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/ihkosctl.rs": {
+      "sha256": "911d316f0672c2d0efde8154b1a309ade1fdb8fb5da1c56e467e8b30aa579613",
+      "bytes": 17788,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/Whole70ProducerQualified.cmake": {
+      "sha256": "e2bab67598cf86c8c90765f725c123e53430ae1588f2ff9553f2cbef5d03c8f0",
+      "bytes": 2349,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/abi/combined_selected_SDK_actual_header_ABI.c": {
+      "sha256": "df92feb1f21ae49ce9d8a5c2e5a1fc89ffee61e2aa0c5c6c5c17013e492b3acc",
+      "bytes": 1743,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/abi/diagnostic_origins.selected_target_C_witness.c": {
+      "sha256": "ba54b173d3e2efec723e8e6b6dec505a97070e1944b8fd03dd1a12a7a9e565c6",
+      "bytes": 3783,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/abi/dump_abi_witness.c": {
+      "sha256": "e50f855bc3dc7594b852d23255b2daeec338832769cc20f0de74f6176bcbef38",
+      "bytes": 5380,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/abi/parser_public_abi_compile_witness.c": {
+      "sha256": "b339cce16f9fa8959c784d9eb3c0e30d713c10c5faab00d20ce1a4eac7c6f636",
+      "bytes": 1170,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/abi/perf_pages_abi_witness.c": {
+      "sha256": "d5a83d0b6560f063cfa963bbd28dede8a4efc3fc8624142e8795935b02473f08",
+      "bytes": 2209,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/abi/runtime_state_actual_header_witness.c": {
+      "sha256": "3b8c37b3d2763cdc3078d2a757a11d86a8b3c48fe8dbfe38b9b8243f2caac1ce",
+      "bytes": 1041,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/abi/rusage_actual_header_witness.c": {
+      "sha256": "8c162fbcc6adeaf72b95e6db80c065ca1df17a132ba14ba8acedad549b937f3b",
+      "bytes": 990,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/abi/selected_target_stat_dirent_ABI.c": {
+      "sha256": "64962ed558bbd70e6a78753d7b41494f4e07d17444e06b5f002a40c1ebfb890b",
+      "bytes": 1313,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/accepted_host_root.assigned_memory_dependency_join.rs": {
+      "sha256": "f1b515fa9eceb75b2b912a9630641e663f21fa3ad06ab79b12d917492a9b22a2",
+      "bytes": 5325,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/build_whole70_qualified.py": {
+      "sha256": "5dd07dddecc790d69f218c4dd124a7fb0fd494d36362a4d702f25c9ae8edb7c6",
+      "bytes": 5180,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_cli_parsers_ikc_shared.rs": {
+      "sha256": "96c92ac93dc9b72116440387660610c86e2fec07656539dbe2e7e012b0011ae7",
+      "bytes": 9032,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_configuration_report.rs": {
+      "sha256": "54190163b43304a54c8656c5621727c966760725ecdd8ab204092e057d7a6984",
+      "bytes": 3780,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_create_os_environment.rs": {
+      "sha256": "fbb3c645ac23dadfb766c845506e93678a7c3de11a3a931a1d57c4449ae54b91",
+      "bytes": 19387,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_dump.rs": {
+      "sha256": "79ff3f621fd20b76665d98f8fc47677f106fcc4de483aa8b9a218d29cbb4aa42",
+      "bytes": 20305,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_environment.rs": {
+      "sha256": "0f97af3fe014193641686278e0e1e7d9b64b38f0a855a00792dfe0dc232f0577",
+      "bytes": 10591,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_eventfd.rs": {
+      "sha256": "77a7a43a2288f5393bf472d353521ca23192df0c2fa886b3018ef879e55b6862",
+      "bytes": 4411,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_ikc.rs": {
+      "sha256": "3f3317143cd576328d3757d81ef2a0d4148109321fc79f17fcfe3eabaff93dbf",
+      "bytes": 5936,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_ikc_map.rs": {
+      "sha256": "03feca1e0e717d243031decd821e3fb5777865aa5d508fe40253e65d423ddbed",
+      "bytes": 5927,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_kmsg_control.rs": {
+      "sha256": "9b9eef3f88d68543c9638f1190498c2740ec6121d841d23b335ad2bc1939aabe",
+      "bytes": 2890,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_legacy_data.rs": {
+      "sha256": "4d7ba9a97520ab1fef8f2ff00f7c32fe5a8c8d7015f6384c4168f886923c988b",
+      "bytes": 1874,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_mcstat_memory_shared_parser.rs": {
+      "sha256": "75d8fa2c77104a2f119aff0c5ee60da23089e06003b56f67b7fd79d2469e6601",
+      "bytes": 8009,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_mcstat_shared_readable.rs": {
+      "sha256": "8233bceea0acd9179cc2bfd822d6c97a613a4b808c81aa128e76a114c8f7942e",
+      "bytes": 4101,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_memory_os_and_os_assigned.rs": {
+      "sha256": "2daedcdf8c1a42e7d23ae83ae8e3f38adae83c785ba9b6d08e2a2b5928650ab7",
+      "bytes": 24330,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_os_cpu.rs": {
+      "sha256": "5cc4a2a96c0018368284ee38e4338cfce763ca6d5dcd45c58e06affe21fb37ed",
+      "bytes": 3373,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_os_instance_lifecycle.rs": {
+      "sha256": "2818b2c0f1385555ac75c4e7ecd84c49165320a9607f3d6a064c332969d59441",
+      "bytes": 1573,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_os_kargs.rs": {
+      "sha256": "d9f48968a9947f3a662317d6b61503a1cd295c4e0134a93b6327ce8efddb66b0",
+      "bytes": 4134,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_os_load_boot.rs": {
+      "sha256": "ff2cfce6c1080bfbebef90909c1430f7fa5aebf1c371df4c3acef827576eb40c",
+      "bytes": 4081,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_perf.rs": {
+      "sha256": "cae5525c2c8fe02d31c25e46e41f12cfce6dd742d6fd0c0c69ffaa98a32df204",
+      "bytes": 5872,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_raw_strings.rs": {
+      "sha256": "6edffa3721d54876c26ad277584cdb9f571ec8c72da891511d2faf250366dea8",
+      "bytes": 10763,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_runtime_state.rs": {
+      "sha256": "0fd576ceb1ee4f66faeb8688f04da2117975746fd70a5a2df0b8ca1b00516e12",
+      "bytes": 3535,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_shutdown_freeze.rs": {
+      "sha256": "e9a3b6d0d35d7344845d8030c4a675290d3f400ff72af3f617456ff2a23de72a",
+      "bytes": 4636,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_status_kmsg.rs": {
+      "sha256": "358c8a9bf5548745265f69bee1528be7cb1136d7df61747476959f3dd8baa440",
+      "bytes": 1372,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/libihklib_whole70.rs": {
+      "sha256": "06d61a8a66568dda04b691f5c26b666df3289e92e3cb4f26e28a28e3250c7232",
+      "bytes": 1662,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/ihk/linux/user/rust/whole70/rust_diagnostics.py": {
+      "sha256": "9747eff108f6d99018d14ef91520f55f234ddcadec5f956f24f62e84b373e43d",
+      "bytes": 6389,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/executer/user/CMakeLists.txt": {
+      "sha256": "9ae1f610f2d2641a6b75c9d30006b9b449d0943cce1da3d196140c391d539b11",
+      "bytes": 21907,
+      "mode": "0o600"
+    },
+    "/home/holden/mckernel/executer/user/rust/mcps.rs": {
+      "sha256": "11bbecd7a0a6f4d098bb737ccca1e64e974e7c91bcc124b989fdc40b552c3b53",
+      "bytes": 3902,
+      "mode": "0o600"
+    }
+  },
+  "actual_new_route_compilation": null,
+  "native_default_credit": false,
+  "pure_diagnostic_fixture": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/root-M15-canonical-diagnostic-qualifier-pure-1/WHOLE-JOIN.json",
+  "frozen_M14_inputs_mutated": false
+}

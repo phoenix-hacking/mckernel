@@ -1,3 +1,25 @@
+## Engineering cursor — 2026-10-24T21:10Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains COMPLETE35/35; M14/M15 remain OPEN. F02 genuine C slot ABI and
+retained-object observer PASS3.596314s; F06 nine-command ABI45/allocated partial
+PASS22.307246s. Neither proves native effects or whole-file retirement. F03 two
+request initializer fixes passed310 cases and current81 fullcrate17.324511s;
+canonical syscall_policy.rs is277c399f. Frozen M14 image inputs remain unchanged.
+
+The retained normal M14 build failed on missing generated output directories;
+all prior Rust outputs are reused. Independent normal retirementcc3f90f8 and
+NONNULL current postjoin1fa08bd7 accepted. Corrected copy2 pure validation PASS
+34.179781s. Next: publish/fetch exact source, fresh five-read admission, reviewed
+remaining image build. M15 canonical whole70 source producer/three CLI selectors
+are integrated source WIP; new SDK producer execution follows M14 in soleheavy.
+IHK upstream noninteractive auth failed once; exact local commits are retained in
+a verified bundle with restore instructions. No retry or fresh-clone claim.
+
+Snapshot12:13Z is stale. Actual receipts, not heartbeat, drive scheduling; CPU/peak
+memory and queue-latency estimates remain unknown where unmeasured. Evidence:
+`evidence/rust-cutover-engineering-checkpoint-20261024-2110/REVIEW.json`.
+
 ## Engineering cursor — 2026-10-24T20:30Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

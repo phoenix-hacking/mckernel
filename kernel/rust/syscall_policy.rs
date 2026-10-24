@@ -19471,6 +19471,16 @@ pub unsafe extern "C" fn terminate_mcexec_body_result(
         read_volatile(status_ptr),
     );
     write_volatile(nohost_ptr, 1);
+    // SAFETY: The caller owns this fresh, unpublished request. The selected
+    // Linux consumer ignores these five arguments; IDs and valid remain owned
+    // by the unchanged offload preparation/publication chain.
+    unsafe {
+        write_volatile(core::ptr::addr_of_mut!((*request).args[1]), 0);
+        write_volatile(core::ptr::addr_of_mut!((*request).args[2]), 0);
+        write_volatile(core::ptr::addr_of_mut!((*request).args[3]), 0);
+        write_volatile(core::ptr::addr_of_mut!((*request).args[4]), 0);
+        write_volatile(core::ptr::addr_of_mut!((*request).args[5]), 0);
+    }
     syscall(request, cpu)
 }
 
@@ -21192,6 +21202,16 @@ pub unsafe extern "C" fn perf_event_open_linux_fd_body_result(
         perf_event_open_nr as CULong,
     );
     write_volatile(core::ptr::addr_of_mut!((*request).args[0]), 0);
+    // SAFETY: The caller owns this fresh, unpublished request. The selected
+    // Linux consumer ignores these five arguments; IDs and valid remain owned
+    // by the unchanged offload preparation/publication chain.
+    unsafe {
+        write_volatile(core::ptr::addr_of_mut!((*request).args[1]), 0);
+        write_volatile(core::ptr::addr_of_mut!((*request).args[2]), 0);
+        write_volatile(core::ptr::addr_of_mut!((*request).args[3]), 0);
+        write_volatile(core::ptr::addr_of_mut!((*request).args[4]), 0);
+        write_volatile(core::ptr::addr_of_mut!((*request).args[5]), 0);
+    }
     let fd = syscall(request, cpu);
     if fd < 0 {
         return fd;

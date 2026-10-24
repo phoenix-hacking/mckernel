@@ -1,0 +1,28 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ATOMIC_CANONICAL_TWO_INITIALIZER_CORRECTNESS_INTEGRATION",
+  "at": "2026-10-24T21:01:05.044353+00:00",
+  "before_sha256": "c3cbf2b4107f23fef6fac1e85b2a3dff585651dd1c23c9333634f52cc0c21965",
+  "after_sha256": "277c399ffdc9eb2e89aa804319b0b479b105b556236da226ba958f7474765509",
+  "changed_functions": [
+    "terminate_mcexec_body_result",
+    "perf_event_open_linux_fd_body_result"
+  ],
+  "change": "Only volatile scalar args1..5 initialization before existing callbacks, preserved args0/claim/nohost/ID/valid/map semantics",
+  "source_patch_sha256": "867280b3eb7e80b514eeccbccec3e855a42f7b0bfface18f1ba8102630ef670c",
+  "actual_leaf_suffix": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/root-F03-request-header-correction-three-1/RESULT.json",
+    "sha256": "936108a7eedff57cc754406376716b34ab60d09077c1b422ef87a5ce38a23e98",
+    "bytes": 336
+  },
+  "actual_current81_fullcrate": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/root-F03-two-initializers-current81-fullcrate-1/RESULT.json",
+    "sha256": "6e63284a43b9abb796b8bd6823786c4ac702040240e48c006447a9edf748c0bb",
+    "bytes": 342
+  },
+  "genuine_source_and_actual_reviewer": "/root/m14_callback_review PASS_HOST_TWO_FRESH_REQUEST_INITIALIZERS_AND_SOURCE_INTEGRATION_READINESS",
+  "F02_read_binding": "Closed by actual81123b50 and independentm14_callback_review; no combined-cohort retroqualification",
+  "frozen_M14_attempt2_source_unchanged": true,
+  "current_default_image_native_credit": false,
+  "ACK_lifetime_hold_unchanged": true
+}
