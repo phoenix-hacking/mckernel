@@ -1,3 +1,21 @@
+## Engineering cursor — 2026-10-24T22:17Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 stays COMPLETE35/35; M14/M15 OPEN. Executor-only target compiled/linked rc0,
+then fullvalidator FAIL ownedforkoptionnotON. CMake ignored that option; syscall
+macro was absent. Normal retirement and independent physicalca8334/postjoin6d375
+accepted. DefaultOFF/nativeguard/source-property-order fix passed3CMake controls
+.154973s and integrated0ceb; realSDK Ccompile/image relink stillpending.
+
+Perf helper controlled regression PASS.237471s/CPU.210902:36positive across3backends,
+21negative/no-write,3NULL,10+4ABI. One fake callback type correction, no Rustrecompile;
+canonical helper8d42 nowreturnsnegative errno before pointer/page access. Current81
+rejoin/caller/default/native remainOPEN. M15 correctedsource18archive fetchedc76;
+15currentauthority published. Nextsoleheavy correctedSDK producer after freshquery
+and exactrelease; M14 source/C-onlyrelink prep and ordinary rejoin run in parallel.
+No new native or C-retirement credit; peak/whole-milestone percentages unmeasured.
+Evidence: `evidence/rust-cutover-engineering-checkpoint-20261024-2217/REVIEW.json`.
+
 ## Engineering cursor — 2026-10-24T22:00Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

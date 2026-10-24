@@ -20696,6 +20696,14 @@ pub unsafe extern "C" fn perf_mmap_body_result(
         core::ptr::null_mut(),
     );
 
+    // Defined-error successor: the actual mapping error is not a page pointer.
+    // Preserve its exact errno and perform no metadata access on this branch.
+    if rc < 0 {
+        return rc;
+    }
+
+    // SAFETY: The caller/provider must supply the original positive, writable,
+    // aligned mapping spanning both real metadata fields. No ownership is added.
     let page = rc as CULong as *mut u8;
     write_volatile(field_ptr::<CULong>(page, data_head_offset), 16);
     let capabilities = field_ptr::<CULong>(page, capabilities_offset);
