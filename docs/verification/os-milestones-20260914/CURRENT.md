@@ -1,3 +1,25 @@
+## Retained validation preflight failed; new token requires reconciliation — 2026-10-24 08:52 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains complete at35/35. M14/M15 remain open; engineering percentages unknown.
+Tool18565 returned exit1 before artifact validation: owner dcb48 still required
+an old COMMON_EXCLUSION namespace. New shared token204de6d0, device1828/inode116778,
+owner21172/start62928000 remains retained. Prior physical8a7/6ada acceptance predates
+this token and cannot clear it. Historical outer joins are unknown, not PASS.
+Namespace-only corrected owner ab137 is frozen; validator e3c/request6ab/copy80b7
+are unchanged. Next: source-bound fresh strict physical facts164ce90a, independent
+physical-only acceptance, then accepted c252 normal token release. No raw unlink,
+image rebuild, SDK launch or unchanged owner retry. The readonly/reconcile packet
+is private velocity15/m14-retained-validator-continuation-1/
+retained-owner-namespace-correction-1/ROOT-CURRENT-FAILED-PREVALIDATION-TOKEN.NEXT-OPERATIONS.json.
+
+Actual foreground executor3 acceptance c50858f9:18 commands, exact controlled C/Rust
+behavior transcripts,624 allocated sections,1.654124s wall/1.525755s CPU, all joined;
+CPU0 released. Tool cohort7 HOST commands PASS,0.577132s CPU. Neither supplies
+native/default/whole-file retirement. All six M14 owners continue whole-file source
+work; library owner reactivated for coherent provider integration. Review record:
+/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/ENGINEERING-REVIEW-20261024T0852.json.
+
 ## Retained image physical clearance accepted; validation next — 2026-10-24 08:40 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

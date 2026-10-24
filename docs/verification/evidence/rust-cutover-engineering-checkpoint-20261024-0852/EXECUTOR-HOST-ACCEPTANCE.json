@@ -1,0 +1,44 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ACCEPT_ACTUAL_HOST_FIXED_EXECUTOR_FIXTURES_ONLY",
+  "actual_result": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-executor-foreground-execution-3-allocated-sections/capture-1/RESULT.json",
+    "sha256": "5b1bd0bbc1c1c9a943bdc051e76a6a749fa75692ae749ca8b54139beeffbe3b6"
+  },
+  "commands_passed_joined": 18,
+  "wall_seconds": 1.6541244629770517,
+  "CPU_seconds": 1.525755,
+  "terminals": [
+    {
+      "plan": "overlay-1",
+      "capture": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-executor-foreground-execution-3-allocated-sections/capture-1/overlay-1/04-execute-C-reference-callback-fixture/stdout",
+      "terminal": "PASS overlay callbacks: events=157 allocations=16 opens=6 closes=2",
+      "bytes": 2710
+    },
+    {
+      "plan": "overlay-1",
+      "capture": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-executor-foreground-execution-3-allocated-sections/capture-1/overlay-1/05-execute-Rust-candidate-callback-fixture/stdout",
+      "terminal": "PASS overlay callbacks: events=157 allocations=16 opens=6 closes=2",
+      "bytes": 2710
+    },
+    {
+      "plan": "next-1-calloc-successor-1",
+      "capture": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-executor-foreground-execution-3-allocated-sections/capture-1/next-1-calloc-successor-1/04-execute-C-reference-worker-workflows/stdout",
+      "terminal": "PASS worker publication and join: allocations=11",
+      "bytes": 1002
+    },
+    {
+      "plan": "next-1-calloc-successor-1",
+      "capture": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-executor-foreground-execution-3-allocated-sections/capture-1/next-1-calloc-successor-1/05-execute-actual-Rust-worker-workflows/stdout",
+      "terminal": "PASS worker publication and join: allocations=11",
+      "bytes": 1002
+    }
+  ],
+  "scope_limits": [
+    "C/Rust controlled overlay and worker lifecycle provider workflows only.",
+    "No actual device/guest/thread lifecycle or native/default/whole executor acceptance.",
+    "Original two failures and all consumed/fresh grants/captures preserved."
+  ],
+  "CPU0_foreground_slot": "All18children joined/groupgone/closed; no foreground compiler/fixture remains. Root owns slot again.",
+  "model": "Existing compiled Rust object reused; no Rust or heavy recompilation."
+}
