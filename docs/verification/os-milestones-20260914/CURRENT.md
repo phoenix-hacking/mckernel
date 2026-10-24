@@ -1,3 +1,17 @@
+## Actual F01 compiler correction and memory behavior PASS — 2026-10-24 11:33 continuation
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+F01 bounded duplicate-declaration/register-union correction passed all11 commands,
+current78 private Rust/C ABI/allocated references/partial link; outer17.629107201s,
+inner17.506374136s, RustT3237/U553. Whole coredump remains C-selected/HOLD; no default
+or native acceptance. Whole-memory expert suffix passed288 corrected contracts,
+8legacy truncation sentinels,192C/Rust leaves,768selectors, CPU0.54798s. Reused objects;
+no Rust/ld replay. Writable callback storage still fails original RO gate.
+Genuine Linux library recorder stopped precompile on LLVM's actual calloc fold;
+sole bounded explicit-recorder correction is source-ready, awaiting narrow review.
+SDK failed-build current physical retirement accepted; source correction ready for
+publication/admission/release. M12 stays35/35, new C-retirement/native count0.
+
 ## SDK inert compiler failure and concrete execution queue — 2026-10-24 11:33 review
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

@@ -3,7 +3,7 @@
   "id": "M15",
   "scope_id": "project-owned-runtime-rust-cutover-v1-20261024",
   "title": "Complete Rust/assembly custom host modules and integration runtime",
-  "as_of": "2026-10-24T11:00:44.060056+00:00",
+  "as_of": "2026-10-24T11:43:50.774989+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user2026-10-24: custom code outside the Rocky/Linux baseline must be Rust, including loadable IHK/project modules; previous reviewed-assembly allowance retained.",
@@ -229,6 +229,11 @@
         "at": "2026-10-24T06:53:11.612587+00:00",
         "actual": "HOST controlled-body fixture passed1.230076s; warning/source fixes preserved.",
         "limits": "SDK objtool/layout/module/native unresolved; all3 Cwrappers still selected."
+      },
+      "current_increment": {
+        "at": "2026-10-24T11:43:50.774989+00:00",
+        "actual_progress": "Actual SDK first inert C layout probe compiled, Rust layout probe FAIL redundant no_std/unusedextern under unchanged -Dwarnings. No module phase; normal and independent physical retirement PASS, current postjoin nonnull. Inert-only4line correction source PASS, not executed.",
+        "engineering_percentage": null
       }
     },
     {
@@ -503,7 +508,11 @@
       "status": "open",
       "source_selection": "ihk/linux/user/CMakeLists.txt:21",
       "existing_rust": [],
-      "current_increment": "Current pinned user library is C; no Rust selector or ihk/linux/user/rust directory. Public exported ABI, request parsing, ioctl/sysfs/resources/BFD paths need reuse recovery or implementation.",
+      "current_increment": {
+        "at": "2026-10-24T11:43:50.774989+00:00",
+        "actual_progress": "Actual supported whole70 HOST Rust library seventeen commands PASS; no C runtime TU, retained CLI link only. Real target/default/native OPEN. Genuine Linux recorder preflight STOP before children unqualified calloc; exact compiler fold diagnosed, explicit tracked-calloc bounded source successor prepared. Original fake-statusHOLD preserved.",
+        "engineering_percentage": null
+      },
       "proof_gap": [
         "recover historically claimed ihklib_helpers.rs at an identified revision or implement against current ABI",
         "Rust selector and exported libihk ABI parity",
@@ -1316,6 +1325,18 @@
       "retired_C_boundaries": [],
       "engineering_percentage": null,
       "evidence": "docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-1052/REVIEW.json"
+    },
+    {
+      "at": "2026-10-24T11:43:50.774989+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "actual_delta": {
+        "M15-F01": "Actual SDK first inert C layout probe compiled, Rust layout probe FAIL redundant no_std/unusedextern under unchanged -Dwarnings. No module phase; normal and independent physical retirement PASS, current postjoin nonnull. Inert-only4line correction source PASS, not executed.",
+        "M15-F05": "Actual supported whole70 HOST Rust library seventeen commands PASS; no C runtime TU, retained CLI link only. Real target/default/native OPEN. Genuine Linux recorder preflight STOP before children unqualified calloc; exact compiler fold diagnosed, explicit tracked-calloc bounded source successor prepared. Original fake-statusHOLD preserved."
+      },
+      "new_native_qualified": 0,
+      "new_C_retired": 0,
+      "engineering_percentage": null,
+      "evidence": "docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-1133/REVIEW.json"
     }
   ]
 }

@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-24T11:00:44.060056+00:00",
+  "as_of": "2026-10-24T11:43:50.774989+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -409,6 +409,11 @@
         "at": "2026-10-24T06:53:11.612587+00:00",
         "owner_activity": "running actual turn confirmed at this checkpoint",
         "note": "Actual196node-accounting plus45logging/memcheck comparisons and corrected genuine fallback ABI accepted; new __kmalloc/__kfree/cache redirections source-only. Low-level allocator ownership remains active.",
+        "engineering_percentage": null
+      },
+      "current_increment": {
+        "at": "2026-10-24T11:43:50.774989+00:00",
+        "actual_progress": "Actual current78 bounded correction ALL11PASS, wall17.506374136 inner/17.629107201 outer. Rust T3237/U553;164 selected entries with genuine C ABI/allocated references and partial link. Held coredump C remains selected; default GCC14/newbody behavior/native OPEN. First duplicate-declaration/register-field compiler failure preserved.",
         "engineering_percentage": null
       }
     },
@@ -1527,6 +1532,11 @@
         "owner_activity": "running actual turn confirmed at this checkpoint",
         "note": "New genuine HOST snprintf NoWalk96 functional fixture passed .296803s outer; old invalid-mock96 failures retained. Full IRQ/registration source candidate and genuine ABI/native lifetimes remain open.",
         "engineering_percentage": null
+      },
+      "current_increment": {
+        "at": "2026-10-24T11:43:50.774989+00:00",
+        "actual_progress": "Actual current79 whole Rust/GCC9 ABI/100providers and24 C-data allocated families partial proof ALL9PASS; default GCC14/hardware/native open. No wholefile retirement.",
+        "engineering_percentage": null
       }
     },
     {
@@ -2140,6 +2150,11 @@
         "at": "2026-10-24T06:53:11.612587+00:00",
         "owner_activity": "running actual turn confirmed at this checkpoint",
         "note": "Actual498set/split+256error/log+660RSS accepted; new300flush/visitor/error comparisons PASS .474600s outer. Public split/lower geometry source candidates separate; production/default/native remain open.",
+        "engineering_percentage": null
+      },
+      "current_increment": {
+        "at": "2026-10-24T11:43:50.774989+00:00",
+        "actual_progress": "Actual four-command wide-behavior suffix PASS 288 corrected top contracts/8 legacy truncation sentinels/192 C-Rust leaves/768 selectors, .597037868wall/.54798CPU. Retained ET_REL10 exact bindings qualified WRITE=true, RO gate FAIL preserved; default GCC14/final pointer storage/native OPEN.",
         "engineering_percentage": null
       }
     },
@@ -2797,6 +2812,19 @@
       "retired_C_boundaries": [],
       "engineering_percentage": null,
       "evidence": "docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-1052/REVIEW.json"
+    },
+    {
+      "at": "2026-10-24T11:43:50.774989+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "actual_delta": {
+        "M14-F01": "Actual current78 bounded correction ALL11PASS, wall17.506374136 inner/17.629107201 outer. Rust T3237/U553;164 selected entries with genuine C ABI/allocated references and partial link. Held coredump C remains selected; default GCC14/newbody behavior/native OPEN. First duplicate-declaration/register-field compiler failure preserved.",
+        "M14-F04": "Actual current79 whole Rust/GCC9 ABI/100providers and24 C-data allocated families partial proof ALL9PASS; default GCC14/hardware/native open. No wholefile retirement.",
+        "M14-F05": "Actual four-command wide-behavior suffix PASS 288 corrected top contracts/8 legacy truncation sentinels/192 C-Rust leaves/768 selectors, .597037868wall/.54798CPU. Retained ET_REL10 exact bindings qualified WRITE=true, RO gate FAIL preserved; default GCC14/final pointer storage/native OPEN."
+      },
+      "new_native_qualified": 0,
+      "new_C_retired": 0,
+      "engineering_percentage": null,
+      "evidence": "docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-1133/REVIEW.json"
     }
   ]
 }

@@ -1,0 +1,10 @@
+--- a/modules/m15_rust_layout_probe.rs
++++ b/modules/m15_rust_layout_probe.rs
+@@ -1,7 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
+ //! Inert C/Rust ABI witness compiled only through the exact pinned SDK Kbuild.
+-#![no_std]
+-extern crate kernel;
+ use core::mem::{align_of, offset_of, size_of};
+ use kernel::bindings as b;
+ const MM_INNER: usize = offset_of!(b::mm_struct, __bindgen_anon_1);
