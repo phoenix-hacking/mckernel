@@ -1,3 +1,21 @@
+## Engineering cursor — 2026-10-24T22:47Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 COMPLETE35/35; M14/M15 OPEN. Actual canonical-source M15 SDK11 PASS,
+independently accepted: new Rust archive produced from real headers/source,
+strict libihk DSO plus three CLI links, 70 function/six data providers and
+caller imports4/13/0. Command wall11.480194s; CPU/peak unmeasured. Normal
+physical6c667/current02f834 accepted. No CLI/default/native/file retirement credit.
+
+Perf negative-error fix current81 wholecrate/retained-C rejoin PASS21.351829s.
+M14 corrected owned-fork selection source copy PASS9.040076s/CPU2.543238;
+retained COPY4 PASS.512253s,444files/70421267B. Next root soleheavy step is
+reviewed syscall-only compile/rawld image relink after actual final bindings,
+pure/publication/fresh admission. Reuse Rust objects and accepted M15 outputs.
+Controlled NMI fixture review overlaps; no native/hardware job. Old failures
+preserved; no percentages, speedup or extra C-retirement credit inferred.
+Evidence: `evidence/rust-cutover-engineering-checkpoint-20261024-2247/REVIEW.json`.
+
 ## Engineering cursor — 2026-10-24T22:17Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
