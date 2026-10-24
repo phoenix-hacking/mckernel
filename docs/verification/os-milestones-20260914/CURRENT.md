@@ -1,3 +1,23 @@
+## SDK inert compiler failure and concrete execution queue — 2026-10-24 11:33 review
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains35/35. SDK actual first C layout probe compiled; Rust probe failed
+redundant no_std/unused extern crate under unchanged -Dwarnings. No module phase
+ran. Normal owned cleanup passed; fresh PROC/mutex observations returned0 with
+clean whole joins; independent final physical retirement now PASS. No new
+native qualification or retired C boundary. Four-line inert-only successor7fabcb49
+has independent source PASS, not compiler validation. Original failure retained.
+
+Root next: final physical binding, then corrected SDK exact admission/release;
+F01 current78 first compile failed two concrete Rust source errors (duplicate cache
+allocator declaration and nonexistent register field); sole author bounded correction
+is assigned, original failure retained. Approved genuine-Linux-recorder
+15-command library behavior job supply independent ordinary work. Retained image
+uses bound forty-command reuse plus ten genuine suffix commands, no image rebuild.
+Memory behavior suffix reuses actual derivative/tiny object, no Rust/ld replay.
+CPU/process/memory/syscall private source owners were positively reactivated.
+Overall effort percentages and peak memory remain unmeasured. See1133 REVIEW.json.
+
 ## Actual CPU whole-crate qualification; retained image warning mismatch — 2026-10-24 10:52 review
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
