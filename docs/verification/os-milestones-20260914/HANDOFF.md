@@ -1,3 +1,23 @@
+## Engineering cursor — 2026-10-24T17:44Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains35/35; M14/M15 OPEN, percentages unmeasured. COPY6 normal retirement
+PASS_EXECUTED and independent physical PASS6c5acdd2; current_live_postjoin repaired
+NONNULL9133afff. Container removed normally, two ownership records archived, failure
+537B log preserved, permanent27:4 unchanged. No artifact acceptance from retirement.
+F06 context actual9 commands PASS18.629622wall/18.495297CPU, real20wordABI and typed
+allocated references/partial link accepted; no liveGS/TSS/default/native credit.
+F02 boundedRust+link4 PASS; retained observer misread NOBITS and import resolution,
+expert-bound observer successor pending. F03 actualRust/C PASS, ABI consumer lacked
+one genuine extern; bounded seven-command suffix ready, successful objects reused.
+Normalcurrent81 five-readonly observations PASS.307964wall/.253839CPU; exact final
+GCC14 heavy release under review after source publication and real37s validation.
+SDK ten actual producers retained; five-suffix/sourcepublication ready, no DSO yet.
+Canonical runtime remains current81; CPU37/context private proof awaits next coherent
+union, not silently installed into the frozen build. No new whole-file/native credit.
+Evidence: evidence/m14-copy6-normal-retirement-20261024-1/RETENTION.json and
+ evidence/m14-context-current81-qualification-20261024-1/.
+
 ## Engineering cursor — 2026-10-24T17:27Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
