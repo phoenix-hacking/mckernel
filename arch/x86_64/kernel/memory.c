@@ -36,7 +36,13 @@
 #define DDEBUG_DEFAULT DDEBUG_PRINT
 #endif
 
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 39 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
 static char *last_page;
+#endif
+#line 39 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
 extern char _head[], _end[];
 
 extern unsigned long linux_page_offset_base;
@@ -294,16 +300,27 @@ void arch_adjust_allocate_page_size(struct page_table *pt,
 }
 #endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+unsigned long x86_arch_mem_virt_to_phys_bridge(void *addr);
+#else
 X86_MEMORY_PUBLIC_BRIDGE unsigned long x86_arch_mem_virt_to_phys_bridge(void *addr)
 {
 	return virt_to_phys(addr);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void *x86_arch_mem_phys_to_virt_bridge(unsigned long phys);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void *x86_arch_mem_phys_to_virt_bridge(unsigned long phys)
 {
 	return phys_to_virt(phys);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_early_alloc_panic_bridge(int reason);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_early_alloc_panic_bridge(int reason)
 {
 	switch (reason) {
@@ -315,26 +332,46 @@ X86_MEMORY_PUBLIC_BRIDGE void x86_early_alloc_panic_bridge(int reason)
 		break;
 	}
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void **x86_early_alloc_last_page_slot_bridge(void);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void **x86_early_alloc_last_page_slot_bridge(void)
 {
 	return (void **)&last_page;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+unsigned long x86_early_alloc_end_bridge(void);
+#else
 X86_MEMORY_PUBLIC_BRIDGE unsigned long x86_early_alloc_end_bridge(void)
 {
 	return (unsigned long)_end;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+unsigned long x86_bootstrap_mem_end_bridge(void);
+#else
 X86_MEMORY_PUBLIC_BRIDGE unsigned long x86_bootstrap_mem_end_bridge(void)
 {
 	return bootstrap_mem_end;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_early_alloc_invalidate_bridge(void);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_early_alloc_invalidate_bridge(void)
 {
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_mem_cpuid_edx_bridge(unsigned long op, unsigned long *edxp);
+#else
 static void x86_mem_cpuid_edx_bridge(unsigned long op, unsigned long *edxp)
 {
 	unsigned long edx;
@@ -342,7 +379,11 @@ static void x86_mem_cpuid_edx_bridge(unsigned long op, unsigned long *edxp)
 	asm ("cpuid" : "=d" (edx) : "a" (op) : "%rbx", "%rcx");
 	*edxp = edx;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+extern void x86_mem_log_int_bridge(int event, int value);
+#else
 static void x86_mem_log_int_bridge(int event, int value)
 {
 	switch (event) {
@@ -351,7 +392,11 @@ static void x86_mem_log_int_bridge(int event, int value)
 		break;
 	}
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+extern void x86_mem_log_bridge(int event);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_mem_log_bridge(int event)
 {
 	switch (event) {
@@ -365,21 +410,68 @@ X86_MEMORY_PUBLIC_BRIDGE void x86_mem_log_bridge(int event)
 		break;
 	}
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void *x86_kmalloc_bridge(int size, int flag);
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 411 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+const char x86_memory_kmalloc_file[] = __FILE__;
+#endif
+#line 411 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 412 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+const int x86_memory_kmalloc_line = 383;
+#endif
+#line 412 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+#else
+#line 381
 X86_MEMORY_PUBLIC_BRIDGE void *x86_kmalloc_bridge(int size, int flag)
 {
 	return kmalloc_tracked(size, flag, __FILE__, __LINE__);
 }
+#endif
+#line 385
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+int x86_kmalloc_initialized_bridge(void);
+#else
+#line 386
 X86_MEMORY_PUBLIC_BRIDGE int x86_kmalloc_initialized_bridge(void)
 {
 	return get_this_cpu_local_var()->kmalloc_initialized;
 }
+#endif
+#line 390
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_kfree_bridge(void *ptr);
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 393 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+const char x86_memory_kfree_file[] = __FILE__;
+#endif
+#line 393 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 394 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+const int x86_memory_kfree_line = 393;
+#endif
+#line 394 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+#else
+#line 391
 X86_MEMORY_PUBLIC_BRIDGE void x86_kfree_bridge(void *ptr)
 {
 	kfree_tracked(ptr, __FILE__, __LINE__);
 }
+#endif
+#line 395
 
 /* Arch specific early allocation routine */
 #ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
@@ -438,10 +530,34 @@ struct page_table {
 	pte_t entry[PT_ENTRIES];
 };
 
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 453 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
 static struct page_table *init_pt;
+#endif
+#line 453 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 454 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
 static struct page_table *boot_pt;
+#endif
+#line 454 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 455 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
 static int init_pt_loaded = 0;
+#endif
+#line 455 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 456 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
 static ihk_spinlock_t init_pt_lock;
+#endif
+#line 456 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
 
 void load_page_table(struct page_table *pt);
 void init_text_area(struct page_table *pt);
@@ -459,15 +575,23 @@ X86_MEMORY_PUBLIC_BRIDGE void *x86_pt_phys_to_virt_bridge(unsigned long phys);
 X86_MEMORY_PUBLIC_BRIDGE void x86_pt_free_pages_bridge(void *pt, int nr_pages);
 X86_MEMORY_PUBLIC_BRIDGE void x86_pt_destroy_panic_bridge(int reason);
 X86_MEMORY_PUBLIC_BRIDGE void x86_pt_destroy_helper_failed_panic_bridge(void);
-static void x86_pt_set_page_log_bridge(unsigned long virt);
+X86_MEMORY_PUBLIC_BRIDGE void x86_pt_set_page_log_bridge(unsigned long virt);
 
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 476 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
 static int use_1gb_page = 0;
+#endif
+#line 476 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
 
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 static void check_available_page_size(void)
 {
 	x86_check_available_page_size_body_result(&use_1gb_page,
 			x86_mem_cpuid_edx_bridge, x86_mem_log_int_bridge);
 }
+#endif
 
 static unsigned long setup_l2(struct page_table *pt,
                               unsigned long page_head, unsigned long start,
@@ -496,6 +620,9 @@ static struct page_table *__alloc_new_pt(ihk_mc_ap_flag ap_flag)
  *      but L2 and L1 do not!
  */
 
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 513 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
 enum ihk_mc_pt_attribute attr_mask
 		= 0
 		| PTATTR_FILEOFF
@@ -503,12 +630,19 @@ enum ihk_mc_pt_attribute attr_mask
 		| PTATTR_USER
 		| PTATTR_ACTIVE
 		| 0;
+#endif
+#line 519 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
 #define	ATTR_MASK	attr_mask
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+unsigned long x86_attr_mask_bridge(void);
+#else
 X86_MEMORY_PUBLIC_BRIDGE unsigned long x86_attr_mask_bridge(void)
 {
 	return ATTR_MASK;
 }
+#endif
 
 #ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 void enable_ptattr_no_execute(void)
@@ -524,6 +658,14 @@ static unsigned long attr_to_l4attr(enum ihk_mc_pt_attribute attr)
 	return (attr & ATTR_MASK) | PFL4_PRESENT;
 }
 #endif
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+unsigned long x86_attr_to_l3attr_public(enum ihk_mc_pt_attribute);
+#define attr_to_l3attr x86_attr_to_l3attr_public
+unsigned long x86_attr_to_l2attr_public(enum ihk_mc_pt_attribute);
+#define attr_to_l2attr x86_attr_to_l2attr_public
+unsigned long x86_attr_to_l1attr_public(enum ihk_mc_pt_attribute);
+#define attr_to_l1attr x86_attr_to_l1attr_public
+#else
 static unsigned long attr_to_l3attr(enum ihk_mc_pt_attribute attr)
 {
 	return x86_attr_to_l3attr_result(attr, ATTR_MASK);
@@ -536,6 +678,7 @@ static unsigned long attr_to_l1attr(enum ihk_mc_pt_attribute attr)
 {
 	return x86_attr_to_l1attr_result(attr, ATTR_MASK);
 }
+#endif
 
 #define PTLX_SHIFT(index) PTL ## index ## _SHIFT
 
@@ -626,11 +769,14 @@ pte_t *get_pte(struct page_table *pt, void *virt, enum ihk_mc_pt_attribute attr,
 }
 #endif
 
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 static void x86_pt_set_page_log_bridge(unsigned long virt)
 {
 	kprintf("EBUSY: page table for 0x%lX is already set\n", virt);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 static int __set_pt_page(struct page_table *pt, void *virt, unsigned long phys,
                          enum ihk_mc_pt_attribute attr)
 {
@@ -653,6 +799,7 @@ static int __set_pt_page(struct page_table *pt, void *virt, unsigned long phys,
 	}
 	return ret;
 }
+#endif
 
 #ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 static int __clear_pt_page(struct page_table *pt, void *virt, int largepage)
@@ -684,6 +831,10 @@ int ihk_mc_pt_virt_to_phys(struct page_table *pt,
 }
 #endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_pt_print_log_bridge(int event, int level,
+		unsigned long value, int index);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_pt_print_log_bridge(int event, int level,
 		unsigned long value, int index)
 {
@@ -706,6 +857,7 @@ X86_MEMORY_PUBLIC_BRIDGE void x86_pt_print_log_bridge(int event, int level,
 		break;
 	}
 }
+#endif
 
 #ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 int ihk_mc_pt_print_pte(struct page_table *pt, void *virt)
@@ -745,21 +897,63 @@ int ihk_mc_pt_set_page(page_table_t pt, void *virt,
 }
 #endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+/* Original allocator trace callsite and real C geometry, data only. */
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 786 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+const char x86_pt_alloc_pages_file[] = __FILE__;
+#endif
+#line 786 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 787 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+const int x86_pt_alloc_pages_line = 750;
+#endif
+#line 787 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 788 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+const int x86_pt_alloc_pages_p2align = PAGE_P2ALIGN;
+#endif
+#line 788 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 789 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+const int x86_pt_alloc_pages_is_user = IHK_MC_PG_KERNEL;
+#endif
+#line 789 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+#else
+#line 748
 X86_MEMORY_PUBLIC_BRIDGE void *x86_pt_alloc_pages_bridge(int nr_pages, int ap_flag)
 {
 	return _ihk_mc_alloc_aligned_pages_node(nr_pages, PAGE_P2ALIGN, (ihk_mc_ap_flag)ap_flag, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
 }
+#endif
+#line 766
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+unsigned long x86_pt_virt_to_phys_bridge(void *addr);
+#else
 unsigned long x86_pt_virt_to_phys_bridge(void *addr)
 {
 	return virt_to_phys(addr);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+int x86_pt_set_page_bridge(void *pt,unsigned long virt,unsigned long phys,unsigned long attr);
+#else
 X86_MEMORY_PUBLIC_BRIDGE int x86_pt_set_page_bridge(void *pt, unsigned long virt,
 		unsigned long phys, unsigned long attr)
 {
 	return __set_pt_page(pt, (void *)virt, phys, attr);
 }
+#endif
 
 #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 int ihk_mc_pt_prepare_map(page_table_t p, void *virt, unsigned long size,
@@ -797,16 +991,50 @@ static void destroy_page_table(int level, struct page_table *pt)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void *x86_pt_phys_to_virt_bridge(unsigned long phys);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void *x86_pt_phys_to_virt_bridge(unsigned long phys)
 {
 	return phys_to_virt(phys);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+/* Original PTfree tracking callsite; data only, no C runtime provider. */
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 833 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+const char x86_pt_free_pages_file[] = __FILE__;
+#endif
+#line 833 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 834 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+const int x86_pt_free_pages_line = 807;
+#endif
+#line 834 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 835 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+const int x86_pt_free_pages_flag = IHK_MC_PG_KERNEL;
+#endif
+#line 835 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+#else
+#line 805
 X86_MEMORY_PUBLIC_BRIDGE void x86_pt_free_pages_bridge(void *pt, int nr_pages)
 {
 	_ihk_mc_free_pages(pt, nr_pages, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
 }
+#endif
+#line 836
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_pt_destroy_panic_bridge(int reason);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_pt_destroy_panic_bridge(int reason)
 {
 	if (reason == X86_PT_DESTROY_PANIC_LEVEL) {
@@ -816,11 +1044,16 @@ X86_MEMORY_PUBLIC_BRIDGE void x86_pt_destroy_panic_bridge(int reason)
 		panic("destroy_page_table: pt is NULL");
 	}
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_pt_destroy_helper_failed_panic_bridge(void);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_pt_destroy_helper_failed_panic_bridge(void)
 {
 	panic("destroy_page_table: helper failed");
 }
+#endif
 
 #ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 static void x86_pt_destroy_bridge(int level, void *pt)
@@ -901,38 +1134,90 @@ static int walk_pte_l4(struct page_table *pt, uint64_t base, uint64_t start,
 }
 #endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void *x86_split_alloc_new_pt_bridge(int nr_pages,int ap_flag);
+#else
 static void *x86_split_alloc_new_pt_bridge(int nr_pages, int ap_flag)
 {
 	if (nr_pages != 1)
 		return NULL;
 	return __alloc_new_pt((ihk_mc_ap_flag)ap_flag);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void *x86_split_phys_to_page_bridge(unsigned long phys);
+#else
 static void *x86_split_phys_to_page_bridge(unsigned long phys)
 {
 	return phys_to_page(phys);
 }
+#endif
 
+
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_split_page_map_bridge(void *page);
+#else
 static void x86_split_page_map_bridge(void *page)
 {
 	page_map(page);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_split_rss_add_bridge(size_t size, size_t pgsize);
+#else
 static void x86_split_rss_add_bridge(size_t size, size_t pgsize)
 {
 	memory_stat_rss_add(size, pgsize);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_split_rss_sub_bridge(size_t size, size_t pgsize);
+#else
 static void x86_split_rss_sub_bridge(size_t size, size_t pgsize)
 {
 	memory_stat_rss_sub(size, pgsize);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+int x86_split_page_unmap_bridge(void *page);
+#else
 static int x86_split_page_unmap_bridge(void *page)
 {
 	return page_unmap(page);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 997 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_split_rss_add_debug = {
+	.file = __FILE__, .func = "x86_split_log_bridge",
+	.line = 966, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 1001 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 1002 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_split_rss_sub_debug = {
+	.file = __FILE__, .func = "x86_split_log_bridge",
+	.line = 970, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 1006 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+void x86_split_log_bridge(int event, unsigned long value, size_t size,
+		size_t pgsize, void *page);
+#else
+#line 955
 static void x86_split_log_bridge(int event, unsigned long value, size_t size,
 		size_t pgsize, void *page)
 {
@@ -958,11 +1243,18 @@ static void x86_split_log_bridge(int event, unsigned long value, size_t size,
 		break;
 	}
 }
+#endif
+#line 1030
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_split_panic_bridge(void);
+#else
 static void x86_split_panic_bridge(void)
 {
 	panic("split_large_page:page_unmap\n");
 }
+#endif
+#line 1040
 
 static int split_large_page(pte_t *ptep, size_t pgsize)
 {
@@ -1042,6 +1334,9 @@ static int x86_visit_walk_l1_bridge(void *pt, unsigned long base,
 }
 #endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_visit_pte_log_bridge(int event,int level_shift);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_visit_pte_log_bridge(int event,
 		int level_shift)
 {
@@ -1061,6 +1356,7 @@ X86_MEMORY_PUBLIC_BRIDGE void x86_visit_pte_log_bridge(int event,
 		break;
 	}
 }
+#endif
 
 #ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 static int visit_pte_l2(void *arg0, pte_t *ptep, uintptr_t base,
@@ -1335,7 +1631,25 @@ static void *x86_clear_phys_to_virt_bridge(unsigned long phys)
 
 #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 extern void x86_clear_free_pages_user_bridge(void *addr, int nr_pages);
-const char x86_clear_free_pages_user_file[] = __FILE__; const int x86_clear_free_pages_user_line = __LINE__; const int x86_clear_free_pages_user_flag = IHK_MC_PG_USER;
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 1416 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+const char x86_clear_free_pages_user_file[] = __FILE__;
+#endif
+#line 1416 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+ 
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 1416 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+const int x86_clear_free_pages_user_line = __LINE__;
+#endif
+#line 1416 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+ 
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 1416 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+const int x86_clear_free_pages_user_flag = IHK_MC_PG_USER;
+#endif
+#line 1416 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
 #else
 static void x86_clear_free_pages_user_bridge(void *addr, int nr_pages)
 {
@@ -1372,6 +1686,55 @@ static void x86_clear_memobj_rss_sub_bridge(void *memobj, size_t size,
 }
 #endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+extern void x86_clear_effect_log_bridge(int event, unsigned long base,
+		unsigned long phys, size_t pgsize);
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 1456 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_clear_effect_free_anon_debug = {
+    .file = __FILE__, .func = "x86_clear_effect_log_bridge", .fmt = NULL,
+    .line = 1380, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 1460 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 1461 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_clear_effect_xpmem_keep_debug = {
+    .file = __FILE__, .func = "x86_clear_effect_log_bridge", .fmt = NULL,
+    .line = 1384, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 1465 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 1466 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_clear_effect_free_unmapped_debug = {
+    .file = __FILE__, .func = "x86_clear_effect_log_bridge", .fmt = NULL,
+    .line = 1387, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 1470 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 1471 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_clear_effect_child_free_debug = {
+    .file = __FILE__, .func = "x86_clear_effect_log_bridge", .fmt = NULL,
+    .line = 1391, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 1475 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+#else
+#line 1375
 static void x86_clear_effect_log_bridge(int event, unsigned long base,
 		unsigned long phys, size_t pgsize)
 {
@@ -1395,6 +1758,8 @@ static void x86_clear_effect_log_bridge(int event, unsigned long base,
 		break;
 	}
 }
+#endif
+#line 1503
 
 #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 extern void x86_clear_range_top_log_bridge(int event, void *pt,
@@ -1418,6 +1783,23 @@ X86_MEMORY_PUBLIC_BRIDGE void x86_clear_range_top_log_bridge(int event, void *pt
 }
 #endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+extern void x86_clear_range_log_bridge(int event, void *args,
+		unsigned long *ptep, unsigned long base, unsigned long start,
+		unsigned long end, int error, int level_shift, unsigned long phys);
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 1530 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_clear_range_large_phys_debug = {
+    .file = __FILE__, .func = "x86_clear_range_log_bridge", .fmt = NULL,
+    .line = 1446, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 1534 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+#else
+#line 1421
 static void x86_clear_range_log_bridge(int event, void *args,
 		unsigned long *ptep, unsigned long base, unsigned long start,
 		unsigned long end, int error, int level_shift, unsigned long phys)
@@ -1450,6 +1832,8 @@ static void x86_clear_range_log_bridge(int event, void *args,
 		break;
 	}
 }
+#endif
+#line 1571
 
 #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 /* Private clear-range layout consumed by the Rust old-entry callback. */
@@ -1557,7 +1941,13 @@ static int x86_clear_range_walk_l1_bridge(void *pt, unsigned long base,
 
 #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 /* Synchronous existing L1 C walker identity; its lower chain remains C debt. */
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 1678 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
 x86_clear_child_walk_fn_t const x86_clear_l2_child_walk = &x86_clear_range_walk_l1_bridge;
+#endif
+#line 1678 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
 extern int clear_range_l2(void *args0, pte_t *ptep, uint64_t base,
         uint64_t start, uint64_t end);
 #else
@@ -1600,13 +1990,55 @@ static int x86_clear_range_walk_l2_bridge(void *pt, unsigned long base,
 
 #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 /* Typed immutable identities; remaining C providers are tracked independently. */
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 1721 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
 x86_clear_child_walk_fn_t const x86_clear_l3_child_walk = &x86_clear_range_walk_l2_bridge;
+#endif
+#line 1721 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 1722 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
 x86_clear_flush_memobj_fn_t const x86_clear_l3_memobj_flush = &x86_clear_memobj_flush_bridge;
+#endif
+#line 1722 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 1723 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
 x86_clear_rss_sub_fn_t const x86_clear_l3_rss_sub = &x86_clear_rss_sub_bridge;
+#endif
+#line 1723 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 1724 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
 x86_clear_memobj_rss_sub_fn_t const x86_clear_l3_memobj_rss_sub = &x86_clear_memobj_rss_sub_bridge;
+#endif
+#line 1724 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 1725 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
 x86_clear_range_log_fn_t const x86_clear_l3_range_log = &x86_clear_range_log_bridge;
+#endif
+#line 1725 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 1726 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
 x86_clear_effect_log_fn_t const x86_clear_l3_effect_log = &x86_clear_effect_log_bridge;
+#endif
+#line 1726 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 1727 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
 const int *const x86_clear_l3_use_1gb_page = &use_1gb_page;
+#endif
+#line 1727 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
 extern int clear_range_l3(void *args0, pte_t *ptep, uint64_t base,
         uint64_t start, uint64_t end);
 #else
@@ -1649,8 +2081,14 @@ static int x86_clear_range_walk_l3_bridge(void *pt, unsigned long base,
 
 #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 /* Same synchronous L3 walker identity; the default body is supplied by Rust. */
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 1770 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
 int (*const x86_clear_range_l3_callback)(void *, unsigned long,
         unsigned long, unsigned long, void *) = &x86_clear_range_walk_l3_bridge;
+#endif
+#line 1771 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
 extern int x86_clear_range_l4_body(void *args0, pte_t *ptep, uint64_t base,
         uint64_t start, uint64_t end);
 #else
@@ -1667,8 +2105,14 @@ static int clear_range_l4(void *args0, pte_t *ptep, uint64_t base,
 
 #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 /* Immutable callback identity; the retained private C callback chain remains C debt. */
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 1788 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
 int (*const x86_clear_range_l4_callback)(void *, pte_t *, uint64_t,
         uint64_t, uint64_t) = &x86_clear_range_l4_body;
+#endif
+#line 1789 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
 extern int x86_clear_range_walk_l4_bridge(void *pt, unsigned long base,
         unsigned long start, unsigned long end, void *args);
 #else
@@ -1752,6 +2196,7 @@ int ihk_mc_pt_free_range(page_table_t pt, struct process_vm *vm,
 }
 #endif
 
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 static int x86_set_range_clear_bridge(void *pt, void *vm,
 		unsigned long start, unsigned long end, int free_physical,
 		void *memobj)
@@ -1770,6 +2215,58 @@ static int x86_set_range_rss_add_bridge(void *range, unsigned long phys,
 	return rusage_memory_stat_add(range, phys, size, pgsize);
 }
 
+#endif
+
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 1895 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_set_range_map_2m_debug = {
+	.file = __FILE__, .func = "x86_set_range_log_bridge",
+	.line = 1942, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 1899 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 1900 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_set_range_map_1g_debug = {
+	.file = __FILE__, .func = "x86_set_range_log_bridge",
+	.line = 1945, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 1904 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 1905 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_set_range_rss_add_debug = {
+	.file = __FILE__, .func = "x86_set_range_log_bridge",
+	.line = 1950, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 1909 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 1910 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_set_range_rss_skip_debug = {
+	.file = __FILE__, .func = "x86_set_range_log_bridge",
+	.line = 1955, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 1914 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+void x86_set_range_log_bridge(int event, int level_shift,
+		unsigned long base, unsigned long start, unsigned long end,
+		int error, unsigned long pte, unsigned long phys, size_t size,
+		size_t pgsize, int rss_called);
+#else
 static const char *x86_set_range_fn_name(int level_shift)
 {
 	switch (level_shift) {
@@ -1841,6 +2338,8 @@ static void x86_set_range_log_bridge(int event, int level_shift,
 		break;
 	}
 }
+
+#endif
 
 #if 0
 struct change_attr_args {
@@ -1942,6 +2441,10 @@ static int change_attr_range_l4(void *arg0, pte_t *ptep, uint64_t base,
 }
 #endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+int ihk_mc_pt_change_attr_range(page_table_t,void *,void *,
+		enum ihk_mc_pt_attribute,enum ihk_mc_pt_attribute);
+#else
 int ihk_mc_pt_change_attr_range(page_table_t pt, void *start0, void *end0,
 		enum ihk_mc_pt_attribute clrattr,
 		enum ihk_mc_pt_attribute setattr)
@@ -1953,7 +2456,9 @@ int ihk_mc_pt_change_attr_range(page_table_t pt, void *start0, void *end0,
 			attr_to_l1attr(clrattr), attr_to_l1attr(setattr),
 			x86_pt_phys_to_virt_bridge);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 static pte_t *lookup_pte(struct page_table *pt, uintptr_t virt, int pgshift,
 		uintptr_t *basep, size_t *sizep, int *p2alignp)
 {
@@ -1970,7 +2475,34 @@ static pte_t *lookup_pte(struct page_table *pt, uintptr_t virt, int pgshift,
 	if (p2alignp) *p2alignp = p2align;
 	return ptep;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 2131 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_lookup_enter_debug = {
+	.file = __FILE__, .func = "ihk_mc_pt_lookup_pte",
+	.line = 2041, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2135 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 2136 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_lookup_exit_debug = {
+	.file = __FILE__, .func = "ihk_mc_pt_lookup_pte",
+	.line = 2046, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2140 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+pte_t *ihk_mc_pt_lookup_pte(page_table_t pt,void *virt,int pgshift,void **basep,size_t *sizep,int *p2alignp);
+#else
+#line 2033
 pte_t *ihk_mc_pt_lookup_pte(page_table_t pt, void *virt, int pgshift,
 		void **basep, size_t *sizep, int *p2alignp)
 {
@@ -1988,6 +2520,9 @@ pte_t *ihk_mc_pt_lookup_pte(page_table_t pt, void *virt, int pgshift,
 			pt, virt, pgshift, ptep, base, size, p2align);
 	return ptep;
 }
+#endif
+#line 2127
+
 
 struct set_range_args {
 	page_table_t pt;
@@ -1999,6 +2534,121 @@ struct set_range_args {
 	struct vm_range *range; /* To find pages we don't need to call memory_stat_rss_add() */
 };
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+struct x86_set_range_log_geometry {
+	unsigned long range_start_offset, range_end_offset;
+};
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 2143 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+const struct x86_set_range_log_geometry x86_set_range_log_geometry = {
+	__builtin_offsetof(struct vm_range, start),
+	__builtin_offsetof(struct vm_range, end),
+};
+#endif
+#line 2146 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+_Static_assert(sizeof(enum ihk_mc_pt_attribute)==8 &&
+	(__builtin_types_compatible_p(enum ihk_mc_pt_attribute,unsigned long) ||
+	 __builtin_types_compatible_p(enum ihk_mc_pt_attribute,unsigned long long)),
+	"actual full-width set-range enum ABI");
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 2151 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_set_range_l1_enter_debug = { .file = __FILE__, .func = "set_range_l1",
+	.line = 2145, .flags = DDEBUG_DEFAULT };
+#endif
+#line 2153 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 2154 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_set_range_l1_exit_debug = { .file = __FILE__, .func = "set_range_l1",
+	.line = 2153, .flags = DDEBUG_DEFAULT };
+#endif
+#line 2156 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 2157 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_set_range_l2_enter_debug = { .file = __FILE__, .func = "set_range_l2",
+	.line = 2170, .flags = DDEBUG_DEFAULT };
+#endif
+#line 2159 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 2160 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_set_range_l2_exit_debug = { .file = __FILE__, .func = "set_range_l2",
+	.line = 2182, .flags = DDEBUG_DEFAULT };
+#endif
+#line 2162 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 2163 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_set_range_l3_enter_debug = { .file = __FILE__, .func = "set_range_l3",
+	.line = 2199, .flags = DDEBUG_DEFAULT };
+#endif
+#line 2165 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 2166 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_set_range_l3_exit_debug = { .file = __FILE__, .func = "set_range_l3",
+	.line = 2211, .flags = DDEBUG_DEFAULT };
+#endif
+#line 2168 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 2169 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_set_range_l4_enter_debug = { .file = __FILE__, .func = "set_range_l4",
+	.line = 2228, .flags = DDEBUG_DEFAULT };
+#endif
+#line 2171 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 2172 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_set_range_l4_exit_debug = { .file = __FILE__, .func = "set_range_l4",
+	.line = 2240, .flags = DDEBUG_DEFAULT };
+#endif
+#line 2174 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 2175 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_set_range_top_enter_debug = { .file = __FILE__, .func = "ihk_mc_pt_set_range",
+	.line = 2258, .flags = DDEBUG_DEFAULT };
+#endif
+#line 2177 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 2178 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_set_range_top_exit_debug = { .file = __FILE__, .func = "ihk_mc_pt_set_range",
+	.line = 2268, .flags = DDEBUG_DEFAULT };
+#endif
+#line 2180 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+int set_range_l1(void *,pte_t *,uintptr_t,uintptr_t,uintptr_t);
+int set_range_l2(void *,pte_t *,uintptr_t,uintptr_t,uintptr_t);
+int set_range_l3(void *,pte_t *,uintptr_t,uintptr_t,uintptr_t);
+int set_range_l4(void *,pte_t *,uintptr_t,uintptr_t,uintptr_t);
+int ihk_mc_pt_set_range(page_table_t,struct process_vm *,void *,void *,uintptr_t,
+		enum ihk_mc_pt_attribute,int,struct vm_range *,int);
+#else
 int set_range_l1(void *args0, pte_t *ptep, uintptr_t base, uintptr_t start,
 		uintptr_t end)
 {
@@ -2133,6 +2783,11 @@ int ihk_mc_pt_set_range(page_table_t pt, struct process_vm *vm, void *start,
 	return error;
 }
 
+#endif
+
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_pt_set_pte_log_bridge(int event,void *pt,pte_t *ptep,size_t pgsize,unsigned long phys,unsigned long attr,int error,unsigned long current);
+#else
 static void x86_pt_set_pte_log_bridge(int event, void *pt, pte_t *ptep,
 		size_t pgsize, unsigned long phys, unsigned long attr,
 		int error, unsigned long current)
@@ -2154,12 +2809,43 @@ static void x86_pt_set_pte_log_bridge(int event, void *pt, pte_t *ptep,
 		break;
 	}
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_pt_set_pte_panic_bridge(void);
+#else
 static void x86_pt_set_pte_panic_bridge(void)
 {
 	panic("ihk_mc_pt_set_pte:page size");
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 2360 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_set_pte_enter_debug = {
+	.file = __FILE__, .func = "ihk_mc_pt_set_pte",
+	.line = 2227, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2364 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 2365 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_set_pte_exit_debug = {
+	.file = __FILE__, .func = "ihk_mc_pt_set_pte",
+	.line = 2233, .flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2369 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+int ihk_mc_pt_set_pte(page_table_t pt,pte_t *ptep,size_t pgsize,uintptr_t phys,enum ihk_mc_pt_attribute attr);
+#else
+#line 2222
 int ihk_mc_pt_set_pte(page_table_t pt, pte_t *ptep, size_t pgsize,
 		uintptr_t phys, enum ihk_mc_pt_attribute attr)
 {
@@ -2175,7 +2861,13 @@ int ihk_mc_pt_set_pte(page_table_t pt, pte_t *ptep, size_t pgsize,
 			pt, ptep, pgsize, phys, attr, error, *ptep);
 	return error;
 }
+#endif
+#line 2339
 
+
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+unsigned long *x86_pt_split_lookup_bridge(void *pt,unsigned long addr,int pgshift,unsigned long *pgaddrp,size_t *pgsizep,int *p2alignp);
+#else
 static pte_t *x86_pt_split_lookup_bridge(void *pt, unsigned long addr,
 		int pgshift, unsigned long *pgaddrp, size_t *pgsizep,
 		int *p2alignp)
@@ -2190,23 +2882,42 @@ static pte_t *x86_pt_split_lookup_bridge(void *pt, unsigned long addr,
 		*pgaddrp = (unsigned long)pgaddr;
 	return ptep;
 }
+#endif
 
+
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+int x86_pt_splitable_bridge(void *page,unsigned int memobj_flags);
+#else
 static int x86_pt_splitable_bridge(void *page, unsigned int memobj_flags)
 {
 	return is_splitable(page, memobj_flags);
 }
+#endif
 
+
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+int x86_pt_split_large_bridge(unsigned long *ptep,size_t pgsize);
+#else
 static int x86_pt_split_large_bridge(unsigned long *ptep, size_t pgsize)
 {
 	return split_large_page(ptep, pgsize);
 }
+#endif
 
+
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_pt_split_flush_bridge(void *vm,unsigned long addr,int cpu_id);
+#else
 static void x86_pt_split_flush_bridge(void *vm, unsigned long addr,
 		int cpu_id)
 {
 	remote_flush_tlb_cpumask(vm, (intptr_t)addr, cpu_id);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_pt_split_log_bridge(int event,int error);
+#else
 static void x86_pt_split_log_bridge(int event, int error)
 {
 	switch (event) {
@@ -2221,7 +2932,11 @@ static void x86_pt_split_log_bridge(int event, int error)
 		break;
 	}
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+int ihk_mc_pt_split(page_table_t pt,struct process_vm *vm,struct vm_range *range,void *addr);
+#else
 int ihk_mc_pt_split(page_table_t pt, struct process_vm *vm,
 		struct vm_range *range, void *addr)
 {
@@ -2236,19 +2951,30 @@ int ihk_mc_pt_split(page_table_t pt, struct process_vm *vm,
 			x86_pt_split_large_bridge,
 			x86_pt_split_flush_bridge,
 			x86_pt_split_log_bridge);
-} /* ihk_mc_pt_split() */
+}
+#endif
+ /* ihk_mc_pt_split() */
 
 #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+int x86_use_1gb_page_bridge(void);
+#else
 int x86_use_1gb_page_bridge(void)
 {
 	return use_1gb_page;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+enum ihk_mc_pt_attribute x86_common_vrflag_to_ptattr_bridge(
+		unsigned long flag, uint64_t fault, pte_t *ptep);
+#else
 enum ihk_mc_pt_attribute x86_common_vrflag_to_ptattr_bridge(
 		unsigned long flag, uint64_t fault, pte_t *ptep)
 {
 	return common_vrflag_to_ptattr(flag, fault, ptep);
 }
+#endif
 
 int arch_get_smaller_page_size(void *args, size_t cursize, size_t *newsizep,
 		int *p2alignp);
@@ -2282,6 +3008,46 @@ struct move_args {
 	struct vm_range *range;
 };
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 2485 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_move_one_enter_debug = { .file = __FILE__, .func = "move_one_page",
+	.line = 2510, .flags = DDEBUG_DEFAULT };
+#endif
+#line 2487 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 2488 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_move_one_exit_debug = { .file = __FILE__, .func = "move_one_page",
+	.line = 2516, .flags = DDEBUG_DEFAULT };
+#endif
+#line 2490 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 2491 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_move_range_enter_debug = { .file = __FILE__, .func = "move_pte_range",
+	.line = 2541, .flags = DDEBUG_DEFAULT };
+#endif
+#line 2493 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 2494 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+x86_move_range_exit_debug = { .file = __FILE__, .func = "move_pte_range",
+	.line = 2548, .flags = DDEBUG_DEFAULT };
+#endif
+#line 2496 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+void x86_move_flush_tlb_bridge(void);
+int move_pte_range(page_table_t,struct process_vm *,void *,void *,size_t,struct vm_range *);
+#else
 static int x86_move_set_range_bridge(void *pt, void *vm,
 		unsigned long start, unsigned long end, unsigned long phys,
 		unsigned long attr, int pgshift, void *range, int overwrite)
@@ -2360,20 +3126,34 @@ int move_pte_range(page_table_t pt, struct process_vm *vm,
 	return error;
 }
 
+#endif
+
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void *x86_page_table_init_pt_bridge(void);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void *x86_page_table_init_pt_bridge(void)
 {
 	return init_pt;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void *x86_page_table_boot_pt_bridge(void);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void *x86_page_table_boot_pt_bridge(void)
 {
 	return boot_pt;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_load_page_table_panic_bridge(void);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_load_page_table_panic_bridge(void)
 {
 	panic("load_page_table: helper failed");
 }
+#endif
 
 #ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 void load_page_table(struct page_table *pt)
@@ -2402,18 +3182,34 @@ struct page_table *get_boot_page_table(void)
 }
 #endif
 
-static unsigned long fixed_virt;
 
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 2634 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+static unsigned long fixed_virt;
+#endif
+#line 2634 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void *x86_map_fixed_area_init_pt_bridge(void);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void *x86_map_fixed_area_init_pt_bridge(void)
 {
 	return init_pt;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+unsigned long *x86_map_fixed_area_fixed_virt_slot_bridge(void);
+#else
 X86_MEMORY_PUBLIC_BRIDGE unsigned long *x86_map_fixed_area_fixed_virt_slot_bridge(void)
 {
 	return &fixed_virt;
 }
+#endif
 
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 2749
 X86_MEMORY_PUBLIC_BRIDGE void x86_map_fixed_area_log_bridge(unsigned long phys,
 		unsigned long size, unsigned long virt)
 {
@@ -2422,6 +3218,26 @@ X86_MEMORY_PUBLIC_BRIDGE void x86_map_fixed_area_log_bridge(unsigned long phys,
 			(int)(((phys & (PAGE_SIZE - 1)) + size +
 				PAGE_SIZE - 1) >> PAGE_SHIFT));
 }
+#else
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 2758 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug x86_map_fixed_area_log_debug __aligned(8)
+	__attribute__((section("__verbose"))) = {
+	.file = __FILE__,
+	.func = "x86_map_fixed_area_log_bridge",
+	.fmt = NULL,
+	.line = 2752,
+	.flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2765 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+void x86_map_fixed_area_log_bridge(unsigned long phys,
+		unsigned long size, unsigned long virt);
+#endif
+#line 2757
 
 #ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 static void init_fixed_area(struct page_table *pt)
@@ -2435,16 +3251,25 @@ static void init_fixed_area(struct page_table *pt)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_init_fixed_panic_bridge(void);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_init_fixed_panic_bridge(void)
 {
 	panic("init_fixed_area: helper failed");
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+unsigned long x86_init_normal_get_memory_address_bridge(int type,
+		int arg);
+#else
 X86_MEMORY_PUBLIC_BRIDGE unsigned long x86_init_normal_get_memory_address_bridge(int type,
 		int arg)
 {
 	return ihk_mc_get_memory_address(type, arg);
 }
+#endif
 
 #ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 X86_MEMORY_PUBLIC_BRIDGE int x86_init_normal_set_large_bridge(void *pt, unsigned long virt,
@@ -2455,6 +3280,10 @@ X86_MEMORY_PUBLIC_BRIDGE int x86_init_normal_set_large_bridge(void *pt, unsigned
 }
 #endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+extern void x86_init_normal_log_bridge(int event, unsigned long a,
+        unsigned long b, unsigned long c);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_init_normal_log_bridge(int event, unsigned long a,
 		unsigned long b, unsigned long c)
 {
@@ -2471,12 +3300,21 @@ X86_MEMORY_PUBLIC_BRIDGE void x86_init_normal_log_bridge(int event, unsigned lon
 		break;
 	}
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_init_normal_panic_bridge(void);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_init_normal_panic_bridge(void)
 {
 	panic("init_normal_area: helper failed");
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+extern void x86_init_text_log_bridge(int event, unsigned long a,
+        unsigned long b, unsigned long c);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_init_text_log_bridge(int event, unsigned long a,
 		unsigned long b, unsigned long c)
 {
@@ -2494,11 +3332,18 @@ X86_MEMORY_PUBLIC_BRIDGE void x86_init_text_log_bridge(int event, unsigned long 
 		break;
 	}
 }
+#endif
 
 #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 /* Declarative build geometry: CMake resolves this value from the host kernel.
  * Rust owns the getter; this immutable data witness contains no C execution. */
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 2856 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
 const unsigned long x86_map_kernel_start_geometry = MAP_KERNEL_START;
+#endif
+#line 2856 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
 #else
 X86_MEMORY_PUBLIC_BRIDGE unsigned long x86_init_text_map_kernel_start_bridge(void)
 {
@@ -2513,15 +3358,23 @@ X86_MEMORY_PUBLIC_BRIDGE unsigned long x86_init_text_end_bridge(void)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_init_text_panic_bridge(void);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_init_text_panic_bridge(void)
 {
 	panic("init_text_area: helper failed");
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_init_low_panic_bridge(void);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_init_low_panic_bridge(void)
 {
 	panic("init_low_area: helper failed");
 }
+#endif
 
 #ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 static void init_normal_area(struct page_table *pt)
@@ -2541,22 +3394,37 @@ static void init_normal_area(struct page_table *pt)
 
 extern char *find_command_line(char *name);
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+char *x86_init_linux_find_command_line_bridge(char *name);
+#else
 X86_MEMORY_PUBLIC_BRIDGE char *x86_init_linux_find_command_line_bridge(char *name)
 {
 	return find_command_line(name);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+int x86_init_linux_get_nr_memory_chunks_bridge(void);
+#else
 X86_MEMORY_PUBLIC_BRIDGE int x86_init_linux_get_nr_memory_chunks_bridge(void)
 {
 	return ihk_mc_get_nr_memory_chunks();
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+int x86_init_linux_get_memory_chunk_bridge(int id,
+		unsigned long *start, unsigned long *end, int *numa_id);
+#else
 X86_MEMORY_PUBLIC_BRIDGE int x86_init_linux_get_memory_chunk_bridge(int id,
 		unsigned long *start, unsigned long *end, int *numa_id)
 {
 	return ihk_mc_get_memory_chunk(id, start, end, numa_id);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 2918
 X86_MEMORY_PUBLIC_BRIDGE void x86_init_linux_log_bridge(int event, unsigned long a,
 		unsigned long b, unsigned long c, unsigned long d, int error)
 {
@@ -2596,11 +3464,35 @@ X86_MEMORY_PUBLIC_BRIDGE void x86_init_linux_log_bridge(int event, unsigned long
 	}
 	(void)error;
 }
+#else
 
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 2958 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug x86_init_linux_log_chunk_range_debug __aligned(8)
+	__attribute__((section("__verbose"))) = {
+	.file = __FILE__,
+	.func = "x86_init_linux_log_bridge",
+	.fmt = NULL,
+	.line = 2945,
+	.flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 2965 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+void x86_init_linux_log_bridge(int event, unsigned long a,
+		unsigned long b, unsigned long c, unsigned long d, int error);
+#endif
+#line 2957
+
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_init_linux_panic_bridge(void);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_init_linux_panic_bridge(void)
 {
 	panic("init_linux_kernel_mapping: helper failed");
 }
+#endif
 
 #ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 static void init_linux_kernel_mapping(struct page_table *pt)
@@ -2669,15 +3561,23 @@ void init_low_area(struct page_table *pt)
 
 extern char vsyscall_page[];
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void *x86_init_vsyscall_page_bridge(void);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void *x86_init_vsyscall_page_bridge(void)
 {
 	return vsyscall_page;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_init_vsyscall_panic_bridge(void);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_init_vsyscall_panic_bridge(void)
 {
 	panic("init_vsyscall_area:__set_pt_page failed");
 }
+#endif
 
 #ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 static void init_vsyscall_area(struct page_table *pt)
@@ -2697,22 +3597,53 @@ static void init_vsyscall_area(struct page_table *pt)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_check_available_page_size_bridge(int event);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_check_available_page_size_bridge(int event)
 {
 	(void)event;
 	check_available_page_size();
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void *x86_init_page_table_alloc_bridge(int nr_pages, int flag);
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 3082 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+const char x86_memory_init_alloc_file[] = __FILE__;
+#endif
+#line 3082 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 3083 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+const int x86_memory_init_alloc_line = 2954;
+#endif
+#line 3083 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+#else
+#line 2952
 X86_MEMORY_PUBLIC_BRIDGE void *x86_init_page_table_alloc_bridge(int nr_pages, int flag)
 {
 	return _ihk_mc_alloc_aligned_pages_node(nr_pages, PAGE_P2ALIGN, flag, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
 }
+#endif
+#line 2956
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_init_page_table_spin_init_bridge(void *lock);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_init_page_table_spin_init_bridge(void *lock)
 {
 	ihk_mc_spinlock_init((ihk_spinlock_t *)lock);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_init_page_table_normal_bridge(void *pt);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_init_page_table_normal_bridge(void *pt)
 {
 #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
@@ -2721,7 +3652,11 @@ X86_MEMORY_PUBLIC_BRIDGE void x86_init_page_table_normal_bridge(void *pt)
 	init_normal_area((struct page_table *)pt);
 #endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_init_page_table_linux_bridge(void *pt);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_init_page_table_linux_bridge(void *pt)
 {
 #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
@@ -2730,7 +3665,11 @@ X86_MEMORY_PUBLIC_BRIDGE void x86_init_page_table_linux_bridge(void *pt)
 	init_linux_kernel_mapping((struct page_table *)pt);
 #endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_init_page_table_fixed_bridge(void *pt);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_init_page_table_fixed_bridge(void *pt)
 {
 #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
@@ -2739,12 +3678,20 @@ X86_MEMORY_PUBLIC_BRIDGE void x86_init_page_table_fixed_bridge(void *pt)
 	init_fixed_area((struct page_table *)pt);
 #endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_init_page_table_text_bridge(void *pt);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_init_page_table_text_bridge(void *pt)
 {
 	init_text_area((struct page_table *)pt);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_init_page_table_vsyscall_bridge(void *pt);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_init_page_table_vsyscall_bridge(void *pt)
 {
 #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
@@ -2753,17 +3700,29 @@ X86_MEMORY_PUBLIC_BRIDGE void x86_init_page_table_vsyscall_bridge(void *pt)
 	init_vsyscall_area((struct page_table *)pt);
 #endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_init_page_table_low_bridge(void *pt);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_init_page_table_low_bridge(void *pt)
 {
 	init_low_area((struct page_table *)pt);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_init_page_table_load_bridge(void *pt);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_init_page_table_load_bridge(void *pt)
 {
 	load_page_table((struct page_table *)pt);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+extern void x86_init_page_table_log_bridge(int event, void *pt);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_init_page_table_log_bridge(int event, void *pt)
 {
 	switch (event) {
@@ -2772,7 +3731,11 @@ X86_MEMORY_PUBLIC_BRIDGE void x86_init_page_table_log_bridge(int event, void *pt
 		break;
 	}
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_init_page_table_panic_bridge(int reason);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void x86_init_page_table_panic_bridge(int reason)
 {
 	switch (reason) {
@@ -2789,31 +3752,52 @@ X86_MEMORY_PUBLIC_BRIDGE void x86_init_page_table_panic_bridge(int reason)
 		panic("init_page_table: helper failed");
 	}
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void **x86_init_page_table_init_pt_slot_bridge(void);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void **x86_init_page_table_init_pt_slot_bridge(void)
 {
 	return (void **)&init_pt;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void **x86_init_page_table_boot_pt_slot_bridge(void);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void **x86_init_page_table_boot_pt_slot_bridge(void)
 {
 	return (void **)&boot_pt;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+int *x86_init_page_table_loaded_slot_bridge(void);
+#else
 X86_MEMORY_PUBLIC_BRIDGE int *x86_init_page_table_loaded_slot_bridge(void)
 {
 	return &init_pt_loaded;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void *x86_init_page_table_lock_bridge(void);
+#else
 X86_MEMORY_PUBLIC_BRIDGE void *x86_init_page_table_lock_bridge(void)
 {
 	return &init_pt_lock;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+size_t x86_init_page_table_size_bridge(void);
+#else
 X86_MEMORY_PUBLIC_BRIDGE size_t x86_init_page_table_size_bridge(void)
 {
 	return sizeof(*init_pt);
 }
+#endif
 
 #ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 void init_page_table(void)
@@ -2844,6 +3828,10 @@ extern void __reserve_arch_pages(unsigned long, unsigned long,
 		void (*)(struct ihk_page_allocator_desc *, 
 			unsigned long, unsigned long, int));
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_reserve_arch_pages_bridge(unsigned long start,
+		unsigned long end, x86_reserve_pages_cb_fn_t cb_fn);
+#else
 void x86_reserve_arch_pages_bridge(unsigned long start,
 		unsigned long end, x86_reserve_pages_cb_fn_t cb_fn)
 {
@@ -2851,11 +3839,16 @@ void x86_reserve_arch_pages_bridge(unsigned long start,
 			(void (*)(struct ihk_page_allocator_desc *,
 				unsigned long, unsigned long, int))cb_fn);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_reserve_arch_pages_panic_bridge(void);
+#else
 void x86_reserve_arch_pages_panic_bridge(void)
 {
 	panic("ihk_mc_reserve_arch_pages: helper failed");
 }
+#endif
 
 #ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 void ihk_mc_reserve_arch_pages(struct ihk_page_allocator_desc *pa_allocator,
@@ -2882,11 +3875,17 @@ void ihk_mc_reserve_arch_pages(struct ihk_page_allocator_desc *pa_allocator,
 #define X86_ADDR_PUBLIC_BRIDGE static
 #endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+int x86_addr_init_pt_loaded_bridge(void);
+#else
 X86_ADDR_PUBLIC_BRIDGE int x86_addr_init_pt_loaded_bridge(void)
 {
 	return init_pt_loaded;
 }
+#endif
 
+#ifndef MCKERNEL_RUST_X86_USER_COPY_PUBLIC
+#line 3268
 X86_ADDR_PUBLIC_BRIDGE void x86_addr_log_bridge(int event, unsigned long value)
 {
 	switch (event) {
@@ -2902,6 +3901,40 @@ X86_ADDR_PUBLIC_BRIDGE void x86_addr_log_bridge(int event, unsigned long value)
 		break;
 	}
 }
+#else
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 3284 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug x86_addr_log_kernel_debug __aligned(8)
+	__attribute__((section("__verbose"))) = {
+	.file = __FILE__,
+	.func = "x86_addr_log_bridge",
+	.fmt = NULL,
+	.line = 3272,
+	.flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 3291 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 3293 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug x86_addr_log_straight_debug __aligned(8)
+	__attribute__((section("__verbose"))) = {
+	.file = __FILE__,
+	.func = "x86_addr_log_bridge",
+	.fmt = NULL,
+	.line = 3276,
+	.flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 3300 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+void x86_addr_log_bridge(int event, unsigned long value);
+#endif
+#line 3283
 
 #ifdef MCKERNEL_RUST_X86_USER_COPY_PUBLIC
 extern unsigned long virt_to_phys(void *v);
@@ -2928,10 +3961,14 @@ void *phys_to_virt(unsigned long p)
 #define X86_USER_COPY_BRIDGE static
 #endif
 
+#ifndef MCKERNEL_RUST_X86_USER_COPY_PUBLIC
 static int x86_read_process_vm_bridge(void *vm, void *kdst, const void *usrc,
 		size_t siz);
+#endif
+#ifndef MCKERNEL_RUST_X86_USER_COPY_PUBLIC
 static int x86_write_process_vm_bridge(void *vm, void *udst, const void *ksrc,
 		size_t siz);
+#endif
 X86_USER_COPY_BRIDGE int x86_user_page_fault_bridge(void *vm, void *addr,
 		unsigned long reason);
 X86_USER_COPY_BRIDGE int x86_user_verify_bridge(void *vm, void *addr,
@@ -2964,58 +4001,97 @@ int read_process_vm(struct process_vm *vm, void *kdst, const void *usrc,
 int write_process_vm(struct process_vm *vm, void *udst, const void *ksrc,
 		size_t siz);
 
+#ifndef MCKERNEL_RUST_X86_USER_COPY_PUBLIC
 static int x86_read_process_vm_bridge(void *vm, void *kdst, const void *usrc,
 		size_t siz)
 {
 	return read_process_vm(vm, kdst, usrc, siz);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_X86_USER_COPY_PUBLIC
 static int x86_write_process_vm_bridge(void *vm, void *udst, const void *ksrc,
 		size_t siz)
 {
 	return write_process_vm(vm, udst, ksrc, siz);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_USER_COPY_PUBLIC
+int x86_user_page_fault_bridge(void *vm, void *addr,
+		unsigned long reason);
+#else
 X86_USER_COPY_BRIDGE int x86_user_page_fault_bridge(void *vm, void *addr,
 		unsigned long reason)
 {
 	return page_fault_process_vm(vm, addr, reason);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_USER_COPY_PUBLIC
+int x86_user_verify_bridge(void *vm, void *addr,
+		unsigned long size);
+#else
 X86_USER_COPY_BRIDGE int x86_user_verify_bridge(void *vm, void *addr,
 		unsigned long size)
 {
 	return verify_process_vm(vm, addr, size);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_USER_COPY_PUBLIC
+int x86_user_vtop_bridge(void *pt, const void *virt,
+		unsigned long *physp);
+#else
 X86_USER_COPY_BRIDGE int x86_user_vtop_bridge(void *pt, const void *virt,
 		unsigned long *physp)
 {
 	return ihk_mc_pt_virt_to_phys(pt, virt, physp);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_USER_COPY_PUBLIC
+int x86_user_is_memory_bridge(unsigned long start,
+		unsigned long end);
+#else
 X86_USER_COPY_BRIDGE int x86_user_is_memory_bridge(unsigned long start,
 		unsigned long end)
 {
 	return is_mckernel_memory(start, end);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_USER_COPY_PUBLIC
+void *x86_user_map_bridge(unsigned long phys,
+		int nr_pages, unsigned long attr);
+#else
 X86_USER_COPY_BRIDGE void *x86_user_map_bridge(unsigned long phys,
 		int nr_pages, unsigned long attr)
 {
 	return ihk_mc_map_virtual(phys, nr_pages, attr);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_USER_COPY_PUBLIC
+void x86_user_unmap_bridge(void *addr, int nr_pages);
+#else
 X86_USER_COPY_BRIDGE void x86_user_unmap_bridge(void *addr, int nr_pages)
 {
 	ihk_mc_unmap_virtual(addr, nr_pages);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_USER_COPY_PUBLIC
+void *x86_user_phys_to_virt_bridge(unsigned long phys);
+#else
 X86_USER_COPY_BRIDGE void *x86_user_phys_to_virt_bridge(unsigned long phys)
 {
 	return phys_to_virt(phys);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_X86_USER_COPY_PUBLIC
+#line 3397
 X86_USER_COPY_BRIDGE void x86_user_copy_log_bridge(int event, void *vm,
 		unsigned long a, unsigned long b, int error)
 {
@@ -3060,11 +4136,65 @@ X86_USER_COPY_BRIDGE void x86_user_copy_log_bridge(int event, void *vm,
 		break;
 	}
 }
+#else
 
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 3442 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug x86_user_copy_log_external_debug __aligned(8)
+	__attribute__((section("__verbose"))) = {
+	.file = __FILE__,
+	.func = "x86_user_copy_log_bridge",
+	.fmt = NULL,
+	.line = 3414,
+	.flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 3449 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 3451 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug x86_user_copy_log_patch_start_debug __aligned(8)
+	__attribute__((section("__verbose"))) = {
+	.file = __FILE__,
+	.func = "x86_user_copy_log_bridge",
+	.fmt = NULL,
+	.line = 3418,
+	.flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 3458 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 3460 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+struct ddebug x86_user_copy_log_patch_done_debug __aligned(8)
+	__attribute__((section("__verbose"))) = {
+	.file = __FILE__,
+	.func = "x86_user_copy_log_bridge",
+	.fmt = NULL,
+	.line = 3434,
+	.flags = DDEBUG_DEFAULT,
+};
+#endif
+#line 3467 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+void x86_user_copy_log_bridge(int event, void *vm,
+		unsigned long a, unsigned long b, int error);
+#endif
+#line 3441
+
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+unsigned long x86_user_map_kernel_start_bridge(void);
+#else
 X86_USER_COPY_BRIDGE unsigned long x86_user_map_kernel_start_bridge(void)
 {
 	return MAP_KERNEL_START;
 }
+#endif
 
 #ifndef MCKERNEL_RUST_X86_USER_COPY_PUBLIC
 int strlen_user(const char *s)
@@ -3165,8 +4295,74 @@ int patch_process_vm(struct process_vm *vm, void *udst, const void *ksrc, size_t
 } /* patch_process_vm() */
 #endif
 
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 int split_contiguous_pages(pte_t *ptep, size_t pgsize,
 		uint32_t memobj_flags)
 {
 	return 0;
 }
+#endif
+
+
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+/* Actual static-storage identities only; no new C runtime getter. */
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 3561 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+void **const x86_memory_last_page_slot = (void **)&last_page;
+#endif
+#line 3561 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 3562 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+void **const x86_memory_init_pt_slot = (void **)&init_pt;
+#endif
+#line 3562 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 3563 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+void **const x86_memory_boot_pt_slot = (void **)&boot_pt;
+#endif
+#line 3563 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 3564 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+int *const x86_memory_init_pt_loaded_slot = &init_pt_loaded;
+#endif
+#line 3564 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 3565 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+void *const x86_memory_init_pt_lock_address = &init_pt_lock;
+#endif
+#line 3565 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 3566 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+const size_t x86_memory_page_table_bytes = sizeof(*init_pt);
+#endif
+#line 3566 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#line 3567 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+unsigned long *const x86_memory_fixed_virt_slot = &fixed_virt;
+#endif
+#line 3567 "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-retained-validator-continuation-1/whole-memory-closure-source-3/production-consumer-preparation-1/bounded-type-import-correction-1/expert-outer-brace-correction-1/real-split-provider-source-successor-1/source/arch/x86_64/kernel/memory.c"
+
+#endif
+
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+_Static_assert(DDEBUG_DEFAULT == 0, "Rust-owned debug initializer profile");
+_Static_assert(sizeof(struct page_table) == 4096, "Rust-owned page table geometry");
+_Static_assert(sizeof(ihk_spinlock_t) == 4 && _Alignof(ihk_spinlock_t) == 4,
+        "Rust-owned boot lock storage ABI");
+_Static_assert(MAP_KERNEL_START == 0xfffffffffe800000UL, "Rust-owned map geometry");
+_Static_assert((0 | PTATTR_FILEOFF | PTATTR_WRITABLE | PTATTR_USER | PTATTR_ACTIVE) == 0x807UL,
+        "Rust-owned initial attribute mask");
+#endif

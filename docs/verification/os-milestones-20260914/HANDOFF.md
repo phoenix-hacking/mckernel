@@ -1,3 +1,32 @@
+## Current compiler/integration cursor — 2026-10-24
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains35/35. Memory Rust80/GCC9 zero C FUNC/OBJECT/EXEC,79data and16RO
+proof passed; exact5 compiled source files nowcanonical, plus2 missing CMake
+leaf dependencies. GCC14/defaultimage/native stillOPEN. Current80 allocator/VM
+next13 passed11commands (18.038042244inner), whole-entry coredump12parity/5abort
+29ABI passed; retained C debt is1FUNC+111OBJECTs, not exempt adapters. Full
+user-mode set_signal caller4096vectors/2guards/20ABI PASS (.527153665inner).
+F03 correctedRust80 compiled; Cprojection guard failed at forwarddeclaration,
+expertretained-only correction pending. Originalerrors preserved; successful
+objects reused. COPY3 physicalretirement accepted907593/currentpostjoin420dd;
+COPY4 source-data binding actualPASS4.791610276,43retained+7remaining commands,
+no imagebuild/release yet. Sourcepackage m14-copy4-strict43-source-preparation-20261024-1
+is source-only; rootfinalreview/freshadmission remain required. No new native
+acceptance/C-retirement/whole-M14orM15 closure. Percentages unknown.
+
+## Current physical cursor — 2026-10-24
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+COPY3 owner115206 and cleanupcaller131444 are positively retired; independent
+physical acceptance includes two fresh PROC reports, current CID/active-path
+absence, original archives/journal/protected bytes and permanent27:4.
+current_live_postjoin is NONNULL at velocity-intervention-20261023-15/
+m14-retained-validator-continuation-1/copy3-normal-retirement-preparation-1/
+postjoin-preparation-1/CURRENT-LIVE-POSTJOIN.json. Original artifact FAIL preserved.
+No native/C-retirement credit. Root continues queued ordinary compiler checks
+and prepares retained43+seven-command image successor; no image rebuild.
+
 ## Engineering checkpoint — 2026-10-24 13:13 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

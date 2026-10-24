@@ -75,6 +75,8 @@ mod x86_coredump;
 mod x86_cpu_helpers;
 mod x86_local;
 mod x86_memory_helpers;
+mod x86_memory_loggers;
+mod x86_memory_logger_bridges;
 mod x86_perfctr;
 mod x86_setup;
 mod x86_vsyscall;
