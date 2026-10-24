@@ -1,3 +1,25 @@
+## Engineering cursor — 2026-10-24T20:30Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains COMPLETE35/35; M14/M15 remain OPEN. Selected-SDK target CMake, real
+header ABI and library/tool links passed all11 commands (10.594250s command wall;
+11.116899s container wall). Independent normal physical retirement952f1ddb and
+NONNULL current postjoinb76e422d accepted. This qualifies bound artifacts; the
+external-archive-only canonical default proposal is held pending a genuine source
+producer route, now in focused review. No new native or whole-file retirement.
+
+Daemon fortified-ring/oversize five commands PASS; original failures and37-child
+prefix retained. HOST boot/stop8 and eclair6 fake tests PASS. F03 request
+initializers passed60perf/240terminate cases after a genuine Cheader correction,
+reusing Rust output. F02 precompiler tool-symlink authority failure and F06 three
+raw-union autoref compiler errors have exact owner/expert corrections underway.
+
+M14 isolated copied prefix and HOST recursive-make controls PASS. Final owner,
+driver and request bind copy68bd5341; source publication, matching SDK marker,
+fresh admission and exact independent heavy release precede remaining C/image
+work. No configure/full-Rust replay is planned. Evidence:
+`evidence/rust-cutover-engineering-checkpoint-20261024-2030/REVIEW.json`.
+
 ## Engineering cursor — 2026-10-24T19:30Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
