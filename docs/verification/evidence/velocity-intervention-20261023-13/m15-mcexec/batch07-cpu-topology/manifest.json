@@ -1,0 +1,48 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_UNCOMPILED",
+  "retired_symbols_proposed": [
+    "mcexec_numa_node_cpu_isset_bridge",
+    "mcexec_main_get_cpu_bridge",
+    "mcexec_main_get_nodes_bridge",
+    "mcexec_main_no_cpu_bridge",
+    "mcexec_main_no_numa_node_bridge",
+    "mcexec_main_alloc_nodes_error_bridge",
+    "mcexec_main_cpu_alloc_size_bridge",
+    "mcexec_main_publish_topology_bridge",
+    "mcexec_main_numa_node_zero_bridge",
+    "mcexec_main_node_cpu_exists_bridge",
+    "mcexec_main_numa_node_set_cpu_bridge",
+    "mcexec_overlay_cpu_in_node_bridge",
+    "mcexec_partition_get_cpuset_bridge",
+    "mcexec_partition_get_cpuset_failed_bridge",
+    "mcexec_partition_sched_setaffinity_bridge",
+    "mcexec_partition_numa_run_bridge",
+    "mcexec_numa_local_cpu_log_bridge",
+    "mcexec_numa_node_cpu_log_bridge",
+    "mcexec_process_thread_plan_flib_log_bridge",
+    "mcexec_partition_rank_log_bridge",
+    "mcexec_partition_sched_setaffinity_warning_bridge",
+    "mcexec_partition_numa_run_warning_bridge"
+  ],
+  "requires": [
+    "batch04-load-descriptor/mcexec_load_descriptor.rs exact ProgramLoadDesc type"
+  ],
+  "providers": [
+    "existing Rust environment/ioctl/FD ABI providers",
+    "genuine libc/pthread/stat/snprintf/sched and libnuma APIs",
+    "C data ncpu/nnodes/numa_nodes/cpu_set_size/mcexec_partition_cpu_set_storage/debug; partition storage exported in candidate"
+  ],
+  "reference_parity": [
+    "CPU_ALLOC_SIZE/CPU_ZERO_S/CPU_SET_S/CPU_ISSET_S algorithms preserve byte-size guards and bit numbering",
+    "CPUSET request all pointer fields/env lookup count/pid/size values",
+    "static partition affinity storage reused by remaining C DEBUG callbacks",
+    "raw ioctl/sched/numa returns preserved"
+  ],
+  "ABI": [
+    "actual C struct stat size/alignment for opaque buffer storage, no stat field reads",
+    "actual cpu_set_t128bytes/align8 and all get_cpu_set_arg offsets",
+    "depends on matching batch04 descriptor layout"
+  ],
+  "compiler_or_native_execution": false
+}

@@ -1,0 +1,50 @@
+--- a/arch/x86_64/kernel/cpu.c
++++ b/arch/x86_64/kernel/cpu.c
+@@ -2800,15 +2800,8 @@
+ #endif
+ 
+ #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+-unsigned long x86_kprintf_lock_bridge(void)
+-{
+-	return kprintf_lock();
+-}
+-
+-void x86_kprintf_unlock_bridge(unsigned long flags)
+-{
+-	kprintf_unlock(flags);
+-}
++unsigned long x86_kprintf_lock_bridge(void);
++void x86_kprintf_unlock_bridge(unsigned long flags);
+ 
+ void x86_context_line_log_bridge(int event, unsigned long a,
+ 		unsigned long b, unsigned long c, unsigned long d);
+--- a/kernel/rust/x86_cpu_helpers.rs
++++ b/kernel/rust/x86_cpu_helpers.rs
+@@ -142,8 +142,6 @@
+     fn x86_virt_to_phys_bridge(addr: *mut c_void) -> CULong;
+     fn x86_write_msr_bridge(reg: CInt, value: CULong);
+     fn x86_current_cpu_bridge() -> CInt;
+-    fn x86_kprintf_lock_bridge() -> CULong;
+-    fn x86_kprintf_unlock_bridge(flags: CULong);
+     fn x86_stack_frame_log_bridge(ip: CULong, sp: CULong, fp: CULong);
+     fn x86_print_stack_bridge(rbp: *mut c_void, first: CULong);
+     fn x86_cpu_boot_status_slot_bridge() -> *mut CInt;
+@@ -3243,3 +3241,18 @@
+         }
+     }
+ }
++
++/// Enter the same existing Rust print lock and return its complete IRQ flags.
++/// This is the complete selected C callback body. The surrounding diagnostic
++/// caller still owns the lock span; no guard, state or reference is retained.
++#[no_mangle]
++pub unsafe extern "C" fn x86_kprintf_lock_bridge() -> CULong {
++    unsafe { crate::debug::kprintf_lock() }
++}
++
++/// Leave the same existing print lock using exactly the caller-supplied flags.
++/// No IRQ bit is normalized and no lifetime/ordering policy is introduced.
++#[no_mangle]
++pub unsafe extern "C" fn x86_kprintf_unlock_bridge(flags: CULong) {
++    unsafe { crate::debug::kprintf_unlock(flags); }
++}

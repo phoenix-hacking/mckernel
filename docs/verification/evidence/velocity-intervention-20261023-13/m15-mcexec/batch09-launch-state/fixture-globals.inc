@@ -1,0 +1,35 @@
+char *altroot;
+int debug = 1;
+int disable_sched_yield = 0;
+#ifdef ENABLE_TOFU
+int enable_tofu = 0;
+#endif
+int enable_uti = 0;
+int enable_vdso = 1;
+char *exec_path = NULL;
+unsigned long heap_extension = -1;
+int ischild;
+unsigned long mcexec_flags = 0;
+int mcosid;
+char *mpol_bind_nodes = NULL;
+int mpol_no_bss = 0;
+int mpol_no_heap = 0;
+int mpol_no_stack = 0;
+int mpol_shm_premap = 0;
+unsigned long mpol_threshold = 0;
+int no_bind_ikc_map = 0;
+int nr_processes = 0;
+int nr_threads = -1;
+int profile = 0;
+struct rlimit rlim_stack;
+long stack_max = -1;
+long stack_premap = (2ULL << 20);
+int straight_map = 0;
+unsigned long straight_map_threshold = (1024*1024);
+int uti_thread_rank = 0;
+int uti_use_last_cpu = 0;
+int fd;
+unsigned long page_size,page_mask;
+char dev[64];
+pthread_spinlock_t overlay_fd_lock;
+struct option mcexec_options[]={{0}};

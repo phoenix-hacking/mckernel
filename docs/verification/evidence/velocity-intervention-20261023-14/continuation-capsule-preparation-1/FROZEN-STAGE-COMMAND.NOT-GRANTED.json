@@ -1,0 +1,61 @@
+{
+  "argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/run_actual_capsule_stage.py"
+  ],
+  "binding": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/CAPSULE-BINDING.READY.json",
+    "sha256": "0dce5bb9e25652903cbf913ec01595a86c15496df6f306f23d8d3292e60f15d5",
+    "size": 15665
+  },
+  "builder": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/stage_long_session.py",
+    "sha256": "b37c545987bc7643db063575b6de5b4dbb1e83e176b178762b05a57044b0eb0f",
+    "size": 8838
+  },
+  "caller": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/run_actual_capsule_stage.py",
+    "sha256": "68e5f50224976eabd03d8dc5846025e530ee73a3802a7fda0db5075aee1b5cc6",
+    "size": 6392
+  },
+  "capture_helper_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8",
+  "child_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/stage_long_session.py",
+    "--binding",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/CAPSULE-BINDING.READY.json"
+  ],
+  "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1",
+  "execution_grant": null,
+  "fresh_outputs_absent": {
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/ACTUAL-CAPACITY-BEFORE-STAGE.json": true,
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/ACTUAL-CAPSULE-STAGE-WHOLE-JOIN.json": true,
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/ROOT-ORDINARY-STAGE-GRANT.json": true,
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/actual-capsule-stage-1": true,
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/actual-stage-1": true,
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/evidence-copy-1": true
+  },
+  "no_compiler_root_Docker_guest": true,
+  "profile": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/STAGE-PROFILE.FROZEN.NOT-GRANTED.json",
+    "sha256": "b01fdfe9342bc65897f7665f9a63935a08c7a02aad65e5545ac5c7e9dba3dddf",
+    "size": 878
+  },
+  "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Metadata-preserving collector-only SDK8 capsule stage through the accepted owned-capture caller and strict v2 manifest loader.",
+  "required_ROOT_grant_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-capsule-preparation-1/ROOT-ORDINARY-STAGE-GRANT.json",
+  "required_ROOT_grant_status": "ROOT_ORDINARY_GRANTED",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXACT_COMMAND_FROZEN_NO_EXECUTION_GRANT",
+  "whole_join_required": [
+    "returncode0",
+    "direct_child_joined",
+    "group_absent",
+    "closed_streams",
+    "errorNone",
+    "retirement_errorNone"
+  ]
+}

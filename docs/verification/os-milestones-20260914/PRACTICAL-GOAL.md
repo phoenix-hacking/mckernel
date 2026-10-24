@@ -1,3 +1,10 @@
+Current explicit P12 session criterion (2026-10-24): the user authorizes at least
+60 **cumulative mixed-work minutes** across identified segments with the same
+kernel/modules/apps, subject to full credited-round, identity and retirement
+validation. Preserve the original uninterrupted contract and failed results.
+The proposed90-second continuation is not yet run or accepted; practical status
+remains34/35. See [current V2 approval](P12-CUMULATIVE-USER-APPROVAL-20261024-V2.json) and [M12 closure confirmation](M12-CLOSURE-USER-CONFIRMATION-20261024.md).
+
 # Practical kernel and application goal
 
 Current assignment scope (2026-10-21 UTC): functional McKernel OS/apps and

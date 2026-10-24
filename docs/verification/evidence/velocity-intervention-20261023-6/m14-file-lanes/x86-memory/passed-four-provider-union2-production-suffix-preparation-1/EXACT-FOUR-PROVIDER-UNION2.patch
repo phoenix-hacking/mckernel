@@ -1,0 +1,240 @@
+--- a/arch/x86_64/kernel/memory.c
++++ b/arch/x86_64/kernel/memory.c
+@@ -745,10 +745,20 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
++/* Original allocator trace callsite and real C geometry, data only. */
++const char x86_pt_alloc_pages_file[] = __FILE__;
++const int x86_pt_alloc_pages_line = 750;
++const int x86_pt_alloc_pages_p2align = PAGE_P2ALIGN;
++const int x86_pt_alloc_pages_is_user = IHK_MC_PG_KERNEL;
++#else
++#line 748
+ X86_MEMORY_PUBLIC_BRIDGE void *x86_pt_alloc_pages_bridge(int nr_pages, int ap_flag)
+ {
+ 	return _ihk_mc_alloc_aligned_pages_node(nr_pages, PAGE_P2ALIGN, (ihk_mc_ap_flag)ap_flag, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
+ }
++#endif
++#line 762
+ 
+ unsigned long x86_pt_virt_to_phys_bridge(void *addr)
+ {
+@@ -802,10 +812,19 @@
+ 	return phys_to_virt(phys);
+ }
+ 
++#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
++/* Original PTfree tracking callsite; data only, no C runtime provider. */
++const char x86_pt_free_pages_file[] = __FILE__;
++const int x86_pt_free_pages_line = 807;
++const int x86_pt_free_pages_flag = IHK_MC_PG_KERNEL;
++#else
++#line 805
+ X86_MEMORY_PUBLIC_BRIDGE void x86_pt_free_pages_bridge(void *pt, int nr_pages)
+ {
+ 	_ihk_mc_free_pages(pt, nr_pages, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
+ }
++#endif
++#line 828
+ 
+ X86_MEMORY_PUBLIC_BRIDGE void x86_pt_destroy_panic_bridge(int reason)
+ {
+@@ -1372,6 +1391,31 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
++extern void x86_clear_effect_log_bridge(int event, unsigned long base,
++		unsigned long phys, size_t pgsize);
++struct ddebug __aligned(8) __attribute__((section("__verbose")))
++x86_clear_effect_free_anon_debug = {
++    .file = __FILE__, .func = "x86_clear_effect_log_bridge", .fmt = NULL,
++    .line = 1380, .flags = DDEBUG_DEFAULT,
++};
++struct ddebug __aligned(8) __attribute__((section("__verbose")))
++x86_clear_effect_xpmem_keep_debug = {
++    .file = __FILE__, .func = "x86_clear_effect_log_bridge", .fmt = NULL,
++    .line = 1384, .flags = DDEBUG_DEFAULT,
++};
++struct ddebug __aligned(8) __attribute__((section("__verbose")))
++x86_clear_effect_free_unmapped_debug = {
++    .file = __FILE__, .func = "x86_clear_effect_log_bridge", .fmt = NULL,
++    .line = 1387, .flags = DDEBUG_DEFAULT,
++};
++struct ddebug __aligned(8) __attribute__((section("__verbose")))
++x86_clear_effect_child_free_debug = {
++    .file = __FILE__, .func = "x86_clear_effect_log_bridge", .fmt = NULL,
++    .line = 1391, .flags = DDEBUG_DEFAULT,
++};
++#else
++#line 1375
+ static void x86_clear_effect_log_bridge(int event, unsigned long base,
+ 		unsigned long phys, size_t pgsize)
+ {
+@@ -1395,6 +1439,8 @@
+ 		break;
+ 	}
+ }
++#endif
++#line 1444
+ 
+ #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+ extern void x86_clear_range_top_log_bridge(int event, void *pt,
+@@ -1418,6 +1464,17 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
++extern void x86_clear_range_log_bridge(int event, void *args,
++		unsigned long *ptep, unsigned long base, unsigned long start,
++		unsigned long end, int error, int level_shift, unsigned long phys);
++struct ddebug __aligned(8) __attribute__((section("__verbose")))
++x86_clear_range_large_phys_debug = {
++    .file = __FILE__, .func = "x86_clear_range_log_bridge", .fmt = NULL,
++    .line = 1446, .flags = DDEBUG_DEFAULT,
++};
++#else
++#line 1421
+ static void x86_clear_range_log_bridge(int event, void *args,
+ 		unsigned long *ptep, unsigned long base, unsigned long start,
+ 		unsigned long end, int error, int level_shift, unsigned long phys)
+@@ -1450,6 +1507,8 @@
+ 		break;
+ 	}
+ }
++#endif
++#line 1512
+ 
+ #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+ /* Private clear-range layout consumed by the Rust old-entry callback. */
+--- a/kernel/rust/x86_memory_helpers.rs
++++ b/kernel/rust/x86_memory_helpers.rs
+@@ -186,6 +186,11 @@
+     static x86_clear_l3_effect_log: X86ClearEffectLogFn;
+     static x86_clear_l3_use_1gb_page: *const CInt;
+     fn kprintf(format: *const i8, ...) -> CInt;
++    static mut x86_clear_effect_free_anon_debug: crate::debug::Ddebug;
++    static mut x86_clear_effect_xpmem_keep_debug: crate::debug::Ddebug;
++    static mut x86_clear_effect_free_unmapped_debug: crate::debug::Ddebug;
++    static mut x86_clear_effect_child_free_debug: crate::debug::Ddebug;
++    static mut x86_clear_range_large_phys_debug: crate::debug::Ddebug;
+     fn _ihk_mc_free_pages(ptr: *mut c_void, npages: CInt, is_user: CInt, file: *mut i8, line: CInt);
+     static x86_clear_free_pages_user_file: [i8; 1];
+     static x86_clear_free_pages_user_line: CInt;
+@@ -226,8 +231,14 @@
+     fn x86_page_table_boot_pt_bridge() -> *mut c_void;
+     fn x86_load_page_table_panic_bridge();
+     fn ihk_mc_chk_page_address(phys: CULong) -> CInt;
+-    fn x86_pt_alloc_pages_bridge(nr_pages: CInt, ap_flag: CInt) -> *mut c_void;
+-    fn x86_pt_free_pages_bridge(pt: *mut c_void, nr_pages: CInt);
++    fn _ihk_mc_alloc_aligned_pages_node(npages: CInt, p2align: CInt, flag: CULong, node: CInt, is_user: CInt, virt_addr: CULong, file: *mut i8, line: CInt) -> *mut c_void;
++    static x86_pt_alloc_pages_file: [i8; 1];
++    static x86_pt_alloc_pages_line: CInt;
++    static x86_pt_alloc_pages_p2align: CInt;
++    static x86_pt_alloc_pages_is_user: CInt;
++    static x86_pt_free_pages_file: [i8; 1];
++    static x86_pt_free_pages_line: CInt;
++    static x86_pt_free_pages_flag: CInt;
+     fn x86_pt_destroy_panic_bridge(reason: CInt);
+     fn x86_pt_destroy_helper_failed_panic_bridge();
+     fn x86_visit_pte_log_bridge(event: CInt, level_shift: CInt);
+@@ -7488,3 +7499,97 @@
+         Some(x86_user_copy_log_bridge),
+     )
+ }
++
++// Same tracked allocator used by the C provider. Static C callsite data keeps
++// its original file/line/flag; no Rust file!()/line!() substitution or new policy.
++#[no_mangle]
++pub unsafe extern "C" fn x86_pt_free_pages_bridge(pt: *mut c_void, nr_pages: CInt) {
++    unsafe {
++        _ihk_mc_free_pages(
++            pt, nr_pages, x86_pt_free_pages_flag,
++            core::ptr::addr_of!(x86_pt_free_pages_file).cast::<i8>() as *mut i8,
++            x86_pt_free_pages_line,
++        );
++    }
++}
++
++// Declarative C debug selectors keep the original file/function/line ABI. The
++// flag byte may be changed through the existing debug control path; any nonzero
++// byte enables its own original callsite, matching dkprintf (not just bit 0).
++#[no_mangle]
++pub unsafe extern "C" fn x86_clear_effect_log_bridge(
++    event: CInt, base: CULong, phys: CULong, pgsize: SizeT,
++) {
++    unsafe {
++        match event {
++            X86_CLEAR_EFFECT_FREE_ANON => {
++                if core::ptr::read_volatile(core::ptr::addr_of!(x86_clear_effect_free_anon_debug.line_flags)) >> 24 != 0 {
++                    let _ = kprintf(
++                        b"%lx-,%s: freed anonymous page,base=%lx,size=%ld,pgsize=%ld\n\0".as_ptr().cast(),
++                        phys, b"x86_clear_effect_log_bridge\0".as_ptr().cast::<i8>(), base, pgsize, pgsize,
++                    );
++                }
++            }
++            X86_CLEAR_EFFECT_XPMEM_KEEP => {
++                if core::ptr::read_volatile(core::ptr::addr_of!(x86_clear_effect_xpmem_keep_debug.line_flags)) >> 24 != 0 {
++                    let _ = kprintf(b"%s: XPMEM attach,phys=%lx\n\0".as_ptr().cast(),
++                        b"x86_clear_effect_log_bridge\0".as_ptr().cast::<i8>(), phys);
++                }
++            }
++            X86_CLEAR_EFFECT_FREE_UNMAPPED => {
++                if core::ptr::read_volatile(core::ptr::addr_of!(x86_clear_effect_free_unmapped_debug.line_flags)) >> 24 != 0 {
++                    let _ = kprintf(
++                        b"%lx-,%s: freed unmapped memobj page,base=%lx,size=%ld,pgsize=%ld\n\0".as_ptr().cast(),
++                        phys, b"x86_clear_effect_log_bridge\0".as_ptr().cast::<i8>(), base, pgsize, pgsize,
++                    );
++                }
++            }
++            X86_CLEAR_EFFECT_CHILD_FREE => {
++                if core::ptr::read_volatile(core::ptr::addr_of!(x86_clear_effect_child_free_debug.line_flags)) >> 24 != 0 {
++                    let _ = kprintf(b"%s: freed child page table at base=%lx,size=%ld\n\0".as_ptr().cast(),
++                        b"x86_clear_effect_log_bridge\0".as_ptr().cast::<i8>(), base, pgsize);
++                }
++            }
++            _ => {}
++        }
++    }
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn x86_clear_range_log_bridge(
++    event: CInt, args: *mut c_void, ptep: *mut CULong, base: CULong,
++    start: CULong, end: CULong, error: CInt, level_shift: CInt, phys: CULong,
++) {
++    let name = match level_shift {
++        PTL2_SHIFT => b"clear_range_l2\0".as_ptr().cast::<i8>(),
++        PTL3_SHIFT => b"clear_range_l3\0".as_ptr().cast::<i8>(),
++        _ => b"clear_range_l4\0".as_ptr().cast::<i8>(),
++    };
++    unsafe {
++        match event {
++            X86_CLEAR_RANGE_LOG_SPLIT => {
++                let _ = kprintf(b"%s(%p,%p,%lx,%lx,%lx):split page. %d\n\0".as_ptr().cast(),
++                    name, args, ptep, base, start, end, error);
++            }
++            X86_CLEAR_RANGE_LOG_LARGE_PHYS => {
++                if core::ptr::read_volatile(core::ptr::addr_of!(x86_clear_range_large_phys_debug.line_flags)) >> 24 != 0 {
++                    let _ = kprintf(b"%s: phys=%ld, pte_get_phys(&old),PTL3_SIZE\n\0".as_ptr().cast(), name, phys);
++                }
++            }
++            _ => {}
++        }
++    }
++}
++
++// Retain the C int->unsigned-long conversion, tracked allocation, and raw result.
++#[no_mangle]
++pub unsafe extern "C" fn x86_pt_alloc_pages_bridge(nr_pages: CInt, ap_flag: CInt) -> *mut c_void {
++    unsafe {
++        _ihk_mc_alloc_aligned_pages_node(
++            nr_pages, x86_pt_alloc_pages_p2align, ap_flag as CULong,
++            -1, x86_pt_alloc_pages_is_user, CULong::MAX,
++            core::ptr::addr_of!(x86_pt_alloc_pages_file).cast::<i8>() as *mut i8,
++            x86_pt_alloc_pages_line,
++        )
++    }
++}

@@ -1,0 +1,38 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "STRICT_V2_LOADER_SOURCE_ONLY_NO_STAGE_TEST_NATIVE_OR_EXECUTION_RELEASE",
+  "diagnostic_source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/continuation-review/strict-v2-loader-source/native_diagnostic.py",
+  "callable": "load_manifest",
+  "parent": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-runtime-successor-1/source",
+  "accepted_source_sha256": {
+    "native_diagnostic.py": "2cc19500bdecdabf9fc419195df38c25636017bd038d94da688a2d4ad1fed7d3",
+    "long_transport.py": "c6b6c88f3d11fb132d198be4c368a1304c39def4f4f935dad8d5916cadaa2044",
+    "composite_module_binding.py": "233e10b97114f47f357a1ab50bcd64159a4ce29b2bf04558ca31f3f176d84ca9",
+    "repaired_image_authority.py": "a778431998bb9569dee9f4bcd27d0cfceb7361d11ebbe7654cb57082ebde0847",
+    "CURRENT68-SDK8-AUTHORITY-LINKS.json": "9f0f9edc97cbe759d7d8b635e5fb9181ac2cd4c3dfb3f91ee3b408d5678dde43",
+    "p12_long_session.py": "bff717d885afdda0d82cd0ab05a0930a3e66b242c6200b1295f2173bb4cdc5d3"
+  },
+  "source_sha256": {
+    "native_diagnostic.py": "2cc19500bdecdabf9fc419195df38c25636017bd038d94da688a2d4ad1fed7d3",
+    "long_transport.py": "51e15045a87ee5456cf59df6880f166149ff391a1cd922915b8a89a6c19f04c9",
+    "composite_module_binding.py": "233e10b97114f47f357a1ab50bcd64159a4ce29b2bf04558ca31f3f176d84ca9",
+    "repaired_image_authority.py": "a778431998bb9569dee9f4bcd27d0cfceb7361d11ebbe7654cb57082ebde0847",
+    "CURRENT68-SDK8-AUTHORITY-LINKS.json": "9f0f9edc97cbe759d7d8b635e5fb9181ac2cd4c3dfb3f91ee3b408d5678dde43",
+    "p12_long_session.py": "daf8c6d8295a0d3f6db816e9216ea4e6c3140ae73d276acbce8d2817d677ffe4"
+  },
+  "changes": {
+    "long_transport.py": "exact v2/90s/600s/min2 profile;1200/1500 host budgets;capture bindingNone fails existing release gate",
+    "p12_long_session.py": "supplied derived strict v2 segment consumer"
+  },
+  "unchanged": [
+    "native_diagnostic.py",
+    "composite_module_binding.py",
+    "repaired_image_authority.py",
+    "CURRENT68-SDK8-AUTHORITY-LINKS.json"
+  ],
+  "retained_guards": "load_manifest native body byte-identical: all JSON, artifact, exact final-map, SDK8 module, current kernel/launcher, source/native/physical authority checks retained.",
+  "runtime_owner": null,
+  "sourcehash_owner_map": null,
+  "execution_release": null,
+  "next": "Capsule owner can set diagnostic_source to this path before capsule exists. After actual v2 capsule/manifest, config mode refreezes full runtime cohort and root independently admits its exact release."
+}

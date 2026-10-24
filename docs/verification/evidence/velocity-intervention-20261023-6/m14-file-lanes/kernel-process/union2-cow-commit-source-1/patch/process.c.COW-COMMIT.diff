@@ -1,0 +1,44 @@
+--- a/kernel/process.c
++++ b/kernel/process.c
+@@ -2849,6 +2849,21 @@
+ int process_page_fault_cow_classify_body_result(struct vm_range *, uint64_t, struct page *);
+ #endif
+ 
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++static struct ddebug __aligned(8) __attribute__((section("__verbose")))
++process_page_fault_cow_rss_add_debug = {
++    .file = __FILE__, .func = "page_fault_process_memory_range",
++    .line = 3071, .flags = DDEBUG_DEFAULT,
++};
++static struct ddebug __aligned(8) __attribute__((section("__verbose")))
++process_page_fault_cow_rss_sub_debug = {
++    .file = __FILE__, .func = "page_fault_process_memory_range",
++    .line = 3076, .flags = DDEBUG_DEFAULT,
++};
++void process_page_fault_cow_commit_body_result(struct vm_range *,uintptr_t *,
++        size_t,void *,struct page **,struct ddebug *,struct ddebug *);
++#endif
++
+ int page_fault_process_memory_range(struct process_vm *vm,
+ 				    struct vm_range *range,
+ 				    uintptr_t fault_addr, uint64_t reason)
+@@ -3059,6 +3074,11 @@
+ 					 __FUNCTION__, virt, phys_to_virt(phys), virt_to_phys(virt), phys, pgsize);
+ 			memcpy(virt, phys_to_virt(phys), pgsize);
+ 
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++            process_page_fault_cow_commit_body_result(range, &phys, pgsize,
++                virt, &page, &process_page_fault_cow_rss_add_debug,
++                &process_page_fault_cow_rss_sub_debug);
++#else
+ 			/* Count COW-source pointed-to by only fileobj
+ 			 *  The steps in test/rusage/005:
+ 			 *  (1) Private-map regular file
+@@ -3079,6 +3099,7 @@
+ 			}
+ 			phys = virt_to_phys(virt);
+ 			page = phys_to_page(phys);
++#endif
+ 		}
+ 	}
+ 	else if (!(range->flag & VR_PRIVATE)) { /*VR_SHARED*/

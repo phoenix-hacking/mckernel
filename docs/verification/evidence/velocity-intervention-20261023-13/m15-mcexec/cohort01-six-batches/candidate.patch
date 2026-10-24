@@ -1,0 +1,2732 @@
+--- a/executer/user/mcexec.c
++++ b/executer/user/mcexec.c
+@@ -94,9 +94,9 @@
+ #define ADD_ENVS_OPTION
+ 
+ #ifdef DEBUG
+-static int debug = 1;
+-#else
+-static int debug;
++int debug = 1;
++#else
++int debug;
+ #endif
+ 
+ #define __dprintf(format, args...) do {                  \
+@@ -309,7 +309,7 @@
+ static char *altroot;
+ static const char rlimit_stack_envname[] = "MCKERNEL_RLIMIT_STACK";
+ static const char ld_preload_envname[] = "MCKERNEL_LD_PRELOAD";
+-static int ischild;
++int ischild;
+ static int enable_vdso = 1;
+ static int mpol_no_heap = 0;
+ static int mpol_no_stack = 0;
+@@ -671,64 +671,15 @@
+ #ifdef MCEXEC_RUST_HELPERS
+ struct program_load_desc *load_elf(FILE *fp, char **interp_pathp);
+ 
+-struct program_load_desc *mcexec_load_alloc_desc_bridge(int nsections)
+-{
+-	struct program_load_desc *desc;
+-	size_t size = sizeof(struct program_load_desc) +
+-		sizeof(struct program_image_section) * nsections;
+-
+-	desc = malloc(size);
+-	if (!desc) {
+-		return NULL;
+-	}
+-	memset(desc, '\0', size);
+-	desc->magic = PLD_MAGIC;
+-	desc->num_sections = nsections;
+-	desc->stack_prot = PROT_READ | PROT_WRITE | PROT_EXEC;
+-	return desc;
+-}
+-
+-void mcexec_load_publish_main_section_bridge(
+-		struct program_load_desc *desc, int index,
+-		unsigned long vaddr, unsigned long filesz,
+-		unsigned long offset, unsigned long len, int prot, void *fp)
+-{
+-	desc->sections[index].vaddr = vaddr;
+-	desc->sections[index].filesz = filesz;
+-	desc->sections[index].offset = offset;
+-	desc->sections[index].len = len;
+-	desc->sections[index].interp = 0;
+-	desc->sections[index].fp = fp;
+-	desc->sections[index].prot = prot;
+-}
+-
+-int *mcexec_load_cred_bridge(struct program_load_desc *desc)
+-{
+-	return desc->cred;
+-}
+-
+-long mcexec_load_clk_tck_bridge(void)
+-{
+-	return sysconf(_SC_CLK_TCK);
+-}
+-
+-void mcexec_load_finalize_desc_bridge(struct program_load_desc *desc,
+-		int pid, int pgid, int reloc, unsigned long entry,
+-		unsigned long at_phdr, unsigned long at_phent,
+-		unsigned long at_phnum, unsigned long at_entry,
+-		unsigned long at_clktck, int stack_prot)
+-{
+-	desc->pid = pid;
+-	desc->pgid = pgid;
+-	desc->reloc = reloc;
+-	desc->entry = entry;
+-	desc->at_phdr = at_phdr;
+-	desc->at_phent = at_phent;
+-	desc->at_phnum = at_phnum;
+-	desc->at_entry = at_entry;
+-	desc->at_clktck = at_clktck;
+-	desc->stack_prot = stack_prot;
+-}
++/* mcexec_load_alloc_desc_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_load_publish_main_section_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_load_cred_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_load_clk_tck_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_load_finalize_desc_bridge is implemented in the Rust residual-callback modules. */
+ 
+ void mcexec_load_too_large_interp_bridge(void)
+ {
+@@ -1582,15 +1533,9 @@
+ #endif
+ 
+ #ifdef MCEXEC_RUST_HELPERS
+-size_t mcexec_program_load_desc_size_bridge(void)
+-{
+-	return sizeof(struct program_load_desc);
+-}
+-
+-size_t mcexec_program_image_section_size_bridge(void)
+-{
+-	return sizeof(struct program_image_section);
+-}
++/* mcexec_program_load_desc_size_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_program_image_section_size_bridge is implemented in the Rust residual-callback modules. */
+ 
+ void mcexec_load_cannot_read_ehdr_bridge(void)
+ {
+@@ -1617,37 +1562,13 @@
+ 	__eprintf("PT_INTERP on interp\n");
+ }
+ 
+-void mcexec_desc_set_num_sections_bridge(struct program_load_desc *desc,
+-		int count)
+-{
+-	desc->num_sections = count;
+-}
+-
+-void mcexec_desc_set_entry_bridge(struct program_load_desc *desc,
+-		unsigned long entry)
+-{
+-	desc->entry = entry;
+-}
+-
+-void mcexec_desc_set_interp_align_bridge(struct program_load_desc *desc,
+-		unsigned long align)
+-{
+-	desc->interp_align = align;
+-}
+-
+-void mcexec_desc_publish_interp_section_bridge(
+-		struct program_load_desc *desc, int index,
+-		unsigned long vaddr, unsigned long filesz,
+-		unsigned long offset, unsigned long len, int prot, void *fp)
+-{
+-	desc->sections[index].vaddr = vaddr;
+-	desc->sections[index].filesz = filesz;
+-	desc->sections[index].offset = offset;
+-	desc->sections[index].len = len;
+-	desc->sections[index].interp = 1;
+-	desc->sections[index].fp = fp;
+-	desc->sections[index].prot = prot;
+-}
++/* mcexec_desc_set_num_sections_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_desc_set_entry_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_desc_set_interp_align_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_desc_publish_interp_section_bridge is implemented in the Rust residual-callback modules. */
+ 
+ void mcexec_load_section_log_bridge(int index, unsigned long vaddr,
+ 		unsigned long filesz, unsigned long offset,
+@@ -1755,66 +1676,27 @@
+ #endif
+ 
+ #ifdef MCEXEC_RUST_HELPERS
+-int mcexec_desc_num_sections_bridge(const struct program_load_desc *desc)
+-{
+-	return desc->num_sections;
+-}
+-
+-int mcexec_desc_cpu_bridge(const struct program_load_desc *desc)
+-{
+-	return desc->cpu;
+-}
+-
+-int mcexec_desc_pid_bridge(const struct program_load_desc *desc)
+-{
+-	return desc->pid;
+-}
+-
+-unsigned long mcexec_desc_entry_bridge(const struct program_load_desc *desc)
+-{
+-	return desc->entry;
+-}
+-
+-unsigned long mcexec_desc_rprocess_bridge(const struct program_load_desc *desc)
+-{
+-	return desc->rprocess;
+-}
+-
+-unsigned long mcexec_desc_section_vaddr_bridge(
+-		const struct program_load_desc *desc, int index)
+-{
+-	return desc->sections[index].vaddr;
+-}
+-
+-unsigned long mcexec_desc_section_len_bridge(
+-		const struct program_load_desc *desc, int index)
+-{
+-	return desc->sections[index].len;
+-}
+-
+-unsigned long mcexec_desc_section_remote_pa_bridge(
+-		const struct program_load_desc *desc, int index)
+-{
+-	return desc->sections[index].remote_pa;
+-}
+-
+-unsigned long mcexec_desc_section_filesz_bridge(
+-		const struct program_load_desc *desc, int index)
+-{
+-	return desc->sections[index].filesz;
+-}
+-
+-unsigned long mcexec_desc_section_offset_bridge(
+-		const struct program_load_desc *desc, int index)
+-{
+-	return desc->sections[index].offset;
+-}
+-
+-void *mcexec_desc_section_fp_bridge(
+-		const struct program_load_desc *desc, int index)
+-{
+-	return desc->sections[index].fp;
+-}
++/* mcexec_desc_num_sections_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_desc_cpu_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_desc_pid_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_desc_entry_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_desc_rprocess_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_desc_section_vaddr_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_desc_section_len_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_desc_section_remote_pa_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_desc_section_filesz_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_desc_section_offset_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_desc_section_fp_bridge is implemented in the Rust residual-callback modules. */
+ 
+ void mcexec_transfer_seek_error_bridge(void)
+ {
+@@ -2202,18 +2084,9 @@
+ 	close(fd);
+ }
+ 
+-void mcexec_partition_publish_cpu_rank_bridge(struct program_load_desc *desc,
+-		int target_core, int process_rank)
+-{
+-	desc->cpu = target_core;
+-	desc->process_rank = process_rank;
+-}
+-
+-void mcexec_partition_publish_rank_bridge(struct program_load_desc *desc,
+-		int process_rank)
+-{
+-	desc->process_rank = process_rank;
+-}
++/* mcexec_partition_publish_cpu_rank_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_partition_publish_rank_bridge is implemented in the Rust residual-callback modules. */
+ 
+ void mcexec_partition_rank_log_bridge(int process_rank, int target_core)
+ {
+@@ -2287,36 +2160,9 @@
+ 	mcexec_numa_local_body((unsigned long *)(localset), (nodemask), 1)
+ #define numa_all(nodemask) mcexec_numa_all_body(nodemask)
+ 
+-void mcexec_desc_publish_mpol_base_bridge(struct program_load_desc *desc,
+-		int profile_arg, int nr_processes_arg, unsigned long flags,
+-		unsigned long threshold, unsigned long heap_ext,
+-		int pld_mpol_max)
+-{
+-	desc->profile = profile_arg;
+-	desc->nr_processes = nr_processes_arg;
+-	desc->mpol_flags = flags;
+-	desc->mpol_threshold = threshold;
+-	desc->heap_extension = heap_ext;
+-	desc->mpol_bind_mask = 0;
+-	desc->mpol_mode = pld_mpol_max;
+-}
+-
+-void mcexec_desc_apply_bind_nodes_bridge(struct program_load_desc *desc,
+-		const char *nodes)
+-{
+-	struct bitmask *bind_mask;
+-
+-	bind_mask = numa_parse_nodestring_all(nodes);
+-	if (bind_mask) {
+-		int node;
+-
+-		for (node = 0; node <= numa_max_possible_node(); ++node) {
+-			if (numa_bitmask_isbitset(bind_mask, node)) {
+-				desc->mpol_bind_mask |= (1UL << node);
+-			}
+-		}
+-	}
+-}
++/* mcexec_desc_publish_mpol_base_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_desc_apply_bind_nodes_bridge is implemented in the Rust residual-callback modules. */
+ 
+ void mcexec_desc_ompi_policy_log_bridge(const char *mpol)
+ {
+@@ -2324,20 +2170,7 @@
+ 		  mpol);
+ }
+ 
+-void mcexec_desc_apply_ompi_policy_bridge(struct program_load_desc *desc,
+-		int mode, int nodemask_action)
+-{
+-	desc->mpol_mode = mode;
+-	if (nodemask_action == 1) {
+-		numa_local(desc->cpu_set, desc->mpol_nodemask);
+-	}
+-	else if (nodemask_action == 2) {
+-		numa_nonlocal(desc->cpu_set, desc->mpol_nodemask);
+-	}
+-	else if (nodemask_action == 3) {
+-		numa_all(desc->mpol_nodemask);
+-	}
+-}
++/* mcexec_desc_apply_ompi_policy_bridge is implemented in the Rust residual-callback modules. */
+ 
+ void mcexec_desc_mpol_log_bridge(const struct program_load_desc *desc)
+ {
+@@ -2345,27 +2178,7 @@
+ 		  desc->mpol_mode, desc->mpol_nodemask[0]);
+ }
+ 
+-void mcexec_desc_publish_runtime_flags_bridge(struct program_load_desc *desc,
+-		int enable_uti_arg, int uti_thread_rank_arg,
+-		int uti_use_last_cpu_arg, int thp_disable_arg,
+-		int straight_map_arg, unsigned long straight_map_threshold_arg,
+-		int enable_tofu_arg, unsigned long mcexec_flags_arg)
+-{
+-	desc->enable_uti = enable_uti_arg;
+-	desc->uti_thread_rank = uti_thread_rank_arg;
+-	desc->uti_use_last_cpu = uti_use_last_cpu_arg;
+-	desc->thp_disable = thp_disable_arg;
+-	desc->straight_map = straight_map_arg;
+-	desc->straight_map_threshold = straight_map_threshold_arg;
+-#ifdef ENABLE_TOFU
+-	desc->enable_tofu = enable_tofu_arg;
+-#else
+-	(void)enable_tofu_arg;
+-#endif
+-	if (mcexec_flags_arg) {
+-		desc->mcexec_flags = mcexec_flags_arg;
+-	}
+-}
++/* mcexec_desc_publish_runtime_flags_bridge is implemented in the Rust residual-callback modules. */
+ #else
+ static inline void _numa_local(__cpu_set_unit *localset,
+ 			       unsigned long *nodemask, int nonlocal)
+@@ -2537,23 +2350,11 @@
+ 		ioctl(fd, MCEXEC_UP_SIG_THREAD, 0);
+ }
+ #else
+-int mcexec_sendsig_si_pid_bridge(const siginfo_t *siginfo)
+-{
+-	return siginfo->si_pid;
+-}
+-
+-int mcexec_sendsig_si_signo_bridge(const siginfo_t *siginfo)
+-{
+-	return siginfo->si_signo;
+-}
+-
+-void mcexec_sendsig_default_action_bridge(int sig)
+-{
+-	signal(sig, SIG_DFL);
+-	kill(getpid(), sig);
+-	for(;;)
+-		sleep(1);
+-}
++/* mcexec_sendsig_si_pid_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_sendsig_si_signo_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_sendsig_default_action_bridge is implemented in the Rust residual-callback modules. */
+ #endif
+ 
+ #ifndef MCEXEC_RUST_HELPERS
+@@ -2623,232 +2424,57 @@
+ 	return rc;
+ }
+ #else
+-ssize_t mcexec_act_signalfd4_write_bridge(int fd, const void *info,
+-		size_t len)
+-{
+-	return write(fd, info, len);
+-}
+-
+-void mcexec_act_signalfd4_write_error_bridge(void)
+-{
+-	fprintf(stderr, "error: writing sigpipe\n");
+-}
+-#endif
+-
+-#ifdef MCEXEC_RUST_HELPERS
+-void mcexec_act_sigaction_install_bridge(int sig, int ignored)
+-{
+-	struct sigaction act;
+-
+-	memset(&act, '\0', sizeof act);
+-	if (ignored) {
+-		act.sa_handler = SIG_IGN;
+-	}
+-	else {
+-		act.sa_sigaction = sendsig;
+-		act.sa_flags = SA_SIGINFO;
+-	}
+-	sigaction(sig, &act, NULL);
+-}
+-
+-void mcexec_act_sigprocmask_apply_bridge(unsigned long mask)
+-{
+-	sigset_t set;
+-
+-	sigemptyset(&set);
+-	memcpy(&set, &mask, sizeof(unsigned long));
+-	sigdelset(&set, LOCALSIG);
+-	sigprocmask(SIG_SETMASK, &set, NULL);
+-}
+-
+-long mcexec_path_readlinkat_bridge(int dirfd, const char *path,
+-		char *buf, size_t size)
+-{
+-	long ret;
+-
+-	ret = readlinkat(dirfd, path, buf, size);
+-	SET_ERR(ret);
+-	__dprintf("readlinkat: dirfd=%d, path=%s, buf=%s, ret=%ld\n",
+-		dirfd, path, buf, ret);
+-	return ret;
+-}
+-
+-long mcexec_path_readlink_bridge(const char *path, char *buf, size_t size)
+-{
+-	long ret;
+-
+-	ret = readlink(path, buf, size);
+-	SET_ERR(ret);
+-	__dprintf("readlink: path=%s, buf=%s, ret=%ld\n", path, buf, ret);
+-	return ret;
+-}
+-
+-long mcexec_path_fstatat_bridge(int dirfd, const char *path,
+-		void *statbuf, int flags)
+-{
+-	long ret;
+-
+-	ret = fstatat(dirfd, path, statbuf, flags);
+-	SET_ERR(ret);
+-	__dprintf("fstatat: dirfd=%d, pathname=%s, buf=%p, flags=%x, ret=%ld\n",
+-		  dirfd, path, statbuf, flags, ret);
+-	return ret;
+-}
+-
+-long mcexec_path_stat_bridge(const char *path, void *statbuf)
+-{
+-	long ret;
+-
+-	ret = stat(path, statbuf);
+-	SET_ERR(ret);
+-	__dprintf("stat: path=%s, ret=%ld\n", path, ret);
+-	return ret;
+-}
+-
+-long mcexec_path_faccessat_bridge(int dirfd, const char *path,
+-		int mode, int flags)
+-{
+-	long ret;
+-
+-	ret = faccessat(dirfd, path, mode, flags);
+-	SET_ERR(ret);
+-	__dprintf("faccessat: dirfd=%d, pathname=%s, mode=%d, ret=%ld\n",
+-		  dirfd, path, mode, ret);
+-	return ret;
+-}
+-
+-long mcexec_path_access_bridge(const char *path, int mode)
+-{
+-	long ret;
+-
+-	ret = access(path, mode);
+-	SET_ERR(ret);
+-	__dprintf("access: path=%s, ret=%ld\n", path, ret);
+-	return ret;
+-}
+-
+-long mcexec_path_getxattr_bridge(const char *path, const char *name,
+-		void *value, size_t size)
+-{
+-	long ret;
+-
+-	ret = getxattr(path, name, value, size);
+-	SET_ERR(ret);
+-	__dprintf("getxattr: path=%s, name=%s, ret=%ld\n", path, name, ret);
+-	return ret;
+-}
+-
+-long mcexec_path_lgetxattr_bridge(const char *path, const char *name,
+-		void *value, size_t size)
+-{
+-	long ret;
+-
+-	ret = lgetxattr(path, name, value, size);
+-	SET_ERR(ret);
+-	__dprintf("lgetxattr: path=%s, name=%s, ret=%ld\n", path, name, ret);
+-	return ret;
+-}
+-
+-void mcexec_path_openat_log_bridge(int dirfd, const char *path, int tid)
+-{
+-	__dprintf("openat: %d, %s,tid=%d\n", dirfd, path, tid);
+-}
+-
+-void mcexec_path_open_log_bridge(const char *path)
+-{
+-	__dprintf("open: %s\n", path);
+-}
+-
+-long mcexec_path_openat_bridge(int dirfd, const char *path,
+-		unsigned long flags, unsigned long mode)
+-{
+-	long ret;
+-
+-	ret = openat(dirfd, path, flags, mode);
+-	SET_ERR(ret);
+-	return ret;
+-}
+-
+-long mcexec_path_open_bridge(const char *path, unsigned long flags,
+-		unsigned long mode)
+-{
+-	long ret;
+-
+-	ret = open(path, flags, mode);
+-	SET_ERR(ret);
+-	return ret;
+-}
+-
+-void mcexec_cred_get_bridge(int mcos_fd, unsigned long arg)
+-{
+-	ioctl(mcos_fd, MCEXEC_UP_GET_CRED, arg);
+-}
+-
+-long mcexec_cred_setfsuid_bridge(unsigned long uid)
+-{
+-	return setfsuid(uid);
+-}
+-
+-long mcexec_cred_setresuid_bridge(unsigned long ruid,
+-		unsigned long euid, unsigned long suid)
+-{
+-	long ret;
+-
+-	ret = setresuid(ruid, euid, suid);
+-	SET_ERR(ret);
+-	return ret;
+-}
+-
+-long mcexec_cred_setreuid_bridge(unsigned long ruid, unsigned long euid)
+-{
+-	long ret;
+-
+-	ret = setreuid(ruid, euid);
+-	SET_ERR(ret);
+-	return ret;
+-}
+-
+-long mcexec_cred_setuid_bridge(unsigned long uid)
+-{
+-	long ret;
+-
+-	ret = setuid(uid);
+-	SET_ERR(ret);
+-	return ret;
+-}
+-
+-long mcexec_cred_setresgid_bridge(unsigned long rgid,
+-		unsigned long egid, unsigned long sgid)
+-{
+-	long ret;
+-
+-	ret = setresgid(rgid, egid, sgid);
+-	SET_ERR(ret);
+-	return ret;
+-}
+-
+-long mcexec_cred_setregid_bridge(unsigned long rgid, unsigned long egid)
+-{
+-	long ret;
+-
+-	ret = setregid(rgid, egid);
+-	SET_ERR(ret);
+-	return ret;
+-}
+-
+-long mcexec_cred_setgid_bridge(unsigned long gid)
+-{
+-	long ret;
+-
+-	ret = setgid(gid);
+-	SET_ERR(ret);
+-	return ret;
+-}
+-
+-long mcexec_cred_setfsgid_bridge(unsigned long gid)
+-{
+-	return setfsgid(gid);
+-}
++/* mcexec_act_signalfd4_write_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_act_signalfd4_write_error_bridge is implemented in the Rust residual-callback modules. */
++#endif
++
++#ifdef MCEXEC_RUST_HELPERS
++/* mcexec_act_sigaction_install_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_act_sigprocmask_apply_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_path_readlinkat_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_path_readlink_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_path_fstatat_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_path_stat_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_path_faccessat_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_path_access_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_path_getxattr_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_path_lgetxattr_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_path_openat_log_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_path_open_log_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_path_openat_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_path_open_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_cred_get_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_cred_setfsuid_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_cred_setresuid_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_cred_setreuid_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_cred_setuid_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_cred_setresgid_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_cred_setregid_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_cred_setgid_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_cred_setfsgid_bridge is implemented in the Rust residual-callback modules. */
+ #else
+ void
+ act_sigaction(struct syscall_wait_desc *w)
+@@ -3030,26 +2656,13 @@
+ 	fwrite(line, 1, len, stderr);
+ }
+ 
+-void mcexec_exit_debug_bridge(unsigned long status, int cpu)
+-{
+-	__dprintf("__NR_exit/__NR_exit_group: %ld (cpu_id: %d)\n",
+-			status, cpu);
+-}
+-
+-int mcexec_exit_isatty_bridge(int target_fd)
+-{
+-	return isatty(target_fd);
+-}
+-
+-void mcexec_exit_report_signal_bridge(int sig)
+-{
+-	fprintf(stderr, "Terminate by signal %d\n", sig);
+-}
+-
+-void mcexec_exit_report_status_bridge(int term)
+-{
+-	__dprintf("Exit status: %d\n", term);
+-}
++/* mcexec_exit_debug_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_exit_isatty_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_exit_report_signal_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_exit_report_status_bridge is implemented in the Rust residual-callback modules. */
+ 
+ void mcexec_exit_cmd_servers_bridge(void)
+ {
+@@ -3066,17 +2679,9 @@
+ #endif
+ }
+ 
+-void mcexec_exit_replay_signal_bridge(int sig)
+-{
+-	signal(sig, SIG_DFL);
+-	kill(getpid(), sig);
+-	pause();
+-}
+-
+-void mcexec_exit_process_bridge(int term)
+-{
+-	exit(term);
+-}
++/* mcexec_exit_replay_signal_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_exit_process_bridge is implemented in the Rust residual-callback modules. */
+ 
+ void mcexec_execve2_alloc_desc_failed_bridge(void)
+ {
+@@ -3200,21 +2805,9 @@
+ 	return stack_premap;
+ }
+ 
+-void mcexec_desc_set_execve1_runtime_bridge(struct program_load_desc *desc,
+-		int vdso, unsigned long rlim_cur, unsigned long rlim_max,
+-		long prem)
+-{
+-	desc->enable_vdso = vdso;
+-	desc->rlimit[RLIMIT_STACK].rlim_cur = rlim_cur;
+-	desc->rlimit[RLIMIT_STACK].rlim_max = rlim_max;
+-	desc->stack_premap = prem;
+-}
+-
+-void mcexec_desc_set_args_len_bridge(struct program_load_desc *desc,
+-		unsigned long args_len)
+-{
+-	desc->args_len = args_len;
+-}
++/* mcexec_desc_set_execve1_runtime_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_desc_set_args_len_bridge is implemented in the Rust residual-callback modules. */
+ 
+ void mcexec_execve1_load_desc_ok_bridge(const char *filename, int sections)
+ {
+@@ -3255,10 +2848,7 @@
+ 	__dprintf("timed out.\n");
+ }
+ 
+-int mcexec_main_loop_thread_barrier_wait_bridge(void *barrier)
+-{
+-	return pthread_barrier_wait((pthread_barrier_t *)barrier);
+-}
++/* mcexec_main_loop_thread_barrier_wait_bridge is implemented in the Rust residual-callback modules. */
+ 
+ int mcexec_main_loop_is_child_bridge(void)
+ {
+@@ -3276,21 +2866,9 @@
+ #endif
+ 
+ #ifdef MCEXEC_RUST_HELPERS
+-void mcexec_init_sigaction_set_master_tid_bridge(int tid)
+-{
+-	master_tid = tid;
+-}
+-
+-void mcexec_init_sigaction_install_bridge(int sig)
+-{
+-	struct sigaction act;
+-
+-	sigaction(sig, NULL, &act);
+-	act.sa_sigaction = sendsig;
+-	act.sa_flags &= ~(SA_RESTART);
+-	act.sa_flags |= SA_SIGINFO;
+-	sigaction(sig, &act, NULL);
+-}
++/* mcexec_init_sigaction_set_master_tid_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_init_sigaction_install_bridge is implemented in the Rust residual-callback modules. */
+ #else
+ void init_sigaction(void)
+ {
+@@ -3315,43 +2893,17 @@
+ static int max_cpuid;
+ 
+ #ifdef MCEXEC_RUST_HELPERS
+-void *mcexec_create_worker_thread_alloc_bridge(void)
+-{
+-	return malloc(sizeof(struct thread_data_s));
+-}
+-
+-void mcexec_create_worker_thread_alloc_error_bridge(void)
+-{
+-	fprintf(stderr, "%s: error: allocating thread structure\n",
+-		"create_worker_thread");
+-}
+-
+-int mcexec_create_worker_thread_next_cpu_bridge(void)
+-{
+-	return max_cpuid++;
+-}
+-
+-void *mcexec_create_worker_thread_lock_bridge(void)
+-{
+-	return &lock;
+-}
+-
+-void mcexec_create_worker_thread_publish_bridge(struct thread_data_s *tp,
+-		struct thread_data_s **tp_out)
+-{
+-	tp->next = thread_data;
+-	thread_data = tp;
+-
+-	if (tp_out) {
+-		*tp_out = tp;
+-	}
+-}
+-
+-int mcexec_create_worker_thread_pthread_create_bridge(struct thread_data_s *tp)
+-{
+-	return pthread_create(&tp->thread_id, NULL,
+-			      &main_loop_thread_func, tp);
+-}
++/* mcexec_create_worker_thread_alloc_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_create_worker_thread_alloc_error_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_create_worker_thread_next_cpu_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_create_worker_thread_lock_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_create_worker_thread_publish_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_create_worker_thread_pthread_create_bridge is implemented in the Rust residual-callback modules. */
+ 
+ #define create_worker_thread(tp_out, init_ready) \
+ 	mcexec_create_worker_thread_body((tp_out), (init_ready))
+@@ -3406,35 +2958,17 @@
+ 	return 0;
+ }
+ #else
+-void mcexec_init_worker_threads_lock_init_bridge(void)
+-{
+-	pthread_mutex_init(&lock, NULL);
+-}
+-
+-void mcexec_init_worker_threads_barrier_init_bridge(int count)
+-{
+-	pthread_barrier_init(&init_ready, NULL, count);
+-}
+-
+-void mcexec_init_worker_threads_reset_cpuid_bridge(void)
+-{
+-	max_cpuid = 0;
+-}
+-
+-int mcexec_init_worker_threads_create_bridge(void)
+-{
+-	return create_worker_thread(NULL, &init_ready);
+-}
+-
+-void mcexec_init_worker_threads_wait_bridge(void)
+-{
+-	pthread_barrier_wait(&init_ready);
+-}
+-
+-void mcexec_init_worker_threads_error_bridge(int ret)
+-{
+-	printf("ERROR: creating worker threads (%d), check ulimit?\n", ret);
+-}
++/* mcexec_init_worker_threads_lock_init_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_init_worker_threads_barrier_init_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_init_worker_threads_reset_cpuid_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_init_worker_threads_create_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_init_worker_threads_wait_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_init_worker_threads_error_bridge is implemented in the Rust residual-callback modules. */
+ #endif
+ 
+ #define MCK_RLIMIT_AS	0
+@@ -3455,16 +2989,7 @@
+ #define MCK_RLIMIT_STACK	15
+ 
+ #ifdef MCEXEC_RUST_HELPERS
+-void mcexec_main_stack_publish_bridge(struct program_load_desc *desc,
+-		rlim_t cur, rlim_t max, long prem)
+-{
+-	desc->rlimit[MCK_RLIMIT_STACK].rlim_cur = cur;
+-	desc->rlimit[MCK_RLIMIT_STACK].rlim_max = max;
+-	desc->stack_premap = prem;
+-	__dprintf("desc->rlimit[MCK_RLIMIT_STACK]=%ld,%ld\n",
+-			desc->rlimit[MCK_RLIMIT_STACK].rlim_cur,
+-			desc->rlimit[MCK_RLIMIT_STACK].rlim_max);
+-}
++/* mcexec_main_stack_publish_bridge is implemented in the Rust residual-callback modules. */
+ #endif
+ 
+ static int rlimits[] = {
+@@ -3519,30 +3044,11 @@
+ };
+ 
+ #ifdef MCEXEC_RUST_HELPERS
+-void mcexec_desc_snapshot_rlimits_bridge(struct program_load_desc *desc)
+-{
+-	int i;
+-
+-	for (i = 0; i < sizeof(rlimits) / sizeof(int); i += 2) {
+-		getrlimit(rlimits[i], &desc->rlimit[rlimits[i + 1]]);
+-	}
+-}
+-
+-void mcexec_desc_publish_env_bridge(struct program_load_desc *desc,
+-		int envs_len, char *envs)
+-{
+-	desc->envs_len = envs_len;
+-	desc->envs = envs;
+-}
+-
+-void mcexec_desc_publish_args_cpu_bridge(struct program_load_desc *desc,
+-		unsigned long args_len, char *args, int cpu, int vdso)
+-{
+-	desc->args_len = args_len;
+-	desc->args = args;
+-	desc->cpu = cpu;
+-	desc->enable_vdso = vdso;
+-}
++/* mcexec_desc_snapshot_rlimits_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_desc_publish_env_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_desc_publish_args_cpu_bridge is implemented in the Rust residual-callback modules. */
+ #endif
+ 
+ char dev[64];
+@@ -4190,15 +3696,9 @@
+ #endif
+ 
+ #ifdef MCEXEC_RUST_HELPERS
+-void *mcexec_join_all_threads_head_bridge(void)
+-{
+-	return thread_data;
+-}
+-
+-void mcexec_join_all_threads_join_bridge(struct thread_data_s *tp)
+-{
+-	pthread_join(tp->thread_id, NULL);
+-}
++/* mcexec_join_all_threads_head_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_join_all_threads_join_bridge is implemented in the Rust residual-callback modules. */
+ #endif
+ 
+ #ifdef MCEXEC_RUST_HELPERS
+@@ -4235,10 +3735,7 @@
+ 		path, strerror(ret));
+ }
+ 
+-void mcexec_desc_clear_flags_bridge(struct program_load_desc *desc)
+-{
+-	desc->mcexec_flags = 0;
+-}
++/* mcexec_desc_clear_flags_bridge is implemented in the Rust residual-callback modules. */
+ #else
+ static int
+ opendev()
+@@ -5687,28 +5184,15 @@
+ #endif
+ 
+ #ifdef MCEXEC_RUST_HELPERS
+-long mcexec_do_generic_syscall_raw_bridge(struct syscall_wait_desc *w)
+-{
+-	return syscall(w->sr.number, w->sr.args[0], w->sr.args[1], w->sr.args[2],
+-		       w->sr.args[3], w->sr.args[4], w->sr.args[5]);
+-}
+-
+-void mcexec_do_generic_syscall_start_bridge(unsigned long number)
+-{
+-	__dprintf("do_generic_syscall(%ld)\n", number);
+-}
+-
+-void mcexec_do_generic_syscall_done_bridge(unsigned long number, long ret)
+-{
+-	__dprintf("do_generic_syscall(%ld):%ld (%#lx)\n", number, ret, ret);
+-}
++/* mcexec_do_generic_syscall_raw_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_do_generic_syscall_start_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_do_generic_syscall_done_bridge is implemented in the Rust residual-callback modules. */
+ 
+ #define do_generic_syscall(w) mcexec_do_generic_syscall_body(w)
+ 
+-long mcexec_do_generic_syscall_bridge(struct syscall_wait_desc *w)
+-{
+-	return mcexec_do_generic_syscall_body(w);
+-}
++/* mcexec_do_generic_syscall_bridge is implemented in the Rust residual-callback modules. */
+ #else
+ static long
+ do_generic_syscall(
+@@ -5735,15 +5219,9 @@
+ #define kill_thread(tid, sig, my_thread) \
+ 	mcexec_kill_thread_body((tid), (unsigned long)(sig), (my_thread))
+ 
+-void *mcexec_kill_thread_head_bridge(void)
+-{
+-	return thread_data;
+-}
+-
+-int mcexec_kill_thread_pthread_kill_bridge(struct thread_data_s *tp, int sig)
+-{
+-	return pthread_kill(tp->thread_id, sig);
+-}
++/* mcexec_kill_thread_head_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_kill_thread_pthread_kill_bridge is implemented in the Rust residual-callback modules. */
+ 
+ void mcexec_kill_thread_not_found_bridge(unsigned long tid, int sig)
+ {
+@@ -5778,28 +5256,9 @@
+ #endif
+ 
+ #ifdef MCEXEC_RUST_HELPERS
+-int mcexec_waitid_pid_bridge(int pid, int opt, int *errno_out)
+-{
+-	siginfo_t info;
+-	int ret;
+-
+-	memset(&info, '\0', sizeof info);
+-	while ((ret = waitid(P_PID, pid, &info, opt)) == -1 &&
+-			errno == EINTR)
+-		;
+-	if (errno_out)
+-		*errno_out = errno;
+-	if (ret == 0)
+-		ret = info.si_pid;
+-	return ret;
+-}
+-
+-void mcexec_wait4_error_bridge(unsigned long requested_pid, int ret,
+-		int errno_value)
+-{
+-	fprintf(stderr, "ERROR: waiting for %lu rc=%d errno=%d\n",
+-			requested_pid, ret, errno_value);
+-}
++/* mcexec_waitid_pid_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_wait4_error_bridge is implemented in the Rust residual-callback modules. */
+ 
+ void mcexec_gettid_alloc_error_bridge(void)
+ {
+@@ -5858,165 +5317,33 @@
+ 	fprintf(stderr, "linux_spawn(): ERROR: posix_spawn returned %d\n", rc);
+ }
+ 
+-void mcexec_fork_sync_lock_bridge(void)
+-{
+-	pthread_mutex_lock(&fork_sync_mutex);
+-}
+-
+-void mcexec_fork_sync_unlock_bridge(void)
+-{
+-	pthread_mutex_unlock(&fork_sync_mutex);
+-}
+-
+-void mcexec_fork_sync_munmap_bridge(void *fs)
+-{
+-	munmap(fs, sizeof(struct fork_sync));
+-}
+-
+-void mcexec_fork_sync_free_bridge(void *node)
+-{
+-	free(node);
+-}
+-
+-void *mcexec_clone_alloc_fork_sync_bridge(void)
+-{
+-	struct fork_sync *fs;
+-
+-	fs = mmap(NULL, sizeof(struct fork_sync), PROT_READ | PROT_WRITE,
+-			MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+-	if (fs == (void *)-1)
+-		return NULL;
+-
+-	memset(fs, '\0', sizeof(struct fork_sync));
+-	sem_init(&fs->sem, 1, 0);
+-	return fs;
+-}
+-
+-void *mcexec_clone_alloc_container_bridge(void)
+-{
+-	struct fork_sync_container *fsc;
+-
+-	fsc = malloc(sizeof(struct fork_sync_container));
+-	if (!fsc)
+-		return NULL;
+-
+-	memset(fsc, '\0', sizeof(struct fork_sync_container));
+-	return fsc;
+-}
+-
+-int mcexec_clone_fork_bridge(void)
+-{
+-	return fork();
+-}
+-
+-void mcexec_clone_fork_failed_bridge(void)
+-{
+-	fprintf(stderr, "fork(): error forking child process\n");
+-}
+-
+-long mcexec_clone_child_bridge(struct syscall_wait_desc *w, void *sync)
+-{
+-	struct fork_sync *fs = sync;
+-	struct fork_sync_container *fp;
+-	struct fork_sync_container *fb;
+-	struct rpgtable_desc rpt;
+-	int ret = 1;
+-
+-	ischild = 1;
+-	close(fd);
+-	fd = opendev();
+-	if (fd < 0) {
+-		fs->status = -errno;
+-		fprintf(stderr, "ERROR: opening %s\n", dev);
+-		goto fork_child_sync_pipe;
+-	}
+-
+-	rpt.start = w->sr.args[1];
+-	rpt.len = w->sr.args[2];
+-	rpt.rpgtable = w->sr.args[3];
+-	if (ioctl(fd, MCEXEC_UP_CREATE_PPD, &rpt)) {
+-		fs->status = -errno;
+-		fprintf(stderr, "ERROR: creating PPD %s\n", dev);
+-		goto fork_child_sync_pipe;
+-	}
+-
+-	init_sigaction();
+-	thread_data = NULL;
+-	__dprintf("pid(%d): signals and syscall threads OK\n", getpid());
+-
+-	if ((ret = ioctl(fd, MCEXEC_UP_GET_NUM_POOL_THREADS)) < 0) {
+-		fprintf(stderr, "Error: obtaining thread pool count\n");
+-	}
+-
+-	if (ret == 1) {
+-		n_threads = 4;
+-	}
+-
+-	if ((ret = init_worker_threads(fd)) != 0) {
+-		fprintf(stderr, "%s: Error: creating worker threads: %s\n",
+-			__func__, strerror(-ret));
+-		close(fd);
+-		exit(1);
+-	}
+-
+-fork_child_sync_pipe:
+-	for (fp = fork_sync_top; fp;) {
+-		fb = fp->next;
+-		if (fp->fs && fp->fs != fs) {
+-			munmap(fp->fs, sizeof(struct fork_sync));
+-		}
+-		free(fp);
+-		fp = fb;
+-	}
+-	fork_sync_top = NULL;
+-
+-	sem_post(&fs->sem);
+-	if (fs->status) {
+-		exit(1);
+-	}
+-
+-	pthread_mutex_init(&fork_sync_mutex, NULL);
+-
+-	while (getppid() != 1 && fs->success == 0) {
+-		sched_yield();
+-	}
+-
+-	if (fs->success == 0) {
+-		exit(1);
+-	}
+-
+-	sem_destroy(&fs->sem);
+-	munmap(fs, sizeof(struct fork_sync));
+-	join_all_threads();
+-	return ret;
+-}
+-
+-int mcexec_clone_sem_trywait_bridge(void *fs)
+-{
+-	return sem_trywait(&((struct fork_sync *)fs)->sem);
+-}
+-
+-int mcexec_clone_waitpid_nohang_bridge(int pid)
+-{
+-	int st;
+-
+-	return waitpid(pid, &st, WNOHANG);
+-}
+-
+-void mcexec_clone_sched_yield_bridge(void)
+-{
+-	sched_yield();
+-}
+-
+-void mcexec_clone_child_after_fork_failed_bridge(void)
+-{
+-	fprintf(stderr, "fork(): error with child process after fork\n");
+-}
+-
+-void mcexec_clone_sem_destroy_bridge(void *fs)
+-{
+-	sem_destroy(&((struct fork_sync *)fs)->sem);
+-}
++/* mcexec_fork_sync_lock_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_fork_sync_unlock_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_fork_sync_munmap_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_fork_sync_free_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_clone_alloc_fork_sync_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_clone_alloc_container_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_clone_fork_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_clone_fork_failed_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_clone_child_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_clone_sem_trywait_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_clone_waitpid_nohang_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_clone_sched_yield_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_clone_child_after_fork_failed_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_clone_sem_destroy_bridge is implemented in the Rust residual-callback modules. */
+ #endif
+ 
+ #ifdef MCEXEC_RUST_HELPERS
+@@ -6039,26 +5366,13 @@
+ 	__dprintf("%s: uti_desc=%p\n", "util_thread", desc);
+ }
+ 
+-void mcexec_util_thread_barrier_init_bridge(void)
+-{
+-	pthread_barrier_init(&uti_init_ready, NULL, 2);
+-}
+-
+-int mcexec_util_thread_create_worker_bridge(struct thread_data_s **tp_out)
+-{
+-	return create_worker_thread(tp_out, &uti_init_ready);
+-}
+-
+-void mcexec_util_thread_worker_error_bridge(int rc)
+-{
+-	printf("%s: Error: create_worker_thread failed (%d)\n",
+-	       "util_thread", rc);
+-}
+-
+-void mcexec_util_thread_barrier_wait_bridge(void)
+-{
+-	pthread_barrier_wait(&uti_init_ready);
+-}
++/* mcexec_util_thread_barrier_init_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_util_thread_create_worker_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_util_thread_worker_error_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_util_thread_barrier_wait_bridge is implemented in the Rust residual-callback modules. */
+ 
+ void mcexec_util_thread_worker_tid_log_bridge(int tid)
+ {
+@@ -6222,24 +5536,11 @@
+ 			pid_arg);
+ }
+ 
+-long mcexec_perf_event_open_bridge(void)
+-{
+-	return open("/dev/null", O_RDONLY);
+-}
+-
+-long mcexec_clock_gettime_bridge(int clock_id, struct timespec *tv)
+-{
+-	long ret;
+-
+-	ret = clock_gettime(clock_id, tv);
+-	SET_ERR(ret);
+-	return ret;
+-}
+-
+-void mcexec_clock_gettime_log_bridge(long sec, long nsec)
+-{
+-	__dprintf("clock_gettime=%016ld,%09ld\n", sec, nsec);
+-}
++/* mcexec_perf_event_open_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_clock_gettime_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_clock_gettime_log_bridge is implemented in the Rust residual-callback modules. */
+ #endif
+ 
+ #ifndef MCEXEC_RUST_HELPERS
+@@ -6425,34 +5726,7 @@
+ 	fprintf(stderr, "%s: path too long\n", "overlay_addfd");
+ }
+ 
+-int mcexec_overlay_addfd_publish_bridge(int fd, const char *linux_path,
+-		const char *mck_path, size_t pathlen)
+-{
+-	struct overlay_fd *ofd;
+-
+-	ofd = malloc(sizeof(*ofd));
+-	if (!ofd) {
+-		fprintf(stderr, "%s: out of memory\n", "overlay_addfd");
+-		return -ENOMEM;
+-	}
+-
+-	ofd->fd = fd;
+-	ofd->getdents_fd = -1;
+-	ofd->linux_fd = -1;
+-	ofd->mck_dirents = NULL;
+-	ofd->mck_dirents_size = 0;
+-	ofd->linux_dirents = NULL;
+-	ofd->linux_dirents_size = 0;
+-	ofd->pathlen = pathlen;
+-	strncpy(ofd->linux_path, linux_path, PATH_MAX);
+-	strncpy(ofd->mck_path, mck_path, PATH_MAX);
+-
+-	pthread_spin_lock(&overlay_fd_lock);
+-	overlay_list_add(&ofd->link, &overlay_fd_list);
+-	pthread_spin_unlock(&overlay_fd_lock);
+-
+-	return 0;
+-}
++/* mcexec_overlay_addfd_publish_bridge is implemented in the Rust residual-callback modules. */
+ #endif
+ 
+ #ifndef MCEXEC_RUST_HELPERS
+@@ -6477,26 +5751,7 @@
+ 	pthread_spin_unlock(&overlay_fd_lock);
+ }
+ #else
+-void mcexec_overlay_delfd_bridge(int fd)
+-{
+-	struct overlay_fd *ofd;
+-
+-	pthread_spin_lock(&overlay_fd_lock);
+-	for (ofd = ((typeof(*ofd) *)((char *)((&overlay_fd_list)->next) - offsetof(typeof(*ofd), link))); &ofd->link != (&overlay_fd_list); ofd = ((typeof(*ofd) *)((char *)(ofd->link.next) - offsetof(typeof(*ofd), link)))) {
+-		if (ofd->fd == fd) {
+-			overlay_list_del(&ofd->link);
+-			if (ofd->getdents_fd != -1)
+-				close(ofd->getdents_fd);
+-			if (ofd->linux_fd != -1)
+-				close(ofd->linux_fd);
+-			free(ofd->mck_dirents);
+-			free(ofd->linux_dirents);
+-			free(ofd);
+-			break;
+-		}
+-	}
+-	pthread_spin_unlock(&overlay_fd_lock);
+-}
++/* mcexec_overlay_delfd_bridge is implemented in the Rust residual-callback modules. */
+ #endif
+ 
+ /* List of blacklisted paths
+@@ -7189,171 +6444,29 @@
+ #ifdef MCEXEC_RUST_HELPERS
+ #define dirent_is64(sysnum) mcexec_dirent_is64_body((sysnum), __NR_getdents64)
+ 
+-void *mcexec_overlay_getdents_find_bridge(int fd)
+-{
+-	struct overlay_fd *ofd_iter;
+-
+-	pthread_spin_lock(&overlay_fd_lock);
+-	for (ofd_iter = ((typeof(*ofd_iter) *)((char *)((&overlay_fd_list)->next) - offsetof(typeof(*ofd_iter), link))); &ofd_iter->link != (&overlay_fd_list); ofd_iter = ((typeof(*ofd_iter) *)((char *)(ofd_iter->link.next) - offsetof(typeof(*ofd_iter), link)))) {
+-		if (ofd_iter->fd == fd) {
+-			__dprintf("found overlay cache entry (%s)\n",
+-					ofd_iter->linux_path);
+-			pthread_spin_unlock(&overlay_fd_lock);
+-			return ofd_iter;
+-		}
+-	}
+-	pthread_spin_unlock(&overlay_fd_lock);
+-
+-	return NULL;
+-}
+-
+-int mcexec_overlay_getdents_hide_orig_bridge(void *opaque)
+-{
+-	struct overlay_fd *ofd = opaque;
+-	size_t len;
+-
+-	if (!ofd || strncmp(ofd->linux_path, "/proc", 5))
+-		return 0;
+-
+-	len = strlen(ofd->linux_path);
+-	return len >= 4 && !strncmp(ofd->linux_path + len - 4, "task", 4);
+-}
+-
+-const char *mcexec_overlay_getdents_linux_path_bridge(void *opaque)
+-{
+-	struct overlay_fd *ofd = opaque;
+-
+-	return ofd->linux_path;
+-}
+-
+-size_t mcexec_overlay_getdents_pathlen_bridge(void *opaque)
+-{
+-	struct overlay_fd *ofd = opaque;
+-
+-	return ofd->pathlen;
+-}
+-
+-void *mcexec_overlay_getdents_mck_dirents_bridge(void *opaque)
+-{
+-	struct overlay_fd *ofd = opaque;
+-
+-	return ofd->mck_dirents;
+-}
+-
+-size_t mcexec_overlay_getdents_mck_size_bridge(void *opaque)
+-{
+-	struct overlay_fd *ofd = opaque;
+-
+-	return ofd->mck_dirents_size;
+-}
+-
+-void *mcexec_overlay_getdents_linux_dirents_bridge(void *opaque)
+-{
+-	struct overlay_fd *ofd = opaque;
+-
+-	return ofd->linux_dirents;
+-}
+-
+-size_t mcexec_overlay_getdents_linux_size_bridge(void *opaque)
+-{
+-	struct overlay_fd *ofd = opaque;
+-
+-	return ofd->linux_dirents_size;
+-}
+-
+-int mcexec_overlay_getdents_mck_fd_bridge(void *opaque)
+-{
+-	struct overlay_fd *ofd = opaque;
+-
+-	if (ofd->getdents_fd == -1) {
+-		ofd->getdents_fd = open(ofd->mck_path, O_RDONLY | O_DIRECTORY);
+-		if (ofd->getdents_fd < 0) {
+-			int error = errno;
+-
+-			if (error != ENOENT) {
+-				fprintf(stderr, "%s: could not open %s: %d\n",
+-					"overlay_getdents", ofd->mck_path,
+-					error);
+-			}
+-			return -error;
+-		}
+-	}
+-
+-	return ofd->getdents_fd;
+-}
+-
+-int mcexec_overlay_getdents_linux_fd_bridge(void *opaque)
+-{
+-	struct overlay_fd *ofd = opaque;
+-
+-	if (ofd->linux_fd == -1) {
+-		ofd->linux_fd = open(ofd->linux_path, O_RDONLY | O_DIRECTORY);
+-		if (ofd->linux_fd < 0) {
+-			int error = errno;
+-
+-			if (error != ENOENT) {
+-				fprintf(stderr, "%s: could not open %s: %d\n",
+-					"overlay_getdents", ofd->linux_path,
+-					error);
+-			}
+-			return -error;
+-		}
+-	}
+-
+-	return ofd->linux_fd;
+-}
+-
+-int mcexec_overlay_getdents_append_mck_bridge(void *opaque,
+-		const void *dirp, size_t len, int is64)
+-{
+-	struct overlay_fd *ofd = opaque;
+-	void *newbuf;
+-	int rc;
+-
+-	newbuf = realloc(ofd->mck_dirents, ofd->mck_dirents_size + len);
+-	if (!newbuf) {
+-		fprintf(stderr, "%s: not enough memory (%zd)",
+-			"overlay_getdents", ofd->mck_dirents_size + len);
+-		return -ENOMEM;
+-	}
+-	ofd->mck_dirents = newbuf;
+-	memcpy(ofd->mck_dirents + ofd->mck_dirents_size, dirp, len);
+-
+-	rc = mcexec_dirent_rewrite_offsets_result(ofd->mck_dirents,
+-			ofd->mck_dirents_size, ofd->mck_dirents_size + len,
+-			0, is64);
+-	if (rc < 0)
+-		return rc;
+-
+-	ofd->mck_dirents_size += len;
+-	return 0;
+-}
+-
+-int mcexec_overlay_getdents_append_linux_bridge(void *opaque,
+-		const void *dirp, size_t len, int is64, int old_ret)
+-{
+-	struct overlay_fd *ofd = opaque;
+-	void *newbuf;
+-	int rc;
+-
+-	newbuf = realloc(ofd->linux_dirents, ofd->linux_dirents_size + len);
+-	if (!newbuf) {
+-		fprintf(stderr, "%s: not enough memory (%zd)",
+-			"overlay_getdents", ofd->linux_dirents_size + len);
+-		return old_ret;
+-	}
+-	ofd->linux_dirents = newbuf;
+-	memcpy(ofd->linux_dirents + ofd->linux_dirents_size, dirp, len);
+-	ofd->linux_dirents_size += len;
+-
+-	rc = mcexec_dirent_rewrite_offsets_result(ofd->linux_dirents, 0,
+-			ofd->linux_dirents_size, ofd->mck_dirents_size,
+-			is64);
+-	if (rc < 0)
+-		return rc;
+-
+-	return 0;
+-}
++/* mcexec_overlay_getdents_find_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_overlay_getdents_hide_orig_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_overlay_getdents_linux_path_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_overlay_getdents_pathlen_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_overlay_getdents_mck_dirents_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_overlay_getdents_mck_size_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_overlay_getdents_linux_dirents_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_overlay_getdents_linux_size_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_overlay_getdents_mck_fd_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_overlay_getdents_linux_fd_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_overlay_getdents_append_mck_bridge is implemented in the Rust residual-callback modules. */
++
++/* mcexec_overlay_getdents_append_linux_bridge is implemented in the Rust residual-callback modules. */
+ 
+ void mcexec_overlay_getdents_offset_bridge(long offset)
+ {
+--- a/executer/user/rust/mcexec_helpers.rs
++++ b/executer/user/rust/mcexec_helpers.rs
+@@ -8719,3 +8719,21 @@
+         core::hint::spin_loop();
+     }
+ }
++
++#[path = "mcexec_overlay_fd.rs"]
++mod mcexec_overlay_fd;
++
++#[path = "mcexec_worker_lifecycle.rs"]
++mod mcexec_worker_lifecycle;
++
++#[path = "mcexec_clone_child.rs"]
++mod mcexec_clone_child;
++
++#[path = "mcexec_load_descriptor.rs"]
++mod mcexec_load_descriptor;
++
++#[path = "mcexec_signal_wait_exit.rs"]
++mod mcexec_signal_wait_exit;
++
++#[path = "mcexec_platform_syscalls.rs"]
++mod mcexec_platform_syscalls;
+--- a/executer/user/CMakeLists.txt
++++ b/executer/user/CMakeLists.txt
+@@ -35,11 +35,16 @@
+ 	find_program(RUSTC rustc)
+ 	if (RUSTC)
+ 		set(MCEXEC_RUST_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rust/mcexec_helpers.o")
++		set(_mcexec_rust_cfg_flags)
++		if (ENABLE_TOFU)
++			list(APPEND _mcexec_rust_cfg_flags --cfg mcexec_enable_tofu)
++		endif()
+ 		add_custom_command(
+ 			OUTPUT "${MCEXEC_RUST_OBJ}"
+ 			COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
+ 			COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= ${RUSTC}
+ 				--crate-name mcexec_helpers
++				${_mcexec_rust_cfg_flags}
+ 				--crate-type lib
+ 				--edition=2021
+ 				-C panic=abort
+@@ -49,6 +54,12 @@
+ 				--emit=obj=${MCEXEC_RUST_OBJ}
+ 				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_helpers.rs"
+ 			DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_helpers.rs"
++				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_overlay_fd.rs"
++				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_worker_lifecycle.rs"
++				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_clone_child.rs"
++				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_load_descriptor.rs"
++				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_signal_wait_exit.rs"
++				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_platform_syscalls.rs"
+ 			COMMENT "Building Rust mcexec helpers"
+ 			VERBATIM
+ 		)
+--- /dev/null
++++ b/executer/user/rust/mcexec_overlay_fd.rs
+@@ -0,0 +1,210 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Port of selected overlay FD callbacks. Platform libc/pthread providers remain external.
++use super::{McexecListHead, PATH_MAX, ENOMEM, ENOENT, c_int, c_void};
++use core::ptr::{addr_of_mut, copy_nonoverlapping};
++
++#[repr(C)]
++pub struct OverlayFd {
++    pub fd: c_int,
++    pub getdents_fd: c_int,
++    pub linux_fd: c_int,
++    pub link: McexecListHead,
++    pub linux_path: [u8; PATH_MAX],
++    pub mck_path: [u8; PATH_MAX],
++    pub pathlen: usize,
++    pub mck_dirents: *mut u8,
++    pub mck_dirents_size: usize,
++    pub linux_dirents: *mut u8,
++    pub linux_dirents_size: usize,
++}
++unsafe extern "C" {
++    static mut overlay_fd_list: McexecListHead;
++    static mut overlay_fd_lock: c_int;
++    static mut debug: c_int;
++    static mut stdout: *mut c_void;
++    static mut stderr: *mut c_void;
++    fn pthread_spin_lock(lock: *mut c_int) -> c_int;
++    fn pthread_spin_unlock(lock: *mut c_int) -> c_int;
++    fn fprintf(stream: *mut c_void, format: *const u8, ...) -> c_int;
++    fn printf(format: *const u8, ...) -> c_int;
++    fn fflush(stream: *mut c_void) -> c_int;
++    fn open(path: *const u8, flags: c_int, ...) -> c_int;
++}
++
++unsafe fn lock() { pthread_spin_lock(addr_of_mut!(overlay_fd_lock)); }
++unsafe fn unlock() { pthread_spin_unlock(addr_of_mut!(overlay_fd_lock)); }
++unsafe fn entry(link: *mut McexecListHead) -> *mut OverlayFd {
++    link.cast::<u8>().sub(core::mem::offset_of!(OverlayFd, link)).cast()
++}
++unsafe fn find_unlocked(fd: c_int) -> *mut OverlayFd {
++    let head = addr_of_mut!(overlay_fd_list);
++    let mut link = (*head).next;
++    while link != head {
++        let ofd = entry(link);
++        if (*ofd).fd == fd { return ofd; }
++        link = (*link).next;
++    }
++    core::ptr::null_mut()
++}
++// Equivalent to strncpy(dst, src, PATH_MAX), including zero padding.
++unsafe fn copy_path(dst: *mut u8, src: *const u8) {
++    let mut ended = false;
++    for i in 0..PATH_MAX {
++        let value = if ended { 0 } else { *src.add(i) };
++        *dst.add(i) = value;
++        ended |= value == 0;
++    }
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_addfd_publish_bridge(
++    fd: c_int, linux_path: *const u8, mck_path: *const u8, pathlen: usize,
++) -> c_int {
++    let ofd = super::malloc(core::mem::size_of::<OverlayFd>()).cast::<OverlayFd>();
++    if ofd.is_null() {
++        fprintf(stderr, b"overlay_addfd: out of memory\n\0".as_ptr());
++        return -ENOMEM;
++    }
++    (*ofd).fd = fd;
++    (*ofd).getdents_fd = -1;
++    (*ofd).linux_fd = -1;
++    (*ofd).mck_dirents = core::ptr::null_mut();
++    (*ofd).mck_dirents_size = 0;
++    (*ofd).linux_dirents = core::ptr::null_mut();
++    (*ofd).linux_dirents_size = 0;
++    (*ofd).pathlen = pathlen;
++    copy_path(addr_of_mut!((*ofd).linux_path).cast(), linux_path);
++    copy_path(addr_of_mut!((*ofd).mck_path).cast(), mck_path);
++    lock();
++    super::mcexec_overlay_list_add_body(addr_of_mut!((*ofd).link), addr_of_mut!(overlay_fd_list));
++    unlock();
++    0
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_delfd_bridge(fd: c_int) {
++    lock();
++    let ofd = find_unlocked(fd);
++    if !ofd.is_null() {
++        super::mcexec_overlay_list_del_body(addr_of_mut!((*ofd).link));
++        if (*ofd).getdents_fd != -1 { super::close((*ofd).getdents_fd); }
++        if (*ofd).linux_fd != -1 { super::close((*ofd).linux_fd); }
++        super::free((*ofd).mck_dirents);
++        super::free((*ofd).linux_dirents);
++        super::free(ofd.cast());
++    }
++    unlock();
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_getdents_find_bridge(fd: c_int) -> *mut c_void {
++    lock();
++    let ofd = find_unlocked(fd);
++    if !ofd.is_null() && debug != 0 {
++        printf(b"mcexec_overlay_getdents_find_bridge: found overlay cache entry (%s)\n\0".as_ptr(), addr_of_mut!((*ofd).linux_path).cast::<u8>());
++        fflush(stdout);
++    }
++    unlock();
++    ofd.cast()
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_getdents_hide_orig_bridge(opaque: *mut c_void) -> c_int {
++    if opaque.is_null() { return 0; }
++    let ofd = opaque.cast::<OverlayFd>();
++    let path = addr_of_mut!((*ofd).linux_path).cast::<u8>();
++    let bytes = super::cstr_bytes(path);
++    (bytes.starts_with(b"/proc") && bytes.ends_with(b"task")) as c_int
++}
++
++macro_rules! accessor {
++    ($name:ident, $field:ident, $type:ty) => {
++        #[no_mangle]
++        pub unsafe extern "C" fn $name(opaque: *mut c_void) -> $type {
++            (*opaque.cast::<OverlayFd>()).$field
++        }
++    };
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_getdents_linux_path_bridge(opaque: *mut c_void) -> *const u8 {
++    addr_of_mut!((*opaque.cast::<OverlayFd>()).linux_path).cast()
++}
++accessor!(mcexec_overlay_getdents_pathlen_bridge, pathlen, usize);
++accessor!(mcexec_overlay_getdents_mck_dirents_bridge, mck_dirents, *mut u8);
++accessor!(mcexec_overlay_getdents_mck_size_bridge, mck_dirents_size, usize);
++accessor!(mcexec_overlay_getdents_linux_dirents_bridge, linux_dirents, *mut u8);
++accessor!(mcexec_overlay_getdents_linux_size_bridge, linux_dirents_size, usize);
++
++unsafe fn lazy_fd(ofd: *mut OverlayFd, linux: bool) -> c_int {
++    let fd = if linux { addr_of_mut!((*ofd).linux_fd) } else { addr_of_mut!((*ofd).getdents_fd) };
++    let path = if linux { addr_of_mut!((*ofd).linux_path).cast::<u8>() } else { addr_of_mut!((*ofd).mck_path).cast::<u8>() };
++    if *fd == -1 {
++        *fd = open(path, 0o200000); // O_RDONLY | O_DIRECTORY, Linux x86_64.
++        if *fd < 0 {
++            let error = *super::__errno_location();
++            if error != ENOENT {
++                fprintf(stderr, b"overlay_getdents: could not open %s: %d\n\0".as_ptr(), path, error);
++            }
++            return -error;
++        }
++    }
++    *fd
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_getdents_mck_fd_bridge(opaque: *mut c_void) -> c_int {
++    lazy_fd(opaque.cast(), false)
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_getdents_linux_fd_bridge(opaque: *mut c_void) -> c_int {
++    lazy_fd(opaque.cast(), true)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_getdents_append_mck_bridge(
++    opaque: *mut c_void, dirp: *const u8, len: usize, is64: c_int,
++) -> c_int {
++    let ofd = opaque.cast::<OverlayFd>();
++    // Reference parity: no new overflow policy in this batch.
++    let size = (*ofd).mck_dirents_size.wrapping_add(len);
++    let newbuf = super::realloc((*ofd).mck_dirents, size);
++    if newbuf.is_null() {
++        fprintf(stderr, b"overlay_getdents: not enough memory (%zd)\0".as_ptr(), size);
++        return -ENOMEM;
++    }
++    (*ofd).mck_dirents = newbuf;
++    copy_nonoverlapping(dirp, newbuf.add((*ofd).mck_dirents_size), len);
++    let rc = super::mcexec_dirent_rewrite_offsets_result(newbuf, (*ofd).mck_dirents_size, size, 0, is64);
++    if rc < 0 { return rc; }
++    (*ofd).mck_dirents_size = size;
++    0
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_getdents_append_linux_bridge(
++    opaque: *mut c_void, dirp: *const u8, len: usize, is64: c_int, old_ret: c_int,
++) -> c_int {
++    let ofd = opaque.cast::<OverlayFd>();
++    let size = (*ofd).linux_dirents_size.wrapping_add(len);
++    let newbuf = super::realloc((*ofd).linux_dirents, size);
++    if newbuf.is_null() {
++        fprintf(stderr, b"overlay_getdents: not enough memory (%zd)\0".as_ptr(), size);
++        return old_ret;
++    }
++    (*ofd).linux_dirents = newbuf;
++    copy_nonoverlapping(dirp, newbuf.add((*ofd).linux_dirents_size), len);
++    (*ofd).linux_dirents_size = size;
++    let rc = super::mcexec_dirent_rewrite_offsets_result(newbuf, 0, size, (*ofd).mck_dirents_size, is64);
++    if rc < 0 { return rc; }
++    0
++}
++
++#[cfg(mcexec_overlay_fixture)]
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_overlay_fixture_abi(out: *mut usize) {
++    let values = [core::mem::size_of::<OverlayFd>(), core::mem::align_of::<OverlayFd>(),
++        core::mem::offset_of!(OverlayFd, link), core::mem::offset_of!(OverlayFd, linux_path),
++        core::mem::offset_of!(OverlayFd, mck_path), core::mem::offset_of!(OverlayFd, pathlen),
++        core::mem::offset_of!(OverlayFd, mck_dirents), core::mem::offset_of!(OverlayFd, mck_dirents_size),
++        core::mem::offset_of!(OverlayFd, linux_dirents), core::mem::offset_of!(OverlayFd, linux_dirents_size)];
++    core::ptr::copy_nonoverlapping(values.as_ptr(), out, values.len());
++}
+--- /dev/null
++++ b/executer/user/rust/mcexec_worker_lifecycle.rs
+@@ -0,0 +1,92 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Remaining worker callbacks use libc/pthread directly; existing Rust owns sequencing.
++use super::{c_int,c_void,McexecThreadData};
++use core::ptr::{addr_of_mut,null_mut};
++static mut NEXT_CPU: c_int = 0;
++unsafe extern "C" {
++    static mut lock: c_void;
++    static mut init_ready: c_void;
++    static mut uti_init_ready: c_void;
++    static mut stderr: *mut c_void;
++    fn pthread_mutex_init(lock: *mut c_void, attr: *const c_void) -> c_int;
++    fn pthread_barrier_init(barrier: *mut c_void, attr: *const c_void, count: u32) -> c_int;
++    fn pthread_barrier_wait(barrier: *mut c_void) -> c_int;
++    fn pthread_create(thread: *mut usize, attr: *const c_void,
++        entry: unsafe extern "C" fn(*mut c_void)->*mut c_void, arg:*mut c_void) -> c_int;
++    fn pthread_join(thread: usize, value: *mut *mut c_void) -> c_int;
++    fn pthread_kill(thread: usize, sig: c_int) -> c_int;
++    fn fprintf(stream: *mut c_void, format: *const u8, ...) -> c_int;
++    fn printf(format: *const u8, ...) -> c_int;
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_create_worker_thread_alloc_bridge() -> *mut McexecThreadData {
++    super::malloc(core::mem::size_of::<McexecThreadData>()).cast()
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_create_worker_thread_alloc_error_bridge() {
++    fprintf(stderr,b"create_worker_thread: error: allocating thread structure\n\0".as_ptr());
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_create_worker_thread_next_cpu_bridge() -> c_int {
++    let current = NEXT_CPU;
++    // Inputs in supported execution cannot exhaust int; preserve postincrement ordering.
++    NEXT_CPU = current.wrapping_add(1);
++    current
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_create_worker_thread_lock_bridge() -> *mut c_void { addr_of_mut!(lock) }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_create_worker_thread_publish_bridge(tp:*mut McexecThreadData,out:*mut *mut McexecThreadData) {
++    (*tp).next = super::MCEXEC_THREAD_DATA;
++    super::MCEXEC_THREAD_DATA = tp;
++    if !out.is_null() { *out=tp; }
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_create_worker_thread_pthread_create_bridge(tp:*mut McexecThreadData)->c_int {
++    pthread_create(addr_of_mut!((*tp).thread_id),core::ptr::null(),super::mcexec_main_loop_thread_func_body,tp.cast())
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_loop_thread_barrier_wait_bridge(barrier:*mut c_void)->c_int { pthread_barrier_wait(barrier) }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_init_worker_threads_lock_init_bridge() { pthread_mutex_init(addr_of_mut!(lock),core::ptr::null()); }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_init_worker_threads_barrier_init_bridge(count:c_int) {
++    pthread_barrier_init(addr_of_mut!(init_ready),core::ptr::null(),count as u32);
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_init_worker_threads_reset_cpuid_bridge() { NEXT_CPU=0; }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_init_worker_threads_create_bridge()->c_int {
++    super::mcexec_create_worker_thread_body(null_mut(),addr_of_mut!(init_ready))
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_init_worker_threads_wait_bridge() { pthread_barrier_wait(addr_of_mut!(init_ready)); }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_init_worker_threads_error_bridge(ret:c_int) {
++    printf(b"ERROR: creating worker threads (%d), check ulimit?\n\0".as_ptr(),ret);
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_join_all_threads_head_bridge()->*mut McexecThreadData { super::MCEXEC_THREAD_DATA }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_join_all_threads_join_bridge(tp:*mut McexecThreadData) { pthread_join((*tp).thread_id,null_mut()); }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_kill_thread_head_bridge()->*mut McexecThreadData { super::MCEXEC_THREAD_DATA }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_kill_thread_pthread_kill_bridge(tp:*mut McexecThreadData,sig:c_int)->c_int { pthread_kill((*tp).thread_id,sig) }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_util_thread_barrier_init_bridge() { pthread_barrier_init(addr_of_mut!(uti_init_ready),core::ptr::null(),2); }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_util_thread_create_worker_bridge(out:*mut *mut McexecThreadData)->c_int { super::mcexec_create_worker_thread_body(out,addr_of_mut!(uti_init_ready)) }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_util_thread_worker_error_bridge(rc:c_int) { printf(b"util_thread: Error: create_worker_thread failed (%d)\n\0".as_ptr(),rc); }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_util_thread_barrier_wait_bridge() { pthread_barrier_wait(addr_of_mut!(uti_init_ready)); }
++
++#[cfg(mcexec_worker_fixture)]
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_worker_fixture_abi(out:*mut usize) {
++ let values=[core::mem::size_of::<McexecThreadData>(),core::mem::align_of::<McexecThreadData>(),
++ core::mem::offset_of!(McexecThreadData,thread_id),core::mem::offset_of!(McexecThreadData,cpu),
++ core::mem::offset_of!(McexecThreadData,lock),core::mem::offset_of!(McexecThreadData,init_ready)];
++ core::ptr::copy_nonoverlapping(values.as_ptr(),out,values.len());
++}
+--- /dev/null
++++ b/executer/user/rust/mcexec_clone_child.rs
+@@ -0,0 +1,131 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Linux x86_64 glibc sem_t ABI is checked against the original C fixture.
++use super::{c_int,c_long,c_ulong,c_void,ForkSyncContainer,McexecSyscallWaitDesc};
++use core::ptr::{addr_of_mut,null_mut,read_volatile};
++#[repr(C)]
++struct FullForkSync { status:c_int, success:c_int, sem:[u64;4] }
++#[repr(C)]
++struct RpgtableDesc { rpgtable:usize, start:usize, len:usize }
++unsafe extern "C" {
++ static mut fork_sync_mutex:c_void;
++ static mut ischild:c_int;
++ static mut debug:c_int;
++ static mut stdout:*mut c_void;
++ static mut stderr:*mut c_void;
++ fn pthread_mutex_lock(p:*mut c_void)->c_int;
++ fn pthread_mutex_unlock(p:*mut c_void)->c_int;
++ fn pthread_mutex_init(p:*mut c_void,a:*const c_void)->c_int;
++ fn mmap(p:*mut c_void,n:usize,prot:c_int,flags:c_int,fd:c_int,off:c_long)->*mut c_void;
++ fn munmap(p:*mut c_void,n:usize)->c_int;
++ fn sem_init(p:*mut c_void,shared:c_int,value:u32)->c_int;
++ fn sem_trywait(p:*mut c_void)->c_int;
++ fn sem_post(p:*mut c_void)->c_int;
++ fn sem_destroy(p:*mut c_void)->c_int;
++ fn fork()->c_int;
++ fn waitpid(pid:c_int,status:*mut c_int,options:c_int)->c_int;
++ fn getppid()->c_int;
++ fn sched_yield()->c_int;
++ fn exit(status:c_int)->!;
++ fn fprintf(p:*mut c_void,fmt:*const u8,...)->c_int;
++ fn printf(fmt:*const u8,...)->c_int;
++ fn fflush(p:*mut c_void)->c_int;
++ fn strerror(error:c_int)->*const u8;
++}
++unsafe fn semaphore(fs:*mut FullForkSync)->*mut c_void { addr_of_mut!((*fs).sem).cast() }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_fork_sync_lock_bridge() { pthread_mutex_lock(addr_of_mut!(fork_sync_mutex)); }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_fork_sync_unlock_bridge() { pthread_mutex_unlock(addr_of_mut!(fork_sync_mutex)); }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_fork_sync_munmap_bridge(fs:*mut c_void) { munmap(fs,core::mem::size_of::<FullForkSync>()); }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_fork_sync_free_bridge(node:*mut c_void) { super::free(node.cast()); }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_clone_alloc_fork_sync_bridge()->*mut c_void {
++ let fs=mmap(null_mut(),core::mem::size_of::<FullForkSync>(),3,0x21,-1,0).cast::<FullForkSync>();
++ if fs as usize==usize::MAX { return null_mut(); }
++ core::ptr::write_bytes(fs.cast::<u8>(),0,core::mem::size_of::<FullForkSync>());
++ sem_init(semaphore(fs),1,0);
++ fs.cast()
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_clone_alloc_container_bridge()->*mut c_void {
++ let node=super::malloc(core::mem::size_of::<ForkSyncContainer>());
++ if !node.is_null() { core::ptr::write_bytes(node,0,core::mem::size_of::<ForkSyncContainer>()); }
++ node.cast()
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_clone_fork_bridge()->c_int { fork() }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_clone_fork_failed_bridge() { fprintf(stderr,b"fork(): error forking child process\n\0".as_ptr()); }
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_clone_child_bridge(w:*const McexecSyscallWaitDesc,sync:*mut c_void)->c_long {
++ let fs=sync.cast::<FullForkSync>();
++ let mut ret:c_int=1;
++ ischild=1;
++ super::close(super::MCEXEC_FD);
++ super::MCEXEC_FD=super::mcexec_opendev_body();
++ if super::MCEXEC_FD<0 {
++   (*fs).status = -*super::__errno_location();
++   fprintf(stderr,b"ERROR: opening %s\n\0".as_ptr(),super::mcexec_opendev_dev_bridge());
++ } else {
++   let mut rpt=RpgtableDesc { start:(*w).sr.args[1] as usize,len:(*w).sr.args[2] as usize,rpgtable:(*w).sr.args[3] as usize };
++   if super::ioctl(super::MCEXEC_FD,0x30a0290e as c_ulong,addr_of_mut!(rpt) as c_ulong)!=0 {
++     (*fs).status = -*super::__errno_location();
++     fprintf(stderr,b"ERROR: creating PPD %s\n\0".as_ptr(),super::mcexec_opendev_dev_bridge());
++   } else {
++     super::init_sigaction();
++     super::MCEXEC_THREAD_DATA=null_mut();
++     if debug!=0 {
++       printf(b"mcexec_clone_child_bridge: pid(%d): signals and syscall threads OK\n\0".as_ptr(),super::getpid());fflush(stdout);
++     }
++     ret=super::ioctl(super::MCEXEC_FD,0x30a02926 as c_ulong);
++     if ret<0 { fprintf(stderr,b"Error: obtaining thread pool count\n\0".as_ptr()); }
++     if ret==1 { super::MCEXEC_N_THREADS=4; }
++     ret=super::init_worker_threads(super::MCEXEC_FD);
++     if ret!=0 {
++       fprintf(stderr,b"mcexec_clone_child_bridge: Error: creating worker threads: %s\n\0".as_ptr(),strerror(-ret));
++       super::close(super::MCEXEC_FD);
++       exit(1);
++     }
++   }
++ }
++ // This cleanup intentionally runs after open/PPD failures but not worker failure.
++ let mut fp=super::MCEXEC_FORK_SYNC_TOP;
++ while !fp.is_null() {
++   let next=(*fp).next;
++   if !(*fp).fs.is_null() && (*fp).fs.cast::<FullForkSync>()!=fs {
++     munmap((*fp).fs.cast(),core::mem::size_of::<FullForkSync>());
++   }
++   super::free(fp.cast());
++   fp=next;
++ }
++ super::MCEXEC_FORK_SYNC_TOP=null_mut();
++ sem_post(semaphore(fs));
++ if (*fs).status!=0 { exit(1); }
++ pthread_mutex_init(addr_of_mut!(fork_sync_mutex),core::ptr::null());
++ while getppid()!=1 && read_volatile(addr_of_mut!((*fs).success))==0 { sched_yield(); }
++ if read_volatile(addr_of_mut!((*fs).success))==0 { exit(1); }
++ sem_destroy(semaphore(fs));
++ munmap(fs.cast(),core::mem::size_of::<FullForkSync>());
++ super::mcexec_join_all_threads_body();
++ ret as c_long
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_clone_sem_trywait_bridge(fs:*mut c_void)->c_int { sem_trywait(semaphore(fs.cast())) }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_clone_waitpid_nohang_bridge(pid:c_int)->c_int { let mut status=0;waitpid(pid,addr_of_mut!(status),1) }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_clone_sched_yield_bridge() { sched_yield(); }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_clone_child_after_fork_failed_bridge() { fprintf(stderr,b"fork(): error with child process after fork\n\0".as_ptr()); }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_clone_sem_destroy_bridge(fs:*mut c_void) { sem_destroy(semaphore(fs.cast())); }
++
++#[cfg(mcexec_clone_fixture)]
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_clone_fixture_abi(out:*mut usize) {
++ let values=[core::mem::size_of::<FullForkSync>(),core::mem::align_of::<FullForkSync>(),core::mem::offset_of!(FullForkSync,sem),core::mem::size_of::<ForkSyncContainer>(),core::mem::align_of::<ForkSyncContainer>(),core::mem::offset_of!(ForkSyncContainer,next),core::mem::offset_of!(ForkSyncContainer,fs),core::mem::size_of::<RpgtableDesc>(),core::mem::offset_of!(RpgtableDesc,start),core::mem::offset_of!(RpgtableDesc,len)];
++ core::ptr::copy_nonoverlapping(values.as_ptr(),out,values.len());
++}
+--- /dev/null
++++ b/executer/user/rust/mcexec_load_descriptor.rs
+@@ -0,0 +1,361 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Exact uprotocol.h selected Linux x86_64 ABI; fixture compares every field offset.
++use super::{c_int,c_long,c_ulong,c_void};
++use core::ptr::addr_of_mut;
++#[repr(C)]
++pub struct Rlimit { pub rlim_cur:c_ulong, pub rlim_max:c_ulong }
++#[repr(C)]
++pub struct ImageSection {
++ pub vaddr:c_ulong,
++ pub len:c_ulong,
++ pub remote_pa:c_ulong,
++ pub filesz:c_ulong,
++ pub offset:c_ulong,
++ pub prot:c_int,
++ pub interp:u8,
++ pub padding:[u8;3],
++ pub fp:*mut c_void,
++}
++#[repr(C)]
++pub struct ProgramLoadDesc {
++ pub magic:c_ulong,
++ pub num_sections:c_int,
++ pub cpu:c_int,
++ pub pid:c_int,
++ pub stack_prot:c_int,
++ pub pgid:c_int,
++ pub cred:[c_int;8],
++ pub reloc:c_int,
++ pub enable_vdso:i8,
++ pub padding:[u8;7],
++ pub entry:c_ulong,
++ pub user_start:c_ulong,
++ pub user_end:c_ulong,
++ pub rprocess:c_ulong,
++ pub rpgtable:c_ulong,
++ pub at_phdr:c_ulong,
++ pub at_phent:c_ulong,
++ pub at_phnum:c_ulong,
++ pub at_entry:c_ulong,
++ pub at_clktck:c_ulong,
++ pub args:*mut u8,
++ pub args_len:c_ulong,
++ pub envs:*mut u8,
++ pub envs_len:c_ulong,
++ pub rlimit:[Rlimit;20],
++ pub interp_align:c_ulong,
++ pub mpol_flags:c_ulong,
++ pub mpol_threshold:c_ulong,
++ pub heap_extension:c_ulong,
++ pub stack_premap:c_long,
++ pub mpol_bind_mask:c_ulong,
++ pub mpol_mode:c_int,
++ pub mpol_nodemask:[c_ulong;4],
++ pub thp_disable:c_int,
++ pub enable_uti:c_int,
++ pub uti_thread_rank:c_int,
++ pub uti_use_last_cpu:c_int,
++ pub straight_map:c_int,
++ pub straight_map_threshold:usize,
++ #[cfg(mcexec_enable_tofu)]
++ pub enable_tofu:c_int,
++ pub mcexec_flags:c_ulong,
++ pub nr_processes:c_int,
++ pub process_rank:c_int,
++ pub cpu_set:[c_ulong;16],
++ pub profile:c_int,
++ pub sections:[ImageSection;0],
++}
++unsafe extern "C" {
++ static mut debug:c_int;
++ static mut stdout:*mut c_void;
++ fn printf(fmt:*const u8,...)->c_int;
++ fn fflush(f:*mut c_void)->c_int;
++ fn getrlimit(resource:c_int,limit:*mut Rlimit)->c_int;
++ fn numa_parse_nodestring_all(nodes:*const u8)->*mut c_void;
++ fn numa_max_possible_node()->c_int;
++ fn numa_bitmask_isbitset(mask:*const c_void,node:u32)->c_int;
++}
++unsafe fn section(d:*mut ProgramLoadDesc,index:c_int)->*mut ImageSection {
++ addr_of_mut!((*d).sections).cast::<ImageSection>().offset(index as isize)
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_alloc_desc_bridge(nsections:c_int) -> *mut ProgramLoadDesc {
++ let size=core::mem::size_of::<ProgramLoadDesc>().wrapping_add(core::mem::size_of::<ImageSection>().wrapping_mul(nsections as usize));
++ let desc=super::malloc(size).cast::<ProgramLoadDesc>();
++ if desc.is_null() { return desc; }
++ core::ptr::write_bytes(desc.cast::<u8>(),0,size);
++ (*desc).magic=0xcafecafe44332211;
++ (*desc).num_sections=nsections;
++ (*desc).stack_prot=7;
++ desc
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_publish_main_section_bridge(desc:*mut ProgramLoadDesc,index:c_int,vaddr:c_ulong,filesz:c_ulong,offset:c_ulong,len:c_ulong,prot:c_int,fp:*mut c_void) {
++ let s=section(desc,index);
++ (*s).vaddr=vaddr;(*s).filesz=filesz;(*s).offset=offset;(*s).len=len;(*s).interp=0;(*s).fp=fp;(*s).prot=prot;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_publish_interp_section_bridge(desc:*mut ProgramLoadDesc,index:c_int,vaddr:c_ulong,filesz:c_ulong,offset:c_ulong,len:c_ulong,prot:c_int,fp:*mut c_void) {
++ let s=section(desc,index);
++ (*s).vaddr=vaddr;(*s).filesz=filesz;(*s).offset=offset;(*s).len=len;(*s).interp=1;(*s).fp=fp;(*s).prot=prot;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_cred_bridge(desc:*mut ProgramLoadDesc) -> *mut c_int {
++ addr_of_mut!((*desc).cred).cast()
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_clk_tck_bridge() -> c_long {
++ super::sysconf(2) // _SC_CLK_TCK on pinned Linux glibc.
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_load_finalize_desc_bridge(desc:*mut ProgramLoadDesc,pid:c_int,pgid:c_int,reloc:c_int,entry:c_ulong,at_phdr:c_ulong,at_phent:c_ulong,at_phnum:c_ulong,at_entry:c_ulong,at_clktck:c_ulong,stack_prot:c_int) {
++ (*desc).pid=pid;
++ (*desc).pgid=pgid;
++ (*desc).reloc=reloc;
++ (*desc).entry=entry;
++ (*desc).at_phdr=at_phdr;
++ (*desc).at_phent=at_phent;
++ (*desc).at_phnum=at_phnum;
++ (*desc).at_entry=at_entry;
++ (*desc).at_clktck=at_clktck;
++ (*desc).stack_prot=stack_prot;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_program_load_desc_size_bridge() -> usize {
++ core::mem::size_of::<ProgramLoadDesc>()
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_program_image_section_size_bridge() -> usize {
++ core::mem::size_of::<ImageSection>()
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_set_num_sections_bridge(desc:*mut ProgramLoadDesc,value:c_int) {
++ (*desc).num_sections=value;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_set_entry_bridge(desc:*mut ProgramLoadDesc,value:c_ulong) {
++ (*desc).entry=value;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_set_interp_align_bridge(desc:*mut ProgramLoadDesc,value:c_ulong) {
++ (*desc).interp_align=value;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_set_args_len_bridge(desc:*mut ProgramLoadDesc,value:c_ulong) {
++ (*desc).args_len=value;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_num_sections_bridge(desc:*const ProgramLoadDesc) -> c_int {
++ (*desc).num_sections
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_cpu_bridge(desc:*const ProgramLoadDesc) -> c_int {
++ (*desc).cpu
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_pid_bridge(desc:*const ProgramLoadDesc) -> c_int {
++ (*desc).pid
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_entry_bridge(desc:*const ProgramLoadDesc) -> c_ulong {
++ (*desc).entry
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_rprocess_bridge(desc:*const ProgramLoadDesc) -> c_ulong {
++ (*desc).rprocess
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_section_vaddr_bridge(desc:*const ProgramLoadDesc,index:c_int) -> c_ulong {
++ (*section(desc.cast_mut(),index)).vaddr
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_section_len_bridge(desc:*const ProgramLoadDesc,index:c_int) -> c_ulong {
++ (*section(desc.cast_mut(),index)).len
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_section_remote_pa_bridge(desc:*const ProgramLoadDesc,index:c_int) -> c_ulong {
++ (*section(desc.cast_mut(),index)).remote_pa
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_section_filesz_bridge(desc:*const ProgramLoadDesc,index:c_int) -> c_ulong {
++ (*section(desc.cast_mut(),index)).filesz
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_section_offset_bridge(desc:*const ProgramLoadDesc,index:c_int) -> c_ulong {
++ (*section(desc.cast_mut(),index)).offset
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_section_fp_bridge(desc:*const ProgramLoadDesc,index:c_int) -> *mut c_void {
++ (*section(desc.cast_mut(),index)).fp
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_partition_publish_cpu_rank_bridge(desc:*mut ProgramLoadDesc,target_core:c_int,process_rank:c_int) {
++ (*desc).cpu=target_core;(*desc).process_rank=process_rank;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_partition_publish_rank_bridge(desc:*mut ProgramLoadDesc,process_rank:c_int) {
++ (*desc).process_rank=process_rank;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_publish_mpol_base_bridge(desc:*mut ProgramLoadDesc,profile:c_int,nr_processes:c_int,flags:c_ulong,threshold:c_ulong,heap_ext:c_ulong,pld_mpol_max:c_int) {
++ (*desc).profile=profile;(*desc).nr_processes=nr_processes;(*desc).mpol_flags=flags;(*desc).mpol_threshold=threshold;
++ (*desc).heap_extension=heap_ext;(*desc).mpol_bind_mask=0;(*desc).mpol_mode=pld_mpol_max;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_apply_bind_nodes_bridge(desc:*mut ProgramLoadDesc,nodes:*const u8) {
++ let mask=numa_parse_nodestring_all(nodes);
++ if !mask.is_null() {
++   let mut node:c_int=0;
++   while node<=numa_max_possible_node() {
++     if numa_bitmask_isbitset(mask,node as u32)!=0 {
++       // C 1UL<<node is defined only for node<64. Wrapping is an explicit
++       // extension outside that reference domain, not C parity evidence.
++       (*desc).mpol_bind_mask |= 1u64.wrapping_shl(node as u32);
++     }
++     node=node.wrapping_add(1);
++   }
++ } // Reference retains mask allocation; no silent ownership policy change.
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_apply_ompi_policy_bridge(desc:*mut ProgramLoadDesc,mode:c_int,nodemask_action:c_int) {
++ (*desc).mpol_mode=mode;
++ if nodemask_action==1 || nodemask_action==2 {
++   super::mcexec_numa_local_body(addr_of_mut!((*desc).cpu_set).cast(),addr_of_mut!((*desc).mpol_nodemask).cast(),(nodemask_action==2) as c_int);
++ } else if nodemask_action==3 { super::mcexec_numa_all_body(addr_of_mut!((*desc).mpol_nodemask).cast()); }
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_publish_runtime_flags_bridge(desc:*mut ProgramLoadDesc,enable_uti:c_int,uti_thread_rank:c_int,uti_use_last_cpu:c_int,thp_disable:c_int,straight_map:c_int,straight_map_threshold:c_ulong,enable_tofu:c_int,mcexec_flags:c_ulong) {
++ (*desc).enable_uti=enable_uti;(*desc).uti_thread_rank=uti_thread_rank;(*desc).uti_use_last_cpu=uti_use_last_cpu;(*desc).thp_disable=thp_disable;
++ (*desc).straight_map=straight_map;(*desc).straight_map_threshold=straight_map_threshold;
++ #[cfg(mcexec_enable_tofu)] { (*desc).enable_tofu=enable_tofu; }
++ #[cfg(not(mcexec_enable_tofu))] { let _=enable_tofu; }
++ if mcexec_flags!=0 { (*desc).mcexec_flags=mcexec_flags; }
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_set_execve1_runtime_bridge(desc:*mut ProgramLoadDesc,vdso:c_int,rlim_cur:c_ulong,rlim_max:c_ulong,prem:c_long) {
++ (*desc).enable_vdso=vdso as i8;
++ // Original execve uses host RLIMIT_STACK=3, distinct from main MCK index15.
++ (*desc).rlimit[3].rlim_cur=rlim_cur;(*desc).rlimit[3].rlim_max=rlim_max;(*desc).stack_premap=prem;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_main_stack_publish_bridge(desc:*mut ProgramLoadDesc,cur:c_ulong,max:c_ulong,prem:c_long) {
++ (*desc).rlimit[15].rlim_cur=cur;(*desc).rlimit[15].rlim_max=max;(*desc).stack_premap=prem;
++ if debug!=0 { printf(b"mcexec_main_stack_publish_bridge: desc->rlimit[MCK_RLIMIT_STACK]=%ld,%ld\n\0".as_ptr(),cur,max);fflush(stdout); }
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_snapshot_rlimits_bridge(desc:*mut ProgramLoadDesc) {
++ // (host resource, McKernel slot), all defined in selected Linux glibc headers.
++ let resources=[9,4,0,2,1,10,8,12,13,7,6,5,14,15,11,3];
++ for (slot,resource) in resources.into_iter().enumerate() { getrlimit(resource,addr_of_mut!((*desc).rlimit[slot])); }
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_publish_env_bridge(desc:*mut ProgramLoadDesc,envs_len:c_int,envs:*mut u8) {
++ (*desc).envs_len=envs_len as c_ulong;(*desc).envs=envs;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_publish_args_cpu_bridge(desc:*mut ProgramLoadDesc,args_len:c_ulong,args:*mut u8,cpu:c_int,vdso:c_int) {
++ (*desc).args_len=args_len;(*desc).args=args;(*desc).cpu=cpu;(*desc).enable_vdso=vdso as i8;
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_clear_flags_bridge(desc:*mut ProgramLoadDesc) {
++ (*desc).mcexec_flags=0;
++}
++
++#[cfg(mcexec_desc_fixture)]
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_desc_fixture_abi(out:*mut usize)->usize {
++ let values=[core::mem::size_of::<ProgramLoadDesc>(),core::mem::align_of::<ProgramLoadDesc>(),core::mem::size_of::<ImageSection>(),core::mem::align_of::<ImageSection>(),
++ core::mem::offset_of!(ProgramLoadDesc,magic),
++ core::mem::offset_of!(ProgramLoadDesc,num_sections),
++ core::mem::offset_of!(ProgramLoadDesc,cpu),
++ core::mem::offset_of!(ProgramLoadDesc,pid),
++ core::mem::offset_of!(ProgramLoadDesc,stack_prot),
++ core::mem::offset_of!(ProgramLoadDesc,pgid),
++ core::mem::offset_of!(ProgramLoadDesc,cred),
++ core::mem::offset_of!(ProgramLoadDesc,reloc),
++ core::mem::offset_of!(ProgramLoadDesc,enable_vdso),
++ core::mem::offset_of!(ProgramLoadDesc,padding),
++ core::mem::offset_of!(ProgramLoadDesc,entry),
++ core::mem::offset_of!(ProgramLoadDesc,user_start),
++ core::mem::offset_of!(ProgramLoadDesc,user_end),
++ core::mem::offset_of!(ProgramLoadDesc,rprocess),
++ core::mem::offset_of!(ProgramLoadDesc,rpgtable),
++ core::mem::offset_of!(ProgramLoadDesc,at_phdr),
++ core::mem::offset_of!(ProgramLoadDesc,at_phent),
++ core::mem::offset_of!(ProgramLoadDesc,at_phnum),
++ core::mem::offset_of!(ProgramLoadDesc,at_entry),
++ core::mem::offset_of!(ProgramLoadDesc,at_clktck),
++ core::mem::offset_of!(ProgramLoadDesc,args),
++ core::mem::offset_of!(ProgramLoadDesc,args_len),
++ core::mem::offset_of!(ProgramLoadDesc,envs),
++ core::mem::offset_of!(ProgramLoadDesc,envs_len),
++ core::mem::offset_of!(ProgramLoadDesc,rlimit),
++ core::mem::offset_of!(ProgramLoadDesc,interp_align),
++ core::mem::offset_of!(ProgramLoadDesc,mpol_flags),
++ core::mem::offset_of!(ProgramLoadDesc,mpol_threshold),
++ core::mem::offset_of!(ProgramLoadDesc,heap_extension),
++ core::mem::offset_of!(ProgramLoadDesc,stack_premap),
++ core::mem::offset_of!(ProgramLoadDesc,mpol_bind_mask),
++ core::mem::offset_of!(ProgramLoadDesc,mpol_mode),
++ core::mem::offset_of!(ProgramLoadDesc,mpol_nodemask),
++ core::mem::offset_of!(ProgramLoadDesc,thp_disable),
++ core::mem::offset_of!(ProgramLoadDesc,enable_uti),
++ core::mem::offset_of!(ProgramLoadDesc,uti_thread_rank),
++ core::mem::offset_of!(ProgramLoadDesc,uti_use_last_cpu),
++ core::mem::offset_of!(ProgramLoadDesc,straight_map),
++ core::mem::offset_of!(ProgramLoadDesc,straight_map_threshold),
++ #[cfg(mcexec_enable_tofu)]
++ core::mem::offset_of!(ProgramLoadDesc,enable_tofu),
++ core::mem::offset_of!(ProgramLoadDesc,mcexec_flags),
++ core::mem::offset_of!(ProgramLoadDesc,nr_processes),
++ core::mem::offset_of!(ProgramLoadDesc,process_rank),
++ core::mem::offset_of!(ProgramLoadDesc,cpu_set),
++ core::mem::offset_of!(ProgramLoadDesc,profile),
++ core::mem::offset_of!(ProgramLoadDesc,sections),
++ core::mem::offset_of!(ImageSection,vaddr),
++ core::mem::offset_of!(ImageSection,len),
++ core::mem::offset_of!(ImageSection,remote_pa),
++ core::mem::offset_of!(ImageSection,filesz),
++ core::mem::offset_of!(ImageSection,offset),
++ core::mem::offset_of!(ImageSection,prot),
++ core::mem::offset_of!(ImageSection,interp),
++ core::mem::offset_of!(ImageSection,padding),
++ core::mem::offset_of!(ImageSection,fp),
++ ];
++ core::ptr::copy_nonoverlapping(values.as_ptr(),out,values.len());values.len()
++}
+--- /dev/null
++++ b/executer/user/rust/mcexec_signal_wait_exit.rs
+@@ -0,0 +1,106 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// libc owns kernel signal ABI adaptation; Rust owns project action/lifecycle logic.
++use super::{c_int,c_long,c_ulong,c_void};
++use core::ptr::{addr_of_mut,null_mut};
++#[repr(C)]
++struct SigSet { bits:[c_ulong;16] }
++#[repr(C)]
++struct SigAction { handler:usize, mask:SigSet, flags:c_int, restorer:usize }
++#[repr(C,align(8))]
++struct SigInfo { bytes:[u8;128] }
++unsafe extern "C" {
++ static mut master_tid:c_int;
++ static mut debug:c_int;
++ static mut stdout:*mut c_void;
++ static mut stderr:*mut c_void;
++ fn sigaction(sig:c_int,action:*const SigAction,old:*mut SigAction)->c_int;
++ fn sigemptyset(set:*mut SigSet)->c_int;
++ fn sigdelset(set:*mut SigSet,sig:c_int)->c_int;
++ fn sigprocmask(how:c_int,set:*const SigSet,old:*mut SigSet)->c_int;
++ fn waitid(kind:c_int,pid:u32,info:*mut SigInfo,options:c_int)->c_int;
++ fn write(fd:c_int,buf:*const c_void,size:usize)->isize;
++ fn signal(sig:c_int,handler:usize)->usize;
++ fn kill(pid:c_int,sig:c_int)->c_int;
++ fn sleep(seconds:u32)->u32;
++ fn pause()->c_int;
++ fn exit(code:c_int)->!;
++ fn isatty(fd:c_int)->c_int;
++ fn fprintf(stream:*mut c_void,format:*const u8,...)->c_int;
++ fn printf(format:*const u8,...)->c_int;
++ fn fflush(stream:*mut c_void)->c_int;
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_sendsig_si_pid_bridge(info:*const c_void)->c_int { info.cast::<u8>().add(16).cast::<c_int>().read() }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_sendsig_si_signo_bridge(info:*const c_void)->c_int { info.cast::<c_int>().read() }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_sendsig_default_action_bridge(sig:c_int) {
++ signal(sig,0);kill(super::getpid(),sig);loop { sleep(1); }
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_act_signalfd4_write_bridge(fd:c_int,info:*const c_void,len:usize)->isize { write(fd,info,len) }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_act_signalfd4_write_error_bridge() { fprintf(stderr,b"error: writing sigpipe\n\0".as_ptr()); }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_act_sigaction_install_bridge(sig:c_int,ignored:c_int) {
++ let mut act:SigAction=core::mem::zeroed();
++ if ignored!=0 { act.handler=1; } else {act.handler=super::sendsig as usize;act.flags=4;}
++ sigaction(sig,&act,null_mut());
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_act_sigprocmask_apply_bridge(mask:c_ulong) {
++ let mut set:SigSet=core::mem::zeroed();
++ sigemptyset(addr_of_mut!(set));
++ set.bits[0]=mask;
++ sigdelset(addr_of_mut!(set),23); // LOCALSIG == SIGURG.
++ sigprocmask(2,&set,null_mut()); // SIG_SETMASK.
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_init_sigaction_set_master_tid_bridge(tid:c_int) { master_tid=tid; }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_init_sigaction_install_bridge(sig:c_int) {
++ // Deliberate defined extension: a failed query leaves zeros instead of the
++ // original uninitialized C struct. Defined successful-query behavior is parity.
++ let mut act:SigAction=core::mem::zeroed();
++ sigaction(sig,core::ptr::null(),addr_of_mut!(act));
++ act.handler=super::sendsig as usize;
++ act.flags=(act.flags & !0x10000000)|4; // clear SA_RESTART, set SA_SIGINFO.
++ sigaction(sig,&act,null_mut());
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_waitid_pid_bridge(pid:c_int,opt:c_int,errno_out:*mut c_int)->c_int {
++ let mut info:SigInfo=core::mem::zeroed();
++ let mut ret;
++ loop {
++   ret=waitid(1,pid as u32,addr_of_mut!(info),opt); // P_PID.
++   if ret!=-1 || *super::__errno_location()!=4 { break; }
++ }
++ if !errno_out.is_null() { *errno_out=*super::__errno_location(); }
++ if ret==0 {ret=mcexec_sendsig_si_pid_bridge(addr_of_mut!(info).cast());}
++ ret
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_wait4_error_bridge(pid:c_ulong,ret:c_int,error:c_int) { fprintf(stderr,b"ERROR: waiting for %lu rc=%d errno=%d\n\0".as_ptr(),pid,ret,error); }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_exit_debug_bridge(status:c_ulong,cpu:c_int) {
++ if debug!=0 {printf(b"mcexec_exit_debug_bridge: __NR_exit/__NR_exit_group: %ld (cpu_id: %d)\n\0".as_ptr(),status,cpu);fflush(stdout);}
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_exit_isatty_bridge(fd:c_int)->c_int { isatty(fd) }
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_exit_report_signal_bridge(sig:c_int) {fprintf(stderr,b"Terminate by signal %d\n\0".as_ptr(),sig);}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_exit_report_status_bridge(term:c_int) {
++ if debug!=0 {printf(b"mcexec_exit_report_status_bridge: Exit status: %d\n\0".as_ptr(),term);fflush(stdout);}
++}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_exit_replay_signal_bridge(sig:c_int) {signal(sig,0);kill(super::getpid(),sig);pause();}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_exit_process_bridge(term:c_int) {exit(term);}
++#[cfg(mcexec_signal_fixture)]
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_signal_fixture_abi(out:*mut usize) {
++ let values=[core::mem::size_of::<SigInfo>(),core::mem::align_of::<SigInfo>(),0,16,
++ core::mem::size_of::<SigAction>(),core::mem::align_of::<SigAction>(),core::mem::offset_of!(SigAction,handler),core::mem::offset_of!(SigAction,mask),core::mem::offset_of!(SigAction,flags),core::mem::offset_of!(SigAction,restorer),core::mem::size_of::<SigSet>(),core::mem::align_of::<SigSet>()];
++ core::ptr::copy_nonoverlapping(values.as_ptr(),out,values.len());
++}
+--- /dev/null
++++ b/executer/user/rust/mcexec_platform_syscalls.rs
+@@ -0,0 +1,176 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Project callback bodies now in Rust; genuine libc handles platform ABI.
++use super::{c_int,c_long,c_ulong,c_void,McexecSyscallWaitDesc,McexecTimespec};
++unsafe extern "C" {
++ static mut debug:c_int;static mut stdout:*mut c_void;
++ fn printf(fmt:*const u8,...)->c_int;fn fflush(p:*mut c_void)->c_int;
++ fn readlinkat(fd:c_int,path:*const u8,out:*mut u8,size:usize)->isize;
++ fn fstatat(fd:c_int,path:*const u8,out:*mut c_void,flags:c_int)->c_int;
++ fn stat(path:*const u8,out:*mut c_void)->c_int;
++ fn faccessat(fd:c_int,path:*const u8,mode:c_int,flags:c_int)->c_int;
++ fn getxattr(path:*const u8,name:*const u8,value:*mut c_void,size:usize)->isize;
++ fn lgetxattr(path:*const u8,name:*const u8,value:*mut c_void,size:usize)->isize;
++ fn openat(fd:c_int,path:*const u8,flags:c_int,...)->c_int;
++ fn open(path:*const u8,flags:c_int,...)->c_int;
++ fn setfsuid(uid:u32)->c_int;fn setfsgid(gid:u32)->c_int;
++ fn setresuid(r:u32,e:u32,s:u32)->c_int;fn setresgid(r:u32,e:u32,s:u32)->c_int;
++ fn setreuid(r:u32,e:u32)->c_int;fn setregid(r:u32,e:u32)->c_int;
++ fn setuid(uid:u32)->c_int;fn setgid(gid:u32)->c_int;
++ fn clock_gettime(clock:c_int,tv:*mut McexecTimespec)->c_int;
++}
++unsafe fn converted(ret:c_long)->c_long {super::mcexec_errno_return_result(ret,*super::__errno_location())}
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_path_readlinkat_bridge(dirfd:c_int,path:*const u8,buf:*mut u8,size:usize) -> c_long {
++ let ret=converted(readlinkat(dirfd,path,buf,size) as c_long);
++ if debug!=0 {printf(b"mcexec_path_readlinkat_bridge: readlinkat: dirfd=%d, path=%s, buf=%s, ret=%ld\n\0".as_ptr(),dirfd,path,buf,ret);fflush(stdout);}
++ ret
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_path_readlink_bridge(path:*const u8,buf:*mut u8,size:usize) -> c_long {
++ let ret=converted(super::readlink(path,buf,size) as c_long);
++ if debug!=0 {printf(b"mcexec_path_readlink_bridge: readlink: path=%s, buf=%s, ret=%ld\n\0".as_ptr(),path,buf,ret);fflush(stdout);}
++ ret
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_path_fstatat_bridge(dirfd:c_int,path:*const u8,statbuf:*mut c_void,flags:c_int) -> c_long {
++ let ret=converted(fstatat(dirfd,path,statbuf,flags) as c_long);
++ if debug!=0 {printf(b"mcexec_path_fstatat_bridge: fstatat: dirfd=%d, pathname=%s, buf=%p, flags=%x, ret=%ld\n\0".as_ptr(),dirfd,path,statbuf,flags,ret);fflush(stdout);}
++ ret
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_path_stat_bridge(path:*const u8,statbuf:*mut c_void) -> c_long {
++ let ret=converted(stat(path,statbuf) as c_long);
++ if debug!=0 {printf(b"mcexec_path_stat_bridge: stat: path=%s, ret=%ld\n\0".as_ptr(),path,ret);fflush(stdout);}
++ ret
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_path_faccessat_bridge(dirfd:c_int,path:*const u8,mode:c_int,flags:c_int) -> c_long {
++ let ret=converted(faccessat(dirfd,path,mode,flags) as c_long);
++ if debug!=0 {printf(b"mcexec_path_faccessat_bridge: faccessat: dirfd=%d, pathname=%s, mode=%d, ret=%ld\n\0".as_ptr(),dirfd,path,mode,ret);fflush(stdout);}
++ ret
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_path_access_bridge(path:*const u8,mode:c_int) -> c_long {
++ let ret=converted(super::access(path,mode) as c_long);
++ if debug!=0 {printf(b"mcexec_path_access_bridge: access: path=%s, ret=%ld\n\0".as_ptr(),path,ret);fflush(stdout);}
++ ret
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_path_getxattr_bridge(path:*const u8,name:*const u8,value:*mut c_void,size:usize) -> c_long {
++ let ret=converted(getxattr(path,name,value,size) as c_long);
++ if debug!=0 {printf(b"mcexec_path_getxattr_bridge: getxattr: path=%s, name=%s, ret=%ld\n\0".as_ptr(),path,name,ret);fflush(stdout);}
++ ret
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_path_lgetxattr_bridge(path:*const u8,name:*const u8,value:*mut c_void,size:usize) -> c_long {
++ let ret=converted(lgetxattr(path,name,value,size) as c_long);
++ if debug!=0 {printf(b"mcexec_path_lgetxattr_bridge: lgetxattr: path=%s, name=%s, ret=%ld\n\0".as_ptr(),path,name,ret);fflush(stdout);}
++ ret
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_path_openat_log_bridge(dirfd:c_int,path:*const u8,tid:c_int) {
++ if debug!=0 {printf(b"mcexec_path_openat_log_bridge: openat: %d, %s,tid=%d\n\0".as_ptr(),dirfd,path,tid);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_path_open_log_bridge(path:*const u8) {
++ if debug!=0 {printf(b"mcexec_path_open_log_bridge: open: %s\n\0".as_ptr(),path);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_path_openat_bridge(dirfd:c_int,path:*const u8,flags:c_ulong,mode:c_ulong) -> c_long {
++ converted(openat(dirfd,path,flags as c_int,mode) as c_long)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_path_open_bridge(path:*const u8,flags:c_ulong,mode:c_ulong) -> c_long {
++ converted(open(path,flags as c_int,mode) as c_long)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_cred_get_bridge(fd:c_int,arg:c_ulong) {
++ super::ioctl(fd,0x30a0290a as c_ulong,arg);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_cred_setfsuid_bridge(uid:c_ulong) -> c_long {
++ setfsuid(uid as u32) as c_long
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_cred_setfsgid_bridge(gid:c_ulong) -> c_long {
++ setfsgid(gid as u32) as c_long
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_cred_setresuid_bridge(a0:c_ulong,a1:c_ulong,a2:c_ulong) -> c_long {
++ converted(setresuid(a0 as u32,a1 as u32,a2 as u32) as c_long)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_cred_setresgid_bridge(a0:c_ulong,a1:c_ulong,a2:c_ulong) -> c_long {
++ converted(setresgid(a0 as u32,a1 as u32,a2 as u32) as c_long)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_cred_setreuid_bridge(a0:c_ulong,a1:c_ulong) -> c_long {
++ converted(setreuid(a0 as u32,a1 as u32) as c_long)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_cred_setregid_bridge(a0:c_ulong,a1:c_ulong) -> c_long {
++ converted(setregid(a0 as u32,a1 as u32) as c_long)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_cred_setuid_bridge(a0:c_ulong) -> c_long {
++ converted(setuid(a0 as u32) as c_long)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_cred_setgid_bridge(a0:c_ulong) -> c_long {
++ converted(setgid(a0 as u32) as c_long)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_do_generic_syscall_raw_bridge(w:*const McexecSyscallWaitDesc) -> c_long {
++ let sr=&(*w).sr;super::syscall(sr.number as c_long,sr.args[0],sr.args[1],sr.args[2],sr.args[3],sr.args[4],sr.args[5])
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_do_generic_syscall_start_bridge(number:c_ulong) {
++ if debug!=0 {printf(b"mcexec_do_generic_syscall_start_bridge: do_generic_syscall(%ld)\n\0".as_ptr(),number);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_do_generic_syscall_done_bridge(number:c_ulong,ret:c_long) {
++ if debug!=0 {printf(b"mcexec_do_generic_syscall_done_bridge: do_generic_syscall(%ld):%ld (%#lx)\n\0".as_ptr(),number,ret,ret);fflush(stdout);}
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_do_generic_syscall_bridge(w:*const McexecSyscallWaitDesc) -> c_long {
++ super::mcexec_do_generic_syscall_body(w)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_perf_event_open_bridge() -> c_long {
++ open(b"/dev/null\0".as_ptr(),0) as c_long
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_clock_gettime_bridge(clock:c_int,tv:*mut McexecTimespec) -> c_long {
++ converted(clock_gettime(clock,tv) as c_long)
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn mcexec_clock_gettime_log_bridge(sec:c_long,nsec:c_long) {
++ if debug!=0 {printf(b"mcexec_clock_gettime_log_bridge: clock_gettime=%016ld,%09ld\n\0".as_ptr(),sec,nsec);fflush(stdout);}
++}

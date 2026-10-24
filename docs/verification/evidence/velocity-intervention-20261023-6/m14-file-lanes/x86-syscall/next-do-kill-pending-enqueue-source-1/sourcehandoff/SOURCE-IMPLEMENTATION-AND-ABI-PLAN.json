@@ -1,0 +1,48 @@
+{
+  "C_postimage": {
+    "bytes": 113073,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-do-kill-pending-enqueue-source-1/candidate/syscall.c",
+    "sha256": "9ce74de20037dbc0208b94cc556a9efa01478b77b7750ce5c5df2b730783604a"
+  },
+  "C_preimage": {
+    "bytes": 112634,
+    "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+    "sha256": "d876e0b24f789372e6747fee7c554a53a3deaa9cee7034d7096374c2dff34ad6"
+  },
+  "Cpatch": {
+    "bytes": 1405,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-do-kill-pending-enqueue-source-1/patch/syscall.c.diff",
+    "sha256": "f1399e80d8f714ca359ddb359b2c6fe7e3410d670038200bf18264d297568837"
+  },
+  "Rust_fragment": {
+    "bytes": 2634,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-do-kill-pending-enqueue-source-1/candidate/syscall_policy.do_kill_pending_enqueue.FRAGMENT.rs",
+    "sha256": "7f8fc85e5025efaf2762871b9addaf6adb8133c2a5269ad6c49b57b3b014872e"
+  },
+  "actual_ABI": {
+    "bytes": 903,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-do-kill-pending-enqueue-source-1/fixture-fragments/real-ABI.FRAGMENT.c",
+    "sha256": "14b875d90e7e0c5b948d55d438a8c81fa18f6f94dbe1e5c38f5216e3de9a4a82"
+  },
+  "actual_compile": null,
+  "actual_fixture": null,
+  "default_link": null,
+  "engineering_percentage": null,
+  "fixture": {
+    "bytes": 1223,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-do-kill-pending-enqueue-source-1/fixture-fragments/SMALLEST-FIXTURE.PROPOSAL.json",
+    "sha256": "ec4d39e11fdf6eee7ff71cfdba3ea448023b0011d7883c02d42266be45e32063"
+  },
+  "native": null,
+  "no_second_executable_queue": true,
+  "original_C": {
+    "bytes": 937,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-do-kill-pending-enqueue-source-1/fixture-fragments/original-pending-enqueue.ACTUAL.inc",
+    "sha256": "0e5e204f1bb7dd1d172f50020af90037783f326a94270af9671e3d7b40699d16"
+  },
+  "ownership": "Caller retains target hold, IRQ-disable state and pending writerlock. New allocation transfers to list exactly once before event; nofree here. Coalescing preserves existing node/info. doint1 onENOMEM preserved; Cunlock/restore/delivery remainunchanged.",
+  "policy_merge": "Append isolated fragment only; root central Cregion composition with group/FP/restart; no shared imports/ABI edits.",
+  "remaining_C": "do_kill target selection/permission/hold+release/wakeup/IPI; do_signal pending consume/handler lifecycle. No wholefunction/file retirement.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PENDING_ENQUEUE_OWNERSHIP_BRANCH_IMPLEMENTED_SOURCE_ONLY"
+}

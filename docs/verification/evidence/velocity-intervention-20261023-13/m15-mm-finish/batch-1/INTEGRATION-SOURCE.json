@@ -1,0 +1,54 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "REVIEWABLE_PRIVATE_SOURCE_PATCH_NOT_APPLIED",
+  "actual_time": "2026-10-24T04:30:26.557891+00:00",
+  "changes": {
+    "host-kernel/native-rust/mcctrl.rs": {
+      "preimage_sha256": "1871d5fc2bd352228dc167a7460a6f687e1a5b8228410cbf394be90c010c325e",
+      "candidate_sha256": "de4793814c7ab3834d0d284c7e28ab2fbfdbfb63f50aac286c5082909d392dee",
+      "private_source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/m15-mm-finish/batch-1/integration-source/host-kernel/native-rust/mcctrl.rs"
+    },
+    "host-kernel/native-rust/mcctrl_vm.rs": {
+      "preimage_sha256": "ba957d7349a45cda47ba135dd265885516cf40c00872658ca8309a98aa8d19c1",
+      "candidate_sha256": "4c19b54344980a20520cdf3660b31c50d62525e6fed0ab58f950e38d880a5864",
+      "private_source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/m15-mm-finish/batch-1/integration-source/host-kernel/native-rust/mcctrl_vm.rs"
+    },
+    "host-kernel/kbuild/Kbuild.in": {
+      "preimage_sha256": "c92d3c04e12f42997fec518a3e1783c67ed31ebedc9456b789b71ff10c66e2b9",
+      "candidate_sha256": "192c744b53fe2158f8f81ab6165107753b2fb66a9642db02c3a85c3c3843a4e3",
+      "private_source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/m15-mm-finish/batch-1/integration-source/host-kernel/kbuild/Kbuild.in"
+    },
+    "host-kernel/native-rust/mcctrl_mm_write.rs": {
+      "preimage_sha256": null,
+      "candidate_sha256": "6e1d6d65fcad10aa673bd546646b96f28fd7280250ad05a6ca560a0dc2877107",
+      "private_source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/m15-mm-finish/batch-1/integration-source/host-kernel/native-rust/mcctrl_mm_write.rs"
+    },
+    "host-kernel/native-rust/m15_mmap_trace_gates.S": {
+      "preimage_sha256": null,
+      "candidate_sha256": "365305ba7f9d7a22615d5fdf0a600715f63a9fc56c4f4ac9f0e126d19a812161",
+      "private_source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/m15-mm-finish/batch-1/integration-source/host-kernel/native-rust/m15_mmap_trace_gates.S"
+    },
+    "host-kernel/native-rust/m15_mm_write_warning.S": {
+      "preimage_sha256": null,
+      "candidate_sha256": "24bd1ebcd59ac1de5761282cac404540a2324fd819576f5d39dd51c1c7f18550",
+      "private_source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/m15-mm-finish/batch-1/integration-source/host-kernel/native-rust/m15_mm_write_warning.S"
+    }
+  },
+  "canonical_edits": false,
+  "C_reference_files_preserved": true,
+  "requires_before_default_selection": [
+    "independent MM/shared-word/jump-label/warning ASM source review",
+    "actual corrected body fixture",
+    "actual pinned-SDK layout/leaf/ASM+objtool and coherent staging+three-module link proof",
+    "matching changed-path native functional observations"
+  ],
+  "build_contract_remaining": [
+    "scripts/rocky_rust_staging.py hard-locked EXPECTED_INPUTS+LOCKED_ESCAPE_SUPPORT and EXPECTED_BUILD_CONTRACT need a reviewed matching successor, not bypass",
+    "host-kernel/kbuild/stage-manifest.json must bind these current candidate identities, retire selected compat C/h inputs and add existing embedded_assembly_source classification for the two .S files",
+    "native_rust_kconfig_policy.py and native_rust_build_surface_audit.py bind exact current Kbuild composite; review successor expectations with new object list",
+    "native_rust_host_audit.py currently reports and accepts one compat C object; actual source/link ownership assertions need a matching reviewed successor",
+    "freeze actual current mcctrl_rust source/build and MODULE cfg controls; the retained scratch22 .mcctrl.o.cmd is older single-object context, not current composite evidence"
+  ],
+  "manual_rustc_forbidden": true,
+  "staging_or_acceptance_bypass_proposed": false
+}

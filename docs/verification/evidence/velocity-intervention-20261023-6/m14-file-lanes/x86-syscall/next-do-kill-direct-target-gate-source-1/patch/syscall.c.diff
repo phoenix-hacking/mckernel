@@ -1,0 +1,39 @@
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -2155,6 +2155,12 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern int arch_do_kill_direct_target_gate_result(struct process *caller_proc,
++		struct process *target_proc, struct thread *target, int sig,
++		unsigned long irqstate, unsigned long *return_value);
++#endif
++
+ unsigned long
+ do_kill(struct thread *thread, int pid, int tid, int sig, siginfo_t *info,
+         int ptracecont)
+@@ -2369,6 +2375,14 @@
+ 	}
+ 
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++	{
++		unsigned long direct_target_return;
++		if (arch_do_kill_direct_target_gate_result(proc, tproc, tthread,
++				sig, irqstate, &direct_target_return))
++			return direct_target_return;
++	}
++#else
+ 	if(sig != SIGCONT &&
+ 	   proc &&
+ 	   proc->euid != 0 &&
+@@ -2397,6 +2411,8 @@
+ 		release_thread(tthread);
+ 		return 0;
+ 	}
++
++#endif
+ 
+ 	doint = 0;
+ 

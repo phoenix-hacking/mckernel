@@ -1,0 +1,88 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Independent focused source review; no compiler, test, guest, privileged action,
+or canonical/frozen-source edit performed. Read-only shell source inspection only.
+
+Decision: source changes support a distinct v2 continuation, but the supplied
+collector/consumer-only packet cannot run through the accepted owner unchanged.
+This is NOT runtime PASS, physical clearance, prefix qualification or release.
+
+Exact source-diff findings
+1. Rust pair_long_static.rs (actual staticlib input) and pair_long_producer.rs
+   agree: WORK_NS90e9, WALL_NS600e9, MIN_LAUNCHES2, wire version2. Bridge initial
+   ctx deadline600e9 agrees. ABI declarations/layouts/exports unchanged; C header
+   contains no stale profile constant. ROUND_CAP2048, trace256MiB, per-app10s,
+   strict pair report, cleanup/ownership and final completion gates preserved.
+2. Supplied pair_collector.c line35 still uses COLLECTOR_SECONDS7320 for long
+   mode. This drives the real PID1 alarm and all helper outer bounds. Derived
+   successor must720 (producer600 + unchanged120 startup/teardown allowance).
+   Patch is collector-outer-budget.successor.patch. --collector-source-only
+   mode creates collector-source720 without changing the frozen supplied source.
+3. Cursor optimization is sound for current callers: cursor begins0 and advances
+   only to exact authenticated newline boundaries. Setting off=max(offset,cursor)
+   skips only bytes the preexisting off>=cursor predicate could not match. Stat
+   identity check remains before skip; if cursor exceeds a record end, while is
+   skipped before pointer arithmetic/dereference. PID filters are unchanged.
+   New round_report fail-phase label is diagnostic only.
+
+All concrete old host/runtime profile joins found
+* long_transport.py PROFILE line14 is exactv1/3600/7200/min100; is_long line88
+  rejectsv2 before owner admission, manifest loading, backend or consumer.
+* native_diagnostic.py line1461 loads sibling p12_long_session.py. Merely adding
+  p12_cumulative_segment.py does not select it. Successor keeps original module
+  filename in the NEW cohort and installs derivedv2 contents there.
+* old transport inner7800/outer8100 are exact comparisons (deadline), not maxima;
+  owner default outer and runner inner draw from TRANSPORT. New proposal1200/
+  1500 preserves old480s guest-to-runner margin and300s owner cleanup margin.
+* old EXTERNAL_CAPTURE_BINDING pins controller path/digest, request/output path,
+  owner path and softwall8100. Capture wrapper separately hardcodes owner,
+  manifest path/digest, release path, host output, nonce and exactsoftwall8100.
+  These all need a fresh coherent successor and request; captures cannot be
+  redirected by runtime arguments alone.
+* owner RUNNER and SELF are absolute oldpaths; bound_manifest also hardcodes old
+  native_diagnostic.py. Owner SOURCE_HASHES pins runtime source and authority
+  inputs, EXTRA_READONLY binds accessible runtime/stage inputs. Must rebase all
+  cohort paths, recalculate changed cohort pins, and add actual collector/capsule
+  stage source+handoff pins/read-only paths. Preserve other existing authority pins.
+* long_transport FILES includes p12_long_session.py (use actual consumedname)
+  and owner; fresh release source_sha256 must exactly cover all9 members. Release
+  profile equality, independent payload review, new nonce, manifest digest,
+  boot/expiry/one-execution and storage admission remain mandatory.
+* long_transport live_growth pins scratch110GiB. If root has grown scratch142GiB,
+  strict successor must pin actual142GiB; neither old110 nor automatic fallback.
+  UUID/loop/backing/device/floors/full sparse gap admission remain unchanged.
+* sibling CURRENT68-SDK8-AUTHORITY-LINKS.json must accompany copied
+  repaired_image_authority.py; retain exact accepted kernel/modules/native proof.
+* manifest: pair_long_session exactv2, unchanged pair identity but NEW collector,
+  derived capsule and complete final-map/producer/staging hashes. Excludes
+  pair_rounds. Reuse existing kernel10972/modules/apps/launcher/nativeboot/base;
+  there is no need to rebuild a full image.
+
+Concrete successor materialization
+prepare_exact_runtime_successor.py is NOT executed here. Parent may first run
+it with --collector-source-only, compile the resulting collector-source720 Rust
+staticlib and C collector, stage a derived capsule using the accepted stage body,
+then supply exact config JSON to materialize runtime-successor/source plus its
+fresh wrapper. Config requires actual new manifest digest, new namespace/nonce,
+host device, actual reviewed backing bytes and extra readonly/source bindings.
+No fixture/runtime import, subprocess, release, admission or native launch exists
+in this materializer. It parses Python syntax only and writes fresh private dirs.
+Parent must use its NEW collector-source720 paths in real compile argv; supplied
+ROOT-NEXT-COMMANDS still points to frozen uncorrected collector source.
+
+Unclosed acceptance matters
+* cumulative_accounting.py uses first app start as wall anchor, weaker than
+  genuine producer entered/deadline; actual root fixture failure preserved.
+  Reducer author owns qualified wall-anchor successor. No overlapping edit here.
+* accounting accepts generic artifact_bindings equality; real independent qualifier
+  must enforce complete kernel/modules/apps/launcher and collector/segment-specific
+  provenance, actual original per-round oracle, original failed round exclusion,
+  native cleanup/resource/retirement and evidence digests. Equality of incomplete
+  mappings, callback mocks, counters or source-only receipts proves none of this.
+* old629 rounds need full original traces/strict per-round native provenance, not
+  only progress counters or latest1MiB failure snapshot. Oldprefix remains
+  NOT_QUALIFIED until its real evidence chain is accepted. Preserve oldABORTFAIL.
+* old/new clocks are distinct guest sessions; qualify each session's own producer
+  wall anchor and independent host owner start/retirement interval. Sum only the
+  successful application work unions, never subtract timestamps across guests.
+* Short90s gives target3609690949712ns only IF original3519690949712ns prefix is
+  qualified and new actual work reaches90e9. Original uninterrupted goal staysFAIL.

@@ -1,0 +1,115 @@
+{
+  "actual_results": null,
+  "all_existing_union2_policy_bytes_preserved": true,
+  "canonical_preimages": {
+    "C": {
+      "bytes": 843077,
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "sha256": "07af5efb4af2754988376301d19887ea90743b8f304455b7df980738f2629399"
+    },
+    "policy": {
+      "bytes": 733513,
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "c5d6ddd9ce210ffd51f0e84c3feefddcf4d115044ced76018b9e946aad9cb6f5"
+    }
+  },
+  "compiler_receipt": null,
+  "default_link": false,
+  "engineering_percentage": null,
+  "excluded": [
+    "move_pages",
+    "logger",
+    "exec cleanup",
+    "exec filename admission",
+    "exec descriptor init",
+    "sigaction/prlimit uninitialized context HOLD"
+  ],
+  "expected_F03_TU": {
+    "F03_only_after": {
+      "T": 3090,
+      "U": 574
+    },
+    "actual_genuine_future_result": null,
+    "added_T": [
+      "reset_cputime",
+      "set_cputime",
+      "sys_execve",
+      "sys_execveat"
+    ],
+    "added_U": [
+      "syscall_execveat_bridge"
+    ],
+    "authority": {
+      "bytes": 222582,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/root-union-preparation-2/root-actual-combined-production-1/01/stdout",
+      "sha256": "751111c17b9a75739901128fc118f85b5856b2b9c75abe7861784a3b0a26d257"
+    },
+    "before": {
+      "T": 3086,
+      "U": 574
+    },
+    "other_ROOT_lane_deltas_must_be_independently_bound": true,
+    "removed_U": [
+      "reset_cputime"
+    ]
+  },
+  "file_retired": false,
+  "fragments": {
+    "cputime": {
+      "bytes": 5726,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/passed-exec-cputime-production-preparation-1/candidate/cputime.FRAGMENT.rs",
+      "sha256": "9b9c8906da22585e0f94ea995e74a603a0b8f96ef985cced7cb12ead9c6da962"
+    },
+    "exec_entries": {
+      "bytes": 1953,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/passed-exec-cputime-production-preparation-1/candidate/exec_entries.FRAGMENT.rs",
+      "sha256": "323ec363a7c27aa4c8e2382ecb170382f16216f9c5795372807b3e2962f695a9"
+    }
+  },
+  "full78_source": null,
+  "native": false,
+  "new_executors": 0,
+  "new_per_lane_full78_compilers": 0,
+  "only_two_passed_fragments_appended": true,
+  "passed_scope": {
+    "cputime_source": {
+      "bytes": 3249,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/passed-cputime-production-preparation-1/SOURCE-HANDOFF.PENDING-ROOT-UNION-OBJECT.json",
+      "sha256": "bd462f4c01a47277b83c619bef20e76953ff7c342191c98d33799d00c34823e4"
+    },
+    "cputime_suffix": "2044c7600d5fa1659fe7593b85ec3c691caf51adaddb65d9cedff076926fb2b5",
+    "exec_actual": {
+      "bytes": 18813,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/actual-fixture-preparation-1/actual-fixture-1/ACTUAL-WHOLE-JOIN.json",
+      "sha256": "ad0ba9e595079b1be8973d46b0ba0d4cbbdb2cf889f3f2e1affa3f07d6c29fbc"
+    },
+    "exec_layout_fields": 14,
+    "exec_pairs": 4788,
+    "exec_source": {
+      "bytes": 2671,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-entries-source-1/SOURCE-HANDOFF.json",
+      "sha256": "c2bae706f35b2c18babda74434efcefa86bc887aea68a546f9419ad883a343ba"
+    }
+  },
+  "postimages": {
+    "C": {
+      "bytes": 843632,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/passed-exec-cputime-production-preparation-1/candidate/syscall.c",
+      "sha256": "236d77ac65579e35ab45f7aafaa68454f201488848669f3ba6d429688c154bbc"
+    },
+    "policy": {
+      "bytes": 741194,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/passed-exec-cputime-production-preparation-1/candidate/syscall_policy.EXEC-CPUTIME.POSTIMAGE.rs",
+      "sha256": "f76787a55eca0d48c260406f69f5995fae5f3cc35580155420d4942db41db6bc"
+    }
+  },
+  "root_combined_object": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_patch": {
+    "bytes": 9517,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/passed-exec-cputime-production-preparation-1/EXEC-CPUTIME-ON-UNION2.NONOVERLAPPING.patch",
+    "sha256": "40029a49edde5b3ac49e1fc51cac932579a6103729568298eb5357092f0a25d8"
+  },
+  "source_verdict": null,
+  "status": "PASSED_EXEC_AND_CPUTIME_ONLY_COMPOSED_UNION2_PRODUCTION_POSTIMAGES_SOURCE_ONLY"
+}

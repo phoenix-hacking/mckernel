@@ -1,0 +1,32 @@
+--- a/kernel/rust/process_helpers.rs
++++ b/kernel/rust/process_helpers.rs
+@@ -12216,3 +12216,29 @@
+     // predicate preserves every positive/negative provider error unchanged.
+     (*error_out != 0) as CInt
+ }
++
++// Borrowed COW classification only; allocation and cleanup retain their owner.
++#[no_mangle]
++pub unsafe extern "C" fn process_page_fault_cow_classify_body_result(
++    range: *mut VmRange,
++    reason: CULong,
++    page: *mut c_void,
++) -> CInt {
++    let private_range = ((*range).flag & VR_PRIVATE) != 0;
++    let patching_to_rdonly =
++        (reason & PF_PATCH) != 0 && ((*range).flag & VR_PROT_WRITE) == 0;
++    // Preserve the original OR, including its existing zeroobj behavior.
++    // This port does not reinterpret it as the often-expected bitwise AND.
++    let devfile_or_hugetlbfs_or_premap = page.is_null()
++        && !(*range).memobj.is_null()
++        && (((*(*range).memobj.cast::<Memobj>()).flags | 0x20000) == 0);
++    // Original C evaluates this Page classification before the final private/
++    // patch predicate. Preserve both short-circuit order and borrowed lifetime.
++    let regfile_or_shm = !page.is_null()
++        && (crate::page_helpers::page_is_in_memobj(
++                page.cast::<crate::page_helpers::Page>()) != 0
++            || crate::page_helpers::page_is_multi_mapped(
++                page.cast::<crate::page_helpers::Page>()) != 0);
++    ((private_range || patching_to_rdonly)
++        && (devfile_or_hugetlbfs_or_premap || regfile_or_shm)) as CInt
++}

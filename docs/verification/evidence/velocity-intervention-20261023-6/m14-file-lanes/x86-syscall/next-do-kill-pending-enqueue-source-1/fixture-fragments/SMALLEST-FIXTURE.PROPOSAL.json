@@ -1,0 +1,25 @@
+{
+  "actual_Rust_reuse": [
+    "abi::SigPending160/Thread/SigInfo",
+    "list_helpers list_add/list_add_tail",
+    "string __inline_memset/memcpy",
+    "mem_helpers kmalloc_tracked"
+  ],
+  "actual_results": null,
+  "cases": [
+    "empty/nonempty list;signals1/9/19/32/33/64",
+    "normal duplicate matchingmask+ptrace coalesces preserving firstinfo/interrupted and sigevent",
+    "normal samemask/differentptrace allocates",
+    "realtime duplicate alwaysallocates",
+    "allocationfail returns-ENOMEM butdoint1, no list/event mutation",
+    "KILL/STOP prepend;ordinary/RT append",
+    "full128byte patterned info copied, zero padding/interrupted, list links consistent",
+    "ownership allocationpublishedonce neverfreed byenqueue; caller laterconsumer frees",
+    "existingheldwriterlock remains held throughout allocator/list callbacks, no helperlock/unlock/IRQ/refrelease"
+  ],
+  "controls": "TESTONLY allocator token and held-lock assertion only; actual ABI/list/string bodies retained. No raw IRQ or real target signal delivery.",
+  "driver": null,
+  "grant": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_FRAGMENTS_ONLY_NO_SECOND_QUEUE"
+}

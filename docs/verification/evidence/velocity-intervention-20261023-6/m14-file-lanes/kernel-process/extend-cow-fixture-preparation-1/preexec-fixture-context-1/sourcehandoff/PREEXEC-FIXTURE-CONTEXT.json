@@ -1,0 +1,27 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PREEXEC_FIXTURE_CONTEXT_AND_EXPLICIT_TAPE_LAYOUT_NO_ACTUAL_FAILURE_OR_PRODUCT_CHANGE",
+  "superseded_unrun_ready": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/extend-cow-fixture-preparation-1/sourcehandoff/EXECUTABLE-READY.EXTEND-COW4480.NOT-GRANTED.json",
+    "sha256": "5a75a90b7845e706df75f51279548dc4131479160c5bf71dbf92426fdb651237",
+    "bytes": 2472
+  },
+  "exact_changes": [
+    "Put #line context inside selected include so preprocessor __FILE__ agrees with held original function; outer #line cannot override include filename.",
+    "Add explicit zero reserved int to event and tape records, eliminating native C padding in strict whole-record memcmp; all meaningful field/event/order/value/count oracles unchanged."
+  ],
+  "source_product_C": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-extend-region-source-1/candidate/kernel/process.SOURCE-CONTEXT-CORRECTED.c",
+    "sha256": "42ee6f390724da418d0cc0ac6573200615c1ed2a52cf0f7a10602d6eb9729ef1",
+    "bytes": 167788
+  },
+  "source_product_Rust": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-extend-region-source-1/candidate/kernel/rust/process_helpers.rs",
+    "sha256": "2e74d8131170630a1930d8f972e2918b8519e929635c5754fafd935009865da1",
+    "bytes": 371962
+  },
+  "compiler_jobs": 0,
+  "actual_family_attempts": 0,
+  "comparisons_planned_unchanged": 4480,
+  "zeroobj_hold_unchanged": true
+}

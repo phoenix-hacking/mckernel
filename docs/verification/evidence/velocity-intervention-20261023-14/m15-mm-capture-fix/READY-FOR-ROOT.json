@@ -1,0 +1,52 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FROZEN_SOURCE_ONLY_H990_CAPTURE_SUCCESSOR_READY_FOR_REVIEW",
+  "root_execution_grant": null,
+  "CPU_grant": null,
+  "compiler_slot_grant": null,
+  "profile": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mm-capture-fix/CAPTURE-PROFILE.json",
+    "bytes": 5496,
+    "sha256": "228971c3de41a8f021706c84161b34297bb4f902d25a00dcd51e70f767f50de3"
+  },
+  "exact_argv": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mm-capture-fix/EXACT-ARGV.json",
+    "bytes": 1690,
+    "sha256": "901a45749f0488c857b4b4c9ef738bf3c4691e182575164773f47d2d5f05e7c2"
+  },
+  "runner": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mm-capture-fix/capture_body.py",
+    "bytes": 8250,
+    "sha256": "5f90a8d3a4d19cd0a274827cd45c35fbb0a6be8a0d2d4711668030b6e821b5f0"
+  },
+  "body_runner": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mm-capture-fix/run_body_fixture.py",
+    "bytes": 15323,
+    "sha256": "a60f041abe588f6b303ddc9e3d304bada69db08e0b2af08935bb7f633a60c790"
+  },
+  "changes": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mm-capture-fix/SOURCE-CHANGES.json",
+    "bytes": 1909,
+    "sha256": "537c2f0d136724e8bb16fa34c6cb0f88ebc3d5c913e6f481a6c5962d47803130"
+  },
+  "immutable_parent": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/m15-mm-finish/batch-1/READY-FOR-ROOT.json",
+    "bytes": 2062,
+    "sha256": "2d3a9663ad5a1d14f57b9f20150306454dc4c986a9a158f0b16906e29bf2992f"
+  },
+  "old_batch_untouched": true,
+  "source_only_checks": {
+    "parent_runner_hash_matches_manifest": true,
+    "h990_hash_matches_requested": true,
+    "accepted_census_hash_matches_helper": true,
+    "generated_runner_Python38_AST": true,
+    "exact_compiler_env_RUST_MIN_STACK": "2097152",
+    "no_actual_output_dirs": true
+  },
+  "actual_compiler_test_runtime_guest_privileged_signal_operations": 0,
+  "canonical_edits": false,
+  "HOST_body_fixture_pass": false,
+  "SDK_objtool_module_native_or_C_retirement_acceptance": false,
+  "needed_grant": "Independent exact source/profile/argv/capacity review, then one ordinary CPU0 OR6 compiler slot at uid1000 with2GiB AS/60CPU/90wall+6 retirement/F32-per-file/FD256/core0/stack2MiB and64MiB aggregate output acceptance reservation. No grant is supplied by this handoff.",
+  "remaining": "Root may execute this exact ordinary body capture only after grant. Production SDK GLIBC2.38/objtool/codegen/ABI/module/native path remains separate."
+}

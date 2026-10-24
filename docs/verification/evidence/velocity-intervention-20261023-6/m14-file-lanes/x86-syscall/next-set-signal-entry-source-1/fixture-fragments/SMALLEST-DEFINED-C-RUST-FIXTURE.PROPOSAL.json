@@ -1,0 +1,30 @@
+{
+  "actual_reference": {
+    "bytes": 547,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-set-signal-entry-source-1/fixture-fragments/original-set-signal.ACTUAL.inc",
+    "sha256": "247b4e1451fd5a6c6ace236b11b3e409baf2a93ccec428dbe46455d64a80060d"
+  },
+  "actual_results": null,
+  "argv": null,
+  "cases": [
+    "no currentthread returns before regs/info access",
+    "current process pid0 returns before regs/info access",
+    "valid user context: signals1/9/17/19/31/32/33/63/64, each blocked/unblocked",
+    "unblocked: exactly do_kill(current,pid,tid,sig,sameinfo,0), ignore unsigned return extremes",
+    "blocked: coredump then terminate(0,sig|128); when controlled void provider returns, original continuation still callsdo_kill",
+    "current/context/siginfo borrowed unchanged; callback modifications reloaded for final pid/tid as inC",
+    "classifier reuses actual Rust interrupt_from_user and real contextRSP offset"
+  ],
+  "driver": null,
+  "grant": null,
+  "native_only": "Kernel-mode context calls genuine debug_show then genuine kernel panic. That provider/instruction/lifecycle branch is unhostsafe; keep source/default/native obligation rather than claim HOST acceptance. If a later explicit endpoint model is approved it must be labeled controlled and cannot count native panic proof.",
+  "provider_contracts": "Future HOST comparison must explicitly model CPU/current, coredump/terminate and recursive signal delivery endpoints under separate review. Actual C panic(const char*) is NOT a Rust panic lang item and NOT declared noreturn. No fake kernel panic provider, unsafe kernel panic execution or homemade Rust panic handler is supplied here.",
+  "real_ABI": {
+    "bytes": 750,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-set-signal-entry-source-1/fixture-fragments/real-public-ABI.FRAGMENT.c",
+    "sha256": "4c4f184b9668c718d15812c97ee2895013d5d10c0f4b266ba5d0b6de804a9435"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FIXTURE_FRAGMENTS_ONLY_NO_SECOND_QUEUE",
+  "valid_domain": "Valid signal1..64 and live context for eligible currentthread; nullcontext after nonkernel/current guard and out-of-range signal remain original fault/undefined domains, not newpolicy."
+}

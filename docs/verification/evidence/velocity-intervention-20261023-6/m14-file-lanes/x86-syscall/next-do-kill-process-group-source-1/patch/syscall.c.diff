@@ -1,0 +1,43 @@
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -2155,6 +2155,11 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern int arch_do_kill_process_group_result(struct thread *thread, int pid,
++		int sig, siginfo_t *info, int ptracecont, struct process_hash *phash);
++#endif
++
+ unsigned long
+ do_kill(struct thread *thread, int pid, int tid, int sig, siginfo_t *info,
+         int ptracecont)
+@@ -2164,7 +2169,9 @@
+ 	struct process *tproc;
+ 	struct process *proc = thread? thread->proc: NULL;
+ 	struct thread *tthread = NULL;
++#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ 	int i;
++#endif
+ 	__sigset_t mask;
+ 	mcs_rwlock_lock_t *savelock = NULL;
+ 	struct mcs_rwlock_node mcs_rw_node;
+@@ -2193,6 +2200,10 @@
+ 	}
+ 
+ 	if(tid == -1 && pid <= 0){
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++		return arch_do_kill_process_group_result(thread, pid, sig, info,
++				ptracecont, phash);
++#else
+ 		struct process *p;
+ 		struct mcs_rwlock_node_irqsave slock;
+ 		int	pgid = -pid;
+@@ -2267,6 +2278,7 @@
+ 
+ 		kfree_tracked(pids, __FILE__, __LINE__);
+ 		return rc;
++	#endif
+ 	}
+ 
+ 	irqstate = cpu_disable_interrupt_save();

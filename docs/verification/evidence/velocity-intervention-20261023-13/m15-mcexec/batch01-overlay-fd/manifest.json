@@ -1,0 +1,42 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_UNCOMPILED",
+  "retired_symbols_proposed": [
+    "mcexec_overlay_addfd_publish_bridge",
+    "mcexec_overlay_delfd_bridge",
+    "mcexec_overlay_getdents_find_bridge",
+    "mcexec_overlay_getdents_hide_orig_bridge",
+    "mcexec_overlay_getdents_linux_path_bridge",
+    "mcexec_overlay_getdents_pathlen_bridge",
+    "mcexec_overlay_getdents_mck_dirents_bridge",
+    "mcexec_overlay_getdents_mck_size_bridge",
+    "mcexec_overlay_getdents_linux_dirents_bridge",
+    "mcexec_overlay_getdents_linux_size_bridge",
+    "mcexec_overlay_getdents_mck_fd_bridge",
+    "mcexec_overlay_getdents_linux_fd_bridge",
+    "mcexec_overlay_getdents_append_mck_bridge",
+    "mcexec_overlay_getdents_append_linux_bridge"
+  ],
+  "providers": [
+    "existing Rust list mutation and dirent rewrite helpers",
+    "C data overlay_fd_list and overlay_fd_lock",
+    "global debug exported by candidate; value/CLI untouched",
+    "libc malloc/realloc/free/open/close/fprintf/printf/fflush/__errno_location/stdout/stderr",
+    "libpthread pthread_spin_lock/unlock"
+  ],
+  "reference_parity": [
+    "same duplicate FD insertion/newest-first lookup/removal",
+    "same unlock-before-return and concurrent-close lifetime limitation",
+    "same lazy open retry and ENOENT diagnostic suppression",
+    "same upper/lower realloc failure asymmetry",
+    "same upper cache size publication after rewrite, lower before rewrite",
+    "same wrapping C size arithmetic; no hardening policy introduced"
+  ],
+  "required_checks": [
+    "compile ABI static assertions against original struct; compare size/alignment/offsets",
+    "compile whole Rust helper + selected C object; duplicate symbol/undefined provider check",
+    "focused original-C/Rust fixture in fixture.c",
+    "production build/link/default selection then native changed-path behavior"
+  ],
+  "compiler_or_native_execution": false
+}

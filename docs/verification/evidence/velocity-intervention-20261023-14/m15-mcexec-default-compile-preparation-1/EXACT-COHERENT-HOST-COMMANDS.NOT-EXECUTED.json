@@ -1,0 +1,153 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "commands": [
+    {
+      "label": "00-selected-HOST-header-ABI-candidate",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-c",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1/platform-ABI-candidate.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1/output-1/platform-ABI-candidate.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing."
+    },
+    {
+      "label": "01-full-cohort03-one-Rust-compile",
+      "argv": [
+        "/usr/bin/cmake",
+        "-E",
+        "env",
+        "MAKEFLAGS=",
+        "MCEXEC_BUILDID_RS=/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1/source/executer/user/rust/mcexec_buildid_generated.rs",
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--crate-name",
+        "mcexec_helpers",
+        "--crate-type",
+        "lib",
+        "--edition=2021",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "debuginfo=1",
+        "-C",
+        "force-unwind-tables=no",
+        "-C",
+        "codegen-units=1",
+        "--emit=obj=/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1/output-1/mcexec_helpers.o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1/source/executer/user/rust/mcexec_helpers.rs"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing."
+    },
+    {
+      "label": "02-existing-architecture-assembly-only",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DPROFILE_ENABLE",
+        "-g",
+        "-fPIC",
+        "-Wall",
+        "-Wextra",
+        "-c",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1/source/executer/user/arch/x86_64/archdep.S",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1/output-1/archdep.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing."
+    },
+    {
+      "label": "03-existing-ASM-library-archive",
+      "argv": [
+        "/usr/bin/ar",
+        "cr",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1/output-1/libmcexec.a",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1/output-1/archdep.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing."
+    },
+    {
+      "label": "04-existing-ASM-library-index",
+      "argv": [
+        "/usr/bin/ranlib",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1/output-1/libmcexec.a"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing."
+    },
+    {
+      "label": "05-default-source-shape-HOST-PIE-link-no-project-C-body",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-g",
+        "-fPIE",
+        "-pie",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1/output-1/mcexec_helpers.o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1/output-1/libmcexec.a",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1/output-1/mcexec",
+        "/usr/lib/x86_64-linux-gnu/librt.a",
+        "/usr/lib/x86_64-linux-gnu/libnuma.so",
+        "-lpthread"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing."
+    },
+    {
+      "label": "06-genuine-Rust-provider-defined-import-NM",
+      "argv": [
+        "/usr/bin/nm",
+        "-g",
+        "-S",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1/output-1/mcexec_helpers.o"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing."
+    },
+    {
+      "label": "07-HOST-ELF-symbol-and-buildid-consumer",
+      "argv": [
+        "/usr/bin/readelf",
+        "-SWs",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1/output-1/mcexec"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing."
+    },
+    {
+      "label": "08-HOST-ELF-dynamic-provider-closure",
+      "argv": [
+        "/usr/bin/readelf",
+        "-dW",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1/output-1/mcexec"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing."
+    }
+  ],
+  "actual_results": null,
+  "perbatch_compiler_commands": 0,
+  "one_coherent_Rust_compile": true,
+  "target_executed": false,
+  "compiler_profile": {
+    "CPU": 6,
+    "jobs": 1,
+    "AS": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 90,
+    "retirement_seconds": 6,
+    "FSIZE": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "stack": 2097152,
+    "RUST_MIN_STACK": 2097152
+  }
+}

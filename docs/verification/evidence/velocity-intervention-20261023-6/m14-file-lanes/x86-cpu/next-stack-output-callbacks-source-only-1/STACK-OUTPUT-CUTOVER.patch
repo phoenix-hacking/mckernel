@@ -1,0 +1,55 @@
+--- a/arch/x86_64/kernel/cpu.c
++++ b/arch/x86_64/kernel/cpu.c
+@@ -2945,15 +2945,8 @@
+ 
+ #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+ void x86_stack_frame_log_bridge(unsigned long ip, unsigned long sp,
+-		unsigned long fp)
+-{
+-	kprintf("IP: %016lx, SP: %016lx, FP: %016lx\n", ip, sp, fp);
+-}
+-
+-void x86_print_stack_bridge(void *rbp, unsigned long first)
+-{
+-	__print_stack(rbp, first);
+-}
++		unsigned long fp);
++void x86_print_stack_bridge(void *rbp, unsigned long first);
+ #endif
+ 
+ #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+--- a/kernel/rust/x86_cpu_helpers.rs
++++ b/kernel/rust/x86_cpu_helpers.rs
+@@ -144,8 +144,6 @@
+     fn x86_current_cpu_bridge() -> CInt;
+     fn x86_kprintf_lock_bridge() -> CULong;
+     fn x86_kprintf_unlock_bridge(flags: CULong);
+-    fn x86_stack_frame_log_bridge(ip: CULong, sp: CULong, fp: CULong);
+-    fn x86_print_stack_bridge(rbp: *mut c_void, first: CULong);
+     fn x86_cpu_boot_status_slot_bridge() -> *mut CInt;
+     fn x86_boot_trampoline_va_bridge() -> *mut c_void;
+     fn x86_boot_trampoline_code_data_bridge() -> *const u8;
+@@ -3243,3 +3241,23 @@
+         }
+     }
+ }
++
++/// Preserve the complete selected stack-frame diagnostic. All three values are
++/// passed by value to the existing Rust variadic logger; none is dereferenced.
++/// The outer caller's lock span is unchanged and the logger result is ignored.
++#[no_mangle]
++pub unsafe extern "C" fn x86_stack_frame_log_bridge(
++    ip: CULong, sp: CULong, fp: CULong,
++) {
++    unsafe {
++        kprintf(b"IP: %016lx, SP: %016lx, FP: %016lx\n\0".as_ptr().cast(), ip, sp, fp);
++    }
++}
++
++/// Forward the same caller-owned frame and first IP to the already accepted
++/// Rust stack formatter. The frame is neither read here nor retained. The
++/// formatter's existing live-frame precondition and native-walk gap remain.
++#[no_mangle]
++pub unsafe extern "C" fn x86_print_stack_bridge(rbp: *mut c_void, first: CULong) {
++    unsafe { __print_stack(rbp.cast::<CULong>(), first); }
++}

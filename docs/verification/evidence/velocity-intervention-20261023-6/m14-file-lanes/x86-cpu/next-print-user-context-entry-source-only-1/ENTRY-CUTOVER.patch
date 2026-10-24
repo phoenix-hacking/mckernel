@@ -1,0 +1,40 @@
+--- a/arch/x86_64/kernel/cpu.c
++++ b/arch/x86_64/kernel/cpu.c
+@@ -2853,6 +2853,9 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
++void ihk_mc_print_user_context(ihk_mc_user_context_t *uctx);
++#else
+ void ihk_mc_print_user_context(ihk_mc_user_context_t *uctx)
+ {
+ #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+@@ -2864,6 +2867,7 @@
+ 	        uctx->gpr.rsi, uctx->gpr.rdi, uctx->gpr.rsp);
+ #endif
+ }
++#endif
+ 
+ /*@
+   @ requires \valid(handler);
+--- a/kernel/rust/x86_cpu_helpers.rs
++++ b/kernel/rust/x86_cpu_helpers.rs
+@@ -3243,3 +3243,17 @@
+         }
+     }
+ }
++
++/// Retire the selected C entry while reusing its exact existing Rust core.
++/// The original selected entry discarded the core result. In particular, a
++/// null context retains the existing core's -EINVAL/no-log behavior; no new
++/// frame or freeze/null policy is introduced. Context/log pointers do not escape.
++#[no_mangle]
++pub unsafe extern "C" fn ihk_mc_print_user_context(uctx: *mut X86UserContext) {
++    unsafe {
++        let _ = x86_print_user_context_body_result(
++            uctx,
++            Some(x86_context_line_log_bridge),
++        );
++    }
++}

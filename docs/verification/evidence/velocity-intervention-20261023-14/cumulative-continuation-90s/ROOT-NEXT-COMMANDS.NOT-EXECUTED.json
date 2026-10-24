@@ -1,0 +1,60 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PROPOSED_ROOT_COMMANDS_NOT_EXECUTED_REQUIRE_ROOT_REVIEW_AND_SLOT",
+  "commands": [
+    {
+      "purpose": "Accounting-only hostfixture; mockqualifier gives no native proof; execute only under root testgrant.",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-m",
+        "unittest",
+        "-v",
+        "test_cumulative_accounting.py"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/cumulative-continuation-90s"
+    },
+    {
+      "purpose": "Compile distinct continuation Rust staticarchive, preserving originalarchive.",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=staticlib",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "panic=abort",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/cumulative-continuation-90s/source/pair_long_static.rs",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/cumulative-continuation-90s/libpair_cumulative_segment.a"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/cumulative-continuation-90s"
+    },
+    {
+      "purpose": "Link collector-only continuationELF against new90s Rustarchive.",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-static",
+        "-fno-pie",
+        "-no-pie",
+        "-Wl,-z,noexecstack",
+        "-DND_CORE_THREADS",
+        "-DND_PAIR_LAUNCH_EXPANSION",
+        "-DND_PAIR_LONG",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/cumulative-continuation-90s/source/pair_collector.c",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/cumulative-continuation-90s/libpair_cumulative_segment.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/cumulative-continuation-90s/collector-cumulative-segment"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/cumulative-continuation-90s"
+    }
+  ],
+  "not_prepared_as_launch_command": "No rootlaunchargv exists until actualcompiledartifact+capsulestage+runtimebindings+profile+freshclearance. Existing strictversion1 runtimecohort must not be reused unchanged."
+}

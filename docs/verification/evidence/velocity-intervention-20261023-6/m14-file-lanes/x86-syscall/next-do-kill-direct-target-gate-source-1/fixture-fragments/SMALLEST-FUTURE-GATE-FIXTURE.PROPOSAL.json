@@ -1,0 +1,27 @@
+{
+  "HOLD": [
+    "final reference destruction/procfs/VM teardown not HOST safe",
+    "actual LinuxIKC syscall forwarding",
+    "native IRQ asymmetry unchanged and requiresfocused ownershipreview",
+    "native process/thread lifetimes and full selected do_kill integration"
+  ],
+  "actual_provider": {
+    "bytes": 361675,
+    "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+    "sha256": "5bf085bfa3f60217abacbda380e80d35d2fd56922c0e82f82dbab1d5fe09d4d1"
+  },
+  "control_scope": "External IRQ restore and Linuxforwarding effects controlled; actual reference decrement must use existing Rust atomic implementation. No fake release provider or HOST kernel panic.",
+  "driver": null,
+  "execution_grant": null,
+  "future_vectors": [
+    "SIGCONT exemption before credential dereference",
+    "null caller/kernel send, euid0, all4 ruid/euid-versus-targetruid/suid matches and total mismatch",
+    "sig0/nulltarget/exitedtarget ordering afterpermission",
+    "UTI Linux/nohost0 forwarding-before-release and nohost1 release-only",
+    "continuation retains heldreference and exact IRQstate, leaves return slot unchanged",
+    "permission/sig0/exited branches release before oneIRQrestore, output unsigned-Eperm/zero",
+    "under original heldrefcount2 use byte-extracted genuine process_helpers::release_thread/body/refatomic functions toobserve2to1, with lifecyclefinalcallbacks refused ifreached"
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_FRAGMENT_ONLY_NO_SECOND_EXECUTABLE_QUEUE"
+}

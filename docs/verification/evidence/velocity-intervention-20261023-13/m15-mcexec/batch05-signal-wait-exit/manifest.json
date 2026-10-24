@@ -1,0 +1,43 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_UNCOMPILED",
+  "retired_symbols_proposed": [
+    "mcexec_sendsig_si_pid_bridge",
+    "mcexec_sendsig_si_signo_bridge",
+    "mcexec_sendsig_default_action_bridge",
+    "mcexec_act_signalfd4_write_bridge",
+    "mcexec_act_signalfd4_write_error_bridge",
+    "mcexec_act_sigaction_install_bridge",
+    "mcexec_act_sigprocmask_apply_bridge",
+    "mcexec_init_sigaction_set_master_tid_bridge",
+    "mcexec_init_sigaction_install_bridge",
+    "mcexec_waitid_pid_bridge",
+    "mcexec_wait4_error_bridge",
+    "mcexec_exit_debug_bridge",
+    "mcexec_exit_isatty_bridge",
+    "mcexec_exit_report_signal_bridge",
+    "mcexec_exit_report_status_bridge",
+    "mcexec_exit_replay_signal_bridge",
+    "mcexec_exit_process_bridge"
+  ],
+  "providers": [
+    "existing Rust sendsig/action/signalfd/init/exit orchestration",
+    "genuine glibc signal/sigset/sigaction/waitid/write/process APIs",
+    "existing C master_tid/debug data only"
+  ],
+  "reference_parity": [
+    "signal handler and mask install through libc, not raw kernel struct",
+    "waitid retries EINTR and preserves leftover errno on success",
+    "same zeroed info and WNOHANG pid0 shaping",
+    "same default signal replay/sleep or pause behavior",
+    "same signalfd write result forwarding"
+  ],
+  "deliberate_defined_extension": [
+    "init sigaction failed-query case initializes otherwise uninitialized original C action storage to zero; successful-query cases alone count C parity. Separate Rust-defined fixture required."
+  ],
+  "ABI": [
+    "glibc Linux x86_64 siginfo128bytes/align8/pid16/signo0",
+    "sigaction/sigset all field offsets and sizes must compare actual C headers"
+  ],
+  "compiler_or_native_execution": false
+}

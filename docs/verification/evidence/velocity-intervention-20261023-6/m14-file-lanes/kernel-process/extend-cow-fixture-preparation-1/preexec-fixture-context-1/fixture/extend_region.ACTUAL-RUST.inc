@@ -1,0 +1,105 @@
+#[no_mangle]
+pub unsafe extern "C" fn process_extend_region_body_result(
+    vm: *mut ProcessVm,
+    end_allocated: CULong,
+    address: CULong,
+    mut flag: CULong,
+    page_size: SizeT,
+    page_shift: CInt,
+    page_mask: CULong,
+    large_page_size: SizeT,
+    large_page_mask: CULong,
+    large_page_p2align: CULong,
+    page_p2align: CULong,
+    large_page_shift: CInt,
+    mpol_no_heap: CULong,
+    ap_nowait: CULong,
+    ap_user: CULong,
+    pg_user: CInt,
+    file: *const i8,
+    alloc_line: CInt,
+    free_line: CInt,
+    exists_debug: *mut crate::debug::Ddebug,
+    alloc_debug: *mut crate::debug::Ddebug,
+    success_debug: *mut crate::debug::Ddebug,
+) -> CULong {
+    let align_size = if (*(*vm).proc.cast::<Process>()).heap_extension > page_size as CULong {
+        large_page_size
+    } else { page_size };
+    let align_mask = if (*(*vm).proc.cast::<Process>()).heap_extension > page_size as CULong {
+        large_page_mask
+    } else { page_mask };
+    let align_p2align = if (*(*vm).proc.cast::<Process>()).heap_extension > page_size as CULong {
+        large_page_p2align
+    } else { page_p2align };
+    let align_shift = if (*(*vm).proc.cast::<Process>()).heap_extension > page_size as CULong {
+        large_page_shift
+    } else { page_shift };
+    let mut new_end_allocated =
+        address.wrapping_add((page_size as CULong).wrapping_sub(1)) & page_mask;
+    if new_end_allocated.wrapping_sub(end_allocated)
+        < (*(*vm).proc.cast::<Process>()).heap_extension
+    {
+        new_end_allocated = end_allocated
+            .wrapping_add((*(*vm).proc.cast::<Process>()).heap_extension)
+            .wrapping_add((align_size as CULong).wrapping_sub(1)) & align_mask;
+    }
+    let range = lookup_process_memory_range(vm, end_allocated, new_end_allocated);
+    if !range.is_null() {
+        if core::ptr::read_volatile(core::ptr::addr_of!((*exists_debug).line_flags)) >> 24 != 0 {
+            let _ = kprintf(
+                b"%s: warning: vm_range for extension already exists\n\0".as_ptr().cast(),
+                b"extend_process_region\0".as_ptr().cast::<i8>(),
+            );
+        }
+        return end_allocated;
+    }
+    let len = new_end_allocated.wrapping_sub(end_allocated) as SizeT;
+    let npages = (len >> page_shift) as CInt;
+    let p = if flag & VR_DEMAND_PAGING != 0 {
+        null_mut()
+    } else {
+        let p = crate::mem_helpers::_ihk_mc_alloc_aligned_pages_node(
+            npages, align_p2align as CInt,
+            ap_nowait | if (*(*vm).proc.cast::<Process>()).mpol_flags & mpol_no_heap == 0 {
+                ap_user
+            } else { 0 },
+            -1, pg_user, end_allocated, file.cast_mut(), alloc_line,
+        );
+        if p.is_null() {
+            if core::ptr::read_volatile(core::ptr::addr_of!((*alloc_debug).line_flags)) >> 24 != 0 {
+                let _ = kprintf(
+                    b"%s: warning: failed to allocate %d contiguous pages  (bytes: %lu, pgshift: %d), enabling demand paging\n\0".as_ptr().cast(),
+                    b"extend_process_region\0".as_ptr().cast::<i8>(),
+                    npages, len, align_p2align,
+                );
+            }
+            flag |= VR_DEMAND_PAGING;
+        }
+        p
+    };
+    let phys = if p.is_null() { 0 } else {
+        crate::x86_memory_helpers::virt_to_phys(p)
+    };
+    let rc = add_process_memory_range(
+        vm, end_allocated, new_end_allocated, phys, flag, null_mut(),
+        0, align_shift, null_mut(), null_mut(),
+    );
+    if rc != 0 {
+        // The original error path frees even a NULL pointer from demand paging.
+        // Do not infer a new NULL policy or transfer ownership on failure.
+        crate::mem_helpers::_ihk_mc_free_pages(
+            p, npages, pg_user, file.cast_mut(), free_line,
+        );
+        return end_allocated;
+    }
+    // Successful add owns any allocated pages; the caller must not free them.
+    if core::ptr::read_volatile(core::ptr::addr_of!((*success_debug).line_flags)) >> 24 != 0 {
+        let _ = kprintf(
+            b"%s: new_end_allocated: 0x%lx, align_size: %lu, align_mask: %lx\n\0".as_ptr().cast(),
+            b"extend_process_region\0".as_ptr().cast::<i8>(),
+            new_end_allocated, align_size, align_mask,
+        );
+    }
+    new_end_allocated
+}

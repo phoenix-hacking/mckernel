@@ -1,3 +1,110 @@
+## Engineering checkpoint — 2026-10-24T05:42:42.002457+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains34/35: qualified prefix3519690949712ns, strict90s continuation NOTRUN.
+Actual capsule stage PASS20.941778s, cleanjoin; manifest e2e264d9, capsule2a85a8de,
+collector d788349c. Independent actual review confirms onlyinit changed and61
+othermembers unchanged. Physical retirement already accepted e54d603e; no repeat
+cleanup. Fresh runtime materialization is next; exact materializer pin delta
+6ae4 versus priorf2b under narrow review. Fresh l12c1 namespaces observed absent.
+Six M14 owners reactivated on disjoint substantive bodies; compiler-ready slices
+remain separate from active work. Combined union3b compile/partial PASS does not
+prove default/native. M15 full executor HOST Rust+ASM link PASS; MM HOST controlled
+body PASS1.230076s, CPU1.127633/output7785307B/cleanjoin, no SDK/module/native credit.
+No new practical IDs closed. Original fullhourFAIL retained; only revised cumulative
+criterion applies. Heavy priority is short M12 continuation before M14 image build.
+
+## Qualified cumulative prefix, actual compiler outcomes and next operation — 2026-10-24T05:31:52.630959+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+CurrentV2criterion explicitUSER051019/053020:629completedproducer/report-replayed
+rounds0..628/1258launches/3519690949712ns qualified after actualadmission/capture/
+physicalbinding. Preserve original4a76DeadlineFAIL/strictHOSTcoverageincomplete.
+P12-CUMULATIVE-USER-APPROVAL-20261024-V2.json andM12-CLOSURE-USER-CONFIRMATION-20261024.md
+controlrevised practicalexposure; remaining80309050288ns/proposed90ssegment NOTRUN.
+Once strict90+matchingartifacts/normalphysical+priorboot/cycle/launchjoins qualify,
+closeM12/P-M12-01 without waitingM14/M15. Currentcount34/35/no newacceptedIDs.
+
+Actual90scollectorRust+ClinkPASS.972s; C720relinkPASS.657s reusingRustarchive,
+ELFd788349c/1633128B+17sources bound2518d70a. Correctedaccounting6testsPASS.185s,
+original4testanchorFAILretained. Realfilesystemcursor7casesPASS.154compile/.044run,
+measured524800to1024calls/no nativeperformanceclaim. Strictv2loader now exists;
+solecapsuleowner prepared exactmetadata-preservingstager42c80f4a replacingonlyinit,
+61members unchanged. Rootstageoperationreview/grant/actualcapsule/runtimeguard/
+freshrelease/native90 stillpending. No fullhourreplay/no expiredrelease.
+
+ActualM14union3b combined78Rust+sixC+partial18commandsPASS:RustT3110/U596,
+partialT3692/U19, actualRust159f88fc/14111144B; sourcehandoffcece6f03. Rustemitprefix
+observerFAIL and F03quotedheaderFAILretained; successfulobjects reused, no crate
+replay. PerlaneallocatedABI/relocation/integration andGCC14default/nativeOPEN.
+Normalunion2defaultimagecorrectedpurestagePASS37.713s; provenanceoldauthority
+FAIL38.776s retained, constants-onlysuccessorindependentlyaccepted. Exactnormal
+build-onlyconditionalrelease received; rootfreshfullaggregate/admission+Gitbefore
+heavyinvocation stillrequired. No imagebuild yet.
+
+ActualM15executorcohort03 fullRust+ASM HOSTPIE linkPASS8suffixcommands1.930s,
+CplatformABI00PASS reused; originalRust u64toUSIZEnominaltypeFAILretained andone
+losslessLP64correctionbounded. No projectCbodyinHOSTlink;349sourcecallbacks+entry/
+51data compiled, behavioral/Rockydefault/native remainOPEN. MMHOSTbodyjobcurrently
+CPU6tool26544; sourcewarning/outercapture independentlyreviewed, finalactualCPU/
+output/joinchecksrequired. OtherfrozenM14/M15batches remain source-only honestly.
+Overallengineering_percentagenull. Billing/launcherunchanged; includedusage35%.
+
+## Explicit cumulative P12 continuation criterion — 2026-10-24 04:54 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+User20261024T045451435430Z explicitly authorizes cumulative>=60mixedminutes across
+matchingunchangedkernel/modules/apps segments instead of anotherfullhourreplay.
+Approval P12-CUMULATIVE-USER-APPROVAL-20261024.json preserves original4a76FAIL/
+7200deadline/uninterruptedcontract unchanged. Prefix629rounds/1258launches/
+3519690949712ns is candidatecreditONLYpendingfullperround+identity/retirementproof;
+failedround629 excluded. Conditionalremaining80309050288ns, proposednew90s segment.
+No newPASS/statusID/release yet. Foreauthor prepares separatecumulativeconsumer/config;
+sourcecursorcorrection independentPASS needs actualfixture. Rootownspositivecurrent
+physicalclearance/newidentity/release, no fullhourreplay. M14/M15 continueparallel.
+
+## Closed LONG controller, actual failure disposition — 2026-10-24T04:45:51.004613+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Existingcontroller25780 terminal exit1:7804.650788218s, directchildjoined/groupabsent/
+closedstreams true, noTERM/noSIGerrors/noforce. Inner resultFAIL lifecycleTimeoutError
+absolute deadline expired; QEMU-9/reapedtrue/errors[],captureerrors[]. Producer already
+failed enforced7200wall at629rounds1258launches3519.690949712mixed. Collector deliberately
+remainsPID1 afterfailedrun; normal inner7800deadline cleanup explains laterterminal,
+not a newlyprovenhang/kernelcrash. Ownerledger/client/CID/mutexphysicalacceptanceOPEN.
+Current closedexport successor sourcepreparation assigned; nooldcleanup replay.
+Practical34/35/no newclosedIDs/hourcredit0. Actualexec4788+14ABIPASS.614s;
+restart248640+24ABI corrected genuineaffinity header suffixPASS.416s reusing Rustarchive,
+originalmissingcpu_set_t failure preserved. Wakeupcontrolledfixture firstjob inprogress.
+Constants-onlyunion2buildpins independentlyPASSa9c13cbb; noheavyrelease/admission yet.
+
+## Actual LONG failure and engineering steering — 2026-10-24T04:43:01.954159+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+User specifically authorized one read15 after finite14. Actual04:40:13UTC uncapped
+read15:629 rounds/1258launches/3519.690949712mixed seconds (58m39.691),
+7564.091ownerwall; callback-report result-3, ABORT2, trace150512132B,
+trace/parser errors[]/wireNULL. This is FAIL, not continuous-hour acceptance.
+Independent exact consumed-source diagnosis identifies -3 as Failure::Deadline,
+7200s producer wall bound; trace below268435456 cap. trace_retention is stale
+last-gate label, NOT proven cap failure. Exact deadline callsite remains ambiguous.
+No kernel failure proven, no partial-hour credit or timeout/oracle change.
+Existing controller25780 still finishing normal owner cleanup; physical clearance
+OPEN. No restart/newguest/cleanup replay authorized by this checkpoint.
+
+Canonical union2 committed/pushed/fetched e6aff01fe86ba7faaf51293cd026b2a6fccc8a5d.
+Actual next image source copy PASS10.792s; image build not yet run. Nineteen stale
+driver pins found before build, constants-only successor84832286 under independent
+review; root admission/release NULL until normal P12 clearance. All six persistent
+M14 owners confirmed running new private source turns; two support turns diagnose
+P12 and review build pins. Overall engineering percentages remain null.
+M15 ihkosctl186parity+5separatecorrectness cases actualPASS13.182s, three signal
+ownership regressions PASS; no default/native credit. Fore mcexec/MM/boot batches
+remain source-only and immutable. CPU6 restart first actual Rust compile PASS,
+C consumer failed missing genuine cpu_set_t context; all joined/gone/closed,
+one bounded fixture correction assigned to F06, no unchanged replay.
+Practical34/35; newly closed IDs:none. Preserve27:4/scratch21/native resource limits.
+
 ## Canonical Rust union2 and actual LONG read13 — 2026-10-24T04:22:02.536749+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

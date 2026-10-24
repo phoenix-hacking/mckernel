@@ -1,0 +1,112 @@
+--- a/arch/x86_64/kernel/memory.c
++++ b/arch/x86_64/kernel/memory.c
+@@ -633,6 +633,7 @@
+ }
+ #endif
+ 
++#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+ static int __set_pt_page(struct page_table *pt, void *virt, unsigned long phys,
+                          enum ihk_mc_pt_attribute attr)
+ {
+@@ -655,6 +656,7 @@
+ 	}
+ 	return ret;
+ }
++#endif
+ 
+ #ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+ static int __clear_pt_page(struct page_table *pt, void *virt, int largepage)
+@@ -760,18 +762,23 @@
+ 	return _ihk_mc_alloc_aligned_pages_node(nr_pages, PAGE_P2ALIGN, (ihk_mc_ap_flag)ap_flag, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
+ }
+ #endif
+-#line 764
++#line 766
+ 
+ unsigned long x86_pt_virt_to_phys_bridge(void *addr)
+ {
+ 	return virt_to_phys(addr);
+ }
+ 
++#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
++int x86_pt_set_page_bridge(void *pt, unsigned long virt,
++		unsigned long phys, unsigned long attr);
++#else
+ X86_MEMORY_PUBLIC_BRIDGE int x86_pt_set_page_bridge(void *pt, unsigned long virt,
+ 		unsigned long phys, unsigned long attr)
+ {
+ 	return __set_pt_page(pt, (void *)virt, phys, attr);
+ }
++#endif
+ 
+ #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+ int ihk_mc_pt_prepare_map(page_table_t p, void *virt, unsigned long size,
+@@ -826,7 +833,7 @@
+ 	_ihk_mc_free_pages(pt, nr_pages, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
+ }
+ #endif
+-#line 830
++#line 837
+ 
+ #ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+ X86_MEMORY_PUBLIC_BRIDGE void x86_pt_destroy_panic_bridge(int reason)
+@@ -1446,7 +1453,7 @@
+ 	}
+ }
+ #endif
+-#line 1450
++#line 1457
+ 
+ #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+ extern void x86_clear_range_top_log_bridge(int event, void *pt,
+@@ -1514,7 +1521,7 @@
+ 	}
+ }
+ #endif
+-#line 1518
++#line 1525
+ 
+ #ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+ /* Private clear-range layout consumed by the Rust old-entry callback. */
+--- a/kernel/rust/x86_memory_helpers.rs
++++ b/kernel/rust/x86_memory_helpers.rs
+@@ -263,7 +263,6 @@
+     fn x86_map_fixed_area_init_pt_bridge() -> *mut c_void;
+     fn x86_map_fixed_area_fixed_virt_slot_bridge() -> *mut CULong;
+     fn x86_map_fixed_area_log_bridge(phys: CULong, size: CULong, virt: CULong);
+-    fn x86_pt_set_page_bridge(pt: *mut c_void, virt: CULong, phys: CULong, attr: CULong) -> CInt;
+     fn x86_move_flush_tlb_bridge();
+     fn x86_init_normal_get_memory_address_bridge(type_: CInt, arg: CInt) -> CULong;
+     fn x86_init_normal_log_bridge(event: CInt, a: CULong, b: CULong, c: CULong);
+@@ -7627,3 +7626,31 @@
+         let _ = kprintf(b"EBUSY: page table for 0x%lX is already set\n\0".as_ptr().cast(), virt);
+     }
+ }
++
++// Complete original __set_pt_page orchestration. Use the existing IRQ-saving
++// spinlock implementation and raw lock address; never borrow across callbacks.
++#[no_mangle]
++pub unsafe extern "C" fn x86_pt_set_page_bridge(
++    pt: *mut c_void, virt: CULong, phys: CULong, attr: CULong,
++) -> CInt {
++    unsafe {
++        let in_kernel = x86_pt_kernel_lock_needed_result(virt) != 0;
++        let mut lock: *mut crate::abi::IhkSpinlock = core::ptr::null_mut();
++        let mut flags: CULong = 0;
++        if in_kernel {
++            lock = x86_init_page_table_lock_bridge().cast();
++            flags = crate::spinlock_helpers::__ihk_mc_spinlock_lock(lock);
++        }
++        // Read init_pt after acquisition, exactly as the original C body did.
++        let ret = x86_pt_set_page_body_result(
++            pt, x86_page_table_init_pt_bridge(), virt, phys, attr,
++            x86_attr_mask_bridge(), Some(x86_pt_alloc_pages_bridge),
++            Some(x86_pt_virt_to_phys_bridge), Some(x86_pt_phys_to_virt_bridge),
++            Some(x86_pt_set_page_log_bridge),
++        );
++        if in_kernel {
++            crate::spinlock_helpers::__ihk_mc_spinlock_unlock(lock, flags);
++        }
++        ret
++    }
++}

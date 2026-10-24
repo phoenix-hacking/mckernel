@@ -1,0 +1,11 @@
+--- failed-original-C.inc
++++ corrected-original-C.inc
+@@ -16,7 +16,7 @@
+ 	ihk_pagealloc_free(desc, address, npages);
+ }
+ 
+-static int mem_pt_prepare_map_bridge(page_table_t pt, void *virt,
++static int original_mem_pt_prepare_map_bridge(page_table_t pt, void *virt,
+ 		unsigned long size, enum ihk_mc_pt_prepare_flag flag)
+ {
+ 	return ihk_mc_pt_prepare_map(pt, virt, size, flag);

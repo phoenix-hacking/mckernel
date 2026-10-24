@@ -1,0 +1,39 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/p12-normal-retirement/readonly_export_closed_current_owner.py
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/p12-current-normal-retirement-1/readonly_export_closed_current_owner.py
+@@ -3,7 +3,7 @@
+ """
+ from pathlib import Path
+ import base64,hashlib,json,os,stat
+-ROOT=Path('/home/holden/mckernel-work/l12s8e1/p.owner-63bdc7731c34491eb430ddb34b094d5b')
++ROOT=Path('/home/holden/mckernel-work/l12q1/p.owner-4a76457e33f34ba9a6805115bd121eb0')
+ s=ROOT.lstat();assert stat.S_ISDIR(s.st_mode) and not ROOT.is_symlink() and s.st_uid==s.st_gid==0 and stat.S_IMODE(s.st_mode)==0o700
+ all_names=sorted(os.listdir(ROOT));assert len(all_names)<=4096
+ # Existing37-name consumer is blocked: current exact owner has an unknown final
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/p12-normal-retirement/readonly_export_closed_current_owner.py
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/p12-current-normal-retirement-1/readonly_export_closed_current_capture.py
+@@ -3,14 +3,14 @@
+ """
+ from pathlib import Path
+ import base64,hashlib,json,os,stat
+-ROOT=Path('/home/holden/mckernel-work/l12s8e1/p.owner-63bdc7731c34491eb430ddb34b094d5b')
++ROOT=Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/qmp-runtime-successor-1/actual-capture-1')
+ s=ROOT.lstat();assert stat.S_ISDIR(s.st_mode) and not ROOT.is_symlink() and s.st_uid==s.st_gid==0 and stat.S_IMODE(s.st_mode)==0o700
+ all_names=sorted(os.listdir(ROOT));assert len(all_names)<=4096
+ # Existing37-name consumer is blocked: current exact owner has an unknown final
+ # command count after natural QMP failure. Export every retained command ledger,
+ # its present stream siblings and the fixed flush/recovery markers in ONE read.
+ command_names=sorted(name for name in all_names if name.endswith('.json') and name.partition('-')[0].isdigit())
+-marker_names=['owner.json','result.json','recovery-result.json','inner-result.json','state.json']
++marker_names=['CAPTURE-RESULT.json','started.json','command.json','stdout','stderr','termination-request.json']
+ names=set(name for name in marker_names if name in all_names)
+ for name in command_names:
+  names.add(name)
+@@ -19,7 +19,7 @@
+   if sibling in all_names:names.add(sibling)
+ names.update(name for name in all_names if name.startswith('command-retirements-') and name.endswith('.json'))
+ names=sorted(names)
+-missing_markers=[name for name in ('owner.json','result.json') if name not in all_names]
++missing_markers=[name for name in ('CAPTURE-RESULT.json','started.json','command.json') if name not in all_names]
+ rows=[];total=0
+ for name in names:
+  assert name not in('.','..') and '/' not in name

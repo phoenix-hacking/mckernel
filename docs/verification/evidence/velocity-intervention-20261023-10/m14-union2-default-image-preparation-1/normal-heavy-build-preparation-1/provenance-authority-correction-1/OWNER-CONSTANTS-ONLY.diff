@@ -1,0 +1,30 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/native_rust_exact_mckernel_image_container_owner.union2.py
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/provenance-authority-correction-1/native_rust_exact_mckernel_image_container_owner.py
+@@ -30,15 +30,15 @@
+ REQUEST_SCHEMA = "mckernel.native-exact-mckernel-image-container-request.v1"
+ RECEIPT_SCHEMA = "mckernel.native-exact-mckernel-image-container-receipt.v1"
+ OWNER_RECEIPT_NAME = "owner-receipt.json"
+-EXPECTED_DRIVER_SHA256 = 'b3e5971f24a85ad1ff5f55247a232cb8cf11933c3053406e383695898f48b5e1'
+-EXPECTED_PROVENANCE_SHA256 = 'c5868d8a336795b5c3d76215bba8bcb3e56a804e00f1014d8b4eeaf6ddb76a69'
++EXPECTED_DRIVER_SHA256 = '8be1ad0ed225cd66565c7aad084956e5f5b298d156e21315813a8040bfe8feba'
++EXPECTED_PROVENANCE_SHA256 = '68e1c97a16d849ab7d8d1b87fd6ffaf104f632e87f8e0d7a9fd21ca77d75460b'
+ EXPECTED_HOST_OWNER_SHA256 = "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+ EXPECTED_HEAVY_ENTRY_CONTRACT_SHA256 = "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1"
+ # The image owner advances with the image-candidate namespace.  Keep consumed
+ # exclusions explicit: accepting one of these would allow a request to race a
+ # retired build candidate.  Tests may replace COMMON_EXCLUSION with a private
+ # fixture, so the rejection list remains separate from the active value.
+-COMMON_EXCLUSION = '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/pinned-full-image-attempt-1/common-exclusion.json'
++COMMON_EXCLUSION = '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/provenance-authority-correction-1/pinned-full-image-attempt-1/common-exclusion.json'
+ RETIRED_COMMON_EXCLUSIONS = frozenset(
+     "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-" + suffix + ".json"
+     for suffix in (
+@@ -221,7 +221,7 @@
+ _HOST_OWNER_PATH = Path('/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_build_container_owner.py')
+ _HOST_OWNER = _load_reviewed_host_owner(
+     _HOST_OWNER_PATH, EXPECTED_HOST_OWNER_SHA256,
+-    Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/native_rust_exact_build_offline.py'),
++    Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/provenance-authority-correction-1/native_rust_exact_build_offline.py'),
+     EXPECTED_PROVENANCE_SHA256)
+ 
+ 

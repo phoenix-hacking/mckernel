@@ -1,0 +1,129 @@
+{
+  "ABI_source": {
+    "bytes": 1752,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-x86-wakeup-source-only-1/FUTURE-PRODUCTION-ABI.c.inc",
+    "sha256": "4ba8cf3abaf147945c1cbf30d88b0be876d49b99e05599cdcd7bd0acbfcbd8ba"
+  },
+  "CPU_reserved": false,
+  "Cfallback": "literal original helper+body preserved under else; default actual entry is Rust export __x86_wakeup",
+  "actual_constant_source": {
+    "bytes": 194,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-x86-wakeup-source-only-1/ACTUAL-CPU-CONSTANTS.inc",
+    "sha256": "3f3b598f35578879f8b6ca0b7cd87faf6ad596a10cbe9dc7dffa9516f96e71e5"
+  },
+  "actual_result": null,
+  "body": "static __x86_wakeup plus its tightly coupled static set_warm_reset_vector call",
+  "candidate": {
+    "C": {
+      "bytes": 96329,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-x86-wakeup-source-only-1/candidate/arch/x86_64/kernel/cpu.c",
+      "sha256": "697abebc2f1f79a2ea2debbc7001f32afcaa190545ac391902db94ba352ce2d0"
+    },
+    "Rust": {
+      "bytes": 96170,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-x86-wakeup-source-only-1/candidate/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "0c9aab896e0413dd2f570665fbdb9c4bc88f3eadfc79dd07c9e45e9296b2d6b4"
+    }
+  },
+  "canonical_preimages": {
+    "C": {
+      "bytes": 95605,
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "sha256": "c779079fb6de66991c861c823dca06b2a9ceec16ac4c984995200b668d7e78ce"
+    },
+    "Rust": {
+      "bytes": 93305,
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "98914e1ff4d50c2f42ccbdeb1f4f338024b7a9a2143fbad2f59ebd6f6b50dd0b"
+    }
+  },
+  "compiler_jobs": 0,
+  "current_live_callers": [
+    {
+      "consumer": "existing selected Rust x86_ihk_mc_boot_cpu_body_result callback",
+      "line": 2549,
+      "source": "cpu.c::x86_wakeup_bridge"
+    },
+    {
+      "consumer": "literal C fallback",
+      "line": 2593,
+      "source": "cpu.c fallback ihk_mc_boot_cpu"
+    }
+  ],
+  "default_GCC14_link_native": "OPEN",
+  "difficulty": "moderate typed callback/data ABI and ordering leaf; hardware AP startup/native and producer lifetime remain independent proof",
+  "engineering_percentage": null,
+  "existing_C_debt_not_exempt": [
+    "selected callback implementations and APIC initialization/selection",
+    "x86_wakeup_bridge existing selected C callback wrapper",
+    "underlying warm-reset provider origin not newly certified here"
+  ],
+  "existing_Rust_reuse": [
+    "arch_delay existing typed provider",
+    "existing per-word read_volatile and existing CPU boot/APIC boundaries",
+    "x86_issue_ipi existing configured function-pointer dispatch",
+    "existing x86_set_warm_reset provider; no new C warm-reset implementation"
+  ],
+  "future_fixture_fragment": {
+    "bytes": 4524,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-x86-wakeup-source-only-1/FUTURE-RECORDED-BOUNDARIES.c.inc",
+    "sha256": "61158359c501b62f11955f3496a96697fb2e5e9f31ee94fa865b93d1cebde9a6"
+  },
+  "future_vectors_not_executed": {
+    "apicid": [
+      "INT_MIN",
+      "-1",
+      "0",
+      "1",
+      "INT_MAX"
+    ],
+    "callback_slots": [
+      "fixed",
+      "replace read/IPI/wait after first invocation"
+    ],
+    "ignored_read_results": [
+      "0",
+      "UINT_MAX"
+    ],
+    "ip": [
+      "0",
+      "1",
+      "0xfff",
+      "0x1000",
+      "ULONG_MAX"
+    ],
+    "status": [
+      "initial nonzero still sends first SIPI",
+      "complete after delay1/2/3",
+      "never complete runs exactly3",
+      "negative status treated nonzero"
+    ]
+  },
+  "inherited_NULL_freeze_HOLD": "separate preserved; no guessed frame or guard",
+  "integration_dependency": "standalone base canonicalc779/9891; later coherent root merge with accepted volatile and tested exception-stop postimages, no implied combined acceptance",
+  "new_C_runtime_functionality": false,
+  "new_declarative_C_debt": [
+    "five const pointer descriptors to existing callback/state slots",
+    "one const unsigned-int[5] macro witness; no invented architecture numeric values"
+  ],
+  "no_second_ready_fixture": "no main/driver/argv/profile request; exception-stop corrected batch remains sole queue",
+  "original_C": {
+    "bytes": 666,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-x86-wakeup-source-only-1/ORIGINAL-C-BODY.inc",
+    "sha256": "716e7c4158fe456b33411fe8ef00aa4b87d08767ddf3be5033b478356cd74355"
+  },
+  "patch": {
+    "bytes": 4100,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-x86-wakeup-source-only-1/COMPLETE-WAKEUP-SOURCE.patch",
+    "sha256": "40c3cf598c1ffb9238af4c4ca8590917bf37c796b50ce4b6968c4710c9ddfdd4"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_invariants": [
+    "warm-reset full unsigned-long IP/current first_page_va before error clear",
+    "ESR write/read, two INIT IPIs, wait, up to exactly three read/SIPI/wait/delay200/status sequences",
+    "int APIC id converts modulo unsigned32 at actual callback; startup OR uses ulong before callback truncation",
+    "each callback slot reloaded at its original expression; boot status read volatile only after delay",
+    "no null guard, recovery, return/error policy, pointer lifetime extension, IRQ/lock or host hardware operation added"
+  ],
+  "status": "SUBSTANTIVE_COMPLETE_WAKEUP_SOURCE_ONLY_NO_EXECUTABLE_QUEUE"
+}

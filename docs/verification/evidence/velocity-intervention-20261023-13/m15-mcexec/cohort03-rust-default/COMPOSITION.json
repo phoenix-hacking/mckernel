@@ -1,0 +1,43 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_UNCOMPILED",
+  "supersedes_source_proposal": "cohort02-all-eleven-batches plus batch12-runtime-data",
+  "existing_Rust_reused": "complete8720-line original executor, unchanged except module declarations",
+  "bridge_bodies_implemented_Rust": 349,
+  "additional_shims_owned_Rust": [
+    "main",
+    "util_thread direct existing Rust forwarding"
+  ],
+  "Rust_data_symbols_optional_included": 51,
+  "new_Rust_modules": [
+    "mcexec_clone_child.rs",
+    "mcexec_cpu_topology.rs",
+    "mcexec_diagnostics.rs",
+    "mcexec_entry_metadata_options.rs",
+    "mcexec_launch_state.rs",
+    "mcexec_load_descriptor.rs",
+    "mcexec_overlay_fd.rs",
+    "mcexec_platform_syscalls.rs",
+    "mcexec_residual_functional.rs",
+    "mcexec_runtime_data.rs",
+    "mcexec_signal_wait_exit.rs",
+    "mcexec_worker_lifecycle.rs"
+  ],
+  "default_selection": "Rust-enabled x86_64 RUSTC branch removes mcexec.c, links Rust object plus existing reviewed libmcexec architecture assembly and genuine platform libraries; LINKER_LANGUAGE C supplies platform CRT/link driver",
+  "original_C_byte_identical": true,
+  "fallback": "original C selected for Rust disabled/unavailable/non-x86_64, unchanged",
+  "metadata": "same BUILDID configure input as config.h, @ONLY Rust DATA template, MCEXEC_BUILDID_RS, explicit dependencies",
+  "optional_boundary": "CMake booleans bind Rust cfgs; unmatched CFLAGS/directory-only variants fail config. Header/source manual variants require separately bound configuration. Optional project command-server/isunshare providers remain debt.",
+  "canonical_mutated": false,
+  "compiler_or_native_execution": false,
+  "source_retirement_or_PASS_credit": false,
+  "fixtures": "all12 private batch README/compiler/provider proposals; all source scaffolds UNCOMPILED",
+  "root_acceptance_required": [
+    "independent source/ABI contract review and compiler/scaffold fixes in successor paths",
+    "all12 original-C/Rust fixture comparisons; three defined extensions separately assessed",
+    "actual generated BUILDID byte comparison",
+    "actual default production compile/link and source/object/ELF/project-dependency closure",
+    "matching changed-cohort native exec/process/wait/thread/FD/overlay/resource behavior",
+    "optional product delivery/dependency disposition"
+  ]
+}

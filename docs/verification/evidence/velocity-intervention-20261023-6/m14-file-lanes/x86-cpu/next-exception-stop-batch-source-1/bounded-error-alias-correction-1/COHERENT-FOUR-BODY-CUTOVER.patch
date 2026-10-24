@@ -1,0 +1,299 @@
+--- a/arch/x86_64/kernel/cpu.c
++++ b/arch/x86_64/kernel/cpu.c
+@@ -2226,6 +2226,9 @@
+ 	}
+ }
+ 
++#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
++void gpe_handler(struct x86_user_context *regs);
++#else
+ void gpe_handler(struct x86_user_context *regs)
+ {
+ 	set_cputime(interrupt_from_user(regs) ?
+@@ -2242,7 +2245,18 @@
+ 		CPUTIME_MODE_K2U : CPUTIME_MODE_K2K_OUT);
+ 	panic("GPF");
+ }
+-
++#endif
++
++#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
++/* Immutable witness of this C translation unit's existing debug gate;
++ * declarative remaining C data, not a C helper implementation. */
++#ifdef DEBUG_PRINT_CPU
++const unsigned int x86_debug_handler_debug_print_enabled = 1;
++#else
++const unsigned int x86_debug_handler_debug_print_enabled = 0;
++#endif
++void debug_handler(struct x86_user_context *regs);
++#else
+ void debug_handler(struct x86_user_context *regs)
+ {
+ 	unsigned long db6;
+@@ -2272,7 +2286,18 @@
+ 	set_cputime(interrupt_from_user(regs) ?
+ 		CPUTIME_MODE_K2U : CPUTIME_MODE_K2K_OUT);
+ }
+-
++#endif
++
++#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
++/* Declarative witness of this C translation unit's existing debug gate.
++ * This immutable data is explicit remaining C debt, not a C helper body. */
++#ifdef DEBUG_PRINT_CPU
++const unsigned int x86_int3_debug_print_enabled = 1;
++#else
++const unsigned int x86_int3_debug_print_enabled = 0;
++#endif
++void int3_handler(struct x86_user_context *regs);
++#else
+ void int3_handler(struct x86_user_context *regs)
+ {
+ 	struct siginfo info;
+@@ -2292,6 +2317,7 @@
+ 	set_cputime(interrupt_from_user(regs) ?
+ 		CPUTIME_MODE_K2U : CPUTIME_MODE_K2K_OUT);
+ }
++#endif
+ 
+ static void outb(uint8_t v, uint16_t port)
+ {
+@@ -3052,12 +3078,16 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
++void arch_cpu_stop(void);
++#else
+ void arch_cpu_stop(void)
+ {
+ 	while (1) {
+ 		cpu_halt();
+ 	}
+ }
++#endif
+ 
+ /*@
+   @ behavior fs_base:
+--- a/kernel/rust/x86_cpu_helpers.rs
++++ b/kernel/rust/x86_cpu_helpers.rs
+@@ -3243,3 +3243,219 @@
+         }
+     }
+ }
++
++unsafe extern "C" {
++    // Existing selected providers; aliases introduce no new exported helper.
++    #[link_name = "interrupt_from_user"]
++    fn x86_gpe_from_user(regs: *mut c_void) -> CInt;
++    #[link_name = "set_cputime"]
++    fn x86_gpe_set_cputime(mode: CUInt);
++    #[link_name = "arch_show_interrupt_context"]
++    fn x86_gpe_show_context(regs: *const c_void);
++    #[link_name = "set_signal"]
++    fn x86_gpe_set_signal(sig: CInt, regs: *mut c_void, info: *mut crate::abi::SigInfo);
++    #[link_name = "interrupt_exit"]
++    fn x86_gpe_interrupt_exit(regs: *mut X86UserContext);
++    #[link_name = "panic"]
++    fn x86_gpe_panic(message: *const i8) -> !;
++    // Existing provider symbols; aliases add no new C implementation.
++    #[link_name = "interrupt_from_user"]
++    fn x86_int3_from_user(regs: *mut c_void) -> CInt;
++    #[link_name = "set_cputime"]
++    fn x86_int3_set_cputime(mode: CUInt);
++    #[link_name = "arch_show_interrupt_context"]
++    fn x86_int3_show_context(regs: *const c_void);
++    #[link_name = "set_signal"]
++    fn x86_int3_set_signal(sig: CInt, regs: *mut c_void, info: *mut crate::abi::SigInfo);
++    #[link_name = "interrupt_exit"]
++    fn x86_int3_interrupt_exit(regs: *mut X86UserContext);
++    #[link_name = "x86_int3_debug_print_enabled"]
++    static X86_INT3_DEBUG_PRINT_ENABLED: CUInt;
++    // Reuse existing provider symbols; no new C implementation or ABI header.
++    #[link_name = "interrupt_from_user"]
++    fn x86_debug_from_user(regs: *mut c_void) -> CInt;
++    #[link_name = "set_cputime"]
++    fn x86_debug_set_cputime(mode: CUInt);
++    #[link_name = "arch_show_interrupt_context"]
++    fn x86_debug_show_context(regs: *const c_void);
++    #[link_name = "set_signal"]
++    fn x86_debug_set_signal(sig: CInt, regs: *mut c_void, info: *mut crate::abi::SigInfo);
++    #[link_name = "interrupt_exit"]
++    fn x86_debug_interrupt_exit(regs: *mut X86UserContext);
++    #[link_name = "x86_debug_handler_debug_print_enabled"]
++    static X86_DEBUG_HANDLER_DEBUG_PRINT_ENABLED: CUInt;
++}
++
++// Exact kernel/include/syscall.h enum values and x86 signal.h SIGSEGV.
++// The supported GCC enum transport is checked by the real-header witness.
++const X86_GPE_CPUTIME_K2U: CUInt = 0;
++const X86_GPE_CPUTIME_U2K: CUInt = 1;
++const X86_GPE_CPUTIME_K2K_IN: CUInt = 2;
++const X86_GPE_CPUTIME_K2K_OUT: CUInt = 3;
++const X86_GPE_SIGSEGV: CInt = 11;
++
++/// Complete selected general-protection-fault orchestration.
++///
++/// The interrupt producer owns the same live context for this call. No Rust
++/// reference crosses a provider call: CS is reloaded after context display,
++/// and the existing classifier is called again after interrupt_exit. The
++/// actual selected Rust panic provider does not return; no new recovery path,
++/// pointer retention, lock, IRQ operation or signal ownership is introduced.
++#[no_mangle]
++pub unsafe extern "C" fn gpe_handler(regs: *mut X86UserContext) {
++    unsafe {
++        x86_gpe_set_cputime(if x86_gpe_from_user(regs.cast::<c_void>()) != 0 {
++            X86_GPE_CPUTIME_U2K
++        } else {
++            X86_GPE_CPUTIME_K2K_IN
++        });
++        kprintf(
++            b"General protection fault (err: %lx, %lx:%lx)\n\0".as_ptr().cast(),
++            core::ptr::addr_of!((*regs).gpr.orig_rax).read(),
++            core::ptr::addr_of!((*regs).gpr.cs).read(),
++            core::ptr::addr_of!((*regs).gpr.rip).read(),
++        );
++        x86_gpe_show_context(regs.cast::<c_void>());
++        if (core::ptr::addr_of!((*regs).gpr.cs).read() & 3) == 0 {
++            x86_gpe_panic(b"gpe_handler\0".as_ptr().cast());
++        }
++        x86_gpe_set_signal(
++            X86_GPE_SIGSEGV, regs.cast::<c_void>(), core::ptr::null_mut(),
++        );
++        x86_gpe_interrupt_exit(regs);
++        x86_gpe_set_cputime(if x86_gpe_from_user(regs.cast::<c_void>()) != 0 {
++            X86_GPE_CPUTIME_K2U
++        } else {
++            X86_GPE_CPUTIME_K2K_OUT
++        });
++        x86_gpe_panic(b"GPF\0".as_ptr().cast());
++    }
++}
++
++// Exact existing syscall.h and x86 signal.h constants; real-header witness
++// must confirm the supported unsigned32-bit enum transport before acceptance.
++const X86_INT3_CPUTIME_K2U: CUInt = 0;
++const X86_INT3_CPUTIME_U2K: CUInt = 1;
++const X86_INT3_CPUTIME_K2K_IN: CUInt = 2;
++const X86_INT3_CPUTIME_K2K_OUT: CUInt = 3;
++const X86_INT3_SIGTRAP: CInt = 5;
++const X86_INT3_TRAP_BRKPT: CInt = 1;
++
++/// Complete breakpoint-exception orchestration using existing selected providers.
++///
++/// C owns the live interrupt context. The stack-local real SigInfo storage is
++/// zeroed byte-for-byte (including padding) and borrowed only for set_signal.
++/// No Rust reference crosses a provider, no frame/signal pointer is retained,
++/// and the second classification is performed after interrupt_exit as in C.
++#[no_mangle]
++pub unsafe extern "C" fn int3_handler(regs: *mut X86UserContext) {
++    let mut info = core::mem::MaybeUninit::<crate::abi::SigInfo>::uninit();
++    unsafe {
++        x86_int3_set_cputime(if x86_int3_from_user(regs.cast::<c_void>()) != 0 {
++            X86_INT3_CPUTIME_U2K
++        } else {
++            X86_INT3_CPUTIME_K2K_IN
++        });
++        // #ifdef DEBUG_PRINT_CPU, including a definition with value 0, is
++        // captured by the immutable data from the actual C translation unit.
++        if X86_INT3_DEBUG_PRINT_ENABLED != 0 {
++            kprintf(
++                b"int3 exception (err: %lx, %lx:%lx)\n\0".as_ptr().cast(),
++                core::ptr::addr_of!((*regs).gpr.orig_rax).read(),
++                core::ptr::addr_of!((*regs).gpr.cs).read(),
++                core::ptr::addr_of!((*regs).gpr.rip).read(),
++            );
++            x86_int3_show_context(regs.cast::<c_void>());
++        }
++        core::ptr::write_bytes(
++            info.as_mut_ptr().cast::<u8>(), 0, core::mem::size_of::<crate::abi::SigInfo>(),
++        );
++        core::ptr::addr_of_mut!((*info.as_mut_ptr()).si_code).write(X86_INT3_TRAP_BRKPT);
++        x86_int3_set_signal(X86_INT3_SIGTRAP, regs.cast::<c_void>(), info.as_mut_ptr());
++        x86_int3_interrupt_exit(regs);
++        x86_int3_set_cputime(if x86_int3_from_user(regs.cast::<c_void>()) != 0 {
++            X86_INT3_CPUTIME_K2U
++        } else {
++            X86_INT3_CPUTIME_K2K_OUT
++        });
++    }
++}
++
++// Exact existing syscall.h/registers.h/x86 signal.h constants.
++// The future real-header witness must confirm each value and enum transport.
++const X86_DEBUG_CPUTIME_K2U: CUInt = 0;
++const X86_DEBUG_CPUTIME_U2K: CUInt = 1;
++const X86_DEBUG_CPUTIME_K2K_IN: CUInt = 2;
++const X86_DEBUG_CPUTIME_K2K_OUT: CUInt = 3;
++const X86_DEBUG_DB6_BS: CULong = 1 << 14;
++const X86_DEBUG_DB6_BREAKPOINT_MASK: CULong = 0xf;
++const X86_DEBUG_RFLAGS_TF: CULong = 1 << 8;
++const X86_DEBUG_SIGTRAP: CInt = 5;
++const X86_DEBUG_TRAP_TRACE: CInt = 2;
++const X86_DEBUG_TRAP_HWBKPT: CInt = 4;
++
++/// Complete debug-exception orchestration. The generic reader is the existing
++/// privileged debug-register boundary, not a new C getter or public helper.
++/// The caller retains the original live frame and CPU-local debug-state
++/// exclusion. No frame or stack-local signal-info pointer escapes.
++#[inline(always)]
++unsafe fn x86_debug_handler_body<R: DebugRegisterReader>(
++    regs: *mut X86UserContext,
++    reader: &mut R,
++) {
++    let mut info = core::mem::MaybeUninit::<crate::abi::SigInfo>::uninit();
++    let mut si_code: CInt = 0;
++    unsafe {
++        x86_debug_set_cputime(if x86_debug_from_user(regs.cast::<c_void>()) != 0 {
++            X86_DEBUG_CPUTIME_U2K
++        } else {
++            X86_DEBUG_CPUTIME_K2K_IN
++        });
++        if X86_DEBUG_HANDLER_DEBUG_PRINT_ENABLED != 0 {
++            kprintf(
++                b"debug exception (err: %lx, %lx:%lx)\n\0".as_ptr().cast(),
++                core::ptr::addr_of!((*regs).gpr.orig_rax).read(),
++                core::ptr::addr_of!((*regs).gpr.cs).read(),
++                core::ptr::addr_of!((*regs).gpr.rip).read(),
++            );
++            x86_debug_show_context(regs.cast::<c_void>());
++        }
++        // Reuse the exact existing DR6 instruction/provider; only register6
++        // is requested, once, after the optional context callback.
++        let db6 = reader.read::<6>();
++        if db6 & X86_DEBUG_DB6_BS != 0 {
++            let flags = core::ptr::addr_of_mut!((*regs).gpr.rflags);
++            flags.write(flags.read() & !X86_DEBUG_RFLAGS_TF);
++            si_code = X86_DEBUG_TRAP_TRACE;
++        } else if db6 & X86_DEBUG_DB6_BREAKPOINT_MASK != 0 {
++            si_code = X86_DEBUG_TRAP_HWBKPT;
++        }
++        core::ptr::write_bytes(
++            info.as_mut_ptr().cast::<u8>(), 0, core::mem::size_of::<crate::abi::SigInfo>(),
++        );
++        core::ptr::addr_of_mut!((*info.as_mut_ptr()).si_code).write(si_code);
++        x86_debug_set_signal(X86_DEBUG_SIGTRAP, regs.cast::<c_void>(), info.as_mut_ptr());
++        x86_debug_interrupt_exit(regs);
++        x86_debug_set_cputime(if x86_debug_from_user(regs.cast::<c_void>()) != 0 {
++            X86_DEBUG_CPUTIME_K2U
++        } else {
++            X86_DEBUG_CPUTIME_K2K_OUT
++        });
++    }
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn debug_handler(regs: *mut X86UserContext) {
++    unsafe { x86_debug_handler_body(regs, &mut HardwareDebugRegisterReader); }
++}
++
++/// Complete nonreturning stop loop, using the existing architecture halt body.
++/// Each wakeup returns to the next halt; no IRQ state, return policy or counter
++/// is introduced. The C ABI remains void(void), as in the actual panic caller.
++#[cfg(not(mckernel_equivalence))]
++#[no_mangle]
++pub unsafe extern "C" fn arch_cpu_stop() {
++    loop {
++        unsafe { cpu_halt(); }
++    }
++}

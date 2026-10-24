@@ -1,0 +1,36 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_UNCOMPILED",
+  "retired_symbols_proposed": [
+    "mcexec_fork_sync_lock_bridge",
+    "mcexec_fork_sync_unlock_bridge",
+    "mcexec_fork_sync_munmap_bridge",
+    "mcexec_fork_sync_free_bridge",
+    "mcexec_clone_alloc_fork_sync_bridge",
+    "mcexec_clone_alloc_container_bridge",
+    "mcexec_clone_fork_bridge",
+    "mcexec_clone_fork_failed_bridge",
+    "mcexec_clone_child_bridge",
+    "mcexec_clone_sem_trywait_bridge",
+    "mcexec_clone_waitpid_nohang_bridge",
+    "mcexec_clone_sched_yield_bridge",
+    "mcexec_clone_child_after_fork_failed_bridge",
+    "mcexec_clone_sem_destroy_bridge"
+  ],
+  "providers": [
+    "existing Rust opendev/init_sigaction/init_worker_threads/join_all_threads bodies and McexecSyscallWaitDesc/ForkSyncContainer ABI",
+    "existing C global storage fd/ischild/debug/thread_data/n_threads/fork_sync_top/fork_sync_mutex",
+    "existing mcexec_opendev_dev_bridge data accessor remains explicit C debt",
+    "Linux x86_64 glibc sem_t 32 bytes/8-byte alignment requires C fixture confirmation",
+    "genuine libc/libpthread APIs mmap/munmap/semaphore/mutex/fork/waitpid/getppid/sched_yield/exit/IO/error providers"
+  ],
+  "parity": [
+    "open and PPD failures publish negative errno then cleanup+sem_post before exit",
+    "worker init failure closes and exits before fork-list cleanup, preserving original behavior",
+    "pool count one forces n_threads four; negative count reports but still initializes",
+    "cleanup skips self shared fs, frees all containers, clears list",
+    "success is volatile with original parent-death exit policy",
+    "sem_init/post/destroy and mutex return values still ignored as reference"
+  ],
+  "compiler_or_native_execution": false
+}

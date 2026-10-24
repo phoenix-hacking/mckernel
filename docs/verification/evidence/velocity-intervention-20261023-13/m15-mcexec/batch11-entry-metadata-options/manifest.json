@@ -1,0 +1,36 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_UNCOMPILED",
+  "retired_symbols_proposed": [
+    "mcexec_opendev_buildid_size_bridge",
+    "mcexec_opendev_buildid_bridge",
+    "mcexec_opendev_query_result_bridge",
+    "mcexec_exit_cmd_servers_bridge",
+    "mcexec_main_cmd_servers_init_bridge",
+    "mcexec_main_bind_mount_bridge",
+    "mcexec_partition_debug_ikc_binding_bridge",
+    "mcexec_partition_debug_numa_binding_bridge"
+  ],
+  "additional_selected_C_bodies_removed": [
+    "default main shim",
+    "selected util_thread forwarding shim"
+  ],
+  "providers": [
+    "same BUILDID as config.h generated into Rust data template by CMake, include via MCEXEC_BUILDID_RS",
+    "existing Rust main body and integer formatting helper",
+    "existing C exported partition cpuset/debug/fd data",
+    "genuine libc/libnuma/sched/output APIs",
+    "optional project command-server init/exit and isunshare C providers remain EXPLICIT optional-product debt; not default runtime closure credit"
+  ],
+  "cfg_requirements": {
+    "mcexec_debug": "DEBUG",
+    "mcexec_syscall_mod_call": "USE_SYSCALL_MOD_CALL",
+    "mcexec_cmd_dcfa": "CMD_DCFA",
+    "mcexec_cmd_dcfampi": "CMD_DCFAMPI",
+    "mcexec_bind_mount": "MCEXEC_BIND_MOUNT"
+  },
+  "deliberate_defined_extension": [
+    "DEBUG affinity string construction uses defined Rust append, replacing original overlapping sprintf source/destination undefined behavior. Default DEBUG-off parity independent; no C-defined-behavior credit for DEBUG string construction."
+  ],
+  "compiler_or_native_execution": false
+}

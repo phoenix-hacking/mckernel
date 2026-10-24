@@ -1,0 +1,131 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "COMPLETE_EXTEND_PROCESS_REGION_SOURCE_ONLY",
+  "base": {
+    "C": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-cow-classify-source-1/candidate/kernel/process.c",
+      "sha256": "b17d39bc259c827743707d5c8b0e4a2fe3fd4e9cc2977bd1f9d120bc83b61c34",
+      "bytes": 166192
+    },
+    "Rust": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-cow-classify-source-1/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "9d17bbf43585157ebde12404dbeaae7300d8128245d465267804cd9b1c00c775",
+      "bytes": 367623
+    }
+  },
+  "postimages": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-extend-region-source-1/candidate/kernel/process.SOURCE-CONTEXT-CORRECTED.c",
+      "sha256": "42ee6f390724da418d0cc0ac6573200615c1ed2a52cf0f7a10602d6eb9729ef1",
+      "bytes": 167788
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-extend-region-source-1/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "2e74d8131170630a1930d8f972e2918b8519e929635c5754fafd935009865da1",
+      "bytes": 371962
+    }
+  },
+  "original": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-extend-region-source-1/fixture/extend_process_region.ACTUAL-ORIGINAL-C.inc",
+    "sha256": "155a8ac5a986cfc2af0c5f731dab77daf419f2290b751f926c21a042745af3d8",
+    "bytes": 2218
+  },
+  "Rust": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-extend-region-source-1/fixture/extend_region.ACTUAL-RUST.inc",
+    "sha256": "fa3b101b2650f6103b66f09524a8f5f1fb4f2e85eda65baba4db54df49553e03",
+    "bytes": 4257
+  },
+  "fixture": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-extend-region-source-1/fixture/FIXTURE-PROPOSAL.json",
+    "sha256": "6b987b08eb4afbc10ee00e4863a619a6b8382428b908abc4af69d8ae506f873f",
+    "bytes": 2188
+  },
+  "real_header_ABI": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-extend-region-source-1/fixture/actual_real_header_abi.SOURCE-ONLY.c",
+    "sha256": "4027dc53d93949d4ce976d76d5d4a7c9359f4f71764aabc581ca90bdce610f40",
+    "bytes": 1569
+  },
+  "actual_consumer": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-extend-region-source-1/fixture/brk_extend_bridge.ACTUAL-C-CONSUMER.inc",
+    "sha256": "fe7c7a3e6d03d78b55d135033853bb2c60dd447bbe65c8e60b7ad295fc11689c",
+    "bytes": 201
+  },
+  "source_context": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-extend-region-source-1/fixture/EXACT-TRACKING-AND-DIAGNOSTIC-SOURCE.json",
+    "sha256": "d7b7fa8d808f775df76b9c7ecfd24cef642f6a60326a81d182e143397551257f",
+    "bytes": 982
+  },
+  "invariant": "Preserve unsigned round-up/wrap, signed npages narrowing, lookup-before-allocation, mpol read after lookup, exact allocated pointer physical translation before add, NULL-to-demand transition, full add arguments, unconditional tracked free on any add error including NULL, and successful ownership transfer with no free. No new lock/ref/Page policy. Original complete C fallback retained.",
+  "source_field_access": "Existing abi::ProcessVm.proc borrowed pointer to abi::Process, existing heap_extension/mpol_flags only. No guessed offsets or new Page implementation.",
+  "remaining_C_debt": [
+    "brk_extend_bridge public caller and its surrounding lock/log adapters",
+    "existing lookup/add-range provider C diagnostics/backend bridges remain accepted provider debt",
+    "page-fault COW allocation/copy/accounting/install/cleanup and owning zeroobj comparison remain outside this full body port"
+  ],
+  "inherited_source_only": [
+    "COW classifier and memobj acquisition uncompiled; F01 getter future union3 dependency",
+    "anonymous allocation source remains separate and not included"
+  ],
+  "prior_failure_history": "All accepted795/404/96 and failed E0428/E0308/nominal-C/source-debug-context evidence retained; no replay or family reset.",
+  "production_suffix_unchanged": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-passed-prepare-production-1/ROOT-READY.CURRENT-UNION2-PREPARE-AND-F01-CONSUMER.json",
+    "sha256": "01fc0c57c07d29ca2092b423ec40bd8fd2db18469ea3fae9c4264d673127263e",
+    "bytes": 2643
+  },
+  "provider_sources": {
+    "kernel/rust/abi.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    "kernel/rust/mem_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "sha256": "be693dec5e53b20f06f7963b7418a7c0dff68cbecaaa2360e291d8542784e045",
+      "bytes": 209297
+    },
+    "kernel/rust/x86_memory_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "087240006b3f1b99c844c77c1c645118710bf34f53546637eb12d54215822092",
+      "bytes": 204359
+    },
+    "kernel/include/process.h": {
+      "path": "/home/holden/mckernel/kernel/include/process.h",
+      "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649",
+      "bytes": 26602
+    },
+    "lib/include/ihk/mm.h": {
+      "path": "/home/holden/mckernel/lib/include/ihk/mm.h",
+      "sha256": "a1b412608df7512a1b7295c6f19b3ec5a77e6364e8f24b208ab1a29e7556e5b1",
+      "bytes": 9548
+    },
+    "lib/include/ihk/debug.h": {
+      "path": "/home/holden/mckernel/lib/include/ihk/debug.h",
+      "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc",
+      "bytes": 1294
+    }
+  },
+  "compiler_jobs": 0,
+  "CPU_reservations": 0,
+  "new_executable_queues": 0,
+  "canonical_mutations": 0,
+  "default_native_credit": false,
+  "original_source_handoff_preserved": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-extend-region-source-1/sourcehandoff/SOURCE-NEXT-BODY.json",
+    "sha256": "e3160e5ce6cf69300500d15a4ea89785d8eb90273a3a4de2f6b5aa67617d26b5",
+    "bytes": 6453
+  },
+  "source_only_preexecution_context_correction": "Only post-fallback #line restoration decremented by one because preserved source suffix starts with original function-ending newline. No executable statements, tracking constants, debug descriptors, Rust code, C fallback, or fixture oracle changed. Both initial prepared C and context-corrected C preserved.",
+  "layout_witnesses": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-extend-region-source-1/fixture/field_layout.ACTUAL-HEADER-SOURCE-ONLY.c",
+      "sha256": "424f85106d9e57d8cd70ace794220b65d8f8d2ad35b0b32d2342c1fbf0a58a38",
+      "bytes": 668
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-extend-region-source-1/fixture/field_layout.ACTUAL-RUST-SOURCE-ONLY.inc",
+      "sha256": "d8bfb1d85347a16f6a0e88d71446c9a631fd0ad320a4f3da3df93481ccad7c90",
+      "bytes": 860
+    }
+  ],
+  "next_check": "After root bindings/grant: compile actual real header witness and exact Rust field witness, compare eleven compiler-derived values before helper execution; compare original complete C and Rust state/event/vararg oracles. Production requires coherent future union3 full crate and whole process TU consumer; no source-only credit."
+}

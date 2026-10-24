@@ -1,0 +1,46 @@
+--- a/kernel/process.c
++++ b/kernel/process.c
+@@ -2840,6 +2840,11 @@
+ #endif
+ 
+ 
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++int process_page_fault_memobj_get_body_result(struct vm_range *, void *, uintptr_t,
++        pte_t *, size_t, int, uintptr_t *, unsigned long *, int *);
++#endif
++
+ int page_fault_process_memory_range(struct process_vm *vm,
+ 				    struct vm_range *range,
+ 				    uintptr_t fault_addr, uint64_t reason)
+@@ -2913,6 +2918,23 @@
+ 	/*****/
+ 	dkprintf("%s: ptep=%lx,pte_is_null=%d,pte_is_fileoff=%d\n", __FUNCTION__, ptep, ptep ? pte_is_null(ptep) : -1, ptep ? pte_is_fileoff(ptep, pgsize) : -1);
+ 	if (!ptep || pte_is_null(ptep) || pte_is_fileoff(ptep, pgsize)) {
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++        /* Rust returns the existing signed-error predicate, not a new release
++         * policy. Preserve the owning zeroobj error branch here verbatim. */
++        if (process_page_fault_memobj_get_body_result(range, pgaddr,
++                fault_addr, ptep, pgsize, p2align, &phys, &memobj_flag, &error)) {
++				struct memobj *obj;
++
++				if (zeroobj_create(&obj)) {
++					panic("PFPMR: zeroobj_crate");
++				}
++
++				if (range->memobj != obj) {
++					goto out;
++				}
++			
++        }
++#else
+ 		phys = NOPHYS;
+ 		if (range->memobj) {
+ 			off_t off;
+@@ -2938,6 +2960,7 @@
+ 			}
+ 			// memory_stat_rss_add() is called downstream, i.e. memobj_get_page() to check page->count
+ 		}
++#endif
+ 		if (phys == NOPHYS) {
+ 			void *virt = NULL;
+ 			size_t npages;

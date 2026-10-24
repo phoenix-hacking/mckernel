@@ -1,0 +1,74 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "COW_CLASSIFICATION_SOURCE_ONLY",
+  "base": {
+    "C": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-memobj-get-source-1/candidate/kernel/process.c",
+      "sha256": "54c1f0473f64d9fbdaea229ddbabf6b496130ee9ca794642e5d3ff6daac49986",
+      "bytes": 165883
+    },
+    "Rust": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-memobj-get-source-1/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "f4ea58d13a5915953bcbf7ee80c31815b95c230c0d99e1dfc66b9cb9b0178d5f",
+      "bytes": 366345
+    }
+  },
+  "postimages": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-cow-classify-source-1/candidate/kernel/process.c",
+      "sha256": "b17d39bc259c827743707d5c8b0e4a2fe3fd4e9cc2977bd1f9d120bc83b61c34",
+      "bytes": 166192
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-cow-classify-source-1/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "9d17bbf43585157ebde12404dbeaae7300d8128245d465267804cd9b1c00c775",
+      "bytes": 367623
+    }
+  },
+  "original": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-cow-classify-source-1/fixture/original_classify.ACTUAL-C.inc",
+    "sha256": "54c714d1fb56264946b2f649ee0d99646dbd73130d761f3e6b48bbb71b37ccce",
+    "bytes": 544
+  },
+  "Rust": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-cow-classify-source-1/fixture/cow_classify.ACTUAL-RUST.inc",
+    "sha256": "7fbf0fec890b839c18b1c628c17b7f44f4ab880c2a4584ebd254a2adaf52ab6b",
+    "bytes": 1197
+  },
+  "fixture": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-cow-classify-source-1/fixture/FIXTURE-PROPOSAL.json",
+    "sha256": "a5ca86105b05df2af73cc25a4000149fedec9f993a9d9fed8bbe6aabe78f0a49",
+    "bytes": 1342
+  },
+  "invariant": "Borrowed VM range, optional memobj and Page retain the same lock/lifetime. Classification only; preserve original bitwise OR with MF_ZEROOBJ, Page predicate order/short-circuit, and final boolean. Every COW allocation/copy/ref/unmap/RSS/physical replacement/install/out path remains untouched.",
+  "zeroobj_ownership_hold_unchanged": true,
+  "anonymous_source_included": false,
+  "upstream_unproven": [
+    "memobj acquisition source still uncompiled",
+    "F01 page_get_offset source dependency still future union3",
+    "COW classification and fixture fragments uncompiled/unrun"
+  ],
+  "provider_sources": {
+    "kernel/rust/page_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/page_helpers.rs",
+      "sha256": "cfc64f72bf9b94c65417bc8f4e29d65b81f98239fe52ab2a7dd0352ebdfc3f70",
+      "bytes": 17367
+    },
+    "kernel/rust/abi.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    },
+    "kernel/include/memobj.h": {
+      "path": "/home/holden/mckernel/kernel/include/memobj.h",
+      "sha256": "7d587411f1b6957c6fcc6f61d8f03b052d875cfd774f602aefe05ff99f536bb9",
+      "bytes": 3957
+    }
+  },
+  "passed96_reused_without_replay": true,
+  "compiler_jobs": 0,
+  "CPU_reservations": 0,
+  "new_executable_queues": 0,
+  "canonical_mutations": 0,
+  "default_native_credit": false
+}

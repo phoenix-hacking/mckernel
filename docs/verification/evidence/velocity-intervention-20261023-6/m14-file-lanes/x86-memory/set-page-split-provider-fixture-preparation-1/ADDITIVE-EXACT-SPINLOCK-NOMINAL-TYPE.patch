@@ -1,0 +1,11 @@
+--- a/kernel/rust/x86_memory_helpers.rs
++++ b/kernel/rust/x86_memory_helpers.rs
+@@ -7635,7 +7635,7 @@
+ ) -> CInt {
+     unsafe {
+         let in_kernel = x86_pt_kernel_lock_needed_result(virt) != 0;
+-        let mut lock: *mut crate::abi::IhkSpinlock = core::ptr::null_mut();
++        let mut lock: *mut crate::spinlock_helpers::IhkSpinlock = core::ptr::null_mut();
+         let mut flags: CULong = 0;
+         if in_kernel {
+             lock = x86_init_page_table_lock_bridge().cast();

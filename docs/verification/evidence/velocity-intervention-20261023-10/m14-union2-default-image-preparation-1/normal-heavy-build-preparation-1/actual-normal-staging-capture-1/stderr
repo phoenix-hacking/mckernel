@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/prepare_and_validate.UNION2.CPU0.NOT-RELEASED.py", line 38, in <module>
+    validation_start=time.monotonic();bound=owner._validate_request(request)
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/native_rust_exact_mckernel_image_container_owner.union2.py", line 1179, in _validate_request
+    _validate_authenticated_source(source, source_doc, candidate, ihk, source_tools, provenance)
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/native_rust_exact_mckernel_image_container_owner.union2.py", line 892, in _validate_authenticated_source
+    provenance.validate_thin_source(source, manifest, candidate, ihk)
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/native_rust_exact_build_offline.py", line 732, in validate_thin_source
+    materialized,metadata=validate_thin_document(document,candidate,ihk)
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/native_rust_exact_build_offline.py", line 783, in validate_thin_document
+    _thin_require(document.get("schema")==THIN_SCHEMA and _thin_digest(_thin_canonical(document))==EXPECTED_SUCCESSOR_CANONICAL_SHA256,"exact independently reviewed cutover authority required")
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/native_rust_exact_build_offline.py", line 594, in _thin_require
+    raise ValueError('thin source: '+message)
+ValueError: thin source: exact independently reviewed cutover authority required

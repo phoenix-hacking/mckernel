@@ -1,0 +1,30 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_FRAGMENTS_ONLY_NO_SECOND_EXECUTABLE_QUEUE",
+  "reference": "original_reference.SOURCE-ONLY.c.inc",
+  "Rust": "extend_region.ACTUAL-RUST.inc",
+  "strict_cases": [
+    "heap_extension below/equal/above PAGE_SIZE and values near ULONG_MAX; address/end subtraction and round-up wrapping",
+    "existing range short-circuits allocation/add/free and captures gated warning",
+    "demand paging set: skip allocator and translation; absent flag allocator success/failure with mpol no-heap on/off",
+    "allocation NULL enables demand paging; signed add errors positive/negative cause exact unconditional free including NULL; success transfers allocated pages without free",
+    "CInt npages narrowing (including high bit) and p2align exact; all tracking file/line, sizes, flags, node/user/virt/NULL arguments captured",
+    "debug flags 0,1,2,255; exact format/varargs/pointer lifetimes/event order, two-space allocation warning and low-word %d consumption retained",
+    "provider may mutate mpol_flags in range lookup before allocator policy read; snapshots range/VM/process with only controlled provider mutations"
+  ],
+  "actual_provider_contracts": [
+    "current Rust process_helpers lookup_process_memory_range and add_process_memory_range",
+    "current Rust mem_helpers tracked allocation/free; no new allocator or free policy",
+    "current Rust x86_memory_helpers virt_to_phys; host fixture models its controlled effect separately from native mapping",
+    "existing unconditional kprintf declaration reused, no duplicate extern"
+  ],
+  "consumer_checks": [
+    "real brk_extend_bridge public entry relocation from held actual C; selected extend entry calls exactly new helper",
+    "unique helper definition in current root full crate, source-bound provider imports, actual ABI/debug descriptors and caller bytes/all allocated relocations preserved into partial",
+    "exact original complete fallback function; no guessed undefined-symbol counts"
+  ],
+  "execution": null,
+  "compiler_jobs": 0,
+  "actual_comparisons": null,
+  "default_native_acceptance": false
+}

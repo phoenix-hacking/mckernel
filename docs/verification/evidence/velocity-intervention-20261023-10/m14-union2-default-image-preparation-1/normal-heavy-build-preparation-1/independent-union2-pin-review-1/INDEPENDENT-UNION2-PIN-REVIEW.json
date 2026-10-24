@@ -1,0 +1,293 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE_STAGE_EXACT_NINETEEN_UNION2_PINS_ONLY",
+  "reviewer": "m14_build_release_review",
+  "reviewed_handoff": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/READY-FOR-ROOT.NORMAL-HEAVY.UNION2-PINS.NOT-RELEASED.json",
+    "bytes": 8903,
+    "sha256": "84832286c681a437143891cc90117b21cda02f540ae7e9ea3ab87196b709824b"
+  },
+  "driver_predecessor": {
+    "bytes": 224435,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-default-image-preparation-1/native_rust_exact_mckernel_image_offline.py",
+    "sha256": "c5c35f04b3a86b1f3a3d0dc586e7165d1dba4968b4270fa51cb525907ebf0557"
+  },
+  "driver_successor": {
+    "bytes": 224435,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/native_rust_exact_mckernel_image_offline.union2.py",
+    "sha256": "b3e5971f24a85ad1ff5f55247a232cb8cf11933c3053406e383695898f48b5e1"
+  },
+  "independent_driver_AST_check": {
+    "paired_entire_AST_structure_equal_except_exact19_string_hash_literals": true,
+    "after_exact_declared_literal_substitutions_entire_AST_identical": true,
+    "literal_counts": {
+      "M14_SOURCE_PINS": 11,
+      "OWNED_FORK_CURRENT_SOURCE_PINS": 3,
+      "AFFINITY_SOURCE_PINS": 3,
+      "_validate_release_tid_production": 2
+    },
+    "each19_actual_value_matches_materialized_repository_files_row": true,
+    "all_functions_classes_predicates_callers_flags_oracles_other_constants_unchanged": true,
+    "no_candidate_import_or_compile": true
+  },
+  "exact_reviewed_literal_locations": [
+    {
+      "actual": "07af5efb4af2754988376301d19887ea90743b8f304455b7df980738f2629399",
+      "container": "OWNED_FORK_CURRENT_SOURCE_PINS",
+      "line": 1449,
+      "old": "1035622a96a5441a85d60a9db15d3ac452b60266d1f8123eb807ce3849c41081",
+      "path": "kernel/syscall.c"
+    },
+    {
+      "actual": "5bf085bfa3f60217abacbda380e80d35d2fd56922c0e82f82dbab1d5fe09d4d1",
+      "container": "OWNED_FORK_CURRENT_SOURCE_PINS",
+      "line": 1449,
+      "old": "3f2c3dc03445147addee47d77e3ad2b31207fb3bfaa591ad99b6d0d9c897932e",
+      "path": "kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual": "c5d6ddd9ce210ffd51f0e84c3feefddcf4d115044ced76018b9e946aad9cb6f5",
+      "container": "OWNED_FORK_CURRENT_SOURCE_PINS",
+      "line": 1449,
+      "old": "f1f7866c0f2ccc8e1b0024dfb632ec7359dd2a0a4bcd8e22deb957d48ef6d770",
+      "path": "kernel/rust/syscall_policy.rs"
+    },
+    {
+      "actual": "4d2d267cacb48a69179d9b29dec5d905748143210e0f6c7d555e0ac508b419f3",
+      "container": "M14_SOURCE_PINS",
+      "line": 1453,
+      "old": "9d53106e7228b5a7654f4250bab58e20e7bc47a28f8ad9675b1c9ac92599b976",
+      "path": "kernel/mem.c"
+    },
+    {
+      "actual": "7ab29dad607ac06e9548065f4395c6e870359558a2777844c1052d67e046ca13",
+      "container": "M14_SOURCE_PINS",
+      "line": 1453,
+      "old": "1ecbc287f2e704e738cc4e9fbe18289226b5aadadc9da88d226dc0ad0bb57234",
+      "path": "kernel/process.c"
+    },
+    {
+      "actual": "ceed123214cd293f5afefd21dd071e39aa824cf3424cc6355a841c1ae5467f39",
+      "container": "M14_SOURCE_PINS",
+      "line": 1453,
+      "old": "93df0ac24de8163cc5a7e2cce277d3a46c89a607b924c1937f2413e12edf0f66",
+      "path": "arch/x86_64/kernel/memory.c"
+    },
+    {
+      "actual": "087240006b3f1b99c844c77c1c645118710bf34f53546637eb12d54215822092",
+      "container": "M14_SOURCE_PINS",
+      "line": 1453,
+      "old": "800a18bb4db0e28bf76441fca783b3f8d47066260240fb5107967c23775aa494",
+      "path": "kernel/rust/x86_memory_helpers.rs"
+    },
+    {
+      "actual": "5574c151cef8d26fa14e3eac72d54b55703be153e4f147f831c5a9e9b63c70bc",
+      "container": "M14_SOURCE_PINS",
+      "line": 1453,
+      "old": "c779079fb6de66991c861c823dca06b2a9ceec16ac4c984995200b668d7e78ce",
+      "path": "arch/x86_64/kernel/cpu.c"
+    },
+    {
+      "actual": "d876e0b24f789372e6747fee7c554a53a3deaa9cee7034d7096374c2dff34ad6",
+      "container": "M14_SOURCE_PINS",
+      "line": 1453,
+      "old": "912fb97a58cc797407979ce835c422578949ff876ac519193d2ebc4855cce791",
+      "path": "arch/x86_64/kernel/syscall.c"
+    },
+    {
+      "actual": "be693dec5e53b20f06f7963b7418a7c0dff68cbecaaa2360e291d8542784e045",
+      "container": "M14_SOURCE_PINS",
+      "line": 1453,
+      "old": "6a527f7a55930d72d6d72c775ee0261c3550e2bd0094fe01031f3aa3238aefd6",
+      "path": "kernel/rust/mem_helpers.rs"
+    },
+    {
+      "actual": "5bf085bfa3f60217abacbda380e80d35d2fd56922c0e82f82dbab1d5fe09d4d1",
+      "container": "M14_SOURCE_PINS",
+      "line": 1453,
+      "old": "70015d712c29e416881e2fbaccd67026ee15ac7eb915cb80e828485d6f34d71f",
+      "path": "kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual": "c5d6ddd9ce210ffd51f0e84c3feefddcf4d115044ced76018b9e946aad9cb6f5",
+      "container": "M14_SOURCE_PINS",
+      "line": 1453,
+      "old": "3ef8288617db7bcc26c56039491295d3f48c53d4f76d111b68dfcc3186546f7d",
+      "path": "kernel/rust/syscall_policy.rs"
+    },
+    {
+      "actual": "a44a391c7eb461b82cb181089941f52e8845ae90b04d34319aff6437deebb3e4",
+      "container": "M14_SOURCE_PINS",
+      "line": 1453,
+      "old": "98914e1ff4d50c2f42ccbdeb1f4f338024b7a9a2143fbad2f59ebd6f6b50dd0b",
+      "path": "kernel/rust/x86_cpu_helpers.rs"
+    },
+    {
+      "actual": "07af5efb4af2754988376301d19887ea90743b8f304455b7df980738f2629399",
+      "container": "M14_SOURCE_PINS",
+      "line": 1453,
+      "old": "34ec8a08c5790aa7533e5a8e3905d1dd1d4989bf0f431b8517ae6d50bbaa54f4",
+      "path": "kernel/syscall.c"
+    },
+    {
+      "actual": "7ab29dad607ac06e9548065f4395c6e870359558a2777844c1052d67e046ca13",
+      "container": "_validate_release_tid_production",
+      "line": 2432,
+      "old": "64af918855ea361bd850d6ad7480d304634c28814e04127fe3dec8c013f21044",
+      "path": "kernel/process.c"
+    },
+    {
+      "actual": "5bf085bfa3f60217abacbda380e80d35d2fd56922c0e82f82dbab1d5fe09d4d1",
+      "container": "_validate_release_tid_production",
+      "line": 2433,
+      "old": "3f2c3dc03445147addee47d77e3ad2b31207fb3bfaa591ad99b6d0d9c897932e",
+      "path": "kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual": "07af5efb4af2754988376301d19887ea90743b8f304455b7df980738f2629399",
+      "container": "AFFINITY_SOURCE_PINS",
+      "line": 2526,
+      "old": "1035622a96a5441a85d60a9db15d3ac452b60266d1f8123eb807ce3849c41081",
+      "path": "kernel/syscall.c"
+    },
+    {
+      "actual": "5bf085bfa3f60217abacbda380e80d35d2fd56922c0e82f82dbab1d5fe09d4d1",
+      "container": "AFFINITY_SOURCE_PINS",
+      "line": 2526,
+      "old": "3f2c3dc03445147addee47d77e3ad2b31207fb3bfaa591ad99b6d0d9c897932e",
+      "path": "kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual": "c5d6ddd9ce210ffd51f0e84c3feefddcf4d115044ced76018b9e946aad9cb6f5",
+      "container": "AFFINITY_SOURCE_PINS",
+      "line": 2526,
+      "old": "f1f7866c0f2ccc8e1b0024dfb632ec7359dd2a0a4bcd8e22deb957d48ef6d770",
+      "path": "kernel/rust/syscall_policy.rs"
+    }
+  ],
+  "accepted_source_identity": {
+    "manifest_producer_reference_NOT_rehashed": {
+      "bytes": 10197070,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/source-materialization-CPU0-1/source-inputs.json",
+      "sha256": "6c14e905e7eda40cb90a4cf28265021afbde718b23985b61671ae1e0a5f4ed0e"
+    },
+    "materialization_result": {
+      "bytes": 3352,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/source-materialization-CPU0-1/MATERIALIZATION-RESULT.json",
+      "sha256": "fc3d7d6d020de06779bf0f80f650c7a253c0f0a7e0f69b08d144f9c80bf0fda7"
+    },
+    "sourcecopy_whole_join": {
+      "bytes": 1564,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/source-materialization-CPU0-capture-1/ACTUAL-WHOLE-JOIN.json",
+      "sha256": "604339091aec3df1b673555e09a00f1a4be5ea9c7e0d305b6467209aae7aba07"
+    },
+    "materialization_sha256": "a57d2d9f8f71fc026aceae8a64f3c34f5314e8d04031e63c262f0fdc036cbef8",
+    "source_derivative_sha256": "2b12d740e25b0dd3c2dbb17031d59d2f47fd4c9569a8820be869411da4aa97c1",
+    "source_identity": {
+      "dev": 66306,
+      "file_type": 16384,
+      "gid": 1000,
+      "inode": 56250160,
+      "mode": 448,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/source-materialization-CPU0-1/materialized-source",
+      "uid": 1000
+    },
+    "scope": "Consumed accepted actual6c14 metadata and selected19 hash rows; no whole-source inventory or large-file rehash."
+  },
+  "dependent_bindings": {
+    "owner": {
+      "bytes": 93599,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/native_rust_exact_mckernel_image_container_owner.union2.py",
+      "sha256": "63c23e753e625e646d825006300fe2d40506904f8af5b8ea8f23447325127498"
+    },
+    "owner_predecessor": {
+      "bytes": 93599,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/native_rust_exact_mckernel_image_container_owner.py",
+      "sha256": "e85861479005895626295a853b0bd4a3a3392fb67b4ab7feabcaeb9d2394ab77"
+    },
+    "owner_entire_AST_unchanged_after_single_EXPECTED_DRIVER_SHA256_substitution": true,
+    "stager": {
+      "bytes": 7079,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/prepare_and_validate.UNION2.CPU0.NOT-RELEASED.py",
+      "sha256": "43eae2a0b7dc02b151964bee22026ad38de6672db38f39681bdb72ba6acd50a8"
+    },
+    "stager_predecessor": {
+      "bytes": 6985,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/prepare_and_validate.CPU0.NOT-RELEASED.py",
+      "sha256": "36ce2c643089483e42bd375464d2b484c060dcfd6f7805d409358e225570c59e"
+    },
+    "stager_all_functions_classes_AST_identical": true,
+    "stager_entire_AST_unchanged_after_exact5_path_hash_string_substitutions": true,
+    "stager_literal_changes": [
+      "owner filename",
+      "owner hash",
+      "driver path",
+      "driver hash",
+      "provenance path"
+    ],
+    "provenance": {
+      "bytes": 41116,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/native_rust_exact_build_offline.py",
+      "sha256": "c5868d8a336795b5c3d76215bba8bcb3e56a804e00f1014d8b4eeaf6ddb76a69"
+    },
+    "request_data_producer_reference_NOT_rehashed": {
+      "bytes": 26525940,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/image-request.UNION2.DATA-PREPARED.NOT-RELEASED.json",
+      "sha256": "cc89e126ad7edde45c87e4348458abd60ed8b92d6779142f8cc2624e10558e74"
+    },
+    "request_source_manifest_derivative_materialization_driver_provenance_gitlink_namespace_metadata_coherent": true,
+    "request_jobs4_and_mounts_unchanged_from_accepted_candidate15_base": true,
+    "gitlink_manifest": {
+      "bytes": 72854,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-union2-default-image-preparation-1/normal-heavy-build-preparation-1/gitlink-inputs.json",
+      "sha256": "5e14419d2615fb3944be31e45bd268c1aec3c101099c24ef377defed8b5e8061"
+    },
+    "gitlink_compared_to_base_request_manifest_only_changed_key": "base_manifest_sha256",
+    "retained_libdwarf_and_other_gitlink_fields_equal": true
+  },
+  "heavy_profile_preparation_only": {
+    "CPUs": "2-5",
+    "CPU_count": 4,
+    "memory_bytes": 12884901888,
+    "swap_extra_bytes": 0,
+    "tasks": 512,
+    "jobs": 4,
+    "network": "none",
+    "controller_CPU": 7,
+    "controller_AS": 2147483648,
+    "no_new_outer_timeout_or_kill": true,
+    "mutex": "permanent27:4 preserved"
+  },
+  "actual_missing_fields_preserved_NULL": [
+    "actual_normal_staging",
+    "actual_owner_request_validation",
+    "old_P12_owner_clearance",
+    "current_live_postjoin",
+    "actual_heavy_admission",
+    "actual_independent_release",
+    "actual_build_output",
+    "actual_image"
+  ],
+  "required_next": [
+    "Root obtains genuine positive P12 physical retirement/current continuity; terminal failure is not clearance.",
+    "Root separately grants exact bounded normal namespace/request staging and complete owner validation; all actual results remain pending here.",
+    "Then bind immutable actual request/namespace/source publication and fresh sole-heavy admission to a separately reviewed exact build operation."
+  ],
+  "limitations": [
+    "Source/constants/dependent-data review only; no execution release or actual owner request validation.",
+    "Historical original13 driver regression tests remain historical; successor tests not executed or claimed by reviewer.",
+    "No default GCC14/image/native/whole-file credit; inherited NULL-freeze qualification remains unchanged.",
+    "ModeB compile-only proposal remains separately unreleased.",
+    "Original c5c35 driver/HOLD and all failure history preserved."
+  ],
+  "execution_authorized": false,
+  "normal_staging_authorized_by_this_receipt": false,
+  "reviewer_activity": {
+    "candidate_imports": 0,
+    "compilers_tests": 0,
+    "root_Docker_guest_probes": 0,
+    "large_request_manifest_object_hashes": 0,
+    "canonical_or_product_edits": 0
+  },
+  "writes": "Only this additive focused independent review."
+}

@@ -1,0 +1,57 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ROOT_PINNED_SDK_PROFILE_DERIVATION_REQUIRED_NOT_RELEASED",
+  "retained_pin": "Linux 6.12.0-211.44.1.el10_2.mckernel1.x86_64; Rocky 10.2; configured Rust1.92.0 Red Hat build",
+  "concrete_platform_blocker": "retained objtool ELF requires GLIBC_2.38, among other versions; host-body grant cannot authorize its execution or a replacement objtool.",
+  "pin_source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2",
+  "pin_build": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build",
+  "saved_Rust_command_context": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/drivers/misc/mckernel/.mcctrl.o.cmd",
+  "saved_command_limit": "Historical single-object mcctrl root. Derive a new Linux-Kbuild-owned command under the actual reviewed SDK runtime/current source contract. Do not replay manual rustc or call the old command current composite proof.",
+  "manual_rustc_forbidden": true,
+  "silent_config_or_platform_change_forbidden": true,
+  "new_private_staged_direct_probe_inputs": {
+    "m15_c_layout_probe.c": "m15_c_layout_probe.c",
+    "layout_witness.c": "layout_witness.c",
+    "layout_witness_v2.c": "layout_witness_v2.c",
+    "layout_witness_v3.c": "layout_witness_v3.c",
+    "layout_witness.rs": "m15_rust_layout_probe.rs",
+    "sdk_leaf_probe.rs": "m15_leaf_probe.rs",
+    "integration-source/host-kernel/native-rust/mcctrl_mm_write.rs": "mcctrl_mm_write.rs",
+    "m15_mmap_trace_gates.S": "m15_mmap_trace_gates.S",
+    "m15_mm_write_warning.S": "m15_mm_write_warning.S"
+  },
+  "probe_fragment": "SDK-PROBES.Kbuild.fragment",
+  "direct_inert_Kbuild_targets": [
+    "drivers/misc/mckernel/m15_c_layout_probe.o",
+    "drivers/misc/mckernel/m15_rust_layout_probe.o",
+    "drivers/misc/mckernel/m15_leaf_probe.o",
+    "drivers/misc/mckernel/m15_mmap_trace_gates.o",
+    "drivers/misc/mckernel/m15_mm_write_warning.o"
+  ],
+  "probe_selection": "Only explicit inert object targets; never add C/Rust witness objects to obj-y, obj-m or delivered mcctrl-y. Existing module graph remains unchanged until accepted successor.",
+  "after_actual_compile_readback_argv": [
+    "/usr/bin/python3",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-13/m15-mm-finish/batch-1/inspect_sdk_objects.py",
+    "--c-layout",
+    "<actual-private-build>/drivers/misc/mckernel/m15_c_layout_probe.o",
+    "--rust-layout",
+    "<actual-private-build>/drivers/misc/mckernel/m15_rust_layout_probe.o",
+    "--warning-object",
+    "<actual-private-build>/drivers/misc/mckernel/m15_mm_write_warning.o"
+  ],
+  "mandatory_observations": [
+    "C/Rust 23-word MM layout and12-word warning layout match exactly.",
+    "Actual leaf codegen has32-bit wrapping sequence updates, correct begin/end compiler ordering,64-bit single rwsem count read and warning conditional before both unlock seq-end and VMA idempotence.",
+    "Actual production gate object has three relative16-byte jump-table entries with key+10 relocations and matching objtool-processed NOP2/NOP5 sites; Linux exports/helper CRCs agree.",
+    "Actual warning object has ENDBR64, UD2,12-byte relative verbose __bug_table record, flags0x901 without ONCE, correct reachable/special-data annotations and platform RET thunk.",
+    "Pinned objtool emits no warnings under actual full platform flags; no skip-objtool or unprocessed object is accepted.",
+    "After source/ABI/fixture acceptance, integrate coherent staging/source contract and build/link all3 actual modules; no selected project C leaf remains, generated Linux module metadata classified separately."
+  ],
+  "standalone_gate_recipe": "run_candidate_fixture.py --phase gate is supplied for root to derive under a reviewed compatible runtime with explicit bound interpreter/compiler/readback/objtool identities. Its current host tool bindings must not be silently remapped; no current executable gate grant exists.",
+  "native_followup": [
+    "M03 actual inherited mapping/invalidation, M06 fork/exec/wait/current inheritance and cleanup with current InheritedWrite RAII, M05 lifecycle/resource restoration and M08 module interface checks at matching changed module cohort.",
+    "Exercise VMA start first/repeated/same/different epochs, mapping success and every preexisting error/drop path, then no held locks or stale owner/mm references.",
+    "Exercise tracepoints disabled and valid enabled/disabled transitions via approved Linux tracing interface while valid MM callers operate; confirm event fields/order and no new warnings.",
+    "No invalid native unlock or deliberate warning trap: synthetic assertion-count vectors and actual inert warning-object readback cover this branch without tainting or crashing a native kernel."
+  ]
+}

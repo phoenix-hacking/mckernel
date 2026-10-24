@@ -1,0 +1,94 @@
+{
+  "ABI": "C unsigned long64 return/argument and void return, no flags masking; direct existing Rust debug provider calls retain same KMSG_LOCK and primitive IRQ-save/restore implementation. No new repr(C) layout.",
+  "APhardware_and_declarative_data_placement": "OPEN",
+  "CPU_reserved": false,
+  "NULL_freeze_HOLD": true,
+  "actual_Rust_bodies": {
+    "bytes": 651,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-print-lock-callbacks-source-only-1/ACTUAL-RUST-CALLBACKS.inc",
+    "sha256": "38cd8994f2a9e8269e3d55e2ce047a3805e7aad9659940cafcec55e95fd58b32"
+  },
+  "actual_default_caller": "x86_cpu_helpers::arch_show_interrupt_context passes both callbacks into its existing context-print core, which preserves lock/display/unlock order. Caller/core unchanged.",
+  "actual_existing_global_T_and_U": {
+    "bytes": 107610,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/root-union-preparation-2/root-actual-combined-production-1/ACTUAL-RUST-EXACT-GLOBAL-SETS.json",
+    "sha256": "df4a245ea3a0af191734fcdf50df1be53b21e4de5956ef84258bda9bf8441fcf"
+  },
+  "actual_result": null,
+  "candidate": {
+    "C": {
+      "bytes": 95863,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-print-lock-callbacks-source-only-1/candidate/arch/x86_64/kernel/cpu.c",
+      "sha256": "7279503135bcc6b6a140bc412044be0a99226ca881486b6ed157d994ee5a9795"
+    },
+    "Rust": {
+      "bytes": 97909,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-print-lock-callbacks-source-only-1/candidate/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "c395ca30b9d139779d87ed2ab8e3441697bcffaed43280a7f057c2725c6db4c0"
+    }
+  },
+  "canonical_base": {
+    "C": {
+      "bytes": 95918,
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "sha256": "5574c151cef8d26fa14e3eac72d54b55703be153e4f147f831c5a9e9b63c70bc"
+    },
+    "Rust": {
+      "bytes": 97351,
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "a44a391c7eb461b82cb181089941f52e8845ae90b04d34319aff6437deebb3e4"
+    }
+  },
+  "compiler_jobs": 0,
+  "current_U_to_retire": [
+    "x86_kprintf_lock_bridge",
+    "x86_kprintf_unlock_bridge"
+  ],
+  "default_GCC14_final_kernel_link_native": "OPEN",
+  "engineering_percentage": null,
+  "exact_original_C": {
+    "bytes": 153,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-print-lock-callbacks-source-only-1/ORIGINAL-SELECTED-C-CALLBACKS.inc",
+    "sha256": "f206606f99c72f2d5563a630156aff2a36e6fa3d55a9817f5bc01c60987be1cf"
+  },
+  "existing_Rust_T_reused": [
+    "kprintf_lock",
+    "kprintf_unlock"
+  ],
+  "fallback": "These two callbacks only exist under original HELPERS branch; selected C bodies become declarations, literal C diagnostic fallback remains unchanged. Original selected C bodies retained exactly.",
+  "future_consumer": "Controlled original C/extracted actual Rust full-width endpoint tape + real-header types + actual current root Rust allocated callback imports, genuine existing kprintf lock/unlock T in partial; no real lock/IRQ/native execution.",
+  "future_fixture_fragment": {
+    "bytes": 1128,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-print-lock-callbacks-source-only-1/FUTURE-LOCK-ENDPOINT-TAPE.c.inc",
+    "sha256": "1fd9e0be21dbe6404faa854d8cbeb5b9db655df49d512cad96e834ed01ca6126"
+  },
+  "no_new_C_compute_functionality": true,
+  "patch": {
+    "bytes": 1766,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-print-lock-callbacks-source-only-1/PRINT-LOCK-CALLBACK-CUTOVER.patch",
+    "sha256": "3a6c4c650bab906bb55f2329b2c046d7b01bf5eca5798a5d53efaee58045c785"
+  },
+  "production_proof": null,
+  "provider_source": {
+    "bytes": 13020,
+    "path": "/home/holden/mckernel/kernel/rust/debug.rs",
+    "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16"
+  },
+  "real_existing_C_declarations": {
+    "bytes": 1294,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-exception-stop-batch-source-1/bounded-error-alias-correction-1/source/lib/include/ihk/debug.h",
+    "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "second_ready_queue": false,
+  "status": "COMPLETE_LIVE_PRINT_LOCK_CALLBACK_PAIR_SOURCE_ONLY_NO_SECOND_QUEUE",
+  "targets": [
+    "x86_kprintf_lock_bridge",
+    "x86_kprintf_unlock_bridge"
+  ],
+  "unchanged_existing_Rust_provider_bodies": {
+    "bytes": 250,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-print-lock-callbacks-source-only-1/UNCHANGED-ACTUAL-RUST-LOCK-PROVIDERS.inc",
+    "sha256": "f1f061e9d3ba3415546d48aa87afad1bedbde48803f2a6a097dc8a79bb7694ae"
+  }
+}

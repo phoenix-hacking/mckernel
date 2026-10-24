@@ -1,0 +1,10 @@
+--- original/source/restart-compare.c
++++ bounded/source/restart-compare.c
+@@ -2,6 +2,7 @@
+  * Actual original legacy/native C against exact public Rust policy.
+  * Real headers supply all original syscall and signal constants.
+  */
++#include <affinity.h>
+ #include <syscall.h>
+ #include <signal.h>
+ #include <errno.h>

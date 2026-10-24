@@ -1,0 +1,48 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PROPOSAL_NOT_RUN",
+  "host_fixture": "Use existing translation-unit-private collector regression fixture and exact materialized include; root owns all compile/test admission.",
+  "required_cases": [
+    {
+      "name": "ordered-subsequence-equivalence",
+      "inputs": "Multiple adjacent immutable records with two PIDs each; queries from first line through final line, including gaps and identical line text in multiple records.",
+      "assert": "Original and candidate return/cursor agree; bytes before cursor never rematch; current full byte retention remains byte-identical."
+    },
+    {
+      "name": "cursor-boundaries",
+      "inputs": "cursor0; record start; middle exact newline end; record end; next record start; later record end; all previous records exhausted.",
+      "assert": "Same match/no-match; no out-of-record dereference; no file identity checks skipped."
+    },
+    {
+      "name": "pid-and-startup-route",
+      "inputs": "PID-specific old traces; pid0 control markers across multiple records; no matching PID; startup-control reuse after ring rollover.",
+      "assert": "Exact ordered authentication preserved; unknown PID/reordered line still rejects."
+    },
+    {
+      "name": "identity-failure-before-skipped-bytes",
+      "inputs": "Replace/delete/chmod/link/truncate/retimestamp an old record whose byte range is below cursor, including pid0 traversal.",
+      "assert": "Candidate still returns error in same place and retains existing stat comparison, O_NOFOLLOW, regular-file/link, close behavior."
+    },
+    {
+      "name": "whole-save-and-retain",
+      "inputs": "Run exact pair_trace_save and long_retain with previous records plus old-prefix/current-PID snapshot; capture all output bytes and before/after record identity.",
+      "assert": "Exact selected bytes, per-round file bytes, authenticated-memory bytes and spool bytes equal original; current_round state and total unchanged."
+    },
+    {
+      "name": "profile-unchanged",
+      "inputs": "Exact cap and just-over-cap retention, maximum round, empty/unterminated/currentthenold snapshot.",
+      "assert": "Same acceptance/rejection, no cap/round/wall/oracle relaxation."
+    },
+    {
+      "name": "operation-count-regression",
+      "inputs": "A retained record with4096 unique ordered newline lines queried sequentially. Instrument memchr bytes/calls in fixture only; retain all real identity operations.",
+      "assert": "Candidate starts scan at prior match end; original triangular scans vs candidate linear scans; identity syscall calls/order remain identical."
+    },
+    {
+      "name": "end-to-end-functional-retry",
+      "inputs": "Fresh root-owned admitted successor after positive retirement and required independent review.",
+      "assert": "New full60continuous mixed work, same strict oracle/full retention; no partial credit from failed run."
+    }
+  ],
+  "resource_profile": "No new static memory/FDs, no syscall ownership change, same trace_cap268435456 and wall7200000000000. Collector rebuild/capsule regeneration requires normal root resource slots; no kernel/module rebuild required. Native benefit must be measured."
+}

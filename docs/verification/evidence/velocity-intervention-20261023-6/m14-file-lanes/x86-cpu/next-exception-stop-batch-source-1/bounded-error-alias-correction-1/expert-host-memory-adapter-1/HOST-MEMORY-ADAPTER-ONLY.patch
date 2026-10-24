@@ -1,0 +1,13 @@
+--- a/fixture.c
++++ b/fixture.c
+@@ -8,7 +8,9 @@
+ #include <syscall.h>
+ #include <ihk/debug.h>
+ #undef memset
+-extern void *memset(void *, int, unsigned long);
++extern void *fixture_host_memset(void *, int, __SIZE_TYPE__) __asm__("memset");
++#define memset fixture_host_memset
++_Static_assert(sizeof(__SIZE_TYPE__)==8,"actual hosted compiler size_t transport");
+ extern int printf(const char *, ...);
+ extern long host_read(int,void*,unsigned long) __asm__("read");
+ extern long host_write(int,const void*,unsigned long) __asm__("write");

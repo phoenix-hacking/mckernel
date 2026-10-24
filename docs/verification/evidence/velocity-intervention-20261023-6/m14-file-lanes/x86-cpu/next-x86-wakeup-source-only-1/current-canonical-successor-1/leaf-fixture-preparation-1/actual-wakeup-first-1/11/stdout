@@ -1,0 +1,203 @@
+                 U INIT_LIST_HEAD
+0000000000000240 00000000000000b0 R M14_C_WAKEUP_TYPE_ABI
+0000000000000000 00000000000000b0 R M14_RUST_WAKEUP_TYPE_ABI
+                 U _GLOBAL_OFFSET_TABLE_
+                 U __ihk_mc_spinlock_lock
+                 U __ihk_mc_spinlock_unlock
+                 U __inline_memset
+                 U __kprintf
+                 U __mcs_rwlock_writer_lock
+                 U __mcs_rwlock_writer_unlock
+                 U __print_stack
+0000000000000008 0000000000000008 C __x86_syscall_handler
+0000000000000000 000000000000011d T __x86_wakeup
+                 U _ihk_mc_alloc_aligned_pages_node
+                 U ap_trampoline
+                 U arch_clear_panic
+0000000000003140 0000000000000036 T arch_cpu_stop
+                 U arch_delay
+00000000000037a0 0000000000000039 T arch_native_signal_mxcsr_mask_bridge
+00000000000037e0 0000000000000072 T arch_native_signal_reset_fp_bridge
+00000000000038d0 000000000000033c T arch_save_panic_regs
+0000000000002f60 0000000000000147 T arch_show_extended_context
+                 U arch_show_interrupt_context
+0000000000003280 0000000000000343 T arch_switch_context
+                 U assign_processor_id
+0000000000000008 0000000000000008 B boot_pat_state
+                 U call_ap_func
+                 U check_signal
+0000000000003700 0000000000000098 T clear_fp_regs
+0000000000003630 0000000000000050 T copy_fp_regs
+                 U cpu_disable_interrupt
+                 U cpu_disable_interrupt_save
+                 U cpu_halt
+                 U cpu_pause
+                 U cpu_restore_interrupt
+                 U debug_exception
+0000000000002730 0000000000000117 T debug_handler
+                 U do_backlog
+                 U enable_ptattr_no_execute
+                 U enter_user_mode
+                 U freeze_thaw
+                 U general_protection_exception
+                 U generic_common_handlers
+                 U get_boot_page_table
+                 U get_init_page_table
+                 U get_this_cpu_local_var
+                 U get_transit_page_table
+                 U get_x86_cpu_local_kstack
+                 U get_x86_cpu_local_variable
+                 U get_x86_this_cpu_kstack
+                 U get_x86_this_cpu_local
+0000000000000010 0000000000000004 B gettime_local_support
+00000000000025f0 000000000000013a T gpe_handler
+0000000000001dd0 0000000000000815 T handle_interrupt
+                 U ihk_mc_clear_dump_page_completion
+                 U ihk_mc_get_cpu_info
+                 U ihk_mc_get_processor_id
+00000000000018c0 00000000000000cb T ihk_mc_init_ap
+0000000000002c50 0000000000000042 T ihk_mc_init_context
+0000000000002e30 000000000000005a T ihk_mc_init_user_process
+                 U ihk_mc_init_user_tlsbase
+                 U ihk_mc_load_page_table
+                 U ihk_mc_mb
+0000000000002f10 0000000000000042 T ihk_mc_print_user_context
+                 U ihk_mc_query_mem_areas
+0000000000002930 0000000000000077 T ihk_mc_register_interrupt_handler
+                 U ihk_mc_switch_context
+00000000000029b0 0000000000000042 T ihk_mc_unregister_interrupt_handler
+0000000000000eb0 00000000000000ad T init_cpu
+00000000000001a0 0000000000000332 T init_fpu
+00000000000004e0 00000000000000ee T init_gdt
+0000000000000e50 000000000000005e T init_gettime_support
+00000000000009a0 00000000000000ab T init_lapic
+0000000000000730 000000000000005c T init_lapic_bsp
+                 U init_page_table
+0000000000000a90 000000000000007f T init_pat
+                 U init_processors_local
+                 U init_pstate_and_turbo
+0000000000000dc0 0000000000000081 T init_syscall
+                 U int3_exception
+0000000000002850 00000000000000d5 T int3_handler
+                 U interrupt_exit
+                 U interrupt_from_user
+                 U kprintf
+                 U kprintf_lock
+                 U kprintf_unlock
+                 U lapic_ack
+                 U list_add_tail
+                 U list_del
+0000000000003860 0000000000000067 T lookup_user_context
+                 U map_fixed_area
+                 U memcpy
+0000000000003c10 0000000000000242 T multi_nm_interrupt_handler
+                 U nmi_handler
+                 U nmi_mode
+0000000000000008 0000000000000004 D no_turbo
+                 U page_fault
+                 U panic
+                 U perf_reset
+                 U perf_start
+0000000000001760 000000000000015b T print_msr
+0000000000000000 0000000000000008 B pvti
+0000000000000000 0000000000000008 D pvti_msr
+0000000000000004 0000000000000004 C pvti_npages
+                 U rdmsr
+                 U rdtsc
+00000000000015e0 0000000000000030 T reload_gdt
+0000000000001550 000000000000002b T reload_idt
+0000000000003680 0000000000000072 T restore_fp_regs
+                 U running_on_kvm
+                 U rust_x86_clear_fp_regs
+                 U rust_x86_copy_fp_regs
+                 U rust_x86_native_signal_mxcsr_mask
+                 U rust_x86_native_signal_reset_fp
+                 U rust_x86_restore_fp_regs
+                 U rust_x86_save_fp_regs
+00000000000035d0 000000000000005e T save_fp_regs
+                 U schedule
+                 U set_cputime
+                 U set_signal
+00000000000012c0 00000000000000b9 T setup_x86_ap
+0000000000001cb0 000000000000006c T setup_x86_phase1
+0000000000001d20 000000000000007a T setup_x86_phase2
+                 U show_context_stack
+                 U smp_func_call_handler
+                 U tlb_flush_handler
+                 U trampoline_code_data
+                 U trampoline_code_data_end
+0000000000000068 0000000000000068 C tss
+                 U virt_to_phys
+                 U waitq_wakeup
+                 U wrmsr
+                 U x2apic_is_enabled
+0000000000001610 0000000000000034 T x86_alloc_aligned_pages_node_bridge
+                 U x86_apic_issue_ipi_body_result
+                 U x86_arch_save_panic_regs_body_result
+0000000000002aa0 000000000000002e T x86_boot_ap_trampoline_bridge
+0000000000002b00 000000000000004e T x86_boot_page_table_phys_bridge
+0000000000002ad0 000000000000002a T x86_boot_setup_ap_bridge
+0000000000002a30 000000000000002b T x86_boot_trampoline_code_data_bridge
+0000000000002a60 0000000000000039 T x86_boot_trampoline_code_size_bridge
+0000000000002a00 000000000000002b T x86_boot_trampoline_va_bridge
+                 U x86_check_no_execute_body_result
+                 U x86_context_line_log_bridge
+0000000000001da0 000000000000002a T x86_cpu_boot_status_slot_bridge
+0000000000002b50 0000000000000034 T x86_cpu_kstack_bridge
+0000000000002c10 0000000000000034 T x86_cpu_pause_bridge
+                 U x86_cpu_ulong_log_bridge
+0000000000001710 000000000000001d T x86_cpuid6_bridge
+0000000000001730 0000000000000027 T x86_cpuid_leaf_bridge
+0000000000001690 0000000000000034 T x86_current_cpu_bridge
+0000000000002cd0 0000000000000044 T x86_current_thread_bridge
+                 U x86_enable_no_execute_body_result
+                 U x86_ihk_mc_init_ap_body_result
+                 U x86_init_context_body_result
+                 U x86_init_cpu_body_result
+                 U x86_init_gettime_support_body_result
+                 U x86_init_lapic_body_result
+                 U x86_init_lapic_bsp_body_result
+                 U x86_init_pat_body_result
+                 U x86_init_perfctr
+                 U x86_init_syscall_body_result
+                 U x86_init_user_process_body_result
+00000000000031b0 00000000000000ce T x86_interrupt_log_bridge
+0000000000000008 0000000000000008 C x86_issue_ipi
+0000000000003180 0000000000000029 T x86_issue_ipi_bridge
+0000000000002e90 0000000000000034 T x86_kprintf_lock_bridge
+0000000000002ed0 0000000000000034 T x86_kprintf_unlock_bridge
+0000000000000060 0000000000000029 T x86_lapic_write_bridge
+                 U x86_lookup_user_context_body_result
+0000000000002d80 000000000000006a T x86_mcexec_v10_trace_log_bridge
+0000000000003100 0000000000000034 T x86_print_stack_bridge
+                 U x86_print_user_context_body_result
+0000000000001a50 000000000000025f T x86_pvclock_log_bridge
+00000000000005d0 0000000000000034 T x86_read_msr_bridge
+00000000000016d0 0000000000000034 T x86_running_on_kvm_bridge
+0000000000002d70 000000000000000e T x86_runq_irqstate_offset_bridge
+0000000000002d60 000000000000000e T x86_runq_lock_offset_bridge
+0000000000002df0 0000000000000034 T x86_runq_unlock_bridge
+                 U x86_set_kstack_body_result
+                 U x86_set_warm_reset
+                 U x86_setup_phase1_body_result
+                 U x86_setup_phase2_body_result
+00000000000030b0 000000000000004e T x86_stack_frame_log_bridge
+                 U x86_syscall
+0000000000002d20 0000000000000034 T x86_this_cpu_local_var_bridge
+0000000000001990 00000000000000b4 T x86_tick_log_bridge
+0000000000002ca0 000000000000002a T x86_trace_enter_user_offsets_bridge
+0000000000002b90 0000000000000034 T x86_transit_page_table_bridge
+0000000000001650 0000000000000034 T x86_virt_to_phys_bridge
+0000000000000000 0000000000000008 D x86_wakeup_boot_status_slot
+0000000000002bd0 0000000000000034 T x86_wakeup_bridge
+00000000000002f0 0000000000000014 R x86_wakeup_constants
+0000000000000008 0000000000000008 D x86_wakeup_first_page_slot
+0000000000000018 0000000000000008 D x86_wakeup_lapic_read_slot
+0000000000000020 0000000000000008 D x86_wakeup_lapic_write_slot
+0000000000000010 0000000000000008 D x86_wakeup_wait_slot
+0000000000000660 0000000000000034 T x86_write_msr_bridge
+                 U x86_x2apic_issue_ipi_body_result
+00000000000015b0 000000000000002b T x86_xsave_mask_bridge
+0000000000001580 000000000000002a T x86_xsave_size_bridge
+                 U xgetbv
+                 U xsetbv

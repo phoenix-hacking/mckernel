@@ -1,0 +1,134 @@
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -262,7 +262,6 @@
+     #[cfg(not(native_linux_irq_work_v6_12))]
+     fn arch_rt_sigreturn_xrstor_bridge(fpregs: *mut c_void);
+     #[cfg(native_linux_irq_work_v6_12)]
+-    fn arch_native_signal_restore_fp_bridge(fpregs: CULong, xsave_size: CInt) -> CLong;
+     #[cfg(native_linux_irq_work_v6_12)]
+     fn arch_native_signal_bad_frame_bridge(error: CLong) -> CLong;
+     fn arch_syscall_forward_context_bridge(syscall_nr: CInt, ctx: *mut c_void) -> CLong;
+@@ -23950,3 +23949,123 @@
+         );
+     }
+ }
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// F06: complete native signal private-copy/validate/checked-XRSTOR lifetime.
++// Existing checked hardware instruction/fault recovery and CPU reset owners stay
++// at their accepted providers. No new XRSTOR or raw user-memory access is added.
++#[cfg(native_linux_irq_work_v6_12)]
++unsafe extern "C" {
++    #[link_name = "arch_native_signal_reset_fp_bridge"]
++    fn f06_native_fp_reset() -> CLong;
++    #[link_name = "arch_native_signal_mxcsr_mask_bridge"]
++    fn f06_native_fp_mxcsr_mask() -> u32;
++    #[link_name = "native_xrstor_checked"]
++    fn f06_native_fp_xrstor(buffer: *const u8, mask: CULong) -> CLong;
++}
++
++/// The copied allocation remains exclusively live through validation and the
++/// synchronous checked XRSTOR provider, then its ORIGINAL base is freed once.
++/// CPU pinning/FP exclusion and provider fault recovery are the caller's existing
++/// sigreturn contract. This entry creates no owner reference or user-memory slice.
++#[cfg(native_linux_irq_work_v6_12)]
++#[no_mangle]
++pub unsafe extern "C" fn arch_native_signal_restore_fp_bridge(
++    user_address: CULong, size: CInt,
++) -> CLong {
++    unsafe {
++        // Preserve the original getter-before-NULL-reset order.
++        let configured = crate::x86_cpu_helpers::get_xsave_size();
++        if user_address == 0 {
++            return f06_native_fp_reset();
++        }
++        let bytes = crate::native_xstate::native_xstate_buffer_size_result(size, configured);
++        if bytes < 0 {
++            return bytes;
++        }
++        // Existing Rust policy bounds bytes to 576..=65536; +63 fits the
++        // unchanged tracked allocator's int size ABI and supplies all padding.
++        let allocation = crate::mem_helpers::kmalloc_tracked(
++            (bytes as SizeT).wrapping_add(63) as CInt,
++            IHK_MC_AP_NOWAIT,
++            concat!(file!(), "\0").as_ptr().cast::<i8>() as *mut i8,
++            line!() as CInt,
++        );
++        if allocation.is_null() {
++            return -(ENOMEM as CLong);
++        }
++        // Same unsigned address rounding as C; map_addr preserves the base
++        // allocation's provenance while selecting its in-bounds aligned window.
++        let aligned = allocation.cast::<u8>()
++            .map_addr(|address| address.wrapping_add(63) & !63usize);
++        let copied = crate::x86_memory_helpers::copy_from_user(
++            aligned.cast(), user_address as *const c_void, bytes as SizeT,
++        );
++        let result = if copied != 0 {
++            -(EFAULT as CLong)
++        } else {
++            let mask = crate::x86_cpu_helpers::get_xsave_mask();
++            let checked = crate::native_xstate::native_xstate_validate_result(
++                aligned, bytes as SizeT, configured, mask, f06_native_fp_mxcsr_mask(),
++            );
++            if checked == 0 { f06_native_fp_xrstor(aligned, mask) } else { checked }
++        };
++        // Never free aligned: that may be inside the allocation, not its owner.
++        crate::mem_helpers::kfree_tracked(
++            allocation,
++            concat!(file!(), "\0").as_ptr().cast::<i8>() as *mut i8,
++            line!() as CInt,
++        );
++        result
++    }
++}
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// F06: complete live signal restart policy; preserve the legacy/native config
++// distinction at the existing C call sites through an explicit literal flag.
++const F06_SIGNAL_RESTART_NEVER: [CInt; 16] = [
++    34, // __NR_pause,
++    130, // __NR_rt_sigsuspend,
++    128, // __NR_rt_sigtimedwait,
++    SYS_EPOLL_WAIT as CInt, // __NR_epoll_wait,
++    281, // __NR_epoll_pwait,
++    7, // __NR_poll,
++    SYS_PPOLL, // __NR_ppoll,
++    23, // __NR_select,
++    SYS_PSELECT6, // __NR_pselect6,
++    70, // __NR_msgrcv,
++    69, // __NR_msgsnd,
++    65, // __NR_semop,
++    220, // __NR_semtimedop,
++    230, // __NR_clock_nanosleep,
++    SYS_NANOSLEEP, // __NR_nanosleep,
++    208, // __NR_io_getevents
++];
++
++/// Pure policy only: no signal ownership, user-register or handler-state changes.
++/// `rc` is the original unsigned-long return bits, not a narrowed signed errno.
++/// The native flag is selected by the same MCKERNEL_NATIVE_SIGNAL_STACK C macro
++/// as the original early-return guard; callers evaluate each argument once.
++#[no_mangle]
++pub extern "C" fn arch_signal_restart_result(
++    num: CInt, rc: CULong, sig: CInt, restart: CInt, native_signal_stack: CInt,
++) -> CInt {
++    // A pending native handler observes an already-restored user continuation.
++    if native_signal_stack != 0 && num == 15 { // __NR_rt_sigreturn
++        return 0;
++    }
++    if sig == SIGKILL || sig == SIGSTOP {
++        return 0;
++    }
++    if num < 0 || rc != (-(EINTR as CLong)) as CULong {
++        return 0;
++    }
++    // Preserve this shortcut before the non-restarting syscall set.
++    if sig == SIGCHLD {
++        return 1;
++    }
++    if F06_SIGNAL_RESTART_NEVER.contains(&num) {
++        return 0;
++    }
++    (restart != 0) as CInt
++}

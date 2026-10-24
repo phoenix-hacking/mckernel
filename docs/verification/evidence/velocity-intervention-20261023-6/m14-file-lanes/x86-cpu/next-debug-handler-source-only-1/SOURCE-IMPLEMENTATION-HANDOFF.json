@@ -1,0 +1,105 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_COMPLETE_LIVE_DEBUG_HANDLER_SOURCE_ONLY",
+  "target": "arch/x86_64/kernel/cpu.c::debug_handler",
+  "patch_preimages": {
+    "C": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "sha256": "c779079fb6de66991c861c823dca06b2a9ceec16ac4c984995200b668d7e78ce",
+      "bytes": 95605
+    },
+    "Rust": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "98914e1ff4d50c2f42ccbdeb1f4f338024b7a9a2143fbad2f59ebd6f6b50dd0b",
+      "bytes": 93305
+    }
+  },
+  "postimages": {
+    "arch/x86_64/kernel/cpu.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-debug-handler-source-only-1/candidate/arch/x86_64/kernel/cpu.c",
+      "sha256": "9ec822d4d3a094b2be979374369d282201da57e532e86e9ada9862c27d99a798",
+      "bytes": 96004
+    },
+    "kernel/rust/x86_cpu_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-debug-handler-source-only-1/candidate/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "4667ef918143a400f74ae44437dc7a205a3f91472ceb393168abb0cfd4e3c26b",
+      "bytes": 96918
+    }
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-debug-handler-source-only-1/PRIVATE-COMPLETE-DEBUG-HANDLER.patch",
+    "sha256": "3b190362055eaeb4b52c92c918e3f3f952f6d6f5f0135a4b1ce4fa9472084903",
+    "bytes": 4901
+  },
+  "original_C": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-debug-handler-source-only-1/ORIGINAL-C-BODY.inc",
+    "sha256": "b3353a3a426eb7e6e6d4a27dc1560349e8dd13e8c160118cdd61925d6c13becd",
+    "bytes": 776
+  },
+  "actual_Rust": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-debug-handler-source-only-1/ACTUAL-RUST-BODY.rs",
+    "sha256": "da22bec99bea2e0cce1b7336ded96c844b46f9b2fdd9d2d54881b700dae71892",
+    "bytes": 2925
+  },
+  "provider_declarations": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-debug-handler-source-only-1/ACTUAL-RUST-PROVIDER-DECLARATIONS.inc",
+    "sha256": "e075490ca8b2d167182fe7f545fa4a50e6f2421b1fa3aa8a1d2c720c2e52f1b5",
+    "bytes": 687
+  },
+  "declarative_C_config": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-debug-handler-source-only-1/DECLARATIVE-C-CONFIG-DATA.inc",
+    "sha256": "11f69535d82f704e2cd266610dff9cc8d0dc3ede9d9cad739d16beeacae81e69",
+    "bytes": 298
+  },
+  "consumer_plan": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-debug-handler-source-only-1/SOURCE-CONSUMER-PLAN.json",
+    "sha256": "199b7f6ec4fd1f6628b1b860f46d58a2b63fd9d80acd7b9f4bbe2cf0ccba2ce9",
+    "bytes": 3741
+  },
+  "fixture_source_fragments": {
+    "fixture-source-fragment/real-header-ABI.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-debug-handler-source-only-1/fixture-source-fragment/real-header-ABI.c",
+      "sha256": "607fb259893d63af5e0743d9187d6a0cd08d326ad4d0d2b9194c5dbb8b19ceae",
+      "bytes": 1633
+    },
+    "fixture-source-fragment/CONTROLLED-RUST-READER.inc.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-debug-handler-source-only-1/fixture-source-fragment/CONTROLLED-RUST-READER.inc.rs",
+      "sha256": "287d94581ad62514a202d13a99c1e9f92309e08ba07e330720c7b95b5e566aa2",
+      "bytes": 594
+    },
+    "fixture-source-fragment/actual-Rust-ABI.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-debug-handler-source-only-1/fixture-source-fragment/actual-Rust-ABI.inc",
+      "sha256": "d26648cc496c297a253a7bc0fce2a89c26b6ea2dc1bfe430587c766b3ead7022",
+      "bytes": 504
+    },
+    "fixture-source-fragment/ORIGINAL-C-CONTROLLED-DR6.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-debug-handler-source-only-1/fixture-source-fragment/ORIGINAL-C-CONTROLLED-DR6.inc",
+      "sha256": "7f4fcb67ed3157302e56fbe6d41406ecb59e21ba470e95873a47acfac8fa7187",
+      "bytes": 792
+    },
+    "fixture-source-fragment/CONTROLLED-DR6-ORACLE.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-debug-handler-source-only-1/fixture-source-fragment/CONTROLLED-DR6-ORACLE.c",
+      "sha256": "57494b4299c4cff9c3133b4aefec5861f63d04ffd5fbabc2ced93bdb50915ea8",
+      "bytes": 2920
+    }
+  },
+  "known_body_effort_ranking": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-debug-handler-source-only-1/KNOWN-BODIES-EFFORT-RANKING.json",
+    "sha256": "ae031be303ce351d317c96dc822c00bf8ecfc8e4ddb1d496a62cbc18ffacad7c",
+    "bytes": 2788
+  },
+  "invariants": [
+    "FulloriginalCfallbackpreserved; actualselectedRustentryreplacessubstantivebody, nothelper-onlycredit.",
+    "ExistingDebugRegisterReader/HWimplementationunchanged, read::<6>once; no newASM/functionality/panicbranch.",
+    "No Rustreferenceacrossproviders, no context/signalptrretention; fullrealSigInfo bytezero andexistingmutablecallback preserved.",
+    "No NMIrepair/canonical/shared/Git/productionqueue change; debuggate Cdatum remains explicitdeclarativeCdebt."
+  ],
+  "actual_leaf_default_link_native": null,
+  "whole_file_retirement": false,
+  "engineering_percentage": null,
+  "compiler_jobs": 0,
+  "test_jobs": 0,
+  "CPU_slots_held": 0,
+  "canonical_shared_P12_Git_writes": 0,
+  "failure_history": "AllCPUlogger/kmsg/8MiB/preflight89ea/observer0460failuresandactual8000expertcontinuationretained; thisdebugbodyuncompiled/untested."
+}

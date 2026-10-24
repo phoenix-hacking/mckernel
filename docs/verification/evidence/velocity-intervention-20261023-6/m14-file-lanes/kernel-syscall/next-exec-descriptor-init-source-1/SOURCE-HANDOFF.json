@@ -1,0 +1,88 @@
+{
+  "actual_result": null,
+  "allocation_origin_line": 7142,
+  "allocation_origin_note": "Captured old C preimage origin; conscious root rebind on source rebase; file remains actual __FILE__ staticstring.",
+  "canonical_preimages": {
+    "C": {
+      "bytes": 843077,
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "sha256": "07af5efb4af2754988376301d19887ea90743b8f304455b7df980738f2629399"
+    },
+    "policy": {
+      "bytes": 733513,
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "c5d6ddd9ce210ffd51f0e84c3feefddcf4d115044ced76018b9e946aad9cb6f5"
+    }
+  },
+  "compiler_jobs": 0,
+  "default_link": false,
+  "engineering_percentage": null,
+  "error_out": "Written only on failure before C failure return; no read on success.",
+  "fallback_byteexact": true,
+  "file_retired": false,
+  "fixture_proposal": {
+    "bytes": 1717,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-descriptor-init-source-1/fixture-fragments-only/SMALLEST-ACTUAL-C-RUST-CHECK.md",
+    "sha256": "4a39ec19b9ab1dbb03b67f97b6926a4d5f5ad0657fac7b550660f2d91dfe7d1f"
+  },
+  "genuine_provider_sources": [
+    {
+      "bytes": 209297,
+      "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "sha256": "be693dec5e53b20f06f7963b7418a7c0dff68cbecaaa2360e291d8542784e045"
+    },
+    {
+      "bytes": 13172,
+      "path": "/home/holden/mckernel/kernel/rust/string.rs",
+      "sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3"
+    }
+  ],
+  "native": false,
+  "outputs": {
+    "descriptor-init.NONOVERLAPPING.patch": {
+      "bytes": 2374,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-descriptor-init-source-1/descriptor-init.NONOVERLAPPING.patch",
+      "sha256": "a3e242cfe26eda3aaacdf5408865b698bf22b7385937bd5d5af5eeb27012d298"
+    },
+    "descriptor_init.C-ABI.inc": {
+      "bytes": 245,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-descriptor-init-source-1/descriptor_init.C-ABI.inc",
+      "sha256": "ae7c83bcc3ab23ad580f340b1a8df60ede3d3776f961c5e9e362c076b6a65b09"
+    },
+    "descriptor_init.C-SELECTION-FRAGMENT.inc": {
+      "bytes": 421,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-descriptor-init-source-1/descriptor_init.C-SELECTION-FRAGMENT.inc",
+      "sha256": "90dd1c4eff1e838dd2deaf735ea30d8de0b0d0089af6dd3b9c5bdc83dae44e6c"
+    },
+    "descriptor_init.ORIGINAL-C.inc": {
+      "bytes": 262,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-descriptor-init-source-1/descriptor_init.ORIGINAL-C.inc",
+      "sha256": "f49a954255ecfeb4d05c924b36ba1265a0825f13e107d1a41c341f25bf98724c"
+    },
+    "descriptor_init.RUST-FRAGMENT.rs.inc": {
+      "bytes": 1066,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-descriptor-init-source-1/descriptor_init.RUST-FRAGMENT.rs.inc",
+      "sha256": "ed9f70addaa67f6f068b63d1a0665c44cc5cf27081313dd0dc91a3ce494ab072"
+    },
+    "fixture-fragments-only/memset.GENUINE-RUST-DEPENDENCY.inc": {
+      "bytes": 270,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-descriptor-init-source-1/fixture-fragments-only/memset.GENUINE-RUST-DEPENDENCY.inc",
+      "sha256": "69cd20f99c4a3a9be7775bce28fbd4889cea61a4a981fd412a202f974f679e8e"
+    },
+    "fixture-fragments-only/tracked_alloc.GENUINE-RUST-DEPENDENCY.inc": {
+      "bytes": 985,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-exec-descriptor-init-source-1/fixture-fragments-only/tracked_alloc.GENUINE-RUST-DEPENDENCY.inc",
+      "sha256": "6c2c0397f7ca0d548b69d2bd1b13442fe059b10d984d1d73eab844b934a2999c"
+    }
+  },
+  "queued_recipe": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "IMPLEMENTED_DEFINED_DESCRIPTOR_ALLOCATION_AND_ZEROING_SOURCE_ONLY",
+  "supported_profile": {
+    "NOWAIT": 2,
+    "PAGE_P2ALIGN": 0,
+    "PAGE_SIZE": 4096,
+    "kernel": 0,
+    "pages": 4
+  }
+}

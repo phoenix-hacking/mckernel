@@ -1,0 +1,104 @@
+{
+  "actual_test_result": null,
+  "candidate_include": {
+    "bytes": 6711,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/cumulative-continuation-90s/cursor-host-fixture-1/long_trace_retention.inc",
+    "sha256": "adc08b445de3d3cadff671ecf5b6ca8ac49c6480dd91830c7e5976b6a2a9af56"
+  },
+  "counter_semantics": {
+    "actual_memchr_call_counter": true,
+    "actual_results": null,
+    "actual_visited_bytes_counter": false,
+    "analytic_candidate_calls": 1024,
+    "analytic_original_calls": 524800,
+    "both_original_and_candidate_instrumented": true,
+    "calls_real_libc_memchr": true,
+    "macro_defined_after_wrapper_so_no_recursion": true,
+    "not_requested_n_sum": true,
+    "planned_queries": 1024
+  },
+  "coverage_vs_original7HOSTproposal": [
+    {
+      "coverage": "Yes membership return/cursor on gaps/backward query and repeated line text; raw retained file bytes are seeded equal, no whole-save/retain invocation.",
+      "group": "ordered-subsequence-equivalence"
+    },
+    {
+      "coverage": "Yes0, newline2, record-end4, next-record newline6/end8; no out-of-invariant arbitrary interior byte cursors.",
+      "group": "cursor-boundaries"
+    },
+    {
+      "coverage": "PID-specific/unknownPID and pid0 traversal yes; actual pair_route_reuse not exercised, pair_routes stub is unused.",
+      "group": "pid-and-startup-route"
+    },
+    {
+      "coverage": "Real missing path below cursor and real hardlink nlink change yes; replacement/chmod/truncate/retimestamp variants not all enumerated.",
+      "group": "identity-failure-before-skipped-bytes"
+    },
+    {
+      "coverage": "Not covered; fixture uses real save_file seeding but does not call exact pair_trace_save or long_retain.",
+      "group": "whole-save-and-retain"
+    },
+    {
+      "coverage": "Production source caps unchanged; cap/round/line rejection vectors not exercised by this member-only fixture.",
+      "group": "profile-unchanged"
+    },
+    {
+      "coverage": "1024actual libc memchr queries/calls counted; analytically524800->1024. No actual result yet, no4096/visitedbyte claim.",
+      "group": "operation-count-regression"
+    }
+  ],
+  "duplicate_fixture_authored": false,
+  "fixture": {
+    "bytes": 5782,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/cumulative-continuation-90s/cursor-host-fixture-1/fixture_cursor.c",
+    "sha256": "f1c11f76bcffc5d4af22acd83a8e82b2c027560dbac086e0a890f8b1d7ac0c98"
+  },
+  "foreground_candidate_member_equals_production_fix_after_comment_whitespace_normalization": true,
+  "foreground_manifest": {
+    "bytes": 3155,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/cumulative-continuation-90s/cursor-host-fixture-1/FROZEN-7HOST-FIXTURE.NOT-EXECUTED.json",
+    "sha256": "63beef7efed7c44425bc2a79416e3a558b55fe512cc345cda095b7f9175e7ba4"
+  },
+  "identity_semantics": {
+    "both_use_same_real_long_trace_stat_and_pair_trace_same": true,
+    "real_missing_old_path_and_hardlink_tests": true,
+    "source_identity_gate_before_cursor_skip": true,
+    "source_order_equivalence": true,
+    "syscall_count_and_order_instrumented": false
+  },
+  "important_limits": [
+    "7foreground functions are seven member-focused cases, not all seven broad original proposal groups.",
+    "Do not claim identity syscall count/order or visited-byte instrumentation that is absent.",
+    "Do not claim1024performance analytic counts are actual until the frozen executable runs.",
+    "pair_routes stub is unused and supplies no startup-route/native/resource acceptance."
+  ],
+  "main_semantics": {
+    "frozen_main_invokes_all7_named_functions": true,
+    "maximum_test_trace_under20000B": true,
+    "newline_cursor_boundaries_only": true,
+    "original_and_candidate_query_same_records": true,
+    "paths_mkdtemp_owned": true,
+    "pre_post_stat_query_real": true,
+    "seed_trace_memory_bytes_match_real_record_file_bytes": true,
+    "source_not_executed": true
+  },
+  "new_C_files_created": false,
+  "new_jobs_or_reservations": false,
+  "next_root_operation": "ROOT runs chosen already-frozen foreground compile+7member fixture once under held profile. Reuse it; no second member fixture or optional long_retain gate needed.",
+  "original_include": {
+    "bytes": 6588,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/p12-snapshot-capacity-1/production-collector-preparation-1/production-source/long_trace_retention.inc",
+    "sha256": "66ad73a4b7da9ccb775247c2d32a803f445e93a1e5b8762cabc5a4968adf099f"
+  },
+  "original_member_function_byte_exact_after_name_restore": true,
+  "potential_compile_feedback": "Frozen -Werror/GCC9 may diagnose snprintf(.old/.link) target truncation because records expose PATH_MAX source arrays and those two calls check n>0 only. Fixed actual frozen argv yields short paths; no compile was attempted, so this is a static warning concern, not an observed failure. Preserve first actual compiler result and delegate any bounded source correction to the foreground owner.",
+  "production_fix": {
+    "bytes": 6786,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/trace-retention-fix/long_trace_retention.inc",
+    "sha256": "2df20077af1d815b76f6bd70b094153a40507afb00c0c359e4df314762566edf"
+  },
+  "production_sources_mutated": false,
+  "remaining_default_practical90_blocker": "No additional HOST long_retain wrapper is necessary solely for the changed member cursor body: long_retain/source caps/ABI are unchanged, same record identity gate precedes skip, and frozen member fixture exercises the changed valid cursor/order behavior. Collector build plus separately admitted native90segment must still pass original strict perround/fulltrace/retirement oracles. Whole-retain host fixture is optional extra coverage, not a newly imposed gate.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FOCUSED_FROZEN_FOREGROUND_FIXTURE_SOURCE_REVIEW_NO_EXECUTION"
+}

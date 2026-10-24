@@ -1,0 +1,57 @@
+{
+  "C_patch": {
+    "bytes": 1146,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-do-kill-process-group-source-1/patch/syscall.c.diff",
+    "sha256": "ebfb8013a39bb942603d213818e20cba283a77cc448cea54fd514aefd6d80455"
+  },
+  "C_postimage": {
+    "bytes": 113037,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-do-kill-process-group-source-1/candidate/syscall.c",
+    "sha256": "dcf4ebee3d3779b7a3077c482a9942ccdcd0776ada924a130c45624cc285e330"
+  },
+  "C_preimage": {
+    "bytes": 112634,
+    "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+    "sha256": "d876e0b24f789372e6747fee7c554a53a3deaa9cee7034d7096374c2dff34ad6"
+  },
+  "Rust_fragment": {
+    "bytes": 5063,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-do-kill-process-group-source-1/candidate/syscall_policy.do_kill_process_group.FRAGMENT.rs",
+    "sha256": "a5ccdf371ccd120c51c57b10fc98dc6e29b44252da434d100c0eec949b6fcd3d"
+  },
+  "actual_compile": null,
+  "actual_fixture": null,
+  "actual_reference": {
+    "bytes": 1959,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-do-kill-process-group-source-1/fixture-fragments/original-process-group-branch.ACTUAL.inc",
+    "sha256": "f7b8ad00c96fc02aa8b4da11e85163570050c4dea3b37f50d453d05498148ceb"
+  },
+  "difficulty": "Moderate/high lifecycle/concurrency: two-pass live tables and recursive self dispatch. Retain reference group-growth/shrink behavior and require focused source/actual controlled callback proof before integration.",
+  "engineering_percentage": null,
+  "existing_Rust_reuse": [
+    "abi::ProcessHash73/Process/Thread/AbiListHead/SigInfo",
+    "lock_helpers::__mcs_rwlock_reader_lock/unlock and McsRwlockNodeIrqsave",
+    "mem_helpers::kmalloc_tracked/kfree_tracked"
+  ],
+  "fixture_ABI_fragment": {
+    "bytes": 1788,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-do-kill-process-group-source-1/fixture-fragments/real-ABI-and-original-reference.FRAGMENT.c",
+    "sha256": "c4bcbf0a490d39a267486e699a97f583c99747f51d81795b1cfdc71231e4ed5d"
+  },
+  "fixture_proposal": {
+    "bytes": 1998,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-do-kill-process-group-source-1/fixture-fragments/SMALLEST-FUTURE-GROUP-FIXTURE.PROPOSAL.json",
+    "sha256": "3c867490f9c2c6ec9c06564a0afb7456c3c6e46caa9b935aea8bd7704adf93b6"
+  },
+  "native": null,
+  "no_second_executable_queue": true,
+  "ownership": "Original phash snapshot is passed from C (no reread currentCPU); no process references retained across locks; collect numeric PIDs; heap freed after peer+self recursion, including original freeNULL self-only route; default local siginfo Cparent frame alive synchronously.",
+  "policy_merge": "Append private fragment only. No shared imports/ABI or FFI removal. Existing PTRACEs do_kill FFI names remain unchanged. Root centrally composes this C region with FP/restart/other accepted selections.",
+  "production_default_link": null,
+  "remaining_C_provider": "Recursive public do_kill remains C: direct process/thread selection, permission, pending enqueue/coalescing, wakeup/interrupt and thread-hold/release. This port deliberately reuses it after unlocking; no new C provider body.",
+  "retired_scope_if_proven": "Only live do_kill tid==-1,pid<=0 group count/collect/dispatch branch; NOT complete do_kill/do_signal/file retirement.",
+  "return_semantics": "Each unsigned-long recursive result converts to signed int low32 before replacing rc, then selected C public do_kill return sign-extends rc to unsigned long. No aggregate-success policy added.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_tracking": "Tracked allocation/free uses actual Rust file!/line! provenance; extent/flags/owner and exact release order retained.",
+  "status": "SUBSTANTIVE_PROCESS_GROUP_BRANCH_RUST_SOURCE_ONLY_UNCOMPILED"
+}

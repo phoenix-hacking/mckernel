@@ -1,0 +1,73 @@
+{
+  "actual_fixture_production_default_native": null,
+  "authorities": [
+    {
+      "bytes": 1647,
+      "path": "/home/holden/mckernel/kernel/include/page.h",
+      "sha256": "c8f3f5e7804c71430c814395ea14a1ee93267180713caeb39880b662cc9cd0dc"
+    },
+    {
+      "bytes": 17367,
+      "path": "/home/holden/mckernel/kernel/rust/page_helpers.rs",
+      "sha256": "cfc64f72bf9b94c65417bc8f4e29d65b81f98239fe52ab2a7dd0352ebdfc3f70"
+    }
+  ],
+  "engineering_percentage": null,
+  "existing_Rust_reuse": "crate::page_helpers::page_map and page_unmap are already no_mangle Rust production providers with exact actual page.h ABI. Direct call preserves same target, Page pointer identity and synchronous CInt return.",
+  "fallback_C_byte_identical": true,
+  "fragments": [
+    {
+      "bytes": 983,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-split-page-callbacks-source-only-1/FUTURE-REAL-HEADER-ABI-FRAGMENT.NOT-QUEUED.c",
+      "sha256": "55db00567ef3595ad2d75c38ebca27e1a21e3b111505e920ccdb56e67b849ab5"
+    },
+    {
+      "bytes": 1617,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-split-page-callbacks-source-only-1/FUTURE-RAW-PAGE-CONSUMER.NOT-QUEUED.c",
+      "sha256": "fff9994a269b87c1c57e77421e4276c29b277bb09c9e91a04b2500ca36a50404"
+    }
+  ],
+  "held_remaining_major_bodies": "Split physical-page translation, split RSS/log/panic callbacks still live C; existing Rust phys/page/RSS/kprintf/panic can supply them with exact metadata/format witnesses. Split allocator/set-page lock orchestration and page callbacks now source-only, need actual tests. Physical ownership/real allocation and full default-linked/native path remain harder than callback transport.",
+  "new_C_function_getter": false,
+  "new_queue_CPU_reservation": null,
+  "original_C": {
+    "bytes": 152,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-split-page-callbacks-source-only-1/EXACT-ORIGINAL-C-PROVIDERS.inc",
+    "sha256": "b7f9d862f89e012489d68429b26f26483af938c92ee57d44f251417747b38fe7"
+  },
+  "ownership": "No page dereference/reference, new null policy, refcount/free/accounting/lock introduced in adapters. Existing split orchestration still chooses call order and interprets map/unmap results; existing page helpers own atomic count and hash locking/lifetime. Raw pointer cast only and no borrow crosses a callback.",
+  "patch": {
+    "bytes": 1759,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-split-page-callbacks-source-only-1/EXACT-SPLIT-PAGE-CALLBACKS.patch",
+    "sha256": "f3249bda985a7c61dc05234f41da0022d08e87663b025e3727afaa643e02a1a1"
+  },
+  "postimages": [
+    {
+      "bytes": 92311,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-split-page-callbacks-source-only-1/candidate/arch/x86_64/kernel/memory.c",
+      "sha256": "ecda4e8af5a80fc6d82ba4f1a318e910fa737b365157c959560ce3c3deb1cad7"
+    },
+    {
+      "bytes": 212709,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-split-page-callbacks-source-only-1/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "08182aa41265c319a2806a25aad3354ca2f30cf75774345d1bf8244e39a50d49"
+    }
+  ],
+  "preimages": [
+    {
+      "bytes": 92118,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-split-alloc-source-only-1/candidate/arch/x86_64/kernel/memory.c",
+      "sha256": "332cc62ca7823fe10fd6902e6b06ec6fed9f52d57174302adc38dfb30c73d28f"
+    },
+    {
+      "bytes": 212237,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/next-split-alloc-source-only-1/candidate/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "61b55c2489c7eef22c11c0d2535135da039542e8a704a908f37aa75a5cba3530"
+    }
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nSource-only split page-map/unmap callback ownership handoff; no executable queue.\n",
+  "selection": "PUBLIC retains existing callback declarations and excludes only original static bodies. Existing split_large_page callback arguments unchanged; future actual wholeTU/allocated relocs/Rust unique providers and partial remain NULL.",
+  "sole_executable_queue": "passed-four-provider-union2-production-suffix-preparation-1/c03ce4ee",
+  "source_only_predecessors": "Set-page orchestration cb4f7036 and split allocator03da72d7 remain untested source; original four-provider production queue remains f13 and excludes these changes.",
+  "status": "COMPLETE_SPLIT_PAGE_MAP_UNMAP_CALLBACKS_SOURCE_ONLY"
+}

@@ -1,0 +1,45 @@
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -2155,6 +2155,12 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern int arch_do_kill_pending_enqueue_result(struct thread *target,
++		struct list_head *head, unsigned long mask, int sig,
++		const siginfo_t *info, int ptracecont, int *doint);
++#endif
++
+ unsigned long
+ do_kill(struct thread *thread, int pid, int tid, int sig, siginfo_t *info,
+         int ptracecont)
+@@ -2180,7 +2186,9 @@
+ 	struct process_hash *phash = rset->process_hash;
+ 	struct mcs_rwlock_node lock;
+ 	struct mcs_rwlock_node updatelock;
++#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ 	struct sig_pending *pending = NULL;
++#endif
+ 
+ 	if(sig > 64 || sig < 0)
+ 		return -EINVAL;
+@@ -2404,6 +2412,10 @@
+ 
+ 	rc = 0;
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++	rc = arch_do_kill_pending_enqueue_result(tthread, head, mask, sig,
++			info, ptracecont, &doint);
++#else
+ 	if (sig < 33) { // SIGRTMIN - SIGRTMAX
+ 		for (pending = ((typeof(*pending) *)((char *)((head)->next) - offsetof(typeof(*pending), list))); &pending->list != (head); pending = ((typeof(*pending) *)((char *)(pending->list.next) - offsetof(typeof(*pending), list)))) {
+ 			if (pending->sigmask.__val[0] == mask &&
+@@ -2431,6 +2443,8 @@
+ 			tthread->sigevent = 1;
+ 		}
+ 	}
++
++#endif
+ 
+ 	mcs_rwlock_writer_unlock_noirq(savelock, &mcs_rw_node);
+ 	cpu_restore_interrupt(irqstate);

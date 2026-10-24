@@ -1,0 +1,35 @@
+error[E0609]: no field `error` on type `X86BasicRegs`
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-exception-stop-batch-source-1/actual_bodies.rs:101:45
+    |
+101 |             core::ptr::addr_of!((*regs).gpr.error).read(),
+    |                                             ^^^^^ unknown field
+    |
+    = note: available fields are: `r15`, `r14`, `r13`, `r12`, `rbp` ... and 16 others
+
+error[E0609]: no field `error` on type `X86BasicRegs`
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-exception-stop-batch-source-1/actual_bodies.rs:151:49
+    |
+151 |                 core::ptr::addr_of!((*regs).gpr.error).read(),
+    |                                                 ^^^^^ unknown field
+    |
+    = note: available fields are: `r15`, `r14`, `r13`, `r12`, `rbp` ... and 16 others
+
+error[E0609]: no field `error` on type `X86BasicRegs`
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-exception-stop-batch-source-1/actual_bodies.rs:204:49
+    |
+204 |                 core::ptr::addr_of!((*regs).gpr.error).read(),
+    |                                                 ^^^^^ unknown field
+    |
+    = note: available fields are: `r15`, `r14`, `r13`, `r12`, `rbp` ... and 16 others
+
+error[E0609]: no field `error` on type `X86BasicRegs`
+ --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-exception-stop-batch-source-1/gpe-actual-Rust-ABI.inc:6:103
+  |
+6 |  core::mem::offset_of!(crate::abi::X86UserContext,gpr)+core::mem::offset_of!(crate::abi::X86BasicRegs,error),
+  |                                                        -----------------------------------------------^^^^^- due to this macro variable
+  |
+  = note: available fields are: `r15`, `r14`, `r13`, `r12`, `rbp` ... and 16 others
+
+error: aborting due to 4 previous errors
+
+For more information about this error, try `rustc --explain E0609`.

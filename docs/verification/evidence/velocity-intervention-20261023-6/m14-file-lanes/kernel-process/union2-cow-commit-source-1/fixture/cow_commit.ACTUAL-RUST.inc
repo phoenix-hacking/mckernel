@@ -1,0 +1,43 @@
+#[no_mangle]
+pub unsafe extern "C" fn process_page_fault_cow_commit_body_result(
+    range: *mut VmRange,
+    phys_out: *mut CULong,
+    pgsize: SizeT,
+    virt: *mut c_void,
+    page_out: *mut *mut crate::page_helpers::Page,
+    rss_add_debug: *mut crate::debug::Ddebug,
+    rss_sub_debug: *mut crate::debug::Ddebug,
+) {
+    // The original caller still holds page_table_lock and owns the fresh copy.
+    // The old Page reference is consumed only by the same existing unmap call.
+    let old_phys = *phys_out;
+    if crate::mem_helpers::rusage_memory_stat_add(
+        range, old_phys, pgsize as CULong, pgsize as CInt,
+    ) != 0 {
+        if core::ptr::read_volatile(core::ptr::addr_of!((*rss_add_debug).line_flags)) >> 24 != 0 {
+            let _ = kprintf(
+                b"%lx+,%s: COW-source pointed-to by only fileobj, calling memory_stat_rss_add(),pgsize=%ld\n\0".as_ptr().cast(),
+                old_phys, b"page_fault_process_memory_range\0".as_ptr().cast::<i8>(), pgsize,
+            );
+        }
+    }
+    if !(*page_out).is_null() {
+        if crate::page_helpers::page_unmap(*page_out) != 0 {
+            if core::ptr::read_volatile(core::ptr::addr_of!((*rss_sub_debug).line_flags)) >> 24 != 0 {
+                let _ = kprintf(
+                    b"%lx-,%s: cow,calling memory_stat_rss_sub(),size=%ld,pgsize=%ld\n\0".as_ptr().cast(),
+                    old_phys, b"page_fault_process_memory_range\0".as_ptr().cast::<i8>(), pgsize, pgsize,
+                );
+            }
+            // Read memobj after unmap and its diagnostic, as in original C.
+            crate::mem_helpers::rusage_memory_stat_sub(
+                (*range).memobj.cast::<Memobj>(), pgsize as CULong, pgsize as CInt,
+            );
+        }
+    }
+    // Publish the same new physical result before the Page provider call.
+    // Leave the old Page pointer visible until that call returns; no guessed
+    // reference release, new-page unmap, free, lock change or success ACK.
+    *phys_out = crate::x86_memory_helpers::virt_to_phys(virt);
+    *page_out = phys_to_page(*phys_out);
+}

@@ -1,0 +1,47 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_UNCOMPILED",
+  "retired_symbols_proposed": [
+    "mcexec_path_readlinkat_bridge",
+    "mcexec_path_readlink_bridge",
+    "mcexec_path_fstatat_bridge",
+    "mcexec_path_stat_bridge",
+    "mcexec_path_faccessat_bridge",
+    "mcexec_path_access_bridge",
+    "mcexec_path_getxattr_bridge",
+    "mcexec_path_lgetxattr_bridge",
+    "mcexec_path_openat_log_bridge",
+    "mcexec_path_open_log_bridge",
+    "mcexec_path_openat_bridge",
+    "mcexec_path_open_bridge",
+    "mcexec_cred_get_bridge",
+    "mcexec_cred_setfsuid_bridge",
+    "mcexec_cred_setfsgid_bridge",
+    "mcexec_cred_setresuid_bridge",
+    "mcexec_cred_setresgid_bridge",
+    "mcexec_cred_setreuid_bridge",
+    "mcexec_cred_setregid_bridge",
+    "mcexec_cred_setuid_bridge",
+    "mcexec_cred_setgid_bridge",
+    "mcexec_do_generic_syscall_raw_bridge",
+    "mcexec_do_generic_syscall_start_bridge",
+    "mcexec_do_generic_syscall_done_bridge",
+    "mcexec_do_generic_syscall_bridge",
+    "mcexec_perf_event_open_bridge",
+    "mcexec_clock_gettime_bridge",
+    "mcexec_clock_gettime_log_bridge"
+  ],
+  "providers": [
+    "existing Rust errno conversion and generic syscall body",
+    "genuine libc path/file/credential/syscall/clock APIs",
+    "existing C debug data only"
+  ],
+  "parity": [
+    "same path diagnostic strings and debug gating/flush",
+    "errno conversion only for -1; raw fsuid/fsgid/generic/perf returns stay raw",
+    "explicit uid_t/gid_t and open flags narrowing preserves platform prototypes",
+    "all six generic syscall args preserve unsigned-long width",
+    "perf-event request still opens /dev/null as original"
+  ],
+  "compiler_or_native_execution": false
+}

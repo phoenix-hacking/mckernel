@@ -1,0 +1,22 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_PREPARER_FAILURE_BEFORE_ANY_CANDIDATE_FIXTURE_OR_COMPILER",
+  "argv": [
+    "python3",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-cow-commit-source-1/prepare_source.py"
+  ],
+  "exit_code": 1,
+  "source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/union2-cow-commit-source-1/prepare_source.py",
+    "sha256": "8593020505cffe6be827f72eac9662187191f89f762f84ab846ae53aee1325de",
+    "bytes": 12989
+  },
+  "actual_error": "IndexError: string index out of range",
+  "actual_site": "prepare_source.py line16 fun; called line22 for page_fault_process_memory_range",
+  "cause": "Raw brace matcher counted selected and fallback COW branch opening braces simultaneously; source is a preprocessor-conditional complete C function.",
+  "compiler_jobs": 0,
+  "CPU_reservations": 0,
+  "canonical_mutations": 0,
+  "bounded_correction": "Use exact known next top-level process_zeroobj_match_bridge marker for this one held function; no source rewriting or generic parser expansion.",
+  "next_unexpected": "STOP_EXPERT_ESCALATION_NO_FURTHER_AUTHOR_RETRY"
+}

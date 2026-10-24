@@ -1,0 +1,35 @@
+--- a/kernel/mem.c
++++ b/kernel/mem.c
+@@ -5934,11 +5934,8 @@
+ extern void *mem_vmap_init_bridge(unsigned long start, unsigned long size,
+ 		unsigned long unit);
+ 
+-static int mem_pt_prepare_map_bridge(page_table_t pt, void *virt,
+-		unsigned long size, enum ihk_mc_pt_prepare_flag flag)
+-{
+-	return ihk_mc_pt_prepare_map(pt, virt, size, flag);
+-}
++extern int mem_pt_prepare_map_bridge(page_table_t pt, void *virt,
++		unsigned long size, enum ihk_mc_pt_prepare_flag flag);
+ 
+ extern unsigned long mem_vmap_alloc_bridge(void *desc, int npages,
+ 		int p2align);
+--- a/kernel/rust/mem_helpers.rs
++++ b/kernel/rust/mem_helpers.rs
+@@ -6995,3 +6995,16 @@
+ pub unsafe extern "C" fn mem_vmap_free_bridge(desc: *mut c_void, address: CULong, npages: CInt) {
+     unsafe { crate::page_alloc::ihk_pagealloc_free(desc, address, npages) }
+ }
++
++/// Same public page-table preparation provider and exact error result.
++/// The enclosing virtual-allocator initialization retains its store/call order;
++/// this adapter adds no table/Page ownership, alignment or cleanup policy.
++#[no_mangle]
++pub unsafe extern "C" fn mem_pt_prepare_map_bridge(
++    pt: *mut c_void,
++    virt: *mut c_void,
++    size: CULong,
++    flag: CInt,
++) -> CInt {
++    unsafe { crate::x86_memory_helpers::ihk_mc_pt_prepare_map(pt, virt, size, flag) }
++}

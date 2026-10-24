@@ -2126,7 +2126,7 @@
       "title": "Bounded repeatability and stress",
       "engineering_state": "unmeasured",
       "completion_status": "open",
-      "exit_condition": "Two fresh boots, ten native cycles, 100 app launches and 60-minute mixed workload pass.",
+      "exit_condition": "Complete original bounded boot/cycle/launch joins and at least60 cumulative mixed-work minutes on matching kernel/modules/apps/launcher under P12-CUMULATIVE-USER-APPROVAL-20261024-V2.json: qualified629-round producer/report-replayed prefix plus strict completed90-second segment, matching artifacts and normal positive physical retirement. Preserve original uninterrupted FAIL and unsupported HOST predicates. M14/M15 are separate.",
       "checks": [
         {
           "id": "P-M12-01",
@@ -2207,7 +2207,15 @@
           "assessment_note": "Additional matching current-profile evidence: six actual launches/three rounds/one guest boot, accepted app665075e1 and physical5883bb04; zero proved public CPU/memory restoration cycles. Full2boots/10cycles/100launches/60mixedminutes remain open; reuse only matching declared final profile/tuple.",
           "assessment_history": [
             "Thirteen distinct accepted diagnostic/app invocations across separate guests are scoped evidence, not completion of final-profile 2boots/10nativecycles/100launches/60minutes."
-          ]
+          ],
+          "explicit_session_criterion_20261024": {
+            "authority": "20261024T045451435430Z-eb0863f16a4e403581548e7986a95c4a",
+            "approval": "docs/verification/os-milestones-20260914/P12-CUMULATIVE-USER-APPROVAL-20261024.json",
+            "effective": "60 cumulative mixed-work minutes across exact matching kernel/modules/apps segments; every credited completed round must qualify and each segment requires identity/normalphysical acceptance. Other original bounded-session criteria remain.",
+            "original_uninterrupted_result": "Preserved unchanged; failed4a76 remains Deadline FAIL, no uninterrupted PASS.",
+            "current_status": "OPEN:629completedprefix qualifiedunderexplicitV2producer/report-replayexposure mode;90sstrictsegmentNOTRUN. OriginaluninterruptedFAIL/fullHOSTqualificationincomplete retained.",
+            "approval_current_v2": "docs/verification/os-milestones-20260914/P12-CUMULATIVE-USER-APPROVAL-20261024-V2.json"
+          }
         },
         {
           "id": "P-M12-02",
@@ -2281,7 +2289,13 @@
           ]
         }
       ],
-      "current_evidence_summary": "Closed accepted twenty-launch batch records actual launches/resource retirement separately from model vectors; app-throughput4x target passed at6.332426x on its bound profile. This is not the full final-profile session budget. Two fresh boots/ten complete native cycles/100launches/60-minute mixed run remain unproved as a matched final-profile set."
+      "current_evidence_summary": "Closed accepted twenty-launch batch records actual launches/resource retirement separately from model vectors; app-throughput4x target passed at6.332426x on its bound profile. This is not the full final-profile session budget. Two fresh boots/ten complete native cycles/100launches/60-minute mixed run remain unproved as a matched final-profile set.",
+      "exit_condition_history": [
+        {
+          "condition": "Two fresh boots, ten native cycles, 100 app launches and 60-minute mixed workload pass.",
+          "superseded_by": "20261024 explicit cumulative practical exposure criterion; original uninterrupted qualification preserved"
+        }
+      ]
     },
     {
       "id": "M13",

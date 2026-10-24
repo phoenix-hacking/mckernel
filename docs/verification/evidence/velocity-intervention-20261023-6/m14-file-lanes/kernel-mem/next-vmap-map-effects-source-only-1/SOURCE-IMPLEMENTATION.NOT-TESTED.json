@@ -1,0 +1,92 @@
+{
+  "ABI": "OpaquePT/virtpointers, unsignedlongphys/address64, IhkMcPtAttribute64exactbitpatterninclbit63; CIntreturns unchanged. Compilerbarriernoargsvoid, nohardwarefence. Existingextern4callbackimportsreplacedbyRustdefinitions, existingRustmap/unmapcallertypesunchanged.",
+  "C_barrier_actual_macro_header": {
+    "bytes": 11651,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-mem-next/production-consumer-preparation-1/current-L4-refresh-1/source/kernel/include/lwk/compiler-gcc.h",
+    "sha256": "1a2693ab50b3768ca2ca362bb0e6773bdabc12425ad4061802b3aca20dbe47a2"
+  },
+  "C_selection": "OnlyexistingMEM_HELPERS liveCcallbackbodiesbecomeexternunder sameexistingselector; originallegacywholemap/unmapfallbackbodyunchanged.",
+  "actual": null,
+  "base": [
+    {
+      "bytes": 228762,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/next-whole-vmap-init-and-storage-source-only-1/candidate/kernel/mem.c",
+      "sha256": "620a4aa01308d66a178ec6c2822361e9aa3ec0e9a91dc58015720fa7819b37cc"
+    },
+    {
+      "bytes": 216137,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/next-whole-vmap-init-and-storage-source-only-1/candidate/kernel/rust/mem_helpers.rs",
+      "sha256": "4aa5feaadd86251283d558a57c1526e065bdb3aaaa0bc79b0d5fbb9aa107ad72"
+    }
+  ],
+  "engineering_percentage": null,
+  "execution": null,
+  "existing_Rust_providers": [
+    {
+      "exact_function_sha256": "389666824e2e338f36f20bc6b4c74cbbcd7a8d185580d64760e28d026c429ac7",
+      "function": "ihk_mc_pt_set_page",
+      "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs"
+    },
+    {
+      "exact_function_sha256": "6719927229692c7cac1b58f65cacf10191512e537a224f3e525d386573617524",
+      "function": "ihk_mc_pt_clear_page",
+      "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs"
+    },
+    {
+      "exact_function_sha256": "44bac6af678e4cb6294341d046c5e21c6278e27cfa31d9860f64c73ef704e308",
+      "function": "arch_barrier",
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs"
+    },
+    {
+      "exact_function_sha256": "67391e0e635eeffdd4a8f64efcc8cfb819ee067f15f9c90d2c4855cd50431255",
+      "function": "mem_tlb_flush_single_bridge",
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/next-whole-vmap-init-and-storage-source-only-1/candidate/kernel/rust/mem_helpers.rs"
+    }
+  ],
+  "fragment": {
+    "bytes": 1165,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/next-vmap-map-effects-source-only-1/vmap-map-effects.rs.fragment",
+    "sha256": "24af8e64a81cd12e0c83e52e80b2634b35352868ca3b26296a39200205f049ef"
+  },
+  "future_fixture": {
+    "bytes": 3573,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/next-vmap-map-effects-source-only-1/future-actual-consumer-fragment.c",
+    "sha256": "12cbcc7c79c571888d7202b8503ad618fca1a4f6c6fcf5b9c44f64ad64ce19f0"
+  },
+  "held_remaining": [
+    "dynamicunmapverbose logger metadata/flags ABI HOLD",
+    "privatephyslookup/insertion/failurelogger sourceuntested",
+    "underlyingPTElookup andphysicalmapping/accounting ownership providers Cdebt"
+  ],
+  "original_C": {
+    "bytes": 432,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/next-vmap-map-effects-source-only-1/actual-original-C-bodies.inc",
+    "sha256": "bdf742f0bc13781feefcf5140d789cc95717c5c4ae4d886b5fb8e484725aa814"
+  },
+  "ownership_order": "No new Page/table/refcount/lifetime/lock/CPU/preempt/ACK/retry/cleanup/null/alignmentpolicy. Existingmap/unmaporchestratorsretainset/clear/flush/barrier/rollback ordering andexistingerrorhandling.",
+  "patch": {
+    "bytes": 2812,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/next-vmap-map-effects-source-only-1/cutover.patch",
+    "sha256": "76932cb8359591634ff4b937aafacf21f73d62b2e749b5ff1b78f4e3b2fbd0ff"
+  },
+  "postimages": [
+    {
+      "bytes": 228651,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/next-vmap-map-effects-source-only-1/candidate/kernel/mem.c",
+      "sha256": "278a2d96c2d66b171fbdcdfc9ec329cefd7c6c311614468395e6fcb6321c4dd0"
+    },
+    {
+      "bytes": 216995,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/next-vmap-map-effects-source-only-1/candidate/kernel/rust/mem_helpers.rs",
+      "sha256": "570b8dd64113d47df0d47de13371331106ec084e693be49bce570fd44c34bf7c"
+    }
+  ],
+  "reuse": "Set/cleardirectactualpublicx86Rustproviders; singleTLBflush reusespassedTLB13Rustcallback; compilerbarrierdirectexistingRustarch_barrieremptyasm. Noalgorithmcopy/newASM/computeC.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "scope_limits": [
+    "Futureprivatebasecontainsuntestedwholevmapinit/storage448a7; neitheritnornew4effects includedinpassedVM4productionaddition.",
+    "Currentunion3b/frozencandidates/sharedobjectNULL/passedbatches preserved, no jobs/reservations/newfixturequeue.",
+    "Hostfixturemustcontrolprivilegedflushendpoint; barrieractualemptyasm safe. Noactualmapping/nativeconcurrency/finalimage/fileclosure."
+  ],
+  "status": "FOUR_COMPLETE_VM_MAP_EFFECT_CALLBACKS_PRIVATE_SOURCE_ONLY_UNTESTED"
+}
