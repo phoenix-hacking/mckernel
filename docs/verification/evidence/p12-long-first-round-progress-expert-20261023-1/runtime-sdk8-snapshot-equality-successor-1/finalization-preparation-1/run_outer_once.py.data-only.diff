@@ -1,0 +1,19 @@
+--- 
++++ 
+@@ -1,14 +1,14 @@
+ # Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ from pathlib import Path
+ import importlib.util,json,subprocess,time,os
+-D=Path('/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-diagnostic-collector-successor-1')
++D=Path('/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1')
+ H=Path('/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py')
+ s=importlib.util.spec_from_file_location('accepted_capture',H);h=importlib.util.module_from_spec(s);s.loader.exec_module(h)
+ assert h.hashed(H,65536)['sha256']=='990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8'
+ r=json.loads((D/'ACTUAL-FINAL-SERIALIZATION-AND-REALCLOCK-CONSUMER.json').read_text())
+ assert r['status']=='PASS_PUBLISHED_FINAL_SERIALIZATION_AND_FULL_REALCLOCK_RELEASE_CONSUMER' and r['actual_published_request_pre_effect_consumer']=='PASS_ACTUAL_FINAL_SERIALIZED_REQUEST_PRE_EFFECT_GUARDS'
+ a=json.loads((D/'ROOT-ARGV.FINAL.NOT-EXECUTED.json').read_text());assert a[0:2]==['/usr/bin/sudo','-A'] and time.time()<r['expires_unix']
+-out=Path('/home/holden/mckernel/docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-diagnostic-collector-successor-1/actual-root-controller-outer-1');out.mkdir(mode=0o700)
++out=Path('/home/holden/mckernel/docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/actual-root-controller-outer-1');out.mkdir(mode=0o700)
+ h.write(out/'command.json',a)
+ streams=[]
+ for n in ('stdout','stderr'):

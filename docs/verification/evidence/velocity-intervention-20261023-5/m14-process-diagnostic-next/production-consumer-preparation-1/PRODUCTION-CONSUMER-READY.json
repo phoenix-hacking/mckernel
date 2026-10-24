@@ -1,0 +1,83 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "CURRENT78_COMPLETE_PROCESS_PRODUCTION_SOURCE_READY_NO_GRANT",
+  "Rust_recipe": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-process-diagnostic-next/production-consumer-preparation-1/EXACT-CURRENT78-RUST-RECIPE.NOT-EXECUTED.json",
+    "sha256": "ce16d1ba316cee7c8efb7d19c6cd48daf5bdfb0372c9eea4910ff9cd12c692a5",
+    "bytes": 93189
+  },
+  "C_recipe": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-process-diagnostic-next/production-consumer-preparation-1/EXACT-SELECTED-GCC9-PROCESS-CONSUMER.NOT-EXECUTED.json",
+    "sha256": "6caa59653a93c8762fcad51ef075d2f7741ee1768c19cab542bf265fa71e8d50",
+    "bytes": 79651
+  },
+  "source_identity": "761992e8fb41bc8888915bfabd276f7c976dc37136c88f7bc9480f7e2b99ea0d",
+  "source_count": 78,
+  "C_headers": 73,
+  "canonical_refresh_exact": [
+    "kernel/rust/mem_helpers.rs",
+    "kernel/rust/syscall_policy.rs",
+    "kernel/rust/x86_memory_helpers.rs"
+  ],
+  "private_target_override": "process_helpers17c927 over canonical3f2c; C08c238 over64af",
+  "accepted_prior_actual_leaf": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-process-diagnostic-next/sourcehandoff/ACTUAL-FIRST-CANDIDATE-WHOLE-JOIN.json",
+    "sha256": "bebe72021c410cddfd8c67dfc086c365d51641e074aca04f87f5450405509316",
+    "bytes": 24274
+  },
+  "expected_T_delta": {
+    "removed": [],
+    "added": [
+      "arch_ptrace",
+      "remote_flush_tlb_cpumask",
+      "syscall_signalfd_publish_bridge",
+      "vm_range_insert_log_bridge",
+      "x86_clear_range_l4_body"
+    ],
+    "before": 3039,
+    "after": 3044
+  },
+  "expected_U_delta": {
+    "removed": [
+      "syscall_signalfd_publish_bridge",
+      "vm_range_insert_log_bridge"
+    ],
+    "added": [
+      "process_vm_range_insert_debug",
+      "x86_clear_range_l3_callback"
+    ],
+    "before": 577,
+    "after": 577
+  },
+  "prepared_commands": 14,
+  "profile": {
+    "CPU": 6,
+    "jobs": 1,
+    "AS": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 90,
+    "retirement_seconds": 6,
+    "FSIZE": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "RUST_MIN_STACK": 2097152
+  },
+  "reused_actualbody_comparisons": 1101,
+  "reused_actual_commands": 13,
+  "compiler_jobs": 0,
+  "CPU_reservations": 0,
+  "canonical_or_frozen15_mutations": 0,
+  "execution_prerequisites": [
+    "Independent leaf/source/ABI acceptance and exact root ordinary grant",
+    "Fresh shared19GiB/7job/floors/fullgrowth checks and prior CPU owner wholejoin",
+    "All current78 and73header bindings still match; otherwise stop and ask root for exact coherent successor",
+    "Durable compiler objects before observers; first unexpected result stops, no self retry"
+  ],
+  "preserved_prior_process_entry_observer_failure_and_correction": true,
+  "remaining_C_debt": [
+    "Declarative dynamic selector data",
+    "vm_range_insert_dump_bridge/dump_tree/optional dtree",
+    "Other process.c compute bodies"
+  ],
+  "whole_area_file_default_image_native": "OPEN"
+}

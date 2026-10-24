@@ -1562,6 +1562,18 @@ static int x86_clear_range_walk_l2_bridge(void *pt, unsigned long base,
 	return walk_pte_l2(pt, base, start, end, &clear_range_l2, args);
 }
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+/* Typed immutable identities; these existing lower C callbacks remain debt. */
+x86_clear_child_walk_fn_t const x86_clear_l3_child_walk = &x86_clear_range_walk_l2_bridge;
+x86_clear_flush_memobj_fn_t const x86_clear_l3_memobj_flush = &x86_clear_memobj_flush_bridge;
+x86_clear_rss_sub_fn_t const x86_clear_l3_rss_sub = &x86_clear_rss_sub_bridge;
+x86_clear_memobj_rss_sub_fn_t const x86_clear_l3_memobj_rss_sub = &x86_clear_memobj_rss_sub_bridge;
+x86_clear_range_log_fn_t const x86_clear_l3_range_log = &x86_clear_range_log_bridge;
+x86_clear_effect_log_fn_t const x86_clear_l3_effect_log = &x86_clear_effect_log_bridge;
+const int *const x86_clear_l3_use_1gb_page = &use_1gb_page;
+extern int clear_range_l3(void *args0, pte_t *ptep, uint64_t base,
+        uint64_t start, uint64_t end);
+#else
 static int clear_range_l3(void *args0, pte_t *ptep, uint64_t base,
 		uint64_t start, uint64_t end)
 {
@@ -1586,6 +1598,7 @@ static int clear_range_l3(void *args0, pte_t *ptep, uint64_t base,
 			x86_clear_range_log_bridge,
 			x86_clear_effect_log_bridge);
 }
+#endif
 
 static int x86_clear_range_walk_l3_bridge(void *pt, unsigned long base,
 		unsigned long start, unsigned long end, void *args)

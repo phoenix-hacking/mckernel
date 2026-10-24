@@ -1,0 +1,84 @@
+{
+  "M14_candidate15_positive_physical": null,
+  "actual_fresh_query": null,
+  "argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport importlib.util,json,os,sys,time\nD=Path('/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1')\nassert len(sys.argv)==3 and os.getuid()==os.geteuid()==1000 and sys.version_info[:3]==(3,9,12)\ns=importlib.util.spec_from_file_location('frozen_expert_selected_transport',D/'source/long_transport.py');g=importlib.util.module_from_spec(s);s.loader.exec_module(g)\nassert g.digest(g.stable(D/'source/long_transport.py'))=='b08e4aef7ed2984e84196f3c603abd19e093b5db372b1854f88ee8b75aee9b46'\nqraw=g.stable(Path(None));assert g.digest(qraw)==None;q=json.loads(qraw);assert q['status']=='PASS_FRESH_READ_ONLY_P12_LONG_ADMISSION'\nvalue=json.loads(g.stable(D/'LONG-RELEASE.PROTOTYPE.ACTUAL-STAGE.NOT-EXECUTABLE.json'));value.pop('independent_review',None)\nvalue['profile']=g.TRANSPORT;value['storage_admission']=q['observations']['admission'];value['boot_id']=Path('/proc/sys/kernel/random/boot_id').read_text().strip();value['author']=sys.argv[2];assert value['author']=='/root'\nvalue['status']='PASS_EXECUTION_RELEASE';value['execution_count']=1;value['expires_unix']=time.time()+590\nvalue['source_sha256']={name:g.digest(g.stable(D/'source'/name)) for name in g.FILES}\nassert value['nonce']=='63bdc7731c34491eb430ddb34b094d5b' and value['attempt_parent']=='/home/holden/mckernel-work/l12s8e1/p'\nraw=g.canonical(value);assert raw.endswith(b'\\n') and 'independent_review' not in json.loads(raw)\noutput=Path(sys.argv[1]);assert output.is_absolute() and output.parent.resolve(strict=True)==output.parent\nfd=os.open(output,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o600)\nwith os.fdopen(fd,'wb') as f:f.write(raw);f.flush();os.fsync(f.fileno())\nprint(json.dumps(dict(scope='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.',status='ROOT_PRE_REVIEW_CANONICAL_PAYLOAD_FROZEN_NOT_RELEASED',path=str(output),sha256=g.digest(raw),bytes=len(raw),expires_unix=value['expires_unix'],review=None,release_published=False)))\n",
+    null,
+    null
+  ],
+  "canonical_LF_AST_bytes": [
+    10
+  ],
+  "canonical_rule": "Unmodified selected g.canonical: compact sorted JSON, final LF byte10; pre-review object excludes independent_review",
+  "current_live_postjoin": null,
+  "expiry_rule": "Actual root invocation time +590; unchanged production guard max600. Mint only after staticpublication + actualfreshadmission + exact source/template review.",
+  "fresh_query_path": null,
+  "fresh_query_sha256": null,
+  "future_expiry": null,
+  "future_payload": null,
+  "future_review": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "slots": {
+    "argv5": "Root-owned sole canonical payload absolute path; recommended basename ROOT-CANONICAL-SDK8-DIAGNOSTIC-LONG-PAYLOAD.NOT-RELEASED.json, no existingfile overwritten",
+    "argv6": "Genuine root author identity distinct from reviewer; existing source requires /root",
+    "freeze_code_Path_None": "Bind only genuine successful fresh authenticated query path after actualPASS",
+    "freeze_code_digest_None": "Bind exact genuine query SHA after actualPASS"
+  },
+  "source9": {
+    "composite_module_binding.py": {
+      "bytes": 5480,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/source/composite_module_binding.py",
+      "sha256": "233e10b97114f47f357a1ab50bcd64159a4ce29b2bf04558ca31f3f176d84ca9"
+    },
+    "long_transport.py": {
+      "bytes": 16926,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/source/long_transport.py",
+      "sha256": "b08e4aef7ed2984e84196f3c603abd19e093b5db372b1854f88ee8b75aee9b46"
+    },
+    "native_diagnostic.py": {
+      "bytes": 88456,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/source/native_diagnostic.py",
+      "sha256": "77df4006aac41e171cd4db65018354d9f34ae5d6c1feee4308053aa18c8b079f"
+    },
+    "native_diagnostic_backend.py": {
+      "bytes": 26316,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/source/native_diagnostic_backend.py",
+      "sha256": "3f01a73dbd7664a12a514163561790fc56edf46114018f13781ab62387cccd52"
+    },
+    "native_diagnostic_container_owner.py": {
+      "bytes": 147559,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/source/native_diagnostic_container_owner.py",
+      "sha256": "57600f1c92d2075ee85d6a52949f11ae69c99dbd122087c227bab28178caedb6"
+    },
+    "native_diagnostic_runner.py": {
+      "bytes": 7500,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/source/native_diagnostic_runner.py",
+      "sha256": "d3cbf307b619e347c994503e2765da9d1962d0affe42baf54482529a4f372094"
+    },
+    "p12_long_session.py": {
+      "bytes": 10930,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/source/p12_long_session.py",
+      "sha256": "bff717d885afdda0d82cd0ab05a0930a3e66b242c6200b1295f2173bb4cdc5d3"
+    },
+    "qmp_capture.py": {
+      "bytes": 9913,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/source/qmp_capture.py",
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741"
+    },
+    "repaired_image_authority.py": {
+      "bytes": 3432,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/source/repaired_image_authority.py",
+      "sha256": "a778431998bb9569dee9f4bcd27d0cfceb7361d11ebbe7654cb57082ebde0847"
+    }
+  },
+  "source_guard_transport": {
+    "bytes": 16926,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk8-snapshot-equality-successor-1/source/long_transport.py",
+    "sha256": "b08e4aef7ed2984e84196f3c603abd19e093b5db372b1854f88ee8b75aee9b46"
+  },
+  "status": "TEMPLATE_NULL_FRESH_ADMISSION_PAYLOADPATH_AUTHOR_NOT_EXECUTABLE_NOT_MINTED"
+}

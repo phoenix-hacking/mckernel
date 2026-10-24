@@ -1,0 +1,55 @@
+--- a/arch/x86_64/kernel/cpu.c
++++ b/arch/x86_64/kernel/cpu.c
+@@ -1129,6 +1129,11 @@
+ 	enable_ptattr_no_execute();
+ }
+ 
++#endif /* MCKERNEL_RUST_X86_CPU_HELPERS: preceding callbacks */
++
++#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
++void x86_cpu_ulong_log_bridge(int event, unsigned long value);
++#else
+ static void
+ x86_cpu_ulong_log_bridge(int event, unsigned long value)
+ {
+@@ -1145,6 +1150,10 @@
+ 		break;
+ 	}
+ }
++
++#endif
++
++#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+ 
+ static int
+ x86_cpu_info_ncpus_bridge(void)
+--- a/kernel/rust/x86_cpu_helpers.rs
++++ b/kernel/rust/x86_cpu_helpers.rs
+@@ -3075,3 +3075,27 @@
+         (*thread).fp_regs = null_mut();
+     }
+ }
++
++
++/// Preserve the existing three unsigned-long CPU diagnostics through Rust kprintf.
++/// Values are forwarded by value; case 15 is a pointer-format argument only and
++/// is never dereferenced. Unknown events perform no call; kprintf results remain
++/// ignored exactly as in the C callback.
++#[no_mangle]
++pub unsafe extern "C" fn x86_cpu_ulong_log_bridge(event: CInt, value: CULong) {
++    match event {
++        1 => unsafe {
++            kprintf(b"Trampoline area: 0x%lx \n\0".as_ptr().cast(), value);
++        },
++        2 => unsafe {
++            kprintf(b"# of cpus : %lu\n\0".as_ptr().cast(), value);
++        },
++        15 => unsafe {
++            kprintf(
++                b"arch_save_panic_regs: in user-space: %p\n\0".as_ptr().cast(),
++                value as *mut c_void,
++            );
++        },
++        _ => {},
++    }
++}

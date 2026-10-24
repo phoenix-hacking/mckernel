@@ -1,0 +1,92 @@
+"""Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+One frozen actual78 Rust production build and selected GCC9 memory consumer cohort.
+"""
+from pathlib import Path
+import hashlib,json,os,signal,resource,sys,time,re,importlib.util,struct
+P=Path(__file__).resolve().parent;R=P/'EXACT-PRODUCTION-RUST-RECIPE.NOT-EXECUTED.json';C=P/'EXACT-SELECTED-GCC9-ARCHMEMORY-CONSUMER.NOT-EXECUTED.json'
+def sha(f):return hashlib.sha256(f.read_bytes()).hexdigest()
+assert sha(R)=='b2693b8240210c01d32d1bab715c28b54a56875df51b473b0480c6ef4e7f0a09';assert sha(C)=='8f9cad11e10ecbb22a7650b0cf68e945ad5473f798784a77076a67183b1aee95';r=json.loads(R.read_bytes());c=json.loads(C.read_bytes())
+H=Path('/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py');assert sha(H)=='990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8';spec=importlib.util.spec_from_file_location('capture',H);cap=importlib.util.module_from_spec(spec);spec.loader.exec_module(cap)
+for sig in (signal.SIGTERM,signal.SIGINT,signal.SIGALRM):signal.signal(sig,cap.stop)
+assert os.getuid()==os.geteuid()==1000 and os.sched_getaffinity(0)=={6};assert Path(sys.executable).resolve()==Path('/home/holden/anaconda3/bin/python3').resolve() and sys.version_info[:2]==(3,9)
+os.umask(0o077);os.environ['RUST_MIN_STACK']='2097152'
+for k,v in [(resource.RLIMIT_AS,2<<30),(resource.RLIMIT_CPU,60),(resource.RLIMIT_FSIZE,32<<20),(resource.RLIMIT_NOFILE,256),(resource.RLIMIT_CORE,0)]:resource.setrlimit(k,(v,v))
+A=P/'actual-attempt-1';A.mkdir(mode=0o700);O=P/'output-1';O.mkdir(mode=0o700)
+def sources():
+ assert len(r['source_inputs'])==78
+ for key,row in r['source_inputs'].items():
+  for role in ['canonical_before','private']:assert sha(Path(row[role]['path']))==row[role]['sha256'],(key,role)
+ for row in [c['private_memory_source'],c['canonical_memory_preimage'],c['ABI_witness'],c['current_canonical_mem_source'],c['arch_memory_header'],*c['reused67_header_pins'].values()]:assert sha(Path(row['path']))==row['sha256'],row
+sources();assert sha(Path(r['argv'][6]))==r['compiler_sha256']=='70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09'
+memobj=c['current_actual_mem_provider']
+def stable(row):
+ s=Path(row['path']).stat()
+ for k,v in [('device',s.st_dev),('inode',s.st_ino),('size',s.st_size),('mtime_ns',s.st_mtime_ns),('ctime_ns',s.st_ctime_ns),('uid',s.st_uid),('gid',s.st_gid),('nlink',s.st_nlink)]:assert row[k]==v,(k,row['path'])
+stable(memobj)
+host=os.statvfs(P);scratch=os.statvfs('/home/holden/mckernel-work/scratch');back=Path('/home/holden/mckernel-work/scratch.ext4').stat();gap=max(0,back.st_size-back.st_blocks*512);mem=int(next(l.split()[1] for l in Path('/proc/meminfo').read_text().splitlines() if l.startswith('MemAvailable:')))*1024
+facts=dict(MemAvailable=mem,memory_required=19<<30,HOST_available=host.f_bavail*host.f_frsize,HOST_required=(16<<30)+gap+(128<<20)+679477248,scratch_available=scratch.f_bavail*scratch.f_frsize,scratch_required=(12<<30)+679477248,full_sparse_gap=gap,backing_size=back.st_size,reserves=679477248);cap.write(A/'HEADROOM.json',facts);assert mem>=facts['memory_required'] and facts['HOST_available']>=facts['HOST_required'] and facts['scratch_available']>=facts['scratch_required'],facts
+cap.write(A/'PRELAUNCH-SOURCE-PROFILE.json',dict(scope=__doc__,Rust_recipe_sha256=sha(R),C_recipe_sha256=sha(C),driver_sha256=sha(Path(__file__)),profile=r['profile'],interpreter=sys.executable,version=sys.version,helper_sha256=sha(H),capture_API='full module all required globals, dict argv/cwd/purpose, registeredTERMINTALRM',current78_sourceguards=True,reused_actual_mem_object_stat=memobj))
+commands=[dict(label='production-Rust-compile',argv=r['argv'],cwd=str(O)),dict(label='production-Rust-NM',argv=['/usr/bin/nm','-a',str(O/'mckernel_rust.o')],cwd=str(O)),dict(label='production-Rust-ELF',argv=['/usr/bin/readelf','-Ws',str(O/'mckernel_rust.o')],cwd=str(O))]+c['commands']
+def rows(t,n):return [l.split() for l in t.splitlines() if l.split()[-1:]==[n]]
+def unique(t,n,kind):
+ found=rows(t,n);assert len(found)==1 and found[0][-2]==kind,(n,kind,found)
+results=[];artifacts={};texts={};begin=time.monotonic();initial=cap.cpu_used();signal.setitimer(signal.ITIMER_REAL,96)
+try:
+ for i,cmd in enumerate(commands):
+  cmd=dict(cmd,purpose=__doc__+' '+cmd['label']);d=A/('%02d-'%i+cmd['label']);d.mkdir(mode=0o700);cap.write(d/'command.json',cmd);os.chdir(cmd['cwd']);remaining=90-(time.monotonic()-begin);assert remaining>0
+  j=cap.owned_capture(cmd,d,remaining,lambda:None);cap.write(d/'whole-join.json',j);results.append(dict(label=cmd['label'],join=j));assert j['returncode']==0 and j['direct_child_joined'] and j['group_absent'] and j['closed_streams'] and j['error'] is None and j['retirement_error'] is None and not j['timed_out'],j
+  label=cmd['label'];text=(d/'stdout').read_text();texts[label]=text
+  for trigger,file in [('production-Rust-compile','mckernel_rust.o'),('selected-complete-memory-TU','memory.c.o'),('actual-selected-partial-link','selected-consumer-provider.o')]:
+   if label==trigger:artifacts[file]=cap.hashed(O/file,32<<20);cap.write(d/'DURABLE-OBJECT-BEFORE-OBSERVERS.json',artifacts[file])
+  if label=='production-Rust-NM':
+   u={line.split()[-1] for line in text.splitlines() if line.split()[-2:-1]==['U']};assert u==set(r['expected_U']) and len(u)==584,(sorted(u-set(r['expected_U'])),sorted(set(r['expected_U'])-u))
+   for name in r['expected_all_prior_T']+r['expected_T_added']:unique(text,name,'T')
+  if label=='production-Rust-ELF':
+   found=rows(text,'clear_range_l3');assert len(found)==1 and found[0][3:5]==['FUNC','GLOBAL'],found
+  if label=='selected-memory-preprocess':
+   for name in ['clear_range_l3','clear_range_l4','x86_clear_range_l4_body','x86_clear_range_walk_l4_bridge','x86_clear_range_top_log_bridge']:assert re.search(r'\b'+name+r'\s*\([^;{}]*\)\s*\{',text,re.S) is None,name
+   for name in c['expected_new_immutable_callback_data']:assert name in text
+  if label=='memory-symbols':
+   unique(text,'clear_range_l3','U');unique(text,'x86_clear_range_public_body','U')
+   for name in c['expected_C_no_definition']:assert not any(v[-2] in ('T','t') for v in rows(text,name)),name
+  if label=='memory-relocations':assert 'clear_range_l3' in text and 'x86_clear_range_public_body' in text
+  if label=='actual-mem-provider-symbols':
+   for name in ['remote_flush_tlb_array_cpumask','remote_flush_tlb_cpumask']:assert not any(v[-2] in ('T','t') for v in rows(text,name)),name
+  if label=='partial-symbols':
+   for name in c['expected_partial_unique_Rust_T']:unique(text,name,'T')
+ # Exact expert section-aware ELF observer. Each named pointer gets its own
+ # symbol section identity before looking at relocation offsets in that section.
+ raw=(O/'memory.c.o').read_bytes();eh=struct.unpack_from('<16sHHIQQQIHHHHHH',raw);assert eh[0][:6]==b'\x7fELF\x02\x01' and eh[1]==1 and eh[2]==62 and eh[11]==64
+ shoff,shnum,shstr=eh[6],eh[12],eh[13];sections=[dict(zip(['name_off','type','flags','addr','offset','size','link','info','align','entsize'],struct.unpack_from('<IIQQQQIIQQ',raw,shoff+i*64))) for i in range(shnum)]
+ def payload(sec):return raw[sec['offset']:sec['offset']+sec['size']]
+ def string(tab,off):return tab[off:tab.index(b'\0',off)].decode()
+ names=payload(sections[shstr])
+ for i,s in enumerate(sections):s.update(index=i,name=string(names,s['name_off']))
+ symsecs=[s for s in sections if s['type']==2];assert len(symsecs)==1;ss=symsecs[0];assert ss['entsize']==24;strings=payload(sections[ss['link']]);symbols=[]
+ for i in range(ss['size']//24):
+  no,info,other,idx,val,size=struct.unpack_from('<IBBHQQ',raw,ss['offset']+i*24);symbols.append(dict(index=i,name=string(strings,no),bind=info>>4,type=info&15,shndx=idx,value=val,size=size))
+ def sym(name):
+  found=[s for s in symbols if s['name']==name];assert len(found)==1,(name,found);return found[0]
+ targets=dict(c['expected_new_immutable_callback_data'],x86_clear_range_l4_callback='x86_clear_range_l4_body',x86_clear_range_l3_callback='x86_clear_range_walk_l3_bridge');proof={}
+ for ptrname,targetname in targets.items():
+  ptr=sym(ptrname);assert ptr['bind']==1 and ptr['type']==1 and ptr['size']==8;section=sections[ptr['shndx']];assert section['align']>=8
+  relsecs=[s for s in sections if s['type']==4 and s['info']==ptr['shndx']];assert len(relsecs)==1;rs=relsecs[0];assert rs['link']==ss['index'] and rs['entsize']==24
+  found=[]
+  for n in range(rs['size']//24):
+   off,info,addend=struct.unpack_from('<QQq',raw,rs['offset']+n*24)
+   if off==ptr['value']:found.append(dict(offset=off,type=info&0xffffffff,target=symbols[info>>32],addend=addend))
+  assert len(found)==1 and found[0]['type']==1;rel=found[0];target=sym(targetname);reltarget=rel['target']
+  if target['shndx']==0:assert target['bind']==1 and reltarget['name']==targetname and reltarget['bind']==1 and reltarget['shndx']==0 and rel['addend']==0
+  else:
+   assert target['bind']==0 and reltarget['type']==3 and reltarget['shndx']==target['shndx'] and reltarget['value']+rel['addend']==target['value']
+   assert target['type']==(1 if targetname=='use_1gb_page' else 2)
+   if targetname=='use_1gb_page':assert target['size']==4
+  proof[ptrname]=dict(pointer=ptr,target=target,section=section,relocation_section=rs,relocation=rel)
+ cap.write(A/'ACTUAL-NINE-CALLBACK-DATA-RELOCATIONS.json',dict(scope=__doc__,status='PASS_EXACT_SYMBOL_SECTION_RELA_SH_INFO_TARGETS_ALL9',proof=proof,section_offset_identity_not_merged=True,qualification='Relocatable object only; no finalimage protection/native claims'))
+ sources();stable(memobj)
+ for row in artifacts.values():stable(row)
+ receipt=dict(scope=__doc__,status='PASS_ACTUAL_CURRENT78_L3_FULLCRATE_GCC9_MEMORY_ABI_NINE_TYPED_DATA_RELOCS_AND_PARTIAL_LINK',results=results,seconds=time.monotonic()-begin,CPU_seconds=cap.cpu_used()-initial,artifacts=artifacts,source_count=78,all_current78_sources_unchanged=True,Rust_U_exact_count=584,Rust_U_delta=r['expected_U_delta'],all3043priorT_preserved=True,new_T='clear_range_l3',partial_Rust_unique_T=38,reused_current_scalar_mem_object_not_rehashed=memobj,Rust_recipe_sha256=sha(R),C_recipe_sha256=sha(C),driver_sha256=sha(Path(__file__)),callbacks=proof,all_first_compile_and_writer_failures_preserved=True,canonical_frozen15_P12_changes=0,remaining_C_debt=c['retained_C_debt'],default_GCC14_image_native=False,CPU6_released=True)
+ cap.write(P/'ACTUAL-PRODUCTION-CONSUMER-RECEIPT.json',receipt);print(json.dumps(dict(status=receipt['status'],seconds=receipt['seconds'],CPU_seconds=receipt['CPU_seconds'],commands=len(results),object=artifacts['mckernel_rust.o'],CPU6_released=True)))
+except BaseException as e:
+ cap.write(A/'FAILURE.STOP.json',dict(scope=__doc__,error=repr(e),completed_commands=len(results),results=results,artifacts_durable_before_observers=artifacts,CPU6_released=True,no_retry=True));raise
+finally:signal.setitimer(signal.ITIMER_REAL,0)

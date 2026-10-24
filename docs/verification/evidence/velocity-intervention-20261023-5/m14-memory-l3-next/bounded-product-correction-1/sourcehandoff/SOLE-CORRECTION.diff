@@ -1,0 +1,19 @@
+--- failed/x86_memory_helpers.rs
++++ corrected/x86_memory_helpers.rs
+@@ -59,6 +59,7 @@
+ const PFL2_PRESENT: CULong = 0x01;
+ const PFL2_KERN_ATTR: CULong = 0x03;
+ const PFL2_SIZE: CULong = 0x80;
++const PFL3_SIZE: CULong = 0x80;
+ const PFL2_PDIR_ATTR: CULong = 0x07;
+ const PFL3_PDIR_ATTR: CULong = 0x07;
+ const PFL4_PDIR_ATTR: CULong = 0x07;
+--- failed/real-header-ABI.c
++++ corrected/real-header-ABI.c
+@@ -10,3 +10,6 @@
+ _Static_assert(__builtin_types_compatible_p(__typeof__(x86_clear_l3_effect_log),x86_clear_effect_log_fn_t const),"x86_clear_l3_effect_log ABI");
+ _Static_assert(__builtin_types_compatible_p(__typeof__(x86_clear_l3_use_1gb_page),const int *const),"live use1GB borrowed address ABI");
+ #endif
++
++_Static_assert(PFL3_SIZE == ((pte_t)0x80),"exact C PFL3_SIZE1GB bit matches Rust");
++_Static_assert(sizeof(pte_t)==sizeof(unsigned long) && sizeof(pte_t)==8,"PFL3_SIZE actual x86 ABI width");

@@ -1,0 +1,102 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXECUTABLE_READY_SOLE_BOUNDED_CORRECTION_NO_GRANT_OR_JOB",
+  "old_ready_preserved": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-process-diagnostic-next/production-consumer-preparation-1/PRODUCTION-CONSUMER-READY.json",
+    "sha256": "4208ef4073968c6dda4a5771b3e7513c1f28937625ec75633879fb3f81535201",
+    "bytes": 3160
+  },
+  "old_failure_preserved": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-process-diagnostic-next/production-consumer-preparation-1/PRODUCTION-FIRST-FAILURE-1.json",
+    "sha256": "2fb3a2294e4347bc7eced2aee91ef259778c079779bcbfa5e8f61eda3fb17698",
+    "bytes": 3145
+  },
+  "old_error_preserved": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-process-diagnostic-next/production-consumer-preparation-1/actual-production-capture-1/00-current78-production-Rust-compile/stderr",
+    "sha256": "e9a1a83c79078bfecf6bfd2e63cca2705fa1dbfbe16ad7afff3e830d093e0425",
+    "bytes": 1574
+  },
+  "Rust_recipe": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-process-diagnostic-next/production-consumer-preparation-1/bounded-correction-1/EXACT-CURRENT78-RUST-RECIPE.CORRECTED-NOT-GRANTED.json",
+    "sha256": "b6b45f347c25f05a4116af427b0efa585d6bd6a0201fda37826b88dfacfd0718",
+    "bytes": 123298
+  },
+  "C_recipe": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-process-diagnostic-next/production-consumer-preparation-1/bounded-correction-1/EXACT-SELECTED-GCC9-PROCESS-CONSUMER.CORRECTED-NOT-GRANTED.json",
+    "sha256": "b819d2d64eb861675f7bdbe7bbdb972f31715e9b713ba39dc13b58960b0e9811",
+    "bytes": 85643
+  },
+  "qualification": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-process-diagnostic-next/production-consumer-preparation-1/bounded-correction-1/SOLE-DECLARATION-CORRECTION-AND-LEAF-SCOPE.json",
+    "sha256": "bc98b02360a2582bd00d766fa902f2a691079ba117520fa9dafbdbac76dcda3f",
+    "bytes": 3701
+  },
+  "source_count": 78,
+  "source_identity": "986f665569ca8147a54217c7142ebef228ea2427ac7b73bbdb188f1977864c71",
+  "canonical_inputs_changed_from_failed_cohort": [],
+  "private_inputs_changed_from_failed_cohort": [
+    "kernel/rust/process_helpers.rs"
+  ],
+  "corrected_Rust": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-process-diagnostic-next/production-consumer-preparation-1/bounded-correction-1/candidate/process_helpers.rs",
+    "sha256": "d04b48c887c834edd6380e3ae06fccdef7dfafaf67196fd28af7f9571993bd6d",
+    "bytes": 353812
+  },
+  "unchanged_C": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-process-diagnostic-next/production-consumer-preparation-1/bounded-correction-1/candidate/process.c",
+    "sha256": "08c238a08066a6eda5f346bbd6e6f87333bd505d8d598276dc9c52cd43568a45",
+    "bytes": 162457
+  },
+  "unchanged_T_U_expectations": {
+    "T": {
+      "removed": [],
+      "added": [
+        "arch_ptrace",
+        "remote_flush_tlb_cpumask",
+        "syscall_signalfd_publish_bridge",
+        "vm_range_insert_log_bridge",
+        "x86_clear_range_l4_body"
+      ],
+      "before": 3039,
+      "after": 3044
+    },
+    "U": {
+      "removed": [
+        "syscall_signalfd_publish_bridge",
+        "vm_range_insert_log_bridge"
+      ],
+      "added": [
+        "process_vm_range_insert_debug",
+        "x86_clear_range_l3_callback"
+      ],
+      "before": 577,
+      "after": 577
+    }
+  },
+  "prepared_commands": 14,
+  "profile": {
+    "CPU": 6,
+    "jobs": 1,
+    "AS": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 90,
+    "retirement_seconds": 6,
+    "FSIZE": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "RUST_MIN_STACK": 2097152
+  },
+  "accepted_actual_1101_leaf_scope_preserved": true,
+  "failure_family": {
+    "family": "E0428_duplicate_kprintf",
+    "failed_candidates": 1,
+    "bounded_corrections_prepared": 1,
+    "bounded_corrections_executed": 0,
+    "further_unexpected_result": "expert escalation; no third attempt"
+  },
+  "compiler_jobs": 0,
+  "CPU_reservations": 0,
+  "canonical_or_frozen15_writes": 0,
+  "production_link_native_credit": false,
+  "requires": "Exact new root grant and fresh cohort/profile/headroom preflight before sole corrected attempt; no old O_EXCL producer/output/attempt reuse."
+}

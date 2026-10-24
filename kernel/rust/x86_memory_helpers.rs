@@ -59,6 +59,7 @@ const PFLX_PCD: CULong = 0x10;
 const PFL2_PRESENT: CULong = 0x01;
 const PFL2_KERN_ATTR: CULong = 0x03;
 const PFL2_SIZE: CULong = 0x80;
+const PFL3_SIZE: CULong = 0x80;
 const PFL2_PDIR_ATTR: CULong = 0x07;
 const PFL3_PDIR_ATTR: CULong = 0x07;
 const PFL4_PDIR_ATTR: CULong = 0x07;
@@ -176,6 +177,13 @@ unsafe extern "C" {
     fn remote_flush_tlb_array_cpumask(vm: *mut c_void, addr: *mut CULong, nr_addr: CInt, cpu_id: CInt);
     static x86_clear_range_l4_callback: X86WalkPteCallback;
     static x86_clear_range_l3_callback: X86ClearChildWalkFn;
+    static x86_clear_l3_child_walk: X86ClearChildWalkFn;
+    static x86_clear_l3_memobj_flush: X86ClearFlushMemobjFn;
+    static x86_clear_l3_rss_sub: X86ClearRssSubFn;
+    static x86_clear_l3_memobj_rss_sub: X86ClearMemobjRssSubFn;
+    static x86_clear_l3_range_log: X86ClearRangeLogFn;
+    static x86_clear_l3_effect_log: X86ClearEffectLogFn;
+    static x86_clear_l3_use_1gb_page: *const CInt;
     fn kprintf(format: *const i8, ...) -> CInt;
     fn _ihk_mc_free_pages(ptr: *mut c_void, npages: CInt, is_user: CInt, file: *mut i8, line: CInt);
     static x86_clear_free_pages_user_file: [i8; 1];
@@ -3268,6 +3276,35 @@ pub unsafe extern "C" fn x86_set_range_map_entry_result(
 
 // Error logging preserves the original unconditional ekprintf -> kprintf
 // call, format bytes and C varargs payload. Unknown events remain silent.
+/// Complete former C L3 callback. Args remain raw borrowed storage: callbacks
+/// may synchronously update nr_addr/PTEs, so no exclusive Rust reference survives.
+#[no_mangle]
+pub unsafe extern "C" fn clear_range_l3(
+    args0: *mut c_void,
+    ptep: *mut CULong,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+) -> CInt {
+    let args = args0.cast::<X86ClearRangeArgs>();
+    // Like the original C callback, args0 is caller-valid even for null ptep.
+    unsafe {
+        x86_clear_range_level_body_result(
+            args0, ptep, base, start, end,
+            PTL3_SHIFT, PTL3_SIZE, PFL3_SIZE, *x86_clear_l3_use_1gb_page,
+            (*args).vm, (*args).addr, core::ptr::addr_of_mut!((*args).nr_addr),
+            (*args).max_nr_addr, ihk_mc_get_processor_id(),
+            (*args).free_physical, (*args).memobj.cast(),
+            Some(x86_clear_old_action_bridge), Some(x86_clear_phys_to_virt_bridge),
+            Some(x86_clear_l3_child_walk), Some(remote_flush_tlb_array_cpumask),
+            Some(x86_pt_free_pages_bridge), Some(x86_clear_l3_memobj_flush),
+            Some(x86_clear_free_pages_user_bridge), Some(x86_clear_page_unmap_bridge),
+            Some(x86_clear_l3_rss_sub), Some(x86_clear_l3_memobj_rss_sub),
+            Some(x86_clear_l3_range_log), Some(x86_clear_l3_effect_log),
+        )
+    }
+}
+
 /// Complete former clear_range_l4 callback, using the same root/phys provider
 /// and synchronously borrowing the retained private C L3 walker callback.
 #[no_mangle]

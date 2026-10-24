@@ -1,0 +1,88 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_ACTUAL_CPU_ULONG_LOG_IMPLEMENTATION_AND_LEAF_RECIPE_READY_NOT_EXECUTED",
+  "recipe": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-cpu-log-next/EXECUTABLE-READY.NOT-EXECUTED.json",
+    "sha256": "a24b187be9ffffa580197a41a792b8ccff33e26e37bd0535044d7707c403ffe4",
+    "bytes": 33830
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-cpu-log-next/PRIVATE-CPU-ULONG-LOG.patch",
+    "sha256": "3c5631fc94d65d587c9d335eff1d97ff5b326c106cebf9388e8458a7a1dfd14e",
+    "bytes": 1504
+  },
+  "preimages": {
+    "arch/x86_64/kernel/cpu.c": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "sha256": "8c71fe79e003f7aa7ef0f7faf2b31ebf11e65e747abdb0969dc77dbafbd839e9",
+      "bytes": 95267
+    },
+    "kernel/rust/x86_cpu_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "a6e7465d7924755c97e5d72919a97c2985aacd35cf9db417c4ee981b4d5d071a",
+      "bytes": 90445
+    }
+  },
+  "postimages": {
+    "arch/x86_64/kernel/cpu.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-cpu-log-next/candidate/arch/x86_64/kernel/cpu.c",
+      "sha256": "2d29bca555936a213f0a7296a302ec57b55c575536c33a58285b07b203390eca",
+      "bytes": 95484
+    },
+    "kernel/rust/x86_cpu_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-5/m14-cpu-log-next/candidate/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "26180e00c1d6673aa600f0ec9afed5d100ca6e0c39af803c3328e58f8cc88fb9",
+      "bytes": 91270
+    }
+  },
+  "finite_live_C_finding": {
+    "C_line": 1133,
+    "existing_flag": "MCKERNEL_RUST_X86_CPU_HELPERS",
+    "existing_Rust_duplicate": false,
+    "current_callers": [
+      1586,
+      3722
+    ],
+    "Rust_provider": "existing debug.rs::kprintf at252; x86_cpu_helpers.rs existing declaration105 reused"
+  },
+  "source_hunks": [
+    "Only selected target region: close/reopen surrounding existing helper flag; selected branch external declaration; byte-exact original static Cbody in nonselected branch. No other Cfunction body modified.",
+    "Append one exported Rust callback to existing x86_cpu_helpers.rs; all existing types/declarations/body code unchanged."
+  ],
+  "ABI_semantics": [
+    "int event, unsigned long value, void return; actual Cheaders and existing real abi.rs types used.",
+    "Events1/2 pass exact CULong to existing Cvariadic-compatible Rustkprintf; event15 passes value as *mut c_void with identical pointer-format bits and no dereference.",
+    "Exact formats/trailing space/newline preserved; one print for known events; ignored CInt loggerreturn; unknown events no call; no panic paths.",
+    "Existing callback ownership/lifetime/lock/IRQ/evaluation at callers unchanged; no callbacks retained."
+  ],
+  "leaf_profile": {
+    "CPU": "ROOT_ASSIGN",
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 90,
+    "retirement_seconds": 6,
+    "FSIZE_bytes": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "CGU": 1,
+    "RUST_MIN_STACK": 2097152,
+    "owned_capture_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+  },
+  "command_count": 13,
+  "planned_pairs_not_acceptance": 6800,
+  "planned_supported_print_pairs": 2040,
+  "planned_unknown_noop_pairs": 4760,
+  "next_operation": "Rootgrant one exclusive ordinaryCPU slot with accepted2GiB/60CPU/90+6/FSIZE32MiB/FD256/core0/Rust1.92GCC9CGU1/stack2MiB/h990 dict+registeredhandlers afterfresh19GiB/7jobs/floors/fullgap. Compileactualleafonce and run frozen13commands; stopfirstunexpectedfailure forrootfailurefamilydisposition.",
+  "current_readiness_limits": [
+    "Source-only; no compiler/test/CPUreservation has occurred.",
+    "Variadic recording tape checks caller ABI/exactformats and argumentbits; real production Rustkprintf formatter not executed in leaf.",
+    "Later complete production78Rust/currentwholeCPU C TU/defaultlink/native remainOPEN; no wholefile or helper-only retirement credit.",
+    "No canonical/sharedABI/CMake/frozen15/P12/currentimage/Git/lease/control mutation."
+  ],
+  "canonical_writes": 0,
+  "compiler_jobs": 0,
+  "test_jobs": 0,
+  "CPU_slots_held": 0,
+  "failure_history": "NewboundedCPUulonglog slice: firstcandidate notexecuted; oneboundedcorrection thenexpert, allpriorfamilies preserved separately."
+}

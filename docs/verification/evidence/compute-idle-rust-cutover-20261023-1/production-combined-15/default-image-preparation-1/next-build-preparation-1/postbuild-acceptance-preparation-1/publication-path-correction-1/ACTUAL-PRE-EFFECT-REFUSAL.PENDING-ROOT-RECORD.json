@@ -1,0 +1,32 @@
+{
+  "actual_refusal": {
+    "process_reports": [],
+    "reason": "source-git-blob-binding",
+    "status": "REFUSED"
+  },
+  "actual_started": {
+    "bytes": 823,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/postbuild-acceptance-preparation-1/actual-normal-image-cleanup-capture-1/started.json",
+    "sha256": "72c893aabff3e7b68eaabf4c2820a296fadd893f327e9763d25ff26453ac074f"
+  },
+  "actual_stderr": {
+    "bytes": 0,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/postbuild-acceptance-preparation-1/actual-normal-image-cleanup-capture-1/stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "actual_stdout": {
+    "bytes": 82,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/next-build-preparation-1/postbuild-acceptance-preparation-1/actual-normal-image-cleanup-capture-1/stdout",
+    "sha256": "7cdd49639f9ac547e3c580d0964153c2666e9fa304c86b2098ba02256f590874"
+  },
+  "child_exit_code": null,
+  "child_exit_code_qualification": "Root reports child.wait and streams close completed, then capture writer raised TypeError: hashed missing maximum; no numeric exit code retained. Do not fabricate it.",
+  "child_pid": 3993202,
+  "child_starttime": 59756656,
+  "new_query_or_cleanup": false,
+  "root_declaration": null,
+  "root_reported_writer_failure": "TypeError: h.hashed missing required maximum argument AFTER child.wait/streamclose",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_order_proof": "Unchanged main calls configure before recover; source-git-blob-binding is raised inside configure before transaction construction or cleanup.",
+  "status": "PRE_EFFECT_REFUSAL_AND_CAPTURE_WRITER_FAILURE_RETAINED_ROOT_STATEMENT_PENDING"
+}

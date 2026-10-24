@@ -1,0 +1,12 @@
+error[E0425]: cannot find value `PFL3_SIZE` in this scope
+    --> ../candidate/kernel/rust/x86_memory_helpers.rs:3293:36
+     |
+  61 | const PFL2_SIZE: CULong = 0x80;
+     | ------------------------------- similarly named constant `PFL2_SIZE` defined here
+...
+3293 |             PTL3_SHIFT, PTL3_SIZE, PFL3_SIZE, *x86_clear_l3_use_1gb_page,
+     |                                    ^^^^^^^^^ help: a constant with a similar name exists: `PFL2_SIZE`
+
+error: aborting due to 1 previous error
+
+For more information about this error, try `rustc --explain E0425`.
