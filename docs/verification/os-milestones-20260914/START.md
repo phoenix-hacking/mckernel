@@ -1,3 +1,5 @@
+Current implementation priority: [M14/M15 completion and functional refinement](FOCUS-UNTIL-20261024-1700.md).
+
 Current delivery target and included-first/explicit-credit handoff limits: [October24 run window](RUN-WINDOW-20261024.md). Active resident billing controls remain authoritative.
 
 # Dispatcher entry point

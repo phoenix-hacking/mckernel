@@ -1,3 +1,30 @@
+## M14 retained image validation and productive ordinary queue — 2026-10-24 07:59 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains accepted35/35; no further M12 session. Follow [current M14/M15 focus](FOCUS-UNTIL-20261024-1700.md).
+M14 union2 actual six GCC14 C units and full Rust compiled; mckernel.img linked.
+Original artifact validation FAIL clear_range_l1 remains retained. Independent
+object/final-ELF evidence establishes C RO callbacks → Rust walkers → unique Rust
+level callbacks; a second stale local-C walker predicate is being corrected,
+without rebuilding the retained image. Full validation/native acceptance remain open.
+Stopped container57c8fa4d remains retained; no new heavy until normal archive/removal
+and fresh physical acceptance. Honest retirement30tests PASS; current readonly
+observer source review PASS, exact publication completed; root payload/release pending.
+Retained process metadata/allocated-consumer observer PASS b0860778 (1.614327s
+whole capture), reusing prior successful production objects; original failures kept.
+Clone rollback60/27 ABI expert-context successor actual capture PASS1.228524s,
+clean joined/gone/closed. No default/native/whole-file credit from these checks.
+All six M14 owners have new productive turns; F05 owns sole retained-validator fix.
+Library owner separately corrects eventfd leak/negative-close behavior; parity960
+receipt remains scoped and unchanged. Foreground alone owns dump correctness;
+executor foreground fixtures must not be duplicated. SDK frozen3 remains source
+HOLD for deadline remainder and stdout objtool-warning checks, no launch.
+07:52 snapshot: MemAvailable27540104KiB, HOST164766715904B/scratch14101098496B free;
+these observations are not admission or peak measurements. Queue-to-compiler and
+failure-to-fix durations lack complete timestamps; no invented speedup/percentage.
+Root scheduling change: execute cheap retained checks while fixing the image guard,
+reactivate disjoint source owners, reuse compiled artifacts rather than unchanged builds.
+
 ## M12 COMPLETE — all35 practical checks complete — 2026-10-24 06:52 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

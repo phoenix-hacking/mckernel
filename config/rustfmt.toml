@@ -1,0 +1,12 @@
+# Stable rustfmt options shipped with Rust 1.92.0 (rustfmt 1.8.0).
+# Explicit configuration: does not change inherited formatting of frozen inputs.
+# See docs/development/RUST-STYLE.md.
+max_width = 100
+hard_tabs = false
+tab_spaces = 4
+newline_style = "Unix"
+reorder_imports = true
+# Preserve module declaration order: cfg/macro visibility may depend on it.
+reorder_modules = false
+# Edition belongs to each build target; pass its existing --edition explicitly.
+# Import grouping, comment wrapping and hex case are reviewed manually.

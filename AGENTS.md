@@ -1,3 +1,5 @@
+Current user priority: [M14/M15 completion, functional refinement and twenty-minute steering through October24 at17:00PDT](docs/verification/os-milestones-20260914/FOCUS-UNTIL-20261024-1700.md). Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
 Current delivery target and included-first/explicit-credit handoff limits: [October24 run window](docs/verification/os-milestones-20260914/RUN-WINDOW-20261024.md). Active resident billing controls remain authoritative.
 
 # McKernel Rust Migration Agent Notes

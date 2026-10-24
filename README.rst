@@ -21,3 +21,13 @@ Documentation
 
 Documentation is available
 `here <https://ihkmckernel.readthedocs.io>`__.
+
+Development entry points
+========================
+
+The current functional delivery plan is in
+`docs/verification/os-milestones-20260914/README.md <docs/verification/os-milestones-20260914/README.md>`__.
+See the `repository map <docs/development/REPOSITORY-MAP.md>`__ for source and
+workflow locations, and `Rust style <docs/development/RUST-STYLE.md>`__ for
+conventions and the explicit-file formatter check. Current working constraints
+remain in `AGENTS.md <AGENTS.md>`__.

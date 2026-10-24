@@ -3,7 +3,7 @@
   "id": "M15",
   "scope_id": "project-owned-runtime-rust-cutover-v1-20261024",
   "title": "Complete Rust/assembly custom host modules and integration runtime",
-  "as_of": "2026-10-24T00:48:58.796129+00:00",
+  "as_of": "2026-10-24T07:56:08.272591+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user2026-10-24: custom code outside the Rocky/Linux baseline must be Rust, including loadable IHK/project modules; previous reviewed-assembly allowance retained.",
@@ -212,7 +212,7 @@
         "status": "open",
         "requirement": "Remove this project C object from actual selected Kbuild/staging only after equivalent Rust successors and matched module proof."
       },
-      "owner": "foreground:/root/ihk_rust_scope",
+      "owner": "foreground:/root/m15_mm_finish",
       "source_preparation": {
         "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/ihk-rust-module-closure/mm-rust-candidate/BLOCKED-PROPOSAL.md",
         "status": "source_and_fixture_preparation_only",
@@ -224,6 +224,11 @@
           "matching changed-path native acceptance"
         ],
         "compiler_or_native_execution": false
+      },
+      "latest_dispatcher_checkpoint": {
+        "at": "2026-10-24T06:53:11.612587+00:00",
+        "actual": "HOST controlled-body fixture passed1.230076s; warning/source fixes preserved.",
+        "limits": "SDK objtool/layout/module/native unresolved; all3 Cwrappers still selected."
       }
     },
     {
@@ -322,6 +327,12 @@
       "file_closure": {
         "status": "open",
         "requirement": "No project-owned C body or callback from this selected target remains in the delivered runtime; preserve third-party ABI and matching native behavior."
+      },
+      "owner": "foreground:/root/m15_executor_rust",
+      "latest_dispatcher_checkpoint": {
+        "at": "2026-10-24T06:53:11.612587+00:00",
+        "implemented": "Existing Rust executor reused plus349callbacks/entry/51DATA source; actual HOST Rust+reviewedASM PIE link accepted fd0691af.",
+        "limits": "No project Cbody link in HOST artifact; Rocky/default/native retirement OPEN; no effortpercentage."
       }
     },
     {
@@ -789,7 +800,8 @@
       "file_closure": {
         "status": "open",
         "requirement": "No project-owned C body or callback from this selected target remains in the delivered runtime; preserve third-party ABI and matching native behavior."
-      }
+      },
+      "owner": "foreground:/root/project_runtime_rust_scope"
     },
     {
       "id": "M15-F08",
@@ -885,7 +897,8 @@
       "file_closure": {
         "status": "open",
         "requirement": "No project-owned C body or callback from this selected target remains in the delivered runtime; preserve third-party ABI and matching native behavior."
-      }
+      },
+      "owner": "foreground:/root/project_runtime_rust_scope"
     }
   ],
   "runtime_programs": [
@@ -1258,6 +1271,19 @@
         "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1/bounded-lp64-threshold-correction-1/root-actual-bounded-LP64-1/FINAL-RESULT.ONCE.json",
         "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mm-capture-fix/ROOT-ACTUAL-HOST-BODY-ACCEPTANCE.json"
       ]
+    },
+    {
+      "at": "2026-10-24T06:53:11.612587+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "note": "Practical M12/35checks now complete independently; M15 still active. Existing driver Rust reused; actual HOST executor link/MM body/library/CLI proof remain scoped. Owner provenance corrected without counting completed foreworkers active.",
+      "engineering_percentage": null
+    }
+  ],
+  "engineering_updates": [
+    {
+      "at": "2026-10-24T07:56:08.272591+00:00",
+      "actual_progress": "Eventfd960 scoped parity PASS; separate resource correctness successor assigned. Tool/daemon/dump/SDK candidates remain gated, no new native closure.",
+      "engineering_percentage": null
     }
   ]
 }
