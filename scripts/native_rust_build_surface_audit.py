@@ -67,7 +67,7 @@ EXPECTED_KBUILD_LINES = (
     "obj-$(CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST) += ihk-smp-x86_64.o",
     "ihk-smp-x86_64-y := ihk_smp_x86_64.o",
     "obj-$(CONFIG_MCKERNEL_MCCTRL_RUST) += mcctrl.o",
-    "mcctrl-y := mcctrl_rust.o mcctrl_vm_write_compat.o",
+    "mcctrl-y := mcctrl_rust.o m15_mmap_trace_gates.o m15_mm_write_warning.o",
 )
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 
@@ -383,6 +383,10 @@ def discover_native_closure(repo):
             seen.add(target)
     if generated != GENERATED_INPUTS:
         raise AuditError("generated compatibility byte dependency differs")
+    # Exact Kbuild constituents; these are not Rust include_str! dependencies.
+    for relative in ("m15_mmap_trace_gates.S", "m15_mm_write_warning.S"):
+        _repository_file(repo, NATIVE_ROOT + "/" + relative, "selected Kbuild assembly " + relative)
+        seen.add(relative)
     return frozenset(seen)
 
 

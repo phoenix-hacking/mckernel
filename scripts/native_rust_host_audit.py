@@ -1280,7 +1280,7 @@ def _rust_brace_depth(masked, end, relative):
     return depth
 
 
-REVIEWED_CURRENT_ROUTE_DIGESTS = {'host-kernel/native-rust/smp_cpu.rs': '356853344bffaa5b3d625c97eb3928b8908d45abbc94d16902e19bdef45ea90c', 'host-kernel/native-rust/smp_memory.rs': '8785b1be4dffe2ef24bc54dc8f861c290418ce13773d46177692c709d69fb525', 'host-kernel/native-rust/os_runtime.rs': '9315b275280232fec0f97bbbc99813be850188d76484253331f929f575224ff6', 'host-kernel/native-rust/abi/application.rs': '184cd8efe68e4592b6c472e86665ab77ec2a03563f3c6df3a6d9a92fc8a7e210', 'host-kernel/native-rust/application_syscall.rs': '65670a19382aaae816f50b14c161e10a82b83fc6221b3b3a1ecd5c0086d3cff9', 'host-kernel/native-rust/mcctrl_process.rs': '018fd57974dbc5fc9f16cfcd021370b8c9cec058aeec139e926282d32e5b437e', 'host-kernel/native-rust/mcctrl_vm.rs': '234d0590751b69d30ec4345c2dc332692b69b89ad71eaca3128d00af27063dbf', 'host-kernel/native-rust/smp_application.rs': '733691a4fabfce7f2c5ba2158abe32f86b8b34bda5c8a35cd0e6c26f3023b2b1', 'host-kernel/native-rust/smp_application_image.rs': 'cf3eb651aac4a5510f8ddcf9cc5376479e3379528582a33e1fc55c084f1317b5', 'host-kernel/native-rust/smp_application_syscall.rs': '617cff45843640c8cad42bb206e77daa1006ddd67bbbff3fde89e006ed818319', 'host-kernel/native-rust/smp_file_pager.rs': '655c029bcddf937b6445ee01d076978ff9606832d60fd038e07076bee939e96c', 'host-kernel/native-rust/smp_procfs.rs': '4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea', 'host-kernel/native-rust/smp_service.rs': '64f403d2287dc04dab0f54e7bb822491f247130605566918caa6cf32be768182', 'host-kernel/native-rust/sysfs_memory.rs': 'c8f4669f7d243ee96eb391d2745f421d5cd407f37eb45a01bb4434574079f52f', 'host-kernel/native-rust/sysfs_remote.rs': 'fe4ec42333148770a36843a82f0c4cdf675a27065dbed1f13449a2b61472dfa9', 'host-kernel/native-rust/current_fork_task_mm.rs': 'e2e124e84030aa6be957af6ff9c2a03116ac1b20118e28c974d24e05048b6dfe', 'host-kernel/native-rust/ihk_smp_x86_64.rs': '03cd3ad22651d5548c4f5f9c2c6a16bf90e04832d29f07d1d8189084e47e0304'}
+REVIEWED_CURRENT_ROUTE_DIGESTS = {'host-kernel/native-rust/smp_cpu.rs': 'f65f3aea00dfdd0a7905d3dd396e67684fd428c71cf34dd6e15a56896c73f912', 'host-kernel/native-rust/smp_memory.rs': '60758aeafac150bd8aac62455844e3f4e4200a082f82f80ce66c3c871d4909be', 'host-kernel/native-rust/os_runtime.rs': '4acedfe7e50e51183f0e58d3ab9fd9225eccf4bd5bfdb4101a49e4a201fd55f5', 'host-kernel/native-rust/abi/application.rs': 'b51c8066f6f7002ddd26fe98c330c1dcebc10e31182955cfcf764879d60d4e88', 'host-kernel/native-rust/application_syscall.rs': 'daaa3b0fabb002b40cafdc4d7c74ed6cdfd606e18dc82d3bb32bc3055e1a96e0', 'host-kernel/native-rust/mcctrl_process.rs': '8bf30cd8ae79cc778bd91816f30aaf7a37ccc2aab59822ca2a03587426a212b8', 'host-kernel/native-rust/mcctrl_vm.rs': '4c19b54344980a20520cdf3660b31c50d62525e6fed0ab58f950e38d880a5864', 'host-kernel/native-rust/smp_application.rs': '6adb4d11e7285caadd699bf22359bf21922f7dbfa4828b12b7a96fb7a1b07be0', 'host-kernel/native-rust/smp_application_image.rs': 'cf3eb651aac4a5510f8ddcf9cc5376479e3379528582a33e1fc55c084f1317b5', 'host-kernel/native-rust/smp_application_syscall.rs': 'b99874d9c1a80720f154086d40f4427f83732824dad85d8d391cc3a8a4de4360', 'host-kernel/native-rust/smp_file_pager.rs': '655c029bcddf937b6445ee01d076978ff9606832d60fd038e07076bee939e96c', 'host-kernel/native-rust/smp_procfs.rs': '4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea', 'host-kernel/native-rust/smp_service.rs': '7d4948d7b0a5139048cf8085863ffcca43cbfff53024c34b5fd4281caed6f639', 'host-kernel/native-rust/sysfs_memory.rs': 'aa98b251e973cee018cec6d69586d99a56c9ea1d208f69c4a645696254af2004', 'host-kernel/native-rust/sysfs_remote.rs': 'b9bb72eb6c4986067e2557e15ac625d90cfddcb53f38c8b99cc3648e85f0d117', 'host-kernel/native-rust/current_fork_task_mm.rs': 'e2e124e84030aa6be957af6ff9c2a03116ac1b20118e28c974d24e05048b6dfe', 'host-kernel/native-rust/ihk_smp_x86_64.rs': 'aa5752bfcf737c013a3721dcb3c454232acf72dcd477cdb210c1cfeb6efc1ac0'}
 
 
 def reject_unreviewed_rust_escapes(relative, text, locked_digest=None):
@@ -1377,7 +1377,7 @@ def main():
         manifest = json.load(f)
     contract = manifest["build_contract"]
     if contract != EXPECTED_BUILD_CONTRACT:
-        die("build contract differs from exact one Linux MM compatibility object")
+        die("build contract differs from exact Rust/reviewed-assembly object graph")
     if contract.get("manual_rustc_invocation_forbidden") is not True:
         die("manual rustc invocation must be forbidden")
     if contract.get("prebuilt_project_objects_forbidden") is not True:
@@ -1458,8 +1458,8 @@ def main():
                 relative, read_text(path),
                 expected[destination]["sha256"] if destination in LOCKED_ESCAPE_SUPPORT else None,
             )
-        # The two .S files are include_str! data consumed by smp_boot_code.rs.
-        # They are copied and hashed, never admitted as project link objects.
+        # Startup .S files are Rust include data; the two M15 .S files are exact
+        # Kbuild constituents checked by the selected composite graph.
         if destination in destinations:
             die("duplicate staged destination: {0}".format(destination))
         destinations.add(destination)
@@ -1479,7 +1479,7 @@ def main():
     except Exception as error:
         die("forbidden Kbuild construct: {0}".format(error))
 
-    print("native-rust-host-audit: PASS modules=3 project_c_link_objects=1 linux_mm_compat_functions=3")
+    print("native-rust-host-audit: PASS modules=3 project_c_link_objects=0 linux_mm_compat_functions=0")
     return 0
 
 

@@ -1,3 +1,21 @@
+## Recovery engineering cursor — 2026-10-24
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains COMPLETE35/35; M14/M15 OPEN, percentages unmeasured.
+COPY3 tool47025 exited1 after43 rc0 commands (40reused+3new); exact453-byte
+kernel/syscall ABI warning stopped the observer. Owner115206/start64286133,
+CIDd9e3b641 remains stopped/retained. Normal retirement is pending; earlier
+SDK physical acceptance predates COPY3 and is not current clearance. Reuse43,
+prepare strict7-command remaining suffix; no image rebuild or unchanged replay.
+MM eleven-file canonical candidate plus reviewed four-input manifest correction
+is applied. All3 existing HOST staging/buildsurface/audit commands PASS:
+4.356281964wall/4.331382CPU, all children joined. Private SDK complete artifact
+and actual codegen/table readbacks PASS; matching native/default retirement open.
+Library behavior remains observer-blocked before fixtures; preserve successful
+objects and qualify genuine proof-map/descriptor adapter correction only.
+See docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-recovery-1/REVIEW.json.
+Root owns canonical integration/releases; preserve original failures and controls.
+
 ## Engineering cursor — 2026-10-24 11:53 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

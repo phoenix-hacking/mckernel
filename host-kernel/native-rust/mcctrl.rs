@@ -17,6 +17,7 @@ use mcctrl_process::Context as FileContext;
 mod mcctrl_exec;
 mod mcctrl_process;
 mod mcctrl_vm;
+mod mcctrl_mm_write;
 mod user_string;
 // Shared byte ABI: SMP and mcctrl intentionally consume different operations.
 #[allow(dead_code)]

@@ -37,18 +37,7 @@ EVIDENCE_FRAGMENT_LINES = (
     "# CONFIG fragment for compiler evidence only; it is not a production-ready",
     "# Rocky policy assertion and cannot award tracker credit.",
 ) + EVIDENCE_FRAGMENT_ASSIGNMENTS
-KBUILD_LINES = (
-    "# SPDX-License-Identifier: GPL-2.0",
-    "",
-    "# Staged as drivers/misc/mckernel/Kbuild in the selected Rocky kernel tree.",
-    "# Linux Kbuild owns every Rust compiler and module linker invocation.",
-    "",
-    "obj-$(CONFIG_MCKERNEL_IHK_RUST) += ihk.o",
-    "obj-$(CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST) += ihk-smp-x86_64.o",
-    "ihk-smp-x86_64-y := ihk_smp_x86_64.o",
-    "obj-$(CONFIG_MCKERNEL_MCCTRL_RUST) += mcctrl.o",
-    "mcctrl-y := mcctrl_rust.o mcctrl_vm_write_compat.o",
-)
+KBUILD_LINES = ('# SPDX-License-Identifier: GPL-2.0', '', '# Staged as drivers/misc/mckernel/Kbuild in the selected Rocky kernel tree.', '# Linux Kbuild owns every Rust compiler and module linker invocation.', '', 'obj-$(CONFIG_MCKERNEL_IHK_RUST) += ihk.o', 'obj-$(CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST) += ihk-smp-x86_64.o', 'ihk-smp-x86_64-y := ihk_smp_x86_64.o', 'obj-$(CONFIG_MCKERNEL_MCCTRL_RUST) += mcctrl.o', 'mcctrl-y := mcctrl_rust.o m15_mmap_trace_gates.o m15_mm_write_warning.o', '# Recognize the explicit capability cfg even in the default-OFF build.', "RUSTFLAGS_mcctrl_rust.o += --check-cfg 'cfg(mckernel_current_fork_adoption_opt_in)' --check-cfg 'cfg(MODULE)' --check-cfg 'cfg(m15_fixture)'", 'RUSTFLAGS_mcctrl_rust.o += --check-cfg \'cfg(CONFIG_X86_64, CONFIG_SMP, CONFIG_PER_VMA_LOCK, CONFIG_TRACING, CONFIG_MEMCG, CONFIG_HAVE_JUMP_LABEL_HACK, CONFIG_KCSAN, CONFIG_DEBUG_LOCK_ALLOC, CONFIG_DEBUG_VM, CONFIG_LOCKDEP, CONFIG_NOINSTR_VALIDATION, CONFIG_PREEMPT_RT, CONFIG_TRACEPOINTS, CONFIG_JUMP_LABEL, CONFIG_OBJTOOL, CONFIG_GENERIC_BUG, CONFIG_GENERIC_BUG_RELATIVE_POINTERS, CONFIG_DEBUG_BUGVERBOSE, CONFIG_BUG, values(none(), "y", "m", "n"))\'', 'ifneq ($(MCKERNEL_CURRENT_FORK_ADOPTION_OPT_IN),)', 'ifneq ($(MCKERNEL_CURRENT_FORK_ADOPTION_OPT_IN),0)', 'ifneq ($(MCKERNEL_CURRENT_FORK_ADOPTION_OPT_IN),1)', '$(error MCKERNEL_CURRENT_FORK_ADOPTION_OPT_IN must be empty, 0 or 1)', 'endif', 'endif', 'endif', 'ifeq ($(MCKERNEL_CURRENT_FORK_ADOPTION_OPT_IN),1)', 'RUSTFLAGS_mcctrl_rust.o += --cfg mckernel_current_fork_adoption_opt_in', 'endif')
 
 
 class KconfigPolicyError(Exception):

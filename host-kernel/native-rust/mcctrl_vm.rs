@@ -195,15 +195,11 @@ unsafe extern "C" fn vma_close(vma:*mut bindings::vm_area_struct) {
     unsafe {(*vma).vm_private_data=ptr::null_mut()};
     if !raw.is_null(){unsafe {drop(Arc::from_raw(raw))};}
 }
-// EXISTING permitted Linux control-plane wrapper providers, never compute-C.
-extern "C" {
-    fn mckernel_inherited_mmap_write_lock(mm:*mut c_void);
-    fn mckernel_inherited_mmap_write_unlock(mm:*mut c_void);
-    fn mckernel_inherited_vma_start_write(vma:*mut c_void);
-}
+// Exact pinned Linux MM semantics supplied by project Rust/reviewed ASM.
+use crate::mcctrl_mm_write::{mmap_write_lock, mmap_write_unlock, vma_start_write};
 struct InheritedWrite<'a>(&'a CurrentMm);
 impl Drop for InheritedWrite<'_> {
-    fn drop(&mut self){unsafe {mckernel_inherited_mmap_write_unlock(self.0.0.as_ptr().cast())};}
+    fn drop(&mut self){unsafe {mmap_write_unlock(self.0.0.as_ptr().cast())};}
 }
 struct VmaReplacement {vma:NonNull<bindings::vm_area_struct>,owner:Option<Arc<VmaOwner>>}
 
@@ -241,7 +237,7 @@ impl Mirror {
         let child=Arc::new(Self{mm:MmIdentity::from_current(&mm)?,start,end,
             admission:AtomicBool::new(true),foreign_alias_seen:AtomicBool::new(false)},GFP_KERNEL)?;
         let replacement=VmaOwner::new(child_registration,child.clone())?;
-        unsafe {mckernel_inherited_mmap_write_lock(mm.0.as_ptr().cast())};
+        unsafe {mmap_write_lock(mm.0.as_ptr().cast())};
         let write=InheritedWrite(&mm);
         let result=(||->Result {
             let mut address=start;let mut count=0usize;let mut file=ptr::null_mut();let mut flags=None;
@@ -269,7 +265,7 @@ impl Mirror {
                 plan.push(VmaReplacement{vma,owner:Some(replacement.clone())},GFP_KERNEL)?;
                 address=unsafe {(*vma.as_ptr()).__bindgen_anon_1.__bindgen_anon_1.vm_end};
             }
-            for item in plan.iter(){unsafe {mckernel_inherited_vma_start_write(item.vma.as_ptr().cast())};}
+            for item in plan.iter(){unsafe {vma_start_write(item.vma.as_ptr().cast())};}
             for item in plan.iter(){let vma=item.vma.as_ptr();let(first,last)=unsafe {
                 ((*vma).__bindgen_anon_1.__bindgen_anon_1.vm_start,(*vma).__bindgen_anon_1.__bindgen_anon_1.vm_end)};
                 unsafe {bindings::zap_vma_ptes(vma,first,last-first)};
@@ -408,15 +404,15 @@ impl Mirror {
             // Zero users alone is insufficient: Linux must have removed every
             // VMA under this exact MM's write lock. Never acquire CurrentMm,
             // call mmput, dereference a VMA, or zap on this zero-users path.
-            unsafe {mckernel_inherited_mmap_write_lock(self.mm.0.as_ptr().cast())};
+            unsafe {mmap_write_lock(self.mm.0.as_ptr().cast())};
             let empty=users.load(Ordering::Acquire)==0
                 &&!self.foreign_alias_seen.load(Ordering::Acquire)
                 &&unsafe {bindings::find_vma(self.mm.0.as_ptr(),0).is_null()};
-            unsafe {mckernel_inherited_mmap_write_unlock(self.mm.0.as_ptr().cast())};
+            unsafe {mmap_write_unlock(self.mm.0.as_ptr().cast())};
             return if empty{Ok(())}else{Err(EBUSY)};
         }
         let mm=CurrentMm(self.mm.0);
-        unsafe {mckernel_inherited_mmap_write_lock(mm.0.as_ptr().cast())};
+        unsafe {mmap_write_lock(mm.0.as_ptr().cast())};
         let guard=InheritedWrite(&mm);
         let result=(||->Result {
             if self.foreign_alias_seen.load(Ordering::Acquire){return Err(EBUSY);}
@@ -436,7 +432,7 @@ impl Mirror {
                         if ptr::eq(&*owner.mirror,&**self) {
                             if first%4096!=0||unsafe {(*vma).vm_file.is_null()}
                                 ||unsafe {(*vma).__bindgen_anon_2.__vm_flags}&bindings::VM_PFNMAP as u64==0{return Err(EBUSY);}
-                            if pass==1{unsafe {mckernel_inherited_vma_start_write(vma.cast())};}
+                            if pass==1{unsafe {vma_start_write(vma.cast())};}
                             if pass==2{unsafe {bindings::zap_vma_ptes(vma,first,last-first)};}
                         }
                     }

@@ -1,7 +1,8 @@
 {
   "build_contract": {
     "allowed_project_source_suffixes": [
-      ".rs"
+      ".rs",
+      ".S"
     ],
     "build_system": "Linux in-tree Kbuild with Rust-for-Linux",
     "compiler_invocation_owner": "Linux Kbuild",
@@ -13,17 +14,11 @@
       ".o",
       ".so"
     ],
-    "linux_control_compat_functions": [
-      "mckernel_inherited_mmap_write_lock",
-      "mckernel_inherited_mmap_write_unlock",
-      "mckernel_inherited_vma_start_write"
-    ],
-    "linux_control_compat_objects": [
-      "mcctrl_vm_write_compat.o"
-    ],
+    "linux_control_compat_functions": [],
+    "linux_control_compat_objects": [],
     "manual_rustc_invocation_forbidden": true,
     "prebuilt_project_objects_forbidden": true,
-    "project_c_link_objects": 1
+    "project_c_link_objects": 0
   },
   "destination": {
     "kernel_relative_root": "drivers/misc/mckernel",
@@ -35,7 +30,7 @@
       "destination": "Kbuild",
       "kind": "kbuild_template",
       "repository_path": "host-kernel/kbuild/Kbuild.in",
-      "sha256": "21594ad6b3830ddd688420abebd94893e07078a9db03c0ccb03c50b7a1ae2d1b"
+      "sha256": "192c744b53fe2158f8f81ab6165107753b2fb66a9642db02c3a85c3c3843a4e3"
     },
     {
       "destination": "Kconfig",
@@ -101,19 +96,19 @@
       "destination": "smp_cpu.rs",
       "kind": "rust_support_module",
       "repository_path": "host-kernel/native-rust/smp_cpu.rs",
-      "sha256": "356853344bffaa5b3d625c97eb3928b8908d45abbc94d16902e19bdef45ea90c"
+      "sha256": "f65f3aea00dfdd0a7905d3dd396e67684fd428c71cf34dd6e15a56896c73f912"
     },
     {
       "destination": "smp_memory.rs",
       "kind": "rust_support_module",
       "repository_path": "host-kernel/native-rust/smp_memory.rs",
-      "sha256": "8785b1be4dffe2ef24bc54dc8f861c290418ce13773d46177692c709d69fb525"
+      "sha256": "60758aeafac150bd8aac62455844e3f4e4200a082f82f80ce66c3c871d4909be"
     },
     {
       "destination": "os_runtime.rs",
       "kind": "rust_support_module",
       "repository_path": "host-kernel/native-rust/os_runtime.rs",
-      "sha256": "9315b275280232fec0f97bbbc99813be850188d76484253331f929f575224ff6"
+      "sha256": "4acedfe7e50e51183f0e58d3ab9fd9225eccf4bd5bfdb4101a49e4a201fd55f5"
     },
     {
       "destination": "os_service.rs",
@@ -131,7 +126,7 @@
       "destination": "abi/application.rs",
       "kind": "rust_support_module",
       "repository_path": "host-kernel/native-rust/abi/application.rs",
-      "sha256": "184cd8efe68e4592b6c472e86665ab77ec2a03563f3c6df3a6d9a92fc8a7e210"
+      "sha256": "b51c8066f6f7002ddd26fe98c330c1dcebc10e31182955cfcf764879d60d4e88"
     },
     {
       "destination": "ihk_mapping.rs",
@@ -167,7 +162,7 @@
       "destination": "abi/sysfs_request.rs",
       "kind": "rust_support_module",
       "repository_path": "host-kernel/native-rust/abi/sysfs_request.rs",
-      "sha256": "df5fad1ef6ec305b71c56ea6a89c9ecbce7b089b95730ad591e09909e3ffd8c7"
+      "sha256": "1b89d1261d218c39d531cfe00181a30562d9953deae5ac0956641f407239df0f"
     },
     {
       "destination": "abi/vdso.rs",
@@ -197,7 +192,7 @@
       "destination": "application_syscall.rs",
       "kind": "rust_support_module",
       "repository_path": "host-kernel/native-rust/application_syscall.rs",
-      "sha256": "65670a19382aaae816f50b14c161e10a82b83fc6221b3b3a1ecd5c0086d3cff9"
+      "sha256": "daaa3b0fabb002b40cafdc4d7c74ed6cdfd606e18dc82d3bb32bc3055e1a96e0"
     },
     {
       "destination": "mcctrl_exec.rs",
@@ -209,13 +204,13 @@
       "destination": "mcctrl_process.rs",
       "kind": "rust_support_module",
       "repository_path": "host-kernel/native-rust/mcctrl_process.rs",
-      "sha256": "018fd57974dbc5fc9f16cfcd021370b8c9cec058aeec139e926282d32e5b437e"
+      "sha256": "8bf30cd8ae79cc778bd91816f30aaf7a37ccc2aab59822ca2a03587426a212b8"
     },
     {
       "destination": "mcctrl_vm.rs",
       "kind": "rust_support_module",
       "repository_path": "host-kernel/native-rust/mcctrl_vm.rs",
-      "sha256": "234d0590751b69d30ec4345c2dc332692b69b89ad71eaca3128d00af27063dbf"
+      "sha256": "4c19b54344980a20520cdf3660b31c50d62525e6fed0ab58f950e38d880a5864"
     },
     {
       "destination": "procfs_objects.rs",
@@ -227,7 +222,7 @@
       "destination": "smp_application.rs",
       "kind": "rust_support_module",
       "repository_path": "host-kernel/native-rust/smp_application.rs",
-      "sha256": "733691a4fabfce7f2c5ba2158abe32f86b8b34bda5c8a35cd0e6c26f3023b2b1"
+      "sha256": "6adb4d11e7285caadd699bf22359bf21922f7dbfa4828b12b7a96fb7a1b07be0"
     },
     {
       "destination": "smp_application_image.rs",
@@ -239,7 +234,7 @@
       "destination": "smp_application_syscall.rs",
       "kind": "rust_support_module",
       "repository_path": "host-kernel/native-rust/smp_application_syscall.rs",
-      "sha256": "617cff45843640c8cad42bb206e77daa1006ddd67bbbff3fde89e006ed818319"
+      "sha256": "b99874d9c1a80720f154086d40f4427f83732824dad85d8d391cc3a8a4de4360"
     },
     {
       "destination": "smp_boot_code.rs",
@@ -269,7 +264,7 @@
       "destination": "smp_service.rs",
       "kind": "rust_support_module",
       "repository_path": "host-kernel/native-rust/smp_service.rs",
-      "sha256": "64f403d2287dc04dab0f54e7bb822491f247130605566918caa6cf32be768182"
+      "sha256": "7d4948d7b0a5139048cf8085863ffcca43cbfff53024c34b5fd4281caed6f639"
     },
     {
       "destination": "smp_topology.rs",
@@ -293,7 +288,7 @@
       "destination": "sysfs_memory.rs",
       "kind": "rust_support_module",
       "repository_path": "host-kernel/native-rust/sysfs_memory.rs",
-      "sha256": "c8f4669f7d243ee96eb391d2745f421d5cd407f37eb45a01bb4434574079f52f"
+      "sha256": "aa98b251e973cee018cec6d69586d99a56c9ea1d208f69c4a645696254af2004"
     },
     {
       "destination": "sysfs_objects.rs",
@@ -311,13 +306,13 @@
       "destination": "sysfs_remote.rs",
       "kind": "rust_support_module",
       "repository_path": "host-kernel/native-rust/sysfs_remote.rs",
-      "sha256": "fe4ec42333148770a36843a82f0c4cdf675a27065dbed1f13449a2b61472dfa9"
+      "sha256": "b9bb72eb6c4986067e2557e15ac625d90cfddcb53f38c8b99cc3648e85f0d117"
     },
     {
       "destination": "sysfs_rpc.rs",
       "kind": "rust_support_module",
       "repository_path": "host-kernel/native-rust/sysfs_rpc.rs",
-      "sha256": "d1bb17868dd426b3c6635171f2f8cc53e498b54779973c1abc58968d1d96cc4e"
+      "sha256": "39c5ff87b671c498afffcff9feb10833918d75207559462952803858fb218131"
     },
     {
       "destination": "sysfs_setup.rs",
@@ -341,7 +336,7 @@
       "destination": "sysfs_zeroing.rs",
       "kind": "rust_support_module",
       "repository_path": "host-kernel/native-rust/sysfs_zeroing.rs",
-      "sha256": "950919a29ab2fb53b0c488cc6e6d01b433f8caa95b27d1a1f32fb0ff3dc8390e"
+      "sha256": "6d35d46758ccf5092db91780bbc35f8e0cacc0e8a3201379d5af95e6bf97f94e"
     },
     {
       "destination": "user_string.rs",
@@ -374,16 +369,46 @@
       "sha256": "e2e124e84030aa6be957af6ff9c2a03116ac1b20118e28c974d24e05048b6dfe"
     },
     {
-      "destination": "mcctrl_vm_write_compat.c",
-      "kind": "linux_mm_compat_source",
-      "repository_path": "host-kernel/native-rust/mcctrl_vm_write_compat.c",
-      "sha256": "dcbe065ede329b51b41abcaf0563015532920fe6a34391c7bf77ed1c2f0abdf0"
+      "destination": "mcctrl_mm_write.rs",
+      "kind": "rust_support_module",
+      "repository_path": "host-kernel/native-rust/mcctrl_mm_write.rs",
+      "sha256": "6e1d6d65fcad10aa673bd546646b96f28fd7280250ad05a6ca560a0dc2877107"
     },
     {
-      "destination": "mcctrl_vm_write_compat.h",
-      "kind": "linux_mm_compat_header",
-      "repository_path": "host-kernel/native-rust/mcctrl_vm_write_compat.h",
-      "sha256": "ff25bb43907149fc9303b0dd0a7db1c84b9fc2c6f49f1922f18ca9c32b57c527"
+      "destination": "m15_mmap_trace_gates.S",
+      "kind": "embedded_assembly_source",
+      "repository_path": "host-kernel/native-rust/m15_mmap_trace_gates.S",
+      "sha256": "365305ba7f9d7a22615d5fdf0a600715f63a9fc56c4f4ac9f0e126d19a812161"
+    },
+    {
+      "destination": "m15_mm_write_warning.S",
+      "kind": "embedded_assembly_source",
+      "repository_path": "host-kernel/native-rust/m15_mm_write_warning.S",
+      "sha256": "24bd1ebcd59ac1de5761282cac404540a2324fd819576f5d39dd51c1c7f18550"
+    },
+    {
+      "destination": "current_fork_control.rs",
+      "kind": "rust_support_module",
+      "repository_path": "host-kernel/native-rust/current_fork_control.rs",
+      "sha256": "81228204d50bd5e95bcad7671d4c6bb272ef9c516d0163b2b39a0f6a5c23a126"
+    },
+    {
+      "destination": "current_fork_host.rs",
+      "kind": "rust_support_module",
+      "repository_path": "host-kernel/native-rust/current_fork_host.rs",
+      "sha256": "5a68633144eb60f941a73ceff9f2d5b0d30c7b9c1c1d0c25d5e8135dfde959b4"
+    },
+    {
+      "destination": "exec_delivery.rs",
+      "kind": "rust_support_module",
+      "repository_path": "host-kernel/native-rust/exec_delivery.rs",
+      "sha256": "65ab86c4aff79e04e46a0f6b9b2eb2397e4e94d16bc5163579e55663eac83b7d"
+    },
+    {
+      "destination": "exec_transfer_checked.rs",
+      "kind": "rust_support_module",
+      "repository_path": "host-kernel/native-rust/exec_transfer_checked.rs",
+      "sha256": "a7dae8a829da028cab0ad2d9de233304a587fd7d09059f4bf87c4fee16b67907"
     }
   ],
   "modules": [
@@ -418,7 +443,7 @@
       "source": {
         "destination": "ihk_smp_x86_64.rs",
         "repository_path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
-        "sha256": "03cd3ad22651d5548c4f5f9c2c6a16bf90e04832d29f07d1d8189084e47e0304"
+        "sha256": "aa5752bfcf737c013a3721dcb3c454232acf72dcd477cdb210c1cfeb6efc1ac0"
       }
     },
     {
@@ -437,7 +462,7 @@
       "source": {
         "destination": "mcctrl_rust.rs",
         "repository_path": "host-kernel/native-rust/mcctrl.rs",
-        "sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030"
+        "sha256": "de4793814c7ab3834d0d284c7e28ab2fbfdbfb63f50aac286c5082909d392dee"
       }
     }
   ],
