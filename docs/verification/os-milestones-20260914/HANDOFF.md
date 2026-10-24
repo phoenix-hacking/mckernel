@@ -1,3 +1,19 @@
+## Engineering checkpoint — 2026-10-24 13:13 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains35/35; M14/M15 OPEN, engineering percentages unknown. Library retained
+commands05–14 PASS (.852169389wall/.772027CPU), genuine Linux-provider parity
+and separate dump correctness; target/default/native remain open. MM canonical
+candidate and3HOST audits PASS, native open. Memory79data Rust/ABI/selectedC/NM
+five commands pass after exact size_t correction; metadata observer rejects exact
+compiler-owned GNU property note. Expert-defined retained-only suffix is pending;
+no successful compilation will be repeated. COPY3 cleanup refused beforeeffects
+on omitted producer argv tail, original failures preserved. New exact tail guard
+and genuine12 pure cases PASS1.336009609capture; freshpublication/release required.
+Current stopped115206/CIDd9e3 remains retained, physical clearance pending. F03
+nine-command supported projection source reviewed, waits normal clearance.
+See docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-1313/REVIEW.json.
+
 ## Recovery engineering cursor — 2026-10-24
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
