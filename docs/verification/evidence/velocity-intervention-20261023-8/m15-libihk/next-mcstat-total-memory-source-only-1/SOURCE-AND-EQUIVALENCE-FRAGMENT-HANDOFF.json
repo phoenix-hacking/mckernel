@@ -1,0 +1,70 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ACTUAL_TOTAL_MEMORY_CHAIN_IMPLEMENTED_SOURCE_ONLY_NO_SECOND_QUEUE",
+  "new_Rust_exports": [
+    "ihklib_os_query_mem_sysfs",
+    "ihk_os_query_total_mem",
+    "ihk_os_query_free_mem"
+  ],
+  "C_parser_helpers_replaced_privately": [
+    "ihk_memparse",
+    "mem_str2array",
+    "mem_str2count",
+    "mem_str2chunks"
+  ],
+  "existing_Rust_parser": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-7/m15-ihkconfig/ihkconfig.rs",
+    "sha256": "b4d9a08416b32b07ee57539bc6a292501b2e9569adc918e66a69a2b206e3dc4e",
+    "bytes": 22886
+  },
+  "actual_selected_C": {
+    "path": "/home/holden/mckernel/ihk/linux/user/ihklib.c",
+    "sha256": "6f2c7321667f405b3dc483c089eb5119db0d0a758c8e17a86460f9aad8dcdeab",
+    "bytes": 103430
+  },
+  "host_stat_header": {
+    "path": "/usr/include/x86_64-linux-gnu/sys/stat.h",
+    "sha256": "e08cccf11fb167ea71163c3ac4dc73c8a155e8c3825ed33b554d735a8fe523dc",
+    "bytes": 16237
+  },
+  "host_stat_version_header": {
+    "path": "/usr/include/x86_64-linux-gnu/bits/stat.h",
+    "sha256": "c7b261ced7bf6f6173097656d935f4a4dcf5bd7d40c92d5588652da1d1686978",
+    "bytes": 7620
+  },
+  "files": {
+    "PRECISE-BOUNDS-AND-PROVIDER-DEBT.md": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/next-mcstat-total-memory-source-only-1/PRECISE-BOUNDS-AND-PROVIDER-DEBT.md",
+      "sha256": "a454843b1dc802120200b90e559e23c879c81480a62e559ab86fcd92549a3563",
+      "bytes": 2350
+    },
+    "reference_total_memory.SOURCE-FRAGMENT.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/next-mcstat-total-memory-source-only-1/reference_total_memory.SOURCE-FRAGMENT.c",
+      "sha256": "8edf2417dac52a33936a928f7ff8b562f9df7c5f78727bf5279ff8f3c3dbf6bc",
+      "bytes": 8333
+    },
+    "test_total_memory.SOURCE-FRAGMENT.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/next-mcstat-total-memory-source-only-1/test_total_memory.SOURCE-FRAGMENT.c",
+      "sha256": "c735737fcb6c30d09e4de0ba56a88c50d769b8d434296b2e42c185d4ddf0822b",
+      "bytes": 4853
+    },
+    "ihklib_mcstat_memory.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/next-mcstat-total-memory-source-only-1/ihklib_mcstat_memory.rs",
+      "sha256": "6f8511a76cac283058e40be9d78c2eff21be4b0e81de24a56d88ef4d0450a4d0",
+      "bytes": 9643
+    },
+    "PREVIOUS-MOCK-EXTENSION.SOURCE-FRAGMENT.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/next-mcstat-total-memory-source-only-1/PREVIOUS-MOCK-EXTENSION.SOURCE-FRAGMENT.c",
+      "sha256": "72d2d896563b3fef13d0fa5ee16ff01b7409e7fb1e81c4fbc192840f678780f8",
+      "bytes": 344
+    }
+  },
+  "concrete_next_dependency": "Selected actual target libc stat ABI/header and size/alignment binding: host xstat1 known; Rocky target unknown NULL. Future source fragment needs prior Rust OS-open module and loglevel C global.",
+  "target_stat_binding": null,
+  "source_boundary_vectors_implemented": 51,
+  "compiler_runs": 0,
+  "tests": 0,
+  "canonical_changes": false,
+  "current_executable_queue_unchanged": "79d138 whole TU/partial library/real ihkconfig link only",
+  "no_native_or_library_retirement": true
+}

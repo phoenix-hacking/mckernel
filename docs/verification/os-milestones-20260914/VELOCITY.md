@@ -1,3 +1,16 @@
+## QMP capacity repair and actual fresh first output — 2026-10-24 02:35 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Previousattempt364rounds/728launches/2008.862mixed failedQMPbudget at4152.062ownerwall;
+zeroformalhourcredit. Capacity24testsPASS.640s/18guardsPASS2.133s; staticcheckpoint79620055
+push/fetchfulltreeequal. FreshqueryPASS.4565s, invokewithqueryage111.728s<120.
+Firstactualread7rounds/14launches/36.390mixed at89.131ownerwall, noerrorsinuncappedprefix;
+noformalcredit. Readtarget30-60missedwhilefocusedreadrelease/handshakes; existingtimer
+notpaused. Usecompactactualsummaryimmediately; allsixsourceownerturnsconfirmedrunning.
+F05firstfixtureCWDfailureSTOPthenoneboundeddrivercorrection10commands/937pairsPASS10.064s,
+nochildtableownership/defaultimage/nativeclaim. CPU6nextF03expertclosure; nopaid/modelchange.
+Original2/44.160327sbaselinepreserved; nospeedupclaimfromthreadcountorpartialproduceroutput.
+
 ## SDK8 actual build and live workload feedback — 2026-10-23 21:34 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

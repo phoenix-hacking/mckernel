@@ -1,0 +1,226 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FAIL",
+  "cases": 23,
+  "passed": 21,
+  "failed": [
+    "child-sigterm-parity-open",
+    "child-sigkill-parity-open"
+  ],
+  "results": [
+    {
+      "name": "synthetic-two-processes",
+      "equal": true,
+      "script_status": 0,
+      "rust_status": 0,
+      "trace_ok": true,
+      "expected_ok": true,
+      "open_signal_boundary": false
+    },
+    {
+      "name": "empty-output",
+      "equal": true,
+      "script_status": 0,
+      "rust_status": 0,
+      "trace_ok": true,
+      "expected_ok": true,
+      "open_signal_boundary": false
+    },
+    {
+      "name": "header-only",
+      "equal": true,
+      "script_status": 0,
+      "rust_status": 0,
+      "trace_ok": true,
+      "expected_ok": true,
+      "open_signal_boundary": false
+    },
+    {
+      "name": "verbatim-bytes",
+      "equal": true,
+      "script_status": 0,
+      "rust_status": 0,
+      "trace_ok": true,
+      "expected_ok": true,
+      "open_signal_boundary": false
+    },
+    {
+      "name": "ignored-args-4",
+      "equal": true,
+      "script_status": 0,
+      "rust_status": 0,
+      "trace_ok": true,
+      "expected_ok": true,
+      "open_signal_boundary": false
+    },
+    {
+      "name": "ignored-args-5",
+      "equal": true,
+      "script_status": 0,
+      "rust_status": 0,
+      "trace_ok": true,
+      "expected_ok": true,
+      "open_signal_boundary": false
+    },
+    {
+      "name": "ignored-args-6",
+      "equal": true,
+      "script_status": 0,
+      "rust_status": 0,
+      "trace_ok": true,
+      "expected_ok": true,
+      "open_signal_boundary": false
+    },
+    {
+      "name": "ignored-args-7",
+      "equal": true,
+      "script_status": 0,
+      "rust_status": 0,
+      "trace_ok": true,
+      "expected_ok": true,
+      "open_signal_boundary": false
+    },
+    {
+      "name": "ignored-args-8",
+      "equal": true,
+      "script_status": 0,
+      "rust_status": 0,
+      "trace_ok": true,
+      "expected_ok": true,
+      "open_signal_boundary": false
+    },
+    {
+      "name": "ignored-args-9",
+      "equal": true,
+      "script_status": 0,
+      "rust_status": 0,
+      "trace_ok": true,
+      "expected_ok": true,
+      "open_signal_boundary": false
+    },
+    {
+      "name": "child-exit-1",
+      "equal": true,
+      "script_status": 1,
+      "rust_status": 1,
+      "trace_ok": true,
+      "expected_ok": true,
+      "open_signal_boundary": false
+    },
+    {
+      "name": "child-exit-2",
+      "equal": true,
+      "script_status": 2,
+      "rust_status": 2,
+      "trace_ok": true,
+      "expected_ok": true,
+      "open_signal_boundary": false
+    },
+    {
+      "name": "child-exit-7",
+      "equal": true,
+      "script_status": 7,
+      "rust_status": 7,
+      "trace_ok": true,
+      "expected_ok": true,
+      "open_signal_boundary": false
+    },
+    {
+      "name": "child-exit-126",
+      "equal": true,
+      "script_status": 126,
+      "rust_status": 126,
+      "trace_ok": true,
+      "expected_ok": true,
+      "open_signal_boundary": false
+    },
+    {
+      "name": "child-exit-127",
+      "equal": true,
+      "script_status": 127,
+      "rust_status": 127,
+      "trace_ok": true,
+      "expected_ok": true,
+      "open_signal_boundary": false
+    },
+    {
+      "name": "child-exit-255",
+      "equal": true,
+      "script_status": 255,
+      "rust_status": 255,
+      "trace_ok": true,
+      "expected_ok": true,
+      "open_signal_boundary": false
+    },
+    {
+      "name": "mixed-streams",
+      "equal": true,
+      "script_status": 0,
+      "rust_status": 0,
+      "trace_ok": true,
+      "expected_ok": true,
+      "open_signal_boundary": false
+    },
+    {
+      "name": "inherited-stdin",
+      "equal": true,
+      "script_status": 0,
+      "rust_status": 0,
+      "trace_ok": true,
+      "expected_ok": true,
+      "open_signal_boundary": false
+    },
+    {
+      "name": "missing-command",
+      "equal": true,
+      "script_status": 127,
+      "rust_status": 127,
+      "trace_ok": true,
+      "expected_ok": true,
+      "open_signal_boundary": false
+    },
+    {
+      "name": "permission-denied",
+      "equal": true,
+      "script_status": 126,
+      "rust_status": 126,
+      "trace_ok": true,
+      "expected_ok": true,
+      "open_signal_boundary": false
+    },
+    {
+      "name": "directory-command",
+      "equal": true,
+      "script_status": 126,
+      "rust_status": 126,
+      "trace_ok": true,
+      "expected_ok": true,
+      "open_signal_boundary": false
+    },
+    {
+      "name": "child-sigterm-parity-open",
+      "equal": false,
+      "script_status": 143,
+      "rust_status": 143,
+      "trace_ok": true,
+      "expected_ok": true,
+      "open_signal_boundary": true
+    },
+    {
+      "name": "child-sigkill-parity-open",
+      "equal": false,
+      "script_status": 137,
+      "rust_status": 137,
+      "trace_ok": true,
+      "expected_ok": true,
+      "open_signal_boundary": true
+    }
+  ],
+  "compiler_paths": {
+    "cc": "/usr/bin/cc",
+    "rustc": "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc"
+  },
+  "elapsed_seconds": 2.265,
+  "native_acceptance": false,
+  "canonical_selected": false
+}

@@ -1,0 +1,33 @@
+--- a/kernel/rust/process_helpers.rs
++++ b/kernel/rust/process_helpers.rs
+@@ -253,8 +253,6 @@
+     fn process_pte_get_phys_bridge(ptep: *mut c_void) -> CULong;
+     fn process_phys_to_page_bridge(phys: CULong) -> *mut c_void;
+     fn process_page_offset_bridge(page: *mut c_void) -> OffT;
+-    fn process_pte_make_fileoff_bridge(off: OffT, pgsize: SizeT, ptep: *mut c_void);
+-    fn process_pte_xchg_bridge(ptep: *mut c_void, valp: *mut c_void);
+     fn process_flush_tlb_single_bridge(addr: CULong);
+     fn process_pgsize_to_tbllv_bridge(pgsize: SizeT) -> CInt;
+     fn process_tbllv_to_contpgsize_bridge(level: CInt) -> SizeT;
+@@ -12102,3 +12100,21 @@
+         arg0, page_table, ptep, pte_value, pgaddr, pgshift, error,
+     );
+ }
++
++// Existing typed PTE providers; no change to owner exclusion or callback order.
++#[no_mangle]
++pub unsafe extern "C" fn process_pte_make_fileoff_bridge(
++    off: OffT,
++    pgsize: SizeT,
++    ptep: *mut c_void,
++) {
++    crate::pte_helpers::pte_make_fileoff(off, 0, pgsize, ptep.cast::<CULong>());
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn process_pte_xchg_bridge(
++    ptep: *mut c_void,
++    valp: *mut c_void,
++) {
++    crate::pte_helpers::pte_xchg(ptep.cast::<CULong>(), valp.cast::<CULong>());
++}

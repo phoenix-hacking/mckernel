@@ -1,3 +1,57 @@
+## Actual LONG read7 and six-file implementation dispatch — 2026-10-24 03:39 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual read7 at03:36:29UTC:331 completed rounds/662 reported launches/
+1860.429929022 mixed seconds (31m00.430 of60mixed),3739.723owner wall seconds.
+Uncapped capture: FAIL[],ABORT0,trace/parser errors[],wireNULL; owner4056308/
+start60669407 matched. This is observed progress, not terminal acceptance.
+Practical34/35; newly closed IDs:none. Previous QMP-budget failure remains FAIL,
+364/728/2008.862mixed,zero continuous-hour credit; no kernelcrash claim.
+Independent read extension permits exactly read7–14 under unchanged profile;
+read7 consumed, skip remaining reads on closure/identity mismatch. Controller25780
+remains the existing native owner; no guest restart or source/image change.
+
+Six actual followup turns confirmed running at03:37: F01 m14_callback (tracked
+pagehash allocator),F02 m14_process_cutover (pagefault orchestration),F03
+p12_consumer_fixture_expert (next syscall body),F04 m14_actual_consumer_fix
+(coherent CPU fixture),F05 m14_production_stage (PTallocator),F06
+terminal_lifecycle_repair (move_pages handler). These are source turns, not six
+compiler grants. F03 partial-context initialized3/read6 finding is held separately;
+no uninitialized Rust forwarding or invented upper arguments is accepted.
+Five production-qualified source pairs await coherent union integration; F06
+VDSO/ptrace controlled40332 proof is complete and wholeTU recipe awaits the genuine
+combined Rust object. m15_bfd_compile_owner stages the private six-file union;
+canonical eleven-file baseline remains unchanged until combined proof/review.
+Current default-image build and changed-image native evidence remain OPEN.
+
+M15 real HOST shared libihk and CLI link passed10 commands/1.884s using genuine
+Rust HOSTstd runtime and retained C object; no CLI execution/defaultRocky/native
+claim. Earlier strict-link/core/BFD failures retained. mcps23/23 actual parity
+passed; ihkconfig188+3 and libCPU4608/memory655 stand. New13-provider source handoff
+357d9a0a reuses parser bodies; IKCtrio and dump remain explicit C debt. Separate
+foreground ihkosctl all-action source prepares186+5 cases, UNRUN. Overall M14/M15
+engineering percentages remain null; source, default link and native are separate.
+
+Extra CPU0/6/7 compiler aggregate proposal is NOT admitted; focused reviewer owns
+that decision. No ordinary compiler currently reserved. Existing nativeCPU2–5/
+12GiB/noSwap/512, permanent27:4 and scratch21 are preserved. User delivery target
+and actual billing distinction are in RUN-WINDOW-20261024.md: current invocation
+still included-only100%; reviewed prepaid handoff is preparation, not armed.
+Next result: qualified combined Rust/C union build plus continued finite LONG
+readback. Longest avoidable wait: accepted batch-to-union integration while root
+handled runtime binding/compaction; mechanical staging is now delegated.
+
+## Fresh QMP10 controller invoked — 2026-10-24T02:34:53.439403+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical34/35, new closed IDs none. Previous364/728/2008.862mixed attempt remains
+FAIL/zero hourcredit and positively retired. Newnonce4a764/sourcecheckpoint79620055
+passedfreshadmission, independentexactpayloadreview, fullrealclock/serializedconsumer;
+controller tool25780 invokedonce atqueryage111.728s. NEWrounds/launches/mixedUNKNOWN
+until authenticatedfirstread; invocation is not progress/acceptance. SixM14ownerturns
+confirmedrunning; F05 first937fixture stopped on missingCWD beforecompile, CPU6released,
+boundeddrivercorrectionpreparing. Defaultimage/native/wholeCfileclosure remainOPEN.
+
 ## Retired QMP failure; fresh namespace18guards PASS — 2026-10-24T02:24:40.304052+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

@@ -1,0 +1,58 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -26668,6 +26668,9 @@
+ 	return smp_call_func((cpu_set_t *)cpu_set, handler, arg);
+ }
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++void move_pages_log_bridge(int event, unsigned long value, int error);
++#else
+ static void
+ move_pages_log_bridge(int event, unsigned long value, int error)
+ {
+@@ -26691,6 +26694,7 @@
+ 		kprintf("%s: parallel: %lu \n", "sys_move_pages", value);
+ 	}
+ }
++#endif
+ 
+ long sys_move_pages(int n, ihk_mc_user_context_t *ctx)
+ {
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -23481,3 +23481,35 @@
+         )
+     }
+ }
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Only the existing five-event C diagnostic formatter is retired by this fragment.
++// Reuse the existing policy MOVE_PAGES_LOG_* constants, CInt/CULong, and kprintf ABI.
++// Numeric messages retain the original space before LF. Unknown events emit nothing.
++#[no_mangle]
++pub unsafe extern "C" fn move_pages_log_bridge(event: CInt, value: CULong, _error: CInt) {
++    match event {
++        MOVE_PAGES_LOG_UNSUPPORTED_PID => {
++            kprintf(
++                c"%s: ERROR: only self (pid == 0) is supported\n".as_ptr().cast(),
++                c"sys_move_pages".as_ptr(),
++            );
++        }
++        MOVE_PAGES_LOG_UNSUPPORTED_MOVE_ALL => {
++            kprintf(
++                c"%s: ERROR: MPOL_MF_MOVE_ALL not supported\n".as_ptr().cast(),
++                c"sys_move_pages".as_ptr(),
++            );
++        }
++        MOVE_PAGES_LOG_INIT_MALLOC => {
++            kprintf(c"%s: init malloc: %lu \n".as_ptr().cast(), c"sys_move_pages".as_ptr(), value);
++        }
++        MOVE_PAGES_LOG_INIT_VERIFY => {
++            kprintf(c"%s: init verify: %lu \n".as_ptr().cast(), c"sys_move_pages".as_ptr(), value);
++        }
++        MOVE_PAGES_LOG_PARALLEL => {
++            kprintf(c"%s: parallel: %lu \n".as_ptr().cast(), c"sys_move_pages".as_ptr(), value);
++        }
++        _ => {}
++    }
++}

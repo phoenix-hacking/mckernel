@@ -1,0 +1,32 @@
+--- a/kernel/process.c
++++ b/kernel/process.c
+@@ -2746,13 +2746,20 @@
+ 	panic(message);
+ }
+ 
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++int process_memobj_invalidate_page_bridge(struct memobj *, uintptr_t, size_t);
++#else
+ int process_memobj_invalidate_page_bridge(struct memobj *memobj,
+ 						 uintptr_t phys,
+ 						 size_t pgsize)
+ {
+ 	return memobj_invalidate_page(memobj, phys, pgsize);
+ }
+-
++#endif
++
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++void process_invalidate_one_page_log_bridge(void *, void *, void *, unsigned long, void *, int, int);
++#else
+ void process_invalidate_one_page_log_bridge(void *arg0,
+ 		void *page_table, void *ptep, unsigned long pte_value,
+ 		void *pgaddr, int pgshift, int error)
+@@ -2762,6 +2769,7 @@
+ 			arg0, page_table, ptep, pte_value, pgaddr, pgshift,
+ 			error);
+ }
++#endif
+ 
+ #ifndef MCKERNEL_RUST_PROCESS_HELPERS
+ int invalidate_one_page(void *arg0, page_table_t pt, pte_t *ptep,

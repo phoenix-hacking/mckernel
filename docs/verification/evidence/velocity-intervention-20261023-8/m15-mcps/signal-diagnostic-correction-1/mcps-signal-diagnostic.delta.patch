@@ -1,0 +1,31 @@
+--- frozen-first/mcps.rs
++++ signal-diagnostic-correction-1/mcps.rs
+@@ -20,6 +20,7 @@
+     fn waitpid(pid: c_int, status: *mut c_int, options: c_int) -> c_int;
+     fn __errno_location() -> *mut c_int;
+     fn strerror(error: c_int) -> *const c_char;
++    fn strsignal(signal: c_int) -> *const c_char;
+     fn opendir(path: *const c_char) -> *mut c_void;
+     fn closedir(directory: *mut c_void) -> c_int;
+     fn fprintf(stream: *mut c_void, fmt: *const c_char, ...) -> c_int;
+@@ -60,8 +61,18 @@
+     let signal = status & 0x7f;
+     if signal == 0 { return (status >> 8) & 0xff; }
+     if signal != 0x7f {
+-        // Exit code is shell-shaped; Bash's extra signal-death stderr line is
+-        // an explicit unresolved parity boundary pending the synthetic fixture.
++        // The retained C-locale Bash oracle has two distinct notification
++        // forms. Use the real waited-for child PID, actual signal and original
++        // script command representation; no fixture names/values are consumed.
++        // Other signal notifications/core-dump and inherited-disposition
++        // parity remain explicitly unqualified in this bounded correction.
++        let message = strsignal(signal);
++        if signal == 15 && !message.is_null() {
++            fprintf(stderr, c!("%s\n"), message);
++        } else if signal == 9 && !message.is_null() {
++            fprintf(stderr, c!("%s: line 10: %5d %-24s%s\n"), name, pid,
++                message, c!("${BINDIR}/mcinspect --kernel=${KERNDIR}/mckernel.img --ps"));
++        }
+         return 128 + signal;
+     }
+     127

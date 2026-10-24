@@ -1,0 +1,109 @@
+--- preserved-d754-three-argument-source
++++ private-host-modern-BFD-eleven-call-correction
+@@ -13,6 +13,12 @@
+ #include <errno.h>
+ #include <dirent.h>
+ #include <bfd.h>
++/* Build-only exact modern BFD ABI witnesses; no runtime C implementation. */
++_Static_assert(__builtin_types_compatible_p(__typeof__(&bfd_set_section_size),
++    bfd_boolean (*)(asection *, bfd_size_type)), "selected modern BFD size setter ABI");
++_Static_assert(__builtin_types_compatible_p(__typeof__(&bfd_set_section_flags),
++    bfd_boolean (*)(asection *, flagword)), "selected modern BFD flags setter ABI");
++
+ #include <inttypes.h>
+ #include <time.h>
+ #include <limits.h>
+@@ -2897,7 +2903,7 @@
+ 			goto out;
+ 		}
+ 
+-		ok = bfd_set_section_size(abfd, scn, cpsize);
++		ok = bfd_set_section_size(scn, cpsize);
+ 		if (!ok) {
+ 			ret = -EINVAL;
+ 			dprintf("%s: error: "
+@@ -2906,7 +2912,7 @@
+ 			goto out;
+ 		}
+ 
+-		ok = bfd_set_section_flags(abfd, scn, SEC_HAS_CONTENTS);
++		ok = bfd_set_section_flags(scn, SEC_HAS_CONTENTS);
+ 		if (!ok) {
+ 			ret = -EINVAL;
+ 			dprintf("%s: error: "
+@@ -2927,7 +2933,7 @@
+ 			goto out;
+ 		}
+ 
+-		ok = bfd_set_section_size(abfd, scn, cpsize);
++		ok = bfd_set_section_size(scn, cpsize);
+ 		if (!ok) {
+ 			ret = -EINVAL;
+ 			dprintf("%s: error: "
+@@ -2936,7 +2942,7 @@
+ 			goto out;
+ 		}
+ 
+-		ok = bfd_set_section_flags(abfd, scn, SEC_HAS_CONTENTS);
++		ok = bfd_set_section_flags(scn, SEC_HAS_CONTENTS);
+ 		if (!ok) {
+ 			ret = -EINVAL;
+ 			dprintf("%s: error: "
+@@ -2957,7 +2963,7 @@
+ 			goto out;
+ 		}
+ 
+-		ok = bfd_set_section_size(abfd, scn, cpsize);
++		ok = bfd_set_section_size(scn, cpsize);
+ 		if (!ok) {
+ 			ret = -EINVAL;
+ 			dprintf("%s: error: "
+@@ -2966,7 +2972,7 @@
+ 			goto out;
+ 		}
+ 
+-		ok = bfd_set_section_flags(abfd, scn, SEC_HAS_CONTENTS);
++		ok = bfd_set_section_flags(scn, SEC_HAS_CONTENTS);
+ 		if (!ok) {
+ 			ret = -EINVAL;
+ 			dprintf("%s: error: "
+@@ -2986,7 +2992,7 @@
+ 		goto out;
+ 	}
+ 
+-	ok = bfd_set_section_size(abfd, scn, mem_size);
++	ok = bfd_set_section_size(scn, mem_size);
+ 	if (!ok) {
+ 		ret = -EINVAL;
+ 		dprintf("%s: error: "
+@@ -2995,7 +3001,7 @@
+ 		goto out;
+ 	}
+ 
+-	ok = bfd_set_section_flags(abfd, scn, SEC_ALLOC|SEC_HAS_CONTENTS);
++	ok = bfd_set_section_flags(scn, SEC_ALLOC|SEC_HAS_CONTENTS);
+ 	if (!ok) {
+ 		ret = -EINVAL;
+ 		dprintf("%s: error: "
+@@ -3021,10 +3027,10 @@
+ 		}
+ 
+ 		if (interactive) {
+-			ok = bfd_set_section_size(abfd, scn, PAGE_SIZE);
++			ok = bfd_set_section_size(scn, PAGE_SIZE);
+ 		}
+ 		else {
+-			ok = bfd_set_section_size(abfd, scn, mem_chunks->chunks[i].size);
++			ok = bfd_set_section_size(scn, mem_chunks->chunks[i].size);
+ 		}
+ 		if (!ok) {
+ 			ret = -EINVAL;
+@@ -3034,7 +3040,7 @@
+ 			goto out;
+ 		}
+ 
+-		ok = bfd_set_section_flags(abfd, scn, SEC_ALLOC|SEC_HAS_CONTENTS);
++		ok = bfd_set_section_flags(scn, SEC_ALLOC|SEC_HAS_CONTENTS);
+ 		if (!ok) {
+ 			ret = -EINVAL;
+ 			dprintf("%s: error: "

@@ -1,0 +1,11 @@
+/// Read the offset of the caller's live, borrowed page.
+///
+/// # Safety
+/// `page` must point to a valid initialized `Page` for this synchronous read.
+/// The caller retains the existing page-table lock/memobj lifetime; this
+/// accessor acquires no reference and supplies no null-pointer policy.
+#[no_mangle]
+pub unsafe extern "C" fn page_get_offset(page: *const Page) -> OffT {
+    unsafe { (*page).offset }
+}
+

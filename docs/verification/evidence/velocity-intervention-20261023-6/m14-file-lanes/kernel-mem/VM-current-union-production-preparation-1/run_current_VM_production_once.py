@@ -1,0 +1,55 @@
+"""Functional McKernel OS/apps and Rust/assembly migration only; no security testing."""
+from pathlib import Path
+import hashlib,importlib.util,json,os,re,resource,signal,sys,time
+D=Path(__file__).resolve().parent
+
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+READY=D/'EXECUTABLE-READY.NOT-EXECUTED.json'
+# Frozen source/command recipe; root separately binds this driver before launch.
+assert sha(READY)=='899b484b790846ab69afc48a0be90292f8e6e10d87ece6cece8c7eae2e2426f4'
+p=json.loads(READY.read_bytes())
+H=Path(p['capture_helper']['path']);assert sha(H)==p['capture_helper']['sha256']
+s=importlib.util.spec_from_file_location('capture',H);c=importlib.util.module_from_spec(s);s.loader.exec_module(c)
+for n in (signal.SIGTERM,signal.SIGINT,signal.SIGALRM):signal.signal(n,c.stop)
+os.umask(0o077);os.chdir(D);os.sched_setaffinity(0,{6});os.environ['RUST_MIN_STACK']='2097152'
+for k,v in [(resource.RLIMIT_AS,2<<30),(resource.RLIMIT_CPU,60),(resource.RLIMIT_FSIZE,32<<20),(resource.RLIMIT_NOFILE,256),(resource.RLIMIT_CORE,0)]:resource.setrlimit(k,(v,v))
+A=D/'actual-VM-production-capture-1';A.mkdir(mode=0o700);results=[];durable={};begin=time.monotonic()
+try:
+ assert Path(sys.executable).resolve()==Path('/home/holden/anaconda3/bin/python3').resolve() and sys.version_info[:2]==(3,9)
+ for row in p['frozen_inputs']:assert sha(Path(row['path']))==row['sha256'],row['path']
+ retained=p['retained_syscall']; st=Path(retained['path']).stat(); assert (st.st_dev,st.st_ino,st.st_size,st.st_mtime_ns,st.st_ctime_ns)==tuple(retained[k] for k in ['device','inode','size','mtime_ns','ctime_ns'])
+ c.write(A/'FROZEN-INPUTS.json',p['frozen_inputs']);c.write(A/'DRIVER-INTERPRETER.json',{'driver':{'path':str(Path(__file__)),'sha256':sha(Path(__file__))},'interpreter':sys.executable,'version':sys.version,'before_child':True})
+ mem=int(next(x.split()[1] for x in Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemAvailable:')))*1024
+ host=os.statvfs('/home/holden');scratch=os.statvfs('/home/holden/mckernel-work/scratch');bs=Path('/home/holden/mckernel-work/scratch.ext4').stat();gap=max(0,bs.st_size-bs.st_blocks*512)
+ facts={'memory_available':mem,'memory_required':19<<30,'host_available':host.f_bavail*host.f_frsize,'host_required':(16<<30)+gap+(128<<20)+679477248,'scratch_available':scratch.f_bavail*scratch.f_frsize,'scratch_required':(12<<30)+679477248,'full_sparse_gap':gap,'backing_size':bs.st_size,'reserves_preserved':679477248,'CPU':6,'root_grant_required':True}
+ c.write(A/'HEADROOM.json',facts);assert mem>=facts['memory_required'] and facts['host_available']>=facts['host_required'] and facts['scratch_available']>=facts['scratch_required'],facts
+ (D/'output-1').mkdir(mode=0o700)
+ c.write(A/'PROFILE.json',p['profile']);signal.setitimer(signal.ITIMER_REAL,96)
+ for i,cmd in enumerate(p['commands']):
+  C=A/('%02d'%i);C.mkdir(mode=0o700);c.write(C/'command.json',cmd);remaining=90-(time.monotonic()-begin);assert remaining>0
+  r=c.owned_capture(cmd,C,remaining,lambda:None);c.write(C/'whole-join.json',r);results.append(r)
+  assert r['returncode']==0 and r['direct_child_joined'] and r['group_absent'] and r['closed_streams'] and not r['timed_out'] and r['error'] is None and r['retirement_error'] is None,r
+  if str(i) in p['durable_after_commands']:
+   name=p['durable_after_commands'][str(i)];durable[name]=c.hashed(D/'output-1'/name,32<<20);c.write(A/('DURABLE-'+name+'.json'),durable[name])
+ # Observers consume only complete durable objects after all real child joins.
+ obs=Path(p['observer']['path']);s=importlib.util.spec_from_file_location('observer',obs);o=importlib.util.module_from_spec(s);s.loader.exec_module(o)
+ expected=json.loads((D/'EXPECTED-SYMBOLS.FROM-ACTUAL-UNION.json').read_bytes());names=p['target_exports']
+ T,U,_=o.nm_sets(A/'01/stdout');assert set(T)==set(expected['expected_T']) and all(v==1 for v in T.values()) and U==set(expected['expected_U'])
+ CT,CU,Crows=o.nm_sets(A/'06/stdout');assert not(set(names)&{n for t,n in Crows if t!='U'});assert 'mem_tlb_atomic_dec_bridge' in CU
+ pp=(A/'03/stdout').read_text()
+ for name in names:assert not re.search(r'\b'+name+r'\([^;{}]*\)\s*\{',pp),name
+ relocation=o.allocated_callback_relocations(D/'output-1/mem.c.o',names);c.write(A/'ACTUAL-ALLOCATED-CALLBACK-RELOCATIONS.json',relocation)
+ ST,SU,SR=o.nm_sets(A/'09/stdout'); assert 'lookup_node' in SU and 'lookup_node' not in ST
+ caller=o.allocated_callback_relocations(Path(p['retained_syscall']['path']),['lookup_node'],False)
+ refs=caller['allocated_callback_relocations']; assert refs and all(x['symbol_shndx']==0 and x['symbol_binding']==1 and x['addend']==0 for x in refs),refs
+ assert all(x['target_section']=='.text' for x in refs),refs
+ c.write(A/'ACTUAL-ALLOCATED-VM-CALLER.json',caller)
+ PT,PU,_=o.nm_sets(A/'12/stdout');assert all(PT[x]==1 and x not in PU for x in expected['expected_T'])
+ for name,metadata in durable.items():
+  st=(D/'output-1'/name).stat();assert (st.st_dev,st.st_ino,st.st_size,st.st_mtime_ns,st.st_ctime_ns)==tuple(metadata[k] for k in ['device','inode','size','mtime_ns','ctime_ns'])
+ for row in p['frozen_inputs']:assert sha(Path(row['path']))==row['sha256'],row['path']
+ receipt={'scope':__doc__,'status':'PASS_ACTUAL_CURRENT78_RUST_COMPLETE_GCC9_MEM_VM_ABI_ALLOCATED_CALLER_AND_PARTIAL_ONLY','source_count':78,'target_exports':names,'captures':results,'durable_objects':durable,'actual_T':len(T),'actual_U':len(U),'all_prior_T_preserved':True,'all13_and_two_VM_Rust_unique_T':True,'PUBLIC_C_bodies_excluded':True,'allocated_relocations':relocation,'all_expected_Rust_partial_unique_T':True,'CPU_seconds':c.cpu_used(),'wall_seconds':time.monotonic()-begin,'CPU6_released':True,'native_default_GCC14_final_image':'OPEN','whole_file_retired':False,'VM_entries_included':True,'pagehash_UNTESTED_excluded':True,'failure_history':p['failure_history']}
+ c.write(A/'FINAL-ACTUAL-PRODUCTION-RECEIPT.json',receipt);print(json.dumps({'status':receipt['status'],'commands':len(results),'wall_seconds':receipt['wall_seconds'],'actual_T':len(T),'actual_U':len(U),'CPU6_released':True}))
+except BaseException as e:
+ c.write(A/'FAILURE.json',{'scope':__doc__,'error':repr(e),'captures':results,'durable_objects':durable,'CPU6_released':True,'STOP_no_retry':True,'failure_history':p['failure_history']});raise
+finally:signal.setitimer(signal.ITIMER_REAL,0)

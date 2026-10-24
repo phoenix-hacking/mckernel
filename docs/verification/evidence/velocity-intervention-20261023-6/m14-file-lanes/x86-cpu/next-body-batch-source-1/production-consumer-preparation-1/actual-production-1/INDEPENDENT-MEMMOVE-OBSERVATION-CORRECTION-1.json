@@ -1,0 +1,109 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_RETAINED_ELF_OBSERVATION_ONLY",
+  "object_recorded_sha256_NOT_rehashed": "2e836af6a013947e598917dcf04effff300a2cceff03d8532bc3d1bbc856b5af",
+  "before": {
+    "st_dev": 66306,
+    "st_ino": 56241819,
+    "st_size": 13857744,
+    "st_mtime_ns": 1792811078720940542,
+    "st_ctime_ns": 1792811078720940542
+  },
+  "memmove_relocations": [
+    {
+      "relocation_section": ".rela.ltext.freeze_thaw",
+      "section": ".ltext.freeze_thaw",
+      "offset": 160,
+      "type": 1,
+      "addend": 0,
+      "symbol": "memmove",
+      "undefined": true,
+      "section_index": 1010,
+      "section_flags": 268435462,
+      "allocated": true,
+      "callers": [
+        {
+          "name": "freeze_thaw",
+          "bind": 1,
+          "type": 2,
+          "other": 0,
+          "section": 1010,
+          "value": 0,
+          "size": 273
+        }
+      ]
+    },
+    {
+      "relocation_section": ".rela.ltext.mod_nmi_ctx",
+      "section": ".ltext.mod_nmi_ctx",
+      "offset": 25,
+      "type": 1,
+      "addend": 0,
+      "symbol": "memmove",
+      "undefined": true,
+      "section_index": 1990,
+      "section_flags": 268435462,
+      "allocated": true,
+      "callers": [
+        {
+          "name": "mod_nmi_ctx",
+          "bind": 1,
+          "type": 2,
+          "other": 0,
+          "section": 1990,
+          "value": 0,
+          "size": 108
+        }
+      ]
+    }
+  ],
+  "mod_nmi_ctx_symbol": {
+    "name": "mod_nmi_ctx",
+    "bind": 1,
+    "type": 2,
+    "other": 0,
+    "section": 1990,
+    "value": 0,
+    "size": 108
+  },
+  "mod_nmi_ctx_section": {
+    "index": 1990,
+    "name_offset": 2158,
+    "type": 1,
+    "flags": 268435462,
+    "address": 0,
+    "offset": 360416,
+    "size": 108,
+    "link": 0,
+    "info": 0,
+    "align": 16,
+    "entry_size": 0,
+    "name": ".ltext.mod_nmi_ctx"
+  },
+  "mod_nmi_ctx_bytes_hex": "554889e54157415653504889f34989fe9c415f488d772848b80000000000000000bab0000000ffd049899eb000000049c786b8000000200000004981e7fffdffff4d89bec0000000498d86d8000000498986c800000049c786d0000000280000004883c4085b415e415f5dc3",
+  "mod_nmi_ctx_relocations": [
+    {
+      "relative_offset": 25,
+      "type": 1,
+      "addend": 0,
+      "symbol": "memmove"
+    }
+  ],
+  "after": {
+    "st_dev": 66306,
+    "st_ino": 56241819,
+    "st_size": 13857744,
+    "st_mtime_ns": 1792811078720940542,
+    "st_ctime_ns": 1792811078720940542
+  },
+  "previous_observation_failure": {
+    "exit": 1,
+    "line": 23,
+    "predicate": "objdump rc0 AND empty stderr AND stdout bytes<16384",
+    "raw_tool_result_fields_not_printed": true,
+    "no_inferred_reason": true,
+    "original_production_U_oracle_FAIL_preserved": true
+  },
+  "no_tool_subprocess": true,
+  "no_object_hash": true
+}

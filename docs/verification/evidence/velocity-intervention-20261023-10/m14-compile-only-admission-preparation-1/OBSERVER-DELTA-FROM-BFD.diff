@@ -1,0 +1,124 @@
+--- accepted-bfd-observer
++++ m14-compact-observer
+@@ -15,7 +15,7 @@
+ import time
+ 
+ D = Path(__file__).resolve().parent
+-B = D.parent
++B = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-10/m14-current-default-compile-only-preparation-1/bounded-provenance-path-correction-1')
+ HELPER = Path('/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py')
+ HELPER_SHA = '990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8'
+ SCOPE = 'Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
+@@ -86,7 +86,7 @@
+                           (resource.RLIMIT_FSIZE, 32 << 20), (resource.RLIMIT_NOFILE, 256),
+                           (resource.RLIMIT_CORE, 0)):
+         need(resource.getrlimit(number) == (value, value), 'exact root query limits')
+-    profile_path = D / 'READONLY-QUERY-PROFILE.json'
++    profile_path = D / 'READONLY-QUERY-PROFILE.COMPACT.json'
+     need(sha(profile_path) == sys.argv[1], 'exact query profile')
+     p = json.loads(profile_path.read_text())
+     need(sha(Path(__file__).resolve()) == p['query_sha256'] and sha(HELPER) == HELPER_SHA, 'exact query/helper source')
+@@ -94,7 +94,7 @@
+     need(context['scope'] == SCOPE and context['operation'] == p['operation'], 'current operation/context')
+     boot = Path('/proc/sys/kernel/random/boot_id').read_text().strip()
+     need(context['boot_id'] == boot, 'same current boot')
+-    for key in ('cpu6_consumer_joined', 'P12_sole_native_heavy', 'controller_allowance_reviewed', 'native_cgroups_unchanged'):
++    for key in ('cpu6_consumer_joined', 'P12_sole_native_heavy', 'controller_allowance_reviewed', 'native_cgroups_unchanged', 'compile_HOST_growth_independently_reviewed'):
+         need(context[key] is True, 'root declaration missing: ' + key)
+     need(context['P12_owner'] == p['P12_owner'], 'current P12 owner anchor')
+     controller = context['P12_capture_controller']
+@@ -107,7 +107,7 @@
+     owner_authority = pinned_authority(Path(p['P12_owner_authority']['path']), p['P12_owner_authority']['sha256'])
+     need(owner_authority == {'pid': p['P12_owner']['pid'], 'start': p['P12_owner']['starttime']},
+          'exact current started receipt, not retired owner identity')
+-    for label in ('CPU6_retirement_authority', 'aggregate_authority', 'continuity_authority'):
++    for label in ('CPU6_retirement_authority', 'aggregate_authority', 'continuity_authority', 'current_source_and_actual19_authority'):
+         row = context[label]
+         need(isinstance(row, dict) and set(row) == {'path', 'sha256'}, 'missing root authority: ' + label)
+         authority = pinned_authority(Path(row['path']), row['sha256'])
+@@ -120,7 +120,7 @@
+     need(all(type(aggregate[k]) is int and aggregate[k] >= 0 for k in component_keys) and
+          aggregate['bytes'] == sum(aggregate[k] for k in component_keys) and
+          aggregate['bytes'] <= p['hard_aggregate_bytes'] and type(aggregate['jobs']) is int and 1 <= aggregate['jobs'] <= 7 and
+-         aggregate['compile_bytes'] == 2 << 30 and aggregate['native_bytes'] == 12 << 30 and
++         aggregate['compile_bytes'] == 4 << 30 and aggregate['native_bytes'] == 12 << 30 and
+          aggregate['P12_owner_AS_bytes'] == 2 << 30 and aggregate['P12_capture_controller_AS_bytes'] == 512 << 20 and
+          aggregate['compile_controller_AS_bytes'] == 2 << 30 and aggregate['root_client_coordination_bytes'] >= 1 << 30 and
+          aggregate['query_AS_bytes'] == 2 << 30 and aggregate['query_inside_existing_controller_pool'] is True,
+@@ -149,10 +149,17 @@
+     result = {'scope': SCOPE, 'status': 'FAIL_RETAINED_NO_RETRY', 'actual_release': None, 'records': records}
+     try:
+         for filename, expected in p['owner_bindings'].items():
+-            need(sha(B / filename) == expected, 'accepted BFD source changed: ' + filename)
+-        request = json.loads((B / 'compile-request.PREPARED.json').read_text())
++            need(sha(Path(filename)) == expected, 'accepted current M14 source changed: ' + filename)
++        prepared_path = Path(p['prepared_request_path'])
++        raw_request = prepared_path.read_bytes()
++        need(len(raw_request) == p['prepared_request_bytes'] and hashlib.sha256(raw_request).hexdigest() == p['prepared_request_sha256'], 'exact accepted prepared request bytes')
++        request = json.loads(raw_request)
+         core = canonical({k: v for k, v in request.items() if k != 'compile_only_release'})
+-        need(core == p['prepared_request_core_sha256'] and request['compile_only_release'] is None, 'unreleased prepared request core')
++        need(core == p['prepared_request_core_sha256'], 'semantically identical accepted prepared request core')
++        need(request['compile_only_release'] is None and request['compile_operation'] == p['operation'] and request['compile_profile_sha256'] == p['owner_profile_sha256'], 'unreleased accepted M14 request/profile')
++        for row in p['namespace_metadata']:
++            path = Path(row['path']); info = path.lstat()
++            need(stat.S_ISDIR(info.st_mode) and (info.st_dev, info.st_ino, info.st_uid, info.st_gid, stat.S_IMODE(info.st_mode)) == (row['device'], row['inode'], row['uid'], row['gid'], int(row['mode'], 8)) and sorted(os.listdir(path)) == sorted(row['children']), 'exact fresh compile namespace directories unchanged')
+         need(birth(p['P12_owner']['pid']) == p['P12_owner']['starttime'], 'P12 owner birth before query')
+         docker = ['/usr/bin/docker', '--host=unix:///var/run/docker.sock']
+         rows = json.loads(command('P12-inspect', docker + ['inspect', p['P12_name'][1:]]))
+@@ -181,7 +188,7 @@
+         need(running == [info['Id']], 'P12 sole running container')
+         own = Path(request['work_root'])
+         rw_roots = sorted(set(m['Source'] for m in info['Mounts'] if m.get('RW') is True and m.get('Source', '').startswith('/')))
+-        need(rw_roots, 'actual P12 writable roots')
++        need(rw_roots == p['P12_expected_rw_roots'], 'exact source/request-derived P12 writable roots')
+         for raw in rw_roots:
+             other = Path(raw)
+             need(raw == os.path.abspath(raw) and own != other and own not in other.parents and other not in own.parents,
+@@ -208,12 +215,14 @@
+         host_available = host.f_bavail * host.f_frsize
+         scratch_available = scratch_space.f_bavail * scratch_space.f_frsize
+         budgets = context['remaining_storage_reservations']
+-        need(set(budgets) == {'HOST_other_growth', 'HOST_BFD_growth', 'scratch_other_growth', 'scratch_BFD_growth', 'emergency'} and
++        need(set(budgets) == {'HOST_other_growth', 'HOST_compile_growth', 'scratch_other_growth', 'scratch_compile_growth', 'emergency'} and
+              all(type(v) is int and v >= 0 for v in budgets.values()) and
+-             budgets['HOST_BFD_growth'] >= p['minimum_BFD_HOST_growth'] and budgets['emergency'] >= 679477248,
++             budgets['HOST_compile_growth'] >= p['minimum_compile_HOST_growth'] and
++             budgets['HOST_other_growth'] >= p['P12_reserved_HOST_growth'] and
++             budgets['scratch_other_growth'] >= p['P12_reserved_scratch_growth'] and budgets['scratch_compile_growth'] == 0 and budgets['emergency'] >= 679477248,
+              'explicit full remaining growth/emergency reservation required')
+-        host_required = (16 << 30) + gap + budgets['HOST_other_growth'] + budgets['HOST_BFD_growth'] + budgets['emergency']
+-        scratch_required = (12 << 30) + budgets['scratch_other_growth'] + budgets['scratch_BFD_growth'] + budgets['emergency']
++        host_required = (16 << 30) + gap + budgets['HOST_other_growth'] + budgets['HOST_compile_growth'] + budgets['emergency']
++        scratch_required = (12 << 30) + budgets['scratch_other_growth'] + budgets['scratch_compile_growth'] + budgets['emergency']
+         mem = int(next(line.split()[1] for line in Path('/proc/meminfo').read_text().splitlines() if line.startswith('MemAvailable:'))) * 1024
+         need(host_available >= host_required and scratch_available >= scratch_required and mem >= 24 << 30,
+              'fresh full-gap storage and24GiB memory admission')
+@@ -233,18 +242,23 @@
+         request['disk_admission']['host_device'] = Path(request['disk_admission']['host_root']).stat().st_dev
+         request['disk_admission']['scratch_device'] = scratch_device
+         final_core = canonical({k: v for k, v in request.items() if k != 'compile_only_release'})
+-        facts = dict(schema='mckernel.m15-bfd-dual-container-admission.v1', operation=p['operation'],
++        facts = dict(schema='mckernel.m14-candidate14-dual-container-admission.v1', operation=p['operation'],
+             request_core_sha256=final_core, profile_sha256=p['owner_profile_sha256'], boot_id=boot,
+             observed_boottime_ns=time.clock_gettime_ns(time.CLOCK_BOOTTIME), MemAvailable=mem,
+             HOST_available=host_available, HOST_required=host_required, scratch_available=scratch_available, scratch_required=scratch_required,
+             compile_limits=p['compile_limits'], P12_limits=p['P12_limits'], P12={'id':info['Id'],'name':info['Name'],
+             'owner_label_key':'mckernel.native-diagnostic.owner','owner_label_value':p['P12_nonce'],
+             'config_sha256':canonical(info['Config']),'host_config_sha256':canonical(info['HostConfig'])}, P12_rw_roots=rw_roots,
+-            capacity_verdict='PASS_DUAL_CONTAINER_COMPILE_CPU6_2G',
++            capacity_verdict='PASS_DUAL_CONTAINER_COMPILE_CPU6_4G',
+             **{k:context[k] for k in ('cpu6_consumer_joined','P12_sole_native_heavy','controller_allowance_reviewed','native_cgroups_unchanged')})
+-        h.write(capture / 'REQUEST.FINALIZED.UNRELEASED.CANDIDATE.json', request)
++        finalized_raw = (json.dumps(request, sort_keys=True, separators=(',', ':'), allow_nan=False) + '\n').encode()
++        need(len(finalized_raw) <= 32 << 20, 'compact finalized request within unchanged file cap')
++        fd = os.open(capture / 'REQUEST.FINALIZED.UNRELEASED.CANDIDATE.json', os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
++        with os.fdopen(fd, 'wb') as stream:
++            stream.write(finalized_raw); stream.flush(); os.fsync(stream.fileno())
++        h.write(capture / 'REQUEST-BINDING.UNRELEASED.CANDIDATE.json', dict(scope=SCOPE, status='EXACT_COMPACT_REQUEST_BINDING_NO_RELEASE', prepared_request_path=str(prepared_path), prepared_request_sha256=p['prepared_request_sha256'], prepared_request_bytes=p['prepared_request_bytes'], prepared_request_core_sha256=core, finalized_request_core_sha256=final_core, finalized_request_sha256=hashlib.sha256(finalized_raw).hexdigest(), finalized_request_bytes=len(finalized_raw), finalized_disk_admission=request['disk_admission'], compile_only_release=None))
+         h.write(capture / 'ROOT-ADMISSION.CANDIDATE.json', facts)
+-        result.update(status='PASS_READONLY_BFD_ADMISSION_CANDIDATE_ONLY', admission=facts,
++        result.update(status='PASS_READONLY_M14_ADMISSION_CANDIDATE_ONLY', admission=facts,
+             prepared_request_core_sha256=core, finalized_request_core_sha256=final_core,
+             observations={'P12_init':{'pid':init_pid,'starttime':init_birth},'init_cgroup':init_cgroup,'native_cgroups':cgroups,
+             'native_lock_rows':locks,'ownership_paths':leases,'backing':{'dev':bs.st_dev,'inode':bs.st_ino,'size':bs.st_size,

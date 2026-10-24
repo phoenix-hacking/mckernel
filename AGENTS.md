@@ -1,3 +1,5 @@
+Current delivery target and included-first/explicit-credit handoff limits: [October24 run window](docs/verification/os-milestones-20260914/RUN-WINDOW-20261024.md). Active resident billing controls remain authoritative.
+
 # McKernel Rust Migration Agent Notes
 
 Updated: 2026-06-02

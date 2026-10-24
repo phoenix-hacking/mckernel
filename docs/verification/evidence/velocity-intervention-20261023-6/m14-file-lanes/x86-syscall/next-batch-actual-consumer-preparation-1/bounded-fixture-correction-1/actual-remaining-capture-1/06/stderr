@@ -1,0 +1,10 @@
+/usr/local/bin/ld: /tmp/ccWGaPem.o: in function `reset':
+signal-compare.c:(.text+0x13): undefined reference to `__inline_memset'
+/usr/local/bin/ld: signal-compare.c:(.text+0x26): undefined reference to `__inline_memset'
+/usr/local/bin/ld: signal-compare.c:(.text+0x39): undefined reference to `__inline_memset'
+/usr/local/bin/ld: signal-compare.c:(.text+0x4c): undefined reference to `__inline_memset'
+/usr/local/bin/ld: signal-compare.c:(.text+0x5f): undefined reference to `__inline_memset'
+/usr/local/bin/ld: /tmp/ccWGaPem.o:signal-compare.c:(.text+0x72): more undefined references to `__inline_memset' follow
+/usr/local/bin/ld: /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-batch-actual-consumer-preparation-1/output-1/signal-Rust.o: in function `fixture_signal_Rust_ABI':
+signal_actual.ec83db15281b023f-cgu.0:(.text.fixture_signal_Rust_ABI+0x103): undefined reference to `core::panicking::panic_bounds_check'
+collect2: error: ld returned 1 exit status

@@ -1,0 +1,117 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FOUR_CALLBACK_INVALIDATE_BATCH_SOURCE_ONLY_NOT_EXECUTABLE_READY",
+  "previous_source_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/sourcehandoff/SOURCE-NEXT-BODY.json",
+    "sha256": "5ad16fbe4bd2e22f92382bda7ac3f7daaeb606d482d3308e76f1ad25680b7990",
+    "bytes": 7253
+  },
+  "previous340_fixture": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/actual_parity.SOURCE-ONLY.c",
+    "sha256": "0f1b0fac7ff3995cb2225fc49b668d3e93f4e3e769ad85bf873d7c293f4bb565",
+    "bytes": 6308
+  },
+  "previous340_history": "Retained unchanged and unrun; planned340 callback comparisons remain source preparation only.",
+  "new_actual_C_bodies": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/pte-extension-1/fixture/process_pte_make_fileoff_bridge.ACTUAL-C.inc",
+      "sha256": "58ad0713ff1ecf55f3ff5f8578bdd209f2ca17f031162fc84d7961720b718b18",
+      "bytes": 137
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/pte-extension-1/fixture/process_pte_xchg_bridge.ACTUAL-C.inc",
+      "sha256": "04bb2df95e1e17557b5037a6aba7b6e6a89336ab62c7f9a491c7c98b675e3fa2",
+      "bytes": 98
+    }
+  ],
+  "new_actual_Rust": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/pte-extension-1/fixture/callbacks.ACTUAL-RUST.inc",
+    "sha256": "2dfa3627b467303e6d040a303911c75c15e7f1a3b69a31f16a8b37f0e20ebf30",
+    "bytes": 411
+  },
+  "postimages": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/pte-extension-1/candidate/kernel/process.c",
+      "sha256": "95efb7dff9bc9a3f923e69c4ee10695965bed516be99408cbc775ffc785c5c3a",
+      "bytes": 164697
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/pte-extension-1/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "47fbe4882db455cc403d130113c48e21ea7cd95158eb71e63b4fb6a865200d4d",
+      "bytes": 362361
+    }
+  },
+  "provider_pins": {
+    "kernel/rust/pte_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/pte_helpers.rs",
+      "sha256": "d6117286cc222c27ae6f76773796efd77d9f87b969644555e0a6286721653e62",
+      "bytes": 7855
+    },
+    "arch/x86_64/kernel/memory.c": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/memory.c",
+      "sha256": "93df0ac24de8163cc5a7e2cce277d3a46c89a607b924c1937f2413e12edf0f66",
+      "bytes": 88466
+    },
+    "arch/x86_64/kernel/include/arch-memory.h": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-memory.h",
+      "sha256": "1704ac32bf55f421c802df661c844b496a1660b8b89e5d12cc2d994d835b5b49",
+      "bytes": 8996
+    },
+    "kernel/rust/abi.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    }
+  },
+  "fixture_sources": {
+    "actual_pte_parity.SOURCE-ONLY.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/pte-extension-1/actual_pte_parity.SOURCE-ONLY.c",
+      "sha256": "28184771b525895e321389d8b55c84d9631175ddb2ef717ad1504c837a1cc191",
+      "bytes": 4104
+    },
+    "fixture/actual_provider.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/pte-extension-1/fixture/actual_provider.rs",
+      "sha256": "1bbc4c2264939a326a73d1247d58e590d5fe2b95fd3b77e561ca6a6548ba0b90",
+      "bytes": 289
+    },
+    "fixture/actual_header_ABI.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/pte-extension-1/fixture/actual_header_ABI.c",
+      "sha256": "1c510ea427126d1685f4627fddb513fa957154c57c27c9b23d5527083502ac1a",
+      "bytes": 1143
+    },
+    "fixture/actual_consumer.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/pte-extension-1/fixture/actual_consumer.c",
+      "sha256": "21c63b96252e72d1d601f75257b8cab46a269a7b494709b8a99c9bf7fe0a8ba6",
+      "bytes": 550
+    }
+  },
+  "original_C_fallback_exact": true,
+  "owner_invariant": "Existing actual Rust invalidate owner calls encoder only when a borrowed Page offset differs from linear offset, then atomically exchanges the live PTE with stack-local apte before the existing TLB callback. New typed adapters preserve off_t bits, ptattr0, size_t and aligned borrowed PTE pointers, including ptep==valp behavior. Existing Rust provider uses SeqCst atomic swap, exactly one volatile valp load and old-value store. No new lock/refcount/lifetime or native TLB effect.",
+  "unproven_scope": "No compiler/test or new ready queue. Sequential actualC/actualRust parity validates callback/provider source when granted; it does not newly qualify concurrent PTE use, native TLB, the complete invalidate owner, production/default link or the kernel image.",
+  "new_planned_comparisons": 294,
+  "total_planned_callback_comparisons": 634,
+  "remaining_exact_owner_C_callbacks": [
+    "process_pte_is_null_bridge",
+    "process_pte_is_fileoff_bridge",
+    "process_pte_get_phys_bridge",
+    "process_phys_to_page_bridge",
+    "process_page_offset_bridge",
+    "process_flush_tlb_single_bridge",
+    "process_pte_is_contiguous_bridge",
+    "process_page_is_contiguous_head_bridge",
+    "process_pgsize_to_tbllv_bridge",
+    "process_tbllv_to_contpgsize_bridge",
+    "process_page_unmap_bridge",
+    "process_panic_bridge"
+  ],
+  "selected_consumer": "Unchanged actual invalidate_one_page function and process_invalidate_one_page_body_result full function extraction retained in fixture/.",
+  "existing_queued_ready": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/EXECUTABLE-READY.OBSERVER-SUCCESSOR.NOT-GRANTED.json",
+    "sha256": "01fbc1acba56489e91f8198865a348379a7aac6518979696465c65dfdfbcea15",
+    "bytes": 11662
+  },
+  "compiler_jobs": 0,
+  "CPU_reservations": 0,
+  "new_executable_queues": 0,
+  "fullimage_native_credit": false
+}

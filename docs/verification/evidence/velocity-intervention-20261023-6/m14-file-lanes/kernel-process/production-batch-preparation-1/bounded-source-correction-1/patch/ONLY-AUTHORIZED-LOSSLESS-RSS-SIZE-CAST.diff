@@ -1,0 +1,11 @@
+--- failed908/process_helpers.rs
++++ bounded-source-correction/process_helpers.rs
+@@ -4355,7 +4355,7 @@
+             }
+             // Reload args->memobj after free/log callbacks, and retain C's
+             // narrowing conversion from size_t to the provider's int pgsize.
+-            crate::mem_helpers::rusage_memory_stat_sub((*args).memobj, pgsize, pgsize as CInt);
++            crate::mem_helpers::rusage_memory_stat_sub((*args).memobj, pgsize as CULong, pgsize as CInt);
+         }
+     }
+     if core::ptr::read_volatile(core::ptr::addr_of!(

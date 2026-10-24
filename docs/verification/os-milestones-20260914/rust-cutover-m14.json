@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-24T01:27:44.772886+00:00",
+  "as_of": "2026-10-24T02:38:42.781097+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -390,7 +390,21 @@
         "observed_status": "running_source",
         "canonical_integration": "dispatcher",
         "native_credit": false
-      }
+      },
+      "execution_updates": [
+        {
+          "utc": "2026-10-24T02:39:00Z",
+          "stage": "actual-focused-checks",
+          "result": "PASS",
+          "comparisons": 2268,
+          "new_commands": 6,
+          "retained_Rust_object_reused": true,
+          "whole_seconds": 0.896841466,
+          "receipt": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/two-VM-fixture-preparation-1/bounded-provider-uint64-correction-1/actual-VM-fixture-capture-1/FINAL-ACTUAL-VM-FIXTURE-RECEIPT.json",
+          "receipt_sha256": "43f71af7860628dc2494b39beb14a505d2175d91aa6294d72744db862ed2b5e9",
+          "limitations": "PUBLIC/fallback header ABI and controlled leaf callbacks only; full current production/native OPEN. Original C nominal uint64_t type failure preserved."
+        }
+      ]
     },
     {
       "id": "M14-F02",
@@ -1191,7 +1205,30 @@
         "observed_status": "running_fixture_granted",
         "canonical_integration": "dispatcher",
         "native_credit": false
-      }
+      },
+      "execution_updates": [
+        {
+          "utc": "2026-10-24T02:38:42.781097+00:00",
+          "id": "M14-F03",
+          "stage": "fixture-provider-compile",
+          "result": "FAIL_STOP_EXPERT",
+          "comparisons": 0,
+          "receipt": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-signal-batch-preparation-1/expert-provider-closure-preparation-1/ACTUAL-STOP-AND-EXPERT-HANDOFF.json",
+          "receipt_sha256": "292581f78d315e6d59d160a4e41597f6e1cb87166ffbcfa7913177c601d4c1f1",
+          "cause_observed": "Invalid dot in inferred Rust crate name selected_provider_companion.PROPOSED; no provider object/link/5712cases. Different-expert disposition requested; no automatic retry."
+        },
+        {
+          "utc": "2026-10-24T02:43:41.098757+00:00",
+          "stage": "actual-focused-checks",
+          "result": "PASS",
+          "comparisons": 5712,
+          "new_commands": 12,
+          "whole_seconds": 5.008721568,
+          "receipt": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-signal-batch-preparation-1/expert-provider-closure-preparation-1/crate-name-argument-successor-1/actual-crate-name-1/ACTUAL-WHOLE-JOIN.json",
+          "receipt_sha256": "c635ddef6eaeea5c5abcd5cbd48a931bf208b10ebaf32df844486c6d0d1233aa",
+          "limitations": "Seven realRustproviders/34ABI facts; retainedoriginalRust+C reused, no fullcurrentcrate/defaultimage/native. All prior failures retained; no fileclosure."
+        }
+      ]
     },
     {
       "id": "M14-F04",
@@ -1453,7 +1490,20 @@
         "observed_status": "running_source",
         "canonical_integration": "dispatcher",
         "native_credit": false
-      }
+      },
+      "execution_updates": [
+        {
+          "utc": "2026-10-24T02:43:41.098757+00:00",
+          "stage": "actual-focused-checks",
+          "result": "PASS",
+          "comparisons": 8000,
+          "new_commands": 15,
+          "whole_seconds": 3.021190659,
+          "receipt": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/actual-retained-continuation-1/ACTUAL-WHOLE-JOIN.json",
+          "receipt_sha256": "476243fae1c47b2106765c7b5a05a355ec2df89ecfaadfcdffc947d14aba4360",
+          "limitations": "RetainedRust00 reused; firsthashNOW only, rawNMI/IRQ/IRET/kernelstack/native not executed. All prior failures retained; no fileclosure."
+        }
+      ]
     },
     {
       "id": "M14-F05",
@@ -2047,7 +2097,21 @@
         "observed_status": "running_source",
         "canonical_integration": "dispatcher",
         "native_credit": false
-      }
+      },
+      "execution_updates": [
+        {
+          "utc": "2026-10-24T02:38:42.781097+00:00",
+          "id": "M14-F05",
+          "stage": "actual-focused-checks",
+          "result": "PASS",
+          "comparisons": 937,
+          "commands": 10,
+          "whole_seconds": 10.064013635,
+          "receipt": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/batch-walkers-rss-flush-fixture-preparation-1/ACTUAL-CWD-CORRECTED-BATCH-WHOLE-RECEIPT.json",
+          "receipt_sha256": "7b799ee6e85fb5e92d3cafbad6f87263f2cbebda5e37433987c9ce2393f1146b",
+          "limitations": "Historical support modules/two unrelated exports namespaced; no child-table ownership. Current78/wholeTU/defaultimage/native OPEN. First missing-CWD failure preserved."
+        }
+      ]
     },
     {
       "id": "M14-F06",
@@ -2350,7 +2414,8 @@
     ],
     "do_not_infer_percentage_from_unassessed_counts": true,
     "file_completion": "Every functional subgoal has complete applicable proof stages and file_closure is complete. Preserve prior partial/native scope.",
-    "milestone_completion": "All six files and all final integration subgoals complete with final matched evidence. Functional35/35 alone does not complete M14."
+    "milestone_completion": "All six files and all final integration subgoals complete with final matched evidence. Functional35/35 alone does not complete M14.",
+    "percentage_policy": "Unmeasured. Withdrawn conversational guesses are not engineering estimates; C-file count, open-area count and test-vector counts do not measure implementation or remaining effort."
   },
   "updates": [
     {
@@ -2620,6 +2685,16 @@
       "evidence": "docs/verification/evidence/velocity-intervention-20261023-6/root-union-preparation-1/CANONICAL-INTEGRATION.json",
       "actual_additional_focused_check": "sync_one_page16commands795comparisonsPASS; receipt4e2d6368",
       "practical_new_closed_ids": []
+    },
+    {
+      "utc": "2026-10-24T02:38:42.781097+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "summary": "ActualF05937/ABI passed after sole CWD correction; F03 expert provider compile stopped on crate-name observer defect. Practical34/35 and all whole-file/default/native statuses unchanged. Six persistent source lanes reused; compiler grants serialized."
+    },
+    {
+      "utc": "2026-10-24T02:46:59.172098+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "summary": "User withdrew unsupported conversational M14/M15 percentages; engineering_percentage null. Credit substantial existing Rust and stage-specific actual implementation/default-link/native evidence; no new audit prerequisite."
     }
   ]
 }

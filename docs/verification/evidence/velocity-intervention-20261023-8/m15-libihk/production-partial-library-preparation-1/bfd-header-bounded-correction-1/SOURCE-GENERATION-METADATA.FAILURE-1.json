@@ -1,0 +1,1 @@
+{"scope": "Functional OS/apps and Rust migration only; no security testing.", "stage": "source metadata before any compile", "error": "Assertion expected one bfd.h include; actual original TU has two at15/2692", "correction": "Insert ABI witness after first actual include; preserve both original includes", "runtime_or_compiler": false}

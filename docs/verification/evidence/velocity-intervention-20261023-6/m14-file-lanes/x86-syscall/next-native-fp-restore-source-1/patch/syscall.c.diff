@@ -1,0 +1,20 @@
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -410,6 +410,9 @@
+ extern unsigned int arch_native_signal_mxcsr_mask_bridge(void);
+ extern long arch_native_signal_reset_fp_bridge(void);
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern long arch_native_signal_restore_fp_bridge(unsigned long user_address, int size);
++#else
+ long arch_native_signal_restore_fp_bridge(unsigned long user_address, int size)
+ {
+ 	int configured = get_xsave_size();
+@@ -443,6 +446,7 @@
+ 	kfree_tracked(allocation, __FILE__, __LINE__);
+ 	return result;
+ }
++#endif
+ 
+ long arch_native_signal_bad_frame_bridge(long error)
+ {

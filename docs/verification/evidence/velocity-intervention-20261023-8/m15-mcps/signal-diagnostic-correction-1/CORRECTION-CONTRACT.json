@@ -1,0 +1,112 @@
+{
+  "acceptance_credit": 0,
+  "actual_signal_evidence": [
+    {
+      "case": 21,
+      "name": "child-sigterm-parity-open",
+      "rust_status": 143,
+      "rust_stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-mcps/fixture-output/case-21-rust.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "rust_stderr_bytes_repr": "b''",
+      "rust_stdout": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-mcps/fixture-output/case-21-rust.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "script_status": 143,
+      "script_stderr": {
+        "bytes": 11,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-mcps/fixture-output/case-21-script.stderr",
+        "sha256": "b4a6c06672677cf0e25ec72bec83beae33305cee4b8087f168962014373b02bb"
+      },
+      "script_stderr_bytes_repr": "b'Terminated\\n'",
+      "script_stdout": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-mcps/fixture-output/case-21-script.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "case": 22,
+      "name": "child-sigkill-parity-open",
+      "rust_status": 137,
+      "rust_stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-mcps/fixture-output/case-22-rust.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "rust_stderr_bytes_repr": "b''",
+      "rust_stdout": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-mcps/fixture-output/case-22-rust.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "script_status": 137,
+      "script_stderr": {
+        "bytes": 217,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-mcps/fixture-output/case-22-script.stderr",
+        "sha256": "0dba197d75e6799c4a4af2e8a5c4afc9b52f93a32f412e9f326bb621bbc3d34b"
+      },
+      "script_stderr_bytes_repr": "b'/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-mcps/fixture-output/invocation/mcps: line 10: 4059515 Killed                  ${BINDIR}/mcinspect --kernel=${KERNDIR}/mckernel.img --ps\\n'",
+      "script_stdout": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-mcps/fixture-output/case-22-script.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "bounded_changes": [
+    "Add libcstrsignal declaration to selected Linux x86_64 no_std wrapper",
+    "On actual waited-for SIGTERM, emit C-locale signal message and LF, matching raw Terminated LF",
+    "On actual waited-for SIGKILL, emit original logical invocation name, scriptline10, real returned childPID width5, C-locale signal message paddedwidth24, retained scriptcommand representation andLF",
+    "Retain spawn/wait, child-status return, EINTR retry, launch errors, all child inheritance and original--ps delegation"
+  ],
+  "canonical_changed": false,
+  "compiler_executed": false,
+  "concrete_root_choice": "Run all23 unchanged cases under a fresh ordinary-host grant to establish this bounded correction; keep all-semantics/script-retirement credit open. Full Bash-compatible signal-disposition semantics require a separate supported-profile decision and broader real oracle observations before any additional implementation.",
+  "correction_attempt": 1,
+  "expected_cases": 23,
+  "failure_family": "M15-P05-mcps-Bash-signal-diagnostic-parity",
+  "first_actual_result": {
+    "bytes": 6071,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-mcps/actual-host-fixture-1/ACTUAL-MCPS-EQUIVALENCE-RESULT.json",
+    "sha256": "a2cbc65b4a59064e4ed34b95b985bfa1cb112c07b726cbf16a2dbf37bbfd830a"
+  },
+  "first_candidate": {
+    "bytes": 3260,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-mcps/mcps.rs",
+    "sha256": "333e8e561e473676c2929abed60aa6458046322b455d8c8bc1f06a1cfae319bc"
+  },
+  "first_summary": {
+    "bytes": 5212,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-mcps/fixture-output/summary.json",
+    "sha256": "fc8240affc7c3e831f75e370db86b14a5e7cf0a675c34eb40e74f01381cd5df4"
+  },
+  "first_whole_join": {
+    "bytes": 1067,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-mcps/actual-host-fixture-1/RESULT.json",
+    "sha256": "2f5f77b07b6fad763eaa23f78c54a36d97e634ec5905cd9da8224db7316c3240"
+  },
+  "fixture_executed": false,
+  "fixtures_unchanged_except_automatic_BASE_path_binding": true,
+  "known_first_failed_cases": [
+    "child-sigterm-parity-open",
+    "child-sigkill-parity-open"
+  ],
+  "native_acceptance": false,
+  "no_fixture_specialcase": true,
+  "no_subshell_or_shell_runtime_added": true,
+  "oracle_unchanged": true,
+  "production_link": false,
+  "remaining_boundary": [
+    "Inherited ignored/blocked SIGCHLD and ignored/caught/default SIGINT/SIGQUIT/SIGPIPE or other child/parent signal interactions remain unqualified; existing spawn/wait behavior is retained, not relabelled Bash-equivalent",
+    "Core-dump annotation, stop/continue, real-time/other signal diagnostic classes are not implemented or accepted by this correction; two observed forms do not establish all-profile signal parity",
+    "Non-C locale, shell job-control/traps/BASH_ENV and shell options, nonliteral configured paths, invalid executable/shebang fallback remain original explicit review boundaries"
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "BOUNDED_SOURCE_CORRECTION_NOT_COMPILED_OR_ACCEPTED",
+  "supported_correction_scope": "Only demonstrated ordinary C-locale SIGTERM/SIGKILL foreground child notifications. No signal-disposition semantics changed or broader parity claimed."
+}

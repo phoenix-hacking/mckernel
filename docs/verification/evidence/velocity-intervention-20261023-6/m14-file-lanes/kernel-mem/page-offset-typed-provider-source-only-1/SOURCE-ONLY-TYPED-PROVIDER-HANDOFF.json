@@ -1,0 +1,37 @@
+{
+  "actual": null,
+  "candidate": {
+    "bytes": 17782,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/page-offset-typed-provider-source-only-1/page_helpers.rs",
+    "sha256": "0d31598c6253ac662c5bb16c3c0b5e346e098dbefc8f56eb21c70c43c637e489"
+  },
+  "consumer_contract": "F02 Rust process callback casts live borrowed opaque pointer to *const page_helpers::Page and calls page_get_offset synchronously after phys_to_page and before PTE exchange/TLB/page_unmap. Existing nonNULL check/lock/memobj ownership retained. F02 owns integration of that callback, not this lane.",
+  "engineering_percentage": null,
+  "fragment": {
+    "bytes": 415,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/page-offset-typed-provider-source-only-1/page_get_offset.rs.fragment",
+    "sha256": "a1e9a5b0866e29ada651bab194d34850921aec35a847e985a406583150b2a3e4"
+  },
+  "integration": null,
+  "mechanism": "One plain read of typed Page.offset; existing repr(C) Page80B/align8/offset64 assertion retained; OffT=i64. No volatile/atomic/NULL/lock/refcount/allocation/mutation/log/release additions.",
+  "next_observation": "Future actualoriginal C long offsetgetter vs actualpageownedRustread for signed64 extremes plus realheader size/type/layout and unchangedinvalidate preexchange/preunmap ordering. No grant or secondfixturequeue created.",
+  "patch": {
+    "bytes": 677,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/page-offset-typed-provider-source-only-1/PAGE-OFFSET-TYPED-PROVIDER.patch",
+    "sha256": "bbf2bb6dbb495f234c86f5e026cf35428a31e7f689237074bb0865d8a6ed3810"
+  },
+  "preimage": {
+    "bytes": 17367,
+    "path": "/home/holden/mckernel/kernel/rust/page_helpers.rs",
+    "sha256": "cfc64f72bf9b94c65417bc8f4e29d65b81f98239fe52ab2a7dd0352ebdfc3f70"
+  },
+  "production_default_native": "OPEN",
+  "request": {
+    "bytes": 2108,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/PAGE-OFFSET-TYPED-PROVIDER-REQUEST.md",
+    "sha256": "401ff4eeab1b582272febad627b39330405f2fc9e8f39d8789bb9f9f523edb31"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "signature": "pub unsafe extern \"C\" fn page_get_offset(page: *const Page) -> OffT",
+  "status": "PRIVATE_TYPED_PAGE_PROVIDER_SOURCE_ONLY_NOT_TESTED"
+}

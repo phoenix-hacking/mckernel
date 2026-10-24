@@ -1,0 +1,38 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "authority": "Root explicit NEW ACTUALTURN grant; CPU6 free after F02 corrected14 PASS756b.",
+  "ready_sha256": "899b484b790846ab69afc48a0be90292f8e6e10d87ece6cece8c7eae2e2426f4",
+  "driver_sha256": "749494d8e66df67f5407a32352d0aa2ee8b5128e58eba593ecc9a08ee00388da",
+  "profile": {
+    "CPU": 6,
+    "jobs": 1,
+    "AS": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 90,
+    "retirement_seconds": 6,
+    "FSIZE": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "OS_stack": 2097152,
+    "RUST_MIN_STACK": 2097152
+  },
+  "command": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--stack=2097152:2097152",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/VM-current-union-production-preparation-1/run_current_VM_production_once.py"
+  ],
+  "stop": "First unexpected failure stops; no automatic retry.",
+  "no_root_Docker_guest_canonical": true
+}

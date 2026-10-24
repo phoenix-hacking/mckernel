@@ -1,0 +1,78 @@
+/// Replace the actual former C remap visitor. The existing outer caller
+/// keeps its page-table exclusion and memobj reference for the synchronous
+/// visit; page_unmap owns its existing mapped-page/hash accounting. No new
+/// lock, reference, ownership transfer or error policy is introduced.
+#[no_mangle]
+pub unsafe extern "C" fn remap_one_page(
+    arg0: *mut c_void,
+    page_table: *mut c_void,
+    ptep: *mut c_void,
+    pgaddr: *mut c_void,
+    pgshift: CInt,
+) -> CInt {
+    let args = arg0.cast::<ProcessRemapArgs>();
+    let pgsize = (1 as SizeT).wrapping_shl(pgshift as u32);
+    let pte = ptep.cast::<CULong>();
+    let mut old_pte: CULong = 0;
+    if core::ptr::read_volatile(core::ptr::addr_of!(
+        process_remap_one_page_entry_debug.line_flags
+    )) >> 24 != 0 {
+        let _ = kprintf(
+            b"remap_one_page(%p,%p,%p %#lx,%p,%d)\n\0".as_ptr().cast(),
+            arg0, page_table, ptep, *pte, pgaddr, pgshift,
+        );
+    }
+    // Preserve C's unsigned uintptr_t arithmetic and LP64 off_t conversion.
+    // Both argument loads occur after the entry logger, as in the C body.
+    let off = ((*args).off as CULong)
+        .wrapping_add((pgaddr as CULong).wrapping_sub((*args).start)) as OffT;
+    crate::pte_helpers::pte_make_fileoff(off, 0, pgsize, &raw mut old_pte);
+    crate::pte_helpers::pte_xchg(pte, &raw mut old_pte);
+    crate::x86_memory_helpers::flush_tlb_single(pgaddr as CULong);
+
+    // All mapping-release decisions use the exchanged snapshot, never a PTE
+    // subsequently published at ptep by the existing TLB/flush boundaries.
+    if crate::pte_helpers::pte_is_null(&raw const old_pte) == 0
+        && crate::pte_helpers::pte_is_fileoff(&raw const old_pte, pgsize) == 0
+    {
+        let phys = crate::pte_helpers::pte_get_phys(&raw const old_pte);
+        if crate::pte_helpers::pte_is_dirty(&raw const old_pte, pgsize) != 0 {
+            // The original remap visitor deliberately ignores this result.
+            let _ = crate::object_helpers::memobj_flush_page((*args).memobj, phys, pgsize);
+        }
+        // Existing public phys_to_page provider retains its C forwarding
+        // wrapper and Rust lookup implementation; it is explicit provider debt.
+        let page = phys_to_page(phys);
+        if !page.is_null() && crate::page_helpers::page_unmap(page) != 0 {
+            let address = crate::x86_memory_helpers::phys_to_virt(phys);
+            crate::mem_helpers::_ihk_mc_free_pages(
+                address,
+                (pgsize / PAGE_SIZE as SizeT) as CInt,
+                1, // existing IHK_MC_PG_USER, checked against actual mm.h
+                process_remap_free_file as *mut i8,
+                process_remap_free_line,
+            );
+            if core::ptr::read_volatile(core::ptr::addr_of!(
+                process_remap_one_page_rss_debug.line_flags
+            )) >> 24 != 0 {
+                // Original %ld payloads are the unsigned size_t values.
+                let _ = kprintf(
+                    b"%lx-,%s: calling memory_stat_rss_sub(),size=%ld,pgsize=%ld\n\0".as_ptr().cast(),
+                    phys, b"remap_one_page\0".as_ptr().cast::<i8>(), pgsize, pgsize,
+                );
+            }
+            // Reload args->memobj after free/log callbacks, and retain C's
+            // narrowing conversion from size_t to the provider's int pgsize.
+            crate::mem_helpers::rusage_memory_stat_sub((*args).memobj, pgsize as CULong, pgsize as CInt);
+        }
+    }
+    if core::ptr::read_volatile(core::ptr::addr_of!(
+        process_remap_one_page_exit_debug.line_flags
+    )) >> 24 != 0 {
+        let _ = kprintf(
+            b"remap_one_page(%p,%p,%p %#lx,%p,%d): %d\n\0".as_ptr().cast(),
+            arg0, page_table, ptep, *pte, pgaddr, pgshift, 0 as CInt,
+        );
+    }
+    0
+}

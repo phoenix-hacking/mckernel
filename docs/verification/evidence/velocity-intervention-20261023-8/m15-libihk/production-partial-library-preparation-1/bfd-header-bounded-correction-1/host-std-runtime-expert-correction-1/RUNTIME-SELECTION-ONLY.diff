@@ -1,0 +1,25 @@
+--- preserved734d-no_std-default
++++ explicit-HOST-std-runtime-root
+@@ -1,6 +1,6 @@
+ //! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ //! Public CPU API successor for the selected WITH_KRM=OFF Linux x86_64 profile.
+-#![no_std]
++#![cfg_attr(not(ihklib_host_std_runtime), no_std)]
+ #[cfg(ihklib_with_krm)]
+ compile_error!("WITH_KRM CPU reservation policy must be ported before selecting this successor");
+ use core::ffi::{c_char, c_int, c_ulong};
+@@ -20,6 +20,7 @@
+     fn __errno_location() -> *mut c_int;
+     fn abort() -> !;
+ }
++#[cfg(not(ihklib_host_std_runtime))]
+ #[panic_handler]
+ fn panic(_: &core::panic::PanicInfo<'_>) -> ! { unsafe { abort() } }
+ unsafe fn neg_errno() -> c_int { unsafe { -*__errno_location() } }
+@@ -109,5 +110,5 @@
+ #[no_mangle]
+ pub extern "C" fn ihklib_cpu_req_count_offset() -> usize { core::mem::offset_of!(IhkCpuReq, num_cpus) }
+ 
+-#[path = "ihklib_memory_os_dependencies.rs"]
++#[path = "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/ihklib_memory_os_dependencies.rs"]
+ mod ihklib_memory_os;

@@ -1,0 +1,48 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "utc": "2026-10-24T02:57:15.648730+00:00",
+  "timer_interval": 2988017,
+  "goal_status": "active",
+  "actual_read": {
+    "abort_count": 0,
+    "completed_rounds": 101,
+    "diagnostic_parse_errors": [],
+    "failures": [],
+    "last_phase": {
+      "line": 1538,
+      "round": 101,
+      "stage": "callback-launch"
+    },
+    "mixed_seconds": 554.685428396,
+    "observed_utc": "2026-10-24T02:54:03.908681+00:00",
+    "owner": {
+      "expected_start": 60669407,
+      "observed_start": 60669407,
+      "pid": 4056308,
+      "same_identity": true,
+      "state": "S"
+    },
+    "owner_age_seconds_at_read": 1194.3589795740554,
+    "practical": "34/35",
+    "prefix_capped": false,
+    "reported_launches": 202,
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "terminal_acceptance": false,
+    "trace_errors": [],
+    "wire_error": null
+  },
+  "practical_complete": 34,
+  "new_closed_ids": [],
+  "production_passes": {
+    "F01_VM": "13commands22.920s140c443a",
+    "F02_process": "14commands27.430s756b9abd",
+    "F05_archmemory": "11commands44.858s36dec658+independentreviewPASS"
+  },
+  "failed_invariants": [
+    "F06signalHOSTproviderclosure missing memset/core panic; retainedVDSO36876PASS, expertgenuineRustproviderproposalpreparing",
+    "F04NULLfreeze inheritedC/Rustprecondition defect, no validframe regression or observedruntimecause"
+  ],
+  "stalled_handoff": "Some new instructions delivered via send_message after ownercompletion didnotstartturn. Correctedwithfollowup_task and explicitactualstartack; no pre-startintervalcountedascompiler/runtime.",
+  "strategy": "Usefollowup_task forEVERYnewexecution/sourceassignment evenifstatusuncertain; send_message onlyongoingtasksteering. SerializedCPU6wholejoin handoffs; fixedsource/memberproviders ratherthannew framework. Holdcanonicalchangesuntilallactivebaselinejobsretire, thenonecoherentunion.",
+  "critical_path": "Healthy-current-captureP12mixedquota/terminalretirement; parallelactualdefaultimagecompile-onlyreusepreparation/currentM14production+M15liblink. No unsupportedthroughputclaim."
+}

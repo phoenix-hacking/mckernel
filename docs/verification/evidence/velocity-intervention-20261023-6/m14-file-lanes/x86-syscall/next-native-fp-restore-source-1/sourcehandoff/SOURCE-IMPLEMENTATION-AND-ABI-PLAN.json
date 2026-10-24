@@ -1,0 +1,119 @@
+{
+  "ABI_unknown": null,
+  "C_patch": {
+    "bytes": 630,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-native-fp-restore-source-1/patch/syscall.c.diff",
+    "sha256": "defa9dd7acece7ccaedce2d58437f850002f3989a78103848cf7beedba8103c0"
+  },
+  "C_preimage": {
+    "bytes": 113504,
+    "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+    "sha256": "912fb97a58cc797407979ce835c422578949ff876ac519193d2ebc4855cce791"
+  },
+  "Rust_merge_patch": {
+    "bytes": 3893,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-native-fp-restore-source-1/patch/syscall_policy.native_fp_restore.REMOVE-ONE-EXTERN-APPEND.diff",
+    "sha256": "e9947cdd4bf2fd1afe0899f863f814305d7d2b9dd50c3f3e9cb33f4b21b513e3"
+  },
+  "Rust_preimage": {
+    "bytes": 713471,
+    "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+    "sha256": "3ef8288617db7bcc26c56039491295d3f48c53d4f76d111b68dfcc3186546f7d"
+  },
+  "actual_result": null,
+  "actual_selected_caller": "syscall_policy::sys_rt_sigreturn native branch -> native_signal::sigreturn RestoreFp callback -> this public callback",
+  "boundary": "long arch_native_signal_restore_fp_bridge(unsigned long,int)",
+  "canonical_writes": 0,
+  "compiler_jobs": 0,
+  "default_consumer": null,
+  "fragment": {
+    "bytes": 3188,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-native-fp-restore-source-1/candidate/syscall_policy.native_fp_restore.FRAGMENT.rs",
+    "sha256": "6bd68293a9d1bb84867c2f8ecb23f81a1c61f63ca543877184b38d9e8bdcda9e"
+  },
+  "fullcrate": null,
+  "future_sources": [
+    {
+      "bytes": 2237,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-native-fp-restore-source-1/future-fixture-source-only/native_xstate.ACTUAL.rs",
+      "sha256": "b0b39e0df8298740f53a6b76c5ce6905dfdd9092328578df18225c4a57e8100e"
+    },
+    {
+      "bytes": 1051,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-native-fp-restore-source-1/future-fixture-source-only/original-C-entry.ACTUAL.inc",
+      "sha256": "2ba61ae3db4c2fce590fcd5b01d867e14059a6d9fa8911eb167ae4f48a7bd0f9"
+    },
+    {
+      "bytes": 2106,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-native-fp-restore-source-1/future-fixture-source-only/real-ABI-caller.c",
+      "sha256": "47fc38af5a3498d379672b4b43185ddda3c51743acd35e595a4d5f8be6118223"
+    }
+  ],
+  "invariants": [
+    "configured getter before NULL user reset; zeroaddress returns exact resetstatus withoutalloc",
+    "actualRustbounds576..65536 policy/error unchanged, allocatebytes+63 withsameNOWAIT/intsizeABI",
+    "same64alignroundedaddress, preservedallocationprovenance/rawbase, neverfreealignedinterior",
+    "copy checked usermemory via existingRust provider, every nonzero copyresult\u2192-EFAULT thenexactlyonebasefree",
+    "getmask aftercopy; getmxcsr onlyvalidationroute; actualxstate validatorunchanged; checkedXRSTOR onlyonvalidation0",
+    "everypostallocationreturn path freesoriginalbaseonce aftersynchronousvalidation/restore, statuspreservedincludingpositiveXRSTORstatus",
+    "no newborroweduserslice/no nativeXRSTORhostexecution, CPUexclusion/lifetimes unchanged",
+    "tracker file/line reflect Rust sourceprovenance ratherthan originalCsource; ownerpointer/extent/freecontract preserved",
+    "originalCfallback fullbodybyteidentical, selectednativecfgsameCMake Linux6.12 definesMCKERNEL_NATIVE_SIGNAL_STACK andRustnative_linux_irq_work_v6_12 together"
+  ],
+  "native": null,
+  "next_consumer": "Full actualC/publicRust differential HOSTstaticlib(defaultgenuineRustcore/panic) with actualnative_xstate validators and controlledallocator/copy/reset/MXCSR/checkedXRSTOR effects;64alignments,16basecases+invalidheader variants, no hardware XRSTOR executed. No driver/secondqueue.",
+  "providers": [
+    {
+      "bytes": 12106,
+      "path": "/home/holden/mckernel/kernel/rust/native_signal.rs",
+      "sha256": "aea4bf00889641d831f4cebf5c452924947e0255cf1f5d47437e804bcbadb250"
+    },
+    {
+      "bytes": 2237,
+      "path": "/home/holden/mckernel/kernel/rust/native_xstate.rs",
+      "sha256": "b0b39e0df8298740f53a6b76c5ce6905dfdd9092328578df18225c4a57e8100e"
+    },
+    {
+      "bytes": 2089,
+      "path": "/home/holden/mckernel/kernel/rust/native_fault.rs",
+      "sha256": "771c46717169d52685bea87386dd15afd7f193fc5c9eefbce1544d67788a6025"
+    },
+    {
+      "bytes": 206768,
+      "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "sha256": "6a527f7a55930d72d6d72c775ee0261c3550e2bd0094fe01031f3aa3238aefd6"
+    },
+    {
+      "bytes": 201809,
+      "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+      "sha256": "800a18bb4db0e28bf76441fca783b3f8d47066260240fb5107967c23775aa494"
+    },
+    {
+      "bytes": 93305,
+      "path": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "98914e1ff4d50c2f42ccbdeb1f4f338024b7a9a2143fbad2f59ebd6f6b50dd0b"
+    },
+    {
+      "bytes": 95605,
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/cpu.c",
+      "sha256": "c779079fb6de66991c861c823dca06b2a9ceec16ac4c984995200b668d7e78ce"
+    },
+    {
+      "bytes": 1171,
+      "path": "/home/holden/mckernel/kernel/include/kmalloc.h",
+      "sha256": "fff00b6875c3f87a0d9c4bdfeadf3c3d3eb731d843dc0650f6364352ac2b1144"
+    },
+    {
+      "bytes": 23076,
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "sha256": "b141d09ad4d717171d9fca51b8ffefec65573f266652bc0d93129bd2a03ec40e"
+    }
+  ],
+  "remaining_C_dependencies": [
+    "Existing cpu.c arch_native_signal_reset_fp_bridge and arch_native_signal_mxcsr_mask_bridge (selected wrappers call alreadyRust F04 FP helpers); no newgetter/body added.",
+    "Existing x86_cpu_helpers get_xsave_size/get_xsave_mask reuse selected CPU data bridges. Their source/activation remains F04 owner scope."
+  ],
+  "reviewed_assembly": "native_fault.rs native_xrstor_checked exact existinginstruction+faultrecovery reused, no newassembly",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "COMPLETE_NATIVE_FP_RESTORE_SOURCE_ONLY_NO_SECOND_READY_QUEUE"
+}

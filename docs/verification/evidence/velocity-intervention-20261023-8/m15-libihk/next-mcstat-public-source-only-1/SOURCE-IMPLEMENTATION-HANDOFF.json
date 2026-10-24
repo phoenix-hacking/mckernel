@@ -1,0 +1,67 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "NEXT_SUBSTANTIVE_MCSTAT_PUBLIC_SOURCE_AND_FIXTURE_FRAGMENTS_ONLY_NO_SECOND_QUEUE",
+  "caller": {
+    "path": "/home/holden/mckernel/tools/mcstat/rust/mcstat.rs",
+    "sha256": "69609bee1602ba37849be3dd6e1e745d957b56c729e5206a444e69f160bef2d2",
+    "bytes": 17509
+  },
+  "original_C": {
+    "path": "/home/holden/mckernel/ihk/linux/user/ihklib.c",
+    "sha256": "6f2c7321667f405b3dc483c089eb5119db0d0a758c8e17a86460f9aad8dcdeab",
+    "bytes": 103430
+  },
+  "selected_UAPI": {
+    "path": "/home/holden/mckernel/ihk/linux/include/ihk/ihk_host_user.h",
+    "sha256": "2335260024075a08becbe74651162a950aee8bea603e9a451cb8bcae3aa0ef97",
+    "bytes": 5704
+  },
+  "selected_rusage": {
+    "path": "/home/holden/mckernel/ihk/linux/include/ihk/ihk_rusage.h",
+    "sha256": "afc786f096e70bd9b89834b5b0af81ee0e1cfe3f3cd2e73ef5f88db4d63d5d01",
+    "bytes": 1404
+  },
+  "reused_Rust_layout": "Existing actual mcstat IhkOsRusage body unchanged except public type visibility; constants1024/1024/8 match current C UAPI.",
+  "new_exports": [
+    "ihklib_os_open",
+    "ihk_os_get_num_numa_nodes",
+    "ihk_os_getrusage"
+  ],
+  "actual_needed_imports": [
+    "ihk_os_get_num_numa_nodes",
+    "ihk_os_getrusage"
+  ],
+  "consumer_next_dependency": "ihk_os_query_total_mem remains C sysfs/count/parser chain; mcstat whole-library/native/default-selector proof remains open",
+  "selected_config": {
+    "ENABLE_RUSAGE": 1,
+    "WITH_KRM": false,
+    "x86_64_LP64": true
+  },
+  "files": {
+    "ihklib_mcstat.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/next-mcstat-public-source-only-1/ihklib_mcstat.rs",
+      "sha256": "0071a8320c503972ec768caf45ddc7fb8f5ccdfef2fe825e1e0bfb3d8a3ea8a0",
+      "bytes": 4090
+    },
+    "reference_mcstat_apis.SOURCE-FRAGMENT.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/next-mcstat-public-source-only-1/reference_mcstat_apis.SOURCE-FRAGMENT.c",
+      "sha256": "fc8d8b447f37f02a7ad66ee4c6588793088e9eac5b21694a80885a4de97f4323",
+      "bytes": 2828
+    },
+    "test_mcstat_api_layout.SOURCE-FRAGMENT.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/next-mcstat-public-source-only-1/test_mcstat_api_layout.SOURCE-FRAGMENT.c",
+      "sha256": "cc4418b367eae709fb0d39e500f9310d7d969558bfcd5d8cb5fd543ab5760710",
+      "bytes": 1627
+    },
+    "ROOT-MODULE-INSERTION.SOURCE-FRAGMENT.txt": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-libihk/next-mcstat-public-source-only-1/ROOT-MODULE-INSERTION.SOURCE-FRAGMENT.txt",
+      "sha256": "55d3e22854c4c051253a012dbf2bb5088c2432a3e0ffb8fc72af4d37075a31bb",
+      "bytes": 524
+    }
+  },
+  "current_queue_unchanged": "79d138 wholeTU/partialsharedlib/CLI four-command queue only",
+  "compiler_runs": 0,
+  "root_device_directory_calls": 0,
+  "CPU_reservation": false,
+  "canonical_changes": false
+}

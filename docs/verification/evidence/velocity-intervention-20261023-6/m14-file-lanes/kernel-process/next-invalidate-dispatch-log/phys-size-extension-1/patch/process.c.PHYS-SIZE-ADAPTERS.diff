@@ -1,0 +1,42 @@
+--- a/kernel/process.c
++++ b/kernel/process.c
+@@ -2703,10 +2703,14 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++uintptr_t process_pte_get_phys_bridge(void *);
++#else
+ uintptr_t process_pte_get_phys_bridge(void *ptep)
+ {
+ 	return pte_get_phys((pte_t *)ptep);
+ }
++#endif
+ 
+ void *process_phys_to_page_bridge(uintptr_t phys)
+ {
+@@ -2742,15 +2746,23 @@
+ 	flush_tlb_single(addr);
+ }
+ 
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++int process_pgsize_to_tbllv_bridge(size_t);
++#else
+ int process_pgsize_to_tbllv_bridge(size_t pgsize)
+ {
+ 	return pgsize_to_tbllv(pgsize);
+ }
+-
++#endif
++
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++size_t process_tbllv_to_contpgsize_bridge(int);
++#else
+ size_t process_tbllv_to_contpgsize_bridge(int level)
+ {
+ 	return tbllv_to_contpgsize(level);
+ }
++#endif
+ 
+ int process_page_unmap_bridge(void *page)
+ {

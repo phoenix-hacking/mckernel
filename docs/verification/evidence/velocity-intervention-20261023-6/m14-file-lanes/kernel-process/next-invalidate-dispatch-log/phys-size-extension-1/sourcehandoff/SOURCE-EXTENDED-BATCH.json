@@ -1,0 +1,66 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "NINE_CALLBACK_INVALIDATE_BATCH_SOURCE_ONLY_NO_SECOND_QUEUE",
+  "predecessor": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/predicate-extension-1/sourcehandoff/SOURCE-EXTENDED-BATCH.json",
+    "sha256": "b4fa09d1415cd830dff95031d694e73d68ad24101845fee3f53959868a1d6a05",
+    "bytes": 4562
+  },
+  "prior690_sources_unchanged_and_unrun": true,
+  "postimages": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/phys-size-extension-1/candidate/kernel/process.c",
+      "sha256": "b7ba75d2c83228adbf273e2b2bc82a5552014b6c665b96e3be8bb55ea8da6a2b",
+      "bytes": 165177
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/phys-size-extension-1/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "2b70399e3c48332aef387a06e75ec8ba1678843c68190c2a8f80d6e9f2a66c5b",
+      "bytes": 362997
+    }
+  },
+  "original_C_fallback_exact": true,
+  "new_Rust_callbacks": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/phys-size-extension-1/fixture/callbacks.ACTUAL-RUST.inc",
+    "sha256": "69299b7bbed842112364ca66ef8b5ef8c6c907a28f40deda2595928aff1dd079",
+    "bytes": 455
+  },
+  "fixture_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/phys-size-extension-1/actual_phys_size_parity.SOURCE-ONLY.c",
+    "sha256": "7e3c6b1e38a52476fdc89cb5344f1fe0f8b4af51a96aea53eadeccacb250c634",
+    "bytes": 2612
+  },
+  "owner_invariant": "Existing Rust owner null/fileoff short-circuit precedes physical extraction. Physical mask result is read before Page lookup and PTE exchange. Existing contiguous test/head test precede pgsize_to_tbllv then tbllv_to_contpgsize; nonhead contiguous case exits0. x86 conversion returns0 for unsupported sizes/contiguous levels exactly as existing providers. No lock/ref/notification/lifetime/write changes.",
+  "new_planned_comparisons": 26,
+  "cumulative_planned_comparisons": 716,
+  "remaining_exact_owner_C_callbacks": [
+    "process_phys_to_page_bridge",
+    "process_page_offset_bridge",
+    "process_flush_tlb_single_bridge",
+    "process_pte_is_contiguous_bridge",
+    "process_page_is_contiguous_head_bridge",
+    "process_page_unmap_bridge",
+    "process_panic_bridge"
+  ],
+  "page_offset_request": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-invalidate-dispatch-log/PAGE-OFFSET-TYPED-PROVIDER-REQUEST.md",
+  "queued_remap404_ready": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/remap-range-log-fixture-preparation-1/sourcehandoff/EXECUTABLE-READY.REMAP-LOG404.NOT-GRANTED.json",
+    "sha256": "e0d1d6b23ddbf7067ddd0e676caf1b881fce7eb21aee246d0b9ac60f96b7b34d",
+    "bytes": 3542
+  },
+  "effort_ranking_with_uncertainty": [
+    "Lower effort: remaining pure PTE/contiguity adapters reuse existing Rust operations.",
+    "Medium: typed phys_to_page/page_unmap/TLB/panic adapters need actual provider/caller and controlled-effect qualification.",
+    "Medium-to-higher uncertainty: Page offset private-field boundary needs F01-owned typed provider, no guessed field offset.",
+    "Highest known implementation uncertainty: retained page_fault_process_memory_range ownership/error/lock orchestration; existing Rust PTE/memobj/allocator helpers help but do not establish a complete port.",
+    "Separate broader dependency: coherent default image linking/provider activation and native/runtime acceptance; current fullcrate/partial and hosted leaf evidence do not close it."
+  ],
+  "next_observation": "26 original C/provider vs real Rust/provider physical-mask and size/default-result cases plus real ABI and unchanged exact caller ordering; source only. The sole executable queue remains remap/log404.",
+  "compiler_jobs": 0,
+  "tests_executed": 0,
+  "CPU_reservations": 0,
+  "new_executable_queues": 0,
+  "percentage_estimate": null,
+  "ETA": null,
+  "default_native_credit": false
+}

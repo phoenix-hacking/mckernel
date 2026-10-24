@@ -1,0 +1,20 @@
+--- a/kernel/rust/page_helpers.rs
++++ b/kernel/rust/page_helpers.rs
+@@ -192,6 +192,17 @@
+ #[no_mangle]
+ pub unsafe extern "C" fn page_is_multi_mapped(page: *mut Page) -> CInt {
+     unsafe { page_is_multi_mapped_body_result(page) }
++}
++
++/// Read the offset of the caller's live, borrowed page.
++///
++/// # Safety
++/// `page` must point to a valid initialized `Page` for this synchronous read.
++/// The caller retains the existing page-table lock/memobj lifetime; this
++/// accessor acquires no reference and supplies no null-pointer policy.
++#[no_mangle]
++pub unsafe extern "C" fn page_get_offset(page: *const Page) -> OffT {
++    unsafe { (*page).offset }
+ }
+ 
+ #[no_mangle]

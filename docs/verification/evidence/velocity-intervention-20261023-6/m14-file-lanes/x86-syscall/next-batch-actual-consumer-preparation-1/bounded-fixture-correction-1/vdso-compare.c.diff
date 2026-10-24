@@ -1,0 +1,20 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-batch-actual-consumer-preparation-1/vdso/compare_actual_public_entries.c
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-batch-actual-consumer-preparation-1/bounded-fixture-correction-1/source/vdso-compare.c
+@@ -160,13 +160,15 @@
+     .setup_error=error==0?0:error==1?-5:17,.fail_at=fail,
+     .map_error=(problem&1)?-12:23,.mutate=mutate,.address_case=address,
+     .debug_flags=problem%3==0?0:problem%3==1?1:128};
+-  if(vector())return 1;problem++;
++  if(vector())return 1;
++  problem++;
+  }
+  /* Actual host-safe Rust pvclock body executes allocation/zeroing only on pages[]. */
+  const int processors[]={0,1,65,129};
+  for(int mode=1;mode<=3;mode++) for(int p=0;p<4;p++) {
+   cfg=(struct config){.present=7,.flags=7,.helper_mode=mode,.cpus=processors[p],.debug_flags=1};
+-  if(vector())return 1;problem++;
++  if(vector())return 1;
++  problem++;
+  }
+  printf("PASS original_C_vs_public_Rust vectors=%d real_headers_vdso88_ddebug32 attr64 pvclock_actual_body12 controlled_map_virt\n",problem);
+  return 0;

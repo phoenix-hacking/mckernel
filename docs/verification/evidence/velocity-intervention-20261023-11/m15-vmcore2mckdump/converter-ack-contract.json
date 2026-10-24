@@ -1,0 +1,35 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "kind": "separate converter acknowledgment proposal; not wrapper parity evidence",
+  "source": "executer/user/rust/ldump2mcdump_helpers.rs",
+  "patch": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-11/m15-vmcore2mckdump/converter-ack.patch",
+  "existing_reuse": [
+    "same cmd_ldump2mcdump producer, BFD sections and memory layout",
+    "unchanged bit/chunk/physmem-name helpers and existing helper smoke at kernel/rust/tests/run_equivalence.sh:120450"
+  ],
+  "protocol": "MCKERNEL_LDUMP2MCDUMP_SUCCESS <exact converter output path> followed by newline; emitted after required reads/writes and successful bfd_close, after existing buffers are freed; fflush makes marker observable",
+  "read_checks_added": [
+    "dump_page_set symbol pointer",
+    "IhkDumpPageSet before assume_init",
+    "IhkDumpPage before assume_init",
+    "page bitmap before chunk decoding",
+    "bootstrap memory address",
+    "all physical payload read results recorded"
+  ],
+  "observation_preservation": "Existing physical read-error fprintf and continuing observations/writes remain; any read failure suppresses ack. Required physchunks lookup missing also suppresses ack. Existing BFD write/close failures retain their diagnostics/early returns. Metadata read failures return before undefined assume_init continuation.",
+  "no_format_change": "No BFD section, memory entry, endian, payload or file-format encoding is changed by this proposal; only control acknowledgment and checked read results differ.",
+  "focused_future_cases": [
+    "every metadata read FALSE: no ack, no use of uninitialized records",
+    "bitmap read FALSE: free its allocated buffer, no ack",
+    "physical read FALSE at first/middle/last chunk: original readmem error retained, later observations retained, no ack",
+    "each bfd_set_section_contents failure: existing diagnostic, no ack",
+    "required physchunks lookup NULL: no ack",
+    "bfd_close FALSE: existing diagnostic, no ack",
+    "all required operations succeed: exactly one marker for configured PATH after successful close",
+    "all original pure helper smoke vectors unchanged"
+  ],
+  "known_gap": "No current full-command callback/BFD fault fixture was identified in the bounded existing equivalence script; the small pure helper smoke does not validate this delta. Prepare/adapt a matched full-command fixture under a separately granted source/ABI review before producer integration.",
+  "unexecuted": true,
+  "compiler_pass": false,
+  "native_acceptance": false
+}

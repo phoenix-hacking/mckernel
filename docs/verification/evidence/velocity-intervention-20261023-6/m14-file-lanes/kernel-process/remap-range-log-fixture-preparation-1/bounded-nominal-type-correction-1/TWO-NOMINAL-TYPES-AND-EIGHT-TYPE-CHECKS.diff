@@ -1,0 +1,30 @@
+--- preserved-failed-fixture/remaining_parity.c
++++ bounded-uintptr-continuation/remaining_parity.c
+@@ -71,11 +71,11 @@
+ }
+ void fixture_tlb_effect(unsigned long address){CHECK(address==addr);event(2,0,0,0,0,0);if(mutation&2)pte=0x10101001UL;}
+ void flush_tlb_single(unsigned long address){fixture_tlb_effect(address);}
+-static int flush(struct memobj *obj,unsigned long phys,size_t pgsize){
++static int flush(struct memobj *obj,uintptr_t phys,size_t pgsize){
+  CHECK(pgsize==(1UL<<shift));event(3,index_of(obj),0,0,phys,pgsize);
+  if(mutation&4){pte=0x20202001UL;args.memobj=&objects[1];}return flush_error;
+ }
+-struct page *phys_to_page(unsigned long phys){event(4,0,0,0,phys,0);if(mutation&8){pte=0x30303001UL;args.memobj=&objects[2];}return page_present?&page:0;}
++struct page *phys_to_page(uintptr_t phys){event(4,0,0,0,phys,0);if(mutation&8){pte=0x30303001UL;args.memobj=&objects[2];}return page_present?&page:0;}
+ int fixture_page_unmap_effect(struct page *p){CHECK(p==&page);event(5,0,0,unmap_result,0,0);if(mutation&16){pte=0x40404001UL;args.memobj=&objects[3];}return unmap_result;}
+ int page_unmap(struct page *p){return fixture_page_unmap_effect(p);}
+ void *fixture_phys_to_virt_effect(unsigned long phys){event(6,0,0,0,phys,0);return (void *)(phys^0xffff800000000000UL);}
+@@ -211,3 +211,13 @@
+  CHECK(comparisons==344&&range_comparisons==60);
+  printf("remaining_actual_C_Rust_remap_comparisons=%d range_log_comparisons=%d typed_host_effects_only=1\n",comparisons,range_comparisons);return 0;
+ }
++
++/* Same-family adapter type checks; no casts or control/oracle changes. */
++_Static_assert(__builtin_types_compatible_p(__typeof__(&flush),memobj_flush_page_func_t *),"exact assigned real memobj callback type");
++_Static_assert(__builtin_types_compatible_p(__typeof__(&phys_to_page),struct page *(*)(uintptr_t)),"exact real page lookup type");
++_Static_assert(__builtin_types_compatible_p(__typeof__(&page_unmap),int (*)(struct page *)),"exact real unmap type");
++_Static_assert(__builtin_types_compatible_p(__typeof__(&flush_tlb_single),void (*)(unsigned long)),"exact real TLB boundary type");
++_Static_assert(__builtin_types_compatible_p(__typeof__(&phys_to_virt),void *(*)(unsigned long)),"exact real physical translation type");
++_Static_assert(__builtin_types_compatible_p(__typeof__(&_ihk_mc_free_pages),void (*)(void *,int,int,char *,int)),"exact real tracked free type");
++_Static_assert(__builtin_types_compatible_p(__typeof__(&rusage_memory_stat_sub),void (*)(struct memobj *,unsigned long,int)),"exact real RSS type");
++_Static_assert(__builtin_types_compatible_p(__typeof__(&kprintf),int (*)(const char *,...)),"exact real logger type");

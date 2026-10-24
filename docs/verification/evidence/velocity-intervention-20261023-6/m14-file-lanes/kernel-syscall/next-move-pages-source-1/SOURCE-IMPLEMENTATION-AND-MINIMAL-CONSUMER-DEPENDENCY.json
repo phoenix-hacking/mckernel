@@ -1,0 +1,100 @@
+{
+  "C_selection": {
+    "bytes": 3384,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-move-pages-source-1/move_pages.C-SELECTION-FRAGMENT.inc",
+    "sha256": "583d011dd0143267cac6c0d6b2b423f965e47534150da4e4b4d25bb005d19caf"
+  },
+  "Rust_fragment": {
+    "bytes": 2966,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-move-pages-source-1/move_pages.RUST-FRAGMENT.rs.inc",
+    "sha256": "1e0faa5e627a9d8f9dc066040717a2093f21ad46e9367ec9874f32bbb82301db"
+  },
+  "actual_result": null,
+  "callback_reuse": [
+    "x86_cpu_helpers ihk_mc_syscall_arg0..5/full private x86_syscall_read",
+    "x86_memory_helpers::verify_process_vm",
+    "x86_setup::ihk_mc_get_nr_numa_nodes through existing policy ABI",
+    "spinlock_helpers::__ihk_mc_spinlock_lock_noirq/unlock_noirq",
+    "ap::smp_call_func",
+    "x86_cpu_helpers::rdtsc"
+  ],
+  "canonical_preimages": {
+    "C": {
+      "bytes": 843257,
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "sha256": "34ec8a08c5790aa7533e5a8e3905d1dd1d4989bf0f431b8517ae6d50bbaa54f4"
+    },
+    "policy": {
+      "bytes": 713471,
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "3ef8288617db7bcc26c56039491295d3f48c53d4f76d111b68dfcc3186546f7d"
+    }
+  },
+  "compiler_jobs": 0,
+  "consumer_dependency": "Before any new executable fixture, close real six getter exports/full x86_syscall_read and actual ABI; model only external VM/IRQ/SMP/allocator/timer/copy effects at existing boundaries. Include exact unchanged helper closure saved here; no fake C replacements for selected pure Rust providers.",
+  "driver": null,
+  "engineering_percentage": null,
+  "fallback": "Entire original C region including public entry/all five adapter bodies/static logger retained byteexact under #else.",
+  "file_retired": false,
+  "full78_production_Rust": false,
+  "native": false,
+  "ownership": "No new allocation/retention policy. Existing Rust helper owns six allocations, verification, node check, page-table lock/SMP call/unlock, status copy and ordered free behavior; current CPU/Thread/VM must remain live as in old entry.",
+  "prevalidation_order": "Six original getter calls/casts before VM sample; retain three current CPU owner samples and helper argument evaluation before unchanged helper validates pid/flags. No added nullctx/VM guard; original getter null semantics retained.",
+  "private_candidate_C": {
+    "bytes": 844074,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-move-pages-source-1/candidate/syscall.c",
+    "sha256": "92a7a24f17554622a6de086de15dae6e7665c3ba68a6861d0b6207abb7b72b97"
+  },
+  "queued_recipe": null,
+  "real_header_ABI_witness": {
+    "bytes": 1304,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-move-pages-source-1/move-pages.REAL-HEADER-ABI.SOURCE-ONLY.c",
+    "sha256": "cc6c297ae57a264da815dca2f65179e06366cc7970adc3adfc616b6c9a784387"
+  },
+  "reused_Rust_helpers": {
+    "move_pages_body_result": {
+      "bytes": 6104,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-move-pages-source-1/move_pages_body_result.UNCHANGED-RUST.inc",
+      "sha256": "447bd670cb099a8b2a810371cbadeb3fe092376ef05b45a9c4f95b30dcb30387"
+    },
+    "move_pages_free_arrays": {
+      "bytes": 411,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-move-pages-source-1/move_pages_free_arrays.UNCHANGED-RUST.inc",
+      "sha256": "68ba35ccbc60c4b04e4a2a4d3ed85ada364b6253d869925b0f77369863772f8a"
+    },
+    "move_pages_log_delta": {
+      "bytes": 307,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-move-pages-source-1/move_pages_log_delta.UNCHANGED-RUST.inc",
+      "sha256": "306f0e36944cc42e50a436f851e8f5dd7ffd25a7390a675f7ba611439b85cd97"
+    },
+    "move_pages_policy_result": {
+      "bytes": 272,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-move-pages-source-1/move_pages_policy_result.UNCHANGED-RUST.inc",
+      "sha256": "cb35cc4c0d9d8a4a6b72ac7085c02c716ce9ce868292cc4c6f8038b07068f3d9"
+    },
+    "move_pages_smp_req_prepare_result": {
+      "bytes": 908,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-move-pages-source-1/move_pages_smp_req_prepare_result.UNCHANGED-RUST.inc",
+      "sha256": "209d0509cc9ba27108ed1cc1181ca82c781fd50a5b5ee919d9159b87ad87b250"
+    }
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_live_body": "kernel/syscall.c::sys_move_pages plus five single-use private C verify/get-nodes/table-lock/table-unlock/SMP-call adapters",
+  "shared_policy_nonoverlap": "Append only sys_move_pages/f03_move_pages_* symbols before existing move_pages_body_result; no existing FFIs removed; no signalfd/pendingmask/sigsuspend/sigaction/F06 definitions edited.",
+  "smallest_future_consumer": [
+    "Original C entry+five original adapters versus exact Rust entry+adapters with same controlled effects; compare full context-read/current-owner/callback order and return values",
+    "pid/flag failures, six allocation failures, each verify failure, optional node invalidity, SMP failure, final copy-to-user failure, zero/count wrapping geometry retained as existing helper behavior",
+    "Actual syscall-table allocated relocation to sys_move_pages, selected C U/new Rust T/real header extent/type/partial link; standalone source-only ABI witness provided"
+  ],
+  "source_patch": {
+    "bytes": 4057,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/next-move-pages-source-1/move-pages.NONOVERLAPPING-SOURCE.patch",
+    "sha256": "2a51666a4fa6bc14dcd53232c2009ff6f4bf30290131748f290bc15acaf8de0a"
+  },
+  "status": "IMPLEMENTED_PRIVATE_SOURCE_ONLY_NOT_A_SECOND_EXECUTABLE_QUEUE",
+  "unchanged_C_debt": [
+    "move_pages_log_bridge exact existing formatter body, only static removed under Rust selection",
+    "arch/x86_64/kernel/syscall.c::move_pages_smp_handler untouched",
+    "existing syscall copy_from_user/copy_to_user/alloc/free bridges reused unchanged"
+  ]
+}

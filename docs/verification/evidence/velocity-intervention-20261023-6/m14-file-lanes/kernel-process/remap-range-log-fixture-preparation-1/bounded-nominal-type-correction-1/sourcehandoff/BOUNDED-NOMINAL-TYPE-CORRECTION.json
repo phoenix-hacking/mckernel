@@ -1,0 +1,172 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOLE_BOUNDED_C_NOMINAL_TYPE_SOURCE_CONTINUATION_NO_EXECUTION",
+  "failure": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/remap-range-log-fixture-preparation-1/sourcehandoff/REMAP-LOG404-FIRST-FAILURE-1.json",
+    "sha256": "eb65c0fa33ee70c0ee272bd22c1a9099be88975b7bb9be250e2f6bd662dfbd0e",
+    "bytes": 7238
+  },
+  "first_stderr": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/remap-range-log-fixture-preparation-1/sourcehandoff/actual-first-candidate-capture-1/02-actual-original-C-remap-log-oracle/stderr",
+    "sha256": "87aaa97b4ce24cc17e076582cdaf3c762682fc243412f1c67806df62f83acc5f",
+    "bytes": 1494
+  },
+  "original_ready": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/remap-range-log-fixture-preparation-1/sourcehandoff/EXECUTABLE-READY.REMAP-LOG404.NOT-GRANTED.json",
+    "sha256": "e0d1d6b23ddbf7067ddd0e676caf1b881fce7eb21aee246d0b9ac60f96b7b34d",
+    "bytes": 3542
+  },
+  "original_driver": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/remap-range-log-fixture-preparation-1/sourcehandoff/run_owned_remap_range_log404_once.py",
+    "sha256": "5368645a04c727db73eab22e3de8f55f0f6d646f2b58983b64c3cf534b8eea1b",
+    "bytes": 10896
+  },
+  "exact_correction_pairs": [
+    [
+      "struct page *phys_to_page(unsigned long phys)",
+      "struct page *phys_to_page(uintptr_t phys)"
+    ],
+    [
+      "static int flush(struct memobj *obj,unsigned long phys,size_t pgsize)",
+      "static int flush(struct memobj *obj,uintptr_t phys,size_t pgsize)"
+    ]
+  ],
+  "nominal_signature_corrections": 2,
+  "added_static_type_checks": 8,
+  "checked_real_declarations": [
+    {
+      "header": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/bounded-source-correction-1/source/kernel/include/page.h",
+        "sha256": "c8f3f5e7804c71430c814395ea14a1ee93267180713caeb39880b662cc9cd0dc",
+        "bytes": 1647
+      },
+      "declaration": "struct page *phys_to_page(uintptr_t phys);"
+    },
+    {
+      "header": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/bounded-source-correction-1/source/kernel/include/page.h",
+        "sha256": "c8f3f5e7804c71430c814395ea14a1ee93267180713caeb39880b662cc9cd0dc",
+        "bytes": 1647
+      },
+      "declaration": "int page_unmap(struct page *page);"
+    },
+    {
+      "header": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/bounded-source-correction-1/source/kernel/include/memobj.h",
+        "sha256": "7d587411f1b6957c6fcc6f61d8f03b052d875cfd774f602aefe05ff99f536bb9",
+        "bytes": 3957
+      },
+      "declaration": "typedef int memobj_flush_page_func_t(struct memobj *obj, uintptr_t phys, size_t pgsize);"
+    },
+    {
+      "header": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/bounded-source-correction-1/source/kernel/include/memobj.h",
+        "sha256": "7d587411f1b6957c6fcc6f61d8f03b052d875cfd774f602aefe05ff99f536bb9",
+        "bytes": 3957
+      },
+      "declaration": "int memobj_flush_page(struct memobj *obj, uintptr_t phys, size_t pgsize);"
+    },
+    {
+      "header": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/bounded-source-correction-1/source/arch/x86_64/kernel/include/arch-memory.h",
+        "sha256": "1704ac32bf55f421c802df661c844b496a1660b8b89e5d12cc2d994d835b5b49",
+        "bytes": 8996
+      },
+      "declaration": "void flush_tlb_single(unsigned long addr);"
+    },
+    {
+      "header": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/bounded-source-correction-1/source/lib/include/memory.h",
+        "sha256": "42c0c943511a9eb26133c9f1ca132ade5eb10606ae43c96f6d81d59a69ffeca2",
+        "bytes": 1377
+      },
+      "declaration": "void *phys_to_virt(unsigned long p);"
+    },
+    {
+      "header": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/bounded-source-correction-1/source/lib/include/ihk/mm.h",
+        "sha256": "a1b412608df7512a1b7295c6f19b3ec5a77e6364e8f24b208ab1a29e7556e5b1",
+        "bytes": 9548
+      },
+      "declaration": "void _ihk_mc_free_pages(void *ptr, int npages, int is_user, char *file, int line);"
+    },
+    {
+      "header": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/bounded-source-correction-1/source/kernel/include/rusage_private.h",
+        "sha256": "9cc30af76f445517a70fbbaa2bc6d2a48dee12bc8fd08bc0e1c37d571693d972",
+        "bytes": 3262
+      },
+      "declaration": "void rusage_memory_stat_sub(struct memobj *memobj, unsigned long size,\n\t\t\t    int pgsize);"
+    },
+    {
+      "header": {
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/production-batch-preparation-1/bounded-source-correction-1/source/lib/include/ihk/debug.h",
+        "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc",
+        "bytes": 1294
+      },
+      "declaration": "int kprintf(const char *format, ...);"
+    }
+  ],
+  "diff": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/remap-range-log-fixture-preparation-1/bounded-nominal-type-correction-1/TWO-NOMINAL-TYPES-AND-EIGHT-TYPE-CHECKS.diff",
+    "sha256": "ff5d68f7881ff0d37cc744576b8ac41fab51a9ac4dc8f2574d8c52dec0b4f68c",
+    "bytes": 2663
+  },
+  "successful_Rust_object": {
+    "ctime_ns": 1792811484853718032,
+    "device": 66306,
+    "gid": 1000,
+    "inode": 56242015,
+    "mode": "0o600",
+    "mtime_ns": 1792811484853718032,
+    "nlink": 1,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/remap-range-log-fixture-preparation-1/output-first-candidate-1/remaining_provider.o",
+    "sha256": "e29e5b4b3f4bbb0de748694b67b3d05c21a6200260ac8d46a034aed5538b2abf",
+    "size": 4120,
+    "uid": 1000
+  },
+  "successful_header_ABI_result": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/remap-range-log-fixture-preparation-1/sourcehandoff/actual-first-candidate-capture-1/01-actual-real-provider-header-ABI/whole-join.json",
+    "sha256": "a49999c535766d520ad4be7d5936b6a188c5d6e30418a2e7f192a32992a65ff8",
+    "bytes": 1305
+  },
+  "successful_commands_reused": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/remap-range-log-fixture-preparation-1/sourcehandoff/actual-first-candidate-capture-1/00-actual-corrected-Rust-remap-log-fixture/whole-join.json",
+      "sha256": "e5f4f1a998ff4c42dea3326dfd6181b3e5690a5c5203f4bcd13f4c282d7378ff",
+      "bytes": 1322
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/remap-range-log-fixture-preparation-1/sourcehandoff/actual-first-candidate-capture-1/01-actual-real-provider-header-ABI/whole-join.json",
+      "sha256": "a49999c535766d520ad4be7d5936b6a188c5d6e30418a2e7f192a32992a65ff8",
+      "bytes": 1305
+    }
+  ],
+  "original795_provider": {
+    "ctime_ns": 1792806587409397935,
+    "device": 66306,
+    "gid": 1000,
+    "inode": 56141443,
+    "mode": "0o600",
+    "mtime_ns": 1792806587409397935,
+    "nlink": 1,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-sync-one-page/bounded-source-correction-1/output-first-candidate-1/actual_provider.o",
+    "sha256": "f5670eed325ff5b8dc8efd06cdd333d9ac614d09c1687561dbeb0f0b7018b959",
+    "size": 3608,
+    "uid": 1000
+  },
+  "original795_replayed": false,
+  "product_Rust5bf_unchanged": true,
+  "old_provider_nominal_ABI_qualification": "The retained f567 actual Rust memobj provider uses Rust CULong=u64 for its phys parameter; the real C declaration uses uintptr_t, nominally unsigned long long. These are not asserted to be C-compatible typedefs. The actual accepted supported x86_64 C ABI passes both as an unsigned64 integer; Rust has one u64 scalar representation. Corrected C adapters now use the exact uintptr_t declaration, and the executable exercises that Rust-to-C typed dispatch. This does not claim a new provider compile or native qualification.",
+  "source_counted_delta": "Exactly two unsigned-long parameter spellings become uintptr_t. Eight static signature checks added; no cast, compiler flag, body control flow, format, data width/layout, comparison count, state/event oracle or product change.",
+  "remaining_commands": 4,
+  "original_command_indices": [
+    2,
+    3,
+    4,
+    5
+  ],
+  "compiler_jobs": 0,
+  "CPU_reservations": 0,
+  "next_unexpected": "STOP_EXPERT_ESCALATION_NO_FURTHER_AUTHOR_CORRECTION_OR_RETRY"
+}

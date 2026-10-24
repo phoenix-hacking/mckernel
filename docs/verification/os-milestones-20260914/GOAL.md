@@ -1,3 +1,5 @@
+Current delivery target and included-first/explicit-credit handoff limits: [October24 run window](RUN-WINDOW-20261024.md). Active resident billing controls remain authoritative.
+
 # Autonomous McKernel goal
 
 Current assignment scope (2026-10-21 UTC): functional McKernel OS/apps and

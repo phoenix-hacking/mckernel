@@ -1,0 +1,33 @@
+0000000000000000 t .text.do_sigaction
+0000000000000000 t .text.do_sigaction_body_result
+0000000000000000 t .text.fixture_rust_layout
+0000000000000000 t .text.process_list_detach_result
+0000000000000000 t .text.sigaction_validate
+0000000000000000 t .text.sigsuspend_pending_matches
+0000000000000000 t .text.sigsuspend_prepare_mask
+0000000000000000 t .text.syscall_do_sigaction_bridge
+0000000000000000 t .text.syscall_pending_mask_bridge
+0000000000000000 t .text.syscall_sigsuspend_bridge
+0000000000000000 0000000000000116 T do_sigaction
+0000000000000000 000000000000011b T do_sigaction_body_result
+                 U do_signal
+                 U fixture_disable_irq
+                 U fixture_pause
+                 U fixture_restore_irq
+                 U fixture_runq_lock
+                 U fixture_runq_unlock
+0000000000000000 000000000000014b T fixture_rust_layout
+                 U fixture_schedule
+                 U fixture_writer_lock
+                 U fixture_writer_unlock
+                 U get_this_cpu_local_var
+                 U memcpy
+0000000000000000 000000000000003a T process_list_detach_result
+0000000000000000 0000000000000025 T sigaction_validate
+0000000000000000 a signal_batch_actual.c33f6b3f91634f52-cgu.0
+0000000000000000 0000000000000009 T sigsuspend_pending_matches
+0000000000000000 000000000000000a T sigsuspend_prepare_mask
+0000000000000000 0000000000000006 T syscall_do_sigaction_bridge
+                 U syscall_forward_sigaction_update_bridge
+0000000000000000 00000000000000cd T syscall_pending_mask_bridge
+0000000000000000 000000000000023b T syscall_sigsuspend_bridge

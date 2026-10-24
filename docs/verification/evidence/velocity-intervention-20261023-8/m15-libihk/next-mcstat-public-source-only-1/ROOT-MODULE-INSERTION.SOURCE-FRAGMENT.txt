@@ -1,0 +1,9 @@
+After source acceptance, append this one module selection to the existing Rust root;
+place ihklib_mcstat.rs beside it. Do not alter the frozen current queued root.
+
+mod ihklib_mcstat;
+
+Remove exactly ihklib_os_open, ihk_os_get_num_numa_nodes and both preprocessor alternatives
+of ihk_os_getrusage from the remaining C TU. Keep C static ihklib_os_readable for unported
+APIs. Selected config ENABLE_RUSAGE=1; a disabled config passes ihklib_rusage_disabled,
+which returns ENOSYS before argument validation just as original C.
