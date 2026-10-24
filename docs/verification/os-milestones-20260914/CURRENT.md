@@ -1,3 +1,23 @@
+## Engineering cursor — 2026-10-24T18:30Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains35/35; M14/M15 OPEN, percentages unmeasured. NORMAL81 actual native
+compile passed; legacy crate failed two missing native-function cfg gates. Exact
+minimal correction passes both actual full crates (17.163s/16.677s); original
+compiler and outer result-writer failures preserved. Canonical integration awaits
+F02 retained input binding. Failed image normal retirement+independent physical
+PASS7ae40213; current_live_postjoin NONNULLec95e79d. One heavy slot clear.
+F03 real seven-suffix ABI/allocated/strict-partial checks PASS1.583s. Existing
+M15MM three SDK phases+retained consumer were already passing; ten new retained
+codegen/jump-table/warning readbacks PASS.565s. No rebuild or native credit.
+F02 new35COMMON controls PASS; observer still fails separate local-FUNC assumption
+at line366. Different expert assigned finite remaining-predicate diagnosis; no
+compiler replay. SDK retained ten producers reused; five-command suffix source
+published/fetched a5eef63 (114members verified), actual query/release then links
+next. No new selected default/native C retirement claimed. Timer snapshots stale;
+actual receipts drive steering. No peak-memory or queue-latency estimate invented.
+Checkpoint: evidence/rust-cutover-engineering-checkpoint-20261024-1830/REVIEW.json.
+
 ## Engineering cursor — 2026-10-24T17:44Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
