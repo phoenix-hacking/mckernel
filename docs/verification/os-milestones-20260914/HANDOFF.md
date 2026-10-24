@@ -1,3 +1,19 @@
+## Engineering cursor — 2026-10-24T22:00Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains COMPLETE35/35; M14/M15 remain OPEN. Actual M15 sourceSDK11 configure
+passed4.724795s; build failed before Rust on nonexistent nested ihk/CMakeCache.txt.
+Normal owned cleanup and independent physical670792d1/currentpostjoineff7b957 PASS.
+One-line top-level cache dependency fix committed IHK7629397; fresh6999file source
+copy PASS8.632927s, binding .141905s and metadata .077210s. Corrected SDK not yet run.
+
+M14 COPY3 full pure validation PASS32.206746s and21member archive PASS1.582526s.
+Next: fetched source, fresh five-read admission, exact independent release, then
+executor-only target and unchanged validators; preserve five kernel artifacts.
+M15 producer follows normal retirement. No new native or C-retirement credit.
+Snapshot12:13Z remains stale; queue latency/peak/whole-milestone effort unmeasured.
+Evidence: `evidence/rust-cutover-engineering-checkpoint-20261024-2200/REVIEW.json`.
+
 ## Engineering cursor — 2026-10-24T21:35Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
