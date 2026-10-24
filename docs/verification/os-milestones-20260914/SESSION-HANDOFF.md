@@ -1,3 +1,20 @@
+## Engineering cursor — 2026-10-24T23:36Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 COMPLETE35/35; M14/M15 OPEN. COPY5 typed-cache fix passed configure;
+strict guard rejected three temporary supporting Linux probe inode/time changes.
+Bytes stayed exact, all26 production objects stayed exact. No selected syscall
+compile/image relink occurred; configure did compile supporting Linux probes.
+Narrow phase-bound correction passes112 cases (2positive/110negative), independently
+accepted. Normal COPY5 cleanup5.969814s and physicald970c7/current2caf7f accepted.
+Next COPY6 reuses original444-file baseline/source65321/Rust objects; no full rebuild.
+Process new-layout346-word ABI actualPASS, independently accepted; coherent
+all81/sixC/assembly consumers remain OPEN. COPY6 fresh444-file copy PASS.498792s. M15 actual
+SDK11 ABI/link evidence remains accepted; four-artifact install/three loader checks
+not yet executed. No new native/C-retirement credit or engineering percentage.
+Actual queue latency/peak remain unmeasured; timer snapshot12:13Z is stale.
+Evidence: `evidence/rust-cutover-engineering-checkpoint-20261024-2336/REVIEW.json`.
+
 ## Engineering cursor — 2026-10-24T23:14Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
