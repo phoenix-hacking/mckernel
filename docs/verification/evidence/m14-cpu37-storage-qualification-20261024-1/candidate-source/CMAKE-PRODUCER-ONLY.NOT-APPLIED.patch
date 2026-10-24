@@ -1,0 +1,32 @@
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -177,12 +177,29 @@
+ 		if (ENABLE_RUSAGE)
+ 			list(APPEND RUST_KERNEL_CFG "--cfg" "enable_rusage")
+ 		endif()
++		# Source-bound x86 policy and exact C diagnostic filename for these Rust providers.
++		set(MCKERNEL_CPU_MARCH_HEADER
++			"${IHK_FULL_SOURCE_DIR}/cokernel/smp/x86_64/include/march.h")
++		file(SHA256 "${MCKERNEL_CPU_MARCH_HEADER}" MCKERNEL_CPU_MARCH_SHA256)
++		if (NOT MCKERNEL_CPU_MARCH_SHA256 STREQUAL
++		    "32984f29c20133f89b2410c922fc291cd675f2942b6128cea55d0e0ff3826f49")
++			message(FATAL_ERROR "Unqualified x86 march.h SSE policy; qualify actual header first")
++		endif()
++		# The exact qualified header has one unconditional #define ENABLE_SSE.
++		set(MCKERNEL_X86_ENABLE_SSE 1)
++		# Same absolute spelling used in MCKERNEL_SRCS below, preserving C __FILE__.
++		set(MCKERNEL_CPU_C_FILE "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/cpu.c")
++		list(APPEND RUST_KERNEL_SRCS "${MCKERNEL_CPU_MARCH_HEADER}" "${MCKERNEL_CPU_C_FILE}")
++		set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
++			"${MCKERNEL_CPU_MARCH_HEADER}")
+ 		add_custom_command(
+ 		OUTPUT "${RUST_KERNEL_OBJ}"
+ 		COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
+ 		COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS=
+ 			MCKERNEL_RUST_VERSION=${MCKERNEL_VERSION}
+ 			MCKERNEL_RUST_BUILDID=${BUILDID}
++			MCKERNEL_X86_ENABLE_SSE=${MCKERNEL_X86_ENABLE_SSE}
++			MCKERNEL_CPU_C_FILE=${MCKERNEL_CPU_C_FILE}
+ 			${RUSTC}
+ 			--crate-name mckernel_rust
+ 			--crate-type lib

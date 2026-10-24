@@ -1,3 +1,18 @@
+## Engineering cursor — 2026-10-24T17:27Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains35/35; M14/M15 OPEN, percentages unmeasured. Current81 combined18
+checks remain accepted at GCC9/partial scope. CPU37 private storage qualification
+all9 actual commands PASS18.1755wall; no default/native retirement. SDK library
+actual00–09 PASS, then diagnostic checker FAIL; exact five-command suffix source
+approved, accepted archive reused. COPY6 FAIL was NULL historical driver identity;
+stopped container e3668ee5 and shared ownership remain retained. New heavy work
+waits normal reviewed cleanup and positive physical acceptance. Cleanup12 original
+predicates and7 owned-logs lifecycle methods passed; exact source publication next.
+F02 bounded divisor five-command compiler suffix runs independently on CPU6;
+retained C/ABI objects reused. No new image, native or whole-file credit.
+Checkpoint: evidence/rust-cutover-engineering-checkpoint-20261024-1727/REVIEW.json.
+
 ## Engineering cursor — 2026-10-24T16:30Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
