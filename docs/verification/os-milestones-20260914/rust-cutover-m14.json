@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-24T15:00:50Z",
+  "as_of": "2026-10-24T16:30:03.512475+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -2897,6 +2897,23 @@
         "F02": "15actualproducercommands9+6,receiptwriterFAILpreserved;pureadjudicationPASS2.098700509capture,b3518b8c",
         "F06": "Correctedkernel5commandsPASS3.013900835capture plusretainedprefix,20ABI3signatures4witness/2liveC/11partialallocatedrefs;scopecbef51ad",
         "observer": "13complete-stream/ownchildfixturesPASS1.057512578capture;notartifactproof"
+      },
+      "whole_file_retirement_delta": 0,
+      "new_native_delta": 0
+    },
+    {
+      "at": "2026-10-24T16:30:03.512475+00:00",
+      "evidence": "docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-1630/REVIEW.json",
+      "actual_progress": {
+        "actual": "Current81 Rust, six selected GCC9 C TUs, seven NM, strict partial link/NM and two allocated/data observers: all18 command observations PASS with clean joins. Inherited component ABI scope.",
+        "receipt": "docs/verification/evidence/m14-current81-six-c-partial-qualification-20261024-1/ACTUAL-COMBINED-QUALIFICATION-RECEIPT.json",
+        "Rust_compile_wall_s": 17.233021,
+        "selected_observer_wall_s": 3.37859085,
+        "partial_observer_outer_wall_s": 1.043415743,
+        "normal_source_stage_wall_s": 8.903287409,
+        "normal_source_stage_cpu_s": 2.38101,
+        "default_GCC14_native": "OPEN; normal-builder source correction in progress; no unchanged image rebuild",
+        "new_whole_file_retirement": 0
       },
       "whole_file_retirement_delta": 0,
       "new_native_delta": 0

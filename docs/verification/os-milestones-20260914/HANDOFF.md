@@ -1,3 +1,18 @@
+## Engineering cursor — 2026-10-24T16:30Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains35/35; M14/M15 OPEN, percentages unmeasured. Current81 Rust, six
+selected GCC9 C TUs, seven NM, strict partial link/NM and both allocated/data
+observers all18 PASS, independently accepted with inherited component ABI scope.
+No GCC14/default/native or whole-file retirement credit. Normal source staging
+6962entries/49symlinks already PASS; corrected normal-builder source is next.
+SDK library third attempt stopped before all15 targets on absent bfd.h; existing
+BFD-capable image41778 source approved, fresh publication/admission/release next.
+COPY5 token reconciled through exact normal API; independent physical acceptance
+06779 followed by latest SDK normal-retirement45f9/current postjoin NONNULL.
+COPY6 static+finite559copy PASS; publication pending, no artifact credit.
+Checkpoint: evidence/rust-cutover-engineering-checkpoint-20261024-1630/REVIEW.json.
+
 ## Engineering cursor — 2026-10-24T15:48Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
