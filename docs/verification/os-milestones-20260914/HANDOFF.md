@@ -1,3 +1,22 @@
+## Engineering cursor — 2026-10-24T23:52Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 COMPLETE35/35; M14/M15 OPEN. COPY6 selected syscall compile and image rawld
+both returned0; artifact validation then FAIL undefined _m14_retained_witness.
+Actual linked artifacts retained. Normal cleanup5.992170s and independent
+physical3ea72/currentd815 accepted, preserving first host-census and pre-census
+dispatch failures. Exclusive witness writer/separate historical1/current9 prefix
+controls PASS.224919s; source accepted. COPY7 fresh462-file/73105591B linked-artifact
+copy PASS.500959s. Next retained-only full validators, with genuine three SDK ABI
+compiles/partial link still required; no configure/syscall/image rebuild replay.
+
+B7 default346-word ABI remains accepted; first coherent wholecrate compile FAIL
+two stale resource_set offset assertions,2.820969s/one joined child. Source owner
+prepares exact measured-layout correction; no later commands ran. M15 SDK11
+ABI/link accepted; installed-consumer operation pending. No new native or whole
+C-retirement credit/percentages. Peak RSS and compiler queue latency unmeasured.
+Evidence: `evidence/rust-cutover-engineering-checkpoint-20261024-2352/REVIEW.json`.
+
 ## Engineering cursor — 2026-10-24T23:36Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

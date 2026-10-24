@@ -1,0 +1,59 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-24T23:52Z",
+  "functional_checks": "M12_COMPLETE_35_OF_35",
+  "M14": "OPEN",
+  "M15": "OPEN",
+  "production_compiled_delta": {
+    "selected_syscall_C": {
+      "exit": 0,
+      "purpose": "Select already implemented Rust owned-fork transaction path; no new C functionality"
+    },
+    "image_raw_ld": {
+      "exit": 0,
+      "acceptance": "NOT_ACCEPTED_VALIDATOR_FAILED"
+    },
+    "COPY6_status": "FAIL",
+    "failure": "artifact-validation: name '_m14_retained_witness' is not defined"
+  },
+  "physical_retirement": {
+    "status": "INDEPENDENT_PASS",
+    "sha256": "3ea72fe1785b765f349ed10f9766b1767cbe4d43c3edf29c91dd5e6cb152993b",
+    "postjoin_sha256": "d81576756bbe284a40aab938cd3a751ac09672c00844e7633781988ade3aaa6b",
+    "cleanup_wall_seconds": 5.992169955
+  },
+  "retained_validation_fix": {
+    "status": "SOURCE_AND_ACTUAL_CONTROL_PASS",
+    "writer_and_two_authority_control_wall_seconds": 0.224919115,
+    "copy7": {
+      "files": 462,
+      "bytes": 73105591,
+      "binding_sha256": "781afba158eb391dd7dbd254e142f8f3aefb13decc0c090976cb51dbd7003aca",
+      "capture_wall_seconds": 0.500958648
+    }
+  },
+  "Process_ABI": {
+    "default_346_words": "PASS_INDEPENDENT",
+    "consumer_compile": "FAIL_TWO_STALE_RESOURCE_SET_OFFSET_ASSERTIONS",
+    "first_child_wall_seconds": 2.820968516,
+    "later_commands_executed": 0,
+    "all_started_children_joined": true,
+    "next": "Exact bounded assertion correction from already measured C table, then fresh coherent compile"
+  },
+  "native_qualified_delta": 0,
+  "new_C_retirement_credit": 0,
+  "resource_notes": {
+    "soleheavy": "COPY6 terminal/retired; next COPY7 retained validation not yet released",
+    "ordinary": "B7 CPU6 terminal, writer CPU0 terminal",
+    "peak_RSS": "unmeasured",
+    "compiler_queue_latency": "unmeasured",
+    "COPY6_query_to_entry_seconds": 34.265376806259155
+  },
+  "retained_failures": [
+    "original COPY6 artifact-validator NameError",
+    "first host census acquisition refusal",
+    "pre-census READ2 dispatch placeholder failure",
+    "B7 E0080 consumer compile"
+  ],
+  "scheduling_change": "Validate existing linked COPY6 image; skip configure/syscall compile/rawld replay. Prepare ordinary bounded B7 correction in parallel. M15 installed-consumer operation remains pending, no repeated SDK compilation."
+}
