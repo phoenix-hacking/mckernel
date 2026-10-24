@@ -1,3 +1,18 @@
+## Qualified source-cohort checkpoint — 2026-10-24T15:00:50Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains35/35. M14/M15 OPEN; percentages unmeasured. Actual CPU81 nine commands,
+F03 seven, F01 eleven and F06 corrected five allPASS at their separate scopes. F02
+15 producer commands qualified by separate pure receipt adjudication; original
+writerFAIL preserved. F01 selectedGCC9 C object has0FUNC/OBJECT and111Rustdata,
+not native retirement. Private14-file union is awaiting focused shared-source
+review and combinedRust/sixC qualification; no canonical union installed yet.
+COPY4 normal+postjoin physicallyaccepted fbb65/currentdb7 NONNULL. Original
+SIGXFSZ/allocator-root mismatch preserved. COPY5 finite559copyPASS; stream13
+fixturesPASS; final artifact observer notrun. SDK library source package only
+published; actual15-target build stillpending. No new native/wholefile credit.
+Evidence: docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-1455/REVIEW.json.
+
 ## Engineering checkpoint — 2026-10-24T14:20:35Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

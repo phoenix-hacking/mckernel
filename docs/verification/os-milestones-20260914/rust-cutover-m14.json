@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-24T11:43:50.774989+00:00",
+  "as_of": "2026-10-24T15:00:50Z",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -2886,6 +2886,20 @@
       },
       "whole_milestone_acceptance": false,
       "percentages": null
+    },
+    {
+      "at": "2026-10-24T15:00:50Z",
+      "evidence": "docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-1455/REVIEW.json",
+      "actual_progress": {
+        "CPU81": "9commands17.556279420capture,17.374409CPU;100Rustproviders+29storage ABI/initializers/alignment/allocated/partial",
+        "F03": "7retainedC/ABI/tool suffixcommands4.340483675capture;47witnesses170Rustexports6Cdata5allocatededges;scope60bec1dc",
+        "F01": "11commands17.334096029capture/17.252386643inner;T3360U391,111RustOBJECT50RO61mutable,selectedC0FUNC0OBJECT;scope53fd815a",
+        "F02": "15actualproducercommands9+6,receiptwriterFAILpreserved;pureadjudicationPASS2.098700509capture,b3518b8c",
+        "F06": "Correctedkernel5commandsPASS3.013900835capture plusretainedprefix,20ABI3signatures4witness/2liveC/11partialallocatedrefs;scopecbef51ad",
+        "observer": "13complete-stream/ownchildfixturesPASS1.057512578capture;notartifactproof"
+      },
+      "whole_file_retirement_delta": 0,
+      "new_native_delta": 0
     }
   ]
 }
