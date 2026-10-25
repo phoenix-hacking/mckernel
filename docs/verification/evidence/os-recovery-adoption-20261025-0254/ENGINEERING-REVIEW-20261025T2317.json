@@ -1,0 +1,180 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "review": "2026-10-25T23:17:17Z",
+  "recorded_at": "2026-10-25T23:22:30.322662+00:00",
+  "interval": [
+    1792969035.7869887,
+    1792970237.394744
+  ],
+  "goal_status": "active",
+  "phase": "running",
+  "delta": {
+    "canonical_integrated_Rust_bodies": 0,
+    "accepted_integration_packages": 0,
+    "default_image_closures": 0,
+    "native_qualified_closures": 0,
+    "whole_file_closures": 0,
+    "retired_C_boundaries": 0,
+    "real_guest_apps": 0
+  },
+  "controlled_HOST_results": [
+    {
+      "source": 17,
+      "Rust_objects_compiled": 1,
+      "behavior_pairs": 4032,
+      "ABI_words": 23,
+      "commands_total": 4,
+      "commands_rc0": 3,
+      "whole_wall_seconds": 0.812633,
+      "CPU_seconds": 0.844206,
+      "proof": "ACTUAL-SOURCE17-WAKEUP-OUTER-INDEPENDENT-HOST-ACCEPTANCE.json"
+    },
+    {
+      "source": 18,
+      "Rust_objects_compiled": 1,
+      "producer_cases": 360,
+      "nonalias_resume_cases": 288,
+      "ABI_words": 32,
+      "commands_total": 4,
+      "commands_rc0": 3,
+      "whole_wall_seconds": 0.750832,
+      "CPU_seconds": 0.770464,
+      "proof": "ACTUAL-SOURCE18-INITIALIZED-PRODUCER-INDEPENDENT-HOST-ACCEPTANCE.json"
+    },
+    {
+      "source": 19,
+      "Rust_objects_compiled": 1,
+      "consumer_cases": 90,
+      "ABI_words": 17,
+      "finite_model_commands": 1,
+      "commands_total": 5,
+      "commands_rc0": 4,
+      "whole_wall_seconds": 0.52004,
+      "CPU_seconds": 0.595116,
+      "proof": "ACTUAL-SOURCE19-SIGCOMMON-CONSUMER-INDEPENDENT-HOST-ACCEPTANCE.json"
+    }
+  ],
+  "HOST_totals": {
+    "commands": 13,
+    "passed": 10,
+    "original_failed": 3,
+    "Rust_objects": 3,
+    "private_new_Rust_body_lanes": 3,
+    "measured_wall_sum_seconds": 2.083505,
+    "measured_CPU_sum_seconds": 2.209786,
+    "max_child_RSS_KiB": 107892,
+    "limits": "Wall sums are per-run envelopes, not elapsed engineering time. HOST fixtures/model do not qualify production/runtime or integration score."
+  },
+  "actual_image_attempt": {
+    "query_to_owner_entry_seconds": 95.02052283287048,
+    "owner_entry_epoch": 1792969713.9261785,
+    "owner_joined_epoch": 1792969714.5610785,
+    "owner_wall_seconds": 0.628667,
+    "owner_CPU_seconds": null,
+    "owner_peak_RSS": null,
+    "compiler_commands": 0,
+    "first_compiler_at": null,
+    "failure": "provenance validation after shared exclusion acquisition",
+    "parent": "866814/start76706306/FD3 permanent27:4 quarantined session65454",
+    "shared": "dev1828/inode116858/SHA324ae871 retained",
+    "held_seconds_at_snapshot": 522.8336653709412
+  },
+  "latencies": {
+    "ready_to_first_default_compiler_seconds": null,
+    "failure_to_runtime_validated_fix_seconds": null,
+    "source_data_checker_wall_seconds": 12.200804,
+    "source_data_checker_CPU_seconds": 12.19397,
+    "source_data_checker_scope": "Six real old binding mismatches exposed, corrected owner8fb/request369 statically coherent and six negative mutations refused; not actual owner validation/admission."
+  },
+  "recovery_after_snapshot": {
+    "readonly_attempt1": {
+      "child": 870183,
+      "rc": 1,
+      "wall_seconds": 0.425653,
+      "joined": true,
+      "failure": "wrong profile identity helper rejects two accepted nlink2 files"
+    },
+    "readonly_attempt2": {
+      "child": 870829,
+      "rc": 1,
+      "wall_seconds": 1.133863,
+      "joined": true,
+      "failure": "Docker strict gate refused; actual rows not retained because writer followed guard"
+    },
+    "actions": "No process signal, record removal, normal cleanup, replay or new heavy owner. Escalated to independent expert before further attempt."
+  },
+  "resources": {
+    "disks": {
+      "/home/holden/mckernel": {
+        "available_bytes": 153263747072,
+        "ismount": false,
+        "st_dev": 66306
+      },
+      "/home/holden/mckernel-work/scratch": {
+        "available_bytes": 14100393984,
+        "ismount": true,
+        "st_dev": 1828
+      }
+    },
+    "load_average": [
+      0.57,
+      0.73,
+      0.72
+    ],
+    "memory": {
+      "MemAvailable_kib": 27208724,
+      "MemTotal_kib": 32421580
+    }
+  },
+  "point_resource_observation": "RESOURCE-OBSERVATION-20261025T2317.json",
+  "CPU_point_limit": "10-second whole-host observation:8.501% busy over seven eligible CPUs (~0.595cores); not engineering attribution or acceptance. No capacity expansion follows.",
+  "owners_actual_active": [
+    "root canonical integration/admission/checkpoint",
+    "review18h expert recovery evidence disposition",
+    "siginfo_commit18h private Source20 pointer-free commit/getter/destructor lifecycle Rust implementation"
+  ],
+  "ready_or_blocked_owners": {
+    "default18h": "completed corrected owner/request static data; namespace2 and actualadmission blocked on positive retired ownership",
+    "postjoin18h": "completed extraction; no further observer until expert source/evidence decision",
+    "daemon18h": "source refresh fetchedbed2; query deferred behind default/current proof",
+    "perf18h": "completed Source17/18/19 HOST lanes; real shared caller/lifetime gaps handed to Source20",
+    "perf_review18h": "completed focused independent acceptances; not counted active"
+  },
+  "idle_slots_reason": "Ready retained ports await default/current-physical qualification; no duplicate body ports or extra heavy owner launched to fill slots. Six nominal file-owner names are not reported as six live turns.",
+  "scheduling_change": "Expert escalation for actual Docker-gate failure with raw-capture defect; capture-before-oracle repair must pass cheap regression before any privileged query. Root now broadcasts CPU0 releases from final results directly so a ready worker does not wait on a completed peer. Independent difficult Source20 Rust lifecycle implementation dispatched with high-effort owner.",
+  "critical_path_next_command_owner": "review18h expert disposition \u2192 postjoin18h minimal capture-before-oracle local regression \u2192 root exactly reviewed readonly diagnostic \u2192 actual parent/shared recovery proof before any default compiler entry.",
+  "velocity_report": "VELOCITY-REPORT-20261025T2317.json",
+  "completed_original_30min_buckets": {
+    "previous": {
+      "start": 1792966422.9841754,
+      "end": 1792968222.9841754,
+      "seconds": 1800.0,
+      "net_by_stage": {
+        "current_object": 0,
+        "default": 0,
+        "SDK": 0,
+        "native": 0
+      },
+      "net_steps": 0,
+      "net_steps_per_hour": 0.0,
+      "ratio_to_baseline": 0.0
+    },
+    "current": {
+      "start": 1792968222.9841754,
+      "end": 1792970022.9841754,
+      "seconds": 1800.0,
+      "net_by_stage": {
+        "current_object": 0,
+        "default": 0,
+        "SDK": 0,
+        "native": 0
+      },
+      "net_steps": 0,
+      "net_steps_per_hour": 0.0,
+      "ratio_to_baseline": 0.0
+    },
+    "sustained_195_claim": false
+  },
+  "planning_context": "M14-M15-ENGINEERING-ESTIMATE-20261025-0512.md retained unchanged; low-confidence planning only, no verified completion percentage.",
+  "deadline": "2026-10-26T15:55:33Z"
+}

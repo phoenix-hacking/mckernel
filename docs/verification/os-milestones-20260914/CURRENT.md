@@ -1,3 +1,33 @@
+## Twenty-minute review — 2026-10-25T23:17Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Three private HOST lanes now independently pass: Source17 outer4032/ABI23,
+Source18 producer360+resume288/ABI32, Source19 consumer90/ABI17 plus finite
+regression. Across13commands,10passed and3original failures were preserved
+and corrected; three Rust objects compiled. Canonical integrated bodies,
+new default/native/file/C-boundary closures remain zero this interval.
+
+Current290 owner failed provenance validation after shared exclusion acquisition;
+parent866814/start76706306/FD3 and shared324a/inode116858 remain quarantined.
+Readonly recovery first rejected a legitimate hard-link shape, then its corrected
+reader hit a Docker gate before retaining raw rows. Expert review18h now owns
+disposition; no signal/record mutation/retry is authorized by this checkpoint.
+Postjoin18h supplies exact extraction and future bounded correction; root alone
+executes reviewed operations. Owner8fb/request369 static data correction passed
+real cross-binding checks but has no namespace/admission authority. Source20's
+independent Rust lifecycle implementation proceeds; ready daemon work waits for
+current proof. Completed owners are not counted active; no extra heavy lane.
+
+Two completed original30-minute buckets have zero accepted packages. Ten-second
+whole-host observation is8.5%busy/~0.595eligiblecores, without engineering
+attribution. The bottleneck is actual ownership/evidence recovery, not more CPUs.
+First default compiler and runtime-validated-fix latency remain unknown. Root now
+broadcasts CPU0 release directly to ready owners instead of waiting on completed
+peers. [Review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T2317.json).
+[Planning estimate](M14-M15-ENGINEERING-ESTIMATE-20261025-0512.md) remains separate
+from acceptance. M12=35/35; M14/M15 OPEN; no95%improvement claim. Fixed deadline
+2026-10-26T15:55:33Z and existing controllers/creditrun7f are unchanged.
+
 ## Current290 owner validation failure — shared ownership remains held
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
