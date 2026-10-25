@@ -1,4 +1,90 @@
-## Manual resume: current290 integrated; fresh SDK physical proof — 2026-10-25T21:45Z
+## Twenty-minute review — current290 default-image entry is next
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The22:17snapshot interval adds zero qualified integration packages and zero
+new default/native/whole-file/C-boundary closures. Current290 andSDK21 are retained
+successes. New controlledperfentry3600/ABI56 passed after fixture-onlyorderingfix;
+compiledRustprefix and originalabort are retained. Fresh SDK current/physical
+proof independentlypasses84da; no furtherobserver/cleanupneeded for that scope.
+
+The coherent current290 sourcecapsule is published:69members/51761182B, with46gzip
+plusreceipt and22directfiles. Eight tempfilecontrols passed. Actualbase/work/
+evidence inodes59650887/59650926/59650927 are empty/owned andbound; liveaggregate
+environment22.0485 is preserved. Nextroot/default18h: fetchedcapsule verification,
+finalretention/protocol/caller binding andindependentrelease beforeone freshlive
+admission andselectedGCC14 ABI/defaultimage proof. No compiler/sourcecopy/SDK
+replay. Largestavoidable delay is thisstaticpublication-to-entry handoff.
+
+Actual18hcontrols: watcher842938,guardian843517,20minmonitor843520;
+[verifiedparentreceipt](../evidence/os-recovery-adoption-20261025-0254/parent-reviewed-new18h/receipts/POST-DETACH-NEW18H-VERIFIED.json).
+[Runwindow](RUN-WINDOW-18H-20261025.md) ends2026-10-26T15:55:33Z;
+[recoveryauthority](RECOVERY-20261025.md) andsamecreditrun7f remainunchanged.
+[Review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T2217.json).
+M12=35/35; M14/M15 OPEN. No sustained95% velocityimprovement is demonstrated.
+
+## New fixed eighteen-hour invocation: SDK21 accepted; current290 preserved
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Manual launcher20261025T215534Z-b8ab6843 resumes same active goal/thread and credit
+run7f. Actual new window new18h-1792965333924702242 starts2026-10-25T21:55:33Z,
+ends2026-10-26T15:55:33Z. Earlier23PDT cutoff and paused banners are historical.
+Steering20minutes; velocity measurement retains original30-minute buckets. No
+controller, deadline or billing guard was changed by this agent.
+
+M15 BFD supported-tools SDK artifact/behavior qualification independentlyPASS
+1231c1f6: retained8+3 and10new commands cover21logical, ABI/Rustproviders/twoPIE
+links/eightbehaviorpairs. Only equivalence resolves to authenticated retained
+binary07cac711; fullstrict validator passed2positive13negative. Original owner
+FAIL1d788f14 is preserved; acceptance is additive, not full installation/default/
+native/C-retirement. Successful outputs and original failures are archived with
+618member readback, b393230d. No SDK or binary replay is needed.
+
+Owner837426/start76193932 joined exit1; normal removal/three-record release
+independentlyaccepted d7068553. New18h postjoin observer completed0, stdout7920c064,
+join65679271; independent current/physical acceptance is pending. Its corrected
+publisher predicate includes actualowner542a and preserves launcher842940/842942.
+No cleanup or signal is needed; no new heavy entry is released by this cursor.
+
+M14 current290 remains integrated/fetched37db8730: five new Rust functions,
+three canonical postimages. Source16 HOST3420/ABI12 separately accepted. A private
+VM3 delta remains source-only. Matching current290 source copy6153entries/49links/
+105804031B completed once (child840180 joined0; CPU2.917s/wall8.666s), exactsix
+readbackPASS e2699ae5. Its selected GCC14 ABI/default image/native remain UNRUN.
+Do not repeat source materialization. Default source includes allfive runtime
+changes since230 plus CMake7cfg/4defs; copying onlylatestthree is incoherent.
+
+NEXT root/default18h: accept fresh SDK current proof; create only reviewedprivate
+build namespaces, bind actual identities to the current290 same-OFD cleanup/
+protocol successor (original e5c7fed8 is hardcoded230), finish source retention/
+publication and independent release before actualselected GCC14/image entry.
+Source-bound request91acbcb3/fixed18h data rebinding aeabd013 are prepared; actual
+namespace/cleanup/publication remain explicit dependencies. No unchanged image
+rebuild, consumed grant, query or cleanup replay. M12=35/35; M14/M15 OPEN;
+new default/native/whole-file/C-boundary closures zero. No95% velocity claim.
+
+## SDK commands passed; retained-origin qualification pending — observed 2026-10-25
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+New SDK owner837426/start76193932 entered43.270s after its fresh query, completed
+and joined exit1. All10 new SDK commands and21logical command rows returned0;
+eight behavior comparisons matched. Host qualification stopped because it looked
+for the equivalence binary in the new output directory, while the retained
+semantic manifest binds the prior successful binary07cac711. No rebuild or binary
+replay is authorized for this path correction. Exact retained-origin validation
+and negative controls are underway; SDK acceptance remains OPEN.
+
+Normal retirement independentlypassed d7068553:14ownerclients+1admissionclient,
+ownedCID removal and three-record archive/release. Fresh current physical proof
+for this new operation is pending; prior41fee cannot clear it. No further cleanup
+or signal is needed. Source16 independentlypassed3420HOST cases/ABI12, separately
+from integration/default/native. Current290 remains integrated and fetched37db8730.
+Next root/sdk_admission/execution_review: accept retained-only SDK artifacts if
+strict checks pass, and finish exact newpostjoin readonly proof. Default290 source
+materialization is prepared for a separate ordinary grant; image/native remains
+unrun. Original failures, sources, locks and finite billing/deadline controls stay
+preserved. M12=35/35; M14/M15 OPEN.
+
+## Manual resume: current290 integrated; fresh SDK physical proof — 2026-10-25T21:36Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 Explicit manual invocation20261025T212953Z-7f025aa8 resumed the same active goal,

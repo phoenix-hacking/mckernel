@@ -1,0 +1,253 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_NOT_GRANTED_NOT_EXECUTED",
+  "commands": [
+    {
+      "name": "00-real-lookup-closure-and-reused-adapter",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 00-real-lookup-closure-and-reused-adapter; controlled sequential HOST leaf only.",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--crate-name",
+        "f06_vm_lookup_actual_1",
+        "--crate-type",
+        "staticlib",
+        "--edition=2021",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "no-redzone=yes",
+        "--print",
+        "native-static-libs",
+        "--emit=obj=/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/output-1/lookup-Rust.o,link=/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/output-1/liblookup_actual.a",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/fixture/lookup_actual.rs"
+      ]
+    },
+    {
+      "name": "01-real-C-lookup-and-ABI12-oracle",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 01-real-C-lookup-and-ABI12-oracle; controlled sequential HOST leaf only.",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-ffreestanding",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+        "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-5/headers/generated/kernel/include",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-5/headers/current/kernel/include",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-5/headers/generated/kernel",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-5/headers/generated",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-5/headers/current/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-5/headers/current/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-5/headers/current/ihk/ikc/include",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-5/headers/current/ihk/linux/include",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-5/headers/current/lib/include",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-5/headers/current/arch/x86_64/kernel/include",
+        "-c",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/fixture/original-C.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/output-1/original-C.o"
+      ]
+    },
+    {
+      "name": "02-real-C-lookup-and-ABI12-oracle",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 02-real-C-lookup-and-ABI12-oracle; controlled sequential HOST leaf only.",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-ffreestanding",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+        "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-5/headers/generated/kernel/include",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-5/headers/current/kernel/include",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-5/headers/generated/kernel",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-5/headers/generated",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-5/headers/current/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-5/headers/current/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-5/headers/current/ihk/ikc/include",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-5/headers/current/ihk/linux/include",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-5/headers/current/lib/include",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-5/headers/current/arch/x86_64/kernel/include",
+        "-c",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/fixture/lookup-compare.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/output-1/compare-C.o"
+      ]
+    },
+    {
+      "name": "03-link-reusing-qualified-lock-object",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 03-link-reusing-qualified-lock-object; controlled sequential HOST leaf only.",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/output-1/original-C.o",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/output-1/compare-C.o",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/output-1/liblookup_actual.a",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-15-process-vm-lock-callbacks/ordinary-leaf-qualification-source-1/output-1/VM-lock-Rust.o",
+        "-lgcc_s",
+        "-lutil",
+        "-lrt",
+        "-lpthread",
+        "-lm",
+        "-ldl",
+        "-lc",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/output-1/lookup-compare"
+      ]
+    },
+    {
+      "name": "04-real-lookup-RB-cache-under-real-read-lock",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 04-real-lookup-RB-cache-under-real-read-lock; controlled sequential HOST leaf only.",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup",
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/output-1/lookup-compare"
+      ]
+    },
+    {
+      "name": "05-exact-provider-and-reuse-observer",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 05-exact-provider-and-reuse-observer; controlled sequential HOST leaf only.",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup",
+      "argv": [
+        "/usr/bin/python3",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/observe_lookup.py"
+      ]
+    }
+  ],
+  "output_root": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/output-1",
+  "reused_lock_inputs": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-15-process-vm-lock-callbacks/ordinary-leaf-qualification-source-1/output-1/VM-lock-Rust.o",
+      "sha256": "0258c6f65ed022596b61b1c9f8cd3b9e03589540fdc20062d985aa1521d73047",
+      "bytes": 3992
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-15-process-vm-lock-callbacks/ordinary-leaf-qualification-source-1/output-1/libVMlock_actual.a",
+      "sha256": "9edbe18a733cc603a269eda58ebd176b856797f46bda282a06e097fe54358def",
+      "bytes": 20701216
+    }
+  ],
+  "recompile_lock": false,
+  "planned_cases": 10260,
+  "ABI": 12,
+  "new_production_T": [
+    "arch_process_vm_rw_lookup_range_bridge"
+  ],
+  "native_cache_concurrency": false,
+  "log_scope": "Exact original lookup public wrapper/log-event forwarding retained; HOST observer verifies two event ABI calls. Production formatter/descriptors not part of this leaf.",
+  "profile": "Proposed one ordinary job; coordinator supplies CPU/memory/timeout grant; no native/root/container actions.",
+  "sources": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/candidate/arch-syscall.c",
+      "sha256": "695659b1101036a95d64bd59f8ab62e7cb6461cb115bff4e55586b4794391b75",
+      "bytes": 114100
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/candidate/process-vm-lookup.FRAGMENT.rs",
+      "sha256": "0a02ef4f2af2244df6f6936d3b3fa188669c453bd9226caf46aef4f530d933cc",
+      "bytes": 755
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/candidate/exact-one-C-provider.diff",
+      "sha256": "ab03757996a9dffccba58ba70a85ae058f5c26472a8ea4553bbbfa3026d387e5",
+      "bytes": 973
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/fixture/lookup-compare.c",
+      "sha256": "40f24dd4487ee27cd8f2c1cb9309f3e0d50934c17bdb30b2f8abe24dc47ace0f",
+      "bytes": 5926
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/fixture/original-lookup.ACTUAL.inc",
+      "sha256": "6d7cdb151574758ac6fb6ee79ede5eb04eca04ac5bce6bf9ac584ff9495e2d90",
+      "bytes": 194
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/fixture/process_helpers.rs",
+      "sha256": "49bada43830962422a94f0ebf1dd7c94eaf00971eed1bb374c4c680eea3dd930",
+      "bytes": 4646
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/fixture/original-C.c",
+      "sha256": "466de788750f78bc1cf70af75c976bd8463e408604e2c48e60273928a36422f6",
+      "bytes": 337
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/fixture/lookup_actual.rs",
+      "sha256": "ea207b69b5192c49cbe0e4cf9e046ad6537b270b1e5ae7f4987a6cc112b52650",
+      "bytes": 807
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/observe_lookup.py",
+      "sha256": "0d7c2db8f476c9f0a16034800e467cbbdbb328ce90c13cfe7824fa1aad362691",
+      "bytes": 1202
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/check_source.py",
+      "sha256": "6b5bc6862a100273a79301d49f8491adf1f75e612f33def103ef6ef9b1f7b4a6",
+      "bytes": 1708
+    }
+  ]
+}

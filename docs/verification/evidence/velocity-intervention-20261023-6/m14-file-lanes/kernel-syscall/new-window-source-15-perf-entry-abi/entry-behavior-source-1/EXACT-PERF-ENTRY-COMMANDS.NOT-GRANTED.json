@@ -1,0 +1,581 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_FROZEN_REQUIRES_FOCUSED_REVIEW_AND_ROOT_GRANT",
+  "commands": [
+    {
+      "name": "00-unchanged-entry-and-genuine-helper-Rust-object",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--crate-name",
+        "perf_entry_parity",
+        "--crate-type",
+        "lib",
+        "--edition=2021",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "--cfg",
+        "enable_perf",
+        "--cfg",
+        "f03_perf_entry_candidate",
+        "--emit=obj=/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/output-1/candidate.o",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/lib.fixture.rs"
+      ],
+      "label": "00-unchanged-entry-and-genuine-helper-Rust-object",
+      "cwd": "/home/holden/mckernel",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Original C versus unchanged Rust perf entry and genuine Rust helper chain; controlled13providers only, no hardware/Linux perf/native effects."
+    },
+    {
+      "name": "01-genuine-C-entry-provider-driver-link",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-Werror=incompatible-pointer-types",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_NATIVE_FORK_OWNED_TRANSACTION",
+        "-DMCKERNEL_RUST_RLIMIT_HELPERS",
+        "-DMCKERNEL_RUST_SCHED_POLICY_HELPERS",
+        "-DMCKERNEL_RUST_SCHED_PRIO_HELPERS",
+        "-DMCKERNEL_RUST_SHMID_HELPERS",
+        "-DMCKERNEL_RUST_SHM_PERM_HELPERS",
+        "-DMCKERNEL_RUST_SIGNAL_HELPERS",
+        "-DMCKERNEL_RUST_SYSCALL_OFFLOAD",
+        "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build/kernel/include",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel/ihk/ikc/include",
+        "-I/home/holden/mckernel/ihk/linux/include",
+        "-I/home/holden/mckernel/lib/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/driver.c",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/output-1/candidate.o",
+        "-no-pie",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/output-1/parity"
+      ],
+      "label": "01-genuine-C-entry-provider-driver-link",
+      "cwd": "/home/holden/mckernel",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Original C versus unchanged Rust perf entry and genuine Rust helper chain; controlled13providers only, no hardware/Linux perf/native effects."
+    },
+    {
+      "name": "02-actual-entry3600-ABI56-controlled-regression",
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/output-1/parity"
+      ],
+      "label": "02-actual-entry3600-ABI56-controlled-regression",
+      "cwd": "/home/holden/mckernel",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Original C versus unchanged Rust perf entry and genuine Rust helper chain; controlled13providers only, no hardware/Linux perf/native effects."
+    }
+  ],
+  "inputs": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/driver.c",
+      "bytes": 12575,
+      "sha256": "8b148262812afeace40227e083b38dbd05b67a3da53c45aa136f9937ecaffd6f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/reference.c",
+      "bytes": 13860,
+      "sha256": "67b3b47d26085864d32acf77851b095d1498eb8ee5052f7507c9d9af3b0ea369"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/lib.fixture.rs",
+      "bytes": 3046,
+      "sha256": "d9c7405b0341b3662a63e38341f4e6cccbab46c36e2c551da1db11d9ca64abcd"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/ACTUAL-EXISTING-PERF-HELPERS.rs.inc",
+      "bytes": 16677,
+      "sha256": "5d67ca2d2a53ba9c2333c48bad195e0190412b2c2e7fcc2fce2c54d2e71554c5"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/ENTRY-UNCHANGED-BODY-WITH-FIXTURE-ABI.rs.inc",
+      "bytes": 12049,
+      "sha256": "5126e995bd34be63c9157f4e9dd19a28eaa5bd9d162f940db7c61090f4523a39"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/ABI-WORD-COUNT.SOURCE.json",
+      "bytes": 1052,
+      "sha256": "038d29abbaaa988f45bf04bb671236ea0faca89f9a971aec25e601d8d461a14e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/entry-behavior-source-1/SCENARIOS-AND-OWNERSHIP.md",
+      "bytes": 4310,
+      "sha256": "dc871e9423fd1a011e5a69e81c64a3f5ca3f3144eeb23c68f507fd4c7bef1631"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/perf_entry.RUST-FRAGMENT.rs.inc",
+      "bytes": 9393,
+      "sha256": "9963e2b3159e38f7f27f9e4d4a7b9f585c283634a63ed4e84ba95497dd1ddbc2"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/perf_event_attr.ABI.rs.inc",
+      "bytes": 1722,
+      "sha256": "8eec931271fd3829c6fffbadf3f2ae1da13796cc1929f3685145d0cd65c8d285"
+    }
+  ],
+  "sources": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    }
+  ],
+  "canonical_origins": [],
+  "header_bindings": [
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-bitops.h",
+      "bytes": 598,
+      "sha256": "c4a9e5067fb84742e5bb411b1a373bed1a4917abb17dc618e8d2630bd6f2d79a"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-futex.h",
+      "bytes": 424,
+      "sha256": "1229adc72ebf596abc31ee9daad76ee005072ebb0aa29b3d71835ccfe95feb55"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-lock.h",
+      "bytes": 4603,
+      "sha256": "ca8baa66ed77634cd6319a918211b3eb8fe80fc7dcb2ac0110ab6bfbd0c1b81b"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-memory.h",
+      "bytes": 8996,
+      "sha256": "1704ac32bf55f421c802df661c844b496a1660b8b89e5d12cc2d994d835b5b49"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-string.h",
+      "bytes": 238,
+      "sha256": "98fe2c9021167e9b08d75dbe5ffc6b25bc84d708a8baeaf60d16fcb88e5b3831"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch/auxvec.h",
+      "bytes": 355,
+      "sha256": "c5728dd4851916b51ce04a993154bd7d9124170b136319f7677a9d843cd4d8c7"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch/cpu.h",
+      "bytes": 913,
+      "sha256": "2130ac820f72c6349cab63f6d456cd0ff23fb00a99a745681e56a7ec4eb9b187"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch/mm.h",
+      "bytes": 141,
+      "sha256": "9d8faad8307f160b596b51cd482bcc6dd5c38a62b848ec6bc6c09dd714d4cdfe"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch/mman.h",
+      "bytes": 839,
+      "sha256": "8e3844987296722aceac782975db7889b37889afdcab23d6c2d24bb3df33f9ec"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch/shm.h",
+      "bytes": 866,
+      "sha256": "a1183834da90fb674307d65ebb0ffabe19315dd88353c46815921f6e88090366"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/cpulocal.h",
+      "bytes": 1299,
+      "sha256": "9c717afdbf8c77744c8f1ca9a8c00e4ffa2eb623f310905799b9c1b07bd685b2"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/errno.h",
+      "bytes": 5167,
+      "sha256": "79e1671f269b7dab1f2e1ea672c402bc03738b85029b6f3b3031efe22dde9157"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/hwcap.h",
+      "bytes": 195,
+      "sha256": "29a039580a68367d2e375bc063f72bf9ef9d37b9fa18daeb0524af8eefe10d93"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/atomic.h",
+      "bytes": 2680,
+      "sha256": "829c76b8e61efd50e6cbc968c6eac56fc7b151c9da4143fd40bde176117ef78d"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/context.h",
+      "bytes": 2286,
+      "sha256": "13a67bcf26c512ac27ece4ab801e5e96976b88ec505d9f549e53755b431171f8"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/types.h",
+      "bytes": 1074,
+      "sha256": "c37a7c748f2439ddfd847725a4d559c008f2aca09c45114fb07e73337013f449"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/registers.h",
+      "bytes": 5778,
+      "sha256": "43fd6d2e278953684574224927fe65bc514a88c5529d97f688e1e21b1864a6fc"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/rlimit.h",
+      "bytes": 2508,
+      "sha256": "c5c9b7255c09d56766d2c2bec72b6261579e51e2925457fcc8c098fe08cd907a"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/signal.h",
+      "bytes": 7474,
+      "sha256": "3cea81b9b2f723fbff2cafa634761d50316a397d06df2c12f94fe5f0dae03752"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/cokernel/smp/x86_64/include/ihk/memconst.h",
+      "bytes": 198,
+      "sha256": "38b25a9fedbcf50d9eae799681aff60705d6e2e5e3559bcb721b0541ce98dc61"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/cokernel/smp/x86_64/include/march.h",
+      "bytes": 1174,
+      "sha256": "32984f29c20133f89b2410c922fc291cd675f2942b6128cea55d0e0ff3826f49"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/ikc/include/ikc/ihk.h",
+      "bytes": 4138,
+      "sha256": "0ddad6947192b527be6a6f9560718c98fb70b50cb2cbb838094d0ca6ce199e3e"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/ikc/include/ikc/queue.h",
+      "bytes": 4501,
+      "sha256": "0acb85aee2d3b0b7620a0b222461815c6c96c530c5b7182fe60e8ae52ec4e461"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/ihk_monitor.h",
+      "bytes": 1575,
+      "sha256": "6fb530c99848036f8c71f946c01d2f7189e15c3e8a42b9962be980eaf29e3b60"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/ihk_rusage.h",
+      "bytes": 1404,
+      "sha256": "afc786f096e70bd9b89834b5b0af81ee0e1cfe3f3cd2e73ef5f88db4d63d5d01"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/ikc.h",
+      "bytes": 312,
+      "sha256": "a7a03e3f661eac44cbef67fa41bf398adda43fc37df1c0d9fa88427d6c69127b"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/affinity.h",
+      "bytes": 1801,
+      "sha256": "9f7dbbeebedd2f74961bfe6833c75ebb2306e9eb072d69ee8ce3486f0a0f82c7"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/amemcpy.h",
+      "bytes": 566,
+      "sha256": "86443ff03bcbe2b7533389c598a051dc2f6ff0a043a4c500361edf3920672639"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/auxvec.h",
+      "bytes": 1485,
+      "sha256": "415e66bbd2c64043e7deca79dcb2edb92f4d46c79e0820e6d3daa6d3b83c175e"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/cls.h",
+      "bytes": 2984,
+      "sha256": "19719fe663c33bc3aec62875baa7f1b8d4a0e0042b5a8aae94fe7b6c9799a4c1"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/futex.h",
+      "bytes": 6087,
+      "sha256": "75acd5b0a0e542777c9fb86c5f75ab9e4a1f9d4df5e59fd516cf854614725407"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/generic-rlimit.h",
+      "bytes": 445,
+      "sha256": "94bca7ac86e30806385aea32eeba1c6a39dea32a6d8f5c79167c3473bc3dffbb"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/kmalloc.h",
+      "bytes": 1171,
+      "sha256": "fff00b6875c3f87a0d9c4bdfeadf3c3d3eb731d843dc0650f6364352ac2b1144"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/kmsg.h",
+      "bytes": 379,
+      "sha256": "47434be82c72e66bdc82ded4da08159eb6c63f7b1060142539e081a2f1f2d5b5"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/lwk/compiler-gcc.h",
+      "bytes": 11651,
+      "sha256": "1a2693ab50b3768ca2ca362bb0e6773bdabc12425ad4061802b3aca20dbe47a2"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/lwk/compiler.h",
+      "bytes": 17894,
+      "sha256": "eeb3c5b9d47dc32d73908c9048002a34ef77e5d6bdc03346b27b494ded5b49dd"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/lwk/stddef.h",
+      "bytes": 358,
+      "sha256": "2e915a7ca2a67b2c57690836bcf2bc37639ae657f5e294ee3309cb13652a4b3b"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/memobj.h",
+      "bytes": 3957,
+      "sha256": "7d587411f1b6957c6fcc6f61d8f03b052d875cfd774f602aefe05ff99f536bb9"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/mman.h",
+      "bytes": 1781,
+      "sha256": "99faf3bbb639ab4eca2c5444dcc95cff0e7046c91fc3fa1a97c88375ee6107e8"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/object_helpers.h",
+      "bytes": 61009,
+      "sha256": "0131700fc9f5bfdae8e1210664befb8a20f7655ba96b55a7d64abbe7703f517a"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/page.h",
+      "bytes": 1647,
+      "sha256": "c8f3f5e7804c71430c814395ea14a1ee93267180713caeb39880b662cc9cd0dc"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/pager.h",
+      "bytes": 1223,
+      "sha256": "24460cdc45191c6ad0905f10a8e2cb89d4fd4b347cffc1ec3914ce51104bed7f"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/plist.h",
+      "bytes": 4349,
+      "sha256": "d66b1a000f5226a06ef28f3ba75f34a0acea9cd4cd5a93c8113ca5764d9b2a29"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/process.h",
+      "bytes": 26602,
+      "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/process_helpers.h",
+      "bytes": 75149,
+      "sha256": "1e4eceec2c06dcd409d86cbd5e24616684d83e828d62d6ca534e08c4e0a20bcb"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/profile.h",
+      "bytes": 3241,
+      "sha256": "a3185194bca3733304a30c08b70de466ecdcf1da223ab5053687d4cd125171ec"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/rbtree.h",
+      "bytes": 3107,
+      "sha256": "86022fb1a246c7ba43bb66913ca4c6a6e9a7d896607c6364ea941b5304ae5332"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/rusage.h",
+      "bytes": 1167,
+      "sha256": "f548ed5eeded34cd0d6a7a89d56c9beff6c31afbd9df7d725888f7eaf641541e"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/rusage_private.h",
+      "bytes": 3262,
+      "sha256": "9cc30af76f445517a70fbbaa2bc6d2a48dee12bc8fd08bc0e1c37d571693d972"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/sched_helpers.h",
+      "bytes": 34428,
+      "sha256": "9712a3df59eb0251f517ce01254e4576119868924b35f7da6fbee294bff966ae"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/shm.h",
+      "bytes": 1948,
+      "sha256": "014fdc724bc42d1245776a4b161463c0df35040f0a5c961144023989ff6f5761"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/syscall.h",
+      "bytes": 20836,
+      "sha256": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/time.h",
+      "bytes": 1780,
+      "sha256": "6d5ec6fd43f6632b5772fbdd99c96957d842951052034a3e355aa63c13ba56d7"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/timer.h",
+      "bytes": 867,
+      "sha256": "7b19b3b4dbdde3d79b4479b5465ee3604f8666ebf7c5992e36e99e6453bf5ec9"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/uio.h",
+      "bytes": 486,
+      "sha256": "f1f1e29cec39675214291cfe435b6fb80b423ce13ced0b54727659df486e9991"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/waitq.h",
+      "bytes": 1847,
+      "sha256": "f3fc8247a033a77efa407f6fe365a2b1bcad404e96de2cbf845f407a2e5946ff"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/xpmem.h",
+      "bytes": 1465,
+      "sha256": "2b1d10e87af013675c7bf415af85cead8378a24c93ac56a2169a69d993692163"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/bitops-test_bit.h",
+      "bytes": 117,
+      "sha256": "1f2fdb9a3a7d2b22d897df29955ea9c8c94fe0a78d3262aa762a7990f47ce635"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/bitops.h",
+      "bytes": 1149,
+      "sha256": "85c1781bb49918a97d8e04c48b3723927377e6d157824f4bd79e38243d6809ff"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ctype.h",
+      "bytes": 861,
+      "sha256": "2156a2b75341299f2034885bd2021b2f757a3e4934484915482c41f4c7b62a52"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/generic-errno.h",
+      "bytes": 2497,
+      "sha256": "7dca1a209f95dbc287627f3b590621762063acc080b65709aea88d3f48c8bfe4"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ihk/cpu.h",
+      "bytes": 5479,
+      "sha256": "a25efd9095efe3f357efb2a2d7d810e2a6d1ed0aea3c6e1d4fac2c0ee8a83c81"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ihk/debug.h",
+      "bytes": 1294,
+      "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ihk/lock.h",
+      "bytes": 2907,
+      "sha256": "fd34fe3adae00d309fc48e4a8f8c4170edfdfc6bfffd5b37db13f5391ed84f6f"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ihk/mm.h",
+      "bytes": 9548,
+      "sha256": "a1b412608df7512a1b7295c6f19b3ec5a77e6364e8f24b208ab1a29e7556e5b1"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ihk/monitor.h",
+      "bytes": 167,
+      "sha256": "15c58b8c1ba5085536ed8725a9178cc48a65a62e5dda6005a6278d6e49b79d91"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/limits.h",
+      "bytes": 1358,
+      "sha256": "b71fc4ae02cfb82c474b61012bd55375ec7e0b0826a3280755ddb3631cc0a6ee"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/list.h",
+      "bytes": 2870,
+      "sha256": "4ddb20f524e073fb69b6fcb1268121c76c653c4007d914437555a4d17af48440"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/mc_perf_event.h",
+      "bytes": 8775,
+      "sha256": "8a9978dcab179a63b3aff3b66641a4814bacaf86cf4631ecdf39e32df45ea5dd"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/memory.h",
+      "bytes": 1377,
+      "sha256": "42c0c943511a9eb26133c9f1ca132ade5eb10606ae43c96f6d81d59a69ffeca2"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/string.h",
+      "bytes": 1588,
+      "sha256": "f612dad80dd16ff0d4d6232f155cc879522de6203ce015afa3ef0c36c3dd5636"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/types.h",
+      "bytes": 515,
+      "sha256": "72179c1e931fdfdfa700d2ecfe745e344027ac0b4af299e8a9ec17957fc9a399"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/config.h",
+      "bytes": 1055,
+      "sha256": "da78d6a8c94b274adad3159b1cc373b00e5de7fea6cc2ae7955a700078db6b2f"
+    }
+  ],
+  "tools": {
+    "C": {
+      "path": "/usr/bin/gcc-9",
+      "bytes": 1158288,
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+    },
+    "stable_Rust": {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "bytes": 654904,
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1"
+    },
+    "Python": {
+      "path": "/home/holden/anaconda3/bin/python3",
+      "bytes": 15880080,
+      "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb"
+    }
+  },
+  "fixture_tools": {},
+  "retained_identity": [],
+  "profile": {
+    "cpu": 0,
+    "jobs": 1,
+    "as_bytes": 2147483648,
+    "cpu_seconds_shared": 60,
+    "wall_seconds": 90,
+    "cleanup_grace": 6,
+    "file_bytes": 33554432,
+    "fd": 256,
+    "stack_bytes": 2097152,
+    "core": 0,
+    "capture": "existing h990 owned_capture; first failure stop; all children joined/groups absent/streams closed"
+  },
+  "expected_stdout": "PASS perf entry genuine-C/Rust cases=3600 ABI56 scenarios18 providers13 copy/error/order/identity/request/flags/publication controlled-only\n",
+  "ABI_accepted_reference": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-15-perf-entry-abi/execution-freeze-1/ACTUAL-SOURCE15-ABI-HANDOFF.json",
+    "bytes": 13846,
+    "sha256": "6763a9706372c8449527f225562dfc51b554383344e08eef70b50c15c71c677b"
+  },
+  "source_predicates": [
+    "Exact Source15 runtime entry body preserved; only fixture geometry static appended outside its body.",
+    "Existing actual production validation/group/counter/Linux/publish/body/entry helpers reused unchanged.",
+    "Actual13 C provider signatures/initializers and genuine header offsets remain, no held corrections.",
+    "56realC/Rust layout words before any CPU/current-thread pointers are consumed.",
+    "rtid/ttid/valid initialized by controlled syscallprovider before observation; no read of incoming uninitialized request ID bytes.",
+    "No new cleanup semantics: original failure side effects compared using static fixture-owned storage.",
+    "No fixture memory declarations/stubs; actual string.h plus normalHOST libc binding.",
+    "OriginalC/Rust state/return/trace paired with independent expected stage/result/publication assertions.",
+    "Source290 unchanged and excludes this perf candidate."
+  ]
+}

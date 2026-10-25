@@ -1,0 +1,109 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_VM_LOOKUP3420_ABI12_PROVIDER",
+  "commands": 6,
+  "actual_cases": 3420,
+  "ABI": 12,
+  "error": null,
+  "wall_seconds": 0.809047759976238,
+  "CPU_seconds": 0.839569,
+  "max_child_RSS_KiB": 116220,
+  "CPU6_released": true,
+  "whole_joined_group_absent_closed": true,
+  "report": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/capture-1/ACTUAL-WHOLE-JOIN.json",
+    "bytes": 12266,
+    "sha256": "8ed6b767929b38bcacd76fac413990d353c5da03dcb2f358d9cf665ba48912b4"
+  },
+  "recipe": {
+    "bytes": 43826,
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/EXACT-LOOKUP-RECIPE.NOT-GRANTED.json",
+    "sha256": "996811a0cf88a42a6884fc3721bf84c51928021e83381b538ba0f64ba70998e8"
+  },
+  "driver": {
+    "bytes": 8091,
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/run_lookup_once.py",
+    "sha256": "0f7bc8fcaf4fe1d98fbbbeb1eaf7a07276f2a8233e8072d00cf16bacc8c44e29"
+  },
+  "root_grant": {
+    "bytes": 1661,
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/ROOT-ORDINARY-CPU6-GRANT.json",
+    "sha256": "f739830218736e8d5d4db714f3089cec7cfc67e617545d5061172156cceb0652"
+  },
+  "actual_runtime_stdout": "PASS process_VM_lookup cases=3420 ABI=12 linear_overlap=1 cache_oracle=1 log_events=1 borrowed_under_real_lock=1 lock_restored=1\n",
+  "actual_ELF_stdout": "PASS lookup_ELF Rust_provider=1 original_C_static=1 typed_C_import=1 reused_lock_providers=2 unchanged_objects=1 log_event_ABI=1\n",
+  "objects": [
+    {
+      "ctime_ns": 1792964283502733276,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 59544048,
+      "mode": "0o600",
+      "mtime_ns": 1792964283502733276,
+      "nlink": 1,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/output-1/lookup-Rust.o",
+      "sha256": "55f20d28d6d66baa8364f0e1a75c022ed6d3f0e4186fe189361bc2b08f1b401b",
+      "size": 16776,
+      "uid": 1000
+    },
+    {
+      "ctime_ns": 1792964283518733585,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 59544050,
+      "mode": "0o600",
+      "mtime_ns": 1792964283518733585,
+      "nlink": 1,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/output-1/liblookup_actual.a",
+      "sha256": "631051e7b78c6806ba66aa09269f66e94c79495d7248261b24f3a7929970e5da",
+      "size": 20714656,
+      "uid": 1000
+    },
+    {
+      "ctime_ns": 1792964283594735054,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 59544056,
+      "mode": "0o600",
+      "mtime_ns": 1792964283594735054,
+      "nlink": 1,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/output-1/original-C.o",
+      "sha256": "9fcad3963211a7b581ece643dcbe1a7b68349fbb3acd61e77ac055a9ecf1d78e",
+      "size": 1472,
+      "uid": 1000
+    },
+    {
+      "ctime_ns": 1792964283710737296,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 59544065,
+      "mode": "0o600",
+      "mtime_ns": 1792964283710737296,
+      "nlink": 1,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/output-1/compare-C.o",
+      "sha256": "b8c7d6f47e03db5163807fc802a84c1da181f152bc3d5db80057706f89d906c8",
+      "size": 7344,
+      "uid": 1000
+    },
+    {
+      "ctime_ns": 1792964283846739925,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 59544074,
+      "mode": "0o700",
+      "mtime_ns": 1792964283846739925,
+      "nlink": 1,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-16-process-vm-lookup/output-1/lookup-compare",
+      "sha256": "89e766199ba4d440dcce1e60b9adaa0b95a9625bb17eea77158e681a2e2554ee",
+      "size": 3804952,
+      "uid": 1000
+    }
+  ],
+  "canonical_writes": 0,
+  "independent_actual_review": "PENDING",
+  "remaining": [
+    "Independent actual HOST result/ownership review",
+    "Central current-wholecrate/retained-C/default image consumer integration",
+    "Native borrowed lifetime/cache concurrency/preemption and whole-file retirement OPEN"
+  ]
+}

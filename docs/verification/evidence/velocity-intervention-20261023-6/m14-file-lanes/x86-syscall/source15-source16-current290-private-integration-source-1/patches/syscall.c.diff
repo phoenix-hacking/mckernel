@@ -1,0 +1,49 @@
+--- /home/holden/mckernel/arch/x86_64/kernel/syscall.c
++++ /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/source15-source16-current290-private-integration-source-1/runtime/arch/x86_64/kernel/syscall.c
+@@ -477,26 +477,44 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern void arch_process_vm_rw_read_lock_bridge(void *);
++#else
++#line 480
+ static void
+ arch_process_vm_rw_read_lock_bridge(void *vm)
+ {
+ 	ihk_rwspinlock_read_lock_noirq(
+ 			&((struct process_vm *)vm)->memory_range_lock);
+ }
+-
++#endif /* exact original borrowed process-VM callback */
++#line 486
++
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern void arch_process_vm_rw_read_unlock_bridge(void *);
++#else
++#line 487
+ static void
+ arch_process_vm_rw_read_unlock_bridge(void *vm)
+ {
+ 	ihk_rwspinlock_read_unlock_noirq(
+ 			&((struct process_vm *)vm)->memory_range_lock);
+ }
+-
++#endif /* exact original borrowed process-VM callback */
++#line 493
++
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern struct vm_range *arch_process_vm_rw_lookup_range_bridge(void *, unsigned long, unsigned long);
++#else
++#line 494
+ static struct vm_range *
+ arch_process_vm_rw_lookup_range_bridge(void *vm, unsigned long start,
+ 		unsigned long end)
+ {
+ 	return lookup_process_memory_range((struct process_vm *)vm, start, end);
+ }
++#endif /* exact original borrowed process-VM callback */
++#line 500
+ 
+ static struct process *
+ arch_process_vm_rw_find_process_bridge(int pid, void *lock_node)
