@@ -1,0 +1,279 @@
+{
+  "Rust_ABI_acceptance": false,
+  "SDK21_acceptance": false,
+  "artifact_names": [
+    "layout-witness",
+    "bfd_layout.rs",
+    "bfd_accessors.o",
+    "mcinspect-original-renamed.o",
+    "eclair-original-renamed.o",
+    "fixture.o",
+    "stripped.o"
+  ],
+  "historical_success_count": 9,
+  "new_current_physical_proof": {
+    "bytes": 2680,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CORRECTED-BFD-C-C-ACTUAL-PHYSICAL-AND-CURRENT-ACCEPTANCE.json",
+    "sha256": "71dfa12d70af2b96c101dcb91ea94c30997cb82552e9f495cec42f243fd9e649"
+  },
+  "no_recompile": [
+    "witness-build",
+    "witness-run",
+    "witness-preprocessed",
+    "rust-build",
+    "mcinspect-original-compile",
+    "eclair-original-compile",
+    "fixture-compile",
+    "fixture-strip"
+  ],
+  "obsolete_success_not_reused": "equivalence-link",
+  "preserved_failed_command": {
+    "argv": [
+      "/work/qualification-1/equivalence",
+      "/work/qualification-1/fixture.o",
+      "/work/qualification-1/stripped.o"
+    ],
+    "cwd": "/work/qualification-1",
+    "log": "equivalence-run",
+    "rc": -6
+  },
+  "prior_commands": {
+    "bytes": 3379,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/commands.json",
+    "sha256": "22caa7fec9186c30a7c5d2596553f7913dfe305584761ce6eff84ef902833c55"
+  },
+  "retained_commands": [
+    {
+      "argv": [
+        "/usr/bin/cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "/candidate/proposal/executer/user/cmake/bfd_layout_witness.c",
+        "/usr/lib64/libbfd.so",
+        "-o",
+        "/work/qualification-1/layout-witness"
+      ],
+      "cwd": "/work/qualification-1",
+      "log": "witness-build",
+      "rc": 0
+    },
+    {
+      "argv": [
+        "/work/qualification-1/layout-witness"
+      ],
+      "cwd": "/work/qualification-1",
+      "log": "witness-run",
+      "rc": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/cc",
+        "-std=c11",
+        "-E",
+        "-P",
+        "/candidate/proposal/executer/user/cmake/bfd_layout_witness.c"
+      ],
+      "cwd": "/work/qualification-1",
+      "log": "witness-preprocessed",
+      "rc": 0
+    },
+    {
+      "argv": [
+        "/nightly/bin/rustc",
+        "--crate-name",
+        "bfd_accessors",
+        "--crate-type",
+        "lib",
+        "--edition=2021",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "debuginfo=1",
+        "-C",
+        "force-unwind-tables=no",
+        "--emit=obj=/work/qualification-1/bfd_accessors.o",
+        "/candidate/proposal/executer/user/rust/bfd_accessors.rs"
+      ],
+      "cwd": "/work/qualification-1",
+      "log": "rust-build",
+      "rc": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/cc",
+        "-std=c11",
+        "-c",
+        "/src/executer/user/mcinspect_bfd_shim.c",
+        "-Dmcinspect_bfd_get_symtab_upper_bound_bridge=original_mcinspect_bfd_get_symtab_upper_bound_bridge",
+        "-Dmcinspect_bfd_canonicalize_symtab_bridge=original_mcinspect_bfd_canonicalize_symtab_bridge",
+        "-o",
+        "/work/qualification-1/mcinspect-original-renamed.o"
+      ],
+      "cwd": "/work/qualification-1",
+      "log": "mcinspect-original-compile",
+      "rc": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/cc",
+        "-std=c11",
+        "-c",
+        "/src/executer/user/eclair_bfd_shim.c",
+        "-Declair_bfd_get_symtab_upper_bound_bridge=original_eclair_bfd_get_symtab_upper_bound_bridge",
+        "-Declair_bfd_canonicalize_symtab_bridge=original_eclair_bfd_canonicalize_symtab_bridge",
+        "-o",
+        "/work/qualification-1/eclair-original-renamed.o"
+      ],
+      "cwd": "/work/qualification-1",
+      "log": "eclair-original-compile",
+      "rc": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/cc",
+        "-c",
+        "-g",
+        "/candidate/tests/fixture.c",
+        "-o",
+        "/work/qualification-1/fixture.o"
+      ],
+      "cwd": "/work/qualification-1",
+      "log": "fixture-compile",
+      "rc": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/strip",
+        "--strip-all",
+        "/work/qualification-1/stripped.o"
+      ],
+      "cwd": "/work/qualification-1",
+      "log": "fixture-strip",
+      "rc": 0
+    }
+  ],
+  "retained_files": {
+    "bfd_accessors.o": {
+      "bytes": 5256,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/bfd_accessors.o",
+      "sha256": "e3bba0de5076371c1b5c7b9736c7cf1add861f67303c55385c564f85be7f21d8"
+    },
+    "bfd_layout.rs": {
+      "bytes": 259,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/bfd_layout.rs",
+      "sha256": "e21b4d9975984b7c14e13760c232dda4e755c5955f1649df77ebdc38e065530b"
+    },
+    "eclair-original-compile.stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/eclair-original-compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "eclair-original-compile.stdout": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/eclair-original-compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "eclair-original-renamed.o": {
+      "bytes": 1496,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/eclair-original-renamed.o",
+      "sha256": "8cb0d3cea9ded4c2798317061ca93e76569a0b0ab9ab3c95b9111899b20b408b"
+    },
+    "fixture-compile.stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/fixture-compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "fixture-compile.stdout": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/fixture-compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "fixture-strip.stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/fixture-strip.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "fixture-strip.stdout": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/fixture-strip.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "fixture.o": {
+      "bytes": 3128,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/fixture.o",
+      "sha256": "a6176c3bc554b55a593056cf41737cc22d95aa76d2de28cd1db4a5663bc26a88"
+    },
+    "layout-witness": {
+      "bytes": 16856,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/layout-witness",
+      "sha256": "23253ccb4c3ac64c7eb67e497ac57ee598585da20b9219058eb6371b7dcb912c"
+    },
+    "mcinspect-original-compile.stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/mcinspect-original-compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "mcinspect-original-compile.stdout": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/mcinspect-original-compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "mcinspect-original-renamed.o": {
+      "bytes": 1504,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/mcinspect-original-renamed.o",
+      "sha256": "a180e46408c79d35f7482d5c4cfb510f46a5a892ab18ba1b39de4b067e8cf4a6"
+    },
+    "rust-build.stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/rust-build.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "rust-build.stdout": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/rust-build.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stripped.o": {
+      "bytes": 896,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/stripped.o",
+      "sha256": "029e97d0340e8b35b3c92f6bdf06dd14b924de62aa169ab8bc3297234ee30495"
+    },
+    "witness-build.stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/witness-build.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "witness-build.stdout": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/witness-build.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "witness-preprocessed.stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/witness-preprocessed.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "witness-preprocessed.stdout": {
+      "bytes": 133114,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/witness-preprocessed.stdout",
+      "sha256": "1489121763192e297ab13cfe34b044e35fd580f0a1752edc213c049fd592e96d"
+    },
+    "witness-run.stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/witness-run.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "witness-run.stdout": {
+      "bytes": 259,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/materialized-coherent-tuple-1/workspace/native-running-modules-candidate-0ccec66ed738427296d4e7b6bff0b4c5/qualification-1/witness-run.stdout",
+      "sha256": "e21b4d9975984b7c14e13760c232dda4e755c5955f1649df77ebdc38e065530b"
+    }
+  },
+  "retained_success_count": 8,
+  "schema": "mckernel.bfd.sdk-success-prefix-reuse.v1",
+  "scope": "Functional OS only; no security testing."
+}
