@@ -15234,3 +15234,126 @@ mod remaining_process_lock_and_tid_providers {
     const _: unsafe extern "C" fn(*mut c_void, *mut c_void, CInt) =
         process_destroy_thread_replace_tid_bridge;
 }
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+mod remaining_process_create_thread_providers {
+    use core::ffi::c_void;
+
+    use crate::abi::{
+        AddressSpace, CInt, CULong, Process, ProcessVm, Thread, X86KernelContext, X86UserContext,
+    };
+
+    unsafe extern "C" {
+        #[link_name = "ihk_mc_init_user_process"]
+        fn initialize_user_context(
+            context: *mut X86KernelContext,
+            user_context: *mut *mut X86UserContext,
+            stack_pointer: *mut c_void,
+            new_pc: CULong,
+            user_sp: CULong,
+        );
+    }
+
+    /// Create address-space storage through the existing current resource set.
+    ///
+    /// # Safety
+    /// The caller runs with the original live CPU-local/resource-set state and
+    /// supplies the existing slot-count domain. CPU binding is stable while
+    /// reading its resource set; that resource set stays live through creation.
+    /// The same backend owns allocation/error policy and nullable ownership return.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_create_thread_address_space_bridge(nslots: CInt) -> *mut c_void {
+        // SAFETY: Same synchronous getter/read/builder sequence as C. Raw reads
+        // create no reference and preserve the existing resource-set lifetime.
+        unsafe {
+            let resource_set = (*super::get_this_cpu_local_var()).resource_set;
+            super::create_address_space(resource_set, nslots).cast::<c_void>()
+        }
+    }
+
+    /// Release the same address-space reference through the existing Rust entry.
+    ///
+    /// # Safety
+    /// The original owner supplies an address-space pointer/reference accepted by
+    /// release_address_space and grants the same one-time reference release.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_create_thread_release_address_space_bridge(asp: *mut c_void) {
+        // SAFETY: Exact pointer and existing backend reference/cleanup policy.
+        unsafe { super::release_address_space(asp.cast::<AddressSpace>()) };
+    }
+
+    /// Invoke the original process initializer and retain its void/zero convention.
+    ///
+    /// # Safety
+    /// The creator exclusively owns the same writable process storage and valid
+    /// parent relationship required by init_process. Existing initialization and
+    /// invariant-failure behavior remain in that unchanged backend.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_create_thread_init_process_bridge(
+        proc: *mut c_void,
+        parent: *mut c_void,
+    ) -> CInt {
+        // SAFETY: This adapter neither reads fields nor adds initialization work.
+        unsafe { super::init_process(proc.cast::<Process>(), parent.cast::<Process>()) };
+        0
+    }
+
+    /// Forward the original process/space/VM tuple and its exact initialization result.
+    ///
+    /// # Safety
+    /// The creator keeps the process and address space live and exclusively owns
+    /// writable VM storage under the initializer's original lifetime contract.
+    /// Any subsequent rollback remains solely with the existing caller.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_create_thread_init_vm_bridge(
+        owner: *mut c_void,
+        asp: *mut c_void,
+        vm: *mut c_void,
+    ) -> CInt {
+        // SAFETY: Identical borrowed objects reach the same actual initializer;
+        // no new lock, reference, reset, error translation or cleanup is added.
+        unsafe {
+            super::init_process_vm(
+                owner.cast::<Process>(), asp.cast::<AddressSpace>(), vm.cast::<ProcessVm>(),
+            )
+        }
+    }
+
+    /// Initialize the same thread context and user-context pointer through its ABI entry.
+    ///
+    /// # Safety
+    /// The creator owns live/writable thread context and uctx output storage and
+    /// the original writable initial stack span. The existing architecture entry
+    /// retains its frame geometry, assembly target and user PC/SP contracts.
+    /// This adapter does not run the created user context or change FP handling.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_create_thread_init_user_bridge(
+        thread: *mut c_void,
+        stack_top: CULong,
+        user_pc: CULong,
+        user_sp: CULong,
+    ) {
+        let thread = thread.cast::<Thread>();
+        // SAFETY: Raw field-address computation preserves the exact original
+        // context/output addresses without borrowing uninitialized thread data.
+        // The unchanged, exported Rust architecture entry performs all writes.
+        unsafe {
+            initialize_user_context(
+                core::ptr::addr_of_mut!((*thread).ctx),
+                core::ptr::addr_of_mut!((*thread).uctx),
+                stack_top as *mut c_void,
+                user_pc,
+                user_sp,
+            );
+        }
+    }
+
+    const _: unsafe extern "C" fn(CInt) -> *mut c_void = process_create_thread_address_space_bridge;
+    const _: unsafe extern "C" fn(*mut c_void) = process_create_thread_release_address_space_bridge;
+    const _: unsafe extern "C" fn(*mut c_void, *mut c_void) -> CInt =
+        process_create_thread_init_process_bridge;
+    const _: unsafe extern "C" fn(*mut c_void, *mut c_void, *mut c_void) -> CInt =
+        process_create_thread_init_vm_bridge;
+    const _: unsafe extern "C" fn(*mut c_void, CULong, CULong, CULong) =
+        process_create_thread_init_user_bridge;
+}

@@ -873,6 +873,18 @@ void *process_create_thread_alloc_pages_bridge(int npages,
 	return _ihk_mc_alloc_aligned_pages_node(npages, PAGE_P2ALIGN, flags, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
 }
 
+#endif /* retain original selected-only page allocator gate */
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void *process_create_thread_address_space_bridge(int nslots);
+void process_create_thread_release_address_space_bridge(void *asp);
+int process_create_thread_init_process_bridge(void *proc, void *parent);
+int process_create_thread_init_vm_bridge(void *owner, void *asp,
+					void *vm);
+void process_create_thread_init_user_bridge(void *thread,
+	unsigned long stack_top, unsigned long user_pc,
+	unsigned long user_sp);
+#else
+#line 791
 void *process_create_thread_address_space_bridge(int nslots)
 {
 	return create_address_space(get_this_cpu_local_var()->resource_set, nslots);
@@ -905,6 +917,7 @@ void process_create_thread_init_user_bridge(void *thread,
 				 user_pc, user_sp);
 }
 #endif
+#line 823
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 struct thread *create_thread(unsigned long user_pc,

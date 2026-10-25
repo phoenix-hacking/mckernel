@@ -1,3 +1,31 @@
+## Thirty-minute engineering review — 2026-10-25T05:12:41.768221+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Source8 fivecreate-thread adapters integrated after6commands/independentHOSTPASS:
+160providers,20fallbacks,12+21ABI,9traces,66data;21.799wall/21.755CPU.
+move_pages fixture5commandsPASS:20legacy+20checked+12correctedRustfaults,
+independentlyaccepted;30ABI/currentobject/default/native stillOPEN.
+Declarationprofile1positive6negativePASS;12graphs remainseparate/all237Cdata debt.
+F06 firstcompileFAIL unclosedfixtureconst;finalizerrelativepathFAILbothretained,
+CPU0released/no comparisons. Oneboundedcorrection each authorized.
+Executor source15fetched07d803, genuinecaeca/592freviews; binder/publicationPASS
+.106/.095wall,15overlayfiles readyforGitfetch thenfreshquery/exactSDKrelease.
+M12 35/35;M14/M15 OPEN;newproduction/native/file/guest/imageclosures0.
+Scheduling:finishfiniteoverlayfetch/admission, prioritize9SDKcommands beforeBFD21/daemon7.
+PeakRSS/queueUTCpairunmeasured;HOST156.5GB/scratch14.10GB,27.2GBMemAvailable.
+Evidence:`../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0512.json`.
+
+## Fetched checkpoint and next compiler admission — 2026-10-25T05:06Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Fetched07d803 verified:7canonical files,794source/evidence archive members,
+15executor source members and8finaltuple files match actualGit blobs. Proof
+`../evidence/os-recovery-adoption-20261025-0254/ACTUAL-FETCHED-CURRENT55-EXECUTOR-SOURCE15-07d803.json`
+SHA89814b13. Independent executor sourceapproval and minimal currentproof binder
+are active;9SDK commands unrun. Source8 object and F06 current3472parity
+preparation proceed independently; F03 move_pages fixture reviewed beforeexecution.
+M12 35/35;M14/M15 OPEN;no new production/native/whole-file retirement.
+
 ## Current checkpoint and executor publication — 2026-10-25T05:02:02.112917+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
