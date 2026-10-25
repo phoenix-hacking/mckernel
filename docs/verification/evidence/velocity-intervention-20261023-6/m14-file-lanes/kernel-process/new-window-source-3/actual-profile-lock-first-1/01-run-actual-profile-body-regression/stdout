@@ -1,0 +1,7 @@
+ORIGINAL_DEFECT_REPRODUCED: ["lock-save-irq", "allocation-failed", "original-allocation-error-report"]
+FIXED_FAILURE: ["lock-save-irq", "allocation-failed", "original-allocation-error-report", "unlock-restore-irq"]
+NEXT_OPERATION_ACQUIRED_AND_FINISHED: ["lock-save-irq", "allocation-failed", "original-allocation-error-report", "unlock-restore-irq", "lock-save-irq", "allocation-succeeded", "print-job-profile", "unlock-restore-irq"]
+NORMAL_FIRST_PROCESS: ["lock-save-irq", "allocation-succeeded", "unlock-restore-irq"]
+NORMAL_LAST_PROCESS: ["lock-save-irq", "allocation-succeeded", "unlock-restore-irq", "lock-save-irq", "print-job-profile", "unlock-restore-irq"]
+EXISTING_JOB_NO_ALLOCATION: ["lock-save-irq", "unlock-restore-irq"]
+PASS actual job-profile lock regression: original defect, failure/reacquire, new-job success, existing-job control; IRQ and node identity preserved

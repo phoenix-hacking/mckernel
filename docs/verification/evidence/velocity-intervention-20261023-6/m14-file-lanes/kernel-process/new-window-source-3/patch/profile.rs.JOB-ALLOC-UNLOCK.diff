@@ -1,0 +1,11 @@
+--- a/kernel/rust/profile.rs
++++ b/kernel/rust/profile.rs
+@@ -361,6 +361,8 @@
+                 JOB_ALLOC_ERR_FMT.as_ptr().cast(),
+                 PROFILE_ACC_JOB_NAME.as_ptr(),
+             );
++            // Release the same acquisition and restore its saved IRQ state.
++            mcs_lock_unlock(&raw mut job_profile_lock, &raw mut node);
+             return -ENOMEM;
+         }
+         zero_events(job_profile_events);

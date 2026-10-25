@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-25T00:01:54.385548+00:00",
+  "as_of": "2026-10-25T03:37:34Z",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -84,7 +84,7 @@
       "c_file": "kernel/mem.c",
       "title": "Generic VM, allocation and memory ownership",
       "status": "open",
-      "owner": "/root/m14_callback",
+      "owner": "/root/m14_mem",
       "inventory_basis": "Exact current image compile database and final link contract; surviving body counts still unmeasured.",
       "object_output": "kernel/CMakeFiles/mckernel.img.dir/mem.c.o",
       "source_dependency_file": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o.d",
@@ -406,23 +406,24 @@
         }
       ],
       "latest_dispatcher_checkpoint": {
-        "at": "2026-10-24T06:53:11.612587+00:00",
-        "owner_activity": "running actual turn confirmed at this checkpoint",
-        "note": "Actual196node-accounting plus45logging/memcheck comparisons and corrected genuine fallback ABI accepted; new __kmalloc/__kfree/cache redirections source-only. Low-level allocator ownership remains active.",
-        "engineering_percentage": null
+        "at": "2026-10-25T03:23:29Z",
+        "actual": "source2_ready; current-TU/default/native dependency",
+        "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0321.json",
+        "limits": "No whole-file/default/native acceptance inferred; exact proof scopes retained."
       },
       "current_increment": {
         "at": "2026-10-24T11:43:50.774989+00:00",
         "actual_progress": "Actual current78 bounded correction ALL11PASS, wall17.506374136 inner/17.629107201 outer. Rust T3237/U553;164 selected entries with genuine C ABI/allocated references and partial link. Held coredump C remains selected; default GCC14/newbody behavior/native OPEN. First duplicate-declaration/register-field compiler failure preserved.",
         "engineering_percentage": null
-      }
+      },
+      "prior_recorded_owner_before_20261025": "/root/m14_callback"
     },
     {
       "id": "M14-F02",
       "c_file": "kernel/process.c",
       "title": "Process, thread, address-space and scheduling lifecycle",
       "status": "partial",
-      "owner": "/root/m14_process_cutover",
+      "owner": "/root/m14_process",
       "inventory_basis": "Exact current image compile database and final link contract; surviving body counts still unmeasured.",
       "object_output": "kernel/CMakeFiles/mckernel.img.dir/process.c.o",
       "source_dependency_file": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o.d",
@@ -946,18 +947,19 @@
         "native_credit": false
       },
       "latest_dispatcher_checkpoint": {
-        "at": "2026-10-24T06:53:11.612587+00:00",
-        "owner_activity": "running actual turn confirmed at this checkpoint",
-        "note": "Actual4480extend/COW comparisons and21ABI accepted; page-fault/PTE/anonymous path coherent next production source prepared. Private union3b passed, canonical union2/default/native remain separate.",
-        "engineering_percentage": null
-      }
+        "at": "2026-10-25T03:23:29Z",
+        "actual": "profile lock-error actual-body repair/test active;3providers source-approved",
+        "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0321.json",
+        "limits": "No whole-file/default/native acceptance inferred; exact proof scopes retained."
+      },
+      "prior_recorded_owner_before_20261025": "/root/m14_process_cutover"
     },
     {
       "id": "M14-F03",
       "c_file": "kernel/syscall.c",
       "title": "Generic syscall, process lifecycle and memory syscall orchestration",
       "status": "open",
-      "owner": "/root/p12_consumer_fixture_expert",
+      "owner": "/root/m14_syscall",
       "inventory_basis": "Exact current image compile database and final link contract; surviving body counts still unmeasured.",
       "object_output": "kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
       "source_dependency_file": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o.d",
@@ -1247,18 +1249,19 @@
         }
       ],
       "latest_dispatcher_checkpoint": {
-        "at": "2026-10-24T06:53:11.612587+00:00",
-        "owner_activity": "running actual turn confirmed at this checkpoint",
-        "note": "Actual1360admission+16ABI accepted. New cleanup Rust compile passed, C01 scaffold missing genuine kfree_tracked declaration failed; one bounded source-context correction underway. CLONE_VM pool/rollback source-only.",
-        "engineering_percentage": null
-      }
+        "at": "2026-10-25T03:23:29Z",
+        "actual": "source-ready existing candidates; diagnostic include family expert-held",
+        "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0321.json",
+        "limits": "No whole-file/default/native acceptance inferred; exact proof scopes retained."
+      },
+      "prior_recorded_owner_before_20261025": "/root/p12_consumer_fixture_expert"
     },
     {
       "id": "M14-F04",
       "c_file": "arch/x86_64/kernel/cpu.c",
       "title": "x86 CPU, interrupt, processor state and context support",
       "status": "open",
-      "owner": "/root/m14_actual_consumer_fix",
+      "owner": "/root/m14_cpu",
       "inventory_basis": "Exact current image compile database and final link contract; surviving body counts still unmeasured.",
       "object_output": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
       "source_dependency_file": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o.d",
@@ -1528,23 +1531,24 @@
         }
       ],
       "latest_dispatcher_checkpoint": {
-        "at": "2026-10-24T06:53:11.612587+00:00",
-        "owner_activity": "running actual turn confirmed at this checkpoint",
-        "note": "New genuine HOST snprintf NoWalk96 functional fixture passed .296803s outer; old invalid-mock96 failures retained. Full IRQ/registration source candidate and genuine ABI/native lifetimes remain open.",
-        "engineering_percentage": null
+        "at": "2026-10-25T03:23:29Z",
+        "actual": "source2_ready; integration/actualABI/default/native dependency",
+        "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0321.json",
+        "limits": "No whole-file/default/native acceptance inferred; exact proof scopes retained."
       },
       "current_increment": {
         "at": "2026-10-24T11:43:50.774989+00:00",
         "actual_progress": "Actual current79 whole Rust/GCC9 ABI/100providers and24 C-data allocated families partial proof ALL9PASS; default GCC14/hardware/native open. No wholefile retirement.",
         "engineering_percentage": null
-      }
+      },
+      "prior_recorded_owner_before_20261025": "/root/m14_actual_consumer_fix"
     },
     {
       "id": "M14-F05",
       "c_file": "arch/x86_64/kernel/memory.c",
       "title": "x86 page-table, address translation and user-copy support",
       "status": "partial",
-      "owner": "/root/m14_production_stage",
+      "owner": "/root/m14_archmem",
       "inventory_basis": "Exact current image compile database and final link contract; surviving body counts still unmeasured.",
       "object_output": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
       "source_dependency_file": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o.d",
@@ -2147,23 +2151,24 @@
         }
       ],
       "latest_dispatcher_checkpoint": {
-        "at": "2026-10-24T06:53:11.612587+00:00",
-        "owner_activity": "running actual turn confirmed at this checkpoint",
-        "note": "Actual498set/split+256error/log+660RSS accepted; new300flush/visitor/error comparisons PASS .474600s outer. Public split/lower geometry source candidates separate; production/default/native remain open.",
-        "engineering_percentage": null
+        "at": "2026-10-25T03:23:29Z",
+        "actual": "bounded observations complete;7storage expert identity proof pending",
+        "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0321.json",
+        "limits": "No whole-file/default/native acceptance inferred; exact proof scopes retained."
       },
       "current_increment": {
         "at": "2026-10-24T11:43:50.774989+00:00",
         "actual_progress": "Actual four-command wide-behavior suffix PASS 288 corrected top contracts/8 legacy truncation sentinels/192 C-Rust leaves/768 selectors, .597037868wall/.54798CPU. Retained ET_REL10 exact bindings qualified WRITE=true, RO gate FAIL preserved; default GCC14/final pointer storage/native OPEN.",
         "engineering_percentage": null
-      }
+      },
+      "prior_recorded_owner_before_20261025": "/root/m14_production_stage"
     },
     {
       "id": "M14-F06",
       "c_file": "arch/x86_64/kernel/syscall.c",
       "title": "x86 syscall ABI, signal frame, ptrace and architecture memory operations",
       "status": "open",
-      "owner": "/root/terminal_lifecycle_repair",
+      "owner": "/root/m14_archsys",
       "inventory_basis": "Exact current image compile database and final link contract; surviving body counts still unmeasured.",
       "object_output": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
       "source_dependency_file": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o.d",
@@ -2422,11 +2427,12 @@
         "native_credit": false
       },
       "latest_dispatcher_checkpoint": {
-        "at": "2026-10-24T06:53:11.612587+00:00",
-        "owner_activity": "running actual turn confirmed at this checkpoint",
-        "note": "Actual1272group/pending comparisons plus18ABI accepted with expert-selected closure GC suffix, unchanged successful Rust/Cobjects. No production GC/native credit. Handler commit/frame successors source-only.",
-        "engineering_percentage": null
-      }
+        "at": "2026-10-25T03:23:29Z",
+        "actual": "next process-target selection source ready; wakeup10368PASS private composition pending",
+        "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0321.json",
+        "limits": "No whole-file/default/native acceptance inferred; exact proof scopes retained."
+      },
+      "prior_recorded_owner_before_20261025": "/root/terminal_lifecycle_repair"
     }
   ],
   "final_subgoals": [
@@ -2962,6 +2968,22 @@
       "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
       "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ADOPTION.json",
       "actual_progress": "Canonical process debug_log source integrated after actual fullcrate metadata+29ABI and independent review. B7 nineteen-command diagnostic PASS preserving six-command prefix. Wakeup tail10,368controlledcases/30ABI PASS after one field correction; not integrated/native. F02 actual5positive58negative controlsPASS; final fullvalidator/typecompile/native OPEN.",
+      "new_native_delta": 0,
+      "whole_file_retirement_delta": 0
+    },
+    {
+      "at": "2026-10-25T03:23:29Z",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0321.json",
+      "actual_progress": "canonical process diagnostic body only; next3 providers source-approved; inherited profile allocation-failure lock leak repair/test active; selected Cobject has zero runtime functions/data/allocatedrelocs;343Rust/image function providers verified;72data ABI pass;7renamed owned storage identities extracted, pointer/relocation proof pending expert",
+      "new_native_delta": 0,
+      "whole_file_retirement_delta": 0
+    },
+    {
+      "at": "2026-10-25T03:37:34Z",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/COMPILED-INSTALL-CHECKPOINT-20261025T0337.json",
+      "actual_progress": "Integrated three process providers/profile allocation-error matching unlock. Actual current C/Rust objects plus strict partial link/fallback PASS9commands19.314s; fourexports once in Rust,226 broader undefined retained. F03 diagnostic controlled parity375+2PASS. F05 exact seven-storage/343provider/72ABI retained artifact evidence independently accepted; no current-union/native/fullfile closure.",
       "new_native_delta": 0,
       "whole_file_retirement_delta": 0
     }

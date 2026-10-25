@@ -1,3 +1,39 @@
+## Current object and installed-consumer checkpoint — 2026-10-25T03:37:34Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Integrated three process providers and the matching profile allocation-failure
+unlock after independent review. Current selected C/full Rust OBJECT/strict
+partial link plus fallback PASS9commands,19.314s wall/19.258s CPU. Four migrated
+exports each once in Rust/partial, absent selectedC;226other unresolved providers
+remain. Syscall diagnostic parity375vectors+2nullcontexts PASS after expert include
+correction; original failures retained. SDK four private installs/three loader
+checks PASS2.811519s and normal retirement independently accepted b7f8c5ea/current
+1fec1959. No CLI main/device/native/build claim. F05 exact seven-owned-storage
+mapping and retained343providers/72ABI accepted independently;56negative records
+have no supplied launcher/join receipt. Current canonical union/native/fullvalidator
+remain OPEN. M12 35/35;new images/native qualifications/wholefile retirements0.
+Six disjoint M14 implementation turns refilled, alongside independent M15 BFD,
+executor and module source-binding lanes. Root next prepares fresh retained COPY7
+copy and one-new-witness/fullvalidator admission; do not rebuild unchanged image.
+Evidence: `../evidence/os-recovery-adoption-20261025-0254/COMPILED-INSTALL-CHECKPOINT-20261025T0337.json`.
+
+## Twenty-minute steering adopted — 2026-10-25T03:23:29Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual review span 1201.764s confirms active same thread.
+New evidence: B7all19diagnosticPASS;debugfullcrate29ABI;next3providers2profilecfg/36ABI
+PASS7commands;wakeup10,368controlledcases30ABI PASS;F02controls5+/58- PASS.
+Canonical integrated Rust diagnostics remain source/currentABI only; newproduction
+links/native/wholefileclosures0. F05 Cobject runtimefunctions/data0 and343Rust/image
+providers verified;7renamedstorage pointer proof held for expert, not accepted byname.
+M15overlay3de8ac09 exact15fetched; query/payload source clearance ready. Largest
+bottleneck is actual admission chain: root/f02_review execute reviewed query and
+canonicalpayload review/attach within120s. Freeze HEAD/canonical writers for that
+interval; keep profile allocation-error lock-leak repair ordinaryHOST lane active.
+Queue latency/peakRSS unmeasured, no speedup claim. HOST/scratch floors retained;
+M12 35/35,M14/M15 OPEN. Full scoped results/owners/timing and useful scheduling
+change: `../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0321.json`.
+
 ## Verified source checkpoint — 2026-10-25T03:13:10Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

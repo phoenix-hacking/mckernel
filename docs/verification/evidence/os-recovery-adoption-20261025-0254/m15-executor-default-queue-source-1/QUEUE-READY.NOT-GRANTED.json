@@ -1,0 +1,68 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_READY_EXECUTOR_DEFAULT_SDK_QUEUE_NOT_COMPILED_NOT_EXECUTABLE_RELEASE",
+  "concrete_defect": "Canonical default target retains MCEXEC_SRCS=mcexec.c and only adds partial Rust helpers. Existing full349 callbacks+entry51data candidate lacks current default selection.",
+  "correction": "Replace only current mcexec CMake block with existing full-Rust selector/dependency/cfg/BUILDID producer and reuse exact actual HOST LP64-corrected source modules. No runtime body rewritten; fallback C retained unchanged.",
+  "producer_patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-executor-default-queue-source-1/DEFAULT-PRODUCER.ROOT-ONLY.NOT-APPLIED.patch",
+    "bytes": 5876,
+    "sha256": "ec412ed743567fc155b6764ff5da73be996815c83948625b3c9c3f19a934f331"
+  },
+  "source_binding": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-executor-default-queue-source-1/SOURCE-BINDINGS.NOT-ACCEPTANCE.json",
+    "bytes": 14902,
+    "sha256": "845fb8472703ee8ced3155433d0255c1baa97652f28a33ccf1ebd15946505846"
+  },
+  "commands": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-executor-default-queue-source-1/EXACT-SDK-INNER-COMMANDS.NOT-RELEASED.json",
+    "bytes": 4402,
+    "sha256": "e7b4873e10b3016f67dbcec4e25156615f289d6504aacbb685caf0da766b4812"
+  },
+  "actual_HOST_proof": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1/bounded-lp64-threshold-correction-1/ACTUAL-COHERENT-HOST-ARTIFACT-AND-SELECTION-HANDOFF.json",
+    "bytes": 23399,
+    "sha256": "b4b63c8e2c1b61455351ab88da5635c3f2054ab32d197ddc66be139ed18e5440"
+  },
+  "actual_HOST_ELF": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-14/m15-mcexec-default-compile-preparation-1/bounded-lp64-threshold-correction-1/output-1/mcexec",
+    "bytes": 396232,
+    "sha256": "fd0691af0639dfc98ed3bfa845de0dbdea85ed1e11d4cc5cc537fd4ad4984497"
+  },
+  "selected_SDK_authority": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/selected-SDK-default-ABI-link-preparation-1/SELECTED-SDK-DEFAULT-ABI-LINK.READY-DATA-ONLY.json",
+    "bytes": 8383,
+    "sha256": "60fe64863436659f3d15f674840369d1e2bde15baaefa91428a38f0b06138bb2"
+  },
+  "selected_image": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+  "selected_CC": {
+    "path": "/usr/bin/cc",
+    "sha256": "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2",
+    "rpm_nevra": "gcc-0:14.3.1-4.4.el10.x86_64",
+    "version": "cc (GCC) 14.3.1 20251022 (Red Hat 14.3.1-4)\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+  },
+  "selected_Rust": {
+    "path": "/nightly/bin/rustc",
+    "sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09",
+    "version": "rustc 1.95.0-nightly (c04308580 2026-02-18)"
+  },
+  "selected_cache": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/current68-launcher-v3-actual-build-20261023-1/actual/pinned-launcher-attempt-1/owner-work/output/build/CMakeCache.txt",
+    "sha256": "50e1523f485648386b9037630ce7306d8315c4dc08f8b9ca56f3a401f0ed0110",
+    "bytes": 26414
+  },
+  "profile": "Existing pinned image CPUs2-5/12GiB/noSwap/512tasks/netnone, explicit -j1. Shared heavy lease/root execution release and fresh HOST/scratch/full sparse gap required. Inner AS2GiB/CPU60/wall90+6/F32/stack2M proposed only.",
+  "root_materialization_prerequisite": "Fresh current canonical source baseline /src with exact private candidate overlay; real .kernel-sdk and /out/build from current selected SDK. Bind actual compiler/header/library closure and source tree before execution. No HOST objects/archive.",
+  "required_consumer_checks": [
+    "Capture actual CMake target verbose producer commands, CMakeCache and generated config.h/BUILDID Rust module.",
+    "Default MCEXEC_SRCS excludes mcexec.c; link.txt only freshRust+freshSDKreviewedASM library and genuine libc/pthread/numa. No hidden project C callbacks or external project archive.",
+    "Generated BUILD_ID bytes equal same configure config.h BUILDID includingNUL; capture allocated binary consumer.",
+    "Selected ABI assertions/object tables must match selectedSDK headers; optionalvariants OPEN.",
+    "Bind main and349source-provider/51data scope, undefined project-name closure, PIE and DT_NEEDED. Source counts are not native acceptance.",
+    "Original12batch fixtures and independently reviewed native process/exec/wait/resource/lifecycle remain OPEN; no app launch in queue."
+  ],
+  "optional_dependencies": "DEBUG/UTI/QLMPI/ToFu/CMD*/bind-mount optional variants remain unqualified. Command-server/isunshare C explicit debt.",
+  "failure_history": "Original HOST threshold cast failure and one boundedLP64 correction preserved. NewSDK mismatch STOP boundedcorrection/expert; HOSTfd0691 is not SDK proof.",
+  "canonical_writes": false,
+  "new_compiler_root_Docker_guest_execution": false,
+  "actual_grant": null
+}

@@ -1,0 +1,235 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_PROFILE_ALLOCATION_FAILURE_LOCK_RECOVERY_AND_CURRENT_FULLCRATE",
+  "records": [
+    {
+      "command": {
+        "name": "00-compile-actual-profile-body-regression",
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 00-compile-actual-profile-body-regression; exact original/fixed Rust job-profile function, controlled allocator/lock/IRQ/print effects and actual production ABI structs.",
+        "argv": [
+          "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+          "--edition=2021",
+          "-C",
+          "opt-level=1",
+          "-C",
+          "codegen-units=1",
+          "-C",
+          "panic=abort",
+          "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-3/fixture/job_profile_regression.rs",
+          "-o",
+          "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-3/output-profile-lock-first-1/job_profile_regression"
+        ],
+        "cwd": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-3/output-profile-lock-first-1"
+      },
+      "join": {
+        "pid": 485997,
+        "start": 69604567,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.3165563429938629,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-3/actual-profile-lock-first-1/00-compile-actual-profile-body-regression/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59397694,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1792898600973670740,
+            "ctime_ns": 1792898600973670740
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-3/actual-profile-lock-first-1/00-compile-actual-profile-body-regression/stderr",
+            "sha256": "1b5489269a53a6850bc56f8d6c8b45cc07d40c60c8b788c0c454aacc85b82582",
+            "device": 66306,
+            "inode": 59397695,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 2179,
+            "mtime_ns": 1792898601249679721,
+            "ctime_ns": 1792898601249679721
+          }
+        }
+      }
+    },
+    {
+      "command": {
+        "name": "01-run-actual-profile-body-regression",
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 01-run-actual-profile-body-regression; exact original/fixed Rust job-profile function, controlled allocator/lock/IRQ/print effects and actual production ABI structs.",
+        "argv": [
+          "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-3/output-profile-lock-first-1/job_profile_regression"
+        ],
+        "cwd": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-3/output-profile-lock-first-1"
+      },
+      "join": {
+        "pid": 486008,
+        "start": 69604599,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.023034383077174425,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-3/actual-profile-lock-first-1/01-run-actual-profile-body-regression/stdout",
+            "sha256": "6c8d0682e52cabf348c99e275a9e43385a196d182e4e2501094779020ed1504a",
+            "device": 66306,
+            "inode": 59397703,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 881,
+            "mtime_ns": 1792898601297681283,
+            "ctime_ns": 1792898601297681283
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-3/actual-profile-lock-first-1/01-run-actual-profile-body-regression/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59397704,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1792898601293681154,
+            "ctime_ns": 1792898601293681154
+          }
+        }
+      }
+    },
+    {
+      "command": {
+        "name": "02-full-current-crate-metadata",
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 02-full-current-crate-metadata; exact original/fixed Rust job-profile function, controlled allocator/lock/IRQ/print effects and actual production ABI structs.",
+        "argv": [
+          "/usr/bin/cmake",
+          "-E",
+          "env",
+          "MAKEFLAGS=",
+          "MCKERNEL_RUST_VERSION=1.8.0",
+          "MCKERNEL_RUST_BUILDID=3114d9e",
+          "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+          "--crate-name",
+          "mckernel_rust",
+          "--crate-type",
+          "lib",
+          "--edition=2021",
+          "-C",
+          "panic=abort",
+          "-C",
+          "opt-level=2",
+          "-C",
+          "debuginfo=2",
+          "-C",
+          "code-model=large",
+          "-C",
+          "relocation-model=static",
+          "-C",
+          "no-redzone=yes",
+          "-C",
+          "force-frame-pointers=yes",
+          "-C",
+          "overflow-checks=off",
+          "-C",
+          "force-unwind-tables=no",
+          "-C",
+          "no-vectorize-loops",
+          "-C",
+          "no-vectorize-slp",
+          "-C",
+          "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+          "--cfg",
+          "native_linux_irq_work_v6_12",
+          "--cfg",
+          "enable_profile",
+          "--cfg",
+          "enable_perf",
+          "--cfg",
+          "enable_rusage",
+          "-C",
+          "codegen-units=1",
+          "--emit=metadata=/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-3/output-profile-lock-first-1/mckernel_rust.rmeta",
+          "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-3/source/kernel/rust/lib.rs"
+        ],
+        "cwd": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-3/output-profile-lock-first-1"
+      },
+      "join": {
+        "pid": 486009,
+        "start": 69604602,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 2.6434515439905226,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-3/actual-profile-lock-first-1/02-full-current-crate-metadata/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59397711,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1792898601321682065,
+            "ctime_ns": 1792898601321682065
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-3/actual-profile-lock-first-1/02-full-current-crate-metadata/stderr",
+            "sha256": "2f5d22e7ef41ec519b288139485a69a11aa7b5d07caf928efe07f2c21b840b79",
+            "device": 66306,
+            "inode": 59397712,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 70731,
+            "mtime_ns": 1792898603921766675,
+            "ctime_ns": 1792898603921766675
+          }
+        }
+      }
+    }
+  ],
+  "seconds": 3.0515787940239534,
+  "CPU_seconds": 3.075648,
+  "CPU0_released": true,
+  "canonical_mutations": 0,
+  "fullcrate_object": false,
+  "native": false,
+  "recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-3/EXACT-PROFILE-LOCK-FIRST.json",
+    "sha256": "109908f9b29dea7074a9bafe3dd048cc634bdaff9ad0ff611b019fb1020ce4e7",
+    "bytes": 32882
+  },
+  "corrected_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-3/source/kernel/rust/profile.rs",
+    "sha256": "2eacbb02e1988ac524e94b1c7824629cfa97bf5a18ddef5c046f0c60106ce543",
+    "bytes": 20253
+  }
+}

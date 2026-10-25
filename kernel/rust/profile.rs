@@ -361,6 +361,8 @@ pub unsafe extern "C" fn profile_accumulate_and_print_job_events(proc: *mut Proc
                 JOB_ALLOC_ERR_FMT.as_ptr().cast(),
                 PROFILE_ACC_JOB_NAME.as_ptr(),
             );
+            // Release the same acquisition and restore its saved IRQ state.
+            mcs_lock_unlock(&raw mut job_profile_lock, &raw mut node);
             return -ENOMEM;
         }
         zero_events(job_profile_events);

@@ -263,12 +263,18 @@ void process_optional_free_bridge(void *ptr)
 	kfree_tracked(ptr, __FILE__, __LINE__);
 }
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_default_ncpus_bridge(void);
+#else
+#line 261
 int process_default_ncpus_bridge(void)
 {
 	struct ihk_mc_cpu_info *infop = ihk_mc_get_cpu_info();
 
 	return infop ? infop->ncpus : -EINVAL;
 }
+#endif
+#line 267
 
 void process_create_cpu_log_bridge(int event, int pid, int cpu)
 {
@@ -512,6 +518,10 @@ static void process_replace_tid_log_bridge(int tid, void *thread, int new_tid)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_release_thread_profile_bridge(void *thread, void *proc);
+#else
+#line 510
 void process_release_thread_profile_bridge(void *thread, void *proc)
 {
 #ifdef PROFILE_ENABLE
@@ -522,6 +532,8 @@ void process_release_thread_profile_bridge(void *thread, void *proc)
 	(void)proc;
 #endif
 }
+#endif
+#line 520
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 void process_procfs_delete_thread_bridge(void *thread);
@@ -4153,6 +4165,10 @@ void process_release_sibling_detach_bridge(void *proc_arg)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_release_profile_bridge(void *proc_arg);
+#else
+#line 3565
 void process_release_profile_bridge(void *proc_arg)
 {
 #ifdef PROFILE_ENABLE
@@ -4171,6 +4187,8 @@ void process_release_profile_bridge(void *proc_arg)
 	(void)proc_arg;
 #endif
 }
+#endif
+#line 3583
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 void process_release_final_cleanup_bridge(void *resource_set_arg);

@@ -1,0 +1,37 @@
+{
+  "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Exact reviewed one-shot source-produced SDK11 private install and three loader --list checks; sole heavy owner, no new build or guest.",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/actual-source-SDK11-installed-consumer-preparation-1/sdk-install-top-level-mount-correction-1/target_tools_sdk_owner.py",
+    "--request",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/actual-source-SDK11-installed-consumer-preparation-1/sdk-install-top-level-mount-correction-1/REQUEST.ROOT.FINAL.json",
+    "--request-sha256",
+    "74def32a434f42ddeb3abd90ca5c728d43696262fdf387fd4059575533775fea",
+    "--release",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/actual-source-SDK11-installed-consumer-preparation-1/sdk-install-top-level-mount-correction-1/RELEASE.ROOT.FINAL.json",
+    "--release-sha256",
+    "a50611dce2d51c696b78c337891bf57c14313c329e5e8575559b9e393685a91e"
+  ],
+  "pid": 486683,
+  "entry": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/actual-source-SDK11-installed-consumer-preparation-1/sdk-install-top-level-mount-correction-1/ROOT-OWNER-ENTRY.FINAL.LIBDWARF1.json",
+    "sha256": "01820a5692ea164950ff19bb88d3d89d8b5f6518c581b04b6c80d31483989aaf",
+    "bytes": 1521
+  },
+  "release": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/actual-source-SDK11-installed-consumer-preparation-1/sdk-install-top-level-mount-correction-1/RELEASE.ROOT.FINAL.json",
+    "sha256": "a50611dce2d51c696b78c337891bf57c14313c329e5e8575559b9e393685a91e",
+    "bytes": 8489
+  }
+}

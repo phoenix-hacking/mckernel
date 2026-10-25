@@ -1,0 +1,913 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FINITE_SEVEN_ROW_IDENTITY_EXTRACTION_NOT_ACCEPTANCE",
+  "rows": [
+    {
+      "C_name": "fixed_virt",
+      "C_size": 8,
+      "C_alignment": 8,
+      "Rust_source_identity": "mckernel_rust::x86_memory_helpers::owned_memory_data::OWNED_FIXED_VIRT",
+      "pointer_cell": "x86_memory_fixed_virt_slot",
+      "relation": "distinct readonly pointer cell initialized to addr_of_mut!(Rust owned storage); not an ELF alias and not C storage",
+      "source_initializer": [
+        {
+          "line": 9539,
+          "text": "static mut OWNED_FIXED_VIRT: CULong = 0;"
+        }
+      ],
+      "source_pointer_initializer": [
+        {
+          "line": 9573,
+          "text": "unsafe { core::ptr::addr_of_mut!(OWNED_FIXED_VIRT).cast() },"
+        }
+      ],
+      "C_reference_declaration": [
+        {
+          "line": 3188,
+          "text": "static unsigned long fixed_virt;"
+        }
+      ],
+      "source_consumer_refs": [
+        {
+          "line": 8913,
+          "text": "unsafe { x86_memory_fixed_virt_slot }"
+        }
+      ],
+      "Rust": {
+        "storage_definitions": [
+          {
+            "value": "0x0",
+            "size": 8,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "5129",
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data16OWNED_FIXED_VIRT",
+            "capture_line": 9756,
+            "section": {
+              "name": ".lbss._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data16OWNED_FIXED_VIRT",
+              "type": "NOBITS",
+              "address": "0x0",
+              "size": 8,
+              "flags": "WAl",
+              "alignment": 8,
+              "capture_line": 5134
+            }
+          }
+        ],
+        "pointer_cell_definitions": [
+          {
+            "value": "0x0",
+            "size": 8,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "5004",
+            "name": "x86_memory_fixed_virt_slot",
+            "capture_line": 12986,
+            "section": {
+              "name": ".rodata.x86_memory_pointer_owners",
+              "type": "PROGBITS",
+              "address": "0x0",
+              "size": 8,
+              "flags": "Ao",
+              "alignment": 8,
+              "capture_line": 5009
+            }
+          }
+        ],
+        "literal_C_storage_definitions": []
+      },
+      "image": {
+        "storage_definitions": [
+          {
+            "value": "0xfffffffffe950018",
+            "size": 8,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "174",
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data16OWNED_FIXED_VIRT",
+            "capture_line": 4051,
+            "section": {
+              "name": ".bss",
+              "type": "NOBITS",
+              "address": "0xfffffffffe93c000",
+              "size": 303812,
+              "flags": "WA",
+              "alignment": 4096,
+              "capture_line": 179
+            }
+          }
+        ],
+        "pointer_cell_definitions": [
+          {
+            "value": "0xfffffffffe904a08",
+            "size": 8,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "34",
+            "name": "x86_memory_fixed_virt_slot",
+            "capture_line": 4964,
+            "section": {
+              "name": ".rodata",
+              "type": "PROGBITS",
+              "address": "0xfffffffffe8f5b20",
+              "size": 62544,
+              "flags": "A",
+              "alignment": 32,
+              "capture_line": 39
+            }
+          }
+        ],
+        "literal_C_storage_definitions": []
+      },
+      "initializer_evidence": "Explicit null/zero Rust initializer and allocated writable NOBITS section (zero-filled initial storage). Pointer cell intended target is source-bound only; compiled pointer target not read by this extraction."
+    },
+    {
+      "C_name": "init_pt_lock",
+      "C_size": 4,
+      "C_alignment": 4,
+      "Rust_source_identity": "mckernel_rust::x86_memory_helpers::owned_memory_data::OWNED_INIT_PT_LOCK",
+      "pointer_cell": "x86_memory_init_pt_lock_address",
+      "relation": "distinct readonly pointer cell initialized to addr_of_mut!(Rust owned storage); not an ELF alias and not C storage",
+      "source_initializer": [
+        {
+          "line": 9537,
+          "text": "static mut OWNED_INIT_PT_LOCK: crate::abi::IhkSpinlock = crate::abi::IhkSpinlock { head_tail: 0 };"
+        }
+      ],
+      "source_pointer_initializer": [
+        {
+          "line": 9584,
+          "text": "unsafe { core::ptr::addr_of_mut!(OWNED_INIT_PT_LOCK).cast() },"
+        }
+      ],
+      "C_reference_declaration": [
+        {
+          "line": 557,
+          "text": "static ihk_spinlock_t init_pt_lock;"
+        }
+      ],
+      "source_consumer_refs": [
+        {
+          "line": 8848,
+          "text": "unsafe { x86_memory_init_pt_lock_address }"
+        }
+      ],
+      "Rust": {
+        "storage_definitions": [
+          {
+            "value": "0x0",
+            "size": 4,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "5130",
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data18OWNED_INIT_PT_LOCK",
+            "capture_line": 10743,
+            "section": {
+              "name": ".lbss._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data18OWNED_INIT_PT_LOCK",
+              "type": "NOBITS",
+              "address": "0x0",
+              "size": 4,
+              "flags": "WAl",
+              "alignment": 4,
+              "capture_line": 5135
+            }
+          }
+        ],
+        "pointer_cell_definitions": [
+          {
+            "value": "0x0",
+            "size": 8,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "5009",
+            "name": "x86_memory_init_pt_lock_address",
+            "capture_line": 12988,
+            "section": {
+              "name": ".rodata.x86_memory_pointer_owners",
+              "type": "PROGBITS",
+              "address": "0x0",
+              "size": 8,
+              "flags": "Ao",
+              "alignment": 8,
+              "capture_line": 5014
+            }
+          }
+        ],
+        "literal_C_storage_definitions": []
+      },
+      "image": {
+        "storage_definitions": [
+          {
+            "value": "0xfffffffffe950020",
+            "size": 4,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "174",
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data18OWNED_INIT_PT_LOCK",
+            "capture_line": 1493,
+            "section": {
+              "name": ".bss",
+              "type": "NOBITS",
+              "address": "0xfffffffffe93c000",
+              "size": 303812,
+              "flags": "WA",
+              "alignment": 4096,
+              "capture_line": 179
+            }
+          }
+        ],
+        "pointer_cell_definitions": [
+          {
+            "value": "0xfffffffffe904a18",
+            "size": 8,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "34",
+            "name": "x86_memory_init_pt_lock_address",
+            "capture_line": 2788,
+            "section": {
+              "name": ".rodata",
+              "type": "PROGBITS",
+              "address": "0xfffffffffe8f5b20",
+              "size": 62544,
+              "flags": "A",
+              "alignment": 32,
+              "capture_line": 39
+            }
+          }
+        ],
+        "literal_C_storage_definitions": []
+      },
+      "initializer_evidence": "Explicit null/zero Rust initializer and allocated writable NOBITS section (zero-filled initial storage). Pointer cell intended target is source-bound only; compiled pointer target not read by this extraction."
+    },
+    {
+      "C_name": "init_pt_loaded",
+      "C_size": 4,
+      "C_alignment": 4,
+      "Rust_source_identity": "mckernel_rust::x86_memory_helpers::owned_memory_data::OWNED_INIT_PT_LOADED",
+      "pointer_cell": "x86_memory_init_pt_loaded_slot",
+      "relation": "distinct readonly pointer cell initialized to addr_of_mut!(Rust owned storage); not an ELF alias and not C storage",
+      "source_initializer": [
+        {
+          "line": 9536,
+          "text": "static mut OWNED_INIT_PT_LOADED: CInt = 0;"
+        }
+      ],
+      "source_pointer_initializer": [
+        {
+          "line": 9592,
+          "text": "unsafe { core::ptr::addr_of_mut!(OWNED_INIT_PT_LOADED).cast() },"
+        }
+      ],
+      "C_reference_declaration": [
+        {
+          "line": 550,
+          "text": "static int init_pt_loaded = 0;"
+        }
+      ],
+      "source_consumer_refs": [
+        {
+          "line": 8796,
+          "text": "unsafe { core::ptr::read(x86_memory_init_pt_loaded_slot) }"
+        },
+        {
+          "line": 8835,
+          "text": "unsafe { x86_memory_init_pt_loaded_slot }"
+        }
+      ],
+      "Rust": {
+        "storage_definitions": [
+          {
+            "value": "0x0",
+            "size": 4,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "5132",
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data20OWNED_INIT_PT_LOADED",
+            "capture_line": 9354,
+            "section": {
+              "name": ".lbss._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data20OWNED_INIT_PT_LOADED",
+              "type": "NOBITS",
+              "address": "0x0",
+              "size": 4,
+              "flags": "WAl",
+              "alignment": 4,
+              "capture_line": 5137
+            }
+          }
+        ],
+        "pointer_cell_definitions": [
+          {
+            "value": "0x0",
+            "size": 8,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "5007",
+            "name": "x86_memory_init_pt_loaded_slot",
+            "capture_line": 12987,
+            "section": {
+              "name": ".rodata.x86_memory_pointer_owners",
+              "type": "PROGBITS",
+              "address": "0x0",
+              "size": 8,
+              "flags": "Ao",
+              "alignment": 8,
+              "capture_line": 5012
+            }
+          }
+        ],
+        "literal_C_storage_definitions": []
+      },
+      "image": {
+        "storage_definitions": [
+          {
+            "value": "0xfffffffffe950028",
+            "size": 4,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "174",
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data20OWNED_INIT_PT_LOADED",
+            "capture_line": 2844,
+            "section": {
+              "name": ".bss",
+              "type": "NOBITS",
+              "address": "0xfffffffffe93c000",
+              "size": 303812,
+              "flags": "WA",
+              "alignment": 4096,
+              "capture_line": 179
+            }
+          }
+        ],
+        "pointer_cell_definitions": [
+          {
+            "value": "0xfffffffffe904a10",
+            "size": 8,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "34",
+            "name": "x86_memory_init_pt_loaded_slot",
+            "capture_line": 4342,
+            "section": {
+              "name": ".rodata",
+              "type": "PROGBITS",
+              "address": "0xfffffffffe8f5b20",
+              "size": 62544,
+              "flags": "A",
+              "alignment": 32,
+              "capture_line": 39
+            }
+          }
+        ],
+        "literal_C_storage_definitions": []
+      },
+      "initializer_evidence": "Explicit null/zero Rust initializer and allocated writable NOBITS section (zero-filled initial storage). Pointer cell intended target is source-bound only; compiled pointer target not read by this extraction."
+    },
+    {
+      "C_name": "boot_pt",
+      "C_size": 8,
+      "C_alignment": 8,
+      "Rust_source_identity": "mckernel_rust::x86_memory_helpers::owned_memory_data::OWNED_BOOT_PT",
+      "pointer_cell": "x86_memory_boot_pt_slot",
+      "relation": "distinct readonly pointer cell initialized to addr_of_mut!(Rust owned storage); not an ELF alias and not C storage",
+      "source_initializer": [
+        {
+          "line": 9535,
+          "text": "static mut OWNED_BOOT_PT: *mut c_void = core::ptr::null_mut();"
+        }
+      ],
+      "source_pointer_initializer": [
+        {
+          "line": 9600,
+          "text": "unsafe { core::ptr::addr_of_mut!(OWNED_BOOT_PT).cast() },"
+        }
+      ],
+      "C_reference_declaration": [
+        {
+          "line": 543,
+          "text": "static struct page_table *boot_pt;"
+        }
+      ],
+      "source_consumer_refs": [
+        {
+          "line": 8822,
+          "text": "unsafe { x86_memory_boot_pt_slot }"
+        },
+        {
+          "line": 8887,
+          "text": "unsafe { core::ptr::read(x86_memory_boot_pt_slot) }"
+        }
+      ],
+      "Rust": {
+        "storage_definitions": [
+          {
+            "value": "0x0",
+            "size": 8,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "5126",
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data13OWNED_BOOT_PT",
+            "capture_line": 10311,
+            "section": {
+              "name": ".lbss._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data13OWNED_BOOT_PT",
+              "type": "NOBITS",
+              "address": "0x0",
+              "size": 8,
+              "flags": "WAl",
+              "alignment": 8,
+              "capture_line": 5131
+            }
+          }
+        ],
+        "pointer_cell_definitions": [
+          {
+            "value": "0x0",
+            "size": 8,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "5002",
+            "name": "x86_memory_boot_pt_slot",
+            "capture_line": 12985,
+            "section": {
+              "name": ".rodata.x86_memory_pointer_owners",
+              "type": "PROGBITS",
+              "address": "0x0",
+              "size": 8,
+              "flags": "Ao",
+              "alignment": 8,
+              "capture_line": 5007
+            }
+          }
+        ],
+        "literal_C_storage_definitions": []
+      },
+      "image": {
+        "storage_definitions": [
+          {
+            "value": "0xfffffffffe950000",
+            "size": 8,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "174",
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data13OWNED_BOOT_PT",
+            "capture_line": 3977,
+            "section": {
+              "name": ".bss",
+              "type": "NOBITS",
+              "address": "0xfffffffffe93c000",
+              "size": 303812,
+              "flags": "WA",
+              "alignment": 4096,
+              "capture_line": 179
+            }
+          }
+        ],
+        "pointer_cell_definitions": [
+          {
+            "value": "0xfffffffffe904a00",
+            "size": 8,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "34",
+            "name": "x86_memory_boot_pt_slot",
+            "capture_line": 1055,
+            "section": {
+              "name": ".rodata",
+              "type": "PROGBITS",
+              "address": "0xfffffffffe8f5b20",
+              "size": 62544,
+              "flags": "A",
+              "alignment": 32,
+              "capture_line": 39
+            }
+          }
+        ],
+        "literal_C_storage_definitions": []
+      },
+      "initializer_evidence": "Explicit null/zero Rust initializer and allocated writable NOBITS section (zero-filled initial storage). Pointer cell intended target is source-bound only; compiled pointer target not read by this extraction."
+    },
+    {
+      "C_name": "init_pt",
+      "C_size": 8,
+      "C_alignment": 8,
+      "Rust_source_identity": "mckernel_rust::x86_memory_helpers::owned_memory_data::OWNED_INIT_PT",
+      "pointer_cell": "x86_memory_init_pt_slot",
+      "relation": "distinct readonly pointer cell initialized to addr_of_mut!(Rust owned storage); not an ELF alias and not C storage",
+      "source_initializer": [
+        {
+          "line": 9534,
+          "text": "static mut OWNED_INIT_PT: *mut c_void = core::ptr::null_mut();"
+        }
+      ],
+      "source_pointer_initializer": [
+        {
+          "line": 9608,
+          "text": "unsafe { core::ptr::addr_of_mut!(OWNED_INIT_PT).cast() },"
+        }
+      ],
+      "C_reference_declaration": [
+        {
+          "line": 536,
+          "text": "static struct page_table *init_pt;"
+        }
+      ],
+      "source_consumer_refs": [
+        {
+          "line": 8809,
+          "text": "unsafe { x86_memory_init_pt_slot }"
+        },
+        {
+          "line": 8874,
+          "text": "unsafe { core::ptr::read(x86_memory_init_pt_slot) }"
+        },
+        {
+          "line": 8900,
+          "text": "unsafe { core::ptr::read(x86_memory_init_pt_slot) }"
+        }
+      ],
+      "Rust": {
+        "storage_definitions": [
+          {
+            "value": "0x0",
+            "size": 8,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "5127",
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data13OWNED_INIT_PT",
+            "capture_line": 9755,
+            "section": {
+              "name": ".lbss._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data13OWNED_INIT_PT",
+              "type": "NOBITS",
+              "address": "0x0",
+              "size": 8,
+              "flags": "WAl",
+              "alignment": 8,
+              "capture_line": 5132
+            }
+          }
+        ],
+        "pointer_cell_definitions": [
+          {
+            "value": "0x0",
+            "size": 8,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "5011",
+            "name": "x86_memory_init_pt_slot",
+            "capture_line": 12989,
+            "section": {
+              "name": ".rodata.x86_memory_pointer_owners",
+              "type": "PROGBITS",
+              "address": "0x0",
+              "size": 8,
+              "flags": "Ao",
+              "alignment": 8,
+              "capture_line": 5016
+            }
+          }
+        ],
+        "literal_C_storage_definitions": []
+      },
+      "image": {
+        "storage_definitions": [
+          {
+            "value": "0xfffffffffe950008",
+            "size": 8,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "174",
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data13OWNED_INIT_PT",
+            "capture_line": 2615,
+            "section": {
+              "name": ".bss",
+              "type": "NOBITS",
+              "address": "0xfffffffffe93c000",
+              "size": 303812,
+              "flags": "WA",
+              "alignment": 4096,
+              "capture_line": 179
+            }
+          }
+        ],
+        "pointer_cell_definitions": [
+          {
+            "value": "0xfffffffffe904a20",
+            "size": 8,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "34",
+            "name": "x86_memory_init_pt_slot",
+            "capture_line": 1098,
+            "section": {
+              "name": ".rodata",
+              "type": "PROGBITS",
+              "address": "0xfffffffffe8f5b20",
+              "size": 62544,
+              "flags": "A",
+              "alignment": 32,
+              "capture_line": 39
+            }
+          }
+        ],
+        "literal_C_storage_definitions": []
+      },
+      "initializer_evidence": "Explicit null/zero Rust initializer and allocated writable NOBITS section (zero-filled initial storage). Pointer cell intended target is source-bound only; compiled pointer target not read by this extraction."
+    },
+    {
+      "C_name": "last_page",
+      "C_size": 8,
+      "C_alignment": 8,
+      "Rust_source_identity": "mckernel_rust::x86_memory_helpers::owned_memory_data::OWNED_LAST_PAGE",
+      "pointer_cell": "x86_memory_last_page_slot",
+      "relation": "distinct readonly pointer cell initialized to addr_of_mut!(Rust owned storage); not an ELF alias and not C storage",
+      "source_initializer": [
+        {
+          "line": 9533,
+          "text": "static mut OWNED_LAST_PAGE: *mut c_void = core::ptr::null_mut();"
+        }
+      ],
+      "source_pointer_initializer": [
+        {
+          "line": 9616,
+          "text": "unsafe { core::ptr::addr_of_mut!(OWNED_LAST_PAGE).cast() },"
+        }
+      ],
+      "C_reference_declaration": [
+        {
+          "line": 42,
+          "text": "static char *last_page;"
+        }
+      ],
+      "source_consumer_refs": [
+        {
+          "line": 8757,
+          "text": "unsafe { x86_memory_last_page_slot }"
+        }
+      ],
+      "Rust": {
+        "storage_definitions": [
+          {
+            "value": "0x0",
+            "size": 8,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "5128",
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data15OWNED_LAST_PAGE",
+            "capture_line": 9542,
+            "section": {
+              "name": ".lbss._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data15OWNED_LAST_PAGE",
+              "type": "NOBITS",
+              "address": "0x0",
+              "size": 8,
+              "flags": "WAl",
+              "alignment": 8,
+              "capture_line": 5133
+            }
+          }
+        ],
+        "pointer_cell_definitions": [
+          {
+            "value": "0x0",
+            "size": 8,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "5015",
+            "name": "x86_memory_last_page_slot",
+            "capture_line": 12990,
+            "section": {
+              "name": ".rodata.x86_memory_pointer_owners",
+              "type": "PROGBITS",
+              "address": "0x0",
+              "size": 8,
+              "flags": "Ao",
+              "alignment": 8,
+              "capture_line": 5020
+            }
+          }
+        ],
+        "literal_C_storage_definitions": []
+      },
+      "image": {
+        "storage_definitions": [
+          {
+            "value": "0xfffffffffe950010",
+            "size": 8,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "174",
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data15OWNED_LAST_PAGE",
+            "capture_line": 4147,
+            "section": {
+              "name": ".bss",
+              "type": "NOBITS",
+              "address": "0xfffffffffe93c000",
+              "size": 303812,
+              "flags": "WA",
+              "alignment": 4096,
+              "capture_line": 179
+            }
+          }
+        ],
+        "pointer_cell_definitions": [
+          {
+            "value": "0xfffffffffe904a28",
+            "size": 8,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "34",
+            "name": "x86_memory_last_page_slot",
+            "capture_line": 1402,
+            "section": {
+              "name": ".rodata",
+              "type": "PROGBITS",
+              "address": "0xfffffffffe8f5b20",
+              "size": 62544,
+              "flags": "A",
+              "alignment": 32,
+              "capture_line": 39
+            }
+          }
+        ],
+        "literal_C_storage_definitions": []
+      },
+      "initializer_evidence": "Explicit null/zero Rust initializer and allocated writable NOBITS section (zero-filled initial storage). Pointer cell intended target is source-bound only; compiled pointer target not read by this extraction."
+    },
+    {
+      "C_name": "use_1gb_page",
+      "C_size": 4,
+      "C_alignment": 4,
+      "Rust_source_identity": "mckernel_rust::x86_memory_helpers::owned_memory_data::OWNED_USE_1GB_PAGE",
+      "pointer_cell": "x86_clear_l3_use_1gb_page",
+      "relation": "distinct readonly pointer cell initialized to addr_of_mut!(Rust owned storage); not an ELF alias and not C storage",
+      "source_initializer": [
+        {
+          "line": 9538,
+          "text": "static mut OWNED_USE_1GB_PAGE: CInt = 0;"
+        }
+      ],
+      "source_pointer_initializer": [
+        {
+          "line": 9967,
+          "text": "unsafe { core::ptr::addr_of_mut!(OWNED_USE_1GB_PAGE).cast() },"
+        }
+      ],
+      "C_reference_declaration": [
+        {
+          "line": 583,
+          "text": "static int use_1gb_page = 0;"
+        }
+      ],
+      "source_consumer_refs": [
+        {
+          "line": 3379,
+          "text": "PTL3_SHIFT, PTL3_SIZE, PFL3_SIZE, *x86_clear_l3_use_1gb_page,"
+        },
+        {
+          "line": 8926,
+          "text": "unsafe { core::ptr::read(x86_clear_l3_use_1gb_page) }"
+        },
+        {
+          "line": 9068,
+          "text": "x86_clear_l3_use_1gb_page.cast_mut(),"
+        }
+      ],
+      "Rust": {
+        "storage_definitions": [
+          {
+            "value": "0x0",
+            "size": 4,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "5131",
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data18OWNED_USE_1GB_PAGE",
+            "capture_line": 9744,
+            "section": {
+              "name": ".lbss._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data18OWNED_USE_1GB_PAGE",
+              "type": "NOBITS",
+              "address": "0x0",
+              "size": 4,
+              "flags": "WAl",
+              "alignment": 4,
+              "capture_line": 5136
+            }
+          }
+        ],
+        "pointer_cell_definitions": [
+          {
+            "value": "0x0",
+            "size": 8,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "4994",
+            "name": "x86_clear_l3_use_1gb_page",
+            "capture_line": 12980,
+            "section": {
+              "name": ".rodata.x86_memory_pointer_owners",
+              "type": "PROGBITS",
+              "address": "0x0",
+              "size": 8,
+              "flags": "Ao",
+              "alignment": 8,
+              "capture_line": 4999
+            }
+          }
+        ],
+        "literal_C_storage_definitions": []
+      },
+      "image": {
+        "storage_definitions": [
+          {
+            "value": "0xfffffffffe950024",
+            "size": 4,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "174",
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data18OWNED_USE_1GB_PAGE",
+            "capture_line": 4263,
+            "section": {
+              "name": ".bss",
+              "type": "NOBITS",
+              "address": "0xfffffffffe93c000",
+              "size": 303812,
+              "flags": "WA",
+              "alignment": 4096,
+              "capture_line": 179
+            }
+          }
+        ],
+        "pointer_cell_definitions": [
+          {
+            "value": "0xfffffffffe9049e8",
+            "size": 8,
+            "type": "OBJECT",
+            "bind": "GLOBAL",
+            "ndx": "34",
+            "name": "x86_clear_l3_use_1gb_page",
+            "capture_line": 1019,
+            "section": {
+              "name": ".rodata",
+              "type": "PROGBITS",
+              "address": "0xfffffffffe8f5b20",
+              "size": 62544,
+              "flags": "A",
+              "alignment": 32,
+              "capture_line": 39
+            }
+          }
+        ],
+        "literal_C_storage_definitions": []
+      },
+      "initializer_evidence": "Explicit null/zero Rust initializer and allocated writable NOBITS section (zero-filled initial storage). Pointer cell intended target is source-bound only; compiled pointer target not read by this extraction."
+    }
+  ],
+  "inputs": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+      "bytes": 311375,
+      "sha256": "5c60055053656751ea490be95c09d7343b0391797c21d5e6c97de97cb8d34c68"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/memory.c",
+      "bytes": 168454,
+      "sha256": "d017514e056abdd216b999cead679dc700341b9c1aa85f6d79cc4351e850f880"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/new-window-source-2/actual-bounded-suffix-1/00/stdout",
+      "bytes": 1225944,
+      "sha256": "6586dec2c1939c5f9df5fc714b61df80d06b93764c27fccf2ed18545638d8651"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/new-window-source-2/actual-bounded-suffix-1/01/stdout",
+      "bytes": 460788,
+      "sha256": "95103d427454401decb895e64e896a8763213948783ff2f173fe98e4039a286c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/new-window-source-2/actual-bounded-suffix-1/02/stdout",
+      "bytes": 57491,
+      "sha256": "7d98af9eea0d6e38dbc7113f89e04f75c1f1e47743c9a72091bbb505a6e4f632"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/new-window-source-2/actual-bounded-suffix-1/FOCUSED-SYMBOL-ABI-EVALUATION.json",
+      "bytes": 298427,
+      "sha256": "b3ad55e050216fc9ded50f6a0fb909e81a811c51385fc2fdda5dc463b20ad24f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/new-window-source-2/actual-bounded-suffix-1/INPUTS-JOIN.json",
+      "bytes": 9445,
+      "sha256": "ca43042866af89882e050e1f8ff76dc2d6d0c21232c46edcfeb029c4ff218ee3"
+    }
+  ],
+  "canonical_sources_equal_retained_join": {
+    "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs": true,
+    "/home/holden/mckernel/arch/x86_64/kernel/memory.c": true
+  },
+  "prior_failures_preserved": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/new-window-source-2/actual-bounded-suffix-1/FOCUSED-SYMBOL-ABI-EVALUATION.json",
+  "limits": [
+    "No compiler/readelf/native execution or observer retry",
+    "No source rename, no canonical modification, no guard change",
+    "Rust relocation dump omitted by prior bounded correction; compiled cell-to-pointee and compiled function reference edges remain unproved by these captures",
+    "Image symbol table contains definitions, not a data-section hex dump; pointer cell target bytes have not been validated",
+    "No default image acceptance/native/file retirement inferred"
+  ],
+  "expert_recommendation": "Independent reviewer may consider a finite source-bound storage identity map for these7 historical internal C names, keeping unique exact owned symbol, C ABI size/alignment, NOBITS/WA/nonexec, distinct-address and initializer checks. Preserve literal-name failure, all72 existing ABI checks and function checks. Do not map storage to the8byte pointer cell or accept arbitrary symbol suffixes. Before claiming compiled target/reference proof obtain separately reviewed bounded exact7cell bytes/relocations (no whole-Rust dump/rebuild); this extraction itself grants no observer replay."
+}

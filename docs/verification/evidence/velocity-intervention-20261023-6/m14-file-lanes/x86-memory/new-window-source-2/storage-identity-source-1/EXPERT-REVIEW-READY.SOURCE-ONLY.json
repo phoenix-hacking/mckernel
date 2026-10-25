@@ -1,0 +1,39 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_AND_FIXTURE_READY_INDEPENDENT_HIGH_REVIEW_REQUIRED",
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/new-window-source-2/storage-identity-source-1/check_seven_cells.SOURCE-ONLY.py",
+    "bytes": 11001,
+    "sha256": "33b5250d3dcadca16cf6c7ac6d46b0ab89129ca5c214d681091ba5ea0057b343"
+  },
+  "result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/new-window-source-2/storage-identity-source-1/EXACT7CELLS-CONTROLLED-SOURCE-RESULT.json",
+    "bytes": 89912,
+    "sha256": "db196ff1482d624db059a5c8c234829ccf9b4ed7236b085846f352c120b3ccad"
+  },
+  "mapping": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/new-window-source-2/storage-identity-source-1/SEVEN-STORAGE-IDENTITIES.SOURCE-ONLY.json",
+    "bytes": 31570,
+    "sha256": "ae516df7af82ca6669870ef51ca3bf36c3e0c30f0367669f563fae73116d4313"
+  },
+  "actual": {
+    "CPU": 6,
+    "job_count": 1,
+    "AS_limit_bytes": 536870912,
+    "CPU_limit_seconds": 30,
+    "wall_limit_seconds": 45,
+    "tool_returncode": 0,
+    "captured_command_wall_seconds": 6.376301843,
+    "internal_wall_seconds": 6.4824939370155334,
+    "cells": 7,
+    "in_memory_negative_controls_rejected": 56,
+    "consumer_function_rows": 13,
+    "reference_gaps": []
+  },
+  "limits": [
+    "No original failed observer replay or modification",
+    "Mapping is separate exact source input; reviewer must bind listed mapping SHA with predicate source/result SHA before future use",
+    "No ownership/default/native/file-retirement acceptance"
+  ],
+  "next": "Independent high review of exact mapping, helper AST extraction, pointer/zero/ABI/section predicate, consumer references and controlled fixtures; root alone decides any fresh validation acceptance."
+}
