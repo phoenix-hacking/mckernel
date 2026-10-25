@@ -1,3 +1,26 @@
+## BFD actual equivalence failure retained; default-image path continues — 2026-10-25T07:39:20.311561+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+BFD owner598507/start71107266 actually entered through the reviewed fresh chain
+and returned1. Nine preparatory commands passed; tenth equivalence-run aborted
+at real_equivalence pointer-equality assertion (rc-6). Root cause remains under
+focused diagnosis; no SDK acceptance. Normal owned cleanup passed, all evidence
+retained. New actual BFD physical/current readback is being prepared before another
+heavy entry. Prior F4D proof cannot clear this newer operation.
+[Failure and retained prefix](../evidence/os-recovery-adoption-20261025-0254/BFD-ACTUAL-FIRST-FAILURE-AND-SUCCESSFUL-PREFIX.json).
+
+Current230 default-image owner f02_contract is preparing bounded source publication
+and compact admission binding for the actual materialized source. The post230
+private277 owner m14_cpu continues compiler witnesses/data oracles; its process43
+AtomicU32 correction passed focused independent source/controlled-HOST review.
+Separate later process bodies remain private. New F03 outer-entry source has a
+concrete coupled PID/count synchronization blocker; m14_syscall is correcting it
+with independent f02_review, before source acceptance or qualification.
+
+No new default/native/whole-file/C-boundary closure. M12 stays35/35, M14/M15 OPEN;
+no sustained1.95x velocity claim. Existing1800-second monitor, resources, ownership,
+included-first billing and fixed2026-10-26T06:00Z cutoff remain unchanged.
+
 ## Executor SDK accepted; BFD binding correction and current230 source ready — 2026-10-25T07:22:43.720142+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

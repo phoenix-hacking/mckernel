@@ -1,0 +1,35 @@
+{
+  "actual_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ACTUAL-BFD21-EXECUTION-REVIEW.json",
+    "sha256": "c3d4d248b276c90815256a0cda40a912f0f09c496d72fa983e48689a4400dea7"
+  },
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/runtime-path-correction-source-4/corrected-preclock-source-1/fill_BFD_current_review_payload.QUERY-INPUT-BYTES-CORRECTED.py",
+    "--publish-reviewed-release",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ACTUAL-BFD21-EXECUTION-REVIEW.json",
+    "c3d4d248b276c90815256a0cda40a912f0f09c496d72fa983e48689a4400dea7"
+  ],
+  "fill": {
+    "bytes": 57738,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/runtime-path-correction-source-4/corrected-preclock-source-1/fill_BFD_current_review_payload.QUERY-INPUT-BYTES-CORRECTED.py",
+    "sha256": "9a02f7b60053c3583714ef630b6bdbea96c57b4cd2a05ec6afccdddc35f8e1cd"
+  },
+  "outer_CPU_rlimit": null,
+  "outer_timeout": null,
+  "query_age_seconds": 30.465877532958984,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nOne separately root-granted reviewed metadata publish -> ordinary samePID owner exec.\nNo outer timeout/CPU watchdog, retry, kill controller or implicit execution authority.\n"
+}

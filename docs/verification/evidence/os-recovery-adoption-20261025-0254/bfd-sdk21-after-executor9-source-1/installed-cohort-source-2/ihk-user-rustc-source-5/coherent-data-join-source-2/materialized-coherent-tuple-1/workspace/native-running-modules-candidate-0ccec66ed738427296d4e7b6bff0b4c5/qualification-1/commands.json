@@ -1,0 +1,143 @@
+[
+  {
+    "argv": [
+      "/usr/bin/cc",
+      "-std=c11",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "/candidate/proposal/executer/user/cmake/bfd_layout_witness.c",
+      "/usr/lib64/libbfd.so",
+      "-o",
+      "/work/qualification-1/layout-witness"
+    ],
+    "cwd": "/work/qualification-1",
+    "rc": 0,
+    "log": "witness-build"
+  },
+  {
+    "argv": [
+      "/work/qualification-1/layout-witness"
+    ],
+    "cwd": "/work/qualification-1",
+    "rc": 0,
+    "log": "witness-run"
+  },
+  {
+    "argv": [
+      "/usr/bin/cc",
+      "-std=c11",
+      "-E",
+      "-P",
+      "/candidate/proposal/executer/user/cmake/bfd_layout_witness.c"
+    ],
+    "cwd": "/work/qualification-1",
+    "rc": 0,
+    "log": "witness-preprocessed"
+  },
+  {
+    "argv": [
+      "/nightly/bin/rustc",
+      "--crate-name",
+      "bfd_accessors",
+      "--crate-type",
+      "lib",
+      "--edition=2021",
+      "-C",
+      "panic=abort",
+      "-C",
+      "opt-level=2",
+      "-C",
+      "debuginfo=1",
+      "-C",
+      "force-unwind-tables=no",
+      "--emit=obj=/work/qualification-1/bfd_accessors.o",
+      "/candidate/proposal/executer/user/rust/bfd_accessors.rs"
+    ],
+    "cwd": "/work/qualification-1",
+    "rc": 0,
+    "log": "rust-build"
+  },
+  {
+    "argv": [
+      "/usr/bin/cc",
+      "-std=c11",
+      "-c",
+      "/src/executer/user/mcinspect_bfd_shim.c",
+      "-Dmcinspect_bfd_get_symtab_upper_bound_bridge=original_mcinspect_bfd_get_symtab_upper_bound_bridge",
+      "-Dmcinspect_bfd_canonicalize_symtab_bridge=original_mcinspect_bfd_canonicalize_symtab_bridge",
+      "-o",
+      "/work/qualification-1/mcinspect-original-renamed.o"
+    ],
+    "cwd": "/work/qualification-1",
+    "rc": 0,
+    "log": "mcinspect-original-compile"
+  },
+  {
+    "argv": [
+      "/usr/bin/cc",
+      "-std=c11",
+      "-c",
+      "/src/executer/user/eclair_bfd_shim.c",
+      "-Declair_bfd_get_symtab_upper_bound_bridge=original_eclair_bfd_get_symtab_upper_bound_bridge",
+      "-Declair_bfd_canonicalize_symtab_bridge=original_eclair_bfd_canonicalize_symtab_bridge",
+      "-o",
+      "/work/qualification-1/eclair-original-renamed.o"
+    ],
+    "cwd": "/work/qualification-1",
+    "rc": 0,
+    "log": "eclair-original-compile"
+  },
+  {
+    "argv": [
+      "/usr/bin/cc",
+      "-std=c11",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "/candidate/tests/equivalence.c",
+      "/work/qualification-1/mcinspect-original-renamed.o",
+      "/work/qualification-1/eclair-original-renamed.o",
+      "/work/qualification-1/bfd_accessors.o",
+      "/usr/lib64/libbfd.so",
+      "-o",
+      "/work/qualification-1/equivalence"
+    ],
+    "cwd": "/work/qualification-1",
+    "rc": 0,
+    "log": "equivalence-link"
+  },
+  {
+    "argv": [
+      "/usr/bin/cc",
+      "-c",
+      "-g",
+      "/candidate/tests/fixture.c",
+      "-o",
+      "/work/qualification-1/fixture.o"
+    ],
+    "cwd": "/work/qualification-1",
+    "rc": 0,
+    "log": "fixture-compile"
+  },
+  {
+    "argv": [
+      "/usr/bin/strip",
+      "--strip-all",
+      "/work/qualification-1/stripped.o"
+    ],
+    "cwd": "/work/qualification-1",
+    "rc": 0,
+    "log": "fixture-strip"
+  },
+  {
+    "argv": [
+      "/work/qualification-1/equivalence",
+      "/work/qualification-1/fixture.o",
+      "/work/qualification-1/stripped.o"
+    ],
+    "cwd": "/work/qualification-1",
+    "rc": -6,
+    "log": "equivalence-run"
+  }
+]

@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/candidate/orchestration/qualify.py", line 148, in <module>
+    qualify(args.repo.resolve(),args.output.resolve())
+  File "/candidate/orchestration/qualify.py", line 78, in qualify
+    run([out/'equivalence',out/'fixture.o',out/'stripped.o'],'equivalence-run')
+  File "/candidate/orchestration/qualify.py", line 44, in run
+    raise RuntimeError(f'{name}: rc {proc.returncode}, expected {expected}; see retained log')
+RuntimeError: equivalence-run: rc -6, expected 0; see retained log
