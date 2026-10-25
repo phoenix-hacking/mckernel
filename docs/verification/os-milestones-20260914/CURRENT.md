@@ -1,3 +1,26 @@
+## Functional HOST progress — 2026-10-25T23:05Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Source17 ptrace outer independentlypasses4032initialized-pending pairs/ABI23;
+retained Rust object reused after one genuine-memset HOST link correction.
+Source18 initialized producer independentlypasses360producer/288nonaliasresume/
+ABI32 after one sizeof-metadata type correction. All corrected children joined;
+original link/compiler failures are retained. Neither controlled fixture proves
+real kernel serialization, alias lifetime, whole-callback/default/native or C retirement.
+[Source17 acceptance](../evidence/os-recovery-adoption-20261025-0254/ACTUAL-SOURCE17-WAKEUP-OUTER-INDEPENDENT-HOST-ACCEPTANCE.json);
+[Source18 acceptance](../evidence/os-recovery-adoption-20261025-0254/ACTUAL-SOURCE18-INITIALIZED-PRODUCER-INDEPENDENT-HOST-ACCEPTANCE.json).
+
+Current290 fresh preparation previously stopped before querying because two
+immutable origin69 references were rebound. Exact-origin restoration passed
+real fill.fetched plus4negative controls; finalimports6 and cleanup14 controls
+pass. Coherent cleanupfa18 is independently source-accepted for caller8830/
+configbea8/fill377f/observer064c. Root/default18h now finish exactpublication and
+fresh admission; owner execution still needs actual payload/holder review.
+Original census REFUSED cause remains unknown until the diagnostic runs.
+Daemon typed84da fill source is independently accepted and fetchedbed2f8e68;
+its actual query waits behind the priority default image. No new default/native/
+whole-file/C-boundary closure or95%velocity claim. M12=35/35, M14/M15 OPEN.
+
 ## Twenty-minute steering — 2026-10-25T22:57Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

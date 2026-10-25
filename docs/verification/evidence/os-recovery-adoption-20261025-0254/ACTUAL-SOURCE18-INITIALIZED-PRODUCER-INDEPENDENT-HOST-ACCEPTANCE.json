@@ -1,0 +1,32 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "ACCEPT_HOST_INITIALIZED_PRODUCER_AND_NONALIAS_RESUME_ONLY",
+  "reviewer": "/root/perf_review18h",
+  "recorded_by": "/root",
+  "at": "2026-10-25T23:05:01.364791+00:00",
+  "result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-18-initialized-setsiginfo/metadata-size-t-correction-1/ACTUAL-INITIALIZED-PRODUCER-FIRST-RESULT.json",
+    "bytes": 13299,
+    "sha256": "3a8a9e586e85eaedfda49bdc62b78fedd9e0f2d1116f1bca06c41cfaabd89d09"
+  },
+  "actual": {
+    "producer_cases": 360,
+    "nonalias_resume_cases": 288,
+    "alias_producer_only_cases_included": 72,
+    "ABI_words": 32,
+    "commands_rc0": 3,
+    "all_joined_groups_absent_streams_closed": true,
+    "wall_seconds": 0.601318,
+    "CPU_seconds": 0.598188,
+    "max_child_RSS_KiB": 101896,
+    "CPU0_released": true
+  },
+  "correction": "Size metadata declaration RustSizeT/Csize_t and absolute unchanged transaction include only. No conversion/body/oracle changes; original E0308 failure retained.",
+  "limits": [
+    "controlled exclusive fixture ownership only",
+    "info-byte initialization only, not complete pending-node initialization",
+    "real serialization/ABA protection/aliasconsumerlifetime held",
+    "wholecallback/default/native/Cretirement remain open"
+  ],
+  "integration_metric_credit": false
+}
