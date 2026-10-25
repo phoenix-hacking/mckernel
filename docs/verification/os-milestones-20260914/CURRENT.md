@@ -1,3 +1,22 @@
+## Current290 owner validation failure — shared ownership remains held
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Fresh census passed; exact97ede owner/request586 entered95.020523s after query.
+Owner867329/start76715862 failed provenance validation before any compiler,
+joined exit1 with closed streams/group absent. Shared exclusion was acquired
+BEFORE validation and remains dev1828/inode116858/SHA324ae871. Caller866814/
+start76706306 retains permanent27:4 FD3 in quarantine (session65454).
+Do not signal, clear records, run normal FA18 cleanup or start another heavy
+operation from this cursor. Independent review requires fresh readonly physical/
+process/container/input proof, then a separately reviewed exact owned-parent
+retirement, with shared record retained and separately reconciled afterward.
+Postjoin18h prepares that bounded recovery; review18h owns release. Default18h
+repairs actual provenance/host-control/common-path data bindings in a private
+successor; original sources/failures remain. Ordinary disjoint HOST/source work
+continues within existing grants. M12=35/35, M14/M15 OPEN; compiler/default/
+native/file/C-retirement additions zero for this attempt.
+[Actual held failure](../evidence/os-recovery-adoption-20261025-0254/ACTUAL-CURRENT290-OWNER-PROVENANCE-FAILURE-AND-HELD-OWNERSHIP.json).
+
 ## Functional HOST progress — 2026-10-25T23:05Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

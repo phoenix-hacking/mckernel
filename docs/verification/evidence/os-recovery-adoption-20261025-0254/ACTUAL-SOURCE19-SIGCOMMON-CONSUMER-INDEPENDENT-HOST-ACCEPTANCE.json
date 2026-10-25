@@ -1,0 +1,31 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "ACCEPT_HOST_SIGCOMMON_CONSUMER_AND_MODEL_ONLY",
+  "reviewer": "/root/perf_review18h",
+  "recorded_by": "/root",
+  "at": "2026-10-25T23:13:16.731246+00:00",
+  "result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-19-sigcommon-pending-consumer/fixture-schedule-name-correction-1/ACTUAL-SIGCOMMON-CONSUMER-FIRST-RESULT.json",
+    "bytes": 12555,
+    "sha256": "1cd65b2ca2ada7e1a33c992713afca1074ad28aff7387687801b8ec970aa69c9"
+  },
+  "actual": {
+    "consumer_cases": 90,
+    "ABI_words": 17,
+    "finite_model": "serialized schedules and explicit hazard/ABA examples only",
+    "corrected_commands_rc0": 3,
+    "all_joined_groups_absent_streams_closed": true,
+    "wall_seconds": 0.314277,
+    "CPU_seconds": 0.344708,
+    "max_child_RSS_KiB": 31400,
+    "CPU0_released": true
+  },
+  "correction": "Exactly four fixture identifier substitutions schedule\u2192transfer_schedule. Successful Rust object3c592921 retained, no recompile; original header collision failure preserved.",
+  "limits": [
+    "producercommit pin/version authority remains absent",
+    "getter/destructor participation andaliaslifetime remain held",
+    "realIRQ/concurrency anddefault/native/wholecallback/Cretirement remainopen",
+    "quarantine866814/shared324a untouched"
+  ],
+  "integration_metric_credit": false
+}
