@@ -1,3 +1,25 @@
+## Executor SDK accepted; BFD binding correction and current230 source ready — 2026-10-25T07:22:43.720142+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Executor fixed SDKproducer contract independentlyPASS: sixnewcommands plus three
+retainedprefix, Rustmain/ASMonlylink/selectedABI/BUILDID3114d9e. Actualphysical/current
+b0bda443 alsoPASS; firstobserverfailure and purecorrection retained. No newreader needed.
+No productiondefault/native/wholefile/app/image closure; M12 remains35/35; M14/M15 OPEN.
+
+BFD firstquery failed BEFOREadmission on lateoldownerpath override; correcteddata-only
+source passes actualeffectivevalidator7cases andstrictboundprojection4cases. SOURCE24
+publication/newfull11approval/currenttransport comesbeforefreshquery, no replay.
+Current230 sourcecopy actuallyPASS6153entries/105658344B/49symlinks; modern77 image-only
+admission andheavybuild stillopen. Frozeneb3compute+explicitIHK3114override, not7629.
+Futex615+352controls andSMP144/41ABI/12metadata independentlycontrolledHOSTPASS;
+notcurrentfullcrate/default/native. Newprivate schedule globalcounterrace blocks runtime
+source acceptance until boundedAtomicU32 fix; otherportbodies advance privately.
+
+Latest completedbuckets:2HOSTpackages then1SDKpackage,4/hour then2/hour versus3.9target.
+No sustained95% claim. Ready/firstcompilerUTCpairs/RSS missingremainnull. Same1800smonitor,
+resourceprofiles/mutex/creditrun/guardian/cutoff2026-10-26T06:00Z; no capacityexpansion.
+[Review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0712.json).
+
 ## Executor selected SDK producer independently accepted — 2026-10-25T07:00:57.936165+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
