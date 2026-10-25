@@ -1,0 +1,61 @@
+{
+  "schema": "mckernel.bfd-semantic-sdk.post-reconciliation.independent-current-acceptance.v1",
+  "status": "PASS_PHYSICAL_AND_CURRENT",
+  "reviewer": "/root/recovery_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual post-reconciliation physical/current state.",
+  "physical_acceptance": true,
+  "current_postjoin_acceptance": true,
+  "process_recovery_acceptance_sha256": "d9e84a4972b0b3e1f5530e939c689986e76fad50df418312ff42f70b6acf1351",
+  "reconciliation_acceptance_sha256": "d55341d320ce883a35ec319d6d4c8cfea83c248cacda21627c47efa02cfed80f",
+  "reconciliation_result_sha256": "ba35fdb2fef5254ee031aeb2319b6be92d9aec8f64fea6e5b8f04d32d23e7079",
+  "profile_sha256": "35edb7296b3e82b9b57ed952d775ebd4727181432c78b6b072fcf57f4ac2e5d2",
+  "stdout": {
+    "bytes": 108243,
+    "sha256": "1f3695e2545889d5a8842f97b3f84ca8791e2047de490658b5a0c338c2fb05c1"
+  },
+  "whole_join_sha256": "c82d56364953ad71dab4df1345bf3c3bc6402843e3c3746b4d20b6dc82f2ccf8",
+  "reader_identity": {
+    "pid": 663412,
+    "starttime": "72122802"
+  },
+  "direct_child": {
+    "pid": 663409,
+    "starttime": "72122794",
+    "returncode": 0,
+    "joined": true,
+    "group_absent": true,
+    "closed_streams": true
+  },
+  "raw_capture_sha256": {
+    "current1.process.json": "d3e89185f24a49ff99313624f246b3055fa46f6aa3b6d0b6ef6302f18d089133",
+    "current2.process.json": "c563f25b3056c9641c09d888014cfbe2ce8fd5e1e8b9def36c52c509c0f6a85c",
+    "current1.containers.jsonl": "c274eeca5494b6dfb4ba316bbeb3a6c6fb3ae31aff70d4ac1d3cf27e3303a407",
+    "current2.containers.jsonl": "d4b9cdd37698b064d64ea73d707c509a8a1443e753616190d473374f4ebb4501"
+  },
+  "complete_process_sweeps": 4,
+  "required_absent_pids": 22,
+  "required_pids_and_groups_absent": true,
+  "publishers_empty": true,
+  "docker_rows_per_snapshot": 44,
+  "all_containers_stopped": true,
+  "owned_container_id_name_and_nonce_absent": true,
+  "three_owned_records_absent": true,
+  "three_raw_archives_exact": true,
+  "active_original_inputs_preserved": 52,
+  "cleanup_evidence_files_preserved": 27,
+  "candidate_metadata_rows_preserved": 4481,
+  "owner_evidence_metadata_rows_preserved": 47,
+  "original_failed_ledger_and_owner_receipt_preserved": true,
+  "permanent_mutex": {
+    "device": 27,
+    "inode": 4,
+    "identity_unchanged": true,
+    "free_before": true,
+    "free_after": true,
+    "flock_operations": 0
+  },
+  "source_workload_status": "FAIL",
+  "native_acceptance": false,
+  "heavy_execution_released": false
+}

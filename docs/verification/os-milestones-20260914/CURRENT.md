@@ -1,3 +1,33 @@
+## Current SDK physical clearance accepted; current290 retained qualification — 2026-10-25T10:26Z checkpoint
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Exact SDK host-owner retirement, stopped-container removal and three-record
+archive/reconciliation passed once. Fresh full current proof independently passes
+physical/current scope (`e3658bb1`); permanent mutex27:4 is unchanged and free,
+all required owners/clients absent, retained FAILED SDK evidence unchanged.
+No further recovery observer or cleanup is needed for that scope. A new SDK
+operation still requires fresh resources and its exact execution release.
+
+Current290 whole Rust codegen, strict partial link, main290/COMMON5 and all66F04
+checks passed after the10:12 snapshot. The final logger observer stopped on leaf
+LOCAL0 versus actual fullcrateGLOBAL1. Its exact-profile correction preserves both
+profiles and reuses all compiled artifacts; only controls and metadata12 remain.
+Canonical integration/default/native acceptance are pending. VMlock192/ABI6 and
+archmemory42 controlled HOST traces passed independently; they confer no native
+or whole-file closure.
+
+[10:12 review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T1012.json):
+zero new integration packages in the snapshot interval; default/native/file/C
+boundary closures zero. Current290 ready-to-enqueue311.625s, enqueue-to-parent
+.367s; true first-compiler and validated SDK-fix timestamps remain unknown.
+Post-snapshot whole qualification CPU24.749s/wall24.790s/peak587836KiB.
+Next root/m14_mem: finish exact17 SDK transport publication/fetch before fresh
+120-second query/review/UID1000 same-PID entry, reusing11 successes and running
+10 new commands. Static work stays before the live clock. Existing monitor496359,
+resources, included-first creditrun7f and2026-10-26T06:00Z cutoff unchanged.
+Planning estimate baseline0512 remains separate and unchanged. M12=35/35;
+M14/M15 OPEN. The sustained1.95x velocity target is not yet demonstrated.
+
 ## Current proof retained; SDK cleanup source qualified — 2026-10-25T10:10Z checkpoint
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
