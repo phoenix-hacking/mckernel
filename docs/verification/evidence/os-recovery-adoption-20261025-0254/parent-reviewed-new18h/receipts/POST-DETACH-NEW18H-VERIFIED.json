@@ -1,0 +1,147 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "VERIFIED_ACTIVE_NEW18H_WINDOW_GUARDIAN_AND20MIN_STEERING",
+  "observed_at_epoch": 1792965501.2670274,
+  "window": {
+    "status": "ACTUAL_FIXED_NEW18H_LAUNCH_WINDOW",
+    "window_id": "new18h-1792965333924702242",
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "start_epoch": 1792965333,
+    "start_boot": 762778.62070498,
+    "start_monotonic": 747440.493656513,
+    "deadline_epoch": 1793030133,
+    "boot_deadline": 827578.62070498,
+    "monotonic_deadline": 812240.493656513,
+    "deadline_utc": "2026-10-26T15:55:33+00:00",
+    "max_agents": 10,
+    "build_jobs": 7
+  },
+  "local_start": "2026-10-25T14:55:33-07:00",
+  "local_end": "2026-10-26T08:55:33-07:00",
+  "same_thread_id": "01a170fb-57c3-7ab3-862d-8005bef92a63",
+  "processes": [
+    {
+      "pid": 842938,
+      "start_ticks": "76277866",
+      "parent_pid": 1311,
+      "state": "S",
+      "CPU_affinity": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "pid": 842940,
+      "start_ticks": "76277874",
+      "parent_pid": 842938,
+      "state": "S",
+      "CPU_affinity": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "pid": 842942,
+      "start_ticks": "76277881",
+      "parent_pid": 842940,
+      "state": "S",
+      "CPU_affinity": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "pid": 843517,
+      "start_ticks": "76287450",
+      "parent_pid": 1311,
+      "state": "S",
+      "CPU_affinity": [
+        0
+      ]
+    },
+    {
+      "pid": 843520,
+      "start_ticks": "76287468",
+      "parent_pid": 1311,
+      "state": "S",
+      "CPU_affinity": [
+        0
+      ]
+    }
+  ],
+  "active_agent_turns": 2,
+  "guardian_packet_sha256": "49873627157a5c48a70a036f25dad123c6e4de89c3f05bedc6922436c66d95ed",
+  "guardian_action": "WAIT_EXISTING_CREDIT_WATCHER",
+  "steering": {
+    "arm_binding_sha256": "4cd46651d7a5ca2803fed3269db162e8396ad622a0c599800fffeb510ac350a2",
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "guardian_packet_sha256": "49873627157a5c48a70a036f25dad123c6e4de89c3f05bedc6922436c66d95ed",
+    "interval_seconds": 1200,
+    "launcher_sha256": "3eaacdfa647e461f70e0150bb8a856a84adcab36e30dea1d6e22dd85fe5d6588",
+    "pid": 843520,
+    "script_path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261025-1/new-18-hour-window-1/twenty-minute-steering/steer_every_twenty_minutes.py",
+    "start_ticks": "76287468",
+    "started_at": 1792965430.0647802,
+    "thread_id": "01a170fb-57c3-7ab3-862d-8005bef92a63"
+  },
+  "first_review_due_utc": "2026-10-25T22:17:10.072828+00:00",
+  "credit_guard_preserved": {
+    "schema_version": 2,
+    "id": "7f4af94a83b14cc08f97401f5891d965",
+    "budget": "57774.852125",
+    "initial_balance": "57774.8521250000",
+    "minimum_balance": "52079.8011050000",
+    "last_balance": "52079.8011050000",
+    "spent": "22812.3311000000",
+    "remaining": "34962.5210250000",
+    "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+  },
+  "resources": {
+    "profile": "aggressive",
+    "max_agents": 10,
+    "build_jobs": 7,
+    "memory_gib": 22.04849624633789,
+    "cpu_count": 7,
+    "cpu_affinity": [
+      0,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "available_memory_gib": 26.04849624633789,
+    "memory_reserve_gib": 4,
+    "agent_memory_gib": 2,
+    "max_depth": 1,
+    "heavy_jobs": 1,
+    "host_disk": {
+      "path": "/home/holden/mckernel",
+      "free_gib": 143.19721221923828,
+      "min_free_gib": 16
+    },
+    "scratch_disk": {
+      "path": "/home/holden/mckernel-work/scratch",
+      "mounted": true,
+      "free_gib": 13.13201904296875,
+      "min_free_gib": 12
+    }
+  },
+  "native_or_milestone_acceptance": "Not granted by controller checks; engineering continues through normal actual qualification."
+}

@@ -67,22 +67,78 @@ def watchdog_requested(directory, worker_pid):
         return False
 
 
+def credit_poll_timeout(state):
+    """An exact read-only RPC timeout is transport, never unknown billing data."""
+    return (state.get("stop_reason") == "credit_budget_unknown"
+            and state.get("credit_budget_error") ==
+            "App-server request timed out: account/rateLimits/read")
+
+
+def timeout_pause_owned(state):
+    """Validate the current worker's actual successful timeout shutdown pause."""
+    row = state.get("credit_timeout_shutdown_pause")
+    goal = state.get("goal")
+    if not isinstance(row, dict) or not isinstance(goal, dict):
+        return False
+    before = row.get("goal_before") or {}
+    return (row.get("schema_version") == 1 and row.get("pause_confirmed") is True
+            and row.get("pause_method") == "thread/goal/set"
+            and type(row.get("worker_pid")) is int and row["worker_pid"] == state.get("worker_pid")
+            and isinstance(row.get("worker_start"), str) and row["worker_start"].isdigit()
+            and row["worker_start"] == state.get("worker_start")
+            and row.get("thread_id") == state.get("thread_id")
+            and row.get("stop_reason") == state.get("stop_reason")
+            and row.get("credit_budget_error") == state.get("credit_budget_error")
+            and before.get("status") == "active" and goal.get("status") == "paused"
+            and goal.get("updatedAt") is not None and before.get("updatedAt") is not None
+            and before.get("objective") == goal.get("objective")
+            and row.get("goal_after") == goal
+            and row.get("goal_after_sha256") == hashlib.sha256(json.dumps(
+                goal, sort_keys=True, separators=(",", ":")).encode()).hexdigest())
+
+
+def timeout_startup_owned(state):
+    """Only the current watcher's in-memory approved origin permits startup retries."""
+    row, origin = state.get("credit_timeout_startup"), state.get("_credit_timeout_origin")
+    goal = state.get("goal")
+    if not isinstance(row, dict) or not isinstance(origin, dict) or not isinstance(goal, dict):
+        return False
+    digest = hashlib.sha256(json.dumps(goal, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+    return (row.get("schema_version") == 1 and row.get("before_inference") is True
+            and row.get("account_validated") is True and row.get("phase_at_failure") == "starting"
+            and row.get("worker_pid") == state.get("worker_pid")
+            and isinstance(row.get("worker_start"), str) and row["worker_start"].isdigit()
+            and row["worker_start"] == state.get("worker_start")
+            and row.get("watcher_pid") == origin.get("watcher_pid")
+            and row.get("watcher_start") == origin.get("watcher_start")
+            and row.get("thread_id") == origin.get("thread_id") == state.get("thread_id")
+            and goal.get("status") == "paused" and origin.get("approved") is True
+            and row.get("expected_goal_sha256") == origin.get("goal_after_sha256") == digest)
+
+
 def should_restart(code, state, watchdog=False, stopped=False):
     status = (state.get("goal") or {}).get("status")
     if stopped or status in {
             "complete", "usageLimited", "budgetLimited"}:
         return False
     reason = state.get("stop_reason") or ""
+    if any(state.get(key) for key in ("service_hold", "policy_hold", "auth_hold", "billing_hold")):
+        return False
+    usage_timeout = code == 21 and credit_poll_timeout(state)
     # Hard service/usage stops retain authority even when a crash leaves a stale
     # phase or a transport exit code. Never reset a session to retry these.
     error = state.get("last_error")
     info = error.get("codexErrorInfo") if isinstance(error, dict) else None
-    stop_classes = ("quota", "credit", "auth", "policy", "included_usage")
-    if any(word in reason.lower() for word in stop_classes):
+    stop_classes = ("quota", "credit", "auth", "policy", "included_usage",
+                    "billing", "budget", "usagelimit", "spendcontrol")
+    if not usage_timeout and any(word in reason.lower() for word in stop_classes):
         return False
     if isinstance(info, (str, dict)) and any(
             word in json.dumps(info).lower() for word in stop_classes):
         return False
+    if usage_timeout:
+        return (status == "paused" and (timeout_pause_owned(state) or timeout_startup_owned(state))
+                and isinstance(state.get("thread_id"), str) and bool(state["thread_id"].strip()))
     if code in {21, 22} or reason in {"quota_exhausted", "quota_or_rate_limit",
                                      "needs_user_input", "goal_cleared", "budget_exhausted"}:
         return False
@@ -185,12 +241,14 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
     deadline = started + args.hours * 3600 if args.hours else float("inf")
     restarts = 0
     recovery_proof = None
+    timeout_recovery = None
     final_code = 1
     log = (directory / "watcher.jsonl").open("a", buffering=1)
 
     def record(event, **values):
         data = dict(event=event, at=time.time(), watcher_pid=os.getpid(),
-                    worker_pid=child.pid if child else None, restarts=restarts, **values)
+                    worker_pid=child.pid if child else None, restarts=restarts,
+                    credit_timeout_recovery=timeout_recovery, **values)
         write_json(watch_path, data)
         log.write(json.dumps(data) + "\n")
         details = " ".join(str(key) + "=" + str(value) for key, value in data.items()
@@ -217,9 +275,13 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
                        *worker_argv, "--worker", "--hours", str(remaining / 3600 if args.hours else 0)]
             if restarts:
                 command.append("--recovered")
+                if timeout_recovery is not None:
+                    command.extend(["--credit-timeout-goal-sha256",
+                                    timeout_recovery["goal_after_sha256"]])
                 if recovery_proof is not None:
                     command.extend(["--fresh-recovery-proof", str(recovery_proof)])
             child = subprocess.Popen(command, stdin=subprocess.DEVNULL, start_new_session=True)
+            child_start = process_start(child.pid)
             record("worker_started", attempt=restarts + 1)
             heartbeat = time.monotonic()
             next_notice = heartbeat + args.heartbeat_seconds
@@ -238,6 +300,8 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
                 if mtime != last_mtime:
                     heartbeat, last_mtime = now, mtime
                     current = snapshot(state_path)
+                    if timeout_recovery is not None and progress_marker(current, child.pid) is not None:
+                        timeout_recovery = None
                 marker = progress_marker(current, child.pid)
                 if marker is None or marker != last_progress:
                     progress_at, last_progress = now, marker
@@ -310,8 +374,30 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
                 record("recovery_stopped_server_identity_unresolved")
                 final_code = 1
                 break
+            # Never import approval lineage from a saved worker/campaign record.
+            state.pop("_credit_timeout_origin", None)
+            if timeout_recovery is not None:
+                state["_credit_timeout_origin"] = dict(timeout_recovery,
+                    watcher_pid=os.getpid(), watcher_start=process_start(os.getpid()))
+            startup = state.get("credit_timeout_startup") or {}
+            if (timeout_startup_owned(state) and startup.get("worker_start") != child_start):
+                record("recovery_stopped_startup_worker_birth_mismatch")
+                final_code = 1
+                break
+            if (timeout_pause_owned(state) and
+                    state["credit_timeout_shutdown_pause"]["worker_start"] != child_start):
+                record("recovery_stopped_worker_birth_mismatch")
+                final_code = 1
+                break
             if not should_restart(final_code, state, watchdog, bool(stop_signals)):
                 break
+            if timeout_recovery is not None and not credit_poll_timeout(state):
+                record("recovery_stopped_timeout_startup_validation")
+                break
+            if credit_poll_timeout(state) and timeout_pause_owned(state):
+                timeout_recovery = dict(state["credit_timeout_shutdown_pause"], approved=True)
+            elif not credit_poll_timeout(state):
+                timeout_recovery = None
             if args.max_restarts >= 0 and restarts >= args.max_restarts:
                 record("restart_limit_reached", max_restarts=args.max_restarts)
                 break
@@ -321,7 +407,8 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
             has_saved_goal = (isinstance(state.get("thread_id"), str) and bool(state["thread_id"].strip())
                               and isinstance(saved_goal, dict)
                               and saved_goal.get("status") in {"active", "paused", "blocked"})
-            if getattr(args, "fresh_on_recovery", False) and has_saved_goal:
+            if (getattr(args, "fresh_on_recovery", False) and has_saved_goal
+                    and not credit_poll_timeout(state)):
                 # The worker verifies this receipt under run.lock before archiving
                 # state. It binds the exact exited worker snapshot to this live
                 # supervisor, after both restart classification and retirement.

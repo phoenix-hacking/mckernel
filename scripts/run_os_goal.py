@@ -61,6 +61,7 @@ LIMIT_ERRORS = {"usageLimitExceeded", "sessionBudgetExceeded"}
 # The user selected continuous work through the full included allowance.
 # Prepaid credits require --credit-budget; API-key billing is never enabled.
 INCLUDED_USAGE_STOP_PERCENT = 100
+CREDIT_NOTIFICATION_MAX_AGE_SECONDS = 15
 USER_INPUT_METHOD = "item/tool/requestUserInput"
 AUTONOMY_REPLY = (
     "Automatic launcher response applying the user's standing instruction; "
@@ -531,6 +532,10 @@ class Campaign:
         self.credit_guard = (CreditBudget(directory, args.credit_run_id, args.credit_budget,
                                           atomic_json, recovered=args.recovered)
                              if getattr(args, "credit_budget", None) is not None else None)
+        # Memory-only: never inherit usage freshness from a preceding worker/server.
+        self.state.pop("credit_timeout_shutdown_pause", None)
+        self.state.pop("credit_timeout_startup", None)
+        self.last_credit_notification = None
         self.last_activity = time.monotonic()
         self.stopping = False
         self.controlled = False
@@ -734,6 +739,8 @@ class Campaign:
             self.output.notice("Instruction delivery uncertain; inspect " + str(sending))
 
     def on_signal(self, signum, frame):
+        self.state.pop("credit_timeout_shutdown_pause", None)
+        self.state.pop("credit_timeout_startup", None)
         if (self.stop_reason or "").startswith("signal_"):
             self.stop_now = True
         # Signals retain stop authority even if a retryable error arrived first.
@@ -807,6 +814,8 @@ class Campaign:
         return True
 
     def record_failure(self, error, reason, will_retry=False, *, thread_id=None, turn_id=None):
+        self.state.pop("credit_timeout_shutdown_pause", None)
+        self.state.pop("credit_timeout_startup", None)
         self.save(last_error=error, last_failure={
             "thread_id": thread_id, "id": turn_id, "error": error,
             "reason": reason, "log_dir": str(self.log_dir), "recorded_at": utc()})
@@ -821,7 +830,9 @@ class Campaign:
             self.stop_reason = "rate_limit" if info == "rateLimitExceeded" else reason
             self.stop_now = True
 
-    def record_rate_limits(self, limits):
+    def record_rate_limits(self, limits, *, notification=False):
+        if notification:
+            self.last_credit_notification = None
         previous = self.state.get("last_rate_limits") or {}
         self.save(last_rate_limits=limits)
         if self.stop_reason:
@@ -837,6 +848,9 @@ class Campaign:
                 self.save(credit_budget=record, credit_budget_error=None)
                 if exhausted:
                     self.stop_reason, self.stop_now = "credit_budget_exhausted", True
+                elif notification:
+                    # observe() persisted the existing run/budget before freshness is granted.
+                    self.last_credit_notification = (self.rpc, time.monotonic())
             except (OSError, ValueError, TypeError, InvalidOperation) as error:
                 self.save(credit_budget_error=str(error))
                 self.stop_reason, self.stop_now = "credit_budget_unknown", True
@@ -856,7 +870,7 @@ class Campaign:
             self.output.notice("Usage/billing stop: " + self.stop_reason)
 
     def refresh_credit_budget(self):
-        """Poll without inference; notifications alone cannot enforce a budget."""
+        """Poll without inference; only freshly persisted notifications can cover a timeout."""
         for attempt in range(3):
             if self.stop_reason or self.stop_now:
                 return
@@ -865,6 +879,21 @@ class Campaign:
                 self.record_rate_limits(result.get("rateLimits"))
                 return
             except Exception as error:
+                observed = self.last_credit_notification
+                age = time.monotonic() - observed[1] if observed is not None else None
+                if (isinstance(error, RecoverableFailure)
+                        and str(error) == "App-server request timed out: account/rateLimits/read"
+                        and self.credit_guard is not None and observed is not None
+                        and observed[0] is self.rpc and age is not None
+                        and 0 <= age <= CREDIT_NOTIFICATION_MAX_AGE_SECONDS
+                        and not self.stop_reason and not self.stop_now
+                        and self.state.get("credit_budget_error") is None):
+                    self.save(last_usage_read_notification_fallback={
+                        "at": utc(), "age_seconds": age, "error": str(error),
+                        "source": "same_worker_server_validated_persisted_notification"})
+                    self.output.notice("Usage read timed out; current validated notification "
+                                       "already persisted the unchanged credit guard.")
+                    return
                 if (attempt < 2 and not self.stop_reason and not self.stop_now
                         and temporary_usage_read_failure(error)):
                     self.save(last_usage_read_retry={"at": utc(), "attempt": attempt + 1,
@@ -873,6 +902,23 @@ class Campaign:
                                        + str(attempt + 1) + "/2.")
                     time.sleep(attempt + 1)
                     continue
+                expected = getattr(self.args, "credit_timeout_goal_sha256", None)
+                if (isinstance(error, RecoverableFailure)
+                        and str(error) == "App-server request timed out: account/rateLimits/read"
+                        and self.credit_guard is not None and expected
+                        and not self.controlled and not self.stop_reason
+                        and not self.stop_now and self.state.get("phase") == "starting"
+                        and self.state.get("auth_mode") == "chatgpt"
+                        and (self.state.get("goal") or {}).get("status") == "paused"
+                        and hashlib.sha256(json.dumps(self.state["goal"], sort_keys=True,
+                            separators=(",", ":")).encode()).hexdigest() == expected):
+                    from watch_os_goal import process_start
+                    self.save(credit_timeout_startup={"schema_version": 1,
+                        "worker_pid": os.getpid(), "worker_start": self.state.get("worker_start"),
+                        "watcher_pid": os.getppid(), "watcher_start": process_start(os.getppid()),
+                        "thread_id": self.state.get("thread_id"), "before_inference": True,
+                        "account_validated": True, "expected_goal_sha256": expected,
+                        "phase_at_failure": "starting"})
                 self.save(credit_budget_error=str(error))
                 self.stop_reason = self.stop_reason or "credit_budget_unknown"
                 self.stop_now = True
@@ -883,6 +929,9 @@ class Campaign:
         self.output.event(message)
         thread = data.get("threadId")
         primary = thread == self.state.get("thread_id")
+        if primary and method in {"thread/goal/updated", "thread/goal/cleared"}:
+            self.state.pop("credit_timeout_shutdown_pause", None)
+            self.state.pop("credit_timeout_startup", None)
         if method in {"item/started", "item/completed"}:
             self.remember_child_provenance(data)
         if "id" in message:
@@ -922,7 +971,7 @@ class Campaign:
                 self.record_failure(data["error"], "server_error", data.get("willRetry", False),
                                     thread_id=thread, turn_id=turn or self.active.get(thread))
         elif method == "account/rateLimits/updated":
-            self.record_rate_limits(data.get("rateLimits"))
+            self.record_rate_limits(data.get("rateLimits"), notification=True)
         elif method == "account/updated" and data.get("authMode") not in (None, "chatgpt"):
             self.stop_reason, self.stop_now = "chatgpt_auth_changed", True
         elif method == "item/agentMessage/delta" and primary:
@@ -1165,7 +1214,9 @@ class Campaign:
         if (self.state.get("resume_instruction") or {}).get("status") in {"sending", "delivery_uncertain"}:
             raise RuntimeError("Resume instruction delivery is uncertain; reconcile its saved turn before resuming")
         note = getattr(self.args, "startup_instruction", None)
-        self.save(worker_pid=os.getpid(), server_pid=None, server_start=None, retryable=False,
+        from watch_os_goal import process_start
+        self.save(worker_pid=os.getpid(), worker_start=process_start(os.getpid()),
+                  server_pid=None, server_start=None, retryable=False,
                   startup_instruction_sha256=hashlib.sha256(note.encode()).hexdigest() if note else None)
         check_resources(launch_resources(self.args, self.repo))
         self.rpc = self.rpc_factory(server_argv(self.args, self.repo), self.log_dir, self.event)
@@ -1212,6 +1263,12 @@ class Campaign:
             goal = self.rpc.call("thread/goal/get", {"threadId": previous_id})["goal"]
             if goal and goal["objective"] != OBJECTIVE:
                 raise RuntimeError("Stored thread has a different objective; it was not resumed or replaced.")
+            expected = getattr(self.args, "credit_timeout_goal_sha256", None)
+            if expected and hashlib.sha256(json.dumps(
+                    goal, sort_keys=True, separators=(",", ":")).encode()).hexdigest() != expected:
+                self.remember_goal(goal)
+                self.stop_reason, self.stop_now = "startup_goal_stopped", True
+                return
             if not goal and self.state.get("goal"):
                 raise RuntimeError("The saved goal was cleared outside this launcher; inspect state before starting a new campaign.")
             self.controlled = True
@@ -1241,6 +1298,12 @@ class Campaign:
         goal = self.rpc.call("thread/goal/get", {"threadId": ident})["goal"]
         if goal and goal["objective"] != OBJECTIVE:
             raise RuntimeError("Stored thread has a different objective; it was not replaced.")
+        expected = getattr(self.args, "credit_timeout_goal_sha256", None)
+        if expected and hashlib.sha256(json.dumps(
+                goal, sort_keys=True, separators=(",", ":")).encode()).hexdigest() != expected:
+            self.remember_goal(goal)
+            self.stop_reason, self.stop_now = "startup_goal_stopped", True
+            return
         if goal and (goal["status"] == "complete" or
                      goal["status"] == "usageLimited" and self.args.recovered):
             self.remember_goal(goal)
@@ -1335,9 +1398,31 @@ class Campaign:
         if current and current["objective"] != OBJECTIVE:
             self.controlled = False
             raise RuntimeError("Goal objective changed externally; launcher will not alter it.")
+        receipt = None
         if current and current["status"] == "active":
+            before = dict(current)
+            generation = self.primary_stop_generation
             current = self.rpc.call("thread/goal/set", {"threadId": ident, "status": "paused"})["goal"]
+            if (self.stopping and not self.checkpoint_requested
+                    and self.stop_reason == "credit_budget_unknown" and self.stop_now
+                    and self.state.get("credit_budget_error") ==
+                    "App-server request timed out: account/rateLimits/read"
+                    and current and current.get("status") == "paused"
+                    and current.get("objective") == OBJECTIVE
+                    and self.primary_stop_generation <= generation + 1
+                    and not any(self.state.get(key) for key in
+                                ("service_hold", "policy_hold", "auth_hold", "billing_hold"))):
+                receipt = {"schema_version": 1, "worker_pid": os.getpid(),
+                           "worker_start": self.state.get("worker_start"), "thread_id": ident,
+                           "stop_reason": self.stop_reason,
+                           "credit_budget_error": self.state["credit_budget_error"],
+                           "pause_method": "thread/goal/set", "pause_confirmed": True,
+                           "goal_before": before, "goal_after": current,
+                           "goal_after_sha256": hashlib.sha256(json.dumps(
+                               current, sort_keys=True, separators=(",", ":")).encode()).hexdigest()}
         self.remember_goal(current)
+        if receipt is not None:
+            self.save(credit_timeout_shutdown_pause=receipt)
 
     def request_checkpoint(self):
         self.pause()
@@ -1511,12 +1596,17 @@ def arguments(argv=None):
     parser.add_argument("--quiet", action="store_true", help="Hide live agent output; keep heartbeats and console.log")
     parser.add_argument("--worker", action="store_true", help=argparse.SUPPRESS)
     parser.add_argument("--recovered", action="store_true", help=argparse.SUPPRESS)
+    parser.add_argument("--credit-timeout-goal-sha256", help=argparse.SUPPRESS)
     args = parser.parse_args(argv)
     if args.credit_run_id is not None and (args.credit_budget is None or
             len(args.credit_run_id) != 32 or any(c not in "0123456789abcdef" for c in args.credit_run_id)):
         parser.error("credit-run-id requires a credit budget and a 32-character lowercase hex identifier")
     if args.worker and args.credit_budget is not None and args.credit_run_id is None:
         parser.error("Credit-funded workers require the watcher's persistent credit-run-id")
+    if args.credit_timeout_goal_sha256 and (not args.worker or not args.recovered
+            or len(args.credit_timeout_goal_sha256) != 64
+            or any(c not in "0123456789abcdef" for c in args.credit_timeout_goal_sha256)):
+        parser.error("Credit-timeout recovery requires a supervised worker and exact goal digest")
     if args.fresh_recovery_proof and not (args.worker and args.recovered and args.fresh_on_recovery):
         parser.error("Fresh recovery requires the supervised recovered worker and a watcher proof")
     args.startup_instruction = (read_startup_instruction(args.startup_instruction_file)
