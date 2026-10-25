@@ -1,3 +1,25 @@
+## Twenty-minute steering — 2026-10-25T22:57Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The review interval adds zero accepted integration packages/default/native/file
+closures. Current290 census failed before owner/compiler entry and closed normally;
+the opaque REFUSED cause remains unknown. Default18h is correcting a diagnostic
+test-harness constant extraction after16/19 checks passed; original failure retained.
+The private wrapper preserves its original basename and exact historical helper.
+Root/review18h own fresh admission after those local tests and exact source review.
+Perf18h advances initialized pending-siginfo production; daemon typed-fill adapter
+passed1positive37negative controls and perf_review18h reviews its exact sources.
+
+Source17 initialized-pending CPU0 three-command check has source approval and will
+follow the diagnostic's exclusive CPU0 slot. No default selectors change. Last
+completed original30-minute bucket adds zero packages; preceding bucket adds one
+SDK package. The95% target is unmet. Resource snapshot: HOST153258061824B free,
+scratch14100398080B free, MemAvailable27226356KiB; load is not CPU utilization.
+First current290 default compiler time and validated census-fix time remain unknown.
+Next acceptance remains current290 selected GCC14 ABI/default image, then affected
+native qualification; M14/M15 OPEN, practical35/35 unchanged. Fixed15:55:33Z end.
+[Review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T2257.json).
+
 ## Current290 census refused before build — 22:37 review and subsequent failure
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
