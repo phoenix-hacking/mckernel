@@ -8298,6 +8298,11 @@ long sys_times(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES)
+extern long
+syscall_do_kill_thread_bridge(void *thread, int pid, int tid, int sig,
+		const void *info, int ptracecont);
+#else
 long
 syscall_do_kill_thread_bridge(void *thread, int pid, int tid, int sig,
 		const void *info, int ptracecont)
@@ -8305,7 +8310,16 @@ syscall_do_kill_thread_bridge(void *thread, int pid, int tid, int sig,
 	return do_kill((struct thread *)thread, pid, tid, sig,
 			(struct siginfo *)info, ptracecont);
 }
+#endif /* MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES */
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES)
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_kill_log_debug_v1[2] = {
+ {.file=__FILE__,.func="syscall_kill_log_bridge",.line=8313,.flags=DDEBUG_DEFAULT},
+ {.file=__FILE__,.func="syscall_kill_log_bridge",.line=8315,.flags=DDEBUG_DEFAULT},
+};
+extern void
+syscall_kill_log_bridge(int event, int pid, int sig, int error);
+#else
 void
 syscall_kill_log_bridge(int event, int pid, int sig, int error)
 {
@@ -8316,6 +8330,7 @@ syscall_kill_log_bridge(int event, int pid, int sig, int error)
 				pid, sig, error);
 	}
 }
+#endif /* MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES */
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_kill(int n, ihk_mc_user_context_t *ctx);
@@ -21643,12 +21658,17 @@ long sys_rt_sigtimedwait(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES)
+extern long
+syscall_do_kill_current_bridge(int pid, int sig, const void *info);
+#else
 long
 syscall_do_kill_current_bridge(int pid, int sig, const void *info)
 {
 	return do_kill(get_this_cpu_local_var()->current, pid, -1, sig,
 			(struct siginfo *)info, 0);
 }
+#endif /* MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES */
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_rt_sigqueueinfo(int n, ihk_mc_user_context_t *ctx);
@@ -24259,25 +24279,40 @@ static const struct syscall_cputime_offsets syscall_cputime_offsets = {
 							  maxrss_children),
 };
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES)
+extern void
+syscall_threads_reader_lock_bridge(void *proc, void *lock_arg);
+#else
 void
 syscall_threads_reader_lock_bridge(void *proc, void *lock_arg)
 {
 	mcs_rwlock_reader_lock_noirq(&((struct process *)proc)->threads_lock,
 			(struct mcs_rwlock_node *)lock_arg);
 }
+#endif /* MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES */
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES)
+extern void
+syscall_threads_reader_unlock_bridge(void *proc, void *lock_arg);
+#else
 void
 syscall_threads_reader_unlock_bridge(void *proc, void *lock_arg)
 {
 	mcs_rwlock_reader_unlock_noirq(&((struct process *)proc)->threads_lock,
 			(struct mcs_rwlock_node *)lock_arg);
 }
+#endif /* MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES */
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES)
+extern void
+syscall_interrupt_cpu_bridge(int cpu_id);
+#else
 void
 syscall_interrupt_cpu_bridge(int cpu_id)
 {
 	ihk_mc_interrupt_cpu(cpu_id, ihk_mc_get_vector(IHK_GV_IKC));
 }
+#endif /* MCKERNEL_RUST_F03_SIGNAL_PROCESS_BRIDGES */
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_getrusage(int n, ihk_mc_user_context_t *ctx);

@@ -1,3 +1,28 @@
+## Current221 integrated; executor complete input closure — 2026-10-25T06:18:53.211478+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Current221 has independent HOST object/ABI/strict-partial acceptance; six exact runtime
+postimages are centrally integrated (43 additional providers over178). Both observer
+failures and the one successful Rust codegen are retained. Selected HOST C absence is
+proved at that scope; production/default, native and whole-file retirement remain open.
+[Integration](../evidence/os-recovery-adoption-20261025-0254/ACTUAL-CURRENT221-INDEPENDENT-ACCEPTANCE-AND-CANONICAL-INTEGRATION.json).
+
+Executor52f entered at query age31seconds, failed beforeSDK on one unmounted libdwarf
+authority file, and retired normally. Its exact new physical/current proof is independently
+accepted. Expert correction adds one readonly bind; all453precommandinputs and42controls
+passed. Fresh03c source15archive is ready; publish/fetch and finish allstaticbindings before
+one freshquery/review/entry. BFD11source+metadata and43inputcontrols are ready behind it.
+Pagefault/zeroobj core source passed independent review and controlledfixtures; freerange
+360cases/12ABI passed. These later bodies await their matching currentobject qualification.
+
+First complete velocity bucket05:43:42.984–06:13:42.984Z has one accepted package,2/hour
+againstbaseline2/hour andtarget3.9/hour. Current221 accepted06:14:10.590Z belongs to the
+next partial bucket. No95% gain or two-bucket quality claim. Default/native/file/app/image
+closures0; M12 remains35/35; M14/M15 OPEN. [Review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0612.json).
+Planning estimates0512 remain separate and unchanged. Monitor1800seconds and cutoff
+2026-10-26T06:00:00Z unchanged. Root is canonical/event-ledger writer; next criticalowner
+is root+m15_tools+recovery_review for03c nineSDKcommands, thenBFD21/daemon7/MM.
+
 ## Current178 integrated and executor correction — 2026-10-25T05:55:53.501107+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

@@ -800,3 +800,14 @@ pub unsafe extern "C" fn page_get_count_atomic(page: *const Page) -> CInt {
     // The existing provider performs exactly one AtomicI32 SeqCst load.
     unsafe { crate::atomic_helpers::ihk_atomic_read(count.cast()) }
 }
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+/// Return the existing page's signed offset from the owning module's actual type.
+///
+/// # Safety
+/// The original owner keeps this nonnull aligned Page live/readable and excludes
+/// conflicting offset mutation under its existing mapping locks. No reference
+/// is formed, no lifetime is extended and no page ownership is acquired.
+pub(crate) unsafe fn process_page_offset(page:*const Page)->OffT {
+    unsafe { (*page).offset }
+}

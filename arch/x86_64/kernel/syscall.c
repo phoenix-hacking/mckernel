@@ -625,26 +625,6 @@ arch_ptrace_alloc_bridge(size_t size, unsigned long flags)
 	return kmalloc_tracked(size, flags, __FILE__, __LINE__);
 }
 
-void
-arch_ptrace_user_log_bridge(int event, int value, int result)
-{
-	(void)result;
-	if (event == 3) {
-		kprintf("ptrace_read_user: missing ptrace_debugreg\n");
-	}
-	else if (event == 4) {
-		dkprintf("ptrace_read_user,addr=%d\n", value);
-	}
-	else if (event == 5) {
-		kprintf("ptrace_write_user: missing ptrace_debugreg\n");
-	}
-	else if (event == 6) {
-		dkprintf("ptrace_write_user,addr=%d\n", value);
-	}
-	else if (event == 7) {
-		kprintf("alloc_debugreg: no memory.\n");
-	}
-}
 
 unsigned long
 arch_ptrace_find_thread_bridge(int tgid, int tid)
@@ -789,6 +769,29 @@ arch_mmap_error_flags_bridge(void)
 		| MAP_NONBLOCK;
 }
 #endif
+
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+void
+arch_ptrace_user_log_bridge(int event, int value, int result)
+{
+	(void)result;
+	if (event == 3) {
+		kprintf("ptrace_read_user: missing ptrace_debugreg\n");
+	}
+	else if (event == 4) {
+		dkprintf("ptrace_read_user,addr=%d\n", value);
+	}
+	else if (event == 5) {
+		kprintf("ptrace_write_user: missing ptrace_debugreg\n");
+	}
+	else if (event == 6) {
+		dkprintf("ptrace_write_user,addr=%d\n", value);
+	}
+	else if (event == 7) {
+		kprintf("alloc_debugreg: no memory.\n");
+	}
+}
+#endif /* retained original callback for the existing C fallback */
 
 //#define DEBUG_PRINT_SC
 

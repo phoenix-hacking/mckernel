@@ -270,7 +270,7 @@ unsafe extern "C" {
     fn arch_prctl_log_bridge(event: CInt, cpu: CInt, value: CULong);
     fn arch_ptrace_lookup_user_context_bridge(thread: *mut c_void) -> *mut c_void;
     fn arch_ptrace_alloc_bridge(size: SizeT, flags: CULong) -> *mut c_void;
-    fn arch_ptrace_user_log_bridge(event: CInt, value: CInt, result: CInt);
+
     fn arch_ptrace_find_thread_bridge(tgid: CInt, tid: CInt) -> CULong;
     fn arch_ptrace_thread_unlock_bridge(thread_addr: CULong);
     fn arch_ptrace_read_user_bridge(thread_addr: CULong, addr: CLong, value: *mut CULong) -> CLong;
@@ -33516,3 +33516,155 @@ mod f03_sched_bridges_candidate {
         }
     }
 }
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(f03_signal_process_bridges_candidate)]
+mod f03_signal_process_bridges_candidate {
+    use core::ffi::c_void;
+    use core::ptr::{addr_of, addr_of_mut, read_volatile};
+    use crate::abi::{CInt, CLong, CULong, Process, SigInfo, Thread};
+
+    unsafe extern "C" {
+        fn do_kill(thread: *mut Thread, pid: CInt, tid: CInt, sig: CInt,
+                   info: *mut SigInfo, ptracecont: CInt) -> CULong;
+        fn ihk_mc_get_vector(kind: CInt) -> CInt;
+        static mut f03_kill_log_debug_v1: [crate::debug::Ddebug; 2];
+    }
+
+    /// # Safety
+    /// Proc is the genuine live Process and node is its caller-owned lock node;
+    /// retain the original caller's lock/lifetime and noirq context obligations.
+    #[export_name = "syscall_threads_reader_lock_bridge"]
+    pub unsafe extern "C" fn reader_lock(proc: *mut c_void, node: *mut c_void) {
+        let lock = unsafe { addr_of_mut!((*(proc as *mut Process)).threads_lock) };
+        unsafe { crate::lock_helpers::__mcs_rwlock_reader_lock_noirq(lock.cast(), node) };
+    }
+
+    /// # Safety
+    /// The same live process lock/node are held by this caller; nothing is retained.
+    #[export_name = "syscall_threads_reader_unlock_bridge"]
+    pub unsafe extern "C" fn reader_unlock(proc: *mut c_void, node: *mut c_void) {
+        let lock = unsafe { addr_of_mut!((*(proc as *mut Process)).threads_lock) };
+        unsafe { crate::lock_helpers::__mcs_rwlock_reader_unlock_noirq(lock.cast(), node) };
+    }
+
+    /// # Safety
+    /// CPU and IKC vector provider satisfy the existing interrupt API contract.
+    /// Preserve vector lookup before dispatch and discard the original int result.
+    #[export_name = "syscall_interrupt_cpu_bridge"]
+    pub unsafe extern "C" fn interrupt(cpu: CInt) {
+        let vector = unsafe { ihk_mc_get_vector(1) };
+        unsafe { crate::x86_cpu_helpers::ihk_mc_interrupt_cpu(cpu, vector) };
+    }
+
+    /// # Safety
+    /// Caller preserves genuine thread and readable SigInfo lifetimes through the
+    /// synchronous original do_kill provider; no reference/ownership is invented.
+    #[export_name = "syscall_do_kill_thread_bridge"]
+    pub unsafe extern "C" fn kill_thread(
+        thread: *mut c_void, pid: CInt, tid: CInt, sig: CInt,
+        info: *const SigInfo, ptracecont: CInt,
+    ) -> CLong {
+        // C returns unsigned long from do_kill through a signed-long bridge.
+        unsafe { do_kill(thread.cast(), pid, tid, sig, info.cast_mut(), ptracecont) as CLong }
+    }
+
+    /// # Safety
+    /// Actual CPU-local/current thread and info remain valid through do_kill.
+    /// Read current exactly once, retain tid=-1 and ptracecont=0.
+    #[export_name = "syscall_do_kill_current_bridge"]
+    pub unsafe extern "C" fn kill_current(pid: CInt, sig: CInt, info: *const SigInfo) -> CLong {
+        let current = unsafe { (*super::get_this_cpu_local_var()).current };
+        unsafe { do_kill(current, pid, -1, sig, info.cast_mut(), 0) as CLong }
+    }
+
+    /// # Safety
+    /// Original dynamic-debug synchronization/static records and formatter remain
+    /// available. Only event1 selects enter; every other int selects returning.
+    #[export_name = "syscall_kill_log_bridge"]
+    pub unsafe extern "C" fn log(event: CInt, pid: CInt, sig: CInt, error: CInt) {
+        let index = if event == 1 { 0 } else { 1 };
+        let flags = unsafe { read_volatile(addr_of!(f03_kill_log_debug_v1[index].line_flags)) >> 24 };
+        if flags != 0 {
+            unsafe {
+                if event == 1 {
+                    super::kprintf(c"sys_kill,enter,pid=%d,sig=%d\n".as_ptr().cast(), pid, sig);
+                } else {
+                    super::kprintf(c"sys_kill,returning,pid=%d,sig=%d,error=%d\n".as_ptr().cast(), pid, sig, error);
+                }
+            }
+        }
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Own the selected architecture ptrace diagnostics and their writable debug records.
+mod f06_ptrace_user_log_v1 {
+    use crate::abi::CInt;
+    use crate::debug::Ddebug;
+    use core::ptr::{addr_of, read_volatile};
+
+    #[used]
+    #[no_mangle]
+    #[link_section = "__verbose"]
+    pub static mut arch_ptrace_user_log_debug_v1: [Ddebug; 2] = [
+        Ddebug {
+            file: concat!(file!(), "\0").as_ptr().cast(),
+            func: b"arch_ptrace_user_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: line!() & 0x00ff_ffff,
+        },
+        Ddebug {
+            file: concat!(file!(), "\0").as_ptr().cast(),
+            func: b"arch_ptrace_user_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: line!() & 0x00ff_ffff,
+        },
+    ];
+
+    /// Emit the existing architecture ptrace callback's diagnostic, if selected.
+    ///
+    /// # Safety
+    /// The normal kernel logger and dynamic-debug record lifetime are available.
+    /// The two records retain the existing external flag-update contract.
+    #[no_mangle]
+    pub unsafe extern "C" fn arch_ptrace_user_log_bridge(
+        event: CInt, value: CInt, result: CInt,
+    ) {
+        let _ = result;
+        match event {
+            3 => {
+                // SAFETY: static NUL-terminated format; original no-argument ABI.
+                unsafe { super::kprintf(b"ptrace_read_user: missing ptrace_debugreg\n\0".as_ptr().cast()); }
+            }
+            4 => {
+                // SAFETY: read only the read-user record's externally updated flags.
+                let enabled = unsafe { read_volatile(addr_of!(arch_ptrace_user_log_debug_v1[0].line_flags)) } >> 24;
+                if enabled != 0 {
+                    // SAFETY: value remains C int for the genuine %d vararg ABI.
+                    unsafe { super::kprintf(b"ptrace_read_user,addr=%d\n\0".as_ptr().cast(), value); }
+                }
+            }
+            5 => {
+                // SAFETY: static NUL-terminated format; original no-argument ABI.
+                unsafe { super::kprintf(b"ptrace_write_user: missing ptrace_debugreg\n\0".as_ptr().cast()); }
+            }
+            6 => {
+                // SAFETY: write-user debug flags are independent of read-user flags.
+                let enabled = unsafe { read_volatile(addr_of!(arch_ptrace_user_log_debug_v1[1].line_flags)) } >> 24;
+                if enabled != 0 {
+                    // SAFETY: same C int vararg and unchanged diagnostic bytes.
+                    unsafe { super::kprintf(b"ptrace_write_user,addr=%d\n\0".as_ptr().cast(), value); }
+                }
+            }
+            7 => {
+                // SAFETY: static NUL-terminated format; original no-argument ABI.
+                unsafe { super::kprintf(b"alloc_debugreg: no memory.\n\0".as_ptr().cast()); }
+            }
+            _ => {}
+        }
+    }
+}
+
+// Existing policy callers bind directly to the Rust definition above.
+use self::f06_ptrace_user_log_v1::arch_ptrace_user_log_bridge;
