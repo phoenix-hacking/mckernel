@@ -1,0 +1,23 @@
+--- parent-OBSERVER
++++ final-OBSERVER
+@@ -23,9 +23,9 @@
+ PREP = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-f02-contract-source-1/retained-validation-queue-source-1/current-retained-validator-postflight-source-1')
+ CASE = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-f02-contract-source-1/retained-validation-queue-source-1/retained-validation-attempt-1')
+ CAPTURE = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-f02-contract-source-1/retained-validation-queue-source-1/retained-validation-attempt-1/owner-evidence/attempt')
+-SOURCE = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-f02-contract-source-1/retained-validation-queue-source-1/current-retained-validator-postflight-source-1/cleanup_current_retained_F03_image.SOURCE-ONLY.NOT-RELEASED.py')
++SOURCE = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-f02-contract-source-1/retained-validation-queue-source-1/current-retained-validator-postflight-source-1/final-source-binding-1/cleanup_current_retained_F03_image.SOURCE-ONLY.NOT-RELEASED.py')
+ TEST = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-f02-contract-source-1/retained-validation-queue-source-1/current-retained-validator-postflight-source-1/test_current_retained_F03_receipt.NOT-RUN.py')
+-SOURCE_SHA = 'd818511b7909269d55e7d94bd76134b84bb755d053c80101e66f830b010ab595'
++SOURCE_SHA = '0144fc2d73b9b60c8988885eade5bb0eaf656a098329bb165c15d3a0a8d322b3'
+ TEST_SHA = 'cb12d7ffaf06ef02e0f51051799fedb68f4454f2625b2d7331454345d467cf70'
+ RETIREMENT = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-f02-contract-source-1/retained-validation-queue-source-1/actual-copy-bound-source-1/actual-build-owner-capture-1/ROOT-CONTROLLER-JOIN-AND-FAILURE-DELTA.json')
+ RETIREMENT_SHA = '07baff618c4faf0e106c6c97f3a89ad78ea7fe89795889d1b2b0bc9303e8cd3b'
+@@ -171,7 +171,7 @@
+ CLI_PROOF = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-f02-contract-source-1/retained-validation-queue-source-1/current-retained-validator-postflight-source-1/CLOSED-CURRENT-F03-OWNER-CLI-PROOF.json')
+ 
+ EXPECTED_CURRENT_FIXTURE = {'schema': 'mckernel.m14.current-retained-receipt-pure-fixture.v1', 'status': 'PASS', 'tests_run': 8, 'source_sha256': 'd818511b7909269d55e7d94bd76134b84bb755d053c80101e66f830b010ab595', 'fixture_sha256': 'cb12d7ffaf06ef02e0f51051799fedb68f4454f2625b2d7331454345d467cf70'}
+-PENDING_BINDINGS = ('actual current normal receipt fixture and whole-join descriptor', 'published/fetched current source and independent exact readonlyrelease')
++PENDING_BINDINGS = ()
+ 
+ def current_pass_prerequisites(retirement, case, root_join, artifact):
+     """Exact failed-build authority; no invented historical outer join or artifact PASS."""

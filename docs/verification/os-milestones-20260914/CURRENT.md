@@ -1,3 +1,21 @@
+## Retained-validator FAIL preserved; normal retirement queued — 2026-10-25T04:09:10Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The sole-heavy retained run finished FAIL/exit1. Its one new type/alignment witness
+compiled successfully; the next F03 C-function guard stopped at175expected versus
+173actual. Source is unchanged; retained DWARF proves two static C inline owners,
+no extra emitted functions. All C debt remains; fullvalidation is not accepted.
+Controller502711/start69818461 is absent; stopped container8755eabd and shared/
+common ownership remain retained. No new heavy admission until exact readonly
+observation, normal ownedcleanup and independent current physical acceptance.
+Publish only retirement controls as a new checkpoint; tested canonical runtime
+bytes remain9e71829. All four ABI results are reuse-only. In parallel F04 current
+module/root equality supports objectreuse, F06 Rust+twoC+ABI/link/providers pass
+but full relocationdump hit32MiB and remainsFAIL, and next8processproviders pass
+38comparisons/16ABI/currentmetadata. No native/wholefile acceptance added.
+Actual30minmonitor496359/start69732795 and cutoff2026-10-26T06Z unchanged.
+Evidence: `../evidence/current-retained-F03-normal-retirement-20261025-1/ROOT-PUBLICATION-AND-CURRENT-FAIL-STATE.json`.
+
 ## Integrated 39-provider and retained-validator publication checkpoint — 2026-10-25T03:48:50Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
