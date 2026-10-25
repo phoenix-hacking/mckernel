@@ -1,3 +1,24 @@
+## Thirty-minute engineering review — 2026-10-25T04:17:46Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Same active thread; review span1812.836s.39Rust bodies integrated since prior snapshot;
+currentunion39exports/20ABIwords passes. F04newobject100providers/66data checks
+passes and exactcurrentunion reuse accepted. F06newRust/twoC/ABI/link/8providers
+pass; final whole-relocation dump FAIL32MiB retained. Next8process bodies pass
+38comparisons/16ABI and8object commands. F02newtypewitness and selected119branch
+pass, wholevalidatorFAIL atF03 compiler inlining boundary. HOST preflight finds
+F03/F06 data profiles still open; no blind heavy replay. M15BFD11pure cases pass,
+SDK/default/native still queued. Production/native/file-retirement/guest/image
+closure deltas0;M12 35/35;M14/M15 OPEN.
+Largest measured blocker: stopped8755eabd/common records retain heavy admission,
+974.3s since sealedFAIL. Exact normalcleanup path correction21fd/observer4984
+passes3gate tests; root prioritizes publication/fetch/readonly then normalcleanup
+and independentphysical. No new heavy admission or capacity expansion. HOST/scratch
+headroom and actual CPU/wall/controller observedHWM are in report; queue latency/
+wholejob peak unavailable. Existing prepaid guard now supplies authorized fallback
+after providerincluded100percentused; same budget/run/ledger, no reset/purchase.
+Evidence: `../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0412.json`.
+
 ## Retained-validator FAIL preserved; normal retirement queued — 2026-10-25T04:09:10Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
