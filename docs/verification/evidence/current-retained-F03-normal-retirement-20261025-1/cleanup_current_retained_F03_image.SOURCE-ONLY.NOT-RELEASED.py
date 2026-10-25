@@ -1119,7 +1119,7 @@ class Transaction:
         nfd, nchain = directory(NAMESPACE)
         try:
             meta = os.fstat(nfd)
-            actual = dict(device=meta.st_dev, inode=meta.st_ino, mode=meta.st_mode, uid=meta.st_uid, gid=meta.st_gid)
+            actual = dict(path=str(NAMESPACE), device=meta.st_dev, inode=meta.st_ino, mode=meta.st_mode, uid=meta.st_uid, gid=meta.st_gid)
             if (actual != NAMESPACE_BINDING or namespace_ancestry() != NAMESPACE_ANCESTRY or nchain != self.namespace_chain or
                     identity(os.fstat(self.nfd)) != identity(meta) or meta.st_dev != NAMESPACE_BINDING['device']):
                 raise Refusal('namespace-parent-replaced')

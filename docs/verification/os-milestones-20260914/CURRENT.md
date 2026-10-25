@@ -1,3 +1,26 @@
+## Current normal-retirement refusal and compiler progress — 2026-10-25T04:26Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Corrected23source publication/fetch748bb3bf7 verified. Actual readonly observer
+PASS, observation34253109; separate exact cleanup21fd ran once and REFUSED
+namespace-parent-replaced before mutation. All7transaction paths are actually absent.
+Concrete identity-shape defect: expected namespace includes exact path, runtime
+comparison omitted path. Narrow correction+genuine regression and independent
+review underway; no retry/new heavy/currentphysical acceptance yet. Original
+failure, stopped8755container/common/shared and failed artifacts remain retained.
+Six new PC32/link-map negative controls PASS after independently reviewed fixture
+section-name correction; original1774 failure preserved. Current finite metadata
+reader failed missing pyelftools under /usr/bin Python; interpreter-only correction
+is pending, with genuine prior successful argv/package evidence, no installation.
+New mincore whole-Rust object and selected/fallback C compile; ABI witness typedef
+correction suffix underway, preserving successful prefix. Next8process source6
+independent source/current39 HOST review PASS; integration waits for freeze release.
+Source7 adds7MCS/thread/TID candidates, unrun. Executor SDK11 lifetime adapter and
+latest BFD fixture compiler-selector source review ready; SDK/default/native open.
+M12 35/35; M14/M15 OPEN. Production/native/whole-file retirement deltas0.
+Evidence: `../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0412.json`;
+private current normal-retirement correction cursor retains exact follow-up records.
+
 ## Thirty-minute engineering review — 2026-10-25T04:17:46Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

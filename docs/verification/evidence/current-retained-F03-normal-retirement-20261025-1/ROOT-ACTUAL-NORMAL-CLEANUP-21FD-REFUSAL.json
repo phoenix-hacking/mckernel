@@ -1,0 +1,18 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-25T04:25:37.864610+00:00",
+  "source_sha256": "21fd186c30506fc3c80eaea4db3534ecc40ce6c9d0473a940c7d21dd3098f886",
+  "release_sha256": "3d9e2a6709d1038458f83ef75e354b68d58d726084b767ff7eb496bf6bed11e7",
+  "tool_session": 80273,
+  "tool_exit": 1,
+  "terminal": {
+    "process_reports": [],
+    "reason": "namespace-parent-replaced",
+    "status": "REFUSED"
+  },
+  "source_observation": "Transaction.pinned actual namespace dict omits path while NAMESPACE_BINDING includes exactpath; Transaction.__init__ calls pinned before any transaction mutation. Independent confirmation and actual fresh pathabsence pending.",
+  "retry": false,
+  "new_heavy_admission": false,
+  "owner_correction": "/root/copy7_recovery",
+  "independent_review": "/root/recovery_review"
+}
