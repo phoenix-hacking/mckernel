@@ -1,3 +1,33 @@
+## Launcher shutdown — 2026-10-25T00:00Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Launcher requested shutdown and paused future continuations. New dispatch stopped;
+all11 child agents completed and every started tool child joined. No build/guest
+is running. Do not resume without a subsequent launcher invocation.
+
+M12 stays COMPLETE35/35; M14/M15 remain OPEN. COPY7 failed F02 allocated_C_OBJECT
+validation after all3 real ABI witness compiles returned0. Stopped container
+0e41e2cf1f390c77108eafef7d031a1d1e561485a38ed7524f77d953e0c62d70 and
+its common/shared ownership records remain retained. Owner413643/start68359948
+closed; nonce76b2af948f3440219ad33c013fc3fbcb. Do not infer physical clearance
+from process absence. Cleanup source ab794aa8/observer29fb48d7 plus8puretests
+PASS and fetched publication df283ded are accepted at SOURCE scope only.
+No readonly execution or cleanup release was issued before shutdown.
+
+NEXT FIRST: use copy7-normal-image-retirement-preparation-1 READYb960a9c4,
+finish exact reviewed read-only observation, normal retirement and independent
+positive physical/current-postjoin acceptance before any new heavy work.
+Prior COPY6 physical3ea72/d815 is historical and cannot clear COPY7.
+
+F02 diagnosis: existing C globals runq_reservation_lock/resource_set_lock/
+resource_set_list are GCC9 COMMON versus GCC14 BSS, sizes4/64/16; other differences
+include compiler-local descriptor IDs. Correct exact profile/source/relocation
+contracts with negative controls; never drop data guard or claim C retirement.
+Retain the linked image and three ABI results; no unchanged rebuild.
+B7 expert-fixed CWD driver READY62130b99 is UNRUN (new grant required).
+M15 installed-consumer operation is UNRUN; bind genuine future post-COPY7 proof.
+Full shutdown identities/paths and next tasks: `evidence/os-shutdown-checkpoint-20261025-0000/SHUTDOWN.json`.
+
 ## Live terminal cursor — 2026-10-24T23:59Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

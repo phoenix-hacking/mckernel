@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-24T16:30:03.512475+00:00",
+  "as_of": "2026-10-25T00:01:54.385548+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -2939,6 +2939,15 @@
       "evidence": "docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-2314/REVIEW.json",
       "actual_progress": "NMI controlled12/90 and current81 static5 accepted; COPY4 strictcacheFAIL preserved and normally retired. Seven typed producer arguments corrected; COPY5 pure PASS. No native/default/Cretirement credit.",
       "engineering_percentage": null
+    },
+    {
+      "at": "2026-10-25T00:01:54.385548+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "evidence": "docs/verification/evidence/os-shutdown-checkpoint-20261025-0000/SHUTDOWN.json",
+      "actual_progress": "COPY6 actual selected syscall compile/raw image link exit0; COPY7 three actual ABI witness compiles exit0 then full F02 C-object contract FAIL. Linked artifacts and all failures retained. COPY7 stopped container/common/shared ownership retained; source-approved cleanup unexecuted at launcher shutdown. B7 default ABI346 accepted; coherent compile/correction remains incomplete.",
+      "engineering_percentage": null,
+      "new_native_delta": 0,
+      "whole_file_retirement_delta": 0
     }
   ]
 }
