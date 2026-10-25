@@ -1,0 +1,23 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-25T06:49:41.016740+00:00",
+  "actual_tool_chunk": "b4c239",
+  "command": "taskset -c 7 python3 -B -m unittest discover -s scripts/os_velocity -p test_report_velocity.py",
+  "returncode": 0,
+  "tests": 10,
+  "reported_test_wall_seconds": 0.001,
+  "report_command_returncode": 0,
+  "retained_original_failure": "ValueError: declaration must precede work; chunk1df127, unchanged current230 declare/start shared observation1792909886.8403046",
+  "repair": "Accept ordered same-observation timestamps only when declared state already exists; reversed order regression rejects. No ledger timestamps or stage/scoring contracts changed.",
+  "current_completed_bucket": {
+    "accepted": 2,
+    "per_hour": 4,
+    "baseline_per_hour": 2,
+    "target_per_hour": 3.9
+  },
+  "sustained_195_claim": false,
+  "files": {
+    "scripts/os_velocity/report_velocity.py": "71eaba7f12fbdbaad46f6303fdeca6959b41c9244c4bc2376c1af0c18a13fcef",
+    "scripts/os_velocity/test_report_velocity.py": "c8a5a6f70ebddaa06f6b9a0e8c3335baf9fe2d65363176f96b250c040244880d"
+  }
+}
