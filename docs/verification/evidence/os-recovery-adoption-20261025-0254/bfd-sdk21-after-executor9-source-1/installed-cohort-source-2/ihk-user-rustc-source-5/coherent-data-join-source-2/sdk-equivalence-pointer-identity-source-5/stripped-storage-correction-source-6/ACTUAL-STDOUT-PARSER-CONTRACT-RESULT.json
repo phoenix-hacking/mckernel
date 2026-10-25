@@ -1,0 +1,169 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_RETAINED_STDOUT_PARSER_OWNER_CONTRACT_ONLY",
+  "records": [
+    {
+      "step": 0,
+      "command": {
+        "argv": [
+          "/usr/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/stripped-storage-correction-source-6/check_actual_retained_stdout_parser_owner_contract_once.py",
+          "--check-once",
+          "6ee68c5dc31a4d4ec097254965492d915b9d50e3e419f4209426cdfb2a6d94c8"
+        ],
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Functional OS only; no security testing. Test retained actualmockstdout against unchanged actualrunner parser/ownerreceiptvalidator,3positive4negative, no compiler/SDK."
+      },
+      "join": {
+        "pid": 615433,
+        "start": 71354103,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.09597720799501985,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/stripped-storage-correction-source-6/actual-stdout-parser-contract-h990-CPU0-1/step0/stdout",
+            "sha256": "4827d52b4d8c965ae36a152c7383578471b00b825421f3972d74111e97f57984",
+            "device": 66306,
+            "inode": 59535077,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 1328,
+            "mtime_ns": 1792916096378763663,
+            "ctime_ns": 1792916096378763663
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/stripped-storage-correction-source-6/actual-stdout-parser-contract-h990-CPU0-1/step0/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59535078,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1792916096334762283,
+            "ctime_ns": 1792916096334762283
+          }
+        }
+      }
+    }
+  ],
+  "checks": {
+    "Rust_ABI_acceptance": false,
+    "SDK_execution": false,
+    "negative_cases": 4,
+    "owner_function_AST_extracted_unchanged": true,
+    "positive_cases": 3,
+    "records": [
+      {
+        "case": "normal",
+        "empty_rows": [
+          [
+            "EMPTY_SYMBOL_COUNT",
+            "mcinspect",
+            "0",
+            "0"
+          ],
+          [
+            "EMPTY_SYMBOL_COUNT",
+            "eclair",
+            "0",
+            "0"
+          ]
+        ],
+        "pointer_rows": [
+          {
+            "changed": 1,
+            "count": 1,
+            "wrapper": "mcinspect"
+          },
+          {
+            "changed": 1,
+            "count": 1,
+            "wrapper": "eclair"
+          }
+        ],
+        "status": "PASS_UNCHANGED_PARSER_AND_ACTUAL_OWNER_FUNCTION"
+      },
+      {
+        "case": "stable-pointers",
+        "empty_rows": [
+          [
+            "EMPTY_SYMBOL_COUNT",
+            "mcinspect",
+            "0",
+            "0"
+          ],
+          [
+            "EMPTY_SYMBOL_COUNT",
+            "eclair",
+            "0",
+            "0"
+          ]
+        ],
+        "pointer_rows": [
+          {
+            "changed": 0,
+            "count": 1,
+            "wrapper": "mcinspect"
+          },
+          {
+            "changed": 0,
+            "count": 1,
+            "wrapper": "eclair"
+          }
+        ],
+        "status": "PASS_UNCHANGED_PARSER_AND_ACTUAL_OWNER_FUNCTION"
+      },
+      {
+        "case": "zero-empty-upper",
+        "empty_rows": [
+          [
+            "EMPTY_SYMBOL_COUNT",
+            "mcinspect",
+            "0",
+            "0"
+          ],
+          [
+            "EMPTY_SYMBOL_COUNT",
+            "eclair",
+            "0",
+            "0"
+          ]
+        ],
+        "pointer_rows": [
+          {
+            "changed": 1,
+            "count": 1,
+            "wrapper": "mcinspect"
+          },
+          {
+            "changed": 1,
+            "count": 1,
+            "wrapper": "eclair"
+          }
+        ],
+        "status": "PASS_UNCHANGED_PARSER_AND_ACTUAL_OWNER_FUNCTION"
+      }
+    ],
+    "scope": "Functional OS only; no security testing. Retained actual mockstdout versus unchanged runner/parser/typedowner functions. No SDK/Rust acceptance.",
+    "status": "PASS_ACTUAL_RETAINED_STDOUT_UNCHANGED_PARSER_OWNER_CONTRACT"
+  },
+  "input_identities_unchanged": true,
+  "seconds": 0.11273294303100556,
+  "CPU_seconds": 0.173975,
+  "CPU0_released": true,
+  "SDK_query_root_native": false,
+  "execution_release": false
+}

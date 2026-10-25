@@ -1,3 +1,32 @@
+## Thirty-minute steering review and next qualification — 2026-10-25T08:35Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The 08:12 review records one accepted current-object package (277, +47 Rust
+providers and five integrated files), with zero new default/native/whole-file
+closures or retired C boundaries. Completed velocity buckets contain 1,2,1,0,1
+packages; the sustained 1.95x target is not achieved. Compiler-start latency and
+failure-to-pinned-SDK-fix time remain unknown where actual timestamp pairs are absent.
+[Review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0812.json).
+
+Current285 subsequently passed all 13 ordinary CPU6 commands (CPU27.590s,
+wall27.744s; largest-child RSS582452 KiB). Independent acceptance/integration is
+pending. CPU6 returned to the frozen five-command syscall-table qualification.
+The separate storage3 alignment correction requires its strengthened BSS flags
+and extent observer before its bounded CPU0 attempt; the original hold remains.
+
+The original-C/C pinned BFD diagnostic linked, then failed its stripped-symbol
+upper-bound assertion. Normal retirement and current physical proof independently
+pass; workload acceptance does not. Its corrected diagnostic preserves zero
+canonical symbol counts, has focused host regressions, and awaits fetched source25
+publication before fresh admission. No nine-command prefix replay is planned.
+The accepted MM module staging and F4D startup overlay are artifact preparation;
+actual guest execution is still pending. The current230 image caller is being
+corrected to retain the same permanent-lock descriptor through completed cleanup.
+Root coordinates canonical integration and the sole heavy entry; source workers
+continue independently. Same monitor496359/1800s, exact grants, included-first
+creditrun7f4af94a83b14cc08f97401f5891d965 and cutoff2026-10-26T06:00Z.
+M12 remains35/35; M14/M15 OPEN. The 05:12 estimate remains planning context only.
+
 ## Current277 HOST package independently accepted and integrated — 2026-10-25T07:57:15.222827+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

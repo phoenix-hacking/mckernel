@@ -1,0 +1,34 @@
+{
+  "command": [
+    "/usr/bin/env",
+    "-i",
+    "PATH=/nightly/bin:/usr/bin:/bin",
+    "LANG=C",
+    "LC_ALL=C",
+    "/usr/bin/python3",
+    "/candidate/orchestration/original_c_twice.py",
+    "--control-once"
+  ],
+  "control_commands": [
+    [
+      "/usr/bin/cc",
+      "-std=c11",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "/candidate/tests/original_C_twice_pinned_BFD_control.c",
+      "/prefix/mcinspect-original-renamed.o",
+      "/prefix/eclair-original-renamed.o",
+      "/usr/lib64/libbfd.so",
+      "-o",
+      "/work/cc-repeat-control-1/original-c-twice"
+    ],
+    [
+      "/work/cc-repeat-control-1/original-c-twice",
+      "/prefix/fixture.o",
+      "/prefix/stripped.o"
+    ]
+  ],
+  "jobs": 1,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing."
+}
