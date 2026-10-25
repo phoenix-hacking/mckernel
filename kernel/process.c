@@ -593,6 +593,12 @@ static void process_sched_waitq_wakeup_bridge(unsigned long waitq_addr)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_sched_do_migrate_log_bridge(unsigned long thread_addr,
+						int tid, int old_cpu_id,
+						int new_cpu_id);
+#else
+#line 484
 PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_do_migrate_log_bridge(unsigned long thread_addr,
 						int tid, int old_cpu_id,
 						int new_cpu_id)
@@ -601,6 +607,12 @@ PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_do_migrate_log_bridge(unsigned lo
 	dkprintf("%s: migrated TID %d from CPU %d to CPU %d\n",
 		 "do_migrate", tid, old_cpu_id, new_cpu_id);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 489
+#else
+#line 491
+#endif
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 static void process_release_tid_log_bridge(int tid, void *thread, int new_tid)
@@ -2777,6 +2789,34 @@ static int vm_range_insert(struct process_vm *vm, struct vm_range *newrange)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_remaining_range_scheduler_debug[18] = {
+ { .file=__FILE__, .func="process_range_public_log_bridge", .line=2137, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_range_public_log_bridge", .line=2141, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_range_public_log_bridge", .line=2147, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_range_public_log_bridge", .line=2151, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_range_public_log_bridge", .line=2157, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_range_public_log_bridge", .line=2161, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_range_public_log_bridge", .line=2167, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_range_public_log_bridge", .line=2173, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_sched_runq_log_bridge", .line=4348, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_sched_runq_log_bridge", .line=4357, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_sched_runq_log_bridge", .line=4361, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_sched_runq_log_bridge", .line=4368, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_sched_runq_log_bridge", .line=4374, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_sched_runq_log_bridge", .line=4382, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_sched_runq_log_bridge", .line=4390, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_sched_runq_log_bridge", .line=4398, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_sched_runq_log_bridge", .line=4413, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_sched_do_migrate_log_bridge", .line=489, .flags=DDEBUG_DEFAULT },
+};
+void process_range_public_log_bridge(int event, struct process_vm *vm,
+				     struct vm_range *range,
+				     unsigned long start,
+				     unsigned long end, int error);
+#else
+#line 2130
 void process_range_public_log_bridge(int event, struct process_vm *vm,
 				     struct vm_range *range,
 				     unsigned long start,
@@ -2829,6 +2869,12 @@ void process_range_public_log_bridge(int event, struct process_vm *vm,
 		break;
 	}
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2179
+#else
+#line 2181
+#endif
 
 /* Parallel memset implementation on top of general
  * SMP funcution call facility */
@@ -3051,6 +3097,16 @@ void process_add_range_mark_xpmem_bridge(struct vm_range *range)
 #endif
 #line 2289
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef ARCH_MEMCLEAR
+void (* const process_add_range_arch_memclear_callback)(void *, unsigned long) = memclear;
+#else
+void (* const process_add_range_arch_memclear_callback)(void *, unsigned long) = NULL;
+#endif
+void process_add_range_memclear_bridge(unsigned long phys,
+				       unsigned long bytes);
+#else
+#line 2290
 void process_add_range_memclear_bridge(unsigned long phys,
 				       unsigned long bytes)
 {
@@ -3060,6 +3116,12 @@ void process_add_range_memclear_bridge(unsigned long phys,
 	memset((void *)phys_to_virt(phys), 0, bytes);
 #endif
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2296
+#else
+#line 2298
+#endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
@@ -4418,6 +4480,13 @@ int process_zeroobj_match_bridge(void *memobj)
 #else
 #line 3278
 #endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_normal_fault_range_bridge(struct process_vm *vm,
+				      struct vm_range *range,
+				      unsigned long fault_addr,
+				      unsigned long reason);
+#else
+#line 3279
 int process_normal_fault_range_bridge(struct process_vm *vm,
 				      struct vm_range *range,
 				      unsigned long fault_addr,
@@ -4425,6 +4494,12 @@ int process_normal_fault_range_bridge(struct process_vm *vm,
 {
 	return page_fault_process_memory_range(vm, range, fault_addr, reason);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 3302
+#else
+#line 3285
+#endif
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 int process_xpmem_fault_range_bridge(struct process_vm *, struct vm_range *,
         unsigned long, unsigned long);
@@ -4434,6 +4509,8 @@ int process_xpmem_fault_range_bridge(struct process_vm *vm, struct vm_range *ran
 	return xpmem_fault_process_memory_range(vm, range, fault_addr, reason);
 }
 #endif
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+#line 3295
 static int do_page_fault_process_vm(struct process_vm *vm, void *fault_addr0, uint64_t reason)
 {
 	struct thread *thread = get_this_cpu_local_var()->current;
@@ -4448,13 +4525,27 @@ static int do_page_fault_process_vm(struct process_vm *vm, void *fault_addr0, ui
 			process_normal_fault_range_bridge,
 			process_xpmem_fault_range_bridge);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 3325
+#else
+#line 3308
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+#line 3310
 static int process_do_page_fault_process_vm_bridge(struct process_vm *vm,
 						   unsigned long fault_addr,
 						   unsigned long reason)
 {
 	return do_page_fault_process_vm(vm, (void *)fault_addr, reason);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 3332
+#else
+#line 3315
+#endif
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 void process_pgio_dispatch_bridge(void *, void *);
 #else
@@ -5666,6 +5757,15 @@ int process_sched_save_fp_bridge(void *thread)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef TIMER_CPU_ID
+const int process_sched_timer_configuration[2] = { 1, TIMER_CPU_ID };
+#else
+const int process_sched_timer_configuration[2] = { 0, 0 };
+#endif
+void process_sched_timer_init_bridge(int cpu);
+#else
+#line 4166
 void process_sched_timer_init_bridge(int cpu)
 {
 #ifdef TIMER_CPU_ID
@@ -5677,6 +5777,12 @@ void process_sched_timer_init_bridge(int cpu)
 	(void)cpu;
 #endif
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 4174
+#else
+#line 4176
+#endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 void process_sched_init_panic_bridge(void);
@@ -5838,6 +5944,13 @@ void process_sched_set_timer_bridge(int runq_locked)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_sched_runq_log_bridge(int event,
+					  unsigned long arg0,
+					  unsigned long arg1, int arg2,
+					  int arg3);
+#else
+#line 4338
 PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_runq_log_bridge(int event,
 					  unsigned long arg0,
 					  unsigned long arg1, int arg2,
@@ -5922,6 +6035,12 @@ PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_runq_log_bridge(int event,
 		break;
 	}
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 4419
+#else
+#line 4421
+#endif
 
 unsigned long process_sched_irq_save_bridge(void);
 void process_sched_irq_restore_bridge(unsigned long irqstate);
@@ -5953,6 +6072,10 @@ void process_sched_counter_dec_bridge(unsigned long counter_addr)
 
 void process_sched_rusage_threads_inc_bridge(void);
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_sched_rusage_debug_bridge(void);
+#else
+#line 4466
 void process_sched_rusage_debug_bridge(void)
 {
 #ifdef RUSAGE_DEBUG
@@ -5971,6 +6094,22 @@ void process_sched_rusage_debug_bridge(void)
 	}
 #endif
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 4468
+#else
+#line 4483
+#endif
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 4469
+#else
+#line 4484
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 4469
+#else
+#line 4471
 #endif
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS

@@ -28744,6 +28744,55 @@ set_cputime(enum set_cputime_mode mode)
 	cpu_restore_interrupt(irq_flags);
 }
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SYSCALL_ENTRY) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT) && defined(PROFILE_ENABLE)
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+struct f03_syscall_entry_config_v1 {
+	const char *const *names;
+	unsigned long name_count;
+	int (*fork_drain)(void);
+	int profile_max, profile_nr, exit_nr, exit_group_nr, sched_yield_nr;
+	int epoll_wait_nr, epoll_pwait_nr, ppoll_nr, mode_u2k, mode_k2u;
+	int sigkill, disable_yield, fugaku;
+	unsigned int resched_mask;
+};
+struct ddebug f03_syscall_entry_debug_v1[6] __aligned(8)
+	__attribute__((section("__verbose"))) = {
+	{ .file = __FILE__, .func = "syscall", .line = 28800, .flags = DDEBUG_DEFAULT },
+	{ .file = __FILE__, .func = "syscall", .line = 28812, .flags = DDEBUG_DEFAULT },
+	{ .file = __FILE__, .func = "syscall", .line = 28821, .flags = DDEBUG_DEFAULT },
+	{ .file = __FILE__, .func = "syscall", .line = 28828, .flags = DDEBUG_DEFAULT },
+	{ .file = __FILE__, .func = "syscall", .line = 28831, .flags = DDEBUG_DEFAULT },
+	{ .file = __FILE__, .func = "syscall", .line = 28876, .flags = DDEBUG_DEFAULT },
+};
+const struct f03_syscall_entry_config_v1 f03_syscall_entry_config_v1 = {
+	.names = (const char *const *)syscall_name,
+	.name_count = sizeof(syscall_name) / sizeof(syscall_name[0]),
+#ifdef MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION
+	.fork_drain = process_fork_runtime_drain_current_v1,
+#else
+	.fork_drain = NULL,
+#endif
+	.profile_max = PROFILE_SYSCALL_MAX, .profile_nr = __NR_profile,
+	.exit_nr = __NR_exit, .exit_group_nr = __NR_exit_group,
+	.sched_yield_nr = __NR_sched_yield, .epoll_wait_nr = __NR_epoll_wait,
+	.epoll_pwait_nr = __NR_epoll_pwait, .ppoll_nr = __NR_ppoll,
+	.mode_u2k = CPUTIME_MODE_U2K, .mode_k2u = CPUTIME_MODE_K2U,
+	.sigkill = SIGKILL,
+#ifdef DISABLE_SCHED_YIELD
+	.disable_yield = 1,
+#else
+	.disable_yield = 0,
+#endif
+#ifdef ENABLE_FUGAKU_HACKS
+	.fugaku = 1,
+#else
+	.fugaku = 0,
+#endif
+	.resched_mask = CPU_FLAG_NEED_RESCHED,
+};
+long syscall(int num, ihk_mc_user_context_t *ctx);
+#else
+#line 28734
 long syscall(int num, ihk_mc_user_context_t *ctx)
 {
 	long l;
@@ -28923,6 +28972,9 @@ long syscall(int num, ihk_mc_user_context_t *ctx)
 
 	return l;
 }
+
+#endif
+#line 28913
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void check_sig_pending(void);

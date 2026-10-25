@@ -34487,3 +34487,257 @@ pub unsafe extern "C" fn move_pages_smp_handler(cpu_index: CInt, nr_cpus: CInt, 
     if !save_pt.is_null() { crate::x86_memory_helpers::ihk_mc_load_page_table(save_pt); }
     (*f06_move_ret(req)).load(Ordering::Relaxed)
 }
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(all(f03_syscall_entry_candidate, f03_dispatch_context_candidate, enable_profile))]
+pub(crate) mod f03_syscall_entry_candidate {
+    use core::ptr::{addr_of, addr_of_mut, null_mut, read, read_volatile};
+
+    use crate::abi::{CInt, CLong, CULong, SigCommon, X86UserContext};
+    use crate::debug::Ddebug;
+    use crate::x86_cpu_helpers as cpu;
+
+    use super::f03_dispatch_context_candidate::DispatchBinding;
+
+    type CUInt = u32;
+
+    #[repr(C)]
+    pub struct EntryConfig {
+        pub names: *const *const i8,
+        pub name_count: CULong,
+        pub fork_drain: Option<unsafe extern "C" fn() -> CInt>,
+        pub profile_max: CInt,
+        pub profile_nr: CInt,
+        pub exit_nr: CInt,
+        pub exit_group_nr: CInt,
+        pub sched_yield_nr: CInt,
+        pub epoll_wait_nr: CInt,
+        pub epoll_pwait_nr: CInt,
+        pub ppoll_nr: CInt,
+        pub mode_u2k: CInt,
+        pub mode_k2u: CInt,
+        pub sigkill: CInt,
+        pub disable_yield: CInt,
+        pub fugaku: CInt,
+        pub resched_mask: CUInt,
+    }
+
+    // BEGIN ACTUAL PACKED BUDGET: extracted unchanged for concurrent controls.
+    use core::sync::atomic::{AtomicU64, Ordering};
+
+    #[cfg(not(target_has_atomic = "64"))]
+    compile_error!("syscall entry budget requires lock-free 64-bit target atomics");
+
+    const INITIAL_LOG_BUDGET: u64 = (u32::MAX as u64) << 32;
+    const LOG_BUDGET_LIMIT: u32 = 128;
+    static ENTRY_LOG_BUDGET: AtomicU64 = AtomicU64::new(INITIAL_LOG_BUDGET);
+    static RETURN_LOG_BUDGET: AtomicU64 = AtomicU64::new(INITIAL_LOG_BUDGET);
+
+    /// One successful coupled PID/count reservation. No formatter or provider is
+    /// called in the CAS loop. Relaxed suffices: this word publishes no other data.
+    /// Signed PID bits occupy high32; low32 is bounded before addition. A changed
+    /// PID resets the count and reserves its first record in the same transaction.
+    /// The returned predecessor/successor are the actual successful CAS operands,
+    /// allowing the exact production helper to be checked without instrumentation.
+    fn reserve_log_budget(state: &AtomicU64, pid: CInt) -> Option<(u64, u64)> {
+        let pid_bits = (pid as u32 as u64) << 32;
+        let mut previous = state.load(Ordering::Relaxed);
+        loop {
+            let count = previous as u32;
+            let next = if previous & 0xffff_ffff_0000_0000 != pid_bits {
+                pid_bits | 1
+            } else if count < LOG_BUDGET_LIMIT {
+                pid_bits | u64::from(count + 1)
+            } else {
+                return None;
+            };
+            match state.compare_exchange_weak(previous, next, Ordering::Relaxed, Ordering::Relaxed) {
+                Ok(_) => return Some((previous, next)),
+                Err(observed) => previous = observed,
+            }
+        }
+    }
+    // END ACTUAL PACKED BUDGET.
+
+    unsafe extern "C" {
+        static f03_syscall_entry_config_v1: EntryConfig;
+        static f03_syscall_dispatch_binding_v1: DispatchBinding;
+        static mut f03_syscall_entry_debug_v1: [Ddebug; 6];
+        fn set_cputime(mode: CInt);
+        fn terminate(status: CInt, signal: CInt);
+    }
+
+    // SAFETY: the selected C TU owns six lifetime-long, aligned actual ddebug
+    // records. Read just the flags byte packed at bits 24..31; every nonzero
+    // value enables a record, matching dkprintf. No format argument is read here.
+    unsafe fn debug_enabled(index: usize) -> bool {
+        unsafe {
+            read_volatile(addr_of!(f03_syscall_entry_debug_v1[index].line_flags)) >> 24 != 0
+        }
+    }
+
+    /// Preserve the original outer entry sequence and provider boundaries.
+    ///
+    /// # Safety
+    /// The caller supplies the original live syscall CPU/current-thread/process,
+    /// signal-common and context contract, including mapped stack words whenever
+    /// the stack debug record is enabled. All provider calls inherit their actual
+    /// lifecycle/IRQ/ptrace requirements. Providers may update CPU.current; the
+    /// original initial thread remains live through this invocation. C metadata
+    /// and dispatch slots are immutable, valid and retained for the kernel life.
+    /// Entry/return log reservations use separate packed atomic PID/count pairs;
+    /// no formatter or provider executes before its reservation is complete.
+    /// A debug-enabled name lookup requires num in the genuine names array, just
+    /// as the original C record does. No native exception recovery is added.
+    #[cfg_attr(not(f03_syscall_entry_fixture), export_name = "syscall")]
+    #[cfg_attr(f03_syscall_entry_fixture, export_name = "fixture_rust_syscall_entry")]
+    pub unsafe extern "C" fn syscall_entry(mut num: CInt, ctx: *mut X86UserContext) -> CLong {
+        // SAFETY: the entry contract above covers raw accesses throughout. Keep
+        // raw pointers across providers so no exclusive borrow spans callbacks.
+        unsafe {
+            let config = addr_of!(f03_syscall_entry_config_v1);
+            let v = super::get_this_cpu_local_var();
+            let thread = (*v).current;
+            let pid = if !thread.is_null() && !(*thread).proc.is_null() {
+                (*(*thread).proc).pid
+            } else {
+                -1
+            };
+            if (*config).disable_yield == 0 || num != (*config).sched_yield_nr {
+                set_cputime((*config).mode_u2k);
+            }
+            if reserve_log_budget(&ENTRY_LOG_BUDGET, pid).is_some() {
+                super::kprintf(
+                    b"mcexec_v10: syscall entry cpu=%d pid=%d tid=%d nr=%d rip=0x%lx sp=0x%lx status=%d\n\0".as_ptr().cast(),
+                    super::ihk_mc_get_processor_id(), pid,
+                    if thread.is_null() { -1 } else { (*thread).tid }, num,
+                    if ctx.is_null() { 0 } else { cpu::ihk_mc_syscall_pc(ctx) },
+                    if ctx.is_null() { 0 } else { cpu::ihk_mc_syscall_sp(ctx) },
+                    if thread.is_null() { -1 } else { (*thread).status },
+                );
+            }
+            if (*thread).profile != 0 && (*thread).profile_start_ts != 0 {
+                let ts = cpu::rdtsc();
+                (*thread).profile_elapsed_ts = (*thread).profile_elapsed_ts
+                    .wrapping_add(ts.wrapping_sub((*thread).profile_start_ts));
+                (*thread).profile_start_ts = ts;
+            }
+            let current = (*super::get_this_cpu_local_var()).current;
+            if super::syscall_reject_after_exit_result(
+                (*(*current).proc).status, num, (*config).exit_nr, (*config).exit_group_nr,
+            ) != 0 {
+                super::save_syscall_return_value(num, (-22 as CLong) as CULong);
+                super::check_signal((-22 as CLong) as CULong, null_mut(), -1);
+                set_cputime((*config).mode_k2u);
+                return -22;
+            }
+            cpu::cpu_enable_interrupt();
+            if let Some(drain) = (*config).fork_drain {
+                let _ = drain();
+            }
+            if (*(*super::get_this_cpu_local_var()).current).ptrace != 0 {
+                super::arch_ptrace_syscall_event(
+                    (*super::get_this_cpu_local_var()).current, ctx, -38,
+                );
+                num = cpu::ihk_mc_syscall_number(ctx) as CInt;
+            }
+            if debug_enabled(0) {
+                super::kprintf(
+                    b"SC(%d:%d)[%3d=%s](%lx, %lx,%lx, %lx, %lx, %lx)@%lx,sp:%lx\0".as_ptr().cast(),
+                    super::ihk_mc_get_processor_id(),
+                    crate::x86_local::ihk_mc_get_hardware_processor_id(), num,
+                    read((*config).names.offset(num as isize)),
+                    cpu::ihk_mc_syscall_arg0(ctx), cpu::ihk_mc_syscall_arg1(ctx),
+                    cpu::ihk_mc_syscall_arg2(ctx), cpu::ihk_mc_syscall_arg3(ctx),
+                    cpu::ihk_mc_syscall_arg4(ctx), cpu::ihk_mc_syscall_arg5(ctx),
+                    cpu::ihk_mc_syscall_pc(ctx), cpu::ihk_mc_syscall_sp(ctx),
+                );
+            }
+            if debug_enabled(1) {
+                // Preserve four separately evaluated stack accessors/loads.
+                super::kprintf(
+                    b",*sp:%lx,*(sp+8):%lx,*(sp+16):%lx,*(sp+24):%lx\0".as_ptr().cast(),
+                    read(cpu::ihk_mc_syscall_sp(ctx) as *const CULong),
+                    read(cpu::ihk_mc_syscall_sp(ctx).wrapping_add(8) as *const CULong),
+                    read(cpu::ihk_mc_syscall_sp(ctx).wrapping_add(16) as *const CULong),
+                    read(cpu::ihk_mc_syscall_sp(ctx).wrapping_add(24) as *const CULong),
+                );
+            }
+            if debug_enabled(2) {
+                super::kprintf(b"\n\0".as_ptr().cast());
+            }
+            let binding = addr_of!(f03_syscall_dispatch_binding_v1);
+            let count = (*binding).count as CInt;
+            let slot = if num >= 0 && num < count {
+                read((*binding).handlers.add(num as usize))
+            } else {
+                None
+            };
+            let mut result;
+            if super::syscall_nested_dispatch_valid_result(num, count, slot.is_some() as CInt) != 0 {
+                // The genuine existing helper returns true only for Some(slot).
+                result = slot.unwrap_unchecked()(num, ctx);
+                if debug_enabled(3) {
+                    super::kprintf(b"SC(%d)[%3d] ret: %lx\n\0".as_ptr().cast(),
+                        super::ihk_mc_get_processor_id(), num, result);
+                }
+            } else {
+                if debug_enabled(4) {
+                    super::kprintf(
+                        b"USC[%3d](%lx, %lx, %lx, %lx, %lx) @ %lx | %lx\n\0".as_ptr().cast(),
+                        num, cpu::ihk_mc_syscall_arg0(ctx), cpu::ihk_mc_syscall_arg1(ctx),
+                        cpu::ihk_mc_syscall_arg2(ctx), cpu::ihk_mc_syscall_arg3(ctx),
+                        cpu::ihk_mc_syscall_arg4(ctx), cpu::ihk_mc_syscall_pc(ctx),
+                        cpu::ihk_mc_syscall_sp(ctx),
+                    );
+                }
+                result = super::syscall_generic_forwarding(num, ctx);
+            }
+            if reserve_log_budget(&RETURN_LOG_BUDGET, pid).is_some() {
+                super::kprintf(
+                    b"mcexec_v10: syscall return cpu=%d pid=%d tid=%d nr=%d ret=0x%lx ret_signed=%ld rip=0x%lx sp=0x%lx\n\0".as_ptr().cast(),
+                    super::ihk_mc_get_processor_id(), pid,
+                    if thread.is_null() { -1 } else { (*thread).tid }, num, result, result,
+                    if ctx.is_null() { 0 } else { cpu::ihk_mc_syscall_pc(ctx) },
+                    if ctx.is_null() { 0 } else { cpu::ihk_mc_syscall_sp(ctx) },
+                );
+            }
+            super::save_syscall_return_value(num, result as CULong);
+            if (*(*super::get_this_cpu_local_var()).current).ptrace != 0 {
+                result = super::arch_ptrace_syscall_event(
+                    (*super::get_this_cpu_local_var()).current, ctx, result,
+                );
+            }
+            let ts = cpu::rdtsc();
+            if super::syscall_profile_event_needed_result(num, (*config).profile_max) != 0 {
+                crate::profile::profile_event_add(num, ts.wrapping_sub((*thread).profile_start_ts));
+                (*thread).profile_start_ts = cpu::rdtsc();
+            } else if num != (*config).profile_nr && debug_enabled(5) {
+                super::kprintf(b"%s: syscall > %d ?? : %d\n\0".as_ptr().cast(),
+                    b"syscall\0".as_ptr().cast::<i8>(), (*config).profile_max, num);
+            }
+            let skip_resched = (*config).fugaku != 0
+                && (num == (*config).epoll_wait_nr || num == (*config).epoll_pwait_nr
+                    || num == (*config).ppoll_nr);
+            if !skip_resched && cpu::smp_load_acquire_uint(addr_of!((*v).flags))
+                & (*config).resched_mask != 0 {
+                crate::sched_helpers::check_need_resched();
+            }
+            let pending = addr_of!((*thread).sigpending);
+            // Preserve C short-circuit, including the sigcommon pointer load.
+            if (*pending).next != pending.cast_mut() || {
+                let common = (*thread).sigcommon.cast::<SigCommon>();
+                (*common).sigpending.next != addr_of_mut!((*common).sigpending)
+            } {
+                super::check_signal(result as CULong, null_mut(), num);
+            }
+            if (*config).disable_yield == 0 || num != (*config).sched_yield_nr {
+                set_cputime((*config).mode_k2u);
+            }
+            if (*(*thread).proc).nohost != 0 {
+                terminate(0, (*config).sigkill);
+            }
+            result
+        }
+    }
+}

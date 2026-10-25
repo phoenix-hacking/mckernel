@@ -17014,3 +17014,294 @@ mod remaining_process_memory_logs {
         }
     }
 }
+
+mod remaining_process_range_scheduler_logs {
+    use core::ptr::{addr_of, addr_of_mut, read_volatile};
+
+    use crate::abi::{CInt, CULong, ProcessVm, Thread, VmRange};
+    use crate::debug::Ddebug;
+
+    unsafe extern "C" {
+        static mut process_remaining_range_scheduler_debug: [Ddebug; 18];
+    }
+
+    // Every caller uses a constant index into the original C-owned selectors.
+    unsafe fn enabled(index: usize) -> bool {
+        // SAFETY: The retained 18-entry metadata array is live for the kernel
+        // lifetime; selectors use the existing volatile dynamic-debug boundary.
+        unsafe {
+            let descriptor = addr_of_mut!(process_remaining_range_scheduler_debug)
+                .cast::<Ddebug>().add(index);
+            read_volatile(addr_of!((*descriptor).line_flags)) >> 24 != 0
+        }
+    }
+
+    /// Preserve range lookup/neighbor/extension diagnostics and nullable fields.
+    /// # Safety
+    /// A non-null range must remain readable under the original VM exclusion
+    /// when its event is enabled. vm is only formatted; no storage is retained.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_range_public_log_bridge(
+        event: CInt, vm: *mut ProcessVm, range: *mut VmRange,
+        start: CULong, end: CULong, error: CInt,
+    ) {
+        // SAFETY: Read fields only after the matching live selector is enabled;
+        // callers retain the original range lifetime across this synchronous log.
+        unsafe {
+            if !(1..=8).contains(&event) || !enabled((event - 1) as usize) {
+                return;
+            }
+            match event {
+                1 => { let _ = super::kprintf(
+                    b"lookup_process_memory_range(%p,%lx,%lx)\n\0".as_ptr().cast(),
+                    vm, start, end,
+                ); }
+                2 | 4 | 6 => {
+                    let format = match event {
+                        2 => b"lookup_process_memory_range(%p,%lx,%lx): %p %lx-%lx\n\0".as_ptr(),
+                        4 => b"next_process_memory_range(%p,%lx-%lx): %p %lx-%lx\n\0".as_ptr(),
+                        _ => b"previous_process_memory_range(%p,%lx-%lx): %p %lx-%lx\n\0".as_ptr(),
+                    };
+                    let _ = super::kprintf(format.cast(), vm, start, end, range,
+                        if range.is_null() { 0 } else { (*range).start },
+                        if range.is_null() { 0 } else { (*range).end });
+                }
+                3 => { let _ = super::kprintf(
+                    b"next_process_memory_range(%p,%lx-%lx)\n\0".as_ptr().cast(), vm, start, end,
+                ); }
+                5 => { let _ = super::kprintf(
+                    b"previous_process_memory_range(%p,%lx-%lx)\n\0".as_ptr().cast(), vm, start, end,
+                ); }
+                7 => { let _ = super::kprintf(
+                    b"exntend_up_process_memory_range(%p,%p %#lx-%#lx,%#lx)\n\0".as_ptr().cast(),
+                    vm, range, if range.is_null() { 0 } else { (*range).start },
+                    if range.is_null() { 0 } else { (*range).end }, end,
+                ); }
+                8 => { let _ = super::kprintf(
+                    b"exntend_up_process_memory_range(%p,%p %#lx-%#lx,%#lx):%d\n\0".as_ptr().cast(),
+                    vm, range, if range.is_null() { 0 } else { (*range).start },
+                    if range.is_null() { 0 } else { (*range).end }, end, error,
+                ); }
+                _ => {}
+            }
+        }
+    }
+
+    /// Preserve runqueue diagnostics, including guarded Thread field reads.
+    /// # Safety
+    /// For enabled WAKE_ENTRY, arg0 points to a live aligned Thread protected
+    /// by the original wakeup/runqueue exclusion. The CPU getter must be valid
+    /// in the caller's original scheduler context. No pointer is retained.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_sched_runq_log_bridge(
+        event: CInt, arg0: CULong, _arg1: CULong, arg2: CInt, arg3: CInt,
+    ) {
+        // SAFETY: All formats are static. Only the enabled wake-entry event
+        // dereferences arg0, under the caller's original Thread lifetime.
+        unsafe { match event {
+            1 => { let _ = super::kprintf(b"no migration in IRQ context\n\0".as_ptr().cast()); }
+            2 if enabled(8) => {
+                let thread = arg0 as *const Thread;
+                let _ = super::kprintf(
+                    b"%s: proc->pid=%d, valid_states=%08x, proc->status=%08x, proc->cpu_id=%d,my cpu_id=%d\n\0".as_ptr().cast(),
+                    b"__sched_wakeup_thread\0".as_ptr().cast::<i8>(), arg2, arg3,
+                    (*thread).status, (*thread).cpu_id, super::ihk_mc_get_processor_id(),
+                );
+            }
+            3 if enabled(9) => { let _ = super::kprintf(
+                b"%s: spin wakeup: cpu_id: %d\n\0".as_ptr().cast(),
+                b"__sched_wakeup_thread\0".as_ptr().cast::<i8>(), arg2,
+            ); }
+            4 if enabled(10) => { let _ = super::kprintf(
+                b"%s: issuing IPI, thread->cpu_id=%d\n\0".as_ptr().cast(),
+                b"__sched_wakeup_thread\0".as_ptr().cast::<i8>(), arg2,
+            ); }
+            5 if enabled(11) => { let _ = super::kprintf(
+                b"runq_add_proc(): tid %d added to CPU[%d]'s runq\n\0".as_ptr().cast(), arg2, arg3,
+            ); }
+            6 if enabled(12) => { let _ = super::kprintf(
+                b"%s: idle_halt -> schedule()\n\0".as_ptr().cast(),
+                b"spin_sleep_or_schedule\0".as_ptr().cast::<i8>(),
+            ); }
+            7 if enabled(13) => { let _ = super::kprintf(
+                b"%s: caught a lost wake-up!\n\0".as_ptr().cast(),
+                b"spin_sleep_or_schedule\0".as_ptr().cast::<i8>(),
+            ); }
+            // IHK_OS_MANYCORE maps ihk_ikc_get_processor_id to the same actual
+            // ihk_mc_get_processor_id getter in ikc/ihk.h, as in sched_helpers.
+            8 if enabled(14) => { let _ = super::kprintf(
+                b"%s: woken while spinning, cpu: %d, do_schedule: %d\n\0".as_ptr().cast(),
+                b"spin_sleep_or_schedule\0".as_ptr().cast::<i8>(),
+                super::ihk_mc_get_processor_id(), arg3,
+            ); }
+            9 if enabled(15) => { let _ = super::kprintf(
+                b"%s: woken while sleeping, cpu: %d\n\0".as_ptr().cast(),
+                b"spin_sleep_or_schedule\0".as_ptr().cast::<i8>(),
+                super::ihk_mc_get_processor_id(),
+            ); }
+            10 => { let _ = super::kprintf(
+                b"%s: WARNING can't schedule() while no preemption, cnt: %d\n\0".as_ptr().cast(),
+                b"schedule\0".as_ptr().cast::<i8>(), arg2,
+            ); }
+            11 if enabled(16) => { let _ = super::kprintf(
+                b"%s: clone_count is %d\n\0".as_ptr().cast(),
+                b"runq_add_thread\0".as_ptr().cast::<i8>(), arg2,
+            ); }
+            _ => {}
+        } }
+    }
+
+    /// Preserve migration's original label and signed CPU/TID arguments.
+    /// # Safety
+    /// Enter in the original logging context. thread_addr is intentionally
+    /// unused; no Thread access, callback, lock operation or retained pointer.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_sched_do_migrate_log_bridge(
+        _thread_addr: CULong, tid: CInt, old_cpu_id: CInt, new_cpu_id: CInt,
+    ) {
+        // SAFETY: Original live selector and static format, scalar varargs only.
+        unsafe {
+            if enabled(17) { let _ = super::kprintf(
+                b"%s: migrated TID %d from CPU %d to CPU %d\n\0".as_ptr().cast(),
+                b"do_migrate\0".as_ptr().cast::<i8>(), tid, old_cpu_id, new_cpu_id,
+            ); }
+        }
+    }
+}
+
+mod remaining_process_add_range_memclear {
+    use core::ffi::c_void;
+
+    use crate::abi::{CULong, SizeT};
+
+    // The original C call converts unsigned long bytes to size_t. Both are
+    // full-width on the current target, so this conversion preserves all bits.
+    const _: [(); core::mem::size_of::<CULong>()] = [(); core::mem::size_of::<SizeT>()];
+
+    type ArchMemclear = unsafe extern "C" fn(*mut c_void, CULong);
+    const _: [(); core::mem::size_of::<Option<ArchMemclear>>()] =
+        [(); core::mem::size_of::<*mut c_void>()];
+
+    unsafe extern "C" {
+        static process_add_range_arch_memclear_callback: Option<ArchMemclear>;
+    }
+
+    /// Clear the original physical allocation through its existing architecture provider.
+    /// # Safety
+    /// phys maps to bytes writable, exclusively owned ordinary RAM for the
+    /// complete call. The architecture translation and optional existing clear
+    /// callback retain their original mapping/alignment/lifetime requirements.
+    /// No reference, allocation, mapping change or callback pointer is retained.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_add_range_memclear_bridge(phys: CULong, bytes: CULong) {
+        // SAFETY: The caller keeps the original allocation live. Translate once
+        // before clearing, matching C. The read-only selector is initialized
+        // from the actual ARCH_MEMCLEAR provider or NULL, never a guessed ABI.
+        unsafe {
+            let addr = crate::x86_memory_helpers::phys_to_virt(phys);
+            if let Some(clear) = process_add_range_arch_memclear_callback {
+                clear(addr, bytes);
+            } else {
+                super::process_memset_smp_memset_bridge(addr, 0, bytes as SizeT);
+            }
+        }
+    }
+}
+
+mod remaining_process_conditional_scheduler {
+    use core::sync::atomic::{AtomicI64, AtomicU64, Ordering};
+
+    use crate::abi::{CInt, CLong, CULong};
+    use crate::sched_helpers::SchedExitDebug;
+
+    unsafe extern "C" {
+        static process_sched_timer_configuration: [CInt; 2];
+        static process_schedule_exit_debug_input: *const SchedExitDebug;
+    }
+
+    const _: [(); core::mem::size_of::<CULong>()] = [(); core::mem::size_of::<AtomicU64>()];
+    const _: [(); core::mem::align_of::<CULong>()] = [(); core::mem::align_of::<AtomicU64>()];
+    const _: [(); core::mem::size_of::<CLong>()] = [(); core::mem::size_of::<AtomicI64>()];
+    const _: [(); core::mem::align_of::<CLong>()] = [(); core::mem::align_of::<AtomicI64>()];
+
+    /// Enter the existing timer loop only on the actual configured timer CPU.
+    /// # Safety
+    /// Called from original scheduler initialization with its original CPU
+    /// ownership. The existing timer initialization/loop retains all timer,
+    /// wakeup and lifetime requirements; its return behavior is unchanged.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_sched_timer_init_bridge(cpu: CInt) {
+        // SAFETY: Actual C preprocessor constants, live read-only kernel data.
+        // Existing Rust backends own all initialization and loop effects.
+        unsafe {
+            if process_sched_timer_configuration[0] != 0
+                && cpu == process_sched_timer_configuration[1]
+            {
+                crate::timer::init_timers();
+                crate::timer::wake_timers_loop();
+            }
+        }
+    }
+
+    /// Print the original optional rusage diagnostics after first-thread admission.
+    /// # Safety
+    /// The static descriptor is NULL when disabled, otherwise points to the
+    /// original live accounting counters and exact page-size array bounds.
+    /// Counters have native 64-bit alignment and use existing atomic accounting
+    /// updates during runtime; initialization is complete before this callback.
+    /// No reference or storage is retained across a log call.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_sched_rusage_debug_bridge() {
+        // SAFETY: Reuse the actual source-owned descriptor, without duplicating
+        // private rusage layout. Independent Relaxed reads pair with existing
+        // atomic counter updates; diagnostics do not publish state or promise
+        // a coherent snapshot of all counters.
+        unsafe {
+            let debug = process_schedule_exit_debug_input;
+            if debug.is_null()
+                || AtomicU64::from_ptr((*debug).num_threads.cast_mut()).load(Ordering::Relaxed) != 1
+            {
+                return;
+            }
+            let total = AtomicU64::from_ptr((*debug).total_memory_usage.cast_mut())
+                .load(Ordering::Relaxed);
+            let _ = super::kprintf(b"total_memory_usage=%ld\n\0".as_ptr().cast(), total);
+            let mut i = 0;
+            while i < (*debug).page_sizes {
+                let value = AtomicI64::from_ptr((*debug).memory_stat_rss.add(i as usize).cast_mut())
+                    .load(Ordering::Relaxed);
+                let _ = super::kprintf(b"memory_stat_rss[%d]=%ld\n\0".as_ptr().cast(), i, value);
+                i += 1;
+            }
+            i = 0;
+            while i < (*debug).page_sizes {
+                let value = AtomicI64::from_ptr(
+                    (*debug).memory_stat_mapped_file.add(i as usize).cast_mut(),
+                ).load(Ordering::Relaxed);
+                let _ = super::kprintf(
+                    b"memory_stat_mapped_file[%d]=%ld\n\0".as_ptr().cast(), i, value,
+                );
+                i += 1;
+            }
+        }
+    }
+}
+
+mod remaining_process_normal_fault_provider {
+    use crate::abi::{CInt, CULong, ProcessVm, VmRange};
+
+    /// Forward the original normal-range fault to the existing Rust core owner.
+    /// # Safety
+    /// vm/range and their original locks, mapping/backing-object lifetimes and
+    /// fault-address/reason contracts remain valid for the synchronous core
+    /// fault operation. The core owns all lock completion, result and error
+    /// semantics; this leaf retains no reference or pointer after the call.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_normal_fault_range_bridge(
+        vm: *mut ProcessVm, range: *mut VmRange, fault_addr: CULong, reason: CULong,
+    ) -> CInt {
+        // SAFETY: Exact original pointer/scalar inputs and original core owner;
+        // no extra lock, policy decision, error translation or side effect.
+        unsafe { super::page_fault_process_memory_range(vm, range, fault_addr, reason) }
+    }
+}

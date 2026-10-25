@@ -1,3 +1,22 @@
+## Current285 integrated after independent HOST acceptance — 2026-10-25T08:40:58.981721+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Current285 independently passed13 commands and all ownership/ABI/data checks;
+four clean postimages are integrated (+7 process providers and the outer syscall
+entry over277). CPU27.590s/wall27.744s/largest-child RSS582452KiB. Exact sources,
+objects and raw joins are retained in three archives with148 new payloads and
+190 unchanged277 restoration aliases. No default/native/file/Cboundary closure.
+[Acceptance](../evidence/os-recovery-adoption-20261025-0254/ACTUAL-CURRENT285-INDEPENDENT-ACCEPTANCE-AND-CANONICAL-INTEGRATION.json).
+
+The owned syscall table independently passed4025 pointers/32264 dispatch cases
+in one controlled profile; the next candidate must prove genuine fullcrate
+consumers. Storage3's five compile/link/behavior commands passed; its observer-only
+DYNSYM reader correction awaits one retained-object run. Original failures remain.
+Root is completing the corrected BFD diagnostic static publication before fresh
+admission; image caller and same-OFD cleanup adaptation continue independently.
+M14/M15 remain OPEN; M12 remains35/35. No sustained1.95x velocity claim.
+Same1800smonitor, one heavy owner, exact resources and fixed2026-10-26T06:00Z cutoff.
+
 ## Thirty-minute steering review and next qualification — 2026-10-25T08:35Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
