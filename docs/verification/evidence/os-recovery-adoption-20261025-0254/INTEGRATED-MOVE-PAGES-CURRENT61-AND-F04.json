@@ -1,0 +1,55 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-25T05:18:22.534785+00:00",
+  "status": "EXACT_MOVE_PAGES_RUNTIME_SOURCE_INTEGRATED_AFTER_INDEPENDENT_ACTUAL_HOST_AND_CONTROLLED_PARITY_ACCEPTANCE",
+  "pre_post": [
+    {
+      "pre": {
+        "bytes": 900001,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-4/syscall.PRIVATE-MINCORE.c",
+        "sha256": "fc6ed01b2179d5a1a72a5f6d2edd32ab424206f60b832109dfd179c5875d5fe2"
+      },
+      "post": {
+        "bytes": 900203,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-5/syscall.PRIVATE-MOVE-PAGES.c",
+        "sha256": "0a3eb7a3ff5cb0e8318722298b58a09fedb3871fa1b78f361cbe9bd83d46f844"
+      }
+    },
+    {
+      "pre": {
+        "bytes": 1086248,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-4/syscall_policy.PRIVATE-MINCORE.rs",
+        "sha256": "ac129c811983788e157e183671158f60b4ca00ea83a5c238c4a6819fd6036a30"
+      },
+      "post": {
+        "bytes": 1098941,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-5/syscall_policy.PRIVATE-MOVE-PAGES.rs",
+        "sha256": "ac57c7d567b15a852a3a11028d9ec012f3d7121513762a31b389e8ffe9143472"
+      }
+    }
+  ],
+  "reviewer": "/root/f02_review",
+  "implementation_ownership": false,
+  "actual_object_handoff_sha256": "566c8d71ac13c1101ccddf3e7b5508b6f3db19b58c8abebe00ffe0c4b25ab7a8",
+  "actual_object_result_sha256": "92acc7b8be7f5c1bca4a0c57e7b657a9d194d91961d43208bfbba0b1fffe393b",
+  "actual_controlled_parity_sha256": "1f3acca9a6d1ae1d7b3136f3710656a27d01eb0751ca9d717a3c542efe536348",
+  "provider_count": 161,
+  "new_public_Rust_providers": 1,
+  "own_C_bodies_omitted_selected": 7,
+  "fallback_retained": true,
+  "ABI_words": [
+    30,
+    21,
+    12
+  ],
+  "F04_data": 66,
+  "wall_seconds": 24.557046,
+  "CPU_seconds": 24.58363,
+  "rust_object_sha256": "d31d993fd6241589993c91960da56db76c9cbb9812524cfd97a3b2b7ffc18029",
+  "partial_sha256": "a5556ed410961e46e61082309a8fde6b1a364f41dded7eefc3e846d3c5c08ee4",
+  "default_copy_error_correction_selected": false,
+  "default_producer_source": "pairedcandidate d1122b50 pendingfocusedreview/integration;3fragmentcasesPASS",
+  "SDK_default_native_retirement": false,
+  "normal_object_warnings_retained": 133,
+  "checked_metadata_warnings_retained": 129
+}

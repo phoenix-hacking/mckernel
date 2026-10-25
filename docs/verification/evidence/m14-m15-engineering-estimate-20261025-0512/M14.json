@@ -1,0 +1,346 @@
+{
+  "schema": "m14-engineering-progress-estimate-v1",
+  "written_at_utc": "2026-10-25T05:12:03.410134+00:00",
+  "evidence_as_of_utc": "2026-10-25T05:09:00Z",
+  "scope": "Functional McKernel OS/apps and Rust/reviewed-assembly migration only; no security testing. Supported default co-booted LWK M14 delivery including reusable existing Rust; Linux supporting control-plane C is allowed.",
+  "authorization": "User explicitly requested measurement and estimate. Private source/evidence reads and assessment writes only. No compiler/build/fixture/model RPC/native/queue/process/resource/canonical changes performed by this assessment.",
+  "acceptance_status": "OPEN; unchanged",
+  "denominator": {
+    "structural": "Six tracked runtime C translation units, five functional behavior areas each (30), plus three final integration obligations. These are a scope map, not33 equal units or six equal tasks.",
+    "final_integration": [
+      "M14-I01 final executable ownership/no live project compute C",
+      "M14-I02 coherent reproducible selected Rust/assembly image",
+      "M14-I03 useful applications and lifecycle on matching cutover image"
+    ],
+    "estimated_work": "Total engineering needed to deliver that supported M14 scope, crediting reusable existing Rust implementation and genuinely reusable evidence. Complexity and proof weights are explicit judgment, not measured person-hours. Shared final ownership/build/native obligations are counted once through proof-stage dimensions, not added as another equal set of boxes."
+  },
+  "measured_counters": {
+    "tracked_files": 6,
+    "behavior_areas": 30,
+    "final_integration_obligations": 3,
+    "formal_whole_file_closures_accepted": 0,
+    "formal_whole_file_status": "6 unassessed, not6 known failures or0 implementation",
+    "historical_c_functions": 968,
+    "historical_functions_referencing_rust_components": 841,
+    "historical_inventory_warning": "Historical retained source inventory only. Referencing Rust does not prove complete Rust ownership; neither841/968 nor newly exported symbols is milestone completion. Current exact residual C body count is unknown.",
+    "canonical_current_host_cohort": {
+      "shared_process_mincore_providers": 55,
+      "f04_providers": 100,
+      "f04_storage_owners": 66,
+      "process_fallbacks": 15,
+      "mincore_abi_words": 21
+    },
+    "newer_private_source8_host_cohort": {
+      "shared_process_mincore_providers": 60,
+      "f04_providers": 100,
+      "new_process_adapters": 5,
+      "private_controlled_comparisons": 52,
+      "private_abi_words": 12,
+      "integrated": false,
+      "default_consumer_qualified": false,
+      "native_qualified": false
+    },
+    "retained_f05": {
+      "provider_observations": 343,
+      "abi_words": 72,
+      "storage_owners": 7
+    },
+    "retained_f06": {
+      "providers": 8,
+      "named_relocation_observations": 107,
+      "anonymous_relocations_open": 23
+    },
+    "new_f06_cases_proposed_unrun": 3472,
+    "new_f06_abi_words_proposed_unrun": 45,
+    "matching_final_changed_cohort_native_files_accepted": 0,
+    "historical_practical_baseline": "M12 practical baseline35/35 retained separately. This establishes useful existing functionality, not current M14 final image acceptance."
+  },
+  "estimate": {
+    "implementation_only_percent_rounded": [
+      80,
+      95
+    ],
+    "end_to_end_point_percent_rounded": 70,
+    "end_to_end_range_percent_rounded": [
+      60,
+      85
+    ],
+    "confidence": "LOW",
+    "remaining_relative_engineering_effort_percent_rounded": [
+      15,
+      40
+    ],
+    "not_calendar_eta": "No schedule inferred: dependency admission, remaining semantic work and execution/retry throughput are not measured.",
+    "stage_weights_percent": {
+      "implementation": 55,
+      "focused_checks": 20,
+      "selected_build_link": 10,
+      "native_historical_reuse_scenario": 15
+    },
+    "aggregate_stage_interval_percent": {
+      "implementation": [
+        79.61,
+        95.2
+      ],
+      "focused_checks": [
+        59.45,
+        88.80000000000001
+      ],
+      "selected_build_link": [
+        33.4,
+        72.89999999999999
+      ],
+      "native_historical_reuse_scenario": [
+        0.0,
+        39.0
+      ]
+    },
+    "unrounded_model_interval_percent": [
+      59.0155,
+      83.25999999999999
+    ],
+    "unrounded_midpoint_percent": 71.13775,
+    "rounding": "Planning bounds outward to nearby5-point markers (59.0155\u201383.26 becomes roughly60\u201385), central estimate rounded to about70; no statistical confidence interpretation.",
+    "native_interpretation": "Native lower bound gives no completed final changed-cohort credit. Upper bound is a favorable scenario for reuse of already qualified historical functional cases once exact final image identity/affected behavior match; not measured39% final native coverage. Source/fixture/build preparation is credited only in its own stages and is not credited again as native work.",
+    "sensitivity": {
+      "stage_weights_percent": {
+        "implementation": 45,
+        "focused_checks": 20,
+        "selected_build_link": 10,
+        "native_historical_reuse_scenario": 25
+      },
+      "unrounded_interval_percent": [
+        51.054500000000004,
+        77.64000000000001
+      ],
+      "unrounded_midpoint_percent": 64.34725,
+      "rounded_point_percent": 65,
+      "interpretation": "Giving final native10 additional percentage points and implementation10 fewer moves midpoint down about7 points. This exposes the subjective effort weighting; native acceptance remains a hard gate at every weighting."
+    }
+  },
+  "files": [
+    {
+      "id": "F01",
+      "file": "kernel/mem.c",
+      "complexity_weight_percent": 20,
+      "estimated_stage_intervals_percent": {
+        "implementation": [
+          90,
+          100
+        ],
+        "focused_checks": [
+          70,
+          95
+        ],
+        "selected_build_link": [
+          40,
+          80
+        ],
+        "native_historical_reuse_scenario": [
+          0,
+          50
+        ]
+      },
+      "historical_selected_c_function_inventory": 153,
+      "historical_functions_referencing_rust_components": 141,
+      "implemented_known": "Normal bodies reported source-complete; retained prior nine HOST checks. Paired IO/mincore default producer integrated after three CMake selection cases.",
+      "remaining_known": "Exact current whole-file C/macro/header/callback/data ownership, coherent SDK/default image and matching native cutover remain unclosed.",
+      "proof_stage": "Source-complete normal bodies; retained HOST evidence; current producer source only.",
+      "coverage_uncertainty": "No exact current residual whole-file body/callback/data denominator. Formal file closure remains unassessed; unknown is not zero.",
+      "source_keys": [
+        "m14_tracker",
+        "f01",
+        "engineering_review"
+      ]
+    },
+    {
+      "id": "F02",
+      "file": "kernel/process.c",
+      "complexity_weight_percent": 25,
+      "estimated_stage_intervals_percent": {
+        "implementation": [
+          75,
+          92
+        ],
+        "focused_checks": [
+          55,
+          85
+        ],
+        "selected_build_link": [
+          30,
+          70
+        ],
+        "native_historical_reuse_scenario": [
+          0,
+          35
+        ]
+      },
+      "historical_selected_c_function_inventory": 145,
+      "historical_functions_referencing_rust_components": 127,
+      "implemented_known": "Canonical current55 contains fifteen new process providers. Newer private Source8 adds five create-thread adapters: 52 parity cases/12 ABI words, then actual Rust object/partial and five selected-C absence/fallback checks PASS at05:08:50Z.",
+      "remaining_known": "Source8 is private, not integrated/default/native. Address-space/thread backend lifecycle, scheduler/state ownership and final compiler-local/data identity remain whole-file obligations.",
+      "proof_stage": "Canonical current55 HOST PASS; private current60+F04100 HOST160 PASS; no new default/native.",
+      "coverage_uncertainty": "No exact current residual whole-file body/callback/data denominator. Formal file closure remains unassessed; unknown is not zero.",
+      "source_keys": [
+        "m14_tracker",
+        "f02",
+        "engineering_review"
+      ]
+    },
+    {
+      "id": "F03",
+      "file": "kernel/syscall.c",
+      "complexity_weight_percent": 25,
+      "estimated_stage_intervals_percent": {
+        "implementation": [
+          70,
+          92
+        ],
+        "focused_checks": [
+          50,
+          85
+        ],
+        "selected_build_link": [
+          30,
+          70
+        ],
+        "native_historical_reuse_scenario": [
+          0,
+          35
+        ]
+      },
+      "historical_selected_c_function_inventory": 391,
+      "historical_functions_referencing_rust_components": 352,
+      "implemented_known": "Substantial existing syscall Rust; mincore entry plus ten callbacks integrated, 69 controlled parity comparisons and21 ABI words/current55 HOST PASS. Paired default producer source integrated.",
+      "remaining_known": "Complex syscall/VM/process/futex/ptrace and callback/data closure not fully assessed. move_pages and separate copy-error work are source-ready; no whole-image/native acceptance.",
+      "proof_stage": "Selected mincore HOST/ABI proof; current default producer source only.",
+      "coverage_uncertainty": "No exact current residual whole-file body/callback/data denominator. Formal file closure remains unassessed; unknown is not zero.",
+      "source_keys": [
+        "m14_tracker",
+        "engineering_review",
+        "f04"
+      ]
+    },
+    {
+      "id": "F04",
+      "file": "arch/x86_64/kernel/cpu.c",
+      "complexity_weight_percent": 10,
+      "estimated_stage_intervals_percent": {
+        "implementation": [
+          90,
+          100
+        ],
+        "focused_checks": [
+          70,
+          95
+        ],
+        "selected_build_link": [
+          40,
+          75
+        ],
+        "native_historical_reuse_scenario": [
+          0,
+          35
+        ]
+      },
+      "historical_selected_c_function_inventory": 100,
+      "historical_functions_referencing_rust_components": 76,
+      "implemented_known": "Actual current one-Rust-object/strict-partial cohort qualifies100 F04 providers and66 F04 storage owners, with shared process/mincore checks.",
+      "remaining_known": "Selected SDK/default image, final executable ownership and matching startup/IRQ/FPU/native behavior remain open.",
+      "proof_stage": "Current integrated55+F04100 HOST PASS; paired producer source only.",
+      "coverage_uncertainty": "No exact current residual whole-file body/callback/data denominator. Formal file closure remains unassessed; unknown is not zero.",
+      "source_keys": [
+        "m14_tracker",
+        "f04",
+        "engineering_review"
+      ]
+    },
+    {
+      "id": "F05",
+      "file": "arch/x86_64/kernel/memory.c",
+      "complexity_weight_percent": 12,
+      "estimated_stage_intervals_percent": {
+        "implementation": [
+          93,
+          100
+        ],
+        "focused_checks": [
+          75,
+          95
+        ],
+        "selected_build_link": [
+          40,
+          80
+        ],
+        "native_historical_reuse_scenario": [
+          0,
+          50
+        ]
+      },
+      "historical_selected_c_function_inventory": 116,
+      "historical_functions_referencing_rust_components": 93,
+      "implemented_known": "Normal bodies source-complete. Retained343-provider/72-ABI/seven-storage acceptance reused; current source/build bindings match COPY7. Selected C object zero-runtime ownership observed for that retained cohort.",
+      "remaining_known": "Current whole union/image and native qualification remain open; source completeness does not independently close every included-header/macro/debug/data contract.",
+      "proof_stage": "Retained selected-object/image evidence plus current source reuse; no final current native/file closure.",
+      "coverage_uncertainty": "No exact current residual whole-file body/callback/data denominator. Formal file closure remains unassessed; unknown is not zero.",
+      "source_keys": [
+        "m14_tracker",
+        "f05",
+        "engineering_review"
+      ]
+    },
+    {
+      "id": "F06",
+      "file": "arch/x86_64/kernel/syscall.c",
+      "complexity_weight_percent": 8,
+      "estimated_stage_intervals_percent": {
+        "implementation": [
+          65,
+          90
+        ],
+        "focused_checks": [
+          40,
+          80
+        ],
+        "selected_build_link": [
+          20,
+          60
+        ],
+        "native_historical_reuse_scenario": [
+          0,
+          25
+        ]
+      },
+      "historical_selected_c_function_inventory": 63,
+      "historical_functions_referencing_rust_components": 52,
+      "implemented_known": "Existing Rust bridges; three genuine fixtures/twelve commands qualify eight providers and107 named RELA observations in a retained private cohort.",
+      "remaining_known": "23 anonymous RELA/historical scope and whole-entry behavior remain open. Current-union3472-case/45-ABI descriptor is source-ready with zero commands started, not a pass.",
+      "proof_stage": "Retained bounded callback/relocation proof; newer current-union descriptor unrun.",
+      "coverage_uncertainty": "No exact current residual whole-file body/callback/data denominator. Formal file closure remains unassessed; unknown is not zero.",
+      "source_keys": [
+        "m14_tracker",
+        "f06",
+        "engineering_review"
+      ]
+    }
+  ],
+  "sources": {
+    "current": "/home/holden/mckernel/docs/verification/os-milestones-20260914/CURRENT.md",
+    "m14_tracker": "/home/holden/mckernel/docs/verification/os-milestones-20260914/rust-cutover-m14.json",
+    "m14_definition": "/home/holden/mckernel/docs/verification/os-milestones-20260914/RUST-CUTOVER-M14.md",
+    "historical_worklist": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m14-live-c-closure-worklist-1/FUNCTION-WORKLIST.json",
+    "engineering_review": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0442.json",
+    "f01": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/new-window-source-5-f03-default-selectors/ACTUAL-THREE-CASE-ROOT-HANDOFF.json",
+    "f02": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-8/object-successor-1/ACTUAL-SOURCE8-CURRENT-OBJECT-HANDOFF.json",
+    "f04": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-5-union-qualification-preparation-1/mincore-selected-successor-1/common-UND-accounting-correction-1/ACTUAL-CURRENT-INTEGRATED55-F04-HOST-HANDOFF.json",
+    "f05": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/new-window-source-3/CURRENT-DEFAULT-SOURCE-SUCCESSOR.SOURCE-ONLY.json",
+    "f06": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-5/checkpoint-07d803-frozen-queue-1/FROZEN-READY.json"
+  },
+  "next_evidence_that_would_narrow_range": [
+    "Exact current selected executable and allocated-data ownership per file, including included-header/macro/callback/compiler-local identities; unknown owners cannot be assumed inert.",
+    "Coherent default SDK/image build and link for the integrated current union; private object PASS is not this proof.",
+    "Affected application/lifecycle native checks on that exact cutover image, reusing only identity-matching baseline evidence.",
+    "Current functional-area residual work assessment, especially F02/F03/F06, without treating forwarder references as complete implementations."
+  ],
+  "independent_review": "/root/trace_retention_failure independently reproduced arithmetic and approved this qualified planning method; range remains subjective and low-confidence."
+}

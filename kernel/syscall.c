@@ -28006,6 +28006,9 @@ long sys_migrate_pages(int n, ihk_mc_user_context_t *ctx)
 } /* sys_migrate_pages() */
 #endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_MOVE_PAGES)
+extern long sys_move_pages(int n, ihk_mc_user_context_t *ctx);
+#else
 static int
 move_pages_verify_bridge(struct process_vm *vm, unsigned long addr,
 		size_t bytes)
@@ -28088,6 +28091,7 @@ long sys_move_pages(int n, ihk_mc_user_context_t *ctx)
 			move_pages_smp_call_bridge, move_pages_smp_handler,
 			syscall_rdtsc_bridge, move_pages_log_bridge);
 }
+#endif /* MCKERNEL_RUST_F03_MOVE_PAGES */
 
 extern int do_process_vm_read_writev(int pid,
 	const struct iovec *local_iov,

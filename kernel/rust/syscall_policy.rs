@@ -32234,3 +32234,339 @@ mod f03_mincore_candidate {
         }
     }
 }
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(f03_move_pages_candidate)]
+mod f03_move_pages_candidate {
+    use core::ffi::c_void;
+    use core::mem::{size_of, MaybeUninit};
+    use core::ptr::{addr_of_mut, null_mut, read_volatile};
+
+    use crate::abi::{CInt, CLong, CULong, CpuSet, MovePagesSmpReq, ProcessVm, SizeT,
+        X86UserContext};
+
+    use super::{current_thread_ptr, ihk_mc_get_nr_numa_nodes, kprintf,
+        move_pages_free_arrays, move_pages_log_delta, move_pages_policy_result,
+        move_pages_smp_req_prepare_result, syscall_alloc_bridge, syscall_copy_from_user_bridge,
+        syscall_copy_to_user_bridge, syscall_mckfd_free_bridge, MovePagesGetNrNodesFn,
+        MovePagesLogFn, MovePagesSmpCallFn, MovePagesSmpHandlerFn, MovePagesVerifyFn,
+        SyscallCopyFromUserFn, SyscallCopyToUserFn, SyscallMckfdFreeFn, SyscallPolicyAllocFn,
+        SyscallRdtscFn, SyscallRwlockFn, EFAULT, ENODEV, ENOMEM, IHK_MC_AP_NOWAIT,
+        MOVE_PAGES_LOG_INIT_MALLOC, MOVE_PAGES_LOG_INIT_VERIFY, MOVE_PAGES_LOG_PARALLEL,
+        MOVE_PAGES_LOG_UNSUPPORTED_MOVE_ALL, MOVE_PAGES_LOG_UNSUPPORTED_PID, MPOL_MF_MOVE_ALL};
+
+    #[cfg(not(f03_move_pages_copy_error_candidate))]
+    use super::move_pages_body_result as selected_body;
+    #[cfg(f03_move_pages_copy_error_candidate)]
+    use self::f03_move_pages_checked_body as selected_body;
+
+    unsafe extern "C" {
+        #[link_name = "move_pages_smp_handler"]
+        fn f03_move_pages_smp_handler(cpu: CInt, nr_cpus: CInt, arg: *mut c_void) -> CInt;
+    }
+
+// SAFETY CONTRACT: current CPU/thread/VM/proc/cpu_set remain genuine and stable
+// throughout these non-scheduling owner samples and the synchronous body call.
+// The page-table lock and original SMP provider retain the stack request until
+// real completion, then unlock precedes status copy and tracked array reclamation.
+// Every callback uses the exact existing ABI. No callback creates a reference,
+// allocation ownership token, publication ACK or scheduler authority.
+unsafe extern "C" fn f03_move_pages_log(event: CInt, value: CULong, _error: CInt) {
+    match event {
+        MOVE_PAGES_LOG_UNSUPPORTED_PID => {
+            kprintf(
+                c"%s: ERROR: only self (pid == 0) is supported\n".as_ptr().cast(),
+                c"sys_move_pages".as_ptr(),
+            );
+        }
+        MOVE_PAGES_LOG_UNSUPPORTED_MOVE_ALL => {
+            kprintf(
+                c"%s: ERROR: MPOL_MF_MOVE_ALL not supported\n".as_ptr().cast(),
+                c"sys_move_pages".as_ptr(),
+            );
+        }
+        MOVE_PAGES_LOG_INIT_MALLOC => {
+            kprintf(c"%s: init malloc: %lu \n".as_ptr().cast(), c"sys_move_pages".as_ptr(), value);
+        }
+        MOVE_PAGES_LOG_INIT_VERIFY => {
+            kprintf(c"%s: init verify: %lu \n".as_ptr().cast(), c"sys_move_pages".as_ptr(), value);
+        }
+        MOVE_PAGES_LOG_PARALLEL => {
+            kprintf(c"%s: parallel: %lu \n".as_ptr().cast(), c"sys_move_pages".as_ptr(), value);
+        }
+        _ => {}
+    }
+}
+
+unsafe extern "C" fn f03_move_pages_verify(vm: *mut ProcessVm, addr: CULong, bytes: SizeT) -> CInt {
+    crate::x86_memory_helpers::verify_process_vm(vm, addr as *const c_void, bytes)
+}
+
+unsafe extern "C" fn f03_move_pages_table_lock(lock: *mut c_void) {
+    crate::spinlock_helpers::__ihk_mc_spinlock_lock_noirq(lock.cast());
+}
+
+unsafe extern "C" fn f03_move_pages_table_unlock(lock: *mut c_void) {
+    crate::spinlock_helpers::__ihk_mc_spinlock_unlock_noirq(lock.cast());
+}
+
+unsafe extern "C" fn f03_move_pages_smp_call(
+    cpus: *mut c_void, handler: Option<MovePagesSmpHandlerFn>, arg: *mut c_void,
+) -> CInt {
+    crate::ap::smp_call_func(cpus.cast::<CpuSet>(), handler, arg)
+}
+
+/// Execute the selected move-pages syscall through its original typed provider set.
+///
+/// # Safety
+/// The kernel context/current thread, VM, process and CPU set remain live. The
+/// genuine noirq lock and synchronous SMP provider must complete all handler
+/// access before returning and freeing arrays or the stack request. Successful
+/// user-node copy must initialize every consumed int in the legacy selector;
+/// the separate copy-error selector explicitly checks failure before any read.
+#[no_mangle]
+pub unsafe extern "C" fn sys_move_pages(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    // Keep the six original selected Rust getter calls, casts and null-context
+    // behavior. Current thread/VM remain live as required by the original entry.
+    let pid = crate::x86_cpu_helpers::ihk_mc_syscall_arg0(ctx) as CInt;
+    let count = crate::x86_cpu_helpers::ihk_mc_syscall_arg1(ctx);
+    let user_virt_addr = crate::x86_cpu_helpers::ihk_mc_syscall_arg2(ctx);
+    let user_nodes = crate::x86_cpu_helpers::ihk_mc_syscall_arg3(ctx);
+    let user_status = crate::x86_cpu_helpers::ihk_mc_syscall_arg4(ctx);
+    let flags = crate::x86_cpu_helpers::ihk_mc_syscall_arg5(ctx) as CInt;
+    let vm = (*current_thread_ptr()).vm;
+    // Retain three current-CPU samples and evaluate both owner arguments before
+    // the helper; this entry does not schedule between the stable-owner samples.
+    let proc = (*current_thread_ptr()).proc;
+    let cpu_set = addr_of_mut!((*current_thread_ptr()).cpu_set);
+    selected_body(
+        pid, count, user_virt_addr, user_nodes, user_status, flags,
+        vm, addr_of_mut!((*vm).page_table_lock).cast::<c_void>(),
+        cpu_set.cast::<c_void>(), proc.cast::<c_void>(), IHK_MC_AP_NOWAIT,
+        size_of::<*mut c_void>(), size_of::<CInt>(), size_of::<CULong>(), size_of::<CULong>(),
+        Some(f03_move_pages_verify), Some(syscall_copy_from_user_bridge),
+        Some(syscall_copy_to_user_bridge), Some(syscall_alloc_bridge),
+        Some(syscall_mckfd_free_bridge), Some(ihk_mc_get_nr_numa_nodes),
+        Some(f03_move_pages_table_lock), Some(f03_move_pages_table_unlock),
+        Some(f03_move_pages_smp_call), Some(f03_move_pages_smp_handler),
+        Some(crate::x86_cpu_helpers::rdtsc), Some(f03_move_pages_log),
+    )
+}
+
+// Separate source behavior refinement, never an unchanged-C equivalence claim.
+// Failure returns EFAULT without node reads/get_nr_nodes/SMP/copy-to; the existing
+// common path still frees each successfully owned array exactly once.
+#[cfg(f03_move_pages_copy_error_candidate)]
+unsafe extern "C" fn f03_move_pages_checked_body(
+    pid: CInt,
+    count: CULong,
+    user_virt_addr_addr: CULong,
+    user_nodes_addr: CULong,
+    user_status_addr: CULong,
+    flags: CInt,
+    vm: *mut ProcessVm,
+    page_table_lock: *mut c_void,
+    cpu_set: *mut c_void,
+    proc: *mut c_void,
+    alloc_flags: CULong,
+    ptr_size: SizeT,
+    int_size: SizeT,
+    pte_size: SizeT,
+    ulong_size: SizeT,
+    verify_fn: Option<MovePagesVerifyFn>,
+    copy_from_fn: Option<SyscallCopyFromUserFn>,
+    copy_to_fn: Option<SyscallCopyToUserFn>,
+    alloc_fn: Option<SyscallPolicyAllocFn>,
+    free_fn: Option<SyscallMckfdFreeFn>,
+    get_nr_nodes_fn: Option<MovePagesGetNrNodesFn>,
+    lock_fn: Option<SyscallRwlockFn>,
+    unlock_fn: Option<SyscallRwlockFn>,
+    smp_call_fn: Option<MovePagesSmpCallFn>,
+    handler_fn: Option<MovePagesSmpHandlerFn>,
+    rdtsc_fn: Option<SyscallRdtscFn>,
+    log_fn: Option<MovePagesLogFn>,
+) -> CLong {
+    let policy_error = move_pages_policy_result(pid, flags);
+    if policy_error != 0 {
+        if let Some(log) = log_fn {
+            if pid != 0 {
+                log(MOVE_PAGES_LOG_UNSUPPORTED_PID, 0, policy_error);
+            } else if (flags & MPOL_MF_MOVE_ALL) != 0 {
+                log(MOVE_PAGES_LOG_UNSUPPORTED_MOVE_ALL, 0, policy_error);
+            }
+        }
+        return policy_error as CLong;
+    }
+
+    let (
+        Some(alloc),
+        Some(verify),
+        Some(copy_to),
+        Some(get_nr_nodes),
+        Some(lock),
+        Some(unlock),
+        Some(smp_call),
+        Some(handler),
+    ) = (
+        alloc_fn,
+        verify_fn,
+        copy_to_fn,
+        get_nr_nodes_fn,
+        lock_fn,
+        unlock_fn,
+        smp_call_fn,
+        handler_fn,
+    )
+    else {
+        return -(EFAULT as CLong);
+    };
+
+    if vm.is_null() || page_table_lock.is_null() || cpu_set.is_null() || proc.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    let count_size = count as SizeT;
+    let ptr_bytes = ptr_size.wrapping_mul(count_size);
+    let int_bytes = int_size.wrapping_mul(count_size);
+    let pte_bytes = pte_size.wrapping_mul(count_size);
+    let ulong_bytes = ulong_size.wrapping_mul(count_size);
+    let mut start = rdtsc_fn.map_or(0, |rdtsc| rdtsc());
+
+    let virt_addr = alloc(ptr_bytes, alloc_flags);
+    if virt_addr.is_null() {
+        return -(ENOMEM as CLong);
+    }
+    let nr_pages = alloc(int_bytes, alloc_flags);
+    if nr_pages.is_null() {
+        move_pages_free_arrays(
+            free_fn,
+            virt_addr,
+            nr_pages,
+            null_mut(),
+            null_mut(),
+            null_mut(),
+            null_mut(),
+        );
+        return -(ENOMEM as CLong);
+    }
+    let nodes = alloc(int_bytes, alloc_flags);
+    if nodes.is_null() {
+        move_pages_free_arrays(
+            free_fn,
+            virt_addr,
+            nr_pages,
+            nodes,
+            null_mut(),
+            null_mut(),
+            null_mut(),
+        );
+        return -(ENOMEM as CLong);
+    }
+    let status = alloc(int_bytes, alloc_flags);
+    if status.is_null() {
+        move_pages_free_arrays(
+            free_fn,
+            virt_addr,
+            nr_pages,
+            nodes,
+            status,
+            null_mut(),
+            null_mut(),
+        );
+        return -(ENOMEM as CLong);
+    }
+    let ptep = alloc(pte_bytes, alloc_flags);
+    if ptep.is_null() {
+        move_pages_free_arrays(
+            free_fn,
+            virt_addr,
+            nr_pages,
+            nodes,
+            status,
+            ptep,
+            null_mut(),
+        );
+        return -(ENOMEM as CLong);
+    }
+    let dst_phys = alloc(ulong_bytes, alloc_flags);
+    if dst_phys.is_null() {
+        move_pages_free_arrays(free_fn, virt_addr, nr_pages, nodes, status, ptep, dst_phys);
+        return -(ENOMEM as CLong);
+    }
+
+    start = move_pages_log_delta(log_fn, rdtsc_fn, MOVE_PAGES_LOG_INIT_MALLOC, start);
+
+    let mut ret = 0;
+    if verify(vm, user_virt_addr_addr, ptr_bytes) != 0 {
+        ret = -EFAULT;
+    } else if user_nodes_addr != 0 && verify(vm, user_nodes_addr, int_bytes) != 0 {
+        ret = -EFAULT;
+    } else if verify(vm, user_status_addr, int_bytes) != 0 {
+        ret = -EFAULT;
+    }
+
+    if ret == 0 && user_nodes_addr != 0 {
+        if let Some(copy_from) = copy_from_fn {
+            let copy_error = copy_from(nodes.cast::<u8>(), user_nodes_addr, int_bytes);
+            if copy_error != 0 {
+                // A partial/failed copy defines no readable node array. Preserve
+                // the existing EFAULT domain and common six-array cleanup path.
+                ret = -EFAULT;
+            } else {
+                let nr_nodes = get_nr_nodes();
+                let nodes_i32 = nodes.cast::<CInt>();
+                let mut i = 0usize;
+                while i < count_size {
+                    let node = read_volatile(nodes_i32.add(i));
+                    if node < 0 || node >= nr_nodes {
+                        ret = -ENODEV;
+                        break;
+                    }
+                    i += 1;
+                }
+            }
+        } else {
+            ret = -EFAULT;
+        }
+    }
+
+    start = move_pages_log_delta(log_fn, rdtsc_fn, MOVE_PAGES_LOG_INIT_VERIFY, start);
+
+    if ret == 0 {
+        let mut request = MaybeUninit::<MovePagesSmpReq>::uninit();
+        lock(page_table_lock);
+        ret = move_pages_smp_req_prepare_result(
+            request.as_mut_ptr(),
+            count,
+            user_virt_addr_addr as *mut *const c_void,
+            user_status_addr as *mut CInt,
+            user_nodes_addr as *const CInt,
+            virt_addr.cast::<*mut c_void>(),
+            status.cast::<CInt>(),
+            ptep.cast::<*mut c_void>(),
+            nodes.cast::<CInt>(),
+            nr_pages.cast::<CInt>(),
+            dst_phys.cast::<CULong>(),
+            proc,
+        );
+        if ret == 0 {
+            ret = smp_call(
+                cpu_set,
+                Some(handler),
+                request.as_mut_ptr().cast::<c_void>(),
+            );
+        }
+        unlock(page_table_lock);
+    }
+
+    if ret == 0 {
+        let _ = move_pages_log_delta(log_fn, rdtsc_fn, MOVE_PAGES_LOG_PARALLEL, start);
+        if copy_to(user_status_addr, status.cast::<u8>(), int_bytes) != 0 {
+            ret = -EFAULT;
+        }
+    }
+
+    move_pages_free_arrays(free_fn, virt_addr, nr_pages, nodes, status, ptep, dst_phys);
+    ret as CLong
+}
+}

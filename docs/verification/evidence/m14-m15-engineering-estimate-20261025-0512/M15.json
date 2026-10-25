@@ -1,0 +1,266 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "as_of": "2026-10-25T05:10:32.630785+00:00",
+  "status": "PRIVATE_PLANNING_ESTIMATE_NOT_ACCEPTANCE",
+  "canonical_as_of": "2026-10-25T04:53:34.467560+00:00",
+  "CURRENT_read_through": "2026-10-25T05:06Z",
+  "scope_denominator": {
+    "profile": "retained x86_64/SMP, Rust user tools ON; QLMPI OFF, UTI OFF; existing pinned Linux/toolchains unchanged",
+    "coverage": "All eight M15-F01..F08 rows and all five P01..P05 programs assessed; existing three native module roots plus four pre-existing Rust/assembly support entries considered. These overlap by target: F01 belongs to mcctrl; do not add rows as independent equal effort. Final four integration joins included as work, not extra file counters.",
+    "not_complete_inventory": true,
+    "unassessed": "Final all-delivered-runtime closure and conditional crash/QLMPI/UTI/config products remain unknown; not assigned zero effort."
+  },
+  "measured_counters": {
+    "known_C_goals": 8,
+    "known_runtime_programs": 5,
+    "known_goals_with_existing_Rust_successor_source": 13,
+    "source_candidate_count_is_completion": false,
+    "canonical_C_goal_selectors_now_Rust_or_ASM": 4,
+    "canonical_C_goal_selectors_still_C": 4,
+    "canonical_runtime_program_selectors_now_Rust": 1,
+    "canonical_runtime_program_selectors_still_interpreted": 4,
+    "actual_SDK_source_producer_commands_accepted": 11,
+    "supported_library_function_providers": 70,
+    "supported_library_data_providers": 6,
+    "SDK_tool_links": 3,
+    "SDK_tool_project_import_counts": [
+      4,
+      13,
+      0
+    ],
+    "private_installed_artifacts": 4,
+    "private_loader_checks": 3,
+    "new_CLI_mains_executed_in_install_job": 0,
+    "executor_controlled_HOST_cases_retained": 18,
+    "boot_stop_fake_cases": 8,
+    "eclair_dialogue_fake_cases": 6,
+    "daemon_fortified_ring_oversize_cases": 5,
+    "new_cohort_native_acceptances": 0,
+    "new_whole_file_retirements": 0,
+    "counts_are_scoped_observations_not_effort_fractions": true
+  },
+  "components": [
+    {
+      "component": "Existing IHK/SMP/mcctrl roots + F01 MM",
+      "implementation": "Rust roots and all three MM wrappers exist; current Kbuild Rust + two assembly objects",
+      "actual_compile_ABI_behavior": "Prior matching three-module SDK/artifact/ABI and tested205 native profile; MM HOST/SDK readbacks retained",
+      "default_integration": "Canonical Rust/ASM selection; current changed-MM delivery/native closure OPEN",
+      "matching_native": "Prior exact profile accepted; changed MM not accepted",
+      "remaining": "Join retained coherent modules/image and prove real MM/lifecycle; no rewrite",
+      "evidence": [
+        "/home/holden/mckernel/docs/verification/evidence/current-host-pair-205-native-20261019-1/usable-profile-1/USABLE-TESTED-PROFILE-RECIPE.json",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-mm-source-1/SOURCE-REUSE.json"
+      ]
+    },
+    {
+      "component": "F02 mcexec",
+      "implementation": "Full supported Rust executor/callback/entry/data candidate available; semantic qualification incomplete",
+      "actual_compile_ABI_behavior": "HOST Rust/ASM link; 349 callback exports/entry/51 data ownership and 18 controlled cases retained",
+      "default_integration": "Canonical default still includes mcexec.c; SDK nine commands pending",
+      "matching_native": "New cohort OPEN",
+      "remaining": "Execute prepared target ABI/link/default qualification, then process/exec/wait/resource behavior",
+      "evidence": [
+        "/home/holden/mckernel/docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-0852/EXECUTOR-HOST-ACCEPTANCE.json",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0442.json"
+      ]
+    },
+    {
+      "component": "F03/F04 mcinspect/eclair BFD adapters",
+      "implementation": "Shared Rust successor exists for four accessors; tool main bodies already Rust",
+      "actual_compile_ABI_behavior": "Latest source/fixture-selector review and 11 pure cases; actual SDK21/eight paired CLI oracles pending",
+      "default_integration": "Two C adapters still selected in canonical CMake",
+      "matching_native": "Changed BFD/tools OPEN",
+      "remaining": "Pinned BFD layout/macros/signatures, real tools and default selectors; useful diagnostics",
+      "evidence": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0442.json"
+      ]
+    },
+    {
+      "component": "F05 libihk",
+      "implementation": "Supported whole70-function/six-data Rust implementation exists; perf/rusage already included",
+      "actual_compile_ABI_behavior": "HOST whole library and genuine recorder proof; source-produced SDK archive + strict DSO accepted",
+      "default_integration": "Canonical default Rust source producer; four-artifact private install accepted; production retirement OPEN",
+      "matching_native": "Real library/device/lifecycle OPEN",
+      "remaining": "Real CLI lifecycle/dump/perf/resource behavior and complete dependency/config/delivery join",
+      "evidence": [
+        "/home/holden/mckernel/docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-2247/REVIEW.json",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/COMPILED-INSTALL-CHECKPOINT-20261025T0337.json"
+      ]
+    },
+    {
+      "component": "F06/F07 ihkconfig/ihkosctl",
+      "implementation": "Complete Rust CLI candidates integrated",
+      "actual_compile_ABI_behavior": "HOST behavior/link; SDK source-producer links with four/thirteen project imports, private install/loader accepted",
+      "default_integration": "Canonical Rust default selector; production/native retirement OPEN",
+      "matching_native": "New Rust library/CLI cohort OPEN",
+      "remaining": "Execute real management and OS-control error/lifecycle/resource operations with accepted library",
+      "evidence": [
+        "/home/holden/mckernel/docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-2247/REVIEW.json",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/COMPILED-INSTALL-CHECKPOINT-20261025T0337.json"
+      ]
+    },
+    {
+      "component": "F08 ihkmond",
+      "implementation": "Complete Rust daemon with event-read correction exists",
+      "actual_compile_ABI_behavior": "Three original compiler steps rc0 but packet FAIL empty-rmeta oracle; five controlled fortified ring/oversize cases accepted; real SDK7 pending",
+      "default_integration": "Canonical default remains C; Rust selector private source only",
+      "matching_native": "Thread/event/device/udev lifecycle OPEN",
+      "remaining": "Real linked daemon/libudev ABI plus worker/ring/stop/provider ownership, then default/native",
+      "evidence": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/PRIOR-FIRST-FAILURE.PRESERVED.json",
+        "/home/holden/mckernel/docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-2030/REVIEW.json"
+      ]
+    },
+    {
+      "component": "P01/P02 boot and stop/release",
+      "implementation": "Both full Rust state-machine/backend sources exist",
+      "actual_compile_ABI_behavior": "HOST1.92 fake fixture compile and eight combined tests PASS; configured production backends not qualified",
+      "default_integration": "Top-level canonical still installs shell programs",
+      "matching_native": "Real boot/retry/IRQ/swappiness/resource restoration OPEN",
+      "remaining": "Build configured binaries and compare original behavior, install Rust selectors, native lifecycle",
+      "evidence": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/root-M15-remaining-tools-HOST-fake-fixtures-1/RESULT.json",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/root-M15-remaining-tools-HOST-fake-fixtures-1/EXACT-HOST-PLAN.json"
+      ]
+    },
+    {
+      "component": "P03 eclair backtrace dialogue",
+      "implementation": "Full Rust dialogue/PTY candidate exists",
+      "actual_compile_ABI_behavior": "HOST fake fixture compile and six cases PASS; real PTY/target link not qualified",
+      "default_integration": "Canonical still expect",
+      "matching_native": "Real eclair/BFD/backtrace dialogue OPEN",
+      "remaining": "Target configured link and owned PTY/original-dialogue comparison with qualified diagnostics",
+      "evidence": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/root-M15-remaining-tools-HOST-fake-fixtures-1/RESULT.json"
+      ]
+    },
+    {
+      "component": "P04 vmcore2mckdump",
+      "implementation": "Full Rust wrapper and matched converter-ack patch exist",
+      "actual_compile_ABI_behavior": "No accepted compile/PTY/converter fixture located in this bounded assessment",
+      "default_integration": "Canonical still script; ack contract requires joint adoption",
+      "matching_native": "Real dump format/converter behavior OPEN",
+      "remaining": "Qualify wrapper + converter acknowledgement together; cannot select strict wrapper alone",
+      "evidence": [
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-11/m15-vmcore2mckdump/SOURCE-READY.json"
+      ]
+    },
+    {
+      "component": "P05 mcps",
+      "implementation": "Corrected full Rust candidate integrated",
+      "actual_compile_ABI_behavior": "HOST23-case behavior; actual SDK artifact/private install/loader accepted",
+      "default_integration": "Canonical Rust default selector; final mcinspect dependency closure OPEN",
+      "matching_native": "New full cohort OPEN",
+      "remaining": "Complete actual mcinspect/BFD/default dependency and native process reporting",
+      "evidence": [
+        "/home/holden/mckernel/docs/verification/evidence/rust-cutover-engineering-checkpoint-20261024-2247/REVIEW.json",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/COMPILED-INSTALL-CHECKPOINT-20261025T0337.json"
+      ]
+    },
+    {
+      "component": "Pre-existing sched_yield / ldump2mcdump / mcstat / assembly libmcexec",
+      "implementation": "Rust or reviewed assembly source selected in scoped configuration",
+      "actual_compile_ABI_behavior": "Exact current artifacts/native not independently requalified here; mcstat now has Rust library candidate dependency",
+      "default_integration": "Existing source selection credited, final linked/delivered closure not newly established",
+      "matching_native": "Unknown for current exact cohort",
+      "remaining": "Retain matched evidence and close dump converter, monitoring and assembly ABI dependencies",
+      "evidence": [
+        "/home/holden/mckernel/docs/verification/os-milestones-20260914/rust-cutover-m15.json"
+      ]
+    }
+  ],
+  "estimate": {
+    "user_facing": "Roughly 60\u201375% of the engineering work for the assessed supported M15 profile; about two-thirds. Low confidence; final cutover/native acceptance remains OPEN.",
+    "rounded_range_percent": [
+      60,
+      75
+    ],
+    "broader_uncertainty_percent": [
+      55,
+      80
+    ],
+    "stage_estimates": {
+      "implementation": {
+        "weight": 0.5,
+        "range": [
+          85,
+          95
+        ],
+        "basis": "Large module/executor/library bodies and all known program successors exist; source availability is discounted for unresolved behavior, ABI/config and acknowledgement contracts."
+      },
+      "focused_behavior_ABI": {
+        "weight": 0.2,
+        "range": [
+          55,
+          75
+        ],
+        "basis": "Substantial module, executor, library/CLI and fake state-machine evidence; real target BFD/daemon and PTY/configured backends still open."
+      },
+      "default_delivery_integration": {
+        "weight": 0.15,
+        "range": [
+          35,
+          55
+        ],
+        "basis": "Existing module/Rust tool source selections plus library/CLI source producer and private install; executor/adapters/daemon/four scripts remain selected C/interpreted; full delivered manifest open."
+      },
+      "matching_native": {
+        "weight": 0.15,
+        "range": [
+          15,
+          30
+        ],
+        "basis": "Credit exact existing three-module tested205 profile only; changed MM/new executor/library/CLI/daemon/program cohort native remains open. Unknown current support artifacts retain an interval."
+      }
+    },
+    "unrounded_weighted_range_percent": [
+      61.0,
+      75.25
+    ],
+    "weights_are_engineering_judgment_not_measured_work_hours": true,
+    "basis": "Modules, executor and library carry most semantic effort; CLI wrappers are smaller, while BFD/daemon/boot/PTY/dump qualification and final dependency/native joins account for material remaining effort. No LOC, forwarding declarations, equal file fractions or test-count conversion.",
+    "sensitivity_native_weighted": {
+      "weights": [
+        0.4,
+        0.2,
+        0.15,
+        0.25
+      ],
+      "range_percent": [
+        54.0,
+        68.75
+      ],
+      "rounded_range_percent": [
+        55,
+        70
+      ],
+      "interpretation": "If native and restoration qualification is one-quarter rather than 15% of total engineering effort, current estimate falls to roughly55\u201370%."
+    },
+    "scope_sensitivity": "If final optional/delivered ownership assessment adds work equal to20% of today's assessed total effort, the same completed effort becomes roughly50\u201363% (60\u201375 divided by1.2). This is a scenario, not measured optional debt; no finite overall percentage is asserted for unbounded unknown products.",
+    "not": "Not a probability, a deadline forecast, a formal verified-completion percentage or M14 estimate.",
+    "implementation_only_range_percent": [
+      85,
+      95
+    ],
+    "method_review_note": "Independent reviewer approved qualified weighted planning method; final source-completeness band narrowed downward from initial90\u201398 to85\u201395 because available bodies do not establish semantic completion. Thus final overall estimate60\u201375 is lower than initial central65\u201375 discussion.",
+    "supported_scope_milestone_completion_range_percent": [
+      60,
+      75
+    ],
+    "inventory_completeness_limit": "inventory_complete=false limits confidence and upper bound; unassessed work is not counted as zero. Conditional product dispositions remain separate from current supported profile."
+  },
+  "remaining_C_and_dependency_debt": [
+    "Canonical selected mcexec.c, mcinspect_bfd_shim.c, eclair_bfd_shim.c, ihkmond.c remain; Rust candidates do not retire them.",
+    "Four canonical interpreted runtime programs remain; mcps now Rust-selected.",
+    "MM C reference remains inactive under current Kbuild; changed Rust+ASM module functional consumer still must qualify.",
+    "Supported library70 providers now Rust; first tool cohort historical13C-import debt is superseded for the new matched SDK library/tool link, not globally erased.",
+    "libc/BFD/libdwarf/libudev/Linux are allowed dependencies; target signature/layout/link provenance remains required.",
+    "Optional crash extension still has C body; QLMPI has ABI/finalizer/md5 C when enabled; UTI/vendor ownership and WITH_KRM/multi-OS/debug/redirect profiles need explicit delivery/config disposition. Disabled is not converted."
+  ],
+  "limitations": [
+    "Historical null-percentage notes are superseded only by this explicitly requested private planning estimate, not rewritten.",
+    "Existing native module acceptance cannot transfer to changed MM or all new userspace successors.",
+    "No compiler/build/test/queue/model RPC/control/lock operation performed. Canonical files unchanged.",
+    "Read-only bounded source/receipt assessment; no recursive evidence scan/hash. No new proof inferred from preparation or elapsed time."
+  ]
+}

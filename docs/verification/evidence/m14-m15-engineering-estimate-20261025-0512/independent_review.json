@@ -1,0 +1,169 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "INDEPENDENT_PLANNING_METHOD_REVIEW_NOT_MILESTONE_ACCEPTANCE",
+  "authority": "Current user explicitly requests estimates. This is a qualified engineering estimate; original milestone definitions and canonical null percentage fields are unchanged.",
+  "read_only_sources": [
+    "/home/holden/mckernel/docs/verification/os-milestones-20260914/rust-cutover-m14.json",
+    "/home/holden/mckernel/docs/verification/os-milestones-20260914/rust-cutover-m15.json",
+    "/home/holden/mckernel/docs/verification/os-milestones-20260914/RUST-CUTOVER-M15.md",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m14-live-c-closure-worklist-1/COMPACT-CLOSURE-PRIORITIES.json"
+  ],
+  "canonical_as_of": {
+    "M14": "2026-10-25T04:53:34.467560+00:00",
+    "M15": "2026-10-25T04:53:34.467560+00:00"
+  },
+  "measured_structural_counters": {
+    "M14": {
+      "remaining_selected_C_files": 6,
+      "tracked_residual_behavior_areas": 30,
+      "final_integration_joins": 3,
+      "tracker_areas_partial": 9,
+      "tracker_areas_unassessed": 21,
+      "historical_selected_object_text_functions": 968,
+      "historical_functions_referencing_some_Rust_component": 841,
+      "important_limit": "968 and841 describe one retained union2 C-object inventory. A Rust helper call is not a complete Rust body; these are not whole-kernel percentages."
+    },
+    "M15": {
+      "known_C_files": 8,
+      "known_C_semantic_subgoals": 22,
+      "installed_runtime_programs": 5,
+      "existing_native_Rust_module_roots": 3,
+      "existing_Rust_or_ASM_entries": 4,
+      "conditional_disposition_records": 5,
+      "final_integration_joins": 4,
+      "inventory_complete": false,
+      "important_limit": "These categories overlap through library/module dependencies. They are not independent equal-weight work units."
+    }
+  },
+  "observable_progress_counters_to_report": [
+    "Actual semantic bodies implemented/integrated, named by behavior area and exact source cohort.",
+    "Matching focused ABI/behavior cases passed with actual C reference versus actual Rust, distinguishing fake-provider HOST checks from native tests.",
+    "Real default-selected object/artifact ownership and build/link/install/loader results for the exact current cohort; count shared libraries once.",
+    "Whole-file C retirement with header/macro/callback debt resolved; current newly accepted whole-file closure remains0, independent of substantial partial Rust progress.",
+    "Matching native behavior qualification by changed cohort; current new native retirement remains0, while reused historical native evidence retains its limited scope."
+  ],
+  "recommended_formula": {
+    "description": "For each semantic component choose a relative total engineering-effort weight, independently of file/function/LOC count. For each proof stage assign a bounded completion judgment using actual scope evidence. Overall=sum(component_weight * stage_weight * bounded_stage_score). Shared ABI/library work belongs to one owning component; other rows include only incremental consumer work.",
+    "M14_stage_weights": {
+      "implementation": 0.55,
+      "focused_checks": 0.2,
+      "selected_build_link": 0.1,
+      "matching_native": 0.15
+    },
+    "M14_file_weights_judgment": {
+      "kernel/mem.c": 0.2,
+      "kernel/process.c": 0.25,
+      "kernel/syscall.c": 0.25,
+      "arch/x86_64/kernel/cpu.c": 0.1,
+      "arch/x86_64/kernel/memory.c": 0.12,
+      "arch/x86_64/kernel/syscall.c": 0.08
+    },
+    "M15_stage_weights": {
+      "implementation": 0.5,
+      "focused_checks": 0.2,
+      "selected_build_link": 0.15,
+      "matching_native": 0.15
+    },
+    "judgment_basis": "Lifecycle/address-space/syscall algorithms, hardware callback ordering, shared ABI integration and changed-cohort validation dominate remaining effort. Small accessor wrappers and source-only scaffolds receive less weight. All weights are planning assumptions, not measured time.",
+    "unknown_handling": "Unassessed is an interval with explicit unresolved work, never zero implementation. Missing delivery/optional ownership is a denominator risk and widens range; it cannot silently count as complete.",
+    "baseline_handling": "Existing Rust and reviewed assembly deserve implementation and scoped test/link/native credit where the evidence matches. Remaining six/eight C files describe residual ownership, not the entire amount of engineering already done."
+  },
+  "sibling_range_review": {
+    "M14": {
+      "reported_candidate_range_percent": [
+        60,
+        85
+      ],
+      "recommended_central_description": "about70%, broad60\u201385% planning range, low confidence",
+      "status": "Semantic owner supplied explicit per-file stage intervals; formula independently reproduces59.0155\u201383.26%. Rough60\u201385/about70 is a plausible LOW-confidence engineering estimate.",
+      "reported_stage_ranges_percent": {
+        "implementation": [
+          79.61,
+          95.2
+        ],
+        "focused_checks": [
+          59.45,
+          88.8
+        ],
+        "selected_build_link": [
+          33.4,
+          72.9
+        ],
+        "native_reuse_readiness": [
+          0,
+          39
+        ]
+      },
+      "weighted_interval_percent": [
+        59.0155,
+        83.26
+      ],
+      "weighted_midpoint_percent": 71.13775,
+      "native_stage_caveat": "0\u201339% is explicitly a historical evidence reuse/readiness or stage-effort interval, not matching final native acceptance. Upper bound relying on projected reuse is a favorable scenario, not measured native completion; preparation already credited in focused/build stages must not be counted twice."
+    },
+    "M15": {
+      "final_source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m15-progress-estimate-1/M15-PROGRESS.json",
+      "reported_stage_ranges_percent": {
+        "implementation": [
+          85,
+          95
+        ],
+        "focused_checks": [
+          55,
+          75
+        ],
+        "selected_build_link": [
+          35,
+          55
+        ],
+        "matching_native": [
+          15,
+          30
+        ]
+      },
+      "weighted_interval_percent": [
+        61.0,
+        75.25
+      ],
+      "recommended_central_description": "about two-thirds; rough60\u201375%, broader55\u201380% uncertainty",
+      "qualification": "Independent reviewer accepts final downward-discounted85\u201395 implementation judgment as a planning interval, not body-count measurement. Exact reused module native evidence only; new changed cohort native/whole-file retirement remains0."
+    }
+  },
+  "sensitivity": {
+    "rule": "Move10 percentage points of weight from implementation to matching native. Overall changes by0.10*(native_completion-implementation_completion), expressed as a fraction.",
+    "M15_native_heavier_weights": {
+      "implementation": 0.4,
+      "focused_checks": 0.2,
+      "selected_build_link": 0.15,
+      "matching_native": 0.25
+    },
+    "M15_native_heavier_interval_percent": [
+      54.0,
+      68.75
+    ],
+    "interpretation": "Moving10weight points from implementation to matching native lowers the final M15 base61\u201375.25% to54\u201368.75% (rough55\u201370%). Neither estimate changes actual formal gates.",
+    "denominator_expansion_example": "If10% of total effort is newly discovered and all of it remains, a70% estimate of the known90% becomes63% overall. This is sensitivity only;10% discovery is not measured or predicted.",
+    "M14_native_heavier_weights": {
+      "implementation": 0.45,
+      "focused_checks": 0.2,
+      "selected_build_link": 0.1,
+      "matching_native": 0.25
+    },
+    "M14_native_heavier_interval_percent": [
+      51.0545,
+      77.64
+    ],
+    "M14_native_heavier_midpoint_percent": 64.34725
+  },
+  "remaining_effort_interpretation": "M14 base range implies roughly15\u201340% of assumed total engineering effort remains; final M15 base interval implies roughly25\u201340%, with native-heavy assumptions roughly30\u201345%. These are relative effort judgments, not elapsed hours or a completion-by-deadline promise. Parallel owners and one-heavy-job bottleneck prevent conversion to calendar ETA without observed comparable remaining tasks.",
+  "critical_no_double_credit": [
+    "Old35/35 functional result does not close M14/M15.",
+    "Rust helper providers, reference imports, token counts and compiler commands are not whole-file acceptance.",
+    "SDK whole70 library/three CLI linkage and4installs/3loader checks are shared dependency progress; do not count the same archive independently for every consumer.",
+    "M15 executor9SDK commands still pending at stated cursor; source-ready cannot receive executed credit.",
+    "M14 normal-body source completion still excludes unresolved logger/header/macro/callback ownership until exact whole-file proof."
+  ],
+  "approval": "APPROVE_QUALIFIED_ENGINEERING_ESTIMATE_METHOD; current milestone acceptance remainsOPEN. Final numeric band should use semantic siblings source assessments and retain these limitations.",
+  "actions_performed": "Read-only bounded canonical/worklist inspection; wrote only this private review. No builds, compiler, fixture/native/model RPC, campaign queue changes or canonical edits.",
+  "review_revision": "Final semantic-owner bands reviewed: M15 source implementation discounted85\u201395, overall61\u201375.25; M14 stage endpoints independently reproduce59.0155\u201383.26. Initial candidate discussion superseded."
+}

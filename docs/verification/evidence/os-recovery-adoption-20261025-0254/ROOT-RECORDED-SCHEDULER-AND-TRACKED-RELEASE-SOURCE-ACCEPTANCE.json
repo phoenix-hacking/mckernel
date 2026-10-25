@@ -1,0 +1,34 @@
+{
+  "reviewer": "/root/f02_review",
+  "implementation_ownership": false,
+  "decisions": [
+    {
+      "id": "F03_scheduler7",
+      "decision": "PASS_SOURCE_AND_ACTUAL_CONTROLLED_FIXTURE",
+      "source_sha256": "7d39ff61ef064de371e6227dba65645aecf5071fcc01097934525ed2f1f42eb1",
+      "actual_result_sha256": "56b9feb5aae25fee0328767267cf562eb42691466e06418cee91e1c9cefc8521",
+      "comparisons": [
+        45,
+        56,
+        48
+      ],
+      "ABI_rows": 9,
+      "C_function_types": 7,
+      "joins": 3,
+      "limitation": "No native lookup/refcount/locking/migrationwait"
+    },
+    {
+      "id": "tracked_thread_page_release",
+      "decision": "PASS_SOURCE_AND_ACTUAL_CONTROLLED_FIXTURE",
+      "source_sha256": "a06ec8adec8b4230b4984b3e6278e1088ff1220eef058d2eb9a4e1f1496609ce",
+      "actual_result_sha256": "d9351451354e2c57dfbd2cf6c75c7cc13487c8a908feb8e2ee520bd5e853dd8c",
+      "comparisons": 3,
+      "ABI_rows": 5,
+      "joins": 5,
+      "limitation": "Controlledfreeonly;no actualfree/currentobject/native"
+    }
+  ],
+  "SDK_native_retirement": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-25T05:27:31.837185+00:00"
+}

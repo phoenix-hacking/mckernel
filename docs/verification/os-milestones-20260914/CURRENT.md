@@ -1,3 +1,32 @@
+## Current functional checkpoint and fresh executor admission — 2026-10-25T05:27:31.837185+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Normalmove_pages source0a3e/ac57 actuallyintegrated05:19:32Z; paireddefault
+CMake d112 integrated05:23:09Z. Initialwrongprivate-destination integrationclaim
+corrected; Source4 originals restoredexactly, correctionevidence preserved.
+CurrentHOST161 accepted; fullSDK/default/native OPEN. Source10 96/12ABI,
+F06historical3472/45ABI, scheduler149/9ABI+7types andtrackedfree3/5ABI
+controlledchecks passed. One178union qualifier prepares, no duplicateRustcodegen.
+Pageproviders31/12ABI additionalfixturePASS, notyetcurrentobject/native.
+Executor priorquery/reviewPASS butexpired beforeownerafterrootUID invocationerror;
+bothfailures retained/noSDKstarted. Freshnonce7058/request1932 withunchanged
+runtime/preparation published15metadatafiles, Gitfetchthenstaticstagedrootpublish
+andnewactualquery/reviewrequired. No replayorTTLextension.
+F02retainedconsumerprofile exact173func/237Cdata passed, selected-six thenFAIL
+F05note80expected/48actual; exactretainedmetadata expertcorrection underway.
+M12 35/35;M14/M15 OPEN;newproduction/native/file/guest/imageclosures0.
+[Planning baseline](M14-M15-ENGINEERING-ESTIMATE-20261025-0512.md) preservedseparately.
+
+## Planning context adopted — 2026-10-25T05:13Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+[Engineering estimate baseline](M14-M15-ENGINEERING-ESTIMATE-20261025-0512.md)
+is planning context: M14about70%/60–85; M15about65–70%/60–75 (wider55–80),
+lowconfidence. Acceptedmilestones unchanged:M12 35/35,M14/M15 OPEN. Preserve
+sameweights/scope; updateonlyaftermaterialcoherentevidence, no repeatedinventory.
+Checkpointb257fbc pushed/fetched;15executoroverlayblobs+286Source8archivemembers
+verified, proof82ee8510. Freshquery/fill/executionreview next;SDKunrun.
+
 ## Thirty-minute engineering review — 2026-10-25T05:12:41.768221+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

@@ -1,0 +1,39 @@
+{
+  "reviewer": "/root/f02_review",
+  "implementation_ownership": false,
+  "decisions": [
+    {
+      "id": "SOURCE10",
+      "decision": "PASS_SOURCE_AND_ACTUAL_CONTROLLED_PARITY_AND_FROZEN_METADATA",
+      "result_sha256": "80ce9f2deea622e8eb1ad77693b974e1532e1329ebf73b31d55eb3a8cebb5533",
+      "comparisons": 96,
+      "ABI_rows": 12,
+      "joins": 5,
+      "warnings_retained": 129,
+      "limitation": "Frozenac129policy cohort only,currentac57unionobjectpending"
+    },
+    {
+      "id": "F06_HISTORICAL",
+      "decision": "PASS_ACTUAL_HISTORICAL_CONTROLLED_PARITY",
+      "handoff_sha256": "3935fce5fbd4ced0af55824ded5e6405aa4ca627e551296e8775fa4aeb283324",
+      "actual_report_sha256": "802c8f49a316c5d8c4ff04b48b3506ce881c405fe20a6fce6100a642a2fbee09",
+      "comparisons": 3472,
+      "ABI_rows": 45,
+      "joins": 4,
+      "limitation": "Historical07d803/ac12/03e6/f544,currentunionpending"
+    },
+    {
+      "id": "MOVE_PAGES_PAIRED_PRODUCER",
+      "decision": "PASS_SOURCE_AND_ACTUAL_FRAGMENT",
+      "preimage": "ed663442300a0482a219381f0936152a5080941b59a3eb86f082b42272764aa8",
+      "postimage": "d1122b50af29c2b72948e50964ae1b5d1dd8193bd684d188d2fd830e219966cc",
+      "actual_envelope_sha256": "44f1afbc4362b793c0879dc5169e4fdeae65bbc18719c1aca1f7b8c15dde82e9",
+      "cases": 3,
+      "copy_error_default": "OFF",
+      "fullSDK_default_artifact_native": false
+    }
+  ],
+  "new_retirement": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-25T05:27:31.837185+00:00"
+}
