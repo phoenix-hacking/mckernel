@@ -565,6 +565,10 @@ arch_process_vm_rw_memcpy_bridge(void *dst, const void *src, size_t bytes)
 	fast_memcpy(dst, src, bytes);
 }
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern void arch_process_vm_rw_log_bridge(const struct arch_process_vm_rw_log_record *record);
+#else
+#line 568
 static void
 arch_process_vm_rw_log_bridge(const struct arch_process_vm_rw_log_record *record)
 {
@@ -594,6 +598,8 @@ arch_process_vm_rw_log_bridge(const struct arch_process_vm_rw_log_record *record
 		break;
 	}
 }
+#endif /* exact original process-VM logger fallback */
+#line 597
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 extern const struct arch_process_vm_rw_offsets arch_process_vm_rw_kernel_offsets;

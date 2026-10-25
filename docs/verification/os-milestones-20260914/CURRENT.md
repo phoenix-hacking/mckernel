@@ -1,3 +1,33 @@
+## Manual resume: current290 integrated; fresh SDK physical proof — 2026-10-25T21:45Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Explicit manual invocation20261025T212953Z-7f025aa8 resumed the same active goal,
+creditrun7f ledger and fixed2026-10-26T06:00Z cutoff. Launcher state is running;
+no stop or billing hold was observed. Historical paused banners remain historical.
+
+Current290 has independent current-object acceptance and exactly three canonical
+postimages integrated: kernel/syscall.c54a9b0a8, syscall_policy.rse7d533e6 and
+arch syscall.cd6bf00d0. Five new Rust functions join accepted285/data5. Original
+whole Rust/strictpartial and successful observers were reused; fresh controls
+2positive/38negative and metadata12 passed after fixture-only spacing correction.
+Two children joined, CPU6 released; CPU2.657s/wall2.676s/peak90644KiB. Original
+fixture failure and all earlier failures remain retained. [Acceptance](../evidence/os-recovery-adoption-20261025-0254/ACTUAL-CURRENT290-INDEPENDENT-CURRENT-OBJECT-ACCEPTANCE.json).
+
+Fresh read-only physical/current evidence independently passes41fee997: four
+complete process sweeps, required22PIDs/groups absent,44stopped containers per
+snapshot, ownedCID/three-record absence, retained inputs/archives exact and mutex
+27:4 unchanged/free. Current launcher identities are preserved. This supplies
+current proof; it does not release new SDK/native execution. [Fresh acceptance](../evidence/os-recovery-adoption-20261025-0254/ACTUAL-MANUAL-RESUME-20261025T212953-PHYSICAL-AND-CURRENT-INDEPENDENT-ACCEPTANCE.json).
+
+Next root/sdk_admission/execution_review: fetch the fresh17-member transport,
+finish static bindings/review, then one fresh120-second query/review/UID1000
+same-PID SDK entry, retaining11 successful commands and running10new. In parallel
+prepare matching current290 default-image source and F06 lookup consumer fixture.
+One new current-object integration package is recorded; sustained1.95x target is
+not demonstrated. Default/native/whole-file/C-boundary closures remain zero.
+M12=35/35; M14/M15 OPEN. Included-first billing, ownership/resources and cutoff
+unchanged; no duplicate watcher or monitor started.
+
 ## Current SDK physical clearance accepted; current290 retained qualification — 2026-10-25T10:26Z checkpoint
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

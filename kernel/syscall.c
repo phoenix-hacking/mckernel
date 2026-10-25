@@ -7725,6 +7725,18 @@ end:
 	return ret;
 }
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+int
+syscall_execveat_bridge(void *ctx, int dirfd, const char *filename,
+		char **argv, char **envp, int flags)
+{
+	return do_execveat((ihk_mc_user_context_t *)ctx, dirfd, filename,
+			argv, envp, flags);
+}
+
+long sys_execve(int n, ihk_mc_user_context_t *ctx);
+#else
+#line 7705
 static int
 syscall_execveat_bridge(void *ctx, int dirfd, const char *filename,
 		char **argv, char **envp, int flags)
@@ -7741,6 +7753,8 @@ long sys_execve(int n, ihk_mc_user_context_t *ctx)
 			(char **)ihk_mc_syscall_arg2(ctx),
 			syscall_execveat_bridge);
 }
+#endif
+#line 7721
 
 #ifdef MCKERNEL_RUST_SCHED_POLICY_HELPERS
 extern int sched_clone_affinity_snapshot_result(unsigned long thread_mask,
@@ -20144,6 +20158,10 @@ out:
 }
 #endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+long sys_execveat(int n, ihk_mc_user_context_t *ctx);
+#else
+#line 20124
 long sys_execveat(int n, ihk_mc_user_context_t *ctx)
 {
 	int dirfd = (int)ihk_mc_syscall_arg0(ctx);
@@ -20155,6 +20173,8 @@ long sys_execveat(int n, ihk_mc_user_context_t *ctx)
 			(char **)ihk_mc_syscall_arg3(ctx), flags,
 			filename[0], syscall_execveat_bridge);
 }
+#endif
+#line 20135
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_close(int n, ihk_mc_user_context_t *ctx);
@@ -25331,6 +25351,11 @@ static long ptrace_geteventmsg(int pid, long data)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long f03_ptrace_getsiginfo_v1(int pid, siginfo_t *data);
+#define ptrace_getsiginfo f03_ptrace_getsiginfo_v1
+#else
+#line 25298
 static long
 ptrace_getsiginfo(int pid, siginfo_t *data)
 {
@@ -25365,6 +25390,8 @@ ptrace_getsiginfo(int pid, siginfo_t *data)
 	return rc;
 #endif
 }
+#endif
+#line 25332
 
 static long
 ptrace_setsiginfo(int pid, siginfo_t *data)
@@ -25458,6 +25485,38 @@ ptrace_setsiginfo(int pid, siginfo_t *data)
 #endif
 }
 
+#ifdef MCKERNEL_RUST_F03_PTRACE_ENTRY
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#error "Rust ptrace entry requires existing Rust syscall policy helpers"
+#endif
+const struct ptrace_syscall_ops f03_ptrace_entry_ops_v1 = {
+		.traceme_fn = ptrace_traceme,
+		.wakeup_fn = ptrace_wakeup_sig,
+		.getregs_fn = ptrace_getregs,
+		.setregs_fn = ptrace_setregs,
+		.getfpregs_fn = ptrace_getfpregs,
+		.setfpregs_fn = ptrace_setfpregs,
+		.peekuser_fn = ptrace_peekuser,
+		.pokeuser_fn = ptrace_pokeuser,
+		.peektext_fn = ptrace_peektext,
+		.poketext_fn = ptrace_poketext,
+		.setoptions_fn = ptrace_setoptions,
+		.attach_fn = ptrace_attach,
+		.detach_fn = ptrace_detach,
+		.getsiginfo_fn = ptrace_getsiginfo,
+		.setsiginfo_fn = ptrace_setsiginfo,
+		.getregset_fn = ptrace_getregset,
+		.setregset_fn = ptrace_setregset,
+		.geteventmsg_fn = ptrace_geteventmsg,
+		.arch_fn = arch_ptrace,
+	};
+struct ddebug __attribute__((aligned(8),section("__verbose")))
+f03_ptrace_entry_debug_v1 = {
+ .file=__FILE__, .func="sys_ptrace", .line=25454, .flags=DDEBUG_DEFAULT
+};
+extern long sys_ptrace(int, ihk_mc_user_context_t *);
+#else
+#line 25425
 long sys_ptrace(int n, ihk_mc_user_context_t *ctx)
 {
 	const long request = (long)ihk_mc_syscall_arg0(ctx);
@@ -25490,6 +25549,8 @@ long sys_ptrace(int n, ihk_mc_user_context_t *ctx)
 	dkprintf("ptrace(%d,%ld,%p,%p): returning %d\n", request, pid, addr, data, error);
 	return error;
 }
+#endif
+#line 25457
 
 #define SCHED_CHECK_SAME_OWNER        0x01
 #define SCHED_CHECK_ROOT              0x02

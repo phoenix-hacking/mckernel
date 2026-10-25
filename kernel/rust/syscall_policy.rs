@@ -35049,3 +35049,192 @@ pub(crate) mod f03_syscall_table_candidate {
         assert!(core::mem::size_of::<[Option<Handler>; SLOT_COUNT]>() == SLOT_COUNT * 8);
     };
 }
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Reused existing four-selector callback; only public provider naming is adapted.
+#[used]
+#[link_section = "__verbose"]
+static mut F06_PROCESS_VM_IOV_LOCAL_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+    file: concat!(file!(), "\0").as_ptr().cast(), func: b"arch_process_vm_rw_log_bridge\0".as_ptr().cast(),
+    fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,
+};
+#[used]
+#[link_section = "__verbose"]
+static mut F06_PROCESS_VM_IOV_REMOTE_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+    file: concat!(file!(), "\0").as_ptr().cast(), func: b"arch_process_vm_rw_log_bridge\0".as_ptr().cast(),
+    fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,
+};
+#[used]
+#[link_section = "__verbose"]
+static mut F06_PROCESS_VM_FOUND_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+    file: concat!(file!(), "\0").as_ptr().cast(), func: b"arch_process_vm_rw_log_bridge\0".as_ptr().cast(),
+    fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,
+};
+#[used]
+#[link_section = "__verbose"]
+static mut F06_PROCESS_VM_COPY_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+    file: concat!(file!(), "\0").as_ptr().cast(), func: b"arch_process_vm_rw_log_bridge\0".as_ptr().cast(),
+    fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,
+};
+/// Log one borrowed process-VM event without retaining the record.
+///
+/// # Safety
+/// `record` must be aligned and readable through its event and the active branch's
+/// initialized fields until return. Inactive fields may remain uninitialized.
+/// Debug selector mutation follows the existing externally serialized contract.
+#[no_mangle]
+pub unsafe extern "C" fn arch_process_vm_rw_log_bridge(record: *const ArchProcessVmRwLogRecord) {
+    unsafe {
+        // The reused producer initializes only the active event's fields.
+        // Read exactly those fields; never form/read a whole initialized record.
+        match read_volatile(addr_of!((*record).event)) {
+            1 => if read_volatile(addr_of!(F06_PROCESS_VM_IOV_LOCAL_DEBUG.line_flags)) >> 24 != 0 {
+                kprintf(b"local_iov[%d].iov_base: 0x%lx, len: %lu\n\0".as_ptr().cast(),
+                    read_volatile(addr_of!((*record).x)), read_volatile(addr_of!((*record).a)), read_volatile(addr_of!((*record).b)));
+            },
+            2 => if read_volatile(addr_of!(F06_PROCESS_VM_IOV_REMOTE_DEBUG.line_flags)) >> 24 != 0 {
+                kprintf(b"remote_iov[%d].iov_base: 0x%lx, len: %lu\n\0".as_ptr().cast(),
+                    read_volatile(addr_of!((*record).x)), read_volatile(addr_of!((*record).a)), read_volatile(addr_of!((*record).b)));
+            },
+            3 => if read_volatile(addr_of!(F06_PROCESS_VM_FOUND_DEBUG.line_flags)) >> 24 != 0 {
+                let operation = if read_volatile(addr_of!((*record).y)) == PROCESS_VM_READ {
+                    b"PROCESS_VM_READ\0".as_ptr().cast::<i8>()
+                } else { b"PROCESS_VM_WRITE\0".as_ptr().cast::<i8>() };
+                kprintf(b"pid %d found, doing %s: liovcnt: %d, riovcnt: %d \n\0".as_ptr().cast(),
+                    read_volatile(addr_of!((*record).x)), operation,
+                    read_volatile(addr_of!((*record).a)) as CInt, read_volatile(addr_of!((*record).b)) as CInt);
+            },
+            4 => if read_volatile(addr_of!(F06_PROCESS_VM_COPY_DEBUG.line_flags)) >> 24 != 0 {
+                let direction = if read_volatile(addr_of!((*record).z)) == PROCESS_VM_READ {
+                    b"<-\0".as_ptr().cast::<i8>()
+                } else { b"->\0".as_ptr().cast::<i8>() };
+                kprintf(b"local_iov[%d]: 0x%lx %s remote_iov[%d]: 0x%lx, %lu copied, psize: %lu, rpage_left: %lu\n\0".as_ptr().cast(),
+                    read_volatile(addr_of!((*record).x)), read_volatile(addr_of!((*record).a)), direction,
+                    read_volatile(addr_of!((*record).y)), read_volatile(addr_of!((*record).b)), read_volatile(addr_of!((*record).c)),
+                    read_volatile(addr_of!((*record).d)), read_volatile(addr_of!((*record).e)));
+            },
+            _ => {},
+        }
+    }
+}
+
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(f03_ptrace_entry_candidate)]
+mod ptrace_entry {
+    use core::ptr::{addr_of, read_volatile};
+
+    use crate::abi::{CInt, CLong, X86UserContext};
+    use crate::debug::Ddebug;
+    use crate::x86_cpu_helpers as cpu;
+
+    use super::PtraceSyscallOps;
+
+    unsafe extern "C" {
+        static f03_ptrace_entry_ops_v1: PtraceSyscallOps;
+        static mut f03_ptrace_entry_debug_v1: Ddebug;
+    }
+
+    /// Decode the genuine ptrace entry and invoke the existing Rust dispatcher.
+    ///
+    /// # Safety
+    /// The context is live and readable under the original syscall-entry contract.
+    /// The immutable C provider table retains all original callbacks and their
+    /// tracee ownership/locking requirements. The lifetime-long debug descriptor
+    /// uses the existing dynamic-debug flags access contract. No user address is
+    /// dereferenced by this entry; the chosen provider retains that obligation.
+    #[no_mangle]
+    pub unsafe extern "C" fn sys_ptrace(_number: CInt, context: *mut X86UserContext) -> CLong {
+        // SAFETY: The caller supplies the original live user context.
+        let (request, pid, address, data) = unsafe {
+            (
+                cpu::ihk_mc_syscall_arg0(context) as CLong,
+                cpu::ihk_mc_syscall_arg1(context) as CInt,
+                cpu::ihk_mc_syscall_arg2(context) as CLong,
+                cpu::ihk_mc_syscall_arg3(context) as CLong,
+            )
+        };
+        // SAFETY: The selected immutable table has exactly the original 19 slots.
+        let error = unsafe {
+            super::ptrace_syscall_body_result(
+                request, pid, address, data, addr_of!(f03_ptrace_entry_ops_v1),
+            )
+        };
+        // SAFETY: Read only the packed flags byte from genuine aligned C storage.
+        if unsafe { read_volatile(addr_of!(f03_ptrace_entry_debug_v1.line_flags)) >> 24 != 0 } {
+            // SAFETY: Preserve original vararg widths, including the historical
+            // request/return %d and pid %ld mismatch; no conversion is corrected.
+            unsafe {
+                super::kprintf(
+                    b"ptrace(%d,%ld,%p,%p): returning %d\n\0".as_ptr().cast(),
+                    request, pid, address, data, error,
+                );
+            }
+        }
+        error
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Complete live sys_execve/sys_execveat entries; existing C exec lifecycle is debt.
+extern "C" {
+    #[link_name = "syscall_execveat_bridge"]
+    fn f03_execveat_existing_C_provider(
+        ctx: *mut c_void, dirfd: CInt, filename: *const c_void,
+        argv: *mut *mut c_void, envp: *mut *mut c_void, flags: CInt,
+    ) -> CInt;
+}
+
+/// # Safety
+/// The original current-thread user-context and exec-provider lifetime/ownership
+/// contract applies. No new context copy, argument initialization or null guard.
+#[no_mangle]
+pub unsafe extern "C" fn sys_execve(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    execve_body_result(
+        ctx.cast::<c_void>(),
+        crate::x86_cpu_helpers::ihk_mc_syscall_arg0(ctx) as *const c_void,
+        crate::x86_cpu_helpers::ihk_mc_syscall_arg1(ctx) as *mut *mut c_void,
+        crate::x86_cpu_helpers::ihk_mc_syscall_arg2(ctx) as *mut *mut c_void,
+        Some(f03_execveat_existing_C_provider),
+    )
+}
+
+/// # Safety
+/// In addition to the original exec context/provider contract, filename must
+/// permit the original first-byte read even when flags/dirfd will be rejected.
+/// This preserves the existing pre-policy read; no invalid-pointer EFAULT proof.
+#[no_mangle]
+pub unsafe extern "C" fn sys_execveat(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    let dirfd = crate::x86_cpu_helpers::ihk_mc_syscall_arg0(ctx) as CInt;
+    let filename = crate::x86_cpu_helpers::ihk_mc_syscall_arg1(ctx) as *const c_void;
+    let flags = crate::x86_cpu_helpers::ihk_mc_syscall_arg4(ctx) as CInt;
+    execveat_body_result(
+        ctx.cast::<c_void>(), dirfd, filename,
+        crate::x86_cpu_helpers::ihk_mc_syscall_arg2(ctx) as *mut *mut c_void,
+        crate::x86_cpu_helpers::ihk_mc_syscall_arg3(ctx) as *mut *mut c_void,
+        flags, *filename.cast::<i8>() as CInt,
+        Some(f03_execveat_existing_C_provider),
+    )
+}
+
+/// Read pending siginfo through the existing retained-thread/usercopy helper.
+///
+/// # Safety
+/// The original find/unlock protocol must retain the tracee and pending node
+/// through the copy. The user address stays opaque until the existing usercopy
+/// provider consumes it. Scratch is written only on a valid pending-info path;
+/// it is never read here and cannot escape the synchronous helper call.
+#[no_mangle]
+pub unsafe extern "C" fn f03_ptrace_getsiginfo_v1(
+    pid: CInt, data: *mut SigInfo,
+) -> CLong {
+    let mut info = MaybeUninit::<SigInfo>::uninit();
+    unsafe {
+        ptrace_getsiginfo_body_result(
+            pid, data as CULong, info.as_mut_ptr().cast(), size_of::<SigInfo>(),
+            offset_of!(crate::abi::SigPending, info) as CULong,
+            addr_of!(F03_PTRACE_IO_OFFSETS), Some(f03_ptrace_io_find),
+            Some(f03_ptrace_io_unlock), Some(syscall_copy_to_user_bridge),
+        )
+    }
+}
