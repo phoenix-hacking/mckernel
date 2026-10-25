@@ -1,0 +1,127 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EIGHT_TRACKED_PROVIDER_BODIES_SOURCE_ONLY",
+  "base": {
+    "C": {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "sha256": "92507b0549a92e4697dc28ed2354cf6263cfed06ecef97809bf0370eb961cd35",
+      "bytes": 190313
+    },
+    "Rust": {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "sha256": "f2e69c7eadb843300861fa7deb2f95b1611d234ffe2de30d2accd1d0bc3da8e6",
+      "bytes": 475099
+    }
+  },
+  "postimages": {
+    "C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/candidate/kernel/process.c",
+      "sha256": "120f75ec367ff01a7b3928714bbc95d56053594ea0d9e360f4f6ad33a87e1eb1",
+      "bytes": 191878
+    },
+    "Rust": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/candidate/kernel/rust/process_helpers.rs",
+      "sha256": "4efa2509c37189b57b5236ea65d6df707a36358a748a2886d5ba66afe9f86ace",
+      "bytes": 482735
+    }
+  },
+  "body": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/fixture/tracked_allocator_providers.ACTUAL-RUST.inc",
+    "sha256": "fc473dd142717bb14c95a2a6975a2c10f30346ba6a69699f69cafb101e23d16e",
+    "bytes": 7635
+  },
+  "originals": {
+    "process_mckfd_free_bridge": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/fixture/process_mckfd_free_bridge.ACTUAL-C.inc",
+      "sha256": "9f7183979f91eb9dc26b0c44bb74168dc429d020a10907eeb663c303f290397a",
+      "bytes": 95
+    },
+    "process_policy_free_bridge": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/fixture/process_policy_free_bridge.ACTUAL-C.inc",
+      "sha256": "c16b32246e73eb088484111e66c45f2da417ffdb1338d255e4aa208e1a272d1b",
+      "bytes": 94
+    },
+    "process_optional_free_bridge": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/fixture/process_optional_free_bridge.ACTUAL-C.inc",
+      "sha256": "781a650e9af5c9556a7805b8b2e44807f4626a5ac70e0570a466fb71478938da",
+      "bytes": 90
+    },
+    "process_alloc_bridge": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/fixture/process_alloc_bridge.ACTUAL-C.inc",
+      "sha256": "57788ba34afb01287e60f76667f2a60f38baf6b40676632bf2971e3130233db5",
+      "bytes": 130
+    },
+    "process_free_vm_bridge": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/fixture/process_free_vm_bridge.ACTUAL-C.inc",
+      "sha256": "961edc19c62619e9b7f7edb26749b29b4eb3ec064bf3a3001687569f8248a7f9",
+      "bytes": 82
+    },
+    "process_range_kfree_bridge": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/fixture/process_range_kfree_bridge.ACTUAL-C.inc",
+      "sha256": "1838a01fd1e2df6be3cf68541d7b134bd4112161a54baba3b3d75bf47ffe5df0",
+      "bytes": 103
+    },
+    "process_add_range_alloc_bridge": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/fixture/process_add_range_alloc_bridge.ACTUAL-C.inc",
+      "sha256": "362ba859d6afe9d0bcdc416f58157cb6064a61742757b37874da75cbce90d97a",
+      "bytes": 141
+    },
+    "process_add_range_free_bridge": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/fixture/process_add_range_free_bridge.ACTUAL-C.inc",
+      "sha256": "90a15d602b2f6ac9915e7a794772c0f5cd1c99ee1f02f544363669c3ed72eb12",
+      "bytes": 106
+    }
+  },
+  "selected_exports": [
+    "process_mckfd_free_bridge",
+    "process_policy_free_bridge",
+    "process_optional_free_bridge",
+    "process_alloc_bridge",
+    "process_free_vm_bridge",
+    "process_range_kfree_bridge",
+    "process_add_range_alloc_bridge",
+    "process_add_range_free_bridge"
+  ],
+  "original_logical_call_lines": {
+    "process_mckfd_free_bridge": 171,
+    "process_policy_free_bridge": 253,
+    "process_optional_free_bridge": 258,
+    "process_alloc_bridge": 340,
+    "process_free_vm_bridge": 561,
+    "process_range_kfree_bridge": 1817,
+    "process_add_range_alloc_bridge": 2256,
+    "process_add_range_free_bridge": 2261
+  },
+  "source_logical_line_sequence_preserved": true,
+  "providers": {
+    "kernel/rust/mem_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/mem_helpers.rs",
+      "sha256": "f544c5177156ad5de8544bb95c46bbc8e2ac870a25c4895ca4cefb7c8cc79680",
+      "bytes": 444772
+    },
+    "kernel/include/kmalloc.h": {
+      "path": "/home/holden/mckernel/kernel/include/kmalloc.h",
+      "sha256": "fff00b6875c3f87a0d9c4bdfeadf3c3d3eb731d843dc0650f6364352ac2b1144",
+      "bytes": 1171
+    },
+    "lib/include/ihk/mm.h": {
+      "path": "/home/holden/mckernel/lib/include/ihk/mm.h",
+      "sha256": "a1b412608df7512a1b7295c6f19b3ec5a77e6364e8f24b208ab1a29e7556e5b1",
+      "bytes": 9548
+    },
+    "kernel/rust/abi.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    }
+  },
+  "remaining_metadata_C": "One readonly file pointer and8 readonly CInt source-line constants preserve exact callsite tracing; no getter or computation added. Original C fallbacks preserved.",
+  "ABI": "Original unsignedlong size narrows to allocator CInt as before; flags remain unsignedlong; NOWAIT reuses existing parent Rust constant2; raw pointer addresses/nullable return/free forwarding unchanged.",
+  "ownership": "Existing allocator retains all OOM diagnostics, allocation and nullablefree policy. No new lock/ref/nullfilter/reset/free site or data access.",
+  "canonical_mutations": 0,
+  "compiler_jobs": 0,
+  "actual_tests": 0,
+  "fullcrate_default_native_credit": false,
+  "next_check": "Root ordinary grant: current fullcrate metadata; actual C header/provider signature + readonlymetadata widths/layout + original file/line values; actual body forwarding vectors for size/int narrowing/flags/nullresult/freepointer and source metadata; selected/fallback C object+full Rust object+strictpartial eight exports.",
+  "downstream_unlock": "Retires eight selected allocation/free C callback bodies, exposing only exact readonly callsite data and existing allocator backend debt; wholefile/default/native remains open."
+}

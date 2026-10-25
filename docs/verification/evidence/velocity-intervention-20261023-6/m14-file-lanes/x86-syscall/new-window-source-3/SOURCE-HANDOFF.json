@@ -1,0 +1,92 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "TID_SELECTION_AND_PREPARE_INFO_SOURCE_ONLY_UNCOMPILED",
+  "bindings": [
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "bytes": 112911,
+      "sha256": "bd2ea4750d041c5b7aec05c409ed2d34ff1837fe6ee54d05e8e18dbc1a5412f0"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1048112,
+      "sha256": "8d42e6071211ed68fb03ef9ed0535f183abab57f1ede987a453750962e5530b7"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "bytes": 475099,
+      "sha256": "f2e69c7eadb843300861fa7deb2f95b1611d234ffe2de30d2accd1d0bc3da8e6"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+      "bytes": 12202,
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-3/candidate/do_kill_prepare_info.FRAGMENT.rs",
+      "bytes": 1818,
+      "sha256": "2cc8d887096d6329b8c680a47d906858c97d6a9385a2326a5b4610a0653b4a77"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-3/candidate/do_kill_thread_target.FRAGMENT.rs",
+      "bytes": 5304,
+      "sha256": "5c294d6557a74efe1b14d2cf0d52091f30eb28ff957d94aa20f219441515f5b1"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-3/candidate/syscall.c",
+      "bytes": 113748,
+      "sha256": "a4ba5577fbae118468335c0e6f0205e5058afd19eaf4ee2967458a706ef3da11"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-3/patch/syscall.c.diff",
+      "bytes": 1790,
+      "sha256": "ecfb1472a133279e205cc52a223ed3f4cc47a268246de6c52eac4c925485accb"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-3/reference/original-prepare-info.ACTUAL.inc",
+      "bytes": 175,
+      "sha256": "31e6d1a71da58cfb7e28651c235fca675c2691a0f788b54d463b6bcf9194f1bc"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-3/reference/original-thread-target.ACTUAL.inc",
+      "bytes": 1409,
+      "sha256": "3c03fcf01ba018460f8058c410efd3dd355cd98b5040f822f2760f1b5db87bcd"
+    }
+  ],
+  "composition": "Disjoint individual-TID and prepare-info regions, reuse source2 process lookup and qualified corrected-wakeup. Root owns combination with group/gate/pending/whole-signal candidates. Do not replace canonical with full private C postimage.",
+  "ownership": "Original noirq hash-node reused for inner threads lock and final outer unlock; actual providers ignore node contents. No aliasing node rewrite/IRQ restoration invented. Missing returns ESRCH after hash unlock then C restores IRQ. Other paths transfer target reference or null and release every lock.",
+  "prepare_info": "Default storage remains original C info0 frame until all synchronous recursion/delivery ends; full128bytes zeroed; external nonnull info never read/copied; invalid signals do not touch output/default storage.",
+  "negative_TID_contract": "Original unchecked thread_hash(tid) may yield negative index; source port does not broaden its defined domain or add new validation policy. Future original-C vectors use only valid hash indices.",
+  "remaining_C": "Top-level ABI entry/cpu-resource snapshots, sigmask formation, macro-selected helper composition and pending writer-lock/IRQ orchestration remain C until central full Rust composition proves them. sig==0 __sigmask shift is original C source debt outside this helper; unchanged.",
+  "actual_compile": null,
+  "actual_cases": null,
+  "default_link": null,
+  "native": null,
+  "fixture_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-3/EXACT-TARGET-QUEUE.NOT-GRANTED.json",
+    "bytes": 38715,
+    "sha256": "4e2d60879a07ccc959ad903692d465bfb11db250330aed6a70f6757af721cf48"
+  },
+  "fixture_expected": {
+    "TID": 972,
+    "prepare_info": 138,
+    "ABI": 25
+  },
+  "reuse_dependencies": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-2/SOURCE-HANDOFF.json",
+      "bytes": 4304,
+      "sha256": "dc164348ff7f30b28cb682851e6b3e370dee8b21a1128c6823cfb5dc16cc71cb"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-1/bounded-field-name-correction-1/PASS-HANDOFF.json",
+      "bytes": 4387,
+      "sha256": "f5e3c74fc5c28b506adf30c6d65165d8092e1a656cc7e2d3ac3eaee0f41dbe54"
+    }
+  ]
+}

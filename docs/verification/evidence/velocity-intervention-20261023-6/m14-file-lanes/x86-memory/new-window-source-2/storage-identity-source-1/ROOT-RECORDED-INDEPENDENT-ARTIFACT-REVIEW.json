@@ -1,0 +1,46 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-25T03:40:38.836022+00:00",
+  "reviewer": "/root/f02_review",
+  "recorded_by": "/root",
+  "status": "PASS_EXACT_SEVEN_STORAGE_MAPPING_AND_RETAINED_F05_ARTIFACT_DEFAULT_SELECTION",
+  "references": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/new-window-source-2/storage-identity-source-1/EXPERT-REVIEW-READY.SOURCE-ONLY.json",
+      "sha256": "46bd484c068d1608cce09d4e76e076a5b3ebf8e354624759075726bd2419b951",
+      "bytes": 2036
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/new-window-source-2/storage-identity-source-1/check_seven_cells.SOURCE-ONLY.py",
+      "sha256": "33b5250d3dcadca16cf6c7ac6d46b0ab89129ca5c214d681091ba5ea0057b343",
+      "bytes": 11001
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/new-window-source-2/storage-identity-source-1/SEVEN-STORAGE-IDENTITIES.SOURCE-ONLY.json",
+      "sha256": "ae516df7af82ca6669870ef51ca3bf36c3e0c30f0367669f563fae73116d4313",
+      "bytes": 31570
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-memory/new-window-source-2/storage-identity-source-1/EXACT7CELLS-CONTROLLED-SOURCE-RESULT.json",
+      "sha256": "db196ff1482d624db059a5c8c234829ccf9b4ed7236b085846f352c120b3ccad",
+      "bytes": 89912
+    }
+  ],
+  "independently_inspected": [
+    "seven final raw pointer cells at retained section offsets",
+    "seven raw Rust RELA entries, exact owner symbol indices/type1/offset0/addend0",
+    "teninput hashes and selected C object",
+    "13 compiled consumer source rows",
+    "72 prior ABI rows",
+    "343 unique executable Rust/image providers and zero named image undefineds"
+  ],
+  "selected_C_runtime": "zero FUNC/OBJECT/COMMON/executable bytes/allocated relocation targets",
+  "storage": "seven distinct zero-initialized writable NOBITS owners, matching size/alignment, separate immutable pointer cells",
+  "negative_records": 56,
+  "negative_fixture_launcher_join_record_supplied": false,
+  "native_accepted": false,
+  "whole_file_retired": false,
+  "full_validator_accepted": false,
+  "current_canonical_union_accepted": false,
+  "original_failures_preserved": true
+}

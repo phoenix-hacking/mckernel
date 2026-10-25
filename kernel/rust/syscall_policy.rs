@@ -337,11 +337,7 @@ unsafe extern "C" {
     fn do_pageout(filename: *const c_void, workarea: *mut c_void, size: SizeT, flag: CInt) -> CInt;
     fn do_pagein(flag: CInt) -> CInt;
     fn syscall_swapout_log_bridge(fname: *const c_void, buf: *mut c_void, size: SizeT, flag: CInt);
-    fn syscall_util_thread_bridge(arg: *mut c_void) -> CLong;
     fn syscall_util_indicate_clone_disabled_bridge();
-    fn syscall_copy_to_user_bridge(dst_addr: CULong, src: *const u8, bytes: SizeT) -> CLong;
-    fn syscall_copy_from_user_bridge(dst: *mut u8, src_addr: CULong, bytes: SizeT) -> CLong;
-    fn syscall_copy_int_to_user_bridge(dst_addr: CULong, src: *const CInt) -> CLong;
     fn syscall_forward_rt_sigprocmask_bridge(sigmask: CULong) -> CLong;
     fn syscall_do_kill_thread_bridge(
         thread: *mut c_void,
@@ -355,10 +351,6 @@ unsafe extern "C" {
     fn syscall_kill_log_bridge(event: CInt, pid: CInt, sig: CInt, error: CInt);
     fn do_setresuid();
     fn do_setresgid();
-    fn syscall_mckfd_lock_bridge(lock: *mut c_void) -> CLong;
-    fn syscall_mckfd_unlock_bridge(lock: *mut c_void, irqstate: CLong);
-    fn syscall_alloc_bridge(size: SizeT, flags: CULong) -> *mut c_void;
-    fn syscall_mckfd_free_bridge(fdp: *mut c_void);
     fn syscall_tofu_ioctl_bridge(
         thread: *mut c_void,
         fd: CInt,
@@ -366,29 +358,15 @@ unsafe extern "C" {
         arg: CULong,
         handled: *mut CInt,
     ) -> CLong;
-    fn syscall_tofu_close_bridge(thread: *mut c_void, fd: CInt);
-    fn syscall_strlen_user_bridge(path: *const c_void) -> CLong;
-    fn syscall_xpmem_open_bridge(pathname: *const c_void, flags: CInt, ctx: *mut c_void) -> CLong;
-    fn syscall_xpmem_openat_bridge(pathname: *const c_void, flags: CInt, ctx: *mut c_void)
-        -> CLong;
-    fn syscall_tsc_to_ts_bridge(tsc: CULong, ts: *mut TimeSpec);
-    fn syscall_timespec_to_jiffy_bridge(ts: *const TimeSpec) -> CULong;
-    fn syscall_ts_add_bridge(dst: *mut TimeSpec, src: *const TimeSpec);
-    fn syscall_gettime_bridge(ts: *mut TimeSpec);
     fn syscall_threads_reader_lock_bridge(proc: *mut c_void, lock_arg: *mut c_void);
     fn syscall_threads_reader_unlock_bridge(proc: *mut c_void, lock_arg: *mut c_void);
     fn syscall_interrupt_cpu_bridge(cpu_id: CInt);
-    fn syscall_set_timer_bridge(runq_locked: CInt);
-    fn syscall_find_process_bridge(pid: CInt, lock_arg: *mut c_void) -> *mut c_void;
-    fn syscall_process_unlock_bridge(proc: *mut c_void, lock_arg: *mut c_void);
     fn syscall_do_prlimit64_bridge(
         pid: CInt,
         resource: CInt,
         new_limit_addr: CULong,
         old_limit_addr: CULong,
     ) -> CLong;
-    fn syscall_get_processor_id_bridge() -> CInt;
-    fn syscall_get_numa_id_bridge() -> CInt;
     fn syscall_linux_mlock_log_bridge(addr: CULong, len: SizeT);
     fn syscall_util_register_desc_log_bridge(tid: CInt, desc: CULong);
     fn exit_do_exit_bridge(code: CInt);
@@ -31373,4 +31351,749 @@ pub extern "C" fn arch_signal_restart_result(
 
     const _: extern "C" fn(CInt, CULong, CInt, CInt, CInt) -> CInt =
         arch_signal_restart_result;
+}
+
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+/// Preserve the syscall clock-sampling callback through its existing complete Rust provider.
+///
+/// # Safety
+/// `ts` obeys the original callback contract: it denotes writable, aligned `TimeSpec`
+/// storage for the duration of the call. The existing provider retains its null behavior.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_gettime_bridge(ts: *mut TimeSpec) {
+    // SAFETY: The caller supplies the same TimeSpec storage as the original C callback;
+    // no reference is created and no storage or clock-state ownership is transferred.
+    unsafe { calculate_time_from_tsc(ts) };
+}
+
+/// Preserve timer rearming through the existing scheduler timer implementation.
+///
+/// # Safety
+/// The caller runs on the current CPU with the original timer/IRQ contract. `runq_locked`
+/// describes existing runqueue-lock ownership; this wrapper neither changes nor claims it.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_set_timer_bridge(runq_locked: CInt) {
+    // SAFETY: The original callback forwards the same current-CPU and runqueue-lock
+    // preconditions to set_timer. The existing Rust provider owns all timer effects.
+    unsafe { crate::sched_helpers::set_timer(runq_locked) };
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+/// Copy exactly one C int through the existing complete Rust user-copy provider.
+///
+/// # Safety
+/// `src` denotes the original readable sizeof(int) source span. `dst_addr` is the
+/// original user address and may fault under the existing user-copy contract.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_copy_int_to_user_bridge(
+    dst_addr: CULong,
+    src: *const CInt,
+) -> CLong {
+    // SAFETY: Raw spans and the actual current-thread mapping context pass unchanged to
+    // the existing provider. No source value is read by this wrapper or borrowed.
+    unsafe {
+        crate::x86_memory_helpers::copy_to_user(
+            dst_addr as *mut c_void,
+            src.cast(),
+            core::mem::size_of::<CInt>(),
+        ) as CLong
+    }
+}
+
+/// Preserve the complete byte-copy-from-user boundary and signed C-int result.
+///
+/// # Safety
+/// `dst` denotes the original writable kernel span of `bytes`. `src_addr` and
+/// the current-thread/address-space lifetime obey the existing user-copy contract.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_copy_from_user_bridge(
+    dst: *mut u8,
+    src_addr: CULong,
+    bytes: SizeT,
+) -> CLong {
+    // SAFETY: The exact source/destination spans, zero-length behavior and recoverable
+    // user faults remain owned by the existing Rust provider. No new reference is made.
+    unsafe {
+        crate::x86_memory_helpers::copy_from_user(dst.cast(), src_addr as *const c_void, bytes)
+            as CLong
+    }
+}
+
+/// Preserve the complete byte-copy-to-user boundary and signed C-int result.
+///
+/// # Safety
+/// `src` denotes the original readable kernel span of `bytes`. `dst_addr` and
+/// the current-thread/address-space lifetime obey the existing user-copy contract.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_copy_to_user_bridge(
+    dst_addr: CULong,
+    src: *const u8,
+    bytes: SizeT,
+) -> CLong {
+    // SAFETY: The underlying provider retains page-fault, map/unmap, partial-copy and
+    // error behavior. The C-int-to-C-long cast preserves the original signed conversion.
+    unsafe {
+        crate::x86_memory_helpers::copy_to_user(dst_addr as *mut c_void, src.cast(), bytes)
+            as CLong
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+/// Preserve process lookup and the existing hash-reader IRQ-save lock handoff.
+///
+/// # Safety
+/// `lock_arg` denotes the original live, aligned McsRwlockNodeIrqsave storage. The
+/// caller must pair a successful lookup with the original process_unlock protocol.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_find_process_bridge(
+    pid: CInt,
+    lock_arg: *mut c_void,
+) -> *mut c_void {
+    // SAFETY: The actual process helper receives the same pid and caller-owned lock
+    // node. Its returned pointer and lock ownership are forwarded without new claims.
+    unsafe { crate::process_helpers::find_process(pid, lock_arg.cast()).cast() }
+}
+
+/// Release the exact process lookup/reference and IRQ-save lock handoff.
+///
+/// # Safety
+/// `proc` and `lock_arg` form the valid pair returned by the original find_process
+/// protocol; the caller has not already released that ownership or reused the node.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_process_unlock_bridge(
+    proc: *mut c_void,
+    lock_arg: *mut c_void,
+) {
+    // SAFETY: The existing provider owns the release and IRQ restoration. Raw casts
+    // preserve the original ABI and do not create references or acquire another lock.
+    unsafe { crate::process_helpers::process_unlock(proc.cast(), lock_arg.cast()) };
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+/// Forward the original request pointer and CPU to the genuine offload transaction.
+///
+/// # Safety
+/// `request` and `cpu` must satisfy the existing do_syscall lifetime, initialization,
+/// current-thread and offload-channel contract. Known partial-request callers remain
+/// unqualified. This wrapper neither reads request fields nor repairs their state.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_do_syscall_request_bridge(
+    request: *mut SyscallRequest,
+    cpu: CInt,
+) -> CLong {
+    // SAFETY: The exact pointer/CPU are handed to the existing C do_syscall provider.
+    // No Rust reference, field load, byte copy, new request or extra ownership is made.
+    unsafe { do_syscall(request, cpu) }
+}
+
+/// Translate the original address through the existing complete Rust mapping provider.
+///
+/// # Safety
+/// The caller preserves the original architecture mapping/boot-state contract.
+/// `addr` is interpreted as an address by that provider and is not dereferenced here.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_virt_to_phys_bridge(addr: *mut c_void) -> CULong {
+    // SAFETY: The original raw address and mapping-state preconditions pass unchanged.
+    // The actual Rust provider retains all range branches, wrapping arithmetic and logs.
+    unsafe { crate::x86_memory_helpers::virt_to_phys(addr) }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+/// Preserve the current-CPU callback through the existing architecture implementation.
+///
+/// # Safety
+/// The caller satisfies the original boot/current-CPU and GS-base access contract.
+/// The existing provider retains its signed return and architecture-equivalence cfg.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_get_processor_id_bridge() -> CInt {
+    // SAFETY: The original architecture entry is called under the same CPU context;
+    // no MSR access, local-data read or fallback behavior is reimplemented here.
+    unsafe { crate::x86_local::ihk_mc_get_processor_id() }
+}
+
+/// Preserve the current-NUMA callback through the existing complete Rust provider.
+///
+/// # Safety
+/// The caller satisfies the original CPU-info initialization and valid current-CPU
+/// index contract. This does not extend the valid domain to out-of-range CPU IDs.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_get_numa_id_bridge() -> CInt {
+    // SAFETY: The existing provider owns the CPU-info/node lookup, including its
+    // original null CPU-info return. No reference or additional validation is introduced.
+    unsafe { crate::x86_setup::ihk_mc_get_numa_id() }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+/// Forward tick conversion to the existing complete Rust time implementation.
+///
+/// # Safety
+/// `ts` is writable, aligned TimeSpec storage. The original initialized, nonzero
+/// clocks-per-second precondition and clock-state access discipline remain required.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_tsc_to_ts_bridge(tsc: CULong, ts: *mut TimeSpec) {
+    // SAFETY: The same tick value and raw output storage reach the original Rust
+    // conversion. Division, normalization and output order are not reimplemented.
+    unsafe { tsc_to_ts(tsc, ts) };
+}
+
+/// Forward a complete timespec to the existing Rust jiffy conversion.
+///
+/// # Safety
+/// `ts` points to a live, initialized, aligned TimeSpec with the original read contract.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_timespec_to_jiffy_bridge(ts: *const TimeSpec) -> CULong {
+    // SAFETY: This preserves the exact raw source pointer and provider arithmetic.
+    unsafe { timespec_to_jiffy(ts) }
+}
+
+/// Preserve timespec addition and normalization through the actual Rust timer body.
+///
+/// # Safety
+/// `dst` and `src` satisfy the original initialized, aligned TimeSpec access contract;
+/// the caller excludes concurrent mutation. No extra disjointness rule is introduced.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_ts_add_bridge(dst: *mut TimeSpec, src: *const TimeSpec) {
+    // SAFETY: The actual pointer-only provider preserves field access order, including
+    // valid same-object aliasing. No Rust reference or copied snapshot is introduced.
+    unsafe { crate::timer::ts_add(dst, src) };
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+unsafe extern "C" {
+    static f03_mckfd_alloc_origin_file_v1: i8;
+    static f03_mckfd_alloc_origin_line_v1: CInt;
+    static f03_mckfd_free_origin_file_v1: i8;
+    static f03_mckfd_free_origin_line_v1: CInt;
+}
+
+/// Acquire the original ticket lock and preserve the signed saved-IRQ-bit return.
+///
+/// # Safety
+/// `lock` denotes the original live, aligned IhkSpinlock. The caller obeys its
+/// lock order, preemption context and matching unlock protocol.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_mckfd_lock_bridge(lock: *mut c_void) -> CLong {
+    // SAFETY: The actual lock provider owns IRQ save, ticket acquisition and preemption.
+    // The unsigned-to-signed cast retains the original x86_64 C long bit pattern.
+    (unsafe { crate::spinlock_helpers::__ihk_mc_spinlock_lock(lock.cast()) }) as CLong
+}
+
+/// Release the original ticket lock with the exact matching saved IRQ bits.
+///
+/// # Safety
+/// The caller owns `lock` from the corresponding acquisition and supplies its saved
+/// IRQ state. No node/reference ownership or additional lock is introduced.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_mckfd_unlock_bridge(lock: *mut c_void, irqstate: CLong) {
+    // SAFETY: Casting back restores all original saved bits; the existing provider
+    // owns ticket release, preemption enable and IRQ restoration in original order.
+    unsafe { crate::spinlock_helpers::__ihk_mc_spinlock_unlock(lock.cast(), irqstate as CULong) };
+}
+
+/// Allocate through the genuine tracked allocator with the original C origin metadata.
+///
+/// # Safety
+/// The caller preserves the actual allocator/flag context. Fresh storage or null is
+/// returned unchanged; original size_t-to-int conversion is intentionally preserved.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_alloc_bridge(size: SizeT, flags: CULong) -> *mut c_void {
+    // SAFETY: The existing allocator owns allocation and OOM logging. Declarative C
+    // data gives the same file/call-site line; its static string is not mutated here.
+    unsafe {
+        crate::mem_helpers::kmalloc_tracked(
+            size as CInt,
+            flags,
+            core::ptr::addr_of!(f03_mckfd_alloc_origin_file_v1).cast_mut(),
+            f03_mckfd_alloc_origin_line_v1,
+        )
+    }
+}
+
+/// Release through the genuine tracked free provider and original C call-site metadata.
+///
+/// # Safety
+/// `fdp` obeys the original allocator ownership/free contract. The caller ensures a
+/// legal release exactly once; null behavior remains owned by the existing provider.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_mckfd_free_bridge(fdp: *mut c_void) {
+    // SAFETY: No allocation is constructed, pointer dereferenced or release suppressed
+    // here. The original tracked provider consumes the same pointer and origin data.
+    unsafe {
+        crate::mem_helpers::kfree_tracked(
+            fdp,
+            core::ptr::addr_of!(f03_mckfd_free_origin_file_v1).cast_mut(),
+            f03_mckfd_free_origin_line_v1,
+        )
+    };
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+#[cfg(enable_tofu)]
+unsafe extern "C" {
+    static f03_tofu_close_source_file_v1: u8;
+    static f03_tofu_close_free_line_v1: CInt;
+    static mut f03_tofu_close_debug_v1: [crate::debug::Ddebug; 2];
+}
+
+#[cfg(enable_tofu)]
+unsafe fn f03_tofu_close_data_slot(thread: *mut Thread, fd: usize) -> *mut *mut c_void {
+    // SAFETY: The original close caller owns a live Thread/Process and checked fd.
+    // Reload Process at each operation, including after external release/log calls.
+    let proc = unsafe { addr_of!((*thread).proc).read() };
+    unsafe { addr_of_mut!((*proc).fd_pde_data).cast::<*mut c_void>().add(fd) }
+}
+
+#[cfg(enable_tofu)]
+unsafe fn f03_tofu_close_path_slot(thread: *mut Thread, fd: usize) -> *mut *mut i8 {
+    // SAFETY: Same original lifetime/range contract; no cached slot spans a callback.
+    let proc = unsafe { addr_of!((*thread).proc).read() };
+    unsafe { addr_of_mut!((*proc).fd_path).cast::<*mut i8>().add(fd) }
+}
+
+/// Release the optional Tofu fd, then free and clear its current tracked path.
+///
+/// # Safety
+/// With enable_tofu, thread and its current Process must remain live under the
+/// original close caller's synchronization. Every reachable path slot is initialized;
+/// a non-null path retains the original tracked allocation ownership. The genuine
+/// release endpoint may update those slots, so they are reloaded after callbacks.
+/// This adapter adds no lock, reference, rollback or lifetime. Without enable_tofu
+/// neither argument is inspected, matching the original complete C branch.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_tofu_close_bridge(threadp: *mut c_void, fd: CInt) {
+    #[cfg(enable_tofu)]
+    {
+        let thread = threadp.cast::<Thread>();
+        // SAFETY: Original C dereferences Thread/Process before the fd range check.
+        let proc = unsafe { addr_of!((*thread).proc).read() };
+        let enabled = unsafe { addr_of!((*proc).enable_tofu).read() };
+        if enabled != 0 && fd >= 0 && fd < 1024 {
+            let index = fd as usize;
+            // SAFETY: Original checked index and initialized descriptor slots.
+            if !unsafe { f03_tofu_close_data_slot(thread, index).read() }.is_null() {
+                let log_enabled = unsafe {
+                    read_volatile(addr_of!(f03_tofu_close_debug_v1[0].line_flags)) >> 24 != 0
+                };
+                if log_enabled {
+                    let path = unsafe { f03_tofu_close_path_slot(thread, index).read() };
+                    // SAFETY: Exact C formatter ABI and its original optional path.
+                    unsafe {
+                        kprintf(
+                            c"%s: -> tof_utofu_release_fd() @ fd: %d (%s)\n".as_ptr().cast(),
+                            c"syscall_tofu_close_bridge".as_ptr(), fd, path,
+                        );
+                    }
+                }
+                // SAFETY: Reuse the existing genuine release binding. Keep its call
+                // before clearing data, and reload Process after possible callbacks.
+                let current = unsafe { addr_of!((*thread).proc).read() };
+                unsafe { f03_process_cleanup_tofu_release(current, fd) };
+                unsafe { f03_tofu_close_data_slot(thread, index).write(null_mut()) };
+            }
+            // SAFETY: Read the CURRENT path after release, exactly as original C.
+            if !unsafe { f03_tofu_close_path_slot(thread, index).read() }.is_null() {
+                let log_enabled = unsafe {
+                    read_volatile(addr_of!(f03_tofu_close_debug_v1[1].line_flags)) >> 24 != 0
+                };
+                if log_enabled {
+                    let path = unsafe { f03_tofu_close_path_slot(thread, index).read() };
+                    unsafe {
+                        kprintf(
+                            c"%s: %d -> %s\n".as_ptr().cast(),
+                            c"syscall_tofu_close_bridge".as_ptr(), fd, path,
+                        );
+                    }
+                }
+                // SAFETY: Reload after logging too; free the same current path that
+                // C passes, then clear only after the actual tracked free returns.
+                let path = unsafe { f03_tofu_close_path_slot(thread, index).read() };
+                unsafe {
+                    crate::mem_helpers::kfree_tracked(
+                        path.cast(), addr_of!(f03_tofu_close_source_file_v1).cast_mut().cast(),
+                        f03_tofu_close_free_line_v1,
+                    );
+                    f03_tofu_close_path_slot(thread, index).write(null_mut());
+                }
+            }
+        }
+    }
+    #[cfg(not(enable_tofu))]
+    let _ = (threadp, fd);
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+unsafe extern "C" {
+    static mut f03_futex_log_debug_v2: [crate::debug::Ddebug; 4];
+}
+
+fn f03_futex_op_name_v2(op: CInt) -> *const i8 {
+    match op {
+        0 => c"FUTEX_WAIT".as_ptr(),
+        9 => c"FUTEX_WAIT_BITSET".as_ptr(),
+        1 => c"FUTEX_WAKE".as_ptr(),
+        5 => c"FUTEX_WAKE_OP".as_ptr(),
+        10 => c"FUTEX_WAKE_BITSET".as_ptr(),
+        4 => c"FUTEX_CMP_REQUEUE".as_ptr(),
+        3 => c"FUTEX_REQUEUE (NOT IMPL!)".as_ptr(),
+        _ => c"unknown".as_ptr(),
+    }
+}
+
+/// Format the original futex record only when its genuine dynamic-debug flag is on.
+///
+/// # Safety
+/// record must name the initialized fields of the original stack log record for
+/// this synchronous call. For enabled ENTER/EXIT only, uaddr must retain the same
+/// aligned readable u32 contract that the C diagnostic dereference required. Flags
+/// may disable all access to that user word. No record/pointee borrow is retained,
+/// and no complete-record read touches its uninitialized representation padding.
+#[no_mangle]
+pub unsafe extern "C" fn f03_futex_log_bridge_v2(record: *const FutexLogRecord) {
+    // SAFETY: Event is initialized by the complete Rust/C producer before callback.
+    let event = unsafe { addr_of!((*record).event).read() };
+    let flag_index = match event {
+        1 => 0,
+        2 => 1,
+        3 => 2,
+        4 => 3,
+        _ => return,
+    };
+    // SAFETY: Exact event-to-record mapping bounds the genuine four-entry C array.
+    let enabled = unsafe {
+        read_volatile(addr_of!(f03_futex_log_debug_v2[flag_index].line_flags)) >> 24 != 0
+    };
+    if !enabled {
+        return;
+    }
+    match event {
+        1 | 4 => {
+            // SAFETY: These fields are initialized individually by the producer.
+            // User memory is read only AFTER the same lexical debug flag gate.
+            let op = unsafe { addr_of!((*record).op).read() };
+            let uaddr = unsafe { addr_of!((*record).uaddr).read() };
+            let val = unsafe { addr_of!((*record).val).read() };
+            let utime = unsafe { addr_of!((*record).utime).read() };
+            let uaddr2 = unsafe { addr_of!((*record).uaddr2).read() };
+            let val3 = unsafe { addr_of!((*record).val3).read() };
+            let fshared = unsafe { addr_of!((*record).fshared).read() };
+            let user_word = unsafe { (uaddr as *const u32).read() };
+            if event == 1 {
+                let flags = unsafe { addr_of!((*record).flags).read() };
+                // SAFETY: Exact original C vararg widths and literal bytes.
+                unsafe {
+                    kprintf(
+                        c"futex op=[%x, %s],uaddr=%lx, val=%x, utime=%lx, uaddr2=%lx, val3=%x, []=%x, shared: %d\n"
+                            .as_ptr().cast(),
+                        flags, f03_futex_op_name_v2(op), uaddr, val, utime,
+                        uaddr2, val3, user_word, fshared,
+                    );
+                }
+            } else {
+                let ret = unsafe { addr_of!((*record).ret).read() };
+                unsafe {
+                    kprintf(
+                        c"futex op=[%x, %s],uaddr=%lx, val=%x, utime=%lx, uaddr2=%lx, val3=%x, []=%x, shared: %d, ret: %d\n"
+                            .as_ptr().cast(),
+                        op, f03_futex_op_name_v2(op), uaddr, val, utime,
+                        uaddr2, val3, user_word, fshared, ret,
+                    );
+                }
+            }
+        }
+        2 | 3 => {
+            let sec = unsafe { addr_of!((*record).sec).read() };
+            let nsec = unsafe { addr_of!((*record).nsec).read() };
+            if event == 2 {
+                unsafe {
+                    kprintf(
+                        c"%s: utime=%ld.%09ld\n".as_ptr().cast(),
+                        c"do_futex_log_bridge".as_ptr(), sec, nsec,
+                    );
+                }
+            } else {
+                unsafe {
+                    kprintf(
+                        c"%s: ats=%ld.%09ld\n".as_ptr().cast(),
+                        c"do_futex_log_bridge".as_ptr(), sec, nsec,
+                    );
+                }
+            }
+        }
+        _ => {}
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+/// Sample the delegated clock using the complete, zeroed native-futex request.
+///
+/// # Safety
+/// ats denotes writable aligned TimeSpec storage. The original caller's current
+/// thread/CPU, physical mapping and synchronous do_syscall contracts apply. The
+/// delegated provider may write the selected private timespec only during this
+/// call and retains no request or timespec pointer after return. This introduces
+/// no publication acknowledgement or ownership authority beyond that C contract.
+#[cfg(native_linux_irq_work_v6_12)]
+#[no_mangle]
+pub unsafe extern "C" fn f03_futex_native_syscall_time_v2(
+    syscall_nr: CInt,
+    clock_id: CInt,
+    ats: *mut TimeSpec,
+) -> CInt {
+    // The x86 IHK_DMA_ALIGN macro is empty: preserve actual natural C alignment,
+    // not an invented cache-line/page alignment. All fields and tv entries are set.
+    let mut request = SyscallRequest {
+        rtid: 0,
+        ttid: 0,
+        valid: 0,
+        number: 0,
+        args: [0; 6],
+    };
+    let mut tv = [
+        TimeSpec { tv_sec: 0, tv_nsec: 0 },
+        TimeSpec { tv_sec: 0, tv_nsec: 0 },
+    ];
+    let first = addr_of_mut!(tv).cast::<TimeSpec>();
+    // SAFETY: Two real initialized array entries; pointer arithmetic remains in it.
+    let second = unsafe { first.add(1) };
+    let now = if ((first as CULong) ^ (second as CULong)) & PAGE_MASK != 0 {
+        second
+    } else {
+        first
+    };
+    request.number = syscall_nr as CULong;
+    // SAFETY: Same actual raw address translation, then current CPU lookup order.
+    request.args[0] = unsafe { crate::x86_memory_helpers::virt_to_phys(now.cast()) };
+    request.args[1] = clock_id as CULong;
+    let cpu = unsafe { crate::x86_local::ihk_mc_get_processor_id() };
+    // SAFETY: Exact complete request goes to the genuine existing offload provider.
+    // Original C assigns long return to int BEFORE its sign test; keep narrowing.
+    let result = unsafe { do_syscall(addr_of_mut!(request), cpu) } as CInt;
+    if result < 0 {
+        return result;
+    }
+    // SAFETY: Synchronous provider has completed its writes. Copy the two fields
+    // separately and only after nonnegative narrowed result, preserving C order.
+    unsafe {
+        addr_of_mut!((*ats).tv_sec).write(addr_of!((*now).tv_sec).read());
+        addr_of_mut!((*ats).tv_nsec).write(addr_of!((*now).tv_nsec).read());
+    }
+    0
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+/// Preserve the original user-string length callback and signed C-int promotion.
+///
+/// # Safety
+/// path is the original user address. Current-thread mapping, fault recovery and
+/// readable range follow the genuine strlen_user contract; no direct Rust read or
+/// user slice/reference is introduced by this adapter.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_strlen_user_bridge(path: *const c_void) -> CLong {
+    // SAFETY: Existing complete provider owns mapping, verification and scanning.
+    unsafe { crate::x86_memory_helpers::strlen_user(path.cast()) as CLong }
+}
+
+/// Invoke the actual XPMEM open transaction using the original pathname/context.
+///
+/// # Safety
+/// pathname, flags and opaque ctx meet the existing xpmem_open contract. The real
+/// provider owns process/partition lookup, allocation, lock/ref and forwarding
+/// effects. This adapter neither dereferences ctx nor changes those lifetimes.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_xpmem_open_bridge(
+    pathname: *const c_void,
+    flags: CInt,
+    ctx: *mut c_void,
+) -> CLong {
+    // SAFETY: Identical pointer/flags pass to the genuine Rust open provider.
+    unsafe { crate::xpmem_helpers::xpmem_open(pathname.cast(), flags, ctx) as CLong }
+}
+
+/// Invoke the distinct actual XPMEM openat entry and preserve int-to-long errors.
+///
+/// # Safety
+/// Same original pathname/context lifetime and provider ownership as openat.
+/// Keep its separate syscall selector rather than substituting the open entry.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_xpmem_openat_bridge(
+    pathname: *const c_void,
+    flags: CInt,
+    ctx: *mut c_void,
+) -> CLong {
+    // SAFETY: Exact original input bits, genuine provider and signed promotion.
+    unsafe { crate::xpmem_helpers::xpmem_openat(pathname.cast(), flags, ctx) as CLong }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+unsafe extern "C" {
+    #[link_name = "util_thread"]
+    fn f03_existing_util_thread_v2(arg: *mut UtiAttr) -> CInt;
+}
+
+/// Hand the original UTI attribute to the existing complete C endpoint.
+///
+/// # Safety
+/// The raw argument and current-thread/offload state satisfy the ORIGINAL
+/// util_thread contract. This adapter does not dereference/copy/free the argument
+/// or repair that endpoint's partial request. C util_thread is explicit debt;
+/// native/ownership qualification of its backend is not conferred by this entry.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_util_thread_bridge(arg: *mut c_void) -> CLong {
+    // SAFETY: Exact C-int return is sign-extended to the original C-long wrapper.
+    unsafe { f03_existing_util_thread_v2(arg.cast()) as CLong }
+}
+
+/// Consume only this current thread's already-published remote-spawn mode.
+///
+/// # Safety
+/// Current CPU/Thread and mod_clone fields are live and initialized under the
+/// caller's original current-thread ownership. No concurrent access is admitted
+/// by these plain loads/stores. mod_clone_arg remains valid for the existing UTI
+/// endpoint; ownership is neither cloned, freed nor cleared here.
+#[no_mangle]
+pub unsafe extern "C" fn utilthr_migrate() {
+    // SAFETY: Same actual CPU-local/current-thread lookup as original C.
+    let local = unsafe { crate::cls::get_this_cpu_local_var() };
+    let thread = unsafe { addr_of!((*local).current).read() };
+    let mode = unsafe { addr_of!((*thread).mod_clone).read() };
+    if mode == F03_SPAWNING_TO_REMOTE {
+        // SAFETY: Clear mode BEFORE the external endpoint so same-thread reentry
+        // sees the original SPAWN_TO_LOCAL state. No new atomic/lock is invented.
+        unsafe { addr_of_mut!((*thread).mod_clone).write(SPAWN_TO_LOCAL) };
+        let argument = unsafe { addr_of!((*thread).mod_clone_arg).read() };
+        // SAFETY: Existing endpoint sees the same argument after the mode store.
+        // Its result is ignored by the original void entry, including errors.
+        let _ = unsafe { f03_existing_util_thread_v2(argument.cast()) };
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+/// Submit the original complete credential request and return its selected raw span.
+///
+/// # Safety
+/// raw_buf, when non-null, provides the original writable sixteen-CInt scratch
+/// allocation and physical-map/synchronous-offload lifetime. The helper does not
+/// read credential values. Its callers MUST separately establish that the genuine
+/// response producer initialized every consumed value. This entry cannot supply
+/// that missing authority, turn an ignored endpoint error into success, or justify
+/// reading failed/uninitialized output. No new zero-fill or ACK is introduced.
+#[no_mangle]
+pub unsafe extern "C" fn getcred(raw_buf: *mut CInt) -> *mut CInt {
+    // SAFETY: Reuse the exact existing selected algorithm, including its full
+    // zeroed REQUEST (not response buffer), page-span choice and ignored syscall
+    // result. Three source18 adapters resolve to genuine mapping/CPU/do_syscall.
+    unsafe {
+        getcred_body_result(
+            raw_buf, PAGE_MASK, SYS_SETFSUID,
+            Some(syscall_virt_to_phys_bridge), Some(syscall_get_processor_id_bridge),
+            Some(syscall_do_syscall_request_bridge),
+        )
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+/// Read the original child's counter through the complete existing Rust provider.
+///
+/// # Safety
+/// The caller retains the actual perf counter/current-CPU hardware contract.
+/// Genuine provider validation, general/fixed counter selection and rdpmc effects
+/// are unchanged. This is not a HOST permission to execute hardware reads.
+#[no_mangle]
+pub unsafe extern "C" fn f03_sync_child_perf_read_v2(counter_id: CInt) -> CULong {
+    // SAFETY: Exact original signed selector, genuine provider and unsigned result.
+    unsafe { crate::x86_perfctr::ihk_mc_perfctr_read(counter_id) }
+}
+
+/// Store the original signed child count using its genuine Rust atomic provider.
+///
+/// # Safety
+/// count names a live initialized, aligned actual ihk_atomic64_t object under the
+/// existing perf-sync ownership. No pointee/reference is fabricated; C long and
+/// the real AtomicI64 width/alignment match the actual supported ABI.
+#[no_mangle]
+pub unsafe extern "C" fn f03_sync_child_count_set_v2(count: *mut c_void, value: CLong) {
+    // SAFETY: Keep the existing atomic64 SeqCst store and original signed value.
+    unsafe { crate::atomic_helpers::ihk_atomic64_set(count.cast(), value) };
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(f03_io_diagnostic_callbacks_candidate)]
+mod f03_io_diagnostic_callbacks_v1 {
+    use core::ffi::c_void;
+    use core::ptr::{addr_of, read_volatile};
+
+    use crate::abi::{CInt, CLong, CULong, SizeT};
+
+    use super::{ihk_mc_get_processor_id, kprintf};
+
+    unsafe extern "C" {
+        static mut f03_swapout_callback_debug_v1: crate::debug::Ddebug;
+    }
+
+    /// Emit the original gated swapout diagnostic before its existing body.
+    ///
+    /// # Safety
+    /// The static debug record and formatter must be live. Debug-flag updates
+    /// require the original dynamic-debug synchronization contract. Pointer values
+    /// are formatted numerically and are never dereferenced by this callback.
+    #[export_name = "syscall_swapout_log_bridge"]
+    pub unsafe extern "C" fn swapout(
+        filename: *const c_void,
+        workarea: *mut c_void,
+        size: SizeT,
+        flag: CInt,
+    ) {
+        // SAFETY: This is the actual aligned static record, read without creating
+        // a reference. Match the C macro's nonzero eight-bit flags test.
+        let flags = unsafe {
+            read_volatile(addr_of!(f03_swapout_callback_debug_v1.line_flags)) >> 24
+        };
+        if flags != 0 {
+            // SAFETY: Original format, argument order and promoted scalar widths.
+            // CPU lookup remains conditional, as in the original dkprintf macro.
+            unsafe {
+                kprintf(
+                    c"[%d]swapout(%lx,%lx,%lx,%ld)\n".as_ptr().cast(),
+                    ihk_mc_get_processor_id(),
+                    filename as CULong,
+                    workarea as CULong,
+                    size as CULong,
+                    flag as CLong,
+                );
+            }
+        }
+    }
+
+    /// Emit the original unconditional Linux-mlock diagnostic.
+    ///
+    /// # Safety
+    /// The genuine kernel formatter must be available in this context. The address
+    /// is only formatted as a pointer; this callback does not access user memory.
+    #[export_name = "syscall_linux_mlock_log_bridge"]
+    pub unsafe extern "C" fn linux_mlock(address: CULong, length: SizeT) {
+        // SAFETY: Match the original pointer and signed-long variadic slots;
+        // converting length preserves all bits, including its signed presentation.
+        unsafe {
+            kprintf(
+                c"linux_mlock: %p %ld\n".as_ptr().cast(),
+                address as *const c_void,
+                length as CLong,
+            );
+        }
+    }
 }

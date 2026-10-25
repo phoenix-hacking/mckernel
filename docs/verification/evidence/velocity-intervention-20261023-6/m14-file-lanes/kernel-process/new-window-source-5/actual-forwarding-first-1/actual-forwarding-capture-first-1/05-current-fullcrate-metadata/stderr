@@ -1,0 +1,1175 @@
+warning: target feature `sse2` must be enabled to ensure that the ABI of the current target can be implemented correctly
+  |
+  = note: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+  = note: for more information, see issue #116344 <https://github.com/rust-lang/rust/issues/116344>
+
+warning: the feature `core_intrinsics` is internal to the compiler or standard library
+ --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/lib.rs:2:12
+  |
+2 | #![feature(core_intrinsics)]
+  |            ^^^^^^^^^^^^^^^
+  |
+  = note: using it is strongly discouraged
+  = note: `#[warn(internal_features)]` on by default
+
+warning: unused import: `addr_of_mut`
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/x86_cpu_helpers.rs:4807:30
+     |
+4807 |     use core::ptr::{addr_of, addr_of_mut};
+     |                              ^^^^^^^^^^^
+     |
+     = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:11879:17
+      |
+11879 |         record: unsafe { core::ptr::addr_of_mut!(RECORD_3).cast::<u8>() },
+      |                 ^^^^^^ unnecessary `unsafe` block
+      |
+      = note: `#[warn(unused_unsafe)]` (part of `#[warn(unused)]`) on by default
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:11890:13
+      |
+11890 |             unsafe { core::ptr::addr_of_mut!(RECORD_4).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:11902:13
+      |
+11902 |             unsafe { core::ptr::addr_of_mut!(RECORD_5).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:11903:13
+      |
+11903 |             unsafe { core::ptr::addr_of_mut!(RECORD_6).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:11904:13
+      |
+11904 |             unsafe { core::ptr::addr_of_mut!(RECORD_7).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:11905:13
+      |
+11905 |             unsafe { core::ptr::addr_of_mut!(RECORD_8).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:11917:13
+      |
+11917 |             unsafe { core::ptr::addr_of_mut!(RECORD_9).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:11929:13
+      |
+11929 |             unsafe { core::ptr::addr_of_mut!(RECORD_10).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:11930:13
+      |
+11930 |             unsafe { core::ptr::addr_of_mut!(RECORD_11).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:11931:13
+      |
+11931 |             unsafe { core::ptr::addr_of_mut!(RECORD_12).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:11932:13
+      |
+11932 |             unsafe { core::ptr::addr_of_mut!(RECORD_13).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:11933:13
+      |
+11933 |             unsafe { core::ptr::addr_of_mut!(RECORD_14).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:11934:13
+      |
+11934 |             unsafe { core::ptr::addr_of_mut!(RECORD_15).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:11935:13
+      |
+11935 |             unsafe { core::ptr::addr_of_mut!(RECORD_16).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:11947:13
+      |
+11947 |             unsafe { core::ptr::addr_of_mut!(RECORD_18).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:11958:17
+      |
+11958 |         record: unsafe { core::ptr::addr_of_mut!(RECORD_17).cast::<u8>() },
+      |                 ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:11969:13
+      |
+11969 |             unsafe { core::ptr::addr_of_mut!(RECORD_19).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:11970:13
+      |
+11970 |             unsafe { core::ptr::addr_of_mut!(RECORD_20).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:11971:13
+      |
+11971 |             unsafe { core::ptr::addr_of_mut!(RECORD_21).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:11984:17
+      |
+11984 |         record: unsafe { core::ptr::addr_of_mut!(RECORD_2).cast::<u8>() },
+      |                 ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:11998:13
+      |
+11998 |             unsafe { core::ptr::addr_of_mut!(RECORD_1).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:11999:13
+      |
+11999 |             unsafe { core::ptr::addr_of_mut!(RECORD_0).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:12088:29
+      |
+12088 |         query_free_handler: unsafe { core::ptr::addr_of!(QUERY_FREE_MEM_HANDLER).cast() },
+      |                             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:12090:20
+      |
+12090 |         anon_slot: unsafe { core::ptr::addr_of_mut!(ANON_ON_DEMAND) },
+      |                    ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:12091:21
+      |
+12091 |         xpmem_slot: unsafe { core::ptr::addr_of_mut!(XPMEM_PAGE_IN_REMOTE_ON_ATTACH) },
+      |                     ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:12100:9
+      |
+12100 |         unsafe { core::ptr::addr_of_mut!(MEMORY_NODES).cast() },
+      |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:12109:13
+      |
+12109 |             unsafe { core::ptr::addr_of_mut!(VMAP_ALLOCATOR) },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:12118:18
+      |
+12118 |             ops: unsafe { core::ptr::addr_of_mut!(NUMA_SYSFS_MEMINFO) },
+      |                  ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:12119:20
+      |
+12119 |             nodes: unsafe { core::ptr::addr_of_mut!(MEMORY_NODES).cast() },
+      |                    ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:12242:13
+      |
+12242 |             unsafe { core::ptr::addr_of_mut!(CORE_DEBUG_0).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:12243:13
+      |
+12243 |             unsafe { core::ptr::addr_of_mut!(CORE_DEBUG_1).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:12418:20
+      |
+12418 |         allocator: unsafe { core::ptr::addr_of_mut!(ALLOCATOR) },
+      |                    ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:12441:16
+      |
+12441 |         nodes: unsafe { core::ptr::addr_of_mut!(MEMORY_NODES).cast() },
+      |                ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:12460:20
+      |
+12460 |         log_count: unsafe { core::ptr::addr_of_mut!(PAGE_FAULT_LOG_COUNT) },
+      |                    ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:12461:18
+      |
+12461 |         log_pid: unsafe { core::ptr::addr_of_mut!(PAGE_FAULT_LOG_PID) },
+      |                  ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:12484:13
+      |
+12484 |             unsafe { core::ptr::addr_of_mut!(RECORD_0).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:12486:13
+      |
+12486 |             unsafe { core::ptr::addr_of_mut!(RECORD_1).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:12487:13
+      |
+12487 |             unsafe { core::ptr::addr_of_mut!(RECORD_2).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:12570:13
+      |
+12570 |             unsafe { core::ptr::addr_of_mut!(RECORD_3).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:12571:13
+      |
+12571 |             unsafe { core::ptr::addr_of_mut!(RECORD_4).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:12572:13
+      |
+12572 |             unsafe { core::ptr::addr_of_mut!(RECORD_5).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:12573:13
+      |
+12573 |             unsafe { core::ptr::addr_of_mut!(RECORD_6).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:12574:13
+      |
+12574 |             unsafe { core::ptr::addr_of_mut!(RECORD_7).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:12576:13
+      |
+12576 |             unsafe { core::ptr::addr_of_mut!(RECORD_8).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/page_alloc.rs:3382:28
+     |
+3382 |             pa_start_slot: unsafe { core::ptr::addr_of_mut!(PA_START) },
+     |                            ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/page_alloc.rs:3383:26
+     |
+3383 |             pa_end_slot: unsafe { core::ptr::addr_of_mut!(PA_END) },
+     |                          ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/page_alloc.rs:3384:25
+     |
+3384 |             kernel_end: unsafe { core::ptr::addr_of_mut!(KERNEL_END) },
+     |                         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/process_helpers.rs:13183:18
+      |
+13183 |     let config = unsafe { core::ptr::addr_of!(process_extend_region_entry_config) };
+      |                  ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/x86_memory_helpers.rs:8770:5
+     |
+8770 |     unsafe { core::ptr::addr_of!(X86_END) as CULong }
+     |     ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/x86_memory_helpers.rs:8939:5
+     |
+8939 |     unsafe { core::ptr::addr_of!(MEMORY_VSYSCALL_PAGE) as *mut c_void }
+     |     ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/x86_memory_helpers.rs:9169:18
+     |
+9169 |     let result = unsafe { core::arch::x86_64::__cpuid(op as u32) };
+     |                  ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/x86_memory_helpers.rs:9573:9
+     |
+9573 |         unsafe { core::ptr::addr_of_mut!(OWNED_FIXED_VIRT).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/x86_memory_helpers.rs:9584:9
+     |
+9584 |         unsafe { core::ptr::addr_of_mut!(OWNED_INIT_PT_LOCK).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/x86_memory_helpers.rs:9592:9
+     |
+9592 |         unsafe { core::ptr::addr_of_mut!(OWNED_INIT_PT_LOADED).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/x86_memory_helpers.rs:9600:9
+     |
+9600 |         unsafe { core::ptr::addr_of_mut!(OWNED_BOOT_PT).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/x86_memory_helpers.rs:9608:9
+     |
+9608 |         unsafe { core::ptr::addr_of_mut!(OWNED_INIT_PT).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/x86_memory_helpers.rs:9616:9
+     |
+9616 |         unsafe { core::ptr::addr_of_mut!(OWNED_LAST_PAGE).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/x86_memory_helpers.rs:9967:9
+     |
+9967 |         unsafe { core::ptr::addr_of_mut!(OWNED_USE_1GB_PAGE).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: type `ProcessCloneConfig` is more private than the item `process_clone_thread_body_result`
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/process_helpers.rs:13751:1
+      |
+13751 | / pub unsafe extern "C" fn process_clone_thread_body_result(
+13752 | |     org: *mut Thread,
+13753 | |     pc: CULong,
+13754 | |     sp: CULong,
+13755 | |     clone_flags: CInt,
+13756 | |     config: *const ProcessCloneConfig,
+13757 | | ) -> *mut Thread {
+      | |________________^ function `process_clone_thread_body_result` is reachable at visibility `pub(crate)`
+      |
+note: but type `ProcessCloneConfig` is only usable at visibility `pub(self)`
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/process_helpers.rs:13691:1
+      |
+13691 | struct ProcessCloneConfig {
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^
+      = note: `#[warn(private_interfaces)]` on by default
+
+warning: struct `CallerCredits` is never constructed
+  --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/fork_child_credits.rs:32:19
+   |
+32 | pub(crate) struct CallerCredits {
+   |                   ^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated items `acquire` and `cancel_unpublished` are never used
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/fork_child_credits.rs:94:26
+    |
+ 39 | impl ChildCredits {
+    | ----------------- associated items in this implementation
+...
+ 94 |     pub(crate) unsafe fn acquire(
+    |                          ^^^^^^^
+...
+161 |     pub(crate) unsafe fn cancel_unpublished(self) -> Result<CallerCredits, Self> {
+    |                          ^^^^^^^^^^^^^^^^^^
+
+warning: struct `PrivateFork` is never constructed
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/fork_child_credits.rs:194:19
+    |
+194 | pub(crate) struct PrivateFork<'request> {
+    |                   ^^^^^^^^^^^
+
+warning: struct `CreateFailure` is never constructed
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/fork_child_credits.rs:214:19
+    |
+214 | pub(crate) struct CreateFailure { pub(crate) error: i32, pub(crate) credits: ChildCredits }
+    |                   ^^^^^^^^^^^^^
+
+warning: struct `PrivateFailure` is never constructed
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/fork_child_credits.rs:215:19
+    |
+215 | pub(crate) struct PrivateFailure<'request> { pub(crate) error: i32, pub(crate) owner: PrivateFork<'request> }
+    |                   ^^^^^^^^^^^^^^
+
+warning: enum `BeginFailure` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/fork_child_credits.rs:216:17
+    |
+216 | pub(crate) enum BeginFailure<'request> {
+    |                 ^^^^^^^^^^^^
+
+warning: associated items `create`, `create_owned`, `create_raw`, `validate`, `cancel`, and `begin` are never used
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/fork_child_credits.rs:225:26
+    |
+221 | impl<'request> PrivateFork<'request> {
+    | ------------------------------------ associated items in this implementation
+...
+225 |     pub(crate) unsafe fn create(
+    |                          ^^^^^^
+...
+235 |     pub(crate) unsafe fn create_owned(
+    |                          ^^^^^^^^^^^^
+...
+244 |     unsafe fn create_raw(
+    |               ^^^^^^^^^^
+...
+260 |     unsafe fn validate(&self, carrier: &Carrier) -> bool {
+    |               ^^^^^^^^
+...
+276 |     pub(crate) unsafe fn cancel(mut self) -> Result<CallerCredits, PrivateFailure<'request>> {
+    |                          ^^^^^^
+...
+322 |     pub(crate) unsafe fn begin(mut self) -> Result<EscapedFork<'request>, BeginFailure<'request>> {
+    |                          ^^^^^
+
+warning: field `child_pid` is never read
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/fork_child_credits.rs:352:23
+    |
+352 |     ReceiptObserved { child_pid: i32, owner: RetainedFork },
+    |     ---------------   ^^^^^^^^^
+    |     |
+    |     field in this variant
+
+warning: field `actual` is never read
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/fork_child_credits.rs:353:17
+    |
+353 |     Uncertain { actual: Option<i64>, owner: RetainedFork },
+    |     ---------   ^^^^^^
+    |     |
+    |     field in this variant
+
+warning: method `handle` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/fork_child_credits.rs:357:19
+    |
+356 | impl EscapedFork<'_> {
+    | -------------------- method in this implementation
+357 |     pub(crate) fn handle(&self) -> Handle { self.handle }
+    |                   ^^^^^^
+
+warning: method `caller_cleanup_allowed` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/fork_child_credits.rs:419:19
+    |
+417 | impl RetainedFork {
+    | ----------------- method in this implementation
+418 |     pub(crate) fn handle(&self) -> Handle { self.handle }
+419 |     pub(crate) fn caller_cleanup_allowed(&self) -> bool { false }
+    |                   ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `NATIVE_QUEUE_ABI_VERSION` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/ikc_queue.rs:24:11
+   |
+24 | pub const NATIVE_QUEUE_ABI_VERSION: u32 = 2;
+   |           ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: enum `PendingFreeBatchState` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:166:6
+    |
+166 | enum PendingFreeBatchState {
+    |      ^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `PendingPhysicalBounds` is never constructed
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:176:8
+    |
+176 | struct PendingPhysicalBounds {
+    |        ^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `PendingFreeCallbackArgs` is never constructed
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:182:8
+    |
+182 | struct PendingFreeCallbackArgs {
+    |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `PendingInventoryLease` is never constructed
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:200:8
+    |
+200 | struct PendingInventoryLease {
+    |        ^^^^^^^^^^^^^^^^^^^^^
+
+warning: associated items `new`, `descriptor`, `descriptor_node`, and `descriptor_index` are never used
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:214:15
+    |
+210 | impl PendingInventoryLease {
+    | -------------------------- associated items in this implementation
+...
+214 |     unsafe fn new(
+    |               ^^^
+...
+230 |     unsafe fn descriptor(&self, index: usize) -> *mut MemPage {
+    |               ^^^^^^^^^^
+...
+234 |     unsafe fn descriptor_node(&self, index: usize) -> *mut AbiListHead {
+    |               ^^^^^^^^^^^^^^^
+...
+238 |     unsafe fn descriptor_index(&self, node: *mut AbiListHead) -> Option<usize> {
+    |               ^^^^^^^^^^^^^^^^
+
+warning: struct `ValidatedPendingInventory` is never constructed
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:251:8
+    |
+251 | struct ValidatedPendingInventory {
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `PendingFreeBatch` is never constructed
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:259:8
+    |
+259 | struct PendingFreeBatch {
+    |        ^^^^^^^^^^^^^^^^
+
+warning: associated function `new` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:269:14
+    |
+268 | impl PendingFreeBatch {
+    | --------------------- associated function in this implementation
+269 |     const fn new() -> Self {
+    |              ^^^
+
+warning: function `validate_pending_inventory_metadata` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:284:11
+    |
+284 | unsafe fn validate_pending_inventory_metadata(
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `validate_pending_inventory_ring` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:349:11
+    |
+349 | unsafe fn validate_pending_inventory_ring(
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `validate_pending_inventory` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:405:11
+    |
+405 | unsafe fn validate_pending_inventory(
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: methods `try_reanchor_into` and `reanchor_into` are never used
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:421:15
+    |
+417 | impl ValidatedPendingInventory {
+    | ------------------------------ methods in this implementation
+...
+421 |     unsafe fn try_reanchor_into(
+    |               ^^^^^^^^^^^^^^^^^
+...
+445 |     unsafe fn reanchor_into(self, mut destination: Pin<&mut PendingFreeBatch>) {
+    |               ^^^^^^^^^^^^^
+
+warning: function `drain_validated_pending_inventory` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:472:11
+    |
+472 | unsafe fn drain_validated_pending_inventory(
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `detach_pending_free_batch` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:580:11
+    |
+580 | unsafe fn detach_pending_free_batch(
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `drain_pending_free_batch` is never used
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:625:11
+    |
+625 | unsafe fn drain_pending_free_batch(
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: associated function `unpublished` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/smp_ikc.rs:45:18
+   |
+44 | impl NativeIrqWorkDescriptor {
+   | ---------------------------- associated function in this implementation
+45 |     pub const fn unpublished(generation: u64, slots_phys: u64, slots_count: u32) -> Self {
+   |                  ^^^^^^^^^^^
+
+warning: function `native_irq_work_descriptor_offset` is never used
+  --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/smp_ikc.rs:89:8
+   |
+89 | pub fn native_irq_work_descriptor_offset(tables_end: usize) -> Option<usize> {
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: associated items `new` and `can_drain` are never used
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/smp_ikc.rs:108:18
+    |
+106 | impl IrqWorkSenderGate {
+    | ---------------------- associated items in this implementation
+107 |     const CLOSED: u32 = 1 << 31;
+108 |     pub const fn new() -> Self {
+    |                  ^^^
+...
+134 |     pub fn can_drain(&self) -> bool {
+    |            ^^^^^^^^^
+
+warning: module `selected_APboot_storage` should have a snake case name
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/x86_cpu_helpers.rs:6173:5
+     |
+6173 | mod selected_APboot_storage {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `selected_apboot_storage`
+     |
+     = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: static variable `no_execute` should have an upper case name
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/x86_cpu_helpers.rs:4499:16
+     |
+4499 |     static mut no_execute: CInt = 0;
+     |                ^^^^^^^^^^
+     |
+     = note: `#[warn(non_upper_case_globals)]` (part of `#[warn(nonstandard_style)]`) on by default
+help: convert the identifier to upper case
+     |
+4499 -     static mut no_execute: CInt = 0;
+4499 +     static mut NO_EXECUTE: CInt = 0;
+     |
+
+warning: static variable `selected_mode` should have an upper case name
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/x86_cpu_helpers.rs:5286:16
+     |
+5286 |     static mut selected_mode: CInt = 0;
+     |                ^^^^^^^^^^^^^
+     |
+help: convert the identifier to upper case
+     |
+5286 -     static mut selected_mode: CInt = 0;
+5286 +     static mut SELECTED_MODE: CInt = 0;
+     |
+
+warning: direct cast of function item into an integer
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/xpmem_helpers.rs:1795:21
+     |
+1795 |         xpmem_ioctl as usize as CULong,
+     |                     ^^^^^^^^
+     |
+     = note: `#[warn(function_casts_as_integer)]` on by default
+help: first cast to a pointer `as *const ()`
+     |
+1795 |         xpmem_ioctl as *const () as usize as CULong,
+     |                     ++++++++++++
+
+warning: direct cast of function item into an integer
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/xpmem_helpers.rs:1796:21
+     |
+1796 |         xpmem_close as usize as CULong,
+     |                     ^^^^^^^^
+     |
+help: first cast to a pointer `as *const ()`
+     |
+1796 |         xpmem_close as *const () as usize as CULong,
+     |                     ++++++++++++
+
+warning: direct cast of function item into an integer
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/xpmem_helpers.rs:1797:19
+     |
+1797 |         xpmem_dup as usize as CULong,
+     |                   ^^^^^^^^
+     |
+help: first cast to a pointer `as *const ()`
+     |
+1797 |         xpmem_dup as *const () as usize as CULong,
+     |                   ++++++++++++
+
+warning: `ihk_ikc_send` redeclared with a different signature
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/host_helpers.rs:197:5
+    |
+197 |     fn ihk_ikc_send(channel: *mut c_void, packet: *mut c_void, opt: CInt) -> CInt;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/futex.rs:198:5
+    |
+198 |     fn ihk_ikc_send(channel: *mut c_void, packet: *mut IkcScdPacket, flags: CInt) -> CInt;
+    |     -------------------------------------------------------------------------------------- `ihk_ikc_send` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut core::ffi::c_void, *mut IkcScdPacket, i32) -> i32`
+               found `unsafe extern "C" fn(*mut core::ffi::c_void, *mut core::ffi::c_void, i32) -> i32`
+    = note: `#[warn(clashing_extern_declarations)]` on by default
+
+warning: `page_fault_process_vm` redeclared with a different signature
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/host_helpers.rs:215:5
+    |
+215 |     fn page_fault_process_vm(vm: *mut ProcessVm, addr: *mut c_void, reason: CULong);
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/futex.rs:204:5
+    |
+204 |     fn page_fault_process_vm(vm: *mut ProcessVm, addr: *mut c_void, reason: CULong) -> CInt;
+    |     ---------------------------------------------------------------------------------------- `page_fault_process_vm` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut abi::ProcessVm, *mut core::ffi::c_void, u64) -> i32`
+               found `unsafe extern "C" fn(*mut abi::ProcessVm, *mut core::ffi::c_void, u64)`
+
+warning: `sched_wakeup_thread` redeclared with a different signature
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/host_helpers.rs:221:5
+    |
+221 |     fn sched_wakeup_thread(thread: *mut Thread, valid_states: CInt) -> CInt;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/futex.rs:205:5
+    |
+205 |     fn sched_wakeup_thread(thread: *mut c_void, valid_states: CInt) -> CInt;
+    |     ------------------------------------------------------------------------ `sched_wakeup_thread` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut core::ffi::c_void, i32) -> i32`
+               found `unsafe extern "C" fn(*mut abi::Thread, i32) -> i32`
+
+warning: `ihk_mc_map_virtual` redeclared with a different signature
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/ikc_queue.rs:95:5
+    |
+ 95 |     fn ihk_mc_map_virtual(phys: CULong, size: CULong, attr: CULong) -> *mut CULong;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/host_helpers.rs:186:5
+    |
+186 |     fn ihk_mc_map_virtual(phys: CULong, npages: CInt, attr: CULong) -> *mut c_void;
+    |     ------------------------------------------------------------------------------- `ihk_mc_map_virtual` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(u64, i32, u64) -> *mut core::ffi::c_void`
+               found `unsafe extern "C" fn(u64, u64, u64) -> *mut u64`
+
+warning: `ihk_mc_unmap_virtual` redeclared with a different signature
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/ikc_queue.rs:96:5
+    |
+ 96 |     fn ihk_mc_unmap_virtual(virt: *mut CULong, size: CULong);
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/host_helpers.rs:187:5
+    |
+187 |     fn ihk_mc_unmap_virtual(addr: *mut c_void, npages: CInt);
+    |     --------------------------------------------------------- `ihk_mc_unmap_virtual` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut core::ffi::c_void, i32)`
+               found `unsafe extern "C" fn(*mut u64, u64)`
+
+warning: `ihk_mc_map_virtual` redeclared with a different signature
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/listeners.rs:55:5
+    |
+ 55 |     fn ihk_mc_map_virtual(phys: CULong, size: CULong, attr: CULong) -> *mut CULong;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/host_helpers.rs:186:5
+    |
+186 |     fn ihk_mc_map_virtual(phys: CULong, npages: CInt, attr: CULong) -> *mut c_void;
+    |     ------------------------------------------------------------------------------- `ihk_mc_map_virtual` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(u64, i32, u64) -> *mut core::ffi::c_void`
+               found `unsafe extern "C" fn(u64, u64, u64) -> *mut u64`
+
+warning: `ihk_mc_unmap_virtual` redeclared with a different signature
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/listeners.rs:56:5
+    |
+ 56 |     fn ihk_mc_unmap_virtual(virt: *mut CULong, size: CULong);
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/host_helpers.rs:187:5
+    |
+187 |     fn ihk_mc_unmap_virtual(addr: *mut c_void, npages: CInt);
+    |     --------------------------------------------------------- `ihk_mc_unmap_virtual` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut core::ffi::c_void, i32)`
+               found `unsafe extern "C" fn(*mut u64, u64)`
+
+warning: `page_fault_process_vm` redeclared with a different signature
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:24:5
+    |
+ 24 |     fn page_fault_process_vm(vm: *mut c_void, virt: *mut c_void, reason: CULong) -> CInt;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/futex.rs:204:5
+    |
+204 |     fn page_fault_process_vm(vm: *mut ProcessVm, addr: *mut c_void, reason: CULong) -> CInt;
+    |     ---------------------------------------------------------------------------------------- `page_fault_process_vm` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut abi::ProcessVm, *mut core::ffi::c_void, u64) -> i32`
+               found `unsafe extern "C" fn(*mut core::ffi::c_void, *mut core::ffi::c_void, u64) -> i32`
+
+warning: `mem_kmalloc_panic` redeclares `panic` with a different signature
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:7041:5
+     |
+7041 |     #[link_name = "panic"]
+     |     ^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+     |
+    ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/ap.rs:80:5
+     |
+  80 |     #[link_name = "panic"]
+     |     ---------------------- `panic` previously declared here
+     |
+     = note: expected `unsafe extern "C" fn(*const i8) -> !`
+                found `unsafe extern "C" fn(*const i8)`
+
+warning: `mem_register_interrupt_handler_provider` redeclares `ihk_mc_register_interrupt_handler` with a different signature
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:8987:5
+     |
+8987 |       #[link_name = "ihk_mc_register_interrupt_handler"]
+     |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+     |
+    ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/ikc_manycore.rs:48:5
+     |
+  48 | /     fn ihk_mc_register_interrupt_handler(vector: CInt, handler: *mut IhkMcInterruptHandler)
+  49 | |         -> CInt;
+     | |________________- `ihk_mc_register_interrupt_handler` previously declared here
+     |
+     = note: expected `unsafe extern "C" fn(i32, *mut IhkMcInterruptHandler) -> i32`
+                found `unsafe extern "C" fn(i32, *mut core::ffi::c_void) -> i32`
+
+warning: `mem_get_vector_provider` redeclares `ihk_mc_get_vector` with a different signature
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:9208:5
+     |
+9208 |     #[link_name = "ihk_mc_get_vector"]
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+     |
+    ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/futex.rs:201:5
+     |
+ 201 |     fn ihk_mc_get_vector(vector_key: CInt) -> CInt;
+     |     ----------------------------------------------- `ihk_mc_get_vector` previously declared here
+     |
+     = note: expected `unsafe extern "C" fn(i32) -> i32`
+                found `unsafe extern "C" fn(u32) -> i32`
+
+warning: `ORIGINAL_CPU_INFO` redeclares `ihk_mc_get_cpu_info` with a different signature
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:12337:9
+      |
+12337 |         #[link_name = "ihk_mc_get_cpu_info"]
+      |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+      |
+     ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/ap.rs:92:5
+      |
+   92 |     fn ihk_mc_get_cpu_info() -> *mut IhkMcCpuInfo;
+      |     ---------------------------------------------- `ihk_mc_get_cpu_info` previously declared here
+      |
+      = note: expected `unsafe extern "C" fn() -> *mut ap::IhkMcCpuInfo`
+                 found `unsafe extern "C" fn() -> *mut abi::IhkCpuInfo`
+
+warning: `ORIGINAL_PROFILE_EVENT_ADD` redeclares `profile_event_add` with a different signature
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:12362:9
+      |
+12362 |         #[link_name = "profile_event_add"]
+      |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+      |
+     ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/devobj.rs:68:5
+      |
+   68 |     fn profile_event_add(type_: CInt, tsc: CULong);
+      |     ----------------------------------------------- `profile_event_add` previously declared here
+      |
+      = note: expected `unsafe extern "C" fn(i32, u64)`
+                 found `unsafe extern "C" fn(u32, u64)`
+
+warning: `mem_reserve_panic_provider` redeclares `panic` with a different signature
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/page_alloc.rs:3158:5
+     |
+3158 |     #[link_name = "panic"]
+     |     ^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+     |
+    ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/ap.rs:80:5
+     |
+  80 |     #[link_name = "panic"]
+     |     ---------------------- `panic` previously declared here
+     |
+     = note: expected `unsafe extern "C" fn(*const i8) -> !`
+                found `unsafe extern "C" fn(*const i8)`
+
+warning: `phys_to_page` redeclared with a different signature
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/process_helpers.rs:193:5
+    |
+193 |     fn phys_to_page(phys: CULong) -> *mut crate::page_helpers::Page;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/fileobj.rs:180:5
+    |
+180 |     fn phys_to_page(phys: CULong) -> *mut ObjectPage;
+    |     ------------------------------------------------- `phys_to_page` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(u64) -> *mut fileobj::ObjectPage`
+               found `unsafe extern "C" fn(u64) -> *mut Page`
+
+warning: `process_copy_set_range_public` redeclares `ihk_mc_pt_set_range` with a different signature
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/process_helpers.rs:13332:5
+      |
+13332 |       #[link_name = "ihk_mc_pt_set_range"]
+      |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+      |
+     ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/host_helpers.rs:161:5
+      |
+  161 | /     fn ihk_mc_pt_set_range(
+  162 | |         page_table: *mut c_void,
+  163 | |         vm: *mut c_void,
+  164 | |         start: *mut c_void,
+...     |
+  170 | |         flags: CInt,
+  171 | |     ) -> CInt;
+      | |______________- `ihk_mc_pt_set_range` previously declared here
+      |
+      = note: expected `unsafe extern "C" fn(*mut core::ffi::c_void, *mut core::ffi::c_void, *mut core::ffi::c_void, *mut core::ffi::c_void, u64, u64, i32, *mut core::ffi::c_void, i32) -> i32`
+                 found `unsafe extern "C" fn(*mut core::ffi::c_void, *mut abi::ProcessVm, *mut core::ffi::c_void, *mut core::ffi::c_void, u64, u64, i32, *mut VmRange, i32) -> i32`
+
+warning: `ihk_mc_map_virtual` redeclared with a different signature
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/procfs.rs:103:5
+    |
+103 |     fn ihk_mc_map_virtual(phys: CULong, npages: CULong, attr: CULong) -> *mut CULong;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/host_helpers.rs:186:5
+    |
+186 |     fn ihk_mc_map_virtual(phys: CULong, npages: CInt, attr: CULong) -> *mut c_void;
+    |     ------------------------------------------------------------------------------- `ihk_mc_map_virtual` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(u64, i32, u64) -> *mut core::ffi::c_void`
+               found `unsafe extern "C" fn(u64, u64, u64) -> *mut u64`
+
+warning: `ihk_mc_unmap_virtual` redeclared with a different signature
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/procfs.rs:104:5
+    |
+104 |     fn ihk_mc_unmap_virtual(ptr: *mut CULong, npages: CULong);
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/host_helpers.rs:187:5
+    |
+187 |     fn ihk_mc_unmap_virtual(addr: *mut c_void, npages: CInt);
+    |     --------------------------------------------------------- `ihk_mc_unmap_virtual` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut core::ffi::c_void, i32)`
+               found `unsafe extern "C" fn(*mut u64, u64)`
+
+warning: `release_thread` redeclared with a different signature
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/sched_helpers.rs:28:5
+    |
+ 28 |     fn release_thread(thread: *mut core::ffi::c_void);
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/procfs.rs:116:5
+    |
+116 |     fn release_thread(thread: *mut Thread);
+    |     --------------------------------------- `release_thread` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut abi::Thread)`
+               found `unsafe extern "C" fn(*mut core::ffi::c_void)`
+
+warning: `ihk_mc_pt_lookup_pte` redeclared with a different signature
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/shmobj.rs:134:5
+    |
+134 | /     fn ihk_mc_pt_lookup_pte(
+135 | |         pt: *mut c_void,
+136 | |         virt: *mut c_void,
+137 | |         pgshift: CInt,
+...   |
+140 | |         p2alignp: *mut CInt,
+141 | |     ) -> *mut c_void;
+    | |_____________________^ this signature doesn't match the previous declaration
+    |
+   ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:20:5
+    |
+ 20 | /     fn ihk_mc_pt_lookup_pte(
+ 21 | |         pt: *mut c_void, virt: *mut c_void, pgshift: CInt,
+ 22 | |         basep: *mut *mut c_void, sizep: *mut usize, p2alignp: *mut CInt,
+ 23 | |     ) -> *mut CULong;
+    | |_____________________- `ihk_mc_pt_lookup_pte` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut core::ffi::c_void, *mut core::ffi::c_void, i32, *mut *mut core::ffi::c_void, *mut usize, *mut i32) -> *mut u64`
+               found `unsafe extern "C" fn(*mut core::ffi::c_void, *mut core::ffi::c_void, i32, *mut *mut core::ffi::c_void, *mut usize, *mut i32) -> *mut core::ffi::c_void`
+
+warning: `f06_set_signal_kernel_panic` redeclares `panic` with a different signature
+     --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/syscall_policy.rs:29828:5
+      |
+29828 |     #[link_name = "panic"]
+      |     ^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+      |
+     ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/ap.rs:80:5
+      |
+   80 |     #[link_name = "panic"]
+      |     ---------------------- `panic` previously declared here
+      |
+      = note: expected `unsafe extern "C" fn(*const i8) -> !`
+                 found `unsafe extern "C" fn(*const i8)`
+
+warning: `c_map_fixed_area` redeclares `map_fixed_area` with a different signature
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/x86_cpu_helpers.rs:5709:9
+     |
+5709 |         #[link_name = "map_fixed_area"]
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+     |
+    ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/builtin_dma.rs:53:5
+     |
+  53 |     fn map_fixed_area(phys: CULong, size: CULong, flags: CULong) -> *mut c_void;
+     |     ---------------------------------------------------------------------------- `map_fixed_area` previously declared here
+     |
+     = note: expected `unsafe extern "C" fn(u64, u64, u64) -> *mut core::ffi::c_void`
+                found `unsafe extern "C" fn(u64, u64, i32) -> *mut core::ffi::c_void`
+
+warning: `c_cpu_info` redeclares `ihk_mc_get_cpu_info` with a different signature
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/x86_cpu_helpers.rs:5719:9
+     |
+5719 |         #[link_name = "ihk_mc_get_cpu_info"]
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+     |
+    ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/ap.rs:92:5
+     |
+  92 |     fn ihk_mc_get_cpu_info() -> *mut IhkMcCpuInfo;
+     |     ---------------------------------------------- `ihk_mc_get_cpu_info` previously declared here
+     |
+     = note: expected `unsafe extern "C" fn() -> *mut ap::IhkMcCpuInfo`
+                found `unsafe extern "C" fn() -> *mut core::ffi::c_void`
+
+warning: `x86_memory_existing_panic` redeclares `panic` with a different signature
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/x86_memory_helpers.rs:196:5
+    |
+196 |     #[link_name = "panic"]
+    |     ^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/ap.rs:80:5
+    |
+ 80 |     #[link_name = "panic"]
+    |     ---------------------- `panic` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*const i8) -> !`
+               found `unsafe extern "C" fn(*const i8)`
+
+warning: `page_unmap` redeclared with a different signature
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/x86_memory_helpers.rs:207:5
+    |
+207 |     fn page_unmap(page: *mut Page) -> CInt;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/fileobj.rs:183:5
+    |
+183 |     fn page_unmap(page: *mut ObjectPage) -> CInt;
+    |     --------------------------------------------- `page_unmap` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut fileobj::ObjectPage) -> i32`
+               found `unsafe extern "C" fn(*mut Page) -> i32`
+
+warning: `phys_to_page` redeclared with a different signature
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/x86_memory_helpers.rs:208:5
+    |
+208 |     fn phys_to_page(phys: CULong) -> *mut Page;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/fileobj.rs:180:5
+    |
+180 |     fn phys_to_page(phys: CULong) -> *mut ObjectPage;
+    |     ------------------------------------------------- `phys_to_page` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(u64) -> *mut fileobj::ObjectPage`
+               found `unsafe extern "C" fn(u64) -> *mut Page`
+
+warning: `memory_find_command_line` redeclares `find_command_line` with a different signature
+    --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/x86_memory_helpers.rs:9078:5
+     |
+9078 |     #[link_name = "find_command_line"]
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+     |
+    ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/ap.rs:87:5
+     |
+  87 |     fn find_command_line(name: *const c_char) -> *mut c_char;
+     |     --------------------------------------------------------- `find_command_line` previously declared here
+     |
+     = note: expected `unsafe extern "C" fn(*const i8) -> *mut i8`
+                found `unsafe extern "C" fn(*mut i8) -> *mut i8`
+
+warning: `syscall_generic_forwarding` redeclared with a different signature
+  --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/xpmem_helpers.rs:98:5
+   |
+98 |     fn syscall_generic_forwarding(syscall_num: CInt, ctx: *mut c_void) -> CLong;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+   |
+  ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/devobj.rs:57:5
+   |
+57 |     fn syscall_generic_forwarding(n: CInt, ctx: *mut X86UserContext) -> CLong;
+   |     -------------------------------------------------------------------------- `syscall_generic_forwarding` previously declared here
+   |
+   = note: expected `unsafe extern "C" fn(i32, *mut X86UserContext) -> i64`
+              found `unsafe extern "C" fn(i32, *mut core::ffi::c_void) -> i64`
+
+warning: `memobj_unref` redeclared with a different signature
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/xpmem_helpers.rs:127:5
+    |
+127 |     fn memobj_unref(ptr: *mut c_void) -> CInt;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration
+    |
+   ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/fileobj.rs:190:5
+    |
+190 |     fn memobj_unref(obj: *mut Memobj) -> CInt;
+    |     ------------------------------------------ `memobj_unref` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut Memobj) -> i32`
+               found `unsafe extern "C" fn(*mut core::ffi::c_void) -> i32`
+
+warning: `ihk_mc_pt_lookup_pte` redeclared with a different signature
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/xpmem_helpers.rs:139:5
+    |
+139 | /     fn ihk_mc_pt_lookup_pte(
+140 | |         page_table: *mut c_void,
+141 | |         vaddr: *mut c_void,
+142 | |         pgshift: CInt,
+...   |
+145 | |         p2align: *mut CInt,
+146 | |     ) -> *mut c_void;
+    | |_____________________^ this signature doesn't match the previous declaration
+    |
+   ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/mem_helpers.rs:20:5
+    |
+ 20 | /     fn ihk_mc_pt_lookup_pte(
+ 21 | |         pt: *mut c_void, virt: *mut c_void, pgshift: CInt,
+ 22 | |         basep: *mut *mut c_void, sizep: *mut usize, p2alignp: *mut CInt,
+ 23 | |     ) -> *mut CULong;
+    | |_____________________- `ihk_mc_pt_lookup_pte` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut core::ffi::c_void, *mut core::ffi::c_void, i32, *mut *mut core::ffi::c_void, *mut usize, *mut i32) -> *mut u64`
+               found `unsafe extern "C" fn(*mut core::ffi::c_void, *mut core::ffi::c_void, i32, *mut *mut core::ffi::c_void, *mut usize, *mut i32) -> *mut core::ffi::c_void`
+
+warning: `ihk_mc_pt_set_range` redeclared with a different signature
+   --> /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/xpmem_helpers.rs:154:5
+    |
+154 | /     fn ihk_mc_pt_set_range(
+155 | |         page_table: *mut c_void,
+156 | |         vm: *mut ProcessVm,
+157 | |         start: *mut c_void,
+...   |
+163 | |         replace: CInt,
+164 | |     ) -> CInt;
+    | |______________^ this signature doesn't match the previous declaration
+    |
+   ::: /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/source/kernel/rust/host_helpers.rs:161:5
+    |
+161 | /     fn ihk_mc_pt_set_range(
+162 | |         page_table: *mut c_void,
+163 | |         vm: *mut c_void,
+164 | |         start: *mut c_void,
+...   |
+170 | |         flags: CInt,
+171 | |     ) -> CInt;
+    | |______________- `ihk_mc_pt_set_range` previously declared here
+    |
+    = note: expected `unsafe extern "C" fn(*mut core::ffi::c_void, *mut core::ffi::c_void, *mut core::ffi::c_void, *mut core::ffi::c_void, u64, u64, i32, *mut core::ffi::c_void, i32) -> i32`
+               found `unsafe extern "C" fn(*mut core::ffi::c_void, *mut abi::ProcessVm, *mut core::ffi::c_void, *mut core::ffi::c_void, u64, u64, i32, *mut VmRange, i32) -> i32`
+
+warning: 129 warnings emitted
+

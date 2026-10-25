@@ -1,0 +1,139 @@
+--- a/kernel/process.c
++++ b/kernel/process.c
+@@ -171,10 +171,20 @@
+ int split_process_memory_range(struct process_vm *vm, struct vm_range *range,
+ 			       uintptr_t addr, struct vm_range **splitp);
+ 
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++const char *const process_tracked_allocator_source_file = __FILE__;
++#endif
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++const int process_mckfd_free_bridge_source_line = 171;
++void process_mckfd_free_bridge(struct mckfd *fdp);
++#else
++#line 169
+ void process_mckfd_free_bridge(struct mckfd *fdp)
+ {
+ 	kfree_tracked(fdp, __FILE__, __LINE__);
+ }
++#endif
++#line 173
+ 
+ void process_mcs_writer_lock_bridge(unsigned long lock_addr, void *node)
+ {
+@@ -253,15 +263,29 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++const int process_policy_free_bridge_source_line = 253;
++void process_policy_free_bridge(void *policy);
++#else
++#line 251
+ void process_policy_free_bridge(void *policy)
+ {
+ 	kfree_tracked(policy, __FILE__, __LINE__);
+ }
+-
++#endif
++#line 255
++
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++const int process_optional_free_bridge_source_line = 258;
++void process_optional_free_bridge(void *ptr);
++#else
++#line 256
+ void process_optional_free_bridge(void *ptr)
+ {
+ 	kfree_tracked(ptr, __FILE__, __LINE__);
+ }
++#endif
++#line 260
+ 
+ #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+ int process_default_ncpus_bridge(void);
+@@ -346,10 +370,17 @@
+ 	(void)numa_id;
+ }
+ 
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++const int process_alloc_bridge_source_line = 340;
++void *process_alloc_bridge(unsigned long size, unsigned long flags);
++#else
++#line 338
+ void *process_alloc_bridge(unsigned long size, unsigned long flags)
+ {
+ 	return kmalloc_tracked(size, flags, __FILE__, __LINE__);
+ }
++#endif
++#line 342
+ 
+ #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+ void *process_pt_create_bridge(unsigned long flags);
+@@ -573,10 +604,17 @@
+ 	free_all_process_memory_range(vm);
+ }
+ 
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++const int process_free_vm_bridge_source_line = 561;
++void process_free_vm_bridge(void *vm);
++#else
++#line 559
+ void process_free_vm_bridge(void *vm)
+ {
+ 	kfree_tracked(vm, __FILE__, __LINE__);
+ }
++#endif
++#line 563
+ 
+ struct list_head resource_set_list;
+ mcs_rwlock_lock_t    resource_set_lock;
+@@ -1972,10 +2010,17 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++const int process_range_kfree_bridge_source_line = 1817;
++void process_range_kfree_bridge(struct vm_range *range);
++#else
++#line 1815
+ void process_range_kfree_bridge(struct vm_range *range)
+ {
+ 	kfree_tracked(range, __FILE__, __LINE__);
+ }
++#endif
++#line 1819
+ 
+ void process_join_range_log_bridge(int event, struct process_vm *vm,
+ 		struct vm_range *surviving, struct vm_range *merging, int error)
+@@ -2411,15 +2456,29 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++const int process_add_range_alloc_bridge_source_line = 2256;
++struct vm_range *process_add_range_alloc_bridge(unsigned long size);
++#else
++#line 2254
+ struct vm_range *process_add_range_alloc_bridge(unsigned long size)
+ {
+ 	return kmalloc_tracked(size, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
+ }
+-
++#endif
++#line 2258
++
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++const int process_add_range_free_bridge_source_line = 2261;
++void process_add_range_free_bridge(struct vm_range *range);
++#else
++#line 2259
+ void process_add_range_free_bridge(struct vm_range *range)
+ {
+ 	kfree_tracked(range, __FILE__, __LINE__);
+ }
++#endif
++#line 2263
+ 
+ int process_add_range_insert_bridge(struct process_vm *vm,
+ 				    struct vm_range *range)

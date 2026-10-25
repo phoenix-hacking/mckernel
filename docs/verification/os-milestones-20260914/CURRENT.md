@@ -1,3 +1,42 @@
+## Integrated 39-provider and retained-validator publication checkpoint — 2026-10-25T03:48:50Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Eight process allocator/free providers and31F03 providers integrated after focused
+independent reviews,82forwarding comparisons,62ABI correction and actual fullRust/
+strictpartial union. All39exports once;20ABIwords equal;97partial unresolved remain.
+Nine trace metadata Csymbols remain explicitdebt; final readonly mapping unproved.
+F01 nineHOSTdiagnostics PASS1.819111s using exactRustobjectreuse,69actualdependencies
+perselected/fallbackbound; selectedC contains no runtime definitions. F06 narrow
+972TID+138info/25ABI PASS6commands; historicalprivate fullcomposition compile queued.
+F02 freshcopy474files/73,253,571B; exactboundpureconsumerPASS47.121325s, source
+publicationPASS1.461538s,28ondiskmembers and35,951,826B requestdecompression verified.
+Next root publishes/fetches exact archive+request then genuinefreshadmission forone
+newtype/alignmentwitness+retained fullvalidator; no unchangedimage/Rust rebuild.
+M12 35/35;M14/M15 OPEN;native/wholefile delta0.
+Parent confirmed queue-only30minmonitor496359/start69732795 active, predecessor
+475659 positivelyretired; nextreview noearlier04:11:48.034773Z. Samecampaign/
+watcher/guardian/creditledger and2026-10-26T06Zdeadline unchanged; no controlleredit.
+Evidence: `../evidence/os-recovery-adoption-20261025-0254/INTEGRATED-39-PROVIDERS-AND-F02-PUBLICATION.json`.
+
+## Engineering steering and thirty-minute cadence — 2026-10-25T03:42:54Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Handled the final queued old-monitor review; current direct steering/focus now
+requires thirty-minute reviews. Parent owns monitor handoff; cutoff unchanged.
+Since previous review:3Rustproviders+profileunlock integrated and currentobject/
+strictpartial/fallback9commands PASS;next8providers82comparisons+6type/meta commands
+PASS;syscall375+2parityPASS;source3Rust+selected/fallbackC PASS,62ABI declaration
+correction suffix queued. SDK4privateinstalls/3loaderchecks and independentphysical
+PASS;F05exact7storage/343providers/72ABI retained artifact review PASS. No new
+productionlink/native/file-retirement/guest/image delta. COPY7freshnonhardlinkcopy
+474files/73,253,571B PASS; bindinge9e23e37; one-new-type-witness retained validator
+binding next. Skip unchanged F01 Rustcompile (all81inputs match04859db9), target
+changed TU only. BFD soleheavy existingSDKowner successor removes obsolete liveP12
+wait while retaining shared exclusions/27:4. No capacity expansion. Queue latency,
+blocked duration/peakRSS unavailable; actualjob CPU/wall and headroom in report.
+Checkpoint205f74365 pushed/fetched11criticalblobs. M12 35/35;M14/M15 OPEN.
+Evidence: `../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0341.json`.
+
 ## Current object and installed-consumer checkpoint — 2026-10-25T03:37:34Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

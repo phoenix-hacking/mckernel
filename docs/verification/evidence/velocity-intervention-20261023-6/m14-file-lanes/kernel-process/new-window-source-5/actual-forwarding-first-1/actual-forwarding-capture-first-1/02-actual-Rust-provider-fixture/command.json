@@ -1,0 +1,24 @@
+{
+  "name": "02-actual-Rust-provider-fixture",
+  "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 02-actual-Rust-provider-fixture; original C/Rust forwarding controlled effects and actual type/ABI only.",
+  "argv": [
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--edition=2021",
+    "--crate-type=lib",
+    "--emit=obj",
+    "--crate-name",
+    "m14_tracked_forwarding",
+    "-C",
+    "panic=abort",
+    "-C",
+    "opt-level=1",
+    "-C",
+    "codegen-units=1",
+    "-C",
+    "relocation-model=static",
+    "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/fixture/actual_forwarding.rs",
+    "-o",
+    "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/output-forwarding-first-1/actual_rust.o"
+  ],
+  "cwd": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/output-forwarding-first-1"
+}

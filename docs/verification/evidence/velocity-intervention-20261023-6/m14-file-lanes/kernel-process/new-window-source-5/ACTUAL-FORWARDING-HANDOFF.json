@@ -1,0 +1,54 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_ORIGINAL_C_RUST_TRACKED_FORWARDING_82_REAL_ABI_FULLCRATE",
+  "result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/ACTUAL-TRACKED-FORWARDING-FIRST-RESULT.json",
+    "sha256": "441a8067ac40b2ce8d816054a78ce6b72ed43f289cfd75d42bcfa6b67e99ca7c",
+    "bytes": 21358
+  },
+  "exact_body": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/fixture/tracked_allocator_providers.ACTUAL-RUST.inc",
+    "sha256": "fc473dd142717bb14c95a2a6975a2c10f30346ba6a69699f69cafb101e23d16e",
+    "bytes": 7635
+  },
+  "candidate_C": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/candidate/kernel/process.c",
+    "sha256": "120f75ec367ff01a7b3928714bbc95d56053594ea0d9e360f4f6ad33a87e1eb1",
+    "bytes": 191878
+  },
+  "candidate_Rust": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/candidate/kernel/rust/process_helpers.rs",
+    "sha256": "4efa2509c37189b57b5236ea65d6df707a36358a748a2886d5ba66afe9f86ace",
+    "bytes": 482735
+  },
+  "actual_commands": 6,
+  "actual_original_C_Rust_comparisons": 82,
+  "all_eight_exports": [
+    "process_mckfd_free_bridge",
+    "process_policy_free_bridge",
+    "process_optional_free_bridge",
+    "process_alloc_bridge",
+    "process_free_vm_bridge",
+    "process_range_kfree_bridge",
+    "process_add_range_alloc_bridge",
+    "process_add_range_free_bridge"
+  ],
+  "metadata_values": {
+    "process_mckfd_free_bridge": 171,
+    "process_policy_free_bridge": 253,
+    "process_optional_free_bridge": 258,
+    "process_alloc_bridge": 340,
+    "process_free_vm_bridge": 561,
+    "process_range_kfree_bridge": 1817,
+    "process_add_range_alloc_bridge": 2256,
+    "process_add_range_free_bridge": 2261
+  },
+  "metadata_filename_fixture": "/home/holden/mckernel/kernel/process.c",
+  "metadata_scope": "Exact source-bound original bodies use original canonical #line locations; fixture readonly metadata uses the same selected-candidate line values. Provider signatures checked against genuine current headers; production metadata object/link verification still pending.",
+  "all_children_joined": true,
+  "CPU0_released": true,
+  "canonical_mutations": 0,
+  "object_rebuild": false,
+  "native": false,
+  "next": "Independent source/ownership review; root new grant for selected/fallback C object and coherent full Rust object/strictpartial after this fixture pass."
+}

@@ -1,0 +1,62 @@
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -2158,6 +2158,15 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern int arch_do_kill_prepare_info_result(int sig, siginfo_t *provided,
++		siginfo_t *fallback, siginfo_t **selected);
++extern int arch_do_kill_thread_target_result(struct thread_hash *thash,
++		int pid, int tid, int sig, void *node, void *update_node,
++		struct process **selected_process, struct thread **selected_thread,
++		mcs_rwlock_lock_t **pending_lock, struct list_head **pending_head);
++#endif
++
+ unsigned long
+ do_kill(struct thread *thread, int pid, int tid, int sig, siginfo_t *info,
+         int ptracecont)
+@@ -2185,6 +2194,11 @@
+ 	struct mcs_rwlock_node updatelock;
+ 	struct sig_pending *pending = NULL;
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++	rc = arch_do_kill_prepare_info_result(sig, info, &info0, &info);
++	if (rc)
++		return rc;
++#else
+ 	if(sig > 64 || sig < 0)
+ 		return -EINVAL;
+ 
+@@ -2194,6 +2208,8 @@
+ 		info0.si_signo = sig;
+ 		info0.si_code = SI_KERNEL;
+ 	}
++
++#endif
+ 
+ 	if(tid == -1 && pid <= 0){
+ 		struct process *p;
+@@ -2330,6 +2346,14 @@
+ 		mcs_rwlock_reader_unlock_noirq(&phash->lock[hash], &plock);
+ 	}
+ 	else{
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++		rc = arch_do_kill_thread_target_result(thash, pid, tid, sig,
++				&lock, &updatelock, &tproc, &tthread, &savelock, &head);
++		if (rc) {
++			cpu_restore_interrupt(irqstate);
++			return rc;
++		}
++#else
+ 		found = 0;
+ 		hash = thread_hash(tid);
+ 		mcs_rwlock_reader_lock_noirq(&thash->lock[hash], &lock);
+@@ -2369,6 +2393,7 @@
+ 		mcs_rwlock_reader_unlock_noirq(&tproc->threads_lock, &lock);
+ 		mcs_rwlock_reader_unlock_noirq(&tproc->update_lock, &updatelock);
+ 		mcs_rwlock_reader_unlock_noirq(&thash->lock[hash], &lock);
++#endif
+ 	}
+ 
+ 

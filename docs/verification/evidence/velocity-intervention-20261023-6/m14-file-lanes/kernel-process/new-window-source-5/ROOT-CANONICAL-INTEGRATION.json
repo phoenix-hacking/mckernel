@@ -1,0 +1,32 @@
+{
+  "at": "2026-10-25T03:44:32.169693+00:00",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/recovery_review",
+  "decision": "PASS_SOURCE_INTEGRATION",
+  "integration_owner": "/root",
+  "files": [
+    {
+      "path": "kernel/process.c",
+      "preimage": "92507b0549a92e4697dc28ed2354cf6263cfed06ecef97809bf0370eb961cd35",
+      "postimage": "120f75ec367ff01a7b3928714bbc95d56053594ea0d9e360f4f6ad33a87e1eb1"
+    },
+    {
+      "path": "kernel/rust/process_helpers.rs",
+      "preimage": "f2e69c7eadb843300861fa7deb2f95b1611d234ffe2de30d2accd1d0bc3da8e6",
+      "postimage": "4efa2509c37189b57b5236ea65d6df707a36358a748a2886d5ba66afe9f86ace"
+    }
+  ],
+  "actual_forwarding_result": "441a8067ac40b2ce8d816054a78ce6b72ed43f289cfd75d42bcfa6b67e99ca7c",
+  "comparisons": 82,
+  "object_result": "edca3a0290130b6a0d2096898f4116a01120b01eae1fceb07bc6cabfbcf5a3ec",
+  "object_commands": 8,
+  "object_wall_seconds": 21.005,
+  "object_CPU_seconds": 20.979,
+  "eight_selected_C_definitions_absent_and_Rust_partial_once": true,
+  "broader_unresolved_unchanged": 226,
+  "remaining_C_metadata_symbols": 9,
+  "final_pointer_readonly_mapping_unproved": true,
+  "production_default_native_wholefile_accepted": false,
+  "existing_34_C_logical_line_sites_unchanged": true,
+  "allocation_ownership_policy_changed": false
+}
