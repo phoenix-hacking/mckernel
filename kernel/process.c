@@ -2155,10 +2155,27 @@ static void *process_free_range_phys_to_virt_bridge(unsigned long phys)
 #endif
 #line 1870
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+const int process_free_range_pages_source_line = 1873;
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_free_range_body_debug[3] = {
+ { .file=__FILE__, .func="process_free_range_log_bridge", .line=1947, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="process_free_range_log_bridge", .line=1955, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="free_process_memory_range", .line=1964, .flags=DDEBUG_DEFAULT },
+};
+#endif
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1871
 static void process_free_range_pages_bridge(void *addr, unsigned long pages)
 {
 	_ihk_mc_free_pages(addr, pages, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1872
+#else
+#line 1874
+#endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 int process_free_range_clear_main_bridge(struct process_vm *vm,
@@ -2233,6 +2250,8 @@ static int process_free_range_pt_clear_bridge(void *page_table,
 #line 1913
 
 #ifdef ENABLE_TOFU
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1915
 static int process_free_range_tofu_remove_bridge(struct process_vm *vm,
 		struct vm_range *range)
 {
@@ -2242,7 +2261,15 @@ static int process_free_range_tofu_remove_bridge(struct process_vm *vm,
 	return tofu_stag_range_remove_overlapping(vm, range);
 }
 #endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1920
+#else
+#line 1922
+#endif
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1925
 static void process_free_range_log_bridge(int event, struct process_vm *vm,
 		struct vm_range *range, unsigned long start, unsigned long end,
 		int error)
@@ -2278,7 +2305,15 @@ static void process_free_range_log_bridge(int event, struct process_vm *vm,
 		break;
 	}
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1957
+#else
+#line 1959
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1961
 static int free_process_memory_range(struct process_vm *vm,
 					struct vm_range *range)
 {
@@ -2308,12 +2343,26 @@ static int free_process_memory_range(struct process_vm *vm,
 			process_free_range_clear_main_bridge,
 			process_range_kfree_bridge, process_free_range_log_bridge);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1987
+#else
+#line 1989
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1991
 int process_memory_range_free_bridge(struct process_vm *vm,
 				     struct vm_range *range)
 {
 	return free_process_memory_range(vm, range);
 }
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 1993
+#else
+#line 1995
+#endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 void process_memory_range_free_log_bridge(struct process_vm *vm,
@@ -3369,12 +3418,12 @@ int process_page_fault_cow_classify_body_result(struct vm_range *, uint64_t, str
 #endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
-static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_page_fault_cow_rss_add_debug = {
     .file = __FILE__, .func = "page_fault_process_memory_range",
     .line = 3071, .flags = DDEBUG_DEFAULT,
 };
-static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_page_fault_cow_rss_sub_debug = {
     .file = __FILE__, .func = "page_fault_process_memory_range",
     .line = 3076, .flags = DDEBUG_DEFAULT,
@@ -3384,17 +3433,17 @@ void process_page_fault_cow_commit_body_result(struct vm_range *,uintptr_t *,
 #endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
-static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_page_fault_set_pte_rss_add_debug = {
     .file = __FILE__, .func = "page_fault_process_memory_range",
     .line = 3118, .flags = DDEBUG_DEFAULT,
 };
-static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_page_fault_set_pte_rss_skip_debug = {
     .file = __FILE__, .func = "page_fault_process_memory_range",
     .line = 3121, .flags = DDEBUG_DEFAULT,
 };
-static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_page_fault_set_pte_attr_debug = {
     .file = __FILE__, .func = "page_fault_process_memory_range",
     .line = 3125, .flags = DDEBUG_DEFAULT,
@@ -3414,17 +3463,17 @@ void process_page_fault_finish_body_result(uintptr_t,int *,struct page **);
 #endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
-static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_page_fault_out_stray_debug = {
     .file = __FILE__, .func = "page_fault_process_memory_range",
     .line = 3202, .flags = DDEBUG_DEFAULT,
 };
-static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_page_fault_out_rss_sub_debug = {
     .file = __FILE__, .func = "page_fault_process_memory_range",
     .line = 3206, .flags = DDEBUG_DEFAULT,
 };
-static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_page_fault_out_return_debug = {
     .file = __FILE__, .func = "page_fault_process_memory_range",
     .line = 3210, .flags = DDEBUG_DEFAULT,
@@ -3435,12 +3484,12 @@ int process_page_fault_out_body_result(struct process_vm *,struct vm_range *,
 #endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
-static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_page_fault_anon_clear_debug = {
     .file = __FILE__, .func = "page_fault_process_memory_range",
     .line = 3059, .flags = DDEBUG_DEFAULT,
 };
-static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_page_fault_anon_map_debug = {
     .file = __FILE__, .func = "page_fault_process_memory_range",
     .line = 3067, .flags = DDEBUG_DEFAULT,
@@ -3460,6 +3509,21 @@ int process_page_fault_install_finish_body_result(struct process_vm *,
     struct ddebug *,struct ddebug *,struct ddebug *);
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+/* Retained metadata for the original COW copy log and profile event. */
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_page_fault_cow_copy_debug = {
+ .file = __FILE__, .func = "page_fault_process_memory_range",
+ .line = 3151, .flags = DDEBUG_DEFAULT,
+};
+#ifdef PROFILE_ENABLE
+const int process_page_fault_anon_clear_profile_event = PROFILE_page_fault_anon_clr;
+#else
+const int process_page_fault_anon_clear_profile_event = 0;
+#endif
+#endif
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+#line 2944
 int page_fault_process_memory_range(struct process_vm *vm,
 				    struct vm_range *range,
 				    uintptr_t fault_addr, uint64_t reason)
@@ -3880,6 +3944,16 @@ out:
 #endif
 }
 
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 3285
+#else
+#line 3268
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_zeroobj_match_bridge(void *memobj);
+#else
+#line 3269
 int process_zeroobj_match_bridge(void *memobj)
 {
 	struct memobj *obj;
@@ -3890,6 +3964,12 @@ int process_zeroobj_match_bridge(void *memobj)
 	return memobj == obj;
 }
 
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 3295
+#else
+#line 3278
+#endif
 int process_normal_fault_range_bridge(struct process_vm *vm,
 				      struct vm_range *range,
 				      unsigned long fault_addr,

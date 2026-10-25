@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-25T06:18:53.211478+00:00",
+  "as_of": "2026-10-25T06:48:07.959550+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -3039,13 +3039,44 @@
       "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0612.json",
       "new_native_delta": 0,
       "whole_file_retirement_delta": 0
+    },
+    {
+      "at": "2026-10-25T06:48:07.959550+00:00",
+      "actual": {
+        "new_full_current_Rust_codegen": 1,
+        "new_selected_fallback_C_objects": 6,
+        "new_strict_partial_links": 1,
+        "current_providers": 230,
+        "new_over221": 9,
+        "SDK_commands_executed": 4,
+        "SDK_commands_passed": 3,
+        "SDK_first_compiler": "Actual GCC selected-platform ABI PASS, two symbol sizes56/96; Rust executor build not reached",
+        "current230_proof": "ACTUAL-CURRENT230-INDEPENDENT-ACCEPTANCE-AND-CANONICAL-INTEGRATION.json"
+      },
+      "implemented": "current230 integrated; later source bodies private",
+      "limits": "Default/native/whole-file retirement OPEN; HOST/source-only not production closure",
+      "evidence": [
+        "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0642.json"
+      ]
     }
   ],
   "latest_dispatcher_checkpoint": {
-    "as_of": "2026-10-25T06:18:53.211478+00:00",
-    "actual": "Two HOSTpackages178/221 accepted,60providersover161; ONEnewRustcodegen221thiswindow. SDK/default/native/fileclosures0.",
-    "implemented": "Pagefault core and free-range source/controlledfixtures; completeexecutor453precommandmapping42controls.",
-    "limits": "M12 35/35; M14/M15OPEN. Retainedstrictpartial missing. Next03cSDKfreshadmission.",
-    "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0612.json"
+    "at": "2026-10-25T06:48:07.959550+00:00",
+    "actual": {
+      "new_full_current_Rust_codegen": 1,
+      "new_selected_fallback_C_objects": 6,
+      "new_strict_partial_links": 1,
+      "current_providers": 230,
+      "new_over221": 9,
+      "SDK_commands_executed": 4,
+      "SDK_commands_passed": 3,
+      "SDK_first_compiler": "Actual GCC selected-platform ABI PASS, two symbol sizes56/96; Rust executor build not reached",
+      "current230_proof": "ACTUAL-CURRENT230-INDEPENDENT-ACCEPTANCE-AND-CANONICAL-INTEGRATION.json"
+    },
+    "implemented": "current230 integrated; later source bodies private",
+    "limits": "Default/native/whole-file retirement OPEN; HOST/source-only not production closure",
+    "evidence": [
+      "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0642.json"
+    ]
   }
 }

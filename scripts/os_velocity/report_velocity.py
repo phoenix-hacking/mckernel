@@ -60,7 +60,9 @@ def report(records, start, end):
             raise ValueError('contract must be predeclared')
         state = states[key]
         if kind == 'start':
-            if state['declared'] is not None and at <= state['declared']:
+            # Ordered records can share one observation timestamp. The state
+            # lookup above still requires the declaration to appear first.
+            if state['declared'] is not None and at < state['declared']:
                 raise ValueError('declaration must precede work')
             if state['started'] is None:
                 state['started'] = at

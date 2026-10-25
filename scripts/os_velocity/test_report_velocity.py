@@ -16,6 +16,13 @@ def work(package, at, stage='current_object'):
 
 
 class Velocity(unittest.TestCase):
+    def test_ordered_declaration_and_start_can_share_observation_time(self):
+        rows = work('same-clock', 2000)
+        rows[1]['at'] = rows[0]['at']
+        self.assertEqual(report(baseline() + rows, 1800, 3600)['current']['net_steps'], 1)
+        with self.assertRaises(ValueError):
+            report(baseline() + [rows[1], rows[0], rows[2]], 1800, 3600)
+
     def test_baseline_duration_and_target(self):
         d = baseline(); d[0].update(start=1792903323.2948987, end=1792905126.062605)
         r = report(d, 1800, 3600)

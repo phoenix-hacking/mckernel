@@ -3,7 +3,7 @@
   "id": "M15",
   "scope_id": "project-owned-runtime-rust-cutover-v1-20261024",
   "title": "Complete Rust/assembly custom host modules and integration runtime",
-  "as_of": "2026-10-25T06:18:53.211478+00:00",
+  "as_of": "2026-10-25T06:48:07.959550+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user2026-10-24: custom code outside the Rocky/Linux baseline must be Rust, including loadable IHK/project modules; previous reviewed-assembly allowance retained.",
@@ -1620,13 +1620,34 @@
       "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0612.json",
       "new_native_delta": 0,
       "whole_file_retirement_delta": 0
+    },
+    {
+      "at": "2026-10-25T06:48:07.959550+00:00",
+      "actual": {
+        "SDK_commands_executed": 4,
+        "passed": 3,
+        "first_failure": 3,
+        "accepted_SDK": 0
+      },
+      "implemented": "executor six-command corrected suffix/source17; BFD21/daemon7 ready",
+      "limits": "Default/native/whole-file retirement OPEN; HOST/source-only not production closure",
+      "evidence": [
+        "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0642.json"
+      ]
     }
   ],
   "latest_dispatcher_checkpoint": {
-    "as_of": "2026-10-25T06:18:53.211478+00:00",
-    "actual": "Two HOSTpackages178/221 accepted,60providersover161; ONEnewRustcodegen221thiswindow. SDK/default/native/fileclosures0.",
-    "implemented": "Pagefault core and free-range source/controlledfixtures; completeexecutor453precommandmapping42controls.",
-    "limits": "M12 35/35; M14/M15OPEN. Retainedstrictpartial missing. Next03cSDKfreshadmission.",
-    "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0612.json"
+    "at": "2026-10-25T06:48:07.959550+00:00",
+    "actual": {
+      "SDK_commands_executed": 4,
+      "passed": 3,
+      "first_failure": 3,
+      "accepted_SDK": 0
+    },
+    "implemented": "executor six-command corrected suffix/source17; BFD21/daemon7 ready",
+    "limits": "Default/native/whole-file retirement OPEN; HOST/source-only not production closure",
+    "evidence": [
+      "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0642.json"
+    ]
   }
 }

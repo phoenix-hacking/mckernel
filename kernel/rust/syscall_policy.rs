@@ -292,14 +292,6 @@ unsafe extern "C" {
     fn arch_clone_reader_unlock_bridge(lock: *mut c_void, node: *mut c_void);
     fn ihk_mc_get_linux_default_huge_page_shift() -> CInt;
     fn arch_do_shmget_bridge(key: CLong, size: SizeT, shmflg: CInt) -> CInt;
-    fn arch_shmget_log_bridge(
-        event: CInt,
-        key: CLong,
-        size: SizeT,
-        shmflg0: CInt,
-        error: CInt,
-        shmid: CInt,
-    );
     fn arch_do_mmap_bridge(
         addr: CULong,
         len: SizeT,
@@ -310,18 +302,6 @@ unsafe extern "C" {
         vrf0: CInt,
         private_data: *mut c_void,
     ) -> CLong;
-    fn arch_mmap_log_bridge(
-        event: CInt,
-        addr0: CULong,
-        len0: SizeT,
-        prot: CInt,
-        flags0: CInt,
-        fd: CInt,
-        off0: CLong,
-        error: CInt,
-        result_addr: CULong,
-        extra: CInt,
-    );
     fn arch_mmap_supported_flags_bridge() -> CInt;
     fn arch_mmap_ignored_flags_bridge() -> CInt;
     fn arch_mmap_error_flags_bridge() -> CInt;
@@ -13842,7 +13822,6 @@ unsafe extern "C" {
         d: CULong,
         pages: CInt,
     );
-    fn arch_vdso_public_log_bridge(event: CInt, error: CInt, enabled: CInt, vm: *mut ProcessVm);
 }
 
 const ARCH_VDSO_SETUP_LOG_GET_INFO_FAILED: CInt = 1;
@@ -33668,3 +33647,298 @@ mod f06_ptrace_user_log_v1 {
 
 // Existing policy callers bind directly to the Rust definition above.
 use self::f06_ptrace_user_log_v1::arch_ptrace_user_log_bridge;
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+mod f06_mmap_log_v1 {
+    use crate::abi::{CInt, CLong, CULong, SizeT};
+    use crate::debug::Ddebug;
+    use core::ptr::{addr_of, read_volatile};
+
+    #[used]
+    #[no_mangle]
+    #[link_section = "__verbose"]
+    pub static mut arch_mmap_log_debug_v1: [Ddebug; 2] = [
+        Ddebug {
+            file: concat!(file!(), "\0").as_ptr().cast(),
+            func: b"arch_mmap_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: line!() & 0x00ff_ffff,
+        },
+        Ddebug {
+            file: concat!(file!(), "\0").as_ptr().cast(),
+            func: b"arch_mmap_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: line!() & 0x00ff_ffff,
+        },
+    ];
+
+    /// Preserve the selected architecture mmap callback's messages and C varargs.
+    ///
+    /// # Safety
+    /// The ordinary kernel logger and external debug flag-update contract hold.
+    /// Event 6 retains the original C int error argument paired with a %ld format;
+    /// this port does not claim defined formatted-output behavior for that mismatch.
+    #[no_mangle]
+    pub unsafe extern "C" fn arch_mmap_log_bridge(
+        event: CInt, addr0: CULong, len0: SizeT, prot: CInt, flags0: CInt,
+        fd: CInt, off0: CLong, error: CInt, result_addr: CULong, extra: CInt,
+    ) {
+        match event {
+            1 => {
+                // SAFETY: preserve independent entry flags and genuine C argument types.
+                let flags = unsafe { read_volatile(addr_of!(arch_mmap_log_debug_v1[0].line_flags)) } >> 24;
+                if flags != 0 {
+                    unsafe {
+                        super::kprintf(b"sys_mmap(%lx,%lx,%x,%x,%d,%lx)\n\0".as_ptr().cast(),
+                            addr0, len0, prot, flags0, fd, off0);
+                    }
+                }
+            }
+            2 | 3 | 4 => {
+                let fmt: *const i8 = match event {
+                    2 => b"sys_mmap(%lx,%lx,%x,%x,%x,%lx):not supported page size.\n\0".as_ptr().cast(),
+                    3 => b"sys_mmap(%lx,%lx,%x,%x,%x,%lx):EINVAL\n\0".as_ptr().cast(),
+                    _ => b"sys_mmap(%lx,%lx,%x,%x,%x,%lx):ENOMEM\n\0".as_ptr().cast(),
+                };
+                // SAFETY: static original formats, same six promoted C arguments.
+                unsafe { super::kprintf(fmt, addr0, len0, prot, flags0, fd, off0); }
+            }
+            5 => {
+                // SAFETY: preserve the extra C int unknown-flags argument.
+                unsafe {
+                    super::kprintf(b"sys_mmap(%lx,%lx,%x,%x,%x,%lx):unknown flags %x\n\0".as_ptr().cast(),
+                        addr0, len0, prot, flags0, fd, off0, extra);
+                }
+            }
+            6 => {
+                // SAFETY: exit record flags are independent from entry record flags.
+                let flags = unsafe { read_volatile(addr_of!(arch_mmap_log_debug_v1[1].line_flags)) } >> 24;
+                if flags != 0 {
+                    // Preserve the source's C int error argument exactly. Rendering the
+                    // original %ld mismatch remains an explicit old undefined domain.
+                    unsafe {
+                        super::kprintf(b"sys_mmap(%lx,%lx,%x,%x,%d,%lx): %ld %lx\n\0".as_ptr().cast(),
+                            addr0, len0, prot, flags0, fd, off0, error, result_addr);
+                    }
+                }
+            }
+            _ => {}
+        }
+    }
+}
+
+use self::f06_mmap_log_v1::arch_mmap_log_bridge;
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+mod f06_shmget_log_v1 {
+    use crate::abi::{CInt, CLong, SizeT};
+    use crate::debug::Ddebug;
+    use core::ptr::{addr_of, read_volatile};
+
+    #[used]
+    #[no_mangle]
+    #[link_section = "__verbose"]
+    pub static mut arch_shmget_log_debug_v1: [Ddebug; 2] = [
+        Ddebug {
+            file: concat!(file!(), "\0").as_ptr().cast(),
+            func: b"arch_shmget_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: line!() & 0x00ff_ffff,
+        },
+        Ddebug {
+            file: concat!(file!(), "\0").as_ptr().cast(),
+            func: b"arch_shmget_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: line!() & 0x00ff_ffff,
+        },
+    ];
+
+    /// Emit the unchanged shmget entry/exit diagnostic when its own flag is set.
+    ///
+    /// # Safety
+    /// The ordinary kernel logger and external dynamic-debug flag contract hold.
+    #[no_mangle]
+    pub unsafe extern "C" fn arch_shmget_log_bridge(
+        event: CInt, key: CLong, size: SizeT, shmflg0: CInt, error: CInt, shmid: CInt,
+    ) {
+        match event {
+            1 => {
+                // SAFETY: read only the entry record; preserve long/size_t/int ABI.
+                let enabled = unsafe { read_volatile(addr_of!(arch_shmget_log_debug_v1[0].line_flags)) } >> 24;
+                if enabled != 0 {
+                    unsafe {
+                        super::kprintf(b"shmget(%#lx,%#lx,%#x)\n\0".as_ptr().cast(),
+                            key, size, shmflg0);
+                    }
+                }
+            }
+            2 => {
+                // SAFETY: exit flags are independent; both result fields stay C int.
+                let enabled = unsafe { read_volatile(addr_of!(arch_shmget_log_debug_v1[1].line_flags)) } >> 24;
+                if enabled != 0 {
+                    unsafe {
+                        super::kprintf(b"shmget(%#lx,%#lx,%#x): %d %d\n\0".as_ptr().cast(),
+                            key, size, shmflg0, error, shmid);
+                    }
+                }
+            }
+            _ => {}
+        }
+    }
+}
+
+use self::f06_shmget_log_v1::arch_shmget_log_bridge;
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+mod f06_vdso_public_log_v1 {
+    use crate::abi::{CInt, ProcessVm};
+    use crate::debug::Ddebug;
+    use core::ptr::{addr_of, null_mut, read_volatile};
+    use super::{ARCH_VDSO_PUBLIC_LOG_SETUP_ENTER, ARCH_VDSO_PUBLIC_LOG_SETUP_EXIT,
+        ARCH_VDSO_PUBLIC_LOG_MAP_ENTER, ARCH_VDSO_PUBLIC_LOG_MAP_EXIT};
+
+    #[used]
+    #[no_mangle]
+    #[link_section = "__verbose"]
+    pub static mut arch_vdso_public_log_debug_v1: [Ddebug; 4] = [
+        Ddebug { file: concat!(file!(), "\0").as_ptr().cast(),
+            func: b"arch_vdso_public_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff },
+        Ddebug { file: concat!(file!(), "\0").as_ptr().cast(),
+            func: b"arch_vdso_public_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff },
+        Ddebug { file: concat!(file!(), "\0").as_ptr().cast(),
+            func: b"arch_vdso_public_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff },
+        Ddebug { file: concat!(file!(), "\0").as_ptr().cast(),
+            func: b"arch_vdso_public_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff },
+    ];
+
+    /// Preserve public vDSO diagnostics, conditional VM reads and logger ordering.
+    ///
+    /// # Safety
+    /// Logger/debug-record lifetimes follow the existing kernel contract. For an
+    /// enabled MAP_EXIT record, nonnull vm must denote a live readable ProcessVm.
+    #[no_mangle]
+    pub unsafe extern "C" fn arch_vdso_public_log_bridge(
+        event: CInt, error: CInt, enabled: CInt, vm: *mut ProcessVm,
+    ) {
+        match event {
+            ARCH_VDSO_PUBLIC_LOG_SETUP_ENTER => {
+                // SAFETY: original independent setup-entry record.
+                if unsafe { read_volatile(addr_of!(arch_vdso_public_log_debug_v1[0].line_flags)) } >> 24 != 0 {
+                    unsafe { super::kprintf(b"arch_setup_vdso()\n\0".as_ptr().cast()); }
+                }
+            }
+            ARCH_VDSO_PUBLIC_LOG_SETUP_EXIT => {
+                // SAFETY: preserve the unconditional logger call BEFORE testing
+                // the debug flag: the logger may itself update that flag.
+                unsafe {
+                    if enabled != 0 {
+                        super::kprintf(b"vdso is enabled\n\0".as_ptr().cast());
+                    } else {
+                        super::kprintf(b"vdso is disabled\n\0".as_ptr().cast());
+                    }
+                }
+                if unsafe { read_volatile(addr_of!(arch_vdso_public_log_debug_v1[1].line_flags)) } >> 24 != 0 {
+                    // SAFETY: same static format and promoted C int error.
+                    unsafe { super::kprintf(b"arch_setup_vdso(): %d\n\0".as_ptr().cast(), error); }
+                }
+            }
+            ARCH_VDSO_PUBLIC_LOG_MAP_ENTER => {
+                // SAFETY: original independent map-entry record.
+                if unsafe { read_volatile(addr_of!(arch_vdso_public_log_debug_v1[2].line_flags)) } >> 24 != 0 {
+                    unsafe { super::kprintf(b"arch_map_vdso()\n\0".as_ptr().cast()); }
+                }
+            }
+            ARCH_VDSO_PUBLIC_LOG_MAP_EXIT => {
+                // SAFETY: do not access vm before the original record flag gate.
+                if unsafe { read_volatile(addr_of!(arch_vdso_public_log_debug_v1[3].line_flags)) } >> 24 != 0 {
+                    let address = if vm.is_null() { null_mut() } else {
+                        // SAFETY: original live nonnull VM contract for this branch.
+                        unsafe { (*vm).vdso_addr }
+                    };
+                    unsafe { super::kprintf(b"arch_map_vdso(): %d %p\n\0".as_ptr().cast(), error, address); }
+                }
+            }
+            _ => {}
+        }
+    }
+}
+
+use self::f06_vdso_public_log_v1::arch_vdso_public_log_bridge;
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(f03_dispatch_context_candidate)]
+pub(crate) mod f03_dispatch_context_candidate {
+    use core::ptr::{addr_of, read};
+    use crate::abi::{CInt, CLong, X86UserContext};
+
+    pub type Handler = unsafe extern "C" fn(CInt, *mut X86UserContext) -> CLong;
+
+    #[repr(C)]
+    pub struct DispatchBinding {
+        pub handlers: *const Option<Handler>,
+        pub count: usize,
+    }
+
+    unsafe extern "C" {
+        static f03_syscall_dispatch_binding_v1: DispatchBinding;
+    }
+
+    /// Dispatch one original nested syscall through the actual sparse table.
+    ///
+    /// # Safety
+    /// The exact C-derived table descriptor is immutable and lives for the whole
+    /// kernel lifetime. It contains count readable actual nullable handler slots,
+    /// with count <= INT_MAX. A selected handler inherits its original syscall
+    /// context/lifetime/locking contract; this bridge neither reads ctx nor retains
+    /// it. The table and all genuine handler implementations remain dependencies.
+    #[export_name = "syscall_dispatch_context_bridge"]
+    pub unsafe extern "C" fn dispatch(num: CInt, ctx: *mut X86UserContext) -> CLong {
+        let binding = addr_of!(f03_syscall_dispatch_binding_v1);
+        let count = unsafe { (*binding).count } as CInt;
+        if num < 0 || num >= count {
+            return -38;
+        }
+        let handlers = unsafe { (*binding).handlers };
+        let handler = unsafe { read(handlers.add(num as usize)) };
+        match handler {
+            Some(call) => unsafe { call(num, ctx) },
+            None => -38,
+        }
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(f03_leaf_callbacks_candidate)]
+mod f03_leaf_callbacks_candidate {
+    use core::ffi::c_void;
+    use crate::abi::{CInt, CLong, CULong};
+
+    /// Current non-TOFU ioctl hook: no device is handled in this profile.
+    /// # Safety
+    /// A nonnull handled pointer is writable/aligned for one C int. All other
+    /// arguments are deliberately ignored, including thread and signed fd.
+    #[cfg(not(enable_tofu))]
+    #[export_name = "syscall_tofu_ioctl_bridge"]
+    pub unsafe extern "C" fn ioctl(
+        _thread: *mut c_void, _fd: CInt, _cmd: CULong, _arg: CULong,
+        handled: *mut CInt,
+    ) -> CLong {
+        if !handled.is_null() {
+            unsafe { core::ptr::write(handled, 0) };
+        }
+        0
+    }
+
+    /// Preserve the exact existing unsupported-settimeofday panic provider.
+    /// # Safety
+    /// The original kernel panic context/formatter requirements remain in force;
+    /// this is not a recoverable error path and the real provider never returns.
+    #[export_name = "syscall_settimeofday_panic_bridge"]
+    pub unsafe extern "C" fn settimeofday_panic() {
+        unsafe { crate::abort::panic(c"settimeofday".as_ptr().cast()) }
+    }
+}

@@ -152,7 +152,6 @@ unsafe extern "C" {
         end: CULong,
     ) -> CInt;
     fn process_remove_region_log_bridge(vm: *mut ProcessVm, start: CULong, end: CULong);
-    fn process_memory_range_free_bridge(vm: *mut c_void, range: *mut c_void) -> CInt;
     fn process_remove_range_split_bridge(
         vm: *mut ProcessVm,
         range: *mut VmRange,
@@ -174,7 +173,6 @@ unsafe extern "C" {
         fault_addr: CULong,
         reason: CULong,
     ) -> CInt;
-    fn process_zeroobj_match_bridge(memobj: *mut c_void) -> CInt;
     fn process_populate_warn_bridge(
         vm: *mut ProcessVm,
         addr: CULong,
@@ -15874,3 +15872,225 @@ pub unsafe extern "C" fn process_lookup_pte_bridge(
         ).cast()
     }
 }
+
+/// Retains the original zero-object creation/reference acquisition and pointer
+/// comparison. The existing caller retains its historical reference policy.
+/// # Safety
+/// The zero-object subsystem must satisfy its original initialization/locking
+/// preconditions. This function never dereferences or retains memobj itself.
+#[no_mangle]
+pub unsafe extern "C" fn process_zeroobj_match_bridge(memobj: *mut core::ffi::c_void) -> CInt {
+    unsafe {
+        let mut obj = core::ptr::null_mut();
+        if crate::zeroobj::zeroobj_create(&raw mut obj) != 0 {
+            crate::abort::panic(b"DPFP: zeroobj_crate\0".as_ptr().cast());
+        }
+        (memobj == obj.cast()) as CInt
+    }
+}
+
+unsafe extern "C" {
+    static mut process_page_fault_anon_clear_debug: crate::debug::Ddebug;
+    static mut process_page_fault_anon_map_debug: crate::debug::Ddebug;
+    static mut process_page_fault_cow_rss_add_debug: crate::debug::Ddebug;
+    static mut process_page_fault_cow_rss_sub_debug: crate::debug::Ddebug;
+    static mut process_page_fault_set_pte_rss_add_debug: crate::debug::Ddebug;
+    static mut process_page_fault_set_pte_rss_skip_debug: crate::debug::Ddebug;
+    static mut process_page_fault_set_pte_attr_debug: crate::debug::Ddebug;
+    static mut process_page_fault_out_stray_debug: crate::debug::Ddebug;
+    static mut process_page_fault_out_rss_sub_debug: crate::debug::Ddebug;
+    static mut process_page_fault_out_return_debug: crate::debug::Ddebug;
+    static mut process_page_fault_cow_copy_debug: crate::debug::Ddebug;
+    static process_page_fault_anon_clear_profile_event: CInt;
+}
+
+unsafe extern "C" fn process_fault_set_range_target(
+    pt: *mut c_void, vm: *mut ProcessVm, start: *mut c_void, end: *mut c_void,
+    phys: CULong, attr: CULong, pgshift: CInt, range: *mut VmRange, overwrite: CInt,
+) -> CInt {
+    unsafe { crate::x86_memory_helpers::ihk_mc_pt_set_range(
+        pt, vm.cast(), start, end, phys, attr, pgshift, range.cast(), overwrite,
+    ) }
+}
+
+/// Complete original page-fault orchestration over the existing Rust substeps.
+/// # Safety
+/// vm/range and their borrowed page table/object state must remain live under
+/// the original caller's VM lock. Prepare takes the page-table lock. Every
+/// nonfatal early exit calls out exactly once; install_finish owns final unlock.
+/// Zero-object creation retains its original reference policy. Allocated pages
+/// and mapped references retain the existing substeps' transfer/unwind rules.
+#[no_mangle]
+pub unsafe extern "C" fn page_fault_process_memory_range(
+    vm: *mut ProcessVm, range: *mut VmRange, fault_addr: CULong, reason: CULong,
+) -> CInt {
+    unsafe {
+        let mut ptep = core::ptr::null_mut();
+        let mut pgaddr = core::ptr::null_mut();
+        // Early prepare errors historically leave size uninitialized. The out
+        // helper never reads it while page is null; keep that exact contract.
+        let mut pgsize = core::mem::MaybeUninit::<SizeT>::uninit();
+        let mut p2align = 0;
+        let mut error = 0;
+        let mut phys = 0;
+        let mut page = core::ptr::null_mut();
+        let mut memobj_flag = 0;
+        process_page_fault_entry_log_body_result(vm, range, fault_addr, reason);
+        'fault: {
+            if process_page_fault_prepare_body_result(vm, range, fault_addr, reason,
+                &raw mut ptep, &raw mut pgaddr, pgsize.as_mut_ptr(),
+                &raw mut p2align, &raw mut error) != 0 { break 'fault; }
+            process_page_fault_pte_state_log_bridge(ptep, pgsize.assume_init());
+            if ptep.is_null() || crate::pte_helpers::pte_is_null(ptep) != 0
+                || crate::pte_helpers::pte_is_fileoff(ptep, pgsize.assume_init()) != 0 {
+                if process_page_fault_memobj_get_body_result(range, pgaddr,
+                    fault_addr, ptep, pgsize.assume_init(), p2align,
+                    &raw mut phys, &raw mut memobj_flag, &raw mut error) != 0 {
+                    let mut obj = core::ptr::null_mut();
+                    if crate::zeroobj::zeroobj_create(&raw mut obj) != 0 {
+                        crate::abort::panic(b"PFPMR: zeroobj_crate\0".as_ptr().cast());
+                    }
+                    if (*range).memobj != obj.cast() { break 'fault; }
+                }
+                if phys == !0_u64 {
+                    let mut virt = core::ptr::null_mut();
+                    if process_page_fault_anon_allocate_body_result(vm, range,
+                        fault_addr, reason, &raw mut ptep, &raw mut pgaddr,
+                        pgsize.as_mut_ptr(), &raw mut p2align,
+                        &raw mut virt, &raw mut error) != 0 { break 'fault; }
+                    process_page_fault_anon_clear_body_result(range, pgaddr,
+                        pgsize.assume_init(), virt, page, fault_addr, reason,
+                        &raw mut phys, cfg!(enable_profile) as CInt,
+                        process_page_fault_anon_clear_profile_event,
+                        &raw mut process_page_fault_anon_clear_debug,
+                        &raw mut process_page_fault_anon_map_debug);
+                }
+            } else { phys = process_pte_get_phys_bridge(ptep.cast()); }
+            let mut attr = process_page_fault_mapping_state_body_result(range,
+                phys, memobj_flag, reason, ptep, &raw mut page);
+            if process_page_fault_cow_classify_body_result(range, reason, page.cast()) != 0 {
+                if process_page_fault_cow_dirty_permission_body_result(&raw mut attr) != 0 {
+                    let mut virt = core::ptr::null_mut();
+                    if process_page_fault_cow_allocate_body_result(vm, range, page,
+                        pgsize.assume_init(), p2align, fault_addr, reason,
+                        &raw mut virt, &raw mut error) != 0 { break 'fault; }
+                    if core::ptr::read_volatile(&raw const process_page_fault_cow_copy_debug.line_flags) >> 24 != 0 {
+                        let _ = kprintf(b"%s: cow,copying virt:%lx<-%lx,phys:%lx<-%lx,pgsize=%lu\n\0".as_ptr().cast(),
+                            b"page_fault_process_memory_range\0".as_ptr().cast::<i8>(),
+                            virt, crate::x86_memory_helpers::phys_to_virt(phys),
+                            crate::x86_memory_helpers::virt_to_phys(virt), phys,
+                            pgsize.assume_init());
+                    }
+                    process_page_fault_cow_copy_body_result(virt, phys, pgsize.assume_init());
+                    process_page_fault_cow_commit_body_result(range, &raw mut phys,
+                        pgsize.assume_init(), virt, &raw mut page,
+                        &raw mut process_page_fault_cow_rss_add_debug,
+                        &raw mut process_page_fault_cow_rss_sub_debug);
+                }
+            } else { attr = process_page_fault_shared_permission_body_result(range, attr); }
+            return process_page_fault_install_finish_body_result(vm, range,
+                fault_addr, reason, ptep, pgaddr, pgsize.assume_init(), phys,
+                attr, page, crate::x86_memory_helpers::ihk_mc_pt_set_pte,
+                process_fault_set_range_target,
+                &raw mut process_page_fault_set_pte_rss_add_debug,
+                &raw mut process_page_fault_set_pte_rss_skip_debug,
+                &raw mut process_page_fault_set_pte_attr_debug,
+                &raw mut process_page_fault_out_stray_debug,
+                &raw mut process_page_fault_out_rss_sub_debug,
+                &raw mut process_page_fault_out_return_debug);
+        }
+        process_page_fault_out_body_result(vm, range, fault_addr, reason,
+            pgsize.as_ptr(), page, error, &raw mut process_page_fault_out_stray_debug,
+            &raw mut process_page_fault_out_rss_sub_debug,
+            &raw mut process_page_fault_out_return_debug)
+    }
+}
+
+mod remaining_free_range_entry {
+    use super::*;
+    use super::remaining_process_free_range_providers as providers;
+    unsafe extern "C" {
+        static process_tracked_allocator_source_file: *const i8;
+        static process_free_range_pages_source_line: CInt;
+        static mut process_free_range_body_debug: [crate::debug::Ddebug; 3];
+        #[cfg(enable_tofu)]
+        fn tofu_stag_range_remove_overlapping(vm: *mut ProcessVm, range: *mut VmRange) -> CInt;
+    }
+
+    // Raw bounded descriptor addresses avoid references to mutable C metadata.
+    unsafe fn enabled(index: usize) -> bool {
+        let descriptor = core::ptr::addr_of_mut!(process_free_range_body_debug)
+            .cast::<crate::debug::Ddebug>().add(index);
+        core::ptr::read_volatile(core::ptr::addr_of!((*descriptor).line_flags)) >> 24 != 0
+    }
+
+    /// Original tracked release; the backend retains null/locking/free policy.
+    /// # Safety
+    /// The caller owns the same final live page span and excludes later accesses.
+    unsafe extern "C" fn free_pages(addr: *mut c_void, pages: CULong) {
+        unsafe { crate::mem_helpers::_ihk_mc_free_pages(addr, pages as CInt, 0,
+            process_tracked_allocator_source_file.cast_mut(),
+            process_free_range_pages_source_line); }
+    }
+
+    /// Original callback formats and argument order, with no retained pointers.
+    /// # Safety
+    /// Events2/3 require a live range; other events preserve original null use.
+    unsafe extern "C" fn log(event: CInt, vm: *mut ProcessVm, range: *mut VmRange,
+        start: CULong, end: CULong, error: CInt) {
+        unsafe { match event {
+            PROCESS_FREE_BODY_LOG_PLAN_FAILED => { let _ = kprintf(
+                b"free_process_memory_range:arch_get_smaller_page_size failed. %d\n\0".as_ptr().cast(), error); }
+            PROCESS_FREE_BODY_LOG_PT_FREE_FAILED => { let _ = kprintf(
+                b"free_process_memory_range(%p,%lx-%lx):ihk_mc_pt_free_range(%lx-%lx,%p) failed. %d\n\0".as_ptr().cast(),
+                vm, (*range).start, (*range).end, start, end, (*range).memobj, error); }
+            PROCESS_FREE_BODY_LOG_PT_CLEAR_FAILED => { let _ = kprintf(
+                b"free_process_memory_range(%p,%lx-%lx):ihk_mc_pt_clear_range(%lx-%lx) failed. %d\n\0".as_ptr().cast(),
+                vm, (*range).start, (*range).end, start, end, error); }
+            PROCESS_FREE_BODY_LOG_TOFU_REMOVED if enabled(0) => { let _ = kprintf(
+                b"%s: removed %d Tofu stag entries for range 0x%lx:%lu\n\0".as_ptr().cast(),
+                b"process_free_range_log_bridge\0".as_ptr().cast::<i8>(), error, start, end.wrapping_sub(start)); }
+            PROCESS_FREE_BODY_LOG_FINALIZE_FAILED => { let _ = kprintf(
+                b"free_process_memory_range(%p,%lx-%lx):finalize failed. %d\n\0".as_ptr().cast(), vm, start, end, error); }
+            PROCESS_FREE_BODY_LOG_DONE if enabled(1) => { let _ = kprintf(
+                b"free_process_memory_range(%p,%lx-%lx): 0\n\0".as_ptr().cast(), vm, start, end); }
+            _ => {}
+        } }
+    }
+
+    /// Complete existing free-range entry, preserving callback/ownership policy.
+    /// # Safety
+    /// vm/range/process stay live under original range exclusion. The existing
+    /// body owns lock/unlock, range release and error handling; no references
+    /// cross its callbacks, and this entry never accesses range after release.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_memory_range_free_bridge(vm_arg: *mut c_void,
+        range_arg: *mut c_void) -> CInt {
+        unsafe {
+            let vm = vm_arg.cast::<ProcessVm>();
+            let range = range_arg.cast::<VmRange>();
+            if enabled(2) { let _ = kprintf(
+                b"free_process_memory_range(%p, 0x%lx - 0x%lx)\n\0".as_ptr().cast(),
+                vm, (*range).start, (*range).end); }
+            #[cfg(enable_tofu)]
+            let (tofu_enabled, tofu_callback) = ((*(*vm).proc.cast::<Process>()).enable_tofu,
+                Some(tofu_stag_range_remove_overlapping as ProcessFreeRangeTofuRemoveFn));
+            #[cfg(not(enable_tofu))]
+            let (tofu_enabled, tofu_callback) = (0, None);
+            process_free_memory_range_body_result(vm, range,
+                (*(*vm).proc.cast::<Process>()).straight_va as CULong,
+                core::ptr::addr_of_mut!((*(*vm).proc.cast::<Process>()).straight_len),
+                (*(*vm).proc.cast::<Process>()).straight_pa, tofu_enabled,
+                Some(providers::process_free_range_page_size_bridge),
+                Some(process_free_range_noirq_lock_bridge),
+                Some(process_free_range_noirq_unlock_bridge), None, None,
+                Some(process_free_range_pt_free_bridge),
+                Some(providers::process_free_range_pt_clear_bridge), tofu_callback,
+                Some(providers::process_free_range_phys_to_virt_bridge),
+                Some(free_pages), Some(providers::process_free_range_clear_main_bridge),
+                Some(process_range_kfree_bridge), Some(log))
+        }
+    }
+}
+
+use remaining_free_range_entry::process_memory_range_free_bridge;

@@ -678,18 +678,6 @@ arch_do_shmget_bridge(long key, size_t size, int shmflg)
 	return do_shmget((key_t)key, size, shmflg);
 }
 
-void
-arch_shmget_log_bridge(int event, long key, size_t size, int shmflg0,
-		int error, int shmid)
-{
-	if (event == 1) {
-		dkprintf("shmget(%#lx,%#lx,%#x)\n", key, size, shmflg0);
-	}
-	else if (event == 2) {
-		dkprintf("shmget(%#lx,%#lx,%#x): %d %d\n",
-				key, size, shmflg0, error, shmid);
-	}
-}
 
 long
 arch_do_mmap_bridge(unsigned long addr, size_t len, int prot, int flags,
@@ -698,38 +686,6 @@ arch_do_mmap_bridge(unsigned long addr, size_t len, int prot, int flags,
 	return do_mmap(addr, len, prot, flags, fd, off, vrf0, private_data);
 }
 
-void
-arch_mmap_log_bridge(int event, unsigned long addr0, size_t len0, int prot,
-		int flags0, int fd, long off0, int error,
-		unsigned long result_addr, int extra)
-{
-	if (event == 1) {
-		dkprintf("sys_mmap(%lx,%lx,%x,%x,%d,%lx)\n",
-				addr0, len0, prot, flags0, fd, off0);
-	}
-	else if (event == 2) {
-		ekprintf("sys_mmap(%lx,%lx,%x,%x,%x,%lx):"
-				"not supported page size.\n",
-				addr0, len0, prot, flags0, fd, off0);
-	}
-	else if (event == 3) {
-		ekprintf("sys_mmap(%lx,%lx,%x,%x,%x,%lx):EINVAL\n",
-				addr0, len0, prot, flags0, fd, off0);
-	}
-	else if (event == 4) {
-		ekprintf("sys_mmap(%lx,%lx,%x,%x,%x,%lx):ENOMEM\n",
-				addr0, len0, prot, flags0, fd, off0);
-	}
-	else if (event == 5) {
-		ekprintf("sys_mmap(%lx,%lx,%x,%x,%x,%lx):unknown flags %x\n",
-				addr0, len0, prot, flags0, fd, off0, extra);
-	}
-	else if (event == 6) {
-		dkprintf("sys_mmap(%lx,%lx,%x,%x,%d,%lx): %ld %lx\n",
-				addr0, len0, prot, flags0, fd, off0, error,
-				result_addr);
-	}
-}
 
 int
 arch_mmap_supported_flags_bridge(void)
@@ -792,6 +748,58 @@ arch_ptrace_user_log_bridge(int event, int value, int result)
 	}
 }
 #endif /* retained original callback for the existing C fallback */
+
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+void
+arch_mmap_log_bridge(int event, unsigned long addr0, size_t len0, int prot,
+		int flags0, int fd, long off0, int error,
+		unsigned long result_addr, int extra)
+{
+	if (event == 1) {
+		dkprintf("sys_mmap(%lx,%lx,%x,%x,%d,%lx)\n",
+				addr0, len0, prot, flags0, fd, off0);
+	}
+	else if (event == 2) {
+		ekprintf("sys_mmap(%lx,%lx,%x,%x,%x,%lx):"
+				"not supported page size.\n",
+				addr0, len0, prot, flags0, fd, off0);
+	}
+	else if (event == 3) {
+		ekprintf("sys_mmap(%lx,%lx,%x,%x,%x,%lx):EINVAL\n",
+				addr0, len0, prot, flags0, fd, off0);
+	}
+	else if (event == 4) {
+		ekprintf("sys_mmap(%lx,%lx,%x,%x,%x,%lx):ENOMEM\n",
+				addr0, len0, prot, flags0, fd, off0);
+	}
+	else if (event == 5) {
+		ekprintf("sys_mmap(%lx,%lx,%x,%x,%x,%lx):unknown flags %x\n",
+				addr0, len0, prot, flags0, fd, off0, extra);
+	}
+	else if (event == 6) {
+		dkprintf("sys_mmap(%lx,%lx,%x,%x,%d,%lx): %ld %lx\n",
+				addr0, len0, prot, flags0, fd, off0, error,
+				result_addr);
+	}
+}
+
+#endif /* cumulative retained original callback */
+
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+void
+arch_shmget_log_bridge(int event, long key, size_t size, int shmflg0,
+		int error, int shmid)
+{
+	if (event == 1) {
+		dkprintf("shmget(%#lx,%#lx,%#x)\n", key, size, shmflg0);
+	}
+	else if (event == 2) {
+		dkprintf("shmget(%#lx,%#lx,%#x): %d %d\n",
+				key, size, shmflg0, error, shmid);
+	}
+}
+
+#endif /* cumulative retained original callback */
 
 //#define DEBUG_PRINT_SC
 
@@ -2973,6 +2981,11 @@ static void vdso_calc_container_size(void)
 } /* vdso_calc_container_size() */
 #endif
 
+#define ARCH_VDSO_PUBLIC_LOG_SETUP_ENTER 1
+#define ARCH_VDSO_PUBLIC_LOG_SETUP_EXIT 2
+#define ARCH_VDSO_PUBLIC_LOG_MAP_ENTER 3
+#define ARCH_VDSO_PUBLIC_LOG_MAP_EXIT 4
+
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 #define ARCH_VDSO_SETUP_LOG_GET_INFO_FAILED 1
 #define ARCH_VDSO_SETUP_LOG_LOCAL_GETTIME_DISABLED 2
@@ -2983,10 +2996,6 @@ static void vdso_calc_container_size(void)
 #define ARCH_VDSO_MAP_LOG_MAPPED 3
 #define ARCH_VDSO_MAP_LOG_SET_RANGE_FAILED 4
 #define ARCH_VDSO_MAP_LOG_ADD_VVAR_FAILED 5
-#define ARCH_VDSO_PUBLIC_LOG_SETUP_ENTER 1
-#define ARCH_VDSO_PUBLIC_LOG_SETUP_EXIT 2
-#define ARCH_VDSO_PUBLIC_LOG_MAP_ENTER 3
-#define ARCH_VDSO_PUBLIC_LOG_MAP_EXIT 4
 
 void
 arch_vdso_state_bridge(struct vdso **vdso_p, size_t **container_size_p,
@@ -3067,6 +3076,10 @@ arch_vdso_map_log_bridge(int event, int error, struct process_vm *vm,
 	}
 }
 
+
+#endif
+
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 arch_vdso_public_log_bridge(int event, int error, int enabled,
 		struct process_vm *vm)
@@ -3093,7 +3106,7 @@ arch_vdso_public_log_bridge(int event, int error, int enabled,
 		break;
 	}
 }
-#endif
+#endif /* cumulative retained original publicvDSO callback */
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 extern int arch_setup_vdso(void);

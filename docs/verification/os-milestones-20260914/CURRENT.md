@@ -1,3 +1,25 @@
+## Current230 integrated; executor compiler prefix retained — 2026-10-25T06:48:07.959550+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Current230 has independent HOST ABI/object/strict-partial acceptance; five changed
+runtime files are centrally integrated. Nine providers over221. Real default-image,
+native and whole-file retirement remain OPEN; no new production C boundary retired.
+Executor03c passed commands00..02 including real GCC ABI, failed03 missing
+IHK_USER_RUSTC, and retired normally. Independent physical/current acceptance68c89
+is durable. Three bounded CMake controls pass; fresh f4d suffix reuses actual prefix
+and executes only03..08 after publication/fresh query/review. No unchanged rebuild.
+
+Completed velocity buckets: first1package(2/hour), second2packages(4/hour), baseline2/hour.
+One bucket meets3.9/hour; no sustained95% claim or quality attestation. Default/native/
+SDK/file/app/image closures0. M12 stays35/35; M14/M15 OPEN. Planning estimate0512 is
+unchanged and separate. [Review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0642.json).
+
+Scheduling: root/m15_tools/recovery_review finish SOURCE17/authority publication then
+fresh actual executor suffix entry. CPU/f02_contract prepare current230 paired default
+image/ABI/linkownership; source owners continue private bodies and next BFD/daemon.
+No additional heavy owner or controller. Monitor1800sec, same creditrun/guardian and
+cutoff2026-10-26T06:00Z. Queue/firstcompiler UTC pairs and RSS missing remain null.
+
 ## Current221 integrated; executor complete input closure — 2026-10-25T06:18:53.211478+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

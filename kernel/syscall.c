@@ -119,6 +119,20 @@ static long (*syscall_table[])(int, ihk_mc_user_context_t *) = {
 };
 
 #ifdef MCKERNEL_RUST_SYSCALL_OFFLOAD
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+/* Readonly ABI binding to the unchanged genuine C table; its C data remains debt. */
+struct f03_syscall_dispatch_binding_v1 {
+ long (**handlers)(int,ihk_mc_user_context_t *);
+ unsigned long count;
+};
+_Static_assert(sizeof(syscall_table)/sizeof(syscall_table[0]) <= 2147483647UL,
+ "genuine syscall table count fits the original int ns");
+const struct f03_syscall_dispatch_binding_v1 f03_syscall_dispatch_binding_v1 = {
+ .handlers=syscall_table,.count=sizeof(syscall_table)/sizeof(syscall_table[0])
+};
+extern long syscall_dispatch_context_bridge(int num,ihk_mc_user_context_t *ctx);
+#else
 long syscall_dispatch_context_bridge(int num, ihk_mc_user_context_t *ctx)
 {
 	int ns = sizeof(syscall_table) / sizeof(syscall_table[0]);
@@ -128,6 +142,7 @@ long syscall_dispatch_context_bridge(int num, ihk_mc_user_context_t *ctx)
 
 	return syscall_table[num](num, ctx);
 }
+#endif /* MCKERNEL_RUST_F03_DISPATCH_CONTEXT */
 #endif
 
 /* generate syscall_name[] */
@@ -20204,6 +20219,11 @@ syscall_mckfd_free_bridge(void *fdp)
 }
 #endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && !defined(ENABLE_TOFU)
+extern long
+syscall_tofu_ioctl_bridge(void *threadp, int fd, unsigned long cmd,
+		unsigned long arg, int *handled);
+#else
 long
 syscall_tofu_ioctl_bridge(void *threadp, int fd, unsigned long cmd,
 		unsigned long arg, int *handled)
@@ -20238,6 +20258,7 @@ syscall_tofu_ioctl_bridge(void *threadp, int fd, unsigned long cmd,
 #endif
 	return 0;
 }
+#endif /* MCKERNEL_RUST_F03_LEAF_CALLBACKS */
 
 #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(ENABLE_TOFU)
 const char f03_tofu_close_source_file_v1[] = __FILE__;
@@ -26546,11 +26567,16 @@ syscall_wmb_bridge(void)
 }
 #endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS)
+extern void
+syscall_settimeofday_panic_bridge(void);
+#else
 void
 syscall_settimeofday_panic_bridge(void)
 {
 	panic("settimeofday");
 }
+#endif /* MCKERNEL_RUST_F03_LEAF_CALLBACKS */
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 extern void syscall_settimeofday_log_bridge(int, unsigned long, unsigned long, long, long, long);
