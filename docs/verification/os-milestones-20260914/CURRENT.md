@@ -1,4 +1,4 @@
-## Thirty-minute review: five data owners integrated; SDK owner recovery required — 2026-10-25T09:12Z review, updated 09:40Z
+## Thirty-minute review: five data owners integrated; SDK owner recovery required — 2026-10-25T09:12Z review, updated 09:36Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 M12 remains35/35; M14/M15 OPEN. The review snapshot interval accepted zero new
