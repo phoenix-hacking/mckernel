@@ -1,0 +1,23 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE_AND_CONTROLLED_HOST_PARITY",
+  "reviewer": "/root/f02_review",
+  "implementation_ownership": false,
+  "production_fragment_sha256": "80ee8370fff056c1e6e3532db72f25b5497a479d6556c7498850c53a20afb9a3",
+  "fixture_sha256": "d2fa4cdd0d01c7159653e5ea33b8138650bfb0e5f9fc1d1148ed77b7130be640",
+  "C_reference_sha256": "7a3bd4308bb4f0575744f18e3d1f2c01eb4e8422a3891251df86bae43ba187b5",
+  "compiler_ABI_partial_result_sha256": "8813683a336bd6b1b5bac77e8e4a4d491a15bc5dd4c5302427b97506c448a364",
+  "actual_parity_result_sha256": "aa196d53289de70e30b043f77ffc94ab653c7025ed74caf58b2ca50f9ba9585c",
+  "comparisons": 69,
+  "flags": [
+    0,
+    1,
+    128
+  ],
+  "cases": 23,
+  "commands": 2,
+  "joins_groups_streams": "PASS",
+  "findings": "Range-before-PTE acquire, PTE-before-range release beforecopy. BorrowedPTE stayslocked; memobj signedoffset/alignment0/nulloptional preserved; copyerrors signextended; diagnostics gates preserved. ActualC/Rust bytes/rc/orderedarguments/traces/formatteddiagnostics match69cases.",
+  "integration_recommendation": "Include exactmincore in55+F04 unionqualification; no wholeunion/default/native acceptance yet.",
+  "limitations": "Controlled HOST fixture; live tree/PTE/memobj concurrency, genuine usercopy faults and native hardware remain OPEN."
+}

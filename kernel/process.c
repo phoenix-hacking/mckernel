@@ -186,34 +186,64 @@ void process_mckfd_free_bridge(struct mckfd *fdp)
 #endif
 #line 173
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_mcs_writer_lock_bridge(unsigned long lock_addr, void *node);
+#else
+#line 174
 void process_mcs_writer_lock_bridge(unsigned long lock_addr, void *node)
 {
 	mcs_rwlock_writer_lock((struct mcs_rwlock_lock *)lock_addr,
 			       (struct mcs_rwlock_node_irqsave *)node);
 }
+#endif
+#line 179
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_mcs_writer_unlock_bridge(unsigned long lock_addr, void *node);
+#else
+#line 180
 void process_mcs_writer_unlock_bridge(unsigned long lock_addr, void *node)
 {
 	mcs_rwlock_writer_unlock((struct mcs_rwlock_lock *)lock_addr,
 				 (struct mcs_rwlock_node_irqsave *)node);
 }
+#endif
+#line 185
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_mcs_reader_lock_bridge(unsigned long lock_addr, void *node);
+#else
+#line 186
 void process_mcs_reader_lock_bridge(unsigned long lock_addr, void *node)
 {
 	mcs_rwlock_reader_lock((struct mcs_rwlock_lock *)lock_addr,
 			       (struct mcs_rwlock_node_irqsave *)node);
 }
+#endif
+#line 191
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_mcs_reader_unlock_bridge(unsigned long lock_addr, void *node);
+#else
+#line 192
 void process_mcs_reader_unlock_bridge(unsigned long lock_addr, void *node)
 {
 	mcs_rwlock_reader_unlock((struct mcs_rwlock_lock *)lock_addr,
 				 (struct mcs_rwlock_node_irqsave *)node);
 }
+#endif
+#line 197
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_hold_thread_bridge(void *thread);
+#else
+#line 198
 void process_hold_thread_bridge(void *thread)
 {
 	hold_thread((struct thread *)thread);
 }
+#endif
+#line 202
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 void process_ptrace_mcs_lock_noirq_bridge(unsigned long lock_addr, void *node)
@@ -2063,21 +2093,38 @@ int join_process_memory_range(struct process_vm *vm,
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_free_range_page_size_bridge(size_t current, size_t *nextp);
+#else
+#line 1861
 static int process_free_range_page_size_bridge(size_t current, size_t *nextp)
 {
 	return arch_get_smaller_page_size(NULL, current, nextp, NULL);
 }
+#endif
+#line 1865
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void *process_free_range_phys_to_virt_bridge(unsigned long phys);
+#else
+#line 1866
 static void *process_free_range_phys_to_virt_bridge(unsigned long phys)
 {
 	return phys_to_virt(phys);
 }
+#endif
+#line 1870
 
 static void process_free_range_pages_bridge(void *addr, unsigned long pages)
 {
 	_ihk_mc_free_pages(addr, pages, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
 }
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_free_range_clear_main_bridge(struct process_vm *vm,
+		unsigned long start, unsigned long end);
+#else
+#line 1876
 static int process_free_range_clear_main_bridge(struct process_vm *vm,
 		unsigned long start, unsigned long end)
 {
@@ -2090,17 +2137,37 @@ static int process_free_range_clear_main_bridge(struct process_vm *vm,
 
 	return error;
 }
+#endif
+#line 1888
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_free_range_noirq_lock_bridge(unsigned long lock_addr);
+#else
+#line 1889
 void process_free_range_noirq_lock_bridge(unsigned long lock_addr)
 {
 	ihk_mc_spinlock_lock_noirq((ihk_spinlock_t *)lock_addr);
 }
+#endif
+#line 1893
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_free_range_noirq_unlock_bridge(unsigned long lock_addr);
+#else
+#line 1894
 void process_free_range_noirq_unlock_bridge(unsigned long lock_addr)
 {
 	ihk_mc_spinlock_unlock_noirq((ihk_spinlock_t *)lock_addr);
 }
+#endif
+#line 1898
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_free_range_pt_free_bridge(void *page_table,
+		struct process_vm *vm, unsigned long start, unsigned long end,
+		void *memobj);
+#else
+#line 1899
 int process_free_range_pt_free_bridge(void *page_table,
 		struct process_vm *vm, unsigned long start, unsigned long end,
 		void *memobj)
@@ -2108,13 +2175,22 @@ int process_free_range_pt_free_bridge(void *page_table,
 	return ihk_mc_pt_free_range(page_table, vm, (void *)start, (void *)end,
 			memobj);
 }
+#endif
+#line 1906
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_free_range_pt_clear_bridge(void *page_table,
+		struct process_vm *vm, unsigned long start, unsigned long end);
+#else
+#line 1907
 static int process_free_range_pt_clear_bridge(void *page_table,
 		struct process_vm *vm, unsigned long start, unsigned long end)
 {
 	return ihk_mc_pt_clear_range(page_table, vm, (void *)start,
 			(void *)end);
 }
+#endif
+#line 1913
 
 #ifdef ENABLE_TOFU
 static int process_free_range_tofu_remove_bridge(struct process_vm *vm,
@@ -2501,10 +2577,16 @@ void process_add_range_remove_bridge(struct process_vm *vm,
 	remove_process_memory_range(vm, start, end, NULL);
 }
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_add_range_mark_xpmem_bridge(struct vm_range *range);
+#else
+#line 2285
 void process_add_range_mark_xpmem_bridge(struct vm_range *range)
 {
 	range->memobj->flags |= MF_XPMEM;
 }
+#endif
+#line 2289
 
 void process_add_range_memclear_bridge(unsigned long phys,
 				       unsigned long bytes)
@@ -4536,18 +4618,33 @@ void process_destroy_thread_time_account_bridge(void *thread_arg)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_destroy_thread_release_tid_bridge(void *proc_arg,
+					       void *thread_arg);
+#else
+#line 3871
 void process_destroy_thread_release_tid_bridge(void *proc_arg,
 					       void *thread_arg)
 {
 	__release_tid(proc_arg, thread_arg);
 }
+#endif
+#line 3876
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_destroy_thread_replace_tid_bridge(void *proc_arg,
+					       void *thread_arg,
+					       int new_tid);
+#else
+#line 3877
 void process_destroy_thread_replace_tid_bridge(void *proc_arg,
 					       void *thread_arg,
 					       int new_tid)
 {
 	__find_and_replace_tid(proc_arg, thread_arg, new_tid);
 }
+#endif
+#line 3883
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 void process_release_sigcommon_bridge(void *sigcommon);

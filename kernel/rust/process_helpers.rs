@@ -14911,3 +14911,326 @@ mod remaining_process_tracked_allocators {
     const _: unsafe extern "C" fn(*mut VmRange) = process_range_kfree_bridge;
     const _: unsafe extern "C" fn(*mut VmRange) = process_add_range_free_bridge;
 }
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+mod remaining_process_free_range_providers {
+    use core::ffi::c_void;
+    use core::mem::{align_of, offset_of, size_of};
+    use core::ptr::null_mut;
+
+    use crate::abi::{CInt, CULong, IhkSpinlock, Memobj, ProcessVm, SizeT, VmRange};
+
+    const MF_XPMEM: u32 = 0x10000;
+
+    // Both types describe the existing4-byte C ticket lock. The actual provider
+    // module independently asserts its head/tail field offset0 and alignment4.
+    // Raw casts below introduce no references or extra lock state/lifetimes.
+    const _: () = {
+        assert!(size_of::<IhkSpinlock>() == 4);
+        assert!(align_of::<IhkSpinlock>() == 4);
+        assert!(offset_of!(IhkSpinlock, head_tail) == 0);
+        assert!(size_of::<crate::spinlock_helpers::IhkSpinlock>() == 4);
+        assert!(align_of::<crate::spinlock_helpers::IhkSpinlock>() == 4);
+    };
+
+    /// Obtain the same next smaller page size without requesting p2alignment.
+    ///
+    /// # Safety
+    /// The existing caller supplies the original supported page-size domain and
+    /// writable output pointer. The actual architecture provider keeps its same
+    /// error/output policy; both original optional arguments remain null.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_free_range_page_size_bridge(
+        current: SizeT,
+        nextp: *mut SizeT,
+    ) -> CInt {
+        // SAFETY: Original output/domain contract is forwarded unchanged.
+        unsafe {
+            crate::x86_memory_helpers::arch_get_smaller_page_size(
+                null_mut(), current, nextp, null_mut(),
+            )
+        }
+    }
+
+    /// Translate the original physical address with the existing architecture map.
+    ///
+    /// # Safety
+    /// The address satisfies the original phys_to_virt provider's supported map
+    /// domain. This does not dereference, allocate or acquire the returned memory.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_free_range_phys_to_virt_bridge(phys: CULong) -> *mut c_void {
+        // SAFETY: Same scalar domain and unchanged raw pointer translation.
+        unsafe { crate::x86_memory_helpers::phys_to_virt(phys) }
+    }
+
+    /// Clear the same main page-table range under its existing noirq lock.
+    ///
+    /// # Safety
+    /// The caller supplies a live VM/address space and the original valid range.
+    /// The VM and page-table lock remain stable through lock, backend and unlock.
+    /// Existing IRQ context and lock ordering apply; neither callback unwinds.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_free_range_clear_main_bridge(
+        vm_arg: *mut c_void,
+        start: CULong,
+        end: CULong,
+    ) -> CInt {
+        let vm = vm_arg.cast::<ProcessVm>();
+        // SAFETY: The actual C/ABI lock and Rust ticket-lock representations are
+        // identical as asserted above. Exclusive access is provided by the same
+        // original lock; no Rust reference to the VM or address space is formed.
+        unsafe {
+            let lock = core::ptr::addr_of_mut!((*vm).page_table_lock)
+                .cast::<crate::spinlock_helpers::IhkSpinlock>();
+            crate::spinlock_helpers::__ihk_mc_spinlock_lock_noirq(lock);
+            let error = crate::x86_memory_helpers::ihk_mc_pt_clear_range(
+                (*(*vm).address_space).page_table,
+                vm,
+                start as *mut c_void,
+                end as *mut c_void,
+            );
+            crate::spinlock_helpers::__ihk_mc_spinlock_unlock_noirq(lock);
+            error
+        }
+    }
+
+    /// Acquire the original caller-specified noirq ticket lock.
+    ///
+    /// # Safety
+    /// The address is aligned/live writable C ticket-lock storage in the original
+    /// allowed IRQ context and lock order, with exclusive ownership after return.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_free_range_noirq_lock_bridge(lock_addr: CULong) {
+        // SAFETY: The caller's existing C lock storage has the exact asserted
+        // representation; the raw cast changes no address, lifetime or state.
+        unsafe {
+            crate::spinlock_helpers::__ihk_mc_spinlock_lock_noirq(
+                lock_addr as *mut crate::spinlock_helpers::IhkSpinlock,
+            );
+        }
+    }
+
+    /// Release the same caller-owned noirq ticket-lock acquisition.
+    ///
+    /// # Safety
+    /// The caller owns this exact lock's current acquisition and keeps the same
+    /// live/aligned storage and IRQ context through its single matching release.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_free_range_noirq_unlock_bridge(lock_addr: CULong) {
+        // SAFETY: Same lock address and ABI representation, no added acquisition.
+        unsafe {
+            crate::spinlock_helpers::__ihk_mc_spinlock_unlock_noirq(
+                lock_addr as *mut crate::spinlock_helpers::IhkSpinlock,
+            );
+        }
+    }
+
+    /// Forward the existing page-table free operation and borrowed memobj.
+    ///
+    /// # Safety
+    /// The original owner provides live page-table/VM/memobj state, valid range
+    /// and backend-required lock/lifetime conditions. Existing free/error policy
+    /// remains entirely with the same architecture provider.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_free_range_pt_free_bridge(
+        page_table: *mut c_void,
+        vm: *mut ProcessVm,
+        start: CULong,
+        end: CULong,
+        memobj: *mut c_void,
+    ) -> CInt {
+        // SAFETY: Exact original borrowed arguments and pointer conversions.
+        unsafe {
+            crate::x86_memory_helpers::ihk_mc_pt_free_range(
+                page_table, vm, start as *mut c_void, end as *mut c_void, memobj.cast::<Memobj>(),
+            )
+        }
+    }
+
+    /// Forward the existing page-table clear operation without a new lock.
+    ///
+    /// # Safety
+    /// The original caller preserves live page-table/VM state, valid range and
+    /// the provider's existing ownership/lock contract through the synchronous call.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_free_range_pt_clear_bridge(
+        page_table: *mut c_void,
+        vm: *mut ProcessVm,
+        start: CULong,
+        end: CULong,
+    ) -> CInt {
+        // SAFETY: Forward only; the caller retains existing synchronization.
+        unsafe {
+            crate::x86_memory_helpers::ihk_mc_pt_clear_range(
+                page_table, vm, start as *mut c_void, end as *mut c_void,
+            )
+        }
+    }
+
+    /// Publish the original XPMEM accounting flag on the range's memobj.
+    ///
+    /// # Safety
+    /// The range and nonnull memobj remain valid/writable under the original
+    /// publication owner's exclusion of conflicting flag updates. This preserves
+    /// the existing non-atomic read/OR/write and adds no lock or reference policy.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_add_range_mark_xpmem_bridge(range: *mut VmRange) {
+        // SAFETY: Original caller owns this live flag publication; the same
+        // actual u32 memobj field is modified without creating shared references.
+        unsafe { (*(*range).memobj.cast::<Memobj>()).flags |= MF_XPMEM };
+    }
+
+    const _: unsafe extern "C" fn(SizeT, *mut SizeT) -> CInt = process_free_range_page_size_bridge;
+    const _: unsafe extern "C" fn(CULong) -> *mut c_void = process_free_range_phys_to_virt_bridge;
+    const _: unsafe extern "C" fn(*mut c_void, CULong, CULong) -> CInt =
+        process_free_range_clear_main_bridge;
+    const _: unsafe extern "C" fn(CULong) = process_free_range_noirq_lock_bridge;
+    const _: unsafe extern "C" fn(CULong) = process_free_range_noirq_unlock_bridge;
+    const _: unsafe extern "C" fn(*mut c_void, *mut ProcessVm, CULong, CULong, *mut c_void) -> CInt =
+        process_free_range_pt_free_bridge;
+    const _: unsafe extern "C" fn(*mut c_void, *mut ProcessVm, CULong, CULong) -> CInt =
+        process_free_range_pt_clear_bridge;
+    const _: unsafe extern "C" fn(*mut VmRange) = process_add_range_mark_xpmem_bridge;
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+mod remaining_process_lock_and_tid_providers {
+    use core::ffi::c_void;
+    use core::mem::{align_of, offset_of, size_of};
+
+    use crate::abi::{CInt, CULong, McsRwlockLock, Process, Thread};
+
+    const _: () = {
+        assert!(size_of::<McsRwlockLock>() == 64);
+        assert!(align_of::<McsRwlockLock>() == 64);
+        assert!(offset_of!(McsRwlockLock, slock) == 0);
+        assert!(size_of::<crate::lock_helpers::McsRwlockLock>() == 64);
+        assert!(align_of::<crate::lock_helpers::McsRwlockLock>() == 64);
+        assert!(size_of::<crate::lock_helpers::McsRwlockNodeIrqsave>() == 64);
+        assert!(align_of::<crate::lock_helpers::McsRwlockNodeIrqsave>() == 64);
+    };
+
+    /// Acquire the original IRQ-saving writer lock using the caller's node.
+    ///
+    /// # Safety
+    /// `lock_addr` names aligned/live C MCS lock storage and `node` names the
+    /// caller's aligned/writable IRQ-save node. The caller obeys existing lock
+    /// ordering/IRQ context and preserves both through their matching unlock.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_mcs_writer_lock_bridge(lock_addr: CULong, node: *mut c_void) {
+        // SAFETY: Actual C and Rust lock/node representations match the same
+        // existing provider ABI. Raw casts preserve addresses without references;
+        // the provider retains the original IRQ-save and acquisition operation.
+        unsafe {
+            crate::lock_helpers::__mcs_rwlock_writer_lock(
+                lock_addr as *mut crate::lock_helpers::McsRwlockLock,
+                node.cast::<crate::lock_helpers::McsRwlockNodeIrqsave>(),
+            );
+        }
+    }
+
+    /// Release the original writer acquisition and restore its node's IRQ state.
+    ///
+    /// # Safety
+    /// The caller owns this exact acquisition and supplies the same live lock and
+    /// original saved node, excluding competing node reuse until release finishes.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_mcs_writer_unlock_bridge(lock_addr: CULong, node: *mut c_void) {
+        // SAFETY: Same lock/node and one matching provider release; no new state
+        // or IRQ restore is synthesized outside the actual lock implementation.
+        unsafe {
+            crate::lock_helpers::__mcs_rwlock_writer_unlock(
+                lock_addr as *mut crate::lock_helpers::McsRwlockLock,
+                node.cast::<crate::lock_helpers::McsRwlockNodeIrqsave>(),
+            );
+        }
+    }
+
+    /// Acquire the original IRQ-saving reader lock using the caller's node.
+    ///
+    /// # Safety
+    /// The caller provides the same aligned/live lock and exclusive writable node
+    /// storage required by the C bridge and retains them for the matching unlock.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_mcs_reader_lock_bridge(lock_addr: CULong, node: *mut c_void) {
+        // SAFETY: Preserve the existing typed C representation and actual reader
+        // provider selection, including its IRQ handling and synchronization.
+        unsafe {
+            crate::lock_helpers::__mcs_rwlock_reader_lock(
+                lock_addr as *mut crate::lock_helpers::McsRwlockLock,
+                node.cast::<crate::lock_helpers::McsRwlockNodeIrqsave>(),
+            );
+        }
+    }
+
+    /// Release the original reader acquisition with its original IRQ-save node.
+    ///
+    /// # Safety
+    /// The caller owns the matching acquisition; lock/node storage remains live,
+    /// aligned and protected against conflicting node mutation until return.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_mcs_reader_unlock_bridge(lock_addr: CULong, node: *mut c_void) {
+        // SAFETY: Actual provider restores the same saved state from the same
+        // caller node. No guard lifetime, lock count or pointer value changes.
+        unsafe {
+            crate::lock_helpers::__mcs_rwlock_reader_unlock(
+                lock_addr as *mut crate::lock_helpers::McsRwlockLock,
+                node.cast::<crate::lock_helpers::McsRwlockNodeIrqsave>(),
+            );
+        }
+    }
+
+    /// Retain the original thread reference through the existing public entry.
+    ///
+    /// # Safety
+    /// The original caller satisfies hold_thread's lifetime/reference contract.
+    /// Its original int result remains ignored by this void callback, as in C.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_hold_thread_bridge(thread: *mut c_void) {
+        // SAFETY: Same pointer and provider, without a new reference operation.
+        unsafe {
+            let _ = super::hold_thread(thread.cast::<Thread>());
+        }
+    }
+
+    /// Forward the original final-thread TID release to the existing body.
+    ///
+    /// # Safety
+    /// The process/thread and TID table remain live under the caller's original
+    /// final-release exclusion and reference ownership throughout this callback.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_destroy_thread_release_tid_bridge(
+        proc: *mut c_void,
+        thread: *mut c_void,
+    ) {
+        // SAFETY: Preserve exact objects and existing table/lock/lifecycle policy.
+        unsafe { super::__release_tid(proc.cast::<Process>(), thread.cast::<Thread>()) };
+    }
+
+    /// Forward the existing TID replacement without adding lookup or lifetime work.
+    ///
+    /// # Safety
+    /// The caller preserves the original process/thread/TID table lifetime and
+    /// required exclusion; `new_tid` retains the existing provider's value domain.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_destroy_thread_replace_tid_bridge(
+        proc: *mut c_void,
+        thread: *mut c_void,
+        new_tid: CInt,
+    ) {
+        // SAFETY: Exact arguments reach the existing replacement operation once.
+        unsafe {
+            super::__find_and_replace_tid(proc.cast::<Process>(), thread.cast::<Thread>(), new_tid);
+        }
+    }
+
+    const _: unsafe extern "C" fn(CULong, *mut c_void) = process_mcs_writer_lock_bridge;
+    const _: unsafe extern "C" fn(CULong, *mut c_void) = process_mcs_writer_unlock_bridge;
+    const _: unsafe extern "C" fn(CULong, *mut c_void) = process_mcs_reader_lock_bridge;
+    const _: unsafe extern "C" fn(CULong, *mut c_void) = process_mcs_reader_unlock_bridge;
+    const _: unsafe extern "C" fn(*mut c_void) = process_hold_thread_bridge;
+    const _: unsafe extern "C" fn(*mut c_void, *mut c_void) =
+        process_destroy_thread_release_tid_bridge;
+    const _: unsafe extern "C" fn(*mut c_void, *mut c_void, CInt) =
+        process_destroy_thread_replace_tid_bridge;
+}

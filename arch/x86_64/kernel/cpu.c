@@ -338,7 +338,11 @@ unsigned long ihk_mc_syscall_sp(const ihk_mc_user_context_t *uc)
 
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
 extern void *lapic_vp; /* Rust-owned slot; existing device lifetime unchanged. */
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern const unsigned int x86_local_apic_base_msr;
+#else
 const unsigned int x86_local_apic_base_msr = APIC_BASE_MSR;
+#endif
 #else
 static void *lapic_vp;
 #endif
@@ -354,9 +358,13 @@ static void (*lapic_write)(int reg, unsigned int value);
 #endif
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
 extern unsigned int (*lapic_read)(int reg); /* Rust-owned selected dispatch slot. */
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern const unsigned long x86_icr_geometry[4];
+#else
 const unsigned long x86_icr_geometry[4] = {
  IA32_X2APIC_ICR, LAPIC_ICR2, LAPIC_ICR0, APIC_ICR_BUSY,
 };
+#endif
 #else
 static unsigned int (*lapic_read)(int reg);
 #endif
@@ -613,7 +621,11 @@ void assign_processor_id(void);
 void arch_delay(int);
 void x86_set_warm_reset(unsigned long ip, char *first_page_va);
 void x86_init_perfctr(void);
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern int gettime_local_support;
+#else
 int gettime_local_support = 0;
+#endif
 
 extern int kprintf(const char *format, ...);
 extern int interrupt_from_user(void *);
@@ -630,12 +642,16 @@ extern struct x86_desc_ptr x86_cpu_idt_desc;
 extern struct x86_desc_ptr gdt_desc; /* Rust/assembly-owned selected storage. */
 #define idt x86_cpu_idt
 #define idt_desc x86_cpu_idt_desc
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern const unsigned long x86_idt_geometry[9];
+#else
 const unsigned long x86_idt_geometry[9] = {
  sizeof(idt),sizeof(struct idt_entry),sizeof(idt[0].desc),
  sizeof(struct x86_desc_ptr),__builtin_offsetof(struct x86_desc_ptr,size),
  __builtin_offsetof(struct x86_desc_ptr,address),
  sizeof(idt_desc.size),sizeof(idt_desc.address),KERNEL_CS,
 };
+#endif
 #else
 static struct idt_entry{
 	uint32_t desc[4];
@@ -673,7 +689,11 @@ X86_INITIAL_GDT_STORAGE uint64_t gdt[] __attribute__((aligned(16))) = {
 #undef X86_INITIAL_GDT_STORAGE
 #endif
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern const unsigned long x86_gdt_geometry[2];
+#else
 const unsigned long x86_gdt_geometry[2] = { sizeof(gdt), GLOBAL_TSS_ENTRY };
+#endif
 #endif
 
 
@@ -783,11 +803,7 @@ extern uint64_t xsave_mask __asm__("x86_cpu_xsave_mask");
 extern unsigned char initial_fp_regs[PAGE_SIZE] __asm__("x86_cpu_initial_fp_regs")
  __attribute__((aligned(64)));
 extern int initial_fp_regs_available __asm__("x86_cpu_initial_fp_regs_available");
-#ifdef ENABLE_SSE
-const int x86_cpu_fp_sse_enabled = 1;
-#else
-const int x86_cpu_fp_sse_enabled = 0;
-#endif
+extern const int x86_cpu_fp_sse_enabled;
 #else
 static int xsave_available = 0;
 static int xsave_size = 0;
@@ -798,8 +814,15 @@ static int initial_fp_regs_available;
 
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
 void init_fpu(void);
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern const unsigned long x86_initial_fp_regs_extent;
+#else
 const unsigned long x86_initial_fp_regs_extent = sizeof(initial_fp_regs);
+#endif
 /* Existing per-call-site dynamic-debug metadata, no runtime C logging body. */
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern struct ddebug x86_init_fpu_debug[6];
+#else
 struct ddebug x86_init_fpu_debug[6] __aligned(8)
  __attribute__((section("__verbose"))) = {
  { .file=__FILE__, .func="init_fpu", .line=712, .flags=DDEBUG_DEFAULT },
@@ -809,6 +832,7 @@ struct ddebug x86_init_fpu_debug[6] __aligned(8)
  { .file=__FILE__, .func="init_fpu", .line=740, .flags=DDEBUG_DEFAULT },
  { .file=__FILE__, .func="init_fpu", .line=744, .flags=DDEBUG_DEFAULT },
 };
+#endif
 #else
 void init_fpu(void)
 {
@@ -914,7 +938,11 @@ uint64_t get_xsave_mask()
 
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
 void reload_gdt(struct x86_desc_ptr *gdt_ptr);
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern const unsigned long x86_gdt_reload_geometry[3];
+#else
 const unsigned long x86_gdt_reload_geometry[3]={KERNEL_CS,KERNEL_DS,GLOBAL_TSS};
+#endif
 #else
 void reload_gdt(struct x86_desc_ptr *gdt_ptr)
 {
@@ -1184,11 +1212,15 @@ x86_cpuid_leaf_bridge(unsigned long op, unsigned long *eaxp,
 		unsigned long *edxp);
 
 /* Existing PAT dkprintf selector, declarative data only. */
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern struct ddebug x86_cpu_setup_log_debug;
+#else
 struct ddebug x86_cpu_setup_log_debug __aligned(8)
 __attribute__((section("__verbose"))) = {
 	.file=__FILE__, .func="x86_cpu_log_bridge", .line=1104,
 	.flags=DDEBUG_DEFAULT,
 };
+#endif
 void x86_cpu_log_bridge(int event);
 void
 x86_cpu_log_bridge(int event);
@@ -1225,8 +1257,12 @@ x86_cpu_ulong_log_bridge(int event, unsigned long value)
 
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
 
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern const unsigned long x86_cpu_info_ncpus_offset;
+#else
 const unsigned long x86_cpu_info_ncpus_offset =
  __builtin_offsetof(struct ihk_mc_cpu_info,ncpus);
+#endif
 int
 x86_cpu_info_ncpus_bridge(void);
 
@@ -1309,7 +1345,11 @@ apic_icr_write(unsigned int h, unsigned int l)
 #endif
 
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern const int x86_ipi_icr_id_shift;
+#else
 const int x86_ipi_icr_id_shift = LAPIC_ICR_ID_SHIFT;
+#endif
 void x2apic_x86_issue_ipi(unsigned int apicid, unsigned int low);
 #else
 static void
@@ -1631,10 +1671,14 @@ static void set_kstack(unsigned long ptr)
 void init_smp_processor(void);
 /* Actual existing macro values; TSC_AUX is the original function-local literal.
  * Immutable geometry only, no new C function or hardware operation. */
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern const unsigned long x86_smp_init_geometry[6];
+#else
 const unsigned long x86_smp_init_geometry[6] = {
  IA32_X2APIC_APICID, LAPIC_ID, LAPIC_ID_SHIFT, GLOBAL_TSS_ENTRY, GETCPU_ENTRY,
  0xc0000103
 };
+#endif
 #else
 static void init_smp_processor(void)
 {
@@ -1692,7 +1736,11 @@ static char *trampoline_va, *first_page_va;
   @*/
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
 void ihk_mc_init_ap(void);
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern const unsigned long x86_ap_init_geometry[2];
+#else
 const unsigned long x86_ap_init_geometry[2]={AP_TRAMPOLINE_SIZE,PAGE_SIZE};
+#endif
 #else
 void ihk_mc_init_ap(void)
 {
@@ -1798,13 +1846,6 @@ extern int x86_interrupt_cpu_result(int cpu, int vector, int num_processors,
 		void (*issue_ipi_fn)(unsigned long, int),
 		void (*log_fn)(int, int, int));
 
-static const struct x86_thread_context_offsets x86_thread_context_offsets = {
-	.thread_status_offset = __builtin_offsetof(struct thread, status),
-	.thread_uctx_offset = __builtin_offsetof(struct thread, uctx),
-	.thread_tlsblock_base_offset =
-		__builtin_offsetof(struct thread, tlsblock_base),
-};
-
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
 extern const struct x86_trace_enter_user_offsets x86_trace_enter_user_offsets;
 #else
@@ -1818,27 +1859,24 @@ const struct x86_trace_enter_user_offsets x86_trace_enter_user_offsets = {
 
 void *x86_this_kstack_bridge(void);
 
-static void *x86_cpu_local_bridge(int cpu)
-{
-	return get_x86_cpu_local_variable(cpu);
-}
-
-static void x86_arch_delay_bridge(int us)
-{
-	arch_delay(us);
-}
-
 /* Existing three dkprintf records; data only, no C diagnostic body. */
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern struct ddebug x86_tick_log_debug[3];
+#else
 struct ddebug x86_tick_log_debug[3] __aligned(8)
 __attribute__((section("__verbose"))) = {
 	{ .file=__FILE__, .func="x86_tick_log_bridge", .line=1720, .flags=DDEBUG_DEFAULT },
 	{ .file=__FILE__, .func="x86_tick_log_bridge", .line=1723, .flags=DDEBUG_DEFAULT },
 	{ .file=__FILE__, .func="x86_tick_log_bridge", .line=1726, .flags=DDEBUG_DEFAULT },
 };
+#endif
 void x86_tick_log_bridge(int event);
 void x86_tick_log_bridge(int event);
 
 /* Existing11 dkprintf selectors; declarative data, no C diagnostic body. */
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern struct ddebug x86_pvclock_log_debug[11];
+#else
 struct ddebug x86_pvclock_log_debug[11] __aligned(8)
 __attribute__((section("__verbose"))) = {
 	{ .file=__FILE__, .func="x86_pvclock_log_bridge", .line=1735, .flags=DDEBUG_DEFAULT },
@@ -1853,6 +1891,7 @@ __attribute__((section("__verbose"))) = {
 	{ .file=__FILE__, .func="x86_pvclock_log_bridge", .line=1765, .flags=DDEBUG_DEFAULT },
 	{ .file=__FILE__, .func="x86_pvclock_log_bridge", .line=1768, .flags=DDEBUG_DEFAULT },
 };
+#endif
 void x86_pvclock_log_bridge(int event);
 void x86_pvclock_log_bridge(int event);
 #endif
@@ -1901,10 +1940,14 @@ static void enable_page_protection_fault(void)
 
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
 extern int no_execute_available __asm__("x86_cpu_no_execute_available");
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern const unsigned long x86_init_geometry[11];
+#else
 const unsigned long x86_init_geometry[11] = {
  MSR_IA32_APIC_BASE, PAGE_MASK, PAGE_SIZE, 0x800, MSR_IA32_CR_PAT,
  MSR_EFER, MSR_STAR, MSR_LSTAR, KERNEL_CS, USER_CS, 1UL << 11,
 };
+#endif
 #else
 static int no_execute_available = 0;
 #endif
@@ -2197,11 +2240,18 @@ void interrupt_exit(struct x86_user_context *regs)
 
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
 /* Existing main-IRQ selectors/constants/state visibility only. No C getter. */
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern struct ddebug x86_main_irq_debug[2];
+#else
 struct ddebug x86_main_irq_debug[2] __aligned(8)
 __attribute__((section("__verbose"))) = {
 	{ .file=__FILE__, .func="handle_interrupt", .line=2086, .flags=DDEBUG_DEFAULT },
 	{ .file=__FILE__, .func="handle_interrupt", .line=2158, .flags=DDEBUG_DEFAULT },
 };
+#endif
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern const unsigned long x86_main_irq_constants[23];
+#else
 const unsigned long x86_main_irq_constants[23] = {
  CPUTIME_MODE_U2K, CPUTIME_MODE_K2K_IN, CPUTIME_MODE_K2U, CPUTIME_MODE_K2K_OUT,
  CPU_FLAG_NEED_RESCHED, CPU_FLAG_NEED_MIGRATE,
@@ -2212,6 +2262,10 @@ const unsigned long x86_main_irq_constants[23] = {
  SIGFPE, FPE_INTDIV, SIGSEGV, SIGILL, ILL_ILLOPN, SIGBUS, BUS_ADRALN, SIGIO,
  256-32,
 };
+#endif
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern const unsigned long x86_main_irq_handler_layout[9];
+#else
 const unsigned long x86_main_irq_handler_layout[9] = {
  sizeof(struct ihk_mc_interrupt_handler), __alignof__(struct ihk_mc_interrupt_handler),
  __builtin_offsetof(struct ihk_mc_interrupt_handler,list),
@@ -2221,6 +2275,7 @@ const unsigned long x86_main_irq_handler_layout[9] = {
  sizeof(((struct ihk_mc_interrupt_handler*)0)->priv),
  sizeof(struct list_head), __builtin_offsetof(struct list_head,next),
 };
+#endif
 void handle_interrupt(int vector, struct x86_user_context *regs);
 #else
 void handle_interrupt(int vector, struct x86_user_context *regs)
@@ -2404,10 +2459,17 @@ void gpe_handler(struct x86_user_context *regs)
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
 /* Immutable witness of this C translation unit's existing debug gate;
  * declarative remaining C data, not a C helper implementation. */
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+#ifdef DEBUG_PRINT_CPU
+#error private Rust debug policy requires a separately qualified enabled-debug producer
+#endif
+extern const unsigned int x86_debug_handler_debug_print_enabled;
+#else
 #ifdef DEBUG_PRINT_CPU
 const unsigned int x86_debug_handler_debug_print_enabled = 1;
 #else
 const unsigned int x86_debug_handler_debug_print_enabled = 0;
+#endif
 #endif
 void debug_handler(struct x86_user_context *regs);
 #else
@@ -2445,10 +2507,17 @@ void debug_handler(struct x86_user_context *regs)
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
 /* Declarative witness of this C translation unit's existing debug gate.
  * This immutable data is explicit remaining C debt, not a C helper body. */
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+#ifdef DEBUG_PRINT_CPU
+#error private Rust debug policy requires a separately qualified enabled-debug producer
+#endif
+extern const unsigned int x86_int3_debug_print_enabled;
+#else
 #ifdef DEBUG_PRINT_CPU
 const unsigned int x86_int3_debug_print_enabled = 1;
 #else
 const unsigned int x86_int3_debug_print_enabled = 0;
+#endif
 #endif
 void int3_handler(struct x86_user_context *regs);
 #else
@@ -2473,22 +2542,29 @@ void int3_handler(struct x86_user_context *regs)
 }
 #endif
 
-static void outb(uint8_t v, uint16_t port)
-{
-	asm volatile("outb %0, %1" : : "a" (v), "d" (port));
-}
-
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
 /* Declarative remaining C data debt: typed addresses of existing storage and
  * original macro values. No new state, getter or runtime C operation. */
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern void (**const x86_wakeup_lapic_write_slot)(int, unsigned int);
+extern unsigned int (**const x86_wakeup_lapic_read_slot)(int);
+extern void (**const x86_wakeup_wait_slot)(void);
+extern char **const x86_wakeup_first_page_slot;
+extern volatile int *const x86_wakeup_boot_status_slot;
+#else
 void (**const x86_wakeup_lapic_write_slot)(int, unsigned int) = &lapic_write;
 unsigned int (**const x86_wakeup_lapic_read_slot)(int) = &lapic_read;
 void (**const x86_wakeup_wait_slot)(void) = &lapic_wait_icr_idle;
 char **const x86_wakeup_first_page_slot = &first_page_va;
 volatile int *const x86_wakeup_boot_status_slot = &cpu_boot_status;
+#endif
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern const unsigned int x86_wakeup_constants[5];
+#else
 const unsigned int x86_wakeup_constants[5] = {
     LAPIC_ESR, APIC_INT_LEVELTRIG, APIC_INT_ASSERT, APIC_DM_INIT, APIC_DM_STARTUP
 };
+#endif
 
 void __x86_wakeup(int apicid, unsigned long ip);
 #else
@@ -3291,6 +3367,9 @@ void x86_issue_ipi_bridge(unsigned long apic_id, int vector);
 /* Existing dkprintf selector data; the complete diagnostic body is Rust.
  * Retain original CPU C file/function/line and current DDEBUG_DEFAULT selection.
  */
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern struct ddebug x86_interrupt_log_debug;
+#else
 struct ddebug x86_interrupt_log_debug __aligned(8)
 __attribute__((section("__verbose"))) = {
 	.file = __FILE__,
@@ -3298,6 +3377,7 @@ __attribute__((section("__verbose"))) = {
 	.line = 3140,
 	.flags = DDEBUG_DEFAULT,
 };
+#endif
 void x86_interrupt_log_bridge(int event, int cpu, int vector);
 void x86_interrupt_log_bridge(int event, int cpu, int vector);
 #endif
@@ -3326,25 +3406,41 @@ _Static_assert(sizeof(struct mcs_rwlock_node_irqsave)==64 &&
  _Alignof(struct mcs_rwlock_node_irqsave)==64 &&
  __builtin_offsetof(struct mcs_rwlock_node_irqsave,irqsave)==0,
  "actual current switch lock-node ABI");
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern const unsigned long x86_switch_context_geometry[6];
+#else
 const unsigned long x86_switch_context_geometry[6] = {
  PS_DELAY_STOPPED, PS_DELAY_TRACED, PS_STOPPED, PS_TRACED, PP_RESET, PP_COUNT
 };
+#endif
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern const int x86_switch_context_perf_enabled;
+#else
 const int x86_switch_context_perf_enabled =
 #ifdef ENABLE_PERF
  1;
 #else
  0;
 #endif
+#endif
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern const int x86_switch_context_profile_enabled;
+#else
 const int x86_switch_context_profile_enabled =
 #ifdef PROFILE_ENABLE
  1;
 #else
  0;
 #endif
+#endif
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern struct ddebug x86_switch_context_debug;
+#else
 struct ddebug x86_switch_context_debug __aligned(8)
  __attribute__((section("__verbose"))) = {
  .file=__FILE__, .func="arch_switch_context", .line=3168, .flags=DDEBUG_DEFAULT
 };
+#endif
 #else
 struct thread *arch_switch_context(struct thread *prev, struct thread *next)
 {
@@ -3656,18 +3752,21 @@ long arch_native_signal_reset_fp_bridge(void)
 #endif
 
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern const int x86_lookup_sleep_mask;
+#else
 const int x86_lookup_sleep_mask = PS_INTERRUPTIBLE | PS_UNINTERRUPTIBLE |
  PS_STOPPED | PS_TRACED;
+#endif
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern const unsigned long x86_user_start_geometry[3];
+#else
 const unsigned long x86_user_start_geometry[3] = { USER_CS, USER_DS, RFLAGS_IF };
+#endif
 ihk_mc_user_context_t *lookup_user_context(struct thread *thread);
 #else
 ihk_mc_user_context_t *lookup_user_context(struct thread *thread)
 {
-#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-	return x86_lookup_user_context_body_result(thread, get_this_cpu_local_var()->current,
-			PS_INTERRUPTIBLE | PS_UNINTERRUPTIBLE |
-			PS_STOPPED | PS_TRACED, &x86_thread_context_offsets);
-#else
 	ihk_mc_user_context_t *uctx = thread->uctx;
 
 	if ((!(thread->status & (PS_INTERRUPTIBLE | PS_UNINTERRUPTIBLE
@@ -3689,7 +3788,6 @@ ihk_mc_user_context_t *lookup_user_context(struct thread *thread)
 	}
 
 	return uctx;
-#endif
 }
 #endif /* lookup_user_context() */
 
@@ -3894,7 +3992,11 @@ mod_nmi_ctx(void *nmi_ctx, void (*func)())
 
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
 void arch_save_panic_regs(void *irq_regs);
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern const unsigned long x86_panic_user_end;
+#else
 const unsigned long x86_panic_user_end = USER_END;
+#endif
 #else
 void arch_save_panic_regs(void *irq_regs)
 {
@@ -4025,11 +4127,15 @@ extern long freeze_thaw(void *nmi_ctx);
 
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
 void multi_nm_interrupt_handler(void *irq_regs);
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern struct ddebug x86_multi_nmi_debug[2];
+#else
 struct ddebug x86_multi_nmi_debug[2] __aligned(8)
  __attribute__((section("__verbose"))) = {
  { .file=__FILE__, .func="multi_nm_interrupt_handler", .line=3854, .flags=DDEBUG_DEFAULT },
  { .file=__FILE__, .func="multi_nm_interrupt_handler", .line=3859, .flags=DDEBUG_DEFAULT },
 };
+#endif
 #else
 void multi_nm_interrupt_handler(void *irq_regs)
 {
@@ -4074,3 +4180,75 @@ void multi_nm_interrupt_handler(void *irq_regs)
 #endif
 
 /*** end of file ***/
+
+/* Source-bound declarative policy guards only, no new runtime C implementation.
+ * These protect the exact selected macro values transcribed into private Rust.
+ * A changed header/debug selection must fail rather than silently use stale data. */
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+#ifndef ENABLE_SSE
+#error qualified private x86 SSE producer requires selected march.h ENABLE_SSE
+#endif
+_Static_assert(sizeof(unsigned long) == 8, "qualified Rust CULong width");
+_Static_assert((DDEBUG_DEFAULT) == (0), "Rust selected DDEBUG_DEFAULT binding");
+_Static_assert((PAGE_SIZE) == (4096UL), "Rust selected PAGE_SIZE binding");
+_Static_assert((PAGE_MASK) == (~4095UL), "Rust selected PAGE_MASK binding");
+_Static_assert((AP_TRAMPOLINE_SIZE) == (0x2000), "Rust selected AP_TRAMPOLINE_SIZE binding");
+_Static_assert((KERNEL_CS) == (4 * 8), "Rust selected KERNEL_CS binding");
+_Static_assert((KERNEL_DS) == (5 * 8), "Rust selected KERNEL_DS binding");
+_Static_assert((USER_CS) == (6 * 8 + 3), "Rust selected USER_CS binding");
+_Static_assert((USER_DS) == (7 * 8 + 3), "Rust selected USER_DS binding");
+_Static_assert((GLOBAL_TSS_ENTRY) == (8), "Rust selected GLOBAL_TSS_ENTRY binding");
+_Static_assert((GLOBAL_TSS) == (8 * 8), "Rust selected GLOBAL_TSS binding");
+_Static_assert((GETCPU_ENTRY) == (15), "Rust selected GETCPU_ENTRY binding");
+_Static_assert((RFLAGS_IF) == (1UL << 9), "Rust selected RFLAGS_IF binding");
+_Static_assert((USER_END) == (0x0000800000000000UL), "Rust selected USER_END binding");
+_Static_assert((APIC_BASE_MSR) == (0x800), "Rust selected APIC_BASE_MSR binding");
+_Static_assert((LAPIC_ICR_ID_SHIFT) == (24), "Rust selected LAPIC_ICR_ID_SHIFT binding");
+_Static_assert((LAPIC_ID_SHIFT) == (24), "Rust selected LAPIC_ID_SHIFT binding");
+_Static_assert((PS_INTERRUPTIBLE) == (0x2), "Rust selected PS_INTERRUPTIBLE binding");
+_Static_assert((PS_UNINTERRUPTIBLE) == (0x4), "Rust selected PS_UNINTERRUPTIBLE binding");
+_Static_assert((PS_STOPPED) == (0x20), "Rust selected PS_STOPPED binding");
+_Static_assert((PS_TRACED) == (0x40), "Rust selected PS_TRACED binding");
+_Static_assert((PS_DELAY_STOPPED) == (0x200), "Rust selected PS_DELAY_STOPPED binding");
+_Static_assert((PS_DELAY_TRACED) == (0x400), "Rust selected PS_DELAY_TRACED binding");
+_Static_assert((PP_RESET) == (1), "Rust selected PP_RESET binding");
+_Static_assert((PP_COUNT) == (2), "Rust selected PP_COUNT binding");
+_Static_assert((CPUTIME_MODE_U2K) == (1), "Rust selected CPUTIME_MODE_U2K binding");
+_Static_assert((CPUTIME_MODE_K2K_IN) == (2), "Rust selected CPUTIME_MODE_K2K_IN binding");
+_Static_assert((CPUTIME_MODE_K2U) == (0), "Rust selected CPUTIME_MODE_K2U binding");
+_Static_assert((CPUTIME_MODE_K2K_OUT) == (3), "Rust selected CPUTIME_MODE_K2K_OUT binding");
+_Static_assert((CPU_FLAG_NEED_RESCHED) == (1U), "Rust selected CPU_FLAG_NEED_RESCHED binding");
+_Static_assert((CPU_FLAG_NEED_MIGRATE) == (2U), "Rust selected CPU_FLAG_NEED_MIGRATE binding");
+_Static_assert((LOCAL_TIMER_VECTOR) == (0xef), "Rust selected LOCAL_TIMER_VECTOR binding");
+_Static_assert((LOCAL_PERF_VECTOR) == (0xf0), "Rust selected LOCAL_PERF_VECTOR binding");
+_Static_assert((LOCAL_SMP_FUNC_CALL_VECTOR) == (0xf1), "Rust selected LOCAL_SMP_FUNC_CALL_VECTOR binding");
+_Static_assert((LAPIC_LVTPC) == (0x340), "Rust selected LAPIC_LVTPC binding");
+_Static_assert((MSR_PERF_GLOBAL_STATUS) == (0x38e), "Rust selected MSR_PERF_GLOBAL_STATUS binding");
+_Static_assert((MSR_PERF_GLOBAL_OVF_CTRL) == (0x390), "Rust selected MSR_PERF_GLOBAL_OVF_CTRL binding");
+_Static_assert((IHK_TLB_FLUSH_IRQ_VECTOR_START) == (68), "Rust selected IHK_TLB_FLUSH_IRQ_VECTOR_START binding");
+_Static_assert((IHK_TLB_FLUSH_IRQ_VECTOR_END) == (68 + 64), "Rust selected IHK_TLB_FLUSH_IRQ_VECTOR_END binding");
+_Static_assert((SIGFPE) == (8), "Rust selected SIGFPE binding");
+_Static_assert((FPE_INTDIV) == (1), "Rust selected FPE_INTDIV binding");
+_Static_assert((SIGSEGV) == (11), "Rust selected SIGSEGV binding");
+_Static_assert((SIGILL) == (4), "Rust selected SIGILL binding");
+_Static_assert((ILL_ILLOPN) == (2), "Rust selected ILL_ILLOPN binding");
+_Static_assert((SIGBUS) == (7), "Rust selected SIGBUS binding");
+_Static_assert((BUS_ADRALN) == (1), "Rust selected BUS_ADRALN binding");
+_Static_assert((SIGIO) == (29), "Rust selected SIGIO binding");
+_Static_assert((IA32_X2APIC_ICR) == (0x830), "Rust selected IA32_X2APIC_ICR binding");
+_Static_assert((LAPIC_ICR2) == (0x310), "Rust selected LAPIC_ICR2 binding");
+_Static_assert((LAPIC_ICR0) == (0x300), "Rust selected LAPIC_ICR0 binding");
+_Static_assert((APIC_ICR_BUSY) == (0x1000), "Rust selected APIC_ICR_BUSY binding");
+_Static_assert((MSR_IA32_APIC_BASE) == (0x1b), "Rust selected MSR_IA32_APIC_BASE binding");
+_Static_assert((MSR_IA32_CR_PAT) == (0x277), "Rust selected MSR_IA32_CR_PAT binding");
+_Static_assert((MSR_EFER) == (0xc0000080UL), "Rust selected MSR_EFER binding");
+_Static_assert((MSR_STAR) == (0xc0000081UL), "Rust selected MSR_STAR binding");
+_Static_assert((MSR_LSTAR) == (0xc0000082UL), "Rust selected MSR_LSTAR binding");
+_Static_assert((IA32_X2APIC_APICID) == (0x802), "Rust selected IA32_X2APIC_APICID binding");
+_Static_assert((LAPIC_ID) == (0x020), "Rust selected LAPIC_ID binding");
+_Static_assert((LAPIC_ESR) == (0x280), "Rust selected LAPIC_ESR binding");
+_Static_assert((APIC_INT_LEVELTRIG) == (0x8000), "Rust selected APIC_INT_LEVELTRIG binding");
+_Static_assert((APIC_INT_ASSERT) == (0x4000), "Rust selected APIC_INT_ASSERT binding");
+_Static_assert((APIC_DM_INIT) == (0x500), "Rust selected APIC_DM_INIT binding");
+_Static_assert((APIC_DM_STARTUP) == (0x600), "Rust selected APIC_DM_STARTUP binding");
+#endif

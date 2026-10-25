@@ -1,3 +1,48 @@
+## Current checkpoint and executor publication — 2026-10-25T05:02:02.112917+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Current55+F04 HOST artifact independentlyPASS; paired defaultproducer source
+ed663442 integrated.794 new source/evidence files retained exactly in the1.95MB
+CURRENT55 archive (SHAc1b01dd3), originals unchanged and actualobjects retained.
+Executor retained-only ASTcompatmetadata continuation PASS .1724wall/.1980CPU;
+final owner eb0d0eee/driver16253cf6/prep6b8edcb6/request4f267f65/mapaa90b5f7.
+Actual15-member sourcepublication archive b8ec51d0 PASS .1110wall/.1452CPU,
+208966B; originalhelper labelSELECTED_INSTALL is historical, not an install claim.
+Rootpublishes/fetches this exactsourcecohort; copy7ownerprepares existingquery/
+binder/fill successor withgenuine26ca/a50ecurrentclosure. Oldapproval schemas and
+unknownoriginalcleanupPID/fullstdout cannotbe relabelled. Actualsourceapproval,
+freshquery/exactexecutionreview remainPENDING; SDK9commands notlaunched.
+M14source8 private52parity/12ABI/currentmetadataPASS; creator/fallbackreviewpending.
+M12 35/35;M14/M15 OPEN;newproduction/native/file/guest/imageclosures0.
+Evidence: `../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0442.json`.
+
+## Thirty-minute engineering review — 2026-10-25T04:53:34.467560+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Integrated15process providers and mincore entry+10callbacks plusF04storage source.
+ONE newRustobject/combinedstrictpartial independentlyPASS:55process/F03+100F04
+providers once,15fallbacks,21mincoreABIwords,66F04dataowners andU60. Knownmissing
+uti.h fixedwithgenuine0787header; COMMON-accountingobserverfixed/tested14cases;
+no successfulcompilerprefix repeated. Current HOST object32aee23b/partiala016fd23
+are accepted at exactmanualselector scope. Paired defaultCMake selectors ed663442
+nowintegrated after3compiler-free producer-fragment cases; SDK/defaultobjects/
+image/native proof remainsOPEN. NextprivateSOURCE8 passes52parity/12ABI+metadata,
+129warnings retained; source/object/lifetime review stillneeded.
+Normalcleanup0521 completed, stopped8755/common/shared retired. Independentactual
+physical26ca1a73/currentpostjoina50e9321 accepted;622inventory/67files/9journal
+preserved, permanentmutex27:4free. OriginalcleanupPID/fullstdout remainunavailable
+(tooltruncation); complete newread-onlycaptures are separatelyretained, no fake
+originalresult orcleanupreplay. Executor7014files/121334676B sourcecopyPASS8.665s,
+2.081CPU; SDK9commandsUNRUN. FinalmetadataAST3.8compat3testsPASS; retained-only
+continuationunderreview. Largestnewdelay is thismetadatafinalization, not capacity.
+SixM14 sourcegoals remainowned; F01/F05 normalbodies sourcecomplete awaitingcurrent
+default/native, F01ownerimplementedpairedproducer; F02/F03/F06 nextbodies/fixtures
+continue. M15executor takesnextheavycompilerprioritybeforeBFD21/daemon7queues.
+Report covers monitor1802.432s span plus explicit latecompletions; practical35/35
+unchanged, production/native/file/guest/image closure deltas0. No expansion or
+stress/cleanupadmission. Same30minmonitor/creditrun/deadline remainauthoritative.
+Evidence: `../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0442.json`.
+
 ## Thirty-minute engineering review — 2026-10-25T04:17:46Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

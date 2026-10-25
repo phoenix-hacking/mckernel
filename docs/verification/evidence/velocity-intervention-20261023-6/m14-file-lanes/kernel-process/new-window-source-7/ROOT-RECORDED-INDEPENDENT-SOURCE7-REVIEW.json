@@ -1,0 +1,18 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE",
+  "reviewer": "/root/f02_review",
+  "implementation_ownership": false,
+  "C_preimage_sha256": "3330ba92abc17005ee9bbe1048483428d8a4a2eb50c63420fa1d72804719dfea",
+  "C_postimage_sha256": "213eedcf873348c9cb60ba76675ed1d1757079ef13aabaa534bb777e519e2098",
+  "Rust_preimage_sha256": "5dfcc6cc5baa784e7bf081b9093c3549fe21b14062c8e2507d65f88a092080ef",
+  "Rust_postimage_sha256": "03e6d5671fe0fb51a99827c7b75ca7e1582d66232837337292c166481c991f78",
+  "body_sha256": "39f7f9c965827cbe444d79a41ffaa13875c19e34c5327cd524e716b9c06ffbbe",
+  "actual_parity_result_sha256": "70a4e534e8cf071fad154f06aadf5f9d19efcb9f2c2b0d8f7c00354c86eabe6b",
+  "comparisons": 30,
+  "ABI_rows": 12,
+  "commands_joined": 4,
+  "findings": "No blocking ownership/ABI finding. Original lock/node addresses and IRQ-save ownership retained; genuine64B/align64 lock+node layouts, slock0/irqsave0. Thread/TID pointers once, signed CInt and ignored hold result preserved; no additional refs/releases. Cfallbacks/logical lines retained.",
+  "integration_condition": "Wholeunion typecheck, selected/fallback C, unique partial providers and7912ABI before integrated artifact acceptance.",
+  "limits": "Controlled forwarding/simulatedIRQ only; contention/kernelIRQ/TIDlifecycle/default/native/wholefile remain OPEN."
+}

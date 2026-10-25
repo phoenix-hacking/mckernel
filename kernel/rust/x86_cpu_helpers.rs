@@ -6429,3 +6429,550 @@ mod selected_syscall_handler_slot {
         assert!(align_of::<CULong>() == 8);
     };
 }
+
+
+// Existing gettime support publication and FP-image extent. No CPUID/MSR/FPU
+// instruction is introduced here; the unchanged bodies retain their calls,
+// volatile stores, startup exclusion and eligibility checks.
+mod selected_time_fp_extent_storage {
+    use core::mem::{align_of, size_of};
+
+    use crate::abi::{CInt, CULong};
+
+    use super::selected_fp_storage::InitialFpStorage;
+
+    #[unsafe(no_mangle)]
+    static mut gettime_local_support: CInt = 0;
+
+    #[unsafe(no_mangle)]
+    static x86_initial_fp_regs_extent: CULong = size_of::<InitialFpStorage>() as CULong;
+
+    const _: () = {
+        assert!(size_of::<CInt>() == 4);
+        assert!(align_of::<CInt>() == 4);
+        assert!(size_of::<CULong>() == 8);
+        assert!(size_of::<InitialFpStorage>() == super::PAGE_SIZE as usize);
+    };
+}
+
+// Selected architecture-header policy, not the Rust instruction target features.
+// The source-bound build producer must provide this value from the selected march.h.
+// Missing or malformed producer input is a compile error, never an assumed disable.
+mod selected_fp_sse_policy {
+    use crate::abi::CInt;
+
+    const fn decode(value: &[u8]) -> CInt {
+        assert!(value.len() == 1, "selected SSE policy must be one byte");
+        assert!(value[0] == b'0' || value[0] == b'1', "invalid selected SSE policy");
+        (value[0] - b'0') as CInt
+    }
+
+    #[no_mangle]
+    pub static x86_cpu_fp_sse_enabled: CInt =
+        decode(env!("MCKERNEL_X86_ENABLE_SSE").as_bytes());
+}
+
+// Exact three-field declaration from the selected lib/include/ihk/cpu.h.
+// This representation only constructs immutable geometry; it does not authorize
+// dereferencing handler storage or extend any registration/callback lifetime.
+mod selected_irq_handler_geometry {
+    use core::ffi::c_void;
+    use core::mem::{align_of, offset_of, size_of};
+
+    use crate::abi::{AbiListHead, CULong};
+
+    type InterruptCallback = Option<unsafe extern "C" fn(*mut c_void)>;
+
+    #[repr(C)]
+    struct InterruptHandler {
+        list: AbiListHead,
+        func: InterruptCallback,
+        private: *mut c_void,
+    }
+
+    #[no_mangle]
+    pub static x86_main_irq_handler_layout: [CULong; 9] = [
+        size_of::<InterruptHandler>() as CULong,
+        align_of::<InterruptHandler>() as CULong,
+        offset_of!(InterruptHandler, list) as CULong,
+        offset_of!(InterruptHandler, func) as CULong,
+        offset_of!(InterruptHandler, private) as CULong,
+        size_of::<InterruptCallback>() as CULong,
+        size_of::<*mut c_void>() as CULong,
+        size_of::<AbiListHead>() as CULong,
+        offset_of!(AbiListHead, next) as CULong,
+    ];
+}
+
+// Writable existing dynamic-debug records, preserving the real Ddebug ABI.
+// C __FILE__ is an input of the producer: Rust file!() identifies a different file.
+// Missing producer input deliberately fails compilation; no source name is guessed.
+mod selected_cpu_verbose_records {
+    use crate::debug::Ddebug;
+
+    const FILE: &[u8] = concat!(env!("MCKERNEL_CPU_C_FILE"), "\0").as_bytes();
+
+    // Existing mutable flags are still owned by the dynamic-debug subsystem.
+    #[used]
+    #[no_mangle]
+    #[link_section = "__verbose"]
+    pub static mut x86_init_fpu_debug: [Ddebug; 6] = [
+        Ddebug {
+            file: FILE.as_ptr().cast(),
+            func: b"init_fpu\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 712,
+        },
+        Ddebug {
+            file: FILE.as_ptr().cast(),
+            func: b"init_fpu\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 718,
+        },
+        Ddebug {
+            file: FILE.as_ptr().cast(),
+            func: b"init_fpu\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 728,
+        },
+        Ddebug {
+            file: FILE.as_ptr().cast(),
+            func: b"init_fpu\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 735,
+        },
+        Ddebug {
+            file: FILE.as_ptr().cast(),
+            func: b"init_fpu\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 740,
+        },
+        Ddebug {
+            file: FILE.as_ptr().cast(),
+            func: b"init_fpu\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 744,
+        },
+    ];
+
+    // Existing mutable flags are still owned by the dynamic-debug subsystem.
+    #[used]
+    #[no_mangle]
+    #[link_section = "__verbose"]
+    pub static mut x86_cpu_setup_log_debug: Ddebug = Ddebug {
+        file: FILE.as_ptr().cast(),
+        func: b"x86_cpu_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 1104,
+    };
+
+    // Existing mutable flags are still owned by the dynamic-debug subsystem.
+    #[used]
+    #[no_mangle]
+    #[link_section = "__verbose"]
+    pub static mut x86_tick_log_debug: [Ddebug; 3] = [
+        Ddebug {
+            file: FILE.as_ptr().cast(),
+            func: b"x86_tick_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 1720,
+        },
+        Ddebug {
+            file: FILE.as_ptr().cast(),
+            func: b"x86_tick_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 1723,
+        },
+        Ddebug {
+            file: FILE.as_ptr().cast(),
+            func: b"x86_tick_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 1726,
+        },
+    ];
+
+    // Existing mutable flags are still owned by the dynamic-debug subsystem.
+    #[used]
+    #[no_mangle]
+    #[link_section = "__verbose"]
+    pub static mut x86_pvclock_log_debug: [Ddebug; 11] = [
+        Ddebug {
+            file: FILE.as_ptr().cast(),
+            func: b"x86_pvclock_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 1735,
+        },
+        Ddebug {
+            file: FILE.as_ptr().cast(),
+            func: b"x86_pvclock_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 1738,
+        },
+        Ddebug {
+            file: FILE.as_ptr().cast(),
+            func: b"x86_pvclock_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 1741,
+        },
+        Ddebug {
+            file: FILE.as_ptr().cast(),
+            func: b"x86_pvclock_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 1744,
+        },
+        Ddebug {
+            file: FILE.as_ptr().cast(),
+            func: b"x86_pvclock_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 1747,
+        },
+        Ddebug {
+            file: FILE.as_ptr().cast(),
+            func: b"x86_pvclock_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 1750,
+        },
+        Ddebug {
+            file: FILE.as_ptr().cast(),
+            func: b"x86_pvclock_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 1753,
+        },
+        Ddebug {
+            file: FILE.as_ptr().cast(),
+            func: b"x86_pvclock_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 1759,
+        },
+        Ddebug {
+            file: FILE.as_ptr().cast(),
+            func: b"x86_pvclock_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 1762,
+        },
+        Ddebug {
+            file: FILE.as_ptr().cast(),
+            func: b"x86_pvclock_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 1765,
+        },
+        Ddebug {
+            file: FILE.as_ptr().cast(),
+            func: b"x86_pvclock_log_bridge\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 1768,
+        },
+    ];
+
+    // Existing mutable flags are still owned by the dynamic-debug subsystem.
+    #[used]
+    #[no_mangle]
+    #[link_section = "__verbose"]
+    pub static mut x86_main_irq_debug: [Ddebug; 2] = [
+        Ddebug {
+            file: FILE.as_ptr().cast(),
+            func: b"handle_interrupt\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 2086,
+        },
+        Ddebug {
+            file: FILE.as_ptr().cast(),
+            func: b"handle_interrupt\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 2158,
+        },
+    ];
+
+    // Existing mutable flags are still owned by the dynamic-debug subsystem.
+    #[used]
+    #[no_mangle]
+    #[link_section = "__verbose"]
+    pub static mut x86_interrupt_log_debug: Ddebug = Ddebug {
+        file: FILE.as_ptr().cast(),
+        func: b"x86_interrupt_log_bridge\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 3140,
+    };
+
+    // Existing mutable flags are still owned by the dynamic-debug subsystem.
+    #[used]
+    #[no_mangle]
+    #[link_section = "__verbose"]
+    pub static mut x86_switch_context_debug: Ddebug = Ddebug {
+        file: FILE.as_ptr().cast(),
+        func: b"arch_switch_context\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: 3168,
+    };
+
+    // Existing mutable flags are still owned by the dynamic-debug subsystem.
+    #[used]
+    #[no_mangle]
+    #[link_section = "__verbose"]
+    pub static mut x86_multi_nmi_debug: [Ddebug; 2] = [
+        Ddebug {
+            file: FILE.as_ptr().cast(),
+            func: b"multi_nm_interrupt_handler\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 3854,
+        },
+        Ddebug {
+            file: FILE.as_ptr().cast(),
+            func: b"multi_nm_interrupt_handler\0".as_ptr().cast(),
+            fmt: core::ptr::null(),
+            line_flags: 3859,
+        },
+    ];
+}
+
+// Both languages already select these policies from the same CMake options.
+// This moves the immutable view only; arch_switch_context ordering is unchanged.
+mod selected_switch_context_policy {
+    use crate::abi::CInt;
+
+    #[no_mangle]
+    pub static x86_switch_context_perf_enabled: CInt = cfg!(enable_perf) as CInt;
+
+    #[no_mangle]
+    pub static x86_switch_context_profile_enabled: CInt = cfg!(enable_profile) as CInt;
+}
+
+// Immutable address initializers only: no instructions, loads, dereferences or
+// callback calls. Existing typed declarations still govern every consumer.
+// Each target is the actual Rust-owned slot already qualified in the CPU81
+// data proof; the exact one-address relocation remains to be checked for this
+// new source. Readonly assembly data avoids inventing a Sync pointer wrapper or
+// converting a pointer to an integer during Rust const evaluation.
+core::arch::global_asm!(
+    r#"
+    .pushsection .rodata.x86_wakeup_lapic_write_slot,"a",@progbits
+    .balign 8
+    .global x86_wakeup_lapic_write_slot
+    .type x86_wakeup_lapic_write_slot,@object
+x86_wakeup_lapic_write_slot:
+    .quad lapic_write
+    .size x86_wakeup_lapic_write_slot,8
+    .popsection
+    .pushsection .rodata.x86_wakeup_lapic_read_slot,"a",@progbits
+    .balign 8
+    .global x86_wakeup_lapic_read_slot
+    .type x86_wakeup_lapic_read_slot,@object
+x86_wakeup_lapic_read_slot:
+    .quad lapic_read
+    .size x86_wakeup_lapic_read_slot,8
+    .popsection
+    .pushsection .rodata.x86_wakeup_wait_slot,"a",@progbits
+    .balign 8
+    .global x86_wakeup_wait_slot
+    .type x86_wakeup_wait_slot,@object
+x86_wakeup_wait_slot:
+    .quad lapic_wait_icr_idle
+    .size x86_wakeup_wait_slot,8
+    .popsection
+    .pushsection .rodata.x86_wakeup_first_page_slot,"a",@progbits
+    .balign 8
+    .global x86_wakeup_first_page_slot
+    .type x86_wakeup_first_page_slot,@object
+x86_wakeup_first_page_slot:
+    .quad x86_cpu_first_page_va
+    .size x86_wakeup_first_page_slot,8
+    .popsection
+    .pushsection .rodata.x86_wakeup_boot_status_slot,"a",@progbits
+    .balign 8
+    .global x86_wakeup_boot_status_slot
+    .type x86_wakeup_boot_status_slot,@object
+x86_wakeup_boot_status_slot:
+    .quad x86_cpu_boot_status
+    .size x86_wakeup_boot_status_slot,8
+    .popsection
+    "#
+);
+
+// Reuse the real existing AP CPU-info type, also used by kernel/rust/init.rs.
+// abi::IhkCpuInfo is a different control descriptor and must not substitute for
+// struct ihk_mc_cpu_info merely because its name and first field look similar.
+mod selected_cpu_info_offset {
+    use core::mem::offset_of;
+
+    use crate::abi::CULong;
+    use crate::ap::IhkMcCpuInfo;
+
+    #[no_mangle]
+    pub static x86_cpu_info_ncpus_offset: CULong = offset_of!(IhkMcCpuInfo, ncpus) as CULong;
+}
+
+// Literal values transcribed from the exact selected C macro definitions.
+// No build-dependent MAP_KERNEL_START or configuration policy is inferred here.
+// Real-header object equality remains mandatory before these private providers
+// can be integrated; alternate header values are not qualified by this source.
+mod selected_fixed_cpu_selectors {
+    use crate::abi::{CInt, CULong};
+    use super::CUInt;
+
+    // Existing cpu.c APIC_BASE_MSR definition, retained source value 0x800.
+    #[no_mangle]
+    pub static x86_local_apic_base_msr: CUInt = 0x800;
+
+    // Selected march.h LAPIC_ICR_ID_SHIFT definition.
+    #[no_mangle]
+    pub static x86_ipi_icr_id_shift: CInt = 24;
+
+    // Selected process.h PS_INTERRUPTIBLE, PS_UNINTERRUPTIBLE, PS_STOPPED, PS_TRACED.
+    #[no_mangle]
+    pub static x86_lookup_sleep_mask: CInt = 0x2 | 0x4 | 0x20 | 0x40;
+
+    // Selected arch-memory.h USER_END definition.
+    #[no_mangle]
+    pub static x86_panic_user_end: CULong = 0x0000_8000_0000_0000;
+}
+
+// Descriptor shape uses the real existing Rust storage/types already qualified
+// in CPU81. Selectors below are the literal selected arch-memory.h definitions,
+// not a new selector policy. Every new array still needs real C object equality.
+mod selected_descriptor_ap_geometry {
+    use core::mem::{offset_of, size_of};
+
+    use crate::abi::{CULong, X86DescPtr};
+
+    const KERNEL_CS: CULong = 4 * 8;
+    const KERNEL_DS: CULong = 5 * 8;
+    const USER_CS: CULong = 6 * 8 + 3;
+    const USER_DS: CULong = 7 * 8 + 3;
+    const GLOBAL_TSS_ENTRY: CULong = 8;
+    const GLOBAL_TSS: CULong = GLOBAL_TSS_ENTRY * 8;
+
+    #[no_mangle]
+    pub static x86_idt_geometry: [CULong; 9] = [
+        size_of::<super::selected_descriptor_storage::IdtStorage>() as CULong,
+        size_of::<[u32; 4]>() as CULong,
+        size_of::<[u32; 4]>() as CULong,
+        size_of::<X86DescPtr>() as CULong,
+        offset_of!(X86DescPtr, size) as CULong,
+        offset_of!(X86DescPtr, address) as CULong,
+        size_of::<u16>() as CULong,
+        size_of::<u64>() as CULong,
+        KERNEL_CS,
+    ];
+
+    #[no_mangle]
+    pub static x86_gdt_geometry: [CULong; 2] = [
+        size_of::<super::selected_initial_descriptor_storage::GdtStorage>() as CULong,
+        GLOBAL_TSS_ENTRY,
+    ];
+
+    #[no_mangle]
+    pub static x86_gdt_reload_geometry: [CULong; 3] = [KERNEL_CS, KERNEL_DS, GLOBAL_TSS];
+
+    // AP_TRAMPOLINE_SIZE is exactly 0x2000 in the selected arch-memory.h.
+    // PAGE_SIZE reuses the existing module constant, not another page-size model.
+    #[no_mangle]
+    pub static x86_ap_init_geometry: [CULong; 2] = [0x2000, super::PAGE_SIZE];
+
+    // registers.h RFLAGS_IF is (1 << 9); existing exit code uses that same bit.
+    #[no_mangle]
+    pub static x86_user_start_geometry: [CULong; 3] = [USER_CS, USER_DS, 1 << 9];
+}
+
+// Existing main-IRQ table order is part of the current private consumer contract.
+// Values below transcribe the exact selected C enum/macro definitions recorded
+// in this source packet. This does not execute/authorize the IRQ transaction,
+// prove its post-unlock lifetimes or change any EOI/callback/locking order.
+mod selected_main_irq_constants {
+    use crate::abi::CULong;
+
+    #[no_mangle]
+    pub static x86_main_irq_constants: [CULong; 23] = [
+        1, // CPUTIME_MODE_U2K
+        2, // CPUTIME_MODE_K2K_IN
+        0, // CPUTIME_MODE_K2U
+        3, // CPUTIME_MODE_K2K_OUT
+        0x1, // CPU_FLAG_NEED_RESCHED
+        0x2, // CPU_FLAG_NEED_MIGRATE
+        0xef, // LOCAL_TIMER_VECTOR
+        0xf0, // LOCAL_PERF_VECTOR
+        0x340, // LAPIC_LVTPC
+        0x38e, // MSR_PERF_GLOBAL_STATUS
+        0x390, // MSR_PERF_GLOBAL_OVF_CTRL
+        68, // IHK_TLB_FLUSH_IRQ_VECTOR_START
+        68 + 64, // IHK_TLB_FLUSH_IRQ_VECTOR_END
+        0xf1, // LOCAL_SMP_FUNC_CALL_VECTOR
+        8, // SIGFPE
+        1, // FPE_INTDIV
+        11, // SIGSEGV
+        4, // SIGILL
+        2, // ILL_ILLOPN
+        7, // SIGBUS
+        1, // BUS_ADRALN
+        29, // SIGIO
+        256 - 32, // 256-32
+    ];
+}
+
+// Fixed selected-header/CPU macro arrays. Values retain the original expressions
+// and table order; original C-expression witnesses are frozen alongside this code.
+// These immutable providers do not publish hardware state or run AP/IRQ actions.
+mod selected_remaining_cpu_arrays {
+    use crate::abi::CULong;
+    use super::CUInt;
+
+    // IA32_X2APIC_ICR, LAPIC_ICR2, LAPIC_ICR0, APIC_ICR_BUSY.
+    #[no_mangle]
+    pub static x86_icr_geometry: [CULong; 4] = [0x830, 0x310, 0x300, 0x1000];
+
+    #[no_mangle]
+    pub static x86_init_geometry: [CULong; 11] = [
+        0x1b, // MSR_IA32_APIC_BASE, distinct from the existing 0x800 enable mask.
+        !(super::PAGE_SIZE - 1), // PAGE_MASK uses the existing unsigned-long page size.
+        super::PAGE_SIZE,
+        0x800,
+        0x277, // MSR_IA32_CR_PAT.
+        0xc000_0080, // MSR_EFER.
+        0xc000_0081, // MSR_STAR.
+        0xc000_0082, // MSR_LSTAR.
+        4 * 8, // KERNEL_CS.
+        6 * 8 + 3, // USER_CS.
+        1 << 11,
+    ];
+
+    #[no_mangle]
+    pub static x86_smp_init_geometry: [CULong; 6] = [
+        0x802, // IA32_X2APIC_APICID.
+        0x020, // LAPIC_ID.
+        24, // LAPIC_ID_SHIFT.
+        8, // GLOBAL_TSS_ENTRY.
+        15, // GETCPU_ENTRY.
+        0xc000_0103,
+    ];
+
+    #[no_mangle]
+    pub static x86_switch_context_geometry: [CULong; 6] = [
+        0x200, // PS_DELAY_STOPPED.
+        0x400, // PS_DELAY_TRACED.
+        0x20, // PS_STOPPED.
+        0x40, // PS_TRACED.
+        1, // PP_RESET.
+        2, // PP_COUNT.
+    ];
+
+    #[no_mangle]
+    pub static x86_wakeup_constants: [CUInt; 5] = [
+        0x280, // LAPIC_ESR.
+        0x8000, // APIC_INT_LEVELTRIG.
+        0x4000, // APIC_INT_ASSERT.
+        0x500, // APIC_DM_INIT.
+        0x600, // APIC_DM_STARTUP.
+    ];
+}
+
+// The actual current CPU81 compiler profile leaves DEBUG_PRINT_CPU undefined.
+// C compile guards reject an enabled-debug profile before it could silently
+// observe these disabled values; that alternate producer is not qualified.
+mod selected_exception_debug_policy {
+    use super::CUInt;
+
+    #[no_mangle]
+    pub static x86_debug_handler_debug_print_enabled: CUInt = 0;
+
+    #[no_mangle]
+    pub static x86_int3_debug_print_enabled: CUInt = 0;
+}

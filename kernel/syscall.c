@@ -21836,6 +21836,15 @@ long sys_sigaltstack(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_MINCORE)
+extern long sys_mincore(int n, ihk_mc_user_context_t *ctx);
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_mincore_debug_v1[4] = {
+ { .file=__FILE__, .func="mincore_log_bridge", .line=21899, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="mincore_log_bridge", .line=21903, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="mincore_log_bridge", .line=21907, .flags=DDEBUG_DEFAULT },
+ { .file=__FILE__, .func="mincore_log_bridge", .line=21911, .flags=DDEBUG_DEFAULT },
+};
+#else
 static void
 mincore_range_read_lock_bridge(void *lock)
 {
@@ -21935,6 +21944,7 @@ long sys_mincore(int n, ihk_mc_user_context_t *ctx)
 			mincore_memobj_lookup_bridge, mincore_copy_byte_bridge,
 			mincore_log_bridge);
 } /* sys_mincore() */
+#endif /* MCKERNEL_RUST_F03_MINCORE */
 
 static int
 set_memory_range_flag(struct vm_range *range, unsigned long arg)

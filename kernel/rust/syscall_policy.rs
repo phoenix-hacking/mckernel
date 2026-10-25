@@ -32097,3 +32097,140 @@ mod f03_io_diagnostic_callbacks_v1 {
         }
     }
 }
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(f03_mincore_candidate)]
+mod f03_mincore_candidate {
+    use core::ffi::c_void;
+    use core::mem::offset_of;
+    use core::ptr::{addr_of, addr_of_mut, null_mut, read_volatile};
+
+    use crate::abi::{CInt, CLong, CULong, SizeT, VmRange, X86UserContext};
+
+    use super::{kprintf, mincore_body_result};
+
+    unsafe extern "C" {
+        static mut f03_mincore_debug_v1: [crate::debug::Ddebug; 4];
+    }
+
+    // All callbacks run synchronously under the unchanged mincore body's locking
+    // and VM lifetime contract. They never manufacture a reference or retained pin.
+    unsafe extern "C" fn range_lock(lock: *mut c_void) {
+        // SAFETY: Actual initialized VM range lock, original noirq read ordering.
+        unsafe { crate::lock_helpers::ihk_rwspinlock_read_lock_noirq(lock.cast()) };
+    }
+
+    unsafe extern "C" fn range_unlock(lock: *mut c_void) {
+        // SAFETY: Same range lock after lookup/PTE work, held by this caller.
+        unsafe { crate::lock_helpers::ihk_rwspinlock_read_unlock_noirq(lock.cast()) };
+    }
+
+    unsafe extern "C" fn pte_lock(lock: *mut c_void) {
+        // SAFETY: Actual initialized page-table lock, with the range lock held.
+        unsafe { crate::spinlock_helpers::__ihk_mc_spinlock_lock_noirq(lock.cast()) };
+    }
+
+    unsafe extern "C" fn pte_unlock(lock: *mut c_void) {
+        // SAFETY: Same held page-table lock, before releasing the range lock.
+        unsafe { crate::spinlock_helpers::__ihk_mc_spinlock_unlock_noirq(lock.cast()) };
+    }
+
+    unsafe extern "C" fn lookup(vm: *mut c_void, start: CULong, end: CULong) -> *mut c_void {
+        // SAFETY: Genuine borrowed VM/tree under the original range read lock.
+        unsafe { crate::process_helpers::lookup_process_memory_range(vm.cast(), start, end).cast() }
+    }
+
+    unsafe extern "C" fn lookup_pte(table: *mut c_void, address: CULong) -> *mut c_void {
+        // SAFETY: Actual page table under both original locks; preserve pgshift0
+        // and all three absent optional outputs, with no retained PTE after unlock.
+        unsafe {
+            crate::x86_memory_helpers::ihk_mc_pt_lookup_pte(
+                table, address as *mut c_void, 0, null_mut(), null_mut(), null_mut(),
+            ).cast()
+        }
+    }
+
+    unsafe extern "C" fn present(pte: *mut c_void) -> CInt {
+        // SAFETY: Non-null actual aligned PTE returned while its lock is held.
+        unsafe { crate::pte_helpers::pte_is_present(pte.cast()) }
+    }
+
+    unsafe extern "C" fn lookup_memobj(object: *mut c_void, offset: CULong) -> CInt {
+        // SAFETY: Genuine range-owned memobj and synchronous existing ops table.
+        // x86 PAGE_P2ALIGN is0; convert unsigned offset to original signed off_t
+        // with the same bit pattern and preserve both absent optional outputs.
+        unsafe {
+            crate::object_helpers::memobj_lookup_page(
+                object.cast(), offset as crate::abi::OffT, 0, null_mut(), null_mut(),
+            )
+        }
+    }
+
+    unsafe extern "C" fn copy_byte(destination: CULong, value: u8) -> CLong {
+        // SAFETY: Only the live stack byte is read synchronously; user destination
+        // may fault through the genuine copy provider. Sign-extend its C int result.
+        unsafe {
+            crate::x86_memory_helpers::copy_to_user(
+                destination as *mut c_void, addr_of!(value).cast(), 1,
+            ) as CLong
+        }
+    }
+
+    unsafe extern "C" fn log(
+        event: CInt, start: CULong, length: SizeT, vector: CULong, error: CInt,
+    ) {
+        let index = match event { 1..=4 => (event - 1) as usize, _ => return };
+        // SAFETY: Bounded index into actual aligned lexical debug records. Preserve
+        // nonzero flags test; dynamic-debug update synchronization remains original.
+        let enabled = unsafe {
+            let record = addr_of!(f03_mincore_debug_v1).cast::<crate::debug::Ddebug>().add(index);
+            read_volatile(addr_of!((*record).line_flags)) >> 24 != 0
+        };
+        if !enabled { return; }
+        // SAFETY: Exact original formats and promoted variadic widths. Vector is
+        // only formatted; no diagnostic follows it or reads a user allocation.
+        unsafe {
+            match event {
+                1 => { kprintf(c"mincore(0x%lx,0x%lx,%p): invalid %d\n".as_ptr().cast(),
+                    start, length, vector as *mut c_void, error); }
+                2 => { kprintf(c"mincore(0x%lx,0x%lx,%p):lookup failed. ENOMEM\n"
+                    .as_ptr().cast(), start, length, vector as *mut c_void); }
+                3 => { kprintf(c"mincore(0x%lx,0x%lx,%p):copy failed. %d\n".as_ptr().cast(),
+                    start, length, vector as *mut c_void, error); }
+                4 => { kprintf(c"mincore(0x%lx,0x%lx,%p): 0\n".as_ptr().cast(),
+                    start, length, vector as *mut c_void); }
+                _ => {}
+            }
+        }
+    }
+
+    /// Preserve the complete mincore syscall with existing Rust policy/providers.
+    ///
+    /// # Safety
+    /// `context` is the live aligned kernel syscall context. Current CPU/thread,
+    /// VM/address-space and both locks have the original syscall lifetime. The
+    /// existing body retains range-lock/PTE-lock ordering and releases both before
+    /// copying a residency byte. No provider may retain the local byte or PTE.
+    #[export_name = "sys_mincore"]
+    pub unsafe extern "C" fn mincore(_number: CInt, context: *mut X86UserContext) -> CLong {
+        // SAFETY: Same original kernel context/current-VM preconditions; all raw
+        // field pointers are borrowed for this synchronous body call only.
+        unsafe {
+            let start = (*context).gpr.rdi;
+            let length = (*context).gpr.rsi as SizeT;
+            let vector = (*context).gpr.rdx;
+            let thread = (*crate::cls::get_this_cpu_local_var()).current;
+            let vm = (*thread).vm;
+            mincore_body_result(
+                vm.cast(), addr_of_mut!((*vm).memory_range_lock).cast(),
+                addr_of_mut!((*vm).page_table_lock).cast(), (*(*vm).address_space).page_table,
+                start, length, vector, (*vm).region.user_start, (*vm).region.user_end,
+                offset_of!(VmRange, start), offset_of!(VmRange, end),
+                offset_of!(VmRange, memobj), offset_of!(VmRange, objoff),
+                Some(range_lock), Some(range_unlock), Some(pte_lock), Some(pte_unlock),
+                Some(lookup), Some(lookup_pte), Some(present), Some(lookup_memobj),
+                Some(copy_byte), Some(log),
+            )
+        }
+    }
+}
