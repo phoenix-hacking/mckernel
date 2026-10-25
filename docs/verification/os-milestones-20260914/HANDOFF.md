@@ -1,3 +1,31 @@
+## Thirty-minute review: qualification failures drive the next checks — 2026-10-25T07:44:01.269171+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Review interval07:12–07:42 produced zero new accepted integration/default/native/whole-file
+closures. BFD compiled nine preparatory commands, then its equivalence fixture aborted
+on cross-call symbol-pointer equality; the root cause is unproved. Original-C/C pinned
+SDK diagnostic is next (root/m14_mem), reusing every successful prefix artifact.
+Actual failed-owner physical and current-postjoin proof3e1dc115 independentlyPASS;
+no further retirement observer is needed. Workload remainsFAIL.
+
+Current230 source-retention independentlyPASS:6153sourceentries,45boundedgzipoutputs,
+7.308859s wall/7.181012sCPU; root copied68boundfiles for publication/fetch. f02_contract
+is binding exact existing modern77 image-only release grammar before its first actual
+mckernel.img-j4 configure/build. No new image/default/native acceptance yet.
+
+Private277 coherent-object preparation continues (m14_cpu). Process43 atomic fix is
+reviewed; later7 private providers pass their fixtures, and selectedpreprocessor now
+has zero processCfunctiondefinitions (Cmetadata and all link/native gates remain).
+Packed outer-syscall correction passed source review; five actual commands queue after
+m15_mm's three F4D loader checks onCPU6. A prechildloaderwrapper path failure is retained;
+its bounded selfpath fix passed cheap regression, not loader acceptance.
+
+Memory snapshot26.10GiBavailable, HOST144.50GiBfree, scratch13.132GiBfree; exactbytes
+and limits are in the review. No measured sustainedCPUutilization/RSS or compilerUTC
+pair exists. Completed velocity buckets1,2,1 packages; currentbucket stillpartial at
+review. No sustained95% improvement claim; planning estimate0512 unchanged.
+[Review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0742.json).
+
 ## Executor SDK accepted; BFD binding correction and current230 source ready — 2026-10-25T07:22:43.720142+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
