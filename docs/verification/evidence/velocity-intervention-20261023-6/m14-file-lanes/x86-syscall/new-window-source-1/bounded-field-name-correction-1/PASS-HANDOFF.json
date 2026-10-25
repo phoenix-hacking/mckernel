@@ -1,0 +1,103 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_C_RUST_WAKEUP10368_CONTROLLED_ONLY",
+  "actual_report": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-1/bounded-field-name-correction-1/actual-wakeup-capture-1/ACTUAL-WHOLE-JOIN.json",
+    "sha256": "c01ea1f536b53570ce13eabb562b7b5037764dafc2810e01e4fcb27cdac7ea85",
+    "bytes": 11813
+  },
+  "actual_stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-1/bounded-field-name-correction-1/actual-wakeup-capture-1/03/stdout",
+    "sha256": "756ba0bb45fde93bf29bc5f2d3d8a7ec36094ccd22473af977c18b9224417cb8",
+    "bytes": 98
+  },
+  "stdout": "PASS actual_C_Rust_wakeup cases=10368 ABI=30 ordered_callbacks=1 siginfo_bytes=128 release_once=1\n",
+  "original_E0609_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-1/actual-wakeup-capture-1/ACTUAL-WHOLE-JOIN.json",
+    "sha256": "8ec4260d9698d9a25a4a4f3fdf3f9a4e3cb02646c68057029cbdac4b03f8d807",
+    "bytes": 2926
+  },
+  "selected_corrected_Rust_fragment": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-1/bounded-field-name-correction-1/fixture-source/wakeup.FRAGMENT.rs",
+    "sha256": "8b1502ba7305ce709ddcbdb8480857dc82804a2b70edc9410cfea6f2a927806d",
+    "bytes": 6490
+  },
+  "selected_C_patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-1/patch/syscall.c.diff",
+    "sha256": "95102dbaed838ee6004f91b1ebffcfb335653d23f8ce9afb1f9b8fa7ce7f1a0e",
+    "bytes": 1012
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/new-window-source-1/bounded-field-name-correction-1/EXACT-WAKEUP-QUEUE.NOT-GRANTED.json",
+    "sha256": "9cb911f7648858242eb4b63636b266bc1930eb289ba9dd7b1ee1ec9384d8a3cb",
+    "bytes": 39051
+  },
+  "commands": [
+    {
+      "name": "00-exact-Rust-tail-real-ABI-and-byte-provider-genuine-HOST-runtime",
+      "pid": 480460,
+      "start": 69531677,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "group_absent": true,
+      "closed_streams": true
+    },
+    {
+      "name": "01-real-header-original-C-and-public-Rust-consumer",
+      "pid": 480467,
+      "start": 69531693,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "group_absent": true,
+      "closed_streams": true
+    },
+    {
+      "name": "02-genuine-HOST-runtime-link",
+      "pid": 480470,
+      "start": 69531709,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "group_absent": true,
+      "closed_streams": true
+    },
+    {
+      "name": "03-original-C-Rust10368-parity-comparisons",
+      "pid": 480473,
+      "start": 69531725,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "group_absent": true,
+      "closed_streams": true
+    },
+    {
+      "name": "04-unique-public-provider-symbols",
+      "pid": 480474,
+      "start": 69531747,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "group_absent": true,
+      "closed_streams": true
+    },
+    {
+      "name": "05-genuine-HOST-runtime-symbols",
+      "pid": 480475,
+      "start": 69531752,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "group_absent": true,
+      "closed_streams": true
+    }
+  ],
+  "seconds": 0.8375949669862166,
+  "CPU_seconds": 0.8416349999999999,
+  "CPU6_released": true,
+  "actual_cases": 10368,
+  "ABI_values": 30,
+  "next_step": "Independent focused ownership/ABI review; root centrally composes corrected fragment and C tail with prior group/gate/pending ports, then genuine whole compute crate compile/link/native evidence.",
+  "not_proven": [
+    "default compute-crate link",
+    "native scheduler/IPI/lifetime effects",
+    "full do_kill or whole-file retirement"
+  ],
+  "integration_note": "Use bounded-field-name-correction-1/fixture-source/wakeup.FRAGMENT.rs; original candidate/do_kill_wakeup.FRAGMENT.rs remains failed __val preimage deliberately retained."
+}

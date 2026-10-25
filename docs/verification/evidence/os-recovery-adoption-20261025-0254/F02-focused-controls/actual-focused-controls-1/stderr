@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-f02-contract-source-1/check_f02_contract_controls.py", line 459, in <module>
+    main(args.output)
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-f02-contract-source-1/check_f02_contract_controls.py", line 306, in main
+    passed('symbol %s %s=%s' % (name, field, value),
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-f02-contract-source-1/check_f02_contract_controls.py", line 108, in passed
+    action()
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-f02-contract-source-1/check_f02_contract_controls.py", line 307, in <lambda>
+    lambda n=name, k=field, v=value: mutate_symbol(n, k, v), True)
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-f02-contract-source-1/check_f02_contract_controls.py", line 132, in mutate_symbol
+    check(e=e)
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-f02-contract-source-1/check_f02_contract_controls.py", line 119, in check
+    actual = ns['_f02_collect'](elf if e is None else e,
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-f02-contract-source-1/f02_data_contract.py", line 168, in _f02_collect
+    exact['final'] = _f02_final_owner(elf, row, helpers, final, contributions, aliases)
+  File "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-f02-contract-source-1/f02_data_contract.py", line 106, in _f02_final_owner
+    section = elf.sections[row['shndx']]
+IndexError: list index out of range

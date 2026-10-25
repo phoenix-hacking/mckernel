@@ -1,0 +1,49 @@
+--- /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/new-window-installed-consumer-source-1/binder-successor-source-1/bind_install_actual_COPY7_authority_once.WITH-PUBLISHER.NOT-RELEASED.py
++++ /home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/new-window-installed-consumer-source-1/binder-successor-source-1/bind_install_recorded_COPY7_authority_once.WITH-PUBLISHER.NOT-RELEASED.py
+@@ -49,8 +49,17 @@
+   if isinstance(node,ast.Assign) and len(node.targets)==1 and isinstance(node.targets[0],ast.Name) and node.targets[0].id in values:
+    lines[node.lineno-1:node.end_lineno]=[node.targets[0].id+' = '+values[node.targets[0].id]+'\n']
+  return ''.join(lines)
++COPY7_AUTHORITY={'physical_acceptance': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-qualified-source-integration-1/current81-default-image-preparation/next-normal-cfg-only-source-preparation-1/namespace-request-preparation-cfg-only-1/bounded-runtime-import-binding-correction-1/expert-current-process-TID-source-identity-correction-1/retained-normal-prefix-continuation-preparation-1/copy7-normal-image-retirement-preparation-1/recovery-source-reconciliation-20261025-1/physical-postflight-source-1/ROOT-RECORDED-INDEPENDENT-PHYSICAL-ACCEPTANCE.json', 'bytes': 1657, 'sha256': 'dda45e6348748469bb15734ff585733b5a18c405f907f82e9e9e0f9c4c1e0129'}, 'current_postjoin': {'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-qualified-source-integration-1/current81-default-image-preparation/next-normal-cfg-only-source-preparation-1/namespace-request-preparation-cfg-only-1/bounded-runtime-import-binding-correction-1/expert-current-process-TID-source-identity-correction-1/retained-normal-prefix-continuation-preparation-1/copy7-normal-image-retirement-preparation-1/recovery-source-reconciliation-20261025-1/physical-postflight-source-1/CURRENT-LIVE-POSTJOIN.json', 'bytes': 3918, 'sha256': 'f37ff2d1507d6cacd69c76ca0749c91b44b8b5783dd5b3716ff775f80375393f'}, 'normal_retirement': {'bytes': 369056, 'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m14-qualified-source-integration-1/current81-default-image-preparation/next-normal-cfg-only-source-preparation-1/namespace-request-preparation-cfg-only-1/bounded-runtime-import-binding-correction-1/expert-current-process-TID-source-identity-correction-1/retained-normal-prefix-continuation-preparation-1/copy7-normal-image-retirement-preparation-1/recovery-source-reconciliation-20261025-1/actual-normal-cleanup-1/stdout', 'sha256': 'eef16afae29dd5441d393c22c9010ffa49a698e1eb371f81577a52c4df0eba4e'}}
++
+ def require_copy7_identity(ph, post, normal):
+- need(ph['reviewer']=='/root/recovery_review', 'exact current COPY7 independent reviewer')
++ need(ph['schema']=='mckernel.copy7.normal-retirement.physical-acceptance.v1' and ph['status']=='PASS_ACTUAL_M14_COPY7_NORMAL_FAILED_IMAGE_PHYSICAL_RETIREMENT' and ph['reviewer']=='/root/recovery_review', 'exact current COPY7 independent reviewer/schema/status')
++ need(post['schema']=='mckernel.current-live-postjoin.v1' and post['reviewer']=='/root/recovery_review' and post['implementation_ownership'] is False,'genuine independently accepted current postjoin')
++ need(ph['cleanup_pid']==post['cleanup_pid']==473751 and ph['cleanup_starttime']==post['cleanup_starttime']=='69456080' and ph['reported_parent_pid']==post['reported_parent_pid']==473748,'exact actual COPY7 cleanup identities')
++ need(ph['container_id']==post['container_id']==normal['container_id'] and ph['closed_nonce']=='76b2af948f3440219ad33c013fc3fbcb' and ph['boot_id']==post['boot_id']==normal['boot_id'],'exact COPY7 container/nonce/boot binding')
++ need(ph['consumed_cleanup_release_sha256']==post['consumed_cleanup_release']['sha256'],'actual consumed cleanup release raw-file binding')
++ consumed_release=json.loads(read(post['consumed_cleanup_release']))
++ need(normal['release_sha256']==digest(json.dumps(consumed_release,sort_keys=True,separators=(',',':')).encode()),'actual consumed cleanup release canonical binding')
++ need(ph['journal_events']==9 and ph['preserved_selected_files']==71 and ph['preserved_inventory_rows']==617,'actual accepted COPY7 preservation counts')
+  need(ph['owner_pid']==413643 and ph['owner_starttime']=='68359948' and
+       post['owner_pid']==413643 and post['owner_starttime']=='68359948',
+       'exact COPY7 owner/birth required; historical COPY6 cannot clear COPY7')
+@@ -67,11 +76,12 @@
+  packet=json.loads(raw);need(set(packet)=={'physical_acceptance','current_postjoin','normal_retirement','source_approval','fetched_source_proof'},'finite binding schema')
+  need(all(isinstance(packet[k],dict) and set(packet[k])=={'path','sha256','bytes'} for k in packet),'all genuine references required before effects')
+  need(packet['fetched_source_proof']==PUBLISHED_SOURCE_PROOF,'exact fetched15 source proof')
++ need(all(packet[k]==v for k,v in COPY7_AUTHORITY.items()),'exact recorded COPY7 authority descriptors')
+  rows={k:json.loads(read(v)) for k,v in packet.items()};ph=rows['physical_acceptance'];post=rows['current_postjoin'];normal=rows['normal_retirement'];approval=rows['source_approval'];fetched=rows['fetched_source_proof']
+  require_copy7_identity(ph,post,normal)
+- need(ph['reviewer']=='/root/recovery_review' and ph['implementation_ownership'] is False and ph['current_live_postjoin_accepted_non_null'] is True,'independent positive physical authority')
++ need(ph['reviewer']=='/root/recovery_review' and ph['implementation_ownership'] is False and post['status']=='ACCEPTED_NON_NULL' and post['independent_physical']==packet['physical_acceptance'],'independent positive physical authority')
+  need(ph['status'].startswith('PASS_ACTUAL_M14_') and ph['original_workload_status']=='FAIL' and ph['artifact_native_acceptance'] is False,'exact failed M14 retirement scope')
+- need(ph['historical_client_births'] is None and ph['host_init_identity'] is None and 'historical_outer_identity' not in ph,'explicit actual COPY4-schema historical qualifications')
++ need(ph['client_births'] is None and ph['host_init_identity'] is None and 'historical_outer_identity' not in ph,'explicit actual COPY7 qualifications')
+  need(post['status']=='ACCEPTED_NON_NULL' and post['independent_physical']==packet['physical_acceptance'] and post['native_acceptance'] is False and post['original_workload_status']=='FAIL','actual nonNULL postjoin schema')
+  need(ph['normal_result_sha256']==packet['normal_retirement']['sha256'] and normal['status']=='PASS_EXECUTED','bound genuine normal result')
+  need(post['owner_pid']==ph['owner_pid'] and post['owner_starttime']==ph['owner_starttime'] and post['cleanup_pid']==ph['cleanup_pid'],'postjoin exact owner/cleanup')
+@@ -97,7 +107,11 @@
+  new_reviewer="normal_cfg['implementation_ownership'] is False and normal_cfg['reviewer']=='/root/recovery_review'"
+  need(query.count(old_reviewer)==1, 'one exact current reviewer assertion required')
+  query=query.replace(old_reviewer,new_reviewer)
+- replacements={"normal_cfg['client_births'] is None and normal_cfg['historical_outer_identity'] is None and normal_cfg['host_init_identity'] is None":"normal_cfg['historical_client_births'] is None and 'historical_outer_identity' not in normal_cfg and normal_cfg['host_init_identity'] is None", "normal_cfg_live['physical_acceptance']==current_normal_cfg_physical":"normal_cfg_live['independent_physical']==current_normal_cfg_physical", "normal_cfg_live['actual_cleanup']==normal_cfg_normal_ref and normal_cfg_live['current_live_postjoin']==normal_cfg_links":"normal_cfg_live['proc_whole_join']==normal_cfg_links['proc'] and normal_cfg_live['mutex_whole_join']==normal_cfg_links['mutex']", "normal_cfg_live['artifact_native_acceptance']":"normal_cfg_live['native_acceptance']"}
++ current_boolean="normal_cfg['current_live_postjoin_accepted_non_null'] is True"
++ current_actual="normal_cfg['schema']=='mckernel.copy7.normal-retirement.physical-acceptance.v1' and normal_cfg_live['status']=='ACCEPTED_NON_NULL' and normal_cfg_live['independent_physical']==current_normal_cfg_physical"
++ need(query.count(current_boolean)==1,'one exact predecessor current acceptance boolean')
++ query=query.replace(current_boolean,current_actual)
++ replacements={"normal_cfg['client_births'] is None and normal_cfg['historical_outer_identity'] is None and normal_cfg['host_init_identity'] is None":"normal_cfg['client_births'] is None and 'historical_outer_identity' not in normal_cfg and normal_cfg['host_init_identity'] is None", "normal_cfg_live['physical_acceptance']==current_normal_cfg_physical":"normal_cfg_live['independent_physical']==current_normal_cfg_physical", "normal_cfg_live['actual_cleanup']==normal_cfg_normal_ref and normal_cfg_live['current_live_postjoin']==normal_cfg_links":"normal_cfg_live['proc_whole_join']==normal_cfg_links['proc'] and normal_cfg_live['mutex_whole_join']==normal_cfg_links['mutex']", "normal_cfg_live['artifact_native_acceptance']":"normal_cfg_live['native_acceptance']"}
+  for old,new in replacements.items():need(old in query,'exact schema predecessor '+old);query=query.replace(old,new)
+  mount=request['libdwarf_mountpoint_identity'];need(repr(mount) in query and mount['path'] in query,'current request path+node exact literal')
+  ast.parse(query);need('assert False' not in query,'no pending query literal')

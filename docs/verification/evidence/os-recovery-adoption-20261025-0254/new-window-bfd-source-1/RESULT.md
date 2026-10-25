@@ -1,0 +1,5 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Reused all four already prepared Rust BFD accessor bodies. The actual source blocker is the obsolete CMake binding and full-overlay snapshot: current canonical CMake changed while the other five source hashes still match. This private correction applies only the five existing BFD selector edits to the current CMake file and supplies a new exact source binding. Original Rust tool bodies, BFD witness, header/library/compiler pins, equivalence harness and qualification driver are byte-for-byte reused. No behavior oracle or accepted component was weakened.
+
+No test, build, CMake configure, Docker, root or guest ran. READY.CURRENT-CMAKE-REBASE.NOT-EXECUTED.json supplies the exact future inner command. Existing holds/releases and source histories remain untouched. Root must first accept actual physical clearance and issue the ordinary compiler grant; any new run uses fresh output and separately reviewed release. Actual BFD ABI/link/default/native proof remains open.

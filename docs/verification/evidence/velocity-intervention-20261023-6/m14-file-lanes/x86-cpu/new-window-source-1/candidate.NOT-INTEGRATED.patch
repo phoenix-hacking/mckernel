@@ -1,0 +1,53 @@
+--- a/arch/x86_64/kernel/cpu.c
++++ b/arch/x86_64/kernel/cpu.c
+@@ -1846,13 +1846,6 @@
+ 		void (*issue_ipi_fn)(unsigned long, int),
+ 		void (*log_fn)(int, int, int));
+ 
+-static const struct x86_thread_context_offsets x86_thread_context_offsets = {
+-	.thread_status_offset = __builtin_offsetof(struct thread, status),
+-	.thread_uctx_offset = __builtin_offsetof(struct thread, uctx),
+-	.thread_tlsblock_base_offset =
+-		__builtin_offsetof(struct thread, tlsblock_base),
+-};
+-
+ #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+ extern const struct x86_trace_enter_user_offsets x86_trace_enter_user_offsets;
+ #else
+@@ -1865,16 +1858,6 @@
+ #endif
+ 
+ void *x86_this_kstack_bridge(void);
+-
+-static void *x86_cpu_local_bridge(int cpu)
+-{
+-	return get_x86_cpu_local_variable(cpu);
+-}
+-
+-static void x86_arch_delay_bridge(int us)
+-{
+-	arch_delay(us);
+-}
+ 
+ /* Existing three dkprintf records; data only, no C diagnostic body. */
+ #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+@@ -3789,11 +3772,6 @@
+ #else
+ ihk_mc_user_context_t *lookup_user_context(struct thread *thread)
+ {
+-#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+-	return x86_lookup_user_context_body_result(thread, get_this_cpu_local_var()->current,
+-			PS_INTERRUPTIBLE | PS_UNINTERRUPTIBLE |
+-			PS_STOPPED | PS_TRACED, &x86_thread_context_offsets);
+-#else
+ 	ihk_mc_user_context_t *uctx = thread->uctx;
+ 
+ 	if ((!(thread->status & (PS_INTERRUPTIBLE | PS_UNINTERRUPTIBLE
+@@ -3815,7 +3793,6 @@
+ 	}
+ 
+ 	return uctx;
+-#endif
+ }
+ #endif /* lookup_user_context() */
+ 

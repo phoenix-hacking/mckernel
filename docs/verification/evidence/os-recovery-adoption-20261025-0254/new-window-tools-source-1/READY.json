@@ -1,0 +1,73 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_NOT_COMPILED",
+  "defect": "Prepared daemon selector depends on nonexistent nested IHK CMakeCache and has implicit linker; canonical ihkmond still selects C.",
+  "reused": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-remaining-tools-default-join/ihkmond.WHOLE70-CONSUMER.SELECTOR.cmake",
+      "sha256": "86b9f77c35dc41fa400121d8f019ceb574ea641760b8f0643fbeedd0e7a44f1f",
+      "bytes": 2256
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-12/m15-ihkmond/ihkmond.rs",
+      "sha256": "80b4dbab2695f6a709e61a07cb54f72482b3ff9c2a6d0f4c4e94052b9675dda6",
+      "bytes": 21522
+    }
+  ],
+  "canonical_preimage": {
+    "path": "ihk/linux/user/CMakeLists.txt",
+    "sha256": "b193917d629382406aa968ceaefea1b9f29f4de741510493f8c54772c025527d",
+    "bytes": 10456
+  },
+  "changes": [
+    "Use CMAKE_BINARY_DIR/CMakeCache.txt, matching qualified whole70 producer correction.",
+    "Bind absolute selected IHK_USER_RUSTC and selected CMAKE_C_COMPILER linker.",
+    "Track actual libihk target file, libudev and compiler inputs for rebuild.",
+    "Coherent default Rust target and install while retaining explicit IHK_ALLOW_CLI_C_FALLBACK comparison branch.",
+    "Reuse full daemon source unchanged; no equivalent body reimplemented."
+  ],
+  "outputs": [
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-tools-source-1/daemon-default-integration.patch",
+      "sha256": "6242e505114965379e7e6f6e0676bdabc0697990856f83b44c3f699bf29ce0ae",
+      "bytes": 25592
+    },
+    {
+      "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-tools-source-1/ihkmond-selector.cmake",
+      "sha256": "80ffcf5350029addd5ae0557a269a1ad29d9f19be18334c4d46554ce923d38a0",
+      "bytes": 2838
+    }
+  ],
+  "tests_run": [],
+  "native_acceptance": false,
+  "retirement_credit": 0,
+  "next_check": "After root explicit ordinary grant: miniature CMake configure/generate with separate top-level and IHK binary dirs; record selected compiler/linker, dependencies, default no-C, opt-in C reference and install destinations. Then selected SDK actual daemon compile/link and retained mock fixture; real device/daemon launch requires independent execution release.",
+  "unlocks": "M15-F08 selected-source daemon integration queue, then matching native lifecycle and boot/stop consumer qualification.",
+  "generation_check_source": {
+    "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-tools-source-1/check_daemon_selector.NOT-GRANTED.py",
+    "sha256": "d6993fd8c857b7990112cbb6c33dc97013249d4e4381299623b62bcbec2b9788",
+    "bytes": 5329
+  },
+  "ordinary_check_argv": [
+    "/usr/bin/python3",
+    "-I",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-tools-source-1/check_daemon_selector.NOT-GRANTED.py",
+    "--execute",
+    "--output",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-tools-source-1/actual-cmake-generation-1"
+  ],
+  "ordinary_check_profile": {
+    "jobs": 1,
+    "requested_cpu": "root assigned single ordinary CPU",
+    "wall_seconds": 150,
+    "memory_mib": 512,
+    "disk_mib": 16,
+    "root": false,
+    "Docker": false,
+    "guest": false,
+    "CMake_C_compiler_detection": true,
+    "Rust_compilation": false,
+    "daemon_execution": false
+  },
+  "generation_check_status": "UNRUN; no current grant"
+}

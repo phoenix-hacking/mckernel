@@ -1,0 +1,25 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. One bounded harness-only COMMON-control correction, frozen F02 candidate unchanged.",
+  "CPU": 0,
+  "ordinary_jobs": 1,
+  "physical_sha256": "dda45e6348748469bb15734ff585733b5a18c405f907f82e9e9e0f9c4c1e0129",
+  "current_postjoin_sha256": "f37ff2d1507d6cacd69c76ca0749c91b44b8b5783dd5b3716ff775f80375393f",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-f02-contract-source-1/check_f02_contract_controls.py",
+    "--output",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-2/m14-f02-contract-source-1/FOCUSED-CONTROLS-RESULT-2.json"
+  ]
+}

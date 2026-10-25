@@ -1,3 +1,97 @@
+## Verified source checkpoint — 2026-10-25T03:13:10Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Canonical process debug traversal integrated helpers1049cc79/C5eed915e after
+independent review/current fullcrate metadata+29real C/Rust ABI rows PASS.
+Signal wakeup tail controlled parity10,368cases/30ABI PASS6joinedcommands after
+one SigSet.val correction; source integration/wholecrate/native still OPEN.
+B7 actual19diagnostic commands PASS using retained6prefix+13suffix; original
+E0080/CWD/missingheader failures retained; no unchanged fullcrate/image rebuild.
+COPY7 physicaldda45e/currentf37ff2 accepted and retained; no retirement replay.
+F02 controls5positive58negative PASS; frozen driveradb7003a unchanged and final
+fullvalidator/typecompile/native OPEN. M15daemon threecase generation evaluation
+PASS; installed effective11source cohort independently PASS_SOURCE (initial
+literal-only pathfinding withdrawn). COPY7-aware generatedbinder8puretests with
+31identity+22querynegativecases PASS; actual metadata-only binderPASS.226944s,
+READY7af1c6b2. Query/publisher/fill/heavyinstall UNRUN. Next exact M15 step is
+15member current overlay publication/fetch, fresh query+payload/execution review,
+then soleheavy privateDESTDIR+3loader checks. Retain SDK11 actual artifacts.
+M12 stays35/35;M14/M15 OPEN;newguestapps0/newproductionimagebuilds0. Fixed window,
+creditrun and parentarmed controls unchanged. All test/build children joined;
+private source lanes waiting matching integration/object/default/native checks.
+Evidence index: `../evidence/os-recovery-adoption-20261025-0254/ADOPTION.json`.
+
+## Integrated Rust and executable checkpoint — 2026-10-25T03:10:52Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+COPY7 physicaldda45e/currentf37ff2 accepted; do not repeat retirement or infer new
+native credit. Canonical process debug_log now selects reviewed Rust traversal
+via existing lock bridges: helpers1049cc79/C5eed915e. Actual current fullcrate
+metadata and29C/RustABI rows PASS6commands; original14mock cases remain bound to
+olderbody285794c0. Correctedbodyobject/defaultlink/native and separateB7offset7976
+remain OPEN. B7 complete19command diagnostic sequence PASS using retained6prefix
+plus corrected13suffix, no prefix rebuild; three genuine header overlay source
+and original failures retained. F02 actual5positive58negative controls PASS after
+expert-mapped process-local descriptor correction; frozen parentdriveradb7003a
+unchanged, fullvalidator/typecompile/native OPEN. M15daemon retainedthreecase
+CMakegeneration PASS; currentCOPY7 binder pure8tests/31+22negativecases PASS but
+metadata operation/install UNRUN. Installedruntime initial pathfinding withdrawn:
+effective map overrides at owner93-94 need exact11source verification, preserve
+working source. M12 remains35/35;M14/M15 OPEN. Realguestapps0/newproductionimages0.
+See `../evidence/os-recovery-adoption-20261025-0254/ADOPTION.json` and
+`PROCESS-DEBUG-SOURCE-INTEGRATION.json` there. Fixedwindow/creditrun and parent
+watcher/guardian/20minute controls unchanged. Next: finish M15 genuine source
+approval/binder; realwakeuptail fixture runningCPU6; object/default/native queues.
+
+## Verified recovery and compiler cursor — 2026-10-25T03:03Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+COPY7 normal retirement is independently physically accepted dda45e63 and current
+postjoin f37ff2d1;71files/617inventoryrows/9journal events preserved. New successors
+still need fresh admission. Actual process debug C/Rust parity14cases PASS, four
+commands joined/clean, .364s wall. B7 full81Rust plus five C compiles PASS; index06
+F06 stopped on missing elfcore.h. Expert identifies three genuine missing headers;
+retain prefix and run only corrected unrun suffix after fresh ordinary grant.
+F02 controls original invalid COMMON mutation failed; bounded harness correction
+then accepted a final-pointer negative. Both raw failures preserved; independent
+expert escalation active, no third author retry. Frozen parentcandidateadb7003a
+unchanged. CPU0M15daemon three-case CMake and CPU6syscall diagnostic parity running.
+M12 stays35/35;M14/M15 OPEN;new guestapps0/productionimagebuilds0. Source batches and
+actual evidence index: `../evidence/os-recovery-adoption-20261025-0254/ADOPTION.json`.
+
+## Recovery engineering cursor — 2026-10-25T02:59Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Fresh authorized invocation retains watcher469821/start69432582, fixed cutoff
+2026-10-26T06:00Z and creditrun7f4af94a83b14cc08f97401f5891d965 unchanged.
+Policy adoption matches all four supplied SHA256 values; record:
+`../evidence/os-recovery-adoption-20261025-0254/ADOPTION.json`.
+COPY7 exact independently released read-only observer joined0/3.700507s, empty
+stderr;25selected raw readbacks joined0/.148819s for independent review. Normal
+cleanup release/physical/current-postjoin acceptance PENDING; no new heavy work,
+compiler, guest or native acceptance. Original COPY7 failure/evidence retained.
+Six M14 source owners produced private process debug traversal, syscall logging,
+signal wakeup-tail and CPU dead-callback removal candidates; mem/arch-memory reuse
+existing canonical Rust rather than duplicating closed source bodies. Source-only
+checks remain unrun. F02 parent-owned frozen driveradb7003a unchanged; separate
+focused controls prepared, independent source review active. M15 MM12bindings and
+SDK11fourartifacts reused; daemon CMake cache/linker/default derivative prepared,
+BFD current-CMake rebase and B7 exact queue preparation active. M12 stays35/35;
+M14/M15 OPEN. Root/recovery_review own exact cleanup decision and next physical
+acceptance. No new guest apps/current-candidate builds this recovery.
+
+## New run window explicitly authorized — 2026-10-25 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The user explicitly resumes work now through Sunday2026-10-25 at23:00PDT
+(2026-10-26T06:00:00Z), included weekly allowance first and existing credits after
+exhaustion. See RUN-WINDOW-20261025-2300.md and FOCUS-UNTIL-20261025-2300.md.
+Launcher/controller preparation is in progress; no new workload is claimed here.
+The prior 17:00 cutoff/shutdown below is historical for this new authorized
+window. Its engineering/ownership facts remain current: COPY7 requires exact
+reviewed observation/normal retirement and independent current physical proof
+before new heavy work. Preserve retained records and all source/failure evidence.
+
 ## Launcher shutdown — 2026-10-25T00:00Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

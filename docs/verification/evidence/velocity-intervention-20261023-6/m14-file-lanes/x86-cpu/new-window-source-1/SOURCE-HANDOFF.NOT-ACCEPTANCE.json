@@ -1,0 +1,56 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_UNUSED_LOCAL_C_RETIREMENT_NOT_COMPILED",
+  "parent_C": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/whole-private-selected-debug-policy-storage-successor-34/candidate/arch/x86_64/kernel/cpu.c",
+    "bytes": 116436,
+    "sha256": "d3bcba8fcae9ffeaea390e9029e9b3360c6884c50d3acae44c02f7da7a981115"
+  },
+  "parent_Rust": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/whole-private-selected-debug-policy-storage-successor-34/candidate/kernel/rust/x86_cpu_helpers.rs",
+    "bytes": 255878,
+    "sha256": "f9a38e876068e727a046251c379edbe9e7e2522a3d78fec21065a5031cfb8610"
+  },
+  "candidate_C": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-1/candidate/arch/x86_64/kernel/cpu.c",
+    "bytes": 115748,
+    "sha256": "744be10723f5ddf8e05e75dd20cca8c50bcc4613066ccdd1478d5a0f5ced556d"
+  },
+  "candidate_Rust": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-1/candidate/kernel/rust/x86_cpu_helpers.rs",
+    "bytes": 255878,
+    "sha256": "f9a38e876068e727a046251c379edbe9e7e2522a3d78fec21065a5031cfb8610"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-1/candidate.NOT-INTEGRATED.patch",
+    "bytes": 1483,
+    "sha256": "6b326a5ceb33718336db783a11468a144c2de1a3e203ed3f892cd210a3b42515"
+  },
+  "canonical_writes": false,
+  "new_compiler_test_Docker_root_guest_execution": false,
+  "Rust_bytes_unchanged": true,
+  "body_changes": [
+    {
+      "removed": "x86_cpu_local_bridge",
+      "reason": "Only definition in parent C. Existing Rust x86_cpu_local_native forwards to actual x86_local provider and is selected by ihk_mc_interrupt_cpu."
+    },
+    {
+      "removed": "x86_arch_delay_bridge",
+      "reason": "Only definition in parent C. Existing Rust ihk_mc_delay_us directly calls arch_delay."
+    },
+    {
+      "removed": "x86_thread_context_offsets private static table and impossible nested consumer",
+      "reason": "Table use was only in #ifdef RUST nested inside the #else of that same RUST guard. Existing Rust native entry uses offset_of!(Thread,...) table at4159."
+    }
+  ],
+  "preserved": "All existing Rust bodies and accepted FP/config fixes; original fallback lookup body; stages22-34 proof requirements; all original failure families.",
+  "next_executable_check": "After root exact COPY7 physical acceptance and ordinary grant: actual selected C compile + nm/objdump to confirm no residual C t/T bodies for these names, no undefined new names, actual Rust consumer and partial link join. Compile coherent stages22-34 together with exact CMake producer source and filename binding.",
+  "unlocks": "Removes two known selected local C source-body leftovers without duplicating existing Rust; leaves actual wholefile/no-local-C proof pending.",
+  "remaining_HOLD": [
+    "No compiler/default/native acceptance",
+    "Raw NMI/freeze(NULL)/mainIRQ lifetimes unchanged",
+    "APIC/FP/descriptors/state native checks open",
+    "Selected DEBUG_PRINT_CPU enabled profile still refused/unqualified",
+    "Full remaining local/inlined/configuration worklist requires actual coherent compiler observation"
+  ]
+}
