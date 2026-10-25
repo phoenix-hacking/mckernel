@@ -1,0 +1,119 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_BFD_THREE_IHK_USER_RUSTC_CMAKE_CONTROLS_ONLY",
+  "records": [
+    {
+      "step": 1,
+      "command": {
+        "argv": [
+          "/usr/bin/python3",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/test_BFD_typed_user_rustc_cmake_generation.NOT-GRANTED.py",
+          "--check-once",
+          "c807b7754575d4be0ad08f6f5ea88d7dce578ed01865ba207e9073ebde7a4c7b"
+        ],
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Rootgranted exactc807 threecase LANGNONE IHK_USER_RUSTC controls for BFD oneflag successor; no compiler/SDK."
+      },
+      "join": {
+        "pid": 577656,
+        "start": 70845357,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.2389562859898433,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/actual-threecase-IHKUSER-h990-1/step1/stdout",
+            "sha256": "657de1e70d838bf06fe0ecc1a26ff4af9c4bc3690a6fc8c6a46a1ce79eb3fd29",
+            "device": 66306,
+            "inode": 59522055,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 1975,
+            "mtime_ns": 1792911009073507117,
+            "ctime_ns": 1792911009073507117
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/actual-threecase-IHKUSER-h990-1/step1/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59522056,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1792911008873501151,
+            "ctime_ns": 1792911008873501151
+          }
+        }
+      }
+    }
+  ],
+  "checks": {
+    "SDK_executed": false,
+    "cases": [
+      {
+        "argv": [
+          "/usr/bin/cmake",
+          "-G",
+          "Unix Makefiles",
+          "-S",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/actual-cmake-threecases-1/project",
+          "-B",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/actual-cmake-threecases-1/missing/build",
+          "-DRUSTC:FILEPATH=/compute/preserved/bin/rustc"
+        ],
+        "case": "missing",
+        "returncode": 1
+      },
+      {
+        "argv": [
+          "/usr/bin/cmake",
+          "-G",
+          "Unix Makefiles",
+          "-S",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/actual-cmake-threecases-1/project",
+          "-B",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/actual-cmake-threecases-1/relative/build",
+          "-DRUSTC:FILEPATH=/compute/preserved/bin/rustc",
+          "-DIHK_USER_RUSTC:FILEPATH=rustc"
+        ],
+        "case": "relative",
+        "returncode": 1
+      },
+      {
+        "argv": [
+          "/usr/bin/cmake",
+          "-G",
+          "Unix Makefiles",
+          "-S",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/actual-cmake-threecases-1/project",
+          "-B",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/actual-cmake-threecases-1/pinned/build",
+          "-DRUSTC:FILEPATH=/compute/preserved/bin/rustc",
+          "-DIHK_USER_RUSTC:FILEPATH=/nightly/bin/rustc"
+        ],
+        "case": "pinned",
+        "returncode": 0
+      }
+    ],
+    "compiler_executed": false,
+    "compute_RUSTC_preserved": true,
+    "native": false,
+    "status": "PASS_THREE_BFD_TYPED_USER_RUSTC_ACTUAL_FRAGMENT_CASES_ONLY"
+  },
+  "input_identities_unchanged": true,
+  "seconds": 0.26110079092904925,
+  "CPU_seconds": 0.268696,
+  "CPU6_released": true,
+  "SDK_query_root_native": false,
+  "execution_release": false
+}

@@ -1,3 +1,26 @@
+## Executor selected SDK producer independently accepted — 2026-10-25T07:00:57.936165+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual F4D commands03..08 pass, reusing retained00..02 without replay. Independent
+review verifies selected-header ABI, actual Rust main plus assembly-only archive link,
+ELF/dependencies and matching BUILDID3114d9e. One fixed SDK integration package accepted.
+No CLI/all349/all51/allocation/default/native/whole-file retirement credit.
+[Acceptance](../evidence/os-recovery-adoption-20261025-0254/ACTUAL-F4D-EXECUTOR-INDEPENDENT-SDK-PRODUCER-ACCEPTANCE.json).
+
+Owner579459/start70867966 entered atqueryage29.351s; tool23810 terminal0 and normal
+retirement PASS. First physicalreader failed in observer artifact snapshot schema
+(missing returned mtime_ns), before PROC. Failure retained; copied stableFD timestamp
+helper and genuine-engine/7-artifact pure controls precede any corrected root read.
+No nextheavy yet. BFD coherent30 source publication and daemon7 retained-provider
+binding advance; M14 current230 image-only freshbuild packet preserves modern owner
+controls and actual native-fork compileflags; pair/native qualification remains OPEN.
+
+Current230 HOST integration/default selectors are pushed/fetched a1f20991; executor
+source17/authority22 eb3ce544 fetchedverified. Latest completed throughputbucket has
+2HOSTpackages/30min; new partialbucket has1SDKpackage. No sustained95% improvement
+claim. M12 remains35/35; M14/M15 OPEN. Same monitor1800s/creditrun/mutex/resources
+and cutoff2026-10-26T06:00Z. Root owns canonical integration and event ledger.
+
 ## Current230 integrated; executor compiler prefix retained — 2026-10-25T06:48:07.959550+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
