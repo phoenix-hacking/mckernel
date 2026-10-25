@@ -1,3 +1,30 @@
+## Thirty-minute review: current285 integrated; BFD diagnostic identifies oracle defect — 2026-10-25T08:46:57.569695+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The08:42 review adds one accepted current-object package:285 providers (+8),
+one fullRust codegen/strictpartial and four integrated files. New default/native/
+wholefile/Cboundary closures remain zero. Controlled storage3 and syscalltable
+fixtures independently pass; one combined285/five-data-owner qualification is
+being prepared to avoid duplicate wholeRust codegen. Logger callback/128Bdata
+source is ready separately. [Review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0842.json).
+
+The corrected original-C/C diagnostic actually passed both pinned SDK commands.
+All18 symbol addresses changed across calls while names/values/flags matched;
+stripped counts were0/0 with8B bounds. The previous crosscallpointer assertion
+is invalid here. Root/m14_mem owns the bounded logical-snapshot oracle correction;
+Rust ABI/SDK21 acceptance is still open. New actual physical/current proof is
+pending for625893/start71521270; the older83 proof cannot clear this new operation.
+The actual entry used36.731s of its120s query window and joined normally.
+
+Current230's finite caller correction retains the same lock descriptor through
+cleanup. Its compatible exact cleanup implementation remains the image-build
+blocker (copy7 constructor/constants; f02 contract typed-source/protocol helper).
+M15's accepted executor/MM/overlay native packet awaits actual execution release.
+Completed source owners wait on these concrete dependencies; no second heavy
+owner or resource expansion is admitted. Includedusage30% asrecorded; unchanged
+creditguard/monitor496359/1800s and2026-10-26T06:00Z cutoff. M12=35/35; M14/M15 OPEN.
+Recent fixedpackage buckets remain below the sustained1.95x target; no claim.
+
 ## Current285 integrated after independent HOST acceptance — 2026-10-25T08:40:58.981721+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
