@@ -1,3 +1,30 @@
+## Current277 HOST package independently accepted and integrated — 2026-10-25T07:57:15.222827+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Current277 independentlyPASS at HOST manual-profile scope:47new Rustproviders
+(43process,3futex,1SMP) over230; five clean runtime postimages integrated after
+exactpreimage checks. Ten successful compiler/link commands retained plus three
+new observers; one Rust object/strictpartial, exact ABI/FUNC/data/RELA/COMMON/U
+and emitter checks pass. Original witness and observer failures remain retained.
+CMake/default selectors are unchanged; no default/native/wholefile/Cboundary
+retirement is claimed. Source11 outerentry and later7 process candidates remain
+outside277. [Acceptance](../evidence/os-recovery-adoption-20261025-0254/ACTUAL-CURRENT277-INDEPENDENT-ACCEPTANCE-AND-CANONICAL-INTEGRATION.json).
+
+BFD's pinned original-C/C two-command diagnostic source25 is fetched54d5bf00.
+Its17member current transport actualpublication and typed-schema expertreview pass;
+root publication/fetch/finalqueryreview are next before a freshactualentry.
+No nine-commandprefix replay or testoracle weakening. ActualfirstBFDworkload stillFAIL.
+
+Source11 passed independent675comparison/52word and coupled atomicbudget controls;
+F4D three loadercompatibility checks independentlyPASS. Both remain narrower than
+currentfullcrate/default/native acceptance. Current230 sourcecapsule is fetched933638a3
+(all80newblobs/6156tarmembers/38metadatachunks); private230 image candidate remains
+unchanged while its external heldflock/currentcontext envelope prepares.
+
+One newly accepted fixedpackage this currentbucket; completedpreviousbuckets1,2,1,0.
+No sustained95% improvement claim. M12 remains35/35; M14/M15 OPEN. Same1800smonitor,
+resourcegrants/27:4/singleheavy/includedfirstcreditrun/cutoff2026-10-26T06:00Z.
+
 ## Thirty-minute review: qualification failures drive the next checks — 2026-10-25T07:44:01.269171+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

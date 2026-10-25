@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-25T07:43:22.019431+00:00",
+  "as_of": "2026-10-25T07:57:15.222827+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -3126,49 +3126,62 @@
       "evidence": [
         "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0742.json"
       ]
+    },
+    {
+      "at": "2026-10-25T07:57:15.222827+00:00",
+      "actual": {
+        "new_current_object_packages": 1,
+        "current_Rust_providers": 277,
+        "new_Rust_providers_over230": 47,
+        "canonical_runtime_files_integrated": 5,
+        "retained_successful_commands": 10,
+        "new_observers": 3
+      },
+      "implemented": {
+        "next_actual_acceptance": "Pinned BFD original-C/C diagnostic then correctedSDKcontract; private230 defaultimage entry",
+        "owners": [
+          "root",
+          "m14_mem",
+          "f02_contract"
+        ]
+      },
+      "limits": {
+        "production_default": 0,
+        "native": 0,
+        "whole_C_files_retired": 0,
+        "production_C_boundaries_retired": 0
+      },
+      "evidence": [
+        "docs/verification/evidence/os-recovery-adoption-20261025-0254/ACTUAL-CURRENT277-INDEPENDENT-ACCEPTANCE-AND-CANONICAL-INTEGRATION.json"
+      ]
     }
   ],
   "latest_dispatcher_checkpoint": {
-    "at": "2026-10-25T07:43:22.019431+00:00",
+    "at": "2026-10-25T07:57:15.222827+00:00",
     "actual": {
-      "accepted_fixed_integration_packages": 0,
-      "canonical_integrated_Rust_bodies": 0,
-      "current_fullcrate_qualified_objects": 0,
-      "BFD_successful_preparatory_commands": 9,
-      "BFD_failed_commands": 1,
-      "BFD_failure": "real_equivalence left[i]==right[i] assertion rc-6; root cause unresolved",
-      "source_retention_files": 6153,
-      "source_retention_gzip_outputs": 45,
-      "production_default_closures": 0,
-      "native_closures": 0,
-      "whole_C_files_retired": 0,
-      "production_C_boundaries_retired": 0,
-      "new_guest_apps": 0,
-      "new_images": 0
+      "new_current_object_packages": 1,
+      "current_Rust_providers": 277,
+      "new_Rust_providers_over230": 47,
+      "canonical_runtime_files_integrated": 5,
+      "retained_successful_commands": 10,
+      "new_observers": 3
     },
     "implemented": {
-      "next_actual_acceptance": {
-        "name": "BFD pinned original-C twice diagnostic, then corrected fixedBFD SDK contract",
-        "owner": "root + m14_mem",
-        "next_command": "Link original_C_twice_pinned_BFD_control.c with retained two original-C objects and pinned libbfd; execute retained fixture.o/stripped.o within existing reviewed controller",
-        "blocker": "Finite two-command driver/owner/source binding and actualexecution release; no unchanged21command replay"
-      },
-      "next_default_acceptance": {
-        "owner": "root + f02_contract",
-        "command": "cmake --build /work/output/build --target mckernel.img -j4 after fresh configure",
-        "blocker": "Published/fetched actual source capsule plus exact compact metadata/staticreview, then freshactualquery/payloadreview and soleheavyentry",
-        "source_identity": "dev66306 inode59524933 frozeneb3 compute + explicit qualifiedIHK3114d9e override"
-      }
+      "next_actual_acceptance": "Pinned BFD original-C/C diagnostic then correctedSDKcontract; private230 defaultimage entry",
+      "owners": [
+        "root",
+        "m14_mem",
+        "f02_contract"
+      ]
     },
     "limits": {
-      "SDK_packages": 0,
       "production_default": 0,
       "native": 0,
       "whole_C_files_retired": 0,
       "production_C_boundaries_retired": 0
     },
     "evidence": [
-      "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0742.json"
+      "docs/verification/evidence/os-recovery-adoption-20261025-0254/ACTUAL-CURRENT277-INDEPENDENT-ACCEPTANCE-AND-CANONICAL-INTEGRATION.json"
     ]
   }
 }

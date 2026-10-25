@@ -33942,3 +33942,548 @@ mod f03_leaf_callbacks_candidate {
         unsafe { crate::abort::panic(c"settimeofday".as_ptr().cast()) }
     }
 }
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(f03_futex_atomic_candidate)]
+mod f03_futex_atomic_candidate {
+    use crate::abi::{CInt,CULong};
+    #[cfg(not(target_arch="x86_64"))]
+    compile_error!("This exact original x86 atomic/fixup proposal requires x86_64");
+
+    /// Current original !__UACCESS__ profile always accepts without reading uaddr.
+    /// # Safety
+    /// No pointer is accessed. This export must be paired with the C profile
+    /// !__UACCESS__; the enabled access_ok implementation remains original C.
+    #[cfg(f03_futex_no_uaccess_candidate)]
+    #[no_mangle]
+    pub unsafe extern "C" fn futex_atomic_access_ok_bridge(_uaddr:*mut CInt,_size:CULong)->CInt {1}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// SOURCE PROPOSAL: exact x86 fault-table/constraint review and actual assembler
+// observations are required before selecting these two providers.
+
+/// Preserve the original cmpxchg instruction, old-value result and -EFAULT fixup.
+///
+/// # Safety
+/// uaddr obeys the original inatomic user-word mapping/lock contract. Kernel
+/// exception-table handling must recognize the emitted fault/fixup pair. No Rust
+/// reference is formed to user memory and no page fault retry is introduced.
+#[no_mangle]
+pub unsafe extern "C" fn futex_atomic_cmpxchg_inatomic_bridge(
+    uaddr: *mut CInt,
+    oldval: CInt,
+    newval: CInt,
+) -> CInt {
+    let mut observed = oldval;
+    // SAFETY: Exact lock-cmpxchg and EAX fixup. Default asm memory/flags effects
+    // retain the original volatile asm + memory-clobber contract; no nomem,
+    // readonly, pure or preserves_flags relaxation. Numeric labels start at 2.
+    unsafe {
+        core::arch::asm!(
+            "2: lock cmpxchg dword ptr [{address}], {new_value:e}",
+            "3:",
+            ".pushsection .fixup, \"ax\"",
+            "4: mov eax, {fault}",
+            "jmp 3b",
+            ".popsection",
+            ".pushsection __ex_table, \"a\"",
+            ".balign 8",
+            ".quad 2b, 4b",
+            ".popsection",
+            address = in(reg) uaddr,
+            new_value = in(reg) newval,
+            fault = const -14,
+            inout("eax") observed,
+            options(nostack),
+        );
+    }
+    observed
+}
+
+unsafe fn f03_futex_exchange_v3(address: *mut CInt, argument: CInt) -> (CInt, CInt) {
+    let mut old = argument;
+    let mut result: CInt = 0;
+    // SAFETY: Same inatomic word contract. Memory xchg is implicitly locked;
+    // failure changes only the result and never publishes an old-value output.
+    unsafe {
+        core::arch::asm!(
+            "2: xchg dword ptr [{address}], {old:e}",
+            "3:",
+            ".pushsection .fixup, \"ax\"",
+            "4: mov {result:e}, {fault}",
+            "jmp 3b",
+            ".popsection",
+            ".pushsection __ex_table, \"a\"",
+            ".balign 8",
+            ".quad 2b, 4b",
+            ".popsection",
+            address = in(reg) address,
+            old = inout(reg) old,
+            result = inout(reg) result,
+            fault = const -14,
+            options(nostack),
+        );
+    }
+    (result, old)
+}
+
+unsafe fn f03_futex_add_v3(address: *mut CInt, argument: CInt) -> (CInt, CInt) {
+    let mut old = argument;
+    let mut result: CInt = 0;
+    // SAFETY: Exact original locked xadd primitive and fault-site correspondence.
+    unsafe {
+        core::arch::asm!(
+            "2: lock xadd dword ptr [{address}], {old:e}",
+            "3:",
+            ".pushsection .fixup, \"ax\"",
+            "4: mov {result:e}, {fault}",
+            "jmp 3b",
+            ".popsection",
+            ".pushsection __ex_table, \"a\"",
+            ".balign 8",
+            ".quad 2b, 4b",
+            ".popsection",
+            address = in(reg) address,
+            old = inout(reg) old,
+            result = inout(reg) result,
+            fault = const -14,
+            options(nostack),
+        );
+    }
+    (result, old)
+}
+
+unsafe fn f03_futex_or_v3(address: *mut CInt, argument: CInt) -> (CInt, CInt) {
+    // The internal scratch EAX starts initialized so a fault at the first load
+    // cannot create an invalid Rust value. Its value is NEVER published on error.
+    let mut old: CInt = 0;
+    let mut result: CInt = 0;
+    // SAFETY: Original reload/CAS retry sequence, two fault sites and same fixup.
+    // The unused temporary output is discarded, including first-load fault paths.
+    unsafe {
+        core::arch::asm!(
+            "2: mov eax, dword ptr [{address}]",
+            "mov {temporary:e}, eax",
+            "or {temporary:e}, {argument:e}",
+            "3: lock cmpxchg dword ptr [{address}], {temporary:e}",
+            "jnz 2b",
+            "4:",
+            ".pushsection .fixup, \"ax\"",
+            "5: mov {result:e}, {fault}",
+            "jmp 4b",
+            ".popsection",
+            ".pushsection __ex_table, \"a\"",
+            ".balign 8",
+            ".quad 2b, 5b",
+            ".quad 3b, 5b",
+            ".popsection",
+            address = in(reg) address,
+            argument = in(reg) argument,
+            temporary = out(reg) _,
+            result = inout(reg) result,
+            fault = const -14,
+            inout("eax") old,
+            options(nostack),
+        );
+    }
+    (result, old)
+}
+
+unsafe fn f03_futex_andn_v3(address: *mut CInt, argument: CInt) -> (CInt, CInt) {
+    // The internal scratch EAX starts initialized so a fault at the first load
+    // cannot create an invalid Rust value. Its value is NEVER published on error.
+    let mut old: CInt = 0;
+    let mut result: CInt = 0;
+    // SAFETY: Original reload/CAS retry sequence, two fault sites and same fixup.
+    // The unused temporary output is discarded, including first-load fault paths.
+    unsafe {
+        core::arch::asm!(
+            "2: mov eax, dword ptr [{address}]",
+            "mov {temporary:e}, eax",
+            "and {temporary:e}, {argument:e}",
+            "3: lock cmpxchg dword ptr [{address}], {temporary:e}",
+            "jnz 2b",
+            "4:",
+            ".pushsection .fixup, \"ax\"",
+            "5: mov {result:e}, {fault}",
+            "jmp 4b",
+            ".popsection",
+            ".pushsection __ex_table, \"a\"",
+            ".balign 8",
+            ".quad 2b, 5b",
+            ".quad 3b, 5b",
+            ".popsection",
+            address = in(reg) address,
+            argument = in(reg) argument,
+            temporary = out(reg) _,
+            result = inout(reg) result,
+            fault = const -14,
+            inout("eax") old,
+            options(nostack),
+        );
+    }
+    (result, old)
+}
+
+unsafe fn f03_futex_xor_v3(address: *mut CInt, argument: CInt) -> (CInt, CInt) {
+    // The internal scratch EAX starts initialized so a fault at the first load
+    // cannot create an invalid Rust value. Its value is NEVER published on error.
+    let mut old: CInt = 0;
+    let mut result: CInt = 0;
+    // SAFETY: Original reload/CAS retry sequence, two fault sites and same fixup.
+    // The unused temporary output is discarded, including first-load fault paths.
+    unsafe {
+        core::arch::asm!(
+            "2: mov eax, dword ptr [{address}]",
+            "mov {temporary:e}, eax",
+            "xor {temporary:e}, {argument:e}",
+            "3: lock cmpxchg dword ptr [{address}], {temporary:e}",
+            "jnz 2b",
+            "4:",
+            ".pushsection .fixup, \"ax\"",
+            "5: mov {result:e}, {fault}",
+            "jmp 4b",
+            ".popsection",
+            ".pushsection __ex_table, \"a\"",
+            ".balign 8",
+            ".quad 2b, 5b",
+            ".quad 3b, 5b",
+            ".popsection",
+            address = in(reg) address,
+            argument = in(reg) argument,
+            temporary = out(reg) _,
+            result = inout(reg) result,
+            fault = const -14,
+            inout("eax") old,
+            options(nostack),
+        );
+    }
+    (result, old)
+}
+
+/// Execute one original primitive and publish oldval only after success.
+///
+/// # Safety
+/// uaddr retains the original inatomic word/fault-table contract. oldval names
+/// writable CInt storage on success. argument is already complemented for ANDN
+/// by the existing Rust futex dispatcher; this primitive must not invert it again.
+#[no_mangle]
+pub unsafe extern "C" fn futex_atomic_op_inuser_bridge(
+    op: CInt,
+    uaddr: *mut CInt,
+    argument: CInt,
+    oldval: *mut CInt,
+) -> CInt {
+    // SAFETY: Existing Rust dispatcher decodes the same five primitives. Keep
+    // unknown-op -ENOSYS without touching user memory or the oldval destination.
+    let (result, old) = match op {
+        0 => unsafe { f03_futex_exchange_v3(uaddr, argument) },
+        1 => unsafe { f03_futex_add_v3(uaddr, argument) },
+        2 => unsafe { f03_futex_or_v3(uaddr, argument) },
+        3 => unsafe { f03_futex_andn_v3(uaddr, argument) },
+        4 => unsafe { f03_futex_xor_v3(uaddr, argument) },
+        _ => return -38,
+    };
+    if result == 0 {
+        // SAFETY: Exactly the original success-only publication; no output on fault.
+        unsafe { oldval.write(old) };
+    }
+    result
+}
+
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// F06 private, complete public SMP migration callback. No shared policy writes.
+// Caller retains request/process/VM/arrays until every synchronous SMP call ends.
+// Per-index writes, master allocation, three atomic phase barriers and temporary
+// page-table borrowing match the original callback. No new rollback or validation.
+const _: () = {
+    assert!(size_of::<core::sync::atomic::AtomicI32>() == size_of::<CInt>());
+    assert!(align_of::<core::sync::atomic::AtomicI32>() == align_of::<CInt>());
+};
+
+unsafe extern "C" {
+    #[link_name = "ihk_mc_pt_lookup_pte"]
+    fn f06_move_pages_lookup_pte(
+        pt: *mut c_void, virt: *mut c_void, pgshift: CInt,
+        phys: *mut *mut c_void, pgsize: *mut SizeT, p2align: *mut CInt,
+    ) -> *mut CULong;
+}
+
+#[used]
+#[link_section = "__verbose"]
+static mut F06_MOVE_PHASE1_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+    file: concat!(file!(), "\0").as_ptr().cast(), func: b"move_pages_smp_handler\0".as_ptr().cast(),
+    fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,
+};
+#[used]
+#[link_section = "__verbose"]
+static mut F06_MOVE_PHASE2_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+    file: concat!(file!(), "\0").as_ptr().cast(), func: b"move_pages_smp_handler\0".as_ptr().cast(),
+    fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,
+};
+#[used]
+#[link_section = "__verbose"]
+static mut F06_MOVE_PHASE3_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+    file: concat!(file!(), "\0").as_ptr().cast(), func: b"move_pages_smp_handler\0".as_ptr().cast(),
+    fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,
+};
+#[used]
+#[link_section = "__verbose"]
+static mut F06_MOVE_LOOKUP_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+    file: concat!(file!(), "\0").as_ptr().cast(), func: b"move_pages_smp_handler\0".as_ptr().cast(),
+    fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,
+};
+#[used]
+#[link_section = "__verbose"]
+static mut F06_MOVE_ALLOC_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+    file: concat!(file!(), "\0").as_ptr().cast(), func: b"move_pages_smp_handler\0".as_ptr().cast(),
+    fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,
+};
+#[used]
+#[link_section = "__verbose"]
+static mut F06_MOVE_COPY_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+    file: concat!(file!(), "\0").as_ptr().cast(), func: b"move_pages_smp_handler\0".as_ptr().cast(),
+    fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,
+};
+
+// Atomic views have exactly the existing repr(C) int storage. This avoids Rust
+// data races for the original shared ready/result fields. x86 release/acquire
+// ready uses ordinary MOV; phase_done retains locked SeqCst increment/barrier.
+unsafe fn f06_move_ready(req: *mut MovePagesSmpReq) -> *const core::sync::atomic::AtomicI32 {
+    addr_of!((*req).nodes_ready).cast::<core::sync::atomic::AtomicI32>()
+}
+unsafe fn f06_move_ret(req: *mut MovePagesSmpReq) -> *const core::sync::atomic::AtomicI32 {
+    addr_of!((*req).phase_ret).cast::<core::sync::atomic::AtomicI32>()
+}
+unsafe fn f06_move_barrier(req: *mut MovePagesSmpReq, phase: CInt, nr_cpus: CInt) {
+    let done = core::ptr::addr_of_mut!((*req).phase_done).cast::<crate::atomic_helpers::IhkAtomic>();
+    crate::atomic_helpers::ihk_atomic_inc(done);
+    while crate::atomic_helpers::ihk_atomic_read(done) < phase.wrapping_mul(nr_cpus) {
+        core::hint::spin_loop();
+    }
+}
+unsafe fn f06_move_phase_debug(desc: *const crate::debug::Ddebug, phase: CInt) {
+    if read_volatile(addr_of!((*desc).line_flags)) >> 24 != 0 {
+        kprintf(b"%s: phase %d done\n\0".as_ptr().cast(),
+            b"move_pages_smp_handler\0".as_ptr().cast::<i8>(), phase);
+    }
+}
+unsafe fn f06_move_zero_pte_status(req: *mut MovePagesSmpReq, count: CInt) {
+    crate::string::__inline_memset((*req).ptep.cast(), 0, (count as SizeT).wrapping_mul(size_of::<CULong>()));
+    crate::string::__inline_memset((*req).status.cast(), 0, (count as SizeT).wrapping_mul(size_of::<CInt>()));
+}
+unsafe fn f06_move_zero_pages_phys(req: *mut MovePagesSmpReq, count: CInt) {
+    crate::string::__inline_memset((*req).nr_pages.cast(), 0, (count as SizeT).wrapping_mul(size_of::<CInt>()));
+    crate::string::__inline_memset((*req).dst_phys.cast(), 0, (count as SizeT).wrapping_mul(size_of::<CULong>()));
+}
+unsafe fn f06_move_copy_addrs(req: *mut MovePagesSmpReq, offset: CInt, count: CInt) {
+    crate::string::memcpy((*req).virt_addr.offset(offset as isize).cast(),
+        (*req).user_virt_addr.offset(offset as isize).cast(),
+        (count as SizeT).wrapping_mul(size_of::<*mut c_void>()));
+}
+unsafe fn f06_move_copy_nodes(req: *mut MovePagesSmpReq, count: CInt) {
+    if !(*req).user_nodes.is_null() {
+        crate::string::memcpy((*req).nodes.cast(), (*req).user_nodes.cast(),
+            (count as SizeT).wrapping_mul(size_of::<CInt>()));
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn move_pages_smp_handler(cpu_index: CInt, nr_cpus: CInt, arg: *mut c_void) -> CInt {
+    // Same public calling contract as C: a live fully prepared request and
+    // positive nr_cpus, with this CPU in [0,nr_cpus), and count representable as int.
+    let req = arg.cast::<MovePagesSmpReq>();
+    let proc = (*req).proc.cast::<Process>();
+    let vm = (*proc).vm;
+    let count = (*req).count as CInt;
+    let mut phase: CInt = 1;
+    let first = (count / nr_cpus).wrapping_mul(cpu_index);
+    let last = if cpu_index == nr_cpus - 1 { count } else { first.wrapping_add(count / nr_cpus) };
+    let cpu = crate::cls::get_this_cpu_local_var();
+    let current = (*cpu).current;
+    let mut save_pt = if current == core::ptr::addr_of_mut!((*cpu).idle) {
+        crate::x86_memory_helpers::get_init_page_table()
+    } else {
+        (*(*(*current).vm).address_space).page_table
+    };
+    let target_pt = (*(*vm).address_space).page_table;
+    if save_pt != target_pt { crate::x86_memory_helpers::ihk_mc_load_page_table(target_pt); }
+    else { save_pt = null_mut(); }
+
+    if nr_cpus == 1 {
+        if cpu_index == 0 {
+            f06_move_copy_addrs(req, 0, count); f06_move_copy_nodes(req, count);
+            f06_move_zero_pte_status(req, count); f06_move_zero_pages_phys(req, count);
+            (*f06_move_ready(req)).store(1, Ordering::Release);
+        }
+    } else if nr_cpus < 4 {
+        match cpu_index {
+            0 => { f06_move_copy_addrs(req, 0, count); f06_move_copy_nodes(req, count); (*f06_move_ready(req)).store(1, Ordering::Release); }
+            1 => { f06_move_zero_pte_status(req, count); f06_move_zero_pages_phys(req, count); }
+            _ => {}
+        }
+    } else if nr_cpus < 7 {
+        match cpu_index {
+            0 => f06_move_copy_addrs(req, 0, count),
+            1 => { f06_move_copy_nodes(req, count); (*f06_move_ready(req)).store(1, Ordering::Release); }
+            2 => f06_move_zero_pte_status(req, count),
+            3 => f06_move_zero_pages_phys(req, count),
+            _ => {}
+        }
+    } else {
+        match cpu_index {
+            // Preserve the original two count/2 copies, including odd-count tail.
+            0 => f06_move_copy_addrs(req, 0, count / 2),
+            1 => f06_move_copy_addrs(req, count / 2, count / 2),
+            2 => { f06_move_copy_nodes(req, count); (*f06_move_ready(req)).store(1, Ordering::Release); }
+            3 => { crate::string::__inline_memset((*req).ptep.cast(), 0, (count as SizeT).wrapping_mul(size_of::<CULong>())); }
+            4 => { crate::string::__inline_memset((*req).status.cast(), 0, (count as SizeT).wrapping_mul(size_of::<CInt>())); }
+            5 => { crate::string::__inline_memset((*req).nr_pages.cast(), 0, (count as SizeT).wrapping_mul(size_of::<CInt>())); }
+            6 => { crate::string::__inline_memset((*req).dst_phys.cast(), 0, (count as SizeT).wrapping_mul(size_of::<CULong>())); }
+            _ => {}
+        }
+    }
+    while (*f06_move_ready(req)).load(Ordering::Acquire) == 0 { core::hint::spin_loop(); }
+
+    if !(*req).user_nodes.is_null() {
+        let mut i = first;
+        while i < last {
+            let node = *(*req).nodes.offset(i as isize);
+            if node < 0 || node >= ihk_mc_get_nr_numa_nodes()
+                || crate::bitops::test_bit(node, addr_of!((*vm).numa_mask).cast()) == 0 {
+                (*f06_move_ret(req)).store(-EINVAL, Ordering::Relaxed); break;
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    f06_move_barrier(req, phase, nr_cpus);
+    if (*f06_move_ret(req)).load(Ordering::Relaxed) == 0 {
+        f06_move_phase_debug(addr_of!(F06_MOVE_PHASE1_DEBUG), phase); phase += 1;
+        let mut i = first;
+        while i < last {
+            let mut phys: *mut c_void = null_mut();
+            let mut pgsize: SizeT = 0;
+            let mut p2align: CInt = 0;
+            let ptep = f06_move_pages_lookup_pte(target_pt, *(*req).virt_addr.offset(i as isize),
+                0, &mut phys, &mut pgsize, &mut p2align);
+            *(*req).ptep.offset(i as isize) = ptep.cast();
+            if ptep.is_null() || crate::pte_helpers::pte_is_present(ptep) == 0 {
+                *(*req).status.offset(i as isize) = -ENOENT;
+                *(*req).ptep.offset(i as isize) = null_mut(); i += 1; continue;
+            }
+            if crate::pte_helpers::pte_is_fileoff(ptep, PAGE_SIZE as SizeT) != 0 {
+                *(*req).status.offset(i as isize) = -EINVAL;
+                *(*req).ptep.offset(i as isize) = null_mut(); i += 1; continue;
+            }
+            if read_volatile(addr_of!(F06_MOVE_LOOKUP_DEBUG.line_flags)) >> 24 != 0 {
+                kprintf(b"%s: virt 0x%lx:%lu requested to be moved to node %d\n\0".as_ptr().cast(),
+                    b"move_pages_smp_handler\0".as_ptr().cast::<i8>(),
+                    *(*req).virt_addr.offset(i as isize) as CULong, pgsize,
+                    *(*req).nodes.offset(i as isize));
+            }
+            if pgsize > PAGE_SIZE as SizeT {
+                let nr_sub_pages = (pgsize / PAGE_SIZE as SizeT) as CInt;
+                if i.wrapping_add(nr_sub_pages) > count {
+                    kprintf(b"%s: ERROR: page at index %d exceeds the region\n\0".as_ptr().cast(),
+                        b"move_pages_smp_handler\0".as_ptr().cast::<i8>(), i);
+                    *(*req).status.offset(i as isize) = -EINVAL; break;
+                }
+                let mut j = 0;
+                let mut inconsistent = false;
+                while j < nr_sub_pages {
+                    if *(*req).virt_addr.offset(i.wrapping_add(j) as isize)
+                        != (*(*req).virt_addr.offset(i as isize)).wrapping_byte_add((j as CULong).wrapping_mul(PAGE_SIZE) as usize)
+                        || *(*req).nodes.offset(i as isize) != *(*req).nodes.offset(i.wrapping_add(j) as isize) {
+                        kprintf(b"%s: ERROR: virt address or node at index %d is inconsistent\n\0".as_ptr().cast(),
+                            b"move_pages_smp_handler\0".as_ptr().cast::<i8>(), i.wrapping_add(j));
+                        (*f06_move_ret(req)).store(-EINVAL, Ordering::Relaxed); inconsistent = true; break;
+                    }
+                    j += 1;
+                }
+                if inconsistent { break; }
+                *(*req).nr_pages.offset(i as isize) = nr_sub_pages;
+                i = i.wrapping_add(nr_sub_pages.wrapping_sub(1));
+            } else { *(*req).nr_pages.offset(i as isize) = 1; }
+            i = i.wrapping_add(1);
+        }
+        f06_move_barrier(req, phase, nr_cpus);
+        if (*f06_move_ret(req)).load(Ordering::Relaxed) == 0 {
+            f06_move_phase_debug(addr_of!(F06_MOVE_PHASE2_DEBUG), phase); phase += 1;
+            if (*req).user_nodes.is_null() {
+                let mut i = first;
+                while i < last {
+                    if *(*req).status.offset(i as isize) >= 0 {
+                        *(*req).status.offset(i as isize) = crate::mem_helpers::phys_to_nid(
+                            crate::pte_helpers::pte_get_phys((*(*req).ptep.offset(i as isize)).cast()));
+                    }
+                    i += 1;
+                }
+                (*f06_move_ret(req)).store(0, Ordering::Relaxed);
+            } else {
+                if cpu_index == 0 {
+                    let mut i = 0;
+                    while i < count {
+                        let nr = *(*req).nr_pages.offset(i as isize);
+                        if (*(*req).ptep.offset(i as isize)).is_null()
+                            || *(*req).status.offset(i as isize) < 0 || nr == 0 { i += 1; continue; }
+                        let pgalign = if nr > 1 && (nr as CULong).wrapping_mul(PAGE_SIZE) == (1 << 21) { 21 - 12 } else { 0 };
+                        let dst = crate::mem_helpers::_ihk_mc_alloc_aligned_pages_node(nr, pgalign, 0x001000,
+                            *(*req).nodes.offset(i as isize), 0, !0, concat!(file!(), "\0").as_ptr().cast_mut().cast(), line!() as CInt);
+                        if dst.is_null() { *(*req).status.offset(i as isize) = -ENOMEM; i += 1; continue; }
+                        let mut j = i;
+                        while j < i.wrapping_add(nr) {
+                            *(*req).status.offset(j as isize) = *(*req).nodes.offset(i as isize); j += 1;
+                        }
+                        *(*req).dst_phys.offset(i as isize) = crate::x86_memory_helpers::virt_to_phys(dst);
+                        if read_volatile(addr_of!(F06_MOVE_ALLOC_DEBUG.line_flags)) >> 24 != 0 {
+                            kprintf(b"%s: virt 0x%lx:%lu to node %d, pgalign: %d, allocated phys: 0x%lx\n\0".as_ptr().cast(),
+                                b"move_pages_smp_handler\0".as_ptr().cast::<i8>(),
+                                *(*req).virt_addr.offset(i as isize) as CULong, (nr as CULong).wrapping_mul(PAGE_SIZE),
+                                *(*req).nodes.offset(i as isize), pgalign, *(*req).dst_phys.offset(i as isize));
+                        }
+                        i += 1;
+                    }
+                }
+                f06_move_barrier(req, phase, nr_cpus);
+                if (*f06_move_ret(req)).load(Ordering::Relaxed) == 0 {
+                    f06_move_phase_debug(addr_of!(F06_MOVE_PHASE3_DEBUG), phase);
+                    let mut i = first;
+                    while i < last {
+                        let dest = *(*req).dst_phys.offset(i as isize);
+                        if dest != 0 {
+                            let ptep = (*(*req).ptep.offset(i as isize)).cast::<CULong>();
+                            let nr = *(*req).nr_pages.offset(i as isize);
+                            crate::string::__inline_memcpy(crate::x86_memory_helpers::phys_to_virt(dest),
+                                crate::x86_memory_helpers::phys_to_virt(crate::pte_helpers::pte_get_phys(ptep)),
+                                (nr as CULong).wrapping_mul(PAGE_SIZE) as SizeT);
+                            crate::mem_helpers::_ihk_mc_free_pages(
+                                crate::x86_memory_helpers::phys_to_virt(crate::pte_helpers::pte_get_phys(ptep)), nr, 0,
+                                concat!(file!(), "\0").as_ptr().cast_mut().cast(), line!() as CInt);
+                            crate::pte_helpers::pte_update_phys(ptep, dest);
+                            if read_volatile(addr_of!(F06_MOVE_COPY_DEBUG.line_flags)) >> 24 != 0 {
+                                kprintf(b"%s: virt 0x%lx:%lu copied and remapped to phys: 0x%lu\n\0".as_ptr().cast(),
+                                    b"move_pages_smp_handler\0".as_ptr().cast::<i8>(),
+                                    *(*req).virt_addr.offset(i as isize) as CULong, (nr as CULong).wrapping_mul(PAGE_SIZE), dest);
+                            }
+                        }
+                        i += 1;
+                    }
+                    let current_now = (*crate::cls::get_this_cpu_local_var()).current;
+                    if (*current_now).proc == proc {
+                        let mut i: CInt = 0;
+                        while (i as CULong) < (*req).count {
+                            if *(*req).dst_phys.offset(i as isize) != 0 {
+                                crate::x86_memory_helpers::flush_tlb_single(*(*req).virt_addr.offset(i as isize) as CULong);
+                            }
+                            i = i.wrapping_add(1);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if !save_pt.is_null() { crate::x86_memory_helpers::ihk_mc_load_page_table(save_pt); }
+    (*f06_move_ret(req)).load(Ordering::Relaxed)
+}

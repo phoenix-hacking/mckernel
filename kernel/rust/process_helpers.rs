@@ -16094,3 +16094,923 @@ mod remaining_free_range_entry {
 }
 
 use remaining_free_range_entry::process_memory_range_free_bridge;
+
+mod remaining_process_idle_context {
+    use super::*;
+    unsafe extern "C" {
+        static process_idle_offsets: crate::sched_helpers::SchedIdleOffsets;
+        static process_idle_values: crate::sched_helpers::SchedIdleValues;
+        static process_idle_callbacks: crate::sched_helpers::SchedIdleCallbacks;
+        fn ihk_mc_init_context(context: *mut crate::abi::X86KernelContext,
+            stack: *mut c_void, entry: Option<unsafe extern "C" fn()>);
+    }
+
+    /// Enter the existing Rust idle loop with the same captured CPU/monitor.
+    /// # Safety
+    /// This runs in the original per-CPU idle context for its entire lifetime.
+    /// The static geometry/values/callbacks and CPU/monitor storage remain live;
+    /// the existing loop retains its original IRQ/runqueue and halt obligations.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_idle_entry() {
+        unsafe {
+            let local = get_this_cpu_local_var();
+            let monitor = (*local).monitor;
+            crate::sched_helpers::sched_idle_loop_body_result(local as usize,
+                monitor as usize, core::ptr::addr_of!(process_idle_offsets),
+                core::ptr::addr_of!(process_idle_values),
+                core::ptr::addr_of!(process_idle_callbacks));
+        }
+    }
+
+    /// Prepare the same Thread.ctx with NULL stack and the idle entry callback.
+    /// # Safety
+    /// thread_arg is the original live writable Thread under creator exclusion.
+    /// No reference crosses the context provider; it retains all stack/context
+    /// initialization policy. This adapter neither switches contexts nor frees.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_sched_init_context_bridge(thread_arg: *mut c_void) {
+        let thread = thread_arg.cast::<Thread>();
+        unsafe { ihk_mc_init_context(core::ptr::addr_of_mut!((*thread).ctx),
+            core::ptr::null_mut(), Some(process_idle_entry)); }
+    }
+}
+
+mod remaining_process_timer_adapters {
+    use super::*;
+    /// Same IRQ-save spin-lock boundary, without an extra lock or IRQ operation.
+    /// # Safety
+    /// lock_addr is the original live aligned writable ticket lock, in the
+    /// original IRQ context with its existing pairing/ownership contract.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_timer_spin_lock_bridge(lock_addr: CULong) -> CULong {
+        unsafe { super::process_spin_lock_bridge(lock_addr) }
+    }
+    /// Preserve the exact saved IRQ state of the paired original lock.
+    /// # Safety
+    /// The original caller holds the same lock and provides its saved state.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_timer_spin_unlock_bridge(lock_addr: CULong, irqstate: CULong) {
+        unsafe { super::process_spin_unlock_bridge(lock_addr, irqstate); }
+    }
+    /// Forward the original unsigned32 clocks to the existing timer code.
+    /// # Safety
+    /// The existing LAPIC/CPU privilege and MMIO mapping contract applies.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_timer_lapic_enable_bridge(clocks: u32) {
+        unsafe { crate::x86_cpu_helpers::lapic_timer_enable(clocks); }
+    }
+    /// Invoke the original disable once without changing timer policy.
+    /// # Safety
+    /// The existing LAPIC/CPU privilege and MMIO mapping contract applies.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_timer_lapic_disable_bridge() {
+        unsafe { crate::x86_cpu_helpers::lapic_timer_disable(); }
+    }
+}
+
+mod remaining_process_page_table_shm_adapters {
+    use core::ffi::c_void;
+
+    use crate::abi::{CInt, CLong, CULong, Memobj, ProcessVm, VmRange};
+
+    /// Preserve the existing architecture attribute conversion and PTE input.
+    /// # Safety
+    /// The original page-table owner keeps ptep live and aligned under the
+    /// original VM/page-table lock and architecture provider's read contract.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_update_page_table_attr_bridge(
+        flag: CULong, fault: CULong, ptep: *mut c_void,
+    ) -> CULong {
+        unsafe { crate::x86_memory_helpers::arch_vrflag_to_ptattr(flag, fault, ptep.cast()) }
+    }
+
+    /// Reuse the complete set-range implementation with unchanged integer bits.
+    /// # Safety
+    /// The original caller owns the page-table/VM locks and keeps vm, range and
+    /// all mapping inputs live throughout the synchronous traversal. No pointer
+    /// or borrowed Rust reference is retained by this forwarding adapter.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_update_page_table_set_range_bridge(
+        page_table: *mut c_void, vm: *mut ProcessVm, start: CULong, end: CULong,
+        phys: CULong, attr: CULong, pgshift: CInt, range: *mut VmRange, flags: CInt,
+    ) -> CInt {
+        unsafe {
+            crate::x86_memory_helpers::ihk_mc_pt_set_range(
+                page_table, vm.cast(), start as *mut c_void, end as *mut c_void,
+                phys, attr, pgshift, range.cast(), flags,
+            )
+        }
+    }
+
+    /// Emit the original format and signed error without changing log policy.
+    /// # Safety
+    /// The original kernel logging context and kprintf synchronization apply.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_update_page_table_log_bridge(error: CInt) {
+        // SAFETY: The format is static NUL-terminated storage; its sole vararg is int.
+        unsafe {
+            let _ = super::kprintf(
+                b"update_process_page_table:ihk_mc_pt_set_range failed. %d\n\0".as_ptr().cast(),
+                error,
+            );
+        }
+    }
+
+    /// Dispatch the same optional memobj lookup operation and out parameters.
+    /// # Safety
+    /// The original owner keeps obj and its ops table live and synchronized.
+    /// Both output pointers obey the original callback's alignment/writability
+    /// contract; no reference is added and no callback or output pointer escapes.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_split_shm_lookup_page_bridge(
+        obj: *mut Memobj, off: CLong, p2align: CInt,
+        physp: *mut CULong, pflag: *mut CULong,
+    ) -> CInt {
+        unsafe { crate::object_helpers::memobj_lookup_page(obj, off, p2align, physp, pflag) }
+    }
+
+    /// Return the original borrowed page pointer without acquiring a reference.
+    /// # Safety
+    /// The original caller keeps hash storage and returned page storage live
+    /// under the existing lookup-lock and mapping-ownership contract.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_split_shm_phys_to_page_bridge(phys: CULong) -> *mut c_void {
+        unsafe { crate::mem_helpers::phys_to_page(phys).cast() }
+    }
+
+    /// Dispatch the same optional update operation with unchanged raw pointers.
+    /// # Safety
+    /// obj and its ops table remain live under the original synchronization;
+    /// page_table, page and vaddr satisfy that callback's synchronous lifetime
+    /// and mapping contract. This adapter creates no reference or ownership.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_split_shm_update_page_bridge(
+        obj: *mut Memobj, page_table: *mut c_void, page: *mut c_void, vaddr: *mut c_void,
+    ) -> CInt {
+        unsafe { crate::object_helpers::memobj_update_page(obj, page_table, page, vaddr) }
+    }
+}
+
+mod remaining_process_split_range_providers {
+    use core::ffi::c_void;
+
+    use crate::abi::{CInt, CULong, ProcessVm, VmRange};
+
+    unsafe extern "C" {
+        static process_tracked_allocator_source_file: *const i8;
+        static process_split_range_alloc_source_line: CInt;
+    }
+
+    /// Preserve the original allocator's int narrowing and tracked call site.
+    /// # Safety
+    /// The original caller obeys the allocator flags/context contract and owns
+    /// initialization, publication and eventual release of a non-null result.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_split_range_alloc_bridge(
+        size: CULong, flags: CULong,
+    ) -> *mut VmRange {
+        unsafe {
+            crate::mem_helpers::kmalloc_tracked(
+                size as CInt, flags, process_tracked_allocator_source_file.cast_mut(),
+                process_split_range_alloc_source_line,
+            ).cast()
+        }
+    }
+
+    /// Preserve allocation-error reporting without retaining caller storage.
+    /// # Safety
+    /// range is live and readable under the original VM range exclusion;
+    /// vm and splitp are only formatted as raw pointers in the original context.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_split_range_alloc_log_bridge(
+        vm: *mut ProcessVm, range: *mut VmRange, addr: CULong, splitp: *mut c_void,
+    ) {
+        unsafe {
+            let _ = super::kprintf(
+                b"split_process_memory_range(%p,%lx-%lx,%lx,%p):kmalloc failed\n\0".as_ptr().cast(),
+                vm, (*range).start, (*range).end, addr, splitp,
+            );
+        }
+    }
+
+    /// Preserve the public insertion-error format and signed status.
+    /// # Safety
+    /// The original kernel logging context and synchronization apply.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_split_range_publish_log_bridge(error: CInt) {
+        unsafe {
+            let _ = super::kprintf(
+                b"%s: ERROR: could not insert range: %d\n\0".as_ptr().cast(),
+                b"split_process_memory_range\0".as_ptr().cast::<i8>(), error,
+            );
+        }
+    }
+
+    /// Reuse the complete existing page-table split with the original pointers.
+    /// # Safety
+    /// The original caller holds VM/page-table exclusion and keeps vm/range
+    /// and their backing memobj/mapping live throughout the synchronous split.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_split_range_pt_split_bridge(
+        page_table: *mut c_void, vm: *mut ProcessVm, range: *mut VmRange, addr: *mut c_void,
+    ) -> CInt {
+        unsafe { crate::x86_memory_helpers::ihk_mc_pt_split(page_table, vm, range, addr) }
+    }
+
+    /// Preserve page-table split-error reporting and int vararg promotion.
+    /// # Safety
+    /// The original kernel logging context and synchronization apply.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_split_range_pt_log_bridge(error: CInt) {
+        unsafe {
+            let _ = super::kprintf(
+                b"split_process_memory_range:ihk_mc_pt_split failed. %d\n\0".as_ptr().cast(), error,
+            );
+        }
+    }
+
+    /// Preserve both shared-memory errors and the silent unknown-event path.
+    /// # Safety
+    /// The original kernel logging context and synchronization apply.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_split_shm_log_bridge(event: CInt, error: CInt) {
+        unsafe {
+            let format: &[u8] = match event {
+                super::PROCESS_SPLIT_SHM_LOG_LOOKUP_FAILED =>
+                    b"%s: memobj_lookup_page failed. %d\n\0",
+                super::PROCESS_SPLIT_SHM_LOG_UPDATE_FAILED =>
+                    b"%s: memobj_update_page failed. %d\n\0",
+                _ => return,
+            };
+            let _ = super::kprintf(format.as_ptr().cast(),
+                b"split_process_memory_range\0".as_ptr().cast::<i8>(), error);
+        }
+    }
+
+    /// Publish through the existing tree implementation without a new policy.
+    /// # Safety
+    /// The original caller holds the VM range writer exclusion and owns the
+    /// live range's insertion and lifetime; the backend retains duplicate rules.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_split_range_insert_bridge(
+        vm: *mut ProcessVm, range: *mut VmRange,
+    ) -> CInt {
+        unsafe { super::vm_range_insert(vm, range) }
+    }
+}
+
+mod remaining_process_schedule_entry {
+    use core::ffi::c_void;
+    use core::mem::MaybeUninit;
+    use core::sync::atomic::{AtomicI32, AtomicU32, Ordering};
+
+    use crate::abi::{CInt, CULong, CpuLocalVar, IhkSpinlock, Thread, X86UserContext};
+    use crate::sched_helpers::{SchedExitDebug, SchedRunqueueOffsets, SchedScheduleResult};
+
+    unsafe extern "C" {
+        static process_sched_runqueue_offsets: SchedRunqueueOffsets;
+        static mut process_schedule_switch_debug: crate::debug::Ddebug;
+        static process_schedule_exit_debug_input: *const SchedExitDebug;
+        fn restore_fp_regs(thread: *mut Thread);
+        fn arch_switch_context(prev: *mut Thread, next: *mut Thread) -> *mut Thread;
+        fn ihk_mc_load_page_table(table: *mut c_void);
+        fn arch_flush_icache_all();
+        fn ihk_mc_syscall_pc(context: *const X86UserContext) -> CULong;
+        fn ihk_mc_syscall_sp(context: *const X86UserContext) -> CULong;
+        fn process_sched_runq_log_bridge(
+            event: CInt, arg0: usize, arg1: usize, arg2: CInt, arg3: CInt,
+        );
+    }
+
+    // The current real x86_64 ABI uses equal-width usize and unsigned long.
+    // Keep distinct Rust callback types explicit instead of transmuting them.
+    const _: [(); core::mem::size_of::<usize>()] = [(); core::mem::size_of::<CULong>()];
+
+    unsafe extern "C" fn prepare_noirq_lock(addr: usize) {
+        // SAFETY: The original preparation owns this live aligned runqueue lock.
+        unsafe { super::process_sched_noirq_lock_bridge(addr as CULong); }
+    }
+
+    unsafe extern "C" fn prepare_noirq_unlock(addr: usize) {
+        // SAFETY: Preparation holds the same lock and retains its pairing scope.
+        unsafe { super::process_sched_noirq_unlock_bridge(addr as CULong); }
+    }
+
+    unsafe extern "C" fn prepare_has_signal(addr: usize) -> CInt {
+        // SAFETY: Preparation keeps the original Thread/signal state live.
+        unsafe { super::process_sched_has_signal_bridge(addr as CULong) }
+    }
+
+    // Per-CPU runqueue locks do not serialize this global diagnostic budget.
+    // Reserve a slot before logging. Relaxed ordering coordinates only the
+    // budget; this counter never publishes thread, VM or context state.
+    static MCEXEC_V10_SCHEDULER_LOGS: AtomicU32 = AtomicU32::new(0);
+    const _: [(); 4] = [(); core::mem::size_of::<AtomicU32>()];
+    const _: [(); 4] = [(); core::mem::align_of::<AtomicU32>()];
+
+    fn claim_scheduler_log_slot() -> bool {
+        let mut observed = MCEXEC_V10_SCHEDULER_LOGS.load(Ordering::Relaxed);
+        while observed < 32 {
+            match MCEXEC_V10_SCHEDULER_LOGS.compare_exchange_weak(
+                observed, observed + 1, Ordering::Relaxed, Ordering::Relaxed,
+            ) {
+                Ok(_) => return true,
+                Err(actual) => observed = actual,
+            }
+        }
+        false
+    }
+
+    /// Complete the original scheduler orchestration around the existing Rust
+    /// admission, preparation, debug-register handoff and exit cleanup.
+    ///
+    /// # Safety
+    /// Enter only in the original scheduler context. IRQ admission pins the
+    /// live FP owner before runqueue mutation. Preparation either releases its
+    /// exclusion or returns SWITCH while holding the runqueue lock. prev/next,
+    /// their process/VM/address-space/context storage remain live through the
+    /// architecture switch. That backend may resume on a different CPU; unlock
+    /// and IRQ restoration must use fresh current-CPU pointers, while cleanup
+    /// receives the original CPU pointer and owns last's release. No Rust
+    /// reference spans a callback, context switch or release.
+    #[no_mangle]
+    pub unsafe extern "C" fn schedule() {
+        unsafe {
+            let irqstate = crate::sched_helpers::sched_schedule_fp_admit(super::PS_EXITED);
+            let mut result = MaybeUninit::<SchedScheduleResult>::uninit();
+            let action = crate::sched_helpers::sched_schedule_prepare_body_result(
+                super::get_this_cpu_local_var() as usize,
+                core::ptr::addr_of_mut!((*super::get_this_cpu_local_var()).idle) as usize,
+                AtomicI32::from_ptr(core::ptr::addr_of_mut!(
+                    (*super::get_this_cpu_local_var()).no_preempt.counter
+                )).load(Ordering::SeqCst),
+                1, 2, 1, 2, super::PS_EXITED, 1001, 1, 3,
+                core::ptr::addr_of!(process_sched_runqueue_offsets), result.as_mut_ptr(),
+                Some(super::process_sched_irq_save_bridge),
+                Some(super::process_sched_irq_restore_bridge),
+                Some(prepare_noirq_lock),
+                Some(prepare_noirq_unlock),
+                Some(super::process_sched_set_timer_bridge),
+                Some(super::process_sched_reset_cputime_bridge),
+                Some(prepare_has_signal),
+                Some(process_sched_runq_log_bridge),
+            );
+            if action != 3 {
+                super::cpu_restore_interrupt(irqstate);
+                return;
+            }
+            // Preparation initializes every result field before returning SWITCH.
+            let result = result.assume_init();
+            let old_cpu = result.cpu_addr as *mut CpuLocalVar;
+            (*old_cpu).runq_irqstate = irqstate;
+            let prev = result.prev_thread_addr as *mut Thread;
+            let next = result.next_thread_addr as *mut Thread;
+            let prevpid = result.prevpid;
+            if core::ptr::read_volatile(core::ptr::addr_of!(
+                process_schedule_switch_debug.line_flags
+            )) >> 24 != 0 {
+                let _ = super::kprintf(
+                    b"%s: %d => %d [ctx sws: %lu]\n\0".as_ptr().cast(),
+                    b"schedule\0".as_ptr().cast::<i8>(),
+                    if prev.is_null() { 0 } else { (*prev).tid },
+                    if next.is_null() { 0 } else { (*next).tid },
+                    (*super::get_this_cpu_local_var()).nr_ctx_switches,
+                );
+            }
+            if !next.is_null()
+                && next != core::ptr::addr_of_mut!((*super::get_this_cpu_local_var()).idle)
+                && claim_scheduler_log_slot()
+            {
+                let _ = super::kprintf(
+                    b"mcexec_v10: scheduler switch cpu=%d %d=>%d pid=%d rip=0x%lx sp=0x%lx status=%d runq_len=%d\n\0".as_ptr().cast(),
+                    super::ihk_mc_get_processor_id(),
+                    if prev.is_null() { -1 } else { (*prev).tid }, (*next).tid,
+                    if (*next).proc.is_null() { -1 } else { (*(*next).proc).pid },
+                    if (*next).uctx.is_null() { 0 } else { ihk_mc_syscall_pc((*next).uctx) },
+                    if (*next).uctx.is_null() { 0 } else { ihk_mc_syscall_sp((*next).uctx) },
+                    (*next).status, (*old_cpu).runq_len,
+                );
+            }
+            crate::sched_helpers::sched_schedule_debug_handoff(prev, next);
+            if next != core::ptr::addr_of_mut!((*super::get_this_cpu_local_var()).idle) {
+                restore_fp_regs(next);
+            }
+            if !prev.is_null()
+                && (*(*(*prev).vm).address_space).page_table
+                    != (*(*(*next).vm).address_space).page_table
+            {
+                ihk_mc_load_page_table((*(*(*next).vm).address_space).page_table);
+            }
+            if !prev.is_null() && (*prev).proc != (*next).proc
+                && next != core::ptr::addr_of_mut!((*super::get_this_cpu_local_var()).idle)
+                && (prevpid != (*(*next).proc).pid
+                    || prev != core::ptr::addr_of_mut!((*super::get_this_cpu_local_var()).idle))
+            {
+                arch_flush_icache_all();
+            }
+            let last = arch_switch_context(prev, next);
+            // Reacquire CURRENT after a possibly migrating switch. Do not use
+            // old_cpu for this lock address or its separately captured IRQ state.
+            super::process_sched_noirq_unlock_bridge(core::ptr::addr_of_mut!(
+                (*super::get_this_cpu_local_var()).runq_lock
+            ) as CULong);
+            super::cpu_restore_interrupt((*super::get_this_cpu_local_var()).runq_irqstate);
+            crate::sched_helpers::sched_schedule_exit_cleanup(
+                old_cpu, last, super::PS_EXITED, process_schedule_exit_debug_input,
+            );
+            // The original final old/current comparison has no external effect;
+            // it performs no accesses to last or released thread storage.
+        }
+    }
+}
+
+mod remaining_process_memory_forwarding {
+    use core::ffi::c_void;
+
+    use crate::abi::{CInt, CULong, CpuSet, ProcessVm, SizeT, VmRange};
+
+    type SmpHandler = unsafe extern "C" fn(CInt, CInt, *mut c_void) -> CInt;
+    const _: [(); core::mem::size_of::<SmpHandler>()] =
+        [(); core::mem::size_of::<*mut c_void>()];
+
+    /// Return the existing architecture translation without changing mapping policy.
+    /// # Safety
+    /// phys lies in the original supported physical mapping domain; the caller
+    /// retains the mapping/storage lifetime and dereference obligations.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_memset_smp_phys_to_virt_bridge(phys: CULong) -> *mut c_void {
+        unsafe { crate::x86_memory_helpers::phys_to_virt(phys) }
+    }
+
+    unsafe extern "C" {
+        static process_memset_smp_fast_word_pattern: CInt;
+    }
+
+    /// Fill exactly the original span using its actual C-header-selected provider.
+    /// # Safety
+    /// addr identifies len writable bytes under the original memory ownership
+    /// and exclusion. This creates no reference and touches nothing for len=0.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_memset_smp_memset_bridge(
+        addr: *mut c_void, value: CInt, len: SizeT,
+    ) {
+        unsafe {
+            if process_memset_smp_fast_word_pattern != 0 {
+                let _ = crate::string::__inline_memset(addr, value as CULong, len);
+            } else {
+                let _ = crate::string::memset(addr, value, len);
+            }
+        }
+    }
+
+    /// Preserve the existing reverse architecture translation.
+    /// # Safety
+    /// addr obeys the original supported virtual mapping domain and lifetime.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_memset_smp_virt_to_phys_bridge(addr: *mut c_void) -> CULong {
+        unsafe { crate::x86_memory_helpers::virt_to_phys(addr) }
+    }
+
+    /// Forward the original synchronous SMP request to its existing Rust owner.
+    /// # Safety
+    /// cpu_set is the original live aligned CpuSet or original null input.
+    /// Non-null handler is a genuine current-target C function pointer with the
+    /// SmpHandler signature, as supplied by memset_smp_handler. arg and all
+    /// request storage remain live through the synchronous backend completion;
+    /// this adapter neither retains them nor changes callback/rejection policy.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_memset_smp_call_bridge(
+        cpu_set: *mut c_void, handler: *mut c_void, arg: *mut c_void,
+    ) -> CInt {
+        unsafe {
+            let callback = if handler.is_null() {
+                None
+            } else {
+                // SAFETY: The original C (smp_func_t) cast has this same
+                // caller-provided callable signature and target representation.
+                Some(core::mem::transmute::<*mut c_void, SmpHandler>(handler))
+            };
+            crate::ap::smp_call_func(cpu_set.cast::<CpuSet>(), callback, arg)
+        }
+    }
+
+    /// Use the existing VM tree insertion without a new ownership rule.
+    /// # Safety
+    /// vm/range are live under the original VM range writer exclusion; the
+    /// original caller owns publication and the existing backend's error path.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_add_range_insert_bridge(
+        vm: *mut ProcessVm, range: *mut VmRange,
+    ) -> CInt {
+        unsafe { super::vm_range_insert(vm, range) }
+    }
+
+    /// Preserve page-table update flags and signed error forwarding.
+    /// # Safety
+    /// vm/range and backing address space stay live under original VM/PT
+    /// exclusion throughout the synchronous existing update implementation.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_add_range_update_bridge(
+        vm: *mut ProcessVm, range: *mut VmRange, phys: CULong, attr: CULong,
+    ) -> CInt {
+        unsafe { super::update_process_page_table(vm, range, phys, attr) }
+    }
+
+    /// Retain the original discarded removal status and NULL accounting output.
+    /// # Safety
+    /// The existing owner provides a live VM/process and original range writer
+    /// exclusion. The backend owns removal, storage release and all field use;
+    /// this adapter performs no access to removed ranges after its return.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_add_range_remove_bridge(
+        vm: *mut ProcessVm, start: CULong, end: CULong,
+    ) {
+        unsafe { let _ = super::remove_process_memory_range(vm, start, end, core::ptr::null_mut()); }
+    }
+
+    /// Preserve the existing split result and caller-owned range output.
+    /// # Safety
+    /// vm/range and splitp obey the original range writer/initialization
+    /// contract; splitp is writable when required by the existing core. No
+    /// callback or pointer escapes and no extra reference/allocation is added.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_remove_range_split_bridge(
+        vm: *mut ProcessVm, range: *mut VmRange, addr: CULong, splitp: *mut *mut VmRange,
+    ) -> CInt {
+        unsafe { super::split_process_memory_range(vm, range, addr, splitp) }
+    }
+}
+
+mod remaining_process_range_page_table_providers {
+    use core::ffi::c_void;
+
+    use crate::abi::{CInt, CULong, ProcessVm};
+
+    type VisitPte = unsafe extern "C" fn(
+        *mut c_void, *mut c_void, *mut CULong, *mut c_void, CInt,
+    ) -> CInt;
+    const _: [(); core::mem::size_of::<VisitPte>()] =
+        [(); core::mem::size_of::<*mut c_void>()];
+
+    /// Preserve the existing architecture conversion and original PTE input.
+    /// # Safety
+    /// The original owner keeps ptep live/aligned under its existing VM/PT
+    /// exclusion and architecture conversion provider's read contract.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_change_prot_attr_bridge(
+        flag: CULong, fault: CULong, ptep: *mut c_void,
+    ) -> CULong {
+        unsafe { crate::x86_memory_helpers::arch_vrflag_to_ptattr(flag, fault, ptep.cast()) }
+    }
+
+    /// Reuse the complete page-table attribute change without a new policy.
+    /// # Safety
+    /// page_table and every reached mapping remain live and correctly owned
+    /// under the original VM/PT locks; raw start/end bits keep their old domain.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_change_prot_pt_change_bridge(
+        page_table: *mut c_void, start: CULong, end: CULong,
+        clrattr: CULong, setattr: CULong,
+    ) -> CInt {
+        unsafe {
+            crate::x86_memory_helpers::ihk_mc_pt_change_attr_range(
+                page_table, start as *mut c_void, end as *mut c_void, clrattr, setattr,
+            )
+        }
+    }
+
+    /// Retain the original typed synchronous page-table visitor boundary.
+    /// # Safety
+    /// The original owner holds traversal/mapping exclusion and keeps the
+    /// table and arg storage live through synchronous completion. A non-null
+    /// visit_fn is a genuine current-target C function pointer of VisitPte's
+    /// exact signature; null preserves the existing backend rejection policy.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_visit_pte_range_bridge(
+        page_table: *mut c_void, start: CULong, end: CULong,
+        pgshift: CInt, flags: CInt, visit_fn: *mut c_void, arg: *mut c_void,
+    ) -> CInt {
+        unsafe {
+            let visitor = if visit_fn.is_null() {
+                None
+            } else {
+                // SAFETY: Same original C callback cast, with its callable
+                // target representation and signature retained by the caller.
+                Some(core::mem::transmute::<*mut c_void, VisitPte>(visit_fn))
+            };
+            crate::x86_memory_helpers::visit_pte_range(
+                page_table, start as *mut c_void, end as *mut c_void,
+                pgshift, flags, visitor, arg,
+            )
+        }
+    }
+
+    /// Preserve deferred freeing by invoking only the existing clear backend.
+    /// # Safety
+    /// The original owner keeps vm/table/mappings live under VM/PT exclusion.
+    /// The backend retains clearing/accounting policy; this adapter adds no
+    /// reference/free and does not access cleared storage after completion.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_remove_region_clear_bridge(
+        page_table: *mut c_void, vm: *mut ProcessVm, start: CULong, end: CULong,
+    ) -> CInt {
+        unsafe {
+            crate::x86_memory_helpers::ihk_mc_pt_clear_range(
+                page_table, vm, start as *mut c_void, end as *mut c_void,
+            )
+        }
+    }
+}
+
+mod remaining_process_range_cleanup_panic {
+    use crate::abi::{ProcessVm, VmRange};
+
+    /// Preserve XPMEM's synchronous lifetime/lock owner and discarded status.
+    /// # Safety
+    /// vm/range are the original live objects under range removal exclusion.
+    /// The existing XPMEM backend retains attachment/refcount/lock/cleanup
+    /// policy. This adapter creates no reference and uses no removed storage
+    /// after completion; it preserves the original deliberately ignored result.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_remove_range_xpmem_bridge(
+        vm: *mut ProcessVm, range: *mut VmRange,
+    ) {
+        unsafe {
+            let _ = crate::xpmem_helpers::xpmem_remove_process_memory_range(vm.cast(), range.cast());
+        }
+    }
+
+    /// Forward the exact original fatal diagnostic to the existing panic owner.
+    /// # Safety
+    /// message is the original live NUL-terminated kernel message. Call only
+    /// where the existing panic/fail-stop contract applies; it does not return.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_panic_bridge(message: *const i8) {
+        unsafe { super::panic(message); }
+    }
+}
+
+mod remaining_process_range_logs {
+    use core::ptr::{addr_of, addr_of_mut, read_volatile};
+
+    use crate::abi::{CInt, CULong, ProcessVm, VmRange};
+    use crate::debug::Ddebug;
+
+    unsafe extern "C" { static mut process_remaining_range_debug: [Ddebug; 8]; }
+
+    /// The original writable C selectors stay live for the kernel lifetime.
+    /// Raw bounded addresses avoid borrowing metadata across a logger call.
+    unsafe fn enabled(index: usize) -> bool {
+        unsafe {
+            let descriptor = addr_of_mut!(process_remaining_range_debug).cast::<Ddebug>().add(index);
+            read_volatile(addr_of!((*descriptor).line_flags)) >> 24 != 0
+        }
+    }
+
+    /// Preserve split entry/exit fields, nullable newrange and silent unknown events.
+    /// # Safety
+    /// When its selected event is enabled, range is live/readable under original
+    /// range exclusion; non-null newrange is live for event2. Other pointers are
+    /// only formatted. No pointer or reference is retained by this logger.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_split_range_public_log_bridge(
+        event: CInt, vm: *mut ProcessVm, range: *mut VmRange, addr: CULong,
+        splitp: *mut *mut VmRange, newrange: *mut VmRange, error: CInt,
+    ) {
+        unsafe { match event {
+            1 if enabled(0) => { let _ = super::kprintf(
+                b"split_process_memory_range(%p,%lx-%lx,%lx,%p)\n\0".as_ptr().cast(),
+                vm, (*range).start, (*range).end, addr, splitp,
+            ); }
+            2 if enabled(1) => { let _ = super::kprintf(
+                b"split_process_memory_range(%p,%lx-%lx,%lx,%p): %d %p %lx-%lx\n\0".as_ptr().cast(),
+                vm, (*range).start, (*range).end, addr, splitp, error, newrange,
+                if newrange.is_null() { 0 } else { (*newrange).start },
+                if newrange.is_null() { 0 } else { (*newrange).end },
+            ); }
+            _ => {}
+        } }
+    }
+
+    /// Preserve both original join formats and field-read scopes.
+    /// # Safety
+    /// Enabled events require live surviving; enabled event1 also requires live
+    /// merging. Event2 only formats merging as a pointer, preserving null use.
+    /// Original VM range exclusion and logging synchronization remain required.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_join_range_log_bridge(
+        event: CInt, vm: *mut ProcessVm, surviving: *mut VmRange,
+        merging: *mut VmRange, error: CInt,
+    ) {
+        unsafe { match event {
+            1 if enabled(2) => { let _ = super::kprintf(
+                b"join_process_memory_range(%p,%lx-%lx,%lx-%lx)\n\0".as_ptr().cast(),
+                vm, (*surviving).start, (*surviving).end, (*merging).start, (*merging).end,
+            ); }
+            2 if enabled(3) => { let _ = super::kprintf(
+                b"join_process_memory_range(%p,%lx-%lx,%p): %d\n\0".as_ptr().cast(),
+                vm, (*surviving).start, (*surviving).end, merging, error,
+            ); }
+            _ => {}
+        } }
+    }
+
+    /// Preserve the original zero-event versus every-nonzero-event distinction.
+    /// # Safety
+    /// The existing logging context applies; vm is only formatted as a pointer.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_flush_memory_debug_bridge(vm: *mut ProcessVm, event: CInt) {
+        unsafe {
+            if event == 0 {
+                if enabled(4) { let _ = super::kprintf(
+                    b"flush_process_memory(%p)\n\0".as_ptr().cast(), vm,
+                ); }
+            } else if enabled(5) { let _ = super::kprintf(
+                b"flush_process_memory(%p):\n\0".as_ptr().cast(), vm,
+            ); }
+        }
+    }
+
+    /// Preserve unconditional errors, conditional traces and unsigned subtraction.
+    /// # Safety
+    /// A non-null range is live/readable for enabled converted event2; original
+    /// range exclusion and logging context apply. Other pointers are only
+    /// formatted, and unknown events do not read caller storage.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_remove_range_log_bridge(
+        event: CInt, vm: *mut ProcessVm, start: CULong, end: CULong,
+        range: *mut VmRange, error: CInt,
+    ) {
+        unsafe { match event {
+            1 => { let _ = super::kprintf(
+                b"%s: WARNING: no straight mapping range found for 0x%lx\n\0".as_ptr().cast(),
+                b"remove_process_memory_range\0".as_ptr().cast::<i8>(), start,
+            ); }
+            2 if enabled(6) => { let _ = super::kprintf(
+                b"%s: straight range converted from 0x%lx:%lu -> 0x%lx:%lu\n\0".as_ptr().cast(),
+                b"remove_process_memory_range\0".as_ptr().cast::<i8>(),
+                if range.is_null() { start } else { (*range).straight_start },
+                end.wrapping_sub(start), start, end.wrapping_sub(start),
+            ); }
+            3 => { let _ = super::kprintf(
+                b"remove_process_memory_range(%p,%lx,%lx):split failed %d\n\0".as_ptr().cast(),
+                vm, start, end, error,
+            ); }
+            4 => { let _ = super::kprintf(
+                b"remove_process_memory_range(%p,%lx,%lx):free failed %d\n\0".as_ptr().cast(),
+                vm, start, end, error,
+            ); }
+            5 if enabled(7) => { let _ = super::kprintf(
+                b"remove_process_memory_range(%p,%lx,%lx): 0 %d\n\0".as_ptr().cast(),
+                vm, start, end, error,
+            ); }
+            _ => {}
+        } }
+    }
+}
+
+mod remaining_process_memory_logs {
+    use core::ptr::{addr_of, addr_of_mut, read_volatile};
+
+    use crate::abi::{CInt, CLong, CULong, ProcessVm, SizeT, VmRange};
+    use crate::debug::Ddebug;
+
+    unsafe extern "C" { static mut process_remaining_memory_log_debug: [Ddebug; 5]; }
+
+    // All callers use constant indices 0..5 into the original live selectors.
+    unsafe fn enabled(index: usize) -> bool {
+        unsafe {
+            let descriptor = addr_of_mut!(process_remaining_memory_log_debug).cast::<Ddebug>().add(index);
+            read_volatile(addr_of!((*descriptor).line_flags)) >> 24 != 0
+        }
+    }
+
+    /// Preserve allocation/insertion/preparation errors and the selected demand trace.
+    /// # Safety
+    /// The original kernel logging context and synchronization apply. Inputs
+    /// are scalar values and static formats, with no caller storage retained.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_add_range_log_bridge(
+        event: CInt, rc: CInt, start: CULong, end: CULong,
+    ) {
+        unsafe { match event {
+            1 => { let _ = super::kprintf(
+                b"%s: ERROR: allocating pages for range
+ ".as_ptr().cast(),
+                b"add_process_memory_range ".as_ptr().cast::<i8>(),
+            ); }
+            2 => { let _ = super::kprintf(
+                b"%s: ERROR: could not insert range: %d
+ ".as_ptr().cast(),
+                b"add_process_memory_range ".as_ptr().cast::<i8>(), rc,
+            ); }
+            3 => { let _ = super::kprintf(
+                b"%s: ERROR: preparing page tables
+ ".as_ptr().cast(),
+                b"add_process_memory_range ".as_ptr().cast::<i8>(),
+            ); }
+            4 if enabled(0) => { let _ = super::kprintf(
+                b"%s: range: 0x%lx - 0x%lx is demand paging
+ ".as_ptr().cast(),
+                b"add_process_memory_range ".as_ptr().cast::<i8>(), start, end,
+            ); }
+            5 => { let _ = super::kprintf(
+                b"%s: error: range %lx - %lx is not in user available area
+ ".as_ptr().cast(),
+                b"add_process_memory_range ".as_ptr().cast::<i8>(), start, end,
+            ); }
+            _ => {}
+        } }
+    }
+
+    /// Preserve nullable range fields and conditional entry/exit versus always-error logs.
+    /// # Safety
+    /// Non-null range is live/readable under the original VM range exclusion
+    /// when its event logs. vm is only formatted; no reference is retained.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_change_prot_public_log_bridge(
+        event: CInt, vm: *mut ProcessVm, range: *mut VmRange, protflag: CULong, error: CInt,
+    ) {
+        unsafe { match event {
+            1 if enabled(1) => { let _ = super::kprintf(
+                b"change_prot_process_memory_range(%p,%lx-%lx,%lx)
+ ".as_ptr().cast(),
+                vm, if range.is_null() { 0 } else { (*range).start },
+                if range.is_null() { 0 } else { (*range).end }, protflag,
+            ); }
+            2 => { let _ = super::kprintf(
+                b"change_prot_process_memory_range(%p,%lx-%lx,%lx):ihk_mc_pt_change_attr_range failed: %d
+ ".as_ptr().cast(),
+                vm, if range.is_null() { 0 } else { (*range).start },
+                if range.is_null() { 0 } else { (*range).end }, protflag, error,
+            ); }
+            3 if enabled(2) => { let _ = super::kprintf(
+                b"change_prot_process_memory_range(%p,%lx-%lx,%lx): %d
+ ".as_ptr().cast(),
+                vm, if range.is_null() { 0 } else { (*range).start },
+                if range.is_null() { 0 } else { (*range).end }, protflag, error,
+            ); }
+            _ => {}
+        } }
+    }
+
+    /// Keep both original remap errors, including the signed offset's vararg bits.
+    /// # Safety
+    /// The original logging context applies. vm/range are only formatted as
+    /// raw pointers; unknown events do not access any caller storage.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_remap_range_log_bridge(
+        event: CInt, vm: *mut ProcessVm, range: *mut VmRange, start: CULong,
+        end: CULong, off: CLong, old_pgshift: CInt, error: CInt,
+    ) {
+        unsafe { match event {
+            1 => { let _ = super::kprintf(
+                b"%s: pgshift is too big (%d)  failed:%d
+ ".as_ptr().cast(),
+                b"remap_process_memory_range ".as_ptr().cast::<i8>(), old_pgshift, error,
+            ); }
+            2 => { let _ = super::kprintf(
+                b"remap_process_memory_range(%p,%p,%#lx,%#lx,%#lx):visit pte failed %d
+ ".as_ptr().cast(),
+                vm, range, start, end, off, error,
+            ); }
+            _ => {}
+        } }
+    }
+
+    /// Preserve the single SMP memset diagnostic and its actual size_t argument.
+    /// # Safety
+    /// The original logging context applies. All values are scalars; no callback
+    /// or mapping is invoked and unknown events remain silent.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_memset_smp_log_bridge(
+        event: CInt, cpu_index: CInt, nr_cpus: CInt, phys: CULong, len: SizeT,
+        start: CULong, end: CULong,
+    ) {
+        unsafe {
+            if event == 1 && enabled(3) { let _ = super::kprintf(
+                b"%s: cpu_index: %d, nr_cpus: %d, phys: 0x%lx, len: %lu, p_s: 0x%lx, p_e: 0x%lx
+ ".as_ptr().cast(),
+                b"memset_smp_handler ".as_ptr().cast::<i8>(),
+                cpu_index, nr_cpus, phys, len, start, end,
+            ); }
+        }
+    }
+
+    /// Keep the original source-function label and deferred-accounting diagnostic.
+    /// # Safety
+    /// The original logging context applies. vm is intentionally unused, and
+    /// start/end are only formatted as the original unsigned long values.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_remove_region_log_bridge(
+        _vm: *mut ProcessVm, start: CULong, end: CULong,
+    ) {
+        unsafe {
+            if enabled(4) { let _ = super::kprintf(
+                b"%s: memory_stat_rss_sub() isn't called,start=%lx,end=%lx
+ ".as_ptr().cast(),
+                b"process_remove_region_log_bridge ".as_ptr().cast::<i8>(), start, end,
+            ); }
+        }
+    }
+}

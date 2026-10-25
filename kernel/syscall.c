@@ -23709,6 +23709,10 @@ static int do_futex_dispatch_bridge(unsigned long uaddr, int op, uint32_t val,
 #endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#if defined(MCKERNEL_RUST_F03_FUTEX_ATOMIC) && !defined(__UACCESS__)
+extern int futex_atomic_access_ok_bridge(int *,unsigned long);
+#else
+#line 23712
 int futex_atomic_access_ok_bridge(int *uaddr, unsigned long size)
 {
 #ifdef __UACCESS__
@@ -23719,7 +23723,14 @@ int futex_atomic_access_ok_bridge(int *uaddr, unsigned long size)
 	return 1;
 #endif
 }
+#endif /* original access_ok enabled profile retained */
+#line 23722
 
+#ifdef MCKERNEL_RUST_F03_FUTEX_ATOMIC
+extern int futex_atomic_cmpxchg_inatomic_bridge(int *,int,int);
+extern int futex_atomic_op_inuser_bridge(int,int *,int,int *);
+#else
+#line 23723
 int futex_atomic_cmpxchg_inatomic_bridge(int *uaddr, int oldval, int newval)
 {
 	asm volatile("1:\tlock; cmpxchgl %3, %1\n"
@@ -23807,7 +23818,9 @@ int futex_atomic_op_inuser_bridge(int op, int *uaddr, int oparg, int *oldval)
 
 	return ret;
 }
+#endif /* original futex atomic instruction/fixup fallback */
 #endif
+#line 23811
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 extern void f03_futex_log_bridge_v2(const struct do_futex_log_record *);

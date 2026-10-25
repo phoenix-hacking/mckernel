@@ -3659,6 +3659,8 @@ out:
 #endif
 }
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#line 3662
 int move_pages_smp_handler(int cpu_index, int nr_cpus, void *arg)
 {
 	int i, i_s, i_e, phase = 1;
@@ -4012,6 +4014,8 @@ out:
 
 	return mpsr->phase_ret;
 }
+#endif /* retained original move_pages_smp_handler fallback */
+#line 4015
 
 #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 time_t time(void) {
