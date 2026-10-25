@@ -1,3 +1,24 @@
+## Current290 census refused before build — 22:37 review and subsequent failure
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Current290 default preparation reached the actual read-only census. The census
+child859093/start76586349 joined exit1 in0.228186s with REFUSED and no detailed
+reason. Caller859032/start76583843 then joined exit1 before owner entry; process
+absence and normal permanent-lock release were observed. No image build, native
+run or cleanup started. Preserve actual-entry-1 and its consumed query/grants.
+
+The final69-member capsule and control sources are fetched and verified at
+ e7ecf225; nine static controls passed (wall2.772438s/CPU2.768432s).
+Next default18h/root: repair diagnostic basename/sibling bindings, run bounded
+pure/mock controls, obtain independent review, then fresh admission. Never retry
+the consumed attempt unchanged. Daemon typed-fill preparation and initialized
+ptrace-outer review proceed independently. No new integration/default/native/
+whole-file/C-boundary closure; M12 remains35/35 and M14/M15 remain OPEN.
+Queue-to-first-compiler and failure-to-validated-fix are unknown, not zero.
+[Review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T2237.json).
+The fixed window ends2026-10-26T15:55:33Z; original30-minute velocity buckets,
+20-minute steering and same creditrun7f remain. No95% improvement is claimed.
+
 ## Twenty-minute review — current290 default-image entry is next
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
