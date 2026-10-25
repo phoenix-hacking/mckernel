@@ -25973,6 +25973,7 @@ extern int setscheduler_body_result(unsigned long thread_addr, int policy,
 		size_t thread_policy_offset);
 #endif
 
+#if !(defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_SCHED_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SCHED_BRIDGES))
 static int setscheduler(struct thread *thread, int policy, struct sched_param *param)
 {
 #ifdef MCKERNEL_RUST_SCHED_POLICY_HELPERS
@@ -25996,6 +25997,8 @@ static int setscheduler(struct thread *thread, int policy, struct sched_param *p
 #endif
 }
 
+#endif /* original setscheduler fallback */
+
 static const struct sched_syscall_offsets sched_syscall_offsets = {
 	.thread_proc_offset = __builtin_offsetof(struct thread, proc),
 	.thread_sched_param_offset = __builtin_offsetof(struct thread, sched_param),
@@ -26008,6 +26011,18 @@ static const struct sched_syscall_offsets sched_syscall_offsets = {
 	.proc_cpu_set_offset = __builtin_offsetof(struct process, cpu_set),
 };
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_SCHED_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SCHED_BRIDGES)
+struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_sched_setparam_debug_v1 = {
+ .file=__FILE__, .func="sched_setparam_log_bridge", .line=26052, .flags=DDEBUG_DEFAULT
+};
+extern unsigned long sched_find_thread_bridge(int pid);
+extern void sched_thread_unlock_bridge(unsigned long thread_addr);
+extern int sched_apply_scheduler_bridge(unsigned long thread_addr, int policy, unsigned long param_addr);
+extern int sched_hold_thread_bridge(unsigned long thread_addr);
+extern void sched_release_thread_bridge(unsigned long thread_addr);
+extern void sched_request_migrate_bridge(int cpu_id, unsigned long thread_addr);
+extern void sched_setparam_log_bridge(int pid, unsigned long uparam_addr);
+#else
 unsigned long
 sched_find_thread_bridge(int pid)
 {
@@ -26052,6 +26067,8 @@ sched_setparam_log_bridge(int pid, unsigned long uparam_addr)
 	dkprintf("sched_setparam: pid: %d, uparam: 0x%lx\n", pid,
 			uparam_addr);
 }
+
+#endif /* MCKERNEL_RUST_F03_SCHED_BRIDGES */
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_sched_setparam(int n, ihk_mc_user_context_t *ctx);

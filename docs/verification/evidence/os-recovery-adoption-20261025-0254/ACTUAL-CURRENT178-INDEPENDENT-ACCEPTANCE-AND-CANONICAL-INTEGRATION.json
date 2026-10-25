@@ -1,0 +1,71 @@
+{
+  "status": "ACTUAL_CURRENT178_HOST_ACCEPTED_AND_EXACT_RUNTIME_POSTIMAGES_INTEGRATED",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": 1792907672.5251017,
+  "utc": "2026-10-25T05:54:32.525102+00:00",
+  "reviewer": "/root/f02_review",
+  "independent_decision": "PASS_ACTUAL_CURRENT178_HOST_ARTIFACT_SCOPE",
+  "handoff": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-6-current-union-qualification/with-qualified-scheduler7-source-successor-1/bounded-exact-debug-symbol-observer-source-1/ACTUAL-PRIVATE-CURRENT178-HOST-HANDOFF.json",
+  "handoff_sha256": "ec1e5b8fb99c5dee4c59eee5c47fd9b015fb55e3682041c299089807c1aa913d",
+  "runtime_integrations": [
+    {
+      "destination": "kernel/process.c",
+      "before_sha256": "09ed54c51c298e0b5b1a673b45651da8014ef2824b199dea3452bbcfdc6ed582",
+      "source": {
+        "bytes": 195102,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-6-current-union-qualification/with-qualified-scheduler7-source-successor-1/source/kernel/process.c",
+        "sha256": "a080264ea9ec7baae55bf6c6ebd06b0ce092b9f045c57d55d7eb4b00a6ca4976"
+      }
+    },
+    {
+      "destination": "kernel/rust/process_helpers.rs",
+      "before_sha256": "45fb1a8acb73b9ffa0713549cf90ba41e0dc42cf908935d649b5e0551263291b",
+      "source": {
+        "bytes": 506012,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-6-current-union-qualification/with-qualified-scheduler7-source-successor-1/source/kernel/rust/process_helpers.rs",
+        "sha256": "8aa74d49d3a0348bf4bb4c81f8ad2251520902425cda3a08ff6eb21b0bcce6f9"
+      }
+    },
+    {
+      "destination": "kernel/syscall.c",
+      "before_sha256": "0a3eb7a3ff5cb0e8318722298b58a09fedb3871fa1b78f361cbe9bd83d46f844",
+      "source": {
+        "bytes": 901287,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-6-current-union-qualification/with-qualified-scheduler7-source-successor-1/runtime/kernel/syscall.c",
+        "sha256": "4b0548463c4437d5f9731e4b753add859e56f744d20afffd50fdbe6a33cc023a"
+      }
+    },
+    {
+      "destination": "kernel/rust/syscall_policy.rs",
+      "before_sha256": "ac57c7d567b15a852a3a11028d9ec012f3d7121513762a31b389e8ffe9143472",
+      "source": {
+        "bytes": 1144117,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-6-current-union-qualification/with-qualified-scheduler7-source-successor-1/source/kernel/rust/syscall_policy.rs",
+        "sha256": "a40bbd703a32170b13b30ae9eea3ad1581189440984df6f7258cd2d684eee0e3"
+      }
+    },
+    {
+      "destination": "arch/x86_64/kernel/syscall.c",
+      "before_sha256": "bd2ea4750d041c5b7aec05c409ed2d34ff1837fe6ee54d05e8e18dbc1a5412f0",
+      "source": {
+        "bytes": 112963,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-6-current-union-qualification/with-qualified-scheduler7-source-successor-1/source/arch/x86_64/kernel/syscall.c",
+        "sha256": "0fdbb728ca056f14b362da919a4034500445d0966fffb71badd6c566fc82c3c0"
+      }
+    }
+  ],
+  "Rust_object_sha256": "627a32646e40a4bc855acd20b885ed3294fbe7de3f6ed865ac8e922e6c25b4ae",
+  "strict_partial_sha256": "3a365b18d470613f49907ec1ce42af057fefd4c0f17ec7123317312edeb0af20",
+  "providers": 178,
+  "new_providers_over161": 17,
+  "open": [
+    "SDK",
+    "production default image",
+    "native",
+    "whole-file retirement",
+    "legacy/native fallback equivalence",
+    "23 anonymous metadata edges"
+  ],
+  "compiler_only_C_and_lib_not_integrated": true,
+  "original_failures_preserved": true
+}

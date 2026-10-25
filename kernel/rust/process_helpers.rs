@@ -15357,3 +15357,75 @@ mod remaining_process_create_thread_providers {
     const _: unsafe extern "C" fn(*mut c_void, CULong, CULong, CULong) =
         process_create_thread_init_user_bridge;
 }
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+mod remaining_process_create_leafs {
+    use core::ffi::c_void;
+    use crate::abi::{CInt, CULong};
+
+    unsafe extern "C" {
+        static process_tracked_allocator_source_file: *const i8;
+        static process_create_thread_alloc_pages_source_line: CInt;
+        static mut process_create_cpu_debug: crate::debug::Ddebug;
+    }
+
+    /// Allocate the original creator stack pages through the existing tracked allocator.
+    ///
+    /// # Safety
+    /// The caller supplies the allocator's original page-count/flags domain and
+    /// takes ownership of the identical nullable raw allocation. Source metadata
+    /// stays valid for tracking; no initialized Thread reference is formed here.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_create_thread_alloc_pages_bridge(
+        npages: CInt, flags: CULong,
+    ) -> *mut c_void {
+        // SAFETY: Exact original x86 PAGE_P2ALIGN=0/IHK_MC_PG_KERNEL=0,
+        // node=-1/virtual-address=-1 conversion and tracked source identity.
+        // The genuine-header fixture binds the two architecture constants.
+        unsafe {
+            crate::mem_helpers::_ihk_mc_alloc_aligned_pages_node(
+                npages, 0, flags, -1, 0, CULong::MAX,
+                process_tracked_allocator_source_file.cast_mut(),
+                process_create_thread_alloc_pages_source_line,
+            )
+        }
+    }
+
+    /// Emit the original creator CPU diagnostics with the same dynamic selector.
+    ///
+    /// # Safety
+    /// Called in the original logging context. The retained C descriptor lives in
+    /// __verbose throughout kernel life and follows the existing dynamic-debug
+    /// update/read policy. No process/thread ownership escapes this operation.
+    #[no_mangle]
+    pub unsafe extern "C" fn process_create_cpu_log_bridge(event: CInt, pid: CInt, cpu: CInt) {
+        // SAFETY: Terminated static formats and exact promoted C int arguments;
+        // packed line/flags use the already reviewed real Ddebug representation.
+        unsafe {
+            match event {
+                super::PROCESS_CREATE_CPU_LOG_INVALID => {
+                    let _ = super::kprintf(
+                        b"%s: invalid CPU requested in initial cpu_set\n\0".as_ptr().cast(),
+                        b"create_thread\0".as_ptr().cast::<i8>(),
+                    );
+                }
+                super::PROCESS_CREATE_CPU_LOG_REQUESTED => {
+                    let flags = core::ptr::read_volatile(
+                        core::ptr::addr_of!(process_create_cpu_debug.line_flags),
+                    ) >> 24;
+                    if flags != 0 {
+                        let _ = super::kprintf(
+                            b"%s: pid: %d, CPU: %d\n\0".as_ptr().cast(),
+                            b"create_thread\0".as_ptr().cast::<i8>(), pid, cpu,
+                        );
+                    }
+                }
+                _ => {}
+            }
+        }
+    }
+
+    const _: unsafe extern "C" fn(CInt, CULong) -> *mut c_void =
+        process_create_thread_alloc_pages_bridge;
+    const _: unsafe extern "C" fn(CInt, CInt, CInt) = process_create_cpu_log_bridge;
+}

@@ -330,6 +330,18 @@ int process_default_ncpus_bridge(void)
 #endif
 #line 267
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+/* Retained source selector data, no C computation. */
+struct ddebug __aligned(8) __attribute__((section("__verbose")))
+process_create_cpu_debug = {
+    .file = __FILE__,
+    .func = "process_create_cpu_log_bridge",
+    .line = 276,
+    .flags = DDEBUG_DEFAULT,
+};
+void process_create_cpu_log_bridge(int event, int pid, int cpu);
+#else
+#line 268
 void process_create_cpu_log_bridge(int event, int pid, int cpu)
 {
 	switch (event) {
@@ -345,6 +357,8 @@ void process_create_cpu_log_bridge(int event, int pid, int cpu)
 		break;
 	}
 }
+#endif
+#line 283
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 void process_spin_init_bridge(unsigned long lock_addr);
@@ -867,11 +881,9 @@ init_process_vm(struct process *owner, struct address_space *asp, struct process
 #endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
-void *process_create_thread_alloc_pages_bridge(int npages,
-					      unsigned long flags)
-{
-	return _ihk_mc_alloc_aligned_pages_node(npages, PAGE_P2ALIGN, flags, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
-}
+const int process_create_thread_alloc_pages_source_line = 788;
+void *process_create_thread_alloc_pages_bridge(int npages, unsigned long flags);
+#line 790
 
 #endif /* retain original selected-only page allocator gate */
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS

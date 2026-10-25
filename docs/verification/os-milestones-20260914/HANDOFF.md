@@ -1,3 +1,29 @@
+## Current178 integrated and executor correction — 2026-10-25T05:55:53.501107+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The exact five runtime postimages for current178 are centrally integrated after independent
+HOST object/ABI/strict-partial review. One accepted package is recorded; SDK/default image,
+native proof and whole-file retirement remain open. Compiler prefixes and both original
+failures are retained. [Integration evidence](../evidence/os-recovery-adoption-20261025-0254/ACTUAL-CURRENT178-INDEPENDENT-ACCEPTANCE-AND-CANONICAL-INTEGRATION.json).
+
+Executor7058 entered normally but failed before its nine SDK commands because CONFIG
+referenced an unmounted pathname. Normal owned retirement completed; two physical readers
+passed and the final postjoin observation is independently accepted (6e32c7c5).
+The one-path repair passed four regressions. Corrected fresh static cohort52f7 is being
+prepared before the next live admission clock. No prior failed nonce is replayed.
+
+Retained F02 final-pointer/link checks passed without rebuilding; strict partial artifact
+is genuinely missing. CPU0 continues process bodies; CPU6 serializes ready F03/F06 fixtures;
+source-complete owners prepare BFD21, daemon7 and MM staging. No second heavy owner.
+M12 remains35/35; M14/M15 open; new default/native/file/app/image closures0.
+[Review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0542.json).
+
+Velocity baseline2 accepted packages/hour, target3.9/hour. Current178 is one carryover
+package accepted after intervention; two complete30-minute buckets and quality disposition
+are still required. No95% improvement is claimed. [Live measurement plan](ENGINEERING-VELOCITY-BASELINE-20261025-0542.json).
+[Low-confidence planning estimates](M14-M15-ENGINEERING-ESTIMATE-20261025-0512.md) remain separate.
+Monitor496359/start69732795 uses1800seconds; cutoff2026-10-26T06:00:00Z unchanged.
+
 ## Current functional checkpoint and fresh executor admission — 2026-10-25T05:27:31.837185+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

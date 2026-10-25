@@ -2158,6 +2158,7 @@ void save_syscall_return_value(int num, unsigned long rc)
 }
 #endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 unsigned long
 do_kill(struct thread *thread, int pid, int tid, int sig, siginfo_t *info,
         int ptracecont)
@@ -2484,6 +2485,7 @@ done:
 	release_thread(tthread);
 	return rc;
 }
+#endif
 
 #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void

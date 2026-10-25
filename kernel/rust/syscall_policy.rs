@@ -32570,3 +32570,949 @@ unsafe extern "C" fn f03_move_pages_checked_body(
     ret as CLong
 }
 }
+
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// ABI field stride stays abi::McsRwlockLock; callback views the identical real
+// lock_helpers type. Both existing layouts are repr(C), 64-byte size/alignment.
+const _: () = {
+    assert!(size_of::<crate::abi::McsRwlockLock>() == size_of::<crate::lock_helpers::McsRwlockLock>());
+    assert!(align_of::<crate::abi::McsRwlockLock>() == align_of::<crate::lock_helpers::McsRwlockLock>());
+};
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// F06: retire only the live do_kill process-group enumeration/dispatch branch.
+// Direct-target permission, pending queue, wakeup and IPI handling remain C.
+unsafe extern "C" {
+    #[link_name = "do_kill"]
+    fn f06_process_group_recursive_do_kill(
+        thread: *mut Thread, pid: CInt, tid: CInt, sig: CInt,
+        info: *mut SigInfo, ptracecont: CInt,
+    ) -> CULong;
+}
+
+/// Called only at the existing tid==-1 && pid<=0 branch, after the C caller's
+/// signal validation/default-info setup. `hash` is its original resource-set
+/// snapshot: no new current-CPU lookup or migration-dependent snapshot is taken.
+/// The caller thread and info remain borrowed across all synchronous calls.
+/// Processes are borrowed only while each bucket reader lock is held; only PID
+/// values survive unlock. No thread/process owner reference is created here.
+#[no_mangle]
+pub unsafe extern "C" fn arch_do_kill_process_group_result(
+    thread: *mut Thread, pid: CInt, sig: CInt, info: *mut SigInfo,
+    ptracecont: CInt, hash: *mut crate::abi::ProcessHash,
+) -> CInt {
+    let mut pgid = pid.wrapping_neg();
+    let mut rc: CInt = -ESRCH;
+    let mut pids: *mut CInt = null_mut();
+    let mut n: CInt = 0;
+    let mut nr_pids: CInt = 0;
+    let mut sendme = false;
+    let mut node = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+    if pid == 0 {
+        if thread.is_null() || (*(*thread).proc).pid <= 0 {
+            return -ESRCH;
+        }
+        pgid = (*(*thread).proc).pgid;
+    }
+    // First pass counts peers only, remembering a matching caller separately.
+    for i in 0..crate::abi::PROCESS_HASH_SIZE {
+        let lock = core::ptr::addr_of_mut!((*hash).lock).cast::<crate::abi::McsRwlockLock>().add(i);
+        let head = core::ptr::addr_of_mut!((*hash).list).cast::<AbiListHead>().add(i);
+        crate::lock_helpers::__mcs_rwlock_reader_lock(lock.cast(), node.as_mut_ptr());
+        let mut pos = (*head).next;
+        while pos != head {
+            let proc = pos.cast::<u8>().sub(offset_of!(Process, hash_list)).cast::<Process>();
+            if pgid == 1 || (*proc).pgid == pgid {
+                if !thread.is_null() && (*proc).pid == (*(*thread).proc).pid {
+                    sendme = true;
+                } else {
+                    nr_pids = nr_pids.wrapping_add(1);
+                }
+            }
+            pos = (*pos).next;
+        }
+        crate::lock_helpers::__mcs_rwlock_reader_unlock(lock.cast(), node.as_mut_ptr());
+    }
+    if nr_pids != 0 {
+        // Same int allocator ABI/extent conversion as the C kmalloc_tracked call.
+        pids = crate::mem_helpers::kmalloc_tracked(
+            (size_of::<CInt>() as SizeT).wrapping_mul(nr_pids as SizeT) as CInt,
+            IHK_MC_AP_NOWAIT,
+            concat!(file!(), "\0").as_ptr().cast_mut().cast(), line!() as CInt,
+        ).cast();
+        if pids.is_null() { return -ENOMEM; }
+    } else if !sendme {
+        return rc;
+    }
+
+    if nr_pids != 0 {
+        // The list can change between passes. Cap collection by the first count;
+        // shrink delivers only actual collected PIDs, growth never overruns it.
+        for i in 0..crate::abi::PROCESS_HASH_SIZE {
+            if n == nr_pids { break; }
+            let lock = core::ptr::addr_of_mut!((*hash).lock).cast::<crate::abi::McsRwlockLock>().add(i);
+            let head = core::ptr::addr_of_mut!((*hash).list).cast::<AbiListHead>().add(i);
+            crate::lock_helpers::__mcs_rwlock_reader_lock(lock.cast(), node.as_mut_ptr());
+            let mut pos = (*head).next;
+            while pos != head {
+                let proc = pos.cast::<u8>().sub(offset_of!(Process, hash_list)).cast::<Process>();
+                if pgid == 1 || (*proc).pgid == pgid {
+                    if !thread.is_null() && (*proc).pid == (*(*thread).proc).pid {
+                        sendme = true;
+                    } else {
+                        *pids.offset(n as isize) = (*proc).pid;
+                        n = n.wrapping_add(1);
+                        if n == nr_pids { break; }
+                    }
+                }
+                pos = (*pos).next;
+            }
+            crate::lock_helpers::__mcs_rwlock_reader_unlock(lock.cast(), node.as_mut_ptr());
+        }
+        let mut i: CInt = 0;
+        while i < n {
+            // Original unsigned-long do_kill result is assigned to int rc first.
+            // Preserve its low32-bit conversion and last-result return policy.
+            rc = f06_process_group_recursive_do_kill(
+                thread, *pids.offset(i as isize), -1, sig, info, ptracecont,
+            ) as CInt;
+            i += 1;
+        }
+    }
+    if sendme {
+        rc = f06_process_group_recursive_do_kill(
+            thread, (*(*thread).proc).pid, -1, sig, info, ptracecont,
+        ) as CInt;
+    }
+    // Preserve free(NULL) for the original zero-peer/self-only goto-sendme path.
+    crate::mem_helpers::kfree_tracked(
+        pids.cast(), concat!(file!(), "\0").as_ptr().cast_mut().cast(), line!() as CInt,
+    );
+    rc
+}
+
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// F06: direct-target permission and early-return ownership orchestration only.
+unsafe extern "C" {
+    #[link_name = "interrupt_syscall"]
+    fn f06_direct_target_interrupt_syscall(thread: *mut Thread, sig: CInt);
+}
+
+/// Return1 means the original do_kill caller must return `*return_value`.
+/// Return0 continues to the caller's EXISTING pending writer lock/enqueue/wakeup.
+/// caller_proc and target_proc are the original snapshots, borrowed at entry.
+/// The caller already holds exactly one target-thread reference, when nonnull.
+/// This body consumes it only on an original terminal branch; the continuing
+/// path leaves it and IRQ-disabled state entirely with the C caller.
+#[no_mangle]
+pub unsafe extern "C" fn arch_do_kill_direct_target_gate_result(
+    caller_proc: *mut Process, target_proc: *mut Process,
+    target: *mut Thread, sig: CInt, irqstate: CULong,
+    return_value: *mut CULong,
+) -> CInt {
+    // Same SIGCONT exemption and real/saved UID checks. No target EUID check,
+    // session check or new null-pointer policy is added to this existing gate.
+    if sig != SIGCONT && !caller_proc.is_null()
+        && (*caller_proc).euid != 0
+        && (*caller_proc).ruid != (*target_proc).ruid
+        && (*caller_proc).euid != (*target_proc).ruid
+        && (*caller_proc).ruid != (*target_proc).suid
+        && (*caller_proc).euid != (*target_proc).suid
+    {
+        if !target.is_null() { crate::process_helpers::release_thread(target); }
+        cpu_restore_interrupt(irqstate);
+        *return_value = (-EPERM as CLong) as CULong;
+        return 1;
+    }
+    if sig == 0 || target.is_null() || (*target).status == PS_EXITED {
+        if !target.is_null() { crate::process_helpers::release_thread(target); }
+        cpu_restore_interrupt(irqstate);
+        *return_value = 0;
+        return 1;
+    }
+    // The selected C branch releases the target and returns WITHOUT an explicit
+    // cpu_restore_interrupt, including nohost. Preserve that baseline exactly;
+    // do not infer or invent IRQ restoration in interrupt_syscall forwarding.
+    if (*target).uti_state == 2 { // actual process.h UTI_STATE_RUNNING_IN_LINUX
+        if (*(*target).proc).nohost == 0 {
+            f06_direct_target_interrupt_syscall(target, sig);
+        }
+        crate::process_helpers::release_thread(target);
+        *return_value = 0;
+        return 1;
+    }
+    0
+}
+
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// F06: coalesce/allocate/publish while the EXISTING C pending writer lock is held.
+// The caller retains its held target reference and disabled IRQ state throughout;
+// this helper neither locks/unlocks nor releases that target reference.
+#[no_mangle]
+pub unsafe extern "C" fn arch_do_kill_pending_enqueue_result(
+    target: *mut Thread, head: *mut AbiListHead, mask: CULong, sig: CInt,
+    info: *const SigInfo, ptracecont: CInt, doint: *mut CInt,
+) -> CInt {
+    let mut pending: *mut crate::abi::SigPending = null_mut();
+    // Actual caller sets this slot to zero before taking the writer lock.
+    // A coalesced signal leaves that slot untouched, like the original branch.
+    if sig < 33 {
+        let mut pos = (*head).next;
+        while pos != head {
+            let candidate = pos.cast::<u8>()
+                .wrapping_sub(offset_of!(crate::abi::SigPending, list))
+                .cast::<crate::abi::SigPending>();
+            if (*candidate).sigmask.val[0] == mask && (*candidate).ptracecont == ptracecont {
+                pending = candidate;
+                break;
+            }
+            pos = (*candidate).list.next;
+        }
+    }
+    if !pending.is_null() {
+        // Standard-signal coalescing leaves existing info/list/interrupted state
+        // and target sigevent untouched, exactly like the original branch.
+        return 0;
+    }
+    // Preserve doint=1 EVEN when the unchanged allocator returns NULL.
+    *doint = 1;
+    pending = crate::mem_helpers::kmalloc_tracked(
+        size_of::<crate::abi::SigPending>() as CInt, IHK_MC_AP_NOWAIT,
+        concat!(file!(), "\0").as_ptr().cast_mut().cast(), line!() as CInt,
+    ).cast();
+    if pending.is_null() { return -ENOMEM; }
+    crate::string::__inline_memset(pending.cast(), 0, size_of::<crate::abi::SigPending>());
+    (*pending).sigmask.val[0] = mask;
+    // Copy every siginfo byte, including its representation/padding as in C.
+    crate::string::memcpy(core::ptr::addr_of_mut!((*pending).info).cast(),
+        info.cast(), size_of::<SigInfo>());
+    (*pending).ptracecont = ptracecont;
+    if sig == SIGKILL || sig == SIGSTOP {
+        crate::list_helpers::list_add(core::ptr::addr_of_mut!((*pending).list).cast(), head.cast());
+    } else {
+        crate::list_helpers::list_add_tail(core::ptr::addr_of_mut!((*pending).list).cast(), head.cast());
+    }
+    // Ownership transfers to the protected list before the original event store.
+    // No free is allowed here: do_signal/the pending consumer later owns release.
+    (*target).sigevent = 1;
+    0
+}
+
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Append-only private candidate; canonical syscall_policy.rs is coordinator-owned.
+mod f06_do_kill_wakeup_candidate {
+    use core::mem::{size_of, MaybeUninit};
+    use core::ptr::{addr_of, addr_of_mut, read_volatile};
+
+    use crate::abi::{CInt, CULong, Process, SigInfo, SigInfoChild, Thread};
+
+    use super::{CLD_CONTINUED, PS_INTERRUPTIBLE, PS_RUNNING, PS_STOPPED, PS_TRACED,
+        SIGNAL_STOP_CONTINUED, SIGCHLD, SIGCONT, SIGKILL};
+
+    unsafe extern "C" {
+        #[link_name = "do_kill"]
+        fn notify_parent(
+            thread: *mut Thread, pid: CInt, tid: CInt, sig: CInt,
+            info: *mut SigInfo, ptracecont: CInt,
+        ) -> CULong;
+        fn ihk_mc_get_vector(vector_type: CInt) -> CInt;
+        fn ihk_mc_interrupt_cpu(cpu: CInt, vector: CInt) -> CInt;
+    }
+
+    #[used]
+    #[link_section = "__verbose"]
+    static mut IPI_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+        file: concat!(file!(), "\0").as_ptr().cast(),
+        func: b"do_kill\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: line!() & 0x00ff_ffff,
+    };
+
+    /// Complete existing do_kill tail after pending writer unlock and IRQ restore.
+    /// Returns the enqueue result unchanged; consumes exactly one target reference.
+    ///
+    /// # Safety
+    /// `target` is nonnull with the reference acquired by original target selection.
+    /// It and its process/main-thread/parent relations remain valid under the
+    /// existing signal-delivery lifetime contract through synchronous notification
+    /// and scheduler/IPI calls. `target_proc` is the original borrowed snapshot.
+    /// No list or process lock is held by this tail. `caller` may be null and is
+    /// compared only, never dereferenced. The caller has already restored IRQs.
+    #[no_mangle]
+    pub unsafe extern "C" fn arch_do_kill_wakeup_result(
+        caller: *mut Thread, target: *mut Thread, target_proc: *mut Process,
+        sig: CInt, ptracecont: CInt, mask: CULong, mut doint: CInt, rc: CInt,
+    ) -> CInt {
+        if sig == SIGCONT || ptracecont == 1 {
+            // SAFETY: target owns the caller's held reference. Preserve scheduler
+            // result test exactly: only zero means the stopped state was resumed.
+            if unsafe { crate::sched_helpers::sched_wakeup_thread(target, PS_STOPPED) } == 0 {
+                let mut storage = MaybeUninit::<SigInfo>::uninit();
+                // SAFETY: stack storage is writable and suitably aligned for its
+                // full extent. Zeroing every byte initializes the repr(C) siginfo
+                // including padding before any public do_kill consumer sees it.
+                unsafe {
+                    (*(*(*target).proc).main_thread).signal_flags = SIGNAL_STOP_CONTINUED;
+                    (*(*target).proc).status = PS_RUNNING;
+                    crate::string::__inline_memset(
+                        storage.as_mut_ptr().cast(), 0, size_of::<SigInfo>(),
+                    );
+                }
+                // SAFETY: every byte of this plain ABI value was initialized.
+                let mut info = unsafe { storage.assume_init() };
+                info.si_signo = SIGCHLD;
+                info.si_code = CLD_CONTINUED;
+                let child = addr_of_mut!(info.sifields.sigchld).cast::<SigInfoChild>();
+                // SAFETY: child points into live writable SigInfo union storage;
+                // the chosen payload is exactly the original SIGCHLD arm. The
+                // notification borrows info synchronously and does not retain it.
+                unsafe {
+                    (*child).si_pid = (*(*target).proc).pid;
+                    (*child).si_status = 0x0000ffff;
+                    let _ = notify_parent(
+                        target, (*(*(*target).proc).parent).pid, -1, SIGCHLD, &mut info, 0,
+                    );
+                    // Re-read target->proc after the externally visible effect.
+                    (*(*target).proc).status = PS_RUNNING;
+                    if caller != target {
+                        let cpu = (*target).cpu_id;
+                        let vector = ihk_mc_get_vector(1); // actual IHK_GV_IKC
+                        let _ = ihk_mc_interrupt_cpu(cpu, vector);
+                    }
+                }
+                doint = 0;
+            }
+        }
+        // SAFETY: held target reference remains live until the final release;
+        // reads retain original unsynchronized signal/status observation semantics.
+        if doint != 0 && mask & unsafe { (*target).sigmask.val[0] } == 0 {
+            let status = unsafe { (*target).status };
+            if caller != target {
+                // SAFETY: static debug metadata is retained; read its flag without
+                // making a Rust reference to the mutable descriptor.
+                if unsafe { read_volatile(addr_of!(IPI_DEBUG.line_flags)) } >> 24 != 0 {
+                    // SAFETY: exact diagnostic format and ABI integer arguments;
+                    // target_proc is the original live selected-process snapshot.
+                    unsafe {
+                        super::kprintf(
+                            b"do_kill,ipi,pid=%d,cpu_id=%d\n\0".as_ptr().cast(),
+                            (*target_proc).pid, (*target).cpu_id,
+                        );
+                    }
+                }
+                // SAFETY: retain original CPU/vector endpoint and ignored result.
+                unsafe {
+                    let cpu = (*target).cpu_id;
+                    let vector = ihk_mc_get_vector(1);
+                    let _ = ihk_mc_interrupt_cpu(cpu, vector);
+                }
+            }
+            if status != PS_RUNNING {
+                let states = if sig == SIGKILL {
+                    PS_TRACED | PS_STOPPED | PS_INTERRUPTIBLE
+                } else {
+                    PS_INTERRUPTIBLE
+                };
+                // SAFETY: use status captured BEFORE IPI, as original C; the
+                // scheduler owns synchronization and no new lock spans this call.
+                let _ = unsafe { crate::sched_helpers::sched_wakeup_thread(target, states) };
+            }
+        }
+        // SAFETY: consume exactly the caller's held target reference after all
+        // target/process accesses. No target pointer is accessed after release.
+        unsafe { crate::process_helpers::release_thread(target) };
+        rc
+    }
+}
+
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Private isolated positive-PID process target selection; not yet compiler tested.
+mod f06_do_kill_process_target_candidate {
+    use core::ffi::c_void;
+    use core::mem::offset_of;
+    use core::ptr::{addr_of_mut, null_mut};
+
+    use crate::abi::{AbiListHead, CInt, CULong, McsRwlockLock, Process, ProcessHash,
+        SigCommon, Thread};
+
+    use super::{ESRCH, PS_EXITED, PS_ZOMBIE};
+
+    /// Select the original process-directed do_kill target under the actual locks.
+    /// Return -ESRCH only for absent PID; otherwise return zero, including an
+    /// exited/zombie process or process with no eligible thread. IRQs stay disabled.
+    ///
+    /// # Safety
+    /// Caller enters the existing tid==-1, pid>0 branch with IRQs disabled. `table`
+    /// is the original live resource-set process hash. Its circular lists and
+    /// process/thread membership obey existing hash/update/threads lock ownership.
+    /// The three node pointers designate distinct original C stack lock nodes,
+    /// alive until corresponding noirq unlock; actual noirq helpers ignore their
+    /// contents. Output slots are valid writable distinct C locals with no alias
+    /// into traversed graph. The target/lock/head slots initially contain NULL.
+    /// The held target reference transfers to the original caller's gate/enqueue/
+    /// wakeup/release path; no process or list lock escapes this function.
+    #[no_mangle]
+    pub unsafe extern "C" fn arch_do_kill_process_target_result(
+        table: *mut ProcessHash,
+        pid: CInt,
+        mask: CULong,
+        hash_node: *mut c_void,
+        update_node: *mut c_void,
+        threads_node: *mut c_void,
+        selected_process: *mut *mut Process,
+        selected_thread: *mut *mut Thread,
+        pending_lock: *mut *mut McsRwlockLock,
+        pending_head: *mut *mut AbiListHead,
+    ) -> CInt {
+        let hash = crate::process_helpers::process_hash(pid) as usize;
+        // SAFETY: actual process_hash returns a valid index for the positive PID;
+        // raw array pointers preserve genuine ABI lock/list strides without a
+        // reference spanning a lock or externally visible lifecycle operation.
+        let (hash_lock, head) = unsafe {
+            (
+                addr_of_mut!((*table).lock).cast::<McsRwlockLock>().add(hash),
+                addr_of_mut!((*table).list).cast::<AbiListHead>().add(hash),
+            )
+        };
+        // SAFETY: borrowed hash lock and node satisfy original noirq contract.
+        unsafe {
+            crate::lock_helpers::__mcs_rwlock_reader_lock_noirq(hash_lock.cast(), hash_node);
+        }
+        let mut process: *mut Process = null_mut();
+        // SAFETY: hash lock protects membership throughout this traversal. Only
+        // non-sentinel entries are converted to the containing Process pointer.
+        unsafe {
+            let mut entry = (*head).next;
+            while entry != head {
+                let candidate = entry.cast::<u8>().sub(offset_of!(Process, hash_list))
+                    .cast::<Process>();
+                if (*candidate).pid == pid {
+                    process = candidate;
+                    break;
+                }
+                entry = (*entry).next;
+            }
+        }
+        if process.is_null() {
+            // SAFETY: match original absent-PID unlock before caller restores IRQs.
+            unsafe {
+                crate::lock_helpers::__mcs_rwlock_reader_unlock_noirq(
+                    hash_lock.cast(), hash_node,
+                );
+            }
+            return -ESRCH;
+        }
+        // SAFETY: process remains protected by hash membership; output reflects
+        // original tproc even if its status below makes target selection terminal.
+        let update_lock = unsafe {
+            *selected_process = process;
+            addr_of_mut!((*process).update_lock)
+        };
+        unsafe {
+            // SAFETY: acquire process update lock inside retained hash lock.
+            crate::lock_helpers::__mcs_rwlock_reader_lock_noirq(
+                update_lock.cast(), update_node,
+            );
+        }
+        // SAFETY: status read remains inside original process update lock scope.
+        if unsafe { (*process).status != PS_EXITED && (*process).status != PS_ZOMBIE } {
+            // SAFETY: process and thread-membership list remain live under the
+            // outer hash/update guards; thread list gets its own original guard.
+            let (threads_lock, threads_head) = unsafe {
+                (addr_of_mut!((*process).threads_lock), addr_of_mut!((*process).threads_list))
+            };
+            unsafe {
+                // SAFETY: same third original stack node, no recursive node alias.
+                crate::lock_helpers::__mcs_rwlock_reader_lock_noirq(
+                    threads_lock.cast(), threads_node,
+                );
+            }
+            let mut target: *mut Thread = null_mut();
+            let mut masked_fallback: *mut Thread = null_mut();
+            // SAFETY: threads lock protects intrusive membership until hold_thread
+            // obtains original retained ownership; sigmask/status use the original
+            // locked plain reads. No new status/permission policy is introduced.
+            unsafe {
+                let mut entry = (*threads_head).next;
+                while entry != threads_head {
+                    let candidate = entry.cast::<u8>().sub(offset_of!(Thread, siblings_list))
+                        .cast::<Thread>();
+                    if ((*candidate).tid == pid || target.is_null())
+                        && (*candidate).status != PS_EXITED
+                    {
+                        if mask & (*candidate).sigmask.val[0] == 0 {
+                            target = candidate;
+                        } else if target.is_null() && masked_fallback.is_null() {
+                            masked_fallback = candidate;
+                        }
+                    }
+                    entry = (*entry).next;
+                }
+                if target.is_null() {
+                    target = masked_fallback;
+                }
+                if !target.is_null() && (*target).status != PS_EXITED {
+                    let common = (*target).sigcommon.cast::<SigCommon>();
+                    *pending_lock = addr_of_mut!((*common).lock);
+                    *pending_head = addr_of_mut!((*common).sigpending);
+                    // The selected process branch ignores hold_thread's int result,
+                    // exactly as original C; do not borrow direct-TID error policy.
+                    let _ = crate::process_helpers::hold_thread(target);
+                    *selected_thread = target;
+                } else {
+                    *selected_thread = null_mut();
+                }
+                crate::lock_helpers::__mcs_rwlock_reader_unlock_noirq(
+                    threads_lock.cast(), threads_node,
+                );
+            }
+        }
+        // SAFETY: release in reverse original order. The caller receives only
+        // output pointers and any held thread reference, never a held lock/node.
+        unsafe {
+            crate::lock_helpers::__mcs_rwlock_reader_unlock_noirq(
+                update_lock.cast(), update_node,
+            );
+            crate::lock_helpers::__mcs_rwlock_reader_unlock_noirq(hash_lock.cast(), hash_node);
+        }
+        0
+    }
+}
+
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+mod f06_do_kill_thread_target_candidate {
+    use core::ffi::c_void;
+    use core::mem::offset_of;
+    use core::ptr::{addr_of_mut, null_mut};
+
+    use crate::abi::{AbiListHead, CInt, McsRwlockLock, Process, Thread, ThreadHash};
+
+    use super::{ESRCH, PS_EXITED, PS_ZOMBIE, SIGKILL};
+
+    /// Individual-TID target lookup and original protected reference acquisition.
+    /// Return -ESRCH only for an absent matching live thread; otherwise zero.
+    /// IRQ state stays disabled for the existing caller to restore or transfer.
+    ///
+    /// # Safety
+    /// Caller owns IRQ-disabled state and the original resource-set thread hash.
+    /// `tid` must map into the actual hash table, as required by the original C
+    /// unchecked indexing contract. List members and process relations stay live
+    /// under their original hash/update/threads locks. Output slots are distinct
+    /// writable C locals, initially NULL. `node` is the original stack lock node,
+    /// reused by BOTH hash and threads locks exactly as existing C; the production
+    /// noirq providers ignore node contents. `update_node` is a distinct live node.
+    /// No hash/list/process lock escapes. A successfully held target reference
+    /// transfers to the caller's existing gate/enqueue/wakeup/release lifecycle.
+    #[no_mangle]
+    pub unsafe extern "C" fn arch_do_kill_thread_target_result(
+        table: *mut ThreadHash, pid: CInt, tid: CInt, sig: CInt,
+        node: *mut c_void, update_node: *mut c_void,
+        selected_process: *mut *mut Process, selected_thread: *mut *mut Thread,
+        pending_lock: *mut *mut McsRwlockLock, pending_head: *mut *mut AbiListHead,
+    ) -> CInt {
+        let hash = crate::process_helpers::thread_hash(tid) as usize;
+        // SAFETY: actual hash index validity and genuine array layout are caller
+        // contracts; raw pointers avoid references spanning lock acquisitions.
+        let (hash_lock, head) = unsafe {
+            (addr_of_mut!((*table).lock).cast::<McsRwlockLock>().add(hash),
+             addr_of_mut!((*table).list).cast::<AbiListHead>().add(hash))
+        };
+        // SAFETY: caller's original node and IRQ-disabled hash-lock ownership.
+        unsafe {
+            crate::lock_helpers::__mcs_rwlock_reader_lock_noirq(hash_lock.cast(), node);
+        }
+        let mut target: *mut Thread = null_mut();
+        // SAFETY: hash lock protects traversal; only real nonsentinel entries
+        // become Thread pointers. PID filtering retains original evaluation order.
+        unsafe {
+            let mut entry = (*head).next;
+            while entry != head {
+                let candidate = entry.cast::<u8>().sub(offset_of!(Thread, hash_list))
+                    .cast::<Thread>();
+                if (pid == -1 || (*(*candidate).proc).pid == pid)
+                    && (*candidate).tid == tid && (*candidate).status != PS_EXITED
+                {
+                    target = candidate;
+                    break;
+                }
+                entry = (*entry).next;
+            }
+        }
+        if target.is_null() {
+            // SAFETY: original absent-target return unlocks hash; caller restores IRQs.
+            unsafe {
+                crate::lock_helpers::__mcs_rwlock_reader_unlock_noirq(hash_lock.cast(), node);
+            }
+            return -ESRCH;
+        }
+        // SAFETY: hash guard retains selected thread/process relation through the
+        // subsequent update/threads lock scopes and the actual hold operation.
+        unsafe {
+            let process = (*target).proc;
+            *selected_process = process;
+            let update_lock = addr_of_mut!((*process).update_lock);
+            crate::lock_helpers::__mcs_rwlock_reader_lock_noirq(update_lock.cast(), update_node);
+            *pending_lock = addr_of_mut!((*target).sigpendinglock);
+            *pending_head = addr_of_mut!((*target).sigpending);
+            let threads_lock = addr_of_mut!((*process).threads_lock);
+            // Deliberate original node reuse: do not silently fix, replace with
+            // IRQ-save locks or infer support from a homemade node implementation.
+            crate::lock_helpers::__mcs_rwlock_reader_lock_noirq(threads_lock.cast(), node);
+            if (*target).status != PS_EXITED
+                && (sig == SIGKILL
+                    || ((*process).status != PS_EXITED && (*process).status != PS_ZOMBIE))
+            {
+                let rc = crate::process_helpers::hold_thread(target);
+                if rc != 0 {
+                    super::kprintf(
+                        b"%s: ERROR hold_thread returned %d,tid=%d\n\0".as_ptr().cast(),
+                        b"do_kill\0".as_ptr().cast::<i8>(), rc, (*target).tid,
+                    );
+                    target = null_mut();
+                }
+            } else {
+                target = null_mut();
+            }
+            *selected_thread = target;
+            crate::lock_helpers::__mcs_rwlock_reader_unlock_noirq(threads_lock.cast(), node);
+            crate::lock_helpers::__mcs_rwlock_reader_unlock_noirq(update_lock.cast(), update_node);
+            crate::lock_helpers::__mcs_rwlock_reader_unlock_noirq(hash_lock.cast(), node);
+        }
+        0
+    }
+}
+
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+mod f06_do_kill_prepare_info_candidate {
+    use core::mem::size_of;
+
+    use crate::abi::{CInt, SigInfo};
+
+    use super::EINVAL;
+
+    /// Original do_kill signal range check and caller-owned default siginfo setup.
+    ///
+    /// # Safety
+    /// Caller keeps original C `info0` storage in `fallback` alive throughout all
+    /// synchronous group/direct signal deliveries. If `provided` is nonnull its
+    /// bytes/lifetime remain the original consumer contract and are not read or
+    /// written here. `selected` is a distinct writable C pointer local. On invalid
+    /// signal this function writes neither the output nor fallback. On valid
+    /// signal with NULL provided, fallback is suitably aligned, writable for a
+    /// whole SigInfo and disjoint from selected; its entire object is initialized.
+    #[no_mangle]
+    pub unsafe extern "C" fn arch_do_kill_prepare_info_result(
+        sig: CInt, provided: *mut SigInfo, fallback: *mut SigInfo,
+        selected: *mut *mut SigInfo,
+    ) -> CInt {
+        if sig > 64 || sig < 0 {
+            return -EINVAL;
+        }
+        if provided.is_null() {
+            // SAFETY: original caller-owned local frame remains alive through
+            // recursive do_kill; zero ALL payload/padding bytes, same as C memset.
+            unsafe {
+                crate::string::__inline_memset(fallback.cast(), 0, size_of::<SigInfo>());
+                *selected = fallback;
+                (*fallback).si_signo = sig;
+                (*fallback).si_code = 0x80; // actual signal.h SI_KERNEL
+            }
+        } else {
+            // SAFETY: store original borrowed pointer without dereference or copy.
+            unsafe { *selected = provided };
+        }
+        0
+    }
+}
+
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Complete public do_kill orchestration, composing the separately retained bodies.
+mod f06_full_do_kill_candidate {
+    use core::ffi::c_void;
+    use core::mem::{align_of, offset_of, size_of, MaybeUninit};
+    use core::ptr::{addr_of, null_mut, read_volatile};
+
+    use crate::abi::{AbiListHead, CInt, CLong, CULong, IhkAtomic, McsRwlockLock,
+        Process, ProcessHash, SigInfo, Thread, ThreadHash};
+
+    // Actual arch-lock.h struct mcs_rwlock_node under selected !ENABLE_UBSAN.
+    // Noirq helpers ignore contents, but keep its actual type geometry/identity.
+    #[repr(C, align(64))]
+    struct NoirqNode {
+        count: IhkAtomic,
+        kind: u8,
+        locked: u8,
+        padding: [u8; 2],
+        next: *mut NoirqNode,
+    }
+    const _: () = {
+        assert!(size_of::<NoirqNode>() == 64);
+        assert!(align_of::<NoirqNode>() == 64);
+        assert!(offset_of!(NoirqNode, count) == 0);
+        assert!(offset_of!(NoirqNode, kind) == 4);
+        assert!(offset_of!(NoirqNode, locked) == 5);
+        assert!(offset_of!(NoirqNode, next) == 8);
+    };
+
+    // Exact exported provider ABIs, including nested private source2/source3/
+    // corrected-wakeup modules. No new bridge or alternate implementation.
+    unsafe extern "C" {
+        fn arch_do_kill_prepare_info_result(
+            sig: CInt, provided: *mut SigInfo, fallback: *mut SigInfo,
+            selected: *mut *mut SigInfo,
+        ) -> CInt;
+        fn arch_do_kill_process_group_result(
+            thread: *mut Thread, pid: CInt, sig: CInt, info: *mut SigInfo,
+            ptracecont: CInt, hash: *mut ProcessHash,
+        ) -> CInt;
+        fn arch_do_kill_process_target_result(
+            table: *mut ProcessHash, pid: CInt, mask: CULong,
+            hash_node: *mut c_void, update_node: *mut c_void, threads_node: *mut c_void,
+            process: *mut *mut Process, thread: *mut *mut Thread,
+            pending_lock: *mut *mut McsRwlockLock, pending_head: *mut *mut AbiListHead,
+        ) -> CInt;
+        fn arch_do_kill_thread_target_result(
+            table: *mut ThreadHash, pid: CInt, tid: CInt, sig: CInt,
+            node: *mut c_void, update_node: *mut c_void,
+            process: *mut *mut Process, thread: *mut *mut Thread,
+            pending_lock: *mut *mut McsRwlockLock, pending_head: *mut *mut AbiListHead,
+        ) -> CInt;
+        fn arch_do_kill_direct_target_gate_result(
+            caller: *mut Process, process: *mut Process, thread: *mut Thread,
+            sig: CInt, irqstate: CULong, result: *mut CULong,
+        ) -> CInt;
+        fn arch_do_kill_pending_enqueue_result(
+            thread: *mut Thread, head: *mut AbiListHead, mask: CULong, sig: CInt,
+            info: *const SigInfo, ptracecont: CInt, doint: *mut CInt,
+        ) -> CInt;
+        fn arch_do_kill_wakeup_result(
+            caller: *mut Thread, target: *mut Thread, process: *mut Process,
+            sig: CInt, ptracecont: CInt, mask: CULong, doint: CInt, rc: CInt,
+        ) -> CInt;
+    }
+
+    #[used]
+    #[link_section = "__verbose"]
+    static mut ENTER_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+        file: concat!(file!(), "\0").as_ptr().cast(),
+        func: b"do_kill\0".as_ptr().cast(),
+        fmt: core::ptr::null(),
+        line_flags: line!() & 0x00ff_ffff,
+    };
+
+    /// Existing public architecture signal-delivery entry, with unchanged ABI.
+    ///
+    /// # Safety
+    /// Caller supplies original live current/borrowed thread (or NULL), valid
+    /// signal-info bytes/lifetime when nonnull, and the existing CPU resource-set
+    /// lifetime/migration contract. Process/thread tables obey genuine lock and
+    /// reference ownership. Thread/process links needed after selection retain the
+    /// original lifetime assumptions. This implementation intentionally preserves
+    /// the Linux-UTI terminal gate's lack of an explicit IRQ restore.
+    ///
+    /// Defined-domain limits are retained: original C __sigmask(0) shifts by -1,
+    /// negative non-sentinel TIDs may index before the hash and INT_MIN PID may
+    /// overflow group negation. The corresponding old executions were undefined;
+    /// no new acceptance/policy promise for them is made by this port. The wrapping
+    /// mask below matches selected x86 shift lowering and is identical to C for
+    /// signals 1..64; it must not be treated as proof of original signal0 policy.
+    #[no_mangle]
+    pub unsafe extern "C" fn do_kill(
+        thread: *mut Thread, pid: CInt, tid: CInt, sig: CInt,
+        provided: *mut SigInfo, ptracecont: CInt,
+    ) -> CULong {
+        // SAFETY: retained actual debug metadata; preserve entry diagnostic before
+        // snapshots, including potentially externally visible kprintf ordering.
+        if unsafe { read_volatile(addr_of!(ENTER_DEBUG.line_flags)) } >> 24 != 0 {
+            unsafe {
+                super::kprintf(
+                    b"do_kill,pid=%d,tid=%d,sig=%d\n\0".as_ptr().cast(), pid, tid, sig,
+                );
+            }
+        }
+        // SAFETY: preserve original caller-process snapshot BEFORE current-CPU
+        // resource-set and thread/process hash snapshots, even on invalid signal.
+        let caller_process = if thread.is_null() {
+            null_mut()
+        } else {
+            unsafe { (*thread).proc }
+        };
+        let (thread_hash, process_hash) = unsafe {
+            let resource = (*super::get_this_cpu_local_var()).resource_set;
+            ((*resource).thread_hash, (*resource).process_hash)
+        };
+        let mut fallback = MaybeUninit::<SigInfo>::uninit();
+        let mut info = provided;
+        // SAFETY: the entire original caller-frame lifetime is now this Rust frame;
+        // info fallback remains alive across all synchronous recursive deliveries.
+        let rc = unsafe {
+            arch_do_kill_prepare_info_result(sig, provided, fallback.as_mut_ptr(), &mut info)
+        };
+        if rc != 0 {
+            return rc as CLong as CULong;
+        }
+        if tid == -1 && pid <= 0 {
+            // SAFETY: same resource snapshot and initialized or borrowed info;
+            // group provider dispatches back to THIS public entry after unlock.
+            return unsafe {
+                arch_do_kill_process_group_result(thread, pid, sig, info, ptracecont, process_hash)
+            } as CLong as CULong;
+        }
+        // SAFETY: existing privileged endpoint and original saved IRQ ownership.
+        let irqstate = unsafe { super::cpu_disable_interrupt_save() };
+        let mask = 1u64.wrapping_shl(sig.wrapping_sub(1) as u32);
+        let mut process: *mut Process = null_mut();
+        let mut target: *mut Thread = null_mut();
+        let mut pending_lock: *mut McsRwlockLock = null_mut();
+        let mut pending_head: *mut AbiListHead = null_mut();
+        let mut node = MaybeUninit::<NoirqNode>::uninit();
+        let mut update_node = MaybeUninit::<NoirqNode>::uninit();
+        let rc = if tid == -1 {
+            let mut hash_node = MaybeUninit::<NoirqNode>::uninit();
+            // SAFETY: three distinct original node roles, retained until all three
+            // actual noirq guards are released. Outputs are distinct stack locals.
+            unsafe {
+                arch_do_kill_process_target_result(
+                    process_hash, pid, mask, hash_node.as_mut_ptr().cast(),
+                    update_node.as_mut_ptr().cast(), node.as_mut_ptr().cast(),
+                    &mut process, &mut target, &mut pending_lock, &mut pending_head,
+                )
+            }
+        } else {
+            // SAFETY: individual-TID provider deliberately reuses node for outer
+            // hash and inner threads lock, matching original C and actual noirq ABI.
+            unsafe {
+                arch_do_kill_thread_target_result(
+                    thread_hash, pid, tid, sig, node.as_mut_ptr().cast(),
+                    update_node.as_mut_ptr().cast(), &mut process, &mut target,
+                    &mut pending_lock, &mut pending_head,
+                )
+            }
+        };
+        if rc != 0 {
+            // SAFETY: selection returned with all locks released and no target ref.
+            unsafe { super::cpu_restore_interrupt(irqstate) };
+            return rc as CLong as CULong;
+        }
+        let mut terminal_result = 0;
+        // SAFETY: gate consumes any held target reference only on its terminal
+        // branches; otherwise it leaves reference and disabled IRQ ownership here.
+        if unsafe {
+            arch_do_kill_direct_target_gate_result(
+                caller_process, process, target, sig, irqstate, &mut terminal_result,
+            )
+        } != 0 {
+            return terminal_result;
+        }
+        let mut doint = 0;
+        let mut pending_node = MaybeUninit::<NoirqNode>::uninit();
+        // SAFETY: continuing gate guarantees live held target and selected pending
+        // lock/head. The exact writer critical section wraps only pending enqueue;
+        // unlock precedes IRQ restore, which precedes scheduler/notification/IPI.
+        let rc = unsafe {
+            crate::lock_helpers::__mcs_rwlock_writer_lock_noirq(
+                pending_lock.cast(), pending_node.as_mut_ptr().cast(),
+            );
+            let rc = arch_do_kill_pending_enqueue_result(
+                target, pending_head, mask, sig, info, ptracecont, &mut doint,
+            );
+            crate::lock_helpers::__mcs_rwlock_writer_unlock_noirq(
+                pending_lock.cast(), pending_node.as_mut_ptr().cast(),
+            );
+            super::cpu_restore_interrupt(irqstate);
+            rc
+        };
+        // SAFETY: full tail consumes target exactly once after all effects, even
+        // when enqueue failed. No target pointer or pending-node access follows.
+        (unsafe {
+            arch_do_kill_wakeup_result(thread, target, process, sig, ptracecont, mask, doint, rc)
+        }) as CLong as CULong
+    }
+}
+
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(f03_sched_bridges_candidate)]
+mod f03_sched_bridges_candidate {
+    use core::mem::{offset_of, size_of};
+    use core::ptr::{addr_of, read_volatile};
+    use crate::abi::{CInt, CULong, SchedParam, Thread};
+
+    unsafe extern "C" {
+        static mut f03_sched_setparam_debug_v1: crate::debug::Ddebug;
+    }
+
+    /// Preserve the genuine lookup's locked, reference-held return contract.
+    /// # Safety
+    /// The process/thread lists and current CPU context satisfy find_thread's
+    /// existing locking and lifetime requirements. No reference is fabricated.
+    #[export_name = "sched_find_thread_bridge"]
+    pub unsafe extern "C" fn find(pid: CInt) -> usize {
+        unsafe { crate::process_helpers::find_thread(0, pid) as usize }
+    }
+
+    /// # Safety
+    /// The address is a live thread returned by the existing locked lookup.
+    #[export_name = "sched_thread_unlock_bridge"]
+    pub unsafe extern "C" fn unlock(thread: usize) {
+        unsafe { crate::process_helpers::thread_unlock(thread as *mut Thread) };
+    }
+
+    /// Apply the already-copied kernel sched_param using the existing Rust body.
+    /// # Safety
+    /// The thread stays writable/alive under the caller's original lock; param
+    /// addresses a readable, aligned, nonoverlapping actual SchedParam.
+    #[export_name = "sched_apply_scheduler_bridge"]
+    pub unsafe extern "C" fn apply(thread: usize, policy: CInt, param: usize) -> CInt {
+        unsafe {
+            crate::sched_helpers::setscheduler_body_result(
+                thread, policy, param, size_of::<SchedParam>(),
+                offset_of!(SchedParam, sched_priority),
+                offset_of!(Thread, sched_param), offset_of!(Thread, sched_policy),
+            )
+        }
+    }
+
+    /// # Safety
+    /// The pointer denotes a live thread under its existing acquisition protocol.
+    #[export_name = "sched_hold_thread_bridge"]
+    pub unsafe extern "C" fn hold(thread: usize) -> CInt {
+        unsafe { crate::process_helpers::hold_thread(thread as *mut Thread) }
+    }
+
+    /// # Safety
+    /// The caller owns the reference it transfers to the genuine release path.
+    /// Release may destroy the thread; no access follows this call.
+    #[export_name = "sched_release_thread_bridge"]
+    pub unsafe extern "C" fn release(thread: usize) {
+        unsafe { crate::process_helpers::release_thread(thread as *mut Thread) };
+    }
+
+    /// # Safety
+    /// The live referenced thread and CPU satisfy the genuine synchronous
+    /// migration request/wait contract; ownership stays with the original caller.
+    #[export_name = "sched_request_migrate_bridge"]
+    pub unsafe extern "C" fn migrate(cpu: CInt, thread: usize) {
+        unsafe { crate::sched_helpers::sched_request_migrate(cpu, thread as *mut Thread) };
+    }
+
+    /// # Safety
+    /// The original dynamic-debug record/formatter are available and obey the
+    /// existing flag synchronization contract. User address is formatted only.
+    #[export_name = "sched_setparam_log_bridge"]
+    pub unsafe extern "C" fn log(pid: CInt, address: CULong) {
+        let flags = unsafe { read_volatile(addr_of!(f03_sched_setparam_debug_v1.line_flags)) >> 24 };
+        if flags != 0 {
+            unsafe {
+                super::kprintf(c"sched_setparam: pid: %d, uparam: 0x%lx\n".as_ptr().cast(), pid, address);
+            }
+        }
+    }
+}
