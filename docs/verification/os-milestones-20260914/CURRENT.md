@@ -1,3 +1,30 @@
+## Twenty-minute review — 2026-10-25T23:37Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Source20 independentlypasses411controlledlifecycle cases/ABI25 including26
+full-width usercopy vectors; fivecommands,4passed/1originalcfgfailure retained.
+Finalsuffix reused its Rustobject. Source21 nowimplements actualpositive-CAS
+lookup/retainedcaller/destructor integration privately; its first body compile
+passed afterone fixture-parent correction, but fixtures/selection remain unrun.
+No new canonical/default/native/file/C-boundary closures thisinterval.
+
+Current typedbaseline independentlypasses a4ea798e:4completePROC sweeps,
+134retained+18actualinputmaps,45requiredabsences andtwoexact44-container
+inspections(allstopped). Historicalfull label-map equality staysUNPROVEN.
+Parent866814/start76706306/FD3 andshared324a/inode116858 remainheld.
+Nextroot: publish/fetchprocess-only source7f34/profile0fc and concreteCPU∞
+release; review18h validates actualpayload beforeone exactpidfd retirement.
+Nooutertimeoutkill; sharedrecord remainsintact, noDocker/container action.
+Externaloriginaltool65454/wrapper866813 join andposthelper proof follow; shared
+archival needs separate review. Owner8fb/request369 is source-ready only;
+namespace2 and freshadmission remain unqualified. No newheavy/grant replay.
+
+Two completed original30-minute buckets add0packages; target95%unmet.
+Firstdefaultcompiler/failure-to-runtimevalidatedfix times remainunknown.
+[Review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T2337.json).
+M12=35/35; M14/M15 OPEN. Fixeddeadline2026-10-26T15:55:33Z andsamecontrols/
+creditrun7f remain. Independent source workcontinues while exactrecovery proceeds.
+
 ## Twenty-minute review — 2026-10-25T23:17Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

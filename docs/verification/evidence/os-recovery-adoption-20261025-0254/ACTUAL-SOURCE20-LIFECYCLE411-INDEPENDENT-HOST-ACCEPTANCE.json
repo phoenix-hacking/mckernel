@@ -1,0 +1,38 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "ACCEPT_HOST_LIFECYCLE411_ABI25_CONTROLLED_ONLY",
+  "reviewer": "/root/perf_review18h",
+  "recorded_by": "/root",
+  "at": "2026-10-25T23:40:09.039919+00:00",
+  "result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-20-pending-commit-lifecycle/usercopy-long-abi-correction-1/ACTUAL-FIXTURE-SUFFIX-FIRST-RESULT.json",
+    "bytes": 10303,
+    "sha256": "a2308f2b1b8a9d4dadf4d22113106c4fa9119f0763b374e9e06d97cfed21430a"
+  },
+  "actual": {
+    "producer_cases": 376,
+    "getter_cases": 30,
+    "destructor_cases": 5,
+    "ABI_words": 25,
+    "long_highword_vectors": 26,
+    "original_cases_preserved": 385,
+    "commands_rc0": 2,
+    "all_joined_groups_absent_streams_closed": true,
+    "wall_seconds": 0.333277,
+    "CPU_seconds": 0.41028,
+    "max_child_RSS_KiB": 34144,
+    "CPU0_released": true,
+    "retained_Rust_object": "d904db5d...988ab",
+    "Rust_recompile_in_suffix": false
+  },
+  "genuine_ABI": "ExactproductionPtraceUserCopyFromFn/ToFn Rustimports andC long typedef/staticcompat, no casts/normalizing adapters; fullwidth1L<<32 nonzero failure/rollback checks. Originalintcontract object and wrongcfg compilerfailure preserved.",
+  "metadata_debt": "Frozencommandlabel retains360/20 while expected/actual oracle411; label is not case-count evidence.",
+  "limits": [
+    "explicit controlledcurrent-slot contract only",
+    "realstatus/thread/sigcommonlifetime exclusion open",
+    "allparticipantlocks/destructorpublisherexclusion/aliasownership open",
+    "externalHELDmapping andproductionselection held",
+    "no default/native/wholecallback/Cretirement/quarantineclearance"
+  ],
+  "integration_metric_credit": false
+}
