@@ -704,9 +704,24 @@ void process_free_vm_bridge(void *vm)
 #endif
 #line 563
 
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+#error MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE requires MCKERNEL_RUST_PROCESS_HELPERS
+#endif
+extern struct list_head resource_set_list;
+extern mcs_rwlock_lock_t resource_set_lock;
+extern ihk_spinlock_t runq_reservation_lock;
+#else
+#line 564
 struct list_head resource_set_list;
 mcs_rwlock_lock_t    resource_set_lock;
 ihk_spinlock_t runq_reservation_lock;
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 564
+#else
+#line 566
+#endif
 
 int idle_halt = 0;
 int allow_oversubscribe = 0;

@@ -110,6 +110,19 @@ size_t iov_length(const struct iovec *iov, unsigned long nr_segs)
 #undef	SYSCALL_DELEGATED
 
 /* generate syscall_table[] */
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT) && defined(MCKERNEL_RUST_F03_SYSCALL_TABLE)
+/* Rust owns immutable slot storage; genuine C fallback stays below. */
+#ifdef PROFILE_ENABLE
+_Static_assert(PROFILE_EVENT_MAX == 4024, "qualify changed profile syscall slot");
+#define F03_SYSCALL_TABLE_SLOTS (PROFILE_EVENT_MAX + 1)
+#else
+#define F03_SYSCALL_TABLE_SLOTS 812
+#endif
+extern long (*const f03_syscall_handler_table_v1[F03_SYSCALL_TABLE_SLOTS])
+	(int, ihk_mc_user_context_t *);
+#define syscall_table f03_syscall_handler_table_v1
+#else
+#line 113
 static long (*syscall_table[])(int, ihk_mc_user_context_t *) = {
 #define	SYSCALL_HANDLED(number,name)	[number] = &sys_##name,
 #define	SYSCALL_DELEGATED(number,name)
@@ -117,13 +130,23 @@ static long (*syscall_table[])(int, ihk_mc_user_context_t *) = {
 #undef	SYSCALL_HANDLED
 #undef	SYSCALL_DELEGATED
 };
+#endif
+#line 119
+
 
 #ifdef MCKERNEL_RUST_SYSCALL_OFFLOAD
 #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
 /* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
 /* Readonly ABI binding to the unchanged genuine C table; its C data remains debt. */
 struct f03_syscall_dispatch_binding_v1 {
+#ifdef MCKERNEL_RUST_F03_SYSCALL_TABLE
+#line 126
+ long (*const *handlers)(int,ihk_mc_user_context_t *);
+#else
+#line 126
  long (**handlers)(int,ihk_mc_user_context_t *);
+#endif
+#line 127
  unsigned long count;
 };
 _Static_assert(sizeof(syscall_table)/sizeof(syscall_table[0]) <= 2147483647UL,

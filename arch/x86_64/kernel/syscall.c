@@ -595,6 +595,10 @@ arch_process_vm_rw_log_bridge(const struct arch_process_vm_rw_log_record *record
 	}
 }
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern const struct arch_process_vm_rw_offsets arch_process_vm_rw_kernel_offsets;
+#else
+#line 598
 static const struct arch_process_vm_rw_offsets arch_process_vm_rw_kernel_offsets = {
 	.thread_proc_offset = __builtin_offsetof(struct thread, proc),
 	.thread_vm_offset = __builtin_offsetof(struct thread, vm),
@@ -612,6 +616,8 @@ static const struct arch_process_vm_rw_offsets arch_process_vm_rw_kernel_offsets
 		__builtin_offsetof(struct address_space, page_table),
 	.vm_range_flag_offset = __builtin_offsetof(struct vm_range, flag),
 };
+#endif /* exact original offset-table fallback */
+#line 615
 
 void *
 arch_ptrace_lookup_user_context_bridge(void *thread)

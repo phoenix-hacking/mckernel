@@ -34741,3 +34741,311 @@ pub(crate) mod f03_syscall_entry_candidate {
         }
     }
 }
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Exact existing thirteen-offset initializer, reused from the private process-VM port.
+// Immutable real-layout offsets: no pointers, relocation, ownership transfer or allocator.
+// Selected C consumers borrow this static for their existing synchronous call.
+#[used]
+#[export_name = "arch_process_vm_rw_kernel_offsets"]
+pub static F06_PROCESS_VM_RW_OFFSETS: ArchProcessVmRwOffsets = ArchProcessVmRwOffsets {
+    thread_proc_offset: offset_of!(Thread, proc) as SizeT,
+    thread_vm_offset: offset_of!(Thread, vm) as SizeT,
+    proc_vm_offset: offset_of!(Process, vm) as SizeT,
+    proc_status_offset: offset_of!(Process, status) as SizeT,
+    proc_ruid_offset: offset_of!(Process, ruid) as SizeT,
+    proc_euid_offset: offset_of!(Process, euid) as SizeT,
+    proc_suid_offset: offset_of!(Process, suid) as SizeT,
+    proc_rgid_offset: offset_of!(Process, rgid) as SizeT,
+    proc_egid_offset: offset_of!(Process, egid) as SizeT,
+    proc_sgid_offset: offset_of!(Process, sgid) as SizeT,
+    process_vm_address_space_offset: offset_of!(ProcessVm, address_space) as SizeT,
+    address_space_page_table_offset: offset_of!(crate::abi::AddressSpace, page_table) as SizeT,
+    vm_range_flag_offset: offset_of!(VmRange, flag) as SizeT,
+};
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Generated only from the genuine syscall_list.h/profile.h pinned in the manifest.
+#[cfg(all(f03_syscall_table_candidate, f03_dispatch_context_candidate))]
+pub(crate) mod f03_syscall_table_candidate {
+    use crate::abi::{CInt, CLong, X86UserContext};
+    use super::f03_dispatch_context_candidate::Handler;
+
+    #[cfg(enable_profile)]
+    pub const SLOT_COUNT: usize = 4025;
+    #[cfg(not(enable_profile))]
+    pub const SLOT_COUNT: usize = 812;
+
+    unsafe extern "C" {
+        fn sys_read(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_open(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_close(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_mmap(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_mprotect(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_munmap(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_brk(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_rt_sigaction(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_rt_sigprocmask(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_rt_sigreturn(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_ioctl(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_sched_yield(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_mremap(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_msync(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_mincore(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_madvise(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_shmget(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_shmat(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_shmctl(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_pause(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_nanosleep(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_getitimer(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_setitimer(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_getpid(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_clone(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_fork(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_vfork(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_execve(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_exit(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_wait4(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_kill(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_shmdt(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_fcntl(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_gettimeofday(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_getrlimit(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_getrusage(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_sysinfo(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_times(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_ptrace(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_getuid(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_getgid(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_setuid(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_setgid(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_geteuid(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_getegid(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_setpgid(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_getppid(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_setreuid(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_setregid(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_setresuid(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_getresuid(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_setresgid(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_getresgid(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_setfsuid(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_setfsgid(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_rt_sigpending(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_rt_sigtimedwait(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_rt_sigqueueinfo(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_rt_sigsuspend(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_sigaltstack(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_sched_setparam(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_sched_getparam(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_sched_setscheduler(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_sched_getscheduler(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_sched_get_priority_max(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_sched_get_priority_min(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_sched_rr_get_interval(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_mlock(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_munlock(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_mlockall(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_munlockall(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_prctl(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_arch_prctl(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_setrlimit(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_settimeofday(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_gettid(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_tkill(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_time(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_futex(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_sched_setaffinity(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_sched_getaffinity(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_remap_file_pages(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_set_tid_address(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_clock_gettime(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_exit_group(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_tgkill(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_mbind(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_set_mempolicy(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_get_mempolicy(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_waitid(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_migrate_pages(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_openat(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_pselect6(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_ppoll(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_set_robust_list(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_move_pages(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_epoll_pwait(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_signalfd(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_signalfd4(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        #[cfg(enable_perf)]
+        fn sys_perf_event_open(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_prlimit64(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        #[cfg(f03_syscall_table_dcfa)]
+        fn sys_mod_call(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_getcpu(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_process_vm_readv(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_process_vm_writev(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_execveat(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        #[cfg(f03_syscall_table_clone3)]
+        fn sys_clone3(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_get_cpu_id(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        #[cfg(enable_profile)]
+        fn sys_profile(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_util_migrate_inter_kernel(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_util_indicate_clone(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_get_system(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_util_register_desc(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_swapout(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_linux_mlock(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_suspend_threads(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_resume_threads(num: CInt, ctx: *mut X86UserContext) -> CLong;
+        fn sys_linux_spawn(num: CInt, ctx: *mut X86UserContext) -> CLong;
+    }
+
+    const fn slots() -> [Option<Handler>; SLOT_COUNT] {
+        let mut table: [Option<Handler>; SLOT_COUNT] = [None; SLOT_COUNT];
+        table[0] = Some(sys_read);
+        table[2] = Some(sys_open);
+        table[3] = Some(sys_close);
+        table[9] = Some(sys_mmap);
+        table[10] = Some(sys_mprotect);
+        table[11] = Some(sys_munmap);
+        table[12] = Some(sys_brk);
+        table[13] = Some(sys_rt_sigaction);
+        table[14] = Some(sys_rt_sigprocmask);
+        table[15] = Some(sys_rt_sigreturn);
+        table[16] = Some(sys_ioctl);
+        table[24] = Some(sys_sched_yield);
+        table[25] = Some(sys_mremap);
+        table[26] = Some(sys_msync);
+        table[27] = Some(sys_mincore);
+        table[28] = Some(sys_madvise);
+        table[29] = Some(sys_shmget);
+        table[30] = Some(sys_shmat);
+        table[31] = Some(sys_shmctl);
+        table[34] = Some(sys_pause);
+        table[35] = Some(sys_nanosleep);
+        table[36] = Some(sys_getitimer);
+        table[38] = Some(sys_setitimer);
+        table[39] = Some(sys_getpid);
+        table[56] = Some(sys_clone);
+        table[57] = Some(sys_fork);
+        table[58] = Some(sys_vfork);
+        table[59] = Some(sys_execve);
+        table[60] = Some(sys_exit);
+        table[61] = Some(sys_wait4);
+        table[62] = Some(sys_kill);
+        table[67] = Some(sys_shmdt);
+        table[72] = Some(sys_fcntl);
+        table[96] = Some(sys_gettimeofday);
+        table[97] = Some(sys_getrlimit);
+        table[98] = Some(sys_getrusage);
+        table[99] = Some(sys_sysinfo);
+        table[100] = Some(sys_times);
+        table[101] = Some(sys_ptrace);
+        table[102] = Some(sys_getuid);
+        table[104] = Some(sys_getgid);
+        table[105] = Some(sys_setuid);
+        table[106] = Some(sys_setgid);
+        table[107] = Some(sys_geteuid);
+        table[108] = Some(sys_getegid);
+        table[109] = Some(sys_setpgid);
+        table[110] = Some(sys_getppid);
+        table[113] = Some(sys_setreuid);
+        table[114] = Some(sys_setregid);
+        table[117] = Some(sys_setresuid);
+        table[118] = Some(sys_getresuid);
+        table[119] = Some(sys_setresgid);
+        table[120] = Some(sys_getresgid);
+        table[122] = Some(sys_setfsuid);
+        table[123] = Some(sys_setfsgid);
+        table[127] = Some(sys_rt_sigpending);
+        table[128] = Some(sys_rt_sigtimedwait);
+        table[129] = Some(sys_rt_sigqueueinfo);
+        table[130] = Some(sys_rt_sigsuspend);
+        table[131] = Some(sys_sigaltstack);
+        table[142] = Some(sys_sched_setparam);
+        table[143] = Some(sys_sched_getparam);
+        table[144] = Some(sys_sched_setscheduler);
+        table[145] = Some(sys_sched_getscheduler);
+        table[146] = Some(sys_sched_get_priority_max);
+        table[147] = Some(sys_sched_get_priority_min);
+        table[148] = Some(sys_sched_rr_get_interval);
+        table[149] = Some(sys_mlock);
+        table[150] = Some(sys_munlock);
+        table[151] = Some(sys_mlockall);
+        table[152] = Some(sys_munlockall);
+        table[157] = Some(sys_prctl);
+        table[158] = Some(sys_arch_prctl);
+        table[160] = Some(sys_setrlimit);
+        table[164] = Some(sys_settimeofday);
+        table[186] = Some(sys_gettid);
+        table[200] = Some(sys_tkill);
+        table[201] = Some(sys_time);
+        table[202] = Some(sys_futex);
+        table[203] = Some(sys_sched_setaffinity);
+        table[204] = Some(sys_sched_getaffinity);
+        table[216] = Some(sys_remap_file_pages);
+        table[218] = Some(sys_set_tid_address);
+        table[228] = Some(sys_clock_gettime);
+        table[231] = Some(sys_exit_group);
+        table[234] = Some(sys_tgkill);
+        table[237] = Some(sys_mbind);
+        table[238] = Some(sys_set_mempolicy);
+        table[239] = Some(sys_get_mempolicy);
+        table[247] = Some(sys_waitid);
+        table[256] = Some(sys_migrate_pages);
+        table[257] = Some(sys_openat);
+        table[270] = Some(sys_pselect6);
+        table[271] = Some(sys_ppoll);
+        table[273] = Some(sys_set_robust_list);
+        table[279] = Some(sys_move_pages);
+        table[281] = Some(sys_epoll_pwait);
+        table[282] = Some(sys_signalfd);
+        table[289] = Some(sys_signalfd4);
+        #[cfg(enable_perf)]
+        {
+            table[298] = Some(sys_perf_event_open);
+        }
+        table[302] = Some(sys_prlimit64);
+        #[cfg(f03_syscall_table_dcfa)]
+        {
+            table[303] = Some(sys_mod_call);
+        }
+        table[309] = Some(sys_getcpu);
+        table[310] = Some(sys_process_vm_readv);
+        table[311] = Some(sys_process_vm_writev);
+        table[322] = Some(sys_execveat);
+        #[cfg(f03_syscall_table_clone3)]
+        {
+            table[435] = Some(sys_clone3);
+        }
+        table[700] = Some(sys_get_cpu_id);
+        #[cfg(enable_profile)]
+        {
+            table[4024] = Some(sys_profile);
+        }
+        table[730] = Some(sys_util_migrate_inter_kernel);
+        table[731] = Some(sys_util_indicate_clone);
+        table[732] = Some(sys_get_system);
+        table[733] = Some(sys_util_register_desc);
+        table[801] = Some(sys_swapout);
+        table[802] = Some(sys_linux_mlock);
+        table[803] = Some(sys_suspend_threads);
+        table[804] = Some(sys_resume_threads);
+        table[811] = Some(sys_linux_spawn);
+        table
+    }
+
+    // Immutable, compile-time initialized owned storage. C consumers receive only
+    // const slot access; no runtime initialization, callbacks, allocation or
+    // mutable aliases are introduced. Actual provider definitions remain debt.
+    // External visibility is required by the selected C translation unit.
+    #[no_mangle]
+    pub static f03_syscall_handler_table_v1: [Option<Handler>; SLOT_COUNT] = slots();
+
+    const _: () = {
+        assert!(core::mem::size_of::<Option<Handler>>() == 8);
+        assert!(core::mem::align_of::<Option<Handler>>() == 8);
+        assert!(core::mem::size_of::<[Option<Handler>; SLOT_COUNT]>() == SLOT_COUNT * 8);
+    };
+}

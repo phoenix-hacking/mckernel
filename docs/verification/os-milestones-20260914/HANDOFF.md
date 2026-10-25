@@ -1,3 +1,33 @@
+## Thirty-minute review: five data owners integrated; SDK owner recovery required — 2026-10-25T09:12Z review, updated 09:40Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M12 remains35/35; M14/M15 OPEN. The review snapshot interval accepted zero new
+packages; at09:13:25 independent HOST acceptance integrated five data owners
+with285 Rust function providers across five files. One fullRust/partial-link
+qualification passed; default/native/whole-file/C-boundary closures remain zero.
+Logger13 passed8640 comparisons and ptrace14 passed6240 separately, pending
+coherent current integration. [Review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0912.json).
+
+BFD actual semantic link/run/symbol checks passed; selected configure failed on
+CXX/install prerequisites. Owner635880/start71676755 is quarantined holding
+mutex27:4 after its source inventory observer exceeded4096 expanded entries.
+The stopped container and FAILED client records are retained. Corrected bounded
+read-only two-snapshot proof completed; independent raw review and separately
+released exact owned recovery are next. No other heavy work is admitted.
+Copy7 owns recovery source, recovery_review independent release, root execution.
+Mem owns source clone/observer and bootstrap fixes; preserve8+3 successful SDK
+commands and execute only the reviewed remaining suffix after fresh admission.
+
+Scheduling change: resolve retained-owner recovery instead of waiting for its
+quarantine timeout; refill disjoint source lanes and reuse successful prefixes.
+Measured HOST CPU27.200s/wall27.340s, peak child587144KiB, suffix2.187s; actual
+first-compiler timestamp and validated SDK-fix latency remain unknown. Point CPU
+sample0.487 busy eligible cores is not sustained useful utilization. HOST154.5GB,
+scratch14.10GB, MemAvailable27.18MKiB at snapshot; preserve exact greater SDK floors.
+Bucket7 has one package after this snapshot: sustained1.95x target is not achieved.
+Planning estimates remain [low-confidence context](M14-M15-ENGINEERING-ESTIMATE-20261025-0512.md).
+Monitor496359/1800s, included-first creditrun7f and2026-10-26T06:00Z cutoff unchanged.
+
 ## Thirty-minute review: current285 integrated; BFD diagnostic identifies oracle defect — 2026-10-25T08:46:57.569695+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
