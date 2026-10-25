@@ -1,0 +1,18 @@
+{
+  "command": [
+    "/usr/bin/env",
+    "-i",
+    "PATH=/nightly/bin:/usr/bin:/bin",
+    "LANG=C",
+    "LC_ALL=C",
+    "/usr/bin/python3",
+    "/candidate/orchestration/qualify.py",
+    "--repo",
+    "/src",
+    "--output",
+    "/work/qualification-1"
+  ],
+  "jobs": 1,
+  "qualifier_sha256": "4b1bd6afa8b11384e0e7b194c515261d67edbf160af98ad83affb05d0573b072",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing."
+}

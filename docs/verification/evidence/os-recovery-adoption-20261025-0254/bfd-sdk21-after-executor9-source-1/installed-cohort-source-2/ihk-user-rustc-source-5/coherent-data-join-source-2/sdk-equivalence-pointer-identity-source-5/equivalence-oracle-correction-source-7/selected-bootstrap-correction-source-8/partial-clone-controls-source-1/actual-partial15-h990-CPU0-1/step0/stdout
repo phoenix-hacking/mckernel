@@ -1,0 +1,114 @@
+{
+  "status": "PASS_ACTUAL_PARTIAL_FILESYSTEM_MODEL_ONLY",
+  "records": [
+    {
+      "case": "empty-output-before-clone",
+      "status": "PASS",
+      "inventory": {
+        "source_entries": 0,
+        "generated_entries": 0,
+        "logical_bytes": 0,
+        "allocated_bytes": 4096
+      }
+    },
+    {
+      "case": "missing-declared-entries-and-provisional-directory-mode",
+      "status": "PASS",
+      "inventory": {
+        "source_entries": 1,
+        "generated_entries": 3,
+        "logical_bytes": 0,
+        "allocated_bytes": 20480
+      }
+    },
+    {
+      "case": "short-copied-bytes-before-copystat",
+      "status": "PASS",
+      "inventory": {
+        "source_entries": 4,
+        "generated_entries": 3,
+        "logical_bytes": 1,
+        "allocated_bytes": 32768
+      }
+    },
+    {
+      "case": "declared-dangling-file-alias-no-target-copied",
+      "status": "PASS",
+      "inventory": {
+        "source_entries": 9,
+        "generated_entries": 3,
+        "logical_bytes": 21,
+        "allocated_bytes": 49152
+      }
+    },
+    {
+      "case": "declared-dangling-directory-alias-no-traversal",
+      "status": "PASS",
+      "inventory": {
+        "source_entries": 12,
+        "generated_entries": 3,
+        "logical_bytes": 32,
+        "allocated_bytes": 57344
+      }
+    },
+    {
+      "case": "short-file-over-declared-size",
+      "status": "EXPECTED_REFUSAL",
+      "error": "source file type/size changed"
+    },
+    {
+      "case": "undeclared-partial-entry",
+      "status": "EXPECTED_REFUSAL",
+      "error": "undeclared source entry"
+    },
+    {
+      "case": "changed-alias-escape",
+      "status": "EXPECTED_REFUSAL",
+      "error": "undeclared or changed alias"
+    },
+    {
+      "case": "file-becomes-directory",
+      "status": "EXPECTED_REFUSAL",
+      "error": "source directory type changed"
+    },
+    {
+      "case": "partial-claimed-complete",
+      "status": "EXPECTED_REFUSAL",
+      "error": "source mode changed"
+    },
+    {
+      "case": "partial-logical-cap",
+      "status": "EXPECTED_REFUSAL",
+      "error": "logical byte bound"
+    },
+    {
+      "case": "partial-allocated-cap",
+      "status": "EXPECTED_REFUSAL",
+      "error": "allocated byte bound"
+    },
+    {
+      "case": "partial-source-count-cap",
+      "status": "EXPECTED_REFUSAL",
+      "error": "source entry bound"
+    },
+    {
+      "case": "generated-unpinned-alias",
+      "status": "EXPECTED_REFUSAL",
+      "error": "undeclared or changed alias"
+    },
+    {
+      "case": "restored-incomplete-source-still-accepted",
+      "status": "PASS",
+      "inventory": {
+        "source_entries": 12,
+        "generated_entries": 3,
+        "logical_bytes": 32,
+        "allocated_bytes": 57344
+      }
+    }
+  ],
+  "declared_source_paths": 3053,
+  "declared_aliases": 72,
+  "helper_unchanged": true,
+  "SDK_or_native_acceptance": false
+}

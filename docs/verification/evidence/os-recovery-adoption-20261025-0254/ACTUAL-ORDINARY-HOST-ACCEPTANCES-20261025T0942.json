@@ -1,0 +1,40 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "recorded_at": 1792921332.027311,
+  "reviewer": "/root/f02_review",
+  "implementation_ownership": false,
+  "items": [
+    {
+      "decision": "PASS_ACTUAL_ABI_ONLY",
+      "handoff_sha256": "6763a9706372c8449527f225562dfc51b554383344e08eef70b50c15c71c677b",
+      "result_sha256": "13eba166e41861d5bea019efe259513c1b760185fa22c0c7738579d8d2d96426",
+      "scope": "perf ABI33/64flags/scalarunion/request bytes; attr104/al8 request72/al8; entry not compiled",
+      "CPU_s": 0.373519,
+      "wall_s": 0.362307274
+    },
+    {
+      "decision": "PASS_ACTUAL_CONTROLLED_HOST_GETSIGINFO6144_ABI14",
+      "summary_sha256": "1c7c1e7d60af40825c023c66ce64dbb08515ea5562825d5282d17c81a9680376",
+      "result_sha256": "6ca021157be44bf7e10a7a26324747295d903520e092c4a1d3006890d2434401",
+      "scope": "6144 unchanged C/Rust parity cases, ABI14,128B/order/error/no mutation; heldsetsiginfoOFF",
+      "CPU_s": 0.321512,
+      "wall_s": 0.318733,
+      "original_failure_retained": "05a34e58ea557c90968153bf97e1805e5facae7bf783896a05974f8a850e3fbb"
+    },
+    {
+      "decision": "PASS_ACTUAL_TWO_MM_CONTROLLED_HOST_FIXTURE",
+      "handoff_sha256": "6bcd0bb631171cfd8f21d2fbb64644a5b4a5af634d404c3faaf221cfcaebdddb",
+      "result_sha256": "28e59099a6afde5a296cf4a1ecad15d04b4de7a14312cc2e09fd84647c0bc35f",
+      "scope": "two stable MM allocations/interleaving/peer isolation/wrap/repeatedVMA/exact controlled trace; mockABI singlethreaded",
+      "CPU_s": 0.300248,
+      "wall_s": 0.283645
+    }
+  ],
+  "all_children_joined": true,
+  "default_acceptance": false,
+  "native_acceptance": false,
+  "whole_file_retirement": false,
+  "new_fixed_integration_package_acceptance": false,
+  "new_integrated_runtime_bodies": 0,
+  "limits": "Real pending-node concurrency/MMU/usercopy/LinuxMM ABI/RAII/current production fullcrate remain open."
+}

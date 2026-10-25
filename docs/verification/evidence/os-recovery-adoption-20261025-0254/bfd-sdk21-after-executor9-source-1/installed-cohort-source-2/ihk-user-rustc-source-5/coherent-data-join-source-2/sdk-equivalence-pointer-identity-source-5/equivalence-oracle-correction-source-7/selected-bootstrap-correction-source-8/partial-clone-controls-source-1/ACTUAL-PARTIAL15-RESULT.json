@@ -1,0 +1,182 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_PARTIAL15_FILESYSTEM_MODEL_ONLY",
+  "records": [
+    {
+      "step": 0,
+      "command": {
+        "argv": [
+          "/usr/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/selected-bootstrap-correction-source-8/partial-clone-controls-source-1/check_actual_partial_clone_model.NOT-EXECUTED.py",
+          "--check-once",
+          "d52ee2dc29c17f46c2f35956a97d271ac7bcfc33e3dad7d3beee567c990b81b4"
+        ],
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actualincomplete filesystemmodel6positive9negative againstunchangedrolehelper; no owner/SDK/root/compiler."
+      },
+      "join": {
+        "pid": 655398,
+        "start": 71973071,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.08147176797501743,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/selected-bootstrap-correction-source-8/partial-clone-controls-source-1/actual-partial15-h990-CPU0-1/step0/stdout",
+            "sha256": "2f9ef8404aea712ba46afd94501b06d6c9473631a0d88d28ccd97b9652e05c15",
+            "device": 66306,
+            "inode": 59543346,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 2871,
+            "mtime_ns": 1792922286057793896,
+            "ctime_ns": 1792922286057793896
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/selected-bootstrap-correction-source-8/partial-clone-controls-source-1/actual-partial15-h990-CPU0-1/step0/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59543347,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1792922286017792725,
+            "ctime_ns": 1792922286017792725
+          }
+        }
+      }
+    }
+  ],
+  "checks": {
+    "status": "PASS_ACTUAL_PARTIAL_FILESYSTEM_MODEL_ONLY",
+    "records": [
+      {
+        "case": "empty-output-before-clone",
+        "status": "PASS",
+        "inventory": {
+          "source_entries": 0,
+          "generated_entries": 0,
+          "logical_bytes": 0,
+          "allocated_bytes": 4096
+        }
+      },
+      {
+        "case": "missing-declared-entries-and-provisional-directory-mode",
+        "status": "PASS",
+        "inventory": {
+          "source_entries": 1,
+          "generated_entries": 3,
+          "logical_bytes": 0,
+          "allocated_bytes": 20480
+        }
+      },
+      {
+        "case": "short-copied-bytes-before-copystat",
+        "status": "PASS",
+        "inventory": {
+          "source_entries": 4,
+          "generated_entries": 3,
+          "logical_bytes": 1,
+          "allocated_bytes": 32768
+        }
+      },
+      {
+        "case": "declared-dangling-file-alias-no-target-copied",
+        "status": "PASS",
+        "inventory": {
+          "source_entries": 9,
+          "generated_entries": 3,
+          "logical_bytes": 21,
+          "allocated_bytes": 49152
+        }
+      },
+      {
+        "case": "declared-dangling-directory-alias-no-traversal",
+        "status": "PASS",
+        "inventory": {
+          "source_entries": 12,
+          "generated_entries": 3,
+          "logical_bytes": 32,
+          "allocated_bytes": 57344
+        }
+      },
+      {
+        "case": "short-file-over-declared-size",
+        "status": "EXPECTED_REFUSAL",
+        "error": "source file type/size changed"
+      },
+      {
+        "case": "undeclared-partial-entry",
+        "status": "EXPECTED_REFUSAL",
+        "error": "undeclared source entry"
+      },
+      {
+        "case": "changed-alias-escape",
+        "status": "EXPECTED_REFUSAL",
+        "error": "undeclared or changed alias"
+      },
+      {
+        "case": "file-becomes-directory",
+        "status": "EXPECTED_REFUSAL",
+        "error": "source directory type changed"
+      },
+      {
+        "case": "partial-claimed-complete",
+        "status": "EXPECTED_REFUSAL",
+        "error": "source mode changed"
+      },
+      {
+        "case": "partial-logical-cap",
+        "status": "EXPECTED_REFUSAL",
+        "error": "logical byte bound"
+      },
+      {
+        "case": "partial-allocated-cap",
+        "status": "EXPECTED_REFUSAL",
+        "error": "allocated byte bound"
+      },
+      {
+        "case": "partial-source-count-cap",
+        "status": "EXPECTED_REFUSAL",
+        "error": "source entry bound"
+      },
+      {
+        "case": "generated-unpinned-alias",
+        "status": "EXPECTED_REFUSAL",
+        "error": "undeclared or changed alias"
+      },
+      {
+        "case": "restored-incomplete-source-still-accepted",
+        "status": "PASS",
+        "inventory": {
+          "source_entries": 12,
+          "generated_entries": 3,
+          "logical_bytes": 32,
+          "allocated_bytes": 57344
+        }
+      }
+    ],
+    "declared_source_paths": 3053,
+    "declared_aliases": 72,
+    "helper_unchanged": true,
+    "SDK_or_native_acceptance": false
+  },
+  "input_identities_unchanged": true,
+  "seconds": 0.1014973979908973,
+  "CPU_seconds": 0.153144,
+  "CPU0_released": true,
+  "SDK_query_root_native": false,
+  "execution_release": false
+}

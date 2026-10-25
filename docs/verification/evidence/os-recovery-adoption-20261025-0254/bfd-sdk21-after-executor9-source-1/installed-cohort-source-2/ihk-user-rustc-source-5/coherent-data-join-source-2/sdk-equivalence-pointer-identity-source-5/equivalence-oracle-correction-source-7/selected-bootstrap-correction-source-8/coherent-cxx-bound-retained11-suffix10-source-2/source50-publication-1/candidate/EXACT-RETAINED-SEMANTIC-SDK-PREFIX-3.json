@@ -1,0 +1,129 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "AUTHENTICATED_RETAINED_THREE_ACTUAL_SEMANTIC_PREFIX_ROWS_SOURCE_ONLY",
+  "prefix_root": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/sdk-suffix-owner-source-1/workspace/native-running-modules-candidate-5ad32d6a9f404d0fa638c6539de16c8d/qualification-1",
+  "ledger": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/sdk-suffix-owner-source-1/workspace/native-running-modules-candidate-5ad32d6a9f404d0fa638c6539de16c8d/qualification-1/actual-commands.json",
+    "bytes": 1584,
+    "sha256": "987c59fc7d7c16c1e6926092cb9b8233d17abc7a7f06d3209b9366216717f3f4"
+  },
+  "retained_commands": [
+    {
+      "argv": [
+        "/usr/bin/cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "/candidate/tests/equivalence.c",
+        "/work/qualification-1/mcinspect-original-renamed.o",
+        "/work/qualification-1/eclair-original-renamed.o",
+        "/work/qualification-1/bfd_accessors.o",
+        "/usr/lib64/libbfd.so",
+        "-o",
+        "/work/qualification-1/equivalence"
+      ],
+      "cwd": "/work/qualification-1",
+      "rc": 0,
+      "log": "equivalence-link",
+      "execution_provenance": "CURRENT_SDK_SUFFIX"
+    },
+    {
+      "argv": [
+        "/work/qualification-1/equivalence",
+        "/work/qualification-1/fixture.o",
+        "/work/qualification-1/stripped.o"
+      ],
+      "cwd": "/work/qualification-1",
+      "rc": 0,
+      "log": "equivalence-run",
+      "execution_provenance": "CURRENT_SDK_SUFFIX"
+    },
+    {
+      "argv": [
+        "/usr/bin/nm",
+        "-g",
+        "/work/qualification-1/bfd_accessors.o"
+      ],
+      "cwd": "/work/qualification-1",
+      "rc": 0,
+      "log": "rust-symbols",
+      "execution_provenance": "CURRENT_SDK_SUFFIX"
+    }
+  ],
+  "retained_command_count": 3,
+  "preserved_failure": {
+    "argv": [
+      "/usr/bin/cmake",
+      "-S",
+      "/candidate/tests/tool-project",
+      "-B",
+      "/work/qualification-1/selected-tools",
+      "-DCMAKE_C_COMPILER=/usr/bin/cc",
+      "-DSTAGED_USER_SOURCE=/work/qualification-1/source/executer/user",
+      "-DORIGINAL_SOURCE=/src",
+      "-DCMAKE_VERBOSE_MAKEFILE=ON",
+      "-DIHK_USER_RUSTC:FILEPATH=/nightly/bin/rustc"
+    ],
+    "cwd": "/work/qualification-1",
+    "rc": 1,
+    "log": "selected-configure",
+    "execution_provenance": "CURRENT_SDK_SUFFIX"
+  },
+  "failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/sdk-suffix-owner-source-1/workspace/native-running-modules-candidate-5ad32d6a9f404d0fa638c6539de16c8d/qualification-1/FAILURE.json",
+    "bytes": 140,
+    "sha256": "7fe6cef488e4ff4fc1be0ccb0541a4f98e6fa2db7b33182274e1c41899f40398"
+  },
+  "streams": {
+    "equivalence-link.stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/sdk-suffix-owner-source-1/workspace/native-running-modules-candidate-5ad32d6a9f404d0fa638c6539de16c8d/qualification-1/equivalence-link.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "equivalence-link.stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/sdk-suffix-owner-source-1/workspace/native-running-modules-candidate-5ad32d6a9f404d0fa638c6539de16c8d/qualification-1/equivalence-link.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "equivalence-run.stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/sdk-suffix-owner-source-1/workspace/native-running-modules-candidate-5ad32d6a9f404d0fa638c6539de16c8d/qualification-1/equivalence-run.stdout",
+      "bytes": 133,
+      "sha256": "91c5e76ce7b57dc8c33da1979628b2edf0aabac4d102170cc0686d0ed0468d3a"
+    },
+    "equivalence-run.stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/sdk-suffix-owner-source-1/workspace/native-running-modules-candidate-5ad32d6a9f404d0fa638c6539de16c8d/qualification-1/equivalence-run.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "rust-symbols.stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/sdk-suffix-owner-source-1/workspace/native-running-modules-candidate-5ad32d6a9f404d0fa638c6539de16c8d/qualification-1/rust-symbols.stdout",
+      "bytes": 240,
+      "sha256": "60f19a6ca1621c609adf154350c8aec3f8dd6831c5ed4bcc0e09c0749c00044d"
+    },
+    "rust-symbols.stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/sdk-suffix-owner-source-1/workspace/native-running-modules-candidate-5ad32d6a9f404d0fa638c6539de16c8d/qualification-1/rust-symbols.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "equivalence_binary": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/sdk-suffix-owner-source-1/workspace/native-running-modules-candidate-5ad32d6a9f404d0fa638c6539de16c8d/qualification-1/equivalence",
+    "bytes": 6517160,
+    "sha256": "07cac711dfc59340d814613fa515a2482d9c0961c7a957deb01141f4d91020d1"
+  },
+  "fixture": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/sdk-suffix-owner-source-1/candidate/tests/equivalence.c",
+    "bytes": 7151,
+    "sha256": "b317c855d4418c3c1f85ec579928c30bf2f8fe6a7584da71dc248d13e4504bad"
+  },
+  "prior_eight_prefix_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/sdk-suffix-owner-source-1/candidate/EXACT-RETAINED-SDK-PREFIX-8-OF-9.json",
+    "bytes": 16148,
+    "sha256": "3f8ea371280dd5e9f33ac042b15ee92f459bd63d2226c6ab0f67ef898127224d"
+  },
+  "reuse_rule": "Keep prior eight authenticated SDK rows plus these three successful current rows. New suffix starts selected-configure; ten new rows, logical contract21. No unchanged relink/equivalence-run/accessor rustc/nm replay. Owner adapter must require exact provenance split8+3+10 and genuine same pinned image; this descriptor grants no execution.",
+  "sdk21_acceptance": false,
+  "native_acceptance": false,
+  "execution_release": false
+}

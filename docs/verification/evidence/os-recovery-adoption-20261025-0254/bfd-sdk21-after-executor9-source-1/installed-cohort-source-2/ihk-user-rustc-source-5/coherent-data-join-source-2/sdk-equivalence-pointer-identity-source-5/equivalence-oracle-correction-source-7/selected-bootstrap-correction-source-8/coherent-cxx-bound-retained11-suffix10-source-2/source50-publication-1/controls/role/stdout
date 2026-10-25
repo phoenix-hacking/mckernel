@@ -1,0 +1,113 @@
+{
+  "status": "PASS_EXPLICIT_FILESYSTEM_MODEL_ONLY",
+  "source_paths": 3053,
+  "aliases": 72,
+  "records": [
+    {
+      "case": "exact3053-path72-alias-complete-model",
+      "status": "PASS",
+      "inventory": {
+        "source_entries": 3053,
+        "generated_entries": 3,
+        "logical_bytes": 2466,
+        "allocated_bytes": 974848
+      }
+    },
+    {
+      "case": "declared-partial-model",
+      "status": "PASS",
+      "inventory": {
+        "source_entries": 3053,
+        "generated_entries": 3,
+        "logical_bytes": 2466,
+        "allocated_bytes": 974848
+      }
+    },
+    {
+      "case": "file-size",
+      "status": "EXPECTED_REFUSAL",
+      "error": "source file type/size changed"
+    },
+    {
+      "case": "file-hash",
+      "status": "EXPECTED_REFUSAL",
+      "error": "source file hash changed"
+    },
+    {
+      "case": "file-mode",
+      "status": "EXPECTED_REFUSAL",
+      "error": "source mode changed"
+    },
+    {
+      "case": "missing-complete-path",
+      "status": "EXPECTED_REFUSAL",
+      "error": "completed source closure incomplete"
+    },
+    {
+      "case": "undeclared-source",
+      "status": "EXPECTED_REFUSAL",
+      "error": "undeclared source entry"
+    },
+    {
+      "case": "alias-escape",
+      "status": "EXPECTED_REFUSAL",
+      "error": "undeclared or changed alias"
+    },
+    {
+      "case": "generated-alias",
+      "status": "EXPECTED_REFUSAL",
+      "error": "undeclared or changed alias"
+    },
+    {
+      "case": "special-fifo",
+      "status": "EXPECTED_REFUSAL",
+      "error": "special output file"
+    },
+    {
+      "case": "hardlink",
+      "status": "EXPECTED_REFUSAL",
+      "error": "unexpected output hardlink"
+    },
+    {
+      "case": "source-cap",
+      "status": "EXPECTED_REFUSAL",
+      "error": "source entry bound"
+    },
+    {
+      "case": "generated-cap",
+      "status": "EXPECTED_REFUSAL",
+      "error": "generated entry bound"
+    },
+    {
+      "case": "allocated-cap",
+      "status": "EXPECTED_REFUSAL",
+      "error": "allocated byte bound"
+    },
+    {
+      "case": "logical-cap",
+      "status": "EXPECTED_REFUSAL",
+      "error": "logical byte bound"
+    },
+    {
+      "case": "real-generated4097-cap",
+      "status": "EXPECTED_REFUSAL",
+      "error": "generated entry bound"
+    },
+    {
+      "case": "root-identity-change",
+      "status": "EXPECTED_REFUSAL",
+      "error": "role root identity changed"
+    },
+    {
+      "case": "restored-full-model",
+      "status": "PASS",
+      "inventory": {
+        "source_entries": 3053,
+        "generated_entries": 3,
+        "logical_bytes": 2466,
+        "allocated_bytes": 974848
+      }
+    }
+  ],
+  "SDK_or_native_acceptance": false
+}

@@ -1,3 +1,65 @@
+## Current proof retained; SDK cleanup source qualified — 2026-10-25T10:10Z checkpoint
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Fresh postjoin current proof independentlyaccepts allrequiredPID/groupabsence,
+55unchangedinputs and permanent27:4 FREEboth. Stopped6d055 andthreeownedrecords
+remain for separatecleanup; heavyclearance remains false. Reconciliationrevision4
+cd5fc751 is independentlySOURCEaccepted; priorrevision3 actual12TEMPFILEcontrols
+passed, preservedwith firstextractionfailure. Publication/fetch/finalpayload/grant
+are next; no new privileged cleanup run hasoccurred.
+
+CXX-bound SDKowner542a/driverc1a66/full11 approvalda00 andall50source copies are
+ready with role3positive15negative,focused4positive17negative,partial6positive
+9negative controls. Staticquery/preparationtransport is source-ready; future
+postcleanup authority/fetch are NULL. No fresh120-secondclock started.
+Current290 retains allsuccessfulCsteps00..06 after genuineuti transportfix;
+checkedmetadata07 failedonlycompilerappendixarray-semicolon extraction. Root
+owns a bounded07..12correction; no wholeRustcodegen/link occurred for290 yet.
+VMlock192/ABI6 and archmemory42 finite traces independentlypassed HOST scope.
+No new default/native/whole-file/Cboundary acceptance. Source/evidence preserved.
+
+## SDK quarantine host owner retired — 2026-10-25T09:45Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ONE reviewed pidfd signal retired635880/start71676755; positiveexit and temporary
+replacementHOLDER650468/start71895197 on same permanent27:4 independentlyaccepted.
+Recovery rc0/wall1.645s; originalSDKsession84411 joined exit137. All53protected
+inputs and originalFAILEDledger unchanged. [Process-only acceptance](../evidence/os-recovery-adoption-20261025-0254/ACTUAL-SDK-HOST-PROCESS-RECOVERY-INDEPENDENT-ACCEPTANCE.json).
+NEXT copy7/root: fresh postjoin fullPROC/group/clientabsence and mutexFREE proof,
+then separatelyreviewed stoppedCID6d055/three-record reconciliation. No heavy
+clearance/default/native acceptance yet. No further retirement signal authorized.
+
+## Thirty-minute review: one integration package; three HOST checks — 2026-10-25T09:42Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The interval adds one accepted current285/five-data-owner integration package,
+fetched4ab06a7e5; zero new function providers, five Rust data owners. Default,
+native, whole-file and C-boundary closures remain zero. Getsiginfo6144/ABI14,
+perfABI33/all64flagimages, and two-MM isolation/wrap/trace fixtures independently
+passed at controlled HOST scope. Original getsig fixture abort is retained; one
+count/flush correction reused its successful Rust object. [Review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T0942.json).
+
+Critical path: root enters the separately reviewed exact pidfd retirement of
+quarantined host owner635880/start71676755, after finalpayload release. Two fresh
+held-owner snapshots and all raw captures independentlypassed; source19members
+are fetched1f89fbbe5. No retirement is yet accepted. Container6d055 and three
+ownership records remain retained for separately released reconciliation; no new
+heavy work until actual current physical acceptance. Watchers/controller/mutex
+inode27:4 remain unchanged. Source observer/bootstrap fix retains8+3 successful
+SDK commands and only10 new commands; pure3positive/15negative controls pass.
+
+Scheduling change: fold newly qualified getsiginfo into uncompiled289 source
+batch to form290 before one wholeRust qualification, and replace source-alias
+expansion with exact3053-node/72-alias role validation. CPU source+syscall owners
+prepare that union; recovery owner/reviewer/root clear the concrete SDK blocker.
+Other source-complete owners await finite ordinary qualification/admission; no
+independent missing tool runtime body was found, so no duplicate ports were made.
+Data5 CPU29.387s/wall29.525s/peak child587144KiB; getsig/perf/twoMM each under0.4s.
+First-compiler timestamps and SDK validated-fix latency remain unknown. HOST
+154.48GB/scratch14.10GB/MemAvailable27.19MKiB at snapshot. One package per bucket
+remains below the sustained1.95x target. M12=35/35; M14/M15 OPEN. Monitor496359,
+included-first creditrun7f and2026-10-26T06:00Z cutoff unchanged.
+
 ## Thirty-minute review: five data owners integrated; SDK owner recovery required — 2026-10-25T09:12Z review, updated 09:36Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

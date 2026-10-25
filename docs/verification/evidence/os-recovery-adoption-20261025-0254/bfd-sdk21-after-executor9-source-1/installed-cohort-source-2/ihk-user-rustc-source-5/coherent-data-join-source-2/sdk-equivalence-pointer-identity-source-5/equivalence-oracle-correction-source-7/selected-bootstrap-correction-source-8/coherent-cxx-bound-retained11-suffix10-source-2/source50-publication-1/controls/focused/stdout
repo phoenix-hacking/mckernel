@@ -1,0 +1,147 @@
+{
+  "status": "PASS_FOCUSED_ACTUAL_FUNCTION_MODEL_AND_COMPILER_FREE_BOOTSTRAP_ONLY",
+  "records": [
+    {
+      "case": "actual-mounts-and-driver-CONFIG",
+      "status": "PASS"
+    },
+    {
+      "case": "missing-semantic",
+      "status": "EXPECTED_REFUSAL",
+      "error": "semantic prefix RO"
+    },
+    {
+      "case": "semantic-RW",
+      "status": "EXPECTED_REFUSAL",
+      "error": "semantic prefix RO"
+    },
+    {
+      "case": "semantic-wrong-source",
+      "status": "EXPECTED_REFUSAL",
+      "error": "semantic prefix RO"
+    },
+    {
+      "case": "missing-original",
+      "status": "EXPECTED_REFUSAL",
+      "error": "original prefix RO"
+    },
+    {
+      "case": "missing-CONFIG",
+      "status": "EXPECTED_REFUSAL",
+      "error": "'/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-sdk21-after-executor9-source-1/installed-cohort-source-2/ihk-user-rustc-source-5/coherent-data-join-source-2/sdk-equivalence-pointer-identity-source-5/equivalence-oracle-correction-source-7/selected-bootstrap-correction-source-8/coherent-retained11-suffix10-source-1/BFD-PREPARATION.json'"
+    },
+    {
+      "case": "actual-receipt-8plus3plus10-boundary",
+      "status": "PASS"
+    },
+    {
+      "case": "old8plus13-counts",
+      "status": "EXPECTED_REFUSAL",
+      "error": "eight original plus three semantic retained/ten new"
+    },
+    {
+      "case": "missing-semantic-row",
+      "status": "EXPECTED_REFUSAL",
+      "error": "exact eight original and three semantic successes"
+    },
+    {
+      "case": "extra-semantic-row",
+      "status": "EXPECTED_REFUSAL",
+      "error": "exact eight original and three semantic successes"
+    },
+    {
+      "case": "retained-provenance",
+      "status": "EXPECTED_REFUSAL",
+      "error": "exact eight original and three semantic successes"
+    },
+    {
+      "case": "configure-argv",
+      "status": "EXPECTED_REFUSAL",
+      "error": "unchanged selected configure argv with corrected bootstrap only"
+    },
+    {
+      "case": "actual-failure-preserved",
+      "status": "EXPECTED_REFUSAL",
+      "error": "exact ten actual current SDK suffix successes"
+    },
+    {
+      "case": "semantic-argv",
+      "status": "EXPECTED_REFUSAL",
+      "error": "exact eight original and three semantic successes"
+    },
+    {
+      "case": "retained-stream-hash",
+      "status": "EXPECTED_REFUSAL",
+      "error": "copied retained semantic stream identity"
+    },
+    {
+      "case": "restored-receipt",
+      "status": "PASS"
+    },
+    {
+      "case": "bootstrap-good",
+      "status": "PASS",
+      "argv": [
+        "/usr/bin/cmake",
+        "-S",
+        "/tmp/bfd-focused-controls-w5o6n0nr/cmake-project",
+        "-B",
+        "/tmp/bfd-focused-controls-w5o6n0nr/cmake-0"
+      ],
+      "rc": 0
+    },
+    {
+      "case": "bootstrap-RustOFF",
+      "status": "EXPECTED_REFUSAL",
+      "argv": [
+        "/usr/bin/cmake",
+        "-S",
+        "/tmp/bfd-focused-controls-w5o6n0nr/cmake-project",
+        "-B",
+        "/tmp/bfd-focused-controls-w5o6n0nr/cmake-1",
+        "-DENABLE_RUST_USER_TOOLS:BOOL=OFF"
+      ],
+      "rc": 1
+    },
+    {
+      "case": "bootstrap-wrong-CXX",
+      "status": "EXPECTED_REFUSAL",
+      "argv": [
+        "/usr/bin/cmake",
+        "-S",
+        "/tmp/bfd-focused-controls-w5o6n0nr/cmake-project",
+        "-B",
+        "/tmp/bfd-focused-controls-w5o6n0nr/cmake-2",
+        "-DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/g++"
+      ],
+      "rc": 1
+    },
+    {
+      "case": "bootstrap-relative-CXX",
+      "status": "EXPECTED_REFUSAL",
+      "argv": [
+        "/usr/bin/cmake",
+        "-S",
+        "/tmp/bfd-focused-controls-w5o6n0nr/cmake-project",
+        "-B",
+        "/tmp/bfd-focused-controls-w5o6n0nr/cmake-3",
+        "-DCMAKE_CXX_COMPILER:FILEPATH=clang"
+      ],
+      "rc": 1
+    },
+    {
+      "case": "bootstrap-wrong-CXX-mode",
+      "status": "EXPECTED_REFUSAL",
+      "argv": [
+        "/usr/bin/cmake",
+        "-S",
+        "/tmp/bfd-focused-controls-w5o6n0nr/cmake-project",
+        "-B",
+        "/tmp/bfd-focused-controls-w5o6n0nr/cmake-4",
+        "-DCMAKE_CXX_COMPILER_ARG1:STRING=--driver-mode=gcc"
+      ],
+      "rc": 1
+    }
+  ],
+  "SDK_native_or_ABI_acceptance": false
+}
