@@ -1,0 +1,20 @@
+--- a/kernel/process.c
++++ b/kernel/process.c
+@@ -5813,6 +5813,9 @@
+ }
+ #endif
+ 
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++void debug_log(unsigned long arg);
++#else
+ void
+ debug_log(unsigned long arg)
+ {
+@@ -5882,6 +5885,7 @@
+ 		break;
+ 	}
+ }
++#endif
+ 
+ void process_access_ok_log_bridge(struct process_vm *vm, int type,
+ 		unsigned long addr, size_t len, int rc)

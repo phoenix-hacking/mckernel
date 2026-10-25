@@ -14460,3 +14460,174 @@ pub unsafe extern "C" fn process_pgio_dispatch_bridge(fp: *mut c_void, arg: *mut
 const _: unsafe extern "C" fn(*mut ProcessVm, *mut VmRange, CULong, CULong) -> CInt =
     process_xpmem_fault_range_bridge;
 const _: unsafe extern "C" fn(*mut c_void, *mut c_void) = process_pgio_dispatch_bridge;
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+/// Print the existing process-hash view, omitting the resource set's pid1.
+///
+/// # Safety
+/// `hash` and `pid1` come from the live current resource set. All bucket heads and
+/// linked process/parent objects remain valid for this synchronous traversal.
+/// With `locked`, the existing reader lock excludes list writers in each bucket;
+/// otherwise the original debug caller must already exclude removal/reclamation.
+/// Printed state fields retain the original diagnostic snapshot semantics.
+unsafe fn process_debug_process_hash(
+    hash: *mut ProcessHash,
+    pid1: *mut Process,
+    locked: bool,
+) {
+    let mut found: CInt = 0;
+    let mut node = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+    for bucket in 0..PROCESS_HASH_SIZE {
+        // SAFETY: Fixed-size ABI arrays contain every bucket. The caller keeps
+        // the hash, list members and parents live; lock scope matches C exactly.
+        unsafe {
+            let lock = core::ptr::addr_of_mut!((*hash).lock)
+                .cast::<McsRwlockLock>()
+                .add(bucket);
+            if locked {
+                process_mcs_reader_lock_bridge(lock as CULong, node.as_mut_ptr().cast());
+            }
+            let head = core::ptr::addr_of_mut!((*hash).list)
+                .cast::<AbiListHead>()
+                .add(bucket);
+            let mut entry = (*head).next;
+            while entry != head {
+                let process = entry
+                    .cast::<u8>()
+                    .sub(offset_of!(Process, hash_list))
+                    .cast::<Process>();
+                if process != pid1 {
+                    // The original signed count is representable for live hash
+                    // contents; wrapping avoids adding a diagnostic panic path.
+                    found = found.wrapping_add(1);
+                    if locked {
+                        kprintf(
+                            b"pid=%d ppid=%d status=%d ref=%d\n\0".as_ptr().cast(),
+                            (*process).pid,
+                            (*(*process).ppid_parent).pid,
+                            (*process).status,
+                            (*process).refcount.counter,
+                        );
+                    } else {
+                        kprintf(
+                            b"pid=%d ppid=%d status=%d\n\0".as_ptr().cast(),
+                            (*process).pid,
+                            (*(*process).ppid_parent).pid,
+                            (*process).status,
+                        );
+                    }
+                }
+                entry = (*entry).next;
+            }
+            if locked {
+                process_mcs_reader_unlock_bridge(lock as CULong, node.as_mut_ptr().cast());
+            }
+        }
+    }
+    // SAFETY: Static NUL-terminated format and promoted CInt match C varargs.
+    unsafe { kprintf(b"%d processes are found.\n\0".as_ptr().cast(), found) };
+}
+
+/// Print the existing thread-hash view in bucket and list order.
+///
+/// # Safety
+/// The current resource set, hash, list members and owning processes remain
+/// valid throughout. `locked` retains the original per-bucket reader locking;
+/// the unlocked mode requires the original caller's stable diagnostic context.
+unsafe fn process_debug_thread_hash(hash: *mut ThreadHash, locked: bool) {
+    let mut found: CInt = 0;
+    let mut node = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+    for bucket in 0..PROCESS_HASH_SIZE {
+        // SAFETY: The typed ABI arrays cover each bucket. Original list lifetime
+        // and synchronization obligations above cover every raw pointer read.
+        unsafe {
+            let lock = core::ptr::addr_of_mut!((*hash).lock)
+                .cast::<McsRwlockLock>()
+                .add(bucket);
+            if locked {
+                process_mcs_reader_lock_bridge(lock as CULong, node.as_mut_ptr().cast());
+            }
+            let head = core::ptr::addr_of_mut!((*hash).list)
+                .cast::<AbiListHead>()
+                .add(bucket);
+            let mut entry = (*head).next;
+            while entry != head {
+                let thread = entry
+                    .cast::<u8>()
+                    .sub(offset_of!(Thread, hash_list))
+                    .cast::<Thread>();
+                found = found.wrapping_add(1);
+                if locked {
+                    kprintf(
+                        concat!(
+                            "cpu=%d pid=%d tid=%d status=%d ",
+                            "offload=%d ref=%d ptrace=%08x\n\0",
+                        )
+                        .as_ptr()
+                        .cast(),
+                        (*thread).cpu_id,
+                        (*(*thread).proc).pid,
+                        (*thread).tid,
+                        (*thread).status,
+                        (*thread).in_syscall_offload,
+                        (*thread).refcount.counter,
+                        (*thread).ptrace,
+                    );
+                } else {
+                    kprintf(
+                        b"cpu=%d pid=%d tid=%d status=%d\n\0".as_ptr().cast(),
+                        (*thread).cpu_id,
+                        (*(*thread).proc).pid,
+                        (*thread).tid,
+                        (*thread).status,
+                    );
+                }
+                entry = (*entry).next;
+            }
+            if locked {
+                process_mcs_reader_unlock_bridge(lock as CULong, node.as_mut_ptr().cast());
+            }
+        }
+    }
+    // SAFETY: Static NUL-terminated format and promoted CInt match C varargs.
+    unsafe { kprintf(b"%d threads are found.\n\0".as_ptr().cast(), found) };
+}
+
+/// Emit the existing process/thread diagnostic selected by codes 1 through 4.
+///
+/// # Safety
+/// The original debug entry context supplies a live CPU-local resource set and
+/// keeps CPU/resource-set identity stable. Codes 1/2 retain each original reader
+/// lock. Codes 3/4 retain the original unlocked traversal and require list-member
+/// and parent/owner lifetimes to remain stable; no new protection is claimed.
+#[no_mangle]
+pub unsafe extern "C" fn debug_log(arg: CULong) {
+    // SAFETY: The caller supplies the original live CPU/resource-set/hash state.
+    // Raw pointers avoid creating shared references to concurrently observed
+    // kernel storage. Helpers retain original output, ordering and lock scopes.
+    unsafe {
+        let resource_set = (*get_this_cpu_local_var()).resource_set;
+        let processes = (*resource_set).process_hash;
+        let threads = (*resource_set).thread_hash;
+        let pid1 = (*resource_set).pid1;
+        match arg {
+            1 => process_debug_process_hash(processes, pid1, true),
+            2 => process_debug_thread_hash(threads, true),
+            3 => process_debug_process_hash(processes, pid1, false),
+            4 => process_debug_thread_hash(threads, false),
+            _ => {}
+        }
+    }
+}
+
+const _: unsafe extern "C" fn(CULong) = debug_log;
+
+// The actual callback node/lock layouts used by this bridge are independently typed.
+const _: () = {
+    assert!(core::mem::size_of::<McsRwlockNodeIrqsave>() == 64);
+    assert!(core::mem::align_of::<McsRwlockNodeIrqsave>() == 64);
+    assert!(core::mem::size_of::<McsRwlockLock>() == 64);
+    assert!(core::mem::align_of::<McsRwlockLock>() == 64);
+    assert!(PROCESS_HASH_SIZE == 73);
+};

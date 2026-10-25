@@ -1,0 +1,264 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_C_RUST_DEBUG_PARITY_14_MOCK_LAYOUT",
+  "actual_commands": 4,
+  "actual_comparisons": 14,
+  "records": [
+    {
+      "command": {
+        "name": "00-original-C-oracle",
+        "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 00-original-C-oracle; original C/Rust diagnostic behavior parity with controlled mock layouts only.",
+        "argv": [
+          "/usr/bin/gcc-9",
+          "-std=gnu11",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-fno-pie",
+          "-c",
+          "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/fixture/parity.c",
+          "-o",
+          "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/output-debug-parity-first-1/actual_c.o"
+        ],
+        "cwd": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/output-debug-parity-first-1"
+      },
+      "join": {
+        "pid": 476282,
+        "start": 69482169,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.1420272010145709,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/actual-debug-parity-first-1/00-original-C-oracle/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 56266492,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1792897376993273577,
+            "ctime_ns": 1792897376993273577
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/actual-debug-parity-first-1/00-original-C-oracle/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 56266493,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1792897376993273577,
+            "ctime_ns": 1792897376993273577
+          }
+        }
+      }
+    },
+    {
+      "command": {
+        "name": "01-actual-Rust-body",
+        "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 01-actual-Rust-body; original C/Rust diagnostic behavior parity with controlled mock layouts only.",
+        "argv": [
+          "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+          "--edition=2021",
+          "--crate-type=lib",
+          "--emit=obj",
+          "--crate-name",
+          "m14_process_debug_parity",
+          "-C",
+          "panic=abort",
+          "-C",
+          "opt-level=1",
+          "-C",
+          "codegen-units=1",
+          "-C",
+          "relocation-model=static",
+          "-C",
+          "overflow-checks=off",
+          "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/fixture/parity.rs",
+          "-o",
+          "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/output-debug-parity-first-1/actual_rust.o"
+        ],
+        "cwd": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/output-debug-parity-first-1"
+      },
+      "join": {
+        "pid": 476285,
+        "start": 69482183,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.1446561070624739,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/actual-debug-parity-first-1/01-actual-Rust-body/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 56266501,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1792897377137279161,
+            "ctime_ns": 1792897377137279161
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/actual-debug-parity-first-1/01-actual-Rust-body/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 56266502,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1792897377137279161,
+            "ctime_ns": 1792897377137279161
+          }
+        }
+      }
+    },
+    {
+      "command": {
+        "name": "02-link-original-and-Rust",
+        "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 02-link-original-and-Rust; original C/Rust diagnostic behavior parity with controlled mock layouts only.",
+        "argv": [
+          "/usr/bin/gcc-9",
+          "-no-pie",
+          "-Wl,--no-undefined",
+          "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/output-debug-parity-first-1/actual_c.o",
+          "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/output-debug-parity-first-1/actual_rust.o",
+          "-o",
+          "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/output-debug-parity-first-1/actual_parity"
+        ],
+        "cwd": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/output-debug-parity-first-1"
+      },
+      "join": {
+        "pid": 476292,
+        "start": 69482198,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.04229826293885708,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/actual-debug-parity-first-1/02-link-original-and-Rust/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 56266510,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1792897377285284901,
+            "ctime_ns": 1792897377285284901
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/actual-debug-parity-first-1/02-link-original-and-Rust/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 56266511,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1792897377285284901,
+            "ctime_ns": 1792897377285284901
+          }
+        }
+      }
+    },
+    {
+      "command": {
+        "name": "03-actual-debug-parity",
+        "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 03-actual-debug-parity; original C/Rust diagnostic behavior parity with controlled mock layouts only.",
+        "argv": [
+          "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/output-debug-parity-first-1/actual_parity"
+        ],
+        "cwd": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/output-debug-parity-first-1"
+      },
+      "join": {
+        "pid": 476295,
+        "start": 69482203,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.02211782895028591,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/actual-debug-parity-first-1/03-actual-debug-parity/stdout",
+            "sha256": "c3a07bdedc2110b18f2ab7b22cf1c63e1b65fcd1e41cfa1d8f042ef1c0d2ffa4",
+            "device": 66306,
+            "inode": 56267568,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 34323,
+            "mtime_ns": 1792897377333286763,
+            "ctime_ns": 1792897377333286763
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/actual-debug-parity-first-1/03-actual-debug-parity/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 56267569,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1792897377329286607,
+            "ctime_ns": 1792897377329286607
+          }
+        }
+      }
+    }
+  ],
+  "CPU0_released": true,
+  "canonical_mutations": 0,
+  "production_ABI": false,
+  "fullcrate_default_native_credit": false,
+  "recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-1/EXACT-DEBUG-PARITY.NOT-GRANTED.json",
+    "sha256": "5c5eeb34f3ebe4c91c7ea19a9fbad45cdbdb88e8a7f01ec4614f53980be64651",
+    "bytes": 7765
+  },
+  "seconds": 0.3643522630445659,
+  "CPU_seconds": 0.32110199999999994
+}
