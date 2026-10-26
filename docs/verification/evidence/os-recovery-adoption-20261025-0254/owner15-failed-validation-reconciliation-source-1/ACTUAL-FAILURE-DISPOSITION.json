@@ -1,0 +1,22 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FAILED_BEFORE_MUTATION_OR_SIGNAL",
+  "helper_pid": 1008846,
+  "helper_starttime": "79361139",
+  "actual_returncode": 1,
+  "source": "0600ec1c7c1bb7f58dca71a6b6fdc5260fb482b81d30ca5449896fe2121a3524",
+  "consumed_grant": "8d628ea2b25b3c8b93d93e7322f308c63c4b95f749d3555b5b0bf9162e2afcb5",
+  "failure": "first snapshot require_lock_holder",
+  "actual_actions": {
+    "pidfd_open": 1,
+    "record_archive": 0,
+    "shared_unlink": 0,
+    "signal": 0
+  },
+  "independent_reviewer": "/root/perf_review18h",
+  "independent_observation": "action_root absent; shared exact268B/1828:116861/d2184cf6; raw firstsnapshot failure beforeclaim",
+  "new_heavy_admission": false,
+  "retry_authority": false,
+  "bounded_correction_owner": "/root/process_hash33",
+  "causal_diagnostic": "worker readonly same-FD /proc/locks first4068B omitted27:4; remaining3069B thenEOF includesexactsole997661; full7137B"
+}

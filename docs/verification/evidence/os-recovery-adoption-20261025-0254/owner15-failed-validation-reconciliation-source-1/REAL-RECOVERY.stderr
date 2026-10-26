@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/owner15-failed-validation-reconciliation-source-1/failed_validation_recovery.py", line 555, in <module>
+    main()
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/owner15-failed-validation-reconciliation-source-1/failed_validation_recovery.py", line 551, in main
+    recover(packet, ops)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/owner15-failed-validation-reconciliation-source-1/failed_validation_recovery.py", line 138, in recover
+    first = ops.snapshot(shared_present=True)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/owner15-failed-validation-reconciliation-source-1/failed_validation_recovery.py", line 372, in snapshot
+    caller=self.caller(), flocks=self.ns['require_lock_holder'](PID),
+  File "/home/holden/mckernel/scripts/native_exact_scratch22_authority1_quarantine_recovery.py", line 321, in require_lock_holder
+    raise Refusal('sole preserved root flock holder differs')
+__main__.Refusal: sole preserved root flock holder differs

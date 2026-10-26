@@ -1,3 +1,59 @@
+## Current cursor — failed-validation recovery complete; owner213 default entry next
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Independent completion468813ec accepts the exact failed-validation exception:
+shared268B archived/retired while caller997661 held27:4, one pidfd SIGKILL,
+positive exit, actual tool10088 completion137 and four retired groups absent.
+Permanent27:4 unchanged/free2x; shared live path absent; five protected births alive.
+No normal ownerreceipt was fabricated; both original failures remain retained.
+[Independent recovery completion](../evidence/os-recovery-adoption-20261025-0254/INDEPENDENT-OWNER15-FAILED-VALIDATION-RECOVERY-COMPLETION.json).
+
+Owner213 actual real-validator three controls are independently accepted across
+two retained runs; positive34.462wall/33.940CPU/RSS714532KiB/421realGitcommands.
+W21-file transport/publication SOURCE review found an initializer-owner15 versus
+runtime-owner213 role mismatch. An additive exact succession/role proof and small
+producer check are being prepared; retain namespace1d307 and never reinitialize.
+Root next publishes/fetches the qualified successor and binds genuine fresh
+physical/resource/holder/admission before current290 incremental owner213 entry.
+Reuse nine old objects; replace Rust/process and raw-link eleven only. No replay
+of consumed T/recovery grants or namespace initialization. Source38 six-command
+ordinary C/partial-link envelope preparation overlaps; no Rust rebuild.
+[06:37 review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261026T0637.json).
+M14/M15 OPEN/practical35/35. New default/native/whole-file/C-retirement delta0;
+no95% velocity claim. Fixed2026-10-26T15:55:33Z deadline and resident controls unchanged.
+
+## 06:35 bounded corrections validated; failed-validation recovery remains pending
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual readonly procfs diagnosis confirmed first4068B omitted the exact lock row;
+EOF7137B contains it. Observer-only95adb255/packet300a647b preserves every action
+and sole-holder predicate; nine new pure short-read/overflow/malformed controls PASS.
+No corrected live action grant or new signal/unlink occurred. Original failure
+and consumed8d628 grant remain retained; caller997661 still holds27:4.
+
+OwnerU21378 full real extended validator positive PASS in34.462wall/33.940CPU,
+RSS714532KiB, child1011020 joined/groupabsent/closed. Reuses two earlier actualPASS
+controls; original67.25s/-9 suite failure retained. Independent combined disposition
+pending. W static21-file owner213 frontend prepared before any future live clock.
+Source38 exact four existing process-data providers are SOURCE-reviewed; final
+recipe freeze pending. No new Rust/C compiler/default/native/whole-file credit.
+M14/M15 OPEN; no95% velocity claim. Fixed2026-10-26T15:55:33Z deadline unchanged.
+
+## 06:29 recovery observer refusal — original hold preserved
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Recovery source0600/packetaddd passed12 pure mock tests; independent7b283 accepted
+its exact one-shot profile. Root helper1008846/start79361139 joined1 in0.123s
+at initial require_lock_holder, before evidence claim/archive/unlink/signal.
+The caller997661/start79134158 still holds27:4; shared268B record remains.
+No recovery success or new heavy admission is claimed. Original grant is consumed.
+A bounded observer correction is being diagnosed against actual procfs reads;
+no unchanged action replay. SourceU real-validator ordinary tests run separately;
+Source38 exact three existing C-data provider binding correction stays private.
+Checkpoint0409ccb571f51fc22075bd90c009853d2ffd5630 pushed/fetched50files exact.
+M14/M15 remain OPEN; actual default/native/whole-file/C-retirement delta0.
+Fixed2026-10-26T15:55:33Z window and resident controls unchanged.
+
 ## Current cursor — T failed-validation quarantine; no new heavy authority
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
