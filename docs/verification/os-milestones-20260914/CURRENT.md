@@ -1,3 +1,23 @@
+## Current checkpoint — Source32 accepted at controlled HOST scope
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Independent review accepted Source32’s two actual C2 commands: 440 paired cases,
+880 calls, ABI28 plus retained ABI22/Lookup12. Both children joined, their groups
+are absent, and streams closed. Wall 0.503s, CPU 0.527s, peak RSS 36,996 KiB.
+The source, raw results, warnings and joins are preserved in archive `99e097d4`.
+[Acceptance](../evidence/os-recovery-adoption-20261025-0254/ACTUAL-SOURCE32-C2-INDEPENDENT-HOST-ACCEPTANCE.json).
+Actual kernel locking, migration completion, full-crate/default/native and
+whole-file retirement remain open. M14/M15 remain OPEN; no new default/native,
+whole-file or C-retirement closure and no demonstrated 95% velocity increase.
+
+Next image acceptance owner: Root, using postjoin18h’s corrected frontend after
+review18h’s independent review. The blocker is the additive frontend dependency
+and pure-loader correction, followed by its eight effect-free controls. Attempt4
+namespace initialization `1d307ea4` is already complete and must not be repeated.
+Source34’s genuine production writer ABI is independently reviewed in parallel;
+its ordinary three-command runner is being prepared, with execution ungranted.
+Fixed deadline remains 2026-10-26T15:55:33Z; resident controls and run7f unchanged.
+
 ## Current cursor — attempt4 directories initialized; frontend bootstrap fix pending
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

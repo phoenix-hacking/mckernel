@@ -1,0 +1,64 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "ACCEPT_HOST_CONTROLLED_SOURCE32_C2",
+  "reviewer": "/root/perf_review18h",
+  "recorded_at": "2026-10-26T04:29:25.127417+00:00",
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-32-setaffinity-lifetime/ACTUAL-SOURCE32-C-SUFFIX-FIRST-RESULT.json",
+      "sha256": "2215172b522ea7242cdc44bac060fdca864f6c4ca583b7c4482af12729108d87",
+      "bytes": 11315
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-32-setaffinity-lifetime/ACTUAL-CONTROLLED440-ABI28-REUSED22-12-AND-RELEASE.json",
+      "sha256": "afeccfb2374314f3ea7bd5a85cdee0eb7e9c269fbd052d0e963cd052292c4596",
+      "bytes": 9092
+    }
+  ],
+  "actual": {
+    "commands": 2,
+    "paired_cases": 440,
+    "calls": 880,
+    "old_counter_domain_cases": 20,
+    "abi_new": 28,
+    "abi_reused": [
+      22,
+      12
+    ],
+    "wall_seconds": 0.502944,
+    "cpu_seconds": 0.527273,
+    "peak_rss_kib": 36996,
+    "children": [
+      {
+        "pid": 964246,
+        "start": 78495592
+      },
+      {
+        "pid": 964251,
+        "start": 78495626
+      }
+    ],
+    "both_joined": true,
+    "groups_absent": true,
+    "streams_closed": true
+  },
+  "verified_invariants": [
+    "full CLong high-word errors",
+    "native SizeT copy span",
+    "64-bit IRQ token",
+    "mask application before migration",
+    "runq unlock before synchronous migration",
+    "positive reference released after callback return",
+    "current task borrowed"
+  ],
+  "warnings": "Two retained C misleading-indentation warnings; runtime stderr empty.",
+  "limits": [
+    "Controlled model providers only",
+    "Actual kernel runq/IRQ/schedule/wait completion untested",
+    "Process/global mask/hash/caller lifetime open",
+    "Full crate/default/native/whole-file retirement open"
+  ],
+  "new_default_closures": 0,
+  "new_native_closures": 0,
+  "new_c_retirements": 0
+}
