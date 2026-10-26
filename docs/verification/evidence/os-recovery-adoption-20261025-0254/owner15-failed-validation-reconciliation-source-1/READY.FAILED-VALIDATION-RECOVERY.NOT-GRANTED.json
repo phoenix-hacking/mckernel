@@ -1,0 +1,63 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_AND_PURE_MOCKS_READY_UNEXECUTED_ROOT_GRANT_NULL",
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/owner15-failed-validation-reconciliation-source-1/failed_validation_recovery.py",
+    "bytes": 27982,
+    "sha256": "0600ec1c7c1bb7f58dca71a6b6fdc5260fb482b81d30ca5449896fe2121a3524"
+  },
+  "tests": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/owner15-failed-validation-reconciliation-source-1/test_failed_validation_recovery.py",
+    "bytes": 12297,
+    "sha256": "eaec0d5c80b9e34c0f4cfdc3fb6aff1aa08cc998674fcecb5087c2a8733fcf93"
+  },
+  "packet": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/owner15-failed-validation-reconciliation-source-1/FAILED-VALIDATION-RECOVERY.PACKET.NOT-GRANTED.json",
+    "bytes": 36202,
+    "sha256": "addd30ee9fe24c87e383af0f86016d3e182c841c2b8799a9df4f60cc31b85ef7"
+  },
+  "source_order_facts": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/owner15-failed-validation-reconciliation-source-1/SOURCE-ORDER-AND-ALGORITHM-FACTS.json",
+    "bytes": 4889,
+    "sha256": "9cd60c43adb48abbcab50e0f52cdc64325dc77e14eee8b0da8779b419bf8b93d"
+  },
+  "root_grant": null,
+  "independent_execution_review": null,
+  "actual_mutations": 0,
+  "actual_signals": 0,
+  "actual_pidfd_opens": 0,
+  "actual_process_queries": 0,
+  "pure_mock_tests_run": 0,
+  "proposed_pure_mock_command": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--stack=2097152:2097152",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/owner15-failed-validation-reconciliation-source-1/test_failed_validation_recovery.py"
+  ],
+  "execution_profile": "Future real helper: ordinary controlCPU7, AS2GiB, no inherited outer CPU/alarm/wall kill; bounded pidfd poll30s and exact fixed-window preaction guards. Independent review required. Pure mocks may use finite CPU60/wall90+6 capture.",
+  "holds": [
+    "Pure mock suite not executed; exact Root test-only grant requested.",
+    "Independent complete source and execution profile review required before any actual helper run.",
+    "Root sole executor; actual grant/review hashes absent/null.",
+    "Root tool10088 creator join/group proof is external postflight and cannot be fabricated by helper."
+  ],
+  "action_budget": {
+    "shared_unlink": 1,
+    "pidfd_sigkill": 1,
+    "numeric_signal": 0,
+    "group_signal": 0,
+    "normal_release": 0,
+    "permanent_mutations": 0
+  }
+}

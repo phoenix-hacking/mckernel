@@ -1,3 +1,28 @@
+## Current cursor — T failed-validation quarantine; no new heavy authority
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual T owner998188/start79143668 entered at94.08s and joined1 before compiling:
+owner15 COMMON_EXCLUSION still bound namespace3 while request31 uses namespace4.
+Shared c252 admission preceded validate and left scratch record1828:116861/268B.
+Caller997661/start79134158 holds permanent27:4/FD3 in infinite quarantine, with
+no ownerreceipt/normal-cleanup route. It remains alive; NO SIGNAL/FD RELEASE or
+shared-record mutation has occurred. Model server842942 is protected/alive.
+[Exact references](../evidence/os-recovery-adoption-20261025-0254/ACTUAL-T-OWNER15-VALIDATION-FAILURE-REFERENCES.json)
+and [readonly live identity](../evidence/os-recovery-adoption-20261025-0254/ACTUAL-T-QUARANTINE-LIVE-IDENTITY-SNAPSHOT.json).
+
+Root alone executes reconciliation after independent review. Process_hash33 builds
+one private failed-validation helper: archive/retire only the exact shared record
+while caller still holds27:4; then one pidfd-bound retirement of that caller;
+positive pidfd exit, actual tool10088 join and final unchanged/free27:4 proof.
+Do not fabricate a normal c252 PASS/ownerreceipt, signal controls, replay grants,
+or clear the heavy reservation before completion. SourceU21378 changes only the
+owner namespace constant; real full-validator regression/source review pending.
+Source38 selected-C/partial source observer is being corrected for accepted
+Source37 inlining; no compiler or Rust replay. Source37 HOST proof remains valid.
+[06:17 review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261026T0617.json).
+M14/M15 OPEN/practical35/35. Default/native/whole-file/C-retirement delta0;
+95% speedup unproved. Fixed15:55:33Z deadline, run7f and resident controls unchanged.
+
 ## 05:37 checkpoint — private whole-Rust graph qualified; T admission next
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

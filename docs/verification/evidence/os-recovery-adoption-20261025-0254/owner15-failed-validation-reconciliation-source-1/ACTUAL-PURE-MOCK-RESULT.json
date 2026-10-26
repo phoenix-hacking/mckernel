@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "returncode": 0,
+  "wall_seconds": 0.06534074700903147,
+  "command": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--stack=2097152:2097152",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/owner15-failed-validation-reconciliation-source-1/test_failed_validation_recovery.py"
+  ],
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "3c599dbd9c5e0fc6c34e92a135385feed449b8045d56fcbd8f12e6b42e9017d2",
+  "actual_recovery_actions": 0
+}

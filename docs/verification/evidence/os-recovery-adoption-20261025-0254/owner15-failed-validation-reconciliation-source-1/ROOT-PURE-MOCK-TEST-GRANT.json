@@ -1,0 +1,39 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ROOT_PURE_MOCK_TEST_ONLY_GRANTED",
+  "command": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--stack=2097152:2097152",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/owner15-failed-validation-reconciliation-source-1/test_failed_validation_recovery.py"
+  ],
+  "actual_recovery_authority": false,
+  "at": "2026-10-26T06:25:48.306371+00:00",
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/owner15-failed-validation-reconciliation-source-1/failed_validation_recovery.py",
+    "bytes": 27982,
+    "sha256": "0600ec1c7c1bb7f58dca71a6b6fdc5260fb482b81d30ca5449896fe2121a3524"
+  },
+  "tests": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/owner15-failed-validation-reconciliation-source-1/test_failed_validation_recovery.py",
+    "bytes": 12297,
+    "sha256": "eaec0d5c80b9e34c0f4cfdc3fb6aff1aa08cc998674fcecb5087c2a8733fcf93"
+  },
+  "packet": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/owner15-failed-validation-reconciliation-source-1/FAILED-VALIDATION-RECOVERY.PACKET.NOT-GRANTED.json",
+    "bytes": 36202,
+    "sha256": "addd30ee9fe24c87e383af0f86016d3e182c841c2b8799a9df4f60cc31b85ef7"
+  },
+  "profile": "CPU0 one job AS2GiB CPU60 wall90 finite; no real LocalOps/pidfd/process queries/unlink/signals"
+}
