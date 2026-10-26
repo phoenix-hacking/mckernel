@@ -1,3 +1,23 @@
+## Current cursor — shared archival and postreturn physical accepted
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Independent004f4df9 accepts exact shared324a archival/sole unlink and current
+postreturn physical proof. Helper898578/start77303089 joined0, shared path is
+absent, permanent27:4 free twice; retained inputs/typed44 baseline preserved.
+[Acceptance](../evidence/os-recovery-adoption-20261025-0254/CURRENT290-SHARED-ARCHIVAL-INDEPENDENT-CURRENT-PHYSICAL-ACCEPTANCE.json).
+No additional broad recovery observer is required. Original owner FAIL and
+prior889039 cause UNKNOWN remain retained. This supplies recovery evidence;
+fresh workload admission remains required. Default18h binds genuine proof to
+attempt2 templates, then exact ordinary three-namespace initialization/static
+publication/review precede fresh five/census/holder admission. Root executes;
+review18h independently reviews. Current290/source/SDK successes are reused.
+
+Source24 independently passes333 setter cases/657calls/ABI22+Lookup12;
+Source25 passes6480 RR queries/ABI18. All ordinary children joined. Source26
+prepares retained-object lookup/query/RR composition, with no body replay.
+No new canonical/default/native/whole-file/C-retirement closure; M14/M15 OPEN.
+Same fixed18h window and controls; no95%velocity claim.
+
 ## Current cursor — zero-unlink diagnostic accepted
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
