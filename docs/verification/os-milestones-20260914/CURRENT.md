@@ -7,6 +7,9 @@ namespace3 initialized once6294. Corrected admission floor passes seven controls
 precedes fresh caller-owned five/census. One ordinary Source30 compile now advances
 during preparation and must join before admission. Source29 tiny A/B passes three
 commands at diagnostic scope; real-crate linkage and default/native remain open.
+After snapshot, Source30 real77-module compile passed: new18,109,944B objectdfba,
+20.5408s wall/20.5534s CPU/587,964KiB peak;181warnings preserved. Independent
+compile-only acceptance; LOCAL/ABI/partial/default/native still pending. CPU0joined.
 New accepted packages/default/native/file/C-retirement closures0; M14/M15 OPEN,
 practical35/35;95% claim unproved. Same fixed18h window and billing/resource controls.
 [Review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261026T0217.json).
