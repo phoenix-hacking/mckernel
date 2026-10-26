@@ -1,3 +1,16 @@
+## Qualified private logger correction — selected HOST scope
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Source30 real77-module Rustdfba and selected4C partial48f2 independently accepted:
+five commands pass, unchanged LOCAL oracle for four records in both artifacts,
+ABI16/290providers/F04storage66/ptrace19/13newboundarysymbols. Two edge observations
+are one setter edge in Rust and partial. All five children joined; no canonical
+change/default/native/file/C-retirement credit. Archive4493792e retains191members.
+One bounded admission-helper correction K passes6actualtop-level mock controls;
+publication/review and fresh caller admission pending. CPU0/6bothjoined/released.
+Source31 owner advances independent Rust setscheduler lifetime body source-only.
+[HOST acceptance](../evidence/os-recovery-adoption-20261025-0254/ACTUAL-SOURCE30-SELECTED-CRATE-PARTIAL-INDEPENDENT-HOST-ACCEPTANCE.json).
+
 ## Current cursor — attempt3 observation packet binding failed before query
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
