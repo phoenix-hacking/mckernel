@@ -1,3 +1,23 @@
+## 05:37 checkpoint — private whole-Rust graph qualified; T admission next
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Source37’s private enabled wholeRust object6e54 (18,206,144B) now passes both
+strict observers, independently accepted218b2719. Rust compiled once; the first
+missing-edge failure586c is retained. Four exact inlined owners/six helper names
+are proved with instruction/RELA checks; three named edges remain strict.
+Eight providers/six caller rows/U231/shared4,64,16B storage and all20 original
+arithmetic/logger assertions pass. No C/assembly/default/native/C-retirement credit.
+
+T’s real producer/prequery4controls pass16f28, acceptancec8aa; source/controls
+are fetched at a699a923. Final Root context and exact current15fe/31a commands
+are being verified before the fresh clock. All previous preparations are retired,
+permanent27:4 free, namespace1d307 unchanged. Root is sole admission owner;
+review18h owns the genuine future payload/holder/resource review. Reuse9objects,
+compile only changedRust/process and raw-link11. No old grants/queries replay.
+[05:37 review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261026T0537.json).
+New fixed integration packages/default/native/whole-file/C-retirement closures0;
+M14/M15OPEN/practical35/35; no95% velocity claim. Fixed15:55:33Z deadline/run7f.
+
 ## Current cursor — no heavy owner; payload and whole-Rust checks advance
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
