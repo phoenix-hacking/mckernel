@@ -1,0 +1,223 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "authority": "Bounded extraction of retained Root observations only; no new live/root observation or action.",
+  "failure_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-PARTIAL-CUSTODY-PREPARATION-1/RUNTIME/SHARED-FAILURE.DEAD-CALLER-OBSERVATIONS.json",
+    "bytes": 1938953,
+    "sha256": "32bc631dc8160f4ac4c6208c5ed41ffef709e397535c3b555324f0b68fc42ac7"
+  },
+  "phase_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-PARTIAL-CUSTODY-PREPARATION-1/ROOT-ACTUAL-SHARED-FAILURE-PARTIAL-STATE.json",
+    "bytes": 20128,
+    "sha256": "ee73c8aef5b07b7f3c088c794d2bed544c5ac52fb7922d92a891f8d97bebd5d0"
+  },
+  "pass_observations": 13,
+  "failed_observations": [
+    {
+      "sequence": 13,
+      "error": "DeadCallerIncompleteSnapshot:attempt=1:pid=1195287:stage=first-stat:[Errno 2] No such file or directory: '/proc/1195287/stat'",
+      "incomplete_entries": [
+        {
+          "cmdline_hex": null,
+          "executable": null,
+          "incomplete_read": {
+            "attempt": 1,
+            "errno": 2,
+            "filename": "/proc/1195287/stat",
+            "stage": "first-stat",
+            "type": "FileNotFoundError"
+          },
+          "pid": 1195287,
+          "stat_after_hex": null,
+          "stat_hex": null
+        }
+      ]
+    },
+    {
+      "sequence": 14,
+      "error": "DeadCallerIncompleteSnapshot:attempt=2:pid=1195372:stage=first-stat:[Errno 2] No such file or directory: '/proc/1195372/stat'",
+      "incomplete_entries": [
+        {
+          "cmdline_hex": null,
+          "executable": null,
+          "incomplete_read": {
+            "attempt": 2,
+            "errno": 2,
+            "filename": "/proc/1195372/stat",
+            "stage": "first-stat",
+            "type": "FileNotFoundError"
+          },
+          "pid": 1195372,
+          "stat_after_hex": null,
+          "stat_hex": null
+        }
+      ]
+    },
+    {
+      "sequence": 15,
+      "error": "DeadCallerIncompleteSnapshot:attempt=3:pid=1195602:stage=first-stat:[Errno 2] No such file or directory: '/proc/1195602/stat'",
+      "incomplete_entries": [
+        {
+          "cmdline_hex": null,
+          "executable": null,
+          "incomplete_read": {
+            "attempt": 3,
+            "errno": 2,
+            "filename": "/proc/1195602/stat",
+            "stage": "first-stat",
+            "type": "FileNotFoundError"
+          },
+          "pid": 1195602,
+          "stat_after_hex": null,
+          "stat_hex": null
+        }
+      ]
+    }
+  ],
+  "root_collectors": [
+    {
+      "result": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-PARTIAL-CUSTODY-PREPARATION-1/RUNTIME/ROOT-COMMAND-0000.RESULT.json",
+        "bytes": 7597,
+        "sha256": "b5ee07ae3577507b708d3ca12f81103a50596257cd0b3ee28abd8e09df02f583"
+      },
+      "returncode": 0,
+      "stdout_bytes": 13563,
+      "stderr_bytes": 0
+    },
+    {
+      "result": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-PARTIAL-CUSTODY-PREPARATION-1/RUNTIME/ROOT-COMMAND-0001.RESULT.json",
+        "bytes": 662,
+        "sha256": "84b31f867c487a59fa7b9f0c6751b74ef078414e22479176fa02e4de9a9a056a"
+      },
+      "returncode": 0,
+      "stdout_bytes": 68697,
+      "stderr_bytes": 0
+    },
+    {
+      "result": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-PARTIAL-CUSTODY-PREPARATION-1/RUNTIME/ROOT-COMMAND-0002.RESULT.json",
+        "bytes": 7597,
+        "sha256": "c15b83019bf8c76283eb7c2b71eb92d1faea4ba1962879bf54676c1493702f92"
+      },
+      "returncode": 0,
+      "stdout_bytes": 13563,
+      "stderr_bytes": 0
+    },
+    {
+      "result": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-PARTIAL-CUSTODY-PREPARATION-1/RUNTIME/ROOT-COMMAND-0003.RESULT.json",
+        "bytes": 662,
+        "sha256": "7e67c716c84148bbd1fd186fa96553d1c96a4b1893c7ad1eb0ffad132203dce9"
+      },
+      "returncode": 0,
+      "stdout_bytes": 68697,
+      "stderr_bytes": 0
+    }
+  ],
+  "journal": {
+    "path": "/home/holden/mckernel-work/scratch/m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.journal.jsonl",
+    "bytes": 1245,
+    "sha256": "f51d694648934ea837a035daf8adcf99da36d4e47a24cfe1ae397b20861a7577",
+    "events": [
+      {
+        "sequence": 0,
+        "event": "before_exchange",
+        "index": 0
+      },
+      {
+        "sequence": 1,
+        "event": "after_exchange",
+        "index": 0
+      },
+      {
+        "sequence": 2,
+        "event": "release",
+        "index": 0
+      },
+      {
+        "sequence": 3,
+        "event": "after_release",
+        "index": 0
+      }
+    ]
+  },
+  "retained_paths": {
+    "/home/holden/mckernel-work/scratch/m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.journal.jsonl": {
+      "exists": true,
+      "device": 1828,
+      "inode": 116867,
+      "mode": 33152,
+      "uid": 1000,
+      "gid": 1000,
+      "size": 1245,
+      "mtime_ns": 1793005660721077726,
+      "ctime_ns": 1793005660721077726,
+      "bytes": 1245,
+      "sha256": "f51d694648934ea837a035daf8adcf99da36d4e47a24cfe1ae397b20861a7577"
+    },
+    "/home/holden/mckernel-work/scratch/m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.plan.json": {
+      "exists": true,
+      "device": 1828,
+      "inode": 116868,
+      "mode": 33152,
+      "uid": 1000,
+      "gid": 1000,
+      "size": 15316,
+      "mtime_ns": 1793005658024992112,
+      "ctime_ns": 1793005658024992112,
+      "bytes": 15316,
+      "sha256": "b5df1a15e071ce09cc4ba44d316baee32b9217917f307dde388efb69196ca88c"
+    },
+    "/home/holden/mckernel-work/scratch/m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.quarantine.json": {
+      "exists": true,
+      "device": 1828,
+      "inode": 116869,
+      "mode": 33152,
+      "uid": 1000,
+      "gid": 1000,
+      "size": 208,
+      "mtime_ns": 1793005661189092588,
+      "ctime_ns": 1793005661189092588,
+      "bytes": 208,
+      "sha256": "1df4c03a3bc191e82b1b6dd4afb816311e827be25d401bfa3261b284535b1dbc"
+    },
+    "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock": {
+      "exists": true,
+      "device": 1828,
+      "inode": 116861,
+      "mode": 33152,
+      "uid": 1000,
+      "gid": 1000,
+      "size": 269,
+      "mtime_ns": 1793002757447730725,
+      "ctime_ns": 1793002757447730725,
+      "bytes": 269,
+      "sha256": "f65b41d9c9834a1f2b3d1dc9ed1e14307fe6189dd9c3521c8119fdb24847c0d8"
+    },
+    "/home/holden/mckernel-work/scratch/m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.shared.archive": {
+      "exists": true,
+      "device": 1828,
+      "inode": 116866,
+      "mode": 16832,
+      "uid": 1000,
+      "gid": 1000,
+      "size": 4096,
+      "mtime_ns": 1793005657888987793,
+      "ctime_ns": 1793005657888987793,
+      "entries": []
+    }
+  },
+  "remaining_phase": "common index0 after_release; shared index1 before_exchange (no shared event/effect); original four-event prefix and original plan/quarantine retained",
+  "current_custody": {
+    "keeper_pid": 1193473,
+    "keeper_starttime": "83392603",
+    "keeper_fd": 6,
+    "flock_origin_pid": 1060806,
+    "permanent_mutex_device": 27,
+    "permanent_mutex_inode": 4,
+    "source": "Root current task statement; no new live measurement by this worker"
+  },
+  "continuation": "Existing runtime0a67 and consumed run remain held. Future exact separately reviewed keeper transfer/continuation only; no command replay or mutation budget reset."
+}

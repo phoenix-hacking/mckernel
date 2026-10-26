@@ -1,0 +1,78 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_PENDING_INDEPENDENT_REVIEW_NO_EXECUTION_AUTHORITY",
+  "inputs": {
+    "prior_installer": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-proc-snapshot-lifecycle-source-1/whole-pair-enoent-correction-source-1/source-origin-correction-source-1/current-reviewer-correction-source-1/deadscan_runtime_bridge.SOURCE-ONLY.py",
+      "bytes": 10296,
+      "sha256": "ee69ea61211f43ece62feeb15df885c2d75987effb9c03386491bc33009d8e74"
+    },
+    "patch": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-capture-shared-mutator-source-1/lifecycle-exhaustion-repair-source-1/dead_caller_confirmed_exited.FOCUSED-FUNCTIONS.SOURCE-ONLY.py",
+      "bytes": 17841,
+      "sha256": "c75997323aee2032dcacb4dcb21f3bc73d08b450b8669f95f617582e2317549d"
+    },
+    "history_seed": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-PARTIAL-CUSTODY-PREPARATION-1/RUNTIME/SHARED-FAILURE.DEAD-CALLER-OBSERVATIONS.json",
+      "bytes": 1938953,
+      "sha256": "32bc631dc8160f4ac4c6208c5ed41ffef709e397535c3b555324f0b68fc42ac7"
+    }
+  },
+  "installer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-capture-shared-mutator-source-1/lifecycle-exhaustion-repair-source-1/lifecycle_runtime_bridge.SOURCE-ONLY.py",
+    "bytes": 11597,
+    "sha256": "021165e4fb4d67bb89574c9c0643340731572dec7702ed77892e16daa014a759"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-capture-shared-mutator-source-1/lifecycle-exhaustion-repair-source-1/dead_caller_confirmed_exited.FOCUSED-FUNCTIONS.SOURCE-ONLY.py",
+    "bytes": 17841,
+    "sha256": "c75997323aee2032dcacb4dcb21f3bc73d08b450b8669f95f617582e2317549d"
+  },
+  "changed_slots": [
+    "record_dead_caller_observation",
+    "dead_caller_absent"
+  ],
+  "added_slots": [
+    "dead_caller_confirm_exited",
+    "dead_caller_retained_births",
+    "_DEAD_CALLER_RETAINED_HISTORY_SEED"
+  ],
+  "composition_marker": "_CONFIRMED_EXIT_DELTA_MANIFEST",
+  "source_authorization_template": {
+    "schema": "mckernel.current290.confirmed-exited-lifecycle-delta.authorization.v1",
+    "author": "/root",
+    "decision": "GRANT_EXACT_CONFIRMED_EXITED_LIFECYCLE_SOURCE_DELTA",
+    "installer_sha256": "021165e4fb4d67bb89574c9c0643340731572dec7702ed77892e16daa014a759",
+    "patch_sha256": "c75997323aee2032dcacb4dcb21f3bc73d08b450b8669f95f617582e2317549d",
+    "prior_installer": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-proc-snapshot-lifecycle-source-1/whole-pair-enoent-correction-source-1/source-origin-correction-source-1/current-reviewer-correction-source-1/deadscan_runtime_bridge.SOURCE-ONLY.py",
+      "bytes": 10296,
+      "sha256": "ee69ea61211f43ece62feeb15df885c2d75987effb9c03386491bc33009d8e74"
+    },
+    "history_seed": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-PARTIAL-CUSTODY-PREPARATION-1/RUNTIME/SHARED-FAILURE.DEAD-CALLER-OBSERVATIONS.json",
+      "bytes": 1938953,
+      "sha256": "32bc631dc8160f4ac4c6208c5ed41ffef709e397535c3b555324f0b68fc42ac7"
+    },
+    "source_review": {
+      "path": "<ACTUAL_INDEPENDENT_SOURCE_REVIEW_PATH>",
+      "bytes": "<ACTUAL_BYTES>",
+      "sha256": "<ACTUAL_SHA256>"
+    }
+  },
+  "retained_failure_and_phase": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-capture-shared-mutator-source-1/lifecycle-exhaustion-repair-source-1/RETAINED-FAILURE-AND-PHASE.json",
+    "bytes": 7823,
+    "sha256": "4d84408576fa344021076048e96183101a7afbce674b551607122bf75736e4b3"
+  },
+  "frozen_original_runtime": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-capture-shared-mutator-source-1/runtime_pipeline.py",
+    "bytes": 33739,
+    "sha256": "0a67af9b28ac480960dbcaa2553b9b262cf90f1f96618beb818392018715648c"
+  },
+  "constraints": [
+    "Do not edit frozen runtime0a67, consume/replay any old command, reset mutation budget or inject code into the held keeper.",
+    "History seed raw references are exact pinned inputs to source composition;12prior compact positive observations remain explicit UNKNOWN PID histories.",
+    "Actual same-OFD successor transfer and shared continuation need separate exact independent execution release and admission."
+  ]
+}

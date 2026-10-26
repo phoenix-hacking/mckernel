@@ -1,0 +1,90 @@
+test_closed_production_adapter_refuses_fixture (test_keeper_custody_successor.PrivateCustody) ... ERROR
+test_current_holder_distinct_from_original_lock_origin (test_keeper_custody_successor.PrivateCustody) ... ERROR
+test_independent_reopen_same_inode_refused (test_keeper_custody_successor.PrivateCustody) ... ERROR
+test_inheritable_copy_refused (test_keeper_custody_successor.PrivateCustody) ... ERROR
+test_metadata_mismatch_refused (test_keeper_custody_successor.PrivateCustody) ... ERROR
+test_postexit_requires_positive_pidfd_then_preserves_original_origin (test_keeper_custody_successor.PrivateCustody) ... ERROR
+test_real_pidfd_getfd_private_fixture (test_keeper_custody_successor.PrivateCustody) ... ERROR
+test_writable_descriptor_refused (test_keeper_custody_successor.PrivateCustody) ... ERROR
+test_wrong_lock_origin_refused (test_keeper_custody_successor.PrivateCustody) ... ERROR
+test_frozen_adoption_unchanged_in_private_module (test_keeper_custody_successor.SourceAndRetention) ... ok
+test_post_getfd_failure_retains_raw_descriptors (test_keeper_custody_successor.SourceAndRetention) ... ok
+test_pre_getfd_failure_closes_only_empty_pidfd (test_keeper_custody_successor.SourceAndRetention) ... ok
+test_predecessor_exact_source_capture_argv_and_grant (test_keeper_custody_successor.SourceAndRetention) ... ok
+
+======================================================================
+ERROR: test_closed_production_adapter_refuses_fixture (test_keeper_custody_successor.PrivateCustody)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-held-keeper-successor-source-1/test_keeper_custody_successor.py", line 32, in setUp
+    self.pidfd=os.pidfd_open(self.pid);self.joined=False
+AttributeError: module 'os' has no attribute 'pidfd_open'
+
+======================================================================
+ERROR: test_current_holder_distinct_from_original_lock_origin (test_keeper_custody_successor.PrivateCustody)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-held-keeper-successor-source-1/test_keeper_custody_successor.py", line 32, in setUp
+    self.pidfd=os.pidfd_open(self.pid);self.joined=False
+AttributeError: module 'os' has no attribute 'pidfd_open'
+
+======================================================================
+ERROR: test_independent_reopen_same_inode_refused (test_keeper_custody_successor.PrivateCustody)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-held-keeper-successor-source-1/test_keeper_custody_successor.py", line 32, in setUp
+    self.pidfd=os.pidfd_open(self.pid);self.joined=False
+AttributeError: module 'os' has no attribute 'pidfd_open'
+
+======================================================================
+ERROR: test_inheritable_copy_refused (test_keeper_custody_successor.PrivateCustody)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-held-keeper-successor-source-1/test_keeper_custody_successor.py", line 32, in setUp
+    self.pidfd=os.pidfd_open(self.pid);self.joined=False
+AttributeError: module 'os' has no attribute 'pidfd_open'
+
+======================================================================
+ERROR: test_metadata_mismatch_refused (test_keeper_custody_successor.PrivateCustody)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-held-keeper-successor-source-1/test_keeper_custody_successor.py", line 32, in setUp
+    self.pidfd=os.pidfd_open(self.pid);self.joined=False
+AttributeError: module 'os' has no attribute 'pidfd_open'
+
+======================================================================
+ERROR: test_postexit_requires_positive_pidfd_then_preserves_original_origin (test_keeper_custody_successor.PrivateCustody)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-held-keeper-successor-source-1/test_keeper_custody_successor.py", line 32, in setUp
+    self.pidfd=os.pidfd_open(self.pid);self.joined=False
+AttributeError: module 'os' has no attribute 'pidfd_open'
+
+======================================================================
+ERROR: test_real_pidfd_getfd_private_fixture (test_keeper_custody_successor.PrivateCustody)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-held-keeper-successor-source-1/test_keeper_custody_successor.py", line 32, in setUp
+    self.pidfd=os.pidfd_open(self.pid);self.joined=False
+AttributeError: module 'os' has no attribute 'pidfd_open'
+
+======================================================================
+ERROR: test_writable_descriptor_refused (test_keeper_custody_successor.PrivateCustody)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-held-keeper-successor-source-1/test_keeper_custody_successor.py", line 32, in setUp
+    self.pidfd=os.pidfd_open(self.pid);self.joined=False
+AttributeError: module 'os' has no attribute 'pidfd_open'
+
+======================================================================
+ERROR: test_wrong_lock_origin_refused (test_keeper_custody_successor.PrivateCustody)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-held-keeper-successor-source-1/test_keeper_custody_successor.py", line 32, in setUp
+    self.pidfd=os.pidfd_open(self.pid);self.joined=False
+AttributeError: module 'os' has no attribute 'pidfd_open'
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.024s
+
+FAILED (errors=9)
