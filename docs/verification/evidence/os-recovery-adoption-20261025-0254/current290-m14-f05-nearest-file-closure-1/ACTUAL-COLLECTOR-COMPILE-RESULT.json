@@ -1,0 +1,42 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=536870912:536870912",
+    "--cpu=6:6",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--",
+    "/usr/bin/gcc",
+    "-std=gnu11",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-static",
+    "-fno-pie",
+    "-no-pie",
+    "-Wl,-z,noexecstack",
+    "-DND_CORE_MEMORY",
+    "-MD",
+    "-MF",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f05-nearest-file-closure-1/collector.d",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-native-retirement-eagain-repair-1/native_diagnostic_guest_collector.c",
+    "-o",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f05-nearest-file-closure-1/init"
+  ],
+  "returncode": 0,
+  "started_at": 1793053774.034743,
+  "finished_at": 1793053774.3496878,
+  "CPU_seconds": 0.279888,
+  "maximum_child_RSS_KiB": 34392,
+  "native_runs": 0,
+  "compiled_collector": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f05-nearest-file-closure-1/init",
+    "bytes": 1021408,
+    "sha256": "70a6de490cf025e79cf7ea3e815ee4f8bfff61d8cf2e9ed493317db829af3a39"
+  }
+}

@@ -1,0 +1,91 @@
+"""Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Static native2 protocol-success/retirement projection from exact independent records.
+No live observers, imports of runtime owners, clocks, grants or workload execution.
+"""
+import argparse,copy,hashlib,json
+from pathlib import Path
+INPUTS={'post': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT290-NATIVE-STARTUP-ADMISSION-2/POSTNATIVE-CURRENT.stdout', 'bytes': 122704, 'sha256': '92d4949f804461705333e01b855d634d84753b3496a38a44c29d0d1ac7112012'}, 'command': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT290-NATIVE-STARTUP-ADMISSION-2/POSTNATIVE-CURRENT-COMMAND.json', 'bytes': 628, 'sha256': '8f016156cb69738b094d5c85a81d4de4b1fb07f5d5756b99370701affc059f76'}, 'owner_export': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT290-NATIVE-STARTUP-ADMISSION-2/OWNER-RAW-EXPORT.json', 'bytes': 27869, 'sha256': '1ee653c738fb66ecd952c4a98820a77e0a14457e6b9127ce95cf99037bc3e7de'}, 'caller_join': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT290-NATIVE-STARTUP-ADMISSION-2/CAPTURE/JOINED.json', 'bytes': 233, 'sha256': '7a74a86f03f56359abcfda7efcae9a6a5187bf7bd361a41d5e504c070951b11f'}, 'owner': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT290-NATIVE-STARTUP-ADMISSION-2/OWNER-RAW/owner.json', 'bytes': 797, 'sha256': '38685a2c690cdbf9f6268c1a775fd46cb6dc74ebfcd2df53524ed175d2c0639f'}, 'owner_result': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT290-NATIVE-STARTUP-ADMISSION-2/OWNER-RAW/result.json', 'bytes': 257, 'sha256': '31d68fcbffdd438c02e70acd5aa1fd88997ce7aad35531611b074af565e84349'}, 'terminal_inspection': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT290-NATIVE-STARTUP-ADMISSION-2/OWNER-RAW/026-inspect.stdout', 'bytes': 41208, 'sha256': '98cf8842a461c65f1191fdb9c21964116e9f4eed60786f1f6cacbeffa3266915'}, 'terminal_command': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT290-NATIVE-STARTUP-ADMISSION-2/OWNER-RAW/026-inspect.json', 'bytes': 279, 'sha256': 'c9bb6f32082cf16797979203b2a428a4816c0a3e6447f7ae4e80dfc010c673cb'}, 'inner': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT290-NATIVE-STARTUP-ADMISSION-2/OWNER-RAW/inner-result.json', 'bytes': 144918, 'sha256': '03eadab5ed04803da37559c7177c1b4fbf350bc5e0369ad3c326206676f3cf0a'}, 'origin': {'path': '/home/holden/mckernel-work/host-preparation/daemon-sdk7-new18h-source-1/CONSUMER.NEXT18H.PENDING.json', 'bytes': 12496, 'sha256': '6d8ba10f30546fa9aceeca6c76da7f0c9fe050963f0e7d78dfbdc99cc6823c2d'}, 'adapter': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-sdk7-current-authority-composition-source-1/sdk7_authority_adapter.CURRENT-WINDOW.SOURCE-ONLY.py', 'bytes': 22336, 'sha256': 'af1e529c2f618c079a2ce7b71e71a113342f21d6a11db7ee97fbdb2c7738ef99'}, 'window': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-sdk7-current-authority-composition-source-1/WINDOW.EARLIEST-PARENT-BOUND.SOURCE-ONLY.json', 'bytes': 1061, 'sha256': '3911bcd329383467e7a6ce8a36e3bbab9605fdcde80e2b85e0963e5a360dbed2'}, 'acceptance': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT290-NATIVE2-INDEPENDENT-POSTJOIN-ACCEPTANCE.json', 'bytes': 1848, 'sha256': '702ae4bae994910a72fee4eec2f273d5dcd7ad097255d4010988c7a681f74b63'}, 'protocol_acceptance': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT290-NATIVE2-INDEPENDENT-STARTUP-CASE-ACCEPTANCE.json', 'bytes': 2511, 'sha256': '267a357e29f1be9cbcdd88293010d539c20c709eb9dc0ef6efe2ac9f4a6f7a22'}}
+SCOPE='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
+def need(ok,reason):
+ if not ok:raise ValueError(reason)
+def render(value):return (json.dumps(value,sort_keys=True,indent=2,allow_nan=False)+'\n').encode()
+def document_ref(path,value):
+ raw=render(value);return dict(path=str(path),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def bound(ref):
+ raw=Path(ref['path']).read_bytes();need(len(raw)==ref['bytes'] and hashlib.sha256(raw).hexdigest()==ref['sha256'],'exact-retained-input-changed');return json.loads(raw)
+def validate_retirement(v,refs):
+ acceptance,post,join,owner,result,terminal,command=v['acceptance'],v['post'],v['caller_join'],v['owner'],v['owner_result'],v['terminal_inspection'],v['terminal_command']
+ need(acceptance.get('decision')=='PASS_ACTUAL_NATIVE2_POSTJOIN_CURRENT_PHYSICAL' and acceptance.get('independent') is True and acceptance.get('reviewer') not in (None,'','/root'),'independent-native2-postjoin-acceptance')
+ need(acceptance['actual']==refs['post'] and acceptance['command']==refs['command'] and acceptance['owner_export']==refs['owner_export'] and acceptance['caller_join']==refs['caller_join'],'acceptance-exact-provenance')
+ protocol=v['protocol_acceptance']
+ need(protocol.get('decision')=='PASS_ACTUAL_NATIVE2_STARTUP_CASE_AND_NORMAL_RETIREMENT_AT_DIAGNOSTIC_SCOPE' and protocol.get('independent') is True and protocol.get('reviewer') not in (None,'','/root') and protocol.get('accepted_native_diagnostic_case') is True,'independent-native2-diagnostic-scope')
+ for review in (acceptance,protocol):
+  need(review['nonce']==owner['nonce'] and review['runner_protocol_false_flags_unchanged'] is True and review['original_native1_failure_preserved'] is True and {'future admission','M14 milestone completion','M15 milestone completion','whole-file C retirement'} <= set(review['source_scope_excludes']),'preserved-runner-flags-and-limited-independent-scope')
+ need(protocol['caller_join']==refs['caller_join'] and protocol['owner_export']==refs['owner_export'] and protocol['actual_inner_result']['sha256']==refs['inner']['sha256'] and protocol['actual_inner_result']['bytes']==refs['inner']['bytes'],'independent-protocol-exact-retained-copy')
+ need(protocol['case_id']=='startup.argv-empty' and protocol['exact_stdout_bytes']==91 and protocol['exit_status']==0 and protocol['stderr_bytes']==0 and protocol['procfs_empty'] is True and protocol['retirement_queries']==[{'token':514,'errno':-11},{'token':515,'errno':0}],'independent-protocol-observation-relation')
+ need(post['status']=='PASS_NATIVE2_POSTJOIN_CURRENT_OBSERVATION_PENDING_INDEPENDENT_ACCEPTANCE' and post['native_acceptance'] is False,'native2-current-observation-scope')
+ need(result==post['actual_protocol_result'] and result['status']=='PROTOCOL_PASS' and result['failure'] is None and result['application_acceptance'] is False and result['absence_verified'] is True and result['lease_retained'] is False,'native2-protocol-result-and-retirement')
+ inner=v['inner'];report=inner['guest_report'];streams=report['streams']
+ need(inner['status']=='PROTOCOL_PASS' and inner['application_acceptance'] is False and inner['mckernel_application_executed'] is False,'original-protocol-acceptance-flags-preserved')
+ expected=b'{"case":"startup.argv-empty","argc":4,"argv":["app","A","","B"],"terminator_is_null":true}\n'
+ need(report['raw_wait_status']==0 and report['procfs_empty'] is True and streams['stdout']['hex']==expected.hex() and streams['stdout']['observed']==streams['stdout']['retained']==91 and streams['stderr']['hex']=='' and streams['stderr']['observed']==streams['stderr']['retained']==0,'exact-native2-startup-observation')
+ need(all(streams[name]['eof'] is True and streams[name]['truncated'] is False and streams[name]['discarded']==0 for name in ('stdout','stderr')),'complete-native2-guest-streams')
+ need(inner['cleanup']['reaped'] is True and inner['cleanup']['errors']==[],'native2-inner-retirement')
+ retirements=[line for line in inner['observation']['serial'].splitlines() if 'application retirement os=' in line]
+ need(retirements and 'token=515 errno=0' in retirements[-1],'actual-native2-final-retirement-515-zero')
+ cid=result['container'];nonce=owner['nonce']
+ need(terminal[0]['Id']==post['exact_container_absent']==cid and terminal[0]['Config']['Labels']['mckernel.native-diagnostic.owner']==nonce,'terminal-cid-owner-relation')
+ state=terminal[0]['State']
+ need(state['Running'] is False and state['Paused'] is False and state['Restarting'] is False and state['Pid']==0 and state['Status']=='exited' and state['ExitCode']==0,'actual-protocol-pass-nonrunning-terminal-state')
+ need(command['returncode']==0 and command['command']['reaped'] is True and v['command']['returncode']==0,'retained-observers-positive-return-and-reap')
+ need(join['joined'] is True and join['returncode']==0 and join['finished_at']<=post['observed_at'],'actual-protocol-pass-caller-joined')
+ actors=post['known_actor_births_absent'];numeric=set(post['known_numeric_controls_absent'])
+ need(actors[str(join['caller_pid'])]==int(join['caller_starttime']) and actors[str(owner['outer']['pid'])]==owner['outer']['proc_starttime'] and set(map(int,actors))<=numeric,'accepted-actor-birth-closure')
+ groups={owner['outer']['pgid']}
+ need(len(post['commands_actual_reaped'])==30,'exact-native-client-count')
+ for item in post['commands_actual_reaped']:
+  child=item['command'];need(child['reaped'] is True and actors[str(child['pid'])]==child['proc_starttime'] and child['pid'] in numeric,'all-retained-client-reaps')
+  groups.add(child['pgid'])
+ census=post['group_membership_observation'];need(census['errors']==[] and not any(row['pgrp'] in groups for row in census['rows']),'accepted-all-original-groups-absent')
+ for line in post['closed_exclusive_probes']:
+  fields=line.split();need(fields[1:4]==['FLOCK','ADVISORY','WRITE'] and fields[5:] == ['00:1b:4','0','EOF'],'permanent-mutex-probe-identity')
+ need(len(post['closed_exclusive_probes'])==2,'two-closed-exclusive-probes')
+ docker=post['docker_observations'];need(len(docker)==3,'three-exact-container-absence-observations')
+ for row in docker:
+  need(row['returncode']==0 and row['stderr']=='' and cid not in row['stdout'].splitlines(),'accepted-native-container-absent')
+  if '--filter' in row['argv']:need(row['stdout']=='','native-name-nonce-absent')
+ # Exact independent records cover these retained closure facts, not future admission.
+ return cid,nonce,state
+
+def compose(v,refs,out):
+ cid,nonce,state=validate_retirement(v,refs);origin=v['origin'];post=v['post'];window=v['window'];out=Path(out)
+ need(origin['owner']['sha256']=='94d8d3fd6e2b1181c1ea9a3b53d7d3dbaad00140c4fa8335310e75808456c750' and origin['provider']['sha256']=='89639e9d56c390968a86a95bb734128ec61bd0f6de28f7c7992cfb9e00b9ef96','unchanged-sdk7-owner-and-provider')
+ terminal=dict(container=cid,state=copy.deepcopy(state),source_only_projection=True,inspection=refs['terminal_inspection'],inspection_command=refs['terminal_command'],original_native_protocol_result=refs['owner_result'],original_inner_protocol_result=refs['inner'],independent_retirement_acceptance=refs['acceptance'],native_acceptance=False,application_acceptance=False)
+ terminal_ref=document_ref(out/'LATEST-NATIVE2-TERMINAL.PROJECTION.json',terminal)
+ closure=dict(schema='mckernel.owned-operation-closure.v1',status='PASS_OWNED_OPERATION_CLOSED',scope=SCOPE,source_only_projection=True,projection_adds_no_independent_acceptance=True,nonce=nonce,boot_id=window['boot_id'],closed_wall=post['observed_at'],terminal=terminal_ref,container=cid,direct_child_joined=True,group_absent=True,closed_streams=True,holder_retired=True,container_dispositions=[dict(cid=cid,disposition='absent',independently_accepted=True,acceptance=refs['acceptance'])],original_workload_status='PROTOCOL_PASS',protocol_observation=dict(status=v['inner']['status'],application_acceptance=v['inner']['application_acceptance'],mckernel_application_executed=v['inner']['mckernel_application_executed'],raw_wait_status=v['inner']['guest_report']['raw_wait_status'],procfs_empty=v['inner']['guest_report']['procfs_empty'],stdout_bytes=91,stderr_bytes=0,retirement_lines=[line for line in v['inner']['observation']['serial'].splitlines() if 'application retirement os=' in line]),independent_protocol_acceptance=refs['protocol_acceptance'],accepted_native_diagnostic_case=True,native_acceptance=False,application_acceptance=False,independent_retirement_acceptance=refs['acceptance'],actual_postjoin=refs['post'],caller_join=refs['caller_join'],owner_export=refs['owner_export'],no_fresh_workload_admission=True)
+ closure_ref=document_ref(out/'LATEST-NATIVE2-CLOSURE.PROJECTION.json',closure)
+ head=dict(schema='mckernel.serial-operation-head.v1',status='STATIC_LATEST_KNOWN_OPERATION_BINDING_ROOT_FINALIZATION_REQUIRED',latest_operation=closure_ref,consumed_nonces=None,no_intervening_operation=None,known_consumed_nonce_from_bound_evidence=nonce,latest_acceptance=refs['acceptance'])
+ head_ref=document_ref(out/'OPERATION-HEAD.TEMPLATE.NOT-RELEASED.json',head)
+ live=dict(schema='mckernel.daemon7.live-environment-observation.v1',status='TEMPLATE_NOT_A_FRESH_OBSERVATION',latest_operation=closure_ref,operation_head=head_ref,clock=None,global_mutex_rows=None,active_records_absent=None,no_unknown_owned_operations=None,root_mutex=None,container_dispositions=None,accepted_previous_observation=refs['post'],previous_observed_wall=post['observed_at'])
+ live_ref=document_ref(out/'LIVE-OBSERVATION.TEMPLATE.NOT-RELEASED.json',live)
+ request=copy.deepcopy(v['original_request'])
+ for key in ('nonce','request_path','candidate_root','candidate_identity','owner_evidence_root','output_parent_identity','input_identity','basis_identity','backing_identity'):request[key]=None
+ request['boot_id']=window['boot_id']
+ request_ref=document_ref(out/'SDK7-REQUEST.TEMPLATE.NOT-RELEASED.json',request)
+ bundle=dict(schema='mckernel.daemon7.live-admission.v1',status='STATIC_BOUND_LATEST_ACCEPTED_NATIVE2_NOT_EXECUTABLE',parent_window=refs['window'],query_window=refs['window'],request=request_ref,operation_head=head_ref,latest_operation=closure_ref,live_observation=live_ref,query=None,query_join=None,reservation=None,root_admission_review=None)
+ query=dict(status='STATIC_QUERY_BINDING_NOT_A_QUERY_RELEASE',bundle=None,adapter=refs['adapter'],parent_window=refs['window'],request=request_ref,operation_head=head_ref,latest_operation=closure_ref,live_observation=live_ref,profile=origin['profile'],capture_helper=origin['capture_helper'],actual_nonce=None,aggregate_memory_GiB=None,owned_holder=None,evidence_root=None,independent_query_release=None)
+ fill=dict(status='STATIC_FILL_BINDING_NOT_AN_EXECUTION_PAYLOAD',bundle=None,adapter=refs['adapter'],historical_origin=refs['origin'],historical_source_approval=origin['source_approval'],historical_sdk21_artifact=origin['SDK21_artifact_behavior'],latest_operation=closure_ref,actual_query=None,actual_query_join=None,reservation=None,root_admission_review=None,execution_review=None,runtime_authority=None)
+ owner_argv=['/home/holden/anaconda3/bin/python3','-I','-B',origin['owner']['path'],'--request','<ACTUAL_NEW_REQUEST_ABSOLUTE_PATH>','--request-sha256','<ACTUAL_NEW_REQUEST_SHA256>','--release','<ACTUAL_REVIEWED_SDK7_RELEASE_ABSOLUTE_PATH>','--release-sha256','<ACTUAL_REVIEWED_SDK7_RELEASE_SHA256>']
+ command=dict(scope=SCOPE,status='EXACT_EXISTING_OWNER_ARGUMENT_SHAPE_NOT_RELEASED',required_uid=1000,owner=origin['owner'],argv=owner_argv,source_only=True,commands=origin['seven_commands'],provider=origin['provider'],profile=origin['profile'],blocked_root_finalization=['fresh nonce and exactly owner-compatible fresh request/candidate/evidence identities','Root current operation head with complete consumed-nonce ledger and no intervening serialized operation','fresh live observation with allthree actual clocks and current absent ownership/mutex/container disposition','source-reviewed hash-exact query release and actual owned27:4 holder+complete h990 capture','actual identity/resource/image-only query plus wholejoin, current aggregate environment and sole-heavy reservation','independent exact root admission metadata review, source publication, execution-payload review and execution release'],actual_live_query_calls=0,actual_sdk_commands=0,native_acceptance=False)
+ return {'LATEST-NATIVE2-TERMINAL.PROJECTION.json':terminal,'LATEST-NATIVE2-CLOSURE.PROJECTION.json':closure,'OPERATION-HEAD.TEMPLATE.NOT-RELEASED.json':head,'LIVE-OBSERVATION.TEMPLATE.NOT-RELEASED.json':live,'SDK7-REQUEST.TEMPLATE.NOT-RELEASED.json':request,'SDK7-BUNDLE.STATIC.NOT-RELEASED.json':bundle,'SDK7-QUERY.STATIC.NOT-RELEASED.json':query,'SDK7-FILL.STATIC.NOT-RELEASED.json':fill,'NEXT-UNPRIVILEGED-SDK7-OWNER.COMMAND.NOT-RELEASED.json':command}
+
+def main():
+ parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--emit-dir',type=Path,required=True);args=parser.parse_args()
+ v={name:(None if ref is None else bound(ref)) for name,ref in INPUTS.items() if name!='adapter'}
+ v['original_request']=bound(v['origin']['request']);refs=dict(INPUTS)
+ args.emit_dir.mkdir(mode=0o700,exist_ok=False)
+ outputs=compose(v,refs,args.emit_dir.resolve())
+ for name,value in outputs.items():
+  with (args.emit_dir/name).open('xb') as stream:stream.write(render(value))
+ print(json.dumps(dict(status='PASS_STATIC_ACCEPTED_NATIVE2_PROTOCOL_RETIREMENT_TO_SDK7_BINDING_NO_EXECUTION',outputs=len(outputs),directory=str(args.emit_dir))))
+if __name__=='__main__':main()

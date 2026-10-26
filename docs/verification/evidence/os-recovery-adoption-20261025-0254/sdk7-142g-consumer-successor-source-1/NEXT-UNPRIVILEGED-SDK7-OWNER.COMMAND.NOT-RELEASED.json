@@ -1,0 +1,140 @@
+{
+  "actual_live_query_calls": 0,
+  "actual_sdk_commands": 0,
+  "argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-142g-consumer-successor-source-1/daemon_sdk_owner.142G-SOURCE-ONLY.py",
+    "--request",
+    "<ACTUAL_NEW_REQUEST_ABSOLUTE_PATH>",
+    "--request-sha256",
+    "<ACTUAL_NEW_REQUEST_SHA256>",
+    "--release",
+    "<ACTUAL_REVIEWED_SDK7_RELEASE_ABSOLUTE_PATH>",
+    "--release-sha256",
+    "<ACTUAL_REVIEWED_SDK7_RELEASE_SHA256>"
+  ],
+  "blocked_root_finalization": [
+    "fresh nonce and exactly owner-compatible fresh request/candidate/evidence identities",
+    "Root current operation head with complete consumed-nonce ledger and no intervening serialized operation",
+    "fresh live observation with allthree actual clocks and current absent ownership/mutex/container disposition",
+    "source-reviewed hash-exact query release and actual owned27:4 holder+complete h990 capture",
+    "actual identity/resource/image-only query plus wholejoin, current aggregate environment and sole-heavy reservation",
+    "independent exact root admission metadata review, source publication, execution-payload review and execution release"
+  ],
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/cc",
+        "-std=gnu11",
+        "-O2",
+        "-Werror",
+        "-MD",
+        "-MF",
+        "/work/daemon-sdk-1/linux-ABI.d",
+        "-I/src/ihk/linux/include",
+        "-I/src/ihk/include",
+        "-c",
+        "/candidate/linux_abi_witness.c",
+        "-o",
+        "/work/daemon-sdk-1/linux-ABI.o"
+      ],
+      "label": "linux-ABI"
+    },
+    {
+      "argv": [
+        "/usr/bin/cc",
+        "-std=gnu11",
+        "-O2",
+        "-Werror",
+        "-MD",
+        "-MF",
+        "/work/daemon-sdk-1/libudev-ABI.d",
+        "-I/src/ihk/linux/include",
+        "-I/src/ihk/include",
+        "-c",
+        "/candidate/libudev_abi_witness.c",
+        "-o",
+        "/work/daemon-sdk-1/libudev-ABI.o"
+      ],
+      "label": "libudev-ABI"
+    },
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "-S",
+        "/candidate/default-selection",
+        "-B",
+        "/work/daemon-sdk-1/build",
+        "-DCMAKE_C_COMPILER:FILEPATH=/usr/bin/cc",
+        "-DIHK_USER_RUSTC:FILEPATH=/nightly/bin/rustc",
+        "-DCMAKE_INSTALL_PREFIX:PATH=/usr/local",
+        "-DCMAKE_VERBOSE_MAKEFILE:BOOL=ON"
+      ],
+      "label": "selected-configure"
+    },
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "--build",
+        "/work/daemon-sdk-1/build",
+        "--target",
+        "ihkmond",
+        "--parallel",
+        "1"
+      ],
+      "label": "selected-build"
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-d",
+        "/work/daemon-sdk-1/build/sdk-daemon/ihkmond"
+      ],
+      "label": "daemon-dynamic"
+    },
+    {
+      "argv": [
+        "/usr/bin/nm",
+        "-D",
+        "--undefined-only",
+        "/work/daemon-sdk-1/build/sdk-daemon/ihkmond"
+      ],
+      "label": "daemon-imports"
+    },
+    {
+      "argv": [
+        "/lib64/ld-linux-x86-64.so.2",
+        "--library-path",
+        "/accepted-libihk",
+        "--list",
+        "/work/daemon-sdk-1/build/sdk-daemon/ihkmond"
+      ],
+      "label": "daemon-loader"
+    }
+  ],
+  "native_acceptance": false,
+  "owner": {
+    "bytes": 74224,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-142g-consumer-successor-source-1/daemon_sdk_owner.142G-SOURCE-ONLY.py",
+    "sha256": "999713a7b4dafa034232d997872132642358aa80029244ad27e571efbf1664ee"
+  },
+  "profile": {
+    "cpus": "2-5",
+    "jobs": 1,
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "network": "none",
+    "pids": 512
+  },
+  "provider": {
+    "bytes": 12095032,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/canonical-source-producer-SDK-target-operation-1/bounded-top-level-cache-dependency-correction-1/selected-source-1/workspace/native-running-modules-candidate-1315033c6e40480ea1b61cf8159c0c19/output/whole70-tool-default/ihk/linux/user/libihk.so",
+    "sha256": "89639e9d56c390968a86a95bb734128ec61bd0f6de28f7c7992cfb9e00b9ef96"
+  },
+  "required_uid": 1000,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_only": true,
+  "status": "STATIC_142G_CONSUMER_SOURCE_ONLY_NOT_RELEASED"
+}

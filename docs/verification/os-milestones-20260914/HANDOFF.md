@@ -1,3 +1,64 @@
+## SDK7 capacity gate and coherent growth successor prepared — 2026-10-26T22:30Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+SDK7 query/compiler has NOT started: unchangedowner requires14,091,616,256B scratch;
+lastcurrent14,056,960,000B is33MiBshort. Native2matchingstartup/retirement accepted,
+no keeper/nativejob active, alloriginalsources/prefixes retained. Capacity is actual
+gate, notlack ofCPUs. Userauthorized110->142GiB scratchgrowth beingprepared;
+oldSDK94d8hardcodes110, so narrowlyreviewed142successor999713a7 +typedgrowthhead
+b05eaee0/696cab2d separatesnative2lastcontainer fromgrowthlastphysicaloperation.
+Sixpuretests/21negativecontrols andindependentSOURCEPASS; no floorlowering,
+oldproofrelabeling/growth/query/SDKauthority inferred. Rootfinitegrowthsourcef94e
+with9puretests awaitsindependentsourcereview thenactualfreshgrant. Unprivileged
+ext4resizefixture confirmedautomaticreserve ratio163->326 unchanged; realscratch
+still110GiB. Requiredsameinode/UUID/fullHOSTgrowth+sparsegap/exclusive27:4/oldconsumer
+reconciliation remainhardguards; no actualmutationbeforeindependentrelease.
+
+ParallelM14F05 selectedCmemoryobject iszeroFUNC/OBJECT/allocatedruntime relocations;
+343Rustproviders/sevenstoragepointers matchactualimage. Nextsupportedmemorycase
+collector compiled0/.315s/34392KiB atHOSTscope, reusedpayload558d1607; actualnative
+coverage/finalwholefileacceptance stillOPEN. No duplicateports/broaderinventory.
+NextRoot: publishfetched142consumer+growSource, actualreviewedgrowthenSDK7freshquery
+andretainedsevencommands. Largestdelay nowcoherentstoragegate/handoff; no95percent
+claim orsource/testcount-as-file/nativeacceptance. Allfixedend/accountcontrolsunchanged.
+
+## Matching current290 startup diagnostic independently accepted — 2026-10-26T22:15Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Native2 caller1270470/tool32851 genuinelyjoined0/39.096s; sameimagee6a82/modules,
+correctedcollectordbfc produced exactstartup91B/exit0/stderr0/procfsempty and genuine
+samePID256 retirement514=-11 then515=0 beforeguestpowerdown. Independentreplay of
+unchanged evaluator PASS. Additive exactcase acceptance:
+CURRENT290-NATIVE2-INDEPENDENT-STARTUP-CASE-ACCEPTANCE.json. Reusable runner's
+protocol/application falseflags preserved; no wholeOS/M14/M15/Ccredit inferred.
+QEMU actualreturn-9 afterguestshutdown/hostquit retained, neverinventedexit0.
+All30Dockerclientsreaped, ownernormalcleanup removedactualCID2d91abdf; callerjoined0.
+Fresh9c779observation .265s/324rawprocessrows/noerrors/noownedgroupmembers,
+all32actors/33numericcontrolsabsent, two27:4probesclosed, daemon/common/sharedabsence,
+capacity/samemount accepted in CURRENT290-NATIVE2-INDEPENDENT-POSTJOIN-ACCEPTANCE.json.
+Native2 nonce7b3d... CONSUMED; no keeper/native workload remains fromit. Original
+native1FAIL/captures/sourceprefixes retained. Nextheavy needsfreshadmission.
+
+Concrete delta: one matching native startup diagnosticcase and validated current
+selectedimage; completecutover default/native/file/Cretirement closures still0.
+M14/M15 OPEN/practical35/35 unchanged. No95percentclaim. SDK7 typedcomposition
+owner prepareslatest successfuloperation shape withoutcoercingFALSE runnerflags;
+Rootnext query/fill/admission and7retainedSDKcommands. Fixedend/account unchanged.
+
+## Corrected collector native attempt actually running — 2026-10-26T22:11Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Native2 nonce7b3d529538fe42ccb3612fb0348bef6d nowCONSUMED underactualindependent
+releasecefdbfa2, freshresource54973d11; caller1270470/start85013071/tool32851 running.
+ExactCAPTURE at ROOT-CURRENT290-NATIVE-STARTUP-ADMISSION-2/CAPTURE. No secondheavy,
+no replay/cleanup/sourcechange whileownedoperationactive. Imagee6a82/modules
+unchanged; onlycompiledcollector dbfc43d0 observationgate corrected, manifest54a6306d.
+Actualnative/application result, normalretirement andpostjoin independentacceptance
+pending; originalnative1FAIL remainsretained. Pushed/fetched2efe9a3cd06356d8cbaf79ac2d8e3f68a4cf2f12
+includesactualfailure/correction/tests/packaging/staticready. SDK7staticcomposition
+isready; latestoperationprojection/livebinding mustusenative2actualclosure afterjoin,
+notrelabelnative1currentproof. Samefixedend/credit/owner/resourcecontrols unchanged.
+
 ## Native retirement failure retained; collector-only correction tested — 2026-10-26T22:09Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
