@@ -1,3 +1,18 @@
+## Twenty-minute review — 2026-10-26T01:17Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Attempt2 entered93.49s thenfailedreceiptidentity beforecompiler; owner904301
+joined1, parent903729/FD3 andNEWbe875record remainquarantined. Source337/4d
+wholeproductionreceiptfunction11controls independentlyPASS, runtimeunqualified.
+Firstreal77-moduleRustcompile exposedE0583 fourmissingmodulepaths. One4attribute
+correction subsequentlyPASS15fa8b7f aftersnapshot; independentactualreviewpending.
+Freshheldreadonly f04/022/aabe source-reviewed, corrected9controlsPASS, actualquery
+notyetstarted. Rootnext exactpub/fetch/concretereadonlyrelease, then separately
+reviewed903retirement/be87archive. Frontend3NULLproof/IDs preparedfailclosed.
+Newdefault/native/file/Cclosures0; M14/M15 OPEN; original30minbucketszero,
+95%claimunproved. [Review/metrics](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261026T0117.json).
+Samefixed18hwindow/controls. ActualrealRustcrateprogress isnotnativeacceptance.
+
 ## Current cursor — attempt2 receipt failure, ownership retained
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
