@@ -1,3 +1,24 @@
+## Matching current290 memory diagnostic independently accepted — 2026-10-26T23:31Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actualmemorynonce9c4b439d613e437da475c9dccee0b8a0 CONSUMED; tool98399/caller1297475
+start85479190 joined0/38.848566s. Exact24Bstdout/stderr0/exit37/procfsempty; unchanged
+f368 evaluator PROTOCOL_PASS independentlyreplayed. PID255 retirement0 at34.067497s
+beforepowerdown34.827582s; actualQEMU-9 aftershutdown/hostquit preserved. Reusable
+falseacceptanceflags unchanged. Exactcase +actualpostjoin accepted in
+CURRENT290-MEMORY1-INDEPENDENT-{CASE,POSTJOIN}-ACCEPTANCE.json. All30ownercommands
+reaped; already-stoppedkillrc1 preserved with inspectedcontainerexit0; actualCIDb2c0
+normalremoved/actorsgroupsabsent/sharedrecordsabsent/twoown27probesclosed/mountfloors.
+No wholefile/M14/M15/Cretirement or fixed-package acceptance inferred.
+
+ActualFDclose→nativecallerstart327.956026s; bytecapacityclear→nativecaller2742.880604s.
+CaptureCPU0.92897s/peak52928KiB applies ONLYouterclient; wholeQEMU CPU/RSS unmeasured.
+No newkernelimage/module/compilerprefix rebuild. Native cases thisresume2(startup+memory).
+SDK7twohop/headv3 adapter+8puretests/23negativecases independentlySOURCEPASS; Rootnext
+materializesactualacceptedgrowth+memoryrefs then onefreshSDK7query/admission/sevenargv.
+Sourceowner partial_runtime_finish preparesliteralproposals whileRootintegratesaccepted
+memory. Currentimagee6a82/modules/source6153/SDK21/nineobjects retained, no replay.
+
 ## Final custody-free state independently accepted — 2026-10-26T23:27Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

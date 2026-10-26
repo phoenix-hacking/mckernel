@@ -1,0 +1,52 @@
+--- a/sdk7_authority_adapter.RECOVERED-GROWTH.SOURCE-ONLY.py
++++ b/sdk7_authority_adapter.POSTGROWTH-CHAIN.SOURCE-ONLY.py
+@@ -19,7 +19,7 @@
+ from sdk7_current_window import load_window, validate_window
+ from retained_sdk21_authority import validate_current
+ sys.path.insert(0,str(Path(__file__).resolve().parent))
+-from growth_recovery_validator import current_sources, validate_recovered_growth as growth_chain
++from growth_chain_validator import current_sources, validate_growth_chain as growth_chain
+ 
+ PROFILE = dict(cpus='2-5', jobs=1, memory_bytes=12 * 2**30,
+                memory_swap_bytes=12 * 2**30, network='none', pids=512)
+@@ -186,7 +186,7 @@
+          and review['execution_release'] is False
+          and review['bindings'] == {k: bundle[k] for k in
+              ('request', 'parent_window', 'operation_head', 'latest_operation',
+-              'live_observation', 'query', 'query_join', 'reservation')}
++              'live_observation', 'query', 'query_join', 'reservation', 'accepted_growth_stage')}
+          and review['historical_source_approval'] == origin['source_approval']
+          and review['current_source_map'] == bundle['current_source_map']
+          and review['current_source_review'] == bundle['current_source_review']
+@@ -199,6 +199,7 @@
+          and query['request'] == bundle['request']
+          and query['live_observation'] == bundle['live_observation']
+          and query['operation_head'] == bundle['operation_head']
++         and query['accepted_growth_stage'] == bundle['accepted_growth_stage']
+          and query['window'] == bundle['parent_window']
+          and query['profile'] == PROFILE and query['image_id'] == request['image_id']
+          and query['current_owner'] == source_review['bindings']['current_owner']
+@@ -258,6 +259,7 @@
+                    actual_query=bundle['query'], actual_query_whole_join=bundle['query_join'],
+                    parent_window=bundle['parent_window'], current_operation_head=bundle['operation_head'],
+                    resource_reservation=bundle['reservation'],
++                   accepted_growth_stage=bundle['accepted_growth_stage'],
+                    status='PENDING_INDEPENDENT_EXECUTION_REVIEW', execution_release=False)
+     return payload
+ 
+@@ -297,6 +299,7 @@
+          and release['current_source_review'] == bound(bundle_ref)['current_source_review']
+          and release['current_source_publication'] == bound(bundle_ref)['current_source_publication']
+          and release['growth_closure'] == bound(bundle_ref)['growth_closure']
++         and release['accepted_growth_stage'] == bound(bundle_ref)['accepted_growth_stage']
+          and release['aggregate_memory_GiB'] == os.environ.get('MCKERNEL_OS_MEMORY_GIB'),
+          'external exact read-only query release required')
+ 
+@@ -355,6 +358,7 @@
+     return dict(schema='mckernel.daemon7.current-window-readonly-query.v1',
+                 request=bundle['request'], live_observation=bundle['live_observation'],
+                 operation_head=bundle['operation_head'], window=bundle['parent_window'],
++                accepted_growth_stage=bundle['accepted_growth_stage'],
+                 profile=PROFILE, image_id=rows[0]['Id'], target_calls=0, container_create_calls=0,
+                 current_owner=current_owner, current_source_map=bundle['current_source_map'],
+                 current_source_review=bundle['current_source_review'],
