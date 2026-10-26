@@ -1,0 +1,60 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_HELPER_REGRESSION_PASSED_ONLY",
+  "defect": {
+    "expression": "value.get(\"status\")",
+    "original_line": 244,
+    "caller": "_reuse_prepare_build -> _atomic_json(database, rows)",
+    "caller_line": 1923,
+    "actual_database_rows": 79,
+    "description": "compile_commands is JSON list; temp is fsynced before unconditional dict access fails, preventing database replacement and every compiler command"
+  },
+  "correction": "Guard status lookup with isinstance(value, dict); preserve dict PASS interrupt gate.",
+  "bindings": {
+    "original_driver": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt3-coherent-entry-preparation-source-1/genuine-newbe87-physical-binding-preparation-source-1/actual7553-namespace6294-final-source-1/memory-floor-correction1-source-1/query-packet-pin-correction1-source-1/default290-link-data-selector-correction1-source-1/minimal-selected-default-readonly-overlay-and-seed-plan-1/implementation-source-1/exact-consumed-gitlink-view-correction1-source-1/fresh-compiled-object-ownership-gate-source-1/native_rust_exact_mckernel_image_offline.CURRENT290.VIEW-AND-FRESH-OBJECT-GATE.py",
+      "bytes": 226452,
+      "sha256": "9d0b4e92891a2251bd099eb3dde04471e23dc76c7fb043f2781a45d64f7e376b"
+    },
+    "corrected_driver": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-driver-identity-repair-source-1/native_rust_exact_mckernel_image_offline.CURRENT290.VIEW-AND-FRESH-OBJECT-GATE.py",
+      "bytes": 226480,
+      "sha256": "9d2d39a0f4a28dc15638fe2c1a01052e64886078d39c3b1e7bf57eccf68bbdfd"
+    }
+  },
+  "original_retained": {
+    "receipt.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt3-coherent-entry-preparation-source-1/genuine-newbe87-physical-binding-preparation-source-1/actual7553-namespace6294-final-source-1/memory-floor-correction1-source-1/query-packet-pin-correction1-source-1/default290-link-data-selector-correction1-source-1/minimal-selected-default-readonly-overlay-and-seed-plan-1/implementation-source-1/exact-consumed-gitlink-view-correction1-source-1/fresh-compiled-object-ownership-gate-source-1/attempt4-request-and-namespace-plan-source-1/actual-current290-default-image-attempt-4/owner-work/evidence/receipt.json",
+      "bytes": 1036,
+      "sha256": "f4dd4938821245c2bc3c1fba14fd6b81b35a9488c1c878e1b48d6c92e87483b4"
+    },
+    "progress.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt3-coherent-entry-preparation-source-1/genuine-newbe87-physical-binding-preparation-source-1/actual7553-namespace6294-final-source-1/memory-floor-correction1-source-1/query-packet-pin-correction1-source-1/default290-link-data-selector-correction1-source-1/minimal-selected-default-readonly-overlay-and-seed-plan-1/implementation-source-1/exact-consumed-gitlink-view-correction1-source-1/fresh-compiled-object-ownership-gate-source-1/attempt4-request-and-namespace-plan-source-1/actual-current290-default-image-attempt-4/owner-work/evidence/progress.json",
+      "bytes": 333,
+      "sha256": "07357d1c38d64f1272ea58b744bca685eaa3b4f668299b2d8cab7fb4501a41c9"
+    },
+    "provenance.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt3-coherent-entry-preparation-source-1/genuine-newbe87-physical-binding-preparation-source-1/actual7553-namespace6294-final-source-1/memory-floor-correction1-source-1/query-packet-pin-correction1-source-1/default290-link-data-selector-correction1-source-1/minimal-selected-default-readonly-overlay-and-seed-plan-1/implementation-source-1/exact-consumed-gitlink-view-correction1-source-1/fresh-compiled-object-ownership-gate-source-1/attempt4-request-and-namespace-plan-source-1/actual-current290-default-image-attempt-4/owner-work/evidence/provenance.json",
+      "bytes": 43309288,
+      "sha256": "fc5992b52a35b6f6538aee1a048db1473493c1be432767b0bff894ea7647786f"
+    }
+  },
+  "test": {
+    "command": "taskset -c 0 bash -c 'ulimit -v 2097152; exec python3 -B docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-driver-identity-repair-source-1/test_atomic_json.py'",
+    "exit_code": 0,
+    "result": "All 7 helper checks passed; original exact list AttributeError reproduced; actual 79-row list fresh/replacement publication, no-status/nonPASS dict, PASS signal gate and interrupted PASS nonpublication verified.",
+    "limits": "CPU0, one job, address space 2097152KiB",
+    "script": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-driver-identity-repair-source-1/test_atomic_json.py",
+      "bytes": 3595,
+      "sha256": "a80459688d0f3c7a97a78dc74c87e871d3ecc9e397760f72f47b9ab2d6bec37a"
+    },
+    "traceback": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-driver-identity-repair-source-1/original-reproduction.traceback.txt",
+      "bytes": 1205,
+      "sha256": "2f50fd8b59179be7f321ff0cfd47f90f08b3253a6c98a8e702ee69659b8080f9"
+    }
+  },
+  "downstream": "Independent review and new successor exact driver path/hash binding needed in entry/owner manifests and mount descriptor; original frozen driver unchanged. No runtime/release permission inherited. Companion native_rust_exact_build_offline import must retain its existing exact binding.",
+  "no_build_or_native_actions": true
+}

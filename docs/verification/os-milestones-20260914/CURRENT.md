@@ -1,3 +1,28 @@
+## Recovery checkpoint — 2026-10-26T08:33Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Current290 owner1043716/start80020161 joined1 after the offline driver's identity
+phase failed with `'list' object has no attribute 'get'`; commands=[] means no
+compiler ran. Preserve nine successful compiler prefixes and source6153. The
+stopped CID0715da07649768d4347212f4214bc523c2e5b07227f06bcb9697ec7ad67890f8
+and common/shared records remain retained. Caller1043200/start80013658 is now
+absent and tool37865 returns Unknown process id after recovery. Historical
+same-OFD readiness cannot authorize cleanup with a missing holder. Independent
+current-owner retirement review is active; no new workload or cleanup admitted.
+
+Source worker driver_identity_repair localized `_atomic_json` calling `.get`
+on the actual compile_commands list; private correction passed seven local regressions and independent source review. The reviewed PASS-publication signal gate must stay intact.
+Owner current_owner_retirement checks the precise dead-caller retirement path.
+M12 remains35/35; M14/M15 OPEN. New default/native/file/C-retirement closures0.
+No95% velocity improvement claim. Next executable acceptance: reviewed retirement
+of retained current290 operation, then corrected current290 selected image entry
+under fresh actual admission; SDK21 remains accepted and is not replayed.
+
+Changed-holder observation:
+[actual recovery cursor](../evidence/os-recovery-adoption-20261025-0254/CURRENT290-RECOVERY-CHANGED-HOLDER-20261026T0830.json).
+Fixed new18h window ends2026-10-26T15:55:33Z; run7f accounting and owner/resource
+controls remain unchanged. No control restart or historical-grant replay.
+
 ## Fresh N output generation ready; timed-review checks move preclock
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
