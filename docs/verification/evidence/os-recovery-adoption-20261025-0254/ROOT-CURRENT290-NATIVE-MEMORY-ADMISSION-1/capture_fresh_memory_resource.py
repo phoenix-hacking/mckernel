@@ -1,0 +1,27 @@
+"""Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Fresh read-only native admission inputs; no container/guest creation or cleanup.
+"""
+from pathlib import Path
+import json,os,time,subprocess,hashlib
+A=Path(__file__).resolve().parent;E=A.parent;G=E/'ROOT-SCRATCH-GROWTH-SDK7-ADMISSION-1'
+accept=G/'FINAL-CURRENT-FREE-INDEPENDENT-ACCEPTANCE.json';d=json.loads(accept.read_bytes());assert d['decision']=='PASS_RECOVERED_GROWTH_FINAL_CUSTODY_FREE' and d['implementation_ownership'] is False
+clocks=[time.time(),time.monotonic(),time.clock_gettime(time.CLOCK_BOOTTIME)]
+assert all(c<e for c,e in zip(clocks,[1793100290,882395.5689528405,897734.6960034363]))
+source=E/'ROOT-CURRENT290-NATIVE-STARTUP-ADMISSION-2/check_postnative_current.py'
+r=subprocess.run(['/home/holden/anaconda3/bin/python3','-I','-B',str(source)],capture_output=True,timeout=40)
+assert r.returncode==0 and not r.stderr
+(A/'FRESH-POSTNATIVE-READONLY.stdout').write_bytes(r.stdout);(A/'FRESH-POSTNATIVE-READONLY.stderr').write_bytes(r.stderr);current=json.loads(r.stdout)
+mem={}
+for line in Path('/proc/meminfo').read_text().splitlines():
+ k,v=line.split(':',1)
+ if k in ['MemTotal','MemAvailable']:mem[k]=int(v.split()[0])*1024
+assert mem['MemAvailable']>=24*2**30
+paths=['/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us','/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us','/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes','/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy','/sys/fs/cgroup/pids/mckernel-dev/pids.max']
+cgroup={p:Path(p).read_text().strip() for p in paths};assert list(cgroup.values())==['100000','400000','12884901888','1','512']
+pids=int(Path('/sys/fs/cgroup/pids/mckernel-dev/pids.current').read_text());assert pids==0
+state=json.loads(Path('/home/holden/mckernel/.git/os-autopilot/state.json').read_bytes());assert state['phase']=='running'
+raw=accept.read_bytes();acceptref=dict(path=str(accept),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+result=dict(scope=__doc__.splitlines()[0],observed_clocks=clocks,freshness_seconds_max=120,boot_id=Path('/proc/sys/kernel/random/boot_id').read_text().strip(),launcher_guard={k:state[k] for k in ['phase','thread_id','heartbeat_at','credit_budget','credit_budget_error','last_rate_limits']},actual_postgrowth_free_acceptance=acceptref,current_physical_observation=current,no_existing_heavy=True,active_shared_records_absent=True,capacity=current['capacity'],memory=mem,cgroup=cgroup,pids_current=pids,container_reservation=dict(cpus='2-5',jobs=4,RAM_bytes=12884901888,pids=512,swap_bytes=0),other_RAM_reserved_bytes=6442450944,aggregate_RAM_ceiling_GiB=22.0439,aggregate_jobs_max=7,fresh_directories=[])
+for p in [A/'CAPTURE',Path('/home/holden/mckernel-work/scratch/n290memory1/p')]:
+ assert p.is_dir() and not list(p.iterdir());s=p.lstat();result['fresh_directories'].append(dict(path=str(p),device=s.st_dev,inode=s.st_ino,mode=s.st_mode,uid=s.st_uid,gid=s.st_gid))
+print(json.dumps(result,indent=2))

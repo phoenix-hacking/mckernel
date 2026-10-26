@@ -1,3 +1,22 @@
+## Final custody-free state independently accepted — 2026-10-26T23:27Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+PASS_RECOVERED_GROWTH_FINAL_CUSTODY_FREE actualindependentdecision recorded at
+ROOT-SCRATCH-GROWTH-SDK7-ADMISSION-1/FINAL-CURRENT-FREE-INDEPENDENT-ACCEPTANCE.json.
+RealNORMAL-CLOSE/actualcaller+tool0/zero27:4rows/twoownprobesclosed, same142GiB
+identity/UUID/reserveABS288358, fivecritical+24scratch21unchanged accepted. Specific
+ordinary n290memory1 rootdirectorydelta qualified; unchangedrootidentity FALSE.
+OriginalgrowthreserveFAIL/4976accountguardFAIL/strictrootobserverFAIL allpreserved.
+No maintenance work remains. No newSDK/native/fileacceptance countedforcustodyclose.
+
+Root next: allstaticmemoryinputs/staged40c1manifest/sourcepublished beforeclock,
+then fresh120sresource/currentphysical/exactindependentrelease andONE matching
+baseline.core.memory guest. SDK7 typedtwohop/currentheadrepair runsinparallel.
+Concrete recurrence rules: allnewhelpersreuse pinnedcanonicalaccountpolicy and
+replayactualredactedsnapshot; maintenance-dependentpackagingwrites HOSTprivate
+untilscratchmetadata preservation invariantclosed/qualified. No newframework.
+M14/M15 OPEN/practical35/35 unchanged. Fixedend2026-10-27T11:24:50Z/accountunchanged.
+
 ## Actual final copied FD closed and both callers joined — 2026-10-26T23:24Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
