@@ -1,3 +1,26 @@
+## Current cursor — frontend controls passed; exact default entry next
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Attempt4’s expert-corrected frontend passed its real bootstrap (65 bound refs) and
+all eight controls, result `42208eeb`, independently accepted as `2c18a730`.
+Cleanup source `8f899578` has independent same-OFD source review `fb58f63e`.
+The genuine namespace base inode59655333 and exact26-row ancestry are bound;
+initializer `1d307ea4` must never be replayed. Earlier bootstrap failures remain.
+Root is publishing the final111-file source/control cohort, then preparing exact
+commands/context before one fresh query→review→same-PID incremental image entry.
+Reuse nine unchanged objects; compile changed Rust/process and link the image.
+No workload admission follows from this source checkpoint alone.
+
+Source34 passed three ordinary compile/static commands with ABI36 and exactly
+six expected imports, independent acceptance `c60a5cf7`; archive `e3c79b0f` retains
+the original missing-import compiler failure and its import-only correction.
+No runtime or default/native credit. Source35 production selector wiring,
+Source36 real affinity callbacks and the next F05 memory body advance privately.
+[04:37 review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261026T0437.json).
+New accepted integration packages/default/native/whole-file/C-retirement closures
+remain zero. M14/M15 OPEN; practical35/35 unchanged; no95% velocity claim.
+Fixed deadline2026-10-26T15:55:33Z, resident controls and run7f unchanged.
+
 ## Current checkpoint — Source32 accepted at controlled HOST scope
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
