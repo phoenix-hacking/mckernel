@@ -1,3 +1,71 @@
+## Current cursor — recovered physical/frontend controls accepted; default entry next
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Z current-physical adapter53b4/specf8d5/configde74/caller350aad is SOURCE-qualified;
+three controls accepted across retained runs8aabfe42. Corrected realexecute positive
+1023479 passes2.168wall/2.142CPU/RSS189028KiB to exact first-query sentinel, with
+transport/flock forbidden. Original2PASS/fullpositive fixtureERROR stays retained.
+Cleanup820019 same-OFD source review35f5ac1a is accepted; no cleanup execution grant.
+Z validates old0886/578a as historical baseline, exact4688/11b6 as current recovery,
+and initializer15/runtime213 roles. Root publishes/fetches this coherent tuple,
+finishes static context/commands then requests genuine fresh admission. No new query
+or owner entered; namespace1d307 must not be reinitialized and grants never replayed.
+
+Source38 processf395/syscall141d/partial61db remain actualcompiled/linked HOSTprefix.
+Retained-only strict observer passed closed35/21 witness and util exactline checks,
+then FAIL named allocationidentity: actualHOSTpartial __verbose loses0x200000
+retention flag for four32B Rust descriptors while bytes/type/alignment survive.
+Independent exactmapping diagnosis remains OPEN; no genericflagmask/retention waiver
+or compiler/link replay. This HOSToracle does not block independent current290
+selecteddefault/native qualification. Original failed observers/rawELFs preserved.
+M14/M15 OPEN/practical35/35; new default/native/file/Cretirement0; no95%claim.
+Fixed2026-10-26T15:55:33Z/run7f and resident controls unchanged.
+
+## Current cursor — both selected C objects and coherent partial retained
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Source38 now has actual process+syscall ABI36 syntax PASS, both genuine changed
+C objects compiled and five-input partial linked. Processf3953d21/58816B and
+syscall141d9763/319000B/partial61db9cfc are retained; no replay authorized.
+Strict observer FAIL is preserved: baseline syscall has35 appended HOST ABI
+witness objects and21 imports owned by22 witness pointers. Expertreview proves
+closedfixture role/no allocated runtime consumers;30runtimefunctions byte-identical,
+util_thread only6tracked source-line immediates+27. Exact observer-only successor
+is being frozen; partialU19 and all runtime/ABI/provider/storage/machine guards stay.
+
+Y three real role/producer controls accepted. Z binds genuine latest recovery4688/
+postjoin11b6 as current, preserving0886/578a as historical baseline and initializer1d.
+Its actual tests:2PASS/fullpositive failed only TEMP Path facade; test-only exact
+capture-write redirection is being corrected. Real execute/newphysical/roles must
+reach pre-query sentinel before publication/admission. Root then publishes/fetches
+qualified Z, prepares all static bindings before freshclock and obtains separate
+actual resource/physical/holder review+grant for owner213. Reuse9image objects.
+No source-only proof grants a workload or clears a consumed grant.
+
+Watcher842938 owns currentmodel worker1017996/server1017998; Root sent no control
+signal/restart. Old842942 was retired by model recovery after OS recovery proof.
+Guardian843517 alive; old queue-only monitor843520 journal stopped goal_not_active;
+Root observes only and creates no replacement. Current goal active/service running,
+no stop_reason/credit_budget_error; due steering review recorded with fresh facts.
+[Due06:57 review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261026T0657.json).
+M14/M15 OPEN/practical35/35. New default/native/file/Cretirement0; no95%claim.
+Fixed2026-10-26T15:55:33Z and run7f/actual guards unchanged. Latest fetchedcheckpoint
+9f5286d279f47e2d7e3355492fcb2fe055500987; selective compiler/control checkpoint next.
+
+## 06:47 Source38 real compiler prefix; suffix header closure correction
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual Source38 process ABI36 syntax and changed process C compile both PASS.
+Syscall syntax FAILS at candidate/kernel/syscall.c:64, missing genuine relative
+executer/include/uti.h; no syscall compile/partial link/observer ran. All three
+children retired; prefix1.510wall/.970CPU/RSS24104KiB, ordinary CPU0 released.
+Preserve new process.o and its ABI proof. Owner prepares exact additive header
+closure and four-command suffix only; no process/Rust/CPU/VM/ASM replay.
+Frontend X effect-free controls stopped0tests at a duplicated DATA_BINDING path;
+bootstrap-only bounded correction underway, no new query/grant/admission.
+Independent failed-validation recovery468813 remains complete. Current290
+production default/native/whole-file/C-retirement remain OPEN and unchanged.
+
 ## Current cursor — failed-validation recovery complete; owner213 default entry next
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

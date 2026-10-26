@@ -1,0 +1,4451 @@
+{
+  "D_added": [],
+  "D_removed": [
+    "CURRENT290_EXEC_C_ABI14",
+    "CURRENT290_GETSIGINFO_C_ABI14",
+    "f03_actual_access_address",
+    "f03_actual_address_sched_apply_scheduler_bridge",
+    "f03_actual_address_sched_find_thread_bridge",
+    "f03_actual_address_sched_hold_thread_bridge",
+    "f03_actual_address_sched_release_thread_bridge",
+    "f03_actual_address_sched_request_migrate_bridge",
+    "f03_actual_address_sched_setparam_log_bridge",
+    "f03_actual_address_sched_thread_unlock_bridge",
+    "f03_actual_address_syscall_do_kill_current_bridge",
+    "f03_actual_address_syscall_do_kill_thread_bridge",
+    "f03_actual_address_syscall_interrupt_cpu_bridge",
+    "f03_actual_address_syscall_kill_log_bridge",
+    "f03_actual_address_syscall_threads_reader_lock_bridge",
+    "f03_actual_address_syscall_threads_reader_unlock_bridge",
+    "f03_actual_atomic_op_address",
+    "f03_actual_cmpxchg_address",
+    "f03_actual_dispatch_address",
+    "f03_actual_ioctl_leaf_address",
+    "f03_actual_settimeofday_panic_address",
+    "f03_atomic_C_ABI",
+    "f03_dispatch_C_ABI",
+    "f03_entry_config_guard_witness_v1",
+    "f03_entry_config_scalar_witness_v1",
+    "f03_leaf_C_ABI",
+    "f03_move_pages_C_ABI",
+    "f03_move_pages_actual_entry_address",
+    "f03_move_pages_actual_handler_address",
+    "f03_ptrace_entry_C_ABI8",
+    "f03_sched_C_ABI",
+    "f03_signal_process_C_ABI",
+    "f03_syscall_entry_C_ABI",
+    "f03_syscall_entry_C_address",
+    "f03_table_C_guards4"
+  ],
+  "U_added": [],
+  "U_removed": [
+    "futex_atomic_access_ok_bridge",
+    "futex_atomic_cmpxchg_inatomic_bridge",
+    "futex_atomic_op_inuser_bridge",
+    "move_pages_smp_handler",
+    "sched_apply_scheduler_bridge",
+    "sched_find_thread_bridge",
+    "sched_hold_thread_bridge",
+    "sched_release_thread_bridge",
+    "sched_request_migrate_bridge",
+    "sched_setparam_log_bridge",
+    "sched_thread_unlock_bridge",
+    "sys_move_pages",
+    "syscall",
+    "syscall_dispatch_context_bridge",
+    "syscall_do_kill_current_bridge",
+    "syscall_interrupt_cpu_bridge",
+    "syscall_kill_log_bridge",
+    "syscall_settimeofday_panic_bridge",
+    "syscall_threads_reader_lock_bridge",
+    "syscall_threads_reader_unlock_bridge",
+    "syscall_tofu_ioctl_bridge"
+  ],
+  "actual_input_consumer_proofs": [
+    {
+      "ALLOC_RELA_count": 200,
+      "input": {
+        "bytes": 58816,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-38-coherent-selected-c-partial-link-source-1/accepted-inline-machine-binding-correction1-source-1/exact-selected-process-prior-U-correction1-source-1/output-1/process.selected.o",
+        "sha256": "f3953d2131216a32302b4ba8377684b77585447d76c6bada9508ffbb4c505e15"
+      }
+    },
+    {
+      "ALLOC_RELA_count": 423,
+      "input": {
+        "bytes": 110864,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/output-1/f06-arch-selected.o",
+        "sha256": "86a6fc0fc1b9144eb296d69db39dcf355b6c37e488b5b1c8a56dd0b31855f63d"
+      }
+    },
+    {
+      "ALLOC_RELA_count": 1630,
+      "input": {
+        "bytes": 319000,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-38-coherent-selected-c-partial-link-source-1/exact-four-command-header-fixture-suffix-source-1/output-1/syscall.selected.o",
+        "sha256": "141d9763639b2d72ff8a02e023959c0f008b93231a3aaf545e74156f132626b0"
+      }
+    },
+    {
+      "ALLOC_RELA_count": 0,
+      "input": {
+        "bytes": 29104,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-3/ordinary-HOST-qualification-preparation-1/bounded-C-include-namespace-transport-correction-1/output-1/F04.selected.o",
+        "sha256": "e86e190482dfa459c128a21b8bab4ac98bd33c685de197c82465b276dd075e9c"
+      }
+    },
+    {
+      "ALLOC_RELA_count": 20095,
+      "input": {
+        "bytes": 18206144,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-37-coherent-lifetime-worker-whole-rust-source-1/bounded-pregrant-correction-1/output-1/coherent-lifetime-worker-rust.o",
+        "sha256": "6e54dc57de7cb4c4b5506cdaddb181e7758edfc7640684f9f587b48518ebd3ce"
+      }
+    },
+    {
+      "ALLOC_RELA_count": 22348,
+      "input": {
+        "bytes": 18963760,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-38-coherent-selected-c-partial-link-source-1/exact-four-command-header-fixture-suffix-source-1/output-1/coherent-selected.partial.o",
+        "sha256": "61db9cfcd1903afda3162c82c0899a06d420f5cb86164d9aa5391e2e9e1a7781"
+      }
+    }
+  ],
+  "actual_old_join": {
+    "bytes": 1401,
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/genuine-uti-header-transport-suffix04-source-1/actual-suffix04-12-attempt-1/04/WHOLE-JOIN.json",
+    "sha256": "1d014d3f87768c8d502bb5b0ab78c40fae7e67d5b3e66cc281462aed0a133bad"
+  },
+  "actual_old_producer": {
+    "bytes": 3935,
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/genuine-uti-header-transport-suffix04-source-1/actual-suffix04-12-attempt-1/04/command.json",
+    "sha256": "4b64e590866a2c9952eb53cfbe3067534d762419e58ff8731359f7f61c251d86"
+  },
+  "actual_partial": {
+    "bytes": 18963760,
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-38-coherent-selected-c-partial-link-source-1/exact-four-command-header-fixture-suffix-source-1/output-1/coherent-selected.partial.o",
+    "sha256": "61db9cfcd1903afda3162c82c0899a06d420f5cb86164d9aa5391e2e9e1a7781"
+  },
+  "actual_syscall": {
+    "bytes": 319000,
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-38-coherent-selected-c-partial-link-source-1/exact-four-command-header-fixture-suffix-source-1/output-1/syscall.selected.o",
+    "sha256": "141d9763639b2d72ff8a02e023959c0f008b93231a3aaf545e74156f132626b0"
+  },
+  "authenticated_inputs": [
+    {
+      "bytes": 58816,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-38-coherent-selected-c-partial-link-source-1/accepted-inline-machine-binding-correction1-source-1/exact-selected-process-prior-U-correction1-source-1/output-1/process.selected.o",
+      "sha256": "f3953d2131216a32302b4ba8377684b77585447d76c6bada9508ffbb4c505e15"
+    },
+    {
+      "bytes": 110864,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/output-1/f06-arch-selected.o",
+      "sha256": "86a6fc0fc1b9144eb296d69db39dcf355b6c37e488b5b1c8a56dd0b31855f63d"
+    },
+    {
+      "bytes": 319000,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-38-coherent-selected-c-partial-link-source-1/exact-four-command-header-fixture-suffix-source-1/output-1/syscall.selected.o",
+      "sha256": "141d9763639b2d72ff8a02e023959c0f008b93231a3aaf545e74156f132626b0"
+    },
+    {
+      "bytes": 29104,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-3/ordinary-HOST-qualification-preparation-1/bounded-C-include-namespace-transport-correction-1/output-1/F04.selected.o",
+      "sha256": "e86e190482dfa459c128a21b8bab4ac98bd33c685de197c82465b276dd075e9c"
+    },
+    {
+      "bytes": 18206144,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-37-coherent-lifetime-worker-whole-rust-source-1/bounded-pregrant-correction-1/output-1/coherent-lifetime-worker-rust.o",
+      "sha256": "6e54dc57de7cb4c4b5506cdaddb181e7758edfc7640684f9f587b48518ebd3ce"
+    },
+    {
+      "bytes": 326440,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/output-1/F03.selected.o",
+      "sha256": "1c95acd63f5b4f801c8274a32c404e35c3fccdd553eb281cc688cf86257cfdc5"
+    },
+    {
+      "bytes": 18963760,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-38-coherent-selected-c-partial-link-source-1/exact-four-command-header-fixture-suffix-source-1/output-1/coherent-selected.partial.o",
+      "sha256": "61db9cfcd1903afda3162c82c0899a06d420f5cb86164d9aa5391e2e9e1a7781"
+    },
+    {
+      "bytes": 927570,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/source/kernel/syscall.c",
+      "sha256": "cc829750de7f50c9c77980955ac9c62521f3f3d3c1c0c72fcc7f84ce294f4642"
+    },
+    {
+      "bytes": 911224,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-37-coherent-lifetime-worker-whole-rust-source-1/bounded-pregrant-correction-1/candidate/kernel/syscall.c",
+      "sha256": "c2ea34a0219f6fe53799a3a27751afcd715c9af3bf42df25dbb4493605043fc6"
+    },
+    {
+      "bytes": 3935,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/genuine-uti-header-transport-suffix04-source-1/actual-suffix04-12-attempt-1/04/command.json",
+      "sha256": "4b64e590866a2c9952eb53cfbe3067534d762419e58ff8731359f7f61c251d86"
+    },
+    {
+      "bytes": 1401,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/genuine-uti-header-transport-suffix04-source-1/actual-suffix04-12-attempt-1/04/WHOLE-JOIN.json",
+      "sha256": "1d014d3f87768c8d502bb5b0ab78c40fae7e67d5b3e66cc281462aed0a133bad"
+    },
+    {
+      "bytes": 22339,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-38-coherent-selected-c-partial-link-source-1/exact-four-command-header-fixture-suffix-source-1/fixed-reviewed-environment-admission-1/ACTUAL-SOURCE38-FOUR-COMMAND-FIRST-RESULT.json",
+      "sha256": "5e4bd58044a05b90f5a1c28620bc5cc43d52159a39ec917476576197db6d80dd"
+    },
+    {
+      "bytes": 871,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-38-coherent-selected-c-partial-link-source-1/exact-four-command-header-fixture-suffix-source-1/fixed-reviewed-environment-admission-1/actual-four-command-capture-1/03/stderr",
+      "sha256": "bc1e90b7e4872886cd493d29466ebfb9a2c9fcebb78b72a5d7833b6fba4b3987"
+    },
+    {
+      "bytes": 1883,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-38-coherent-selected-c-partial-link-source-1/exact-four-command-header-fixture-suffix-source-1/fixed-reviewed-environment-admission-1/actual-four-command-capture-1/01/whole-join-and-end.json",
+      "sha256": "5117ac9326e48d4a884122bbf07af552f32e3eb247763c6d2a4d6925400000a4"
+    },
+    {
+      "bytes": 1871,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-38-coherent-selected-c-partial-link-source-1/exact-four-command-header-fixture-suffix-source-1/fixed-reviewed-environment-admission-1/actual-four-command-capture-1/02/whole-join-and-end.json",
+      "sha256": "ac4b7183c061af9895b19661b454d139420d90b0a3e758a483a8e4389cc2316c"
+    },
+    {
+      "bytes": 65756,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-38-coherent-selected-c-partial-link-source-1/exact-four-command-header-fixture-suffix-source-1/STATIC-SYSCALL-CLOSED35-SOURCE-AND-OUTGOING-RELA.FACTS.json",
+      "sha256": "897a41e3546026346970df062cede128bb1830325e8ec37fc593d94bf0a78897"
+    },
+    {
+      "bytes": 41017,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-38-coherent-selected-c-partial-link-source-1/exact-four-command-header-fixture-suffix-source-1/STATIC-UTIL-THREAD-EXACT-SIX-LINE-IMMEDIATES.FACTS.json",
+      "sha256": "48e65a4fb73eb9d00b3baf9b31b438b0c7a0ae0a08d153f6817d3c55000abe4f"
+    }
+  ],
+  "closed35_objects": [
+    {
+      "bytes_hex": "e000000000000000080000000000000038000000000000000000000000000000a800000000000000080000000000000070000000000000006800000000000000600000000000000038000000000000004800000000000000400000000000000050000000000000007800000000000000",
+      "name": "CURRENT290_EXEC_C_ABI14",
+      "outgoing_RELA": [],
+      "section": {
+        "addr": 0,
+        "align": 32,
+        "entsize": 0,
+        "flags": 2,
+        "index": 7,
+        "info": 0,
+        "link": 0,
+        "name": ".rodata",
+        "name_off": 84,
+        "offset": 43776,
+        "size": 4540,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29606,
+          "text": "const unsigned long CURRENT290_EXEC_C_ABI14[14]={sizeof(ihk_mc_user_context_t),_Alignof(ihk_mc_user_context_t),__builtin_offsetof(ihk_mc_user_context_t,gpr),__builtin_offsetof(ihk_mc_user_context_t,sr),sizeof(struct x86_basic_regs),_Alignof(struct x86_basic_regs),__builtin_offsetof(struct x86_basic_regs,rdi),__builtin_offsetof(struct x86_basic_regs,rsi),__builtin_offsetof(struct x86_basic_regs,rdx),__builtin_offsetof(struct x86_basic_regs,r10),__builtin_offsetof(struct x86_basic_regs,r8),__builtin_offsetof(struct x86_basic_regs,r9),__builtin_offsetof(struct x86_basic_regs,rax),__builtin_offsetof(struct x86_basic_regs,orig_rax)};"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 568,
+        "name": "CURRENT290_EXEC_C_ABI14",
+        "shndx": 7,
+        "size": 112,
+        "type": 1,
+        "value": 832
+      }
+    },
+    {
+      "bytes_hex": "80000000000000000800000000000000a00000000000000008000000000000001800000000000000c01500000000000040000000000000005810000000000000a01300000000000058000000000000000800000000000000080000000000000008000000000000000400000000000000",
+      "name": "CURRENT290_GETSIGINFO_C_ABI14",
+      "outgoing_RELA": [],
+      "section": {
+        "addr": 0,
+        "align": 32,
+        "entsize": 0,
+        "flags": 2,
+        "index": 7,
+        "info": 0,
+        "link": 0,
+        "name": ".rodata",
+        "name_off": 84,
+        "offset": 43776,
+        "size": 4540,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29598,
+          "text": "const unsigned long CURRENT290_GETSIGINFO_C_ABI14[14] = {sizeof(siginfo_t),__alignof__(siginfo_t),sizeof(struct sig_pending),"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 569,
+        "name": "CURRENT290_GETSIGINFO_C_ABI14",
+        "shndx": 7,
+        "size": 112,
+        "type": 1,
+        "value": 960
+      }
+    },
+    {
+      "bytes_hex": "0000000000000000",
+      "name": "f03_actual_access_address",
+      "outgoing_RELA": [
+        {
+          "addend": 0,
+          "offset": 0,
+          "owning_section": 11,
+          "target": {
+            "bind": 1,
+            "index": 583,
+            "name": "futex_atomic_access_ok_bridge",
+            "shndx": 0,
+            "size": 0,
+            "type": 0,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "section": {
+        "addr": 0,
+        "align": 8,
+        "entsize": 0,
+        "flags": 3,
+        "index": 11,
+        "info": 0,
+        "link": 0,
+        "name": ".data.rel",
+        "name_off": 115,
+        "offset": 49184,
+        "size": 168,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29424,
+          "text": "__typeof__(&futex_atomic_access_ok_bridge) f03_actual_access_address=&futex_atomic_access_ok_bridge;"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 582,
+        "name": "f03_actual_access_address",
+        "shndx": 11,
+        "size": 8,
+        "type": 1,
+        "value": 16
+      }
+    },
+    {
+      "bytes_hex": "0000000000000000",
+      "name": "f03_actual_address_sched_apply_scheduler_bridge",
+      "outgoing_RELA": [
+        {
+          "addend": 0,
+          "offset": 0,
+          "owning_section": 11,
+          "target": {
+            "bind": 1,
+            "index": 614,
+            "name": "sched_apply_scheduler_bridge",
+            "shndx": 0,
+            "size": 0,
+            "type": 0,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "section": {
+        "addr": 0,
+        "align": 8,
+        "entsize": 0,
+        "flags": 3,
+        "index": 11,
+        "info": 0,
+        "link": 0,
+        "name": ".data.rel",
+        "name_off": 115,
+        "offset": 49184,
+        "size": 168,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29365,
+          "text": "__typeof__(&sched_apply_scheduler_bridge) f03_actual_address_sched_apply_scheduler_bridge = &sched_apply_scheduler_bridge;"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 613,
+        "name": "f03_actual_address_sched_apply_scheduler_bridge",
+        "shndx": 11,
+        "size": 8,
+        "type": 1,
+        "value": 128
+      }
+    },
+    {
+      "bytes_hex": "0000000000000000",
+      "name": "f03_actual_address_sched_find_thread_bridge",
+      "outgoing_RELA": [
+        {
+          "addend": 0,
+          "offset": 0,
+          "owning_section": 11,
+          "target": {
+            "bind": 1,
+            "index": 618,
+            "name": "sched_find_thread_bridge",
+            "shndx": 0,
+            "size": 0,
+            "type": 0,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "section": {
+        "addr": 0,
+        "align": 8,
+        "entsize": 0,
+        "flags": 3,
+        "index": 11,
+        "info": 0,
+        "link": 0,
+        "name": ".data.rel",
+        "name_off": 115,
+        "offset": 49184,
+        "size": 168,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29361,
+          "text": "__typeof__(&sched_find_thread_bridge) f03_actual_address_sched_find_thread_bridge = &sched_find_thread_bridge;"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 617,
+        "name": "f03_actual_address_sched_find_thread_bridge",
+        "shndx": 11,
+        "size": 8,
+        "type": 1,
+        "value": 144
+      }
+    },
+    {
+      "bytes_hex": "0000000000000000",
+      "name": "f03_actual_address_sched_hold_thread_bridge",
+      "outgoing_RELA": [
+        {
+          "addend": 0,
+          "offset": 0,
+          "owning_section": 11,
+          "target": {
+            "bind": 1,
+            "index": 612,
+            "name": "sched_hold_thread_bridge",
+            "shndx": 0,
+            "size": 0,
+            "type": 0,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "section": {
+        "addr": 0,
+        "align": 8,
+        "entsize": 0,
+        "flags": 3,
+        "index": 11,
+        "info": 0,
+        "link": 0,
+        "name": ".data.rel",
+        "name_off": 115,
+        "offset": 49184,
+        "size": 168,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29367,
+          "text": "__typeof__(&sched_hold_thread_bridge) f03_actual_address_sched_hold_thread_bridge = &sched_hold_thread_bridge;"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 611,
+        "name": "f03_actual_address_sched_hold_thread_bridge",
+        "shndx": 11,
+        "size": 8,
+        "type": 1,
+        "value": 120
+      }
+    },
+    {
+      "bytes_hex": "0000000000000000",
+      "name": "f03_actual_address_sched_release_thread_bridge",
+      "outgoing_RELA": [
+        {
+          "addend": 0,
+          "offset": 0,
+          "owning_section": 11,
+          "target": {
+            "bind": 1,
+            "index": 610,
+            "name": "sched_release_thread_bridge",
+            "shndx": 0,
+            "size": 0,
+            "type": 0,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "section": {
+        "addr": 0,
+        "align": 8,
+        "entsize": 0,
+        "flags": 3,
+        "index": 11,
+        "info": 0,
+        "link": 0,
+        "name": ".data.rel",
+        "name_off": 115,
+        "offset": 49184,
+        "size": 168,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29369,
+          "text": "__typeof__(&sched_release_thread_bridge) f03_actual_address_sched_release_thread_bridge = &sched_release_thread_bridge;"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 609,
+        "name": "f03_actual_address_sched_release_thread_bridge",
+        "shndx": 11,
+        "size": 8,
+        "type": 1,
+        "value": 112
+      }
+    },
+    {
+      "bytes_hex": "0000000000000000",
+      "name": "f03_actual_address_sched_request_migrate_bridge",
+      "outgoing_RELA": [
+        {
+          "addend": 0,
+          "offset": 0,
+          "owning_section": 11,
+          "target": {
+            "bind": 1,
+            "index": 608,
+            "name": "sched_request_migrate_bridge",
+            "shndx": 0,
+            "size": 0,
+            "type": 0,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "section": {
+        "addr": 0,
+        "align": 8,
+        "entsize": 0,
+        "flags": 3,
+        "index": 11,
+        "info": 0,
+        "link": 0,
+        "name": ".data.rel",
+        "name_off": 115,
+        "offset": 49184,
+        "size": 168,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29371,
+          "text": "__typeof__(&sched_request_migrate_bridge) f03_actual_address_sched_request_migrate_bridge = &sched_request_migrate_bridge;"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 607,
+        "name": "f03_actual_address_sched_request_migrate_bridge",
+        "shndx": 11,
+        "size": 8,
+        "type": 1,
+        "value": 104
+      }
+    },
+    {
+      "bytes_hex": "0000000000000000",
+      "name": "f03_actual_address_sched_setparam_log_bridge",
+      "outgoing_RELA": [
+        {
+          "addend": 0,
+          "offset": 0,
+          "owning_section": 11,
+          "target": {
+            "bind": 1,
+            "index": 606,
+            "name": "sched_setparam_log_bridge",
+            "shndx": 0,
+            "size": 0,
+            "type": 0,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "section": {
+        "addr": 0,
+        "align": 8,
+        "entsize": 0,
+        "flags": 3,
+        "index": 11,
+        "info": 0,
+        "link": 0,
+        "name": ".data.rel",
+        "name_off": 115,
+        "offset": 49184,
+        "size": 168,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29373,
+          "text": "__typeof__(&sched_setparam_log_bridge) f03_actual_address_sched_setparam_log_bridge = &sched_setparam_log_bridge;"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 605,
+        "name": "f03_actual_address_sched_setparam_log_bridge",
+        "shndx": 11,
+        "size": 8,
+        "type": 1,
+        "value": 96
+      }
+    },
+    {
+      "bytes_hex": "0000000000000000",
+      "name": "f03_actual_address_sched_thread_unlock_bridge",
+      "outgoing_RELA": [
+        {
+          "addend": 0,
+          "offset": 0,
+          "owning_section": 11,
+          "target": {
+            "bind": 1,
+            "index": 616,
+            "name": "sched_thread_unlock_bridge",
+            "shndx": 0,
+            "size": 0,
+            "type": 0,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "section": {
+        "addr": 0,
+        "align": 8,
+        "entsize": 0,
+        "flags": 3,
+        "index": 11,
+        "info": 0,
+        "link": 0,
+        "name": ".data.rel",
+        "name_off": 115,
+        "offset": 49184,
+        "size": 168,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29363,
+          "text": "__typeof__(&sched_thread_unlock_bridge) f03_actual_address_sched_thread_unlock_bridge = &sched_thread_unlock_bridge;"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 615,
+        "name": "f03_actual_address_sched_thread_unlock_bridge",
+        "shndx": 11,
+        "size": 8,
+        "type": 1,
+        "value": 136
+      }
+    },
+    {
+      "bytes_hex": "0000000000000000",
+      "name": "f03_actual_address_syscall_do_kill_current_bridge",
+      "outgoing_RELA": [
+        {
+          "addend": 0,
+          "offset": 0,
+          "owning_section": 11,
+          "target": {
+            "bind": 1,
+            "index": 596,
+            "name": "syscall_do_kill_current_bridge",
+            "shndx": 0,
+            "size": 0,
+            "type": 0,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "section": {
+        "addr": 0,
+        "align": 8,
+        "entsize": 0,
+        "flags": 3,
+        "index": 11,
+        "info": 0,
+        "link": 0,
+        "name": ".data.rel",
+        "name_off": 115,
+        "offset": 49184,
+        "size": 168,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29386,
+          "text": "__typeof__(&syscall_do_kill_current_bridge) f03_actual_address_syscall_do_kill_current_bridge=&syscall_do_kill_current_bridge;"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 595,
+        "name": "f03_actual_address_syscall_do_kill_current_bridge",
+        "shndx": 11,
+        "size": 8,
+        "type": 1,
+        "value": 56
+      }
+    },
+    {
+      "bytes_hex": "0000000000000000",
+      "name": "f03_actual_address_syscall_do_kill_thread_bridge",
+      "outgoing_RELA": [
+        {
+          "addend": 0,
+          "offset": 0,
+          "owning_section": 11,
+          "target": {
+            "bind": 1,
+            "index": 424,
+            "name": "syscall_do_kill_thread_bridge",
+            "shndx": 0,
+            "size": 0,
+            "type": 0,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "section": {
+        "addr": 0,
+        "align": 8,
+        "entsize": 0,
+        "flags": 3,
+        "index": 11,
+        "info": 0,
+        "link": 0,
+        "name": ".data.rel",
+        "name_off": 115,
+        "offset": 49184,
+        "size": 168,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29384,
+          "text": "__typeof__(&syscall_do_kill_thread_bridge) f03_actual_address_syscall_do_kill_thread_bridge=&syscall_do_kill_thread_bridge;"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 597,
+        "name": "f03_actual_address_syscall_do_kill_thread_bridge",
+        "shndx": 11,
+        "size": 8,
+        "type": 1,
+        "value": 64
+      }
+    },
+    {
+      "bytes_hex": "0000000000000000",
+      "name": "f03_actual_address_syscall_interrupt_cpu_bridge",
+      "outgoing_RELA": [
+        {
+          "addend": 0,
+          "offset": 0,
+          "owning_section": 11,
+          "target": {
+            "bind": 1,
+            "index": 599,
+            "name": "syscall_interrupt_cpu_bridge",
+            "shndx": 0,
+            "size": 0,
+            "type": 0,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "section": {
+        "addr": 0,
+        "align": 8,
+        "entsize": 0,
+        "flags": 3,
+        "index": 11,
+        "info": 0,
+        "link": 0,
+        "name": ".data.rel",
+        "name_off": 115,
+        "offset": 49184,
+        "size": 168,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29382,
+          "text": "__typeof__(&syscall_interrupt_cpu_bridge) f03_actual_address_syscall_interrupt_cpu_bridge=&syscall_interrupt_cpu_bridge;"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 598,
+        "name": "f03_actual_address_syscall_interrupt_cpu_bridge",
+        "shndx": 11,
+        "size": 8,
+        "type": 1,
+        "value": 72
+      }
+    },
+    {
+      "bytes_hex": "0000000000000000",
+      "name": "f03_actual_address_syscall_kill_log_bridge",
+      "outgoing_RELA": [
+        {
+          "addend": 0,
+          "offset": 0,
+          "owning_section": 11,
+          "target": {
+            "bind": 1,
+            "index": 594,
+            "name": "syscall_kill_log_bridge",
+            "shndx": 0,
+            "size": 0,
+            "type": 0,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "section": {
+        "addr": 0,
+        "align": 8,
+        "entsize": 0,
+        "flags": 3,
+        "index": 11,
+        "info": 0,
+        "link": 0,
+        "name": ".data.rel",
+        "name_off": 115,
+        "offset": 49184,
+        "size": 168,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29388,
+          "text": "__typeof__(&syscall_kill_log_bridge) f03_actual_address_syscall_kill_log_bridge=&syscall_kill_log_bridge;"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 593,
+        "name": "f03_actual_address_syscall_kill_log_bridge",
+        "shndx": 11,
+        "size": 8,
+        "type": 1,
+        "value": 48
+      }
+    },
+    {
+      "bytes_hex": "0000000000000000",
+      "name": "f03_actual_address_syscall_threads_reader_lock_bridge",
+      "outgoing_RELA": [
+        {
+          "addend": 0,
+          "offset": 0,
+          "owning_section": 11,
+          "target": {
+            "bind": 1,
+            "index": 603,
+            "name": "syscall_threads_reader_lock_bridge",
+            "shndx": 0,
+            "size": 0,
+            "type": 0,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "section": {
+        "addr": 0,
+        "align": 8,
+        "entsize": 0,
+        "flags": 3,
+        "index": 11,
+        "info": 0,
+        "link": 0,
+        "name": ".data.rel",
+        "name_off": 115,
+        "offset": 49184,
+        "size": 168,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29378,
+          "text": "__typeof__(&syscall_threads_reader_lock_bridge) f03_actual_address_syscall_threads_reader_lock_bridge=&syscall_threads_reader_lock_bridge;"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 602,
+        "name": "f03_actual_address_syscall_threads_reader_lock_bridge",
+        "shndx": 11,
+        "size": 8,
+        "type": 1,
+        "value": 88
+      }
+    },
+    {
+      "bytes_hex": "0000000000000000",
+      "name": "f03_actual_address_syscall_threads_reader_unlock_bridge",
+      "outgoing_RELA": [
+        {
+          "addend": 0,
+          "offset": 0,
+          "owning_section": 11,
+          "target": {
+            "bind": 1,
+            "index": 601,
+            "name": "syscall_threads_reader_unlock_bridge",
+            "shndx": 0,
+            "size": 0,
+            "type": 0,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "section": {
+        "addr": 0,
+        "align": 8,
+        "entsize": 0,
+        "flags": 3,
+        "index": 11,
+        "info": 0,
+        "link": 0,
+        "name": ".data.rel",
+        "name_off": 115,
+        "offset": 49184,
+        "size": 168,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29380,
+          "text": "__typeof__(&syscall_threads_reader_unlock_bridge) f03_actual_address_syscall_threads_reader_unlock_bridge=&syscall_threads_reader_unlock_bridge;"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 600,
+        "name": "f03_actual_address_syscall_threads_reader_unlock_bridge",
+        "shndx": 11,
+        "size": 8,
+        "type": 1,
+        "value": 80
+      }
+    },
+    {
+      "bytes_hex": "0000000000000000",
+      "name": "f03_actual_atomic_op_address",
+      "outgoing_RELA": [
+        {
+          "addend": 0,
+          "offset": 0,
+          "owning_section": 11,
+          "target": {
+            "bind": 1,
+            "index": 579,
+            "name": "futex_atomic_op_inuser_bridge",
+            "shndx": 0,
+            "size": 0,
+            "type": 0,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "section": {
+        "addr": 0,
+        "align": 8,
+        "entsize": 0,
+        "flags": 3,
+        "index": 11,
+        "info": 0,
+        "link": 0,
+        "name": ".data.rel",
+        "name_off": 115,
+        "offset": 49184,
+        "size": 168,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29426,
+          "text": "__typeof__(&futex_atomic_op_inuser_bridge) f03_actual_atomic_op_address=&futex_atomic_op_inuser_bridge;"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 578,
+        "name": "f03_actual_atomic_op_address",
+        "shndx": 11,
+        "size": 8,
+        "type": 1,
+        "value": 0
+      }
+    },
+    {
+      "bytes_hex": "0000000000000000",
+      "name": "f03_actual_cmpxchg_address",
+      "outgoing_RELA": [
+        {
+          "addend": 0,
+          "offset": 0,
+          "owning_section": 11,
+          "target": {
+            "bind": 1,
+            "index": 581,
+            "name": "futex_atomic_cmpxchg_inatomic_bridge",
+            "shndx": 0,
+            "size": 0,
+            "type": 0,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "section": {
+        "addr": 0,
+        "align": 8,
+        "entsize": 0,
+        "flags": 3,
+        "index": 11,
+        "info": 0,
+        "link": 0,
+        "name": ".data.rel",
+        "name_off": 115,
+        "offset": 49184,
+        "size": 168,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29425,
+          "text": "__typeof__(&futex_atomic_cmpxchg_inatomic_bridge) f03_actual_cmpxchg_address=&futex_atomic_cmpxchg_inatomic_bridge;"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 580,
+        "name": "f03_actual_cmpxchg_address",
+        "shndx": 11,
+        "size": 8,
+        "type": 1,
+        "value": 8
+      }
+    },
+    {
+      "bytes_hex": "0000000000000000",
+      "name": "f03_actual_dispatch_address",
+      "outgoing_RELA": [
+        {
+          "addend": 0,
+          "offset": 0,
+          "owning_section": 11,
+          "target": {
+            "bind": 1,
+            "index": 591,
+            "name": "syscall_dispatch_context_bridge",
+            "shndx": 0,
+            "size": 0,
+            "type": 0,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "section": {
+        "addr": 0,
+        "align": 8,
+        "entsize": 0,
+        "flags": 3,
+        "index": 11,
+        "info": 0,
+        "link": 0,
+        "name": ".data.rel",
+        "name_off": 115,
+        "offset": 49184,
+        "size": 168,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29402,
+          "text": "__typeof__(&syscall_dispatch_context_bridge) f03_actual_dispatch_address=&syscall_dispatch_context_bridge;"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 590,
+        "name": "f03_actual_dispatch_address",
+        "shndx": 11,
+        "size": 8,
+        "type": 1,
+        "value": 40
+      }
+    },
+    {
+      "bytes_hex": "0000000000000000",
+      "name": "f03_actual_ioctl_leaf_address",
+      "outgoing_RELA": [
+        {
+          "addend": 0,
+          "offset": 0,
+          "owning_section": 11,
+          "target": {
+            "bind": 1,
+            "index": 588,
+            "name": "syscall_tofu_ioctl_bridge",
+            "shndx": 0,
+            "size": 0,
+            "type": 0,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "section": {
+        "addr": 0,
+        "align": 8,
+        "entsize": 0,
+        "flags": 3,
+        "index": 11,
+        "info": 0,
+        "link": 0,
+        "name": ".data.rel",
+        "name_off": 115,
+        "offset": 49184,
+        "size": 168,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29416,
+          "text": "__typeof__(&syscall_tofu_ioctl_bridge) f03_actual_ioctl_leaf_address=&syscall_tofu_ioctl_bridge;"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 587,
+        "name": "f03_actual_ioctl_leaf_address",
+        "shndx": 11,
+        "size": 8,
+        "type": 1,
+        "value": 32
+      }
+    },
+    {
+      "bytes_hex": "0000000000000000",
+      "name": "f03_actual_settimeofday_panic_address",
+      "outgoing_RELA": [
+        {
+          "addend": 0,
+          "offset": 0,
+          "owning_section": 11,
+          "target": {
+            "bind": 1,
+            "index": 586,
+            "name": "syscall_settimeofday_panic_bridge",
+            "shndx": 0,
+            "size": 0,
+            "type": 0,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "section": {
+        "addr": 0,
+        "align": 8,
+        "entsize": 0,
+        "flags": 3,
+        "index": 11,
+        "info": 0,
+        "link": 0,
+        "name": ".data.rel",
+        "name_off": 115,
+        "offset": 49184,
+        "size": 168,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29417,
+          "text": "__typeof__(&syscall_settimeofday_panic_bridge) f03_actual_settimeofday_panic_address=&syscall_settimeofday_panic_bridge;"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 585,
+        "name": "f03_actual_settimeofday_panic_address",
+        "shndx": 11,
+        "size": 8,
+        "type": 1,
+        "value": 24
+      }
+    },
+    {
+      "bytes_hex": "04000000000000000400000000000000080000000000000008000000000000000000000000000000010000000000000002000000000000000300000000000000040000000000000026000000000000000e000000000000000000000000000000",
+      "name": "f03_atomic_C_ABI",
+      "outgoing_RELA": [],
+      "section": {
+        "addr": 0,
+        "align": 32,
+        "entsize": 0,
+        "flags": 2,
+        "index": 7,
+        "info": 0,
+        "link": 0,
+        "name": ".rodata",
+        "name_off": 84,
+        "offset": 43776,
+        "size": 4540,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29427,
+          "text": "const unsigned long f03_atomic_C_ABI[12]={sizeof(int),__alignof__(int),sizeof(unsigned long),sizeof(void *),FUTEX_OP_SET,FUTEX_OP_ADD,FUTEX_OP_OR,FUTEX_OP_ANDN,FUTEX_OP_XOR,ENOSYS,EFAULT,0};"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 577,
+        "name": "f03_atomic_C_ABI",
+        "shndx": 7,
+        "size": 96,
+        "type": 1,
+        "value": 1696
+      }
+    },
+    {
+      "bytes_hex": "10000000000000000800000000000000000000000000000008000000000000000800000000000000b90f00000000000004000000000000000800000000000000e00000000000000008000000000000000800000000000000",
+      "name": "f03_dispatch_C_ABI",
+      "outgoing_RELA": [],
+      "section": {
+        "addr": 0,
+        "align": 32,
+        "entsize": 0,
+        "flags": 2,
+        "index": 7,
+        "info": 0,
+        "link": 0,
+        "name": ".rodata",
+        "name_off": 84,
+        "offset": 43776,
+        "size": 4540,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29403,
+          "text": "const unsigned long f03_dispatch_C_ABI[11]={"
+        },
+        {
+          "line": 29541,
+          "text": " * Reuse existing selected f03_dispatch_C_ABI[11] as the genuine geometry vector."
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 589,
+        "name": "f03_dispatch_C_ABI",
+        "shndx": 7,
+        "size": 88,
+        "type": 1,
+        "value": 1856
+      }
+    },
+    {
+      "bytes_hex": "0100000000000000010000000000000000000000000000000000000000000000",
+      "name": "f03_entry_config_guard_witness_v1",
+      "outgoing_RELA": [],
+      "section": {
+        "addr": 0,
+        "align": 32,
+        "entsize": 0,
+        "flags": 2,
+        "index": 7,
+        "info": 0,
+        "link": 0,
+        "name": ".rodata",
+        "name_off": 84,
+        "offset": 43776,
+        "size": 4540,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29515,
+          "text": "const unsigned long f03_entry_config_guard_witness_v1[4] = {"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 572,
+        "name": "f03_entry_config_guard_witness_v1",
+        "shndx": 7,
+        "size": 32,
+        "type": 1,
+        "value": 1184
+      }
+    },
+    {
+      "bytes_hex": "d0070000b80f00003c000000e700000018000000e8000000190100000f010000010000000000000009000000000000000000000001000000",
+      "name": "f03_entry_config_scalar_witness_v1",
+      "outgoing_RELA": [],
+      "section": {
+        "addr": 0,
+        "align": 32,
+        "entsize": 0,
+        "flags": 2,
+        "index": 7,
+        "info": 0,
+        "link": 0,
+        "name": ".rodata",
+        "name_off": 84,
+        "offset": 43776,
+        "size": 4540,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29499,
+          "text": "const int f03_entry_config_scalar_witness_v1[14] = {"
+        },
+        {
+          "line": 29533,
+          "text": "_Static_assert(sizeof(f03_entry_config_scalar_witness_v1) == 56, \"config scalar bytes\");"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 573,
+        "name": "f03_entry_config_scalar_witness_v1",
+        "shndx": 7,
+        "size": 56,
+        "type": 1,
+        "value": 1216
+      }
+    },
+    {
+      "bytes_hex": "04000000000000000400000000000000080000000000000008000000000000000800000000000000",
+      "name": "f03_leaf_C_ABI",
+      "outgoing_RELA": [],
+      "section": {
+        "addr": 0,
+        "align": 32,
+        "entsize": 0,
+        "flags": 2,
+        "index": 7,
+        "info": 0,
+        "link": 0,
+        "name": ".rodata",
+        "name_off": 84,
+        "offset": 43776,
+        "size": 4540,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29418,
+          "text": "const unsigned long f03_leaf_C_ABI[5]={sizeof(int),__alignof__(int),sizeof(unsigned long),sizeof(long),sizeof(void *)};"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 584,
+        "name": "f03_leaf_C_ABI",
+        "shndx": 7,
+        "size": 40,
+        "type": 1,
+        "value": 1792
+      }
+    },
+    {
+      "bytes_hex": "6800000000000000080000000000000000000000000000000800000000000000100000000000000018000000000000002000000000000000280000000000000030000000000000003800000000000000400000000000000048000000000000005000000000000000580000000000000060000000000000006400000000000000c01500000000000068100000000000003012000000000000d010000000000000b0000000000000008000000000000000080000000000000008000000000000000800000000000000040000000000000008000000000000000200000000000000a81e0000000000003001000000000000",
+      "name": "f03_move_pages_C_ABI",
+      "outgoing_RELA": [],
+      "section": {
+        "addr": 0,
+        "align": 32,
+        "entsize": 0,
+        "flags": 2,
+        "index": 7,
+        "info": 0,
+        "link": 0,
+        "name": ".rodata",
+        "name_off": 84,
+        "offset": 43776,
+        "size": 4540,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29326,
+          "text": "const unsigned long f03_move_pages_C_ABI[30] = {"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 619,
+        "name": "f03_move_pages_C_ABI",
+        "shndx": 7,
+        "size": 240,
+        "type": 1,
+        "value": 2144
+      }
+    },
+    {
+      "bytes_hex": "0000000000000000",
+      "name": "f03_move_pages_actual_entry_address",
+      "outgoing_RELA": [
+        {
+          "addend": 0,
+          "offset": 0,
+          "owning_section": 11,
+          "target": {
+            "bind": 1,
+            "index": 623,
+            "name": "sys_move_pages",
+            "shndx": 0,
+            "size": 0,
+            "type": 0,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "section": {
+        "addr": 0,
+        "align": 8,
+        "entsize": 0,
+        "flags": 3,
+        "index": 11,
+        "info": 0,
+        "link": 0,
+        "name": ".data.rel",
+        "name_off": 115,
+        "offset": 49184,
+        "size": 168,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29324,
+          "text": "__typeof__(&sys_move_pages) f03_move_pages_actual_entry_address = &sys_move_pages;"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 622,
+        "name": "f03_move_pages_actual_entry_address",
+        "shndx": 11,
+        "size": 8,
+        "type": 1,
+        "value": 160
+      }
+    },
+    {
+      "bytes_hex": "0000000000000000",
+      "name": "f03_move_pages_actual_handler_address",
+      "outgoing_RELA": [
+        {
+          "addend": 0,
+          "offset": 0,
+          "owning_section": 11,
+          "target": {
+            "bind": 1,
+            "index": 621,
+            "name": "move_pages_smp_handler",
+            "shndx": 0,
+            "size": 0,
+            "type": 0,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "section": {
+        "addr": 0,
+        "align": 8,
+        "entsize": 0,
+        "flags": 3,
+        "index": 11,
+        "info": 0,
+        "link": 0,
+        "name": ".data.rel",
+        "name_off": 115,
+        "offset": 49184,
+        "size": 168,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29325,
+          "text": "__typeof__(&move_pages_smp_handler) f03_move_pages_actual_handler_address = &move_pages_smp_handler;"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 620,
+        "name": "f03_move_pages_actual_handler_address",
+        "shndx": 11,
+        "size": 8,
+        "type": 1,
+        "value": 152
+      }
+    },
+    {
+      "bytes_hex": "9800000000000000080000000000000020000000000000000800000000000000e000000000000000080000000000000004000000000000000800000000000000",
+      "name": "f03_ptrace_entry_C_ABI8",
+      "outgoing_RELA": [],
+      "section": {
+        "addr": 0,
+        "align": 32,
+        "entsize": 0,
+        "flags": 2,
+        "index": 7,
+        "info": 0,
+        "link": 0,
+        "name": ".rodata",
+        "name_off": 84,
+        "offset": 43776,
+        "size": 4540,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29582,
+          "text": "const unsigned long f03_ptrace_entry_C_ABI8[8]={"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 570,
+        "name": "f03_ptrace_entry_C_ABI8",
+        "shndx": 7,
+        "size": 64,
+        "type": 1,
+        "value": 1088
+      }
+    },
+    {
+      "bytes_hex": "040000000000000004000000000000000000000000000000c015000000000000fc10000000000000f810000000000000c00600000000000008000000000000000400000000000000",
+      "name": "f03_sched_C_ABI",
+      "outgoing_RELA": [],
+      "section": {
+        "addr": 0,
+        "align": 32,
+        "entsize": 0,
+        "flags": 2,
+        "index": 7,
+        "info": 0,
+        "link": 0,
+        "name": ".rodata",
+        "name_off": 84,
+        "offset": 43776,
+        "size": 4540,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29374,
+          "text": "const unsigned long f03_sched_C_ABI[9] = {sizeof(struct sched_param),__alignof__(struct sched_param),__builtin_offsetof(struct sched_param,sched_priority),sizeof(struct thread),__builtin_offsetof(struct thread,sched_param),__builtin_offsetof(struct thread,sched_policy),sizeof(struct process),sizeof(unsigned long),sizeof(int)};"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 604,
+        "name": "f03_sched_C_ABI",
+        "shndx": 7,
+        "size": 72,
+        "type": 1,
+        "value": 2048
+      }
+    },
+    {
+      "bytes_hex": "c006000000000000c00000000000000040000000000000004000000000000000c015000000000000a81e000000000000800000000000000008000000000000000800000000000000080000000000000008000000000000000100000000000000",
+      "name": "f03_signal_process_C_ABI",
+      "outgoing_RELA": [],
+      "section": {
+        "addr": 0,
+        "align": 32,
+        "entsize": 0,
+        "flags": 2,
+        "index": 7,
+        "info": 0,
+        "link": 0,
+        "name": ".rodata",
+        "name_off": 84,
+        "offset": 43776,
+        "size": 4540,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29391,
+          "text": "const unsigned long f03_signal_process_C_ABI[12]={"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 592,
+        "name": "f03_signal_process_C_ABI",
+        "shndx": 7,
+        "size": 96,
+        "type": 1,
+        "value": 1952
+      }
+    },
+    {
+      "bytes_hex": "c015000000000000400000000000000014000000000000005810000000000000d010000000000000bc12000000000000c812000000000000d01200000000000020110000000000000013000000000000d812000000000000c0060000000000004000000000000000c801000000000000a401000000000000f401000000000000c01f0000000000004000000000000000a81e000000000000081f0000000000008008000000000000400000000000000048080000000000005000000000000000080000000000000000000000000000000800000000000000100000000000000018000000000000001c000000000000002000000000000000240000000000000028000000000000002c000000000000003000000000000000340000000000000038000000000000003c000000000000004000000000000000440000000000000048000000000000004c0000000000000008000000000000000800000000000000ffffffff00000000000000000000000080000000000000000200000000000000e000000000000000080000000000000020000000000000000800000000000000",
+      "name": "f03_syscall_entry_C_ABI",
+      "outgoing_RELA": [],
+      "section": {
+        "addr": 0,
+        "align": 32,
+        "entsize": 0,
+        "flags": 2,
+        "index": 7,
+        "info": 0,
+        "link": 0,
+        "name": ".rodata",
+        "name_off": 84,
+        "offset": 43776,
+        "size": 4540,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29432,
+          "text": "const unsigned long f03_syscall_entry_C_ABI[] = {"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 576,
+        "name": "f03_syscall_entry_C_ABI",
+        "shndx": 7,
+        "size": 416,
+        "type": 1,
+        "value": 1280
+      }
+    },
+    {
+      "bytes_hex": "0000000000000000",
+      "name": "f03_syscall_entry_C_address",
+      "outgoing_RELA": [
+        {
+          "addend": 0,
+          "offset": 0,
+          "owning_section": 9,
+          "target": {
+            "bind": 1,
+            "index": 575,
+            "name": "syscall",
+            "shndx": 0,
+            "size": 0,
+            "type": 0,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "section": {
+        "addr": 0,
+        "align": 32,
+        "entsize": 0,
+        "flags": 3,
+        "index": 9,
+        "info": 0,
+        "link": 0,
+        "name": ".data.rel.ro",
+        "name_off": 97,
+        "offset": 48320,
+        "size": 864,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29486,
+          "text": "long (*const f03_syscall_entry_C_address)(int, ihk_mc_user_context_t *) = syscall;"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 574,
+        "name": "f03_syscall_entry_C_address",
+        "shndx": 9,
+        "size": 8,
+        "type": 1,
+        "value": 0
+      }
+    },
+    {
+      "bytes_hex": "0100000000000000010000000000000001000000000000000000000000000000",
+      "name": "f03_table_C_guards4",
+      "outgoing_RELA": [],
+      "section": {
+        "addr": 0,
+        "align": 32,
+        "entsize": 0,
+        "flags": 2,
+        "index": 7,
+        "info": 0,
+        "link": 0,
+        "name": ".rodata",
+        "name_off": 84,
+        "offset": 43776,
+        "size": 4540,
+        "type": 1
+      },
+      "source_occurrences": [
+        {
+          "line": 29555,
+          "text": "const unsigned long f03_table_C_guards4[4] = {"
+        }
+      ],
+      "symbol": {
+        "bind": 1,
+        "index": 571,
+        "name": "f03_table_C_guards4",
+        "shndx": 7,
+        "size": 32,
+        "type": 1,
+        "value": 1152
+      }
+    }
+  ],
+  "complete_source_append": {
+    "exact_text": "__typeof__(&sys_move_pages) f03_move_pages_actual_entry_address = &sys_move_pages;\n__typeof__(&move_pages_smp_handler) f03_move_pages_actual_handler_address = &move_pages_smp_handler;\nconst unsigned long f03_move_pages_C_ABI[30] = {\n sizeof(struct move_pages_smp_req),\n __alignof__(struct move_pages_smp_req),\n __builtin_offsetof(struct move_pages_smp_req,count),\n __builtin_offsetof(struct move_pages_smp_req,user_virt_addr),\n __builtin_offsetof(struct move_pages_smp_req,user_status),\n __builtin_offsetof(struct move_pages_smp_req,user_nodes),\n __builtin_offsetof(struct move_pages_smp_req,virt_addr),\n __builtin_offsetof(struct move_pages_smp_req,status),\n __builtin_offsetof(struct move_pages_smp_req,ptep),\n __builtin_offsetof(struct move_pages_smp_req,nodes),\n __builtin_offsetof(struct move_pages_smp_req,nodes_ready),\n __builtin_offsetof(struct move_pages_smp_req,nr_pages),\n __builtin_offsetof(struct move_pages_smp_req,dst_phys),\n __builtin_offsetof(struct move_pages_smp_req,proc),\n __builtin_offsetof(struct move_pages_smp_req,phase_done),\n __builtin_offsetof(struct move_pages_smp_req,phase_ret),\n sizeof(struct thread),\n __builtin_offsetof(struct thread,vm),\n __builtin_offsetof(struct thread,cpu_set),\n __builtin_offsetof(struct thread,proc),\n __builtin_offsetof(struct process_vm,page_table_lock),\n sizeof(cpu_set_t),\n __alignof__(cpu_set_t),\n sizeof(pte_t),\n sizeof(void *),\n sizeof(int),\n sizeof(unsigned long),\n IHK_MC_AP_NOWAIT,\n __builtin_offsetof(struct cpu_local_var,current),\n sizeof(struct process_vm),\n};\n\n/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sched_find_thread_bridge),unsigned long (*)(int)),\"sched_find_thread_bridge actual ABI\");\n__typeof__(&sched_find_thread_bridge) f03_actual_address_sched_find_thread_bridge = &sched_find_thread_bridge;\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sched_thread_unlock_bridge),void (*)(unsigned long)),\"sched_thread_unlock_bridge actual ABI\");\n__typeof__(&sched_thread_unlock_bridge) f03_actual_address_sched_thread_unlock_bridge = &sched_thread_unlock_bridge;\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sched_apply_scheduler_bridge),int (*)(unsigned long,int,unsigned long)),\"sched_apply_scheduler_bridge actual ABI\");\n__typeof__(&sched_apply_scheduler_bridge) f03_actual_address_sched_apply_scheduler_bridge = &sched_apply_scheduler_bridge;\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sched_hold_thread_bridge),int (*)(unsigned long)),\"sched_hold_thread_bridge actual ABI\");\n__typeof__(&sched_hold_thread_bridge) f03_actual_address_sched_hold_thread_bridge = &sched_hold_thread_bridge;\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sched_release_thread_bridge),void (*)(unsigned long)),\"sched_release_thread_bridge actual ABI\");\n__typeof__(&sched_release_thread_bridge) f03_actual_address_sched_release_thread_bridge = &sched_release_thread_bridge;\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sched_request_migrate_bridge),void (*)(int,unsigned long)),\"sched_request_migrate_bridge actual ABI\");\n__typeof__(&sched_request_migrate_bridge) f03_actual_address_sched_request_migrate_bridge = &sched_request_migrate_bridge;\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sched_setparam_log_bridge),void (*)(int,unsigned long)),\"sched_setparam_log_bridge actual ABI\");\n__typeof__(&sched_setparam_log_bridge) f03_actual_address_sched_setparam_log_bridge = &sched_setparam_log_bridge;\nconst unsigned long f03_sched_C_ABI[9] = {sizeof(struct sched_param),__alignof__(struct sched_param),__builtin_offsetof(struct sched_param,sched_priority),sizeof(struct thread),__builtin_offsetof(struct thread,sched_param),__builtin_offsetof(struct thread,sched_policy),sizeof(struct process),sizeof(unsigned long),sizeof(int)};\n\n/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */\n_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_threads_reader_lock_bridge),void (*)(void *,void *)),\"syscall_threads_reader_lock_bridge genuine ABI\");\n__typeof__(&syscall_threads_reader_lock_bridge) f03_actual_address_syscall_threads_reader_lock_bridge=&syscall_threads_reader_lock_bridge;\n_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_threads_reader_unlock_bridge),void (*)(void *,void *)),\"syscall_threads_reader_unlock_bridge genuine ABI\");\n__typeof__(&syscall_threads_reader_unlock_bridge) f03_actual_address_syscall_threads_reader_unlock_bridge=&syscall_threads_reader_unlock_bridge;\n_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_interrupt_cpu_bridge),void (*)(int)),\"syscall_interrupt_cpu_bridge genuine ABI\");\n__typeof__(&syscall_interrupt_cpu_bridge) f03_actual_address_syscall_interrupt_cpu_bridge=&syscall_interrupt_cpu_bridge;\n_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_do_kill_thread_bridge),long (*)(void *,int,int,int,const void *,int)),\"syscall_do_kill_thread_bridge genuine ABI\");\n__typeof__(&syscall_do_kill_thread_bridge) f03_actual_address_syscall_do_kill_thread_bridge=&syscall_do_kill_thread_bridge;\n_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_do_kill_current_bridge),long (*)(int,int,const void *)),\"syscall_do_kill_current_bridge genuine ABI\");\n__typeof__(&syscall_do_kill_current_bridge) f03_actual_address_syscall_do_kill_current_bridge=&syscall_do_kill_current_bridge;\n_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_kill_log_bridge),void (*)(int,int,int,int)),\"syscall_kill_log_bridge genuine ABI\");\n__typeof__(&syscall_kill_log_bridge) f03_actual_address_syscall_kill_log_bridge=&syscall_kill_log_bridge;\n_Static_assert(__builtin_types_compatible_p(__typeof__(&do_kill),unsigned long (*)(struct thread *,int,int,int,struct siginfo *,int)),\"unsigned do_kill provider ABI\");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&ihk_mc_interrupt_cpu),int (*)(int,int)),\"interrupt provider ABI\");\nconst unsigned long f03_signal_process_C_ABI[12]={\n sizeof(struct process),__builtin_offsetof(struct process,threads_lock),\n sizeof(((struct process *)0)->threads_lock),__alignof__(((struct process *)0)->threads_lock),\n sizeof(struct thread),__builtin_offsetof(struct cpu_local_var,current),\n sizeof(struct siginfo),__alignof__(struct siginfo),sizeof(unsigned long),sizeof(long),\n sizeof(struct mcs_rwlock_node *),IHK_GV_IKC\n};\n\n#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)\n/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */\n_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_dispatch_context_bridge),long (*)(int,ihk_mc_user_context_t *)),\"actual dispatcher ABI\");\n__typeof__(&syscall_dispatch_context_bridge) f03_actual_dispatch_address=&syscall_dispatch_context_bridge;\nconst unsigned long f03_dispatch_C_ABI[11]={\n sizeof(struct f03_syscall_dispatch_binding_v1),__alignof__(struct f03_syscall_dispatch_binding_v1),\n __builtin_offsetof(struct f03_syscall_dispatch_binding_v1,handlers),\n __builtin_offsetof(struct f03_syscall_dispatch_binding_v1,count),\n sizeof(syscall_table[0]),sizeof(syscall_table)/sizeof(syscall_table[0]),\n sizeof(int),sizeof(long),sizeof(ihk_mc_user_context_t),__alignof__(ihk_mc_user_context_t),sizeof(void *)\n};\n\n#endif /* compiler-only selected dispatcher ABI witness */\n\n/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */\n_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_tofu_ioctl_bridge),long (*)(void *,int,unsigned long,unsigned long,int *)),\"actual ioctl hook ABI\");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_settimeofday_panic_bridge),void (*)(void)),\"actual panic hook ABI\");\n__typeof__(&syscall_tofu_ioctl_bridge) f03_actual_ioctl_leaf_address=&syscall_tofu_ioctl_bridge;\n__typeof__(&syscall_settimeofday_panic_bridge) f03_actual_settimeofday_panic_address=&syscall_settimeofday_panic_bridge;\nconst unsigned long f03_leaf_C_ABI[5]={sizeof(int),__alignof__(int),sizeof(unsigned long),sizeof(long),sizeof(void *)};\n\n/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */\n_Static_assert(__builtin_types_compatible_p(__typeof__(&futex_atomic_access_ok_bridge),int (*)(int *,unsigned long)),\"genuine access ABI\");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&futex_atomic_cmpxchg_inatomic_bridge),int (*)(int *,int,int)),\"genuine cmpxchg ABI\");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&futex_atomic_op_inuser_bridge),int (*)(int,int *,int,int *)),\"genuine atomic op ABI\");\n__typeof__(&futex_atomic_access_ok_bridge) f03_actual_access_address=&futex_atomic_access_ok_bridge;\n__typeof__(&futex_atomic_cmpxchg_inatomic_bridge) f03_actual_cmpxchg_address=&futex_atomic_cmpxchg_inatomic_bridge;\n__typeof__(&futex_atomic_op_inuser_bridge) f03_actual_atomic_op_address=&futex_atomic_op_inuser_bridge;\nconst unsigned long f03_atomic_C_ABI[12]={sizeof(int),__alignof__(int),sizeof(unsigned long),sizeof(void *),FUTEX_OP_SET,FUTEX_OP_ADD,FUTEX_OP_OR,FUTEX_OP_ANDN,FUTEX_OP_XOR,ENOSYS,EFAULT,0};\n\n/* Functional OS only; no security testing. */\n#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SYSCALL_ENTRY) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT) && defined(PROFILE_ENABLE)\n/* Functional OS only; no security testing. */\nconst unsigned long f03_syscall_entry_C_ABI[] = {\nsizeof(struct thread),\n__alignof__(struct thread),\n__builtin_offsetof(struct thread, tid),\n__builtin_offsetof(struct thread, status),\n__builtin_offsetof(struct thread, proc),\n__builtin_offsetof(struct thread, profile),\n__builtin_offsetof(struct thread, profile_start_ts),\n__builtin_offsetof(struct thread, profile_elapsed_ts),\n__builtin_offsetof(struct thread, ptrace),\n__builtin_offsetof(struct thread, sigpending),\n__builtin_offsetof(struct thread, sigcommon),\nsizeof(struct process),\n__alignof__(struct process),\n__builtin_offsetof(struct process, pid),\n__builtin_offsetof(struct process, status),\n__builtin_offsetof(struct process, nohost),\nsizeof(struct cpu_local_var),\n__alignof__(struct cpu_local_var),\n__builtin_offsetof(struct cpu_local_var, current),\n__builtin_offsetof(struct cpu_local_var, flags),\nsizeof(struct sig_common),\n__alignof__(struct sig_common),\n__builtin_offsetof(struct sig_common, sigpending),\nsizeof(struct f03_syscall_entry_config_v1),\n__alignof__(struct f03_syscall_entry_config_v1),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, names),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, name_count),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, fork_drain),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, profile_max),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, profile_nr),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, exit_nr),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, exit_group_nr),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, sched_yield_nr),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, epoll_wait_nr),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, epoll_pwait_nr),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, ppoll_nr),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, mode_u2k),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, mode_k2u),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, sigkill),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, disable_yield),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, fugaku),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, resched_mask),\nsizeof(_Atomic unsigned long),\n__alignof__(_Atomic unsigned long),\n0xffffffffUL,\n0UL,\n128UL,\n2UL,\nsizeof(ihk_mc_user_context_t),\n__alignof__(ihk_mc_user_context_t),\nsizeof(struct ddebug),\n__alignof__(struct ddebug)\n};\nlong (*const f03_syscall_entry_C_address)(int, ihk_mc_user_context_t *) = syscall;\n\n#endif\n\n#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SYSCALL_ENTRY) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT) && defined(PROFILE_ENABLE)\n_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall),long(*)(int,ihk_mc_user_context_t*)),\"actual outer syscall signature\");\n#endif\n\n/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\n * Compiler-only witness. Expressions/order are the actual metadata initializer;\n * the final uint mask is compared as four emitted bytes, not signed arithmetic.\n */\n#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SYSCALL_ENTRY) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT) && defined(PROFILE_ENABLE)\nconst int f03_entry_config_scalar_witness_v1[14] = {\n PROFILE_SYSCALL_MAX, __NR_profile, __NR_exit, __NR_exit_group, __NR_sched_yield,\n __NR_epoll_wait, __NR_epoll_pwait, __NR_ppoll, CPUTIME_MODE_U2K, CPUTIME_MODE_K2U,\n SIGKILL,\n#ifdef DISABLE_SCHED_YIELD\n 1,\n#else\n 0,\n#endif\n#ifdef ENABLE_FUGAKU_HACKS\n 1,\n#else\n 0,\n#endif\n CPU_FLAG_NEED_RESCHED\n};\nconst unsigned long f03_entry_config_guard_witness_v1[4] = {\n 1, /* PROFILE_ENABLE required by this selected declaration */\n#ifdef MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION\n 1,\n#else\n 0,\n#endif\n#ifdef DISABLE_SCHED_YIELD\n 1,\n#else\n 0,\n#endif\n#ifdef ENABLE_FUGAKU_HACKS\n 1\n#else\n 0\n#endif\n};\n_Static_assert(sizeof(f03_entry_config_scalar_witness_v1) == 56, \"config scalar bytes\");\n_Static_assert(__builtin_offsetof(struct f03_syscall_entry_config_v1, profile_max) == 24,\n \"config scalar offset\");\n_Static_assert(sizeof(struct f03_syscall_entry_config_v1) == 80, \"config total bytes\");\n#endif\n\n/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\n * Compiler-only assertions and guard witness: no replacement handlers or Ctable.\n * Reuse existing selected f03_dispatch_C_ABI[11] as the genuine geometry vector.\n */\n#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT) && defined(MCKERNEL_RUST_F03_SYSCALL_TABLE)\ntypedef long (*f03_table_genuine_handler_type_v1)(int, ihk_mc_user_context_t *);\n#ifdef SYSCALL_HANDLED\n#error syscall list macro unexpectedly leaked into table ABI witness\n#endif\n#define SYSCALL_HANDLED(number,name) _Static_assert(__builtin_types_compatible_p(__typeof__(&sys_##name),f03_table_genuine_handler_type_v1),\"genuine handled provider ABI\");\n#define SYSCALL_DELEGATED(number,name)\n#include <syscall_list.h>\n#undef SYSCALL_HANDLED\n#undef SYSCALL_DELEGATED\n_Static_assert(sizeof(syscall_table[0])==8,\"actual fn pointer slot width\");\n_Static_assert(__alignof__(__typeof__(syscall_table[0]))==8,\"actual slot type alignment\");\nconst unsigned long f03_table_C_guards4[4] = {\n#ifdef PROFILE_ENABLE\n 1,\n#else\n 0,\n#endif\n#ifdef ENABLE_PERF\n 1,\n#else\n 0,\n#endif\n#ifdef MCKERNEL_NATIVE_CLONE3\n 1,\n#else\n 0,\n#endif\n#ifdef DCFA_KMOD\n 1\n#else\n 0\n#endif\n};\n#endif\n\n/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */\n#ifdef MCKERNEL_RUST_F03_PTRACE_ENTRY\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sys_ptrace),long (*)(int,ihk_mc_user_context_t *)),\"actual selected ptrace entry ABI\");\nconst unsigned long f03_ptrace_entry_C_ABI8[8]={\n sizeof(struct ptrace_syscall_ops),__alignof__(struct ptrace_syscall_ops),\n sizeof(struct ddebug),__alignof__(struct ddebug),sizeof(ihk_mc_user_context_t),\n __alignof__(ihk_mc_user_context_t),sizeof(int),sizeof(long)\n};\n#endif\n\n#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sys_execve),long(*)(int,ihk_mc_user_context_t*)), \"execve public ABI\");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sys_execveat),long(*)(int,ihk_mc_user_context_t*)), \"execveat public ABI\");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_execveat_bridge),int(*)(void*,int,const char*,char**,char**,int)), \"existing provider ABI\");\n_Static_assert(sizeof(int)==4 && sizeof(long)==8 && sizeof(void*)==8, \"x86_64 widths\");\n_Static_assert((char)0xff<0, \"original filename char promotion\");\n#endif\n\n#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS\nconst unsigned long CURRENT290_GETSIGINFO_C_ABI14[14] = {sizeof(siginfo_t),__alignof__(siginfo_t),sizeof(struct sig_pending),\n __alignof__(struct sig_pending),__builtin_offsetof(struct sig_pending,info),sizeof(struct thread),\n __alignof__(struct thread),__builtin_offsetof(struct thread,status),\n __builtin_offsetof(struct thread,ptrace_recvsig),sizeof(struct ptrace_io_offsets),\n __alignof__(struct ptrace_io_offsets),sizeof(unsigned long),sizeof(size_t),sizeof(int)};\n#endif\n\n#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS\nconst unsigned long CURRENT290_EXEC_C_ABI14[14]={sizeof(ihk_mc_user_context_t),_Alignof(ihk_mc_user_context_t),__builtin_offsetof(ihk_mc_user_context_t,gpr),__builtin_offsetof(ihk_mc_user_context_t,sr),sizeof(struct x86_basic_regs),_Alignof(struct x86_basic_regs),__builtin_offsetof(struct x86_basic_regs,rdi),__builtin_offsetof(struct x86_basic_regs,rsi),__builtin_offsetof(struct x86_basic_regs,rdx),__builtin_offsetof(struct x86_basic_regs,r10),__builtin_offsetof(struct x86_basic_regs,r8),__builtin_offsetof(struct x86_basic_regs,r9),__builtin_offsetof(struct x86_basic_regs,rax),__builtin_offsetof(struct x86_basic_regs,orig_rax)};\n#endif\n",
+    "first_line": 29324,
+    "last_line": 29607,
+    "sha256": "f6bdcccab5a06e2c4dd6fbe29033ae601a36497732f4cfa1a0a4f5a9b6047d79"
+  },
+  "current_source": {
+    "bytes": 911224,
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-37-coherent-lifetime-worker-whole-rust-source-1/bounded-pregrant-correction-1/candidate/kernel/syscall.c",
+    "sha256": "c2ea34a0219f6fe53799a3a27751afcd715c9af3bf42df25dbb4493605043fc6"
+  },
+  "current_source_occurrences": {
+    "CURRENT290_EXEC_C_ABI14": [],
+    "CURRENT290_GETSIGINFO_C_ABI14": [],
+    "f03_actual_access_address": [],
+    "f03_actual_address_sched_apply_scheduler_bridge": [],
+    "f03_actual_address_sched_find_thread_bridge": [],
+    "f03_actual_address_sched_hold_thread_bridge": [],
+    "f03_actual_address_sched_release_thread_bridge": [],
+    "f03_actual_address_sched_request_migrate_bridge": [],
+    "f03_actual_address_sched_setparam_log_bridge": [],
+    "f03_actual_address_sched_thread_unlock_bridge": [],
+    "f03_actual_address_syscall_do_kill_current_bridge": [],
+    "f03_actual_address_syscall_do_kill_thread_bridge": [],
+    "f03_actual_address_syscall_interrupt_cpu_bridge": [],
+    "f03_actual_address_syscall_kill_log_bridge": [],
+    "f03_actual_address_syscall_threads_reader_lock_bridge": [],
+    "f03_actual_address_syscall_threads_reader_unlock_bridge": [],
+    "f03_actual_atomic_op_address": [],
+    "f03_actual_cmpxchg_address": [],
+    "f03_actual_dispatch_address": [],
+    "f03_actual_ioctl_leaf_address": [],
+    "f03_actual_settimeofday_panic_address": [],
+    "f03_atomic_C_ABI": [],
+    "f03_dispatch_C_ABI": [],
+    "f03_entry_config_guard_witness_v1": [],
+    "f03_entry_config_scalar_witness_v1": [],
+    "f03_leaf_C_ABI": [],
+    "f03_move_pages_C_ABI": [],
+    "f03_move_pages_actual_entry_address": [],
+    "f03_move_pages_actual_handler_address": [],
+    "f03_ptrace_entry_C_ABI8": [],
+    "f03_sched_C_ABI": [],
+    "f03_signal_process_C_ABI": [],
+    "f03_syscall_entry_C_ABI": [],
+    "f03_syscall_entry_C_address": [],
+    "f03_table_C_guards4": []
+  },
+  "exact_removed_U_relocation_owners": [
+    {
+      "addend": 0,
+      "fixture": "f03_actual_access_address",
+      "name": "futex_atomic_access_ok_bridge",
+      "offset": 16,
+      "type": 1
+    },
+    {
+      "addend": 0,
+      "fixture": "f03_actual_cmpxchg_address",
+      "name": "futex_atomic_cmpxchg_inatomic_bridge",
+      "offset": 8,
+      "type": 1
+    },
+    {
+      "addend": 0,
+      "fixture": "f03_actual_atomic_op_address",
+      "name": "futex_atomic_op_inuser_bridge",
+      "offset": 0,
+      "type": 1
+    },
+    {
+      "addend": 0,
+      "fixture": "f03_move_pages_actual_handler_address",
+      "name": "move_pages_smp_handler",
+      "offset": 152,
+      "type": 1
+    },
+    {
+      "addend": 0,
+      "fixture": "f03_actual_address_sched_apply_scheduler_bridge",
+      "name": "sched_apply_scheduler_bridge",
+      "offset": 128,
+      "type": 1
+    },
+    {
+      "addend": 0,
+      "fixture": "f03_actual_address_sched_find_thread_bridge",
+      "name": "sched_find_thread_bridge",
+      "offset": 144,
+      "type": 1
+    },
+    {
+      "addend": 0,
+      "fixture": "f03_actual_address_sched_hold_thread_bridge",
+      "name": "sched_hold_thread_bridge",
+      "offset": 120,
+      "type": 1
+    },
+    {
+      "addend": 0,
+      "fixture": "f03_actual_address_sched_release_thread_bridge",
+      "name": "sched_release_thread_bridge",
+      "offset": 112,
+      "type": 1
+    },
+    {
+      "addend": 0,
+      "fixture": "f03_actual_address_sched_request_migrate_bridge",
+      "name": "sched_request_migrate_bridge",
+      "offset": 104,
+      "type": 1
+    },
+    {
+      "addend": 0,
+      "fixture": "f03_actual_address_sched_setparam_log_bridge",
+      "name": "sched_setparam_log_bridge",
+      "offset": 96,
+      "type": 1
+    },
+    {
+      "addend": 0,
+      "fixture": "f03_actual_address_sched_thread_unlock_bridge",
+      "name": "sched_thread_unlock_bridge",
+      "offset": 136,
+      "type": 1
+    },
+    {
+      "addend": 0,
+      "fixture": "f03_move_pages_actual_entry_address",
+      "name": "sys_move_pages",
+      "offset": 160,
+      "type": 1
+    },
+    {
+      "addend": 0,
+      "fixture": "f03_syscall_entry_C_address",
+      "name": "syscall",
+      "offset": 0,
+      "type": 1
+    },
+    {
+      "addend": 0,
+      "fixture": "f03_actual_dispatch_address",
+      "name": "syscall_dispatch_context_bridge",
+      "offset": 40,
+      "type": 1
+    },
+    {
+      "addend": 0,
+      "fixture": "f03_actual_address_syscall_do_kill_current_bridge",
+      "name": "syscall_do_kill_current_bridge",
+      "offset": 56,
+      "type": 1
+    },
+    {
+      "addend": 0,
+      "fixture": "f03_actual_address_syscall_interrupt_cpu_bridge",
+      "name": "syscall_interrupt_cpu_bridge",
+      "offset": 72,
+      "type": 1
+    },
+    {
+      "addend": 0,
+      "fixture": "f03_actual_address_syscall_kill_log_bridge",
+      "name": "syscall_kill_log_bridge",
+      "offset": 48,
+      "type": 1
+    },
+    {
+      "addend": 0,
+      "fixture": "f03_actual_settimeofday_panic_address",
+      "name": "syscall_settimeofday_panic_bridge",
+      "offset": 24,
+      "type": 1
+    },
+    {
+      "addend": 0,
+      "fixture": "f03_actual_address_syscall_threads_reader_lock_bridge",
+      "name": "syscall_threads_reader_lock_bridge",
+      "offset": 88,
+      "type": 1
+    },
+    {
+      "addend": 0,
+      "fixture": "f03_actual_address_syscall_threads_reader_unlock_bridge",
+      "name": "syscall_threads_reader_unlock_bridge",
+      "offset": 80,
+      "type": 1
+    },
+    {
+      "addend": 0,
+      "fixture": "f03_actual_ioctl_leaf_address",
+      "name": "syscall_tofu_ioctl_bridge",
+      "offset": 32,
+      "type": 1
+    }
+  ],
+  "execution": false,
+  "expert_scope": "Exact35 fixture definitions and exact21 imports exclusively owned by22fixture pointers; distinct process20 gate unchanged. No runtime import/code waiver.",
+  "extractor": {
+    "bytes": 3879,
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-38-coherent-selected-c-partial-link-source-1/exact-four-command-header-fixture-suffix-source-1/extract_syscall_role_facts.py",
+    "sha256": "63b25e8f2d23b65c8244f6dc9686c428ed8419150306ca4aeb9db629e591d070"
+  },
+  "five_actual_partial_inputs": [
+    {
+      "bytes": 58816,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-38-coherent-selected-c-partial-link-source-1/accepted-inline-machine-binding-correction1-source-1/exact-selected-process-prior-U-correction1-source-1/output-1/process.selected.o",
+      "sha256": "f3953d2131216a32302b4ba8377684b77585447d76c6bada9508ffbb4c505e15"
+    },
+    {
+      "bytes": 110864,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/output-1/f06-arch-selected.o",
+      "sha256": "86a6fc0fc1b9144eb296d69db39dcf355b6c37e488b5b1c8a56dd0b31855f63d"
+    },
+    {
+      "bytes": 319000,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-38-coherent-selected-c-partial-link-source-1/exact-four-command-header-fixture-suffix-source-1/output-1/syscall.selected.o",
+      "sha256": "141d9763639b2d72ff8a02e023959c0f008b93231a3aaf545e74156f132626b0"
+    },
+    {
+      "bytes": 29104,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-3/ordinary-HOST-qualification-preparation-1/bounded-C-include-namespace-transport-correction-1/output-1/F04.selected.o",
+      "sha256": "e86e190482dfa459c128a21b8bab4ac98bd33c685de197c82465b276dd075e9c"
+    },
+    {
+      "bytes": 18206144,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-37-coherent-lifetime-worker-whole-rust-source-1/bounded-pregrant-correction-1/output-1/coherent-lifetime-worker-rust.o",
+      "sha256": "6e54dc57de7cb4c4b5506cdaddb181e7758edfc7640684f9f587b48518ebd3ce"
+    }
+  ],
+  "observer_correction": false,
+  "old_source": {
+    "bytes": 927570,
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/source/kernel/syscall.c",
+    "sha256": "cc829750de7f50c9c77980955ac9c62521f3f3d3c1c0c72fcc7f84ce294f4642"
+  },
+  "old_source_append": {
+    "exact_text": " __builtin_offsetof(struct move_pages_smp_req,user_status),\n __builtin_offsetof(struct move_pages_smp_req,user_nodes),\n __builtin_offsetof(struct move_pages_smp_req,virt_addr),\n __builtin_offsetof(struct move_pages_smp_req,status),\n __builtin_offsetof(struct move_pages_smp_req,ptep),\n __builtin_offsetof(struct move_pages_smp_req,nodes),\n __builtin_offsetof(struct move_pages_smp_req,nodes_ready),\n __builtin_offsetof(struct move_pages_smp_req,nr_pages),\n __builtin_offsetof(struct move_pages_smp_req,dst_phys),\n __builtin_offsetof(struct move_pages_smp_req,proc),\n __builtin_offsetof(struct move_pages_smp_req,phase_done),\n __builtin_offsetof(struct move_pages_smp_req,phase_ret),\n sizeof(struct thread),\n __builtin_offsetof(struct thread,vm),\n __builtin_offsetof(struct thread,cpu_set),\n __builtin_offsetof(struct thread,proc),\n __builtin_offsetof(struct process_vm,page_table_lock),\n sizeof(cpu_set_t),\n __alignof__(cpu_set_t),\n sizeof(pte_t),\n sizeof(void *),\n sizeof(int),\n sizeof(unsigned long),\n IHK_MC_AP_NOWAIT,\n __builtin_offsetof(struct cpu_local_var,current),\n sizeof(struct process_vm),\n};\n\n/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sched_find_thread_bridge),unsigned long (*)(int)),\"sched_find_thread_bridge actual ABI\");\n__typeof__(&sched_find_thread_bridge) f03_actual_address_sched_find_thread_bridge = &sched_find_thread_bridge;\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sched_thread_unlock_bridge),void (*)(unsigned long)),\"sched_thread_unlock_bridge actual ABI\");\n__typeof__(&sched_thread_unlock_bridge) f03_actual_address_sched_thread_unlock_bridge = &sched_thread_unlock_bridge;\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sched_apply_scheduler_bridge),int (*)(unsigned long,int,unsigned long)),\"sched_apply_scheduler_bridge actual ABI\");\n__typeof__(&sched_apply_scheduler_bridge) f03_actual_address_sched_apply_scheduler_bridge = &sched_apply_scheduler_bridge;\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sched_hold_thread_bridge),int (*)(unsigned long)),\"sched_hold_thread_bridge actual ABI\");\n__typeof__(&sched_hold_thread_bridge) f03_actual_address_sched_hold_thread_bridge = &sched_hold_thread_bridge;\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sched_release_thread_bridge),void (*)(unsigned long)),\"sched_release_thread_bridge actual ABI\");\n__typeof__(&sched_release_thread_bridge) f03_actual_address_sched_release_thread_bridge = &sched_release_thread_bridge;\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sched_request_migrate_bridge),void (*)(int,unsigned long)),\"sched_request_migrate_bridge actual ABI\");\n__typeof__(&sched_request_migrate_bridge) f03_actual_address_sched_request_migrate_bridge = &sched_request_migrate_bridge;\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sched_setparam_log_bridge),void (*)(int,unsigned long)),\"sched_setparam_log_bridge actual ABI\");\n__typeof__(&sched_setparam_log_bridge) f03_actual_address_sched_setparam_log_bridge = &sched_setparam_log_bridge;\nconst unsigned long f03_sched_C_ABI[9] = {sizeof(struct sched_param),__alignof__(struct sched_param),__builtin_offsetof(struct sched_param,sched_priority),sizeof(struct thread),__builtin_offsetof(struct thread,sched_param),__builtin_offsetof(struct thread,sched_policy),sizeof(struct process),sizeof(unsigned long),sizeof(int)};\n\n/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */\n_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_threads_reader_lock_bridge),void (*)(void *,void *)),\"syscall_threads_reader_lock_bridge genuine ABI\");\n__typeof__(&syscall_threads_reader_lock_bridge) f03_actual_address_syscall_threads_reader_lock_bridge=&syscall_threads_reader_lock_bridge;\n_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_threads_reader_unlock_bridge),void (*)(void *,void *)),\"syscall_threads_reader_unlock_bridge genuine ABI\");\n__typeof__(&syscall_threads_reader_unlock_bridge) f03_actual_address_syscall_threads_reader_unlock_bridge=&syscall_threads_reader_unlock_bridge;\n_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_interrupt_cpu_bridge),void (*)(int)),\"syscall_interrupt_cpu_bridge genuine ABI\");\n__typeof__(&syscall_interrupt_cpu_bridge) f03_actual_address_syscall_interrupt_cpu_bridge=&syscall_interrupt_cpu_bridge;\n_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_do_kill_thread_bridge),long (*)(void *,int,int,int,const void *,int)),\"syscall_do_kill_thread_bridge genuine ABI\");\n__typeof__(&syscall_do_kill_thread_bridge) f03_actual_address_syscall_do_kill_thread_bridge=&syscall_do_kill_thread_bridge;\n_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_do_kill_current_bridge),long (*)(int,int,const void *)),\"syscall_do_kill_current_bridge genuine ABI\");\n__typeof__(&syscall_do_kill_current_bridge) f03_actual_address_syscall_do_kill_current_bridge=&syscall_do_kill_current_bridge;\n_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_kill_log_bridge),void (*)(int,int,int,int)),\"syscall_kill_log_bridge genuine ABI\");\n__typeof__(&syscall_kill_log_bridge) f03_actual_address_syscall_kill_log_bridge=&syscall_kill_log_bridge;\n_Static_assert(__builtin_types_compatible_p(__typeof__(&do_kill),unsigned long (*)(struct thread *,int,int,int,struct siginfo *,int)),\"unsigned do_kill provider ABI\");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&ihk_mc_interrupt_cpu),int (*)(int,int)),\"interrupt provider ABI\");\nconst unsigned long f03_signal_process_C_ABI[12]={\n sizeof(struct process),__builtin_offsetof(struct process,threads_lock),\n sizeof(((struct process *)0)->threads_lock),__alignof__(((struct process *)0)->threads_lock),\n sizeof(struct thread),__builtin_offsetof(struct cpu_local_var,current),\n sizeof(struct siginfo),__alignof__(struct siginfo),sizeof(unsigned long),sizeof(long),\n sizeof(struct mcs_rwlock_node *),IHK_GV_IKC\n};\n\n#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)\n/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */\n_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_dispatch_context_bridge),long (*)(int,ihk_mc_user_context_t *)),\"actual dispatcher ABI\");\n__typeof__(&syscall_dispatch_context_bridge) f03_actual_dispatch_address=&syscall_dispatch_context_bridge;\nconst unsigned long f03_dispatch_C_ABI[11]={\n sizeof(struct f03_syscall_dispatch_binding_v1),__alignof__(struct f03_syscall_dispatch_binding_v1),\n __builtin_offsetof(struct f03_syscall_dispatch_binding_v1,handlers),\n __builtin_offsetof(struct f03_syscall_dispatch_binding_v1,count),\n sizeof(syscall_table[0]),sizeof(syscall_table)/sizeof(syscall_table[0]),\n sizeof(int),sizeof(long),sizeof(ihk_mc_user_context_t),__alignof__(ihk_mc_user_context_t),sizeof(void *)\n};\n\n#endif /* compiler-only selected dispatcher ABI witness */\n\n/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */\n_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_tofu_ioctl_bridge),long (*)(void *,int,unsigned long,unsigned long,int *)),\"actual ioctl hook ABI\");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_settimeofday_panic_bridge),void (*)(void)),\"actual panic hook ABI\");\n__typeof__(&syscall_tofu_ioctl_bridge) f03_actual_ioctl_leaf_address=&syscall_tofu_ioctl_bridge;\n__typeof__(&syscall_settimeofday_panic_bridge) f03_actual_settimeofday_panic_address=&syscall_settimeofday_panic_bridge;\nconst unsigned long f03_leaf_C_ABI[5]={sizeof(int),__alignof__(int),sizeof(unsigned long),sizeof(long),sizeof(void *)};\n\n/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */\n_Static_assert(__builtin_types_compatible_p(__typeof__(&futex_atomic_access_ok_bridge),int (*)(int *,unsigned long)),\"genuine access ABI\");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&futex_atomic_cmpxchg_inatomic_bridge),int (*)(int *,int,int)),\"genuine cmpxchg ABI\");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&futex_atomic_op_inuser_bridge),int (*)(int,int *,int,int *)),\"genuine atomic op ABI\");\n__typeof__(&futex_atomic_access_ok_bridge) f03_actual_access_address=&futex_atomic_access_ok_bridge;\n__typeof__(&futex_atomic_cmpxchg_inatomic_bridge) f03_actual_cmpxchg_address=&futex_atomic_cmpxchg_inatomic_bridge;\n__typeof__(&futex_atomic_op_inuser_bridge) f03_actual_atomic_op_address=&futex_atomic_op_inuser_bridge;\nconst unsigned long f03_atomic_C_ABI[12]={sizeof(int),__alignof__(int),sizeof(unsigned long),sizeof(void *),FUTEX_OP_SET,FUTEX_OP_ADD,FUTEX_OP_OR,FUTEX_OP_ANDN,FUTEX_OP_XOR,ENOSYS,EFAULT,0};\n\n/* Functional OS only; no security testing. */\n#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SYSCALL_ENTRY) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT) && defined(PROFILE_ENABLE)\n/* Functional OS only; no security testing. */\nconst unsigned long f03_syscall_entry_C_ABI[] = {\nsizeof(struct thread),\n__alignof__(struct thread),\n__builtin_offsetof(struct thread, tid),\n__builtin_offsetof(struct thread, status),\n__builtin_offsetof(struct thread, proc),\n__builtin_offsetof(struct thread, profile),\n__builtin_offsetof(struct thread, profile_start_ts),\n__builtin_offsetof(struct thread, profile_elapsed_ts),\n__builtin_offsetof(struct thread, ptrace),\n__builtin_offsetof(struct thread, sigpending),\n__builtin_offsetof(struct thread, sigcommon),\nsizeof(struct process),\n__alignof__(struct process),\n__builtin_offsetof(struct process, pid),\n__builtin_offsetof(struct process, status),\n__builtin_offsetof(struct process, nohost),\nsizeof(struct cpu_local_var),\n__alignof__(struct cpu_local_var),\n__builtin_offsetof(struct cpu_local_var, current),\n__builtin_offsetof(struct cpu_local_var, flags),\nsizeof(struct sig_common),\n__alignof__(struct sig_common),\n__builtin_offsetof(struct sig_common, sigpending),\nsizeof(struct f03_syscall_entry_config_v1),\n__alignof__(struct f03_syscall_entry_config_v1),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, names),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, name_count),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, fork_drain),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, profile_max),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, profile_nr),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, exit_nr),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, exit_group_nr),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, sched_yield_nr),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, epoll_wait_nr),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, epoll_pwait_nr),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, ppoll_nr),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, mode_u2k),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, mode_k2u),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, sigkill),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, disable_yield),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, fugaku),\n__builtin_offsetof(struct f03_syscall_entry_config_v1, resched_mask),\nsizeof(_Atomic unsigned long),\n__alignof__(_Atomic unsigned long),\n0xffffffffUL,\n0UL,\n128UL,\n2UL,\nsizeof(ihk_mc_user_context_t),\n__alignof__(ihk_mc_user_context_t),\nsizeof(struct ddebug),\n__alignof__(struct ddebug)\n};\nlong (*const f03_syscall_entry_C_address)(int, ihk_mc_user_context_t *) = syscall;\n\n#endif\n\n#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SYSCALL_ENTRY) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT) && defined(PROFILE_ENABLE)\n_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall),long(*)(int,ihk_mc_user_context_t*)),\"actual outer syscall signature\");\n#endif\n\n/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\n * Compiler-only witness. Expressions/order are the actual metadata initializer;\n * the final uint mask is compared as four emitted bytes, not signed arithmetic.\n */\n#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SYSCALL_ENTRY) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT) && defined(PROFILE_ENABLE)\nconst int f03_entry_config_scalar_witness_v1[14] = {\n PROFILE_SYSCALL_MAX, __NR_profile, __NR_exit, __NR_exit_group, __NR_sched_yield,\n __NR_epoll_wait, __NR_epoll_pwait, __NR_ppoll, CPUTIME_MODE_U2K, CPUTIME_MODE_K2U,\n SIGKILL,\n#ifdef DISABLE_SCHED_YIELD\n 1,\n#else\n 0,\n#endif\n#ifdef ENABLE_FUGAKU_HACKS\n 1,\n#else\n 0,\n#endif\n CPU_FLAG_NEED_RESCHED\n};\nconst unsigned long f03_entry_config_guard_witness_v1[4] = {\n 1, /* PROFILE_ENABLE required by this selected declaration */\n#ifdef MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION\n 1,\n#else\n 0,\n#endif\n#ifdef DISABLE_SCHED_YIELD\n 1,\n#else\n 0,\n#endif\n#ifdef ENABLE_FUGAKU_HACKS\n 1\n#else\n 0\n#endif\n};\n_Static_assert(sizeof(f03_entry_config_scalar_witness_v1) == 56, \"config scalar bytes\");\n_Static_assert(__builtin_offsetof(struct f03_syscall_entry_config_v1, profile_max) == 24,\n \"config scalar offset\");\n_Static_assert(sizeof(struct f03_syscall_entry_config_v1) == 80, \"config total bytes\");\n#endif\n\n/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\n * Compiler-only assertions and guard witness: no replacement handlers or Ctable.\n * Reuse existing selected f03_dispatch_C_ABI[11] as the genuine geometry vector.\n */\n#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT) && defined(MCKERNEL_RUST_F03_SYSCALL_TABLE)\ntypedef long (*f03_table_genuine_handler_type_v1)(int, ihk_mc_user_context_t *);\n#ifdef SYSCALL_HANDLED\n#error syscall list macro unexpectedly leaked into table ABI witness\n#endif\n#define SYSCALL_HANDLED(number,name) _Static_assert(__builtin_types_compatible_p(__typeof__(&sys_##name),f03_table_genuine_handler_type_v1),\"genuine handled provider ABI\");\n#define SYSCALL_DELEGATED(number,name)\n#include <syscall_list.h>\n#undef SYSCALL_HANDLED\n#undef SYSCALL_DELEGATED\n_Static_assert(sizeof(syscall_table[0])==8,\"actual fn pointer slot width\");\n_Static_assert(__alignof__(__typeof__(syscall_table[0]))==8,\"actual slot type alignment\");\nconst unsigned long f03_table_C_guards4[4] = {\n#ifdef PROFILE_ENABLE\n 1,\n#else\n 0,\n#endif\n#ifdef ENABLE_PERF\n 1,\n#else\n 0,\n#endif\n#ifdef MCKERNEL_NATIVE_CLONE3\n 1,\n#else\n 0,\n#endif\n#ifdef DCFA_KMOD\n 1\n#else\n 0\n#endif\n};\n#endif\n\n/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */\n#ifdef MCKERNEL_RUST_F03_PTRACE_ENTRY\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sys_ptrace),long (*)(int,ihk_mc_user_context_t *)),\"actual selected ptrace entry ABI\");\nconst unsigned long f03_ptrace_entry_C_ABI8[8]={\n sizeof(struct ptrace_syscall_ops),__alignof__(struct ptrace_syscall_ops),\n sizeof(struct ddebug),__alignof__(struct ddebug),sizeof(ihk_mc_user_context_t),\n __alignof__(ihk_mc_user_context_t),sizeof(int),sizeof(long)\n};\n#endif\n\n#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sys_execve),long(*)(int,ihk_mc_user_context_t*)), \"execve public ABI\");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&sys_execveat),long(*)(int,ihk_mc_user_context_t*)), \"execveat public ABI\");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_execveat_bridge),int(*)(void*,int,const char*,char**,char**,int)), \"existing provider ABI\");\n_Static_assert(sizeof(int)==4 && sizeof(long)==8 && sizeof(void*)==8, \"x86_64 widths\");\n_Static_assert((char)0xff<0, \"original filename char promotion\");\n#endif\n\n#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS\nconst unsigned long CURRENT290_GETSIGINFO_C_ABI14[14] = {sizeof(siginfo_t),__alignof__(siginfo_t),sizeof(struct sig_pending),\n __alignof__(struct sig_pending),__builtin_offsetof(struct sig_pending,info),sizeof(struct thread),\n __alignof__(struct thread),__builtin_offsetof(struct thread,status),\n __builtin_offsetof(struct thread,ptrace_recvsig),sizeof(struct ptrace_io_offsets),\n __alignof__(struct ptrace_io_offsets),sizeof(unsigned long),sizeof(size_t),sizeof(int)};\n#endif\n\n#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS\nconst unsigned long CURRENT290_EXEC_C_ABI14[14]={sizeof(ihk_mc_user_context_t),_Alignof(ihk_mc_user_context_t),__builtin_offsetof(ihk_mc_user_context_t,gpr),__builtin_offsetof(ihk_mc_user_context_t,sr),sizeof(struct x86_basic_regs),_Alignof(struct x86_basic_regs),__builtin_offsetof(struct x86_basic_regs,rdi),__builtin_offsetof(struct x86_basic_regs,rsi),__builtin_offsetof(struct x86_basic_regs,rdx),__builtin_offsetof(struct x86_basic_regs,r10),__builtin_offsetof(struct x86_basic_regs,r8),__builtin_offsetof(struct x86_basic_regs,r9),__builtin_offsetof(struct x86_basic_regs,rax),__builtin_offsetof(struct x86_basic_regs,orig_rax)};\n#endif\n",
+    "first_line": 29331,
+    "last_line": 29607,
+    "sha256": "cb5d3342185954e1a882d997a5041501e7cc17b56a698b482d2021ffbb0392a8"
+  },
+  "old_syscall": {
+    "bytes": 326440,
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/output-1/F03.selected.o",
+    "sha256": "1c95acd63f5b4f801c8274a32c404e35c3fccdd553eb281cc688cf86257cfdc5"
+  },
+  "removed_U_is_subset_of_closed35_undefined_targets": true,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_EXPERT_EXACT_CLOSED35_D_CLOSED21_U_ROLE_CONTRACT",
+  "strict_partial_U19": [
+    "_GLOBAL_OFFSET_TABLE_",
+    "__freeze",
+    "__page_fault_handler_address",
+    "__start___verbose",
+    "__stop___verbose",
+    "_end",
+    "_head",
+    "debug_exception",
+    "enter_user_mode",
+    "general_protection_exception",
+    "generic_common_handlers",
+    "ihk_mc_switch_context",
+    "int3_exception",
+    "nmi_handler",
+    "page_fault",
+    "trampoline_code_data",
+    "trampoline_code_data_end",
+    "vsyscall_page",
+    "x86_syscall"
+  ],
+  "undefined_targets_from_closed35": [
+    "futex_atomic_access_ok_bridge",
+    "futex_atomic_cmpxchg_inatomic_bridge",
+    "futex_atomic_op_inuser_bridge",
+    "move_pages_smp_handler",
+    "sched_apply_scheduler_bridge",
+    "sched_find_thread_bridge",
+    "sched_hold_thread_bridge",
+    "sched_release_thread_bridge",
+    "sched_request_migrate_bridge",
+    "sched_setparam_log_bridge",
+    "sched_thread_unlock_bridge",
+    "sys_move_pages",
+    "syscall",
+    "syscall_dispatch_context_bridge",
+    "syscall_do_kill_current_bridge",
+    "syscall_do_kill_thread_bridge",
+    "syscall_interrupt_cpu_bridge",
+    "syscall_kill_log_bridge",
+    "syscall_settimeofday_panic_bridge",
+    "syscall_threads_reader_lock_bridge",
+    "syscall_threads_reader_unlock_bridge",
+    "syscall_tofu_ioctl_bridge"
+  ],
+  "util_exact_line_immediates": {
+    "all_other_function_bytes_identical": true,
+    "changed_byte_count": 8,
+    "exact_six_instruction_source_bindings": [
+      {
+        "function_relative_instruction_offset": 91,
+        "new_instruction_hex": "b9b56e0000",
+        "new_source_line": {
+          "latest_directive": {
+            "next_logical_line": 25457,
+            "physical_line": 25553,
+            "text": "#line 25457"
+          },
+          "logical_line": 28341,
+          "physical_line": 28438,
+          "text": "\trctx = kmalloc_tracked(sizeof(struct uti_ctx), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);"
+        },
+        "old_instruction_hex": "b99a6e0000",
+        "old_source_line": {
+          "latest_directive": {
+            "next_logical_line": 25457,
+            "physical_line": 25553,
+            "text": "#line 25457"
+          },
+          "logical_line": 28314,
+          "physical_line": 28411,
+          "text": "\trctx = kmalloc_tracked(sizeof(struct uti_ctx), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);"
+        },
+        "opcode": 185,
+        "register": "ecx",
+        "section_relative_instruction_offset": 32795
+      },
+      {
+        "function_relative_instruction_offset": 240,
+        "new_instruction_hex": "b9be6e0000",
+        "new_source_line": {
+          "latest_directive": {
+            "next_logical_line": 25457,
+            "physical_line": 25553,
+            "text": "#line 25457"
+          },
+          "logical_line": 28350,
+          "physical_line": 28447,
+          "text": "\tuti_info = kmalloc_tracked(sizeof(struct uti_info), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);"
+        },
+        "old_instruction_hex": "b9a36e0000",
+        "old_source_line": {
+          "latest_directive": {
+            "next_logical_line": 25457,
+            "physical_line": 25553,
+            "text": "#line 25457"
+          },
+          "logical_line": 28323,
+          "physical_line": 28420,
+          "text": "\tuti_info = kmalloc_tracked(sizeof(struct uti_info), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);"
+        },
+        "opcode": 185,
+        "register": "ecx",
+        "section_relative_instruction_offset": 32944
+      },
+      {
+        "function_relative_instruction_offset": 809,
+        "new_instruction_hex": "baec6e0000",
+        "new_source_line": {
+          "latest_directive": {
+            "next_logical_line": 25457,
+            "physical_line": 25553,
+            "text": "#line 25457"
+          },
+          "logical_line": 28396,
+          "physical_line": 28493,
+          "text": "\tkfree_tracked(rctx, __FILE__, __LINE__);"
+        },
+        "old_instruction_hex": "bad16e0000",
+        "old_source_line": {
+          "latest_directive": {
+            "next_logical_line": 25457,
+            "physical_line": 25553,
+            "text": "#line 25457"
+          },
+          "logical_line": 28369,
+          "physical_line": 28466,
+          "text": "\tkfree_tracked(rctx, __FILE__, __LINE__);"
+        },
+        "opcode": 186,
+        "register": "edx",
+        "section_relative_instruction_offset": 33513
+      },
+      {
+        "function_relative_instruction_offset": 849,
+        "new_instruction_hex": "baef6e0000",
+        "new_source_line": {
+          "latest_directive": {
+            "next_logical_line": 25457,
+            "physical_line": 25553,
+            "text": "#line 25457"
+          },
+          "logical_line": 28399,
+          "physical_line": 28496,
+          "text": "\tkfree_tracked(uti_info, __FILE__, __LINE__);"
+        },
+        "old_instruction_hex": "bad46e0000",
+        "old_source_line": {
+          "latest_directive": {
+            "next_logical_line": 25457,
+            "physical_line": 25553,
+            "text": "#line 25457"
+          },
+          "logical_line": 28372,
+          "physical_line": 28469,
+          "text": "\tkfree_tracked(uti_info, __FILE__, __LINE__);"
+        },
+        "opcode": 186,
+        "register": "edx",
+        "section_relative_instruction_offset": 33553
+      },
+      {
+        "function_relative_instruction_offset": 975,
+        "new_instruction_hex": "ba066f0000",
+        "new_source_line": {
+          "latest_directive": {
+            "next_logical_line": 25457,
+            "physical_line": 25553,
+            "text": "#line 25457"
+          },
+          "logical_line": 28422,
+          "physical_line": 28519,
+          "text": "\tkfree_tracked(rctx, __FILE__, __LINE__);"
+        },
+        "old_instruction_hex": "baeb6e0000",
+        "old_source_line": {
+          "latest_directive": {
+            "next_logical_line": 25457,
+            "physical_line": 25553,
+            "text": "#line 25457"
+          },
+          "logical_line": 28395,
+          "physical_line": 28492,
+          "text": "\tkfree_tracked(rctx, __FILE__, __LINE__);"
+        },
+        "opcode": 186,
+        "register": "edx",
+        "section_relative_instruction_offset": 33679
+      },
+      {
+        "function_relative_instruction_offset": 993,
+        "new_instruction_hex": "ba076f0000",
+        "new_source_line": {
+          "latest_directive": {
+            "next_logical_line": 25457,
+            "physical_line": 25553,
+            "text": "#line 25457"
+          },
+          "logical_line": 28423,
+          "physical_line": 28520,
+          "text": "\tkfree_tracked(uti_info, __FILE__, __LINE__);"
+        },
+        "old_instruction_hex": "baec6e0000",
+        "old_source_line": {
+          "latest_directive": {
+            "next_logical_line": 25457,
+            "physical_line": 25553,
+            "text": "#line 25457"
+          },
+          "logical_line": 28396,
+          "physical_line": 28493,
+          "text": "\tkfree_tracked(uti_info, __FILE__, __LINE__);"
+        },
+        "opcode": 186,
+        "register": "edx",
+        "section_relative_instruction_offset": 33697
+      }
+    ],
+    "execution": false,
+    "extractor": {
+      "bytes": 4083,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-38-coherent-selected-c-partial-link-source-1/exact-four-command-header-fixture-suffix-source-1/extract_util_exact_line_facts.py",
+      "sha256": "42abc85d05019a68496a618c1c8c021f8f741f49e8f18ade554cf80e04dbaf85"
+    },
+    "new_bytes_hex": "f30f1efaf30f1efa49bb0000000000000000554889e541574c8d3de5ffffff41564d01df49be000000000000000041554b8d043e415449bc0000000000000000534d01fc4881ec180100004889bdc8feffff488985d0feffffffd0b9b56e0000be02000000bf00100000488b98a81e000048b800000000000000004a8d1438488985e8feffffc783581400000100000041ffd448ba0000000000000000c785e0fefffff4ffffff488995d8feffff4989c54885c00f84040300004889c748b800000000000000004e8d343841ffd631f64c89ef488985c0feffff48b800000000000000004c01f8ffd0488bb5e8feffffb9be6e0000bfa00000004a8d143ebe0200000041ffd44989c44885c00f84ac020000488b8dd0feffffffd1488b8dd0feffff488b80a81e000049890424ffd1488bb8881f000041ffd6488b8dd0feffff4989442418ffd1488bb8e01e000041ffd648b9000000000000000049894424208b431448898de0feffff41894424284a8d0439ffd0488dbb58100000418944242c41ffd6488dbb00110000498944245841ffd6488dbb04110000498944246041ffd6488bbb68100000498944246841ffd6488dbb70140000498944247041ffd6498944247848b80000000000000000498b04078b00418984248000000048b800000000000000004c01f8ffd04889c741ffd6488bb5c8feffff48c78508ffffffcb0000004989842498000000488b85c0feffff48c78510ffffff0000000048898518ffffff48c78520ffffff000000004885f6744b4c8d8d40ffffff488dbd48ffffffba8800000048b800000000000000004c898dd8feffff4c01f8ffd0486383681400004c8b8dd8feffff48898540ffffff4c89cf41ffd648898520ffffff4c8bb5e0feffff48b800000000000000004c89a528ffffffc7835814000002000000498b04074d01fe48898530ffffff41ffd6488dbdf8feffff89c648b800000000000000004c01f8ffd04989c648b8000000000000000041807c071b000f858c01000048ba000000000000000031c0c78358140000030000004c01faffd2418b550048b8000000000000000041807c071b0089936c1400000f8519010000488b85e8feffff4c89efbaec6e000048b9000000000000000048898dd8feffff4e8d2c394a8d343841ffd5488b85e8feffffbaef6e00004c89e74a8d343841ffd54489b5e0feffff4d85f60f8840010000490fbae6200f838d00000048b8000000000000000041807c071b000f85cf010000488b83d0100000410fb6f64531edc780f4010000010000004489f00fb6fc48b800000000000000004c01f8ffd04c8bb5e8feffff488b9dd8feffff4c89efba066f00004b8d343e4c01fbffd34b8d343eba076f000031ffffd38b85e0feffff4881c4180100005b415c415d415e415f5dc3660f1f44000048b8000000000000000041807c071b000f858201000048b800000000000000004489f74531ed4c01f8ffd0eb890f1f0048b8000000000000000048b90000000000000000498d34074c01f948b80000000000000000498d3c0731c0ffd1e9b5feffff660f1f44000048b800000000000000008b53144c89f149b90000000000000000498d34074d01f948b80000000000000000498d3c0731c041ffd1e93bfeffff0f1f800000000048b800000000000000004c89f74c01f8ffd085c0745a488b83d01000008b4b144d89f049b900000000000000004d01f98b90c801000048b80000000000000000498d340748b80000000000000000498d3c0731c041ffd1488b83d0100000c780f401000001000000e901ffffff0f1f0048b800000000000000004c89f24531ed48b90000000000000000498d34074c01f948b80000000000000000498d3c0731c0ffd1e966feffff0f1f84000000000048b800000000000000008b53144c89f149b80000000000000000498d34074d01f848b80000000000000000498d3c0731c041ffd0e9f8fdffff0f1f8000000000488b83d01000008b4b144d89f049b900000000000000004d01f98b90c801000048b80000000000000000498d340748b80000000000000000498d3c0731c041ffd1e938feffff",
+    "new_function_RELA": [
+      {
+        "addend": 6,
+        "offset": 10,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 294,
+          "name": "_GLOBAL_OFFSET_TABLE_",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 29
+      },
+      {
+        "addend": 0,
+        "offset": 38,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 309,
+          "name": "get_this_cpu_local_var",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 56,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 302,
+          "name": "kmalloc_tracked",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 115,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 169,
+          "name": ".LC2",
+          "shndx": 6,
+          "size": 0,
+          "type": 0,
+          "value": 40
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 149,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 304,
+          "name": "kfree_tracked",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 191,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 436,
+          "name": "virt_to_phys",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 220,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 556,
+          "name": "save_uctx",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 339,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 385,
+          "name": "ihk_mc_get_processor_id",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 455,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 557,
+          "name": "idle_halt",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 27
+      },
+      {
+        "addend": 0,
+        "offset": 479,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 558,
+          "name": "get_futex_queues",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 586,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 360,
+          "name": "memcpy",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 649,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 554,
+          "name": "uti_desc",
+          "shndx": 65522,
+          "size": 8,
+          "type": 1,
+          "value": 8
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 702,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 371,
+          "name": "do_syscall",
+          "shndx": 1,
+          "size": 1335,
+          "type": 2,
+          "value": 6848
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 720,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 140,
+          "name": "ddebug.17941",
+          "shndx": 9,
+          "size": 32,
+          "type": 1,
+          "value": 384
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 742,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 553,
+          "name": "util_show_syscall_profile",
+          "shndx": 1,
+          "size": 278,
+          "type": 2,
+          "value": 32416
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 773,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 141,
+          "name": "ddebug.17944",
+          "shndx": 9,
+          "size": 32,
+          "type": 1,
+          "value": 352
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 816,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 304,
+          "name": "kfree_tracked",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 893,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 142,
+          "name": "ddebug.17945",
+          "shndx": 9,
+          "size": 32,
+          "type": 1,
+          "value": 320
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 945,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 391,
+          "name": "terminate",
+          "shndx": 1,
+          "size": 3892,
+          "type": 2,
+          "value": 8864
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1034,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 143,
+          "name": "ddebug.17946",
+          "shndx": 9,
+          "size": 32,
+          "type": 1,
+          "value": 288
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1056,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 99,
+          "name": "do_exit",
+          "shndx": 1,
+          "size": 997,
+          "type": 2,
+          "value": 12768
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1082,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 144,
+          "name": "__FUNCTION__.17943",
+          "shndx": 7,
+          "size": 12,
+          "type": 1,
+          "value": 120
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1092,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 295,
+          "name": "kprintf",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 1109,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 284,
+          "name": ".LC118",
+          "shndx": 5,
+          "size": 0,
+          "type": 0,
+          "value": 782
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1138,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 144,
+          "name": "__FUNCTION__.17943",
+          "shndx": 7,
+          "size": 12,
+          "type": 1,
+          "value": 120
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1154,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 295,
+          "name": "kprintf",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 1171,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 285,
+          "name": ".LC117",
+          "shndx": 6,
+          "size": 0,
+          "type": 0,
+          "value": 4112
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1202,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 378,
+          "name": "syscall_proxy_dead_result",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 1237,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 295,
+          "name": "kprintf",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 1256,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 144,
+          "name": "__FUNCTION__.17943",
+          "shndx": 7,
+          "size": 12,
+          "type": 1,
+          "value": 120
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1270,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 286,
+          "name": ".LC121",
+          "shndx": 6,
+          "size": 0,
+          "type": 0,
+          "value": 4248
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1314,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 144,
+          "name": "__FUNCTION__.17943",
+          "shndx": 7,
+          "size": 12,
+          "type": 1,
+          "value": 120
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1330,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 295,
+          "name": "kprintf",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 1347,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 287,
+          "name": ".LC122",
+          "shndx": 6,
+          "size": 0,
+          "type": 0,
+          "value": 4296
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1378,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 144,
+          "name": "__FUNCTION__.17943",
+          "shndx": 7,
+          "size": 12,
+          "type": 1,
+          "value": 120
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1394,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 295,
+          "name": "kprintf",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 1411,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 288,
+          "name": ".LC119",
+          "shndx": 6,
+          "size": 0,
+          "type": 0,
+          "value": 4160
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1455,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 295,
+          "name": "kprintf",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 1474,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 144,
+          "name": "__FUNCTION__.17943",
+          "shndx": 7,
+          "size": 12,
+          "type": 1,
+          "value": 120
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1488,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 289,
+          "name": ".LC120",
+          "shndx": 6,
+          "size": 0,
+          "type": 0,
+          "value": 4192
+        },
+        "type": 25
+      }
+    ],
+    "new_object": {
+      "bytes": 319000,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-38-coherent-selected-c-partial-link-source-1/exact-four-command-header-fixture-suffix-source-1/output-1/syscall.selected.o",
+      "sha256": "141d9763639b2d72ff8a02e023959c0f008b93231a3aaf545e74156f132626b0"
+    },
+    "new_runtime_logic": false,
+    "new_source": {
+      "bytes": 911224,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-37-coherent-lifetime-worker-whole-rust-source-1/bounded-pregrant-correction-1/candidate/kernel/syscall.c",
+      "sha256": "c2ea34a0219f6fe53799a3a27751afcd715c9af3bf42df25dbb4493605043fc6"
+    },
+    "new_symbol": {
+      "bind": 1,
+      "index": 555,
+      "name": "util_thread",
+      "shndx": 1,
+      "size": 1510,
+      "type": 2,
+      "value": 32704
+    },
+    "old_bytes_hex": "f30f1efaf30f1efa49bb0000000000000000554889e541574c8d3de5ffffff41564d01df49be000000000000000041554b8d043e415449bc0000000000000000534d01fc4881ec180100004889bdc8feffff488985d0feffffffd0b99a6e0000be02000000bf00100000488b98a81e000048b800000000000000004a8d1438488985e8feffffc783581400000100000041ffd448ba0000000000000000c785e0fefffff4ffffff488995d8feffff4989c54885c00f84040300004889c748b800000000000000004e8d343841ffd631f64c89ef488985c0feffff48b800000000000000004c01f8ffd0488bb5e8feffffb9a36e0000bfa00000004a8d143ebe0200000041ffd44989c44885c00f84ac020000488b8dd0feffffffd1488b8dd0feffff488b80a81e000049890424ffd1488bb8881f000041ffd6488b8dd0feffff4989442418ffd1488bb8e01e000041ffd648b9000000000000000049894424208b431448898de0feffff41894424284a8d0439ffd0488dbb58100000418944242c41ffd6488dbb00110000498944245841ffd6488dbb04110000498944246041ffd6488bbb68100000498944246841ffd6488dbb70140000498944247041ffd6498944247848b80000000000000000498b04078b00418984248000000048b800000000000000004c01f8ffd04889c741ffd6488bb5c8feffff48c78508ffffffcb0000004989842498000000488b85c0feffff48c78510ffffff0000000048898518ffffff48c78520ffffff000000004885f6744b4c8d8d40ffffff488dbd48ffffffba8800000048b800000000000000004c898dd8feffff4c01f8ffd0486383681400004c8b8dd8feffff48898540ffffff4c89cf41ffd648898520ffffff4c8bb5e0feffff48b800000000000000004c89a528ffffffc7835814000002000000498b04074d01fe48898530ffffff41ffd6488dbdf8feffff89c648b800000000000000004c01f8ffd04989c648b8000000000000000041807c071b000f858c01000048ba000000000000000031c0c78358140000030000004c01faffd2418b550048b8000000000000000041807c071b0089936c1400000f8519010000488b85e8feffff4c89efbad16e000048b9000000000000000048898dd8feffff4e8d2c394a8d343841ffd5488b85e8feffffbad46e00004c89e74a8d343841ffd54489b5e0feffff4d85f60f8840010000490fbae6200f838d00000048b8000000000000000041807c071b000f85cf010000488b83d0100000410fb6f64531edc780f4010000010000004489f00fb6fc48b800000000000000004c01f8ffd04c8bb5e8feffff488b9dd8feffff4c89efbaeb6e00004b8d343e4c01fbffd34b8d343ebaec6e000031ffffd38b85e0feffff4881c4180100005b415c415d415e415f5dc3660f1f44000048b8000000000000000041807c071b000f858201000048b800000000000000004489f74531ed4c01f8ffd0eb890f1f0048b8000000000000000048b90000000000000000498d34074c01f948b80000000000000000498d3c0731c0ffd1e9b5feffff660f1f44000048b800000000000000008b53144c89f149b90000000000000000498d34074d01f948b80000000000000000498d3c0731c041ffd1e93bfeffff0f1f800000000048b800000000000000004c89f74c01f8ffd085c0745a488b83d01000008b4b144d89f049b900000000000000004d01f98b90c801000048b80000000000000000498d340748b80000000000000000498d3c0731c041ffd1488b83d0100000c780f401000001000000e901ffffff0f1f0048b800000000000000004c89f24531ed48b90000000000000000498d34074c01f948b80000000000000000498d3c0731c0ffd1e966feffff0f1f84000000000048b800000000000000008b53144c89f149b80000000000000000498d34074d01f848b80000000000000000498d3c0731c041ffd0e9f8fdffff0f1f8000000000488b83d01000008b4b144d89f049b900000000000000004d01f98b90c801000048b80000000000000000498d340748b80000000000000000498d3c0731c041ffd1e938feffff",
+    "old_function_RELA": [
+      {
+        "addend": 6,
+        "offset": 10,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 294,
+          "name": "_GLOBAL_OFFSET_TABLE_",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 29
+      },
+      {
+        "addend": 0,
+        "offset": 38,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 309,
+          "name": "get_this_cpu_local_var",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 56,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 302,
+          "name": "kmalloc_tracked",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 115,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 169,
+          "name": ".LC2",
+          "shndx": 6,
+          "size": 0,
+          "type": 0,
+          "value": 40
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 149,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 304,
+          "name": "kfree_tracked",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 191,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 436,
+          "name": "virt_to_phys",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 220,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 556,
+          "name": "save_uctx",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 339,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 385,
+          "name": "ihk_mc_get_processor_id",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 455,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 557,
+          "name": "idle_halt",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 27
+      },
+      {
+        "addend": 0,
+        "offset": 479,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 558,
+          "name": "get_futex_queues",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 586,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 360,
+          "name": "memcpy",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 649,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 554,
+          "name": "uti_desc",
+          "shndx": 65522,
+          "size": 8,
+          "type": 1,
+          "value": 8
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 702,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 371,
+          "name": "do_syscall",
+          "shndx": 1,
+          "size": 1335,
+          "type": 2,
+          "value": 6848
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 720,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 140,
+          "name": "ddebug.17891",
+          "shndx": 13,
+          "size": 32,
+          "type": 1,
+          "value": 384
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 742,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 553,
+          "name": "util_show_syscall_profile",
+          "shndx": 1,
+          "size": 278,
+          "type": 2,
+          "value": 32416
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 773,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 141,
+          "name": "ddebug.17894",
+          "shndx": 13,
+          "size": 32,
+          "type": 1,
+          "value": 352
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 816,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 304,
+          "name": "kfree_tracked",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 893,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 142,
+          "name": "ddebug.17895",
+          "shndx": 13,
+          "size": 32,
+          "type": 1,
+          "value": 320
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 945,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 391,
+          "name": "terminate",
+          "shndx": 1,
+          "size": 3892,
+          "type": 2,
+          "value": 8864
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1034,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 143,
+          "name": "ddebug.17896",
+          "shndx": 13,
+          "size": 32,
+          "type": 1,
+          "value": 288
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1056,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 99,
+          "name": "do_exit",
+          "shndx": 1,
+          "size": 997,
+          "type": 2,
+          "value": 12768
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1082,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 144,
+          "name": "__FUNCTION__.17893",
+          "shndx": 7,
+          "size": 12,
+          "type": 1,
+          "value": 120
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1092,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 295,
+          "name": "kprintf",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 1109,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 284,
+          "name": ".LC118",
+          "shndx": 5,
+          "size": 0,
+          "type": 0,
+          "value": 782
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1138,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 144,
+          "name": "__FUNCTION__.17893",
+          "shndx": 7,
+          "size": 12,
+          "type": 1,
+          "value": 120
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1154,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 295,
+          "name": "kprintf",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 1171,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 285,
+          "name": ".LC117",
+          "shndx": 6,
+          "size": 0,
+          "type": 0,
+          "value": 4096
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1202,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 378,
+          "name": "syscall_proxy_dead_result",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 1237,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 295,
+          "name": "kprintf",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 1256,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 144,
+          "name": "__FUNCTION__.17893",
+          "shndx": 7,
+          "size": 12,
+          "type": 1,
+          "value": 120
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1270,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 286,
+          "name": ".LC121",
+          "shndx": 6,
+          "size": 0,
+          "type": 0,
+          "value": 4232
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1314,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 144,
+          "name": "__FUNCTION__.17893",
+          "shndx": 7,
+          "size": 12,
+          "type": 1,
+          "value": 120
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1330,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 295,
+          "name": "kprintf",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 1347,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 287,
+          "name": ".LC122",
+          "shndx": 6,
+          "size": 0,
+          "type": 0,
+          "value": 4280
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1378,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 144,
+          "name": "__FUNCTION__.17893",
+          "shndx": 7,
+          "size": 12,
+          "type": 1,
+          "value": 120
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1394,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 295,
+          "name": "kprintf",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 1411,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 288,
+          "name": ".LC119",
+          "shndx": 6,
+          "size": 0,
+          "type": 0,
+          "value": 4144
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1455,
+        "owning_section": 1,
+        "target": {
+          "bind": 1,
+          "index": 295,
+          "name": "kprintf",
+          "shndx": 0,
+          "size": 0,
+          "type": 0,
+          "value": 0
+        },
+        "type": 31
+      },
+      {
+        "addend": 0,
+        "offset": 1474,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 144,
+          "name": "__FUNCTION__.17893",
+          "shndx": 7,
+          "size": 12,
+          "type": 1,
+          "value": 120
+        },
+        "type": 25
+      },
+      {
+        "addend": 0,
+        "offset": 1488,
+        "owning_section": 1,
+        "target": {
+          "bind": 0,
+          "index": 289,
+          "name": ".LC120",
+          "shndx": 6,
+          "size": 0,
+          "type": 0,
+          "value": 4176
+        },
+        "type": 25
+      }
+    ],
+    "old_object": {
+      "bytes": 326440,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/output-1/F03.selected.o",
+      "sha256": "1c95acd63f5b4f801c8274a32c404e35c3fccdd553eb281cc688cf86257cfdc5"
+    },
+    "old_source": {
+      "bytes": 927570,
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/source/kernel/syscall.c",
+      "sha256": "cc829750de7f50c9c77980955ac9c62521f3f3d3c1c0c72fcc7f84ce294f4642"
+    },
+    "old_symbol": {
+      "bind": 1,
+      "index": 555,
+      "name": "util_thread",
+      "shndx": 1,
+      "size": 1510,
+      "type": 2,
+      "value": 32704
+    },
+    "other30_global_functions": [
+      {
+        "machine_sha256": "8dea1010c29202b9a8a43ddae70f1be8b0097a3a27b0b095c8e1af1dbd55b6da",
+        "name": "do_mmap",
+        "size": 8293
+      },
+      {
+        "machine_sha256": "a13c8ce2cadf3734c892c7432f82f48bd20bb6a4b54f0e738d6dafc3502bc6d7",
+        "name": "do_syscall",
+        "size": 1335
+      },
+      {
+        "machine_sha256": "b70fdd20bd83854487c20aec9183c8d99180be066d1a4ea74ce640bf4488afa9",
+        "name": "terminate_mcexec",
+        "size": 187
+      },
+      {
+        "machine_sha256": "45ce505e65884a851c82f0e6a3a0fd8a1d91ce595fcb46459c3862615546e1bb",
+        "name": "sync_child_event",
+        "size": 158
+      },
+      {
+        "machine_sha256": "3bc552611dcbc0d251781f3fdd7f8c63b0b310356d16a07051caf1d34c9ee0d0",
+        "name": "terminate",
+        "size": 3892
+      },
+      {
+        "machine_sha256": "c103d0bf5c17ea56936df495a611726462a7a261040f794bab78c71f915319a6",
+        "name": "terminate_host",
+        "size": 237
+      },
+      {
+        "machine_sha256": "9748ea1762fc4da3335d4f06f8e2e65dce68841abebf594200a7db4d646dfa54",
+        "name": "interrupt_syscall",
+        "size": 314
+      },
+      {
+        "machine_sha256": "65d9060c6c240e1310890f07e22d37f2e6247503ef602e042e0a8c567c65747d",
+        "name": "exit_group_log_bridge",
+        "size": 100
+      },
+      {
+        "machine_sha256": "b2fbe8f7da5be74ac3cc4d53436ab406ebd5b4737670e0da661fb44534af9398",
+        "name": "exit_group_terminate_bridge",
+        "size": 43
+      },
+      {
+        "machine_sha256": "aff86ce136a215750db3bf315d2834eee0b777668036e17c71cc2b90dd9830a2",
+        "name": "exit_group_current_pid_bridge",
+        "size": 81
+      },
+      {
+        "machine_sha256": "0fccdc07c944bbf60af85a33f3fe6b4f074a7ffd4a8b9c41917402c60758df2c",
+        "name": "clear_host_pte",
+        "size": 180
+      },
+      {
+        "machine_sha256": "2ac862c871219a85c8492288a9ac26c5edfb82d885eb9d89cd903ffe1eec49c7",
+        "name": "do_munmap",
+        "size": 219
+      },
+      {
+        "machine_sha256": "35fdad3069b7f81a22b0ab17f602bcfdf329894c7aeb50e2cb4fcce403af929f",
+        "name": "ptrace_syscall_event",
+        "size": 71
+      },
+      {
+        "machine_sha256": "f2ddacb918f059cc7d570af4f5b2d1cb53574ce58c81efa42ae70c7ffb16dffb",
+        "name": "syscall_execveat_bridge",
+        "size": 43
+      },
+      {
+        "machine_sha256": "cd8ca61b8422cefaeec16be47325d942170b8c34c0ac7b0e666f6a1d4488865a",
+        "name": "do_fork",
+        "size": 5179
+      },
+      {
+        "machine_sha256": "951d248f55dcc575b20c4cd1c10d76e88be6c71d26914f2877d10edef924ec3f",
+        "name": "do_setresuid",
+        "size": 138
+      },
+      {
+        "machine_sha256": "5e94469d2597dafdccdff7b30ac21206de3028a94a3c501da8f0d586d27336e8",
+        "name": "do_setresgid",
+        "size": 138
+      },
+      {
+        "machine_sha256": "496de876f43cdb525e75b5c842ada3348150af9da5512bb954c298d8b5b4752d",
+        "name": "syscall_forward_rt_sigprocmask_bridge",
+        "size": 107
+      },
+      {
+        "machine_sha256": "1a3665fdac22f8af52726a3aa0279d781c3f49b135c0bd2426541a3c3f2c9b30",
+        "name": "syscall_forward_sigaction_update_bridge",
+        "size": 155
+      },
+      {
+        "machine_sha256": "5fca502eb591ddc767fd71a76680fe4c563b35f4b13d3307f37fb170e0e7ea2a",
+        "name": "syscall_policy_forward_context_bridge",
+        "size": 52
+      },
+      {
+        "machine_sha256": "b8a2517638fcb1e3486ed96ddf0d8bf0db8df500788ee5345a466ee2375a7549",
+        "name": "sys_perf_event_open",
+        "size": 591
+      },
+      {
+        "machine_sha256": "b2fbe8f7da5be74ac3cc4d53436ab406ebd5b4737670e0da661fb44534af9398",
+        "name": "exit_do_exit_bridge",
+        "size": 43
+      },
+      {
+        "machine_sha256": "a5d364eadf3e93df567c4d154eb6a77e573e3718cf5b7c3f15bc884309b6c58f",
+        "name": "syscall_do_prlimit64_bridge",
+        "size": 51
+      },
+      {
+        "machine_sha256": "6451673766cdec090ad6a158f58a31cfe09d663848043ba789ec017fb988c8ba",
+        "name": "syscall_policy_do_syscall2_bridge",
+        "size": 97
+      },
+      {
+        "machine_sha256": "6fc6b0d6f3340514c7b31277383929139424fe5dab4875c9bd3ab38734b10560",
+        "name": "syscall_policy_do_syscall3_bridge",
+        "size": 43
+      },
+      {
+        "machine_sha256": "50dbabc49b24aa97661b1cfaea2457aab8d3c6c0b919f9771dcd933b212bf066",
+        "name": "util_show_syscall_profile",
+        "size": 278
+      },
+      {
+        "machine_sha256": "d085f9628556ce0f06dae9baba15e034daf587bc10ad4b1ea2c2e2e299ed1d73",
+        "name": "syscall_util_indicate_clone_disabled_bridge",
+        "size": 82
+      },
+      {
+        "machine_sha256": "9133a724688c92507f2ae9b6f0553b7cac0c2c77d0d6caa73db468725edd791e",
+        "name": "syscall_util_register_desc_log_bridge",
+        "size": 118
+      },
+      {
+        "machine_sha256": "6f9fb80f87c69d7e4a2d7eb666596ae842ba0556266bf8d29cc755171fcc7767",
+        "name": "reset_cputime",
+        "size": 104
+      },
+      {
+        "machine_sha256": "77787475b74f74bbd539ed1cfe5e2852467849c2e0b9e877780987a919ea1a5f",
+        "name": "set_cputime",
+        "size": 1035
+      }
+    ],
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "status": "STATIC_EXACT_SIX_LINE_IMMEDIATE_FACTS_ONLY"
+  },
+  "util_semantic_relocations": [
+    {
+      "addend": 6,
+      "bind": 1,
+      "new_name": "_GLOBAL_OFFSET_TABLE_",
+      "offset": 10,
+      "old_name": "_GLOBAL_OFFSET_TABLE_",
+      "role": "same_named_import_or_common",
+      "size": 0,
+      "symbol_type": 0,
+      "type": 29,
+      "value": 0
+    },
+    {
+      "addend": 0,
+      "bind": 1,
+      "new_name": "get_this_cpu_local_var",
+      "offset": 38,
+      "old_name": "get_this_cpu_local_var",
+      "role": "same_named_import_or_common",
+      "size": 0,
+      "symbol_type": 0,
+      "type": 31,
+      "value": 0
+    },
+    {
+      "addend": 0,
+      "bind": 1,
+      "new_name": "kmalloc_tracked",
+      "offset": 56,
+      "old_name": "kmalloc_tracked",
+      "role": "same_named_import_or_common",
+      "size": 0,
+      "symbol_type": 0,
+      "type": 31,
+      "value": 0
+    },
+    {
+      "addend": 0,
+      "new_name": ".LC2",
+      "offset": 115,
+      "old_name": ".LC2",
+      "role": "exact_compiler_literal",
+      "strings": {
+        "exact_source_path_change": true,
+        "new_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f646f63732f766572696669636174696f6e2f65766964656e63652f76656c6f636974792d696e74657276656e74696f6e2d32303236313032332d362f6d31342d66696c652d6c616e65732f6b65726e656c2d73797363616c6c2f6e65772d77696e646f772d736f757263652d33372d636f686572656e742d6c69666574696d652d776f726b65722d77686f6c652d727573742d736f757263652d312f626f756e6465642d7072656772616e742d636f7272656374696f6e2d312f63616e6469646174652f6b65726e656c2f73797363616c6c2e6300",
+        "old_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f646f63732f766572696669636174696f6e2f65766964656e63652f76656c6f636974792d696e74657276656e74696f6e2d32303236313032332d362f6d31342d66696c652d6c616e65732f7838362d6370752f6e65772d77696e646f772d736f757263652d31382d63757272656e743238392d756e696f6e2d736f757263652d312f7175616c69666965642d676574736967696e666f2d63757272656e743239302d737563636573736f722d312f736f757263652f6b65726e656c2f73797363616c6c2e6300"
+      },
+      "type": 25
+    },
+    {
+      "addend": 0,
+      "bind": 1,
+      "new_name": "kfree_tracked",
+      "offset": 149,
+      "old_name": "kfree_tracked",
+      "role": "same_named_import_or_common",
+      "size": 0,
+      "symbol_type": 0,
+      "type": 31,
+      "value": 0
+    },
+    {
+      "addend": 0,
+      "bind": 1,
+      "new_name": "virt_to_phys",
+      "offset": 191,
+      "old_name": "virt_to_phys",
+      "role": "same_named_import_or_common",
+      "size": 0,
+      "symbol_type": 0,
+      "type": 31,
+      "value": 0
+    },
+    {
+      "addend": 0,
+      "bind": 1,
+      "new_name": "save_uctx",
+      "offset": 220,
+      "old_name": "save_uctx",
+      "role": "same_named_import_or_common",
+      "size": 0,
+      "symbol_type": 0,
+      "type": 31,
+      "value": 0
+    },
+    {
+      "addend": 0,
+      "bind": 1,
+      "new_name": "ihk_mc_get_processor_id",
+      "offset": 339,
+      "old_name": "ihk_mc_get_processor_id",
+      "role": "same_named_import_or_common",
+      "size": 0,
+      "symbol_type": 0,
+      "type": 31,
+      "value": 0
+    },
+    {
+      "addend": 0,
+      "bind": 1,
+      "new_name": "idle_halt",
+      "offset": 455,
+      "old_name": "idle_halt",
+      "role": "same_named_import_or_common",
+      "size": 0,
+      "symbol_type": 0,
+      "type": 27,
+      "value": 0
+    },
+    {
+      "addend": 0,
+      "bind": 1,
+      "new_name": "get_futex_queues",
+      "offset": 479,
+      "old_name": "get_futex_queues",
+      "role": "same_named_import_or_common",
+      "size": 0,
+      "symbol_type": 0,
+      "type": 31,
+      "value": 0
+    },
+    {
+      "addend": 0,
+      "bind": 1,
+      "new_name": "memcpy",
+      "offset": 586,
+      "old_name": "memcpy",
+      "role": "same_named_import_or_common",
+      "size": 0,
+      "symbol_type": 0,
+      "type": 31,
+      "value": 0
+    },
+    {
+      "addend": 0,
+      "bind": 1,
+      "new_name": "uti_desc",
+      "offset": 649,
+      "old_name": "uti_desc",
+      "role": "same_named_import_or_common",
+      "size": 8,
+      "symbol_type": 1,
+      "type": 25,
+      "value": 8
+    },
+    {
+      "addend": 0,
+      "machine_sha256": "a13c8ce2cadf3734c892c7432f82f48bd20bb6a4b54f0e738d6dafc3502bc6d7",
+      "new_name": "do_syscall",
+      "offset": 702,
+      "old_name": "do_syscall",
+      "role": "exact_defined_function",
+      "size": 1335,
+      "type": 25
+    },
+    {
+      "addend": 0,
+      "exact_source_call": "\tdkprintf(\"%s: returned from do_syscall,tid=%d,rc=%lx\\n\", __FUNCTION__, thread->tid, rc);",
+      "new_bytes_hex": "000000000000000000000000000000000000000000000000e26e000000000000",
+      "new_logical_line": 28386,
+      "new_name": "ddebug.17941",
+      "new_pointer_RELA": [
+        {
+          "addend": 40,
+          "offset": 0,
+          "owning_section": 9,
+          "target": {
+            "bind": 0,
+            "index": 10,
+            "name": "",
+            "shndx": 6,
+            "size": 0,
+            "type": 3,
+            "value": 0
+          },
+          "type": 1
+        },
+        {
+          "addend": 104,
+          "offset": 8,
+          "owning_section": 9,
+          "target": {
+            "bind": 0,
+            "index": 63,
+            "name": "",
+            "shndx": 7,
+            "size": 0,
+            "type": 3,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "offset": 720,
+      "old_bytes_hex": "000000000000000000000000000000000000000000000000c76e000000000000",
+      "old_logical_line": 28359,
+      "old_name": "ddebug.17891",
+      "old_pointer_RELA": [
+        {
+          "addend": 40,
+          "offset": 0,
+          "owning_section": 13,
+          "target": {
+            "bind": 0,
+            "index": 10,
+            "name": "",
+            "shndx": 6,
+            "size": 0,
+            "type": 3,
+            "value": 0
+          },
+          "type": 1
+        },
+        {
+          "addend": 104,
+          "offset": 8,
+          "owning_section": 13,
+          "target": {
+            "bind": 0,
+            "index": 63,
+            "name": "",
+            "shndx": 7,
+            "size": 0,
+            "type": 3,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "pointer_strings": [
+        {
+          "offset": 0,
+          "strings": {
+            "exact_source_path_change": true,
+            "new_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f646f63732f766572696669636174696f6e2f65766964656e63652f76656c6f636974792d696e74657276656e74696f6e2d32303236313032332d362f6d31342d66696c652d6c616e65732f6b65726e656c2d73797363616c6c2f6e65772d77696e646f772d736f757263652d33372d636f686572656e742d6c69666574696d652d776f726b65722d77686f6c652d727573742d736f757263652d312f626f756e6465642d7072656772616e742d636f7272656374696f6e2d312f63616e6469646174652f6b65726e656c2f73797363616c6c2e6300",
+            "old_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f646f63732f766572696669636174696f6e2f65766964656e63652f76656c6f636974792d696e74657276656e74696f6e2d32303236313032332d362f6d31342d66696c652d6c616e65732f7838362d6370752f6e65772d77696e646f772d736f757263652d31382d63757272656e743238392d756e696f6e2d736f757263652d312f7175616c69666965642d676574736967696e666f2d63757272656e743239302d737563636573736f722d312f736f757263652f6b65726e656c2f73797363616c6c2e6300"
+          },
+          "type": 1
+        },
+        {
+          "offset": 8,
+          "strings": {
+            "exact_source_path_change": false,
+            "new_hex": "7574696c5f74687265616400",
+            "old_hex": "7574696c5f74687265616400"
+          },
+          "type": 1
+        }
+      ],
+      "role": "exact_ddebug_source_line",
+      "type": 25
+    },
+    {
+      "addend": 0,
+      "machine_sha256": "50dbabc49b24aa97661b1cfaea2457aab8d3c6c0b919f9771dcd933b212bf066",
+      "new_name": "util_show_syscall_profile",
+      "offset": 742,
+      "old_name": "util_show_syscall_profile",
+      "role": "exact_defined_function",
+      "size": 278,
+      "type": 25
+    },
+    {
+      "addend": 0,
+      "exact_source_call": "\tdkprintf(\"%s: mcexec worker tid=%d\\n\", __FUNCTION__, thread->uti_refill_tid);",
+      "new_bytes_hex": "000000000000000000000000000000000000000000000000ea6e000000000000",
+      "new_logical_line": 28394,
+      "new_name": "ddebug.17944",
+      "new_pointer_RELA": [
+        {
+          "addend": 40,
+          "offset": 0,
+          "owning_section": 9,
+          "target": {
+            "bind": 0,
+            "index": 10,
+            "name": "",
+            "shndx": 6,
+            "size": 0,
+            "type": 3,
+            "value": 0
+          },
+          "type": 1
+        },
+        {
+          "addend": 104,
+          "offset": 8,
+          "owning_section": 9,
+          "target": {
+            "bind": 0,
+            "index": 63,
+            "name": "",
+            "shndx": 7,
+            "size": 0,
+            "type": 3,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "offset": 773,
+      "old_bytes_hex": "000000000000000000000000000000000000000000000000cf6e000000000000",
+      "old_logical_line": 28367,
+      "old_name": "ddebug.17894",
+      "old_pointer_RELA": [
+        {
+          "addend": 40,
+          "offset": 0,
+          "owning_section": 13,
+          "target": {
+            "bind": 0,
+            "index": 10,
+            "name": "",
+            "shndx": 6,
+            "size": 0,
+            "type": 3,
+            "value": 0
+          },
+          "type": 1
+        },
+        {
+          "addend": 104,
+          "offset": 8,
+          "owning_section": 13,
+          "target": {
+            "bind": 0,
+            "index": 63,
+            "name": "",
+            "shndx": 7,
+            "size": 0,
+            "type": 3,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "pointer_strings": [
+        {
+          "offset": 0,
+          "strings": {
+            "exact_source_path_change": true,
+            "new_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f646f63732f766572696669636174696f6e2f65766964656e63652f76656c6f636974792d696e74657276656e74696f6e2d32303236313032332d362f6d31342d66696c652d6c616e65732f6b65726e656c2d73797363616c6c2f6e65772d77696e646f772d736f757263652d33372d636f686572656e742d6c69666574696d652d776f726b65722d77686f6c652d727573742d736f757263652d312f626f756e6465642d7072656772616e742d636f7272656374696f6e2d312f63616e6469646174652f6b65726e656c2f73797363616c6c2e6300",
+            "old_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f646f63732f766572696669636174696f6e2f65766964656e63652f76656c6f636974792d696e74657276656e74696f6e2d32303236313032332d362f6d31342d66696c652d6c616e65732f7838362d6370752f6e65772d77696e646f772d736f757263652d31382d63757272656e743238392d756e696f6e2d736f757263652d312f7175616c69666965642d676574736967696e666f2d63757272656e743239302d737563636573736f722d312f736f757263652f6b65726e656c2f73797363616c6c2e6300"
+          },
+          "type": 1
+        },
+        {
+          "offset": 8,
+          "strings": {
+            "exact_source_path_change": false,
+            "new_hex": "7574696c5f74687265616400",
+            "old_hex": "7574696c5f74687265616400"
+          },
+          "type": 1
+        }
+      ],
+      "role": "exact_ddebug_source_line",
+      "type": 25
+    },
+    {
+      "addend": 0,
+      "bind": 1,
+      "new_name": "kfree_tracked",
+      "offset": 816,
+      "old_name": "kfree_tracked",
+      "role": "same_named_import_or_common",
+      "size": 0,
+      "symbol_type": 0,
+      "type": 31,
+      "value": 0
+    },
+    {
+      "addend": 0,
+      "exact_source_call": "\t\t\tdkprintf(\"%s: exit_group, tid=%d,rc=%lx\\n\", __FUNCTION__, thread->tid, rc);",
+      "new_bytes_hex": "000000000000000000000000000000000000000000000000f46e000000000000",
+      "new_logical_line": 28404,
+      "new_name": "ddebug.17945",
+      "new_pointer_RELA": [
+        {
+          "addend": 40,
+          "offset": 0,
+          "owning_section": 9,
+          "target": {
+            "bind": 0,
+            "index": 10,
+            "name": "",
+            "shndx": 6,
+            "size": 0,
+            "type": 3,
+            "value": 0
+          },
+          "type": 1
+        },
+        {
+          "addend": 104,
+          "offset": 8,
+          "owning_section": 9,
+          "target": {
+            "bind": 0,
+            "index": 63,
+            "name": "",
+            "shndx": 7,
+            "size": 0,
+            "type": 3,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "offset": 893,
+      "old_bytes_hex": "000000000000000000000000000000000000000000000000d96e000000000000",
+      "old_logical_line": 28377,
+      "old_name": "ddebug.17895",
+      "old_pointer_RELA": [
+        {
+          "addend": 40,
+          "offset": 0,
+          "owning_section": 13,
+          "target": {
+            "bind": 0,
+            "index": 10,
+            "name": "",
+            "shndx": 6,
+            "size": 0,
+            "type": 3,
+            "value": 0
+          },
+          "type": 1
+        },
+        {
+          "addend": 104,
+          "offset": 8,
+          "owning_section": 13,
+          "target": {
+            "bind": 0,
+            "index": 63,
+            "name": "",
+            "shndx": 7,
+            "size": 0,
+            "type": 3,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "pointer_strings": [
+        {
+          "offset": 0,
+          "strings": {
+            "exact_source_path_change": true,
+            "new_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f646f63732f766572696669636174696f6e2f65766964656e63652f76656c6f636974792d696e74657276656e74696f6e2d32303236313032332d362f6d31342d66696c652d6c616e65732f6b65726e656c2d73797363616c6c2f6e65772d77696e646f772d736f757263652d33372d636f686572656e742d6c69666574696d652d776f726b65722d77686f6c652d727573742d736f757263652d312f626f756e6465642d7072656772616e742d636f7272656374696f6e2d312f63616e6469646174652f6b65726e656c2f73797363616c6c2e6300",
+            "old_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f646f63732f766572696669636174696f6e2f65766964656e63652f76656c6f636974792d696e74657276656e74696f6e2d32303236313032332d362f6d31342d66696c652d6c616e65732f7838362d6370752f6e65772d77696e646f772d736f757263652d31382d63757272656e743238392d756e696f6e2d736f757263652d312f7175616c69666965642d676574736967696e666f2d63757272656e743239302d737563636573736f722d312f736f757263652f6b65726e656c2f73797363616c6c2e6300"
+          },
+          "type": 1
+        },
+        {
+          "offset": 8,
+          "strings": {
+            "exact_source_path_change": false,
+            "new_hex": "7574696c5f74687265616400",
+            "old_hex": "7574696c5f74687265616400"
+          },
+          "type": 1
+        }
+      ],
+      "role": "exact_ddebug_source_line",
+      "type": 25
+    },
+    {
+      "addend": 0,
+      "machine_sha256": "3bc552611dcbc0d251781f3fdd7f8c63b0b310356d16a07051caf1d34c9ee0d0",
+      "new_name": "terminate",
+      "offset": 945,
+      "old_name": "terminate",
+      "role": "exact_defined_function",
+      "size": 3892,
+      "type": 25
+    },
+    {
+      "addend": 0,
+      "exact_source_call": "\t\t\tdkprintf(\"%s: exit or killed by signal, pid=%d,tid=%d,rc=%lx\\n\", __FUNCTION__, thread->proc->pid, thread->tid, rc);",
+      "new_bytes_hex": "000000000000000000000000000000000000000000000000f96e000000000000",
+      "new_logical_line": 28409,
+      "new_name": "ddebug.17946",
+      "new_pointer_RELA": [
+        {
+          "addend": 40,
+          "offset": 0,
+          "owning_section": 9,
+          "target": {
+            "bind": 0,
+            "index": 10,
+            "name": "",
+            "shndx": 6,
+            "size": 0,
+            "type": 3,
+            "value": 0
+          },
+          "type": 1
+        },
+        {
+          "addend": 104,
+          "offset": 8,
+          "owning_section": 9,
+          "target": {
+            "bind": 0,
+            "index": 63,
+            "name": "",
+            "shndx": 7,
+            "size": 0,
+            "type": 3,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "offset": 1034,
+      "old_bytes_hex": "000000000000000000000000000000000000000000000000de6e000000000000",
+      "old_logical_line": 28382,
+      "old_name": "ddebug.17896",
+      "old_pointer_RELA": [
+        {
+          "addend": 40,
+          "offset": 0,
+          "owning_section": 13,
+          "target": {
+            "bind": 0,
+            "index": 10,
+            "name": "",
+            "shndx": 6,
+            "size": 0,
+            "type": 3,
+            "value": 0
+          },
+          "type": 1
+        },
+        {
+          "addend": 104,
+          "offset": 8,
+          "owning_section": 13,
+          "target": {
+            "bind": 0,
+            "index": 63,
+            "name": "",
+            "shndx": 7,
+            "size": 0,
+            "type": 3,
+            "value": 0
+          },
+          "type": 1
+        }
+      ],
+      "pointer_strings": [
+        {
+          "offset": 0,
+          "strings": {
+            "exact_source_path_change": true,
+            "new_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f646f63732f766572696669636174696f6e2f65766964656e63652f76656c6f636974792d696e74657276656e74696f6e2d32303236313032332d362f6d31342d66696c652d6c616e65732f6b65726e656c2d73797363616c6c2f6e65772d77696e646f772d736f757263652d33372d636f686572656e742d6c69666574696d652d776f726b65722d77686f6c652d727573742d736f757263652d312f626f756e6465642d7072656772616e742d636f7272656374696f6e2d312f63616e6469646174652f6b65726e656c2f73797363616c6c2e6300",
+            "old_hex": "2f686f6d652f686f6c64656e2f6d636b65726e656c2f646f63732f766572696669636174696f6e2f65766964656e63652f76656c6f636974792d696e74657276656e74696f6e2d32303236313032332d362f6d31342d66696c652d6c616e65732f7838362d6370752f6e65772d77696e646f772d736f757263652d31382d63757272656e743238392d756e696f6e2d736f757263652d312f7175616c69666965642d676574736967696e666f2d63757272656e743239302d737563636573736f722d312f736f757263652f6b65726e656c2f73797363616c6c2e6300"
+          },
+          "type": 1
+        },
+        {
+          "offset": 8,
+          "strings": {
+            "exact_source_path_change": false,
+            "new_hex": "7574696c5f74687265616400",
+            "old_hex": "7574696c5f74687265616400"
+          },
+          "type": 1
+        }
+      ],
+      "role": "exact_ddebug_source_line",
+      "type": 25
+    },
+    {
+      "addend": 0,
+      "machine_sha256": "7c770e3a2150ae427f828bd327e3854d26bebb0e6f1119ee2003602b95af5c91",
+      "new_name": "do_exit",
+      "offset": 1056,
+      "old_name": "do_exit",
+      "role": "exact_defined_function",
+      "size": 997,
+      "type": 25
+    },
+    {
+      "addend": 0,
+      "bytes_hex": "7574696c5f74687265616400",
+      "new_name": "__FUNCTION__.17943",
+      "offset": 1082,
+      "old_name": "__FUNCTION__.17893",
+      "role": "exact_function_name",
+      "type": 25
+    },
+    {
+      "addend": 0,
+      "bind": 1,
+      "new_name": "kprintf",
+      "offset": 1092,
+      "old_name": "kprintf",
+      "role": "same_named_import_or_common",
+      "size": 0,
+      "symbol_type": 0,
+      "type": 31,
+      "value": 0
+    },
+    {
+      "addend": 0,
+      "new_name": ".LC118",
+      "offset": 1109,
+      "old_name": ".LC118",
+      "role": "exact_compiler_literal",
+      "strings": {
+        "exact_source_path_change": false,
+        "new_hex": "25733a206d636578656320776f726b6572207469643d25640a00",
+        "old_hex": "25733a206d636578656320776f726b6572207469643d25640a00"
+      },
+      "type": 25
+    },
+    {
+      "addend": 0,
+      "bytes_hex": "7574696c5f74687265616400",
+      "new_name": "__FUNCTION__.17943",
+      "offset": 1138,
+      "old_name": "__FUNCTION__.17893",
+      "role": "exact_function_name",
+      "type": 25
+    },
+    {
+      "addend": 0,
+      "bind": 1,
+      "new_name": "kprintf",
+      "offset": 1154,
+      "old_name": "kprintf",
+      "role": "same_named_import_or_common",
+      "size": 0,
+      "symbol_type": 0,
+      "type": 31,
+      "value": 0
+    },
+    {
+      "addend": 0,
+      "new_name": ".LC117",
+      "offset": 1171,
+      "old_name": ".LC117",
+      "role": "exact_compiler_literal",
+      "strings": {
+        "exact_source_path_change": false,
+        "new_hex": "25733a2072657475726e65642066726f6d20646f5f73797363616c6c2c7469643d25642c72633d256c780a00",
+        "old_hex": "25733a2072657475726e65642066726f6d20646f5f73797363616c6c2c7469643d25642c72633d256c780a00"
+      },
+      "type": 25
+    },
+    {
+      "addend": 0,
+      "bind": 1,
+      "new_name": "syscall_proxy_dead_result",
+      "offset": 1202,
+      "old_name": "syscall_proxy_dead_result",
+      "role": "same_named_import_or_common",
+      "size": 0,
+      "symbol_type": 0,
+      "type": 31,
+      "value": 0
+    },
+    {
+      "addend": 0,
+      "bind": 1,
+      "new_name": "kprintf",
+      "offset": 1237,
+      "old_name": "kprintf",
+      "role": "same_named_import_or_common",
+      "size": 0,
+      "symbol_type": 0,
+      "type": 31,
+      "value": 0
+    },
+    {
+      "addend": 0,
+      "bytes_hex": "7574696c5f74687265616400",
+      "new_name": "__FUNCTION__.17943",
+      "offset": 1256,
+      "old_name": "__FUNCTION__.17893",
+      "role": "exact_function_name",
+      "type": 25
+    },
+    {
+      "addend": 0,
+      "new_name": ".LC121",
+      "offset": 1270,
+      "old_name": ".LC121",
+      "role": "exact_compiler_literal",
+      "strings": {
+        "exact_source_path_change": false,
+        "new_hex": "25733a2072656c656173655f68616e646c65722c7069643d25642c7469643d25642c72633d256c780a00",
+        "old_hex": "25733a2072656c656173655f68616e646c65722c7069643d25642c7469643d25642c72633d256c780a00"
+      },
+      "type": 25
+    },
+    {
+      "addend": 0,
+      "bytes_hex": "7574696c5f74687265616400",
+      "new_name": "__FUNCTION__.17943",
+      "offset": 1314,
+      "old_name": "__FUNCTION__.17893",
+      "role": "exact_function_name",
+      "type": 25
+    },
+    {
+      "addend": 0,
+      "bind": 1,
+      "new_name": "kprintf",
+      "offset": 1330,
+      "old_name": "kprintf",
+      "role": "same_named_import_or_common",
+      "size": 0,
+      "symbol_type": 0,
+      "type": 31,
+      "value": 0
+    },
+    {
+      "addend": 0,
+      "new_name": ".LC122",
+      "offset": 1347,
+      "old_name": ".LC122",
+      "role": "exact_compiler_literal",
+      "strings": {
+        "exact_source_path_change": false,
+        "new_hex": "25733a204552524f523a20646f5f73797363616c6c2829206661696c65642028256c64290a00",
+        "old_hex": "25733a204552524f523a20646f5f73797363616c6c2829206661696c65642028256c64290a00"
+      },
+      "type": 25
+    },
+    {
+      "addend": 0,
+      "bytes_hex": "7574696c5f74687265616400",
+      "new_name": "__FUNCTION__.17943",
+      "offset": 1378,
+      "old_name": "__FUNCTION__.17893",
+      "role": "exact_function_name",
+      "type": 25
+    },
+    {
+      "addend": 0,
+      "bind": 1,
+      "new_name": "kprintf",
+      "offset": 1394,
+      "old_name": "kprintf",
+      "role": "same_named_import_or_common",
+      "size": 0,
+      "symbol_type": 0,
+      "type": 31,
+      "value": 0
+    },
+    {
+      "addend": 0,
+      "new_name": ".LC119",
+      "offset": 1411,
+      "old_name": ".LC119",
+      "role": "exact_compiler_literal",
+      "strings": {
+        "exact_source_path_change": false,
+        "new_hex": "25733a20657869745f67726f75702c207469643d25642c72633d256c780a00",
+        "old_hex": "25733a20657869745f67726f75702c207469643d25642c72633d256c780a00"
+      },
+      "type": 25
+    },
+    {
+      "addend": 0,
+      "bind": 1,
+      "new_name": "kprintf",
+      "offset": 1455,
+      "old_name": "kprintf",
+      "role": "same_named_import_or_common",
+      "size": 0,
+      "symbol_type": 0,
+      "type": 31,
+      "value": 0
+    },
+    {
+      "addend": 0,
+      "bytes_hex": "7574696c5f74687265616400",
+      "new_name": "__FUNCTION__.17943",
+      "offset": 1474,
+      "old_name": "__FUNCTION__.17893",
+      "role": "exact_function_name",
+      "type": 25
+    },
+    {
+      "addend": 0,
+      "new_name": ".LC120",
+      "offset": 1488,
+      "old_name": ".LC120",
+      "role": "exact_compiler_literal",
+      "strings": {
+        "exact_source_path_change": false,
+        "new_hex": "25733a2065786974206f72206b696c6c6564206279207369676e616c2c207069643d25642c7469643d25642c72633d256c780a00",
+        "old_hex": "25733a2065786974206f72206b696c6c6564206279207369676e616c2c207069643d25642c7469643d25642c72633d256c780a00"
+      },
+      "type": 25
+    }
+  ]
+}

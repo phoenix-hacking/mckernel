@@ -1,0 +1,43 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "OPEN_HOST_PARTIAL_RETAINS_DATA_NOT_GNU_RETAIN_SEMANTICS",
+  "reviewer": "/root/frontend_review",
+  "recorded_by": "/root",
+  "implementation_ownership": false,
+  "actual_partial_sha256": "61db9cfcd1903afda3162c82c0899a06d420f5cb86164d9aa5391e2e9e1a7781",
+  "first_failure": {
+    "caller": "sched_do_migrate_public",
+    "relative_offset": 2747,
+    "relocation_type": 1,
+    "addend": 24,
+    "target": "x86_interrupt_log_debug",
+    "target_bytes": 32,
+    "old_section_flags": 2097155,
+    "new_section_flags": 3
+  },
+  "other_affected_targets": [
+    "REPLACE_TID_DEBUG",
+    "RELEASE_TID_DEBUG",
+    "RELEASE_FP_REGS_DEBUG"
+  ],
+  "exact_mapping": {
+    "output_verbose_bytes": 12448,
+    "output_sha256": "7fc12e1a2462aefb5be309220a87a8a209b173c5822d4fb947c734113da5cd4f",
+    "input_sections": 105,
+    "named_allocation_symbols": 253,
+    "outgoing_R64_pointers": 778,
+    "all_bytes_symbols_pointer_targets_and_strings_map_exactly": true
+  },
+  "linker": {
+    "path": "/usr/bin/ld",
+    "bytes": 1732192,
+    "sha256": "476b24d5cc1fef54f80412d06e7430b2dcf4e2b6f1525ee17e6eaaf16b28a00f",
+    "embedded_identity": "GNU Binutils for Ubuntu 2.34",
+    "actual_operation": "plain ld -r five exact inputs"
+  },
+  "qualification": false,
+  "retention_or_GC_credit": false,
+  "mask_or_guard_waiver": false,
+  "observer_or_compiler_or_link_replay": false,
+  "next": "Actual selected default linker/script final required allocations/pointers/consumer and retention evidence; current290 default/native independent."
+}
