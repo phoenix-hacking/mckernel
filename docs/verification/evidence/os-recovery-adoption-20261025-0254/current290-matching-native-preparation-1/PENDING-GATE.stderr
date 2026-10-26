@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-matching-native-preparation-1/stage_current290_startup.py", line 56, in <module>
+    parser=argparse.ArgumentParser();parser.add_argument('--inputs',required=True);parser.add_argument('--inputs-sha256',required=True);a=parser.parse_args();raise SystemExit(stage(a.inputs,a.inputs_sha256))
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-matching-native-preparation-1/stage_current290_startup.py", line 27, in stage
+    need(d['current_image_abi_link_qualification'] is not None,'current-image-ABI-link-qualification-pending')
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-matching-native-preparation-1/stage_current290_startup.py", line 16, in need
+    if not ok:raise ValueError(why)
+ValueError: current-image-ABI-link-qualification-pending

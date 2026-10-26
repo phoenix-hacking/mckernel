@@ -1,3 +1,93 @@
+## Postbuild current state accepted; matching native stage ready — 2026-10-26T22:00Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual postbuild observer3cefea1b returned0/.265s, independentlyaccepted:
+CURRENT290-BUILD3-INDEPENDENT-POSTJOIN-ACCEPTANCE.json. Both recordedbuildactors
+absent, two new27:4 probes closed, retainedCID5487exited0/Pid0; actualoutputSHAs
+and scratchmountUUID/capacity unchanged. This is not futureexecutionadmission.
+Currentclone witness substitution independentlyaccepted exactsupplementc614d36c;
+worker default_witness_gate implements strictprofile-only assertion replacement,
+preserving originalgenericFAIL/allotherpanic/import/logger guards. No recompiles.
+
+Root actualoffline nativepackage21.06s rc0, manifest760221c8/startupa75885f7;
+onlybasekernelrecord replaced byimagee6a82, acceptedmodules/oracle untouched.
+Native staticbindings541cbdce independentlyPASS_STATIC_NOT_EXECUTION; finalstrictgate,
+freshresources/physical/account+Rootgrant+exactexecutionreview stillrequired.
+Rootnext exactargv under ROOT-CURRENT290-NATIVE-STARTUP-ADMISSION-1, freshCAPTURE
+prepared, ownerNOTLAUNCHED/guest0. SDK7 earliestcutoffcompositionaf1e529c reuses
+parent6341adapter/14tests;3focusedpurechecksPASS, all7argv/providers unchanged,
+livefieldsNULL. No native/default/file/Cretirement credit or95percentclaim.
+Samefixedend/creditguard, parentalone handles auxiliary monitor/poller repair.
+See ENGINEERING-REVIEW-20261026T2159.json for measuredscope and unknownlatencies.
+
+## Explicit manual continuation — 2026-10-26T21:55:59Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+User invocation20261026T215559Z-7d46d297 resumes samegoal/window/accountguard;
+prior shutdown banners are historical. Fixedend2026-10-27T11:24:50Z unchanged.
+Phone helper actualcheck: disabledphone-001, remotecommitadd05893; no engineering
+branch checkout. All pushes use scripts/push_os_checkpoint.py wrapper.
+BUILD3 threepassedcommands/nonce d115c3b6/CID5487 retained; no compiler replay.
+Root ordinary CPU6/AS2GiB archive transformation returned0 in21.06s, fresh
+/scratch/n290startup1 selects actuale6a82image with onlybasekernelrecord changed;
+modules/startuporacle preserved. Exact ACTUAL-STAGE-RESULT-20261026T2200.json
+under current290-matching-native-preparation-1; guest/native runs0.
+Root postbuild checker corrected privately, source3cefea1b, NOTRUN pending
+custody_release_review exactreadonlyrelease and clonewitness disposition.
+capture_finish binds actualstage manifest into same native profile; SDK7 owner
+reuses parent14test typedadapter, no duplicateport. Native/default acceptance
+and all newfile/Cretirements remain OPEN. Next actualpostjoin observation,
+independent defaultwitness disposition, then matching native admission/run.
+
+## Replacement ready for explicit user invocation — 2026-10-26T20:12Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Old campaign stopped; parent prepared, independently reviewed and installed the
+user-run replacement. Command: `python3 -B /home/holden/mckernel/scripts/start_os_campaign.py --run`.
+Read [operator handoff](RESTART-READY-20261026.md) for live agent logs and the remote
+GitHub phone file. No new campaign/model/build/guest/cleanup action was started.
+Same original thread, debit ledger and fixed end11:24:50UTC October27 retained.
+Actual saved-goal/turn read-only check PASS; saved stale hint was not cleared.
+23 installed offline +15 driver checks PASS, core350 earlier PASS unchanged;
+actual GitHub disabled-file check PASS0.6s without engineering Git/state changes.
+Native postbuild currentphysical and actual release remain pending as below.
+Use ready private M15 SDK/MM work rather than duplicating existing Rust. Engineering
+estimates remain about70% M14 and65–70% M15, low-confidence; practical35/35 unchanged.
+
+## PAUSED for explicit parent replacement — 2026-10-26T19:40Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+New dispatch and workload admission STOPPED on current user request. Parent owns
+controller replacement and subsequent Git; no new commit/push races this handoff.
+Last already pushed/fetched checkpoint7c02a2ce910dcc5458edd90016ffba8439b31268
+retains all3 successful compiler/link outputs and original failed admissions.
+Three-command build3 nonce d115c3b6c48b45c0afb6f247106bf30f CONSUMED, tool35276
+joined0, holder1224701/start84038706/FD3 closed own description after runner1224936/
+start84046403 joined0. RetainedCID5487cf9508267dd943b917980bffdfd6adcf3c4ca721112a84beaa3d892614b2
+last actual exited0/Runningfalse/Pid0/noOOM. No guest/native job started. Do not
+replay commands, old grants or cleanup. Original cleanupf597 accepted; build3
+postjoin currentphysical NOT RUN and must be completed before next admission.
+
+Unrun checker current290-build3-postjoin-current-physical-1/check_current.py needs
+reviewer corrections: exact CID/name/image/claim bindings, fullmutex metadata,
+mountUUID and refusal of numericPIDreuse. No PASS or runtime authority for draft.
+Image ELF/link/requiredsymbols and changedobject/logger/storage checks PASS;
+original clone_thread undefined-provider witness FAIL retained; narrow additive
+source/object/finalcode proof frozen PASS (two exact R64 pointers); independent
+disposition of obsolete witness pending, no weakening/default acceptance.
+Native preparation frozen current290-matching-native-preparation-1; next ordinary
+packaging command in STAGE-ARGV.PENDING.json, NOT RUN. Matching startup.argv-empty
+uses app,A,empty,B, accepted4vCPU/8192 profile and existing SDK5/68module tuple.
+No module rebuild required. Finalimage manifest/ABI/currentphysical/resource and
+independent actual execution release remain pending. SDK7 private adapter is untested SOURCEONLY/NOTREADY; stopped cursor retained.
+Parent READY.TYPED-ADAPTER.SOURCE-ONLY.json14tests/MMfixture READY-SOURCE-ONLY.json
+remain uncompiled/unreleased. Parent owns phone instruction file/restart work.
+
+Fixedend2026-10-27T11:24:50Z, samegoal/creditguard unchanged. M14/M15 OPEN,
+practical35/35 unchanged; no new acceptedpackage/default/native/file/Cclosures.
+Exact stop record: ../evidence/os-recovery-adoption-20261025-0254/SHUTDOWN-20261026T1940-EXPLICIT-USER.json.
+Subsequent launcher invocation authorizes continuation; do not resume in shutdown.
+
 ## Current290 actual incremental build passed — 2026-10-26T19:30Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

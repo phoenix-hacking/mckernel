@@ -1,0 +1,32 @@
+--- retained/qualify_actual_build3.py
++++ private/qualify_actual_build3_profile.py
+@@ -23,6 +23,8 @@
+  if text=='/src/kernel/rust/syscall_policy.rs':return PolicyPath()
+  if text.startswith('/seed-build/'):return seed/text.removeprefix('/seed-build/')
+  return HostPath(value)
++from profile_clone_witness import validate
++profile_proof=json.loads((D/'CLONE-FINAL-POINTER-AND-WARNINGS.json').read_text())
+ source=DRIVER.read_bytes();assert hashlib.sha256(source).hexdigest()=='9d2d39a0f4a28dc15638fe2c1a01052e64886078d39c3b1e7bf57eccf68bbdfd'
+ tree=ast.parse(source)
+ names={'_fail','_sha256','_canonical','_regular','_artifact','_reuse_require','_reuse_elf_owning_relocations','_reuse_elf_object_bytes','_reuse_elf_cstring','_reuse_elf_descriptor','_reuse_elf_function','_reuse_elf_undefined','_reuse_elf_panic_targets','_reuse_validate_changed_rust_object','_no_core_panic_undefined'}
+@@ -50,9 +52,18 @@
+   storage[name]=dict(Rust_symbol=v,section=sec,initial_hex=bytes(size).hex(),process_has_no_definition=True)
+  report['phases']['three_Rust_data_providers']=storage
+  undefined=subprocess.run(['/usr/bin/nm','--undefined-only','--demangle',str(B/'kernel/rust/mckernel_rust.o')],capture_output=True,text=True,check=True)
+- assert not undefined.stderr;report['phases']['production_panic_gate']=ns['_no_core_panic_undefined'](undefined.stdout)
++ assert not undefined.stderr;report['phases']['production_panic_gate']=validate(undefined.stdout,profile_proof)
+  (D/'production-rust-undefined.nm').write_text(undefined.stdout)
+- report['status']='PASS_ACTUAL_PRODUCER_RUST_STORAGE_PANIC_LOGGER_GATES_IMAGE_SUFFIX_PENDING'
++ old=Elf(seed/'kernel/rust/mckernel_rust.o')
++ for elf in (old,rust):
++  clone=ns['_reuse_elf_function'](elf,'clone_thread')
++  assert clone['bind']==1 and clone['type']==2 and clone['size']==27 and clone['shndx']!=0
++ expected=(E/'current290-actual-build3-qualification-source-1/new-production-rust-undefined.nm').read_text()
++ assert undefined.stdout==expected, 'all other provider witnesses must remain exact'
++ report['phases']['current_profile_clone_source_object_final_proof']=profile_proof
++ report['phases']['both_old_new_clone_global_defined_27B']=True
++ report['phases']['all_other_undefined_provider_witnesses_exact']=True
++ report['status']='PASS_ACTUAL_CURRENT290_PROFILE_PRODUCER_RUST_STORAGE_PANIC_LOGGER_CLONE_FINAL_GATES'
+ except BaseException as error:
+  report['status']='FAIL_FIRST_ACTUAL_VALIDATOR_PRESERVED';report['first_failure']=repr(error);report['traceback']=traceback.format_exc()
+ write(D/'RESULT.json',report)

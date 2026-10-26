@@ -1,0 +1,52 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_THREE_FOCUSED_PURE_INTEGRATION_CHECKS",
+  "command": [
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--",
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-sdk7-current-authority-composition-source-1/test_current_window_integration.py"
+  ],
+  "tests": 3,
+  "cpu_affinity": [
+    0
+  ],
+  "jobs": 1,
+  "address_space_bytes": 2147483648,
+  "reported_seconds": 0.025,
+  "returncode": 0,
+  "stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-sdk7-current-authority-composition-source-1/integration-pure.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-sdk7-current-authority-composition-source-1/integration-pure.stderr",
+    "bytes": 374,
+    "sha256": "27af4add1b4047299e4f5200e9f9e8436da103788a93c6ce4bda544c2e91ba87"
+  },
+  "test_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-sdk7-current-authority-composition-source-1/test_current_window_integration.py",
+    "bytes": 2926,
+    "sha256": "86ff67490263b1b66686006282843927f3f63b0ead909ab13250563538a9ed7d"
+  },
+  "preserved_first_fixture_error": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-sdk7-current-authority-composition-source-1/FIRST-INTEGRATION-FIXTURE-FAILURE.json",
+    "bytes": 583,
+    "sha256": "f2157005fd48727cd39aabb40631f1b6159790e5437300d78be1b0b169b2416e"
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-sdk7-current-authority-composition-source-1/COMPOSITION.SOURCE-ONLY.NOT-RELEASED.json",
+    "bytes": 11321,
+    "sha256": "e387a6dab83b9bbde6bb6f22781348c74e91f833d01e1a08c7aeaec9a6443f33"
+  },
+  "source_only": true,
+  "actual_sdk_commands": 0,
+  "actual_query_calls": 0,
+  "root_native_docker_capture_cleanup_or_git_actions": 0
+}

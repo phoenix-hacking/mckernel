@@ -1,0 +1,92 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "review_interval": 1494209,
+  "observed_at": "2026-10-26T22:00:02.490686+00:00",
+  "bounded_observations": [
+    {
+      "at": 1793042912.8631527,
+      "thread_id": "01a170fb-57c3-7ab3-862d-8005bef92a63",
+      "goal_status": "active",
+      "phase": "running",
+      "resources": {
+        "disks": {
+          "/home/holden/mckernel": {
+            "available_bytes": 151832113152,
+            "ismount": false,
+            "st_dev": 66306
+          },
+          "/home/holden/mckernel-work/scratch": {
+            "available_bytes": 14100344832,
+            "ismount": true,
+            "st_dev": 1828
+          }
+        },
+        "load_average": [
+          1.16,
+          0.95,
+          0.94
+        ],
+        "memory": {
+          "MemAvailable_kib": 27411496,
+          "MemTotal_kib": 32421580
+        }
+      }
+    },
+    {
+      "at": 1793051979.7970436,
+      "thread_id": "01a170fb-57c3-7ab3-862d-8005bef92a63",
+      "goal_status": "active",
+      "phase": "running",
+      "resources": {
+        "disks": {
+          "/home/holden/mckernel": {
+            "available_bytes": 151561273344,
+            "ismount": false,
+            "st_dev": 66306
+          },
+          "/home/holden/mckernel-work/scratch": {
+            "available_bytes": 14073167872,
+            "ismount": true,
+            "st_dev": 1828
+          }
+        },
+        "load_average": [
+          1.12,
+          0.97,
+          0.78
+        ],
+        "memory": {
+          "MemAvailable_kib": 26780700,
+          "MemTotal_kib": 32421580
+        }
+      }
+    }
+  ],
+  "new_compiler_commands": 0,
+  "retained_passed_compiler_commands": 3,
+  "retained_first_compiler": "2026-10-26T19:30:19.713586Z",
+  "new_native_apps": 0,
+  "new_accepted_packages": 0,
+  "new_default_acceptances": 0,
+  "new_whole_file_closures": 0,
+  "new_C_retirements": 0,
+  "new_results": [
+    "Actual offline image-only native archive transformation rc0 in21.06s",
+    "Actual build3 postjoin currentphysical independentlyaccepted rc0 .265s",
+    "Independent currentprofile clonewitness substitution accepted; strictgate executable correction pending"
+  ],
+  "queue_to_compiler_seconds": null,
+  "blocked_duration_seconds": null,
+  "largest_remaining_handoff": "Strict profilegate result to sole reviewer exact native release; static profile already reviewed",
+  "concrete_adjustment": "Reuse completed build3, run archive transformation in parallel with postjoin/witness checks; prebind native staticpacket before final fresh liveclock",
+  "active_owners": {
+    "root": "Canonical integration/native actualexecution",
+    "default_witness_gate": "Strictprofile witness correction + retained-object validation",
+    "custody_release_review": "Sole exactnative execution reviewer when profilegate ready",
+    "capture_finish": "Completed actualstagebinding",
+    "partial_runtime_finish": "CompletedSDK7typedcomposition; livefieldsNULL"
+  },
+  "M14_M15": "OPEN",
+  "practical": "35/35 unchanged",
+  "velocity_buckets": "Original nonoverlapping30minutes; no95percentclaim"
+}

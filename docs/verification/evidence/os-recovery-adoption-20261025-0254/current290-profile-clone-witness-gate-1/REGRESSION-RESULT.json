@@ -1,0 +1,178 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS",
+  "controls": [
+    {
+      "case": "exact retained current profile",
+      "result": "PASS_ACCEPTED"
+    },
+    {
+      "case": "nm accepted type U",
+      "result": "PASS_ACCEPTED"
+    },
+    {
+      "case": "nm accepted type w",
+      "result": "PASS_ACCEPTED"
+    },
+    {
+      "case": "nm accepted type v",
+      "result": "PASS_ACCEPTED"
+    },
+    {
+      "case": "empty",
+      "result": "PASS_REJECTED",
+      "reason": "production Rust current-profile defined provider witness"
+    },
+    {
+      "case": "blank row",
+      "result": "PASS_REJECTED",
+      "reason": "production Rust nm row format"
+    },
+    {
+      "case": "malformed missing name",
+      "result": "PASS_REJECTED",
+      "reason": "production Rust nm row format"
+    },
+    {
+      "case": "unsupported type",
+      "result": "PASS_REJECTED",
+      "reason": "production Rust nm row format"
+    },
+    {
+      "case": "clone U reintroduced",
+      "result": "PASS_REJECTED",
+      "reason": "production Rust current-profile defined provider witness"
+    },
+    {
+      "case": "clone weak reintroduced",
+      "result": "PASS_REJECTED",
+      "reason": "production Rust current-profile defined provider witness"
+    },
+    {
+      "case": "bounds panic",
+      "result": "PASS_REJECTED",
+      "reason": "unsupported production Rust core panic references: ['core::panicking::panic_bounds_check']"
+    },
+    {
+      "case": "unwrap panic",
+      "result": "PASS_REJECTED",
+      "reason": "unsupported production Rust core panic references: ['core::result::unwrap_failed']"
+    },
+    {
+      "case": "provider removed",
+      "result": "PASS_REJECTED",
+      "reason": "all other current-profile provider witnesses must remain exact"
+    },
+    {
+      "case": "provider added",
+      "result": "PASS_REJECTED",
+      "reason": "all other current-profile provider witnesses must remain exact"
+    },
+    {
+      "case": "provider duplicated",
+      "result": "PASS_REJECTED",
+      "reason": "all other current-profile provider witnesses must remain exact"
+    },
+    {
+      "case": "wrong source",
+      "result": "PASS_REJECTED",
+      "reason": "exact current290 clone source/object/final proof mismatch"
+    },
+    {
+      "case": "wrong new_Rust_object",
+      "result": "PASS_REJECTED",
+      "reason": "exact current290 clone source/object/final proof mismatch"
+    },
+    {
+      "case": "wrong new_process_object",
+      "result": "PASS_REJECTED",
+      "reason": "exact current290 clone source/object/final proof mismatch"
+    },
+    {
+      "case": "wrong new_image",
+      "result": "PASS_REJECTED",
+      "reason": "exact current290 clone source/object/final proof mismatch"
+    },
+    {
+      "case": "clone_thread_object_symbol wrong bind",
+      "result": "PASS_REJECTED",
+      "reason": "exact current290 clone source/object/final proof mismatch"
+    },
+    {
+      "case": "clone_thread_object_symbol wrong shndx",
+      "result": "PASS_REJECTED",
+      "reason": "exact current290 clone source/object/final proof mismatch"
+    },
+    {
+      "case": "clone_thread_object_symbol wrong size",
+      "result": "PASS_REJECTED",
+      "reason": "exact current290 clone source/object/final proof mismatch"
+    },
+    {
+      "case": "clone_thread_final_symbol wrong bind",
+      "result": "PASS_REJECTED",
+      "reason": "exact current290 clone source/object/final proof mismatch"
+    },
+    {
+      "case": "clone_thread_final_symbol wrong shndx",
+      "result": "PASS_REJECTED",
+      "reason": "exact current290 clone source/object/final proof mismatch"
+    },
+    {
+      "case": "clone_thread_final_symbol wrong size",
+      "result": "PASS_REJECTED",
+      "reason": "exact current290 clone source/object/final proof mismatch"
+    },
+    {
+      "case": "pointer 0 wrong type",
+      "result": "PASS_REJECTED",
+      "reason": "exact current290 clone source/object/final proof mismatch"
+    },
+    {
+      "case": "pointer 0 wrong offset",
+      "result": "PASS_REJECTED",
+      "reason": "exact current290 clone source/object/final proof mismatch"
+    },
+    {
+      "case": "pointer 0 wrong addend",
+      "result": "PASS_REJECTED",
+      "reason": "exact current290 clone source/object/final proof mismatch"
+    },
+    {
+      "case": "pointer 1 wrong type",
+      "result": "PASS_REJECTED",
+      "reason": "exact current290 clone source/object/final proof mismatch"
+    },
+    {
+      "case": "pointer 1 wrong offset",
+      "result": "PASS_REJECTED",
+      "reason": "exact current290 clone source/object/final proof mismatch"
+    },
+    {
+      "case": "pointer 1 wrong addend",
+      "result": "PASS_REJECTED",
+      "reason": "exact current290 clone source/object/final proof mismatch"
+    },
+    {
+      "case": "missing pointer",
+      "result": "PASS_REJECTED",
+      "reason": "exact current290 clone source/object/final proof mismatch"
+    },
+    {
+      "case": "no exact final bytes",
+      "result": "PASS_REJECTED",
+      "reason": "exact current290 clone source/object/final proof mismatch"
+    },
+    {
+      "case": "missing profile proof",
+      "result": "PASS_REJECTED",
+      "reason": "exact current290 clone source/object/final proof mismatch"
+    },
+    {
+      "case": "unchanged generic original failure preserved",
+      "result": "PASS_EXPECTED_ORIGINAL_FAILURE",
+      "reason": "production Rust undefined provider witness"
+    }
+  ],
+  "count": 35
+}

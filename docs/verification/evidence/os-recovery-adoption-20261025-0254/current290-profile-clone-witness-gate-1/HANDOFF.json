@@ -1,0 +1,145 @@
+{
+  "task_id": "current290-profile-clone-witness-gate-1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_READY_FOR_REVIEW_NOT_APPLICATION_ACCEPTANCE",
+  "environment": {
+    "cwd": "/home/holden/mckernel",
+    "cpu_affinity": [
+      0
+    ],
+    "max_address_space_bytes": 2147483648,
+    "cpu_seconds_per_command": 60,
+    "parallel_jobs": 1,
+    "compiler_native_root_Docker_Git": false
+  },
+  "checks": [
+    {
+      "argv": [
+        "taskset",
+        "-c",
+        "0",
+        "prlimit",
+        "--as=2147483648",
+        "--cpu=60",
+        "--",
+        "python3",
+        "-B",
+        "docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-profile-clone-witness-gate-1/test_profile_clone_witness.py"
+      ],
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "taskset",
+        "-c",
+        "0",
+        "prlimit",
+        "--as=2147483648",
+        "--cpu=60",
+        "--",
+        "python3",
+        "-B",
+        "docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-profile-clone-witness-gate-1/qualify_clone_pointer_and_warning_suffix.py"
+      ],
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "taskset",
+        "-c",
+        "0",
+        "prlimit",
+        "--as=2147483648",
+        "--cpu=60",
+        "--",
+        "python3",
+        "-B",
+        "docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-profile-clone-witness-gate-1/qualify_actual_build3_profile.py"
+      ],
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "taskset",
+        "-c",
+        "0",
+        "prlimit",
+        "--as=2147483648",
+        "--cpu=60",
+        "--",
+        "python3",
+        "-B",
+        "docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-profile-clone-witness-gate-1/qualify_actual_image_suffix.py"
+      ],
+      "returncode": 0
+    }
+  ],
+  "regressions": {
+    "total": 35,
+    "positive": 4,
+    "negative_rejections": 30,
+    "original_generic_expected_failure": 1
+  },
+  "retained_accepted_supplement": {
+    "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-actual-build3-qualification-source-1/CLONE-FINAL-POINTER-AND-WARNINGS.json",
+    "sha256": "c614d36c2d6aa96861376ae0d372c1a7ab5a7135f4ec1e2518ef80a88fadbe24"
+  },
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-profile-clone-witness-gate-1/RESULT.json",
+      "sha256": "8f9a3e16dc009d832e8651a0ed62e0a006d24ed59fcb459e1a0ccacac937c257",
+      "bytes": 25091
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-profile-clone-witness-gate-1/IMAGE-LINK-RESULT.json",
+      "sha256": "d21b629c3d20e1288925c7e0dbeb76df9bc364a73e1ed917503da793dc6a7647",
+      "bytes": 15301
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-profile-clone-witness-gate-1/REGRESSION-RESULT.json",
+      "sha256": "535127175ae2fb2a53eef0108abc9d5d5f00401c1dade773fd3fb3efbcf11c70",
+      "bytes": 5508
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-profile-clone-witness-gate-1/CLONE-FINAL-POINTER-AND-WARNINGS.json",
+      "sha256": "c614d36c2d6aa96861376ae0d372c1a7ab5a7135f4ec1e2518ef80a88fadbe24",
+      "bytes": 18933
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-profile-clone-witness-gate-1/profile_clone_witness.py",
+      "sha256": "a16e8ac14d278d20aecbbd2f9fda4f6739981447d33a1af62687c806fba26646",
+      "bytes": 8698
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-profile-clone-witness-gate-1/qualify_actual_build3_profile.py",
+      "sha256": "712461fae609786cf79e18abd263d7228a54f246e83ff826f6053bf1d51e10dd",
+      "bytes": 5707
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-profile-clone-witness-gate-1/qualification-private-adapter.patch",
+      "sha256": "cf7ab032ff27eb154a3ea52847c94381aca843dd3108e647364c0a287d1c69c1",
+      "bytes": 2561
+    }
+  ],
+  "unchanged_copied_scripts": [
+    [
+      "qualify_clone_pointer_and_warning_suffix.py",
+      true
+    ],
+    [
+      "qualify_actual_image_suffix.py",
+      true
+    ]
+  ],
+  "preserved": {
+    "original_generic_FAIL": true,
+    "Source38_debt": "OPEN",
+    "Rust_warnings": 135,
+    "warning_headers_equal": true,
+    "ld_RWX_warning": true,
+    "native_acceptance": false
+  },
+  "blocker": null,
+  "next_task": "Independent review of private profile witness; dispatcher owns integration and native acceptance.",
+  "discovery_note": "Initial broad discovery rg encountered unrelated unreadable INBOX paths (exit 2); dispatcher explicitly authorized continuing exact scoped inputs. Missing optional ancestor AGENTS files observed by ls (exit 2). No candidate or validator unexpected failure."
+}

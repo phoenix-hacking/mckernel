@@ -1,0 +1,111 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "producer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT290-BUILD-ONLY-ADMISSION-3/OUTPUT/work/evidence/producer-contract.json",
+    "bytes": 7697,
+    "sha256": "5364b451583c57fb62ed40f491385e287f8aec3dd877e896f24d69e242b64a8c"
+  },
+  "worker_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT290-BUILD-ONLY-ADMISSION-3/OUTPUT/work/evidence/worker-result.json",
+    "bytes": 6546,
+    "sha256": "310a96e869aff28176fe32dbf5d52f9c202a1456bb8159802dd39119c52fe8f3"
+  },
+  "validator_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-driver-identity-repair-source-1/native_rust_exact_mckernel_image_offline.CURRENT290.VIEW-AND-FRESH-OBJECT-GATE.py",
+    "bytes": 226480,
+    "sha256": "9d2d39a0f4a28dc15638fe2c1a01052e64886078d39c3b1e7bf57eccf68bbdfd"
+  },
+  "status": "FAIL_FIRST_ACTUAL_VALIDATOR_PRESERVED",
+  "phases": {
+    "producer": "PASS_EXACT_THREE_ARGV_AND_FRESH_OUTPUT_IDENTITIES",
+    "changed_Rust_unchanged_9d2d_gate": {
+      "status": "PASS_ACTUAL_DEFAULT_WHOLE_RUST_HANDLER_NO_PANIC_AND_FOUR_LOCAL_LOGGERS",
+      "proof": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-actual-build3-qualification-source-1/fresh-compiled-rust-ownership-proof.json"
+    },
+    "three_Rust_data_providers": {
+      "resource_set_list": {
+        "Rust_symbol": {
+          "index": 5994,
+          "name": "resource_set_list",
+          "bind": 1,
+          "type": 1,
+          "shndx": 5718,
+          "value": 0,
+          "size": 16
+        },
+        "section": {
+          "name_off": 5192,
+          "type": 8,
+          "flags": 268435459,
+          "addr": 0,
+          "offset": 1043520,
+          "size": 16,
+          "link": 0,
+          "info": 0,
+          "align": 16,
+          "entsize": 0,
+          "index": 5718,
+          "name": ".lbss.resource_set_list"
+        },
+        "initial_hex": "00000000000000000000000000000000",
+        "process_has_no_definition": true
+      },
+      "resource_set_lock": {
+        "Rust_symbol": {
+          "index": 5995,
+          "name": "resource_set_lock",
+          "bind": 1,
+          "type": 1,
+          "shndx": 5719,
+          "value": 0,
+          "size": 64
+        },
+        "section": {
+          "name_off": 96723,
+          "type": 8,
+          "flags": 268435459,
+          "addr": 0,
+          "offset": 1043520,
+          "size": 64,
+          "link": 0,
+          "info": 0,
+          "align": 64,
+          "entsize": 0,
+          "index": 5719,
+          "name": ".lbss.resource_set_lock"
+        },
+        "initial_hex": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "process_has_no_definition": true
+      },
+      "runq_reservation_lock": {
+        "Rust_symbol": {
+          "index": 4102,
+          "name": "runq_reservation_lock",
+          "bind": 1,
+          "type": 1,
+          "shndx": 5720,
+          "value": 0,
+          "size": 4
+        },
+        "section": {
+          "name_off": 96962,
+          "type": 8,
+          "flags": 268435459,
+          "addr": 0,
+          "offset": 1043520,
+          "size": 4,
+          "link": 0,
+          "info": 0,
+          "align": 4,
+          "entsize": 0,
+          "index": 5720,
+          "name": ".lbss.runq_reservation_lock"
+        },
+        "initial_hex": "00000000",
+        "process_has_no_definition": true
+      }
+    }
+  },
+  "first_failure": "RuntimeError('production Rust undefined provider witness')",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-actual-build3-qualification-source-1/qualify_actual_build3.py\", line 53, in <module>\n    assert not undefined.stderr;report['phases']['production_panic_gate']=ns['_no_core_panic_undefined'](undefined.stdout)\n  File \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-driver-identity-repair-source-1/native_rust_exact_mckernel_image_offline.CURRENT290.VIEW-AND-FRESH-OBJECT-GATE.py:UNCHANGED_READONLY_RUST_GATES\", line 1537, in _no_core_panic_undefined\n  File \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-driver-identity-repair-source-1/native_rust_exact_mckernel_image_offline.CURRENT290.VIEW-AND-FRESH-OBJECT-GATE.py:UNCHANGED_READONLY_RUST_GATES\", line 192, in _fail\nRuntimeError: production Rust undefined provider witness\n"
+}
