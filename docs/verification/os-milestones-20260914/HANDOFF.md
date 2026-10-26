@@ -1,3 +1,22 @@
+## Current checkpoint — 01:37/01:57 reviews recorded; newphysical accepted
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Newbe87archive1abf/helper922472joined0 andpost8fc independentlyaccepted75535:
+sharedabsent,27:4free2x,204pins/typed44preserved. Process903/oldwrapper already
+retired/joined. Namespace3initializedonce6294. Rootnext final337/4dfrontend3
+actualbinding/producer/import/sourcecleanupreview/pub BEFOREfreshfive/census;
+actualpayload+holderreview stillrequired. Original69/9793/6153/SDK21 retained.
+
+Real77-moduleRustobject6057 (18.1MB) compiled/accepted scopedcompileonly.
+Source28commands00-04passselectedCsyntax/ld/ABI-data-prefix;05stopsloggerLOCAL
+assertion. Retainede517alreadyfailsitandbothobjectsGLOBAL—historicalunresolved
+leaf/fullcratecontract, notnewcodegenregression. Originaloracle/failures preserved.
+TinySource29 A/Bdiagnostic isunrun, no blindfullRust/image rebuild authorized.
+Default/native/file/Cclosures0; M14/M15 OPEN;95%velocityclaimunproved.
+[01:37 review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261026T0137.json),
+[01:57 review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261026T0157.json).
+Samefixed18hwindow/controls. Source-only/host-only results remain scoped.
+
 ## Twenty-minute review — 2026-10-26T01:17Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
