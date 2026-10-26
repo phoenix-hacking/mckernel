@@ -1,3 +1,40 @@
+## Fresh N output generation ready; timed-review checks move preclock
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+N=Z/fresh-clock-successor1-source-1 preserves all6production function/classASTs,
+owner213/request31/current4688+11b6/source69/retention9793/namespace1d/9objects.
+Only freshP/capture/five/metadata/census/payload and authenticated path/hash bindings
+change. READY83757841/expected8f9/manifest78e40; one realprepare/finish+prequerypath
+control1035181 passes1.969wall/1.928CPU/RSS361432KiB. Source/path and cleanup7ae0552e
+same-OFD propagation independently accepted. No new observation clock/grant launched.
+
+Largest measured delay was final actualpayload review handoff; oldZ expired without
+ownerentry. Reviewerapproved exactreadonlyfield checklist beforeclock; one small
+facts collector/expectedschema is being prepared and checked against retained data,
+with no fullunchanged source/objects rehash. Timed reviewer must still inspectfresh
+actualfacts andreturn genuineexactpayloaddecision; Root finalgrant retains120s check.
+Source38HOSTretain-loss remainsOPEN/nonblocking to independentcurrent290default.
+Fixed2026-10-26T15:55:33Z/run7f; no policy/model/control/resource changes; M14/M15OPEN.
+
+## Current cursor — Z expired before owner entry; fresh-clock successor preparation
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Z actual five/prepare/census/finish allPASS; independent exact payload5ad5 reviewPASS
+arrived too late for Rootrecording. Original120s guard refused before any grantfile
+write; caller1032509/tool81777 joined1 normalexpiry. Independent4a1e retirement:
+caller/threechildren/groupsgone, unchanged27:4free2/sharedabsent,3namespaceIDs/entries
+unchanged, noownerentry. Actual4688/11b6 physicalboundary remainscurrent; no native
+cleanup or compiler/image credit. Preserve Zqueries/metadata/review asconsumed/expired.
+
+Next: private fresh-clock output/source successor with runtimeowner213/request31/
+namespace1d/source69/retention9793/9objects unchanged; NEVER replaygrant/query/output
+names or extendTTL. Reviewer freezes exactreadonlyfield checks before liveclock;
+Root will notify actualpayload immediately, then obtain genuine independentdecision
+and freshRootgrant. No newcontroller/modelchange/capacityretry. Source38 retainflag
+oracle staysOPEN; its2Cobjects/partial preserved, no unrelatedrebuild.
+Fixed2026-10-26T15:55:33Z/run7f; M14/M15OPEN/practical35/35; no95%claim.
+Latest published/fetched source3ac42269 and preclockb3a34c51; no owner entered.
+
 ## Current cursor — recovered physical/frontend controls accepted; default entry next
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
