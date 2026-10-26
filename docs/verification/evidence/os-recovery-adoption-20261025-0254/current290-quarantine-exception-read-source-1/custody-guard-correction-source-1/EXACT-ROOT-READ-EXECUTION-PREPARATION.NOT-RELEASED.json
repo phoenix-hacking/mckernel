@@ -1,0 +1,112 @@
+{
+  "status": "NOT_RELEASED_SOURCE_AND_OWNED_FIXTURE_ONLY",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "runner": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/exact_root_guard_runner.py",
+    "bytes": 8774,
+    "sha256": "7754e68bcdb2796a61a7b7444453442eec46e4e5057305cb9f98e28445856b7f"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/EXACT-ACTOR-ROOT-READ-PROFILE.NOT-RELEASED.json",
+    "bytes": 6578,
+    "sha256": "5accbdaa97e4a9e9e8b970c477b89baac0e3313ece2f3ecac54e3969a31bddc1"
+  },
+  "helper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/read_exact_recover_error.gdb.py",
+    "bytes": 4178,
+    "sha256": "8c445cb73209ec8b08bcd5c63bf73cd67ffc6a4b748ac85da8d0a9157c41f795"
+  },
+  "gdb": {
+    "path": "/usr/bin/gdb",
+    "bytes": 8824736,
+    "sha256": "ee638c585936025f85a5f0f967e3929c9b36cb286d37ef662b23705682e31e2a"
+  },
+  "python": {
+    "path": "/home/holden/anaconda3/bin/python3.9",
+    "bytes": 15880080,
+    "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb"
+  },
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "--",
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/exact_root_guard_runner.py",
+    "--execute-exact-root-read"
+  ],
+  "exact_owned_gdb_argv": [
+    "/usr/bin/gdb",
+    "-nx",
+    "-nh",
+    "-batch",
+    "-q",
+    "-iex",
+    "set auto-load off",
+    "-ex",
+    "set pagination off",
+    "-ex",
+    "set confirm off",
+    "-ex",
+    "set may-call-functions off",
+    "-ex",
+    "set may-write-registers off",
+    "-ex",
+    "set may-write-memory off",
+    "-ex",
+    "set may-insert-breakpoints off",
+    "-ex",
+    "set may-insert-fast-tracepoints off",
+    "-ex",
+    "file /home/holden/anaconda3/bin/python3.9",
+    "-ex",
+    "attach 1060806",
+    "-ex",
+    "source /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/read_exact_recover_error.gdb.py",
+    "-ex",
+    "read-exact-recover-error /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/bounded-observer-correction-source-1/native_rust_cutover_image_terminal_cleanup.CURRENT290.EXACT-DEAD-CALLER.py Refusal",
+    "-ex",
+    "detach"
+  ],
+  "debugger_child_deadline_seconds": 10,
+  "fd_guard": "Read-only stat/readlink/fdinfo discovery bounded256FDs, exactlyone permanent27:4description with soleFLOCKWRITEowner1060806; no holderFDopen/dup/lock acquisition. Before/after exactfdnumber/link/fullfdinfo/identity/lock match.",
+  "process_guard": "Exactfixed actor1060806/start80309560 andsudo1060803/start80309553, full frozen argv/binaryname, directparent/group,boot, live nonstopped, rootactorcredentials. Sudo parent eUID0, real0or1000 and known0/1000GIDs permitted; exactobservedcredentialarrays preserved before/after.",
+  "source_guard": "ELF gdb+Pythonpath/size/SHA, helper/e49source/release, frozeninode/bytes/hash quarantine/plan/journal authenticated. No source/transaction mutations.",
+  "timeout": "subprocess.run kills/reaps ONLY newly-owned debugger child on10s timeout; postguards always attempted; no target/group signals or permission changes. Fixture proves kernel detaches/resumes target and sameprivateflock survives.",
+  "oracle": "Exactlyone PASS JSON matching e49source/recover/error/Refusal +gdbexit0 + equal pre/postcustody. GDBexit0alone rejected. No inferredcleanup acceptance.",
+  "capture": "Runner stdout structured result includes full GDB stdout/stderr as raw_hex+bytes+SHA, cap1MiB each. UID1000outercapture can reconstruct exactbytes withoutrootreader; retain rootouter stdout/stderr/status/directJOIN. Postguard failures preserve raw and refuse.",
+  "debuginfod": "InstalledGDB lacks debuginfod command (ordinary safeprobe exit1); omit unsupportedcommand, DEBUGINFOD_URLS empty; -nx -nh autoload off.",
+  "fixture_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/FIXTURE-LOCK-CUSTODY-RESULT.json",
+    "bytes": 5679,
+    "sha256": "7fa77f0f1cf6c5c933dc394af383a06181c8d0ddaa67c3fab14bdb2b19d30767"
+  },
+  "tests": {
+    "fixture-tests": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/fixture-tests.status.json",
+      "bytes": 1379,
+      "sha256": "c7a7604df7f2f5900127e70ade4ac68254150ff0dc695c40b00f5ce37f1ca4d2"
+    },
+    "guard-tests": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/guard-tests.status.json",
+      "bytes": 1359,
+      "sha256": "a4220456e16fcd20187ae9f2a4222682d363083d3a4373cc866386b0ff71f466"
+    }
+  },
+  "actual_actor_attached": false,
+  "actual_root_queries": false,
+  "root_execution_requires": [
+    "Independent exactsource/profile/operation review",
+    "Root exactgrant after publication/fetchedsourceverification; no authority from this draft"
+  ],
+  "optional_CID_inspect": null
+}

@@ -1,0 +1,40 @@
+{
+  "active_e49_unchanged": true,
+  "actual_quarantine_cause_inferred": false,
+  "corrected": {
+    "bytes": 128990,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-reporting-source-1/native_rust_cutover_image_terminal_cleanup.QUARANTINE-REASON.SOURCE-ONLY.py",
+    "sha256": "183a23ff27a8496788339a40feeb53e17ee2bfca9f0dc7bfefa09126ce07cba1"
+  },
+  "decision": "PASS_SOURCE_ONLY_EXACT_ERROR_MESSAGE_PRESERVATION",
+  "evidence": "Existing source/mock regression executes original and corrected recover function ASTs for two distinct Refusal reasons. Original drops both reasons; corrected durable/stdout outputs preserve exact messages and every original field unchanged. Filesystem/signal/transaction behavior mocked; no live runtime effect.",
+  "implementation_ownership": false,
+  "live_replay_or_patch_authority": false,
+  "native_or_cleanup_acceptance": false,
+  "original": {
+    "bytes": 128910,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/bounded-observer-correction-source-1/native_rust_cutover_image_terminal_cleanup.CURRENT290.EXACT-DEAD-CALLER.py",
+    "sha256": "e49eaf2a7bacc6a64523f9f6c91516b9a3abefc875cdc1d8941c4e6b55473de3"
+  },
+  "patch": {
+    "bytes": 2822,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-reporting-source-1/logging-only.patch",
+    "sha256": "f7e438510f415dd0c5e926aae4aaee79cfa9cdff45963e9d6d51a713a63038b5"
+  },
+  "recorded_at": "2026-10-26T09:29:50.052800+00:00",
+  "reviewed_delta": "Only error_message=str(error) added to existing durable quarantine JSON and stdout quarantine JSON, plus PUBLISHED_SCRIPT private-successor path. All other function/class ASTs unchanged; recover changes only the two dict fields.",
+  "reviewer": "/root/current_owner_retirement",
+  "root_execution_release": false,
+  "schema": "mckernel.current290.quarantine.reason-reporting.independent-source-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "test": {
+    "bytes": 2600,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-reporting-source-1/test_reason_preservation.py",
+    "sha256": "f3fe2de1528e44cc97a8d78fb51024ca1bd162a1f1a85d8c439615f14924d54b"
+  },
+  "test_result": {
+    "bytes": 1845,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-reporting-source-1/RESULT.json",
+    "sha256": "f3074e70849c5d3ba577ff2d4be3ba55435591d03746cc5576a9904354a54690"
+  }
+}
