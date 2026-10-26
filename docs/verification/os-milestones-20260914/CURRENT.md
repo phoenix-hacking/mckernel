@@ -1,3 +1,70 @@
+## Reviewed default-link corrections integrated as WIP
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ROOT integrated exactly3reviewedpostimages: kernel/CMakeLists.txtf293, Rustliba059,
+policyfefec endingd62. CMake includes855B previouslyprivate current290selectors
+plus215BprocessGLOBALstorage pairing; no Cbodychanged. Newcheckedpartitionhelper
+andhandlercall remove2panicimports;4internalmetadataattrs preserveLOCALcontract.
+Actual77module/83file default-profile Rustf9 compiles18.9s andpassesstrictELF
+imports233→231/fourLOCAL32 records/bytes/RELA/consumers.135warnings retained.
+Initial10lineobserverfailure preserved; onepureextentfix reusedsameobject.
+No C/ASM/image-link/native/file/Cretirement acceptance fromthisWIPintegration.
+
+Currentphysical08860bb3 acceptedaftercomplete5119cleanupandcaller934813joined1;
+permanent27:4free, no nativeowner. All11oldobjects preservedarchiveeba7d942.
+Default18himplements readonlyseed warmmode toreplaceRust/process.o/reuse9;
+source-review caught exactlibdwarf effective-view gap andmissingexecutablefresh
+loggergate, both mustbe fixedbeforeactualruntime. Oldpurecontrolfirstattempt
+stoppedonPython3.8ast.unparse fixtureAPI; preserved/no replay. Source32setter
+source-ready; Source33writer4/5HOSTtests failedobserverreceiverlifetime, expert
+fix source-ready forindependentreview, no kernelbodychange.
+[03:17 review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261026T0317.json).
+M14/M15 OPEN; practical35/35 separate;95%velocitytargetunproved.
+Fixeddeadline2026-10-26T15:55:33Z/20minsteering/samecreditrun7f unchanged.
+
+## Current cursor — image link failures retained; normal cleanup accepted
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actualcurrent290default compiled11objects thenLINKFAIL:3duplicateC/Rustdata
+definitions and2move_pages signeddivision panicimports. Completefailedbuild/
+provenance/11objects retainedarchiveeba7d942; no unchangedprefixrebuildauthorized.
+Cleanup5119helper945340joined0; bothrecordsarchived/absent andcontainer71dbabsent.
+Independentcompletionaccepted; caller934813/tool63873joined1 preservingbuildFAIL.
+Currentphysical independentlyaccepted aftersame27:4free2x, allworkloadgroupsgone.
+Modeltoolserver842942/start76277881 remainsalive, NEVER a retirementtarget.
+[Currentphysical](../evidence/os-recovery-adoption-20261025-0254/CURRENT290-ATTEMPT3-INDEPENDENT-NORMAL-CLEANUP-CURRENT-PHYSICAL-ACCEPTANCE.json).
+
+CMake56e3missingstorage-selector fix passes4realCMakeprofilecases; noC/Rustbody
+change. Checkeddivision8cfc passes5arithmeticcommands/960vectors+2errororder/ABI4;
+actualfullhandler/defaultlink stillunverified. Perf18h prepareschangedREALdefault
+77modulegraph withonlydivision+qualifiedloggerinternalattrs; actualdefaultflags
+(noextraCGU1,privatecfgs orABIappendices) mustbe preservedandnewmetadataqualified.
+Default18h preparesminimal readonlyseed/incrementaldriver extension preserving
+9unchangedobjects while replacingonlyRust+process.o; freshlaterheavyreviewrequired.
+Source31controlled214pairs428calls/ABI22Lookup12 independentlyHOSTaccepted;
+Source32setaffinitylifetime implementation advancesprivately/defaultOFF.
+[02:57 review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261026T0257.json).
+Default/native/file/Cretirementclosures0; M14/M15 OPEN,practical35/35separate.
+95%velocityclaimnotdemonstrated. Existing30minbuckets/stableIDs preserved.
+[Fixed18hwindow](RUN-WINDOW-18H-20261025.md), [recovery](RECOVERY-20261025.md),
+[lowconfidenceplanningestimate](M14-M15-ENGINEERING-ESTIMATE-20261025-0512.md)
+remaincontext; fixedend2026-10-26T15:55:33Z/20minsteering, samecreditrun7f.
+
+## Live current290 image build — owner935300 / caller934813
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Corrected Kcaller1be9/config61d6 freshfive/census and actualpayload review PASS.
+Owner337/request4d entered1792982279.555328,52.0795s afterfive. Actor935300/
+start77972425 runs undercaller934813/start77967163 FD3, same27:4; ROOTtool63873
+is live. Configure0; actualbuild reached Rust kernel compiler, warnings retained.
+No build/default/native acceptance yet. Preserve this owner and sameFD through
+terminalreceipt and independentlyreviewed cleanup5119/postflight/closure. No replay.
+Source30private Rustdfba/partial48f2 independentlyHOSTqualified, archive4493792e
+retains191members;5strictqualificationcommands passed. Source31affinity-query
+retainededge implementation proceeds source-only; setschedulerexistingbody reused.
+[02:37 review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261026T0237.json).
+Default/native/file/Cclosures0; M14/M15 OPEN,35/35 separately;95%targetunproved.
+
 ## Qualified private logger correction — selected HOST scope
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

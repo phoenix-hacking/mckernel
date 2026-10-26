@@ -1,3 +1,4 @@
+#![feature(linkage)]
 #![feature(c_variadic)]
 #![feature(core_intrinsics)]
 #![no_std]

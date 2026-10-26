@@ -34290,6 +34290,32 @@ unsafe fn f06_move_copy_nodes(req: *mut MovePagesSmpReq, count: CInt) {
     }
 }
 
+/// Partition the original narrowed signed count without a panic runtime dependency.
+///
+/// Valid SMP callers supply positive CPU count and an in-range CPU index. Keep
+/// the selected implementation's explicit wrapping products/sums and final-CPU
+/// remainder. Signed negative arithmetic outside that native caller domain remains
+/// defined where division is representable; zero and MIN/-1 return EINVAL before
+/// producing bounds or any page-table/barrier/request-state effects.
+#[inline(always)]
+fn f03_move_pages_partition_checked_v1(
+    count: CInt,
+    nr_cpus: CInt,
+    cpu_index: CInt,
+) -> Result<(CInt, CInt), CInt> {
+    let pages_per_cpu = match count.checked_div(nr_cpus) {
+        Some(quotient) => quotient,
+        None => return Err(-EINVAL),
+    };
+    let first = pages_per_cpu.wrapping_mul(cpu_index);
+    let last = if cpu_index == nr_cpus.wrapping_sub(1) {
+        count
+    } else {
+        first.wrapping_add(pages_per_cpu)
+    };
+    Ok((first, last))
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn move_pages_smp_handler(cpu_index: CInt, nr_cpus: CInt, arg: *mut c_void) -> CInt {
     // Same public calling contract as C: a live fully prepared request and
@@ -34299,8 +34325,10 @@ pub unsafe extern "C" fn move_pages_smp_handler(cpu_index: CInt, nr_cpus: CInt, 
     let vm = (*proc).vm;
     let count = (*req).count as CInt;
     let mut phase: CInt = 1;
-    let first = (count / nr_cpus).wrapping_mul(cpu_index);
-    let last = if cpu_index == nr_cpus - 1 { count } else { first.wrapping_add(count / nr_cpus) };
+    let (first, last) = match f03_move_pages_partition_checked_v1(count, nr_cpus, cpu_index) {
+        Ok(bounds) => bounds,
+        Err(error) => return error,
+    };
     let cpu = crate::cls::get_this_cpu_local_var();
     let current = (*cpu).current;
     let mut save_pt = if current == core::ptr::addr_of_mut!((*cpu).idle) {
@@ -35054,24 +35082,28 @@ pub(crate) mod f03_syscall_table_candidate {
 // Reused existing four-selector callback; only public provider naming is adapted.
 #[used]
 #[link_section = "__verbose"]
+#[linkage = "internal"]
 static mut F06_PROCESS_VM_IOV_LOCAL_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
     file: concat!(file!(), "\0").as_ptr().cast(), func: b"arch_process_vm_rw_log_bridge\0".as_ptr().cast(),
     fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,
 };
 #[used]
 #[link_section = "__verbose"]
+#[linkage = "internal"]
 static mut F06_PROCESS_VM_IOV_REMOTE_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
     file: concat!(file!(), "\0").as_ptr().cast(), func: b"arch_process_vm_rw_log_bridge\0".as_ptr().cast(),
     fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,
 };
 #[used]
 #[link_section = "__verbose"]
+#[linkage = "internal"]
 static mut F06_PROCESS_VM_FOUND_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
     file: concat!(file!(), "\0").as_ptr().cast(), func: b"arch_process_vm_rw_log_bridge\0".as_ptr().cast(),
     fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,
 };
 #[used]
 #[link_section = "__verbose"]
+#[linkage = "internal"]
 static mut F06_PROCESS_VM_COPY_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
     file: concat!(file!(), "\0").as_ptr().cast(), func: b"arch_process_vm_rw_log_bridge\0".as_ptr().cast(),
     fmt: core::ptr::null(), line_flags: line!() & 0x00ff_ffff,
