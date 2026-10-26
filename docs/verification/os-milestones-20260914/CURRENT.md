@@ -1,3 +1,43 @@
+## LIVE OWNED CLEANUP QUARANTINE — 2026-10-26T09:11Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual e49 cleanup entered QUARANTINED_ROOT_LOCK_HELD after common-record index0
+completed four journal transitions. Rootpayload1060806 remains alive holding
+permanent27:4; sudo1060803/start80309553/PGID1060803 and tool65524 remain live.
+DO NOT signal/unlock/replay. No completion/free/new-workload authority.
+Common name absent; original272B record archived66306:59657390/hash70d279.
+Shared original269B1828:116861/hashf65b41 remains active; shared.archive empty
+sentinel1828:116866. Plan/journal/quarantine and all original evidence preserved.
+34fullEOF deadcaller rechecks PASS; later Refusal reason was omitted by existing
+quarantine writer. Root snapshot retains readable exact plan/journal/records;
+source owner driver_identity_repair and independent current_owner_retirement
+trace the precise phase predicate with cheap retained-state reproduction.
+
+Actual release9c7589af/granta9f54316 and allfullstdout838445B/stderr0 retained:
+`../evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/ROOT-NORMAL-RETIREMENT-PREPARATION-1/ROOT-ACTUAL-CLEANUP-OUTER-1/`.
+Next: exact independent partial-transaction reconciliation, source correction only
+from reproduced cause, then separately reviewed continuation/retirement. No heavy
+entry until genuine currentphysical acceptance. Source6153/ninecompilerobjects/
+SDK21 remain reuse; M14/M15 OPEN/practical35/35 and native/default/file credit0.
+
+## Corrected actual observation PASS — 2026-10-26T09:04Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Observer1058831 joined0/groupsabsent/stderrempty:5.799828wall/5.753750CPU,
+451908KiB peak RSS. Independent actual acceptance9a7a7c52 verifies77selected
+identities, seven exited clients, genuine normal-owner/typed-source proofs and
+311+311 full proc rows. Lossless observation276fdf67/process4eee2f60 copies
+match privileged originals. No cleanup, free-current or workload credit.
+
+Root e49 exact-dead-caller retirement proposal e55dbbc1 is under independent
+execution review. Caller1043200 remains absent; stopped CID0715da/common/shared
+records retained. No originalcaller JOIN or sameOFD custody is invented. Next:
+finalize only approved release fields/argv hash, freshchecks, actual reviewed
+normal retirement and independent positivepostjoin/currentphysical. Then bind
+prepared attempt5 correcteddriver9d2d; preserve source6153/nineobjects/SDK21.
+M14/M15 OPEN, practical35/35, newdefault/native/wholefile/Cretirement0; no95%claim.
+[09:00 engineering review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261026T0900.json).
+
 ## Actual read-only observation — 2026-10-26T08:55Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
