@@ -1,3 +1,15 @@
+## Current cursor — zero-unlink diagnostic accepted
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual895698/start77258252 joined0 in4.447966s. Independent review accepts
+three current snapshots/nine successful root queries and postreturn free27:4;
+shared324a remains intact. Original889039 observer cause remains UNKNOWN.
+[Acceptance](../evidence/os-recovery-adoption-20261025-0254/CURRENT290-ZERO-UNLINK-DIAGNOSTIC-INDEPENDENT-ACCEPTANCE.json).
+Root next: review/publish a distinct captured archival successor with fresh
+namespace and50PID/group absence domain, then separate concrete mutation release.
+Postjoin18h owns source; review18h independent release; no heavy admission yet.
+Source24 sched_setparam and Source25 RR-interval private Rust bodies advance.
+
 ## Twenty-minute review — 2026-10-26T00:37Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
