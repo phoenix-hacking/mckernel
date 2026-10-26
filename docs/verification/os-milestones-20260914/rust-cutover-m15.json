@@ -3,7 +3,7 @@
   "id": "M15",
   "scope_id": "project-owned-runtime-rust-cutover-v1-20261024",
   "title": "Complete Rust/assembly custom host modules and integration runtime",
-  "as_of": "2026-10-25T23:48:22.359856+00:00",
+  "as_of": "2026-10-26T00:36:26.090068+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user2026-10-24: custom code outside the Rocky/Linux baseline must be Rust, including loadable IHK/project modules; previous reviewed-assembly allowance retained.",
@@ -1825,11 +1825,23 @@
       "at": "2026-10-25T23:48:22.359856+00:00",
       "actual_progress": "23:37review: Source20private411/ABI25HOSTaccepted; newcurrenttypedquiescencea4ea accepted asprocessrecoveryprerequisite only. Parent866814/shared324a retained; process-onlysource7f approvedpendingfetchedconcreterelease withCPUinfinity/noouterkill. Source21privatepositiveCAS/caller/destructor compiled, notselected. Default/native/file/Cclosures0; firstdefaultcompilerunknown.",
       "review": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T2337.json"
+    },
+    {
+      "at": "2026-10-26T00:36:26.090068+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "actual_progress": "Late23:57/00:17 reviews: Source21 private60/ABI20 HOST acceptance. Process-only retirement ed504 passes, permanent27:4 free; shared324a fence intact. Later shared attempt failed pre-archive/unlink in root-readonly observation; underlying failure UNKNOWN. Zero-unlink diagnostic source/9controls passed, pending fetched/concrete release. Source22/23 Rust compile pass, retained-object C qualification underway. No new default/native/whole-file/C retirement. SDK21/current290 successful prefixes retained.",
+      "evidence": [
+        "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261026T0017.json"
+      ],
+      "engineering_percentage": null
     }
   ],
   "latest_dispatcher_checkpoint": {
-    "at": "2026-10-25T23:48:22.359856+00:00",
-    "actual_progress": "23:37review: Source20private411/ABI25HOSTaccepted; newcurrenttypedquiescencea4ea accepted asprocessrecoveryprerequisite only. Parent866814/shared324a retained; process-onlysource7f approvedpendingfetchedconcreterelease withCPUinfinity/noouterkill. Source21privatepositiveCAS/caller/destructor compiled, notselected. Default/native/file/Cclosures0; firstdefaultcompilerunknown.",
-    "review": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T2337.json"
+    "at": "2026-10-26T00:36:26.090068+00:00",
+    "next_owner": "root",
+    "next_action": "Exact published/fetched zero-unlink diagnostic after independent concrete release; shared fence prevents heavy admission.",
+    "default_closures": 0,
+    "native_closures": 0,
+    "whole_file_closures": 0
   }
 }

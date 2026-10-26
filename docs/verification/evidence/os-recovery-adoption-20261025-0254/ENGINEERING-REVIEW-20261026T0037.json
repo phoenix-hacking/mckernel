@@ -1,0 +1,127 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "review": "20261026T0037",
+  "recorded_at": "2026-10-26T00:37:38.278354+00:00",
+  "recorded_late": false,
+  "interval": [
+    1792973842.9189239,
+    1792975044.5792294
+  ],
+  "goal_status": "active",
+  "phase": "running",
+  "delta": {
+    "canonical_integrated_Rust_bodies": 0,
+    "accepted_integration_packages": 0,
+    "production_default_images": 0,
+    "native_qualified_closures": 0,
+    "whole_file_closures": 0,
+    "retired_C_boundaries": 0,
+    "real_guest_apps": 0
+  },
+  "actual": {
+    "compiled_Rust_objects": 2,
+    "Source22_prefix": {
+      "wall_seconds": 0.215662,
+      "CPU_seconds": 0.265889,
+      "peak_RSS_KiB": 99972,
+      "object": "fbd48780"
+    },
+    "Source23_prefix": {
+      "whole_wall_seconds": 0.182059,
+      "CPU_seconds": 0.238989,
+      "peak_RSS_KiB": 95744,
+      "object": "a42df0cf"
+    },
+    "Source22_suffix": {
+      "proof": "ACTUAL-SOURCE22-LOOKUP42-INDEPENDENT-HOST-ACCEPTANCE.json",
+      "commands": 3,
+      "actual_returncodes": [
+        0,
+        0,
+        1
+      ],
+      "last_is_expected_negative_ABI_rejection": true,
+      "controlled_cases": 42,
+      "ABI_words": 12,
+      "reused_ABI_words": 20,
+      "wall_seconds": 0.366376,
+      "CPU_seconds": 0.436609,
+      "peak_RSS_KiB": 34916
+    },
+    "Source23_suffix": {
+      "proof": "ACTUAL-SOURCE23-SCHEDULER4320-INDEPENDENT-HOST-ACCEPTANCE.json",
+      "commands": 2,
+      "returncodes": [
+        0,
+        0
+      ],
+      "controlled_queries": 4320,
+      "ABI_words": 18,
+      "wall_seconds": 0.323172,
+      "CPU_seconds": 0.361858,
+      "peak_RSS_KiB": 32464
+    },
+    "shared_archival_attempt": {
+      "child": 889039,
+      "starttime": "77141363",
+      "joined_exit": 1,
+      "failure": "Root-readonly first safety observation; exact rc/stderr discarded by original helper. Cause UNKNOWN.",
+      "archive_or_unlink_reached": false,
+      "postreturn_mutex": "free27:4",
+      "shared_record": "unchanged324a/inode116858"
+    },
+    "zero_unlink_diagnostic": "9pure controls and independent source review pass; exact dependency publication pending; no actual query"
+  },
+  "resources": {
+    "disks": {
+      "/home/holden/mckernel": {
+        "available_bytes": 153081630720,
+        "ismount": false,
+        "st_dev": 66306
+      },
+      "/home/holden/mckernel-work/scratch": {
+        "available_bytes": 14100393984,
+        "ismount": true,
+        "st_dev": 1828
+      }
+    },
+    "load_average": [
+      0.4,
+      0.55,
+      0.61
+    ],
+    "memory": {
+      "MemAvailable_kib": 27214020,
+      "MemTotal_kib": 32421580
+    }
+  },
+  "latencies": {
+    "ready_to_first_default_compiler_seconds": null,
+    "first_default_compiler_at": null,
+    "failure_to_runtime_validated_fix_seconds": null
+  },
+  "critical_path_owner": "root with postjoin18h source and review18h independent execution review",
+  "blocker": "Exact shared324a fence remains; no heavy admission.",
+  "next_command": "Publish/fetch exact diagnostic source/dependencies; independent concrete release; once zero-unlink diagnostic to capture underlying root-readonly failure.",
+  "scheduling_change": "Immediately moved Source22 owner to actual remaining setter lifetime body; sequential C suffixes reused both Rust objects. Full diagnostic waits for exact publication, not additional inventory or compiler capacity.",
+  "ready_owners": {
+    "review18h": "source review complete; waiting concrete fetched payload",
+    "perf_review18h": "HOST actual reviews completed",
+    "daemon18h": "static SDK7 ready waits current proof"
+  },
+  "active_owners_at_recording": {
+    "root": "publication/checkpoint then exact diagnostic",
+    "postjoin18h": "exact diagnostic publication manifest",
+    "siginfo_commit18h": "Source24 remaining scheduler setter lifetime implementation",
+    "perf18h": "Source22/23 lossless evidence preservation",
+    "default18h": "process/shared actual failure retention"
+  },
+  "idle_slots_reason": "Other ports retain ready implementation; dependency is actual shared-fence recovery/default qualification. No duplicate source bodies or extra heavy owner.",
+  "post_snapshot_followon": "Independent actual Source22/23 HOST review recorded; no default/native inference.",
+  "velocity_report": "VELOCITY-REPORT-20261026T0037.json",
+  "sustained_195_claim": false,
+  "practical": 35,
+  "M14": "OPEN",
+  "M15": "OPEN",
+  "deadline": "2026-10-26T15:55:33Z"
+}

@@ -1,0 +1,30 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "ACCEPT_HOST_SCHEDULER_QUERY4320_ABI18_CONTROLLED_ONLY",
+  "reviewer": "/root/perf_review18h",
+  "implementation_ownership": false,
+  "recorded_by": "/root",
+  "at": "2026-10-26T00:37:13.943078+00:00",
+  "actual_result_sha256": "efdb7c48db4d1ee2712d043d164bbaa674d6eb7f5f9f526d7b33fdd68771d467",
+  "verified_pins": 87,
+  "retained_object_sha256": "a42df0cf9f5672a8953991cc7753d6ffed4c58e4b517183ee9cd4335ebe4d95c",
+  "commands": 2,
+  "returncodes": [
+    0,
+    0
+  ],
+  "getparam_cases": 2160,
+  "getscheduler_cases": 2160,
+  "ABI_words": 18,
+  "stderr_empty": true,
+  "children_joined_group_absent_streams_closed": true,
+  "wall_seconds": 0.323172,
+  "CPU_seconds": 0.361858,
+  "peak_RSS_KiB": 32464,
+  "Rust_replayed": false,
+  "oracles": "Genuine aligned C allocation, positive lookup ownership, exit before/inside copy, final-edge poison/free, full-width and partial-copy faults, NULL/current/pid0 paths, matching unlock and allocation balance.",
+  "canonical_integrated": false,
+  "default_selected": false,
+  "native_qualified": false,
+  "limits": "Controlled query lifetime fixture only. Source22 HOST acceptance does not establish composed production behavior. RR interval, shared selector/setter lifetime, concurrent field consistency, current build/link/native and C retirement remain open; selectors OFF."
+}

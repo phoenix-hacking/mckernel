@@ -1,3 +1,52 @@
+## Twenty-minute review — 2026-10-26T00:37Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Source22 independently passes42 lookup cases/ABI12+reused20; Source23 passes
+4320 scheduler queries/ABI18. Two Rust objects compiled; five retained-object
+C commands qualified, including one expected negative ABI rejection. No new
+production/default/native/whole-file/C-boundary closures; M14/M15 remain OPEN.
+Shared archival failed pre-unlink; helper joined1,27:4 free, shared324a intact.
+Exact cause remains UNKNOWN. Root next publishes/fetches the independently
+reviewed zero-unlink diagnostic, obtains concrete release, then captures the
+underlying observation failure. Postjoin18h owns publication; Source24 owner
+implements remaining setter lifetime while ready default/daemon wait physical
+clearance. No additional heavy owner or repeated compiler prefix.
+[Review/metrics](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261026T0037.json).
+Fixed30-minute package buckets remain zero;95%target unproved. First default
+compiler/failure-to-runtime-fix latency remains null. Same18h window/controls.
+
+## Current checkpoint — 2026-10-26, reviews23:57/00:17 recorded
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Parent866814 is positively retired; original tool joined137 and helper882832
+joined0. Independent acceptance ed50414d proves process-only retirement and
+postreturn free permanent27:4. Shared324a/dev1828/inode116858 remains unchanged.
+The later shared archival attempt889039 failed BEFORE archive/unlink during a
+root-readonly safety observation. It joined, released27:4, and left the shared
+fence intact. Underlying rc/stderr were discarded; cause remains UNKNOWN.
+
+Next root command: exact distinct zero-unlink diagnostic, after fetched source
+publication and independent concrete release. It retains raw rc/stdout/stderr
+before the unchanged guard. No heavy admission or old release replay.
+Postjoin18h prepares exact publication; review18h owns independent release.
+Current290 owner8fb/request369 and coherent attempt2 templates are ready but
+await genuine shared retirement and postreturn physical proof; daemonSDK7 waits.
+SDK21 acceptance1231c1f6 and current290 compiler/source prefixes are reused.
+
+Source21 independently passes60 controlled HOST cases/ABI20 using Source20's
+accepted genuine ABI object. Source22 lookup and Source23 scheduler-query Rust
+repairs compile; their retained-object C suffixes are reviewed and queued on
+ordinary CPU0, with diagnostic snapshots taking priority after joined checks.
+Selectors stay OFF. No new canonical/default/native/file/C-retirement closure.
+Ready-to-default-compiler and failure-to-runtime-fix latency remain unknown.
+The shared-fence handoff is the largest delay; idle slots do not justify duplicate
+implementations or extra heavy owners. M12=35/35; M14/M15 OPEN;95%target unproved.
+[23:57 review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261025T2357.json),
+[00:17 review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261026T0017.json).
+Fixed window [RUN-WINDOW-18H-20261025.md](RUN-WINDOW-18H-20261025.md), recovery
+[RECOVERY-20261025.md](RECOVERY-20261025.md), deadline2026-10-26T15:55:33Z;
+same run7f/controls. Planning estimate remains separate from accepted gates.
+
 ## Twenty-minute review — 2026-10-25T23:37Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
