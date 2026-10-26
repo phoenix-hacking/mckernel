@@ -1,3 +1,61 @@
+## Current290 firstbuild admission staged — exact frozen runner refs
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Cleanup acceptedf597854a; ordinarypostcleanupone-heavy holder1215997/
+start83854322/FD3/tool83474 nowholds27:4, noDocker/compilerlaunched.
+Nonce0b9c44bcab064992b16ff143fb626e4e, actualREADY under
+`../evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT290-BUILD-ONLY-ADMISSION-1/HOLDER/`.
+Rootinputexportauthority4b73207a fullyqualifies22ROfiles/6153source/retained9/SDK
+aliases, exactfourtoolSHA+genuinebytes; no metadata gap remains.
+Frozen source/profile reviewedbyforegroundm15_dump_provider (parent-owned),
+not duplicated byrootreviewer: runner16380B/bc9e984a4f1b85a7267f4c7f08f96ad840f2e6bf4c1a7297ada1141a3d554bcb;
+worker3723B/bc00cd12db5d7df6f8eb1aa5649de291865d32e9905527cd583cf3afe65d8fb0;
+holder7002B/91f6dbdfc4203fb98aae939c62303313bc2c719a4952142abbbf08556e89bd07;
+profile39621B/43905ccfad42e62dd2034f985f72f1f2b3d5f84f10c762be95da233796dcdca3.
+Exactpacketdirectory is ROOT-CURRENT290-BUILD-ONLY-ADMISSION-1 under sameevidence
+root. Fresh120s resourceclock deliberatelynotstarted untilstaticreviewready.
+Rootnextsource/nonce/resource/export/executionreviewbinding thenREADYgo, exact
+Rust/process/ld3commands. CPU2-5/12GiB/pids512/noSwap/noNet/UID1000 retained.
+No newdefault/native/file/C closures or compilercommand yet; no95%claim.
+
+## Cleanup and currentphysical independently accepted — build admission next
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Current290 retained cleanup is COMPLETE at cleanup scope. Finalkeeper1207999 and
+caller tool45301 genuinelyjoined0, sudo directwait0; allknown old/new controls
+absent. Two genuine27:4 exclusive probes succeeded/closed; globalrowabsent;
+activecommon/sharedabsent andoldCID0715absent. Originalplan, nine-eventjournal,
+archives, historicalquarantine,77selectedfiles and76inventoryrows preserved.
+Independentcurrentacceptance is
+`../evidence/os-recovery-adoption-20261025-0254/CURRENT290-CLEANUP-INDEPENDENT-CURRENT-PHYSICAL-ACCEPTANCE-20261026-1850.json`.
+Historicalunknownjoins remainunknown; no kernel/native/file credit added.
+
+NextRoot actualfreshone-heavy reservation/admission then exactRust/process/ld
+threecommands retaining nineprefixobjects/source6153/SDK21. default_link_repair
+implements explicit existingSUDO_DOCKER_PREFIX mediation for UID1000hostrunner/
+UID1000container; directUID1000daemonaccess failedread-only andisnotbypassed.
+Newrunner24purechecks passed; actualindependentreview/reservation stillrequired.
+Originalattempt5frontend/request7a/initializer remainready asfallback.
+No newcompilercommand yet; default/native/file/Cclosures0. Fixeddeadline remains
+2026-10-27T11:24:50Z, sameaccount/resources/controlownership.
+
+## Live successor1207999 — predecessor1193473 retired and joined
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+FreshPREPARATION-2 entered once under reviewedrelease; keeper1207999/start83681127/
+PGID1207994/tool45301 holds original27:4 viaFD6. Reviewedpidfd retirement of
+predecessor1193473 succeeded within120s after immediatefinitepublication.
+Tool1416 returnedactualexit1; originalouter records realdirectsudo1193470
+wait_status9/exit-9, streams0/0. No originalroot1060806 action replay.
+Newlifecycle0211/c759 with pinnedknownhistory is installed; actualsharedcontinuation
+notyetexecuted. Freshreadonlyprotected/currentabsencechecks passed. Typedjoins
+receiptaec0ebab andadoptiongrant89cc67f8 awaitindependentrelease.
+Preserve currentcustody, original4eventjournal andallrawproof; no blindsignal/unlock.
+Evidence: `../evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-KEEPER-SUCCESSOR-PREPARATION-2/`.
+Earlierexpiredstandby1203549/tool17927 joined0 andclosedonlyaddedcopy; no command
+consumed/signal. Sourcecandidatefc0/a69 remainsfrozen. Nextshared/finalclose/current
+physicalthenincrementaldefaulttwo-object/eleveninputlink; no newclosuresyet.
+
 ## Shared-phase failure retained — current keeper custody
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

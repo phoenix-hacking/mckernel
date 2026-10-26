@@ -1,0 +1,44 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_EXACT_PINNED_IMAGE_TOOLS_READONLY_METADATA",
+  "image": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+  "observed_wall": 1793041474.3750741,
+  "container_created": false,
+  "compiler_run": false,
+  "image_mutated": false,
+  "tools": [
+    {
+      "path": "/usr/bin/cmake",
+      "bytes": 8838896,
+      "sha256": "a2ec9c59d15b48b6abba45cfaa873df186e01a2e3ca99302ada1e51637f4cfd1",
+      "image_target": "/usr/bin/cmake",
+      "actual_layer_file": "/var/lib/docker/overlay2/7dfdeca53dbb9dd0b2a42681dfe546347648e0f11b7b03876404223be540f39f/diff/usr/bin/cmake",
+      "device": 66306,
+      "inode": 1616074
+    },
+    {
+      "path": "/usr/bin/cc",
+      "bytes": 1375456,
+      "sha256": "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2",
+      "image_target": "/usr/bin/gcc",
+      "actual_layer_file": "/var/lib/docker/overlay2/7dfdeca53dbb9dd0b2a42681dfe546347648e0f11b7b03876404223be540f39f/diff/usr/bin/gcc",
+      "device": 66306,
+      "inode": 1616153
+    },
+    {
+      "path": "/usr/bin/ld",
+      "bytes": 1193976,
+      "sha256": "825f11b6b672735ab4c3a2c95cc9711294b159b1d0e1c191b5d1d1f8917e0586",
+      "image_target": "/usr/bin/ld.bfd",
+      "actual_layer_file": "/var/lib/docker/overlay2/2a23ddce6067a5847fc046c77f050a037a224c752e9e6ff2d7d56ac9162e8982/diff/usr/bin/ld.bfd",
+      "device": 66306,
+      "inode": 55711206
+    },
+    {
+      "path": "/nightly/bin/rustc",
+      "bytes": 645792,
+      "sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09",
+      "actual_host_file": "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc"
+    }
+  ]
+}

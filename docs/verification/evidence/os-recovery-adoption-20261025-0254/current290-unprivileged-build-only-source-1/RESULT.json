@@ -1,0 +1,74 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_28_PURE_CHANGED_TESTS_POSTCLEANUP_SUDO_CLIENT_SOURCE_ONLY",
+  "tests": 28,
+  "command": [
+    "taskset",
+    "-c",
+    "2",
+    "prlimit",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-unprivileged-build-only-source-1/test_build_only.py"
+  ],
+  "returncode": 0,
+  "sources": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-unprivileged-build-only-source-1/hold_and_run_build_only.py",
+      "bytes": 7002,
+      "sha256": "91f6dbdfc4203fb98aae939c62303313bc2c719a4952142abbbf08556e89bd07"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-unprivileged-build-only-source-1/run_build_only.py",
+      "bytes": 16380,
+      "sha256": "bc9e984a4f1b85a7267f4c7f08f96ad840f2e6bf4c1a7297ada1141a3d554bcb"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-unprivileged-build-only-source-1/build_only_worker.py",
+      "bytes": 3723,
+      "sha256": "bc00cd12db5d7df6f8eb1aa5649de291865d32e9905527cd583cf3afe65d8fb0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-unprivileged-build-only-source-1/PROFILE.SOURCE-ONLY.json",
+      "bytes": 39621,
+      "sha256": "43905ccfad42e62dd2034f985f72f1f2b3d5f84f10c762be95da233796dcdca3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-unprivileged-build-only-source-1/test_build_only.py",
+      "bytes": 11021,
+      "sha256": "2dca01701ca5af9c4372bd9fee7ffded248c1301e81d929276fc3ca389a8d906"
+    }
+  ],
+  "captures": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-unprivileged-build-only-source-1/TEST.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-unprivileged-build-only-source-1/TEST.stderr",
+      "bytes": 1947,
+      "sha256": "049d02417cec55c0a678b4b9cb28381d294366bb4d918f2fc714565b683317d5"
+    }
+  ],
+  "runtime_authority": null,
+  "compiler_commands_run": 0,
+  "Docker_calls": 0,
+  "native_or_root_actions": 0,
+  "global_mutex_or_shared_lock_operations": 0,
+  "measurement_claim": "No actual container/RSS/timing/readable-export/daemon-access qualification yet;12GiB/4CPU/pids512 retained.",
+  "next_command": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-unprivileged-build-only-source-1/hold_and_run_build_only.py",
+    "--bootstrap-grant",
+    "ACTUAL_ROOT_HOLDER_BOOTSTRAP_GRANT.json"
+  ],
+  "actual_blocker": "Root ordinary holder-only bootstrap; actual27:4 reservation/PID/birth/fullEOF; exact readable exports/resource data; one independent actual build release and explicit sudoDocker-client rootgrant. Oldnativecustody f597 already accepted.",
+  "default_native_file_retirement_closures": 0
+}

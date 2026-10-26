@@ -1,0 +1,137 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SCHEMA_ONLY_POSTCLEANUP_ONE_HEAVY_NOT_AUTHORITY",
+  "runtime_authority": null,
+  "root_grant": {
+    "author": null,
+    "decision": "GRANT_ONE_CURRENT290_BUILD_ONLY",
+    "maximum_invocations": 1,
+    "nonce": null,
+    "runner": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-unprivileged-build-only-source-1/run_build_only.py",
+      "bytes": 16380,
+      "sha256": "bc9e984a4f1b85a7267f4c7f08f96ad840f2e6bf4c1a7297ada1141a3d554bcb"
+    },
+    "worker": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-unprivileged-build-only-source-1/build_only_worker.py",
+      "bytes": 3723,
+      "sha256": "bc00cd12db5d7df6f8eb1aa5649de291865d32e9905527cd583cf3afe65d8fb0"
+    },
+    "profile": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-unprivileged-build-only-source-1/PROFILE.SOURCE-ONLY.json",
+      "bytes": 39621,
+      "sha256": "43905ccfad42e62dd2034f985f72f1f2b3d5f84f10c762be95da233796dcdca3"
+    },
+    "review": null,
+    "resource_authority": null,
+    "input_export_authority": null,
+    "fresh_output_root": null,
+    "docker_client_prefix": [
+      "/usr/bin/sudo",
+      "-A",
+      "/usr/bin/docker",
+      "--host=unix:///var/run/docker.sock"
+    ],
+    "root_docker_client_only": true,
+    "native_custody_clearance": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT290-CLEANUP-INDEPENDENT-CURRENT-PHYSICAL-ACCEPTANCE-20261026-1850.json",
+      "bytes": 1666,
+      "sha256": "f597854a21fdf2a225ecd058cc0f9393dc4d3c49ab3a25f684bbdee1085cc003"
+    }
+  },
+  "resource_required_fields": [
+    "author=/root",
+    "runtime_authority=ONE_BUILD_ONLY_RESOURCE_RESERVATION",
+    "nonce",
+    "observed_at_epoch",
+    "cpus=[2,3,4,5]",
+    "heavy_slots_held=1",
+    "other_heavy_slots=0",
+    "reservation_owner=nonce",
+    "cpu_reservation_held=true",
+    "reservation_holder={path,pid,starttime,device,inode}; actual /proc/locks full-EOF row",
+    "container_memory_bytes=12884901888",
+    "container_pids=512",
+    "other_reserved_memory_bytes",
+    "aggregate_memory_budget_bytes<=23669457394",
+    "other_reserved_pids",
+    "aggregate_pid_budget",
+    "fresh_output_root",
+    "native_custody_unchanged=true",
+    "host_required_free_bytes",
+    "scratch_required_free_bytes",
+    "coexistence_decision=REVIEWED_POSTCLEANUP_ONE_HEAVY only",
+    "reservation_kind=PERMANENT_27_4_ONE_HEAVY_AFTER_CLEARANCE",
+    "reservation_ready_record=exact actual HOLDER.READY.json reference",
+    "reservation_holder=exact ready.holder object including fd",
+    "native_custody_clearance={\"path\": \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT290-CLEANUP-INDEPENDENT-CURRENT-PHYSICAL-ACCEPTANCE-20261026-1850.json\", \"bytes\": 1666, \"sha256\": \"f597854a21fdf2a225ecd058cc0f9393dc4d3c49ab3a25f684bbdee1085cc003\"}"
+  ],
+  "export_required_fields": [
+    "author=/root",
+    "decision=PASS_EXACT_UID1000_READONLY_BUILD_EXPORTS",
+    "request_sha256=7a0477f1bfad282ef11c08fed10e8485849505a8e7540fd33b1dc69a2c443dcf",
+    "runtime_authority=null",
+    "source6153=/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source",
+    "source6153_entries=6153",
+    "retained_seed=/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build",
+    "readable_source_export",
+    "readable_seed_export",
+    "additional_readonly_exports=[] or exact reviewed generated/SDK/gitlink mounts",
+    "qualified_readonly_files=exact profile configuration + nine nonreplacement source refs + three postimage refs",
+    "container_tool_files=exact pinned container executable refs including /usr/bin/cmake,/usr/bin/cc,/usr/bin/ld,/nightly/bin/rustc",
+    "Rust_release=1.95.0-nightly",
+    "GCC_major=14",
+    "SDK21_recompiled=false"
+  ],
+  "independent_review_required_fields": [
+    "decision=PASS_EXACT_BUILD_ONLY_EXECUTION",
+    "independent=true",
+    "reviewer distinct from implementer/root",
+    "nonce",
+    "runner",
+    "profile",
+    "worker",
+    "resource_authority",
+    "input_export_authority",
+    "fresh_output_root",
+    "coexistence_decision",
+    "docker_client_prefix=exact existing sudo -A docker --host=unix:///var/run/docker.sock",
+    "root_docker_client_only=true",
+    "native_custody_clearance=exact f597854a accepted record"
+  ],
+  "one_review_sequence": "Root ordinary holder-only bootstrap (no Docker) -> actual holder ready/PID/start/FD/fullEOF -> root actualresource/inputexport binding -> ONE independent exact build execution review -> exact new root buildgrant and READY -> three commands.",
+  "bootstrap": {
+    "status": "PENDING_ROOT_ORDINARY_HOLDER_GRANT_NOT_RELEASED",
+    "author": null,
+    "decision": "GRANT_ONE_POSTCLEANUP27_4_BUILD_ONLY_HOLDER",
+    "maximum_invocations": 1,
+    "nonce": null,
+    "permanent_mutex_path": null,
+    "fresh_handshake_root": null,
+    "native_custody_clearance": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT290-CLEANUP-INDEPENDENT-CURRENT-PHYSICAL-ACCEPTANCE-20261026-1850.json",
+      "bytes": 1666,
+      "sha256": "f597854a21fdf2a225ecd058cc0f9393dc4d3c49ab3a25f684bbdee1085cc003"
+    },
+    "source": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-unprivileged-build-only-source-1/hold_and_run_build_only.py",
+      "bytes": 7002,
+      "sha256": "91f6dbdfc4203fb98aae939c62303313bc2c719a4952142abbbf08556e89bd07"
+    },
+    "runner": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-unprivileged-build-only-source-1/run_build_only.py",
+      "bytes": 16380,
+      "sha256": "bc9e984a4f1b85a7267f4c7f08f96ad840f2e6bf4c1a7297ada1141a3d554bcb"
+    },
+    "worker": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-unprivileged-build-only-source-1/build_only_worker.py",
+      "bytes": 3723,
+      "sha256": "bc00cd12db5d7df6f8eb1aa5649de291865d32e9905527cd583cf3afe65d8fb0"
+    },
+    "profile": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-unprivileged-build-only-source-1/PROFILE.SOURCE-ONLY.json",
+      "bytes": 39621,
+      "sha256": "43905ccfad42e62dd2034f985f72f1f2b3d5f84f10c762be95da233796dcdca3"
+    }
+  }
+}

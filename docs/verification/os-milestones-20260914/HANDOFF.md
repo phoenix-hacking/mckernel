@@ -1,3 +1,24 @@
+## Current cleanup accepted — global27:4 free; actualbuild next
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Current290 cleanup/currentphysical independentlyaccepted f597854a.
+Keeper1207999 andcaller45301 joined0; predecessor1193473/directsudo/tool1416
+retired withgenuinejoins; original1060806 retirementpreserved. Global27:4free
+twopositiveprobes, common/sharedabsent, oldCIDabsent, originalplan+9eventjournal+
+archives/historicalquarantine/77files/76inventoryrows preserved. Historical
+unknownjoins stayunknown. No kernel/default/native/file/Cretirementcredit.
+
+Rootnext actualone-heavy buildadmission using exact3Rust/process/ld commands,
+retaining source6153/nineprefixobjects/SDK21. default_link_repair owns reusable
+build-onlyrunner andRootDockerprefixmediation (existingowner735 prefix), plus
+actual27:4 reservationwrapper. Host/containerUID1000;4CPU2-5/12GiB/pids512/noSwap/
+noNet/ROinputs/freshRWoutput preserved. DirectUID1000daemonaccessdenied; nofallback
+orpermissionchange. Code/profiles are source-only until exactreview+admission.
+Originalattempt5source/request7a/initializer remainsfallbackready.
+Fixedend2026-10-27T11:24:50Z; controls/accounting untouched. LatestCURRENT
+and CURRENT290-CLEANUP-INDEPENDENT-CURRENT-PHYSICAL-ACCEPTANCE-20261026-1850.json
+routeactualproof. No live cleanupkeeper remains and no newcompile yet.
+
 ## Actual17:48 shared failure — keeper1193473 owns retained custody
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

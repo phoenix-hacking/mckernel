@@ -1,0 +1,15 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "argv": [
+    "/usr/bin/docker",
+    "--host=unix:///var/run/docker.sock",
+    "image",
+    "inspect",
+    "--format",
+    "{{json .GraphDriver.Data}}",
+    "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5"
+  ],
+  "returncode": 0,
+  "stdout": "{\"LowerDir\":\"/var/lib/docker/overlay2/2a23ddce6067a5847fc046c77f050a037a224c752e9e6ff2d7d56ac9162e8982/diff\",\"MergedDir\":\"/var/lib/docker/overlay2/7dfdeca53dbb9dd0b2a42681dfe546347648e0f11b7b03876404223be540f39f/merged\",\"UpperDir\":\"/var/lib/docker/overlay2/7dfdeca53dbb9dd0b2a42681dfe546347648e0f11b7b03876404223be540f39f/diff\",\"WorkDir\":\"/var/lib/docker/overlay2/7dfdeca53dbb9dd0b2a42681dfe546347648e0f11b7b03876404223be540f39f/work\"}\n",
+  "stderr": ""
+}
