@@ -1,3 +1,22 @@
+## SDK actual static provenance finalized; precise F05 remaining obligation — 2026-10-26T23:49Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+F05 whole-file KEEP_OPEN onlyon existing frozen M14-05-05 nativeusercopy/process-VM
+verify/read/write/patch boundedlifetimes/faultfixups; selectedC0/343Rust/sevenstorage
+andmatchingmemorynative accepted. Nextsupportedcase baseline.core.files (8209-byte
+transfer), requiresactualrouteevidence; no neworacle orautomaticwholefilecredit.
+ActiveF05worklistnowshowscurrentproof and exactblocker; olderunassessed/sourceblocked
+notes preserved ashistorical. Files/threadsHOSTcollectors+overlays ready, no nativesyet.
+
+SDKrequest0ea8a102ddbd49b3be5cdeb8cd40633c reserved, NOTconsumed. Allactualgrowth/
+2hop/Native2historicalstage+currentmemoryheadmetadata nowbound; unchangedparent696
+andactual2hop purevalidationPASS. Newtypedphysical693a mapsactualaccepted9bd1 scope,
+originalpostcheckFAIL retained. No queryholder/query/SDK operation entered yet.
+Rootfinishesstaticquerysourcepublication (h990capture+ordinaryownFDholder), then
+freshclock beforeobservations, oneactualreadonlyquery/admission/sevenretainedargv.
+InitialRootfinalizer-I importfailure retained; exactreviewed-BCLI succeeded, no
+sourceedit/output/replay. Existingcredit/run/deadline/ownercontrolsunchanged.
+
 ## Matching current290 memory diagnostic independently accepted — 2026-10-26T23:31Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

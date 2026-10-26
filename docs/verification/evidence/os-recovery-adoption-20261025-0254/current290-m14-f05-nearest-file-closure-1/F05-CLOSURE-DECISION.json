@@ -1,0 +1,104 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "KEEP_F05_WHOLE_FILE_OPEN_ONE_FROZEN_NATIVE_OBLIGATION_NOT_YET_PROVED",
+  "whole_file_closure_eligible": false,
+  "independent_file_acceptance": false,
+  "canonical_worklist_changed": false,
+  "runtime_authority": null,
+  "file_id": "M14-F05",
+  "file_path": "arch/x86_64/kernel/memory.c",
+  "profile": "current290 source6153; GCC14 retained memory.c.o d3207c7a; fresh Rust6284ac14; linked imagee6a82; existing pinned4CPU/12GiB container and4vCPU/8192MiB native diagnostic",
+  "frozen_requirement": {
+    "worklist": {
+      "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/rust-cutover-m14.json",
+      "bytes": 205304,
+      "sha256": "84913fe4cbeef802c2a252a0deacc624afb8920df171c22bd9c7e8208c76c8a4"
+    },
+    "description": {
+      "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/RUST-CUTOVER-M14.md",
+      "bytes": 34993,
+      "sha256": "c724340cda8b6976246dfda8706733c2393238ce2c2a8c76c8b5cf0e3a65c695"
+    },
+    "subgoal": "M14-05-05",
+    "title": "Usercopy and process-VM verify/read/write/patch entrypoints, bounded mapping lifetimes and fault fixups.",
+    "proof_clause": "Demonstrate applicable actual native functional behavior on matching artifacts; record exact supported scope and unresolved branches. Model-only results are insufficient.",
+    "existing_validation_concern": "TLB visibility and memory ordering; usercopy partial transfer/fault recovery and source/destination bounds."
+  },
+  "accepted_reused_proof": {
+    "selected_source_default_link_and_storage": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f05-nearest-file-closure-1/SELECTED-F05-RECONCILIATION.json",
+      "bytes": 56742,
+      "sha256": "faf1d548f34d23edf2cd0eee1c3cbdb9c36b8a908bc1aeb6c603ea891442c0e3"
+    },
+    "c_runtime_functions": 0,
+    "c_runtime_objects": 0,
+    "c_allocated_relocations": 0,
+    "rust_function_providers": 343,
+    "exact_final_storage_pointers": 7,
+    "host_move_teardown": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ACTUAL-F05-MOVE-TEARDOWN-SIX-COMPOSITIONS-INDEPENDENT-HOST-ACCEPTANCE.json",
+      "bytes": 1495,
+      "sha256": "f08027b1f978c4ae18005a3610529c997096bc566284bc1a58db3b4dca750a23"
+    },
+    "matching_memory_native": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT290-MEMORY1-INDEPENDENT-CASE-ACCEPTANCE.json",
+      "bytes": 1765,
+      "sha256": "f92aeeb8a823b9084d074a7fbf248661f388bf1b8abfae18466710d135a2ea55"
+    },
+    "matching_memory_postjoin": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT290-MEMORY1-INDEPENDENT-POSTJOIN-ACCEPTANCE.json",
+      "bytes": 1767,
+      "sha256": "86b693c55760b6d519185f6b785c520892fe762402c919b973037d053955dd56"
+    }
+  },
+  "native_proven": "Matching boot and current-image heap allocation/free,256KiB anonymous mapping/64page complete readback, first-pageRW/RO/RW transitions and post-restorewrite, munmap, exit37, exact24Bstdout/empty stderr, normal native cleanup and accepted postjoin.",
+  "single_decisive_unproved_obligation": "M14-05-05 matching native usercopy read/write behavior over page boundaries with exact transferred bytes and bounded mapping lifetime. The accepted memory payload performs in-process heap/mapping operations and only24B stdout transfer; it has no read/pread or cross-page write/pwrite byte-contract. HOST semantic fixtures and Rust/link ownership establish other scopes and cannot supply this missing native behavior.",
+  "smallest_already_supported_next_test": {
+    "case_id": "baseline.core.files",
+    "collector_profile": "ND_CORE_FILES",
+    "payload_source": {
+      "path": "/home/holden/mckernel/scripts/tests/fixtures/native-application-core.c",
+      "bytes": 5758,
+      "sha256": "525bb7416c579da09c5f780b3ff6962287f07143488b6669bbee5ae744412743"
+    },
+    "payload": {
+      "path": "/home/holden/mckernel-work/scratch/native-application-core-build-20260908-1/native-application-core",
+      "size": 39488,
+      "sha256": "558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a",
+      "mode": 33261
+    },
+    "host_manifest": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-next-core-cases-source-1/files/manifest.HOST-STATIC.json",
+      "sha256": "f4566bf04455e6d002d104679143abe291bc84a6fedc382d32b15c036647b21e",
+      "size": 7692,
+      "mode": 33152
+    },
+    "overlay": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-next-core-cases-source-1/files/files.cpio.gz",
+      "sha256": "1359e588ceb5f88a94998d1d89bac470e41660d5d6f8c696eb0cdb07738a5dab",
+      "size": 13859371,
+      "mode": 33152
+    },
+    "collector": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-next-core-cases-source-1/files/init",
+      "sha256": "24bea046230cc7166be3786c2cde7d33dc6565fa29dc8597623eab556c4e2207",
+      "size": 1021408,
+      "mode": 33216
+    },
+    "frozen_oracle": {
+      "exit_code": 37,
+      "stderr_hex": "",
+      "stdout_hex": "4e41544956455f434f524520504153532066696c65730a"
+    },
+    "actual_existing_checks": [
+      "8209byte write/read and exact memcmp",
+      "single-byte pwrite at offset4096 followed by8209byte pread and exact memcmp",
+      "EOF read0; reopen+8209byte read; close/unlink and ENOENT"
+    ],
+    "why_this_next": "Existing supported core collector and unchanged payload already compiled/packaged; no new oracle, port, kernel build or framework. The8209byte buffers necessarily span page boundaries. Native trace/route evidence must establish the changed-boundary path; no direct F05 route acceptance is inferred from libc alone.",
+    "minimum_next_preparation": "Root-authorized same-byte scratch manifest staging outside separate writable parent; actual owner purepath checks; publication and fresh independent native admission after SDK. No compile/overlay replay.",
+    "after_pass_limit": "This case addresses ordinary successful usercopy read/write and lifecycle only. It does not itself prove process_vm patching, fault-fixup/partial-transfer branches or automatically close F05; retain the existing frozen unresolved branches for final independent review."
+  },
+  "no_expansion": "This decision uses the existing M14-05-05 title, frozen native-proof clause and already-supported baseline core files case. It does not infer missing implementation from stale unassessed statuses or add new qualification/oracles.",
+  "root_final_review_required": true
+}

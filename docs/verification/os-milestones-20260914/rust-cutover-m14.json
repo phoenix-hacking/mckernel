@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-26T23:33:39.496042+00:00",
+  "as_of": "2026-10-26T23:49:41.812613+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -2084,7 +2084,7 @@
         {
           "id": "M14-05-05",
           "title": "Usercopy and process-VM verify/read/write/patch entrypoints, bounded mapping lifetimes and fault fixups.",
-          "status": "unassessed",
+          "status": "partial",
           "owner": null,
           "remaining_c_functions": null,
           "rust_consumer": null,
@@ -2106,7 +2106,9 @@
               "status": "unassessed",
               "evidence": []
             }
-          }
+          },
+          "historical_status_before_current290": "unassessed",
+          "current_native_gap": "Matching memory smoke does not provide read/pread/cross-page write byte-contract; prepared baseline.core.files is next supported test and needs actual F05 route evidence. Process-VM/fault/partial branches are not inferred."
         }
       ],
       "validation_concerns": [
@@ -2115,11 +2117,18 @@
         "Kernel/user mapping ABI and actual boot table layout; prove symbols/default flags in the artifact before native mapping regression credit."
       ],
       "file_closure": {
-        "status": "unassessed",
+        "status": "open",
         "requirement": "All supported live implementations from this translation unit and its included headers/macros are Rust/reviewed assembly; no substantive live C callbacks, wrappers or unknown owners remain. Preserve declarations and excluded fallback source where useful.",
-        "residual_c_bytes": null,
-        "residual_c_functions": null,
-        "evidence": []
+        "residual_c_bytes": 0,
+        "residual_c_functions": 0,
+        "evidence": [
+          "docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f05-nearest-file-closure-1/SELECTED-F05-RECONCILIATION.json",
+          "docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT290-MEMORY1-INDEPENDENT-CASE-ACCEPTANCE.json",
+          "docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f05-nearest-file-closure-1/F05-CLOSURE-DECISION.json"
+        ],
+        "current_scope": "Selected current290 GCC14 F05 memory.c runtime object; whole-file remains open for existing functional native obligation.",
+        "current_blocker": "M14-05-05 native usercopy/process-VM read/write/patch, bounded lifetimes and fault fixups.",
+        "next_supported_test": "baseline.core.files"
       },
       "active_lane_20261024": {
         "confirmed_at": "2026-10-24T00:29:28.290006+00:00",
@@ -2147,16 +2156,22 @@
         }
       ],
       "latest_dispatcher_checkpoint": {
-        "implemented": "SelectedzeroC source retained. f02_contract prepares42trace/state move_pte_range cases using retained875f object, no wholecrate replay; unrun.",
-        "actual": "SelectedzeroC source retained. f02_contract prepares42trace/state move_pte_range cases using retained875f object, no wholecrate replay; unrun.",
-        "limits": "Controlled HOST/source scopes only; selected default/native/wholefile/Cboundary retirement remain open."
+        "at": "2026-10-26T23:49:41.812613+00:00",
+        "implemented": "Selected current290 F05 C object has zero runtime FUNC/OBJECT/allocated relocations; 343 Rust providers and seven final storage pointers qualified. Existing HOST semantics retained.",
+        "actual": "Matching current290 startup and baseline.core.memory diagnostic cases independently accepted with normal retirement/currentphysical; F05 whole-file decision KEEP_OPEN on exact frozen M14-05-05.",
+        "limits": "Native usercopy/process-VM read/write/patch bounded-lifetime/fault-fixup obligation not closed by memory smoke; smallest already-supported next case baseline.core.files with 8209-byte transfer and route evidence. No broader oracle or percentage added."
       },
       "current_increment": {
         "at": "2026-10-24T11:43:50.774989+00:00",
         "actual_progress": "Actual four-command wide-behavior suffix PASS 288 corrected top contracts/8 legacy truncation sentinels/192 C-Rust leaves/768 selectors, .597037868wall/.54798CPU. Retained ET_REL10 exact bindings qualified WRITE=true, RO gate FAIL preserved; default GCC14/final pointer storage/native OPEN.",
         "engineering_percentage": null
       },
-      "prior_recorded_owner_before_20261025": "/root/m14_production_stage"
+      "prior_recorded_owner_before_20261025": "/root/m14_production_stage",
+      "historical_pre_current290_dispatcher_checkpoint": {
+        "implemented": "SelectedzeroC source retained. f02_contract prepares42trace/state move_pte_range cases using retained875f object, no wholecrate replay; unrun.",
+        "actual": "SelectedzeroC source retained. f02_contract prepares42trace/state move_pte_range cases using retained875f object, no wholecrate replay; unrun.",
+        "limits": "Controlled HOST/source scopes only; selected default/native/wholefile/Cboundary retirement remain open."
+      }
     },
     {
       "id": "M14-F06",
@@ -3295,6 +3310,16 @@
         "docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mm-unlock-fixture-actual-1/RESULT.json"
       ],
       "limits": "One exact native diagnosticcase only; no whole defaultcutover/nativecutover/M14/M15/wholefile/Cboundary retirement acceptance or95percentclaim."
+    },
+    {
+      "at": "2026-10-26T23:49:41.812613+00:00",
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "actual_progress": "Matching current290 memory diagnostic accepted stdout24B/exit37/retirement/postjoin; F05 selectedC0/343Rust/7storage proofs qualified, file KEEP_OPEN precisely at frozen M14-05-05. SDK source/custody/currenthead composition PASS, actualRootstatic binding and fresh query next; no SDK command or C/file closure yet.",
+      "evidence": [
+        "docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT290-MEMORY1-INDEPENDENT-CASE-ACCEPTANCE.json",
+        "docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f05-nearest-file-closure-1/F05-CLOSURE-DECISION.json"
+      ],
+      "limits": "Exact diagnostic and selected-link scope only; M14/M15 OPEN/practical35 unchanged; no velocity95percentclaim."
     }
   ],
   "latest_dispatcher_checkpoint": {
