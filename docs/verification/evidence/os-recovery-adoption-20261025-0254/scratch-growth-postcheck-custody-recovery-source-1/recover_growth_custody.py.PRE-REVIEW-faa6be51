@@ -1,0 +1,255 @@
+#!/usr/bin/env python3
+"""Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+One separately released copy/retire/close operation for growth1281419 FD4.
+No filesystem mutation, lock reopening, unlock, child spawning or automatic signal.
+"""
+import argparse
+import ctypes
+import datetime
+from decimal import Decimal
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import resource
+import select
+import signal
+import sys
+import time
+
+HERE=Path(__file__).resolve().parent
+sys.path.insert(0,str(HERE))
+import ofd_primitives as ofd
+E=HERE.parent
+PID,BIRTH,PARENT,PGID,REMOTE_FD,ORIGIN=1281419,85204892,1281416,1281414,4,1281419
+BOOT='7bfc5687-6c04-4d15-84eb-b92ab9a55dcb'
+CUTOFFS=[1793100290.0,882395.5689528405,897734.6960034363]
+LOCK=Path('/run/lock/mckernel-development.lock')
+OUTPUT=E/'ROOT-SCRATCH-GROWTH-CUSTODY-RECOVERY-1'
+SCOPE='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
+TARGET=dict(pid=PID,birth=BIRTH,parent=PARENT,pgid=PGID,fd=REMOTE_FD,origin=ORIGIN)
+
+def need(ok,why):
+    if not ok:raise ValueError(why)
+def canonical(v):return (json.dumps(v,sort_keys=True,separators=(',',':'),allow_nan=False)+'\n').encode()
+def reference(p):
+    raw=Path(p).read_bytes();return dict(path=str(p),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def bound(r,document=True,root=True):
+    need(isinstance(r,dict) and set(r)=={'path','bytes','sha256'},'exact evidence reference')
+    p=Path(r['path']);s=p.lstat();need(p.is_absolute() and not p.is_symlink() and (s.st_uid==0 if root else s.st_uid in (0,1000)) and s.st_nlink==1,'owned evidence')
+    raw=p.read_bytes();need(len(raw)==r['bytes'] and hashlib.sha256(raw).hexdigest()==r['sha256'],'changed evidence')
+    return json.loads(raw) if document else raw
+
+def guard():
+    need(os.getuid()==os.geteuid()==os.getgid()==os.getegid()==0 and os.uname().machine=='x86_64','root x86_64 only')
+    need(Path('/proc/sys/kernel/random/boot_id').read_text().strip()==BOOT,'same boot')
+    clocks=[time.time(),time.monotonic(),time.clock_gettime(time.CLOCK_BOOTTIME)]
+    need(all(a<b for a,b in zip(clocks,CUTOFFS)),'fixed cutoff')
+    s=json.loads(Path('/home/holden/mckernel/.git/os-autopilot/state.json').read_bytes())
+    age=clocks[0]-datetime.datetime.fromisoformat(s['heartbeat_at']).timestamp()
+    need(s['phase']=='running' and s['thread_id']=='01a170fb-57c3-7ab3-862d-8005bef92a63'
+         and s['credit_budget']['id']=='7f4af94a83b14cc08f97401f5891d965'
+         and Decimal(s['credit_budget']['budget'])==Decimal('57774.852125')
+         and Decimal(s['credit_budget']['remaining'])>0 and s['credit_budget_error'] is None
+         and 0<=age<180 and s['last_rate_limits']['spendControlReached'] is False,'same account guard')
+    return clocks
+
+def independent(review,decision,payload):
+    need(review['decision']==decision and review['implementation_ownership'] is False
+         and review['reviewer'] not in ('','/root',None)
+         and review['payload_sha256']==hashlib.sha256(canonical(payload)).hexdigest(),'independent exact phase review')
+
+class Recovery:
+    """A single-use state machine. Any exception after possible copy retains custody."""
+    def __init__(self,backend):
+        self.b=backend;self.pidfd=None;self.fd=None;self.copy_possible=False
+        self.phase='NEW';self.ready=None;self.retired=None;self.consumed=set();self.closed=False
+    def copy(self):
+        need(self.phase=='NEW','copy once')
+        self.b.before_copy()
+        self.b.consume_copy();self.consumed.add('COPY')
+        self.pidfd=self.b.open_pidfd()
+        self.b.check_old(self.pidfd)
+        self.copy_possible=True
+        # Store the raw result before any fallible verification/publication adapter.
+        self.fd=self.b.copy_fd(self.pidfd)
+        need(type(self.fd) is int and self.fd>=0,'copy failed')
+        proof=self.b.verify_copy(self.fd,self.pidfd)
+        self.ready=self.b.publish('RAWREADY',proof)
+        self.phase='READY'
+        return self.ready
+    def retire(self,command):
+        need(self.phase=='READY' and 'RETIRE' not in self.consumed,'retire once after READY')
+        self.b.authorize('RETIRE',command,self.ready,self.retired)
+        self.b.check_old(self.pidfd);self.b.verify_copy(self.fd,self.pidfd)
+        retire_consumed=self.b.consume('RETIRE',command);self.consumed.add('RETIRE')
+        self.b.kill_exact(self.pidfd)
+        self.b.positive_exit(self.pidfd)
+        self.b.verify_after_exit(self.fd,self.pidfd)
+        self.retired=self.b.publish('PIDFD-EXIT',dict(ready=self.ready,old_target=TARGET,
+                        positive_pidfd_exit=True,nonchild_waitpid_claim=False,retained_fd=self.fd,consumed_retire=retire_consumed))
+        self.phase='RETIRED'
+        return self.retired
+    def close(self,command):
+        need(self.phase=='RETIRED' and 'CLOSE' not in self.consumed,'close only after retired')
+        self.b.authorize('CLOSE',command,self.ready,self.retired)
+        self.b.positive_exit(self.pidfd);self.b.verify_after_exit(self.fd,self.pidfd)
+        close_consumed=self.b.consume('CLOSE',command);self.consumed.add('CLOSE')
+        self.b.final_close_check(command,self.fd,self.pidfd)
+        self.b.close_copy(self.fd)
+        self.fd=None;self.closed=True;self.phase='CLOSED'
+        # A publication fault now is explicitly postclose; it cannot restore custody.
+        self.b.publish('NORMAL-CLOSE',dict(ready=self.ready,pidfd_exit=self.retired,
+            successor_fd_closed=True,original_helper_normal_close_claim=False,normal_return_expected=True,consumed_close=close_consumed))
+        return 0
+
+class Backend:
+    def __init__(self,packet_ref):
+        self.packet_ref=packet_ref;self.packet=bound(packet_ref)
+        self.target_pins=bound(self.packet['actual_target_pins'],root=False)
+        self.libc=ctypes.CDLL(None,use_errno=True);self.libc.syscall.restype=ctypes.c_long
+        self.meta=None;self.own=None
+    def before_copy(self):
+        guard();p=self.packet
+        need(bool(os.sched_getaffinity(0)) and set(os.sched_getaffinity(0))<={2,3,4,5},'reviewed CPU affinity')
+        as_limit=resource.getrlimit(resource.RLIMIT_AS)[0]
+        need(0<as_limit<=2*2**30 and resource.getrlimit(resource.RLIMIT_CORE)[0]==0,'reviewed process limits')
+        need(p['target']==TARGET and p['output']==str(OUTPUT) and p['boot_id']==BOOT
+             and p['fixed_cutoffs']==CUTOFFS and p['phase']=='COPY_ONLY','one exact copy packet')
+        need(self.target_pins['target']==dict(TARGET,command_hex=self.target_pins['target']['command_hex']),'exact pinned target')
+        for name,r in self.target_pins['pins'].items():bound(r,False,root=name!='source822')
+        need(self.target_pins['pins']['source822']['sha256']=='8229919524d803c3694aea42e85bb43d705228d7f78a8ce768704b613ce7608f','original source822')
+        need(Path('/proc/self/cmdline').read_bytes()==bytes.fromhex(p['command_hex']),'exact reviewed recovery argv')
+        expected={n:reference(HERE/n) for n in ('recover_growth_custody.py','ofd_primitives.py','ACTUAL-TARGET-PINS.json')}
+        need(p['sources']==expected and p['actual_target_pins']==expected['ACTUAL-TARGET-PINS.json'],'exact recovery sources')
+        qualification=bound(p['qualified_postconditions'])
+        need(qualification['decision']=='PASS_QUALIFIED_ONLINE_GROWTH_POSTCONDITIONS'
+             and qualification['implementation_ownership'] is False and qualification['reviewer'] not in ('','/root',None)
+             and qualification['original_readonly_proof']==self.target_pins['pins']['postconditions']
+             and qualification['original_postcheck_failure_preserved'] is True
+             and qualification['absolute_reserved_blocks']==288358
+             and qualification['old_and_new_commands_joined'] is True,'independent actual online growth qualification')
+        payload={k:v for k,v in p.items() if k!='copy_review'}
+        independent(bound(p['copy_review']),'PASS_COPY_ONLY',payload)
+        s=OUTPUT.lstat();need(s.st_uid==s.st_gid==0 and s.st_mode&0o777==0o700 and not OUTPUT.is_symlink(),'private root output')
+        self.meta=ofd.metadata(os.stat(LOCK,follow_symlinks=False))
+        need(tuple(self.meta[k] for k in ('st_dev','st_ino','st_uid','st_gid','st_nlink','st_size','st_mode'))==(27,4,0,0,1,0,0o100644),'permanent lock node')
+    def consume_copy(self):
+        self.exclusive(OUTPUT/'CONSUMED-COPY.json',dict(source_packet=self.packet_ref,copy_review=self.packet['copy_review']))
+    def syscall(self,n,*args):
+        result=self.libc.syscall(ctypes.c_long(n),*[ctypes.c_int(x) for x in args])
+        if result<0:raise OSError(ctypes.get_errno(),'exact pidfd syscall '+str(n))
+        return result
+    def open_pidfd(self):return self.syscall(434,PID,0)
+    def copy_fd(self,pidfd):return self.syscall(438,pidfd,REMOTE_FD,0)
+    def check_old(self,pidfd):
+        guard()
+        raw=Path('/proc/self/fdinfo/'+str(pidfd)).read_text()
+        need([x.split()[1:] for x in raw.splitlines() if x.startswith('Pid:')]==[[str(PID)]],'exact live pidfd')
+        poll=select.poll();poll.register(pidfd,select.POLLIN|select.POLLHUP|select.POLLERR);need(not poll.poll(0),'old pidfd already exited')
+        actor=ofd.process(PID,str(BIRTH),PARENT,PGID,0,bytes.fromhex(self.target_pins['target']['command_hex']))
+        tasks=list(Path('/proc/'+str(PID)+'/task').iterdir());need(len(tasks)==1,'old helper single thread')
+        need(all((t/'children').read_text().strip()=='' for t in tasks),'old helper child absence')
+        need(ofd.metadata(os.stat(LOCK,follow_symlinks=False))==self.meta,'permanent node unchanged')
+        return actor
+    def verify_copy(self,fd,pidfd):
+        before=self.check_old(pidfd)
+        proof=ofd.verify_custody(fd,PID,REMOTE_FD,LOCK,self.meta,ORIGIN)
+        need(self.check_old(pidfd)==before,'target raced')
+        ownraw=Path('/proc/self/stat').read_text().rsplit(') ',1)[1].split()
+        self.own=dict(pid=os.getpid(),birth=int(ownraw[19]),parent=int(ownraw[1]),pgid=os.getpgrp(),fd=fd,command_hex=Path('/proc/self/cmdline').read_bytes().hex())
+        self.check_self()
+        proof.update(successor=self.own,old_target=TARGET,boot_id=BOOT,consumed_copy=reference(OUTPUT/'CONSUMED-COPY.json'),
+                     fdinfo=Path('/proc/self/fdinfo/'+str(fd)).read_text(),qualified_postconditions=self.packet['qualified_postconditions'],copy_only=True)
+        return proof
+    def check_self(self):
+        guard()
+        actor=ofd.process(self.own['pid'],str(self.own['birth']),self.own['parent'],self.own['pgid'],0,bytes.fromhex(self.own['command_hex']))
+        tasks=list(Path('/proc/self/task').iterdir());need(len(tasks)==1 and all((t/'children').read_text().strip()=='' for t in tasks),'successor no children/threads')
+        need(ofd.metadata(os.fstat(self.own['fd']))==self.meta==ofd.metadata(os.stat(LOCK,follow_symlinks=False)),'successor exact root FD')
+        return actor
+    def publish(self,event,data):
+        p=OUTPUT/(event+'.json');document=dict(scope=SCOPE,event=event,wall=time.time(),source_packet=self.packet_ref,data=data)
+        self.exclusive(p,document);return reference(p)
+    def exclusive(self,p,data):
+        fd=os.open(p,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_CLOEXEC|os.O_NOFOLLOW,0o600)
+        try:
+            raw=canonical(data);offset=0
+            while offset<len(raw):offset+=os.write(fd,raw[offset:])
+            os.fsync(fd)
+        finally:os.close(fd)
+    def authorize(self,action,envelope,ready,retired):
+        self.check_self();payload=envelope['payload'];review=bound(envelope['review'])
+        need(payload['action']==action and payload['author']=='/root' and payload['ready']==ready
+             and payload['source_packet']==self.packet_ref and payload['target']==TARGET
+             and payload['qualified_postconditions']==self.packet['qualified_postconditions']
+             and re.fullmatch('[0-9a-f]{32}',payload['nonce']) is not None,'exact phase command binding')
+        independent(review,'PASS_'+action+'_ONLY',payload)
+        need(payload['expires_wall']>time.time() and payload['expires_wall']<=CUTOFFS[0],'phase command clock')
+        if action=='RETIRE':need(payload['signal']==9 and payload['target_pidfd_signal_count']==1,'one exact SIGKILL target')
+        else:
+            need(action=='CLOSE' and payload['pidfd_exit']==retired,'close binds actual pidfd exit')
+            joins=bound(payload['old_actual_joins']);fs=bound(payload['current_fs_acceptance'])
+            need(joins['decision']=='PASS_ACTUAL_OLD_GROWTH_CALLER_TOOL_JOIN' and joins['old_target']==TARGET
+                 and joins['caller']==dict(pid=1281416,birth=85204885) and joins['tool_cell_id']=='40285'
+                 and all(joins[k] is True for k in ('caller_positive_wait','tool_positive_join','group_absent','closed_streams'))
+                 and joins['pidfd_exit']==retired,'genuine old caller/tool joins required')
+            for r in joins['actual_evidence']:bound(r,False)
+            need(len(joins['actual_evidence'])>=2,'actual caller/tool capture refs')
+            need(fs['decision']=='PASS_RECOVERED_GROWTH_CURRENT_PHYSICAL' and fs['implementation_ownership'] is False
+                 and fs['reviewer'] not in ('','/root',None) and fs['old_actual_joins']==payload['old_actual_joins']
+                 and fs['ready']==ready and fs['pidfd_exit']==retired
+                 and fs['qualified_postconditions']==self.packet['qualified_postconditions']
+                 and fs['successor_fd_still_held'] is True,'current filesystem acceptance before close')
+    def consume(self,action,envelope):
+        p=OUTPUT/('CONSUMED-'+action+'.json');self.exclusive(p,envelope);return reference(p)
+    def final_close_check(self,command,fd,pidfd):
+        self.check_self()
+        need(command['payload']['expires_wall']>time.time() and command['payload']['expires_wall']<=CUTOFFS[0],'close command expired after consume')
+        self.positive_exit(pidfd);self.verify_after_exit(fd,pidfd)
+        # These are after the fallible fsync and immediately before the own-FD close.
+        guard();need(command['payload']['expires_wall']>time.time(),'close command expired before close')
+    def kill_exact(self,pidfd):
+        self.check_old(pidfd)
+        # pidfd_send_signal(pidfd,SIGKILL,NULL,0): no PID/group fallback.
+        r=self.libc.syscall(ctypes.c_long(424),ctypes.c_int(pidfd),ctypes.c_int(9),ctypes.c_void_p(0),ctypes.c_uint(0))
+        if r<0:raise OSError(ctypes.get_errno(),'single pidfd SIGKILL failed; no retry')
+    def positive_exit(self,pidfd):
+        poll=select.poll();poll.register(pidfd,select.POLLIN)
+        need(any(f==pidfd and m&select.POLLIN for f,m in poll.poll(30000)),'positive pidfd exit required')
+    def verify_after_exit(self,fd,pidfd):
+        self.check_self()
+        need(self.own['pid']==os.getpid() and ofd.metadata(os.stat(LOCK,follow_symlinks=False))==self.meta,'successor/permanent identity')
+        return ofd.verify_held_after_exit(fd,pidfd,self.meta,LOCK,ORIGIN)
+    def close_copy(self,fd):os.close(fd)
+    def command(self,action):
+        p=OUTPUT/(action+'.json')
+        if not p.exists():return None
+        return bound(reference(p))
+
+def passive_hold(state,error):
+    # Even evidence publication failure cannot discard a possibly owned copy.
+    try:state.b.publish('QUARANTINE',dict(phase=state.phase,fd=state.fd,pidfd=state.pidfd,error=repr(error),copy_possible=state.copy_possible,closed=state.closed))
+    except BaseException:pass
+    while True:time.sleep(30)
+
+def main():
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--packet-ref',required=True);a=p.parse_args()
+    for sig in (signal.SIGTERM,signal.SIGINT,signal.SIGHUP,signal.SIGQUIT):signal.signal(sig,signal.SIG_IGN)
+    backend=Backend(json.loads(Path(a.packet_ref).read_bytes()));state=Recovery(backend)
+    try:
+        state.copy()
+        for action in ('RETIRE','CLOSE'):
+            command=None
+            while command is None:command=backend.command(action);time.sleep(1)
+            if action=='RETIRE':state.retire(command)
+            else:return state.close(command)
+    except BaseException as error:
+        if state.closed:
+            try:backend.publish('POSTCLOSE-FAULT',dict(error=repr(error),successor_fd_closed=True,original_helper_normal_close_claim=False))
+            except BaseException:pass
+            return 2
+        if state.copy_possible:passive_hold(state,error)
+        raise
+if __name__=='__main__':raise SystemExit(main())

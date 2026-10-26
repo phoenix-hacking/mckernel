@@ -1,0 +1,104 @@
+{
+  "actual_copy": null,
+  "actual_normal_close": null,
+  "actual_retirement": null,
+  "actual_target_pins": {
+    "bytes": 4134,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-postcheck-custody-recovery-source-1/ACTUAL-TARGET-PINS.json",
+    "sha256": "86d827e59e90338311868c681c447e04b045c2e83c6b2282fdf0da6eb3681957"
+  },
+  "all_growth_and_native_execution": false,
+  "contracts": {
+    "bytes": 7023,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-postcheck-custody-recovery-source-1/README.md",
+    "sha256": "aec993ae255dc9ebe9b384a8a0aae804f26aa5584c908f5d2457c72f641d5bf0"
+  },
+  "execution_authority": false,
+  "new_actual_joins": null,
+  "old_actual_joins": null,
+  "preserved_preimages": [
+    {
+      "bytes": 15574,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-postcheck-custody-recovery-source-1/recover_growth_custody.py.PRE-REVIEW-54d86f89",
+      "sha256": "54d86f8960280b9190d3e4b5f6322cc9936f86caee45bef1defa7c2e99473c2b"
+    },
+    {
+      "bytes": 4830,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-postcheck-custody-recovery-source-1/ofd_primitives.py.PRE-REVIEW-d8061516",
+      "sha256": "d8061516ada688a956ebb134a977ae4cb69e4a1b36aaaeefaa0126323f12e818"
+    },
+    {
+      "bytes": 5970,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-postcheck-custody-recovery-source-1/growth_recovery_validator.py.PRE-REVIEW-512bef37",
+      "sha256": "512bef37a9867cea777a19c82d0cde84ea1681402c7609732b3d1c98483f4677"
+    },
+    {
+      "bytes": 3311,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-postcheck-custody-recovery-source-1/RESULT.PRE-REVIEW.a5255bd0.json",
+      "sha256": "a5255bd07f9972cd6b1568eea05e363562422b5caace217603d49ac82f80eddb"
+    },
+    {
+      "bytes": 16518,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-postcheck-custody-recovery-source-1/recover_growth_custody.py.PRE-REVIEW-faa6be51",
+      "sha256": "faa6be51d64821229ab996d3970658be5baa6d4762bba92a5df84cb252f621b4"
+    }
+  ],
+  "review_corrections": [
+    "exclusive consumed COPY before pidfd/getfd; replay fails before acquisition",
+    "CLOSE after consume/fsync immediately rechecks clocks/current self/OFD/expiry before actual own close",
+    "RAWREADY exact source_packet sources/copy_review/qualification; actual consumed RETIRE/CLOSE and exact cited canonical phase reviews required",
+    "RETIRE final current self/OFD/oldbirth/guard/phaseexpiry check after consume/fsync, plus expiry recheck immediately before pidfd signal"
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_only": true,
+  "sources": {
+    "growth_recovery_validator.py": {
+      "bytes": 9383,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-postcheck-custody-recovery-source-1/growth_recovery_validator.py",
+      "sha256": "3b402691ec5fbac9c60e481eca6bf92ed2748152b0f1eddd4f8cf5df3c3ac547"
+    },
+    "ofd_primitives.py": {
+      "bytes": 4830,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-postcheck-custody-recovery-source-1/ofd_primitives.py",
+      "sha256": "d8061516ada688a956ebb134a977ae4cb69e4a1b36aaaeefaa0126323f12e818"
+    },
+    "recover_growth_custody.py": {
+      "bytes": 16971,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-postcheck-custody-recovery-source-1/recover_growth_custody.py",
+      "sha256": "4976f2dced932f670145a8aa03c35e596e7ebcf41b342351c4f69e6010f17b52"
+    },
+    "sdk7_authority_adapter.RECOVERED-GROWTH.SOURCE-ONLY.py": {
+      "bytes": 24728,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-postcheck-custody-recovery-source-1/sdk7_authority_adapter.RECOVERED-GROWTH.SOURCE-ONLY.py",
+      "sha256": "26aefb93058123639aef8d037033f2bf36b5fda23d3901220c8b520bc9218b7d"
+    },
+    "test_phase_bindings.py": {
+      "bytes": 4655,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-postcheck-custody-recovery-source-1/test_phase_bindings.py",
+      "sha256": "e6a939f21c740cadb744a2c912b25b38c3b7f574a74145c0cd2449ae92f3d8a6"
+    },
+    "test_recovery.py": {
+      "bytes": 6415,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-postcheck-custody-recovery-source-1/test_recovery.py",
+      "sha256": "63c723a60520964c0aa1569a58b38da1c7d80a0d7a46e688b7d845e945317275"
+    }
+  },
+  "status": "SOURCE_READY_NOT_EXECUTION_RELEASED",
+  "tests": {
+    "fake_backend_only": true,
+    "passed": 15,
+    "phase_negative_subcases": 12,
+    "returncode": 0,
+    "stderr": {
+      "bytes": 1368,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-postcheck-custody-recovery-source-1/pure.stderr",
+      "sha256": "ef49698a05ac2bf548564a15d631d50a19d530dfc37ee7e5d2879397a0728ff8"
+    },
+    "stdout": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-postcheck-custody-recovery-source-1/pure.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "unchanged_parent_geometry_authority_sha256": "696cab2d2f09be636650bc3aa7b590a8f4bee3ff730da3cf8abeea0deede61f7"
+}

@@ -1,3 +1,31 @@
+## Actual142GiB growth complete; postcheck quarantine retains custody — 2026-10-26T22:49Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Growth noncedb86abdf0ccf4e8a9ac86946401f3967 CONSUMED; neverreplaytruncate/loop/resize.
+All3mutatingcommandsand2geometryreadchildren actuallyjoined0. Actual142GiB
+backingsize152471339008/sameinode47468427/dev66306/loop36/UUID2a5768c8 preserved;
+geometry37224448blocks4096, absoluteReserved288358 unchanged. Scratchnow47,877,730,304B
+(44.59GiB), SDKbytecapacitygate clearedat2026-10-26T22:43:24Z. ButSource822
+postcheck expectedofflineproportionalreserve; actualONLINEpath keptabsolutereserve.
+OriginalFAILandQUARANTINE retained. Sourcehelper1281419/start85204892/group1281414
+holds27:4 FD4; caller1281416/start85204885/tool40285 STILLWAITING. All5children
+positivelywaited, nohelperchildren. No newheavy/query/SDK permitted untilcustodyclosed.
+
+Freshread-onlypostqualification-2 provesfivecriticalfile bytes/24scratch21nodes/
+rootdir unchanged, clean142geometry/samemount, fullRootmetadata/loop/FD/procgroups,
+HOST/scratchfloors. Parentupstream5.15explanation predictsintegerpercent0 preserves
+288358absolute; inference notexactUbuntu sourceproof. Noreserveloweringcommand,
+no tune2fs/no rollback. Independentactualpostconditionqualificationpending.
+Rootnewfinitebirth-bound sameOFDcopy/pidfdretire/realcallerjoin/explicitowncopyclose
+sourcebeingpreparedwithoneindependentreviewer; nosignal/custodyreleaseissuedyet.
+SDK142consumerSourcePASSandfetched; actualSDKcompilercommands0. Nextmemorycase
+payload558d1607+ND_CORE_MEMORYcollector70a6de49 compiledHOST, no newguest yet.
+
+Native2startupindependentdiagnosticcase acceptance remainsvalidatEXACTscope;
+M14/M15/wholefile/Cretirement OPEN/practical35/35 unchanged. Source/control/billing/
+fixedcutoffs unchanged. ENGINEERING-REVIEW-20261026T2239.json records bytegateclear
+versusstill-heldadmission andunknownqueue/blockedtimestamps. No95percentclaim.
+
 ## SDK7 capacity gate and coherent growth successor prepared — 2026-10-26T22:30Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
