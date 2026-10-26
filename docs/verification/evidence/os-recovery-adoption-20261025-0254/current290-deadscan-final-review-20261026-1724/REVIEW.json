@@ -1,0 +1,17 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/deadscan_review",
+  "status": "CHANGES_REQUIRED_SOURCE_BINDING",
+  "source_sha256": "bb62079c17e157e65111404713df2248935dd78d1dd593f4333e6e04a8a3161d",
+  "snapshot_sha256": "2cd8400c362f4fc5252873bb05ded9233dde45c53c030064b45942d5dfbb18e2",
+  "finding": "Code equality ignores co_filename; root_command, validate_process_report, same_ofd_read with wrong co_filename accepted in three genuine composed engines. Require explicit correct-origin comparisons before mutation.",
+  "experiment": {
+    "tool_chunk": "f955ff",
+    "exit_code": 0,
+    "wall_seconds": 0.388,
+    "cpu": 7,
+    "address_space_bytes": 2147483648
+  },
+  "additional_snapshot_blocker": null,
+  "runtime_release": false
+}

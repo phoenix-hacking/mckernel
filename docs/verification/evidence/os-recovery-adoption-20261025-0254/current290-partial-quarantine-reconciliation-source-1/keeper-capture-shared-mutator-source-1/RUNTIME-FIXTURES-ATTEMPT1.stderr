@@ -1,0 +1,35 @@
+test_adapter_failure_retains_raw_copy_before_io (__main__.RuntimeTests) ... ok
+test_borrowed_close_preserves_real_private_keeper_lock_until_final_release (__main__.RuntimeTests) ... ok
+test_null_deadscan_fails_closed_without_install (__main__.RuntimeTests) ... ok
+test_real_shared_only_mutator_preserves_common_quarantine_and_journal_prefix (__main__.RuntimeTests) ... ERROR
+test_serve_adapter_failure_quarantines_with_raw_hold (__main__.RuntimeTests) ... ok
+
+======================================================================
+ERROR: test_real_shared_only_mutator_preserves_common_quarantine_and_journal_prefix (__main__.RuntimeTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-capture-shared-mutator-source-1/test_runtime_pipeline.py", line 139, in test_real_shared_only_mutator_preserves_common_quarantine_and_journal_prefix
+    self.run_borrowed_fixture(True)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-capture-shared-mutator-source-1/test_runtime_pipeline.py", line 132, in run_borrowed_fixture
+    staged.BootstrapRealFileTests('test_held_bootstrap_original_plan_and_protected_files').test_held_bootstrap_original_plan_and_protected_files()
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-phase-adoption-source-1/test_keeper_phase_adoption.py", line 466, in test_held_bootstrap_original_plan_and_protected_files
+    tx=phase.bootstrap_held_transaction(p,m,configured,custody,receipt(),packet(),archive)
+  File "/home/holden/anaconda3/lib/python3.9/unittest/mock.py", line 1092, in __call__
+    return self._mock_call(*args, **kwargs)
+  File "/home/holden/anaconda3/lib/python3.9/unittest/mock.py", line 1096, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+  File "/home/holden/anaconda3/lib/python3.9/unittest/mock.py", line 1157, in _execute_mock_call
+    result = effect(*args, **kwargs)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-capture-shared-mutator-source-1/test_runtime_pipeline.py", line 100, in replacement
+    result=tx.run_shared()
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-capture-shared-mutator-source-1/runtime_pipeline.py", line 146, in run_shared
+    result=guarded(self,True)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-capture-shared-mutator-source-1/runtime_pipeline.py", line 1555, in _adopted_original_run
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-capture-shared-mutator-source-1/runtime_pipeline.py", line 131, in authorized_quarantine_gate
+    need(m.read_bounded(m.PLAN)==configured['raw_plan'] and m.read_bounded(m.JOURNAL)==configured['raw_journal'],
+AttributeError: module '_reviewed_e49_partial_state' has no attribute 'read_bounded'
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.272s
+
+FAILED (errors=1)

@@ -1,0 +1,72 @@
+{
+  "actual_runtime_checks_previously_passed": 34,
+  "additions": [
+    "DeadCallerOrdinaryExit",
+    "dead_caller_publisher",
+    "dead_caller_forbidden_rows"
+  ],
+  "baseline": {
+    "bytes": 128910,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/bounded-observer-correction-source-1/native_rust_cutover_image_terminal_cleanup.CURRENT290.EXACT-DEAD-CALLER.py",
+    "sha256": "e49eaf2a7bacc6a64523f9f6c91516b9a3abefc875cdc1d8941c4e6b55473de3"
+  },
+  "causality": "Related source lifecycle defect only. Actual observed legacy PROC_CODE failure is separate;34 actual deadcaller checks passed.",
+  "final_capture": {
+    "direct_command_joined": true,
+    "returncode": 0,
+    "stderr": {
+      "bytes": 1533,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-proc-snapshot-lifecycle-source-1/actual-final-pure.stderr",
+      "sha256": "d4eb02151c60300b4a31792ac23518c705e031530042650298d4ec27a38e77f9"
+    },
+    "stdout": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-proc-snapshot-lifecycle-source-1/actual-final-pure.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "tool_chunk_id": "255a3f",
+    "wall_time_seconds": 0.47844529
+  },
+  "hypothesis_status": "PROVEN_EXACT_E49_AST_MOCK_SECOND_STAT_ORDINARY_EXIT_RAISES_FILENOTFOUNDERROR",
+  "maximum_fresh_pair_attempts": 3,
+  "new_execution_release": false,
+  "observed_cause_claim": false,
+  "patch": {
+    "bytes": 9586,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-proc-snapshot-lifecycle-source-1/dead_caller_snapshot_lifecycle.FOCUSED-FUNCTIONS.SOURCE-ONLY.py",
+    "sha256": "45fd7803aff3d646d2233e6cd6ba102258eed84d3fa1c05d1fbecb2fa8bdcd4d"
+  },
+  "prior_source_test": {
+    "patch_sha256": "27c1f3c26ee00532208aacd4b120812f69f9be81edb6c1c550c9442cc2552fb3",
+    "status": "PASS",
+    "subsequent_change": "Retain failed partial metadata even if protected observer identity read itself throws during churn catch",
+    "tests": 19
+  },
+  "replacements": [
+    "record_dead_caller_observation",
+    "dead_caller_absent"
+  ],
+  "retained_original_functions": [
+    "validate_dead_caller_snapshots",
+    "validate_dead_operation_argv",
+    "same_ofd_read",
+    "same_ofd_process"
+  ],
+  "retry_scope": "Exact secondstat ENOENT after full ordinary classification; parent0/1 only; never observer/PID1/protected/knownpublisher/unknown",
+  "root_or_current_fd_change": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_TWENTY_PURE_FIXTURES_SOURCE_ONLY_NOT_RELEASED",
+  "test_count": 20,
+  "test_source": {
+    "bytes": 9574,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-proc-snapshot-lifecycle-source-1/test_dead_caller_snapshot_lifecycle.PURE.py",
+    "sha256": "98ebf16ee02d686abf5deab5bf95f4061a303aa560d530da080de5689d9067ec"
+  },
+  "unchanged_oracles": [
+    "original exact new-OFD pinned identity/root lock admission",
+    "permanent mutex and quarantine protocol",
+    "fullEOF perread65536 and processcount4096",
+    "total canonical deadcaller capture16MiB",
+    "original caller/owner/waiter/descendant/group absence validator"
+  ]
+}

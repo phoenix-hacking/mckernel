@@ -1,3 +1,22 @@
+## Active October26 continuation — exact partial cleanup successor
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual window2026-10-26T17:24:50Z through2026-10-27T11:24:50Z; same goal/creditrun.
+[Actual activation](../../../../mckernel-work/host-preparation/velocity-intervention-20261026-1/new-18-hour-window-1/parent-handoff/POST-DETACH-NEW18H-VERIFIED.json)
+(outside repository; [window record](RUN-WINDOW-18H-20261026.md)).
+Guardian1188080/observer1188083 are parent-owned; do not restart or edit controls.
+
+Retained child rc1/stderr192B proves legacy census `/proc/1060848/stat` ENOENT.
+Read already completed; preserve original evidence, no repeat collector/debugger.
+Root1060806/sudo1060803 remain live holding27:4; outer1060802 now absent, historical
+JOIN unknown. New runtime/capture and census fixes passed focused source review
+(15 runtime,18 capture,13 installer,23 snapshot checks); actual execution is unreleased.
+Root next supplies concrete launch/static bindings and one independent release,
+then custody transfer/positive retirement/shared-only reconciliation/currentphysical.
+Retain source6153/nine objects/SDK21. Next default work is only process+Rust
+compiles and exact eleven-input link; matching native proof follows actual admission.
+No new integration/default/native/file/C-retirement closure; M14/M15 OPEN.
+
 ## Current checkpoint — 01:37/01:57 reviews recorded; newphysical accepted
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

@@ -1,0 +1,62 @@
+test_actual_closed_nodes_compose_after_real_c9af_source_delta (__main__.Installer) ... ERROR
+test_baseline_deadcaller_modified_refused (__main__.Installer) ... FAIL
+test_census_slot_mutation_refused (__main__.Installer) ... ok
+test_double_install_refused (__main__.Installer) ... ERROR
+test_existing_helper_collision_refused (__main__.Installer) ... FAIL
+test_file_identity_spoof_refused (__main__.Installer) ... ok
+test_missing_census_delta_refused (__main__.Installer) ... ok
+test_original_release_changed_refused (__main__.Installer) ... ok
+test_stale_root_authorization_refused_without_mutation (__main__.Installer) ... ok
+
+======================================================================
+ERROR: test_actual_closed_nodes_compose_after_real_c9af_source_delta (__main__.Installer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-proc-snapshot-lifecycle-source-1/whole-pair-enoent-correction-source-1/test_deadscan_installer.PURE.py", line 29, in test_actual_closed_nodes_compose_after_real_c9af_source_delta
+    before=dict(self.engine.__dict__);result=bridge.install_deadscan_delta(self.engine,self.authorization)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-proc-snapshot-lifecycle-source-1/whole-pair-enoent-correction-source-1/deadscan_runtime_bridge.SOURCE-ONLY.py", line 42, in install_deadscan_delta
+    need(hashlib.sha256(module.PROC_CODE.encode()).hexdigest()==census['proc_code_sha256'] and all(fingerprint(module.__dict__[name])==census['corrected_function_fingerprints'][name] for name in ['root_command','validate_process_report']),'census-three-slots-unchanged')
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-proc-snapshot-lifecycle-source-1/whole-pair-enoent-correction-source-1/deadscan_runtime_bridge.SOURCE-ONLY.py", line 16, in need
+    if not value:raise DeadscanBridgeRefusal(message)
+deadscan_bridge.DeadscanBridgeRefusal: census-three-slots-unchanged
+
+======================================================================
+ERROR: test_double_install_refused (__main__.Installer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-proc-snapshot-lifecycle-source-1/whole-pair-enoent-correction-source-1/test_deadscan_installer.PURE.py", line 54, in test_double_install_refused
+    bridge.install_deadscan_delta(self.engine,self.authorization)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-proc-snapshot-lifecycle-source-1/whole-pair-enoent-correction-source-1/deadscan_runtime_bridge.SOURCE-ONLY.py", line 42, in install_deadscan_delta
+    need(hashlib.sha256(module.PROC_CODE.encode()).hexdigest()==census['proc_code_sha256'] and all(fingerprint(module.__dict__[name])==census['corrected_function_fingerprints'][name] for name in ['root_command','validate_process_report']),'census-three-slots-unchanged')
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-proc-snapshot-lifecycle-source-1/whole-pair-enoent-correction-source-1/deadscan_runtime_bridge.SOURCE-ONLY.py", line 16, in need
+    if not value:raise DeadscanBridgeRefusal(message)
+deadscan_bridge.DeadscanBridgeRefusal: census-three-slots-unchanged
+
+======================================================================
+FAIL: test_baseline_deadcaller_modified_refused (__main__.Installer)
+----------------------------------------------------------------------
+deadscan_bridge.DeadscanBridgeRefusal: census-three-slots-unchanged
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-proc-snapshot-lifecycle-source-1/whole-pair-enoent-correction-source-1/test_deadscan_installer.PURE.py", line 49, in test_baseline_deadcaller_modified_refused
+    with self.assertRaisesRegex(bridge.DeadscanBridgeRefusal,'baseline-function'):bridge.install_deadscan_delta(self.engine,self.authorization)
+AssertionError: "baseline-function" does not match "census-three-slots-unchanged"
+
+======================================================================
+FAIL: test_existing_helper_collision_refused (__main__.Installer)
+----------------------------------------------------------------------
+deadscan_bridge.DeadscanBridgeRefusal: census-three-slots-unchanged
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-proc-snapshot-lifecycle-source-1/whole-pair-enoent-correction-source-1/test_deadscan_installer.PURE.py", line 52, in test_existing_helper_collision_refused
+    with self.assertRaisesRegex(bridge.DeadscanBridgeRefusal,'collision'):bridge.install_deadscan_delta(self.engine,self.authorization)
+AssertionError: "collision" does not match "census-three-slots-unchanged"
+
+----------------------------------------------------------------------
+Ran 9 tests in 1.013s
+
+FAILED (failures=2, errors=2)
