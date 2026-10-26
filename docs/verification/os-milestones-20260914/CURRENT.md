@@ -1,3 +1,25 @@
+## Current cursor — attempt2 receipt failure, ownership retained
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual8fb/369 owner entered93.49s afterfreshfive, then failedbeforecompiler at
+_validate_v2_image_tools635: reusableimage receiptcandidate942 was comparedwith
+newcomputecandidateeb. Owner904301/start77396514 joined1/groupsabsent/closed;
+parent903729/start77387104 FD3/session68064 holds27:4 in quarantine. NEWshared
+be875569/dev1828/inode116858 (inode reused) binds904301/request5a20. Old004f
+cannot clear this new ownership. Six target common/lease/attempt/output/evidence/
+receipt paths absent. [Actualfailure](../evidence/os-recovery-adoption-20261025-0254/ACTUAL-ATTEMPT2-IMAGE-RECEIPT-FAILURE-AND-HELD-OWNERSHIP.json).
+
+Independent source/function correction337652/4d612 separatelypins receipt942
+while sourceeb staysunchanged. Realwholeproductionreceipt function+10readonly
+helpers passes11controls including originalfailure reproduction and authentic
+fullpositive tool/libraryclosure. Remainingowner validation/runtime NOTaccepted.
+Postjoin18h preparesfreshreadonlycurrentproof before separatelyreviewed process
+retirement andnewshared archival. Root aloneexecutes; review18h independently
+releases. No unchangedowner/source/SDK replay. Source27 genuine77-module crate
+compile awaits one runner-only cwd/reporting correction; its codecomposition
+passedreview. Allsource/current290/compilerprefixes/originalfailures preserved.
+M12=35/35; M14/M15 OPEN; default/native/file/Cclosures0; same18hwindow/controls.
+
 ## Twenty-minute review — 2026-10-26T00:57Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

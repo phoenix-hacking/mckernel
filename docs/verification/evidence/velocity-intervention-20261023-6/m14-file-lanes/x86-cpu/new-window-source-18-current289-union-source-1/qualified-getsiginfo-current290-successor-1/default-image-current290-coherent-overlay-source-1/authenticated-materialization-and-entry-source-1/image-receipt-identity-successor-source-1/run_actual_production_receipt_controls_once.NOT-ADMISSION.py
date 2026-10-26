@@ -1,0 +1,23 @@
+"""Functional McKernel OS/apps and Rust/assembly migration only; no security testing."""
+from pathlib import Path
+import ast,hashlib,json,os,resource,signal,time
+P=Path('/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1')
+def sha(p):
+ h=hashlib.sha256()
+ with Path(p).open('rb') as f:
+  for b in iter(lambda:f.read(1<<20),b''):h.update(b)
+ return h.hexdigest()
+def ref(p):return dict(path=str(p),sha256=sha(p),bytes=Path(p).stat().st_size)
+def need(c,m):
+ if not c:raise RuntimeError(m)
+def auth(row):need(ref(row['path'])==row,'exact source input');return Path(row['path'])
+descriptor=P/'EXACT-PRODUCTION-RECEIPT-FUNCTION-CONTROLS.CPU0.json';need(sha(descriptor)=='30d25c0d4554f199c9d8133b15190db993f9c1e952d152b7546927d5ca38e4c3','exact source descriptor');recipe=json.loads(descriptor.read_bytes());scope=P/'ORDINARY-SOURCE-REGRESSION-AUTHORIZATION-REFERENCE.NOT-ADMISSION.json';sc=json.loads(scope.read_bytes());need(sc['descriptor']==ref(descriptor) and sc['maximum_invocations']==1 and sc['authorized_by']=='/root','parent-authorized ordinary source regression')
+rows=[recipe['source_tuple'],recipe['fixture'],recipe['capture']['source']]+recipe['additional_stable_inputs']
+for row in rows:auth(row)
+need(os.getuid()==os.geteuid()==1000 and os.environ.get('MCKERNEL_OS_MEMORY_GIB')=='22.0485','ordinary source UID/environment');h=auth(recipe['capture']['source']);need(sha(h)=='990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8','reviewed capturefunctions');functions={'need','write','hashed','stop','cpu_used','members','process_start','terminal_unreaped','wait_terminal','owned_capture'};assignments={'FIELDS','stopping','CENSUS_SOURCE','CENSUS_SHA','_CENSUS','STOP_SIGNALS'};nodes=[n for n in ast.parse(h.read_bytes(),str(h)).body if isinstance(n,(ast.Import,ast.ImportFrom)) or isinstance(n,ast.FunctionDef) and n.name in functions or isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id in assignments for t in n.targets)];ns={'__file__':str(h)};exec(compile(ast.Module(body=nodes,type_ignores=[]),str(h),'exec'),ns)
+for sig in [signal.SIGTERM,signal.SIGINT,signal.SIGALRM]:signal.signal(sig,ns['stop'])
+cap=Path(recipe['capture']['fresh_capture_root']);need(not os.path.lexists(cap),'fresh ordinary capture');host=os.statvfs('/home/holden');scratch=os.statvfs('/home/holden/mckernel-work/scratch');mem=int(next(x.split()[1] for x in Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemAvailable:')))*1024;admission=dict(HOST_available=host.f_bavail*host.f_frsize,scratch_available=scratch.f_bavail*scratch.f_frsize,MemAvailable=mem);need(admission['HOST_available']>=(16<<30)+(16<<20) and admission['scratch_available']>=14091616256 and mem>=(2<<30)+(4<<30),'ordinary shared resource floors');cap.mkdir(mode=0o700);ns['write'](cap/'SOURCE-CHECK-STARTED.NOT-ADMISSION.json',dict(scope=__doc__,descriptor=ref(descriptor),authority=ref(scope),inputs=rows,argv=recipe['argv'],profile=recipe['profile'],admission=admission,at=time.time()));p=recipe['profile']
+def limits():
+ for key,value in [(resource.RLIMIT_AS,p['AS_bytes']),(resource.RLIMIT_CPU,p['CPU_seconds']),(resource.RLIMIT_FSIZE,p['FSIZE_bytes']),(resource.RLIMIT_NOFILE,p['FD']),(resource.RLIMIT_STACK,p['stack_bytes']),(resource.RLIMIT_CORE,p['core'])]:resource.setrlimit(key,(value,value))
+start=time.monotonic();cpu=ns['cpu_used']();joined=ns['owned_capture']({'argv':recipe['argv']},cap,p['wall_seconds'],limits);wall=time.monotonic()-start;used=ns['cpu_used']()-cpu;ns['write'](cap/'receipt.json',joined);stable=all(ref(row['path'])==row for row in rows);ok=joined['returncode']==0 and joined['direct_child_joined'] and joined['group_absent'] and joined['closed_streams'] and joined['error'] is None and joined['retirement_error'] is None and stable
+record=dict(scope=__doc__,status='PASS_ACTUAL_FULL_PRODUCTION_RECEIPT_FUNCTION_ONLY' if ok else 'FAIL_SOURCE_REGRESSION_STOP_NO_REPLAY',descriptor=ref(descriptor),authority=ref(scope),receipt=ref(cap/'receipt.json'),stdout=ref(cap/'stdout'),stderr=ref(cap/'stderr'),all_inputs_stable=stable,CPU_seconds=used,wall_seconds=wall,expected_tests=11,live_query_owner_namespace_admission_or_cleanup=False);ns['write'](cap/'RESULT.json',record);print(json.dumps(record,sort_keys=True));raise SystemExit(0 if ok else 1)

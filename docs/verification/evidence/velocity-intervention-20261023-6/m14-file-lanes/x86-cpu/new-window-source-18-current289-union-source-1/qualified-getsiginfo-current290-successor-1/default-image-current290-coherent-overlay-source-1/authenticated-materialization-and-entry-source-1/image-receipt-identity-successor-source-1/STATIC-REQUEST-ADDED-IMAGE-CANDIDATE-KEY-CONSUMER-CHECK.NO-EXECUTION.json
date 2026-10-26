@@ -1,0 +1,71 @@
+{
+  "concrete_allowed_key_omission_found": false,
+  "host_control_boundary": "ImageOwner calls authenticated_host.measure with explicit paths/floors/allocation roots; it does not invoke host96 BuildOwner.validate or pass full image request into it",
+  "host_measure_calls": [
+    "authenticated_host.measure(host_measure, scratch_measure, 16 * 2 ** 30, 12 * 2 ** 30, source_root=source, output_root=work_root, memory_allocation_roots=allocation_paths)"
+  ],
+  "image_receipt_candidate_field_required_only_by_corrected_receipt_function": true,
+  "imageowner_copies_whole_request_without_filtering": true,
+  "imageowner_run_retains_request_for_revalidation": true,
+  "imageowner_validate_passes_full_request_to_validate_request": true,
+  "no_owner_import_validation_probe_or_subprocess": true,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_host": {
+    "bytes": 51420,
+    "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_build_container_owner.py",
+    "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+  },
+  "selected_nodes": [
+    {
+      "AST_sha256": "c7cfee2afa8c611f680de9609c7c9be648eea2537bdafb899d0f8335c8ac48ae",
+      "end_line": 711,
+      "line": 627,
+      "name": "_validate_v2_image_tools",
+      "source": "owner337"
+    },
+    {
+      "AST_sha256": "f276209f6a5e0ae00eb63b213317d6531b1286b7195937c44d695bf14b36e7f8",
+      "end_line": 1275,
+      "line": 1000,
+      "name": "_validate_request",
+      "source": "owner337"
+    },
+    {
+      "AST_sha256": "1f23bc63e69b0359a2b3ef4f0398167a05f5997fd7cb82065123d477061e43d1",
+      "end_line": 1476,
+      "line": 1433,
+      "name": "_revalidate_inputs",
+      "source": "owner337"
+    },
+    {
+      "AST_sha256": "280de37df00e59b6f374e2120141068cf99a4a969ce7a98d4ebdc4fd22c41327",
+      "end_line": 1640,
+      "line": 1479,
+      "name": "ImageOwner",
+      "source": "owner337"
+    },
+    {
+      "AST_sha256": "fffc4751da95b1c71818d121deae44f2eb5da1d226df4894b72803f2c2f1f4e4",
+      "end_line": 615,
+      "line": 526,
+      "name": "measure",
+      "source": "host96"
+    },
+    {
+      "AST_sha256": "009314c126046e7aa1435f04c888dc2eb0d9c577d5579d260be47643d332d7bc",
+      "end_line": 1051,
+      "line": 856,
+      "name": "BuildOwner",
+      "source": "host96"
+    }
+  ],
+  "shared_record_normalization": "sha256(json.dumps(self.request,sort_keys=True).encode()) includes added field; does not reject/filter keys",
+  "source_candidate_preserved": true,
+  "status": "PASS_STATIC_ADDED_KEY_PERMITTED_NO_RUNTIME_VALIDATION",
+  "strict_whole_request_key_gates": [],
+  "successor_owner": {
+    "bytes": 95047,
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/native_rust_exact_mckernel_image_container_owner.CURRENT290.IMAGE-RECEIPT-IDENTITY-SUCCESSOR.py",
+    "sha256": "3376520a1fdbf2b4f479fcfcd0e2823f347532a9085ca862ead39407d874c337"
+  }
+}

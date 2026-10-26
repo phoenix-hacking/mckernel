@@ -1,0 +1,27 @@
+--- /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/owner-release-data-successor-source-1/native_rust_exact_mckernel_image_container_owner.CURRENT290.RELEASE-DATA-SUCCESSOR.py
++++ /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/native_rust_exact_mckernel_image_container_owner.CURRENT290.IMAGE-RECEIPT-IDENTITY-SUCCESSOR.py
+@@ -39,7 +39,7 @@
+ # exclusions explicit: accepting one of these would allow a request to race a
+ # retired build candidate.  Tests may replace COMMON_EXCLUSION with a private
+ # fixture, so the rejection list remains separate from the active value.
+-COMMON_EXCLUSION = '/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/owner-release-data-successor-source-1/actual-current290-default-image-attempt-2/common-exclusion.json'
++COMMON_EXCLUSION = '/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/common-exclusion.json'
+ RETIRED_COMMON_EXCLUSIONS = frozenset(
+     "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-" + suffix + ".json"
+     for suffix in (
+@@ -632,8 +632,14 @@
+           "image receipt hash binding")
+     _fail(_sha256(receipt) == expected, "image receipt hash drift")
+     document = _load_json(receipt, "image receipt")
++    # A source-free tool image retains its own preparation candidate identity.
++    # The current source candidate is independently authenticated by _validate_request.
++    image_candidate = request.get("image_receipt_candidate_sha")
++    _fail(isinstance(image_candidate, str) and
++          re.fullmatch(r"[0-9a-f]{40}", image_candidate),
++          "image receipt candidate identity binding")
+     _fail(document.get("status") == "PASS" and document.get("image_id") == request["image_id"] and
+-          document.get("candidate_sha") == request.get("candidate_sha") and
++          document.get("candidate_sha") == image_candidate and
+           document.get("retired") is True and
+           document.get("base_image") == PREPARER_BASE_IMAGE,
+           "image receipt identity differs")
