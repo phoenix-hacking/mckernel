@@ -1,0 +1,77 @@
+{
+  "schema": "mckernel.current290.process-census-lifecycle.independent-source-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE_ONLY_NO_EXECUTION_AUTHORITY",
+  "reviewer": "/root/census_lifecycle_review",
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-process-census-lifecycle-correction-source-1/native_rust_cutover_image_terminal_cleanup.PROCESS-LIFECYCLE.v2.SOURCE-ONLY.py",
+    "bytes": 133996,
+    "sha256": "1eb0a669f5d3c248afa1b14130421a1582f1410847be95494ec107a322f6ad9a"
+  },
+  "proc_code": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-process-census-lifecycle-correction-source-1/PROC_CODE.LIFECYCLE.v2.py",
+    "bytes": 6816,
+    "sha256": "0e6da43702e25f72741eddc4ae28cd245d474cb597c16ff19c79da86865a4302"
+  },
+  "base": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-reporting-source-1/native_rust_cutover_image_terminal_cleanup.QUARANTINE-REASON.SOURCE-ONLY.py",
+    "bytes": 128990,
+    "sha256": "183a23ff27a8496788339a40feeb53e17ee2bfca9f0dc7bfefa09126ce07cba1"
+  },
+  "worker_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-process-census-lifecycle-correction-source-1/RESULT.json",
+    "bytes": 4200,
+    "sha256": "1ac9f91d7a575e5477a9f4b7d3d4215f9591ca78aae9e74d1a846fcfc876cf24"
+  },
+  "worker_tests": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-process-census-lifecycle-correction-source-1/tests.status.json",
+    "bytes": 1298,
+    "sha256": "e72ecfc4ab7259b6c87b5eafda35480c9432473f8c38e50de9310c48457c7028"
+  },
+  "independent_tests": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-process-census-lifecycle-review-1/independent.status.json",
+    "bytes": 1622,
+    "sha256": "0768ebcb9a66db4fb9046c4343c5ad8a90221ab6fd8dc59941b95556d1aad792"
+  },
+  "actual_failure_acceptance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-post-recovery-retirement-review-1/ACTUAL-ROOT-COMMAND-RESULT-INDEPENDENT-ACCEPTANCE.json",
+    "bytes": 9206,
+    "sha256": "342057c5ae7f1260b19a484ce2892f11c57cad08ceab8284ad31380d154f1150"
+  },
+  "original_failure_bytes": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-process-census-lifecycle-correction-source-1/ORIGINAL-ACTUAL-COLLECTOR.stderr",
+    "bytes": 192,
+    "sha256": "1781f39d0960d572cb51c609210705e722790ba7363696c6915e5f20e0eeb4f4"
+  },
+  "source_change_names": [
+    "PUBLISHED_SCRIPT",
+    "PROC_CODE",
+    "root_command",
+    "validate_process_report"
+  ],
+  "verified_contract": [
+    "Only exact built-in FileNotFoundError errno2 on exact enumerated noncaller stat/cmdline/exe path enters bounded lifecycle retry; protected caller, boot and enumeration reads remain outside classifier.",
+    "Maximum three fresh complete-pair attempts; failed first/second snapshot data is discarded and never merged, skipped or reported. Outer subprocess timeout remains30s and original caps remain unchanged.",
+    "Caller identity, live state, full original numeric format and parent remain checked between snapshots and retries; birth changes, malformed/permission/unknown failures and persistent churn refuse.",
+    "Known publishers are recorded immediately after executable identity and before final stat; previously observed publishers prevent retry. Full successful report publisher and owner/waiter-descendant guards are AST-identical to accepted183a suffix.",
+    "Lifecycle.v2 report requires exact keys, typed attempt1..3, precisely attempts-1 chronological failure records and exact noncaller path/operation/errno metadata.",
+    "Root-command failure embeds bounded4096-byte stderr prefix with exact lengths/hashes, actual returncode and completeness; raw stdout and argv/code are absent. Accepted183a durable/stdout error_message logging remains unchanged.",
+    "All other top-level source AST nodes unchanged, including runtime ownership/mutation/quarantine behavior."
+  ],
+  "review_findings_closed": [
+    "Known publisher final-stat ENOENT formerly could retry before publisher registration; final candidate records publisher before reread and both independent/worker fixtures refuse it.",
+    "Protected caller_check formerly omitted full state/numeric validation; final candidate applies original allowlist/numeric checks and intermediate malformed checks refuse."
+  ],
+  "limits": [
+    "Source and in-memory fixtures only; no live collector/native execution or new functional application acceptance.",
+    "No cleanup continuation, custody transfer, actor FD access, attach, signal, unlock, retirement, free-lock or workload admission authority.",
+    "Current root1060806/start80309560 and sudo1060803/start80309553 ownership remains under root coordinator and separate custody/phase reviewer; this review makes no live-state claim.",
+    "Future usage must bind exact newsource/PROC_CODE/consumer/logger bytes in separately reviewed reconciliation and execution release; active e49 source stays preserved."
+  ],
+  "adopted_policy_sha256": {
+    "CONVERGENCE.md": "3cb05691834bbd11da1597862111cd1bf8264baf020a097635b452668d064dce",
+    "GOAL.md": "aaf587e0b24a2b801edf462fc40727709f96cfedd70a2de94bb59191afc4a849",
+    "HANDOFF.md": "47b07adad7eb48fa34a35f499712c45d16cbfcad8a3d6ed09845e7bcc084afee",
+    "START.md": "dafb718ee3c820a91516f589e220ca380662656757c008d419ddebc6a9157d69"
+  }
+}

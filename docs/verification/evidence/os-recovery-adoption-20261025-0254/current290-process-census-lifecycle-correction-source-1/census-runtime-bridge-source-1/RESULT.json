@@ -1,0 +1,67 @@
+{
+  "status": "SOURCE_READY_FOR_INDEPENDENT_REVIEW_NO_EXECUTION_AUTHORITY",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "bridge": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-process-census-lifecycle-correction-source-1/census-runtime-bridge-source-1/census_runtime_bridge.py",
+    "bytes": 8758,
+    "sha256": "c9af3506af824af58c599a2aa8d7a1aae30b680a25c4bcc5ca87b8bcd1d20a2a"
+  },
+  "inputs": {
+    "baseline": {
+      "bytes": 128910,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/bounded-observer-correction-source-1/native_rust_cutover_image_terminal_cleanup.CURRENT290.EXACT-DEAD-CALLER.py",
+      "sha256": "e49eaf2a7bacc6a64523f9f6c91516b9a3abefc875cdc1d8941c4e6b55473de3"
+    },
+    "corrected": {
+      "bytes": 133996,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-process-census-lifecycle-correction-source-1/native_rust_cutover_image_terminal_cleanup.PROCESS-LIFECYCLE.v2.SOURCE-ONLY.py",
+      "sha256": "1eb0a669f5d3c248afa1b14130421a1582f1410847be95494ec107a322f6ad9a"
+    },
+    "old_release": {
+      "bytes": 241402,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/ROOT-NORMAL-RETIREMENT-PREPARATION-1/RELEASE.PASS_EXECUTION_RELEASE.json",
+      "sha256": "9c7589afa411c1b40fe02777facf69007b885d228632b12c3f34e5a091b517e9"
+    },
+    "review": {
+      "bytes": 5811,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-process-census-lifecycle-review-1/REVIEW.json",
+      "sha256": "6d138ab30b2aed59af88551f005787eda2a4e6c8936ceb3cafc69c80908522e7"
+    }
+  },
+  "interface": "install_census_delta(original_e49_module, exact_new_authorization) -> composition_manifest",
+  "new_authorization_template": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-process-census-lifecycle-correction-source-1/census-runtime-bridge-source-1/NEW-DIAGNOSTIC-AUTHORIZATION.TEMPLATE.NOT-GRANTED.json",
+    "bytes": 609,
+    "sha256": "6abe0fef0ed47778776dd886044c5014ce2092a73947613aff23dc4a0ae62e77"
+  },
+  "slots": [
+    "PROC_CODE",
+    "root_command",
+    "validate_process_report"
+  ],
+  "new_manifest_slot": "_PROCESS_CENSUS_DELTA_MANIFEST",
+  "required_context": "Old genuine e49.__file__/PUBLISHED_SCRIPT/PROC_CODE and root_command/validate_process_report/process_absent/run_privileged/canonical must match baseline. RELEASE raw9c and canonical57c, originalboot/owner/clientcontext required; allstdlibdeps genuine. Additional old context globals (including _process_report and CENSUS_DELTA_BOUND) allowed and identity-preserved.",
+  "boundary": "No __file__/PUBLISHED_SCRIPT/fullnewmodule spoof. Onlythree corrected nodes compiled with actual1ebfilename into originalglobals. No oldconfigure/Transaction/recover/plan/source/Git checks are installed or executed by bridge. Old recoverlogger left unchanged; newroot_command alreadyretainsboundedrc/stderrcontext.",
+  "authority": "Old release/canonical/plan remainhistoricalunchanged. DistinctNEWRootauthorization exactsource/review+oldrelease/planpins required; manifest records author/reviewer/authhash plusnewco_filename/functionfingerprints. Template NOT_GRANTED is rejected. Phasekeeper owns reviewedcustody/execution.",
+  "tests": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-process-census-lifecycle-correction-source-1/census-runtime-bridge-source-1/tests.status.json",
+    "bytes": 1478,
+    "sha256": "ff538b852659a94cec939ad322f161abf1642d894771c74eef270822b1f9a4b2"
+  },
+  "fourteen_compatibility": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-process-census-lifecycle-correction-source-1/census-runtime-bridge-source-1/FOURTEEN-BRIDGED-FIXTURE-RESULT.json",
+    "bytes": 3709,
+    "sha256": "70e4a0208cfafaa1e8fe63f38c583d968b96d96447ce2c2c544b1056a1210b43"
+  },
+  "negative_checks": [
+    "wrongactualsourcebytes",
+    "wrongauthorization",
+    "unapprovedslotselection",
+    "modifiedbaselineorfileidentity",
+    "missingdependency",
+    "reinstall"
+  ],
+  "fixture_adaptations": "Genuine retainedoldrelease setsfixtureboot/owner/client numbers and oldRefusal(ValueError) ancestry. Productioncollector and validatorbodies unchanged;14 originalfunctionalfixtures run againstbridgeinstalledPROC_CODE and genuinebridgeconsumer.",
+  "prior_test_failure": "Initial fixture caught RuntimeError rather than genuineold Refusal(ValueError), and missingJSON dependency raised NameError before explicitguard. Fixed fixture ancestry and made missingcontext reject before codecall; failedoutput retained.",
+  "no_actual_root_actions": true
+}

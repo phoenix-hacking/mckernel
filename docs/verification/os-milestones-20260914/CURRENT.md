@@ -1,3 +1,29 @@
+## October26 continuation — retained census failure, custody preserved
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+New fixed run: 2026-10-26T17:24:50Z through 2026-10-27T11:24:50Z, same goal and
+credit ledger. [Window](RUN-WINDOW-18H-20261026.md), [recovery](RECOVERY-20261026.md).
+The retained child result was recovered: rc1, stdout0, stderr192B, exact
+`FileNotFoundError: /proc/1060848/stat` in the legacy process census. This
+supersedes the earlier unknown-cause cursor; do not repeat the debugger read.
+
+Fresh resume observation: root1060806/start80309560 and sudo1060803/start80309553
+remain alive, sole permanent27:4 held; former outer1060802 is absent. Common
+phase already completed; shared phase remains pending. Preserve original journal,
+quarantine, source and retained outputs. No signal, unlock or cleanup replay.
+Successor runtime/capture owners finish the prepared lifecycle correction and
+same-OFD custody continuation; independent reviewers cover exact census and
+retirement boundaries. Historical outer JOIN must not be invented. Actual
+root execution requires its separate release and fresh physical/admission checks.
+
+Next: shared terminal/current physical proof, then incremental current290 default
+build retaining nine successful objects, source6153 and SDK21, followed by matching
+native qualification. Practical35/35; M14/M15 OPEN; new integration/default/native/
+whole-file/C-retirement closures0. Compiler latency and blocked-duration timestamps
+are unknown. No measured95% speedup.
+[Resume review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-RESUME-20261026T1724.json).
+[Planning estimate only](M14-M15-ENGINEERING-ESTIMATE-20261025-0512.md).
+
 ## Actual retained exception recovered — 2026-10-26T09:55Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

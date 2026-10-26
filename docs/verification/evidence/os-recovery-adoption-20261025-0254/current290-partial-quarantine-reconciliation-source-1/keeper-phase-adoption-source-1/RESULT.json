@@ -1,0 +1,126 @@
+{
+  "actual_actor_fd_access": false,
+  "actual_actor_retirement": false,
+  "actual_root_custody_transfer": false,
+  "actual_signals": false,
+  "checks": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--core=0:0",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-phase-adoption-source-1/test_keeper_phase_adoption.py"
+      ],
+      "evidence": "FIXTURES-FINAL.stderr",
+      "exit_code": 0,
+      "kind": "private-files-and-mocked-protocol",
+      "reported_wall_seconds": 0.238,
+      "result": "PASS",
+      "tests": 23
+    },
+    {
+      "collector_executed": false,
+      "evidence": "ACTUAL-SOURCE-READONLY-CONFIGURE-ATTEMPT2.json",
+      "exit_code": 0,
+      "kind": "genuine-original-configure-unprivileged-source-metadata",
+      "python": "/home/holden/anaconda3/bin/python3",
+      "reported_wall_seconds": 5.85018544702325,
+      "result": "PASS",
+      "runtime_entrypoint_calls": [],
+      "selected_rows": 77
+    },
+    {
+      "authorization_scope": "controlled source fixture only; no Root grant file",
+      "collector_executed": false,
+      "evidence": "ACTUAL-SOURCE-READONLY-CONFIGURE-AND-BRIDGE.json",
+      "exit_code": 0,
+      "kind": "genuine-original-configure-plus-new-diagnostic-bridge-source-fixture",
+      "reported_wall_seconds": 5.763197575928643,
+      "result": "PASS",
+      "selected_rows": 77
+    }
+  ],
+  "collector_bridge": {
+    "actual_runtime_auth_issued": false,
+    "bytes": 8758,
+    "changed_slots": [
+      "PROC_CODE",
+      "root_command",
+      "validate_process_report"
+    ],
+    "manifest_slot": "_PROCESS_CENSUS_DELTA_MANIFEST",
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-process-census-lifecycle-correction-source-1/census-runtime-bridge-source-1/census_runtime_bridge.py",
+    "sha256": "c9af3506af824af58c599a2aa8d7a1aae30b680a25c4bcc5ca87b8bcd1d20a2a"
+  },
+  "new_candidate_builds": 0,
+  "new_guest_apps": 0,
+  "next_required": [
+    "independent high source/execution review",
+    "reviewed Root keeper/capture/owned-command wrapper and actual fresh admission",
+    "genuine actual held-copy evidence before separate retirement authorization",
+    "positive original root pidfd exit and original sudo/outer/tool joins",
+    "separately reviewed shared-only mutator and final physical acceptance"
+  ],
+  "old_plan_canonical_sha256": "279b40f40ae69255914c064e92486fdfbb65ad798077206dc9c598d185e277f8",
+  "old_release_canonical_sha256": "57c62c0c739438ca4a68c2ec167dc953f7274b4968e7c4e6dba74272acc32f70",
+  "owner": "/root/partial_quarantine_reconcile",
+  "preserved_failures": [
+    {
+      "correction": "supply actual imported fcntl in fixture namespace; one bounded correction",
+      "evidence": "FIXTURES-ATTEMPT2.stderr",
+      "reason": "private original-lock fixture namespace omitted fcntl",
+      "source": "test_keeper_phase_adoption.ATTEMPT2-FAILURE.py"
+    },
+    {
+      "correction": "same source/inputs under actual reviewed anacondaPython3.9; one bounded correction",
+      "evidence": "ACTUAL-SOURCE-READONLY-CONFIGURE-ATTEMPT1.json",
+      "reason": "Python3.8 lacks pathlib.Path.is_relative_to used by current contract"
+    }
+  ],
+  "production_mutations": false,
+  "recorded_at": "2026-10-26T10:42:17.877253+00:00",
+  "root_queries": false,
+  "runtime_execution_release": false,
+  "schema": "mckernel.current290.keeper-phase-adoption.source-stage.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": [
+    {
+      "bytes": 7818,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-phase-adoption-source-1/fixed_root_custody_standby.WITH-OUTER.SOURCE-ONLY.py",
+      "sha256": "5f7c9cd748b68116a958ed9d23be4ee69def6a4fa383c7638d92689e384ba6f1"
+    },
+    {
+      "bytes": 12140,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-phase-adoption-source-1/phase_bootstrap.SOURCE-ONLY.py",
+      "sha256": "83df82d4e5bdb6310b7510bbcb2b42685ac460e66b93ef69b9c24ef6ba0d3ea7"
+    },
+    {
+      "bytes": 22574,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-phase-adoption-source-1/keeper_protocol.SOURCE-ONLY.py",
+      "sha256": "942342288186d5ba186297b5a4b65fccff5940f31effe4dce1f2c8607e927027"
+    },
+    {
+      "bytes": 26827,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-phase-adoption-source-1/test_keeper_phase_adoption.py",
+      "sha256": "4294701fa2d24620903376e28acdf73f4810dc617b9961b0d21e243d28934d30"
+    },
+    {
+      "bytes": 2696,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-phase-adoption-source-1/validate_actual_alias_readonly.py",
+      "sha256": "0d91328aa10da4fbaf0b8ac065f026215f13d0e41c576e4115c9c4053ccc208d"
+    },
+    {
+      "bytes": 3624,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-partial-quarantine-reconciliation-source-1/keeper-phase-adoption-source-1/validate_actual_alias_and_bridge_readonly.py",
+      "sha256": "7a0e51be025aebd96816da07b8683d330ca45c66e6f1d05db4f120c4caf9e049"
+    }
+  ],
+  "status": "SOURCE_READY_FOR_INDEPENDENT_REVIEW_NO_RUNTIME_RELEASE"
+}
