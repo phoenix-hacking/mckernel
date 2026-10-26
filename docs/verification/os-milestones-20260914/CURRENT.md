@@ -1,3 +1,33 @@
+## Current cursor — attempt4 directories initialized; frontend bootstrap fix pending
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Latestpushed2f372630 request31a38(26,533,411B) bindsrevieweddriver9d0b/owner15fe/
+seedc9af. Exact13origindeltas+15effect-freepreflightcontrolsPASS. Newsource47pure
+controlsPASS; source9d15 independentlyruntimeSOURCEPASS, no actualcontainer yet.
+Fetchedsourceproof1ac227(9files)/requestprooff569084(19files) retainedEV.
+Ordinaryinitializer8e213executedONCE0: T/ACTUAL-ATTEMPT4-THREE-NAMESPACE-INITIALIZATION.json
+1d307ea4/19051B; exact3UID1000/GID1000mode0700dirs exist. NEVERreinitialize.
+No Rootquery/five/owner/lease/heavywork started; latestphysical08860bb3 remains.
+
+FrontendB8purecontrolsSTOPPED0tests missingoriginhelperDATA_BINDING sibling.
+Expertcompletegraphfix: correctthatbasename, restorefillEXPECTED_NAMESPACE8
+toacceptedhistoricalcapturepath matchingARGV, repinalltransitives; replacefull
+ownerimport inmodeadapterwithauthenticatedpureASTvalidatorclosure preserving
+alias/redefinitionordering. Postjoin18h implementsadditivesuccessor, review18h
+reviews; actualfullcapture+observerbootstrap mustpassbeforefinalfreeze.
+KeeporiginalNULLnamespacefixturefornegatives; bindactual1d307IDsonlyfinaltuple.
+DoNOTreuseoldconsumedcaller/grants/namespace3 orrelabeloriginal69/9793.
+
+Canonical3sourcefixes d067 remainWIP; actualdefaultwholeRustf9 independently
+HOSTqualified. Nextactualacceptance: freshadmittedincrementalRust/processcompile
+and11objectlink preserving9oldobjects, thenmatchingnativepilot. Source32actual
+440pairs880calls/ABI28+reused22/12PASS, independentactualreviewpending. Source33
+5HOSTfixtures/36boundarycases independentlyacceptedafterexpertobserverfix;
+Source34productionwriterABI36source-ready/uncompiled. Rootcontrolsunchanged.
+[04:17review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261026T0417.json).
+Default/native/file/Cretirementclosures0; M14/M15OPEN/practical35/35separate.
+No95%velocityclaim; original30minbuckets,20minsteering, fixed2026-10-26T15:55:33Z.
+
 ## Reviewed default-link corrections integrated as WIP
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
