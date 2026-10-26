@@ -1,0 +1,15 @@
+--- /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/diagnostic-c252-refusal-successor-source-1/owner-validation-provenance-failure-recovery-source-1/shared-only324a-archival-reconciliation-source-1/archive-parent-durability-correction1-source-1/shared_only_record_archive_primitives.ARCHIVE-PARENT-DURABILITY-CORRECTION1.py
++++ /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt2-coherent-entry-preparation-source-1/genuine-postshared-binding-successor-source-1/owner904301-parent903729-recovery-source-1/new-be87-shared-archival-preparation-source-1/actual1937-process-bound-shared-source-1/transitive-record-owner-correction1-source-1/shared_record_archive_primitives.NEWBE87-OWNER904301.REQUEST5A20.CORRECTION1.py
+@@ -50,8 +50,10 @@
+         need(all(getattr(before, k) == getattr(after, k) == getattr(linked, k) for k in fields) and
+              len(raw) == before.st_size and json.loads(raw, object_pairs_hook=guard._duplicates) == expected,
+              'owned record bytes/identity raced')
+-        need(expected.get('pid') == 867329 and expected.get('starttime') == '76715862',
+-             'exact independently retired original failed owner required')
++        need(expected.get('pid') == 904301 and expected.get('starttime') == '77396514' and
++             expected.get('request_sha256') == '5a20b25385d0df0dd233539e5f745222990526da14447d7c9053ea646dac74a7' and
++             expected.get('schema') == 'mckernel.heavy-operation.v1' and expected.get('kind') == 'image',
++             'exact independently retired current failed owner/request/schema required')
+         if 'inode' in expected:
+             need(expected['inode'] == before.st_ino and expected.get('device', expected.get('dev')) == before.st_dev,
+                  'owned exclusion inode differs')
