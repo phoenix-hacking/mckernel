@@ -1,3 +1,18 @@
+## Current cursor — attempt3 observation packet binding failed before query
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Caller931397 stopped before root observation/lock acquisition: its child931398
+joined1 at capture helper line16, embedded packetSHA mismatch. Both processes and
+groups absent;27:4free2x, no livecontext/CENSUS/shared/owner created. FrozenY and
+actual-entry-1 evidence preserved; no replay. Default18h owns one bounded private
+pin/transitive-capture successor plus actual top-level regression to mocked first
+query. Review18h checks changed chain independently. Existing namespace6294 and
+owner337/request4d remain unchanged; no namespace initialization replay.
+Source30 genuine77-module compile independently accepted at compile scope only;
+ordinary pure17-role/19-negative preflight granted separately, must join before
+fresh admission. Default/native/file/C-retirement closures remain0; M14/M15 OPEN.
+[Actual failure](../evidence/os-recovery-adoption-20261025-0254/ACTUAL-ATTEMPT3-PREQUERY-PACKET-PIN-FAILURE.json).
+
 ## Twenty-minute review — 2026-10-26T02:17Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
