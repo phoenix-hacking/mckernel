@@ -1,0 +1,37 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "ACCEPT_HOST_EXACT_RETAINED_CLOSURE_SIX_MOVE_TEARDOWN_COMPOSITIONS_ONLY",
+  "reviewer": "/root/f02_contract_review",
+  "result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/move-pte-functional-callback-successor-1/exact-four-section-closure-correction-1/ACTUAL-MOVE-TEARDOWN-FIRST-RESULT.json",
+    "sha256": "c4fe899822023bdde9e7277cba83c0eacc0147f5793fdbdc16b76ef2fa7bdcf1",
+    "bytes": 14138
+  },
+  "commands": 4,
+  "all_commands_joined_zero": true,
+  "all_groups_absent": true,
+  "all_streams_closed": true,
+  "all_stderr_empty": true,
+  "original_code_bytes_equal": 593,
+  "allocated_sections": 4,
+  "semantic_relocations_equal": 3,
+  "exports": 2,
+  "undefined_imports": 0,
+  "scenarios": 6,
+  "moves": 6,
+  "teardowns": 12,
+  "once_only_table_frees": 22,
+  "compile_time_ABI_checks": 3,
+  "input_pins_match": 20,
+  "retained_object_identity_unchanged": true,
+  "original_failure_preserved": "a506d7db805cdd2f241bf55a2c56afec6b4bc85c995bcc3dda113eb138ae5499",
+  "resources": {
+    "seconds": 0.5045445080613717,
+    "CPU_seconds": 0.498546,
+    "fresh_batch_max_child_RSS_KiB": 53480
+  },
+  "limits": [
+    "HOST derivative and controlled callback/teardown composition only",
+    "Actual mapping allocator/walker, VM locks, TLB, concurrency, payload reference release and default/native qualification remain open"
+  ]
+}

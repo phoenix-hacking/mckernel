@@ -1,3 +1,48 @@
+## 04:57 steering checkpoint — qualified bodies compose; default still blocked
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Source35’s ten commands, F05’s six move/teardown compositions and Source36’s
+Rust compile plus48 controlled cases/ABI30 are independently accepted at their
+stated HOST scopes. Original fixture/link failures and corrections are retained
+in archives `a21f9931`, `eb376cc0` and `728c3d89`. Actual blocking concurrency,
+hardware IRQ/VM behavior, full-crate composition and default/native remain open.
+One private Source37 owner now composes the qualified affinity/hash/migration
+bodies and their selectors for the next whole-Rust compiler check; no commands
+are granted yet. Root owns all canonical integration and heavy admission.
+
+Default admission was blocked throughout this20-minute review. The fresh E
+caller adds a pre-query command/output path check; its real metadata preparation
+regression passed all4controls (`9c5cd608`), independently accepted `3b28bcbb`;
+cleanup source `56173874` is reviewed `12945eae`. Root publishes the exact89-file
+source/control cohort next. No E query/clock/grant exists. Keep namespace1d307 and consumed prior
+attempt evidence unchanged. Next: Root runs four focused effect-free controls,
+publishes/fetches the successful tuple, then seeks one fresh actual admission.
+[04:57 review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261026T0457.json).
+Integration packages/default/native/whole-file/C-retirement delta0; M14/M15OPEN.
+Fixed deadline2026-10-26T15:55:33Z; run7f and resident controls unchanged.
+
+## Current cursor — metadata path failure retained; fresh successor required
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual attempt4 preparation: five observations passed; metadata prepare failed
+because its frozen context argument pointed to F while the caller produced C.
+No census or owner entered. Caller977384 and children977385/977394 retired;
+permanent27:4 is free, namespace1d307 unchanged, all driver paths absent.
+[Independent retirement](../evidence/os-recovery-adoption-20261025-0254/ATTEMPT4-PREOWNER-FAILURE-INDEPENDENT-RETIREMENT-ACCEPTANCE.json).
+Its observations, capture and grant are consumed. Postjoin18h prepares a fresh
+successor with real metadata preparation regression and command/output path
+checks before any query. Review18h owns independent acceptance. No initializer,
+old query, owner grant or unchanged compiler prefix may be replayed.
+
+Source35 passed ten selector/retained-partial-link commands, independently at
+that HOST scope only. Source36’s new migration worker compiled with no imports;
+ABI30/C comparison and48 controlled cases remain unrun. F05 lifecycle fixture
+failed first link on duplicate main/broad whole-object roots, before execution;
+expert correction will extract the exact four-section/three-RELA provider closure
+from retained f9, preserving its bytes and unchanged fixture. No blind stubs.
+M14/M15 OPEN; default/native/whole-file/C-retirement closures remain zero.
+Fixed deadline2026-10-26T15:55:33Z; resident controls and run7f unchanged.
+
 ## Current cursor — frontend controls passed; exact default entry next
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
