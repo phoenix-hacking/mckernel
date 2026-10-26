@@ -1,3 +1,16 @@
+## Twenty-minute review — 2026-10-26T02:17Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Exact newbe87 archival and postreturn current physical proof accepted75535;
+namespace3 initialized once6294. Corrected admission floor passes seven controls;
+76 frozen publication files match origin770f63c9a. Static context/command preparation
+precedes fresh caller-owned five/census. One ordinary Source30 compile now advances
+during preparation and must join before admission. Source29 tiny A/B passes three
+commands at diagnostic scope; real-crate linkage and default/native remain open.
+New accepted packages/default/native/file/C-retirement closures0; M14/M15 OPEN,
+practical35/35;95% claim unproved. Same fixed18h window and billing/resource controls.
+[Review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261026T0217.json).
+
 ## Current checkpoint — 01:37/01:57 reviews recorded; newphysical accepted
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
