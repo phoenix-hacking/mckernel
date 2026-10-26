@@ -1,0 +1,20 @@
+{
+  "status": "MATCHED_TYPED_NATIVE_LAYOUT_AND_REAL_FIXTURE",
+  "python_version": "CPython3.9.12 (Conda samebinary)",
+  "native_type_source": "Installed ELFdebug_info: PyBaseExceptionObject.traceback, PyTracebackObject.tb_next/tb_frame, PyFrameObject.f_code/f_localsplus, PyTypeObject.tp_dictoffset/tp_basicsize/tp_itemsize, PyDictObject, _dictkeysobject, PyDictKeyEntry, PyBytesObject, PyLongObject, PyListObject.",
+  "observed_completedprocess_layout": {
+    "tp_basicsize": 32,
+    "tp_dictoffset": 16,
+    "tp_itemsize": 0
+  },
+  "primary_source": "https://raw.githubusercontent.com/python/cpython/v3.9.12/Tools/gdb/libpython.py",
+  "source_scope": "PyDictObjectPtr._get_entries lines658-681 and iteritems: typed dk_indices plus onebyte per slot for dk_size<=255; ma_values split table or entry.me_value combined. Narrow reader accepts only four exactknown attributes and <=128slots.",
+  "fail_closed": [
+    "other Python/object/layout/negative dict offset",
+    "dictionary notexact4keys args/returncode/stdout/stderr",
+    "noncompactASCII metadata or oversized code",
+    "nonexact argv codehash/callerbirth",
+    "childbytes>4MiBeach or nonbytes",
+    "no unique exactsource traceback root_command frame/result"
+  ]
+}

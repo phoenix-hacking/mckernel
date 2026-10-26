@@ -1,3 +1,24 @@
+## Actual retained exception recovered — 2026-10-26T09:55Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Scoped debugger guard1069539 joined0/groupsabsent in.905409wall/.819170CPU,
+159704KiB peakRSS. Independent actualacceptance963deef9 verifies exactactor/parent/
+boot/FD3/sole27:4 before==after. OriginalRefusal is
+`root-command-failed:/usr/bin/python3`; underlyingchildcause still unproved.
+Onlysourcecall is legacyPROC_CODE census. No collector replay or cleanup resumed.
+Root1060806/start80309560 remains quarantined holding27:4, sudo1060803 andtool65524
+remain live; commonarchived/sharedpending exactlyasprior. Preservecustody.
+
+Nextscopedtypedreader dde95/runner5e7369 prepares reading only retainedtraceback
+root_command.result returncode/stdout/stderr and exactPROC_CODE argvmetadata.
+Fourrealflockfixturecases and13guardtests pass; resources remainCPU0/2GiB/32MiB
+file/10sdebugger, combinedchildoutputcap5MiB. Noactualnewattach yet; independent
+executionreview/fetchedpublication/freshgrant required. This readsfailurebytes,
+neverrerunscollector. Rootsource-only error_message correction183a is independently
+reviewed for future evidence preservation, with activee49 retained unchanged.
+M14/M15 OPEN, practical35/35, newdefault/native/file/Cretirement0; no95%claim.
+[Latest actualsteering](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261026T0944.json).
+
 ## LIVE OWNED CLEANUP QUARANTINE — 2026-10-26T09:11Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

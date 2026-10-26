@@ -1,0 +1,65 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "decision": "GRANT_EXACT_OWNED_QUARANTINE_EXCEPTION_READ_ONCE",
+  "granted_at": "2026-10-26T09:38:48.696107+00:00",
+  "packet": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/ROOT-ACTUAL-EXCEPTION-READ-PREPARATION-1/EXACT-EXCEPTION-READ-CAPTURE-PACKET.SOURCE-ONLY.json",
+    "bytes": 3137,
+    "sha256": "31d920e0213eb466b86c4cc7809df84113b2947d7885b05fcc4a046304ccbf89"
+  },
+  "independent_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-post-recovery-retirement-review-1/QUARANTINE-EXCEPTION-7754-INDEPENDENT-EXECUTION-REVIEW.json",
+    "bytes": 15753,
+    "sha256": "8180a76dcd0949f4672dbabbf4c4e57e7602daee0ff00b5f9d2aa75e6630b863"
+  },
+  "capture_binding_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-post-recovery-retirement-review-1/QUARANTINE-EXCEPTION-8906-CAPTURE-BINDING-REVIEW.json",
+    "bytes": 2547,
+    "sha256": "24919c99168d8e1f8c128de9f2c982f78f26437d72d1886e5b426a5f29a78221"
+  },
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "--",
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/exact_root_guard_runner.py",
+    "--execute-exact-root-read"
+  ],
+  "outer_capture_directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/custody-guard-correction-source-1/ROOT-ACTUAL-EXCEPTION-READ-PREPARATION-1/ROOT-ACTUAL-EXCEPTION-READ-OUTER-1",
+  "resources": {
+    "MemAvailable_bytes": 27839795200,
+    "disk_available_bytes": {
+      "/home/holden/mckernel": 152021372928,
+      "/home/holden/mckernel-work/scratch": 14100340736
+    },
+    "cpu": "0 payload/7 coordinator",
+    "jobs": 1,
+    "address_space_bytes": 2147483648,
+    "aggregate_cap": "7jobs/22.0485GiB unchanged"
+  },
+  "publication_proof": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/FETCHED-CHECKPOINT-8f71a5715.json",
+    "bytes": 12076,
+    "sha256": "5ca851d33c8f5e75d25462112f004a981e23b46e31c5862606a9e5726d73d6f8"
+  },
+  "target": {
+    "pid": 1060806,
+    "starttime": "80309560",
+    "purpose": "read retained recover.error only; debugger brief attach-stop/detach-resume quarantine"
+  },
+  "no_direct_target_or_group_signal": true,
+  "new_debugger_child_timeout_only": true,
+  "no_cleanup_reconciliation_or_unlock": true,
+  "new_workload_admission": false
+}
