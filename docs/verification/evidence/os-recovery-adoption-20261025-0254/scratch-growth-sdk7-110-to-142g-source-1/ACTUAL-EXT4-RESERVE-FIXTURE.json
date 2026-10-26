@@ -1,0 +1,71 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_UNPRIVILEGED_TOOL_RESERVE_GROWTH_FIXTURE",
+  "real_scratch_mutated": false,
+  "root": false,
+  "mount_or_loop": false,
+  "fixture_image": "/tmp/mckernel-ext4-reserve-fixture-2yvg968t/fixture.ext4",
+  "before": {
+    "Block count": 16384,
+    "Reserved block count": 163,
+    "Block size": 4096
+  },
+  "after": {
+    "Block count": 32768,
+    "Reserved block count": 326,
+    "Block size": 4096
+  },
+  "expected_proportional_reserved": 326.0,
+  "commands": [
+    {
+      "argv": [
+        "/usr/sbin/mke2fs",
+        "-q",
+        "-t",
+        "ext4",
+        "-F",
+        "-b",
+        "4096",
+        "-m",
+        "1",
+        "/tmp/mckernel-ext4-reserve-fixture-2yvg968t/fixture.ext4"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "wall_seconds": 0.007947206497192383
+    },
+    {
+      "argv": [
+        "/usr/sbin/dumpe2fs",
+        "-h",
+        "/tmp/mckernel-ext4-reserve-fixture-2yvg968t/fixture.ext4"
+      ],
+      "returncode": 0,
+      "stdout": "Filesystem volume name:   <none>\nLast mounted on:          <not available>\nFilesystem UUID:          ccea16e3-e4fa-4a73-a861-d5f541f37c2e\nFilesystem magic number:  0xEF53\nFilesystem revision #:    1 (dynamic)\nFilesystem features:      has_journal ext_attr resize_inode dir_index filetype extent 64bit flex_bg sparse_super large_file huge_file dir_nlink extra_isize metadata_csum\nFilesystem flags:         signed_directory_hash \nDefault mount options:    user_xattr acl\nFilesystem state:         clean\nErrors behavior:          Continue\nFilesystem OS type:       Linux\nInode count:              16384\nBlock count:              16384\nReserved block count:     163\nFree blocks:              14831\nFree inodes:              16373\nFirst block:              0\nBlock size:               4096\nFragment size:            4096\nGroup descriptor size:    64\nReserved GDT blocks:      7\nBlocks per group:         32768\nFragments per group:      32768\nInodes per group:         16384\nInode blocks per group:   512\nFlex block group size:    16\nFilesystem created:       Mon Oct 26 15:28:26 2026\nLast mount time:          n/a\nLast write time:          Mon Oct 26 15:28:26 2026\nMount count:              0\nMaximum mount count:      -1\nLast checked:             Mon Oct 26 15:28:26 2026\nCheck interval:           0 (<none>)\nLifetime writes:          45 kB\nReserved blocks uid:      0 (user root)\nReserved blocks gid:      0 (group root)\nFirst inode:              11\nInode size:\t          128\nJournal inode:            8\nDefault directory hash:   half_md4\nDirectory Hash Seed:      37406a01-9c21-436d-b32d-168546e45b99\nJournal backup:           inode blocks\nChecksum type:            crc32c\nChecksum:                 0x234f613d\nJournal features:         (none)\nJournal size:             4096k\nJournal length:           1024\nJournal sequence:         0x00000001\nJournal start:            0\n\n",
+      "stderr": "dumpe2fs 1.45.5 (07-Jan-2020)\n",
+      "wall_seconds": 0.0029528141021728516
+    },
+    {
+      "argv": [
+        "/usr/sbin/resize2fs",
+        "/tmp/mckernel-ext4-reserve-fixture-2yvg968t/fixture.ext4"
+      ],
+      "returncode": 0,
+      "stdout": "Resizing the filesystem on /tmp/mckernel-ext4-reserve-fixture-2yvg968t/fixture.ext4 to 32768 (4k) blocks.\nThe filesystem on /tmp/mckernel-ext4-reserve-fixture-2yvg968t/fixture.ext4 is now 32768 (4k) blocks long.\n\n",
+      "stderr": "resize2fs 1.45.5 (07-Jan-2020)\n",
+      "wall_seconds": 0.007066249847412109
+    },
+    {
+      "argv": [
+        "/usr/sbin/dumpe2fs",
+        "-h",
+        "/tmp/mckernel-ext4-reserve-fixture-2yvg968t/fixture.ext4"
+      ],
+      "returncode": 0,
+      "stdout": "Filesystem volume name:   <none>\nLast mounted on:          <not available>\nFilesystem UUID:          ccea16e3-e4fa-4a73-a861-d5f541f37c2e\nFilesystem magic number:  0xEF53\nFilesystem revision #:    1 (dynamic)\nFilesystem features:      has_journal ext_attr resize_inode dir_index filetype extent 64bit flex_bg sparse_super large_file huge_file dir_nlink extra_isize metadata_csum\nFilesystem flags:         signed_directory_hash \nDefault mount options:    user_xattr acl\nFilesystem state:         clean\nErrors behavior:          Continue\nFilesystem OS type:       Linux\nInode count:              16384\nBlock count:              32768\nReserved block count:     326\nFree blocks:              31215\nFree inodes:              16373\nFirst block:              0\nBlock size:               4096\nFragment size:            4096\nGroup descriptor size:    64\nReserved GDT blocks:      7\nBlocks per group:         32768\nFragments per group:      32768\nInodes per group:         16384\nInode blocks per group:   512\nFlex block group size:    16\nFilesystem created:       Mon Oct 26 15:28:26 2026\nLast mount time:          n/a\nLast write time:          Mon Oct 26 15:28:26 2026\nMount count:              0\nMaximum mount count:      -1\nLast checked:             Mon Oct 26 15:28:26 2026\nCheck interval:           0 (<none>)\nLifetime writes:          65 kB\nReserved blocks uid:      0 (user root)\nReserved blocks gid:      0 (group root)\nFirst inode:              11\nInode size:\t          128\nJournal inode:            8\nDefault directory hash:   half_md4\nDirectory Hash Seed:      37406a01-9c21-436d-b32d-168546e45b99\nJournal backup:           inode blocks\nChecksum type:            crc32c\nChecksum:                 0x6686c5b7\nJournal features:         (none)\nJournal size:             4096k\nJournal length:           1024\nJournal sequence:         0x00000001\nJournal start:            0\n\n",
+      "stderr": "dumpe2fs 1.45.5 (07-Jan-2020)\n",
+      "wall_seconds": 0.0027740001678466797
+    }
+  ]
+}
