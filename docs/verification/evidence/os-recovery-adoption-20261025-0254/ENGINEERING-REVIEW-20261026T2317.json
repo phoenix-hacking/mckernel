@@ -1,0 +1,43 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "observed_at": "2026-10-26T23:17:25.913722+00:00",
+  "decision": "CLOSE_REFUSED_BEFORE_CONSUMPTION_CUSTODY_RETAINED",
+  "capacity_cleared_at": "2026-10-26T22:43:24.370298Z",
+  "original_holder": {
+    "pid": 1281419,
+    "birth": 85204892,
+    "retired": true,
+    "caller_joined": true,
+    "caller_returncode": -9,
+    "tool": "40285",
+    "tool_joined": true
+  },
+  "current_holder": {
+    "pid": 1289073,
+    "birth": 85353159,
+    "parent": 1289070,
+    "pgid": 1289064,
+    "fd": 4,
+    "origin": 1281419,
+    "tool": "44584",
+    "joined": false
+  },
+  "actual_failure": "ValueError('same account guard')",
+  "cause": "helper requires last_rate_limits.spendControlReached is False; actual optional field is null",
+  "actual_service_snapshot": {
+    "phase": "running",
+    "heartbeat_at": "2026-10-26T23:17:23.948815+00:00",
+    "credit_budget_error": null,
+    "spendControlReached": false,
+    "credit_remaining": "34962.5210250000"
+  },
+  "close_nonce": "90455eaae03345959f280fae5eaf4319",
+  "close_consumed": false,
+  "new_sdk_commands": 0,
+  "new_native_cases_this_interval": 0,
+  "whole_file_closures": 0,
+  "critical_path": "one source owner prepares finite exact successor using retained OFD primitives; independent reviewer checks canonical optional service-field semantics; no mutation of paused actor or replay",
+  "next_command": "publish and independently review exact new-target successor source before any fresh copy/retire/close authority",
+  "largest_delay": "serialized custody closure after capacity clear; not CPU capacity",
+  "fixed_end": "2026-10-27T11:24:50Z"
+}

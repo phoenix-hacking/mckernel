@@ -1,3 +1,22 @@
+## Exact final-close refusal; original growth actor retired — 2026-10-26T23:17Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Original holder1281419/start85204892 retired by the one reviewed pidfd signal;
+actual caller1281416/tool40285 joined, recorded caller return-9. Growth is not replayed.
+Successor1289073/start85353159/parent1289070/group1289064 retains copied27:4 FD4,
+original lock origin1281419. Tool44584 remains active. Exact independent CLOSE
+release fbb76326 was published, but helper refused BEFORE CONSUMED-CLOSE with
+ValueError('same account guard'): actual spendControlReached is null while its
+predicate requires literal false. QUARANTINE is preserved; no FD closure/current-free
+claim. Launcher running, fresh heartbeat, credit error null and positive remaining.
+No state/control edit or old command replay. One focused reviewer checks canonical
+optional-field semantics; one repair owner prepares the smallest finite exact-target
+successor using retained OFD primitives. Root next executable operation needs that
+source and actual independent release. Capacity cleared22:43:24.370298Z; custody
+handoff remains the blocker, not CPU. SDK/new guest still barred until actual close,
+real joins and fresh physical proof. See ENGINEERING-REVIEW-20261026T2317.json.
+M14/M15 remain OPEN; no new SDK/native/file/C retirement delta this interval.
+
 ## Actual142GiB growth complete; postcheck quarantine retains custody — 2026-10-26T22:49Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
