@@ -1,3 +1,22 @@
+## Actual read-only observation — 2026-10-26T08:55Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Reviewed deadline-bounded observer158d ran once under Root grant9817f987,
+PID1056746: joined1, all group members absent, no observation errors, full streams
+closed;1.741078s wall/1.701309s CPU/209888KiB peak RSS. No cleanup ran. Exact
+first failure: normal typed proof selected-file closure omitted currentN
+ROOT-EXECUTION-GRANT.json and its payload; the static publication proof is already
+present. Worker prepares one bounded correction plus genuine retainedN proof-chain
+regression. All original root captures, source and independent findings retained.
+No new compiler command, default/native/file closure or C-retirement credit.
+
+Root own240s observer alarm and cleanup e49 successor are source-reviewed;
+pushed/fetched source checkpoints222fbabed/8e8fb6ff1/acb25cb88 preserve the original
+failed candidates and tests. Attempt5 driver/frontend/role sources are prepared;
+actual initializer/physical/grants remain pending. Preserve nine compiler prefixes
+and source6153/SDK21. Next actual acceptance remains exact retained current290
+retirement+positivecurrentphysical, then corrected selected default/native work.
+
 ## Recovery checkpoint — 2026-10-26T08:33Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
@@ -17,6 +36,11 @@ M12 remains35/35; M14/M15 OPEN. New default/native/file/C-retirement closures0.
 No95% velocity improvement claim. Next executable acceptance: reviewed retirement
 of retained current290 operation, then corrected current290 selected image entry
 under fresh actual admission; SDK21 remains accepted and is not replayed.
+
+Parser/source checkpoint2ec97b6f663b613a454844c2181fc64ae759c160 and failure-retention
+checkpointd8c9d4b08643f240f216b66a7913680520f00f68 are pushed and all changed fetched
+Git blobs verified.37 actual capture members including provenance43,309,288B
+are hash-verified in the retained archive; originals remain in place.
 
 Changed-holder observation:
 [actual recovery cursor](../evidence/os-recovery-adoption-20261025-0254/CURRENT290-RECOVERY-CHANGED-HOLDER-20261026T0830.json).

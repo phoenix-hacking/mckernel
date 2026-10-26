@@ -1,0 +1,145 @@
+{
+  "actual_cleanup_execution": false,
+  "actual_deadline_analysis": {
+    "argv_enforces_overall_deadline": false,
+    "outer_caller_implementation_not_reviewed_here": true,
+    "overall_deadline_seconds": 240,
+    "per_query_timeout_seconds": 30,
+    "required_outer_caller_behavior": "Root final authenticated grant/captured caller must actually enforce240s wall deadline, retain exact process/PGID identity, full streams and direct JOIN/retirement evidence, and never replay after timeout. Packet declaration alone is not timeout enforcement. No source change is necessary when existing outer captured caller enforces this bound.",
+    "source_enforces_overall_deadline": false
+  },
+  "capture_plan": {
+    "directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/observation-producer-source-1/actual-owner1043716-readonly-observation-1",
+    "files": [
+      "inspect.stdout",
+      "inspect.stderr",
+      "inspect.status.json",
+      "findmnt.stdout",
+      "findmnt.stderr",
+      "findmnt.status.json",
+      "OBSERVATION.json",
+      "dead-caller-proc-evidence.json"
+    ],
+    "outer": "retain complete root command stdout/stderr/status and direct JOIN, no truncation; on refusal keep partial captures; no removal",
+    "process": "lossless first rawfullEOF snapshotpair and everyfailure raw plus compact verified hashes/counts per reread"
+  },
+  "cleanup_execution_authority": false,
+  "cleanup_source_review": {
+    "bytes": 6242,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-post-recovery-retirement-review-1/SOURCE-E49EAF-INDEPENDENT-ACCEPTANCE.json",
+    "sha256": "00ac93bc933b1349cc5688cd736756da1bb723187d791ea9efb436e34e7343af"
+  },
+  "decision": "PASS_SOURCE_AND_EXACT_BOUNDED_READONLY_OBSERVATION_PROFILE",
+  "exact_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "--",
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/observation-producer-source-1/produce_actual_owner1043716_cleanup_observation.EXACT-DEAD-CALLER.READONLY.NOT_RELEASED.py",
+    "--execute-readonly"
+  ],
+  "implementation_ownership": false,
+  "independent_tests": {
+    "command": "taskset -c 0 bash -c 'ulimit -v 2097152; exec python3 -B docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/observation-producer-source-1/test_observation_producer.py'",
+    "exit_code": 0,
+    "reported_seconds": 0.071,
+    "scope": "AST/mock/exact source reads only, unprivileged CPU0/address space2GiB; no root queries",
+    "tests": 8
+  },
+  "native_or_retirement_acceptance": false,
+  "new_workload_authority": false,
+  "next_action": "Root authenticates exact read-only grant with real outer240s bound, executes this reviewed producer once, retains genuine observation/process evidence for cleanup release preparation. No additional review gate beyond existing exact root execution release is introduced.",
+  "packet": {
+    "bytes": 5250,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/observation-producer-source-1/READONLY-EXECUTION-PREPARATION.NOT-RELEASED.json",
+    "sha256": "0da17451f78089beb047457a170ae096265f693686b66b8e504b13d1b4d2d4d6"
+  },
+  "profile": {
+    "bytes": 30072,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/observation-producer-source-1/EXACT-OWNER1043716-DEAD-CALLER-READONLY-OBSERVATION-PROFILE.json",
+    "sha256": "fa0f5a376a9a7cbb243143316149afd3d7f08684bb806de67e7644ed93e43f27"
+  },
+  "published_and_fetched": {
+    "bytes": 2922,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/FETCHED-CHECKPOINT-8e8fb6ff1.json",
+    "sha256": "7b223fcb11b67b442d5c14e5fa088b5bead30c4194bb3c8bc4d87da5224e0293"
+  },
+  "query_allowlist": {
+    "findmnt": [
+      "/usr/bin/findmnt",
+      "-J",
+      "-T",
+      "/home/holden/mckernel-work/scratch",
+      "-o",
+      "TARGET,SOURCE,FSTYPE,OPTIONS,UUID,MAJ:MIN"
+    ],
+    "inspect": [
+      "/usr/bin/docker",
+      "--host=unix:///var/run/docker.sock",
+      "inspect",
+      "--type=container",
+      "0715da07649768d4347212f4214bc523c2e5b07227f06bcb9697ec7ad67890f8"
+    ]
+  },
+  "query_caps": {
+    "findmnt": 65536,
+    "inspect": 1048576
+  },
+  "recorded_at": "2026-10-26T08:47:01.249097+00:00",
+  "resources": {
+    "address_space_bytes": 2147483648,
+    "capture_headroom_bytes": 134217728,
+    "core_bytes": 0,
+    "cpu_affinity": "0",
+    "individual_file_limit_bytes": 33554432,
+    "jobs": 1,
+    "overall_observer_deadline_seconds": 240,
+    "query_timeout_seconds": 30
+  },
+  "reviewed_predicates": [
+    "All nine producer bootstrap pins match actual source/protocol/contract/recipe/owner receipt/ready/join/process/entry; exact e49 cleanup and fa0f profile bound.",
+    "Producer acquires a NEW read-only NOFOLLOW NONBLOCK permanent27:4 LOCK_EX|LOCK_NB; before/after identity and fresh deadcaller census checked. No sameOFD inheritance, original caller JOIN or unknown callerPGID fabrication.",
+    "Entire produce and durable final process capture execute while new mutex descriptor held; close in finally. Busy acquisition closes descriptor without cleanup action.",
+    "Only exact Docker inspect for frozen CID and findmnt for scratch are queried; each enforces30s timeout. Complete stdout/stderr/status durably captured before parser/status/cap oracle, including timeout/refusal.",
+    "Exact genuine21-key observation, all seven exited status rows, request-derived baseline candidate tree, current static AND runtime closure, original typed normal-owner JOIN/source predicates and full inventories retained; selected identities/exclusions rechecked.",
+    "No configure/recover/Transaction/container mutation/ownership unlink/rename/signal calls; only new evidence directory/files and temporary exclusive mutex custody.",
+    "Fresh capture directory absent at review; retained evidence and frozen original sources preserved.",
+    "Published fetched checkpoint8e8fb6ff1f2b287c435a82fe63efbfa0bf4d3665 records matching exact reviewed source/profile/packet/test bytes."
+  ],
+  "reviewer": "/root/current_owner_retirement",
+  "root_grant_requirements": [
+    "Bind this exact review, packet/source/profile/test/fetched hashes and exact argv/resources/query/capture plan.",
+    "Use already required fresh resource/physical admission: sole coordinator/no conflicting operation, no root mutation from absentcaller inference, CPU0/one job/2GiB/32MiB file/zero core, HOST capture128MiB and retained scratch/HOST floors.",
+    "Implement actual outer240s bounded observer and positive exact process/group/stream retirement as described; do not count a240s label as enforcement.",
+    "Release applies once to this exact read-only observation and fresh absent capture directory; failure/timeout evidence retained, no unchanged replay or cleanup authority."
+  ],
+  "root_observation_executed": false,
+  "schema": "mckernel.current290.dead-caller.readonly-producer.independent-execution-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": {
+    "bytes": 11060,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/observation-producer-source-1/produce_actual_owner1043716_cleanup_observation.EXACT-DEAD-CALLER.READONLY.NOT_RELEASED.py",
+    "sha256": "7af6d7cae33b640b83f46146f78f078ae075c862a1a5204c765a1bf44d28421a"
+  },
+  "stdin": "DEVNULL; no sameOFD inheritance claimed",
+  "tests": {
+    "bytes": 8048,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/observation-producer-source-1/test_observation_producer.py",
+    "sha256": "d8394079e0acda38ecaec570bc6b762cea1958de7fbaaa752cfa166af7e1b752"
+  },
+  "worker_test_status": {
+    "bytes": 982,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/observation-producer-source-1/tests.status.json",
+    "sha256": "ddec6e13c21d2ff2aba415dfc5dced09cbca71c2649afc322f669bfb5deba20b"
+  }
+}

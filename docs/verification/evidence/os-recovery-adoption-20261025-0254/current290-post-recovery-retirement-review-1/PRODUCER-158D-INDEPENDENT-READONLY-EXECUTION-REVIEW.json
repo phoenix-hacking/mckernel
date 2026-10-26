@@ -1,0 +1,151 @@
+{
+  "actual_cleanup_execution": false,
+  "actual_deadline": {
+    "enforced_by": "own observer process ITIMER_REAL/SIGALRM before bootstrap through evidence publication and mutex close",
+    "existing_timer": "Refuse nonzero existing timer before altering handler/timer; zero previous timer remains zero; prior SIGALRM handler restored in finally.",
+    "expiry": "ObserverDeadlineExpired propagates; subprocess.run BaseException path kills/reaps only its owned query child; perquery30s retained. File-backed capture retains partial stdout/stderr and status on observed query deadline.",
+    "no_external_process_group_signals": true,
+    "seconds": 240
+  },
+  "capture_plan": {
+    "directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/overall-deadline-correction-source-1/actual-owner1043716-readonly-observation-1",
+    "files": [
+      "inspect.stdout",
+      "inspect.stderr",
+      "inspect.status.json",
+      "findmnt.stdout",
+      "findmnt.stderr",
+      "findmnt.status.json",
+      "OBSERVATION.json",
+      "dead-caller-proc-evidence.json"
+    ],
+    "outer": "retain complete root command stdout/stderr/status and direct JOIN, no truncation; on refusal keep partial captures; no removal",
+    "process": "lossless first rawfullEOF snapshotpair and everyfailure raw plus compact verified hashes/counts per reread"
+  },
+  "cleanup_execution_authority": false,
+  "cleanup_source_review": {
+    "bytes": 6242,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-post-recovery-retirement-review-1/SOURCE-E49EAF-INDEPENDENT-ACCEPTANCE.json",
+    "sha256": "00ac93bc933b1349cc5688cd736756da1bb723187d791ea9efb436e34e7343af"
+  },
+  "decision": "PASS_SOURCE_AND_EXACT_ROOT_READONLY_EXECUTION_PROFILE",
+  "exact_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "--",
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/overall-deadline-correction-source-1/produce_actual_owner1043716_cleanup_observation.EXACT-DEAD-CALLER.READONLY.NOT_RELEASED.py",
+    "--execute-readonly"
+  ],
+  "implementation_ownership": false,
+  "independent_tests": {
+    "command": "taskset -c 0 bash -c 'ulimit -v 2097152; exec python3 -B docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/overall-deadline-correction-source-1/test_observation_producer.py'",
+    "coverage": [
+      "Original8 source/profile/branch/rawcapture/busylock predicates",
+      "Own alarm expiry and priorhandler/cancel restoration",
+      "Existingtimer refused untouched",
+      "Query deadline partial raw preservation/exception propagation",
+      "Actual stdlib.run with mocked owned child kill/reap on deadline",
+      "Main expiry before/after lock emits noPASS, retains available evidence, closes acquired lock",
+      "Lossless length/hash/rawUTF8 bundle"
+    ],
+    "exit_code": 0,
+    "reported_seconds": 0.088,
+    "scope": "Unprivileged oneCPU0/addressspace2GiB, AST/mock/exact source reads, temporary private test capture files only; no root queries or real alarm signal.",
+    "tests": 14
+  },
+  "native_or_retirement_acceptance": false,
+  "new_workload_authority": false,
+  "next_action": "Root publishes/fetch-verifies exact new source/profile/tests/packet, binds this review and fresh admission in authenticated root grant, then executes the exact bounded read-only producer once.",
+  "packet": {
+    "bytes": 5955,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/overall-deadline-correction-source-1/READONLY-EXECUTION-PREPARATION.NOT-RELEASED.json",
+    "sha256": "10f95ddaf9cfd2e161706943fab6ff5d86092012a1615723a47ca9cb65d52bef"
+  },
+  "previous_external_deadline_requirement_superseded": true,
+  "previous_review": {
+    "bytes": 8706,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-post-recovery-retirement-review-1/PRODUCER-7AF6-INDEPENDENT-READONLY-EXECUTION-REVIEW.json",
+    "sha256": "589e3fc1ef0124f1b6837d109bdeb6078145342e8a92c6c31350f2c7065c0a80"
+  },
+  "profile": {
+    "bytes": 30230,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/overall-deadline-correction-source-1/EXACT-OWNER1043716-DEAD-CALLER-READONLY-OBSERVATION-PROFILE.json",
+    "sha256": "f00b2fa763829ed96b29528674606e88d7c3ad2f39d4dfe4052f8fea61a589a4"
+  },
+  "query_allowlist": {
+    "findmnt": [
+      "/usr/bin/findmnt",
+      "-J",
+      "-T",
+      "/home/holden/mckernel-work/scratch",
+      "-o",
+      "TARGET,SOURCE,FSTYPE,OPTIONS,UUID,MAJ:MIN"
+    ],
+    "inspect": [
+      "/usr/bin/docker",
+      "--host=unix:///var/run/docker.sock",
+      "inspect",
+      "--type=container",
+      "0715da07649768d4347212f4214bc523c2e5b07227f06bcb9697ec7ad67890f8"
+    ]
+  },
+  "query_caps": {
+    "findmnt": 65536,
+    "inspect": 1048576
+  },
+  "recorded_at": "2026-10-26T08:52:37.513519+00:00",
+  "resources": {
+    "address_space_bytes": 2147483648,
+    "capture_headroom_bytes": 134217728,
+    "core_bytes": 0,
+    "cpu_affinity": "0",
+    "individual_file_limit_bytes": 33554432,
+    "jobs": 1,
+    "overall_observer_deadline_seconds": 240,
+    "query_timeout_seconds": 30
+  },
+  "reviewed_changes": [
+    "Producer/profile changes from accepted7af6 confined to local deadline, file-backed durable query capture, fresh capture directory and lossless readable result bundle. Produce/normal typed owner JOIN/receipt/source/runtime closure/exact21-key observation/client ledger/inventory/identity predicates unchanged.",
+    "Timer installed before bootstrap and still armed through fresh exclusive permanent27:4 custody, produce, final process evidence and mutex close; cancel/restore afterward. PASS printed only after these cleanup steps; refusal prints REFUSED then propagates.",
+    "File-backed raw captures opened0600/O_EXCL/NOFOLLOW, fsynced/closed in finally. Query stdlib subprocess.run uses allowed fixedargv and30s timeout; owned deadline expiry cannot be silently accepted as a normal result.",
+    "Root-owned0600/root0700 originals remain. UID1000 coordinator receives exact rawUTF8 observation/proc evidence plus length/SHA256 through existing outer full-EOF stdout capture; no ownership changes or extra root read required.",
+    "Root effects limited to temporary fresh mutex custody, two reviewed queries and new evidence writes. No cleanup/configure/recover/Transaction/container removal/ownership mutation calls."
+  ],
+  "reviewer": "/root/current_owner_retirement",
+  "root_final_grant_requirements": [
+    "Bind exact reviewed source/profile/packet/tests/argv/caps/capture names and publication/fetched proof for these new bytes.",
+    "Retain existing fresh resource/physical admission and ordinary caller process/fullstream/directJOIN evidence controls; capture directory must still be absent.",
+    "One exact bounded read-only attempt; retain refusal/timeout originals and do not replay unchanged.",
+    "No further review gate beyond already required exact Root authenticated execution grant is introduced."
+  ],
+  "root_observation_executed": false,
+  "schema": "mckernel.current290.dead-caller.locally-bounded-readonly.independent-execution-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": {
+    "bytes": 13341,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/overall-deadline-correction-source-1/produce_actual_owner1043716_cleanup_observation.EXACT-DEAD-CALLER.READONLY.NOT_RELEASED.py",
+    "sha256": "158d406c5fdf6dabea1e71a10c23aba6d89741922e62b2b7e414f91c170162be"
+  },
+  "stdin": "DEVNULL; no sameOFD inheritance claimed",
+  "test_status": {
+    "bytes": 999,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/overall-deadline-correction-source-1/tests.status.json",
+    "sha256": "d678320162b82adffa0cdfe00d654fffd992a9e94a1d7510101741d286b5fb4b"
+  },
+  "tests": {
+    "bytes": 12110,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/overall-deadline-correction-source-1/test_observation_producer.py",
+    "sha256": "7345e8b43a4628b35b037edea2a92ea2a90a4cd1ff7577293a2e588a03de5f64"
+  }
+}

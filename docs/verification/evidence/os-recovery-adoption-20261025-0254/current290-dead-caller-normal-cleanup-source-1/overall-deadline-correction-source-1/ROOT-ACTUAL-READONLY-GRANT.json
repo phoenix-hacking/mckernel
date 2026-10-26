@@ -1,0 +1,60 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "decision": "GRANT_EXACT_BOUNDED_READONLY_OBSERVATION_ONCE",
+  "granted_at": "2026-10-26T08:53:35.555232+00:00",
+  "packet": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/overall-deadline-correction-source-1/READONLY-EXECUTION-PREPARATION.NOT-RELEASED.json",
+    "bytes": 5955,
+    "sha256": "10f95ddaf9cfd2e161706943fab6ff5d86092012a1615723a47ca9cb65d52bef"
+  },
+  "independent_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-post-recovery-retirement-review-1/PRODUCER-158D-INDEPENDENT-READONLY-EXECUTION-REVIEW.json",
+    "bytes": 8901,
+    "sha256": "0be7189bde11d4a62faa18bb34ac3c70ea42e9871fa7f8e4478a346dc7bc3869"
+  },
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "--",
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/overall-deadline-correction-source-1/produce_actual_owner1043716_cleanup_observation.EXACT-DEAD-CALLER.READONLY.NOT_RELEASED.py",
+    "--execute-readonly"
+  ],
+  "outer_capture_directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/overall-deadline-correction-source-1/ROOT-ACTUAL-READONLY-OUTER-1",
+  "capture_wrapper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CAPTURE-EXACT-READONLY-ONCE.py",
+    "bytes": 3016,
+    "sha256": "e38109ad7f6ed35b88f0f858e6b71890832ad197f75aa7209365495b2e8b289d"
+  },
+  "resources": {
+    "MemAvailable_bytes": 27981594624,
+    "disk_available_bytes": {
+      "/home/holden/mckernel": 152110694400,
+      "/home/holden/mckernel-work/scratch": 14100373504
+    },
+    "cpu": "0 payload,7 coordinator",
+    "jobs": 1,
+    "address_space_bytes": 2147483648,
+    "cap_unchanged": "7 aggregate/22.0485GiB",
+    "deadline": "observer own240s ITIMER_REAL"
+  },
+  "publication_proof": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/FETCHED-CHECKPOINT-acb25cb88.json",
+    "bytes": 3617,
+    "sha256": "c11d6c9b120ce2ba20d00453cf81fcf906cea319c874d80287b7f462baaef4c9"
+  },
+  "cleanup_effects_authorized": false,
+  "new_workload_admission": false,
+  "same_OFD_claim": false
+}
