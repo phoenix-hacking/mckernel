@@ -2,7 +2,11 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 These are templates only. No nonce, resource proof, current physical acceptance,
 review, runtime authority, Root admission directory or capture directory is supplied.
-The two null argv values are the attempt-parent and nonce. Never execute either
+The two null argv values remain the actual admitted attempt-parent and nonce.
+The reserved empty parent is /home/holden/mckernel-work/scratch/n290memory1/p.
+The actual manifest is /home/holden/mckernel-work/scratch/n290memory1/m.json,
+byte-identical SHA40c1d0f4; both pure owner path guards and load_manifest passed.
+Never execute either
 template or reuse the consumed startup2 nonce/attempt/capture.
 
 Root fill sequence:
@@ -13,7 +17,9 @@ Root fill sequence:
    is null because no new scratch stage-result file was created. Bind this actual
    packaging record in the Root operation rather than borrowing startup2's stage.
 2. After accepted growth FD closure/final custody release, choose one genuinely
-   fresh nonce and Root-owned attempt-parent and admission/capture directories.
+   fresh nonce and admission/capture directories; bind the reserved existing empty
+   uid1000 parent /home/holden/mckernel-work/scratch/n290memory1/p. Do not replace
+   it or chown it merely for preparation.
    Fill both templates' nonce and attempt_parent fields and the corresponding
    --nonce/--attempt-parent argv values identically. Preserve every known argv
    element, manifest path/hash, owner45010e54, container/guest profile and cutoff.

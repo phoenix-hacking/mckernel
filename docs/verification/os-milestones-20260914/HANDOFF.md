@@ -1,3 +1,29 @@
+## Actual final copied FD closed and both callers joined — 2026-10-26T23:24Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Finalhelper1294129/start85433672 closed own27:4FD4 at1793057019.2948763
+(23:23:39.294876Z), NORMAL-CLOSE retained. Actualcaller1294126/tool68172 joined0;
+priorcopiedholder1289073/caller1289070/tool44584 joined-9 (wrapper0), and original
+growth1281419/caller1281416/tool40285 alreadyretired. No livecustody actor remains.
+Source04b5 reuses hash-pinned canonicalcreditpolicy (NULL onlywithknownpositivefinite
+credits),18puretestsPASS; source+exactCOPY/RETIRE/CLOSE independentlyreleased.
+Firsthelper4976's unconsumedCLOSE/sameaccountguardQUARANTINE staysretained.
+
+Freshfreeobserver confirms twoactualownedEXNBprobesclosed/noLOCK_UN, zero27:4rows,
+oldgroupsabsent, same142GiB/inode/UUID/reserveABS288358 and fivefiles+24scratch21.
+Independentfinalfreeacceptance PENDING. Specificordinary stagingdelta explicitly
+qualified: new n290memory1/m.json(40c1)+emptyp changes rootdirectory nlink+1/size+4096;
+originalunchangedrootidentityclaim FALSE. Initialstrictobserverfailure retained,
+originalgrowthcontract unmodified; acceptedprestageheldFSproof preserved.
+Capacity-clear→actualFDclose2414.924578s (40m14.925s). This is custodyhandofflatency,
+notOS/native acceptance or proof of insufficientCPU. SDKcompiler0/newnative0.
+
+NextRoot: obtain final scoped freeacceptance, fresh currentresources/executionrelease,
+then matching baseline.core.memory using alreadyvalidatedcurrent290 image/modules,
+publisheda4bc memoryoverlay/40c1manifest staged under scratch/n290memory1/m.json.
+OneSDKsourceowner repairsactualtwohopcustody/head composition inparallel; no false
+firsthelperNORMAL-CLOSE and no replay ofSDK21/build3/growth. M14/M15 remainOPEN.
+
 ## Exact final-close refusal; original growth actor retired — 2026-10-26T23:17Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
