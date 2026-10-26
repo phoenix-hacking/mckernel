@@ -19,8 +19,8 @@ import sys
 import time
 
 D = Path(__file__).resolve().parent
-CONFIG = D / 'FROZEN-CURRENT290-IMAGE-ENTRY-INPUTS.ATTEMPT4.READONLY-SEED.json'
-CONFIG_SHA = '0210e878ac5908a6a28bb8961710d13ecb0bff8c9dc1641d01aae2d5c70b51e2'
+CONFIG = D / 'FROZEN-CURRENT290-IMAGE-ENTRY-INPUTS.ATTEMPT5.READONLY-SEED.json'
+CONFIG_SHA = '1e6f779c267d2a845e0432ca0fc1faead5a5766834c8fecfd5813f357cb2b152'
 LOCK = Path('/run/lock/mckernel-development.lock')
 SCOPE = 'Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
 
@@ -335,8 +335,8 @@ def command_output_paths(cfg):
 def execute(preparation_grant_path, actual_config_path, actual_config_sha):
     cfg = actual_config(actual_config_path, actual_config_sha)
     command_output_paths(cfg)
-    binding_path = Path('/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt3-coherent-entry-preparation-source-1/genuine-newbe87-physical-binding-preparation-source-1/actual7553-namespace6294-final-source-1/memory-floor-correction1-source-1/query-packet-pin-correction1-source-1/default290-link-data-selector-correction1-source-1/minimal-selected-default-readonly-overlay-and-seed-plan-1/implementation-source-1/exact-consumed-gitlink-view-correction1-source-1/fresh-compiled-object-ownership-gate-source-1/attempt4-request-and-namespace-plan-source-1/attempt4-frontend-source-1/owner213-frontend-preparation-source-1/initializer-owner-role-join-correction1-source-1/bootstrap-local-path-correction1-source-1/current-physical-recovery-binding-source-1/attempt4_exact_source_origin_binding.READONLY-SEED.py')
-    need(reference(binding_path) == {'path': '/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt3-coherent-entry-preparation-source-1/genuine-newbe87-physical-binding-preparation-source-1/actual7553-namespace6294-final-source-1/memory-floor-correction1-source-1/query-packet-pin-correction1-source-1/default290-link-data-selector-correction1-source-1/minimal-selected-default-readonly-overlay-and-seed-plan-1/implementation-source-1/exact-consumed-gitlink-view-correction1-source-1/fresh-compiled-object-ownership-gate-source-1/attempt4-request-and-namespace-plan-source-1/attempt4-frontend-source-1/owner213-frontend-preparation-source-1/initializer-owner-role-join-correction1-source-1/bootstrap-local-path-correction1-source-1/current-physical-recovery-binding-source-1/attempt4_exact_source_origin_binding.READONLY-SEED.py', 'sha256': '497d7a6673b86b253fc3e46b4c9f281a671688e951796217e9331b5057b64d13', 'bytes': 12922}, 'exact attempt2 source-origin helper')
+    binding_path = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-corrected-driver-successor-binding-source-1/frontend-source-1/initializer-runtime-role-source-1/attempt5_exact_source_origin_binding.SOURCE-ONLY.NOT-RELEASED.py')
+    need(reference(binding_path) == {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-corrected-driver-successor-binding-source-1/frontend-source-1/initializer-runtime-role-source-1/attempt5_exact_source_origin_binding.SOURCE-ONLY.NOT-RELEASED.py', 'sha256': '8708018b1dcaae500b663ef8780db07d247e04bf6e80ccc2dce688c2adb0da28', 'bytes': 9179}, 'exact attempt2 source-origin helper')
     binding_module = type(sys)('attempt2_static_binding'); binding_module.__file__ = str(binding_path)
     exec(compile(binding_path.read_bytes(), str(binding_path), 'exec'), binding_module.__dict__)
     binding_module.require_new_runtime_facts(cfg)

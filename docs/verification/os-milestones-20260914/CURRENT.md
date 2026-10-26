@@ -1,3 +1,40 @@
+## Shared-phase failure retained — current keeper custody
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Keeper1193473/start83392603/PGID1193468/tool1416 retains permanent27:4 viaFD6.
+Original1060806 positively retired; sudo1060803 and outer1060802 absent.
+One reviewed shared-only run failed `dead-caller-incomplete-pair-retry-exhausted`
+after13full-EOF checks and3 first-stat ENOENT for different transientPIDs.
+All4 actual root collector commands returned0/stderr0; full output retained.
+Actual current journal remains4events, originalshared269B/inode116861 unchanged,
+archive empty/inode116866 and originalquarantine preserved. Shared mutation did
+not occur. Consumed commands/grants must not be replayed; keeper must not be killed
+or unlocked. High implementation/review owners minimize this lifecyclefailure and
+prepare one bounded correction/explicit custody successor if justified.
+
+New integration/default/native/file/C closures0; no speedupclaim. Nextdefault
+preclock4file correction is prepared privately (stale paths/helper/origin/deadline
+and consumednamespace receipt); root integration pending. Source6153/nineobjects/
+SDK21 remain intact. [17:48 review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261026T1748.json).
+
+## Live custody successor — original cleanup root positively retired
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Reviewed standby was entered once; new keeper1193473/start83392603/PGID1193468
+(tool1416) verified same-OFD duplicateFD6 of permanent27:4. Exact reviewed
+pidfd-only retirement command executed once; original1060806 has positive pidfd
+exit and is absent. Original sudo1060803/outer1060802 are absent; their historical
+outer JOIN remains UNKNOWN_UNAVAILABLE. New keeper retains custody: do not signal,
+unlock, replay, or start heavy work. No old capture JOIN is invented.
+
+Fresh unchanged phase configure/protected-files/current-absence checks PASS6.165s.
+Typed receipt79843b2f and adoption grant771fa89d await independent release; next
+is borrowed-phase adoption, shared-only continuation, explicit terminal close and
+independent currentphysical. Full actual evidence lives in
+`../evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-PARTIAL-CUSTODY-PREPARATION-1/`.
+Sources/harness are pushed/fetched95d270735. Default/native/file/C closures remain0.
+Current fixed deadline2026-10-27T11:24:50Z; same controls and credit ledger.
+
 ## October26 continuation — retained census failure, custody preserved
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
