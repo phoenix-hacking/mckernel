@@ -1,0 +1,26 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/exact_root_result_guard_runner.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/compact-result-envelope-correction-source-1/exact_root_result_guard_runner.py
+@@ -89,6 +89,14 @@
+  need(meta.get('prefix')==['/usr/bin/python3','-I','-B','-c'] and meta.get('code_sha256')==code['sha256'] and meta.get('code_bytes')==code['bytes'] and meta.get('challenge_bytes')==48 and isinstance(meta.get('challenge_sha256'),str) and len(meta['challenge_sha256'])==64 and meta.get('caller_pid')==1060806 and meta.get('caller_starttime')=='80309560','exact-PROC_CODE-caller-metadata')
+  need(rc or answer['stderr']['bytes'] or answer['stdout']['bytes']>profile['root_command_limit_bytes'],'actual-source-failure-condition')
+  return answer
++def summarize_result(answer):
++ # decode_result() already validated every full raw byte/hash/length and all
++ # original frame/argv/failure oracles. Sole full copy remains in GDB stdout.
++ summary=dict(answer)
++ for stream in ('stdout','stderr'):
++  summary[stream]={key:answer[stream][key] for key in ('bytes','sha256')}
++ return summary
++
+ def perform(profile,guardfn=guard,runfn=subprocess.run):
+  before=guardfn(profile);stdout=stderr=b'';error=None;code=None;after=None
+  try:
+@@ -107,7 +115,7 @@
+              stderr=dict(bytes=len(stderr),sha256=hashlib.sha256(stderr).hexdigest(),raw_hex=stderr.hex()))
+  if error is None:
+   try:
+-   need(code==0 and after==before,'same-custody-and-gdb-exit');result['extraction']=decode_result(stdout,profile);result['status']='PASS_EXACT_OWNED_ROOT_COMMAND_RESULT_READ'
++   need(code==0 and after==before,'same-custody-and-gdb-exit');result['extraction']=summarize_result(decode_result(stdout,profile));result['status']='PASS_EXACT_OWNED_ROOT_COMMAND_RESULT_READ'
+   except Exception as exc:result['error']=type(exc).__name__+':'+str(exc)
+  return result
+ def main():

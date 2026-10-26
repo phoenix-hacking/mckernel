@@ -1,0 +1,62 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/compact-result-envelope-correction-source-1/exact_root_result_guard_runner.py",
+    "bytes": 10433,
+    "sha256": "6eb1d81f5caa1c1f3dd7819ff580b94e7a611a08291f0469b804aed664248ba7"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/compact-result-envelope-correction-source-1/EXACT-ROOT-COMMAND-RESULT-PROFILE.NOT-RELEASED.json",
+    "bytes": 7396,
+    "sha256": "c85d1a143b71f8a394abe0d72d8abeae0b6cd59355023f22e61cda6b6202bab3"
+  },
+  "cleanup_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/bounded-observer-correction-source-1/native_rust_cutover_image_terminal_cleanup.CURRENT290.EXACT-DEAD-CALLER.py",
+    "bytes": 128910,
+    "sha256": "e49eaf2a7bacc6a64523f9f6c91516b9a3abefc875cdc1d8941c4e6b55473de3"
+  },
+  "helper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/read_exact_root_command_result.gdb.py",
+    "bytes": 9185,
+    "sha256": "dde95e94fc4f7510f928f0d77c08d2712eb85b60878a99070bf69d413ddf180c"
+  },
+  "gdb": {
+    "path": "/usr/bin/gdb",
+    "bytes": 8824736,
+    "sha256": "ee638c585936025f85a5f0f967e3929c9b36cb286d37ef662b23705682e31e2a"
+  },
+  "python": {
+    "path": "/home/holden/anaconda3/bin/python3.9",
+    "bytes": 15880080,
+    "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb"
+  },
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "--",
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/compact-result-envelope-correction-source-1/exact_root_result_guard_runner.py",
+    "--execute-exact-root-read"
+  ],
+  "proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/compact-result-envelope-correction-source-1/EXACT-ROOT-RESULT-READ-PREPARATION.NOT-RELEASED.json",
+    "bytes": 7571,
+    "sha256": "b9ce99dd03c22d99c648e74ae59bcfb473b140574732d6d96c3151b1b2d4e45e"
+  },
+  "capture_wrapper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/ROOT-ACTUAL-RESULT-READ-PREPARATION-1/ROOT-CAPTURE-EXACT-ROOT-RESULT-READ-ONCE.py",
+    "bytes": 3072,
+    "sha256": "a3b0ef0a162b3c7fb8b8e9501725423328d2f585cef653d1389f6d14523b6d4f"
+  },
+  "role": "read exactretained root_command CompletedProcess from traceback, compactsummary+losslessraw; no collector rerun or cleanup/reconciliation/unlock"
+}

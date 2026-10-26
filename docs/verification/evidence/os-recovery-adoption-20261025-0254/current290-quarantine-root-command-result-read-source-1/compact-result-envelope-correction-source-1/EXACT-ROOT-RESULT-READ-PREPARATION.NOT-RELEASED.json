@@ -1,0 +1,141 @@
+{
+  "status": "NOT_RELEASED_SOURCE_AND_OWNED_FIXTURE_ONLY",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "helper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/read_exact_root_command_result.gdb.py",
+    "bytes": 9185,
+    "sha256": "dde95e94fc4f7510f928f0d77c08d2712eb85b60878a99070bf69d413ddf180c"
+  },
+  "runner": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/compact-result-envelope-correction-source-1/exact_root_result_guard_runner.py",
+    "bytes": 10433,
+    "sha256": "6eb1d81f5caa1c1f3dd7819ff580b94e7a611a08291f0469b804aed664248ba7"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/compact-result-envelope-correction-source-1/EXACT-ROOT-COMMAND-RESULT-PROFILE.NOT-RELEASED.json",
+    "bytes": 7396,
+    "sha256": "c85d1a143b71f8a394abe0d72d8abeae0b6cd59355023f22e61cda6b6202bab3"
+  },
+  "gdb": {
+    "path": "/usr/bin/gdb",
+    "bytes": 8824736,
+    "sha256": "ee638c585936025f85a5f0f967e3929c9b36cb286d37ef662b23705682e31e2a"
+  },
+  "python": {
+    "path": "/home/holden/anaconda3/bin/python3.9",
+    "bytes": 15880080,
+    "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb"
+  },
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "--",
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/compact-result-envelope-correction-source-1/exact_root_result_guard_runner.py",
+    "--execute-exact-root-read"
+  ],
+  "exact_gdb_argv": [
+    "/usr/bin/gdb",
+    "-nx",
+    "-nh",
+    "-batch",
+    "-q",
+    "-iex",
+    "set auto-load off",
+    "-ex",
+    "set pagination off",
+    "-ex",
+    "set confirm off",
+    "-ex",
+    "set may-call-functions off",
+    "-ex",
+    "set may-write-registers off",
+    "-ex",
+    "set may-write-memory off",
+    "-ex",
+    "set may-insert-breakpoints off",
+    "-ex",
+    "set may-insert-fast-tracepoints off",
+    "-ex",
+    "file /home/holden/anaconda3/bin/python3.9",
+    "-ex",
+    "attach 1060806",
+    "-ex",
+    "source /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/read_exact_root_command_result.gdb.py",
+    "-ex",
+    "read-exact-root-command-result /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/bounded-observer-correction-source-1/native_rust_cutover_image_terminal_cleanup.CURRENT290.EXACT-DEAD-CALLER.py 986e64c50fd8d78bbe3c23e86a690e67b51255ab03c9f03f29db30ee50891532 3564 80309560",
+    "-ex",
+    "detach"
+  ],
+  "proc_code": {
+    "source": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/bounded-observer-correction-source-1/native_rust_cutover_image_terminal_cleanup.CURRENT290.EXACT-DEAD-CALLER.py",
+      "bytes": 128910,
+      "sha256": "e49eaf2a7bacc6a64523f9f6c91516b9a3abefc875cdc1d8941c4e6b55473de3"
+    },
+    "sha256": "986e64c50fd8d78bbe3c23e86a690e67b51255ab03c9f03f29db30ee50891532",
+    "bytes": 3564
+  },
+  "limits": {
+    "cpu": "0",
+    "jobs": 1,
+    "address_space_bytes": 2147483648,
+    "debugger_timeout_seconds": 10,
+    "output_each_bytes": 1048576,
+    "child_stdout_bytes": 4194304,
+    "child_stderr_bytes": 4194304,
+    "gdb_stdout_bytes": 12582912,
+    "gdb_stderr_bytes": 1048576,
+    "outer_capture_file_bytes": 33554432,
+    "child_combined_bytes": 5242880
+  },
+  "bounds": "Original perstream4MiB/combined5MiB sourcecaps and GDBstdout12MiB/stderr1MiB unchanged. Extraction is summaryonly bytes/SHA (allfullvalidation first), avoidingduplicatechildrawhex. Fullcopy retainedsolely in GDBstdout rawhex. Outer\u226424MiB+2MiB+1MiBfixedmetadatareserve=27MiB<32MiB; measuredworstfixtureproof retained.",
+  "custody": "Reuse accepted7754fixed actor/parent/source/boot/FD3sole27:4/quarantine/plan/journal prepostguards; rootrunner privatecopy only. No target FDopen/dup/lock acquire, no inferiorcalls/writes/breakpoints/otherlocals/heapdump/collector rerun.",
+  "read": "Exactrecover.error.__traceback__ exactsource root_command.result; native typed CompletedProcess exact4dictionaryattrs; returncode/stdout/stderr; boundargv codehash/length only pluschallengehash andcallerPID/birth.",
+  "fixture_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/COMPLETED-PROCESS-FIXTURE-RESULT.json",
+    "bytes": 8614,
+    "sha256": "f72bb0de474a3f0b730b757cc9b3c53c1d3345f31ca3bd8a036d451614c6dfec"
+  },
+  "fixture_test": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/fixture-tests.status.json",
+    "bytes": 1284,
+    "sha256": "d358a61a75979f3ed0bc8683abca1b824c24612a60cf32d0f79617a70d3e47c0"
+  },
+  "guard_test": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/guard-tests.status.json",
+    "bytes": 1285,
+    "sha256": "0e95c816a33fedc8fc79b13f5a86e28d4856361afb3ad78e70838e7b8985582f"
+  },
+  "layout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/TYPED-LAYOUT-REFERENCE.json",
+    "bytes": 1227,
+    "sha256": "4cf911a5ca1f078ff3f7b03ec3702cdbf8391cb203d6c2c526c0c2dda6f55cbd"
+  },
+  "oracle": "Unique PASS_EXACT_ROOT_COMMAND_RESULT_READ bound to exactsource/frame/local/type/proc_code/caller, childbytes hashes/lengths + actualfailurepredicate, gdbexit0 + pre/postcustody identical. FullrawGDBstdout/stderr nestedhex availabletoUID1000.",
+  "execution_requires": [
+    "Independent exactsource/profile/operation review",
+    "Root fetchedsourceverification and actualspecificgrant. This preparation authorizes no attach/query."
+  ],
+  "summary_regression": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/compact-result-envelope-correction-source-1/tests.status.json",
+    "bytes": 1463,
+    "sha256": "f11d203b4dcd5501b1d32d3c5a92c49dbf3756825c82a30be5b5bbd1cdd75c47"
+  },
+  "worst_measurements": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-root-command-result-read-source-1/compact-result-envelope-correction-source-1/WORST-ENVELOPE-MEASUREMENTS.json",
+    "bytes": 242,
+    "sha256": "83f27265c83703f7f18e2cca497358728166c946455fb75e18cdd2febbf83c01"
+  },
+  "summary_behavior": "All full child rawbytes/hash/length/source/argv/failure validations still execute via decode_result; summarize_result removes only stdout/stderr.raw_hex from returned extraction. Reconstruct original childbytes losslessly from rawGDBstdout; no fullcopy truncation."
+}
