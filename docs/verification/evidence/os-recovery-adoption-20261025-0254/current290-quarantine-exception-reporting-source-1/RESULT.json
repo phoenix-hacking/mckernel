@@ -1,0 +1,26 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE_EVIDENCE_REGRESSION_ONLY",
+  "original": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/bounded-observer-correction-source-1/native_rust_cutover_image_terminal_cleanup.CURRENT290.EXACT-DEAD-CALLER.py",
+    "bytes": 128910,
+    "sha256": "e49eaf2a7bacc6a64523f9f6c91516b9a3abefc875cdc1d8941c4e6b55473de3"
+  },
+  "corrected": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-reporting-source-1/native_rust_cutover_image_terminal_cleanup.QUARANTINE-REASON.SOURCE-ONLY.py",
+    "bytes": 128990,
+    "sha256": "183a23ff27a8496788339a40feeb53e17ee2bfca9f0dc7bfefa09126ce07cba1"
+  },
+  "test": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-reporting-source-1/test_reason_preservation.py",
+    "bytes": 2600,
+    "sha256": "f3fe2de1528e44cc97a8d78fb51024ca1bd162a1f1a85d8c439615f14924d54b"
+  },
+  "command": "taskset -c 6 prlimit --as=2147483648:2147483648 --core=0:0 -- python3 -I -B docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-reporting-source-1/test_reason_preservation.py",
+  "exit_code": 0,
+  "stdout": "PASS: distinct exact reasons retained in durable and stdout fixtures; all other fields unchanged; no live operations\n",
+  "stderr": "",
+  "changes": "Only add exact error_message to durable quarantine and stdout JSON; PUBLISHED_SCRIPT identifies private successor. Active source unchanged. Post-test indent alignment proved AST-identical.",
+  "execution_release": false,
+  "actual_cause_claim": false
+}

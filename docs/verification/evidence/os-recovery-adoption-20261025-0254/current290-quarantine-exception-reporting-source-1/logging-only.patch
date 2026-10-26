@@ -1,0 +1,26 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/bounded-observer-correction-source-1/native_rust_cutover_image_terminal_cleanup.CURRENT290.EXACT-DEAD-CALLER.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-reporting-source-1/native_rust_cutover_image_terminal_cleanup.QUARANTINE-REASON.SOURCE-ONLY.py
+@@ -42,7 +42,7 @@
+     return module
+ 
+ REPO = Path('/home/holden/mckernel')
+-PUBLISHED_SCRIPT = 'docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/bounded-observer-correction-source-1/native_rust_cutover_image_terminal_cleanup.CURRENT290.EXACT-DEAD-CALLER.py'
++PUBLISHED_SCRIPT = 'docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-reporting-source-1/native_rust_cutover_image_terminal_cleanup.QUARANTINE-REASON.SOURCE-ONLY.py'
+ PUBLISHED_TESTS = 'scripts/tests/test_native_rust_cutover_image_terminal_cleanup.py'
+ SELFTEST = REPO / PUBLISHED_TESTS
+ NAMESPACE = Path('/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt3-coherent-entry-preparation-source-1/genuine-newbe87-physical-binding-preparation-source-1/actual7553-namespace6294-final-source-1/memory-floor-correction1-source-1/query-packet-pin-correction1-source-1/default290-link-data-selector-correction1-source-1/minimal-selected-default-readonly-overlay-and-seed-plan-1/implementation-source-1/exact-consumed-gitlink-view-correction1-source-1/fresh-compiled-object-ownership-gate-source-1/attempt4-request-and-namespace-plan-source-1/actual-current290-default-image-attempt-4')
+@@ -1666,12 +1666,14 @@
+                     'schema': 'fp-save-image.cleanup-quarantine.v1',
+                     'release_sha256': digest(canonical(RELEASE)),
+                     'error_type': type(error).__name__,
++                    'error_message': str(error),
+                     'requires': 'independent-exact-state-reconciliation'}) + b'\n')
+             except BaseException:
+                 pass
+             try:
+                 print(json.dumps({'status': 'QUARANTINED_ROOT_LOCK_HELD',
+                                   'error_type': type(error).__name__,
++                                  'error_message': str(error),
+                                   'requires': 'independent-exact-state-reconciliation',
+                                   'dead_caller_observations': DEAD_CALLER_OBSERVATIONS}), flush=True)
+             except BaseException:

@@ -1,0 +1,261 @@
+{
+  "status": "PASS_SOURCE_FORENSIC_REPLAY_ONLY_ACTUAL_REFUSAL_UNRESOLVED",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "phase_result": {
+    "status": "PASS_SOURCE_PHASE_REPLAY_ONLY",
+    "actual_state": [
+      "after_release",
+      "before_exchange"
+    ],
+    "journal_events": 4,
+    "next_event": [
+      "before_exchange",
+      1
+    ],
+    "conclusion": "Retained state passes e49state and advances through e49run to the next append in a stable mocked census. Exact actual Refusal cause is not recoverable from error_type alone; injected census refusal is only an ambiguity demonstration.",
+    "source_sha256": "e49eaf2a7bacc6a64523f9f6c91516b9a3abefc875cdc1d8941c4e6b55473de3",
+    "snapshot_sha256": "2101987c76aafe9cb2df7192750be0b6963df9b5c5a2623eeab9f331e8aba055",
+    "trace": [
+      [
+        "preservation-snapshot-mock"
+      ],
+      [
+        "read_at",
+        10,
+        "m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.plan.json"
+      ],
+      [
+        "read_at",
+        10,
+        "m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.journal.jsonl"
+      ],
+      [
+        "read_at",
+        20,
+        "m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.attempt.archive"
+      ],
+      [
+        "sentinel",
+        "m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.shared.archive",
+        [
+          1828,
+          116866
+        ]
+      ],
+      [
+        "read_at",
+        10,
+        "mckernel-heavy-operation.lock"
+      ],
+      [
+        "protected-files-already-proved-separately"
+      ],
+      [
+        "preservation-snapshot-mock"
+      ],
+      [
+        "read_at",
+        10,
+        "m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.plan.json"
+      ],
+      [
+        "read_at",
+        10,
+        "m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.journal.jsonl"
+      ],
+      [
+        "read_at",
+        20,
+        "m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.attempt.archive"
+      ],
+      [
+        "sentinel",
+        "m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.shared.archive",
+        [
+          1828,
+          116866
+        ]
+      ],
+      [
+        "read_at",
+        10,
+        "mckernel-heavy-operation.lock"
+      ],
+      [
+        "no-effect-capture-mock"
+      ],
+      [
+        "pinned-snapshot-mock"
+      ],
+      [
+        "pinned-snapshot-mock"
+      ],
+      [
+        "protected-files-already-proved-separately"
+      ],
+      [
+        "preservation-snapshot-mock"
+      ],
+      [
+        "read_at",
+        10,
+        "m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.plan.json"
+      ],
+      [
+        "read_at",
+        10,
+        "m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.journal.jsonl"
+      ],
+      [
+        "read_at",
+        20,
+        "m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.attempt.archive"
+      ],
+      [
+        "sentinel",
+        "m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.shared.archive",
+        [
+          1828,
+          116866
+        ]
+      ],
+      [
+        "read_at",
+        10,
+        "mckernel-heavy-operation.lock"
+      ],
+      [
+        "protected-files-already-proved-separately"
+      ],
+      [
+        "preservation-snapshot-mock"
+      ],
+      [
+        "read_at",
+        10,
+        "m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.plan.json"
+      ],
+      [
+        "read_at",
+        10,
+        "m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.journal.jsonl"
+      ],
+      [
+        "read_at",
+        20,
+        "m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.attempt.archive"
+      ],
+      [
+        "sentinel",
+        "m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.shared.archive",
+        [
+          1828,
+          116866
+        ]
+      ],
+      [
+        "read_at",
+        10,
+        "mckernel-heavy-operation.lock"
+      ],
+      [
+        "preservation-snapshot-mock"
+      ],
+      [
+        "protected-files-already-proved-separately"
+      ],
+      [
+        "preservation-snapshot-mock"
+      ],
+      [
+        "read_at",
+        10,
+        "m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.plan.json"
+      ],
+      [
+        "read_at",
+        10,
+        "m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.journal.jsonl"
+      ],
+      [
+        "read_at",
+        20,
+        "m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.attempt.archive"
+      ],
+      [
+        "sentinel",
+        "m14-current290-owner213-rolejoin-pathfix-retirement-20261026-1.shared.archive",
+        [
+          1828,
+          116866
+        ]
+      ],
+      [
+        "read_at",
+        10,
+        "mckernel-heavy-operation.lock"
+      ]
+    ]
+  },
+  "reason_result": {
+    "status": "PASS_REPRODUCED_LOSS_OF_DISTINCT_REFUSAL_REASONS",
+    "original_record": {
+      "error_type": "Refusal",
+      "release_sha256": "57c62c0c739438ca4a68c2ec167dc953f7274b4968e7c4e6dba74272acc32f70",
+      "requires": "independent-exact-state-reconciliation",
+      "schema": "fp-save-image.cleanup-quarantine.v1"
+    },
+    "scope": "diagnostic reporting defect only; does not identify actual runtime refusal"
+  },
+  "tests": [
+    {
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-normal-retirement-partial-quarantine-diagnosis-source-1/reproduce_retained_phase.py",
+        "bytes": 5050,
+        "sha256": "8be42363fd2ca7d8e8deec4853bb1b611cf0e2258239bed420ed0c6fcec888b1"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-normal-retirement-partial-quarantine-diagnosis-source-1/tests.stdout",
+        "bytes": 4375,
+        "sha256": "c11c94aacc00c12d4b2ac39b69ca21521e9ce2af4e84598c6ed6c06907118236"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-normal-retirement-partial-quarantine-diagnosis-source-1/tests.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "exit_code": 0
+    },
+    {
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-normal-retirement-partial-quarantine-diagnosis-source-1/reproduce_quarantine_reason_loss.py",
+        "bytes": 1891,
+        "sha256": "6b4f01d20e1e830ef14c2dd7360a3eb60f6c0422fd1291cca9884260a698e3f5"
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-normal-retirement-partial-quarantine-diagnosis-source-1/reason-tests.stdout",
+        "bytes": 413,
+        "sha256": "b867641ac447f6472c6f3eff9ba7787d47c8f9fc3be053a64004fca9398baec4"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-normal-retirement-partial-quarantine-diagnosis-source-1/reason-tests.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "exit_code": 0
+    }
+  ],
+  "protected_files": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-normal-retirement-partial-quarantine-diagnosis-source-1/CURRENT-PROTECTED-FILES-DIAGNOSTIC.json",
+    "bytes": 76,
+    "sha256": "b1c8f020d9c3efa5b2668e0e7698fb378b1b9d59a2037f6e746d1d62faee32dc"
+  },
+  "limitations": [
+    "No exact phase-aware predicate failure reproduced; stable snapshot correctly passesstate and advancesrun until mocked stop before index1append",
+    "Injected censusRefusal is ambiguity fixture only, not claim of actualcause",
+    "Originalrecover dropsdistinctRefusal messages proven; liveexceptframe may stillretainactualerror for independentlyreviewed exactread",
+    "No currentrecords/source/rootactor mutations, signals, privilegedqueries, replay or cleanup"
+  ],
+  "next": "Independent exact live recoverframe.error read preparation in sibling current290-quarantine-exception-read-source-1; actualattach disabled until Rootreviewedexecution",
+  "source_correction": null
+}

@@ -1,0 +1,85 @@
+{
+  "status": "NOT_RELEASED_NO_ACTUAL_ACTOR_ATTACH",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "helper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/read_exact_recover_error.gdb.py",
+    "bytes": 4178,
+    "sha256": "8c445cb73209ec8b08bcd5c63bf73cd67ffc6a4b748ac85da8d0a9157c41f795"
+  },
+  "target": {
+    "pid": 1060806,
+    "starttime": "80309560",
+    "python": "/home/holden/anaconda3/bin/python3.9",
+    "co_filename": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/bounded-observer-correction-source-1/native_rust_cutover_image_terminal_cleanup.CURRENT290.EXACT-DEAD-CALLER.py",
+      "bytes": 128910,
+      "sha256": "e49eaf2a7bacc6a64523f9f6c91516b9a3abefc875cdc1d8941c4e6b55473de3"
+    },
+    "co_name": "recover",
+    "local": "error",
+    "exception_type": "Refusal",
+    "only_value": "PyBaseExceptionObject.args[0] compactASCII<=4096"
+  },
+  "argv": [
+    "/usr/bin/gdb",
+    "-nx",
+    "-nh",
+    "-batch",
+    "-q",
+    "-iex",
+    "set auto-load off",
+    "-ex",
+    "set pagination off",
+    "-ex",
+    "set confirm off",
+    "-ex",
+    "set may-call-functions off",
+    "-ex",
+    "set may-write-registers off",
+    "-ex",
+    "set may-write-memory off",
+    "-ex",
+    "set may-insert-breakpoints off",
+    "-ex",
+    "set may-insert-fast-tracepoints off",
+    "-ex",
+    "file /home/holden/anaconda3/bin/python3.9",
+    "-ex",
+    "attach 1060806",
+    "-ex",
+    "source /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/read_exact_recover_error.gdb.py",
+    "-ex",
+    "read-exact-recover-error /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/bounded-observer-correction-source-1/native_rust_cutover_image_terminal_cleanup.CURRENT290.EXACT-DEAD-CALLER.py Refusal",
+    "-ex",
+    "detach"
+  ],
+  "resources": {
+    "cpu": "0",
+    "jobs": 1,
+    "address_space_bytes": 2147483648,
+    "debugger_timeout_seconds": 10,
+    "stdout_stderr_cap_bytes": 1048576
+  },
+  "guards_required_before_and_after": [
+    "Root-owned fresh exact PID/starttime alive nonzombie/nonstopped; exact Python executable and e49 source argv/hash",
+    "Permanent27:4 unchanged; exactrootactor1060806 soleFLOCKWRITEholder remains held",
+    "No attach to model/watcher/other processes; no native/container work",
+    "No target or targetgroup signals. Timeout may kill/reap only this exact newly-owned debugger child; verify target resumed unchanged via read-only guards and retain uncertainty without signalling if not",
+    "Root existing exactoperation ownership/executionreview required before attach; source/fixture success confers no execution grant"
+  ],
+  "oracle": "Require exactly one valid PASS_EXACT_RECOVER_ERROR_READ JSON record matching exactco_filename/name/local/type plus postguards. GDB exit0 ALONE IS NOT SUCCESS: absentframe helpererror produced exit0 while explicitdetach stillran.",
+  "capture": "Retain complete GDB stdout/stderr/directexit+JOIN; no broad register/memory/backtrace/locals dump. Output only namederrorargument and bounded traversalcounts.",
+  "fixture_success": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/FIXTURE-RESULT.json",
+    "bytes": 722,
+    "sha256": "41f693fe9e28f3fa4ea02184a5730b1952b7c71de065e1d5682a57faa5b56461"
+  },
+  "fixture_error_timeout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-quarantine-exception-read-source-1/FAILURE-DETACH-RESULT.json",
+    "bytes": 680,
+    "sha256": "d0ae6003263ec4d7569676604aaecf9f499ac565443d699fd174d8a21f904e6b"
+  },
+  "fixtures_only_ptracer": "Each ordinary owned fixture alone uses PR_SET_PTRACER_ANY via prctl; no target permission mutation or hostsysctl. All3 fixtures alive/resumed afterdetach/timeout and then normalflagrelease exit0.",
+  "symbol_evidence": "Installed sameCondaCPython3.9 binary has typed PyThreadState/PyInterpreterState/PyFrameObject/PyASCIIObject/PyTupleObject/PyBaseExceptionObject/_PyRuntime debug_info; no layout guesses or memoryscan.",
+  "no_actual_actor_attach_or_signal": true
+}
