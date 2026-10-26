@@ -1,0 +1,41 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/overall-deadline-correction-source-1/produce_actual_owner1043716_cleanup_observation.EXACT-DEAD-CALLER.READONLY.NOT_RELEASED.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-dead-caller-normal-cleanup-source-1/normal-entry-reference-closure-correction-source-1/produce_actual_owner1043716_cleanup_observation.EXACT-DEAD-CALLER.READONLY.NOT_RELEASED.py
+@@ -3,7 +3,7 @@
+ from contextlib import contextmanager
+ from pathlib import Path
+ PROFILE=Path(__file__).parent/'EXACT-OWNER1043716-DEAD-CALLER-READONLY-OBSERVATION-PROFILE.json'
+-PROFILE_SHA='f00b2fa763829ed96b29528674606e88d7c3ad2f39d4dfe4052f8fea61a589a4'
++PROFILE_SHA='c5d3283eedee466a6115165e11ac034d852e4db86ca8d7455547eb1268f748e5'
+ REQUIRED=frozenset(('mount','root','boot_id','root_lock','request','target','container_inspect','retained_exclusions','request_lease_absent','inventories','candidate_root','candidate_commit','candidate_tree','selected_files','backup_root','namespace_binding','namespace_ancestry','client_ledger','ownership_case','shared_record_already_absent','normal_owner_join'))
+ def need(value,message):
+  if not value:raise ValueError(message)
+@@ -97,6 +97,20 @@
+  except BaseException:
+   os.close(fd);raise
+ 
++def normal_entry_references(p):
++ # The normal owner proof consumes a separate exact chain in addition to the
++ # readonly-mode runtime paths. Follow only these actual authenticated edges.
++ entry=json.loads(pinned(p['caller_entry']))
++ grant_ref=entry['root_execution_grant'];grant=json.loads(pinned(grant_ref))
++ payload_ref=grant['payload'];payload=json.loads(pinned(payload_ref))
++ rows=[grant_ref,grant['independent_review'],payload_ref,payload['fetched_publication']]
++ seen={}
++ for row in rows:
++  need(isinstance(row,dict) and set(row)=={'path','bytes','sha256'},'normalentryreferenceshape')
++  need(row['path'] not in seen or seen[row['path']]==row,'normalentryconflictingreference')
++  pinned(row);seen[row['path']]=row
++ return list(seen.values())
++
+ def produce(p,e,queryfn):
+  ready=e.parse(pinned(p['ready']));receipt=e.parse(pinned(p['owner_receipt']));joined=e.parse(pinned(p['join']));process=e.parse(pinned(p['process']));c=e.parse(pinned(p['contract']));request=e.parse(pinned(c['static']['request']));dead_caller_check(e,p,ready)
+  need(ready['owner_join']==joined and ready['owner_receipt']==p['owner_receipt'] and joined['pid']==1043716 and joined['starttime']=='80020161' and joined['returncode']==1 and all(joined[k] is True for k in ('direct_child_joined','group_absent','closed_streams')) and joined['error'] is None and joined['retirement_error'] is None,'joinedactualowner')
+@@ -115,7 +129,7 @@
+  protocol=e.current230_contract();needed={str(e.REQUEST),str(e.TERMINAL),p['join']['path'],str(e.EVIDENCE/'attempt/container.log'),str(e.OUTPUT/'evidence/receipt.json')};needed.update(row['status_path'] for row in ledger)
+  joins={'driver_path':'driver_sha256','provenance_path':'provenance_sha256','host_owner_path':'host_owner_sha256','source_manifest':'source_manifest_sha256','toolchain_manifest':'toolchain_manifest_sha256'}
+  if request.get('gitlink_manifest') is not None:joins['gitlink_manifest']='gitlink_manifest_sha256'
+- needed.update(request[k] for k in joins);needed.update(protocol.required_runtime_references(request,receipt));needed.update(str(Path(c['caller_capture_root'])/name) for name in ('owner.PROCESS.json','ACTUAL-OWNER-ENTRY.json','ROOT-NORMAL-CLEANUP-COMPLETION-READY.json','owner.stdout','owner.stderr'));static=protocol.required_static_references();needed.update(row['path'] for row in static);needed.update(row['path'] for row in p['dead_caller_new_ofd']['references'].values());obs['selected_files']=[e.observe_identity(Path(path)) for path in sorted(needed)];selected={row['path']:row for row in obs['selected_files']}
++ needed.update(request[k] for k in joins);needed.update(protocol.required_runtime_references(request,receipt));needed.update(row['path'] for row in normal_entry_references(p));needed.update(str(Path(c['caller_capture_root'])/name) for name in ('owner.PROCESS.json','ACTUAL-OWNER-ENTRY.json','ROOT-NORMAL-CLEANUP-COMPLETION-READY.json','owner.stdout','owner.stderr'));static=protocol.required_static_references();needed.update(row['path'] for row in static);needed.update(row['path'] for row in p['dead_caller_new_ofd']['references'].values());obs['selected_files']=[e.observe_identity(Path(path)) for path in sorted(needed)];selected={row['path']:row for row in obs['selected_files']}
+  for row in static:need(selected[row['path']]['sha256']==row['sha256'] and selected[row['path']]['size']==row['bytes'],'selectedstaticpin')
+  for key,hkey in joins.items():need(selected[request[key]]['sha256']==request[hkey],'requestsourcehash')
+  protocol.normal_owner_join_binding(receipt,joined,target,item,p['owner_receipt']['sha256'],request,obs,selected);protocol.typed_source_binding(request,obs,selected)
