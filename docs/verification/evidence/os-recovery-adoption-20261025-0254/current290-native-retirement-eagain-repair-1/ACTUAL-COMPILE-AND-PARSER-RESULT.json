@@ -1,0 +1,90 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "commands": [
+    {
+      "index": 0,
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=536870912:536870912",
+        "--cpu=6:6",
+        "--fsize=33554432:33554432",
+        "--core=0:0",
+        "--",
+        "/usr/bin/gcc",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-static",
+        "-fno-pie",
+        "-no-pie",
+        "-Wl,-z,noexecstack",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-native-retirement-eagain-repair-1/native_diagnostic_guest_collector.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-native-retirement-eagain-repair-1/init"
+      ],
+      "started_at": 1793052464.259795,
+      "finished_at": 1793052464.624996,
+      "returncode": 0,
+      "CPU_seconds": 0.29219799999999996,
+      "maximum_child_RSS_KiB": 34432
+    },
+    {
+      "index": 1,
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=536870912:536870912",
+        "--cpu=6:6",
+        "--fsize=33554432:33554432",
+        "--core=0:0",
+        "--",
+        "/usr/bin/gcc",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fno-pie",
+        "-no-pie",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-native-retirement-eagain-repair-1/test_retirement_parser.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-native-retirement-eagain-repair-1/test_retirement_parser"
+      ],
+      "started_at": 1793052464.6250503,
+      "finished_at": 1793052464.8901548,
+      "returncode": 0,
+      "CPU_seconds": 0.251537,
+      "maximum_child_RSS_KiB": 34804
+    },
+    {
+      "index": 2,
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=536870912:536870912",
+        "--cpu=6:6",
+        "--fsize=33554432:33554432",
+        "--core=0:0",
+        "--",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-native-retirement-eagain-repair-1/test_retirement_parser",
+        "/home/holden/mckernel-work/scratch/n290startup1/p/attempt-bcc6706bcaa04ddfb223d6aa142a5c50/serial.log"
+      ],
+      "started_at": 1793052464.890188,
+      "finished_at": 1793052464.9227529,
+      "returncode": 0,
+      "CPU_seconds": 0.021458999999999992,
+      "maximum_child_RSS_KiB": 34804
+    }
+  ],
+  "native_runs": 0,
+  "status": "PASS"
+}

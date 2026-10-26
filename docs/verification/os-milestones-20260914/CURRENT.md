@@ -1,3 +1,53 @@
+## Native retirement failure retained; collector-only correction tested — 2026-10-26T22:09Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Native1 noncebcc6706/caller1266512/owner1266515 joined1 after38.197s; actualexact
+startup91Bstdout/exit0/stderr0/procfsemptytrue observed, but unchangedoracle FAIL
+BEGINretirementresult: samePID254 ACK0 then query513errno-11 beforeguestpowerdown.
+No native/default/file acceptance. FailedCID14c35d was removed bynormalowned
+cleanup; all25commandreaps/27knownactors/groups absent/two27:4closed probes and
+currentCIDabsence independentlyaccepted at failed-attemptretirement scope only.
+CURRENT290-NATIVE1-INDEPENDENT-FAILED-ATTEMPT-POSTJOIN-ACCEPTANCE.json binds proof;
+rawguest+ownerarchives/actualjoin retained undernativeadmission1. No replay.
+
+Actualdefect: oldSeptember28collector stops onprocfsEmpty before+1s retirement
+retry. Kernel/moduleproducerunchanged; privatecollector208204ff waits genuine
+samephase/PIDretirement0 withinunchanged5s/outerdeadline. Staticcollector+parser
+compiles and22CcontrolsPASS;10unchangedhostoraclecontrolsPASS. Independentsource
+reviewPASS; originalnativeFAIL preserved. Rootcollector-only packaging native2
+PASS10.38s afteronepreserved pre-effectschemaKeyError correction; no kernel/module
+rebuild, baseimagee6a82 reused. Manifest54a6306d/startupc7113757. Newnonce
+7b3d529538fe42ccb3612fb0348bef6d is NOTYETRELEASED/NOTCONSUMED; admission2static
+packetready, freshresourceclock/oneactualreview/Rootgrant stillrequired.
+
+IndependentMMunlock hostfixture actualoneRustcompile0/.23s/129264KiB plus64epochs,
+ordering/writerbitcontrolsPASS; mockABIonly, no native/MMretirementclaim.
+SDK7 owner finishespreparedtyped currentbinding fromacceptedlatestfailedoperation;
+all7argv/providers reused, no newports. Rootnext correctmatchingnativeproof after
+freshadmission; SDK7nextheavy oncegenuinecurrentclosurespermit. Samefixedend11:24:50Z
+October27/accountguard. No95percentclaim; no newwholefile/Cboundaryretirements.
+
+## Actual matching native startup admitted and running — 2026-10-26T22:02Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Rootexactnativegrant noncebcc6706bcaa04ddfb223d6aa142a5c50 CONSUMED; sole actual
+owner tool84320/caller1266512/start84956976 running. Exactcapture under
+ROOT-CURRENT290-NATIVE-STARTUP-ADMISSION-1/CAPTURE; do not replay or start another
+heavy workload. Independentreview PASSf215e0da/resources587242e2 within120seconds;
+owner45010e54/manifest760221c8/imagee6a82; unchanged4CPU2-5/12GiB/pids512/noNet,
+guest4vCPU8192. Startup case app,A,empty,B exactoracle. Native result/JOIN/teardown
+pending; no application/default/file retirement acceptance yet.
+
+Parent actualcorewatcher1263619/worker1263621/server1263623/guardian1263804 never
+restarted; repairedauxmonitor1265530/start84942440 andphonepoller1264786 healthy.
+Parentactualrepair receipt velocity-intervention-20261026-1/monitor-startup-repair-1/ACTUAL-REPAIR-VERIFIED.json.
+Preserve oldHELDfailure with additiveactualreconciliation; do not startauxiliaries.
+Phone-001 disabled, fixedend11:24:50Z October27 andsamecreditguard unchanged.
+Reviewedstrictprofilegate and35controlsPASS; samepostbuildobjects reused.
+Pushed/fetchedcheckpoint942fd2b1a36877a02b05e942fc581df5905da021; source/packaging
+andpostjoinproof saved. Next: join actualnativeowner, inspect exactapp/kernel/
+teardown evidence, independentlyqualifyactualscope, thenreadySDK7currentbinding.
+
 ## Postbuild current state accepted; matching native stage ready — 2026-10-26T22:00Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

@@ -1,0 +1,90 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "saved native FAIL preserved",
+      "expected_oracle_accepts": false,
+      "actual_oracle_accepts": false,
+      "detail": "BEGIN retirement result",
+      "synthetic": false
+    },
+    {
+      "name": "synthetic later genuine final0",
+      "expected_oracle_accepts": true,
+      "actual_oracle_accepts": true,
+      "detail": {
+        "entry_token": 3,
+        "query_tokens": [
+          513,
+          514
+        ]
+      },
+      "synthetic": true
+    },
+    {
+      "name": "synthetic EAGAIN through deadline",
+      "expected_oracle_accepts": false,
+      "actual_oracle_accepts": false,
+      "detail": "BEGIN retirement result",
+      "synthetic": true
+    },
+    {
+      "name": "synthetic real error",
+      "expected_oracle_accepts": false,
+      "actual_oracle_accepts": false,
+      "detail": "BEGIN retirement result",
+      "synthetic": true
+    },
+    {
+      "name": "synthetic wrongpid0",
+      "expected_oracle_accepts": false,
+      "actual_oracle_accepts": false,
+      "detail": "BEGIN retirement result",
+      "synthetic": true
+    },
+    {
+      "name": "synthetic wronggeneration0",
+      "expected_oracle_accepts": false,
+      "actual_oracle_accepts": false,
+      "detail": "malformed/wrong-generation BEGIN lifecycle",
+      "synthetic": true
+    },
+    {
+      "name": "synthetic reused querytoken",
+      "expected_oracle_accepts": false,
+      "actual_oracle_accepts": false,
+      "detail": "BEGIN retirement attempts",
+      "synthetic": true
+    },
+    {
+      "name": "synthetic zero querytoken",
+      "expected_oracle_accepts": false,
+      "actual_oracle_accepts": false,
+      "detail": "BEGIN premature retirement/token",
+      "synthetic": true
+    },
+    {
+      "name": "synthetic duplicate final0",
+      "expected_oracle_accepts": false,
+      "actual_oracle_accepts": false,
+      "detail": "BEGIN retirement result",
+      "synthetic": true
+    },
+    {
+      "name": "synthetic cleanupACK failure",
+      "expected_oracle_accepts": false,
+      "actual_oracle_accepts": false,
+      "detail": "real cleanup ACK failure/token",
+      "synthetic": true
+    }
+  ],
+  "causal_timing": {
+    "EAGAIN_seconds": 33.507584,
+    "shutdown_seconds": 33.973369,
+    "next_legal_retry_seconds": 34,
+    "shutdown_precedes_first_retry": true
+  },
+  "native_execution": false,
+  "application_acceptance": false,
+  "candidate_C_compiled_or_executed": false
+}

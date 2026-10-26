@@ -1,0 +1,55 @@
+{
+  "author": "/root",
+  "decision": "PENDING_ONE_EXACT_NATIVE_STARTUP_RELEASE",
+  "maximum_invocations": 1,
+  "nonce": "bcc6706bcaa04ddfb223d6aa142a5c50",
+  "exact_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--fsize=33554432",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/runtime-provider-rebind-1/native/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/n290startup1/p",
+    "--nonce",
+    "bcc6706bcaa04ddfb223d6aa142a5c50",
+    "--owner-sha256",
+    "45010e54e1f78e3efcd6572b71342ee6078abeea98961f2c5d49849575dd5048",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/n290startup1/m.json",
+    "--manifest-sha256",
+    "760221c89fb27a9c35217d07ee9e0af120229fc780a3e09a3b9d2dd4bd9c4ed1"
+  ],
+  "static_bindings": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT290-NATIVE-STARTUP-ADMISSION-1/STATIC-NATIVE-BINDINGS.NOT-RELEASED.json",
+    "bytes": 5849,
+    "sha256": "541cbdce9d7b3309043372fb6b1a4b903bc2a9b0fd56d4a1b9bf5a7fd6f8aeee"
+  },
+  "strict_profile_acceptance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT290-BUILD3-INDEPENDENT-STRICT-PROFILE-ACCEPTANCE.json",
+    "bytes": 799,
+    "sha256": "2d73030b3553a67fb1bc96afd30ff387bebc11c05d1c35750d7fd5cffc4e8e1a"
+  },
+  "fresh_resource_physical": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT290-NATIVE-STARTUP-ADMISSION-1/ROOT-FRESH-NATIVE-RESOURCE-PHYSICAL-1.json",
+    "bytes": 17858,
+    "sha256": "587242e2fc416a7c51ca76e33760f935743e38168c8de2a9882619d577ccca06"
+  },
+  "capture_directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT290-NATIVE-STARTUP-ADMISSION-1/CAPTURE",
+  "fixed_cutoffs": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+    "bytes": 952,
+    "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+  },
+  "source_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "application_acceptance": false
+}
