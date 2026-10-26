@@ -1,3 +1,31 @@
+## Current290 actual incremental build passed — 2026-10-26T19:30Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+All three actual commands returned0: whole Rust object6284ac14, process objectf5292f07,
+and eleven-input image e6a82f87461e3bbf262c1a1eb3bb47398c5b820bb3c974c8f22b3577dfe51da4
+(10,175,312bytes). Nine retained objects/source6153/SDK21 reused unchanged.
+First compiler19:30:19.713586Z; command wall20.893s, CPU20.921s, peakchildRSS584136KiB.
+Actual nonce d115c3b6c48b45c0afb6f247106bf30f consumed; holder1224701/tool35276
+joined0; retained CID5487cf9508267dd943b917980bffdfd6adcf3c4ca721112a84beaa3d892614b2
+exited0/Runningfalse/Pid0/noOOM. Do not replay successful commands or consumed grants.
+Evidence: ../evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT290-BUILD-ONLY-ADMISSION-3/OUTPUT/.
+Prior OCI target failure and expired second admission remain retained separately.
+
+Actual object ownership/logger/RELA checks pass; unchanged production panic validator
+currently fails clone_thread undefined-provider witness. default_link_repair owns
+narrow source/object/final-image diagnosis and remaining link/ABI qualification.
+capture_finish prepares matching startup.argv-empty native proof and exact current
+image initramfs substitution; Root owns canonical integration/actual execution.
+135 compiler warnings and RWX link warning retained. No default/native/file/C closure
+or accepted package claimed yet; M14/M15 OPEN, practical35/35 unchanged.
+Cleanup/currentphysical f597 remains accepted; historical native1060806 custody is
+retired, not a current hold. New workloads still require actual current admission.
+Actual window RUN-WINDOW-18H-20261026.md ends2026-10-27T11:24:50Z; recovery/accounting
+controls unchanged. Twenty-minute review uses original thirty-minute velocity buckets.
+Next: finish retained-image qualification, then matching admitted native startup;
+prepare existing SDK7 consumer using typed historical-provenance/current-authority
+composition. No broad inventory, unchanged rebuild or95% velocity claim.
+
 ## Current cleanup accepted — global27:4 free; actualbuild next
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
