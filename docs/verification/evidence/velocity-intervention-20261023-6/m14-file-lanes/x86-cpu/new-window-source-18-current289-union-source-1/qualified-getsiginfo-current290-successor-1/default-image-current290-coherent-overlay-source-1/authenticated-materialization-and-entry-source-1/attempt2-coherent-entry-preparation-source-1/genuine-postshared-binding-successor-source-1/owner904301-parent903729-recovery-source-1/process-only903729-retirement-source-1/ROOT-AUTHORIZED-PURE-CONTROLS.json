@@ -1,0 +1,26 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "authorization": "ROOT focused pure controls only; no live query/pidfd/flock/signal/unlink",
+  "source_sha256": "380cee81ef2839b9bdede4f53b323616caba57df4e947257aa4fc60ca59e4ee2",
+  "test_sha256": "2d1a761231271c6286efa7d80c0adf985f580e1a4431a8fbcf9d5b6e28373ab9",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--stack=2097152:2097152",
+    "--core=0:0",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=6",
+    "90",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/attempt2-coherent-entry-preparation-source-1/genuine-postshared-binding-successor-source-1/owner904301-parent903729-recovery-source-1/process-only903729-retirement-source-1/test_process903_FOCUSED_PURE.py"
+  ]
+}
