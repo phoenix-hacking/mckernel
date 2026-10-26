@@ -1,3 +1,30 @@
+## Current cursor — no heavy owner; payload and whole-Rust checks advance
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+E’s actual five/metadata/census chain completed, but independent review blocked
+payload owner337/request4d versus selected15fe/31a. No owner grant was issued.
+Caller985830 expired normally at the original120-second limit; all children are
+joined/absent, namespace1d307 unchanged, permanent27:4 free. Evidencee445 is
+independently accepted94c4 as additive pre-owner continuity, not build acceptance.
+
+S fixes the three template items and tests real prepare+finish outputs. Its first
+control passed; the new pre-query guard then rejected the genuine26.5MB request
+using the generic1MB metadata limit. One call-specific32MB read limit (the existing
+image-request contract) is being corrected; global guards/limits stay unchanged.
+No S query, namespace initialization or heavy work occurred. T’s call-specific
+request-cap correction now passes all4controls (`16f28b27`), independently
+accepted `c8aa268c`; cleanup source `e110bcb5` is reviewed `2c79f1a8`.
+Root publishes this exact T cohort before a fresh admitted attempt.
+
+Source37’s changed wholeRust graph compiled, object6e54dc57/18,206,144B. First
+consumer-edge observer failed on an inlined lookup path; exact machine-code/RELA
+proof is under review. Reuse this object; no unchanged compilation replay and
+no blanket edge waiver. Third oracle remains unrun. Receipt586cbbc3 retains
+19.353wall/19.422CPU/RSS584988KiB and all warnings/retirement evidence.
+[05:17 review](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261026T0517.json).
+New fixed packages/default/native/whole-file/C-retirement closures0; M14/M15OPEN.
+Fixed deadline2026-10-26T15:55:33Z; resident controls/run7f unchanged.
+
 ## 04:57 steering checkpoint — qualified bodies compose; default still blocked
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
