@@ -1,0 +1,29 @@
+{
+  "actual_cleanup_execution": false,
+  "amends_expectation": "SUCCESSOR-REVIEW-EXPECTATIONS.json: caller_group",
+  "decision": "ACCEPT_BOUNDED_ALTERNATIVE_PROOF_DESIGN_PENDING_SOURCE_AND_EXECUTION_REVIEW",
+  "execution_authority": false,
+  "historical_caller_pgid": null,
+  "historical_caller_pgid_status": "UNKNOWN_NO_AUTHENTIC_RETAINED_PGID_FOUND",
+  "limitations": [
+    "These are design review conditions, not observed current runtime proof or execution release.",
+    "The original caller positive tool JOIN remains unavailable and must be reported unavailable.",
+    "Original caller PGID remains unknown; no assertion that all members of that unknown group are absent.",
+    "Exclusive lock proves no conflicting inherited lock custody at acquisition; this alone does not prove container/record/process retirement."
+  ],
+  "principle": "Do not fabricate PGID=PID, demand emptiness of a possibly shared toolserver group, or claim an unavailable original caller positive join. Cleanup can acquire fresh custody after the exact recorded operation is quiescent.",
+  "recorded_at": "2026-10-26T08:37:34.957610+00:00",
+  "required_conjunction": [
+    "Exact historical caller1043200/start80013658/boot7bfc5687-6c04-4d15-84eb-b92ab9a55dcb bound from retained caller/holder/entry; current PID absent. Any present1043200 including PID reuse refuses. Unknown read/parse/permission state refuses.",
+    "All actually recorded prepare/five/finish/owner direct children have genuine positive JOINs, closed streams/null errors, and their recorded groups have no current members; group provenance is from recorded child PROCESS records.",
+    "All seven actual operation client status records are positively exited and matched to fresh root process census. Exact owner1043716/start80020161 normal JOIN/receipt/lineage and current typed source binding remain unchanged.",
+    "Fresh reviewed root full-EOF process census finds no frozen original caller/owner/request/namespace/source-matching operation processes or descendants. Expected new cleanup/census helper selves may be excluded only via exact independently reviewed current identities. Any ambiguous operation match blocks.",
+    "Fresh exact container inspect proves stopped CID0715da07649768d4347212f4214bc523c2e5b07227f06bcb9697ec7ad67890f8/noncee06e0d993a5941179901c6fef4637aa2 and immutable original request/profile.",
+    "Acquire a NEW read-only NOFOLLOW NONBLOCK descriptor and LOCK_EX|LOCK_NB on unchanged permanent27:4; fresh exclusive custody rules out another process retaining any inherited flock OFD. Identity/size/owner/mode/nlink checks and process/container census repeat while held before effects.",
+    "Preserve tool/modelserver groups, permanent mutex, original records/evidence and normal transaction archives/quarantine controls. No signal or cleanup of a guessed original caller process group."
+  ],
+  "reviewer": "/root/current_owner_retirement",
+  "schema": "mckernel.current290.dead-caller-successor.unknown-group.review-amendment.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_review": false
+}

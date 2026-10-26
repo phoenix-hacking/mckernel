@@ -1,0 +1,41 @@
+{
+  "actual_root_effects": false,
+  "decision": "CHANGES_REQUIRED_BEFORE_SOURCE_ACCEPTANCE",
+  "findings": [
+    {
+      "consequence": "Cap near22calls at measured host process size; healthy normal cleanup can trip cap after mutation and retain quarantined custody.",
+      "evidence": "dead_caller_absent appends two full-EOF process snapshots on every call and accumulates DEAD_CALLER_CAPTURE_BYTES globally up to16MiB. It is invoked from every Transaction.pinned and census. Transaction state->preserved->pinned and append->pinned make two-record normal cleanup exceed40calls.",
+      "id": "OBSERVER_CUMULATIVE_CAPTURE_EXHAUSTION",
+      "readonly_measurement": {
+        "method": "Unprivileged read-only /proc stat twice/cmdline hex + placeholder executable path canonical-JSON estimate, no root calls or raw process commands emitted.",
+        "one_snapshot_estimated_bytes": 381757,
+        "processes": 311,
+        "two_snapshots_estimated_bytes": 763514
+      },
+      "required_correction": "Keep all actual process checks and original resource/output constraints; bound retained evidence independently of number of transaction checkpoints. Add cheap repeated or whole-transaction mock check covering more than the normal checkpoint count at realistic snapshot size; verify failure evidence remains retained. Do not merely raise an execution profile cap.",
+      "severity": "blocking-functional-observer-defect"
+    },
+    {
+      "evidence": "DEAD_CALLER_FROZEN.group_ids=[1043716], references pin ownerPROCESS/JOIN but omit genuine five/prepare/finish PROCESS/JOIN and corresponding groups1043203/1043212/1043234.",
+      "id": "MISSING_RECORDED_CHILD_GROUP_PROOF",
+      "required_correction": "Bind exact actual PROCESS/JOIN refs for all known preparatory children, validate positive joins and actual group IDs, and refuse surviving recorded group members. Keep original callerPGID UNKNOWN; do not substitute callerPID as PGID.",
+      "severity": "blocking-proof-gap"
+    }
+  ],
+  "new_workload_authority": false,
+  "next_step": "Implementation owner bounded correction and cheap pure observer/group controls; then new frozen refs for focused independent review. Observation producer still requires separate adaptation and review before root observation or execution.",
+  "patch_sha256": "714370c03d290b0a314e59da3580ae7e40b70b719da0e4482ef8ec4bd2d3ceaa",
+  "positive_findings": [
+    "New mode explicit and mutually exclusive with same-OFD stdin; default configure retains inherited_root_binding and rejects stray deadcaller fields.",
+    "Original typed normal-owner join/source/runtime closure, container/namespace/client ledger and archive transaction behavior remain in configure.",
+    "New mode preserves new exclusive readonly NOFOLLOW NONBLOCK permanent27:4 acquisition and rechecks after acquisition/pinned/census; no sameOFD impersonation.",
+    "Original receipt/stdout comparison remains parsed JSON equality, allowing retained pretty serialization difference.",
+    "Preparation remains NOT_RELEASED with separate independent source/execution/fetched Git requirements."
+  ],
+  "recorded_at": "2026-10-26T08:41:31.568485+00:00",
+  "reviewer": "/root/current_owner_retirement",
+  "schema": "mckernel.current290.dead-caller-successor.independent-source-findings.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_sha256": "c72effcec2237c56770b70bbac9664252888b7efe57eb2bd9354b7b3da4fa1b7",
+  "tests_sha256": "2e707fa3a6fd4c5c9278f235f0b790e29ae5d4812441fc285f058f88c2f3f041"
+}

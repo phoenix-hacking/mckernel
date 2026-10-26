@@ -1,0 +1,59 @@
+{
+  "argv": [
+    "taskset",
+    "-c",
+    "6",
+    "prlimit",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-corrected-driver-successor-binding-source-1/check_successor_source_bindings.PURE.py"
+  ],
+  "execution_grant": false,
+  "large_request_or_manifest_duplicated": false,
+  "new_namespace_created": false,
+  "physical_admission": false,
+  "returncode": 0,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "sources": [
+    {
+      "bytes": 5299,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-corrected-driver-successor-binding-source-1/OWNER-SOURCE.diff",
+      "sha256": "750e7a383aab0dee536de39732f980e4c8e63c76dbe04c26ddfafc685049b063"
+    },
+    {
+      "bytes": 11291,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-corrected-driver-successor-binding-source-1/REQUEST-SUCCESSOR-EXACT-DELTA.SOURCE-ONLY.NOT-GRANTED.json",
+      "sha256": "338e1bca84868b66a25ad1d8572c47cbc59626b3f801825cef042ab7ada9f39a"
+    },
+    {
+      "bytes": 7921,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-corrected-driver-successor-binding-source-1/SUCCESSOR-BINDING-PLAN.SOURCE-ONLY.NOT-GRANTED.json",
+      "sha256": "749b5c702e14f606a03bd26a5e8366d38c7a315277ce0ed59ad2dd1a46a9cffd"
+    },
+    {
+      "bytes": 3783,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-corrected-driver-successor-binding-source-1/check_successor_source_bindings.PURE.py",
+      "sha256": "179d96e4cc61ccf6eda64ca2c056dd3eb4a599b19adc7b14445345bdb65962f0"
+    },
+    {
+      "bytes": 181098,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-corrected-driver-successor-binding-source-1/native_rust_exact_mckernel_image_container_owner.CURRENT290.NAMESPACE5-CORRECTED-DRIVER.SOURCE-ONLY.py",
+      "sha256": "735cfd6ea52610f5799d5a1215d7698161f24021230911d6480f586096b0869d"
+    }
+  ],
+  "status": "PASS_PURE_SOURCE_BINDINGS_NOT_EXECUTION_ACCEPTANCE",
+  "stderr": "",
+  "stdout": {
+    "compiler_or_container_run": false,
+    "exact_request_replacements": 9,
+    "namespace_absent": true,
+    "owner_imported": false,
+    "status": "PASS_PURE_SOURCE_BINDINGS",
+    "unchanged_callable_bodies": true,
+    "unchanged_reuse_descriptor": true
+  }
+}

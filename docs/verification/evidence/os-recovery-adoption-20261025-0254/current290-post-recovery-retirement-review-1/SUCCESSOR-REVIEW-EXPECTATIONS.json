@@ -1,0 +1,79 @@
+{
+  "checks": [
+    {
+      "expected": "Exactly one selected transport; explicit dead-caller mode uses a separate released binding and leaves INHERITED_ROOT_LOCK=None. Neither missing nor mixed flags may silently choose new-OFD cleanup.",
+      "id": "explicit_mode"
+    },
+    {
+      "expected": "The ordinary same-OFD route still validates the exact live caller/start/boot/FD0/FD3/source and retains its existing default refusal and transaction path.",
+      "id": "default_same_ofd"
+    },
+    {
+      "expected": "New mode accepts only exact original caller1043200/start80013658/boot7bfc5687-6c04-4d15-84eb-b92ab9a55dcb plus fixed current owner1043716/start80020161, genuine ENTRY/READY/PROCESS/JOIN/receipt hashes and request bindings.",
+      "id": "valid_historical_lineage"
+    },
+    {
+      "expected": "Refuse a live caller with original birth; conservatively refuse any present1043200 with another birth, including zombie state. No signal or attempt to retire it.",
+      "id": "present_or_reused_caller"
+    },
+    {
+      "expected": "Permission errors, unexpected I/O errors, malformed stat/status/boot data, proc visibility changes or ambiguous reads refuse. Only explicit current absence is accepted as absence evidence; it is not positive original caller join.",
+      "id": "unknown_caller_state"
+    },
+    {
+      "expected": "Use actual retained group/session provenance rather than assuming PGID equals PID. Refuse surviving matching group members or uncertain/incomplete census; repeat relevant absence checks under the newly acquired permanent mutex before mutation.",
+      "id": "caller_group"
+    },
+    {
+      "expected": "Require positive owner direct join, group absent, streams closed, rc1, null error/retirement_error; exact owner stdout/receipt/CID/nonce/stopped container identity. Reject edited or mismatched data and incomplete client ledger.",
+      "id": "actual_normal_owner"
+    },
+    {
+      "expected": "Fresh read-only NOFOLLOW NONBLOCK open of permanent mutex, exact named and held27:4 identity/owner/mode/nlink/size, LOCK_EX|LOCK_NB; busy/replaced/missing mutex refuses. Do not unlink/replace/unlock another OFD or synthesize stdin transport.",
+      "id": "new_ofd"
+    },
+    {
+      "expected": "New descriptor remains held through full root census, frozen container verification, all archive/sentinel mutation and postflight. Existing quarantine holds on uncertain mutation; no new timeout unlock path.",
+      "id": "lock_lifetime"
+    },
+    {
+      "expected": "Keep current typed normal_owner_join_binding and typed_source_binding, required_static_references and required_runtime_references including read-only seed refs. Historical producer must not omit current runtime closure.",
+      "id": "source_closure"
+    },
+    {
+      "expected": "Exact21-key observation, fresh inspect/findmnt, durable raw captures before parse/status oracle, complete seven exited client rows, exact retained common/shared identities and inventories. Recheck producer evidence for drift.",
+      "id": "producer_observation"
+    },
+    {
+      "expected": "Preparation emits NOT_RELEASED; source/test Git+fetched bindings and independent source/execution reviews remain required before root effects. Producer preparation supplies no cleanup/workload authority.",
+      "id": "release_boundary"
+    },
+    {
+      "expected": "Preserve original evidence. Fresh output/transaction/archive names avoid collision. Normal archive exchange, sentinel release, container absence and preserved selected files retain original checks.",
+      "id": "archives_and_postflight"
+    },
+    {
+      "expected": "Do not create old caller completion or terminal release as if dead caller consumed it; new independent completion records actual cleanup helper join, new lock lifetime and genuine postflight.",
+      "id": "no_old_caller_completion"
+    }
+  ],
+  "execution_authority": false,
+  "implementation_or_test_changes": false,
+  "implementation_owner": "/root/driver_identity_repair",
+  "prior_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-post-recovery-retirement-review-1/REVIEW.json",
+    "sha256": "962a5aff2f975eaebe1ca4cb2a8d92b9f7f139063dba365a393a31ebc864d971"
+  },
+  "recorded_at": "2026-10-26T08:34:53.630709+00:00",
+  "review_inputs_needed": [
+    "Frozen exact successor cleanup, producer/profile and test refs with SHA256 and diff against source7ae0552e; exact selected transport schema and current source/protocol refs.",
+    "Actual cheap pure regression command/status/output produced by implementation owner.",
+    "No privileged runtime needed for source review; runtime release remains separate."
+  ],
+  "reviewer": "/root/current_owner_retirement",
+  "reviewer_write_allowlist": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-post-recovery-retirement-review-1",
+  "schema": "mckernel.current290.dead-caller-successor.review-expectations.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_review": false,
+  "status": "EXPECTATIONS_ONLY_SOURCE_NOT_YET_SUPPLIED"
+}
