@@ -1,0 +1,64 @@
+--- /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/diagnostic-c252-refusal-successor-source-1/owner-validation-provenance-failure-recovery-source-1/shared-only324a-archival-reconciliation-source-1/archive-parent-durability-correction1-source-1/root-readonly-capture-correction1-source-1/reconcile_exact_current290_shared_only324a.ROOT-READONLY-CAPTURE-CORRECTION1.NOT_RELEASED.py
++++ /home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/diagnostic-c252-refusal-successor-source-1/owner-validation-provenance-failure-recovery-source-1/shared-only324a-archival-reconciliation-source-1/archive-parent-durability-correction1-source-1/root-readonly-capture-correction1-source-1/diagnostic-only-zero-unlink-source-1/shared-archival-after-diagnostic-successor-source-1/reconcile_current290_shared_archival.AFTER_ACCEPTED_ZERO_UNLINK_DIAGNOSTIC.NOT_RELEASED.py
+@@ -6,8 +6,8 @@
+ from pathlib import Path
+ import ast,hashlib,importlib.util,json,os,resource,signal
+ D=Path(__file__).resolve().parent
+-PROFILE=D/'EXACT-SHARED-ONLY324A-PRIVATE-ROOT-READONLY-CAPTURE-CORRECTION1-PROFILE.json'
+-PROFILE_SHA='35268714bc84345e4c46f9361264ae167aeecde49be6a0c0a927f7640b8db780'
++PROFILE=D/'EXACT-SHARED-ARCHIVAL-AFTER-DIAGNOSTIC-SUCCESSOR-PROFILE.json'
++PROFILE_SHA='b5db6b84d7695c1d7eff71fa2592d7902da0b36cf1e6068a72ca7931e29683cf'
+ assert hashlib.sha256(PROFILE.read_bytes()).hexdigest()==PROFILE_SHA
+ r=json.loads(PROFILE.read_bytes())
+ def initial_load(ref,name):
+@@ -23,7 +23,7 @@
+ historical=json.loads(Path(p['historical_profile']['path']).read_bytes());current=json.loads(Path(p['current_profile']['path']).read_bytes())
+ assert (os.getuid(),os.getgid(),os.geteuid(),os.getegid())==(1000,1000,1000,1000) and os.sched_getaffinity(0)=={0}
+ m.PID,m.START,m.PARENT=866814,'76706306',866813;m.BOOT=p['boot_id']
+-m.ABSENT=set(historical['required_absent_pids'])|set(current['required_absent_pids'])|set(p['required_absent_pids'])|set(r['additional_absent_pids']);assert len(m.ABSENT)==48
++m.ABSENT=set(historical['required_absent_pids'])|set(current['required_absent_pids'])|set(p['required_absent_pids'])|set(r['additional_absent_pids']);assert len(m.ABSENT)==50
+ OUT=Path(r['archive_directory']);m.PREFIX=OUT/'retained-current290-shared-only';m.PREPARED=OUT/'PREPARED.json';m.COMPLETE=OUT/'COMPLETE.json';m.QUARANTINE=OUT/'QUARANTINE.json'
+ SHARED=Path(r['allowed_record_path']);assert str(SHARED)=='/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock'
+ private_root_capture.CAPTURE_DIRECTORY=OUT;private_root_capture.PUBLISH=m.publish;private_root_capture.SMALL_LIMIT=m.SMALL_LIMIT;private_root_capture.Refusal=m.Refusal
+@@ -91,7 +91,7 @@
+  if run.body[1].lineno!=1488 or run.body[2].lineno!=1490 or b'OwnerError: offline provenance release hash' not in (base/'owner.stderr').read_bytes():raise m.Refusal('actual pre-Docker validation failure/controlflow differs')
+  return result
+ m.proc_bytes=proc_bytes_eof
+-sources=list(historical['publisher_source_paths'])+list(current['source_paths'])+[p['bound_guard']['source'],str(Path(p['bound_guard']['source']).parent.parent/'native_rust_exact_mckernel_image_container_owner.CURRENT290.ENV22_0485.COMPACT.NEW18H.SOURCE-ONLY.py'),r['process_retirement_source']['path']];assert len(sources)==len(set(sources))==9
++sources=list(historical['publisher_source_paths'])+list(current['source_paths'])+[p['bound_guard']['source'],str(Path(p['bound_guard']['source']).parent.parent/'native_rust_exact_mckernel_image_container_owner.CURRENT290.ENV22_0485.COMPACT.NEW18H.SOURCE-ONLY.py'),r['process_retirement_source']['path']]+[row['path'] for row in r['new_exact_publisher_sources']];assert len(sources)==len(set(sources))==11
+ original_process_code=m.process_code
+ def process_code():
+  code=original_process_code();marker='    for arg in argv:\n';assert code.count(marker)==1
+@@ -105,7 +105,23 @@
+  if accepted.get('decision')!='PASS_PROCESS_ONLY_RETIREMENT_AND_POSTRETURN_FREE_MUTEX_SHARED_FENCE_RETAINED' or accepted.get('reviewer')!='/root/review18h' or accepted.get('implementation_ownership') is not False or accepted.get('target_retired')!={'pid':866814,'starttime':'76706306'} or accepted.get('original_session_join_returncode')!=137 or accepted.get('helper_join_returncode')!=0 or accepted.get('mutex27_4_free_after_return') is not True or accepted.get('shared_record_preserved') is not True or accepted.get('historical_label_map_equality')!='UNPROVEN' or any(accepted.get(key) is not False for key in ('shared_reconciliation_authorized','Docker_mutation_authorized','new_admission_authorized')):raise m.Refusal('exact accepted process-only retirement/postreturn shared fence required')
+  currentproof=m.read_json(Path(r['current_quiescence_acceptance']['path']),r['current_quiescence_acceptance']['sha256']);actual=m.read_json(Path(currentproof['raw_stdout']['path']),currentproof['raw_stdout']['sha256']);baseline=actual['snapshots'][0]['structured_inspect_projection'];labels.compare(baseline,actual['snapshots'][1]['structured_inspect_projection'])
+  if m.sha(m.canonical(baseline))!=r['current_structured_projection_sha256']:raise m.Refusal('accepted NEW current typed baseline changed')
++ accepted_recent_zero_unlink_diagnostic(baseline)
+  return baseline
++
++def accepted_recent_zero_unlink_diagnostic(baseline):
++ refs=r['recent_zero_unlink_diagnostic']
++ accepted=m.read_json(Path(refs['acceptance']['path']),refs['acceptance']['sha256']);observed=m.read_json(Path(refs['result']['path']),refs['result']['sha256']);joined=m.read_json(Path(refs['whole_join']['path']),refs['whole_join']['sha256']);post=m.read_json(Path(refs['postreturn']['path']),refs['postreturn']['sha256'])
++ if accepted.get('decision')!='PASS_ZERO_UNLINK_DIAGNOSTIC_AND_POSTRETURN_FREE_MUTEX_SHARED_FENCE_RETAINED' or accepted.get('reviewer')!='/root/review18h' or accepted.get('implementation_ownership') is not False or accepted.get('result')!={key:refs['result'][key] for key in ('sha256','bytes')} or accepted.get('whole_join')!={key:refs['whole_join'][key] for key in ('sha256','bytes')} or accepted.get('postreturn',{}).get('sha256')!=refs['postreturn']['sha256'] or accepted.get('child')!=895698 or accepted.get('starttime')!='77258252' or accepted.get('returncode')!=0 or accepted.get('joined_group_absent_closed') is not True or accepted.get('snapshots')!=3 or accepted.get('root_queries')!=9 or accepted.get('root_returncodes')!=[0]*9 or accepted.get('root_stderr_empty') is not True or accepted.get('historical_label_maps')!='UNPROVEN' or accepted.get('prior889039_observer_cause')!='UNKNOWN' or accepted.get('new_heavy_admission_authorized') is not False or accepted.get('shared_clearance') is not False:raise m.Refusal('actual independently accepted zero-unlink diagnostic binding differs')
++ if observed.get('status')!='DIAGNOSTIC_ONLY_CURRENT_SHARED_FENCE_OBSERVED_ZERO_UNLINK' or observed.get('diagnostic_only') is not True or observed.get('shared_original_identity')!=r['shared_identity'] or observed.get('shared_record_unchanged') is not True or observed.get('historical_label_map_equality')!='UNPROVEN' or observed.get('source_workload_status')!='FAIL' or any(observed.get(key)!=0 or type(observed.get(key)) is not int for key in ('record_unlinks','archive_and_unlink_calls','attempt_markers','signals_sent','Docker_mutations')) or observed.get('process_or_shared_reconciliation_authorized') is not False or observed.get('new_heavy_admission_authorized') is not False:raise m.Refusal('actual zero-action diagnostic result differs')
++ snapshots=observed.get('snapshots')
++ if not isinstance(snapshots,list) or len(snapshots)!=3 or any(snap.get('active_shared_present') is not True or snap['inputs']!=snapshots[0]['inputs'] for snap in snapshots):raise m.Refusal('actual diagnostic three held-fence input maps differ')
++ for snap in snapshots:labels.compare(baseline,snap['structured_inspect_projection'])
++ if joined.get('pid')!=895698 or str(joined.get('start'))!='77258252' or joined.get('returncode')!=0 or not all(joined.get(key) is True for key in ('direct_child_joined','group_absent','closed_streams')):raise m.Refusal('actual diagnostic direct join differs')
++ if post.get('tool_session')!=2774 or post.get('tool_joined_exit')!=0 or post.get('child')!=895698 or post.get('starttime')!='77258252' or post.get('shared_reconciliation_authorized') is not False or post.get('new_heavy_admission_authorized') is not False or not isinstance(post.get('observations'),list) or len(post['observations'])!=2:raise m.Refusal('actual diagnostic postreturn witness differs')
++ wanted={key:value for key,value in r['shared_identity'].items() if key!='path'}
++ for row in post['observations']:
++  if row.get('helper895698_absent') is not True or row.get('group_members')!=[] or row.get('mutex_identity')!=[27,4] or row.get('nonblocking_existing_mutex_acquire_release') is not True or row.get('shared')!=wanted:raise m.Refusal('actual diagnostic postreturn free mutex/shared identity differs')
++ return True
+ 
+ def original_request_relation():
+  row=next(ref for ref in p['evidence_inputs'] if Path(ref['path']).name=='image-request.CURRENT290.IMAGE-ONLY.ENV22_0485.COMPACT.NEW18H.SOURCE-ONLY.json')
+@@ -158,7 +174,7 @@
+ 
+ def bind_release(path,expected):
+  runtime_limits();release=m.read_json(path,expected)
+- if release.get('schema')!='mckernel.current290.exact-shared-only324a-reconciliation.release.v1' or release.get('status')!='PASS_EXECUTION_RELEASE' or type(release.get('execution_count')) is not int or release['execution_count']!=1 or type(release.get('unlink_budget')) is not int or release['unlink_budget']!=1 or release.get('profile_sha256')!=PROFILE_SHA or release.get('shared_identity')!=r['shared_identity'] or release.get('process_retirement_acceptance')!=r['process_retirement_acceptance'] or release.get('fetched_source_verified') is not True or release.get('outer_timeout_or_kill_authorized') is not False or not m.re.fullmatch('[0-9a-f]{40}',str(release.get('source_checkpoint',''))) or not release.get('author'):raise m.Refusal('separate exact shared-only one-shot execution release required')
++ if release.get('schema')!='mckernel.current290.exact-shared-only324a-reconciliation.release.v1' or release.get('status')!='PASS_EXECUTION_RELEASE' or type(release.get('execution_count')) is not int or release['execution_count']!=1 or type(release.get('unlink_budget')) is not int or release['unlink_budget']!=1 or release.get('profile_sha256')!=PROFILE_SHA or release.get('shared_identity')!=r['shared_identity'] or release.get('process_retirement_acceptance')!=r['process_retirement_acceptance'] or release.get('recent_zero_unlink_diagnostic_acceptance')!=r['recent_zero_unlink_diagnostic']['acceptance'] or release.get('fetched_source_verified') is not True or release.get('outer_timeout_or_kill_authorized') is not False or not m.re.fullmatch('[0-9a-f]{40}',str(release.get('source_checkpoint',''))) or not release.get('author'):raise m.Refusal('separate exact shared-only one-shot execution release required')
+  accepted_prerequisites();original_request_relation()
+  files={str(Path(__file__).resolve()):hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),str(PROFILE):PROFILE_SHA}
+  for key in ('archive_primitives','primitive','h990','parent_readonly_profile','typed_diagnostic_source','typed_diagnostic_profile','typed_comparator','process_retirement_source','sdk_record_source','shared_request_hash_source','private_root_readonly_capture'):
