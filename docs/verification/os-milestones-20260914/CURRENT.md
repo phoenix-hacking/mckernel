@@ -1,3 +1,21 @@
+## Twenty-minute review — 2026-10-26T00:57Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Recovery is accepted004f: exactshared324a archived/unlinked once, helperjoined0,
+sharedabsent and same27:4free postreturn. Source24/25 add two compiledRustobjects
+and controlled333setter/6480RRcases; Source26 composes retainedlookup/query/RR
+objects in33newcalls. Eight compiler/link/behavior commands passed. All remain
+HOSTscope; new default/native/whole-file/C-retirement closures zero.
+Actualthree namespaces853f initialized once. Changed6staticcontrols and independent
+ec15 source review pass; final40files fetched48a4b0d8. Root next: beforeclock
+context/preparation review, exactcaller c5c6/cfg2666 freshfive/census handshake,
+actualpayload+holder review, then admittedowner8fb/request369. No standalonequery
+or completedsource/SDK/compiler-prefix replay. Source27 independentlyprepares
+real77-module changedRustcrate integration. Original30min velocity buckets remain
+zero acceptedpackages;95%targetunproved. Firstdefaultcompiler/runtimefixlatency
+unknown. [Review/metrics](../evidence/os-recovery-adoption-20261025-0254/ENGINEERING-REVIEW-20261026T0057.json).
+Samefixed18hwindow/controls; M12=35/35; M14/M15 OPEN.
+
 ## Current cursor — shared archival and postreturn physical accepted
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
