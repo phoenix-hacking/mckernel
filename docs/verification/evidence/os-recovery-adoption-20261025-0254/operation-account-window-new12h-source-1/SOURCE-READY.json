@@ -1,0 +1,56 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_READY_INDEPENDENT_REVIEW_REQUIRED_NO_OPERATION_AUTHORITY",
+  "source_refs": {
+    "actual_account_window.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/operation-account-window-new12h-source-1/actual_account_window.py",
+      "bytes": 4674,
+      "sha256": "8bf26bae56a019876c6a1463945733c85be5016d21ac5f6f955c29fd131a8cbe"
+    },
+    "ACTUAL-WINDOW.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/operation-account-window-new12h-source-1/ACTUAL-WINDOW.json",
+      "bytes": 815,
+      "sha256": "91bdfb1de3955a684d0766ffa85a5e18deda8f5f49c6ce1d85fcdbf2df6e3d86"
+    },
+    "SOURCE-REFERENCES.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/operation-account-window-new12h-source-1/SOURCE-REFERENCES.json",
+      "bytes": 1526,
+      "sha256": "48f7d10c4e6651c016a80e6c8d6994698de0bfab5b1cc6cbf333429df2f5aca7"
+    },
+    "ACCOUNT-FIXTURE.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/operation-account-window-new12h-source-1/ACCOUNT-FIXTURE.json",
+      "bytes": 1488,
+      "sha256": "41ba71231a53d995d35aaaa6ddd0dd64aa96744fdcd0e2783163210663b411af"
+    },
+    "test_actual_account_window.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/operation-account-window-new12h-source-1/test_actual_account_window.py",
+      "bytes": 4659,
+      "sha256": "ce7cd29154b055f21b5b9aa949f7ea151e0c50132aa26e5337d0b50e2b0b6f50"
+    }
+  },
+  "exports": {
+    "guard": "Read-only local live check -> [wall,MONOTONIC,BOOTTIME]; grants no native/ordinary release",
+    "check_account_state": "(state,wall) -> exact canonical available_balance",
+    "CUTOFFS": [
+      1793165769.0,
+      947875.677502648,
+      963213.804550928
+    ],
+    "load_window": "Pinned actual window metadata",
+    "check_window": "(window,[wall,MONOTONIC,BOOTTIME],boot_id) -> original clocks"
+  },
+  "tests": {
+    "command": "/usr/bin/python3 -B /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/operation-account-window-new12h-source-1/test_actual_account_window.py",
+    "passed": 9,
+    "seconds": 0.004
+  },
+  "canonical_policies_preserved": [
+    "Canonical amount and available_balance exact AST extraction from pinned scripts/os_goal_credits.py; no old cleanup module imported.",
+    "Same run7f budget57774.852125, cumulative spent>=22812.3311, remaining=budget-spent>0, heartbeat<180s.",
+    "Current actual thread/active goal, all service/auth/policy/billing holds, stop_now/reason and resident billing settings checked.",
+    "UTC/BOOT/MONOTONIC fixed actual window, no reset/recovery extension.",
+    "Existing guards, sources, releases, nonces and evidence unchanged.",
+    "Root must bind this new source explicitly into reviewed operation successor; imports and checks grant no execution authority."
+  ],
+  "outer_guardian_proposal": "My previous private proposal superseded/unarmed; parent outer controls untouched."
+}

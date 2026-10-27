@@ -1,0 +1,89 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/guardian_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "at": "2026-10-27T17:42:58.140964+00:00",
+  "decision": "PASS_EXACT17_CANONICAL_SOURCE_ADOPTION_ONLY",
+  "execution_authority": false,
+  "canonical_mutation_performed": false,
+  "reviewed_inputs": {
+    "ROOT-NEXT.md": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/ROOT-NEXT.md",
+      "bytes": 5363,
+      "sha256": "a3cc19ee67370fd4347dc56da068757918640aa898c253d793cc1e43fab51dea"
+    },
+    "prepare_root_adoption.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/prepare_root_adoption.py",
+      "bytes": 5811,
+      "sha256": "24225c8e6eee269913e6bf674474f0e7ce96604d56d97083833c26374b47f0c6"
+    },
+    "SOURCE-ADOPTION-MANIFEST.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/SOURCE-ADOPTION-MANIFEST.json",
+      "bytes": 13021,
+      "sha256": "277ee83ef81aade4cba07840a3456252b67c200ae1bd4616fde03c1f3910d112"
+    },
+    "SOURCE-GUARD-CHECKS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/SOURCE-GUARD-CHECKS.json",
+      "bytes": 1881,
+      "sha256": "1451520cd6a9f69dde6d9f0ac8de3524dfde5c289a077c186e942c66aeb638a7"
+    }
+  },
+  "preparation_preimage": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/PREPARATION.json",
+    "bytes": 119943,
+    "sha256": "2fbc1d27c5d991343261144c06ab043271809300fd40fdc4d765d1cfcb0625c2"
+  },
+  "selected_source_files": 19,
+  "proposed_canonical_writes": 17,
+  "write_paths": [
+    "executer/user/CMakeLists.txt",
+    "executer/user/rust/mcexec_buildid.rs.in",
+    "executer/user/rust/mcexec_clone_child.rs",
+    "executer/user/rust/mcexec_cpu_topology.rs",
+    "executer/user/rust/mcexec_diagnostics.rs",
+    "executer/user/rust/mcexec_entry_metadata_options.rs",
+    "executer/user/rust/mcexec_helpers.rs",
+    "executer/user/rust/mcexec_launch_state.rs",
+    "executer/user/rust/mcexec_load_descriptor.rs",
+    "executer/user/rust/mcexec_overlay_fd.rs",
+    "executer/user/rust/mcexec_platform_syscalls.rs",
+    "executer/user/rust/mcexec_residual_functional.rs",
+    "executer/user/rust/mcexec_runtime_data.rs",
+    "executer/user/rust/mcexec_signal_wait_exit.rs",
+    "executer/user/rust/mcexec_worker_lifecycle.rs",
+    "ihk/linux/user/CMakeLists.txt",
+    "ihk/linux/user/rust/ihkmond.rs"
+  ],
+  "already_exact_paths": [
+    "CMakeLists.txt",
+    "ihk/CMakeLists.txt"
+  ],
+  "verified": [
+    "All19 provider byte lengths/SHA256 and actual current canonical preimages/absence match. Exactly17 write_required flags; top CMakeLists.txt and ihk/CMakeLists.txt remain byte-exact. Target paths are direct canonical paths with no symlink component.",
+    "All19 manifest postimages exactly equal the source selection reconstructed from retained F4D runtime_sources, build_producer_sources and the three exact executor/IHK-user/daemon overrides in existing mcexec_contract.py. Both qualification-only inputs exactly match PREPARATION and their retained actual bytes.",
+    "All14 Rust executor postimages are unchanged accepted F4D providers; accepted SDK/source-review/provider-join/loader references match their retained hashes. No349-body rewrite is introduced.",
+    "Executor CMake1208a097/27799B and independent IHK-user CMakea21e1cfb/13474B retain their exact accepted disjoint composition. Daemon0c0b4b6d/23095B is reused at its retained provider path; missing canonical daemon is correctly guarded as an absent preimage.",
+    "Manifest277ee83e is hard-pinned in preparation script. PREPARATION2fbc1d27 is checked before either mutation mode. All providers and19 preimages are checked before first source write, existing preimages are rechecked before overwrite, absent targets use exclusive create, final postimages are checked. Drift/partial application requires Root reconciliation; no silent replay or rollback is promised.",
+    "Default mode performs source checks only. Explicit source-adoption mutation preserves C reference files and writes only the17 listed source paths plus a fresh Root-chosen receipt. It invokes no compiler, subprocess, container, staging, loader, native operation or account/clock/lease change.",
+    "Runtime binder requires canonical19 postimages, actual materialization status PASS_FINITE_TARGET_SOURCE_MATERIALIZATION_ONLY, current source node identity, exact21 selected/qualification inputs, all retained prefix hashes, actual CMakeCache RUSTC=/nightly/bin/rustc and pinned original vendor identity. It records only runtime adoption metadata and retains actual_* request/account/release fields unchanged.",
+    "Binding PREPARATION changes the19-member runtime map. Existing8269 static map and READY8c2a do not authenticate the successor; new independent exact-command/map/source review and fresh current typed runtime admission remain mandatory.",
+    "Original SDK acceptance stays SDK-only: default/native/CLI, all349-provider parity, all51-data ABI, allocation proof and whole-file retirement remain false/open. Source adoption confers no installed-production or language-retirement claim."
+  ],
+  "root_conditions": [
+    "Root coordinates sole canonical writing, confirms exact reviewed script/manifest hashes and chooses a fresh safe absolute receipt path before --apply-canonical; all current preimages/providers must still pass. This review covers only the17 proposed source writes.",
+    "Do not invoke --bind-runtime until Root has separately admitted and actually executed a fresh finite materialization successor. A caller-supplied status string is not independent execution proof; Root must review actual copy-loop/plan/result provenance and the full original finite source set, stable-FD/no-hardlink/error/bound/ownership/floor predicates. This binder validates selected inputs and node identity; it does not execute or independently establish the full copy operation.",
+    "Derive fresh materialization helper/plan/output paths and hashes; historical consumed materializers and old admissions must not be replayed. Preserve source timestamps/BUILDID and object-context guards; changed F4D producer context requires a separate current compile release.",
+    "Configure/context/link/import/install/installed-ELF phases and later loader/native work require their own reviewed actual release, fresh account/source/native ownership and fixed-window admission. No ordinary/heavy workload is authorized here.",
+    "Fixed cutoff2026-10-28T05:36:09Z, boot7bfc5687-6c04-4d15-84eb-b92ab9a55dcb, BOOT963213.804550928 and MONO947875.677502648 persist. Same creditrun7f4af94a83b14cc08f97401f5891d965/ceiling57774.852125/cumulative spent>=22812.3311 and all real holds, exclusions, resource limits and floors remain effective. No budget/account refresh is asserted by this source review.",
+    "Outer guardian review remains superseded/noarm and is unrelated to this source adoption review."
+  ],
+  "review_actions": {
+    "source_hash_and_selection_reads_only": true,
+    "source_guard_records_read": true,
+    "mutation_modes_not_invoked": true,
+    "no_compiler_container_root_native_staging_loader_cleanup": true,
+    "no_canonical_or_PREPARATION_mutation": true,
+    "only_this_review_file_written": true
+  }
+}

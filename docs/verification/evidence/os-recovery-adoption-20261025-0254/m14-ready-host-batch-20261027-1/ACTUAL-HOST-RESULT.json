@@ -1,0 +1,176 @@
+{
+  "task_id": "M14-READY-HOST-BATCH-20261027-1",
+  "status": "PASS_19_ORDINARY_HOST_COMMANDS_READY_FOR_REVIEW",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "results": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-ready-host-batch-20261027-1/RESULTS.json",
+    "bytes": 30497,
+    "sha256": "75d89cee5f0daabd5869fd1a297d86e20bd26781a50da3af57427df57aa14bb6"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-ready-host-batch-20261027-1/PROFILE.NOT-GRANTED.json",
+    "bytes": 86365,
+    "sha256": "df60349e349e7beacbb028ac87a1067e48ed03ab2cb27fe216c23844d99dade4"
+  },
+  "runner": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-ready-host-batch-20261027-1/run_ready_host_batch.NOT-GRANTED.py",
+    "bytes": 3600,
+    "sha256": "e4fd4df2dd86cb9d0e9813783e15086726837b44b518ebee74bb6d179ef4fe6a"
+  },
+  "root_grant": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-ready-host-batch-20261027-1/ROOT-GRANT.json",
+    "bytes": 2249,
+    "sha256": "e1782c35636f26bdc32cb7803762a44a083038b99ff8de4e5c16203b1d967a4d"
+  },
+  "commands": 19,
+  "all_direct_child_joined": true,
+  "all_groups_absent": true,
+  "all_streams_closed": true,
+  "unexpected_descendants": 0,
+  "total_child_elapsed_seconds": 1.360364091116935,
+  "first_started_record_mtime_UTC": "2026-10-27T07:52:24.504283+00:00",
+  "final_join_record_mtime_UTC": "2026-10-27T07:52:26.368344+00:00",
+  "time_evidence_scope": "Filesystem publication times of owned started and final join records; child elapsed monotonic measurements in each join.",
+  "CPU_time_seconds": null,
+  "peak_RSS_KiB": null,
+  "resource_metric_limit": "Pinned h990 owned_capture uses Popen.wait and records elapsed/direct joins, but does not retain wait4 CPU/RSS. No replay to add metrics.",
+  "leaves": [
+    {
+      "name": "F03perf3",
+      "commands": 3,
+      "elapsed_seconds": 0.24264207703527063,
+      "stdout": "PASS perf callback bridges:162 alloc +3 free +21 init pairs +18 genuine ABI/origin words; explicit HOST mocks only, real allocator/PMU/lifetime holds OPEN\n",
+      "artifacts": [
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-perf-alloc-three-bridges-1/future-host-output-1/providers.o",
+          "bytes": 2376,
+          "sha256": "1e811d16a616dfb335ce64a91178eaf1b19ed87a8b2c05089988e6754d6065b4"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-perf-alloc-three-bridges-1/future-host-output-1/parity",
+          "bytes": 45104,
+          "sha256": "0740d258e90efccece1cc25fe75a22a00e55951e726a0cee500893a5ab7542d5"
+        }
+      ],
+      "plan": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-perf-alloc-three-bridges-1/FUTURE-HOST-COMMAND-PLAN.NOT-GRANTED.json",
+        "bytes": 11466,
+        "sha256": "46fd2971d3d6989ee31d490e2e3ce97803a5281c7fc0b0c334791af61cc9bc58"
+      }
+    },
+    {
+      "name": "F06-syscall",
+      "commands": 3,
+      "elapsed_seconds": 0.19522338511887938,
+      "stdout": "PASS arch_rt_sigreturn_syscall_bridge controlled dispatch pairs140\n",
+      "artifacts": [
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-rt-sigreturn-three-source-1/syscall/future-output-1/libfixture.a",
+          "bytes": 7240930,
+          "sha256": "5e382f39a2974aaba491820896de1882e6894bf39d0311c105bd4e2d4f1c0efc"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-rt-sigreturn-three-source-1/syscall/future-output-1/driver",
+          "bytes": 41312,
+          "sha256": "768e99d71fc36a368ae9d0f60fb038ff64439fbbdfe2ef07a1dfbc1f8fbb1777"
+        }
+      ],
+      "plan": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-rt-sigreturn-three-source-1/syscall/FUTURE-HOST-COMMAND-PLAN.json",
+        "bytes": 10948,
+        "sha256": "42def8cc22bcd5a51bb6885b6414ff9e61a00def8cbb3dec7187d9504b50c282"
+      }
+    },
+    {
+      "name": "F06-set-signal",
+      "commands": 3,
+      "elapsed_seconds": 0.20891989395022392,
+      "stdout": "PASS arch_rt_sigreturn_set_signal_bridge controlled signal pairs100\n",
+      "artifacts": [
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-rt-sigreturn-three-source-1/set-signal/future-output-1/libfixture.a",
+          "bytes": 7240950,
+          "sha256": "146d02f5f0858730431e310336fd557d06a63cd230dd8e204aeee9d4cebbba7d"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-rt-sigreturn-three-source-1/set-signal/future-output-1/driver",
+          "bytes": 41064,
+          "sha256": "1b67ed17757143e3a5c3ff17c818785cd4b7a2215fddf8dc357181c300022f67"
+        }
+      ],
+      "plan": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-rt-sigreturn-three-source-1/set-signal/FUTURE-HOST-COMMAND-PLAN.json",
+        "bytes": 11021,
+        "sha256": "4bb259ec2e130aef11880963d4c245a048abccd28816b186135e792db1e08a78"
+      }
+    },
+    {
+      "name": "F06-check-signal",
+      "commands": 3,
+      "elapsed_seconds": 0.20378050999715924,
+      "stdout": "PASS arch_rt_sigreturn_check_signal_bridge controlled checker pairs80\n",
+      "artifacts": [
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-rt-sigreturn-three-source-1/check-signal/future-output-1/libfixture.a",
+          "bytes": 7240954,
+          "sha256": "b75d09a9a0c3bd7e357e974485e82f7f8348232bc46ac9daa8bfa1653b981eaa"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-rt-sigreturn-three-source-1/check-signal/future-output-1/driver",
+          "bytes": 40984,
+          "sha256": "6e934c7cb68a8bd33b0633b027f58ee853fca6d6734f1604a1bafd2decfbbe01"
+        }
+      ],
+      "plan": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-rt-sigreturn-three-source-1/check-signal/FUTURE-HOST-COMMAND-PLAN.json",
+        "bytes": 11070,
+        "sha256": "9aa4eb1422c20610b56b0cbb3ecf290a8e7681e6c537efc6ba06cc5ccd6fe94b"
+      }
+    },
+    {
+      "name": "F02idle2",
+      "commands": 7,
+      "elapsed_seconds": 0.5097982250154018,
+      "stdout": "PASS 108 original-C/Rust idle state and callback-order cases; actual production headers\n",
+      "artifacts": [
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-idle-layout-values-next-current-source-1/HOST-output-proposed-1/selected.o",
+          "bytes": 37224,
+          "sha256": "cf5c23ed8625a4a48e21a74cf3bac7517d5accf943e88c90bbe7670ef1c8d3ac"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-idle-layout-values-next-current-source-1/HOST-output-proposed-1/fallback.o",
+          "bytes": 39280,
+          "sha256": "d0bd8272500de43213b066f1178fe55493f37f94bdf6ad3e4a2d6050d50c0dc5"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-idle-layout-values-next-current-source-1/HOST-output-proposed-1/IDLE-DATA-OWNERSHIP.json",
+          "bytes": 5953,
+          "sha256": "0b538b3abf7c7bce8a12c997f74327722bf7c0194687320ec754ad16988c0ac9"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-idle-layout-values-next-current-source-1/HOST-output-proposed-1/idle.o",
+          "bytes": 2824,
+          "sha256": "0283fca48779d8df817fb256b4754a15221bca9c26ecd4027c3aeb74c001c3df"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-idle-layout-values-next-current-source-1/HOST-output-proposed-1/idle",
+          "bytes": 59256,
+          "sha256": "d0d7f916798c0eda3a71c1ce64a9ca1b3620639a04ae81f997cfb5b909128912"
+        },
+        {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-idle-layout-values-next-current-source-1/HOST-output-proposed-1/idle.map",
+          "bytes": 26192,
+          "sha256": "26d5652b55ba42a6bc71f0ba85f7552e1797e588e7f6ba1ce06098cb0067bfcb"
+        }
+      ],
+      "plan": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-idle-layout-values-next-current-source-1/EXACT-SEVEN-COMMAND-HOST-RECIPE.NOT-ADMITTED.json",
+        "bytes": 39078,
+        "sha256": "2430bf0a511762f2891cc9948d9e1b78e373ae71f81f450c1b528386abc00b92"
+      }
+    }
+  ],
+  "production_default_native_acceptance": false,
+  "selective_integration": "Root sole canonical writer. Use frozen bounded selectors/fragments/diffs in source packets; preserve newer whole files. F03 append selected-bridges.Rust.inc and bounded three C selectors under original gates/file token; F06 combine three disjoint syscall C hunks and corresponding Rust cfg bodies; F02 localized process C idle-table and Rust data insertion only. No whole-file replacement or acceptance credit."
+}

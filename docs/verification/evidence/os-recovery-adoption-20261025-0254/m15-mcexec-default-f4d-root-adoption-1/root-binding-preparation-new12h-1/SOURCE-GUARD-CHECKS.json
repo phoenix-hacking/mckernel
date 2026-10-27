@@ -1,0 +1,41 @@
+{
+  "artifacts": {
+    "SOURCE-ADOPTION-MANIFEST.json": {
+      "bytes": 13021,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/SOURCE-ADOPTION-MANIFEST.json",
+      "sha256": "277ee83ef81aade4cba07840a3456252b67c200ae1bd4616fde03c1f3910d112"
+    },
+    "prepare_root_adoption.py": {
+      "bytes": 5811,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/prepare_root_adoption.py",
+      "sha256": "24225c8e6eee269913e6bf674474f0e7ce96604d56d97083833c26374b47f0c6"
+    }
+  },
+  "canonical_writes": 0,
+  "checks": [
+    "all19_provider_and_preimage_checks_pass",
+    {
+      "control": "changed_canonical_preimage",
+      "rejected": "canonical changed CMakeLists.txt"
+    },
+    {
+      "control": "changed_provider",
+      "rejected": "provider changed CMakeLists.txt"
+    },
+    {
+      "control": "unadopted_current_canonical",
+      "rejected": "canonical changed executer/user/CMakeLists.txt"
+    }
+  ],
+  "compiler_or_container": false,
+  "execution_authority": false,
+  "preserved_generation_failure": "Initial manifest generation stopped before writing any manifest when canonical ihkmond.rs was absent; corrected provider is retained accepted0c0b graph source.",
+  "preserved_preparation": {
+    "bytes": 119943,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/PREPARATION.json",
+    "sha256": "2fbc1d27c5d991343261144c06ab043271809300fd40fdc4d765d1cfcb0625c2"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "seconds": 0.006913125980645418,
+  "status": "PASS_SOURCE_ONLY_GUARDS"
+}

@@ -8719,3 +8719,39 @@ fn panic(_info: &PanicInfo) -> ! {
         core::hint::spin_loop();
     }
 }
+
+#[path = "mcexec_overlay_fd.rs"]
+mod mcexec_overlay_fd;
+
+#[path = "mcexec_worker_lifecycle.rs"]
+mod mcexec_worker_lifecycle;
+
+#[path = "mcexec_clone_child.rs"]
+mod mcexec_clone_child;
+
+#[path = "mcexec_load_descriptor.rs"]
+mod mcexec_load_descriptor;
+
+#[path = "mcexec_signal_wait_exit.rs"]
+mod mcexec_signal_wait_exit;
+
+#[path = "mcexec_platform_syscalls.rs"]
+mod mcexec_platform_syscalls;
+
+#[path = "mcexec_cpu_topology.rs"]
+mod mcexec_cpu_topology;
+
+#[path = "mcexec_diagnostics.rs"]
+mod mcexec_diagnostics;
+
+#[path = "mcexec_launch_state.rs"]
+mod mcexec_launch_state;
+
+#[path = "mcexec_residual_functional.rs"]
+mod mcexec_residual_functional;
+
+#[path = "mcexec_entry_metadata_options.rs"]
+mod mcexec_entry_metadata_options;
+
+#[path = "mcexec_runtime_data.rs"]
+mod mcexec_runtime_data;

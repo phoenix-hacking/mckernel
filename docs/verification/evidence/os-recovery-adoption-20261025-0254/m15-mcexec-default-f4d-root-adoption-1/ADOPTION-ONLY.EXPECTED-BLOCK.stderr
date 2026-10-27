@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/preflight_mcexec_sources.py", line 43, in <module>
+    if __name__=='__main__':main()
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/preflight_mcexec_sources.py", line 36, in main
+    ns['configuration_api'](mc.prep())
+  File "literal-driver-configuration-api", line 159, in configuration_api
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/mcexec_contract.py", line 34, in configuration_api
+    r=p['runtime'];need(r['adopted'] is True and all(r.get(k) is not None for k in ('source_root','source_identity','materialization','retained_prefix_root','retained_prefix_identity','vendor_source','vendor_identity','preserved_compute_RUSTC')),'Root source/adoption bindings required')
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/mcexec_contract.py", line 15, in need
+    if not ok:raise ValueError(why)
+ValueError: Root source/adoption bindings required

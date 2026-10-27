@@ -1,0 +1,902 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewed_UTC": "2026-10-27T17:41:39.720181+00:00",
+  "decision": "PASS_EXACT_NINE_SELECTIVE_SOURCE_POSTIMAGES_FOR_ROOT_ADOPTION",
+  "manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-HOST19-SELECTIVE-INTEGRATION-NEW12H-1/MANIFEST.json",
+    "bytes": 8226,
+    "sha256": "664ad921a848a48fd9411f318d668932ee8c8c55496ee9930eded237a8e670b9"
+  },
+  "prepare": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-HOST19-SELECTIVE-INTEGRATION-NEW12H-1/prepare.py",
+    "bytes": 6286,
+    "sha256": "2c126d29a421be055ca010e46d402bacd1ab9035c1b57b867ec46e1a241a9c15"
+  },
+  "files": [
+    {
+      "destination": "/home/holden/mckernel/kernel/syscall.c",
+      "preimage": {
+        "path": "/home/holden/mckernel/kernel/syscall.c",
+        "bytes": 915683,
+        "sha256": "eb3ec7202a3f6b6a0a13ae14d008ddfb6ff717f413e5b2e287c3eabba40243d1"
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-HOST19-SELECTIVE-INTEGRATION-NEW12H-1/candidate/kernel/syscall.c",
+        "bytes": 916284,
+        "sha256": "d9187c6eeb63f134602218db3b3b50683e1ca45b416199fcaa8ca4976c352713"
+      },
+      "diff": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-HOST19-SELECTIVE-INTEGRATION-NEW12H-1/diffs/kernel/syscall.c.diff",
+        "bytes": 1209,
+        "sha256": "46c1e11d5290797da8324b4f631474ccaeb96f65afc234146ec2c9ec681f5db0"
+      }
+    },
+    {
+      "destination": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "preimage": {
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "bytes": 1260070,
+        "sha256": "f795e2581826e7cec92348a2a809be21ef9e26d03689d4cf8a07403bbdc40300"
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-HOST19-SELECTIVE-INTEGRATION-NEW12H-1/candidate/kernel/rust/syscall_policy.rs",
+        "bytes": 1263273,
+        "sha256": "2ddde21dfcf32402d281d7ba70e62d765cb60e60bf225d7303b17221959a5477"
+      },
+      "diff": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-HOST19-SELECTIVE-INTEGRATION-NEW12H-1/diffs/kernel/rust/syscall_policy.rs.diff",
+        "bytes": 3488,
+        "sha256": "5d6a9b371772288d9f0209dc4c014b0faca35e93a21e471c0646cae9abbec816"
+      }
+    },
+    {
+      "destination": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "preimage": {
+        "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+        "bytes": 115374,
+        "sha256": "cae4bbc9be8f8ed8bf3e7ff82a9848ea11aaf50f740ecc23ee389fd73f70297b"
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-HOST19-SELECTIVE-INTEGRATION-NEW12H-1/candidate/arch/x86_64/kernel/syscall.c",
+        "bytes": 116023,
+        "sha256": "c7b0c46302a133b017dbd9176dfe523e3f05fb0e3d268acd32b63679e6493605"
+      },
+      "diff": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-HOST19-SELECTIVE-INTEGRATION-NEW12H-1/diffs/arch/x86_64/kernel/syscall.c.diff",
+        "bytes": 1244,
+        "sha256": "bef81604b82ab1342c22dace7abd158cd6c96659bfcf6fae5cc12f72ea1fdab8"
+      }
+    },
+    {
+      "destination": "/home/holden/mckernel/kernel/rust/arch_rt_sigreturn_syscall_bridge.rs",
+      "preimage": null,
+      "candidate": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-HOST19-SELECTIVE-INTEGRATION-NEW12H-1/candidate/kernel/rust/arch_rt_sigreturn_syscall_bridge.rs",
+        "bytes": 748,
+        "sha256": "c2b972091d99383f52baabf74a17ce15a55d7e51b3e74a88d41e6d7330f5597d"
+      },
+      "diff": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-HOST19-SELECTIVE-INTEGRATION-NEW12H-1/diffs/kernel/rust/arch_rt_sigreturn_syscall_bridge.rs.diff",
+        "bytes": 892,
+        "sha256": "38fd8e613b3fae9844e99c77e74ab06db5a66244e59fd0f121a265296d9e87ea"
+      }
+    },
+    {
+      "destination": "/home/holden/mckernel/kernel/rust/arch_rt_sigreturn_set_signal_bridge.rs",
+      "preimage": null,
+      "candidate": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-HOST19-SELECTIVE-INTEGRATION-NEW12H-1/candidate/kernel/rust/arch_rt_sigreturn_set_signal_bridge.rs",
+        "bytes": 837,
+        "sha256": "9c1059f9c814739336d1b68ff18f14768b73d6cc477f13be531b0ccb577639c8"
+      },
+      "diff": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-HOST19-SELECTIVE-INTEGRATION-NEW12H-1/diffs/kernel/rust/arch_rt_sigreturn_set_signal_bridge.rs.diff",
+        "bytes": 988,
+        "sha256": "8616c14964bb3b08f4ab3397488d5239119fffc468c583301e7bcb90ce9333e0"
+      }
+    },
+    {
+      "destination": "/home/holden/mckernel/kernel/rust/arch_rt_sigreturn_check_signal_bridge.rs",
+      "preimage": null,
+      "candidate": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-HOST19-SELECTIVE-INTEGRATION-NEW12H-1/candidate/kernel/rust/arch_rt_sigreturn_check_signal_bridge.rs",
+        "bytes": 768,
+        "sha256": "964cdb4cc60d83e6d0762901d4e70e27d0e533b2deb8b3f88d7a2557b56099b9"
+      },
+      "diff": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-HOST19-SELECTIVE-INTEGRATION-NEW12H-1/diffs/kernel/rust/arch_rt_sigreturn_check_signal_bridge.rs.diff",
+        "bytes": 922,
+        "sha256": "55229bf7644d97f6396373f6a1057800a011d217ac32656a218ed31a62f88625"
+      }
+    },
+    {
+      "destination": "/home/holden/mckernel/kernel/process.c",
+      "preimage": {
+        "path": "/home/holden/mckernel/kernel/process.c",
+        "bytes": 218569,
+        "sha256": "1dc76b89466859d49b85377f9bfa0f809890ee12ec9392ff4768104ba0f32567"
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-HOST19-SELECTIVE-INTEGRATION-NEW12H-1/candidate/kernel/process.c",
+        "bytes": 219278,
+        "sha256": "ec88faeab2ed4cc43d79fbf8a3e1f2fd5b7c75bd8c1dc2d184a92198431995ea"
+      },
+      "diff": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-HOST19-SELECTIVE-INTEGRATION-NEW12H-1/diffs/kernel/process.c.diff",
+        "bytes": 1308,
+        "sha256": "65e66bdd6be47d1bca194e697f7ec1f6b26521607bab6094e14510385a3278cb"
+      }
+    },
+    {
+      "destination": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "preimage": {
+        "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+        "bytes": 606868,
+        "sha256": "439ffb1e00f405c5d470468facb07ebe86d41a9ab291553d573cf98bbf232613"
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-HOST19-SELECTIVE-INTEGRATION-NEW12H-1/candidate/kernel/rust/process_helpers.rs",
+        "bytes": 608687,
+        "sha256": "b93ee208c78e05243cdece49bf6d7ceb50b9afc3c3c2b62af1637c2fc4346d91"
+      },
+      "diff": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-HOST19-SELECTIVE-INTEGRATION-NEW12H-1/diffs/kernel/rust/process_helpers.rs.diff",
+        "bytes": 2924,
+        "sha256": "875edee01fbcf71b3821a6d392fc21e69040eada156cd5314d285287ce12cf72"
+      }
+    },
+    {
+      "destination": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "preimage": {
+        "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+        "bytes": 31502,
+        "sha256": "c60b391f5f2f7f5156d3f381ab5563afcdb9ccca334dc2bf3ff9b0383a5fbd77"
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-HOST19-SELECTIVE-INTEGRATION-NEW12H-1/candidate/kernel/CMakeLists.txt",
+        "bytes": 32485,
+        "sha256": "96ce9084a3c0973cefefdd21753cbcd2ea7c94d5ca1c0d59363afa3500f737fd"
+      },
+      "diff": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-HOST19-SELECTIVE-INTEGRATION-NEW12H-1/diffs/kernel/CMakeLists.txt.diff",
+        "bytes": 4212,
+        "sha256": "7e41328657ce4d9f13c8eb17593f488b4cae98e4c73c60fe1f9a9c7a3bbd8724"
+      }
+    }
+  ],
+  "integrity": {
+    "candidate_and_diff_hashes": 9,
+    "current_preimages_exact": 6,
+    "new_module_destinations_absent": 3
+  },
+  "F06_original_finding": "Resolved in exact successor: fallback type declarations logical364/370/376 and following blank369/375/381; copied bodies unchanged. Root retains any focused actual compiler regression requirement before adoption.",
+  "line_preservation_readonly_static_analysis": [
+    {
+      "path": "kernel/syscall.c",
+      "expressions": 68,
+      "every_expression_and_logical_line_and_file_token_equal": true,
+      "expressions_observed": [
+        {
+          "expression": "\t\t\t\tkfree_tracked(arg, __FILE__, __LINE__);",
+          "logical_line": 4208,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tkfree_tracked(ptr, __FILE__, __LINE__);",
+          "logical_line": 4664,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\t\tkfree_tracked(proc->fd_path[fd], __FILE__, __LINE__);",
+          "logical_line": 5331,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\tids = kmalloc_tracked(sizeof(int) * n, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 5353,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\tkfree_tracked(ids, __FILE__, __LINE__);",
+          "logical_line": 5370,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\tkfree_tracked(proc->saved_cmdline, __FILE__, __LINE__);",
+          "logical_line": 5410,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\tkfree_tracked(proc->fd_path[fd], __FILE__, __LINE__);",
+          "logical_line": 5572,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\tp = _ihk_mc_alloc_aligned_pages_node(npages, p2align, IHK_MC_AP_NOWAIT | ap_flag, -1, IHK_MC_PG_USER, addr0, __FILE__, __LINE__);",
+          "logical_line": 6444,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t_ihk_mc_free_pages(p, npages, IHK_MC_PG_USER, __FILE__, __LINE__);",
+          "logical_line": 6658,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tdesc = _ihk_mc_alloc_aligned_pages_node(4, PAGE_P2ALIGN, IHK_MC_AP_NOWAIT, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);",
+          "logical_line": 7588,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\tkfilename = kmalloc_tracked(len + 1, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 7630,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\tkfree_tracked(kfilename, __FILE__, __LINE__);",
+          "logical_line": 7635,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\tkfilename = kmalloc_tracked(len + 1, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 7647,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\tkfree_tracked(kfilename, __FILE__, __LINE__);",
+          "logical_line": 7652,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\tkfree_tracked(envp_flat, __FILE__, __LINE__);",
+          "logical_line": 7744,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\tkfree_tracked(argv_flat, __FILE__, __LINE__);",
+          "logical_line": 7747,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t_ihk_mc_free_pages(desc, 4, IHK_MC_PG_KERNEL, __FILE__, __LINE__);",
+          "logical_line": 7749,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\ttids = kmalloc_tracked(sizeof(int) * NR_TIDS, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 7924,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\t\t\t\tNR_TIDS, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 7932,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\t\tkfree_tracked(tids, __FILE__, __LINE__);",
+          "logical_line": 7935,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\t\tkfree_tracked(tids, __FILE__, __LINE__);",
+          "logical_line": 7944,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\tkfree_tracked(tids, __FILE__, __LINE__);",
+          "logical_line": 7956,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\tnew->mod_clone_arg = kmalloc_tracked(sizeof(struct uti_attr), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 8113,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tkfree_tracked(new->mod_clone_arg, __FILE__, __LINE__);",
+          "logical_line": 8203,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\tkfree_tracked(newproc->tids, __FILE__, __LINE__);",
+          "logical_line": 8215,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\tkfree_tracked(newproc->saved_cmdline, __FILE__, __LINE__);",
+          "logical_line": 8238,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tpathname = kmalloc_tracked(len, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 20014,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\tkfree_tracked(pathname, __FILE__, __LINE__);",
+          "logical_line": 20046,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tkfree_tracked(pathname, __FILE__, __LINE__);",
+          "logical_line": 20049,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tpathname = kmalloc_tracked(len, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 20082,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\tkfree_tracked(pathname, __FILE__, __LINE__);",
+          "logical_line": 20114,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tkfree_tracked(pathname, __FILE__, __LINE__);",
+          "logical_line": 20117,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "const int f03_mckfd_alloc_origin_line_v1 = __LINE__ + 6;",
+          "logical_line": 20200,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\treturn kmalloc_tracked(size, flags, __FILE__, __LINE__);",
+          "logical_line": 20206,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "const int f03_mckfd_free_origin_line_v1 = __LINE__ + 6;",
+          "logical_line": 20212,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tkfree_tracked(fdp, __FILE__, __LINE__);",
+          "logical_line": 20218,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "const int f03_tofu_close_free_line_v1 = __LINE__ + 26;",
+          "logical_line": 20265,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "    { .file=__FILE__, .func=\"syscall_tofu_close_bridge\", .line=__LINE__ + 15, .flags=DDEBUG_DEFAULT },",
+          "logical_line": 20268,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "    { .file=__FILE__, .func=\"syscall_tofu_close_bridge\", .line=__LINE__ + 21, .flags=DDEBUG_DEFAULT },",
+          "logical_line": 20269,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\tkfree_tracked(thread->proc->fd_path[fd], __FILE__, __LINE__);",
+          "logical_line": 20291,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\tsfd = kmalloc_tracked(sizeof(struct mckfd), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 20363,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "{ return kmalloc_tracked(size,flags,__FILE__,__LINE__); }",
+          "logical_line": 21271,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "{ kfree_tracked(p,__FILE__,__LINE__); }",
+          "logical_line": 21279,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\tkfree_tracked(range_policy_iter, __FILE__, __LINE__);",
+          "logical_line": 21324,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\t\trange_policy = kmalloc_tracked(sizeof(struct vm_range_numa_policy), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 21340,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\tkfree_tracked(range, __FILE__, __LINE__);",
+          "logical_line": 21389,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\treturn kmalloc_tracked(size, flags, __FILE__, __LINE__);",
+          "logical_line": 21404,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tkfree_tracked(event, __FILE__, __LINE__);",
+          "logical_line": 21410,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\tkfree_tracked(pending, __FILE__, __LINE__);",
+          "logical_line": 21680,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tkfree_tracked(pending, __FILE__, __LINE__);",
+          "logical_line": 21686,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "    { .file=__FILE__, .func=\"do_futex_log_bridge\", .line=__LINE__ + 9, .flags=DDEBUG_DEFAULT },",
+          "logical_line": 23817,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "    { .file=__FILE__, .func=\"do_futex_log_bridge\", .line=__LINE__ + 15, .flags=DDEBUG_DEFAULT },",
+          "logical_line": 23818,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "    { .file=__FILE__, .func=\"do_futex_log_bridge\", .line=__LINE__ + 18, .flags=DDEBUG_DEFAULT },",
+          "logical_line": 23819,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "    { .file=__FILE__, .func=\"do_futex_log_bridge\", .line=__LINE__ + 21, .flags=DDEBUG_DEFAULT },",
+          "logical_line": 23820,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "    { .file=__FILE__, .func=\"do_exit\", .line=__LINE__ + 16, .flags=DDEBUG_DEFAULT },",
+          "logical_line": 23922,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "    { .file=__FILE__, .func=\"do_exit\", .line=__LINE__ + 24, .flags=DDEBUG_DEFAULT },",
+          "logical_line": 23923,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\t\tkfree_tracked(pending, __FILE__, __LINE__);",
+          "logical_line": 24565,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\tallocated_sendsig = kmalloc_tracked(sizeof(struct sig_pending), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 25366,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\treturn kmalloc_tracked(size, flags, __FILE__, __LINE__);",
+          "logical_line": 27502,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\t\t\t\trange_policy = kmalloc_tracked(sizeof(*range_policy), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 27787,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\t\t\tkfree_tracked(range_policy_iter, __FILE__, __LINE__);",
+          "logical_line": 27810,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\trange_policy = kmalloc_tracked(sizeof(struct vm_range_numa_policy), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 27840,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\trctx = kmalloc_tracked(sizeof(struct uti_ctx), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 28314,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tuti_info = kmalloc_tracked(sizeof(struct uti_info), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 28323,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tkfree_tracked(rctx, __FILE__, __LINE__);",
+          "logical_line": 28369,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tkfree_tracked(uti_info, __FILE__, __LINE__);",
+          "logical_line": 28372,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tkfree_tracked(rctx, __FILE__, __LINE__);",
+          "logical_line": 28395,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tkfree_tracked(uti_info, __FILE__, __LINE__);",
+          "logical_line": 28396,
+          "file_token": "unchanged"
+        }
+      ]
+    },
+    {
+      "path": "arch/x86_64/kernel/syscall.c",
+      "expressions": 28,
+      "every_expression_and_logical_line_and_file_token_equal": true,
+      "expressions_observed": [
+        {
+          "expression": "\treturn kmalloc_tracked(size, flags, __FILE__, __LINE__);",
+          "logical_line": 385,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tkfree_tracked(ptr, __FILE__, __LINE__);",
+          "logical_line": 391,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\t__FILE__, __LINE__);",
+          "logical_line": 428,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tkfree_tracked(allocation, __FILE__, __LINE__);",
+          "logical_line": 443,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\treturn kmalloc_tracked(size, flags, __FILE__, __LINE__);",
+          "logical_line": 629,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\tvoid *fpregs = kmalloc_tracked(xsavesize + 64, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 1088,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\tkfree_tracked(fpregs, __FILE__, __LINE__);",
+          "logical_line": 1101,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tthread->ptrace_debugreg = kmalloc_tracked(sizeof(*thread->ptrace_debugreg) * 8, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 1249,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\tkfree_tracked(pending, __FILE__, __LINE__);",
+          "logical_line": 1808,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\tvoid *_kfpregs = kmalloc_tracked(xsavesize + 64, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 1899,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\t\tkfree_tracked(pending, __FILE__, __LINE__);",
+          "logical_line": 1907,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\t\tkfree_tracked(_kfpregs, __FILE__, __LINE__);",
+          "logical_line": 1908,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\t\tkfree_tracked(_kfpregs, __FILE__, __LINE__);",
+          "logical_line": 1919,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\t\tkfree_tracked(pending, __FILE__, __LINE__);",
+          "logical_line": 1923,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\t\tkfree_tracked(_kfpregs, __FILE__, __LINE__);",
+          "logical_line": 1924,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\tkfree_tracked(_kfpregs, __FILE__, __LINE__);",
+          "logical_line": 1931,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\tkfree_tracked(pending, __FILE__, __LINE__);",
+          "logical_line": 1940,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\tkfree_tracked(pending, __FILE__, __LINE__);",
+          "logical_line": 1960,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\tkfree_tracked(pending, __FILE__, __LINE__);",
+          "logical_line": 2001,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\t\tkfree_tracked(thread->ptrace_recvsig, __FILE__, __LINE__);",
+          "logical_line": 2021,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\t\tkfree_tracked(thread->ptrace_sendsig, __FILE__, __LINE__);",
+          "logical_line": 2024,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\tkfree_tracked(pending, __FILE__, __LINE__);",
+          "logical_line": 2028,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\t\tkmalloc_tracked(sizeof(struct x86_user_context), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 2132,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\tpids = kmalloc_tracked(sizeof(int) * nr_pids, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 2261,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\tkfree_tracked(pids, __FILE__, __LINE__);",
+          "logical_line": 2301,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\tpending = kmalloc_tracked(sizeof(struct sig_pending), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 2451,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\tdst = _ihk_mc_alloc_aligned_pages_node(mpsr->nr_pages[i], pgalign, IHK_MC_AP_USER, mpsr->nodes[i], IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);",
+          "logical_line": 3942,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t_ihk_mc_free_pages(phys_to_virt(pte_get_phys(mpsr->ptep[i])), mpsr->nr_pages[i], IHK_MC_PG_KERNEL, __FILE__, __LINE__);",
+          "logical_line": 3986,
+          "file_token": "unchanged"
+        }
+      ]
+    },
+    {
+      "path": "kernel/process.c",
+      "expressions": 33,
+      "every_expression_and_logical_line_and_file_token_equal": true,
+      "expressions_observed": [
+        {
+          "expression": "\tkfree_tracked(fdp, __FILE__, __LINE__);",
+          "logical_line": 171,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tkfree_tracked(policy, __FILE__, __LINE__);",
+          "logical_line": 253,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tkfree_tracked(ptr, __FILE__, __LINE__);",
+          "logical_line": 258,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\treturn kmalloc_tracked(size, flags, __FILE__, __LINE__);",
+          "logical_line": 340,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tkfree_tracked(vm, __FILE__, __LINE__);",
+          "logical_line": 561,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tthread = _ihk_mc_alloc_aligned_pages_node(KERNEL_STACK_NR_PAGES, PAGE_P2ALIGN, IHK_MC_AP_NOWAIT, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);",
+          "logical_line": 882,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tproc = kmalloc_tracked(sizeof(struct process), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 891,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tvm = kmalloc_tracked(sizeof(struct process_vm), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 892,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tif ((thread = _ihk_mc_alloc_aligned_pages_node(KERNEL_STACK_NR_PAGES, PAGE_P2ALIGN, IHK_MC_AP_NOWAIT, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__)) == NULL) {",
+          "logical_line": 1002,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\tproc = kmalloc_tracked(sizeof(struct process), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 1063,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\tproc->vm = kmalloc_tracked(sizeof(struct process_vm), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 1083,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\tstruct mckfd *mckfd = kmalloc_tracked(sizeof(struct mckfd), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 1144,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\t\tkfree_tracked(mckfd, __FILE__, __LINE__);",
+          "logical_line": 1153,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\tvirt = _ihk_mc_alloc_aligned_pages_node(npages, pgalign, IHK_MC_AP_NOWAIT, -1, IHK_MC_PG_USER, (uintptr_t)pgaddr, __FILE__, __LINE__);",
+          "logical_line": 1464,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t_ihk_mc_free_pages(virt, npages, IHK_MC_PG_KERNEL, __FILE__, __LINE__);",
+          "logical_line": 1520,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\treturn kmalloc_tracked(size, flags, __FILE__, __LINE__);",
+          "logical_line": 1628,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tkfree_tracked(range, __FILE__, __LINE__);",
+          "logical_line": 1817,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t_ihk_mc_free_pages(addr, pages, IHK_MC_PG_KERNEL, __FILE__, __LINE__);",
+          "logical_line": 1873,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\treturn kmalloc_tracked(size, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);",
+          "logical_line": 2256,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\tkfree_tracked(range, __FILE__, __LINE__);",
+          "logical_line": 2261,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t_ihk_mc_free_pages(phys_to_virt(phys), pgsize/PAGE_SIZE, IHK_MC_PG_USER, __FILE__, __LINE__);",
+          "logical_line": 2490,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\t\t\t((range->flag & VR_AP_USER) ? IHK_MC_AP_USER : 0), -1, IHK_MC_PG_USER, fault_addr, __FILE__, __LINE__);",
+          "logical_line": 3058,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\tvirt = _ihk_mc_alloc_aligned_pages_node(npages, p2align, IHK_MC_AP_NOWAIT, -1, IHK_MC_PG_USER, fault_addr, __FILE__, __LINE__);",
+          "logical_line": 3145,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\treturn _ihk_mc_alloc_aligned_pages_node(npages, p2align, flags, -1, IHK_MC_PG_USER, virt_addr, __FILE__, __LINE__);",
+          "logical_line": 3340,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t_ihk_mc_free_pages(addr, npages, IHK_MC_PG_USER, __FILE__, __LINE__);",
+          "logical_line": 3345,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": " * This preserves their actual logical __LINE__ without guessing a numeric line. */",
+          "logical_line": 3460,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "const int process_init_stack_alloc_line = __LINE__ - 122;",
+          "logical_line": 3462,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "const int process_init_stack_free_line = __LINE__ - 119;",
+          "logical_line": 3464,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "    .line = __LINE__ - 58, .flags = DDEBUG_DEFAULT,",
+          "logical_line": 3469,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "    .line = __LINE__ - 58, .flags = DDEBUG_DEFAULT,",
+          "logical_line": 3474,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t\t\t IHK_MC_AP_USER : 0), -1, IHK_MC_PG_USER, end_allocated, __FILE__, __LINE__);",
+          "logical_line": 3408,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t\t_ihk_mc_free_pages(p, npages, IHK_MC_PG_USER, __FILE__, __LINE__);",
+          "logical_line": 3423,
+          "file_token": "unchanged"
+        },
+        {
+          "expression": "\t_ihk_mc_free_pages(thread, KERNEL_STACK_NR_PAGES, IHK_MC_PG_KERNEL, __FILE__, __LINE__);",
+          "logical_line": 3501,
+          "file_token": "unchanged"
+        }
+      ]
+    }
+  ],
+  "CMake_gate_stacks": [
+    {
+      "line": 205,
+      "conditions": [
+        "if (ENABLE_RUST_KERNEL AND \"${ARCH}\" STREQUAL \"x86_64\")",
+        "if (MCKERNEL_HOST_IRQ_ABI STREQUAL \"linux-6.12\")",
+        "if (ARCH STREQUAL \"x86_64\" AND NOT ENABLE_UBSAN)"
+      ]
+    },
+    {
+      "line": 206,
+      "conditions": [
+        "if (ENABLE_RUST_KERNEL AND \"${ARCH}\" STREQUAL \"x86_64\")",
+        "if (MCKERNEL_HOST_IRQ_ABI STREQUAL \"linux-6.12\")",
+        "if (ARCH STREQUAL \"x86_64\" AND NOT ENABLE_UBSAN)"
+      ]
+    },
+    {
+      "line": 207,
+      "conditions": [
+        "if (ENABLE_RUST_KERNEL AND \"${ARCH}\" STREQUAL \"x86_64\")",
+        "if (MCKERNEL_HOST_IRQ_ABI STREQUAL \"linux-6.12\")",
+        "if (ARCH STREQUAL \"x86_64\" AND NOT ENABLE_UBSAN)"
+      ]
+    },
+    {
+      "line": 209,
+      "conditions": [
+        "if (ENABLE_RUST_KERNEL AND \"${ARCH}\" STREQUAL \"x86_64\")",
+        "if (MCKERNEL_HOST_IRQ_ABI STREQUAL \"linux-6.12\")",
+        "if (ARCH STREQUAL \"x86_64\" AND NOT ENABLE_UBSAN)",
+        "if (ENABLE_PERF)"
+      ]
+    },
+    {
+      "line": 446,
+      "conditions": [
+        "if (RUST_KERNEL_ENABLED)",
+        "if (MCKERNEL_HOST_IRQ_ABI STREQUAL \"linux-6.12\")",
+        "if (ARCH STREQUAL \"x86_64\" AND NOT ENABLE_UBSAN)",
+        "if (ENABLE_PERF)"
+      ]
+    },
+    {
+      "line": 449,
+      "conditions": [
+        "if (RUST_KERNEL_ENABLED)",
+        "if (MCKERNEL_HOST_IRQ_ABI STREQUAL \"linux-6.12\")",
+        "if (ARCH STREQUAL \"x86_64\" AND NOT ENABLE_UBSAN)"
+      ]
+    }
+  ],
+  "CMake_review": "New F06 flags and three explicit source dependencies stay under equivalent Rust-runtime/Linux6.12/x86_64/noUBSAN branches. New perf flags require ENABLE_PERF on both sides, while exact Rust functions also require enable_perf. Existing MCKERNEL_RUST_SYSCALL_POLICY_HELPERS guards and lib/syscall_policy selection remain. No gate widening or new build profile. Existing idle C/Rust GLOBAL_STORAGE selector reused.",
+  "exact_scope": "Diffs contain only three retained perf selectors/fragment, three corrected sigreturn selectors and unchanged copied Rust modules/cfg/source dependencies, two idle data definitions/fragment and paired CMake flags. Existing accepted wakeup/export/copy/forward/timer deltas preserved.",
+  "preserved_failure": "Reviewer initial ad hoc CMake stack extractor recognized only `if (`; it emitted correct target stacks then failed later with IndexError on existing `if(` spelling. Bounded read-only correction matches optional whitespace and completed with empty final stack. No source or evidence mutation caused by either extraction. Root prepare first ambiguous insertion-anchor failure remains separately retained.",
+  "source_decision_limits": [
+    "Root remains sole canonical writer and must independently inspect retained postimages.",
+    "Adopt only these exact9 bytes while all6 existing preimages and3 absences match; any overlap requires renewed reconciliation.",
+    "No compiler, fixture, native, Docker, guest, root or cleanup command ran in this review.",
+    "No production/default image/native/full-file retirement acceptance; original REVIEW.json open predicates remain."
+  ]
+}

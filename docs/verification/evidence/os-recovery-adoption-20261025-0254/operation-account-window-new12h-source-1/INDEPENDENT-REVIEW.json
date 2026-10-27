@@ -1,0 +1,74 @@
+{
+  "schema": "mckernel.new12h-operation-account-window.independent-source-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/daemon_execution_review",
+  "implementation_ownership": false,
+  "decision": "PASS_SOURCE",
+  "at": "2026-10-27T17:42:46.537490+00:00",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/operation-account-window-new12h-source-1/SOURCE-READY.json",
+    "bytes": 3252,
+    "sha256": "b2e29778359454ebf60a1b2cb087de8748ae319a3fc5b9678ccf9ffbe93d78cb"
+  },
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/operation-account-window-new12h-source-1/actual_account_window.py",
+    "bytes": 4674,
+    "sha256": "8bf26bae56a019876c6a1463945733c85be5016d21ac5f6f955c29fd131a8cbe"
+  },
+  "reviewed_source_refs": {
+    "ACTUAL-WINDOW.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/operation-account-window-new12h-source-1/ACTUAL-WINDOW.json",
+      "bytes": 815,
+      "sha256": "91bdfb1de3955a684d0766ffa85a5e18deda8f5f49c6ce1d85fcdbf2df6e3d86"
+    },
+    "SOURCE-REFERENCES.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/operation-account-window-new12h-source-1/SOURCE-REFERENCES.json",
+      "bytes": 1526,
+      "sha256": "48f7d10c4e6651c016a80e6c8d6994698de0bfab5b1cc6cbf333429df2f5aca7"
+    },
+    "ACCOUNT-FIXTURE.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/operation-account-window-new12h-source-1/ACCOUNT-FIXTURE.json",
+      "bytes": 1488,
+      "sha256": "41ba71231a53d995d35aaaa6ddd0dd64aa96744fdcd0e2783163210663b411af"
+    },
+    "test_actual_account_window.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/operation-account-window-new12h-source-1/test_actual_account_window.py",
+      "bytes": 4659,
+      "sha256": "ce7cd29154b055f21b5b9aa949f7ea151e0c50132aa26e5337d0b50e2b0b6f50"
+    }
+  },
+  "checks": [
+    "All5 declared source references and3 upstream window/canonical/historical references match exact sizes and SHA256.",
+    "Canonical amount and available_balance function ASTs are selected without modification from pinned adf51872 os_goal_credits.py, with exact Decimal/InvalidOperation globals and no mutable ledger functions extracted. Nullable spendControlReached is accepted only as canonical available_balance accepts it; unknown/exhausted/nonfinite balance and actual spending control reject.",
+    "Same current thread01a17e6f, active goal/running phase, no stop reason/stop_now and no service/policy/auth/billing holds are required. credit_budget_error must be null and heartbeat age in [0,180)s.",
+    "Exact run7f4af94a83b14cc08f97401f5891d965 and57774.852125 ceiling are retained. Finite spent>=22812.3311 and spent<budget, remaining==budget-spent>0 are required. Resident prepaid settings prohibit automatic purchase/API-key billing and require account-wide balance guard.",
+    "Actual window bytes pin91bdfb1d and exact boot7bfc5687 bind fixed epoch1793165769/MONOTONIC947875.677502648/BOOTTIME963213.804550928 cutoffs. All three finite nonnegative observed clocks must be strictly before those cutoffs; recovery grants no extension.",
+    "guard() performs only local reads/clocks and pure checks. No process creation, signal, write, account RPC, release, nonce consumption, ledger mutation, guardian arming or cleanup path exists.",
+    "Historical04b5 guard/source/release/nonces remain untouched; source explicitly declares separate operation guard authority only."
+  ],
+  "validation": {
+    "command": "/usr/bin/python3 -B /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/operation-account-window-new12h-source-1/test_actual_account_window.py",
+    "passed": 9,
+    "reported_seconds": 0.004,
+    "independent_live_readonly_guard": "PASS",
+    "live_clocks_wall_monotonic_boottime": [
+      1793122945.334889,
+      905051.903845695,
+      920390.030896132
+    ],
+    "fresh_account_RPC": false,
+    "workload_invocations": 0,
+    "Docker_commands": 0,
+    "root_commands": 0,
+    "ledger_mutations": 0
+  },
+  "blocking_findings": [],
+  "reuse": "Accept exact guard8bf26bae and pinned actual-window source in Source31 operation successor explicit reviewed source closure. Calling guard returns only operation precondition clocks and grants no operation.",
+  "limits": [
+    "Local resident snapshot only: canonical resident polling remains the account observation/debit owner.",
+    "Parent alone owns actual outer guardian/monitor/phone. This helper never arms, replaces or clears them.",
+    "Fresh operation source/request/current ownership/resource/admission and exact independent execution release remain required."
+  ],
+  "runtime_authority": null,
+  "execution_release": false
+}

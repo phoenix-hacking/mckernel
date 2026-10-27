@@ -1,3 +1,62 @@
+## NEW12h source integration checkpoint — 2026-10-27T17:42:54.072028+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual window ends2026-10-28T05:36:09Z, BOOT963213.804550928/MONO947875.677502648,
+boot7bfc5687. Current thread01a17e6f; canonical account guardPASS, creditrun7f unchanged,
+spent>=22812.3311/57774.852125 ceiling; no ledger reset. Root fresh ledger25 and
+read-only admission at evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1.
+Parent exclusively owns outer model guardian/20min steering/phone restoration;
+private competing proposal superseded/unarmed. Operation-specific window/account
+successor is source-ready, independent review pending; no workload released.
+
+Root independently inspected and adopted9 selective HOST19 postimages: F03perf3,
+F06rt_sigreturn3 and F02idle offsets80B/values36B. Retained19commands allPASS/joined,
+elapsed1.360364s, no replay. Independent combined review25a975e5 accepts exactmanifest
+664ad921. Found/repaired F06 selectors shifting downstream tracking21lines; all129
+existing tracking expressions preserved. New pure regression8selector combinations
+and original-defect rejectionPASS. Receipt: evidence/os-recovery-adoption-20261025-0254/
+ROOT-HOST19-SELECTIVE-INTEGRATION-NEW12H-1/ROOT-CANONICAL-SOURCE-ADOPTION.json.
+Source-only delta6Rustcallbacks+2tables116B; no new compiler/default/native/filecredit.
+CURRENT109 imagee87f/C72+28=100/process70 stays accepted; never rerun its5commands.
+M12 practical35/35; M14supportedfiles2/6 and M15files1/8 remainOPEN.
+Original wholeFP4096/1024FAIL unchanged. Newguestapps0/newcandidatebuilds0 thiswindow.
+
+NEXT Source31: retained26cases/217files validated, zero reexecutions; only C-ring,
+Rust-ring,Rust-oversize remain. Narrow fresh owner/contract successor in preparation
+by daemon_final_suffix_repair, then freshnonce/currentaccount/nativeownership/newwindow
+admission and independent exactrelease. Source30 consumed1f97 cannot be reused.
+Mcexec F4D exact19/17canonicalwrites proposal source-ready, independentreview pending;
+actualfinite materialization/default/link/install/native remainsOPEN. F05accepted204B
+adapter literal5file export prepared; canonicalexport/newownerreview/CloneTIDobject/
+provider/image/native remainsOPEN. Source31newoperation, current110build preparation,
+mcexecfinitecopy and F05export remain disjoint; Root alone grants execution/integration.
+
+Current user instruction — NEW12h run activated 2026-10-27T17:36:09+00:00, ending 2026-10-28T05:36:09+00:00. Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Read [current twelve-hour window](RUN-WINDOW-12H-20261027.md). This replaces earlier expired18h time limits; preserve original credit ledger, all evidence and native controls. Accepted CURRENT109 build and HOST19 are complete; do not replay. Source31 has only three unfinished ring/oversize invocations and needs new admission.
+
+--- Earlier retained context ---
+
+## Source30 partial joined and current-free — 2026-10-27T07:53:13.588675+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ActualSource30 nonce1f970513ccad337e1822fbacb46260ee CONSUMED under fresh3 exactreview e4fce5bc/publishedrelease62c09303. Rustcompile0 and18suffixcases8–25 passed assertions; outerbatchFAIL before ring-C entry because retained helper executable and capture directory share ring-C path. Preserve actualFAIL/prefixes. Tool37854 exit1/owner1469066birth88483584 positivejoin4.138s,15clientsnormallyjoined, CIDec34 removed, three ownedrecords archived/released. Independent source30 current-free acceptance: evidence/os-recovery-adoption-20261025-0254/SOURCE30-INDEPENDENT-FAILED-BATCH-CURRENT-FREE.json; observation93a107e5. No workload/native/wholefilecredit.
+
+NEXT: existing daemon_final_suffix_repair owns source-only three remaining invocations (C-ring,Rust-ring,Rust-oversize), zero compilers/case0–25 replays; actualrelease needs freshnewnonce/currentledger25 and requiredreview. In parallel CPU6 Rootgrant actual19HOSTbatch F03perf3/F06rt_sigreturn3/F02idle2; mcexec deriveddefaultcohort staticexportdone/adoptionbindingsnext. F05adapter independentSOURCEPASS c3a1a4b5, export/adoption/actualCloneTIDproof stillOPEN. SameACTIVEgoal/ledger/fixed11:24:50Z. No capacity/control/resource expansion.
+
+## CURRENT109 accepted; capacity recovery continuation — 2026-10-27T07:48:30.591968+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Same goal ACTIVE, thread01a170fb-57c3-7ab3-862d-8005bef92a63, creditrun7f/original57774.852125 ledger, fixed cutoff2026-10-27T11:24:50Z. Manual invocation20261027T074559Z-7c50c0a0 follows typed serverOverloaded capacity failure; old controller retirement is not native cleanup. Current canonical account guard passed after relaunch. Original evidence and earlier checkpoint below are historical.
+
+CURRENT109 FIVE production commands already PASSED once; DO NOT repeat finalizer/adoption/build or nonceea92. Independently accepted imagee87f5155eb82c13ab268e8a35fb13bf1560ffd5a5f97c8fd2af78f0281fc3d78:39Rust function exports, selected C72+28=100,70process objects. Six additional C functions and one120B timer table moved to Rust. Record: evidence/os-recovery-adoption-20261025-0254/CURRENT109-INDEPENDENT-DEFAULT-ARTIFACT-ACCEPTANCE.json. Scripted OPEN ac52ec09 retained; independent current-tuple13folded arguments and nine timer consumer fields supplement it, six other words preserved data. Both caller and holder joined; stoppedCIDcb85 retained; current-free independent24640ae8. Native/whole-file delta0 for this cohort; M14files2/6(F01/F04), M15files1/8(F01), both OPEN. WholeFP4096/1024 FAIL untouched.
+
+NEXT unfinished daemonSource30: staticprepare already done, nonce1f970513ccad337e1822fbacb46260ee RESERVED UNUSED, request0c92/18inputtree. No ACTUAL-REVIEWED-RELEASE, OWNER-COMMAND or OWNER-WHOLE-JOIN exists; OWNER-CAPTURE empty at relaunch check. Old admissions1/2 and exact review072745 are EXPIRED, never grant entry. Reuse immutable SourcePASS/map30/publication and actual24ledger/currentfree24640; fresh live physical/account/nonce check, reviewer READY, then fresh3 observation/proposal→exactreview→publish→entry. Do not repeat mirror/staticprepare, old640/Source29 partial, passed mock/compiler prefixes. Source30 only one Rust compile plus unfinished8–25cases, realpids64/outputTMP guards/finalsingleton8s retained.
+
+Parallel private owners: daemon_execution_review exactrelease only; mcexec_default_prepare existingF4D default/install static integration; f05_adapter_review original204B adapter independent review; m14_ready_host_batch three ready HOST batches (no compiler before actual ordinary grant). Root sole canonical/Git/execution writer. No extra heavy job. Source-ready→entry remains bottleneck; no95% claim. SourceReady/queue start UNKNOWN where no event, record actual first compiler/join/disposition. Native/full-file credit requires own proof.
+
+--- Earlier retained checkpoint (superseded next-action text) ---
+
 ## SAFE TURN CHECKPOINT: CURRENT109 metadata FINALIZED — 2026-10-27T07:05:07.352789+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

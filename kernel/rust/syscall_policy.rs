@@ -35956,3 +35956,64 @@ mod f06_copy_from_user_candidate;
 #[cfg(f06_forward_context_candidate)]
 #[path = "arch_syscall_forward_context_bridge.rs"]
 mod f06_forward_context_candidate;
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Reuse existing same-translation-unit filename token; new tracking line storage
+// is Rust-owned. Tracker hashes strlen and compares strcmp, never pointer identity.
+#[cfg(all(enable_perf, f03_perf_alloc_bridges_selected_candidate))]
+const F03_PERF_ALLOC_ORIGIN_LINE_V1: CInt = 21404;
+#[cfg(all(enable_perf, f03_perf_alloc_bridges_selected_candidate))]
+const F03_PERF_FREE_ORIGIN_LINE_V1: CInt = 21410;
+/// Forward the original perf-event allocator callback to its retained Rust provider.
+/// # Safety
+/// Same allocator/flag context as C. Return transfers only fresh unpublished storage
+/// or null to the original caller. Preserve size_t-to-int truncation and tracking;
+/// the C filename token is borrowed static data and is never written here.
+#[cfg(all(enable_perf, f03_perf_alloc_bridges_selected_candidate))]
+#[no_mangle]
+pub unsafe extern "C" fn perf_event_alloc_kmalloc_bridge(size: SizeT, flags: CULong) -> *mut c_void {
+    unsafe { crate::mem_helpers::kmalloc_tracked(size as CInt, flags,
+        core::ptr::addr_of!(f03_mckfd_alloc_origin_file_v1).cast_mut(),
+        F03_PERF_ALLOC_ORIGIN_LINE_V1) }
+}
+
+/// Forward the original owned event release, including the exact pointer and origin.
+/// # Safety
+/// Caller retains the original tracked-free ownership/context and calls once.
+/// Null behavior stays with the existing provider; no reference, dereference,
+/// suppression, clearing or extra release is introduced by this callback.
+#[cfg(all(enable_perf, f03_perf_alloc_bridges_selected_candidate))]
+#[no_mangle]
+pub unsafe extern "C" fn perf_event_alloc_free_bridge(event: *mut c_void) {
+    unsafe { crate::mem_helpers::kfree_tracked(event,
+        core::ptr::addr_of!(f03_mckfd_alloc_origin_file_v1).cast_mut(),
+        F03_PERF_FREE_ORIGIN_LINE_V1) };
+}
+
+/// Forward the same borrowed event to the existing architecture Rust initializer.
+/// # Safety
+/// Event obeys the same live C event/provider ABI as the previous wrapper.
+/// The cast only forwards its address and creates no reference or field access.
+/// Existing x86 provider behavior/status is preserved, not replaced by a new stub;
+/// PMU hardware/configuration and complete event-layout/lifetime holds remain open.
+#[cfg(all(enable_perf, f03_perf_alloc_bridges_selected_candidate))]
+#[no_mangle]
+pub unsafe extern "C" fn perf_event_alloc_hw_init_bridge(event: *mut c_void) -> CInt {
+    unsafe { crate::x86_perfctr::hw_perf_event_init(event.cast()) }
+}
+
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(f06_rt_sigreturn_syscall_candidate)]
+#[path = "arch_rt_sigreturn_syscall_bridge.rs"]
+mod f06_rt_sigreturn_syscall_candidate;
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(f06_rt_sigreturn_set_signal_candidate)]
+#[path = "arch_rt_sigreturn_set_signal_bridge.rs"]
+mod f06_rt_sigreturn_set_signal_candidate;
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(f06_rt_sigreturn_check_signal_candidate)]
+#[path = "arch_rt_sigreturn_check_signal_bridge.rs"]
+mod f06_rt_sigreturn_check_signal_candidate;

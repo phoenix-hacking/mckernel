@@ -1,0 +1,46 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -21516,23 +21516,41 @@
+ #endif
+ 
+ #ifdef ENABLE_PERF
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_ALLOC_BRIDGES)
++extern void * perf_event_alloc_kmalloc_bridge(size_t size, unsigned long flags);
++#else
++#line 21401
+ static void *
+ perf_event_alloc_kmalloc_bridge(size_t size, unsigned long flags)
+ {
+ 	return kmalloc_tracked(size, flags, __FILE__, __LINE__);
+ }
+-
++#endif
++#line 21406
++
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_ALLOC_BRIDGES)
++extern void perf_event_alloc_free_bridge(void *event);
++#else
++#line 21407
+ static void
+ perf_event_alloc_free_bridge(void *event)
+ {
+ 	kfree_tracked(event, __FILE__, __LINE__);
+ }
+-
++#endif
++#line 21412
++
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_ALLOC_BRIDGES)
++extern int perf_event_alloc_hw_init_bridge(void *event);
++#else
++#line 21413
+ static int
+ perf_event_alloc_hw_init_bridge(void *event)
+ {
+ 	return hw_perf_event_init((struct mc_perf_event *)event);
+ }
++#endif
++#line 21418
+ 
+ static int mc_perf_event_alloc(struct mc_perf_event **out,
+ 			       struct perf_event_attr *attr)

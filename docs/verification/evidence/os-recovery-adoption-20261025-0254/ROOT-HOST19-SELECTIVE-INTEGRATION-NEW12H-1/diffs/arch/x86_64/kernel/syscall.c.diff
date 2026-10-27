@@ -1,0 +1,49 @@
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -385,23 +385,44 @@
+ #endif
+ #line 363
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_RT_SIGRETURN_SYSCALL)
++extern long
++arch_rt_sigreturn_syscall_bridge(int num, void *regs);
++#else
++#line 364
+ long
+ arch_rt_sigreturn_syscall_bridge(int num, void *regs)
+ {
+ 	return syscall(num, (ihk_mc_user_context_t *)regs);
+ }
+-
++#endif
++#line 369
++
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_RT_SIGRETURN_SET_SIGNAL)
++extern void
++arch_rt_sigreturn_set_signal_bridge(int sig, void *regs, const void *info);
++#else
++#line 370
+ void
+ arch_rt_sigreturn_set_signal_bridge(int sig, void *regs, const void *info)
+ {
+ 	set_signal(sig, regs, (struct siginfo *)info);
+ }
+-
++#endif
++#line 375
++
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_RT_SIGRETURN_CHECK_SIGNAL)
++extern void
++arch_rt_sigreturn_check_signal_bridge(int signum, void *regs, int num);
++#else
++#line 376
+ void
+ arch_rt_sigreturn_check_signal_bridge(int signum, void *regs, int num)
+ {
+ 	check_signal(signum, regs, num);
+ }
++#endif
++#line 381
+ 
+ void *
+ arch_rt_sigreturn_alloc_bridge(size_t size, unsigned long flags)

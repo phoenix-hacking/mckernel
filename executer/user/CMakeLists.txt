@@ -30,16 +30,91 @@ set_property(TARGET libmcexec PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 option(ENABLE_RUST_USER_TOOLS "Enable Rust helpers in McKernel user tools" ON)
 
+# Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+# F4D's existing Rust main/349-provider composition, with an independent user compiler.
+set(MCEXEC_USER_RUSTC "" CACHE FILEPATH "Pinned mcexec user Rust compiler; independent of compute RUSTC")
+option(MCEXEC_ALLOW_C_REFERENCE "Select retained mcexec C comparison explicitly" OFF)
 set(MCEXEC_SRCS mcexec.c)
-if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
-	find_program(RUSTC rustc)
-	if (RUSTC)
+if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64" AND NOT MCEXEC_ALLOW_C_REFERENCE)
+	# Preserve the compute RUSTC binding. Resolve the same qualified user compiler
+	# through its own cache entry, or the already-pinned IHK user compiler.
+	if (NOT MCEXEC_USER_RUSTC AND IHK_USER_RUSTC)
+		set(MCEXEC_USER_RUSTC "${IHK_USER_RUSTC}")
+	endif()
+	if (NOT MCEXEC_USER_RUSTC OR NOT IS_ABSOLUTE "${MCEXEC_USER_RUSTC}"
+		OR NOT EXISTS "${MCEXEC_USER_RUSTC}")
+		message(FATAL_ERROR "mcexec: bind the qualified absolute user Rust compiler; no silent C fallback")
+	endif()
+	if (ENABLE_TOFU OR ENABLE_UTI OR ENABLE_QLMPI OR ENABLE_KMSG_REDIRECT
+		OR DEBUG OR USE_SYSCALL_MOD_CALL OR CMD_DCFA OR CMD_DCFAMPI OR MCEXEC_BIND_MOUNT)
+		message(FATAL_ERROR "mcexec: qualify this optional profile before selecting the Rust default")
+	endif()
+	if (MCEXEC_USER_RUSTC)
 		set(MCEXEC_RUST_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rust/mcexec_helpers.o")
+		set(_mcexec_rust_cfg_flags)
+		set(_mcexec_rust_variant_defs)
+		get_directory_property(_mcexec_directory_defs COMPILE_DEFINITIONS)
+		string(TOUPPER "${CMAKE_BUILD_TYPE}" _mcexec_build_type_upper)
+		set(_mcexec_c_flag_view "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_${_mcexec_build_type_upper}}")
+		if ((_mcexec_directory_defs MATCHES "(^|;)DEBUG($|=)" OR
+			_mcexec_c_flag_view MATCHES "(^|[ \t])-DDEBUG($|[= \t])") AND NOT DEBUG)
+			message(FATAL_ERROR "mcexec: DEBUG requires matching -DDEBUG=ON CMake/Rust cfg binding and optional-provider qualification")
+		endif()
+		if ((_mcexec_directory_defs MATCHES "(^|;)USE_SYSCALL_MOD_CALL($|=)" OR
+			_mcexec_c_flag_view MATCHES "(^|[ \t])-DUSE_SYSCALL_MOD_CALL($|[= \t])") AND NOT USE_SYSCALL_MOD_CALL)
+			message(FATAL_ERROR "mcexec: USE_SYSCALL_MOD_CALL requires matching -DUSE_SYSCALL_MOD_CALL=ON CMake/Rust cfg binding and optional-provider qualification")
+		endif()
+		if ((_mcexec_directory_defs MATCHES "(^|;)CMD_DCFA($|=)" OR
+			_mcexec_c_flag_view MATCHES "(^|[ \t])-DCMD_DCFA($|[= \t])") AND NOT CMD_DCFA)
+			message(FATAL_ERROR "mcexec: CMD_DCFA requires matching -DCMD_DCFA=ON CMake/Rust cfg binding and optional-provider qualification")
+		endif()
+		if ((_mcexec_directory_defs MATCHES "(^|;)CMD_DCFAMPI($|=)" OR
+			_mcexec_c_flag_view MATCHES "(^|[ \t])-DCMD_DCFAMPI($|[= \t])") AND NOT CMD_DCFAMPI)
+			message(FATAL_ERROR "mcexec: CMD_DCFAMPI requires matching -DCMD_DCFAMPI=ON CMake/Rust cfg binding and optional-provider qualification")
+		endif()
+		if ((_mcexec_directory_defs MATCHES "(^|;)MCEXEC_BIND_MOUNT($|=)" OR
+			_mcexec_c_flag_view MATCHES "(^|[ \t])-DMCEXEC_BIND_MOUNT($|[= \t])") AND NOT MCEXEC_BIND_MOUNT)
+			message(FATAL_ERROR "mcexec: MCEXEC_BIND_MOUNT requires matching -DMCEXEC_BIND_MOUNT=ON CMake/Rust cfg binding and optional-provider qualification")
+		endif()
+		if (ENABLE_TOFU)
+			list(APPEND _mcexec_rust_cfg_flags --cfg mcexec_enable_tofu)
+		endif()
+		if (ENABLE_UTI)
+			list(APPEND _mcexec_rust_cfg_flags --cfg mcexec_enable_uti)
+		endif()
+		if (ENABLE_QLMPI)
+			list(APPEND _mcexec_rust_cfg_flags --cfg mcexec_enable_qlmpi)
+		endif()
+		if (DEBUG)
+			list(APPEND _mcexec_rust_cfg_flags --cfg mcexec_debug)
+			list(APPEND _mcexec_rust_variant_defs DEBUG MCEXEC_RUST_DEBUG_CFG_MATCHED)
+		endif()
+		if (USE_SYSCALL_MOD_CALL)
+			list(APPEND _mcexec_rust_cfg_flags --cfg mcexec_syscall_mod_call)
+			list(APPEND _mcexec_rust_variant_defs USE_SYSCALL_MOD_CALL MCEXEC_RUST_USE_SYSCALL_MOD_CALL_CFG_MATCHED)
+		endif()
+		if (CMD_DCFA)
+			list(APPEND _mcexec_rust_cfg_flags --cfg mcexec_cmd_dcfa)
+			list(APPEND _mcexec_rust_variant_defs CMD_DCFA MCEXEC_RUST_CMD_DCFA_CFG_MATCHED)
+		endif()
+		if (CMD_DCFAMPI)
+			list(APPEND _mcexec_rust_cfg_flags --cfg mcexec_cmd_dcfampi)
+			list(APPEND _mcexec_rust_variant_defs CMD_DCFAMPI MCEXEC_RUST_CMD_DCFAMPI_CFG_MATCHED)
+		endif()
+		if (MCEXEC_BIND_MOUNT)
+			list(APPEND _mcexec_rust_cfg_flags --cfg mcexec_bind_mount)
+			list(APPEND _mcexec_rust_variant_defs MCEXEC_BIND_MOUNT MCEXEC_RUST_MCEXEC_BIND_MOUNT_CFG_MATCHED)
+		endif()
+		file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/rust")
+		configure_file("${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_buildid.rs.in"
+			"${CMAKE_CURRENT_BINARY_DIR}/rust/mcexec_buildid_generated.rs" @ONLY)
 		add_custom_command(
 			OUTPUT "${MCEXEC_RUST_OBJ}"
 			COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
-			COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS= ${RUSTC}
+			COMMAND ${CMAKE_COMMAND} -E env MAKEFLAGS=
+				"MCEXEC_BUILDID_RS=${CMAKE_CURRENT_BINARY_DIR}/rust/mcexec_buildid_generated.rs" ${MCEXEC_USER_RUSTC}
 				--crate-name mcexec_helpers
+				${_mcexec_rust_cfg_flags}
 				--crate-type lib
 				--edition=2021
 				-C panic=abort
@@ -49,20 +124,40 @@ if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
 				--emit=obj=${MCEXEC_RUST_OBJ}
 				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_helpers.rs"
 			DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_helpers.rs"
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_runtime_data.rs"
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_overlay_fd.rs"
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_worker_lifecycle.rs"
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_clone_child.rs"
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_load_descriptor.rs"
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_signal_wait_exit.rs"
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_platform_syscalls.rs"
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_cpu_topology.rs"
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_diagnostics.rs"
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_launch_state.rs"
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_residual_functional.rs"
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_entry_metadata_options.rs"
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_buildid.rs.in"
+				"${CMAKE_CURRENT_BINARY_DIR}/rust/mcexec_buildid_generated.rs"
+				"${MCEXEC_USER_RUSTC}"
 			COMMENT "Building Rust mcexec helpers"
 			VERBATIM
 		)
 		add_custom_target(mcexec_rust_helpers DEPENDS "${MCEXEC_RUST_OBJ}")
 		set_source_files_properties("${MCEXEC_RUST_OBJ}"
 			PROPERTIES EXTERNAL_OBJECT TRUE GENERATED TRUE)
+		list(REMOVE_ITEM MCEXEC_SRCS mcexec.c)
 		list(APPEND MCEXEC_SRCS "${MCEXEC_RUST_OBJ}")
 	endif()
 endif()
 
+if (NOT TARGET mcexec_rust_helpers AND NOT MCEXEC_ALLOW_C_REFERENCE)
+	message(FATAL_ERROR "mcexec: supported default requires Rust; retained C must be explicitly selected")
+endif()
 add_executable(mcexec ${MCEXEC_SRCS})
 if (TARGET mcexec_rust_helpers)
 	add_dependencies(mcexec mcexec_rust_helpers)
-	target_compile_definitions(mcexec PRIVATE MCEXEC_RUST_HELPERS)
+	set_property(TARGET mcexec PROPERTY LINKER_LANGUAGE C)
+	target_compile_definitions(mcexec PRIVATE MCEXEC_RUST_HELPERS ${_mcexec_rust_variant_defs})
 endif()
 target_link_libraries(mcexec
 	libmcexec ${LIBRT} ${LIBNUMA} $<$<BOOL:ENABLE_QLMPI>:${LIBMPI}> pthread)
@@ -547,7 +642,10 @@ else()
   message(FATAL_ERROR "Supported mcps profile requires Rust/x86_64; shell reference selection must be explicit")
 endif()
 
-install(TARGETS mcexec eclair mcinspect
+# Preserve full install paths; allow the qualified launcher to be staged alone.
+install(TARGETS mcexec
+	RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT mcexec_runtime)
+install(TARGETS eclair mcinspect
 	DESTINATION "${CMAKE_INSTALL_BINDIR}")
 install(PROGRAMS
 	"${CMAKE_CURRENT_BINARY_DIR}/vmcore2mckdump"

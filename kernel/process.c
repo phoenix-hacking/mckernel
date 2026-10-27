@@ -5616,6 +5616,17 @@ static void do_migrate(void);
 #endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+extern const struct sched_idle_offsets process_idle_offsets;
+extern const struct sched_idle_values process_idle_values;
+_Static_assert(CPU_STATUS_RUNNING == 2 && CPU_STATUS_IDLE == 1 && CPU_STATUS_RESERVED == 3,
+    "Rust idle CPU status constants match the original pinned C producer");
+_Static_assert(PS_RUNNING == 1 && PS_STOPPED == 0x20 && PS_INTERRUPTIBLE == 2,
+    "Rust idle thread status constants match the original pinned C producer");
+_Static_assert(CPU_FLAG_NEED_MIGRATE == 2U && IHK_OS_MONITOR_IDLE == 1 && IHK_OS_MONITOR_KERNEL == 3,
+    "Rust idle flag and monitor constants match the original pinned C producer");
+#else
+#line 3997
 const struct sched_idle_offsets process_idle_offsets = {
 	.cpu_runq_lock_offset = offsetof(struct cpu_local_var, runq_lock),
 	.cpu_runq_irqstate_offset = offsetof(struct cpu_local_var, runq_irqstate),
@@ -5635,6 +5646,8 @@ const struct sched_idle_values process_idle_values = {
 	.need_migrate = CPU_FLAG_NEED_MIGRATE,
 	.monitor_idle = IHK_OS_MONITOR_IDLE, .monitor_kernel = IHK_OS_MONITOR_KERNEL,
 };
+#endif
+#line 4016
 #ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
 extern const struct sched_idle_callbacks process_idle_callbacks;
 #else

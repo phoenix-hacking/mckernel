@@ -1,0 +1,69 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "RECOMMENDATION_ONLY_NOT_CANONICAL",
+  "corrections": [
+    {
+      "symbol": "arch_rt_sigreturn_syscall_bridge",
+      "source_binding": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-rt-sigreturn-three-source-1/syscall/SOURCE-BINDINGS.json",
+        "bytes": 2799,
+        "sha256": "2b2546e2f854137c5197c02e997d03f977772b328fff766c417f726d96101d1e"
+      },
+      "canonical_target": "arch/x86_64/kernel/syscall.c",
+      "C_selector": "MCKERNEL_RUST_F06_RT_SIGRETURN_SYSCALL",
+      "Rust_selector": "f06_rt_sigreturn_syscall_candidate",
+      "fallback_first_blank_logical_line": 363,
+      "fallback_type_declaration_logical_line": 364,
+      "following_original_blank_logical_line": 369,
+      "replace_exact_original_C": "\nlong\narch_rt_sigreturn_syscall_bridge(int num, void *regs)\n{\n\treturn syscall(num, (ihk_mc_user_context_t *)regs);\n}\n",
+      "recommended_corrected_wrapper": "\n#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_RT_SIGRETURN_SYSCALL)\nextern long\narch_rt_sigreturn_syscall_bridge(int num, void *regs);\n#else\n#line 363\n\nlong\narch_rt_sigreturn_syscall_bridge(int num, void *regs)\n{\n\treturn syscall(num, (ihk_mc_user_context_t *)regs);\n}\n#endif\n#line 369\n",
+      "Rust_module": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-rt-sigreturn-three-source-1/syscall/arch_rt_sigreturn_syscall_bridge.rs",
+        "bytes": 748,
+        "sha256": "c2b972091d99383f52baabf74a17ce15a55d7e51b3e74a88d41e6d7330f5597d"
+      }
+    },
+    {
+      "symbol": "arch_rt_sigreturn_set_signal_bridge",
+      "source_binding": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-rt-sigreturn-three-source-1/set-signal/SOURCE-BINDINGS.json",
+        "bytes": 2888,
+        "sha256": "8c671a754601032e40b546d0e537673ebb206b2a0c18d02db6d8ce1b7199be33"
+      },
+      "canonical_target": "arch/x86_64/kernel/syscall.c",
+      "C_selector": "MCKERNEL_RUST_F06_RT_SIGRETURN_SET_SIGNAL",
+      "Rust_selector": "f06_rt_sigreturn_set_signal_candidate",
+      "fallback_first_blank_logical_line": 369,
+      "fallback_type_declaration_logical_line": 370,
+      "following_original_blank_logical_line": 375,
+      "replace_exact_original_C": "\nvoid\narch_rt_sigreturn_set_signal_bridge(int sig, void *regs, const void *info)\n{\n\tset_signal(sig, regs, (struct siginfo *)info);\n}\n",
+      "recommended_corrected_wrapper": "\n#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_RT_SIGRETURN_SET_SIGNAL)\nextern void\narch_rt_sigreturn_set_signal_bridge(int sig, void *regs, const void *info);\n#else\n#line 369\n\nvoid\narch_rt_sigreturn_set_signal_bridge(int sig, void *regs, const void *info)\n{\n\tset_signal(sig, regs, (struct siginfo *)info);\n}\n#endif\n#line 375\n",
+      "Rust_module": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-rt-sigreturn-three-source-1/set-signal/arch_rt_sigreturn_set_signal_bridge.rs",
+        "bytes": 837,
+        "sha256": "9c1059f9c814739336d1b68ff18f14768b73d6cc477f13be531b0ccb577639c8"
+      }
+    },
+    {
+      "symbol": "arch_rt_sigreturn_check_signal_bridge",
+      "source_binding": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-rt-sigreturn-three-source-1/check-signal/SOURCE-BINDINGS.json",
+        "bytes": 2866,
+        "sha256": "1c0fa6d50a0c25c7dca93d0dd290fc87d151dbc87c093472c7e515f3d55b7572"
+      },
+      "canonical_target": "arch/x86_64/kernel/syscall.c",
+      "C_selector": "MCKERNEL_RUST_F06_RT_SIGRETURN_CHECK_SIGNAL",
+      "Rust_selector": "f06_rt_sigreturn_check_signal_candidate",
+      "fallback_first_blank_logical_line": 375,
+      "fallback_type_declaration_logical_line": 376,
+      "following_original_blank_logical_line": 381,
+      "replace_exact_original_C": "\nvoid\narch_rt_sigreturn_check_signal_bridge(int signum, void *regs, int num)\n{\n\tcheck_signal(signum, regs, num);\n}\n",
+      "recommended_corrected_wrapper": "\n#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_RT_SIGRETURN_CHECK_SIGNAL)\nextern void\narch_rt_sigreturn_check_signal_bridge(int signum, void *regs, int num);\n#else\n#line 375\n\nvoid\narch_rt_sigreturn_check_signal_bridge(int signum, void *regs, int num)\n{\n\tcheck_signal(signum, regs, num);\n}\n#endif\n#line 381\n",
+      "Rust_module": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-rt-sigreturn-three-source-1/check-signal/arch_rt_sigreturn_check_signal_bridge.rs",
+        "bytes": 768,
+        "sha256": "964cdb4cc60d83e6d0762901d4e70e27d0e533b2deb8b3f88d7a2557b56099b9"
+      }
+    }
+  ]
+}
