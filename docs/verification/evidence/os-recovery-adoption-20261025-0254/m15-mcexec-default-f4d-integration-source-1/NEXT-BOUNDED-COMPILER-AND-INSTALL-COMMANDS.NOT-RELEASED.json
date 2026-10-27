@@ -1,0 +1,132 @@
+{
+  "actual_first_compiler": null,
+  "actual_installed_launcher": null,
+  "actual_loader_check": null,
+  "actual_preserved_compute_RUSTC": null,
+  "actual_runtime_release": null,
+  "actual_source_and_dependency_release": null,
+  "actual_source_materialization": null,
+  "commands": [
+    {
+      "actual": null,
+      "argv": [
+        "/usr/bin/cmake",
+        "-C",
+        "/proposal/qualified-inputs/m15_selected_sdk_cache.cmake",
+        "-S",
+        "/src",
+        "-B",
+        "/work/output/m15-mcexec-default-f4d-1/build",
+        "-DENABLE_RUST_USER_TOOLS=ON",
+        "-DMCKERNEL_RUNTIME_TOOL_RUSTC:FILEPATH=/nightly/bin/rustc",
+        "-DIHKLIB_USE_QUALIFIED_EXTERNAL_ARCHIVE=OFF",
+        "-DENABLE_QLMPI=OFF",
+        "-DENABLE_TOFU=OFF",
+        "-DENABLE_UTI=OFF",
+        "-DIHK_USER_RUSTC:FILEPATH=/nightly/bin/rustc",
+        "-DMCEXEC_USER_RUSTC:FILEPATH=/nightly/bin/rustc",
+        "-DMCEXEC_ALLOW_C_REFERENCE=OFF",
+        "-DENABLE_KMSG_REDIRECT=OFF",
+        "--graphviz=/work/output/m15-mcexec-default-f4d-1/build/mcexec-default.dot"
+      ],
+      "label": "configure-current-default-executor-graph",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Same selected SDK cache, independent user compiler, current graph only; preserve compute RUSTC."
+    },
+    {
+      "actual": null,
+      "argv": [
+        "/usr/bin/cmake",
+        "--build",
+        "/work/output/m15-mcexec-default-f4d-1/build",
+        "--target",
+        "mcexec",
+        "--",
+        "-j1",
+        "VERBOSE=1"
+      ],
+      "label": "build-selected-current-mcexec-only",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Current Rust main plus reviewed-ASM link only; no ihklib/daemon/compute target build."
+    },
+    {
+      "actual": null,
+      "argv": [
+        "/usr/bin/nm",
+        "-g",
+        "-S",
+        "/work/output/m15-mcexec-default-f4d-1/build/executer/user/rust/mcexec_helpers.o"
+      ],
+      "label": "observe-current-object-providers",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Match retained provider/import manifest at its actual scope; no349behavior/parity inference."
+    },
+    {
+      "actual": null,
+      "argv": [
+        "/usr/bin/ar",
+        "t",
+        "/work/output/m15-mcexec-default-f4d-1/build/executer/user/libmcexec.a"
+      ],
+      "label": "observe-ASM-only-archive",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Require only reviewed archdep.S object and no projectC producer."
+    },
+    {
+      "actual": null,
+      "argv": [
+        "/usr/bin/readelf",
+        "-hSWsdrW",
+        "/work/output/m15-mcexec-default-f4d-1/build/executer/user/mcexec"
+      ],
+      "label": "observe-current-ELF-and-dynamic-imports",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Bind actual PIE/main/import/DT_NEEDED/BUILDID and allocated objects to current source/default linker."
+    },
+    {
+      "actual": null,
+      "argv": [
+        "/usr/bin/cmake",
+        "-E",
+        "env",
+        "DESTDIR=/work/output/m15-mcexec-default-f4d-1/stage",
+        "/usr/bin/cmake",
+        "-DCMAKE_INSTALL_COMPONENT=mcexec_runtime",
+        "-DCMAKE_INSTALL_DO_STRIP=OFF",
+        "-P",
+        "/work/output/m15-mcexec-default-f4d-1/build/executer/user/cmake_install.cmake"
+      ],
+      "label": "install-current-mcexec-component",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Stage only current selected launcher using actual generated CMake install rule."
+    }
+  ],
+  "prerequisites": [
+    "Fresh finite current-source materialization with14 unchanged F4D Rust inputs, this executor CMake and frozena21e IHK user/daemon source; not old7014files called current without rebase.",
+    "Retained selected Linux SDK /out and readonly nightly toolchain/image/header/BFD/numa tuple at exact acceptance scope.",
+    "Record compute RUSTC before/after configure: command intentionally does not set it.",
+    "Root current source/ABI/dependency review and actual slot/headroom/physical admission; do not delay liveFP or kernel5 cohort.",
+    "Do not replay successful F4D00..08 or an old grant/nonce. Retain any matching object/archive only after source/flags/ABI/BUILDID/current graph proof; otherwise current selected build is the genuine changed operation.",
+    "GeneratedBUILDID must match the selected native module handshake;3114d9e historical is not an assumed current value.",
+    "No ihklib/daemon/sourceproducer prefix is part of mcexec target closure."
+  ],
+  "profile": {
+    "cpus": "2-5",
+    "gid": 1000,
+    "jobs": 1,
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "network": "none",
+    "pids": 512,
+    "uid": 1000
+  },
+  "qualification_only_inputs": {
+    "m15_selected_platform_ABI.c": {
+      "bytes": 2792,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/source-materialization-1/materialized-source/executer/user/rust/m15_selected_platform_ABI.c",
+      "sha256": "0a87e1b6c7d3cc31802763de3a22973c6643ccf6e748a486e739e99c47811b0e"
+    },
+    "m15_selected_sdk_cache.cmake": {
+      "bytes": 12667,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/source-materialization-1/materialized-source/executer/user/rust/m15_selected_sdk_cache.cmake",
+      "sha256": "a75f7188e5b37caba67e0d0c575151e1c9135b2b4b7c2e85d2db7a785edf37cb"
+    }
+  },
+  "qualification_only_inputs_not_runtime_C": true,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_NOT_A_GRANT"
+}

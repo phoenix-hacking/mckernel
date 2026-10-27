@@ -1,3 +1,57 @@
+## Safe coordinator checkpoint — 2026-10-27T05:45:27.592657+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Goal ACTIVE. No live Rootheavy/guest/holder/query/admissionclock. Currentturn ends
+afterverifiedcheckpoint; normal samegoalcontinuation mayresume nextunfinished task,
+notreplayoperations. Fixed11:24:50Z/samecreditledger/account/realholds unchanged.
+
+Actual26ebcombineddefault artifact independently accepted004291b3:35Rustexports,
+C75/31=106 (prior121),13readonlydataRustowners/processCmetadata71. Delta+1default
+cohort; native/fileclosure deltas0. WholeM14/M15OPEN, onecompletefileeach; matching
+26ebnative/Source38GNU_RETAIN/MM/PMU/lifetimeholds remain.5commands22.257436s/
+CPU22.254142/peak648704KiB; compilerfinish→decision375.695261s, tooljoinOBSERVATION
+→decision354.625827s; exactjoin/sourceReady timestampsunknown.180targetnotmet or
+claimed. Warning/import failures8bf9/07002c25 andscriptedOPEN preserved; exact
+independent13argument supplement closes only26ebtuple. Pushed/fetchedb3522fe00
+contains actualartifact+Source28publication; finalcheckpointcommit follows.
+
+DAEMONd413/tool45932 CONSUMED, positiveparentjoin1; caller1426650/start87716472
+joined/groupabsent/closedstreams in3.087001s. mock-buildPASS, Rust-daemon-buildFAIL
+EROFS temporarydir nextROsource, zeroobservercases. Ownerretiredtrue/recordsreleased/
+CID864ccac9removed/allclientsreaped; independentcurrentfree98887bde joins9dfbb073
+fresh322errorfreecensus/current16IDsabsent/probesclosed/UUID/floors. OldN5observer
+labels arehistorical; actualcurrentdecision uses explicitfailedop/postflight refs.
+Failedoperationfinish→retirementdecisionreceipt152.885553s isnotfunctionalvelocity.
+Futureledger mustkeep22consumed (Source28prior21 plusd413); oldSledger21historical.
+No morecleanup needed; no repeateddaemonentry/nonce/mirror/staticprepare.
+
+NEXT executableowners: partial_runtime_finish prepares one exactcompiler-output/
+cwd correction in freshprivate successor, retainingpassedmock.o/old8cases/Cbinaries/
+allRustassertions/8s/pids64. native_retirement_repair prepares reviewedadapterdata
+composition forFP254case atqualified26eb whilefrozenf42fallback6a8fa40f remains
+unchanged. FreshFPsuccessorUNSTAGED/no nonce; nextclock onlyafterallstaticbinds,
+actualcurrentfree98887bde andoneexactrelease. No kernel/module/payload rebuild or
+neworacle. FP86 anddaemon d413 failures remain. Rootsolecanonical/Git/grant writer.
+McexecF4Dprivateproposal9a94 SOURCEPASS; canonical Cstillselected, noexecutioncredit.
+
+Schedulingchange: carry literalcompiler adoptedoutput/cwd/ROmount API preflight
+into narrow suffix beforeclock; preservepassedprefixes andrunfirstentry-ready
+FP/daemonoperation, withoutserializing it behindallfiles ormetric/reportpolish.
+Privateowners continueusefulsourcework; no model/service/controlrestart orholdclear.
+
+## Actual daemon suffix live — 2026-10-27T05:42:32.211900+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Rootactualtool45932 LIVE, daemonSource28nonce d4134805d53969c694dd03c112991116
+CONSUMED atentry. IndependentexecutionPASS a1f30d1a payload, actualrelease6d3e80c3,
+resource658f684f/admission0f89869a/fetchedSource28b3522fe00. Oneheavyjob only.
+Do notlaunchFP/anotherbuild orreplaythisentry. Root retains actualparenttoolhandle
+and mustjoin/validate/independentlyacceptnormalretirement+freshcurrentphysical.
+Exactstaticbatch6c897123/d5551c9e helper, old0–7prefix reused; twoactualneeded
+compilejobs andsuffix8–25, original8second/singleton/TIDbirth guards, realpids64
+proofbeforecompiler/afterjoins. No resultclaimed yet. Accepted26ebdefault artifact
+004291b3 unchanged; matchingnative/file flagsOPEN. Fixed11:24:50Z/ledger unchanged.
+
 ## Accepted coherent five-stage artifact; daemon static prepared — 2026-10-27T05:38:58Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
