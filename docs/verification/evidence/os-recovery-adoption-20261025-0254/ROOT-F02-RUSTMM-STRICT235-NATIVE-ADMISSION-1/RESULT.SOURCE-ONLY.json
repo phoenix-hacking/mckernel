@@ -1,0 +1,94 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "READY_STATIC_ONLY_REAL_API_PREFLIGHT_EXIT0_NO_STAGE_OR_NATIVE",
+  "runtime_authority": null,
+  "real_preflight_command": [
+    "taskset",
+    "-c",
+    "6",
+    "prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--core=0",
+    "--",
+    "timeout",
+    "60s",
+    "python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/prepare_strict235_bindings.py",
+    "--check-static"
+  ],
+  "real_preflight_returncode": 0,
+  "helper_ASTs": 4,
+  "tests_added": 0,
+  "actual_guest_stage_compiler_grant_actions": 0,
+  "nonce": null,
+  "live_clock": null,
+  "manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-rust-mm-strict235-preparation-1/offline-preparation-1/manifest.HOST-STATIC.json",
+    "bytes": 8669,
+    "sha256": "bc1e08b4356fd0b02ef62c392ec2b7d3688029e1955c66a2e01126611c61fef5"
+  },
+  "oracle_bytes": 235,
+  "oracle_exit": 0,
+  "static_pending_fields": [
+    "Root chosen short scratch stage and actual path-guard receipt",
+    "Root fresh 32-hex nonce",
+    "Actual static source publication",
+    "Actual fresh resource/physical snapshot and clock",
+    "Independent exact execution review and one-use Root grant"
+  ],
+  "source_only_refs": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/STATIC-NATIVE-BINDINGS.TEMPLATE.NOT-RELEASED.json",
+      "bytes": 8895,
+      "sha256": "9a700978bef7b33e5541e3649cc854cb2d81cb43b34afc2ef9be495bf23634f9"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/ROOT-GRANT.PRE-NONCE-TEMPLATE.NOT-RELEASED.json",
+      "bytes": 1125,
+      "sha256": "06a86f22c0e4b7beead4d69f2fe210613039753a0cc1eaf9a20aab353861718f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/stage_strict235_manifest.py",
+      "bytes": 2950,
+      "sha256": "28eb559090aef458968962e81b63c743b5939f5aa0d59db4e63b3079b7465cd3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/prepare_strict235_bindings.py",
+      "bytes": 6760,
+      "sha256": "9757e84412ce6ae4ae4df1052bd14035eb8a623c447d19b4372200d74bb286a3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/capture_fresh_strict235_resource.py",
+      "bytes": 4774,
+      "sha256": "c6d4e96965e325060fcdbfd3f57f290ed49e8072628643bb1ca4a14b9c0122f8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/run_native_strict235_capture.py",
+      "bytes": 2822,
+      "sha256": "5f670b628de96dd78c50d4320ecd771cd84acc5363bdae582b865af6cbb23594"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/STRICT235-CAPABILITY-AND-ACK-BINDINGS.SOURCE-ONLY.json",
+      "bytes": 5872,
+      "sha256": "798c42c72741bf4f9cd92fdf83ba08f80c054d83d0be7be92fd2c0fa9d4c4711"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/READY.STATIC.NOT-RELEASED.json",
+      "bytes": 5098,
+      "sha256": "eddd61fe7dfe92362e64df546bf924d2ed8b7517044d91152b2db9d53a18ab64"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/ROOT-COMMANDS.SOURCE-ONLY.md",
+      "bytes": 3166,
+      "sha256": "bb8fd2c754468d1799b2ad9115814aa95b72e2099a5b1d561becbfcf1fd6451c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/STATIC-SOURCE-PARENTS.json",
+      "bytes": 2979,
+      "sha256": "8a9fc4a4cbca09c383ba7de4780527d40e84e694b598dae21092ee39df9d4f97"
+    }
+  ]
+}

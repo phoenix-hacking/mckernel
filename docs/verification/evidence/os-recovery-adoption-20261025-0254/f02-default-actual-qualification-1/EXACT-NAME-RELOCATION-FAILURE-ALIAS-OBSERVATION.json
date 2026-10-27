@@ -1,0 +1,94 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "READONLY_OBSERVATION_NOT_GATE_CORRECTION",
+  "rows": {
+    "process_spin_lock_bridge": {
+      "original_target": {
+        "index": 7979,
+        "name": "process_spin_lock_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 2338,
+        "value": 0,
+        "size": 171
+      },
+      "relocation_target": {
+        "index": 4060,
+        "name": "mem_kmalloc_remote_lock_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 2338,
+        "value": 0,
+        "size": 171
+      },
+      "same_object_address": true,
+      "same_object_code": true,
+      "final_original": {
+        "index": 4725,
+        "name": "process_spin_lock_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684878384,
+        "size": 171
+      },
+      "final_relocation": {
+        "index": 876,
+        "name": "mem_kmalloc_remote_lock_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684878384,
+        "size": 171
+      },
+      "same_final_address": true,
+      "same_final_code": true
+    },
+    "process_spin_unlock_bridge": {
+      "original_target": {
+        "index": 7857,
+        "name": "process_spin_unlock_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 2340,
+        "value": 0,
+        "size": 132
+      },
+      "relocation_target": {
+        "index": 4059,
+        "name": "mem_kmalloc_remote_unlock_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 2340,
+        "value": 0,
+        "size": 132
+      },
+      "same_object_address": true,
+      "same_object_code": true,
+      "final_original": {
+        "index": 4616,
+        "name": "process_spin_unlock_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684878560,
+        "size": 132
+      },
+      "final_relocation": {
+        "index": 1132,
+        "name": "mem_kmalloc_remote_unlock_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684878560,
+        "size": 132
+      },
+      "same_final_address": true,
+      "same_final_code": true
+    }
+  }
+}

@@ -1,0 +1,19 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT290-NATIVE-FILES-ADMISSION-1/run_native_files_capture.py
++++ run_native_strict235_capture.py
+@@ -3,8 +3,8 @@
+ import json,hashlib,subprocess,os,time,resource,datetime,decimal,importlib.util
+ A=Path(__file__).resolve().parent
+ assert os.getuid()==os.geteuid()==os.getgid()==os.getegid()==1000
+-G=json.loads((A/'ROOT-ACTUAL-ONE-NATIVE-FILES-GRANT.json').read_bytes())
+-assert G['decision']=='GRANTED_ONE_EXACT_NATIVE_FILES' and G['maximum_invocations']==1
++G=json.loads((A/'ROOT-ACTUAL-ONE-NATIVE-STRICT235-GRANT.json').read_bytes())
++assert G['decision']=='GRANTED_ONE_EXACT_NATIVE_STRICT235' and G['maximum_invocations']==1
+ for ref in [G['execution_review'],G['fresh_resource_physical'],G['pending_execution_packet']]:
+  raw=Path(ref['path']).read_bytes();assert len(raw)==ref['bytes'] and hashlib.sha256(raw).hexdigest()==ref['sha256']
+ review=json.loads(Path(G['execution_review']['path']).read_bytes());packet_raw=Path(G['pending_execution_packet']['path']).read_bytes()
+@@ -25,4 +25,4 @@
+  child=subprocess.Popen(G['exact_argv'],stdout=out,stderr=err);rc=child.wait()
+ after=resource.getrusage(resource.RUSAGE_CHILDREN)
+ (C/'JOINED.json').write_text(json.dumps(dict(joined=True,returncode=rc,caller_pid=os.getpid(),caller_starttime=stat[19],started_at=start,finished_at=time.time(),cpu_seconds=(after.ru_utime+after.ru_stime-before.ru_utime-before.ru_stime),peak_rss_kib=after.ru_maxrss),indent=2)+'\n')
+-print('Actual files native caller joined',rc,flush=True)
++print('Actual strict235 native caller joined',rc,flush=True)

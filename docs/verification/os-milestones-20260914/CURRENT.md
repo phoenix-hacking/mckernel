@@ -1,3 +1,66 @@
+## F02 default cohort accepted; no live admission clock — 2026-10-27T01:40Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Goal ACTIVE. Parent0137requests this coordinator turn end at a safe idle boundary
+BEFOREanotherfreshclock; complying without goalpause/restart/newthread/window/budget.
+Root has no live query/holder/heavy owner or live TTL. PrivateSource/HOST grants
+continue. ActualF02nonce d52e2aa8388a645c39da3dc6e2a3e6e6 CONSUMED ONCE; holder1334460/
+start86071451/tool10555 andrunner1334975/start86075316 joined0/absent; permanent27:4
+free/twoownprobesclosed. CID1464cc34 retainedexited0/Pid0/noOOM, NOT an activejob.
+Do not replay itsgrant/READY/compilerprefix or inventcontainerremovalrequirement.
+
+PASS_ACTUAL_F02_DEFAULT_SELECTED_ARTIFACT_QUALIFICATION independentlyaccepted:
+newRust18060952B f9bb089630647c37476d8ba729250c3a2d8ae375a9bd3174bea4fcc77c0582b7;
+process73408B b8168c1f52369f7909bf174fe1c926a4a4a3be4a63cd0667741841680b0ca289;
+image10175040B 2ed7ef68530ff625772684af500c8b97e471b2b3a4e877c69792568507f1cd0f.
+Threeactualcommands0, nineoriginalobjects reused, sameeleveninputlink. Wholeproduction
+Rust/selectedC/ABI/data4/oldlogger+panic+clone/link.d/native-requiredsymbols PASS.
+Three4Bflags defaults0/0/1 and80Balign8readonlycallbacktable nowownedbyRust; actualC
+OBJECT88→84 withEXACT4removals, other84semanticmetadata preserved. No newCfunctions.
+Originalstrictreloc-nameFAIL resolvedONLYviaexacttwoLLVMaliases (slots8/16, same
+objectsection/value/size/code+finaladdress/code, all10finaloriginalnamedtargets match).
+Wrong-old-seed observerFAIL retained/correctedtoactualBUILD3 f529. Warnings135→137
+exacttwoLP64usize/CULongdeclarations retaineddebt; existingRWEsegment/RWXwarning
+unchanged, no newphysicalpage-RO claim. Proof FINAL-ARTIFACT-QUALIFICATION8df6ade9,
+F02-DEFAULT-INDEPENDENT-{ARTIFACT,POSTJOIN-CURRENT}-ACCEPTANCE plusaliasdisposition.
+Native/wholefile/F02Source38/globalM14/M15closure flags remainOPEN/FALSE. Onefrozen
+current_object package m14.current290.f02-runtime-storage accepted, notperdata split.
+Firstcompiler01:08:28.873953Z,18.892957swall/18.917063sCPU/585136KiBpeak;
+freshresource→compiler31.607933s. Ready/enqueue latency UNKNOWN. Nativecasestotal3;
+latestreviewdefaultartifact+1/nativecase0/SDK0/wholefile0/fullcutover0, no95%claim.
+
+EXACTNEXT: existingstrict235 matching NEW2ed7 +RustMMSMP887dc356/mcctrl57546af5;
+its offlinepreparation tool79630 ALREADYcompleted0/no stderr; neverreplayderive/
+overlay-equivalent argv. Newbase/overlay produced, manifestbc1e08b4356fd0b02ef62c392ec2b7d3688029e1955c66a2e01126611c61fef5,
+overlay30cb7f1793e082f24fcaecb910404e79997b2833259ff75da3a4d40a7c593f81.
+Actualordinarystage scratch/f02mm1/m.json/pempty UID1000mode700 PASS; nonce
+2005b0dd8446ae5356152dfb13144dab reservedNOTconsumed. Static5f9c0273 alreadybound.
+DO NOTrestage or rerun --nonce. ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1 has
+READY/ROOT-COMMANDS/static/capture+binderdirectwait/04b5/noouterkill. Independent
+custody reviewer READY_FOR_STRICT235_FRESH_CLOCK onexacttuple/profile/235Bexit0/
+parent-childACK/reap/ECHILD/procfsempty semantics. Sourcepublication mustbefetched
+beforefreshsnapshot; Rootwillwriteactualpubreceipt afterthischeckpointpush.
+After contextrecovery/readCURRENT, actualRootnextcommand ONCE:
+`/home/holden/anaconda3/bin/python3 -I -B docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/capture_fresh_strict235_resource.py > docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/ROOT-FRESH-NATIVE-RESOURCE-PHYSICAL-1.json`
+Then prepare_strict235_bindings.py --bind-fresh, oneexactindependentexecutionreview,
+actualRootgrant, UID1000directwaitcapture. Allstaticwork/publicationBEFOREfresh120s.
+Existingowner450/pinnedLinux/profile/resources/cutoffs unchanged. ActualACKroute
+identities determineF05exec/waitusercopy+MMinherit/revoke scope; NOTallprocessVM/fault.
+Prior3acceptednatives usedbaselineMM06e8/2eb3 andcannotretireRustMM57546/887dc.
+
+Privatequalifiedqueue: F03do_exit1536+16+47PASS (existingbody/casts, releaseholdsOFF);
+F03fivebridgebatch864+104+3+16PASS/no correction; F06complete-context sixproviders
+expert14suffixPASS withsixpassedprefix reused; F06fourleaf12commands4179casesPASS.
+Allordinarychildrenjoined/CPU6released; theseareHOSTscopes, notdefault/native counts.
+F03nextthreegaps sourceadvancing in sameboundedturn; F06backlogready/no canonical.
+M15daemon defaultCMakesuccessor e754/Rust0c0b and realpids64isolationproposal0c245
+ready; actualowner/driverbinding+kernelpids.max64 stillrequired beforemock26. No
+RLIMIT_NPROC64/unboundedHOST run. Libihkcomponentinstall/reuseeligibility9purePASS
+keepssourceproducerON/Makeedgesintact; freshconfigure/graph proof remainsNULL,
+no implicitwhole70archive replay. Rootsolecanonical/Gitwriter; shareddaemon/lib
+installhunk needscentralcomposition. Sources/workloads neveralterpinnedcontrols,
+clearrealholds, resetdebits or extendfixed2026-10-27T11:24:50Z window.
+
 ## Files accepted; canonical F02 default cohort next — 2026-10-27T01:05Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

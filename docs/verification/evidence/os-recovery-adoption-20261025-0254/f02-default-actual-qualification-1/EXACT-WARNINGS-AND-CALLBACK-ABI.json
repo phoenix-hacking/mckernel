@@ -1,0 +1,37 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXACT_TWO_NEW_ABI_EQUIVALENT_DECLARATION_WARNINGS_RETAINED_PENDING_INDEPENDENT_REVIEW",
+  "baseline_Rust_warning_count": 135,
+  "new_Rust_warning_count": 137,
+  "baseline_135_warning_headers_unchanged": true,
+  "new_warning_headers": [
+    "warning: `process_spin_lock_bridge_c` redeclares `process_spin_lock_bridge` with a different signature",
+    "warning: `process_spin_unlock_bridge_c` redeclares `process_spin_unlock_bridge` with a different signature"
+  ],
+  "new_warning_blocks": [
+    "warning: `process_spin_lock_bridge_c` redeclares `process_spin_lock_bridge` with a different signature\n     --> /src/kernel/rust/sched_helpers.rs:39:5\n      |\n   39 |     #[link_name = \"process_spin_lock_bridge\"]\n      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration\n      |\n     ::: /src/kernel/rust/process_helpers.rs:17394:9\n      |\n17394 |         fn process_spin_lock_bridge(lock_addr: usize) -> CULong;\n      |         -------------------------------------------------------- `process_spin_lock_bridge` previously declared here\n      |\n      = note: expected `unsafe extern \"C\" fn(usize) -> u64`\n                 found `unsafe extern \"C\" fn(u64) -> u64`\n\n",
+    "warning: `process_spin_unlock_bridge_c` redeclares `process_spin_unlock_bridge` with a different signature\n     --> /src/kernel/rust/sched_helpers.rs:41:5\n      |\n   41 |     #[link_name = \"process_spin_unlock_bridge\"]\n      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this signature doesn't match the previous declaration\n      |\n     ::: /src/kernel/rust/process_helpers.rs:17395:9\n      |\n17395 |         fn process_spin_unlock_bridge(lock_addr: usize, irqstate: CULong);\n      |         ------------------------------------------------------------------ `process_spin_unlock_bridge` previously declared here\n      |\n      = note: expected `unsafe extern \"C\" fn(usize, u64)`\n                 found `unsafe extern \"C\" fn(u64, u64)`\n\n"
+  ],
+  "actual_compiler_stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/evidence/00.stderr",
+    "bytes": 54147,
+    "sha256": "74c2e0bc733ece46d3f92574884eba0e0ec73bb97f5169f7c5ff71c038cbcb0d"
+  },
+  "process_compiler_stderr_empty": true,
+  "ld_warning": "/usr/bin/ld: warning: mckernel.img has a LOAD segment with RWX permissions\n",
+  "type_source_bindings": {
+    "C_header": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/include/sched_helpers.h",
+      "bytes": 34428,
+      "sha256": "9712a3df59eb0251f517ce01254e4576119868924b35f7da6fbee294bff966ae"
+    },
+    "C_callback_type": "struct sched_idle_callbacks {\n\tunsigned long (*current_cpu)(void);\n\tunsigned long (*lock)(unsigned long lock_addr);\n\tvoid (*unlock)(unsigned long lock_addr, unsigned long irqstate);\n\tvoid (*enable_interrupt)(void);\n\tvoid (*disable_interrupt)(void);\n\tvoid (*schedule)(void);\n\tvoid (*migrate)(void);\n\tvoid (*consolidate)(void);\n\tvoid (*zero_free)(void);\n\tvoid (*safe_halt)(void);\n};",
+    "Rust_sched_helper_type": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/rust/sched_helpers.rs",
+      "bytes": 185669,
+      "sha256": "d16200db3054d88a83752fda1383d6c101d24de4b787bd78cd42edb46ab251fc"
+    },
+    "Rust_callback_type": "pub struct SchedIdleCallbacks {\n    pub current_cpu: unsafe extern \"C\" fn() -> usize,\n    pub lock: unsafe extern \"C\" fn(usize) -> CULong,\n    pub unlock: unsafe extern \"C\" fn(usize, CULong),\n    pub enable_interrupt: unsafe extern \"C\" fn(),\n    pub disable_interrupt: unsafe extern \"C\" fn(),\n    pub schedule: unsafe extern \"C\" fn(),\n    pub migrate: unsafe extern \"C\" fn(),\n    pub consolidate: unsafe extern \"C\" fn(),\n    pub zero_free: unsafe extern \"C\" fn(),\n    pub safe_halt: unsafe extern \"C\" fn(),\n}"
+  },
+  "meaning": "Exact fixed x86_64 LP64 type layouts: usize/CULong/u64 are eight-byte values; lock has one eight-byte argument and eight-byte return; unlock has two eight-byte arguments and unit return. Genuine compiled C/Rust table size/alignment/offset assertions and original callback slots retained. No source/suppression/cast/wrapper change."
+}

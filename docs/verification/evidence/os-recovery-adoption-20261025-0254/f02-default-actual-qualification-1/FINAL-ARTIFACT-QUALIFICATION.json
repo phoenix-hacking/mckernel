@@ -1,0 +1,361 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_F02_PRODUCER_OBJECT_ELF_LINK_FOUR_DATA_OWNER_ABI_QUALIFICATION",
+  "actual_producer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/evidence/producer-contract.json",
+    "bytes": 8071,
+    "sha256": "91ef01c321d3bac684cf7f54128d2c54447c7fd6ad248f93e98baa7376c420fa"
+  },
+  "actual_objects_and_image": [
+    {
+      "index": 0,
+      "argv": [
+        "/usr/bin/cmake",
+        "-E",
+        "env",
+        "MAKEFLAGS=",
+        "MCKERNEL_RUST_VERSION=1.8.0",
+        "MCKERNEL_RUST_BUILDID=3114d9e",
+        "MCKERNEL_X86_ENABLE_SSE=1",
+        "MCKERNEL_CPU_C_FILE=/src/arch/x86_64/kernel/cpu.c",
+        "/nightly/bin/rustc",
+        "--crate-name",
+        "mckernel_rust",
+        "--crate-type",
+        "lib",
+        "--edition=2021",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "debuginfo=2",
+        "-C",
+        "code-model=large",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "no-redzone=yes",
+        "-C",
+        "force-frame-pointers=yes",
+        "-C",
+        "overflow-checks=off",
+        "-C",
+        "force-unwind-tables=no",
+        "-C",
+        "no-vectorize-loops",
+        "-C",
+        "no-vectorize-slp",
+        "-C",
+        "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+        "--cfg",
+        "f03_io_diagnostic_callbacks_candidate",
+        "--cfg",
+        "f03_mincore_candidate",
+        "--cfg",
+        "f03_move_pages_candidate",
+        "--cfg",
+        "f03_sched_bridges_candidate",
+        "--cfg",
+        "f03_signal_process_bridges_candidate",
+        "--cfg",
+        "f03_dispatch_context_candidate",
+        "--cfg",
+        "f03_leaf_callbacks_candidate",
+        "--cfg",
+        "native_linux_irq_work_v6_12",
+        "--cfg",
+        "f03_syscall_entry_candidate",
+        "--cfg",
+        "f03_futex_atomic_candidate",
+        "--cfg",
+        "f03_futex_no_uaccess_candidate",
+        "--cfg",
+        "process_global_storage_candidate",
+        "--cfg",
+        "f03_syscall_table_candidate",
+        "--cfg",
+        "f03_ptrace_entry_candidate",
+        "--cfg",
+        "f03_syscall_table_clone3",
+        "--cfg",
+        "enable_profile",
+        "--cfg",
+        "enable_perf",
+        "--cfg",
+        "enable_rusage",
+        "--emit=obj=/work/output/build/kernel/rust/mckernel_rust.o",
+        "/src/kernel/rust/lib.rs"
+      ],
+      "cwd": "/work/output/build/kernel",
+      "started_at_epoch": 1793063308.8739533,
+      "finished_at_epoch": 1793063327.5848458,
+      "returncode": 0,
+      "CPU_seconds": 18.759411,
+      "maximum_child_RSS_KiB": 585136,
+      "output": {
+        "path": "/work/output/build/kernel/rust/mckernel_rust.o",
+        "bytes": 18060952,
+        "sha256": "f9bb089630647c37476d8ba729250c3a2d8ae375a9bd3174bea4fcc77c0582b7"
+      }
+    },
+    {
+      "index": 1,
+      "argv": [
+        "/usr/bin/cc",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_RUST_PROCESS_GLOBAL_STORAGE",
+        "-DMCKERNEL_RUST_PROCESS_HELPERS",
+        "-I/work/output/build/kernel/include",
+        "-I/src/kernel/include",
+        "-I/work/output/build/kernel",
+        "-I/work/output/build",
+        "-I/src/ihk/cokernel/smp/x86_64/include",
+        "-I/src/ihk/cokernel/smp/x86_64",
+        "-I/src/ihk/ikc/include",
+        "-I/src/ihk/linux/include",
+        "-I/src/lib/include",
+        "-I/src/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-redhat-linux/14/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-o",
+        "CMakeFiles/mckernel.img.dir/process.c.o",
+        "-c",
+        "/src/kernel/process.c"
+      ],
+      "cwd": "/work/output/build/kernel",
+      "started_at_epoch": 1793063327.6031828,
+      "finished_at_epoch": 1793063327.654072,
+      "returncode": 0,
+      "CPU_seconds": 0.04545000000000243,
+      "maximum_child_RSS_KiB": 585136,
+      "output": {
+        "path": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+        "bytes": 73408,
+        "sha256": "b8168c1f52369f7909bf174fe1c926a4a4a3be4a63cd0667741841680b0ca289"
+      }
+    },
+    {
+      "index": 2,
+      "argv": [
+        "/usr/bin/ld",
+        "-e",
+        "arch_start",
+        "-T",
+        "/work/output/build/kernel/config/smp-x86.lds",
+        "--build-id",
+        "-Map=/work/output/build/kernel/mckernel.img.map",
+        "--dependency-file=CMakeFiles/mckernel.img.dir/link.d",
+        "CMakeFiles/mckernel.img.dir/mem.c.o",
+        "CMakeFiles/mckernel.img.dir/syscall.c.o",
+        "CMakeFiles/mckernel.img.dir/process.c.o",
+        "CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+        "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o",
+        "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+        "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o",
+        "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+        "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+        "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o",
+        "rust/mckernel_rust.o",
+        "-o",
+        "mckernel.img"
+      ],
+      "cwd": "/work/output/build/kernel",
+      "started_at_epoch": 1793063327.6543248,
+      "finished_at_epoch": 1793063327.7669103,
+      "returncode": 0,
+      "CPU_seconds": 0.11220199999999991,
+      "maximum_child_RSS_KiB": 585136,
+      "output": {
+        "path": "/work/output/build/kernel/mckernel.img",
+        "bytes": 10175040,
+        "sha256": "2ed7ef68530ff625772684af500c8b97e471b2b3a4e877c69792568507f1cd0f"
+      }
+    }
+  ],
+  "base_profile_ELF_link_gates": "PASS",
+  "scoped_provider_witness_regression_tests": {
+    "tests": 6,
+    "returncode": 0,
+    "extra_or_missing_provider_cloneU_panic_or_mutated_proof_rejected": true
+  },
+  "new_Rust_data_owners": 4,
+  "three_flags": {
+    "size": 4,
+    "alignment": 4,
+    "initial_values": {
+      "idle_halt": 0,
+      "allow_oversubscribe": 0,
+      "time_sharing": 1
+    }
+  },
+  "callback": {
+    "bytes": 80,
+    "alignment": 8,
+    "R64_zeroaddend_slots": 10,
+    "original_named_final_function_addresses_all_match": true,
+    "Rust_and_final_section_readonly_nonexec": true,
+    "unique_Rust_provider": true,
+    "strict_original_RELA_name_gate": "ORIGINAL_FAIL_RETAINED_WITH_INDEPENDENT_EXACT_TWO_ALIAS_DISPOSITION",
+    "object_and_final_alias_identity_proven": true,
+    "predecessor_successor_PT_LOAD_flags": 7,
+    "mapping_semantics_unchanged": true,
+    "runtime_page_protection_claim": false,
+    "narrow_alias_gate": "PASS_EXACT_TWO_PAIRS_FULL_IDENTITY_AND_NEGATIVE_CONTROLS"
+  },
+  "C_metadata": {
+    "predecessor_objects": 88,
+    "new_objects": 84,
+    "removed_only": [
+      "idle_halt",
+      "allow_oversubscribe",
+      "time_sharing",
+      "process_idle_callbacks"
+    ],
+    "remaining_type_binding_size_initial_bytes_and_semantic_relocations_identical": true,
+    "section_partition": {
+      "__verbose": 46,
+      ".rodata": 38
+    },
+    "new_C_functions": 0,
+    "new_Rust_function_names": 0,
+    "nine_original_RO_objects_exact": true
+  },
+  "warnings": {
+    "old": 135,
+    "new": 137,
+    "new_ABI_equivalent_redeclarations": 2,
+    "existing_RWXLINK_warning_unchanged": true,
+    "source_changes_or_suppressions": 0
+  },
+  "preserved_failures": [
+    "FOUR-F02-OWNERS-RESULT.json",
+    "FOUR-F02-OWNERS-ALIAS-OBSERVATION-RESULT.json"
+  ],
+  "context_holds": [
+    "Matching F02 native functional proof and whole-file retirement remain pending",
+    "Existing Source38 different-source partial-link debt remains open"
+  ],
+  "native_default_whole_file_acceptance": false,
+  "compiler_container_grant_canonical_Git_actions": 0,
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-actual-qualification-1/ACTUAL-BASE-QUALIFICATION.json",
+      "bytes": 469,
+      "sha256": "756ec6216e8603102e447dfa6927697e9087e71afed8a2f12bd3373049d9f0c7"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-actual-qualification-1/RESULT.json",
+      "bytes": 25558,
+      "sha256": "ac23a60193730a067d6aeb7c4a5444f47da373fcd81fda3d1537abd15034522f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-actual-qualification-1/IMAGE-LINK-RESULT.json",
+      "bytes": 15304,
+      "sha256": "c256af145ea5423231f3c22e6840cf7bd548d587bd8f796ffbeb3b16c360af23"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-actual-qualification-1/CLONE-FINAL-POINTER-AND-WARNINGS.json",
+      "bytes": 19353,
+      "sha256": "0c653e16744a60f7b256bbaf02a4f8db271e71fb620859774066af0275faaf03"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-actual-qualification-1/fresh-compiled-rust-ownership-proof.json",
+      "bytes": 9123,
+      "sha256": "66fabf0a89fc53a5034fb6d23cc216419096723f94f9c6d2ddddb408b870bdc8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-actual-qualification-1/FOUR-F02-OWNERS-BOUND-PREDECESSOR-RESULT.json",
+      "bytes": 13625,
+      "sha256": "880dbc578ac5893ccbc18678f9e071c27f1429c93e40e8545042113ef303cae5"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-actual-qualification-1/EXACT-NAME-RELOCATION-FAILURE-ALIAS-OBSERVATION.json",
+      "bytes": 2329,
+      "sha256": "c3fd45ae86c1e91a9090c5d55aeea6cde2db0d92b7f28ac67bb5952d674e5793"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-actual-qualification-1/EXACT-WARNINGS-AND-CALLBACK-ABI.json",
+      "bytes": 5043,
+      "sha256": "51064c78b0189d63b45f515f85a453d93eecd7d86a5c2b093a59564d806d24aa"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-actual-qualification-1/ADAPTER-SOURCES.json",
+      "bytes": 1618,
+      "sha256": "d122e38f5f0d9a7af2e879c13b49bf97fae1391fd547d3dfcecdb1df238ee9f3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-actual-qualification-1/test_f02_scoped_provider_witness.py",
+      "bytes": 2251,
+      "sha256": "1470f49a104ea25156687eb2d092b70d5379309bb877e9bcc6e9f9d890b02b8e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-actual-qualification-1/FINAL-ALIAS-IDENTITY-GATE.json",
+      "bytes": 2076,
+      "sha256": "60027f177cd7ccb81ede11f47c03fb78bcdde5295c00a9e23613f0bee210bba1"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-actual-qualification-1/NARROW-ALIAS-ACTUAL-ROWS.json",
+      "bytes": 57400,
+      "sha256": "71aeb3d07ee8b48d175731706f750a440c6f423f9b047bcd5424b75ee910aebf"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-actual-qualification-1/narrow_f02_alias_identity.py",
+      "bytes": 2649,
+      "sha256": "0422b8a096631b41cc6e5e28f739f690767e70bce26c997012c2d65f09b6ff49"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-actual-qualification-1/test_narrow_f02_alias_identity.py",
+      "bytes": 2222,
+      "sha256": "7cab2f41c4f9f5401952c94a5078b00e5719ec8d27b39bdc8cd732d830ef9c9c"
+    }
+  ],
+  "independent_narrow_alias_disposition": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/F02-DEFAULT-INDEPENDENT-ALIAS-AND-ABI-WARNING-DISPOSITION.json",
+    "bytes": 1988,
+    "sha256": "1ce6de982e7b7beed038e31cde6a60a5b3168bb079276d57e8a9929bf5178b19"
+  },
+  "separate_Root_independent_physical_postjoin": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/F02-DEFAULT-INDEPENDENT-POSTJOIN-CURRENT-ACCEPTANCE.json",
+    "bytes": 1823,
+    "sha256": "74084067b9d3c167a06a4714713a68733eb140e984a13518648b39eba6ede046"
+  },
+  "scoped_alias_negative_control_tests": {
+    "methods": 11,
+    "returncode": 0
+  }
+}

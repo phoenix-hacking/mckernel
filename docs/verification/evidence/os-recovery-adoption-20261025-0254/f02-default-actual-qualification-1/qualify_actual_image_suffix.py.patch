@@ -1,0 +1,14 @@
+--- qualify_actual_image_suffix.py
++++ qualify_actual_image_suffix.py
+@@ -4,9 +4,9 @@
+ import ast,hashlib,json,os,re,shlex,stat,struct,subprocess,traceback
+ from pathlib import Path as HP,PurePosixPath as PP
+ D=HP(__file__).resolve().parent;E=D.parent
+-ROOT=E/'ROOT-CURRENT290-BUILD-ONLY-ADMISSION-3/OUTPUT';B=ROOT/'work/output/build';A=ROOT/'work/evidence'
++ROOT=E/'ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT';B=ROOT/'work/output/build';A=ROOT/'work/evidence'
+ DRIVER=E/'current290-driver-identity-repair-source-1/native_rust_exact_mckernel_image_offline.CURRENT290.VIEW-AND-FRESH-OBJECT-GATE.py'
+-profile=json.loads((E/'current290-unprivileged-build-only-source-1/PROFILE.SOURCE-ONLY.json').read_text());I=profile['inputs'];seed=HP(I['retained_seed'])
++profile=json.loads((E/'ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json').read_text());I=profile['inputs'];seed=HP(I['retained_seed'])
+ # This map is the actual immutable Docker RO binding, not the zero host placeholders.
+ exact={'/work/output/build/'+r['build_relative']:HP(r['source']['path']) for r in I['configuration']+[r for r in I['objects'] if not r['replace']]}
+ def actual(value):
