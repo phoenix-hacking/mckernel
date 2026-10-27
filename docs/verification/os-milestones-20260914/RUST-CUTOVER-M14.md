@@ -1,3 +1,5 @@
+Current supported-file checkpoint (2026-10-27): F01 and F04 are complete at their original supported scopes. F04 uses independently accepted diagnostic FP-value/trace/retirement proof on image26eb. The whole FP run remains FAIL because declared4096 and actual1024 stream caps differ; no application/full-protocol native PASS is claimed. See `evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json`. M14 remains OPEN; current selected syscall C function counts are75/31 and process metadata71. Historical unassessed entries below retain their original dates.
+
 ## Engineering cursor — 2026-10-24T23:14Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

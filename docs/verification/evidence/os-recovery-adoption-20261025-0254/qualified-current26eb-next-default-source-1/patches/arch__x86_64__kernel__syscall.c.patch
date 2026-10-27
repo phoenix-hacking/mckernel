@@ -1,0 +1,50 @@
+--- arch/x86_64/kernel/syscall.c
++++ arch/x86_64/kernel/syscall.c
+@@ -343,23 +343,47 @@
+ extern void arch_clear_single_step_body_result(struct thread *thread);
+ extern void arch_set_single_step_body_result(struct thread *thread);
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_FORWARD_CONTEXT)
++extern long
++arch_syscall_forward_context_bridge(int syscall_nr, void *ctx);
++#else
++
+ long
+ arch_syscall_forward_context_bridge(int syscall_nr, void *ctx)
+ {
+ 	return syscall_generic_forwarding(syscall_nr, ctx);
+ }
+ 
++#endif
++#line 351
++
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_COPY_TO_USER)
++extern long
++arch_copy_to_user_bridge(unsigned long dst_addr, const void *src, size_t bytes);
++#else
++
+ long
+ arch_copy_to_user_bridge(unsigned long dst_addr, const void *src, size_t bytes)
+ {
+ 	return copy_to_user((void *)dst_addr, src, bytes);
+ }
+ 
++#endif
++#line 357
++
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_COPY_FROM_USER)
++extern long
++arch_copy_from_user_bridge(void *dst, unsigned long src_addr, size_t bytes);
++#else
++
+ long
+ arch_copy_from_user_bridge(void *dst, unsigned long src_addr, size_t bytes)
+ {
+ 	return copy_from_user(dst, (void *)src_addr, bytes);
+ }
++
++#endif
++#line 363
+ 
+ long
+ arch_rt_sigreturn_syscall_bridge(int num, void *regs)

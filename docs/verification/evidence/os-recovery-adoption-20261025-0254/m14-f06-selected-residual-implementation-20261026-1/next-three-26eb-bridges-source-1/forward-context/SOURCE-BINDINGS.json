@@ -1,0 +1,44 @@
+{
+  "symbol": "arch_syscall_forward_context_bridge",
+  "selected_cursor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT26EB-SELECTED-F03-F06-REMAINING-SOURCE-CURSOR.json",
+    "bytes": 5561,
+    "sha256": "aa2ec71f9317efbe9f527345df973573c1b22382128a63639e14015ea8d592b9"
+  },
+  "selected_object": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SYNC-PROCESSVM-HOST13-FIVE-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+    "bytes": 113648,
+    "sha256": "1ceffd6dfbba55025440938e7c6884b1beaab336083c64aa77b3ae50ab5bf7c9"
+  },
+  "canonical_before": [
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "bytes": 114757,
+      "sha256": "060ae704f105aff84cfdadb9a4f3846ae1b4a2e8192947a479336b2c05d05ea8"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1259403,
+      "sha256": "02ddaecff895693d389b0a6710c0ff4579c91caf2b53ea5f62746f4b8125d812"
+    }
+  ],
+  "reused_fragment": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-signal-runtime-adapters-source-1/candidate/syscall_policy.signal_runtime_adapters.FRAGMENT.rs",
+    "bytes": 4876,
+    "sha256": "8bdc144795df245cfbae5731880906bba50215b61dfc2df0468ff1f6321c0ad0"
+  },
+  "reused_exact_body_sha256": "4d1d76a2bfab5240910b58a3920e6d9ae269310deddb74f19ece8810956f4722",
+  "original_C": "\nlong\narch_syscall_forward_context_bridge(int syscall_nr, void *ctx)\n{\n\treturn syscall_generic_forwarding(syscall_nr, ctx);\n}\n",
+  "C_wrapper": "\n#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_FORWARD_CONTEXT)\nextern long\narch_syscall_forward_context_bridge(int syscall_nr, void *ctx);\n#else\n\nlong\narch_syscall_forward_context_bridge(int syscall_nr, void *ctx)\n{\n\treturn syscall_generic_forwarding(syscall_nr, ctx);\n}\n\n#endif\n",
+  "rust_selection": "\n// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\n#[cfg(f06_forward_context_candidate)]\n#[path = \"bridge.rs\"]\nmod f06_forward_context_candidate;\n",
+  "selectors": {
+    "C": "MCKERNEL_RUST_F06_FORWARD_CONTEXT",
+    "Rust": "f06_forward_context_candidate"
+  },
+  "real_provider": "syscall_generic_forwarding",
+  "provider_source": {
+    "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+    "bytes": 1259403,
+    "sha256": "02ddaecff895693d389b0a6710c0ff4579c91caf2b53ea5f62746f4b8125d812"
+  }
+}

@@ -1,0 +1,188 @@
+{
+  "status": "SOURCE_ONLY_ROOT_GRANT_REQUIRED",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nThree exact selected26eb residuals, reusing existing private Rust bodies.\nNo compiler, canonical writes, provider implementation or new dispatch policy.\n",
+  "purpose": "Functional selected C/Rust adapter ABI parity at one controlled external provider; no actual usercopy or kernel dispatch.",
+  "symbol": "arch_syscall_forward_context_bridge",
+  "expected_cases": 140,
+  "expected_stdout": "PASS arch_syscall_forward_context_bridge controlled forwarding pairs140\n",
+  "commands": [
+    [
+      "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "--crate-type",
+      "staticlib",
+      "--crate-name",
+      "f06_forward_context",
+      "-C",
+      "panic=abort",
+      "-C",
+      "opt-level=1",
+      "-C",
+      "code-model=large",
+      "-C",
+      "relocation-model=static",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/forward-context/fixture.rs",
+      "-o",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/forward-context/future-output-1/libfixture.a"
+    ],
+    [
+      "/usr/bin/gcc-9",
+      "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+      "-DIHK_OS_MANYCORE",
+      "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+      "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+      "-DMCKERNEL_NATIVE_CLONE3",
+      "-DMCKERNEL_NATIVE_CLONE_TID",
+      "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+      "-DMCKERNEL_NATIVE_FUTEX",
+      "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+      "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+      "-DMCKERNEL_RUST_BITOPS",
+      "-DMCKERNEL_RUST_LIST_HELPERS",
+      "-DMCKERNEL_RUST_LOCK_HELPERS",
+      "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+      "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+      "-DMCKERNEL_RUST_PTE_HELPERS",
+      "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+      "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+      "-DPROFILE_ENABLE",
+      "-D__KERNEL__",
+      "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+      "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+      "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/include",
+      "-I/home/holden/mckernel/kernel/include",
+      "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel",
+      "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build",
+      "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+      "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+      "-I/home/holden/mckernel/ihk/ikc/include",
+      "-I/home/holden/mckernel/ihk/linux/include",
+      "-I/home/holden/mckernel/lib/include",
+      "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Wno-unused-parameter",
+      "-Wno-sign-compare",
+      "-Wno-unused-function",
+      "-Wno-implicit-fallthrough",
+      "-Wno-stringop-truncation",
+      "-ffreestanding",
+      "-O2",
+      "-nostdinc",
+      "-isystem",
+      "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+      "-fno-omit-frame-pointer",
+      "-mcmodel=large",
+      "-mno-red-zone",
+      "-mno-sse",
+      "-o",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/forward-context/future-output-1/driver",
+      "-no-pie",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/forward-context/fixture.c",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/forward-context/future-output-1/libfixture.a"
+    ],
+    [
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/forward-context/future-output-1/driver"
+    ]
+  ],
+  "fresh_output": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/forward-context/future-output-1",
+  "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/forward-context",
+  "limits": {
+    "cpu": 6,
+    "jobs": 1,
+    "address_space_bytes": 2147483648,
+    "cpu_seconds": 60,
+    "file_size_bytes": 67108864,
+    "core_bytes": 0,
+    "wall_seconds": 90,
+    "resource_floor_bytes": 21474836480
+  },
+  "tools": [
+    {
+      "path": "/usr/bin/gcc-9",
+      "bytes": 1158288,
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "bytes": 654904,
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/forward-context/BASE.syscall.c",
+      "bytes": 114757,
+      "sha256": "060ae704f105aff84cfdadb9a4f3846ae1b4a2e8192947a479336b2c05d05ea8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/forward-context/BASE.syscall_policy.rs",
+      "bytes": 1259403,
+      "sha256": "02ddaecff895693d389b0a6710c0ff4579c91caf2b53ea5f62746f4b8125d812"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/forward-context/SOURCE-BINDINGS.json",
+      "bytes": 2631,
+      "sha256": "cbee74d875291a7c76d1679399137837c4e7b156db38476c31392fffda2203cb"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/forward-context/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/forward-context/bridge.rs",
+      "bytes": 604,
+      "sha256": "3f14c1b94b1a071910623ec25551381b846ed36f3c2cefbf501cf33eb036314a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/forward-context/fixture.c",
+      "bytes": 2961,
+      "sha256": "23e964e0c334b36bbb2a5ff5023b7e7b1dd3a63ca397853058715acb762f041f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/forward-context/fixture.rs",
+      "bytes": 411,
+      "sha256": "ff9028f9a88c747818d90841849f5c7908913a8f825237175d066f9d999e585c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/forward-context/original-bridge.inc",
+      "bytes": 126,
+      "sha256": "fc5e3c01fc7582d158d7539a3e409f86f7aaa0daa1775131cb17ef2771ef7325"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/forward-context/syscall.c",
+      "bytes": 114944,
+      "sha256": "7e6c2270952c23ebd1f4108a188d3fa875b661563eb43a46593a18d8ba2f2a73"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/forward-context/syscall.c.diff",
+      "bytes": 607,
+      "sha256": "4b5fe8c172bb91d4e0857cad59c28a7abcc317ad6704c53b181dfb8d9d536bdf"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/forward-context/syscall_policy.rs",
+      "bytes": 1259585,
+      "sha256": "0ef08a2619a42f9703a60a2f2d5217cb0fbb679598f99f4f3820c7e2e5bcff68"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/forward-context/syscall_policy.rs.diff",
+      "bytes": 359,
+      "sha256": "39d69263c233f26d019144b45f27ee90b1e7401206800d1af118d64675da489b"
+    }
+  ],
+  "genuine_configuration": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/GENUINE-NOCACHE-CONFIGURATION.json",
+    "bytes": 91114,
+    "sha256": "a74a4a7b3edef59a5db47c41e1056768540439002331aaaf158dd95e21c7888c"
+  },
+  "admission": "Reviewed e8b84de3.admission()/04b5/adf, actual fixed cutoffs and resource floors; fresh Root grant required.",
+  "actual_compile": null,
+  "actual_runtime": null,
+  "holds": [
+    "real usercopy/fault fixups",
+    "real forwarding/kernel context lifetime",
+    "default link/native selection"
+  ]
+}

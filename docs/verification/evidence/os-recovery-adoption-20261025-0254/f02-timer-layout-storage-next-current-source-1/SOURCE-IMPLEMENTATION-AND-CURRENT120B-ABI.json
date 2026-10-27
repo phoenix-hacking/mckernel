@@ -1,0 +1,198 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_SOURCE_IMPLEMENTED_NOT_COMPILED",
+  "chosen_family": "process_timer_runtime_offsets",
+  "runtime_role": "Immutable15field descriptor passed by current Rust set_timer to timer_set_timer_body_result; not an inert ABI witness or missing function.",
+  "preimages": [
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "bytes": 218419,
+      "sha256": "8d7fc71197eba2e9c29d32de49c6e97aa3f27ee36986bb637eaa73e6f2230038"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "bytes": 605160,
+      "sha256": "f54652a091b8b426ede0ed1610193c88d3c15cdd7a4e9d6a1e1dfa760be5f3d0"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "bytes": 185669,
+      "sha256": "d16200db3054d88a83752fda1383d6c101d24de4b787bd78cd42edb46ab251fc"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    }
+  ],
+  "postimages": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/candidate/kernel/process.c",
+      "bytes": 218569,
+      "sha256": "1dc76b89466859d49b85377f9bfa0f809890ee12ec9392ff4768104ba0f32567"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/candidate/kernel/rust/process_helpers.rs",
+      "bytes": 606868,
+      "sha256": "439ffb1e00f405c5d470468facb07ebe86d41a9ab291553d573cf98bbf232613"
+    }
+  ],
+  "Rust_fragment": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/timer_layout_storage.FRAGMENT.rs",
+    "bytes": 1707,
+    "sha256": "ede1d013292aef7093cf556a9f9d34d46a9be49ed60c38b5c0089fd4def7ba72"
+  },
+  "current71_C_object": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SYNC-PROCESSVM-HOST13-FIVE-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+    "bytes": 71144,
+    "sha256": "055c157831118f4b434a92e03725a05bd9ff8c3071235b8c79ab6019c94a9c40"
+  },
+  "actual_current_table": {
+    "section": ".rodata",
+    "section_flags": 2,
+    "section_alignment": 32,
+    "symbol_offset": 1152,
+    "size": 120,
+    "minimum_symbol_alignment": 8,
+    "bytes_hex": "5810000000000000e81000000000000000110000000000000411000000000000d013000000000000981e000000000000c01e000000000000d01e000000000000a81e0000000000002c1f000000000000781f0000000000000000000000000000080000000000000020000000000000003000000000000000",
+    "fifteen_offset_words": [
+      4184,
+      4328,
+      4352,
+      4356,
+      5072,
+      7832,
+      7872,
+      7888,
+      7848,
+      7980,
+      8056,
+      0,
+      8,
+      32,
+      48
+    ]
+  },
+  "fields": [
+    {
+      "table_field": "thread_status_offset",
+      "actual_C_type": "thread",
+      "actual_member": "status",
+      "Rust_type": "Thread"
+    },
+    {
+      "table_field": "thread_sched_list_offset",
+      "actual_C_type": "thread",
+      "actual_member": "sched_list",
+      "Rust_type": "Thread"
+    },
+    {
+      "table_field": "thread_spin_sleep_lock_offset",
+      "actual_C_type": "thread",
+      "actual_member": "spin_sleep_lock",
+      "Rust_type": "Thread"
+    },
+    {
+      "table_field": "thread_spin_sleep_offset",
+      "actual_C_type": "thread",
+      "actual_member": "spin_sleep",
+      "Rust_type": "Thread"
+    },
+    {
+      "table_field": "thread_itimer_enabled_offset",
+      "actual_C_type": "thread",
+      "actual_member": "itimer_enabled",
+      "Rust_type": "Thread"
+    },
+    {
+      "table_field": "cpu_runq_lock_offset",
+      "actual_C_type": "cpu_local_var",
+      "actual_member": "runq_lock",
+      "Rust_type": "CpuLocalVar"
+    },
+    {
+      "table_field": "cpu_runq_offset",
+      "actual_C_type": "cpu_local_var",
+      "actual_member": "runq",
+      "Rust_type": "CpuLocalVar"
+    },
+    {
+      "table_field": "cpu_runq_len_offset",
+      "actual_C_type": "cpu_local_var",
+      "actual_member": "runq_len",
+      "Rust_type": "CpuLocalVar"
+    },
+    {
+      "table_field": "cpu_current_offset",
+      "actual_C_type": "cpu_local_var",
+      "actual_member": "current",
+      "Rust_type": "CpuLocalVar"
+    },
+    {
+      "table_field": "cpu_timer_enabled_offset",
+      "actual_C_type": "cpu_local_var",
+      "actual_member": "timer_enabled",
+      "Rust_type": "CpuLocalVar"
+    },
+    {
+      "table_field": "cpu_backlog_list_offset",
+      "actual_C_type": "cpu_local_var",
+      "actual_member": "backlog_list",
+      "Rust_type": "CpuLocalVar"
+    },
+    {
+      "table_field": "timer_timeout_offset",
+      "actual_C_type": "timer",
+      "actual_member": "timeout",
+      "Rust_type": "Timer"
+    },
+    {
+      "table_field": "timer_waitq_offset",
+      "actual_C_type": "timer",
+      "actual_member": "processes",
+      "Rust_type": "Timer"
+    },
+    {
+      "table_field": "timer_list_offset",
+      "actual_C_type": "timer",
+      "actual_member": "list",
+      "Rust_type": "Timer"
+    },
+    {
+      "table_field": "timer_thread_offset",
+      "actual_C_type": "timer",
+      "actual_member": "thread",
+      "Rust_type": "Timer"
+    }
+  ],
+  "C_original_table": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/fixture/timer_offsets.ORIGINAL-C.inc",
+    "bytes": 1228,
+    "sha256": "d9ede6e752c63a223a566508b54bf53fcce761da0e2854cb99bb2ac593f34cec"
+  },
+  "C_logical_first": 104,
+  "C_logical_after": 125,
+  "C_source_coord_plan": "Originaltable fallback retains exactbytes under#line104; afternewselector allsubsequentoriginalsource resumes#line125. Original__FILE__namespace unchanged; allDdebug descriptors/strings/othermetadata unchanged.",
+  "selectors": {
+    "C": "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE",
+    "Rust": "process_global_storage_candidate",
+    "new_selector": false
+  },
+  "default_runtime_artifact_mutation": false,
+  "new_compilers": 0,
+  "current_C_objects_counted": 71,
+  "current_C_data_retirement_credit": 0,
+  "prospective_C_table_removals": 1,
+  "remaining_after_future_success": 70,
+  "original_GNU_RETAIN_requirement": "Unchanged. No __verbose producer,flags,KEEP rule,sectionretention orSource38holdisaltered.",
+  "Source37_consumer_reuse": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/fixture/BINDING.json",
+    "bytes": 5688,
+    "sha256": "5cb3ac898289f245ec370fcf3ac09a2ba3e86ea951f3fd03783defeba7552b84"
+  },
+  "current71_accepted_report": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sync-processvm-host13-validator-import-suffix-1/actual-qualification-1/RETAINED-F02-DATA-OWNERS-RESULT.json",
+    "bytes": 14048,
+    "sha256": "d9163559d7f344663c326e9638e140b9e7bf6bef43bb018355867175031836af"
+  }
+}

@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-27T05:37:48.345070+00:00",
+  "as_of": "2026-10-27T06:12:33.798265+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -923,9 +923,9 @@
         "native_credit": false
       },
       "latest_dispatcher_checkpoint": {
-        "implemented": "Four additional default Rust data owners: three int4 controls plus immutable80B callbacktable; actual selected C88\u219284.",
-        "actual": "Default3commands0/11inputlink accepted; matching F02image2ed7 strict235 now native accepted with RustMM tuple.",
-        "limits": "Remaining84 C semantic metadata/Source38 and whole-file obligations remain open; no whole-file claim."
+        "implemented": "Original4Rustdata/callbackowners plus13readonlysignedCIntowners actualdefault26eb.",
+        "actual": "Independent26ebdefaultartifact004291b3 processC0functions/OBJECT84\u219271; exact13consumerarguments accepteded3fb6ac.",
+        "limits": "Remaining71metadata/Source38GNU_RETAIN/wholefile remainopen; rawFP26eb notfullprotocolPASS."
       },
       "prior_recorded_owner_before_20261025": "/root/m14_process_cutover",
       "checkpoint_before_20261027_active_frontier": {
@@ -1240,9 +1240,9 @@
         }
       ],
       "latest_dispatcher_checkpoint": {
-        "implemented": "Qualified existing Rust/selector cohort actually adopted; supported Linux6.12/x86/nonUBSAN/nonDCFA profile.",
-        "actual": "Actual4commands0/fullRust+2C+11inputlink, eightCinputs reused, uniqueRustexports23; selectedM14-F03 Cfunctions96\u219282. Independent artifact/postjoin accepted.",
-        "limits": "Matching685ace native proof pending; no whole-file/fullcutover credit. Staticelision distinct from separately implementedport; warnings retained."
+        "implemented": "ExistingRustselectors integrated, current26ebsupportsLinux6.12/x86/nonUBSAN/nonDCFA.",
+        "actual": "Independent26ebdefaultartifact Ckernel75; 35Rustexports entirecohort/U-15+0; next3callbacks sourceonly.",
+        "limits": "Newbodies/globalnative/File closureopen. FPrawdiagnosticdoesnotfullnativequalifycohort."
       },
       "prior_recorded_owner_before_20261025": "/root/p12_consumer_fixture_expert",
       "checkpoint_before_20261027_active_frontier": {
@@ -1284,7 +1284,7 @@
       "id": "M14-F04",
       "c_file": "arch/x86_64/kernel/cpu.c",
       "title": "x86 CPU, interrupt, processor state and context support",
-      "status": "open",
+      "status": "complete",
       "owner": "/root/m14_cpu",
       "inventory_basis": "Exact current image compile database and final link contract; surviving body counts still unmeasured.",
       "object_output": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
@@ -1331,122 +1331,218 @@
         {
           "id": "M14-04-01",
           "title": "CPU register/interrupt/atomic primitives with reviewed assembly boundaries and exact memory ordering.",
-          "status": "unassessed",
+          "status": "complete",
           "owner": null,
           "remaining_c_functions": null,
           "rust_consumer": null,
-          "next_action": "Reconcile this area with the current matched consumer and already accepted Rust bodies; implement only the actual remaining C behavior.",
+          "next_action": "Preserve originalsupportedprofile proof; no newguestperhelperquota. Fullapplicationprotocolstreamlimitrepair remains separate.",
           "proof": {
             "implementation": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+                  "scope": "Originalsupportedfileonly; applicable diagnosticnative-value proof withwholeprotocolFAIL retained",
+                  "qualification": "Oneindependentfinalfiledecision joins priororiginalobligation proofs/currentproducer identity; notuniversalconfigurationcoverage"
+                }
+              ]
             },
             "focused_checks": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+                  "scope": "Originalsupportedfileonly; applicable diagnosticnative-value proof withwholeprotocolFAIL retained",
+                  "qualification": "Oneindependentfinalfiledecision joins priororiginalobligation proofs/currentproducer identity; notuniversalconfigurationcoverage"
+                }
+              ]
             },
             "production_link": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+                  "scope": "Originalsupportedfileonly; applicable diagnosticnative-value proof withwholeprotocolFAIL retained",
+                  "qualification": "Oneindependentfinalfiledecision joins priororiginalobligation proofs/currentproducer identity; notuniversalconfigurationcoverage"
+                }
+              ]
             },
             "native_validation": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+                  "scope": "Originalsupportedfileonly; applicable diagnosticnative-value proof withwholeprotocolFAIL retained",
+                  "qualification": "Oneindependentfinalfiledecision joins priororiginalobligation proofs/currentproducer identity; notuniversalconfigurationcoverage"
+                }
+              ]
             }
           }
         },
         {
           "id": "M14-04-02",
           "title": "CPU/AP startup, GDT/IDT/TSS and syscall entry initialization, LAPIC/IPI/timer and clock setup orchestration.",
-          "status": "unassessed",
+          "status": "complete",
           "owner": null,
           "remaining_c_functions": null,
           "rust_consumer": null,
-          "next_action": "Reconcile this area with the current matched consumer and already accepted Rust bodies; implement only the actual remaining C behavior.",
+          "next_action": "Preserve originalsupportedprofile proof; no newguestperhelperquota. Fullapplicationprotocolstreamlimitrepair remains separate.",
           "proof": {
             "implementation": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+                  "scope": "Originalsupportedfileonly; applicable diagnosticnative-value proof withwholeprotocolFAIL retained",
+                  "qualification": "Oneindependentfinalfiledecision joins priororiginalobligation proofs/currentproducer identity; notuniversalconfigurationcoverage"
+                }
+              ]
             },
             "focused_checks": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+                  "scope": "Originalsupportedfileonly; applicable diagnosticnative-value proof withwholeprotocolFAIL retained",
+                  "qualification": "Oneindependentfinalfiledecision joins priororiginalobligation proofs/currentproducer identity; notuniversalconfigurationcoverage"
+                }
+              ]
             },
             "production_link": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+                  "scope": "Originalsupportedfileonly; applicable diagnosticnative-value proof withwholeprotocolFAIL retained",
+                  "qualification": "Oneindependentfinalfiledecision joins priororiginalobligation proofs/currentproducer identity; notuniversalconfigurationcoverage"
+                }
+              ]
             },
             "native_validation": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+                  "scope": "Originalsupportedfileonly; applicable diagnosticnative-value proof withwholeprotocolFAIL retained",
+                  "qualification": "Oneindependentfinalfiledecision joins priororiginalobligation proofs/currentproducer identity; notuniversalconfigurationcoverage"
+                }
+              ]
             }
           }
         },
         {
           "id": "M14-04-03",
           "title": "Context switching, TLS installation, runqueue lock handoff and post-switch process retirement.",
-          "status": "unassessed",
+          "status": "complete",
           "owner": null,
           "remaining_c_functions": null,
           "rust_consumer": null,
-          "next_action": "Reconcile this area with the current matched consumer and already accepted Rust bodies; implement only the actual remaining C behavior.",
+          "next_action": "Preserve originalsupportedprofile proof; no newguestperhelperquota. Fullapplicationprotocolstreamlimitrepair remains separate.",
           "proof": {
             "implementation": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+                  "scope": "Originalsupportedfileonly; applicable diagnosticnative-value proof withwholeprotocolFAIL retained",
+                  "qualification": "Oneindependentfinalfiledecision joins priororiginalobligation proofs/currentproducer identity; notuniversalconfigurationcoverage"
+                }
+              ]
             },
             "focused_checks": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+                  "scope": "Originalsupportedfileonly; applicable diagnosticnative-value proof withwholeprotocolFAIL retained",
+                  "qualification": "Oneindependentfinalfiledecision joins priororiginalobligation proofs/currentproducer identity; notuniversalconfigurationcoverage"
+                }
+              ]
             },
             "production_link": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+                  "scope": "Originalsupportedfileonly; applicable diagnosticnative-value proof withwholeprotocolFAIL retained",
+                  "qualification": "Oneindependentfinalfiledecision joins priororiginalobligation proofs/currentproducer identity; notuniversalconfigurationcoverage"
+                }
+              ]
             },
             "native_validation": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+                  "scope": "Originalsupportedfileonly; applicable diagnosticnative-value proof withwholeprotocolFAIL retained",
+                  "qualification": "Oneindependentfinalfiledecision joins priororiginalobligation proofs/currentproducer identity; notuniversalconfigurationcoverage"
+                }
+              ]
             }
           }
         },
         {
           "id": "M14-04-04",
           "title": "FPU/XSAVE ownership: allocate/save/copy/restore/clear/release, signal handoff and fault recovery.",
-          "status": "unassessed",
+          "status": "complete",
           "owner": null,
           "remaining_c_functions": null,
           "rust_consumer": null,
-          "next_action": "Reconcile this area with the current matched consumer and already accepted Rust bodies; implement only the actual remaining C behavior.",
+          "next_action": "Preserve originalsupportedprofile proof; no newguestperhelperquota. Fullapplicationprotocolstreamlimitrepair remains separate.",
           "proof": {
             "implementation": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+                  "scope": "Originalsupportedfileonly; applicable diagnosticnative-value proof withwholeprotocolFAIL retained",
+                  "qualification": "Oneindependentfinalfiledecision joins priororiginalobligation proofs/currentproducer identity; notuniversalconfigurationcoverage"
+                }
+              ]
             },
             "focused_checks": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+                  "scope": "Originalsupportedfileonly; applicable diagnosticnative-value proof withwholeprotocolFAIL retained",
+                  "qualification": "Oneindependentfinalfiledecision joins priororiginalobligation proofs/currentproducer identity; notuniversalconfigurationcoverage"
+                }
+              ]
             },
             "production_link": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+                  "scope": "Originalsupportedfileonly; applicable diagnosticnative-value proof withwholeprotocolFAIL retained",
+                  "qualification": "Oneindependentfinalfiledecision joins priororiginalobligation proofs/currentproducer identity; notuniversalconfigurationcoverage"
+                }
+              ]
             },
             "native_validation": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+                  "scope": "Originalsupportedfileonly; applicable diagnosticnative-value proof withwholeprotocolFAIL retained",
+                  "qualification": "Oneindependentfinalfiledecision joins priororiginalobligation proofs/currentproducer identity; notuniversalconfigurationcoverage"
+                }
+              ]
             }
           }
         },
         {
           "id": "M14-04-05",
           "title": "CPU-local diagnostics/context access and register/performance state housekeeping.",
-          "status": "partial",
+          "status": "complete",
           "owner": null,
           "remaining_c_functions": null,
           "rust_consumer": null,
-          "next_action": "Root coherent private union and real default/link/targeted native proof; bounded increment is partial, remaining area C stays open.",
+          "next_action": "Preserve originalsupportedprofile proof; no newguestperhelperquota. Fullapplicationprotocolstreamlimitrepair remains separate.",
           "proof": {
             "implementation": {
-              "status": "partial",
+              "status": "pass",
               "evidence": [
                 {
                   "path": "docs/verification/evidence/velocity-intervention-20261023-4/m14-x86-cpu/CANONICAL-INTEGRATION.ROOT-RECORD.json",
@@ -1458,11 +1554,16 @@
                   "sha256": "6ce4b7c4d5e6883d6934359a6056b343dcde6ced9b6a3aa55fa2c1a6db45c387",
                   "size": 20622,
                   "scope": "context correctedproper2MiBprofile11PASS/12240leaf/full78/completeGCC9/partial; old8MiB cohort not profile accepted"
+                },
+                {
+                  "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+                  "scope": "Originalsupportedfileonly; applicable diagnosticnative-value proof withwholeprotocolFAIL retained",
+                  "qualification": "Oneindependentfinalfiledecision joins priororiginalobligation proofs/currentproducer identity; notuniversalconfigurationcoverage"
                 }
               ]
             },
             "focused_checks": {
-              "status": "partial",
+              "status": "pass",
               "evidence": [
                 {
                   "path": "docs/verification/evidence/velocity-intervention-20261023-4/m14-x86-cpu/INDEPENDENT-CORRECTED-SOURCE-AND-ACTUAL-CONSUMER.ROOT-RECORD.json",
@@ -1474,11 +1575,16 @@
                   "sha256": "6ce4b7c4d5e6883d6934359a6056b343dcde6ced9b6a3aa55fa2c1a6db45c387",
                   "size": 20622,
                   "scope": "context correctedproper2MiBprofile11PASS/12240leaf/full78/completeGCC9/partial; old8MiB cohort not profile accepted"
+                },
+                {
+                  "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+                  "scope": "Originalsupportedfileonly; applicable diagnosticnative-value proof withwholeprotocolFAIL retained",
+                  "qualification": "Oneindependentfinalfiledecision joins priororiginalobligation proofs/currentproducer identity; notuniversalconfigurationcoverage"
                 }
               ]
             },
             "production_link": {
-              "status": "partial",
+              "status": "pass",
               "evidence": [
                 {
                   "path": "docs/verification/evidence/velocity-intervention-20261023-4/m14-x86-cpu/CANONICAL-INTEGRATION.ROOT-RECORD.json",
@@ -1490,12 +1596,23 @@
                   "sha256": "6ce4b7c4d5e6883d6934359a6056b343dcde6ced9b6a3aa55fa2c1a6db45c387",
                   "size": 20622,
                   "scope": "context correctedproper2MiBprofile11PASS/12240leaf/full78/completeGCC9/partial; old8MiB cohort not profile accepted"
+                },
+                {
+                  "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+                  "scope": "Originalsupportedfileonly; applicable diagnosticnative-value proof withwholeprotocolFAIL retained",
+                  "qualification": "Oneindependentfinalfiledecision joins priororiginalobligation proofs/currentproducer identity; notuniversalconfigurationcoverage"
                 }
               ]
             },
             "native_validation": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+                  "scope": "Originalsupportedfileonly; applicable diagnosticnative-value proof withwholeprotocolFAIL retained",
+                  "qualification": "Oneindependentfinalfiledecision joins priororiginalobligation proofs/currentproducer identity; notuniversalconfigurationcoverage"
+                }
+              ]
             }
           },
           "bounded_increments": [
@@ -1524,11 +1641,15 @@
         "Interrupt enable/disable and runqueue lock restoration; AP boot/timer/IPI requires matching native coverage when authorized."
       ],
       "file_closure": {
-        "status": "unassessed",
+        "status": "complete",
         "requirement": "All supported live implementations from this translation unit and its included headers/macros are Rust/reviewed assembly; no substantive live C callbacks, wrappers or unknown owners remain. Preserve declarations and excluded fallback source where useful.",
-        "residual_c_bytes": null,
-        "residual_c_functions": null,
-        "evidence": []
+        "residual_c_bytes": 0,
+        "residual_c_functions": 0,
+        "evidence": [
+          "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+          "docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f04-file-decision-preparation-1/F04-CONDITIONAL-FILE-DECISION-INPUTS.json"
+        ],
+        "current_scope": "OriginalsupportedF04file only; source-bounddiagnosticnativeFPvalues/trace/retirementaccepted, WHOLEapplicationprotocolFAILstreamcaps4096vs1024 preserved; no universalstateclass/SMP/nativeappacceptance"
       },
       "active_lane_20261024": {
         "confirmed_at": "2026-10-24T00:29:28.290006+00:00",
@@ -1555,9 +1676,9 @@
         }
       ],
       "latest_dispatcher_checkpoint": {
-        "implemented": "Current285/data5 fullRust/partial accepted and fivecanonicalfiles integrated, fetchedb4ab06a7e5. Source18 batches logger/ptrace/exec/getsig for onefuture290compile; no replay.",
-        "actual": "Current285/data5 fullRust/partial accepted and fivecanonicalfiles integrated, fetchedb4ab06a7e5. Source18 batches logger/ptrace/exec/getsig for onefuture290compile; no replay.",
-        "limits": "Controlled HOST/source scopes only; selected default/native/wholefile/Cboundary retirement remain open."
+        "implemented": "Supportedselectedcpu.o0runtimeCfunctions/data/allocatedRELA and unchangedcurrentRustcontext/ABI/turbo proofs.",
+        "actual": "IndependentF04supportedfileCOMPLETE via matching26ebrawFP254/exit0/exacttrace+BEGIN/currentfree, as originalapplicable-native-behaviorpredicate permits.",
+        "limits": "WholeFPprotocolFAIL4096declared/1024actual remains. No broadernativeapp/stateclass/SMP/bootstrapcompilerprovenance/hostACKclaim; M14globalOPEN."
       },
       "current_increment": {
         "at": "2026-10-24T11:43:50.774989+00:00",
@@ -1566,9 +1687,9 @@
       },
       "prior_recorded_owner_before_20261025": "/root/m14_actual_consumer_fix",
       "checkpoint": {
-        "implemented": "Actual selected zero-C cpu object/context/ABI/turbo proofs retained; current f42 FP payload and exact module tuple staged using existing unchanged consumer.",
-        "actual": "Offline base/overlay/manifest/ordinaryjoin independently accepted; execution static source/profile reviewPASS; FP values not executed yet.",
-        "limits": "Original M14-04-04 current FP/XSAVE value join remainsOPEN. No guestperhelper/newquota/SMP/allconfiguration claim. Exactbootstrapcompilerprovenanceunproved."
+        "implemented": "Supportedselectedcpu.o0runtimeCfunctions/data/allocatedRELA and unchangedcurrentRustcontext/ABI/turbo proofs.",
+        "actual": "IndependentF04supportedfileCOMPLETE via matching26ebrawFP254/exit0/exacttrace+BEGIN/currentfree, as originalapplicable-native-behaviorpredicate permits.",
+        "limits": "WholeFPprotocolFAIL4096declared/1024actual remains. No broadernativeapp/stateclass/SMP/bootstrapcompilerprovenance/hostACKclaim; M14globalOPEN."
       }
     },
     {
@@ -2469,9 +2590,9 @@
         "native_credit": false
       },
       "latest_dispatcher_checkpoint": {
-        "implemented": "Qualified existing Rust/selector cohort actually adopted; supported Linux6.12/x86/nonUBSAN/nonDCFA profile.",
-        "actual": "Actual4commands0/fullRust+2C+11inputlink, eightCinputs reused, uniqueRustexports23; selectedM14-F06 Cfunctions55\u219249. Independent artifact/postjoin accepted.",
-        "limits": "Matching685ace native proof pending; no whole-file/fullcutover credit. Staticelision distinct from separately implementedport; warnings retained."
+        "implemented": "ExistingRustprocessVM defaultselectors integrated26eb, no duplicatedports.",
+        "actual": "Independent26ebdefaultartifact archC31; nextcopy-to/from/forwardHOST490passed separately3ba78ed6, notdefaultyet.",
+        "limits": "RealMM/usercopy/fault/lifetime/wholefile/fullnative remainopen."
       },
       "prior_recorded_owner_before_20261025": "/root/terminal_lifecycle_repair",
       "checkpoint_before_20261027_active_frontier": {
@@ -3417,11 +3538,17 @@
       "actual_progress": "Independent26ebdefaultcohort accepted: C75/31,13readonlyRustdataowners,71Cmetadata,35exports; native/wholefile unchanged.",
       "evidence": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/FIVE-DEFAULT-INDEPENDENT-ARTIFACT-ACCEPTANCE.json",
       "engineering_percentage": null
+    },
+    {
+      "at": "2026-10-27T06:12:33.798265+00:00",
+      "actual_progress": "F04originalsupportedfileCOMPLETE by independentnarrowdiagnosticnative-value decision; WHOLEFPprotocolFAIL4096vs1024 preserved. F06next3 HOST490PASS separate, notdefault.",
+      "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+      "engineering_percentage": null
     }
   ],
   "latest_dispatcher_checkpoint": {
-    "at": "2026-10-27T05:37:48.345070+00:00",
-    "evidence": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/FIVE-DEFAULT-INDEPENDENT-ARTIFACT-ACCEPTANCE.json",
-    "next_action": "Firstentry-readyFPpathcorrected ordaemonSource28suffix underfreshactualrelease; matching26ebnative remainsopen."
+    "at": "2026-10-27T06:12:33.798265+00:00",
+    "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+    "next_action": "Source29daemonIOcorrection firstentryready underactualfreshadmission; qualifyF03/F02HOST and integratecoherentreadybatch. FPfullprotocolrepairseparate."
   }
 }

@@ -1,0 +1,41 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ROOT_GRANTED_ONE_ALIAS_ORDER_CORRECTION",
+  "original_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/fixture/main.c",
+    "bytes": 7360,
+    "sha256": "c1cdbfc0eb156fdccac376c91148b024721de6ed3b8983fc62e0057489aaf53a"
+  },
+  "corrected_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/table-name-alias-correction-1/fixture/main.c",
+    "bytes": 7360,
+    "sha256": "9f59ed6c91fd9a277c273983da86a341ec753b7058b88fde29b54ecdb647fc58"
+  },
+  "diff": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/table-name-alias-correction-1/fixture-alias-order.diff",
+    "bytes": 907,
+    "sha256": "61b5735367b5ab55e2839aa1ddde77a98469e0a0b74b3ef9858b9d0cbc392129"
+  },
+  "delta": "Move only the retained fixture list-type alias below genuine reference-table offsetof(timer,list), before unchanged original main. No CHECK/ABI/type/value/Rust/Cselector/GCCflag changes.",
+  "corrected_plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/table-name-alias-correction-1/EXACT-THREE-SUFFIX-COMMANDS.json",
+    "bytes": 33265,
+    "sha256": "75f0f9fc9451ed14da2d2508b8ebf1397796438d4a769fb54ddd4e0c2a77eb12"
+  },
+  "runner": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/table-name-alias-correction-1/run_suffix_once.py",
+    "bytes": 6724,
+    "sha256": "a1b33d70fbd3c508724d532e0462e1c50942d9586e5827b18f56aaa44abd5cc4"
+  },
+  "grant": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/ROOT-ORDINARY-CPU6-CORRECTION-ALLOWANCE-1.json",
+    "bytes": 1158,
+    "sha256": "e92e3d110ba3b45fe01bf94682769ac81e16d0ee3deaeab952dd2813f80dc264"
+  },
+  "original_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/4.stderr",
+    "bytes": 326,
+    "sha256": "57c40a34f141adf8f933cd6bedeac3a0e2fb1924e184efe4fd0734de382bfe38"
+  },
+  "prefix_replays": false
+}

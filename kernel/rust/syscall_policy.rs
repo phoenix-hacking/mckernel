@@ -25019,6 +25019,7 @@ unsafe fn f03_exit_notify_debug_enabled(index: usize) -> bool {
     unsafe { read_volatile(addr_of!((*record).line_flags)) >> 24 != 0 }
 }
 
+#[cfg_attr(f03_exit_waitq_wake_selected_candidate,no_mangle)]
 unsafe extern "C" fn f03_exit_notify_wake(waitq: *mut c_void) {
     // SAFETY: The full helper retains the owning process and actual wait queue.
     unsafe { crate::waitq::waitq_wakeup(waitq.cast()) };
@@ -35940,3 +35941,18 @@ mod f03_sync_child_event_v1 {
 #[cfg(f06_process_vm_entry_candidate)]
 #[path = "f06_process_vm_entry.rs"]
 mod f06_process_vm_entry;
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(f06_copy_to_user_candidate)]
+#[path = "arch_copy_to_user_bridge.rs"]
+mod f06_copy_to_user_candidate;
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(f06_copy_from_user_candidate)]
+#[path = "arch_copy_from_user_bridge.rs"]
+mod f06_copy_from_user_candidate;
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(f06_forward_context_candidate)]
+#[path = "arch_syscall_forward_context_bridge.rs"]
+mod f06_forward_context_candidate;

@@ -1,0 +1,196 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_CURRENT26EB_THREE_REUSED_CALLBACKS_FIND90_UNLOCK3_WAITQ3_ABI19",
+  "source_handoff": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/SOURCE-HANDOFF.NOT-GRANTED.json",
+    "bytes": 4729,
+    "sha256": "7b3ccd7086025e4c0e106f0caf17a7a0b59dd8a145df78c725819a263e3e61c2"
+  },
+  "exact_plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/FUTURE-HOST-COMMAND-PLAN.NOT-GRANTED.json",
+    "bytes": 17128,
+    "sha256": "af26202462633f6d0d0cb96d8a7c80797e236404b8c42a66e7f72edd6f3ed8dd"
+  },
+  "Root_grant": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/ROOT-ORDINARY-CPU6-GRANT.json",
+    "bytes": 2798,
+    "sha256": "d6eae19860fd0d43bcd8570f0e2be7f0fb7c7f8b420c7c5cb3b5793e62176409"
+  },
+  "actual_results": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/actual-host-1/RESULTS.json",
+    "bytes": 21649,
+    "sha256": "a5806fd56981bffa960824de3ec8386dc87d2759d4cff5bfcc7463eab2c9280c"
+  },
+  "execution_wrapper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/actual-host-1/run_actual.py",
+    "bytes": 7878,
+    "sha256": "a45c831cfcfee5b980329b11d3b8b8d490085f8e1424041a55424d2ae9f1606d"
+  },
+  "actual_capture_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/actual-host-1/capture/profile.json",
+    "bytes": 4197,
+    "sha256": "7f4f1d6281bef6df7023dc1e2a714f0320d51e9cc3feb5c1ac78015497aaae1b"
+  },
+  "commands": 3,
+  "returncodes": [
+    0,
+    0,
+    0
+  ],
+  "actual_checks": {
+    "find_original_selected_pairs": 90,
+    "unlock_valid_pointer_pairs": 3,
+    "waitq_valid_pointer_pairs": 3,
+    "genuine_C_Rust_ABI_words": 19,
+    "source_defined_C_and_selected_alias_signatures": 6
+  },
+  "actual_stdout": "PASS three reused callbacks:90 find +3 unlock +3 waitq pointer-forwarding pairs +19 genuine ABI words; explicit HOST mocks only; real lookup/lock/wake/lifetime ownership OPEN\n",
+  "completions": [
+    {
+      "label": "00-existing-Rust-three-callback-object",
+      "pid": 1439024,
+      "birth_start_ticks": 87913059,
+      "returncode": 0,
+      "direct_joined": true,
+      "group_absent": true,
+      "streams_closed": true,
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/actual-host-1/capture/00-existing-Rust-three-callback-object/stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/actual-host-1/capture/00-existing-Rust-three-callback-object/stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/actual-host-1/capture/00-existing-Rust-three-callback-object/command.json",
+        "bytes": 1418,
+        "sha256": "bf2240fc4801eca4899c37783052db81ead253906d3c1fdd5776ac52f4b3a93a"
+      },
+      "metrics": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/actual-host-1/capture/00-existing-Rust-three-callback-object/actual-metrics.json",
+        "bytes": 2629,
+        "sha256": "dc34c6e0cc6defd6eb2022f1c5052d5a727f4a0b03a5ff3caa58cc54097a9338"
+      },
+      "direct_join": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/actual-host-1/capture/00-existing-Rust-three-callback-object/direct-join.json",
+        "bytes": 260,
+        "sha256": "f4cda0aeb35d519b5d14bacd2bc8a3a464c3e51ff7bd45360fd8fcd629979c38"
+      },
+      "direct_wait": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/actual-host-1/capture/00-existing-Rust-three-callback-object/direct-wait.json",
+        "bytes": 82,
+        "sha256": "6e45d1d4e3decc07c7cc87bc8eeafae667a27f9f454102839657e210938db2e5"
+      }
+    },
+    {
+      "label": "01-genuine-header-original-C-and-three-selected-aliases-link",
+      "pid": 1439031,
+      "birth_start_ticks": 87913070,
+      "returncode": 0,
+      "direct_joined": true,
+      "group_absent": true,
+      "streams_closed": true,
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/actual-host-1/capture/01-genuine-header-original-C-and-three-selected-aliases-link/stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/actual-host-1/capture/01-genuine-header-original-C-and-three-selected-aliases-link/stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/actual-host-1/capture/01-genuine-header-original-C-and-three-selected-aliases-link/command.json",
+        "bytes": 3978,
+        "sha256": "51b3a0b4c6664cc36dea9ad2a807d90bc118b765961d6cfc8853c6c70c839679"
+      },
+      "metrics": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/actual-host-1/capture/01-genuine-header-original-C-and-three-selected-aliases-link/actual-metrics.json",
+        "bytes": 2627,
+        "sha256": "6ed4c41219ab1f75a9c7f68bc1f0e750d3d96c76f89e34264ea66e7286961dc4"
+      },
+      "direct_join": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/actual-host-1/capture/01-genuine-header-original-C-and-three-selected-aliases-link/direct-join.json",
+        "bytes": 260,
+        "sha256": "c5b14fbe0b052e69a1c09758eed112534c0a55bb262686d7c4a432c954726603"
+      },
+      "direct_wait": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/actual-host-1/capture/01-genuine-header-original-C-and-three-selected-aliases-link/direct-wait.json",
+        "bytes": 82,
+        "sha256": "d22148122b72a675188b396be41c69b539770b2d38ff92bed07cef2f7cf294b3"
+      }
+    },
+    {
+      "label": "02-find90-unlock3-waitq3-and-genuineABI19",
+      "pid": 1439036,
+      "birth_start_ticks": 87913081,
+      "returncode": 0,
+      "direct_joined": true,
+      "group_absent": true,
+      "streams_closed": true,
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/actual-host-1/capture/02-find90-unlock3-waitq3-and-genuineABI19/stdout",
+        "bytes": 175,
+        "sha256": "53527035ea95ab5529d604583083a3a4437f6b554af4efbf57b624a80297b84c"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/actual-host-1/capture/02-find90-unlock3-waitq3-and-genuineABI19/stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/actual-host-1/capture/02-find90-unlock3-waitq3-and-genuineABI19/command.json",
+        "bytes": 728,
+        "sha256": "b7fd38474abc0696d534cdb6b0c744692e7f16fbd30406d62c73bedee712b18e"
+      },
+      "metrics": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/actual-host-1/capture/02-find90-unlock3-waitq3-and-genuineABI19/actual-metrics.json",
+        "bytes": 2626,
+        "sha256": "90f445fd39dafcb6c3a1e51758ab983043014c9b464e043ed3cc9e15d0f41c0c"
+      },
+      "direct_join": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/actual-host-1/capture/02-find90-unlock3-waitq3-and-genuineABI19/direct-join.json",
+        "bytes": 260,
+        "sha256": "553ee57971569c2e9a6a4830d44c59a793bc05b2e8e80ce2855c59c02be394e3"
+      },
+      "direct_wait": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/actual-host-1/capture/02-find90-unlock3-waitq3-and-genuineABI19/direct-wait.json",
+        "bytes": 82,
+        "sha256": "d4f61f432ab0113f2384509ee45e4c4e9407e990e2ab71615574a86247146af6"
+      }
+    }
+  ],
+  "first_compiler_UTC": "2026-10-27T06:14:45.902505+00:00",
+  "last_finished_joined_by_UTC": "2026-10-27T06:14:46.145147+00:00",
+  "last_time_basis": "Metrics-file mtime after exact owned_capture returned with directjoin/groupabsence/closedstreams; observed upper bound, not fabricated exact kernel exit",
+  "CPU_seconds": 0.132959,
+  "command_wall_seconds": 0.23038378008641303,
+  "whole_wrapper_wall_seconds": 0.2784203359624371,
+  "fresh_batch_peak_RSS_KiB": 90768,
+  "peak_RSS_scope": "Actual fresh cumulative child rusage high water, not per-command attribution",
+  "actual_source_ready_observation_epoch": 1793081163.8448749,
+  "source_ready_observation_to_first_compiler_seconds": 522.0576300621033,
+  "Root_grant_recorded_to_first_compiler_seconds": 67.73671007156372,
+  "original_block_start_timestamp": null,
+  "blocked_duration_seconds": null,
+  "e8b_canonical04b5_adf_admission_before_each_command": true,
+  "all_direct_children_joined": true,
+  "all_groups_absent": true,
+  "all_streams_closed": true,
+  "CPU6_slot_FREE": true,
+  "actual_prefix_replay": false,
+  "compiler_correction_count": 0,
+  "all_stderr_bytes_zero": true,
+  "frozen_source_tool_headers_argv_unchanged": true,
+  "scope_limits": "HOST inert find/unlock/waitq argument and ABI forwarding only; no actual lookup, thread lock, wait-list/wake/scheduler, reference/current-stack/kernel/native effects",
+  "actual_new_default_retirements": 0,
+  "default_link": false,
+  "native": false,
+  "whole_file_retired": false,
+  "real_ownership_holds_preserved": true,
+  "canonical_Git_Docker_guest_actions": 0
+}

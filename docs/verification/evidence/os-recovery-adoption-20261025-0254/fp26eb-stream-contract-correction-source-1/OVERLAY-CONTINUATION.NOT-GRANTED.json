@@ -1,0 +1,91 @@
+{
+  "actual_grant": null,
+  "changed_final_map_members_expected": [
+    "init"
+  ],
+  "current_physical": null,
+  "decision": "SOURCE_ONLY_REQUIRES_NEW_COLLECTOR_QUALIFICATION_AND_ACTUAL_ORDINARY_COMPOSITION_GRANT",
+  "existing_API": "build_overlay(base_path,payload_path,collector_path,mcexec_path,output_path,*,collector_sha256,mcexec_sha256,payload_sha256,base_sha256,base_size,base_cpio_sha256,base_cpio_size)",
+  "existing_overlay_source": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_overlay.py",
+    "sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d",
+    "size": 26579
+  },
+  "image_sha256": "26eb201ab8160b98e9a95ac3bae116a6392f343faf60641bb62faa7116a793eb",
+  "immutable_base": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/five26eb-fp-image-composition-static-source-1/offline-materialization-1/next10-fp-mm-base.cpio.gz",
+    "sha256": "e03f3e00e483080723a0389b1a7885a21e2b33d47789cc349a9357c70e2bb64a",
+    "size": 13308071
+  },
+  "immutable_launcher": {
+    "mode": 33261,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/launcher-runtime-snapshot-1/mcexec",
+    "sha256": "dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954",
+    "size": 394648
+  },
+  "immutable_payload": {
+    "mode": 33216,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f42-fp-readonly-artifact-path-correction-source-1/runtime-inputs/fp-payload.snapshot",
+    "sha256": "3488648514aa2d8d5eacfdbdd111ad33f17c2abccfff4755f3ebcefef45ec583",
+    "size": 5662872
+  },
+  "module_refs": [
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/module-runtime-snapshots-1/ihk.ko",
+      "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+      "size": 1527808
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/five26eb-fp-image-composition-static-source-1/offline-materialization-1/runtime-inputs/ihk-smp-x86_64.ko",
+      "sha256": "887dc3567e6035c921588e61b45b41a8ef32a972d142fe2ba82ec48442353b12",
+      "size": 13098896
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/five26eb-fp-image-composition-static-source-1/offline-materialization-1/runtime-inputs/mcctrl.ko",
+      "sha256": "57546af5110c0674b307e5ac5a328228abbe784f890f69521db5f594f21f6ae8",
+      "size": 2578512
+    }
+  ],
+  "new_collector": null,
+  "new_manifest": null,
+  "new_overlay": null,
+  "new_overlay_metadata": null,
+  "new_qualification": null,
+  "nonce": null,
+  "original_payload_contract": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stdout_hex": "465054485245414420763120746872656164733d322073616d655f7065726d69747465645f6370753d312064697374696e63745f7469643d310a7468726561643020726f756e64733d363420796d6d5f6c616e65733d363420706565725f70726f67726573733d3634207969656c645f6d696e3d363420636f6e74726f6c733d303737662f3366383020726573746f7265643d310a7468726561643120726f756e64733d363420796d6d5f6c616e65733d363420706565725f70726f67726573733d3634207969656c645f6d696e3d363420636f6e74726f6c733d306237662f3566383020726573746f7265643d310a465054485245414420504153530a"
+    },
+    "stderr_limit_bytes": 4096,
+    "stdout_limit_bytes": 4096
+  },
+  "positional_inputs": [
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/five26eb-fp-image-composition-static-source-1/offline-materialization-1/next10-fp-mm-base.cpio.gz",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f42-fp-readonly-artifact-path-correction-source-1/runtime-inputs/fp-payload.snapshot",
+    "ACTUAL_QUALIFIED_NEW_ND_FUTEX_COLLECTOR_PATH",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/launcher-runtime-snapshot-1/mcexec",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/fp26eb-stream-contract-correction-source-1/overlay-PENDING-ROOT/fp-thread-state.cpio.gz"
+  ],
+  "runtime_authority": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_profile": "ND_FUTEX"
+}

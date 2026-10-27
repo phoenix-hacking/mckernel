@@ -1,0 +1,89 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "STOP_ONE_CORRECTION_CONSUMED_EXACT_PROVIDER_DEPENDENCY_ESCALATED",
+  "first_attempt": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/RESULTS.json",
+    "bytes": 28235,
+    "sha256": "11f286a3e2dd6e133dda62e28e481258fe7b937f08729e3e4d905c9b44803f4e"
+  },
+  "first_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/4.stderr",
+    "bytes": 326,
+    "sha256": "57c40a34f141adf8f933cd6bedeac3a0e2fb1924e184efe4fd0734de382bfe38"
+  },
+  "correction_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/table-name-alias-correction-1/SOURCE-CORRECTION.json",
+    "bytes": 2577,
+    "sha256": "faadff96a61a9541b337ae115f96c1f3b162c725fa413192e82b4435e0f3072b"
+  },
+  "correction_attempt": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/table-name-alias-correction-1/actual-suffix-1/RESULTS.json",
+    "bytes": 10251,
+    "sha256": "045bffbb1ebc0e7b1510dbfc8715c4437119ec252866e9e9c58fd6a62f767614"
+  },
+  "correction_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/table-name-alias-correction-1/actual-suffix-1/0.stderr",
+    "bytes": 314,
+    "sha256": "172492b68117925b347ba94d650a7c84e46936839aad3afbb130f910d9fee30b"
+  },
+  "successful_prefix_artifacts": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/timer.o",
+      "bytes": 2640,
+      "sha256": "dae24d2258ccc1a5488869ad993871b61409656b1aa01e5938fe88aa8c9bc6b0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/fallback.o",
+      "bytes": 38448,
+      "sha256": "e9cee1fe464e130e1a990b692491149f1304aafc568691daa59060168e8db198"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/selected.o",
+      "bytes": 36480,
+      "sha256": "54e0aa163274e61ba5899c48c38d3ecb6ef7a07e764b9caa6cfa61617b106337"
+    }
+  ],
+  "passed_scopes": [
+    "Genuine C header assertions for 15 offset values, field types/positions, 120-byte size and 8-byte alignment.",
+    "Focused Rust table constructor, type, wrapper and existing timer body compiled once.",
+    "C fallback producer and selected extern-only miniobjects compiled. Their ELF ownership checks have not run."
+  ],
+  "new_blocker": "The genuine kernel string header maps memset to __inline_memset. The unchanged fixture init has three zeroing calls. C compilation passed, but linking requires the existing Rust provider. No unresolved import was ignored.",
+  "existing_provider_source": {
+    "path": "/home/holden/mckernel/kernel/rust/string.rs",
+    "bytes": 13172,
+    "sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3"
+  },
+  "existing_provider_name": "__inline_memset",
+  "existing_provider_lines": [
+    286,
+    315
+  ],
+  "not_run": [
+    "Readonly/current055c/C-fallback/Rust/final-table byte comparison",
+    "Final Rust table/wrapper/body origin checker",
+    "25750 assertion execution"
+  ],
+  "metrics": {
+    "actual_commands": 6,
+    "all_directly_joined": true,
+    "all_groups_absent": true,
+    "all_streams_closed": true,
+    "CPU6_released": true,
+    "total_CPU_seconds": 0.312878,
+    "total_command_wall_seconds": 0.34109594917390496,
+    "peak_RSS_KiB": 100732,
+    "first_compiler_UTC": "2026-10-27T06:18:30.185856+00:00",
+    "first_failure_end_UTC": "2026-10-27T06:18:30.440143+00:00",
+    "correction_compiler_UTC": "2026-10-27T06:20:25.271758+00:00",
+    "correction_end_UTC": "2026-10-27T06:20:25.415005+00:00",
+    "failure_to_correction_start_seconds": 114.8169059753418,
+    "earlier_task_blocked_timestamp": null
+  },
+  "current_C_records_counted": 71,
+  "actual_C_record_retirements": 0,
+  "canonical_writes": 0,
+  "default_native_artifact_mutation": false,
+  "expert_owner": "/root/timer_provider_link_expert",
+  "no_further_correction_or_compilation_by_this_owner": true
+}

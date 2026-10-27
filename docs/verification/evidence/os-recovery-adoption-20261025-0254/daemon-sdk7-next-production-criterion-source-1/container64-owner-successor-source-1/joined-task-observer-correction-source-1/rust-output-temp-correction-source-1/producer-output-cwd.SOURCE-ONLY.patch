@@ -1,0 +1,45 @@
+--- Source28/run_fixture_suffix.py
++++ Source29/run_fixture_suffix.py
+@@ -32,6 +32,9 @@
+     started=time.monotonic();sys.path.insert(0,str(BASE/'fixture'));from owned_process import Owner
+     from joined_audit import validate as validate_join_audit
+     from prefix_evidence import load as load_prefix
++    from rust_output_contract import validate as validate_rust_output, runtime_preflight as probe_rust_output
++    retained_mock=Path('/retained-mock-build')
++    baseline_rust_argv=json.loads((retained_mock/'Rust-daemon-build.command.json').read_bytes())['argv']
+     owner=Owner(out)
+     def limit(seconds):
+         left=90-(time.monotonic()-started)
+@@ -49,11 +52,20 @@
+     assert bound.read_bytes()==Path('/retained-prefix/ihkmond.fixture.c').read_bytes()
+     assert helper.read_bytes()==Path('/retained-prefix/reference_helpers.c').read_bytes()
+     def build(argv,label):
+-        (out/(label+'.command.json')).write_text(json.dumps({'argv':argv,'IHKMOND_TMP':str(tmp),'LC_ALL':'C'},indent=2)+'\n')
+-        p=owner.run(argv,env,BASE,limit(60),label)
++        cwd=out if label=='Rust-daemon-build' else BASE
++        compiler_env=dict(env)
++        if label=='Rust-daemon-build':
++            validate_rust_output(argv,cwd,out,baseline_rust_argv)
++            compiler_env.update({key:str(out/'rustc-tmp') for key in ['TMPDIR','TMP','TEMP']})
++            io_proof=probe_rust_output(argv,cwd,out,BASE,compiler_env,baseline_rust_argv)
++            with (out/'Rust-output-preflight.ACTUAL.json').open('x') as receipt:json.dump(io_proof,receipt,indent=2);receipt.write('\n')
++        (out/(label+'.command.json')).write_text(json.dumps({'argv':argv,'cwd':str(cwd),'compiler_temporary_environment':{key:compiler_env.get(key) for key in ['TMPDIR','TMP','TEMP']},'IHKMOND_TMP':str(tmp),'LC_ALL':'C'},indent=2)+'\n')
++        p=owner.run(argv,compiler_env,cwd,limit(60),label)
+         if p.returncode:raise RuntimeError(label+' failed; capture retained, no retry')
+     includes=['-I',str(BASE.parent/'host-libudev-header-1'),'-I',str(BASE/'fixture/include'),'-I',str(out)];mock=out/'mock.o'
+-    build([cc,'-std=gnu11','-O2','-fPIC','-pthread']+includes+['-c',str(BASE/'fixture/mock.c'),'-o',str(mock)],'mock-build')
++    # d413 already compiled this unchanged observer successfully. Reuse it.
++    shutil.copyfile(retained_mock/'mock.o',mock)
++    assert hashlib.sha256(mock.read_bytes()).hexdigest()==hashlib.sha256((retained_mock/'mock.o').read_bytes()).hexdigest()
+     flags=['-Wl,--wrap='+s for s in WRAPS]
+     c_binary=out/'ihkmond-C';r_binary=out/'ihkmond-Rust';c_helper=out/'ring-C'
+     # Both successful C compiler prefixes are reused byte-for-byte.
+@@ -61,7 +73,7 @@
+         shutil.copyfile(Path('/retained-prefix')/name,out/name);os.chmod(out/name,0o700)
+     rust=[rustc,'--edition=2021','--cfg','ihkmond_fixture','-C','opt-level=2','-C','codegen-units=1',str(BASE/'ihkmond.rs'),'-C','link-arg='+str(mock)]
+     for flag in flags:rust+=['-C','link-arg='+flag]
+-    rust+=['--emit=link='+str(r_binary)+',obj='+str(out/'ihkmond-Rust.o')];build(rust,'Rust-daemon-build')
++    rust+=['--emit=link='+str(r_binary)+',obj='+str(out/'ihkmond-Rust.o'),'--out-dir',str(out)];build(rust,'Rust-daemon-build')
+     invocation=out/'ihkmond'
+     def execute(exe,label,args,mode,mon,kmsg,helper=False):
+         if invocation.is_symlink():invocation.unlink()

@@ -1,0 +1,46 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_LITERAL_ADOPTED_NAMESPACE_CLI_WITH_SOURCE_TEMPLATE",
+  "argv": [
+    "taskset",
+    "-c",
+    "0",
+    "prlimit",
+    "--as=2147483648",
+    "--cpu=30",
+    "--core=0",
+    "--",
+    "timeout",
+    "60s",
+    "python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/qualify_produced_cohort.py",
+    "--preflight-only",
+    "--admission",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT109-NEXT-DEFAULT-BUILD-ADMISSION-1"
+  ],
+  "returncode": 0,
+  "adopted_profile_checked": true,
+  "artifact_gates_executed": false,
+  "actual_output_created": false,
+  "source_only_profile_after_probe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT109-NEXT-DEFAULT-BUILD-ADMISSION-1/PROFILE.CLI-PREFLIGHT.SOURCE-ONLY.json",
+    "bytes": 97841,
+    "sha256": "739e15bc2a8b7c2f90d18241f8660659b61ff2d1cd873469be5ad64507fab8c7"
+  },
+  "profile_preserved_by_rename_for_fresh_Root_finalization": true,
+  "canonical_postimages_checked": 9,
+  "canonical_Rust_mirror_checked": 109,
+  "source_adoption": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/ROOT-CANONICAL-SOURCE-ADOPTION.json",
+    "bytes": 5259,
+    "sha256": "1be783617282f1568e4b6f09bd2a93942880b6544aa9447fb3678ad6e70287d2"
+  },
+  "source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/ROOT-RECORDED-INDEPENDENT-SOURCE-PROFILE-REVIEW.json",
+    "bytes": 629,
+    "sha256": "f1222fe80af9db795e60ef0307809452127ce22b56f987a1eb36ef0a295ebe1f"
+  },
+  "physical_clearance": null,
+  "Root_request_adoption_nonce_grant_resource_clock_created": false
+}

@@ -1,0 +1,256 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_ONE_F04_SUPPORTED_PROFILE_FILE_DECISION_INPUTS_FP_NATIVE_PREDICATE_OPEN",
+  "whole_file_acceptance": false,
+  "native_acceptance": false,
+  "runtime_authority": null,
+  "canonical_status_changed": false,
+  "original_file_id": "M14-F04",
+  "original_file": "arch/x86_64/kernel/cpu.c",
+  "frozen_obligations": [
+    {
+      "id": "M14-04-01",
+      "title": "CPU register/interrupt/atomic primitives with reviewed assembly boundaries and exact memory ordering."
+    },
+    {
+      "id": "M14-04-02",
+      "title": "CPU/AP startup, GDT/IDT/TSS and syscall entry initialization, LAPIC/IPI/timer and clock setup orchestration."
+    },
+    {
+      "id": "M14-04-03",
+      "title": "Context switching, TLS installation, runqueue lock handoff and post-switch process retirement."
+    },
+    {
+      "id": "M14-04-04",
+      "title": "FPU/XSAVE ownership: allocate/save/copy/restore/clear/release, signal handoff and fault recovery."
+    },
+    {
+      "id": "M14-04-05",
+      "title": "CPU-local diagnostics/context access and register/performance state housekeeping."
+    }
+  ],
+  "worklist": {
+    "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/rust-cutover-m14.json",
+    "bytes": 213882,
+    "sha256": "a88549358d6552330565d65699a5455a1550d086908f94f53fbb0d4bda2dbdac"
+  },
+  "only_remaining_readiness_predicate": "M14-04-04 current selected Rust context/FP producer native-value join. Parent readiness already accepts other supported-profile source/default/focused/context/ABI/turbo inputs; this preparation does not inventory or add new gates.",
+  "readiness_reused": {
+    "selected_cpu_C_runtime_functions": 0,
+    "selected_cpu_C_runtime_objects": 0,
+    "selected_cpu_C_allocated_RELA": 0,
+    "authority": "Explicit Root completed bounded-readiness cursor; no absence-based recomputation or new whole-file acceptance",
+    "unchanged_cpu_object_binding": {
+      "action": "reuse exact object; no C/ASM compile",
+      "build_relative": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+      "link_token": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+      "replace": false,
+      "retained_archive_member": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+      "source": {
+        "bytes": 2872,
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+        "sha256": "3bed7de9807b6d8e70e87722a11b3d103119203822b9e022ebd0ecbc570bbce1"
+      }
+    },
+    "existing_focused_receipts": [
+      {
+        "path": "docs/verification/evidence/velocity-intervention-20261023-4/m14-x86-cpu/INDEPENDENT-CORRECTED-SOURCE-AND-ACTUAL-CONSUMER.ROOT-RECORD.json",
+        "scope": "18432 selectedoriginalC/Rust and18432 modeledprimitivefallback comparisons,15missingcallbacks,55ABI/wholeGCC9CPU/partiallink; actual10commands independentlyPASS",
+        "qualification": "Bounded body only, notwholearea/file/native closure"
+      },
+      {
+        "path": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/production-context-consumer-preparation-1/root-retained-stack2m-observer-1/stdout",
+        "sha256": "6ce4b7c4d5e6883d6934359a6056b343dcde6ced9b6a3aa55fa2c1a6db45c387",
+        "size": 20622,
+        "scope": "context correctedproper2MiBprofile11PASS/12240leaf/full78/completeGCC9/partial; old8MiB cohort not profile accepted"
+      },
+      {
+        "utc": "2026-10-24T02:43:41.098757+00:00",
+        "stage": "actual-focused-checks",
+        "result": "PASS",
+        "comparisons": 8000,
+        "new_commands": 15,
+        "whole_seconds": 3.021190659,
+        "receipt": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/next-body-batch-source-1/actual-retained-continuation-1/ACTUAL-WHOLE-JOIN.json",
+        "receipt_sha256": "476243fae1c47b2106765c7b5a05a355ec2df89ecfaadfcdffc947d14aba4360",
+        "limitations": "RetainedRust00 reused; firsthashNOW only, rawNMI/IRQ/IRET/kernelstack/native not executed. All prior failures retained; no fileclosure."
+      }
+    ]
+  },
+  "current_provider_identity_join": {
+    "artifact_acceptance": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/FIVE-DEFAULT-INDEPENDENT-ARTIFACT-ACCEPTANCE.json",
+      "bytes": 2323,
+      "sha256": "004291b31bb92352035b1ea10e3f13c14ec768e3816ff18fa5499ecee5a469b2"
+    },
+    "artifact_qualification": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sync-processvm-host13-validator-import-suffix-1/actual-qualification-1/FINAL-ARTIFACT-QUALIFICATION.json",
+      "bytes": 10817,
+      "sha256": "9fe81078310aa7f2440f4d1613dbf28abc160f09649e81387dab9dafd936cf35"
+    },
+    "actual_producer": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SYNC-PROCESSVM-HOST13-FIVE-BUILD-ADMISSION-1/OUTPUT/work/evidence/producer-contract.json",
+      "bytes": 16835,
+      "sha256": "ca4479f672d926cc523c71c7062868f409e842c1318e0eda16f3cf09567f7f9a"
+    },
+    "actual_profile": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SYNC-PROCESSVM-HOST13-FIVE-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json",
+      "bytes": 96277,
+      "sha256": "f13bdbff42626012b73c8c3701afa2bf5991649b055918821b418901d19b0e9c"
+    },
+    "closed_Rust_source_map": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-host13-five-stage-source-1/RUST-SUBTREE-CLOSED-SOURCE-MAP.json",
+      "bytes": 139080,
+      "sha256": "8a7ce23ceb18ccca297d25b63d6d588d9816e8e14ded58893a41d05b8a7a68f4"
+    },
+    "Rust_source_count": 106,
+    "exact_x86_cpu_source": {
+      "relative": "x86_cpu_helpers.rs",
+      "original": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/rust/x86_cpu_helpers.rs",
+        "bytes": 255992,
+        "sha256": "8db479fbea9493ee498bf5d78aef71589b49d9f065e13a8617b5765cd681c194"
+      },
+      "snapshot": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-host13-five-stage-source-1/rust-subtree/x86_cpu_helpers.rs",
+        "bytes": 255992,
+        "sha256": "8db479fbea9493ee498bf5d78aef71589b49d9f065e13a8617b5765cd681c194"
+      },
+      "kind": "unchanged source6153 subtree",
+      "predecessor_snapshot": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-next-default-source-1/rust-subtree/x86_cpu_helpers.rs",
+        "bytes": 255992,
+        "sha256": "8db479fbea9493ee498bf5d78aef71589b49d9f065e13a8617b5765cd681c194"
+      }
+    },
+    "old_bounded_FP_source_join": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current685-m14-f04-fp-proof-preparation-1/OLD-TO-CURRENT-FP-PROVIDER-JOIN.json",
+      "bytes": 16952,
+      "sha256": "e52c5f4af78c59b499496477c3b247d4b21edf96f71694fe59ec02c6dde5e4a3"
+    },
+    "old_current_x86_cpu_source_sha256": "8db479fbea9493ee498bf5d78aef71589b49d9f065e13a8617b5765cd681c194",
+    "new_26eb_same_x86_cpu_source_sha256": "8db479fbea9493ee498bf5d78aef71589b49d9f065e13a8617b5765cd681c194",
+    "unchanged_source_body_join_permitted": true,
+    "historical_image_native_acceptance_not_relabelled": true,
+    "new_default_Rust_output": {
+      "path": "/work/output/build/kernel/rust/mckernel_rust.o",
+      "bytes": 18259624,
+      "sha256": "e9cc19209572b008257385f1251e4f8f7fa30c15540bc28255cdbe13f017b90e"
+    },
+    "new_default_image": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SYNC-PROCESSVM-HOST13-FIVE-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+      "size": 10251784,
+      "sha256": "26eb201ab8160b98e9a95ac3bae116a6392f343faf60641bb62faa7116a793eb",
+      "mode": 33261
+    },
+    "seven_original_C_ASM_prefixes_reused": 7,
+    "producer_identity_chain": "Accepted106-source closedRustmap -> exact x86_cpu_helpers8db479fb -> actual fullRust e9cc1920 -> accepted11input finalimage26eb201a -> offlineFPmanifest/image-recordcomposition. Old685/1e7a image or Rust96c230cc receipts are not substituted for this new producer."
+  },
+  "already_completed_offline_binding": {
+    "join": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/five26eb-fp-image-composition-static-source-1/ROOT-ACTUAL-OFFLINE-COMPOSITION-JOIN.json",
+      "bytes": 2566,
+      "sha256": "fd5fd133025de6eeca36aff3a0a6ee77d8b4514327c125b5f3f2cef80faedbd2"
+    },
+    "composition": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/five26eb-fp-image-composition-static-source-1/offline-materialization-1/OFFLINE-COMPOSITION-RESULT.json",
+      "bytes": 4761,
+      "sha256": "fdd82145a0e41389036ba49c740f47791be078739a1a576bac1c3e9489c3ff4f"
+    },
+    "frozen_input": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/five26eb-fp-image-composition-static-source-1/FROZEN-FP-COMPOSITION.json",
+      "bytes": 12433,
+      "sha256": "8cc6a16486fc08ffc0501455202f067245a341518110db63bed98df882e5b6e0"
+    },
+    "source_publication": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/five26eb-fp-image-composition-static-source-1/ROOT-SOURCE-PUBLICATION-VERIFIED.json",
+      "bytes": 3305,
+      "sha256": "f011f87b35954388ac971c28b5a8a5aed99960242f2a7f927dc0b8fefc41ac47"
+    },
+    "static_manifest": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/five26eb-fp-image-composition-static-source-1/offline-materialization-1/manifest.HOST-STATIC.json",
+      "sha256": "e98d082a91c079b5fd8e7bd5526f1317711d2577b13d037caa9a26dd31cfdfad",
+      "size": 8757,
+      "mode": 33152
+    },
+    "overlay": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/five26eb-fp-image-composition-static-source-1/offline-materialization-1/fp-thread-state.cpio.gz",
+      "sha256": "805485106bb2f68c704d5d537154dadee7380fd1bba4312dbef715f9ce1d0afa",
+      "size": 15661279,
+      "mode": 33152
+    },
+    "payload": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f42-fp-readonly-artifact-path-correction-source-1/runtime-inputs/fp-payload.snapshot",
+      "size": 5662872,
+      "sha256": "3488648514aa2d8d5eacfdbdd111ad33f17c2abccfff4755f3ebcefef45ec583",
+      "mode": 33216
+    },
+    "modules": [
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/module-runtime-snapshots-1/ihk.ko",
+        "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+        "size": 1527808
+      },
+      {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/five26eb-fp-image-composition-static-source-1/offline-materialization-1/runtime-inputs/ihk-smp-x86_64.ko",
+        "sha256": "887dc3567e6035c921588e61b45b41a8ef32a972d142fe2ba82ec48442353b12",
+        "size": 13098896,
+        "mode": 33188
+      },
+      {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/five26eb-fp-image-composition-static-source-1/offline-materialization-1/runtime-inputs/mcctrl.ko",
+        "sha256": "57546af5110c0674b307e5ac5a328228abbe784f890f69521db5f594f21f6ae8",
+        "size": 2578512,
+        "mode": 33188
+      }
+    ],
+    "materialization_replay_permitted": false
+  },
+  "remaining_condition_for_single_review": {
+    "original_subgoal_id": "M14-04-04",
+    "original_title": "FPU/XSAVE ownership: allocate/save/copy/restore/clear/release, signal handoff and fault recovery.",
+    "case_id": "practical.rust-std.fp-thread-state",
+    "actual_native_acceptance_ref": null,
+    "actual_postjoin_acceptance_ref": null,
+    "expected_image_sha256": "26eb201ab8160b98e9a95ac3bae116a6392f343faf60641bb62faa7116a793eb",
+    "expected_Rust_sha256": "e9cc19209572b008257385f1251e4f8f7fa30c15540bc28255cdbe13f017b90e",
+    "expected_payload_sha256": "3488648514aa2d8d5eacfdbdd111ad33f17c2abccfff4755f3ebcefef45ec583",
+    "expected_oracle": {
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stdout_hex": "465054485245414420763120746872656164733d322073616d655f7065726d69747465645f6370753d312064697374696e63745f7469643d310a7468726561643020726f756e64733d363420796d6d5f6c616e65733d363420706565725f70726f67726573733d3634207969656c645f6d696e3d363420636f6e74726f6c733d303737662f3366383020726573746f7265643d310a7468726561643120726f756e64733d363420796d6d5f6c616e65733d363420706565725f70726f67726573733d3634207969656c645f6d696e3d363420636f6e74726f6c733d306237662f3566383020726573746f7265643d310a465054485245414420504153530a"
+    },
+    "expected_stdout_bytes": 254,
+    "frozen_oracle": {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-fp-thread-state-app-20261018-1/frozen-oracle.json",
+      "size": 6451,
+      "sha256": "4146e26ab601b59e0301aaff37ef448a2305650063cc7791c99b78b52f6b4dfa",
+      "mode": 33152
+    },
+    "expected_stdout": {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-fp-thread-state-app-20261018-1/expected.stdout",
+      "size": 254,
+      "sha256": "52095dafd5235a8c1073248bbda3964f8a7b749722306ceaabf321d2fdcd4816",
+      "mode": 33152
+    },
+    "what_case_exercises": "Unchanged two-worker same-permitted-CPU FP case:64rounds each,64YMM lanes, peer-progress/yield minimum64, distinctTIDs and x87/MXCSR controls restored for both workers.",
+    "predicate": "Actual once-admitted run must use this exact26eb image/modules/payload and unchanged evaluator/oracle; exact254Bstdout/empty stderr/exit0, existing route/lifecycle/cleanup and postjoin gates must pass. Then independent reviewer may join this actual result to current Rust producer and existing F04 source/default/focused evidence for ONE supported-profile whole-file decision.",
+    "no_native_result_now": true
+  },
+  "precise_guards": {
+    "historical_reuse": "Old1e7a nativeFP PASS is baseline only. Source equality of low-levelsave/restore bodies does not prove new Rust public frontend/contextproducer or machine-code identity.",
+    "new_identity_ready": "New26eb x86_cpu_helpers source identity DOESjoin through the accepted106-source map and actualRust/image receipt. The unresolved predicate is actual native current-producer value evidence, not a guessed missing implementation.",
+    "tuple_mismatch": "Any actualguest image/Rust/provider/module/payload/evaluator mismatch blocks this conditional file decision; do not accept by absenterror/logs or sourceequal alone.",
+    "unchanged_runner": "Retain actual bootstrap/profile and ordinarytrace/BEGINcleanup acceptance semantics; never relabel threadsasforkchildren, coerce falseflags, weaken254oracle or replay consumednonces.",
+    "limitation": "Historical no-nonnull-release/all-stateclass/multicore limitations stay explicit. Do not manufacture perhelper/perbranch guest quotas from them; reviewer decides exact supported-profile scope against existing proofs."
+  },
+  "after_pass_fill_only": [
+    "Actual native exactcase independent acceptance ref",
+    "Actual postjoin/currentphysical independent acceptance ref",
+    "Consumed actualnonce and original result/serial/join refs"
+  ],
+  "no_new_test_or_oracle": true,
+  "no_guest_per_helper_quota": true,
+  "Root_and_independent_reviewer_sole_final_acceptance": true
+}

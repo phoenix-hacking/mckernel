@@ -1,0 +1,21 @@
+--- syscall.c
++++ syscall.c
+@@ -355,11 +355,18 @@
+ 	return copy_to_user((void *)dst_addr, src, bytes);
+ }
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_COPY_FROM_USER)
++extern long
++arch_copy_from_user_bridge(void *dst, unsigned long src_addr, size_t bytes);
++#else
++
+ long
+ arch_copy_from_user_bridge(void *dst, unsigned long src_addr, size_t bytes)
+ {
+ 	return copy_from_user(dst, (void *)src_addr, bytes);
+ }
++
++#endif
+ 
+ long
+ arch_rt_sigreturn_syscall_bridge(int num, void *regs)

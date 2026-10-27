@@ -1,0 +1,523 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_TIMER120_HOST_15_ABI_WORDS_AND_GENUINE_TYPE_25750_COMPARISONS",
+  "grant": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/ROOT-ORDINARY-EXPERT-CPU6-GRANT.json",
+    "bytes": 2762,
+    "sha256": "0336b8953ddedf4d5070fd2e02774aa5dd111be5feb6ce30b9b3b69ebbbdd641"
+  },
+  "plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/EXACT-FIVE-REMAINING-COMMANDS.NOT-ADMITTED.json",
+    "bytes": 39489,
+    "sha256": "d2ba907b20fdfe0c9c458e57c382fd5d67d7f79eb6f2c09e9581bc5e02a95e92"
+  },
+  "initial_admission": {
+    "wall": 1793082515.3613412,
+    "monotonic": 864621.930297896,
+    "boottime": 879960.057348084,
+    "fixed_cutoff_ref": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+      "bytes": 952,
+      "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+    },
+    "memory_available_bytes": 27195670528,
+    "aggregate_reserved_bytes": 21474836480,
+    "budget": {
+      "schema_version": 2,
+      "id": "7f4af94a83b14cc08f97401f5891d965",
+      "budget": "57774.852125",
+      "initial_balance": "57774.8521250000",
+      "minimum_balance": "52079.8011050000",
+      "last_balance": "52079.8011050000",
+      "spent": "22812.3311000000",
+      "remaining": "34962.5210250000",
+      "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+    },
+    "heartbeat_at": "2026-10-27T06:28:27.553137+00:00",
+    "phase": "running",
+    "account_wall": 1793082515.361632,
+    "heartbeat_age_seconds": 7.808495044708252,
+    "available_prepaid_balance": "52079.8011050000",
+    "spendControlReached": null,
+    "loadavg": [
+      1.06,
+      1.03,
+      1.03
+    ],
+    "CPU_affinity": [
+      6
+    ]
+  },
+  "original_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/4.stderr",
+    "bytes": 326,
+    "sha256": "57c40a34f141adf8f933cd6bedeac3a0e2fb1924e184efe4fd0734de382bfe38"
+  },
+  "original_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/RESULTS.json",
+    "bytes": 28235,
+    "sha256": "11f286a3e2dd6e133dda62e28e481258fe7b937f08729e3e4d905c9b44803f4e"
+  },
+  "successful_prefixes_reused": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/timer.o",
+      "bytes": 2640,
+      "sha256": "dae24d2258ccc1a5488869ad993871b61409656b1aa01e5938fe88aa8c9bc6b0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/fallback.o",
+      "bytes": 38448,
+      "sha256": "e9cee1fe464e130e1a990b692491149f1304aafc568691daa59060168e8db198"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/selected.o",
+      "bytes": 36480,
+      "sha256": "54e0aa163274e61ba5899c48c38d3ecb6ef7a07e764b9caa6cfa61617b106337"
+    }
+  ],
+  "prior_attempted_commands": 6,
+  "bounded_correction_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/table-name-alias-correction-1/actual-suffix-1/RESULTS.json",
+    "bytes": 10251,
+    "sha256": "045bffbb1ebc0e7b1510dbfc8715c4437119ec252866e9e9c58fd6a62f767614"
+  },
+  "started_wall": 1793082515.3618755,
+  "ended_wall": 1793082515.9385672,
+  "results": [
+    {
+      "index": 0,
+      "name": "00-exact-existing-Rust-inline-memset-provider",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=lib",
+        "--emit=obj",
+        "--crate-name",
+        "m14_exact_existing_inline_memset_host",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=1",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "relocation-model=static",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/provider.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/actual-provider-suffix-1/provider.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Compile only the byte-exact existing Rust __inline_memset provider into a separate focused HOST object.",
+      "pid": 1443569,
+      "started_wall": 1793082515.3743463,
+      "ended_wall": 1793082515.4061809,
+      "elapsed": 0.03183506603818387,
+      "returncode": 0,
+      "CPU_user": 0.010248,
+      "CPU_system": 0.013665,
+      "max_RSS_KiB": 82068,
+      "direct_wait": true,
+      "group_absent": true,
+      "streams_closed": true,
+      "timed_out": false,
+      "admission": {
+        "wall": 1793082515.3739269,
+        "monotonic": 864621.942883425,
+        "boottime": 879960.069933604,
+        "fixed_cutoff_ref": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+          "bytes": 952,
+          "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+        },
+        "memory_available_bytes": 27194126336,
+        "aggregate_reserved_bytes": 21474836480,
+        "budget": {
+          "schema_version": 2,
+          "id": "7f4af94a83b14cc08f97401f5891d965",
+          "budget": "57774.852125",
+          "initial_balance": "57774.8521250000",
+          "minimum_balance": "52079.8011050000",
+          "last_balance": "52079.8011050000",
+          "spent": "22812.3311000000",
+          "remaining": "34962.5210250000",
+          "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+        },
+        "heartbeat_at": "2026-10-27T06:28:27.553137+00:00",
+        "phase": "running",
+        "account_wall": 1793082515.3741982,
+        "heartbeat_age_seconds": 7.821061134338379,
+        "available_prepaid_balance": "52079.8011050000",
+        "spendControlReached": null,
+        "loadavg": [
+          1.06,
+          1.03,
+          1.03
+        ],
+        "CPU_affinity": [
+          6
+        ]
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/actual-provider-suffix-1/0.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/actual-provider-suffix-1/0.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 1,
+      "name": "01-original-corrected-genuine25750-fixture-link-plus-provider",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_RUST_PROCESS_HELPERS",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/include",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel/ihk/ikc/include",
+        "-I/home/holden/mckernel/ihk/linux/include",
+        "-I/home/holden/mckernel/lib/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-no-pie",
+        "-Wl,--no-undefined",
+        "-Wl,-Map=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/actual-provider-suffix-1/timer.map",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/table-name-alias-correction-1/fixture/main.c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/timer.o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/actual-provider-suffix-1/provider.o",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/actual-provider-suffix-1/timer"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Reuse the corrected genuine C fixture and retained timer.o; append only the existing Rust provider object. All previous GCC9 flags stay exact.",
+      "pid": 1443576,
+      "started_wall": 1793082515.4193635,
+      "ended_wall": 1793082515.561948,
+      "elapsed": 0.14258488407358527,
+      "returncode": 0,
+      "CPU_user": 0.118548,
+      "CPU_system": 0.012740999999999999,
+      "max_RSS_KiB": 32508,
+      "direct_wait": true,
+      "group_absent": true,
+      "streams_closed": true,
+      "timed_out": false,
+      "admission": {
+        "wall": 1793082515.418736,
+        "monotonic": 864621.987692613,
+        "boottime": 879960.114743182,
+        "fixed_cutoff_ref": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+          "bytes": 952,
+          "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+        },
+        "memory_available_bytes": 27188748288,
+        "aggregate_reserved_bytes": 21474836480,
+        "budget": {
+          "schema_version": 2,
+          "id": "7f4af94a83b14cc08f97401f5891d965",
+          "budget": "57774.852125",
+          "initial_balance": "57774.8521250000",
+          "minimum_balance": "52079.8011050000",
+          "last_balance": "52079.8011050000",
+          "spent": "22812.3311000000",
+          "remaining": "34962.5210250000",
+          "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+        },
+        "heartbeat_at": "2026-10-27T06:28:27.553137+00:00",
+        "phase": "running",
+        "account_wall": 1793082515.4191577,
+        "heartbeat_age_seconds": 7.866020679473877,
+        "available_prepaid_balance": "52079.8011050000",
+        "spendControlReached": null,
+        "loadavg": [
+          1.06,
+          1.03,
+          1.03
+        ],
+        "CPU_affinity": [
+          6
+        ]
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/actual-provider-suffix-1/1.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/actual-provider-suffix-1/1.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 2,
+      "name": "02-exact-Rust-producer-closure-final-map-and-bytes",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/check_provider_closure.py",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/actual-provider-suffix-1/provider.o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/actual-provider-suffix-1/timer",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/actual-provider-suffix-1/timer.map",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/actual-provider-suffix-1/INLINE-MEMSET-CLOSURE.json"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Require sole exact Rust provider, zero imports, no code relocations, exact final map origin and byte identity.",
+      "pid": 1443581,
+      "started_wall": 1793082515.5749402,
+      "ended_wall": 1793082515.6164627,
+      "elapsed": 0.04152281302958727,
+      "returncode": 0,
+      "CPU_user": 0.023798,
+      "CPU_system": 0.007932,
+      "max_RSS_KiB": 13900,
+      "direct_wait": true,
+      "group_absent": true,
+      "streams_closed": true,
+      "timed_out": false,
+      "admission": {
+        "wall": 1793082515.5744388,
+        "monotonic": 864622.143395495,
+        "boottime": 879960.270445851,
+        "fixed_cutoff_ref": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+          "bytes": 952,
+          "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+        },
+        "memory_available_bytes": 27186167808,
+        "aggregate_reserved_bytes": 21474836480,
+        "budget": {
+          "schema_version": 2,
+          "id": "7f4af94a83b14cc08f97401f5891d965",
+          "budget": "57774.852125",
+          "initial_balance": "57774.8521250000",
+          "minimum_balance": "52079.8011050000",
+          "last_balance": "52079.8011050000",
+          "spent": "22812.3311000000",
+          "remaining": "34962.5210250000",
+          "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+        },
+        "heartbeat_at": "2026-10-27T06:28:27.553137+00:00",
+        "phase": "running",
+        "account_wall": 1793082515.5747674,
+        "heartbeat_age_seconds": 8.02163028717041,
+        "available_prepaid_balance": "52079.8011050000",
+        "spendControlReached": null,
+        "loadavg": [
+          1.06,
+          1.03,
+          1.03
+        ],
+        "CPU_affinity": [
+          6
+        ]
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/actual-provider-suffix-1/2.stdout",
+        "bytes": 110,
+        "sha256": "ec81f4eb4215e0732584fd257b71624ec441be977b5486cf35e9e17d807670ea"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/actual-provider-suffix-1/2.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 3,
+      "name": "03-original-readonly120-byte-table-and-real-consumer-origin-check",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/check_table_ownership.py",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/timer.o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/fallback.o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/selected.o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/actual-provider-suffix-1/timer",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/actual-provider-suffix-1/timer.map",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/actual-provider-suffix-1/TIMER120-OWNERSHIP.json"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Run the unchanged original strict timer ownership check using retained Rust/fallback/selected objects.",
+      "pid": 1443582,
+      "started_wall": 1793082515.6296527,
+      "ended_wall": 1793082515.6711829,
+      "elapsed": 0.041530765942297876,
+      "returncode": 0,
+      "CPU_user": 0.029727999999999997,
+      "CPU_system": 0.0037159999999999997,
+      "max_RSS_KiB": 13900,
+      "direct_wait": true,
+      "group_absent": true,
+      "streams_closed": true,
+      "timed_out": false,
+      "admission": {
+        "wall": 1793082515.6291375,
+        "monotonic": 864622.198094234,
+        "boottime": 879960.325145029,
+        "fixed_cutoff_ref": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+          "bytes": 952,
+          "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+        },
+        "memory_available_bytes": 27184631808,
+        "aggregate_reserved_bytes": 21474836480,
+        "budget": {
+          "schema_version": 2,
+          "id": "7f4af94a83b14cc08f97401f5891d965",
+          "budget": "57774.852125",
+          "initial_balance": "57774.8521250000",
+          "minimum_balance": "52079.8011050000",
+          "last_balance": "52079.8011050000",
+          "spent": "22812.3311000000",
+          "remaining": "34962.5210250000",
+          "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+        },
+        "heartbeat_at": "2026-10-27T06:28:27.553137+00:00",
+        "phase": "running",
+        "account_wall": 1793082515.6294758,
+        "heartbeat_age_seconds": 8.076338768005371,
+        "available_prepaid_balance": "52079.8011050000",
+        "spendControlReached": null,
+        "loadavg": [
+          1.06,
+          1.03,
+          1.03
+        ],
+        "CPU_affinity": [
+          6
+        ]
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/actual-provider-suffix-1/3.stdout",
+        "bytes": 109,
+        "sha256": "92f5915817266adead8b7becdee84ba0b4afabccf2e42573a10585b09723b4a4"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/actual-provider-suffix-1/3.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 4,
+      "name": "04-original25750-assertion-oracle",
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/actual-provider-suffix-1/timer"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Execute the unchanged real25750assertion timer oracle with controlled callback effects, no privileged operations.",
+      "pid": 1443583,
+      "started_wall": 1793082515.6847572,
+      "ended_wall": 1793082515.9375987,
+      "elapsed": 0.2528418080182746,
+      "returncode": 0,
+      "CPU_user": 0.248025,
+      "CPU_system": 0.0,
+      "max_RSS_KiB": 13900,
+      "direct_wait": true,
+      "group_absent": true,
+      "streams_closed": true,
+      "timed_out": false,
+      "admission": {
+        "wall": 1793082515.6842527,
+        "monotonic": 864622.253209154,
+        "boottime": 879960.380260025,
+        "fixed_cutoff_ref": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+          "bytes": 952,
+          "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+        },
+        "memory_available_bytes": 27184631808,
+        "aggregate_reserved_bytes": 21474836480,
+        "budget": {
+          "schema_version": 2,
+          "id": "7f4af94a83b14cc08f97401f5891d965",
+          "budget": "57774.852125",
+          "initial_balance": "57774.8521250000",
+          "minimum_balance": "52079.8011050000",
+          "last_balance": "52079.8011050000",
+          "spent": "22812.3311000000",
+          "remaining": "34962.5210250000",
+          "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+        },
+        "heartbeat_at": "2026-10-27T06:28:27.553137+00:00",
+        "phase": "running",
+        "account_wall": 1793082515.6845825,
+        "heartbeat_age_seconds": 8.131445407867432,
+        "available_prepaid_balance": "52079.8011050000",
+        "spendControlReached": null,
+        "loadavg": [
+          1.06,
+          1.03,
+          1.03
+        ],
+        "CPU_affinity": [
+          6
+        ]
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/actual-provider-suffix-1/4.stdout",
+        "bytes": 144,
+        "sha256": "06266bfd9ee2881c29cbde999f982e1059a2d4f51d334c3f826784a91b334410"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-provider-link-repair-source-1/actual-provider-suffix-1/4.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "failure": null,
+  "first_compiler_timestamp": 1793082515.3743463,
+  "all_children_directly_joined": true,
+  "all_groups_absent": true,
+  "all_streams_closed": true,
+  "CPU_seconds": 0.46840099999999996,
+  "command_wall_seconds": 0.5103153371019289,
+  "maximum_RSS_KiB": 82068,
+  "production_or_native_credit": false,
+  "current_C_records_counted": 71,
+  "C_data_retirement_credit": 0,
+  "whole_file_acceptance": false
+}

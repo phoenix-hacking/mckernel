@@ -1,0 +1,112 @@
+{
+  "task_id": "f05-owned-processvm-host-qualification-1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "STOP_BEFORE_COMPILER_LITERAL_PROFILE_MISMATCH",
+  "snapshots": [
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/f05-owned-processvm-consumer-source-1/HANDOFF.md",
+      "snapshot": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-host-qualification-1/HANDOFF.md",
+      "bytes": 1803,
+      "sha256": "09df513820630ddbf740e95b1783d287521f47e6eaaf4636351b0776acfd8358"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/f05-owned-processvm-consumer-source-1/BUILD-STAGING-PROPOSAL.json",
+      "snapshot": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-host-qualification-1/BUILD-STAGING-PROPOSAL.json",
+      "bytes": 3900,
+      "sha256": "810b5796db2fb03fea6c6c068ddc104f08db399d46733e1ef5b03aa59acd1518"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/f05-owned-processvm-consumer-source-1/primary-oracle.json",
+      "snapshot": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-host-qualification-1/primary-oracle.json",
+      "bytes": 1474,
+      "sha256": "de8c41a3a53a3cf823c9c6cfe242f363cb823dfa173be854f6d89188a20e7aae"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/f05-owned-processvm-consumer-source-1/app.rs",
+      "snapshot": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-host-qualification-1/app.rs",
+      "bytes": 10987,
+      "sha256": "4aef0b5f30bc8090bdbe102332e39895b328b3ebe2735c3d011d5c035c602e68"
+    },
+    {
+      "source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/f05-owned-processvm-consumer-source-1/expected.stdout",
+      "snapshot": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-host-qualification-1/expected.stdout",
+      "bytes": 204,
+      "sha256": "23b067b03362e707b543c24afe8f22b907e07ab7141219d4b7b95eb703fade45"
+    }
+  ],
+  "literal_compiler_argv": [
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--edition=2021",
+    "-D",
+    "warnings",
+    "-C",
+    "opt-level=1",
+    "-C",
+    "codegen-units=1",
+    "-C",
+    "target-feature=+crt-static",
+    "-C",
+    "relocation-model=static",
+    "-C",
+    "link-arg=-no-pie",
+    "-C",
+    "link-arg=-Wl,-z,noexecstack",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/f05-owned-processvm-consumer-source-1/app.rs",
+    "-o",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/f05-owned-processvm-consumer-source-1/app"
+  ],
+  "proposal_profile": {
+    "argv": [
+      "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "-D",
+      "warnings",
+      "-C",
+      "opt-level=1",
+      "-C",
+      "codegen-units=1",
+      "-C",
+      "target-feature=+crt-static",
+      "-C",
+      "relocation-model=static",
+      "-C",
+      "link-arg=-no-pie",
+      "-C",
+      "link-arg=-Wl,-z,noexecstack",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/f05-owned-processvm-consumer-source-1/app.rs",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/f05-owned-processvm-consumer-source-1/app"
+    ],
+    "jobs": 1,
+    "memory_limit_bytes": 1073741824,
+    "cpu_slot": "background owner allocation required; no assumed CPU grant",
+    "outer_wall_seconds": 180,
+    "reference_run": "Same exact artifact on ordinary Linux, separately granted and captured; exact frozen bytes/exit0; no oracle inferred from reference stdout."
+  },
+  "grant_profile": {
+    "cpu": 6,
+    "jobs": 1,
+    "as_bytes": 2147483648,
+    "cpu_seconds": 60,
+    "fsize_bytes": 67108864,
+    "core_bytes": 0,
+    "wall_seconds": 90,
+    "application_wall_seconds": 10
+  },
+  "blocking_differences": [
+    "literal proposal outer_wall_seconds=180 versus grant wall_seconds=90",
+    "literal compiler output targets foreground-owned source directory; fresh owned output requires argv adaptation"
+  ],
+  "additional_profile_difference": "proposal memory_limit_bytes=1073741824 versus grant AS2147483648; no interpretation/adaptation attempted",
+  "compiler_children_launched": 0,
+  "payload_children_launched": 0,
+  "cpu6_owned_children": 0,
+  "cpu6_reservation_released": true,
+  "source_changed": false,
+  "oracle_changed": false,
+  "admission_invoked": false,
+  "capture_invoked": false,
+  "native_M14_05_05": "OPEN",
+  "conditional_CLONE_TID_writeproof": "OPEN",
+  "next_task": "Dispatcher resolves literal proposal limits/output bindings and issues exact compatible argv; sole foreground implementation owner remains unchanged."
+}

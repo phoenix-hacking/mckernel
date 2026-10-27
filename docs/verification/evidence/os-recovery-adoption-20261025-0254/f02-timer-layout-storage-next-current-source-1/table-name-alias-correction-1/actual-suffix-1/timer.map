@@ -1,0 +1,599 @@
+Archive member included to satisfy reference by file (symbol)
+
+/usr/lib/x86_64-linux-gnu/libc_nonshared.a(elf-init.oS)
+                              /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o (__libc_csu_init)
+
+Merging program properties
+
+Removed property 0xc0000002 to merge /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o (0x3) and /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/timer.o (not found)
+Removed property 0xc0000002 to merge /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o (not found) and /usr/lib/x86_64-linux-gnu/libc_nonshared.a(elf-init.oS) (0x3)
+Removed property 0xc0000002 to merge /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o (not found) and /usr/lib/gcc/x86_64-linux-gnu/9/crtend.o (0x3)
+Removed property 0xc0000002 to merge /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o (not found) and /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crtn.o (0x3)
+
+As-needed library included to satisfy reference by file (symbol)
+
+libc.so.6                     /tmp/ccb0hdzH.o (exit@@GLIBC_2.2.5)
+
+Allocating common symbols
+Common symbol       size              file
+
+time_sharing        0x4               /tmp/ccb0hdzH.o
+
+Discarded input sections
+
+ .note.gnu.property
+                0x0000000000000000       0x20 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+ .note.gnu.property
+                0x0000000000000000       0x20 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crti.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crti.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/crtbegin.o
+ .note.gnu.property
+                0x0000000000000000       0x20 /usr/lib/gcc/x86_64-linux-gnu/9/crtbegin.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 /tmp/ccb0hdzH.o
+ .note.gnu.property
+                0x0000000000000000       0x20 /tmp/ccb0hdzH.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/timer.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 /usr/lib/x86_64-linux-gnu/libc_nonshared.a(elf-init.oS)
+ .note.gnu.property
+                0x0000000000000000       0x20 /usr/lib/x86_64-linux-gnu/libc_nonshared.a(elf-init.oS)
+ .note.GNU-stack
+                0x0000000000000000        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/crtend.o
+ .note.gnu.property
+                0x0000000000000000       0x20 /usr/lib/gcc/x86_64-linux-gnu/9/crtend.o
+ .note.gnu.property
+                0x0000000000000000       0x20 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crtn.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crtn.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+LOAD /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crti.o
+LOAD /usr/lib/gcc/x86_64-linux-gnu/9/crtbegin.o
+LOAD /tmp/ccb0hdzH.o
+LOAD /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/timer.o
+LOAD /usr/lib/gcc/x86_64-linux-gnu/9/libgcc.a
+LOAD /usr/lib/gcc/x86_64-linux-gnu/9/libgcc_s.so
+START GROUP
+LOAD /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/libgcc_s.so.1
+LOAD /usr/lib/gcc/x86_64-linux-gnu/9/libgcc.a
+END GROUP
+LOAD /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/libc.so
+START GROUP
+LOAD /lib/x86_64-linux-gnu/libc.so.6
+LOAD /usr/lib/x86_64-linux-gnu/libc_nonshared.a
+LOAD /lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+END GROUP
+LOAD /usr/lib/gcc/x86_64-linux-gnu/9/libgcc.a
+LOAD /usr/lib/gcc/x86_64-linux-gnu/9/libgcc_s.so
+START GROUP
+LOAD /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/libgcc_s.so.1
+LOAD /usr/lib/gcc/x86_64-linux-gnu/9/libgcc.a
+END GROUP
+LOAD /usr/lib/gcc/x86_64-linux-gnu/9/crtend.o
+LOAD /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crtn.o
+                [!provide]                        PROVIDE (__executable_start = SEGMENT_START ("text-segment", 0x400000))
+                0x00000000004002a8                . = (SEGMENT_START ("text-segment", 0x400000) + SIZEOF_HEADERS)
+
+.interp         0x00000000004002a8       0x1c
+ *(.interp)
+ .interp        0x00000000004002a8       0x1c /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+
+.note.gnu.build-id
+                0x00000000004002c4       0x24
+ *(.note.gnu.build-id)
+ .note.gnu.build-id
+                0x00000000004002c4       0x24 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+
+.note.ABI-tag   0x00000000004002e8       0x20
+ .note.ABI-tag  0x00000000004002e8       0x20 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+
+.hash
+ *(.hash)
+
+.gnu.hash       0x0000000000400308       0x1c
+ *(.gnu.hash)
+ .gnu.hash      0x0000000000400308       0x1c /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+
+.dynsym         0x0000000000400328       0x90
+ *(.dynsym)
+ .dynsym        0x0000000000400328       0x90 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+
+.dynstr         0x00000000004003b8       0x4b
+ *(.dynstr)
+ .dynstr        0x00000000004003b8       0x4b /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+
+.gnu.version    0x0000000000400404        0xc
+ *(.gnu.version)
+ .gnu.version   0x0000000000400404        0xc /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+
+.gnu.version_d  0x0000000000400410        0x0
+ *(.gnu.version_d)
+ .gnu.version_d
+                0x0000000000400410        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+
+.gnu.version_r  0x0000000000400410       0x20
+ *(.gnu.version_r)
+ .gnu.version_r
+                0x0000000000400410       0x20 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+
+.rela.dyn       0x0000000000400430       0x30
+ *(.rela.init)
+ *(.rela.text .rela.text.* .rela.gnu.linkonce.t.*)
+ .rela.text     0x0000000000400430        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+ .rela.text.set_timer
+                0x0000000000400430        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+ *(.rela.fini)
+ *(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*)
+ *(.rela.data .rela.data.* .rela.gnu.linkonce.d.*)
+ .rela.data.rel.ro
+                0x0000000000400430        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+ *(.rela.tdata .rela.tdata.* .rela.gnu.linkonce.td.*)
+ *(.rela.tbss .rela.tbss.* .rela.gnu.linkonce.tb.*)
+ *(.rela.ctors)
+ *(.rela.dtors)
+ *(.rela.got)
+ .rela.got      0x0000000000400430       0x30 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+ *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
+ .rela.bss      0x0000000000400460        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+ *(.rela.ldata .rela.ldata.* .rela.gnu.linkonce.l.*)
+ *(.rela.lbss .rela.lbss.* .rela.gnu.linkonce.lb.*)
+ *(.rela.lrodata .rela.lrodata.* .rela.gnu.linkonce.lr.*)
+ *(.rela.ifunc)
+
+.rela.plt       0x0000000000400460       0x48
+ *(.rela.plt)
+ .rela.plt      0x0000000000400460       0x48 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+                [!provide]                        PROVIDE (__rela_iplt_start = .)
+ *(.rela.iplt)
+ .rela.iplt     0x00000000004004a8        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+                [!provide]                        PROVIDE (__rela_iplt_end = .)
+                0x0000000000401000                . = ALIGN (CONSTANT (MAXPAGESIZE))
+
+.init           0x0000000000401000       0x1b
+ *(SORT_NONE(.init))
+ .init          0x0000000000401000       0x16 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crti.o
+                0x0000000000401000                _init
+ .init          0x0000000000401016        0x5 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crtn.o
+
+.plt            0x0000000000401020       0x40
+ *(.plt)
+ .plt           0x0000000000401020       0x40 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+                0x0000000000401030                printf@@GLIBC_2.2.5
+                0x0000000000401040                memcmp@@GLIBC_2.2.5
+                0x0000000000401050                exit@@GLIBC_2.2.5
+ *(.iplt)
+ .iplt          0x0000000000401060        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+
+.plt.got        0x0000000000401060        0x0
+ *(.plt.got)
+ .plt.got       0x0000000000401060        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+
+.plt.sec
+ *(.plt.sec)
+
+.text           0x0000000000401060     0x13b5
+ *(.text.unlikely .text.*_unlikely .text.unlikely.*)
+ *(.text.exit .text.exit.*)
+ *(.text.startup .text.startup.*)
+ .text.startup.main
+                0x0000000000401060      0x390 /tmp/ccb0hdzH.o
+                0x0000000000401060                main
+ *(.text.hot .text.hot.*)
+ *(SORT_BY_NAME(.text.sorted.*))
+ *(.text .stub .text.* .gnu.linkonce.t.*)
+ .text          0x00000000004013f0       0x35 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+                0x00000000004013f0                _start
+                0x0000000000401420                _dl_relocate_static_pie
+ .text          0x0000000000401425        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crti.o
+ *fill*         0x0000000000401425        0xb 
+ .text          0x0000000000401430       0xa6 /usr/lib/gcc/x86_64-linux-gnu/9/crtbegin.o
+ .text          0x00000000004014d6        0x0 /tmp/ccb0hdzH.o
+ *fill*         0x00000000004014d6        0xa 
+ .text.event    0x00000000004014e0       0xad /tmp/ccb0hdzH.o
+ *fill*         0x000000000040158d        0x3 
+ .text.process_timer_lapic_disable_bridge
+                0x0000000000401590       0x30 /tmp/ccb0hdzH.o
+                0x0000000000401590                process_timer_lapic_disable_bridge
+ .text.process_timer_spin_lock_bridge
+                0x00000000004015c0       0xad /tmp/ccb0hdzH.o
+                0x00000000004015c0                process_timer_spin_lock_bridge
+ *fill*         0x000000000040166d        0x3 
+ .text.process_timer_spin_unlock_bridge
+                0x0000000000401670       0xab /tmp/ccb0hdzH.o
+                0x0000000000401670                process_timer_spin_unlock_bridge
+ *fill*         0x000000000040171b        0x5 
+ .text.process_timer_lapic_enable_bridge
+                0x0000000000401720       0x8f /tmp/ccb0hdzH.o
+                0x0000000000401720                process_timer_lapic_enable_bridge
+ *fill*         0x00000000004017af        0x1 
+ .text.init     0x00000000004017b0      0x213 /tmp/ccb0hdzH.o
+ *fill*         0x00000000004019c3        0xd 
+ .text.get_this_cpu_local_var
+                0x00000000004019d0       0x7b /tmp/ccb0hdzH.o
+                0x00000000004019d0                get_this_cpu_local_var
+ *fill*         0x0000000000401a4b        0x5 
+ .text.timer_set_timer_body_result
+                0x0000000000401a50      0x1ac /tmp/ccb0hdzH.o
+                0x0000000000401a50                timer_set_timer_body_result
+ *fill*         0x0000000000401bfc        0x4 
+ .text.original_set_timer
+                0x0000000000401c00       0xa8 /tmp/ccb0hdzH.o
+                0x0000000000401c00                original_set_timer
+ *fill*         0x0000000000401ca8        0x8 
+ .text.pair     0x0000000000401cb0      0x4ec /tmp/ccb0hdzH.o
+ .text          0x000000000040219c        0x0 /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/timer.o
+ *fill*         0x000000000040219c        0x4 
+ .text.leaf_timer_set_timer_body_result
+                0x00000000004021a0      0x1b5 /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/timer.o
+                0x00000000004021a0                leaf_timer_set_timer_body_result
+ *fill*         0x0000000000402355        0xb 
+ .text.set_timer
+                0x0000000000402360       0x39 /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/timer.o
+                0x0000000000402360                set_timer
+ *fill*         0x0000000000402399        0x7 
+ .text          0x00000000004023a0       0x75 /usr/lib/x86_64-linux-gnu/libc_nonshared.a(elf-init.oS)
+                0x00000000004023a0                __libc_csu_init
+                0x0000000000402410                __libc_csu_fini
+ .text          0x0000000000402415        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/crtend.o
+ .text          0x0000000000402415        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crtn.o
+ *(.gnu.warning)
+
+.fini           0x0000000000402418        0xd
+ *(SORT_NONE(.fini))
+ .fini          0x0000000000402418        0x8 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crti.o
+                0x0000000000402418                _fini
+ .fini          0x0000000000402420        0x5 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crtn.o
+                [!provide]                        PROVIDE (__etext = .)
+                [!provide]                        PROVIDE (_etext = .)
+                [!provide]                        PROVIDE (etext = .)
+                0x0000000000403000                . = ALIGN (CONSTANT (MAXPAGESIZE))
+                0x0000000000403000                . = SEGMENT_START ("rodata-segment", (ALIGN (CONSTANT (MAXPAGESIZE)) + (. & (CONSTANT (MAXPAGESIZE) - 0x1))))
+
+.rodata         0x0000000000403000      0x530
+ *(.rodata .rodata.* .gnu.linkonce.r.*)
+ .rodata.cst4   0x0000000000403000        0x4 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+                0x0000000000403000                _IO_stdin_used
+ .rodata.event.str1.1
+                0x0000000000403004       0x26 /tmp/ccb0hdzH.o
+ *fill*         0x000000000040302a        0x6 
+ .rodata.process_timer_spin_lock_bridge.str1.8
+                0x0000000000403030       0x24 /tmp/ccb0hdzH.o
+ *fill*         0x0000000000403054        0x4 
+ .rodata.process_timer_spin_unlock_bridge.str1.8
+                0x0000000000403058       0x39 /tmp/ccb0hdzH.o
+ .rodata.process_timer_lapic_enable_bridge.str1.1
+                0x0000000000403091       0x10 /tmp/ccb0hdzH.o
+ *fill*         0x00000000004030a1        0x7 
+ .rodata.timer_set_timer_body_result.str1.8
+                0x00000000004030a8       0xd4 /tmp/ccb0hdzH.o
+ *fill*         0x000000000040317c        0x4 
+ .rodata.pair.str1.8
+                0x0000000000403180      0x1b9 /tmp/ccb0hdzH.o
+ *fill*         0x0000000000403339        0x7 
+ .rodata.main.str1.8
+                0x0000000000403340       0xe7 /tmp/ccb0hdzH.o
+ *fill*         0x0000000000403427       0x19 
+ .rodata.reference_process_timer_runtime_offsets
+                0x0000000000403440       0x78 /tmp/ccb0hdzH.o
+                0x0000000000403440                reference_process_timer_runtime_offsets
+ .rodata.process_timer_runtime_offsets
+                0x00000000004034b8       0x78 /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/timer.o
+                0x00000000004034b8                process_timer_runtime_offsets
+
+.rodata1
+ *(.rodata1)
+
+.eh_frame_hdr   0x0000000000403530       0x9c
+ *(.eh_frame_hdr)
+ .eh_frame_hdr  0x0000000000403530       0x9c /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+                0x0000000000403530                __GNU_EH_FRAME_HDR
+ *(.eh_frame_entry .eh_frame_entry.*)
+
+.eh_frame       0x00000000004035d0      0x358
+ *(.eh_frame)
+ .eh_frame      0x00000000004035d0       0x40 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+                                         0x5c (size before relaxing)
+ *fill*         0x0000000000403610        0x0 
+ .eh_frame      0x0000000000403610       0x28 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+                                         0x40 (size before relaxing)
+ .eh_frame      0x0000000000403638        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+ .eh_frame      0x0000000000403638      0x200 /tmp/ccb0hdzH.o
+                                        0x218 (size before relaxing)
+ .eh_frame      0x0000000000403838       0x90 /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/timer.o
+                                         0xa8 (size before relaxing)
+ .eh_frame      0x00000000004038c8       0x5c /usr/lib/x86_64-linux-gnu/libc_nonshared.a(elf-init.oS)
+                                         0x78 (size before relaxing)
+ .eh_frame      0x0000000000403924        0x4 /usr/lib/gcc/x86_64-linux-gnu/9/crtend.o
+ *(.eh_frame.*)
+
+.gcc_except_table
+ *(.gcc_except_table .gcc_except_table.*)
+
+.gnu_extab
+ *(.gnu_extab*)
+
+.exception_ranges
+ *(.exception_ranges*)
+                0x0000000000404e08                . = DATA_SEGMENT_ALIGN (CONSTANT (MAXPAGESIZE), CONSTANT (COMMONPAGESIZE))
+
+.eh_frame
+ *(.eh_frame)
+ *(.eh_frame.*)
+
+.gnu_extab
+ *(.gnu_extab)
+
+.gcc_except_table
+ *(.gcc_except_table .gcc_except_table.*)
+
+.exception_ranges
+ *(.exception_ranges*)
+
+.tdata          0x0000000000404e08        0x0
+                [!provide]                        PROVIDE (__tdata_start = .)
+ *(.tdata .tdata.* .gnu.linkonce.td.*)
+
+.tbss
+ *(.tbss .tbss.* .gnu.linkonce.tb.*)
+ *(.tcommon)
+
+.preinit_array  0x0000000000404e08        0x0
+                [!provide]                        PROVIDE (__preinit_array_start = .)
+ *(.preinit_array)
+                [!provide]                        PROVIDE (__preinit_array_end = .)
+
+.init_array     0x0000000000404e08        0x8
+                0x0000000000404e08                PROVIDE (__init_array_start = .)
+ *(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*))
+ *(.init_array EXCLUDE_FILE(*crtend?.o *crtend.o *crtbegin?.o *crtbegin.o) .ctors)
+ .init_array    0x0000000000404e08        0x8 /usr/lib/gcc/x86_64-linux-gnu/9/crtbegin.o
+                0x0000000000404e10                PROVIDE (__init_array_end = .)
+
+.fini_array     0x0000000000404e10        0x8
+                [!provide]                        PROVIDE (__fini_array_start = .)
+ *(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*))
+ *(.fini_array EXCLUDE_FILE(*crtend?.o *crtend.o *crtbegin?.o *crtbegin.o) .dtors)
+ .fini_array    0x0000000000404e10        0x8 /usr/lib/gcc/x86_64-linux-gnu/9/crtbegin.o
+                [!provide]                        PROVIDE (__fini_array_end = .)
+
+.ctors
+ *crtbegin.o(.ctors)
+ *crtbegin?.o(.ctors)
+ *(EXCLUDE_FILE(*crtend?.o *crtend.o) .ctors)
+ *(SORT_BY_NAME(.ctors.*))
+ *(.ctors)
+
+.dtors
+ *crtbegin.o(.dtors)
+ *crtbegin?.o(.dtors)
+ *(EXCLUDE_FILE(*crtend?.o *crtend.o) .dtors)
+ *(SORT_BY_NAME(.dtors.*))
+ *(.dtors)
+
+.jcr
+ *(.jcr)
+
+.data.rel.ro    0x0000000000404e18        0x0
+ *(.data.rel.ro.local* .gnu.linkonce.d.rel.ro.local.*)
+ *(.data.rel.ro .data.rel.ro.* .gnu.linkonce.d.rel.ro.*)
+ .data.rel.ro   0x0000000000404e18        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+
+.dynamic        0x0000000000404e18      0x1d0
+ *(.dynamic)
+ .dynamic       0x0000000000404e18      0x1d0 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+                0x0000000000404e18                _DYNAMIC
+
+.got            0x0000000000404fe8       0x18
+ *(.got)
+ .got           0x0000000000404fe8       0x18 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+ *(.igot)
+                0x0000000000405fe8                . = DATA_SEGMENT_RELRO_END (., (SIZEOF (.got.plt) >= 0x18)?0x18:0x0)
+
+.got.plt        0x0000000000405000       0x30
+ *(.got.plt)
+ .got.plt       0x0000000000405000       0x30 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+                0x0000000000405000                _GLOBAL_OFFSET_TABLE_
+ *(.igot.plt)
+ .igot.plt      0x0000000000405030        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+
+.data           0x0000000000405030       0x10
+ *(.data .data.* .gnu.linkonce.d.*)
+ .data          0x0000000000405030        0x4 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+                0x0000000000405030                data_start
+                0x0000000000405030                __data_start
+ .data          0x0000000000405034        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crti.o
+ *fill*         0x0000000000405034        0x4 
+ .data          0x0000000000405038        0x8 /usr/lib/gcc/x86_64-linux-gnu/9/crtbegin.o
+                0x0000000000405038                __dso_handle
+ .data          0x0000000000405040        0x0 /tmp/ccb0hdzH.o
+ .data          0x0000000000405040        0x0 /usr/lib/x86_64-linux-gnu/libc_nonshared.a(elf-init.oS)
+ .data          0x0000000000405040        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/crtend.o
+ .data          0x0000000000405040        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crtn.o
+
+.tm_clone_table
+                0x0000000000405040        0x0
+ .tm_clone_table
+                0x0000000000405040        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/crtbegin.o
+ .tm_clone_table
+                0x0000000000405040        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/crtend.o
+
+.data1
+ *(.data1)
+                0x0000000000405040                _edata = .
+                [!provide]                        PROVIDE (edata = .)
+                0x0000000000405040                . = .
+                0x0000000000405040                __bss_start = .
+
+.bss            0x0000000000405040     0x77c8
+ *(.dynbss)
+ .dynbss        0x0000000000405040        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+ *(.bss .bss.* .gnu.linkonce.b.*)
+ .bss           0x0000000000405040        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crt1.o
+ .bss           0x0000000000405040        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crti.o
+ .bss           0x0000000000405040        0x1 /usr/lib/gcc/x86_64-linux-gnu/9/crtbegin.o
+ .bss           0x0000000000405041        0x0 /tmp/ccb0hdzH.o
+ *fill*         0x0000000000405041       0x1f 
+ .bss.seen      0x0000000000405060       0x80 /tmp/ccb0hdzH.o
+ .bss.mutate_sharing
+                0x00000000004050e0        0x4 /tmp/ccb0hdzH.o
+ .bss.return_value
+                0x00000000004050e4        0x4 /tmp/ccb0hdzH.o
+ .bss.mode      0x00000000004050e8        0x4 /tmp/ccb0hdzH.o
+ *fill*         0x00000000004050ec        0x4 
+ .bss.current_cpu
+                0x00000000004050f0        0x8 /tmp/ccb0hdzH.o
+ *fill*         0x00000000004050f8        0x8 
+ .bss.backlog   0x0000000000405100       0x10 /tmp/ccb0hdzH.o
+ *fill*         0x0000000000405110       0x30 
+ .bss.threads   0x0000000000405140     0x5700 /tmp/ccb0hdzH.o
+ .bss.cpu       0x000000000040a840     0x1fc0 /tmp/ccb0hdzH.o
+ .bss           0x000000000040c800        0x0 /usr/lib/x86_64-linux-gnu/libc_nonshared.a(elf-init.oS)
+ .bss           0x000000000040c800        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/crtend.o
+ .bss           0x000000000040c800        0x0 /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crtn.o
+ *(COMMON)
+ COMMON         0x000000000040c800        0x4 /tmp/ccb0hdzH.o
+                0x000000000040c800                time_sharing
+                0x000000000040c808                . = ALIGN ((. != 0x0)?0x8:0x1)
+ *fill*         0x000000000040c804        0x4 
+
+.lbss
+ *(.dynlbss)
+ *(.lbss .lbss.* .gnu.linkonce.lb.*)
+ *(LARGE_COMMON)
+                0x000000000040c808                . = ALIGN (0x8)
+                0x000000000040c808                . = SEGMENT_START ("ldata-segment", .)
+
+.lrodata
+ *(.lrodata .lrodata.* .gnu.linkonce.lr.*)
+
+.ldata          0x000000000040e808        0x0
+ *(.ldata .ldata.* .gnu.linkonce.l.*)
+                0x000000000040e808                . = ALIGN ((. != 0x0)?0x8:0x1)
+                0x000000000040e808                . = ALIGN (0x8)
+                0x000000000040c808                _end = .
+                [!provide]                        PROVIDE (end = .)
+                0x000000000040e808                . = DATA_SEGMENT_END (.)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment        0x0000000000000000       0x5f
+ *(.comment)
+ .comment       0x0000000000000000       0x2b /usr/lib/gcc/x86_64-linux-gnu/9/crtbegin.o
+                                         0x2c (size before relaxing)
+ .comment       0x000000000000002b       0x2c /tmp/ccb0hdzH.o
+ .comment       0x000000000000002b       0x34 /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/HOST-output-proposed-1/timer.o
+                                         0x35 (size before relaxing)
+ .comment       0x000000000000005f       0x2c /usr/lib/gcc/x86_64-linux-gnu/9/crtend.o
+
+.gnu.build.attributes
+ *(.gnu.build.attributes .gnu.build.attributes.*)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x0000000000000000       0xd0
+ *(.debug_aranges)
+ .debug_aranges
+                0x0000000000000000       0xd0 /tmp/ccb0hdzH.o
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_info     0x0000000000000000     0x3ecb
+ *(.debug_info .gnu.linkonce.wi.*)
+ .debug_info    0x0000000000000000     0x3ecb /tmp/ccb0hdzH.o
+
+.debug_abbrev   0x0000000000000000      0x4a0
+ *(.debug_abbrev)
+ .debug_abbrev  0x0000000000000000      0x4a0 /tmp/ccb0hdzH.o
+
+.debug_line     0x0000000000000000      0xd9e
+ *(.debug_line .debug_line.* .debug_line_end)
+ .debug_line    0x0000000000000000      0xd9e /tmp/ccb0hdzH.o
+
+.debug_frame
+ *(.debug_frame)
+
+.debug_str      0x0000000000000000     0x2330
+ *(.debug_str)
+ .debug_str     0x0000000000000000     0x2330 /tmp/ccb0hdzH.o
+                                       0x265b (size before relaxing)
+
+.debug_loc      0x0000000000000000      0xc13
+ *(.debug_loc)
+ .debug_loc     0x0000000000000000      0xc13 /tmp/ccb0hdzH.o
+
+.debug_macinfo
+ *(.debug_macinfo)
+
+.debug_weaknames
+ *(.debug_weaknames)
+
+.debug_funcnames
+ *(.debug_funcnames)
+
+.debug_typenames
+ *(.debug_typenames)
+
+.debug_varnames
+ *(.debug_varnames)
+
+.debug_pubtypes
+ *(.debug_pubtypes)
+
+.debug_ranges   0x0000000000000000      0x380
+ *(.debug_ranges)
+ .debug_ranges  0x0000000000000000      0x380 /tmp/ccb0hdzH.o
+
+.debug_macro
+ *(.debug_macro)
+
+.debug_addr
+ *(.debug_addr)
+
+.gnu.attributes
+ *(.gnu.attributes)
+
+/DISCARD/
+ *(.note.GNU-stack)
+ *(.gnu_debuglink)
+ *(.gnu.lto_*)
+OUTPUT(/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/table-name-alias-correction-1/actual-suffix-1/timer elf64-x86-64)

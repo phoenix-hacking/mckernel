@@ -1,0 +1,27 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_LITERAL_SOURCE_CLI_AND_EXPLICIT_PINNED_HELPER_IMPORTS",
+  "command": [
+    "taskset",
+    "-c",
+    "0",
+    "prlimit",
+    "--as=2147483648",
+    "--cpu=30",
+    "--core=0",
+    "--",
+    "timeout",
+    "60s",
+    "python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/qualify_produced_cohort.py",
+    "--preflight-only"
+  ],
+  "returncode": 0,
+  "stdout": "PASS_LITERAL_CLI_PINNED_DEPENDENCIES_AND_FROZEN_GATE_IMPORTS",
+  "adopted_profile_checked": false,
+  "required_before_clock": "Same literal CLI with --preflight-only --admission ACTUAL_ROOT_ADMISSION after Root adopts exact static profile; no artifact gates run",
+  "actual_output_created": false,
+  "helper_paths_authenticated_from_manifest": true,
+  "scope_limited_to_static": true
+}

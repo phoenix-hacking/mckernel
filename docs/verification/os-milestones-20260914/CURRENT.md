@@ -1,3 +1,153 @@
+## SAFE TURN CHECKPOINT: CURRENT109 metadata FINALIZED — 2026-10-27T07:05:07.352789+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Goal ACTIVE, no Rootheavy/guest/holder/query/freshclock or ordinaryCPU6job. Root
+ends this coordinator turn beforeaNEWclock; privatecodeowners maycontinue. Same
+thread/ledger/fixed11:24:50Z. Do NOTpause/restart/resetcontrols orreplayoperations.
+
+FIRST NEXT: actual CURRENT109 FIVE productionbuild. RootEXACT9canonicalpostimages
+ADOPTEDonce(Q/ROOT-CANONICAL-SOURCE-ADOPTION1be78361), independentSOURCE_PROFILE
+PASSplan793cb3a4/profile739e15bc; allF03/F06HOST+timer25750qualified. RootACTUAL
+metadatafinalizer alreadyRAN0 ONCE in A=ROOT-CURRENT109-NEXT-DEFAULT-BUILD-ADMISSION-1.
+Nonceea92dbc3148490a122f116a6afa7b010 RESERVEDUNUSED, request798ab808, actualprofile
+8a31dd25/98162B, latestphysical54e4356d. Do NOT rerunfinalizer/preimagechecker.
+NoHOLDER/OUTPUT/resource/release yet. Sourcepublication/fetch atthischeckpoint
+required; then EXACTA/hold_and_run_build_only.py --bootstrap-grant
+A/ROOT-HOLDER-BOOTSTRAP-GRANT.json; actualHOLDER.READY→ONEcapture_and_bind_resource.py
+→oneexactindependentreview→publish_approved_ready.py A APPROVEDINPUTSHA.
+Unchangedrun25d3/worker8512/holder91f/publisheraf39/resource2174; 5commands/fullRust
++processC+kernelC+archC+11ld,7prefixes retained/SDK21source6153 notrebuilt. Expected
+39exports/C72+28/process70+oneRusttimer120B are NOTyetactualacceptance. Current
+acceptedartifact remains26eb C75+31=106/process71. DriverreportpolishNOTcompilegate.
+Afterjoin retaintoolresult/runQqualifier+postjoin/independentactualdecision.
+
+NEXT AFTER A actualretirement/currentfree: daemonSource30 actualsingleRustcompile
+andunfinished8–25mocks. Source30ROOTordinarySTATICpreparealreadyDONE0: nonce
+1f970513ccad337e1822fbacb46260ee RESERVEDUNUSED/request0c92d84d/18inputtree.
+NoTEMP29/640replay;640dc1258eabe29edce9af8214de41f0 oldpartialRESERVEDUNUSED,
+NOTconsumed. T=daemonSDK..joined-task-observer-correction-source-1/rust-output-temp-
+correction-source-1/pinned-helper-import-correction-source-1. SourcePASS0d06/map30
+02f940dc, Roottypedreview+ledger23/current54 bound. After A consumes ea92, preserve
+old23ledger andbindactual24+newcurrentfree indata beforeitsfreshclock. Noactual
+Source30resource/grant/container/compiler yet. ExactT/ROOT-RECIPE commands; Sourcepub
+atcheckpointverified first. Do NOTreprepare/copymirror/allocateanothernonce.
+
+ACCEPTANCE: F04supportedfileCOMPLETEf936dce9 byindependentnarrowdiagnosticnative
+proof; fullFPprotocolFAILoriginal4096vsactual1024 remainsuntouched. M14F01/F04
+complete2/6; M15F01complete1/8; BOTHmilestonesOPEN/fullnativeprotocolcase delta0.
+FP692actualretirement54e4356d/Source29d413retirement98887 verified, nocleanupneeded.
+F06HOST4903ba78; F03HOST96+19ABI13c162; timeroriginal25750+120B15words expert
+1dd58c83 allPASS/allchildrenjoined. No defaultcreditforthesereadycodeincrements.
+F05foreground-owned204Bapp HOSTRust/ELF/LinuxreferencePASSca6f2ee3/staticEXEC
+be508daa atrepoexport; nativecaseblockedexact235/227allowlist, privateadapterproposal
+e7ac043b/b9b5113e sourceonly, no relabel/oraclechange/newquota. ConditionalCloneTID
+writeproofOPEN. NoFGsourceimplementationduplication.
+
+Activeprivatebacklogsready/source-only: F03perf3bridges9edd133b (reusesexisting
+filetoken, zeroNEWCdata), F06rt_sigreturn3leaves4ab503e1, F02idle2tables89419737
+(80B+36B) basedpriorcanonicalneedscoherentmerge, no compilergrant yet. McexecF4D
+19-source/3-hook owner25c5275c implemented15puretestsPASS, sourceonly; actual
+source/default configure/compile/install/launcher/nativeauthorityNULL.
+
+Measured source-to-compiler delays stilllarge; no95/180speedclaim. Largestavoidable
+handoff: adopted-layout helperimports/prefixclosure and fixturelinkproviders;
+strategy usesliteraladoptedCLI andactualinsideSDK IOprobe before Rust, preserves
+passedobjects, andRootnextturn executesreadycompiledcohort beforereport-onlywork.
+All account/realholds/CPU7cap/HOSTreserves/16GiBHOST12GiBscratch/permanent27:4 and
+scratch21 controls unchanged. This Gitcheckpoint doesNOTpausecampaign.
+
+## Review cursor: F04 scoped complete, six HOST callbacks ready — 2026-10-27T06:26:53.918078+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+No actualheavy/queryclock; latestacceptedcurrentfree54e4356d afterFP692.
+Supportedfiledelta+1F04(f936dce9), fullnativeprotocolcase delta0/wholeM14M15OPEN.
+Currentdefault26eb/C75+31=106/processmetadata71 unchanged. RetainedFP254diagnostic
+proof closesoriginalperfile04-04 only; declared4096/actual1024 andwholeFAIL kept.
+
+F06HOST9/490pair PASS3ba78ed6 (CPU0.37138/wall0.432476/RSS94088KiB); F03HOST3/
+96pair+19ABI PASS13c162ca(CPU0.132959/wall0.230384/RSS90768KiB), allchildren
+joined/CPU6FREE. F03sourceReady-observation→compiler522.06s; grant→compiler67.74s,
+originalblockedstartUNKNOWN. SourceReadytimingmayincludeworkerprep; no95claim.
+Qualifiedbatchowner combinesready6selectors/uniqueF06modules, no bodyrewrites.
+ExactFOURprofileguard originallyb816/969 cannottruthfullyclaimcurrent055/source8d7;
+preparingnarrowexacttuple data successor withsameguardstrength/current004provenance,
+notgenericallywideningparser/relabelingoldproof. Do notholdready6foruntestedtimer.
+
+TimerHOST4prefixespassed; originalfixturealiasfailure thenoneallowedcorrection
+failedongenuine__inline_memset linkdependency. All6childrenjoined/CPU6free; strict
+readonly/origin and25750oracleNOTRUN. Expert timer_provider_link_expert prepares
+separateEXISTINGRuststring.rsprovider closure+relinkretainedtimerobject, no stubs/
+unresolvedignore/assertion/type/flags weaken orprefixrecompile. No newgrant yet.
+
+Source29ordinarySTATIC640unusedpartial retainedaftermissingprefix_evidence import;
+noTEMP-REQUEST/compiler/container/clock/workload. Sameowner preparesclosedliteral
+path/size/SHA helperloader source30 withtrue__file__/specorigin in allisolatedentry
+contexts, fivefocusedtestsPASS; originalSource29andpartial17inputtree unchanged.
+NextactualRootstaticmustusefreshnamespace/no640replay, ledger23consumed +reserved
+640separate; latestphysical54e4356d, nothistoric98887. No additionalcleanup needed.
+
+ForegroundownsF05 parent/child/privatebufferprocess_vm candidate exclusively at
+host-preparation/velocity-intervention-20261026-1/f05-owned-processvm-consumer-source-1;
+Rootdoesnotduplicateorassumeitsroute/runtime. No newlogicalquota/securitywork.
+Fixed11:24:50Z/account/holds/CPU7cap/reserves/permanent27:4/oneheavy unchanged.
+
+## Supported F04 file closure; retained whole FP failure — 2026-10-27T06:19:06.766729+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M14-F04 COMPLETEoriginalsupportedfile contract by independentdefault_witness_gate
+PASS_F04_SUPPORTED_PROFILE_FILE_PROOF, Rootrecordf936dce9. OriginalM14 proofitem4
+requiresapplicableactualnativebehavior/matchingartifacts; itdoesnotmakewholeapp
+protocolPASS prerequisiteforperfileproof. Reusedprior04-01..05 proofs/current
+106Rustmap→x86cpu8db4→Ruste9cc→image26eb and unchangedselectedcpu.o0C/data/RELA.
+RawactualFP254/exit0/twoTIDs/16YMM64rounds/EOF254+0/nodrops/truncation plus
+unchangedf368trace/BEGINintent0/ACK3abandoned1/retire51=-11then52=0 andindependent
+ownedretirement54e4356d closeONLYthatfile's remaining04-04 native-valuejoin.
+WHOLE run result remainsFAILstreamaccounting: ORIGINALdeclared4096/actual1024
+bothstreams unchanged. Application/fullnativeprotocolflagsFALSE; no retro1024
+approval/oraclenormalization/newguestquota/bootstrapprovenance/SMP/allstateclaim.
+M14now2supportedfilescomplete(F01/F04), M15one(F01); BOTHmilestonesOPEN.
+
+FPnonce692/tool95085 CONSUMEDonce; actualinnercaller1/outertool0/36.392466s;
+QEMU32sreaped-9. OwnerCIDd2773removed/27hostactorsabsent/25clientsreaped/records
+released/currentfree54e4356d accepted. D/OWNER-AND-GUEST-RAW-EXPORT84files a68792a2
+retainsalloriginalresults/serial/QMP; originalmckernel_application_executed:false
+flag kept asfrozenformalresult. No furthercleanup oractualguest retryneedednow.
+Collector4096profile correction91e3ddc4 source-only/11controlsPASS, no compile;
+fullprotocolrepair isseparate fromF04filedecision. Futureconsumedledger23;
+640dc1258eabe29edce9af8214de41f0 isSTATICpartialRESERVEDUNUSED, notconsumed.
+
+F06next3HOST490PASS9commands0/CPU0.371380/wall0.432476/RSS94088KiB, handoff3ba78ed6.
+F03next3HOST96pairs+19ABI PASS3commands0/CPU0.132959/wall0.230384/RSS90768KiB,
+handoff13c162ca; firstcompiler06:14:45.902505Z. No default/nativecreditforthese.
+F02timer120B/15wordcohort7commands hasactualCPU6grant3fdf1be9; ownerexecutesunder
+canonicale8baccount/profile, no otherCPU6grant untilpositivejoin/free. Rootprivate
+cohortowner combinesF03/F06 andtimerifready usingexistingFIVEprofile; no canonical
+write yet. Currentaccepteddefault remains26eb C75/31=106/processmetadata71.
+
+DaemonSource29IOcorrection SOURCEPASS5425map29; actualordinarySTATICpreparefailed
+beforeTEMP-REQUEST/Docker/clock onmissingprefix_evidence import. Partialmirror/
+candidate/workdirs andunused640 retained, NOrepeatprepare/delete/replay. Existing
+ownerrepairs exactpinnedhelperimportcontext innewsibling/literalAPIpreflight;
+Rootpreservestypedreview/23ledger/currentfree54e. No needkernelqueuetowaitforit.
+Mcexecownerimplements minimalexisting142SDKowner3hooks usingfrozenF4Dcontextinputs
+e7e5; no349bodyreimplementation/newframework. CanonicalRootsolewriter; fixed
+11:24:50Z/sameledger/account/realholds/resourceguards/permanent27:4 unchanged.
+
+## Actual26eb FP guest operation live — 2026-10-27T05:59:45.728899+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Roottool95085 LIVE, native nonce692afea0aa5a36d9cc82735b9bc4cf55 CONSUMEDatentry.
+Caller1433786/start87820142 started1793080756.7818847. Oneheavyowner only;
+no otherDocker/guest/defaultbuild. IndependentexactexecutionPASSed9cef1f, actual
+resourceb99a5f65/R2retainedjoin0; publishedcapture/static a04f331a5b370418577f9111ec92b7206d608667.
+New scratchfp26eb-native1/m.json e98d082a/26eb image/basee03f/overlay8054; same
+FP254/module/payload/oracle, source8afd. OriginalBEGINfinal0/AVX/YMM/QEMU/caller/
+parentjoins/normalownedretirement guards staymandatory, bootprovenancelimit kept.
+Do NOTreplaystage/resourcebatch/nonce/grant/capture orclearownerbasedonmodelliveness.
+Root retains actualhandle95085; pollsamehandleuntilterminal theninspectinnerJOINED
+(nativewrapperouter0aloneisnotnativePASS), qualifybytes/trace/actualretirement/current.
+M14/F04/native credit remainsOPEN untilactualproof. Goalactive/fixed11:24:50Z.
+
 ## FP26eb offline composition completed — 2026-10-27T05:52:00.789974+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

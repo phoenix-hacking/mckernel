@@ -1,0 +1,21 @@
+--- syscall.c
++++ syscall.c
+@@ -343,11 +343,18 @@
+ extern void arch_clear_single_step_body_result(struct thread *thread);
+ extern void arch_set_single_step_body_result(struct thread *thread);
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_FORWARD_CONTEXT)
++extern long
++arch_syscall_forward_context_bridge(int syscall_nr, void *ctx);
++#else
++
+ long
+ arch_syscall_forward_context_bridge(int syscall_nr, void *ctx)
+ {
+ 	return syscall_generic_forwarding(syscall_nr, ctx);
+ }
++
++#endif
+ 
+ long
+ arch_copy_to_user_bridge(unsigned long dst_addr, const void *src, size_t bytes)

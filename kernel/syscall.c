@@ -4508,11 +4508,21 @@ struct ddebug __attribute__((aligned(8),section("__verbose"))) f03_exit_notify_d
     { .file=__FILE__, .func="finalize_process_wakeup_log_bridge", .line=4436, .flags=DDEBUG_DEFAULT },
 };
 #endif
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_EXIT_WAITQ_WAKE)
+extern void f03_exit_notify_wake(void *);
+#define thread_exit_waitq_wake_bridge f03_exit_notify_wake
+#else
 static void
 thread_exit_waitq_wake_bridge(void *waitq)
 {
 	waitq_wakeup((waitq_t *)waitq);
 }
+#endif
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#line 4490
+#else
+#line 4499
+#endif
 
 #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
@@ -24541,17 +24551,29 @@ static const struct ptrace_io_offsets ptrace_wakeup_io_offsets = {
 		__builtin_offsetof(struct process, update_lock),
 };
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_WAKEUP_FIND)
+extern unsigned long f03_ptrace_io_find(int, int);
+#define ptrace_wakeup_find_thread_bridge f03_ptrace_io_find
+#else
 static unsigned long
 ptrace_wakeup_find_thread_bridge(int tgid, int tid)
 {
 	return (unsigned long)find_thread(tgid, tid);
 }
+#endif
+#line 24418
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_WAKEUP_UNLOCK)
+extern void f03_ptrace_io_unlock(unsigned long);
+#define ptrace_wakeup_thread_unlock_bridge f03_ptrace_io_unlock
+#else
 static void
 ptrace_wakeup_thread_unlock_bridge(unsigned long thread_addr)
 {
 	thread_unlock((struct thread *)thread_addr);
 }
+#endif
+#line 24424
 
 static void
 ptrace_wakeup_log_bridge(int event, int value, int result)

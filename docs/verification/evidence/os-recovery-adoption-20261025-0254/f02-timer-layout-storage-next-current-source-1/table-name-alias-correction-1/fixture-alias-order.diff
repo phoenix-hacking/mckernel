@@ -1,0 +1,18 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/fixture/main.c
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/table-name-alias-correction-1/fixture/main.c
+@@ -14,7 +14,6 @@
+ #ifndef INT_MAX
+ #define INT_MAX 2147483647
+ #endif
+-#define list list_head
+ extern const struct timer_runtime_offsets process_timer_runtime_offsets;
+ #define PROCESS_SCHED_PUBLIC_BRIDGE
+ PROCESS_SCHED_PUBLIC_BRIDGE const struct timer_runtime_offsets reference_process_timer_runtime_offsets = {
+@@ -38,6 +37,7 @@
+ 	.timer_list_offset = __builtin_offsetof(struct timer, list),
+ 	.timer_thread_offset = __builtin_offsetof(struct timer, thread),
+ };
++#define list list_head
+ int time_sharing;
+ static struct cpu_local_var cpu;
+ static struct thread threads[4];

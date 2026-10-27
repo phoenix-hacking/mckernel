@@ -1,0 +1,192 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SIX_HOST_QUALIFIED_FUNCTION_SOURCE_UNION_READY_TIMER_SEPARATE",
+  "runtime_authority": null,
+  "preimages": {
+    "kernel/syscall.c": {
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "bytes": 914839,
+      "sha256": "aeeb1d71cfd5b8d97935981aa3fc29674586289748e7e61514d247a43b473984"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1259403,
+      "sha256": "02ddaecff895693d389b0a6710c0ff4579c91caf2b53ea5f62746f4b8125d812"
+    },
+    "kernel/CMakeLists.txt": {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "bytes": 30707,
+      "sha256": "cd41d90e4b1dae5893c96cc0327aedf644dc7952300e25907543656df6e63586"
+    },
+    "arch/x86_64/kernel/syscall.c": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "bytes": 114757,
+      "sha256": "060ae704f105aff84cfdadb9a4f3846ae1b4a2e8192947a479336b2c05d05ea8"
+    }
+  },
+  "postimages": {
+    "kernel/syscall.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/candidate/kernel/syscall.c",
+      "bytes": 915683,
+      "sha256": "eb3ec7202a3f6b6a0a13ae14d008ddfb6ff717f413e5b2e287c3eabba40243d1"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/candidate/kernel/rust/syscall_policy.rs",
+      "bytes": 1260070,
+      "sha256": "f795e2581826e7cec92348a2a809be21ef9e26d03689d4cf8a07403bbdc40300"
+    },
+    "kernel/rust/arch_copy_to_user_bridge.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/candidate/kernel/rust/arch_copy_to_user_bridge.rs",
+      "bytes": 851,
+      "sha256": "d774aa618e354ae4de6e16f9293fb86f1458a2a29a4e03672c5e026072ff35c3"
+    },
+    "kernel/rust/arch_copy_from_user_bridge.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/candidate/kernel/rust/arch_copy_from_user_bridge.rs",
+      "bytes": 779,
+      "sha256": "062516036d0aa91d8a1db80b652dc9b7f7c4388c8ca99d180d871160d2699610"
+    },
+    "kernel/rust/arch_syscall_forward_context_bridge.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/candidate/kernel/rust/arch_syscall_forward_context_bridge.rs",
+      "bytes": 604,
+      "sha256": "3f14c1b94b1a071910623ec25551381b846ed36f3c2cefbf501cf33eb036314a"
+    },
+    "arch/x86_64/kernel/syscall.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/candidate/arch/x86_64/kernel/syscall.c",
+      "bytes": 115374,
+      "sha256": "cae4bbc9be8f8ed8bf3e7ff82a9848ea11aaf50f740ecc23ee389fd73f70297b"
+    },
+    "kernel/CMakeLists.txt": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/candidate/kernel/CMakeLists.txt",
+      "bytes": 31502,
+      "sha256": "c60b391f5f2f7f5156d3f381ab5563afcdb9ccca334dc2bf3ff9b0383a5fbd77"
+    }
+  },
+  "qualified_F03": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/ACTUAL-HOST-HANDOFF.json",
+    "bytes": 11611,
+    "sha256": "13c162ca28351cd3724ca5acd6b858245bbaef484a73ed69f3db9acf140bc768"
+  },
+  "qualified_F06": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/actual-three-host-1/HANDOFF.json",
+    "bytes": 8979,
+    "sha256": "3ba78ed6318f5e5e481b484aec878148d8a4158c23cd83aba284c70daa37d37c"
+  },
+  "F03_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/THREE-SOURCE-SLICES.json",
+    "bytes": 7820,
+    "sha256": "f65137a4c6ab4f64e06512336456a716c68513ec4b44bf0eb23d60cabbd28471"
+  },
+  "F06_exact_sources": [
+    {
+      "leaf": "copy-to-user",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/copy-to-user/SOURCE-BINDINGS.json",
+        "bytes": 2657,
+        "sha256": "b4a0c61724690e330dd0405dfd1fe2061a768746c9ea9860c0992a4990f5d467"
+      },
+      "qualified_module": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/copy-to-user/bridge.rs",
+        "bytes": 851,
+        "sha256": "d774aa618e354ae4de6e16f9293fb86f1458a2a29a4e03672c5e026072ff35c3"
+      },
+      "canonical_module": "kernel/rust/arch_copy_to_user_bridge.rs",
+      "body_bytes_unchanged": true,
+      "original_C": "\nlong\narch_copy_to_user_bridge(unsigned long dst_addr, const void *src, size_t bytes)\n{\n\treturn copy_to_user((void *)dst_addr, src, bytes);\n}\n",
+      "selected_C": "\n#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_COPY_TO_USER)\nextern long\narch_copy_to_user_bridge(unsigned long dst_addr, const void *src, size_t bytes);\n#else\n\nlong\narch_copy_to_user_bridge(unsigned long dst_addr, const void *src, size_t bytes)\n{\n\treturn copy_to_user((void *)dst_addr, src, bytes);\n}\n\n#endif\n#line 357\n",
+      "qualified_guard_before_line_restoration": "\n#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_COPY_TO_USER)\nextern long\narch_copy_to_user_bridge(unsigned long dst_addr, const void *src, size_t bytes);\n#else\n\nlong\narch_copy_to_user_bridge(unsigned long dst_addr, const void *src, size_t bytes)\n{\n\treturn copy_to_user((void *)dst_addr, src, bytes);\n}\n\n#endif\n",
+      "following_logical_line_preserved": 357
+    },
+    {
+      "leaf": "copy-from-user",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/copy-from-user/SOURCE-BINDINGS.json",
+        "bytes": 2663,
+        "sha256": "eb207167467de3d64bfa4f168e25d24dded886163f97069ca0aca6597abfd107"
+      },
+      "qualified_module": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/copy-from-user/bridge.rs",
+        "bytes": 779,
+        "sha256": "062516036d0aa91d8a1db80b652dc9b7f7c4388c8ca99d180d871160d2699610"
+      },
+      "canonical_module": "kernel/rust/arch_copy_from_user_bridge.rs",
+      "body_bytes_unchanged": true,
+      "original_C": "\nlong\narch_copy_from_user_bridge(void *dst, unsigned long src_addr, size_t bytes)\n{\n\treturn copy_from_user(dst, (void *)src_addr, bytes);\n}\n",
+      "selected_C": "\n#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_COPY_FROM_USER)\nextern long\narch_copy_from_user_bridge(void *dst, unsigned long src_addr, size_t bytes);\n#else\n\nlong\narch_copy_from_user_bridge(void *dst, unsigned long src_addr, size_t bytes)\n{\n\treturn copy_from_user(dst, (void *)src_addr, bytes);\n}\n\n#endif\n#line 363\n",
+      "qualified_guard_before_line_restoration": "\n#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_COPY_FROM_USER)\nextern long\narch_copy_from_user_bridge(void *dst, unsigned long src_addr, size_t bytes);\n#else\n\nlong\narch_copy_from_user_bridge(void *dst, unsigned long src_addr, size_t bytes)\n{\n\treturn copy_from_user(dst, (void *)src_addr, bytes);\n}\n\n#endif\n",
+      "following_logical_line_preserved": 363
+    },
+    {
+      "leaf": "forward-context",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/forward-context/SOURCE-BINDINGS.json",
+        "bytes": 2631,
+        "sha256": "cbee74d875291a7c76d1679399137837c4e7b156db38476c31392fffda2203cb"
+      },
+      "qualified_module": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/forward-context/bridge.rs",
+        "bytes": 604,
+        "sha256": "3f14c1b94b1a071910623ec25551381b846ed36f3c2cefbf501cf33eb036314a"
+      },
+      "canonical_module": "kernel/rust/arch_syscall_forward_context_bridge.rs",
+      "body_bytes_unchanged": true,
+      "original_C": "\nlong\narch_syscall_forward_context_bridge(int syscall_nr, void *ctx)\n{\n\treturn syscall_generic_forwarding(syscall_nr, ctx);\n}\n",
+      "selected_C": "\n#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_FORWARD_CONTEXT)\nextern long\narch_syscall_forward_context_bridge(int syscall_nr, void *ctx);\n#else\n\nlong\narch_syscall_forward_context_bridge(int syscall_nr, void *ctx)\n{\n\treturn syscall_generic_forwarding(syscall_nr, ctx);\n}\n\n#endif\n#line 351\n",
+      "qualified_guard_before_line_restoration": "\n#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_FORWARD_CONTEXT)\nextern long\narch_syscall_forward_context_bridge(int syscall_nr, void *ctx);\n#else\n\nlong\narch_syscall_forward_context_bridge(int syscall_nr, void *ctx)\n{\n\treturn syscall_generic_forwarding(syscall_nr, ctx);\n}\n\n#endif\n",
+      "following_logical_line_preserved": 351
+    }
+  ],
+  "new_Rust_cfgs": [
+    "f03_exit_waitq_wake_selected_candidate",
+    "f06_copy_to_user_candidate",
+    "f06_copy_from_user_candidate",
+    "f06_forward_context_candidate"
+  ],
+  "new_C_defines": {
+    "kernel": [
+      "MCKERNEL_RUST_F03_WAKEUP_FIND",
+      "MCKERNEL_RUST_F03_WAKEUP_UNLOCK",
+      "MCKERNEL_RUST_F03_EXIT_WAITQ_WAKE"
+    ],
+    "arch": [
+      "MCKERNEL_RUST_F06_COPY_TO_USER",
+      "MCKERNEL_RUST_F06_COPY_FROM_USER",
+      "MCKERNEL_RUST_F06_FORWARD_CONTEXT"
+    ]
+  },
+  "new_module_paths": [
+    "kernel/rust/arch_copy_to_user_bridge.rs",
+    "kernel/rust/arch_copy_from_user_bridge.rs",
+    "kernel/rust/arch_syscall_forward_context_bridge.rs"
+  ],
+  "new_algorithm_bodies": 0,
+  "current_C_FUNC_counts": [
+    75,
+    31
+  ],
+  "expected_C_FUNC_counts": [
+    72,
+    28
+  ],
+  "new_public_Rust_function_exports": [
+    "f03_exit_notify_wake",
+    "arch_copy_to_user_bridge",
+    "arch_copy_from_user_bridge",
+    "arch_syscall_forward_context_bridge"
+  ],
+  "existing_public_Rust_function_exports_reused": [
+    "f03_ptrace_io_find",
+    "f03_ptrace_io_unlock"
+  ],
+  "expected_new_Rust_import_removals": [
+    "arch_copy_to_user_bridge",
+    "arch_copy_from_user_bridge",
+    "arch_syscall_forward_context_bridge"
+  ],
+  "timer_included": false,
+  "timer_actual_result": null,
+  "canonical_Git_compiler_Docker_runtime_actions": 0,
+  "default_acceptance": false,
+  "native_acceptance": false,
+  "whole_file_retired": false,
+  "arch_tracked_file_line_preservation": "Exact #line after each three guard blocks restores following original physical/logical source line before existing rt_sigreturn allocation/free diagnostics"
+}

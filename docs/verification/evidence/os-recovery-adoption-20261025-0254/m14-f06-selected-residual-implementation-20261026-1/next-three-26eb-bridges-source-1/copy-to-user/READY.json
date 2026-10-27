@@ -1,0 +1,38 @@
+{
+  "task": "F06-selected26eb-copy-to-user",
+  "status": "SOURCE_READY_ACTUAL_QUALIFICATION_OPEN",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "symbol": "arch_copy_to_user_bridge",
+  "source_checks": {
+    "identity": "PASS",
+    "retained31_selected_name": "PASS",
+    "existing_Rust_exact_body_reuse": "PASS",
+    "paired_fallback_byte_exact": "PASS",
+    "provider_predicate_controls": "PASS_3_ALLOWED_4_REJECTED"
+  },
+  "plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/copy-to-user/FUTURE-HOST-COMMAND-PLAN.json",
+    "bytes": 10932,
+    "sha256": "ac44ee1bb031e617fbf0d3c9e205a4d644cbaee33357f52c769ff7135f6e427b"
+  },
+  "candidate_module": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/copy-to-user/bridge.rs",
+    "bytes": 851,
+    "sha256": "d774aa618e354ae4de6e16f9293fb86f1458a2a29a4e03672c5e026072ff35c3"
+  },
+  "bindings": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-three-26eb-bridges-source-1/copy-to-user/SOURCE-BINDINGS.json",
+    "bytes": 2657,
+    "sha256": "b4a0c61724690e330dd0405dfd1fe2061a768746c9ea9860c0992a4990f5d467"
+  },
+  "expected_controlled_pairs": 175,
+  "commands": 3,
+  "actual_compile": null,
+  "actual_runtime": null,
+  "holds": [
+    "real usercopy/fault fixups",
+    "real forwarding/kernel context lifetime",
+    "default link/native selection"
+  ],
+  "central_module_filename_required": "arch_copy_to_user_bridge.rs"
+}

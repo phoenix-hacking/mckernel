@@ -1,0 +1,70 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_THREE_REAL_CURRENT26EB_REUSED_SOURCE_SLICES_AND_LITERAL_FUTURE_HOST_PLAN",
+  "source_slices": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/THREE-SOURCE-SLICES.json",
+    "bytes": 7820,
+    "sha256": "f65137a4c6ab4f64e06512336456a716c68513ec4b44bf0eb23d60cabbd28471"
+  },
+  "HOST_plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-current26eb-three-selected-bridges-source-1/FUTURE-HOST-COMMAND-PLAN.NOT-GRANTED.json",
+    "bytes": 17128,
+    "sha256": "af26202462633f6d0d0cb96d8a7c80797e236404b8c42a66e7f72edd6f3ed8dd"
+  },
+  "actual_current_metadata": [
+    {
+      "name": "ptrace_wakeup_find_thread_bridge",
+      "actual_symbol": {
+        "index": 51,
+        "name": "ptrace_wakeup_find_thread_bridge",
+        "bind": 0,
+        "type": 2,
+        "shndx": 1,
+        "value": 1728,
+        "size": 12
+      },
+      "selected_existing_Rust": "f03_ptrace_io_find"
+    },
+    {
+      "name": "ptrace_wakeup_thread_unlock_bridge",
+      "actual_symbol": {
+        "index": 50,
+        "name": "ptrace_wakeup_thread_unlock_bridge",
+        "bind": 0,
+        "type": 2,
+        "shndx": 1,
+        "value": 1712,
+        "size": 12
+      },
+      "selected_existing_Rust": "f03_ptrace_io_unlock"
+    },
+    {
+      "name": "thread_exit_waitq_wake_bridge",
+      "actual_symbol": {
+        "index": 27,
+        "name": "thread_exit_waitq_wake_bridge",
+        "bind": 0,
+        "type": 2,
+        "shndx": 1,
+        "value": 560,
+        "size": 12
+      },
+      "selected_existing_Rust": "f03_exit_notify_wake"
+    }
+  ],
+  "current_C_FUNCTION_count": 75,
+  "expected_after_selection_count": 72,
+  "new_Rust_algorithm_bodies": 0,
+  "newly_exported_existing_Rust_functions": 1,
+  "already_exported_Rust_functions_reused": 2,
+  "logical_following_lines_preserved_for_dispatch_and_fallback_context": true,
+  "C_fallback_and_all_other_source_bytes_exact": true,
+  "fixture_expected_pairs": 96,
+  "fixture_expected_ABI_words": 19,
+  "actual_compile": null,
+  "actual_HOST": null,
+  "default_acceptance": false,
+  "native_acceptance": false,
+  "whole_file_retired": false,
+  "compiler_Docker_Git_canonical_runtime_actions": 0
+}

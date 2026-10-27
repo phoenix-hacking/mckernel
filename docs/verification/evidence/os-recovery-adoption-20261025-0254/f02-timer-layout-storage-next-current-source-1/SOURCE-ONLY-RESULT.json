@@ -1,0 +1,108 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "NEXT_GENUINE_TIMER_RUNTIME_DATA_FAMILY_IMPLEMENTED_PRIVATE_STATIC_PASS_NOT_COMPILED",
+  "chosen_family": {
+    "name": "process_timer_runtime_offsets",
+    "current_C_record_count": 1,
+    "bytes": 120,
+    "readonly": true,
+    "offset_words": 15,
+    "genuine_runtime_consumer": "unchanged sched_helpers::set_timer -> timer_set_timer_body_result",
+    "not_function_count": true,
+    "not_inert_layout_witness": true
+  },
+  "implementation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/SOURCE-IMPLEMENTATION-AND-CURRENT120B-ABI.json",
+    "bytes": 7227,
+    "sha256": "0f6b83e8d93397dfd7276accffb03a095dca068677aeab984e180ded3b7d11bb"
+  },
+  "postimages": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/candidate/kernel/process.c",
+      "bytes": 218569,
+      "sha256": "1dc76b89466859d49b85377f9bfa0f809890ee12ec9392ff4768104ba0f32567"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/candidate/kernel/rust/process_helpers.rs",
+      "bytes": 606868,
+      "sha256": "439ffb1e00f405c5d470468facb07ebe86d41a9ab291553d573cf98bbf232613"
+    }
+  ],
+  "frozen_preimages": [
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "bytes": 218419,
+      "sha256": "8d7fc71197eba2e9c29d32de49c6e97aa3f27ee36986bb637eaa73e6f2230038"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "bytes": 605160,
+      "sha256": "f54652a091b8b426ede0ed1610193c88d3c15cdd7a4e9d6a1e1dfa760be5f3d0"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "bytes": 185669,
+      "sha256": "d16200db3054d88a83752fda1383d6c101d24de4b787bd78cd42edb46ab251fc"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    }
+  ],
+  "existing_Source37_reuse": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/fixture/BINDING.json",
+    "bytes": 5688,
+    "sha256": "5cb3ac898289f245ec370fcf3ac09a2ba3e86ea951f3fd03783defeba7552b84"
+  },
+  "actual_current71_C_object": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SYNC-PROCESSVM-HOST13-FIVE-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+    "bytes": 71144,
+    "sha256": "055c157831118f4b434a92e03725a05bd9ff8c3071235b8c79ab6019c94a9c40"
+  },
+  "current71_accepted_report": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sync-processvm-host13-validator-import-suffix-1/actual-qualification-1/RETAINED-F02-DATA-OWNERS-RESULT.json",
+    "bytes": 14048,
+    "sha256": "d9163559d7f344663c326e9638e140b9e7bf6bef43bb018355867175031836af"
+  },
+  "static_check": {
+    "command": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/verify_private_source.py"
+    ],
+    "status": "PASS_STATIC_TIMER120_SOURCE_AND_RETAINED25750_ORACLE",
+    "new_compilers": 0,
+    "actual_retirements": 0
+  },
+  "HOST_recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/EXACT-SEVEN-COMMAND-HOST-RECIPE.NOT-ADMITTED.json",
+    "bytes": 38046,
+    "sha256": "11db518fe601fd3e54350a6fba3b5bd71400814d7e8e6b20b26b199cde3bc904"
+  },
+  "postcompile_checker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-timer-layout-storage-next-current-source-1/check_table_ownership.py",
+    "bytes": 4979,
+    "sha256": "a2266b037d9ed0770592c997bcb4e6518f0d9fa921e801af11f5afb54a6f7fd8"
+  },
+  "precise_next_executable_gap": "Rootordinarygrant for genuine15wordABI +focusedRusttable/currenttimerwrappers/body +actualCselected/fallbackownerobjects +link +readonly120/current055cbyteequality/exactRustorigins +retained25750assertionrun. Thenmatchingproductiondefault3cmd/nativebinding remainsseparate.",
+  "source_selection": "Existing C GLOBAL_STORAGE/Rust process_global_storage_candidate only. InRustselectedprofile Cdeclaresextern; Rustimmutableconstructor uses existing TimerRuntimeOffsets and genuine offset_of(Thread/CpuLocalVar/Timer). Fallbackoriginaltable unchanged atlogical104; nextoldsource resumeslogical125.",
+  "contract_scope": "The table drives actual timer/list/lock decisions, so it remains a project-owned runtime data obligation. No newkernelalgorithm or runtimeC added. Inerttest ABI witness arrays are not retirement evidence. Source37/38provided existingtypes/body/fixtures but no readyRusttabledefinition.",
+  "preserved": {
+    "prior13_Rust_line_owners": true,
+    "prior_four_control_callback_owners": true,
+    "other_current70_C_records": true,
+    "verbose_symbol_families": 46,
+    "verbose_descriptor_entries": 78,
+    "GNU_RETAIN_old_hold": "OPEN_UNCHANGED_NO_WAIVER",
+    "all_original_source_file_namespace_and_later_logical_lines": true,
+    "default_artifacts_immutable": true,
+    "canonical_writes": 0,
+    "compiler_or_Docker_or_guest_or_native_runs": 0,
+    "current_selected_C_records_counted": 71,
+    "current_C_record_retirement_credit": 0,
+    "prospective_only_one_table_removal": true
+  },
+  "native_policy": "No perword/record nativequota. Reuse matching priorfunctionalnative evidence only after exactdefaultsource/object/consumerbinding and independentRootacceptance.",
+  "fixed_deadline_UTC": "2026-10-27T11:24:50Z"
+}

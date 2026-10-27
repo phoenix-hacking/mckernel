@@ -1,0 +1,15 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEXT10-DEFAULT-BUILD-ADMISSION-1/run_build_only.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/run_build_only.py
+@@ -119,10 +119,10 @@
+     require(profile['cohort_source_bindings']==[dict(relative=r['relative'],postimage=r['postimage']) for r in profile['inputs']['postimages']]+source_directory_postimages(profile),'exact new cohort source map')
+     require(isinstance(profile['reuse_descriptor'],str) and profile['reuse_descriptor'],'Root must supply matching eight-object/three-replacement reuse descriptor')
+     require(isinstance(profile['producer_contract']['process_delta'],str) and profile['producer_contract']['process_delta'],'Root must state exact new process delta')
+-    if 'unchanged_completed_process_prefix' in profile:require(profile['unchanged_completed_process_prefix']['Root_decision']=='REUSE_EXACT_F02_B8168C1F','Root must disposition already completed unchanged F02 process prefix before grant')
++    if 'unchanged_completed_process_prefix' in profile:require(profile['unchanged_completed_process_prefix']['Root_decision']=='REUSE_EXACT_CURRENT_26EB_055C1578','Root must disposition already completed unchanged F02 process prefix before grant')
+     prefix=profile['unchanged_completed_process_prefix']
+     retained_process=[r for r in profile['inputs']['objects'] if r['link_token']=='CMakeFiles/mckernel.img.dir/process.c.o']
+-    require(len(retained_process)==1 and retained_process[0]['replace'] is False and retained_process[0]['source']==prefix['actual_F02_output'] and prefix['argv_unchanged'] is True and prefix['source_sha256']=='9692036c3aa2d580a2a134c2d4a8fc32ab5ff4215b44128668858d6fac131b12','exact matching qualified F02 process prefix reuse')
++    require(len(retained_process)==1 and retained_process[0]['replace'] is False and retained_process[0]['source']==prefix['actual_F02_output'] and prefix['argv_unchanged'] is True and prefix['source_sha256']=='8d7fc71197eba2e9c29d32de49c6e97aa3f27ee36986bb637eaa73e6f2230038','exact matching qualified F02 process prefix reuse')
+     commands=profile['exact_commands']
+     outputs=['rust/mckernel_rust.o','CMakeFiles/mckernel.img.dir/syscall.c.o','CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o','mckernel.img']
+     sources=['/src/kernel/rust/lib.rs','/src/kernel/syscall.c','/src/arch/x86_64/kernel/syscall.c']

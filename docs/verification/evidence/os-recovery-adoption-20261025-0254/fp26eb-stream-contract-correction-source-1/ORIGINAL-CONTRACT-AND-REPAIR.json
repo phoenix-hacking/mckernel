@@ -1,0 +1,52 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "original_manifest": {
+    "path": "/home/holden/mckernel-work/scratch/fpts-m-34886485/manifest.json",
+    "bytes": 5587,
+    "sha256": "27f5ff333ec0fbd6852e60196aefb3a20bfcc2c3abc5b769da6cf6f8facb275e"
+  },
+  "original_proposal": {
+    "path": "/home/holden/mckernel-work/host-preparation/practical-fp-thread-state-app-20261018-1/fp-stage-fixture-parent-1/parent-bound-1/execution-proposal.json",
+    "bytes": 21128,
+    "sha256": "c120f324d9f93bca597d844adb30539dda2817fcd67b73aa45c608ce365df5df"
+  },
+  "original_collector": {
+    "mode": 33216,
+    "path": "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/init",
+    "sha256": "ead247cdf56556c7491bd5d8f746c6c668c0c944414ce51392f7caaed895a63a",
+    "size": 1021968
+  },
+  "original_collector_profile": "Unchanged ND_FUTEX4096 no application arguments",
+  "original_limits": {
+    "stdout": 4096,
+    "stderr": 4096
+  },
+  "new_failed_collector_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/native_diagnostic_guest_collector.helper-diagnostic.c",
+    "bytes": 25205,
+    "sha256": "b3fc4fe0d46ae95a0b428a3c2ff46a8836affc0d929da9a2809cbe3e15b5e2d6"
+  },
+  "failed_selected_define": "ND_PROCESS_EXEC_WAIT",
+  "failed_limit": 1024,
+  "repaired_existing_define": "ND_FUTEX",
+  "repaired_stream_limit": 4096,
+  "repaired_frame_limit": 8192,
+  "production_C_source_changes": 0,
+  "raw_export": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/five26eb-fp-native-execution-static-source-1/OWNER-AND-GUEST-RAW-EXPORT.json",
+    "bytes": 1030155,
+    "sha256": "a68792a29b3a828005e43c639d8343d5d431c9347a8b90ba1869f91f0f8c9080"
+  },
+  "raw_stream_report": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/fp26eb-stream-contract-correction-source-1/ACTUAL.ND_PAYLOAD.json",
+    "bytes": 1009,
+    "sha256": "3fd64fc9b519d2be79ad6bcbecbd60b1e5036e4f347144dafbcb3950ef870e8a"
+  },
+  "original_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/fp26eb-stream-contract-correction-source-1/ACTUAL.attempt-result.json",
+    "bytes": 2994,
+    "sha256": "4fe4e8cda02d99419ea3fb0fadb91e4ed2a0022d4224ae472871a023bfee4a90"
+  },
+  "retrospective_1024_acceptance_allowed": false,
+  "runtime_authority": null
+}

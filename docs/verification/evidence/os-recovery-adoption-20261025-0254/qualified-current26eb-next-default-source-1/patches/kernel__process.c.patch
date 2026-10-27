@@ -1,0 +1,22 @@
+--- kernel/process.c
++++ kernel/process.c
+@@ -115,6 +115,10 @@
+ extern void lapic_timer_enable(unsigned int clocks);
+ extern void lapic_timer_disable();
+ 
++#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
++extern const struct timer_runtime_offsets process_timer_runtime_offsets;
++#else
++#line 104
+ PROCESS_SCHED_PUBLIC_BRIDGE const struct timer_runtime_offsets process_timer_runtime_offsets = {
+ 	.thread_status_offset = __builtin_offsetof(struct thread, status),
+ 	.thread_sched_list_offset = __builtin_offsetof(struct thread, sched_list),
+@@ -136,6 +140,8 @@
+ 	.timer_list_offset = __builtin_offsetof(struct timer, list),
+ 	.timer_thread_offset = __builtin_offsetof(struct timer, thread),
+ };
++#endif
++#line 125
+ 
+ #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+ unsigned long process_timer_spin_lock_bridge(unsigned long lock_addr);
