@@ -1,0 +1,252 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ROOT_PROPOSAL_NOT_ADMITTED_NOT_EXECUTED",
+  "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1",
+  "environment": {
+    "PATH": "/usr/bin:/bin",
+    "LC_ALL": "C",
+    "RUST_BACKTRACE": "0"
+  },
+  "output_directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/actual-focused-provider-1",
+  "commands": [
+    {
+      "purpose": "Functional OS only; no security testing. Compile only exact selected F01 HOST-equivalence provider closure.",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/bin/rustc",
+        "--crate-name",
+        "mckernel_f01_equiv",
+        "--crate-type",
+        "lib",
+        "--edition=2021",
+        "--cfg",
+        "mckernel_equivalence",
+        "--cfg",
+        "enable_rusage",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "debuginfo=2",
+        "-C",
+        "code-model=large",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "no-redzone=yes",
+        "-C",
+        "force-frame-pointers=yes",
+        "-C",
+        "overflow-checks=off",
+        "-C",
+        "force-unwind-tables=no",
+        "-C",
+        "no-vectorize-loops",
+        "-C",
+        "no-vectorize-slp",
+        "-C",
+        "target-feature=-sse,-sse2,-sse3,-ssse3,-ssse4.1,-ssse4.2,-avx,-avx2,-fma",
+        "--emit=obj=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/actual-focused-provider-1/f01.HOST-EQUIVALENCE.o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/lib.rs"
+      ]
+    },
+    {
+      "purpose": "Functional OS only; no security testing. Link unchanged original fixture and existing lower-boundary mocks to exact F01 Rust provider.",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-Wl,-Map=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/actual-focused-provider-1/Rust.map",
+        "-Wl,--cref",
+        "-no-pie",
+        "-fno-builtin",
+        "-Wl,--gc-sections",
+        "-Wl,--allow-multiple-definition",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f01-nearest-file-closure-1/existing-focused-inputs/mem_init_helpers_equiv.c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f01-nearest-file-closure-1/existing-focused-inputs/rust_stubs.c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/actual-focused-provider-1/f01.HOST-EQUIVALENCE.o",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/actual-focused-provider-1/mem_init_helpers_rust"
+      ]
+    },
+    {
+      "purpose": "Functional OS only; no security testing. Require every original tested extern final symbol to originate in exact Rust input section.",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/check_origins.py",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/actual-focused-provider-1/f01.HOST-EQUIVALENCE.o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/actual-focused-provider-1/mem_init_helpers_rust",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/actual-focused-provider-1/Rust.map",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/actual-focused-provider-1/EXACT-TESTED-PROVIDER-ORIGINS.json"
+      ]
+    },
+    {
+      "purpose": "Functional OS only; no security testing. Execute retained reference C fixture once without recompiling seven successful prefixes.",
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f01-nearest-file-closure-1/actual-focused-attempt-1/output/mem_init_helpers_c"
+      ],
+      "stdout": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/actual-focused-provider-1/C.stdout"
+    },
+    {
+      "purpose": "Functional OS only; no security testing. Execute unchanged fixture assertions against focused Rust provider.",
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/actual-focused-provider-1/mem_init_helpers_rust"
+      ],
+      "stdout": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/actual-focused-provider-1/Rust.stdout"
+    },
+    {
+      "purpose": "Functional OS only; no security testing. Compare complete original fixture stdout bytes.",
+      "argv": [
+        "/usr/bin/diff",
+        "-u",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/actual-focused-provider-1/C.stdout",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/actual-focused-provider-1/Rust.stdout"
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/hash.rs",
+      "bytes": 872,
+      "sha256": "9dd27922476ed87117500dc130fdce75f389347beb32df8d47b34b014ffe0a03"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/lib.rs",
+      "bytes": 366,
+      "sha256": "e4cde4bb6c65f593dd1c31e045c2972b6c72da918161b4e4945fedac5e8bfab7"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/llist.rs",
+      "bytes": 2753,
+      "sha256": "246764fe6b346d78bb3cac84b1773469106dc99ae394cefe0c9317d08b7305f8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/mem_helpers.rs",
+      "bytes": 114198,
+      "sha256": "a17abd0d36a876d901e4ba3ceec63870a7eb9a4d0e6260e2a67cc2bec37ce42d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/rbtree.rs",
+      "bytes": 22536,
+      "sha256": "114e8dbd0b48abc156879bfd2f019071c30174019e97904c028ccee911840256"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/spinlock_helpers.rs",
+      "bytes": 3105,
+      "sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/string.rs",
+      "bytes": 13172,
+      "sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/x86_setup.rs",
+      "bytes": 471,
+      "sha256": "3613c29fa06592844db8f24eb3ac01243bd273042742f542fa2a3bded67f6b3a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f01-nearest-file-closure-1/existing-focused-inputs/mem_init_helpers_equiv.c",
+      "bytes": 155219,
+      "sha256": "0b306eac536d11232248f686425cb4e1f13348c44a6e722210d5a4fe714370a9"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f01-nearest-file-closure-1/existing-focused-inputs/rust_stubs.c",
+      "bytes": 58824,
+      "sha256": "92b7190260c94f20d4677665272b8164ae0c728abd2dd0d9d1f7192ff1468d91"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f01-nearest-file-closure-1/actual-focused-attempt-1/output/mem_c.o",
+      "bytes": 157280,
+      "sha256": "66a3dd85f4e603fe95d3683caf906b0ca8eaaef1ccef791a226bf6495cbc9681"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f01-nearest-file-closure-1/actual-focused-attempt-1/output/init_c.o",
+      "bytes": 14208,
+      "sha256": "fa5f369b5b9ec1f58d5af3b12732ea7ecfb8c6c229f26d8464f867927e4dc8cb"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f01-nearest-file-closure-1/actual-focused-attempt-1/output/string_c.o",
+      "bytes": 7960,
+      "sha256": "131e9a22d1867522e9db7ad0a36471234e1a344a1e15c2c83f7e979d40ba6884"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f01-nearest-file-closure-1/actual-focused-attempt-1/output/rbtree_c.o",
+      "bytes": 23304,
+      "sha256": "78c22d0ad4b6568270b998fc247403117216c7d1b51490572bb308c438b3b023"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f01-nearest-file-closure-1/actual-focused-attempt-1/output/list_c.o",
+      "bytes": 9352,
+      "sha256": "c40b5b36292ed08c8c3e41de195f4046d82fe1af0e6324a6be525ceba436eb32"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f01-nearest-file-closure-1/actual-focused-attempt-1/output/pte_helpers_fallback_c.o",
+      "bytes": 16072,
+      "sha256": "8e978b025ee1d111f25ec9446fc818d304ee578116929a318361e61d6be76eab"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f01-nearest-file-closure-1/actual-focused-attempt-1/output/mem_init_helpers_c",
+      "bytes": 172584,
+      "sha256": "9fc8afa07695d528fa54fd7899c00179c9c42e81456dfa4f2ac932b3da1d40a0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/PROVIDER-SOURCE-BINDING.json",
+      "bytes": 29597,
+      "sha256": "40184c5ad44dc6c8969c241a4edf11985edab6e916958bf20270b5c2730221da"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/check_origins.py",
+      "bytes": 5337,
+      "sha256": "6fb4a8e288b3c139b9eec7cd86c6ed545258439265d71ee3db70c2226418b0ca"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/verify_source.py",
+      "bytes": 2258,
+      "sha256": "4dfee6fafd0af85527d42c068217a89a6b9a933191ad40eb26a8cb35e1e6249e"
+    }
+  ],
+  "tools": [
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/bin/rustc",
+      "bytes": 645792,
+      "sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09"
+    },
+    {
+      "path": "/usr/bin/gcc-9",
+      "bytes": 1158288,
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+    },
+    {
+      "path": "/usr/bin/diff",
+      "bytes": 219480,
+      "sha256": "65e1e75eda05e06fb3739bf2403c24bf14f5fd2a4cba6d8691e9bd9ae206217f"
+    },
+    {
+      "path": "/usr/bin/python3",
+      "bytes": 5490456,
+      "sha256": "298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06"
+    }
+  ],
+  "proposed_limits": {
+    "CPU_affinity": [
+      6
+    ],
+    "max_live_children": 1,
+    "RLIMIT_AS_bytes": 2147483648,
+    "RLIMIT_CPU_seconds": 60,
+    "RLIMIT_FSIZE_bytes": 67108864,
+    "RLIMIT_CORE_bytes": 0,
+    "per_child_wall_seconds": 90
+  },
+  "admission_required": "Fresh Root ordinary CPU/RAM/storage/account/deadline grant using existing same-watcher guards; no independent runner authority here.",
+  "successful_prefixes_recompiled": false,
+  "production_artifacts_modified": false,
+  "no_new_mocks": true,
+  "original_main_assertions_and_digest_unchanged": true,
+  "one_bounded_correction_strategy": "On one compile/link failure preserve diagnostics and all prefix outputs. Correct only one demonstrable omitted exact source dependency or source-span defect, bound to selected source and same existing mocks. No cfg/flag experimentation, full crate fallback, new stubs, ignored undefineds or changed oracle. A behavior/origin failure is held for expert review, with no automatic correction."
+}

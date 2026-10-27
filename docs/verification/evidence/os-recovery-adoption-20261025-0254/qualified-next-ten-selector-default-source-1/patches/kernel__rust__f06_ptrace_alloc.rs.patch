@@ -1,0 +1,21 @@
+--- /dev/null
++++ kernel/rust/f06_ptrace_alloc.rs
+@@ -0,0 +1,18 @@
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Exact existing adapter; current-stack/allocation/VM ownership remains with provider.
++use core::ffi::c_void;
++
++use crate::abi::{CInt, CULong, SizeT};
++
++/// # Safety
++/// Existing tracked allocator/CPU/flags contract. Preserve C's size_t-to-int
++/// conversion even outside the defined allocation domain; no added bound policy.
++#[no_mangle]
++pub unsafe extern "C" fn arch_ptrace_alloc_bridge(size: SizeT, flags: CULong) -> *mut c_void {
++    // SAFETY: genuine selected allocator, with Rust callsite tracking coordinates.
++    unsafe {
++        crate::mem_helpers::kmalloc_tracked(
++            size as CInt, flags, concat!(file!(), "\0").as_ptr() as *mut i8, line!() as CInt,
++        )
++    }
++}

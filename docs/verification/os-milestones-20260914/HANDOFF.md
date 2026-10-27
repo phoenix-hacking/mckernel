@@ -1,3 +1,56 @@
+## Safe idle checkpoint: F01 complete; daemon failure retired; NEXT10 next — 2026-10-27T03:47Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Goal ACTIVE, same thread/window/ledger; fixed deadline 2026-10-27T11:24:50Z.
+This coordinator turn ends at a safe idle boundary before another fresh clock.
+No live Root heavy/query/TTL/ordinary compiler grant. No controller restart,
+new release, cleanup replay or goal pause. Earlier entries below are historical.
+
+Accepted deltas: M14-F01 supported file COMPLETE, joining six focused commands,
+all77 strong Rust origins and exact digest00338ce95ffd5b5d to retained production/
+native evidence and actual mem.o zero allocated C functions/data/relocations.
+Both failed full-object attempts and all seven C prefixes remain retained.
+M15-F01 remains COMPLETE at its three-wrapper scope. Full M14/M15 remain OPEN.
+Matching685/RustMM native5 accepted: five instances/four distinct cases; no replay.
+The current review interval adds no default/native/file closure beyond the prior
+snapshot; no new C-retirement credit from the failed daemon or private NEXT10.
+
+Daemon nonce1fff493f114662040e1147fdcbf5fa32 CONSUMED ONCE. Tool17302 exit1;
+caller1380041/start86891873, owner1380043/start86891891 joined1; wall4.427445s.
+Kernel pids.max64 was genuinely observed before compilation. Full-lifecycle
+assertion failed threads2/expected1; extra historical TID/state NOT captured.
+Not a proven procfs race. Preserve final singleton assertion and existing8s bound.
+CID3cbc986a removed, owned records removed normally, all17 actors/groups absent;
+FAILED-RUN-CURRENT-FREE bbe6afde independently accepted. Permanent27:4 preserved.
+Do not run the success-only afterjoin helper or replay daemon26/old nonces.
+
+Largest avoidable handoff remains preparation/disposition serialization, not CPU.
+Explicit parent ready observation02:38:19.378119Z to daemon entry03:24:34.204702Z
+is2774.826583s; actual source-ready timestamp UNKNOWN. Binding batch ready to entry
+531.142802s. Daemon first-compiler wall timestamp UNKNOWN. Current-free observation
+03:37:28.670315Z; independent decision later, exact original decision time UNKNOWN.
+No180s/95% speedup claim. Keep original nonoverlapping30min bucket baseline.
+
+NEXT OWNER Root: qualified-next-ten-selector-default-source-1 has independent
+PASS_SOURCE exact9b1f2f41, eight postimages/ten C selectors/105-file Rust snapshot.
+First executable static check: python3 -B
+ docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-next-ten-selector-default-source-1/check_static_cohort.py
+under its existing bounded ordinary profile. Then exact preimage-checked canonical
+adoption, reuse unchanged four-command runner and eight C inputs, finish static
+publication/reviewer context BEFORE new resource clock. Actual future compiler,
+nonce/grant and image/native acceptance remain unset. Prepared postbuild validator
+qualify_produced_cohort.py --admission ACTUAL_ROOT_DIRECTORY checks33Rust exports,
+exact6+4C removals/import delta once. No completed prefix rebuild.
+
+Parallel private owner partial_runtime_finish: same-image joined-TID reproducer
+290189d9/source-only, no execution grant; distinguish leak before observer repair.
+mm_unlock_fixture prepares existing unchanged F04 FP payload/oracle only. F03
+sync_child_event294d/F06processVM824e/libihk CMakea21e remain private/uncompiled;
+no invented source or acceptance credit. Root remains sole canonical/Git writer.
+Scheduling change: NEXT10 gets next heavy slot while daemon observation admission
+is prepared; do not serialize kernel work behind open-ended daemon diagnosis.
+Preserve all resource/account/holds/floors/ownership and scratch21 controls.
+
 ## Matching685 native accepted; daemon64 is next actual slot — 2026-10-27T03:00Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

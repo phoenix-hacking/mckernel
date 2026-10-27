@@ -1,0 +1,40 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_M14_F01_FROZEN_SUPPORTED_PROFILE_FILE_CUTOVER",
+  "reviewer": "/root/default_witness_gate",
+  "independent": true,
+  "implementation_ownership": false,
+  "at": 1793071091.0492516,
+  "focused_inputs": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/actual-focused-provider-1/FOCUSED-FILE-DECISION-INPUTS.json",
+    "bytes": 6907,
+    "sha256": "7ef97a572b0d5153dee8b4d2a94d12f90b148174a47dd0a975cc90c66f120478"
+  },
+  "actual_results": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/actual-focused-provider-1/RESULTS.json",
+    "bytes": 22232,
+    "sha256": "6096e0656a35b9952021b9c67f4eb48d5d3099a975272ba377f1ba5d2b09eadf"
+  },
+  "all77_Rust_origins": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/actual-focused-provider-1/EXACT-TESTED-PROVIDER-ORIGINS.json",
+    "bytes": 28917,
+    "sha256": "bc7570350916919e468b0767b7b717adacc9a08443eeb0f1d37ea10ebb8c14da"
+  },
+  "selected_mem_object_sha256": "4b595744494abba0493d75a1475e48b3745e1a668f5575543e81797b994e4f7c",
+  "selected_allocated_FUNC": 0,
+  "selected_allocated_OBJECT": 0,
+  "selected_runtime_relocations": 0,
+  "all6_commands_pass": true,
+  "source_bound_functions": 94,
+  "unchanged_original_fixture": true,
+  "exact_digest": "00338ce95ffd5b5d",
+  "production_native_evidence": "Unchanged actual mem.o/current selectedRust codegen plus acceptedmemory/F02RustMM235/685strict235 reused at exactscopes",
+  "limits": [
+    "Only frozen supported-profile F01 file contract",
+    "Existingpagealloc_track_init lowerboundary outside77 remains explicit",
+    "Retain originalwholecore lifetime/follower limits",
+    "OriginalproductionHOSTlink24undef and fullHOSTcfg20error failures preserved",
+    "No broader M14/OS/SMP/external qualification completion inferred"
+  ],
+  "runtime_authority": null
+}

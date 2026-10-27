@@ -1,0 +1,125 @@
+"""Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual F02 four-owner ELF, original callback ABI, metadata and mapping qualification.
+"""
+import collections,json,struct,traceback
+from pathlib import Path
+D=Path(__file__).resolve().parent
+# Reuse the accepted strict ET_REL parser and exact EXEC byte reader, stopping
+# before the clone/warnings validator; this does not run a compiler or workload.
+source=(D/'qualify_clone_pointer_and_warning_suffix.py').read_text();prefix=source[:source.index("\nclone=ns['_reuse_elf_function']")]
+ctx=dict(__file__=str(D/'qualify_four_f02_owners.py'));exec(compile(prefix,str(D/'qualify_clone_pointer_and_warning_suffix.py')+':REUSED_STRICT_ELF_READERS','exec'),ctx)
+E=ctx['E'];B=ctx['B'];P=ctx['P'];Elf=ctx['Elf'];rust=ctx['rust'];process=ctx['process'];final=ctx['final'];data=ctx['data'];sections=ctx['sections'];ref=ctx['ref'];object_bytes=ctx['ns']['_reuse_elf_object_bytes'];relocs=ctx['ns']['_reuse_elf_owning_relocations']
+FOUR=['idle_halt','allow_oversubscribe','time_sharing','process_idle_callbacks']
+TARGETS=['sched_idle_current_cpu_bridge','process_spin_lock_bridge','process_spin_unlock_bridge','cpu_enable_interrupt','cpu_disable_interrupt','schedule','sched_do_migrate_public','kmalloc_consolidate_free_list','process_sched_zero_free_bridge','cpu_safe_halt']
+report=dict(scope=__doc__.splitlines()[0],status='IN_PROGRESS',phases={},native_acceptance=False,physical_postjoin='SEPARATE_ROOT_READER',compiler_container_grant_actions=0)
+def own(elf,name):
+ rows=[s for s in elf.symbols if s['name']==name and s['shndx']!=0];assert len(rows)==1,(name,len(rows));return rows[0]
+def allocated(elf,type_):return [s for s in elf.symbols if s['type']==type_ and 0<s['shndx']<len(elf.sections) and elf.sections[s['shndx']]['flags']&2]
+def normalized_relocation(elf,r):
+ t=r['target'];result=dict(offset=r['offset'],type=r['type'],addend=r['addend'],target=t['name'])
+ if t['type']==3 and 0<t['shndx']<len(elf.sections):
+  sec=elf.sections[t['shndx']];result['target_section']=sec['name'];address=t['value']+r['addend']
+  # Section-relative C strings are identified by their actual immutable bytes,
+  # rather than incidental string-pool offsets after the table is removed.
+  if 'str' in sec['name']:
+   raw=elf.payload(sec);assert 0<=address<len(raw);end=raw.index(b'\0',address);result['target_string_hex']=raw[address:end+1].hex();result.pop('addend')
+ return result
+try:
+ # All selected immutable input source files are the exact producer profile bytes.
+ for row in P['inputs']['postimages']:assert ref(row['postimage']['path'])==row['postimage']
+ oldprocess=Elf(E/'ROOT-CURRENT290-BUILD-ONLY-ADMISSION-3/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o')
+ oldrust=Elf(E/'ROOT-CURRENT290-BUILD-ONLY-ADMISSION-3/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o')
+ providers=[('new Rust',rust)]
+ for row in P['inputs']['objects']:
+  if row['link_token']=='rust/mckernel_rust.o':continue
+  p=B/row['build_relative'] if row['replace'] else Path(row['source']['path'])
+  if not row['replace']:assert ref(p)==row['source']
+  providers.append((row['link_token'],Elf(p)))
+ newfunctions=allocated(process,2);assert not newfunctions
+ # New qualified function exports are checked by NEXT-PROVIDERS-RESULT.json.
+ assert json.loads((D/'NEXT-PROVIDERS-RESULT.json').read_text())['status'].startswith('PASS')
+ report['phases']['source_and_provider_context']=dict(selected_source_refs=[r['postimage'] for r in P['inputs']['postimages']],nine_RO_objects_exact=True,selected_C_allocated_functions=0,new_Rust_functions='SEPARATE_PASSED_NEXT_PROVIDER_GATE')
+ flags={}
+ for name,value in [('idle_halt',0),('allow_oversubscribe',0),('time_sharing',1)]:
+  s=own(rust,name);sec=rust.sections[s['shndx']]
+  assert (s['bind'],s['type'],s['size'])==(1,1,4) and sec['align']>=4 and s['value']%4==0
+  info=rust.raw[rust.table['offset']+s['index']*24+5];assert info==0
+  expected=value.to_bytes(4,'little');assert object_bytes(rust,s)==expected
+  f=final(name);assert (f['bind'],f['type'],f['size'])==(1,1,4) and f['value']%4==0 and data(f)==expected
+  actual_providers=[label for label,elf in providers if any(v['name']==name and v['shndx']!=0 for v in elf.symbols)];assert actual_providers==['new Rust']
+  flags[name]=dict(Rust_symbol=s,section=sec,initial_signed_CInt=value,final_symbol=f,initial_hex=expected.hex(),unique_provider=actual_providers)
+ report['phases']['three_CInt_flags']=flags
+ table=own(rust,'process_idle_callbacks');sec=rust.sections[table['shndx']]
+ assert (table['bind'],table['type'],table['size'])==(1,1,80) and sec['align']>=8 and table['value']%8==0
+ assert sec['flags']&2 and not sec['flags']&(1|4) and object_bytes(rust,table)==bytes(80)
+ assert rust.raw[rust.table['offset']+table['index']*24+5]==0
+ actual_rels=relocs(rust,table);old_rels=relocs(oldprocess,own(oldprocess,'process_idle_callbacks'))
+ def exact(rs):return [dict(offset=r['offset'],type=r['type'],addend=r['addend'],target=r['target']['name']) for r in rs]
+ expected=[dict(offset=i*8,type=1,addend=0,target=name) for i,name in enumerate(TARGETS)]
+ assert exact(old_rels)==expected
+ assert len(actual_rels)==10 and [(r['offset'],r['type'],r['addend']) for r in actual_rels]==[(i*8,1,0) for i in range(10)]
+ alias_observations=[]
+ for original,actual_row in zip(TARGETS,actual_rels):
+  actual_name=actual_row['target']['name'];a=own(rust,original);b=own(rust,actual_name)
+  assert (a['bind'],a['type'],a['shndx'],a['value'],a['size'])==(b['bind'],b['type'],b['shndx'],b['value'],b['size'])
+  assert object_bytes(rust,a)==object_bytes(rust,b) and final(original)['value']==final(actual_name)['value']
+  if actual_name!=original:alias_observations.append(dict(original_name=original,actual_RELA_name=actual_name,exact_same_object_section_value_size_and_code=True,exact_same_final_address=True))
+ assert [(r['original_name'],r['actual_RELA_name']) for r in alias_observations]==[('process_spin_lock_bridge','mem_kmalloc_remote_lock_bridge'),('process_spin_unlock_bridge','mem_kmalloc_remote_unlock_bridge')]
+ report['strict_original_target_name_gate']='FAIL_PRESERVED_TWO_PROVEN_COMPILER_ALIAS_NAMES_PENDING_INDEPENDENT_DISPOSITION'
+ report['compiler_alias_observations']=alias_observations
+ ft=final('process_idle_callbacks');fsec=sections[ft['shndx']]
+ assert (ft['bind'],ft['type'],ft['size'])==(1,1,80) and ft['value']%8==0 and fsec['flags']&2 and not fsec['flags']&(1|4)
+ pointers=struct.unpack('<10Q',data(ft));resolved=[]
+ for name,pointer in zip(TARGETS,pointers):
+  target=final(name);assert target['bind']==1 and target['type']==2 and pointer==target['value']
+  matches=[label for label,elf in providers if any(v['name']==name and v['shndx']!=0 for v in elf.symbols)];assert len(matches)==1
+  resolved.append(dict(target=name,final_value=pointer,unique_object_provider=matches[0]))
+ actual_providers=[label for label,elf in providers if any(v['name']=='process_idle_callbacks' and v['shndx']!=0 for v in elf.symbols)];assert actual_providers==['new Rust']
+ # Preserve section mapping facts separately from PT_LOAD flags. No page-RO claim.
+ def mapping(path,name):
+  raw=path.read_bytes();h=struct.unpack_from('<16sHHIQQQIHHHHHH',raw);assert h[1:3]==(2,62)
+  sh=[dict(zip(['name_off','type','flags','addr','offset','size','link','info','align','entsize'],struct.unpack_from('<IIQQQQIIQQ',raw,h[6]+i*64))) for i in range(h[12])]
+  symtab=next(s for s in sh if s['type']==2);strings=raw[sh[symtab['link']]['offset']:sh[symtab['link']]['offset']+sh[symtab['link']]['size']];matches=[]
+  for i in range(symtab['size']//24):
+   no,info,other,idx,value,size=struct.unpack_from('<IBBHQQ',raw,symtab['offset']+i*24)
+   if strings[no:strings.index(b'\0',no)].decode()==name and idx:matches.append(dict(value=value,size=size,section_flags=sh[idx]['flags']))
+  assert len(matches)==1;row=matches[0];segments=[]
+  for i in range(h[10]):
+   kind,flags,off,va,pa,filesz,memsz,align=struct.unpack_from('<IIQQQQQQ',raw,h[5]+i*h[9])
+   if kind==1 and va<=row['value'] and row['value']+row['size']<=va+memsz:segments.append(dict(type='PT_LOAD',flags=flags,readonly=not bool(flags&2),executable=bool(flags&1)))
+  assert len(segments)==1;row['containing_segment']=segments[0];return row
+ predecessor=mapping(E/'ROOT-CURRENT290-BUILD-ONLY-ADMISSION-3/OUTPUT/work/output/build/kernel/mckernel.img','process_idle_callbacks');successor=mapping(B/'kernel/mckernel.img','process_idle_callbacks')
+ assert predecessor['section_flags']==successor['section_flags'] and predecessor['containing_segment']==successor['containing_segment']
+ report['phases']['immutable_80B_callback_table']=dict(Rust_symbol=table,Rust_section=sec,ten_original_target_slots=expected,actual_R64_zero_addend_relocations=exact(actual_rels),final_symbol=ft,final_section=fsec,final_target_pointer_values=resolved,unique_provider=actual_providers,predecessor_mapping=predecessor,successor_mapping=successor,mapping_semantics_unchanged=True,runtime_page_protection_claim=False)
+ # Exact remaining C OBJECT names, binding, type, size, initial bytes and target
+ # relocations; normalizing only incidental C string-pool address movement.
+ oldmeta={s['name']:s for s in allocated(oldprocess,1)};newmeta={s['name']:s for s in allocated(process,1)}
+ assert len(oldmeta)==88 and len(newmeta)==84
+ assert set(oldmeta)-set(newmeta)==set(FOUR) and not set(newmeta)-set(oldmeta)
+ differences=[]
+ for name,s in sorted(newmeta.items()):
+  old=oldmeta[name]
+  if tuple(s[k] for k in ['bind','type','size'])!=tuple(old[k] for k in ['bind','type','size']) or object_bytes(process,s)!=object_bytes(oldprocess,old) or [normalized_relocation(process,r) for r in relocs(process,s)]!=[normalized_relocation(oldprocess,r) for r in relocs(oldprocess,old)]:differences.append(name)
+ assert not differences,('remaining C metadata differences',differences)
+ report['phases']['remaining_selected_C_metadata']=dict(original_allocated_OBJECTs=88,new_allocated_OBJECTs=84,only_removed_objects=FOUR,all_84_binding_type_size_initial_bytes_and_relocations_preserved=True,no_new_C_functions=True)
+ # Actual fixed LP64 C/Rust source assertions and constructor signatures.
+ helper=Path(P['inputs']['source_directory_exports'][0]['host_path'])/'process_helpers.rs';text=helper.read_text()
+ start=text.index('pub static process_idle_callbacks:');snippet=text[max(0,start-5000):start+2000]
+ assert all(name in snippet for name in TARGETS)
+ csource=Path(next(r['postimage']['path'] for r in P['inputs']['postimages'] if r['relative']=='kernel/process.c'));ctext=csource.read_text()
+ assert 'extern const struct sched_idle_callbacks process_idle_callbacks;' in ctext
+ assert '_Static_assert(sizeof(unsigned long) == 8 && sizeof(void *) == 8,' in ctext
+ for assertion in ['const _: [(); 8] = [(); size_of::<usize>()];','const _: [(); 8] = [(); size_of::<CULong>()];','const _: [(); 80] = [(); size_of::<SchedIdleCallbacks>()];','const _: [(); 8] = [(); align_of::<SchedIdleCallbacks>()];']:
+  assert assertion in text
+ fields=['current_cpu','lock','unlock','enable_interrupt','disable_interrupt','schedule','migrate','consolidate','zero_free','safe_halt']
+ for i,field in enumerate(fields):assert f'const _: [(); {i*8}] = [(); offset_of!(SchedIdleCallbacks, {field})];' in text
+ assert 'fn process_spin_lock_bridge(lock_addr: usize) -> CULong;' in text
+ assert 'fn process_spin_unlock_bridge(lock_addr: usize, irqstate: CULong);' in text
+ report['compiled_actual_C_and_Rust_assertions']='PASS_FIXED_LP64_POINTER_AND_ULONG8_TABLE80_ALIGN8_TEN_FIELD_OFFSETS_C_EXTERN_CONST_AND_TYPED_INITIALIZERS'
+ report['phases']['actual_source_ABI_bindings']=dict(process_helpers=ref(helper),process_source=next(r['postimage'] for r in P['inputs']['postimages'] if r['relative']=='kernel/process.c'),callback_fields=10,field_stride=8,CInt_bytes=4,callback_alignment=8,pointer_and_CULong_bytes=8,new_declaration_warning_debt='Two new usize/u64 signature spellings; ABI-equivalent under the fixed x86_64 LP64 producer, retained without suppressions/casts/wrappers.')
+ report['status']='PASS_RETAINED_F02_FOUR_OWNER_ABI_FINAL_POINTER_84_PROCESS_METADATA_WITH_NARROW_ALIAS_IDENTITIES'
+except BaseException as error:
+ report['status']='FAIL_FIRST_F02_DATA_OWNER_VALIDATOR_PRESERVED';report['first_failure']=repr(error);report['traceback']=traceback.format_exc()
+(D/'RETAINED-F02-DATA-OWNERS-RESULT.json').write_text(json.dumps(report,indent=2)+'\n')
+print(json.dumps(dict(status=report['status'],first_failure=report.get('first_failure'),phases=list(report['phases']))))
+if report['status'].startswith('FAIL'):raise SystemExit(1)

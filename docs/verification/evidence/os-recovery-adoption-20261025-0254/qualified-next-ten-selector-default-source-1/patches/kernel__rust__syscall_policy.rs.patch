@@ -1,0 +1,66 @@
+--- kernel/rust/syscall_policy.rs
++++ kernel/rust/syscall_policy.rs
+@@ -24788,7 +24788,8 @@
+ unsafe extern "C" fn f03_wait_list_add_tail(entry: *mut c_void, head: *mut c_void) {
+     unsafe { crate::process_helpers::process_list_add_tail_result(entry.cast(), head.cast()) };
+ }
+-unsafe extern "C" fn f03_wait_release_process(proc: *mut c_void) {
++#[cfg_attr(f03_wait_process_release_selected_candidate,no_mangle)]
++pub unsafe extern "C" fn f03_wait_release_process(proc: *mut c_void) {
+     unsafe { crate::process_helpers::release_process(proc.cast()) };
+ }
+ #[cfg_attr(f03_wait_release_selected_candidate,no_mangle)]
+@@ -25264,10 +25265,12 @@
+ // SAFETY (adapter callers): complete existing I/O bodies control the retained
+ // find/unlock edge and valid thread/context provider use. No checked-release or
+ // fabricated reference is substituted for the actual public provider contract.
+-unsafe extern "C" fn f03_ptrace_io_find(tgid: CInt, tid: CInt) -> CULong {
++#[cfg_attr(f03_ptrace_io_find_selected_candidate,no_mangle)]
++pub unsafe extern "C" fn f03_ptrace_io_find(tgid: CInt, tid: CInt) -> CULong {
+     unsafe { crate::process_helpers::find_thread(tgid, tid) as CULong }
+ }
+-unsafe extern "C" fn f03_ptrace_io_unlock(thread: CULong) {
++#[cfg_attr(f03_ptrace_io_unlock_selected_candidate,no_mangle)]
++pub unsafe extern "C" fn f03_ptrace_io_unlock(thread: CULong) {
+     unsafe { crate::process_helpers::thread_unlock(thread as *mut Thread) };
+ }
+ unsafe extern "C" fn f03_ptrace_io_read(
+@@ -35720,3 +35723,38 @@
+ #[cfg(f06_mmap_dispatch_bridge_candidate)]
+ #[path = "f06_mmap_dispatch_bridge.rs"]
+ mod f06_mmap_dispatch_bridge;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(f03_terminate_refcount_selected_candidate)]
++mod f03_terminate_refcount_selected {
++ use super::*;
++ /// Preserve the original terminate_host callback's signed32-bit atomic set.
++ /// # Safety
++ /// `refcount` is the original live, initialized,4-byte-aligned IhkAtomic field.
++ /// Caller retains the ORIGINAL authority to reset it; this adapter grants no
++ /// reference or final-release/current-stack ownership. Same SeqCst provider.
++ #[no_mangle]
++ pub unsafe extern "C" fn f03_terminate_host_refcount_set_v1(refcount:*mut c_void,value:CInt) {
++  unsafe { crate::atomic_helpers::ihk_atomic_set(refcount.cast(),value) };
++ }
++}
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(f06_ptrace_context_candidate)]
++#[path = "f06_ptrace_context.rs"]
++mod f06_ptrace_context;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(f06_ptrace_alloc_candidate)]
++#[path = "f06_ptrace_alloc.rs"]
++mod f06_ptrace_alloc;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(f06_vdso_add_range_candidate)]
++#[path = "f06_vdso_add_range.rs"]
++mod f06_vdso_add_range;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(f06_vdso_set_range_candidate)]
++#[path = "f06_vdso_set_range.rs"]
++mod f06_vdso_set_range;

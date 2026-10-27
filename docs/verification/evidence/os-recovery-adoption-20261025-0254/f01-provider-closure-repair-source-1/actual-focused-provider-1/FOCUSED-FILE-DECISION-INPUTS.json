@@ -1,0 +1,120 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_ORIGINAL_F01_FOCUSED_ASSERTIONS_AND_CURRENT_SOURCE_PROVIDER_JOIN_READY_FOR_ONE_INDEPENDENT_FILE_DECISION",
+  "whole_file_acceptance": false,
+  "full_M14_acceptance": false,
+  "Root_or_reviewer_file_decision_required": true,
+  "actual_six_commands": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/actual-focused-provider-1/RESULTS.json",
+    "bytes": 22232,
+    "sha256": "6096e0656a35b9952021b9c67f4eb48d5d3099a975272ba377f1ba5d2b09eadf"
+  },
+  "exact_all77_Rust_origins": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/actual-focused-provider-1/EXACT-TESTED-PROVIDER-ORIGINS.json",
+    "bytes": 28917,
+    "sha256": "bc7570350916919e468b0767b7b717adacc9a08443eeb0f1d37ea10ebb8c14da"
+  },
+  "source_binding": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/PROVIDER-SOURCE-BINDING.json",
+    "bytes": 29597,
+    "sha256": "40184c5ad44dc6c8969c241a4edf11985edab6e916958bf20270b5c2730221da"
+  },
+  "frozen_recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/EXACT-ROOT-PROPOSED-RECIPE.NOT-ADMITTED.json",
+    "bytes": 13657,
+    "sha256": "6539ad566bb18fbbfc4963090640b7f80c5462ecf5389f4b79f4e4df251f54d7"
+  },
+  "source_preflight": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/actual-focused-provider-1/STATIC-PREFLIGHT.stdout",
+    "bytes": 154,
+    "sha256": "0cc1d9fb78871dc2e77b35f9c1acf8539cf58f1ea10561c248f17421c6e0f8e9"
+  },
+  "source_functions_byte_exact": 94,
+  "tested_memory_roots": 73,
+  "tested_hash_roots": 4,
+  "original_fixture_bytes": 155219,
+  "fixture_assertions_mocks_and_original_digest_unchanged": true,
+  "origin_check_no_tested_C_stub_exception": true,
+  "existing_non_tested_lower_boundaries": [
+    "Original early_phase/early_panic HOST-equivalence behavior",
+    "Existing pagealloc_track_init lowerboundary outside77 testedexterns"
+  ],
+  "original_C_stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/actual-focused-provider-1/C.stdout",
+    "bytes": 44,
+    "sha256": "76e43ace8ebfb1dff76aaadef6ea2d094d38e7cd443252b522543ea86cd7782c"
+  },
+  "Rust_stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/actual-focused-provider-1/Rust.stdout",
+    "bytes": 44,
+    "sha256": "76e43ace8ebfb1dff76aaadef6ea2d094d38e7cd443252b522543ea86cd7782c"
+  },
+  "exact_stdout": "mem_init_helpers ok digest=00338ce95ffd5b5d\n",
+  "executed_fixture_programs": 2,
+  "program_exit_statuses": [
+    0,
+    0
+  ],
+  "complete_stdout_diff_status": 0,
+  "focused_effects_asserted_by_unchanged_fixture": [
+    "Rusage valid initialization: cleared counters, processor/node/TSC metadata, physical-publication pointer andsize, exactonecallback counts",
+    "Rusage missingCPUinfo: expected-22, panic1, publication0/log0 ordering",
+    "Dump completion volatile reset with exactone getset callback",
+    "RBTREEfreepages/address/size/two-nodeiterator and bound/null guards",
+    "Dump query no-op/positive metadata completion publication and callbackcounts",
+    "Additional unchanged mem_init helper asserts and complete original C/Rust digest"
+  ],
+  "total_dynamic_assertion_or_effect_count": null,
+  "total_dynamic_count_reason": "No added instrumentation; fixture programs/evaluator77origins and exact original stdout are measured. Do not relabel lexical assertions or source function counts as dynamic case totals.",
+  "first_compiler_timestamp": 1793070456.7355378,
+  "summed_command_wall_seconds": 1.2216105341212824,
+  "summed_child_CPU_seconds": 1.0522369999999999,
+  "maximum_observed_child_RSS_KiB": 133336,
+  "all_PIDs_joined": true,
+  "all_groups_absent": true,
+  "all_streams_closed": true,
+  "CPU6_free": true,
+  "original_families_preserved": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f01-nearest-file-closure-1/actual-focused-attempt-1/RESULTS.json",
+      "bytes": 48916,
+      "sha256": "6721504367af27b3f004b6b5d6abaa2f61bfb5562849431632d023899019405b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f01-nearest-file-closure-1/actual-hostcfg-correction-1/RESULTS.json",
+      "bytes": 6158,
+      "sha256": "8fdd53e7a29ec622611ee40865a74fcbf6984da95ce4df5ee547c5c0ad47005b"
+    }
+  ],
+  "seven_C_compile_link_prefixes_reused": true,
+  "new_correction_in_bounded_strategy_used": false,
+  "production_object_mutated": false,
+  "Rust_production_or_wholecrate_recompiled": false,
+  "accepted196_45_wholecore_tests_replayed": false,
+  "native_runs": 0,
+  "existing_native_refs": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT290-MEMORY1-INDEPENDENT-CASE-ACCEPTANCE.json",
+      "bytes": 1765,
+      "sha256": "f92aeeb8a823b9084d074a7fbf248661f388bf1b8abfae18466710d135a2ea55"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT290-MEMORY1-INDEPENDENT-POSTJOIN-ACCEPTANCE.json",
+      "bytes": 1767,
+      "sha256": "86b693c55760b6d519185f6b785c520892fe762402c919b973037d053955dd56"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/F02-RUSTMM-STRICT235-ACTUAL-ACCEPTED-SUMMARY.json",
+      "bytes": 1597,
+      "sha256": "3d04f0e6393cbb4f9d82644bdeca8b832688a93b1328993dc7b1b78d96fa7bee"
+    }
+  ],
+  "existing_source_codegen_join": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f01-nearest-file-closure-1/F01-FOCUSED-PROOF-JOIN.json",
+    "bytes": 14890,
+    "sha256": "8a16ba496a57aef5870adf54da693175c451d5ec89172735274d94cfe3fd95f3"
+  },
+  "scope_limits": "HOST initialized memory and existing mocked lower effects; no kernel scheduling/hardware/DMA/native dump transport inferred. Production default codegen and matching functional native evidence remain separate reused scopes. This focused result supplies the missing original M14-01-05 accounting/dump publication/error-order assertion join; one independent supported-profile file decision must reconcile retained full-file source/default/native ownership and prior limitations.",
+  "no_new_test_or_guest_quota": true,
+  "runtime_authority": null
+}

@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-27T02:12:28.238410+00:00",
+  "as_of": "2026-10-27T03:18:11.050620+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -83,7 +83,7 @@
       "id": "M14-F01",
       "c_file": "kernel/mem.c",
       "title": "Generic VM, allocation and memory ownership",
-      "status": "open",
+      "status": "complete",
       "owner": "/root/m14_mem",
       "inventory_basis": "Exact current image compile database and final link contract; surviving body counts still unmeasured.",
       "object_output": "kernel/CMakeFiles/mckernel.img.dir/mem.c.o",
@@ -131,110 +131,105 @@
         {
           "id": "M14-01-01",
           "title": "Physical/NUMA allocator bootstrap, page bookkeeping and free-page lifecycle; reuse existing page allocator rather than duplicate it.",
-          "status": "unassessed",
-          "owner": null,
+          "status": "complete",
+          "owner": "/root",
           "remaining_c_functions": null,
           "rust_consumer": null,
-          "next_action": "Reconcile this area with the current matched consumer and already accepted Rust bodies; implement only the actual remaining C behavior.",
+          "next_action": "Retain exact supported-profile source/codegen/focused/native proof; broader milestones remainopen.",
           "proof": {
             "implementation": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             },
             "focused_checks": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             },
             "production_link": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             },
             "native_validation": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             }
           }
         },
         {
           "id": "M14-01-02",
           "title": "Kernel heap chunk allocation, cache allocation/free and free-list consolidation; close remaining C allocation/logging callback bodies.",
-          "status": "unassessed",
-          "owner": null,
+          "status": "complete",
+          "owner": "/root",
           "remaining_c_functions": null,
           "rust_consumer": null,
-          "next_action": "Reconcile this area with the current matched consumer and already accepted Rust bodies; implement only the actual remaining C behavior.",
+          "next_action": "Retain exact supported-profile source/codegen/focused/native proof; broader milestones remainopen.",
           "proof": {
             "implementation": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             },
             "focused_checks": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             },
             "production_link": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             },
             "native_validation": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             }
           }
         },
         {
           "id": "M14-01-03",
           "title": "Page and memobj reference ownership, map/unmap accounting and final release; carry explicit last-reference rules into Rust.",
-          "status": "partial",
-          "owner": "terminal_lifecycle_repair implementation; dispatcher integration",
+          "status": "complete",
+          "owner": "/root",
           "remaining_c_functions": null,
           "rust_consumer": "kernel/rust/page_helpers.rs public page_unmap using existing PAGE_HELPERS default selector",
-          "next_action": "Preserve accepted actual default-consumer/link evidence for bounded slice; normal build-owner cleanup/physicalclearance, then relevant native proof under separately reviewed new-image profile. Remaining area C bodies stayopen.",
+          "next_action": "Retain exact supported-profile source/codegen/focused/native proof; broader milestones remainopen.",
           "proof": {
             "implementation": {
-              "status": "partial",
+              "status": "pass",
               "evidence": [
-                {
-                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/CANONICAL-INTEGRATION.json",
-                  "sha256": "470bd305420d2f848d8a002ee24d0988a6ef1a52538309a7039ce45902a909dc",
-                  "size": 1850
-                },
-                {
-                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/INDEPENDENT-SOURCE-REVIEW.json",
-                  "sha256": "038945e0912a8bc9bd3a472e8d28c20a6b88f1445bb4110ab29d2742a3eaaabf",
-                  "size": 1021
-                }
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
               ]
             },
             "focused_checks": {
-              "status": "partial",
+              "status": "pass",
               "evidence": [
-                {
-                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/RESULT.json",
-                  "sha256": "63bc5c481ea8fec6049255762d7c5e1cf558df9ad617517d6bccf9995bf10815",
-                  "size": 12330
-                }
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
               ]
             },
             "production_link": {
-              "status": "partial",
+              "status": "pass",
               "evidence": [
-                {
-                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/production-consumer-1/INDEPENDENT-ACTUAL-CONSUMER-REVIEW.json",
-                  "sha256": "02632334a7ebc114fc96208a2b617ebeb3bd6fbb80439f2fe9e87c852bc9e8cc",
-                  "size": 1027
-                },
-                {
-                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/actual-default-link-retention-1/INDEPENDENT-ACTUAL-M14-DEFAULT-LINK-ACCEPTANCE.json",
-                  "sha256": "38694775a6d61aaf761683defd37401347f73aec391b1f464407c8c2f77ba0dc",
-                  "size": 4033
-                }
-              ],
-              "scope": "Actual GCC14 default selected C translation units, complete production Rust crate and final kernel unique Rust providers accepted for retained bounded slices only; native/wholearea remainsopen."
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             },
             "native_validation": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             }
           },
           "prior_assessment_20261023_page_unmap": {
@@ -256,65 +251,35 @@
         {
           "id": "M14-01-04",
           "title": "User-page lookup, fault-PTE lookup and VM page maintenance across split/shared/large-page cases.",
-          "status": "partial",
-          "owner": "m14_actual_consumer_fix implementation; dispatcher integration; m14_callback_review independent",
+          "status": "complete",
+          "owner": "/root",
           "remaining_c_functions": null,
           "rust_consumer": "Canonical Rust remote_flush_tlb_array_cpumask entry calls existing mem_remote_flush_tlb_array_body_result; exact C fallback remains.",
-          "next_action": "Root coherent private union and real default/link/targeted native proof; bounded increment is partial, remaining area C stays open.",
+          "next_action": "Retain exact supported-profile source/codegen/focused/native proof; broader milestones remainopen.",
           "proof": {
             "implementation": {
-              "status": "partial",
+              "status": "pass",
               "evidence": [
-                {
-                  "path": "docs/verification/evidence/velocity-intervention-20261023-3/m14-remote-flush/CANONICAL-INTEGRATION.ROOT-RECORD.json",
-                  "sha256": "681464e66c5d316d34281eac34a577a5795b533dee8196312e265e549eb503cb",
-                  "size": 2313
-                },
-                {
-                  "path": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/actual-fixture-cohort-3/FINAL-ACTUAL-FIXTURE-RECEIPT.json",
-                  "sha256": "9f6d9f97b9b2616d498a5637f30572d7fe418aff5c35e7cf270930fdca9185e7",
-                  "size": 11334,
-                  "scope": "first3callback1944 actual8PASS, selected/fallback ABI; all13source separate"
-                }
-              ],
-              "scope": "Complete public entry now canonical Rust; exact fallback and 13Ccallback bodies retained as debt. Source integration is not current image/native retirement."
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             },
             "focused_checks": {
-              "status": "partial",
+              "status": "pass",
               "evidence": [
-                {
-                  "path": "docs/verification/evidence/velocity-intervention-20261023-3/m14-remote-flush/INDEPENDENT-SOURCE-AND-ACTUAL-LEAF-FIXTURE-ACCEPTANCE.ROOT-RECORD.json",
-                  "sha256": "363e2ddc0e1707a75ef55716ae298db1b79fcded1625647f44703ef1bf81f193",
-                  "size": 1065
-                },
-                {
-                  "path": "docs/verification/evidence/velocity-intervention-20261023-3/m14-remote-flush/INDEPENDENT-ACTUAL-PRODUCTION-CONSUMER-ACCEPTANCE.ROOT-RECORD.json",
-                  "sha256": "5bd517d506657593f5a7fab60b1380ace84387c78349ff51cb91312b911c83f6",
-                  "size": 777
-                },
-                {
-                  "path": "docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-mem/actual-fixture-cohort-3/FINAL-ACTUAL-FIXTURE-RECEIPT.json",
-                  "sha256": "9f6d9f97b9b2616d498a5637f30572d7fe418aff5c35e7cf270930fdca9185e7",
-                  "size": 11334,
-                  "scope": "first3callback1944 actual8PASS, selected/fallback ABI; all13source separate"
-                }
-              ],
-              "scope": "1792 unchanged original-C/Rust forwarding pairs,20arguments,12callbackidentities,8ignoredreturns; actual15commands0/.690091s; realheaderlayouts/PUBLICfallback/selectedleafpartiallink. No actual IRQ/TLB behavior proof."
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             },
             "production_link": {
-              "status": "partial",
+              "status": "pass",
               "evidence": [
-                {
-                  "path": "docs/verification/evidence/velocity-intervention-20261023-3/m14-remote-flush/INDEPENDENT-ACTUAL-PRODUCTION-CONSUMER-ACCEPTANCE.ROOT-RECORD.json",
-                  "sha256": "5bd517d506657593f5a7fab60b1380ace84387c78349ff51cb91312b911c83f6",
-                  "size": 777
-                }
-              ],
-              "scope": "Actual78Rust compile+complete selected GCC9 mem.c ABI/relocation/fullRust partial link independently accepted; exactGCC14/finaldefaultimage/native OPEN."
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             },
             "native_validation": {
-              "status": "open",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             }
           },
           "prior_assessment_before_remote_flush_slice": {
@@ -343,27 +308,35 @@
         {
           "id": "M14-01-05",
           "title": "Memory/rusage counters, memory-dump iteration and metadata publication; preserve exact functional counters and error ordering.",
-          "status": "unassessed",
-          "owner": null,
+          "status": "complete",
+          "owner": "/root",
           "remaining_c_functions": null,
           "rust_consumer": null,
-          "next_action": "Reconcile this area with the current matched consumer and already accepted Rust bodies; implement only the actual remaining C behavior.",
+          "next_action": "Retain exact supported-profile source/codegen/focused/native proof; broader milestones remainopen.",
           "proof": {
             "implementation": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             },
             "focused_checks": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             },
             "production_link": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             },
             "native_validation": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             }
           }
         }
@@ -374,11 +347,15 @@
         "Source selection must be checked against actual production flags, symbols and linked object; do not count helper-only equivalence as retirement."
       ],
       "file_closure": {
-        "status": "unassessed",
+        "status": "complete",
         "requirement": "All supported live implementations from this translation unit and its included headers/macros are Rust/reviewed assembly; no substantive live C callbacks, wrappers or unknown owners remain. Preserve declarations and excluded fallback source where useful.",
-        "residual_c_bytes": null,
-        "residual_c_functions": null,
-        "evidence": []
+        "residual_c_bytes": 0,
+        "residual_c_functions": 0,
+        "evidence": [
+          "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+          "docs/verification/evidence/os-recovery-adoption-20261025-0254/f01-provider-closure-repair-source-1/actual-focused-provider-1/FOCUSED-FILE-DECISION-INPUTS.json"
+        ],
+        "current_scope": "Frozen supported-profile whole kernel/mem.c cutover; actual unchanged selected mem.o and current Rust/native tuple evidence, not universalSMP/config/external qualification"
       },
       "active_lane_20261024": {
         "confirmed_at": "2026-10-24T00:29:28.290006+00:00",
@@ -406,9 +383,9 @@
         }
       ],
       "latest_dispatcher_checkpoint": {
-        "implemented": "Whole-file source retained; independent memory semantic fixtures progress. Owner repaired SDK bootstrap/finite source-role observer, pure3positive15negativePASS; no new default/native.",
-        "actual": "Whole-file source retained; independent memory semantic fixtures progress. Owner repaired SDK bootstrap/finite source-role observer, pure3positive15negativePASS; no new default/native.",
-        "limits": "Controlled HOST/source scopes only; selected default/native/wholefile/Cboundary retirement remain open."
+        "implemented": "All frozenF01 live implementation selectedRust/reviewedassembly; retained mem.o0FUNC/OBJECT/runtimeRELA.",
+        "actual": "IndependentfileCOMPLETE joins retained196/45/wholecore+6freshfocusedcommands/all77Rustorigins+matchingproduction/nativeproof.",
+        "limits": "Exactsupportedfile only; bothfullobjectfailures/lowerboundaries/wholecorelimits preserved; M14globalOPEN."
       },
       "current_increment": {
         "at": "2026-10-24T11:43:50.774989+00:00",
@@ -3383,17 +3360,7 @@
     }
   ],
   "latest_dispatcher_checkpoint": {
-    "as_of": "2026-10-26T23:33:39.496042+00:00",
-    "actual_progress": "Matching current290 baseline.core.memory independently accepted: stdout24B/exit37/stderr0/procfsempty; PID255 retirement0 before powerdown, original QEMU-9 retained. Actual caller0/38.849s/all30commands reaped/normalcontainer removal/fresh physicalfree accepted. Growth final copiedFD closure accepted; original reserve/account/rootdir observer failures preserved. SDK7 reviewed twohop/currenthead adapter source PASS, actual accepted input materialization next; no SDK commands or whole-file/M14/M15 closures.",
-    "native_case_delta": 1,
-    "complete_cutover_package_delta": 0,
-    "whole_file_delta": 0,
-    "C_retirement_delta": 0,
-    "source_or_host_scope_only_is_acceptance": false,
-    "next_action": "Actual SDK7 accepted growth/memory projections, source publication, fresh query/admission and seven retained commands",
-    "evidence": [
-      "docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT290-MEMORY1-INDEPENDENT-CASE-ACCEPTANCE.json",
-      "docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT290-MEMORY1-INDEPENDENT-POSTJOIN-ACCEPTANCE.json"
-    ]
+    "at": "2026-10-27T03:47:00Z",
+    "actual": "M14-F01 complete supported file; M15-F01 complete supported three wrappers; matching685 native accepted; daemon64 actual singleton failure retired/currentfree accepted. NEXT10 source-only next, full M14/M15 OPEN."
   }
 }
