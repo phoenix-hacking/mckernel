@@ -1,0 +1,5125 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/custody_release_review",
+  "independent": true,
+  "decision": "PASS_EXACT_CURRENT110_INHERITED13_TIMER9_AND_IDLE116_FINAL_CONSUMERS",
+  "tuple": {
+    "Rust": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+      "bytes": 18274528,
+      "sha256": "e2c3032791bbd657a85629dd48ca86b3b93f3ef729305568031776d5674ad9d0"
+    },
+    "image": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+      "bytes": 10255112,
+      "sha256": "60e62f97ef48ecaf14174af1c5b75d7181969f439c1b45c618d6c16d4bc40d57"
+    },
+    "process": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+      "bytes": 68656,
+      "sha256": "5b25b9cafa9477e7e177d192d1754d59889749bed6ccf107ff40995b06e867ba"
+    }
+  },
+  "original_failures_preserved": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/resource-and-qualifier-preparation-1/next-provider-path-correction-source-1/actual-suffix-qualification-1/FINAL-SUFFIX-QUALIFICATION.json",
+      "bytes": 5783,
+      "sha256": "5791b2a20ea0b43f9650b8bc4a99a0a1d946221b8d62e39943574db59acbe755"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/resource-and-qualifier-preparation-1/next-provider-path-correction-source-1/actual-suffix-qualification-1/IDLE116-AND-INHERITED-CONSUMERS.json",
+      "bytes": 2637,
+      "sha256": "6a950f4ff208ac21fabd56d0ce598d93bbd6447f1a5895ca79f5c16779b2efe5"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/resource-and-qualifier-preparation-1/next-provider-path-correction-source-1/actual-suffix-qualification-1/NEXT-PROVIDERS-RESULT.json",
+      "bytes": 31962,
+      "sha256": "9b8c3312016989d54b720d5d59e370eabe77d56a781190f223fc44f17e73adda"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/resource-and-qualifier-preparation-1/next-provider-path-correction-source-1/actual-suffix-qualification-1/RETAINED-F02-DATA-OWNERS-RESULT.json",
+      "bytes": 14140,
+      "sha256": "421d3c4565a78a6a74568aa95c6ef7ae31aa4ecedf81004b45b9a296504c025b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/resource-and-qualifier-preparation-1/next-provider-path-correction-source-1/actual-suffix-qualification-1/HOST13-STORAGE-AND-CONSUMERS.json",
+      "bytes": 42295,
+      "sha256": "71b874fe6bad03ec4de2b8cd958cf88f60e64616b8e6a3252dbafcb0cb4d5275"
+    }
+  ],
+  "consumer_comparisons": [
+    {
+      "consumer": "process_add_range_alloc_bridge",
+      "old_symbol": {
+        "index": 6056,
+        "name": "process_add_range_alloc_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 2904,
+        "value": 0,
+        "size": 213
+      },
+      "current_symbol": {
+        "index": 6067,
+        "name": "process_add_range_alloc_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 2914,
+        "value": 0,
+        "size": 213
+      },
+      "current_final_symbol": {
+        "name": "process_add_range_alloc_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684976176,
+        "size": 213
+      },
+      "nonrelocated_bytes_equal": true,
+      "nonrelocated_sha256": "da0c846eff15fe6dd864eb642adbeafab07381736427fc20f1a30805a848f324",
+      "old_final_targets": [
+        {
+          "offset": 9,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe903128",
+          "kind": "NAMED",
+          "target": "process_tracked_allocator_source_file",
+          "final_symbol": {
+            "name": "process_tracked_allocator_source_file",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446952,
+            "size": 8
+          }
+        },
+        {
+          "offset": 22,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe834890",
+          "kind": "NAMED",
+          "target": "_kmalloc",
+          "final_symbol": {
+            "name": "_kmalloc",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684600976,
+            "size": 2089
+          }
+        },
+        {
+          "offset": 75,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 100,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 135,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 174,
+          "type": 1,
+          "addend": 17484,
+          "actual_final_address": "0xfffffffffe90c882",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "203a70548b7db8251427a1e81224023a7f4245530db37e8b85ea1923316ee105",
+          "input_addend": 17484,
+          "literal_hex": "6b6d616c6c6f633a206f7574206f66206d656d6f72792025733a2564206e6f5f707265656d70743d25640a00",
+          "literal": "kmalloc: out of memory %s:%d no_preempt=%d\n",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 184,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8745c0",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "final_symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684862400,
+            "size": 85
+          }
+        }
+      ],
+      "current_final_targets": [
+        {
+          "offset": 9,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe903088",
+          "kind": "NAMED",
+          "target": "process_tracked_allocator_source_file",
+          "final_symbol": {
+            "name": "process_tracked_allocator_source_file",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446792,
+            "size": 8
+          }
+        },
+        {
+          "offset": 22,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe834820",
+          "kind": "NAMED",
+          "target": "_kmalloc",
+          "final_symbol": {
+            "name": "_kmalloc",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684600864,
+            "size": 2089
+          }
+        },
+        {
+          "offset": 75,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 100,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 135,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 174,
+          "type": 1,
+          "addend": 17484,
+          "actual_final_address": "0xfffffffffe90c772",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "203a70548b7db8251427a1e81224023a7f4245530db37e8b85ea1923316ee105",
+          "input_addend": 17484,
+          "literal_hex": "6b6d616c6c6f633a206f7574206f66206d656d6f72792025733a2564206e6f5f707265656d70743d25640a00",
+          "literal": "kmalloc: out of memory %s:%d no_preempt=%d\n",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 184,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8745b0",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "final_symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684862384,
+            "size": 85
+          }
+        }
+      ]
+    },
+    {
+      "consumer": "process_add_range_free_bridge",
+      "old_symbol": {
+        "index": 6058,
+        "name": "process_add_range_free_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 2907,
+        "value": 0,
+        "size": 35
+      },
+      "current_symbol": {
+        "index": 6069,
+        "name": "process_add_range_free_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 2917,
+        "value": 0,
+        "size": 35
+      },
+      "current_final_symbol": {
+        "name": "process_add_range_free_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684976432,
+        "size": 35
+      },
+      "nonrelocated_bytes_equal": true,
+      "nonrelocated_sha256": "d2d79dcc199b90990f3519082e7d6588bc3bd071ea21b9a6922f11a6879465ef",
+      "old_final_targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe903128",
+          "kind": "NAMED",
+          "target": "process_tracked_allocator_source_file",
+          "final_symbol": {
+            "name": "process_tracked_allocator_source_file",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446952,
+            "size": 8
+          }
+        },
+        {
+          "offset": 19,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8343e0",
+          "kind": "NAMED",
+          "target": "_kfree",
+          "final_symbol": {
+            "name": "_kfree",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684599776,
+            "size": 1194
+          }
+        }
+      ],
+      "current_final_targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe903088",
+          "kind": "NAMED",
+          "target": "process_tracked_allocator_source_file",
+          "final_symbol": {
+            "name": "process_tracked_allocator_source_file",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446792,
+            "size": 8
+          }
+        },
+        {
+          "offset": 19,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe834370",
+          "kind": "NAMED",
+          "target": "_kfree",
+          "final_symbol": {
+            "name": "_kfree",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684599664,
+            "size": 1194
+          }
+        }
+      ]
+    },
+    {
+      "consumer": "process_alloc_bridge",
+      "old_symbol": {
+        "index": 6075,
+        "name": "process_alloc_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 2933,
+        "value": 0,
+        "size": 208
+      },
+      "current_symbol": {
+        "index": 6086,
+        "name": "process_alloc_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 2943,
+        "value": 0,
+        "size": 208
+      },
+      "current_final_symbol": {
+        "name": "process_alloc_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684978288,
+        "size": 208
+      },
+      "nonrelocated_bytes_equal": true,
+      "nonrelocated_sha256": "5d079285e863b85810b55301cc77363a90df29c934abfc9aca72c151463f8b37",
+      "old_final_targets": [
+        {
+          "offset": 9,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe903128",
+          "kind": "NAMED",
+          "target": "process_tracked_allocator_source_file",
+          "final_symbol": {
+            "name": "process_tracked_allocator_source_file",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446952,
+            "size": 8
+          }
+        },
+        {
+          "offset": 22,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe834890",
+          "kind": "NAMED",
+          "target": "_kmalloc",
+          "final_symbol": {
+            "name": "_kmalloc",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684600976,
+            "size": 2089
+          }
+        },
+        {
+          "offset": 70,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 95,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 130,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 169,
+          "type": 1,
+          "addend": 17484,
+          "actual_final_address": "0xfffffffffe90c882",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "203a70548b7db8251427a1e81224023a7f4245530db37e8b85ea1923316ee105",
+          "input_addend": 17484,
+          "literal_hex": "6b6d616c6c6f633a206f7574206f66206d656d6f72792025733a2564206e6f5f707265656d70743d25640a00",
+          "literal": "kmalloc: out of memory %s:%d no_preempt=%d\n",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 179,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8745c0",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "final_symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684862400,
+            "size": 85
+          }
+        }
+      ],
+      "current_final_targets": [
+        {
+          "offset": 9,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe903088",
+          "kind": "NAMED",
+          "target": "process_tracked_allocator_source_file",
+          "final_symbol": {
+            "name": "process_tracked_allocator_source_file",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446792,
+            "size": 8
+          }
+        },
+        {
+          "offset": 22,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe834820",
+          "kind": "NAMED",
+          "target": "_kmalloc",
+          "final_symbol": {
+            "name": "_kmalloc",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684600864,
+            "size": 2089
+          }
+        },
+        {
+          "offset": 70,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 95,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 130,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 169,
+          "type": 1,
+          "addend": 17484,
+          "actual_final_address": "0xfffffffffe90c772",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "203a70548b7db8251427a1e81224023a7f4245530db37e8b85ea1923316ee105",
+          "input_addend": 17484,
+          "literal_hex": "6b6d616c6c6f633a206f7574206f66206d656d6f72792025733a2564206e6f5f707265656d70743d25640a00",
+          "literal": "kmalloc: out of memory %s:%d no_preempt=%d\n",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 179,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8745b0",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "final_symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684862384,
+            "size": 85
+          }
+        }
+      ]
+    },
+    {
+      "consumer": "process_create_thread_alloc_pages_bridge",
+      "old_symbol": {
+        "index": 6124,
+        "name": "process_create_thread_alloc_pages_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3000,
+        "value": 0,
+        "size": 60
+      },
+      "current_symbol": {
+        "index": 6135,
+        "name": "process_create_thread_alloc_pages_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3010,
+        "value": 0,
+        "size": 60
+      },
+      "current_final_symbol": {
+        "name": "process_create_thread_alloc_pages_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684991456,
+        "size": 60
+      },
+      "nonrelocated_bytes_equal": true,
+      "nonrelocated_sha256": "212cc2561de9350802d021502c09f8c2f831a661f69dab98aadcd86720ddc838",
+      "old_final_targets": [
+        {
+          "offset": 9,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe903128",
+          "kind": "NAMED",
+          "target": "process_tracked_allocator_source_file",
+          "final_symbol": {
+            "name": "process_tracked_allocator_source_file",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446952,
+            "size": 8
+          }
+        },
+        {
+          "offset": 19,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe833ab0",
+          "kind": "NAMED",
+          "target": "_ihk_mc_alloc_aligned_pages_node",
+          "final_symbol": {
+            "name": "_ihk_mc_alloc_aligned_pages_node",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684597424,
+            "size": 2085
+          }
+        }
+      ],
+      "current_final_targets": [
+        {
+          "offset": 9,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe903088",
+          "kind": "NAMED",
+          "target": "process_tracked_allocator_source_file",
+          "final_symbol": {
+            "name": "process_tracked_allocator_source_file",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446792,
+            "size": 8
+          }
+        },
+        {
+          "offset": 19,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe833a40",
+          "kind": "NAMED",
+          "target": "_ihk_mc_alloc_aligned_pages_node",
+          "final_symbol": {
+            "name": "_ihk_mc_alloc_aligned_pages_node",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684597312,
+            "size": 2085
+          }
+        }
+      ]
+    },
+    {
+      "consumer": "process_free_thread_pages_bridge",
+      "old_symbol": {
+        "index": 6171,
+        "name": "process_free_thread_pages_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3085,
+        "value": 0,
+        "size": 267
+      },
+      "current_symbol": {
+        "index": 6182,
+        "name": "process_free_thread_pages_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3095,
+        "value": 0,
+        "size": 267
+      },
+      "current_final_symbol": {
+        "name": "process_free_thread_pages_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685005984,
+        "size": 267
+      },
+      "nonrelocated_bytes_equal": true,
+      "nonrelocated_sha256": "7f28bcba5ddd3c1c8005bbff7973bb46bb32e0b8e95067bb85c375850aaba567",
+      "old_final_targets": [
+        {
+          "offset": 16,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe903128",
+          "kind": "NAMED",
+          "target": "process_tracked_allocator_source_file",
+          "final_symbol": {
+            "name": "process_tracked_allocator_source_file",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446952,
+            "size": 8
+          }
+        },
+        {
+          "offset": 29,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e930",
+          "kind": "NAMED",
+          "target": "memdebug",
+          "final_symbol": {
+            "name": "memdebug",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685821744,
+            "size": 8
+          }
+        },
+        {
+          "offset": 42,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe986180",
+          "kind": "NAMED",
+          "target": "pagealloc_track_initialized",
+          "final_symbol": {
+            "name": "pagealloc_track_initialized",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685983616,
+            "size": 4
+          }
+        },
+        {
+          "offset": 58,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe87b630",
+          "kind": "NAMED",
+          "target": "mem_pagealloc_track_log_bridge",
+          "final_symbol": {
+            "name": "mem_pagealloc_track_log_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684891184,
+            "size": 430
+          }
+        },
+        {
+          "offset": 68,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe87b540",
+          "kind": "NAMED",
+          "target": "mem_pagealloc_invalid_size_bridge",
+          "final_symbol": {
+            "name": "mem_pagealloc_invalid_size_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684890944,
+            "size": 71
+          }
+        },
+        {
+          "offset": 78,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe87b4f0",
+          "kind": "NAMED",
+          "target": "mem_pagealloc_invalid_free_bridge",
+          "final_symbol": {
+            "name": "mem_pagealloc_invalid_free_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684890864,
+            "size": 70
+          }
+        },
+        {
+          "offset": 88,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe87be20",
+          "kind": "NAMED",
+          "target": "mem_pagealloc_track_noirq_unlock_bridge",
+          "final_symbol": {
+            "name": "mem_pagealloc_track_noirq_unlock_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684893216,
+            "size": 130
+          }
+        },
+        {
+          "offset": 98,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe87bd80",
+          "kind": "NAMED",
+          "target": "mem_pagealloc_track_noirq_lock_bridge",
+          "final_symbol": {
+            "name": "mem_pagealloc_track_noirq_lock_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684893056,
+            "size": 155
+          }
+        },
+        {
+          "offset": 108,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8790a0",
+          "kind": "NAMED",
+          "target": "mem_kmalloc_remote_unlock_bridge",
+          "final_symbol": {
+            "name": "mem_kmalloc_remote_unlock_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684881568,
+            "size": 132
+          }
+        },
+        {
+          "offset": 118,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe878ff0",
+          "kind": "NAMED",
+          "target": "mem_kmalloc_remote_lock_bridge",
+          "final_symbol": {
+            "name": "mem_kmalloc_remote_lock_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684881392,
+            "size": 171
+          }
+        },
+        {
+          "offset": 154,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe82d130",
+          "kind": "NAMED",
+          "target": "___kfree",
+          "final_symbol": {
+            "name": "___kfree",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684570416,
+            "size": 763
+          }
+        },
+        {
+          "offset": 166,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe87b7e0",
+          "kind": "NAMED",
+          "target": "mem_pagealloc_track_meta_alloc_bridge",
+          "final_symbol": {
+            "name": "mem_pagealloc_track_meta_alloc_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684891616,
+            "size": 1425
+          }
+        },
+        {
+          "offset": 178,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe82d100",
+          "kind": "NAMED",
+          "target": "___ihk_mc_free_pages",
+          "final_symbol": {
+            "name": "___ihk_mc_free_pages",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684570368,
+            "size": 36
+          }
+        },
+        {
+          "offset": 190,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe984960",
+          "kind": "NAMED",
+          "target": "pagealloc_addr_hash_locks",
+          "final_symbol": {
+            "name": "pagealloc_addr_hash_locks",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685977440,
+            "size": 1024
+          }
+        },
+        {
+          "offset": 202,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe983960",
+          "kind": "NAMED",
+          "target": "pagealloc_addr_hash",
+          "final_symbol": {
+            "name": "pagealloc_addr_hash",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685973344,
+            "size": 4096
+          }
+        },
+        {
+          "offset": 214,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe985d80",
+          "kind": "NAMED",
+          "target": "pagealloc_track_hash_locks",
+          "final_symbol": {
+            "name": "pagealloc_track_hash_locks",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685982592,
+            "size": 1024
+          }
+        },
+        {
+          "offset": 226,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe984d80",
+          "kind": "NAMED",
+          "target": "pagealloc_track_hash",
+          "final_symbol": {
+            "name": "pagealloc_track_hash",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685978496,
+            "size": 4096
+          }
+        },
+        {
+          "offset": 239,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe889a10",
+          "kind": "NAMED",
+          "target": "pagealloc_track_free_result",
+          "final_symbol": {
+            "name": "pagealloc_track_free_result",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684949520,
+            "size": 1437
+          }
+        }
+      ],
+      "current_final_targets": [
+        {
+          "offset": 16,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe903088",
+          "kind": "NAMED",
+          "target": "process_tracked_allocator_source_file",
+          "final_symbol": {
+            "name": "process_tracked_allocator_source_file",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446792,
+            "size": 8
+          }
+        },
+        {
+          "offset": 29,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e930",
+          "kind": "NAMED",
+          "target": "memdebug",
+          "final_symbol": {
+            "name": "memdebug",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685821744,
+            "size": 8
+          }
+        },
+        {
+          "offset": 42,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe986180",
+          "kind": "NAMED",
+          "target": "pagealloc_track_initialized",
+          "final_symbol": {
+            "name": "pagealloc_track_initialized",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685983616,
+            "size": 4
+          }
+        },
+        {
+          "offset": 58,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe87b620",
+          "kind": "NAMED",
+          "target": "mem_pagealloc_track_log_bridge",
+          "final_symbol": {
+            "name": "mem_pagealloc_track_log_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684891168,
+            "size": 430
+          }
+        },
+        {
+          "offset": 68,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe87b530",
+          "kind": "NAMED",
+          "target": "mem_pagealloc_invalid_size_bridge",
+          "final_symbol": {
+            "name": "mem_pagealloc_invalid_size_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684890928,
+            "size": 71
+          }
+        },
+        {
+          "offset": 78,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe87b4e0",
+          "kind": "NAMED",
+          "target": "mem_pagealloc_invalid_free_bridge",
+          "final_symbol": {
+            "name": "mem_pagealloc_invalid_free_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684890848,
+            "size": 70
+          }
+        },
+        {
+          "offset": 88,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe87be10",
+          "kind": "NAMED",
+          "target": "mem_pagealloc_track_noirq_unlock_bridge",
+          "final_symbol": {
+            "name": "mem_pagealloc_track_noirq_unlock_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684893200,
+            "size": 130
+          }
+        },
+        {
+          "offset": 98,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe87bd70",
+          "kind": "NAMED",
+          "target": "mem_pagealloc_track_noirq_lock_bridge",
+          "final_symbol": {
+            "name": "mem_pagealloc_track_noirq_lock_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684893040,
+            "size": 155
+          }
+        },
+        {
+          "offset": 108,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe879090",
+          "kind": "NAMED",
+          "target": "mem_kmalloc_remote_unlock_bridge",
+          "final_symbol": {
+            "name": "mem_kmalloc_remote_unlock_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684881552,
+            "size": 132
+          }
+        },
+        {
+          "offset": 118,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe878fe0",
+          "kind": "NAMED",
+          "target": "mem_kmalloc_remote_lock_bridge",
+          "final_symbol": {
+            "name": "mem_kmalloc_remote_lock_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684881376,
+            "size": 171
+          }
+        },
+        {
+          "offset": 154,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe82d0c0",
+          "kind": "NAMED",
+          "target": "___kfree",
+          "final_symbol": {
+            "name": "___kfree",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684570304,
+            "size": 763
+          }
+        },
+        {
+          "offset": 166,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe87b7d0",
+          "kind": "NAMED",
+          "target": "mem_pagealloc_track_meta_alloc_bridge",
+          "final_symbol": {
+            "name": "mem_pagealloc_track_meta_alloc_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684891600,
+            "size": 1425
+          }
+        },
+        {
+          "offset": 178,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe82d090",
+          "kind": "NAMED",
+          "target": "___ihk_mc_free_pages",
+          "final_symbol": {
+            "name": "___ihk_mc_free_pages",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684570256,
+            "size": 36
+          }
+        },
+        {
+          "offset": 190,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe984960",
+          "kind": "NAMED",
+          "target": "pagealloc_addr_hash_locks",
+          "final_symbol": {
+            "name": "pagealloc_addr_hash_locks",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685977440,
+            "size": 1024
+          }
+        },
+        {
+          "offset": 202,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe983960",
+          "kind": "NAMED",
+          "target": "pagealloc_addr_hash",
+          "final_symbol": {
+            "name": "pagealloc_addr_hash",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685973344,
+            "size": 4096
+          }
+        },
+        {
+          "offset": 214,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe985d80",
+          "kind": "NAMED",
+          "target": "pagealloc_track_hash_locks",
+          "final_symbol": {
+            "name": "pagealloc_track_hash_locks",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685982592,
+            "size": 1024
+          }
+        },
+        {
+          "offset": 226,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe984d80",
+          "kind": "NAMED",
+          "target": "pagealloc_track_hash",
+          "final_symbol": {
+            "name": "pagealloc_track_hash",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685978496,
+            "size": 4096
+          }
+        },
+        {
+          "offset": 239,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe889a00",
+          "kind": "NAMED",
+          "target": "pagealloc_track_free_result",
+          "final_symbol": {
+            "name": "pagealloc_track_free_result",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684949504,
+            "size": 1437
+          }
+        }
+      ]
+    },
+    {
+      "consumer": "process_free_vm_bridge",
+      "old_symbol": {
+        "index": 6172,
+        "name": "process_free_vm_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3087,
+        "value": 0,
+        "size": 35
+      },
+      "current_symbol": {
+        "index": 6183,
+        "name": "process_free_vm_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3097,
+        "value": 0,
+        "size": 35
+      },
+      "current_final_symbol": {
+        "name": "process_free_vm_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685006256,
+        "size": 35
+      },
+      "nonrelocated_bytes_equal": true,
+      "nonrelocated_sha256": "fdc9744d3539268b4e7e898ab3643b1eaa28c9cc706e068e5d0c241c998a92e4",
+      "old_final_targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe903128",
+          "kind": "NAMED",
+          "target": "process_tracked_allocator_source_file",
+          "final_symbol": {
+            "name": "process_tracked_allocator_source_file",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446952,
+            "size": 8
+          }
+        },
+        {
+          "offset": 19,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8343e0",
+          "kind": "NAMED",
+          "target": "_kfree",
+          "final_symbol": {
+            "name": "_kfree",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684599776,
+            "size": 1194
+          }
+        }
+      ],
+      "current_final_targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe903088",
+          "kind": "NAMED",
+          "target": "process_tracked_allocator_source_file",
+          "final_symbol": {
+            "name": "process_tracked_allocator_source_file",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446792,
+            "size": 8
+          }
+        },
+        {
+          "offset": 19,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe834370",
+          "kind": "NAMED",
+          "target": "_kfree",
+          "final_symbol": {
+            "name": "_kfree",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684599664,
+            "size": 1194
+          }
+        }
+      ]
+    },
+    {
+      "consumer": "process_mckfd_free_bridge",
+      "old_symbol": {
+        "index": 6225,
+        "name": "process_mckfd_free_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3151,
+        "value": 0,
+        "size": 35
+      },
+      "current_symbol": {
+        "index": 6236,
+        "name": "process_mckfd_free_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3161,
+        "value": 0,
+        "size": 35
+      },
+      "current_final_symbol": {
+        "name": "process_mckfd_free_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685015744,
+        "size": 35
+      },
+      "nonrelocated_bytes_equal": true,
+      "nonrelocated_sha256": "03e78454aed644c85aadb82d73f3a4f873c83211497a213569b8d4eef9e92604",
+      "old_final_targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe903128",
+          "kind": "NAMED",
+          "target": "process_tracked_allocator_source_file",
+          "final_symbol": {
+            "name": "process_tracked_allocator_source_file",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446952,
+            "size": 8
+          }
+        },
+        {
+          "offset": 19,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8343e0",
+          "kind": "NAMED",
+          "target": "_kfree",
+          "final_symbol": {
+            "name": "_kfree",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684599776,
+            "size": 1194
+          }
+        }
+      ],
+      "current_final_targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe903088",
+          "kind": "NAMED",
+          "target": "process_tracked_allocator_source_file",
+          "final_symbol": {
+            "name": "process_tracked_allocator_source_file",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446792,
+            "size": 8
+          }
+        },
+        {
+          "offset": 19,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe834370",
+          "kind": "NAMED",
+          "target": "_kfree",
+          "final_symbol": {
+            "name": "_kfree",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684599664,
+            "size": 1194
+          }
+        }
+      ]
+    },
+    {
+      "consumer": "process_memory_range_free_bridge",
+      "old_symbol": {
+        "index": 4667,
+        "name": "process_memory_range_free_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3163,
+        "value": 0,
+        "size": 2324
+      },
+      "current_symbol": {
+        "index": 4677,
+        "name": "process_memory_range_free_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3173,
+        "value": 0,
+        "size": 2324
+      },
+      "current_final_symbol": {
+        "name": "process_memory_range_free_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685016592,
+        "size": 2324
+      },
+      "nonrelocated_bytes_equal": true,
+      "nonrelocated_sha256": "b16dac766f6a7f3ef8f1522e6aadd74958c1fd154f9a4774614b4cffce3996c6",
+      "old_final_targets": [
+        {
+          "offset": 25,
+          "type": 1,
+          "addend": 88,
+          "actual_final_address": "0xfffffffffe8fe318",
+          "kind": "NAMED",
+          "target": "process_free_range_body_debug",
+          "final_symbol": {
+            "name": "process_free_range_body_debug",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 3,
+            "value": 18446744073685426880,
+            "size": 96
+          }
+        },
+        {
+          "offset": 52,
+          "type": 1,
+          "addend": 26624,
+          "actual_final_address": "0xfffffffffe90ec1a",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "203a70548b7db8251427a1e81224023a7f4245530db37e8b85ea1923316ee105",
+          "input_addend": 26624,
+          "literal_hex": "667265655f70726f636573735f6d656d6f72795f72616e67652825702c203078256c78202d203078256c78290a00",
+          "literal": "free_process_memory_range(%p, 0x%lx - 0x%lx)\n",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 62,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8745c0",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "final_symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684862400,
+            "size": 85
+          }
+        },
+        {
+          "offset": 419,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe959100",
+          "kind": "NAMED",
+          "target": "cpu_local_var_initialized",
+          "final_symbol": {
+            "name": "cpu_local_var_initialized",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685799168,
+            "size": 4
+          }
+        },
+        {
+          "offset": 432,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 442,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 452,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 566,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8df570",
+          "kind": "NAMED",
+          "target": "x86_clear_range_public_body",
+          "final_symbol": {
+            "name": "x86_clear_range_public_body",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073685300592,
+            "size": 839
+          }
+        },
+        {
+          "offset": 605,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe959100",
+          "kind": "NAMED",
+          "target": "cpu_local_var_initialized",
+          "final_symbol": {
+            "name": "cpu_local_var_initialized",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685799168,
+            "size": 4
+          }
+        },
+        {
+          "offset": 640,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 663,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 675,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 751,
+          "type": 1,
+          "addend": 9714,
+          "actual_final_address": "0xfffffffffe90aa4d",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "203a70548b7db8251427a1e81224023a7f4245530db37e8b85ea1923316ee105",
+          "input_addend": 9714,
+          "literal_hex": "667265655f70726f636573735f6d656d6f72795f72616e67652825702c256c782d256c78293a69686b5f6d635f70745f636c6561725f72616e676528256c782d256c7829206661696c65642e2025640a00",
+          "literal": "free_process_memory_range(%p,%lx-%lx):ihk_mc_pt_clear_range(%lx-%lx) failed. %d\n",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 761,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8745c0",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "final_symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684862400,
+            "size": 85
+          }
+        },
+        {
+          "offset": 902,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8aa280",
+          "kind": "NAMED",
+          "target": "rb_erase",
+          "final_symbol": {
+            "name": "rb_erase",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073685082752,
+            "size": 556
+          }
+        },
+        {
+          "offset": 953,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe903128",
+          "kind": "NAMED",
+          "target": "process_tracked_allocator_source_file",
+          "final_symbol": {
+            "name": "process_tracked_allocator_source_file",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446952,
+            "size": 8
+          }
+        },
+        {
+          "offset": 976,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe959030",
+          "kind": "NAMED",
+          "target": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data20OWNED_INIT_PT_LOADED",
+          "final_symbol": {
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data20OWNED_INIT_PT_LOADED",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685798960,
+            "size": 4
+          }
+        },
+        {
+          "offset": 995,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e918",
+          "kind": "NAMED",
+          "target": "linux_page_offset_base",
+          "final_symbol": {
+            "name": "linux_page_offset_base",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685821720,
+            "size": 8
+          }
+        },
+        {
+          "offset": 1106,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe896fa0",
+          "kind": "NAMED",
+          "target": "process_free_range_clear_main_bridge",
+          "final_symbol": {
+            "name": "process_free_range_clear_main_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073685004192,
+            "size": 339
+          }
+        },
+        {
+          "offset": 1178,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e930",
+          "kind": "NAMED",
+          "target": "memdebug",
+          "final_symbol": {
+            "name": "memdebug",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685821744,
+            "size": 8
+          }
+        },
+        {
+          "offset": 1191,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe986180",
+          "kind": "NAMED",
+          "target": "pagealloc_track_initialized",
+          "final_symbol": {
+            "name": "pagealloc_track_initialized",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685983616,
+            "size": 4
+          }
+        },
+        {
+          "offset": 1207,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe87b630",
+          "kind": "NAMED",
+          "target": "mem_pagealloc_track_log_bridge",
+          "final_symbol": {
+            "name": "mem_pagealloc_track_log_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684891184,
+            "size": 430
+          }
+        },
+        {
+          "offset": 1217,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe87b540",
+          "kind": "NAMED",
+          "target": "mem_pagealloc_invalid_size_bridge",
+          "final_symbol": {
+            "name": "mem_pagealloc_invalid_size_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684890944,
+            "size": 71
+          }
+        },
+        {
+          "offset": 1227,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe87be20",
+          "kind": "NAMED",
+          "target": "mem_pagealloc_track_noirq_unlock_bridge",
+          "final_symbol": {
+            "name": "mem_pagealloc_track_noirq_unlock_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684893216,
+            "size": 130
+          }
+        },
+        {
+          "offset": 1240,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe87bd80",
+          "kind": "NAMED",
+          "target": "mem_pagealloc_track_noirq_lock_bridge",
+          "final_symbol": {
+            "name": "mem_pagealloc_track_noirq_lock_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684893056,
+            "size": 155
+          }
+        },
+        {
+          "offset": 1262,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe87b4f0",
+          "kind": "NAMED",
+          "target": "mem_pagealloc_invalid_free_bridge",
+          "final_symbol": {
+            "name": "mem_pagealloc_invalid_free_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684890864,
+            "size": 70
+          }
+        },
+        {
+          "offset": 1278,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8790a0",
+          "kind": "NAMED",
+          "target": "mem_kmalloc_remote_unlock_bridge",
+          "final_symbol": {
+            "name": "mem_kmalloc_remote_unlock_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684881568,
+            "size": 132
+          }
+        },
+        {
+          "offset": 1290,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe878ff0",
+          "kind": "NAMED",
+          "target": "mem_kmalloc_remote_lock_bridge",
+          "final_symbol": {
+            "name": "mem_kmalloc_remote_lock_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684881392,
+            "size": 171
+          }
+        },
+        {
+          "offset": 1302,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe82d130",
+          "kind": "NAMED",
+          "target": "___kfree",
+          "final_symbol": {
+            "name": "___kfree",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684570416,
+            "size": 763
+          }
+        },
+        {
+          "offset": 1314,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe87b7e0",
+          "kind": "NAMED",
+          "target": "mem_pagealloc_track_meta_alloc_bridge",
+          "final_symbol": {
+            "name": "mem_pagealloc_track_meta_alloc_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684891616,
+            "size": 1425
+          }
+        },
+        {
+          "offset": 1326,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe82d100",
+          "kind": "NAMED",
+          "target": "___ihk_mc_free_pages",
+          "final_symbol": {
+            "name": "___ihk_mc_free_pages",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684570368,
+            "size": 36
+          }
+        },
+        {
+          "offset": 1338,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe984960",
+          "kind": "NAMED",
+          "target": "pagealloc_addr_hash_locks",
+          "final_symbol": {
+            "name": "pagealloc_addr_hash_locks",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685977440,
+            "size": 1024
+          }
+        },
+        {
+          "offset": 1350,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe983960",
+          "kind": "NAMED",
+          "target": "pagealloc_addr_hash",
+          "final_symbol": {
+            "name": "pagealloc_addr_hash",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685973344,
+            "size": 4096
+          }
+        },
+        {
+          "offset": 1362,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe985d80",
+          "kind": "NAMED",
+          "target": "pagealloc_track_hash_locks",
+          "final_symbol": {
+            "name": "pagealloc_track_hash_locks",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685982592,
+            "size": 1024
+          }
+        },
+        {
+          "offset": 1374,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe984d80",
+          "kind": "NAMED",
+          "target": "pagealloc_track_hash",
+          "final_symbol": {
+            "name": "pagealloc_track_hash",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685978496,
+            "size": 4096
+          }
+        },
+        {
+          "offset": 1387,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe889a10",
+          "kind": "NAMED",
+          "target": "pagealloc_track_free_result",
+          "final_symbol": {
+            "name": "pagealloc_track_free_result",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684949520,
+            "size": 1437
+          }
+        },
+        {
+          "offset": 1412,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8343e0",
+          "kind": "NAMED",
+          "target": "_kfree",
+          "final_symbol": {
+            "name": "_kfree",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684599776,
+            "size": 1194
+          }
+        },
+        {
+          "offset": 1432,
+          "type": 1,
+          "addend": 56,
+          "actual_final_address": "0xfffffffffe8fe2f8",
+          "kind": "NAMED",
+          "target": "process_free_range_body_debug",
+          "final_symbol": {
+            "name": "process_free_range_body_debug",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 3,
+            "value": 18446744073685426880,
+            "size": 96
+          }
+        },
+        {
+          "offset": 1454,
+          "type": 1,
+          "addend": 9795,
+          "actual_final_address": "0xfffffffffe90aa9e",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "203a70548b7db8251427a1e81224023a7f4245530db37e8b85ea1923316ee105",
+          "input_addend": 9795,
+          "literal_hex": "667265655f70726f636573735f6d656d6f72795f72616e67652825702c256c782d256c78293a20300a00",
+          "literal": "free_process_memory_range(%p,%lx-%lx): 0\n",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 1464,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8745c0",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "final_symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684862400,
+            "size": 85
+          }
+        },
+        {
+          "offset": 1511,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95902c",
+          "kind": "NAMED",
+          "target": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data18OWNED_USE_1GB_PAGE",
+          "final_symbol": {
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data18OWNED_USE_1GB_PAGE",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685798956,
+            "size": 4
+          }
+        },
+        {
+          "offset": 1742,
+          "type": 1,
+          "addend": 9566,
+          "actual_final_address": "0xfffffffffe90a9b9",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "203a70548b7db8251427a1e81224023a7f4245530db37e8b85ea1923316ee105",
+          "input_addend": 9566,
+          "literal_hex": "667265655f70726f636573735f6d656d6f72795f72616e67653a617263685f6765745f736d616c6c65725f706167655f73697a65206661696c65642e2025640a00",
+          "literal": "free_process_memory_range:arch_get_smaller_page_size failed. %d\n",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 1752,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8745c0",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "final_symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684862400,
+            "size": 85
+          }
+        },
+        {
+          "offset": 1822,
+          "type": 1,
+          "addend": 9566,
+          "actual_final_address": "0xfffffffffe90a9b9",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "203a70548b7db8251427a1e81224023a7f4245530db37e8b85ea1923316ee105",
+          "input_addend": 9566,
+          "literal_hex": "667265655f70726f636573735f6d656d6f72795f72616e67653a617263685f6765745f736d616c6c65725f706167655f73697a65206661696c65642e2025640a00",
+          "literal": "free_process_memory_range:arch_get_smaller_page_size failed. %d\n",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 1832,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8745c0",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "final_symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684862400,
+            "size": 85
+          }
+        },
+        {
+          "offset": 1870,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe959100",
+          "kind": "NAMED",
+          "target": "cpu_local_var_initialized",
+          "final_symbol": {
+            "name": "cpu_local_var_initialized",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685799168,
+            "size": 4
+          }
+        },
+        {
+          "offset": 1901,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 1926,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 1961,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 2053,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8df570",
+          "kind": "NAMED",
+          "target": "x86_clear_range_public_body",
+          "final_symbol": {
+            "name": "x86_clear_range_public_body",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073685300592,
+            "size": 839
+          }
+        },
+        {
+          "offset": 2131,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe959100",
+          "kind": "NAMED",
+          "target": "cpu_local_var_initialized",
+          "final_symbol": {
+            "name": "cpu_local_var_initialized",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685799168,
+            "size": 4
+          }
+        },
+        {
+          "offset": 2166,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 2191,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 2226,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 2281,
+          "type": 1,
+          "addend": 9631,
+          "actual_final_address": "0xfffffffffe90a9fa",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "203a70548b7db8251427a1e81224023a7f4245530db37e8b85ea1923316ee105",
+          "input_addend": 9631,
+          "literal_hex": "667265655f70726f636573735f6d656d6f72795f72616e67652825702c256c782d256c78293a69686b5f6d635f70745f667265655f72616e676528256c782d256c782c257029206661696c65642e2025640a00",
+          "literal": "free_process_memory_range(%p,%lx-%lx):ihk_mc_pt_free_range(%lx-%lx,%p) failed. %d\n",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 2291,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8745c0",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "final_symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684862400,
+            "size": 85
+          }
+        }
+      ],
+      "current_final_targets": [
+        {
+          "offset": 25,
+          "type": 1,
+          "addend": 88,
+          "actual_final_address": "0xfffffffffe8fe318",
+          "kind": "NAMED",
+          "target": "process_free_range_body_debug",
+          "final_symbol": {
+            "name": "process_free_range_body_debug",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 3,
+            "value": 18446744073685426880,
+            "size": 96
+          }
+        },
+        {
+          "offset": 52,
+          "type": 1,
+          "addend": 26624,
+          "actual_final_address": "0xfffffffffe90eb0a",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "203a70548b7db8251427a1e81224023a7f4245530db37e8b85ea1923316ee105",
+          "input_addend": 26624,
+          "literal_hex": "667265655f70726f636573735f6d656d6f72795f72616e67652825702c203078256c78202d203078256c78290a00",
+          "literal": "free_process_memory_range(%p, 0x%lx - 0x%lx)\n",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 62,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8745b0",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "final_symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684862384,
+            "size": 85
+          }
+        },
+        {
+          "offset": 419,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe959100",
+          "kind": "NAMED",
+          "target": "cpu_local_var_initialized",
+          "final_symbol": {
+            "name": "cpu_local_var_initialized",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685799168,
+            "size": 4
+          }
+        },
+        {
+          "offset": 432,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 442,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 452,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 566,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8df660",
+          "kind": "NAMED",
+          "target": "x86_clear_range_public_body",
+          "final_symbol": {
+            "name": "x86_clear_range_public_body",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073685300832,
+            "size": 839
+          }
+        },
+        {
+          "offset": 605,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe959100",
+          "kind": "NAMED",
+          "target": "cpu_local_var_initialized",
+          "final_symbol": {
+            "name": "cpu_local_var_initialized",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685799168,
+            "size": 4
+          }
+        },
+        {
+          "offset": 640,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 663,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 675,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 751,
+          "type": 1,
+          "addend": 9714,
+          "actual_final_address": "0xfffffffffe90a93d",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "203a70548b7db8251427a1e81224023a7f4245530db37e8b85ea1923316ee105",
+          "input_addend": 9714,
+          "literal_hex": "667265655f70726f636573735f6d656d6f72795f72616e67652825702c256c782d256c78293a69686b5f6d635f70745f636c6561725f72616e676528256c782d256c7829206661696c65642e2025640a00",
+          "literal": "free_process_memory_range(%p,%lx-%lx):ihk_mc_pt_clear_range(%lx-%lx) failed. %d\n",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 761,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8745b0",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "final_symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684862384,
+            "size": 85
+          }
+        },
+        {
+          "offset": 902,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8aa370",
+          "kind": "NAMED",
+          "target": "rb_erase",
+          "final_symbol": {
+            "name": "rb_erase",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073685082992,
+            "size": 556
+          }
+        },
+        {
+          "offset": 953,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe903088",
+          "kind": "NAMED",
+          "target": "process_tracked_allocator_source_file",
+          "final_symbol": {
+            "name": "process_tracked_allocator_source_file",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446792,
+            "size": 8
+          }
+        },
+        {
+          "offset": 976,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe959030",
+          "kind": "NAMED",
+          "target": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data20OWNED_INIT_PT_LOADED",
+          "final_symbol": {
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data20OWNED_INIT_PT_LOADED",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685798960,
+            "size": 4
+          }
+        },
+        {
+          "offset": 995,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e918",
+          "kind": "NAMED",
+          "target": "linux_page_offset_base",
+          "final_symbol": {
+            "name": "linux_page_offset_base",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685821720,
+            "size": 8
+          }
+        },
+        {
+          "offset": 1106,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe897090",
+          "kind": "NAMED",
+          "target": "process_free_range_clear_main_bridge",
+          "final_symbol": {
+            "name": "process_free_range_clear_main_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073685004432,
+            "size": 339
+          }
+        },
+        {
+          "offset": 1178,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e930",
+          "kind": "NAMED",
+          "target": "memdebug",
+          "final_symbol": {
+            "name": "memdebug",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685821744,
+            "size": 8
+          }
+        },
+        {
+          "offset": 1191,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe986180",
+          "kind": "NAMED",
+          "target": "pagealloc_track_initialized",
+          "final_symbol": {
+            "name": "pagealloc_track_initialized",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685983616,
+            "size": 4
+          }
+        },
+        {
+          "offset": 1207,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe87b620",
+          "kind": "NAMED",
+          "target": "mem_pagealloc_track_log_bridge",
+          "final_symbol": {
+            "name": "mem_pagealloc_track_log_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684891168,
+            "size": 430
+          }
+        },
+        {
+          "offset": 1217,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe87b530",
+          "kind": "NAMED",
+          "target": "mem_pagealloc_invalid_size_bridge",
+          "final_symbol": {
+            "name": "mem_pagealloc_invalid_size_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684890928,
+            "size": 71
+          }
+        },
+        {
+          "offset": 1227,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe87be10",
+          "kind": "NAMED",
+          "target": "mem_pagealloc_track_noirq_unlock_bridge",
+          "final_symbol": {
+            "name": "mem_pagealloc_track_noirq_unlock_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684893200,
+            "size": 130
+          }
+        },
+        {
+          "offset": 1240,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe87bd70",
+          "kind": "NAMED",
+          "target": "mem_pagealloc_track_noirq_lock_bridge",
+          "final_symbol": {
+            "name": "mem_pagealloc_track_noirq_lock_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684893040,
+            "size": 155
+          }
+        },
+        {
+          "offset": 1262,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe87b4e0",
+          "kind": "NAMED",
+          "target": "mem_pagealloc_invalid_free_bridge",
+          "final_symbol": {
+            "name": "mem_pagealloc_invalid_free_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684890848,
+            "size": 70
+          }
+        },
+        {
+          "offset": 1278,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe879090",
+          "kind": "NAMED",
+          "target": "mem_kmalloc_remote_unlock_bridge",
+          "final_symbol": {
+            "name": "mem_kmalloc_remote_unlock_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684881552,
+            "size": 132
+          }
+        },
+        {
+          "offset": 1290,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe878fe0",
+          "kind": "NAMED",
+          "target": "mem_kmalloc_remote_lock_bridge",
+          "final_symbol": {
+            "name": "mem_kmalloc_remote_lock_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684881376,
+            "size": 171
+          }
+        },
+        {
+          "offset": 1302,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe82d0c0",
+          "kind": "NAMED",
+          "target": "___kfree",
+          "final_symbol": {
+            "name": "___kfree",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684570304,
+            "size": 763
+          }
+        },
+        {
+          "offset": 1314,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe87b7d0",
+          "kind": "NAMED",
+          "target": "mem_pagealloc_track_meta_alloc_bridge",
+          "final_symbol": {
+            "name": "mem_pagealloc_track_meta_alloc_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684891600,
+            "size": 1425
+          }
+        },
+        {
+          "offset": 1326,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe82d090",
+          "kind": "NAMED",
+          "target": "___ihk_mc_free_pages",
+          "final_symbol": {
+            "name": "___ihk_mc_free_pages",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684570256,
+            "size": 36
+          }
+        },
+        {
+          "offset": 1338,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe984960",
+          "kind": "NAMED",
+          "target": "pagealloc_addr_hash_locks",
+          "final_symbol": {
+            "name": "pagealloc_addr_hash_locks",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685977440,
+            "size": 1024
+          }
+        },
+        {
+          "offset": 1350,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe983960",
+          "kind": "NAMED",
+          "target": "pagealloc_addr_hash",
+          "final_symbol": {
+            "name": "pagealloc_addr_hash",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685973344,
+            "size": 4096
+          }
+        },
+        {
+          "offset": 1362,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe985d80",
+          "kind": "NAMED",
+          "target": "pagealloc_track_hash_locks",
+          "final_symbol": {
+            "name": "pagealloc_track_hash_locks",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685982592,
+            "size": 1024
+          }
+        },
+        {
+          "offset": 1374,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe984d80",
+          "kind": "NAMED",
+          "target": "pagealloc_track_hash",
+          "final_symbol": {
+            "name": "pagealloc_track_hash",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685978496,
+            "size": 4096
+          }
+        },
+        {
+          "offset": 1387,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe889a00",
+          "kind": "NAMED",
+          "target": "pagealloc_track_free_result",
+          "final_symbol": {
+            "name": "pagealloc_track_free_result",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684949504,
+            "size": 1437
+          }
+        },
+        {
+          "offset": 1412,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe834370",
+          "kind": "NAMED",
+          "target": "_kfree",
+          "final_symbol": {
+            "name": "_kfree",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684599664,
+            "size": 1194
+          }
+        },
+        {
+          "offset": 1432,
+          "type": 1,
+          "addend": 56,
+          "actual_final_address": "0xfffffffffe8fe2f8",
+          "kind": "NAMED",
+          "target": "process_free_range_body_debug",
+          "final_symbol": {
+            "name": "process_free_range_body_debug",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 3,
+            "value": 18446744073685426880,
+            "size": 96
+          }
+        },
+        {
+          "offset": 1454,
+          "type": 1,
+          "addend": 9795,
+          "actual_final_address": "0xfffffffffe90a98e",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "203a70548b7db8251427a1e81224023a7f4245530db37e8b85ea1923316ee105",
+          "input_addend": 9795,
+          "literal_hex": "667265655f70726f636573735f6d656d6f72795f72616e67652825702c256c782d256c78293a20300a00",
+          "literal": "free_process_memory_range(%p,%lx-%lx): 0\n",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 1464,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8745b0",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "final_symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684862384,
+            "size": 85
+          }
+        },
+        {
+          "offset": 1511,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95902c",
+          "kind": "NAMED",
+          "target": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data18OWNED_USE_1GB_PAGE",
+          "final_symbol": {
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data18OWNED_USE_1GB_PAGE",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685798956,
+            "size": 4
+          }
+        },
+        {
+          "offset": 1742,
+          "type": 1,
+          "addend": 9566,
+          "actual_final_address": "0xfffffffffe90a8a9",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "203a70548b7db8251427a1e81224023a7f4245530db37e8b85ea1923316ee105",
+          "input_addend": 9566,
+          "literal_hex": "667265655f70726f636573735f6d656d6f72795f72616e67653a617263685f6765745f736d616c6c65725f706167655f73697a65206661696c65642e2025640a00",
+          "literal": "free_process_memory_range:arch_get_smaller_page_size failed. %d\n",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 1752,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8745b0",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "final_symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684862384,
+            "size": 85
+          }
+        },
+        {
+          "offset": 1822,
+          "type": 1,
+          "addend": 9566,
+          "actual_final_address": "0xfffffffffe90a8a9",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "203a70548b7db8251427a1e81224023a7f4245530db37e8b85ea1923316ee105",
+          "input_addend": 9566,
+          "literal_hex": "667265655f70726f636573735f6d656d6f72795f72616e67653a617263685f6765745f736d616c6c65725f706167655f73697a65206661696c65642e2025640a00",
+          "literal": "free_process_memory_range:arch_get_smaller_page_size failed. %d\n",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 1832,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8745b0",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "final_symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684862384,
+            "size": 85
+          }
+        },
+        {
+          "offset": 1870,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe959100",
+          "kind": "NAMED",
+          "target": "cpu_local_var_initialized",
+          "final_symbol": {
+            "name": "cpu_local_var_initialized",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685799168,
+            "size": 4
+          }
+        },
+        {
+          "offset": 1901,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 1926,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 1961,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 2053,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8df660",
+          "kind": "NAMED",
+          "target": "x86_clear_range_public_body",
+          "final_symbol": {
+            "name": "x86_clear_range_public_body",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073685300832,
+            "size": 839
+          }
+        },
+        {
+          "offset": 2131,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe959100",
+          "kind": "NAMED",
+          "target": "cpu_local_var_initialized",
+          "final_symbol": {
+            "name": "cpu_local_var_initialized",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685799168,
+            "size": 4
+          }
+        },
+        {
+          "offset": 2166,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 2191,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 2226,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 2281,
+          "type": 1,
+          "addend": 9631,
+          "actual_final_address": "0xfffffffffe90a8ea",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "203a70548b7db8251427a1e81224023a7f4245530db37e8b85ea1923316ee105",
+          "input_addend": 9631,
+          "literal_hex": "667265655f70726f636573735f6d656d6f72795f72616e67652825702c256c782d256c78293a69686b5f6d635f70745f667265655f72616e676528256c782d256c782c257029206661696c65642e2025640a00",
+          "literal": "free_process_memory_range(%p,%lx-%lx):ihk_mc_pt_free_range(%lx-%lx,%p) failed. %d\n",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 2291,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8745b0",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "final_symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684862384,
+            "size": 85
+          }
+        }
+      ]
+    },
+    {
+      "consumer": "process_optional_free_bridge",
+      "old_symbol": {
+        "index": 6244,
+        "name": "process_optional_free_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3182,
+        "value": 0,
+        "size": 35
+      },
+      "current_symbol": {
+        "index": 6255,
+        "name": "process_optional_free_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3192,
+        "value": 0,
+        "size": 35
+      },
+      "current_final_symbol": {
+        "name": "process_optional_free_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685021312,
+        "size": 35
+      },
+      "nonrelocated_bytes_equal": true,
+      "nonrelocated_sha256": "e4aa6a82ee4d848198593a42d9302b406f2e35f22dfa3cb09e14bc9d60823133",
+      "old_final_targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe903128",
+          "kind": "NAMED",
+          "target": "process_tracked_allocator_source_file",
+          "final_symbol": {
+            "name": "process_tracked_allocator_source_file",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446952,
+            "size": 8
+          }
+        },
+        {
+          "offset": 19,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8343e0",
+          "kind": "NAMED",
+          "target": "_kfree",
+          "final_symbol": {
+            "name": "_kfree",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684599776,
+            "size": 1194
+          }
+        }
+      ],
+      "current_final_targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe903088",
+          "kind": "NAMED",
+          "target": "process_tracked_allocator_source_file",
+          "final_symbol": {
+            "name": "process_tracked_allocator_source_file",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446792,
+            "size": 8
+          }
+        },
+        {
+          "offset": 19,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe834370",
+          "kind": "NAMED",
+          "target": "_kfree",
+          "final_symbol": {
+            "name": "_kfree",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684599664,
+            "size": 1194
+          }
+        }
+      ]
+    },
+    {
+      "consumer": "process_page_fault_anon_allocate_body_result",
+      "old_symbol": {
+        "index": 6245,
+        "name": "process_page_fault_anon_allocate_body_result",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3184,
+        "value": 0,
+        "size": 393
+      },
+      "current_symbol": {
+        "index": 6256,
+        "name": "process_page_fault_anon_allocate_body_result",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3194,
+        "value": 0,
+        "size": 393
+      },
+      "current_final_symbol": {
+        "name": "process_page_fault_anon_allocate_body_result",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685021360,
+        "size": 393
+      },
+      "nonrelocated_bytes_equal": true,
+      "nonrelocated_sha256": "808f144755862c2ed0309024474932dcac55bbee046ede58b519cb44df818310",
+      "old_final_targets": [
+        {
+          "offset": 144,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe902fd0",
+          "kind": "NAMED",
+          "target": "process_page_fault_anon_alloc_file",
+          "final_symbol": {
+            "name": "process_page_fault_anon_alloc_file",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446608,
+            "size": 8
+          }
+        },
+        {
+          "offset": 156,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe833ab0",
+          "kind": "NAMED",
+          "target": "_ihk_mc_alloc_aligned_pages_node",
+          "final_symbol": {
+            "name": "_ihk_mc_alloc_aligned_pages_node",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684597424,
+            "size": 2085
+          }
+        },
+        {
+          "offset": 215,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95902c",
+          "kind": "NAMED",
+          "target": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data18OWNED_USE_1GB_PAGE",
+          "final_symbol": {
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data18OWNED_USE_1GB_PAGE",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685798956,
+            "size": 4
+          }
+        },
+        {
+          "offset": 278,
+          "type": 1,
+          "addend": 26924,
+          "actual_final_address": "0xfffffffffe90ed46",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "203a70548b7db8251427a1e81224023a7f4245530db37e8b85ea1923316ee105",
+          "input_addend": 26924,
+          "literal_hex": "706167655f6661756c745f70726f636573735f6d656d6f72795f72616e67652825702c256c782d256c7820256c782c256c782c256c78293a63616e6e6f7420616c6c6f63617465206e657720706167652e2025640a00",
+          "literal": "page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx):cannot allocate new page. %d\n",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 313,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8745c0",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "final_symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684862400,
+            "size": 85
+          }
+        },
+        {
+          "offset": 383,
+          "type": 1,
+          "addend": 26823,
+          "actual_final_address": "0xfffffffffe90ece1",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "203a70548b7db8251427a1e81224023a7f4245530db37e8b85ea1923316ee105",
+          "input_addend": 26823,
+          "literal_hex": "706167655f6661756c745f70726f636573735f6d656d6f72795f72616e67652825702c256c782d256c7820256c782c256c782c256c78293a617263685f6765745f736d616c6c65725f706167655f73697a6528616e6f6e29206661696c65642e2025640a00",
+          "literal": "page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx):arch_get_smaller_page_size(anon) failed. %d\n",
+          "final_readonly_section": ".lrodata.str1.1"
+        }
+      ],
+      "current_final_targets": [
+        {
+          "offset": 144,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe902f30",
+          "kind": "NAMED",
+          "target": "process_page_fault_anon_alloc_file",
+          "final_symbol": {
+            "name": "process_page_fault_anon_alloc_file",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446448,
+            "size": 8
+          }
+        },
+        {
+          "offset": 156,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe833a40",
+          "kind": "NAMED",
+          "target": "_ihk_mc_alloc_aligned_pages_node",
+          "final_symbol": {
+            "name": "_ihk_mc_alloc_aligned_pages_node",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684597312,
+            "size": 2085
+          }
+        },
+        {
+          "offset": 215,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95902c",
+          "kind": "NAMED",
+          "target": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data18OWNED_USE_1GB_PAGE",
+          "final_symbol": {
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data18OWNED_USE_1GB_PAGE",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685798956,
+            "size": 4
+          }
+        },
+        {
+          "offset": 278,
+          "type": 1,
+          "addend": 26924,
+          "actual_final_address": "0xfffffffffe90ec36",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "203a70548b7db8251427a1e81224023a7f4245530db37e8b85ea1923316ee105",
+          "input_addend": 26924,
+          "literal_hex": "706167655f6661756c745f70726f636573735f6d656d6f72795f72616e67652825702c256c782d256c7820256c782c256c782c256c78293a63616e6e6f7420616c6c6f63617465206e657720706167652e2025640a00",
+          "literal": "page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx):cannot allocate new page. %d\n",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 313,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8745b0",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "final_symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684862384,
+            "size": 85
+          }
+        },
+        {
+          "offset": 383,
+          "type": 1,
+          "addend": 26823,
+          "actual_final_address": "0xfffffffffe90ebd1",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "203a70548b7db8251427a1e81224023a7f4245530db37e8b85ea1923316ee105",
+          "input_addend": 26823,
+          "literal_hex": "706167655f6661756c745f70726f636573735f6d656d6f72795f72616e67652825702c256c782d256c7820256c782c256c782c256c78293a617263685f6765745f736d616c6c65725f706167655f73697a6528616e6f6e29206661696c65642e2025640a00",
+          "literal": "page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx):arch_get_smaller_page_size(anon) failed. %d\n",
+          "final_readonly_section": ".lrodata.str1.1"
+        }
+      ]
+    },
+    {
+      "consumer": "process_policy_free_bridge",
+      "old_symbol": {
+        "index": 6269,
+        "name": "process_policy_free_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3226,
+        "value": 0,
+        "size": 35
+      },
+      "current_symbol": {
+        "index": 6280,
+        "name": "process_policy_free_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3236,
+        "value": 0,
+        "size": 35
+      },
+      "current_final_symbol": {
+        "name": "process_policy_free_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685027888,
+        "size": 35
+      },
+      "nonrelocated_bytes_equal": true,
+      "nonrelocated_sha256": "44623e6ff5e808a12db47b893275628dc119a3180efe93e448ad703bc703bb20",
+      "old_final_targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe903128",
+          "kind": "NAMED",
+          "target": "process_tracked_allocator_source_file",
+          "final_symbol": {
+            "name": "process_tracked_allocator_source_file",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446952,
+            "size": 8
+          }
+        },
+        {
+          "offset": 19,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8343e0",
+          "kind": "NAMED",
+          "target": "_kfree",
+          "final_symbol": {
+            "name": "_kfree",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684599776,
+            "size": 1194
+          }
+        }
+      ],
+      "current_final_targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe903088",
+          "kind": "NAMED",
+          "target": "process_tracked_allocator_source_file",
+          "final_symbol": {
+            "name": "process_tracked_allocator_source_file",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446792,
+            "size": 8
+          }
+        },
+        {
+          "offset": 19,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe834370",
+          "kind": "NAMED",
+          "target": "_kfree",
+          "final_symbol": {
+            "name": "_kfree",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684599664,
+            "size": 1194
+          }
+        }
+      ]
+    },
+    {
+      "consumer": "process_range_kfree_bridge",
+      "old_symbol": {
+        "index": 6301,
+        "name": "process_range_kfree_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3268,
+        "value": 0,
+        "size": 35
+      },
+      "current_symbol": {
+        "index": 6312,
+        "name": "process_range_kfree_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3278,
+        "value": 0,
+        "size": 35
+      },
+      "current_final_symbol": {
+        "name": "process_range_kfree_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685031888,
+        "size": 35
+      },
+      "nonrelocated_bytes_equal": true,
+      "nonrelocated_sha256": "c4960fb876e3d9636c96e1bc644bdb96534f9d6e4259203b9ff0f36e4bb39129",
+      "old_final_targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe903128",
+          "kind": "NAMED",
+          "target": "process_tracked_allocator_source_file",
+          "final_symbol": {
+            "name": "process_tracked_allocator_source_file",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446952,
+            "size": 8
+          }
+        },
+        {
+          "offset": 19,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8343e0",
+          "kind": "NAMED",
+          "target": "_kfree",
+          "final_symbol": {
+            "name": "_kfree",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684599776,
+            "size": 1194
+          }
+        }
+      ],
+      "current_final_targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe903088",
+          "kind": "NAMED",
+          "target": "process_tracked_allocator_source_file",
+          "final_symbol": {
+            "name": "process_tracked_allocator_source_file",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446792,
+            "size": 8
+          }
+        },
+        {
+          "offset": 19,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe834370",
+          "kind": "NAMED",
+          "target": "_kfree",
+          "final_symbol": {
+            "name": "_kfree",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684599664,
+            "size": 1194
+          }
+        }
+      ]
+    },
+    {
+      "consumer": "process_split_range_alloc_bridge",
+      "old_symbol": {
+        "index": 6380,
+        "name": "process_split_range_alloc_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3395,
+        "value": 0,
+        "size": 208
+      },
+      "current_symbol": {
+        "index": 6391,
+        "name": "process_split_range_alloc_bridge",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3405,
+        "value": 0,
+        "size": 208
+      },
+      "current_final_symbol": {
+        "name": "process_split_range_alloc_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685043984,
+        "size": 208
+      },
+      "nonrelocated_bytes_equal": true,
+      "nonrelocated_sha256": "40b7bc63bde3151efbbabff1d433553da618405d21349db3d47967c561b86171",
+      "old_final_targets": [
+        {
+          "offset": 9,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe903128",
+          "kind": "NAMED",
+          "target": "process_tracked_allocator_source_file",
+          "final_symbol": {
+            "name": "process_tracked_allocator_source_file",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446952,
+            "size": 8
+          }
+        },
+        {
+          "offset": 22,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe834890",
+          "kind": "NAMED",
+          "target": "_kmalloc",
+          "final_symbol": {
+            "name": "_kmalloc",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684600976,
+            "size": 2089
+          }
+        },
+        {
+          "offset": 70,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 95,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 130,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 169,
+          "type": 1,
+          "addend": 17484,
+          "actual_final_address": "0xfffffffffe90c882",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "203a70548b7db8251427a1e81224023a7f4245530db37e8b85ea1923316ee105",
+          "input_addend": 17484,
+          "literal_hex": "6b6d616c6c6f633a206f7574206f66206d656d6f72792025733a2564206e6f5f707265656d70743d25640a00",
+          "literal": "kmalloc: out of memory %s:%d no_preempt=%d\n",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 179,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8745c0",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "final_symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684862400,
+            "size": 85
+          }
+        }
+      ],
+      "current_final_targets": [
+        {
+          "offset": 9,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe903088",
+          "kind": "NAMED",
+          "target": "process_tracked_allocator_source_file",
+          "final_symbol": {
+            "name": "process_tracked_allocator_source_file",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685446792,
+            "size": 8
+          }
+        },
+        {
+          "offset": 22,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe834820",
+          "kind": "NAMED",
+          "target": "_kmalloc",
+          "final_symbol": {
+            "name": "_kmalloc",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684600864,
+            "size": 2089
+          }
+        },
+        {
+          "offset": 70,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 95,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 130,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 169,
+          "type": 1,
+          "addend": 17484,
+          "actual_final_address": "0xfffffffffe90c772",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "203a70548b7db8251427a1e81224023a7f4245530db37e8b85ea1923316ee105",
+          "input_addend": 17484,
+          "literal_hex": "6b6d616c6c6f633a206f7574206f66206d656d6f72792025733a2564206e6f5f707265656d70743d25640a00",
+          "literal": "kmalloc: out of memory %s:%d no_preempt=%d\n",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 179,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8745b0",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "final_symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684862384,
+            "size": 85
+          }
+        }
+      ]
+    },
+    {
+      "consumer": "set_timer",
+      "old_symbol": {
+        "index": 4387,
+        "name": "set_timer",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3921,
+        "value": 0,
+        "size": 774
+      },
+      "current_symbol": {
+        "index": 4392,
+        "name": "set_timer",
+        "bind": 1,
+        "type": 2,
+        "shndx": 3931,
+        "value": 0,
+        "size": 774
+      },
+      "current_final_symbol": {
+        "name": "set_timer",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685142288,
+        "size": 774
+      },
+      "nonrelocated_bytes_equal": true,
+      "nonrelocated_sha256": "0a01db9551332a37063c8428069c873be5ccdfbdebce760e14b3f6bfdacc270f",
+      "old_final_targets": [
+        {
+          "offset": 32,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 45,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 92,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 114,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ffafc",
+          "kind": "NAMED",
+          "target": "time_sharing",
+          "final_symbol": {
+            "name": "time_sharing",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 34,
+            "value": 18446744073685433084,
+            "size": 4
+          }
+        },
+        {
+          "offset": 156,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe959100",
+          "kind": "NAMED",
+          "target": "cpu_local_var_initialized",
+          "final_symbol": {
+            "name": "cpu_local_var_initialized",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685799168,
+            "size": 4
+          }
+        },
+        {
+          "offset": 456,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e910",
+          "kind": "NAMED",
+          "target": "lapic_write",
+          "final_symbol": {
+            "name": "lapic_write",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685821712,
+            "size": 8
+          }
+        },
+        {
+          "offset": 484,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 558,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e910",
+          "kind": "NAMED",
+          "target": "lapic_write",
+          "final_symbol": {
+            "name": "lapic_write",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685821712,
+            "size": 8
+          }
+        },
+        {
+          "offset": 615,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 625,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 635,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 669,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe959100",
+          "kind": "NAMED",
+          "target": "cpu_local_var_initialized",
+          "final_symbol": {
+            "name": "cpu_local_var_initialized",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 234,
+            "value": 18446744073685799168,
+            "size": 4
+          }
+        }
+      ],
+      "current_final_targets": [
+        {
+          "offset": 32,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 45,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 92,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 114,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ffafc",
+          "kind": "NAMED",
+          "target": "time_sharing",
+          "final_symbol": {
+            "name": "time_sharing",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 34,
+            "value": 18446744073685433084,
+            "size": 4
+          }
+        },
+        {
+          "offset": 156,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe959100",
+          "kind": "NAMED",
+          "target": "cpu_local_var_initialized",
+          "final_symbol": {
+            "name": "cpu_local_var_initialized",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685799168,
+            "size": 4
+          }
+        },
+        {
+          "offset": 456,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e910",
+          "kind": "NAMED",
+          "target": "lapic_write",
+          "final_symbol": {
+            "name": "lapic_write",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685821712,
+            "size": 8
+          }
+        },
+        {
+          "offset": 484,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 558,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e910",
+          "kind": "NAMED",
+          "target": "lapic_write",
+          "final_symbol": {
+            "name": "lapic_write",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685821712,
+            "size": 8
+          }
+        },
+        {
+          "offset": 615,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 625,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 635,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 669,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe959100",
+          "kind": "NAMED",
+          "target": "cpu_local_var_initialized",
+          "final_symbol": {
+            "name": "cpu_local_var_initialized",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685799168,
+            "size": 4
+          }
+        }
+      ]
+    },
+    {
+      "consumer": "timer_set_timer_body_result",
+      "old_symbol": {
+        "index": 7136,
+        "name": "timer_set_timer_body_result",
+        "bind": 1,
+        "type": 2,
+        "shndx": 4511,
+        "value": 0,
+        "size": 430
+      },
+      "current_symbol": {
+        "index": 7146,
+        "name": "timer_set_timer_body_result",
+        "bind": 1,
+        "type": 2,
+        "shndx": 4521,
+        "value": 0,
+        "size": 430
+      },
+      "current_final_symbol": {
+        "name": "timer_set_timer_body_result",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685251408,
+        "size": 430
+      },
+      "nonrelocated_bytes_equal": true,
+      "nonrelocated_sha256": "983d816995ef0e3aa1464561476b65e04393e3780daab5cf25c306510f7a6d12",
+      "old_final_targets": [],
+      "current_final_targets": []
+    }
+  ],
+  "thirteen_current_ABI_arguments": [
+    {
+      "data": "process_mckfd_free_bridge_source_line",
+      "consumer": "process_mckfd_free_bridge",
+      "signed_CInt": 171,
+      "ABI_argument": "edx",
+      "current_instruction": "fffffffffe899cdb:\tba ab 00 00 00       \tmov    $0xab,%edx"
+    },
+    {
+      "data": "process_policy_free_bridge_source_line",
+      "consumer": "process_policy_free_bridge",
+      "signed_CInt": 253,
+      "ABI_argument": "edx",
+      "current_instruction": "fffffffffe89cc4b:\tba fd 00 00 00       \tmov    $0xfd,%edx"
+    },
+    {
+      "data": "process_optional_free_bridge_source_line",
+      "consumer": "process_optional_free_bridge",
+      "signed_CInt": 258,
+      "ABI_argument": "edx",
+      "current_instruction": "fffffffffe89b29b:\tba 02 01 00 00       \tmov    $0x102,%edx"
+    },
+    {
+      "data": "process_alloc_bridge_source_line",
+      "consumer": "process_alloc_bridge",
+      "signed_CInt": 340,
+      "ABI_argument": "ecx",
+      "current_instruction": "fffffffffe890a91:\tb9 54 01 00 00       \tmov    $0x154,%ecx"
+    },
+    {
+      "data": "process_free_vm_bridge_source_line",
+      "consumer": "process_free_vm_bridge",
+      "signed_CInt": 561,
+      "ABI_argument": "edx",
+      "current_instruction": "fffffffffe8977cb:\tba 31 02 00 00       \tmov    $0x231,%edx"
+    },
+    {
+      "data": "process_create_thread_alloc_pages_source_line",
+      "consumer": "process_create_thread_alloc_pages_bridge",
+      "signed_CInt": 788,
+      "ABI_argument": "stack eighth",
+      "current_instruction": "fffffffffe893e0c:\t68 14 03 00 00       \tpush   $0x314"
+    },
+    {
+      "data": "process_split_range_alloc_source_line",
+      "consumer": "process_split_range_alloc_bridge",
+      "signed_CInt": 1628,
+      "ABI_argument": "ecx",
+      "current_instruction": "fffffffffe8a0b31:\tb9 5c 06 00 00       \tmov    $0x65c,%ecx"
+    },
+    {
+      "data": "process_range_kfree_bridge_source_line",
+      "consumer": "process_range_kfree_bridge",
+      "signed_CInt": 1817,
+      "ABI_argument": "edx",
+      "current_instruction": "fffffffffe89dbeb:\tba 19 07 00 00       \tmov    $0x719,%edx"
+    },
+    {
+      "data": "process_free_range_pages_source_line",
+      "consumer": "process_memory_range_free_bridge",
+      "signed_CInt": 1873,
+      "ABI_argument": "r8d",
+      "current_instruction": "fffffffffe89a4f2:\t41 b8 51 07 00 00    \tmov    $0x751,%r8d"
+    },
+    {
+      "data": "process_add_range_alloc_bridge_source_line",
+      "consumer": "process_add_range_alloc_bridge",
+      "signed_CInt": 2256,
+      "ABI_argument": "ecx",
+      "current_instruction": "fffffffffe890256:\tb9 d0 08 00 00       \tmov    $0x8d0,%ecx"
+    },
+    {
+      "data": "process_add_range_free_bridge_source_line",
+      "consumer": "process_add_range_free_bridge",
+      "signed_CInt": 2261,
+      "ABI_argument": "edx",
+      "current_instruction": "fffffffffe89034b:\tba d5 08 00 00       \tmov    $0x8d5,%edx"
+    },
+    {
+      "data": "process_page_fault_anon_alloc_line",
+      "consumer": "process_page_fault_anon_allocate_body_result",
+      "signed_CInt": 3058,
+      "ABI_argument": "stack eighth",
+      "current_instruction": "fffffffffe89b339:\t68 f2 0b 00 00       \tpush   $0xbf2"
+    },
+    {
+      "data": "process_free_thread_pages_source_line",
+      "consumer": "process_free_thread_pages_bridge",
+      "signed_CInt": 3501,
+      "ABI_argument": "r8d",
+      "current_instruction": "fffffffffe897725:\t41 b8 ad 0d 00 00    \tmov    $0xdad,%r8d"
+    }
+  ],
+  "actual_current_R64_targets": 127,
+  "anonymous_string_targets": 11,
+  "no_anonymous_target_skipped": true,
+  "idle116": {
+    "tables": {
+      "process_idle_offsets": {
+        "Rust": {
+          "index": 6192,
+          "name": "process_idle_offsets",
+          "bind": 1,
+          "type": 1,
+          "shndx": 5779,
+          "value": 0,
+          "size": 80
+        },
+        "final": {
+          "index": 2005,
+          "name": "process_idle_offsets",
+          "bind": 1,
+          "type": 1,
+          "other": 0,
+          "shndx": 150,
+          "value": 18446744073685543272,
+          "size": 80
+        },
+        "size": 80,
+        "alignment": 8,
+        "bytes_hex": "981e000000000000a01e000000000000a81e000000000000081f000000000000f01e000000000000c01e000000000000e810000000000000581000000000000000000000000000000800000000000000",
+        "unique_Rust_provider": true,
+        "hidden_pointer_RELA": false
+      },
+      "process_idle_values": {
+        "Rust": {
+          "index": 6193,
+          "name": "process_idle_values",
+          "bind": 1,
+          "type": 1,
+          "shndx": 5780,
+          "value": 0,
+          "size": 36
+        },
+        "final": {
+          "index": 2377,
+          "name": "process_idle_values",
+          "bind": 1,
+          "type": 1,
+          "other": 0,
+          "shndx": 151,
+          "value": 18446744073685543352,
+          "size": 36
+        },
+        "size": 36,
+        "alignment": 4,
+        "bytes_hex": "020000000100000003000000010000002000000002000000020000000100000003000000",
+        "unique_Rust_provider": true,
+        "hidden_pointer_RELA": false
+      }
+    },
+    "consumer": "process_idle_entry",
+    "current_final_targets": [
+      {
+        "offset": 6,
+        "type": 1,
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe85ddf0",
+        "kind": "NAMED",
+        "target": "get_this_cpu_local_var",
+        "final_symbol": {
+          "name": "get_this_cpu_local_var",
+          "bind": 1,
+          "type": 2,
+          "other": 0,
+          "shndx": 1,
+          "value": 18446744073684770288,
+          "size": 102
+        }
+      },
+      {
+        "offset": 25,
+        "type": 1,
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe91a968",
+        "kind": "NAMED",
+        "target": "process_idle_offsets",
+        "final_symbol": {
+          "name": "process_idle_offsets",
+          "bind": 1,
+          "type": 1,
+          "other": 0,
+          "shndx": 150,
+          "value": 18446744073685543272,
+          "size": 80
+        }
+      },
+      {
+        "offset": 35,
+        "type": 1,
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe91a9b8",
+        "kind": "NAMED",
+        "target": "process_idle_values",
+        "final_symbol": {
+          "name": "process_idle_values",
+          "bind": 1,
+          "type": 1,
+          "other": 0,
+          "shndx": 151,
+          "value": 18446744073685543352,
+          "size": 36
+        }
+      },
+      {
+        "offset": 45,
+        "type": 1,
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe904968",
+        "kind": "NAMED",
+        "target": "process_idle_callbacks",
+        "final_symbol": {
+          "name": "process_idle_callbacks",
+          "bind": 1,
+          "type": 1,
+          "other": 0,
+          "shndx": 37,
+          "value": 18446744073685453160,
+          "size": 80
+        }
+      },
+      {
+        "offset": 55,
+        "type": 1,
+        "addend": 0,
+        "actual_final_address": "0xfffffffffe8b1230",
+        "kind": "NAMED",
+        "target": "sched_idle_loop_body_result",
+        "final_symbol": {
+          "name": "sched_idle_loop_body_result",
+          "bind": 1,
+          "type": 2,
+          "other": 0,
+          "shndx": 1,
+          "value": 18446744073685111344,
+          "size": 109
+        }
+      }
+    ],
+    "final_disassembly": "\n/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img:     file format elf64-x86-64\n\n\nDisassembly of section .text:\n\nfffffffffe897940 <process_idle_entry>:\nfffffffffe897940:\t55                   \tpush   %rbp\nfffffffffe897941:\t48 89 e5             \tmov    %rsp,%rbp\nfffffffffe897944:\t48 b8 f0 dd 85 fe ff \tmovabs $0xfffffffffe85ddf0,%rax\nfffffffffe89794b:\tff ff ff \nfffffffffe89794e:\tff d0                \tcall   *%rax\nfffffffffe897950:\t48 8b b0 40 1f 00 00 \tmov    0x1f40(%rax),%rsi\nfffffffffe897957:\t48 ba 68 a9 91 fe ff \tmovabs $0xfffffffffe91a968,%rdx\nfffffffffe89795e:\tff ff ff \nfffffffffe897961:\t48 b9 b8 a9 91 fe ff \tmovabs $0xfffffffffe91a9b8,%rcx\nfffffffffe897968:\tff ff ff \nfffffffffe89796b:\t49 b8 68 49 90 fe ff \tmovabs $0xfffffffffe904968,%r8\nfffffffffe897972:\tff ff ff \nfffffffffe897975:\t49 b9 30 12 8b fe ff \tmovabs $0xfffffffffe8b1230,%r9\nfffffffffe89797c:\tff ff ff \nfffffffffe89797f:\t48 89 c7             \tmov    %rax,%rdi\nfffffffffe897982:\t41 ff d1             \tcall   *%r9\n\nDisassembly of section .fixup:\n\nDisassembly of section .vsyscall:\n",
+    "ABI": {
+      "offsets": "RDX",
+      "values": "RCX",
+      "callbacks": "R8",
+      "provider": "sched_idle_loop_body_result"
+    }
+  },
+  "timer": {
+    "all15_words": [
+      4184,
+      4328,
+      4352,
+      4356,
+      5072,
+      7832,
+      7872,
+      7888,
+      7848,
+      7980,
+      8056,
+      0,
+      8,
+      32,
+      48
+    ],
+    "readonly120B_aligned8": true,
+    "nine_consumed_word_indices": [
+      0,
+      1,
+      3,
+      4,
+      5,
+      6,
+      8,
+      9,
+      10
+    ],
+    "six_data_only_word_indices": [
+      2,
+      7,
+      11,
+      12,
+      13,
+      14
+    ],
+    "current_consumed_instruction_tokens": {
+      "0": "-0x90(%rdx)",
+      "1": "0x1ec0(%r13)",
+      "3": "0x1c(%rdx)",
+      "4": "0x13d0(%rcx)",
+      "5": "0x1e98(%r13)",
+      "6": "0x1ec0(%r13)",
+      "8": "0x1ea8(%r13)",
+      "9": "0x1f2c(%r13)",
+      "10": "0x1f78(%r13)"
+    },
+    "final_set_timer_disassembly": "\n/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img:     file format elf64-x86-64\n\n\nDisassembly of section .text:\n\nfffffffffe8b8b10 <set_timer>:\nfffffffffe8b8b10:\t55                   \tpush   %rbp\nfffffffffe8b8b11:\t48 89 e5             \tmov    %rsp,%rbp\nfffffffffe8b8b14:\t41 57                \tpush   %r15\nfffffffffe8b8b16:\t41 56                \tpush   %r14\nfffffffffe8b8b18:\t41 55                \tpush   %r13\nfffffffffe8b8b1a:\t41 54                \tpush   %r12\nfffffffffe8b8b1c:\t53                   \tpush   %rbx\nfffffffffe8b8b1d:\t50                   \tpush   %rax\nfffffffffe8b8b1e:\tb9 01 01 00 c0       \tmov    $0xc0000101,%ecx\nfffffffffe8b8b23:\t0f 32                \trdmsr  \nfffffffffe8b8b25:\t48 c1 e2 20          \tshl    $0x20,%rdx\nfffffffffe8b8b29:\t89 c1                \tmov    %eax,%ecx\nfffffffffe8b8b2b:\t48 09 d1             \tor     %rdx,%rcx\nfffffffffe8b8b2e:\t49 bf 20 e9 95 fe ff \tmovabs $0xfffffffffe95e920,%r15\nfffffffffe8b8b35:\tff ff ff \nfffffffffe8b8b38:\t49 8b 17             \tmov    (%r15),%rdx\nfffffffffe8b8b3b:\t49 be d0 f9 8f fe ff \tmovabs $0xfffffffffe8ff9d0,%r14\nfffffffffe8b8b42:\tff ff ff \nfffffffffe8b8b45:\t48 c7 c0 ff ff ff ff \tmov    $0xffffffffffffffff,%rax\nfffffffffe8b8b4c:\t48 39 ca             \tcmp    %rcx,%rdx\nfffffffffe8b8b4f:\t77 19                \tja     fffffffffe8b8b6a <set_timer+0x5a>\nfffffffffe8b8b51:\t49 63 36             \tmovslq (%r14),%rsi\nfffffffffe8b8b54:\t48 c1 e6 0e          \tshl    $0xe,%rsi\nfffffffffe8b8b58:\t48 01 f2             \tadd    %rsi,%rdx\nfffffffffe8b8b5b:\t48 39 ca             \tcmp    %rcx,%rdx\nfffffffffe8b8b5e:\t72 0a                \tjb     fffffffffe8b8b6a <set_timer+0x5a>\nfffffffffe8b8b60:\t65 8b 04 25 00 00 00 \tmov    %gs:0x0,%eax\nfffffffffe8b8b67:\t00 \nfffffffffe8b8b68:\t48 98                \tcltq   \nfffffffffe8b8b6a:\t49 ba f8 90 95 fe ff \tmovabs $0xfffffffffe9590f8,%r10\nfffffffffe8b8b71:\tff ff ff \nfffffffffe8b8b74:\t4d 8b 2a             \tmov    (%r10),%r13\nfffffffffe8b8b77:\t4d 85 ed             \ttest   %r13,%r13\nfffffffffe8b8b7a:\t0f 84 87 02 00 00    \tje     fffffffffe8b8e07 <set_timer+0x2f7>\nfffffffffe8b8b80:\t48 b9 fc fa 8f fe ff \tmovabs $0xfffffffffe8ffafc,%rcx\nfffffffffe8b8b87:\tff ff ff \nfffffffffe8b8b8a:\t83 39 00             \tcmpl   $0x0,(%rcx)\nfffffffffe8b8b8d:\t0f 84 74 02 00 00    \tje     fffffffffe8b8e07 <set_timer+0x2f7>\nfffffffffe8b8b93:\t48 69 c0 c0 1f 00 00 \timul   $0x1fc0,%rax,%rax\nfffffffffe8b8b9a:\t49 01 c5             \tadd    %rax,%r13\nfffffffffe8b8b9d:\t85 ff                \ttest   %edi,%edi\nfffffffffe8b8b9f:\t74 05                \tje     fffffffffe8b8ba6 <set_timer+0x96>\nfffffffffe8b8ba1:\t45 31 db             \txor    %r11d,%r11d\nfffffffffe8b8ba4:\teb 75                \tjmp    fffffffffe8b8c1b <set_timer+0x10b>\nfffffffffe8b8ba6:\t9c                   \tpushf  \nfffffffffe8b8ba7:\t41 5b                \tpop    %r11\nfffffffffe8b8ba9:\tfa                   \tcli    \nfffffffffe8b8baa:\t48 b8 00 91 95 fe ff \tmovabs $0xfffffffffe959100,%rax\nfffffffffe8b8bb1:\tff ff ff \nfffffffffe8b8bb4:\t83 38 00             \tcmpl   $0x0,(%rax)\nfffffffffe8b8bb7:\t74 4a                \tje     fffffffffe8b8c03 <set_timer+0xf3>\nfffffffffe8b8bb9:\tb9 01 01 00 c0       \tmov    $0xc0000101,%ecx\nfffffffffe8b8bbe:\t0f 32                \trdmsr  \nfffffffffe8b8bc0:\t48 c1 e2 20          \tshl    $0x20,%rdx\nfffffffffe8b8bc4:\t89 c1                \tmov    %eax,%ecx\nfffffffffe8b8bc6:\t48 09 d1             \tor     %rdx,%rcx\nfffffffffe8b8bc9:\t49 8b 17             \tmov    (%r15),%rdx\nfffffffffe8b8bcc:\t48 c7 c0 ff ff ff ff \tmov    $0xffffffffffffffff,%rax\nfffffffffe8b8bd3:\t48 39 ca             \tcmp    %rcx,%rdx\nfffffffffe8b8bd6:\t77 19                \tja     fffffffffe8b8bf1 <set_timer+0xe1>\nfffffffffe8b8bd8:\t49 63 36             \tmovslq (%r14),%rsi\nfffffffffe8b8bdb:\t48 c1 e6 0e          \tshl    $0xe,%rsi\nfffffffffe8b8bdf:\t48 01 f2             \tadd    %rsi,%rdx\nfffffffffe8b8be2:\t48 39 ca             \tcmp    %rcx,%rdx\nfffffffffe8b8be5:\t72 0a                \tjb     fffffffffe8b8bf1 <set_timer+0xe1>\nfffffffffe8b8be7:\t65 8b 04 25 00 00 00 \tmov    %gs:0x0,%eax\nfffffffffe8b8bee:\t00 \nfffffffffe8b8bef:\t48 98                \tcltq   \nfffffffffe8b8bf1:\t49 8b 0a             \tmov    (%r10),%rcx\nfffffffffe8b8bf4:\t48 69 c0 c0 1f 00 00 \timul   $0x1fc0,%rax,%rax\nfffffffffe8b8bfb:\tf0 ff 84 01 28 1f 00 \tlock incl 0x1f28(%rcx,%rax,1)\nfffffffffe8b8c02:\t00 \nfffffffffe8b8c03:\tb9 00 00 02 00       \tmov    $0x20000,%ecx\nfffffffffe8b8c08:\tf0 41 0f c1 8d 98 1e \tlock xadd %ecx,0x1e98(%r13)\nfffffffffe8b8c0f:\t00 00 \nfffffffffe8b8c11:\t89 c8                \tmov    %ecx,%eax\nfffffffffe8b8c13:\tc1 e8 10             \tshr    $0x10,%eax\nfffffffffe8b8c16:\t66 39 c1             \tcmp    %ax,%cx\nfffffffffe8b8c19:\t75 35                \tjne    fffffffffe8b8c50 <set_timer+0x140>\nfffffffffe8b8c1b:\t49 8d 8d c0 1e 00 00 \tlea    0x1ec0(%r13),%rcx\nfffffffffe8b8c22:\t49 8b 95 c0 1e 00 00 \tmov    0x1ec0(%r13),%rdx\nfffffffffe8b8c29:\t48 39 ca             \tcmp    %rcx,%rdx\nfffffffffe8b8c2c:\t75 32                \tjne    fffffffffe8b8c60 <set_timer+0x150>\nfffffffffe8b8c2e:\t49 8b 8d a8 1e 00 00 \tmov    0x1ea8(%r13),%rcx\nfffffffffe8b8c35:\t31 c0                \txor    %eax,%eax\nfffffffffe8b8c37:\t48 85 c9             \ttest   %rcx,%rcx\nfffffffffe8b8c3a:\t75 66                \tjne    fffffffffe8b8ca2 <set_timer+0x192>\nfffffffffe8b8c3c:\t49 8d 95 78 1f 00 00 \tlea    0x1f78(%r13),%rdx\nfffffffffe8b8c43:\t49 8b 8d 78 1f 00 00 \tmov    0x1f78(%r13),%rcx\nfffffffffe8b8c4a:\teb 73                \tjmp    fffffffffe8b8cbf <set_timer+0x1af>\nfffffffffe8b8c4c:\t0f 1f 40 00          \tnopl   0x0(%rax)\nfffffffffe8b8c50:\t41 8b 8d 98 1e 00 00 \tmov    0x1e98(%r13),%ecx\nfffffffffe8b8c57:\t66 39 c1             \tcmp    %ax,%cx\nfffffffffe8b8c5a:\t74 bf                \tje     fffffffffe8b8c1b <set_timer+0x10b>\nfffffffffe8b8c5c:\tf3 90                \tpause  \nfffffffffe8b8c5e:\teb f0                \tjmp    fffffffffe8b8c50 <set_timer+0x140>\nfffffffffe8b8c60:\t31 c0                \txor    %eax,%eax\nfffffffffe8b8c62:\t66 66 66 66 66 2e 0f \tdata16 data16 data16 data16 cs nopw 0x0(%rax,%rax,1)\nfffffffffe8b8c69:\t1f 84 00 00 00 00 00 \nfffffffffe8b8c70:\t8b b2 70 ff ff ff    \tmov    -0x90(%rdx),%esi\nfffffffffe8b8c76:\t83 fe 01             \tcmp    $0x1,%esi\nfffffffffe8b8c79:\t40 0f 94 c6          \tsete   %sil\nfffffffffe8b8c7d:\t83 7a 1c 00          \tcmpl   $0x0,0x1c(%rdx)\nfffffffffe8b8c81:\t41 0f 95 c0          \tsetne  %r8b\nfffffffffe8b8c85:\t41 08 f0             \tor     %sil,%r8b\nfffffffffe8b8c88:\t41 0f b6 f0          \tmovzbl %r8b,%esi\nfffffffffe8b8c8c:\t01 f0                \tadd    %esi,%eax\nfffffffffe8b8c8e:\t48 8b 12             \tmov    (%rdx),%rdx\nfffffffffe8b8c91:\t48 39 ca             \tcmp    %rcx,%rdx\nfffffffffe8b8c94:\t75 da                \tjne    fffffffffe8b8c70 <set_timer+0x160>\nfffffffffe8b8c96:\t49 8b 8d a8 1e 00 00 \tmov    0x1ea8(%r13),%rcx\nfffffffffe8b8c9d:\t48 85 c9             \ttest   %rcx,%rcx\nfffffffffe8b8ca0:\t74 72                \tje     fffffffffe8b8d14 <set_timer+0x204>\nfffffffffe8b8ca2:\t8b 91 d0 13 00 00    \tmov    0x13d0(%rcx),%edx\nfffffffffe8b8ca8:\t49 8b 8d 78 1f 00 00 \tmov    0x1f78(%r13),%rcx\nfffffffffe8b8caf:\t83 f8 01             \tcmp    $0x1,%eax\nfffffffffe8b8cb2:\t7f 6c                \tjg     fffffffffe8b8d20 <set_timer+0x210>\nfffffffffe8b8cb4:\t85 d2                \ttest   %edx,%edx\nfffffffffe8b8cb6:\t75 68                \tjne    fffffffffe8b8d20 <set_timer+0x210>\nfffffffffe8b8cb8:\t49 8d 95 78 1f 00 00 \tlea    0x1f78(%r13),%rdx\nfffffffffe8b8cbf:\t4d 8d a5 2c 1f 00 00 \tlea    0x1f2c(%r13),%r12\nfffffffffe8b8cc6:\t41 8b 85 2c 1f 00 00 \tmov    0x1f2c(%r13),%eax\nfffffffffe8b8ccd:\t48 39 d1             \tcmp    %rdx,%rcx\nfffffffffe8b8cd0:\t75 5c                \tjne    fffffffffe8b8d2e <set_timer+0x21e>\nfffffffffe8b8cd2:\t85 c0                \ttest   %eax,%eax\nfffffffffe8b8cd4:\t74 5c                \tje     fffffffffe8b8d32 <set_timer+0x222>\nfffffffffe8b8cd6:\t48 b8 10 e9 95 fe ff \tmovabs $0xfffffffffe95e910,%rax\nfffffffffe8b8cdd:\tff ff ff \nfffffffffe8b8ce0:\t89 7d d4             \tmov    %edi,-0x2c(%rbp)\nfffffffffe8b8ce3:\tbf 80 03 00 00       \tmov    $0x380,%edi\nfffffffffe8b8ce8:\t31 f6                \txor    %esi,%esi\nfffffffffe8b8cea:\t4c 89 db             \tmov    %r11,%rbx\nfffffffffe8b8ced:\tff 10                \tcall   *(%rax)\nfffffffffe8b8cef:\t49 89 db             \tmov    %rbx,%r11\nfffffffffe8b8cf2:\t49 ba f8 90 95 fe ff \tmovabs $0xfffffffffe9590f8,%r10\nfffffffffe8b8cf9:\tff ff ff \nfffffffffe8b8cfc:\t8b 7d d4             \tmov    -0x2c(%rbp),%edi\nfffffffffe8b8cff:\t41 c7 04 24 00 00 00 \tmovl   $0x0,(%r12)\nfffffffffe8b8d06:\t00 \nfffffffffe8b8d07:\t85 ff                \ttest   %edi,%edi\nfffffffffe8b8d09:\t0f 85 f8 00 00 00    \tjne    fffffffffe8b8e07 <set_timer+0x2f7>\nfffffffffe8b8d0f:\te9 8d 00 00 00       \tjmp    fffffffffe8b8da1 <set_timer+0x291>\nfffffffffe8b8d14:\t49 8b 8d 78 1f 00 00 \tmov    0x1f78(%r13),%rcx\nfffffffffe8b8d1b:\t83 f8 01             \tcmp    $0x1,%eax\nfffffffffe8b8d1e:\t7e 98                \tjle    fffffffffe8b8cb8 <set_timer+0x1a8>\nfffffffffe8b8d20:\t4d 8d a5 2c 1f 00 00 \tlea    0x1f2c(%r13),%r12\nfffffffffe8b8d27:\t41 8b 85 2c 1f 00 00 \tmov    0x1f2c(%r13),%eax\nfffffffffe8b8d2e:\t85 c0                \ttest   %eax,%eax\nfffffffffe8b8d30:\t74 0a                \tje     fffffffffe8b8d3c <set_timer+0x22c>\nfffffffffe8b8d32:\t85 ff                \ttest   %edi,%edi\nfffffffffe8b8d34:\t0f 85 cd 00 00 00    \tjne    fffffffffe8b8e07 <set_timer+0x2f7>\nfffffffffe8b8d3a:\teb 65                \tjmp    fffffffffe8b8da1 <set_timer+0x291>\nfffffffffe8b8d3c:\t49 be 10 e9 95 fe ff \tmovabs $0xfffffffffe95e910,%r14\nfffffffffe8b8d43:\tff ff ff \nfffffffffe8b8d46:\t89 fb                \tmov    %edi,%ebx\nfffffffffe8b8d48:\tbf 80 03 00 00       \tmov    $0x380,%edi\nfffffffffe8b8d4d:\tbe 24 f4 00 00       \tmov    $0xf424,%esi\nfffffffffe8b8d52:\t4d 89 df             \tmov    %r11,%r15\nfffffffffe8b8d55:\t41 ff 16             \tcall   *(%r14)\nfffffffffe8b8d58:\tbf e0 03 00 00       \tmov    $0x3e0,%edi\nfffffffffe8b8d5d:\tbe 03 00 00 00       \tmov    $0x3,%esi\nfffffffffe8b8d62:\t41 ff 16             \tcall   *(%r14)\nfffffffffe8b8d65:\tbf 20 03 00 00       \tmov    $0x320,%edi\nfffffffffe8b8d6a:\tbe ef 00 02 00       \tmov    $0x200ef,%esi\nfffffffffe8b8d6f:\t41 ff 16             \tcall   *(%r14)\nfffffffffe8b8d72:\t4d 89 fb             \tmov    %r15,%r11\nfffffffffe8b8d75:\t49 ba f8 90 95 fe ff \tmovabs $0xfffffffffe9590f8,%r10\nfffffffffe8b8d7c:\tff ff ff \nfffffffffe8b8d7f:\t49 bf 20 e9 95 fe ff \tmovabs $0xfffffffffe95e920,%r15\nfffffffffe8b8d86:\tff ff ff \nfffffffffe8b8d89:\t49 be d0 f9 8f fe ff \tmovabs $0xfffffffffe8ff9d0,%r14\nfffffffffe8b8d90:\tff ff ff \nfffffffffe8b8d93:\t89 df                \tmov    %ebx,%edi\nfffffffffe8b8d95:\t41 c7 04 24 01 00 00 \tmovl   $0x1,(%r12)\nfffffffffe8b8d9c:\t00 \nfffffffffe8b8d9d:\t85 ff                \ttest   %edi,%edi\nfffffffffe8b8d9f:\t75 66                \tjne    fffffffffe8b8e07 <set_timer+0x2f7>\nfffffffffe8b8da1:\t66 f0 41 83 85 98 1e \tlock addw $0x2,0x1e98(%r13)\nfffffffffe8b8da8:\t00 00 02 \nfffffffffe8b8dab:\t48 b8 00 91 95 fe ff \tmovabs $0xfffffffffe959100,%rax\nfffffffffe8b8db2:\tff ff ff \nfffffffffe8b8db5:\t83 38 00             \tcmpl   $0x0,(%rax)\nfffffffffe8b8db8:\t74 4a                \tje     fffffffffe8b8e04 <set_timer+0x2f4>\nfffffffffe8b8dba:\tb9 01 01 00 c0       \tmov    $0xc0000101,%ecx\nfffffffffe8b8dbf:\t0f 32                \trdmsr  \nfffffffffe8b8dc1:\t48 c1 e2 20          \tshl    $0x20,%rdx\nfffffffffe8b8dc5:\t89 c1                \tmov    %eax,%ecx\nfffffffffe8b8dc7:\t48 09 d1             \tor     %rdx,%rcx\nfffffffffe8b8dca:\t49 8b 17             \tmov    (%r15),%rdx\nfffffffffe8b8dcd:\t48 c7 c0 ff ff ff ff \tmov    $0xffffffffffffffff,%rax\nfffffffffe8b8dd4:\t48 39 ca             \tcmp    %rcx,%rdx\nfffffffffe8b8dd7:\t77 19                \tja     fffffffffe8b8df2 <set_timer+0x2e2>\nfffffffffe8b8dd9:\t49 63 36             \tmovslq (%r14),%rsi\nfffffffffe8b8ddc:\t48 c1 e6 0e          \tshl    $0xe,%rsi\nfffffffffe8b8de0:\t48 01 f2             \tadd    %rsi,%rdx\nfffffffffe8b8de3:\t48 39 ca             \tcmp    %rcx,%rdx\nfffffffffe8b8de6:\t72 0a                \tjb     fffffffffe8b8df2 <set_timer+0x2e2>\nfffffffffe8b8de8:\t65 8b 04 25 00 00 00 \tmov    %gs:0x0,%eax\nfffffffffe8b8def:\t00 \nfffffffffe8b8df0:\t48 98                \tcltq   \nfffffffffe8b8df2:\t49 8b 0a             \tmov    (%r10),%rcx\nfffffffffe8b8df5:\t48 69 c0 c0 1f 00 00 \timul   $0x1fc0,%rax,%rax\nfffffffffe8b8dfc:\tf0 ff 8c 01 28 1f 00 \tlock decl 0x1f28(%rcx,%rax,1)\nfffffffffe8b8e03:\t00 \nfffffffffe8b8e04:\t41 53                \tpush   %r11\nfffffffffe8b8e06:\t9d                   \tpopf   \nfffffffffe8b8e07:\t48 83 c4 08          \tadd    $0x8,%rsp\nfffffffffe8b8e0b:\t5b                   \tpop    %rbx\nfffffffffe8b8e0c:\t41 5c                \tpop    %r12\nfffffffffe8b8e0e:\t41 5d                \tpop    %r13\nfffffffffe8b8e10:\t41 5e                \tpop    %r14\nfffffffffe8b8e12:\t41 5f                \tpop    %r15\nfffffffffe8b8e14:\t5d                   \tpop    %rbp\nfffffffffe8b8e15:\tc3                   \tret    \n\nDisassembly of section .fixup:\n\nDisassembly of section .vsyscall:\n"
+  },
+  "scripted_HOST13_OPEN_preserved": true,
+  "scope_limit": "Exact current default selected artifact consumers only; no execution/native/whole-file or Source38 clearance.",
+  "compiler_or_workload_actions": 0,
+  "native_acceptance": false,
+  "whole_file_retirement": false
+}
