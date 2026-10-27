@@ -1,3 +1,79 @@
+## NEXT10 default artifact accepted; short daemon diagnosis next — 2026-10-27T04:09Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Goal ACTIVE. Root sole canonical/Git/heavy owner; fixed11:24:50Z/account unchanged.
+NEXT10 nonce05779a0ade362eb7876ce6b6ef768877 CONSUMED ONCE. Tool97941 joined0;
+holder1393280/start87127204 and runner1393451/start87132596 absent. Fourcommands0,
+Rust+twoC+11inputlink; all8unchangedC/source6153/SDK21 retained, no prefix rebuild.
+Imagef42a871d83fcd1f30c9ee66734a8ba760a8587797c4e076079da0e37bfbcb908/10241736B.
+Independentartifact+retainedpostjoin decision b9edb7a5 PASS; actualC82→76/F0649→45,
+33Rustexports/U−4+0/clone/F02data/panic/logger/ld gates allPASS. Sole newRustwarning
+141=140+typedvm/range rawpointer declarations: exact9arg x86_64 C ABI equivalence
+independently accepted using actual realheader56case proof; no suppression/broadwaiver.
+C7/0/RWX debts unchanged. Native matchingf42 PENDING; no newwholefile/fullM14/M15 credit.
+
+Compile first1793073881.658714, finish3902.761326, wall21.102612/CPU21.109092,
+peakchildRSS589460KiB. Resource→firstcompiler45.574457s. Acceptance4097.763127:
+compilefinish→acceptance195.001801s; positive tool-join observation→acceptance173.701977s.
+Exactjoin event timestamp UNKNOWN, so180starget NOT VERIFIED. Source-readyUNKNOWN;
+explicit02:38:19 observation→firstcompiler5182.280595s remains separate. No95%claim.
+CID2d059a5d15b7e24b0d500b638ef5ce8d78bcf3a3eb1ec2804e1771fec527deed retainedexited0,
+PID0/noOOM; exactpostjoin1ba5e930 at1793073945.586245 verifiesactorsabsent/probesclosed/
+permanent27:4/mounts/floors. Retained stoppedcontainer is not nativecustody or cleanup duty.
+
+Convergence lesson from actual delay: preparing downstream validators before entry
+is an efficiency tactic, NOT an additional build execution gate. The unchanged
+build-only profile may compile under genuine source/input/ownership/account/window/
+CPU/memory/PID/physical guards while reporting/acceptance repair proceeds in parallel.
+Artifact/native/retirement claims still wait for real validators and independent
+material ABI disposition. Do not forge sourcePASS, bypass enforced guards or widenTTL.
+
+New ordinaryHOST results: F03 sync-child3commands PASS3072graphpairs+9controls+
+49layout/8offset/4attr, wall0.317632/CPU0.216590/RSS102160; F06 processVM4commands
+PASS ABI22/40controlledpairs/4invalidflags, wall0.423645/CPU0.377490/RSS102996.
+Allchildrenjoined/CPU6free; fixturemockscopes only, actualMM/PMU/lifetime/nativeOPEN.
+Wrapper failures and bounded corrections retained; no repeated passedprefixes.
+
+NEXT Root: same-image daemon8s/pids64 reproducer SourcePASS9e1f69b9/map25 9f16dd3a,
+owner partial_runtime_finish preparing deterministicRootstaticbatch. Freshnonce,
+sourcepub/current18-nonceledger/latestb9postjoin/currentreservation/exactreview needed;
+no runtimeauthority yet. HistoricalextraTIDunknown and NOT_REPRODUCED distinct, no
+original26argv replay. Prepared FP adapter abf729d4/42purechecks binds qualifiedf42
+next, original254Boracle unchanged; no guest/runtime release yet. Root remains oneheavy.
+
+## NEXT10 source integrated; validator correction before actual build — 2026-10-27T04:00Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Goal ACTIVE, same fixed11:24:50Z/account/ownership controls. Review1494228 adds
+0 accepted default/native/file/C-boundary closures since03:40snapshot. M14F01 and
+M15F01 supported file closures remain; fullM14/M15 OPEN. Earlier notes historical.
+Eight NEXT10 source postimages adopted exactly, committed023fc4791; data-only
+four-command staticbinding/toolsd0ab58e52 published/fetched. Nonce05779a0ade362eb7876ce6b6ef768877
+is RESERVED UNUSED; no holder/clock/grant/compiler/container for NEXT10 yet.
+
+Current concrete guard: versioned readonly-validator report must reference actual
+retainedF02 object, not mountplaceholder; enforce prepublished frozenbaseline hashes
+and exact remaining C-function sets. No new oracle/quota/source behavior. Existing
+postjoin reader receives exactnew data bindings before workload; unchanged controls.
+Root next after frozen correction/publication+reviewer readiness: ordinaryUID1000
+hold_and_run_build_only.py --bootstrap-grant ROOT-HOLDER-BOOTSTRAP-GRANT.json in
+ROOT-NEXT10-DEFAULT-BUILD-ADMISSION-1; actualheld capture, one120s exactreview, RootGO.
+Fourcommands/eightretainedCinputs/source6153/SDK21 unchanged; no prefix rebuild.
+
+Parallel actual F06 GCC9 publicABI compile PASS (privateuio include-only correction),
+wall0.052750/CPU0.042214/RSS28484KiB, childjoined/groupabsent/CPU6released. Both
+failedwrapper/generated-null and missingheader attempts retained. No runtime22fact/
+VMlock192/native credit. F03 sync-child exact3HOSTbatch now has soleCPU6grant;
+actualfirstcompiler/results pending. FP staticcomposition advances separately.
+Four actualturns observed: Root/qualified_batch_default_profile/native_retirement_repair/mm_unlock_fixture.
+Daemon same-image reproducer newprofile is source-only/fivepurechecks, not entered.
+
+Largest avoidable handoff remains static/admission/acceptance serialization, not
+capacity. Actualheavy firstcompiler/blocked-duration timestamps UNKNOWN; no95% or
+180s success claim. SnapshotHOST150680338432B/scratch47871762432B/availableRAM26606636KiB,
+load0.93; caps/reserve/permanent27:4/scratch21 unchanged. Strategy: prebind exact
+validator+observer and overlap ordinarybehavior checks, rather than prepare afterjoin.
+
 ## Safe idle checkpoint: F01 complete; daemon failure retired; NEXT10 next — 2026-10-27T03:47Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

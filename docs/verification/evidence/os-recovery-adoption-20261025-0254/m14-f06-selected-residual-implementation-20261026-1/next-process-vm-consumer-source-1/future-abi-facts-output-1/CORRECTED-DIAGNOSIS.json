@@ -1,0 +1,15 @@
+{
+  "status": "OBSERVER_NULL_EXPECTATION_DEFECT_NO_INPUT_DRIFT",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "supersedes_interpretation_only": "BOUNDED-DIAGNOSIS.json manifest-conflict wording; original file preserved",
+  "cause": "run_once.py compared generated config against expected_source_sha256=null. For generated header this optional field has no source counterpart; dependency_row.actual.sha256 is the bound generated identity.",
+  "actual_generated_sha256": "da78d6a8c94b274adad3159b1cc373b00e5de7fea6cc2ae7955a700078db6b2f",
+  "actual_matches_explicit_generated_and_dependency_actual": true,
+  "proposed_source_correction": "For /work/output/build dependencies compare actual.sha256; for /src dependencies retain expected_source_sha256 check. No fallback when a required bound generated identity is absent.",
+  "compiler_started": false,
+  "compiler_attempts": 0,
+  "CPU6_free": true,
+  "unchanged_retry": false,
+  "grant_ended": "preflight reject",
+  "next": "Dispatcher review the finite observer correction and grant a fresh output attempt; no compiler or retry authorized here."
+}

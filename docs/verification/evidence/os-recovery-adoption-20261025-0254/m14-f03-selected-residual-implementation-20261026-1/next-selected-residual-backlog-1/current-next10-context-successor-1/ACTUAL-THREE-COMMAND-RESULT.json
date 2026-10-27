@@ -1,0 +1,442 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_THREE_COMMANDS_SYNC3072_CONTROLS9_LAYOUT49_OFFSETS8_ATTR4",
+  "records": [
+    {
+      "command": {
+        "label": "00-unchanged-sync-entry-Rust-layout-existing-helper-object",
+        "argv": [
+          "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+          "--crate-name",
+          "f03_sync_child_event_bound",
+          "--crate-type",
+          "lib",
+          "--edition=2021",
+          "-C",
+          "panic=abort",
+          "-C",
+          "opt-level=2",
+          "--cfg",
+          "enable_profile",
+          "--cfg",
+          "enable_perf",
+          "--cfg",
+          "f03_sync_child_event_candidate",
+          "--cfg",
+          "f03_sync_child_fixture",
+          "--emit=obj=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/output-PENDING-ROOT/sync_child.o",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/lib.fixture.rs"
+        ],
+        "cwd": "/home/holden/mckernel",
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Controlled HOST original-C/Rust sync-child entry and complete real perf-event ABI. PMU reads are explicit scalar mocks; genuine existing atomic64 stores operate only on initialized HOST event fields. No actual rdpmc/MSR/CR/IRQ/context-switch/syscall/kernel/allocator/refcount/current-stack operation.",
+        "argv_compact_json_LF_sha256": "1aa7932b4db1d407c47a694b585cb1c77077a491773f1799fcb2606ebd378ce7"
+      },
+      "join": {
+        "pid": 1392171,
+        "start": 87105202,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.1250103439670056,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/actual-three-command-capture-1/00-unchanged-sync-entry-Rust-layout-existing-helper-object/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59663464,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793073607319913771,
+            "ctime_ns": 1793073607319913771
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/actual-three-command-capture-1/00-unchanged-sync-entry-Rust-layout-existing-helper-object/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59663465,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793073607319913771,
+            "ctime_ns": 1793073607319913771
+          }
+        }
+      },
+      "metrics": {
+        "started_UTC": "2026-10-27T04:00:07.323788+00:00",
+        "wall_seconds": 0.12616327300202101,
+        "child_user_CPU_seconds": 0.079007,
+        "child_system_CPU_seconds": 0.012473999999999999,
+        "fresh_batch_peak_child_RSS_KiB": 102160,
+        "peak_RSS_scope": "fresh batch cumulative actual child rusage high water; not an invented per-command peak",
+        "environment_relevant": {
+          "PATH": "/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/.local/bin:/home/holden/.codex/tmp/arg0-linux/codex-arg0zhkCqC:/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/anaconda3/bin:/home/holden/anaconda3/condabin:/home/holden/.cargo/bin:/home/holden/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+          "LC_ALL": "C",
+          "LANG": "en_US.UTF-8",
+          "RUST_MIN_STACK": "2097152",
+          "OMP_NUM_THREADS": "1",
+          "RAYON_NUM_THREADS": "1",
+          "CARGO_BUILD_JOBS": "7",
+          "MAKEFLAGS": "-j7",
+          "C_INCLUDE_PATH": null,
+          "LIBRARY_PATH": null,
+          "LD_LIBRARY_PATH": null,
+          "RUSTFLAGS": null,
+          "RUSTUP_TOOLCHAIN": null
+        },
+        "admission": {
+          "wall": 1793073607.3222082,
+          "monotonic": 855713.891165065,
+          "boottime": 871052.018215852,
+          "fixed_cutoff_ref": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+            "bytes": 952,
+            "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+          },
+          "memory_available_bytes": 27242655744,
+          "aggregate_reserved_bytes": 21474836480,
+          "budget": {
+            "schema_version": 2,
+            "id": "7f4af94a83b14cc08f97401f5891d965",
+            "budget": "57774.852125",
+            "initial_balance": "57774.8521250000",
+            "minimum_balance": "52079.8011050000",
+            "last_balance": "52079.8011050000",
+            "spent": "22812.3311000000",
+            "remaining": "34962.5210250000",
+            "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+          },
+          "heartbeat_at": "2026-10-27T04:00:02.200582+00:00",
+          "phase": "running",
+          "account_wall": 1793073607.3224876,
+          "heartbeat_age_seconds": 5.121905565261841,
+          "available_prepaid_balance": "52079.8011050000",
+          "spendControlReached": false,
+          "loadavg": [
+            1.01,
+            0.94,
+            0.95
+          ],
+          "CPU_affinity": [
+            6
+          ],
+          "HOST_available_bytes": 150680526848,
+          "scratch_available_bytes": 47871762432
+        }
+      }
+    },
+    {
+      "command": {
+        "label": "01-genuine-header-original-C-entry-and49word-layout-link",
+        "argv": [
+          "/usr/bin/gcc-9",
+          "-Werror=incompatible-pointer-types",
+          "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+          "-DIHK_OS_MANYCORE",
+          "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+          "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+          "-DMCKERNEL_NATIVE_CLONE3",
+          "-DMCKERNEL_NATIVE_CLONE_TID",
+          "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+          "-DMCKERNEL_NATIVE_FUTEX",
+          "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+          "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+          "-DMCKERNEL_RUST_BITOPS",
+          "-DMCKERNEL_RUST_LIST_HELPERS",
+          "-DMCKERNEL_RUST_LOCK_HELPERS",
+          "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_PTE_HELPERS",
+          "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+          "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+          "-DPROFILE_ENABLE",
+          "-D__KERNEL__",
+          "-DMCKERNEL_NATIVE_FORK_OWNED_TRANSACTION",
+          "-DMCKERNEL_RUST_RLIMIT_HELPERS",
+          "-DMCKERNEL_RUST_SCHED_POLICY_HELPERS",
+          "-DMCKERNEL_RUST_SCHED_PRIO_HELPERS",
+          "-DMCKERNEL_RUST_SHMID_HELPERS",
+          "-DMCKERNEL_RUST_SHM_PERM_HELPERS",
+          "-DMCKERNEL_RUST_SIGNAL_HELPERS",
+          "-DMCKERNEL_RUST_SYSCALL_OFFLOAD",
+          "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+          "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build/kernel/include",
+          "-I/home/holden/mckernel/kernel/include",
+          "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build/kernel",
+          "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build",
+          "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+          "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+          "-I/home/holden/mckernel/ihk/ikc/include",
+          "-I/home/holden/mckernel/ihk/linux/include",
+          "-I/home/holden/mckernel/lib/include",
+          "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wno-sign-compare",
+          "-Wno-unused-function",
+          "-Wno-implicit-fallthrough",
+          "-Wno-stringop-truncation",
+          "-ffreestanding",
+          "-O2",
+          "-nostdinc",
+          "-isystem",
+          "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+          "-fno-omit-frame-pointer",
+          "-mcmodel=large",
+          "-mno-red-zone",
+          "-mno-sse",
+          "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+          "-DMCKERNEL_RUST_F03_SYNC_CHILD_EVENT",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/driver.c",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/output-PENDING-ROOT/sync_child.o",
+          "-no-pie",
+          "-o",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/output-PENDING-ROOT/parity"
+        ],
+        "cwd": "/home/holden/mckernel",
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Controlled HOST original-C/Rust sync-child entry and complete real perf-event ABI. PMU reads are explicit scalar mocks; genuine existing atomic64 stores operate only on initialized HOST event fields. No actual rdpmc/MSR/CR/IRQ/context-switch/syscall/kernel/allocator/refcount/current-stack operation.",
+        "argv_compact_json_LF_sha256": "dd1ba84b4ef5a10bc6bdf2c1432ed9bb2714661658d4f8de87c35363214c56ed"
+      },
+      "join": {
+        "pid": 1392178,
+        "start": 87105215,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.15673104603774846,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/actual-three-command-capture-1/01-genuine-header-original-C-entry-and49word-layout-link/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59663473,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793073607451917745,
+            "ctime_ns": 1793073607451917745
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/actual-three-command-capture-1/01-genuine-header-original-C-entry-and49word-layout-link/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59663474,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793073607451917745,
+            "ctime_ns": 1793073607451917745
+          }
+        }
+      },
+      "metrics": {
+        "started_UTC": "2026-10-27T04:00:07.457093+00:00",
+        "wall_seconds": 0.15808564005419612,
+        "child_user_CPU_seconds": 0.113828,
+        "child_system_CPU_seconds": 0.009274999999999999,
+        "fresh_batch_peak_child_RSS_KiB": 102160,
+        "peak_RSS_scope": "fresh batch cumulative actual child rusage high water; not an invented per-command peak",
+        "environment_relevant": {
+          "PATH": "/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/.local/bin:/home/holden/.codex/tmp/arg0-linux/codex-arg0zhkCqC:/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/anaconda3/bin:/home/holden/anaconda3/condabin:/home/holden/.cargo/bin:/home/holden/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+          "LC_ALL": "C",
+          "LANG": "en_US.UTF-8",
+          "RUST_MIN_STACK": "2097152",
+          "OMP_NUM_THREADS": "1",
+          "RAYON_NUM_THREADS": "1",
+          "CARGO_BUILD_JOBS": "7",
+          "MAKEFLAGS": "-j7",
+          "C_INCLUDE_PATH": null,
+          "LIBRARY_PATH": null,
+          "LD_LIBRARY_PATH": null,
+          "RUSTFLAGS": null,
+          "RUSTUP_TOOLCHAIN": null
+        },
+        "admission": {
+          "wall": 1793073607.4555287,
+          "monotonic": 855714.024485268,
+          "boottime": 871052.151536278,
+          "fixed_cutoff_ref": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+            "bytes": 952,
+            "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+          },
+          "memory_available_bytes": 27243917312,
+          "aggregate_reserved_bytes": 21474836480,
+          "budget": {
+            "schema_version": 2,
+            "id": "7f4af94a83b14cc08f97401f5891d965",
+            "budget": "57774.852125",
+            "initial_balance": "57774.8521250000",
+            "minimum_balance": "52079.8011050000",
+            "last_balance": "52079.8011050000",
+            "spent": "22812.3311000000",
+            "remaining": "34962.5210250000",
+            "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+          },
+          "heartbeat_at": "2026-10-27T04:00:02.200582+00:00",
+          "phase": "running",
+          "account_wall": 1793073607.4558377,
+          "heartbeat_age_seconds": 5.255255699157715,
+          "available_prepaid_balance": "52079.8011050000",
+          "spendControlReached": false,
+          "loadavg": [
+            1.01,
+            0.94,
+            0.95
+          ],
+          "CPU_affinity": [
+            6
+          ],
+          "HOST_available_bytes": 150680481792,
+          "scratch_available_bytes": 47871762432
+        }
+      }
+    },
+    {
+      "command": {
+        "label": "02-sync3072-graphs9controls49layout8offset4attr-pattern",
+        "argv": [
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/output-PENDING-ROOT/parity"
+        ],
+        "cwd": "/home/holden/mckernel",
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Controlled HOST original-C/Rust sync-child entry and complete real perf-event ABI. PMU reads are explicit scalar mocks; genuine existing atomic64 stores operate only on initialized HOST event fields. No actual rdpmc/MSR/CR/IRQ/context-switch/syscall/kernel/allocator/refcount/current-stack operation.",
+        "argv_compact_json_LF_sha256": "677135d0235279f999f32d8e6d3665d519cb5f86207c8365dc83507dc596e8fc"
+      },
+      "join": {
+        "pid": 1392183,
+        "start": 87105231,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.032206946052610874,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/actual-three-command-capture-1/02-sync3072-graphs9controls49layout8offset4attr-pattern/stdout",
+            "sha256": "2aa24deacc739f72c177d8882d3556b69b951bd4118058536c913c6c8f8dec23",
+            "device": 66306,
+            "inode": 59663482,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 212,
+            "mtime_ns": 1793073607619922804,
+            "ctime_ns": 1793073607619922804
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/actual-three-command-capture-1/02-sync3072-graphs9controls49layout8offset4attr-pattern/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59663483,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793073607615922684,
+            "ctime_ns": 1793073607615922684
+          }
+        }
+      },
+      "metrics": {
+        "started_UTC": "2026-10-27T04:00:07.622523+00:00",
+        "wall_seconds": 0.03338270098902285,
+        "child_user_CPU_seconds": 0.0020060000000000078,
+        "child_system_CPU_seconds": 0.0,
+        "fresh_batch_peak_child_RSS_KiB": 102160,
+        "peak_RSS_scope": "fresh batch cumulative actual child rusage high water; not an invented per-command peak",
+        "environment_relevant": {
+          "PATH": "/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/.local/bin:/home/holden/.codex/tmp/arg0-linux/codex-arg0zhkCqC:/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/anaconda3/bin:/home/holden/anaconda3/condabin:/home/holden/.cargo/bin:/home/holden/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+          "LC_ALL": "C",
+          "LANG": "en_US.UTF-8",
+          "RUST_MIN_STACK": "2097152",
+          "OMP_NUM_THREADS": "1",
+          "RAYON_NUM_THREADS": "1",
+          "CARGO_BUILD_JOBS": "7",
+          "MAKEFLAGS": "-j7",
+          "C_INCLUDE_PATH": null,
+          "LIBRARY_PATH": null,
+          "LD_LIBRARY_PATH": null,
+          "RUSTFLAGS": null,
+          "RUSTUP_TOOLCHAIN": null
+        },
+        "admission": {
+          "wall": 1793073607.6208498,
+          "monotonic": 855714.189806509,
+          "boottime": 871052.316856819,
+          "fixed_cutoff_ref": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+            "bytes": 952,
+            "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+          },
+          "memory_available_bytes": 27233615872,
+          "aggregate_reserved_bytes": 21474836480,
+          "budget": {
+            "schema_version": 2,
+            "id": "7f4af94a83b14cc08f97401f5891d965",
+            "budget": "57774.852125",
+            "initial_balance": "57774.8521250000",
+            "minimum_balance": "52079.8011050000",
+            "last_balance": "52079.8011050000",
+            "spent": "22812.3311000000",
+            "remaining": "34962.5210250000",
+            "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+          },
+          "heartbeat_at": "2026-10-27T04:00:02.200582+00:00",
+          "phase": "running",
+          "account_wall": 1793073607.6212015,
+          "heartbeat_age_seconds": 5.420619487762451,
+          "available_prepaid_balance": "52079.8011050000",
+          "spendControlReached": false,
+          "loadavg": [
+            1.01,
+            0.94,
+            0.95
+          ],
+          "CPU_affinity": [
+            6
+          ],
+          "HOST_available_bytes": 150680399872,
+          "scratch_available_bytes": 47871762432
+        }
+      }
+    }
+  ],
+  "seconds": 0.36181060993112624,
+  "peak_child_RSS_KiB": 102160,
+  "actual_stdout": "PASS sync-child entry:3072 original-C/Rust graph pairs +9 null/leader controls +49 layout/8 offset/4 attr ABI words and inherit pattern; PMU mock/HOST accounting only; runtime lifetime/concurrency ownership OPEN\n",
+  "first_compiler_UTC": "2026-10-27T04:00:07.323788+00:00",
+  "canonical_mutations": 0,
+  "native": false,
+  "default_link": false,
+  "whole_file_retired": false
+}

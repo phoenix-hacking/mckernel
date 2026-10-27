@@ -1,0 +1,89 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SUPPORTED_PROFILE_NEXT10_ARTIFACT_AND_RETAINED_POSTJOIN",
+  "reviewer": "/root/default_witness_gate",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": 1793074097.7631266,
+  "review_original_timestamp": null,
+  "nonce": "05779a0ade362eb7876ce6b6ef768877",
+  "producer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEXT10-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/evidence/producer-contract.json",
+    "bytes": 14156,
+    "sha256": "7f1c233c755d0d1016ce8795f4969c65e7f7119fc1d7b40cdfad9d3a3af84818"
+  },
+  "artifact_gates": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next10-validator-report-ref-correction-1/actual-qualification-1/FINAL-ARTIFACT-QUALIFICATION.json",
+    "bytes": 8639,
+    "sha256": "862f69cbe76021558f0debf2ad526147b8a99d486289ff87711906a827f494d0"
+  },
+  "postjoin": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEXT10-DEFAULT-BUILD-ADMISSION-1/POSTBUILD-CURRENT.stdout",
+    "bytes": 76586,
+    "sha256": "1ba5e930b4285c60f9b6ec68c06928fa43afbf087bbeec274b0996c9ca12ef9a"
+  },
+  "holder_positive_tool_join": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEXT10-DEFAULT-BUILD-ADMISSION-1/ROOT-ACTUAL-HOLDER-TOOL-RESULT.json",
+    "bytes": 163,
+    "sha256": "a5bd7c3c715c4c0a74ae546df57687e302ef46156d7e9e44aa4ecb0f22fa39d4"
+  },
+  "image": {
+    "path": "/work/output/build/kernel/mckernel.img",
+    "bytes": 10241736,
+    "sha256": "f42a871d83fcd1f30c9ee66734a8ba760a8587797c4e076079da0e37bfbcb908"
+  },
+  "actual_selected_C_functions": {
+    "kernel_syscall": {
+      "before": 82,
+      "after": 76,
+      "removed": 6
+    },
+    "arch_syscall": {
+      "before": 49,
+      "after": 45,
+      "removed": 4
+    }
+  },
+  "actual_unique_Rust_exports": 33,
+  "exact_U_delta": {
+    "removed": 4,
+    "added": 0
+  },
+  "warning_disposition": {
+    "only_new_warning": "f06_vdso_pt_set_range redeclares ihk_mc_pt_set_range",
+    "decision": "ACCEPT_EXACT_SUPPORTED_X86_64_C_ABI_POINTER_EQUIVALENCE",
+    "reason": "Argument2/8 are typed thin raw pointers versus c_void; all nine scalar/pointer widths and i32 return unchanged; authenticated genuine-header proof covers all9args/results56cases",
+    "existing_proof_SHA_prefixes": [
+      "27c40e5e",
+      "2210fcf4",
+      "f203575b"
+    ],
+    "Rust_warnings_before": 140,
+    "Rust_warnings_after": 141,
+    "C_warnings": [
+      7,
+      0
+    ],
+    "ld_RWX_unchanged": true,
+    "other_debts_unchanged": true
+  },
+  "native_acceptance": false,
+  "whole_file_retirement": false,
+  "real_PMU_VM_lifetime_credit": false,
+  "runtime_authority": null,
+  "timings": {
+    "first_compiler_at": 1793073881.6587138,
+    "compiler_link_finished_at": 1793073902.7613256,
+    "compiler_link_wall_seconds": 21.102611780166626,
+    "compiler_CPU_seconds": 21.109092,
+    "max_child_RSS_KiB": 589460,
+    "positive_tool_join_observed_at": 1793073924.0611494,
+    "final_acceptance_recorded_at": 1793074097.7631266,
+    "compile_finish_to_acceptance_seconds": 195.00180101394653,
+    "positive_tool_join_observation_to_acceptance_seconds": 173.7019772529602,
+    "actual_join_event_timestamp_unknown": true,
+    "source_ready_timestamp": null,
+    "explicit_ready_observation_at": 1793068699.378119,
+    "explicit_ready_observation_to_first_compiler_seconds": 5182.280594825745
+  }
+}

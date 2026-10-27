@@ -1,0 +1,17 @@
+const EINVAL: CInt = 22;
+const EFAULT: CInt = 14;
+const ESRCH: CInt = 3;
+const EPERM: CInt = 1;
+const IOV_MAX: CULong = 1024;
+const PROCESS_VM_READ: CInt = 0;
+const PROCESS_VM_WRITE: CInt = 1;
+const PS_EXITED: CInt = 0x10;
+const PS_ZOMBIE: CInt = 0x8;
+const PAGE_SIZE: CULong = 1 << 12;
+const PAGE_SHIFT: CULong = 12;
+const PAGE_MASK: CULong = !(PAGE_SIZE - 1);
+const PF_POPULATE: CULong = 1 << 30;
+const PF_WRITE: CULong = 1 << 1;
+const PF_USER: CULong = 1 << 2;
+const VR_PROT_READ: CULong = 0x00010000;
+const VR_PROT_WRITE: CULong = 0x00020000;

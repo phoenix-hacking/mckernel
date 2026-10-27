@@ -1,0 +1,51 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_EIGHT_UNCHANGED_SOURCE_ASSERTIONS_ON_NEXT10_CONTEXT",
+  "actual_argv": [
+    "python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/test_current_context.py"
+  ],
+  "returncode": 0,
+  "tests_passed": 8,
+  "unittest_elapsed_seconds": 0.074,
+  "unchanged_assertion_suite": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/test_source_contract.py",
+    "bytes": 4699,
+    "sha256": "ce83b2a435037e2cee3b5362f7a5fb9c87f6cb575303e3b2f14439062ced0292"
+  },
+  "unchanged_driver": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/driver.c",
+    "bytes": 6898,
+    "sha256": "b09f482ff97814f8d50914caf9950936c07dd577d0aec77fbdb2c1712dcc02f0"
+  },
+  "exact_current_helper_bodies": [
+    "field_ptr",
+    "wait_list_entry",
+    "sync_child_event_needed_result",
+    "sync_child_event_pid_action_result",
+    "sync_child_event_apply_action",
+    "sync_child_event_body_result",
+    "f03_sync_child_perf_read_v2",
+    "f03_sync_child_count_set_v2"
+  ],
+  "ABI_snapshots_equal_actual_NEXT10": {
+    "kernel/rust/abi.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "kernel/rust/atomic_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/atomic_helpers.rs",
+      "bytes": 6207,
+      "sha256": "8acf10a907cede816da8300d36bf967d938cc672dd75dbb3ecc8f3992ec42941"
+    },
+    "kernel/rust/f03_perf_event_attr_abi.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/f03_perf_event_attr_abi.rs",
+      "bytes": 1722,
+      "sha256": "8eec931271fd3829c6fffbadf3f2ae1da13796cc1929f3685145d0cd65c8d285"
+    }
+  },
+  "old_full_candidates_not_consumed": true,
+  "compiler_execution": false
+}

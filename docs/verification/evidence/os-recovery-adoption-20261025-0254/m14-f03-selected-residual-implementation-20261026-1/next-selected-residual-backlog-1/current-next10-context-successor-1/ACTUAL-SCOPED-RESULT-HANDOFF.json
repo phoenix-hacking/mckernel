@@ -1,0 +1,422 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_CURRENT_NEXT10_SYNC_CHILD_HOST_SUCCESSOR",
+  "actual_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/ACTUAL-THREE-COMMAND-RESULT.json",
+    "bytes": 22565,
+    "sha256": "2c121207d54221710d2675f55c5cf1948a6da071df13e8b4a5aa76d5ac4f48b7"
+  },
+  "source_handoff": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/SOURCE-HANDOFF.NOT-GRANTED.json",
+    "bytes": 21265,
+    "sha256": "a640afabdcb6fca3fa621ab1353e4df44c3e339de87f8e4847402ac432bb7ec3"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/actual-three-command-capture-1/profile.json",
+    "bytes": 4005,
+    "sha256": "4548effa933b1c74c95c4be8f68bcdfb2a30a198fc9c540ce6806049fe3d6491"
+  },
+  "actual_argv": [
+    [
+      "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--crate-name",
+      "f03_sync_child_event_bound",
+      "--crate-type",
+      "lib",
+      "--edition=2021",
+      "-C",
+      "panic=abort",
+      "-C",
+      "opt-level=2",
+      "--cfg",
+      "enable_profile",
+      "--cfg",
+      "enable_perf",
+      "--cfg",
+      "f03_sync_child_event_candidate",
+      "--cfg",
+      "f03_sync_child_fixture",
+      "--emit=obj=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/output-PENDING-ROOT/sync_child.o",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/lib.fixture.rs"
+    ],
+    [
+      "/usr/bin/gcc-9",
+      "-Werror=incompatible-pointer-types",
+      "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+      "-DIHK_OS_MANYCORE",
+      "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+      "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+      "-DMCKERNEL_NATIVE_CLONE3",
+      "-DMCKERNEL_NATIVE_CLONE_TID",
+      "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+      "-DMCKERNEL_NATIVE_FUTEX",
+      "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+      "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+      "-DMCKERNEL_RUST_BITOPS",
+      "-DMCKERNEL_RUST_LIST_HELPERS",
+      "-DMCKERNEL_RUST_LOCK_HELPERS",
+      "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+      "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+      "-DMCKERNEL_RUST_PTE_HELPERS",
+      "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+      "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+      "-DPROFILE_ENABLE",
+      "-D__KERNEL__",
+      "-DMCKERNEL_NATIVE_FORK_OWNED_TRANSACTION",
+      "-DMCKERNEL_RUST_RLIMIT_HELPERS",
+      "-DMCKERNEL_RUST_SCHED_POLICY_HELPERS",
+      "-DMCKERNEL_RUST_SCHED_PRIO_HELPERS",
+      "-DMCKERNEL_RUST_SHMID_HELPERS",
+      "-DMCKERNEL_RUST_SHM_PERM_HELPERS",
+      "-DMCKERNEL_RUST_SIGNAL_HELPERS",
+      "-DMCKERNEL_RUST_SYSCALL_OFFLOAD",
+      "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+      "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build/kernel/include",
+      "-I/home/holden/mckernel/kernel/include",
+      "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build/kernel",
+      "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build",
+      "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+      "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+      "-I/home/holden/mckernel/ihk/ikc/include",
+      "-I/home/holden/mckernel/ihk/linux/include",
+      "-I/home/holden/mckernel/lib/include",
+      "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Wno-unused-parameter",
+      "-Wno-sign-compare",
+      "-Wno-unused-function",
+      "-Wno-implicit-fallthrough",
+      "-Wno-stringop-truncation",
+      "-ffreestanding",
+      "-O2",
+      "-nostdinc",
+      "-isystem",
+      "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+      "-fno-omit-frame-pointer",
+      "-mcmodel=large",
+      "-mno-red-zone",
+      "-mno-sse",
+      "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+      "-DMCKERNEL_RUST_F03_SYNC_CHILD_EVENT",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/driver.c",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/output-PENDING-ROOT/sync_child.o",
+      "-no-pie",
+      "-o",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/output-PENDING-ROOT/parity"
+    ],
+    [
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/output-PENDING-ROOT/parity"
+    ]
+  ],
+  "actual_checks": {
+    "original_C_Rust_graph_pairs": 3072,
+    "null_missing_leader_controls": 9,
+    "genuine_full_event_layout_words": 49,
+    "runtime_offset_words": 8,
+    "attr_ABI_words": 4,
+    "complete_inherit_bitpattern": true,
+    "all_graph_effects_and_full_object_comparisons": true
+  },
+  "actual_stdout": "PASS sync-child entry:3072 original-C/Rust graph pairs +9 null/leader controls +49 layout/8 offset/4 attr ABI words and inherit pattern; PMU mock/HOST accounting only; runtime lifetime/concurrency ownership OPEN\n",
+  "actual_command_count": 3,
+  "all_returncodes": [
+    0,
+    0,
+    0
+  ],
+  "completions": [
+    {
+      "command": "00-unchanged-sync-entry-Rust-layout-existing-helper-object",
+      "pid": 1392171,
+      "birth_start_ticks": 87105202,
+      "started_UTC": "2026-10-27T04:00:07.323788+00:00",
+      "finished_and_positively_joined_by_UTC": "2026-10-27T04:00:07.443918+00:00",
+      "end_observation_mtime_ns": 1793073607443917505,
+      "end_time_basis": "Actual metrics-file mtime written after owned_capture returned with directwait/group absence/streams closed; an observed completion upper bound, not a fabricated precise kernel-exit time.",
+      "direct_join_ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/actual-three-command-capture-1/00-unchanged-sync-entry-Rust-layout-existing-helper-object/direct-join.json",
+        "bytes": 259,
+        "sha256": "ac5db550529f109f3b8d696f938ba0952ace05aa1a5d1cf7fdc5fa0484860892"
+      },
+      "direct_wait_ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/actual-three-command-capture-1/00-unchanged-sync-entry-Rust-layout-existing-helper-object/direct-wait.json",
+        "bytes": 82,
+        "sha256": "1640896ce80824cb3b2d10f339bf5b629257c35bdaa10b7ea3cb46d3afab0384"
+      },
+      "metrics_ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/actual-three-command-capture-1/00-unchanged-sync-entry-Rust-layout-existing-helper-object/actual-metrics.json",
+        "bytes": 2631,
+        "sha256": "42d0b636d7387ef1a36b3ff1daeb0a320639b453f792fd74da7e6cc7d88b54fa"
+      },
+      "returncode": 0,
+      "metrics": {
+        "started_UTC": "2026-10-27T04:00:07.323788+00:00",
+        "wall_seconds": 0.12616327300202101,
+        "child_user_CPU_seconds": 0.079007,
+        "child_system_CPU_seconds": 0.012473999999999999,
+        "fresh_batch_peak_child_RSS_KiB": 102160,
+        "peak_RSS_scope": "fresh batch cumulative actual child rusage high water; not an invented per-command peak",
+        "environment_relevant": {
+          "PATH": "/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/.local/bin:/home/holden/.codex/tmp/arg0-linux/codex-arg0zhkCqC:/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/anaconda3/bin:/home/holden/anaconda3/condabin:/home/holden/.cargo/bin:/home/holden/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+          "LC_ALL": "C",
+          "LANG": "en_US.UTF-8",
+          "RUST_MIN_STACK": "2097152",
+          "OMP_NUM_THREADS": "1",
+          "RAYON_NUM_THREADS": "1",
+          "CARGO_BUILD_JOBS": "7",
+          "MAKEFLAGS": "-j7",
+          "C_INCLUDE_PATH": null,
+          "LIBRARY_PATH": null,
+          "LD_LIBRARY_PATH": null,
+          "RUSTFLAGS": null,
+          "RUSTUP_TOOLCHAIN": null
+        },
+        "admission": {
+          "wall": 1793073607.3222082,
+          "monotonic": 855713.891165065,
+          "boottime": 871052.018215852,
+          "fixed_cutoff_ref": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+            "bytes": 952,
+            "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+          },
+          "memory_available_bytes": 27242655744,
+          "aggregate_reserved_bytes": 21474836480,
+          "budget": {
+            "schema_version": 2,
+            "id": "7f4af94a83b14cc08f97401f5891d965",
+            "budget": "57774.852125",
+            "initial_balance": "57774.8521250000",
+            "minimum_balance": "52079.8011050000",
+            "last_balance": "52079.8011050000",
+            "spent": "22812.3311000000",
+            "remaining": "34962.5210250000",
+            "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+          },
+          "heartbeat_at": "2026-10-27T04:00:02.200582+00:00",
+          "phase": "running",
+          "account_wall": 1793073607.3224876,
+          "heartbeat_age_seconds": 5.121905565261841,
+          "available_prepaid_balance": "52079.8011050000",
+          "spendControlReached": false,
+          "loadavg": [
+            1.01,
+            0.94,
+            0.95
+          ],
+          "CPU_affinity": [
+            6
+          ],
+          "HOST_available_bytes": 150680526848,
+          "scratch_available_bytes": 47871762432
+        }
+      }
+    },
+    {
+      "command": "01-genuine-header-original-C-entry-and49word-layout-link",
+      "pid": 1392178,
+      "birth_start_ticks": 87105215,
+      "started_UTC": "2026-10-27T04:00:07.457093+00:00",
+      "finished_and_positively_joined_by_UTC": "2026-10-27T04:00:07.611923+00:00",
+      "end_observation_mtime_ns": 1793073607611922563,
+      "end_time_basis": "Actual metrics-file mtime written after owned_capture returned with directwait/group absence/streams closed; an observed completion upper bound, not a fabricated precise kernel-exit time.",
+      "direct_join_ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/actual-three-command-capture-1/01-genuine-header-original-C-entry-and49word-layout-link/direct-join.json",
+        "bytes": 260,
+        "sha256": "e38a55a820db65660fcd1dca08d67595b82d5fdcc85ef9acf5130bba8181fae1"
+      },
+      "direct_wait_ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/actual-three-command-capture-1/01-genuine-header-original-C-entry-and49word-layout-link/direct-wait.json",
+        "bytes": 82,
+        "sha256": "f9c5c2dc6e7c184d2da1bd15347387cc5ab7e6783a4a9a398cda55553479f752"
+      },
+      "metrics_ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/actual-three-command-capture-1/01-genuine-header-original-C-entry-and49word-layout-link/actual-metrics.json",
+        "bytes": 2631,
+        "sha256": "1d30c8d250b96e641b3661d485a0856d1abd20ece41b15a5b0ea460b22b868cf"
+      },
+      "returncode": 0,
+      "metrics": {
+        "started_UTC": "2026-10-27T04:00:07.457093+00:00",
+        "wall_seconds": 0.15808564005419612,
+        "child_user_CPU_seconds": 0.113828,
+        "child_system_CPU_seconds": 0.009274999999999999,
+        "fresh_batch_peak_child_RSS_KiB": 102160,
+        "peak_RSS_scope": "fresh batch cumulative actual child rusage high water; not an invented per-command peak",
+        "environment_relevant": {
+          "PATH": "/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/.local/bin:/home/holden/.codex/tmp/arg0-linux/codex-arg0zhkCqC:/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/anaconda3/bin:/home/holden/anaconda3/condabin:/home/holden/.cargo/bin:/home/holden/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+          "LC_ALL": "C",
+          "LANG": "en_US.UTF-8",
+          "RUST_MIN_STACK": "2097152",
+          "OMP_NUM_THREADS": "1",
+          "RAYON_NUM_THREADS": "1",
+          "CARGO_BUILD_JOBS": "7",
+          "MAKEFLAGS": "-j7",
+          "C_INCLUDE_PATH": null,
+          "LIBRARY_PATH": null,
+          "LD_LIBRARY_PATH": null,
+          "RUSTFLAGS": null,
+          "RUSTUP_TOOLCHAIN": null
+        },
+        "admission": {
+          "wall": 1793073607.4555287,
+          "monotonic": 855714.024485268,
+          "boottime": 871052.151536278,
+          "fixed_cutoff_ref": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+            "bytes": 952,
+            "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+          },
+          "memory_available_bytes": 27243917312,
+          "aggregate_reserved_bytes": 21474836480,
+          "budget": {
+            "schema_version": 2,
+            "id": "7f4af94a83b14cc08f97401f5891d965",
+            "budget": "57774.852125",
+            "initial_balance": "57774.8521250000",
+            "minimum_balance": "52079.8011050000",
+            "last_balance": "52079.8011050000",
+            "spent": "22812.3311000000",
+            "remaining": "34962.5210250000",
+            "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+          },
+          "heartbeat_at": "2026-10-27T04:00:02.200582+00:00",
+          "phase": "running",
+          "account_wall": 1793073607.4558377,
+          "heartbeat_age_seconds": 5.255255699157715,
+          "available_prepaid_balance": "52079.8011050000",
+          "spendControlReached": false,
+          "loadavg": [
+            1.01,
+            0.94,
+            0.95
+          ],
+          "CPU_affinity": [
+            6
+          ],
+          "HOST_available_bytes": 150680481792,
+          "scratch_available_bytes": 47871762432
+        }
+      }
+    },
+    {
+      "command": "02-sync3072-graphs9controls49layout8offset4attr-pattern",
+      "pid": 1392183,
+      "birth_start_ticks": 87105231,
+      "started_UTC": "2026-10-27T04:00:07.622523+00:00",
+      "finished_and_positively_joined_by_UTC": "2026-10-27T04:00:07.651924+00:00",
+      "end_observation_mtime_ns": 1793073607651923768,
+      "end_time_basis": "Actual metrics-file mtime written after owned_capture returned with directwait/group absence/streams closed; an observed completion upper bound, not a fabricated precise kernel-exit time.",
+      "direct_join_ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/actual-three-command-capture-1/02-sync3072-graphs9controls49layout8offset4attr-pattern/direct-join.json",
+        "bytes": 261,
+        "sha256": "cbf352b60446b25695898ca17881379ab05386e506724863e51b5c890eb9f036"
+      },
+      "direct_wait_ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/actual-three-command-capture-1/02-sync3072-graphs9controls49layout8offset4attr-pattern/direct-wait.json",
+        "bytes": 82,
+        "sha256": "20489ea631650d49d293dfeebb4c8fbdfd9d6fb6889a862528d0d7e4f57c6b50"
+      },
+      "metrics_ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/actual-three-command-capture-1/02-sync3072-graphs9controls49layout8offset4attr-pattern/actual-metrics.json",
+        "bytes": 2627,
+        "sha256": "7eed30900f65ad41e08849cfd0a27929fc9bfef5e6ca51d5029498330303db86"
+      },
+      "returncode": 0,
+      "metrics": {
+        "started_UTC": "2026-10-27T04:00:07.622523+00:00",
+        "wall_seconds": 0.03338270098902285,
+        "child_user_CPU_seconds": 0.0020060000000000078,
+        "child_system_CPU_seconds": 0.0,
+        "fresh_batch_peak_child_RSS_KiB": 102160,
+        "peak_RSS_scope": "fresh batch cumulative actual child rusage high water; not an invented per-command peak",
+        "environment_relevant": {
+          "PATH": "/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/.local/bin:/home/holden/.codex/tmp/arg0-linux/codex-arg0zhkCqC:/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/anaconda3/bin:/home/holden/anaconda3/condabin:/home/holden/.cargo/bin:/home/holden/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+          "LC_ALL": "C",
+          "LANG": "en_US.UTF-8",
+          "RUST_MIN_STACK": "2097152",
+          "OMP_NUM_THREADS": "1",
+          "RAYON_NUM_THREADS": "1",
+          "CARGO_BUILD_JOBS": "7",
+          "MAKEFLAGS": "-j7",
+          "C_INCLUDE_PATH": null,
+          "LIBRARY_PATH": null,
+          "LD_LIBRARY_PATH": null,
+          "RUSTFLAGS": null,
+          "RUSTUP_TOOLCHAIN": null
+        },
+        "admission": {
+          "wall": 1793073607.6208498,
+          "monotonic": 855714.189806509,
+          "boottime": 871052.316856819,
+          "fixed_cutoff_ref": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+            "bytes": 952,
+            "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+          },
+          "memory_available_bytes": 27233615872,
+          "aggregate_reserved_bytes": 21474836480,
+          "budget": {
+            "schema_version": 2,
+            "id": "7f4af94a83b14cc08f97401f5891d965",
+            "budget": "57774.852125",
+            "initial_balance": "57774.8521250000",
+            "minimum_balance": "52079.8011050000",
+            "last_balance": "52079.8011050000",
+            "spent": "22812.3311000000",
+            "remaining": "34962.5210250000",
+            "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+          },
+          "heartbeat_at": "2026-10-27T04:00:02.200582+00:00",
+          "phase": "running",
+          "account_wall": 1793073607.6212015,
+          "heartbeat_age_seconds": 5.420619487762451,
+          "available_prepaid_balance": "52079.8011050000",
+          "spendControlReached": false,
+          "loadavg": [
+            1.01,
+            0.94,
+            0.95
+          ],
+          "CPU_affinity": [
+            6
+          ],
+          "HOST_available_bytes": 150680399872,
+          "scratch_available_bytes": 47871762432
+        }
+      }
+    }
+  ],
+  "first_compiler_UTC": "2026-10-27T04:00:07.323788+00:00",
+  "last_finished_joined_by_UTC": "2026-10-27T04:00:07.651924+00:00",
+  "wall_seconds": 0.31763161404524,
+  "child_CPU_seconds": 0.21659,
+  "fresh_batch_peak_child_RSS_KiB": 102160,
+  "RSS_scope": "Actual fresh-batch cumulative child rusage high water, not invented individual peaks.",
+  "raw_stderr_bytes": [
+    0,
+    0,
+    0
+  ],
+  "all_direct_children_joined": true,
+  "all_groups_absent": true,
+  "all_streams_closed": true,
+  "CPU6_slot_FREE": true,
+  "reviewed_e8b84de3_admission_each_command": true,
+  "max_account_heartbeat_age_seconds": 5.420619487762451,
+  "minimum_memory_available_bytes": 27233615872,
+  "minimum_HOST_free_bytes": 150680399872,
+  "minimum_scratch_free_bytes": 47871762432,
+  "compiler_correction_count": 0,
+  "prefix_replay": false,
+  "fixture_sources_assertions_and_original_oracle_unchanged": true,
+  "controlled_effect_scope": "PMU scalar mock only; genuine AtomicI64 stores touch initialized HOST fields. No real PMU/kernel/hardware/lifetime effect.",
+  "default_OFF": true,
+  "real_event_initialization_list_PMU_concurrency_ownership_HOLD": true,
+  "do_exit_debug64_retired": false,
+  "default_link": false,
+  "native": false,
+  "whole_file_retired": false
+}

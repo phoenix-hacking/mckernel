@@ -1,0 +1,91 @@
+{
+  "M15_file_closure": false,
+  "capture_budget_bytes": 67108864,
+  "capture_helper": {
+    "bytes": 14753,
+    "path": "/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py",
+    "sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+  },
+  "census_helper": {
+    "bytes": 51420,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py",
+    "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+  },
+  "command_template": [
+    "/usr/bin/cc",
+    "-std=gnu11",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-pthread",
+    "/repro-src/join_procfs_reproducer.c",
+    "-o",
+    "/work/fixture-output/join-procfs-reproducer"
+  ],
+  "compile_seconds": 60,
+  "container_output": "/work/fixture-output",
+  "container_source_parent": "/repro-src",
+  "daemon_commands": 0,
+  "execute_argv": [
+    "/work/fixture-output/join-procfs-reproducer"
+  ],
+  "expected_case_count": 0,
+  "expected_reference_cases": 0,
+  "fixture_base": "/repro-src",
+  "fixture_budget_bytes": 67108864,
+  "fixture_output_relative": "fixture-output",
+  "fixture_retirement_seconds": 6,
+  "fixture_work_wall_seconds": 90,
+  "native_acceptance": false,
+  "observe_seconds": 8,
+  "output_budget_bytes": 134217728,
+  "parent_preparation": {
+    "bytes": 13133,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/PREPARATION.SOURCE-ONLY.json",
+    "sha256": "1ccb27d716c4541391245201a9715b90f11866c43b466c2a756c862e7ab701de"
+  },
+  "production_daemon_fork_executed": false,
+  "profile": {
+    "cpu_count": 4,
+    "cpus": "2-5",
+    "gid": 1000,
+    "memory_bytes": 12884901888,
+    "memory_swap_total_bytes": 12884901888,
+    "network": "none",
+    "pids": 64,
+    "uid": 1000
+  },
+  "real_udev_or_devices_executed": false,
+  "schema": "mckernel.daemon-join-procfs64-preparation.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_files": [
+    {
+      "mode": 384,
+      "relative": "join_procfs_reproducer.c",
+      "source": {
+        "bytes": 5570,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/thread-exit-observation-repair-source-1/join_procfs_reproducer.c",
+        "sha256": "290189d9d007ede5ba9d67b7b1fc06e05622aede89de342edccb976c23065820"
+      }
+    }
+  ],
+  "source_tree_sha256": "01381dcddb69b42e6a360e7bdec02edf31ae64ddebcb77eb203048e942ec38f6",
+  "timeout": 108,
+  "tool_image": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+  "tool_pins": {
+    "cc": {
+      "executable_version": "cc (GCC) 14.3.1 20251022 (Red Hat 14.3.1-4)\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+      "owner": "gcc",
+      "path": "/usr/bin/cc",
+      "rpm_nevra": "gcc-0:14.3.1-4.4.el10.x86_64",
+      "sha256": "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2",
+      "target": "/usr/bin/gcc",
+      "version": "cc (GCC) 14.3.1 20251022 (Red Hat 14.3.1-4)\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+    },
+    "rustc": {
+      "path": "/nightly/bin/rustc",
+      "sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09"
+    }
+  }
+}

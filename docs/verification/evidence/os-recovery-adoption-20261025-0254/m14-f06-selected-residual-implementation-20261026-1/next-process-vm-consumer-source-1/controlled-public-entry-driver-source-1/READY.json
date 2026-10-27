@@ -1,0 +1,149 @@
+{
+  "task": "F06-controlled-public-entry-driver-source-1",
+  "status": "READY_FOR_REVIEW_COMPILER_FEEDBACK_OPEN",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_check": {
+    "command": [
+      "python3",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/check_source.py"
+    ],
+    "returncode": 0,
+    "status": "PASS_CONTROLLED_PUBLIC_ENTRY_SOURCE",
+    "ABI_facts": 22,
+    "controlled_pairs": 40,
+    "invalid_flags": 4
+  },
+  "future_plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/FUTURE-HOST-COMMAND-PLAN.json",
+    "bytes": 17514,
+    "sha256": "2ac2cef99405424ec5542a036df1a5af8d9606c3efe58b01b378d13a85951f9e"
+  },
+  "actual_compile": null,
+  "actual_runtime": null,
+  "native": null,
+  "dependencies": "Fresh Root ordinary CPU6 grant after current F03 batch; unchanged e8 admission/04b5/adf/cutoffs/floors. No compiler consumed in this task.",
+  "holds": [
+    "Direct VMlock192/ABI6 receipt unresolved",
+    "real MM/usercopy/fault and concurrency",
+    "final-reference/current-stack ownership",
+    "native/default selection"
+  ],
+  "files": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/ABI-caller.inc",
+      "bytes": 2875,
+      "sha256": "0ed1c4f71590952954d87141e54f3e407ac619c1f2c1efc9ef426e2a7031478b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/FUTURE-HOST-COMMAND-PLAN.json",
+      "bytes": 17514,
+      "sha256": "2ac2cef99405424ec5542a036df1a5af8d9606c3efe58b01b378d13a85951f9e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/README.md",
+      "bytes": 3359,
+      "sha256": "3730b1bc5fb9a7c72db3eaad503034364892060b9f2945809dbd17cb38b75521"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/Rust-ABI-facts.inc",
+      "bytes": 993,
+      "sha256": "c75ba2642c76ff235342046a627f43ef5c15b34aebb268336397b31d69db78f6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/actual-body.inc",
+      "bytes": 15638,
+      "sha256": "0282d4bf4312f6ee247989d5ab0ae480cc4b68589f2d9f3bb8a879653ebb96f3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/actual-constants.inc",
+      "bytes": 547,
+      "sha256": "666474f6df0c24ad0c3979e8fb7ac4c26571e597f4e95dcf072752a303beec24"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/actual-layouts.inc",
+      "bytes": 646,
+      "sha256": "876c179f89af9757e195039499e6a143f9c89df8499f439c73bb9a147c51118c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/actual-node.inc",
+      "bytes": 584,
+      "sha256": "c46af959c074dcdd576f179a0708aca891faa3f1eed13582d47e669816e31727"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/actual-offsets.inc",
+      "bytes": 973,
+      "sha256": "af98c0ed3bb0005ba1ad665330f52ab680b3920c8513cac3b9b2f1fa75005a75"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/actual-types.inc",
+      "bytes": 1069,
+      "sha256": "94c709d33ebf69fd1c5451f8b277d01352afd66183d46e281b1b583615855399"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/check_source.py",
+      "bytes": 3430,
+      "sha256": "920d1178acddb5e26dd48847b6bfb5e0508b4224d7140930acb77583e344f08f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/controlled-driver.inc",
+      "bytes": 10275,
+      "sha256": "b0e0638599035c5a65cccd9f422143115b925211b1a65b474645d9f3d630b2a6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/f06_process_vm_entry.rs",
+      "bytes": 5428,
+      "sha256": "0e9d9d23db1a376f38757fba98c6b34d0aed4f4b6c45398b0b9372d7624c3d2e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/fixture-providers.rs",
+      "bytes": 2767,
+      "sha256": "09c0c06b819384a99d91a0bf15838ce0559a4228927b963c2b5df51159f8034a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/fixture.c",
+      "bytes": 2844,
+      "sha256": "29876f470d6ead187235b1ca88de381e364fccc6f022fbedb425751925e6d7cd"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/fixture.rs",
+      "bytes": 931,
+      "sha256": "35d480067248c19aa642cbfd89e15e11d51027e99c545a38e93d5c8c23ea8e8b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/genuine-prologue.inc",
+      "bytes": 982,
+      "sha256": "e69cb389f69cf92a6e81e114a0bb03391a137fa3ba0c7b15d49a51606c1359de"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/original-adapters.inc",
+      "bytes": 2096,
+      "sha256": "b586eb303ec8019976bb9711586f3bc169c412d737e22360668bb060b3a6089d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/original-body-prototype.inc",
+      "bytes": 1022,
+      "sha256": "aa9ac66ef2402dd07249fa73769110cf9cbe68ab7c5eadab6011ff36363cba3e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/original-entry.inc",
+      "bytes": 7495,
+      "sha256": "3b8d2f76fbcd8aae3ae02f60d9c7ce15612d47af0455c26e2d54e7756815af1d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/original-types.inc",
+      "bytes": 1574,
+      "sha256": "2799931e736643b0034936f7e809f55bb5847637d67b2fcec2a55b07f4fd2909"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-consumer-source-1/controlled-public-entry-driver-source-1/prepare_source.py",
+      "bytes": 9252,
+      "sha256": "c10c9a9cd4e1cd047f24ada6260d5211c9f3d2601cf0ed271e579df0f8797d9c"
+    }
+  ]
+}

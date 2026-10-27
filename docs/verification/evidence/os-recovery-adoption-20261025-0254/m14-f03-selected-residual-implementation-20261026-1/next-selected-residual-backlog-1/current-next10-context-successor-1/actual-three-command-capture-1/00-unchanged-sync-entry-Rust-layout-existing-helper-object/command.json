@@ -1,0 +1,28 @@
+{
+  "label": "00-unchanged-sync-entry-Rust-layout-existing-helper-object",
+  "argv": [
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--crate-name",
+    "f03_sync_child_event_bound",
+    "--crate-type",
+    "lib",
+    "--edition=2021",
+    "-C",
+    "panic=abort",
+    "-C",
+    "opt-level=2",
+    "--cfg",
+    "enable_profile",
+    "--cfg",
+    "enable_perf",
+    "--cfg",
+    "f03_sync_child_event_candidate",
+    "--cfg",
+    "f03_sync_child_fixture",
+    "--emit=obj=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/current-next10-context-successor-1/output-PENDING-ROOT/sync_child.o",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-residual-backlog-1/lib.fixture.rs"
+  ],
+  "cwd": "/home/holden/mckernel",
+  "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Controlled HOST original-C/Rust sync-child entry and complete real perf-event ABI. PMU reads are explicit scalar mocks; genuine existing atomic64 stores operate only on initialized HOST event fields. No actual rdpmc/MSR/CR/IRQ/context-switch/syscall/kernel/allocator/refcount/current-stack operation.",
+  "argv_compact_json_LF_sha256": "1aa7932b4db1d407c47a694b585cb1c77077a491773f1799fcb2606ebd378ce7"
+}

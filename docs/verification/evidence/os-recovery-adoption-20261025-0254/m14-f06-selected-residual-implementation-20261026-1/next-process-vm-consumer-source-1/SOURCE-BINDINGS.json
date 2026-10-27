@@ -1,0 +1,62 @@
+{
+  "status": "SOURCE_READY_QUALIFICATION_OPEN",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "canonical_before": [
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "bytes": 114150,
+      "sha256": "affa9b6d2fdc2514c6d7414f4f7854410ae18ebea02db738665065a5179db893"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1249379,
+      "sha256": "f4ed7080659863662e1de75c432b89fd94aadf312efb5e924b1d0e60ef93dbd6"
+    }
+  ],
+  "composition_helper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/prepare_candidate.py",
+    "bytes": 5482,
+    "sha256": "9e982a537cf58be81ffa5abada24a675527c4fe2f917d2dbb202707661e1adb4"
+  },
+  "reused_fragment": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-process-vm-rw-source-1/candidate/syscall_policy.process_vm_rw.FRAGMENT.rs",
+    "bytes": 9251,
+    "sha256": "3f9ecdfa165680224b983928939d5d81015cc9a075fae25210deafb7f9c1c3b5"
+  },
+  "reused_leaf": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/f06_process_vm_entry.rs",
+    "bytes": 5428,
+    "sha256": "0e9d9d23db1a376f38757fba98c6b34d0aed4f4b6c45398b0b9372d7624c3d2e"
+  },
+  "abi": {
+    "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+    "bytes": 76151,
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "lock_helpers": {
+    "path": "/home/holden/mckernel/kernel/rust/lock_helpers.rs",
+    "bytes": 12202,
+    "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+  },
+  "process_helpers": {
+    "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+    "bytes": 603471,
+    "sha256": "851acd51fab945456edd87c001a63b867634f51207fbf1900451edaa368b09ea"
+  },
+  "x86_memory_helpers": {
+    "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+    "bytes": 311375,
+    "sha256": "5c60055053656751ea490be95c09d7343b0391797c21d5e6c97de97cb8d34c68"
+  },
+  "selector": {
+    "C": [
+      "MCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+      "MCKERNEL_RUST_F06_PROCESS_VM_ENTRY"
+    ],
+    "Rust": "f06_process_vm_entry_candidate",
+    "activation": "central paired selection only; private proposal remains disabled"
+  },
+  "actual_compile": null,
+  "actual_native": null,
+  "whole_file_retirement": false
+}

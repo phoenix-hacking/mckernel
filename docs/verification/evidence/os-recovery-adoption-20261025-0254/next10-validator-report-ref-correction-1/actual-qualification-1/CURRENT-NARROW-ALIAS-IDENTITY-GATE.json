@@ -1,0 +1,27 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ONLY_TWO_REVIEWED_ALIAS_PAIRS_WITH_FULL_OBJECT_FINAL_IDENTITY",
+  "decision": {
+    "status": "PASS_ONLY_TWO_REVIEWED_ALIAS_PAIRS_WITH_FULL_OBJECT_FINAL_IDENTITY",
+    "aliases": [
+      {
+        "offset": 8,
+        "original": "process_spin_lock_bridge",
+        "actual": "mem_kmalloc_remote_lock_bridge"
+      },
+      {
+        "offset": 16,
+        "original": "process_spin_unlock_bridge",
+        "actual": "mem_kmalloc_remote_unlock_bridge"
+      }
+    ],
+    "all_ten_original_named_final_function_addresses": true
+  },
+  "predicate": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next10-validator-report-ref-correction-1/actual-qualification-1/narrow_f02_alias_identity.py",
+    "bytes": 2649,
+    "sha256": "0422b8a096631b41cc6e5e28f739f690767e70bce26c997012c2d65f09b6ff49"
+  },
+  "general_alias_waiver": false,
+  "native_acceptance": false
+}
