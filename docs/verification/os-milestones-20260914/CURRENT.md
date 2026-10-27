@@ -1,3 +1,27 @@
+## F05 native still unentered; one-shot handoff correction — 2026-10-27T20:41:49.077948+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+CURRENT111 remains independently accepted cf7e582c: image0bbe8259/Rust48/C91/process67.
+20:06:09–20:36:09 bucket production/native/whole-file closure deltas0. Root32 ledger822f
+and current-free9904 remain current; no native Popen/guest/lease occurred. ENTRY1 nonce95a6
+failed clock equality before release; reviewed min-clamp successor16601 preserves earlier
+BOOT. ENTRY2 nonceff617 obtained PASS but expired before normal entry, helper joined1;
+CAPTURE stayed empty. Both unused namespaces and failures preserved, never replayed.
+Root3 nonce3c67/staticsda95 is unused, no resource/release yet. Exact finite Root-owned
+one-shot bridge source now under independent review BEFORE capture, to remove the
+post-PASS model handoff while retaining120s/all ownership/account/source controls.
+F05 image60e62/bfdda payload unchanged; no roll to newer kernel.
+
+F03event2 HOST independently accepted a731fa32; F02scalar4 ten actual HOST commands0/
+7.081847s now independently reviewed, no production adoption yet. Private112 union source
+review e7c7 retained, genuine origin/layout preparation proceeds independently. Foreground
+WAKE3 and typed VERBOSE46 explicitly reserved in restart ownership receipts; LOCK4 reused.
+Installed Rustexecutor loader8417 accepted; main/native/file/all349/all51 remain OPEN.
+Parent outer controls exclusively retained;05:36:09Z/inherited tighter clocks/account,
+permanent27:4/scratch21/oneheavy/floors unchanged. Review2036 records unchanged17:36:09
+baseline/nonoverlap30min buckets; no95% claim. Next Root command: publish reviewed bridge,
+fresh exact capture, immediate prebuilt normal-entry handoff. No accepted prefix replay.
+
 ## F05v2 static admission ready; CURRENT111 accepted — 2026-10-27T20:08:09.879763+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
