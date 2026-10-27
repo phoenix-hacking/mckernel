@@ -35758,3 +35758,185 @@ mod f06_vdso_add_range;
 #[cfg(f06_vdso_set_range_candidate)]
 #[path = "f06_vdso_set_range.rs"]
 mod f06_vdso_set_range;
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Layout/offset metadata only: no Rust reference to foreign bitfield objects is formed.
+#[cfg(f03_sync_child_event_candidate)]
+mod f03_sync_child_layout_v2 {
+ use crate::abi::{CInt,CLong,CULong,IhkAtomic64,AbiListHead};
+ use crate::f03_perf_attr_callbacks::PerfEventAttr;
+ use crate::x86_perfctr::HwPerfEventExtra;
+ use core::mem::{size_of,align_of,offset_of};
+ #[repr(C)]
+ pub struct HwPerfEvent {
+  pub prev_count:IhkAtomic64,pub sample_period:u64,pub last_period:u64,pub period_left:IhkAtomic64,
+ }
+ // Complete genuine runtime mc_perf_event, distinct from x86_perfctr's128B prefix.
+ // Used only for constants/layout witnesses; never constructs a borrowed whole C event.
+ #[repr(C)]
+ pub struct FullMcPerfEvent {
+  pub attr:PerfEventAttr,pub extra_reg:HwPerfEventExtra,pub hw_config:CULong,pub hw_config_ext:CULong,
+  pub state:CInt,pub cpu_id:CInt,pub counter_id:CInt,pub count:IhkAtomic64,
+  pub child_count_total:CULong,pub pmc_status:CULong,pub sample_freq:CULong,
+  pub parent:*mut FullMcPerfEvent,pub group_leader:*mut FullMcPerfEvent,
+  pub sibling_list:AbiListHead,pub nr_siblings:CInt,pub pid:CInt,pub group_entry:AbiListHead,
+  pub use_invariant_tsc:CInt,pub base_user_tsc:CLong,pub stopped_user_tsc:CLong,pub user_accum_count:CLong,
+  pub base_system_tsc:CLong,pub stopped_system_tsc:CLong,pub system_accum_count:CLong,pub hw:HwPerfEvent,
+ }
+ // Rust-owned runtime offset array: no replacement C data object is introduced.
+ #[no_mangle]
+ pub static f03_sync_child_offsets_v1:[CULong;8]=[
+  (offset_of!(FullMcPerfEvent,attr)+offset_of!(PerfEventAttr,flags)) as CULong,
+  offset_of!(FullMcPerfEvent,pid) as CULong,
+  offset_of!(FullMcPerfEvent,group_leader) as CULong,
+  offset_of!(FullMcPerfEvent,counter_id) as CULong,
+  offset_of!(FullMcPerfEvent,count) as CULong,
+  offset_of!(FullMcPerfEvent,child_count_total) as CULong,
+  offset_of!(FullMcPerfEvent,sibling_list) as CULong,
+  offset_of!(FullMcPerfEvent,group_entry) as CULong,
+ ];
+ #[cfg(f03_sync_child_fixture)]
+ #[no_mangle]
+ pub static F03_SYNC_CHILD_LAYOUT_ABI:[CULong;49]=[
+  (size_of::<FullMcPerfEvent>()) as CULong,
+  (align_of::<FullMcPerfEvent>()) as CULong,
+  (offset_of!(FullMcPerfEvent,attr)) as CULong,
+  (offset_of!(FullMcPerfEvent,extra_reg)) as CULong,
+  (offset_of!(FullMcPerfEvent,hw_config)) as CULong,
+  (offset_of!(FullMcPerfEvent,hw_config_ext)) as CULong,
+  (offset_of!(FullMcPerfEvent,state)) as CULong,
+  (offset_of!(FullMcPerfEvent,cpu_id)) as CULong,
+  (offset_of!(FullMcPerfEvent,counter_id)) as CULong,
+  (offset_of!(FullMcPerfEvent,count)) as CULong,
+  (offset_of!(FullMcPerfEvent,child_count_total)) as CULong,
+  (offset_of!(FullMcPerfEvent,pmc_status)) as CULong,
+  (offset_of!(FullMcPerfEvent,sample_freq)) as CULong,
+  (offset_of!(FullMcPerfEvent,parent)) as CULong,
+  (offset_of!(FullMcPerfEvent,group_leader)) as CULong,
+  (offset_of!(FullMcPerfEvent,sibling_list)) as CULong,
+  (offset_of!(FullMcPerfEvent,nr_siblings)) as CULong,
+  (offset_of!(FullMcPerfEvent,pid)) as CULong,
+  (offset_of!(FullMcPerfEvent,group_entry)) as CULong,
+  (offset_of!(FullMcPerfEvent,use_invariant_tsc)) as CULong,
+  (offset_of!(FullMcPerfEvent,base_user_tsc)) as CULong,
+  (offset_of!(FullMcPerfEvent,stopped_user_tsc)) as CULong,
+  (offset_of!(FullMcPerfEvent,user_accum_count)) as CULong,
+  (offset_of!(FullMcPerfEvent,base_system_tsc)) as CULong,
+  (offset_of!(FullMcPerfEvent,stopped_system_tsc)) as CULong,
+  (offset_of!(FullMcPerfEvent,system_accum_count)) as CULong,
+  (offset_of!(FullMcPerfEvent,hw)) as CULong,
+  (size_of::<HwPerfEvent>()) as CULong,
+  (align_of::<HwPerfEvent>()) as CULong,
+  (offset_of!(HwPerfEvent,prev_count)) as CULong,
+  (offset_of!(HwPerfEvent,sample_period)) as CULong,
+  (offset_of!(HwPerfEvent,last_period)) as CULong,
+  (offset_of!(HwPerfEvent,period_left)) as CULong,
+  (size_of::<HwPerfEventExtra>()) as CULong,
+  (align_of::<HwPerfEventExtra>()) as CULong,
+  (offset_of!(HwPerfEventExtra,config)) as CULong,
+  (offset_of!(HwPerfEventExtra,reg)) as CULong,
+  (offset_of!(HwPerfEventExtra,idx)) as CULong,
+  (size_of::<PerfEventAttr>()) as CULong,
+  (align_of::<PerfEventAttr>()) as CULong,
+  (offset_of!(PerfEventAttr,flags)) as CULong,
+  (offset_of!(PerfEventAttr,sample_type)) as CULong,
+  (offset_of!(PerfEventAttr,read_format)) as CULong,
+  (size_of::<IhkAtomic64>()) as CULong,
+  (align_of::<IhkAtomic64>()) as CULong,
+  (size_of::<AbiListHead>()) as CULong,
+  (align_of::<AbiListHead>()) as CULong,
+  (offset_of!(AbiListHead,next)) as CULong,
+  (offset_of!(AbiListHead,prev)) as CULong,
+ ];
+
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Complete entry over existing Rust group-sync algorithm and genuine providers.
+#[cfg(f03_sync_child_event_candidate)]
+mod f03_sync_child_event_v1 {
+    use core::ffi::c_void;
+    use core::mem::{align_of, offset_of, size_of};
+    use core::ptr::read_volatile;
+
+    use crate::abi::{CInt, CULong};
+    use crate::x86_perfctr::PerfEventAttrOpaque;
+
+    use super::{
+        f03_sync_child_count_set_v2, f03_sync_child_perf_read_v2, sync_child_event_body_result,
+    };
+
+    // Actual fixed scalar prefix from lib/include/mc_perf_event.h. No Rust
+    // reference to an unmodelled C bitfield struct is created. The first flags
+    // byte is read only after genuine event construction initialized its bytes.
+    #[repr(C)]
+    struct AttrFlagsPrefix {
+        type_: u32,
+        size: u32,
+        config: CULong,
+        sample_period: CULong,
+        sample_type: CULong,
+        read_format: CULong,
+        flags: CULong,
+    }
+
+    unsafe extern "C" {
+        // C header-derived offsets: flags byte, pid, leader, counter, count,
+        // child total, sibling list and group entry. No runtime C getter.
+        static f03_sync_child_offsets_v1: [CULong; 8];
+    }
+
+    /// Preserve the original entry's null/pid/inherit and ignored helper result.
+    ///
+    /// # Safety
+    /// A non-null event has its genuine initialized perf attribute bytes and
+    /// live group/leader/list/counter graph. The original synchronization and
+    /// current-CPU perf ownership must last through all callbacks. This entry
+    /// establishes neither a new lock nor an extra lifetime/reference/IRQ rule.
+    /// The x86 compiler's real inherit-bit witness must qualify this selection.
+    #[export_name = "sync_child_event"]
+    pub unsafe extern "C" fn f03_sync_child_event_v1(event: *mut c_void) {
+        if event.is_null() {
+            return;
+        }
+        // SAFETY: C metadata is static and source-bound. Only initialized field
+        // bytes are accessed; no whole foreign attribute reference is formed.
+        unsafe {
+            let offsets = f03_sync_child_offsets_v1;
+            let bytes = event.cast::<u8>();
+            let inherit = (read_volatile(bytes.add(offsets[0] as usize)) & 2 != 0) as CInt;
+            let pid = read_volatile(bytes.add(offsets[1] as usize).cast::<CInt>());
+            let _ = sync_child_event_body_result(
+                event, inherit, pid, offsets[2] as usize, offsets[1] as usize,
+                offsets[3] as usize, offsets[4] as usize, offsets[5] as usize,
+                offsets[6] as usize, offsets[7] as usize,
+                Some(f03_sync_child_perf_read_v2), Some(f03_sync_child_count_set_v2),
+            );
+        }
+    }
+
+    #[no_mangle]
+    #[used]
+    pub static f03_sync_child_attr_Rust_ABI_v1: [CULong; 4] = [
+        size_of::<PerfEventAttrOpaque>() as CULong,
+        align_of::<PerfEventAttrOpaque>() as CULong,
+        offset_of!(AttrFlagsPrefix, flags) as CULong,
+        size_of::<CULong>() as CULong,
+    ];
+
+    // Compare this entire initialized byte object with the compiled original
+    // C {.inherit=1} datum. It is a proposed ABI witness, not observed authority.
+    #[no_mangle]
+    #[used]
+    pub static f03_sync_child_Rust_inherit_pattern_v1: [u8; size_of::<PerfEventAttrOpaque>()] = {
+        let mut bytes = [0; size_of::<PerfEventAttrOpaque>()];
+        bytes[offset_of!(AttrFlagsPrefix, flags)] = 2;
+        bytes
+    };
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Paired centrally with MCKERNEL_RUST_F06_PROCESS_VM_ENTRY; no automatic selection.
+#[cfg(f06_process_vm_entry_candidate)]
+#[path = "f06_process_vm_entry.rs"]
+mod f06_process_vm_entry;

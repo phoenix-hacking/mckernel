@@ -17434,3 +17434,56 @@ mod process_idle_callback_storage {
         safe_halt: cpu_safe_halt,
     };
 }
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Exact original process.c tracked-allocation diagnostic callsite identities.
+// These immutable signed C-int objects use the already paired storage selector.
+// The original C __FILE__ pointers and every mutable Ddebug selector stay unchanged.
+#[cfg(process_global_storage_candidate)]
+mod remaining_process_tracked_line_storage {
+    use crate::abi::CInt;
+
+    const _: () = {
+        assert!(core::mem::size_of::<CInt>() == 4);
+        assert!(core::mem::align_of::<CInt>() == 4);
+    };
+
+    #[no_mangle]
+    pub static process_mckfd_free_bridge_source_line: CInt = 171;
+
+    #[no_mangle]
+    pub static process_policy_free_bridge_source_line: CInt = 253;
+
+    #[no_mangle]
+    pub static process_optional_free_bridge_source_line: CInt = 258;
+
+    #[no_mangle]
+    pub static process_alloc_bridge_source_line: CInt = 340;
+
+    #[no_mangle]
+    pub static process_free_vm_bridge_source_line: CInt = 561;
+
+    #[no_mangle]
+    pub static process_create_thread_alloc_pages_source_line: CInt = 788;
+
+    #[no_mangle]
+    pub static process_split_range_alloc_source_line: CInt = 1628;
+
+    #[no_mangle]
+    pub static process_range_kfree_bridge_source_line: CInt = 1817;
+
+    #[no_mangle]
+    pub static process_free_range_pages_source_line: CInt = 1873;
+
+    #[no_mangle]
+    pub static process_add_range_alloc_bridge_source_line: CInt = 2256;
+
+    #[no_mangle]
+    pub static process_add_range_free_bridge_source_line: CInt = 2261;
+
+    #[no_mangle]
+    pub static process_page_fault_anon_alloc_line: CInt = 3058;
+
+    #[no_mangle]
+    pub static process_free_thread_pages_source_line: CInt = 3501;
+}

@@ -1,0 +1,8 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "stage": "Private validator preparation rerun before freeze",
+  "returncode": 1,
+  "error": "FileExistsError at T.mkdir(mode=0o700): validator-templates already exists",
+  "correction": "exist_ok=True for this private preparation output directory only",
+  "compiler_container_admission_actions": 0
+}

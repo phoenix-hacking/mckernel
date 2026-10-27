@@ -101,6 +101,15 @@ int copy_user_ranges(struct process_vm *vm, struct process_vm *orgvm);
 #else
 static int copy_user_ranges(struct process_vm *vm, struct process_vm *orgvm);
 #endif
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ * Preserve the original tracked callsite numbers; do not use Rust line!/file!.
+ * This selector is before the existing #line reset, so all later diagnostic
+ * metadata keeps its unchanged original logical line and __FILE__ identity. */
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+#define PROCESS_TRACKED_LINE_STORAGE(name, value) extern const int name
+#else
+#define PROCESS_TRACKED_LINE_STORAGE(name, value) const int name = value
+#endif
 #line 100
 extern void __runq_add_proc(struct thread *proc, int cpu_id);
 extern void lapic_timer_enable(unsigned int clocks);
@@ -216,7 +225,7 @@ int split_process_memory_range(struct process_vm *vm, struct vm_range *range,
 const char *const process_tracked_allocator_source_file = __FILE__;
 #endif
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
-const int process_mckfd_free_bridge_source_line = 171;
+PROCESS_TRACKED_LINE_STORAGE(process_mckfd_free_bridge_source_line, 171);
 void process_mckfd_free_bridge(struct mckfd *fdp);
 #else
 #line 169
@@ -314,7 +323,7 @@ void process_ptrace_traceme_log_bridge(int event, int pid, unsigned long value, 
 #endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
-const int process_policy_free_bridge_source_line = 253;
+PROCESS_TRACKED_LINE_STORAGE(process_policy_free_bridge_source_line, 253);
 void process_policy_free_bridge(void *policy);
 #else
 #line 251
@@ -326,7 +335,7 @@ void process_policy_free_bridge(void *policy)
 #line 255
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
-const int process_optional_free_bridge_source_line = 258;
+PROCESS_TRACKED_LINE_STORAGE(process_optional_free_bridge_source_line, 258);
 void process_optional_free_bridge(void *ptr);
 #else
 #line 256
@@ -441,7 +450,7 @@ void process_vm_init_numa_log_bridge(int numa_id)
 #line 337
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
-const int process_alloc_bridge_source_line = 340;
+PROCESS_TRACKED_LINE_STORAGE(process_alloc_bridge_source_line, 340);
 void *process_alloc_bridge(unsigned long size, unsigned long flags);
 #else
 #line 338
@@ -693,7 +702,7 @@ void process_free_all_ranges_bridge(void *vm)
 #line 558
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
-const int process_free_vm_bridge_source_line = 561;
+PROCESS_TRACKED_LINE_STORAGE(process_free_vm_bridge_source_line, 561);
 void process_free_vm_bridge(void *vm);
 #else
 #line 559
@@ -972,7 +981,7 @@ init_process_vm(struct process *owner, struct address_space *asp, struct process
 #endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
-const int process_create_thread_alloc_pages_source_line = 788;
+PROCESS_TRACKED_LINE_STORAGE(process_create_thread_alloc_pages_source_line, 788);
 void *process_create_thread_alloc_pages_bridge(int npages, unsigned long flags);
 #line 790
 
@@ -2026,7 +2035,7 @@ int process_split_shm_update_page_bridge(struct memobj *obj,
 #endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
-const int process_split_range_alloc_source_line = 1628;
+PROCESS_TRACKED_LINE_STORAGE(process_split_range_alloc_source_line, 1628);
 struct vm_range *process_split_range_alloc_bridge(unsigned long size,
 		unsigned long flags);
 #else
@@ -2321,7 +2330,7 @@ int process_join_range_tofu_bridge(struct process_vm *vm,
 #endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
-const int process_range_kfree_bridge_source_line = 1817;
+PROCESS_TRACKED_LINE_STORAGE(process_range_kfree_bridge_source_line, 1817);
 void process_range_kfree_bridge(struct vm_range *range);
 #else
 #line 1815
@@ -2407,7 +2416,7 @@ static void *process_free_range_phys_to_virt_bridge(unsigned long phys)
 #line 1870
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
-const int process_free_range_pages_source_line = 1873;
+PROCESS_TRACKED_LINE_STORAGE(process_free_range_pages_source_line, 1873);
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_free_range_body_debug[3] = {
  { .file=__FILE__, .func="process_free_range_log_bridge", .line=1947, .flags=DDEBUG_DEFAULT },
@@ -3029,7 +3038,7 @@ void *memset_smp(cpu_set_t *cpu_set, void *s, int c, size_t n)
 #endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
-const int process_add_range_alloc_bridge_source_line = 2256;
+PROCESS_TRACKED_LINE_STORAGE(process_add_range_alloc_bridge_source_line, 2256);
 struct vm_range *process_add_range_alloc_bridge(unsigned long size);
 #else
 #line 2254
@@ -3041,7 +3050,7 @@ struct vm_range *process_add_range_alloc_bridge(unsigned long size)
 #line 2258
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
-const int process_add_range_free_bridge_source_line = 2261;
+PROCESS_TRACKED_LINE_STORAGE(process_add_range_free_bridge_source_line, 2261);
 void process_add_range_free_bridge(struct vm_range *range);
 #else
 #line 2259
@@ -3881,7 +3890,7 @@ int process_page_fault_cow_allocate_body_result(struct process_vm *, struct vm_r
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 /* Original allocation tracking identities retain static storage lifetime. */
 const char *const process_page_fault_anon_alloc_file = __FILE__;
-const int process_page_fault_anon_alloc_line = 3058;
+PROCESS_TRACKED_LINE_STORAGE(process_page_fault_anon_alloc_line, 3058);
 int process_page_fault_anon_allocate_body_result(struct process_vm *, struct vm_range *,
         uintptr_t, uint64_t, pte_t **, void **, size_t *, int *, void **, int *);
 #endif
@@ -5060,7 +5069,7 @@ void free_process_memory_ranges(struct process_vm *vm)
 #endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
-const int process_free_thread_pages_source_line = 3501;
+PROCESS_TRACKED_LINE_STORAGE(process_free_thread_pages_source_line, 3501);
 void process_free_thread_pages_bridge(void *thread);
 #else
 #line 3499

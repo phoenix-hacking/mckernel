@@ -1,0 +1,41 @@
+{
+  "baseline": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-unprivileged-build-only-source-1/run_build_only.py",
+    "bytes": 16380,
+    "sha256": "bc9e984a4f1b85a7267f4c7f08f96ad840f2e6bf4c1a7297ada1141a3d554bcb"
+  },
+  "edits": [
+    {
+      "before": "def execute(grant_path):",
+      "after": "def source_directory_postimages(profile):\n    exports=profile['inputs'].get('source_directory_exports',[])\n    require(isinstance(exports,list) and len(exports)<=1,'only one exact Rust subtree directory export')\n    rows=[]\n    for export in exports:\n        require(set(export)=={'host_path','container_destination','readonly','manifest'} and export['readonly'] is True and export['container_destination']=='/src/kernel/rust','exact readonly Rust subtree source export')\n        root=strict_parent(export['host_path']);require(root.is_dir() and not root.is_symlink(),'ordinary closed source directory')\n        manifest=read(auth(export['manifest']))\n        require(manifest['schema']=='mckernel.exact-kernel-rust-subtree-readonly.v1' and manifest['runtime_authority'] is None and manifest['export_root']==str(root) and manifest['container_destination']=='/src/kernel/rust' and manifest['base_source_root']==profile['inputs']['source6153']+'/kernel/rust','exact source-directory manifest binding')\n        expected=set()\n        for row in manifest['files']:\n            relative=Path(row['relative']);require(not relative.is_absolute() and '..' not in relative.parts and str(relative)==row['relative'],'exact normalized source-relative file')\n            require(row['relative'] not in expected and row['snapshot']['path']==str(root/relative),'unique literal source snapshot file map')\n            expected.add(row['relative']);rows.append(dict(relative='kernel/rust/'+row['relative'],postimage=row['snapshot']))\n        actual=set()\n        for path in root.rglob('*'):\n            require(not path.is_symlink(),'no source-subtree symlinks')\n            if path.is_dir():continue\n            require(path.is_file(),'ordinary closed source snapshot file');actual.add(str(path.relative_to(root)))\n        require(actual==expected,'closed exact source-directory file set')\n    return rows\n\ndef commands_for_plan(profile):\n    \"\"\"Fixed successor cohort only; data is incomplete until Root binds exact sources/flags.\"\"\"\n    require(isinstance(profile['request_sha256'],str) and len(profile['request_sha256'])==64 and all(c in '0123456789abcdef' for c in profile['request_sha256']),'Root must bind new exact request SHA256')\n    require(isinstance(profile['inputs']['postimages'],list) and profile['inputs']['postimages'],'Root must supply exact new readonly postimages')\n    require(profile['cohort_source_bindings']==[dict(relative=r['relative'],postimage=r['postimage']) for r in profile['inputs']['postimages']]+source_directory_postimages(profile),'exact new cohort source map')\n    require(isinstance(profile['reuse_descriptor'],str) and profile['reuse_descriptor'],'Root must supply matching seven-object/four-replacement reuse descriptor')\n    require(isinstance(profile['producer_contract']['process_delta'],str) and profile['producer_contract']['process_delta'],'Root must state exact new process delta')\n    if 'unchanged_completed_process_prefix' in profile:require(profile['unchanged_completed_process_prefix']['Root_decision'] is not None,'Root must disposition already completed unchanged F02 process prefix before grant')\n    commands=profile['exact_commands']\n    outputs=['rust/mckernel_rust.o','CMakeFiles/mckernel.img.dir/process.c.o','CMakeFiles/mckernel.img.dir/syscall.c.o','CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o','mckernel.img']\n    sources=['/src/kernel/rust/lib.rs','/src/kernel/process.c','/src/kernel/syscall.c','/src/arch/x86_64/kernel/syscall.c']\n    require(len(commands)==5,'exact five selected successor commands')\n    require(set(s.removeprefix('/src/') for s in sources)<={r['relative'] for r in profile['inputs']['postimages']}|{r['relative'] for r in source_directory_postimages(profile)},'all four changed compiler source paths must be bound readonly postimages')\n    require(sum(not r['replace'] for r in profile['inputs']['objects'])==7 and sum(r['replace'] for r in profile['inputs']['objects'])==4,'seven original retained and four new objects')\n    require({r['link_token'] for r in profile['inputs']['objects'] if r['replace']}==set(outputs[:4]),'exact four selected replacement object paths')\n    for i,(command,output) in enumerate(zip(commands,outputs)):\n        argv=command['argv']\n        require(isinstance(argv,list) and argv and all(isinstance(a,str) and a for a in argv),'Root must supply exact nonempty literal argv')\n        require(command['cwd']=='/work/output/build/kernel' and command['new_output']=='/work/output/build/kernel/'+output,'exact fixed output/cwd map')\n        if i==0:require(argv[:3]==['/usr/bin/cmake','-E','env'] and '--emit=obj='+command['new_output'] in argv and argv[-1]==sources[i],'whole Rust object command binding')\n        elif i<4:require(argv[0]=='/usr/bin/cc' and argv[-2:]==['-c',sources[i]] and argv[argv.index('-o')+1]==output,'exact selected C object/source command binding')\n        else:require(argv==['/usr/bin/ld', '-e', 'arch_start', '-T', '/work/output/build/kernel/config/smp-x86.lds', '--build-id', '-Map=/work/output/build/kernel/mckernel.img.map', '--dependency-file=CMakeFiles/mckernel.img.dir/link.d', 'CMakeFiles/mckernel.img.dir/mem.c.o', 'CMakeFiles/mckernel.img.dir/syscall.c.o', 'CMakeFiles/mckernel.img.dir/process.c.o', 'CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o', 'rust/mckernel_rust.o', '-o', 'mckernel.img'],'unchanged exact eleven-input raw linker argv')\n    return commands\n\ndef execute(grant_path):"
+    },
+    {
+      "before": "    require(profile['runtime_authority'] is None,'profile cannot grant runtime authority')",
+      "after": "    require(profile['runtime_authority'] is None,'profile cannot grant runtime authority')\n    commands=commands_for_plan(profile)"
+    },
+    {
+      "before": "    commands=[dict(c,new_output='/work/output/build/kernel/'+token) for c,token in zip(profile['exact_commands'],['rust/mckernel_rust.o','CMakeFiles/mckernel.img.dir/process.c.o','mckernel.img'])]\n",
+      "after": ""
+    },
+    {
+      "before": "exact retained configuration/nine objects/three postimage export closure",
+      "after": "exact retained configuration/seven objects/new cohort postimage export closure"
+    },
+    {
+      "before": "BUDGET=23669457394  # no larger than 22.0439 GiB; confirmed in pure tests",
+      "after": "BUDGET=23357213271  # current aggregate 21.7531 GiB planning ceiling"
+    },
+    {
+      "before": "    base += [dict(host=r['host_path'],target=r['container_path'],readonly=True) for r in profile['inputs']['toolchain_mounts']]",
+      "after": "    base += [dict(host=r['host_path'],target=r['container_path'],readonly=True) for r in profile['inputs']['toolchain_mounts']]\n    source_directory_postimages(profile)\n    base += [dict(host=r['host_path'],target=r['container_destination'],readonly=True) for r in profile['inputs'].get('source_directory_exports',[])]"
+    },
+    {
+      "before": "    for original in originals:",
+      "after": "    originals += [r['host_path'] for r in profile['inputs'].get('source_directory_exports',[])]\n    for original in originals:"
+    },
+    {
+      "before": "+[r['postimage'] for r in profile['inputs']['postimages']]",
+      "after": "+[r['postimage'] for r in profile['inputs']['postimages']]+[r['postimage'] for r in source_directory_postimages(profile)]"
+    }
+  ]
+}

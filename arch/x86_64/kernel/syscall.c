@@ -477,6 +477,7 @@ arch_rt_sigreturn_context_bridge(struct thread **threadp,
 }
 #endif
 
+#if !(defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_PROCESS_VM_ENTRY))
 static void
 arch_process_vm_rw_read_lock_bridge(void *vm)
 {
@@ -564,6 +565,8 @@ arch_process_vm_rw_memcpy_bridge(void *dst, const void *src, size_t bytes)
 {
 	fast_memcpy(dst, src, bytes);
 }
+
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 extern void arch_process_vm_rw_log_bridge(const struct arch_process_vm_rw_log_record *record);
@@ -3378,6 +3381,13 @@ save_uctx(void *uctx, struct x86_user_context *regs)
 }
 #endif
 
+#if (defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_PROCESS_VM_ENTRY))
+extern int do_process_vm_read_writev(int pid,
+		const struct iovec *local_iov, unsigned long liovcnt,
+		const struct iovec *remote_iov, unsigned long riovcnt,
+		unsigned long flags, int op);
+#else
+
 int do_process_vm_read_writev(int pid, 
 		const struct iovec *local_iov,
 		unsigned long liovcnt,
@@ -3694,6 +3704,8 @@ out:
 	return ret;
 #endif
 }
+
+#endif
 
 #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 #line 3662
