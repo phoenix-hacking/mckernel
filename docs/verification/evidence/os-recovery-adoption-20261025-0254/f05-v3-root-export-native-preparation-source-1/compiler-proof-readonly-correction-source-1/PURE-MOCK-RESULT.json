@@ -1,0 +1,56 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nPure existing-owner mock regressions; no Docker, compiler, guard or guest execution.\n",
+  "status": "PASS_PURE_EXISTING_OWNER_MOCK_REGRESSION",
+  "count": 12,
+  "cases": [
+    {
+      "case": "old143 pins and all owner functions/classes byte-semantic AST unchanged; one exact compiler mount+pin",
+      "result": "PASS"
+    },
+    {
+      "case": "complete create argv identical except new owner SELF and one exact readonly compiler mount",
+      "result": "PASS"
+    },
+    {
+      "case": "complete requested+actual container profile accepts one exact RO file and unchanged full config",
+      "result": "PASS"
+    },
+    {
+      "case": "missing requested compiler mount refuses",
+      "result": "PASS"
+    },
+    {
+      "case": "missing actual compiler mount refuses",
+      "result": "PASS"
+    },
+    {
+      "case": "requested compiler writable refuses",
+      "result": "PASS"
+    },
+    {
+      "case": "actual compiler writable refuses",
+      "result": "PASS"
+    },
+    {
+      "case": "different requested compiler source refuses",
+      "result": "PASS"
+    },
+    {
+      "case": "different actual compiler destination refuses",
+      "result": "PASS"
+    },
+    {
+      "case": "all144 source pins precede complete manifest loader using existing bound_manifest",
+      "result": "PASS"
+    },
+    {
+      "case": "missing compiler file refuses before evaluator loader",
+      "result": "PASS"
+    },
+    {
+      "case": "different compiler hash refuses before evaluator loader",
+      "result": "PASS"
+    }
+  ],
+  "actual_Docker_compiler_guard_native_calls": 0
+}

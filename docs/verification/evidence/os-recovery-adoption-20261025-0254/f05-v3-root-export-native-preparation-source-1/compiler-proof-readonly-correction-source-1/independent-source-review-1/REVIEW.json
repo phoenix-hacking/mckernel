@@ -1,0 +1,190 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/custody_release_review",
+  "at": "2026-10-27T23:01:52.046120+00:00",
+  "decision": "PASS_ONE_EXACT_READONLY_COMPILER_PROOF_FILE_SOURCE_AND_PROFILE_DELTA",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/compiler-proof-readonly-correction-source-1/SOURCE-READY.json",
+    "bytes": 3166,
+    "sha256": "d269b4a825e666da01bb722ca6b8b31f8267c1f00c3c7c230ff20e9d96226b1a"
+  },
+  "preimage": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-runtime-1/native_diagnostic_container_owner.py",
+    "bytes": 94279,
+    "sha256": "24210e3ededacd6576f61a96e7233baaa1ac243629e5ec25ce06ded1463bb99f"
+  },
+  "candidate": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/compiler-proof-readonly-correction-source-1/native_diagnostic_container_owner.py",
+    "bytes": 94653,
+    "sha256": "66da233259a86587688adf1b2e30f6b8bc5db5a0fba23163d376e82f7e04e021"
+  },
+  "Root_destination": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/compiler-proof-readonly-correction-source-1/root-adopted-owner-1/native_diagnostic_container_owner.py",
+  "compiler_readonly_file": {
+    "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "bytes": 654904,
+    "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1"
+  },
+  "retained_runtime_context": {
+    "native_diagnostic.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-runtime-1/native_diagnostic.py",
+      "bytes": 130020,
+      "sha256": "e55ad576c45a5eaee742b47081612924a0fca12fc803d30fb359cc9ea6bc57e2"
+    },
+    "native_diagnostic_runner.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-runtime-1/native_diagnostic_runner.py",
+      "bytes": 6005,
+      "sha256": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499"
+    },
+    "native_diagnostic_backend.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-runtime-1/native_diagnostic_backend.py",
+      "bytes": 25398,
+      "sha256": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614"
+    },
+    "qmp_capture.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-runtime-1/qmp_capture.py",
+      "bytes": 9913,
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741"
+    }
+  },
+  "full_validator_closure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/compiler-proof-readonly-correction-source-1/ACTUAL-READONLY-SUPERVISOR-VALIDATOR-CLOSURE.json",
+    "bytes": 21116,
+    "sha256": "e5d3a6d1b8e5a53846b47a2a52cf2a857932e681fee4e9e62f6acf6b2a5c29f0"
+  },
+  "mock_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/compiler-proof-readonly-correction-source-1/PURE-MOCK-RESULT.json",
+    "bytes": 1681,
+    "sha256": "1af19c0ac9a31c284f423cd02c5bb8f4efc6a8b843c975569c5c10379732de75"
+  },
+  "preserved_actual_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-root37-1/independent-actual-native-review-1/REVIEW.json",
+    "bytes": 63017,
+    "sha256": "9d3aa7ff83c3bec493a575a8035ce59963e92fb2a82d549febd89ab34c8ce066"
+  },
+  "findings": [
+    "Whole owner AST matches predecessor after only SELF literal normalization and removal of exactly two new constant-extension assignments. Every function/class and all other top-level AST unchanged. Original143 source pins including four current runtime context pins remain exact; one compiler pin gives144.",
+    "EXTRA_READONLY appends exactly canonical regular single-link654904B rustc028fd60b file with source=destination at same literal path. No directory/toolchain tree mount, PATH change, command addition, compiler invocation or new native capability.",
+    "Unchanged _create_argv appends exact readonly file bind; unchanged _profile requires exact requested and actual mount sets and rejects missing/writable/wrong source/destination. All isolation/resource/cgroup/mutex/lease/cleanup and oneheavy algorithms unchanged.",
+    "Exact e55 full-supervisor-validator closure reports38reference calls/29unique files, qualified output exactly equals sealed actual908f supervisor binding. Independent lexical mount coverage of all29 referenced paths finds exactly this one uncovered external file under original mounts; added exact file covers it. Full retained validator result reused, not reexecuted.",
+    "Sealed12 pure existing-owner controls cover completeargv/profile, requested+actualRO, missing/RW/different source/destination and compiler missing/hashfail before evaluator import. ReportedPASS authenticated; tests not rerun by reviewer.",
+    "Actual31770 failure remains FileNotFoundError inside bound_manifest/_f05_validate_supervisor, before QEMUversion/guest/runner/payload. Positive current-free proof retained, nonce consumed; no guest/kernel failure or native acceptance inferred.",
+    "This is one bounded source/profile correction to preguest proof visibility. Root adoption/sourceauthority/capability/ownerCLI/sourcepublication must bind new66da and fresh Root38/newnonce/current/resource/independent execution release; consumed31770 cannot be reused."
+  ],
+  "source_pin_counts": {
+    "old": 143,
+    "new": 144,
+    "unchanged_old_pin_values": true
+  },
+  "whole_toolchain_mount": false,
+  "compiler_executed": false,
+  "oracle_or_evaluator_changed": false,
+  "source_profile_delta_acceptance": true,
+  "runtime_authority": null,
+  "native_acceptance": false,
+  "execution_release": false,
+  "actions": {
+    "readonly_source_AST_hash_and_closure_metadata": true,
+    "unchanged143body_rehashes": 0,
+    "compiler_tests_guard_Docker_query_workload_cleanup_canonical_Git": 0,
+    "subagents": 0
+  },
+  "references": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/compiler-proof-readonly-correction-source-1/SOURCE-READY.json",
+      "bytes": 3166,
+      "sha256": "d269b4a825e666da01bb722ca6b8b31f8267c1f00c3c7c230ff20e9d96226b1a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/compiler-proof-readonly-correction-source-1/ACTUAL-READONLY-SUPERVISOR-VALIDATOR-CLOSURE.json",
+      "bytes": 21116,
+      "sha256": "e5d3a6d1b8e5a53846b47a2a52cf2a857932e681fee4e9e62f6acf6b2a5c29f0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/compiler-proof-readonly-correction-source-1/PURE-MOCK-RESULT.json",
+      "bytes": 1681,
+      "sha256": "1af19c0ac9a31c284f423cd02c5bb8f4efc6a8b843c975569c5c10379732de75"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/compiler-proof-readonly-correction-source-1/ROOT-OWNER-CORRECTION.PROPOSAL.json",
+      "bytes": 3421,
+      "sha256": "33eb33e7f03d188ea5dc02b45ca6088c9d2c2bd105bcf70bb08bdc0b8ec753c3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/compiler-proof-readonly-correction-source-1/native_diagnostic_container_owner.py",
+      "bytes": 94653,
+      "sha256": "66da233259a86587688adf1b2e30f6b8bc5db5a0fba23163d376e82f7e04e021"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/compiler-proof-readonly-correction-source-1/owner.compiler-proof-readonly.patch",
+      "bytes": 37081,
+      "sha256": "6d70ee3642458c314707081b04dbcde6cbc9121ff3a4ab002390a9c62cca74e6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/compiler-proof-readonly-correction-source-1/test_compiler_readonly_context_mock.py",
+      "bytes": 5637,
+      "sha256": "a7dbb46e1029597fb1a4c37dd3563349e0539c6bf34595e94d224d3168166796"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/compiler-proof-readonly-correction-source-1/ROOT-OWNER-CORRECTION.PROPOSAL.json",
+      "bytes": 3421,
+      "sha256": "33eb33e7f03d188ea5dc02b45ca6088c9d2c2bd105bcf70bb08bdc0b8ec753c3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-runtime-1/native_diagnostic_container_owner.py",
+      "bytes": 94279,
+      "sha256": "24210e3ededacd6576f61a96e7233baaa1ac243629e5ec25ce06ded1463bb99f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/compiler-proof-readonly-correction-source-1/native_diagnostic_container_owner.py",
+      "bytes": 94653,
+      "sha256": "66da233259a86587688adf1b2e30f6b8bc5db5a0fba23163d376e82f7e04e021"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "bytes": 654904,
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-runtime-1/native_diagnostic.py",
+      "bytes": 130020,
+      "sha256": "e55ad576c45a5eaee742b47081612924a0fca12fc803d30fb359cc9ea6bc57e2"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-runtime-1/native_diagnostic_runner.py",
+      "bytes": 6005,
+      "sha256": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-runtime-1/native_diagnostic_backend.py",
+      "bytes": 25398,
+      "sha256": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-runtime-1/qmp_capture.py",
+      "bytes": 9913,
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/compiler-proof-readonly-correction-source-1/ACTUAL-READONLY-SUPERVISOR-VALIDATOR-CLOSURE.json",
+      "bytes": 21116,
+      "sha256": "e5d3a6d1b8e5a53846b47a2a52cf2a857932e681fee4e9e62f6acf6b2a5c29f0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-runtime-1/native_diagnostic.py",
+      "bytes": 130020,
+      "sha256": "e55ad576c45a5eaee742b47081612924a0fca12fc803d30fb359cc9ea6bc57e2"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/compiler-proof-readonly-correction-source-1/PURE-MOCK-RESULT.json",
+      "bytes": 1681,
+      "sha256": "1af19c0ac9a31c284f423cd02c5bb8f4efc6a8b843c975569c5c10379732de75"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-root37-1/independent-actual-native-review-1/REVIEW.json",
+      "bytes": 63017,
+      "sha256": "9d3aa7ff83c3bec493a575a8035ce59963e92fb2a82d549febd89ab34c8ce066"
+    }
+  ]
+}

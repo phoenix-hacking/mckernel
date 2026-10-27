@@ -1,3 +1,38 @@
+## Root38 free; corrected compiler batch ready — 2026-10-27T23:04:06.925784+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+F05v3preguest31770 failure independentlyretired9d3; Root38ledger9b3d current. Noheavy live.
+ExactHOSTcompiler-fileROcorrection owner66da reviewed880a/Rootadoption9429, source
+readclosure29unique/12mocks unchanged143pins+onecompilerpin. No guest/proof weakening.
+NewouterF05attemptcdc739 reservedUNUSED, originalpayloadgate31770sourceunchanged.
+Corrected113leafcac599/adoptionb09e/sourcePASSd18c, Root38helperPASS2871. Actual
+newadmissionROOT-CURRENT113-ABI-PRIVATE-CORRECTION-BUILD-ADMISSION-1 profile88f219/
+request7d823/noncea8c41cf27729ebfd85f7bc45de76fe4e RESERVEDUNUSED. Fourcommands
+failedRust+3unrun/eightretained/genuine113origin2c419reused. Publishthenfreshactual
+holder/resource/review/READY next. AcceptedC87/Rust52/process67/native0/file0unchanged.
+Perf3fullHOST4af93 nowPASS7prefix+retainedqualifier. CorrectRuststartupstagecf145
+sourceproposal reviewednext, payload/executor/kernel/module recompilationnotneeded.
+Fixed05:36:09Z/earlierclamps/sameaccount/includedfirst/realholds/oneheavy/mutex/floors.
+
+## F05 v3 pre-guest visibility failure preserved — 2026-10-27T22:59:03.240491+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actualv3nonce31770 consumedonce: resource→entry33.687s/atomicreview7bbb.
+Ownercaller1735836/actualowner1735840 returned1 in1.553009s; helper/bridge0NOTacceptance.
+Insideowner e55 supervisorbinding checks HOSTcompiler at exactrustc path notmounted;
+FileNotFoundError beforeattemptdir/guest/collector. No OSbehavior tested. Original
+source908f125c/case/profile correct; failure/rawownerrecords preserved, independent
+currentfree pendingbeforeRoot38. Oneboundedhash-boundexactcompilerfileROmount
+sourcecorrection inprogress; no validatorbypass/toolchainrebuild/newwholetoolchainmount.
+
+22:36–23:06bucket partial: failedRustcompiler1/wall3.113695/CPU3.110836/RSS419364;
+resource→compiler63.602679s. KernelE0616sourcefixd18c/Rootb09 adopted/uncompiled.
+ActualRuststartupcollector5HOSTsteps/16controlsPASS939e andRoot4052/d0bf adopted;
+correctstageSOURCEcf145 ready. Perf3HOST7/5.913008s prefix9832PASS, ELFqualifierpending.
+AcceptedC87/Rust52/process67, native/filedelta0; firstcompilerbaseline2608.941661s.
+20minreview2256 preservesfixed17:36:09baseline/nonoverlap30minbuckets/no95claim.
+Fixed05:36:09Z/earlierclamps/sameaccount/realholds/oneheavy/permanent27:4/scratch21/floors.
+
 ## Root37 free; F05 v3 complete entry ready — 2026-10-27T22:54:52.236710+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
