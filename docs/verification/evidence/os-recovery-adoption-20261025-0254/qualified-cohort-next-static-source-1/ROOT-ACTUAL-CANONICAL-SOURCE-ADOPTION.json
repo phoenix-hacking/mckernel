@@ -1,0 +1,73 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ROOT_EXACT_QUALIFIED_F03_F06_SOURCE_ADOPTION_NOT_COMPILER_ACCEPTANCE",
+  "at": "2026-10-27T01:58:49.355592+00:00",
+  "independent_source_reviewer": "/root/custody_release_review",
+  "independent_source_decision": "PASS_SOURCE; exact active four-command profile separately pending",
+  "changes": [
+    {
+      "path": "kernel/syscall.c",
+      "sha256": "2e1c3d5537551bb6a330ea37371ceed20718692d82e0522e004769bf1dcb7f89",
+      "bytes": 913009
+    },
+    {
+      "path": "kernel/rust/syscall_policy.rs",
+      "sha256": "f4ed7080659863662e1de75c432b89fd94aadf312efb5e924b1d0e60ef93dbd6",
+      "bytes": 1249379
+    },
+    {
+      "path": "kernel/rust/lib.rs",
+      "sha256": "fe60e37167124fba9599112683332c75e1f18ee046afd351a075f3bcf03ed3f7",
+      "bytes": 2252
+    },
+    {
+      "path": "arch/x86_64/kernel/syscall.c",
+      "sha256": "affa9b6d2fdc2514c6d7414f4f7854410ae18ebea02db738665065a5179db893",
+      "bytes": 114150
+    },
+    {
+      "path": "kernel/CMakeLists.txt",
+      "sha256": "a2636a16d089ee4f93158d8bea30e6a43e40bed967a35a8d859d63f4a19afa32",
+      "bytes": 29064
+    },
+    {
+      "path": "kernel/rust/f03_perf_attr_callbacks.rs",
+      "sha256": "116a1b3561009f530817c96341a8d1b58e1ab1ea275856f7582168c126ca2017",
+      "bytes": 1638
+    },
+    {
+      "path": "kernel/rust/f03_perf_event_attr_abi.rs",
+      "sha256": "8eec931271fd3829c6fffbadf3f2ae1da13796cc1929f3685145d0cd65c8d285",
+      "bytes": 1722
+    },
+    {
+      "path": "kernel/rust/f03_prlimit.rs",
+      "sha256": "dff579f83b624f601ab9379b7e2287000501f9ce0ee705fd2e3b0c9969981e43",
+      "bytes": 10668
+    },
+    {
+      "path": "kernel/rust/f06_mmap_dispatch_bridge.rs",
+      "sha256": "f49062df4a7ed65eb68a70735981a348c8e892b48320bab73e59f1bb5d430084",
+      "bytes": 1006
+    },
+    {
+      "path": "kernel/rust/f06_prctl_set_register.rs",
+      "sha256": "7cfbad6524e5ca293b22d5efaa7572492a95bfd2953ba8b01ee09113a287c3a2",
+      "bytes": 659
+    },
+    {
+      "path": "kernel/rust/f06_mmap_flags.rs",
+      "sha256": "862a9af87abfeb269fac4196564475ebb3dcf5a04ea89937b367c45c333d63b9",
+      "bytes": 1411
+    },
+    {
+      "path": "kernel/rust/f06_prctl_get_register.rs",
+      "sha256": "54a14ed47775362b4bb2a3644cb37b5669357edeb185130c1b84441d35df568d",
+      "bytes": 645
+    }
+  ],
+  "unchanged_F02_process_reused": true,
+  "compiler_execution": false,
+  "native_acceptance": false,
+  "whole_file_acceptance": false
+}

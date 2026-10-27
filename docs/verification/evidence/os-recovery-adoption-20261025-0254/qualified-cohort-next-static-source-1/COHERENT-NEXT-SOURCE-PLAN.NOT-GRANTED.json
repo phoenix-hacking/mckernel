@@ -1,0 +1,655 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_MERGED_QUALIFIED_NEXT_COHORT_SOURCE_ONLY_NO_COMPILER",
+  "runtime_authority": null,
+  "source_preimages": {
+    "kernel/syscall.c": {
+      "path": "/home/holden/mckernel/kernel/syscall.c",
+      "bytes": 909462,
+      "sha256": "54a9b0a8c6b9e1077fa7830bbaecdc699e7f3414767f50a77d4e5def63bdc582"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1228858,
+      "sha256": "fefec3eb05be2f714dfeca34310901a566557f82ee08de9b9ad0ef0344f74d62"
+    },
+    "kernel/rust/lib.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+      "bytes": 2115,
+      "sha256": "a05908f81b3ecd37d22fa75585525b8a4c8cf8cc9c52be57ea9a86e2ec580680"
+    },
+    "kernel/CMakeLists.txt": {
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "bytes": 26715,
+      "sha256": "f29336679e462746822d5ce9efe1a74491fbea1f0cbb46d56cfdc48ae082b3cc"
+    },
+    "arch/x86_64/kernel/syscall.c": {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "bytes": 113935,
+      "sha256": "d6bf00d0a46755f37f511bff0c098487f04a155842f11a4ac64f2a1795faa8c1"
+    },
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "bytes": 217647,
+      "sha256": "9692036c3aa2d580a2a134c2d4a8fc32ab5ff4215b44128668858d6fac131b12"
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "bytes": 603471,
+      "sha256": "851acd51fab945456edd87c001a63b867634f51207fbf1900451edaa368b09ea"
+    }
+  },
+  "source_postimages": {
+    "kernel/syscall.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/candidate/kernel/syscall.c",
+      "bytes": 913009,
+      "sha256": "2e1c3d5537551bb6a330ea37371ceed20718692d82e0522e004769bf1dcb7f89"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/candidate/kernel/rust/syscall_policy.rs",
+      "bytes": 1249379,
+      "sha256": "f4ed7080659863662e1de75c432b89fd94aadf312efb5e924b1d0e60ef93dbd6"
+    },
+    "kernel/rust/lib.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/candidate/kernel/rust/lib.rs",
+      "bytes": 2252,
+      "sha256": "fe60e37167124fba9599112683332c75e1f18ee046afd351a075f3bcf03ed3f7"
+    },
+    "arch/x86_64/kernel/syscall.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/candidate/arch/x86_64/kernel/syscall.c",
+      "bytes": 114150,
+      "sha256": "affa9b6d2fdc2514c6d7414f4f7854410ae18ebea02db738665065a5179db893"
+    },
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/candidate/kernel/process.c",
+      "bytes": 217647,
+      "sha256": "9692036c3aa2d580a2a134c2d4a8fc32ab5ff4215b44128668858d6fac131b12"
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/candidate/kernel/rust/process_helpers.rs",
+      "bytes": 603471,
+      "sha256": "851acd51fab945456edd87c001a63b867634f51207fbf1900451edaa368b09ea"
+    },
+    "kernel/CMakeLists.txt": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/candidate/kernel/CMakeLists.txt",
+      "bytes": 29064,
+      "sha256": "a2636a16d089ee4f93158d8bea30e6a43e40bed967a35a8d859d63f4a19afa32"
+    },
+    "kernel/rust/f03_perf_attr_callbacks.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/candidate/kernel/rust/f03_perf_attr_callbacks.rs",
+      "bytes": 1638,
+      "sha256": "116a1b3561009f530817c96341a8d1b58e1ab1ea275856f7582168c126ca2017"
+    },
+    "kernel/rust/f03_perf_event_attr_abi.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/candidate/kernel/rust/f03_perf_event_attr_abi.rs",
+      "bytes": 1722,
+      "sha256": "8eec931271fd3829c6fffbadf3f2ae1da13796cc1929f3685145d0cd65c8d285"
+    },
+    "kernel/rust/f03_prlimit.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/candidate/kernel/rust/f03_prlimit.rs",
+      "bytes": 10668,
+      "sha256": "dff579f83b624f601ab9379b7e2287000501f9ce0ee705fd2e3b0c9969981e43"
+    },
+    "kernel/rust/f06_mmap_dispatch_bridge.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/candidate/kernel/rust/f06_mmap_dispatch_bridge.rs",
+      "bytes": 1006,
+      "sha256": "f49062df4a7ed65eb68a70735981a348c8e892b48320bab73e59f1bb5d430084"
+    },
+    "kernel/rust/f06_prctl_set_register.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/candidate/kernel/rust/f06_prctl_set_register.rs",
+      "bytes": 659,
+      "sha256": "7cfbad6524e5ca293b22d5efaa7572492a95bfd2953ba8b01ee09113a287c3a2"
+    },
+    "kernel/rust/f06_mmap_flags.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/candidate/kernel/rust/f06_mmap_flags.rs",
+      "bytes": 1411,
+      "sha256": "862a9af87abfeb269fac4196564475ebb3dcf5a04ea89937b367c45c333d63b9"
+    },
+    "kernel/rust/f06_prctl_get_register.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/candidate/kernel/rust/f06_prctl_get_register.rs",
+      "bytes": 645,
+      "sha256": "54a14ed47775362b4bb2a3644cb37b5669357edeb185130c1b84441d35df568d"
+    }
+  },
+  "qualified_evidence": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-execveat-selected-1/coherent-four-slice-plan-1/COHERENT-SOURCE-PLAN.NOT-GRANTED.json",
+      "bytes": 8810,
+      "sha256": "f8f057a74627145cc40db687edaede42fc3e85d0059533c4640adec5042d0a61"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-do-exit-selected-1/ACTUAL-SCOPED-RESULT-HANDOFF.json",
+      "bytes": 18186,
+      "sha256": "5d259ac68a1a2ea863a658c658b24bfb6577b212e7cdd6ba3514e2503a4045d1"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-provider-backlog-1/ACTUAL-SCOPED-RESULT-HANDOFF.json",
+      "bytes": 10203,
+      "sha256": "e59b757898ed9c3479e5d61941ce08ce740c5578a1590a1b35a804db05dd69c8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/coherent-f06-six-provider-batch-1/expert-complete-header-context-1/ACTUAL-EXPERT-HOST-HANDOFF.json",
+      "bytes": 7907,
+      "sha256": "3f5b45d43d947cb1e0509d07f72305a8dd1cae907abea1a8faf1f334b800e49b"
+    }
+  ],
+  "merged_source_regions": [
+    {
+      "relative": "kernel/syscall.c",
+      "base": {
+        "path": "/home/holden/mckernel/kernel/syscall.c",
+        "bytes": 909462,
+        "sha256": "54a9b0a8c6b9e1077fa7830bbaecdc699e7f3414767f50a77d4e5def63bdc582"
+      },
+      "edits": [
+        {
+          "owner": "F03-four",
+          "base_line_interval": [
+            7500,
+            7500
+          ],
+          "replacement_lines": 6,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-execveat-selected-1/coherent-four-slice-plan-1/candidate/kernel/syscall.c",
+            "bytes": 911269,
+            "sha256": "69f2fac2a96e08c6229e2293a29826357eef37134e5fae538235b23467cc8ab8"
+          }
+        },
+        {
+          "owner": "F03-four",
+          "base_line_interval": [
+            7622,
+            7622
+          ],
+          "replacement_lines": 3,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-execveat-selected-1/coherent-four-slice-plan-1/candidate/kernel/syscall.c",
+            "bytes": 911269,
+            "sha256": "69f2fac2a96e08c6229e2293a29826357eef37134e5fae538235b23467cc8ab8"
+          }
+        },
+        {
+          "owner": "F03-four",
+          "base_line_interval": [
+            7633,
+            7633
+          ],
+          "replacement_lines": 1,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-execveat-selected-1/coherent-four-slice-plan-1/candidate/kernel/syscall.c",
+            "bytes": 911269,
+            "sha256": "69f2fac2a96e08c6229e2293a29826357eef37134e5fae538235b23467cc8ab8"
+          }
+        },
+        {
+          "owner": "F03-four",
+          "base_line_interval": [
+            7682,
+            7682
+          ],
+          "replacement_lines": 3,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-execveat-selected-1/coherent-four-slice-plan-1/candidate/kernel/syscall.c",
+            "bytes": 911269,
+            "sha256": "69f2fac2a96e08c6229e2293a29826357eef37134e5fae538235b23467cc8ab8"
+          }
+        },
+        {
+          "owner": "F03-four",
+          "base_line_interval": [
+            7683,
+            7683
+          ],
+          "replacement_lines": 1,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-execveat-selected-1/coherent-four-slice-plan-1/candidate/kernel/syscall.c",
+            "bytes": 911269,
+            "sha256": "69f2fac2a96e08c6229e2293a29826357eef37134e5fae538235b23467cc8ab8"
+          }
+        },
+        {
+          "owner": "F03-four",
+          "base_line_interval": [
+            7706,
+            7706
+          ],
+          "replacement_lines": 3,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-execveat-selected-1/coherent-four-slice-plan-1/candidate/kernel/syscall.c",
+            "bytes": 911269,
+            "sha256": "69f2fac2a96e08c6229e2293a29826357eef37134e5fae538235b23467cc8ab8"
+          }
+        },
+        {
+          "owner": "F03-four",
+          "base_line_interval": [
+            7725,
+            7725
+          ],
+          "replacement_lines": 1,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-execveat-selected-1/coherent-four-slice-plan-1/candidate/kernel/syscall.c",
+            "bytes": 911269,
+            "sha256": "69f2fac2a96e08c6229e2293a29826357eef37134e5fae538235b23467cc8ab8"
+          }
+        },
+        {
+          "owner": "F03-four",
+          "base_line_interval": [
+            20552,
+            20552
+          ],
+          "replacement_lines": 4,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-execveat-selected-1/coherent-four-slice-plan-1/candidate/kernel/syscall.c",
+            "bytes": 911269,
+            "sha256": "69f2fac2a96e08c6229e2293a29826357eef37134e5fae538235b23467cc8ab8"
+          }
+        },
+        {
+          "owner": "F03-four",
+          "base_line_interval": [
+            20566,
+            20566
+          ],
+          "replacement_lines": 1,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-execveat-selected-1/coherent-four-slice-plan-1/candidate/kernel/syscall.c",
+            "bytes": 911269,
+            "sha256": "69f2fac2a96e08c6229e2293a29826357eef37134e5fae538235b23467cc8ab8"
+          }
+        },
+        {
+          "owner": "F03-four",
+          "base_line_interval": [
+            20607,
+            20607
+          ],
+          "replacement_lines": 4,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-execveat-selected-1/coherent-four-slice-plan-1/candidate/kernel/syscall.c",
+            "bytes": 911269,
+            "sha256": "69f2fac2a96e08c6229e2293a29826357eef37134e5fae538235b23467cc8ab8"
+          }
+        },
+        {
+          "owner": "F03-four",
+          "base_line_interval": [
+            20622,
+            20622
+          ],
+          "replacement_lines": 1,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-execveat-selected-1/coherent-four-slice-plan-1/candidate/kernel/syscall.c",
+            "bytes": 911269,
+            "sha256": "69f2fac2a96e08c6229e2293a29826357eef37134e5fae538235b23467cc8ab8"
+          }
+        },
+        {
+          "owner": "F03-four",
+          "base_line_interval": [
+            24167,
+            24167
+          ],
+          "replacement_lines": 3,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-execveat-selected-1/coherent-four-slice-plan-1/candidate/kernel/syscall.c",
+            "bytes": 911269,
+            "sha256": "69f2fac2a96e08c6229e2293a29826357eef37134e5fae538235b23467cc8ab8"
+          }
+        },
+        {
+          "owner": "F03-four",
+          "base_line_interval": [
+            24290,
+            24290
+          ],
+          "replacement_lines": 2,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-execveat-selected-1/coherent-four-slice-plan-1/candidate/kernel/syscall.c",
+            "bytes": 911269,
+            "sha256": "69f2fac2a96e08c6229e2293a29826357eef37134e5fae538235b23467cc8ab8"
+          }
+        },
+        {
+          "owner": "F03-four",
+          "base_line_interval": [
+            28706,
+            28706
+          ],
+          "replacement_lines": 4,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-execveat-selected-1/coherent-four-slice-plan-1/candidate/kernel/syscall.c",
+            "bytes": 911269,
+            "sha256": "69f2fac2a96e08c6229e2293a29826357eef37134e5fae538235b23467cc8ab8"
+          }
+        },
+        {
+          "owner": "F03-four",
+          "base_line_interval": [
+            28829,
+            28829
+          ],
+          "replacement_lines": 1,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-execveat-selected-1/coherent-four-slice-plan-1/candidate/kernel/syscall.c",
+            "bytes": 911269,
+            "sha256": "69f2fac2a96e08c6229e2293a29826357eef37134e5fae538235b23467cc8ab8"
+          }
+        },
+        {
+          "owner": "F03-do-exit",
+          "base_line_interval": [
+            23972,
+            23972
+          ],
+          "replacement_lines": 9,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-do-exit-selected-1/candidate/kernel/syscall.c",
+            "bytes": 910148,
+            "sha256": "14cc0dc2fe6326aa6c67bc9cef75d3df2b9cce15549d28d10520c3ce8675f6c3"
+          }
+        },
+        {
+          "owner": "F03-do-exit",
+          "base_line_interval": [
+            24043,
+            24043
+          ],
+          "replacement_lines": 1,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-do-exit-selected-1/candidate/kernel/syscall.c",
+            "bytes": 910148,
+            "sha256": "14cc0dc2fe6326aa6c67bc9cef75d3df2b9cce15549d28d10520c3ce8675f6c3"
+          }
+        },
+        {
+          "owner": "F03-do-exit",
+          "base_line_interval": [
+            24044,
+            24044
+          ],
+          "replacement_lines": 3,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-do-exit-selected-1/candidate/kernel/syscall.c",
+            "bytes": 910148,
+            "sha256": "14cc0dc2fe6326aa6c67bc9cef75d3df2b9cce15549d28d10520c3ce8675f6c3"
+          }
+        },
+        {
+          "owner": "F03-do-exit",
+          "base_line_interval": [
+            24049,
+            24049
+          ],
+          "replacement_lines": 1,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-do-exit-selected-1/candidate/kernel/syscall.c",
+            "bytes": 910148,
+            "sha256": "14cc0dc2fe6326aa6c67bc9cef75d3df2b9cce15549d28d10520c3ce8675f6c3"
+          }
+        },
+        {
+          "owner": "F03-qualified-five-backlog",
+          "base_line_interval": [
+            4980,
+            4980
+          ],
+          "replacement_lines": 4,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-provider-backlog-1/candidate/kernel/syscall.c",
+            "bytes": 910516,
+            "sha256": "54ef4df037627760a3b76395404d7be739517042f7322721337e90b7b8683475"
+          }
+        },
+        {
+          "owner": "F03-qualified-five-backlog",
+          "base_line_interval": [
+            4985,
+            4985
+          ],
+          "replacement_lines": 1,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-provider-backlog-1/candidate/kernel/syscall.c",
+            "bytes": 910516,
+            "sha256": "54ef4df037627760a3b76395404d7be739517042f7322721337e90b7b8683475"
+          }
+        },
+        {
+          "owner": "F03-qualified-five-backlog",
+          "base_line_interval": [
+            5771,
+            5771
+          ],
+          "replacement_lines": 4,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-provider-backlog-1/candidate/kernel/syscall.c",
+            "bytes": 910516,
+            "sha256": "54ef4df037627760a3b76395404d7be739517042f7322721337e90b7b8683475"
+          }
+        },
+        {
+          "owner": "F03-qualified-five-backlog",
+          "base_line_interval": [
+            5776,
+            5776
+          ],
+          "replacement_lines": 1,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-provider-backlog-1/candidate/kernel/syscall.c",
+            "bytes": 910516,
+            "sha256": "54ef4df037627760a3b76395404d7be739517042f7322721337e90b7b8683475"
+          }
+        },
+        {
+          "owner": "F03-qualified-five-backlog",
+          "base_line_interval": [
+            5777,
+            5777
+          ],
+          "replacement_lines": 4,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-provider-backlog-1/candidate/kernel/syscall.c",
+            "bytes": 910516,
+            "sha256": "54ef4df037627760a3b76395404d7be739517042f7322721337e90b7b8683475"
+          }
+        },
+        {
+          "owner": "F03-qualified-five-backlog",
+          "base_line_interval": [
+            5783,
+            5783
+          ],
+          "replacement_lines": 1,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-provider-backlog-1/candidate/kernel/syscall.c",
+            "bytes": 910516,
+            "sha256": "54ef4df037627760a3b76395404d7be739517042f7322721337e90b7b8683475"
+          }
+        },
+        {
+          "owner": "F03-qualified-five-backlog",
+          "base_line_interval": [
+            5797,
+            5797
+          ],
+          "replacement_lines": 4,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-provider-backlog-1/candidate/kernel/syscall.c",
+            "bytes": 910516,
+            "sha256": "54ef4df037627760a3b76395404d7be739517042f7322721337e90b7b8683475"
+          }
+        },
+        {
+          "owner": "F03-qualified-five-backlog",
+          "base_line_interval": [
+            5802,
+            5802
+          ],
+          "replacement_lines": 1,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-provider-backlog-1/candidate/kernel/syscall.c",
+            "bytes": 910516,
+            "sha256": "54ef4df037627760a3b76395404d7be739517042f7322721337e90b7b8683475"
+          }
+        },
+        {
+          "owner": "F03-qualified-five-backlog",
+          "base_line_interval": [
+            5883,
+            5883
+          ],
+          "replacement_lines": 4,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-provider-backlog-1/candidate/kernel/syscall.c",
+            "bytes": 910516,
+            "sha256": "54ef4df037627760a3b76395404d7be739517042f7322721337e90b7b8683475"
+          }
+        },
+        {
+          "owner": "F03-qualified-five-backlog",
+          "base_line_interval": [
+            5888,
+            5888
+          ],
+          "replacement_lines": 1,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-provider-backlog-1/candidate/kernel/syscall.c",
+            "bytes": 910516,
+            "sha256": "54ef4df037627760a3b76395404d7be739517042f7322721337e90b7b8683475"
+          }
+        }
+      ],
+      "overlaps": 0
+    },
+    {
+      "relative": "kernel/rust/syscall_policy.rs",
+      "base": {
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "bytes": 1228858,
+        "sha256": "fefec3eb05be2f714dfeca34310901a566557f82ee08de9b9ad0ef0344f74d62"
+      },
+      "edits": [
+        {
+          "owner": "F03-four",
+          "base_line_interval": [
+            35272,
+            35272
+          ],
+          "replacement_lines": 241,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-execveat-selected-1/coherent-four-slice-plan-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1239651,
+            "sha256": "a151876b90aef16985d9ddf297723a14aede01bf5324da06245bb2bdbef0d247"
+          }
+        },
+        {
+          "owner": "F03-do-exit",
+          "base_line_interval": [
+            35272,
+            35272
+          ],
+          "replacement_lines": 119,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-do-exit-selected-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1235003,
+            "sha256": "747579401808aa9c5b579a6c8b1684661d3e8002e07d61b40e59d4df0b41b194"
+          }
+        },
+        {
+          "owner": "F03-qualified-five-backlog",
+          "base_line_interval": [
+            24793,
+            24794
+          ],
+          "replacement_lines": 2,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-provider-backlog-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1231598,
+            "sha256": "ce5655043193b5f4c683f975fed7c12c25685b274c08a0b52cddf078779d2975"
+          }
+        },
+        {
+          "owner": "F03-qualified-five-backlog",
+          "base_line_interval": [
+            35272,
+            35272
+          ],
+          "replacement_lines": 68,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-selected-provider-backlog-1/candidate/kernel/rust/syscall_policy.rs",
+            "bytes": 1231598,
+            "sha256": "ce5655043193b5f4c683f975fed7c12c25685b274c08a0b52cddf078779d2975"
+          }
+        },
+        {
+          "owner": "F06-qualified-six",
+          "base_line_interval": [
+            35272,
+            35272
+          ],
+          "replacement_lines": 21,
+          "source": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/coherent-f06-six-provider-batch-1/overlay/kernel/rust/syscall_policy.rs",
+            "bytes": 1229701,
+            "sha256": "e0029cedecca3f918f3cb27bd8cd5b7de5b9d660188d65a46c1f6952ad1a17e1"
+          }
+        }
+      ],
+      "overlaps": 0
+    }
+  ],
+  "selection": {
+    "kernel_syscall_C_defines": [
+      "MCKERNEL_RUST_F03_PERF_ATTR_CALLBACKS",
+      "MCKERNEL_RUST_F03_PRLIMIT_BODY",
+      "MCKERNEL_RUST_F03_EXEC_DEFINED_TAIL",
+      "MCKERNEL_RUST_F03_DO_EXIT_V2",
+      "MCKERNEL_RUST_F03_UNMAP_BEGIN",
+      "MCKERNEL_RUST_F03_UNMAP_REMOVE",
+      "MCKERNEL_RUST_F03_UNMAP_FINISH",
+      "MCKERNEL_RUST_F03_MMAP_PAGE_CALLBACK",
+      "MCKERNEL_RUST_F03_WAIT_RELEASE"
+    ],
+    "arch_syscall_C_defines": [
+      "MCKERNEL_RUST_F06_MMAP_FLAG_PROVIDERS",
+      "MCKERNEL_RUST_F06_PRCTL_SET_REGISTER",
+      "MCKERNEL_RUST_F06_PRCTL_GET_REGISTER",
+      "MCKERNEL_RUST_F06_MMAP_DISPATCH_BRIDGE"
+    ],
+    "Rust_cfg_additions": [
+      "f03_prlimit_body_candidate",
+      "f03_do_exit_supported_candidate",
+      "f03_unmap_begin_selected_candidate",
+      "f03_unmap_remove_selected_candidate",
+      "f03_unmap_finish_selected_candidate",
+      "f03_mmap_page_callback_candidate",
+      "f03_wait_release_selected_candidate",
+      "f06_mmap_flag_providers",
+      "f06_prctl_set_register_candidate",
+      "f06_prctl_get_register_candidate",
+      "f06_mmap_dispatch_bridge_candidate"
+    ],
+    "new_options": false,
+    "CMake_supported_scope": "Existing linux-6.12 branch, ARCH=x86_64, ENABLE_UBSAN=OFF; actual DCFA undefined and retained spinlock ABI remain required before admission",
+    "USE_NOCACHE_MMAP": false,
+    "f06_use_nocache_mmap": false
+  },
+  "held_OFF": [
+    "F03 next-termination-provider-backlog-1 (no actual qualified result at selection)",
+    "F06 source-only process_vm/other unqualified selectors",
+    "held whole do_mmap/do_fork/terminate implementations and unsupported configs"
+  ],
+  "rust_directory_export": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/RUST-SUBTREE-CLOSED-SOURCE-MAP.json",
+    "bytes": 98240,
+    "sha256": "2f6814680493bef597ebe93c6afa01978df0fbabd16f2ca73425e6bb806fcb63"
+  },
+  "canonical_mutations": 0,
+  "compiler_runs": 0,
+  "default_native_acceptance": false,
+  "nonce": null,
+  "request_sha256": null,
+  "resource_authority": null,
+  "independent_execution_release": null
+}

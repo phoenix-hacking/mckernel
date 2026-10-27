@@ -1,0 +1,127 @@
+{
+  "application_acceptance": false,
+  "attempt_parent": "/home/holden/mckernel-work/scratch/f02mm1/p",
+  "author": "/root",
+  "capture_directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/CAPTURE",
+  "capture_sources": {
+    "capture_fresh_strict235_resource.py": {
+      "bytes": 4774,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/capture_fresh_strict235_resource.py",
+      "sha256": "c6d4e96965e325060fcdbfd3f57f290ed49e8072628643bb1ca4a14b9c0122f8"
+    },
+    "prepare_strict235_bindings.py": {
+      "bytes": 6760,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/prepare_strict235_bindings.py",
+      "sha256": "9757e84412ce6ae4ae4df1052bd14035eb8a623c447d19b4372200d74bb286a3"
+    },
+    "run_native_strict235_capture.py": {
+      "bytes": 2822,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/run_native_strict235_capture.py",
+      "sha256": "5f670b628de96dd78c50d4320ecd771cd84acc5363bdae582b865af6cbb23594"
+    }
+  },
+  "current_physical": {
+    "bytes": 1823,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/F02-DEFAULT-INDEPENDENT-POSTJOIN-CURRENT-ACCEPTANCE.json",
+    "sha256": "74084067b9d3c167a06a4714713a68733eb140e984a13518648b39eba6ede046"
+  },
+  "decision": "PENDING_ONE_EXACT_NATIVE_STRICT235_RELEASE",
+  "exact_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--fsize=33554432",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/runtime-provider-rebind-1/native/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/f02mm1/p",
+    "--nonce",
+    "2005b0dd8446ae5356152dfb13144dab",
+    "--owner-sha256",
+    "45010e54e1f78e3efcd6572b71342ee6078abeea98961f2c5d49849575dd5048",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/f02mm1/m.json",
+    "--manifest-sha256",
+    "bc1e08b4356fd0b02ef62c392ec2b7d3688029e1955c66a2e01126611c61fef5"
+  ],
+  "expected_case": "P-M06-01-process-exec-wait-235B",
+  "expected_oracle": {
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stdout_hex": "706172656e742073746172740a6368696c642065786563207375636365737320746f6b656e3d66697865642d76310a706172656e742077616974207375636365737320657869743d333720656f663d31207265617065643d3120656368696c643d310a6368696c642065786563206572726f72206572726e6f3d454e4f454e542073746174653d333720756e6368616e6765643d310a706172656e742077616974206572726f7220657869743d343220656f663d31207265617065643d3120656368696c643d310a706172656e7420636f6d706c657465206368696c6472656e3d32206f776e65643d300a"
+  },
+  "fixed_cutoffs": {
+    "bytes": 952,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+    "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+  },
+  "fresh_resource_physical": {
+    "bytes": 129938,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/ROOT-FRESH-NATIVE-RESOURCE-PHYSICAL-1.json",
+    "sha256": "61eea314d5a607c6940acf0804160e9f0f81db35810a6db27cedf246846ec57c"
+  },
+  "independent_review": null,
+  "manifest": {
+    "bytes": 8669,
+    "path": "/home/holden/mckernel-work/scratch/f02mm1/m.json",
+    "sha256": "bc1e08b4356fd0b02ef62c392ec2b7d3688029e1955c66a2e01126611c61fef5"
+  },
+  "maximum_invocations": 1,
+  "nonce": "2005b0dd8446ae5356152dfb13144dab",
+  "profile": {
+    "cap_drop": "ALL",
+    "container_CPU_affinity": "2-5",
+    "container_CPU_count": 4,
+    "container_memory_bytes": 12884901888,
+    "container_network": "none",
+    "container_swap_bytes": 0,
+    "container_tasks": 512,
+    "container_uid": "1000:1000",
+    "guest": {
+      "memory_mib": 8192,
+      "name": "native-diagnostic-4vcpu-8192mib",
+      "numa_nodes": 2,
+      "vcpus": 4
+    },
+    "no_new_privileges": true,
+    "outer_grace_kill": null,
+    "outer_wall_kill": null,
+    "owner_as_bytes": [
+      2147483648,
+      2147483648
+    ],
+    "payload_timeout_ms": 10000,
+    "runner_timeout_seconds": 300,
+    "stream_cap_bytes": 33554432
+  },
+  "runtime_authority": null,
+  "scratch_manifest_stage": {
+    "bytes": 1180,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/ACTUAL-SCRATCH-MANIFEST-STAGE.json",
+    "sha256": "0b6fc0689c411c9749ff38956895ad9b42e4ea47229518bda12b3d3f58027568"
+  },
+  "source_publication": {
+    "bytes": 2316,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/ACTUAL-STATIC-SOURCE-PUBLICATION.json",
+    "sha256": "b950fb39c0351d5217b47c4c5ae4e4588f3a5c79108f7ff2a79a9b7fa2c8f596"
+  },
+  "source_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "static_bindings": {
+    "bytes": 10873,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/STATIC-NATIVE-BINDINGS.NOT-RELEASED.json",
+    "sha256": "5f9c02735fa27fe0cbf817fae199f60a156b2e603bba578da2cd7ef771aa35e7"
+  },
+  "strict_profile_acceptance": {
+    "bytes": 2293,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/F02-DEFAULT-INDEPENDENT-ARTIFACT-ACCEPTANCE.json",
+    "sha256": "d3744598237c722d059a4cf3453c2c59974cf7a6fe1c665207a8b6ebd0a2c9f6"
+  }
+}

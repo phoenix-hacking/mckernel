@@ -1,0 +1,204 @@
+{
+  "task_id": "f02-rustmm-strict235-native-scope-decision-1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/default_witness_gate",
+  "implementation_ownership": false,
+  "decision": "PASS_M15_F01_FROZEN_FILE_PROVIDER_CLOSURE_AT_EXACT_SUPPORTED_PROFILE",
+  "canonical_update_owner": "/root",
+  "execution_authority": false,
+  "case_oracle_and_retirement_review_owner": "/root/custody_release_review",
+  "case_oracle_rereviewed_here": false,
+  "prior_gap_decision": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m15-mm-nearest-file-closure-1/INDEPENDENT-SCOPE-DECISION.json",
+    "bytes": 12219,
+    "sha256": "f5271b63de77683aa1dbbc64cf86ee474aea004c3525f1bdf8374738b523869a"
+  },
+  "references": {
+    "actual_module_manifest_binding": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/STRICT235-CAPABILITY-AND-ACK-BINDINGS.SOURCE-ONLY.json",
+      "bytes": 5872,
+      "sha256": "798c42c72741bf4f9cd92fdf83ba08f80c054d83d0be7be92fd2c0fa9d4c4711"
+    },
+    "actual_staged_manifest": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/ACTUAL-SCRATCH-MANIFEST-STAGE.json",
+      "bytes": 1180,
+      "sha256": "0b6fc0689c411c9749ff38956895ad9b42e4ea47229518bda12b3d3f58027568"
+    },
+    "raw_owner_export": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/OWNER-RAW-EXPORT.json",
+      "bytes": 15236,
+      "sha256": "727e9ac956d7c670b8e28435896336e157211f2212b5b994e99922ba59bd1e12"
+    },
+    "raw_guest_export": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/GUEST-RAW-EXPORT.json",
+      "bytes": 1026,
+      "sha256": "092c3580dc101e1e6e66f24d8343e9254930ea2a5e67d94d5e7c12528a8375b1"
+    },
+    "native_serial": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/GUEST-RAW/serial.log",
+      "bytes": 103032,
+      "sha256": "55c6410d458c39926d159570ac5acb97e836b6744c245831dd151aa0ec645db4"
+    },
+    "actual_MM_HOST_fixture": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mm-unlock-fixture-actual-1/RESULT.json",
+      "bytes": 3560,
+      "sha256": "850fc5b26accba458fa45329f39b8fb5429ee58fba90a9eb779d85dd9cd71f76"
+    },
+    "prior_selected_source_relation": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-mm-source-1/SOURCE-REUSE.json",
+      "bytes": 5230,
+      "sha256": "60f5a3f569551b70ce7a29329aa621be2e8d097a0ec8963e21a3bab8b045aff7"
+    }
+  },
+  "selected_image": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+    "size": 10175040,
+    "sha256": "2ed7ef68530ff625772684af500c8b97e471b2b3a4e877c69792568507f1cd0f",
+    "mode": 33261
+  },
+  "selected_modules": [
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/module-runtime-snapshots-1/ihk.ko",
+      "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+      "size": 1527808
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-rust-mm-strict235-preparation-1/offline-preparation-1/runtime-inputs/ihk-smp-x86_64.ko",
+      "sha256": "887dc3567e6035c921588e61b45b41a8ef32a972d142fe2ba82ec48442353b12",
+      "size": 13098896,
+      "mode": 33188
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-rust-mm-strict235-preparation-1/offline-preparation-1/runtime-inputs/mcctrl.ko",
+      "sha256": "57546af5110c0674b307e5ac5a328228abbe784f890f69521db5f594f21f6ae8",
+      "size": 2578512,
+      "mode": 33188
+    }
+  ],
+  "launcher": {
+    "mode": 33261,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/launcher-runtime-snapshot-1/mcexec",
+    "sha256": "dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954",
+    "size": 394648
+  },
+  "compiler_command": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/workspace/native-running-modules-candidate-15817c3475cb4d3da5b21edd26b5ffb2/modules/.mcctrl_rust.o.cmd",
+    "bytes": 3739,
+    "sha256": "a004865a97d43814a765136e2665a96e1a755fba5b5124a15d460307d12f10a9"
+  },
+  "exact_sources": {
+    "mcctrl_process": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/workspace/native-running-modules-candidate-15817c3475cb4d3da5b21edd26b5ffb2/modules/mcctrl_process.rs",
+      "bytes": 54854,
+      "sha256": "8bf30cd8ae79cc778bd91816f30aaf7a37ccc2aab59822ca2a03587426a212b8"
+    },
+    "mcctrl_vm": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/workspace/native-running-modules-candidate-15817c3475cb4d3da5b21edd26b5ffb2/modules/mcctrl_vm.rs",
+      "bytes": 30882,
+      "sha256": "4c19b54344980a20520cdf3660b31c50d62525e6fed0ab58f950e38d880a5864"
+    },
+    "Rust_MM": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/workspace/native-running-modules-candidate-15817c3475cb4d3da5b21edd26b5ffb2/modules/mcctrl_mm_write.rs",
+      "bytes": 8335,
+      "sha256": "6e1d6d65fcad10aa673bd546646b96f28fd7280250ad05a6ca560a0dc2877107"
+    },
+    "launcher_Rust": {
+      "path": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/launcher-successor-1/authority/mcexec_helpers.8f9f.rs",
+      "bytes": 254806,
+      "sha256": "8f9fbe474220433118e6662c9f2517f73a547730575b83ffb73255d06e9b40d7"
+    },
+    "launcher_C": {
+      "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/source-materialization-1/materialized-source/executer/user/mcexec.c",
+      "bytes": 221546,
+      "sha256": "310301305e41bab4eda63026849ee6f166bb6e5d4d6f2c789aa8003e94745056"
+    }
+  },
+  "frozen_contract": "M15-F01: remove selected project C wrapper only after equivalent Rust successors and matched module proof. Source reconciliation requires a coherent retained-module functional MM consumer. It does not require every MM caller or every trace mask to run natively.",
+  "proof_chain": [
+    "Actual strict235 manifest now binds image2ed7, RustMM SMP887dc356/mcctrl57546af5 and launcherdca025. This resolves the predecessor-module mismatch in prior f5271b63; earlier current290 startup/memory evidence remains unchanged.",
+    "Retained mcctrl compiler command a004865a has the actual --cfg mckernel_current_fork_adoption_opt_in argument, not merely --check-cfg. Source8bf30 create_process(nonzero descriptor) must call adopt_current_fork_v4; the NULL ordinary-registration route is a distinct branch.",
+    "Pinned launcherdca025 production artifact binds Rust8f9 plus genuine C310301. act_clone_start invokes C mcexec_clone_child_bridge after Linux fork; that child always calls MCEXEC_UP_CREATE_PPD with &rpt and publishes failure on nonzero ioctl. Parent publishes a positive child PID only when shared child status is0. No successful NULL-registration alternate exists on this branch.",
+    "Actual parent pid256 clone deliveries31/113 return259/262 and both children continue exec/wait protocol. Given those exact source/compile bindings, child CREATE_PPD succeeded through adoption. adopt_current_fork_v4 returns0 only after attempt.called && attempt.published. The callback publishes only after Mirror::inherit_vmas returns Ok.",
+    "inherit_vmas validates start<end and complete VMA coverage, acquires mmap_write_lock, builds a nonempty replacement plan, calls vma_start_write for every planned VMA, performs the existing zap/owner seal, then explicitly drop(write) invokes mmap_write_unlock before MM drop/publication. Thus all three replacement providers are necessarily invoked by the observed successful adoption; this is source-constrained positive protocol inference, not inference from module load.",
+    "Existing actual-body HOST fixtures/codegen retain equivalence for trace gates, sequence barriers/wrap, repeated VMA idempotence, VMA rwsem/WRITE_ONCE and warning predicates. Native evidence here proves provider invocation/order at successful adoption; no claim is made about observed native trace-mask values or which VMA equality subbranch each call took."
+  ],
+  "subgoals": [
+    {
+      "id": "M15-F01-01",
+      "decision": "PASS_MATCHED_NATIVE_ADOPTION_PROVIDER",
+      "provider": "mmap_write_lock",
+      "evidence": "Mandatory successful inherit_vmas path under exact57546 module and opt-in command; equivalent body/ASM/fixture proof reused."
+    },
+    {
+      "id": "M15-F01-02",
+      "decision": "PASS_MATCHED_NATIVE_RAII_UNLOCK_PROVIDER",
+      "provider": "mmap_write_unlock",
+      "evidence": "Successful inherit_vmas return requires explicit drop(InheritedWrite) after plan effects and before MM drop/callback publication."
+    },
+    {
+      "id": "M15-F01-03",
+      "decision": "PASS_MATCHED_NATIVE_VMA_PROVIDER",
+      "provider": "vma_start_write",
+      "evidence": "Validated nonempty inherited VMA coverage yields nonempty plan and mandatory provider calls; exact branch semantics supported by retained body fixtures/codegen, not invented native observations."
+    }
+  ],
+  "cleanup_ACKs": [
+    {
+      "os": 0,
+      "generation": 1,
+      "pid": 259,
+      "token": 32,
+      "errno": 0,
+      "abandoned": 0
+    },
+    {
+      "os": 0,
+      "generation": 1,
+      "pid": 262,
+      "token": 114,
+      "errno": 0,
+      "abandoned": 0
+    },
+    {
+      "os": 0,
+      "generation": 1,
+      "pid": 256,
+      "token": 3,
+      "errno": 0,
+      "abandoned": 1
+    }
+  ],
+  "parent_abandoned_1_preserved": true,
+  "revoke_scope": {
+    "decision": "KEEP_OPEN_NO_NATIVE_REVOKE_OR_FINAL_DESTRUCTOR_ACK_CREDIT_FROM_THIS_REVIEW",
+    "reason": "Generic application cleanup ACK is Exchange cleanup reply, not HostRevoke callback/final selector3 receipt. application_rpc::abandoned() means !waiter; close_inner calls cleanup.abandon(). Parent pid256/token3/errno0/abandoned1 is therefore an abandoned-waiter cleanup branch and must not be renamed a waited destructor ACK.",
+    "logging_limit": "mcctrl wait_syscall intercepts reserved nr56 selector2/3 before ordinary delivery logging. Their absence from serial does not prove nonexecution. Old launcher rejects such controls if they escape interception; that fallback neither proves nor disproves backend revoke.",
+    "unproved": [
+      "actual selector2\u2192HostRevoke::revoke\u2192Mirror::revoke_fork_aliases and live-MM versus zero-users branch",
+      "actual selector3 acceptance/final guest destructor ACK and carrier-credit release",
+      "full inherited MM teardown/alias restoration and every caller lifecycle"
+    ],
+    "relationship_to_F01": "These are broader caller/control lifecycle obligations. They do not invalidate native invocation proof of all three source-retired MM providers or add an unrequested native quota to the frozen F01 file contract."
+  },
+  "file_scope": "Independent evidence supports closure of the original three-wrapper C file at this exact pinned supported Rust+reviewed-ASM profile, combining selected source/link/ABI/equivalence and actual native adoption consumer. Dispatcher owns canonical completion. Broader M15/module/fork lifecycle completion remains unclaimed.",
+  "checks": [
+    {
+      "scope": "selected small compiler/source pins and mandatory protocol branch mapping only",
+      "status": "PASS"
+    },
+    {
+      "scope": "actual native module tuple and positive child PID/cleanup metadata mapping",
+      "status": "PASS_EXACT_SCOPE"
+    }
+  ],
+  "runtime_actions": 0,
+  "new_builds": 0,
+  "new_oracles": 0,
+  "module_hash_inventory": 0,
+  "changed_paths": [
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json"
+  ],
+  "blocker": null,
+  "next_task": "Root may update only frozen M15-F01 source/link/native-provider/file scope from this decision plus sole custody reviewer case/retirement disposition. Track revoke/final-ACK lifecycle separately; no additional unchanged SDK build, native replay, quota or instrumentation is authorized."
+}

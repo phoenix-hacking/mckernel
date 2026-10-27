@@ -4978,11 +4978,16 @@ wait_thread_ptrace_detach_bridge(void *thread)
 }
 #endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_WAIT_RELEASE)
+extern void f03_wait_release_thread(void *);
+#define wait_thread_release_bridge f03_wait_release_thread
+#else
 static void
 wait_thread_release_bridge(void *thread)
 {
 	release_thread((struct thread *)thread);
 }
+#endif
 
 #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int
@@ -5769,18 +5774,28 @@ out:
 	return (int)lerror;
 }
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_UNMAP_BEGIN)
+extern void f03_unmap_begin(void);
+#define do_munmap_begin_bridge f03_unmap_begin
+#else
 static void
 do_munmap_begin_bridge(void)
 {
 	begin_free_pages_pending();
 }
+#endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_UNMAP_REMOVE)
+extern int f03_unmap_remove(void *, unsigned long, unsigned long, int *);
+#define do_munmap_remove_range_bridge f03_unmap_remove
+#else
 static int
 do_munmap_remove_range_bridge(void *vm, unsigned long start,
 		unsigned long end, int *ro_freedp)
 {
 	return remove_process_memory_range(vm, start, end, ro_freedp);
 }
+#endif
 
 static long
 do_munmap_clear_host_bridge(unsigned long addr, size_t len, int holding_lock)
@@ -5795,11 +5810,16 @@ do_munmap_set_host_bridge(unsigned long addr, size_t len, int prot,
 	return set_host_vma(addr, len, prot, holding_lock);
 }
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_UNMAP_FINISH)
+extern void f03_unmap_finish(void);
+#define do_munmap_finish_bridge f03_unmap_finish
+#else
 static void
 do_munmap_finish_bridge(void)
 {
 	finish_free_pages_pending();
 }
+#endif
 
 static void
 do_munmap_log_bridge(unsigned long addr, size_t len, int error)
@@ -5881,11 +5901,16 @@ static int search_free_space(size_t len, int pgshift, uintptr_t *addrp)
 }
 #endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_MMAP_PAGE_CALLBACK)
+extern int f03_do_mmap_smaller_page_v2(size_t, int *);
+#define do_mmap_smaller_page_bridge f03_do_mmap_smaller_page_v2
+#else
 static int
 do_mmap_smaller_page_bridge(size_t size, int *p2alignp)
 {
 	return arch_get_smaller_page_size(NULL, size, NULL, p2alignp);
 }
+#endif
 
 intptr_t
 do_mmap(const uintptr_t addr0, const size_t len0, const int prot,
@@ -7498,6 +7523,12 @@ _Static_assert(_NSIG == 64 && SS_DISABLE == 2, "Rust exec signal constants");
 extern void exec_reset_signal_state_current_v1(struct thread *thread);
 #endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_EXEC_DEFINED_TAIL) && defined(__x86_64__)
+extern void f03_execveat_install_user_context_v1(struct thread *, struct process_vm *, unsigned long);
+extern int f03_execveat_ptrace_report_v1(struct thread *, ihk_mc_user_context_t *);
+extern long f03_execveat_finish_switch_v1(struct thread *, long);
+#endif
+
 static int do_execveat(ihk_mc_user_context_t *ctx, int dirfd,
 		const char *filename, char **argv, char **envp, int flags)
 {
@@ -7620,6 +7651,9 @@ static int do_execveat(ihk_mc_user_context_t *ctx, int dirfd,
 	/* Unmap all memory areas of the process, userspace will be gone */
 	munmap_all();
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_EXEC_DEFINED_TAIL) && defined(__x86_64__)
+	f03_execveat_install_user_context_v1(thread, vm, desc->entry);
+#else
 	/* Code assumes no process switch from here on */
 	preempt_disable();
 	ihk_mc_init_user_process(&thread->ctx, &thread->uctx,
@@ -7631,6 +7665,7 @@ static int do_execveat(ihk_mc_user_context_t *ctx, int dirfd,
 	 */
 	vm->region.map_start = vm->region.map_end = LD_TASK_UNMAPPED_BASE;
 
+#endif
 	/* Create virtual memory ranges and update args/envs */
 	if ((ret = prepare_process_ranges_args_envs(thread, desc, desc,
 			PTATTR_NO_EXECUTE | PTATTR_WRITABLE | PTATTR_FOR_USER,
@@ -7680,7 +7715,11 @@ static int do_execveat(ihk_mc_user_context_t *ctx, int dirfd,
 
 #endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_EXEC_DEFINED_TAIL) && defined(__x86_64__)
+	error = f03_execveat_ptrace_report_v1(thread, &execve_ctx);
+#else
 	error = ptrace_report_exec(thread, &execve_ctx);
+#endif
 	if (error) {
 		kprintf("execve(): ERROR: ptrace_report_exec()\n");
 	}
@@ -7704,6 +7743,9 @@ end:
 	_ihk_mc_free_pages(desc, 4, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
 #endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_EXEC_DEFINED_TAIL) && defined(__x86_64__)
+	return f03_execveat_finish_switch_v1(thread, ret);
+#else
 	if (!ret) {
 		unsigned long irqstate;
 
@@ -7723,6 +7765,7 @@ end:
 	/* no preempt_enable, errors can only happen before we disabled it */
 
 	return ret;
+#endif
 }
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
@@ -20550,6 +20593,10 @@ perf_counter_init_raw_bridge(int counter_id, unsigned long hw_config, int mode)
 	return ihk_mc_perfctr_init_raw(counter_id, hw_config, mode);
 }
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_ATTR_CALLBACKS)
+extern int f03_perf_counter_attr_flags_v1(const void *, int *, int *);
+#define perf_counter_attr_flags_bridge f03_perf_counter_attr_flags_v1
+#else
 static int
 perf_counter_attr_flags_bridge(const void *attr, int *exclude_kernel,
 			       int *exclude_user)
@@ -20564,6 +20611,7 @@ perf_counter_attr_flags_bridge(const void *attr, int *exclude_kernel,
 	*exclude_user = perf_attr->exclude_user;
 	return 0;
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 extern int perf_counter_set(struct mc_perf_event *);
@@ -20605,6 +20653,10 @@ perf_event_atomic64_read_bridge(void *value)
 	return ihk_atomic64_read((ihk_atomic64_t *)value);
 }
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_ATTR_CALLBACKS)
+extern int f03_perf_read_attr_flags_v1(const void *, int *, int *, int *);
+#define perf_read_attr_flags_bridge f03_perf_read_attr_flags_v1
+#else
 static int
 perf_read_attr_flags_bridge(const void *attr, int *exclude_user,
 			    int *exclude_kernel, int *inherit)
@@ -20620,6 +20672,7 @@ perf_read_attr_flags_bridge(const void *attr, int *exclude_user,
 	*inherit = perf_attr->inherit;
 	return 0;
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 extern unsigned long perf_event_read_value(struct mc_perf_event *);
@@ -23970,6 +24023,15 @@ long sys_futex(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DO_EXIT_V2) && !defined(DCFA_KMOD) && defined(__x86_64__)
+extern void f03_do_exit_supported_v2(int);
+#define do_exit f03_do_exit_supported_v2
+struct ddebug __attribute__((aligned(8),section("__verbose")))
+f03_do_exit_debug_v2[2] = {
+    { .file=__FILE__, .func="do_exit", .line=__LINE__ + 16, .flags=DDEBUG_DEFAULT },
+    { .file=__FILE__, .func="do_exit", .line=__LINE__ + 24, .flags=DDEBUG_DEFAULT },
+};
+#else
 static void
 do_exit(int code)
 {
@@ -24041,12 +24103,17 @@ do_exit(int code)
 
 	return;
 }
+#endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DO_EXIT_V2) && !defined(DCFA_KMOD) && defined(__x86_64__)
+extern void exit_do_exit_bridge(int);
+#else
 void
 exit_do_exit_bridge(int code)
 {
 	do_exit(code);
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_exit(int n, ihk_mc_user_context_t *ctx);
@@ -24165,6 +24232,9 @@ RLIMIT_HELPER_SCOPE int prlimit_to_mckernel_resource(int resource)
 
 #undef RLIMIT_HELPER_SCOPE
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PRLIMIT_BODY) && defined(__x86_64__)
+extern long syscall_do_prlimit64_bridge(int, int, unsigned long, unsigned long);
+#else
 static int do_prlimit64(int pid, int resource, struct rlimit *_new_limit,
 			struct rlimit *old_limit)
 {
@@ -24288,6 +24358,8 @@ syscall_do_prlimit64_bridge(int pid, int resource,
 	return do_prlimit64(pid, resource, (struct rlimit *)new_limit_addr,
 			(struct rlimit *)old_limit_addr);
 }
+
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_setrlimit(int n, ihk_mc_user_context_t *ctx);
@@ -28704,6 +28776,10 @@ syscall_util_register_desc_log_bridge(int tid, unsigned long desc)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+void reset_cputime(void);
+void set_cputime(enum set_cputime_mode mode);
+#else
 void
 reset_cputime()
 {
@@ -28827,6 +28903,7 @@ set_cputime(enum set_cputime_mode mode)
 	}
 	cpu_restore_interrupt(irq_flags);
 }
+#endif
 
 #if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_SYSCALL_ENTRY) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT) && defined(PROFILE_ENABLE)
 /* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */

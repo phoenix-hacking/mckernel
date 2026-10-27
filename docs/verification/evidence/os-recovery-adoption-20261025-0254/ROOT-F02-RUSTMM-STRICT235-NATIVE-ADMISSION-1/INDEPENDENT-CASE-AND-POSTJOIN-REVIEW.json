@@ -1,0 +1,43 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/custody_release_review",
+  "independent": true,
+  "implementation_owner": false,
+  "nonce": "2005b0dd8446ae5356152dfb13144dab",
+  "decisions": [
+    "PASS_F02_RUSTMM_STRICT235_DIAGNOSTIC_CASE",
+    "PASS_F02_RUSTMM_STRICT235_POSTJOIN_CURRENT_PHYSICAL"
+  ],
+  "recorded_at": "2026-10-27T01:54:03.667701+00:00",
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/GUEST-RAW/result.json",
+      "bytes": 111482,
+      "sha256": "10690bac14519ca98bd745249c973080c0defd62bf8f890ea637d8225d018a37"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/CAPTURE/JOINED.json",
+      "bytes": 223,
+      "sha256": "d215d838a43c350eb63636aa3d3d271e79173b9d6f284b68ce0bdbc0af16985c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/POSTNATIVE-CURRENT.stdout",
+      "bytes": 122991,
+      "sha256": "4eb1c1162761eaa80c41c4db87ea038604d4db58e14300d10cf13613a63a7f20"
+    }
+  ],
+  "parent_ACK": {
+    "pid": 256,
+    "token": 3,
+    "errno": 0,
+    "abandoned": 1,
+    "frozen_evaluator_permits_close_path": true,
+    "abandoned_zero_claim": false
+  },
+  "limitations": [
+    "No unobserved child retirement-zero claim",
+    "MM changed-path/file closure separate",
+    "No broad process_vm/fault coverage or full cutover",
+    "No new workload release"
+  ]
+}

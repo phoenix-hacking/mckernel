@@ -1,3 +1,28 @@
+## Matching F02/RustMM native accepted; M15-F01 file closed — 2026-10-27T02:00Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Goal ACTIVE, same thread/credit ledger/fixed end2026-10-27T11:24:50Z. No current
+heavy owner/query/TTL. Strict235 nonce2005b0dd8446ae5356152dfb13144dab CONSUMED
+ONCE; actualtool30565/caller1346904/start86299880 joined0. Exact235Bstdout,
+stderr0/exit0/exec37+ENOENT42/wait/reap/ECHILD/procfsempty independentlyaccepted;
+parent256 ACKtoken3 errno0 abandoned1 preserved, not a waited destructorACK.
+Child259/262 ACKs abandoned0; no invented child-retirement0. QEMU-9 retained after
+shutdown. All30ownercommands reaped/CID7be35b32 removed/ownmutexprobesclosed;
+325row currentphysical independentlyaccepted. Caller37.743360swall/0.915192sCPU/
+53180KiBpeak OUTER ONLY, fullguestCPU/RSS unknown. Freshresource→caller44.580939s;
+queue/source-ready/blockedduration unknown. Accepted diagnosticcases now4.
+
+M15-F01 original THREE-wrapper file contract COMPLETE at EXACT supported pinned
+Linux/RustMM57546+SMP887dc/F02image2ed7/launcherdca025 profile. Independent7c925ec9
+proves actualcompiledoptin+mandatorysuccessfulchildCREATE_PPD(adopt_v4)→nonempty
+inherit_vmas→RustMMlock/VMAwrite/RAIIunlock. Retained actual codegen/HOST equivalence
+reused; selected Cwrapper excluded. Root M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json
+records exact originalscope. Broaderrevoke/finalselector3/destructorACK staysOPEN,
+not a newF01quota. FullM15/M14OPEN, practical35/35 unchanged. F05 actualverify/
+from-user/to-user nowqualified byexec/wait; directprocessVMread/write/patch and
+partialfault consumer absent, frozen05-05/fileOPEN. No acceptance fromliveness.
+
+
 ## Engineering cursor — 2026-10-24T22:47Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

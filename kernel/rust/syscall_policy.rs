@@ -24791,7 +24791,8 @@ unsafe extern "C" fn f03_wait_list_add_tail(entry: *mut c_void, head: *mut c_voi
 unsafe extern "C" fn f03_wait_release_process(proc: *mut c_void) {
     unsafe { crate::process_helpers::release_process(proc.cast()) };
 }
-unsafe extern "C" fn f03_wait_release_thread(thread: *mut c_void) {
+#[cfg_attr(f03_wait_release_selected_candidate,no_mangle)]
+pub unsafe extern "C" fn f03_wait_release_thread(thread: *mut c_void) {
     unsafe { crate::process_helpers::release_thread(thread.cast()) };
 }
 unsafe extern "C" fn f03_wait_report_detach(thread: *mut c_void) {
@@ -35270,3 +35271,452 @@ pub unsafe extern "C" fn f03_ptrace_getsiginfo_v1(
         )
     }
 }
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// F03 private complete CPU-time entry bodies; original current-CPU/IRQ contract applies.
+const F03_CPUTIME_MODE_K2U: CInt = 0;
+const F03_CPUTIME_MODE_U2K: CInt = 1;
+const F03_CPUTIME_MONITOR_USER: CInt = 2;
+const F03_CPUTIME_MONITOR_KERNEL: CInt = 3;
+const F03_CPUTIME_SIGVTALRM: CInt = 26;
+const F03_CPUTIME_SIGPROF: CInt = 27;
+
+/// # Safety
+/// Preserve the original current-CPU ownership/preemption contract. Once clv is
+/// initialized, get_this_cpu_local_var supplies a live current CPU-local block.
+#[no_mangle]
+pub unsafe extern "C" fn reset_cputime() {
+    if crate::cls::clv.is_null() {
+        return;
+    }
+    let thread = (*get_this_cpu_local_var()).current;
+    if thread.is_null() {
+        return;
+    }
+    (*thread).base_tsc = 0;
+}
+
+/// # Safety
+/// Current CPU/thread/monitor/rusage/process pointers retain their original live
+/// ownership. IRQ save/restore, timer and do_kill providers obey their existing
+/// contracts. No pointer ownership transfers or additional null guards occur.
+/// tsc_to_ts requires the same nonzero clocks_per_sec as the original C body.
+#[no_mangle]
+pub unsafe extern "C" fn set_cputime(mode: CInt) {
+    if crate::cls::clv.is_null() {
+        return;
+    }
+    let v = get_this_cpu_local_var();
+    let thread = (*v).current;
+    if thread.is_null() {
+        return;
+    }
+    if thread == addr_of_mut!((*v).idle) {
+        return;
+    }
+    let monitor = (*v).monitor;
+    if mode == F03_CPUTIME_MODE_K2U {
+        (*monitor).status = F03_CPUTIME_MONITOR_USER;
+    } else if mode == F03_CPUTIME_MODE_U2K {
+        (*monitor).counter = (*monitor).counter.wrapping_add(1);
+        (*monitor).status = F03_CPUTIME_MONITOR_KERNEL;
+    }
+    if gettime_local_support == 0 {
+        (*thread).times_update = 1;
+        return;
+    }
+
+    let irq_flags = cpu_disable_interrupt_save();
+    let tsc = crate::x86_cpu_helpers::rdtsc();
+    if (*thread).base_tsc != 0 {
+        let dtsc = tsc.wrapping_sub((*thread).base_tsc);
+        let mut dts = MaybeUninit::<TimeSpec>::uninit();
+        // Existing tsc_to_ts initializes both integer fields before timer reads.
+        tsc_to_ts(dtsc, dts.as_mut_ptr());
+        if mode == F03_CPUTIME_MODE_U2K {
+            (*thread).user_tsc = (*thread).user_tsc.wrapping_add(dtsc);
+            (*(*v).rusage).user_tsc = (*(*v).rusage).user_tsc.wrapping_add(dtsc);
+            crate::timer::ts_add(addr_of_mut!((*thread).itimer_virtual_value), dts.as_ptr());
+            crate::timer::ts_add(addr_of_mut!((*thread).itimer_prof_value), dts.as_ptr());
+        } else {
+            (*thread).system_tsc = (*thread).system_tsc.wrapping_add(dtsc);
+            (*(*v).rusage).system_tsc = (*(*v).rusage).system_tsc.wrapping_add(dtsc);
+            crate::timer::ts_add(addr_of_mut!((*thread).itimer_prof_value), dts.as_ptr());
+        }
+    }
+    (*thread).base_tsc = tsc;
+    (*thread).times_update = 1;
+    (*thread).in_kernel = mode;
+
+    if (*thread).itimer_enabled != 0 {
+        let mut tv = MaybeUninit::<TimeVal>::uninit();
+        let mut ev = false;
+        if (*thread).itimer_virtual.it_value.tv_sec != 0
+            || (*thread).itimer_virtual.it_value.tv_usec != 0
+        {
+            // Existing ts_to_tv initializes both integer fields before tv_sub/read.
+            crate::timer::ts_to_tv(tv.as_mut_ptr(), addr_of!((*thread).itimer_virtual_value));
+            crate::timer::tv_sub(tv.as_mut_ptr(), addr_of!((*thread).itimer_virtual.it_value));
+            let elapsed = tv.as_ptr();
+            if (*elapsed).tv_sec > 0
+                || ((*elapsed).tv_sec == 0 && (*elapsed).tv_usec > 0)
+            {
+                (*thread).itimer_virtual_value.tv_sec = 0;
+                (*thread).itimer_virtual_value.tv_nsec = 0;
+                (*thread).itimer_virtual.it_value.tv_sec = (*thread).itimer_virtual.it_interval.tv_sec;
+                (*thread).itimer_virtual.it_value.tv_usec = (*thread).itimer_virtual.it_interval.tv_usec;
+                let _ = syscall_do_kill_thread_bridge(
+                    thread.cast(), (*(*thread).proc).pid, (*thread).tid,
+                    F03_CPUTIME_SIGVTALRM, core::ptr::null(), 0,
+                );
+                ev = true;
+            }
+        }
+        if (*thread).itimer_prof.it_value.tv_sec != 0
+            || (*thread).itimer_prof.it_value.tv_usec != 0
+        {
+            crate::timer::ts_to_tv(tv.as_mut_ptr(), addr_of!((*thread).itimer_prof_value));
+            crate::timer::tv_sub(tv.as_mut_ptr(), addr_of!((*thread).itimer_prof.it_value));
+            let elapsed = tv.as_ptr();
+            if (*elapsed).tv_sec > 0
+                || ((*elapsed).tv_sec == 0 && (*elapsed).tv_usec > 0)
+            {
+                (*thread).itimer_prof_value.tv_sec = 0;
+                (*thread).itimer_prof_value.tv_nsec = 0;
+                (*thread).itimer_prof.it_value.tv_sec = (*thread).itimer_prof.it_interval.tv_sec;
+                (*thread).itimer_prof.it_value.tv_usec = (*thread).itimer_prof.it_interval.tv_usec;
+                let _ = syscall_do_kill_thread_bridge(
+                    thread.cast(), (*(*thread).proc).pid, (*thread).tid,
+                    F03_CPUTIME_SIGPROF, core::ptr::null(), 0,
+                );
+                ev = true;
+            }
+        }
+        if ev
+            && (*thread).itimer_virtual.it_value.tv_sec == 0
+            && (*thread).itimer_virtual.it_value.tv_usec == 0
+            && (*thread).itimer_prof.it_value.tv_sec == 0
+            && (*thread).itimer_prof.it_value.tv_usec == 0
+        {
+            (*thread).itimer_enabled = 0;
+            crate::sched_helpers::set_timer(0);
+        }
+    }
+    cpu_restore_interrupt(irq_flags);
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Private syscall_policy fragment only; no shared import/ABI/body changes.
+unsafe extern "C" {
+    #[link_name="preempt_disable"]
+    fn f03_exec_install_preempt_disable_v1();
+    #[link_name="enter_user_mode"]
+    static f03_exec_install_enter_user_mode_v1:u8;
+}
+/// # Safety
+/// thread/VM retain their original post-munmap exec lifetimes; thread is backed
+/// by KERNEL_STACK_NR_PAGES pages, including the context/return-slot stack area.
+/// vm is the already captured original C local. No user pointers are read.
+/// Successor C performs prepare_process_ranges_args_envs and all original
+/// failure/preempt-enable/SIGKILL handling. This entry does not restore old VM.
+#[no_mangle]
+pub unsafe extern "C" fn f03_execveat_install_user_context_v1(
+    thread:*mut Thread,vm:*mut ProcessVm,entry:CULong,
+) {
+    f03_exec_install_preempt_disable_v1();
+    let _=crate::x86_cpu_helpers::x86_init_user_process_body_result(
+        addr_of_mut!((*thread).ctx),addr_of_mut!((*thread).uctx),
+        thread.cast::<u8>().add(32*4096).cast(),entry,0,
+        6*8+3,7*8+3,1<<9,
+        addr_of!(f03_exec_install_enter_user_mode_v1).cast_mut().cast(),
+    );
+    // Same chained C assignment order: map_end first, then map_start.
+    (*vm).region.map_end=0x0000_1555_5550_0000;
+    (*vm).region.map_start=0x0000_1555_5550_0000;
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Private policy fragment; original helper and shared F06 public bodies unchanged.
+unsafe extern "C" {
+    #[link_name="preempt_enable"] fn f03_exec_report_preempt_enable_v1();
+    #[link_name="preempt_disable"] fn f03_exec_report_preempt_disable_v1();
+}
+unsafe extern "C" fn f03_exec_report_signal_v1(thread:*mut c_void,sig:CInt) {
+    ptrace_report_signal(thread.cast(),sig);
+}
+unsafe extern "C" fn f03_exec_report_arch_event_v1(
+    thread:*mut c_void,ctx:*mut c_void,setret:CLong,
+)->CLong {
+    arch_ptrace_syscall_event(thread.cast(),ctx.cast(),setret)
+}
+/// # Safety
+/// Original exec Thread/syscall-context spans are live and fully initialized.
+/// Raw scratch has the actual kernel-context alignment/extent. In the unchanged
+/// helper each scratch read is dominated by a full copy into that same scratch;
+/// no assume_init or typed read of uninitialized scratch occurs. Signal/event
+/// callbacks retain their original ownership and can update ptrace/context state.
+#[no_mangle]
+pub unsafe extern "C" fn f03_execveat_ptrace_report_v1(
+    thread:*mut Thread,syscall_ctx:*mut X86UserContext,
+)->CInt {
+    const OFFSETS:PtraceReportExecOffsets=PtraceReportExecOffsets {
+        thread_ptrace_offset:offset_of!(Thread,ptrace),
+        thread_ctx_offset:offset_of!(Thread,ctx),
+        thread_uctx_offset:offset_of!(Thread,uctx),
+        thread_ptrace_saved_uctx_offset:offset_of!(Thread,ptrace_saved_uctx),
+        thread_ptrace_saved_uctx_valid_offset:offset_of!(Thread,ptrace_saved_uctx_valid),
+    };
+    let mut scratch=MaybeUninit::<crate::abi::X86KernelContext>::uninit();
+    ptrace_report_exec_body_result(
+        thread.cast(),syscall_ctx.cast(),&OFFSETS,
+        size_of::<crate::abi::X86KernelContext>(),size_of::<X86UserContext>(),
+        scratch.as_mut_ptr().cast(),
+        Some(f03_exec_report_preempt_enable_v1),Some(f03_exec_report_preempt_disable_v1),
+        Some(f03_exec_report_signal_v1),Some(f03_exec_report_arch_event_v1),
+    )
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Private syscall_policy fragment; existing compute body/ABI and imports unchanged.
+unsafe extern "C" {
+    #[link_name="preempt_enable"]
+    fn f03_exec_finish_preempt_enable_v1();
+    #[link_name="ihk_mc_switch_context"]
+    fn f03_exec_finish_switch_context_v1(
+        old_ctx:*mut crate::abi::X86KernelContext,
+        new_ctx:*mut crate::abi::X86KernelContext,last:*mut c_void,
+    )->*mut c_void;
+}
+/// # Safety
+/// For result==0 the original exec thread/context, current-CPU run queue and
+/// preemption state are live. The runq lock and saved IRQ state transfer to the
+/// unchanged assembly entry/user-mode path. They are deliberately not released
+/// if the supposedly nonreturning switch returns, preserving the C fallback.
+/// Nonzero results touch no thread/CPU/IRQ/lock and retain the original return.
+#[no_mangle]
+pub unsafe extern "C" fn f03_execveat_finish_switch_v1(
+    thread:*mut Thread,result:CLong,
+)->CLong {
+    if result==0 {
+        let irqstate=cpu_disable_interrupt_save();
+        crate::spinlock_helpers::__ihk_mc_spinlock_lock_noirq(
+            addr_of_mut!((*get_this_cpu_local_var()).runq_lock).cast(),
+        );
+        // Preserve both original CPU-local acquisitions; do not cache/hoist one.
+        (*get_this_cpu_local_var()).runq_irqstate=irqstate;
+        f03_exec_finish_preempt_enable_v1();
+        let _=f03_exec_finish_switch_context_v1(
+            null_mut(),addr_of_mut!((*thread).ctx),thread.cast(),
+        );
+        return -(EFAULT as CLong);
+    }
+    result
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Pair only with the exact selected C guard; DCFA remains its original C body.
+#[cfg(all(f03_do_exit_supported_candidate,target_arch="x86_64",not(dcfa_kmod)))]
+mod f03_do_exit_selected_v2 {
+    use super::*;
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+unsafe extern "C" {
+    #[link_name = "terminate"]
+    fn f03_do_exit_existing_terminate_v2(status: CInt, signal: CInt);
+    #[link_name = "sync_child_event"]
+    fn f03_do_exit_existing_sync_child_v2(event: *mut c_void);
+    static mut f03_do_exit_debug_v2: [crate::debug::Ddebug; 2];
+}
+
+/// Execute the supported non-DCFA thread-exit transaction in its original order.
+///
+/// # Safety
+/// The current Thread/Process and linked thread list remain live under the
+/// original exit ownership, with initialized statuses, accounting and boot clock
+/// denominator. The process threads lock protects its list/state. Actual usercopy,
+/// futex, notification, terminate, perf-sync, release and scheduler providers retain
+/// their original caller/IRQ/lifetime contracts; this entry creates no reference
+/// or exit ACK. C terminate/perf-sync remain genuine unported endpoints.
+#[no_mangle]
+pub unsafe extern "C" fn f03_do_exit_supported_v2(code: CInt) {
+    let local = unsafe { crate::cls::get_this_cpu_local_var() };
+    let thread = unsafe { addr_of!((*local).current).read() };
+    let proc = unsafe { addr_of!((*thread).proc).read() };
+    let status = exit_code_status_result(code);
+    let signal = exit_code_signal_result(code);
+    let mut node = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+    let mut accounting = MaybeUninit::<TimeSpec>::uninit();
+    let log_enabled = unsafe {
+        read_volatile(addr_of!(f03_do_exit_debug_v2[0].line_flags)) >> 24 != 0
+    };
+    if log_enabled {
+        let pid = unsafe { addr_of!((*proc).pid).read() };
+        unsafe { kprintf(c"sys_exit,pid=%d\n".as_ptr().cast(), pid) };
+    }
+    let child_tid = unsafe { addr_of!((*thread).clear_child_tid).read() };
+    if !child_tid.is_null() {
+        let log_enabled = unsafe {
+            read_volatile(addr_of!(f03_do_exit_debug_v2[1].line_flags)) >> 24 != 0
+        };
+        if log_enabled {
+            unsafe { kprintf(c"exit clear_child!\n".as_ptr().cast()) };
+        }
+        // SAFETY: Preserve ignored user-set result and exact compiler memory
+        // barrier (no new hardware fence), then reload the original field for wake.
+        let current_tid = unsafe { addr_of!((*thread).clear_child_tid).read() };
+        let _ = unsafe { crate::x86_memory_helpers::setint_user(current_tid, 0) };
+        unsafe { core::arch::asm!("", options(nostack, preserves_flags)) };
+        let current_tid = unsafe { addr_of!((*thread).clear_child_tid).read() };
+        let _ = unsafe {
+            crate::futex::futex(current_tid.cast(), 1, 1, 0, null_mut(), 0, 0, 1)
+        };
+        unsafe { addr_of_mut!((*thread).clear_child_tid).write(null_mut()) };
+    }
+    let lock = unsafe { addr_of_mut!((*proc).threads_lock) };
+    // SAFETY: Genuine same-node reader acquisition and exact original list walk.
+    unsafe { crate::lock_helpers::__mcs_rwlock_reader_lock(lock.cast(), node.as_mut_ptr()) };
+    let head = unsafe { addr_of_mut!((*proc).threads_list) };
+    let mut link = unsafe { addr_of!((*head).next).read() };
+    let mut active: CInt = 0;
+    while link != head {
+        // SAFETY: A real non-sentinel siblings_list node belongs to a live Thread.
+        let child = unsafe {
+            link.cast::<u8>().sub(offset_of!(Thread, siblings_list)).cast::<Thread>()
+        };
+        if terminate_thread_active_result(unsafe { addr_of!((*child).status).read() }) != 0 {
+            active = active.wrapping_add(1);
+        }
+        link = unsafe { addr_of!((*link).next).read() };
+    }
+    if active == 1 {
+        unsafe { crate::lock_helpers::__mcs_rwlock_reader_unlock(lock.cast(), node.as_mut_ptr()) };
+        unsafe { f03_do_exit_existing_terminate_v2(status, signal) };
+        return;
+    }
+    if terminate_process_exited_result(unsafe { addr_of!((*proc).status).read() }) != 0 {
+        // Preserve the C writer-named unlock after reader acquisition. In the
+        // actual selected Rust lock provider both names invoke the SAME ticket
+        // unlock+saved IRQ operation. Do not claim this for another lock profile.
+        unsafe { crate::lock_helpers::__mcs_rwlock_writer_unlock(lock.cast(), node.as_mut_ptr()) };
+        unsafe { f03_do_exit_existing_terminate_v2(status, 0) };
+        return;
+    }
+    unsafe { crate::cls::preempt_disable() };
+    unsafe {
+        addr_of_mut!((*thread).exit_status).write(code);
+        addr_of_mut!((*thread).status).write(PS_EXITED);
+        tsc_to_ts(addr_of!((*thread).user_tsc).read(), accounting.as_mut_ptr());
+        crate::timer::ts_add(addr_of_mut!((*proc).utime), accounting.as_ptr());
+        tsc_to_ts(addr_of!((*thread).system_tsc).read(), accounting.as_mut_ptr());
+        crate::timer::ts_add(addr_of_mut!((*proc).stime), accounting.as_ptr());
+        addr_of_mut!((*thread).user_tsc).write(0);
+        addr_of_mut!((*thread).system_tsc).write(0);
+        f03_thread_exit_signal_v1(thread);
+    }
+    // SAFETY: C reloads thread->proc here, after notification callbacks.
+    let current_proc = unsafe { addr_of!((*thread).proc).read() };
+    let event = unsafe { addr_of!((*current_proc).monitoring_event).read() };
+    unsafe { f03_do_exit_existing_sync_child_v2(event) };
+    unsafe { crate::lock_helpers::__mcs_rwlock_writer_unlock(lock.cast(), node.as_mut_ptr()) };
+    // SAFETY: Same original release edge. No Thread access follows this release.
+    unsafe { crate::process_helpers::release_thread(thread) };
+    unsafe { crate::cls::preempt_enable() };
+    unsafe { schedule() };
+}
+
+    /// Preserve the existing sys_exit -> exit_body_result void callback ABI.
+    /// No reference, return ACK, stack retirement or scheduling authority is added.
+    #[no_mangle]
+    pub unsafe extern "C" fn exit_do_exit_bridge(code:CInt) {
+        f03_do_exit_supported_v2(code);
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(f03_unmap_begin_selected_candidate)]
+mod f03_unmap_begin_selected {
+ use super::*;
+#[no_mangle]
+pub unsafe extern "C" fn f03_unmap_begin() {
+    // SAFETY: Original pending-free CPU-local lifecycle, allocator/preemption and
+    // non-nesting constraints apply; genuine provider retains its panic contract.
+    unsafe { crate::mem_helpers::begin_free_pages_pending() };
+}
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(f03_unmap_remove_selected_candidate)]
+mod f03_unmap_remove_selected {
+ use super::*;
+#[no_mangle]
+pub unsafe extern "C" fn f03_unmap_remove(
+    vm: *mut c_void, start: CULong, end: CULong, ro_freed: *mut CInt,
+) -> CInt {
+    // SAFETY: Actual VM/tree/ownership and original caller's exclusive range guard.
+    // Complete provider owns splitting/removal/free effects and initialized output.
+    unsafe { crate::process_helpers::remove_process_memory_range(vm.cast(), start, end, ro_freed) }
+}
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(f03_unmap_finish_selected_candidate)]
+mod f03_unmap_finish_selected {
+ use super::*;
+#[no_mangle]
+pub unsafe extern "C" fn f03_unmap_finish() {
+    // SAFETY: Pairs the genuine begin lifecycle after removal/host effects, even on
+    // errors. Actual pending-page draining/free implementation is not mocked.
+    unsafe { crate::mem_helpers::finish_free_pages_pending() };
+}
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(f03_mmap_page_callback_candidate)]
+mod f03_mmap_page_selected {
+ use super::*;
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+/// Select the existing architecture's next smaller page without changing policy.
+///
+/// # Safety
+/// `p2align` has the same writable C-int storage contract as the original C callback.
+/// Null handling and result/error behavior remain with the genuine Rust architecture
+/// provider. No page-table pointer, mapping reference or allocation is manufactured.
+#[no_mangle]
+pub unsafe extern "C" fn f03_do_mmap_smaller_page_v2(
+    size: crate::abi::SizeT,
+    p2align: *mut crate::abi::CInt,
+) -> crate::abi::CInt {
+    // SAFETY: The original callback passes NULL args/newsize and the exact requested
+    // size/output pointer. Reuse that selected full Rust provider without new policy.
+    unsafe {
+        crate::x86_memory_helpers::arch_get_smaller_page_size(
+            core::ptr::null_mut(),
+            size,
+            core::ptr::null_mut(),
+            p2align,
+        )
+    }
+}
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Pair centrally with MCKERNEL_RUST_F06_MMAP_FLAG_PROVIDERS and genuine NOCACHE cfg.
+#[cfg(f06_mmap_flag_providers)]
+#[path = "f06_mmap_flags.rs"]
+mod f06_mmap_flags;
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(f06_prctl_set_register_candidate)]
+#[path = "f06_prctl_set_register.rs"]
+mod f06_prctl_set_register;
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(f06_prctl_get_register_candidate)]
+#[path = "f06_prctl_get_register.rs"]
+mod f06_prctl_get_register;
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(f06_mmap_dispatch_bridge_candidate)]
+#[path = "f06_mmap_dispatch_bridge.rs"]
+mod f06_mmap_dispatch_bridge;

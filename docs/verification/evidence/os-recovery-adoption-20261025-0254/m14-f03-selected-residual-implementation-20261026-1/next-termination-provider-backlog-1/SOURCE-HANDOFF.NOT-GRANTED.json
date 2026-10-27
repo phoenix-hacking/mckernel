@@ -1,0 +1,431 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "THREE_NEXT_RETAINED_TERMINATION_BRIDGES_IMPLEMENTED_PRIVATE_SOURCE_ONLY_NOT_GRANTED",
+  "owner": "/root/native_retirement_repair",
+  "created_utc": "2026-10-27T01:42:37.440951+00:00",
+  "selected_frontier": "Same actual retained F03 96FUNC object. Three12B FUNC in allocated section1; original C atomics already call existing Rust providers. Targeted symbol rows retained.",
+  "selected_function_bytes": 36,
+  "slice_count": 3,
+  "slices": [
+    {
+      "number": 1,
+      "short": "wait-process-release",
+      "cname": "wait_process_release_bridge",
+      "rname": "f03_wait_release_process",
+      "cflag": "MCKERNEL_RUST_F03_WAIT_PROCESS_RELEASE",
+      "cfg": "f03_wait_process_release_selected_candidate",
+      "decl": "void f03_wait_release_process(void *)",
+      "kind": "Conditional C export of existing canonical wait process callback; exact body unchanged.",
+      "directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/01-wait-process-release-selected-1"
+    },
+    {
+      "number": 2,
+      "short": "terminate-refcount",
+      "cname": "terminate_host_refcount_set_bridge",
+      "rname": "f03_terminate_host_refcount_set_v1",
+      "cflag": "MCKERNEL_RUST_F03_TERMINATE_REFCOUNT",
+      "cfg": "f03_terminate_refcount_selected_candidate",
+      "decl": "void f03_terminate_host_refcount_set_v1(void *, int)",
+      "kind": "Missing void-pointer ABI adapter to the existing Rust IhkAtomic SeqCst set; no atomic body copied.",
+      "directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/02-terminate-refcount-selected-1"
+    },
+    {
+      "number": 3,
+      "short": "terminate-cmpxchg",
+      "cname": "terminate_mcexec_cmpxchg_bridge",
+      "rname": "atomic_cmpxchg_ulong",
+      "cflag": "MCKERNEL_RUST_F03_TERMINATE_CMPXCHG",
+      "cfg": null,
+      "decl": null,
+      "kind": "Exact existing public Rust atomic_cmpxchg_ulong has the C callback signature; select it directly without duplicate wrapper or atomic body.",
+      "directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/03-terminate-cmpxchg-selected-1"
+    }
+  ],
+  "source_contract": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/ACTUAL-SOURCE-CONTRACT.json",
+    "bytes": 1371,
+    "sha256": "2b14290e6bf073c1113d7eb37a606829500fafabf64e276455c9f74eb1cdc414"
+  },
+  "input_refs": {
+    "SLICES.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/SLICES.json",
+      "bytes": 1933,
+      "sha256": "7fb4e76202453b2ae3ccb03869005feb8a4ca7b5fb4dc4f47ef3c80827a4928e"
+    },
+    "lib.fixture.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/lib.fixture.rs",
+      "bytes": 1520,
+      "sha256": "c02679f6dfef43d80ae24b57e141f4c3df3ac2dea8446cb71a28ecf7137e2814"
+    },
+    "driver.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/driver.c",
+      "bytes": 5647,
+      "sha256": "95090fadf5e05b58dff136843a3e7a3a31b7f549209a90ae4b909df8eb147672"
+    },
+    "retained-abi.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/retained-abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    "retained-atomic_helpers.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/retained-atomic_helpers.rs",
+      "bytes": 6207,
+      "sha256": "8acf10a907cede816da8300d36bf967d938cc672dd75dbb3ecc8f3992ec42941"
+    },
+    "test_source_backlog.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/test_source_backlog.py",
+      "bytes": 4237,
+      "sha256": "8dd13a20d32cb7cc2f9c55476df86c58ca23f7cfb4df11e61e250df57bc0eeb3"
+    },
+    "retained-selected-symbols.txt": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/retained-selected-symbols.txt",
+      "bytes": 426,
+      "sha256": "8259367cb5515830687cd42a5e0dc6c94e440910e564809c627f0914f5590cfe"
+    },
+    "candidate/kernel/syscall.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/candidate/kernel/syscall.c",
+      "bytes": 910261,
+      "sha256": "a3c632fc988b9eb90d585d98a752880257c2aa78acead26083272ca58423658e"
+    },
+    "candidate/kernel/rust/syscall_policy.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/candidate/kernel/rust/syscall_policy.rs",
+      "bytes": 1229641,
+      "sha256": "cf1dd75cb051ff95e6672284205d9b82ca207e8c0dd836b2df1f47fe2649b407"
+    },
+    "01-wait-process-release-selected-1/original.C.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/01-wait-process-release-selected-1/original.C.inc",
+      "bytes": 99,
+      "sha256": "a7a4d1a4aec37399bf4b40648dbb53b5a8c3e95838b2344a5459224d532b530c"
+    },
+    "01-wait-process-release-selected-1/paired-selector.C.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/01-wait-process-release-selected-1/paired-selector.C.inc",
+      "bytes": 320,
+      "sha256": "ef53ae98dc93898ead2e3adfd188d8f85c6ef147cc42341a38cb7b0a4e07aa26"
+    },
+    "01-wait-process-release-selected-1/selected.Rust.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/01-wait-process-release-selected-1/selected.Rust.inc",
+      "bytes": 209,
+      "sha256": "6f86e0e42aaf339b24e1a7e10b4e2a7e46175228b36ffaeac1a3ddc1add6e98f"
+    },
+    "01-wait-process-release-selected-1/reused-original.Rust.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/01-wait-process-release-selected-1/reused-original.Rust.inc",
+      "bytes": 138,
+      "sha256": "1971d35f16e550f32dd06b2f8ca392c9d9ed159632fd52fc9415e4f80d42dd95"
+    },
+    "01-wait-process-release-selected-1/candidate/kernel/syscall.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/01-wait-process-release-selected-1/candidate/kernel/syscall.c",
+      "bytes": 909683,
+      "sha256": "d502bdcdffd2f2efa3d4df8a3d0566fba914adb03751511e36ad6df8c88ba0b3"
+    },
+    "01-wait-process-release-selected-1/candidate/kernel/rust/syscall_policy.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/01-wait-process-release-selected-1/candidate/kernel/rust/syscall_policy.rs",
+      "bytes": 1228929,
+      "sha256": "2708c9aabf93e736583ad7347269a2b29b56cffb98c4f42e622da56679a4d391"
+    },
+    "01-wait-process-release-selected-1/syscall.c.patch": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/01-wait-process-release-selected-1/syscall.c.patch",
+      "bytes": 541,
+      "sha256": "49d1616c31797dea28b29a714759510b44ffac085b2b58781631be078f542260"
+    },
+    "01-wait-process-release-selected-1/syscall_policy.rs.patch": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/01-wait-process-release-selected-1/syscall_policy.rs.patch",
+      "bytes": 628,
+      "sha256": "16583dcf9a750399ef2238b44d48649dbeea4c358cecb26f32f2b94571040708"
+    },
+    "02-terminate-refcount-selected-1/original.C.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/02-terminate-refcount-selected-1/original.C.inc",
+      "bytes": 129,
+      "sha256": "e642cd33287a304225991122e780edd91a2cfeaa8529676da5f2770b3cea6276"
+    },
+    "02-terminate-refcount-selected-1/paired-selector.C.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/02-terminate-refcount-selected-1/paired-selector.C.inc",
+      "bytes": 421,
+      "sha256": "40ddd7240e95fa6ac0b2e7eecccb46fb5ed97815d670f272dbb8e52940b1e82c"
+    },
+    "02-terminate-refcount-selected-1/selected.Rust.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/02-terminate-refcount-selected-1/selected.Rust.inc",
+      "bytes": 711,
+      "sha256": "4a36da2431054508bd648ce4bb4a8d49197a1f5b4ef3ba0794a4d9d9e7bbf672"
+    },
+    "02-terminate-refcount-selected-1/reused-original.Rust.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/02-terminate-refcount-selected-1/reused-original.Rust.inc",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "02-terminate-refcount-selected-1/candidate/kernel/syscall.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/02-terminate-refcount-selected-1/candidate/kernel/syscall.c",
+      "bytes": 909754,
+      "sha256": "db7e193ca2c1aea511818f0b95df7371c9e764084339c937b69cb5dde50b051d"
+    },
+    "02-terminate-refcount-selected-1/candidate/kernel/rust/syscall_policy.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/02-terminate-refcount-selected-1/candidate/kernel/rust/syscall_policy.rs",
+      "bytes": 1229570,
+      "sha256": "863ef1fdd985bcbb5cf74bdebb9f56dd5d52ea2e8149cd8dfa650ace71063247"
+    },
+    "02-terminate-refcount-selected-1/syscall.c.patch": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/02-terminate-refcount-selected-1/syscall.c.patch",
+      "bytes": 688,
+      "sha256": "1ff4ba0f7e364421cf0ccac41f92ab3e247723294c829c4605c05fb0b17fe60b"
+    },
+    "02-terminate-refcount-selected-1/syscall_policy.rs.patch": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/02-terminate-refcount-selected-1/syscall_policy.rs.patch",
+      "bytes": 841,
+      "sha256": "53a31de466e5e5b3077f74c3361ddc4f72700bf7e11253ad1c7144c1ca04c6b7"
+    },
+    "03-terminate-cmpxchg-selected-1/original.C.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/03-terminate-cmpxchg-selected-1/original.C.inc",
+      "bytes": 191,
+      "sha256": "4dd6acb3afcb35d77b3f00490e5191df90db083c6deae1e46e8a3ef7d7f2a476"
+    },
+    "03-terminate-cmpxchg-selected-1/paired-selector.C.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/03-terminate-cmpxchg-selected-1/paired-selector.C.inc",
+      "bytes": 477,
+      "sha256": "5c6da2cded9096caf85d728bb8d77ed24d7018565bc4c2aec77b24a20d2d1cdb"
+    },
+    "03-terminate-cmpxchg-selected-1/selected.Rust.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/03-terminate-cmpxchg-selected-1/selected.Rust.inc",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "03-terminate-cmpxchg-selected-1/reused-original.Rust.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/03-terminate-cmpxchg-selected-1/reused-original.Rust.inc",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "03-terminate-cmpxchg-selected-1/candidate/kernel/syscall.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/03-terminate-cmpxchg-selected-1/candidate/kernel/syscall.c",
+      "bytes": 909748,
+      "sha256": "ad7d529efa320838a33c74e3798c12adef68fc3d335b3979fa506023aff25a5c"
+    },
+    "03-terminate-cmpxchg-selected-1/candidate/kernel/rust/syscall_policy.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/03-terminate-cmpxchg-selected-1/candidate/kernel/rust/syscall_policy.rs",
+      "bytes": 1228858,
+      "sha256": "fefec3eb05be2f714dfeca34310901a566557f82ee08de9b9ad0ef0344f74d62"
+    },
+    "03-terminate-cmpxchg-selected-1/syscall.c.patch": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/03-terminate-cmpxchg-selected-1/syscall.c.patch",
+      "bytes": 680,
+      "sha256": "2da529e6f60012f49cd6880d8a37376ff15b8c6d5a76ce17476453230bcb464a"
+    },
+    "03-terminate-cmpxchg-selected-1/syscall_policy.rs.patch": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/03-terminate-cmpxchg-selected-1/syscall_policy.rs.patch",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "tool_refs": {
+    "stable_Rust": {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "bytes": 654904,
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1"
+    },
+    "gcc9": {
+      "path": "/usr/bin/gcc-9",
+      "bytes": 1158288,
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+    }
+  },
+  "commands": [
+    {
+      "label": "00-three-termination-provider-selectors-genuine-Rust-atomics",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--crate-name",
+        "f03_termination_provider_backlog",
+        "--crate-type",
+        "lib",
+        "--edition=2021",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "--cfg",
+        "enable_profile",
+        "--cfg",
+        "enable_perf",
+        "--cfg",
+        "f03_wait_process_release_selected_candidate",
+        "--cfg",
+        "f03_terminate_refcount_selected_candidate",
+        "--emit=obj=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/output-PENDING-ROOT/providers.o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/lib.fixture.rs"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Controlled HOST actual-selected C callback/ABI equivalence for process-release, refcount-set adapter and direct existing compare-exchange alias. Genuine Rust atomic helpers operate only on initialized ordinary HOST storage; process-release effects are an explicit identity mock. No actual process refcount/free/current-stack/IRQ/MSR/CR/FSGS/context-switch/syscall/kernel/native effects.",
+      "argv_compact_json_LF_sha256": "79ad67e60488e32e85e718fd2a5a004bee7ea4ddb47bec363bdadb403bd8f5c4"
+    },
+    {
+      "label": "01-genuine-header-original-C-and-selected-alias-branches-link",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-Werror=incompatible-pointer-types",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_NATIVE_FORK_OWNED_TRANSACTION",
+        "-DMCKERNEL_RUST_RLIMIT_HELPERS",
+        "-DMCKERNEL_RUST_SCHED_POLICY_HELPERS",
+        "-DMCKERNEL_RUST_SCHED_PRIO_HELPERS",
+        "-DMCKERNEL_RUST_SHMID_HELPERS",
+        "-DMCKERNEL_RUST_SHM_PERM_HELPERS",
+        "-DMCKERNEL_RUST_SIGNAL_HELPERS",
+        "-DMCKERNEL_RUST_SYSCALL_OFFLOAD",
+        "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build/kernel/include",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel/ihk/ikc/include",
+        "-I/home/holden/mckernel/ihk/linux/include",
+        "-I/home/holden/mckernel/lib/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+        "-DMCKERNEL_RUST_F03_WAIT_PROCESS_RELEASE",
+        "-DMCKERNEL_RUST_F03_TERMINATE_REFCOUNT",
+        "-DMCKERNEL_RUST_F03_TERMINATE_CMPXCHG",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/driver.c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/output-PENDING-ROOT/providers.o",
+        "-no-pie",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/output-PENDING-ROOT/parity"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Controlled HOST actual-selected C callback/ABI equivalence for process-release, refcount-set adapter and direct existing compare-exchange alias. Genuine Rust atomic helpers operate only on initialized ordinary HOST storage; process-release effects are an explicit identity mock. No actual process refcount/free/current-stack/IRQ/MSR/CR/FSGS/context-switch/syscall/kernel/native effects.",
+      "argv_compact_json_LF_sha256": "3ceceba9528d92cfd8b7d41671a8cfa179e05badfde98a2df976df380a4cd966"
+    },
+    {
+      "label": "02-atomic-set128-CAS2000-processrelease3-ABI16",
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/output-PENDING-ROOT/parity"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Controlled HOST actual-selected C callback/ABI equivalence for process-release, refcount-set adapter and direct existing compare-exchange alias. Genuine Rust atomic helpers operate only on initialized ordinary HOST storage; process-release effects are an explicit identity mock. No actual process refcount/free/current-stack/IRQ/MSR/CR/FSGS/context-switch/syscall/kernel/native effects.",
+      "argv_compact_json_LF_sha256": "82d25919c7c726216ed1d500c18b66ba4a08c6940850ae6e1e4bd1d20eead4b8"
+    }
+  ],
+  "canonical_preimages": {
+    "C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-do-exit-selected-1/preimage/syscall.c",
+      "bytes": 909462,
+      "sha256": "54a9b0a8c6b9e1077fa7830bbaecdc699e7f3414767f50a77d4e5def63bdc582"
+    },
+    "Rust_policy": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-do-exit-selected-1/preimage/syscall_policy.rs",
+      "bytes": 1228858,
+      "sha256": "fefec3eb05be2f714dfeca34310901a566557f82ee08de9b9ad0ef0344f74d62"
+    }
+  },
+  "existing_providers": {
+    "wait_process": "Exact existing f03_wait_release_process canonical callback gains cfg_attr(no_mangle) and visibility only; real crate::process_helpers::release_process remains unchanged.",
+    "refcount": "New narrow void-pointer typed adapter calls existing crate::atomic_helpers::ihk_atomic_set SeqCst. No reset authorization/extra reference/new atomic body.",
+    "CAS": "No new Rust body or cfg. Existing atomic_cmpxchg_ulong public C ABI exactly matches original callback; C alias directly selects it only with existing MCKERNEL_RUST_ATOMIC_HELPERS enabled."
+  },
+  "real_atomic_source": {
+    "path": "/home/holden/mckernel/kernel/rust/atomic_helpers.rs",
+    "bytes": 6207,
+    "sha256": "8acf10a907cede816da8300d36bf967d938cc672dd75dbb3ecc8f3992ec42941"
+  },
+  "genuine_atomic_header": {
+    "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/atomic.h",
+    "bytes": 2680,
+    "sha256": "829c76b8e61efd50e6cbc968c6eac56fc7b151c9da4143fd40bde176117ef78d"
+  },
+  "genuine_header_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-perf-attribute-callbacks-1/SOURCE-HANDOFF.NOT-GRANTED.json",
+    "bytes": 12804,
+    "sha256": "9299a819b264985bd53aa780ca4ece2bc372246cfad4fc906a9b8aca0a8cb7e6"
+  },
+  "fixture_expected": {
+    "atomic_set_pairs": 128,
+    "CAS_pairs": 2000,
+    "process_release_identity_pairs": 3,
+    "genuine_ABI_words": 16,
+    "selected_alias_branch_required": "C driver includes exact paired selector snippets and #error if each alias branch is absent; callback function-pointer types are genuine-header compatible.",
+    "atomic_scope": "Initialized ordinary HOST guard/counter storage, signed32 and unsigned64 bit patterns, match/mismatch return+mutation and untouched-neighbor checks. Same selected SeqCst providers. No concurrent ordering claim.",
+    "release_scope": "Three initialized HOST Process addresses, exact one-call identity mock only; no real decrement/free or lifetime acceptance.",
+    "actual_executed": false
+  },
+  "unsafe_invariants": [
+    "Original terminate_host authority to force the actual Thread.refcount field remains required; adapter creates no reference or permission to reset an unrelated field.",
+    "IhkAtomic storage remains initialized4-byte-aligned atomicI32; original signed int bits and SeqCst store unchanged.",
+    "Unsigned-long CAS retains initialized8-byte-aligned u64 storage, SeqCst success/failure ordering and prior-value return on match or mismatch.",
+    "Process release retains actual original caller-owned Process identity and exact public void release semantics; no checked/no-op replacement.",
+    "All original locking/preemption/current-stack/final-reference and constructor/cleanup ownership contracts remain unchanged."
+  ],
+  "canonical_write_proposal": [
+    "kernel/syscall.c: exact3 paired guarded replacements, C fallback bytes intact",
+    "kernel/rust/syscall_policy.rs: cfg_attr(no_mangle)/pub on existing f03_wait_release_process plus conditional narrow refcount adapter only; CAS has no Rust-policy edit"
+  ],
+  "shared_ABI_atomic_helpers_or_lib_edit": false,
+  "new_atomic_implementation": false,
+  "CMake_enablement": false,
+  "default": "OFF; no build option mapping/activation written",
+  "holds_cleared": [],
+  "holds_remaining": [
+    "Real Process/Thread final-reference and current-stack release ownership",
+    "Existing forced-refcount reset authority/ordering in terminate_host",
+    "Real do_syscall/termination/host-retirement provider ownership",
+    "Default consumer/full crate/link/image/native acceptance"
+  ],
+  "fresh_output": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/output-PENDING-ROOT",
+  "ordinary_profile_proposed": {
+    "cpu": [
+      6
+    ],
+    "jobs": 1,
+    "address_space_bytes": 2147483648,
+    "CPU_seconds_per_command": 60,
+    "FSIZE_bytes": 67108864,
+    "core_bytes": 0,
+    "wall_seconds_per_command": 90,
+    "first_failure_stop": true,
+    "one_bounded_diagnosed_correction": true
+  },
+  "actual_grant": null,
+  "compiler_execution": false,
+  "first_compiler_timestamp": null,
+  "blocked_duration_timestamp": null,
+  "default_link": false,
+  "native": false,
+  "whole_file_retired": false,
+  "prior_five_bridge_recipe_and_passed_prefix_unchanged": true,
+  "published_do_exit_and_coherent_four_slices_unchanged": true,
+  "fixed_deadline": "2026-10-27T11:24:50Z",
+  "next_actual_step": "Focused independent ownership/ABI review, then NEW explicit ordinary grant for these exact3argv; prior five-bridge grant is consumed and supplies no new authority."
+}

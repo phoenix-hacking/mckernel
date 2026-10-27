@@ -1,3 +1,53 @@
+## Matching F02/RustMM native accepted; M15-F01 file closed — 2026-10-27T02:00Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Goal ACTIVE, same thread/credit ledger/fixed end2026-10-27T11:24:50Z. No current
+heavy owner/query/TTL. Strict235 nonce2005b0dd8446ae5356152dfb13144dab CONSUMED
+ONCE; actualtool30565/caller1346904/start86299880 joined0. Exact235Bstdout,
+stderr0/exit0/exec37+ENOENT42/wait/reap/ECHILD/procfsempty independentlyaccepted;
+parent256 ACKtoken3 errno0 abandoned1 preserved, not a waited destructorACK.
+Child259/262 ACKs abandoned0; no invented child-retirement0. QEMU-9 retained after
+shutdown. All30ownercommands reaped/CID7be35b32 removed/ownmutexprobesclosed;
+325row currentphysical independentlyaccepted. Caller37.743360swall/0.915192sCPU/
+53180KiBpeak OUTER ONLY, fullguestCPU/RSS unknown. Freshresource→caller44.580939s;
+queue/source-ready/blockedduration unknown. Accepted diagnosticcases now4.
+
+M15-F01 original THREE-wrapper file contract COMPLETE at EXACT supported pinned
+Linux/RustMM57546+SMP887dc/F02image2ed7/launcherdca025 profile. Independent7c925ec9
+proves actualcompiledoptin+mandatorysuccessfulchildCREATE_PPD(adopt_v4)→nonempty
+inherit_vmas→RustMMlock/VMAwrite/RAIIunlock. Retained actual codegen/HOST equivalence
+reused; selected Cwrapper excluded. Root M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json
+records exact originalscope. Broaderrevoke/finalselector3/destructorACK staysOPEN,
+not a newF01quota. FullM15/M14OPEN, practical35/35 unchanged. F05 actualverify/
+from-user/to-user nowqualified byexec/wait; directprocessVMread/write/patch and
+partialfault consumer absent, frozen05-05/fileOPEN. No acceptance fromliveness.
+
+NewF03/F06 qualifiedbatch source actuallyADOPTED byRoot after independent unsafe/
+ABI sourcePASS: 12canonicalfiles changed, unchangedF02 process retained. Allprior
+HOSTproofs reused,40pureprofilechecksPASS, realAPI/mount/export/hashpreflightPASS
+withouttargetcalls. NextactualFOURcommands wholeRust+F03syscallC+F06archsyscallC+
+same11inputlink; EIGHTretained Cobjects=sevenoriginal+F02b816 process. No process
+prefixrecompile or nine-reuse miscount. Oneclosed101file RustsubtreeROmount avoids
+absentleafOCI. Exactprofile sourcePASS a9db5b6f; Rootfills request/currentclearance
+and corrects two prosecounts only. ROOT-F03-F06-QUALIFIED-DEFAULT-BUILD-ADMISSION-1
+holds staticpacket, freshnonce2345a19be8fbbc4ed1f4e81c8e94847c RESERVEDNOTCONSUMED.
+NO holder/resources/liveclock/grant yet; sourcepublication must complete first.
+ExactnextRootcommand after verifiedpush:
+`/home/holden/anaconda3/bin/python3 -I -B docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F03-F06-QUALIFIED-DEFAULT-BUILD-ADMISSION-1/hold_and_run_build_only.py --bootstrap-grant docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F03-F06-QUALIFIED-DEFAULT-BUILD-ADMISSION-1/ROOT-HOLDER-BOOTSTRAP-GRANT.json`
+Then actualREADY→capture_and_bind_resource.py→ONEexactindependentexecutionreview→
+Rootactualgrant/READYgo. SourcePASS is not executionrelease. Freshphysical/account/
+reservation/7CPUaggregate/oneheavy/12GiB/512/noNet/UID1000/permanent27:4 unchanged.
+
+Parallel actualF03termination3HOSTcommands all0:128atomicset+2000CAS+3release+16ABI,
+firstcompiler01:55:55.124207Z,wall0.292924/CPU0.181760/RSS96560KiB; alljoined/
+CPU6free; SOURCE-only finalref/lifecycle holds retained. F03nextptrace3 andF06next
+selectedbacklogs advancing privately; daemonowner finishes realpids64owner/driver
+binding, no RLIMIT_NPROC64/unboundedfixture. No SDK7/prefix/native replay. Largest
+avoidablehandoff was scalar source/publication coordination; removed by one merged
+F03/F06 cohort + exactF02processreuse, sourceworkersadvancebounded3–5slices. Current
+HOST150919540736B/scratch47873171456B free at acceptedpostjoin, not CPUshortage.
+No95%speedup claim; retain originalnonoverlap30minbuckets despite20minsteering.
+
 ## F02 default cohort accepted; no live admission clock — 2026-10-27T01:40Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

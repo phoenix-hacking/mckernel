@@ -1,0 +1,27 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_M15_F01_SUPPORTED_FILE_PROVIDER_CLOSURE",
+  "at": "2026-10-27T01:58:35.742191+00:00",
+  "dispatcher": "/root",
+  "independent_provider_decision": {
+    "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+    "bytes": 13254,
+    "sha256": "7c925ec9e387ad997e2c806412c4dcf1754bbdec2a576f9b9f7db930837192c1"
+  },
+  "independent_case_and_postjoin": {
+    "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/INDEPENDENT-CASE-AND-POSTJOIN-REVIEW.json",
+    "bytes": 1691,
+    "sha256": "a4620f1885b03f96dea753aa05f7164f119dadee8cfdbe55ecd6e1d6848e7c18"
+  },
+  "selected_C_file": "host-kernel/native-rust/mcctrl_vm_write_compat.c",
+  "retired_C_boundaries": [
+    "mckernel_inherited_mmap_write_lock",
+    "mckernel_inherited_mmap_write_unlock",
+    "mckernel_inherited_vma_start_write"
+  ],
+  "scope_limit": "Exact pinned Linux/current RustMM57546/SMP887dc +F02image2ed7/launcher dca025 supported profile, matching codegen and mandatory native adopted-VMA protocol path. Not every configuration or caller.",
+  "broader_revoke_and_final_destructor_ACK": "OPEN; parent ACK256/token3 errno0 abandoned1 is preserved waiter-abandonment; no inference of waited destructor ACK",
+  "M15_complete": false,
+  "M14_complete": false,
+  "new_execution_authority": false
+}

@@ -111,3 +111,9 @@ fn panic(_info: &PanicInfo) -> ! {
 pub extern "C" fn mckernel_rust_probe() -> u32 {
     0x5255_5354
 }
+
+#[cfg(enable_perf)]
+pub mod f03_perf_attr_callbacks;
+
+#[cfg(all(f03_prlimit_body_candidate,target_arch="x86_64"))]
+pub mod f03_prlimit;

@@ -1,0 +1,35 @@
+[
+  {
+    "number": 1,
+    "short": "wait-process-release",
+    "cname": "wait_process_release_bridge",
+    "rname": "f03_wait_release_process",
+    "cflag": "MCKERNEL_RUST_F03_WAIT_PROCESS_RELEASE",
+    "cfg": "f03_wait_process_release_selected_candidate",
+    "decl": "void f03_wait_release_process(void *)",
+    "kind": "Conditional C export of existing canonical wait process callback; exact body unchanged.",
+    "directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/01-wait-process-release-selected-1"
+  },
+  {
+    "number": 2,
+    "short": "terminate-refcount",
+    "cname": "terminate_host_refcount_set_bridge",
+    "rname": "f03_terminate_host_refcount_set_v1",
+    "cflag": "MCKERNEL_RUST_F03_TERMINATE_REFCOUNT",
+    "cfg": "f03_terminate_refcount_selected_candidate",
+    "decl": "void f03_terminate_host_refcount_set_v1(void *, int)",
+    "kind": "Missing void-pointer ABI adapter to the existing Rust IhkAtomic SeqCst set; no atomic body copied.",
+    "directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/02-terminate-refcount-selected-1"
+  },
+  {
+    "number": 3,
+    "short": "terminate-cmpxchg",
+    "cname": "terminate_mcexec_cmpxchg_bridge",
+    "rname": "atomic_cmpxchg_ulong",
+    "cflag": "MCKERNEL_RUST_F03_TERMINATE_CMPXCHG",
+    "cfg": null,
+    "decl": null,
+    "kind": "Exact existing public Rust atomic_cmpxchg_ulong has the C callback signature; select it directly without duplicate wrapper or atomic body.",
+    "directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/03-terminate-cmpxchg-selected-1"
+  }
+]

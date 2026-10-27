@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-27T01:41:12.370373+00:00",
+  "as_of": "2026-10-27T01:58:35.742191+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -946,9 +946,9 @@
         "native_credit": false
       },
       "latest_dispatcher_checkpoint": {
-        "implemented": "Five-data-owner union integrated after actual fullRust/partial review, globals4/64/16 with alignment/real instruction consumers. Getsiginfo actual6144/ABI14 controlled parity independentlyPASS; coherent290 source preparation, not yet integrated.",
-        "actual": "Five-data-owner union integrated after actual fullRust/partial review, globals4/64/16 with alignment/real instruction consumers. Getsiginfo actual6144/ABI14 controlled parity independentlyPASS; coherent290 source preparation, not yet integrated.",
-        "limits": "Controlled HOST/source scopes only; selected default/native/wholefile/Cboundary retirement remain open."
+        "implemented": "Four additional default Rust data owners: three int4 controls plus immutable80B callbacktable; actual selected C88\u219284.",
+        "actual": "Default3commands0/11inputlink accepted; matching F02image2ed7 strict235 now native accepted with RustMM tuple.",
+        "limits": "Remaining84 C semantic metadata/Source38 and whole-file obligations remain open; no whole-file claim."
       },
       "prior_recorded_owner_before_20261025": "/root/m14_process_cutover",
       "checkpoint_before_20261027_active_frontier": {
@@ -2144,11 +2144,12 @@
         "evidence": [
           "docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f05-nearest-file-closure-1/SELECTED-F05-RECONCILIATION.json",
           "docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT290-MEMORY1-INDEPENDENT-CASE-ACCEPTANCE.json",
-          "docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f05-nearest-file-closure-1/F05-CLOSURE-DECISION.json"
+          "docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f05-nearest-file-closure-1/F05-CLOSURE-DECISION.json",
+          "docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f05-nearest-file-closure-1/F05-STRICT235-ACTUAL-USERCOPY-SCOPE-DECISION.json"
         ],
         "current_scope": "Selected current290 GCC14 F05 memory.c runtime object; whole-file remains open for existing functional native obligation.",
-        "current_blocker": "M14-05-05 native usercopy/process-VM read/write/patch, bounded lifetimes and fault fixups.",
-        "next_supported_test": "baseline.core.files"
+        "current_blocker": "Direct read/write/patch_process_vm and partial-fault behavior have no established supported frozen native consumer; verify/from-user/to-user now qualified by strict235.",
+        "next_supported_test": null
       },
       "active_lane_20261024": {
         "confirmed_at": "2026-10-24T00:29:28.290006+00:00",
@@ -2176,10 +2177,9 @@
         }
       ],
       "latest_dispatcher_checkpoint": {
-        "at": "2026-10-26T23:49:41.812613+00:00",
-        "implemented": "Selected current290 F05 C object has zero runtime FUNC/OBJECT/allocated relocations; 343 Rust providers and seven final storage pointers qualified. Existing HOST semantics retained.",
-        "actual": "Matching current290 startup and baseline.core.memory diagnostic cases independently accepted with normal retirement/currentphysical; F05 whole-file decision KEEP_OPEN on exact frozen M14-05-05.",
-        "limits": "Native usercopy/process-VM read/write/patch bounded-lifetime/fault-fixup obligation not closed by memory smoke; smallest already-supported next case baseline.core.files with 8209-byte transfer and route evidence. No broader oracle or percentage added."
+        "implemented": "Selected current290 C memory object0FUNC/OBJECT/allocatedrelocs;343Rustproviders+7storage retained.",
+        "actual": "Four scoped diagnostics accepted; strict235 native exec argv/envp verify/from-user plus wait4 status to-user routes now qualified on F02 image.",
+        "limits": "Full M14-05-05/file remains open for direct process-VM read/write/patch/partialfault consumer gap; no automatic whole-file acceptance."
       },
       "current_increment": {
         "at": "2026-10-24T11:43:50.774989+00:00",

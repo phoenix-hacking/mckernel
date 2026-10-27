@@ -650,17 +650,23 @@ arch_ptrace_thread_unlock_bridge(unsigned long thread_addr)
 	thread_unlock((struct thread *)thread_addr);
 }
 
+#ifndef MCKERNEL_RUST_F06_PRCTL_SET_REGISTER
 int
 arch_prctl_set_register_bridge(int type, unsigned long value)
 {
 	return ihk_mc_arch_set_special_register(type, value);
 }
 
+#endif
+
+#ifndef MCKERNEL_RUST_F06_PRCTL_GET_REGISTER
 int
 arch_prctl_get_register_bridge(int type, unsigned long *addr)
 {
 	return ihk_mc_arch_get_special_register(type, addr);
 }
+
+#endif
 
 void
 arch_prctl_log_bridge(int event, int cpu, unsigned long value)
@@ -691,6 +697,7 @@ arch_do_shmget_bridge(long key, size_t size, int shmflg)
 }
 
 
+#ifndef MCKERNEL_RUST_F06_MMAP_DISPATCH_BRIDGE
 long
 arch_do_mmap_bridge(unsigned long addr, size_t len, int prot, int flags,
 		int fd, long off, int vrf0, void *private_data)
@@ -699,6 +706,9 @@ arch_do_mmap_bridge(unsigned long addr, size_t len, int prot, int flags,
 }
 
 
+#endif
+
+#ifndef MCKERNEL_RUST_F06_MMAP_FLAG_PROVIDERS
 int
 arch_mmap_supported_flags_bridge(void)
 {
@@ -736,6 +746,8 @@ arch_mmap_error_flags_bridge(void)
 		| MAP_EXECUTABLE
 		| MAP_NONBLOCK;
 }
+#endif
+
 #endif
 
 #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS

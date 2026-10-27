@@ -1,0 +1,444 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_THREE_COMMANDS_TERMINATION_SET128_CAS2000_RELEASE3_ABI16",
+  "records": [
+    {
+      "command": {
+        "label": "00-three-termination-provider-selectors-genuine-Rust-atomics",
+        "argv": [
+          "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+          "--crate-name",
+          "f03_termination_provider_backlog",
+          "--crate-type",
+          "lib",
+          "--edition=2021",
+          "-C",
+          "panic=abort",
+          "-C",
+          "opt-level=2",
+          "--cfg",
+          "enable_profile",
+          "--cfg",
+          "enable_perf",
+          "--cfg",
+          "f03_wait_process_release_selected_candidate",
+          "--cfg",
+          "f03_terminate_refcount_selected_candidate",
+          "--emit=obj=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/output-PENDING-ROOT/providers.o",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/lib.fixture.rs"
+        ],
+        "cwd": "/home/holden/mckernel",
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Controlled HOST actual-selected C callback/ABI equivalence for process-release, refcount-set adapter and direct existing compare-exchange alias. Genuine Rust atomic helpers operate only on initialized ordinary HOST storage; process-release effects are an explicit identity mock. No actual process refcount/free/current-stack/IRQ/MSR/CR/FSGS/context-switch/syscall/kernel/native effects.",
+        "argv_compact_json_LF_sha256": "79ad67e60488e32e85e718fd2a5a004bee7ea4ddb47bec363bdadb403bd8f5c4"
+      },
+      "join": {
+        "pid": 1350779,
+        "start": 86359982,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.1358031149720773,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/actual-three-command-capture-1/00-three-termination-provider-selectors-genuine-Rust-atomics/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59661902,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793066155119285533,
+            "ctime_ns": 1793066155119285533
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/actual-three-command-capture-1/00-three-termination-provider-selectors-genuine-Rust-atomics/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59661903,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793066155119285533,
+            "ctime_ns": 1793066155119285533
+          }
+        }
+      },
+      "metrics": {
+        "started_UTC": "2026-10-27T01:55:55.124207+00:00",
+        "wall_seconds": 0.1370615620398894,
+        "child_user_CPU_seconds": 0.05977299999999999,
+        "child_system_CPU_seconds": 0.023909,
+        "fresh_batch_peak_child_RSS_KiB": 96560,
+        "peak_RSS_scope": "fresh batch cumulative actual child rusage high water; not an invented per-command peak",
+        "environment_relevant": {
+          "PATH": "/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/.local/bin:/home/holden/.codex/tmp/arg0-linux/codex-arg0zhkCqC:/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/anaconda3/bin:/home/holden/anaconda3/condabin:/home/holden/.cargo/bin:/home/holden/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+          "LC_ALL": "C",
+          "LANG": "en_US.UTF-8",
+          "RUST_MIN_STACK": "2097152",
+          "OMP_NUM_THREADS": "1",
+          "RAYON_NUM_THREADS": "1",
+          "CARGO_BUILD_JOBS": "7",
+          "MAKEFLAGS": "-j7",
+          "C_INCLUDE_PATH": null,
+          "LIBRARY_PATH": null,
+          "LD_LIBRARY_PATH": null,
+          "RUSTFLAGS": null,
+          "RUSTUP_TOOLCHAIN": null
+        },
+        "admission": {
+          "wall": 1793066155.122224,
+          "monotonic": 848261.69118122,
+          "boottime": 863599.818232694,
+          "fixed_cutoff_ref": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+            "bytes": 952,
+            "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+          },
+          "memory_available_bytes": 27261165568,
+          "aggregate_reserved_bytes": 21474836480,
+          "budget": {
+            "schema_version": 2,
+            "id": "7f4af94a83b14cc08f97401f5891d965",
+            "budget": "57774.852125",
+            "initial_balance": "57774.8521250000",
+            "minimum_balance": "52079.8011050000",
+            "last_balance": "52079.8011050000",
+            "spent": "22812.3311000000",
+            "remaining": "34962.5210250000",
+            "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+          },
+          "heartbeat_at": "2026-10-27T01:55:45.460731+00:00",
+          "phase": "running",
+          "account_wall": 1793066155.1226578,
+          "heartbeat_age_seconds": 9.661926746368408,
+          "available_prepaid_balance": "52079.8011050000",
+          "spendControlReached": null,
+          "loadavg": [
+            1.37,
+            1.11,
+            1.15
+          ],
+          "CPU_affinity": [
+            6
+          ],
+          "HOST_available_bytes": 150941519872,
+          "scratch_available_bytes": 47873171456
+        }
+      }
+    },
+    {
+      "command": {
+        "label": "01-genuine-header-original-C-and-selected-alias-branches-link",
+        "argv": [
+          "/usr/bin/gcc-9",
+          "-Werror=incompatible-pointer-types",
+          "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+          "-DIHK_OS_MANYCORE",
+          "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+          "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+          "-DMCKERNEL_NATIVE_CLONE3",
+          "-DMCKERNEL_NATIVE_CLONE_TID",
+          "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+          "-DMCKERNEL_NATIVE_FUTEX",
+          "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+          "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+          "-DMCKERNEL_RUST_BITOPS",
+          "-DMCKERNEL_RUST_LIST_HELPERS",
+          "-DMCKERNEL_RUST_LOCK_HELPERS",
+          "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_PTE_HELPERS",
+          "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+          "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+          "-DPROFILE_ENABLE",
+          "-D__KERNEL__",
+          "-DMCKERNEL_NATIVE_FORK_OWNED_TRANSACTION",
+          "-DMCKERNEL_RUST_RLIMIT_HELPERS",
+          "-DMCKERNEL_RUST_SCHED_POLICY_HELPERS",
+          "-DMCKERNEL_RUST_SCHED_PRIO_HELPERS",
+          "-DMCKERNEL_RUST_SHMID_HELPERS",
+          "-DMCKERNEL_RUST_SHM_PERM_HELPERS",
+          "-DMCKERNEL_RUST_SIGNAL_HELPERS",
+          "-DMCKERNEL_RUST_SYSCALL_OFFLOAD",
+          "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+          "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build/kernel/include",
+          "-I/home/holden/mckernel/kernel/include",
+          "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build/kernel",
+          "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build",
+          "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+          "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+          "-I/home/holden/mckernel/ihk/ikc/include",
+          "-I/home/holden/mckernel/ihk/linux/include",
+          "-I/home/holden/mckernel/lib/include",
+          "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wno-sign-compare",
+          "-Wno-unused-function",
+          "-Wno-implicit-fallthrough",
+          "-Wno-stringop-truncation",
+          "-ffreestanding",
+          "-O2",
+          "-nostdinc",
+          "-isystem",
+          "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+          "-fno-omit-frame-pointer",
+          "-mcmodel=large",
+          "-mno-red-zone",
+          "-mno-sse",
+          "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+          "-DMCKERNEL_RUST_F03_WAIT_PROCESS_RELEASE",
+          "-DMCKERNEL_RUST_F03_TERMINATE_REFCOUNT",
+          "-DMCKERNEL_RUST_F03_TERMINATE_CMPXCHG",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/driver.c",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/output-PENDING-ROOT/providers.o",
+          "-no-pie",
+          "-o",
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/output-PENDING-ROOT/parity"
+        ],
+        "cwd": "/home/holden/mckernel",
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Controlled HOST actual-selected C callback/ABI equivalence for process-release, refcount-set adapter and direct existing compare-exchange alias. Genuine Rust atomic helpers operate only on initialized ordinary HOST storage; process-release effects are an explicit identity mock. No actual process refcount/free/current-stack/IRQ/MSR/CR/FSGS/context-switch/syscall/kernel/native effects.",
+        "argv_compact_json_LF_sha256": "3ceceba9528d92cfd8b7d41671a8cfa179e05badfde98a2df976df380a4cd966"
+      },
+      "join": {
+        "pid": 1350786,
+        "start": 86359997,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.12800814304500818,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/actual-three-command-capture-1/01-genuine-header-original-C-and-selected-alias-branches-link/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59661911,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793066155271289910,
+            "ctime_ns": 1793066155271289910
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/actual-three-command-capture-1/01-genuine-header-original-C-and-selected-alias-branches-link/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59661912,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793066155271289910,
+            "ctime_ns": 1793066155271289910
+          }
+        }
+      },
+      "metrics": {
+        "started_UTC": "2026-10-27T01:55:55.278894+00:00",
+        "wall_seconds": 0.12921489996369928,
+        "child_user_CPU_seconds": 0.08342500000000001,
+        "child_system_CPU_seconds": 0.013415999999999997,
+        "fresh_batch_peak_child_RSS_KiB": 96560,
+        "peak_RSS_scope": "fresh batch cumulative actual child rusage high water; not an invented per-command peak",
+        "environment_relevant": {
+          "PATH": "/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/.local/bin:/home/holden/.codex/tmp/arg0-linux/codex-arg0zhkCqC:/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/anaconda3/bin:/home/holden/anaconda3/condabin:/home/holden/.cargo/bin:/home/holden/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+          "LC_ALL": "C",
+          "LANG": "en_US.UTF-8",
+          "RUST_MIN_STACK": "2097152",
+          "OMP_NUM_THREADS": "1",
+          "RAYON_NUM_THREADS": "1",
+          "CARGO_BUILD_JOBS": "7",
+          "MAKEFLAGS": "-j7",
+          "C_INCLUDE_PATH": null,
+          "LIBRARY_PATH": null,
+          "LD_LIBRARY_PATH": null,
+          "RUSTFLAGS": null,
+          "RUSTUP_TOOLCHAIN": null
+        },
+        "admission": {
+          "wall": 1793066155.27707,
+          "monotonic": 848261.846027037,
+          "boottime": 863599.973077744,
+          "fixed_cutoff_ref": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+            "bytes": 952,
+            "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+          },
+          "memory_available_bytes": 27255873536,
+          "aggregate_reserved_bytes": 21474836480,
+          "budget": {
+            "schema_version": 2,
+            "id": "7f4af94a83b14cc08f97401f5891d965",
+            "budget": "57774.852125",
+            "initial_balance": "57774.8521250000",
+            "minimum_balance": "52079.8011050000",
+            "last_balance": "52079.8011050000",
+            "spent": "22812.3311000000",
+            "remaining": "34962.5210250000",
+            "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+          },
+          "heartbeat_at": "2026-10-27T01:55:45.460731+00:00",
+          "phase": "running",
+          "account_wall": 1793066155.277464,
+          "heartbeat_age_seconds": 9.81673288345337,
+          "available_prepaid_balance": "52079.8011050000",
+          "spendControlReached": null,
+          "loadavg": [
+            1.37,
+            1.11,
+            1.15
+          ],
+          "CPU_affinity": [
+            6
+          ],
+          "HOST_available_bytes": 150941466624,
+          "scratch_available_bytes": 47873171456
+        }
+      }
+    },
+    {
+      "command": {
+        "label": "02-atomic-set128-CAS2000-processrelease3-ABI16",
+        "argv": [
+          "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/output-PENDING-ROOT/parity"
+        ],
+        "cwd": "/home/holden/mckernel",
+        "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Controlled HOST actual-selected C callback/ABI equivalence for process-release, refcount-set adapter and direct existing compare-exchange alias. Genuine Rust atomic helpers operate only on initialized ordinary HOST storage; process-release effects are an explicit identity mock. No actual process refcount/free/current-stack/IRQ/MSR/CR/FSGS/context-switch/syscall/kernel/native effects.",
+        "argv_compact_json_LF_sha256": "82d25919c7c726216ed1d500c18b66ba4a08c6940850ae6e1e4bd1d20eead4b8"
+      },
+      "join": {
+        "pid": 1350806,
+        "start": 86360012,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.025394389987923205,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/actual-three-command-capture-1/02-atomic-set128-CAS2000-processrelease3-ABI16/stdout",
+            "sha256": "19c7773a50f4fc8d6e764178d4685246659be0fd7a6e268cc3a14b77d79c2e51",
+            "device": 66306,
+            "inode": 59661920,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 199,
+            "mtime_ns": 1793066155423294286,
+            "ctime_ns": 1793066155423294286
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/actual-three-command-capture-1/02-atomic-set128-CAS2000-processrelease3-ABI16/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59661921,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793066155419294171,
+            "ctime_ns": 1793066155419294171
+          }
+        }
+      },
+      "metrics": {
+        "started_UTC": "2026-10-27T01:55:55.424972+00:00",
+        "wall_seconds": 0.026647773920558393,
+        "child_user_CPU_seconds": 0.0012369999999999881,
+        "child_system_CPU_seconds": 0.0,
+        "fresh_batch_peak_child_RSS_KiB": 96560,
+        "peak_RSS_scope": "fresh batch cumulative actual child rusage high water; not an invented per-command peak",
+        "environment_relevant": {
+          "PATH": "/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/.local/bin:/home/holden/.codex/tmp/arg0-linux/codex-arg0zhkCqC:/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/anaconda3/bin:/home/holden/anaconda3/condabin:/home/holden/.cargo/bin:/home/holden/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+          "LC_ALL": "C",
+          "LANG": "en_US.UTF-8",
+          "RUST_MIN_STACK": "2097152",
+          "OMP_NUM_THREADS": "1",
+          "RAYON_NUM_THREADS": "1",
+          "CARGO_BUILD_JOBS": "7",
+          "MAKEFLAGS": "-j7",
+          "C_INCLUDE_PATH": null,
+          "LIBRARY_PATH": null,
+          "LD_LIBRARY_PATH": null,
+          "RUSTFLAGS": null,
+          "RUSTUP_TOOLCHAIN": null
+        },
+        "admission": {
+          "wall": 1793066155.4233189,
+          "monotonic": 848261.992276109,
+          "boottime": 863600.11932703,
+          "fixed_cutoff_ref": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+            "bytes": 952,
+            "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+          },
+          "memory_available_bytes": 27252772864,
+          "aggregate_reserved_bytes": 21474836480,
+          "budget": {
+            "schema_version": 2,
+            "id": "7f4af94a83b14cc08f97401f5891d965",
+            "budget": "57774.852125",
+            "initial_balance": "57774.8521250000",
+            "minimum_balance": "52079.8011050000",
+            "last_balance": "52079.8011050000",
+            "spent": "22812.3311000000",
+            "remaining": "34962.5210250000",
+            "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+          },
+          "heartbeat_at": "2026-10-27T01:55:45.460731+00:00",
+          "phase": "running",
+          "account_wall": 1793066155.4236796,
+          "heartbeat_age_seconds": 9.962948560714722,
+          "available_prepaid_balance": "52079.8011050000",
+          "spendControlReached": null,
+          "loadavg": [
+            1.37,
+            1.11,
+            1.15
+          ],
+          "CPU_affinity": [
+            6
+          ],
+          "HOST_available_bytes": 150941388800,
+          "scratch_available_bytes": 47873171456
+        }
+      }
+    }
+  ],
+  "seconds": 0.38487772189546376,
+  "peak_child_RSS_KiB": 96560,
+  "actual_stdout": "PASS termination-provider callbacks:128 atomic-set pairs +2000 CAS pairs +3 process-release identity pairs +16 ABI words; HOST atomics/mocked release only; real lifetime/current-stack ownership OPEN\n",
+  "first_compiler_UTC": "2026-10-27T01:55:55.124207+00:00",
+  "canonical_mutations": 0,
+  "native": false,
+  "default_link": false,
+  "whole_file_retired": false
+}

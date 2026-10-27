@@ -3,7 +3,7 @@
   "id": "M15",
   "scope_id": "project-owned-runtime-rust-cutover-v1-20261024",
   "title": "Complete Rust/assembly custom host modules and integration runtime",
-  "as_of": "2026-10-27T00:51:28.144279+00:00",
+  "as_of": "2026-10-27T01:58:35.742191+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user2026-10-24: custom code outside the Rocky/Linux baseline must be Rust, including loadable IHK/project modules; previous reviewed-assembly allowance retained.",
@@ -115,7 +115,7 @@
       "id": "M15-F01",
       "path": "host-kernel/native-rust/mcctrl_vm_write_compat.c",
       "target": "mcctrl.ko",
-      "status": "partial",
+      "status": "complete",
       "source_selection": "host-kernel/kbuild/Kbuild.in:10",
       "existing_rust": [
         "host-kernel/native-rust/mcctrl.rs",
@@ -125,25 +125,37 @@
         {
           "id": "M15-F01-01",
           "title": "Rust mmap write-lock semantics",
-          "status": "open",
-          "owner": null,
-          "next_action": "Use the exact pinned Linux MM/tracing/seqcount semantics; retain the C wrapper until a reviewed Rust/assembly successor passes actual checks.",
+          "status": "complete",
+          "owner": "/root",
+          "next_action": "Retain exact supported source/module/native proof; broader fork revoke/final-ACK lifecycle remains separately open.",
           "proof": {
             "implementation": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             },
             "focused_checks": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             },
             "production_link": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             },
             "native_validation": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             }
           },
           "remaining_functions": [
@@ -153,25 +165,37 @@
         {
           "id": "M15-F01-02",
           "title": "Rust mmap write-unlock semantics",
-          "status": "open",
-          "owner": null,
-          "next_action": "Preserve trace, sequence end/VMA release, ordering and RAII unlock against the exact configuration.",
+          "status": "complete",
+          "owner": "/root",
+          "next_action": "Retain exact supported source/module/native proof; broader fork revoke/final-ACK lifecycle remains separately open.",
           "proof": {
             "implementation": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             },
             "focused_checks": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             },
             "production_link": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             },
             "native_validation": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             }
           },
           "remaining_functions": [
@@ -181,25 +205,37 @@
         {
           "id": "M15-F01-03",
           "title": "Rust VMA start-write semantics",
-          "status": "open",
-          "owner": null,
-          "next_action": "Preserve current-sequence idempotence, VMA rwsem ownership and WRITE_ONCE publication.",
+          "status": "complete",
+          "owner": "/root",
+          "next_action": "Retain exact supported source/module/native proof; broader fork revoke/final-ACK lifecycle remains separately open.",
           "proof": {
             "implementation": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             },
             "focused_checks": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             },
             "production_link": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             },
             "native_validation": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "pass",
+              "evidence": [
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+                "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
+              ]
             }
           },
           "remaining_functions": [
@@ -207,10 +243,17 @@
           ]
         }
       ],
-      "blocker": "Actual accepted current290 startup/memory/files use predecessor mcctrl06e8/SMP2eb3, while RustMM staged modules57546/887dc are offline-only. Need authenticated inherited-VMA adoption and owned revoke through Mirror::inherit_vmas/revoke_fork_aliases with RustMM tuple; existing strict235 consumer/unchanged oracle ready for actual binding.",
+      "blocker": null,
       "file_closure": {
-        "status": "open",
-        "requirement": "Remove this project C object from actual selected Kbuild/staging only after equivalent Rust successors and matched module proof."
+        "status": "complete",
+        "requirement": "Remove this project C object from actual selected Kbuild/staging only after equivalent Rust successors and matched module proof.",
+        "evidence": [
+          "docs/verification/evidence/os-recovery-adoption-20261025-0254/M15-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+          "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+          "docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-RUSTMM-STRICT235-NATIVE-ADMISSION-1/INDEPENDENT-CASE-AND-POSTJOIN-REVIEW.json"
+        ],
+        "supported_profile": "Exact pinned Linux/current RustMM57546/SMP887dc +F02image2ed7/launcher dca025 supported profile, matching codegen and mandatory native adopted-VMA protocol path. Not every configuration or caller.",
+        "broader_lifecycle_open": "OPEN; parent ACK256/token3 errno0 abandoned1 is preserved waiter-abandonment; no inference of waited destructor ACK"
       },
       "owner": "/root/m15_mm",
       "source_preparation": {
@@ -226,9 +269,9 @@
         "compiler_or_native_execution": false
       },
       "latest_dispatcher_checkpoint": {
-        "implemented": "Three Rust MM successors and reviewed assembly already exist/currentKbuildselected; retained two-module stage and controlled fixtures accepted. Do not re-port.",
-        "actual": "Independent exact tuple review f5271b63 disproves inference from baseline-module current290 smokes to changed RustMM native paths. Existing strict235 native plan is nearest prepared consumer.",
-        "limits": "No new RustMM native/wholefile acceptance. Source-unimplemented/unsupported-abstraction blocker is historical at source scope."
+        "implemented": "All three project C MM wrapper providers replaced by selected Rust/reviewed assembly at exact pinned supported profile.",
+        "actual": "Independent strict235 exact tuple passed plus mandatory successful adopted-VMA callchain proves all three providers including RAII unlock; original file contract met.",
+        "limits": "OPEN; parent ACK256/token3 errno0 abandoned1 is preserved waiter-abandonment; no inference of waited destructor ACK Full M15 remains open."
       },
       "current_increment": {
         "at": "2026-10-25T04:53:34.467560+00:00",
@@ -250,6 +293,12 @@
         "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m15-mm-nearest-file-closure-1/INDEPENDENT-SCOPE-DECISION.json",
         "bytes": 12219,
         "sha256": "f5271b63de77683aa1dbbc64cf86ee474aea004c3525f1bdf8374738b523869a"
+      },
+      "previous_source_preparation_is_historical": true,
+      "current_proof": {
+        "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-rustmm-strict235-native-scope-decision-1/INDEPENDENT-M15-F01-SCOPE-DECISION.json",
+        "bytes": 13254,
+        "sha256": "7c925ec9e387ad997e2c806412c4dcf1754bbdec2a576f9b9f7db930837192c1"
       }
     },
     {

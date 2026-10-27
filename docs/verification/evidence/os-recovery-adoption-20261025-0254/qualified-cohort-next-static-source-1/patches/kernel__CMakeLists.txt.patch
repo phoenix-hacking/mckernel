@@ -1,0 +1,43 @@
+--- kernel/CMakeLists.txt
++++ kernel/CMakeLists.txt
+@@ -176,6 +176,27 @@
+ 			list(APPEND RUST_KERNEL_CFG "--cfg" "f03_syscall_table_candidate")
+ 			list(APPEND RUST_KERNEL_CFG "--cfg" "f03_ptrace_entry_candidate")
+ 			list(APPEND RUST_KERNEL_CFG "--cfg" "f03_syscall_table_clone3")
++			# Qualified next cohort: current native x86_64 Linux6.12, no UBSAN.
++			if (ARCH STREQUAL "x86_64" AND NOT ENABLE_UBSAN)
++				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_prlimit_body_candidate")
++				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_do_exit_supported_candidate")
++				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_unmap_begin_selected_candidate")
++				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_unmap_remove_selected_candidate")
++				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_unmap_finish_selected_candidate")
++				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_mmap_page_callback_candidate")
++				list(APPEND RUST_KERNEL_CFG "--cfg" "f03_wait_release_selected_candidate")
++				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_mmap_flag_providers")
++				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_prctl_set_register_candidate")
++				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_prctl_get_register_candidate")
++				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_mmap_dispatch_bridge_candidate")
++				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_attr_callbacks.rs")
++				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_event_attr_abi.rs")
++				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_prlimit.rs")
++				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_mmap_dispatch_bridge.rs")
++				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_prctl_set_register.rs")
++				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_mmap_flags.rs")
++				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_prctl_get_register.rs")
++			endif()
+ 			add_definitions(-DMCKERNEL_NATIVE_CLONE3)
+ 			add_definitions(-DMCKERNEL_NATIVE_SIGNAL_STACK)
+ 			add_definitions(-DMCKERNEL_NATIVE_FAULT_FIXUP)
+@@ -386,6 +407,12 @@
+ 		# Pair the existing Rust process_global_storage_candidate provider above.
+ 		set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/process.c" APPEND PROPERTY
+ 			COMPILE_DEFINITIONS MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE)
++		if (ARCH STREQUAL "x86_64" AND NOT ENABLE_UBSAN)
++			set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
++				COMPILE_DEFINITIONS "MCKERNEL_RUST_F03_PERF_ATTR_CALLBACKS;MCKERNEL_RUST_F03_PRLIMIT_BODY;MCKERNEL_RUST_F03_EXEC_DEFINED_TAIL;MCKERNEL_RUST_F03_DO_EXIT_V2;MCKERNEL_RUST_F03_UNMAP_BEGIN;MCKERNEL_RUST_F03_UNMAP_REMOVE;MCKERNEL_RUST_F03_UNMAP_FINISH;MCKERNEL_RUST_F03_MMAP_PAGE_CALLBACK;MCKERNEL_RUST_F03_WAIT_RELEASE")
++			set_property(SOURCE "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/syscall.c" APPEND PROPERTY
++				COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_MMAP_FLAG_PROVIDERS;MCKERNEL_RUST_F06_PRCTL_SET_REGISTER;MCKERNEL_RUST_F06_PRCTL_GET_REGISTER;MCKERNEL_RUST_F06_MMAP_DISPATCH_BRIDGE")
++		endif()
+ 		set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+ 			COMPILE_DEFINITIONS "MCKERNEL_RUST_F03_PTRACE_ENTRY;MCKERNEL_RUST_F03_SYSCALL_TABLE;MCKERNEL_RUST_F03_SYSCALL_ENTRY;MCKERNEL_RUST_F03_FUTEX_ATOMIC")
+ 	endif()
