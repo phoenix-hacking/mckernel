@@ -1,3 +1,25 @@
+## FP26eb offline composition completed — 2026-10-27T05:52:00.789974+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+No liveRootheavy/queryclock. One ordinaryCPU6/AS2GiB/CPU60/FSIZE64MiB/wall90
+composition ranonce; tool60576positivejoin0/caller1430058start87765315/groupabsent/
+streamsclosed.21.349140s/CPU21.239958/peak415472KiB. Source/data fetchedverified
+e2d67a0aa2c49abd05a60c83f8dd1a5cad3f8b0c; substantiveindependentsourcereview
+bound actual26eb image004291b3. Adapteralgorithmabf729 unchanged, privateHERE/
+FROZEN_SHA only. Generatedbasee03f3e00/13308071B, overlay80548510/15661279B,
+manifest e98d082a/8757B, resultfdd82145. Only images/mckernel.img changed inbase;
+payload/oracle254/modules unchanged. Independentofflineartifactdecisionpending;
+no guest/native/F04/file credit. Do NOTrepeatstage orold f42 materialization.
+
+Ownernative_retirement_repair prepares26ebactualmanifest/staticFPsuccessor using
+Resource2 explicit-output/binder retention and latestheavycurrentfree98887 (notFIVE).
+Actualnative namespace/nonce/scratchmanifest/capture/resource/grant remainabsent;
+Rootbinds allstaticfields/publication+reviewerreadiness beforefresh120sclock.
+Daemon d413boundedcompiler-output/cwd correction active separately; retainmock.o
+andcases0–7, no actualretry yet. McexecF4Dsourceowner preparesdefaulttargetproducer
+context/BUILDID reuse-or-compile inputs; original110GiB ownercannotbereplayed at142.
+Goalactive/samefixed11:24:50Z/accountledger/resources/realholds unchanged.
+
 ## Safe coordinator checkpoint — 2026-10-27T05:45:27.592657+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

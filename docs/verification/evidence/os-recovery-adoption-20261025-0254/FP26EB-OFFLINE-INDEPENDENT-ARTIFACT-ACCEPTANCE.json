@@ -1,0 +1,47 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_ACTUAL_OFFLINE_26EB_FP_COMPOSITION",
+  "reviewer": "/root/custody_release_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/five26eb-fp-image-composition-static-source-1/offline-materialization-1/OFFLINE-COMPOSITION-RESULT.json",
+    "bytes": 4761,
+    "sha256": "fdd82145a0e41389036ba49c740f47791be078739a1a576bac1c3e9489c3ff4f"
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/five26eb-fp-image-composition-static-source-1/offline-materialization-1/manifest.HOST-STATIC.json",
+    "bytes": 8757,
+    "sha256": "e98d082a91c079b5fd8e7bd5526f1317711d2577b13d037caa9a26dd31cfdfad"
+  },
+  "base": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/five26eb-fp-image-composition-static-source-1/offline-materialization-1/next10-fp-mm-base.cpio.gz",
+    "bytes": 13308071,
+    "sha256": "e03f3e00e483080723a0389b1a7885a21e2b33d47789cc349a9357c70e2bb64a"
+  },
+  "overlay": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/five26eb-fp-image-composition-static-source-1/offline-materialization-1/fp-thread-state.cpio.gz",
+    "bytes": 15661279,
+    "sha256": "805485106bb2f68c704d5d537154dadee7380fd1bba4312dbef715f9ce1d0afa"
+  },
+  "whole_join": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/five26eb-fp-image-composition-static-source-1/ROOT-ACTUAL-OFFLINE-COMPOSITION-JOIN.json",
+    "bytes": 2566,
+    "sha256": "fd5fd133025de6eeca36aff3a0a6ee77d8b4514327c125b5f3f2cef80faedbd2"
+  },
+  "parent_tool": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/five26eb-fp-image-composition-static-source-1/ROOT-ACTUAL-TOOL60576-TERMINAL.json",
+    "bytes": 220,
+    "sha256": "dda8009255c78c9c292aa70c30e0582cbbcd1fc119ac67918e1a81c61489f6cb"
+  },
+  "actual_review_recorded_epoch": 1793080358.1793,
+  "positive_proofs": [
+    "60baseCPIOrecords sameinventory; only images/mckernel.img changed to accepted26eb",
+    "derivedraw44424936B/e0fe4da7 exact; final60entryoverlaymap equalsreceipt",
+    "same348864payload/dca025launcher/C020init/887+575+dacedmodules/FP254oraclevargvprofile",
+    "real f368 manifestAPI PASS; allcaller/group/streams joined0"
+  ],
+  "scope_limits": "Offlinepackaging/data only. Bootstrap exactcompilerprovenancelimitation explicitlypreserved inprotectedcontract/review. No guest/native/FPvalue/file/M14M15acceptance or runtimeauthority. Neverreplaymaterialization.",
+  "native_acceptance": false,
+  "runtime_authority": null
+}
