@@ -1,0 +1,346 @@
+{
+  "schema": "mckernel.source32.outer-failed-batch.independent-behavior-retirement-current-free.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/daemon_execution_review",
+  "implementation_ownership": false,
+  "decision": "PASS_THREE_MOCK_BEHAVIORS_AND_NORMAL_RETIREMENT_CURRENT_FREE",
+  "at": "2026-10-27T18:11:56.287429+00:00",
+  "original_outer_result": "FAIL",
+  "original_driver_postvalidator_failure_preserved": true,
+  "nonce": "36aa4e210a1c5fcda971047b941f9659",
+  "nonce_disposition": "CONSUMED_EXACTLY_ONCE",
+  "Root_ledger_successor_required": "Append36aa once as27th consumed operation;originalRoot26 stays immutable.",
+  "actual_behavior": {
+    "leaf_results": {
+      "ring-C": {
+        "status": 0,
+        "seconds": 0.02643739094492048,
+        "positive_direct_join": true,
+        "group_absent": true,
+        "closed_streams": true,
+        "join": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-candidate-36aa4e210a1c5fcda971047b941f9659/fixture-output/ring-C/whole-join.json",
+          "bytes": 1134,
+          "sha256": "1d71aa30504a0dbfee43af84d0a06d2d5f5b710116b8d91262e80e8f309ef117"
+        },
+        "resources": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-candidate-36aa4e210a1c5fcda971047b941f9659/fixture-output/ring-C.resources.json",
+          "bytes": 214,
+          "sha256": "7b6132ebaae06ec457931df57ffe0fd1f4f37ae3ab7adc0fff3041952d734674"
+        }
+      },
+      "ring-Rust": {
+        "status": 0,
+        "seconds": 0.01571669999975711,
+        "positive_direct_join": true,
+        "group_absent": true,
+        "closed_streams": true,
+        "join": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-candidate-36aa4e210a1c5fcda971047b941f9659/fixture-output/ring-Rust/whole-join.json",
+          "bytes": 1141,
+          "sha256": "8b97db5da982748234ee06a0a158d78b622f9caf3bb2323d3854e122f0aa1739"
+        },
+        "resources": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-candidate-36aa4e210a1c5fcda971047b941f9659/fixture-output/ring-Rust.resources.json",
+          "bytes": 214,
+          "sha256": "7b6132ebaae06ec457931df57ffe0fd1f4f37ae3ab7adc0fff3041952d734674"
+        },
+        "strict_real_join_audit_proof": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-candidate-36aa4e210a1c5fcda971047b941f9659/fixture-output/ring-Rust.joined-tasks.proof.json",
+          "bytes": 232,
+          "sha256": "8995bf4f13170ebacd2a0f46b216b27d6f66c5df25d44166597d3dbf2d05b0c6"
+        }
+      },
+      "oversize-Rust": {
+        "status": 0,
+        "seconds": 0.016192366019822657,
+        "positive_direct_join": true,
+        "group_absent": true,
+        "closed_streams": true,
+        "join": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-candidate-36aa4e210a1c5fcda971047b941f9659/fixture-output/oversize-Rust/whole-join.json",
+          "bytes": 1150,
+          "sha256": "ac2fdf10fa363528955330e3f82c0189351821e230335d732ec03f54a19fb638"
+        },
+        "resources": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-candidate-36aa4e210a1c5fcda971047b941f9659/fixture-output/oversize-Rust.resources.json",
+          "bytes": 219,
+          "sha256": "0ec3be46a76e669ed296280ac4bfa8e78ac3f8f6e415a19a7a5be3743087195b"
+        },
+        "strict_real_join_audit_proof": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-candidate-36aa4e210a1c5fcda971047b941f9659/fixture-output/oversize-Rust.joined-tasks.proof.json",
+          "bytes": 232,
+          "sha256": "60c8d5a64284b0e94200469e27958650a64b2ea27142e07256a6af379dff972b"
+        }
+      }
+    },
+    "C_Rust_ring_status_logs_kmsg0_bytes_equal": true,
+    "oversize_syslog_bytes": 1048592,
+    "all_terminal_resource_counters_closed": true,
+    "both_Rust_real_join_birth_absence_final_singleton_audits": "PASS",
+    "retained_26_case_results_equal_original_reconstruction": true,
+    "new_compiler_calls": 0,
+    "completed_cases_replayed": 0,
+    "fixture_returncode": 0,
+    "fixture_seconds": 0.28921446902677417,
+    "C_stack_profile": 8388608,
+    "Rust_child_stack_profile": 2097152
+  },
+  "outer_owner": {
+    "tool_session": 97540,
+    "returncode": 1,
+    "pid": 1631176,
+    "birth": 92191423,
+    "positive_direct_join": true,
+    "group_absent": true,
+    "closed_streams": true,
+    "seconds": 2.898731530061923
+  },
+  "missing_predicate": {
+    "kernel_pids64_after_observation": "MISSING_NOT_RECONSTRUCTED",
+    "before_observation": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-candidate-36aa4e210a1c5fcda971047b941f9659/evidence/kernel-pids64-before.json",
+      "bytes": 11210,
+      "sha256": "413a974ee1a4c415f7d4dd61a8924f340151add70b5b67ab88aa8e6e6ab10f76"
+    },
+    "before_maximum_raw": "64\n",
+    "reason": "Postvalidator raised exact successful compiler plus18 cases required after fixture joined0;driver did not reach after-observation/positive receipt.",
+    "original_failure_log": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-owner-36aa4e210a1c5fcda971047b941f9659/container.log",
+      "bytes": 2845,
+      "sha256": "b7a7e8d6aff7872d294b281e47190ac574945f4b6c66a160a50aa5645bbeecce"
+    },
+    "full_original_driver_acceptance": "FAIL"
+  },
+  "normal_retirement": {
+    "container_id": "be88257c938868e24823631d9130bac39dc454f23cf68457acaa557dc6562aa1",
+    "terminal_container_exit_code": 1,
+    "exact_container_removed_and_current_absent": true,
+    "Docker_clients_positive_exits": 14,
+    "admission_client_positive_exits": 1,
+    "all_recorded_group_checks_empty": true,
+    "owned_records_archived_released_and_current_absent": 3,
+    "cleanup_status": "PASS_OWNED_REMOVAL_AND_RECORD_RELEASE",
+    "retired": true,
+    "cleanup_pending": false
+  },
+  "independent_checks": [
+    "Outer,fixture and all3leaf joins satisfy positivecreatorwait/groupabsence/closedstreams and exact durable stdout/stderr bytehashes. Exactly3leafjoins,all0;no current firstfailure file.",
+    "Independent summary/retained26 reconstruction equality verified without binaryexecution. C/Rustring resourcecounters closed,status/log/kmsg0 equality and oversize1048592 bytes checked directly. Both Rust actualaudit bytes validated with strict pinnedvalidator against capturedPID/birth and exactproof files.",
+    "14Dockerstatusfiles plus1admission are exited0;allclientgroupcheckrows empty;exactonecreate/start/wait/rm. Source32 ownerreceipt equals capturedouterstdout.",
+    "Bothterminalinspections bind CIDbe88 Runningfalse/ExitCode1;ownerpostflight binds name/label/idabsence;newcurrentfullps excludes exactCID.",
+    "Archivehash equals releaseauthorization/completion;3rawrecords exacthash/size/content match archive;all3livepaths absent.",
+    "Currentphysicald4db observation postdatesouterjoin. Boundedcensus has noerrors/noSource32 owner/clientPIDorPGID;independentprocfsreads confirm16hostPIDs absent. Two closed27:4probes/expectedscratchmount/capacity remain.",
+    "OriginalSource31C-ring-11 and Source32outerFAIL stayunchanged. No replay/newcleanup/newruntimequery beyondordinaryreadonlyevidence/procfsread performed. Missingafter64 remainsOPEN."
+  ],
+  "evidence": {
+    "ADOPT-REQUEST.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/ADOPT-REQUEST.json",
+      "bytes": 4221,
+      "sha256": "cc7f79da32933604326cf852466da3d73594a367ddf9ff4662daded58ef0f19b"
+    },
+    "ACTUAL-REVIEWED-RELEASE.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/ACTUAL-REVIEWED-RELEASE.json",
+      "bytes": 5533,
+      "sha256": "7ac420fe509df4c481c10645464792e56434fb1ca1fbd278e056d81aeb5b49ac"
+    },
+    "INDEPENDENT-EXECUTION-REVIEW.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/INDEPENDENT-EXECUTION-REVIEW.json",
+      "bytes": 5108,
+      "sha256": "47d9af2f10d709242afb3c7e95886c57d156bf852b4fd54f34ca94a37e620378"
+    },
+    "ROOT-ACTUAL-OWNER-TOOL-RESULT.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/ROOT-ACTUAL-OWNER-TOOL-RESULT.json",
+      "bytes": 396,
+      "sha256": "5db09337713a25240e698a5918e507a8d9dc890b7382aab250dccb7ba32dab86"
+    },
+    "OWNER-WHOLE-JOIN.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/OWNER-WHOLE-JOIN.json",
+      "bytes": 1270,
+      "sha256": "16758edd4fa86109c8ec3fdfcce8275e12599147ece979a895d151457419b49d"
+    },
+    "ROOT-SOURCE32-CURRENT-OBSERVATION.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/ROOT-SOURCE32-CURRENT-OBSERVATION.json",
+      "bytes": 133264,
+      "sha256": "d4db0cc1f510bad2c4d70958b9f4117f841fe0abf80f9ff05bf2a1612968a5bf"
+    }
+  },
+  "behavior_evidence": {
+    "fixture-output/summary.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-candidate-36aa4e210a1c5fcda971047b941f9659/fixture-output/summary.json",
+      "bytes": 21367,
+      "sha256": "c02b16f4d32f60df63dd34834cee8e12a95ca02c889912beed901161f92dd47e"
+    },
+    "fixture-output/ring-C.files.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-candidate-36aa4e210a1c5fcda971047b941f9659/fixture-output/ring-C.files.json",
+      "bytes": 64,
+      "sha256": "256b42b990f99d77b397ddddb1d740a6f087abbfacb5fa24c8c12e2993ebd2a1"
+    },
+    "fixture-output/ring-Rust.files.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-candidate-36aa4e210a1c5fcda971047b941f9659/fixture-output/ring-Rust.files.json",
+      "bytes": 64,
+      "sha256": "256b42b990f99d77b397ddddb1d740a6f087abbfacb5fa24c8c12e2993ebd2a1"
+    },
+    "evidence/fixture-join.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-candidate-36aa4e210a1c5fcda971047b941f9659/evidence/fixture-join.json",
+      "bytes": 876,
+      "sha256": "c83ee5eebb0c11cda0e943961db810039988684f9afb2aa20e260b5747ee8c02"
+    },
+    "evidence/stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-candidate-36aa4e210a1c5fcda971047b941f9659/evidence/stdout",
+      "bytes": 330,
+      "sha256": "fbadc5b6396f2f4f2c122601e805dde677357d44e787c164c9baadd4d43b894f"
+    },
+    "evidence/stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-candidate-36aa4e210a1c5fcda971047b941f9659/evidence/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "retirement_evidence": {
+    "owner-receipt.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-owner-36aa4e210a1c5fcda971047b941f9659/owner-receipt.json",
+      "bytes": 54636,
+      "sha256": "b31780eef173b5b49af1c6de4acde6367382e06b4bd225576e2eef0d96a6c97b"
+    },
+    "postflight-proof.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-owner-36aa4e210a1c5fcda971047b941f9659/postflight-proof.json",
+      "bytes": 18356,
+      "sha256": "fca6a78afdba25d20c58141640c88018fd970dfecb5b522a8cb231fa0c177d76"
+    },
+    "ownership-archive.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-owner-36aa4e210a1c5fcda971047b941f9659/ownership-archive.json",
+      "bytes": 25210,
+      "sha256": "b3a1078871a857c4fcbbf3b39454ab20f4bcd89d6f3f01a08127a7b77f283d1b"
+    },
+    "record-release-authorized.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-owner-36aa4e210a1c5fcda971047b941f9659/record-release-authorized.json",
+      "bytes": 1995,
+      "sha256": "18aafac7270703e4caee2c3f01ba9837a066ba17e448a7c3580d586b6bd86c78"
+    },
+    "record-release-complete.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-owner-36aa4e210a1c5fcda971047b941f9659/record-release-complete.json",
+      "bytes": 176,
+      "sha256": "3ce13a0c6b5d76fe8005afcfcf5fa54c10324cd94d5db33fdf17d54cecb67f3e"
+    },
+    "lease.record.raw": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-owner-36aa4e210a1c5fcda971047b941f9659/lease.record.raw",
+      "bytes": 176,
+      "sha256": "4784f544a183caeb667d0379d64dc6321f5f60c305a15c02abeeb1ad917b42ba"
+    },
+    "common.record.raw": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-owner-36aa4e210a1c5fcda971047b941f9659/common.record.raw",
+      "bytes": 269,
+      "sha256": "b6d14234ed5af0d2e26ab33a3690a1ad38b85377ec904998e41e86bfb1377a35"
+    },
+    "shared.record.raw": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-owner-36aa4e210a1c5fcda971047b941f9659/shared.record.raw",
+      "bytes": 269,
+      "sha256": "b034918dcf8aecae3f8d6e0b3d94bfc05d2e49733c73e2878a5ab67bdb3d8a33"
+    },
+    "inspect-terminal.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-owner-36aa4e210a1c5fcda971047b941f9659/inspect-terminal.json",
+      "bytes": 15553,
+      "sha256": "40d28d6d9a3a44e75b6e2d7686fb2bec034b9e924af750bed14a46a0bad78037"
+    },
+    "inspect-terminal-fresh.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-owner-36aa4e210a1c5fcda971047b941f9659/inspect-terminal-fresh.json",
+      "bytes": 15553,
+      "sha256": "1c12aadf94f3b6d545711d9d574f412fdbc16a94d8187c50380041ce5adca005"
+    },
+    "container.log": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-owner-36aa4e210a1c5fcda971047b941f9659/container.log",
+      "bytes": 2845,
+      "sha256": "b7a7e8d6aff7872d294b281e47190ac574945f4b6c66a160a50aa5645bbeecce"
+    }
+  },
+  "client_status_refs": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-owner-36aa4e210a1c5fcda971047b941f9659/command-01bf7fd4cd0f4a03a2c1ef3d066ca838/status.json",
+      "bytes": 273,
+      "sha256": "e5f637bffd398afb4ac960d352bcebaf3b51874a6a17eebf59fdfcdc5fde5855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-owner-36aa4e210a1c5fcda971047b941f9659/command-064a99f0e1fb4ee4ae9755d5ec60ab84/status.json",
+      "bytes": 263,
+      "sha256": "05d06619afc5c20b97660fd6c910a5913010b18a1b7727bb6169557111541c48"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-owner-36aa4e210a1c5fcda971047b941f9659/command-0f34aae4609645d5b7d27cd2f2ec1605/status.json",
+      "bytes": 271,
+      "sha256": "7507e3ec2a90d07fe1bab194dcbb1eb4161792adb2945658821919049549a57d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-owner-36aa4e210a1c5fcda971047b941f9659/command-129ebdeb5152499d9bdd395bbad1a882/status.json",
+      "bytes": 4365,
+      "sha256": "277fdb418d4fd1d42a24f012acc089e39f0bf7d9b0292b0034eb19b3d75e93fd"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-owner-36aa4e210a1c5fcda971047b941f9659/command-25371ef7ee1b4bd9ae55e804b4275227/status.json",
+      "bytes": 261,
+      "sha256": "71ad3368e670f4786f031369fa9478344e3093ad476c3e84e79ba3506b841f7c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-owner-36aa4e210a1c5fcda971047b941f9659/command-2e5005ce1f804b2b979271cda88baf60/status.json",
+      "bytes": 274,
+      "sha256": "e186d6fd8995a997cfcd921a6d50084ef5ce2bcbf8d963ff27280bbed17cf3f5"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-owner-36aa4e210a1c5fcda971047b941f9659/command-9528964897b848c1888aa2755b5fffd9/status.json",
+      "bytes": 297,
+      "sha256": "c415a6d375949f87d72ec38b660bfdbc63c897b4dd3c78a191641fa20fedf756"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-owner-36aa4e210a1c5fcda971047b941f9659/command-9bee6fe48d7e4d40a1f359a333f53d60/status.json",
+      "bytes": 322,
+      "sha256": "168c005e5e9b4b624ed2ea9e9cdfbe9b7f6aef2d5418fb8f78c0df7157933d57"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-owner-36aa4e210a1c5fcda971047b941f9659/command-a7b8e4f0fb9a4776ab8d89a24c5fe338/status.json",
+      "bytes": 336,
+      "sha256": "ba75a80844a17eb684ed8dc3db74e01b282b57c698e6a9bd9e3ed62d63d10e0b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-owner-36aa4e210a1c5fcda971047b941f9659/command-c695413d242544ce98dcd72e1dee0362/status.json",
+      "bytes": 322,
+      "sha256": "ccd433cdf88108e8a47f17327334378262012970260fee5cef4cf05b74a864c9"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-owner-36aa4e210a1c5fcda971047b941f9659/command-d01d44e258c744bcbbfb0bb96e46a52c/status.json",
+      "bytes": 263,
+      "sha256": "114d7f16e010cc9b9889658de4c534aabf8aa811bb433f2200ad5d8cfa5ef4c8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-owner-36aa4e210a1c5fcda971047b941f9659/command-d42b31161b8344d6b78ca1f5135bdb58/status.json",
+      "bytes": 327,
+      "sha256": "56a9da70ee30840b29dab6a6bb6e36aea8ef1b4a616789d5901a7d7dabe8b1d5"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-owner-36aa4e210a1c5fcda971047b941f9659/command-d4ce9d32545d41f994dd60e96288b199/status.json",
+      "bytes": 327,
+      "sha256": "f39a3452519ae9da9a9870495db759dda1e0f3eddbcf0a949d526b75154cc1aa"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-owner-36aa4e210a1c5fcda971047b941f9659/command-e45867a8ebc542f7b50cb67e21a7016a/status.json",
+      "bytes": 263,
+      "sha256": "e8a7b3b0cbb39fd8a82974de657e56efdd1cf94ff6ecc5fbfb5ba1df9f80506e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/stack8-final-operation-source-1/workspace/native-running-modules-admission-36aa4e210a1c5fcda971047b941f9659/command-a435742fb2f34e2f8dcbac96bfe63088/status.json",
+      "bytes": 11329,
+      "sha256": "60ea46f313633a327e4b0d067e44f792328b0ae0173f0cf573fd9312189ada01"
+    }
+  ],
+  "acceptance_limits": [
+    "Threeactualmockbehaviors accepted at retainedleafscope only;originalouterdriverreceipt remainsFAIL.",
+    "No missingpids64-after claim or substituted posthumous observation. Expert retained-only postvalidatorpredicate review remains separate.",
+    "No newguestapp/currentcandidatebuild/native/providerlink/production/M15wholefilecredit."
+  ],
+  "new_guest_apps": 0,
+  "new_candidate_builds": 0,
+  "native_credit_delta": 0,
+  "native_acceptance": false,
+  "production_acceptance": false,
+  "M15_file_closure": false,
+  "new_execution_authority": null
+}
