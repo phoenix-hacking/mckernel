@@ -1,0 +1,97 @@
+{
+  "task_id": "M14-F06-VDSO-SET-RANGE-SELECTOR",
+  "status": "SOURCE_READY_FOR_INDEPENDENT_REVIEW",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_provider": "arch_vdso_set_range_bridge",
+  "selected_bytes": 29,
+  "ownership": "Original live page table/VM/range and lock/IRQ obligations remain with provider/caller. Preserve both zero control arguments, enum/address bits and partial-error status; no retry/rollback/release.",
+  "source_check": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/SOURCE-CHECK.json",
+    "bytes": 200,
+    "sha256": "89150c34b243ea6980e6cffa2f10481f5524843c8dec71017f8dad48f33471c4"
+  },
+  "evidence": {
+    "syscall.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/syscall.c",
+      "bytes": 114199,
+      "sha256": "04361dbaeaee4bfecada65e89246e30c2a41cc15a17e3921f277d84c78897d5f"
+    },
+    "syscall_policy.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/syscall_policy.rs",
+      "bytes": 1249561,
+      "sha256": "d86e16a4d662718c5f0588ac6d8fde7a2641dc251397e2e4190e765334f5bd30"
+    },
+    "f06_vdso_set_range.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/f06_vdso_set_range.rs",
+      "bytes": 1408,
+      "sha256": "78ac29d3e81b388994cfab31eb732716a5c1980a8dd9944dffc6a873af44eeea"
+    },
+    "original_bridge.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/original_bridge.inc",
+      "bytes": 303,
+      "sha256": "a0dad3721c553e14be34d97190cd9f6c0de16fa3d206630433a77aa4a91623ba"
+    },
+    "genuine_prologue.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/genuine_prologue.inc",
+      "bytes": 982,
+      "sha256": "e69cb389f69cf92a6e81e114a0bb03391a137fa3ba0c7b15d49a51606c1359de"
+    },
+    "syscall.c.diff": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/syscall.c.diff",
+      "bytes": 536,
+      "sha256": "bdd951b7e0e3405a62c4da9c0d04d8f9eb3048eb29c4bcb3eb41dc131b03b902"
+    },
+    "syscall_policy.rs.diff": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/syscall_policy.rs.diff",
+      "bytes": 395,
+      "sha256": "9c55a32471a67302c025e38750f5ac48904fe91c374f09f1d1ea307b2c999635"
+    },
+    "SELECTED-SYMBOL.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/SELECTED-SYMBOL.json",
+      "bytes": 1154,
+      "sha256": "afdc0894ac6be40e47b5bd8000964d92e1d228dc251079f69e304248f0de7e62"
+    },
+    "SOURCE-BINDINGS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/SOURCE-BINDINGS.json",
+      "bytes": 5459,
+      "sha256": "27c40e5e600551cfc1606b3cf84dfbaed49d33bdc7daf99aa1d1c2309a2fcaac"
+    },
+    "fixture.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/fixture.rs",
+      "bytes": 776,
+      "sha256": "8085e45d1f0aa4c690067bb4a90c481c05a5e76c7dab0f4198ccf936c585e0e9"
+    },
+    "fixture.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/fixture.c",
+      "bytes": 3059,
+      "sha256": "e298cb35d0b7ad6c028caaff1a6b3101241bec3c5589af0d947ec45c0e734b56"
+    },
+    "ABI-CONTEXT.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/ABI-CONTEXT.json",
+      "bytes": 870,
+      "sha256": "008285232b2b6b300f162b796fd504ff422834b316c5215ab38c254cafd30c24"
+    },
+    "FUTURE-HOST-COMMAND-PLAN.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/FUTURE-HOST-COMMAND-PLAN.json",
+      "bytes": 12612,
+      "sha256": "d1b43fbef398eb3665991d93f236cd24e7c1e2ba233d6cda0ea4852652467cb3"
+    },
+    "SOURCE-CHECK.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/SOURCE-CHECK.json",
+      "bytes": 200,
+      "sha256": "89150c34b243ea6980e6cffa2f10481f5524843c8dec71017f8dad48f33471c4"
+    },
+    "HANDOFF.md": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/HANDOFF.md",
+      "bytes": 1846,
+      "sha256": "c00a24b05b261cae8299af4ef9bf7f5416b38b88fd03639f185c22fd1f708cc0"
+    }
+  },
+  "compiler": null,
+  "parity_execution": null,
+  "production_link": null,
+  "native": null,
+  "canonical_writes": false,
+  "blocker": "Specific Root ordinary HOST grant not yet supplied",
+  "next_task": "Root may admit frozen three-argv inert-effect HOST recipe when ordinary slot/current controls permit; retain real provider/native holds"
+}

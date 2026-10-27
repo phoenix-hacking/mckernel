@@ -1,0 +1,175 @@
+{
+  "task_id": "M14-F06-VDSO-ADD-RANGE-HOST-PLAN",
+  "status": "PREPARED_NOT_GRANTED",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nFour exact finite future HOST recipes, no admission framework or execution.\n",
+  "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range",
+  "fresh_output": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/future-host-output-1",
+  "commands": [
+    {
+      "purpose": "Functional OS only; exact existing vdso-add-range Rust adapter with controlled provider; no security testing",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=staticlib",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "--cfg",
+        "f06_vdso_add_range_candidate",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/fixture.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/future-host-output-1/libadapter.a"
+      ]
+    },
+    {
+      "purpose": "Functional OS only; complete genuine-prologue original-C/Rust typed ABI comparison; no security testing",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+        "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/include",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel/ihk/ikc/include",
+        "-I/home/holden/mckernel/ihk/linux/include",
+        "-I/home/holden/mckernel/lib/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-Werror",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-no-pie",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/fixture.c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/future-host-output-1/libadapter.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/future-host-output-1/fixture"
+      ]
+    },
+    {
+      "purpose": "Functional OS only;112 controlled original-C/provider comparisons; no security testing",
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/future-host-output-1/fixture"
+      ]
+    }
+  ],
+  "command_count": 3,
+  "expected": {
+    "stdout": "PASS vdso-add-range adapter parity112\n",
+    "cases": 112,
+    "exit_code": 0
+  },
+  "resources": {
+    "CPU_slot": null,
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_per_command_seconds": 60,
+    "FSIZE_bytes": 67108864,
+    "core": 0,
+    "wall_per_command_seconds": 90
+  },
+  "inputs": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/SOURCE-BINDINGS.json",
+      "bytes": 4556,
+      "sha256": "39e48349a6336f91cc3f113598f71fed906a21a0bac71c54557df61241b2f7f4"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/SELECTED-SYMBOL.json",
+      "bytes": 1154,
+      "sha256": "b7a78aabf9f11171eb644dcad3ce0ab19bc72ebd8e4e29ec649e6ec5f4fa3964"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/f06_vdso_add_range.rs",
+      "bytes": 1074,
+      "sha256": "89462d17ffe853d5dd4980c960bce9e62c64be799474a9e56cb085bd3c7c6805"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/original_bridge.inc",
+      "bytes": 249,
+      "sha256": "fc284574ac29dad0d24a6fd8646b81c4afb3282e0c835527b3e26d0274c47b79"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/genuine_prologue.inc",
+      "bytes": 982,
+      "sha256": "e69cb389f69cf92a6e81e114a0bb03391a137fa3ba0c7b15d49a51606c1359de"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/fixture.rs",
+      "bytes": 1237,
+      "sha256": "ee60e3ce1dd3adc7282d6546da05c55991c3831794b5ba8ce92018eca4c5c9be"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/fixture.c",
+      "bytes": 3423,
+      "sha256": "b8fad8d479c07ad1081d894a583dd820f0511cc2beab5c80f3a337834d255561"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/ABI-CONTEXT.json",
+      "bytes": 914,
+      "sha256": "45994e64faac9be610a4d9d2582df1610c0646045ea1eaab262cf6952427bb19"
+    }
+  ],
+  "header_context": {
+    "complete_prologue": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/genuine_prologue.inc",
+      "bytes": 982,
+      "sha256": "e69cb389f69cf92a6e81e114a0bb03391a137fa3ba0c7b15d49a51606c1359de"
+    },
+    "original_compile": {
+      "directory": "/work/output/build/kernel",
+      "command": "/usr/bin/cc -DIHK_IKC_USE_LINUX_WORK_IRQ -DIHK_OS_MANYCORE -DKERNEL_RAM_VADDR=0xfffffffffe800000 -DMAP_KERNEL_START=0xfffffffffe800000UL -DMCKERNEL_NATIVE_CLONE3 -DMCKERNEL_NATIVE_CLONE_TID -DMCKERNEL_NATIVE_FAULT_FIXUP -DMCKERNEL_NATIVE_FUTEX -DMCKERNEL_NATIVE_SIGNAL_STACK -DMCKERNEL_RUST_ATOMIC_HELPERS -DMCKERNEL_RUST_BITOPS -DMCKERNEL_RUST_LIST_HELPERS -DMCKERNEL_RUST_LOCK_HELPERS -DMCKERNEL_RUST_MCS_RWLOCK_HELPERS -DMCKERNEL_RUST_MC_RWLOCK_HELPERS -DMCKERNEL_RUST_PTE_HELPERS -DMCKERNEL_RUST_REFCOUNT_HELPERS -DMCKERNEL_RUST_SPINLOCK_HELPERS -DPROFILE_ENABLE -D__KERNEL__ -DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS -DMCKERNEL_RUST_X86_CPU_HELPERS -I/work/output/build/kernel/include -I/src/kernel/include -I/work/output/build/kernel -I/work/output/build -I/src/ihk/cokernel/smp/x86_64/include -I/src/ihk/cokernel/smp/x86_64 -I/src/ihk/ikc/include -I/src/ihk/linux/include -I/src/lib/include -I/src/arch/x86_64/kernel/include -g -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-unused-function -Wno-implicit-fallthrough -Wno-stringop-truncation -ffreestanding -O2 -nostdinc -isystem /usr/lib/gcc/x86_64-redhat-linux/14/include -fno-omit-frame-pointer -mcmodel=large -mno-red-zone -mno-sse -o CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o -c /src/arch/x86_64/kernel/syscall.c",
+      "file": "/src/arch/x86_64/kernel/syscall.c",
+      "output": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o"
+    },
+    "unchanged_complete_context_HOST_pass": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-four-leaf-host-1/ACTUAL-BATCH-HANDOFF.json",
+      "bytes": 4739,
+      "sha256": "74af33eb1fa190c13eb063e5031327262cce4d78fff6c84959ad8484746cab32"
+    }
+  },
+  "effect_scope": "C add_process_memory_range mock records all10args and writes only a valid nonnull caller output slot, including controlled error-return paths; no VM/ref/allocator/mapping operation.",
+  "ownership": "Existing add_process_memory_range owns VM/range lifetime, partial failure and output publication. Preserve NOPHYS/null memobj/zero offset/PAGE_SHIFT/null private_data and exact output pointer; no rollback/free/hold.",
+  "required_admission": "Root specific ordinary grant, accepted04b5/adf account/current aggregate/fixedcutoff controls and fresh outputs; no copied/new supervisor framework",
+  "actual": null
+}

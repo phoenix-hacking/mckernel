@@ -1,0 +1,19 @@
+--- kernel/syscall.c
++++ kernel/syscall.c
+@@ -24780,11 +24780,16 @@
+ 	return ptrace_write_fpregs((struct thread *)thread_addr, (void *)data_addr);
+ }
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_IO_COPY_FROM)
++extern long syscall_copy_from_user_bridge(void *, unsigned long, size_t);
++#define ptrace_copy_from_user_bridge syscall_copy_from_user_bridge
++#else
+ static long
+ ptrace_copy_from_user_bridge(void *dst, unsigned long src_addr, size_t bytes)
+ {
+ 	return copy_from_user(dst, (void *)src_addr, bytes);
+ }
++#endif
+ 
+ static long
+ ptrace_copy_to_user_bridge(unsigned long dst_addr, const void *src, size_t bytes)

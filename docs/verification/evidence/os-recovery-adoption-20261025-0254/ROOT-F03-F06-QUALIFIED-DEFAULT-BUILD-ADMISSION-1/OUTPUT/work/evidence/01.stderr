@@ -1,0 +1,23 @@
+/src/kernel/syscall.c: In function ‘do_execveat’:
+/src/kernel/syscall.c:7524:19: warning: unused variable ‘range’ [-Wunused-variable]
+ 7524 | #endif
+      |                   ^    
+/src/kernel/syscall.c: At top level:
+/src/kernel/syscall.c:26376:44: warning: ‘syscall_itimer_offsets’ defined but not used [-Wunused-const-variable=]
+26376 | }
+      |                                            ^                     
+/src/kernel/syscall.c:26058:43: warning: ‘sched_syscall_offsets’ defined but not used [-Wunused-const-variable=]
+26058 | SCHED_POLICY_HELPER_SCOPE long sched_rr_get_interval_body_result(int pid,
+      |                                           ^~~~~~~~~~~~~~~~~~~~~
+/src/kernel/syscall.c:24297:59: warning: ‘syscall_cputime_offsets’ defined but not used [-Wunused-const-variable=]
+24297 |                 struct thread *thread = get_this_cpu_local_var()->current;
+      |                                                           ^~~~~~~~~~~~~~~~       
+/src/kernel/syscall.c:4905:46: warning: ‘wait_scan_kernel_offsets’ defined but not used [-Wunused-const-variable=]
+ 4905 |         .proc_update_lock_offset = __builtin_offsetof(struct process,
+      |                                              ^~~~~~~~~~~~~~~~~~~~~~~~
+/src/kernel/syscall.c:4872:48: warning: ‘wait_zombie_kernel_offsets’ defined but not used [-Wunused-const-variable=]
+ 4872 |         release_process((struct process *)proc);
+      |                                                ^                         
+/src/kernel/syscall.c:4720:43: warning: ‘ptrace_detach_kernel_offsets’ defined but not used [-Wunused-const-variable=]
+ 4720 | 
+      |                                           ^                           

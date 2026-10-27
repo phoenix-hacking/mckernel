@@ -1,3 +1,130 @@
+## F01 focused family stopped; main native next, no live owner — 2026-10-27T02:27Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Root remainsACTIVE at safe boundary; no live query/TTL/heavy or ordinaryCPU6grant.
+F01's ONEcorrection alsoSTOPPED at Rustcompile20env/cfgerrors BEFOREanyfixtures:
+missing2envinputs plusrealconfigured-outcpu helper calls; env-onlyretryinsufficient.
+Wall3.154647/CPU2.958666/RSS400720KiB, firstcompiler1793067918.1798353, onechild
+joined/groupsabsent/CPU6free. Original24undeflinkFAIL andall7Cprefixesretained.
+No falsepass, secondretry, stubs, ignoredundef orassertionchange. Soleexpert
+/root/default_witness_gate nowproposes smallest existingF01slice/provider-test
+route; no newguestquota orfullcrateflagroulette. F01file staysOPEN. This doesnot
+block prepared685ace nativea6db which remainsunconsumed/exactnextcommand below.
+Daemon64 independentSOURCEPASS nowcomplete; actualmock stillNOTRUN. Currentdefault
+685ace accepted/M15F01threewrappersclosed remainexactlyscopedaspriorcheckpoints.
+
+## Twenty-minute review: current artifact accepted, next native unconsumed — 2026-10-27T02:24Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Goal ACTIVE, safe idle Root boundary before fresh native clock. Latest accepted
+changes remain: F03/F06 selected-default cohort+1, strict235 nativeinstance+1
+(total4distinctdiagnostics), supported M15F01file+1/threeCwrapperproviders retired;
+fullM14/M15 and M14wholefile0. New685ace matchingnative is stillPENDING, notcredit.
+
+F01 focused firstattempt STOPPED at Rustlinkindex7: sevenCprefixcommandsPASS,
+24unresolved production-kernel imports; all8startedchildren joined/CPU6released,
+NO fixtureexec/diff/falsepass. Firstcompiler1793067539.0607076. Existingfixture was
+incorrectlyboundto productioncfgobject; expert default_witness_gate identified
+original HOST-equivalence cfg/profile (mckernel_equivalence+enable_rusage, original
+codegen/env). RootgrantedONE boundedcorrection using freshprivateHOSTobject and
+originalprivate-mainweakening, reuse7Cprefixes; no stubs/ignoredundef/oraclechange.
+That ordinaryCPU6 correction is stillpending/live under worker m14_memory_file_closure.
+No secondordinaryCPU6grant; independentfiledecision onlyaftermatchedsource/origins.
+This is no native/OSimplementationfailure claim and doesnotblock Rootnativeadmission.
+
+Daemon64 owner/driver SOURCECOMPLETE245d08a2,13puretestsPASS, independentPASS_SOURCE
+20source map6bb85ff5. Actualkernelpids.max64 proof required BEFOREcompiler/afterjoins;
+26mockscope only, no productionmain/fullgraph/install/native acceptance. No Root
+nonce/preparation/query/clock/actualfixture yet. Existingowner remains sole, noSDKrebuild.
+Next10selector coherentdefault privateprep combines F03six+F06four HOSTqualified
+slices with same4command/8ROprofile; observer/exportsets prepared BEFOREcompiler
+this time. Current685native remains firstRootheavystep, no all-filewait.
+
+Rootwillendthisturn afterverifiedcheckpoint/sourcepublication withGOALACTIVE;
+normalcontinuation recoverscontext BEFOREcalling exactfreshcommand below. Do not
+pause/restartcontrols/window/credit or replaybuild2345, native2005/offline50577.
+Nativea6db remainsRESERVEDNOTCONSUMED. Alloldfailures/rawQEMU-9/parentabandoned1
+and resource/account/ownership/earliestcutoff controls remain. No95%claim.
+
+## F03/F06 default artifact accepted; safe boundary before native clock — 2026-10-27T02:17Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Goal ACTIVE. Root has no live query/TTL/heavy owner. Do not pause/restart/replay.
+Source/HOST workers retain their actual bounded assignments; F01 focused11command
+ordinaryCPU6 grant is live until its own result, no secondordinaryCPU6grant.
+
+PASS_ACTUAL_F03_F06_DEFAULT_SELECTED_ARTIFACT_QUALIFICATION independentlyaccepted:
+aggregate50b7d641, Rootacceptance52714a2a, postjoin03f492c5. Actual4commands0;
+Rust96c230cc/F03C50436ae4/F06C2923d871/image685ace3f10221264B. EIGHTretainedCinputs,
+includingF02b816process NOTrecompiled; same11link/23uniqueRustexports. Cfunction
+symbols96→82 and55→49: compiler-elidedptrace_report_exec_arch_event_bridge isNOT
+an extra bodyport. CurrentF02threeflags/table/84remainingCmetadata/pointers/alias/
+panic/logger/clone/rawlink.d allPASS. Rust137→140 exact3unusedsuper imports retained;
+F03C7unused warnings baselineunknown/F06empty/unchangedRWE. FullM14/M15OPEN,
+newcohortnative/wholefileFALSE. Onefixedcurrent_object package accepted, not20ports.
+Wall21.738214/CPU21.738144/peak622464KiB, firstcompiler02:02:42.581404Z;
+resource→compiler31.542615s; compilefinish→Rootacceptance563.917289s was the main
+avoidablepostbuildhandoff. Source-ready/enqueue/failurefixlatency UNKNOWN.
+Nextcohort validator inputs/expectedexportsets shouldbefrozen BEFOREcompiler;
+reuse completed basegates and onlyfillactualchangedbindings afterjoin.
+
+New685ace strict235 OFFLINE materialization tool50577 ALREADYcompleted0 once;
+neverreplay it or its equivalentoverlayargv. Same modules57546/887dc/ihkdaced,
+launcher dca025/payload537cb/collector c020/original235oracle. Newmanifest76ce63ad,
+overlay48012424, onlyimages/mckernel.img changed in retainedRustMMbase.
+ROOT-F03-F06-RUSTMM-STRICT235-NATIVE-ADMISSION-1 static0bf9effd11584B; newnonce
+ a6dbd7d514dbdc410c4ecffe5c0a135d RESERVEDNOTCONSUMED. Scratchf03f06mm1/m.json/p
+stagedUID1000; realowner/manifestAPI preflightPASS, QMP96chars. --nonce ALREADYrun,
+DO NOT rerun it/restage. Reviewer READY_FOR_FRESH_MATCHING_NATIVE_CLOCK; exactfresh
+packetreview/grant remainrequired. One data-label defect strict_profile_acceptance
+old2ed7→actualcurrent52714 corrected beforeclock, oldbytes retained .HISTORICAL.
+Typedlatestclearance projects actualindependent03f492/current/terminal, not oldproof.
+
+EXACTNEXT ROOTCOMMAND aftercontextrecovery/verifiedsourcepub and noliveheavy:
+`/home/holden/anaconda3/bin/python3 -I -B docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F03-F06-RUSTMM-STRICT235-NATIVE-ADMISSION-1/capture_fresh_strict235_resource.py > docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F03-F06-RUSTMM-STRICT235-NATIVE-ADMISSION-1/ROOT-FRESH-NATIVE-RESOURCE-PHYSICAL-1.json`
+Thenprepare_strict235_bindings.py --bind-fresh→ONEexactcustodyreview→Rootgrant→
+unchangedUID1000directwaitcapture. Allstatics/publication BEFOREfresh120s. Do not
+reuse old2005/nativegrant or2345/defaultgrant. Matchingnewimagequalification is a
+newcandidate check, notanotherlogicalcase/extraquota. Currentaccepteddiagnostic
+instances4/distinctcases4 (startup,memory,files,strict235); M15F01fileCOMPLETEexact
+2ed7/RustMM profile asbelow, broaderrevoke/destructorACK andF05directVMfaultOPEN.
+
+Parallel: F03sixqualifiedselector successor3privatefiles source3b75/8checksPASS,
+next3commandRust+F03C+same11link mayreuse685F06/F02process +7oldobjects; no grant.
+F06context/range12commands0/1064cases/0.435047CPU/0.540043wall/88084KiB/alljoined,
+newprocessVM port mustreuse oldcandidate, no duplicatealgorithm. F01 matchingproof
+join found196node+45log+wholecorealreadyaccepted; only existing rusage/dump focused
+receipt missing, unchanged11commandrecipe grantedCPU6/noRustrebuild/no guestquota.
+M15daemon64 ownedprofile/driver implementation inprogress; coherent daemonRust+
+libcomponentCMakea21e privateREADY, no configure/fullgraph/install/mock/native credit.
+No newframework/CPUexpansion/oldSDK7/prefix replay. Sameledger/fixed11:24:50Z/holds/
+7CPU/oneheavy/27:4/HOST16GiB/scratch12GiB preserved; no95%speedupclaim.
+
+## F03/F06 production compile and link passed; exact artifact review pending — 2026-10-27T02:05Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Rootnewcohort nonce2345a19be8fbbc4ed1f4e81c8e94847c CONSUMEDONCE; actualtool65036
+terminal0/holder1353039start86396650 andrunner1353536start86400687 joined0/absent.
+FOURcommands all0 in21.738214swall/21.738144sCPU/622464KiBpeak. Firstcompiler
+02:02:42.581404Z; freshresource→compiler31.542615s, enqueue/blocked unknown.
+Rust18178104B96c230cc; F03C370664B50436ae4; F06C131904B2923d871;
+image10221264B685ace3f1536a959198343d7c965e027dfd91f00b17b36e4d6906a177873087f.
+Eightunchanged Cinputs retained, exactF02b816process NOT recompiled. CID33ae9294
+retainedexited0/Pid0/noOOM, notrunning. Postjoincurrent03f492c5 independentlyPASS,
+ownpermanent27:4probesclosed/actualmountedfloors. Neverreplayoldnonce/compilers.
+
+Source12files and frozenstaticpacket are pushed/fetched3e2d9c4ea192a9a502d7af665db0c2630b026e49;
+23exactsourceblobspass. Nextcriticalowner qualified_batch_default_profile isbinding
+actualdefault/provider/ABI/link.d/oldpanic+logger+clone+storage gates; custodyreviewer
+willindependentlyacceptthatartifact. FourcommandrawPASS is notyet selected-default
+acceptance or native/file/fullcutover. Private mm_unlock_fixture prepares ONLY
+new685ace-image strict235 successor using same acceptedRustMM tuple/originaloracle;
+no oldnative replay, no runtimegrant. Daemonowner finishes actualpids64mockprofile;
+libowner combines exactdefaultCMake/componentinstall privately. F03termination3
+andptrace3 HOSTbatches bothPASS/alljoined/CPU6free; F03next6 integration/privateF06
+4slicebacklog advance withoutcanonicalwrites. Parentowns M14-F01closuredecision;
+Rootdoesnotduplicate. All native/file/M14/M15 bounds in02:00checkpoint below stand.
+
 ## Matching F02/RustMM native accepted; M15-F01 file closed — 2026-10-27T02:00Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

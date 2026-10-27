@@ -1,0 +1,94 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "base_sha256": {
+    "kernel/syscall.c": "2e1c3d5537551bb6a330ea37371ceed20718692d82e0522e004769bf1dcb7f89",
+    "kernel/rust/syscall_policy.rs": "f4ed7080659863662e1de75c432b89fd94aadf312efb5e924b1d0e60ef93dbd6",
+    "kernel/CMakeLists.txt": "a2636a16d089ee4f93158d8bea30e6a43e40bed967a35a8d859d63f4a19afa32"
+  },
+  "selectors": [
+    {
+      "number": 1,
+      "short": "wait-process-release",
+      "cname": "wait_process_release_bridge",
+      "rname": "f03_wait_release_process",
+      "cflag": "MCKERNEL_RUST_F03_WAIT_PROCESS_RELEASE",
+      "cfg": "f03_wait_process_release_selected_candidate",
+      "decl": "void f03_wait_release_process(void *)",
+      "kind": "Conditional C export of existing canonical wait process callback; exact body unchanged.",
+      "directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/01-wait-process-release-selected-1",
+      "origin_group": "next-termination-provider-backlog-1"
+    },
+    {
+      "number": 2,
+      "short": "terminate-refcount",
+      "cname": "terminate_host_refcount_set_bridge",
+      "rname": "f03_terminate_host_refcount_set_v1",
+      "cflag": "MCKERNEL_RUST_F03_TERMINATE_REFCOUNT",
+      "cfg": "f03_terminate_refcount_selected_candidate",
+      "decl": "void f03_terminate_host_refcount_set_v1(void *, int)",
+      "kind": "Missing void-pointer ABI adapter to the existing Rust IhkAtomic SeqCst set; no atomic body copied.",
+      "directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/02-terminate-refcount-selected-1",
+      "origin_group": "next-termination-provider-backlog-1"
+    },
+    {
+      "number": 3,
+      "short": "terminate-cmpxchg",
+      "cname": "terminate_mcexec_cmpxchg_bridge",
+      "rname": "atomic_cmpxchg_ulong",
+      "cflag": "MCKERNEL_RUST_F03_TERMINATE_CMPXCHG",
+      "cfg": null,
+      "decl": null,
+      "kind": "Exact existing public Rust atomic_cmpxchg_ulong has the C callback signature; select it directly without duplicate wrapper or atomic body.",
+      "directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/03-terminate-cmpxchg-selected-1",
+      "origin_group": "next-termination-provider-backlog-1"
+    },
+    {
+      "number": 1,
+      "short": "ptrace-find",
+      "cname": "ptrace_find_thread_bridge",
+      "rname": "f03_ptrace_io_find",
+      "cflag": "MCKERNEL_RUST_F03_PTRACE_IO_FIND",
+      "cfg": "f03_ptrace_io_find_selected_candidate",
+      "decl": "unsigned long f03_ptrace_io_find(int, int)",
+      "directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-ptrace-io-provider-backlog-1/01-ptrace-find-selected-1",
+      "origin_group": "next-ptrace-io-provider-backlog-1"
+    },
+    {
+      "number": 2,
+      "short": "ptrace-unlock",
+      "cname": "ptrace_thread_unlock_bridge",
+      "rname": "f03_ptrace_io_unlock",
+      "cflag": "MCKERNEL_RUST_F03_PTRACE_IO_UNLOCK",
+      "cfg": "f03_ptrace_io_unlock_selected_candidate",
+      "decl": "void f03_ptrace_io_unlock(unsigned long)",
+      "directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-ptrace-io-provider-backlog-1/02-ptrace-unlock-selected-1",
+      "origin_group": "next-ptrace-io-provider-backlog-1"
+    },
+    {
+      "number": 3,
+      "short": "ptrace-copy-from",
+      "cname": "ptrace_copy_from_user_bridge",
+      "rname": "syscall_copy_from_user_bridge",
+      "cflag": "MCKERNEL_RUST_F03_PTRACE_IO_COPY_FROM",
+      "cfg": null,
+      "decl": "long syscall_copy_from_user_bridge(void *, unsigned long, size_t)",
+      "directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-ptrace-io-provider-backlog-1/03-ptrace-copy-from-selected-1",
+      "origin_group": "next-ptrace-io-provider-backlog-1"
+    }
+  ],
+  "new_C_defines": [
+    "MCKERNEL_RUST_F03_WAIT_PROCESS_RELEASE",
+    "MCKERNEL_RUST_F03_TERMINATE_REFCOUNT",
+    "MCKERNEL_RUST_F03_TERMINATE_CMPXCHG",
+    "MCKERNEL_RUST_F03_PTRACE_IO_FIND",
+    "MCKERNEL_RUST_F03_PTRACE_IO_UNLOCK",
+    "MCKERNEL_RUST_F03_PTRACE_IO_COPY_FROM"
+  ],
+  "new_Rust_cfgs": [
+    "f03_wait_process_release_selected_candidate",
+    "f03_terminate_refcount_selected_candidate",
+    "f03_ptrace_io_find_selected_candidate",
+    "f03_ptrace_io_unlock_selected_candidate"
+  ],
+  "new_Rust_algorithm_bodies": 0
+}

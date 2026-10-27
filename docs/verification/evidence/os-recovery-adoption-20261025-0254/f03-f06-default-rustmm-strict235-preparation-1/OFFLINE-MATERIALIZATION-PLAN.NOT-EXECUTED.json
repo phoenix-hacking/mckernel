@@ -1,0 +1,120 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_OFFLINE_SUCCESSOR_READY_NOT_EXECUTED_NEW_IMAGE_QUALIFICATION_PENDING",
+  "task": "f03-f06-default-rustmm-strict235-preparation-1",
+  "source_packet": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-f06-default-rustmm-strict235-preparation-1/F03-F06-MM-STRICT235-INPUTS.SOURCE-ONLY.json",
+    "size": 7190,
+    "sha256": "7d4826376564573057320e8996028756a8b22d5fbea10659f850e5a3d7242f29"
+  },
+  "source_helper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-f06-default-rustmm-strict235-preparation-1/prepare_f03_f06_mm_strict235.py",
+    "size": 7153,
+    "sha256": "d7bce7295353e0463fc859bb0a1ff7a683af8b1d601c5f9bf2b93c6f34ea138e"
+  },
+  "new_image": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F03-F06-QUALIFIED-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+    "size": 10221264,
+    "sha256": "685ace3f1536a959198343d7c965e027dfd91f00b17b36e4d6906a177873087f",
+    "mode": 33261
+  },
+  "sourcebase": {
+    "base": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-mm-source-1/native-queue-source-2/mm-strict235-coherent-base-1.cpio.gz",
+      "sha256": "472fa126ad3209c20fb2737bddfe29d2cb1dd4e6fb63c89e5a405463e538686b",
+      "size": 12915408
+    },
+    "cpio": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-mm-source-1/native-queue-source-2/mm-strict235-coherent-base-1.cpio",
+      "sha256": "e62de6abe597335a8e8624a31592f845740bc25c960d5dd414b8d71718c6bf2f",
+      "size": 42612968
+    },
+    "role": "Accepted original10972 image RustMM base; pair57546/887dc already embedded. This is retained sourceinput, not prior consumedcase/overlay/nonce replay."
+  },
+  "qualification_input_finalization": {
+    "future_packet_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-f06-default-rustmm-strict235-preparation-1/F03-F06-MM-STRICT235-INPUTS.QUALIFIED-1.json",
+    "preserve_source_packet": true,
+    "data_only_operations": [
+      "Copy SOURCE-ONLY packet to a fresh QUALIFIED-1 data successor.",
+      "Set current_image_link_qualification to the actual newly accepted image685ace qualification record reference (absolute canonicalpath,size,mode,sha256). Do not substitute old2ed7 image acceptance, producer-only evidence or a guessed filename.",
+      "Keep current_physical, independent_execution_release, runtime_authority, nonce and resources NULL; this remains offline-only.",
+      "Retain every other source/module/payload/oracle/launcher/collector reference exactly; compute SHA256 over finalized packet bytes and bind it in the planned argv.",
+      "Root must separately review/release this offline ordinary profile and fresh output before executing."
+    ],
+    "pending_actual_reference": null,
+    "no_new_input_binding_semantics": "Same accepted helper pinned(ref) and exact packet SHA; only newimage identity/fresh output plus explicit requiredqualification gate differ."
+  },
+  "offline_argv_template": [
+    "/usr/bin/taskset",
+    "--cpu-list",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--core=0",
+    "--fsize=134217728",
+    "--nofile=256",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-f06-default-rustmm-strict235-preparation-1/prepare_f03_f06_mm_strict235.py",
+    "--inputs",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-f06-default-rustmm-strict235-preparation-1/F03-F06-MM-STRICT235-INPUTS.QUALIFIED-1.json",
+    "--inputs-sha256",
+    "<SHA256_OF_ACTUAL_FRESH_QUALIFIED_1_PACKET>"
+  ],
+  "exact_source_packet_argv_not_for_execution": [
+    "/usr/bin/taskset",
+    "--cpu-list",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--core=0",
+    "--fsize=134217728",
+    "--nofile=256",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-f06-default-rustmm-strict235-preparation-1/prepare_f03_f06_mm_strict235.py",
+    "--inputs",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-f06-default-rustmm-strict235-preparation-1/F03-F06-MM-STRICT235-INPUTS.SOURCE-ONLY.json",
+    "--inputs-sha256",
+    "7d4826376564573057320e8996028756a8b22d5fbea10659f850e5a3d7242f29"
+  ],
+  "source_packet_execution_would_stop": "Explicit newqualification-None guard before any helper import/archive/output mutation; it is intentionally not a released runnable packet. No command was invoked.",
+  "planned_cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-f06-default-rustmm-strict235-preparation-1",
+  "planned_output_directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-f06-default-rustmm-strict235-preparation-1/offline-preparation-1",
+  "planned_outputs": [
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-f06-default-rustmm-strict235-preparation-1/offline-preparation-1/f03-f06-current290-mm-base.cpio.gz",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-f06-default-rustmm-strict235-preparation-1/offline-preparation-1/runtime-inputs/ihk-smp-x86_64.ko",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-f06-default-rustmm-strict235-preparation-1/offline-preparation-1/runtime-inputs/mcctrl.ko",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-f06-default-rustmm-strict235-preparation-1/offline-preparation-1/strict235.cpio.gz",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-f06-default-rustmm-strict235-preparation-1/offline-preparation-1/strict235-overlay.json",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-f06-default-rustmm-strict235-preparation-1/offline-preparation-1/manifest.HOST-STATIC.json",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-f06-default-rustmm-strict235-preparation-1/offline-preparation-1/OFFLINE-PREPARATION-RESULT.json"
+  ],
+  "future_materialization_assertions": [
+    "Pin original acceptedMMgzip/cpio/modules/launcher/payload/collector and original235manifest by exactsha,size,mode/FDidentity.",
+    "Use unchanged existing derive_base_payloads to replace ONLY images/mckernel.img10972\u2192685ace; same recordset/order/metadata and byteidentical allother base records.",
+    "Verify all three base module records match actual pinned modules; exactSMP887dc/mcctrl57546 retained.",
+    "Use unchanged overlay.build_overlay once for this freshcandidate output; unchanged payload537cb, launcher dca025, collectorc020 and original235oracle.",
+    "Use unchanged diagnostic_module._validate_manifest; profile4vCPU/8192MiB/twoNUMA and full payload object byte-for-byte logicalequality unchanged.",
+    "Record generated base/rawcpio/overlay/manifest hashes from actual future outputs, plus all helper receipts; never predeclare them as materialized.",
+    "Reverify all FD-pinned inputs at completion; any unexpectedfailure stops andretainsoriginal evidence, no outputreuse/replay."
+  ],
+  "explicit_non_replays": [
+    "Consumed2005/pernonce/overlayderive evidence never used as input authority or run target.",
+    "Previouslymaterialized F02 image2ed7 overlay/equivalentargv is lineage-only and must notbe replayed.",
+    "No current nonce read/staged; no admission/RPC/container/guest/owner invocation performed."
+  ],
+  "scope_limits": [
+    "No compiler,imagebuild,modulebuild,Docker,guest,Root or device actions in this preparation.",
+    "Actualnewimageartifact/link acceptance and matching runtimequalification stillpending. Offline output would not count as native/MM/wholefile acceptance."
+  ],
+  "offline_commands_executed": 0
+}

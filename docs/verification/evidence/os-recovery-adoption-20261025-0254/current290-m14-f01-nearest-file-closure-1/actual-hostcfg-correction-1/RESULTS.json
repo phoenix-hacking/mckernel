@@ -1,0 +1,157 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nOne Root-granted HOST-cfg correction only; reuse seven passed prefixes.",
+  "status": "FAIL_ONE_CORRECTION_STOPPED",
+  "initial_admission": {
+    "wall": 1793067917.8826046,
+    "monotonic": 850024.451561859,
+    "boottime": 865362.578613356,
+    "fixed_cutoff_ref": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+      "bytes": 952,
+      "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+    },
+    "memory_available_bytes": 27226652672,
+    "aggregate_reserved_bytes": 21474836480,
+    "budget": {
+      "schema_version": 2,
+      "id": "7f4af94a83b14cc08f97401f5891d965",
+      "budget": "57774.852125",
+      "initial_balance": "57774.8521250000",
+      "minimum_balance": "52079.8011050000",
+      "last_balance": "52079.8011050000",
+      "spent": "22812.3311000000",
+      "remaining": "34962.5210250000",
+      "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+    },
+    "heartbeat_at": "2026-10-27T02:25:11.060876+00:00",
+    "phase": "running",
+    "account_wall": 1793067917.883088,
+    "heartbeat_age_seconds": 6.822212219238281,
+    "available_prepaid_balance": "52079.8011050000",
+    "spendControlReached": false,
+    "loadavg": [
+      1.39,
+      1.19,
+      1.08
+    ],
+    "CPU_affinity": [
+      6
+    ]
+  },
+  "pins": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f01-nearest-file-closure-1/HOSTCFG-CORRECTION-PINS.json",
+    "bytes": 122353,
+    "sha256": "b94b52752d4ef3595d2b27a30d4222cebcbe03d8033c918e70a13fe8114cbbc4"
+  },
+  "results": [
+    {
+      "index": 0,
+      "argv": [
+        "/usr/bin/env",
+        "MCKERNEL_RUST_VERSION=equiv-version",
+        "MCKERNEL_RUST_BUILDID=equiv-buildid",
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/bin/rustc",
+        "--crate-name",
+        "mckernel_rust",
+        "--crate-type",
+        "lib",
+        "--edition=2021",
+        "--cfg",
+        "mckernel_equivalence",
+        "--cfg",
+        "enable_rusage",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "debuginfo=2",
+        "-C",
+        "code-model=large",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "no-redzone=yes",
+        "-C",
+        "force-frame-pointers=yes",
+        "-C",
+        "overflow-checks=off",
+        "-C",
+        "force-unwind-tables=no",
+        "-C",
+        "no-vectorize-loops",
+        "-C",
+        "no-vectorize-slp",
+        "-C",
+        "target-feature=-sse,-sse2,-sse3,-ssse3,-ssse4.1,-sse4.2,-avx,-avx2,-fma",
+        "--emit=obj=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f01-nearest-file-closure-1/actual-hostcfg-correction-1/mckernel_rust.HOST-EQUIVALENCE.o",
+        "kernel/rust/lib.rs"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nOne Root-granted HOST-cfg correction only; reuse seven passed prefixes.",
+      "pid": 1361157,
+      "started_wall": 1793067918.1798353,
+      "elapsed": 3.154646723996848,
+      "returncode": 1,
+      "CPU_user": 2.810332,
+      "CPU_system": 0.148334,
+      "max_RSS_KiB": 400720,
+      "direct_wait": true,
+      "group_absent": true,
+      "admission": {
+        "wall": 1793067918.1791391,
+        "monotonic": 850024.748096352,
+        "boottime": 865362.875147526,
+        "fixed_cutoff_ref": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+          "bytes": 952,
+          "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+        },
+        "memory_available_bytes": 27200532480,
+        "aggregate_reserved_bytes": 21474836480,
+        "budget": {
+          "schema_version": 2,
+          "id": "7f4af94a83b14cc08f97401f5891d965",
+          "budget": "57774.852125",
+          "initial_balance": "57774.8521250000",
+          "minimum_balance": "52079.8011050000",
+          "last_balance": "52079.8011050000",
+          "spent": "22812.3311000000",
+          "remaining": "34962.5210250000",
+          "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+        },
+        "heartbeat_at": "2026-10-27T02:25:11.060876+00:00",
+        "phase": "running",
+        "account_wall": 1793067918.1796434,
+        "heartbeat_age_seconds": 7.118767499923706,
+        "available_prepaid_balance": "52079.8011050000",
+        "spendControlReached": false,
+        "loadavg": [
+          1.6,
+          1.24,
+          1.09
+        ],
+        "CPU_affinity": [
+          6
+        ]
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f01-nearest-file-closure-1/actual-hostcfg-correction-1/logs/0.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f01-nearest-file-closure-1/actual-hostcfg-correction-1/logs/0.stderr",
+        "bytes": 52842,
+        "sha256": "6c4311e93bc0782b3937bd0f2f2dcde7ea788fa6f28ab03bffc133f79951d0c5"
+      }
+    }
+  ],
+  "failure": "RuntimeError('ONE correction firstfailure command0')",
+  "exact_Rust_provider_origin_count": null,
+  "first_compiler_timestamp": 1793067918.1798353,
+  "production_object_mutated": false,
+  "old_seven_passed_prefix_replayed": false,
+  "reference_C_executable_reused": true,
+  "HOSTcfgdistinctfromProductionNative": true,
+  "whole_file_acceptance": false
+}

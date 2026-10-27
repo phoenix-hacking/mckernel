@@ -1,0 +1,102 @@
+{
+  "task_id": "M14-F06-PTRACE-ALLOC-SELECTOR",
+  "status": "SOURCE_READY_FOR_INDEPENDENT_REVIEW",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_provider": "arch_ptrace_alloc_bridge",
+  "selected_bytes": 27,
+  "ownership": "Existing tracked allocator owns allocation/OOM behavior. No new bound policy; retain same size narrowing/flags/base pointer and Rust static callsite provenance. Caller owns real allocation exactly as before.",
+  "source_check": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/SOURCE-CHECK.json",
+    "bytes": 197,
+    "sha256": "1f02983f6481a08b92c06279fda27075847e325343b51f8a9376ba550b429f6b"
+  },
+  "evidence": {
+    "syscall.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/syscall.c",
+      "bytes": 114197,
+      "sha256": "97abbfd0a33b1c9e5a5d7705e4f4ddee6ee04956f01136a5970c51da09dd4bf2"
+    },
+    "syscall_policy.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/syscall_policy.rs",
+      "bytes": 1249555,
+      "sha256": "f156ce837f2907777e24d8e5468613ac43f715d6da3ff3199acf8e2dac6f93dd"
+    },
+    "f06_ptrace_alloc.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/f06_ptrace_alloc.rs",
+      "bytes": 773,
+      "sha256": "bcb605d9ae7d117b7ce87b51d1bb3468e4dd62a46606cc9d0bde6972ca57b9b0"
+    },
+    "original_bridge.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/original_bridge.inc",
+      "bytes": 130,
+      "sha256": "c68fd3c30026c80e10fc0927fcefd02961a3008bfa516a3832de81abf593b05d"
+    },
+    "genuine_prologue.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/genuine_prologue.inc",
+      "bytes": 982,
+      "sha256": "e69cb389f69cf92a6e81e114a0bb03391a137fa3ba0c7b15d49a51606c1359de"
+    },
+    "syscall.c.diff": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/syscall.c.diff",
+      "bytes": 401,
+      "sha256": "7ef2f3ccccb58686891d49a5701c6ad5eab74584c469b565680af64dd132545b"
+    },
+    "syscall_policy.rs.diff": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/syscall_policy.rs.diff",
+      "bytes": 389,
+      "sha256": "2952c00068aa99319fb26400f668e180d2f0669288618795284a806589034a68"
+    },
+    "SELECTED-SYMBOL.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/SELECTED-SYMBOL.json",
+      "bytes": 1152,
+      "sha256": "d008870b38f9dc24646d9004ff262ea5b68649945b6ce58123801ea3967e03e3"
+    },
+    "SOURCE-BINDINGS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/SOURCE-BINDINGS.json",
+      "bytes": 5442,
+      "sha256": "08c5ee15802fac2878e660b1a5eacf6c8c8d7b5bf44424ac3a99c410426aeff1"
+    },
+    "fixture.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/fixture.rs",
+      "bytes": 986,
+      "sha256": "af8ec9d3e4cf070bff35f2921fc6ca45388ee2df0c262928bf580128d6d0c33e"
+    },
+    "fixture.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/fixture.c",
+      "bytes": 2990,
+      "sha256": "262a9b398291371e2cebeaf1773df9a1a358b5c296ae1523b6e75556a95a3efe"
+    },
+    "ABI-CONTEXT.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/ABI-CONTEXT.json",
+      "bytes": 876,
+      "sha256": "3b1efb244abd64d3e75133f8460e6da811f479fb46345745226bcf63b7733718"
+    },
+    "FUTURE-HOST-COMMAND-PLAN.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/FUTURE-HOST-COMMAND-PLAN.json",
+      "bytes": 12948,
+      "sha256": "4c499be3bcadc9683587384eea5be65916b24868b9f73676dfbc72a179764977"
+    },
+    "SOURCE-CHECK.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/SOURCE-CHECK.json",
+      "bytes": 197,
+      "sha256": "1f02983f6481a08b92c06279fda27075847e325343b51f8a9376ba550b429f6b"
+    },
+    "HANDOFF.md": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/HANDOFF.md",
+      "bytes": 2039,
+      "sha256": "b4b67efcb9c4eaacb825e3ae6edd9afa068de8aef52058e2a5761175ffcb023f"
+    },
+    "TRACKING-EXPECTED.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/TRACKING-EXPECTED.json",
+      "bytes": 585,
+      "sha256": "2eb33e52446a41bf5bdd69fc687eec85a313248c54a940e802171e0c70b835a0"
+    }
+  },
+  "compiler": null,
+  "parity_execution": null,
+  "production_link": null,
+  "native": null,
+  "canonical_writes": false,
+  "blocker": "Specific Root ordinary HOST grant not yet supplied",
+  "next_task": "Root may admit frozen three-argv inert-effect HOST recipe when ordinary slot/current controls permit; retain real provider/native holds"
+}

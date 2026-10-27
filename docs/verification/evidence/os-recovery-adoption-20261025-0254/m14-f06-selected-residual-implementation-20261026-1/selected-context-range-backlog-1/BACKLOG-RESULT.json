@@ -1,0 +1,151 @@
+{
+  "task_id": "M14-F06-FOUR-CONTEXT-RANGE-SOURCE-BACKLOG",
+  "status": "FOUR_GENUINE_SELECTED_ENTRIES_SOURCE_READY",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "entries": [
+    {
+      "entry": "ptrace-context",
+      "status": "SOURCE_READY_FOR_INDEPENDENT_REVIEW",
+      "symbol": "arch_ptrace_lookup_user_context_bridge",
+      "selected_bytes": 12,
+      "module": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/f06_ptrace_context.rs",
+        "bytes": 828,
+        "sha256": "5c24cfbe6519b8e2a449c1240fb9015baf401fd40814a02cca9237a5adae4dc8"
+      },
+      "result": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/RESULT.json",
+        "bytes": 6547,
+        "sha256": "2cef741a04ff164642ffce12322e07b72c55d8cb58b2dddbd531ca7b897fe21e"
+      },
+      "plan": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/FUTURE-HOST-COMMAND-PLAN.json",
+        "bytes": 12601,
+        "sha256": "36330a8ef7106bbb59026292637f8e6a05c246613cb397c8817fc4f680b6d6e2"
+      },
+      "future_cases": 64
+    },
+    {
+      "entry": "ptrace-alloc",
+      "status": "SOURCE_READY_FOR_INDEPENDENT_REVIEW",
+      "symbol": "arch_ptrace_alloc_bridge",
+      "selected_bytes": 27,
+      "module": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/f06_ptrace_alloc.rs",
+        "bytes": 773,
+        "sha256": "bcb605d9ae7d117b7ce87b51d1bb3468e4dd62a46606cc9d0bde6972ca57b9b0"
+      },
+      "result": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/RESULT.json",
+        "bytes": 6879,
+        "sha256": "708ccb00a8b68cf6c839e0aeda5f01369cb74e81a9fe81520ce691472679d329"
+      },
+      "plan": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/FUTURE-HOST-COMMAND-PLAN.json",
+        "bytes": 12948,
+        "sha256": "4c499be3bcadc9683587384eea5be65916b24868b9f73676dfbc72a179764977"
+      },
+      "future_cases": 832
+    },
+    {
+      "entry": "vdso-add-range",
+      "status": "SOURCE_READY_FOR_INDEPENDENT_REVIEW",
+      "symbol": "arch_vdso_add_range_bridge",
+      "selected_bytes": 39,
+      "module": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/f06_vdso_add_range.rs",
+        "bytes": 1074,
+        "sha256": "89462d17ffe853d5dd4980c960bce9e62c64be799474a9e56cb085bd3c7c6805"
+      },
+      "result": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/RESULT.json",
+        "bytes": 6565,
+        "sha256": "5811a1fb408b2d258af629dd8da20d97b66005c9a18844a8606a6ba8f443653f"
+      },
+      "plan": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/FUTURE-HOST-COMMAND-PLAN.json",
+        "bytes": 12673,
+        "sha256": "6ed5a342562f54d99a1f3105ca385d52b41effe09cc02d63fe080368035cc4ff"
+      },
+      "future_cases": 112
+    },
+    {
+      "entry": "vdso-set-range",
+      "status": "SOURCE_READY_FOR_INDEPENDENT_REVIEW",
+      "symbol": "arch_vdso_set_range_bridge",
+      "selected_bytes": 29,
+      "module": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/f06_vdso_set_range.rs",
+        "bytes": 1408,
+        "sha256": "78ac29d3e81b388994cfab31eb732716a5c1980a8dd9944dffc6a873af44eeea"
+      },
+      "result": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/RESULT.json",
+        "bytes": 6545,
+        "sha256": "b7d5d79ffc1f30a9d501c2a76d4dbd316fccf2c2a8f3640d3acd99d99eba28ae"
+      },
+      "plan": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/FUTURE-HOST-COMMAND-PLAN.json",
+        "bytes": 12612,
+        "sha256": "d1b43fbef398eb3665991d93f236cd24e7c1e2ba233d6cda0ea4852652467cb3"
+      },
+      "future_cases": 56
+    }
+  ],
+  "source_check_stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/SOURCE-CHECK.stdout",
+    "bytes": 843,
+    "sha256": "3dfcadfb123839c0cba85eedb3c36b6b97dd11f373bdc2bbf9b4eef3e72586d1"
+  },
+  "source_check_stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/SOURCE-CHECK.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "source_checker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/check_sources.py",
+    "bytes": 5686,
+    "sha256": "588d08da08dddfe9d02ae4c85dc20ed89ce30947131fc0a29ece500d7155edfb"
+  },
+  "source_preparation": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/prepare_sources.py",
+      "bytes": 7267,
+      "sha256": "2d6061baae84b1686828b2798dc2957ca3303e1a576fb69b185b576e171c197e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/prepare_fixtures.py",
+      "bytes": 13935,
+      "sha256": "a6a97e19409ff394706b58f2971583dc4795cc9753701e2c2fc7abfb910b39f2"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/prepare_plans.py",
+      "bytes": 5845,
+      "sha256": "40c87fdeb2a0b02a972fbaa4ee7e752d15e6856583a35a9b6eea294baf68a294"
+    }
+  ],
+  "retained_failures": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/SOURCE-CHECK-FIRST-FAILURE.stderr",
+      "bytes": 601,
+      "sha256": "af357a7e1e5fa5b8b0ce4ce11159142ef74a264e73f1ef7c33258ed27119a066"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/SOURCE-CHECK-SECOND-FAILURE.stderr",
+      "bytes": 618,
+      "sha256": "b4ea13243d492286911ba24fdd043ee6f034ab4d9a79a84c6083dd90124023c4"
+    }
+  ],
+  "findings": "Canonical promotion changed d6bf/fefec common base during source turn. Private-only rebase preserves all Root affa/f4 edits and original variants. Later seen.offset predicate matched formatting incorrectly; Root authorized only whitespace normalization. All adapter/provider/prologue/fixture/oracle bytes unchanged by corrections.",
+  "actual_compiler_commands": 0,
+  "future_commands": 12,
+  "future_cases": 1064,
+  "canonical_shared_Git_Root_Docker_native_changes": false,
+  "real_finalref_currentstack_IRQ_IPC_allocation_mapping_holds_preserved": true,
+  "next_task": "Root readiness decision/specific sequential ordinary grant for frozen perleaf plans; no separate approval ceremony or automatic application acceptance",
+  "ready_host_batch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/READY-HOST-BATCH.json",
+    "bytes": 26975,
+    "sha256": "d9c55f085fc95ed1ff21e6f84d4c8aab0a5dc041f209bbe3128f1032a1794726"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "task_id": "M14-F06-PTRACE-CONTEXT-HOST",
+  "status": "READY_FOR_INDEPENDENT_HOST_REVIEW",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "leaf": "ptrace-context",
+  "cases": 64,
+  "plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/FUTURE-HOST-COMMAND-PLAN.json",
+    "bytes": 12601,
+    "sha256": "36330a8ef7106bbb59026292637f8e6a05c246613cb397c8817fc4f680b6d6e2"
+  },
+  "source_bindings": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/SOURCE-BINDINGS.json",
+    "bytes": 5489,
+    "sha256": "5fc65a02a9a299fa2c4e61a4ae295f00955dd7955fee27fe068b82c50a6263f6"
+  },
+  "actual_leaf": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-context-range-host-1/ptrace-context.RESULTS.json",
+    "bytes": 15258,
+    "sha256": "42c5e559eeb801ec003d30a3519386eb88f33fffa8a6d223a6e1c1d541a0eeec"
+  },
+  "commands": 3,
+  "all_returncodes_zero": true,
+  "all_PID_births_retained": true,
+  "all_direct_waited": true,
+  "all_groups_absent": true,
+  "all_streams_closed": true,
+  "first_compiler_started_wall": 1793067002.5757945,
+  "initial_account_age_seconds": 7.2504706382751465,
+  "CPU_seconds": 0.09491699999999999,
+  "wall_seconds": 0.11756669415626675,
+  "max_child_RSS_KiB": 85816,
+  "artifacts": {
+    "libadapter.a": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/future-host-output-1/libadapter.a",
+      "bytes": 7240912,
+      "sha256": "5d5a5d3afd05ecfb5458a8723165e093d0b9c9a9f6d42631ad8d5581949dfdb4"
+    },
+    "fixture": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/future-host-output-1/fixture",
+      "bytes": 40040,
+      "sha256": "8c1b6092e3f7df64c19be22a7e3e6fc797417f36304b922a780cd2ff368fb190"
+    }
+  },
+  "effect_scope": "C lookup_user_context mock records raw thread pointer and returns opaque context bits; no actual current-stack/GS/TSS/context materialization.",
+  "no_actual_failure_correction_or_replay": true,
+  "production_native_acceptance": false
+}

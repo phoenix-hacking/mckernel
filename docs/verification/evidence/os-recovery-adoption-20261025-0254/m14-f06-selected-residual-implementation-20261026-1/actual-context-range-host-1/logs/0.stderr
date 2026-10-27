@@ -1,0 +1,46 @@
+warning: type alias `CInt` is never used
+ --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/fixture.rs:5:14
+  |
+5 |     pub type CInt = i32;
+  |              ^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: type alias `CLong` is never used
+ --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/fixture.rs:6:14
+  |
+6 |     pub type CLong = i64;
+  |              ^^^^^
+
+warning: type alias `CULong` is never used
+ --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/fixture.rs:7:14
+  |
+7 |     pub type CULong = u64;
+  |              ^^^^^^
+
+warning: type alias `SizeT` is never used
+ --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/fixture.rs:8:14
+  |
+8 |     pub type SizeT = usize;
+  |              ^^^^^
+
+warning: struct `ProcessVm` is never constructed
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/fixture.rs:11:27
+   |
+11 |     #[repr(C)] pub struct ProcessVm { _opaque: [u8; 0] }
+   |                           ^^^^^^^^^
+
+warning: struct `VmRange` is never constructed
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/fixture.rs:12:27
+   |
+12 |     #[repr(C)] pub struct VmRange { _opaque: [u8; 0] }
+   |                           ^^^^^^^
+
+warning: struct `MemObj` is never constructed
+  --> /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-context/fixture.rs:13:27
+   |
+13 |     #[repr(C)] pub struct MemObj { _opaque: [u8; 0] }
+   |                           ^^^^^^
+
+warning: 7 warnings emitted
+

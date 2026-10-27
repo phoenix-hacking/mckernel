@@ -1,0 +1,116 @@
+{
+  "task_id": "M14-F06-CONTEXT-RANGE-FOUR-LEAF-HOST-BATCH",
+  "status": "READY_FOR_INDEPENDENT_HOST_REVIEW",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "actual_results": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-context-range-host-1/RESULTS.json",
+    "bytes": 126917,
+    "sha256": "f043876071385dd62eb71fe0f362c94447623db4c6a977a0ec13c74bc00329a7"
+  },
+  "supervisor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-context-range-host-1/run_granted_batch.py",
+    "bytes": 7094,
+    "sha256": "07736ab308278f8b147216825c41526948b6710ac93154ab1392a73a9011a558"
+  },
+  "sealed_bindings": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-context-range-host-1/SEALED-BATCH-BINDINGS.json",
+    "bytes": 16650,
+    "sha256": "e3609cb5a7e56f65fae88037d17eb981b3c237dee5375de866d15805cdd059ae"
+  },
+  "ready_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/READY-HOST-BATCH.json",
+    "bytes": 26975,
+    "sha256": "d9c55f085fc95ed1ff21e6f84d4c8aab0a5dc041f209bbe3128f1032a1794726"
+  },
+  "leaves": [
+    {
+      "leaf": "ptrace-context",
+      "cases": 64,
+      "handoff": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-context-range-host-1/ptrace-context.ACTUAL-HANDOFF.json",
+        "bytes": 2654,
+        "sha256": "2dd21199b0c1262a7302f3c7e458c9aceaff1a82a344a64e3d2cfb56f07c1822"
+      },
+      "effect_scope": "C lookup_user_context mock records raw thread pointer and returns opaque context bits; no actual current-stack/GS/TSS/context materialization."
+    },
+    {
+      "leaf": "ptrace-alloc",
+      "cases": 832,
+      "handoff": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-context-range-host-1/ptrace-alloc.ACTUAL-HANDOFF.json",
+        "bytes": 2660,
+        "sha256": "b17cabdbabafa83839e36ae7f4570760c7adc408265a543efd2ee1cabea78e68"
+      },
+      "effect_scope": "C kmalloc_tracked mock records narrowed size/full flags and checks distinct exact C/Rust filename+line constants before returning opaque bits; no allocation/free/OOM logging."
+    },
+    {
+      "leaf": "vdso-add-range",
+      "cases": 112,
+      "handoff": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-context-range-host-1/vdso-add-range.ACTUAL-HANDOFF.json",
+        "bytes": 2692,
+        "sha256": "152a49df4ac94a7780bc45f7d2ea5b4bbf746af5b38c832492b93166d18525c2"
+      },
+      "effect_scope": "C add_process_memory_range mock records all10args and writes only a valid nonnull caller output slot, including controlled error-return paths; no VM/ref/allocator/mapping operation."
+    },
+    {
+      "leaf": "vdso-set-range",
+      "cases": 56,
+      "handoff": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-context-range-host-1/vdso-set-range.ACTUAL-HANDOFF.json",
+        "bytes": 2642,
+        "sha256": "2210fcf44be5743bb3d8314f9da876379f14b20727dbd31654a176c1add3dc53"
+      },
+      "effect_scope": "C ihk_mc_pt_set_range mock records all9args and controlled status only; no page-table write, lock, IRQ, translation, syscall or mapping effect."
+    }
+  ],
+  "commands": 12,
+  "total_cases": 1064,
+  "all_returncodes_zero": true,
+  "all_direct_command_PID_births_retained": true,
+  "all_direct_waited": true,
+  "all_groups_absent": true,
+  "all_streams_closed": true,
+  "CPU6_released": true,
+  "first_compiler_started_wall": 1793067002.5757945,
+  "last_command_started_wall": 1793067003.899832,
+  "resources": {
+    "CPU": [
+      6
+    ],
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds_per_command": 60,
+    "FSIZE_bytes": 67108864,
+    "core": 0,
+    "wall_per_command_seconds": 90,
+    "aggregate_reserved_bytes": 21474836480,
+    "CPU_actual_seconds": 0.4350469999999999,
+    "wall_actual_seconds": 0.5400430489098653,
+    "max_child_RSS_KiB": 88084
+  },
+  "first_actual_failure": null,
+  "no_correction_or_prefix_replay": true,
+  "source_preparation_failures_separate": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/SOURCE-CHECK-FIRST-FAILURE.stderr",
+      "bytes": 601,
+      "sha256": "af357a7e1e5fa5b8b0ce4ce11159142ef74a264e73f1ef7c33258ed27119a066"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/SOURCE-CHECK-SECOND-FAILURE.stderr",
+      "bytes": 618,
+      "sha256": "b4ea13243d492286911ba24fdd043ee6f034ab4d9a79a84c6083dd90124023c4"
+    }
+  ],
+  "source_preparation_record": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/BACKLOG-RESULT.json",
+    "bytes": 9113,
+    "sha256": "45cd9f0c00b0171f2279a0d3db7bba49f6a98f009ba90521c4918c7a07be2686"
+  },
+  "no_kernel_stack_ref_allocator_IRQ_IPC_mapping_effects": true,
+  "canonical_shared_policy_HEAD_Git_changes": false,
+  "Root_Docker_heavy_native_actions": false,
+  "limits": "GCC9/Rust1.92 inert-effect HOST adapter ABI/metadata/argument-output-result proof only. Actual current-stack borrowing, allocator/OOM ownership, VM/range partial mappings, real IRQ/IPC/ref/final release, production/default/link/native acceptance remain open.",
+  "next_task": "Independent perleaf/aggregate HOST review then Root-owned production batching/integration. Existing remaining process-VM entry/callback private port should be reused with its coherent caller/ownership/ABI bindings, not reimplemented. No extra compiler grant held."
+}

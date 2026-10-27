@@ -1,0 +1,308 @@
+{
+  "leaf": "vdso-set-range",
+  "status": "PASS_FROZEN_LEAF_HOST",
+  "plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/FUTURE-HOST-COMMAND-PLAN.json",
+    "bytes": 12612,
+    "sha256": "d1b43fbef398eb3665991d93f236cd24e7c1e2ba233d6cda0ea4852652467cb3"
+  },
+  "cases": 56,
+  "results": [
+    {
+      "index": 9,
+      "leaf": "vdso-set-range",
+      "leaf_index": 0,
+      "purpose": "Functional OS only; exact existing vdso-set-range Rust adapter with controlled provider; no security testing",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=staticlib",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "--cfg",
+        "f06_vdso_set_range_candidate",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/fixture.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/future-host-output-1/libadapter.a"
+      ],
+      "pid": 1356122,
+      "birth": {
+        "pid": 1356122,
+        "proc_stat_raw": "1356122 (rustc) R 1356076 1356122 1356122 0 -1 4194304 26 0 0 0 0 0 0 0 20 0 1 0 86444836 3072000 1 18446744073709551615 94416533412880 94416533911040 140726325540816 0 0 0 0 0 0 0 0 0 17 6 0 0 0 0 0 94416533942000 94416533942528 94417061810176 140726325542144 140726325542761 140726325542761 140726325542806 0\n",
+        "starttime_ticks": 86444836,
+        "process_group": 1356122,
+        "session": 1356122,
+        "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+        "observed_wall": 1793067003.6653316
+      },
+      "streams_closed": true,
+      "started_wall": 1793067003.663366,
+      "elapsed": 0.039393606944940984,
+      "CPU_user": 0.015555999999999999,
+      "CPU_system": 0.015555999999999999,
+      "max_RSS_KiB": 84948,
+      "returncode": 0,
+      "direct_wait": true,
+      "group_absent": true,
+      "admission": {
+        "wall": 1793067003.6628692,
+        "monotonic": 849110.231825816,
+        "boottime": 864448.358876174,
+        "fixed_cutoff_ref": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+          "bytes": 952,
+          "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+        },
+        "memory_available_bytes": 27198554112,
+        "aggregate_reserved_bytes": 21474836480,
+        "budget": {
+          "schema_version": 2,
+          "id": "7f4af94a83b14cc08f97401f5891d965",
+          "budget": "57774.852125",
+          "initial_balance": "57774.8521250000",
+          "minimum_balance": "52079.8011050000",
+          "last_balance": "52079.8011050000",
+          "spent": "22812.3311000000",
+          "remaining": "34962.5210250000",
+          "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+        },
+        "heartbeat_at": "2026-10-27T02:09:55.325134+00:00",
+        "phase": "running",
+        "account_wall": 1793067003.6631832,
+        "heartbeat_age_seconds": 8.338049173355103,
+        "available_prepaid_balance": "52079.8011050000",
+        "spendControlReached": null,
+        "loadavg": [
+          1.11,
+          1.08,
+          1.09
+        ],
+        "CPU_affinity": [
+          6
+        ]
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-context-range-host-1/logs/9.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-context-range-host-1/logs/9.stderr",
+        "bytes": 1805,
+        "sha256": "3aaa550badaae7bb040dc0562dc4852357e0b4b9a59267d720a15b0d4f6340f0"
+      }
+    },
+    {
+      "index": 10,
+      "leaf": "vdso-set-range",
+      "leaf_index": 1,
+      "purpose": "Functional OS only; complete genuine-prologue original-C/Rust typed ABI comparison; no security testing",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+        "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/include",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel/ihk/ikc/include",
+        "-I/home/holden/mckernel/ihk/linux/include",
+        "-I/home/holden/mckernel/lib/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-Werror",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-no-pie",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/fixture.c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/future-host-output-1/libadapter.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/future-host-output-1/fixture"
+      ],
+      "pid": 1356131,
+      "birth": {
+        "pid": 1356131,
+        "proc_stat_raw": "1356131 (gcc-9) R 1356076 1356131 1356131 0 -1 4194304 25 0 0 0 0 0 0 0 20 0 1 0 86444845 1503232 1 18446744073709551615 4206592 4773217 140727754445520 0 0 0 0 0 0 0 0 0 17 6 0 0 0 0 0 5338600 5353816 847671296 140727754449751 140727754452924 140727754452924 140727754452969 0\n",
+        "starttime_ticks": 86444845,
+        "process_group": 1356131,
+        "session": 1356131,
+        "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+        "observed_wall": 1793067003.761679
+      },
+      "streams_closed": true,
+      "started_wall": 1793067003.759582,
+      "elapsed": 0.08299843093845993,
+      "CPU_user": 0.072611,
+      "CPU_system": 0.004239,
+      "max_RSS_KiB": 34084,
+      "returncode": 0,
+      "direct_wait": true,
+      "group_absent": true,
+      "admission": {
+        "wall": 1793067003.759032,
+        "monotonic": 849110.327988751,
+        "boottime": 864448.455039239,
+        "fixed_cutoff_ref": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+          "bytes": 952,
+          "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+        },
+        "memory_available_bytes": 27199574016,
+        "aggregate_reserved_bytes": 21474836480,
+        "budget": {
+          "schema_version": 2,
+          "id": "7f4af94a83b14cc08f97401f5891d965",
+          "budget": "57774.852125",
+          "initial_balance": "57774.8521250000",
+          "minimum_balance": "52079.8011050000",
+          "last_balance": "52079.8011050000",
+          "spent": "22812.3311000000",
+          "remaining": "34962.5210250000",
+          "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+        },
+        "heartbeat_at": "2026-10-27T02:09:55.325134+00:00",
+        "phase": "running",
+        "account_wall": 1793067003.7593765,
+        "heartbeat_age_seconds": 8.434242486953735,
+        "available_prepaid_balance": "52079.8011050000",
+        "spendControlReached": null,
+        "loadavg": [
+          1.11,
+          1.08,
+          1.09
+        ],
+        "CPU_affinity": [
+          6
+        ]
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-context-range-host-1/logs/10.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-context-range-host-1/logs/10.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 11,
+      "leaf": "vdso-set-range",
+      "leaf_index": 2,
+      "purpose": "Functional OS only;56 controlled original-C/provider comparisons; no security testing",
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-set-range/future-host-output-1/fixture"
+      ],
+      "pid": 1356136,
+      "birth": {
+        "pid": 1356136,
+        "proc_stat_raw": "1356136 (fixture) R 1356076 1356136 1356136 0 -1 4194304 25 0 0 0 0 0 0 0 20 0 1 0 86444859 348160 1 18446744073709551615 4198400 4199909 140723271181952 0 0 0 0 0 0 0 0 0 17 6 0 0 0 0 0 4210184 4210720 984064000 140723271183905 140723271184118 140723271184118 140723271184163 0\n",
+        "starttime_ticks": 86444859,
+        "process_group": 1356136,
+        "session": 1356136,
+        "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+        "observed_wall": 1793067003.901989
+      },
+      "streams_closed": true,
+      "started_wall": 1793067003.899832,
+      "elapsed": 0.01235919096507132,
+      "CPU_user": 0.001264,
+      "CPU_system": 0.0,
+      "max_RSS_KiB": 34100,
+      "returncode": 0,
+      "direct_wait": true,
+      "group_absent": true,
+      "admission": {
+        "wall": 1793067003.8992589,
+        "monotonic": 849110.468215673,
+        "boottime": 864448.595266429,
+        "fixed_cutoff_ref": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+          "bytes": 952,
+          "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+        },
+        "memory_available_bytes": 27199344640,
+        "aggregate_reserved_bytes": 21474836480,
+        "budget": {
+          "schema_version": 2,
+          "id": "7f4af94a83b14cc08f97401f5891d965",
+          "budget": "57774.852125",
+          "initial_balance": "57774.8521250000",
+          "minimum_balance": "52079.8011050000",
+          "last_balance": "52079.8011050000",
+          "spent": "22812.3311000000",
+          "remaining": "34962.5210250000",
+          "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+        },
+        "heartbeat_at": "2026-10-27T02:09:55.325134+00:00",
+        "phase": "running",
+        "account_wall": 1793067003.8996046,
+        "heartbeat_age_seconds": 8.574470520019531,
+        "available_prepaid_balance": "52079.8011050000",
+        "spendControlReached": null,
+        "loadavg": [
+          1.11,
+          1.08,
+          1.09
+        ],
+        "CPU_affinity": [
+          6
+        ]
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-context-range-host-1/logs/11.stdout",
+        "bytes": 37,
+        "sha256": "fc7d51f1bc54a409c030986f84639d5f846751bf1265c168bf760457b721d1ff"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-context-range-host-1/logs/11.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "scope": "C ihk_mc_pt_set_range mock records all9args and controlled status only; no page-table write, lock, IRQ, translation, syscall or mapping effect.",
+  "production_native_acceptance": false
+}

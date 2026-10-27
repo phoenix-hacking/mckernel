@@ -1,0 +1,10 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nFour exact finite future HOST recipes, no admission framework or execution.\n",
+  "selected_provider": "arch_ptrace_lookup_user_context_bridge",
+  "cases": 64,
+  "ABI": "void*(void*) -> genuine ihk_mc_user_context_t*(struct thread*); raw pointers64",
+  "ownership": "Returned context remains borrowed under original live-thread/current-CPU/current-stack and GS/TSS exclusion. No new read, copy, ref, retained context or substitute current-stack provider.",
+  "effects": "C lookup_user_context mock records raw thread pointer and returns opaque context bits; no actual current-stack/GS/TSS/context materialization.",
+  "real_IRQ_IPC_finalref_currentstack_holds_preserved": true,
+  "production_native_proof": null
+}

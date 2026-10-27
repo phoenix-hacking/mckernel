@@ -1,0 +1,167 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_READY_PRIVATE_SIX_QUALIFIED_SELECTOR_SUCCESSOR_RUNTIME_NOT_GRANTED",
+  "owner": "/root/native_retirement_repair",
+  "created_utc": "2026-10-27T02:11:14.857879+00:00",
+  "source_bindings": [
+    {
+      "relative": "kernel/syscall.c",
+      "preimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-six-qualified-selector-integration-1/preimage/kernel/syscall.c",
+        "bytes": 913009,
+        "sha256": "2e1c3d5537551bb6a330ea37371ceed20718692d82e0522e004769bf1dcb7f89"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-six-qualified-selector-integration-1/candidate/kernel/syscall.c",
+        "bytes": 914490,
+        "sha256": "8b8037ce23d364847fbdfdce2bc67bfea66668bd8574e752d8c0848ea6d0da8c"
+      },
+      "postimage_mode": 256,
+      "scope": "private source candidate only"
+    },
+    {
+      "relative": "kernel/rust/syscall_policy.rs",
+      "preimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-six-qualified-selector-integration-1/preimage/kernel/rust/syscall_policy.rs",
+        "bytes": 1249379,
+        "sha256": "f4ed7080659863662e1de75c432b89fd94aadf312efb5e924b1d0e60ef93dbd6"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-six-qualified-selector-integration-1/candidate/kernel/rust/syscall_policy.rs",
+        "bytes": 1250294,
+        "sha256": "ddfb90c94a281689d5fe2f5cabd4c2db13f00a3a97f287446181d7cad1f3bb2e"
+      },
+      "postimage_mode": 256,
+      "scope": "private source candidate only"
+    },
+    {
+      "relative": "kernel/CMakeLists.txt",
+      "preimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-six-qualified-selector-integration-1/preimage/kernel/CMakeLists.txt",
+        "bytes": 29064,
+        "sha256": "a2636a16d089ee4f93158d8bea30e6a43e40bed967a35a8d859d63f4a19afa32"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-six-qualified-selector-integration-1/candidate/kernel/CMakeLists.txt",
+        "bytes": 29618,
+        "sha256": "17b7c4e623e726a9b8b9bdc6f2b82d2b1ace089624257eec59f827d4aba87edb"
+      },
+      "postimage_mode": 256,
+      "scope": "private source candidate only"
+    }
+  ],
+  "canonical_write_proposal": [
+    "kernel/syscall.c",
+    "kernel/rust/syscall_policy.rs",
+    "kernel/CMakeLists.txt"
+  ],
+  "prior_adopted_cohort": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-cohort-next-static-source-1/COHERENT-NEXT-SOURCE-PLAN.NOT-GRANTED.json",
+    "bytes": 29507,
+    "sha256": "2edb294b0a171d83939751121dc86d7eb99992509532887c284682fdbdeec86b"
+  },
+  "prior_all_twelve_source_deltas_preserved": "Three current files receive only the six exact C region replacements, existing callback visibility/export promotions, reused refcount adapter and paired CMake additions. All other current postimages/source files are inherited unchanged; no F06 body/shared ABI/lib/atomic helper edit.",
+  "selector_inputs": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-six-qualified-selector-integration-1/SIX-REUSED-SELECTORS.json",
+    "bytes": 4932,
+    "sha256": "8a523067f76ffe55509f043489a3f4dedd9930c34e132a41b773b1c700fa1454"
+  },
+  "qualified_HOST_evidence": {
+    "termination3": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/ACTUAL-SCOPED-RESULT-HANDOFF.json",
+      "bytes": 15427,
+      "sha256": "7006443c7e783e82a99bec8149812631db6d752433147f41a640aad22f91e5ba"
+    },
+    "ptrace3": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-ptrace-io-provider-backlog-1/ACTUAL-SCOPED-RESULT-HANDOFF.json",
+      "bytes": 15758,
+      "sha256": "084eb710f4abfd468ecb1274fe143dd9793de74ddf2514fa80d3a2c285d5e6d4"
+    }
+  },
+  "input_frozen_source_packets": {
+    "termination3": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-termination-provider-backlog-1/SOURCE-HANDOFF.NOT-GRANTED.json",
+      "bytes": 29348,
+      "sha256": "8e3f36456d2f1ee9ecd54004e4522edbe2852b17ed425c93a40316dc06a5d461"
+    },
+    "ptrace3": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-ptrace-io-provider-backlog-1/SOURCE-HANDOFF.NOT-GRANTED.json",
+      "bytes": 29310,
+      "sha256": "35e950edcf1044c2e280f9dbc26438ef7ccd951aa285518863e121531d722b62"
+    }
+  },
+  "bounded_source_check": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-six-qualified-selector-integration-1/ACTUAL-SOURCE-INTEGRATION-CHECK.json",
+    "bytes": 1387,
+    "sha256": "cd0e9e796dc54ab5309691639e393d27df25332a1f7ae2d78efe59f73e208d1b"
+  },
+  "source_check_code": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-six-qualified-selector-integration-1/test_source_integration.py",
+    "bytes": 5711,
+    "sha256": "25bbd201b76d61eca661566427e18c0b3f602d037ac82688eef3775cdd3d14a6"
+  },
+  "next_exact_three_argv": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-six-qualified-selector-integration-1/NEXT-THREE-COMMAND-PROFILE.NOT-GRANTED.json",
+    "bytes": 16879,
+    "sha256": "819496d1ab0e5fd95d0dca8767b5a63eb1c5770f746f60a97c1ed0d7d7e541e5"
+  },
+  "next_three_argv_sha256": [
+    "91d8f35ebe7dd1d16f57c1d40e8d62611f56fb9590912ca4b7e9e39f87ed8770",
+    "ca602585a78b619027706ba37c0e3c6923909c6dc1648e9305af07ad6c71e0da",
+    "14c988484795330d38bd9b5a476e4edf20500ed7af150c9d038527b179cd1d92"
+  ],
+  "supported_selection_gate": "Existing Linux6.12 host IRQ ABI + x86_64 + NOT ENABLE_UBSAN gate only; no wider profile or default selection outside it.",
+  "new_C_defines": [
+    "MCKERNEL_RUST_F03_WAIT_PROCESS_RELEASE",
+    "MCKERNEL_RUST_F03_TERMINATE_REFCOUNT",
+    "MCKERNEL_RUST_F03_TERMINATE_CMPXCHG",
+    "MCKERNEL_RUST_F03_PTRACE_IO_FIND",
+    "MCKERNEL_RUST_F03_PTRACE_IO_UNLOCK",
+    "MCKERNEL_RUST_F03_PTRACE_IO_COPY_FROM"
+  ],
+  "new_Rust_cfgs": [
+    "f03_wait_process_release_selected_candidate",
+    "f03_terminate_refcount_selected_candidate",
+    "f03_ptrace_io_find_selected_candidate",
+    "f03_ptrace_io_unlock_selected_candidate"
+  ],
+  "exports": {
+    "new_unique": [
+      "f03_wait_release_process",
+      "f03_terminate_host_refcount_set_v1",
+      "f03_ptrace_io_find",
+      "f03_ptrace_io_unlock"
+    ],
+    "direct_existing_unique": [
+      "atomic_cmpxchg_ulong",
+      "syscall_copy_from_user_bridge"
+    ]
+  },
+  "new_algorithm_body": false,
+  "shared_ABI_or_F06_edit": false,
+  "C_runtime_growth": false,
+  "no_noop_cleanup": "All production adapters call existing actual public release/find/unlock/usercopy/atomic providers. No checked/no-op release, fake reference, ACK, replacement provider or cleanup guard is introduced.",
+  "holds_cleared": [],
+  "holds_remaining": [
+    "Original forced-refcount reset authority in terminate_host remains required",
+    "Actual Process/Thread final-reference and current-stack ownership remain open",
+    "Actual tracee lookup/retention/unlock and usercopy/fault address-space lifetime remain open",
+    "Existing ptrace_setsiginfo initialization/publication/serialization remains unchanged and open",
+    "DCFA and unsupported ABI/architecture profiles remain outside this supported qualification",
+    "Whole-file/default/native acceptance remains open"
+  ],
+  "current_four_command_batch": "Reported all4commands rc0 by Root; artifact acceptance remains pending. Its consumed packet/candidate/output and all HOST prefixes are unchanged.",
+  "genuine_next_integration_dependency": {
+    "first": "Root artifact validator must accept the current4command x86 syscall object/source/argv binding and retained F02 process before those objects enter the next reuse descriptor.",
+    "then": "Root source exporter/adoption review composes only these three private postimages with the unchanged accepted cohort/Rust subtree. This child creates no copied Rust tree or archive.",
+    "then_execution": "Fresh separately reviewed Root SDK3command successor: fullRust+selectedkernelSyscallC+rawlink only. Do not recompile/replay completed x86/process prefixes; no reuse of the old4command nonce/output.",
+    "then_acceptance": "Matching linked-provider and native/lifecycle verification under separate Root authority; HOST callback mocks do not close runtime ownership."
+  },
+  "actual_runtime_authority": null,
+  "compiler_execution": false,
+  "default_link": false,
+  "native": false,
+  "whole_file_retired": false,
+  "first_compiler_timestamp": null,
+  "fixed_deadline": "2026-10-27T11:24:50Z"
+}

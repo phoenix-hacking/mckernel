@@ -1,0 +1,355 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-142g-consumer-successor-source-1/daemon_sdk_owner.142G-SOURCE-ONLY.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/mock64_owner.py
+@@ -1,16 +1,15 @@
+ #!/usr/bin/env python3
+-"""One separately released external-module build; no guest or Linux build.
+-
+-Reuse the accepted Docker client rundown and root quarantine mechanisms.
+-Uncertain ownership never releases the development flock or exclusion records.
+-Stopped containers are retained unless this new operation's exact execution
+-release expressly authorizes owned terminal removal.
++"""Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++One separately released controlled daemon mock64 batch; no production daemon or guest.
++Reuse the exact accepted999 Docker client, ownership archive and quarantine lifecycle.
++Uncertain ownership retains the same reviewed custody/exclusion behavior.
+ """
+ import argparse
+ import copy
+ import fcntl
+ import hashlib
+ import json
++import math
+ import os
+ from pathlib import Path
+ import re
+@@ -24,12 +23,18 @@
+ import native_rust_exact_mckernel_image_container_owner as image
+ import native_rust_exact_build_image_rebind_probe as guard
+ 
++import importlib.util
++sys.path.insert(0, '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1' )
++import mock64_contract as mc
++import kernel_pids64
++from effective_profile64 import check_profile as check_profile64, RESOURCE_ARGS as RESOURCE_ARGS64
++
+ host = image._HOST_OWNER
+ shared = image._SHARED_HEAVY_ENTRY_CONTRACT
+ REPO = Path('/home/holden/mckernel')
+ ROOT = Path('/home/holden/mckernel-work/scratch')
+ # New profile only: created separately after review; inputs/leases stay scratch.
+-OUTPUT_PARENT = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/workspace')
++OUTPUT_PARENT = mc.OUTPUT_PARENT
+ BACKING = ROOT.parent / 'scratch.ext4'
+ NIGHTLY_ROOT = Path('/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu')
+ NIGHTLY_IDENTITY = {'path': '/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu', 'device': 1828, 'inode': 6453911, 'mode': 509, 'uid': 1000, 'gid': 1000}
+@@ -48,14 +53,14 @@
+ OUTPUT_ALLOCATION_BYTES = 6 * OUTPUT_BLOCKS * 4096 + 5 * OUTPUT_FILES * 4096 + 16 * 2**20
+ 
+ BASIS = ROOT / 'mckernel-exact-candidate-scratch-22-authority3-output'
+-PREPARATION = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/DAEMON-PREPARATION.json')
+-PREPARATION_SHA = '0726762a69e49a809ccd28222933a0b348e845dc278d386a63c39e2c1743234b'
+-DRIVER = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/daemon_sdk_driver.py')
++PREPARATION = mc.PREPARATION
++PREPARATION_SHA = mc.PREPARATION_SHA
++DRIVER = mc.DRIVER
+ HISTORICAL_OBSERVER = REPO / 'scripts/native_exact_historical_lease_observer.py'
+ HISTORICAL_OBSERVER_SHA = '463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51'
+ HISTORICAL_PREFIX = ('/usr/bin/sudo', '-A', '/home/holden/anaconda3/bin/python3', '-I', '-B')
+ IMAGE = 'sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5'
+-CANDIDATE = 'a3e41ba4764ba733d0f378fcdd1fdc9cc5a36df4b6920d2c5102ec3a285bc113'
++CANDIDATE = mc.CANDIDATE
+ SOURCE_CANDIDATE = 'a3e41ba4764ba733d0f378fcdd1fdc9cc5a36df4b6920d2c5102ec3a285bc113'
+ EXACT_SOURCE_MAP = {'Kbuild': ['846b22294f3237e389308e17fe87b05ba75d7810fd7de0b62a46c411929d3fa0', 2694], 'Kconfig': ['48c6ba25186281a3a4fe4690c7520b02d8bbe43965e78d3301d2613477c3874f', 848], 'abi/application.rs': ['b51c8066f6f7002ddd26fe98c330c1dcebc10e31182955cfcf764879d60d4e88', 6180], 'abi/os_service.rs': ['9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937', 2527], 'abi/sysfs.rs': ['63b25ac0df5fe3da4c0989196ea9e45e8d57b573e6e7603ca523452b2f19718e', 3393], 'abi/sysfs_request.rs': ['1b89d1261d218c39d531cfe00181a30562d9953deae5ac0956641f407239df0f', 9521], 'abi/vdso.rs': ['d796e3a0723d6a21096a1455c35a7820437dfc2b99e5bb0e1c1f4db79f1c7d7d', 17839], 'abi/x86_64.rs': ['89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3', 19740], 'application_image.rs': ['25b7810c273c9f4b5dbff073f54e67db52c69636e63760c7d5f62e471b7a61b2', 8356], 'application_pager.rs': ['adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19', 3196], 'application_rpc.rs': ['9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39', 10080], 'application_syscall.rs': ['daaa3b0fabb002b40cafdc4d7c74ed6cdfd606e18dc82d3bb32bc3055e1a96e0', 20310], 'current_fork_control.rs': ['81228204d50bd5e95bcad7671d4c6bb272ef9c516d0163b2b39a0f6a5c23a126', 10725], 'current_fork_host.rs': ['5a68633144eb60f941a73ceff9f2d5b0d30c7b9c1c1d0c25d5e8135dfde959b4', 10844], 'current_fork_task_mm.rs': ['e2e124e84030aa6be957af6ff9c2a03116ac1b20118e28c974d24e05048b6dfe', 4578], 'device_registry.rs': ['43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5', 60221], 'exec_delivery.rs': ['65ab86c4aff79e04e46a0f6b9b2eb2397e4e94d16bc5163579e55663eac83b7d', 2058], 'exec_transfer_checked.rs': ['a7dae8a829da028cab0ad2d9de233304a587fd7d09059f4bf87c4fee16b67907', 9875], 'ihk-compat-build-id.bin': ['6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0', 8], 'ihk.rs': ['8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec', 18754], 'ihk_ioctl.rs': ['60739598352b236a0d698abae0c6104e7adfc05524be9a0653b2477b8728519e', 10467], 'ihk_mapping.rs': ['085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc', 21943], 'ihk_smp_x86_64.rs': ['aa5752bfcf737c013a3721dcb3c454232acf72dcd477cdb210c1cfeb6efc1ac0', 36940], 'ikc_master.rs': ['1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3', 26480], 'ikc_queue.rs': ['3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5', 23030], 'layout_witness.c': ['8425784f837905f0e445ede1d53e5b736de4c40954df04443376fc291dc081d1', 1273], 'layout_witness_v2.c': ['0e195ac30609d85758fe34de6ffe6dc224109680d44ea9f4b86194d9cff3b86a', 413], 'm15_c_layout_probe.c': ['2b7f85d2fb0a5f29fcf0e4311b9b98b87e81256cc5370d52063865fb8edd1fd6', 907], 'm15_leaf_probe.rs': ['2b34591b3d964732c5126caf1875eca3e1cb94e8fa758f7f368b336f6b06248b', 1012], 'm15_mm_write_warning.S': ['24bd1ebcd59ac1de5761282cac404540a2324fd819576f5d39dd51c1c7f18550', 1872], 'm15_mmap_trace_gates.S': ['365305ba7f9d7a22615d5fdf0a600715f63a9fc56c4f4ac9f0e126d19a812161', 2272], 'm15_rust_layout_probe.rs': ['129532d905e67c36f85aa8850f6a44af90800580cd96678259449b7da1516c9b', 1848], 'mcctrl.rs': ['de4793814c7ab3834d0d284c7e28ab2fbfdbfb63f50aac286c5082909d392dee', 9095], 'mcctrl_exec.rs': ['4ebf73c46cf12a05fc76b078fbfcf218190dd372b335f886123125a012ae26b0', 8718], 'mcctrl_mm_write.rs': ['6e1d6d65fcad10aa673bd546646b96f28fd7280250ad05a6ca560a0dc2877107', 8335], 'mcctrl_process.rs': ['8bf30cd8ae79cc778bd91816f30aaf7a37ccc2aab59822ca2a03587426a212b8', 54854], 'mcctrl_rust.rs': ['de4793814c7ab3834d0d284c7e28ab2fbfdbfb63f50aac286c5082909d392dee', 9095], 'mcctrl_vm.rs': ['4c19b54344980a20520cdf3660b31c50d62525e6fed0ab58f950e38d880a5864', 30882], 'os_registry.rs': ['b776668f4746a309c59c3de5318eff4723e5d485d88235c089ebac5ec9bd0ad6', 30435], 'os_runtime.rs': ['4acedfe7e50e51183f0e58d3ab9fd9225eccf4bd5bfdb4101a49e4a201fd55f5', 83075], 'os_service.rs': ['f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572', 6907], 'page_allocator.rs': ['8e2af0cde06cbb70204540b493e8a0a66d5203195ed671235b64bed44d328bc5', 21301], 'page_owner_registry.rs': ['443d58fa5b2e423f538c6622ef04d8e34338abc43c5e0fd34811d52fc21f4869', 13085], 'procfs_objects.rs': ['4d1247a87706e94fa75d7bea667d9349d48b7c525eba99d02688a87f5369411c', 19245], 'smp_application.rs': ['6adb4d11e7285caadd699bf22359bf21922f7dbfa4828b12b7a96fb7a1b07be0', 74960], 'smp_application_image.rs': ['cf3eb651aac4a5510f8ddcf9cc5376479e3379528582a33e1fc55c084f1317b5', 9716], 'smp_application_syscall.rs': ['b99874d9c1a80720f154086d40f4427f83732824dad85d8d391cc3a8a4de4360', 34808], 'smp_boot_code.rs': ['0f94af32383cc6e6108e0203619642eef0e492286131dac4b35d5e1248564a7f', 2024], 'smp_cpu.rs': ['f65f3aea00dfdd0a7905d3dd396e67684fd428c71cf34dd6e15a56896c73f912', 78237], 'smp_file_pager.rs': ['655c029bcddf937b6445ee01d076978ff9606832d60fd038e07076bee939e96c', 14152], 'smp_ikc.rs': ['4d1cd859dbea602f8232095fc66dd4d337848ea61ad94436da191fb316628b03', 12886], 'smp_image.rs': ['4f35ec396494fa428c55298c91ffe14aa0142d0282dd37d922f94a901a692689', 14324], 'smp_loader.rs': ['fa86ebb489454cd95c2607bba3a3d564ca36d6e65c5eea6bd6aa319bb40100e6', 3194], 'smp_memory.rs': ['60758aeafac150bd8aac62455844e3f4e4200a082f82f80ce66c3c871d4909be', 127757], 'smp_procfs.rs': ['4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea', 28512], 'smp_resource.rs': ['d4a5794f60be7fa5e549e7c9b806e366276d87370adbc5df94e51b8d464e8dcd', 133271], 'smp_service.rs': ['7d4948d7b0a5139048cf8085863ffcca43cbfff53024c34b5fd4281caed6f639', 52577], 'smp_startup.rs': ['12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2', 4963], 'smp_startup_entry.S': ['b65dc8545456edc714fe2913e8bafe0c87bb287ab84e4769cf9575263a59d9b2', 1350], 'smp_topology.rs': ['6d925fa50279e7eca938fd5b9d0b2a73105ef875793623024c681f40d70d08e6', 11189], 'smp_trampoline.S': ['18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf', 3650], 'smp_trampoline.rs': ['4a110936d52a80664943b5dd605fbf9ad1c99460fe8ff0a16327ca015d2d0bcb', 5709], 'smp_vdso.rs': ['dd94d677c97b0c3271c746f1795289fdaadff89e1c08a660bd7659b14466d488', 6664], 'sysfs_memory.rs': ['aa98b251e973cee018cec6d69586d99a56c9ea1d208f69c4a645696254af2004', 44674], 'sysfs_objects.rs': ['2b04c57b43516550f0c3bdaf115b667d4a64393030494e79b553248c42aa7453', 13988], 'sysfs_os.rs': ['ce44efe98498383862bd2d897f3fe17201917aa141a144853459a0cac7ecffd2', 2451], 'sysfs_remote.rs': ['b9bb72eb6c4986067e2557e15ac625d90cfddcb53f38c8b99cc3648e85f0d117', 13048], 'sysfs_rpc.rs': ['39c5ff87b671c498afffcff9feb10833918d75207559462952803858fb218131', 8000], 'sysfs_setup.rs': ['aef0af92406948da3a4519c937dcfd32724b18d81ab00e394e66c89753863d62', 12683], 'sysfs_snoop.rs': ['c795209a3d116142c6da2ab969d3cdb88ba69796287b20adbab2f59bdbe7249d', 5515], 'sysfs_tree.rs': ['3ee25a02b17654b6f23776d13aaa62de5b597e23cb214ca9c519b5886c29b232', 12276], 'sysfs_zeroing.rs': ['6d35d46758ccf5092db91780bbc35f8e0cacc0e8a3201379d5af95e6bf97f94e', 12908], 'user_string.rs': ['fa83818bc26d52ffff1a763a34a92684dff47775ba389fa6ac831d0835bf62d2', 603], 'zero_pages.rs': ['47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def', 4354]}
+ EXACT_DEPENDENCIES = {'ihk': ['abi/application.rs', 'abi/os_service.rs', 'abi/x86_64.rs', 'device_registry.rs', 'ihk.rs', 'ihk_ioctl.rs', 'ikc_master.rs', 'ikc_queue.rs', 'os_registry.rs', 'os_runtime.rs', 'os_service.rs', 'page_allocator.rs', 'page_owner_registry.rs'], 'ihk_smp_x86_64': ['abi/application.rs', 'abi/sysfs.rs', 'abi/sysfs_request.rs', 'abi/vdso.rs', 'abi/x86_64.rs', 'application_image.rs', 'application_pager.rs', 'application_rpc.rs', 'application_syscall.rs', 'current_fork_control.rs', 'current_fork_task_mm.rs', 'exec_delivery.rs', 'exec_transfer_checked.rs', 'ihk-compat-build-id.bin', 'ihk_mapping.rs', 'ihk_smp_x86_64.rs', 'ikc_master.rs', 'ikc_queue.rs', 'procfs_objects.rs', 'smp_application.rs', 'smp_application_image.rs', 'smp_application_syscall.rs', 'smp_boot_code.rs', 'smp_cpu.rs', 'smp_file_pager.rs', 'smp_ikc.rs', 'smp_image.rs', 'smp_loader.rs', 'smp_memory.rs', 'smp_procfs.rs', 'smp_resource.rs', 'smp_service.rs', 'smp_startup.rs', 'smp_startup_entry.S', 'smp_topology.rs', 'smp_trampoline.S', 'smp_trampoline.rs', 'smp_vdso.rs', 'sysfs_memory.rs', 'sysfs_objects.rs', 'sysfs_os.rs', 'sysfs_remote.rs', 'sysfs_rpc.rs', 'sysfs_setup.rs', 'sysfs_snoop.rs', 'sysfs_tree.rs', 'sysfs_zeroing.rs', 'user_string.rs', 'zero_pages.rs'], 'mcctrl': ['abi/application.rs', 'abi/os_service.rs', 'abi/x86_64.rs', 'application_image.rs', 'current_fork_host.rs', 'mcctrl_exec.rs', 'mcctrl_mm_write.rs', 'mcctrl_process.rs', 'mcctrl_rust.rs', 'mcctrl_vm.rs', 'user_string.rs']}
+@@ -63,35 +68,25 @@
+ BOOT = '7bfc5687-6c04-4d15-84eb-b92ab9a55dcb'
+ LEASE = ROOT / 'native-running-external-modules.lease.json'
+ COMMON = ROOT / 'native-running-external-modules-operational-exclusion.json'
+-COMMAND = ['/driver.py', '--execute']
++COMMAND = ['-I', '-B', '/driver.py', '--execute']
+ MODULES = ('ihk.ko', 'ihk-smp-x86_64.ko', 'mcctrl.ko')
+-SOURCES = ('scripts/native_running_external_modules_owner.py',
+-           'scripts/tests/test_native_running_external_modules_owner.py',
+-           'scripts/native_running_external_modules_offline.py',
+-           'scripts/native_rust_exact_mckernel_image_container_owner.py',
+-           'scripts/native_rust_exact_build_container_owner.py',
+-           'scripts/native_rust_exact_build_offline.py',
+-           'scripts/native_rust_exact_disk_build_wrapper.py',
+-           'scripts/native_rust_exact_build_image_rebind_probe.py',
+-           'scripts/native_rust_exact_build_image_prepare.py',
+-           'scripts/native_rust_exact_build_image_rebind.py',
+-           'scripts/native_exact_historical_lease_observer.py')
++SOURCES = ('scripts/native_running_external_modules_owner.py', 'scripts/tests/test_native_running_external_modules_owner.py', 'scripts/native_running_external_modules_offline.py', 'scripts/native_rust_exact_mckernel_image_container_owner.py', 'scripts/native_rust_exact_build_container_owner.py', 'scripts/native_rust_exact_build_offline.py', 'scripts/native_rust_exact_disk_build_wrapper.py', 'scripts/native_rust_exact_build_image_rebind_probe.py', 'scripts/native_rust_exact_build_image_prepare.py', 'scripts/native_rust_exact_build_image_rebind.py', 'scripts/native_exact_historical_lease_observer.py', 'mock64/contract.py', 'mock64/profile.py', 'mock64/kernel_pids64.py', 'mock64/fixture_runner.py', 'mock64/preparation.json', 'mock64/tests.py', 'mock64/account04b5.py', 'mock64/canonical_account.py', 'mock64/entry_capture.py')
+ 
+ 
+ # Exact successor paths; canonical support source keys and all digest checks remain.
+-RUNTIME_SOURCE_PATHS = {'scripts/native_running_external_modules_owner.py': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/runtime/native_running_external_modules_owner.py', 'scripts/tests/test_native_running_external_modules_owner.py': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/runtime/test_native_running_external_modules_owner.py', 'scripts/native_running_external_modules_offline.py': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/runtime/native_running_external_modules_offline.py', 'scripts/native_rust_exact_mckernel_image_container_owner.py': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/runtime/native_rust_exact_mckernel_image_container_owner.py', 'scripts/native_rust_exact_build_container_owner.py': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/runtime/native_rust_exact_build_container_owner.py', 'scripts/native_rust_exact_build_offline.py': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/runtime/native_rust_exact_build_offline.py', 'scripts/native_rust_exact_disk_build_wrapper.py': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/runtime/native_rust_exact_disk_build_wrapper.py', 'scripts/native_rust_exact_build_image_rebind_probe.py': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/runtime/native_rust_exact_build_image_rebind_probe.py', 'scripts/native_rust_exact_build_image_prepare.py': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/runtime/native_rust_exact_build_image_prepare.py', 'scripts/native_rust_exact_build_image_rebind.py': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/runtime/native_rust_exact_build_image_rebind.py', 'scripts/native_exact_historical_lease_observer.py': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/runtime/native_exact_historical_lease_observer.py'}
++RUNTIME_SOURCE_PATHS = {'scripts/native_running_external_modules_owner.py': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/mock64_owner.py', 'scripts/tests/test_native_running_external_modules_owner.py': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/runtime/test_native_running_external_modules_owner.py', 'scripts/native_running_external_modules_offline.py': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/mock64_driver.py', 'scripts/native_rust_exact_mckernel_image_container_owner.py': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/runtime/native_rust_exact_mckernel_image_container_owner.py', 'scripts/native_rust_exact_build_container_owner.py': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/runtime/native_rust_exact_build_container_owner.py', 'scripts/native_rust_exact_build_offline.py': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/runtime/native_rust_exact_build_offline.py', 'scripts/native_rust_exact_disk_build_wrapper.py': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/runtime/native_rust_exact_disk_build_wrapper.py', 'scripts/native_rust_exact_build_image_rebind_probe.py': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/runtime/native_rust_exact_build_image_rebind_probe.py', 'scripts/native_rust_exact_build_image_prepare.py': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/runtime/native_rust_exact_build_image_prepare.py', 'scripts/native_rust_exact_build_image_rebind.py': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/runtime/native_rust_exact_build_image_rebind.py', 'scripts/native_exact_historical_lease_observer.py': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/runtime/native_exact_historical_lease_observer.py', 'mock64/contract.py': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/mock64_contract.py', 'mock64/profile.py': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/effective_profile64.py', 'mock64/kernel_pids64.py': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/kernel_pids64.py', 'mock64/fixture_runner.py': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/run_fixture_precreated.py', 'mock64/preparation.json': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/PREPARATION.SOURCE-ONLY.json', 'mock64/tests.py': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/test_mock64_successor.py', 'mock64/account04b5.py': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-final-copy-close-source-1/recover_growth_custody.py', 'mock64/canonical_account.py': '/home/holden/mckernel/scripts/os_goal_credits.py', 'mock64/entry_capture.py': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/run_mock64_owned_capture.py'}
+ 
+ class Refusal(RuntimeError):
+     pass
+ 
+ 
+ RUNTIME_PARENT = Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/runtime')
+-COMMANDS_PATH = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/EXACT-DAEMON-QUALIFIER-COMMAND.json')
++COMMANDS_PATH = PREPARATION
+ CAPTURE_HELPER = Path('/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py')
+ CENSUS_HELPER = Path('/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py')
+-LIBRARY_PREPARATION = {'M15_file_closure': False, 'accepted_libihk': {'bytes': 12095032, 'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/canonical-source-producer-SDK-target-operation-1/bounded-top-level-cache-dependency-correction-1/selected-source-1/workspace/native-running-modules-candidate-1315033c6e40480ea1b61cf8159c0c19/output/whole70-tool-default/ihk/linux/user/libihk.so', 'sha256': '89639e9d56c390968a86a95bb734128ec61bd0f6de28f7c7992cfb9e00b9ef96'}, 'accepted_libihk_receipt': {'bytes': 35176, 'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/canonical-source-producer-SDK-target-operation-1/bounded-top-level-cache-dependency-correction-1/selected-source-1/workspace/native-running-modules-candidate-1315033c6e40480ea1b61cf8159c0c19/evidence/receipt.json', 'sha256': '969a603a696f8b2cfde0464ac07654a602a224aaff4fd49bad236fcf69cdf8d3'}, 'candidate_identity': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/candidate', 'device': 66306, 'inode': 59523230, 'mode': 448, 'uid': 1000, 'gid': 1000}, 'candidate_root': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/candidate', 'capture_budget_bytes': 67108864, 'capture_helper': {'bytes': 14753, 'path': '/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py', 'sha256': '990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8'}, 'census_helper': {'bytes': 51420, 'path': '/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py', 'sha256': '96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1'}, 'closure': [{'bytes': 95385, 'path': '/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-8/m15-bfd-owner-successor/compile_image_owner.py', 'sha256': '71381de806c21b7487e1515927543b376199a021a08b965a60d68063241bc794'}, {'bytes': 2824, 'path': '/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-8/m15-bfd-owner-successor/COMPILE-PROFILE.json', 'sha256': 'e25bec3d2864245092c4202e6ce05c20e00ea8914e8a932eacd19f7a3f3e159a'}, {'bytes': 39351, 'path': '/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-8/m15-bfd-owner-successor/compile_host_helper.py', 'sha256': '76ff839a839a2f55cd7d537d22221cb1b053390e2b6052b8be2b5d8b20990e63'}, {'bytes': 26525773, 'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile-request.PREPARED.json', 'sha256': '92bcb96713c498bf2397bb24c3473a2ffbeb61f45dfa423a6ae8b99f4a4ffe4f'}, {'bytes': 72685013, 'path': '/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/image-toolchain.json', 'sha256': 'a68e02b3b66b8bfbae96bf742dc8702b6e81dd97b92189b87437c3d08fccdf72'}, {'bytes': 14753, 'path': '/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py', 'sha256': '990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8'}, {'bytes': 51420, 'path': '/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py', 'sha256': '96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1'}, {'bytes': 39351, 'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd-owner-successor/compile_host_helper.py', 'sha256': '76ff839a839a2f55cd7d537d22221cb1b053390e2b6052b8be2b5d8b20990e63'}, {'bytes': 41116, 'path': '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/native_rust_exact_build_offline.py', 'sha256': '453dd998e4ef1e2ed21b0818771d97197d77f98c90ca8c6c67cc8ab019063044'}, {'bytes': 18936, 'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/DAEMON-INPUTS.json', 'sha256': 'a3e41ba4764ba733d0f378fcdd1fdc9cc5a36df4b6920d2c5102ec3a285bc113'}, {'bytes': 291, 'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/EXACT-DAEMON-QUALIFIER-COMMAND.json', 'sha256': 'c9d79501a2e1cc547841ee1263f8830d272c04c250893ee1da0a6de07a60eebd'}, {'bytes': 12095032, 'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/canonical-source-producer-SDK-target-operation-1/bounded-top-level-cache-dependency-correction-1/selected-source-1/workspace/native-running-modules-candidate-1315033c6e40480ea1b61cf8159c0c19/output/whole70-tool-default/ihk/linux/user/libihk.so', 'sha256': '89639e9d56c390968a86a95bb734128ec61bd0f6de28f7c7992cfb9e00b9ef96'}, {'bytes': 35176, 'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/canonical-source-producer-SDK-target-operation-1/bounded-top-level-cache-dependency-correction-1/selected-source-1/workspace/native-running-modules-candidate-1315033c6e40480ea1b61cf8159c0c19/evidence/receipt.json', 'sha256': '969a603a696f8b2cfde0464ac07654a602a224aaff4fd49bad236fcf69cdf8d3'}], 'commands': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/EXACT-DAEMON-QUALIFIER-COMMAND.json', 'bytes': 291, 'sha256': 'c9d79501a2e1cc547841ee1263f8830d272c04c250893ee1da0a6de07a60eebd'}, 'input_manifest': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/DAEMON-INPUTS.json', 'bytes': 18936, 'sha256': 'a3e41ba4764ba733d0f378fcdd1fdc9cc5a36df4b6920d2c5102ec3a285bc113'}, 'native_acceptance': False, 'output_budget_bytes': 536870912, 'profile': {'cpus': '2-5', 'jobs': 1, 'memory_bytes': 12884901888, 'memory_swap_bytes': 12884901888, 'network': 'none', 'pids': 512}, 'retained_request': {'bytes': 26525773, 'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile-request.PREPARED.json', 'sha256': '92bcb96713c498bf2397bb24c3473a2ffbeb61f45dfa423a6ae8b99f4a4ffe4f'}, 'schema': 'mckernel.daemon-soleheavy-sdk-preparation.v1', 'scope': 'Functional McKernel OS/apps and Rust/assembly migration only; no security testing.', 'source_identity': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/source-materialization-1/materialized-source', 'device': 66306, 'inode': 59403771, 'mode': 448, 'uid': 1000, 'gid': 1000}, 'source_only': True, 'source_root': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/source-materialization-1/materialized-source', 'support_owner': {'bytes': 95385, 'path': '/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-8/m15-bfd-owner-successor/compile_image_owner.py', 'sha256': '71381de806c21b7487e1515927543b376199a021a08b965a60d68063241bc794'}, 'timeout': 19800, 'tool_image': 'sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5', 'toolchain_manifest': {'bytes': 72685013, 'path': '/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/image-toolchain.json', 'sha256': 'a68e02b3b66b8bfbae96bf742dc8702b6e81dd97b92189b87437c3d08fccdf72'}, 'toolchain_mounts': {'/nightly': '/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu', '/out': '/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output'}}
+-RUNTIME_SOURCE_PATHS['scripts/native_running_external_modules_owner.py'] = '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-142g-consumer-successor-source-1/daemon_sdk_owner.142G-SOURCE-ONLY.py'
+-RUNTIME_SOURCE_PATHS['scripts/native_running_external_modules_offline.py'] = str(DRIVER)
++LIBRARY_PREPARATION = mc.PREP
++RUNTIME_SOURCE_PATHS['scripts/native_running_external_modules_owner.py'] = '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/mock64_owner.py'
++RUNTIME_SOURCE_PATHS['scripts/native_running_external_modules_owner.py'] = '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/mock64_owner.py'
+ 
+ 
+ def bfd_support():
+@@ -110,7 +105,7 @@
+ 
+ 
+ _BFD_SUPPORT = None
+-BFD_DRIVER_SHA = '9ee8dd3a74773780df9f56d0eae854aebadd15946f89547f2e0ac69701779f5a'
++BFD_DRIVER_SHA = hashlib.sha256(DRIVER.read_bytes()).hexdigest()
+ 
+ 
+ def retained_archive_snapshot(path):
+@@ -126,30 +121,22 @@
+     finally:os.close(fd)
+ 
+ def validate_library_receipt(receipt, request):
+-    need(receipt.get('schema')=='mckernel.daemon-soleheavy-sdk-receipt.v1' and receipt.get('status')=='PASS_DAEMON_QUALIFIER_CAPTURE' and receipt.get('scope')==LIBRARY_PREPARATION['scope'], 'exact daemon capture receipt')
+-    need(receipt.get('preparation_sha256')==PREPARATION_SHA and receipt.get('command')==json.loads(COMMANDS_PATH.read_bytes())['command'], 'exact daemon command/preparation')
+-    capture=receipt['capture']
+-    need(capture['returncode']==0 and capture['direct_child_joined'] and capture['group_absent'] and capture['closed_streams'] and capture['error'] is None and capture['retirement_error'] is None and not capture['timed_out'] and capture['captures']['stderr']['size']==0, 'daemon qualifier positive owned join')
+-    output=safe_path(str(Path(request['candidate_root'])/'daemon-sdk-1'))
+-    result_path=safe_path(str(output/'RESULT.json'),False)
+-    need(host.digest(result_path)==receipt.get('qualifier_result_sha256'), 'durable daemon result hash')
+-    result=json.loads(result_path.read_bytes())
+-    need(result.get('status')=='PASS_PINNED_DAEMON_ABI_SELECTED_RULE_LINK_LOADER_ONLY' and result.get('scope')==LIBRARY_PREPARATION['scope'], 'exact daemon qualification result')
+-    need(all(result.get(k) is False for k in ('production_daemon_main_executed','mock_parity_executed','full_default_graph_or_install_accepted','native_acceptance','M15_file_closure')), 'daemon compile/link/loader only scope')
+-    rows=json.loads(safe_path(str(output/'commands.json'),False).read_bytes())
+-    labels=['linux-ABI','libudev-ABI','selected-configure','selected-build','daemon-dynamic','daemon-imports','daemon-loader']
+-    need(rows==result['commands'] and [r['label'] for r in rows]==labels and all(type(r['rc']) is int and r['rc']==0 for r in rows), 'exact seven daemon SDK commands')
+-    for label in labels:
+-        for stream in ('stdout','stderr'):
+-            safe_path(str(output/(label+'.'+stream)),False)
+-    need(not (output/'FAILURE.json').exists(), 'daemon failure retained')
+-    binary=safe_path(str(output/'build/sdk-daemon/ihkmond'),False)
+-    need(binary.stat().st_size==result['daemon_bytes'] and host.digest(binary)==result['daemon_sha256'] and binary.read_bytes()[:6]==b'\x7fELF\x02\x01', 'durable real daemon ELF')
++    need(receipt.get('schema')=='mckernel.daemon-mock64-driver-receipt.v1' and receipt.get('status')=='PASS_DAEMON_MOCK64_CAPTURE' and receipt.get('scope')==mc.PREP['scope'],'exact mock64 receipt')
++    need(receipt.get('preparation_sha256')==PREPARATION_SHA and receipt.get('nonce')==request['nonce'] and receipt.get('command')==mc.fixture_command(request['nonce']),'exact mock command/preparation')
++    need(all(receipt.get(k) is False for k in ('production_main_executed','native_acceptance','provider_Rust_link_closure','M15_file_closure')),'mock scope inflated')
++    capture=receipt['capture'];need(mc.capture_ok(capture) and capture['captures']['stderr']['size']==0,'positive owned fixture join')
++    root=Path(request['candidate_root']);summary=mc.validate_fixture_tree(root/'fixture-output')
++    need(mc.ref(root/'fixture-output/summary.json')['sha256']==receipt.get('summary_sha256') and receipt.get('fixture_cases')==26,'actual durable mock summary')
++    proofs=[]
++    for phase in ('before','after'):
++        path=safe_path(str(root/'evidence'/('kernel-pids64-'+phase+'.json')),False)
++        need(host.digest(path)==receipt['kernel_pids64_'+phase+'_sha256'],'actual kernel proof hash')
++        proofs.append(kernel_pids64.validate_proof(mc.json_bytes(path.read_bytes())))
++    need(proofs[0]['controller_identity']==proofs[1]['controller_identity'] and proofs[0]['selected_mount']==proofs[1]['selected_mount'],'actual kernel pids controller changed')
+     for stream in ('stdout','stderr'):
+-        logical=Path(capture['captures'][stream]['path'])
+-        need(logical==Path('/work/evidence')/stream, 'exact capture stream path')
+-        actual=safe_path(str(Path(request['candidate_root'])/logical.relative_to('/work')),False)
+-        need(actual.stat().st_size==capture['captures'][stream]['size'] and host.digest(actual)==capture['captures'][stream]['sha256'], 'durable daemon capture stream')
++        logical=Path(capture['captures'][stream]['path']);need(logical==Path('/work/evidence')/stream,'exact mock driver capture stream')
++        actual=safe_path(str(root/logical.relative_to('/work')),False)
++        need(actual.stat().st_size==capture['captures'][stream]['size'] and host.digest(actual)==capture['captures'][stream]['sha256'],'durable mock driver stream')
+ 
+ 
+ 
+@@ -191,13 +178,14 @@
+ 
+ 
+ def mounts(request):
+-    rows = [(str(BASIS),'/out',True), (str(NIGHTLY_ROOT),'/nightly',True),
+-            (request['candidate_root'],'/work',False), (LIBRARY_PREPARATION['candidate_root'],'/candidate',True),
+-            (LIBRARY_PREPARATION['source_root'],'/src',True), (str(PREPARATION),str(PREPARATION),True),
+-            (str(DRIVER),'/driver.py',True), (request['request_path'],'/request.json',True)]
+-    rows += [(row['path'],row['path'],True) for row in LIBRARY_PREPARATION['closure']]
+-    rows += [(str(Path(LIBRARY_PREPARATION['accepted_libihk']['path']).parent),'/accepted-libihk',True)]
+-    return list(dict.fromkeys(rows))
++    prepdir=request['runtime_preparation_identity']['path']
++    return [(str(mc.MIRROR),mc.PREP['container_source_parent'],True),
++            (str(NIGHTLY_ROOT),'/nightly',True),(str(REPO),str(REPO),True),
++            (request['candidate_root'],'/work',False),
++            (str(Path(request['candidate_root'])/'fixture-output'),mc.PREP['container_output'],False),
++            (prepdir,'/preparation',True),(str(DRIVER),'/driver.py',True),
++            (request['request_path'],'/request.json',True),
++            (mc.PREP['census_helper']['path'],mc.PREP['census_helper']['path'],True)]
+ 
+ 
+ 
+@@ -214,7 +202,7 @@
+          'exact container name/ID required')
+     if cid is not None:
+         need(info['Id'] == cid, 'foreign container ID')
+-    host.check_profile(info, IMAGE, nonce)
++    check_profile64(info, IMAGE, nonce)
+     config, control = info['Config'], info['HostConfig']
+     need(config.get('User') == '1000:1000' and config.get('Entrypoint') == ['/usr/bin/python3'] and
+          config.get('Cmd') == COMMAND and info.get('Path') == '/usr/bin/python3' and
+@@ -288,6 +276,7 @@
+ 
+ def measure(request):
+     # Revalidate parent/backing before every capacity check, including polling.
++    check_campaign()
+     output_admission(request)
+     meta = BACKING.stat()
+     gap = max(0, meta.st_size - meta.st_blocks * 512)
+@@ -300,15 +289,7 @@
+                     host_output_allocation_bound_bytes=OUTPUT_ALLOCATION_BYTES)
+     for key, maximum in (('candidate_root', request['disk_budget_bytes']),
+                          ('owner_evidence_root', request['capture_budget_bytes'])):
+-        root = Path(request[key]); total = count = 0
+-        if not root.exists():
+-            continue
+-        for path in root.rglob('*'):
+-            count += 1
+-            need(count <= 4096 and not path.is_symlink(), 'bounded output inventory/type')
+-            if path.is_file():
+-                total += path.stat().st_size
+-                need(total <= maximum, key + ' byte budget exceeded')
++        mc.output_tree_bytes(Path(request[key]),maximum)
+     return observed
+ 
+ 
+@@ -409,28 +390,15 @@
+         read_stable(root/rel,row['sha256'],int(row['mode'],8)&0o777)
+     return dict(verified_vendor_files=412,configure_and_target_paths=len(spec['configure_and_target_required_paths']),commit=spec['commit'])
+ 
+-def validate_preparation(prep):
+-    need(prep == LIBRARY_PREPARATION and prep['schema'] == 'mckernel.daemon-soleheavy-sdk-preparation.v1' and prep['tool_image'] == IMAGE, 'exact BFD preparation/profile')
+-    for row in prep['closure']:
+-        path = safe_path(row['path'], False)
+-        need(path.stat().st_size == row['bytes'] and host.digest(path) == row['sha256'], 'exact BFD input/support closure')
+-    candidate = safe_path(prep['candidate_root'])
+-    source = safe_path(prep['source_root'])
+-    need(node(candidate) == prep['candidate_identity'] and node(source) == prep['source_identity'], 'current BFD candidate/source identities')
+-    support = bfd_support()
+-    inputs = bound({'path':prep['input_manifest']['path'], 'sha256':prep['input_manifest']['sha256']})
+-    need(support._bfd_inventory(candidate) == inputs['candidate'], 'current BFD candidate closure changed')
+-    need(support._bfd_inventory(source, inputs['source_roots']) == inputs['source'], 'current BFD consumed source closure changed')
+-    binding = json.loads((candidate/'SOURCE-BINDING.json').read_bytes())
+-    for relative, expected in binding['sources'].items():
+-        need(host.digest(safe_path(str(source/relative),False)) == expected, 'BFD original source binding changed')
+-    retained = support._retained_toolchain_request()
+-    toolchain = support._load_json(Path(retained['toolchain_manifest']), 'retained BFD toolchain')
+-    need(host.digest(Path(retained['toolchain_manifest'])) == prep['toolchain_manifest']['sha256'], 'retained BFD SDK manifest changed')
+-    mounted = support._v2_mount_roots(retained, toolchain)
+-    support._validate_v2_image_tools(retained, toolchain)
+-    need({key:str(value) for key,value in mounted.items()} == prep['toolchain_mounts'], 'BFD readonly SDK mount closure differs')
+-    need(mounted['/out'] == BASIS and mounted['/nightly'] == NIGHTLY_ROOT, 'BFD/SDK retained roots differ')
++def validate_preparation(prep, request):
++    need(prep == mc.PREP and prep['schema']=='mckernel.daemon-mock64-preparation.v1' and prep['tool_image']==IMAGE, 'exact mock64 preparation/profile')
++    for row in prep['source_files']:
++        source=safe_path(row['source']['path'],False)
++        need(source.stat().st_size==row['source']['bytes'] and host.digest(source)==row['source']['sha256'],'frozen fixture source differs')
++    for key in ('capture_helper','census_helper'):
++        row=prep[key];path=safe_path(row['path'],False)
++        need(path.stat().st_size==row['bytes'] and host.digest(path)==row['sha256'],'exact mock support closure')
++    return mc.verify_request_inputs(request)
+ 
+ 
+ 
+@@ -440,8 +408,8 @@
+     required = {'schema','candidate_sha','image_id','nonce','request_path','preparation','driver',
+                 'input_root','candidate_root','owner_evidence_root','lease_path','common_exclusion_path',
+                 'basis_identity','candidate_identity','input_identity','boot_id','timeout',
+-                'disk_budget_bytes','capture_budget_bytes','terminal_policy','output_parent_identity','backing_identity'}
+-    need(set(request)==required and request['schema']=='mckernel.daemon-soleheavy-sdk-request.v1', 'exact BFD request schema')
++                'disk_budget_bytes','capture_budget_bytes','terminal_policy','output_parent_identity','backing_identity','fixture_output_identity','runtime_preparation_identity','output_binding'}
++    need(set(request)==required and request['schema']=='mckernel.daemon-mock64-request.v1', 'exact BFD request schema')
+     nonce=request['nonce']
+     need(re.fullmatch('[0-9a-f]{32}',str(nonce)) and request['candidate_sha']==CANDIDATE and request['image_id']==IMAGE and request['request_path']==str(request_path), 'request pins/nonce/path')
+     need(request['preparation']=={'path':str(PREPARATION),'sha256':PREPARATION_SHA} and request['driver']=={'path':str(DRIVER),'sha256':BFD_DRIVER_SHA}, 'exact BFD preparation/driver refs')
+@@ -450,10 +418,10 @@
+     need(type(request['timeout']) is int and request['timeout']==LIBRARY_PREPARATION['timeout'] and type(request['disk_budget_bytes']) is int and request['disk_budget_bytes']==LIBRARY_PREPARATION['output_budget_bytes'] and type(request['capture_budget_bytes']) is int and request['capture_budget_bytes']==LIBRARY_PREPARATION['capture_budget_bytes'] and request['terminal_policy']=='remove-owned-terminal', 'fixed BFD budget/terminal policy')
+     output_namespace(request)
+     safe_path(str(request_path),False)
+-    validate_preparation(bound(request['preparation']))
+-    need(Path(request['input_root'])==PREPARATION.parent, 'exact BFD input namespace')
++    validate_preparation(bound(request['preparation']),request)
++    need(Path(request['input_root'])==mc.MIRROR, 'exact mock input namespace')
+     candidate=safe_path(request['candidate_root'])
+-    need(not list(candidate.iterdir()), 'fresh empty BFD output candidate')
++    need({p.name for p in candidate.iterdir()}=={'fixture-output'} and not list((candidate/'fixture-output').iterdir()), 'fresh mock work/output required')
+     conflicts={LEASE,COMMON,Path(shared.SHARED_HEAVY_LOCK_PATH),Path(image.COMMON_EXCLUSION),Path(host.OPERATIONAL_EXCLUSION_PATH)}
+     conflicts.update(ROOT.glob('native-exact-mckernel-image-lease-*.json'))
+     need(not any(os.path.lexists(path) for path in conflicts), 'conflicting native/image/shared ownership')
+@@ -591,7 +559,7 @@
+ 
+ def create_args(request, name, nonce):
+     args = ['create', '--name', name, '--label', 'mckernel.owner=' + nonce,
+-            '--init', '--network=none', '--ipc=private', *host.RESOURCE_ARGS,
++            '--init', '--network=none', '--ipc=private', *RESOURCE_ARGS64,
+             '--user', '1000:1000', '--cap-drop=ALL', '--security-opt=no-new-privileges',
+             '--read-only', '--restart=no', '--tmpfs', '/tmp:rw,nodev,nosuid,size=256m']
+     for source, target, readonly in mounts(request):
+@@ -808,7 +776,7 @@
+ def authenticate(request_path, request_sha, release_path, release_sha):
+     request = bound(dict(path=str(request_path), sha256=request_sha))
+     release = bound(dict(path=str(release_path), sha256=release_sha))
+-    need(release.get('schema') == 'mckernel.daemon-soleheavy-sdk-release.v1' and
++    need(release.get('schema') == 'mckernel.daemon-mock64-release.v1' and
+          release.get('status') == 'PASS_EXECUTION_RELEASE' and release.get('execution_count') == 1 and
+          type(release['execution_count']) is int and release.get('request') == {'path': str(request_path), 'sha256': request_sha} and
+          release.get('nonce') == request.get('nonce') and release.get('boot_id') == BOOT and
+@@ -828,6 +796,7 @@
+         else:
+             payload = {k: v for k, v in release.items() if k != 'execution_review'}
+             need(review.get('reviewed_release_payload_sha256') == sha(canonical(payload)), 'exact independent execution payload required')
++    check_current_admission(release,request,request_path,request_sha)
+     return request, release
+ 
+ 
+@@ -842,6 +811,7 @@
+ 
+ def guarded_execute(request_path, request_sha, release_path, release_sha):
+     need(os.getuid() == os.geteuid() == os.getgid() == os.getegid() == 1000, 'ordinary holden owner required')
++    check_campaign()
+     with DeferredSignals() as latch:
+         fd = guard._development_lock(guard.DEVELOPMENT_LOCK, (27, 4), (0, 0))
+         entered = safe = False
+@@ -862,6 +832,7 @@
+             latch.check()
+             poll = PollSignals(latch, request)
+             docker = ExternalDocker(Path(request['owner_evidence_root']) / 'docker.log', poll, sudo=True)
++            check_current_admission(release,request,request_path,request_sha)
+             entered = True
+             result = run_owner(request, docker, poll, measurement,
+                                dict(request={'path': str(request_path), 'sha256': request_sha},
+@@ -881,6 +852,32 @@
+             os.close(fd)
+ 
+ 
++_ACCOUNT=None
++def check_campaign():
++    global _ACCOUNT
++    path=REPO/'docs/verification/evidence/os-recovery-adoption-20261025-0254/scratch-growth-final-copy-close-source-1/recover_growth_custody.py'
++    need(hashlib.sha256(path.read_bytes()).hexdigest()=='04b5c6af885baca472e99e590bf07ae360dacad95487709477cf3d2bf8d6c90a','exact accepted account guard')
++    if _ACCOUNT is None:
++        spec=importlib.util.spec_from_file_location('accepted_mock64_account_guard',path);_ACCOUNT=importlib.util.module_from_spec(spec);spec.loader.exec_module(_ACCOUNT)
++    state=json.loads((REPO/'.git/os-autopilot/state.json').read_bytes());_ACCOUNT.check_account_state(state,time.time())
++    clocks=[time.time(),time.monotonic(),time.clock_gettime(time.CLOCK_BOOTTIME)]
++    need(Path('/proc/sys/kernel/random/boot_id').read_text().strip()==BOOT and all(a<b for a,b in zip(clocks,mc.CUTOFFS)),'same boot/fixed cutoff')
++    return clocks
++
++def check_current_admission(release,request,request_path,request_sha):
++    a=bound(release['current_admission'])
++    required={'schema','status','author','nonce','request','boot_id','profile','one_heavy','observed_clocks','expires_wall','nonce_ledger_complete','consumed_nonces','resource_physical','latest_postjoin_acceptance','source_publication'}
++    need(set(a)==required and a['schema']=='mckernel.daemon-mock64-current-admission.v1' and a['status']=='ROOT_RESERVED_DAEMON_MOCK64_SOLE_HEAVY' and a['author']=='/root','actual Root mock64 admission required')
++    need(a['request']==dict(path=str(request_path),sha256=request_sha) and a['nonce']==request['nonce'] and a['boot_id']==BOOT and a['profile']==mc.PREP['profile'] and a['one_heavy'] is True,'exact one-heavy request/profile admission')
++    need(a['nonce_ledger_complete'] is True and isinstance(a['consumed_nonces'],list) and len(a['consumed_nonces'])==len(set(a['consumed_nonces'])) and all(re.fullmatch('[0-9a-f]{32}',str(n)) for n in a['consumed_nonces']) and request['nonce'] not in a['consumed_nonces'],'complete current nonce exclusion required')
++    for reference in (a['resource_physical'],a['latest_postjoin_acceptance'],a['source_publication']):
++        need(set(reference)=={'path','bytes','sha256'} and mc.ref(safe_path(reference['path'],False))==reference,'actual admission reference differs')
++    resources=json.loads(Path(a['resource_physical']['path']).read_bytes())
++    need(resources['observed_clocks']==a['observed_clocks'] and resources['boot_id']==BOOT and resources['no_existing_heavy'] is True,'actual fresh resources differ')
++    now=check_campaign();need(len(a['observed_clocks'])==3 and all(type(x) in (int,float) and math.isfinite(x) for x in a['observed_clocks']),'three finite actual clocks')
++    need(all(0<=n-o<120 for n,o in zip(now,a['observed_clocks'])) and type(a['expires_wall']) in (int,float) and now[0]<a['expires_wall']<=min(a['observed_clocks'][0]+120,mc.CUTOFFS[0]),'fresh bounded Root admission expired')
++    return a
++
+ def main():
+     parser = argparse.ArgumentParser(description=__doc__)
+     for name in ('request', 'request-sha256', 'release', 'release-sha256'):

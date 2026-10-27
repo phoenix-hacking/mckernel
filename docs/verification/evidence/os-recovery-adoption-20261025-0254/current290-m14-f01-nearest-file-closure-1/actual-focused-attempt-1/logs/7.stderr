@@ -1,0 +1,165 @@
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f01-nearest-file-closure-1/existing-focused-inputs/rust_stubs.c:1144:16: warning: 'struct x86_basic_regs' declared inside parameter list will not be visible outside of this definition or declaration
+ 1144 |   const struct x86_basic_regs *regs)
+      |                ^~~~~~~~~~~~~~
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy25f03_check_signal_dispatch':
+/src/kernel/rust/syscall_policy.rs:24680: undefined reference to `do_signal'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:(.ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy25f03_check_signal_dispatch+0x434): undefined reference to `f03_check_signal_empty_debug'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `arch_switch_context':
+/src/kernel/rust/x86_cpu_helpers.rs:5508: undefined reference to `ihk_mc_switch_context'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `destroy_thread':
+/src/kernel/rust/process_helpers.rs:(.ltext.destroy_thread+0x3d3): undefined reference to `process_tracked_allocator_source_file'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `process_destroy_thread_body_result':
+/src/kernel/rust/process_helpers.rs:(.ltext.destroy_thread+0x3dd): undefined reference to `process_optional_free_bridge_source_line'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `destroy_thread':
+/src/kernel/rust/process_helpers.rs:14832: undefined reference to `process_tracked_allocator_source_file'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `process_optional_free_bridge':
+/src/kernel/rust/process_helpers.rs:14833: undefined reference to `process_optional_free_bridge_source_line'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `destroy_thread':
+/src/kernel/rust/process_helpers.rs:14832: undefined reference to `process_tracked_allocator_source_file'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `process_optional_free_bridge':
+/src/kernel/rust/process_helpers.rs:14833: undefined reference to `process_optional_free_bridge_source_line'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `destroy_thread':
+/src/kernel/rust/process_helpers.rs:14832: undefined reference to `process_tracked_allocator_source_file'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `process_optional_free_bridge':
+/src/kernel/rust/process_helpers.rs:14833: undefined reference to `process_optional_free_bridge_source_line'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `destroy_thread':
+/src/kernel/rust/process_helpers.rs:14832: undefined reference to `process_tracked_allocator_source_file'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `process_optional_free_bridge':
+/src/kernel/rust/process_helpers.rs:14833: undefined reference to `process_optional_free_bridge_source_line'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `destroy_thread':
+/src/kernel/rust/process_helpers.rs:14832: undefined reference to `process_tracked_allocator_source_file'
+/usr/bin/ld: /src/kernel/rust/process_helpers.rs:15439: undefined reference to `process_tracked_allocator_source_file'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `process_free_thread_pages_bridge':
+/src/kernel/rust/process_helpers.rs:15440: undefined reference to `process_free_thread_pages_source_line'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `destroy_thread':
+/src/kernel/rust/process_helpers.rs:14832: undefined reference to `process_tracked_allocator_source_file'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `detach_address_space':
+/src/kernel/rust/process_helpers.rs:14832: undefined reference to `process_tracked_allocator_source_file'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `process_optional_free_bridge':
+/src/kernel/rust/process_helpers.rs:14833: undefined reference to `process_optional_free_bridge_source_line'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `perf_counter_set':
+/src/kernel/rust/syscall_policy.rs:(.ltext.perf_counter_set+0x10): undefined reference to `f03_perf_counter_providers_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:(.ltext.perf_counter_set+0x3a): undefined reference to `f03_perf_event_layout_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:(.ltext.perf_counter_set+0x4b): undefined reference to `f03_perf_event_layout_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:(.ltext.perf_counter_set+0x58): undefined reference to `f03_perf_event_layout_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:(.ltext.perf_counter_set+0x65): undefined reference to `f03_perf_event_layout_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:(.ltext.perf_counter_set+0x74): undefined reference to `f03_perf_event_layout_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:(.ltext.perf_counter_set+0x83): undefined reference to `f03_perf_counter_providers_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:(.ltext.perf_counter_set+0x90): undefined reference to `f03_perf_counter_providers_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:(.ltext.perf_counter_set+0x9d): undefined reference to `f03_perf_event_layout_v1'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `perf_reset':
+/src/kernel/rust/syscall_policy.rs:26223: undefined reference to `f03_perf_event_layout_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:26223: undefined reference to `f03_perf_event_layout_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:(.ltext.perf_reset+0x92): undefined reference to `f03_perf_event_layout_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:26224: undefined reference to `f03_perf_event_layout_v1'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:/src/kernel/rust/syscall_policy.rs:26225: more undefined references to `f03_perf_event_layout_v1' follow
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `perf_reset':
+/src/kernel/rust/syscall_policy.rs:26225: undefined reference to `f03_perf_counter_providers_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:26225: undefined reference to `f03_perf_counter_providers_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:26225: undefined reference to `f03_perf_counter_providers_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:26222: undefined reference to `f03_perf_event_layout_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:26222: undefined reference to `f03_perf_event_layout_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:26222: undefined reference to `f03_perf_event_layout_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:26222: undefined reference to `f03_perf_event_layout_v1'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `perf_start':
+/src/kernel/rust/syscall_policy.rs:26191: undefined reference to `f03_perf_event_layout_v1'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:/src/kernel/rust/syscall_policy.rs:26191: more undefined references to `f03_perf_event_layout_v1' follow
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `perf_start':
+/src/kernel/rust/syscall_policy.rs:26204: undefined reference to `f03_perf_counter_providers_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:26204: undefined reference to `f03_perf_counter_providers_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:26204: undefined reference to `f03_perf_counter_providers_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:26190: undefined reference to `f03_perf_event_layout_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:26190: undefined reference to `f03_perf_event_layout_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:26190: undefined reference to `f03_perf_event_layout_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:26190: undefined reference to `f03_perf_event_layout_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:26190: undefined reference to `f03_perf_event_layout_v1'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:/src/kernel/rust/syscall_policy.rs:26190: more undefined references to `f03_perf_event_layout_v1' follow
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `process_memory_range_free_bridge':
+/src/kernel/rust/process_helpers.rs:16067: undefined reference to `process_free_range_body_debug'
+/usr/bin/ld: /src/kernel/rust/process_helpers.rs:(.ltext.process_memory_range_free_bridge+0x3b9): undefined reference to `process_tracked_allocator_source_file'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers26remaining_free_range_entry10free_pages':
+/src/kernel/rust/process_helpers.rs:16032: undefined reference to `process_tracked_allocator_source_file'
+/usr/bin/ld: /src/kernel/rust/process_helpers.rs:16033: undefined reference to `process_free_range_pages_source_line'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `process_memory_range_free_bridge':
+/src/kernel/rust/mem_helpers.rs:(.ltext.process_memory_range_free_bridge+0x585): undefined reference to `process_tracked_allocator_source_file'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `process_memory_range_free_bridge':
+/src/kernel/rust/process_helpers.rs:14867: undefined reference to `process_range_kfree_bridge_source_line'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `process_memory_range_free_bridge':
+/src/kernel/rust/mem_helpers.rs:(.ltext.process_memory_range_free_bridge+0x5b4): undefined reference to `process_free_range_body_debug'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `_RNvNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers9field_ptr':
+/src/kernel/rust/process_helpers.rs:(.ltext.release_process+0xc8): undefined reference to `process_tracked_allocator_source_file'
+/usr/bin/ld: /src/kernel/rust/process_helpers.rs:(.ltext.release_process+0xd2): undefined reference to `process_optional_free_bridge_source_line'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `release_process':
+/src/kernel/rust/process_helpers.rs:15440: undefined reference to `process_free_thread_pages_source_line'
+/usr/bin/ld: /src/kernel/rust/process_helpers.rs:(.ltext.release_process+0x2d0): undefined reference to `process_tracked_allocator_source_file'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `process_mckfd_drain_free_result':
+/src/kernel/rust/process_helpers.rs:(.ltext.release_process+0x2e4): undefined reference to `process_mckfd_free_bridge_source_line'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `release_process':
+/src/kernel/rust/cls.rs:(.ltext.release_process+0x32a): undefined reference to `process_optional_free_bridge_source_line'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `release_process_vm':
+/src/kernel/rust/process_helpers.rs:(.ltext.release_process_vm+0x215): undefined reference to `process_tracked_allocator_source_file'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `release_process_vm':
+/src/kernel/rust/rbtree.rs:(.ltext.release_process_vm+0x23a): undefined reference to `process_policy_free_bridge_source_line'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `release_process_vm':
+/src/kernel/rust/process_helpers.rs:14850: undefined reference to `process_free_vm_bridge_source_line'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `_RINvNtCskWZGD7wR08e_4core3ptr14write_volatileNtNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers19SchedScheduleResultEBL_':
+/nightly/lib/rustlib/src/rust/library/core/src/ptr/mod.rs:2171: undefined reference to `process_sched_runqueue_offsets'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `schedule':
+/src/kernel/rust/sched_helpers.rs:(.ltext.schedule+0x178): undefined reference to `process_sched_runqueue_offsets'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `sched_schedule_prepare_body_result':
+/src/kernel/rust/spinlock_helpers.rs:(.ltext.schedule+0x3af): undefined reference to `process_sched_runqueue_offsets'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `_RINvNtCskWZGD7wR08e_4core3ptr14write_volatileyECsbVRkTr4hvpt_13mckernel_rust':
+/nightly/lib/rustlib/src/rust/library/core/src/ptr/mod.rs:2171: undefined reference to `process_sched_runqueue_offsets'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `_RINvNtCskWZGD7wR08e_4core3ptr13read_volatilejECsbVRkTr4hvpt_13mckernel_rust':
+/nightly/lib/rustlib/src/rust/library/core/src/ptr/mod.rs:(.ltext.schedule+0x3d8): undefined reference to `process_sched_runqueue_offsets'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:/nightly/lib/rustlib/src/rust/library/core/src/ptr/mod.rs:(.ltext.schedule+0x3ef): more undefined references to `process_sched_runqueue_offsets' follow
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `schedule':
+/src/kernel/rust/process_helpers.rs:6086: undefined reference to `reset_cputime'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `process_sched_reset_cputime_bridge':
+/src/kernel/rust/process_helpers.rs:(.ltext.schedule+0x862): undefined reference to `process_sched_runqueue_offsets'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `schedule':
+/src/kernel/rust/process_helpers.rs:16465: undefined reference to `process_schedule_switch_debug'
+/usr/bin/ld: /src/kernel/rust/process_helpers.rs:16519: undefined reference to `process_schedule_exit_debug_input'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `syscall':
+/src/kernel/rust/syscall_policy.rs:(.ltext.syscall+0xa6): undefined reference to `f03_syscall_entry_config_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:34634: undefined reference to `f03_syscall_entry_config_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:(.ltext.syscall+0xc7): undefined reference to `f03_syscall_entry_config_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:34635: undefined reference to `set_cputime'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:(.ltext.syscall+0x2c1): undefined reference to `f03_syscall_entry_config_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:(.ltext.syscall+0x2cf): undefined reference to `f03_syscall_entry_config_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:24694: undefined reference to `f03_syscall_entry_config_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:34659: undefined reference to `set_cputime'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `syscall':
+/src/kernel/rust/x86_cpu_helpers.rs:830: undefined reference to `f03_syscall_entry_config_v1'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy32arch_ptrace_syscall_event_notify':
+/src/kernel/rust/syscall_policy.rs:23471: undefined reference to `ptrace_syscall_event'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `syscall':
+/nightly/lib/rustlib/src/rust/library/core/src/ptr/mod.rs:(.ltext.syscall+0x416): undefined reference to `f03_syscall_entry_debug_v1'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `syscall':
+/src/kernel/rust/syscall_policy.rs:34677: undefined reference to `f03_syscall_entry_config_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:(.ltext.syscall+0x56e): undefined reference to `f03_syscall_entry_debug_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:(.ltext.syscall+0x5c9): undefined reference to `f03_syscall_entry_debug_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:(.ltext.syscall+0x600): undefined reference to `f03_syscall_dispatch_binding_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:34700: undefined reference to `f03_syscall_dispatch_binding_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:(.ltext.syscall+0x633): undefined reference to `f03_syscall_entry_debug_v1'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `syscall':
+/src/kernel/rust/x86_local.rs:(.ltext.syscall+0x69a): undefined reference to `f03_syscall_entry_debug_v1'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy32arch_ptrace_syscall_event_notify':
+/src/kernel/rust/syscall_policy.rs:23471: undefined reference to `ptrace_syscall_event'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `syscall':
+/src/kernel/rust/x86_cpu_helpers.rs:188: undefined reference to `f03_syscall_entry_config_v1'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `syscall':
+/src/kernel/rust/syscall_policy.rs:(.ltext.syscall+0x95d): undefined reference to `f03_syscall_entry_config_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:(.ltext.syscall+0x96c): undefined reference to `f03_syscall_entry_debug_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:(.ltext.syscall+0x9a9): undefined reference to `f03_syscall_entry_config_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:(.ltext.syscall+0x9b8): undefined reference to `f03_syscall_entry_config_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:(.ltext.syscall+0x9c7): undefined reference to `f03_syscall_entry_config_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:(.ltext.syscall+0x9d6): undefined reference to `f03_syscall_entry_config_v1'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `syscall':
+/src/kernel/rust/x86_cpu_helpers.rs:675: undefined reference to `f03_syscall_entry_config_v1'
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:/src/kernel/rust/syscall_policy.rs:34762: more undefined references to `f03_syscall_entry_config_v1' follow
+/usr/bin/ld: /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o: in function `syscall':
+/src/kernel/rust/syscall_policy.rs:34763: undefined reference to `set_cputime'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:(.ltext.syscall+0xa9d): undefined reference to `f03_syscall_entry_config_v1'
+/usr/bin/ld: /src/kernel/rust/syscall_policy.rs:34766: undefined reference to `terminate'
+collect2: error: ld returned 1 exit status

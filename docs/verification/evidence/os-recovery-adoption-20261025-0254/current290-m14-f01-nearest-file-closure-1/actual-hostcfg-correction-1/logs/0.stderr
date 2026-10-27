@@ -1,0 +1,1324 @@
+warning: unknown and unstable feature specified for `-Ctarget-feature`: `ssse4.1`
+  |
+  = note: it is still passed through to the codegen backend, but use of this feature might be unsound and the behavior of this feature can change in the future
+  = help: consider filing a feature request
+
+warning: target feature `sse2` must be enabled to ensure that the ABI of the current target can be implemented correctly
+  |
+  = note: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+  = note: for more information, see issue #116344 <https://github.com/rust-lang/rust/issues/116344>
+
+error: environment variable `MCKERNEL_X86_ENABLE_SSE` not defined at compile time
+    --> kernel/rust/x86_cpu_helpers.rs:6472:16
+     |
+6472 |         decode(env!("MCKERNEL_X86_ENABLE_SSE").as_bytes());
+     |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: use `std::env::var("MCKERNEL_X86_ENABLE_SSE")` to read the variable at run time
+
+error: environment variable `MCKERNEL_CPU_C_FILE` not defined at compile time
+    --> kernel/rust/x86_cpu_helpers.rs:6513:33
+     |
+6513 |     const FILE: &[u8] = concat!(env!("MCKERNEL_CPU_C_FILE"), "\0").as_bytes();
+     |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: use `std::env::var("MCKERNEL_CPU_C_FILE")` to read the variable at run time
+
+error[E0425]: cannot find function `cpu_interrupt_disabled` in module `crate::x86_cpu_helpers`
+   --> kernel/rust/fork_runnable_child.rs:189:35
+    |
+189 |         ||crate::x86_cpu_helpers::cpu_interrupt_disabled()!=0{return false;}
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^ not found in `crate::x86_cpu_helpers`
+    |
+note: found an item that was configured out
+   --> kernel/rust/x86_cpu_helpers.rs:873:26
+    |
+871 | #[cfg(not(mckernel_equivalence))]
+    |          ---------------------- the item is gated here
+872 | #[no_mangle]
+873 | pub unsafe extern "C" fn cpu_interrupt_disabled() -> CInt {
+    |                          ^^^^^^^^^^^^^^^^^^^^^^
+note: function `crate::debug::cpu_interrupt_disabled` exists but is inaccessible
+   --> kernel/rust/debug.rs:63:5
+    |
+ 63 |     fn cpu_interrupt_disabled() -> CInt;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not accessible
+
+error[E0425]: cannot find function `cpu_interrupt_disabled` in module `crate::x86_cpu_helpers`
+   --> kernel/rust/fork_runnable_child.rs:206:35
+    |
+206 |         ||crate::x86_cpu_helpers::cpu_interrupt_disabled()!=0{return EACCES;}
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^ not found in `crate::x86_cpu_helpers`
+    |
+note: found an item that was configured out
+   --> kernel/rust/x86_cpu_helpers.rs:873:26
+    |
+871 | #[cfg(not(mckernel_equivalence))]
+    |          ---------------------- the item is gated here
+872 | #[no_mangle]
+873 | pub unsafe extern "C" fn cpu_interrupt_disabled() -> CInt {
+    |                          ^^^^^^^^^^^^^^^^^^^^^^
+note: function `crate::debug::cpu_interrupt_disabled` exists but is inaccessible
+   --> kernel/rust/debug.rs:63:5
+    |
+ 63 |     fn cpu_interrupt_disabled() -> CInt;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not accessible
+
+error[E0425]: cannot find function `cpu_pause` in module `crate::x86_cpu_helpers`
+   --> kernel/rust/fork_control_registry.rs:95:46
+    |
+ 95 |             unsafe { crate::x86_cpu_helpers::cpu_pause(); }
+    |                                              ^^^^^^^^^ not found in `crate::x86_cpu_helpers`
+    |
+note: found an item that was configured out
+   --> kernel/rust/x86_cpu_helpers.rs:847:26
+    |
+845 | #[cfg(not(mckernel_equivalence))]
+    |          ---------------------- the item is gated here
+846 | #[no_mangle]
+847 | pub unsafe extern "C" fn cpu_pause() {
+    |                          ^^^^^^^^^
+note: these functions exist but are inaccessible
+   --> kernel/rust/ap.rs:86:5
+    |
+ 86 |     fn cpu_pause();
+    |     ^^^^^^^^^^^^^^^ `crate::ap::cpu_pause`: not accessible
+    |
+   ::: kernel/rust/debug.rs:62:5
+    |
+ 62 |     fn cpu_pause();
+    |     ^^^^^^^^^^^^^^^ `crate::debug::cpu_pause`: not accessible
+    |
+   ::: kernel/rust/fileobj.rs:207:5
+    |
+207 |     fn cpu_pause();
+    |     ^^^^^^^^^^^^^^^ `crate::fileobj::cpu_pause`: not accessible
+    |
+   ::: kernel/rust/freeze.rs:17:5
+    |
+ 17 |     fn cpu_pause();
+    |     ^^^^^^^^^^^^^^^ `crate::freeze::cpu_pause`: not accessible
+    |
+   ::: kernel/rust/ikc_manycore.rs:42:5
+    |
+ 42 |     fn cpu_pause();
+    |     ^^^^^^^^^^^^^^^ `crate::ikc_manycore::cpu_pause`: not accessible
+    |
+   ::: kernel/rust/init.rs:60:5
+    |
+ 60 |     fn cpu_pause();
+    |     ^^^^^^^^^^^^^^^ `crate::init::cpu_pause`: not accessible
+    |
+   ::: kernel/rust/lock_helpers.rs:14:5
+    |
+ 14 |     fn cpu_pause();
+    |     ^^^^^^^^^^^^^^^ `crate::lock_helpers::cpu_pause`: not accessible
+    |
+   ::: kernel/rust/mem_helpers.rs:29:5
+    |
+ 29 |     fn cpu_pause();
+    |     ^^^^^^^^^^^^^^^ `crate::mem_helpers::cpu_pause`: not accessible
+    |
+   ::: kernel/rust/process_helpers.rs:54:5
+    |
+ 54 |     fn cpu_pause();
+    |     ^^^^^^^^^^^^^^^ `crate::process_helpers::cpu_pause`: not accessible
+    |
+   ::: kernel/rust/procfs.rs:98:5
+    |
+ 98 |     fn cpu_pause();
+    |     ^^^^^^^^^^^^^^^ `crate::procfs::cpu_pause`: not accessible
+    |
+   ::: kernel/rust/smp_ikc.rs:295:5
+    |
+295 |     fn cpu_pause();
+    |     ^^^^^^^^^^^^^^^ `crate::smp_ikc::cpu_pause`: not accessible
+    |
+   ::: kernel/rust/spinlock_helpers.rs:16:5
+    |
+ 16 |     fn cpu_pause();
+    |     ^^^^^^^^^^^^^^^ `crate::spinlock_helpers::cpu_pause`: not accessible
+    |
+   ::: kernel/rust/syscall_policy.rs:229:5
+    |
+229 |     fn cpu_pause();
+    |     ^^^^^^^^^^^^^^^ `crate::syscall_policy::cpu_pause`: not accessible
+    |
+   ::: kernel/rust/sysfs.rs:109:5
+    |
+109 |     fn cpu_pause();
+    |     ^^^^^^^^^^^^^^^ `crate::sysfs::cpu_pause`: not accessible
+    |
+   ::: kernel/rust/timer.rs:31:5
+    |
+ 31 |     fn cpu_pause();
+    |     ^^^^^^^^^^^^^^^ `crate::timer::cpu_pause`: not accessible
+    |
+   ::: kernel/rust/x86_setup.rs:270:5
+    |
+270 |     fn cpu_pause();
+    |     ^^^^^^^^^^^^^^^ `crate::x86_setup::cpu_pause`: not accessible
+
+error[E0425]: cannot find function `cpu_disable_interrupt_save` in module `crate::x86_cpu_helpers`
+    --> kernel/rust/mem_helpers.rs:7005:38
+     |
+7005 |     unsafe { crate::x86_cpu_helpers::cpu_disable_interrupt_save() }
+     |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^ not found in `crate::x86_cpu_helpers`
+     |
+note: found an item that was configured out
+    --> kernel/rust/x86_cpu_helpers.rs:853:26
+     |
+ 851 | #[cfg(not(mckernel_equivalence))]
+     |          ---------------------- the item is gated here
+ 852 | #[no_mangle]
+ 853 | pub unsafe extern "C" fn cpu_disable_interrupt_save() -> CULong {
+     |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+note: these functions exist but are inaccessible
+    --> kernel/rust/debug.rs:60:5
+     |
+  60 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::debug::cpu_disable_interrupt_save`: not accessible
+     |
+    ::: kernel/rust/ikc_manycore.rs:40:5
+     |
+  40 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::ikc_manycore::cpu_disable_interrupt_save`: not accessible
+     |
+    ::: kernel/rust/ikc_queue.rs:89:5
+     |
+  89 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::ikc_queue::cpu_disable_interrupt_save`: not accessible
+     |
+    ::: kernel/rust/lock_helpers.rs:15:5
+     |
+  15 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::lock_helpers::cpu_disable_interrupt_save`: not accessible
+     |
+    ::: kernel/rust/process_helpers.rs:50:5
+     |
+  50 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::process_helpers::cpu_disable_interrupt_save`: not accessible
+     |
+    ::: kernel/rust/spinlock_helpers.rs:17:5
+     |
+  17 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::spinlock_helpers::cpu_disable_interrupt_save`: not accessible
+     |
+    ::: kernel/rust/syscall_policy.rs:230:5
+     |
+ 230 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::syscall_policy::cpu_disable_interrupt_save`: not accessible
+
+error[E0425]: cannot find function `cpu_restore_interrupt` in module `crate::x86_cpu_helpers`
+    --> kernel/rust/mem_helpers.rs:7009:38
+     |
+7009 |     unsafe { crate::x86_cpu_helpers::cpu_restore_interrupt(flags) }
+     |                                      ^^^^^^^^^^^^^^^^^^^^^ not found in `crate::x86_cpu_helpers`
+     |
+note: found an item that was configured out
+    --> kernel/rust/x86_cpu_helpers.rs:841:26
+     |
+ 839 | #[cfg(not(mckernel_equivalence))]
+     |          ---------------------- the item is gated here
+ 840 | #[no_mangle]
+ 841 | pub unsafe extern "C" fn cpu_restore_interrupt(flags: CULong) {
+     |                          ^^^^^^^^^^^^^^^^^^^^^
+note: these functions exist but are inaccessible
+    --> kernel/rust/debug.rs:61:5
+     |
+  61 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::debug::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/freeze.rs:15:5
+     |
+  15 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::freeze::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/ikc_manycore.rs:41:5
+     |
+  41 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::ikc_manycore::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/ikc_queue.rs:90:5
+     |
+  90 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::ikc_queue::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/lock_helpers.rs:16:5
+     |
+  16 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::lock_helpers::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/process_helpers.rs:51:5
+     |
+  51 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::process_helpers::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/spinlock_helpers.rs:18:5
+     |
+  18 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::spinlock_helpers::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/syscall_policy.rs:231:5
+     |
+ 231 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::syscall_policy::cpu_restore_interrupt`: not accessible
+
+error[E0425]: cannot find value `cpu_disable_interrupt_save` in module `crate::x86_cpu_helpers`
+     --> kernel/rust/mem_helpers.rs:10624:42
+      |
+10624 |             Some(crate::x86_cpu_helpers::cpu_disable_interrupt_save),
+      |                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^ not found in `crate::x86_cpu_helpers`
+      |
+note: found an item that was configured out
+     --> kernel/rust/x86_cpu_helpers.rs:853:26
+      |
+  851 | #[cfg(not(mckernel_equivalence))]
+      |          ---------------------- the item is gated here
+  852 | #[no_mangle]
+  853 | pub unsafe extern "C" fn cpu_disable_interrupt_save() -> CULong {
+      |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+note: these functions exist but are inaccessible
+     --> kernel/rust/debug.rs:60:5
+      |
+   60 |     fn cpu_disable_interrupt_save() -> CULong;
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::debug::cpu_disable_interrupt_save`: not accessible
+      |
+     ::: kernel/rust/ikc_manycore.rs:40:5
+      |
+   40 |     fn cpu_disable_interrupt_save() -> CULong;
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::ikc_manycore::cpu_disable_interrupt_save`: not accessible
+      |
+     ::: kernel/rust/ikc_queue.rs:89:5
+      |
+   89 |     fn cpu_disable_interrupt_save() -> CULong;
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::ikc_queue::cpu_disable_interrupt_save`: not accessible
+      |
+     ::: kernel/rust/lock_helpers.rs:15:5
+      |
+   15 |     fn cpu_disable_interrupt_save() -> CULong;
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::lock_helpers::cpu_disable_interrupt_save`: not accessible
+      |
+     ::: kernel/rust/process_helpers.rs:50:5
+      |
+   50 |     fn cpu_disable_interrupt_save() -> CULong;
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::process_helpers::cpu_disable_interrupt_save`: not accessible
+      |
+     ::: kernel/rust/spinlock_helpers.rs:17:5
+      |
+   17 |     fn cpu_disable_interrupt_save() -> CULong;
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::spinlock_helpers::cpu_disable_interrupt_save`: not accessible
+      |
+     ::: kernel/rust/syscall_policy.rs:230:5
+      |
+  230 |     fn cpu_disable_interrupt_save() -> CULong;
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::syscall_policy::cpu_disable_interrupt_save`: not accessible
+
+error[E0425]: cannot find value `cpu_restore_interrupt` in module `crate::x86_cpu_helpers`
+     --> kernel/rust/mem_helpers.rs:10625:42
+      |
+10625 |             Some(crate::x86_cpu_helpers::cpu_restore_interrupt),
+      |                                          ^^^^^^^^^^^^^^^^^^^^^ not found in `crate::x86_cpu_helpers`
+      |
+note: found an item that was configured out
+     --> kernel/rust/x86_cpu_helpers.rs:841:26
+      |
+  839 | #[cfg(not(mckernel_equivalence))]
+      |          ---------------------- the item is gated here
+  840 | #[no_mangle]
+  841 | pub unsafe extern "C" fn cpu_restore_interrupt(flags: CULong) {
+      |                          ^^^^^^^^^^^^^^^^^^^^^
+note: these functions exist but are inaccessible
+     --> kernel/rust/debug.rs:61:5
+      |
+   61 |     fn cpu_restore_interrupt(flags: CULong);
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::debug::cpu_restore_interrupt`: not accessible
+      |
+     ::: kernel/rust/freeze.rs:15:5
+      |
+   15 |     fn cpu_restore_interrupt(flags: CULong);
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::freeze::cpu_restore_interrupt`: not accessible
+      |
+     ::: kernel/rust/ikc_manycore.rs:41:5
+      |
+   41 |     fn cpu_restore_interrupt(flags: CULong);
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::ikc_manycore::cpu_restore_interrupt`: not accessible
+      |
+     ::: kernel/rust/ikc_queue.rs:90:5
+      |
+   90 |     fn cpu_restore_interrupt(flags: CULong);
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::ikc_queue::cpu_restore_interrupt`: not accessible
+      |
+     ::: kernel/rust/lock_helpers.rs:16:5
+      |
+   16 |     fn cpu_restore_interrupt(flags: CULong);
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::lock_helpers::cpu_restore_interrupt`: not accessible
+      |
+     ::: kernel/rust/process_helpers.rs:51:5
+      |
+   51 |     fn cpu_restore_interrupt(flags: CULong);
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::process_helpers::cpu_restore_interrupt`: not accessible
+      |
+     ::: kernel/rust/spinlock_helpers.rs:18:5
+      |
+   18 |     fn cpu_restore_interrupt(flags: CULong);
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::spinlock_helpers::cpu_restore_interrupt`: not accessible
+      |
+     ::: kernel/rust/syscall_policy.rs:231:5
+      |
+  231 |     fn cpu_restore_interrupt(flags: CULong);
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::syscall_policy::cpu_restore_interrupt`: not accessible
+
+error[E0425]: cannot find function `cpu_pause` in module `crate::x86_cpu_helpers`
+     --> kernel/rust/syscall_policy.rs:29636:38
+      |
+29636 |     unsafe { crate::x86_cpu_helpers::cpu_pause() };
+      |                                      ^^^^^^^^^ not found in `crate::x86_cpu_helpers`
+      |
+note: found an item that was configured out
+     --> kernel/rust/x86_cpu_helpers.rs:847:26
+      |
+  845 | #[cfg(not(mckernel_equivalence))]
+      |          ---------------------- the item is gated here
+  846 | #[no_mangle]
+  847 | pub unsafe extern "C" fn cpu_pause() {
+      |                          ^^^^^^^^^
+note: these functions exist but are inaccessible
+     --> kernel/rust/ap.rs:86:5
+      |
+   86 |     fn cpu_pause();
+      |     ^^^^^^^^^^^^^^^ `crate::ap::cpu_pause`: not accessible
+      |
+     ::: kernel/rust/debug.rs:62:5
+      |
+   62 |     fn cpu_pause();
+      |     ^^^^^^^^^^^^^^^ `crate::debug::cpu_pause`: not accessible
+      |
+     ::: kernel/rust/fileobj.rs:207:5
+      |
+  207 |     fn cpu_pause();
+      |     ^^^^^^^^^^^^^^^ `crate::fileobj::cpu_pause`: not accessible
+      |
+     ::: kernel/rust/freeze.rs:17:5
+      |
+   17 |     fn cpu_pause();
+      |     ^^^^^^^^^^^^^^^ `crate::freeze::cpu_pause`: not accessible
+      |
+     ::: kernel/rust/ikc_manycore.rs:42:5
+      |
+   42 |     fn cpu_pause();
+      |     ^^^^^^^^^^^^^^^ `crate::ikc_manycore::cpu_pause`: not accessible
+      |
+     ::: kernel/rust/init.rs:60:5
+      |
+   60 |     fn cpu_pause();
+      |     ^^^^^^^^^^^^^^^ `crate::init::cpu_pause`: not accessible
+      |
+     ::: kernel/rust/lock_helpers.rs:14:5
+      |
+   14 |     fn cpu_pause();
+      |     ^^^^^^^^^^^^^^^ `crate::lock_helpers::cpu_pause`: not accessible
+      |
+     ::: kernel/rust/mem_helpers.rs:29:5
+      |
+   29 |     fn cpu_pause();
+      |     ^^^^^^^^^^^^^^^ `crate::mem_helpers::cpu_pause`: not accessible
+      |
+     ::: kernel/rust/process_helpers.rs:54:5
+      |
+   54 |     fn cpu_pause();
+      |     ^^^^^^^^^^^^^^^ `crate::process_helpers::cpu_pause`: not accessible
+      |
+     ::: kernel/rust/procfs.rs:98:5
+      |
+   98 |     fn cpu_pause();
+      |     ^^^^^^^^^^^^^^^ `crate::procfs::cpu_pause`: not accessible
+      |
+     ::: kernel/rust/smp_ikc.rs:295:5
+      |
+  295 |     fn cpu_pause();
+      |     ^^^^^^^^^^^^^^^ `crate::smp_ikc::cpu_pause`: not accessible
+      |
+     ::: kernel/rust/spinlock_helpers.rs:16:5
+      |
+   16 |     fn cpu_pause();
+      |     ^^^^^^^^^^^^^^^ `crate::spinlock_helpers::cpu_pause`: not accessible
+      |
+     ::: kernel/rust/sysfs.rs:109:5
+      |
+  109 |     fn cpu_pause();
+      |     ^^^^^^^^^^^^^^^ `crate::sysfs::cpu_pause`: not accessible
+      |
+     ::: kernel/rust/timer.rs:31:5
+      |
+   31 |     fn cpu_pause();
+      |     ^^^^^^^^^^^^^^^ `crate::timer::cpu_pause`: not accessible
+      |
+     ::: kernel/rust/x86_setup.rs:270:5
+      |
+  270 |     fn cpu_pause();
+      |     ^^^^^^^^^^^^^^^ `crate::x86_setup::cpu_pause`: not accessible
+
+error[E0425]: cannot find value `cpu_disable_interrupt_save` in module `super`
+    --> kernel/rust/x86_cpu_helpers.rs:4034:29
+     |
+4034 |                 Some(super::cpu_disable_interrupt_save),
+     |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^ not found in `super`
+     |
+note: found an item that was configured out
+    --> kernel/rust/x86_cpu_helpers.rs:853:26
+     |
+ 851 | #[cfg(not(mckernel_equivalence))]
+     |          ---------------------- the item is gated here
+ 852 | #[no_mangle]
+ 853 | pub unsafe extern "C" fn cpu_disable_interrupt_save() -> CULong {
+     |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+note: these functions exist but are inaccessible
+    --> kernel/rust/debug.rs:60:5
+     |
+  60 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::debug::cpu_disable_interrupt_save`: not accessible
+     |
+    ::: kernel/rust/ikc_manycore.rs:40:5
+     |
+  40 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::ikc_manycore::cpu_disable_interrupt_save`: not accessible
+     |
+    ::: kernel/rust/ikc_queue.rs:89:5
+     |
+  89 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::ikc_queue::cpu_disable_interrupt_save`: not accessible
+     |
+    ::: kernel/rust/lock_helpers.rs:15:5
+     |
+  15 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::lock_helpers::cpu_disable_interrupt_save`: not accessible
+     |
+    ::: kernel/rust/process_helpers.rs:50:5
+     |
+  50 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::process_helpers::cpu_disable_interrupt_save`: not accessible
+     |
+    ::: kernel/rust/spinlock_helpers.rs:17:5
+     |
+  17 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::spinlock_helpers::cpu_disable_interrupt_save`: not accessible
+     |
+    ::: kernel/rust/syscall_policy.rs:230:5
+     |
+ 230 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::syscall_policy::cpu_disable_interrupt_save`: not accessible
+
+error[E0425]: cannot find value `cpu_restore_interrupt` in module `super`
+    --> kernel/rust/x86_cpu_helpers.rs:4036:29
+     |
+4036 |                 Some(super::cpu_restore_interrupt),
+     |                             ^^^^^^^^^^^^^^^^^^^^^ not found in `super`
+     |
+note: found an item that was configured out
+    --> kernel/rust/x86_cpu_helpers.rs:841:26
+     |
+ 839 | #[cfg(not(mckernel_equivalence))]
+     |          ---------------------- the item is gated here
+ 840 | #[no_mangle]
+ 841 | pub unsafe extern "C" fn cpu_restore_interrupt(flags: CULong) {
+     |                          ^^^^^^^^^^^^^^^^^^^^^
+note: these functions exist but are inaccessible
+    --> kernel/rust/debug.rs:61:5
+     |
+  61 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::debug::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/freeze.rs:15:5
+     |
+  15 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::freeze::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/ikc_manycore.rs:41:5
+     |
+  41 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::ikc_manycore::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/ikc_queue.rs:90:5
+     |
+  90 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::ikc_queue::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/lock_helpers.rs:16:5
+     |
+  16 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::lock_helpers::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/process_helpers.rs:51:5
+     |
+  51 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::process_helpers::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/spinlock_helpers.rs:18:5
+     |
+  18 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::spinlock_helpers::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/syscall_policy.rs:231:5
+     |
+ 231 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::syscall_policy::cpu_restore_interrupt`: not accessible
+
+error[E0425]: cannot find value `cpu_disable_interrupt_save` in module `super`
+    --> kernel/rust/x86_cpu_helpers.rs:4057:29
+     |
+4057 |                 Some(super::cpu_disable_interrupt_save),
+     |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^ not found in `super`
+     |
+note: found an item that was configured out
+    --> kernel/rust/x86_cpu_helpers.rs:853:26
+     |
+ 851 | #[cfg(not(mckernel_equivalence))]
+     |          ---------------------- the item is gated here
+ 852 | #[no_mangle]
+ 853 | pub unsafe extern "C" fn cpu_disable_interrupt_save() -> CULong {
+     |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+note: these functions exist but are inaccessible
+    --> kernel/rust/debug.rs:60:5
+     |
+  60 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::debug::cpu_disable_interrupt_save`: not accessible
+     |
+    ::: kernel/rust/ikc_manycore.rs:40:5
+     |
+  40 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::ikc_manycore::cpu_disable_interrupt_save`: not accessible
+     |
+    ::: kernel/rust/ikc_queue.rs:89:5
+     |
+  89 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::ikc_queue::cpu_disable_interrupt_save`: not accessible
+     |
+    ::: kernel/rust/lock_helpers.rs:15:5
+     |
+  15 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::lock_helpers::cpu_disable_interrupt_save`: not accessible
+     |
+    ::: kernel/rust/process_helpers.rs:50:5
+     |
+  50 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::process_helpers::cpu_disable_interrupt_save`: not accessible
+     |
+    ::: kernel/rust/spinlock_helpers.rs:17:5
+     |
+  17 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::spinlock_helpers::cpu_disable_interrupt_save`: not accessible
+     |
+    ::: kernel/rust/syscall_policy.rs:230:5
+     |
+ 230 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::syscall_policy::cpu_disable_interrupt_save`: not accessible
+
+error[E0425]: cannot find value `cpu_restore_interrupt` in module `super`
+    --> kernel/rust/x86_cpu_helpers.rs:4060:29
+     |
+4060 |                 Some(super::cpu_restore_interrupt),
+     |                             ^^^^^^^^^^^^^^^^^^^^^ not found in `super`
+     |
+note: found an item that was configured out
+    --> kernel/rust/x86_cpu_helpers.rs:841:26
+     |
+ 839 | #[cfg(not(mckernel_equivalence))]
+     |          ---------------------- the item is gated here
+ 840 | #[no_mangle]
+ 841 | pub unsafe extern "C" fn cpu_restore_interrupt(flags: CULong) {
+     |                          ^^^^^^^^^^^^^^^^^^^^^
+note: these functions exist but are inaccessible
+    --> kernel/rust/debug.rs:61:5
+     |
+  61 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::debug::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/freeze.rs:15:5
+     |
+  15 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::freeze::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/ikc_manycore.rs:41:5
+     |
+  41 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::ikc_manycore::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/ikc_queue.rs:90:5
+     |
+  90 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::ikc_queue::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/lock_helpers.rs:16:5
+     |
+  16 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::lock_helpers::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/process_helpers.rs:51:5
+     |
+  51 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::process_helpers::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/spinlock_helpers.rs:18:5
+     |
+  18 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::spinlock_helpers::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/syscall_policy.rs:231:5
+     |
+ 231 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::syscall_policy::cpu_restore_interrupt`: not accessible
+
+error[E0425]: cannot find value `cpu_disable_interrupt` in module `super`
+    --> kernel/rust/x86_cpu_helpers.rs:4691:29
+     |
+4691 |                 Some(super::cpu_disable_interrupt),
+     |                             ^^^^^^^^^^^^^^^^^^^^^ not found in `super`
+     |
+note: found an item that was configured out
+    --> kernel/rust/x86_cpu_helpers.rs:835:26
+     |
+ 833 | #[cfg(not(mckernel_equivalence))]
+     |          ---------------------- the item is gated here
+ 834 | #[no_mangle]
+ 835 | pub unsafe extern "C" fn cpu_disable_interrupt() {
+     |                          ^^^^^^^^^^^^^^^^^^^^^
+note: function `crate::abort::cpu_disable_interrupt` exists but is inaccessible
+    --> kernel/rust/abort.rs:15:5
+     |
+  15 |     fn cpu_disable_interrupt();
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ not accessible
+
+error[E0425]: cannot find function `cpu_halt` in module `super`
+    --> kernel/rust/x86_cpu_helpers.rs:5249:32
+     |
+5249 |                         super::cpu_halt();
+     |                                ^^^^^^^^ not found in `super`
+     |
+note: found an item that was configured out
+    --> kernel/rust/x86_cpu_helpers.rs:817:26
+     |
+ 815 | #[cfg(not(mckernel_equivalence))]
+     |          ---------------------- the item is gated here
+ 816 | #[no_mangle]
+ 817 | pub unsafe extern "C" fn cpu_halt() {
+     |                          ^^^^^^^^
+note: these functions exist but are inaccessible
+    --> kernel/rust/abort.rs:23:5
+     |
+  23 |     fn cpu_halt();
+     |     ^^^^^^^^^^^^^^ `crate::abort::cpu_halt`: not accessible
+     |
+    ::: kernel/rust/freeze.rs:16:5
+     |
+  16 |     fn cpu_halt();
+     |     ^^^^^^^^^^^^^^ `crate::freeze::cpu_halt`: not accessible
+
+error[E0425]: cannot find function `cpu_disable_interrupt` in module `super`
+    --> kernel/rust/x86_cpu_helpers.rs:5600:20
+     |
+5600 |             super::cpu_disable_interrupt();
+     |                    ^^^^^^^^^^^^^^^^^^^^^ not found in `super`
+     |
+note: found an item that was configured out
+    --> kernel/rust/x86_cpu_helpers.rs:835:26
+     |
+ 833 | #[cfg(not(mckernel_equivalence))]
+     |          ---------------------- the item is gated here
+ 834 | #[no_mangle]
+ 835 | pub unsafe extern "C" fn cpu_disable_interrupt() {
+     |                          ^^^^^^^^^^^^^^^^^^^^^
+note: function `crate::abort::cpu_disable_interrupt` exists but is inaccessible
+    --> kernel/rust/abort.rs:15:5
+     |
+  15 |     fn cpu_disable_interrupt();
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ not accessible
+
+error[E0425]: cannot find function `cpu_disable_interrupt_save` in module `super`
+    --> kernel/rust/x86_cpu_helpers.rs:5767:21
+     |
+5767 |     unsafe { super::cpu_disable_interrupt_save() }
+     |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^ not found in `super`
+     |
+note: found an item that was configured out
+    --> kernel/rust/x86_cpu_helpers.rs:853:26
+     |
+ 851 | #[cfg(not(mckernel_equivalence))]
+     |          ---------------------- the item is gated here
+ 852 | #[no_mangle]
+ 853 | pub unsafe extern "C" fn cpu_disable_interrupt_save() -> CULong {
+     |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+note: these functions exist but are inaccessible
+    --> kernel/rust/debug.rs:60:5
+     |
+  60 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::debug::cpu_disable_interrupt_save`: not accessible
+     |
+    ::: kernel/rust/ikc_manycore.rs:40:5
+     |
+  40 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::ikc_manycore::cpu_disable_interrupt_save`: not accessible
+     |
+    ::: kernel/rust/ikc_queue.rs:89:5
+     |
+  89 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::ikc_queue::cpu_disable_interrupt_save`: not accessible
+     |
+    ::: kernel/rust/lock_helpers.rs:15:5
+     |
+  15 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::lock_helpers::cpu_disable_interrupt_save`: not accessible
+     |
+    ::: kernel/rust/process_helpers.rs:50:5
+     |
+  50 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::process_helpers::cpu_disable_interrupt_save`: not accessible
+     |
+    ::: kernel/rust/spinlock_helpers.rs:17:5
+     |
+  17 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::spinlock_helpers::cpu_disable_interrupt_save`: not accessible
+     |
+    ::: kernel/rust/syscall_policy.rs:230:5
+     |
+ 230 |     fn cpu_disable_interrupt_save() -> CULong;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::syscall_policy::cpu_disable_interrupt_save`: not accessible
+
+error[E0425]: cannot find function `cpu_restore_interrupt` in module `super`
+    --> kernel/rust/x86_cpu_helpers.rs:5776:21
+     |
+5776 |     unsafe { super::cpu_restore_interrupt(flags); }
+     |                     ^^^^^^^^^^^^^^^^^^^^^ not found in `super`
+     |
+note: found an item that was configured out
+    --> kernel/rust/x86_cpu_helpers.rs:841:26
+     |
+ 839 | #[cfg(not(mckernel_equivalence))]
+     |          ---------------------- the item is gated here
+ 840 | #[no_mangle]
+ 841 | pub unsafe extern "C" fn cpu_restore_interrupt(flags: CULong) {
+     |                          ^^^^^^^^^^^^^^^^^^^^^
+note: these functions exist but are inaccessible
+    --> kernel/rust/debug.rs:61:5
+     |
+  61 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::debug::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/freeze.rs:15:5
+     |
+  15 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::freeze::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/ikc_manycore.rs:41:5
+     |
+  41 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::ikc_manycore::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/ikc_queue.rs:90:5
+     |
+  90 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::ikc_queue::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/lock_helpers.rs:16:5
+     |
+  16 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::lock_helpers::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/process_helpers.rs:51:5
+     |
+  51 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::process_helpers::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/spinlock_helpers.rs:18:5
+     |
+  18 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::spinlock_helpers::cpu_restore_interrupt`: not accessible
+     |
+    ::: kernel/rust/syscall_policy.rs:231:5
+     |
+ 231 |     fn cpu_restore_interrupt(flags: CULong);
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::syscall_policy::cpu_restore_interrupt`: not accessible
+
+error[E0425]: cannot find function `cpu_pause` in module `super`
+    --> kernel/rust/x86_cpu_helpers.rs:6040:21
+     |
+6040 |     unsafe { super::cpu_pause(); }
+     |                     ^^^^^^^^^ not found in `super`
+     |
+note: found an item that was configured out
+    --> kernel/rust/x86_cpu_helpers.rs:847:26
+     |
+ 845 | #[cfg(not(mckernel_equivalence))]
+     |          ---------------------- the item is gated here
+ 846 | #[no_mangle]
+ 847 | pub unsafe extern "C" fn cpu_pause() {
+     |                          ^^^^^^^^^
+note: these functions exist but are inaccessible
+    --> kernel/rust/ap.rs:86:5
+     |
+  86 |     fn cpu_pause();
+     |     ^^^^^^^^^^^^^^^ `crate::ap::cpu_pause`: not accessible
+     |
+    ::: kernel/rust/debug.rs:62:5
+     |
+  62 |     fn cpu_pause();
+     |     ^^^^^^^^^^^^^^^ `crate::debug::cpu_pause`: not accessible
+     |
+    ::: kernel/rust/fileobj.rs:207:5
+     |
+ 207 |     fn cpu_pause();
+     |     ^^^^^^^^^^^^^^^ `crate::fileobj::cpu_pause`: not accessible
+     |
+    ::: kernel/rust/freeze.rs:17:5
+     |
+  17 |     fn cpu_pause();
+     |     ^^^^^^^^^^^^^^^ `crate::freeze::cpu_pause`: not accessible
+     |
+    ::: kernel/rust/ikc_manycore.rs:42:5
+     |
+  42 |     fn cpu_pause();
+     |     ^^^^^^^^^^^^^^^ `crate::ikc_manycore::cpu_pause`: not accessible
+     |
+    ::: kernel/rust/init.rs:60:5
+     |
+  60 |     fn cpu_pause();
+     |     ^^^^^^^^^^^^^^^ `crate::init::cpu_pause`: not accessible
+     |
+    ::: kernel/rust/lock_helpers.rs:14:5
+     |
+  14 |     fn cpu_pause();
+     |     ^^^^^^^^^^^^^^^ `crate::lock_helpers::cpu_pause`: not accessible
+     |
+    ::: kernel/rust/mem_helpers.rs:29:5
+     |
+  29 |     fn cpu_pause();
+     |     ^^^^^^^^^^^^^^^ `crate::mem_helpers::cpu_pause`: not accessible
+     |
+    ::: kernel/rust/process_helpers.rs:54:5
+     |
+  54 |     fn cpu_pause();
+     |     ^^^^^^^^^^^^^^^ `crate::process_helpers::cpu_pause`: not accessible
+     |
+    ::: kernel/rust/procfs.rs:98:5
+     |
+  98 |     fn cpu_pause();
+     |     ^^^^^^^^^^^^^^^ `crate::procfs::cpu_pause`: not accessible
+     |
+    ::: kernel/rust/smp_ikc.rs:295:5
+     |
+ 295 |     fn cpu_pause();
+     |     ^^^^^^^^^^^^^^^ `crate::smp_ikc::cpu_pause`: not accessible
+     |
+    ::: kernel/rust/spinlock_helpers.rs:16:5
+     |
+  16 |     fn cpu_pause();
+     |     ^^^^^^^^^^^^^^^ `crate::spinlock_helpers::cpu_pause`: not accessible
+     |
+    ::: kernel/rust/syscall_policy.rs:229:5
+     |
+ 229 |     fn cpu_pause();
+     |     ^^^^^^^^^^^^^^^ `crate::syscall_policy::cpu_pause`: not accessible
+     |
+    ::: kernel/rust/sysfs.rs:109:5
+     |
+ 109 |     fn cpu_pause();
+     |     ^^^^^^^^^^^^^^^ `crate::sysfs::cpu_pause`: not accessible
+     |
+    ::: kernel/rust/timer.rs:31:5
+     |
+  31 |     fn cpu_pause();
+     |     ^^^^^^^^^^^^^^^ `crate::timer::cpu_pause`: not accessible
+     |
+    ::: kernel/rust/x86_setup.rs:270:5
+     |
+ 270 |     fn cpu_pause();
+     |     ^^^^^^^^^^^^^^^ `crate::x86_setup::cpu_pause`: not accessible
+
+warning: the feature `core_intrinsics` is internal to the compiler or standard library
+ --> kernel/rust/lib.rs:2:12
+  |
+2 | #![feature(core_intrinsics)]
+  |            ^^^^^^^^^^^^^^^
+  |
+  = note: using it is strongly discouraged
+  = note: `#[warn(internal_features)]` on by default
+
+warning: unused import: `IhkSpinlock`
+     --> kernel/rust/process_helpers.rs:16367:49
+      |
+16367 |     use crate::abi::{CInt, CULong, CpuLocalVar, IhkSpinlock, Thread, X86UserContext};
+      |                                                 ^^^^^^^^^^^
+      |
+      = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `core::ffi::c_void`
+    --> kernel/rust/x86_cpu_helpers.rs:4805:9
+     |
+4805 |     use core::ffi::c_void;
+     |         ^^^^^^^^^^^^^^^^^
+
+warning: unused import: `addr_of_mut`
+    --> kernel/rust/x86_cpu_helpers.rs:4807:30
+     |
+4807 |     use core::ptr::{addr_of, addr_of_mut};
+     |                              ^^^^^^^^^^^
+
+warning: unused import: `CLong`
+    --> kernel/rust/x86_cpu_helpers.rs:4809:28
+     |
+4809 |     use crate::abi::{CInt, CLong, CULong, X86CpuLocalVariables};
+     |                            ^^^^^
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:11879:17
+      |
+11879 |         record: unsafe { core::ptr::addr_of_mut!(RECORD_3).cast::<u8>() },
+      |                 ^^^^^^ unnecessary `unsafe` block
+      |
+      = note: `#[warn(unused_unsafe)]` (part of `#[warn(unused)]`) on by default
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:11890:13
+      |
+11890 |             unsafe { core::ptr::addr_of_mut!(RECORD_4).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:11902:13
+      |
+11902 |             unsafe { core::ptr::addr_of_mut!(RECORD_5).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:11903:13
+      |
+11903 |             unsafe { core::ptr::addr_of_mut!(RECORD_6).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:11904:13
+      |
+11904 |             unsafe { core::ptr::addr_of_mut!(RECORD_7).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:11905:13
+      |
+11905 |             unsafe { core::ptr::addr_of_mut!(RECORD_8).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:11917:13
+      |
+11917 |             unsafe { core::ptr::addr_of_mut!(RECORD_9).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:11929:13
+      |
+11929 |             unsafe { core::ptr::addr_of_mut!(RECORD_10).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:11930:13
+      |
+11930 |             unsafe { core::ptr::addr_of_mut!(RECORD_11).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:11931:13
+      |
+11931 |             unsafe { core::ptr::addr_of_mut!(RECORD_12).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:11932:13
+      |
+11932 |             unsafe { core::ptr::addr_of_mut!(RECORD_13).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:11933:13
+      |
+11933 |             unsafe { core::ptr::addr_of_mut!(RECORD_14).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:11934:13
+      |
+11934 |             unsafe { core::ptr::addr_of_mut!(RECORD_15).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:11935:13
+      |
+11935 |             unsafe { core::ptr::addr_of_mut!(RECORD_16).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:11947:13
+      |
+11947 |             unsafe { core::ptr::addr_of_mut!(RECORD_18).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:11958:17
+      |
+11958 |         record: unsafe { core::ptr::addr_of_mut!(RECORD_17).cast::<u8>() },
+      |                 ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:11969:13
+      |
+11969 |             unsafe { core::ptr::addr_of_mut!(RECORD_19).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:11970:13
+      |
+11970 |             unsafe { core::ptr::addr_of_mut!(RECORD_20).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:11971:13
+      |
+11971 |             unsafe { core::ptr::addr_of_mut!(RECORD_21).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:11984:17
+      |
+11984 |         record: unsafe { core::ptr::addr_of_mut!(RECORD_2).cast::<u8>() },
+      |                 ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:11998:13
+      |
+11998 |             unsafe { core::ptr::addr_of_mut!(RECORD_1).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:11999:13
+      |
+11999 |             unsafe { core::ptr::addr_of_mut!(RECORD_0).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:12088:29
+      |
+12088 |         query_free_handler: unsafe { core::ptr::addr_of!(QUERY_FREE_MEM_HANDLER).cast() },
+      |                             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:12090:20
+      |
+12090 |         anon_slot: unsafe { core::ptr::addr_of_mut!(ANON_ON_DEMAND) },
+      |                    ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:12091:21
+      |
+12091 |         xpmem_slot: unsafe { core::ptr::addr_of_mut!(XPMEM_PAGE_IN_REMOTE_ON_ATTACH) },
+      |                     ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:12100:9
+      |
+12100 |         unsafe { core::ptr::addr_of_mut!(MEMORY_NODES).cast() },
+      |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:12109:13
+      |
+12109 |             unsafe { core::ptr::addr_of_mut!(VMAP_ALLOCATOR) },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:12118:18
+      |
+12118 |             ops: unsafe { core::ptr::addr_of_mut!(NUMA_SYSFS_MEMINFO) },
+      |                  ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:12119:20
+      |
+12119 |             nodes: unsafe { core::ptr::addr_of_mut!(MEMORY_NODES).cast() },
+      |                    ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:12242:13
+      |
+12242 |             unsafe { core::ptr::addr_of_mut!(CORE_DEBUG_0).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:12243:13
+      |
+12243 |             unsafe { core::ptr::addr_of_mut!(CORE_DEBUG_1).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:12418:20
+      |
+12418 |         allocator: unsafe { core::ptr::addr_of_mut!(ALLOCATOR) },
+      |                    ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:12441:16
+      |
+12441 |         nodes: unsafe { core::ptr::addr_of_mut!(MEMORY_NODES).cast() },
+      |                ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:12460:20
+      |
+12460 |         log_count: unsafe { core::ptr::addr_of_mut!(PAGE_FAULT_LOG_COUNT) },
+      |                    ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:12461:18
+      |
+12461 |         log_pid: unsafe { core::ptr::addr_of_mut!(PAGE_FAULT_LOG_PID) },
+      |                  ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:12484:13
+      |
+12484 |             unsafe { core::ptr::addr_of_mut!(RECORD_0).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:12486:13
+      |
+12486 |             unsafe { core::ptr::addr_of_mut!(RECORD_1).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:12487:13
+      |
+12487 |             unsafe { core::ptr::addr_of_mut!(RECORD_2).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:12570:13
+      |
+12570 |             unsafe { core::ptr::addr_of_mut!(RECORD_3).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:12571:13
+      |
+12571 |             unsafe { core::ptr::addr_of_mut!(RECORD_4).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:12572:13
+      |
+12572 |             unsafe { core::ptr::addr_of_mut!(RECORD_5).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:12573:13
+      |
+12573 |             unsafe { core::ptr::addr_of_mut!(RECORD_6).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:12574:13
+      |
+12574 |             unsafe { core::ptr::addr_of_mut!(RECORD_7).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/mem_helpers.rs:12576:13
+      |
+12576 |             unsafe { core::ptr::addr_of_mut!(RECORD_8).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> kernel/rust/page_alloc.rs:3382:28
+     |
+3382 |             pa_start_slot: unsafe { core::ptr::addr_of_mut!(PA_START) },
+     |                            ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> kernel/rust/page_alloc.rs:3383:26
+     |
+3383 |             pa_end_slot: unsafe { core::ptr::addr_of_mut!(PA_END) },
+     |                          ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> kernel/rust/page_alloc.rs:3384:25
+     |
+3384 |             kernel_end: unsafe { core::ptr::addr_of_mut!(KERNEL_END) },
+     |                         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> kernel/rust/process_helpers.rs:13167:18
+      |
+13167 |     let config = unsafe { core::ptr::addr_of!(process_extend_region_entry_config) };
+      |                  ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> kernel/rust/x86_memory_helpers.rs:8770:5
+     |
+8770 |     unsafe { core::ptr::addr_of!(X86_END) as CULong }
+     |     ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> kernel/rust/x86_memory_helpers.rs:8939:5
+     |
+8939 |     unsafe { core::ptr::addr_of!(MEMORY_VSYSCALL_PAGE) as *mut c_void }
+     |     ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> kernel/rust/x86_memory_helpers.rs:9169:18
+     |
+9169 |     let result = unsafe { core::arch::x86_64::__cpuid(op as u32) };
+     |                  ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> kernel/rust/x86_memory_helpers.rs:9573:9
+     |
+9573 |         unsafe { core::ptr::addr_of_mut!(OWNED_FIXED_VIRT).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> kernel/rust/x86_memory_helpers.rs:9584:9
+     |
+9584 |         unsafe { core::ptr::addr_of_mut!(OWNED_INIT_PT_LOCK).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> kernel/rust/x86_memory_helpers.rs:9592:9
+     |
+9592 |         unsafe { core::ptr::addr_of_mut!(OWNED_INIT_PT_LOADED).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> kernel/rust/x86_memory_helpers.rs:9600:9
+     |
+9600 |         unsafe { core::ptr::addr_of_mut!(OWNED_BOOT_PT).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> kernel/rust/x86_memory_helpers.rs:9608:9
+     |
+9608 |         unsafe { core::ptr::addr_of_mut!(OWNED_INIT_PT).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> kernel/rust/x86_memory_helpers.rs:9616:9
+     |
+9616 |         unsafe { core::ptr::addr_of_mut!(OWNED_LAST_PAGE).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> kernel/rust/x86_memory_helpers.rs:9967:9
+     |
+9967 |         unsafe { core::ptr::addr_of_mut!(OWNED_USE_1GB_PAGE).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+error: aborting due to 20 previous errors; 65 warnings emitted
+
+For more information about this error, try `rustc --explain E0425`.

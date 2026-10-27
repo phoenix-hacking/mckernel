@@ -1,0 +1,92 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nFinite four selected existing-port bridge compositions; no compiler or canonical writes.\n",
+  "spec": {
+    "name": "vdso-add-range",
+    "symbol": "arch_vdso_add_range_bridge",
+    "begin": "\nint\narch_vdso_add_range_bridge(",
+    "end": "\nint\narch_vdso_set_range_bridge(",
+    "C": "MCKERNEL_RUST_F06_VDSO_ADD_RANGE",
+    "Rust": "f06_vdso_add_range_candidate",
+    "leaf": "f06_vdso_add_range.rs",
+    "old": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-vdso-state-range-transaction-source-1/candidate/syscall_policy.vdso_state_range.FRAGMENT.rs",
+    "provider": "kernel/rust/process_helpers.rs"
+  },
+  "before": [
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "bytes": 113935,
+      "sha256": "d6bf00d0a46755f37f511bff0c098487f04a155842f11a4ac64f2a1795faa8c1"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1228858,
+      "sha256": "fefec3eb05be2f714dfeca34310901a566557f82ee08de9b9ad0ef0344f74d62"
+    }
+  ],
+  "old_fragment": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-vdso-state-range-transaction-source-1/candidate/syscall_policy.vdso_state_range.FRAGMENT.rs",
+    "bytes": 3690,
+    "sha256": "384981f3291b8099f70632af863c49970a05972736e6c8605af4a4b89f1755d8"
+  },
+  "existing_provider": {
+    "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+    "bytes": 603471,
+    "sha256": "851acd51fab945456edd87c001a63b867634f51207fbf1900451edaa368b09ea"
+  },
+  "selected_proof": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/SELECTED-SYMBOL.json",
+    "bytes": 1154,
+    "sha256": "b7a78aabf9f11171eb644dcad3ce0ab19bc72ebd8e4e29ec649e6ec5f4fa3964"
+  },
+  "genuine_headers": [
+    {
+      "path": "/home/holden/mckernel/kernel/include/process.h",
+      "bytes": 26602,
+      "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/kmalloc.h",
+      "bytes": 1171,
+      "sha256": "fff00b6875c3f87a0d9c4bdfeadf3c3d3eb731d843dc0650f6364352ac2b1144"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ihk/mm.h",
+      "bytes": 9548,
+      "sha256": "a1b412608df7512a1b7295c6f19b3ec5a77e6364e8f24b208ab1a29e7556e5b1"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/types.h",
+      "bytes": 1074,
+      "sha256": "c37a7c748f2439ddfd847725a4d559c008f2aca09c45114fb07e73337013f449"
+    }
+  ],
+  "after": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/syscall.c",
+      "bytes": 113984,
+      "sha256": "8bfd91ed7b6826d624482f56ddfbc8475e67fe9d1eceafe5b5f7880baf28ccd9"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/syscall_policy.rs",
+      "bytes": 1229040,
+      "sha256": "46835c940b51185274130dd04188e231eba802572bbdd863c66c548c7b740b13"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/f06_vdso_add_range.rs",
+      "bytes": 1074,
+      "sha256": "89462d17ffe853d5dd4980c960bce9e62c64be799474a9e56cb085bd3c7c6805"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/original_bridge.inc",
+      "bytes": 249,
+      "sha256": "fc284574ac29dad0d24a6fd8646b81c4afb3282e0c835527b3e26d0274c47b79"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/vdso-add-range/genuine_prologue.inc",
+      "bytes": 982,
+      "sha256": "e69cb389f69cf92a6e81e114a0bb03391a137fa3ba0c7b15d49a51606c1359de"
+    }
+  ],
+  "compiler": null,
+  "native": null
+}

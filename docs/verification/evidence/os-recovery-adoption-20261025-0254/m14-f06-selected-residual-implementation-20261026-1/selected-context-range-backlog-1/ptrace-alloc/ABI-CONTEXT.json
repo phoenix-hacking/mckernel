@@ -1,0 +1,10 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nFour exact finite future HOST recipes, no admission framework or execution.\n",
+  "selected_provider": "arch_ptrace_alloc_bridge",
+  "cases": 832,
+  "ABI": "size_t64 narrows to allocator int32, ihk_mc_ap_flag64, static char* filename/int32 line, void* return64",
+  "ownership": "Existing tracked allocator owns allocation/OOM behavior. No new bound policy; retain same size narrowing/flags/base pointer and Rust static callsite provenance. Caller owns real allocation exactly as before.",
+  "effects": "C kmalloc_tracked mock records narrowed size/full flags and checks distinct exact C/Rust filename+line constants before returning opaque bits; no allocation/free/OOM logging.",
+  "real_IRQ_IPC_finalref_currentstack_holds_preserved": true,
+  "production_native_proof": null
+}

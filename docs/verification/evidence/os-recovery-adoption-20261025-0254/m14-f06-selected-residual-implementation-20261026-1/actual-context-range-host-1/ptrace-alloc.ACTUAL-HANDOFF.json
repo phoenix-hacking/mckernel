@@ -1,0 +1,48 @@
+{
+  "task_id": "M14-F06-PTRACE-ALLOC-HOST",
+  "status": "READY_FOR_INDEPENDENT_HOST_REVIEW",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "leaf": "ptrace-alloc",
+  "cases": 832,
+  "plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/FUTURE-HOST-COMMAND-PLAN.json",
+    "bytes": 12948,
+    "sha256": "4c499be3bcadc9683587384eea5be65916b24868b9f73676dfbc72a179764977"
+  },
+  "source_bindings": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/SOURCE-BINDINGS.json",
+    "bytes": 5442,
+    "sha256": "08c5ee15802fac2878e660b1a5eacf6c8c8d7b5bf44424ac3a99c410426aeff1"
+  },
+  "actual_leaf": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/actual-context-range-host-1/ptrace-alloc.RESULTS.json",
+    "bytes": 15248,
+    "sha256": "f43039f0a4298cf4ccbe4fa30536cf9cce6fda79c1f88ab4522c5711f8f157fa"
+  },
+  "commands": 3,
+  "all_returncodes_zero": true,
+  "all_PID_births_retained": true,
+  "all_direct_waited": true,
+  "all_groups_absent": true,
+  "all_streams_closed": true,
+  "first_compiler_started_wall": 1793067002.9203422,
+  "initial_account_age_seconds": 7.594923734664917,
+  "CPU_seconds": 0.114142,
+  "wall_seconds": 0.1381594999693334,
+  "max_child_RSS_KiB": 86216,
+  "artifacts": {
+    "libadapter.a": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/future-host-output-1/libadapter.a",
+      "bytes": 7241258,
+      "sha256": "05de54dedc10a9e76ecdff1f40a855ba3fc2fd8b8b3b3f597a8c4135e3fa0076"
+    },
+    "fixture": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/selected-context-range-backlog-1/ptrace-alloc/future-host-output-1/fixture",
+      "bytes": 41448,
+      "sha256": "ac9e850289d1f48f9ee89fbc97589ec1e897f21ca2cdfbcf6d06e5380ce4b7d7"
+    }
+  },
+  "effect_scope": "C kmalloc_tracked mock records narrowed size/full flags and checks distinct exact C/Rust filename+line constants before returning opaque bits; no allocation/free/OOM logging.",
+  "no_actual_failure_correction_or_replay": true,
+  "production_native_acceptance": false
+}

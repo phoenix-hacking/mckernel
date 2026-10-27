@@ -1,0 +1,90 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "authority": "Explicit Root ROOTGRANT of exact frozen three argv; no extra workload authorized",
+  "jobs": 1,
+  "affinity": [
+    6
+  ],
+  "AS_bytes": 2147483648,
+  "CPU_seconds_per_command": 60,
+  "FSIZE_bytes": 67108864,
+  "core": 0,
+  "wall_seconds_per_command": 90,
+  "environment_relevant": {
+    "PATH": "/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/.local/bin:/home/holden/.codex/tmp/arg0-linux/codex-arg0zhkCqC:/home/holden/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/holden/anaconda3/bin:/home/holden/anaconda3/condabin:/home/holden/.cargo/bin:/home/holden/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+    "LC_ALL": "C",
+    "LANG": "en_US.UTF-8",
+    "RUST_MIN_STACK": "2097152",
+    "OMP_NUM_THREADS": "1",
+    "RAYON_NUM_THREADS": "1",
+    "CARGO_BUILD_JOBS": "7",
+    "MAKEFLAGS": "-j7",
+    "C_INCLUDE_PATH": null,
+    "LIBRARY_PATH": null,
+    "LD_LIBRARY_PATH": null,
+    "RUSTFLAGS": null,
+    "RUSTUP_TOOLCHAIN": null
+  },
+  "recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-selected-residual-implementation-20261026-1/next-ptrace-io-provider-backlog-1/SOURCE-HANDOFF.NOT-GRANTED.json",
+    "bytes": 29310,
+    "sha256": "35e950edcf1044c2e280f9dbc26438ef7ccd951aa285518863e121531d722b62"
+  },
+  "helper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py",
+    "bytes": 14753,
+    "sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+  },
+  "started_UTC": "2026-10-27T02:01:54.277848+00:00",
+  "reviewed_admission_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-selected-1/next-prctl-getter-selected-1/actual-host-getter-1/reviewed-account-supervisor-correction-1/run_sealed.py",
+    "bytes": 6620,
+    "sha256": "e8b84de39128433542b213fc3a374dd50d3e12f232bd397dddaa24859349a805"
+  },
+  "initial_admission": {
+    "wall": 1793066514.2736266,
+    "monotonic": 848620.842583295,
+    "boottime": 863958.969633673,
+    "fixed_cutoff_ref": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW18H-20261026-FIXED-CUTOFF-BINDING.json",
+      "bytes": 952,
+      "sha256": "2e1d3fa8338e51973cf0af5677e7e256259aff539adb164be0fb53240d834b35"
+    },
+    "memory_available_bytes": 27269931008,
+    "aggregate_reserved_bytes": 21474836480,
+    "budget": {
+      "schema_version": 2,
+      "id": "7f4af94a83b14cc08f97401f5891d965",
+      "budget": "57774.852125",
+      "initial_balance": "57774.8521250000",
+      "minimum_balance": "52079.8011050000",
+      "last_balance": "52079.8011050000",
+      "spent": "22812.3311000000",
+      "remaining": "34962.5210250000",
+      "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+    },
+    "heartbeat_at": "2026-10-27T02:01:42.865767+00:00",
+    "phase": "running",
+    "account_wall": 1793066514.2739003,
+    "heartbeat_age_seconds": 11.408133268356323,
+    "available_prepaid_balance": "52079.8011050000",
+    "spendControlReached": null,
+    "loadavg": [
+      0.88,
+      1.03,
+      1.1
+    ],
+    "CPU_affinity": [
+      0,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "HOST_available_bytes": 150948179968,
+    "scratch_available_bytes": 47873171456
+  },
+  "CPU6_slot_authority": "Root explicitly reserves sole ordinary CPU6 slot for this exact ptrace3 batch until joined"
+}
