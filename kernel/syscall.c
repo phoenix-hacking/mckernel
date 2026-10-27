@@ -4866,12 +4866,17 @@ wait_host_wait4_bridge(int pid, int options)
 	return do_syscall(&request, ihk_mc_get_processor_id());
 }
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_WAIT_PROCESS_RELEASE)
+extern void f03_wait_release_process(void *);
+#define wait_process_release_bridge f03_wait_release_process
+#else
 static void
 wait_process_release_bridge(void *proc)
 {
 	release_process((struct process *)proc);
 }
 
+#endif
 static void
 wait_zombie_log_bridge(int event, int pid, int status, int ret)
 {
@@ -5141,6 +5146,10 @@ int wait4_do_wait_bridge(int pid, int *status, int options,
 }
 #endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_ATOMIC_HELPERS) && defined(MCKERNEL_RUST_F03_TERMINATE_CMPXCHG)
+/* Genuine ihk/atomic.h declares the existing selected Rust provider. */
+#define terminate_mcexec_cmpxchg_bridge atomic_cmpxchg_ulong
+#else
 static unsigned long
 terminate_mcexec_cmpxchg_bridge(unsigned long *value,
 		unsigned long old_value, unsigned long new_value)
@@ -5148,18 +5157,24 @@ terminate_mcexec_cmpxchg_bridge(unsigned long *value,
 	return atomic_cmpxchg_ulong(value, old_value, new_value);
 }
 
+#endif
 static long
 terminate_mcexec_do_syscall_bridge(struct syscall_request *request, int cpu)
 {
 	return do_syscall(request, cpu);
 }
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_ATOMIC_HELPERS) && defined(MCKERNEL_RUST_F03_TERMINATE_REFCOUNT)
+extern void f03_terminate_host_refcount_set_v1(void *, int);
+#define terminate_host_refcount_set_bridge f03_terminate_host_refcount_set_v1
+#else
 static void
 terminate_host_refcount_set_bridge(void *refcount, int value)
 {
 	ihk_atomic_set((ihk_atomic_t *)refcount, value);
 }
 
+#endif
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_wait4(int n, ihk_mc_user_context_t *ctx);
 long sys_waitid(int n, ihk_mc_user_context_t *ctx);
@@ -24725,17 +24740,27 @@ static const struct ptrace_io_offsets ptrace_io_kernel_offsets = {
 		__builtin_offsetof(struct process, update_lock),
 };
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_IO_FIND)
+extern unsigned long f03_ptrace_io_find(int, int);
+#define ptrace_find_thread_bridge f03_ptrace_io_find
+#else
 static unsigned long
 ptrace_find_thread_bridge(int tgid, int tid)
 {
 	return (unsigned long)find_thread(tgid, tid);
 }
+#endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_IO_UNLOCK)
+extern void f03_ptrace_io_unlock(unsigned long);
+#define ptrace_thread_unlock_bridge f03_ptrace_io_unlock
+#else
 static void
 ptrace_thread_unlock_bridge(unsigned long thread_addr)
 {
 	thread_unlock((struct thread *)thread_addr);
 }
+#endif
 
 #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void
@@ -24852,11 +24877,16 @@ ptrace_write_fpregs_bridge(unsigned long thread_addr, unsigned long data_addr)
 	return ptrace_write_fpregs((struct thread *)thread_addr, (void *)data_addr);
 }
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_IO_COPY_FROM)
+extern long syscall_copy_from_user_bridge(void *, unsigned long, size_t);
+#define ptrace_copy_from_user_bridge syscall_copy_from_user_bridge
+#else
 static long
 ptrace_copy_from_user_bridge(void *dst, unsigned long src_addr, size_t bytes)
 {
 	return copy_from_user(dst, (void *)src_addr, bytes);
 }
+#endif
 
 static long
 ptrace_copy_to_user_bridge(unsigned long dst_addr, const void *src, size_t bytes)
