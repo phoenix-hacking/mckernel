@@ -1,3 +1,29 @@
+## SDK query expired safely; parallel prlimit qualification passed — 2026-10-27T00:35Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+SDK3 readonly query returned0/.359549s and joined; original120second clock expired
+before final independent metadata/execution review during context recovery. No
+SDK release, owner entry, container or compiler. Holder1319250/start85856534/FD3
+closed normally at1793061268.883543 and tool23513 joined0; PID absent. Evidence
+ROOT-DAEMON7-POSTGROWTH-SDK-ADMISSION-3/ACTUAL-EXPIRED-QUERY-NO-SDK-ENTRY.json.
+Preserve every old query and grant; no TTL extension or consumed workload replay.
+
+F03 actual Rust prlimit qualification passed6480 ordered-effect parity cases,
+240 initialized-request controls,44 ABI words and one separate Rust negative-PID
+control. First compiler00:31:19.073940Z; accepted3 commands wall.466680s/CPU.341360s/
+peak97652KiB. Original missing8accessor link failure retained; corrected only
+exact original C accessor support and reused passed Rust object. Default/native
+and whole-file remain open. F06 getter enters existing CPU6 HOST slot; F03 execveat
+private source advances; F02 callback storage waits narrow independent ABI review.
+
+No new SDK/default/native/file/C-retirement closure in this review interval;
+matching diagnostic native cases remain2. Queue-to-SDK-first-compiler unknown:
+no SDK compiler yet. Largest avoidable handoff is late live-binding/review and
+context delay, not CPU shortage. Adjustment: reviewer static-ready plus one
+prebuilt deterministic binding batch before the next fresh clock. Source owner
+partial_runtime_finish prepares A4; Root owns admission/actual SDK7 next; files
+native remains next after SDK. Fixed deadline/account/resources unchanged.
+
 ## SDK actual API refusal corrected; parallel HOST compiler results — 2026-10-27T00:21Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
