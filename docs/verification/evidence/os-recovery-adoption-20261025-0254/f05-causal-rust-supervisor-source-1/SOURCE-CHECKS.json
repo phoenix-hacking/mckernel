@@ -1,0 +1,46 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FORMAT_PARSE_AND_READ_ONLY_JOIN_CHECKS_ONLY",
+  "executed": [
+    {
+      "command": "rustfmt --edition 2021 main.rs (private directory; recursively parses module sources)",
+      "result": "PASS after bounded unsupported-C-string-literal source correction; no Rust typecheck/compile/link/test executable"
+    },
+    {
+      "command": "rustfmt --edition 2021 --check main.rs",
+      "result": "PASS"
+    },
+    {
+      "command": "Python standard-library read/hash and AST-literal extraction only",
+      "result": "14 original references matched expected supplied joins where present;8 frozen executable/module subjects rehashed; original139+4 owner source pin counts extracted without import/authority renewal;3 later source refs added"
+    }
+  ],
+  "preserved_source_check_failure": {
+    "command": "first rustfmt --edition 2021 selected modules",
+    "result": "FAIL: installed formatter rejected c\"/dev/null\" literal at supervisor.rs279; no executable compiled",
+    "correction": "Use static b\"/dev/null\\0\" pointer; subsequent rustfmt parser/check PASS"
+  },
+  "preserved_inventory_check_failure": {
+    "result": "First AST extraction loop attempted literal_eval of a dict unpack assignment and stopped after printing base139 map; no sources imported/executed/mutated",
+    "correction": "Bound exact AST assignment dict child for4 sibling literals;139+4 extraction PASS"
+  },
+  "tests_prepared_not_run": {
+    "pure_mocked_Rust": 13,
+    "mocked_observer_transport_Rust": 7,
+    "ordinary_HOST_Rust": 6,
+    "total": 26
+  },
+  "actual_executed_counts": {
+    "compiler": 0,
+    "linker": 0,
+    "Rust_test_executable": 0,
+    "guest": 0,
+    "sudo_Docker": 0,
+    "account_clock_resource_queries": 0,
+    "cleanup": 0,
+    "Git_canonical_publication": 0,
+    "subagents": 0
+  },
+  "measured_runtime_latency": null,
+  "unmet": "Independent review, actual Rust compile/25 tests/link/dependency closure/adoption and fresh runtime release remain OPEN."
+}

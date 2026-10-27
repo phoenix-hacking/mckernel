@@ -1,0 +1,652 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/custody_release_review",
+  "independent": true,
+  "decision": "PASS_EXACT_CURRENT112_INHERITED_LOCAL_LOGGERS_METADATA_PANIC_AND_ELF_GATES",
+  "default_artifact_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/independent-postbuild-review-1/DEFAULT-ARTIFACT-REVIEW.json",
+    "bytes": 157639,
+    "sha256": "7056d70f9a502749cb03528f61a2d2cceb6b5c74da728534c6f72396b99356c3"
+  },
+  "prior_logger_proof": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/resource-and-qualifier-preparation-1/next-provider-path-correction-source-1/actual-suffix-qualification-1/fresh-compiled-rust-ownership-proof.json",
+    "bytes": 9138,
+    "sha256": "31088b4bba0a96d3b97a2ba13fe223470b860ddab05ef97ba5d0edf6bb382107"
+  },
+  "current_Rust": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+    "bytes": 18280544,
+    "sha256": "658374d540367a667ffaf97f709bed14205040dc54ff07b2497e906755d5e323"
+  },
+  "current_image": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+    "bytes": 10256600,
+    "sha256": "0da6590bd47ee4783864a734790a4349a2b0ca7af8a7e4fa0caf4fa92a40d7d9"
+  },
+  "four_LOCAL_debug_records": [
+    {
+      "label": "F06_PROCESS_VM_IOV_LOCAL_DEBUG",
+      "Rust": {
+        "index": 734,
+        "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy30F06_PROCESS_VM_IOV_LOCAL_DEBUG",
+        "bind": 0,
+        "type": 1,
+        "shndx": 5507,
+        "value": 0,
+        "size": 32
+      },
+      "final": {
+        "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy30F06_PROCESS_VM_IOV_LOCAL_DEBUG",
+        "bind": 0,
+        "type": 1,
+        "other": 0,
+        "shndx": 3,
+        "value": 18446744073685428544,
+        "size": 32
+      },
+      "strings": [
+        {
+          "input_offset": 0,
+          "literal": "/src/kernel/rust/syscall_policy.rs",
+          "current_final_address": "0xfffffffffe908213"
+        },
+        {
+          "input_offset": 8,
+          "literal": "arch_process_vm_rw_log_bridge",
+          "current_final_address": "0xfffffffffe9090b7"
+        }
+      ],
+      "line": 35093,
+      "initial_nonpointer_bytes": "00000000000000001589000000000000"
+    },
+    {
+      "label": "F06_PROCESS_VM_IOV_REMOTE_DEBUG",
+      "Rust": {
+        "index": 737,
+        "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy31F06_PROCESS_VM_IOV_REMOTE_DEBUG",
+        "bind": 0,
+        "type": 1,
+        "shndx": 5509,
+        "value": 0,
+        "size": 32
+      },
+      "final": {
+        "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy31F06_PROCESS_VM_IOV_REMOTE_DEBUG",
+        "bind": 0,
+        "type": 1,
+        "other": 0,
+        "shndx": 3,
+        "value": 18446744073685428576,
+        "size": 32
+      },
+      "strings": [
+        {
+          "input_offset": 0,
+          "literal": "/src/kernel/rust/syscall_policy.rs",
+          "current_final_address": "0xfffffffffe908213"
+        },
+        {
+          "input_offset": 8,
+          "literal": "arch_process_vm_rw_log_bridge",
+          "current_final_address": "0xfffffffffe9090b7"
+        }
+      ],
+      "line": 35100,
+      "initial_nonpointer_bytes": "00000000000000001c89000000000000"
+    },
+    {
+      "label": "F06_PROCESS_VM_FOUND_DEBUG",
+      "Rust": {
+        "index": 735,
+        "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy26F06_PROCESS_VM_FOUND_DEBUG",
+        "bind": 0,
+        "type": 1,
+        "shndx": 5499,
+        "value": 0,
+        "size": 32
+      },
+      "final": {
+        "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy26F06_PROCESS_VM_FOUND_DEBUG",
+        "bind": 0,
+        "type": 1,
+        "other": 0,
+        "shndx": 3,
+        "value": 18446744073685428416,
+        "size": 32
+      },
+      "strings": [
+        {
+          "input_offset": 0,
+          "literal": "/src/kernel/rust/syscall_policy.rs",
+          "current_final_address": "0xfffffffffe908213"
+        },
+        {
+          "input_offset": 8,
+          "literal": "arch_process_vm_rw_log_bridge",
+          "current_final_address": "0xfffffffffe9090b7"
+        }
+      ],
+      "line": 35107,
+      "initial_nonpointer_bytes": "00000000000000002389000000000000"
+    },
+    {
+      "label": "F06_PROCESS_VM_COPY_DEBUG",
+      "Rust": {
+        "index": 736,
+        "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy25F06_PROCESS_VM_COPY_DEBUG",
+        "bind": 0,
+        "type": 1,
+        "shndx": 5496,
+        "value": 0,
+        "size": 32
+      },
+      "final": {
+        "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy25F06_PROCESS_VM_COPY_DEBUG",
+        "bind": 0,
+        "type": 1,
+        "other": 0,
+        "shndx": 3,
+        "value": 18446744073685428384,
+        "size": 32
+      },
+      "strings": [
+        {
+          "input_offset": 0,
+          "literal": "/src/kernel/rust/syscall_policy.rs",
+          "current_final_address": "0xfffffffffe908213"
+        },
+        {
+          "input_offset": 8,
+          "literal": "arch_process_vm_rw_log_bridge",
+          "current_final_address": "0xfffffffffe9090b7"
+        }
+      ],
+      "line": 35114,
+      "initial_nonpointer_bytes": "00000000000000002a89000000000000"
+    }
+  ],
+  "logger_current_337B_full_final_code_reproduced": true,
+  "logger_four_line_flags_bindings": [
+    {
+      "offset": 28,
+      "record": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy30F06_PROCESS_VM_IOV_LOCAL_DEBUG",
+      "line_flags_address": "0xfffffffffe8fe958"
+    },
+    {
+      "offset": 77,
+      "record": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy26F06_PROCESS_VM_FOUND_DEBUG",
+      "line_flags_address": "0xfffffffffe8fe8d8"
+    },
+    {
+      "offset": 164,
+      "record": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy25F06_PROCESS_VM_COPY_DEBUG",
+      "line_flags_address": "0xfffffffffe8fe8b8"
+    },
+    {
+      "offset": 283,
+      "record": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy31F06_PROCESS_VM_IOV_REMOTE_DEBUG",
+      "line_flags_address": "0xfffffffffe8fe978"
+    }
+  ],
+  "other_positive_current_logger_targets": [
+    {
+      "offset": 15,
+      "kind": "EXACT_FOUR_ENTRY_LOGGER_JUMP_TABLE",
+      "address": "0xfffffffffe905a68",
+      "exact_current_callback_offsets": [
+        26,
+        281,
+        75,
+        162
+      ],
+      "final_values": [
+        18446744073684624250,
+        18446744073684624505,
+        18446744073684624299,
+        18446744073684624386
+      ]
+    },
+    {
+      "offset": 62,
+      "kind": "EXACT_STRING",
+      "address": "0xfffffffffe90ad01",
+      "literal": "local_iov[%d].iov_base: 0x%lx, len: %lu\n"
+    },
+    {
+      "offset": 104,
+      "kind": "EXACT_STRING",
+      "address": "0xfffffffffe90ad65",
+      "literal": "PROCESS_VM_READ"
+    },
+    {
+      "offset": 114,
+      "kind": "EXACT_STRING",
+      "address": "0xfffffffffe90ad54",
+      "literal": "PROCESS_VM_WRITE"
+    },
+    {
+      "offset": 139,
+      "kind": "EXACT_STRING",
+      "address": "0xfffffffffe90ad75",
+      "literal": "pid %d found, doing %s: liovcnt: %d, riovcnt: %d \n"
+    },
+    {
+      "offset": 191,
+      "kind": "EXACT_STRING",
+      "address": "0xfffffffffe90adab",
+      "literal": "<-"
+    },
+    {
+      "offset": 201,
+      "kind": "EXACT_STRING",
+      "address": "0xfffffffffe90ada8",
+      "literal": "->"
+    },
+    {
+      "offset": 234,
+      "kind": "EXACT_STRING",
+      "address": "0xfffffffffe90adae",
+      "literal": "local_iov[%d]: 0x%lx %s remote_iov[%d]: 0x%lx, %lu copied, psize: %lu, rpage_left: %lu\n"
+    },
+    {
+      "offset": 314,
+      "kind": "EXACT_STRING",
+      "address": "0xfffffffffe90ad2a",
+      "literal": "remote_iov[%d].iov_base: 0x%lx, len: %lu\n"
+    }
+  ],
+  "all67_C_process_metadata_equal": [
+    {
+      "name": "process_extend_region_exists_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_extend_region_alloc_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_extend_region_success_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_copy_pte_found_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_copy_pte_size_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_copy_pte_allocated_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_copy_pte_zeroed_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_copy_pte_copied_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_copy_pte_installed_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_clone_vm_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_clone_ranges_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_clone_ranges_ok_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_clone_sigcommon_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_clone_sigshared_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_schedule_exit_debug_input",
+      "bytes": 8,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_schedule_switch_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_sched_timer_configuration",
+      "bytes": 8,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_extend_region_entry_config",
+      "bytes": 136,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_init_stack_entry_config",
+      "bytes": 168,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_init_stack_log_ap_user_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_init_stack_log_size_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_init_stack_user_category",
+      "bytes": 4,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_init_stack_free_line",
+      "bytes": 4,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_init_stack_free_file",
+      "bytes": 8,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_init_stack_alloc_line",
+      "bytes": 4,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_init_stack_alloc_file",
+      "bytes": 8,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_page_fault_anon_clear_profile_event",
+      "bytes": 4,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_page_fault_cow_copy_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_page_fault_anon_map_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_page_fault_anon_clear_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_page_fault_out_return_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_page_fault_out_rss_sub_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_page_fault_out_stray_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_page_fault_set_pte_attr_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_page_fault_set_pte_rss_skip_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_page_fault_set_pte_rss_add_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_page_fault_cow_rss_sub_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_page_fault_cow_rss_add_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_page_fault_prepare_bounds_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_page_fault_page_state_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_page_fault_pte_state_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_page_fault_entry_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_page_fault_profile_path_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_page_fault_anon_alloc_file",
+      "bytes": 8,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_page_fault_cow_alloc_line",
+      "bytes": 4,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_page_fault_cow_alloc_file",
+      "bytes": 8,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_sync_one_page_exit_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_sync_one_page_entry_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_remap_one_page_exit_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_remap_one_page_rss_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_remap_one_page_entry_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_remap_free_line",
+      "bytes": 4,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_remap_free_file",
+      "bytes": 8,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_remaining_memory_log_debug",
+      "bytes": 160,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_add_range_arch_memclear_callback",
+      "bytes": 8,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_memset_smp_fast_word_pattern",
+      "bytes": 4,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_remaining_range_scheduler_debug",
+      "bytes": 576,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_vm_range_insert_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_free_range_body_debug",
+      "bytes": 96,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_remaining_range_debug",
+      "bytes": 256,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_copy_entry_config",
+      "bytes": 112,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_clone_config",
+      "bytes": 136,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_sched_migrate_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_create_cpu_debug",
+      "bytes": 32,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_ptrace_traceme_debug",
+      "bytes": 96,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_tracked_allocator_source_file",
+      "bytes": 8,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    },
+    {
+      "name": "process_dump_tree_enabled",
+      "bytes": 4,
+      "input_bytes_types_bindings_and_relocations_equal": true
+    }
+  ],
+  "original_two_panic_imports_absent": [
+    "_RNvNtNtCskWZGD7wR08e_4core9panicking11panic_const23panic_const_div_by_zero",
+    "_RNvNtNtCskWZGD7wR08e_4core9panicking11panic_const24panic_const_div_overflow"
+  ],
+  "all_undefined_names_exactly_equal_CURRENT111": "Verified by DEFAULT-ARTIFACT-REVIEW; native cfg generic sigreturn route inactive",
+  "ELF_entry_arch_start_and_required_symbols": true,
+  "arch_C_stderr_empty_link_stderr_byte_identical_to_CURRENT110": true,
+  "kernel_C_exact_warning_disposition": {
+    "actual": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/OUTPUT/work/evidence/01.stderr",
+      "bytes": 1626,
+      "sha256": "e017141995a7d329d40c7e5e3717e957efa70587be5fd2f4aa9731d7d8f965f8"
+    },
+    "baseline": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/evidence/02.stderr",
+      "bytes": 1786,
+      "sha256": "4c97a3fc41aa4e8cdeef0e1273062d47d549742227dea8e9ca0ce99a472c8b15"
+    },
+    "exact_warning_messages_equal": true,
+    "changed_presentation": "Rendered source excerpts differ; source-location shifts from exact event2 insertion. Exact source initializer texts are unchanged and authenticated below. No new warning or suppression.",
+    "source_old": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/candidate/kernel/syscall.c",
+      "bytes": 916284,
+      "sha256": "d9187c6eeb63f134602218db3b3b50683e1ca45b416199fcaa8ca4976c352713"
+    },
+    "source_new": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/candidate/kernel/syscall.c",
+      "bytes": 917339,
+      "sha256": "a96938c6f650f5ed7d8183bd7bb8da1a03c477e13e4093b68a1099ea252a35b2"
+    },
+    "four_unchanged_declarations": [
+      {
+        "name": "syscall_itimer_offsets",
+        "unchanged_initializer_sha256": "2a8756d44c9d7c9c6f18955b301a7c261f31a0b75fb10c8b175aad3864ad6d6a",
+        "initializer": "static const struct syscall_itimer_offsets syscall_itimer_offsets = {\n\t.thread_itimer_enabled_offset =\n\t\t__builtin_offsetof(struct thread, itimer_enabled),\n\t.thread_itimer_virtual_offset =\n\t\t__builtin_offsetof(struct thread, itimer_virtual),\n\t.thread_itimer_prof_offset =\n\t\t__builtin_offsetof(struct thread, itimer_prof),\n\t.thread_itimer_virtual_value_offset =\n\t\t__builtin_offsetof(struct thread, itimer_virtual_value),\n\t.thread_itimer_prof_value_offset =\n\t\t__builtin_offsetof(struct thread, itimer_prof_value),\n};"
+      },
+      {
+        "name": "sched_syscall_offsets",
+        "unchanged_initializer_sha256": "6a1dbf31a0ea78b3866927697509641c11865af68de09ef3ceed07de4480bd0b",
+        "initializer": "static const struct sched_syscall_offsets sched_syscall_offsets = {\n\t.thread_proc_offset = __builtin_offsetof(struct thread, proc),\n\t.thread_sched_param_offset = __builtin_offsetof(struct thread, sched_param),\n\t.thread_sched_policy_offset = __builtin_offsetof(struct thread, sched_policy),\n\t.thread_cpu_id_offset = __builtin_offsetof(struct thread, cpu_id),\n\t.thread_cpu_set_offset = __builtin_offsetof(struct thread, cpu_set),\n\t.proc_pid_offset = __builtin_offsetof(struct process, pid),\n\t.proc_ruid_offset = __builtin_offsetof(struct process, ruid),\n\t.proc_euid_offset = __builtin_offsetof(struct process, euid),\n\t.proc_cpu_set_offset = __builtin_offsetof(struct process, cpu_set),\n};"
+      },
+      {
+        "name": "syscall_cputime_offsets",
+        "unchanged_initializer_sha256": "f36059739b35016007e1ef7bcf7ae22072a13f6c87c93ee8fec77fa90378d5f8",
+        "initializer": "static const struct syscall_cputime_offsets syscall_cputime_offsets = {\n\t.thread_proc_offset = __builtin_offsetof(struct thread, proc),\n\t.thread_status_offset = __builtin_offsetof(struct thread, status),\n\t.thread_in_kernel_offset = __builtin_offsetof(struct thread, in_kernel),\n\t.thread_cpu_id_offset = __builtin_offsetof(struct thread, cpu_id),\n\t.thread_times_update_offset = __builtin_offsetof(struct thread,\n\t\t\t\t\t\t\t  times_update),\n\t.thread_user_tsc_offset = __builtin_offsetof(struct thread, user_tsc),\n\t.thread_system_tsc_offset = __builtin_offsetof(struct thread,\n\t\t\t\t\t\t\tsystem_tsc),\n\t.thread_siblings_list_offset = __builtin_offsetof(struct thread,\n\t\t\t\t\t\t\t   siblings_list),\n\t.proc_threads_list_offset = __builtin_offsetof(struct process,\n\t\t\t\t\t\t\tthreads_list),\n\t.proc_utime_offset = __builtin_offsetof(struct process, utime),\n\t.proc_stime_offset = __builtin_offsetof(struct process, stime),\n\t.proc_utime_children_offset = __builtin_offsetof(struct process,\n\t\t\t\t\t\t\t utime_children),\n\t.proc_stime_children_offset = __builtin_offsetof(struct process,\n\t\t\t\t\t\t\t stime_children),\n\t.proc_maxrss_offset = __builtin_offsetof(struct process, maxrss),\n\t.proc_maxrss_children_offset = __builtin_offsetof(struct process,\n\t\t\t\t\t\t\t  maxrss_children),\n};"
+      },
+      {
+        "name": "wait_scan_kernel_offsets",
+        "unchanged_initializer_sha256": "8568dbfb829556c3395381abd9a58bbf2baf5eade4b07dfcec51986978e83dca",
+        "initializer": "static const struct wait_scan_offsets wait_scan_kernel_offsets = {\n\t.thread_proc_offset = __builtin_offsetof(struct thread, proc),\n\t.thread_tid_offset = __builtin_offsetof(struct thread, tid),\n\t.thread_status_offset = __builtin_offsetof(struct thread, status),\n\t.thread_ptrace_offset = __builtin_offsetof(struct thread, ptrace),\n\t.thread_signal_flags_offset =\n\t\t__builtin_offsetof(struct thread, signal_flags),\n\t.thread_termsig_offset = __builtin_offsetof(struct thread, termsig),\n\t.thread_report_siblings_list_offset =\n\t\t__builtin_offsetof(struct thread, report_siblings_list),\n\t.thread_siblings_list_offset =\n\t\t__builtin_offsetof(struct thread, siblings_list),\n\t.proc_pid_offset = __builtin_offsetof(struct process, pid),\n\t.proc_pgid_offset = __builtin_offsetof(struct process, pgid),\n\t.proc_status_offset = __builtin_offsetof(struct process, status),\n\t.proc_children_lock_offset =\n\t\t__builtin_offsetof(struct process, children_lock),\n\t.proc_threads_lock_offset =\n\t\t__builtin_offsetof(struct process, threads_lock),\n\t.proc_children_list_offset =\n\t\t__builtin_offsetof(struct process, children_list),\n\t.proc_ptraced_children_list_offset =\n\t\t__builtin_offsetof(struct process, ptraced_children_list),\n\t.proc_siblings_list_offset =\n\t\t__builtin_offsetof(struct process, siblings_list),\n\t.proc_ptraced_siblings_list_offset =\n\t\t__builtin_offsetof(struct process, ptraced_siblings_list),\n\t.proc_report_threads_list_offset =\n\t\t__builtin_offsetof(struct process, report_threads_list),\n\t.proc_threads_list_offset =\n\t\t__builtin_offsetof(struct process, threads_list),\n\t.proc_main_thread_offset =\n\t\t__builtin_offsetof(struct process, main_thread),\n};"
+      }
+    ]
+  },
+  "native_acceptance": false,
+  "whole_file_retirement": false,
+  "original_scripted_failures_OPEN_and_Source38_holds_preserved": true,
+  "compiler_workload_actions": 0
+}

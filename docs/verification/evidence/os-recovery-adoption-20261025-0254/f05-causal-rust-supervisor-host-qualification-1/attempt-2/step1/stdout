@@ -1,0 +1,41 @@
+
+running 36 tests
+test host_tests::host_missing_namespace_is_an_error ... ok
+test host_tests::host_real_binary_streams_and_raw_wait_status ... ok
+test host_tests::host_real_exec_and_cwd_failures_keep_exact_setup_stage ... ok
+test host_tests::host_real_orphan_descendant_is_reaped_before_clean_result ... ok
+test host_tests::host_real_stream_overflow_counts_without_exceeding_retention ... ok
+test host_tests::host_real_timeout_signals_pinned_group_and_reaps_ignored_term ... ok
+test supervisor::leader_ownership_tests::descendant_reap_keeps_leader_pin_but_echild_removes_all_signal_authority ... ok
+test supervisor::leader_ownership_tests::positive_leader_reap_forbids_signals_on_every_later_clock_or_error_branch ... ok
+test supervisor::observer_tests::mocked_actual_gate_write_failure_is_not_recorded_as_release ... ok
+test supervisor::observer_tests::mocked_backlog_defers_gate_until_all_queued_rows_are_validated ... ok
+test supervisor::observer_tests::mocked_early_child_rows_replay_without_reordering_retained_raw_bytes ... ok
+test supervisor::observer_tests::mocked_foreign_early_child_fails_on_real_clone_binding_and_retains_all_raw_rows ... ok
+test supervisor::observer_tests::mocked_foreign_owner_never_releases ... ok
+test supervisor::observer_tests::mocked_gap_poison_preserves_offending_record_and_never_releases ... ok
+test supervisor::observer_tests::mocked_missing_or_replaced_gate_refuses_actual_write ... ok
+test supervisor::observer_tests::mocked_observer_writes_one_real_g_and_retains_exact_raw_records ... ok
+test supervisor::observer_tests::mocked_post_reap_service_cannot_release_gate ... ok
+test supervisor::observer_tests::mocked_snapshot_short_message_cannot_match_containing_record_or_wrong_multiplicity ... ok
+test tests::child_publication_before_authoritative_clone_delivery_is_not_repaired_by_later_ret ... ok
+test tests::duplicate_malformed_unknown_rows_and_bad_results_are_refused ... ok
+test tests::early_child_publication_write_and_ret_replay_only_after_real_parent_clone_ret ... ok
+test tests::exact_final_kernel_record_body_and_multiplicity_refuse_substrings_and_bad_envelopes ... ok
+test tests::foreign_generation_pid_and_unlinked_publication_are_refused ... ok
+test tests::genuine_child_then_parent_sequence_finishes_only_after_real_parent_zero ... ok
+test tests::namespace_absence_or_ack_or_reap_cannot_release ... ok
+test tests::original_deadlines_clamp_without_renewal ... ok
+test tests::original_twelve_attempt_limit_is_preserved ... ok
+test tests::oversize_frame_uses_original_failure_fallback ... ok
+test tests::pending_duplicate_unknown_and_foreign_rows_fail_strict_binding_replay ... ok
+test tests::pending_unbound_rows_are_bounded_and_wrong_generation_fails_immediately ... ok
+test tests::retirement_zero_alone_does_not_imply_delete ... ok
+test tests::selected_report_preserves_exact_argv_cwd_two_env_and_status ... ok
+test tests::sequence_keeps_native_metadata_and_refuses_gaps_duplicates_overflow ... ok
+test tests::stream_capture_retains_1024_and_counts_all_bytes ... ok
+test tests::unchanged_failed_v2_order_is_refused ... ok
+test tests::unreadable_procfs_and_deadline_never_become_retirement ... ok
+
+test result: ok. 36 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.85s
+

@@ -1,0 +1,174 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/guardian_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-27T22:22:35.684592+00:00",
+  "decision": "PASS_SOURCE",
+  "blocking_findings": [],
+  "execution_release": false,
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/SOURCE-READY.json",
+    "bytes": 1949,
+    "sha256": "3d9572aec7de3de1166775db61eb1ab3415119c567928dce3a2d4fd784ecb701"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/PROFILE.NOT-GRANTED.json",
+    "bytes": 93382,
+    "sha256": "c18160bee23ccf77cbbe7ef11eb556b0cb1984af5f566a233770fee3a5a00ce3"
+  },
+  "recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/COMMAND-RECIPE.NOT-ADMITTED.json",
+    "bytes": 17652,
+    "sha256": "a305de599ae0757c3476f2ad86a3f7e479c1e8cd2387b0c316bd3003fcb25f26"
+  },
+  "negative_controls": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/NEGATIVE-CONTROLS.NOT-ADMITTED.json",
+    "bytes": 12391,
+    "sha256": "707a8c31c1981e45fffbfd7300e0c539c9d5bdd021e1ef966848e1fbeaa1ad97"
+  },
+  "runner": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ordinary-host-new12h-runner-source-1/run_new12h_host.py",
+    "bytes": 7521,
+    "sha256": "6e98a1fbcbce2e822a815a05516287e7122cbd8e06d43277134b27b70cf3ad34"
+  },
+  "qualifier": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/qualify_metadata.py",
+    "bytes": 5213,
+    "sha256": "58751c96f49cd78a67999a4132c2c2d5176f5ecaee840d8d11f895b3bd256ea0"
+  },
+  "negative_helper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/negative_controls.py",
+    "bytes": 1720,
+    "sha256": "59f61a598c35bf40e409d3706aa23b9f4ff2d10b07b993e1b97c4e939b4d2009"
+  },
+  "foreground_context": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/SOURCE-CONTEXT.json",
+    "bytes": 2408,
+    "sha256": "0e0905983ac1080513daa84be7bf08bbe99a25a1c239655c331b4502615a98de"
+  },
+  "CMake_source_proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/CMAKE-ENV-BINDING-PROPOSAL.json",
+    "bytes": 4698,
+    "sha256": "d86294dd70c20c70e14b72627092c4951291d60c28d2169d710af2c55835012b"
+  },
+  "retained_consumer_evidence": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/RETAINED-CONSUMER-EVIDENCE.json",
+    "bytes": 30810,
+    "sha256": "5d70f51860471e00d55592b09d98013877daf599b0f6520abe9b0cf56fe39816"
+  },
+  "verified_exact_input_pins": 338,
+  "outer_commands": 10,
+  "positive_compile_link_commands": 8,
+  "fixed_nested_negative_compiler_controls": 7,
+  "selection": {
+    "Rust_GLOBAL_objects": 32,
+    "Rust_GLOBAL_slots": 64,
+    "Rust_GLOBAL_bytes": 2048,
+    "C_LOCAL_objects": 14,
+    "C_LOCAL_slots": 14,
+    "C_LOCAL_bytes": 448,
+    "complete_registry_objects": 46,
+    "complete_registry_slots": 78,
+    "complete_registry_bytes": 2496,
+    "LOCAL14_Rust_selected": false
+  },
+  "verified_findings": [
+    "Exact READY3d9572aec7de3de1166775db61eb1ab3415119c567928dce3a2d4fd784ecb701/profilec18160be and338inputrows+exactleafrecipe independently hash-match. Ten profileargv arrays match recipe and compact-json-LF pins; output/capture names absent.",
+    "Reuses foregrounde7d77/module8eaa8f0b/fullprocessTUdc445; no descriptor/config/runtimebody rewrite.32global64slots maps exactly to supplied typedstaticmutDdebug records.14local14slots remain originalC; guardedlocal Rustcompile_error and absence of CMake selection retained.",
+    "Focused fixture Ddebug definition tokens match actualcurrent debug.rs reprC/file,func,fmt pointers/u32line_flags. Genuine ihkdebug.h witness fixes size32/alignment8/offset0,8,16/pointertypes/actualC bitfieldword0x01123456. Rust layoutconsts additionally verify packed wordoffset24.",
+    "Exact Csource filename argument matches RustenvMCKERNEL_PROCESS_C_FILE and C quotedMCKERNEL_PROCESS_DDEBUG_FILE. Two Rustflag0/1 and selectedCflag0/1 commands pair CDEBUG_PRINT_PROCESS only with1; originalfallBackC command keeps0. CStaticasserts reject flags/file mismatch; Rustmissing/invalid/empty inputs hardfail. No Rustfile!/line! identity substitution or basename/prefix normalization.",
+    "ForegroundC activeconditional FILE/LINE source design is preserved with original#lineresets and explicitmetadata map; existing12boundedlineprofiles retained. GLOBAL record function/line literals and fmtNULL match all46originalmapentries/24bitbounds; no readonlyconfig owned by LOCAL14 is rewritten.",
+    "Both positive GNUld-r links are mandatory beforequalifier. No ignoreundefined or bootableimage claim; unrelated unresolved runtimeproviders remain expected for partiallink. Qualifier requires allselectedGLOBAL definitions absentC and all14LOCAL absentRust,oneexactdefinition eachincompletejoint/fallback,exactbindings/arrayorder/32stride/writable8aligned__verbose; complete2496bytes.",
+    "Qualifier requires SHF_GNU_RETAIN in Rustmetadata and eachselectedGLOBAL linkedsection. It checks allFILE/FUNC R_X86_64_64 relocations and strings,flags/lines/FMTNULL/zero padding. Complete78slotmetadata requires156stringpointers,64Rustglobal slots require128. Real tool/link bytes must satisfy these gates; source does not substitute success.",
+    "Retained CURRENT111processa430 and Rust1836 bytes pinned unchanged. Existing32globalconsumerrows cover156actualRustrelocation refs and registry__start/__stop each3 refs; genuine debugregistry ABI reused. Retaineddata is explicit priorcohort observation, not newlycompiled/current112default acceptance.",
+    "All7negativecontrols use fixedargv/env/exactrequired diagnostic plusnonzeroandnoobject output. Cases are missingfilename,missingflags,flags2,emptyfilename,LOCAL14selection,Cfilename mismatch,Cflags mismatch. Alternate genericcompiler failure lacking expecteddiagnostic rejects; no retries/fallbacktool.",
+    "Current112CMake7f808 is exact sourcebase; composed13d792e6 equals exactly4specifiedinsertions. Preserves newer flags,defaultverboseON/debugprintOFF0 orON1 pairing,actualprocessfilename,generatedselected/file/flags dependency stamp,source/header dependencies,andlateAPPEND selector definitions after priorproperties. Existing lib.rs selectionpatch reused. No configure/canonicalwrite/wholeforegroundC overwrite authority.",
+    "Full4GiBreserve calculated:20outerstreams+8positiveobjects+14negative streams+5failednegativeobjectpaths+2metadata+2temporaryfiles at64MiB=3264MiB,plus832MiB headroom. Includes internaloutputs and retains firstfailureprefixes; no newquota/framework. Existing6e98 CPU6job1AS2GiB60CPU90wall/64MiBFSIZE/core0/grant/currentadmission consumes HOST16+4=20GiBfree andscratch12GiB,shared7jobs21.6619GiB/oneheavy/fixedclamps unchanged."
+  ],
+  "foreground_sources": {
+    "module": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs",
+      "bytes": 11499,
+      "sha256": "8eaa8f0bff3d10a433fa88b899e56b9bd4aefd719c49f15c1487ffe335d65b27"
+    },
+    "C": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/process.c",
+      "bytes": 224941,
+      "sha256": "dc4450b232c8dc0798918bfecba168990288afc53c51c82fa75635f06bb5fbe3"
+    },
+    "Ddebug_source": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/references/kernel/rust/debug.rs",
+      "bytes": 13020,
+      "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16"
+    },
+    "original_metadata": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/RETAINED-ELF-READBACK.json",
+      "bytes": 30150,
+      "sha256": "26c09b6e69bb2bfa00997126177a7402821ce6edea2eb3336d883b165cab25a2"
+    },
+    "map": {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/EXACT46-SLOT78-MAP.json",
+      "bytes": 28935,
+      "sha256": "13266701cb2ff7a38b73ccb9718e0c2078adf522d80c21c09a7821200f8cf9ee"
+    }
+  },
+  "retained_exact_artifacts": {
+    "process": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+      "bytes": 66600,
+      "sha256": "a4309e34ffe1a1c7c99eee1a2f2fb665cab907a33341956a96078b095edb63bf"
+    },
+    "Rust": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+      "bytes": 18275816,
+      "sha256": "1836ac74294186335742d17b4d53cd2217b2b17f6f471d317e55faf1fa7f346b"
+    },
+    "global_consumer_references": 156,
+    "registry_reference_counts": [
+      3,
+      3
+    ]
+  },
+  "resources": {
+    "cpu": 6,
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds_each": 60,
+    "FSIZE_bytes": 67108864,
+    "CORE_bytes": 0,
+    "wall_seconds_each": 90,
+    "aggregate_jobs": 7,
+    "aggregate_GiB": "21.6619"
+  },
+  "full_growth_reserve_bytes": 4294967296,
+  "known_output_bound_bytes": 3422552064,
+  "Root_literal_command": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ordinary-host-new12h-runner-source-1/run_new12h_host.py",
+    "--profile",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/PROFILE.NOT-GRANTED.json",
+    "--profile-sha256",
+    "c18160bee23ccf77cbbe7ef11eb556b0cb1984af5f566a233770fee3a5a00ce3",
+    "--grant",
+    "ABSOLUTE_FRESH_ROOT_GRANT.json",
+    "--grant-sha256",
+    "ACTUAL_GRANT_SHA256"
+  ],
+  "required_Root_admission": "Fresh Root profilec181/runner6e98/task/goal/fixedclocks/resources/unusedHOSTnonce/CPU6exclusive/currentCPU6observation/currentaccount+holds+nativeownership/sharedreservations/actualHOST20GiBscratch12GiB headroom. Use absolute profile/grant filenames because runner changescwd. Source approval supplies no actualgrant.",
+  "actual_compiler_CPP_test_executable_runtime_guard_resource_account_calls": 0,
+  "canonical_Git_writes": 0,
+  "production_default_native_whole_file_delta": 0,
+  "open_predicates": [
+    "Actual ten-command HOST bytes/ABI/GNU_RETAIN/jointlinks/negativecontrol results and positivegroups/streams retirement",
+    "Root selective currentcanonical source integration and actualCMakeconfigure/C/Rustcommand/dependency/defaultlinked-image registry boundaries/ordering/flags",
+    "Applicable original native registry selection/enable-disable behavior; no newperrecordnativequota"
+  ],
+  "review_actions": {
+    "bounded_source_profile_data_AST_pins_and_retained_evidence_only": true,
+    "no_compiler_CPP_test_guard_resource_runtime_canonical_Git": true,
+    "only_assigned_private_independent_review_directory_written": true
+  },
+  "persistent_controls": "Fixed2026-10-28T05:36:09Z/v2earlierclamps/boot7bfc5687,creditrun7f/cap57774.852125/cumulative>=22812.3311/realholds/oneheavy/permanentnativeownership unchanged. Root grants actualwork/canonical integration; parentexclusiveoutercontrols. M15startup lane independent."
+}

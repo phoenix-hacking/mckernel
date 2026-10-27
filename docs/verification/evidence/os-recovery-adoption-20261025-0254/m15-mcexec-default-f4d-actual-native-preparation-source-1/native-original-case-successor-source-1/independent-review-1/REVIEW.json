@@ -1,0 +1,172 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/guardian_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-27T21:01:00.414485+00:00",
+  "decision": "PASS_SOURCE",
+  "blocking_findings": [],
+  "execution_release": false,
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/native-original-case-successor-source-1/READY.SOURCE-ONLY.json",
+    "bytes": 3299,
+    "sha256": "226f3ff7caf0dce3f1afb7a45f176ed6cee869538e5e87cf301fa0a06e562864"
+  },
+  "reviewed_plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/native-original-case-successor-source-1/ORIGINAL-CASES-SUCCESSOR.NOT-RELEASED.json",
+    "bytes": 29159,
+    "sha256": "8a232e500f5b496106f148a7d934d3bd71c08429d0dcbf7e258873d99413441a"
+  },
+  "binder": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/native-original-case-successor-source-1/bind_composed_case.py",
+    "bytes": 3747,
+    "sha256": "37820be85d345d8f3af3ab39d2c137f1a77c79991994c0457ec71edcfd73d6e7"
+  },
+  "existing_full_manifest_validator": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/bound-native-runtime-1/native_diagnostic.py",
+    "sha256": "529830adcd6fafa13979bf6036b2812c88630c5e0112ce4d80f9fc28cc30d4da",
+    "size": 100261
+  },
+  "existing_executor_provider_supplement": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/validate_staged_executor_binding.py",
+    "bytes": 4386,
+    "sha256": "29f9add4327e6eff4dffe7dcac02ad1b10a8349ae621b8b3ee673426ba2bfaca"
+  },
+  "supplement_contract": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/SOURCE-BOUND-NATIVE-CONTRACT.json",
+    "bytes": 6595,
+    "sha256": "0e3a0cf6e63914e9cc23b6e8a6850156f1cd2ad4a481b517e1354e76a1fed443"
+  },
+  "retained_pure_checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/native-original-case-successor-source-1/PURE-TEST-RESULT.json",
+    "bytes": 740,
+    "sha256": "2c6af7c6e7f53d2e25d79653994ef78b4d41423da9a952c92d29ec8ec946243d"
+  },
+  "selected_executor": {
+    "mode": 33261,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/output/mcexec-default-install-1/usr/local/bin/mcexec",
+    "sha256": "e5d18169ee50581274b374bba17fcefebe39e828885f367bfee182beaa3df756",
+    "size": 396200
+  },
+  "reused_actual_loader_acceptance": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/loader-current-limit-correction-1/independent-review-1/INDEPENDENT-ACTUAL-LOADER-ACCEPTANCE.json",
+    "sha256": "8417dbe4a42058cd859d01d1934eefbf72bca34e4c4ed0818c76434701734d4c",
+    "size": 19132
+  },
+  "reused_default_component_install_acceptance": {
+    "bytes": 14457,
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/container-input-closure-expert-1/INDEPENDENT-SIX-PHASE-ACCEPTANCE-CURRENT-FREE.json",
+    "resolved_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/container-input-closure-expert-1/INDEPENDENT-SIX-PHASE-ACCEPTANCE-CURRENT-FREE.json",
+    "sha256": "7908e5c0475ecd3e9f51ff7b1000617907f992ce9065b523ad513172af69cd2e"
+  },
+  "exact_subject_refs_checked": 20,
+  "cases": {
+    "startup": {
+      "case_id": "startup.argv-empty",
+      "payload": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/scratch/stability-packet001-compile-20260913-1/startup.argv-empty/payload",
+        "sha256": "ff227c83b2da598110768e13f5e042b437e049659706b56079cc73f7c818a836",
+        "size": 20528
+      },
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "app",
+        "A",
+        "",
+        "B"
+      ],
+      "cwd": "/case/work",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PATH": "/usr/bin:/bin"
+      },
+      "oracle": {
+        "exit_code": 0,
+        "stderr_hex": "",
+        "stdout_hex": "7b2263617365223a22737461727475702e617267762d656d707479222c2261726763223a342c2261726776223a5b22617070222c2241222c22222c2242225d2c227465726d696e61746f725f69735f6e756c6c223a747275657d0a"
+      },
+      "future_overlay_output": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/native-original-case-successor-source-1/startup-overlay.cpio.gz",
+      "derived_overlay_and_receipt_currently_absent": true,
+      "native_release": null
+    },
+    "strict235": {
+      "case_id": "P-M06-01-process-exec-wait-235B",
+      "payload": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/payload.snapshot",
+        "sha256": "537cb22b2af1f7fca1202afaf45b017364823c185c2ec47474093e51647ba5b8",
+        "size": 5628568
+      },
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "/apps/app"
+      ],
+      "cwd": "/case/work",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PATH": "/usr/bin:/bin"
+      },
+      "oracle": {
+        "exit_code": 0,
+        "stderr_hex": "",
+        "stdout_hex": "706172656e742073746172740a6368696c642065786563207375636365737320746f6b656e3d66697865642d76310a706172656e742077616974207375636365737320657869743d333720656f663d31207265617065643d3120656368696c643d310a6368696c642065786563206572726f72206572726e6f3d454e4f454e542073746174653d333720756e6368616e6765643d310a706172656e742077616974206572726f7220657869743d343220656f663d31207265617065643d3120656368696c643d310a706172656e7420636f6d706c657465206368696c6472656e3d32206f776e65643d300a"
+      },
+      "future_overlay_output": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/native-original-case-successor-source-1/strict235-overlay.cpio.gz",
+      "derived_overlay_and_receipt_currently_absent": true,
+      "native_release": null
+    }
+  },
+  "source_findings": [
+    "READY226f3ff7/plan8a232e50 and all declared artifacts plus20unique subject/source/module/payload/base references hash/size/mode match. Existing acceptance8417 binds installede5d/396200B/BUILDID3114d9e at loader-only scope;7908 retains actual default-selected build and staged-component install scope. Neither is native main acceptance.",
+    "Two separate generic-overlay46d41bc0 CLI recipes are exact literals binding existing basea637/rawCPIOd983/44428264B,originalstartupff227/20528B orstrict235537cb/5628568B,collectorc020 and installe5d. No compose/rebuild/staging occurs by proposal or binder.",
+    "Startup argv preserves app,A,empty,B and exact original JSON stdout/exit0/empty stderr. Strict235 preserves every original235 output bytes,normalexit37/waitreapEOF/ECHILD and ENOENT/unchanged37/exit42/errorwait behavior. Cwd/env/1024stream bounds unchanged.",
+    "Both manifests explicitly use original begin-cleanup-real-ack-parent-clone-v2 schema and exact consumer8bf30/providerf5c56 source refs with current daced/887dc/57546 modules. Full canonical529830ad validator retains original-schema dispatch; strict235 is original childtrace case and startup is not. F05-specific cleanup/case_binding is not inherited. Historical startup collector/lifecycle evidence is not claimed for this new tuple.",
+    "FrozenF05 manifest actuala035/caseM14-05-05-owned-processvm-v2-204B remains unchanged with C launcherdca025 and image60e62. New originalcase manifests share explicitly selected image60e62/modulecohort but do not mutate F05 or claim latest image/current-cohort paired C baseline.",
+    "bind_composed_case requires caller-supplied actual receipt digest, actual expected output hash/size, exact base compressed/rawCPIO joins and sourcepaths/hashes. It fills real derived_initramfs+overlay_manifest refs, calls unchanged full _validate_manifest (all real artifact/identity/source/finalmap/schema joins), then executor/provider supplement (actual /bin/mcexec+loader/libc/numa, RPATH providers/no cache/original argv/oracles/module tuple). Actual output is written exclusively only after both validations pass. Null proposal refs cannot serve as final manifest authority; no synthetic/placeholder hashes are inserted.",
+    "Binder imports the existing supplement by retained adjacent path; this review pins its exact29f9add4 bytes and contract0e3a0cf6. Future Root ordinary binder profile must include these existing dependency pins along with binder/fullvalidator/plan/actualreceipt/output; it must not rely on a module self-declared contract hash alone.",
+    "No all349 providers/all51 data ABI/allocation/fullABI/wholefile/M15 retirement claim. Original C baseline proofs remain historical exact-cohort evidence; a future direct paired-current-cohort comparison needs matching evidence and is not manufactured here."
+  ],
+  "future_Root_sequence": [
+    "After independent current owner retirement/current-free, derive actual ordinary CPU6 resource/source profile for exactly startup overlay CLI in reviewedplan; fresh grant and full output-growth/capture admission required. This source proposal itself grants nothing.",
+    "Capture actual generic-builder printed receipt; run the exact binder under ordinary Root authority with actualreceipt SHA/freshmanifest path and all listed dependency pins. Independently verify composed finalmap/manifest, actual image capability, unchanged original native source/backend/QMP and complete original acceptance predicates.",
+    "Only a separately reviewed fresh native release may run startup; strict235 composition/runtime remains queued after startup disposition with no completed prefix replay."
+  ],
+  "compose_profile_proposal": {
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "FSIZE_bytes": 33554432,
+    "HOST_floor_bytes": 17179869184,
+    "aggregate_jobs_max": 7,
+    "aggregate_memory_ceiling_bytes": 23259332608,
+    "cpu": 6,
+    "jobs": 1,
+    "scratch_floor_bytes": 12884901888,
+    "work_wall_seconds": 90
+  },
+  "actual_compose_compiler_guard_resource_account_native_calls": 0,
+  "source_only_null_refs_intentional": true,
+  "new_native_case_quota": 0,
+  "native_main_or_whole_file_acceptance": false,
+  "preserved_failures": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/native-original-case-successor-source-1/PRESERVED-SOURCE-GENERATOR-SETUP-FAILURE.txt",
+    "bytes": 352,
+    "sha256": "acf9fdb01f0d188b5b09ac8bd3944a1e1293873b0034a0e9fefa9fec5bfe291a"
+  },
+  "review_actions": {
+    "proportional_source_data_AST_existing_validator_review": true,
+    "no_test_replay_or_compose_compiler_loader_guard_resource_workload": true,
+    "no_canonical_or_foreground_F05_writes": true,
+    "only_private_independent_review_directory_written": true
+  },
+  "persistent_controls": "Fixed2026-10-28T05:36:09Z and v2earlierMONO/BOOT/boot7bfc5687,creditrun7f/cap57774.852125/cumulative>=22812.3311/realholds/oneheavy4CPU12GiB512tasks/permanent27:4/scratch21/HOST16GiB/scratch12GiB all persist. Root alone canonical/grants; parent exclusive outercontrols."
+}

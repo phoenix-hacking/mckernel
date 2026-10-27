@@ -1,0 +1,141 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "decision": "ONE_ORDINARY_SUPERVISOR_HOST_QUALIFICATION_NO_PID1_MAIN_OR_GUEST",
+  "source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/independent-source-review-1/REVIEW.json",
+    "bytes": 13450,
+    "sha256": "c1d30c88c78eba362408804ce476423907dd852cd9552caf6f7c71e7cc205b56"
+  },
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/review-correction-1/READY.json",
+    "bytes": 7468,
+    "sha256": "2ecd06e1cd3fc1d793dfefe5ed2a94db7bb62c2c2a26e5f93c690eb40bdf7eec"
+  },
+  "source_files": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/review-correction-1/host_tests.rs",
+      "bytes": 3949,
+      "sha256": "63b1652dd589b7f7967cc694b2d51c45ab827bbc64ff202f755474cb5dd13b57"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/review-correction-1/lifecycle.rs",
+      "bytes": 22148,
+      "sha256": "c50c17dad311897f5143aad929ad7c8954ad76f069ceb43ef1c59bb19cd32bb3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/review-correction-1/main.rs",
+      "bytes": 14484,
+      "sha256": "a513796141c8a46e29fe180e5125b19083c5c8760a13bebd0d2921153d163294"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/review-correction-1/observer_tests.rs",
+      "bytes": 9643,
+      "sha256": "a892b7965586a3987fad535f602eea79dc99b69db8881a7b225fbae0259cbd25"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/review-correction-1/report.rs",
+      "bytes": 2087,
+      "sha256": "9c55957c00355fef045efed65fecb2d80f93ab88d2f81afdac0c731489fb56fd"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/review-correction-1/supervisor.rs",
+      "bytes": 28731,
+      "sha256": "61bdd82d4c3b4ed0a9b10ae250c1d20eaf81ca627604abe035e595f83cf430d5"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/review-correction-1/tests.rs",
+      "bytes": 14032,
+      "sha256": "e81e1833ed5831ede43d955e4ab9a7eebdd2be7f59d5a8ce780984ce66e6f3f0"
+    }
+  ],
+  "compiler": {
+    "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "bytes": 654904,
+    "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1"
+  },
+  "cpu6_exclusive": true,
+  "ordinary_jobs_other": 0,
+  "heavy_jobs": 0,
+  "current_free": "Root35/52e1dc09",
+  "resources": {
+    "cpu": 6,
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds_each": 60,
+    "FSIZE_bytes": 67108864,
+    "HOST_full_growth_reserve_bytes": 2147483648,
+    "aggregate_jobs": 7,
+    "aggregate_GiB": "21.6619"
+  },
+  "commands": [
+    {
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-D",
+        "warnings",
+        "--test",
+        "-C",
+        "codegen-units=1",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/review-correction-1/main.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-1/supervisor-tests"
+      ],
+      "wall": 90,
+      "purpose": "Functional OS only; no security testing. compile36controls"
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-1/supervisor-tests",
+        "--test-threads=1"
+      ],
+      "wall": 30,
+      "purpose": "Functional OS only; no security testing. run36ordinarycontrols"
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-D",
+        "warnings",
+        "-C",
+        "opt-level=1",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "panic=abort",
+        "-C",
+        "target-feature=+crt-static",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "link-arg=-no-pie",
+        "-C",
+        "link-arg=-Wl,-z,noexecstack",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/review-correction-1/main.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-1/f05-causal-supervisor"
+      ],
+      "wall": 90,
+      "purpose": "Functional OS only; no security testing. compileselectedsupervisor"
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-W",
+        "-h",
+        "-l",
+        "-d",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-1/f05-causal-supervisor"
+      ],
+      "wall": 90,
+      "purpose": "Functional OS only; no security testing. qualifyactualELF"
+    }
+  ],
+  "account_window_before": [
+    1793138376.2677057,
+    920482.836662237,
+    935820.963712514
+  ]
+}

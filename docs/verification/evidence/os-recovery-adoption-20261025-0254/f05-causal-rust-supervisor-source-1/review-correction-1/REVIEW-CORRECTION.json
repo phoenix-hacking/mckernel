@@ -1,0 +1,68 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ADDITIVE_SOURCE_CORRECTION_ONLY_NO_EXECUTION",
+  "retained_original": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/READY.json",
+    "sha256": "1867a606f4f89d7f05baa72237135fa375b8113697dc9a184709307d78a2c569",
+    "all_original12_file_hashes_rechecked_unchanged": true
+  },
+  "fixed_findings": [
+    {
+      "defect": "Clockfailure on a later supervisor turn could signal the leader/group after positive leader reap, while pipes/descendants remained.",
+      "correction": "Irreversible LeaderOwnership state pins PID/group only while unreaped. Every signal branch uses the same guard. Positive leader reap removes authority BEFORE reading its reap clock; ECHILD removes authority and cannot claim a successful status when no positive leader status was observed. Descendant-only reap retains the actual leader pin.",
+      "controls": "Two pure mocked actual guard controls exercise pre-reap group+leader calls, positive-leader-reap clock/error signals and descendant/ECHILD distinctions."
+    },
+    {
+      "defect": "Valid child publication/syscall records arriving before logged positive parentcloneRET were rejected as unlinked.",
+      "correction": "Retain exact unbound rows and original positions within256rows/262144B; authority comes only from a real positive RET matched to the actual parentclone56 delivery. Replay all pending rows in their original order, require each to follow that authoritative clone delivery, and preserve all foreign/duplicate/unknown/malformed failures. Pending/unbound rows cannot release or complete. Raw retained/publication order never changes.",
+      "controls": "Valid early publication/writeRET then positive parentRET; foreign/duplicate/unknown pending records; childpublication before actualclonedelivery; missing authority/storage bounds; mocked actual observer/raw-retention success and failure."
+    },
+    {
+      "defect": "Manual LP64 libc layouts were also admitted under gnux32; HOST prctl variadic options used int-width arguments.",
+      "correction": "Require target_pointer_width64 plus existingLinux/x86_64/little guard; compile-time SignalAction152/align8,Timespec16/align8,PollFd8/align4 assertions; HOST prctl options areusize.",
+      "controls": "Compile-time checks prepared; actual compiler/ABI execution remains unrun."
+    },
+    {
+      "defect": "Substring count could falsely cover observed needle with a different prefixneedle suffix body.",
+      "correction": "Parse every final line using only the selected genuine priority+[padded nonnegative seconds.6digits]+one-space envelope, count exact whole record bodies and multiplicities. Unexpected envelopes/continuations fail. Preserve all body bytes, unknown rows and original raw snapshot; never synthesize or normalize serial.",
+      "controls": "Exact needle versus containing body, insufficient duplicate multiplicity, malformed/incomplete/continued envelopes, actual mocked observer coverage."
+    }
+  ],
+  "unchanged_interface": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/review-correction-1/SUPERVISOR-INTERFACE.json",
+    "sha256": "f38fca58c41b81154a593f468e34dd3ae6f43b5c3df73ecc36cef2fdb71c7304",
+    "note": "Copied byte-exact; original planned ND_PAYLOAD/rawpublication schema, limits and all artifact/qualification refs null unchanged."
+  },
+  "controls_prepared": {
+    "pure_mocked_including_leader_guards": 20,
+    "mocked_observer_IO": 10,
+    "ordinary_HOST": 6,
+    "total": 36,
+    "executed": 0
+  },
+  "actual_source_check": "rustfmt --edition2021 private main.rs parses all modules; no typecheck/link/compiled test executable",
+  "runtime_authority": null,
+  "actual_artifact": null,
+  "actual_source_qualification": null,
+  "actual_HOST_qualification": null,
+  "actual_native_qualification": null,
+  "open": [
+    "Independent focused re-review of additive correction",
+    "Root real Rust compile/36 controls/artifact ABI+link qualification",
+    "Native kmsg escaping/final raw format compatibility and unchanged strict235/227 full evaluator",
+    "Root actual foreground HOST/app artifact cross-binding and genuine retained dca025 provenance adoption",
+    "Fresh current account/source/native ownership and independent Root execution release"
+  ],
+  "hard_stop": "2026-10-28T05:36:09Z and inherited earlier actual clock/account/realhold clamps unchanged",
+  "operations": {
+    "compiler": 0,
+    "Rust_test_executable": 0,
+    "actual_signals": 0,
+    "guest": 0,
+    "Docker_sudo": 0,
+    "guard_account_clock_resource_queries": 0,
+    "cleanup": 0,
+    "canonical_Git": 0,
+    "subagents": 0
+  }
+}

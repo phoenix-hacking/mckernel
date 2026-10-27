@@ -1,0 +1,2323 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "observed_at": "2026-10-27T21:25:32.510135+00:00",
+  "epoch": 1793136332.5101616,
+  "proc_rows": [
+    {
+      "pid": 1,
+      "ppid": 0,
+      "pgrp": 1,
+      "starttime": 13,
+      "comm": "systemd"
+    },
+    {
+      "pid": 2,
+      "ppid": 0,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "kthreadd"
+    },
+    {
+      "pid": 3,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "rcu_gp"
+    },
+    {
+      "pid": 4,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "rcu_par_gp"
+    },
+    {
+      "pid": 5,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "slub_flushwq"
+    },
+    {
+      "pid": 6,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "netns"
+    },
+    {
+      "pid": 10,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "mm_percpu_wq"
+    },
+    {
+      "pid": 11,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "rcu_tasks_rude_"
+    },
+    {
+      "pid": 12,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "rcu_tasks_trace"
+    },
+    {
+      "pid": 13,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "ksoftirqd/0"
+    },
+    {
+      "pid": 14,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "rcu_sched"
+    },
+    {
+      "pid": 15,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "migration/0"
+    },
+    {
+      "pid": 16,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "idle_inject/0"
+    },
+    {
+      "pid": 18,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "cpuhp/0"
+    },
+    {
+      "pid": 19,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "cpuhp/1"
+    },
+    {
+      "pid": 20,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "idle_inject/1"
+    },
+    {
+      "pid": 21,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "migration/1"
+    },
+    {
+      "pid": 22,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "ksoftirqd/1"
+    },
+    {
+      "pid": 23,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "kworker/1:0-events"
+    },
+    {
+      "pid": 24,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "kworker/1:0H-kblockd"
+    },
+    {
+      "pid": 25,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "cpuhp/2"
+    },
+    {
+      "pid": 26,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "idle_inject/2"
+    },
+    {
+      "pid": 27,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "migration/2"
+    },
+    {
+      "pid": 28,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "ksoftirqd/2"
+    },
+    {
+      "pid": 30,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "kworker/2:0H-events_highpri"
+    },
+    {
+      "pid": 31,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "cpuhp/3"
+    },
+    {
+      "pid": 32,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "idle_inject/3"
+    },
+    {
+      "pid": 33,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "migration/3"
+    },
+    {
+      "pid": 34,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "ksoftirqd/3"
+    },
+    {
+      "pid": 36,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 13,
+      "comm": "kworker/3:0H-events_highpri"
+    },
+    {
+      "pid": 37,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 14,
+      "comm": "cpuhp/4"
+    },
+    {
+      "pid": 38,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 14,
+      "comm": "idle_inject/4"
+    },
+    {
+      "pid": 39,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 14,
+      "comm": "migration/4"
+    },
+    {
+      "pid": 40,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 14,
+      "comm": "ksoftirqd/4"
+    },
+    {
+      "pid": 42,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 14,
+      "comm": "kworker/4:0H-kblockd"
+    },
+    {
+      "pid": 43,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 14,
+      "comm": "cpuhp/5"
+    },
+    {
+      "pid": 44,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 14,
+      "comm": "idle_inject/5"
+    },
+    {
+      "pid": 45,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 14,
+      "comm": "migration/5"
+    },
+    {
+      "pid": 46,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 14,
+      "comm": "ksoftirqd/5"
+    },
+    {
+      "pid": 48,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 14,
+      "comm": "kworker/5:0H-events_highpri"
+    },
+    {
+      "pid": 49,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 14,
+      "comm": "cpuhp/6"
+    },
+    {
+      "pid": 50,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 14,
+      "comm": "idle_inject/6"
+    },
+    {
+      "pid": 51,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 14,
+      "comm": "migration/6"
+    },
+    {
+      "pid": 52,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 14,
+      "comm": "ksoftirqd/6"
+    },
+    {
+      "pid": 54,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 14,
+      "comm": "kworker/6:0H-events_highpri"
+    },
+    {
+      "pid": 55,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 14,
+      "comm": "cpuhp/7"
+    },
+    {
+      "pid": 56,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 14,
+      "comm": "idle_inject/7"
+    },
+    {
+      "pid": 57,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 14,
+      "comm": "migration/7"
+    },
+    {
+      "pid": 58,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 14,
+      "comm": "ksoftirqd/7"
+    },
+    {
+      "pid": 60,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 14,
+      "comm": "kworker/7:0H-events_highpri"
+    },
+    {
+      "pid": 61,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 15,
+      "comm": "kdevtmpfs"
+    },
+    {
+      "pid": 62,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 15,
+      "comm": "inet_frag_wq"
+    },
+    {
+      "pid": 63,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 15,
+      "comm": "kauditd"
+    },
+    {
+      "pid": 64,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 15,
+      "comm": "khungtaskd"
+    },
+    {
+      "pid": 65,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 15,
+      "comm": "oom_reaper"
+    },
+    {
+      "pid": 66,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 15,
+      "comm": "writeback"
+    },
+    {
+      "pid": 67,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 15,
+      "comm": "kcompactd0"
+    },
+    {
+      "pid": 68,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 15,
+      "comm": "ksmd"
+    },
+    {
+      "pid": 69,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 15,
+      "comm": "khugepaged"
+    },
+    {
+      "pid": 116,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 15,
+      "comm": "kintegrityd"
+    },
+    {
+      "pid": 117,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 15,
+      "comm": "kblockd"
+    },
+    {
+      "pid": 118,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 15,
+      "comm": "blkcg_punt_bio"
+    },
+    {
+      "pid": 119,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 30,
+      "comm": "tpm_dev_wq"
+    },
+    {
+      "pid": 120,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 30,
+      "comm": "ata_sff"
+    },
+    {
+      "pid": 121,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 30,
+      "comm": "md"
+    },
+    {
+      "pid": 122,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 30,
+      "comm": "edac-poller"
+    },
+    {
+      "pid": 123,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 30,
+      "comm": "devfreq_wq"
+    },
+    {
+      "pid": 125,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 32,
+      "comm": "watchdogd"
+    },
+    {
+      "pid": 128,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 36,
+      "comm": "ksgxd"
+    },
+    {
+      "pid": 130,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 36,
+      "comm": "kswapd0"
+    },
+    {
+      "pid": 131,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 36,
+      "comm": "ecryptfs-kthrea"
+    },
+    {
+      "pid": 133,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 37,
+      "comm": "kthrotld"
+    },
+    {
+      "pid": 135,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 37,
+      "comm": "kworker/1:1-events"
+    },
+    {
+      "pid": 139,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 37,
+      "comm": "acpi_thermal_pm"
+    },
+    {
+      "pid": 142,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 39,
+      "comm": "vfio-irqfd-clea"
+    },
+    {
+      "pid": 143,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 41,
+      "comm": "mld"
+    },
+    {
+      "pid": 144,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 41,
+      "comm": "kworker/5:1H-kblockd"
+    },
+    {
+      "pid": 145,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 41,
+      "comm": "ipv6_addrconf"
+    },
+    {
+      "pid": 155,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 48,
+      "comm": "kstrp"
+    },
+    {
+      "pid": 158,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 48,
+      "comm": "zswap-shrink"
+    },
+    {
+      "pid": 166,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 50,
+      "comm": "charger_manager"
+    },
+    {
+      "pid": 188,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 55,
+      "comm": "kworker/2:1H-kblockd"
+    },
+    {
+      "pid": 222,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 63,
+      "comm": "scsi_eh_0"
+    },
+    {
+      "pid": 223,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 63,
+      "comm": "scsi_tmf_0"
+    },
+    {
+      "pid": 224,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 64,
+      "comm": "nvme-wq"
+    },
+    {
+      "pid": 225,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 64,
+      "comm": "nvme-reset-wq"
+    },
+    {
+      "pid": 226,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 64,
+      "comm": "nvme-delete-wq"
+    },
+    {
+      "pid": 229,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 66,
+      "comm": "kworker/6:1H-events_highpri"
+    },
+    {
+      "pid": 235,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 68,
+      "comm": "irq/98-ELAN0712"
+    },
+    {
+      "pid": 237,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 68,
+      "comm": "kworker/3:1H-events_highpri"
+    },
+    {
+      "pid": 242,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 68,
+      "comm": "kworker/7:1H-kblockd"
+    },
+    {
+      "pid": 274,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 138,
+      "comm": "kworker/4:1H-kblockd"
+    },
+    {
+      "pid": 297,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 265,
+      "comm": "jbd2/nvme0n1p2-"
+    },
+    {
+      "pid": 298,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 265,
+      "comm": "ext4-rsv-conver"
+    },
+    {
+      "pid": 338,
+      "ppid": 1,
+      "pgrp": 338,
+      "starttime": 306,
+      "comm": "systemd-journal"
+    },
+    {
+      "pid": 416,
+      "ppid": 1,
+      "pgrp": 416,
+      "starttime": 318,
+      "comm": "systemd-udevd"
+    },
+    {
+      "pid": 477,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 348,
+      "comm": "cfg80211"
+    },
+    {
+      "pid": 538,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 358,
+      "comm": "cryptd"
+    },
+    {
+      "pid": 554,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 360,
+      "comm": "card0-crtc0"
+    },
+    {
+      "pid": 557,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 360,
+      "comm": "card0-crtc1"
+    },
+    {
+      "pid": 558,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 360,
+      "comm": "card0-crtc2"
+    },
+    {
+      "pid": 573,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 369,
+      "comm": "kworker/u17:1-hci0"
+    },
+    {
+      "pid": 855,
+      "ppid": 1,
+      "pgrp": 855,
+      "starttime": 529,
+      "comm": "systemd-resolve"
+    },
+    {
+      "pid": 856,
+      "ppid": 1,
+      "pgrp": 856,
+      "starttime": 529,
+      "comm": "systemd-timesyn"
+    },
+    {
+      "pid": 861,
+      "ppid": 1,
+      "pgrp": 861,
+      "starttime": 535,
+      "comm": "accounts-daemon"
+    },
+    {
+      "pid": 862,
+      "ppid": 1,
+      "pgrp": 862,
+      "starttime": 535,
+      "comm": "acpid"
+    },
+    {
+      "pid": 865,
+      "ppid": 1,
+      "pgrp": 865,
+      "starttime": 536,
+      "comm": "avahi-daemon"
+    },
+    {
+      "pid": 866,
+      "ppid": 1,
+      "pgrp": 866,
+      "starttime": 536,
+      "comm": "bluetoothd"
+    },
+    {
+      "pid": 867,
+      "ppid": 1,
+      "pgrp": 867,
+      "starttime": 536,
+      "comm": "cron"
+    },
+    {
+      "pid": 870,
+      "ppid": 1,
+      "pgrp": 870,
+      "starttime": 536,
+      "comm": "dbus-daemon"
+    },
+    {
+      "pid": 873,
+      "ppid": 1,
+      "pgrp": 873,
+      "starttime": 536,
+      "comm": "NetworkManager"
+    },
+    {
+      "pid": 885,
+      "ppid": 1,
+      "pgrp": 885,
+      "starttime": 537,
+      "comm": "irqbalance"
+    },
+    {
+      "pid": 891,
+      "ppid": 1,
+      "pgrp": 891,
+      "starttime": 538,
+      "comm": "networkd-dispat"
+    },
+    {
+      "pid": 892,
+      "ppid": 1,
+      "pgrp": 892,
+      "starttime": 538,
+      "comm": "ftsprhvd"
+    },
+    {
+      "pid": 896,
+      "ppid": 1,
+      "pgrp": 896,
+      "starttime": 538,
+      "comm": "polkitd"
+    },
+    {
+      "pid": 901,
+      "ppid": 1,
+      "pgrp": 901,
+      "starttime": 538,
+      "comm": "rsyslogd"
+    },
+    {
+      "pid": 910,
+      "ppid": 1,
+      "pgrp": 910,
+      "starttime": 539,
+      "comm": "snapd"
+    },
+    {
+      "pid": 913,
+      "ppid": 1,
+      "pgrp": 913,
+      "starttime": 539,
+      "comm": "switcheroo-cont"
+    },
+    {
+      "pid": 916,
+      "ppid": 1,
+      "pgrp": 916,
+      "starttime": 539,
+      "comm": "systemd-logind"
+    },
+    {
+      "pid": 922,
+      "ppid": 1,
+      "pgrp": 922,
+      "starttime": 539,
+      "comm": "thermald"
+    },
+    {
+      "pid": 924,
+      "ppid": 1,
+      "pgrp": 924,
+      "starttime": 539,
+      "comm": "udisksd"
+    },
+    {
+      "pid": 934,
+      "ppid": 1,
+      "pgrp": 934,
+      "starttime": 540,
+      "comm": "wpa_supplicant"
+    },
+    {
+      "pid": 959,
+      "ppid": 865,
+      "pgrp": 865,
+      "starttime": 542,
+      "comm": "avahi-daemon"
+    },
+    {
+      "pid": 970,
+      "ppid": 1,
+      "pgrp": 970,
+      "starttime": 545,
+      "comm": "vpnagentd"
+    },
+    {
+      "pid": 971,
+      "ppid": 1,
+      "pgrp": 971,
+      "starttime": 545,
+      "comm": "ftscanhvd"
+    },
+    {
+      "pid": 1059,
+      "ppid": 1,
+      "pgrp": 1059,
+      "starttime": 558,
+      "comm": "vmware-usbarbit"
+    },
+    {
+      "pid": 1081,
+      "ppid": 1,
+      "pgrp": 1081,
+      "starttime": 559,
+      "comm": "colord"
+    },
+    {
+      "pid": 1125,
+      "ppid": 1,
+      "pgrp": 1125,
+      "starttime": 561,
+      "comm": "ModemManager"
+    },
+    {
+      "pid": 1213,
+      "ppid": 1,
+      "pgrp": 1213,
+      "starttime": 566,
+      "comm": "containerd"
+    },
+    {
+      "pid": 1283,
+      "ppid": 1,
+      "pgrp": 1283,
+      "starttime": 591,
+      "comm": "aesm_service"
+    },
+    {
+      "pid": 1301,
+      "ppid": 1,
+      "pgrp": 1301,
+      "starttime": 594,
+      "comm": "unattended-upgr"
+    },
+    {
+      "pid": 1311,
+      "ppid": 1,
+      "pgrp": 1311,
+      "starttime": 596,
+      "comm": "systemd"
+    },
+    {
+      "pid": 1362,
+      "ppid": 1311,
+      "pgrp": 1311,
+      "starttime": 603,
+      "comm": "(sd-pam)"
+    },
+    {
+      "pid": 1385,
+      "ppid": 1,
+      "pgrp": 1385,
+      "starttime": 618,
+      "comm": "upowerd"
+    },
+    {
+      "pid": 1391,
+      "ppid": 1311,
+      "pgrp": 1391,
+      "starttime": 624,
+      "comm": "pulseaudio"
+    },
+    {
+      "pid": 1415,
+      "ppid": 1,
+      "pgrp": 1415,
+      "starttime": 633,
+      "comm": "rtkit-daemon"
+    },
+    {
+      "pid": 1789,
+      "ppid": 1311,
+      "pgrp": 1789,
+      "starttime": 680,
+      "comm": "dbus-daemon"
+    },
+    {
+      "pid": 1798,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 691,
+      "comm": "iprt-VBoxWQueue"
+    },
+    {
+      "pid": 1799,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 692,
+      "comm": "iprt-VBoxTscThr"
+    },
+    {
+      "pid": 1805,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 695,
+      "comm": "bpfilter_umh"
+    },
+    {
+      "pid": 1809,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 696,
+      "comm": "krfcommd"
+    },
+    {
+      "pid": 2036,
+      "ppid": 1,
+      "pgrp": 2036,
+      "starttime": 1513,
+      "comm": "dockerd"
+    },
+    {
+      "pid": 2072,
+      "ppid": 1,
+      "pgrp": 2072,
+      "starttime": 1514,
+      "comm": "kerneloops"
+    },
+    {
+      "pid": 2086,
+      "ppid": 1,
+      "pgrp": 2086,
+      "starttime": 1515,
+      "comm": "kerneloops"
+    },
+    {
+      "pid": 2196,
+      "ppid": 1,
+      "pgrp": 2196,
+      "starttime": 1528,
+      "comm": "clearpass-ongua"
+    },
+    {
+      "pid": 2199,
+      "ppid": 1,
+      "pgrp": 2199,
+      "starttime": 1528,
+      "comm": "clearpass-agent"
+    },
+    {
+      "pid": 2571,
+      "ppid": 1,
+      "pgrp": 2571,
+      "starttime": 1570,
+      "comm": "via-vpn-srv"
+    },
+    {
+      "pid": 3282,
+      "ppid": 1,
+      "pgrp": 3282,
+      "starttime": 2185,
+      "comm": "gdm3"
+    },
+    {
+      "pid": 3880,
+      "ppid": 3282,
+      "pgrp": 3282,
+      "starttime": 7505,
+      "comm": "gdm-session-wor"
+    },
+    {
+      "pid": 3893,
+      "ppid": 1,
+      "pgrp": 3892,
+      "starttime": 7891,
+      "comm": "gnome-keyring-d"
+    },
+    {
+      "pid": 3898,
+      "ppid": 3880,
+      "pgrp": 3898,
+      "starttime": 7918,
+      "comm": "gdm-x-session"
+    },
+    {
+      "pid": 3900,
+      "ppid": 3898,
+      "pgrp": 3898,
+      "starttime": 7919,
+      "comm": "Xorg"
+    },
+    {
+      "pid": 3909,
+      "ppid": 3898,
+      "pgrp": 3898,
+      "starttime": 7950,
+      "comm": "gnome-session-b"
+    },
+    {
+      "pid": 3982,
+      "ppid": 3909,
+      "pgrp": 3982,
+      "starttime": 7965,
+      "comm": "ssh-agent"
+    },
+    {
+      "pid": 4000,
+      "ppid": 1311,
+      "pgrp": 4000,
+      "starttime": 7975,
+      "comm": "at-spi-bus-laun"
+    },
+    {
+      "pid": 4005,
+      "ppid": 4000,
+      "pgrp": 4000,
+      "starttime": 7976,
+      "comm": "dbus-daemon"
+    },
+    {
+      "pid": 4013,
+      "ppid": 1311,
+      "pgrp": 4013,
+      "starttime": 7992,
+      "comm": "gnome-session-c"
+    },
+    {
+      "pid": 4020,
+      "ppid": 1311,
+      "pgrp": 4020,
+      "starttime": 7993,
+      "comm": "gnome-session-b"
+    },
+    {
+      "pid": 4034,
+      "ppid": 1311,
+      "pgrp": 4034,
+      "starttime": 8001,
+      "comm": "gnome-shell"
+    },
+    {
+      "pid": 4052,
+      "ppid": 1311,
+      "pgrp": 4052,
+      "starttime": 8010,
+      "comm": "gvfsd"
+    },
+    {
+      "pid": 4057,
+      "ppid": 1311,
+      "pgrp": 4052,
+      "starttime": 8013,
+      "comm": "gvfsd-fuse"
+    },
+    {
+      "pid": 4073,
+      "ppid": 4034,
+      "pgrp": 4073,
+      "starttime": 8067,
+      "comm": "ibus-daemon"
+    },
+    {
+      "pid": 4077,
+      "ppid": 4073,
+      "pgrp": 4073,
+      "starttime": 8068,
+      "comm": "ibus-memconf"
+    },
+    {
+      "pid": 4078,
+      "ppid": 4073,
+      "pgrp": 4073,
+      "starttime": 8068,
+      "comm": "ibus-extension-"
+    },
+    {
+      "pid": 4082,
+      "ppid": 1311,
+      "pgrp": 4073,
+      "starttime": 8068,
+      "comm": "ibus-x11"
+    },
+    {
+      "pid": 4084,
+      "ppid": 1311,
+      "pgrp": 1789,
+      "starttime": 8068,
+      "comm": "ibus-portal"
+    },
+    {
+      "pid": 4094,
+      "ppid": 1311,
+      "pgrp": 4000,
+      "starttime": 8070,
+      "comm": "at-spi2-registr"
+    },
+    {
+      "pid": 4098,
+      "ppid": 1311,
+      "pgrp": 4098,
+      "starttime": 8082,
+      "comm": "xdg-permission-"
+    },
+    {
+      "pid": 4101,
+      "ppid": 1311,
+      "pgrp": 1789,
+      "starttime": 8082,
+      "comm": "gnome-shell-cal"
+    },
+    {
+      "pid": 4109,
+      "ppid": 1311,
+      "pgrp": 4109,
+      "starttime": 8085,
+      "comm": "evolution-sourc"
+    },
+    {
+      "pid": 4118,
+      "ppid": 1311,
+      "pgrp": 1789,
+      "starttime": 8091,
+      "comm": "goa-daemon"
+    },
+    {
+      "pid": 4120,
+      "ppid": 1311,
+      "pgrp": 1789,
+      "starttime": 8094,
+      "comm": "dconf-service"
+    },
+    {
+      "pid": 4125,
+      "ppid": 1311,
+      "pgrp": 4125,
+      "starttime": 8098,
+      "comm": "evolution-calen"
+    },
+    {
+      "pid": 4126,
+      "ppid": 1311,
+      "pgrp": 4126,
+      "starttime": 8098,
+      "comm": "gvfs-udisks2-vo"
+    },
+    {
+      "pid": 4133,
+      "ppid": 1311,
+      "pgrp": 4133,
+      "starttime": 8104,
+      "comm": "gvfs-goa-volume"
+    },
+    {
+      "pid": 4142,
+      "ppid": 1311,
+      "pgrp": 1789,
+      "starttime": 8105,
+      "comm": "goa-identity-se"
+    },
+    {
+      "pid": 4150,
+      "ppid": 1311,
+      "pgrp": 4150,
+      "starttime": 8106,
+      "comm": "gvfs-gphoto2-vo"
+    },
+    {
+      "pid": 4158,
+      "ppid": 1311,
+      "pgrp": 4158,
+      "starttime": 8107,
+      "comm": "evolution-addre"
+    },
+    {
+      "pid": 4163,
+      "ppid": 1311,
+      "pgrp": 4163,
+      "starttime": 8109,
+      "comm": "gvfs-afc-volume"
+    },
+    {
+      "pid": 4169,
+      "ppid": 1311,
+      "pgrp": 4169,
+      "starttime": 8110,
+      "comm": "gvfs-mtp-volume"
+    },
+    {
+      "pid": 4184,
+      "ppid": 1311,
+      "pgrp": 1789,
+      "starttime": 8126,
+      "comm": "gjs"
+    },
+    {
+      "pid": 4200,
+      "ppid": 4052,
+      "pgrp": 4052,
+      "starttime": 8130,
+      "comm": "gvfsd-trash"
+    },
+    {
+      "pid": 4206,
+      "ppid": 1311,
+      "pgrp": 4206,
+      "starttime": 8132,
+      "comm": "gsd-a11y-settin"
+    },
+    {
+      "pid": 4207,
+      "ppid": 1311,
+      "pgrp": 4207,
+      "starttime": 8132,
+      "comm": "gsd-color"
+    },
+    {
+      "pid": 4209,
+      "ppid": 1311,
+      "pgrp": 4209,
+      "starttime": 8132,
+      "comm": "gsd-datetime"
+    },
+    {
+      "pid": 4212,
+      "ppid": 1311,
+      "pgrp": 4212,
+      "starttime": 8132,
+      "comm": "gsd-housekeepin"
+    },
+    {
+      "pid": 4216,
+      "ppid": 1311,
+      "pgrp": 4216,
+      "starttime": 8132,
+      "comm": "gsd-keyboard"
+    },
+    {
+      "pid": 4218,
+      "ppid": 1311,
+      "pgrp": 4218,
+      "starttime": 8133,
+      "comm": "gsd-media-keys"
+    },
+    {
+      "pid": 4222,
+      "ppid": 1311,
+      "pgrp": 4222,
+      "starttime": 8133,
+      "comm": "gsd-power"
+    },
+    {
+      "pid": 4223,
+      "ppid": 1311,
+      "pgrp": 4223,
+      "starttime": 8133,
+      "comm": "gsd-print-notif"
+    },
+    {
+      "pid": 4224,
+      "ppid": 1311,
+      "pgrp": 4224,
+      "starttime": 8133,
+      "comm": "gsd-rfkill"
+    },
+    {
+      "pid": 4225,
+      "ppid": 1311,
+      "pgrp": 4225,
+      "starttime": 8134,
+      "comm": "gsd-screensaver"
+    },
+    {
+      "pid": 4226,
+      "ppid": 1311,
+      "pgrp": 4226,
+      "starttime": 8134,
+      "comm": "gsd-sharing"
+    },
+    {
+      "pid": 4228,
+      "ppid": 1311,
+      "pgrp": 4228,
+      "starttime": 8134,
+      "comm": "gsd-smartcard"
+    },
+    {
+      "pid": 4230,
+      "ppid": 1311,
+      "pgrp": 4230,
+      "starttime": 8134,
+      "comm": "gsd-sound"
+    },
+    {
+      "pid": 4231,
+      "ppid": 1311,
+      "pgrp": 4231,
+      "starttime": 8134,
+      "comm": "gsd-usb-protect"
+    },
+    {
+      "pid": 4234,
+      "ppid": 1311,
+      "pgrp": 4234,
+      "starttime": 8135,
+      "comm": "gsd-wacom"
+    },
+    {
+      "pid": 4239,
+      "ppid": 1311,
+      "pgrp": 4239,
+      "starttime": 8135,
+      "comm": "gsd-wwan"
+    },
+    {
+      "pid": 4241,
+      "ppid": 1311,
+      "pgrp": 4241,
+      "starttime": 8135,
+      "comm": "gsd-xsettings"
+    },
+    {
+      "pid": 4244,
+      "ppid": 4020,
+      "pgrp": 4020,
+      "starttime": 8136,
+      "comm": "clearpass-ongua"
+    },
+    {
+      "pid": 4265,
+      "ppid": 4073,
+      "pgrp": 4073,
+      "starttime": 8138,
+      "comm": "ibus-engine-sim"
+    },
+    {
+      "pid": 4267,
+      "ppid": 4020,
+      "pgrp": 4020,
+      "starttime": 8138,
+      "comm": "gsd-disk-utilit"
+    },
+    {
+      "pid": 4287,
+      "ppid": 4020,
+      "pgrp": 4020,
+      "starttime": 8140,
+      "comm": "evolution-alarm"
+    },
+    {
+      "pid": 4339,
+      "ppid": 1311,
+      "pgrp": 4223,
+      "starttime": 8146,
+      "comm": "gsd-printer"
+    },
+    {
+      "pid": 4369,
+      "ppid": 1311,
+      "pgrp": 4020,
+      "starttime": 8183,
+      "comm": "chatgpt-desktop"
+    },
+    {
+      "pid": 4405,
+      "ppid": 1311,
+      "pgrp": 4405,
+      "starttime": 8195,
+      "comm": "tracker-miner-f"
+    },
+    {
+      "pid": 4406,
+      "ppid": 1311,
+      "pgrp": 4406,
+      "starttime": 8195,
+      "comm": "xdg-document-po"
+    },
+    {
+      "pid": 4498,
+      "ppid": 4369,
+      "pgrp": 4020,
+      "starttime": 8462,
+      "comm": "chatgpt-desktop"
+    },
+    {
+      "pid": 4499,
+      "ppid": 4369,
+      "pgrp": 4020,
+      "starttime": 8462,
+      "comm": "chatgpt-desktop"
+    },
+    {
+      "pid": 4529,
+      "ppid": 1311,
+      "pgrp": 4529,
+      "starttime": 8787,
+      "comm": "xdg-desktop-por"
+    },
+    {
+      "pid": 4554,
+      "ppid": 1311,
+      "pgrp": 4554,
+      "starttime": 8789,
+      "comm": "xdg-desktop-por"
+    },
+    {
+      "pid": 4564,
+      "ppid": 4498,
+      "pgrp": 4020,
+      "starttime": 8817,
+      "comm": "chatgpt-desktop"
+    },
+    {
+      "pid": 4633,
+      "ppid": 4369,
+      "pgrp": 4020,
+      "starttime": 9002,
+      "comm": "chatgpt-desktop"
+    },
+    {
+      "pid": 5710,
+      "ppid": 1311,
+      "pgrp": 5710,
+      "starttime": 14094,
+      "comm": "gvfsd-metadata"
+    },
+    {
+      "pid": 5713,
+      "ppid": 4020,
+      "pgrp": 4020,
+      "starttime": 14198,
+      "comm": "update-notifier"
+    },
+    {
+      "pid": 6038,
+      "ppid": 1311,
+      "pgrp": 6038,
+      "starttime": 17308,
+      "comm": "gnome-terminal-"
+    },
+    {
+      "pid": 8240,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 31758,
+      "comm": "jbd2/loop36-8"
+    },
+    {
+      "pid": 8241,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 31758,
+      "comm": "ext4-rsv-conver"
+    },
+    {
+      "pid": 8422,
+      "ppid": 6038,
+      "pgrp": 8422,
+      "starttime": 34719,
+      "comm": "bash"
+    },
+    {
+      "pid": 9073,
+      "ppid": 8422,
+      "pgrp": 9073,
+      "starttime": 38704,
+      "comm": "codex"
+    },
+    {
+      "pid": 9164,
+      "ppid": 9073,
+      "pgrp": 9164,
+      "starttime": 38834,
+      "comm": "codex"
+    },
+    {
+      "pid": 223502,
+      "ppid": 1311,
+      "pgrp": 4034,
+      "starttime": 1168583,
+      "comm": "chrome"
+    },
+    {
+      "pid": 223508,
+      "ppid": 223502,
+      "pgrp": 4034,
+      "starttime": 1168584,
+      "comm": "cat"
+    },
+    {
+      "pid": 223509,
+      "ppid": 223502,
+      "pgrp": 4034,
+      "starttime": 1168584,
+      "comm": "cat"
+    },
+    {
+      "pid": 223511,
+      "ppid": 1311,
+      "pgrp": 223510,
+      "starttime": 1168598,
+      "comm": "chrome_crashpad"
+    },
+    {
+      "pid": 223513,
+      "ppid": 1311,
+      "pgrp": 223512,
+      "starttime": 1168598,
+      "comm": "chrome_crashpad"
+    },
+    {
+      "pid": 223519,
+      "ppid": 223502,
+      "pgrp": 4034,
+      "starttime": 1168600,
+      "comm": "chrome"
+    },
+    {
+      "pid": 223520,
+      "ppid": 223502,
+      "pgrp": 4034,
+      "starttime": 1168600,
+      "comm": "chrome"
+    },
+    {
+      "pid": 223521,
+      "ppid": 223520,
+      "pgrp": 4034,
+      "starttime": 1168603,
+      "comm": "nacl_helper"
+    },
+    {
+      "pid": 223524,
+      "ppid": 223520,
+      "pgrp": 4034,
+      "starttime": 1168604,
+      "comm": "chrome"
+    },
+    {
+      "pid": 223546,
+      "ppid": 223519,
+      "pgrp": 4034,
+      "starttime": 1168628,
+      "comm": "chrome"
+    },
+    {
+      "pid": 223548,
+      "ppid": 223502,
+      "pgrp": 4034,
+      "starttime": 1168629,
+      "comm": "chrome"
+    },
+    {
+      "pid": 223559,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 1168634,
+      "comm": "chrome"
+    },
+    {
+      "pid": 223770,
+      "ppid": 223502,
+      "pgrp": 4034,
+      "starttime": 1169292,
+      "comm": "chrome"
+    },
+    {
+      "pid": 223973,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 1172812,
+      "comm": "chrome"
+    },
+    {
+      "pid": 467824,
+      "ppid": 6038,
+      "pgrp": 467824,
+      "starttime": 69396419,
+      "comm": "bash"
+    },
+    {
+      "pid": 621203,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 71469725,
+      "comm": "kworker/0:0H-acpi_thermal_pm"
+    },
+    {
+      "pid": 760731,
+      "ppid": 1,
+      "pgrp": 760731,
+      "starttime": 74438455,
+      "comm": "run-cupsd"
+    },
+    {
+      "pid": 760741,
+      "ppid": 1,
+      "pgrp": 760741,
+      "starttime": 74438456,
+      "comm": "run-cups-browse"
+    },
+    {
+      "pid": 761312,
+      "ppid": 760731,
+      "pgrp": 760731,
+      "starttime": 74438520,
+      "comm": "cupsd"
+    },
+    {
+      "pid": 761313,
+      "ppid": 760731,
+      "pgrp": 760731,
+      "starttime": 74438520,
+      "comm": "cups-proxyd"
+    },
+    {
+      "pid": 761323,
+      "ppid": 760741,
+      "pgrp": 760741,
+      "starttime": 74438579,
+      "comm": "run-cups-browse"
+    },
+    {
+      "pid": 771264,
+      "ppid": 4369,
+      "pgrp": 4020,
+      "starttime": 8623785,
+      "comm": "chatgpt-desktop"
+    },
+    {
+      "pid": 771326,
+      "ppid": 4499,
+      "pgrp": 4020,
+      "starttime": 8624464,
+      "comm": "chatgpt-desktop"
+    },
+    {
+      "pid": 828562,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 76073219,
+      "comm": "chrome"
+    },
+    {
+      "pid": 828591,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 76073405,
+      "comm": "chrome"
+    },
+    {
+      "pid": 828962,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 76083705,
+      "comm": "chrome"
+    },
+    {
+      "pid": 829378,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 76084214,
+      "comm": "chrome"
+    },
+    {
+      "pid": 830003,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 76098038,
+      "comm": "chrome"
+    },
+    {
+      "pid": 830023,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 76098181,
+      "comm": "chrome"
+    },
+    {
+      "pid": 830040,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 76098253,
+      "comm": "chrome"
+    },
+    {
+      "pid": 865630,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 10024238,
+      "comm": "kworker/u17:2-i915_flip"
+    },
+    {
+      "pid": 985240,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 11940296,
+      "comm": "kworker/1:1H"
+    },
+    {
+      "pid": 1076570,
+      "ppid": 1311,
+      "pgrp": 1789,
+      "starttime": 13639431,
+      "comm": "nautilus"
+    },
+    {
+      "pid": 1219993,
+      "ppid": 1,
+      "pgrp": 1219993,
+      "starttime": 15809016,
+      "comm": "whoopsie"
+    },
+    {
+      "pid": 1235363,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 84253223,
+      "comm": "chrome"
+    },
+    {
+      "pid": 1235376,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 84253627,
+      "comm": "chrome"
+    },
+    {
+      "pid": 1235914,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 84259799,
+      "comm": "chrome"
+    },
+    {
+      "pid": 1235956,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 84260554,
+      "comm": "chrome"
+    },
+    {
+      "pid": 1235970,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 84260618,
+      "comm": "chrome"
+    },
+    {
+      "pid": 1236587,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 84265996,
+      "comm": "chrome"
+    },
+    {
+      "pid": 1264053,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 84925303,
+      "comm": "chrome"
+    },
+    {
+      "pid": 1265689,
+      "ppid": 467824,
+      "pgrp": 1265689,
+      "starttime": 84947287,
+      "comm": "python3"
+    },
+    {
+      "pid": 1453340,
+      "ppid": 1,
+      "pgrp": 1453340,
+      "starttime": 88184992,
+      "comm": "cupsd"
+    },
+    {
+      "pid": 1453342,
+      "ppid": 1,
+      "pgrp": 1453342,
+      "starttime": 88184992,
+      "comm": "cups-browsed"
+    },
+    {
+      "pid": 1453345,
+      "ppid": 1453340,
+      "pgrp": 1453345,
+      "starttime": 88184998,
+      "comm": "dbus"
+    },
+    {
+      "pid": 1571641,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 22981351,
+      "comm": "irq/126-mei_me"
+    },
+    {
+      "pid": 1571658,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 22981353,
+      "comm": "RTW_CMD_THREAD"
+    },
+    {
+      "pid": 1572160,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 90919502,
+      "comm": "kworker/7:0-inet_frag_wq"
+    },
+    {
+      "pid": 1616666,
+      "ppid": 1311,
+      "pgrp": 1616666,
+      "starttime": 92001383,
+      "comm": "python3"
+    },
+    {
+      "pid": 1616668,
+      "ppid": 1616666,
+      "pgrp": 1616668,
+      "starttime": 92001391,
+      "comm": "python3"
+    },
+    {
+      "pid": 1616670,
+      "ppid": 1616668,
+      "pgrp": 1616670,
+      "starttime": 92001399,
+      "comm": "codex"
+    },
+    {
+      "pid": 1616809,
+      "ppid": 1616670,
+      "pgrp": 1616809,
+      "starttime": 92002041,
+      "comm": "codex-code-mode"
+    },
+    {
+      "pid": 1619833,
+      "ppid": 1311,
+      "pgrp": 1619833,
+      "starttime": 92037917,
+      "comm": "python3"
+    },
+    {
+      "pid": 1621307,
+      "ppid": 1311,
+      "pgrp": 1621307,
+      "starttime": 92054340,
+      "comm": "python3"
+    },
+    {
+      "pid": 1621308,
+      "ppid": 1311,
+      "pgrp": 1621308,
+      "starttime": 92054340,
+      "comm": "python3"
+    },
+    {
+      "pid": 1625441,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 92109185,
+      "comm": "kworker/2:0-mm_percpu_wq"
+    },
+    {
+      "pid": 1643015,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 92391157,
+      "comm": "kworker/0:1-events"
+    },
+    {
+      "pid": 1646897,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 92462334,
+      "comm": "kworker/u16:0-events_unbound"
+    },
+    {
+      "pid": 1658750,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 92631974,
+      "comm": "kworker/0:1H-events_highpri"
+    },
+    {
+      "pid": 1664630,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 92732071,
+      "comm": "kworker/3:0-cgroup_destroy"
+    },
+    {
+      "pid": 1671342,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 92841818,
+      "comm": "kworker/6:1-events"
+    },
+    {
+      "pid": 1685260,
+      "ppid": 9164,
+      "pgrp": 1685260,
+      "starttime": 93111712,
+      "comm": "codex"
+    },
+    {
+      "pid": 1685455,
+      "ppid": 1685260,
+      "pgrp": 1685455,
+      "starttime": 93114395,
+      "comm": "codex-code-mode"
+    },
+    {
+      "pid": 1685598,
+      "ppid": 1685260,
+      "pgrp": 1685598,
+      "starttime": 93118429,
+      "comm": "python3"
+    },
+    {
+      "pid": 1688005,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 93145684,
+      "comm": "kworker/4:0-cgroup_destroy"
+    },
+    {
+      "pid": 1688812,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 93145821,
+      "comm": "kworker/5:2-mm_percpu_wq"
+    },
+    {
+      "pid": 1690201,
+      "ppid": 761323,
+      "pgrp": 760741,
+      "starttime": 93158634,
+      "comm": "sleep"
+    },
+    {
+      "pid": 1691327,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 93179421,
+      "comm": "kworker/4:1-mm_percpu_wq"
+    },
+    {
+      "pid": 1692872,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 93203376,
+      "comm": "kworker/6:0-events"
+    },
+    {
+      "pid": 1694967,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 93228270,
+      "comm": "kworker/u16:3-events_unbound"
+    },
+    {
+      "pid": 1695008,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 93230939,
+      "comm": "kworker/2:1"
+    },
+    {
+      "pid": 1695046,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 93230947,
+      "comm": "kworker/3:1-mm_percpu_wq"
+    },
+    {
+      "pid": 1695598,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 93238910,
+      "comm": "kworker/0:2-events"
+    },
+    {
+      "pid": 1699033,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 93297005,
+      "comm": "kworker/7:1-mm_percpu_wq"
+    },
+    {
+      "pid": 1699593,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 93306757,
+      "comm": "kworker/u16:1-events_unbound"
+    },
+    {
+      "pid": 1699667,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 93309918,
+      "comm": "kworker/5:1-events"
+    },
+    {
+      "pid": 1701988,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 93349345,
+      "comm": "kworker/u16:2-events_unbound"
+    },
+    {
+      "pid": 1703455,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 93368632,
+      "comm": "kworker/5:0-events"
+    },
+    {
+      "pid": 1703484,
+      "ppid": 2,
+      "pgrp": 0,
+      "starttime": 93368647,
+      "comm": "kworker/7:2-cgroup_destroy"
+    },
+    {
+      "pid": 1703661,
+      "ppid": 1616670,
+      "pgrp": 1703661,
+      "starttime": 93377702,
+      "comm": "bash"
+    },
+    {
+      "pid": 1703662,
+      "ppid": 1703661,
+      "pgrp": 1703661,
+      "starttime": 93377703,
+      "comm": "python3"
+    },
+    {
+      "pid": 2179040,
+      "ppid": 6038,
+      "pgrp": 2179040,
+      "starttime": 31763586,
+      "comm": "htop"
+    },
+    {
+      "pid": 2219399,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 32269742,
+      "comm": "chrome"
+    },
+    {
+      "pid": 2219452,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 32270405,
+      "comm": "chrome"
+    },
+    {
+      "pid": 2219465,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 32270423,
+      "comm": "chrome"
+    },
+    {
+      "pid": 2222035,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 32308222,
+      "comm": "chrome"
+    },
+    {
+      "pid": 2222142,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 32310380,
+      "comm": "chrome"
+    },
+    {
+      "pid": 2335803,
+      "ppid": 1311,
+      "pgrp": 1789,
+      "starttime": 34213084,
+      "comm": "gnome-calendar"
+    },
+    {
+      "pid": 2335806,
+      "ppid": 1311,
+      "pgrp": 1789,
+      "starttime": 34213085,
+      "comm": "seahorse"
+    },
+    {
+      "pid": 3315560,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 50007333,
+      "comm": "chrome"
+    },
+    {
+      "pid": 3464340,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 52282464,
+      "comm": "chrome"
+    },
+    {
+      "pid": 3474861,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 52439202,
+      "comm": "chrome"
+    },
+    {
+      "pid": 3475616,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 52449908,
+      "comm": "chrome"
+    },
+    {
+      "pid": 3476280,
+      "ppid": 4052,
+      "pgrp": 4052,
+      "starttime": 52458686,
+      "comm": "gvfsd-network"
+    },
+    {
+      "pid": 3476295,
+      "ppid": 4052,
+      "pgrp": 4052,
+      "starttime": 52458799,
+      "comm": "gvfsd-dnssd"
+    },
+    {
+      "pid": 3810383,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 57208127,
+      "comm": "chrome"
+    },
+    {
+      "pid": 4164859,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 62225247,
+      "comm": "chrome"
+    },
+    {
+      "pid": 4166301,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 62241185,
+      "comm": "chrome"
+    },
+    {
+      "pid": 4166316,
+      "ppid": 223524,
+      "pgrp": 4034,
+      "starttime": 62241196,
+      "comm": "chrome"
+    }
+  ],
+  "proc_errors": [],
+  "closed_permanent_mutex_probes": [
+    {
+      "index": 1,
+      "device": 27,
+      "inode": 4,
+      "full_EOF_FLOCK_EX_acquired": true,
+      "observer_pid": 1703662,
+      "lock_rows": [
+        "89: FLOCK  ADVISORY  WRITE 1703662 00:1b:4 0 EOF"
+      ],
+      "unlocked": true,
+      "fd_closed": true
+    },
+    {
+      "index": 2,
+      "device": 27,
+      "inode": 4,
+      "full_EOF_FLOCK_EX_acquired": true,
+      "observer_pid": 1703662,
+      "lock_rows": [
+        "104: FLOCK  ADVISORY  WRITE 1703662 00:1b:4 0 EOF"
+      ],
+      "unlocked": true,
+      "fd_closed": true
+    }
+  ],
+  "docker": [
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "50970ddb9d70fd3133037de8b68b6aebb92a3bfe4d311185c706d8f9969811bb"
+      ],
+      "returncode": 0,
+      "stdout": "[\n    {\n        \"Id\": \"50970ddb9d70fd3133037de8b68b6aebb92a3bfe4d311185c706d8f9969811bb\",\n        \"Created\": \"2026-10-27T21:23:39.39138724Z\",\n        \"Path\": \"/usr/bin/python3\",\n        \"Args\": [\n            \"-I\",\n            \"-B\",\n            \"/build-only-worker.py\",\n            \"/build-only-plan.json\"\n        ],\n        \"State\": {\n            \"Status\": \"exited\",\n            \"Running\": false,\n            \"Paused\": false,\n            \"Restarting\": false,\n            \"OOMKilled\": false,\n            \"Dead\": false,\n            \"Pid\": 0,\n            \"ExitCode\": 0,\n            \"Error\": \"\",\n            \"StartedAt\": \"2026-10-27T21:23:39.5548773Z\",\n            \"FinishedAt\": \"2026-10-27T21:24:01.626559264Z\"\n        },\n        \"Image\": \"sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5\",\n        \"ResolvConfPath\": \"/var/lib/docker/containers/50970ddb9d70fd3133037de8b68b6aebb92a3bfe4d311185c706d8f9969811bb/resolv.conf\",\n        \"HostnamePath\": \"/var/lib/docker/containers/50970ddb9d70fd3133037de8b68b6aebb92a3bfe4d311185c706d8f9969811bb/hostname\",\n        \"HostsPath\": \"/var/lib/docker/containers/50970ddb9d70fd3133037de8b68b6aebb92a3bfe4d311185c706d8f9969811bb/hosts\",\n        \"LogPath\": \"/var/lib/docker/containers/50970ddb9d70fd3133037de8b68b6aebb92a3bfe4d311185c706d8f9969811bb/50970ddb9d70fd3133037de8b68b6aebb92a3bfe4d311185c706d8f9969811bb-json.log\",\n        \"Name\": \"/current112-build-only-5c2cd5ea297e4770a1e1f4ea05d8cf9b\",\n        \"RestartCount\": 0,\n        \"Driver\": \"overlay2\",\n        \"Platform\": \"linux\",\n        \"MountLabel\": \"\",\n        \"ProcessLabel\": \"\",\n        \"AppArmorProfile\": \"docker-default\",\n        \"ExecIDs\": null,\n        \"HostConfig\": {\n            \"Binds\": null,\n            \"ContainerIDFile\": \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/OUTPUT/container.cid\",\n            \"LogConfig\": {\n                \"Type\": \"json-file\",\n                \"Config\": {}\n            },\n            \"NetworkMode\": \"none\",\n            \"PortBindings\": {},\n            \"RestartPolicy\": {\n                \"Name\": \"no\",\n                \"MaximumRetryCount\": 0\n            },\n            \"AutoRemove\": false,\n            \"VolumeDriver\": \"\",\n            \"VolumesFrom\": null,\n            \"ConsoleSize\": [\n                0,\n                0\n            ],\n            \"CapAdd\": null,\n            \"CapDrop\": [\n                \"ALL\"\n            ],\n            \"CgroupnsMode\": \"host\",\n            \"Dns\": [],\n            \"DnsOptions\": [],\n            \"DnsSearch\": [],\n            \"ExtraHosts\": null,\n            \"GroupAdd\": null,\n            \"IpcMode\": \"private\",\n            \"Cgroup\": \"\",\n            \"Links\": null,\n            \"OomScoreAdj\": 0,\n            \"PidMode\": \"\",\n            \"Privileged\": false,\n            \"PublishAllPorts\": false,\n            \"ReadonlyRootfs\": true,\n            \"SecurityOpt\": [\n                \"no-new-privileges\"\n            ],\n            \"Tmpfs\": {\n                \"/tmp\": \"rw,nosuid,nodev,size=1073741824,mode=1777\"\n            },\n            \"UTSMode\": \"\",\n            \"UsernsMode\": \"\",\n            \"ShmSize\": 67108864,\n            \"Runtime\": \"runc\",\n            \"Isolation\": \"\",\n            \"CpuShares\": 0,\n            \"Memory\": 12884901888,\n            \"NanoCpus\": 0,\n            \"CgroupParent\": \"\",\n            \"BlkioWeight\": 0,\n            \"BlkioWeightDevice\": [],\n            \"BlkioDeviceReadBps\": [],\n            \"BlkioDeviceWriteBps\": [],\n            \"BlkioDeviceReadIOps\": [],\n            \"BlkioDeviceWriteIOps\": [],\n            \"CpuPeriod\": 0,\n            \"CpuQuota\": 0,\n            \"CpuRealtimePeriod\": 0,\n            \"CpuRealtimeRuntime\": 0,\n            \"CpusetCpus\": \"2-5\",\n            \"CpusetMems\": \"\",\n            \"Devices\": [],\n            \"DeviceCgroupRules\": null,\n            \"DeviceRequests\": null,\n            \"MemoryReservation\": 0,\n            \"MemorySwap\": 12884901888,\n            \"MemorySwappiness\": null,\n            \"OomKillDisable\": false,\n            \"PidsLimit\": 512,\n            \"Ulimits\": [],\n            \"CpuCount\": 0,\n            \"CpuPercent\": 0,\n            \"IOMaximumIOps\": 0,\n            \"IOMaximumBandwidth\": 0,\n            \"Mounts\": [\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/OUTPUT/work\",\n                    \"Target\": \"/work\"\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source\",\n                    \"Target\": \"/src\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build\",\n                    \"Target\": \"/seed-build\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output\",\n                    \"Target\": \"/out\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu\",\n                    \"Target\": \"/nightly\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/rust-subtree\",\n                    \"Target\": \"/src/kernel/rust\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/candidate/kernel/CMakeLists.txt\",\n                    \"Target\": \"/src/kernel/CMakeLists.txt\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/candidate/kernel/process.c\",\n                    \"Target\": \"/src/kernel/process.c\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/candidate/kernel/syscall.c\",\n                    \"Target\": \"/src/kernel/syscall.c\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/candidate/arch/x86_64/kernel/syscall.c\",\n                    \"Target\": \"/src/arch/x86_64/kernel/syscall.c\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/oci-origin-bind-correction-source-1/ROOT-ORIGIN-PRODUCER-OUTPUT-1/f06_rt_sigreturn_origin.h\",\n                    \"Target\": \"/work/output/build/kernel/rust/f06-origin/f06_rt_sigreturn_origin.h\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-unprivileged-build-only-source-1/oci-ro-nested-config-target-data-correction-1/ihk-layout\",\n                    \"Target\": \"/src/ihk\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/.git\",\n                    \"Target\": \"/src/ihk/.git\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/.gitignore\",\n                    \"Target\": \"/src/ihk/.gitignore\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/CMakeLists.txt\",\n                    \"Target\": \"/src/ihk/CMakeLists.txt\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/DESCRIPTION\",\n                    \"Target\": \"/src/ihk/DESCRIPTION\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/LICENSE\",\n                    \"Target\": \"/src/ihk/LICENSE\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/NEWS.md\",\n                    \"Target\": \"/src/ihk/NEWS.md\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/README\",\n                    \"Target\": \"/src/ihk/README\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/TODO\",\n                    \"Target\": \"/src/ihk/TODO\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/cmake\",\n                    \"Target\": \"/src/ihk/cmake\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/cokernel\",\n                    \"Target\": \"/src/ihk/cokernel\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/config.h.in\",\n                    \"Target\": \"/src/ihk/config.h.in\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/doxygen\",\n                    \"Target\": \"/src/ihk/doxygen\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/gpl-2.0.txt\",\n                    \"Target\": \"/src/ihk/gpl-2.0.txt\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/ikc\",\n                    \"Target\": \"/src/ihk/ikc\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/include\",\n                    \"Target\": \"/src/ihk/include\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/linux\",\n                    \"Target\": \"/src/ihk/linux\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/scripts\",\n                    \"Target\": \"/src/ihk/scripts\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/test\",\n                    \"Target\": \"/src/ihk/test\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/include\",\n                    \"Target\": \"/work/output/build/kernel/include\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/CMakeCache.txt\",\n                    \"Target\": \"/work/output/build/CMakeCache.txt\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/compile_commands.json\",\n                    \"Target\": \"/work/output/build/compile_commands.json\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/build.make\",\n                    \"Target\": \"/work/output/build/kernel/CMakeFiles/mckernel.img.dir/build.make\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/flags.make\",\n                    \"Target\": \"/work/output/build/kernel/CMakeFiles/mckernel.img.dir/flags.make\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/link.txt\",\n                    \"Target\": \"/work/output/build/kernel/CMakeFiles/mckernel.img.dir/link.txt\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make\",\n                    \"Target\": \"/work/output/build/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/config/smp-x86.lds\",\n                    \"Target\": \"/work/output/build/kernel/config/smp-x86.lds\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/include/swapfmt.h\",\n                    \"Target\": \"/work/output/build/kernel/include/swapfmt.h\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/tmp.resolve_MODULES_END/driver.ko\",\n                    \"Target\": \"/work/output/build/tmp.resolve_MODULES_END/driver.ko\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/config.h\",\n                    \"Target\": \"/work/output/build/config.h\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o\",\n                    \"Target\": \"/work/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o\",\n                    \"Target\": \"/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o\",\n                    \"Target\": \"/work/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o\",\n                    \"Target\": \"/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o\",\n                    \"Target\": \"/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o\",\n                    \"Target\": \"/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o\",\n                    \"Target\": \"/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o\",\n                    \"Target\": \"/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/FROZEN-FOUR-COMMAND-EIGHT-INPUT-REUSE.json\",\n                    \"Target\": \"/reuse-inputs.json\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/build_only_worker.py\",\n                    \"Target\": \"/build-only-worker.py\",\n                    \"ReadOnly\": true\n                },\n                {\n                    \"Type\": \"bind\",\n                    \"Source\": \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/OUTPUT/plan.json\",\n                    \"Target\": \"/build-only-plan.json\",\n                    \"ReadOnly\": true\n                }\n            ],\n            \"MaskedPaths\": [\n                \"/proc/asound\",\n                \"/proc/acpi\",\n                \"/proc/kcore\",\n                \"/proc/keys\",\n                \"/proc/latency_stats\",\n                \"/proc/timer_list\",\n                \"/proc/timer_stats\",\n                \"/proc/sched_debug\",\n                \"/proc/scsi\",\n                \"/sys/firmware\",\n                \"/sys/devices/virtual/powercap\"\n            ],\n            \"ReadonlyPaths\": [\n                \"/proc/bus\",\n                \"/proc/fs\",\n                \"/proc/irq\",\n                \"/proc/sys\",\n                \"/proc/sysrq-trigger\"\n            ]\n        },\n        \"GraphDriver\": {\n            \"Data\": {\n                \"LowerDir\": \"/var/lib/docker/overlay2/423e903f997b16c641cec24ba6221f37dd1829466ecbbcf126f1348ec5465d10-init/diff:/var/lib/docker/overlay2/7dfdeca53dbb9dd0b2a42681dfe546347648e0f11b7b03876404223be540f39f/diff:/var/lib/docker/overlay2/2a23ddce6067a5847fc046c77f050a037a224c752e9e6ff2d7d56ac9162e8982/diff\",\n                \"MergedDir\": \"/var/lib/docker/overlay2/423e903f997b16c641cec24ba6221f37dd1829466ecbbcf126f1348ec5465d10/merged\",\n                \"UpperDir\": \"/var/lib/docker/overlay2/423e903f997b16c641cec24ba6221f37dd1829466ecbbcf126f1348ec5465d10/diff\",\n                \"WorkDir\": \"/var/lib/docker/overlay2/423e903f997b16c641cec24ba6221f37dd1829466ecbbcf126f1348ec5465d10/work\"\n            },\n            \"Name\": \"overlay2\"\n        },\n        \"Mounts\": [\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/candidate/kernel/CMakeLists.txt\",\n                \"Destination\": \"/src/kernel/CMakeLists.txt\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/README\",\n                \"Destination\": \"/src/ihk/README\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/include\",\n                \"Destination\": \"/src/ihk/include\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/link.txt\",\n                \"Destination\": \"/work/output/build/kernel/CMakeFiles/mckernel.img.dir/link.txt\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/FROZEN-FOUR-COMMAND-EIGHT-INPUT-REUSE.json\",\n                \"Destination\": \"/reuse-inputs.json\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/test\",\n                \"Destination\": \"/src/ihk/test\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o\",\n                \"Destination\": \"/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/doxygen\",\n                \"Destination\": \"/src/ihk/doxygen\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/gpl-2.0.txt\",\n                \"Destination\": \"/src/ihk/gpl-2.0.txt\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/tmp.resolve_MODULES_END/driver.ko\",\n                \"Destination\": \"/work/output/build/tmp.resolve_MODULES_END/driver.ko\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o\",\n                \"Destination\": \"/work/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o\",\n                \"Destination\": \"/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o\",\n                \"Destination\": \"/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/candidate/arch/x86_64/kernel/syscall.c\",\n                \"Destination\": \"/src/arch/x86_64/kernel/syscall.c\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/CMakeLists.txt\",\n                \"Destination\": \"/src/ihk/CMakeLists.txt\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/cmake\",\n                \"Destination\": \"/src/ihk/cmake\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/ikc\",\n                \"Destination\": \"/src/ihk/ikc\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/CMakeCache.txt\",\n                \"Destination\": \"/work/output/build/CMakeCache.txt\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make\",\n                \"Destination\": \"/work/output/build/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o\",\n                \"Destination\": \"/work/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o\",\n                \"Destination\": \"/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/build_only_worker.py\",\n                \"Destination\": \"/build-only-worker.py\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output\",\n                \"Destination\": \"/out\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu\",\n                \"Destination\": \"/nightly\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/rust-subtree\",\n                \"Destination\": \"/src/kernel/rust\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/DESCRIPTION\",\n                \"Destination\": \"/src/ihk/DESCRIPTION\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/candidate/kernel/process.c\",\n                \"Destination\": \"/src/kernel/process.c\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/oci-origin-bind-correction-source-1/ROOT-ORIGIN-PRODUCER-OUTPUT-1/f06_rt_sigreturn_origin.h\",\n                \"Destination\": \"/work/output/build/kernel/rust/f06-origin/f06_rt_sigreturn_origin.h\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/NEWS.md\",\n                \"Destination\": \"/src/ihk/NEWS.md\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/config.h.in\",\n                \"Destination\": \"/src/ihk/config.h.in\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/build.make\",\n                \"Destination\": \"/work/output/build/kernel/CMakeFiles/mckernel.img.dir/build.make\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/flags.make\",\n                \"Destination\": \"/work/output/build/kernel/CMakeFiles/mckernel.img.dir/flags.make\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/config/smp-x86.lds\",\n                \"Destination\": \"/work/output/build/kernel/config/smp-x86.lds\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o\",\n                \"Destination\": \"/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o\",\n                \"Destination\": \"/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/OUTPUT/work\",\n                \"Destination\": \"/work\",\n                \"Mode\": \"\",\n                \"RW\": true,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/candidate/kernel/syscall.c\",\n                \"Destination\": \"/src/kernel/syscall.c\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/.gitignore\",\n                \"Destination\": \"/src/ihk/.gitignore\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/LICENSE\",\n                \"Destination\": \"/src/ihk/LICENSE\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/cokernel\",\n                \"Destination\": \"/src/ihk/cokernel\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/scripts\",\n                \"Destination\": \"/src/ihk/scripts\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/compile_commands.json\",\n                \"Destination\": \"/work/output/build/compile_commands.json\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/config.h\",\n                \"Destination\": \"/work/output/build/config.h\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/OUTPUT/plan.json\",\n                \"Destination\": \"/build-only-plan.json\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source\",\n                \"Destination\": \"/src\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build\",\n                \"Destination\": \"/seed-build\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-unprivileged-build-only-source-1/oci-ro-nested-config-target-data-correction-1/ihk-layout\",\n                \"Destination\": \"/src/ihk\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/.git\",\n                \"Destination\": \"/src/ihk/.git\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/TODO\",\n                \"Destination\": \"/src/ihk/TODO\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/ihk/linux\",\n                \"Destination\": \"/src/ihk/linux\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/include\",\n                \"Destination\": \"/work/output/build/kernel/include\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            },\n            {\n                \"Type\": \"bind\",\n                \"Source\": \"/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/include/swapfmt.h\",\n                \"Destination\": \"/work/output/build/kernel/include/swapfmt.h\",\n                \"Mode\": \"\",\n                \"RW\": false,\n                \"Propagation\": \"rprivate\"\n            }\n        ],\n        \"Config\": {\n            \"Hostname\": \"50970ddb9d70\",\n            \"Domainname\": \"\",\n            \"User\": \"1000:1000\",\n            \"AttachStdin\": false,\n            \"AttachStdout\": true,\n            \"AttachStderr\": true,\n            \"Tty\": false,\n            \"OpenStdin\": false,\n            \"StdinOnce\": false,\n            \"Env\": [\n                \"container=oci\"\n            ],\n            \"Cmd\": [\n                \"-I\",\n                \"-B\",\n                \"/build-only-worker.py\",\n                \"/build-only-plan.json\"\n            ],\n            \"Image\": \"sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5\",\n            \"Volumes\": null,\n            \"WorkingDir\": \"/work/output/build/kernel\",\n            \"Entrypoint\": [\n                \"/usr/bin/python3\"\n            ],\n            \"OnBuild\": null,\n            \"Labels\": {\n                \"io.buildah.version\": \"1.43.1\",\n                \"license\": \"BSD-3-Clause\",\n                \"mckernel.owner\": \"c56c894429a44fd19710ae638df0c5f3\",\n                \"name\": \"rockylinux\",\n                \"org.opencontainers.image.authors\": \"Lukas Magauer, Neil Hanlon, Louis Abel\",\n                \"org.opencontainers.image.licenses\": \"BSD-3-Clause\",\n                \"org.opencontainers.image.source\": \"https://git.resf.org/sig_core/rocky-kiwi-descriptions/src/branch/r10\",\n                \"org.opencontainers.image.title\": \"rockylinux\",\n                \"org.opencontainers.image.vendor\": \"Rocky Enterprise Software Foundation\",\n                \"org.opencontainers.image.version\": \"10\",\n                \"summary\": \"Rocky Linux Base image\",\n                \"vendor\": \"Rocky Enterprise Software Foundation\",\n                \"version\": \"10\"\n            }\n        },\n        \"NetworkSettings\": {\n            \"Bridge\": \"\",\n            \"SandboxID\": \"d06ff76a693478e92b6a3fc34b0f249c69ae0fdfaaebaf2e38375d2478692a3e\",\n            \"SandboxKey\": \"/var/run/docker/netns/d06ff76a6934\",\n            \"Ports\": {},\n            \"HairpinMode\": false,\n            \"LinkLocalIPv6Address\": \"\",\n            \"LinkLocalIPv6PrefixLen\": 0,\n            \"SecondaryIPAddresses\": null,\n            \"SecondaryIPv6Addresses\": null,\n            \"EndpointID\": \"\",\n            \"Gateway\": \"\",\n            \"GlobalIPv6Address\": \"\",\n            \"GlobalIPv6PrefixLen\": 0,\n            \"IPAddress\": \"\",\n            \"IPPrefixLen\": 0,\n            \"IPv6Gateway\": \"\",\n            \"MacAddress\": \"\",\n            \"Networks\": {\n                \"none\": {\n                    \"IPAMConfig\": null,\n                    \"Links\": null,\n                    \"Aliases\": null,\n                    \"MacAddress\": \"\",\n                    \"NetworkID\": \"8c4a9a65ad813cb3f458da3761bdeba25d43fc777fb9fb0b91756f4e1553fa11\",\n                    \"EndpointID\": \"\",\n                    \"Gateway\": \"\",\n                    \"IPAddress\": \"\",\n                    \"IPPrefixLen\": 0,\n                    \"IPv6Gateway\": \"\",\n                    \"GlobalIPv6Address\": \"\",\n                    \"GlobalIPv6PrefixLen\": 0,\n                    \"DriverOpts\": null,\n                    \"DNSNames\": null\n                }\n            }\n        }\n    }\n]\n",
+      "stderr": "",
+      "positive_wait": true,
+      "streams_closed": true
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "name=^/current112-build-only-5c2cd5ea297e4770a1e1f4ea05d8cf9b$"
+      ],
+      "returncode": 0,
+      "stdout": "50970ddb9d70fd3133037de8b68b6aebb92a3bfe4d311185c706d8f9969811bb\n",
+      "stderr": "",
+      "positive_wait": true,
+      "streams_closed": true
+    }
+  ],
+  "cgroups": {
+    "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us": "100000",
+    "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us": "400000",
+    "/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes": "12884901888",
+    "/sys/fs/cgroup/pids/mckernel-dev/pids.max": "512",
+    "/sys/fs/cgroup/pids/mckernel-dev/pids.current": "0"
+  },
+  "capacity": {
+    "/home/holden/mckernel": 149453144064,
+    "/home/holden/mckernel-work/scratch": 47869915136
+  },
+  "meminfo": "MemTotal:       32421580 kB\nMemFree:          819360 kB\nMemAvailable:   26919096 kB\nBuffers:         4326520 kB\nCached:         21015964 kB\nSwapCached:        40892 kB\nActive:         17152344 kB\nInactive:       11471164 kB\nActive(anon):     953128 kB\nInactive(anon):  3095732 kB\nActive(file):   16199216 kB\nInactive(file):  8375432 kB\nUnevictable:      349188 kB\nMlocked:              32 kB\nSwapTotal:       2097148 kB\nSwapFree:         984320 kB\nDirty:              7752 kB\nWriteback:             0 kB\nAnonPages:       3616876 kB\nMapped:           937208 kB\nShmem:            767836 kB\nKReclaimable:    1993028 kB\nSlab:            2391396 kB\nSReclaimable:    1993028 kB\nSUnreclaim:       398368 kB\nKernelStack:       20400 kB\nPageTables:        71092 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    18307936 kB\nCommitted_AS:   18727652 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:       54668 kB\nVmallocChunk:          0 kB\nPercpu:            12064 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:         0 kB\nFilePmdMapped:         0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:     1946992 kB\nDirectMap2M:    31162368 kB\nDirectMap1G:     1048576 kB\n",
+  "container_preserved": true,
+  "no_cleanup": true
+}

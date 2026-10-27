@@ -1,0 +1,36 @@
+--- original/qualify_metadata.py
++++ retained-inputs-new-joints/qualify_retained_metadata.py
+@@ -3,7 +3,7 @@
+ """
+ from pathlib import Path
+ import json,struct,importlib.util,sys,hashlib
+-P=Path(__file__).resolve().parent;E=P.parent
++P=Path(__file__).resolve().parent;E=P.parent.parent
+ N=Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1')
+ spec=importlib.util.spec_from_file_location('existing_f02_elf',E/'f02-source38-next-current-integration-source-1/check_thirteen_storage.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+ rows=json.loads((N/'EXACT46-SLOT78-MAP.json').read_text());globals=[x for x in rows if not x['local']];locals=[x for x in rows if x['local']]
+@@ -41,10 +41,10 @@
+  return dict(object=ref(elf.path),objects=len(wanted),slots=sum(x['slots'] for x in wanted),R64_file_function_relocations=pointer_count,records=records)
+ 
+ def main():
+- out=Path(sys.argv[1]);file=str(N/'postimage/kernel/process.c');report=[]
++ out=Path(sys.argv[1]);joint_out=Path(sys.argv[2]);file=str(N/'postimage/kernel/process.c');report=[]
+  abi=m.Elf(out/'abi.o');s=abi.definitions('f02_genuine_bitfield_witness');assert len(s)==1 and s[0]['size']==32;s=s[0];z=abi.sections[s['ndx']];at=z['off']+s['value']-z['addr'];assert abi.data[at:at+32]==b'\0'*24+struct.pack('<I',0x01123456)+b'\0'*4
+  for flags in [0,1]:
+-  rust=m.Elf(out/('rust'+str(flags)+'.o'));c=m.Elf(out/('selected'+str(flags)+'.o'));joint=m.Elf(out/('joint'+str(flags)+'.o'))
++  rust=m.Elf(out/('rust'+str(flags)+'.o'));c=m.Elf(out/('selected'+str(flags)+'.o'));joint=m.Elf(joint_out/('joint'+str(flags)+'.o'))
+   report.append(metadata(rust,globals,flags,file,True));report.append(metadata(c,locals,flags,file));report.append(metadata(joint,rows,flags,file))
+   for row in globals:assert not c.definitions(row['name'])
+   for row in locals:assert not rust.definitions(row['name'])
+@@ -55,9 +55,9 @@
+   # Registry components are exactly78 entries with32byte stride/8alignment.
+   assert sum(z['size'] for z in joint.sections if z['name']=='__verbose')==2496
+  fallback=m.Elf(out/'fallback.o');report.append(metadata(fallback,rows,0,file))
+- retained=json.loads((P/'RETAINED-CONSUMER-EVIDENCE.json').read_text())
++ retained=json.loads((P.parent/'RETAINED-CONSUMER-EVIDENCE.json').read_text())
+  for key in ['process','Rust']:assert ref(retained[key]['path'])==retained[key]
+  assert all(x['references'] for x in retained['global_consumers']) and all(x['references'] for x in retained['registry_consumers'])
+  result=dict(scope=__doc__.splitlines()[0],decision='PASS_GLOBAL32_HOST_METADATA_ONLY_LOCAL14_RETAINED',ABI_bitfield_word=0x01123456,records=report,retained_consumers=retained,whole_file_delta=0,native_delta=0,production_default_open=True,registry_final_boundary_native_order_open=True)
+- (out/'METADATA-QUALIFICATION.json').write_text(json.dumps(result,indent=2)+'\n');print('VERBOSE32 PASS 32globals/64slots;14C-local;ABI32/8;flags0/1;exactFILE/FUNC/LINE/FMT/R64;GNU_RETAIN;retainedconsumers')
++ (joint_out/'METADATA-QUALIFICATION.json').write_text(json.dumps(result,indent=2)+'\n');print('VERBOSE32 PASS 32globals/64slots;14C-local;ABI32/8;flags0/1;exactFILE/FUNC/LINE/FMT/R64;GNU_RETAIN;retainedconsumers')
+ if __name__=='__main__':main()

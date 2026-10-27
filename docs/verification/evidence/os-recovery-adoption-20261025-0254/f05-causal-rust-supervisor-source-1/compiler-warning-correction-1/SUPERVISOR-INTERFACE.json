@@ -1,0 +1,91 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_INTERFACE_ACTUAL_ARTIFACT_AND_QUALIFICATION_UNBOUND",
+  "case_id": "M14-05-05-owned-processvm-v3-causal-204B",
+  "nonce": "31770ebb739fea402ded939617921dda",
+  "nonce_status": "RESERVED_UNUSED_NO_NATIVE_AUTHORITY",
+  "payload_gate_relative": ".f05-gate-31770ebb739fea402ded939617921dda",
+  "guest_gate_absolute": "/case/work/.f05-gate-31770ebb739fea402ded939617921dda",
+  "initial_bytes": 0,
+  "release_bytes_hex": "47",
+  "release_count": 1,
+  "payload_argv": [
+    "/bin/mcexec",
+    "-t",
+    "1",
+    "0",
+    "/apps/app"
+  ],
+  "payload_cwd": "/case/work",
+  "payload_env": {
+    "PATH": "/usr/bin:/bin",
+    "COKERNEL_PATH": "/apps"
+  },
+  "limits": {
+    "payload_timeout_ms": 10000,
+    "stdout_limit_bytes": 1024,
+    "stderr_limit_bytes": 1024,
+    "collector_timeout_seconds": 120,
+    "post_reap_retirement_ms": 5000,
+    "outer_native_timeout_seconds": 300,
+    "frame_limit_bytes": 4096,
+    "final_klog_bytes": 262144,
+    "real_retirement_attempts_max": 12
+  },
+  "report": {
+    "prefix": "ND_PAYLOAD ",
+    "count": 1,
+    "format": "One unchanged selected ND_PROCESS_EXEC_WAIT JSON line, single atomic write; exact original keys/order/stream serialization; no added env/status rewriting.",
+    "keys": [
+      "argv",
+      "cwd",
+      "env",
+      "raw_wait_status",
+      "started_ns",
+      "reaped_ns",
+      "finished_ns",
+      "streams",
+      "procfs_empty"
+    ],
+    "stream_keys": [
+      "hex",
+      "eof",
+      "truncated",
+      "observed",
+      "retained",
+      "discarded",
+      "limit",
+      "eof_ns"
+    ]
+  },
+  "raw_publication": {
+    "source": "Exactly one genuine final klogctl(3) raw snapshot after bounded actual parent and child completion; native bytes saved as kernel.log and written verbatim to console before report.",
+    "incremental": "Separate genuine /dev/kmsg records in lifecycle.kmsg, including native sequence/timestamp; never transformed into evaluator serial or concatenated with snapshot.",
+    "gap_overflow_or_missing_snapshot_coverage": "FAIL; preserve bytes and error; no synthesized/filter/dedup/order changes."
+  },
+  "gate_invariants": [
+    "Exclusive empty mode0600 regular gate before actual launcher fork; exact source-bound relative/absolute pathname pair; no extra env.",
+    "Actual spawned parent PID bound to sole SCHEDULE; child bound to actual matched positive clone56 RET and its publication.",
+    "Actual child zero-byte write1 RET0, terminal231, parent successful wait61 RET naming child, real child DELETE, real cleanup ACK, fresh bounded retirement tokens ending0 required before exact one-byte G write.",
+    "No procfs emptiness/ACK0/wait-only/generic ledger substitute.",
+    "Observe actual parent DELETE and final retirement0 as well as readable empty procfs within original absolute window; no deadline renewal.",
+    "Preserve complete unchanged full evaluator235/227 and unknown-row checks; source observer does not replace final acceptance."
+  ],
+  "source_directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1",
+  "source_manifest": null,
+  "actual_collector_artifact": null,
+  "actual_source_qualification": null,
+  "actual_host_qualification": null,
+  "actual_native_qualification": null,
+  "qualifier_reference_format": {
+    "path": "absolute real retained file path",
+    "sha256": "64 lowercase hex of actual file bytes",
+    "bytes": "actual nonnegative file byte count",
+    "unbound": "Entire reference stays null until actual result exists; never use old c020/1021320 as v3 successor identity."
+  },
+  "frozen_old_collector_identity": "c020a8e0ab43e222caf901d92bfecb2a8d8cf20ea0b539910a17a578f1fd12fc/1021320B remains old-v2-only",
+  "working_launcher": "Retain C dca025 with exact selected source/object/config Root join; do not substitute canonical Rust executor source.",
+  "runtime_authority": null,
+  "source_publication": false,
+  "hard_stop": "2026-10-28T05:36:09Z and earlier actual clock/account/real holds unchanged"
+}

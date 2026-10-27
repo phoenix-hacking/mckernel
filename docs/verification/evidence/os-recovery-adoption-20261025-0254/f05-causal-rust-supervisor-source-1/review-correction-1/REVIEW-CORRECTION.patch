@@ -1,0 +1,676 @@
+--- retained-original/main.rs
++++ review-correction-1/main.rs
+@@ -2,7 +2,12 @@
+ //! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ //! One private F05 PID1 collector successor. No generic init/configuration modes.
+ #![allow(unsafe_op_in_unsafe_fn)]
+-#[cfg(not(all(target_os = "linux", target_arch = "x86_64", target_endian = "little")))]
++#[cfg(not(all(
++    target_os = "linux",
++    target_arch = "x86_64",
++    target_endian = "little",
++    target_pointer_width = "64"
++)))]
+ compile_error!("this collector's reviewed FFI profile is Linux x86_64 little-endian only");
+ #[cfg(test)]
+ mod host_tests;
+@@ -27,6 +32,8 @@
+     flags: c_int,
+     restorer: Option<extern "C" fn()>,
+ }
++const _: [(); 152] = [(); std::mem::size_of::<SignalAction>()];
++const _: [(); 8] = [(); std::mem::align_of::<SignalAction>()];
+ unsafe extern "C" {
+     fn getpid() -> c_int;
+     fn geteuid() -> u32;
+--- retained-original/supervisor.rs
++++ review-correction-1/supervisor.rs
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ //! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ //! Direct selected-profile translation of collector b3fc4f supervise()/drain().
+-use crate::lifecycle::{Check, KmsgSequence, Lifecycle, GATE_PATH};
++use crate::lifecycle::{snapshot_bodies, Check, KmsgSequence, Lifecycle, GATE_PATH};
+ use std::collections::BTreeMap;
+ use std::ffi::{c_char, c_int, c_void, CString};
+ use std::fs::{File, OpenOptions};
+@@ -37,6 +37,10 @@
+     events: i16,
+     returned: i16,
+ }
++const _: [(); 16] = [(); std::mem::size_of::<Timespec>()];
++const _: [(); 8] = [(); std::mem::align_of::<Timespec>()];
++const _: [(); 8] = [(); std::mem::size_of::<PollFd>()];
++const _: [(); 4] = [(); std::mem::align_of::<PollFd>()];
+ unsafe extern "C" {
+     fn __errno_location() -> *mut c_int;
+     fn clock_gettime(clock: c_int, time: *mut Timespec) -> c_int;
+@@ -240,18 +244,41 @@
+     }
+     _exit(126)
+ }
+-fn signal_owned(pid: i32, signal: i32) -> bool {
+-    // The unreaped leader pins this process-group number. Never call after reap.
+-    let mut good = true;
+-    unsafe {
+-        if kill(-pid, signal) != 0 && errno() != ESRCH {
+-            good = false;
+-        }
+-        if kill(pid, signal) != 0 && errno() != ESRCH {
+-            good = false;
+-        }
+-    }
+-    good
++/// Only an unreaped leader pins both the PID and its process-group number.
++/// Positive leader reap or lost child custody irreversibly removes authority.
++struct LeaderOwnership {
++    pid: i32,
++    unreaped: bool,
++}
++impl LeaderOwnership {
++    fn new(pid: i32) -> Self {
++        Self {
++            pid,
++            unreaped: true,
++        }
++    }
++    fn positive_reap(&mut self, pid: i32) {
++        if pid == self.pid {
++            self.unreaped = false;
++        }
++    }
++    fn no_children(&mut self) {
++        self.unreaped = false;
++    }
++    fn signal_with(&self, signal: i32, mut operation: impl FnMut(i32, i32) -> bool) -> bool {
++        if !self.unreaped {
++            return false;
++        }
++        let group = operation(-self.pid, signal);
++        let leader = operation(self.pid, signal);
++        group && leader
++    }
++    fn signal(&self, signal: i32) -> bool {
++        self.signal_with(signal, |target, signal| {
++            // The guard above pins both numbers through these two calls.
++            unsafe { kill(target, signal) == 0 || errno() == ESRCH }
++        })
++    }
+ }
+ 
+ pub struct Observer {
+@@ -388,15 +415,15 @@
+         self.retained
+             .sync_all()
+             .map_err(|e| format!("incremental log sync: {e}"))?;
+-        let text =
+-            std::str::from_utf8(snapshot).map_err(|_| "final raw kernel snapshot is not UTF8")?;
+-        // klogctl adds its native priority/time prefix but preserves each ASCII
+-        // message. Require every nonempty observed message with its multiplicity
+-        // in the one raw snapshot; do not reconstruct, append or normalize it.
++        let bodies = snapshot_bodies(snapshot)?;
++        // Match exact WHOLE native record bodies and multiplicity. A short
++        // observed body embedded inside another record cannot prove coverage.
++        // Parse every snapshot line; unknown/malformed envelopes fail rather
++        // than being dropped or normalized. The raw snapshot is never edited.
+         for (message, count) in &self.messages {
+-            if !message.is_empty() && text.matches(message.as_str()).count() < *count {
++            if bodies.get(message).copied().unwrap_or(0) < *count {
+                 return Err(format!(
+-                    "final raw snapshot lost observed record: {message}"
++                    "final raw snapshot lost observed record body: {message}"
+                 ));
+             }
+         }
+@@ -485,6 +512,7 @@
+                 child_abort(pipes.0[2][1], 5);
+             }
+         }
++        let mut leader = LeaderOwnership::new(child);
+         for pair in &mut pipes.0 {
+             unsafe {
+                 close(pair[1]);
+@@ -510,7 +538,7 @@
+             let now = now_ns();
+             if now == 0 {
+                 result.fault = true;
+-                signal_owned(child, 9);
++                leader.signal(9);
+                 break;
+             }
+             if let Some(observer) = observer.as_deref_mut() {
+@@ -518,7 +546,7 @@
+                     result.fault = true;
+                 }
+             }
+-            if !ready {
++            if !ready && leader.unreaped {
+                 // Linux x86_64 siginfo_t is128bytes, si_pid at offset16. Use
+                 // u64 alignment and read only that field after waitid success.
+                 let mut info = [0u64; 16];
+@@ -542,12 +570,12 @@
+                 result.timeout = !ready && now >= limit;
+                 stopping = true;
+                 stop_at = now;
+-                if !signal_owned(child, 15) {
++                if !leader.signal(15) {
+                     result.fault = true;
+                 }
+             }
+             if stopping && !killed && now - stop_at >= 100 * MS {
+-                if !signal_owned(child, 9) {
++                if !leader.signal(9) {
+                     result.fault = true;
+                 }
+                 killed = true;
+@@ -581,19 +609,27 @@
+                     result.fault = true;
+                 }
+             }
+-            // No signalling after this point: waitpid may release the leader.
++            // Each positive leader reap irreversibly removes signal authority,
++            // including clock/error branches at the start of all later turns.
+             if killed {
+                 loop {
+                     let mut status = 0;
+                     let pid = unsafe { waitpid(-1, &mut status, 1) };
+                     if pid > 0 {
++                        // Drop signal authority BEFORE reading the reap clock:
++                        // clock failure on this or any later turn cannot signal.
++                        leader.positive_reap(pid);
+                         if pid == child {
+                             result.status = status;
+                             result.reaped = now_ns();
+                         }
+                     } else {
+                         if pid < 0 && errno() == ECHILD {
++                            leader.no_children();
+                             result.clean = true;
++                            if result.status == -1 {
++                                result.fault = true;
++                            }
+                         } else if pid < 0 && errno() != EINTR {
+                             result.fault = true;
+                         }
+@@ -729,3 +765,45 @@
+ pub fn procfs_empty() -> Check<bool> {
+     retired_at("/proc/mcos0")
+ }
++
++#[cfg(test)]
++mod leader_ownership_tests {
++    use super::LeaderOwnership;
++    #[test]
++    fn positive_leader_reap_forbids_signals_on_every_later_clock_or_error_branch() {
++        let mut leader = LeaderOwnership::new(254);
++        let mut calls = Vec::new();
++        assert!(leader.signal_with(15, |pid, sig| {
++            calls.push((pid, sig));
++            true
++        }));
++        assert_eq!(calls, [(-254, 15), (254, 15)]);
++        leader.positive_reap(254);
++        calls.clear();
++        for signal in [9, 15, 9] {
++            assert!(!leader.signal_with(signal, |pid, sig| {
++                calls.push((pid, sig));
++                true
++            }));
++        }
++        assert!(calls.is_empty());
++    }
++    #[test]
++    fn descendant_reap_keeps_leader_pin_but_echild_removes_all_signal_authority() {
++        let mut leader = LeaderOwnership::new(254);
++        leader.positive_reap(257);
++        let mut calls = Vec::new();
++        assert!(leader.signal_with(9, |pid, sig| {
++            calls.push((pid, sig));
++            true
++        }));
++        assert_eq!(calls, [(-254, 9), (254, 9)]);
++        leader.no_children();
++        calls.clear();
++        assert!(!leader.signal_with(9, |pid, sig| {
++            calls.push((pid, sig));
++            true
++        }));
++        assert!(calls.is_empty());
++    }
++}
+--- retained-original/lifecycle.rs
++++ review-correction-1/lifecycle.rs
+@@ -37,6 +37,48 @@
+         .collect()
+ }
+ 
++/// Extract only the owner prefix for bounded deferral. Full original row schema
++/// and state/order checks still run on every retained row during strict replay.
++fn pending_owner(message: &str) -> Check<Option<i128>> {
++    for marker in [
++        "application procfs ",
++        "application_process=",
++        "application_syscall=",
++        "application cleanup ACK ",
++        "application retirement ",
++    ] {
++        if let Some((_, suffix)) = message.split_once(marker) {
++            let row = if matches!(
++                marker,
++                "application procfs " | "application_process=" | "application_syscall="
++            ) {
++                suffix
++                    .split_once(' ')
++                    .ok_or("malformed pending lifecycle row")?
++                    .1
++            } else {
++                suffix
++            };
++            let prefix = row.split_whitespace().take(3).collect::<Vec<_>>().join(" ");
++            let identity = fields(&prefix, &["os", "generation", "pid"])?;
++            need(
++                identity[0] == 0 && identity[1] == 1,
++                "wrong pending lifecycle OS/generation",
++            )?;
++            need(
++                identity[2] > 0 && identity[2] <= i32::MAX as i128,
++                "invalid pending lifecycle PID",
++            )?;
++            return Ok(Some(identity[2]));
++        }
++    }
++    Ok(None)
++}
++struct PendingRow {
++    position: u64,
++    message: String,
++}
++
+ #[derive(Default, Debug)]
+ struct Owner {
+     published: bool,
+@@ -59,6 +101,7 @@
+ }
+ #[derive(Debug)]
+ struct Call {
++    position: u64,
+     number: i64,
+     returned: bool,
+     routed: bool,
+@@ -81,6 +124,10 @@
+     child_write_count: usize,
+     gate_released: bool,
+     calls: BTreeMap<(i32, u64, u64), Call>,
++    position: u64,
++    child_clone_position: Option<u64>,
++    pending: Vec<PendingRow>,
++    pending_bytes: usize,
+ }
+ impl Lifecycle {
+     pub fn new(parent_pid: i32) -> Check<Self> {
+@@ -100,6 +147,10 @@
+             child_write_count: 0,
+             gate_released: false,
+             calls: BTreeMap::new(),
++            position: 0,
++            child_clone_position: None,
++            pending: Vec::new(),
++            pending_bytes: 0,
+         })
+     }
+     fn owner(&mut self, pid: i128) -> Check<&mut Owner> {
+@@ -122,6 +173,7 @@
+     }
+     pub fn child_ready(&self) -> bool {
+         !self.gate_released
++            && self.pending.is_empty()
+             && self.scheduled
+             && self.registered
+             && self.parent.published
+@@ -142,9 +194,58 @@
+         Ok(())
+     }
+     pub fn complete(&self) -> bool {
+-        self.gate_released && self.parent.complete() && self.child.complete()
++        self.pending.is_empty()
++            && self.gate_released
++            && self.parent.complete()
++            && self.child.complete()
+     }
+     pub fn accept(&mut self, message: &str) -> Check<()> {
++        self.position = self
++            .position
++            .checked_add(1)
++            .ok_or("lifecycle row position overflow")?;
++        let position = self.position;
++        if self.child_pid.is_none() {
++            if let Some(pid) = pending_owner(message)? {
++                if pid != self.parent_pid as i128 {
++                    self.pending_bytes = self
++                        .pending_bytes
++                        .checked_add(message.len())
++                        .ok_or("pending row bytes overflow")?;
++                    need(
++                        self.pending_bytes <= RAW_LIMIT && self.pending.len() < 256,
++                        "unbound lifecycle row storage exceeded original fixed capture bounds",
++                    )?;
++                    self.pending.push(PendingRow {
++                        position,
++                        message: message.to_owned(),
++                    });
++                    return Ok(());
++                }
++            }
++        }
++        self.accept_bound(message, position)?;
++        if self.child_pid.is_some() && !self.pending.is_empty() {
++            let clone_position = self
++                .child_clone_position
++                .ok_or("missing authoritative clone delivery position")?;
++            let pending = std::mem::take(&mut self.pending);
++            self.pending_bytes = 0;
++            // Only the actual positive matched parent RET supplies authority.
++            // Preserve every buffered message and its order; a foreign PID,
++            // duplicate, malformed row or publication before clone delivery
++            // fails replay. Raw retention/publication was never reordered.
++            for row in pending {
++                need(
++                    row.position > clone_position,
++                    "child row before authoritative clone delivery",
++                )?;
++                self.accept_bound(&row.message, row.position)?;
++            }
++        }
++        Ok(())
++    }
++    fn accept_bound(&mut self, message: &str, position: u64) -> Check<()> {
+         if let Some((_, row)) = message.split_once("application SCHEDULE ") {
+             let v = fields(row, &["os", "generation", "pid", "cpu"])?;
+             self.identity(&v)?;
+@@ -324,6 +425,7 @@
+                 self.calls.insert(
+                     key,
+                     Call {
++                        position,
+                         number,
+                         returned: false,
+                         routed: false,
+@@ -345,6 +447,7 @@
+                 need(!call.returned, "duplicate syscall return")?;
+                 call.returned = true;
+                 let number = call.number;
++                let delivery_position = call.position;
+                 if pid == self.parent_pid && number == 56 && v[6] > 0 {
+                     need(
+                         self.child_pid.is_none()
+@@ -353,6 +456,7 @@
+                         "duplicate/invalid positive linked clone RET",
+                     )?;
+                     self.child_pid = Some(v[6] as i32);
++                    self.child_clone_position = Some(delivery_position);
+                 }
+                 if Some(pid) == self.child_pid && number == 1 {
+                     need(
+@@ -376,6 +480,54 @@
+         }
+         Ok(())
+     }
++}
++
++/// Parse only the selected frozen kernel's genuine klogctl(3) line envelope.
++/// Preserve every complete body byte; this view is solely for coverage checks.
++/// The original raw snapshot remains the only saved/published evaluator input.
++pub fn snapshot_bodies(snapshot: &[u8]) -> Check<BTreeMap<String, usize>> {
++    let text =
++        std::str::from_utf8(snapshot).map_err(|_| "final raw kernel snapshot is not UTF8")?;
++    need(
++        text.is_empty() || text.ends_with('\n'),
++        "incomplete final kernel record",
++    )?;
++    let mut bodies = BTreeMap::new();
++    for line in text.split_terminator('\n') {
++        let after_open = line
++            .strip_prefix('<')
++            .ok_or("unexpected final klog envelope/continuation")?;
++        let (priority, after_priority) = after_open
++            .split_once('>')
++            .ok_or("missing final klog priority delimiter")?;
++        need(
++            !priority.is_empty() && priority.bytes().all(|b| b.is_ascii_digit()),
++            "invalid final klog priority",
++        )?;
++        let value = priority
++            .parse::<u32>()
++            .map_err(|_| "final klog priority overflow")?;
++        need(value <= 191, "final klog priority range")?;
++        let after_bracket = after_priority
++            .strip_prefix('[')
++            .ok_or("missing final klog timestamp")?;
++        let (timestamp, body) = after_bracket
++            .split_once("] ")
++            .ok_or("invalid final klog timestamp delimiter")?;
++        let timestamp = timestamp.trim_start_matches(' ');
++        let (seconds, fraction) = timestamp
++            .split_once('.')
++            .ok_or("invalid final klog timestamp precision")?;
++        need(
++            !seconds.is_empty()
++                && seconds.bytes().all(|b| b.is_ascii_digit())
++                && fraction.len() == 6
++                && fraction.bytes().all(|b| b.is_ascii_digit()),
++            "invalid final klog timestamp grammar",
++        )?;
++        *bodies.entry(body.to_owned()).or_default() += 1;
++    }
++    Ok(bodies)
+ }
+ 
+ /// Non-destructive /dev/kmsg metadata. Original bytes are saved separately;
+--- retained-original/tests.rs
++++ review-correction-1/tests.rs
+@@ -103,10 +103,13 @@
+     ] {
+         assert!(initial().accept(row).is_err());
+     }
+-    assert!(Lifecycle::new(254)
+-        .unwrap()
+-        .accept("application procfs published os=0 generation=1 pid=257 tid=257")
+-        .is_err());
++    let mut unlinked = parent_before_clone_return();
++    accept(
++        &mut unlinked,
++        "application procfs published os=0 generation=1 pid=258 tid=258",
++    );
++    assert!(!unlinked.child_ready());
++    assert!(unlinked.accept("application_syscall=returned os=0 generation=1 pid=254 worker=6 delivery=26 cpu=0 value=257").is_err());
+ }
+ #[test]
+ fn duplicate_malformed_unknown_rows_and_bad_results_are_refused() {
+@@ -221,3 +224,95 @@
+     assert!(retirement_ready(20, 20, Ok(true), true).is_err());
+     assert!(retirement_ready(0, 20, Ok(true), true).is_err());
+ }
++
++pub(crate) fn parent_before_clone_return() -> Lifecycle {
++    let mut state = Lifecycle::new(254).unwrap();
++    for row in [
++        "application_process=registered os=0 generation=1 pid=254",
++        "application SCHEDULE os=0 generation=1 pid=254 cpu=0",
++        "application procfs published os=0 generation=1 pid=254 tid=254",
++        "application_syscall=delivered os=0 generation=1 pid=254 worker=6 delivery=26 cpu=0 number=56",
++    ] { accept(&mut state,row); }
++    state
++}
++const EARLY_CHILD_ROWS: [&str; 3] = [
++    "application procfs published os=0 generation=1 pid=257 tid=257",
++    "application_syscall=delivered os=0 generation=1 pid=257 worker=29 delivery=31 cpu=0 number=1",
++    "application_syscall=returned os=0 generation=1 pid=257 worker=29 delivery=31 cpu=0 value=0",
++];
++#[test]
++fn early_child_publication_write_and_ret_replay_only_after_real_parent_clone_ret() {
++    let mut state = parent_before_clone_return();
++    for row in EARLY_CHILD_ROWS {
++        accept(&mut state, row);
++    }
++    assert!(!state.child_ready());
++    assert!(state.record_gate_write().is_err());
++    accept(&mut state,"application_syscall=returned os=0 generation=1 pid=254 worker=6 delivery=26 cpu=0 value=257");
++    for row in [
++        "application_syscall=delivered os=0 generation=1 pid=257 worker=29 delivery=36 cpu=0 number=231",
++        "application_process=cleanup_requested os=0 generation=1 pid=257 intent_errno=0",
++        "application cleanup ACK os=0 generation=1 pid=257 token=27 errno=0 abandoned=0",
++        "application_syscall=delivered os=0 generation=1 pid=254 worker=6 delivery=41 cpu=0 number=61",
++        "application_syscall=returned os=0 generation=1 pid=254 worker=6 delivery=41 cpu=0 value=257",
++    ] { accept(&mut state,row); }
++    child_complete(&mut state);
++    assert!(state.child_ready());
++}
++#[test]
++fn pending_duplicate_unknown_and_foreign_rows_fail_strict_binding_replay() {
++    for extra in [
++        EARLY_CHILD_ROWS[0],
++        "application procfs published os=0 generation=1 pid=258 tid=258",
++        "application_syscall=unknown os=0 generation=1 pid=257 worker=29 delivery=32 cpu=0 value=0",
++    ] {
++        let mut state = parent_before_clone_return();
++        accept(&mut state, EARLY_CHILD_ROWS[0]);
++        accept(&mut state, extra);
++        assert!(state.accept("application_syscall=returned os=0 generation=1 pid=254 worker=6 delivery=26 cpu=0 value=257").is_err());
++        assert!(!state.child_ready());
++    }
++}
++#[test]
++fn child_publication_before_authoritative_clone_delivery_is_not_repaired_by_later_ret() {
++    let mut state = Lifecycle::new(254).unwrap();
++    accept(&mut state, EARLY_CHILD_ROWS[0]);
++    for row in [
++        "application_process=registered os=0 generation=1 pid=254",
++        "application SCHEDULE os=0 generation=1 pid=254 cpu=0",
++        "application procfs published os=0 generation=1 pid=254 tid=254",
++        "application_syscall=delivered os=0 generation=1 pid=254 worker=6 delivery=26 cpu=0 number=56",
++    ] { accept(&mut state,row); }
++    assert!(state.accept("application_syscall=returned os=0 generation=1 pid=254 worker=6 delivery=26 cpu=0 value=257").is_err());
++}
++#[test]
++fn pending_unbound_rows_are_bounded_and_wrong_generation_fails_immediately() {
++    let mut state = parent_before_clone_return();
++    assert!(state
++        .accept("application procfs published os=0 generation=2 pid=257 tid=257")
++        .is_err());
++    for _ in 0..256 {
++        accept(&mut state, EARLY_CHILD_ROWS[0]);
++    }
++    assert!(!state.child_ready());
++    assert!(!state.complete());
++    assert!(state.accept(EARLY_CHILD_ROWS[0]).is_err());
++    let huge = format!("{} {}", EARLY_CHILD_ROWS[0], "x".repeat(262144));
++    assert!(parent_before_clone_return().accept(&huge).is_err());
++}
++#[test]
++fn exact_final_kernel_record_body_and_multiplicity_refuse_substrings_and_bad_envelopes() {
++    use crate::lifecycle::snapshot_bodies;
++    let one = snapshot_bodies(b"<6>[    1.000000] needle\n").unwrap();
++    assert_eq!(one.get("needle"), Some(&1));
++    let other = snapshot_bodies(b"<6>[    1.000000] prefixneedle suffix\n").unwrap();
++    assert!(!other.contains_key("needle"));
++    for bad in [
++        b"needle\n".as_slice(),
++        b"<6>[ 1.0] needle\n",
++        b"<6>[ 1.000000] needle",
++        b"<6>[ 1.000000] needle\ncontinuation\n",
++    ] {
++        assert!(snapshot_bodies(bad).is_err());
++    }
++}
+--- retained-original/host_tests.rs
++++ review-correction-1/host_tests.rs
+@@ -12,7 +12,7 @@
+     // The existing C harness uses the same Linux child-subreaper ownership.
+     // Tests are serialized because supervise's genuine waitpid(-1) owns all
+     // subprocesses in this dedicated test binary.
+-    assert_eq!(unsafe { prctl(36, 1i32, 0i32, 0i32, 0i32) }, 0);
++    assert_eq!(unsafe { prctl(36, 1usize, 0usize, 0usize, 0usize) }, 0);
+ }
+ #[test]
+ fn host_missing_namespace_is_an_error() {
+--- retained-original/observer_tests.rs
++++ review-correction-1/observer_tests.rs
+@@ -94,7 +94,7 @@
+         std::fs::read(fixture.directory.join("raw")).unwrap(),
+         records
+     );
+-    let snapshot=b"<6>[ 1.0] application procfs deleted os=0 generation=1 pid=257 tid=257\n<6>[ 2.0] application retirement os=0 generation=1 pid=257 token=42 errno=0\n";
++    let snapshot=b"<6>[ 1.000000] application procfs deleted os=0 generation=1 pid=257 tid=257\n<6>[ 2.000000] application retirement os=0 generation=1 pid=257 token=42 errno=0\n";
+     assert!(fixture
+         .observer
+         .final_snapshot_covers_observation(snapshot)
+@@ -180,3 +180,69 @@
+     assert!(fixture.observer.service(true));
+     assert_eq!(fixture.gate_bytes(), b"G");
+ }
++
++#[test]
++fn mocked_early_child_rows_replay_without_reordering_retained_raw_bytes() {
++    let mut fixture = Fixture::new();
++    fixture.observer.lifecycle = Some(crate::tests::parent_before_clone_return());
++    let mut raw = Vec::new();
++    for (index,row) in [
++        "application procfs published os=0 generation=1 pid=257 tid=257",
++        "application_syscall=delivered os=0 generation=1 pid=257 worker=29 delivery=31 cpu=0 number=1",
++        "application_syscall=returned os=0 generation=1 pid=257 worker=29 delivery=31 cpu=0 value=0",
++    ].iter().enumerate() { raw.extend(fixture.row(index as u64+1,row)); }
++    assert!(fixture.observer.service(true));
++    assert!(fixture.gate_bytes().is_empty());
++    for (index,row) in [
++        "application_syscall=returned os=0 generation=1 pid=254 worker=6 delivery=26 cpu=0 value=257",
++        "application_syscall=delivered os=0 generation=1 pid=257 worker=29 delivery=36 cpu=0 number=231",
++        "application_process=cleanup_requested os=0 generation=1 pid=257 intent_errno=0",
++        "application cleanup ACK os=0 generation=1 pid=257 token=27 errno=0 abandoned=0",
++        "application_syscall=delivered os=0 generation=1 pid=254 worker=6 delivery=41 cpu=0 number=61",
++        "application_syscall=returned os=0 generation=1 pid=254 worker=6 delivery=41 cpu=0 value=257",
++        "application procfs deleted os=0 generation=1 pid=257 tid=257",
++        "application retirement os=0 generation=1 pid=257 token=42 errno=0",
++    ].iter().enumerate() { raw.extend(fixture.row(index as u64+4,row)); }
++    assert!(fixture.observer.service(true));
++    assert_eq!(fixture.gate_bytes(), b"G");
++    assert_eq!(std::fs::read(fixture.directory.join("raw")).unwrap(), raw);
++}
++#[test]
++fn mocked_foreign_early_child_fails_on_real_clone_binding_and_retains_all_raw_rows() {
++    let mut fixture = Fixture::new();
++    fixture.observer.lifecycle = Some(crate::tests::parent_before_clone_return());
++    let mut raw = fixture.row(
++        1,
++        "application procfs published os=0 generation=1 pid=258 tid=258",
++    );
++    assert!(fixture.observer.service(true));
++    assert!(fixture.gate_bytes().is_empty());
++    raw.extend(fixture.row(2,"application_syscall=returned os=0 generation=1 pid=254 worker=6 delivery=26 cpu=0 value=257"));
++    assert!(!fixture.observer.service(true));
++    assert!(fixture.gate_bytes().is_empty());
++    assert_eq!(std::fs::read(fixture.directory.join("raw")).unwrap(), raw);
++}
++#[test]
++fn mocked_snapshot_short_message_cannot_match_containing_record_or_wrong_multiplicity() {
++    let mut fixture = Fixture::new();
++    fixture.row(1, "needle");
++    assert!(fixture.observer.service(false));
++    assert!(fixture
++        .observer
++        .final_snapshot_covers_observation(b"<6>[    1.000000] prefixneedle suffix\n")
++        .is_err());
++    assert!(fixture
++        .observer
++        .final_snapshot_covers_observation(b"<6>[    1.000000] needle\n")
++        .is_ok());
++    fixture.row(2, "needle");
++    assert!(fixture.observer.service(false));
++    assert!(fixture
++        .observer
++        .final_snapshot_covers_observation(b"<6>[    1.000000] needle\n")
++        .is_err());
++    assert!(fixture
++        .observer
++        .final_snapshot_covers_observation(b"<6>[    1.000000] needle\n<6>[    2.000000] needle\n")
++        .is_ok());
++}

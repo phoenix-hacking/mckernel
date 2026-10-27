@@ -1,3 +1,51 @@
+## Startup native source ready; actual Rust supervisor qualified — 2026-10-27T22:26:54.423150+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+CURRENT112 accepted0da6590b/C87/Rust52qualifiedexports/process67/c2e8; Root35/5cc235
+currentfree52e1. No heavy/native live; stopped50970+5c92 preserved. Fourcommands
+21.986243s/CPU21.980503/RSS602804KiB/resource→compiler54.247106s retained. Native/file0.
+V3actualHOST3 PASS0dc/125c/204bb595; Rootreposnapshot/adoption71cf knownfore.
+Rustsupervisor908f/5725328B actualfoursteps0 andall36controlsPASS9b54, actualRootadoption
+8108/bindingfacts0048. Originaltwo-unusedconstant compilerFAIL retained; no warning
+suppression. PID1/nativeformat/causalactualrun OPEN. Foregroundactualboundevaluator
+e55ad576/b9ae ready; new908fsubjectv3only, oldc020/235227/v2FAIL untouched. No duplicateport.
+
+FIRSTreadyheavyjob is separateRustexecutor originalstartup: overlayactual10.314606s,
+binder0.199792/fe20/e5d/originalff227/91B/QMP91. Sourceactualmap1019/Rootadoptionb810/
+bindingdelta8433/sourceStatic21a54/bridge35f93/auth0954 ready, noncebe6e UNUSED. Checkpoint
+andpublish thenfreshcurrentresource/exactindependentPASS/prewrittenonceentry NEXT;
+no F05dependency or reusednonce. Debug32HOST10 currentRootCPU6grant activewhilepublication,
+notadopted/retired; readonlyconfiglocal14/scalarconditional successors remainprivate.
+Consolidatedreviews2136/2156/2216 preservenonoverlap30min17:36:09baseline, no95%claim.
+Same05:36:09Z/earlierclamps/account/parentcontrols/realholds/mutex27:4/scratch21/floors.
+
+## CURRENT112 independently accepted; Root35 current free — 2026-10-27T21:37:51.642910+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+AcceptedCURRENT112 independentc2e8: image0da6590b/10256600B, Rust658374d5/18280544B,
+52qualifiedcohortRustexports/C64+23=87/process67. FournewselectedRustbodyreplacements;
+all4commands0/sumwall21.967128/span21.986243/CPU21.980503/RSS602804KiB. Firstcompiler
+54.247106s afterresource;13selectedCfunctionsreplaced since17:36:09(C100→87), notnative
+Cretirementcredit. Inherited52bodies/consumers/13args/timer120/idle116/runqueue208/
+4logger337B/67metadata/full143-warningstderr positivelyproved; 34BfilenameRustowner/
+alloc385/free391 exact. Genericalloc/freecallbackroute inactiveinnativecfg: no runtime
+claim. SevenunrelatedCtableaddenddeltas retainedunnormalized; nofullfilemetadata claim.
+
+Actualnonce5c2consumedonce. Holder1702852/runner1702974/tool12278joined0; stoppedCID50970
+retainedexited0/Pid0/noOOM. Independentcurrentfree52e1/twoclosedprobes/pids0, Root35ledger
+5cc235f9 current; old5c92 preserved/no cleanup. Native/filedelta0/35of35/M14files2of6/
+M15files1of8 remainOPEN. F05Root4exact204/raw0 andlifecycleFAIL retained56030191; next
+causalcase31770 sourceprotocola7b23d7d: RootRustPID1supervisorowner+foregroundpayload
+DETACH/gateowner, exactsingleG/2env/nooraclerelaxation. No unchangedv2rerun.
+
+M15installedRustexecutor e5d/source660a originalstartupoverlay nowoneordinaryCPU6
+composition underway underRoot35/account/floors; no newguest/mainacceptance. Original
+startup/235oracles andCdca025 F05 remain separateimmutablecohorts. Scalar4Clinecorrection
+551586/d9a1 SOURCEPASS; old1137f8BLOCKED untilcorrectrebase. ForegroundLOCK4WAKE37792
+anddebug32GLOBAL sourcee7d77 unadopted, actualqualificationfuture; local14companion92d4
+prepared. Fixed05:36:09Z/earlierclamps/samecredit/realholds/parentcontrols/oneheavy unchanged.
+Latestpushed/fetched865b837d6; accepted112checkpoint next, no95%claim.
+
 ## Root34 free; CURRENT112 actual static admission ready — 2026-10-27T21:17:48.225492+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

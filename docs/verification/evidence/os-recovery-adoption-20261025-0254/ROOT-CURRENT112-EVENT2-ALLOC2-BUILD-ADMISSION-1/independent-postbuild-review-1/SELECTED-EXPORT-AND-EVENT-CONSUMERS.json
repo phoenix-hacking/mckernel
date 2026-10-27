@@ -1,0 +1,5054 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "independent": true,
+  "decision": "PASS_EXACT_52_CURRENT_EXPORT_BODIES_AND_SELECTED_EVENT_CONSUMER_EDGES",
+  "current_Rust": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+    "bytes": 18280544,
+    "sha256": "658374d540367a667ffaf97f709bed14205040dc54ff07b2497e906755d5e323"
+  },
+  "current_image": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+    "bytes": 10256600,
+    "sha256": "0da6590bd47ee4783864a734790a4349a2b0ca7af8a7e4fa0caf4fa92a40d7d9"
+  },
+  "all52_exports": [
+    {
+      "name": "reset_cputime",
+      "final": {
+        "name": "reset_cputime",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685040976,
+        "size": 131
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 2,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 36,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 61,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "set_cputime",
+      "final": {
+        "name": "set_cputime",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685131328,
+        "size": 1289
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 9,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 47,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 72,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 185,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95b1c8",
+          "kind": "NAMED",
+          "target": "gettime_local_support",
+          "final_symbol": {
+            "name": "gettime_local_support",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685807560,
+            "size": 4
+          }
+        },
+        {
+          "offset": 238,
+          "type": 1,
+          "addend": 16,
+          "actual_final_address": "0xfffffffffe9450b0",
+          "kind": "NAMED",
+          "target": "tod_data",
+          "final_symbol": {
+            "name": "tod_data",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 236,
+            "value": 18446744073685717152,
+            "size": 40
+          }
+        },
+        {
+          "offset": 899,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8483e0",
+          "kind": "NAMED",
+          "target": "do_kill",
+          "final_symbol": {
+            "name": "do_kill",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684681696,
+            "size": 1215
+          }
+        },
+        {
+          "offset": 1188,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8483e0",
+          "kind": "NAMED",
+          "target": "do_kill",
+          "final_symbol": {
+            "name": "do_kill",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684681696,
+            "size": 1215
+          }
+        },
+        {
+          "offset": 1272,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8b8a10",
+          "kind": "NAMED",
+          "target": "set_timer",
+          "final_symbol": {
+            "name": "set_timer",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073685142032,
+            "size": 774
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "f03_perf_counter_attr_flags_v1",
+      "final": {
+        "name": "f03_perf_counter_attr_flags_v1",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684708320,
+        "size": 59
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "f03_perf_read_attr_flags_v1",
+      "final": {
+        "name": "f03_perf_read_attr_flags_v1",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684709056,
+        "size": 82
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "f03_prlimit_body_result",
+      "final": {
+        "name": "f03_prlimit_body_result",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684710288,
+        "size": 652
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 141,
+          "type": 1,
+          "addend": 0,
+          "kind": "EXACT_PRLIMIT_16_ENTRY_TABLE",
+          "target": ".lrodata.f03_prlimit_body_result",
+          "actual_final_address": "0xfffffffffe905b68",
+          "section": ".lrodata.f03_prlimit_body_result",
+          "bytes": 128,
+          "full_final_bytes_reproduced": true,
+          "targets": [
+            {
+              "offset": 0,
+              "target": "f03_prlimit_body_result",
+              "addend": 582,
+              "positive_final_address": "0xfffffffffe84f5d6"
+            },
+            {
+              "offset": 8,
+              "target": "f03_prlimit_body_result",
+              "addend": 152,
+              "positive_final_address": "0xfffffffffe84f428"
+            },
+            {
+              "offset": 16,
+              "target": "f03_prlimit_body_result",
+              "addend": 622,
+              "positive_final_address": "0xfffffffffe84f5fe"
+            },
+            {
+              "offset": 24,
+              "target": "f03_prlimit_body_result",
+              "addend": 602,
+              "positive_final_address": "0xfffffffffe84f5ea"
+            },
+            {
+              "offset": 32,
+              "target": "f03_prlimit_body_result",
+              "addend": 642,
+              "positive_final_address": "0xfffffffffe84f612"
+            },
+            {
+              "offset": 40,
+              "target": "f03_prlimit_body_result",
+              "addend": 572,
+              "positive_final_address": "0xfffffffffe84f5cc"
+            },
+            {
+              "offset": 48,
+              "target": "f03_prlimit_body_result",
+              "addend": 632,
+              "positive_final_address": "0xfffffffffe84f608"
+            },
+            {
+              "offset": 56,
+              "target": "f03_prlimit_body_result",
+              "addend": 152,
+              "positive_final_address": "0xfffffffffe84f428"
+            },
+            {
+              "offset": 64,
+              "target": "f03_prlimit_body_result",
+              "addend": 552,
+              "positive_final_address": "0xfffffffffe84f5b8"
+            },
+            {
+              "offset": 72,
+              "target": "f03_prlimit_body_result",
+              "addend": 193,
+              "positive_final_address": "0xfffffffffe84f451"
+            },
+            {
+              "offset": 80,
+              "target": "f03_prlimit_body_result",
+              "addend": 152,
+              "positive_final_address": "0xfffffffffe84f428"
+            },
+            {
+              "offset": 88,
+              "target": "f03_prlimit_body_result",
+              "addend": 562,
+              "positive_final_address": "0xfffffffffe84f5c2"
+            },
+            {
+              "offset": 96,
+              "target": "f03_prlimit_body_result",
+              "addend": 152,
+              "positive_final_address": "0xfffffffffe84f428"
+            },
+            {
+              "offset": 104,
+              "target": "f03_prlimit_body_result",
+              "addend": 612,
+              "positive_final_address": "0xfffffffffe84f5f4"
+            },
+            {
+              "offset": 112,
+              "target": "f03_prlimit_body_result",
+              "addend": 542,
+              "positive_final_address": "0xfffffffffe84f5ae"
+            },
+            {
+              "offset": 120,
+              "target": "f03_prlimit_body_result",
+              "addend": 592,
+              "positive_final_address": "0xfffffffffe84f5e0"
+            }
+          ],
+          "raw_hex": "d6f584feffffffff28f484fefffffffffef584feffffffffeaf584feffffffff12f684feffffffffccf584feffffffff08f684feffffffff28f484feffffffffb8f584feffffffff51f484feffffffff28f484feffffffffc2f584feffffffff28f484fefffffffff4f584feffffffffaef584feffffffffe0f584feffffffff"
+        },
+        {
+          "offset": 181,
+          "type": 1,
+          "addend": 0,
+          "kind": "EXACT_PRLIMIT_16_ENTRY_TABLE",
+          "target": ".lrodata..Lswitch.table.f03_prlimit_body_result",
+          "actual_final_address": "0xfffffffffe91af00",
+          "section": ".lrodata..Lswitch.table.f03_prlimit_body_result",
+          "bytes": 128,
+          "full_final_bytes_reproduced": true,
+          "targets": [],
+          "raw_hex": "0200000000000000040000000000000003000000000000000f0000000000000001000000000000000b000000000000000a0000000000000009000000000000000600000000000000000000000000000005000000000000000e00000000000000070000000000000008000000000000000c000000000000000d00000000000000"
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "f03_prlimit_forward_request_result",
+      "final": {
+        "name": "f03_prlimit_forward_request_result",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684710944,
+        "size": 137
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "syscall_do_prlimit64_bridge",
+      "final": {
+        "name": "syscall_do_prlimit64_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685217392,
+        "size": 150
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 24,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "locals",
+          "actual_final_address": "0xfffffffffe95e920"
+        },
+        {
+          "offset": 49,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "num_processors",
+          "actual_final_address": "0xfffffffffe8ff9d0"
+        },
+        {
+          "offset": 88,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "clv",
+          "actual_final_address": "0xfffffffffe9590f8"
+        },
+        {
+          "offset": 120,
+          "type": 1,
+          "addend": 0,
+          "kind": "EXACT_NAMED_LOCAL_SECTION_OWNER",
+          "target": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust11f03_prlimit10production9PROVIDERS",
+          "actual_final_address": "0xfffffffffe912918",
+          "input_owner": {
+            "index": 3000,
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust11f03_prlimit10production9PROVIDERS",
+            "bind": 0,
+            "type": 1,
+            "shndx": 5557,
+            "value": 0,
+            "size": 88
+          },
+          "final_owner": {
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust11f03_prlimit10production9PROVIDERS",
+            "bind": 0,
+            "type": 1,
+            "other": 0,
+            "shndx": 138,
+            "value": 18446744073685510424,
+            "size": 88
+          },
+          "full_table": {
+            "section": ".lrodata._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust11f03_prlimit10production9PROVIDERS",
+            "bytes": 88,
+            "full_final_bytes_reproduced": true,
+            "targets": [
+              {
+                "offset": 0,
+                "target": "arch_copy_from_user_bridge",
+                "addend": 0,
+                "positive_final_address": "0xfffffffffe835f00"
+              },
+              {
+                "offset": 8,
+                "target": "arch_copy_to_user_bridge",
+                "addend": 0,
+                "positive_final_address": "0xfffffffffe835f20"
+              },
+              {
+                "offset": 16,
+                "target": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust11f03_prlimit10production8forward4",
+                "addend": 0,
+                "positive_final_address": "0xfffffffffe827d80"
+              },
+              {
+                "offset": 24,
+                "target": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust11f03_prlimit10production11current_pid",
+                "addend": 0,
+                "positive_final_address": "0xfffffffffe827d00"
+              },
+              {
+                "offset": 32,
+                "target": "cpu_disable_interrupt_save",
+                "addend": 0,
+                "positive_final_address": "0xfffffffffe8449c0"
+              },
+              {
+                "offset": 40,
+                "target": "cpu_restore_interrupt",
+                "addend": 0,
+                "positive_final_address": "0xfffffffffe844e00"
+              },
+              {
+                "offset": 48,
+                "target": "process_hash",
+                "addend": 0,
+                "positive_final_address": "0xfffffffffe897860"
+              },
+              {
+                "offset": 56,
+                "target": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy20f03_wait_writer_lock",
+                "addend": 0,
+                "positive_final_address": "0xfffffffffe816bd0"
+              },
+              {
+                "offset": 64,
+                "target": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy22f03_wait_writer_unlock",
+                "addend": 0,
+                "positive_final_address": "0xfffffffffe816e20"
+              },
+              {
+                "offset": 72,
+                "target": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy20f03_wait_writer_lock",
+                "addend": 0,
+                "positive_final_address": "0xfffffffffe816bd0"
+              },
+              {
+                "offset": 80,
+                "target": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy22f03_wait_writer_unlock",
+                "addend": 0,
+                "positive_final_address": "0xfffffffffe816e20"
+              }
+            ],
+            "raw_hex": "005f83feffffffff205f83feffffffff807d82feffffffff007d82feffffffffc04984feffffffff004e84feffffffff607889feffffffffd06b81feffffffff206e81feffffffffd06b81feffffffff206e81feffffffff"
+          }
+        },
+        {
+          "offset": 130,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "f03_prlimit_body_result",
+          "actual_final_address": "0xfffffffffe84f390"
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "f03_execveat_install_user_context_v1",
+      "final": {
+        "name": "f03_execveat_install_user_context_v1",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684703072,
+        "size": 416
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 5,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe959100",
+          "kind": "NAMED",
+          "target": "cpu_local_var_initialized",
+          "final_symbol": {
+            "name": "cpu_local_var_initialized",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685799168,
+            "size": 4
+          }
+        },
+        {
+          "offset": 36,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 61,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 96,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 368,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe807e26",
+          "kind": "NAMED",
+          "target": "enter_user_mode",
+          "final_symbol": {
+            "name": "enter_user_mode",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684418086,
+            "size": 0
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "f03_execveat_ptrace_report_v1",
+      "final": {
+        "name": "f03_execveat_ptrace_report_v1",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684703488,
+        "size": 745
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 127,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe959100",
+          "kind": "NAMED",
+          "target": "cpu_local_var_initialized",
+          "final_symbol": {
+            "name": "cpu_local_var_initialized",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685799168,
+            "size": 4
+          }
+        },
+        {
+          "offset": 141,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 151,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 161,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 248,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8a81c0",
+          "kind": "NAMED",
+          "target": "ptrace_report_signal",
+          "final_symbol": {
+            "name": "ptrace_report_signal",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073685074368,
+            "size": 1478
+          }
+        },
+        {
+          "offset": 309,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 634,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe805670",
+          "kind": "NAMED",
+          "target": "ptrace_syscall_event",
+          "final_symbol": {
+            "name": "ptrace_syscall_event",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684407920,
+            "size": 27
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "f03_execveat_finish_switch_v1",
+      "final": {
+        "name": "f03_execveat_finish_switch_v1",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684702592,
+        "size": 467
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 42,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 55,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 108,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 131,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe959100",
+          "kind": "NAMED",
+          "target": "cpu_local_var_initialized",
+          "final_symbol": {
+            "name": "cpu_local_var_initialized",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685799168,
+            "size": 4
+          }
+        },
+        {
+          "offset": 406,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8071f0",
+          "kind": "NAMED",
+          "target": "ihk_mc_switch_context",
+          "final_symbol": {
+            "name": "ihk_mc_switch_context",
+            "bind": 1,
+            "type": 0,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684414960,
+            "size": 0
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "f03_do_exit_supported_v2",
+      "final": {
+        "name": "f03_do_exit_supported_v2",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684699856,
+        "size": 1818
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 35,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "locals",
+          "actual_final_address": "0xfffffffffe95e920"
+        },
+        {
+          "offset": 48,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "num_processors",
+          "actual_final_address": "0xfffffffffe8ff9d0"
+        },
+        {
+          "offset": 103,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "clv",
+          "actual_final_address": "0xfffffffffe9590f8"
+        },
+        {
+          "offset": 138,
+          "type": 1,
+          "addend": 24,
+          "kind": "NAMED",
+          "target": "f03_do_exit_debug_v2",
+          "actual_final_address": "0xfffffffffe8fce18"
+        },
+        {
+          "offset": 164,
+          "type": 1,
+          "addend": 13611,
+          "kind": "EXACT_SECTION_STRING",
+          "target": null,
+          "actual_final_address": "0xfffffffffe90b6e1",
+          "literal_hex": "7379735f657869742c7069643d25640a00"
+        },
+        {
+          "offset": 174,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "kprintf",
+          "actual_final_address": "0xfffffffffe874610"
+        },
+        {
+          "offset": 200,
+          "type": 1,
+          "addend": 56,
+          "kind": "NAMED",
+          "target": "f03_do_exit_debug_v2",
+          "actual_final_address": "0xfffffffffe8fce38"
+        },
+        {
+          "offset": 219,
+          "type": 1,
+          "addend": 13628,
+          "kind": "EXACT_SECTION_STRING",
+          "target": null,
+          "actual_final_address": "0xfffffffffe90b6f2",
+          "literal_hex": "6578697420636c6561725f6368696c64210a00"
+        },
+        {
+          "offset": 229,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "kprintf",
+          "actual_final_address": "0xfffffffffe874610"
+        },
+        {
+          "offset": 257,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "copy_to_user",
+          "actual_final_address": "0xfffffffffe842b10"
+        },
+        {
+          "offset": 285,
+          "type": 1,
+          "addend": 0,
+          "kind": "EXACT_NAMED_LOCAL_SECTION_OWNER",
+          "target": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust5futex26futex_dispatch_wake_bridge",
+          "actual_final_address": "0xfffffffffe81dd10",
+          "input_owner": {
+            "index": 357,
+            "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust5futex26futex_dispatch_wake_bridge",
+            "bind": 0,
+            "type": 2,
+            "shndx": 336,
+            "value": 0,
+            "size": 663
+          },
+          "final_owner": {
+            "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust5futex26futex_dispatch_wake_bridge",
+            "bind": 0,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684507920,
+            "size": 663
+          }
+        },
+        {
+          "offset": 327,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "cpu_local_var_initialized",
+          "actual_final_address": "0xfffffffffe959100"
+        },
+        {
+          "offset": 360,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "locals",
+          "actual_final_address": "0xfffffffffe95e920"
+        },
+        {
+          "offset": 411,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "clv",
+          "actual_final_address": "0xfffffffffe9590f8"
+        },
+        {
+          "offset": 583,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "locals",
+          "actual_final_address": "0xfffffffffe95e920"
+        },
+        {
+          "offset": 634,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "clv",
+          "actual_final_address": "0xfffffffffe9590f8"
+        },
+        {
+          "offset": 665,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "terminate",
+          "actual_final_address": "0xfffffffffe802700"
+        },
+        {
+          "offset": 757,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "locals",
+          "actual_final_address": "0xfffffffffe95e920"
+        },
+        {
+          "offset": 808,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "clv",
+          "actual_final_address": "0xfffffffffe9590f8"
+        },
+        {
+          "offset": 839,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "terminate",
+          "actual_final_address": "0xfffffffffe802700"
+        },
+        {
+          "offset": 881,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "locals",
+          "actual_final_address": "0xfffffffffe95e920"
+        },
+        {
+          "offset": 932,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "clv",
+          "actual_final_address": "0xfffffffffe9590f8"
+        },
+        {
+          "offset": 984,
+          "type": 1,
+          "addend": 16,
+          "kind": "NAMED",
+          "target": "tod_data",
+          "actual_final_address": "0xfffffffffe9450b0"
+        },
+        {
+          "offset": 1411,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "f03_thread_exit_signal_v1",
+          "actual_final_address": "0xfffffffffe853130"
+        },
+        {
+          "offset": 1440,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "sync_child_event",
+          "actual_final_address": "0xfffffffffe8bed50"
+        },
+        {
+          "offset": 1488,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "locals",
+          "actual_final_address": "0xfffffffffe95e920"
+        },
+        {
+          "offset": 1539,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "clv",
+          "actual_final_address": "0xfffffffffe9590f8"
+        },
+        {
+          "offset": 1592,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "profile_accumulate_events",
+          "actual_final_address": "0xfffffffffe8a5770"
+        },
+        {
+          "offset": 1614,
+          "type": 1,
+          "addend": 30869,
+          "kind": "EXACT_SECTION_STRING",
+          "target": null,
+          "actual_final_address": "0xfffffffffe90fa22",
+          "literal_hex": "6b65726e656c2f727573742f70726f66696c652e727300"
+        },
+        {
+          "offset": 1624,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "_kfree",
+          "actual_final_address": "0xfffffffffe8342d0"
+        },
+        {
+          "offset": 1641,
+          "type": 1,
+          "addend": 0,
+          "kind": "EXACT_NAMED_LOCAL_SECTION_OWNER",
+          "target": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust6procfs17procfs_thread_ctl",
+          "actual_final_address": "0xfffffffffe8208d0",
+          "input_owner": {
+            "index": 71,
+            "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust6procfs17procfs_thread_ctl",
+            "bind": 0,
+            "type": 2,
+            "shndx": 386,
+            "value": 0,
+            "size": 800
+          },
+          "final_owner": {
+            "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust6procfs17procfs_thread_ctl",
+            "bind": 0,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684519120,
+            "size": 800
+          }
+        },
+        {
+          "offset": 1661,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "destroy_thread",
+          "actual_final_address": "0xfffffffffe8464c0"
+        },
+        {
+          "offset": 1676,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "release_process_vm",
+          "actual_final_address": "0xfffffffffe8ac0d0"
+        },
+        {
+          "offset": 1714,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "locals",
+          "actual_final_address": "0xfffffffffe95e920"
+        },
+        {
+          "offset": 1765,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "clv",
+          "actual_final_address": "0xfffffffffe9590f8"
+        },
+        {
+          "offset": 1793,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "schedule",
+          "actual_final_address": "0xfffffffffe8b4200"
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "exit_do_exit_bridge",
+      "final": {
+        "name": "exit_do_exit_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684697616,
+        "size": 17
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe84cad0",
+          "kind": "NAMED",
+          "target": "f03_do_exit_supported_v2",
+          "final_symbol": {
+            "name": "f03_do_exit_supported_v2",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684699856,
+            "size": 1818
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "f03_unmap_begin",
+      "final": {
+        "name": "f03_unmap_begin",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684639472,
+        "size": 168
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 18,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 43,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 78,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 148,
+          "type": 1,
+          "addend": 17800,
+          "actual_final_address": "0xfffffffffe90c73e",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "207aeeddfcdb1435a02837a9f2622e54b4ce8dec18157d68cf02d7fd7b597452",
+          "input_addend": 17800,
+          "literal_hex": "626567696e5f667265655f70616765735f70656e64696e6700",
+          "literal": "begin_free_pages_pending",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 158,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe88a2e0",
+          "kind": "NAMED",
+          "target": "panic",
+          "final_symbol": {
+            "name": "panic",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684951776,
+            "size": 851
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "f03_unmap_remove",
+      "final": {
+        "name": "f03_unmap_remove",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684726848,
+        "size": 17
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8add70",
+          "kind": "NAMED",
+          "target": "remove_process_memory_range",
+          "final_symbol": {
+            "name": "remove_process_memory_range",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073685097840,
+            "size": 962
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "f03_unmap_finish",
+      "final": {
+        "name": "f03_unmap_finish",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684726672,
+        "size": 161
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 22,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 47,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 82,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 113,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe87bf00",
+          "kind": "NAMED",
+          "target": "mem_pending_free_bridge",
+          "final_symbol": {
+            "name": "mem_pending_free_bridge",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684893440,
+            "size": 63
+          }
+        },
+        {
+          "offset": 123,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe877fa0",
+          "kind": "NAMED",
+          "target": "mem_finish_free_pages_pending_result",
+          "final_symbol": {
+            "name": "mem_finish_free_pages_pending_result",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684877216,
+            "size": 482
+          }
+        },
+        {
+          "offset": 141,
+          "type": 1,
+          "addend": 18132,
+          "actual_final_address": "0xfffffffffe90c88a",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "207aeeddfcdb1435a02837a9f2622e54b4ce8dec18157d68cf02d7fd7b597452",
+          "input_addend": 18132,
+          "literal_hex": "667265655f70656e64696e675f70616765733a6e6f7420504d5f50454e44494e475f4652454500",
+          "literal": "free_pending_pages:not PM_PENDING_FREE",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 151,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe88a2e0",
+          "kind": "NAMED",
+          "target": "panic",
+          "final_symbol": {
+            "name": "panic",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684951776,
+            "size": 851
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "f03_do_mmap_smaller_page_v2",
+      "final": {
+        "name": "f03_do_mmap_smaller_page_v2",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684701680,
+        "size": 89
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 17,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95902c",
+          "kind": "NAMED",
+          "target": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data18OWNED_USE_1GB_PAGE",
+          "final_symbol": {
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data18OWNED_USE_1GB_PAGE",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685798956,
+            "size": 4
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "f03_wait_release_thread",
+      "final": {
+        "name": "f03_wait_release_thread",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684728048,
+        "size": 143
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 41,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "profile_accumulate_events",
+          "actual_final_address": "0xfffffffffe8a5770"
+        },
+        {
+          "offset": 63,
+          "type": 1,
+          "addend": 30869,
+          "kind": "EXACT_SECTION_STRING",
+          "target": null,
+          "actual_final_address": "0xfffffffffe90fa22",
+          "literal_hex": "6b65726e656c2f727573742f70726f66696c652e727300"
+        },
+        {
+          "offset": 73,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "_kfree",
+          "actual_final_address": "0xfffffffffe8342d0"
+        },
+        {
+          "offset": 90,
+          "type": 1,
+          "addend": 0,
+          "kind": "EXACT_NAMED_LOCAL_SECTION_OWNER",
+          "target": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust6procfs17procfs_thread_ctl",
+          "actual_final_address": "0xfffffffffe8208d0",
+          "input_owner": {
+            "index": 71,
+            "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust6procfs17procfs_thread_ctl",
+            "bind": 0,
+            "type": 2,
+            "shndx": 386,
+            "value": 0,
+            "size": 800
+          },
+          "final_owner": {
+            "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust6procfs17procfs_thread_ctl",
+            "bind": 0,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684519120,
+            "size": 800
+          }
+        },
+        {
+          "offset": 110,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "destroy_thread",
+          "actual_final_address": "0xfffffffffe8464c0"
+        },
+        {
+          "offset": 125,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "release_process_vm",
+          "actual_final_address": "0xfffffffffe8ac0d0"
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "arch_mmap_supported_flags_bridge",
+      "final": {
+        "name": "arch_mmap_supported_flags_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684620736,
+        "size": 11
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "arch_mmap_ignored_flags_bridge",
+      "final": {
+        "name": "arch_mmap_ignored_flags_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684620480,
+        "size": 11
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "arch_mmap_error_flags_bridge",
+      "final": {
+        "name": "arch_mmap_error_flags_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684620464,
+        "size": 11
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "arch_prctl_set_register_bridge",
+      "final": {
+        "name": "arch_prctl_set_register_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684621120,
+        "size": 34
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "arch_prctl_get_register_bridge",
+      "final": {
+        "name": "arch_prctl_get_register_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684621072,
+        "size": 47
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "arch_do_mmap_bridge",
+      "final": {
+        "name": "arch_do_mmap_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684613520,
+        "size": 17
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe803750",
+          "kind": "NAMED",
+          "target": "do_mmap",
+          "final_symbol": {
+            "name": "do_mmap",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684399952,
+            "size": 7963
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "f03_wait_release_process",
+      "final": {
+        "name": "f03_wait_release_process",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684728016,
+        "size": 17
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ab890",
+          "kind": "NAMED",
+          "target": "release_process",
+          "final_symbol": {
+            "name": "release_process",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073685088400,
+            "size": 1055
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "f03_terminate_host_refcount_set_v1",
+      "final": {
+        "name": "f03_terminate_host_refcount_set_v1",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684726048,
+        "size": 8
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "f03_ptrace_io_find",
+      "final": {
+        "name": "f03_ptrace_io_find",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684718480,
+        "size": 17
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8572c0",
+          "kind": "NAMED",
+          "target": "find_thread",
+          "final_symbol": {
+            "name": "find_thread",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684742848,
+            "size": 536
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "f03_ptrace_io_unlock",
+      "final": {
+        "name": "f03_ptrace_io_unlock",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684718512,
+        "size": 143
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 41,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "profile_accumulate_events",
+          "actual_final_address": "0xfffffffffe8a5770"
+        },
+        {
+          "offset": 63,
+          "type": 1,
+          "addend": 30869,
+          "kind": "EXACT_SECTION_STRING",
+          "target": null,
+          "actual_final_address": "0xfffffffffe90fa22",
+          "literal_hex": "6b65726e656c2f727573742f70726f66696c652e727300"
+        },
+        {
+          "offset": 73,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "_kfree",
+          "actual_final_address": "0xfffffffffe8342d0"
+        },
+        {
+          "offset": 90,
+          "type": 1,
+          "addend": 0,
+          "kind": "EXACT_NAMED_LOCAL_SECTION_OWNER",
+          "target": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust6procfs17procfs_thread_ctl",
+          "actual_final_address": "0xfffffffffe8208d0",
+          "input_owner": {
+            "index": 71,
+            "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust6procfs17procfs_thread_ctl",
+            "bind": 0,
+            "type": 2,
+            "shndx": 386,
+            "value": 0,
+            "size": 800
+          },
+          "final_owner": {
+            "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust6procfs17procfs_thread_ctl",
+            "bind": 0,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684519120,
+            "size": 800
+          }
+        },
+        {
+          "offset": 110,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "destroy_thread",
+          "actual_final_address": "0xfffffffffe8464c0"
+        },
+        {
+          "offset": 125,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "release_process_vm",
+          "actual_final_address": "0xfffffffffe8ac0d0"
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "arch_ptrace_lookup_user_context_bridge",
+      "final": {
+        "name": "arch_ptrace_lookup_user_context_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684624928,
+        "size": 228
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 18,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 43,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 87,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "arch_ptrace_alloc_bridge",
+      "final": {
+        "name": "arch_ptrace_alloc_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684624624,
+        "size": 210
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 8,
+          "type": 1,
+          "addend": 11311,
+          "actual_final_address": "0xfffffffffe90ae06",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "207aeeddfcdb1435a02837a9f2622e54b4ce8dec18157d68cf02d7fd7b597452",
+          "input_addend": 11311,
+          "literal_hex": "2f7372632f6b65726e656c2f727573742f6630365f7074726163655f616c6c6f632e727300",
+          "literal": "/src/kernel/rust/f06_ptrace_alloc.rs",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 18,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe834780",
+          "kind": "NAMED",
+          "target": "_kmalloc",
+          "final_symbol": {
+            "name": "_kmalloc",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684600704,
+            "size": 2089
+          }
+        },
+        {
+          "offset": 63,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 88,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 123,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 162,
+          "type": 1,
+          "addend": 17518,
+          "actual_final_address": "0xfffffffffe90c624",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "207aeeddfcdb1435a02837a9f2622e54b4ce8dec18157d68cf02d7fd7b597452",
+          "input_addend": 17518,
+          "literal_hex": "6b6d616c6c6f633a206f7574206f66206d656d6f72792025733a2564206e6f5f707265656d70743d25640a00",
+          "literal": "kmalloc: out of memory %s:%d no_preempt=%d\n",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 172,
+          "type": 1,
+          "addend": 11311,
+          "actual_final_address": "0xfffffffffe90ae06",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "207aeeddfcdb1435a02837a9f2622e54b4ce8dec18157d68cf02d7fd7b597452",
+          "input_addend": 11311,
+          "literal_hex": "2f7372632f6b65726e656c2f727573742f6630365f7074726163655f616c6c6f632e727300",
+          "literal": "/src/kernel/rust/f06_ptrace_alloc.rs",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 182,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe874610",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "final_symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684862480,
+            "size": 85
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "arch_vdso_add_range_bridge",
+      "final": {
+        "name": "arch_vdso_add_range_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684638528,
+        "size": 46
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 12,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8353d0",
+          "kind": "NAMED",
+          "target": "add_process_memory_range",
+          "final_symbol": {
+            "name": "add_process_memory_range",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684603856,
+            "size": 845
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "arch_vdso_set_range_bridge",
+      "final": {
+        "name": "arch_vdso_set_range_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684639040,
+        "size": 31
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 10,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe86c840",
+          "kind": "NAMED",
+          "target": "ihk_mc_pt_set_range",
+          "final_symbol": {
+            "name": "ihk_mc_pt_set_range",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684830272,
+            "size": 497
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "atomic_cmpxchg_ulong",
+      "final": {
+        "name": "atomic_cmpxchg_ulong",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684639376,
+        "size": 14
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "syscall_copy_from_user_bridge",
+      "final": {
+        "name": "syscall_copy_from_user_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684606720,
+        "size": 20
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe842750",
+          "kind": "NAMED",
+          "target": "copy_from_user",
+          "final_symbol": {
+            "name": "copy_from_user",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684658000,
+            "size": 955
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "sync_child_event",
+      "final": {
+        "name": "sync_child_event",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073685167440,
+        "size": 456
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 96,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe947360",
+          "kind": "NAMED",
+          "target": "PERF_COUNTERS_MASK",
+          "final_symbol": {
+            "name": "PERF_COUNTERS_MASK",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685726048,
+            "size": 8
+          }
+        },
+        {
+          "offset": 131,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe947360",
+          "kind": "NAMED",
+          "target": "PERF_COUNTERS_MASK",
+          "final_symbol": {
+            "name": "PERF_COUNTERS_MASK",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685726048,
+            "size": 8
+          }
+        },
+        {
+          "offset": 154,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe947350",
+          "kind": "NAMED",
+          "target": "FIXED_PERF_COUNTERS_MASK",
+          "final_symbol": {
+            "name": "FIXED_PERF_COUNTERS_MASK",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685726032,
+            "size": 8
+          }
+        },
+        {
+          "offset": 202,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe947350",
+          "kind": "NAMED",
+          "target": "FIXED_PERF_COUNTERS_MASK",
+          "final_symbol": {
+            "name": "FIXED_PERF_COUNTERS_MASK",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685726032,
+            "size": 8
+          }
+        },
+        {
+          "offset": 283,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe947360",
+          "kind": "NAMED",
+          "target": "PERF_COUNTERS_MASK",
+          "final_symbol": {
+            "name": "PERF_COUNTERS_MASK",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685726048,
+            "size": 8
+          }
+        },
+        {
+          "offset": 293,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe947350",
+          "kind": "NAMED",
+          "target": "FIXED_PERF_COUNTERS_MASK",
+          "final_symbol": {
+            "name": "FIXED_PERF_COUNTERS_MASK",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685726032,
+            "size": 8
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "do_process_vm_read_writev",
+      "final": {
+        "name": "do_process_vm_read_writev",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684689184,
+        "size": 382
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 48,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "locals",
+          "actual_final_address": "0xfffffffffe95e920"
+        },
+        {
+          "offset": 73,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "num_processors",
+          "actual_final_address": "0xfffffffffe8ff9d0"
+        },
+        {
+          "offset": 109,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "clv",
+          "actual_final_address": "0xfffffffffe9590f8"
+        },
+        {
+          "offset": 133,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "arch_process_vm_rw_log_bridge",
+          "actual_final_address": "0xfffffffffe83a360"
+        },
+        {
+          "offset": 143,
+          "type": 1,
+          "addend": 0,
+          "kind": "EXACT_NAMED_LOCAL_SECTION_OWNER",
+          "target": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy20f06_process_vm_entry22f06_process_vm_rw_copy",
+          "actual_final_address": "0xfffffffffe827e30",
+          "input_owner": {
+            "index": 492,
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy20f06_process_vm_entry22f06_process_vm_rw_copy",
+            "bind": 0,
+            "type": 2,
+            "shndx": 467,
+            "value": 0,
+            "size": 17
+          },
+          "final_owner": {
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy20f06_process_vm_entry22f06_process_vm_rw_copy",
+            "bind": 0,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684549168,
+            "size": 17
+          }
+        },
+        {
+          "offset": 153,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "mem_phys_to_virt_bridge",
+          "actual_final_address": "0xfffffffffe87c000"
+        },
+        {
+          "offset": 163,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "xpmem_page_fault_vm_bridge",
+          "actual_final_address": "0xfffffffffe8f0500"
+        },
+        {
+          "offset": 186,
+          "type": 1,
+          "addend": 0,
+          "kind": "EXACT_NAMED_LOCAL_SECTION_OWNER",
+          "target": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy20f06_process_vm_entry22f06_process_vm_rw_vtop",
+          "actual_final_address": "0xfffffffffe827e50",
+          "input_owner": {
+            "index": 494,
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy20f06_process_vm_entry22f06_process_vm_rw_vtop",
+            "bind": 0,
+            "type": 2,
+            "shndx": 469,
+            "value": 0,
+            "size": 17
+          },
+          "final_owner": {
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy20f06_process_vm_entry22f06_process_vm_rw_vtop",
+            "bind": 0,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684549200,
+            "size": 17
+          }
+        },
+        {
+          "offset": 198,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "process_release_vm_bridge",
+          "actual_final_address": "0xfffffffffe89ed90"
+        },
+        {
+          "offset": 210,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "hold_process_vm",
+          "actual_final_address": "0xfffffffffe85fc10"
+        },
+        {
+          "offset": 222,
+          "type": 1,
+          "addend": 0,
+          "kind": "EXACT_NAMED_LOCAL_SECTION_OWNER",
+          "target": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy20f06_process_vm_entry31f06_process_vm_rw_update_unlock",
+          "actual_final_address": "0xfffffffffe828050",
+          "input_owner": {
+            "index": 502,
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy20f06_process_vm_entry31f06_process_vm_rw_update_unlock",
+            "bind": 0,
+            "type": 2,
+            "shndx": 477,
+            "value": 0,
+            "size": 131
+          },
+          "final_owner": {
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy20f06_process_vm_entry31f06_process_vm_rw_update_unlock",
+            "bind": 0,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684549712,
+            "size": 131
+          }
+        },
+        {
+          "offset": 234,
+          "type": 1,
+          "addend": 0,
+          "kind": "EXACT_NAMED_LOCAL_SECTION_OWNER",
+          "target": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy20f06_process_vm_entry29f06_process_vm_rw_update_lock",
+          "actual_final_address": "0xfffffffffe827fa0",
+          "input_owner": {
+            "index": 500,
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy20f06_process_vm_entry29f06_process_vm_rw_update_lock",
+            "bind": 0,
+            "type": 2,
+            "shndx": 475,
+            "value": 0,
+            "size": 172
+          },
+          "final_owner": {
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy20f06_process_vm_entry29f06_process_vm_rw_update_lock",
+            "bind": 0,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684549536,
+            "size": 172
+          }
+        },
+        {
+          "offset": 246,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "syscall_process_unlock_bridge",
+          "actual_final_address": "0xfffffffffe8ce4c0"
+        },
+        {
+          "offset": 258,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "syscall_find_process_bridge",
+          "actual_final_address": "0xfffffffffe8cb3c0"
+        },
+        {
+          "offset": 270,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "f03_mprotect_lookup_bridge_v1",
+          "actual_final_address": "0xfffffffffe84e700"
+        },
+        {
+          "offset": 282,
+          "type": 1,
+          "addend": 0,
+          "kind": "EXACT_NAMED_LOCAL_SECTION_OWNER",
+          "target": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy20f06_process_vm_entry29f06_process_vm_rw_read_unlock",
+          "actual_final_address": "0xfffffffffe827f10",
+          "input_owner": {
+            "index": 498,
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy20f06_process_vm_entry29f06_process_vm_rw_read_unlock",
+            "bind": 0,
+            "type": 2,
+            "shndx": 473,
+            "value": 0,
+            "size": 132
+          },
+          "final_owner": {
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy20f06_process_vm_entry29f06_process_vm_rw_read_unlock",
+            "bind": 0,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684549392,
+            "size": 132
+          }
+        },
+        {
+          "offset": 294,
+          "type": 1,
+          "addend": 0,
+          "kind": "EXACT_NAMED_LOCAL_SECTION_OWNER",
+          "target": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy20f06_process_vm_entry27f06_process_vm_rw_read_lock",
+          "actual_final_address": "0xfffffffffe827e70",
+          "input_owner": {
+            "index": 496,
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy20f06_process_vm_entry27f06_process_vm_rw_read_lock",
+            "bind": 0,
+            "type": 2,
+            "shndx": 471,
+            "value": 0,
+            "size": 156
+          },
+          "final_owner": {
+            "name": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy20f06_process_vm_entry27f06_process_vm_rw_read_lock",
+            "bind": 0,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684549232,
+            "size": 156
+          }
+        },
+        {
+          "offset": 306,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "arch_process_vm_rw_kernel_offsets",
+          "actual_final_address": "0xfffffffffe912970"
+        },
+        {
+          "offset": 350,
+          "type": 1,
+          "addend": 0,
+          "kind": "NAMED",
+          "target": "arch_process_vm_read_writev_body_result",
+          "actual_final_address": "0xfffffffffe839af0"
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "f03_exit_notify_wake",
+      "final": {
+        "name": "f03_exit_notify_wake",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684704560,
+        "size": 17
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8dcaa0",
+          "kind": "NAMED",
+          "target": "waitq_wakeup_result",
+          "final_symbol": {
+            "name": "waitq_wakeup_result",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073685289632,
+            "size": 353
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "arch_copy_to_user_bridge",
+      "final": {
+        "name": "arch_copy_to_user_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684606752,
+        "size": 20
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe842b10",
+          "kind": "NAMED",
+          "target": "copy_to_user",
+          "final_symbol": {
+            "name": "copy_to_user",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684658960,
+            "size": 955
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "arch_copy_from_user_bridge",
+      "final": {
+        "name": "arch_copy_from_user_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684606720,
+        "size": 20
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe842750",
+          "kind": "NAMED",
+          "target": "copy_from_user",
+          "final_symbol": {
+            "name": "copy_from_user",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684658000,
+            "size": 955
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "arch_syscall_forward_context_bridge",
+      "final": {
+        "name": "arch_syscall_forward_context_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684638416,
+        "size": 17
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8cb420",
+          "kind": "NAMED",
+          "target": "syscall_generic_forwarding",
+          "final_symbol": {
+            "name": "syscall_generic_forwarding",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073685218336,
+            "size": 448
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "perf_event_alloc_kmalloc_bridge",
+      "final": {
+        "name": "perf_event_alloc_kmalloc_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684956096,
+        "size": 210
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 8,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe902bd0",
+          "kind": "NAMED",
+          "target": "f03_mckfd_alloc_origin_file_v1",
+          "final_symbol": {
+            "name": "f03_mckfd_alloc_origin_file_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445584,
+            "size": 22
+          }
+        },
+        {
+          "offset": 18,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe834780",
+          "kind": "NAMED",
+          "target": "_kmalloc",
+          "final_symbol": {
+            "name": "_kmalloc",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684600704,
+            "size": 2089
+          }
+        },
+        {
+          "offset": 63,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 88,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 123,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 162,
+          "type": 1,
+          "addend": 17518,
+          "actual_final_address": "0xfffffffffe90c624",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "207aeeddfcdb1435a02837a9f2622e54b4ce8dec18157d68cf02d7fd7b597452",
+          "input_addend": 17518,
+          "literal_hex": "6b6d616c6c6f633a206f7574206f66206d656d6f72792025733a2564206e6f5f707265656d70743d25640a00",
+          "literal": "kmalloc: out of memory %s:%d no_preempt=%d\n",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 172,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe902bd0",
+          "kind": "NAMED",
+          "target": "f03_mckfd_alloc_origin_file_v1",
+          "final_symbol": {
+            "name": "f03_mckfd_alloc_origin_file_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445584,
+            "size": 22
+          }
+        },
+        {
+          "offset": 182,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe874610",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "final_symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684862480,
+            "size": 85
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "perf_event_alloc_free_bridge",
+      "final": {
+        "name": "perf_event_alloc_free_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684955536,
+        "size": 32
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe902bd0",
+          "kind": "NAMED",
+          "target": "f03_mckfd_alloc_origin_file_v1",
+          "final_symbol": {
+            "name": "f03_mckfd_alloc_origin_file_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445584,
+            "size": 22
+          }
+        },
+        {
+          "offset": 16,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8342d0",
+          "kind": "NAMED",
+          "target": "_kfree",
+          "final_symbol": {
+            "name": "_kfree",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684599504,
+            "size": 1194
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "perf_event_alloc_hw_init_bridge",
+      "final": {
+        "name": "perf_event_alloc_hw_init_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684797248,
+        "size": 8
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "arch_rt_sigreturn_syscall_bridge",
+      "final": {
+        "name": "arch_rt_sigreturn_syscall_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684628736,
+        "size": 17
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ca230",
+          "kind": "NAMED",
+          "target": "syscall",
+          "final_symbol": {
+            "name": "syscall",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073685213744,
+            "size": 2796
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "arch_rt_sigreturn_set_signal_bridge",
+      "final": {
+        "name": "arch_rt_sigreturn_set_signal_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684628704,
+        "size": 17
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8b88c0",
+          "kind": "NAMED",
+          "target": "set_signal",
+          "final_symbol": {
+            "name": "set_signal",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073685141696,
+            "size": 332
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "arch_rt_sigreturn_check_signal_bridge",
+      "final": {
+        "name": "arch_rt_sigreturn_check_signal_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684628640,
+        "size": 22
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 9,
+          "type": 1,
+          "addend": 0,
+          "kind": "EXACT_NAMED_LOCAL_SECTION_OWNER",
+          "target": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy25f03_check_signal_dispatch",
+          "actual_final_address": "0xfffffffffe817470",
+          "input_owner": {
+            "index": 270,
+            "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy25f03_check_signal_dispatch",
+            "bind": 0,
+            "type": 2,
+            "shndx": 258,
+            "value": 0,
+            "size": 1176
+          },
+          "final_owner": {
+            "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy25f03_check_signal_dispatch",
+            "bind": 0,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684481136,
+            "size": 1176
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "perf_counter_mask_check_bridge",
+      "final": {
+        "name": "perf_counter_mask_check_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684823488,
+        "size": 40
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe947360",
+          "kind": "NAMED",
+          "target": "PERF_COUNTERS_MASK",
+          "final_symbol": {
+            "name": "PERF_COUNTERS_MASK",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685726048,
+            "size": 8
+          }
+        },
+        {
+          "offset": 16,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe947350",
+          "kind": "NAMED",
+          "target": "FIXED_PERF_COUNTERS_MASK",
+          "final_symbol": {
+            "name": "FIXED_PERF_COUNTERS_MASK",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685726032,
+            "size": 8
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "perf_counter_start_bridge",
+      "final": {
+        "name": "perf_counter_start_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684824640,
+        "size": 125
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 2,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe947360",
+          "kind": "NAMED",
+          "target": "PERF_COUNTERS_MASK",
+          "final_symbol": {
+            "name": "PERF_COUNTERS_MASK",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685726048,
+            "size": 8
+          }
+        },
+        {
+          "offset": 12,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe947350",
+          "kind": "NAMED",
+          "target": "FIXED_PERF_COUNTERS_MASK",
+          "final_symbol": {
+            "name": "FIXED_PERF_COUNTERS_MASK",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685726032,
+            "size": 8
+          }
+        },
+        {
+          "offset": 43,
+          "type": 1,
+          "addend": 16764,
+          "actual_final_address": "0xfffffffffe90c332",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "207aeeddfcdb1435a02837a9f2622e54b4ce8dec18157d68cf02d7fd7b597452",
+          "input_addend": 16764,
+          "literal_hex": "25732c636f756e7465725f6d61736b206f7574206f662072616e67650a00",
+          "literal": "%s,counter_mask out of range\n",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 53,
+          "type": 1,
+          "addend": 16794,
+          "actual_final_address": "0xfffffffffe90c350",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "207aeeddfcdb1435a02837a9f2622e54b4ce8dec18157d68cf02d7fd7b597452",
+          "input_addend": 16794,
+          "literal_hex": "69686b5f6d635f706572666374725f737461727400",
+          "literal": "ihk_mc_perfctr_start",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 63,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe874610",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "final_symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684862480,
+            "size": 85
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "perf_counter_stop_bridge",
+      "final": {
+        "name": "perf_counter_stop_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684954544,
+        "size": 17
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe86b2c0",
+          "kind": "NAMED",
+          "target": "ihk_mc_perfctr_stop",
+          "final_symbol": {
+            "name": "ihk_mc_perfctr_stop",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684824768,
+            "size": 194
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": true
+    },
+    {
+      "name": "perf_event_set_period_bridge",
+      "final": {
+        "name": "perf_event_set_period_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684797248,
+        "size": 8
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [],
+      "accepted111_nonrelocated_body_equal": false
+    },
+    {
+      "name": "perf_event_update_bridge",
+      "final": {
+        "name": "perf_event_update_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684814928,
+        "size": 8
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [],
+      "accepted111_nonrelocated_body_equal": false
+    },
+    {
+      "name": "arch_rt_sigreturn_alloc_bridge",
+      "final": {
+        "name": "arch_rt_sigreturn_alloc_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684627456,
+        "size": 210
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 8,
+          "type": 1,
+          "addend": 9566,
+          "actual_final_address": "0xfffffffffe90a739",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "207aeeddfcdb1435a02837a9f2622e54b4ce8dec18157d68cf02d7fd7b597452",
+          "input_addend": 9566,
+          "literal_hex": "2f7372632f617263682f7838365f36342f6b65726e656c2f73797363616c6c2e6300",
+          "literal": "/src/arch/x86_64/kernel/syscall.c",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 18,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe834780",
+          "kind": "NAMED",
+          "target": "_kmalloc",
+          "final_symbol": {
+            "name": "_kmalloc",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684600704,
+            "size": 2089
+          }
+        },
+        {
+          "offset": 63,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 88,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 123,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 162,
+          "type": 1,
+          "addend": 17518,
+          "actual_final_address": "0xfffffffffe90c624",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "207aeeddfcdb1435a02837a9f2622e54b4ce8dec18157d68cf02d7fd7b597452",
+          "input_addend": 17518,
+          "literal_hex": "6b6d616c6c6f633a206f7574206f66206d656d6f72792025733a2564206e6f5f707265656d70743d25640a00",
+          "literal": "kmalloc: out of memory %s:%d no_preempt=%d\n",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 172,
+          "type": 1,
+          "addend": 9566,
+          "actual_final_address": "0xfffffffffe90a739",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "207aeeddfcdb1435a02837a9f2622e54b4ce8dec18157d68cf02d7fd7b597452",
+          "input_addend": 9566,
+          "literal_hex": "2f7372632f617263682f7838365f36342f6b65726e656c2f73797363616c6c2e6300",
+          "literal": "/src/arch/x86_64/kernel/syscall.c",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 182,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe874610",
+          "kind": "NAMED",
+          "target": "kprintf",
+          "final_symbol": {
+            "name": "kprintf",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684862480,
+            "size": 85
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": false
+    },
+    {
+      "name": "arch_rt_sigreturn_free_bridge",
+      "final": {
+        "name": "arch_rt_sigreturn_free_bridge",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684628672,
+        "size": 32
+      },
+      "current_final_bytes_reproduced": true,
+      "targets": [
+        {
+          "offset": 6,
+          "type": 1,
+          "addend": 9566,
+          "actual_final_address": "0xfffffffffe90a739",
+          "kind": "EXACT_SECTION_STRING",
+          "input_section": ".lrodata.str1.1",
+          "input_section_sha256": "207aeeddfcdb1435a02837a9f2622e54b4ce8dec18157d68cf02d7fd7b597452",
+          "input_addend": 9566,
+          "literal_hex": "2f7372632f617263682f7838365f36342f6b65726e656c2f73797363616c6c2e6300",
+          "literal": "/src/arch/x86_64/kernel/syscall.c",
+          "final_readonly_section": ".lrodata.str1.1"
+        },
+        {
+          "offset": 16,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8342d0",
+          "kind": "NAMED",
+          "target": "_kfree",
+          "final_symbol": {
+            "name": "_kfree",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684599504,
+            "size": 1194
+          }
+        }
+      ],
+      "accepted111_nonrelocated_body_equal": false
+    }
+  ],
+  "current_event_C_consumer_edges": [
+    {
+      "consumer": "f03_perf_counter_providers_v1",
+      "consumer_type": 1,
+      "offset": 32,
+      "Rust_provider": "perf_event_set_period_bridge",
+      "current_final_address": "0xfffffffffe864740"
+    },
+    {
+      "consumer": "f03_perf_counter_providers_v1",
+      "consumer_type": 1,
+      "offset": 56,
+      "Rust_provider": "perf_event_update_bridge",
+      "current_final_address": "0xfffffffffe868c50"
+    },
+    {
+      "consumer": "f03_perf_read_providers_v1",
+      "consumer_type": 1,
+      "offset": 8,
+      "Rust_provider": "perf_event_update_bridge",
+      "current_final_address": "0xfffffffffe868c50"
+    }
+  ],
+  "current_five_Rust_event_table_consumers": [
+    {
+      "name": "f03_perf_stop_v1",
+      "current_final": {
+        "name": "f03_perf_stop_v1",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684709920,
+        "size": 361
+      },
+      "current_positive_targets": [
+        {
+          "offset": 18,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 43,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 92,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 120,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe902a60",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 133,
+          "type": 1,
+          "addend": 8,
+          "actual_final_address": "0xfffffffffe902a68",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 146,
+          "type": 1,
+          "addend": 16,
+          "actual_final_address": "0xfffffffffe902a70",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 159,
+          "type": 1,
+          "addend": 24,
+          "actual_final_address": "0xfffffffffe902a78",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 172,
+          "type": 1,
+          "addend": 80,
+          "actual_final_address": "0xfffffffffe902ab0",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 182,
+          "type": 1,
+          "addend": 140,
+          "actual_final_address": "0xfffffffffe902aec",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 195,
+          "type": 1,
+          "addend": 136,
+          "actual_final_address": "0xfffffffffe902ae8",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 208,
+          "type": 1,
+          "addend": 148,
+          "actual_final_address": "0xfffffffffe902af4",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 222,
+          "type": 1,
+          "addend": 24,
+          "actual_final_address": "0xfffffffffe902a18",
+          "kind": "NAMED",
+          "target": "f03_perf_counter_providers_v1",
+          "final_symbol": {
+            "name": "f03_perf_counter_providers_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445120,
+            "size": 80
+          }
+        },
+        {
+          "offset": 232,
+          "type": 1,
+          "addend": 48,
+          "actual_final_address": "0xfffffffffe902a30",
+          "kind": "NAMED",
+          "target": "f03_perf_counter_providers_v1",
+          "final_symbol": {
+            "name": "f03_perf_counter_providers_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445120,
+            "size": 80
+          }
+        },
+        {
+          "offset": 242,
+          "type": 1,
+          "addend": 56,
+          "actual_final_address": "0xfffffffffe902a38",
+          "kind": "NAMED",
+          "target": "f03_perf_counter_providers_v1",
+          "final_symbol": {
+            "name": "f03_perf_counter_providers_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445120,
+            "size": 80
+          }
+        },
+        {
+          "offset": 252,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe88cfd0",
+          "kind": "NAMED",
+          "target": "perf_stop_body_result",
+          "final_symbol": {
+            "name": "perf_stop_body_result",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684963280,
+            "size": 811
+          }
+        },
+        {
+          "offset": 306,
+          "type": 1,
+          "addend": 56,
+          "actual_final_address": "0xfffffffffe902a98",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 318,
+          "type": 1,
+          "addend": 40,
+          "actual_final_address": "0xfffffffffe902a88",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 330,
+          "type": 1,
+          "addend": 32,
+          "actual_final_address": "0xfffffffffe902a80",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        }
+      ],
+      "nonrelocated_bytes_equal": true
+    },
+    {
+      "name": "perf_counter_set",
+      "current_final": {
+        "name": "perf_counter_set",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684953872,
+        "size": 318
+      },
+      "current_positive_targets": [
+        {
+          "offset": 16,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe902a00",
+          "kind": "NAMED",
+          "target": "f03_perf_counter_providers_v1",
+          "final_symbol": {
+            "name": "f03_perf_counter_providers_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445120,
+            "size": 80
+          }
+        },
+        {
+          "offset": 58,
+          "type": 1,
+          "addend": 24,
+          "actual_final_address": "0xfffffffffe902a78",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 75,
+          "type": 1,
+          "addend": 112,
+          "actual_final_address": "0xfffffffffe902ad0",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 88,
+          "type": 1,
+          "addend": 120,
+          "actual_final_address": "0xfffffffffe902ad8",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 101,
+          "type": 1,
+          "addend": 128,
+          "actual_final_address": "0xfffffffffe902ae0",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 116,
+          "type": 1,
+          "addend": 132,
+          "actual_final_address": "0xfffffffffe902ae4",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 131,
+          "type": 1,
+          "addend": 8,
+          "actual_final_address": "0xfffffffffe902a08",
+          "kind": "NAMED",
+          "target": "f03_perf_counter_providers_v1",
+          "final_symbol": {
+            "name": "f03_perf_counter_providers_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445120,
+            "size": 80
+          }
+        },
+        {
+          "offset": 144,
+          "type": 1,
+          "addend": 16,
+          "actual_final_address": "0xfffffffffe902a10",
+          "kind": "NAMED",
+          "target": "f03_perf_counter_providers_v1",
+          "final_symbol": {
+            "name": "f03_perf_counter_providers_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445120,
+            "size": 80
+          }
+        },
+        {
+          "offset": 157,
+          "type": 1,
+          "addend": 104,
+          "actual_final_address": "0xfffffffffe902ac8",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        }
+      ],
+      "nonrelocated_bytes_equal": true
+    },
+    {
+      "name": "perf_event_read_value",
+      "current_final": {
+        "name": "perf_event_read_value",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684959408,
+        "size": 632
+      },
+      "current_positive_targets": [
+        {
+          "offset": 38,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 63,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 98,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 126,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe902b00",
+          "kind": "NAMED",
+          "target": "f03_perf_read_providers_v1",
+          "final_symbol": {
+            "name": "f03_perf_read_providers_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445376,
+            "size": 24
+          }
+        },
+        {
+          "offset": 170,
+          "type": 1,
+          "addend": 8,
+          "actual_final_address": "0xfffffffffe902b28",
+          "kind": "NAMED",
+          "target": "f03_perf_read_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_read_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445408,
+            "size": 136
+          }
+        },
+        {
+          "offset": 190,
+          "type": 1,
+          "addend": 16,
+          "actual_final_address": "0xfffffffffe902b30",
+          "kind": "NAMED",
+          "target": "f03_perf_read_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_read_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445408,
+            "size": 136
+          }
+        },
+        {
+          "offset": 207,
+          "type": 1,
+          "addend": 24,
+          "actual_final_address": "0xfffffffffe902b38",
+          "kind": "NAMED",
+          "target": "f03_perf_read_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_read_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445408,
+            "size": 136
+          }
+        },
+        {
+          "offset": 224,
+          "type": 1,
+          "addend": 32,
+          "actual_final_address": "0xfffffffffe902b40",
+          "kind": "NAMED",
+          "target": "f03_perf_read_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_read_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445408,
+            "size": 136
+          }
+        },
+        {
+          "offset": 241,
+          "type": 1,
+          "addend": 40,
+          "actual_final_address": "0xfffffffffe902b48",
+          "kind": "NAMED",
+          "target": "f03_perf_read_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_read_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445408,
+            "size": 136
+          }
+        },
+        {
+          "offset": 258,
+          "type": 1,
+          "addend": 48,
+          "actual_final_address": "0xfffffffffe902b50",
+          "kind": "NAMED",
+          "target": "f03_perf_read_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_read_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445408,
+            "size": 136
+          }
+        },
+        {
+          "offset": 275,
+          "type": 1,
+          "addend": 56,
+          "actual_final_address": "0xfffffffffe902b58",
+          "kind": "NAMED",
+          "target": "f03_perf_read_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_read_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445408,
+            "size": 136
+          }
+        },
+        {
+          "offset": 292,
+          "type": 1,
+          "addend": 64,
+          "actual_final_address": "0xfffffffffe902b60",
+          "kind": "NAMED",
+          "target": "f03_perf_read_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_read_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445408,
+            "size": 136
+          }
+        },
+        {
+          "offset": 309,
+          "type": 1,
+          "addend": 72,
+          "actual_final_address": "0xfffffffffe902b68",
+          "kind": "NAMED",
+          "target": "f03_perf_read_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_read_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445408,
+            "size": 136
+          }
+        },
+        {
+          "offset": 326,
+          "type": 1,
+          "addend": 80,
+          "actual_final_address": "0xfffffffffe902b70",
+          "kind": "NAMED",
+          "target": "f03_perf_read_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_read_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445408,
+            "size": 136
+          }
+        },
+        {
+          "offset": 339,
+          "type": 1,
+          "addend": 8,
+          "actual_final_address": "0xfffffffffe902b08",
+          "kind": "NAMED",
+          "target": "f03_perf_read_providers_v1",
+          "final_symbol": {
+            "name": "f03_perf_read_providers_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445376,
+            "size": 24
+          }
+        },
+        {
+          "offset": 352,
+          "type": 1,
+          "addend": 16,
+          "actual_final_address": "0xfffffffffe902b10",
+          "kind": "NAMED",
+          "target": "f03_perf_read_providers_v1",
+          "final_symbol": {
+            "name": "f03_perf_read_providers_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445376,
+            "size": 24
+          }
+        },
+        {
+          "offset": 365,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe902b20",
+          "kind": "NAMED",
+          "target": "f03_perf_read_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_read_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445408,
+            "size": 136
+          }
+        }
+      ],
+      "nonrelocated_bytes_equal": true
+    },
+    {
+      "name": "perf_reset",
+      "current_final": {
+        "name": "perf_reset",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684961040,
+        "size": 351
+      },
+      "current_positive_targets": [
+        {
+          "offset": 18,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 43,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 92,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 120,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe902a60",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 133,
+          "type": 1,
+          "addend": 8,
+          "actual_final_address": "0xfffffffffe902a68",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 146,
+          "type": 1,
+          "addend": 16,
+          "actual_final_address": "0xfffffffffe902a70",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 159,
+          "type": 1,
+          "addend": 24,
+          "actual_final_address": "0xfffffffffe902a78",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 172,
+          "type": 1,
+          "addend": 72,
+          "actual_final_address": "0xfffffffffe902aa8",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 182,
+          "type": 1,
+          "addend": 80,
+          "actual_final_address": "0xfffffffffe902ab0",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 192,
+          "type": 1,
+          "addend": 88,
+          "actual_final_address": "0xfffffffffe902ab8",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 202,
+          "type": 1,
+          "addend": 96,
+          "actual_final_address": "0xfffffffffe902ac0",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 212,
+          "type": 1,
+          "addend": 24,
+          "actual_final_address": "0xfffffffffe902a18",
+          "kind": "NAMED",
+          "target": "f03_perf_counter_providers_v1",
+          "final_symbol": {
+            "name": "f03_perf_counter_providers_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445120,
+            "size": 80
+          }
+        },
+        {
+          "offset": 222,
+          "type": 1,
+          "addend": 64,
+          "actual_final_address": "0xfffffffffe902a40",
+          "kind": "NAMED",
+          "target": "f03_perf_counter_providers_v1",
+          "final_symbol": {
+            "name": "f03_perf_counter_providers_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445120,
+            "size": 80
+          }
+        },
+        {
+          "offset": 232,
+          "type": 1,
+          "addend": 72,
+          "actual_final_address": "0xfffffffffe902a48",
+          "kind": "NAMED",
+          "target": "f03_perf_counter_providers_v1",
+          "final_symbol": {
+            "name": "f03_perf_counter_providers_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445120,
+            "size": 80
+          }
+        },
+        {
+          "offset": 246,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe88c870",
+          "kind": "NAMED",
+          "target": "perf_reset_body_result",
+          "final_symbol": {
+            "name": "perf_reset_body_result",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684961392,
+            "size": 548
+          }
+        },
+        {
+          "offset": 288,
+          "type": 1,
+          "addend": 64,
+          "actual_final_address": "0xfffffffffe902aa0",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 300,
+          "type": 1,
+          "addend": 56,
+          "actual_final_address": "0xfffffffffe902a98",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 312,
+          "type": 1,
+          "addend": 48,
+          "actual_final_address": "0xfffffffffe902a90",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 324,
+          "type": 1,
+          "addend": 40,
+          "actual_final_address": "0xfffffffffe902a88",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        }
+      ],
+      "nonrelocated_bytes_equal": true
+    },
+    {
+      "name": "perf_start",
+      "current_final": {
+        "name": "perf_start",
+        "bind": 1,
+        "type": 2,
+        "other": 0,
+        "shndx": 1,
+        "value": 18446744073684961952,
+        "size": 417
+      },
+      "current_positive_targets": [
+        {
+          "offset": 18,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe95e920",
+          "kind": "NAMED",
+          "target": "locals",
+          "final_symbol": {
+            "name": "locals",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685821728,
+            "size": 8
+          }
+        },
+        {
+          "offset": 43,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe8ff9d0",
+          "kind": "NAMED",
+          "target": "num_processors",
+          "final_symbol": {
+            "name": "num_processors",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 27,
+            "value": 18446744073685432784,
+            "size": 4
+          }
+        },
+        {
+          "offset": 92,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe9590f8",
+          "kind": "NAMED",
+          "target": "clv",
+          "final_symbol": {
+            "name": "clv",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 237,
+            "value": 18446744073685799160,
+            "size": 8
+          }
+        },
+        {
+          "offset": 120,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe902a60",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 133,
+          "type": 1,
+          "addend": 8,
+          "actual_final_address": "0xfffffffffe902a68",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 146,
+          "type": 1,
+          "addend": 16,
+          "actual_final_address": "0xfffffffffe902a70",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 159,
+          "type": 1,
+          "addend": 24,
+          "actual_final_address": "0xfffffffffe902a78",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 172,
+          "type": 1,
+          "addend": 136,
+          "actual_final_address": "0xfffffffffe902ae8",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 185,
+          "type": 1,
+          "addend": 140,
+          "actual_final_address": "0xfffffffffe902aec",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 198,
+          "type": 1,
+          "addend": 144,
+          "actual_final_address": "0xfffffffffe902af0",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 211,
+          "type": 1,
+          "addend": 88,
+          "actual_final_address": "0xfffffffffe902ab8",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 221,
+          "type": 1,
+          "addend": 24,
+          "actual_final_address": "0xfffffffffe902a18",
+          "kind": "NAMED",
+          "target": "f03_perf_counter_providers_v1",
+          "final_symbol": {
+            "name": "f03_perf_counter_providers_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445120,
+            "size": 80
+          }
+        },
+        {
+          "offset": 231,
+          "type": 1,
+          "addend": 32,
+          "actual_final_address": "0xfffffffffe902a20",
+          "kind": "NAMED",
+          "target": "f03_perf_counter_providers_v1",
+          "final_symbol": {
+            "name": "f03_perf_counter_providers_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445120,
+            "size": 80
+          }
+        },
+        {
+          "offset": 241,
+          "type": 1,
+          "addend": 40,
+          "actual_final_address": "0xfffffffffe902a28",
+          "kind": "NAMED",
+          "target": "f03_perf_counter_providers_v1",
+          "final_symbol": {
+            "name": "f03_perf_counter_providers_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445120,
+            "size": 80
+          }
+        },
+        {
+          "offset": 255,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe88ab10",
+          "kind": "NAMED",
+          "target": "perf_counter_set",
+          "final_symbol": {
+            "name": "perf_counter_set",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684953872,
+            "size": 318
+          }
+        },
+        {
+          "offset": 305,
+          "type": 1,
+          "addend": 80,
+          "actual_final_address": "0xfffffffffe902ab0",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 317,
+          "type": 1,
+          "addend": 72,
+          "actual_final_address": "0xfffffffffe902aa8",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 329,
+          "type": 1,
+          "addend": 64,
+          "actual_final_address": "0xfffffffffe902aa0",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 341,
+          "type": 1,
+          "addend": 56,
+          "actual_final_address": "0xfffffffffe902a98",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 353,
+          "type": 1,
+          "addend": 48,
+          "actual_final_address": "0xfffffffffe902a90",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 365,
+          "type": 1,
+          "addend": 40,
+          "actual_final_address": "0xfffffffffe902a88",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 377,
+          "type": 1,
+          "addend": 32,
+          "actual_final_address": "0xfffffffffe902a80",
+          "kind": "NAMED",
+          "target": "f03_perf_event_layout_v1",
+          "final_symbol": {
+            "name": "f03_perf_event_layout_v1",
+            "bind": 1,
+            "type": 1,
+            "other": 0,
+            "shndx": 37,
+            "value": 18446744073685445216,
+            "size": 152
+          }
+        },
+        {
+          "offset": 389,
+          "type": 1,
+          "addend": 0,
+          "actual_final_address": "0xfffffffffe88cc50",
+          "kind": "NAMED",
+          "target": "perf_start_body_result",
+          "final_symbol": {
+            "name": "perf_start_body_result",
+            "bind": 1,
+            "type": 2,
+            "other": 0,
+            "shndx": 1,
+            "value": 18446744073684962384,
+            "size": 888
+          }
+        }
+      ],
+      "nonrelocated_bytes_equal": true
+    }
+  ],
+  "anonymous_target_policy": "Exact NUL strings; exact named LOCAL section owners from the finite listed providers; exact two128B prlimit tables. No unknown target accepted.",
+  "native_execution": false
+}

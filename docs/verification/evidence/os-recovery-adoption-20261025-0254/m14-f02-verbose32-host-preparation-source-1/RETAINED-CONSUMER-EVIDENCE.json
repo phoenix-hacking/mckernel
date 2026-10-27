@@ -1,0 +1,1164 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "process": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+    "bytes": 66600,
+    "sha256": "a4309e34ffe1a1c7c99eee1a2f2fb665cab907a33341956a96078b095edb63bf"
+  },
+  "Rust": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+    "bytes": 18275816,
+    "sha256": "1836ac74294186335742d17b4d53cd2217b2b17f6f471d317e55faf1fa7f346b"
+  },
+  "global_consumers": [
+    {
+      "name": "process_ptrace_traceme_debug",
+      "references": [
+        {
+          "section": ".ltext.process_ptrace_traceme_log_bridge",
+          "offset": 21,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.process_ptrace_traceme_log_bridge",
+          "offset": 65,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.process_ptrace_traceme_log_bridge",
+          "offset": 109,
+          "relocation_type": 1,
+          "addend": 88
+        },
+        {
+          "section": ".ltext.ptrace_traceme",
+          "offset": 216,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.ptrace_traceme",
+          "offset": 300,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.ptrace_traceme",
+          "offset": 702,
+          "relocation_type": 1,
+          "addend": 88
+        }
+      ]
+    },
+    {
+      "name": "process_create_cpu_debug",
+      "references": [
+        {
+          "section": ".ltext.create_thread",
+          "offset": 1867,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.create_thread",
+          "offset": 2019,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.process_create_cpu_log_bridge",
+          "offset": 16,
+          "relocation_type": 1,
+          "addend": 24
+        }
+      ]
+    },
+    {
+      "name": "process_sched_migrate_debug",
+      "references": [
+        {
+          "section": ".ltext.process_sched_migrate_log_bridge",
+          "offset": 6,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.sched_request_migrate",
+          "offset": 1146,
+          "relocation_type": 1,
+          "addend": 24
+        }
+      ]
+    },
+    {
+      "name": "process_remaining_range_debug",
+      "references": [
+        {
+          "section": ".ltext.flush_process_memory",
+          "offset": 19,
+          "relocation_type": 1,
+          "addend": 152
+        },
+        {
+          "section": ".ltext.flush_process_memory",
+          "offset": 598,
+          "relocation_type": 1,
+          "addend": 184
+        },
+        {
+          "section": ".ltext.join_process_memory_range",
+          "offset": 25,
+          "relocation_type": 1,
+          "addend": 88
+        },
+        {
+          "section": ".ltext.join_process_memory_range",
+          "offset": 331,
+          "relocation_type": 1,
+          "addend": 120
+        },
+        {
+          "section": ".ltext.process_flush_memory_debug_bridge",
+          "offset": 13,
+          "relocation_type": 1,
+          "addend": 184
+        },
+        {
+          "section": ".ltext.process_flush_memory_debug_bridge",
+          "offset": 45,
+          "relocation_type": 1,
+          "addend": 152
+        },
+        {
+          "section": ".ltext.process_join_range_log_bridge",
+          "offset": 16,
+          "relocation_type": 1,
+          "addend": 120
+        },
+        {
+          "section": ".ltext.process_join_range_log_bridge",
+          "offset": 81,
+          "relocation_type": 1,
+          "addend": 88
+        },
+        {
+          "section": ".ltext.process_remove_range_log_bridge",
+          "offset": 65,
+          "relocation_type": 1,
+          "addend": 248
+        },
+        {
+          "section": ".ltext.process_remove_range_log_bridge",
+          "offset": 137,
+          "relocation_type": 1,
+          "addend": 216
+        },
+        {
+          "section": ".ltext.process_split_range_public_log_bridge",
+          "offset": 35,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.process_split_range_public_log_bridge",
+          "offset": 77,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.remove_process_memory_range",
+          "offset": 508,
+          "relocation_type": 1,
+          "addend": 248
+        },
+        {
+          "section": ".ltext.remove_process_memory_range",
+          "offset": 888,
+          "relocation_type": 1,
+          "addend": 216
+        },
+        {
+          "section": ".ltext.split_process_memory_range",
+          "offset": 31,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.split_process_memory_range",
+          "offset": 216,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.split_process_memory_range",
+          "offset": 1037,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.split_process_memory_range",
+          "offset": 1163,
+          "relocation_type": 1,
+          "addend": 56
+        }
+      ]
+    },
+    {
+      "name": "process_free_range_body_debug",
+      "references": [
+        {
+          "section": ".ltext.process_memory_range_free_bridge",
+          "offset": 25,
+          "relocation_type": 1,
+          "addend": 88
+        },
+        {
+          "section": ".ltext.process_memory_range_free_bridge",
+          "offset": 1432,
+          "relocation_type": 1,
+          "addend": 56
+        }
+      ]
+    },
+    {
+      "name": "process_vm_range_insert_debug",
+      "references": [
+        {
+          "section": ".ltext.vm_range_insert",
+          "offset": 167,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.vm_range_insert_log_bridge",
+          "offset": 81,
+          "relocation_type": 1,
+          "addend": 24
+        }
+      ]
+    },
+    {
+      "name": "process_remaining_range_scheduler_debug",
+      "references": [
+        {
+          "section": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked",
+          "offset": 486,
+          "relocation_type": 1,
+          "addend": 376
+        },
+        {
+          "section": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers23runq_add_thread_checked",
+          "offset": 889,
+          "relocation_type": 1,
+          "addend": 536
+        },
+        {
+          "section": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust13xpmem_helpers19xpmem_detach_bridge",
+          "offset": 405,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust13xpmem_helpers19xpmem_detach_bridge",
+          "offset": 482,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust13xpmem_helpers22xpmem_vm_munmap_bridge",
+          "offset": 190,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust13xpmem_helpers22xpmem_vm_munmap_bridge",
+          "offset": 272,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust13xpmem_helpers23xpmem_release_ap_bridge",
+          "offset": 802,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust13xpmem_helpers23xpmem_release_ap_bridge",
+          "offset": 881,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust13xpmem_helpers23xpmem_remove_seg_bridge",
+          "offset": 2537,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust13xpmem_helpers23xpmem_remove_seg_bridge",
+          "offset": 2626,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust7gencore27gencore_lookup_range_bridge",
+          "offset": 16,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust7gencore27gencore_lookup_range_bridge",
+          "offset": 96,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.__runq_add_thread",
+          "offset": 141,
+          "relocation_type": 1,
+          "addend": 376
+        },
+        {
+          "section": ".ltext.__sched_wakeup_thread",
+          "offset": 191,
+          "relocation_type": 1,
+          "addend": 280
+        },
+        {
+          "section": ".ltext.__sched_wakeup_thread",
+          "offset": 497,
+          "relocation_type": 1,
+          "addend": 312
+        },
+        {
+          "section": ".ltext.__sched_wakeup_thread",
+          "offset": 1344,
+          "relocation_type": 1,
+          "addend": 344
+        },
+        {
+          "section": ".ltext.copy_user_ranges",
+          "offset": 224,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.copy_user_ranges",
+          "offset": 361,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.copy_user_ranges",
+          "offset": 910,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.copy_user_ranges",
+          "offset": 1031,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.copy_user_ranges",
+          "offset": 1225,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.copy_user_ranges",
+          "offset": 1282,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.copy_user_ranges",
+          "offset": 1420,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.extend_up_process_memory_range",
+          "offset": 26,
+          "relocation_type": 1,
+          "addend": 216
+        },
+        {
+          "section": ".ltext.extend_up_process_memory_range",
+          "offset": 171,
+          "relocation_type": 1,
+          "addend": 248
+        },
+        {
+          "section": ".ltext.extend_up_process_memory_range",
+          "offset": 294,
+          "relocation_type": 1,
+          "addend": 248
+        },
+        {
+          "section": ".ltext.f03_execveat_filename_admission_v1",
+          "offset": 176,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.f03_execveat_filename_admission_v1",
+          "offset": 253,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.f03_mprotect_lookup_bridge_v1",
+          "offset": 26,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.f03_mprotect_lookup_bridge_v1",
+          "offset": 100,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.f03_munmap_all_current_v1",
+          "offset": 242,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.f03_munmap_all_current_v1",
+          "offset": 325,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.f03_search_free_space_v1",
+          "offset": 681,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.f03_search_free_space_v1",
+          "offset": 758,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.f03_search_free_space_v1",
+          "offset": 917,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.f03_search_free_space_v1",
+          "offset": 994,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.f03_search_free_space_v1",
+          "offset": 1364,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.f03_search_free_space_v1",
+          "offset": 1441,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.gencore",
+          "offset": 114,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.gencore",
+          "offset": 197,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.mckernel_allocate_aligned_pages_node",
+          "offset": 275,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.mckernel_allocate_aligned_pages_node",
+          "offset": 363,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.next_process_memory_range",
+          "offset": 43,
+          "relocation_type": 1,
+          "addend": 88
+        },
+        {
+          "section": ".ltext.next_process_memory_range",
+          "offset": 142,
+          "relocation_type": 1,
+          "addend": 120
+        },
+        {
+          "section": ".ltext.page_fault_handler",
+          "offset": 2723,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.page_fault_handler",
+          "offset": 2803,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.previous_process_memory_range",
+          "offset": 43,
+          "relocation_type": 1,
+          "addend": 152
+        },
+        {
+          "section": ".ltext.previous_process_memory_range",
+          "offset": 142,
+          "relocation_type": 1,
+          "addend": 184
+        },
+        {
+          "section": ".ltext.print_region",
+          "offset": 22,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.print_region",
+          "offset": 105,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.process_extend_region_body_result",
+          "offset": 137,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.process_extend_region_body_result",
+          "offset": 218,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.process_range_public_log_bridge",
+          "offset": 33,
+          "relocation_type": 1,
+          "addend": 0
+        },
+        {
+          "section": ".ltext.process_sched_do_migrate_log_bridge",
+          "offset": 6,
+          "relocation_type": 1,
+          "addend": 568
+        },
+        {
+          "section": ".ltext.process_sched_runq_log_bridge",
+          "offset": 50,
+          "relocation_type": 1,
+          "addend": 376
+        },
+        {
+          "section": ".ltext.process_sched_runq_log_bridge",
+          "offset": 128,
+          "relocation_type": 1,
+          "addend": 312
+        },
+        {
+          "section": ".ltext.process_sched_runq_log_bridge",
+          "offset": 163,
+          "relocation_type": 1,
+          "addend": 344
+        },
+        {
+          "section": ".ltext.process_sched_runq_log_bridge",
+          "offset": 211,
+          "relocation_type": 1,
+          "addend": 472
+        },
+        {
+          "section": ".ltext.process_sched_runq_log_bridge",
+          "offset": 344,
+          "relocation_type": 1,
+          "addend": 280
+        },
+        {
+          "section": ".ltext.process_sched_runq_log_bridge",
+          "offset": 467,
+          "relocation_type": 1,
+          "addend": 408
+        },
+        {
+          "section": ".ltext.process_sched_runq_log_bridge",
+          "offset": 502,
+          "relocation_type": 1,
+          "addend": 440
+        },
+        {
+          "section": ".ltext.process_sched_runq_log_bridge",
+          "offset": 555,
+          "relocation_type": 1,
+          "addend": 536
+        },
+        {
+          "section": ".ltext.process_sched_runq_log_bridge",
+          "offset": 611,
+          "relocation_type": 1,
+          "addend": 504
+        },
+        {
+          "section": ".ltext.spin_sleep_or_schedule",
+          "offset": 247,
+          "relocation_type": 1,
+          "addend": 408
+        },
+        {
+          "section": ".ltext.spin_sleep_or_schedule",
+          "offset": 312,
+          "relocation_type": 1,
+          "addend": 504
+        },
+        {
+          "section": ".ltext.spin_sleep_or_schedule",
+          "offset": 577,
+          "relocation_type": 1,
+          "addend": 440
+        },
+        {
+          "section": ".ltext.spin_sleep_or_schedule",
+          "offset": 1797,
+          "relocation_type": 1,
+          "addend": 472
+        },
+        {
+          "section": ".ltext.spin_sleep_or_schedule",
+          "offset": 2242,
+          "relocation_type": 1,
+          "addend": 504
+        },
+        {
+          "section": ".ltext.sys_mincore",
+          "offset": 525,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.sys_mincore",
+          "offset": 602,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.sys_msync",
+          "offset": 692,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.sys_msync",
+          "offset": 779,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.sys_shmdt",
+          "offset": 359,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.sys_shmdt",
+          "offset": 436,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.unhandled_page_fault",
+          "offset": 370,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.unhandled_page_fault",
+          "offset": 452,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.xpmem_ensure_valid_page_bridge",
+          "offset": 424,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.xpmem_ensure_valid_page_bridge",
+          "offset": 503,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.xpmem_pin_page_bridge",
+          "offset": 396,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.xpmem_pin_page_bridge",
+          "offset": 477,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.xpmem_remove_process_memory_range",
+          "offset": 643,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.xpmem_remove_process_memory_range",
+          "offset": 731,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.xpmem_vaddr_to_pte_bridge",
+          "offset": 53,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.xpmem_vaddr_to_pte_bridge",
+          "offset": 130,
+          "relocation_type": 1,
+          "addend": 56
+        }
+      ]
+    },
+    {
+      "name": "process_remaining_memory_log_debug",
+      "references": [
+        {
+          "section": ".ltext.add_process_memory_range",
+          "offset": 791,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.change_prot_process_memory_range",
+          "offset": 25,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.change_prot_process_memory_range",
+          "offset": 850,
+          "relocation_type": 1,
+          "addend": 88
+        },
+        {
+          "section": ".ltext.memset_smp_handler",
+          "offset": 364,
+          "relocation_type": 1,
+          "addend": 120
+        },
+        {
+          "section": ".ltext.process_add_range_log_bridge",
+          "offset": 85,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.process_change_prot_public_log_bridge",
+          "offset": 27,
+          "relocation_type": 1,
+          "addend": 88
+        },
+        {
+          "section": ".ltext.process_change_prot_public_log_bridge",
+          "offset": 90,
+          "relocation_type": 1,
+          "addend": 56
+        },
+        {
+          "section": ".ltext.process_memset_smp_log_bridge",
+          "offset": 7,
+          "relocation_type": 1,
+          "addend": 120
+        },
+        {
+          "section": ".ltext.process_remove_region_log_bridge",
+          "offset": 6,
+          "relocation_type": 1,
+          "addend": 152
+        },
+        {
+          "section": ".ltext.remove_process_region",
+          "offset": 365,
+          "relocation_type": 1,
+          "addend": 152
+        }
+      ]
+    },
+    {
+      "name": "process_remap_one_page_entry_debug",
+      "references": [
+        {
+          "section": ".ltext.remap_one_page",
+          "offset": 53,
+          "relocation_type": 1,
+          "addend": 24
+        }
+      ]
+    },
+    {
+      "name": "process_remap_one_page_rss_debug",
+      "references": [
+        {
+          "section": ".ltext.remap_one_page",
+          "offset": 624,
+          "relocation_type": 1,
+          "addend": 24
+        }
+      ]
+    },
+    {
+      "name": "process_remap_one_page_exit_debug",
+      "references": [
+        {
+          "section": ".ltext.remap_one_page",
+          "offset": 752,
+          "relocation_type": 1,
+          "addend": 24
+        }
+      ]
+    },
+    {
+      "name": "process_sync_one_page_entry_debug",
+      "references": [
+        {
+          "section": ".ltext.sync_one_page",
+          "offset": 44,
+          "relocation_type": 1,
+          "addend": 24
+        }
+      ]
+    },
+    {
+      "name": "process_sync_one_page_exit_debug",
+      "references": [
+        {
+          "section": ".ltext.sync_one_page",
+          "offset": 325,
+          "relocation_type": 1,
+          "addend": 24
+        }
+      ]
+    },
+    {
+      "name": "process_page_fault_profile_path_debug",
+      "references": [
+        {
+          "section": ".ltext.process_page_fault_entry_log_body_result",
+          "offset": 139,
+          "relocation_type": 1,
+          "addend": 24
+        }
+      ]
+    },
+    {
+      "name": "process_page_fault_entry_debug",
+      "references": [
+        {
+          "section": ".ltext.process_page_fault_entry_log_body_result",
+          "offset": 252,
+          "relocation_type": 1,
+          "addend": 24
+        }
+      ]
+    },
+    {
+      "name": "process_page_fault_pte_state_debug",
+      "references": [
+        {
+          "section": ".ltext.page_fault_process_memory_range",
+          "offset": 253,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.process_page_fault_pte_state_log_bridge",
+          "offset": 6,
+          "relocation_type": 1,
+          "addend": 24
+        }
+      ]
+    },
+    {
+      "name": "process_page_fault_page_state_debug",
+      "references": [
+        {
+          "section": ".ltext.process_page_fault_install_finish_body_result",
+          "offset": 225,
+          "relocation_type": 1,
+          "addend": 24
+        },
+        {
+          "section": ".ltext.process_page_fault_page_state_log_bridge",
+          "offset": 6,
+          "relocation_type": 1,
+          "addend": 24
+        }
+      ]
+    },
+    {
+      "name": "process_page_fault_prepare_bounds_debug",
+      "references": [
+        {
+          "section": ".ltext.process_page_fault_prepare_body_result",
+          "offset": 418,
+          "relocation_type": 1,
+          "addend": 24
+        }
+      ]
+    },
+    {
+      "name": "process_page_fault_cow_rss_add_debug",
+      "references": [
+        {
+          "section": ".ltext.page_fault_process_memory_range",
+          "offset": 1489,
+          "relocation_type": 1,
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "process_page_fault_cow_rss_sub_debug",
+      "references": [
+        {
+          "section": ".ltext.page_fault_process_memory_range",
+          "offset": 1479,
+          "relocation_type": 1,
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "process_page_fault_set_pte_rss_add_debug",
+      "references": [
+        {
+          "section": ".ltext.page_fault_process_memory_range",
+          "offset": 1618,
+          "relocation_type": 1,
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "process_page_fault_set_pte_rss_skip_debug",
+      "references": [
+        {
+          "section": ".ltext.page_fault_process_memory_range",
+          "offset": 1583,
+          "relocation_type": 1,
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "process_page_fault_set_pte_attr_debug",
+      "references": [
+        {
+          "section": ".ltext.page_fault_process_memory_range",
+          "offset": 1573,
+          "relocation_type": 1,
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "process_page_fault_out_stray_debug",
+      "references": [
+        {
+          "section": ".ltext.page_fault_process_memory_range",
+          "offset": 193,
+          "relocation_type": 1,
+          "addend": 0
+        },
+        {
+          "section": ".ltext.page_fault_process_memory_range",
+          "offset": 1563,
+          "relocation_type": 1,
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "process_page_fault_out_rss_sub_debug",
+      "references": [
+        {
+          "section": ".ltext.page_fault_process_memory_range",
+          "offset": 183,
+          "relocation_type": 1,
+          "addend": 0
+        },
+        {
+          "section": ".ltext.page_fault_process_memory_range",
+          "offset": 1553,
+          "relocation_type": 1,
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "process_page_fault_out_return_debug",
+      "references": [
+        {
+          "section": ".ltext.page_fault_process_memory_range",
+          "offset": 173,
+          "relocation_type": 1,
+          "addend": 0
+        },
+        {
+          "section": ".ltext.page_fault_process_memory_range",
+          "offset": 1543,
+          "relocation_type": 1,
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "process_page_fault_anon_clear_debug",
+      "references": [
+        {
+          "section": ".ltext.page_fault_process_memory_range",
+          "offset": 779,
+          "relocation_type": 1,
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "process_page_fault_anon_map_debug",
+      "references": [
+        {
+          "section": ".ltext.page_fault_process_memory_range",
+          "offset": 769,
+          "relocation_type": 1,
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "process_page_fault_cow_copy_debug",
+      "references": [
+        {
+          "section": ".ltext.page_fault_process_memory_range",
+          "offset": 1283,
+          "relocation_type": 1,
+          "addend": 24
+        }
+      ]
+    },
+    {
+      "name": "process_init_stack_log_size_debug",
+      "references": [
+        {
+          "section": ".ltext.process_init_stack_log_bridge",
+          "offset": 120,
+          "relocation_type": 1,
+          "addend": 24
+        }
+      ]
+    },
+    {
+      "name": "process_init_stack_log_ap_user_debug",
+      "references": [
+        {
+          "section": ".ltext.process_init_stack_log_bridge",
+          "offset": 352,
+          "relocation_type": 1,
+          "addend": 24
+        }
+      ]
+    },
+    {
+      "name": "process_schedule_switch_debug",
+      "references": [
+        {
+          "section": ".ltext.schedule",
+          "offset": 2072,
+          "relocation_type": 1,
+          "addend": 24
+        }
+      ]
+    }
+  ],
+  "registry_consumers": [
+    {
+      "name": "__start___verbose",
+      "references": [
+        {
+          "section": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust5debug24dynamic_debug_sysfs_show",
+          "offset": 64,
+          "relocation_type": 1,
+          "addend": 0
+        },
+        {
+          "section": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust5debug25dynamic_debug_sysfs_store",
+          "offset": 1048,
+          "relocation_type": 1,
+          "addend": 0
+        },
+        {
+          "section": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust5debug25dynamic_debug_sysfs_store",
+          "offset": 1073,
+          "relocation_type": 1,
+          "addend": 0
+        }
+      ]
+    },
+    {
+      "name": "__stop___verbose",
+      "references": [
+        {
+          "section": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust5debug24dynamic_debug_sysfs_show",
+          "offset": 54,
+          "relocation_type": 1,
+          "addend": 0
+        },
+        {
+          "section": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust5debug24dynamic_debug_sysfs_show",
+          "offset": 200,
+          "relocation_type": 1,
+          "addend": 0
+        },
+        {
+          "section": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust5debug25dynamic_debug_sysfs_store",
+          "offset": 72,
+          "relocation_type": 1,
+          "addend": 0
+        }
+      ]
+    }
+  ],
+  "debug_source": {
+    "path": "/home/holden/mckernel/kernel/rust/debug.rs",
+    "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16"
+  },
+  "note": "Actual CURRENT111 readonly reference observation only; no producer or executable replay. Whole/default/native112 binding remains Root obligation."
+}

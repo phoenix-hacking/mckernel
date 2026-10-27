@@ -1,0 +1,98 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/custody_release_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "at": "2026-10-27T21:25:51.783319+00:00",
+  "decision": "PASS_POSITIVE_CURRENT112_FOUR_COMMAND_TERMINATION_AND_CURRENT_FREE_PERMANENT_MUTEX",
+  "nonce": "5c2cd5ea297e4770a1e1f4ea05d8cf9b",
+  "nonce_consumed": true,
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 100127,
+    "sha256": "a95aa8ee04f2f26b3f1275dfe5e5c471dbb793ee5d15c15533949f976dfcc3fe"
+  },
+  "execution_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/independent-execution-review-1/REVIEW.json",
+    "bytes": 7157,
+    "sha256": "3c8c0d0eeee6438ecdbb264857fa26b82b0258254a78111dc48d5a68a43a0734"
+  },
+  "actual_grant": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/ROOT-ACTUAL-ONE-BUILD-ONLY-GRANT.json",
+    "bytes": 2666,
+    "sha256": "06daa2d97f96eb0e726868132337f4e5284bc802f4852b8a3002f73f33fb979a"
+  },
+  "worker_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/OUTPUT/work/evidence/worker-result.json",
+    "bytes": 13888,
+    "sha256": "889527aa740d24e18bd8202e43205c010c5fa5b4f1daa1f42a9597f38c8356fc"
+  },
+  "producer_contract": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/OUTPUT/work/evidence/producer-contract.json",
+    "bytes": 17990,
+    "sha256": "a8ef30bcc32007eef56598fe6d1de0f615baa338d3f01a75b7bd816fe5cba490"
+  },
+  "holder_tool_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/ROOT-ACTUAL-HOLDER-TOOL-RESULT.json",
+    "bytes": 349,
+    "sha256": "37844f1cb91fc8ddd107dcda8a34f7c6a5d4f1be5460e5019e9e7d1e0b2a056d"
+  },
+  "local_terminal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/HOLDER/BUILD-LOCAL-TERMINAL.json",
+    "bytes": 246,
+    "sha256": "b177a13df1deb1b8374cc85065e58c71ecfa244d6d39ff784501e0c463af32ce"
+  },
+  "runner_join": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/HOLDER/RUNNER.JOINED.json",
+    "bytes": 83,
+    "sha256": "9dc9027b3c185e8a101810a55dda420ae3ffd1680dc628563dfddd422412b752"
+  },
+  "container_terminal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/OUTPUT/terminal.json",
+    "bytes": 457,
+    "sha256": "663be77a3017dd3fb4ca71c590f3e7e594ccb397a3ed673575292fc01bac85bb"
+  },
+  "current_observation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/independent-postbuild-review-1/CURRENT-OBSERVATION.json",
+    "bytes": 115755,
+    "sha256": "2890058b608bdafd3ee13b618b72decf4f6ec4da282399b1d593f0afd04ffa87"
+  },
+  "holder": {
+    "path": "/run/lock/mckernel-development.lock",
+    "pid": 1702852,
+    "starttime": 93360315,
+    "device": 27,
+    "inode": 4,
+    "fd": 3
+  },
+  "runner": {
+    "pid": 1702974,
+    "starttime": 93366390,
+    "returncode": 0,
+    "joined": true
+  },
+  "retained_stopped_container": "50970ddb9d70fd3133037de8b68b6aebb92a3bfe4d311185c706d8f9969811bb",
+  "facts": [
+    "Exactly four command argv/cwd rows equal approved profile and all return0; producer and worker command records equal. No configure/SDK/native or old HOST build replay.",
+    "Root tool12278 positive terminal0, runner1702974/start93366390 joined0, holder1702852/start93360315 local terminal0. Fresh320-process census has neither numeric owner nor either process group and no read errors.",
+    "Reviewer acquired and closed permanent27:4 fullEOF FLOCK_EX twice after positive joins. Actual cgroup pids.current0; CPU4 quota,12GiB/512task profile retained.",
+    "Exact current CID50970 inspect and name-filter both identify retained stopped container: exited0/Pid0/noOOM/emptyError. Container remains retained; known historical5c92/Root4 ownership evidence untouched.",
+    "Host149453144064 and scratch47869915136 bytes free exceed required floors. Same clock/account/credit/native/source/aggregate7job controls remain; no new operation released."
+  ],
+  "limits": [
+    "Current active capacity is free with stopped container custody retained. No cleanup/removal permission inferred.",
+    "Actual CURRENT112 selected default artifact/ABI/rawlink/origin/logger/warning/consumer acceptance remains separate and OPEN.",
+    "Root may record nonce consumed/current-free for fresh subsequent admission; recheck current source/account/resources/ownership and applicable release."
+  ],
+  "review_actions": {
+    "retained_metadata_and_exact_current_proc_cgroup_two_closed_mutex_probes_and_CID_name_readonly_queries": true,
+    "cleanup": false,
+    "workload_replay": false,
+    "compiler": false,
+    "native": false
+  },
+  "artifact_acceptance": false,
+  "native_acceptance": false,
+  "whole_file_retirement": false,
+  "execution_release": null
+}

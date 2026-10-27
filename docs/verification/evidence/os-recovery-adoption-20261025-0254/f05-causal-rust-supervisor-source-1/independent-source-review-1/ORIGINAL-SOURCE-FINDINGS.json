@@ -1,0 +1,138 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "independent": true,
+  "reviewer": "/root/custody_release_review",
+  "implementation_owner": "/root/f05_rust_causal_supervisor",
+  "decision": "CHANGES_REQUIRED_EXACT_ORIGINAL_SOURCE_WITH_FINITE_CORRECTION_UNDERWAY",
+  "runtime_authority": null,
+  "at": "2026-10-27T21:53:26.638453+00:00",
+  "original_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/READY.json",
+    "bytes": 5744,
+    "sha256": "1867a606f4f89d7f05baa72237135fa375b8113697dc9a184709307d78a2c569"
+  },
+  "original_interface": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/SUPERVISOR-INTERFACE.json",
+    "bytes": 4144,
+    "sha256": "f38fca58c41b81154a593f468e34dd3ae6f43b5c3df73ecc36cef2fdb71c7304"
+  },
+  "source_files_authenticated": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/HOST-QUALIFICATION.json",
+      "bytes": 5083,
+      "sha256": "02631797e856e0281bc16c74b40cebfdeb5682110c7747abc458c6f732d2f3f0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/PREDECESSORS.json",
+      "bytes": 11382,
+      "sha256": "bca826641219177394490ea05167daebffe864532a70577732d2f217f3bf87a4"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/README.md",
+      "bytes": 6030,
+      "sha256": "899bd022e42d8ed86e17749acd455de00447957d018d66f6acb16ce7dfa0ba93"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/SOURCE-CHECKS.json",
+      "bytes": 2078,
+      "sha256": "9dbaf2c7e51c1d30e76f505e175138641bc91fef4512eca873c6bd70acfc3bb8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/SUPERVISOR-INTERFACE.json",
+      "bytes": 4144,
+      "sha256": "f38fca58c41b81154a593f468e34dd3ae6f43b5c3df73ecc36cef2fdb71c7304"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/host_tests.rs",
+      "bytes": 3941,
+      "sha256": "1944ee69fafd53813d523fe4b7e0e7a23645451217a43f0debbb47e5cfc4a493"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/lifecycle.rs",
+      "bytes": 16113,
+      "sha256": "7d9cfa292ed7f4520624b00bfb2227117db38908398880051fd32e1c1aab20ef"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/main.rs",
+      "bytes": 14310,
+      "sha256": "8d2d3775796e29d3a38790fa1b649c0fb5e53196d1bdaf6fc242ead1eea4fbb4"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/observer_tests.rs",
+      "bytes": 6335,
+      "sha256": "666c9d54767a6be56bf6f7cf06586dbd7a11ea85631ff62a76fbecf7b7205e28"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/report.rs",
+      "bytes": 2087,
+      "sha256": "9c55957c00355fef045efed65fecb2d80f93ab88d2f81afdac0c731489fb56fd"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/supervisor.rs",
+      "bytes": 25935,
+      "sha256": "5e674d825008806b14b90e2120cd0da9ff2aa61d56f3645f72c2b38691cb3a68"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-source-1/tests.rs",
+      "bytes": 9483,
+      "sha256": "87c7a6261e75c1ec84cb19718b7e0f7f81f9f50bdfc8aae02196c38ab3e7b4a0"
+    }
+  ],
+  "concrete_findings": [
+    {
+      "id": "LEADER_REAP_SIGNAL",
+      "file": "supervisor.rs",
+      "lines": "511-515,588-595",
+      "finding": "Clock-failure branch signals child/group unconditionally; an earlier killed-phase iteration may already have positively reaped the leader while pipes/descendants remain. Numeric process-group pin is then gone.",
+      "required_correction": "Irreversible explicit leader ownership state must guard every signalling path and forbid signalling after actual waitpid(child) reap, independently of timestamp success."
+    },
+    {
+      "id": "EARLY_CHILD_LOG_ORDER",
+      "file": "lifecycle.rs",
+      "lines": "105-120,147-166,352-360",
+      "finding": "Unknown child rows are rejected before logged positive parentcloneRET assigns child_pid, although retained full evaluator1359-1361 explicitly permits child execution/publication before parent RET logging.",
+      "required_correction": "Keep exact bounded pending rows/positions until a real matched positive parentcloneRET authenticates the child; then validate/replay original ordering, retaining foreign/duplicate/unknown-row rejection. No first-child inference, filtering or synthetic reordering."
+    },
+    {
+      "id": "LP64_TARGET_GUARD",
+      "file": "main.rs",
+      "lines": "5-6,23-45",
+      "finding": "Linux+x86_64+little does not exclude gnux32, while manual sigaction/mount/poll/siginfo/dirent ABI is LP64.",
+      "required_correction": "Require target_pointer_width64; assert exact supported LP64 SignalAction152/align8, Timespec16/align8 and PollFd8/align4. Bind actual Rust target/libc closure during Root qualification."
+    },
+    {
+      "id": "EXACT_SNAPSHOT_RECORD_COVERAGE",
+      "file": "supervisor.rs",
+      "lines": "387-403",
+      "finding": "text.matches(message) permits an observed short message to be covered only as a substring of another raw record, violating declared loss detection.",
+      "required_correction": "Source/tuple-bound native klog envelope parser must compare whole message bodies/multiplicity, preserving/writing final raw snapshot bytes verbatim. Example observed needle is absent from <6>[    1.000000] prefixneedle suffix newline. Keep /dev/kmsg metadata and bytes separate; unexpected native format fails closed."
+    }
+  ],
+  "additional_HOST_FFI_note": "prctl variadic option values in host_tests.rs must be unsigned long (usize/c_ulong under LP64), rather than depending on int register zero extension; sourceowner informed within the same bounded correction.",
+  "finite_source_findings_otherwise": [
+    "FFI function parameter widths, waitid128B aligned storage/si_pid16, pollfd8B, Linux timespec16B, dirent d_name19 and libc sigaction LP64 layout are coherent at the expressly supported exact LP64 target. No compiler/link/ABI execution is claimed.",
+    "Fork child uses preallocated CStrings/argv/env and async-signal-safe libc operations through execve/_exit; no Rust allocation/destructor path after fork. Pipe descriptor promotion/CLOEXEC/nonblocking setup and scoped RAII ownership preserve existing selected supervision intent.",
+    "Normal exit/error/timeout group signalling uses an unreaped leader pin; positive WNOWAIT observation precedes TERM/100msKILL and subsequent all-owned-child reap. The identified clock failure exception must be corrected before source approval.",
+    "Fixed payload argv/cwd/two-env/1024B per stream/10s app/5s absolute post-reap/120s collector/300s externally owned outer window and one4096B ND serializer remain exact. Failure overflow retains original fail-frame behavior; no limits/oracles normalized.",
+    "Gate is exclusive empty0600 regular file, rechecked by dev/inode/path and written once with actual G. Required child linkage/writeRET0/terminal231/wait61/DELETE/realACK/final0 precede gate; parent DELETE/final0 and readable empty namespace are independently required afterward. No cleanup ACK or namespace absence substitutes for ledger completion.",
+    "Incremental /dev/kmsg is non-destructive, sequence-checked and retained separately, with fail-closed gap/overflow/backlog/header failures. Final klogctl3 snapshot is single raw publication; native escaping/envelope compatibility still needs actual qualification.",
+    "Actual HostProcess64 ordinary sample rule and independent LWK128 debug budget are preserved as distinct mechanisms; necessary pre-gate visibility is OPEN, never inferred or given a per-helper quota. Old235/227 full evaluator and unknown-row checks remain required."
+  ],
+  "ordinary_HOST_proposal": {
+    "decision": "PROPORTIONATE_SAFE_UNPRIVILEGED_SCOPE_AFTER_CORRECTED_SOURCE_REVIEW_AND_EXACT_ROOT_PROFILE",
+    "pure_controls": 13,
+    "mocked_transport_controls": 7,
+    "real_owned_child_controls": 6,
+    "actual_controls_executed": 0,
+    "scope": "One dedicated serialized Rust test executable, private synthetic datagram/files, owned /bin/sh child/process-group lifecycle, child-subreaper only in that test process. Never execute PID1 main, mounts, modules, /dev/kmsg or native on HOST.",
+    "unbound": "Root must bind actual reviewed Rust compiler/target/libc and fresh outputs/ordinary budget; no compiler grant supplied by prose proposal."
+  },
+  "accepted_current_functional_context": "F05v3 foreground app/HOST qualification remains independently owned; no duplicate app/finalizer implementation or prior-native-acceptance prerequisite introduced.",
+  "actions": {
+    "read_hash_source_review_only": true,
+    "compiler_test_exec_signal_process_query_guard_sudo_Docker_resource_native_canonical": 0,
+    "only_assigned_review_directory_written": true,
+    "subagents": 0
+  },
+  "preservation": "Original12files/READY1867, old235/227 contracts and v2 native lifecycleFAIL preserved. No new C functionality or kernel changes proposed."
+}
