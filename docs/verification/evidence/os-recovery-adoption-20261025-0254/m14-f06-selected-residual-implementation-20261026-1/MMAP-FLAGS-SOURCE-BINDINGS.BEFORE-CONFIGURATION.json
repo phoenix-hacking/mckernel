@@ -1,0 +1,54 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nReuse three existing Rust providers and add their missing private paired selection.\n",
+  "task_id": "M14-F06-SELECTED-MMAP-FLAG-PROVIDERS",
+  "authoritative_frontier": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/chat-thirty-minute-oversight-1/M14-SELECTED-OBJECT-FRONTIER.json",
+    "bytes": 5819,
+    "sha256": "350d5ce90e73ed4cc5b742fe582fe587e19aa3aafb7de66613c0a60d250bf72f"
+  },
+  "before": [
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "bytes": 113935,
+      "sha256": "d6bf00d0a46755f37f511bff0c098487f04a155842f11a4ac64f2a1795faa8c1"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1228858,
+      "sha256": "fefec3eb05be2f714dfeca34310901a566557f82ee08de9b9ad0ef0344f74d62"
+    }
+  ],
+  "reused_fragment": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-mapping-prctl-clone-adapters-source-1/candidate/syscall_policy.mapping_prctl_clone.FRAGMENT.rs",
+    "bytes": 9464,
+    "sha256": "286494880bcc53a5025473c16c4c59a5ad5e8424bc19f79744530f9b79f54e59"
+  },
+  "after": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/syscall.mmap_flags.c",
+      "bytes": 113989,
+      "sha256": "9df29dda57df30f24acd7746d980370b05358634aea049cf27b42a8e73631ea7"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/syscall_policy.mmap_flags.rs",
+      "bytes": 1229113,
+      "sha256": "d997c0cea4bd51fac2830a2e7b78b0e0bec2bbae2554a12fe09b9329fe4c96ca"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/f06_mmap_flags.rs",
+      "bytes": 1411,
+      "sha256": "862a9af87abfeb269fac4196564475ebb3dcf5a04ea89937b367c45c333d63b9"
+    }
+  ],
+  "selected_C_define": "MCKERNEL_RUST_F06_MMAP_FLAG_PROVIDERS",
+  "selected_Rust_cfg": "f06_mmap_flag_providers",
+  "USE_NOCACHE_MMAP": {
+    "genuine_config_reference": null,
+    "enabled": null,
+    "required_Rust_cfg": "f06_use_nocache_mmap iff C USE_NOCACHE_MMAP is defined"
+  },
+  "compiler": null,
+  "object": null,
+  "native": null,
+  "canonical_writes": false
+}

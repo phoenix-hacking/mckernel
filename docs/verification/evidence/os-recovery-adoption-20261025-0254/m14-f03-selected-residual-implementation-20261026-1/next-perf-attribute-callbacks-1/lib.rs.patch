@@ -1,0 +1,9 @@
+--- kernel/rust/lib.rs
++++ kernel/rust/lib.rs
+@@ -111,3 +111,6 @@
+ pub extern "C" fn mckernel_rust_probe() -> u32 {
+     0x5255_5354
+ }
++
++#[cfg(enable_perf)]
++pub mod f03_perf_attr_callbacks;

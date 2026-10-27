@@ -1,0 +1,42 @@
+--- arch/x86_64/kernel/syscall.c
++++ arch/x86_64/kernel/syscall.c
+@@ -477,6 +477,7 @@
+ }
+ #endif
+ 
++#if !(defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_PROCESS_VM_ENTRY))
+ static void
+ arch_process_vm_rw_read_lock_bridge(void *vm)
+ {
+@@ -564,6 +565,8 @@
+ {
+ 	fast_memcpy(dst, src, bytes);
+ }
++
++#endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ extern void arch_process_vm_rw_log_bridge(const struct arch_process_vm_rw_log_record *record);
+@@ -3353,6 +3356,13 @@
+ 	ctx->fregsize = 0;
+ }
+ #endif
++
++#if (defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_PROCESS_VM_ENTRY))
++extern int do_process_vm_read_writev(int pid,
++		const struct iovec *local_iov, unsigned long liovcnt,
++		const struct iovec *remote_iov, unsigned long riovcnt,
++		unsigned long flags, int op);
++#else
+ 
+ int do_process_vm_read_writev(int pid, 
+ 		const struct iovec *local_iov,
+@@ -3671,6 +3681,8 @@
+ #endif
+ }
+ 
++#endif
++
+ #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ #line 3662
+ int move_pages_smp_handler(int cpu_index, int nr_cpus, void *arg)

@@ -1,0 +1,69 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nReuse three existing Rust providers and add their missing private paired selection.\n",
+  "task_id": "M14-F06-SELECTED-MMAP-FLAG-PROVIDERS",
+  "authoritative_frontier": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/chat-thirty-minute-oversight-1/M14-SELECTED-OBJECT-FRONTIER.json",
+    "bytes": 5819,
+    "sha256": "350d5ce90e73ed4cc5b742fe582fe587e19aa3aafb7de66613c0a60d250bf72f"
+  },
+  "before": [
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "bytes": 113935,
+      "sha256": "d6bf00d0a46755f37f511bff0c098487f04a155842f11a4ac64f2a1795faa8c1"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1228858,
+      "sha256": "fefec3eb05be2f714dfeca34310901a566557f82ee08de9b9ad0ef0344f74d62"
+    }
+  ],
+  "reused_fragment": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-mapping-prctl-clone-adapters-source-1/candidate/syscall_policy.mapping_prctl_clone.FRAGMENT.rs",
+    "bytes": 9464,
+    "sha256": "286494880bcc53a5025473c16c4c59a5ad5e8424bc19f79744530f9b79f54e59"
+  },
+  "after": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/syscall.mmap_flags.c",
+      "bytes": 113989,
+      "sha256": "9df29dda57df30f24acd7746d980370b05358634aea049cf27b42a8e73631ea7"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/syscall_policy.mmap_flags.rs",
+      "bytes": 1229113,
+      "sha256": "d997c0cea4bd51fac2830a2e7b78b0e0bec2bbae2554a12fe09b9329fe4c96ca"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/f06_mmap_flags.rs",
+      "bytes": 1411,
+      "sha256": "862a9af87abfeb269fac4196564475ebb3dcf5a04ea89937b367c45c333d63b9"
+    }
+  ],
+  "selected_C_define": "MCKERNEL_RUST_F06_MMAP_FLAG_PROVIDERS",
+  "selected_Rust_cfg": "f06_mmap_flag_providers",
+  "USE_NOCACHE_MMAP": {
+    "genuine_config_reference": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/GENUINE-NOCACHE-CONFIGURATION.json",
+      "bytes": 91114,
+      "sha256": "a74a4a7b3edef59a5db47c41e1056768540439002331aaaf158dd95e21c7888c"
+    },
+    "enabled": false,
+    "generated_header": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/config.h",
+      "bytes": 1055,
+      "sha256": "da78d6a8c94b274adad3159b1cc373b00e5de7fea6cc2ae7955a700078db6b2f"
+    },
+    "exact_selected_command": {
+      "directory": "/work/output/build/kernel",
+      "command": "/usr/bin/cc -DIHK_IKC_USE_LINUX_WORK_IRQ -DIHK_OS_MANYCORE -DKERNEL_RAM_VADDR=0xfffffffffe800000 -DMAP_KERNEL_START=0xfffffffffe800000UL -DMCKERNEL_NATIVE_CLONE3 -DMCKERNEL_NATIVE_CLONE_TID -DMCKERNEL_NATIVE_FAULT_FIXUP -DMCKERNEL_NATIVE_FUTEX -DMCKERNEL_NATIVE_SIGNAL_STACK -DMCKERNEL_RUST_ATOMIC_HELPERS -DMCKERNEL_RUST_BITOPS -DMCKERNEL_RUST_LIST_HELPERS -DMCKERNEL_RUST_LOCK_HELPERS -DMCKERNEL_RUST_MCS_RWLOCK_HELPERS -DMCKERNEL_RUST_MC_RWLOCK_HELPERS -DMCKERNEL_RUST_PTE_HELPERS -DMCKERNEL_RUST_REFCOUNT_HELPERS -DMCKERNEL_RUST_SPINLOCK_HELPERS -DPROFILE_ENABLE -D__KERNEL__ -DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS -DMCKERNEL_RUST_X86_CPU_HELPERS -I/work/output/build/kernel/include -I/src/kernel/include -I/work/output/build/kernel -I/work/output/build -I/src/ihk/cokernel/smp/x86_64/include -I/src/ihk/cokernel/smp/x86_64 -I/src/ihk/ikc/include -I/src/ihk/linux/include -I/src/lib/include -I/src/arch/x86_64/kernel/include -g -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-unused-function -Wno-implicit-fallthrough -Wno-stringop-truncation -ffreestanding -O2 -nostdinc -isystem /usr/lib/gcc/x86_64-redhat-linux/14/include -fno-omit-frame-pointer -mcmodel=large -mno-red-zone -mno-sse -o CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o -c /src/arch/x86_64/kernel/syscall.c",
+      "file": "/src/arch/x86_64/kernel/syscall.c",
+      "output": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o"
+    },
+    "required_Rust_cfg": "omit f06_use_nocache_mmap for this exact selected configuration; preserve alternate branch for separately bound future configurations"
+  },
+  "compiler": null,
+  "object": null,
+  "native": null,
+  "canonical_writes": false
+}

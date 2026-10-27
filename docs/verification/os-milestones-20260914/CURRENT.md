@@ -1,3 +1,33 @@
+## SDK actual API refusal corrected; parallel HOST compiler results — 2026-10-27T00:21Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+SDK2nonce0ea8 actualowner1310306/start85703006 wasinvokedONCE thenrefused in
+owner999.authenticate→bound(source_review): strictlegacyAPI needs2keys, adapter
+supplied3. Actualquery2+metadata/exec reviewpassed, queryholder1309975/tool23280
+normalclosed/joined0 beforeownerfreshlock. Actualownerjoined1/.157s/groupabsent/
+closedstreams; noadmissiondir/claim/ownerevidence/container/SDKcompilercommand.
+Rootproof +independentPASS_PRE_ADMISSION_REFUSAL_RETIRED_CURRENT_MUTEX_FREE retained;
+oldgrantused/notreplay. Candidate/workspaces unchanged, no cleanupneeded.
+
+Oneboundedfix0c35884f projects ONLYrelease.source_review to{path,sha256}, bundle
+3keyrefs/contextunchanged. Six REALside-effect-freeowner.authenticate regressions
+pass, originalliteralreleasefails/candidatepasses; independentSOURCEPASS19463.
+No source-onlytestreview treatedasruntimeauthority. NextSDK3 request567416a9e25d4923945486092c3e57f4
+reserved, allAartifact/growthhistoryimmutable; Bheadfreshenswithrefusedattemptprovenance.
+Rootpreparesallstaticbinding/publication BEFOREfreshclock, same deterministiconebatch
+actualPID/ref/clockfill+combinedreview, original120s unchanged. NoSDKcompiler yet.
+
+Parallel actualHOSTsourcequalification: F03two newperfattrRustcallbacks+genuineC ABI
+2330pairs:3commandsPASS/CPU.116436s/wall.226699s/peak79720KiB. F02three4Bflagdata
+selected/fallback ownership/default/signedmutability:11commandsPASS/39ABIchecks each,
+CPU.13s/wall.230s/peak83328KiB. F06threereusedmmapflagproviders/genuineNOCACHEundefined:
+15commandsPASS/selected+fallbackparity/uniqueproviders, CPU.193689s/wall.320403s/
+peak74888KiB. SINGLECPU6slot sequentially released; noRoot/Docker/native/defaultcredit.
+Canonicalsourceunchanged. F03nextgenuineprlimitbody+typed4argforward source advancing;
+F06nextPRCTLregisterbridge source-ready, uncompiled. F05exactM14-05-05 remainsopen.
+Currentnativecases2/startup+memory; fullpackage/default/nativecutover/file/M14/M15
+closures unchanged0; no95percentvelocityclaim. Fixedcutoff/accountcontrolsunchanged.
+
 ## SDK actual static provenance finalized; precise F05 remaining obligation — 2026-10-26T23:49Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

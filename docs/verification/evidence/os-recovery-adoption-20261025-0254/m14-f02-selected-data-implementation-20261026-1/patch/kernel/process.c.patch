@@ -1,0 +1,20 @@
+--- a/kernel/process.c
++++ b/kernel/process.c
+@@ -723,9 +723,17 @@
+ #line 566
+ #endif
+ 
++#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
++extern int idle_halt;
++extern int allow_oversubscribe;
++extern int time_sharing;
++#else
++#line 568
+ int idle_halt = 0;
+ int allow_oversubscribe = 0;
+ int time_sharing = 1;
++#endif
++#line 571
+ 
+ #ifndef MCKERNEL_RUST_PROCESS_HELPERS
+ static const struct process_init_state_offsets process_init_state_offsets = {

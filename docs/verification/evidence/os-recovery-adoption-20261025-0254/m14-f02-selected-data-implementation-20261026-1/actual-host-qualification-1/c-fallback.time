@@ -1,0 +1,23 @@
+	Command being timed: "/usr/bin/timeout --signal=KILL 90s /usr/bin/taskset -c 6 /usr/bin/prlimit --as=2147483648 --cpu=60 --fsize=67108864 --core=0 -- /usr/bin/gcc-9 -DIHK_IKC_USE_LINUX_WORK_IRQ -DIHK_OS_MANYCORE -DKERNEL_RAM_VADDR=0xfffffffffe800000 -DMAP_KERNEL_START=0xfffffffffe800000UL -DMCKERNEL_NATIVE_CLONE3 -DMCKERNEL_NATIVE_CLONE_TID -DMCKERNEL_NATIVE_FAULT_FIXUP -DMCKERNEL_NATIVE_FUTEX -DMCKERNEL_NATIVE_SIGNAL_STACK -DMCKERNEL_RUST_ATOMIC_HELPERS -DMCKERNEL_RUST_BITOPS -DMCKERNEL_RUST_LIST_HELPERS -DMCKERNEL_RUST_LOCK_HELPERS -DMCKERNEL_RUST_MCS_RWLOCK_HELPERS -DMCKERNEL_RUST_MC_RWLOCK_HELPERS -DMCKERNEL_RUST_PTE_HELPERS -DMCKERNEL_RUST_REFCOUNT_HELPERS -DMCKERNEL_RUST_SPINLOCK_HELPERS -DPROFILE_ENABLE -D__KERNEL__ -DMCKERNEL_RUST_PROCESS_HELPERS -I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/include -I/home/holden/mckernel/kernel/include -I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel -I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build -I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include -I/home/holden/mckernel/ihk/cokernel/smp/x86_64 -I/home/holden/mckernel/ihk/ikc/include -I/home/holden/mckernel/ihk/linux/include -I/home/holden/mckernel/lib/include -I/home/holden/mckernel/arch/x86_64/kernel/include -g -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-unused-function -Wno-implicit-fallthrough -Wno-stringop-truncation -ffreestanding -O2 -nostdinc -isystem /usr/lib/gcc/x86_64-linux-gnu/9/include -fno-omit-frame-pointer -mcmodel=large -mno-red-zone -mno-sse -fno-pie -fno-stack-protector -MMD -MF /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-selected-data-implementation-20261026-1/actual-host-qualification-1/output/c-fallback.d -c /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-selected-data-implementation-20261026-1/actual-host-qualification-1/consumer.c -o /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-selected-data-implementation-20261026-1/actual-host-qualification-1/output/c-fallback.o"
+	User time (seconds): 0.03
+	System time (seconds): 0.00
+	Percent of CPU this job got: 97%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.04
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 28852
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 3182
+	Voluntary context switches: 11
+	Involuntary context switches: 7
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 304
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

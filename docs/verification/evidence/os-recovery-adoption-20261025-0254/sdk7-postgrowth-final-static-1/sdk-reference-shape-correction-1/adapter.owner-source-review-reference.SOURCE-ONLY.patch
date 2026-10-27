@@ -1,0 +1,20 @@
+--- a/sdk7_authority_adapter.POSTGROWTH-CHAIN.SOURCE-ONLY.py
++++ b/sdk7_authority_adapter.OWNER-REFERENCE-SHAPE.SOURCE-ONLY.py
+@@ -18,7 +18,7 @@
+ from prepare_current_window_bindings import ORIGIN, ORIGIN_SHA
+ from sdk7_current_window import load_window, validate_window
+ from retained_sdk21_authority import validate_current
+-sys.path.insert(0,str(Path(__file__).resolve().parent))
++sys.path.insert(0,str(Path(__file__).resolve().parent.parent))
+ from growth_chain_validator import current_sources, validate_growth_chain as growth_chain
+ 
+ PROFILE = dict(cpus='2-5', jobs=1, memory_bytes=12 * 2**30,
+@@ -244,7 +244,7 @@
+          'historical pending base source differs')
+     payload = copy.deepcopy(base)
+     payload.update(nonce=nonce, request={k: bundle['request'][k] for k in ('path', 'sha256')},
+-                   boot_id=window['boot_id'], source_review=bundle['current_source_review'],
++                   boot_id=window['boot_id'], source_review={k: bundle['current_source_review'][k] for k in ('path', 'sha256')},
+                    source_sha256=mapping['source_sha256'],
+                    current_consumer_source_map=bundle['current_source_map'],
+                    current_consumer_source_publication=bundle['current_source_publication'],

@@ -1,0 +1,98 @@
+{
+  "task_id": "M14-F06-PRCTL-SET-REGISTER-SELECTOR",
+  "status": "SOURCE_READY_FOR_REVIEW",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_provider": "arch_prctl_set_register_bridge",
+  "implementation": "Exact already-ported Rust provider plus private paired selection; no duplicate body or logger",
+  "checks": [
+    {
+      "command": "python3 -B docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-selected-1/check_source.py",
+      "returncode": 0,
+      "scope": "source-only identity/reuse/selector/ABI-context/fixture-shape checks"
+    }
+  ],
+  "evidence": {
+    "syscall.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-selected-1/syscall.c",
+      "bytes": 113988,
+      "sha256": "643bbc07e4ed02ad36cb4f6cbff8a128dc8fd9503f1fb14a130f6f7aaf8ccf96"
+    },
+    "syscall_policy.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-selected-1/syscall_policy.rs",
+      "bytes": 1229052,
+      "sha256": "bcdb66c8e2fd1259654d8fd532b712fe675769887ca79610500f76a3abb80b27"
+    },
+    "f06_prctl_set_register.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-selected-1/f06_prctl_set_register.rs",
+      "bytes": 659,
+      "sha256": "7cfbad6524e5ca293b22d5efaa7572492a95bfd2953ba8b01ee09113a287c3a2"
+    },
+    "syscall.c.diff": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-selected-1/syscall.c.diff",
+      "bytes": 396,
+      "sha256": "0938a93797e638f884130bb5d1659b98e7fd072622e093b4a6e15540fbf1c342"
+    },
+    "syscall_policy.rs.diff": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-selected-1/syscall_policy.rs.diff",
+      "bytes": 312,
+      "sha256": "e3bd04a466c18db4e610c32f57375ae755f2c59862e47ec9cfba18f3814c598f"
+    },
+    "original_bridge.inc": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-selected-1/original_bridge.inc",
+      "bytes": 126,
+      "sha256": "069a219f885837adc5108ae149748217c14cc6bb1cb2b7f1bab96151534e68d4"
+    },
+    "fixture.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-selected-1/fixture.rs",
+      "bytes": 645,
+      "sha256": "b71dd4daf5d30e372460709e3b8809933463e1981243b2d6488535cc9abcdb28"
+    },
+    "fixture.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-selected-1/fixture.c",
+      "bytes": 2881,
+      "sha256": "58de7558a69c7bb304999b7cf7fc3cdf75e273d039a6f3e450b5478cb562fcb2"
+    },
+    "FUTURE-COMPILER-ARGV.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-selected-1/FUTURE-COMPILER-ARGV.json",
+      "bytes": 2199,
+      "sha256": "5e7578b02c95381304193013aaef1ad2ae83656eb22f52facfdd68f8e2062b2d"
+    },
+    "SOURCE-BINDINGS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-selected-1/SOURCE-BINDINGS.json",
+      "bytes": 3107,
+      "sha256": "17e2c816703f9ea568a857f94f06b90d9ef7849e6270465d406a56ad10da8493"
+    },
+    "SOURCE-CHECK.stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-selected-1/SOURCE-CHECK.stdout",
+      "bytes": 246,
+      "sha256": "d247bdf0df827b2de79b2274ca34643d7af3e48742b0b1eb73d261e61f76a52e"
+    },
+    "SOURCE-CHECK.stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-selected-1/SOURCE-CHECK.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "check_source.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-selected-1/check_source.py",
+      "bytes": 2796,
+      "sha256": "3ffc052729f08caa87b67dc626c7c8ac923a59cbaa9dbeef5045029c47d29c44"
+    },
+    "prepare_source.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-selected-1/prepare_source.py",
+      "bytes": 3507,
+      "sha256": "9d4812420afdff61f90bd2bc737ff8fe93e2832c6df12068b48488c039fa8ad2"
+    },
+    "HANDOFF.md": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/next-process-vm-selected-1/HANDOFF.md",
+      "bytes": 2887,
+      "sha256": "2de03743b96801b6703abf30cf691a3ee7d0befb7e714de1c3cda27930c35e96"
+    }
+  },
+  "compiler": null,
+  "parity_execution": null,
+  "link": null,
+  "native": null,
+  "canonical_writes": false,
+  "blocker": "Specific compiler grant; no CPU slot held by this source work",
+  "next_task": "Independent review then ordinary approved HOST compiler/parity cohort after CPU6 availability; no automatic production acceptance"
+}

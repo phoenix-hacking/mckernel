@@ -1,0 +1,332 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_HOST_SLICE_OBJECT_INITIALIZER_OWNER_AND_C_RUST_INT_BEHAVIOR",
+  "rows": {
+    "rust-selected.o": [
+      {
+        "name": "allow_oversubscribe",
+        "binding": 1,
+        "type": 1,
+        "visibility": 0,
+        "section_index": 9,
+        "value": 0,
+        "bytes": 4,
+        "section": ".bss.allow_oversubscribe",
+        "section_type": 8,
+        "section_flags": 3,
+        "section_alignment": 4,
+        "initial_hex": "00000000"
+      },
+      {
+        "name": "idle_halt",
+        "binding": 1,
+        "type": 1,
+        "visibility": 0,
+        "section_index": 10,
+        "value": 0,
+        "bytes": 4,
+        "section": ".bss.idle_halt",
+        "section_type": 8,
+        "section_flags": 3,
+        "section_alignment": 4,
+        "initial_hex": "00000000"
+      },
+      {
+        "name": "resource_set_list",
+        "binding": 1,
+        "type": 1,
+        "visibility": 0,
+        "section_index": 11,
+        "value": 0,
+        "bytes": 16,
+        "section": ".bss.resource_set_list",
+        "section_type": 8,
+        "section_flags": 3,
+        "section_alignment": 16,
+        "initial_hex": "00000000000000000000000000000000"
+      },
+      {
+        "name": "resource_set_lock",
+        "binding": 1,
+        "type": 1,
+        "visibility": 0,
+        "section_index": 12,
+        "value": 0,
+        "bytes": 64,
+        "section": ".bss.resource_set_lock",
+        "section_type": 8,
+        "section_flags": 3,
+        "section_alignment": 64,
+        "initial_hex": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "name": "runq_reservation_lock",
+        "binding": 1,
+        "type": 1,
+        "visibility": 0,
+        "section_index": 13,
+        "value": 0,
+        "bytes": 4,
+        "section": ".bss.runq_reservation_lock",
+        "section_type": 8,
+        "section_flags": 3,
+        "section_alignment": 4,
+        "initial_hex": "00000000"
+      },
+      {
+        "name": "time_sharing",
+        "binding": 1,
+        "type": 1,
+        "visibility": 0,
+        "section_index": 14,
+        "value": 0,
+        "bytes": 4,
+        "section": ".data.time_sharing",
+        "section_type": 1,
+        "section_flags": 3,
+        "section_alignment": 4,
+        "initial_hex": "01000000"
+      }
+    ],
+    "c-selected.o": [
+      {
+        "name": "allow_oversubscribe",
+        "binding": 1,
+        "type": 0,
+        "visibility": 0,
+        "section_index": 0,
+        "value": 0,
+        "bytes": 0
+      },
+      {
+        "name": "idle_halt",
+        "binding": 1,
+        "type": 0,
+        "visibility": 0,
+        "section_index": 0,
+        "value": 0,
+        "bytes": 0
+      },
+      {
+        "name": "time_sharing",
+        "binding": 1,
+        "type": 0,
+        "visibility": 0,
+        "section_index": 0,
+        "value": 0,
+        "bytes": 0
+      }
+    ],
+    "partial-selected.o": [
+      {
+        "name": "allow_oversubscribe",
+        "binding": 1,
+        "type": 1,
+        "visibility": 0,
+        "section_index": 18,
+        "value": 0,
+        "bytes": 4,
+        "section": ".bss.allow_oversubscribe",
+        "section_type": 8,
+        "section_flags": 3,
+        "section_alignment": 4,
+        "initial_hex": "00000000"
+      },
+      {
+        "name": "resource_set_list",
+        "binding": 1,
+        "type": 1,
+        "visibility": 0,
+        "section_index": 20,
+        "value": 0,
+        "bytes": 16,
+        "section": ".bss.resource_set_list",
+        "section_type": 8,
+        "section_flags": 3,
+        "section_alignment": 16,
+        "initial_hex": "00000000000000000000000000000000"
+      },
+      {
+        "name": "resource_set_lock",
+        "binding": 1,
+        "type": 1,
+        "visibility": 0,
+        "section_index": 21,
+        "value": 0,
+        "bytes": 64,
+        "section": ".bss.resource_set_lock",
+        "section_type": 8,
+        "section_flags": 3,
+        "section_alignment": 64,
+        "initial_hex": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "name": "runq_reservation_lock",
+        "binding": 1,
+        "type": 1,
+        "visibility": 0,
+        "section_index": 22,
+        "value": 0,
+        "bytes": 4,
+        "section": ".bss.runq_reservation_lock",
+        "section_type": 8,
+        "section_flags": 3,
+        "section_alignment": 4,
+        "initial_hex": "00000000"
+      },
+      {
+        "name": "idle_halt",
+        "binding": 1,
+        "type": 1,
+        "visibility": 0,
+        "section_index": 19,
+        "value": 0,
+        "bytes": 4,
+        "section": ".bss.idle_halt",
+        "section_type": 8,
+        "section_flags": 3,
+        "section_alignment": 4,
+        "initial_hex": "00000000"
+      },
+      {
+        "name": "time_sharing",
+        "binding": 1,
+        "type": 1,
+        "visibility": 0,
+        "section_index": 14,
+        "value": 0,
+        "bytes": 4,
+        "section": ".data.time_sharing",
+        "section_type": 1,
+        "section_flags": 3,
+        "section_alignment": 4,
+        "initial_hex": "01000000"
+      }
+    ],
+    "rust-fallback.o": [
+      {
+        "name": "idle_halt",
+        "binding": 1,
+        "type": 0,
+        "visibility": 0,
+        "section_index": 0,
+        "value": 0,
+        "bytes": 0
+      },
+      {
+        "name": "allow_oversubscribe",
+        "binding": 1,
+        "type": 0,
+        "visibility": 0,
+        "section_index": 0,
+        "value": 0,
+        "bytes": 0
+      },
+      {
+        "name": "time_sharing",
+        "binding": 1,
+        "type": 0,
+        "visibility": 0,
+        "section_index": 0,
+        "value": 0,
+        "bytes": 0
+      }
+    ],
+    "c-fallback.o": [
+      {
+        "name": "allow_oversubscribe",
+        "binding": 1,
+        "type": 1,
+        "visibility": 0,
+        "section_index": 3,
+        "value": 0,
+        "bytes": 4,
+        "section": ".bss",
+        "section_type": 8,
+        "section_flags": 3,
+        "section_alignment": 4,
+        "initial_hex": "00000000"
+      },
+      {
+        "name": "idle_halt",
+        "binding": 1,
+        "type": 1,
+        "visibility": 0,
+        "section_index": 3,
+        "value": 4,
+        "bytes": 4,
+        "section": ".bss",
+        "section_type": 8,
+        "section_flags": 3,
+        "section_alignment": 4,
+        "initial_hex": "00000000"
+      },
+      {
+        "name": "time_sharing",
+        "binding": 1,
+        "type": 1,
+        "visibility": 0,
+        "section_index": 2,
+        "value": 0,
+        "bytes": 4,
+        "section": ".data",
+        "section_type": 1,
+        "section_flags": 3,
+        "section_alignment": 4,
+        "initial_hex": "01000000"
+      }
+    ],
+    "partial-fallback.o": [
+      {
+        "name": "allow_oversubscribe",
+        "binding": 1,
+        "type": 1,
+        "visibility": 0,
+        "section_index": 16,
+        "value": 0,
+        "bytes": 4,
+        "section": ".bss",
+        "section_type": 8,
+        "section_flags": 3,
+        "section_alignment": 4,
+        "initial_hex": "00000000"
+      },
+      {
+        "name": "idle_halt",
+        "binding": 1,
+        "type": 1,
+        "visibility": 0,
+        "section_index": 16,
+        "value": 4,
+        "bytes": 4,
+        "section": ".bss",
+        "section_type": 8,
+        "section_flags": 3,
+        "section_alignment": 4,
+        "initial_hex": "00000000"
+      },
+      {
+        "name": "time_sharing",
+        "binding": 1,
+        "type": 1,
+        "visibility": 0,
+        "section_index": 13,
+        "value": 0,
+        "bytes": 4,
+        "section": ".data",
+        "section_type": 1,
+        "section_flags": 3,
+        "section_alignment": 4,
+        "initial_hex": "01000000"
+      }
+    ]
+  },
+  "behavior": {
+    "selected": 39,
+    "fallback": 39,
+    "scope": "genuine process.h GCC9 / actual candidate Rust full storage module and actual owned ABI excerpts, single-threaded host only"
+  },
+  "default_GCC14": false,
+  "native": false,
+  "whole_file_retirement": false
+}

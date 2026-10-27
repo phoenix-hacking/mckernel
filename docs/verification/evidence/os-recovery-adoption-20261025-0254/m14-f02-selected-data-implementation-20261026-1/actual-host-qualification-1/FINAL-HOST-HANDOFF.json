@@ -1,0 +1,121 @@
+{
+  "task": "m14-f02-selected-data-implementation-20261026-1/HOST-qualification-1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_HOST_SLICE_READY_FOR_REVIEW",
+  "at": "2026-10-27T00:13:47.524704+00:00",
+  "result": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-selected-data-implementation-20261026-1/actual-host-qualification-1/ACTUAL-COMMAND-RESULTS.json",
+  "actual_passed_commands": [
+    {
+      "label": "rust-selected",
+      "returncode": 0,
+      "CPU_seconds": 0.02,
+      "wall_seconds": 0.027590906945988536,
+      "RSS_KiB": 82696
+    },
+    {
+      "label": "c-selected",
+      "returncode": 0,
+      "CPU_seconds": 0.03,
+      "wall_seconds": 0.046228631981648505,
+      "RSS_KiB": 28948
+    },
+    {
+      "label": "partial-selected",
+      "returncode": 0,
+      "CPU_seconds": 0.0,
+      "wall_seconds": 0.004990312037989497,
+      "RSS_KiB": 4412
+    },
+    {
+      "label": "link-selected",
+      "returncode": 0,
+      "CPU_seconds": 0.01,
+      "wall_seconds": 0.016075365943834186,
+      "RSS_KiB": 8388
+    },
+    {
+      "label": "run-selected",
+      "returncode": 0,
+      "CPU_seconds": 0.0,
+      "wall_seconds": 0.0030646739760413766,
+      "RSS_KiB": 2220
+    },
+    {
+      "label": "rust-fallback",
+      "returncode": 0,
+      "CPU_seconds": 0.01,
+      "wall_seconds": 0.028607769054360688,
+      "RSS_KiB": 83328
+    },
+    {
+      "label": "c-fallback",
+      "returncode": 0,
+      "CPU_seconds": 0.03,
+      "wall_seconds": 0.04385945200920105,
+      "RSS_KiB": 28852
+    },
+    {
+      "label": "partial-fallback",
+      "returncode": 0,
+      "CPU_seconds": 0.0,
+      "wall_seconds": 0.004803350078873336,
+      "RSS_KiB": 4232
+    },
+    {
+      "label": "link-fallback",
+      "returncode": 0,
+      "CPU_seconds": 0.01,
+      "wall_seconds": 0.01630253391340375,
+      "RSS_KiB": 8348
+    },
+    {
+      "label": "run-fallback",
+      "returncode": 0,
+      "CPU_seconds": 0.0,
+      "wall_seconds": 0.003246001899242401,
+      "RSS_KiB": 2032
+    },
+    {
+      "label": "check-object-and-behavior",
+      "returncode": 0,
+      "CPU_seconds": 0.02,
+      "wall_seconds": 0.034923635073937476,
+      "RSS_KiB": 12824
+    }
+  ],
+  "limits": {
+    "cpu": "6",
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "FSIZE_bytes": 67108864,
+    "core_bytes": 0,
+    "wall_seconds": 90
+  },
+  "CPU_seconds_total": 0.13,
+  "wall_seconds_commands_total": 0.2296926329145208,
+  "largest_command_RSS_KiB": 83328,
+  "source_proof": "Candidate full storage module and exact three-flag C selector block compiled; genuine actual ABI type excerpts and process.h. Selected and fallback configurations; no full Rust crate or whole process.c TU recompilation.",
+  "findings": [
+    "Actual selected Rust producer owns exactly one four-byte writable GLOBAL/OBJECT/default-visibility definition per flag with zero/zero/one initializers and at least four-byte alignment. Selected C object has no flag definitions.",
+    "Actual fallback Rust object has no flag definitions; C owns exact matching storage. Both strict partial links retain exactly one owner per flag.",
+    "Previous list/lock storage owners retain exact zero initializers and size/alignment16/16,64/64,4/4 in actual selected producer.",
+    "Both host executables pass39 checks each for defaults, C/Rust address identity/alignment/distinct storage, five signed values including extrema in each cross-language write/read direction.",
+    "All source/tool/user-header bindings unchanged; all generated user dependencies prebound. All directchildren joined, processgroups absent and streams closed.",
+    "Fallback Rust emits only three expected dead-code warnings because owned list/lock ABI types are unused with provider selectorOFF. No failures or corrections."
+  ],
+  "canonical_source_changes": false,
+  "source_candidate_changed_during_check": false,
+  "cpu6_released": true,
+  "blocker": null,
+  "remaining": [
+    "Independent review of candidate and actual host evidence.",
+    "Root coherent wholeTU/default GCC14 production source/build/link qualification, under existing native SDK resource controls.",
+    "Native boot options/scheduler/oversubscription consumer proof and whole-file retirement remain OPEN."
+  ],
+  "acceptance": {
+    "default_GCC14": false,
+    "production_image": false,
+    "native": false,
+    "whole_file_retirement": false
+  }
+}

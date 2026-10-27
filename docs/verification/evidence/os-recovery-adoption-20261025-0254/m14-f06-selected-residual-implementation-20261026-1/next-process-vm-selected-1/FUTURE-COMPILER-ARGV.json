@@ -1,0 +1,69 @@
+{
+  "status": "PREPARED_NOT_EXECUTION_AUTHORITY",
+  "cwd": "/work/f06-prctl-set",
+  "commands": [
+    {
+      "purpose": "Functional OS only; compile the exact Rust adapter with controlled CPU-provider effect; no security testing",
+      "argv": [
+        "/nightly/bin/rustc",
+        "--edition=2021",
+        "--crate-type=staticlib",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "--cfg",
+        "f06_prctl_set_register_candidate",
+        "/work/f06-prctl-set/fixture.rs",
+        "-o",
+        "/work/f06-prctl-set/libfixture.a"
+      ]
+    },
+    {
+      "purpose": "Functional OS only; link genuine-header original-C/Rust adapter parity fixture; no security testing",
+      "argv": [
+        "/usr/bin/cc",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-no-pie",
+        "-I/src/lib/include",
+        "-I/src/arch/x86_64/kernel/include",
+        "-I/src/kernel/include",
+        "-I/src/ihk/cokernel/smp/x86_64/include",
+        "-I/src/ihk/linux/include",
+        "-I/src/ihk/ikc/include",
+        "-I/work/output/build",
+        "/work/f06-prctl-set/fixture.c",
+        "/work/f06-prctl-set/libfixture.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "/work/f06-prctl-set/fixture"
+      ]
+    },
+    {
+      "purpose": "Functional OS only;728 adapter argument/result/call-count comparisons; no security testing",
+      "argv": [
+        "/work/f06-prctl-set/fixture"
+      ]
+    }
+  ],
+  "expected": {
+    "last_exit_code": 0,
+    "stdout": "PASS prctl set-register adapter parity728\n",
+    "parity_cases": 728
+  },
+  "resources": {
+    "jobs": 1,
+    "heavy_owner_granted": false,
+    "CPU_slot": null,
+    "ordinary_specific_grant_required": true
+  },
+  "prerequisite": "Root pins actual compiler binaries, genuine header closure and generated config in the approved bounded ordinary HOST profile; source files copied byte-identically to cwd. No CPU slot implied.",
+  "scope_limit": "Adapter parity only; underlying CPU provider controlled, not WRMSR/native correctness or production default/link retirement.",
+  "actual": null
+}

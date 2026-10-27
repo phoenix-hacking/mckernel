@@ -1,0 +1,76 @@
+{
+  "task_id": "M14-F06-SELECTED-MMAP-FLAG-PROVIDERS",
+  "status": "SOURCE_READY_CONFIGURATION_BINDING_REQUIRED",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "changes": "Exact three existing Rust flag providers paired with missing private C/Rust selectors; no duplicated body/logger/shared ABI",
+  "checks": [
+    {
+      "command": "python3 -B docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/check_mmap_flags_source.py",
+      "returncode": 0,
+      "scope": "focused source proof only"
+    }
+  ],
+  "evidence": {
+    "syscall.mmap_flags.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/syscall.mmap_flags.c",
+      "bytes": 113989,
+      "sha256": "9df29dda57df30f24acd7746d980370b05358634aea049cf27b42a8e73631ea7"
+    },
+    "syscall_policy.mmap_flags.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/syscall_policy.mmap_flags.rs",
+      "bytes": 1229113,
+      "sha256": "d997c0cea4bd51fac2830a2e7b78b0e0bec2bbae2554a12fe09b9329fe4c96ca"
+    },
+    "f06_mmap_flags.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/f06_mmap_flags.rs",
+      "bytes": 1411,
+      "sha256": "862a9af87abfeb269fac4196564475ebb3dcf5a04ea89937b367c45c333d63b9"
+    },
+    "syscall.mmap_flags.diff": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/syscall.mmap_flags.diff",
+      "bytes": 316,
+      "sha256": "d9662de91b27ec987980e3f8f44eeec18b540a616b2acba5fc0e4e4181622fac"
+    },
+    "syscall_policy.mmap_flags.diff": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/syscall_policy.mmap_flags.diff",
+      "bytes": 374,
+      "sha256": "1978e6472274022d3022f182a3c8e537da7258110a50c4a3b7d51f61180b79cf"
+    },
+    "MMAP-FLAGS-SOURCE-BINDINGS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/MMAP-FLAGS-SOURCE-BINDINGS.json",
+      "bytes": 2542,
+      "sha256": "903b3c00b584a0c154f5e0444c4a7021a9d2d0cbf1110c8aabf9518d32e691fd"
+    },
+    "MMAP-FLAGS-SOURCE-CHECK.stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/MMAP-FLAGS-SOURCE-CHECK.stdout",
+      "bytes": 393,
+      "sha256": "f919c1f2a240e8dbd6f06e4ce2be981a48e15c301e7195ba991e1f6371ba21f4"
+    },
+    "MMAP-FLAGS-SOURCE-CHECK.stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/MMAP-FLAGS-SOURCE-CHECK.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "prepare_mmap_flags.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/prepare_mmap_flags.py",
+      "bytes": 3739,
+      "sha256": "ee0d73497496122612b70046fb362034ebf21d15b071b6b3d4fc657ad2eaef0d"
+    },
+    "check_mmap_flags_source.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/check_mmap_flags_source.py",
+      "bytes": 3049,
+      "sha256": "c30394cd8d3c78eaf3fab78a5fcaba8b11b2b959373ea871ab5c016d7a29e57e"
+    },
+    "HANDOFF.md": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/HANDOFF.md",
+      "bytes": 3466,
+      "sha256": "946e2778830875a4d4f078dbbf6f7a34753ead4dadbba12ae9529664a5893b01"
+    }
+  },
+  "blocker": "Genuine selected USE_NOCACHE_MMAP reference/value and ordinary specific compiler grant before integration/compilation",
+  "compiler": null,
+  "link": null,
+  "native": null,
+  "canonical_writes": false,
+  "next_task": "Root supplies genuine config binding, independent source review and focused compiler admission for three providers only"
+}

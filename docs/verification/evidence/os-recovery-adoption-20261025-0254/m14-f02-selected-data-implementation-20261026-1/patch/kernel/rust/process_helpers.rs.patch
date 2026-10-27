@@ -1,0 +1,28 @@
+--- a/kernel/rust/process_helpers.rs
++++ b/kernel/rust/process_helpers.rs
+@@ -17311,7 +17311,24 @@
+     use core::mem::{align_of, offset_of, size_of};
+     use core::ptr::null_mut;
+ 
+-    use crate::abi::{AbiListHead, IhkSpinlock, McsRwlockLock};
++    use crate::abi::{AbiListHead, CInt, IhkSpinlock, McsRwlockLock};
++
++    // Preserve the existing plain C int ABI and boot defaults. Initialization
++    // owns writes before normal scheduler/application consumers observe these
++    // flags; existing extern accesses retain their current synchronization.
++    // Keep plain mutable storage: changing this to an AtomicI32, bool, or a
++    // lazy initializer would change the original C/Rust access contract.
++    const _: [(); 4] = [(); size_of::<CInt>()];
++    const _: [(); 4] = [(); align_of::<CInt>()];
++
++    #[no_mangle]
++    pub static mut idle_halt: CInt = 0;
++
++    #[no_mangle]
++    pub static mut allow_oversubscribe: CInt = 0;
++
++    #[no_mangle]
++    pub static mut time_sharing: CInt = 1;
+ 
+     // These are the existing owned ABI types, not replacement representations.
+     // The independent genuine-header witness must qualify this exact profile.

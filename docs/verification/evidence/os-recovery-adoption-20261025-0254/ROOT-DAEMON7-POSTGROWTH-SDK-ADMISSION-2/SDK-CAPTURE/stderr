@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-142g-consumer-successor-source-1/daemon_sdk_owner.142G-SOURCE-ONLY.py", line 895, in <module>
+    raise SystemExit(main())
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-142g-consumer-successor-source-1/daemon_sdk_owner.142G-SOURCE-ONLY.py", line 889, in main
+    result = guarded_execute(Path(args.request), args.request_sha256, Path(args.release), args.release_sha256)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-142g-consumer-successor-source-1/daemon_sdk_owner.142G-SOURCE-ONLY.py", line 850, in guarded_execute
+    request, release = authenticate(request_path, request_sha, release_path, release_sha)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-142g-consumer-successor-source-1/daemon_sdk_owner.142G-SOURCE-ONLY.py", line 822, in authenticate
+    review = bound(release[key])
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-142g-consumer-successor-source-1/daemon_sdk_owner.142G-SOURCE-ONLY.py", line 171, in bound
+    need(set(ref) == {'path', 'sha256'}, 'exact file reference required')
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-142g-consumer-successor-source-1/daemon_sdk_owner.142G-SOURCE-ONLY.py", line 159, in need
+    raise Refusal(message)
+__main__.Refusal: exact file reference required

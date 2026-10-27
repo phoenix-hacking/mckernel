@@ -1,0 +1,120 @@
+{
+  "task_id": "M14-F06-SELECTED-MMAP-FLAG-PROVIDERS",
+  "status": "READY_FOR_SOURCE_REVIEW_AND_SPECIFIC_COMPILER_ADMISSION",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "changes": "Exact three existing Rust flag providers paired with missing private C/Rust selectors; no duplicated body/logger/shared ABI",
+  "checks": [
+    {
+      "command": "python3 -B docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/check_mmap_flags_source.py",
+      "returncode": 0,
+      "scope": "focused source proof only"
+    },
+    {
+      "command": "python3 -B docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/bind_nocache_configuration.py",
+      "returncode": 0,
+      "scope": "one exact retained object compile/dependency/header/configuration binding only"
+    }
+  ],
+  "evidence": {
+    "syscall.mmap_flags.c": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/syscall.mmap_flags.c",
+      "bytes": 113989,
+      "sha256": "9df29dda57df30f24acd7746d980370b05358634aea049cf27b42a8e73631ea7"
+    },
+    "syscall_policy.mmap_flags.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/syscall_policy.mmap_flags.rs",
+      "bytes": 1229113,
+      "sha256": "d997c0cea4bd51fac2830a2e7b78b0e0bec2bbae2554a12fe09b9329fe4c96ca"
+    },
+    "f06_mmap_flags.rs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/f06_mmap_flags.rs",
+      "bytes": 1411,
+      "sha256": "862a9af87abfeb269fac4196564475ebb3dcf5a04ea89937b367c45c333d63b9"
+    },
+    "syscall.mmap_flags.diff": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/syscall.mmap_flags.diff",
+      "bytes": 316,
+      "sha256": "d9662de91b27ec987980e3f8f44eeec18b540a616b2acba5fc0e4e4181622fac"
+    },
+    "syscall_policy.mmap_flags.diff": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/syscall_policy.mmap_flags.diff",
+      "bytes": 374,
+      "sha256": "1978e6472274022d3022f182a3c8e537da7258110a50c4a3b7d51f61180b79cf"
+    },
+    "MMAP-FLAGS-SOURCE-BINDINGS.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/MMAP-FLAGS-SOURCE-BINDINGS.json",
+      "bytes": 5034,
+      "sha256": "99272199ea201a5406b799555e7748dc6db0af50336d7344672b204dc2efad59"
+    },
+    "MMAP-FLAGS-SOURCE-CHECK.stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/MMAP-FLAGS-SOURCE-CHECK.stdout",
+      "bytes": 423,
+      "sha256": "e7af49a6db026e3a25a83f1839364eb5e0db688b0c5e730e84cd2c687f85b8b1"
+    },
+    "MMAP-FLAGS-SOURCE-CHECK.stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/MMAP-FLAGS-SOURCE-CHECK.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "prepare_mmap_flags.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/prepare_mmap_flags.py",
+      "bytes": 3739,
+      "sha256": "ee0d73497496122612b70046fb362034ebf21d15b071b6b3d4fc657ad2eaef0d"
+    },
+    "check_mmap_flags_source.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/check_mmap_flags_source.py",
+      "bytes": 3577,
+      "sha256": "0aff090f5569c3a9de1b1af6803a4696cb84d4d2b19266e1037b0851d96e2b48"
+    },
+    "HANDOFF.md": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/HANDOFF.md",
+      "bytes": 4383,
+      "sha256": "9941a4be171b5bd51b9ae2616829d7933b28ec7137a11e1af5823e23f504aec5"
+    },
+    "GENUINE-NOCACHE-CONFIGURATION.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/GENUINE-NOCACHE-CONFIGURATION.json",
+      "bytes": 91114,
+      "sha256": "a74a4a7b3edef59a5db47c41e1056768540439002331aaaf158dd95e21c7888c"
+    },
+    "bind_nocache_configuration.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/bind_nocache_configuration.py",
+      "bytes": 3840,
+      "sha256": "cbbe46fc21bf2c4426e65fe72373d94cc11973dd522133b279fa1b207645aeb9"
+    },
+    "CONFIGURATION-CHECK.stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/CONFIGURATION-CHECK.stdout",
+      "bytes": 260,
+      "sha256": "3ecf395d3469469096016b20d18bbd476450aa6f2982f93c7bea5d891c42dc11"
+    },
+    "CONFIGURATION-CHECK.stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/CONFIGURATION-CHECK.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "MMAP-FLAGS-SOURCE-BINDINGS.BEFORE-CONFIGURATION.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/MMAP-FLAGS-SOURCE-BINDINGS.BEFORE-CONFIGURATION.json",
+      "bytes": 2542,
+      "sha256": "903b3c00b584a0c154f5e0444c4a7021a9d2d0cbf1110c8aabf9518d32e691fd"
+    },
+    "RESULT.BEFORE-CONFIGURATION.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/RESULT.BEFORE-CONFIGURATION.json",
+      "bytes": 4552,
+      "sha256": "c3c2e733a00dccccf8f54e3361ab7c73f6c8b1890b02665017ae3b8a587b64ba"
+    }
+  },
+  "blocker": "Ordinary specific compiler grant and central paired-selector integration; genuine NOCACHE configuration blocker resolved",
+  "compiler": null,
+  "link": null,
+  "native": null,
+  "canonical_writes": false,
+  "next_task": "Independent source review and Root-owned focused compiler admission for exactly three providers under now-bound NOCACHE configuration",
+  "configuration": {
+    "proof": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/GENUINE-NOCACHE-CONFIGURATION.json",
+      "bytes": 91114,
+      "sha256": "a74a4a7b3edef59a5db47c41e1056768540439002331aaaf158dd95e21c7888c"
+    },
+    "USE_NOCACHE_MMAP_defined": false,
+    "Rust_f06_use_nocache_mmap": false
+  }
+}

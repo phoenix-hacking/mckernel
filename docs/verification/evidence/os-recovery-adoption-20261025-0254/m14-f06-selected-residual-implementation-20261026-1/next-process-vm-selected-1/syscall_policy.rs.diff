@@ -1,0 +1,11 @@
+--- kernel/rust/syscall_policy.rs
++++ kernel/rust/syscall_policy.rs
+@@ -35270,3 +35270,8 @@
+         )
+     }
+ }
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(f06_prctl_set_register_candidate)]
++#[path = "f06_prctl_set_register.rs"]
++mod f06_prctl_set_register;

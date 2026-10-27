@@ -1,0 +1,42 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Source consistency only; no compiler or ABI acceptance.",
+  "checks": {
+    "canonical_sources_unchanged": true,
+    "private_reference_matches_inputs": true,
+    "kernel/process.c_single_focused_hunk": true,
+    "kernel/rust/process_helpers.rs_single_focused_hunk": true,
+    "existing_storage_module_reused": true,
+    "three_exact_plain_CInt_initializers": true,
+    "paired_default_selectors_already_exist": true,
+    "fallback_initializer_line_provenance_preserved": true,
+    "selected_post_flag_line_provenance_preserved": true
+  },
+  "logical_source_lines": {
+    "False": {
+      "before": {
+        "int idle_halt = 0;": 568,
+        "int allow_oversubscribe = 0;": 569,
+        "int time_sharing = 1;": 570,
+        "post_flags_conditional": 572
+      },
+      "candidate": {
+        "int idle_halt = 0;": 568,
+        "int allow_oversubscribe = 0;": 569,
+        "int time_sharing = 1;": 570,
+        "post_flags_conditional": 572
+      }
+    },
+    "True": {
+      "before": {
+        "int idle_halt = 0;": 568,
+        "int allow_oversubscribe = 0;": 569,
+        "int time_sharing = 1;": 570,
+        "post_flags_conditional": 572
+      },
+      "candidate": {
+        "post_flags_conditional": 572
+      }
+    }
+  },
+  "passed": true
+}

@@ -1,0 +1,45 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nOne private current-source selector composition. No compiler or canonical writes.\n",
+  "before": [
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "bytes": 113935,
+      "sha256": "d6bf00d0a46755f37f511bff0c098487f04a155842f11a4ac64f2a1795faa8c1"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "bytes": 1228858,
+      "sha256": "fefec3eb05be2f714dfeca34310901a566557f82ee08de9b9ad0ef0344f74d62"
+    }
+  ],
+  "reused_fragment": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-process-vm-rw-source-1/candidate/syscall_policy.process_vm_rw.FRAGMENT.rs",
+    "bytes": 9251,
+    "sha256": "3f9ecdfa165680224b983928939d5d81015cc9a075fae25210deafb7f9c1c3b5"
+  },
+  "after": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/syscall.c",
+      "bytes": 114348,
+      "sha256": "139290045d0200911bb874d1f4b1092f50d3cf23cf6a917dca96361adc5f6300"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/syscall_policy.rs",
+      "bytes": 1229131,
+      "sha256": "58bb4402a080a7e83a1da9ba03c7d006f35493403452e616de4b52842d2c278e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-selected-residual-implementation-20261026-1/f06_process_vm_entry.rs",
+      "bytes": 5428,
+      "sha256": "0e9d9d23db1a376f38757fba98c6b34d0aed4f4b6c45398b0b9372d7624c3d2e"
+    }
+  ],
+  "actual_compile": null,
+  "actual_link": null,
+  "actual_native": null,
+  "central_activation": {
+    "C": "MCKERNEL_RUST_F06_PROCESS_VM_ENTRY",
+    "Rust": "f06_process_vm_entry_candidate"
+  },
+  "disposition": "Secondary process-VM proposal prepared before dispatcher selected narrower mmap flags slice; not compiler/native admitted"
+}

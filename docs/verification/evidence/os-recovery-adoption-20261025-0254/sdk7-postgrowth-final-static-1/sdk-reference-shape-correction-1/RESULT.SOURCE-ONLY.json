@@ -1,0 +1,103 @@
+{
+  "actual_command_record": {
+    "bytes": 879,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-DAEMON7-POSTGROWTH-SDK-ADMISSION-2/SDK-COMMAND.EXACT.json",
+    "sha256": "ac14598fddc085702f394c5d2e8468df30e74391b83b69466e2dadc015235eb7"
+  },
+  "actual_failed_release": {
+    "bytes": 8150,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-DAEMON7-POSTGROWTH-SDK-ADMISSION-2/ACTUAL-REVIEWED-RELEASE.json",
+    "sha256": "333d344297afbe118a2757abefed1dd1531af01d9219a4bcab239a4521005322"
+  },
+  "actual_failed_signature": {
+    "bytes": 1593,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-DAEMON7-POSTGROWTH-SDK-ADMISSION-2/SDK-CAPTURE/stderr",
+    "sha256": "eeec95f3b726e0cf57de8d326c029c21e6446cd16f4dbf23cbe7385368314646"
+  },
+  "actual_owner": {
+    "bytes": 74224,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-142g-consumer-successor-source-1/daemon_sdk_owner.142G-SOURCE-ONLY.py",
+    "sha256": "999713a7b4dafa034232d997872132642358aa80029244ad27e571efbf1664ee"
+  },
+  "actual_request": {
+    "bytes": 3496,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-DAEMON7-POSTGROWTH-SDK-ADMISSION-1/SDK7-REQUEST.json",
+    "sha256": "cd71450d335fef05669f070ae676620402489abc273e8de5b61dc3b5fc1b6f79"
+  },
+  "audit": {
+    "bytes": 2457,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-postgrowth-final-static-1/sdk-reference-shape-correction-1/OWNER-REFERENCE-CONSUMER-AUDIT.SOURCE-ONLY.json",
+    "sha256": "d98aa24d166aeff5de58271f38e66d0acc870c955cc057529b500ddb8c5f8b63"
+  },
+  "baseline_adapter": {
+    "bytes": 25062,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-postgrowth-final-static-1/sdk7_authority_adapter.POSTGROWTH-CHAIN.SOURCE-ONLY.py",
+    "sha256": "7cf2f884f2c4eaa5f509bad259e364d72a79d72b9bcdb340e42487c02b6832df"
+  },
+  "candidate_api_result": "Actual owner.authenticate returns genuine request and candidate release after exact two-key source_review projection and explicitly SOURCE_ONLY ephemeral execution-review payload fixture.",
+  "execution_authority": false,
+  "fixture_policy": "Temporary re-signed review payloads carry fixture_scope and runtime_authority:false; ephemeral source-only review has fixture_only/source_only:true, distinct fixture reviewer; deleted after each test. They confer no execution authority.",
+  "guarded_execute_called": false,
+  "negative_controls": [
+    "wrong source-review hash",
+    "missing source_review",
+    "three-key source_review",
+    "three-key execution_review",
+    "wrong execution payload hash",
+    "historical source review with mismatching source map"
+  ],
+  "next_action": "Root may independently review and bind this additive adapter source, then regenerate actual pending release with existing finalizer semantics and obtain actual exact-payload execution review/current admission. This source-only result does not authorize a query or owner execution.",
+  "original_failure_reproduced": "Refusal: exact file reference required",
+  "patch": {
+    "bytes": 1260,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-postgrowth-final-static-1/sdk-reference-shape-correction-1/adapter.owner-source-review-reference.SOURCE-ONLY.patch",
+    "sha256": "3e9474ea95517e102fc1eabfc671bc30325d2922b919b657af305dd12f70d6eb"
+  },
+  "preserved": [
+    "owner999 exact bound",
+    "full11 source mapping",
+    "parent696",
+    "chain9cc",
+    "three-key bundle/context refs",
+    "actual failed release and capture"
+  ],
+  "runtime_calls": 0,
+  "schema": "mckernel.sdk7.reference-shape-correction.source-only.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": {
+    "bytes": 25105,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-postgrowth-final-static-1/sdk-reference-shape-correction-1/sdk7_authority_adapter.OWNER-REFERENCE-SHAPE.SOURCE-ONLY.py",
+    "sha256": "0c35884f73d32401ae48e139a2bb150e85c975b73425b29c5cd24a6b25f8263b"
+  },
+  "source_only": true,
+  "status": "PASS_SOURCE_ONLY_ACTUAL_OWNER_AUTHENTICATION_REGRESSION",
+  "stderr": {
+    "bytes": 645,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-postgrowth-final-static-1/sdk-reference-shape-correction-1/actual-api-pure.stderr",
+    "sha256": "6dd91a1b3b3ee18f602725d95468824ed9bdfdd740e0421a391136f008afec5a"
+  },
+  "stdout": {
+    "bytes": 0,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-postgrowth-final-static-1/sdk-reference-shape-correction-1/actual-api-pure.stdout",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "test_command_argv": [
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--",
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-postgrowth-final-static-1/sdk-reference-shape-correction-1/test_actual_owner_authentication.py"
+  ],
+  "test_count": 6,
+  "test_elapsed_seconds": 0.174,
+  "test_exit_code": 0,
+  "tests": {
+    "bytes": 7509,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-postgrowth-final-static-1/sdk-reference-shape-correction-1/test_actual_owner_authentication.py",
+    "sha256": "b5fe912ab04abfad343c1e67db88afaef6d1d2e7720c6ea5822f6fceced3e239"
+  }
+}

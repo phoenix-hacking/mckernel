@@ -1,0 +1,88 @@
+{
+  "additional_release_reference_metadata": "Current publication/map, historical provenance and context retain their existing three-key references; these are not owner.bound call arguments.",
+  "guarded_execute_called": false,
+  "owner": {
+    "bytes": 74224,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sdk7-142g-consumer-successor-source-1/daemon_sdk_owner.142G-SOURCE-ONLY.py",
+    "sha256": "999713a7b4dafa034232d997872132642358aa80029244ad27e571efbf1664ee"
+  },
+  "owner_consumers": [
+    {
+      "field": "request CLI",
+      "line": 809,
+      "result": "PASS_ACTUAL_AUTHENTICATE",
+      "shape": "owner constructs exact path/sha256"
+    },
+    {
+      "field": "release CLI",
+      "line": 810,
+      "result": "PASS_ACTUAL_AUTHENTICATE",
+      "shape": "owner constructs exact path/sha256"
+    },
+    {
+      "field": "release.request",
+      "line": 813,
+      "result": "PASS_ACTUAL_AUTHENTICATE",
+      "shape": "strict equality against exact path/sha256"
+    },
+    {
+      "before_keys": [
+        "bytes",
+        "path",
+        "sha256"
+      ],
+      "candidate_keys": [
+        "path",
+        "sha256"
+      ],
+      "field": "release.source_review",
+      "line": 822,
+      "result": "ORIGINAL_REFUSED_CANDIDATE_PASS"
+    },
+    {
+      "field": "release.execution_review",
+      "keys": [
+        "path",
+        "sha256"
+      ],
+      "line": 822,
+      "result": "UNCHANGED_STRICT_SHAPE_PASS_WITH_EXPLICIT_FIXTURE_PAYLOAD_BINDING"
+    },
+    {
+      "field": "request.preparation",
+      "keys": [
+        "path",
+        "sha256"
+      ],
+      "line": 453,
+      "result": "GENUINE_BOUND_API_PASS"
+    },
+    {
+      "field": "preparation.input_manifest",
+      "line": 421,
+      "result": "GENUINE_BOUND_API_PASS",
+      "shape": "existing validator projects exact path/sha256"
+    },
+    {
+      "field": "request.driver",
+      "keys": [
+        "path",
+        "sha256"
+      ],
+      "line": 447,
+      "result": "UNCHANGED_ACTUAL_AUTHENTICATE_PASS",
+      "shape": "strict expected reference plus source-map hash equality; no bound call"
+    }
+  ],
+  "runtime_authority": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_mapping_count": 11,
+  "status": "SOURCE_ONLY_OWNER_REFERENCE_SHAPE_AUDIT",
+  "strict_bound_contract": {
+    "exact_keys": [
+      "path",
+      "sha256"
+    ],
+    "line": 170
+  }
+}
