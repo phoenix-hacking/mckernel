@@ -1,0 +1,47 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/custody_release_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "decisions": [
+    "PASS_F03_F06_RUSTMM_STRICT235_DIAGNOSTIC_CASE",
+    "PASS_F03_F06_RUSTMM_STRICT235_POSTJOIN_CURRENT_PHYSICAL"
+  ],
+  "nonce": "a6dbd7d514dbdc410c4ecffe5c0a135d",
+  "at": 1793068957.5563743,
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F03-F06-RUSTMM-STRICT235-NATIVE-ADMISSION-1/GUEST-RAW/result.json",
+      "bytes": 110843,
+      "sha256": "5f4f115369d05b20914fc673dbd398c4ce2178eafc5ec74bb550ef758c32353d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F03-F06-RUSTMM-STRICT235-NATIVE-ADMISSION-1/POSTNATIVE-CURRENT.stdout",
+      "bytes": 122372,
+      "sha256": "528b43ffd450ca40eee7e40aa78d7383b42d715cff98a117db1c3a5fe56b3ef6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F03-F06-RUSTMM-STRICT235-NATIVE-ADMISSION-1/CAPTURE/JOINED.json",
+      "bytes": 234,
+      "sha256": "9b9b3180fbc5f84eaa3a9f77ddee3e0c8ddb89c40ba8111b08efc576063006c9"
+    }
+  ],
+  "parent_ACK": {
+    "pid": 255,
+    "token": 3,
+    "errno": 0,
+    "abandoned": 1
+  },
+  "child258_observation": "ACK32 abandoned0; observedretirement100/103 EAGAIN only, no inventedzero",
+  "child261_observation": "ACK114 abandoned0/query133 zero",
+  "parent_retirement": "146/errno0 at32.369439 beforepowerdown32.722588",
+  "qemu_returncode": -9,
+  "all30_commands_reaped": true,
+  "container_removed": true,
+  "closed_own_mutex_probes": true,
+  "current_census_rows": 322,
+  "current_census_errors": 0,
+  "whole_file_acceptance": false,
+  "process_VM_acceptance": false,
+  "new_execution_authority": false
+}

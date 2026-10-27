@@ -1,0 +1,269 @@
+{
+  "M15_file_closure": false,
+  "capture_budget_bytes": 67108864,
+  "capture_helper": {
+    "bytes": 14753,
+    "path": "/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py",
+    "sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+  },
+  "census_helper": {
+    "bytes": 51420,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py",
+    "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+  },
+  "command_template": [
+    "/usr/bin/env",
+    "RUST_MIN_STACK=2097152",
+    "IHKMOND_FIXTURE_OUTPUT_BINDING=/preparation/OUTPUT-BINDING.ACTUAL.json",
+    "IHKMOND_FIXTURE_NONCE=ACTUAL_REQUEST_NONCE",
+    "/usr/bin/taskset",
+    "--cpu-list",
+    "2",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--stack=2097152:2097152",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture/run_fixture.py",
+    "--execute",
+    "--cc",
+    "/usr/bin/cc",
+    "--rustc",
+    "/nightly/bin/rustc"
+  ],
+  "container_output": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture-output",
+  "container_source_parent": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation",
+  "expected_case_count": 26,
+  "expected_reference_cases": 8,
+  "fixture_base": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1",
+  "fixture_budget_bytes": 67108864,
+  "fixture_output_relative": "read-errors-successor-1/fixture-output",
+  "fixture_retirement_seconds": 6,
+  "fixture_work_wall_seconds": 90,
+  "frozen_HOST_inputs": {
+    "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/host-libudev-header-1/libudev.h": {
+      "bytes": 9617,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/host-libudev-header-1/libudev.h",
+      "sha256": "adb1beb70d3f5f8e0c97490e46e0d193a237a8151ae3cf3d865738abb5352652"
+    },
+    "fixture/cases.json": {
+      "bytes": 8217,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture/cases.json",
+      "sha256": "8cb7a90f53959f7b85af7967c1e603140f3fdf6b6dbeb5e29cddc457040c85b4"
+    },
+    "fixture/include/config.h": {
+      "bytes": 43,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture/include/config.h",
+      "sha256": "f40c74a658dc4cc8baa5970b6ba7b0ac53b62ebf08a4202ab00a03bb4ad5831b"
+    },
+    "fixture/include/ihk/ihk_host_user.h": {
+      "bytes": 552,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture/include/ihk/ihk_host_user.h",
+      "sha256": "73144a9736b2c9cf5969a9d4c7f2aa8ad4117755f5c070ccc72d8dc58cfcb78e"
+    },
+    "fixture/include/ihk/ihklib.h": {
+      "bytes": 162,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture/include/ihk/ihklib.h",
+      "sha256": "b37e27a87feda93181a9710c709aef02c6d0a0b44ba27ad506ef2ad4f894442c"
+    },
+    "fixture/include/ihk/ihklib_private.h": {
+      "bytes": 161,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture/include/ihk/ihklib_private.h",
+      "sha256": "8df678b5d3fe5a79c6b6665ff402c19dd8d1bcb9305a86553ef158ba4e410f86"
+    },
+    "fixture/include/libudev.h": {
+      "bytes": 733,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture/include/libudev.h",
+      "sha256": "a7ee4e5fcf6d890038fd501715672a215e046104f4bfc7fda82cbb0c0dc3debb"
+    },
+    "fixture/mock.c": {
+      "bytes": 13295,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture/mock.c",
+      "sha256": "0240f2df256c23e2b1f7f1d397e62e63bd0ceae207466a58dc036211f43067ef"
+    },
+    "fixture/owned_process.py": {
+      "bytes": 5750,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture/owned_process.py",
+      "sha256": "a5ada59ee8090f6c72668bd43ac0a03dc69a08aa40f040cfe178f1d5571f3906"
+    },
+    "fixture/reference_helpers.c.in": {
+      "bytes": 869,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture/reference_helpers.c.in",
+      "sha256": "6350fc609604b10df2ba53ce966ea44c45d0894bc59c0a39620cb8c194ea880f"
+    },
+    "fixture/run_fixture.py": {
+      "bytes": 8613,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture/run_fixture.py",
+      "sha256": "d365d49ec46d6373309f488a4c100820db88bc12dd8ede44999d404211726daf"
+    },
+    "ihkmond.rs": {
+      "bytes": 23095,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/ihkmond.rs",
+      "sha256": "0c0b4b6d286e9f0fdbdacf1d32c3cd33ec96d4d2420550771a0dc732dd84d86e"
+    },
+    "reference/ihkmond.c": {
+      "bytes": 22682,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/reference/ihkmond.c",
+      "sha256": "b12258297bf0704815db9d119ef5725f6c24fe6c63d0d0d7a1afd0c06c89e4d3"
+    }
+  },
+  "native_acceptance": false,
+  "output_budget_bytes": 134217728,
+  "production_daemon_fork_executed": false,
+  "profile": {
+    "cpu_count": 4,
+    "cpus": "2-5",
+    "gid": 1000,
+    "memory_bytes": 12884901888,
+    "memory_swap_total_bytes": 12884901888,
+    "network": "none",
+    "pids": 64,
+    "uid": 1000
+  },
+  "real_udev_or_devices_executed": false,
+  "schema": "mckernel.daemon-mock64-preparation.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_files": [
+    {
+      "mode": 436,
+      "relative": "host-libudev-header-1/libudev.h",
+      "source": {
+        "bytes": 9617,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/host-libudev-header-1/libudev.h",
+        "sha256": "adb1beb70d3f5f8e0c97490e46e0d193a237a8151ae3cf3d865738abb5352652"
+      }
+    },
+    {
+      "mode": 436,
+      "relative": "read-errors-successor-1/fixture/cases.json",
+      "source": {
+        "bytes": 8217,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture/cases.json",
+        "sha256": "8cb7a90f53959f7b85af7967c1e603140f3fdf6b6dbeb5e29cddc457040c85b4"
+      }
+    },
+    {
+      "mode": 436,
+      "relative": "read-errors-successor-1/fixture/include/config.h",
+      "source": {
+        "bytes": 43,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture/include/config.h",
+        "sha256": "f40c74a658dc4cc8baa5970b6ba7b0ac53b62ebf08a4202ab00a03bb4ad5831b"
+      }
+    },
+    {
+      "mode": 436,
+      "relative": "read-errors-successor-1/fixture/include/ihk/ihk_host_user.h",
+      "source": {
+        "bytes": 552,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture/include/ihk/ihk_host_user.h",
+        "sha256": "73144a9736b2c9cf5969a9d4c7f2aa8ad4117755f5c070ccc72d8dc58cfcb78e"
+      }
+    },
+    {
+      "mode": 436,
+      "relative": "read-errors-successor-1/fixture/include/ihk/ihklib.h",
+      "source": {
+        "bytes": 162,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture/include/ihk/ihklib.h",
+        "sha256": "b37e27a87feda93181a9710c709aef02c6d0a0b44ba27ad506ef2ad4f894442c"
+      }
+    },
+    {
+      "mode": 436,
+      "relative": "read-errors-successor-1/fixture/include/ihk/ihklib_private.h",
+      "source": {
+        "bytes": 161,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture/include/ihk/ihklib_private.h",
+        "sha256": "8df678b5d3fe5a79c6b6665ff402c19dd8d1bcb9305a86553ef158ba4e410f86"
+      }
+    },
+    {
+      "mode": 436,
+      "relative": "read-errors-successor-1/fixture/include/libudev.h",
+      "source": {
+        "bytes": 733,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture/include/libudev.h",
+        "sha256": "a7ee4e5fcf6d890038fd501715672a215e046104f4bfc7fda82cbb0c0dc3debb"
+      }
+    },
+    {
+      "mode": 436,
+      "relative": "read-errors-successor-1/fixture/mock.c",
+      "source": {
+        "bytes": 13295,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture/mock.c",
+        "sha256": "0240f2df256c23e2b1f7f1d397e62e63bd0ceae207466a58dc036211f43067ef"
+      }
+    },
+    {
+      "mode": 436,
+      "relative": "read-errors-successor-1/fixture/owned_process.py",
+      "source": {
+        "bytes": 5750,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture/owned_process.py",
+        "sha256": "a5ada59ee8090f6c72668bd43ac0a03dc69a08aa40f040cfe178f1d5571f3906"
+      }
+    },
+    {
+      "mode": 436,
+      "relative": "read-errors-successor-1/fixture/reference_helpers.c.in",
+      "source": {
+        "bytes": 869,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/fixture/reference_helpers.c.in",
+        "sha256": "6350fc609604b10df2ba53ce966ea44c45d0894bc59c0a39620cb8c194ea880f"
+      }
+    },
+    {
+      "mode": 384,
+      "relative": "read-errors-successor-1/fixture/run_fixture.py",
+      "source": {
+        "bytes": 10047,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/run_fixture_precreated.py",
+        "sha256": "542785cb1ba205bbd5be9512843541fc96691ed7d0ab42d8aac666864abcdeca"
+      }
+    },
+    {
+      "mode": 436,
+      "relative": "read-errors-successor-1/ihkmond.rs",
+      "source": {
+        "bytes": 23095,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/ihkmond.rs",
+        "sha256": "0c0b4b6d286e9f0fdbdacf1d32c3cd33ec96d4d2420550771a0dc732dd84d86e"
+      }
+    },
+    {
+      "mode": 436,
+      "relative": "read-errors-successor-1/reference/ihkmond.c",
+      "source": {
+        "bytes": 22682,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/m15-daemon-validation/read-errors-successor-1/reference/ihkmond.c",
+        "sha256": "b12258297bf0704815db9d119ef5725f6c24fe6c63d0d0d7a1afd0c06c89e4d3"
+      }
+    }
+  ],
+  "source_tree_sha256": "255371a1411ff2ea417a5efab91b1b2d6fef86e5146e59afe3d9c35ff921ec34",
+  "timeout": 108,
+  "tool_image": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+  "tool_pins": {
+    "cc": {
+      "executable_version": "cc (GCC) 14.3.1 20251022 (Red Hat 14.3.1-4)\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+      "owner": "gcc",
+      "path": "/usr/bin/cc",
+      "rpm_nevra": "gcc-0:14.3.1-4.4.el10.x86_64",
+      "sha256": "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2",
+      "target": "/usr/bin/gcc",
+      "version": "cc (GCC) 14.3.1 20251022 (Red Hat 14.3.1-4)\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+    },
+    "rustc": {
+      "path": "/nightly/bin/rustc",
+      "sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09"
+    }
+  }
+}

@@ -1,3 +1,44 @@
+## Matching685 native accepted; daemon64 is next actual slot — 2026-10-27T03:00Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+GoalACTIVE. Nativea6db CONSUMEDONCE/tool19855/caller1364936start86599960 joined0;
+independentcase/postjoin4c69f480 PASS exact235B/exit0/stderr0/procfsempty on685ace+
+RustMM57546/887dc. Wall37.630040/outerCPU0.926214/RSS52904KiB; wholeguestCPU/RSS
+unknown. CID980a381b removed/all30commandsreaped/current322rowsnoerrors/probesclosed.
+Parent255ACK3 errno0 abandoned1, child258onlyEAGAINqueries (noinventedzero), child261
+query133zero; parentretire146 at32.369439 beforepowerdown32.722588; QEMU-9 retained.
+Fiveacceptedcandidate diagnosticinstances/fourdistinctcases; NOnewwholefile/fullM14/
+M15or20functioninvocationcredit. Current685 nativeactualproof nowmatchesnewdefault.
+
+Firstfreshwindow EXPIREDUNEXECUTED due reviewercontextcompaction AFTERchecks16.54s;
+noRootgrant/nonceeffect. Resource2unique/payload451c75f4 reviewerPASSage22.94s and
+Rootcaller34.105859s afterfresh2. First→secondcapture271.380667s handoffdelay; noTTL
+widening/replay. ALLcriticalreviewercontext/staticwork mustfinish BEFOREfreshclock.
+
+NEXTHEAVY FAIRNESS DAEMON6426mock, no anotherLWKbuildahead. Source20/owner/driver
+unchanged+independentPASS_SOURCE. Rootone-time prepared nonce1fff493f114662040e1147fdcbf5fa32
+RESERVEDNOTCONSUMED, request55d8b71c/mirror13files/fixtureoutput59662858 HOSTprivate.
+Documentedpython-I directCLI importfailed BEFOREeffects; correctedRootisolatedrunpy
+bootstrap insertsONLYfrozenPdirectory (no source or26argvchange), actualpreparation0.
+GenuineownerstaticAPI validatesRootSourceReviewexact20map; intentionalnonapproval
+control DENIED beforeanytargetcall. Root16nonceledgerattestscomplete CURRENTboundary
+fromacceptednative2→a6db, retainingoldknownexclusions; notretroactiveglobalhistory.
+Root_capture_mock64_resource.py remainsUNEXECUTED: aftersourcepub/readinesscapture
+actualcurrentphysical/globalDockerempty/cgroupsPID0/memory/floors/clocks, fillcurrent
+admission thenexactprepare_mock64_release_proposal.py→oneindependentreview→Root
+ACTUAL-REVIEWED-RELEASE→isolatedrunpy run_mock64_owned_capture.py. Runtimeprofile
+4CPU2-5/12GiB/noSwap/noNet/UID1000/kernelpids64 MUSTproveBEFOREcompile/afterjoins;
+no RLIMIT_NPROC64, no actualfixture/defaultgraph/install/native/M15credit yet.
+
+F01failedproductionHOSTlink24undef +onefullHOSTcfg20errorcorrection FAMILY_STOP;
+allchildrenjoined/CPU6free/noeffects/7Cprefixesretained. Specific highworker
+f01_provider_closure_repair nowimplements boundedcurrentproviderclosure privately,
+no fullcrate retry/newstub/oracleweakening/guestquota. F03nextgenuineselectedresidual
+sourceowneractive, NEXT10merge/staticvalidator9b1f ready/noRootadopt/runtimegrant;
+F06processVM14functionconsumer824ee5 source-ready, currentABI/driver/nativeproofopen.
+Rootsolecanonical/Git/actualheavy writer; all7CPU/caps/oneheavy/mutex27:4/floors/
+sameledger/fixed11:24:50Z preserved. ActualM14/M15OPEN; no95%claim.
+
 ## F01 focused family stopped; main native next, no live owner — 2026-10-27T02:27Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
