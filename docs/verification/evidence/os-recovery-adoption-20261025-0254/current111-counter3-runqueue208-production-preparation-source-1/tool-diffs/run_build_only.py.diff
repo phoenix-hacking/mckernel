@@ -1,0 +1,42 @@
+--- CURRENT110/run_build_only.py
++++ CURRENT111/run_build_only.py
+@@ -117,22 +117,22 @@
+     require(isinstance(profile['request_sha256'],str) and len(profile['request_sha256'])==64 and all(c in '0123456789abcdef' for c in profile['request_sha256']),'Root must bind new exact request SHA256')
+     require(isinstance(profile['inputs']['postimages'],list) and profile['inputs']['postimages'],'Root must supply exact new readonly postimages')
+     require(profile['cohort_source_bindings']==[dict(relative=r['relative'],postimage=r['postimage']) for r in profile['inputs']['postimages']]+source_directory_postimages(profile),'exact new cohort source map')
+-    require(isinstance(profile['reuse_descriptor'],str) and profile['reuse_descriptor'],'Root must supply matching seven-object/four-replacement reuse descriptor')
++    require(isinstance(profile['reuse_descriptor'],str) and profile['reuse_descriptor'],'Root must supply matching eight-object/three-replacement reuse descriptor')
+     require(isinstance(profile['producer_contract']['process_delta'],str) and profile['producer_contract']['process_delta'],'Root must state exact new process delta')
+     if 'unchanged_completed_process_prefix' in profile:require(profile['unchanged_completed_process_prefix']['Root_decision'] is not None,'Root must disposition already completed unchanged F02 process prefix before grant')
+     commands=profile['exact_commands']
+-    outputs=['rust/mckernel_rust.o','CMakeFiles/mckernel.img.dir/process.c.o','CMakeFiles/mckernel.img.dir/syscall.c.o','CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o','mckernel.img']
+-    sources=['/src/kernel/rust/lib.rs','/src/kernel/process.c','/src/kernel/syscall.c','/src/arch/x86_64/kernel/syscall.c']
+-    require(len(commands)==5,'exact five selected successor commands')
+-    require(set(s.removeprefix('/src/') for s in sources)<={r['relative'] for r in profile['inputs']['postimages']}|{r['relative'] for r in source_directory_postimages(profile)},'all four changed compiler source paths must be bound readonly postimages')
+-    require(sum(not r['replace'] for r in profile['inputs']['objects'])==7 and sum(r['replace'] for r in profile['inputs']['objects'])==4,'seven original retained and four new objects')
+-    require({r['link_token'] for r in profile['inputs']['objects'] if r['replace']}==set(outputs[:4]),'exact four selected replacement object paths')
++    outputs=['rust/mckernel_rust.o','CMakeFiles/mckernel.img.dir/process.c.o','CMakeFiles/mckernel.img.dir/syscall.c.o','mckernel.img']
++    sources=['/src/kernel/rust/lib.rs','/src/kernel/process.c','/src/kernel/syscall.c']
++    require(len(commands)==4,'exact four selected successor commands')
++    require(set(s.removeprefix('/src/') for s in sources)<={r['relative'] for r in profile['inputs']['postimages']}|{r['relative'] for r in source_directory_postimages(profile)},'all three changed compiler source paths must be bound readonly postimages')
++    require(sum(not r['replace'] for r in profile['inputs']['objects'])==8 and sum(r['replace'] for r in profile['inputs']['objects'])==3,'eight accepted retained and three new objects')
++    require({r['link_token'] for r in profile['inputs']['objects'] if r['replace']}==set(outputs[:3]),'exact three selected replacement object paths')
+     for i,(command,output) in enumerate(zip(commands,outputs)):
+         argv=command['argv']
+         require(isinstance(argv,list) and argv and all(isinstance(a,str) and a for a in argv),'Root must supply exact nonempty literal argv')
+         require(command['cwd']=='/work/output/build/kernel' and command['new_output']=='/work/output/build/kernel/'+output,'exact fixed output/cwd map')
+         if i==0:require(argv[:3]==['/usr/bin/cmake','-E','env'] and '--emit=obj='+command['new_output'] in argv and argv[-1]==sources[i],'whole Rust object command binding')
+-        elif i<4:require(argv[0]=='/usr/bin/cc' and argv[-2:]==['-c',sources[i]] and argv[argv.index('-o')+1]==output,'exact selected C object/source command binding')
++        elif i<3:require(argv[0]=='/usr/bin/cc' and argv[-2:]==['-c',sources[i]] and argv[argv.index('-o')+1]==output,'exact selected C object/source command binding')
+         else:require(argv==['/usr/bin/ld', '-e', 'arch_start', '-T', '/work/output/build/kernel/config/smp-x86.lds', '--build-id', '-Map=/work/output/build/kernel/mckernel.img.map', '--dependency-file=CMakeFiles/mckernel.img.dir/link.d', 'CMakeFiles/mckernel.img.dir/mem.c.o', 'CMakeFiles/mckernel.img.dir/syscall.c.o', 'CMakeFiles/mckernel.img.dir/process.c.o', 'CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o', 'rust/mckernel_rust.o', '-o', 'mckernel.img'],'unchanged exact eleven-input raw linker argv')
+     return commands
+ 
+@@ -200,7 +200,7 @@
+     rows=mounts(profile,export,output)
+     require(len({r['target'] for r in rows})==len(rows),'no duplicate RO mount targets')
+     for row in rows:require(os.access(row['host'],os.R_OK),'actual UID1000 input bind read access')
+-    name='current110-build-only-'+grant['nonce'];require(name.replace('-','').isalnum() and len(name)<=120,'bounded container identity')
++    name='current111-build-only-'+grant['nonce'];require(name.replace('-','').isalnum() and len(name)<=120,'bounded container identity')
+     current_operation_guard()
+     argv=docker_argv(profile,name,rows,output)
+     (output/'claim.json').write_text(json.dumps(dict(grant=reference(grant_path),argv=argv,pid=os.getpid(),scope=profile['scope'],native_authority=False),indent=2)+'\n')

@@ -1,0 +1,50 @@
+# Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+# SOURCE ONLY. Root inserts in existing linux-6.12/x86_64/NOT ENABLE_UBSAN
+# selected-candidate branch. No broad profile or default-enabling claim.
+# Root installs derive_origin.py as scripts/derive_f06_origin.py before use.
+if (NOT ENABLE_RUST_KERNEL OR NOT ARCH STREQUAL "x86_64" OR
+    ENABLE_UBSAN OR NOT MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12")
+    message(FATAL_ERROR "F06 original source origin has no qualified profile")
+endif()
+if (NOT MCKERNEL_F06_ORIGIN_PROFILE)
+    message(FATAL_ERROR "F06 requires exact adopted SDK C argv profile")
+endif()
+find_package(Python3 REQUIRED COMPONENTS Interpreter)
+set(MCKERNEL_F06_ORIGIN_PRODUCER "${PROJECT_SOURCE_DIR}/scripts/derive_f06_origin.py")
+set(MCKERNEL_F06_C_SOURCE "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/syscall.c")
+set(MCKERNEL_F06_ORIGIN_DIR "${CMAKE_CURRENT_BINARY_DIR}/rust/f06-origin")
+execute_process(
+    COMMAND "${Python3_EXECUTABLE}" "${MCKERNEL_F06_ORIGIN_PRODUCER}"
+        --profile "${MCKERNEL_F06_ORIGIN_PROFILE}"
+        --source "${MCKERNEL_F06_C_SOURCE}"
+        --output "${MCKERNEL_F06_ORIGIN_DIR}"
+    RESULT_VARIABLE MCKERNEL_F06_ORIGIN_RESULT
+)
+if (NOT MCKERNEL_F06_ORIGIN_RESULT EQUAL 0)
+    message(FATAL_ERROR "F06 source origin producer rejected the profile/source")
+endif()
+include("${MCKERNEL_F06_ORIGIN_DIR}/f06_rt_sigreturn_origin.cmake")
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+    "${MCKERNEL_F06_ORIGIN_PROFILE}"
+    "${MCKERNEL_F06_ORIGIN_PRODUCER}"
+    "${MCKERNEL_F06_C_SOURCE}")
+list(APPEND RUST_KERNEL_SRCS
+    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_rt_sigreturn_alloc_free.rs"
+    "${MCKERNEL_F06_ORIGIN_DIR}/f06_rt_sigreturn_origin.cmake"
+    "${MCKERNEL_F06_ORIGIN_DIR}/f06_rt_sigreturn_origin.h")
+list(APPEND RUST_KERNEL_CFG
+    "--cfg" "f06_rt_sigreturn_alloc_candidate"
+    "--cfg" "f06_rt_sigreturn_free_candidate")
+set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
+    COMPILE_DEFINITIONS
+    "MCKERNEL_RUST_F06_RT_SIGRETURN_ALLOC;MCKERNEL_RUST_F06_RT_SIGRETURN_FREE")
+set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
+    INCLUDE_DIRECTORIES "${MCKERNEL_F06_ORIGIN_DIR}")
+set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
+    OBJECT_DEPENDS "${MCKERNEL_F06_ORIGIN_DIR}/f06_rt_sigreturn_origin.h")
+
+# Separately insert this argument beside existing MCKERNEL_CPU_C_FILE= in the
+# actual Rust add_custom_command's `cmake -E env`, before ${RUSTC}:
+# "MCKERNEL_F06_RT_SIGRETURN_ORIGIN=${MCKERNEL_F06_RT_SIGRETURN_ORIGIN}"
+# configure exact arg (source profile remains immutable):
+# -DMCKERNEL_F06_ORIGIN_PROFILE=<Root-pinned CURRENT110 profile JSON>

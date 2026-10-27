@@ -1,0 +1,189 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/host19_source_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-27T19:08:16.792305+00:00",
+  "decision": "PASS_SOURCE_EXACT_F03_COUNTER3_SELECTIVE_INTEGRATION_CURRENT_PREIMAGES",
+  "blocking_findings": [],
+  "runtime_authority": null,
+  "exact_patch_deltas": [
+    {
+      "patch": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1/syscall.c.patch",
+        "bytes": 1318,
+        "sha256": "8be5558bc782f80901c5df00e2bd21919cf5422c8ef26be396b32bc5117ac469"
+      },
+      "target": "kernel/syscall.c",
+      "preimage": {
+        "path": "/home/holden/mckernel/kernel/syscall.c",
+        "bytes": 916284,
+        "sha256": "d9187c6eeb63f134602218db3b3b50683e1ca45b416199fcaa8ca4976c352713"
+      },
+      "postimage_bytes": 916935,
+      "postimage_sha256": "7d30396958fd57e6e5274d8a4745d832176468c255fccc2b54be872a30aa4cb5",
+      "hunks": [
+        {
+          "old_start": 20876,
+          "old_count": 11,
+          "new_count": 17
+        },
+        {
+          "old_start": 20896,
+          "old_count": 17,
+          "new_count": 29
+        }
+      ]
+    },
+    {
+      "patch": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1/syscall_policy.rs.patch",
+        "bytes": 1895,
+        "sha256": "efcee06ceb2b0be17a4bd8bce26a9a37245a3069517b15800cf9d6b357b5dd3c"
+      },
+      "target": "kernel/rust/syscall_policy.rs",
+      "preimage": {
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "bytes": 1263273,
+        "sha256": "2ddde21dfcf32402d281d7ba70e62d765cb60e60bf225d7303b17221959a5477"
+      },
+      "postimage_bytes": 1264891,
+      "postimage_sha256": "c81c6735a529003b7efbafa606f6f65ab86f00a55a5f0854ebaa7d575d3e06ae",
+      "hunks": [
+        {
+          "old_start": 36017,
+          "old_count": 3,
+          "new_count": 34
+        }
+      ]
+    },
+    {
+      "patch": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-supported-body-new12h-1/CMakeLists.txt.proposal.patch",
+        "bytes": 2194,
+        "sha256": "6bc0dfa0da6e28ddb39d3259387afe4cf15a83cc8a8ec05a1fbcf8b712c8e21e"
+      },
+      "target": "kernel/CMakeLists.txt",
+      "preimage": {
+        "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+        "bytes": 32485,
+        "sha256": "96ce9084a3c0973cefefdd21753cbcd2ea7c94d5ca1c0d59363afa3500f737fd"
+      },
+      "postimage_bytes": 32630,
+      "postimage_sha256": "1ca3a50f17c4f019f165231f1a04b530806dd9bb6875b302c3869fc70271c310",
+      "hunks": [
+        {
+          "old_start": 207,
+          "old_count": 6,
+          "new_count": 7
+        },
+        {
+          "old_start": 443,
+          "old_count": 7,
+          "new_count": 7
+        }
+      ]
+    }
+  ],
+  "preimages_current_and_exact": true,
+  "preimage_dependencies": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_perfctr.rs",
+      "bytes": 16091,
+      "sha256": "9cabce0fb4295d421a3f5194b7ebb854bdfa93c4126573a643ab2a08e9d11af7"
+    }
+  ],
+  "exact_behavior": "Three bodies each synchronously call the unchanged existing Rust architecture provider once, forwarding every CULong mask bit, signed CInt stop flag and CInt return. No pointer/reference, ownership, allocation, validation, mask policy, callback ordering or PMU operation is added. The stop provider currently ignores flags but the bridge still forwards them exactly.",
+  "provider_ABI": {
+    "mask_and_start": "unsafe extern C fn(CULong)->CInt; x86_64 unsigned long=u64, int=i32",
+    "stop": "unsafe extern C fn(CULong,CInt)->CInt",
+    "existing_providers_unchanged": true
+  },
+  "selectors": {
+    "C": "MCKERNEL_RUST_SYSCALL_POLICY_HELPERS && MCKERNEL_RUST_F03_PERF_COUNTER_CONTROL_BRIDGES",
+    "Rust": "all(enable_perf,f03_perf_counter_control_bridges_selected_candidate)",
+    "CMake": [
+      {
+        "line": 210,
+        "text": "list(APPEND RUST_KERNEL_CFG \"--cfg\" \"f03_perf_counter_control_bridges_selected_candidate\")",
+        "ancestor_conditions": [
+          "if (ENABLE_RUST_KERNEL AND \"${ARCH}\" STREQUAL \"x86_64\")",
+          "if (MCKERNEL_HOST_IRQ_ABI STREQUAL \"linux-6.12\")",
+          "if (ARCH STREQUAL \"x86_64\" AND NOT ENABLE_UBSAN)",
+          "if (ENABLE_PERF)"
+        ]
+      },
+      {
+        "line": 447,
+        "text": "COMPILE_DEFINITIONS \"MCKERNEL_RUST_F03_PERF_ALLOC_BRIDGES;MCKERNEL_RUST_F03_PERF_COUNTER_CONTROL_BRIDGES\")",
+        "ancestor_conditions": [
+          "if (RUST_KERNEL_ENABLED)",
+          "if (MCKERNEL_HOST_IRQ_ABI STREQUAL \"linux-6.12\")",
+          "if (ARCH STREQUAL \"x86_64\" AND NOT ENABLE_UBSAN)",
+          "if (ENABLE_PERF)"
+        ]
+      }
+    ],
+    "existing_C_outer_ENABLE_PERF_preserved": true,
+    "fallback": "Neither/helper-only/callback-only retains byte-identical original static C function; both selectors replace it with one external Rust provider. Existing HOST10 fallback objects and selected addresses are accepted at their original mocked scope."
+  },
+  "tracking": {
+    "all_existing_FILE_LINE_expressions": 193,
+    "every_expression_logical_line_and_filename_preserved": true,
+    "mask_fallback_first": 20761,
+    "mask_following": 20766,
+    "start_fallback_first": 20781,
+    "start_following": 20786,
+    "stop_fallback_first": 20787,
+    "stop_following": 20792,
+    "new_filename_directives": false,
+    "new_C_metadata": false
+  },
+  "patch_scope": "Only three original counter wrappers, exact appended Rust fragment and two paired CMake additions. Whole private source files must not replace newer canonical files. No unrelated body, callback, prior HOST19 integration, timer, idle, allocator tracker, ABI source or provider implementation changes.",
+  "HOST10": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ordinary-host-new12h-runner-source-1/INDEPENDENT-ACTUAL-HOST10-ACCEPTANCE.json",
+    "bytes": 28918,
+    "sha256": "0ba68fff055fb9a1c6399163c7e0231a181343c53be0abd1fb958da36dd32a7f"
+  },
+  "retained_HOST_scope": {
+    "scope": "Scalar HOST mock behavior and selected/fallback ABI only; no PMU hardware or production architecture provider executed.",
+    "actual_commands": 7,
+    "original_C_Rust_pairs": 432,
+    "single_call_trace_checks": 864,
+    "ABI_words": [
+      4,
+      4,
+      8,
+      8,
+      8,
+      8
+    ],
+    "selected_Rust_callbacks": [
+      "perf_counter_mask_check_bridge",
+      "perf_counter_start_bridge",
+      "perf_counter_stop_bridge"
+    ],
+    "object_proof": "providers.o has exactly one global defined FUNC per selected callback,6B each, and actual ABI6 data words4/4/8/8/8/8. selected.o contains these3 undefined imports and3 pointer objects. fallback-none/helper/callback objects each have3 local C FUNC definitions,9B each. Actual parity executable has3 unique6B Rust callback definitions; all3 selected data pointers positively equal their final callback addresses.",
+    "behavior": "Eight mask patterns including full highbits, six int results and seven signed stopflags pass originalC and Rust forwarding once with exact operation/mask/flags/result. Driver also validates selected function pointer identities.",
+    "stdout": "PASS counter-control 432 C/Rust pairs; 864 exact single-call traces; ABI6; selected3\n"
+  },
+  "new_commands_or_replays": 0,
+  "new_compilers": 0,
+  "new_guest_apps": 0,
+  "canonical_mutations": 0,
+  "Root_next": "Root alone may apply these exact three patches while all preimage hashes still match, then bind genuine full Rust/selected C/default link outputs and actual provider/origin/function census. This source decision supplies no execution grant.",
+  "expected_selection_delta": "Three further selected F03 C callback bodies may move to Rust; actual current counts remain accepted CURRENT110 Rust45/C94/process68 until new compiler/link proof.",
+  "native_acceptance": false,
+  "whole_file_retirement": false,
+  "open_predicates": [
+    "Actual next whole-Rust and selected-C compiler/link/default artifact proof",
+    "Actual unique Rust providers and exactly three selected C removals",
+    "Matching native PMU/current-CPU/caller-lock/lifetime behavior",
+    "M14 supported-file and whole-file retirement remain OPEN"
+  ]
+}

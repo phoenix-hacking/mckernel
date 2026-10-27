@@ -3,7 +3,7 @@
 from pathlib import Path
 import hashlib,json,re
 P=Path(__file__).resolve().parent
-O=P/'future-host-output-1';O.mkdir(exist_ok=True)
+O=P/'future-host-output-2'  # Root runner must create fresh output after grant.
 scope='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
 cc=['/usr/bin/cc','-std=c11','-Wall','-Wextra','-Werror','-O2']
 commands=[{'id':'rust-host-object','argv':['/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc','--edition=2021','--crate-name','f03_counter_control_fixture','--crate-type','lib','--emit=obj','-C','panic=abort','-C','opt-level=2','--cfg','enable_perf','--cfg','f03_perf_counter_control_bridges_selected_candidate',str(P/'lib.fixture.rs'),'-o',str(O/'providers.o')],'expected':'exit0;3 genuine Rust wrapper exports; no actual PMU provider'}]

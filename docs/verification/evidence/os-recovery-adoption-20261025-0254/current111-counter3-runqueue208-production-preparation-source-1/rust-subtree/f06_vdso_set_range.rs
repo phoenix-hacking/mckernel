@@ -1,0 +1,44 @@
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Exact existing adapter; current-stack/allocation/VM ownership remains with provider.
+use core::ffi::c_void;
+
+use crate::abi::{CInt, CULong, ProcessVm, VmRange};
+
+unsafe extern "C" {
+    #[link_name = "ihk_mc_pt_set_range"]
+    fn f06_vdso_pt_set_range(
+        page_table: *mut c_void,
+        vm: *mut ProcessVm,
+        start: *mut c_void,
+        end: *mut c_void,
+        phys: CULong,
+        attr: CULong,
+        pgshift: CInt,
+        range: *mut VmRange,
+        overwrite: CInt,
+    ) -> CInt;
+}
+
+/// # Safety
+/// Same live page table/VM/range and lock/IRQ requirements as ihk_mc_pt_set_range.
+/// The inherited C provider may partially map before returning an error. Do not
+/// roll back, retry, release range ownership or transform that result here.
+#[no_mangle]
+pub unsafe extern "C" fn arch_vdso_set_range_bridge(
+    page_table: *mut c_void,
+    vm: *mut ProcessVm,
+    start: CULong,
+    end: CULong,
+    phys: CULong,
+    attr: CULong,
+    range: *mut VmRange,
+) -> CInt {
+    // SAFETY: address casts preserve pointer bits. The real x86 attribute enum
+    // includes bit63 and has unsigned-long representation; assert it in C ABI.
+    unsafe {
+        f06_vdso_pt_set_range(
+            page_table, vm, start as *mut c_void, end as *mut c_void,
+            phys, attr, 0, range, 0,
+        )
+    }
+}

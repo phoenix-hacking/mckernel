@@ -36017,3 +36017,34 @@ mod f06_rt_sigreturn_set_signal_candidate;
 #[cfg(f06_rt_sigreturn_check_signal_candidate)]
 #[path = "arch_rt_sigreturn_check_signal_bridge.rs"]
 mod f06_rt_sigreturn_check_signal_candidate;
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+/// Preserve the original perf mask callback and its exact C int result.
+/// # Safety
+/// Original supported x86 perf initialization and caller synchronization apply.
+/// No extra validation, hardware access, references or ownership are introduced.
+#[cfg(all(enable_perf, f03_perf_counter_control_bridges_selected_candidate))]
+#[no_mangle]
+pub unsafe extern "C" fn perf_counter_mask_check_bridge(counter_mask: CULong) -> CInt {
+    unsafe { crate::x86_perfctr::ihk_mc_perf_counter_mask_check(counter_mask) }
+}
+
+/// Forward the original counter-start callback to the existing Rust provider.
+/// # Safety
+/// Caller retains original current-CPU PMU authority, perf state and ordering.
+/// Original provider validates the complete mask and owns its hardware effects.
+#[cfg(all(enable_perf, f03_perf_counter_control_bridges_selected_candidate))]
+#[no_mangle]
+pub unsafe extern "C" fn perf_counter_start_bridge(counter_mask: CULong) -> CInt {
+    unsafe { crate::x86_perfctr::ihk_mc_perfctr_start(counter_mask) }
+}
+
+/// Forward the original counter-stop callback, including unchanged signed flags.
+/// # Safety
+/// Caller retains original current-CPU PMU authority, perf state and ordering.
+/// Even if the current x86 provider ignores flags, this boundary forwards them.
+#[cfg(all(enable_perf, f03_perf_counter_control_bridges_selected_candidate))]
+#[no_mangle]
+pub unsafe extern "C" fn perf_counter_stop_bridge(counter_mask: CULong, flags: CInt) -> CInt {
+    unsafe { crate::x86_perfctr::ihk_mc_perfctr_stop(counter_mask, flags) }
+}

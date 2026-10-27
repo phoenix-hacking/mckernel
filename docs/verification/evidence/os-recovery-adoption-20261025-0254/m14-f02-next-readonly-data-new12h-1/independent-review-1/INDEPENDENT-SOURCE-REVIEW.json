@@ -1,0 +1,159 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/current110_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-27T19:05:17.019235+00:00",
+  "decision": "PASS_SOURCE_EXACT_CURRENT110_RUNQUEUE208_READONLY_OWNER_AND_26FIELD_ABI_CANDIDATE",
+  "runtime_authority": null,
+  "execution_release": false,
+  "blocking_source_defects": [],
+  "source_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/SOURCE-ONLY.json",
+    "bytes": 6469,
+    "sha256": "9fc6f164583ce1db794656421ee26f7d966ca714a65d63df6a4089084048716e"
+  },
+  "local_input_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/INPUT-HASHES.json",
+    "bytes": 2566,
+    "sha256": "63478bebdad45ca9bc70e2403195c5c016f44c39d0a38166be972235f77ec950"
+  },
+  "original_recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/EXACT-SEVEN-COMMAND-HOST-RECIPE.NOT-ADMITTED.json",
+    "bytes": 14362,
+    "sha256": "64a760b2b88755014b8f16895dd651b0da38abd501489faf3c093baeb2458529"
+  },
+  "Rust_diff": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/sched_helpers.rs.diff",
+    "bytes": 946,
+    "sha256": "abe942aa541031f579ba2eb65de6c93be085c34814450407c7b85daa4c52e083"
+  },
+  "C_diff": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/process.c.diff",
+    "bytes": 694,
+    "sha256": "ad40317c6272d219cf6200dc2f821a692a5a7e05b91fba5e2064fe95c1eee3d8"
+  },
+  "source_reconstruction_checker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/verify_source.py",
+    "bytes": 1650,
+    "sha256": "524e43a03501aaf093b77b7ef8cc1b6ecbaba23951b77aa8e4682357bdb9615d"
+  },
+  "current110_consumer_evidence": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/ACTUAL-CURRENT110-CONSUMER.json",
+    "bytes": 3666,
+    "sha256": "90a16c4b8eae66a57714c71c67096176780502538cb6a216d0f35398a4883434"
+  },
+  "baseline": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+    "bytes": 68656,
+    "sha256": "5b25b9cafa9477e7e177d192d1754d59889749bed6ccf107ff40995b06e867ba"
+  },
+  "accepted_current110": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT110-INDEPENDENT-DEFAULT-ARTIFACT-ACCEPTANCE.json",
+    "bytes": 1187,
+    "sha256": "eea9eb098cca17dc29fd2fe3111aa1b53c3119aed7827101fdbd7c69d4e15737"
+  },
+  "source_bases": [
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "bytes": 219278,
+      "sha256": "ec88faeab2ed4cc43d79fbf8a3e1f2fd5b7c75bd8c1dc2d184a92198431995ea"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "bytes": 185669,
+      "sha256": "d16200db3054d88a83752fda1383d6c101d24de4b787bd78cd42edb46ab251fc"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    }
+  ],
+  "verified": [
+    "All19 local input references match. SOURCE-ONLY9fc6f164, original recipe64a760b2, accepted current110 receipt eea9eb09, actual process object5b25b9ca and Rust e2c30327 and all declared canonical source bases independently match retained hashes.",
+    "Existing actual process_sched_runqueue_offsets is one global OBJECT208B in allocated readonly nonexec .rodata,sectionalignment32, symbolvalue32. All208 actual bytes equal manifest and all26 little-endian unsigned64 words equal frozen actual_current110 values.",
+    "Independent existing ELF parser class-only read confirms exactly26 allocated R_X86_64_64 relocations to this owner in actual Rust .ltext.schedule, with exact recorded offsets/addends. These are26 references, not proof that all26 distinct fields execute; no scheduler/native workload ran.",
+    "Candidate uses existing repr(C) SchedRunqueueOffsets26usize fields and existing typed offset_of constructor. The constructor body is unchanged; fn becomes const fn, and an immutable no_mangle static under existing process_global_storage_candidate plus208/8 size/alignment assertions is added. No numeric field offsets are introduced in production Rust source.",
+    "C selected branch only changes table definition to extern under existing MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE, retaining exact original C fallback under enclosing PROCESS_HELPERS gate. Logical #line4282/4317 boundaries preserve following tracking expressions. Pure verifier reverses both localized changes into byte-identical whole preimages.",
+    "Focused Rust provider imports actual abi.rs and exact Thread/Process/SigCommon/CpuLocalVar types. C genuine_abi uses actual kernel headers and checks size208/alignment8, each of26 field positions/types unsignedlong and each original target offsetof value frozen from current110. All actual host ABI results remain unrun.",
+    "Independent C oracle retains original designated initializer text verbatim except private owner name and compares all26 Rust-owned fields individually before exact RUNQUEUE208 stdout. C fixture selected consumer contains real address relocation; fallback carries original C initializer. No callbacks/locks/IRQs/scheduler execution occur in this fixture.",
+    "Postcompiler ownership checker reuses existing helper to require unique global208B object in Rust/fallback/final with exact original bytes, allocatedreadonly/nonexec/min8 alignment and no relocations hidden in table; selected C must have no definition and real R64 references. Exact linker map origin must bind final owner to runqueue.o. No data/retain/alias waiver is added.",
+    "Seven command recipe is genuine ABI syntax compile, Rust data object compile, C fallback compile, selected C extern compile, no-undefined C-oracle+Rust+selected link with map, readonly/origin checker and final26field executable. This is focused HOST evidence only; actual full production C68\u219267 remains prediction until own default build/link acceptance."
+  ],
+  "pure_validation": {
+    "source_reconstruction": "PASS exact wholepreimage restoration;26frozen actualartifactwords and original C oracle retained",
+    "existing_Elf_class_only": "PASS actual current110table208 and26RustR64refs",
+    "compilers_or_fixtures_run": 0
+  },
+  "ABI_values": [
+    16,
+    20,
+    4184,
+    4352,
+    4356,
+    4328,
+    4864,
+    4824,
+    2120,
+    4304,
+    5212,
+    456,
+    420,
+    64,
+    1424,
+    7832,
+    7840,
+    7848,
+    7864,
+    7872,
+    7888,
+    7896,
+    7944,
+    7920,
+    7968,
+    7984
+  ],
+  "original_execution_packaging_findings": [
+    "Original HOST-output-proposed-1 exists empty. Preserve it; derive fresh HOST-output-proposed-2 literal recipe/profile rather than relaxing runner fresh-output guard or deleting history.",
+    "Original local INPUT-HASHES does not seal transitive check_idle_owners.py, compiler/Python executables and complete actual ABI/header/generated-config closure. Root existing ordinary runner profile must pin these dependencies before entry; source-only recipe is not an actual grant."
+  ],
+  "required_additional_checker_pins": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-idle-layout-values-next-current-source-1/check_idle_owners.py",
+      "bytes": 5466,
+      "sha256": "851934c57ddeb391c732afc47b860c528f332fe11d2e6386cca5c6d6e1d8ae1a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-source38-next-current-integration-source-1/check_thirteen_storage.py",
+      "bytes": 6103,
+      "sha256": "ba2b4764ce71f01cf2a4d80e6892acfa7862bb47455a945122b2c69646cb50cf"
+    }
+  ],
+  "ordinary_execution_conditions": [
+    "Use existing reviewed CPU6 runner6e98/admission7df/capture990/v2 guard with exact fresh7-command profile, current exclusion/reservations/nonce/grant. Preserve AS2GiB/CPU60/FSIZE64MiB/core0/wall90/aggregate7jobs21.6619GiB, both20GiB+23357213694B memory floors, HOST16GiB+fullgrowthreserve and scratch12GiB.",
+    "Root source owner is preparing fresh output2/profile/transitive pins in disjoint successor-host-profile-2; review only bounded packaging delta after ready, preserving all existing source/oracle hashes.",
+    "Root alone executes; preserve first failed command/prefix/captures and normaljoins. No old110/HOST19/HOST10 replay or retired nonce reuse."
+  ],
+  "production_conditions": [
+    "Root selectively merges small diffs into latest canonical source, never overwrites newer whole files. Both original C/Rust selector pair and real production consumer/default link origin must qualify.",
+    "After actual production compile/link, require68\u219267 exact C objects and unique full Rust208B readonlyowner with all26 words, all prior object/debug/retain/consumer/ABI obligations and current schedule consumer final origin proof. Native/file credit requires own native proof; M14/M15 remainOPEN."
+  ],
+  "review_actions": {
+    "source_hashes_and_bounded_actual_ELF_readonly": true,
+    "source_verifier_pure_only": true,
+    "compile_workload_Docker_root_guest_cleanup_or_agents": false,
+    "canonical_source_mutation": false,
+    "only_this_review_directory_written": true
+  },
+  "counts": {
+    "bytes": 208,
+    "fields": 26,
+    "actual_current110_schedule_R64_references": 26,
+    "local_files_verified": 19,
+    "future_HOST_commands": 7,
+    "actual_commands_run": 0,
+    "native_credit_delta": 0,
+    "whole_file_credit_delta": 0
+  }
+}

@@ -1,0 +1,206 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_UNRUN",
+  "baseline": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+    "bytes": 68656,
+    "sha256": "5b25b9cafa9477e7e177d192d1754d59889749bed6ccf107ff40995b06e867ba"
+  },
+  "acceptance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT110-INDEPENDENT-DEFAULT-ARTIFACT-ACCEPTANCE.json",
+    "bytes": 1187,
+    "sha256": "eea9eb098cca17dc29fd2fe3111aa1b53c3119aed7827101fdbd7c69d4e15737"
+  },
+  "helper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-source38-next-current-integration-source-1/check_thirteen_storage.py",
+    "bytes": 6103,
+    "sha256": "ba2b4764ce71f01cf2a4d80e6892acfa7862bb47455a945122b2c69646cb50cf"
+  },
+  "source_bases": [
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "bytes": 219278,
+      "sha256": "ec88faeab2ed4cc43d79fbf8a3e1f2fd5b7c75bd8c1dc2d184a92198431995ea"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "bytes": 185669,
+      "sha256": "d16200db3054d88a83752fda1383d6c101d24de4b787bd78cd42edb46ab251fc"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    }
+  ],
+  "symbol": "process_sched_runqueue_offsets",
+  "size": 208,
+  "alignment": 8,
+  "readonly_flags": 2,
+  "bytes_hex": "10000000000000001400000000000000581000000000000000110000000000000411000000000000e8100000000000000013000000000000d8120000000000004808000000000000d0100000000000005c14000000000000c801000000000000a40100000000000040000000000000009005000000000000981e000000000000a01e000000000000a81e000000000000b81e000000000000c01e000000000000d01e000000000000d81e000000000000081f000000000000f01e000000000000201f000000000000301f000000000000",
+  "fields": [
+    {
+      "field": "thread_cpu_id_offset",
+      "original_struct": "thread",
+      "member": "cpu_id",
+      "actual_current110_value": 16
+    },
+    {
+      "field": "thread_tid_offset",
+      "original_struct": "thread",
+      "member": "tid",
+      "actual_current110_value": 20
+    },
+    {
+      "field": "thread_status_offset",
+      "original_struct": "thread",
+      "member": "status",
+      "actual_current110_value": 4184
+    },
+    {
+      "field": "thread_spin_sleep_lock_offset",
+      "original_struct": "thread",
+      "member": "spin_sleep_lock",
+      "actual_current110_value": 4352
+    },
+    {
+      "field": "thread_spin_sleep_offset",
+      "original_struct": "thread",
+      "member": "spin_sleep",
+      "actual_current110_value": 4356
+    },
+    {
+      "field": "thread_sched_list_offset",
+      "original_struct": "thread",
+      "member": "sched_list",
+      "actual_current110_value": 4328
+    },
+    {
+      "field": "thread_sigpending_offset",
+      "original_struct": "thread",
+      "member": "sigpending",
+      "actual_current110_value": 4864
+    },
+    {
+      "field": "thread_sigcommon_offset",
+      "original_struct": "thread",
+      "member": "sigcommon",
+      "actual_current110_value": 4824
+    },
+    {
+      "field": "sigcommon_sigpending_offset",
+      "original_struct": "sig_common",
+      "member": "sigpending",
+      "actual_current110_value": 2120
+    },
+    {
+      "field": "thread_proc_offset",
+      "original_struct": "thread",
+      "member": "proc",
+      "actual_current110_value": 4304
+    },
+    {
+      "field": "thread_mod_clone_offset",
+      "original_struct": "thread",
+      "member": "mod_clone",
+      "actual_current110_value": 5212
+    },
+    {
+      "field": "proc_pid_offset",
+      "original_struct": "process",
+      "member": "pid",
+      "actual_current110_value": 456
+    },
+    {
+      "field": "proc_status_offset",
+      "original_struct": "process",
+      "member": "status",
+      "actual_current110_value": 420
+    },
+    {
+      "field": "proc_update_lock_offset",
+      "original_struct": "process",
+      "member": "update_lock",
+      "actual_current110_value": 64
+    },
+    {
+      "field": "proc_clone_count_offset",
+      "original_struct": "process",
+      "member": "clone_count",
+      "actual_current110_value": 1424
+    },
+    {
+      "field": "cpu_runq_lock_offset",
+      "original_struct": "cpu_local_var",
+      "member": "runq_lock",
+      "actual_current110_value": 7832
+    },
+    {
+      "field": "cpu_runq_irqstate_offset",
+      "original_struct": "cpu_local_var",
+      "member": "runq_irqstate",
+      "actual_current110_value": 7840
+    },
+    {
+      "field": "cpu_current_offset",
+      "original_struct": "cpu_local_var",
+      "member": "current",
+      "actual_current110_value": 7848
+    },
+    {
+      "field": "cpu_prevpid_offset",
+      "original_struct": "cpu_local_var",
+      "member": "prevpid",
+      "actual_current110_value": 7864
+    },
+    {
+      "field": "cpu_runq_offset",
+      "original_struct": "cpu_local_var",
+      "member": "runq",
+      "actual_current110_value": 7872
+    },
+    {
+      "field": "cpu_runq_len_offset",
+      "original_struct": "cpu_local_var",
+      "member": "runq_len",
+      "actual_current110_value": 7888
+    },
+    {
+      "field": "cpu_runq_reserved_offset",
+      "original_struct": "cpu_local_var",
+      "member": "runq_reserved",
+      "actual_current110_value": 7896
+    },
+    {
+      "field": "cpu_flags_offset",
+      "original_struct": "cpu_local_var",
+      "member": "flags",
+      "actual_current110_value": 7944
+    },
+    {
+      "field": "cpu_status_offset",
+      "original_struct": "cpu_local_var",
+      "member": "status",
+      "actual_current110_value": 7920
+    },
+    {
+      "field": "cpu_in_interrupt_offset",
+      "original_struct": "cpu_local_var",
+      "member": "in_interrupt",
+      "actual_current110_value": 7968
+    },
+    {
+      "field": "cpu_nr_ctx_switches_offset",
+      "original_struct": "cpu_local_var",
+      "member": "nr_ctx_switches",
+      "actual_current110_value": 7984
+    }
+  ],
+  "logical_line_start": 4282,
+  "logical_line_after": 4317,
+  "selected_C_objects_before": 68,
+  "proposed_removed_objects": 1,
+  "selected_C_objects_after_expected": 67,
+  "whole_file_credit": 0,
+  "native_credit": 0
+}

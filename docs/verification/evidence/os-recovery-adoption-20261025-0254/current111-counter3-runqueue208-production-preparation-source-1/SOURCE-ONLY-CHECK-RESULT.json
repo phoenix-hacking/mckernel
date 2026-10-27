@@ -1,0 +1,45 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE_ONLY_NO_EXECUTION_AUTHORITY",
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current111-counter3-runqueue208-production-preparation-source-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 93325,
+    "sha256": "566eecdb8c4edd5c1b6bc6a077a7666ec29eaf7aab218a4e989b3afec51c34fb"
+  },
+  "closed_Rust_sources": 112,
+  "actual_compilers": 0,
+  "actual_workloads": 0,
+  "commands": 4,
+  "changed_objects": 3,
+  "retained_objects": 8,
+  "source_reference_checks": true,
+  "original_profile_resource_and_toolchain_fields_unchanged": true,
+  "exact_command_derivation": true,
+  "positive_commands_for_plan": true,
+  "negative_controls": [
+    {
+      "control": "missing_Root_request",
+      "rejected": "Root must bind new exact request SHA256"
+    },
+    {
+      "control": "replayed_arch_compile",
+      "rejected": "exact four selected successor commands"
+    },
+    {
+      "control": "wrong_output",
+      "rejected": "exact fixed output/cwd map"
+    },
+    {
+      "control": "arch_marked_rebuild",
+      "rejected": "eight accepted retained and three new objects"
+    },
+    {
+      "control": "changed_Rust_binding",
+      "rejected": "exact new cohort source map"
+    }
+  ],
+  "AST_only_tools": 6,
+  "execution_guard_called": false,
+  "Root_authority_minted": false,
+  "limits": "Pure in-memory/reference checks, not actual admission, compiler, default/native or whole-file acceptance."
+}

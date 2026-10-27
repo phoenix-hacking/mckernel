@@ -1,0 +1,144 @@
+{
+  "task_id": "M14-F06-RUST-OWNED-ORIGIN-HOST-PLAN",
+  "status": "PREPARED_UNRUN_NOT_GRANTED",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nFour exact finite future HOST recipes, no admission framework or execution.\n",
+  "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1",
+  "fresh_output": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/future-host-output-1",
+  "commands": [
+    {
+      "purpose": "Functional OS only; derive Rust source origin from exact adopted SDK C argv; no security testing",
+      "argv": [
+        "/usr/bin/python3",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/derive_origin.py",
+        "--profile",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json",
+        "--source",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/syscall.c",
+        "--output",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/future-host-output-1/generated"
+      ]
+    },
+    {
+      "purpose": "Functional OS only; original-C/Rust signal allocation/free adapter ABI and metadata; no security testing",
+      "argv": [
+        "/usr/bin/env",
+        "MCKERNEL_F06_RT_SIGRETURN_ORIGIN=/src/arch/x86_64/kernel/syscall.c",
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=staticlib",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "--cfg",
+        "f06_rt_sigreturn_alloc_candidate",
+        "--cfg",
+        "f06_rt_sigreturn_free_candidate",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/fixture.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/future-host-output-1/libadapter.a"
+      ]
+    },
+    {
+      "purpose": "Functional OS only; original-C/Rust signal allocation/free adapter ABI and metadata; no security testing",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-I/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/future-host-output-1/generated",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+        "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/include",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel",
+        "-I/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel/ihk/ikc/include",
+        "-I/home/holden/mckernel/ihk/linux/include",
+        "-I/home/holden/mckernel/lib/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-Werror",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-no-pie",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/fixture.c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/future-host-output-1/libadapter.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/future-host-output-1/fixture"
+      ]
+    },
+    {
+      "purpose": "Functional OS only; original-C/Rust signal allocation/free adapter ABI and metadata; no security testing",
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/future-host-output-1/fixture"
+      ]
+    },
+    {
+      "purpose": "Functional OS only; origin static assertion positive; no security testing",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-I/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/future-host-output-1/generated",
+        "-c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/origin_guard_positive.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/future-host-output-1/guard-positive.o"
+      ],
+      "expected_exit": 0
+    },
+    {
+      "purpose": "Functional OS only; origin static assertion expected rejection; no security testing",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-std=gnu11",
+        "-I/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/future-host-output-1/generated",
+        "-c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/origin_guard_negative.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/future-host-output-1/guard-negative.o"
+      ],
+      "expected_exit": "nonzero with original __FILE__ binding drift diagnostic"
+    }
+  ],
+  "note": "Different source candidate from passed HOST10; retained HOST10 and earlier proposal unchanged. Exact SDK origin binding only.",
+  "required_admission": "Root ordinary slot/current resource/account/window grant; new Rust-origin provider independent source review, current actual C/genuine header context and GCC builtin constant assertion qualification. No native authority.",
+  "effect_scope": "Controlled tracked-provider ABI/provenance fixture only; 832 allocation +8 free comparisons; no real allocation/free or native execution",
+  "actual": null
+}

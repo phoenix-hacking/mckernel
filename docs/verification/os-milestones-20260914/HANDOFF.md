@@ -1,3 +1,48 @@
+## F05v2 actual HOST3 and F06 origin HOST6 passed — 2026-10-27T19:15:15.436109+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+F05v2 source7fa47f37/oraclec38ea126 actualRustcompile/staticELF/Linuxreference all0,
+joined/groupsabsent/closedstreams, exact204Bstdout/empty stderr. Actualbinary
+bfdda7ef5d3db84097086254125b8d31c958068495c2f8346ba0c9015ab1553d/5624424B.
+Receipt f05-owned-processvm-v2-host-qualification-1/ACTUAL-RESULT.json=ee7d3707.
+3commands wall.269304s/CPU.169685s/maxRSS122680KiB; Roottoolwait0/.374107s.
+Independent actualHOSTreview pending. Foreground retainsv2payload/adapter/finalizer;
+old4aef/be508/c3a1nativeHOLD remains, no newnativeauthority.
+
+F06Rustorigin sixordinarycommands actualPASS/Roottool91652/positivewait0/3.954991s,
+profiledfb949, separateactualHOSTreviewpending. No canonicalF06adoption/default/native
+credit yet; proposedCfilenameobject remainsunadopted. Current111source4command packet
+566eecdbready/reviewinprogress, expectedcounts91/48/67 notactual; no buildnonce/grant.
+Executor fullclosureexpert foundexactlyone72854Bauthoritymissingfrom38mounts among7475
+immutable references; onefile readonlymount successor ready04a0763e/12purecontrols,
+independentsourcereviewinprogress. Sixphases stillunrun; Root30currentfree292acc02.
+No heavy/CPU6job live. Fixed05:36:09Z/account/holds/resources/parentcontrols unchanged.
+
+## F02 HOST accepted; F02/F03 source integrated — 2026-10-27T19:11:41.627746+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual F02 retainedABI+6suffix commands allPASS, independent0b2956a2:208B/26fields,
+readonlyRustowner/finalorigin+actualCcomparison. Sixsuffix tool54705 terminal0/
+4.746202s; childcapture sum.388737s plus retainedABI.079208s, no prefixreplay.
+Root adopted only F02process.c/sched_helpers diffs, exactpostimagesccca48c2/c4e6153b.
+Root also adopted independently97ca882d F03counter3 patches, postimages
+kernel/syscall.c7d303969/policyc81c6735/CMake1ca3a50f. Newsource only, productioncount
+stillacceptedCURRENT11060e62/Rust45/C94/process68 until next matchingbuild.
+
+Current111 bounded fourcommand build preparation is active: wholeRust+changedprocessC+
+changedkernelC+11inputrawlink, reuse accepted unchangedarchsyscall and7otherobjects.
+No compilergrant/nonce/materialization/release yet. Executor expert readonlyinput
+closure repair runs independently after positiveea96retirement/Root30.
+F05v2three-stageHOST source review found exactcwd mismatch before entry; owner
+prepares one literal successor preserving originalproposalcwd/90,90,10s/1GiB.
+No v2compiler/HOSTresult yet; originalF05nativeHOLD unchanged.
+F06Rustfilename ordinary6command preparation active. NextF03twoeventcallbacks have
+exclusive private sourceowner; no duplicateports/canonicalwriters.
+
+Checkpointad54ed03c pushed/fetched3exactblobs. Parentcontrols exclusively unchanged,
+fixed05:36:09Z/same7fledger/realholds/oneheavy/permanent27:4/scratch21/floors.
+Native/file deltas0,35/35,M14files2/6,M15files1/8 remain. No heavyorCPU6job live.
+
 ## Executor pre-command failure retired; F02 ABI prefix passed — 2026-10-27T19:07:50.083374+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

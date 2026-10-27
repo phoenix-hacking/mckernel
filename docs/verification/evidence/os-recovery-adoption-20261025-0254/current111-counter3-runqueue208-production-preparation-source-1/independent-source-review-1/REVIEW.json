@@ -1,0 +1,100 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/guardian_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "at": "2026-10-27T19:15:35.414583+00:00",
+  "decision": "PASS_SOURCE",
+  "blocking_findings": [],
+  "execution_release": false,
+  "runtime_authority": null,
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current111-counter3-runqueue208-production-preparation-source-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 93325,
+    "sha256": "566eecdb8c4edd5c1b6bc6a077a7666ec29eaf7aab218a4e989b3afec51c34fb"
+  },
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current111-counter3-runqueue208-production-preparation-source-1/SOURCE-READY.json",
+    "bytes": 5799,
+    "sha256": "b7388b9442770ce84ef14dec0010e2f87fbd7166e5ff5d0dae9c95ed8b62cfe4"
+  },
+  "derivation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current111-counter3-runqueue208-production-preparation-source-1/DERIVATION.json",
+    "bytes": 13894,
+    "sha256": "0c30613a96dfdfc9d041e304faba8a77da523586ea90f68131e5b4eddc0019b6"
+  },
+  "closed_Rust_source_map": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current111-counter3-runqueue208-production-preparation-source-1/RUST-SUBTREE-CLOSED-SOURCE-MAP.json",
+    "bytes": 110765,
+    "sha256": "978e45c2ac4aec5d1fba6dd1e25aa180d67677479f1185df6d061524d20b6bad"
+  },
+  "reuse_descriptor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current111-counter3-runqueue208-production-preparation-source-1/FROZEN-FOUR-COMMAND-EIGHT-INPUT-REUSE.json",
+    "bytes": 37130,
+    "sha256": "0f54d82c76eb247ce5b3b5b6821ea8fea413b6de8482d5cff47d9c9524f7d32e"
+  },
+  "retained_CURRENT110_acceptance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/independent-final-consumer-review-1/DEFAULT-ARTIFACT-REVIEW.json",
+    "bytes": 8856,
+    "sha256": "01e8f3771fb2dbf807b56bd68e3a86c88b54519a503772bd47ea78002db227f8"
+  },
+  "commands": 4,
+  "new_objects": 3,
+  "retained_objects": 8,
+  "raw_link_inputs": 11,
+  "closed_Rust_sources": 112,
+  "Root_adopted_files_checked": 5,
+  "verified": [
+    "Exact source profile566eecdb/93325B and declared source/derivation/next-step/tool preimage/postimage/diff references independently match. Accepted CURRENT11001e8f377 proves five prior commands0 and artifact-only acceptance; it grants no CURRENT111 runtime authority.",
+    "All five canonical Root adopted postimages and packet snapshots match the accepted F03 counter3/F02 runqueue208 adoption hashes. Source97ca882d, F03 HOST0ba68fff and F02 HOST0b2956a2 evidence is retained/reused; no HOST or broad source audit replay.",
+    "Closed Rust subtree contains exactly112 declared regular snapshot paths and every snapshot size/SHA256 matches. Relative path closure exactly equals actual snapshot file set. Only syscall_policy.rs and sched_helpers.rs differ from CURRENT110; all other Rust providers are retained exact.",
+    "F03 new Rust perf_counter_mask_check/start/stop exports preserve CULong/CInt ABI and original provider calls, including signed flags forwarding. cfg all(enable_perf,f03_perf_counter_control_bridges_selected_candidate) pairs with exact selected syscall-C define under unchanged CMake ENABLE_PERF/x86/native gates. Original C callbacks remain inactive references behind exact else branches with original line bindings.",
+    "F02 readonly process_sched_runqueue_offsets uses existing typed offset_of constructor as const under existing process_global_storage_candidate, with explicit size208/alignment8 assertions. C extern/else branch uses matching MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE and existing process-helper guard; constructor fields/offset semantics and scheduler body/lifecycle remain unchanged.",
+    "Independently derived exact4 commands from accepted CURRENT1105: remove only arch compile; add only new Rust perf-counter cfg and syscall-C perf-counter define. Process compile and final raw ld argv are otherwise byte-identical. Actual source selectors align with literal compiler flags; no configure, SDK or HOST command is introduced.",
+    "Runner commands_for_plan and worker both require exactly4 commands and three replacement output paths. Worker producer-contract label is ACTUAL_BUILD_ONLY_FOUR_COMMAND_PRODUCER, stops first failed command and refuses existing replacement/image outputs. No active five-command/architecture-output assumption remains. Descriptive historical five-command references identify prior CURRENT110 only.",
+    "Exactly8 objects are retained and3 freshly produced: full Rust/processC/kernel syscallC. All8 retained source file hashes match. Seven retained bindings equal accepted CURRENT110 profile exactly; arch syscall objectce8f1ace/109792B is a real successful CURRENT110 producer output now replace=false. Architecture source and command selectors are unchanged and no arch command is replayed.",
+    "Final raw ld has exactly11 unique object tokens matching all8 retained plus3 fresh objects in exact supported original order. No unused arch compile/output or fabricated replacement/archive is substituted.",
+    "Resource/toolchain/config/source6153/retained-seed fields equal accepted CURRENT110 unchanged. CPU2-5/12GiB/no swap/512tasks/networknone, fixed actual cutoffs, aggregate23259332608B planning ceiling and exact sudo Docker mediation remain intact. Export still requires source6153_entries6153 and SDK21_recompiled=false; source packet does not admit an SDK/build replay.",
+    "Tool diff scope is finite: runner four-command/8retained/3new validation and current111 container name, worker count/producer label only. Holder and READY publisher are byte-identical to reviewed actual CURRENT110 tools. No ownership/cleanup/resource/account/clock predicate weakened.",
+    "Read source-only check record: pure positive plan plus missing Root request/arch replay/wrong output/arch rebuild/changed Rust binding negatives passed. No compiler/guard/workload/publication call occurred. Actual nonce/request/resource/holder/execution review/custody fields remain null and cannot execute without Root binding."
+  ],
+  "command_scope": [
+    {
+      "stage": "full current default Rust object",
+      "cwd": "/work/output/build/kernel",
+      "new_output": "/work/output/build/kernel/rust/mckernel_rust.o"
+    },
+    {
+      "stage": "selected process object",
+      "cwd": "/work/output/build/kernel",
+      "new_output": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o"
+    },
+    {
+      "stage": "selected kernel syscall object",
+      "cwd": "/work/output/build/kernel",
+      "new_output": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o"
+    },
+    {
+      "stage": "exact eleven-input raw link",
+      "cwd": "/work/output/build/kernel",
+      "new_output": "/work/output/build/kernel/mckernel.img"
+    }
+  ],
+  "postbuild_obligations": [
+    "Actual full Rust+processC+kernelC compiler/link receipts and exact eleven-input binding are still required. Expected C66+25=91/Rust48/process67 are unaccepted expectations until actual symbols and source-supported elision are reviewed.",
+    "New208B/26word readonly data owner, no hidden relocations, exact alignment/words and every current final consumer pointer/offset must be proved. Three C perf callbacks absent and Rust definitions unique with genuine provider call arguments/gates must be proved.",
+    "New-cohort independent final-consumer review must reread timer120B/idle116B/logger/13line/folded arguments and inherited consumers in actual CURRENT111 image; retain all original scripted OPEN/FAIL and wholeFP4096/1024 FAIL.",
+    "No native/file/M14/M15 whole-language retirement follows from source or build-only success."
+  ],
+  "Root_runtime_requirements": [
+    "Root must separately bind fresh current complete30-or-later ledger, unused nonce/request, exact readable export/publication, current account/native ownership/resources/one-heavy holder and independent exact execution release before READY/GO.",
+    "Existing successful CURRENT110/SDK/HOST commands and consumed nonces are not replay authority. Preserve first failure, all captures and positive holder/container/client joins.",
+    "Same fixedUTC2026-10-28T05:36:09Z/earlier parentMONO947874.5689514667/BOOT963213.6960030915/boot7bfc5687; same creditrun7f4af94a83b14cc08f97401f5891d965/57774.852125/cumulative>=22812.3311/allholds, permanent27:4/scratch21, floors and aggregate7jobs remain effective."
+  ],
+  "review_actions": {
+    "source_diff_AST_hash_and_retained_artifact_reference_reads_only": true,
+    "no_compiler_guard_workload_publication_grant_SDK_or_HOST_replay": true,
+    "no_canonical_source_or_outercontrol_mutation": true,
+    "only_this_review_directory_written": true
+  }
+}

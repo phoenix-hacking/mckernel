@@ -1,0 +1,26 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ROOT_SELECTIVE_SOURCE_ADOPTION_ONLY_DEFAULT_NATIVE_OPEN",
+  "at": "2026-10-27T19:10:15.585880+00:00",
+  "owner": "/root",
+  "independent_HOST_acceptance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/independent-review-1/INDEPENDENT-ACTUAL-HOST-ACCEPTANCE.json",
+    "sha256": "0b2956a240b076f953f8e51d39ab79e3572162f43a700208e98cfcd3ca398b56"
+  },
+  "preimages": {
+    "kernel/process.c": "ec88faeab2ed4cc43d79fbf8a3e1f2fd5b7c75bd8c1dc2d184a92198431995ea",
+    "kernel/rust/sched_helpers.rs": "d16200db3054d88a83752fda1383d6c101d24de4b787bd78cd42edb46ab251fc"
+  },
+  "postimages": {
+    "kernel/process.c": "ccca48c2021c4041ef729c88f184c50f2ccc7749739271b211993e96087c70c4",
+    "kernel/rust/sched_helpers.rs": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020"
+  },
+  "patches": {
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/process.c.diff": "ad40317c6272d219cf6200dc2f821a692a5a7e05b91fba5e2064fe95c1eee3d8",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/sched_helpers.rs.diff": "abe942aa541031f579ba2eb65de6c93be085c34814450407c7b85daa4c52e083"
+  },
+  "data": "process_sched_runqueue_offsets208B26fields",
+  "production_C_objects_count_still": 68,
+  "native_delta": 0,
+  "whole_file_delta": 0
+}

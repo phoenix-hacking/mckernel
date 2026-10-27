@@ -5945,6 +5945,10 @@ static const struct sched_do_migrate_offsets process_sched_do_migrate_offsets = 
 #endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+extern const struct sched_runqueue_offsets process_sched_runqueue_offsets;
+#else
+#line 4282
 const struct sched_runqueue_offsets process_sched_runqueue_offsets = {
 	.thread_cpu_id_offset = __builtin_offsetof(struct thread, cpu_id),
 	.thread_tid_offset = __builtin_offsetof(struct thread, tid),
@@ -5980,6 +5984,8 @@ const struct sched_runqueue_offsets process_sched_runqueue_offsets = {
 	.cpu_nr_ctx_switches_offset =
 		__builtin_offsetof(struct cpu_local_var, nr_ctx_switches),
 };
+#endif
+#line 4317
 
 void process_sched_rwlock_bridge(unsigned long lock_addr,
 				 unsigned long node_addr);

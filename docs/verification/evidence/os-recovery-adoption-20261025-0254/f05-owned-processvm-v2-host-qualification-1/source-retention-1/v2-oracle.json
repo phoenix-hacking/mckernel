@@ -1,0 +1,43 @@
+{
+  "schema": "mckernel.owned-child-f05-v2-source-oracle.v1",
+  "status": "FROZEN_V2_SOURCE_ORACLE_BEFORE_HOST_EXECUTION",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "case_id": "M14-05-05-owned-processvm-v2-204B",
+  "source": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v2-source-1/app.rs",
+    "sha256": "7fa47f37a4006c4050c94409405da48c7bb959d813ec6523f15a54f55b5c8142",
+    "size": 11703
+  },
+  "expected_stdout": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-owned-processvm-v2-source-1/expected.stdout",
+    "sha256": "13fc414ed1c44213c78a5097edc6941a75afd6ce4ae4a6109876ff3acc0e956d",
+    "size": 204
+  },
+  "stdout_hex": "4f574e45445f463035207632206368696c6472656e3d3120636c6f6e655f6368696c645f7365747469643d3120706172656e745f7469645f756e6368616e6765643d310a74726163656d653d302073696773746f703d3139207065656b3d3020706f6b653d3020726561646261636b3d302063726f73735f346b5f776f72643d310a6368696c645f76657269666965643d3120707269766174655f756e6368616e6765643d31206368696c645f657869743d30207265617065643d310a4f574e45445f46303520504153530a",
+  "stderr_hex": "",
+  "exit_code": 0,
+  "child_count": 1,
+  "raw_clone_flags_hex": "0x01200011",
+  "clone_child_settid": true,
+  "clone_child_cleartid": true,
+  "CLONE_VM": false,
+  "child_forwarded_witness": {
+    "syscall": 1,
+    "fd": 2,
+    "buffer": "valid mapped child private bytes",
+    "count": 0,
+    "raw_result": 0,
+    "source_order": "after child-TID check/private initialization and before TRACEME/readiness/SIGSTOP",
+    "arguments_in_application_syscall_trace": false
+  },
+  "child_guest_terminal": 60,
+  "child_observed_host_terminal": 231,
+  "parent_observed_host_terminal": 231,
+  "poll_limit_each": 2000,
+  "poll_nanosleep_ns": 1000000,
+  "stream_limit_each_bytes": 1024,
+  "unsupported_is_success": false,
+  "original_v1_replaced_or_requalified": false,
+  "practical_check_count": 35,
+  "native_acceptance": false
+}

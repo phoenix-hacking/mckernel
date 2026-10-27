@@ -1,0 +1,128 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/custody_release_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-27T19:04:33.871625+00:00",
+  "decision": "PASS_EXACT_F06_RUST_OWNED_ORIGIN_SOURCE_ONLY_DEFAULT_OFF",
+  "source_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/SOURCE-BINDINGS.json",
+    "bytes": 2667,
+    "sha256": "a86d3f6aee63674ff65673d22293c9af95f548d4e1cb10fe6e75bb0154f182da"
+  },
+  "files_checked": 16,
+  "origin_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 94404,
+    "sha256": "64242ef204a7696369462487e5ca17e63f24d1a9d4c9957e43778b643a2fa288"
+  },
+  "original_SDK_command": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/ORIGINAL-SDK-COMMAND.json",
+    "bytes": 3110,
+    "sha256": "1481f3a2ab764c70ef2354f355c9b20976b7444cfb0e558a3bd426d49241d6f9"
+  },
+  "baseline_C": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/candidate/arch/x86_64/kernel/syscall.c",
+    "bytes": 116023,
+    "sha256": "c7b0c46302a133b017dbd9176dfe523e3f05fb0e3d268acd32b63679e6493605"
+  },
+  "candidate_C": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/syscall.c",
+    "bytes": 116749,
+    "sha256": "a89d28371f099fd3a10aaf46f44d8d495c9e18efd1620a7b95004d85e2f81192"
+  },
+  "producer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/derive_origin.py",
+    "bytes": 3807,
+    "sha256": "0a43a3abbdf7f77dd8b359369ac02d35ceb21b5803cc4896838b2a81a3ee8ce7"
+  },
+  "Rust": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/f06_rt_sigreturn_alloc_free.rs",
+    "bytes": 1707,
+    "sha256": "e65cd47a047b631168cea48403ad8c877a05a660384a13da180ac5df1c17fa7d"
+  },
+  "CMake_proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/ROOT-CMAKE-PROPOSAL.fragment",
+    "bytes": 2704,
+    "sha256": "a6b19234a2141194bc44de270b26ab24ebfda5c336e733f5c86dc5eb372e9ffc"
+  },
+  "future_recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-supported-body-new12h-1/generated-rust-origin-alternative-1/FUTURE-HOST-COMMAND-PLAN.json",
+    "bytes": 9400,
+    "sha256": "be03ee7e8ccf3f4fd1583c259bd27c33f962d532ed8863be0236740f3d7bccb7"
+  },
+  "exact_origin": "/src/arch/x86_64/kernel/syscall.c",
+  "exact_origin_bytes_with_NUL": [
+    47,
+    115,
+    114,
+    99,
+    47,
+    97,
+    114,
+    99,
+    104,
+    47,
+    120,
+    56,
+    54,
+    95,
+    54,
+    52,
+    47,
+    107,
+    101,
+    114,
+    110,
+    101,
+    108,
+    47,
+    115,
+    121,
+    115,
+    99,
+    97,
+    108,
+    108,
+    46,
+    99,
+    0
+  ],
+  "findings": [
+    "All16 source manifest members authenticate. Exact selected SDK command is byte-for-byte current110profile command with /usr/bin/cc, fixed cwd and one literal final -c /src/arch/x86_64/kernel/syscall.c; no prefix/response/macro/include override flags. No guessed host-path or normalization equivalence is used.",
+    "Producer locks complete current110profile SHA, then rejects source/compiler/cwd/operand/prefix/macro/response drift and filename-bearing source directives. Actual C TU static strcmp guard additionally rejects any effective __FILE__ mismatch. Numeric-only source directives remain supported. Unusual future preprocessing/profile changes require a fresh bound successor.",
+    "Rust env! has no default; concat adds one trailingNUL to the pinned ASCII origin. Immutable storage belongs to Rust image lifetime; external C header contains only macro/assertion with no runtime C data/function. Existing char* provider contract is unchanged; no filename pointer identity claim.",
+    "Allocation retains SizeT64->CInt32 narrowing, CULong64 flags and synchronous single tracked-provider call at logical385. Free forwards raw pointer once at391, with original NULL/lifetime/context policies. Actual mem_helpers signatures match fixture declarations and immutable original C filename behavior.",
+    "Candidate diff adds paired extern/retained-body selectors, generated-header/static assertion, numeric382/388/394 restoration. Static logical-line scan preserves all original __LINE__ tracking rows exactly, including385/391. Selectors00/01/10/11 follow source branch restoration, but actual preprocessing qualification remains pending.",
+    "CMake proposal belongs only in existing linux6.12/x86_64/nonUBSAN branch. It binds source/profile/producer configure dependencies, generated header object dependency, Rust source dependencies, paired C/Rust selectors and derived same-origin env argument. This is an explicit Root integration proposal; no canonical or default consumer is yet adopted.",
+    "Six proposed ordinary commands comprise source producer, Rust fixture compile, genuine-header C fixture link, controlled832allocation+8free execution, and positive/negative static assertion compiles. They perform no real allocation/free/native syscall or guest work; negative case must retain expected failure diagnostic and no success object."
+  ],
+  "source_tracking_rows": 28,
+  "tracking_alloc_line": 385,
+  "tracking_free_line": 391,
+  "proposed_checks": {
+    "commands": 6,
+    "allocation_comparisons": 832,
+    "free_comparisons": 8,
+    "guard_positive_expected": 0,
+    "guard_negative_expected": "nonzero with exact original __FILE__ binding drift diagnostic",
+    "all_unrun": true,
+    "ordinary_admission_required": true,
+    "fresh_output_required": true
+  },
+  "open_predicates": [
+    "Actual compiler confirmation of GCC9/GCC14 builtin strcmp constant-expression assertion, including positive/negative captures.",
+    "Actual changed-origin fixture832+8, missing env/profile drift/source directive controls and selected tracking129 preprocess checks under Root ordinary grant.",
+    "Before production, Root adopts exact producer/CMake/source/env/header tuple and qualifies actual SDK commands; generated original profile provenance is not next-command execution authority.",
+    "Actual final linked Rust ownership/NULbytes/provider uniqueness and no defined/undefined f06_rt_sigreturn_source_file in selected C object; no new C runtime owner.",
+    "New artifact/native signal lifecycle/whole-file retirement remain OPEN; old HOST10/CURRENT110 evidence retains original scope."
+  ],
+  "no_source_correction_required": true,
+  "actual_tests": 0,
+  "compiler_commands": 0,
+  "workload_or_Docker_or_root_or_native_actions": 0,
+  "execution_release": false,
+  "native_acceptance": false,
+  "whole_file_retirement": false,
+  "canonical_changes": false
+}

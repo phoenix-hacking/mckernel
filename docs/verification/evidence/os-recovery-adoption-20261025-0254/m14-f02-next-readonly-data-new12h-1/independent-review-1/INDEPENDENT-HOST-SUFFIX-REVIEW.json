@@ -1,0 +1,98 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/current110_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-27T19:08:29.902309+00:00",
+  "decision": "PASS_EXACT_F02_SIX_COMMAND_SUFFIX_AND_RETAINED_ACTUAL_ABI_PREFIX_PENDING_FRESH_ROOT_GRANT",
+  "runtime_authority": null,
+  "execution_release": false,
+  "blocking_findings": [],
+  "source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/independent-review-1/INDEPENDENT-SOURCE-REVIEW.json",
+    "bytes": 10154,
+    "sha256": "2006b7d2a06a4fb35a32fe2a1be291377e8215f7a0923f749067632a6112dc93"
+  },
+  "seven_command_profile_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/independent-review-1/INDEPENDENT-HOST-PROFILE-REVIEW.json",
+    "bytes": 4862,
+    "sha256": "0bfda527c27fb7d68d07115b92a1d61ebaeba5ba8e9fc2dfb158d355190751f0"
+  },
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/successor-host-profile-3/SOURCE-READY.json",
+    "bytes": 1572,
+    "sha256": "ef1add772c11b7aca3c209f375bd38814e907afff8b9d5c63fd98bc0f1e19ff5"
+  },
+  "suffix_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/successor-host-profile-3/PROFILE.NOT-GRANTED.json",
+    "bytes": 84076,
+    "sha256": "889531c89becec79fdc8ff9d263c35d47b8934cb1dca640c1c63263d7c193856"
+  },
+  "suffix_recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/successor-host-profile-3/EXACT-SIX-COMMAND-SUFFIX.NOT-ADMITTED.json",
+    "bytes": 14944,
+    "sha256": "8d87923908cd5e52b83c01f84cfd4bdb0c5729064b544872aae6b73eb69e9cc3"
+  },
+  "retained_prefix": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/successor-host-profile-3/RETAINED-ABI-PREFIX.json",
+    "bytes": 9271,
+    "sha256": "1917cee2a6d099a5d5949b6d274ab57ec026675ced751587e4b45e1c0d20bfda"
+  },
+  "preserved_first_harness_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/successor-host-profile-2/future-capture-2/FIRST-FAILURE.json",
+    "bytes": 158,
+    "sha256": "0e12c1ec7598571684c56bfcf68adf4a41d39e8326e80189a5d266d7201215ab"
+  },
+  "actual_prefix_acceptance": {
+    "command": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/successor-host-profile-2/future-capture-2/step0/command.json",
+      "bytes": 2478,
+      "sha256": "e8e5492976cbbbf2eaf05e277f354933282ce2ccacfe1b91d29fade9d58960ab"
+    },
+    "join": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-next-readonly-data-new12h-1/successor-host-profile-2/future-capture-2/step0/whole-join.json",
+      "bytes": 1186,
+      "sha256": "70031c611eddf7959eb7a02c60cf8dc2bd556214b7ede63130d943c925862b1a"
+    },
+    "pid": 1652341,
+    "birth": 92545616,
+    "returncode": 0,
+    "seconds": 0.07920791499782354,
+    "direct_joined": true,
+    "group_absent": true,
+    "streams_closed_empty_hash_verified": true,
+    "current_numeric_pid_absent": true,
+    "scope": "Actual genuine-header syntax compilation passed all26 target offsetof/type/position plus208B/alignment8 assertions under reviewed exact flags. -fsyntax-only emits no ABI object; accepted retained artifact is actual command/join/stream evidence.",
+    "no_command1_entry": "Only results[0]/step0 exists. Harness FileNotFound follows completed command0, with failed aggregate stillRUNNING plus preserved FIRST-FAILURE. It is not a source/compiler failure or completed HOST batch."
+  },
+  "verified_suffix_delta": [
+    "Exactly six former commands1..6 remain, preserving every command key/cwd/oracle and changing only14 output2\u2192fresh output3 path strings plus derived argv hashes. No ABI0 argv is present.",
+    "All314 previously accepted input pins are identical, with14 new exact retained-prefix/failure/metadata pins independently verified. All11 capture2 files including source command/admission/birth/wait/joins/streams are sealed. No original source/oracle/checker/compiler input changed.",
+    "Same runner6e98/admission7df/capture990/v2guard and exact resource/clocks/growth floors remain; fresh task identity and capture3/leaf0..5 names are bounded. Output3/capture3 are absent, while oldoutput2/capture2 remain preserved.",
+    "Absolute --profile and --grant paths are explicit mandatory invocation preconditions. This avoids the observed Root relative-path/chdir harness failure without weakening any guard or replaying the passed command."
+  ],
+  "counts": {
+    "retained_successful_commands": 1,
+    "future_suffix_commands": 6,
+    "old_pins_preserved": 314,
+    "new_pins_verified": 14,
+    "total_pins": 328,
+    "changed_output_pathstrings": 14,
+    "actual_commands_run_during_review": 0,
+    "native_credit_delta": 0,
+    "whole_file_credit_delta": 0
+  },
+  "Root_next_action": "Issue fresh exact ordinary CPU6 exclusion/reservations/nonce/grant for profile889531c8 and invoke existing runner6e98 with ABSOLUTE profile+grant filenames and exact hashes. Old grant/consumed prefix never reused. Run six commands once; preserved genuineABI0 completes the original seven obligations only after matching suffix results independently pass.",
+  "acceptance_limits": [
+    "No Rust object/selectedC/fallback/link/map/26field executable acceptance yet; six commands remain unrun.",
+    "Current production count68 remains until own coherent full default artifact proves67; no native or whole-file proof follows.",
+    "Root exclusively owns actual ordinary execution/aggregate reservations; same fixed cutoff/account/budget/holds remain effective."
+  ],
+  "review_actions": {
+    "actual_prefix_and_added_metadata_only": true,
+    "no_broad_repetition_of314unchangedpins": true,
+    "no_compiler_fixture_workload_Docker_root_guest_cleanup_lease_agents": true,
+    "source_or_canonical_changes": false,
+    "only_this_review_file_written": true
+  }
+}
