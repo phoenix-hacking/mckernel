@@ -1,0 +1,13 @@
+error[E0080]: evaluation panicked: process C filename must not be empty
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:12:15
+   |
+12 |   const _: () = assert!(
+   |  _______________^
+13 | |     SOURCE_FILE.len() > 1,
+14 | |     "process C filename must not be empty"
+15 | | );
+   | |_^ evaluation of `process_verbose_data::_` failed here
+
+error: aborting due to 1 previous error
+
+For more information about this error, try `rustc --explain E0080`.

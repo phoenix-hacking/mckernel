@@ -1,0 +1,361 @@
+error[E0080]: evaluation panicked: process debug flags must match C DDEBUG_DEFAULT (0 or 1)
+ --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:9:10
+  |
+9 |     _ => panic!("process debug flags must match C DDEBUG_DEFAULT (0 or 1)"),
+  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ evaluation of `process_verbose_data::INITIAL_FLAGS` failed here
+
+note: erroneous constant encountered
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+   |
+24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+   |                                  ^^^^^^^^^^^^^
+...
+33 |     record!("process_ptrace_traceme_log_bridge", 236),
+   |     ------------------------------------------------- in this macro invocation
+   |
+   = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+   |
+24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+   |                                  ^^^^^^^^^^^^^
+...
+41 | pub static mut process_create_cpu_debug: Ddebug = record!("process_create_cpu_log_bridge", 276);
+   |                                                   --------------------------------------------- in this macro invocation
+   |
+   = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+   |
+24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+   |                                  ^^^^^^^^^^^^^
+...
+47 |     record!("process_sched_migrate_log_bridge", 422);
+   |     ------------------------------------------------ in this macro invocation
+   |
+   = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+   |
+24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+   |                                  ^^^^^^^^^^^^^
+...
+53 |     record!("process_split_range_public_log_bridge", 1689),
+   |     ------------------------------------------------------ in this macro invocation
+   |
+   = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+   |
+24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+   |                                  ^^^^^^^^^^^^^
+...
+67 |     record!("process_free_range_log_bridge", 1947),
+   |     ---------------------------------------------- in this macro invocation
+   |
+   = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+   |
+24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+   |                                  ^^^^^^^^^^^^^
+...
+75 | pub static mut process_vm_range_insert_debug: Ddebug = record!("vm_range_insert_log_bridge", 2086);
+   |                                                        ------------------------------------------- in this macro invocation
+   |
+   = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+  --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+   |
+24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+   |                                  ^^^^^^^^^^^^^
+...
+81 |     record!("process_range_public_log_bridge", 2137),
+   |     ------------------------------------------------ in this macro invocation
+   |
+   = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+    |
+ 24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+    |                                  ^^^^^^^^^^^^^
+...
+105 |     record!("process_add_range_log_bridge", 2318),
+    |     --------------------------------------------- in this macro invocation
+    |
+    = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+    |
+ 24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+    |                                  ^^^^^^^^^^^^^
+...
+115 | pub static mut process_remap_one_page_entry_debug: Ddebug = record!("remap_one_page", 2448);
+    |                                                             ------------------------------- in this macro invocation
+    |
+    = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+    |
+ 24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+    |                                  ^^^^^^^^^^^^^
+...
+120 | pub static mut process_remap_one_page_rss_debug: Ddebug = record!("remap_one_page", 2470);
+    |                                                           ------------------------------- in this macro invocation
+    |
+    = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+    |
+ 24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+    |                                  ^^^^^^^^^^^^^
+...
+125 | pub static mut process_remap_one_page_exit_debug: Ddebug = record!("remap_one_page", 2476);
+    |                                                            ------------------------------- in this macro invocation
+    |
+    = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+    |
+ 24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+    |                                  ^^^^^^^^^^^^^
+...
+130 | pub static mut process_sync_one_page_entry_debug: Ddebug = record!("sync_one_page", 2546);
+    |                                                            ------------------------------ in this macro invocation
+    |
+    = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+    |
+ 24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+    |                                  ^^^^^^^^^^^^^
+...
+135 | pub static mut process_sync_one_page_exit_debug: Ddebug = record!("sync_one_page", 2574);
+    |                                                           ------------------------------ in this macro invocation
+    |
+    = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+    |
+ 24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+    |                                  ^^^^^^^^^^^^^
+...
+141 |     record!("page_fault_process_memory_range", 2952);
+    |     ------------------------------------------------ in this macro invocation
+    |
+    = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+    |
+ 24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+    |                                  ^^^^^^^^^^^^^
+...
+147 |     record!("page_fault_process_memory_range", 2959);
+    |     ------------------------------------------------ in this macro invocation
+    |
+    = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+    |
+ 24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+    |                                  ^^^^^^^^^^^^^
+...
+153 |     record!("page_fault_process_memory_range", 3006);
+    |     ------------------------------------------------ in this macro invocation
+    |
+    = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+    |
+ 24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+    |                                  ^^^^^^^^^^^^^
+...
+159 |     record!("page_fault_process_memory_range", 3219);
+    |     ------------------------------------------------ in this macro invocation
+    |
+    = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+    |
+ 24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+    |                                  ^^^^^^^^^^^^^
+...
+165 |     record!("page_fault_process_memory_range", 2873);
+    |     ------------------------------------------------ in this macro invocation
+    |
+    = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+    |
+ 24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+    |                                  ^^^^^^^^^^^^^
+...
+171 |     record!("page_fault_process_memory_range", 3071);
+    |     ------------------------------------------------ in this macro invocation
+    |
+    = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+    |
+ 24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+    |                                  ^^^^^^^^^^^^^
+...
+177 |     record!("page_fault_process_memory_range", 3076);
+    |     ------------------------------------------------ in this macro invocation
+    |
+    = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+    |
+ 24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+    |                                  ^^^^^^^^^^^^^
+...
+183 |     record!("page_fault_process_memory_range", 3118);
+    |     ------------------------------------------------ in this macro invocation
+    |
+    = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+    |
+ 24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+    |                                  ^^^^^^^^^^^^^
+...
+189 |     record!("page_fault_process_memory_range", 3121);
+    |     ------------------------------------------------ in this macro invocation
+    |
+    = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+    |
+ 24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+    |                                  ^^^^^^^^^^^^^
+...
+195 |     record!("page_fault_process_memory_range", 3125);
+    |     ------------------------------------------------ in this macro invocation
+    |
+    = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+    |
+ 24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+    |                                  ^^^^^^^^^^^^^
+...
+201 |     record!("page_fault_process_memory_range", 3202);
+    |     ------------------------------------------------ in this macro invocation
+    |
+    = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+    |
+ 24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+    |                                  ^^^^^^^^^^^^^
+...
+207 |     record!("page_fault_process_memory_range", 3206);
+    |     ------------------------------------------------ in this macro invocation
+    |
+    = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+    |
+ 24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+    |                                  ^^^^^^^^^^^^^
+...
+213 |     record!("page_fault_process_memory_range", 3210);
+    |     ------------------------------------------------ in this macro invocation
+    |
+    = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+    |
+ 24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+    |                                  ^^^^^^^^^^^^^
+...
+219 |     record!("page_fault_process_memory_range", 3059);
+    |     ------------------------------------------------ in this macro invocation
+    |
+    = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+    |
+ 24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+    |                                  ^^^^^^^^^^^^^
+...
+225 |     record!("page_fault_process_memory_range", 3067);
+    |     ------------------------------------------------ in this macro invocation
+    |
+    = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+    |
+ 24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+    |                                  ^^^^^^^^^^^^^
+...
+231 |     record!("page_fault_process_memory_range", 3151);
+    |     ------------------------------------------------ in this macro invocation
+    |
+    = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+    |
+ 24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+    |                                  ^^^^^^^^^^^^^
+...
+237 |     record!("process_init_stack_log_bridge", 3430);
+    |     ---------------------------------------------- in this macro invocation
+    |
+    = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+    |
+ 24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+    |                                  ^^^^^^^^^^^^^
+...
+243 |     record!("process_init_stack_log_bridge", 3435);
+    |     ---------------------------------------------- in this macro invocation
+    |
+    = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+note: erroneous constant encountered
+   --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:24:34
+    |
+ 24 |             line_flags: $line | (INITIAL_FLAGS << 24),
+    |                                  ^^^^^^^^^^^^^
+...
+248 | pub static mut process_schedule_switch_debug: Ddebug = record!("schedule", 4684);
+    |                                                        ------------------------- in this macro invocation
+    |
+    = note: this note originates in the macro `record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: aborting due to 1 previous error
+
+For more information about this error, try `rustc --explain E0080`.

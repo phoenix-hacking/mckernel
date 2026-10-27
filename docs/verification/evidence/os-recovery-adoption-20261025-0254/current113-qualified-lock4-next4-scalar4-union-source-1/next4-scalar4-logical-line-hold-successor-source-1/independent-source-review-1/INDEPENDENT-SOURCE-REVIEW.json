@@ -1,0 +1,84 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/current110_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-27T21:12:37.499452+00:00",
+  "decision": "BLOCKED_SOURCE_CONDITIONAL_FILELINE_REGRESSION_SCALAR4_REQUIRES_BOUNDED_CORRECTION",
+  "runtime_authority": null,
+  "execution_release": false,
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/next4-scalar4-logical-line-hold-successor-source-1/SOURCE-READY.json",
+    "bytes": 6843,
+    "sha256": "1659ec99cb9f47d0d67d4d2551da7aa97b33ea2cced7a7d1153b5e06edf96497"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/next4-scalar4-logical-line-hold-successor-source-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 112259,
+    "sha256": "7f8c012e18b689524440609a137de2f7c940258256311390ceaa186d0880128f"
+  },
+  "composition": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/next4-scalar4-logical-line-hold-successor-source-1/COMPOSITION-DERIVATION.json",
+    "bytes": 5991,
+    "sha256": "2961719bb43b9e81890cbd552b8187f5bf5ff901a703d8eb5fbec3ac801cb87a"
+  },
+  "new_origin_proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/next4-scalar4-logical-line-hold-successor-source-1/NEW-ORIGIN-PRODUCER.NOT-GRANTED.json",
+    "bytes": 6747,
+    "sha256": "9401e9f99cec3a119a631792a0cc05f2f5d8af91222e537f8e18897cadd2fce7"
+  },
+  "blocking_findings": [
+    {
+      "id": "SCALAR4_CONDITIONAL_LINE_1",
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/next4-scalar4-logical-line-hold-successor-source-1/candidate/kernel/process.c",
+        "bytes": 221073,
+        "sha256": "3e03722d02bdf8b8c328fcd86efbad531b51ae6f1dfd35df493d3a9579714c98"
+      },
+      "location": "new scalar process_init_stack_user_category selector, #line3466 immediately before existing init-stack ddebug records",
+      "exact_accepted_current111_lines": {
+        "process_init_stack_log_size_debug": 3430,
+        "process_init_stack_log_ap_user_debug": 3435
+      },
+      "forced_new_selected_lines": {
+        "process_init_stack_log_size_debug": 3411,
+        "process_init_stack_log_ap_user_debug": 3416
+      },
+      "reason": "Selected PROCESS_HELPERS/GLOBAL_STORAGE path parses unconditional #line3466 after new scalar conditional. Existing .line=__LINE__-58 expressions then evaluate3411/3416. Accepted actual111process object stores3430/3435. This changes two unrelated inherited ddebug metadata records; lexical inverse/tokenidentity does not establish conditional preprocessor lineidentity.",
+      "smallest_required_correction": "Source owner prepares bounded conditional-aware line restoration outside skipped outerblocks and preserves all original scalar initializer/fallback bytes and inherited active FILE/LINE metadata. Do not alter expected3430/3435 or weaken checker/oracle. Four HOST scalar/constants/ABI results735c remain positive; no replay."
+    },
+    {
+      "id": "SCALAR4_CONDITIONAL_LINE_SCOPE",
+      "location": "PROFILE_ENABLE/ARCH_FAST_MEMSET branches and PROCESS_HELPERS-off fallback",
+      "reason": "Current new restoration directives occur before skipped else branches or within outer helper blocks; same skipped-anchor family requires conditional-aware restoration at branch joins,including helperOFF scope. No new compiler/preprocessor test was run by this reviewer.",
+      "disposition": "Root accepted concrete finding and activated source owner boundedcorrection. This1659/7f8 source packet must not be adopted/released as full sourcePASS."
+    }
+  ],
+  "unaffected_verified_findings": [
+    "All exact ready/profile/map/composition/tool refs match.118 closed Rust snapshot/original pairs match,ordinary/nohardlink/nosymlink. Seven retained object/config hashes match; fivecommands declare4freshobjects+7retained11inputrawlink with reuseconfiguration/noSDK/configure/HOSTreplay.",
+    "Base composition names exactRoot112sourceadoption497e; accepted artifact remains111. Only qualified F06next4 and scalar4 HOST receipts a8a98914/735c are carried. KernelC source is byteidenticalRoot112; syscallpolicy is exactRoot112prefix plus F06fragment. OriginalLOCK4/WAKE3newmodules and their source edits are excluded. Original113LOCK4draft remains historical.",
+    "F06next4 leaves/typedproviderwitness are literal qualifiedhostsource: realreaderlock/unlock typedIRQsave64node,find_thread signedCInt/CInt\u2192Threadpointer\u2192CULong,andone-thread_unlock conversion. No ownership widening or newCbody introduced. Realdefault/native behavior remains unproved.",
+    "SelectiveCMake diff adds only4F06cfgs/4Cdefines/5leafdependencies in existing supportedlinux6.12/x86/NOTUBSAN branch. Scalar4 uses existingGLOBAL_STORAGE pair; no newLOCK4/WAKE3 cfgaxes. Inherited event2/allocfree sourcebodies/originfilename assumptions remain pending actualbuild qualification.",
+    "Adapted runner/worker only change four\u2192five command/fourreplacement map/containername; holder/publisher byteidentical. V2fixedwindow/account/guardian/oneheavy4CPU12GiB512tasks/noNetwork controls and cumulativecreditrun/holds remain. No actualadmission/resource/nonce/holder/grant exists.",
+    "Fresh current113origin producer is truthfullyUNRUN: actualreceipt/header/binding/env/CMakefieldsNULL. Previewheader is not actualproductionproof. Exactnewarchsource+argv/profile producer/header/env/export/cohort rebind is required before compiler admission; old112receipt cannot qualifychangedsource. No newCfilename runtimeobject or /src/scripts compilerhelper mounts are proposed.",
+    "Expected C64+19=83/Rust56/process63 stay predictions; inheritedmetadata/logger/line/timer120/idle116/runqueue208/consumerABI/MM/native obligations and originalOPEN/FAIL remain."
+  ],
+  "prior_LOCK4_correction_carried": {
+    "old_source_review8469_and_HOST461b_preserved": true,
+    "positive_scope": "ExactABI/mockrouting/normaljoins remain positive. ConditionalFILELINEfull-source assertion is held by later concrete skipped-anchor finding.",
+    "old_original_e384_LOCK4_and_WAKE3_adopted_by_this_packet": false,
+    "no_silent_relabel_or_replay": true
+  },
+  "next_actions": [
+    "Keep thispacketSOURCEBLOCKED while sourceowner repairs scalarconditional-line scope; retain correctedsuccessor and originalfinding/hash history.",
+    "Rootalreadyapproved112fourcommandbatch proceeds independently;113repair is not a mandatorywait and creates no resource/releaseauthority. If112completes identicalkernelC beforehand, disposition its actualcompleted object/prefix before113grant rather than replay unchanged commands.",
+    "After correctedsource review,Rootalone adopts/publishesexactpostimages,executes freshoriginproducer,rebinds profile/export/closure,thenfresh currentaccount/source/nativeownership/resources/nonce/holder and independent exactexecutionreview precedeactualgrant. No genericnewgate/framework/quota needed."
+  ],
+  "review_actions": {
+    "source_hash_AST_and_boundedaccepted_ELFmetadata_reads": true,
+    "no_compiler_test_preprocessor_guard_resource_runtime_operations": true,
+    "no_canonical_or_implementation_changes": true,
+    "no_subagents": true,
+    "only_this_review_directory_written": true
+  }
+}

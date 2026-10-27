@@ -708,17 +708,29 @@ arch_ptrace_alloc_bridge(size_t size, unsigned long flags)
 
 #endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_PTRACE_FIND_THREAD)
+extern unsigned long arch_ptrace_find_thread_bridge(int tgid, int tid);
+#else
+#line 635
 unsigned long
 arch_ptrace_find_thread_bridge(int tgid, int tid)
 {
 	return (unsigned long)find_thread(tgid, tid);
 }
+#endif
+#line 640
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_PTRACE_THREAD_UNLOCK)
+extern void arch_ptrace_thread_unlock_bridge(unsigned long thread_addr);
+#else
+#line 641
 void
 arch_ptrace_thread_unlock_bridge(unsigned long thread_addr)
 {
 	thread_unlock((struct thread *)thread_addr);
 }
+#endif
+#line 646
 
 #ifndef MCKERNEL_RUST_F06_PRCTL_SET_REGISTER
 int
@@ -746,19 +758,31 @@ arch_prctl_log_bridge(int event, int cpu, unsigned long value)
 	}
 }
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_CLONE_READER_LOCK)
+extern void arch_clone_reader_lock_bridge(void *lock, void *node);
+#else
+#line 673
 void
 arch_clone_reader_lock_bridge(void *lock, void *node)
 {
 	mcs_rwlock_reader_lock((mcs_rwlock_lock_t *)lock,
 			(struct mcs_rwlock_node_irqsave *)node);
 }
+#endif
+#line 679
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_CLONE_READER_UNLOCK)
+extern void arch_clone_reader_unlock_bridge(void *lock, void *node);
+#else
+#line 680
 void
 arch_clone_reader_unlock_bridge(void *lock, void *node)
 {
 	mcs_rwlock_reader_unlock((mcs_rwlock_lock_t *)lock,
 			(struct mcs_rwlock_node_irqsave *)node);
 }
+#endif
+#line 686
 
 int
 arch_do_shmget_bridge(long key, size_t size, int shmflg)

@@ -1,0 +1,19 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/run_startup_resource_once.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-1/run_f05_v3_resource_once.py
+@@ -29,7 +29,7 @@
+  for source in list(static['capture_sources'].values())+[ref(R/'STATIC-NATIVE-BINDINGS.NOT-RELEASED.json')]:assert source in publication['files']
+  assert not list((A/'CAPTURE').iterdir()) and not list(Path(static['attempt_parent']).iterdir())
+  assert not os.path.lexists(Path(static['attempt_parent'])/('attempt-'+static['nonce']))
+- capture=retain(['/home/holden/anaconda3/bin/python3','-I','-B',str(R/'capture_fresh_startup_resource.py'),'--output-path',str(resource)],stdout,stderr)
++ capture=retain(['/home/holden/anaconda3/bin/python3','-I','-B',str(R/'capture_fresh_f05_v3_resource.py'),'--output-path',str(resource)],stdout,stderr)
+  if capture['returncode']==0:capture['resource']=ref(resource)
+  with (R/'RESOURCE-1-CAPTURE-JOIN.json').open('x') as f:json.dump(capture,f,indent=2);f.write('\n')
+  if capture['returncode']!=0:raise SystemExit(capture['returncode'])
+@@ -37,6 +37,6 @@
+  value=json.loads(resource.read_bytes());assert isinstance(value,dict) and len(value['observed_clocks'])==3
+  # Data-only binder runs immediately after retained JSON; no model/source work
+  # is required between fresh observation and a review-ready exact pending packet.
+- bound=subprocess.run(['/home/holden/anaconda3/bin/python3','-I','-B',str(R/'bind_startup_resource.py'),'--resource',str(resource)],check=False)
++ bound=subprocess.run(['/home/holden/anaconda3/bin/python3','-I','-B',str(R/'bind_f05_v3_resource.py'),'--resource',str(resource)],check=False)
+  raise SystemExit(bound.returncode)
+ if __name__=='__main__':main()

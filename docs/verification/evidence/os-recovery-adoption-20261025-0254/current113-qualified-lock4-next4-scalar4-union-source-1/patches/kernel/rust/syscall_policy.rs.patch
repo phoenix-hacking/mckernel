@@ -1,0 +1,84 @@
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -36050,6 +36050,59 @@
+ }
+ 
+ // Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(f03_ptrace_entry_candidate)]
++mod ptrace_lock_callbacks {
++    use core::ffi::c_void;
++
++    use crate::abi::CULong;
++    use crate::lock_helpers::{McsRwlockLock, McsRwlockNodeIrqsave};
++
++    use super::PtraceRwlockFn;
++
++    /// Acquire the caller's update lock using its original IRQ-save node.
++    ///
++    /// # Safety
++    /// Both addresses name live, aligned lock/node storage held valid by the
++    /// ptrace caller. The same node must reach the matching unlock, preserving
++    /// the saved IRQ flags, lock order and original exclusion lifetime.
++    #[no_mangle]
++    pub unsafe extern "C" fn ptrace_wakeup_update_lock_bridge(
++        lock_addr: CULong,
++        node: *mut c_void,
++    ) {
++        // SAFETY: Preserve the original casts and the caller-owned IRQ-save node.
++        unsafe {
++            crate::lock_helpers::__mcs_rwlock_writer_lock(
++                lock_addr as *mut McsRwlockLock,
++                node.cast::<McsRwlockNodeIrqsave>(),
++            );
++        }
++    }
++
++    /// Release the same writer acquisition and restore its saved IRQ flags.
++    ///
++    /// # Safety
++    /// The caller owns this lock acquisition. Both objects remain live and node
++    /// is the exact IRQ-save node initialized by the corresponding lock call.
++    #[no_mangle]
++    pub unsafe extern "C" fn ptrace_wakeup_update_unlock_bridge(
++        lock_addr: CULong,
++        node: *mut c_void,
++    ) {
++        // SAFETY: Use the same lock and node, retaining the provider's flag restore.
++        unsafe {
++            crate::lock_helpers::__mcs_rwlock_writer_unlock(
++                lock_addr as *mut McsRwlockLock,
++                node.cast::<McsRwlockNodeIrqsave>(),
++            );
++        }
++    }
++
++    const _: PtraceRwlockFn = ptrace_wakeup_update_lock_bridge;
++    const _: PtraceRwlockFn = ptrace_wakeup_update_unlock_bridge;
++}
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ /// Forward the original event pointer and exact signed C-int result.
+ /// # Safety
+ /// Caller retains the original live-event, perf-state and synchronization contract.
+@@ -36076,3 +36129,21 @@
+ #[cfg(any(f06_rt_sigreturn_alloc_candidate, f06_rt_sigreturn_free_candidate))]
+ #[path = "f06_rt_sigreturn_alloc_free.rs"]
+ mod f06_rt_sigreturn_alloc_free;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(f06_clone_reader_lock_candidate)]
++#[path = "f06_clone_reader_lock.rs"]
++mod f06_clone_reader_lock;
++#[cfg(f06_clone_reader_unlock_candidate)]
++#[path = "f06_clone_reader_unlock.rs"]
++mod f06_clone_reader_unlock;
++#[cfg(f06_ptrace_find_thread_candidate)]
++#[path = "f06_ptrace_find_thread.rs"]
++mod f06_ptrace_find_thread;
++#[cfg(f06_ptrace_thread_unlock_candidate)]
++#[path = "f06_ptrace_thread_unlock.rs"]
++mod f06_ptrace_thread_unlock;
++#[cfg(all(f06_clone_reader_lock_candidate, f06_clone_reader_unlock_candidate,
++    f06_ptrace_find_thread_candidate, f06_ptrace_thread_unlock_candidate))]
++#[path = "f06_clone_ptrace_provider_abi.rs"]
++mod f06_clone_ptrace_provider_abi;

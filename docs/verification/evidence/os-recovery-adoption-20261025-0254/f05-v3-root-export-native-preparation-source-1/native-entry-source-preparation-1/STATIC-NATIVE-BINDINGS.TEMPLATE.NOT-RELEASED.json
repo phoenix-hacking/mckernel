@@ -1,0 +1,169 @@
+{
+  "all349_all51_allocation_file_claim": false,
+  "artifact_acceptance": null,
+  "attempt_parent": "/home/holden/mckernel-work/scratch/f05v3n1",
+  "author": null,
+  "capture_directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/root-adopted-entry-1/CAPTURE",
+  "capture_helper": null,
+  "capture_sources": {
+    "prepare_f05_v3_bindings.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-1/prepare_f05_v3_bindings.py",
+      "bytes": 5872,
+      "sha256": "1601f2048aa6db2209c0bea998524cb7db8949dd99081906b11cda7fc1b5a788"
+    },
+    "bind_f05_v3_resource.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-1/bind_f05_v3_resource.py",
+      "bytes": 4860,
+      "sha256": "2df373de91719dcdcb33cc0a363cf983b80a1a7af05d2e72918f6600bae09db6"
+    },
+    "capture_fresh_f05_v3_resource.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-1/capture_fresh_f05_v3_resource.py",
+      "bytes": 13345,
+      "sha256": "49580f3f3dc1b60a871a198cb4ddbbc214a9d543466b80e53d0ae935cc54e0c0"
+    },
+    "run_f05_v3_resource_once.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-1/run_f05_v3_resource_once.py",
+      "bytes": 2833,
+      "sha256": "beb9a4dcd7e6398d5de4d3ed367abaf5208302e6551038d9a1b309818cd3eb92"
+    },
+    "run_native_f05_v3_capture.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-1/run_native_f05_v3_capture.py",
+      "bytes": 5063,
+      "sha256": "a70bce36bc718bc6479aff1ba2ba422daf601942f02e521bba54a7115a62ec8f"
+    }
+  },
+  "case_capability": null,
+  "collector": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-2/f05-causal-supervisor",
+    "sha256": "908f147ef0a61959becc20820d6e889aaf5eb4418adda0c99f13b3c3e6cf72a1",
+    "bytes": 5725328
+  },
+  "evaluator_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-runtime-1/native_diagnostic.py",
+    "bytes": 130020,
+    "sha256": "e55ad576c45a5eaee742b47081612924a0fca12fc803d30fb359cc9ea6bc57e2"
+  },
+  "exact_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--fsize=33554432",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-runtime-1/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/f05v3n1",
+    "--nonce",
+    "31770ebb739fea402ded939617921dda",
+    "--owner-sha256",
+    "24210e3ededacd6576f61a96e7233baaa1ac243629e5ec25ce06ded1463bb99f",
+    "--manifest",
+    null,
+    "--manifest-sha256",
+    null
+  ],
+  "expected_case": "M14-05-05-owned-processvm-v3-causal-204B",
+  "expected_executor_sha256": "dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954",
+  "expected_guest_argv": [
+    "/bin/mcexec",
+    "-t",
+    "1",
+    "0",
+    "/apps/app"
+  ],
+  "expected_new_image_sha256": "60e62f97ef48ecaf14174af1c5b75d7181969f439c1b45c618d6c16d4bc40d57",
+  "expected_oracle": {
+    "stdout_hex": "4f574e45445f463035207633206368696c6472656e3d3120636c6f6e655f6368696c645f7365747469643d3120706172656e745f7469645f756e6368616e6765643d310a74726163656d653d302073696773746f703d3139207065656b3d3020706f6b653d3020726561646261636b3d302063726f73735f346b5f776f72643d310a6368696c645f76657269666965643d3120707269766174655f756e6368616e6765643d31206368696c645f657869743d30207265617065643d310a4f574e45445f46303520504153530a",
+    "stderr_hex": "",
+    "exit_code": 0
+  },
+  "fixed_cutoffs": [
+    1793165769.0,
+    947874.5689514667,
+    963213.6960030915
+  ],
+  "independent_review": null,
+  "latest_serial_operation_physical_acceptance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/root-adopted-entry-1/independent-actual-native-review-1/REVIEW.json",
+    "bytes": 65216,
+    "sha256": "85ce93494b81565fc9cc9a36b325fb7c0d3d756ac15a6b028ef934b83aa85d5b"
+  },
+  "manifest": null,
+  "native_acceptance": false,
+  "native_runtime_authority": null,
+  "nonce": "31770ebb739fea402ded939617921dda",
+  "offline_manifest": null,
+  "one_heavy_only": true,
+  "overlay": null,
+  "overlay_manifest": null,
+  "owner_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-runtime-1/native_diagnostic_container_owner.py",
+    "bytes": 94279,
+    "sha256": "24210e3ededacd6576f61a96e7233baaa1ac243629e5ec25ce06ded1463bb99f"
+  },
+  "payload": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v3-causal-host-qualification-1/future-host-output-1/app",
+    "sha256": "125c0dc8d59c30b618bae9c53308a9f61341eec729a6bc9b69016355491f1033",
+    "bytes": 5627368
+  },
+  "planned_attempt_parent": "/home/holden/mckernel-work/scratch/f05v3n1",
+  "profile": {
+    "cap_drop": "ALL",
+    "container_CPU_affinity": "2-5",
+    "container_CPU_count": 4,
+    "container_memory_bytes": 12884901888,
+    "container_network": "none",
+    "container_swap_bytes": 0,
+    "container_tasks": 512,
+    "container_uid": "1000:1000",
+    "guest": {
+      "memory_mib": 8192,
+      "name": "native-diagnostic-4vcpu-8192mib",
+      "numa_nodes": 2,
+      "vcpus": 4
+    },
+    "no_new_privileges": true,
+    "outer_grace_kill": null,
+    "outer_wall_kill": null,
+    "owner_as_bytes": [
+      2147483648,
+      2147483648
+    ],
+    "payload_timeout_ms": 10000,
+    "runner_timeout_seconds": 300,
+    "stream_cap_bytes": 33554432
+  },
+  "root_admission_directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-1",
+  "root_runtime_grant": null,
+  "runtime_authority": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "scratch_manifest_stage": null,
+  "source_authority": null,
+  "source_publication": null,
+  "stage_map_acceptance": null,
+  "stage_map_scope": "Complete actual source API validation only; Root/independent source and execution review must accept unchanged map before actual native release.",
+  "stage_result": null,
+  "status": "SOURCE_ONLY_V3_STATIC_TEMPLATE_REQUIRES_ACTUAL_ROOT_BINDINGS",
+  "root_ledger36": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER36.json",
+    "bytes": 4870,
+    "sha256": "4534fe9e69cfc6685f70b2eecd2b440496f2820b8a7e3ee1d61c987335a66a3e"
+  },
+  "launcher_source_object_config_proof": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/working-c-launcher-dca025-provenance-1/READY.json",
+    "sha256": "c7fe2c2b522bde9c6d387052b6c22f9badb655b3b3d2cf9b2962c92f3018492c",
+    "bytes": 68993
+  },
+  "supervisor_root_adoption": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/ROOT-ACTUAL-SUPERVISOR-ADOPTION.json",
+    "bytes": 4985,
+    "sha256": "8108ea3e264060637e06041614a9102a00d04331ee23500a477fb7b3c08be109"
+  }
+}

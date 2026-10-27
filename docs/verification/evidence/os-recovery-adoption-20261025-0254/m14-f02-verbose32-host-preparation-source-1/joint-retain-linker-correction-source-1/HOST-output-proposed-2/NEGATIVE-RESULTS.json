@@ -1,0 +1,374 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "results": [
+    {
+      "name": "missing-file",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=lib",
+        "--emit=obj",
+        "--crate-name",
+        "f02_verbose32_host",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=1",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "relocation-model=static",
+        "--cfg",
+        "process_verbose_data",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/fixture/provider.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/HOST-output-proposed-2/negative-missing-file.o"
+      ],
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "LC_ALL": "C",
+        "RUST_BACKTRACE": "0",
+        "MCKERNEL_PROCESS_DDEBUG_FLAGS": "0"
+      },
+      "returncode": 1,
+      "seconds": 0.06492339994292706,
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/HOST-output-proposed-2/control-missing-file.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/HOST-output-proposed-2/control-missing-file.stderr",
+        "bytes": 579,
+        "sha256": "e8081ab4dfcc3d2786c4ee4664f2cbc1f1e993e3688551d9207627ecb0cf7097"
+      }
+    },
+    {
+      "name": "missing-flags",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=lib",
+        "--emit=obj",
+        "--crate-name",
+        "f02_verbose32_host",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=1",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "relocation-model=static",
+        "--cfg",
+        "process_verbose_data",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/fixture/provider.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/HOST-output-proposed-2/negative-missing-flags.o"
+      ],
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "LC_ALL": "C",
+        "RUST_BACKTRACE": "0",
+        "MCKERNEL_PROCESS_C_FILE": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/process.c"
+      },
+      "returncode": 1,
+      "seconds": 0.0651970780454576,
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/HOST-output-proposed-2/control-missing-flags.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/HOST-output-proposed-2/control-missing-flags.stderr",
+        "bytes": 586,
+        "sha256": "d0d07e23679d3fe5f060872db07d41f70448191469ebba80220d5f62061a9e79"
+      }
+    },
+    {
+      "name": "bad-flags",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=lib",
+        "--emit=obj",
+        "--crate-name",
+        "f02_verbose32_host",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=1",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "relocation-model=static",
+        "--cfg",
+        "process_verbose_data",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/fixture/provider.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/HOST-output-proposed-2/negative-bad-flags.o"
+      ],
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "LC_ALL": "C",
+        "RUST_BACKTRACE": "0",
+        "MCKERNEL_PROCESS_C_FILE": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/process.c",
+        "MCKERNEL_PROCESS_DDEBUG_FLAGS": "2"
+      },
+      "returncode": 1,
+      "seconds": 0.06510379002429545,
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/HOST-output-proposed-2/control-bad-flags.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/HOST-output-proposed-2/control-bad-flags.stderr",
+        "bytes": 21072,
+        "sha256": "b30bc93d7abfbc280cd07f38b521a392a445da23b9a8c645fe9514086658cd58"
+      }
+    },
+    {
+      "name": "empty-file",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=lib",
+        "--emit=obj",
+        "--crate-name",
+        "f02_verbose32_host",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=1",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "relocation-model=static",
+        "--cfg",
+        "process_verbose_data",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/fixture/provider.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/HOST-output-proposed-2/negative-empty-file.o"
+      ],
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "LC_ALL": "C",
+        "RUST_BACKTRACE": "0",
+        "MCKERNEL_PROCESS_C_FILE": "",
+        "MCKERNEL_PROCESS_DDEBUG_FLAGS": "0"
+      },
+      "returncode": 1,
+      "seconds": 0.06491975602693856,
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/HOST-output-proposed-2/control-empty-file.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/HOST-output-proposed-2/control-empty-file.stderr",
+        "bytes": 586,
+        "sha256": "30d28137c4c766cac49f44f09c7a06db7f3706e66988161a60f03541dd8d6ea0"
+      }
+    },
+    {
+      "name": "local14-disabled",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-type=lib",
+        "--emit=obj",
+        "--crate-name",
+        "f02_verbose32_host",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=1",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "relocation-model=static",
+        "--cfg",
+        "process_verbose_data",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/fixture/provider.rs",
+        "--cfg",
+        "process_verbose_local_companions",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/HOST-output-proposed-2/negative-local14.o"
+      ],
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "LC_ALL": "C",
+        "RUST_BACKTRACE": "0",
+        "MCKERNEL_PROCESS_C_FILE": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/process.c",
+        "MCKERNEL_PROCESS_DDEBUG_FLAGS": "0"
+      },
+      "returncode": 1,
+      "seconds": 0.0651347009697929,
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/HOST-output-proposed-2/control-local14-disabled.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/HOST-output-proposed-2/control-local14-disabled.stderr",
+        "bytes": 9354,
+        "sha256": "7fe912dcae885101d3232231a20a438c78ddf30ef41146685d4f149ada2acfe7"
+      }
+    },
+    {
+      "name": "C-filename-mismatch",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_RUST_PROCESS_HELPERS",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/include",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel/ihk/ikc/include",
+        "-I/home/holden/mckernel/ihk/linux/include",
+        "-I/home/holden/mckernel/lib/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-DMCKERNEL_RUST_PROCESS_GLOBAL_STORAGE",
+        "-DMCKERNEL_RUST_PROCESS_VERBOSE_DATA",
+        "-DMCKERNEL_PROCESS_DDEBUG_FLAGS=0",
+        "-DMCKERNEL_PROCESS_DDEBUG_FILE=\"/wrong/process.c\"",
+        "-fsyntax-only",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/process.c"
+      ],
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "LC_ALL": "C",
+        "RUST_BACKTRACE": "0"
+      },
+      "returncode": 1,
+      "seconds": 0.06476412701886147,
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/HOST-output-proposed-2/control-C-filename-mismatch.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/HOST-output-proposed-2/control-C-filename-mismatch.stderr",
+        "bytes": 291,
+        "sha256": "bf02b1a4af34af212ce22a81bc26cc47e22aa1a25bcfa721c53ed42c75d24d20"
+      }
+    },
+    {
+      "name": "C-flags-mismatch",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_RUST_PROCESS_HELPERS",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/include",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel/ihk/ikc/include",
+        "-I/home/holden/mckernel/ihk/linux/include",
+        "-I/home/holden/mckernel/lib/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-DMCKERNEL_RUST_PROCESS_GLOBAL_STORAGE",
+        "-DMCKERNEL_RUST_PROCESS_VERBOSE_DATA",
+        "-DMCKERNEL_PROCESS_DDEBUG_FLAGS=1",
+        "-DMCKERNEL_PROCESS_DDEBUG_FILE=\"/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/process.c\"",
+        "-fsyntax-only",
+        "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/process.c"
+      ],
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "LC_ALL": "C",
+        "RUST_BACKTRACE": "0"
+      },
+      "returncode": 1,
+      "seconds": 0.0650357500417158,
+      "stdout": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/HOST-output-proposed-2/control-C-flags-mismatch.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/HOST-output-proposed-2/control-C-flags-mismatch.stderr",
+        "bytes": 295,
+        "sha256": "d4ece969f6511c5f3c46adcb521ebcfd868b83009854a462f5099d3b4e976698"
+      }
+    }
+  ]
+}

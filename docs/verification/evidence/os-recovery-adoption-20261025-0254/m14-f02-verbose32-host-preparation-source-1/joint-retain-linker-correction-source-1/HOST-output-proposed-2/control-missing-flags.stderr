@@ -1,0 +1,10 @@
+error: environment variable `MCKERNEL_PROCESS_DDEBUG_FLAGS` not defined at compile time
+ --> /home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs:6:34
+  |
+6 | const INITIAL_FLAGS: u32 = match env!("MCKERNEL_PROCESS_DDEBUG_FLAGS").as_bytes() {
+  |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = help: use `std::env::var("MCKERNEL_PROCESS_DDEBUG_FLAGS")` to read the variable at run time
+
+error: aborting due to 1 previous error
+

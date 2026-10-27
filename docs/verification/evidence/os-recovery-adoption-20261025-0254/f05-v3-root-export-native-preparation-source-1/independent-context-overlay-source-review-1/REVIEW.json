@@ -1,0 +1,140 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "independent": true,
+  "reviewer": "/root/custody_release_review",
+  "decision": "PASS_EXACT_PRIVATE_V3_CONTEXT_AND_ORDINARY_OVERLAY_SOURCE_PROPOSAL",
+  "at": "2026-10-27T22:41:12.645153+00:00",
+  "runtime_authority": null,
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/SOURCE-READY.json",
+    "bytes": 4205,
+    "sha256": "55e6278dd30c697a17cbda8a1d7c15d6be3006b124a3c039d18b05d53332a34c"
+  },
+  "export_proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/ROOT-LITERAL-SOURCE-EXPORT.PROPOSAL.json",
+    "bytes": 43356,
+    "sha256": "444aa7474255bd614e87657883b2d61d022a64796147606b58c0adc8cef2216a"
+  },
+  "overlay_proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/ROOT-OVERLAY-COMPOSITION.PROPOSAL.json",
+    "bytes": 4455,
+    "sha256": "927fe5581c5ea43abb0f0417dd412b2897305a911d564f685610da23165d9fb4"
+  },
+  "manifest_context": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/MANIFEST-CONTEXT.NOT-ACTUAL.json",
+    "bytes": 9438,
+    "sha256": "218d002bac80f297f4d004436da695738845a6eabf4c488fab02ee73a3af56b7"
+  },
+  "Root_actual_evaluator_source_adoption": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/ROOT-ACTUAL-BOUND-EVALUATOR-SOURCE-ADOPTION.json",
+    "sha256": "6d21db35a882aace6688241ed24eb77aa0ce882527d251ddd894915bdd55cbdc",
+    "size": 1887,
+    "mode": 33152
+  },
+  "reused_evaluator_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f05-v3-actual-supervisor-binding-source-1/independent-source-review-1/REVIEW.json",
+    "bytes": 11185,
+    "sha256": "2db446dc21ef8e683ebf497a9cb9baa242b0b2a74d775d19ef9cb9445ad4859e"
+  },
+  "runtime_candidates": {
+    "native_diagnostic.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/private-runtime-source-candidate-1/native_diagnostic.py",
+      "sha256": "e55ad576c45a5eaee742b47081612924a0fca12fc803d30fb359cc9ea6bc57e2",
+      "size": 130020,
+      "mode": 33152
+    },
+    "native_diagnostic_backend.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/private-runtime-source-candidate-1/native_diagnostic_backend.py",
+      "sha256": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+      "size": 25398,
+      "mode": 33152
+    },
+    "native_diagnostic_container_owner.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/private-runtime-source-candidate-1/native_diagnostic_container_owner.py",
+      "sha256": "24210e3ededacd6576f61a96e7233baaa1ac243629e5ec25ce06ded1463bb99f",
+      "size": 94279,
+      "mode": 33152
+    },
+    "native_diagnostic_runner.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/private-runtime-source-candidate-1/native_diagnostic_runner.py",
+      "sha256": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
+      "size": 6005,
+      "mode": 33152
+    },
+    "qmp_capture.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/private-runtime-source-candidate-1/qmp_capture.py",
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+      "size": 9913,
+      "mode": 33152
+    }
+  },
+  "launcher_source_object_config_proof": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/working-c-launcher-dca025-provenance-1/READY.json",
+    "sha256": "c7fe2c2b522bde9c6d387052b6c22f9badb655b3b3d2cf9b2962c92f3018492c",
+    "size": 68993,
+    "mode": 33152
+  },
+  "verified": [
+    "SOURCE-READY55e6278d, five private runtime files, export444aa747 and overlay927fe558 exact changed-input hashes authenticate. Root reproduction/adoption6d21 binds exact e55 and retained2db446 independent evaluator source review.",
+    "Owner24210e3e differs from accepted v2af2b only RUNNER,SELF, four supplemental sibling context path/digest literals and bound_manifest evaluator source literal. All function/class ASTs are identical after replacing that one literal; all other top-level code exact. No process/cleanup/lease/signal/resource/argv logic change.",
+    "Original139 SOURCE_HASHES dictionary exactly unchanged by AST/literal comparison, without rehash/inventory replay. Current map is precisely139+four siblings runner25ea/backendcd075/qmp5bcc/evaluatore55 under Root future runtime path.",
+    "Five-file copy plan targets literal disjoint root-adopted-native-runtime-1 paths. Runner/backend/qmp bytes retained; private source/original139 evidence preserved. Actual Root adoption/export needed before runtime owner/runner qualification.",
+    "Manifest context binds v3case31770/newpayload125c/Rustcollector908f mode100700 and f38 protocol. Derived initramfs/overlay refs remain None, so this context is not an actual runtime manifest or release.",
+    "Generic overlay46d41 unchanged; exact command binds actual125c/908f/dca025/a63713308321B and rawd98344428264B. Immutable _check_collector was extracted and run only as a pure offline ELF byte validator on908f:PASS. No c020 normalization or composition by reviewer.",
+    "Generic algorithm authenticates gzip/rawCPIO/source identities/ELF/hash/noalias, creates outputO_EXCL, rereads and inflates exact bytes, validates complete final map and fsync identity. Proposed output parent/archive absent at first static check before independently authorized Root ordinary composition began.",
+    "CPU6/90s/AS2GiB/job1 proposal fits existing ordinary profile and aggregate7jobs21.6619GiB; no compiler/SDK/heavy/native operation included. Root ordinary overlay materialization of already-qualified artifacts is independent of adoption of future native owner context.",
+    "Workingdca025 matches c7fe mixed C-consumer/Rust-helper proof; no new canonical Rust executor substituted. Proof also carries buildID/provenance beyond artifact path/hash/size/mode. Host64 perRegistration and separateLWK128 remain actual sampling mechanisms, not quotas.",
+    "Source/native/capability/release remain null; old235/227/v2FAIL and all account/window/ownership controls preserved. No circular native prerequisite or extra peredit/perhelper framework."
+  ],
+  "overlay_command": [
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_overlay.py",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/root-adopted-stage-source-1/offline-materialization-1/current110-f05-mm-base.cpio.gz",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v3-causal-host-qualification-1/future-host-output-1/app",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/attempt-2/f05-causal-supervisor",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/launcher-runtime-snapshot-1/mcexec",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-overlay-materialization-1/owned-processvm-v3-causal.cpio.gz",
+    "--collector-sha256",
+    "908f147ef0a61959becc20820d6e889aaf5eb4418adda0c99f13b3c3e6cf72a1",
+    "--mcexec-sha256",
+    "dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954",
+    "--payload-sha256",
+    "125c0dc8d59c30b618bae9c53308a9f61341eec729a6bc9b69016355491f1033",
+    "--base-sha256",
+    "a6377bfe9735b5b6a8183d3f710305b78093512ab378a9529c38e88b13f15b37",
+    "--base-size",
+    "13308321",
+    "--base-cpio-sha256",
+    "d983c1747414b3a676676108de2cf91a98983698356a2353aab03e236f83b31c",
+    "--base-cpio-size",
+    "44428264"
+  ],
+  "ordinary_context": {
+    "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1",
+    "CPU": [
+      6
+    ],
+    "wall_seconds": 90,
+    "AS_bytes": 2147483648,
+    "output_parent": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-overlay-materialization-1",
+    "capture": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-overlay-materialization-1/overlay.json"
+  },
+  "remaining": [
+    "Root actual five-file literal adoption/export before runtime source/manifest qualification; source-only context cannot release native execution.",
+    "Root independently granted ordinary composition uses existing profile. Authenticate actual new archive/overlay receipt and complete member/source/image/module map, then full e55 normal manifest/owner API and exact QMP precheck before fresh native admission.",
+    "Fresh source/ledger/account/native ownership/resources/oneheavy/permanent27:4/scratch21/floors/earlier clamps and independent native release remain mandatory. Native PID1/kmsg/64trace/child ordering/retirement/full235/227 remain OPEN."
+  ],
+  "source_review_bookkeeping_note": "Initial receipt writer compared entire launcher proof selected_binary (which adds build_id) against four-field manifest artifact, and stopped before publication. Corrected exact comparison of path/hash/size/mode retains extra buildID provenance; no artifact or validation predicate weakened.",
+  "actions": {
+    "changed_reads_hash_AST_and_pure_exact_collector_validator_only": true,
+    "old139_rehash_inventory": false,
+    "composition_compiler_native_guard_resource_query_cleanup_canonical_Git": 0,
+    "only_assigned_review_directory_written": true,
+    "subagents": 0
+  },
+  "native_acceptance": false,
+  "actual_overlay_acceptance": false,
+  "actual_bound_manifest": null
+}

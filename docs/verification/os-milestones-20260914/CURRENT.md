@@ -1,3 +1,22 @@
+## Actual startup failure retained; metadata suffix passes — 2026-10-27T22:37:17.063394+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Freshweekly primary0percentused/availableincluded confirmed; same7f4creditdebits/ceiling,
+noreset/holdclear/settingschange. Pushed/fetched444912420 exact16startupstaticblobs.
+Actualstartupnoncebe6e consumedonce: independentPASS97c2/resource→entry35.971s,
+sourcebindingreview→entry591.732s. Owner39.026s/CPU.858482/controllerRSS53172KiB/exit1.
+Originalstartup FAIL: collector launched /apps/app without required A/empty/B;
+raw10496/exit41/stderr unexpected argc or argv terminator. Wrapper0 isnotacceptance.
+Root35helduntilindependentphysicalfree; allrawfailureevidence retained, no replay.
+Metadata4commandsactualPASS8.007722s usingretained8prefixes/newLLDpartiallinks;
+GNU_RETAINunchangedguardPASS/7negativesrun, independentactualreviewpending.
+V3e55 actualRootfinalizer/adoption6d21 SOURCEonly; sourceParentmissingfirstrefusal
+retained. New908f/125coverlay sourcepreparation active; oldc020notvalidv3.
+22:06–22:36bucket actualguest1FAIL/newproductionC0/data0/native0/file0; accepted
+CURRENT112 C87/Rust52/process67 unchanged. NextRootv3overlay+currentfree/release;
+M15argvsourceowner andcorrected113privatebatch proceedindependently. No95claim.
+Fixed05:36:09Z/earlierclamps/account/realholds/oneheavy/permanent27:4/scratch21/floors.
+
 ## Startup native source ready; actual Rust supervisor qualified — 2026-10-27T22:26:54.423150+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

@@ -17565,3 +17565,30 @@ mod remaining_process_timer_layout_storage {
         timer_thread_offset: offset_of!(Timer, thread),
     };
 }
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Four existing signed C-int runtime selectors. The selected C declarations bind
+// the supported macro/enum values; unsupported dump/fast-memset variants fail
+// their compile-time assertion rather than silently select a different policy.
+#[cfg(process_global_storage_candidate)]
+mod process_scalar_metadata_storage {
+    use crate::abi::CInt;
+
+    const _: () = {
+        assert!(core::mem::size_of::<CInt>() == 4);
+        assert!(core::mem::align_of::<CInt>() == 4);
+    };
+
+    #[no_mangle]
+    pub static process_init_stack_user_category: CInt = 1;
+
+    #[no_mangle]
+    pub static process_page_fault_anon_clear_profile_event: CInt = if cfg!(enable_profile) { 4002 } else { 0 };
+
+    #[no_mangle]
+    pub static process_memset_smp_fast_word_pattern: CInt = 1;
+
+    #[no_mangle]
+    pub static process_dump_tree_enabled: CInt = 0;
+
+}

@@ -1,0 +1,94 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/root_once_startup_entry.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-1/root_once_f05_v3_entry.py
+@@ -14,8 +14,8 @@
+ import subprocess
+ import time
+ 
+-BASE = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1')
+-STARTUP = BASE/'root-adopted-entry-1'
++BASE = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1')
++STARTUP = BASE/'root-adopted-native-entry-1'
+ AUTH = STARTUP/'ROOT-CONDITIONAL-ONCE-ENTRY-AUTHORIZATION.json'
+ STATIC = STARTUP/'STATIC-NATIVE-BINDINGS.NOT-RELEASED.json'
+ PENDING = STARTUP/'ROOT-EXECUTION-GRANT.PENDING-REVIEW.json'
+@@ -23,20 +23,20 @@
+ PUBLICATION = STARTUP/'ACTUAL-STATIC-SOURCE-PUBLICATION.json'
+ REVIEW = STARTUP/'ACTUAL-INDEPENDENT-NATIVE-EXECUTION-REVIEW.json'
+ CLAIM = STARTUP/'ROOT-ONCE-ENTRY.CLAIM.json'
+-GRANT = STARTUP/'ROOT-ACTUAL-ONE-NATIVE-M15-STARTUP-GRANT.json'
++GRANT = STARTUP/'ROOT-ACTUAL-ONE-NATIVE-F05-V3-GRANT.json'
+ REFUSAL = STARTUP/'ROOT-ONCE-ENTRY.REFUSAL.json'
+ JOINED = STARTUP/'ROOT-ONCE-ENTRY.JOINED.json'
+ SPAWNED = STARTUP/'ROOT-ONCE-ENTRY.SPAWNED.json'
+ STDOUT = STARTUP/'ROOT-ONCE-ENTRY.stdout'
+ STDERR = STARTUP/'ROOT-ONCE-ENTRY.stderr'
+-HELPER = STARTUP/'run_native_startup_capture.py'
++HELPER = STARTUP/'run_native_f05_v3_capture.py'
+ GUARD = BASE.parent/'operation-account-window-new12h-source-1/actual-guardian-clamp-successor-1/actual_account_window_v2.py'
+-STATIC_SHA = '491719b8c037f5f411a9b5c570fa11b5d9c790f967c53251875e0231b1acd449'
+-HELPER_SHA = '32354b7717eb63e100ad04309c7cfcb4bcd75badf5d05704617e2e6487a6de68'
++STATIC_SHA = None  # Root fills exact actual static bytes before publication/capture
++HELPER_SHA = 'a70bce36bc718bc6479aff1ba2ba422daf601942f02e521bba54a7115a62ec8f'
+ GUARD_SHA = '1f152e3f18384643cd35d203fcc2a4292950a1c90758734859bdb980cf45fda0'
+ PROFILE_SHA = 'e5584b2c6fecbec0660dfeda3193468cf78af6a9dee0f4cc849e64abbdca1081'
+-NONCE = 'be6ef5d386ef68c2562799dd22cdcc86'
+-CASE = 'startup.argv-empty'
++NONCE = '31770ebb739fea402ded939617921dda'
++CASE = 'M14-05-05-owned-processvm-v3-causal-204B'
+ REVIEWER = '/root/daemon_execution_review'
+ HELPER_ARGV = ['/home/holden/anaconda3/bin/python3','-I','-B',str(HELPER)]
+ _guard = None
+@@ -115,7 +115,7 @@
+ def bind_inputs(auth_sha):
+     need(file_ref(AUTH)['sha256'] == auth_sha,'Root conditional authorization bytes')
+     auth = load_json(AUTH)
+-    need(auth['decision'] == 'CONDITIONALLY_AUTHORIZE_ONE_EXACT_ORIGINAL_STARTUP_ENTRY_AFTER_PASS'
++    need(auth['decision'] == 'CONDITIONALLY_AUTHORIZE_ONE_EXACT_F05_V3_ENTRY_AFTER_PASS'
+          and auth['authorized'] is True and auth['authorized_by'] == '/root'
+          and type(auth['maximum_invocations']) is int and auth['maximum_invocations'] == 1,'Root one-shot authorization')
+     need(auth['reviewer'] == REVIEWER and auth['nonce'] == NONCE and auth['case'] == CASE,'fixed Startup identity')
+@@ -125,11 +125,11 @@
+     need(static['nonce'] == NONCE and static['expected_case'] == CASE and auth['exact_argv'] == static['exact_argv'],'sealed case/nonce/argv')
+     need(hashlib.sha256(encoded(static['profile'])).hexdigest() == PROFILE_SHA and auth['profile_sha256'] == PROFILE_SHA,'exact approved profile')
+     packet = load_json(PENDING)
+-    need(packet['decision'] == 'PENDING_ONE_EXACT_NATIVE_M15_STARTUP_RELEASE' and packet['nonce'] == NONCE
++    need(packet['decision'] == 'PENDING_ONE_EXACT_NATIVE_F05_V3_RELEASE' and packet['nonce'] == NONCE
+          and packet['expected_case'] == CASE and packet['maximum_invocations'] == 1,'exact pending Startup entry')
+     need(packet['static_bindings'] == file_ref(STATIC) and packet['exact_argv'] == static['exact_argv']
+          and packet['profile'] == static['profile'],'pending source/profile/argv binding')
+-    for key in ('source_authority','case_capability','stage_map_acceptance','root_ledger35','manifest',
++    for key in ('source_authority','case_capability','stage_map_acceptance','root_ledger36','manifest',
+                 'scratch_manifest_stage','artifact_acceptance'):
+         need(packet[key] == static[key],'pending/static binding '+key)
+         checked(packet[key])
+@@ -141,7 +141,7 @@
+     publication = checked(packet['source_publication'],PUBLICATION)
+     need(publication['status'] == 'PASS_ACTUAL_PUSH_FETCH_AND_EXACT_NATIVE_STATIC_BLOBS','actual source publication')
+     need(file_ref(STATIC) in publication['files'] and all(r in publication['files'] for r in packet['capture_sources'].values()),'published exact static/helpers')
+-    need(resource['root_ledger35'] == static['root_ledger35'] and resource['actual_latest_operation_postjoin_acceptance'] == static['latest_serial_operation_physical_acceptance']
++    need(resource['root_ledger36'] == static['root_ledger36'] and resource['actual_latest_operation_postjoin_acceptance'] == static['latest_serial_operation_physical_acceptance']
+          and resource['no_existing_heavy'] is True and resource['pids_current'] == 0,'exact resource/current occupancy')
+     refs = dict(authorization=file_ref(AUTH),static=file_ref(STATIC),pending=file_ref(PENDING),
+                 resource=file_ref(RESOURCE),publication=file_ref(PUBLICATION))
+@@ -155,7 +155,7 @@
+          and review['pending_execution_packet'] == refs['pending'],'PASS binds actual pending bytes')
+     need(review['exact_argv'] == packet['exact_argv'] and review['static_bindings'] == refs['static']
+          and review['fresh_resource_physical'] == refs['resource'] and review['source_publication'] == refs['publication'],'PASS exact source/resource/publication')
+-    need(review['manifest'] == packet['manifest'] and review['root_ledger35'] == packet['root_ledger35']
++    need(review['manifest'] == packet['manifest'] and review['root_ledger36'] == packet['root_ledger36']
+          and review['source_authority'] == packet['source_authority'],'PASS exact manifest/ledger/authority')
+     return file_ref(REVIEW)
+ 
+@@ -180,10 +180,10 @@
+     durable_create(CLAIM,dict(status='ONE_STARTUP_ENTRY_CLAIMED_NO_RETRY',nonce=NONCE,case=CASE,
+         maximum_invocations=1,operator_pid=os.getpid(),references=refs,execution_review=review_ref,
+         normal_helper_argv=HELPER_ARGV,clampsUsed=clamps))
+-    grant = dict(author='/root',decision='GRANTED_ONE_EXACT_NATIVE_M15_STARTUP',maximum_invocations=1,
++    grant = dict(author='/root',decision='GRANTED_ONE_EXACT_NATIVE_F05_V3',maximum_invocations=1,
+         nonce=NONCE,exact_argv=packet['exact_argv'],execution_review=review_ref,
+         fresh_resource_physical=refs['resource'],pending_execution_packet=refs['pending'],
+-        runtime_authority='ONE_EXACT_NATIVE_M15_STARTUP_ORIGINAL_CONTRACT_OPERATION')
++        runtime_authority='ONE_EXACT_NATIVE_F05_V3_ORIGINAL_CONTRACT_OPERATION')
+     durable_create(GRANT,grant)
+     clamps_for(packet,resource)
+     child = None

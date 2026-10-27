@@ -1,6 +1,6 @@
 {
   "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
-  "status": "SOURCE_ONLY_EXACT_PROPOSED_C_PRODUCER_NOT_AUTHORITY",
+  "status": "CURRENT113_EXACT_PROPOSED_C_PRODUCER_SOURCE_ONLY_NOT_AUTHORITY",
   "runtime_authority": null,
   "accepted_CURRENT111": {
     "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/independent-final-consumer-review-1/DEFAULT-ARTIFACT-REVIEW.json",
@@ -138,6 +138,10 @@
         "-DMCKERNEL_RUST_F06_RT_SIGRETURN_CHECK_SIGNAL",
         "-DMCKERNEL_RUST_F06_RT_SIGRETURN_ALLOC",
         "-DMCKERNEL_RUST_F06_RT_SIGRETURN_FREE",
+        "-DMCKERNEL_RUST_F06_CLONE_READER_LOCK",
+        "-DMCKERNEL_RUST_F06_CLONE_READER_UNLOCK",
+        "-DMCKERNEL_RUST_F06_PTRACE_FIND_THREAD",
+        "-DMCKERNEL_RUST_F06_PTRACE_THREAD_UNLOCK",
         "-I/work/output/build/kernel/rust/f06-origin",
         "-I/work/output/build/kernel/include",
         "-I/src/kernel/include",
@@ -174,6 +178,16 @@
       "new_output": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o"
     }
   ],
-  "composed_arch_source_sha256": "a89d28371f099fd3a10aaf46f44d8d495c9e18efd1620a7b95004d85e2f81192",
-  "new_C_runtime_objects": 0
+  "composed_arch_source_sha256": "c1cdce29e5e7582f1934370bef27f552a4c9480c0849c93a2d602300ef4cf099",
+  "new_C_runtime_objects": 0,
+  "predecessor_CURRENT112_source_adoption": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/root-source-adoption-1/ROOT-SOURCE-ADOPTION.json",
+    "bytes": 6510,
+    "sha256": "497e0cd8e354973a63437bc5db0f0f893e035a84dbf5a34a96cf6e88f10f095a"
+  },
+  "predecessor_CURRENT112_origin_context": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/oci-origin-bind-correction-source-1/ROOT-ACTUAL-ORIGIN-PRODUCER-RESULT.json",
+    "bytes": 3409,
+    "sha256": "3b8d6a5ccf96dc48bf218531c1e312bad8ac09794f42133cbcc80ab08a9d1256"
+  }
 }

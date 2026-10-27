@@ -1,0 +1,102 @@
+{
+  "scope": "Functional OS one-shot bridge pure mocks; no actual guard/clock/Popen/filesystem mutation.",
+  "status": "PASS_MOCKED_ROOT_ONCE_ONLY",
+  "count": 19,
+  "cases": [
+    {
+      "case": "exact PASS durable claim/grant one normal Popen and second invocation refuses",
+      "result": "PASS",
+      "native_helper_Popens": 1
+    },
+    {
+      "case": "O_EXCL claim race refuses",
+      "result": "PASS",
+      "native_helper_Popens": 0
+    },
+    {
+      "case": "existing claim refuses",
+      "result": "PASS",
+      "native_helper_Popens": 0
+    },
+    {
+      "case": "age exactly120 refuses",
+      "result": "PASS",
+      "native_helper_Popens": 0
+    },
+    {
+      "case": "no PASS waits only remaining freshness then refuses",
+      "result": "PASS",
+      "native_helper_Popens": 0
+    },
+    {
+      "case": "wrong authorization nonce refuses",
+      "result": "PASS",
+      "native_helper_Popens": 0
+    },
+    {
+      "case": "wrong static source hash refuses",
+      "result": "PASS",
+      "native_helper_Popens": 0
+    },
+    {
+      "case": "wrong exact profile refuses",
+      "result": "PASS",
+      "native_helper_Popens": 0
+    },
+    {
+      "case": "wrong resource binding refuses",
+      "result": "PASS",
+      "native_helper_Popens": 0
+    },
+    {
+      "case": "wrong source publication binding refuses",
+      "result": "PASS",
+      "native_helper_Popens": 0
+    },
+    {
+      "case": "wrong PASS decision refuses",
+      "result": "PASS",
+      "native_helper_Popens": 0
+    },
+    {
+      "case": "wrong independent reviewer refuses",
+      "result": "PASS",
+      "native_helper_Popens": 0
+    },
+    {
+      "case": "wrong PASS payload hash refuses",
+      "result": "PASS",
+      "native_helper_Popens": 0
+    },
+    {
+      "case": "wrong PASS nonce refuses",
+      "result": "PASS",
+      "native_helper_Popens": 0
+    },
+    {
+      "case": "wrong PASS resource reference refuses",
+      "result": "PASS",
+      "native_helper_Popens": 0
+    },
+    {
+      "case": "wrong pending case refuses",
+      "result": "PASS",
+      "native_helper_Popens": 0
+    },
+    {
+      "case": "conditional authorization remains false refuses",
+      "result": "PASS",
+      "native_helper_Popens": 0
+    },
+    {
+      "case": "changed five-helper source refuses",
+      "result": "PASS",
+      "native_helper_Popens": 0
+    },
+    {
+      "case": "real durable helper O_EXCL plus file and parent fsync ordering mocked",
+      "result": "PASS"
+    }
+  ],
+  "actual_guard_clock_resource_Docker_native_calls": 0
+}

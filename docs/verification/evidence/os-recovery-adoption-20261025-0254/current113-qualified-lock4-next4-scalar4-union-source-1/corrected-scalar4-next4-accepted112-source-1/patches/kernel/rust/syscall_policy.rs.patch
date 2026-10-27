@@ -1,0 +1,24 @@
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -36076,3 +36076,21 @@
+ #[cfg(any(f06_rt_sigreturn_alloc_candidate, f06_rt_sigreturn_free_candidate))]
+ #[path = "f06_rt_sigreturn_alloc_free.rs"]
+ mod f06_rt_sigreturn_alloc_free;
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(f06_clone_reader_lock_candidate)]
++#[path = "f06_clone_reader_lock.rs"]
++mod f06_clone_reader_lock;
++#[cfg(f06_clone_reader_unlock_candidate)]
++#[path = "f06_clone_reader_unlock.rs"]
++mod f06_clone_reader_unlock;
++#[cfg(f06_ptrace_find_thread_candidate)]
++#[path = "f06_ptrace_find_thread.rs"]
++mod f06_ptrace_find_thread;
++#[cfg(f06_ptrace_thread_unlock_candidate)]
++#[path = "f06_ptrace_thread_unlock.rs"]
++mod f06_ptrace_thread_unlock;
++#[cfg(all(f06_clone_reader_lock_candidate, f06_clone_reader_unlock_candidate,
++    f06_ptrace_find_thread_candidate, f06_ptrace_thread_unlock_candidate))]
++#[path = "f06_clone_ptrace_provider_abi.rs"]
++mod f06_clone_ptrace_provider_abi;

@@ -1,0 +1,159 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/current110_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-27T22:41:29.417417+00:00",
+  "decision": "PASS_SOURCE_BOUNDED_ROOT36_ADMISSION_HELPER_DELTA",
+  "blocking_findings": [],
+  "execution_release": false,
+  "runtime_authority": null,
+  "native_acceptance": false,
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/root36-admission-preparation-source-1/SOURCE-READY.json",
+    "bytes": 3424,
+    "sha256": "ac9028acc984403e0d207bda58a4c6da9550f54f9e36d359c289bc0b76f7eea2"
+  },
+  "preparation_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/root36-admission-preparation-source-1/PREPARATION-MANIFEST.json",
+    "bytes": 10892,
+    "sha256": "15797ad77cf2199ba117b1087305e274f000f1bccd5fa65ee328b71973882233"
+  },
+  "helper_derivation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/root36-admission-preparation-source-1/HELPER-DERIVATION.json",
+    "bytes": 10620,
+    "sha256": "92ef2ef6a38115079fcf5974e3312fa50b6980163b1adce52ccd7168c849ebfe"
+  },
+  "closed_context": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/root36-admission-preparation-source-1/CLOSED-ROOT36-CONTEXT.NOT-AUTHORITY.json",
+    "bytes": 4151,
+    "sha256": "af0e470170cb1a19cc2f1589eb6662d18d7953ab06d6a6bfa5168a0cee94b8d5"
+  },
+  "retained_source_profile_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/final-scope-source-1/independent-source-profile-review-1/INDEPENDENT-SOURCE-PROFILE-REVIEW.json",
+    "bytes": 28267,
+    "sha256": "bf9b9ad1264191c7a0d6e06e45be914b62dc88cb75ed3302d6289158e0335776"
+  },
+  "profile_exact_guard": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/final-scope-source-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 108637,
+    "sha256": "b027f2a5d1f2ef909638056815f6a066561df2dcd7a9a9532e9d0304a583bfe1"
+  },
+  "Root36": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER36.json",
+    "bytes": 4870,
+    "sha256": "4534fe9e69cfc6685f70b2eecd2b440496f2820b8a7e3ee1d61c987335a66a3e"
+  },
+  "latest_retirement_free": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/root-adopted-entry-1/independent-actual-native-review-1/REVIEW.json",
+    "bytes": 65216,
+    "sha256": "85ce93494b81565fc9cc9a36b325fb7c0d3d756ac15a6b028ef934b83aa85d5b"
+  },
+  "verification": {
+    "all_declared_preparation_manifest_file_and_external_refs_match": true,
+    "seven_predecessor_successor_diff_refs_match": true,
+    "actual_helper_diffs_equal_declared_diffs": true,
+    "all_seven_successor_AST_valid": true,
+    "unchanged113_runner_worker_holder_publisher_exact": true,
+    "unchanged118_source_inventory_and_scalar_F06_profile_not_replayed": true,
+    "commands": 4,
+    "new_objects": 3,
+    "retained_objects": 8,
+    "Rust_source_count": 118,
+    "profile_sha256": "b027f2a5d1f2ef909638056815f6a066561df2dcd7a9a9532e9d0304a583bfe1"
+  },
+  "helper_delta_assessment": {
+    "observer": {
+      "successor": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/root36-admission-preparation-source-1/observe_root36_current.py",
+        "bytes": 5114,
+        "sha256": "6b6da525fb30e1793fd7e4d3b350b8d3f07c27b0c2c31c4b37439759c4412876"
+      },
+      "assessment": "ExistingRoot34 wrapper only updated to exactRoot36ledger4534 and startup85ce retirement decision/evidence key/all_28 controls key. Same literalbaselineobserver2b736,25retainedclients and5Dockerquery shape/equality, cgroup0 and two closed permanentmutex probes. No new cleanup/native authority/global observer.",
+      "retained_schema_readback": {
+        "exact25_client_records_reaped_and_matching_returncodes": true,
+        "owner_snapshot_ref": {
+          "bytes": 50195,
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/root-adopted-entry-1/independent-actual-native-review-1/RETAINED-OWNER-AND-GUEST-SNAPSHOT.json",
+          "sha256": "b45399bcefce875e81a1bd61ae9c4ffccd4cc6c5fd78290df5dec62cc72a5adc"
+        },
+        "owner_result_status": "FAIL",
+        "absence_verified": true,
+        "lease_retained": false,
+        "secondary": [],
+        "all_28_numeric_controls_unique": true,
+        "exact_five_retained_query_shapes": [
+          "container-id absence",
+          "exact nonce container-name absence",
+          "exact owner-label absence",
+          "retained absent-id inspect",
+          "global running containers"
+        ],
+        "currentSID_policy_unchanged": true
+      },
+      "scope": "Retained schema/data review only; reviewer did not call observer/procfs/Docker/query. Failure remains failed; positive retirement/free is separate."
+    },
+    "capture_resources": {
+      "successor": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/root36-admission-preparation-source-1/capture_resources.py",
+        "bytes": 10959,
+        "sha256": "abae01bac3f925a12be4676c4bec3571194233b2948b007d09330c70e8c7f8a3"
+      },
+      "assessment": "Only exact observer ref, Root36/free85ce references and source113\u2192118 count change. Same v2guard1f152, before-holder closed-probe observation, original<=120s physical freshness, exact27:4 holder/starttime/FLOCK, pids0/no-running-container and boundsource/export/resource/request checks. Existing aggregate23259332608B, host16GiB and stronger scratch14091616256B floors preserved."
+    },
+    "materializer": {
+      "successor": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/root36-admission-preparation-source-1/materialize_admission.py",
+        "bytes": 9820,
+        "sha256": "3dbd461b73f9f6de7d1794ea5a26ce6bf2d8655c4e40c415b112a558de11998d"
+      },
+      "assessment": "Updates exact finalscopeb027 template and Root36/free85ce, Root-only113adoption status and dynamic actualorigin refs. Requires genuine returncode0/positivejoin/closedstreams origin receipt plus actualheader and source/profile/archcommand-bound context/environment. Replaces only source preview header in postimages/cohort/export with exact matchingbytes actualheader and carries actualproducer reference; profile origin fields and Root36 preparation context populated from Root bindings. Canonical118source equality/read-only exports verified before same ordinary metadata/holder-only staging. No kernel source copy/compiler/guest/cleanup. Actual adoption/origin inputs stay NULL until Root supplies real bindings.",
+      "Root_binding_condition": "Future exact Root actualbindings/adoption and genuine113producer/header/context/env/CMake references must be reviewed at their existing actual admission step. No old112origin reference qualifies changed113source."
+    },
+    "runner_worker_holder_publisher": "Exact corrected113 runnera59b/worker0bdd/holderd17b/publisheraf39 already accepted by bf9b; originalfourcommand/3fresh8retained/custody/account/onceholder/lease behavior unchanged."
+  },
+  "nonblocking_notes": [
+    "Observer result status retains textual PASS_ROOT34 prefix while its actual fields/pinned ledger/free evidence identify Root36/poststartup. This inherited text label grants nothing and is not a source or execution blocker. Existing CURRENT110/CURRENT290 internal schema labels likewise remain original protocol labels."
+  ],
+  "source_context": {
+    "actual_origin_producer_receipt": null,
+    "actual_generated_header": null,
+    "actual_origin_environment": null,
+    "actual_source_adoption": null,
+    "actual_source_publication": null,
+    "actual_resource_authority": null,
+    "actual_holder": null,
+    "actual_nonce": null,
+    "actual_output_root": null,
+    "actual_execution_review": null,
+    "actual_release": null,
+    "fixed_three_clock_cutoffs": [
+      1793165769.0,
+      947874.5689514667,
+      963213.6960030915
+    ],
+    "controls": "Samecreditrun7f4af94a83b14cc08f97401f5891d965/57774.852125/cumulative debits/realholds; CPU2-5/12GiB/noswap/512pids/networknone; oneheavy/permanent27:4/scratch21;7aggregatejobs/23259332608B and original floors. No old clock/release renewed.",
+    "original_preparation_failures": [
+      {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/PREPARATION-FIRST-FAILURE.json",
+        "bytes": 614,
+        "sha256": "6aef48d823699a0642560ea1aec4b5cd11bb61d463ed20b6401619f44d8d05f8"
+      },
+      {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/PREPARATION-SECOND-FAILURE.json",
+        "bytes": 614,
+        "sha256": "370d483567d5a52eafa7cbce1c96178f5bb912f67d83213ec7335549be94c8b7"
+      }
+    ]
+  },
+  "next_action": "Root may continue canonical113 adoption and real freshorigin production, ordinary actualmetadata/holder setup and existing actual account/ownership/resource/independent execution review. This delta adds no reviewgate/framework/quota and grants no compiler entry. Sourceprofile bf9b remains accepted at exact source scope; no unrelatedF05 dependency.",
+  "review_actions": {
+    "read_hash_AST_literal_diff_and_retained_schema_only": true,
+    "unchanged_source_inventory_HASH_replay": false,
+    "observer_main_or_helpermain_or_guard_invocations": 0,
+    "queries_workloads_compilers_resources_guest_cleanup_Git_calls": 0,
+    "canonical_edits": 0,
+    "subagents": 0,
+    "only_new_owned_review_directory_written": true
+  }
+}

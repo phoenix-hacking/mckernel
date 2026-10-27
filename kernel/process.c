@@ -56,8 +56,16 @@
 #define DDEBUG_DEFAULT DDEBUG_PRINT
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 /* Existing compile-time dump gate, exposed as readonly ABI data only. */
-const int process_dump_tree_enabled = 1;
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+extern const int process_dump_tree_enabled;
+_Static_assert((1) == 0, "process_dump_tree_enabled selected supported configuration");
 #else
+#line 59
+const int process_dump_tree_enabled = 1;
+#endif
+#line 60
+#else
+#line 61
 static void dtree(struct rb_node *node, int l) {
 	struct vm_range *range;
 	if (!node)
@@ -75,12 +83,22 @@ static void dump_tree(struct process_vm *vm) {
 }
 #endif
 #else
+#line 78
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
-const int process_dump_tree_enabled = 0;
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+extern const int process_dump_tree_enabled;
+_Static_assert((0) == 0, "process_dump_tree_enabled selected supported configuration");
 #else
+#line 79
+const int process_dump_tree_enabled = 0;
+#endif
+#line 80
+#else
+#line 81
 static void dump_tree(struct process_vm *vm) {}
 #endif
 #endif
+#line 84
 
 extern struct thread *arch_switch_context(struct thread *prev, struct thread *next);
 extern long alloc_debugreg(struct thread *proc);
@@ -2939,10 +2957,25 @@ void *process_memset_smp_phys_to_virt_bridge(unsigned long phys)
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 #ifdef ARCH_FAST_MEMSET
-const int process_memset_smp_fast_word_pattern = 1;
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+extern const int process_memset_smp_fast_word_pattern;
+_Static_assert((1) == 1, "process_memset_smp_fast_word_pattern selected supported configuration");
 #else
+#line 2198
+const int process_memset_smp_fast_word_pattern = 1;
+#endif
+#line 2199
+#else
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+extern const int process_memset_smp_fast_word_pattern;
+_Static_assert((0) == 1, "process_memset_smp_fast_word_pattern selected supported configuration");
+#else
+#line 2200
 const int process_memset_smp_fast_word_pattern = 0;
 #endif
+#line 2201
+#endif
+#line 2202
 void process_memset_smp_memset_bridge(void *addr, int value, size_t len);
 #else
 #line 2196
@@ -4065,11 +4098,26 @@ process_page_fault_cow_copy_debug = {
  .line = 3151, .flags = DDEBUG_DEFAULT,
 };
 #ifdef PROFILE_ENABLE
-const int process_page_fault_anon_clear_profile_event = PROFILE_page_fault_anon_clr;
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+extern const int process_page_fault_anon_clear_profile_event;
+_Static_assert((PROFILE_page_fault_anon_clr) == 4002, "process_page_fault_anon_clear_profile_event selected supported configuration");
 #else
+#line 2952
+const int process_page_fault_anon_clear_profile_event = PROFILE_page_fault_anon_clr;
+#endif
+#line 2953
+#else
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+extern const int process_page_fault_anon_clear_profile_event;
+_Static_assert((0) == 0, "process_page_fault_anon_clear_profile_event selected supported configuration");
+#else
+#line 2954
 const int process_page_fault_anon_clear_profile_event = 0;
 #endif
+#line 2955
 #endif
+#endif
+#line 2957
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 #line 2944
 int page_fault_process_memory_range(struct process_vm *vm,
@@ -4733,7 +4781,14 @@ const char *const process_init_stack_alloc_file = __FILE__;
 const int process_init_stack_alloc_line = __LINE__ - 122;
 const char *const process_init_stack_free_file = __FILE__;
 const int process_init_stack_free_line = __LINE__ - 119;
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+extern const int process_init_stack_user_category;
+_Static_assert((IHK_MC_PG_USER) == 1, "process_init_stack_user_category selected supported configuration");
+#else
+#line 3484
 const int process_init_stack_user_category = IHK_MC_PG_USER;
+#endif
+#line 3485
 struct ddebug __aligned(8) __attribute__((section("__verbose")))
 process_init_stack_log_size_debug = {
     .file = __FILE__, .func = "process_init_stack_log_bridge",
@@ -4755,6 +4810,11 @@ int process_init_stack_pt_set_range_bridge(void *, struct process_vm *, unsigned
 unsigned long process_init_stack_hwcap_bridge(void);
 void process_init_stack_modify_context_bridge(void *, int, unsigned long);
 void process_init_stack_log_bridge(int, const unsigned long *);
+#endif
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#line 3504
+#else
+#line 3487
 #endif
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 struct process_init_stack_entry_config {

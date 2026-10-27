@@ -1,0 +1,1445 @@
+[    0.000000] Linux version 6.12.0-211.44.1.el10_2.mckernel1.x86_64 (mckernel@rocky-10.2-x86_64) (clang version 21.1.8 (RESF 21.1.8-1.el10), LLD 21.1.8) #1 SMP PREEMPT_DYNAMIC Tue, 11 Aug 2026 07:40:34 +0000
+[    0.000000] Command line: console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1
+[    0.000000] BIOS-provided physical RAM map:
+[    0.000000] BIOS-e820: [mem 0x0000000000000000-0x000000000009fbff] usable
+[    0.000000] BIOS-e820: [mem 0x000000000009fc00-0x000000000009ffff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000000f0000-0x00000000000fffff] reserved
+[    0.000000] BIOS-e820: [mem 0x0000000000100000-0x000000007ffdefff] usable
+[    0.000000] BIOS-e820: [mem 0x000000007ffdf000-0x000000007fffffff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000b0000000-0x00000000bfffffff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000fed1c000-0x00000000fed1ffff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000fffc0000-0x00000000ffffffff] reserved
+[    0.000000] BIOS-e820: [mem 0x0000000100000000-0x000000027fffffff] usable
+[    0.000000] BIOS-e820: [mem 0x000000fd00000000-0x000000ffffffffff] reserved
+[    0.000000] NX (Execute Disable) protection: active
+[    0.000000] APIC: Static calls initialized
+[    0.000000] user-defined physical RAM map:
+[    0.000000] user: [mem 0x0000000000000000-0x000000000007ffff] usable
+[    0.000000] user: [mem 0x0000000000081000-0x000000000009fbff] usable
+[    0.000000] user: [mem 0x000000000009fc00-0x000000000009ffff] reserved
+[    0.000000] user: [mem 0x00000000000f0000-0x00000000000fffff] reserved
+[    0.000000] user: [mem 0x0000000000100000-0x000000007ffdefff] usable
+[    0.000000] user: [mem 0x000000007ffdf000-0x000000007fffffff] reserved
+[    0.000000] user: [mem 0x00000000b0000000-0x00000000bfffffff] reserved
+[    0.000000] user: [mem 0x00000000fed1c000-0x00000000fed1ffff] reserved
+[    0.000000] user: [mem 0x00000000fffc0000-0x00000000ffffffff] reserved
+[    0.000000] user: [mem 0x0000000100000000-0x000000027fffffff] usable
+[    0.000000] user: [mem 0x000000fd00000000-0x000000ffffffffff] reserved
+[    0.000000] SMBIOS 2.8 present.
+[    0.000000] DMI: Red Hat KVM/RHEL, BIOS 1.17.0-1.el10 06/10/2025
+[    0.000000] DMI: Memory slots populated: 1/1
+[    0.000000] tsc: Fast TSC calibration using PIT
+[    0.000000] tsc: Detected 1497.539 MHz processor
+[    0.012826] last_pfn = 0x280000 max_arch_pfn = 0x400000000
+[    0.013995] MTRR map: 4 entries (3 fixed + 1 variable; max 19), built from 8 variable MTRRs
+[    0.014364] x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WP  UC- WT  
+[    0.015652] last_pfn = 0x7ffdf max_arch_pfn = 0x400000000
+[    0.035774] found SMP MP-table at [mem 0x000f54d0-0x000f54df]
+[    0.038521] Using GB pages for direct mapping
+[    0.046701] RAMDISK: [mem 0x7f295000-0x7ffcffff]
+[    0.047448] ACPI: Early table checksum verification disabled
+[    0.048236] ACPI: RSDP 0x00000000000F5490 000014 (v00 BOCHS )
+[    0.048908] ACPI: RSDT 0x000000007FFE21EB 000038 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.050098] ACPI: FACP 0x000000007FFE1EF3 0000F4 (v03 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.051431] ACPI: DSDT 0x000000007FFDFDC0 002133 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.051613] ACPI: FACS 0x000000007FFDFD80 000040
+[    0.051698] ACPI: APIC 0x000000007FFE1FE7 000090 (v03 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.051737] ACPI: SRAT 0x000000007FFE2077 000110 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.051770] ACPI: MCFG 0x000000007FFE2187 00003C (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.051802] ACPI: WAET 0x000000007FFE21C3 000028 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.051964] ACPI: Reserving FACP table memory at [mem 0x7ffe1ef3-0x7ffe1fe6]
+[    0.052018] ACPI: Reserving DSDT table memory at [mem 0x7ffdfdc0-0x7ffe1ef2]
+[    0.052031] ACPI: Reserving FACS table memory at [mem 0x7ffdfd80-0x7ffdfdbf]
+[    0.052040] ACPI: Reserving APIC table memory at [mem 0x7ffe1fe7-0x7ffe2076]
+[    0.052049] ACPI: Reserving SRAT table memory at [mem 0x7ffe2077-0x7ffe2186]
+[    0.052058] ACPI: Reserving MCFG table memory at [mem 0x7ffe2187-0x7ffe21c2]
+[    0.052068] ACPI: Reserving WAET table memory at [mem 0x7ffe21c3-0x7ffe21ea]
+[    0.056386] ACPI: SRAT: Node 0 PXM 0 [mem 0x00000000-0x0009ffff]
+[    0.056458] ACPI: SRAT: Node 0 PXM 0 [mem 0x00100000-0x7fffffff]
+[    0.056474] ACPI: SRAT: Node 0 PXM 0 [mem 0x100000000-0x17fffffff]
+[    0.056487] ACPI: SRAT: Node 1 PXM 1 [mem 0x180000000-0x27fffffff]
+[    0.057021] NUMA: Node 0 [mem 0x00001000-0x0009ffff] + [mem 0x00100000-0x7fffffff] -> [mem 0x00001000-0x7fffffff]
+[    0.057118] NUMA: Node 0 [mem 0x00001000-0x7fffffff] + [mem 0x100000000-0x17fffffff] -> [mem 0x00001000-0x17fffffff]
+[    0.058441] NODE_DATA(0) allocated [mem 0x17ffd4b80-0x17fffffff]
+[    0.059806] NODE_DATA(1) allocated [mem 0x27ffd2b80-0x27fffdfff]
+[    0.065964] Zone ranges:
+[    0.065989]   DMA      [mem 0x0000000000001000-0x0000000000ffffff]
+[    0.066194]   DMA32    [mem 0x0000000001000000-0x00000000ffffffff]
+[    0.066220]   Normal   [mem 0x0000000100000000-0x000000027fffffff]
+[    0.066234]   Device   empty
+[    0.066265] Movable zone start for each node
+[    0.066315] Early memory node ranges
+[    0.066362]   node   0: [mem 0x0000000000001000-0x000000000007ffff]
+[    0.066678]   node   0: [mem 0x0000000000081000-0x000000000009efff]
+[    0.066692]   node   0: [mem 0x0000000000100000-0x000000007ffdefff]
+[    0.066744]   node   0: [mem 0x0000000100000000-0x000000017fffffff]
+[    0.066755]   node   1: [mem 0x0000000180000000-0x000000027fffffff]
+[    0.067000] Initmem setup node 0 [mem 0x0000000000001000-0x000000017fffffff]
+[    0.068503] Initmem setup node 1 [mem 0x0000000180000000-0x000000027fffffff]
+[    0.071003] On node 0, zone DMA: 1 pages in unavailable ranges
+[    0.071115] On node 0, zone DMA: 1 pages in unavailable ranges
+[    0.071801] On node 0, zone DMA: 97 pages in unavailable ranges
+[    0.174144] On node 0, zone Normal: 33 pages in unavailable ranges
+[    0.180379] ACPI: PM-Timer IO Port: 0x608
+[    0.181108] ACPI: LAPIC_NMI (acpi_id[0xff] dfl dfl lint[0x1])
+[    0.181866] IOAPIC[0]: apic_id 0, version 32, address 0xfec00000, GSI 0-23
+[    0.182092] ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
+[    0.182567] ACPI: INT_SRC_OVR (bus 0 bus_irq 5 global_irq 5 high level)
+[    0.182625] ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 high level)
+[    0.182804] ACPI: INT_SRC_OVR (bus 0 bus_irq 10 global_irq 10 high level)
+[    0.182821] ACPI: INT_SRC_OVR (bus 0 bus_irq 11 global_irq 11 high level)
+[    0.183229] ACPI: Using ACPI (MADT) for SMP configuration information
+[    0.183791] CPU topo: Max. logical packages:   2
+[    0.183811] CPU topo: Max. logical dies:       2
+[    0.183826] CPU topo: Max. dies per package:   1
+[    0.183941] CPU topo: Max. threads per core:   1
+[    0.184169] CPU topo: Num. cores per package:     2
+[    0.184198] CPU topo: Num. threads per package:   2
+[    0.184218] CPU topo: Allowing 4 present CPUs plus 0 hotplug CPUs
+[    0.186226] PM: hibernation: Registered nosave memory: [mem 0x00000000-0x00000fff]
+[    0.186307] PM: hibernation: Registered nosave memory: [mem 0x00080000-0x00080fff]
+[    0.186340] PM: hibernation: Registered nosave memory: [mem 0x0009f000-0x0009ffff]
+[    0.186382] PM: hibernation: Registered nosave memory: [mem 0x000a0000-0x000effff]
+[    0.186391] PM: hibernation: Registered nosave memory: [mem 0x000f0000-0x000fffff]
+[    0.186404] PM: hibernation: Registered nosave memory: [mem 0x7ffdf000-0x7fffffff]
+[    0.186412] PM: hibernation: Registered nosave memory: [mem 0x80000000-0xafffffff]
+[    0.186420] PM: hibernation: Registered nosave memory: [mem 0xb0000000-0xbfffffff]
+[    0.186427] PM: hibernation: Registered nosave memory: [mem 0xc0000000-0xfed1bfff]
+[    0.186434] PM: hibernation: Registered nosave memory: [mem 0xfed1c000-0xfed1ffff]
+[    0.186442] PM: hibernation: Registered nosave memory: [mem 0xfed20000-0xfffbffff]
+[    0.186450] PM: hibernation: Registered nosave memory: [mem 0xfffc0000-0xffffffff]
+[    0.186650] [mem 0xc0000000-0xfed1bfff] available for PCI devices
+[    0.186755] Booting paravirtualized kernel on bare hardware
+[    0.187253] clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1910969940391419 ns
+[    0.202398] setup_percpu: NR_CPUS:8192 nr_cpumask_bits:4 nr_cpu_ids:4 nr_node_ids:2
+[    0.210895] percpu: Embedded 62 pages/cpu s217088 r8192 d28672 u1048576
+[    0.213643] Kernel command line: console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1
+[    0.215458] Unknown kernel command line parameters "nokaslr", will be passed to user space.
+[    0.221922] random: crng init done
+[    0.225829] Fallback order for Node 0: 0 1 
+[    0.226016] Fallback order for Node 1: 1 0 
+[    0.226389] Built 2 zonelists, mobility grouping on.  Total pages: 2097020
+[    0.226433] Policy zone: Normal
+[    0.229977] mem auto-init: stack:all(zero), heap alloc:off, heap free:off
+[    0.231438] software IO TLB: area num 4.
+[    0.491977] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=2
+[    0.502805] ftrace: allocating 50277 entries in 198 pages
+[    0.502875] ftrace: allocated 198 pages with 4 groups
+[    0.520911] Dynamic Preempt: voluntary
+[    0.527787] rcu: Preemptible hierarchical RCU implementation.
+[    0.527817] rcu: 	RCU event tracing is enabled.
+[    0.527856] rcu: 	RCU restricting CPUs from NR_CPUS=8192 to nr_cpu_ids=4.
+[    0.528166] 	Trampoline variant of Tasks RCU enabled.
+[    0.528180] 	Rude variant of Tasks RCU enabled.
+[    0.528192] 	Tracing variant of Tasks RCU enabled.
+[    0.528338] rcu: RCU calculated value of scheduler-enlistment delay is 100 jiffies.
+[    0.528383] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
+[    0.530827] RCU Tasks: Setting shift to 2 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=4.
+[    0.530890] RCU Tasks Rude: Setting shift to 2 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=4.
+[    0.530913] RCU Tasks Trace: Setting shift to 2 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=4.
+[    0.581889] NR_IRQS: 524544, nr_irqs: 456, preallocated irqs: 16
+[    0.600974] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+[    0.612101] kfence: initialized - using 2097152 bytes for 255 objects at 0x(____ptrval____)-0x(____ptrval____)
+[    0.627405] Console: colour VGA+ 80x25
+[    0.632418] printk: legacy console [ttyS0] enabled
+[    0.676386] mempolicy: Enabling automatic NUMA balancing. Configure with numa_balancing= or the kernel.numa_balancing sysctl
+[    0.677299] ACPI: Core revision 20240827
+[    0.703106] APIC: Switch to symmetric I/O mode setup
+[    0.704511] x2apic: IRQ remapping doesn't support X2APIC mode
+[    0.713170] ..TIMER: vector=0x30 apic1=0 pin1=2 apic2=-1 pin2=-1
+[    0.719632] tsc: Marking TSC unstable due to TSCs unsynchronized
+[    0.720550] Calibrating delay loop (skipped), value calculated using timer frequency.. 2995.07 BogoMIPS (lpj=1497539)
+[    0.727319] x86/cpu: User Mode Instruction Prevention (UMIP) activated
+[    0.744045] Last level iTLB entries: 4KB 0, 2MB 0, 4MB 0
+[    0.744459] Last level dTLB entries: 4KB 0, 2MB 0, 4MB 0, 1GB 0
+[    0.748242] mitigations: Enabled attack vectors: user_kernel, user_user, guest_host, guest_guest, SMT mitigations: auto
+[    0.750281] Speculative Store Bypass: Vulnerable
+[    0.750961] Spectre V2 : Mitigation: Retpolines
+[    0.751469] Spectre V1 : Mitigation: usercopy/swapgs barriers and __user pointer sanitization
+[    0.751961] Spectre V2 : Spectre v2 / SpectreRSB: Filling RSB on context switch and VMEXIT
+[    0.758371] x86/fpu: Supporting XSAVE feature 0x001: 'x87 floating point registers'
+[    0.763207] x86/fpu: Supporting XSAVE feature 0x002: 'SSE registers'
+[    0.763554] x86/fpu: Supporting XSAVE feature 0x004: 'AVX registers'
+[    0.763818] x86/fpu: Supporting XSAVE feature 0x008: 'MPX bounds registers'
+[    0.764101] x86/fpu: Supporting XSAVE feature 0x010: 'MPX CSR'
+[    0.764426] x86/fpu: Supporting XSAVE feature 0x200: 'Protection Keys User registers'
+[    0.765028] x86/fpu: xstate_offset[2]:  576, xstate_sizes[2]:  256
+[    0.765457] x86/fpu: xstate_offset[3]:  960, xstate_sizes[3]:   64
+[    0.765712] x86/fpu: xstate_offset[4]: 1024, xstate_sizes[4]:   64
+[    0.766165] x86/fpu: xstate_offset[9]: 2688, xstate_sizes[9]:    8
+[    0.766451] x86/fpu: Enabled xstate features 0x21f, context size is 2696 bytes, using 'standard' format.
+[    1.000377] Freeing SMP alternatives memory: 48K
+[    1.001615] pid_max: default: 32768 minimum: 301
+[    1.019016] Yama: becoming mindful.
+[    1.020675] SELinux:  Initializing.
+[    1.026187] LSM support for eBPF active
+[    1.026880] landlock: Up and running.
+[    1.108676] Dentry cache hash table entries: 1048576 (order: 11, 8388608 bytes, vmalloc hugepage)
+[    1.142801] Inode-cache hash table entries: 524288 (order: 10, 4194304 bytes, vmalloc hugepage)
+[    1.144951] Mount-cache hash table entries: 16384 (order: 5, 131072 bytes, vmalloc)
+[    1.146397] Mountpoint-cache hash table entries: 16384 (order: 5, 131072 bytes, vmalloc)
+[    1.309142] smpboot: CPU0: AMD QEMU TCG CPU version 2.5+ (family: 0x6, model: 0x6, stepping: 0x3)
+[    1.340506] Performance Events: PMU not available due to virtualization, using software events only.
+[    1.343032] signal: max sigframe size: 3632
+[    1.346060] rcu: Hierarchical SRCU implementation.
+[    1.346368] rcu: 	Max phase no-delay instances is 400.
+[    1.353025] Timer migration: 2 hierarchy levels; 8 children per group; 1 crossnode level
+[    1.365729] NMI watchdog: Perf NMI watchdog permanently disabled
+[    1.371436] smp: Bringing up secondary CPUs ...
+[    1.382898] smpboot: x86: Booting SMP configuration:
+[    1.383211] .... node  #0, CPUs:      #1
+[    1.401377] .... node  #1, CPUs:   #2 #3
+[    0.100093] calibrate_delay_direct() dropping max bogoMips estimate 2 = 1799199
+[    0.100093] calibrate_delay_direct() dropping max bogoMips estimate 0 = 1729771
+[    1.624857] smp: Brought up 2 nodes, 4 CPUs
+[    1.625304] smpboot: Total of 4 processors activated (11988.33 BogoMIPS)
+[    1.700538] node 0 deferred pages initialised in 53ms
+[    1.743408] node 1 deferred pages initialised in 95ms
+[    1.745453] Memory: 8097872K/8388080K available (18432K kernel code, 5771K rwdata, 14072K rodata, 4204K init, 5424K bss, 268576K reserved, 0K cma-reserved)
+[    1.766097] devtmpfs: initialized
+[    1.774102] x86/mm: Memory block size: 128MB
+[    1.813222] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1911260446275000 ns
+[    1.814471] posixtimers hash table entries: 2048 (order: 3, 32768 bytes, vmalloc)
+[    1.814543] futex hash table entries: 512 (32768 bytes on 2 NUMA nodes, total 64 KiB, linear).
+[    1.850421] pinctrl core: initialized pinctrl subsystem
+[    1.923323] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+[    1.931724] DMA: preallocated 1024 KiB GFP_KERNEL pool for atomic allocations
+[    1.932656] DMA: preallocated 1024 KiB GFP_KERNEL|GFP_DMA pool for atomic allocations
+[    1.933473] DMA: preallocated 1024 KiB GFP_KERNEL|GFP_DMA32 pool for atomic allocations
+[    1.934518] audit: initializing netlink subsys (disabled)
+[    1.938690] audit: type=2000 audit(1793140505.236:1): state=initialized audit_enabled=0 res=1
+[    1.947043] thermal_sys: Registered thermal governor 'fair_share'
+[    1.947194] thermal_sys: Registered thermal governor 'step_wise'
+[    1.947465] thermal_sys: Registered thermal governor 'user_space'
+[    1.948259] cpuidle: using governor menu
+[    1.952264] acpiphp: ACPI Hot Plug PCI Controller Driver version: 0.5
+[    1.961386] PCI: ECAM [mem 0xb0000000-0xbfffffff] (base 0xb0000000) for domain 0000 [bus 00-ff]
+[    1.965168] PCI: Using configuration type 1 for base access
+[    1.966551] mtrr: your CPUs had inconsistent fixed MTRR settings
+[    1.966789] mtrr: your CPUs had inconsistent variable MTRR settings
+[    1.967164] mtrr: your CPUs had inconsistent MTRRdefType settings
+[    1.967426] mtrr: probably your BIOS does not setup all CPUs.
+[    1.967661] mtrr: corrected configuration.
+[    1.973563] kprobes: kprobe jump-optimization is enabled. All kprobes are optimized if possible.
+[    1.996142] HugeTLB: registered 1.00 GiB page size, pre-allocated 0 pages
+[    1.996142] HugeTLB: 16380 KiB vmemmap can be freed for a 1.00 GiB page
+[    1.996142] HugeTLB: registered 2.00 MiB page size, pre-allocated 0 pages
+[    1.996142] HugeTLB: 28 KiB vmemmap can be freed for a 2.00 MiB page
+[    2.007594] cryptd: max_cpu_qlen set to 1000
+[    2.022142] ACPI: Added _OSI(Module Device)
+[    2.022142] ACPI: Added _OSI(Processor Device)
+[    2.022142] ACPI: Added _OSI(Processor Aggregator Device)
+[    2.081263] ACPI: 1 ACPI AML tables successfully acquired and loaded
+[    2.118344] ACPI: Interpreter enabled
+[    2.120198] ACPI: PM: (supports S0 S5)
+[    2.120457] ACPI: Using IOAPIC for interrupt routing
+[    2.124390] PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+[    2.124750] PCI: Ignoring E820 reservations for host bridge windows
+[    2.128359] ACPI: Enabled 2 GPEs in block 00 to 3F
+[    2.199624] ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
+[    2.201016] acpi PNP0A08:00: _OSC: OS supports [ExtendedConfig ASPM ClockPM Segments MSI EDR HPX-Type3]
+[    2.204555] acpi PNP0A08:00: _OSC: platform does not support [PCIeHotplug LTR DPC]
+[    2.207306] acpi PNP0A08:00: _OSC: OS now controls [SHPCHotplug PME AER PCIeCapability]
+[    2.215914] PCI host bridge to bus 0000:00
+[    2.216301] pci_bus 0000:00: Unknown NUMA node; performance will be reduced
+[    2.217279] pci_bus 0000:00: root bus resource [io  0x0000-0x0cf7 window]
+[    2.217670] pci_bus 0000:00: root bus resource [io  0x0d00-0xffff window]
+[    2.217892] pci_bus 0000:00: root bus resource [mem 0x000a0000-0x000bffff window]
+[    2.218167] pci_bus 0000:00: root bus resource [mem 0x80000000-0xafffffff window]
+[    2.218458] pci_bus 0000:00: root bus resource [mem 0xc0000000-0xfebfffff window]
+[    2.218702] pci_bus 0000:00: root bus resource [mem 0x280000000-0xa7fffffff window]
+[    2.219505] pci_bus 0000:00: root bus resource [bus 00-ff]
+[    2.222663] pci 0000:00:00.0: [8086:29c0] type 00 class 0x060000 conventional PCI endpoint
+[    2.232388] pci 0000:00:01.0: [1234:1111] type 00 class 0x030000 conventional PCI endpoint
+[    2.234467] pci 0000:00:01.0: BAR 0 [mem 0xfd000000-0xfdffffff pref]
+[    2.234890] pci 0000:00:01.0: BAR 2 [mem 0xfebf0000-0xfebf0fff]
+[    2.235173] pci 0000:00:01.0: ROM [mem 0xfebe0000-0xfebeffff pref]
+[    2.236352] pci 0000:00:01.0: Video device with shadowed ROM at [mem 0x000c0000-0x000dffff]
+[    2.238645] pci 0000:00:1f.0: [8086:2918] type 00 class 0x060100 conventional PCI endpoint
+[    2.238781] pci 0000:00:1f.0: quirk: [io  0x0600-0x067f] claimed by ICH6 ACPI/GPIO/TCO
+[    2.241951] pci 0000:00:1f.2: [8086:2922] type 00 class 0x010601 conventional PCI endpoint
+[    2.242721] pci 0000:00:1f.2: BAR 4 [io  0xc040-0xc05f]
+[    2.244200] pci 0000:00:1f.2: BAR 5 [mem 0xfebf1000-0xfebf1fff]
+[    2.246785] pci 0000:00:1f.3: [8086:2930] type 00 class 0x0c0500 conventional PCI endpoint
+[    2.246838] pci 0000:00:1f.3: BAR 4 [io  0x0700-0x073f]
+[    2.258110] ACPI: PCI: Interrupt link LNKA configured for IRQ 10
+[    2.260663] ACPI: PCI: Interrupt link LNKB configured for IRQ 10
+[    2.262405] ACPI: PCI: Interrupt link LNKC configured for IRQ 11
+[    2.263954] ACPI: PCI: Interrupt link LNKD configured for IRQ 11
+[    2.265718] ACPI: PCI: Interrupt link LNKE configured for IRQ 10
+[    2.267303] ACPI: PCI: Interrupt link LNKF configured for IRQ 10
+[    2.268906] ACPI: PCI: Interrupt link LNKG configured for IRQ 11
+[    2.270586] ACPI: PCI: Interrupt link LNKH configured for IRQ 11
+[    2.271349] ACPI: PCI: Interrupt link GSIA configured for IRQ 16
+[    2.271781] ACPI: PCI: Interrupt link GSIB configured for IRQ 17
+[    2.272302] ACPI: PCI: Interrupt link GSIC configured for IRQ 18
+[    2.272677] ACPI: PCI: Interrupt link GSID configured for IRQ 19
+[    2.273098] ACPI: PCI: Interrupt link GSIE configured for IRQ 20
+[    2.273643] ACPI: PCI: Interrupt link GSIF configured for IRQ 21
+[    2.274085] ACPI: PCI: Interrupt link GSIG configured for IRQ 22
+[    2.274362] ACPI: PCI: Interrupt link GSIH configured for IRQ 23
+[    2.288489] iommu: Default domain type: Translated
+[    2.289220] iommu: DMA domain TLB invalidation policy: lazy mode
+[    2.363826] SCSI subsystem initialized
+[    2.366332] ACPI: bus type USB registered
+[    2.367267] usbcore: registered new interface driver usbfs
+[    2.367966] usbcore: registered new interface driver hub
+[    2.368504] usbcore: registered new device driver usb
+[    2.370200] pps_core: LinuxPPS API ver. 1 registered
+[    2.370403] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+[    2.370815] PTP clock support registered
+[    2.373520] EDAC MC: Ver: 3.0.0
+[    2.395426] NetLabel: Initializing
+[    2.395684] NetLabel:  domain hash size = 128
+[    2.395896] NetLabel:  protocols = UNLABELED CIPSOv4 CALIPSO
+[    2.397944] NetLabel:  unlabeled traffic allowed by default
+[    2.398424] PCI: Using ACPI for IRQ routing
+[    2.410657] pci 0000:00:01.0: vgaarb: setting as boot VGA device
+[    2.410978] pci 0000:00:01.0: vgaarb: bridge control possible
+[    2.411142] pci 0000:00:01.0: vgaarb: VGA device added: decodes=io+mem,owns=io+mem,locks=none
+[    2.411206] vgaarb: loaded
+[    2.415212] clocksource: Switched to clocksource refined-jiffies
+[    2.431318] VFS: Disk quotas dquot_6.6.0
+[    2.431814] VFS: Dquot-cache hash table entries: 512 (order 0, 4096 bytes)
+[    2.436992] pnp: PnP ACPI init
+[    2.443293] system 00:04: [mem 0xb0000000-0xbfffffff window] has been reserved
+[    2.447830] pnp: PnP ACPI: found 5 devices
+[    2.503429] clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 2085701024 ns
+[    2.504128] clocksource: Switched to clocksource acpi_pm
+[    2.505719] NET: Registered PF_INET protocol family
+[    2.520745] IP idents hash table entries: 131072 (order: 8, 1048576 bytes, vmalloc)
+[    2.741267] tcp_listen_portaddr_hash hash table entries: 4096 (order: 4, 65536 bytes, vmalloc)
+[    2.741896] Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, vmalloc)
+[    2.742533] TCP established hash table entries: 65536 (order: 7, 524288 bytes, vmalloc)
+[    2.744260] TCP bind hash table entries: 65536 (order: 9, 2097152 bytes, vmalloc hugepage)
+[    2.750703] TCP: Hash tables configured (established 65536 bind 65536)
+[    2.756829] MPTCP token hash table entries: 8192 (order: 5, 196608 bytes, vmalloc)
+[    2.757953] UDP hash table entries: 4096 (order: 5, 131072 bytes, vmalloc)
+[    2.758944] UDP-Lite hash table entries: 4096 (order: 5, 131072 bytes, vmalloc)
+[    2.762027] NET: Registered PF_UNIX/PF_LOCAL protocol family
+[    2.762964] NET: Registered PF_XDP protocol family
+[    2.764527] pci_bus 0000:00: resource 4 [io  0x0000-0x0cf7 window]
+[    2.764736] pci_bus 0000:00: resource 5 [io  0x0d00-0xffff window]
+[    2.764938] pci_bus 0000:00: resource 6 [mem 0x000a0000-0x000bffff window]
+[    2.765209] pci_bus 0000:00: resource 7 [mem 0x80000000-0xafffffff window]
+[    2.765408] pci_bus 0000:00: resource 8 [mem 0xc0000000-0xfebfffff window]
+[    2.765596] pci_bus 0000:00: resource 9 [mem 0x280000000-0xa7fffffff window]
+[    2.766592] PCI: CLS 0 bytes, default 64
+[    2.767505] PCI-DMA: Using software bounce buffering for IO (SWIOTLB)
+[    2.767800] software IO TLB: mapped [mem 0x000000007b295000-0x000000007f295000] (64MB)
+[    2.768573] ACPI: bus type thunderbolt registered
+[    2.772858] Trying to unpack rootfs image as initramfs...
+[    2.986074] Initialise system trusted keyrings
+[    2.990875] Key type blacklist registered
+[    2.999887] workingset: timestamp_bits=36 max_order=21 bucket_order=0
+[    3.000994] zbud: loaded
+[    3.019346] integrity: Platform Keyring initialized
+[    3.020250] integrity: Machine keyring initialized
+[    4.854845] Freeing initrd memory: 13548K
+[    5.192666] NET: Registered PF_ALG protocol family
+[    5.193222] Key type asymmetric registered
+[    5.193561] Asymmetric key parser 'x509' registered
+[    5.194952] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 246)
+[    5.197509] io scheduler mq-deadline registered
+[    5.197858] io scheduler kyber registered
+[    5.198600] io scheduler bfq registered
+[    5.285396] atomic64_test: passed for x86-64 platform with CX8 and with SSE
+[    5.295768] input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
+[    5.301438] ACPI: button: Power Button [PWRF]
+[    5.311807] Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+[    5.319947] 00:02: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+[    5.329948] Non-volatile memory driver v1.3
+[    5.331744] ACPI: bus type drm_connector registered
+[    5.343623] rdac: device handler registered
+[    5.344948] hp_sw: device handler registered
+[    5.345251] emc: device handler registered
+[    5.346095] alua: device handler registered
+[    5.355629] usbcore: registered new interface driver usbserial_generic
+[    5.356297] usbserial: USB Serial support registered for generic
+[    5.358594] i8042: PNP: PS/2 Controller [PNP0303:KBD,PNP0f13:MOU] at 0x60,0x64 irq 1,12
+[    5.364571] serio: i8042 KBD port at 0x60,0x64 irq 1
+[    5.365303] serio: i8042 AUX port at 0x60,0x64 irq 12
+[    5.368617] mousedev: PS/2 mouse device common for all mice
+[    5.372814] rtc_cmos 00:03: RTC can wake from S4
+[    5.377579] input: AT Translated Set 2 keyboard as /devices/platform/i8042/serio0/input/input1
+[    5.380358] rtc_cmos 00:03: registered as rtc0
+[    5.381453] rtc_cmos 00:03: setting system clock to 2026-10-27T22:35:09 UTC (1793140509)
+[    5.384439] rtc_cmos 00:03: alarms up to one day, y3k, 242 bytes nvram
+[    5.385802] amd_pstate: the _CPC object is not present in SBIOS or ACPI disabled
+[    5.395646] hid: raw HID events driver (C) Jiri Kosina
+[    5.397106] usbcore: registered new interface driver usbhid
+[    5.397374] usbhid: USB HID core driver
+[    5.398531] drop_monitor: Initializing network drop monitor service
+[    5.400829] Initializing XFRM netlink socket
+[    5.401878] NET: Registered PF_INET6 protocol family
+[    5.430035] Segment Routing with IPv6
+[    5.430960] In-situ OAM (IOAM) with IPv6
+[    5.432870] NET: Registered PF_PACKET protocol family
+[    5.434402] mpls_gso: MPLS GSO support
+[    5.443251] IPI shorthand broadcast: enabled
+[    5.444773] AES CTR mode by8 optimization enabled
+[    5.497709] registered taskstats version 1
+[    5.504834] Loading compiled-in X.509 certificates
+[    5.526655] Loaded X.509 cert 'Build time autogenerated kernel key: 8d6cc04d5631c364d0d8b9b39bc6c5bf68964024'
+[    5.591970] Demotion targets for Node 0: null
+[    5.592317] Demotion targets for Node 1: null
+[    5.592665] page_owner is disabled
+[    5.596926] Key type .fscrypt registered
+[    5.597380] Key type fscrypt-provisioning registered
+[    5.599857] Key type big_key registered
+[    5.627354] Key type encrypted registered
+[    5.628680] ima: No TPM chip found, activating TPM-bypass!
+[    5.628973] Loading compiled-in module X.509 certificates
+[    5.632029] Loaded X.509 cert 'Build time autogenerated kernel key: 8d6cc04d5631c364d0d8b9b39bc6c5bf68964024'
+[    5.632694] ima: Allocated hash algorithm: sha256
+[    5.637557] ima: No architecture policies found
+[    5.639959] evm: Initialising EVM extended attributes:
+[    5.640525] evm: security.selinux
+[    5.640828] evm: security.SMACK64 (disabled)
+[    5.641028] evm: security.SMACK64EXEC (disabled)
+[    5.641468] evm: security.SMACK64TRANSMUTE (disabled)
+[    5.641700] evm: security.SMACK64MMAP (disabled)
+[    5.641934] evm: security.apparmor (disabled)
+[    5.642301] evm: security.ima
+[    5.642482] evm: security.capability
+[    5.642697] evm: HMAC attrs: 0x1
+[    5.868578] Running certificate verification RSA selftest
+[    6.099751] input: ImExPS/2 Generic Explorer Mouse as /devices/platform/i8042/serio1/input/input3
+[    6.106014] Loaded X.509 cert 'Certificate verification self-testing key: f58703bb33ce1b73ee02eccdee5b8817518fe3db'
+[    6.114813] Running certificate verification ECDSA selftest
+[    6.149017] Loaded X.509 cert 'Certificate verification ECDSA self-testing key: 2900bcea1deb7bc8479a84a23d758efdfdd2b2d3'
+[    6.238314] Unstable clock detected, switching default tracing clock to "global"
+[    6.238314] If you want to keep using the local clock, then add:
+[    6.238314]   "trace_clock=local"
+[    6.238314] on the kernel command line
+[    6.241999] clk: Disabling unused clocks
+[    6.242750] PM: genpd: Disabling unused power domains
+[    6.533503] Freeing unused decrypted memory: 2028K
+[    7.306573] Freeing unused kernel image (initmem) memory: 4204K
+[    7.307197] Write protecting the kernel read-only data: 32768k
+[    7.312424] Freeing unused kernel image (rodata/data gap) memory: 264K
+[    7.671507] x86/mm: Checked W+X mappings: passed, no W+X pages found.
+[    7.672690] Run /init as init process
+<5>[    0.000000] Linux version 6.12.0-211.44.1.el10_2.mckernel1.x86_64 (mckernel@rocky-10.2-x86_64) (clang version 21.1.8 (RESF 21.1.8-1.el10), LLD 21.1.8) #1 SMP PREEMPT_DYNAMIC Tue, 11 Aug 2026 07:40:34 +0000
+<6>[    0.000000] Command line: console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1
+<6>[    0.000000] BIOS-provided physical RAM map:
+<6>[    0.000000] BIOS-e820: [mem 0x0000000000000000-0x000000000009fbff] usable
+<6>[    0.000000] BIOS-e820: [mem 0x000000000009fc00-0x000000000009ffff] reserved
+<6>[    0.000000] BIOS-e820: [mem 0x00000000000f0000-0x00000000000fffff] reserved
+<6>[    0.000000] BIOS-e820: [mem 0x0000000000100000-0x000000007ffdefff] usable
+<6>[    0.000000] BIOS-e820: [mem 0x000000007ffdf000-0x000000007fffffff] reserved
+<6>[    0.000000] BIOS-e820: [mem 0x00000000b0000000-0x00000000bfffffff] reserved
+<6>[    0.000000] BIOS-e820: [mem 0x00000000fed1c000-0x00000000fed1ffff] reserved
+<6>[    0.000000] BIOS-e820: [mem 0x00000000fffc0000-0x00000000ffffffff] reserved
+<6>[    0.000000] BIOS-e820: [mem 0x0000000100000000-0x000000027fffffff] usable
+<6>[    0.000000] BIOS-e820: [mem 0x000000fd00000000-0x000000ffffffffff] reserved
+<7>[    0.000000] e820: remove [mem 0x00080000-0x00080fff] usable
+<6>[    0.000000] NX (Execute Disable) protection: active
+<6>[    0.000000] APIC: Static calls initialized
+<6>[    0.000000] user-defined physical RAM map:
+<6>[    0.000000] user: [mem 0x0000000000000000-0x000000000007ffff] usable
+<6>[    0.000000] user: [mem 0x0000000000081000-0x000000000009fbff] usable
+<6>[    0.000000] user: [mem 0x000000000009fc00-0x000000000009ffff] reserved
+<6>[    0.000000] user: [mem 0x00000000000f0000-0x00000000000fffff] reserved
+<6>[    0.000000] user: [mem 0x0000000000100000-0x000000007ffdefff] usable
+<6>[    0.000000] user: [mem 0x000000007ffdf000-0x000000007fffffff] reserved
+<6>[    0.000000] user: [mem 0x00000000b0000000-0x00000000bfffffff] reserved
+<6>[    0.000000] user: [mem 0x00000000fed1c000-0x00000000fed1ffff] reserved
+<6>[    0.000000] user: [mem 0x00000000fffc0000-0x00000000ffffffff] reserved
+<6>[    0.000000] user: [mem 0x0000000100000000-0x000000027fffffff] usable
+<6>[    0.000000] user: [mem 0x000000fd00000000-0x000000ffffffffff] reserved
+<6>[    0.000000] SMBIOS 2.8 present.
+<6>[    0.000000] DMI: Red Hat KVM/RHEL, BIOS 1.17.0-1.el10 06/10/2025
+<6>[    0.000000] DMI: Memory slots populated: 1/1
+<6>[    0.000000] tsc: Fast TSC calibration using PIT
+<6>[    0.000000] tsc: Detected 1497.539 MHz processor
+<7>[    0.012353] e820: update [mem 0x00000000-0x00000fff] usable ==> reserved
+<7>[    0.012628] e820: remove [mem 0x000a0000-0x000fffff] usable
+<6>[    0.012826] last_pfn = 0x280000 max_arch_pfn = 0x400000000
+<6>[    0.013995] MTRR map: 4 entries (3 fixed + 1 variable; max 19), built from 8 variable MTRRs
+<6>[    0.014364] x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WP  UC- WT  
+<6>[    0.015652] last_pfn = 0x7ffdf max_arch_pfn = 0x400000000
+<6>[    0.035774] found SMP MP-table at [mem 0x000f54d0-0x000f54df]
+<6>[    0.038521] Using GB pages for direct mapping
+<6>[    0.046701] RAMDISK: [mem 0x7f295000-0x7ffcffff]
+<6>[    0.047448] ACPI: Early table checksum verification disabled
+<6>[    0.048236] ACPI: RSDP 0x00000000000F5490 000014 (v00 BOCHS )
+<6>[    0.048908] ACPI: RSDT 0x000000007FFE21EB 000038 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+<6>[    0.050098] ACPI: FACP 0x000000007FFE1EF3 0000F4 (v03 BOCHS  BXPC     00000001 BXPC 00000001)
+<6>[    0.051431] ACPI: DSDT 0x000000007FFDFDC0 002133 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+<6>[    0.051613] ACPI: FACS 0x000000007FFDFD80 000040
+<6>[    0.051698] ACPI: APIC 0x000000007FFE1FE7 000090 (v03 BOCHS  BXPC     00000001 BXPC 00000001)
+<6>[    0.051737] ACPI: SRAT 0x000000007FFE2077 000110 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+<6>[    0.051770] ACPI: MCFG 0x000000007FFE2187 00003C (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+<6>[    0.051802] ACPI: WAET 0x000000007FFE21C3 000028 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+<6>[    0.051964] ACPI: Reserving FACP table memory at [mem 0x7ffe1ef3-0x7ffe1fe6]
+<6>[    0.052018] ACPI: Reserving DSDT table memory at [mem 0x7ffdfdc0-0x7ffe1ef2]
+<6>[    0.052031] ACPI: Reserving FACS table memory at [mem 0x7ffdfd80-0x7ffdfdbf]
+<6>[    0.052040] ACPI: Reserving APIC table memory at [mem 0x7ffe1fe7-0x7ffe2076]
+<6>[    0.052049] ACPI: Reserving SRAT table memory at [mem 0x7ffe2077-0x7ffe2186]
+<6>[    0.052058] ACPI: Reserving MCFG table memory at [mem 0x7ffe2187-0x7ffe21c2]
+<6>[    0.052068] ACPI: Reserving WAET table memory at [mem 0x7ffe21c3-0x7ffe21ea]
+<6>[    0.056386] ACPI: SRAT: Node 0 PXM 0 [mem 0x00000000-0x0009ffff]
+<6>[    0.056458] ACPI: SRAT: Node 0 PXM 0 [mem 0x00100000-0x7fffffff]
+<6>[    0.056474] ACPI: SRAT: Node 0 PXM 0 [mem 0x100000000-0x17fffffff]
+<6>[    0.056487] ACPI: SRAT: Node 1 PXM 1 [mem 0x180000000-0x27fffffff]
+<6>[    0.057021] NUMA: Node 0 [mem 0x00001000-0x0009ffff] + [mem 0x00100000-0x7fffffff] -> [mem 0x00001000-0x7fffffff]
+<6>[    0.057118] NUMA: Node 0 [mem 0x00001000-0x7fffffff] + [mem 0x100000000-0x17fffffff] -> [mem 0x00001000-0x17fffffff]
+<6>[    0.058441] NODE_DATA(0) allocated [mem 0x17ffd4b80-0x17fffffff]
+<6>[    0.059806] NODE_DATA(1) allocated [mem 0x27ffd2b80-0x27fffdfff]
+<6>[    0.065964] Zone ranges:
+<6>[    0.065989]   DMA      [mem 0x0000000000001000-0x0000000000ffffff]
+<6>[    0.066194]   DMA32    [mem 0x0000000001000000-0x00000000ffffffff]
+<6>[    0.066220]   Normal   [mem 0x0000000100000000-0x000000027fffffff]
+<6>[    0.066234]   Device   empty
+<6>[    0.066265] Movable zone start for each node
+<6>[    0.066315] Early memory node ranges
+<6>[    0.066362]   node   0: [mem 0x0000000000001000-0x000000000007ffff]
+<6>[    0.066678]   node   0: [mem 0x0000000000081000-0x000000000009efff]
+<6>[    0.066692]   node   0: [mem 0x0000000000100000-0x000000007ffdefff]
+<6>[    0.066744]   node   0: [mem 0x0000000100000000-0x000000017fffffff]
+<6>[    0.066755]   node   1: [mem 0x0000000180000000-0x000000027fffffff]
+<6>[    0.067000] Initmem setup node 0 [mem 0x0000000000001000-0x000000017fffffff]
+<6>[    0.068503] Initmem setup node 1 [mem 0x0000000180000000-0x000000027fffffff]
+<6>[    0.071003] On node 0, zone DMA: 1 pages in unavailable ranges
+<6>[    0.071115] On node 0, zone DMA: 1 pages in unavailable ranges
+<6>[    0.071801] On node 0, zone DMA: 97 pages in unavailable ranges
+<6>[    0.174144] On node 0, zone Normal: 33 pages in unavailable ranges
+<6>[    0.180379] ACPI: PM-Timer IO Port: 0x608
+<6>[    0.181108] ACPI: LAPIC_NMI (acpi_id[0xff] dfl dfl lint[0x1])
+<6>[    0.181866] IOAPIC[0]: apic_id 0, version 32, address 0xfec00000, GSI 0-23
+<6>[    0.182092] ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
+<6>[    0.182567] ACPI: INT_SRC_OVR (bus 0 bus_irq 5 global_irq 5 high level)
+<6>[    0.182625] ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 high level)
+<6>[    0.182804] ACPI: INT_SRC_OVR (bus 0 bus_irq 10 global_irq 10 high level)
+<6>[    0.182821] ACPI: INT_SRC_OVR (bus 0 bus_irq 11 global_irq 11 high level)
+<6>[    0.183229] ACPI: Using ACPI (MADT) for SMP configuration information
+<6>[    0.183791] CPU topo: Max. logical packages:   2
+<6>[    0.183811] CPU topo: Max. logical dies:       2
+<6>[    0.183826] CPU topo: Max. dies per package:   1
+<6>[    0.183941] CPU topo: Max. threads per core:   1
+<6>[    0.184169] CPU topo: Num. cores per package:     2
+<6>[    0.184198] CPU topo: Num. threads per package:   2
+<6>[    0.184218] CPU topo: Allowing 4 present CPUs plus 0 hotplug CPUs
+<6>[    0.186226] PM: hibernation: Registered nosave memory: [mem 0x00000000-0x00000fff]
+<6>[    0.186307] PM: hibernation: Registered nosave memory: [mem 0x00080000-0x00080fff]
+<6>[    0.186340] PM: hibernation: Registered nosave memory: [mem 0x0009f000-0x0009ffff]
+<6>[    0.186382] PM: hibernation: Registered nosave memory: [mem 0x000a0000-0x000effff]
+<6>[    0.186391] PM: hibernation: Registered nosave memory: [mem 0x000f0000-0x000fffff]
+<6>[    0.186404] PM: hibernation: Registered nosave memory: [mem 0x7ffdf000-0x7fffffff]
+<6>[    0.186412] PM: hibernation: Registered nosave memory: [mem 0x80000000-0xafffffff]
+<6>[    0.186420] PM: hibernation: Registered nosave memory: [mem 0xb0000000-0xbfffffff]
+<6>[    0.186427] PM: hibernation: Registered nosave memory: [mem 0xc0000000-0xfed1bfff]
+<6>[    0.186434] PM: hibernation: Registered nosave memory: [mem 0xfed1c000-0xfed1ffff]
+<6>[    0.186442] PM: hibernation: Registered nosave memory: [mem 0xfed20000-0xfffbffff]
+<6>[    0.186450] PM: hibernation: Registered nosave memory: [mem 0xfffc0000-0xffffffff]
+<6>[    0.186650] [mem 0xc0000000-0xfed1bfff] available for PCI devices
+<6>[    0.186755] Booting paravirtualized kernel on bare hardware
+<6>[    0.187253] clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1910969940391419 ns
+<6>[    0.202398] setup_percpu: NR_CPUS:8192 nr_cpumask_bits:4 nr_cpu_ids:4 nr_node_ids:2
+<6>[    0.210895] percpu: Embedded 62 pages/cpu s217088 r8192 d28672 u1048576
+<7>[    0.211817] pcpu-alloc: s217088 r8192 d28672 u1048576 alloc=1*2097152
+<7>[    0.211978] pcpu-alloc: [0] 0 1 [1] 2 3 
+<5>[    0.213643] Kernel command line: console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1
+<5>[    0.215458] Unknown kernel command line parameters "nokaslr", will be passed to user space.
+<5>[    0.221922] random: crng init done
+<6>[    0.225829] Fallback order for Node 0: 0 1 
+<6>[    0.226016] Fallback order for Node 1: 1 0 
+<6>[    0.226389] Built 2 zonelists, mobility grouping on.  Total pages: 2097020
+<6>[    0.226433] Policy zone: Normal
+<6>[    0.229977] mem auto-init: stack:all(zero), heap alloc:off, heap free:off
+<6>[    0.231438] software IO TLB: area num 4.
+<6>[    0.491977] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=2
+<6>[    0.502805] ftrace: allocating 50277 entries in 198 pages
+<6>[    0.502875] ftrace: allocated 198 pages with 4 groups
+<6>[    0.520911] Dynamic Preempt: voluntary
+<6>[    0.527787] rcu: Preemptible hierarchical RCU implementation.
+<6>[    0.527817] rcu: 	RCU event tracing is enabled.
+<6>[    0.527856] rcu: 	RCU restricting CPUs from NR_CPUS=8192 to nr_cpu_ids=4.
+<6>[    0.528166] 	Trampoline variant of Tasks RCU enabled.
+<6>[    0.528180] 	Rude variant of Tasks RCU enabled.
+<6>[    0.528192] 	Tracing variant of Tasks RCU enabled.
+<6>[    0.528338] rcu: RCU calculated value of scheduler-enlistment delay is 100 jiffies.
+<6>[    0.528383] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
+<6>[    0.530827] RCU Tasks: Setting shift to 2 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=4.
+<6>[    0.530890] RCU Tasks Rude: Setting shift to 2 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=4.
+<6>[    0.530913] RCU Tasks Trace: Setting shift to 2 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=4.
+<6>[    0.581889] NR_IRQS: 524544, nr_irqs: 456, preallocated irqs: 16
+<6>[    0.600974] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+<6>[    0.612101] kfence: initialized - using 2097152 bytes for 255 objects at 0x(____ptrval____)-0x(____ptrval____)
+<6>[    0.627405] Console: colour VGA+ 80x25
+<6>[    0.632418] printk: legacy console [ttyS0] enabled
+<6>[    0.676386] mempolicy: Enabling automatic NUMA balancing. Configure with numa_balancing= or the kernel.numa_balancing sysctl
+<6>[    0.677299] ACPI: Core revision 20240827
+<6>[    0.703106] APIC: Switch to symmetric I/O mode setup
+<6>[    0.704511] x2apic: IRQ remapping doesn't support X2APIC mode
+<6>[    0.713170] ..TIMER: vector=0x30 apic1=0 pin1=2 apic2=-1 pin2=-1
+<6>[    0.719632] tsc: Marking TSC unstable due to TSCs unsynchronized
+<6>[    0.720550] Calibrating delay loop (skipped), value calculated using timer frequency.. 2995.07 BogoMIPS (lpj=1497539)
+<6>[    0.727319] x86/cpu: User Mode Instruction Prevention (UMIP) activated
+<6>[    0.744045] Last level iTLB entries: 4KB 0, 2MB 0, 4MB 0
+<6>[    0.744459] Last level dTLB entries: 4KB 0, 2MB 0, 4MB 0, 1GB 0
+<6>[    0.748242] mitigations: Enabled attack vectors: user_kernel, user_user, guest_host, guest_guest, SMT mitigations: auto
+<6>[    0.750281] Speculative Store Bypass: Vulnerable
+<6>[    0.750961] Spectre V2 : Mitigation: Retpolines
+<6>[    0.751469] Spectre V1 : Mitigation: usercopy/swapgs barriers and __user pointer sanitization
+<6>[    0.751961] Spectre V2 : Spectre v2 / SpectreRSB: Filling RSB on context switch and VMEXIT
+<6>[    0.758371] x86/fpu: Supporting XSAVE feature 0x001: 'x87 floating point registers'
+<6>[    0.763207] x86/fpu: Supporting XSAVE feature 0x002: 'SSE registers'
+<6>[    0.763554] x86/fpu: Supporting XSAVE feature 0x004: 'AVX registers'
+<6>[    0.763818] x86/fpu: Supporting XSAVE feature 0x008: 'MPX bounds registers'
+<6>[    0.764101] x86/fpu: Supporting XSAVE feature 0x010: 'MPX CSR'
+<6>[    0.764426] x86/fpu: Supporting XSAVE feature 0x200: 'Protection Keys User registers'
+<6>[    0.765028] x86/fpu: xstate_offset[2]:  576, xstate_sizes[2]:  256
+<6>[    0.765457] x86/fpu: xstate_offset[3]:  960, xstate_sizes[3]:   64
+<6>[    0.765712] x86/fpu: xstate_offset[4]: 1024, xstate_sizes[4]:   64
+<6>[    0.766165] x86/fpu: xstate_offset[9]: 2688, xstate_sizes[9]:    8
+<6>[    0.766451] x86/fpu: Enabled xstate features 0x21f, context size is 2696 bytes, using 'standard' format.
+<6>[    1.000377] Freeing SMP alternatives memory: 48K
+<6>[    1.001615] pid_max: default: 32768 minimum: 301
+<6>[    1.019016] Yama: becoming mindful.
+<6>[    1.020675] SELinux:  Initializing.
+<6>[    1.026187] LSM support for eBPF active
+<6>[    1.026880] landlock: Up and running.
+<6>[    1.108676] Dentry cache hash table entries: 1048576 (order: 11, 8388608 bytes, vmalloc hugepage)
+<6>[    1.142801] Inode-cache hash table entries: 524288 (order: 10, 4194304 bytes, vmalloc hugepage)
+<6>[    1.144951] Mount-cache hash table entries: 16384 (order: 5, 131072 bytes, vmalloc)
+<6>[    1.146397] Mountpoint-cache hash table entries: 16384 (order: 5, 131072 bytes, vmalloc)
+<6>[    1.309142] smpboot: CPU0: AMD QEMU TCG CPU version 2.5+ (family: 0x6, model: 0x6, stepping: 0x3)
+<6>[    1.340506] Performance Events: PMU not available due to virtualization, using software events only.
+<6>[    1.343032] signal: max sigframe size: 3632
+<6>[    1.346060] rcu: Hierarchical SRCU implementation.
+<6>[    1.346368] rcu: 	Max phase no-delay instances is 400.
+<6>[    1.353025] Timer migration: 2 hierarchy levels; 8 children per group; 1 crossnode level
+<6>[    1.365729] NMI watchdog: Perf NMI watchdog permanently disabled
+<6>[    1.371436] smp: Bringing up secondary CPUs ...
+<6>[    1.382898] smpboot: x86: Booting SMP configuration:
+<6>[    1.383211] .... node  #0, CPUs:      #1
+<6>[    1.401377] .... node  #1, CPUs:   #2 #3
+<5>[    0.100093] calibrate_delay_direct() dropping max bogoMips estimate 2 = 1799199
+<5>[    0.100093] calibrate_delay_direct() dropping max bogoMips estimate 0 = 1729771
+<6>[    1.624857] smp: Brought up 2 nodes, 4 CPUs
+<6>[    1.625304] smpboot: Total of 4 processors activated (11988.33 BogoMIPS)
+<6>[    1.700538] node 0 deferred pages initialised in 53ms
+<6>[    1.743408] node 1 deferred pages initialised in 95ms
+<6>[    1.745453] Memory: 8097872K/8388080K available (18432K kernel code, 5771K rwdata, 14072K rodata, 4204K init, 5424K bss, 268576K reserved, 0K cma-reserved)
+<6>[    1.766097] devtmpfs: initialized
+<6>[    1.774102] x86/mm: Memory block size: 128MB
+<6>[    1.813222] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1911260446275000 ns
+<6>[    1.814471] posixtimers hash table entries: 2048 (order: 3, 32768 bytes, vmalloc)
+<6>[    1.814543] futex hash table entries: 512 (32768 bytes on 2 NUMA nodes, total 64 KiB, linear).
+<6>[    1.850421] pinctrl core: initialized pinctrl subsystem
+<6>[    1.923323] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+<6>[    1.931724] DMA: preallocated 1024 KiB GFP_KERNEL pool for atomic allocations
+<6>[    1.932656] DMA: preallocated 1024 KiB GFP_KERNEL|GFP_DMA pool for atomic allocations
+<6>[    1.933473] DMA: preallocated 1024 KiB GFP_KERNEL|GFP_DMA32 pool for atomic allocations
+<6>[    1.934518] audit: initializing netlink subsys (disabled)
+<5>[    1.938690] audit: type=2000 audit(1793140505.236:1): state=initialized audit_enabled=0 res=1
+<6>[    1.947043] thermal_sys: Registered thermal governor 'fair_share'
+<6>[    1.947194] thermal_sys: Registered thermal governor 'step_wise'
+<6>[    1.947465] thermal_sys: Registered thermal governor 'user_space'
+<6>[    1.948259] cpuidle: using governor menu
+<6>[    1.952264] acpiphp: ACPI Hot Plug PCI Controller Driver version: 0.5
+<6>[    1.961386] PCI: ECAM [mem 0xb0000000-0xbfffffff] (base 0xb0000000) for domain 0000 [bus 00-ff]
+<6>[    1.965168] PCI: Using configuration type 1 for base access
+<4>[    1.966551] mtrr: your CPUs had inconsistent fixed MTRR settings
+<4>[    1.966789] mtrr: your CPUs had inconsistent variable MTRR settings
+<4>[    1.967164] mtrr: your CPUs had inconsistent MTRRdefType settings
+<6>[    1.967426] mtrr: probably your BIOS does not setup all CPUs.
+<6>[    1.967661] mtrr: corrected configuration.
+<6>[    1.973563] kprobes: kprobe jump-optimization is enabled. All kprobes are optimized if possible.
+<6>[    1.996142] HugeTLB: registered 1.00 GiB page size, pre-allocated 0 pages
+<6>[    1.996142] HugeTLB: 16380 KiB vmemmap can be freed for a 1.00 GiB page
+<6>[    1.996142] HugeTLB: registered 2.00 MiB page size, pre-allocated 0 pages
+<6>[    1.996142] HugeTLB: 28 KiB vmemmap can be freed for a 2.00 MiB page
+<6>[    2.007594] cryptd: max_cpu_qlen set to 1000
+<6>[    2.022142] ACPI: Added _OSI(Module Device)
+<6>[    2.022142] ACPI: Added _OSI(Processor Device)
+<6>[    2.022142] ACPI: Added _OSI(Processor Aggregator Device)
+<6>[    2.081263] ACPI: 1 ACPI AML tables successfully acquired and loaded
+<6>[    2.118344] ACPI: Interpreter enabled
+<6>[    2.120198] ACPI: PM: (supports S0 S5)
+<6>[    2.120457] ACPI: Using IOAPIC for interrupt routing
+<6>[    2.124390] PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+<6>[    2.124750] PCI: Ignoring E820 reservations for host bridge windows
+<6>[    2.128359] ACPI: Enabled 2 GPEs in block 00 to 3F
+<6>[    2.199624] ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
+<6>[    2.201016] acpi PNP0A08:00: _OSC: OS supports [ExtendedConfig ASPM ClockPM Segments MSI EDR HPX-Type3]
+<6>[    2.204555] acpi PNP0A08:00: _OSC: platform does not support [PCIeHotplug LTR DPC]
+<6>[    2.207306] acpi PNP0A08:00: _OSC: OS now controls [SHPCHotplug PME AER PCIeCapability]
+<6>[    2.215914] PCI host bridge to bus 0000:00
+<4>[    2.216301] pci_bus 0000:00: Unknown NUMA node; performance will be reduced
+<6>[    2.217279] pci_bus 0000:00: root bus resource [io  0x0000-0x0cf7 window]
+<6>[    2.217670] pci_bus 0000:00: root bus resource [io  0x0d00-0xffff window]
+<6>[    2.217892] pci_bus 0000:00: root bus resource [mem 0x000a0000-0x000bffff window]
+<6>[    2.218167] pci_bus 0000:00: root bus resource [mem 0x80000000-0xafffffff window]
+<6>[    2.218458] pci_bus 0000:00: root bus resource [mem 0xc0000000-0xfebfffff window]
+<6>[    2.218702] pci_bus 0000:00: root bus resource [mem 0x280000000-0xa7fffffff window]
+<6>[    2.219505] pci_bus 0000:00: root bus resource [bus 00-ff]
+<6>[    2.222663] pci 0000:00:00.0: [8086:29c0] type 00 class 0x060000 conventional PCI endpoint
+<6>[    2.232388] pci 0000:00:01.0: [1234:1111] type 00 class 0x030000 conventional PCI endpoint
+<6>[    2.234467] pci 0000:00:01.0: BAR 0 [mem 0xfd000000-0xfdffffff pref]
+<6>[    2.234890] pci 0000:00:01.0: BAR 2 [mem 0xfebf0000-0xfebf0fff]
+<6>[    2.235173] pci 0000:00:01.0: ROM [mem 0xfebe0000-0xfebeffff pref]
+<6>[    2.236352] pci 0000:00:01.0: Video device with shadowed ROM at [mem 0x000c0000-0x000dffff]
+<6>[    2.238645] pci 0000:00:1f.0: [8086:2918] type 00 class 0x060100 conventional PCI endpoint
+<6>[    2.238781] pci 0000:00:1f.0: quirk: [io  0x0600-0x067f] claimed by ICH6 ACPI/GPIO/TCO
+<6>[    2.241951] pci 0000:00:1f.2: [8086:2922] type 00 class 0x010601 conventional PCI endpoint
+<6>[    2.242721] pci 0000:00:1f.2: BAR 4 [io  0xc040-0xc05f]
+<6>[    2.244200] pci 0000:00:1f.2: BAR 5 [mem 0xfebf1000-0xfebf1fff]
+<6>[    2.246785] pci 0000:00:1f.3: [8086:2930] type 00 class 0x0c0500 conventional PCI endpoint
+<6>[    2.246838] pci 0000:00:1f.3: BAR 4 [io  0x0700-0x073f]
+<6>[    2.258110] ACPI: PCI: Interrupt link LNKA configured for IRQ 10
+<6>[    2.260663] ACPI: PCI: Interrupt link LNKB configured for IRQ 10
+<6>[    2.262405] ACPI: PCI: Interrupt link LNKC configured for IRQ 11
+<6>[    2.263954] ACPI: PCI: Interrupt link LNKD configured for IRQ 11
+<6>[    2.265718] ACPI: PCI: Interrupt link LNKE configured for IRQ 10
+<6>[    2.267303] ACPI: PCI: Interrupt link LNKF configured for IRQ 10
+<6>[    2.268906] ACPI: PCI: Interrupt link LNKG configured for IRQ 11
+<6>[    2.270586] ACPI: PCI: Interrupt link LNKH configured for IRQ 11
+<6>[    2.271349] ACPI: PCI: Interrupt link GSIA configured for IRQ 16
+<6>[    2.271781] ACPI: PCI: Interrupt link GSIB configured for IRQ 17
+<6>[    2.272302] ACPI: PCI: Interrupt link GSIC configured for IRQ 18
+<6>[    2.272677] ACPI: PCI: Interrupt link GSID configured for IRQ 19
+<6>[    2.273098] ACPI: PCI: Interrupt link GSIE configured for IRQ 20
+<6>[    2.273643] ACPI: PCI: Interrupt link GSIF configured for IRQ 21
+<6>[    2.274085] ACPI: PCI: Interrupt link GSIG configured for IRQ 22
+<6>[    2.274362] ACPI: PCI: Interrupt link GSIH configured for IRQ 23
+<6>[    2.288489] iommu: Default domain type: Translated
+<6>[    2.289220] iommu: DMA domain TLB invalidation policy: lazy mode
+<5>[    2.363826] SCSI subsystem initialized
+<6>[    2.366332] ACPI: bus type USB registered
+<6>[    2.367267] usbcore: registered new interface driver usbfs
+<6>[    2.367966] usbcore: registered new interface driver hub
+<6>[    2.368504] usbcore: registered new device driver usb
+<6>[    2.370200] pps_core: LinuxPPS API ver. 1 registered
+<6>[    2.370403] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+<6>[    2.370815] PTP clock support registered
+<6>[    2.373520] EDAC MC: Ver: 3.0.0
+<6>[    2.395426] NetLabel: Initializing
+<6>[    2.395684] NetLabel:  domain hash size = 128
+<6>[    2.395896] NetLabel:  protocols = UNLABELED CIPSOv4 CALIPSO
+<6>[    2.397944] NetLabel:  unlabeled traffic allowed by default
+<6>[    2.398424] PCI: Using ACPI for IRQ routing
+<7>[    2.401142] PCI: pci_cache_line_size set to 64 bytes
+<7>[    2.401142] e820: reserve RAM buffer [mem 0x0009fc00-0x0009ffff]
+<7>[    2.401142] e820: reserve RAM buffer [mem 0x7ffdf000-0x7fffffff]
+<6>[    2.410657] pci 0000:00:01.0: vgaarb: setting as boot VGA device
+<6>[    2.410978] pci 0000:00:01.0: vgaarb: bridge control possible
+<6>[    2.411142] pci 0000:00:01.0: vgaarb: VGA device added: decodes=io+mem,owns=io+mem,locks=none
+<6>[    2.411206] vgaarb: loaded
+<6>[    2.415212] clocksource: Switched to clocksource refined-jiffies
+<5>[    2.431318] VFS: Disk quotas dquot_6.6.0
+<6>[    2.431814] VFS: Dquot-cache hash table entries: 512 (order 0, 4096 bytes)
+<6>[    2.436992] pnp: PnP ACPI init
+<6>[    2.443293] system 00:04: [mem 0xb0000000-0xbfffffff window] has been reserved
+<6>[    2.447830] pnp: PnP ACPI: found 5 devices
+<6>[    2.503429] clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 2085701024 ns
+<6>[    2.504128] clocksource: Switched to clocksource acpi_pm
+<6>[    2.505719] NET: Registered PF_INET protocol family
+<6>[    2.520745] IP idents hash table entries: 131072 (order: 8, 1048576 bytes, vmalloc)
+<6>[    2.741267] tcp_listen_portaddr_hash hash table entries: 4096 (order: 4, 65536 bytes, vmalloc)
+<6>[    2.741896] Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, vmalloc)
+<6>[    2.742533] TCP established hash table entries: 65536 (order: 7, 524288 bytes, vmalloc)
+<6>[    2.744260] TCP bind hash table entries: 65536 (order: 9, 2097152 bytes, vmalloc hugepage)
+<6>[    2.750703] TCP: Hash tables configured (established 65536 bind 65536)
+<6>[    2.756829] MPTCP token hash table entries: 8192 (order: 5, 196608 bytes, vmalloc)
+<6>[    2.757953] UDP hash table entries: 4096 (order: 5, 131072 bytes, vmalloc)
+<6>[    2.758944] UDP-Lite hash table entries: 4096 (order: 5, 131072 bytes, vmalloc)
+<6>[    2.762027] NET: Registered PF_UNIX/PF_LOCAL protocol family
+<6>[    2.762964] NET: Registered PF_XDP protocol family
+<6>[    2.764527] pci_bus 0000:00: resource 4 [io  0x0000-0x0cf7 window]
+<6>[    2.764736] pci_bus 0000:00: resource 5 [io  0x0d00-0xffff window]
+<6>[    2.764938] pci_bus 0000:00: resource 6 [mem 0x000a0000-0x000bffff window]
+<6>[    2.765209] pci_bus 0000:00: resource 7 [mem 0x80000000-0xafffffff window]
+<6>[    2.765408] pci_bus 0000:00: resource 8 [mem 0xc0000000-0xfebfffff window]
+<6>[    2.765596] pci_bus 0000:00: resource 9 [mem 0x280000000-0xa7fffffff window]
+<6>[    2.766592] PCI: CLS 0 bytes, default 64
+<6>[    2.767505] PCI-DMA: Using software bounce buffering for IO (SWIOTLB)
+<6>[    2.767800] software IO TLB: mapped [mem 0x000000007b295000-0x000000007f295000] (64MB)
+<6>[    2.768573] ACPI: bus type thunderbolt registered
+<6>[    2.772858] Trying to unpack rootfs image as initramfs...
+<5>[    2.986074] Initialise system trusted keyrings
+<5>[    2.990875] Key type blacklist registered
+<6>[    2.999887] workingset: timestamp_bits=36 max_order=21 bucket_order=0
+<6>[    3.000994] zbud: loaded
+<5>[    3.019346] integrity: Platform Keyring initialized
+<5>[    3.020250] integrity: Machine keyring initialized
+<6>[    4.854845] Freeing initrd memory: 13548K
+<6>[    5.192666] NET: Registered PF_ALG protocol family
+<5>[    5.193222] Key type asymmetric registered
+<5>[    5.193561] Asymmetric key parser 'x509' registered
+<6>[    5.194952] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 246)
+<6>[    5.197509] io scheduler mq-deadline registered
+<6>[    5.197858] io scheduler kyber registered
+<6>[    5.198600] io scheduler bfq registered
+<6>[    5.285396] atomic64_test: passed for x86-64 platform with CX8 and with SSE
+<6>[    5.295768] input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
+<6>[    5.301438] ACPI: button: Power Button [PWRF]
+<6>[    5.311807] Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+<6>[    5.319947] 00:02: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+<6>[    5.329948] Non-volatile memory driver v1.3
+<6>[    5.331744] ACPI: bus type drm_connector registered
+<6>[    5.343623] rdac: device handler registered
+<6>[    5.344948] hp_sw: device handler registered
+<6>[    5.345251] emc: device handler registered
+<6>[    5.346095] alua: device handler registered
+<6>[    5.355629] usbcore: registered new interface driver usbserial_generic
+<6>[    5.356297] usbserial: USB Serial support registered for generic
+<6>[    5.358594] i8042: PNP: PS/2 Controller [PNP0303:KBD,PNP0f13:MOU] at 0x60,0x64 irq 1,12
+<6>[    5.364571] serio: i8042 KBD port at 0x60,0x64 irq 1
+<6>[    5.365303] serio: i8042 AUX port at 0x60,0x64 irq 12
+<6>[    5.368617] mousedev: PS/2 mouse device common for all mice
+<6>[    5.372814] rtc_cmos 00:03: RTC can wake from S4
+<6>[    5.377579] input: AT Translated Set 2 keyboard as /devices/platform/i8042/serio0/input/input1
+<6>[    5.380358] rtc_cmos 00:03: registered as rtc0
+<6>[    5.381453] rtc_cmos 00:03: setting system clock to 2026-10-27T22:35:09 UTC (1793140509)
+<6>[    5.384439] rtc_cmos 00:03: alarms up to one day, y3k, 242 bytes nvram
+<4>[    5.385802] amd_pstate: the _CPC object is not present in SBIOS or ACPI disabled
+<6>[    5.395646] hid: raw HID events driver (C) Jiri Kosina
+<6>[    5.397106] usbcore: registered new interface driver usbhid
+<6>[    5.397374] usbhid: USB HID core driver
+<6>[    5.398531] drop_monitor: Initializing network drop monitor service
+<6>[    5.400829] Initializing XFRM netlink socket
+<6>[    5.401878] NET: Registered PF_INET6 protocol family
+<6>[    5.430035] Segment Routing with IPv6
+<6>[    5.430960] In-situ OAM (IOAM) with IPv6
+<6>[    5.432870] NET: Registered PF_PACKET protocol family
+<6>[    5.434402] mpls_gso: MPLS GSO support
+<6>[    5.443251] IPI shorthand broadcast: enabled
+<6>[    5.444773] AES CTR mode by8 optimization enabled
+<6>[    5.497709] registered taskstats version 1
+<5>[    5.504834] Loading compiled-in X.509 certificates
+<5>[    5.526655] Loaded X.509 cert 'Build time autogenerated kernel key: 8d6cc04d5631c364d0d8b9b39bc6c5bf68964024'
+<6>[    5.591970] Demotion targets for Node 0: null
+<6>[    5.592317] Demotion targets for Node 1: null
+<6>[    5.592665] page_owner is disabled
+<5>[    5.596926] Key type .fscrypt registered
+<5>[    5.597380] Key type fscrypt-provisioning registered
+<5>[    5.599857] Key type big_key registered
+<5>[    5.627354] Key type encrypted registered
+<6>[    5.628680] ima: No TPM chip found, activating TPM-bypass!
+<5>[    5.628973] Loading compiled-in module X.509 certificates
+<5>[    5.632029] Loaded X.509 cert 'Build time autogenerated kernel key: 8d6cc04d5631c364d0d8b9b39bc6c5bf68964024'
+<6>[    5.632694] ima: Allocated hash algorithm: sha256
+<6>[    5.637557] ima: No architecture policies found
+<6>[    5.639959] evm: Initialising EVM extended attributes:
+<6>[    5.640525] evm: security.selinux
+<6>[    5.640828] evm: security.SMACK64 (disabled)
+<6>[    5.641028] evm: security.SMACK64EXEC (disabled)
+<6>[    5.641468] evm: security.SMACK64TRANSMUTE (disabled)
+<6>[    5.641700] evm: security.SMACK64MMAP (disabled)
+<6>[    5.641934] evm: security.apparmor (disabled)
+<6>[    5.642301] evm: security.ima
+<6>[    5.642482] evm: security.capability
+<6>[    5.642697] evm: HMAC attrs: 0x1
+<5>[    5.868578] Running certificate verification RSA selftest
+<6>[    6.099751] input: ImExPS/2 Generic Explorer Mouse as /devices/platform/i8042/serio1/input/input3
+<5>[    6.106014] Loaded X.509 cert 'Certificate verification self-testing key: f58703bb33ce1b73ee02eccdee5b8817518fe3db'
+<5>[    6.114813] Running certificate verification ECDSA selftest
+<5>[    6.149017] Loaded X.509 cert 'Certificate verification ECDSA self-testing key: 2900bcea1deb7bc8479a84a23d758efdfdd2b2d3'
+<4>[    6.238314] Unstable clock detected, switching default tracing clock to "global"
+<4>[    6.238314] If you want to keep using the local clock, then add:
+<4>[    6.238314]   "trace_clock=local"
+<4>[    6.238314] on the kernel command line
+<6>[    6.241999] clk: Disabling unused clocks
+<6>[    6.242750] PM: genpd: Disabling unused power domains
+<6>[    6.533503] Freeing unused decrypted memory: 2028K
+<6>[    7.306573] Freeing unused kernel image (initmem) memory: 4204K
+<6>[    7.307197] Write protecting the kernel read-only data: 32768k
+<6>[    7.312424] Freeing unused kernel image (rodata/data gap) memory: 264K
+<6>[    7.671507] x86/mm: Checked W+X mappings: passed, no W+X pages found.
+<6>[    7.672690] Run /init as init process
+<7>[    7.672966]   with arguments:
+<7>[    7.673025]     /init
+<7>[    7.673058]     nokaslr
+<7>[    7.673078]   with environment:
+<7>[    7.673108]     HOME=/
+<7>[    7.673136]     TERM=linux
+<4>[    7.932989] ihk: loading out-of-tree module taints kernel.
+<5>[    7.933305] ihk: module verification failed: signature and/or required key missing - tainting kernel
+<6>[    8.015333] ihk: os_family=registered minors=64
+<6>[    8.015664] ihk: lifecycle=load version=1.7.0rc4 abi=1 parameters=0 dependencies=0
+<6>[    8.492453] ihk_smp_x86_64: provider_callback=init status=complete callback_abi=1
+<6>[    8.493006] ihk: provider_lease=attach status=live minor=0 callback_abi=1
+<6>[    8.496822] ihk_smp_x86_64: lifecycle=load parameters=6 dependency=ihk import_namespace=MCKERNEL_IHK_V1
+<6>[    8.756396] mcctrl: application_service=registered abi=1 topology_queries=2
+<6>[    8.756551] mcctrl: lifecycle=load foundation=1 parameters=0 declared_dependencies=1 ihk_import=source-bound-anchor binfmt=blocked-no-safe-rust-api
+<6>[    8.869705] ihk: provider_open=acquire status=live minor=0
+<6>[    8.909240] smpboot: CPU 1 is now offline
+<6>[   10.234825] ihk: os=create minor=0 state=not-booted kmsg_bytes=4194304
+<6>[   10.517459] ihk_smp_x86_64: IHK-SMP: startup tables os=0 generation=1 root=4a00000 image=103200000 pages=260 checksum=06d29c3df49f5c8d; CPUs not started
+<6>[   10.518682] ihk_smp_x86_64: IHK-SMP: image loaded os=0 generation=1 segments=2 window=8388608 checksum=d2a67b6684687f81; CPUs not started
+<6>[   10.531512] ihk_smp_x86_64: IHK-SMP: sysfs root attached os=0 generation=1 setup_completed=0
+<6>[   10.531727] ihk_smp_x86_64: IHK-SMP: boot prepared os=0 generation=1 params=4900000 bytes=8192 trampoline=80000 startup=109400000 cpus=1 numa=1 chunks=2 kmsg=109800000; CPUs not started
+<6>[   10.545223] ihk_smp_x86_64: IHK-SMP: CPU start os=0 generation=1 linux_cpu=1 apic=1 result=0; resources retained
+<6>[   10.545587] ihk_smp_x86_64: IHK-SMP: guest boot progress os=0 generation=1 status=1 irq_events=0; IKC readiness pending
+<6>[   10.941308] ihk_smp_x86_64: IHK-SMP: guest boot progress os=0 generation=1 status=2 irq_events=0; IKC readiness pending
+<6>[   10.941487] ihk_smp_x86_64: IHK-SMP: boot incomplete os=0 generation=1 status=2 receive=103bcf000 send=103bce000; host IKC integration pending, all resources retained
+<6>[   10.944133] ihk_smp_x86_64: IHK-SMP: master INIT_ACK os=0 generation=1 target_cpu=1 receive=103bcf000 send=103bce000; revision-2 replies enabled
+<6>[   10.954957] ihk_smp_x86_64: IHK-SMP: guest CONNECT os=0 generation=1 irq_events=1 packets=1 port=501 packet_size=128 receive=0 send=103bd5000 cookie=ffff888103bcdb80 magic=4905 cpu=-1; process listener notified=true
+<6>[   10.957025] ihk_smp_x86_64: IHK-SMP: control accepted os=0 generation=1 port=501 guest_cpu=0 linux_cpu=1 cookie=1 receive=4980000 send=103bd5000 bytes=16384 reference=2 remote_cookie=ffff888103bcdb80
+<6>[   10.957451] ihk_smp_x86_64: IHK-SMP: CONNECT_REPLY os=0 generation=1 port=501 reference=2 errno=0 receive=4980000 cookie=1
+<6>[   10.966369] ihk_smp_x86_64: IHK-SMP: guest CONNECT os=0 generation=1 irq_events=2 packets=2 port=503 packet_size=128 receive=0 send=103bdb000 cookie=ffff888103bcdd80 magic=4393 cpu=0; process listener notified=true
+<6>[   10.966771] ihk_smp_x86_64: IHK-SMP: control accepted os=0 generation=1 port=503 guest_cpu=0 linux_cpu=1 cookie=2 receive=4984000 send=103bdb000 bytes=16384 reference=3 remote_cookie=ffff888103bcdd80
+<6>[   10.966877] ihk_smp_x86_64: IHK-SMP: CONNECT_REPLY os=0 generation=1 port=503 reference=3 errno=0 receive=4984000 cookie=2
+<6>[   10.977600] ihk_smp_x86_64: IHK-SMP: regular request os=0 generation=1 port=503 cookie=2 packets=1 message=b reference=0 argument=1032ff790 irq_events=3
+<6>[   10.980205] ihk_smp_x86_64: IHK-SMP: vDSO replied os=0 generation=1 argument=1032ff790 bytes=128 text_pages=2 text0=2973000 text1=2974000 time=3006000 rng=3007000 pvclock=0 hvclock=0
+<6>[   10.991458] ihk_smp_x86_64: IHK-SMP: regular request os=0 generation=1 port=503 cookie=2 packets=2 message=40 reference=62783488 argument=0 irq_events=4
+<6>[   11.010967] ihk_smp_x86_64: IHK-SMP: sysfs setup replied os=0 generation=1 request=103be0000 buffer=103bdf000 bytes=4096 nodes=76 error=0 setup_completed=1
+<6>[   11.021314] ihk_smp_x86_64: IHK-SMP: regular request os=0 generation=1 port=503 cookie=2 packets=3 message=30 reference=62787584 argument=0 irq_events=5
+<6>[   11.041071] ihk_smp_x86_64: IHK-SMP: sysfs metadata os=0 generation=1 sequence=1 operation=Create { mode: 292, client: Client { operations: 18446744073685433056, instance: 18446744073685432784 } } path=/sys/devices/system/cpu/num_processors errno=0
+<6>[   11.043477] ihk_smp_x86_64: IHK-SMP: sysfs metadata os=0 generation=1 sequence=2 operation=Create { mode: 420, client: Client { operations: 18446744073685432400, instance: 18446612686427709248 } } path=/sys/devices/system/cpu/cpu0/online errno=0
+<6>[   11.045608] ihk_smp_x86_64: IHK-SMP: sysfs metadata os=0 generation=1 sequence=3 operation=Lookup path=/sys/devices/system/cpu/cpu0 errno=0
+<6>[   11.047466] ihk_smp_x86_64: IHK-SMP: sysfs metadata os=0 generation=1 sequence=4 operation=Symlink { target: 15 } path=/sys/bus/cpu/devices/cpu0 errno=0
+<6>[   11.049390] ihk_smp_x86_64: IHK-SMP: sysfs metadata os=0 generation=1 sequence=5 operation=Symlink { target: 15 } path=/sys/bus/cpu/drivers/processor/cpu0 errno=0
+<6>[   11.051351] ihk_smp_x86_64: IHK-SMP: sysfs metadata os=0 generation=1 sequence=6 operation=Create { mode: 292, client: Client { operations: 18446744073685432792, instance: 18446744073685821760 } } path=/sys/devices/system/node/node0/meminfo errno=0
+<6>[   11.053378] ihk_smp_x86_64: IHK-SMP: sysfs metadata os=0 generation=1 sequence=7 operation=Create { mode: 420, client: Client { operations: 18446744073685432432, instance: 0 } } path=/sys/kernel/debug/dynamic_debug/control errno=0
+<6>[   11.061355] ihk_smp_x86_64: IHK-SMP: full guest ready os=0 generation=1 status=3 sysfs_requests=7 continuing_workers=3
+<6>[   31.605155] ihk: provider_open=release status=complete minor=0
+<6>[   31.790953] mcctrl: application_file=open os=0 generation=1
+<6>[   31.813940] mcctrl: application_process=registered os=0 generation=1 pid=255
+<6>[   31.857035] ihk_smp_x86_64: IHK-SMP: application prepare ACK os=0 generation=1 pid=255 token=4 errno=0 abandoned=0 quarantined=0
+<6>[   31.859943] mcctrl: application_image=prepared os=0 generation=1 pid=255 sections=8 cpu=0
+<6>[   31.895544] ihk_smp_x86_64: IHK-SMP: application SCHEDULE os=0 generation=1 pid=255 cpu=0
+<6>[   31.905132] ihk_smp_x86_64: IHK-SMP: application procfs published os=0 generation=1 pid=255 tid=255
+<6>[   31.929982] mcctrl: application_syscall=delivered os=0 generation=1 pid=255 worker=7 delivery=8 cpu=0 number=21
+<6>[   31.938477] mcctrl: application_syscall=return_route os=0 generation=1 pid=255 worker=7 delivery=8 launcher_cpu=1 guest_cpu=0
+<6>[   31.943638] mcctrl: application_syscall=returned os=0 generation=1 pid=255 worker=7 delivery=8 cpu=0 value=-2
+<6>[   31.949747] mcctrl: application_syscall=delivered os=0 generation=1 pid=255 worker=6 delivery=9 cpu=0 number=257
+<6>[   31.954489] mcctrl: application_syscall=returned os=0 generation=1 pid=255 worker=6 delivery=9 cpu=0 value=-2
+<6>[   31.957613] mcctrl: application_syscall=delivered os=0 generation=1 pid=255 worker=7 delivery=10 cpu=0 number=257
+<6>[   31.959407] mcctrl: application_syscall=return_route os=0 generation=1 pid=255 worker=7 delivery=10 launcher_cpu=1 guest_cpu=0
+<6>[   31.961598] mcctrl: application_syscall=returned os=0 generation=1 pid=255 worker=7 delivery=10 cpu=0 value=-2
+<6>[   31.963581] mcctrl: application_syscall=delivered os=0 generation=1 pid=255 worker=6 delivery=11 cpu=0 number=262
+<6>[   31.966477] mcctrl: application_syscall=returned os=0 generation=1 pid=255 worker=6 delivery=11 cpu=0 value=-2
+<6>[   31.969500] mcctrl: application_syscall=delivered os=0 generation=1 pid=255 worker=7 delivery=12 cpu=0 number=257
+<6>[   31.969803] mcctrl: application_syscall=return_route os=0 generation=1 pid=255 worker=7 delivery=12 launcher_cpu=1 guest_cpu=0
+<6>[   31.972484] mcctrl: application_syscall=returned os=0 generation=1 pid=255 worker=7 delivery=12 cpu=0 value=-2
+<6>[   31.975592] mcctrl: application_syscall=delivered os=0 generation=1 pid=255 worker=7 delivery=13 cpu=0 number=262
+<6>[   31.975898] mcctrl: application_syscall=return_route os=0 generation=1 pid=255 worker=7 delivery=13 launcher_cpu=1 guest_cpu=0
+<6>[   31.977478] mcctrl: application_syscall=returned os=0 generation=1 pid=255 worker=7 delivery=13 cpu=0 value=-2
+<6>[   31.980547] mcctrl: application_syscall=delivered os=0 generation=1 pid=255 worker=6 delivery=14 cpu=0 number=257
+<6>[   31.982522] mcctrl: application_syscall=returned os=0 generation=1 pid=255 worker=6 delivery=14 cpu=0 value=6
+<6>[   31.984541] mcctrl: application_syscall=delivered os=0 generation=1 pid=255 worker=7 delivery=15 cpu=0 number=0
+<6>[   31.987723] mcctrl: application_syscall=return_route os=0 generation=1 pid=255 worker=7 delivery=15 launcher_cpu=1 guest_cpu=0
+<6>[   31.988879] mcctrl: application_syscall=returned os=0 generation=1 pid=255 worker=7 delivery=15 cpu=0 value=832
+<6>[   31.990638] mcctrl: application_syscall=delivered os=0 generation=1 pid=255 worker=7 delivery=16 cpu=0 number=17
+<6>[   31.991545] mcctrl: application_syscall=return_route os=0 generation=1 pid=255 worker=7 delivery=16 launcher_cpu=1 guest_cpu=0
+<6>[   31.992603] mcctrl: application_syscall=returned os=0 generation=1 pid=255 worker=7 delivery=16 cpu=0 value=784
+<6>[   31.994627] mcctrl: application_syscall=delivered os=0 generation=1 pid=255 worker=6 delivery=17 cpu=0 number=5
+<6>[   31.996553] mcctrl: application_syscall=returned os=0 generation=1 pid=255 worker=6 delivery=17 cpu=0 value=0
+<6>[   31.999778] mcctrl: application_syscall=delivered os=0 generation=1 pid=255 worker=7 delivery=18 cpu=0 number=17
+<6>[   31.999942] mcctrl: application_syscall=return_route os=0 generation=1 pid=255 worker=7 delivery=18 launcher_cpu=1 guest_cpu=0
+<6>[   32.001576] mcctrl: application_syscall=returned os=0 generation=1 pid=255 worker=7 delivery=18 cpu=0 value=784
+<6>[   32.009014] ihk_smp_x86_64: file_pager=create handle=20 references=1 shared=0
+<6>[   32.009805] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=19 operation=1 value=0
+<6>[   32.017787] ihk_smp_x86_64: host_mapping=invalidated os=0 generation=1 pid=255 worker=7 delivery=21 value=0 completed=0
+<6>[   32.025096] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=22 operation=3 value=4096
+<6>[   32.030243] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=23 operation=3 value=4096
+<6>[   32.035042] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=24 operation=3 value=4096
+<6>[   32.040032] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=25 operation=3 value=4096
+<6>[   32.044001] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=26 operation=3 value=4096
+<6>[   32.047964] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=27 operation=3 value=4096
+<6>[   32.051856] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=28 operation=3 value=4096
+<6>[   32.055994] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=29 operation=3 value=4096
+<6>[   32.059815] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=30 operation=3 value=4096
+<6>[   32.063918] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=31 operation=3 value=4096
+<6>[   32.067874] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=32 operation=3 value=4096
+<6>[   32.072021] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=33 operation=3 value=4096
+<6>[   32.075935] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=34 operation=3 value=4096
+<6>[   32.078993] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=35 operation=3 value=4096
+<6>[   32.083840] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=36 operation=3 value=4096
+<6>[   32.087891] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=37 operation=3 value=4096
+<6>[   32.091940] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=38 operation=3 value=4096
+<6>[   32.096076] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=39 operation=3 value=4096
+<6>[   32.099798] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=40 operation=3 value=4096
+<6>[   32.103756] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=41 operation=3 value=4096
+<6>[   32.108435] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=42 operation=3 value=4096
+<6>[   32.112967] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=43 operation=3 value=4096
+<6>[   32.116050] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=44 operation=3 value=4096
+<6>[   32.120948] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=45 operation=3 value=4096
+<6>[   32.125104] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=46 operation=3 value=4096
+<6>[   32.130034] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=47 operation=3 value=4096
+<6>[   32.134332] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=48 operation=3 value=4096
+<6>[   32.137940] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=49 operation=3 value=4096
+<6>[   32.142024] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=50 operation=3 value=4096
+<6>[   32.146020] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=51 operation=3 value=4096
+<6>[   32.149003] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=52 operation=3 value=4096
+<6>[   32.153945] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=53 operation=3 value=4096
+<6>[   32.157908] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=54 operation=3 value=4096
+<6>[   32.162295] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=55 operation=3 value=4096
+<6>[   32.166348] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=56 operation=3 value=4096
+<6>[   32.169973] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=57 operation=3 value=4096
+<6>[   32.174110] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=58 operation=3 value=4096
+<6>[   32.179085] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=59 operation=3 value=4096
+<6>[   32.184268] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=60 operation=3 value=4096
+<6>[   32.188009] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=61 operation=3 value=4096
+<6>[   32.191946] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=62 operation=3 value=4096
+<6>[   32.195953] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=63 operation=3 value=4096
+<6>[   32.200036] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=64 operation=3 value=4096
+<6>[   32.203929] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=65 operation=3 value=4096
+<6>[   32.207947] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=66 operation=3 value=4096
+<6>[   32.212076] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=67 operation=3 value=4096
+<6>[   32.216926] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=68 operation=3 value=4096
+<6>[   32.220829] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=69 operation=3 value=4096
+<6>[   32.224969] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=70 operation=3 value=4096
+<6>[   32.229057] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=71 operation=3 value=4096
+<6>[   32.232314] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=72 operation=3 value=4096
+<6>[   32.236029] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=73 operation=3 value=4096
+<6>[   32.240082] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=74 operation=3 value=4096
+<6>[   32.245097] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=75 operation=3 value=4096
+<6>[   32.249536] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=76 operation=3 value=4096
+<6>[   32.253395] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=77 operation=3 value=4096
+<6>[   32.256991] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=78 operation=3 value=4096
+<6>[   32.261913] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=79 operation=3 value=4096
+<6>[   32.266962] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=80 operation=3 value=4096
+<6>[   32.270948] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=81 operation=3 value=4096
+<6>[   32.274952] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=82 operation=3 value=4096
+<6>[   32.277929] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=83 operation=3 value=4096
+<6>[   32.282419] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=84 operation=3 value=4096
+<6>[   32.285851] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=85 operation=3 value=4096
+<6>[   32.290901] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=86 operation=3 value=4096
+<6>[   32.294869] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=87 operation=3 value=4096
+<6>[   32.299054] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=88 operation=3 value=4096
+<6>[   32.302955] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=89 operation=3 value=4096
+<6>[   32.306873] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=90 operation=3 value=4096
+<6>[   32.310916] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=91 operation=3 value=4096
+<6>[   32.314787] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=92 operation=3 value=4096
+<6>[   32.318915] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=93 operation=3 value=4096
+<6>[   32.322884] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=94 operation=3 value=4096
+<6>[   32.328678] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=95 operation=3 value=4096
+<6>[   32.331986] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=96 operation=3 value=4096
+<6>[   32.337389] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=97 operation=3 value=4096
+<6>[   32.342026] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=98 operation=3 value=4096
+<6>[   32.347031] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=99 operation=3 value=4096
+<6>[   32.351532] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=100 operation=3 value=4096
+<6>[   32.355229] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=101 operation=3 value=4096
+<6>[   32.359991] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=102 operation=3 value=4096
+<6>[   32.365760] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=103 operation=3 value=4096
+<6>[   32.368441] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=104 operation=3 value=4096
+<6>[   32.372343] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=105 operation=3 value=4096
+<6>[   32.376014] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=106 operation=3 value=4096
+<6>[   32.379965] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=107 operation=3 value=4096
+<6>[   32.384099] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=108 operation=3 value=4096
+<6>[   32.389373] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=109 operation=3 value=4096
+<6>[   32.394015] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=110 operation=3 value=4096
+<6>[   32.398086] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=111 operation=3 value=4096
+<6>[   32.403360] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=112 operation=3 value=4096
+<6>[   32.406583] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=113 operation=3 value=4096
+<6>[   32.410049] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=114 operation=3 value=4096
+<6>[   32.415113] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=115 operation=3 value=4096
+<6>[   32.418877] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=116 operation=3 value=4096
+<6>[   32.422842] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=117 operation=3 value=4096
+<6>[   32.427313] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=118 operation=3 value=4096
+<6>[   32.430812] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=119 operation=3 value=4096
+<6>[   32.434885] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=120 operation=3 value=4096
+<6>[   32.438852] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=121 operation=3 value=4096
+<6>[   32.442925] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=122 operation=3 value=4096
+<6>[   32.446895] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=123 operation=3 value=4096
+<6>[   32.450808] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=124 operation=3 value=4096
+<6>[   32.455077] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=125 operation=3 value=4096
+<6>[   32.459920] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=126 operation=3 value=4096
+<6>[   32.463872] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=127 operation=3 value=4096
+<6>[   32.467908] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=128 operation=3 value=4096
+<6>[   32.471899] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=129 operation=3 value=4096
+<6>[   32.475860] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=130 operation=3 value=4096
+<6>[   32.479875] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=131 operation=3 value=4096
+<6>[   32.483791] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=132 operation=3 value=4096
+<6>[   32.487817] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=133 operation=3 value=4096
+<6>[   32.491770] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=134 operation=3 value=4096
+<6>[   32.495876] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=135 operation=3 value=4096
+<6>[   32.499982] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=136 operation=3 value=4096
+<6>[   32.503924] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=137 operation=3 value=4096
+<6>[   32.508934] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=138 operation=3 value=4096
+<6>[   32.512943] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=139 operation=3 value=4096
+<6>[   32.516793] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=140 operation=3 value=4096
+<6>[   32.520813] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=141 operation=3 value=4096
+<6>[   32.524977] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=142 operation=3 value=4096
+<6>[   32.529298] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=143 operation=3 value=4096
+<6>[   32.533143] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=144 operation=3 value=4096
+<6>[   32.537010] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=145 operation=3 value=4096
+<6>[   32.540901] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=146 operation=3 value=4096
+<6>[   32.544845] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=147 operation=3 value=4096
+<6>[   32.549280] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=148 operation=3 value=4096
+<6>[   32.552955] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=149 operation=3 value=4096
+<6>[   32.556902] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=150 operation=3 value=4096
+<6>[   32.561331] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=151 operation=3 value=4096
+<6>[   32.566056] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=152 operation=3 value=4096
+<6>[   32.570949] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=153 operation=3 value=4096
+<6>[   32.573861] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=154 operation=3 value=4096
+<6>[   32.577797] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=155 operation=3 value=4096
+<6>[   32.581878] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=156 operation=3 value=4096
+<6>[   32.585863] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=157 operation=3 value=4096
+<6>[   32.589871] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=158 operation=3 value=4096
+<6>[   32.593978] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=159 operation=3 value=4096
+<6>[   32.597872] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=160 operation=3 value=4096
+<6>[   32.602002] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=161 operation=3 value=4096
+<6>[   32.607017] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=162 operation=3 value=4096
+<6>[   32.611004] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=163 operation=3 value=4096
+<6>[   32.615280] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=164 operation=3 value=4096
+<6>[   32.622064] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=165 operation=3 value=4096
+<6>[   32.625805] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=166 operation=3 value=4096
+<6>[   32.629742] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=167 operation=3 value=4096
+<6>[   32.633851] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=168 operation=3 value=4096
+<6>[   32.637863] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=169 operation=3 value=4096
+<6>[   32.641769] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=170 operation=3 value=4096
+<6>[   32.646814] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=171 operation=3 value=4096
+<6>[   32.650768] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=172 operation=3 value=4096
+<6>[   32.654783] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=173 operation=3 value=4096
+<6>[   32.658803] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=174 operation=3 value=4096
+<6>[   32.663062] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=175 operation=3 value=4096
+<6>[   32.666930] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=176 operation=3 value=4096
+<6>[   32.670845] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=177 operation=3 value=4096
+<6>[   32.674951] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=178 operation=3 value=4096
+<6>[   32.678850] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=179 operation=3 value=4096
+<6>[   32.682846] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=180 operation=3 value=4096
+<6>[   32.686772] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=181 operation=3 value=4096
+<6>[   32.691731] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=182 operation=3 value=4096
+<6>[   32.695815] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=183 operation=3 value=4096
+<6>[   32.699752] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=184 operation=3 value=4096
+<6>[   32.704844] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=185 operation=3 value=4096
+<6>[   32.709740] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=186 operation=3 value=4096
+<6>[   32.713887] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=187 operation=3 value=4096
+<6>[   32.717975] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=188 operation=3 value=4096
+<6>[   32.721997] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=189 operation=3 value=4096
+<6>[   32.726951] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=190 operation=3 value=4096
+<6>[   32.731049] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=191 operation=3 value=4096
+<6>[   32.734977] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=192 operation=3 value=4096
+<6>[   32.738953] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=193 operation=3 value=4096
+<6>[   32.742879] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=194 operation=3 value=4096
+<6>[   32.744904] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=195 operation=3 value=4096
+<6>[   32.749040] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=196 operation=3 value=4096
+<6>[   32.752888] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=197 operation=3 value=4096
+<6>[   32.756809] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=198 operation=3 value=4096
+<6>[   32.761909] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=199 operation=3 value=4096
+<6>[   32.766925] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=200 operation=3 value=4096
+<6>[   32.770835] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=201 operation=3 value=4096
+<6>[   32.774761] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=202 operation=3 value=4096
+<6>[   32.778665] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=203 operation=3 value=4096
+<6>[   32.782851] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=204 operation=3 value=4096
+<6>[   32.786796] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=205 operation=3 value=4096
+<6>[   32.790868] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=206 operation=3 value=4096
+<6>[   32.794928] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=207 operation=3 value=4096
+<6>[   32.798802] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=208 operation=3 value=4096
+<6>[   32.802792] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=209 operation=3 value=4096
+<6>[   32.806848] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=210 operation=3 value=4096
+<6>[   32.810784] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=211 operation=3 value=4096
+<6>[   32.814938] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=212 operation=3 value=4096
+<6>[   32.819914] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=213 operation=3 value=4096
+<6>[   32.823872] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=214 operation=3 value=4096
+<6>[   32.827848] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=215 operation=3 value=4096
+<6>[   32.831947] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=216 operation=3 value=4096
+<6>[   32.836820] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=217 operation=3 value=4096
+<6>[   32.840847] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=218 operation=3 value=4096
+<6>[   32.844808] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=219 operation=3 value=4096
+<6>[   32.848874] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=220 operation=3 value=4096
+<6>[   32.852954] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=221 operation=3 value=4096
+<6>[   32.856991] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=222 operation=3 value=4096
+<6>[   32.860931] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=223 operation=3 value=4096
+<6>[   32.864775] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=224 operation=3 value=4096
+<6>[   32.868974] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=225 operation=3 value=4096
+<6>[   32.873058] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=226 operation=3 value=4096
+<6>[   32.876879] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=227 operation=3 value=4096
+<6>[   32.880779] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=228 operation=3 value=4096
+<6>[   32.884894] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=229 operation=3 value=4096
+<6>[   32.888811] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=230 operation=3 value=4096
+<6>[   32.893047] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=231 operation=3 value=4096
+<6>[   32.896792] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=232 operation=3 value=4096
+<6>[   32.900788] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=233 operation=3 value=4096
+<6>[   32.904759] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=234 operation=3 value=4096
+<6>[   32.908821] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=235 operation=3 value=4096
+<6>[   32.912942] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=236 operation=3 value=4096
+<6>[   32.917369] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=237 operation=3 value=4096
+<6>[   32.921026] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=238 operation=3 value=4096
+<6>[   32.924852] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=239 operation=3 value=4096
+<6>[   32.928778] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=240 operation=3 value=4096
+<6>[   32.934031] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=241 operation=3 value=4096
+<6>[   32.939989] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=242 operation=3 value=4096
+<6>[   32.944884] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=243 operation=3 value=4096
+<6>[   32.948999] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=244 operation=3 value=4096
+<6>[   32.952936] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=245 operation=3 value=4096
+<6>[   32.956849] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=246 operation=3 value=4096
+<6>[   32.960838] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=247 operation=3 value=4096
+<6>[   32.964847] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=248 operation=3 value=4096
+<6>[   32.968999] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=249 operation=3 value=4096
+<6>[   32.972953] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=250 operation=3 value=4096
+<6>[   32.977001] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=251 operation=3 value=4096
+<6>[   32.980929] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=252 operation=3 value=4096
+<6>[   32.984936] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=253 operation=3 value=4096
+<6>[   32.990283] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=254 operation=3 value=4096
+<6>[   32.993965] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=255 operation=3 value=4096
+<6>[   32.998844] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=256 operation=3 value=4096
+<6>[   33.002900] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=257 operation=3 value=4096
+<6>[   33.006984] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=258 operation=3 value=4096
+<6>[   33.010972] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=259 operation=3 value=4096
+<6>[   33.014946] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=260 operation=3 value=4096
+<6>[   33.018996] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=261 operation=3 value=4096
+<6>[   33.023046] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=262 operation=3 value=4096
+<6>[   33.026930] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=263 operation=3 value=4096
+<6>[   33.031031] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=264 operation=3 value=4096
+<6>[   33.034854] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=265 operation=3 value=4096
+<6>[   33.038922] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=266 operation=3 value=4096
+<6>[   33.042987] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=267 operation=3 value=4096
+<6>[   33.046818] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=268 operation=3 value=4096
+<6>[   33.048832] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=269 operation=3 value=4096
+<6>[   33.053000] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=270 operation=3 value=4096
+<6>[   33.056952] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=271 operation=3 value=4096
+<6>[   33.061768] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=272 operation=3 value=4096
+<6>[   33.066250] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=273 operation=3 value=4096
+<6>[   33.068849] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=274 operation=3 value=4096
+<6>[   33.072918] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=275 operation=3 value=4096
+<6>[   33.077094] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=276 operation=3 value=4096
+<6>[   33.081310] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=277 operation=3 value=4096
+<6>[   33.084941] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=278 operation=3 value=4096
+<6>[   33.088845] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=279 operation=3 value=4096
+<6>[   33.092831] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=280 operation=3 value=4096
+<6>[   33.096919] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=281 operation=3 value=4096
+<6>[   33.100956] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=282 operation=3 value=4096
+<6>[   33.105016] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=283 operation=3 value=4096
+<6>[   33.108875] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=284 operation=3 value=4096
+<6>[   33.113108] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=285 operation=3 value=4096
+<6>[   33.119527] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=286 operation=3 value=4096
+<6>[   33.123077] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=287 operation=3 value=4096
+<6>[   33.126936] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=288 operation=3 value=4096
+<6>[   33.132004] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=289 operation=3 value=4096
+<6>[   33.136033] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=290 operation=3 value=4096
+<6>[   33.140056] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=291 operation=3 value=4096
+<6>[   33.143905] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=292 operation=3 value=4096
+<6>[   33.147774] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=293 operation=3 value=4096
+<6>[   33.151858] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=294 operation=3 value=4096
+<6>[   33.155966] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=295 operation=3 value=4096
+<6>[   33.159840] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=296 operation=3 value=4096
+<6>[   33.163849] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=297 operation=3 value=4096
+<6>[   33.167856] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=298 operation=3 value=4096
+<6>[   33.171778] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=299 operation=3 value=4096
+<6>[   33.175835] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=300 operation=3 value=4096
+<6>[   33.179895] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=301 operation=3 value=4096
+<6>[   33.184076] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=302 operation=3 value=4096
+<6>[   33.187839] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=303 operation=3 value=4096
+<6>[   33.191862] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=304 operation=3 value=4096
+<6>[   33.195801] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=305 operation=3 value=4096
+<6>[   33.199867] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=306 operation=3 value=4096
+<6>[   33.203798] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=307 operation=3 value=4096
+<6>[   33.207909] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=308 operation=3 value=4096
+<6>[   33.211854] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=309 operation=3 value=4096
+<6>[   33.216835] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=310 operation=3 value=4096
+<6>[   33.220893] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=311 operation=3 value=4096
+<6>[   33.226069] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=312 operation=3 value=4096
+<6>[   33.230965] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=313 operation=3 value=4096
+<6>[   33.234861] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=314 operation=3 value=4096
+<6>[   33.238861] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=315 operation=3 value=4096
+<6>[   33.242980] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=316 operation=3 value=4096
+<6>[   33.246943] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=317 operation=3 value=4096
+<6>[   33.249845] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=318 operation=3 value=4096
+<6>[   33.254007] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=319 operation=3 value=4096
+<6>[   33.257842] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=320 operation=3 value=4096
+<6>[   33.261807] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=321 operation=3 value=4096
+<6>[   33.263955] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=322 operation=3 value=4096
+<6>[   33.267810] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=323 operation=3 value=4096
+<6>[   33.271761] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=324 operation=3 value=4096
+<6>[   33.273865] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=325 operation=3 value=4096
+<6>[   33.277918] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=326 operation=3 value=4096
+<6>[   33.281887] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=327 operation=3 value=4096
+<6>[   33.286091] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=328 operation=3 value=4096
+<6>[   33.290926] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=329 operation=3 value=4096
+<6>[   33.294839] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=330 operation=3 value=4096
+<6>[   33.298997] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=331 operation=3 value=4096
+<6>[   33.301903] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=332 operation=3 value=4096
+<6>[   33.306043] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=333 operation=3 value=4096
+<6>[   33.309939] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=334 operation=3 value=4096
+<6>[   33.313814] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=335 operation=3 value=4096
+<6>[   33.317854] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=336 operation=3 value=4096
+<6>[   33.322962] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=337 operation=3 value=4096
+<6>[   33.326904] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=338 operation=3 value=4096
+<6>[   33.329848] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=339 operation=3 value=4096
+<6>[   33.331930] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=340 operation=3 value=4096
+<6>[   33.336975] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=341 operation=3 value=4096
+<6>[   33.340903] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=342 operation=3 value=4096
+<6>[   33.345014] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=343 operation=3 value=4096
+<6>[   33.349045] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=344 operation=3 value=4096
+<6>[   33.352909] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=345 operation=3 value=4096
+<6>[   33.356879] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=346 operation=3 value=4096
+<6>[   33.361079] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=347 operation=3 value=4096
+<6>[   33.365744] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=348 operation=3 value=4096
+<6>[   33.368913] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=349 operation=3 value=4096
+<6>[   33.372918] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=350 operation=3 value=4096
+<6>[   33.376903] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=351 operation=3 value=4096
+<6>[   33.380969] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=352 operation=3 value=4096
+<6>[   33.384953] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=353 operation=3 value=4096
+<6>[   33.389117] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=354 operation=3 value=4096
+<6>[   33.393616] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=355 operation=3 value=4096
+<6>[   33.397307] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=356 operation=3 value=4096
+<6>[   33.401979] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=357 operation=3 value=4096
+<6>[   33.405847] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=358 operation=3 value=4096
+<6>[   33.410107] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=359 operation=3 value=4096
+<6>[   33.414472] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=360 operation=3 value=4096
+<6>[   33.417973] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=361 operation=3 value=4096
+<6>[   33.422052] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=362 operation=3 value=4096
+<6>[   33.426375] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=363 operation=3 value=4096
+<6>[   33.430101] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=364 operation=3 value=4096
+<6>[   33.434959] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=365 operation=3 value=4096
+<6>[   33.438068] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=366 operation=3 value=4096
+<6>[   33.441902] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=367 operation=3 value=4096
+<6>[   33.445923] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=368 operation=3 value=4096
+<6>[   33.449890] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=369 operation=3 value=4096
+<6>[   33.453824] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=370 operation=3 value=4096
+<6>[   33.457805] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=371 operation=3 value=4096
+<6>[   33.461880] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=372 operation=3 value=4096
+<6>[   33.465883] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=373 operation=3 value=4096
+<6>[   33.470050] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=374 operation=3 value=4096
+<6>[   33.473979] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=375 operation=3 value=4096
+<6>[   33.478076] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=376 operation=3 value=4096
+<6>[   33.481908] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=377 operation=3 value=4096
+<6>[   33.485892] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=378 operation=3 value=4096
+<6>[   33.489931] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=379 operation=3 value=4096
+<6>[   33.494015] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=380 operation=3 value=4096
+<6>[   33.497970] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=381 operation=3 value=4096
+<6>[   33.501960] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=382 operation=3 value=4096
+<6>[   33.505909] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=383 operation=3 value=4096
+<6>[   33.509944] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=384 operation=3 value=4096
+<6>[   33.513937] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=385 operation=3 value=4096
+<6>[   33.517883] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=386 operation=3 value=4096
+<6>[   33.522571] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=387 operation=3 value=4096
+<6>[   33.525980] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=388 operation=3 value=4096
+<6>[   33.530305] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=389 operation=3 value=4096
+<6>[   33.533886] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=390 operation=3 value=4096
+<6>[   33.537772] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=391 operation=3 value=4096
+<6>[   33.541863] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=392 operation=3 value=4096
+<6>[   33.545800] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=393 operation=3 value=4096
+<6>[   33.549728] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=394 operation=3 value=4096
+<6>[   33.553920] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=395 operation=3 value=4096
+<6>[   33.557879] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=396 operation=3 value=4096
+<6>[   33.562812] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=397 operation=3 value=4096
+<6>[   33.566816] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=398 operation=3 value=4096
+<6>[   33.571001] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=399 operation=3 value=4096
+<6>[   33.574892] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=400 operation=3 value=4096
+<6>[   33.578855] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=401 operation=3 value=4096
+<6>[   33.582852] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=402 operation=3 value=4096
+<6>[   33.586788] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=403 operation=3 value=4096
+<6>[   33.590804] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=404 operation=3 value=4096
+<6>[   33.594802] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=405 operation=3 value=4096
+<6>[   33.599974] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=406 operation=3 value=4096
+<6>[   33.603797] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=407 operation=3 value=4096
+<6>[   33.608881] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=408 operation=3 value=4096
+<6>[   33.612890] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=409 operation=3 value=4096
+<6>[   33.616767] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=410 operation=3 value=4096
+<6>[   33.620860] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=411 operation=3 value=4096
+<6>[   33.625005] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=412 operation=3 value=4096
+<6>[   33.628943] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=413 operation=3 value=4096
+<6>[   33.632933] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=414 operation=3 value=4096
+<6>[   33.636851] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=415 operation=3 value=4096
+<6>[   33.640875] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=416 operation=3 value=4096
+<6>[   33.644952] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=417 operation=3 value=4096
+<6>[   33.648888] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=418 operation=3 value=4096
+<6>[   33.652891] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=419 operation=3 value=4096
+<6>[   33.656799] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=420 operation=3 value=4096
+<6>[   33.660790] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=421 operation=3 value=4096
+<6>[   33.664843] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=422 operation=3 value=4096
+<6>[   33.668816] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=423 operation=3 value=4096
+<6>[   33.672864] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=424 operation=3 value=4096
+<6>[   33.674741] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=425 operation=3 value=4096
+<6>[   33.679034] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=426 operation=3 value=4096
+<6>[   33.682961] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=427 operation=3 value=4096
+<6>[   33.686836] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=428 operation=3 value=4096
+<6>[   33.690787] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=429 operation=3 value=4096
+<6>[   33.692781] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=430 operation=3 value=4096
+<6>[   33.696951] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=431 operation=3 value=4096
+<6>[   33.700934] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=432 operation=3 value=4096
+<6>[   33.704954] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=433 operation=3 value=4096
+<6>[   33.708953] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=434 operation=3 value=4096
+<6>[   33.713316] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=435 operation=3 value=4096
+<6>[   33.716791] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=436 operation=3 value=4096
+<6>[   33.720840] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=437 operation=3 value=4096
+<6>[   33.725239] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=438 operation=3 value=4096
+<6>[   33.729320] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=439 operation=3 value=4096
+<6>[   33.733091] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=440 operation=3 value=4096
+<6>[   33.736863] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=441 operation=3 value=4096
+<6>[   33.740843] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=442 operation=3 value=4096
+<6>[   33.744892] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=443 operation=3 value=4096
+<6>[   33.748895] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=444 operation=3 value=4096
+<6>[   33.752875] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=445 operation=3 value=4096
+<6>[   33.757557] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=446 operation=3 value=4096
+<6>[   33.762922] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=447 operation=3 value=4096
+<6>[   33.765831] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=448 operation=3 value=4096
+<6>[   33.769814] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=449 operation=3 value=4096
+<6>[   33.771794] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=450 operation=3 value=4096
+<6>[   33.776848] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=451 operation=3 value=4096
+<6>[   33.780859] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=452 operation=3 value=4096
+<6>[   33.784819] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=453 operation=3 value=4096
+<6>[   33.788823] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=454 operation=3 value=4096
+<6>[   33.792969] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=455 operation=3 value=4096
+<6>[   33.796955] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=456 operation=3 value=4096
+<6>[   33.801044] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=457 operation=3 value=4096
+<6>[   33.805268] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=458 operation=3 value=4096
+<6>[   33.808104] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=459 operation=3 value=4096
+<6>[   33.813018] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=460 operation=3 value=4096
+<6>[   33.816902] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=461 operation=3 value=4096
+<6>[   33.821062] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=462 operation=3 value=4096
+<6>[   33.825709] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=463 operation=3 value=4096
+<6>[   33.827933] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=464 operation=3 value=4096
+<6>[   33.833247] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=465 operation=3 value=4096
+<6>[   33.836860] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=466 operation=3 value=4096
+<6>[   33.838904] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=467 operation=3 value=4096
+<6>[   33.843074] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=468 operation=3 value=4096
+<6>[   33.846847] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=469 operation=3 value=4096
+<6>[   33.850976] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=470 operation=3 value=4096
+<6>[   33.855024] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=471 operation=3 value=4096
+<6>[   33.860090] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=472 operation=3 value=4096
+<6>[   33.864001] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=473 operation=3 value=4096
+<6>[   33.869870] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=474 operation=3 value=4096
+<6>[   33.875445] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=475 operation=3 value=4096
+<6>[   33.878932] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=476 operation=3 value=4096
+<6>[   33.882594] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=477 operation=3 value=4096
+<6>[   33.887283] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=478 operation=3 value=4096
+<6>[   33.890999] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=479 operation=3 value=4096
+<6>[   33.894985] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=480 operation=3 value=4096
+<6>[   33.898947] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=481 operation=3 value=4096
+<6>[   33.902901] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=482 operation=3 value=4096
+<6>[   33.906896] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=483 operation=3 value=4096
+<6>[   33.911898] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=484 operation=3 value=4096
+<6>[   33.916104] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=485 operation=3 value=4096
+<6>[   33.919977] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=486 operation=3 value=4096
+<6>[   33.922871] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=487 operation=3 value=4096
+<6>[   33.926985] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=488 operation=3 value=4096
+<6>[   33.930872] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=489 operation=3 value=4096
+<6>[   33.934763] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=490 operation=3 value=4096
+<6>[   33.938909] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=491 operation=3 value=4096
+<6>[   33.945326] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=492 operation=3 value=4096
+<6>[   33.950038] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=493 operation=3 value=4096
+<6>[   33.953897] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=494 operation=3 value=4096
+<6>[   33.962780] ihk_smp_x86_64: host_mapping=invalidated os=0 generation=1 pid=255 worker=7 delivery=495 value=0 completed=0
+<6>[   34.049439] ihk_smp_x86_64: file_pager=create handle=20 references=2 shared=1
+<6>[   34.049622] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=496 operation=1 value=0
+<6>[   34.052591] ihk_smp_x86_64: host_mapping=invalidated os=0 generation=1 pid=255 worker=6 delivery=497 value=0 completed=0
+<6>[   34.054644] ihk_smp_x86_64: host_mapping=invalidated os=0 generation=1 pid=255 worker=6 delivery=498 value=0 completed=0
+<6>[   34.056899] ihk_smp_x86_64: file_pager=create handle=20 references=3 shared=1
+<6>[   34.056963] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=7 delivery=499 operation=1 value=0
+<6>[   34.059646] ihk_smp_x86_64: host_mapping=invalidated os=0 generation=1 pid=255 worker=6 delivery=500 value=0 completed=0
+<6>[   34.061610] ihk_smp_x86_64: host_mapping=invalidated os=0 generation=1 pid=255 worker=7 delivery=501 value=0 completed=0
+<6>[   34.063915] ihk_smp_x86_64: file_pager=create handle=20 references=4 shared=1
+<6>[   34.063982] ihk_smp_x86_64: file_pager=completed os=0 generation=1 pid=255 worker=6 delivery=502 operation=1 value=0
+<6>[   34.077652] ihk_smp_x86_64: host_mapping=invalidated os=0 generation=1 pid=255 worker=7 delivery=503 value=0 completed=0
+<6>[   34.083533] mcctrl: application_syscall=delivered os=0 generation=1 pid=255 worker=6 delivery=504 cpu=0 number=3
+<6>[   34.084442] mcctrl: application_syscall=returned os=0 generation=1 pid=255 worker=6 delivery=504 cpu=0 value=0
+<6>[   34.091541] ihk_smp_x86_64: IHK-SMP: allocator zeroed os=0 generation=1 sequence=1 pid=255 cpu=0 chunks=337 pages=340 pending=0 workers=0
+<6>[   34.092697] mcctrl: application_syscall=delivered os=0 generation=1 pid=255 worker=7 delivery=505 cpu=0 number=334
+<6>[   34.092925] mcctrl: application_syscall=return_route os=0 generation=1 pid=255 worker=7 delivery=505 launcher_cpu=1 guest_cpu=0
+<6>[   34.094407] mcctrl: application_syscall=returned os=0 generation=1 pid=255 worker=7 delivery=505 cpu=0 value=-22
+<6>[   34.104648] ihk_smp_x86_64: host_mapping=invalidated os=0 generation=1 pid=255 worker=7 delivery=506 value=0 completed=0
+<6>[   34.109646] ihk_smp_x86_64: host_mapping=invalidated os=0 generation=1 pid=255 worker=7 delivery=507 value=0 completed=0
+<6>[   34.115822] ihk_smp_x86_64: host_mapping=invalidated os=0 generation=1 pid=255 worker=7 delivery=508 value=0 completed=0
+<6>[   34.125763] mcctrl: application_syscall=delivered os=0 generation=1 pid=255 worker=7 delivery=509 cpu=0 number=1
+<6>[   34.127273] mcctrl: application_syscall=return_route os=0 generation=1 pid=255 worker=7 delivery=509 launcher_cpu=1 guest_cpu=0
+<6>[   34.128009] mcctrl: application_syscall=returned os=0 generation=1 pid=255 worker=7 delivery=509 cpu=0 value=35
+<6>[   34.132523] mcctrl: application_syscall=delivered os=0 generation=1 pid=255 worker=6 delivery=510 cpu=0 number=231
+<6>[   34.144071] mcctrl: application_file=close os=0 generation=1
+<6>[   34.145769] mcctrl: application_process=cleanup_requested os=0 generation=1 pid=255 intent_errno=0
+<6>[   34.151516] ihk_smp_x86_64: IHK-SMP: application cleanup ACK os=0 generation=1 pid=255 token=3 errno=0 abandoned=1
+<6>[   34.156476] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=1 pid=255 token=511 errno=-11
+<6>[   34.163337] ihk_smp_x86_64: file_pager=release handle=20 references=4 remaining=0
+<6>[   34.170432] ihk_smp_x86_64: IHK-SMP: application procfs deleted os=0 generation=1 pid=255 tid=255
+
+ND_PAYLOAD {"argv":["/bin/mcexec","-t","1","0","/apps/app"],"cwd":"/case/work","env":{"PATH":"/usr/bin:/bin","COKERNEL_PATH":"/apps"},"raw_wait_status":10496,"started_ns":31615643306,"reaped_ns":34149414218,"finished_ns":34557874790,"streams":{"stdout":{"hex":"","eof":true,"truncated":false,"observed":0,"retained":0,"discarded":0,"limit":1024,"eof_ns":34047341468},"stderr":{"hex":"756e65787065637465642061726763206f722061726776207465726d696e61746f720a","eof":true,"truncated":false,"observed":35,"retained":35,"discarded":0,"limit":1024,"eof_ns":34047019360}},"procfs_empty":true}
+[   34.680272] ACPI: PM: Preparing to enter system sleep state S5
+[   34.684702] reboot: Power down

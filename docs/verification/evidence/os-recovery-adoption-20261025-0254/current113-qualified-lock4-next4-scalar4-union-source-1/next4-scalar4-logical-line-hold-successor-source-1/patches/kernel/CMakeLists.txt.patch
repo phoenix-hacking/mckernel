@@ -1,0 +1,26 @@
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -205,6 +205,23 @@
+ 				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_rt_sigreturn_syscall_candidate")
+ 				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_rt_sigreturn_set_signal_candidate")
+ 				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_rt_sigreturn_check_signal_candidate")
++				# Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++				# Source-only default OFF. Root inserts only in existing selected
++				# linux-6.12/x86_64/NOT ENABLE_UBSAN branch, alongside exact F06 providers.
++				list(APPEND RUST_KERNEL_CFG
++				    "--cfg" "f06_clone_reader_lock_candidate"
++				    "--cfg" "f06_clone_reader_unlock_candidate"
++				    "--cfg" "f06_ptrace_find_thread_candidate"
++				    "--cfg" "f06_ptrace_thread_unlock_candidate")
++				list(APPEND RUST_KERNEL_SRCS
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_clone_reader_lock.rs"
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_clone_reader_unlock.rs"
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_ptrace_find_thread.rs"
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_ptrace_thread_unlock.rs"
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_clone_ptrace_provider_abi.rs")
++				set_property(SOURCE "${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/syscall.c" APPEND PROPERTY
++				    COMPILE_DEFINITIONS
++				    "MCKERNEL_RUST_F06_CLONE_READER_LOCK;MCKERNEL_RUST_F06_CLONE_READER_UNLOCK;MCKERNEL_RUST_F06_PTRACE_FIND_THREAD;MCKERNEL_RUST_F06_PTRACE_THREAD_UNLOCK")
+ 				set(MCKERNEL_F06_ORIGIN_PROFILE "${PROJECT_SOURCE_DIR}/scripts/f06_origin_command_profile.json")
+ 				# Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ 				# SOURCE ONLY. Root inserts in existing linux-6.12/x86_64/NOT ENABLE_UBSAN
