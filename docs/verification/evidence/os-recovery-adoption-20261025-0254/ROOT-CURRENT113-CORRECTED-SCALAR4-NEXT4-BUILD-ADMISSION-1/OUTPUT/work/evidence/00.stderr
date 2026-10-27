@@ -1,0 +1,448 @@
+warning: target feature `sse2` must be enabled to ensure that the ABI of the current target can be implemented correctly
+  |
+  = note: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+  = note: for more information, see issue #116344 <https://github.com/rust-lang/rust/issues/116344>
+
+warning: the feature `core_intrinsics` is internal to the compiler or standard library
+ --> /src/kernel/rust/lib.rs:3:12
+  |
+3 | #![feature(core_intrinsics)]
+  |            ^^^^^^^^^^^^^^^
+  |
+  = note: using it is strongly discouraged
+  = note: `#[warn(internal_features)]` on by default
+
+warning: unused import: `IhkSpinlock`
+     --> /src/kernel/rust/process_helpers.rs:16367:49
+      |
+16367 |     use crate::abi::{CInt, CULong, CpuLocalVar, IhkSpinlock, Thread, X86UserContext};
+      |                                                 ^^^^^^^^^^^
+      |
+      = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `MaybeUninit`
+     --> /src/kernel/rust/syscall_policy.rs:32226:30
+      |
+32226 |     use core::mem::{size_of, MaybeUninit};
+      |                              ^^^^^^^^^^^
+
+warning: unused imports: `null_mut` and `read_volatile`
+     --> /src/kernel/rust/syscall_policy.rs:32227:34
+      |
+32227 |     use core::ptr::{addr_of_mut, null_mut, read_volatile};
+      |                                  ^^^^^^^^  ^^^^^^^^^^^^^
+
+warning: unused import: `MovePagesSmpReq`
+     --> /src/kernel/rust/syscall_policy.rs:32229:51
+      |
+32229 |     use crate::abi::{CInt, CLong, CULong, CpuSet, MovePagesSmpReq, ProcessVm, SizeT,
+      |                                                   ^^^^^^^^^^^^^^^
+
+warning: unused imports: `EFAULT`, `ENODEV`, `ENOMEM`, `MPOL_MF_MOVE_ALL`, `MovePagesGetNrNodesFn`, `MovePagesLogFn`, `MovePagesSmpCallFn`, `MovePagesVerifyFn`, `SyscallCopyFromUserFn`, `SyscallCopyToUserFn`, `SyscallMckfdFreeFn`, `SyscallPolicyAllocFn`, `SyscallRdtscFn`, `SyscallRwlockFn`, `move_pages_free_arrays`, `move_pages_log_delta`, `move_pages_policy_result`, and `move_pages_smp_req_prepare_result`
+     --> /src/kernel/rust/syscall_policy.rs:32233:9
+      |
+32233 |         move_pages_free_arrays, move_pages_log_delta, move_pages_policy_result,
+      |         ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^
+32234 |         move_pages_smp_req_prepare_result, syscall_alloc_bridge, syscall_copy_from_user_bridge,
+      |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+32235 |         syscall_copy_to_user_bridge, syscall_mckfd_free_bridge, MovePagesGetNrNodesFn,
+      |                                                                 ^^^^^^^^^^^^^^^^^^^^^
+32236 |         MovePagesLogFn, MovePagesSmpCallFn, MovePagesSmpHandlerFn, MovePagesVerifyFn,
+      |         ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^                         ^^^^^^^^^^^^^^^^^
+32237 |         SyscallCopyFromUserFn, SyscallCopyToUserFn, SyscallMckfdFreeFn, SyscallPolicyAllocFn,
+      |         ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
+32238 |         SyscallRdtscFn, SyscallRwlockFn, EFAULT, ENODEV, ENOMEM, IHK_MC_AP_NOWAIT,
+      |         ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^  ^^^^^^  ^^^^^^  ^^^^^^
+32239 |         MOVE_PAGES_LOG_INIT_MALLOC, MOVE_PAGES_LOG_INIT_VERIFY, MOVE_PAGES_LOG_PARALLEL,
+32240 |         MOVE_PAGES_LOG_UNSUPPORTED_MOVE_ALL, MOVE_PAGES_LOG_UNSUPPORTED_PID, MPOL_MF_MOVE_ALL};
+      |                                                                              ^^^^^^^^^^^^^^^^
+
+warning: unused import: `super::*`
+     --> /src/kernel/rust/syscall_policy.rs:35642:6
+      |
+35642 |  use super::*;
+      |      ^^^^^^^^
+
+warning: unused import: `super::*`
+     --> /src/kernel/rust/syscall_policy.rs:35668:6
+      |
+35668 |  use super::*;
+      |      ^^^^^^^^
+
+warning: unused import: `super::*`
+     --> /src/kernel/rust/syscall_policy.rs:35680:6
+      |
+35680 |  use super::*;
+      |      ^^^^^^^^
+
+warning: unused imports: `align_of` and `size_of`
+     --> /src/kernel/rust/syscall_policy.rs:35770:18
+      |
+35770 |  use core::mem::{size_of,align_of,offset_of};
+      |                  ^^^^^^^ ^^^^^^^^
+
+warning: unused import: `addr_of_mut`
+    --> /src/kernel/rust/x86_cpu_helpers.rs:4807:30
+     |
+4807 |     use core::ptr::{addr_of, addr_of_mut};
+     |                              ^^^^^^^^^^^
+
+error[E0616]: field `irqsave` of struct `lock_helpers::McsRwlockNodeIrqsave` is private
+  --> /src/kernel/rust/f06_clone_ptrace_provider_abi.rs:31:57
+   |
+31 |     assert!(core::mem::offset_of!(McsRwlockNodeIrqsave, irqsave) == 0);
+   |                                                         ^^^^^^^ private field
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11879:17
+      |
+11879 |         record: unsafe { core::ptr::addr_of_mut!(RECORD_3).cast::<u8>() },
+      |                 ^^^^^^ unnecessary `unsafe` block
+      |
+      = note: `#[warn(unused_unsafe)]` (part of `#[warn(unused)]`) on by default
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11890:13
+      |
+11890 |             unsafe { core::ptr::addr_of_mut!(RECORD_4).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11902:13
+      |
+11902 |             unsafe { core::ptr::addr_of_mut!(RECORD_5).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11903:13
+      |
+11903 |             unsafe { core::ptr::addr_of_mut!(RECORD_6).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11904:13
+      |
+11904 |             unsafe { core::ptr::addr_of_mut!(RECORD_7).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11905:13
+      |
+11905 |             unsafe { core::ptr::addr_of_mut!(RECORD_8).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11917:13
+      |
+11917 |             unsafe { core::ptr::addr_of_mut!(RECORD_9).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11929:13
+      |
+11929 |             unsafe { core::ptr::addr_of_mut!(RECORD_10).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11930:13
+      |
+11930 |             unsafe { core::ptr::addr_of_mut!(RECORD_11).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11931:13
+      |
+11931 |             unsafe { core::ptr::addr_of_mut!(RECORD_12).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11932:13
+      |
+11932 |             unsafe { core::ptr::addr_of_mut!(RECORD_13).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11933:13
+      |
+11933 |             unsafe { core::ptr::addr_of_mut!(RECORD_14).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11934:13
+      |
+11934 |             unsafe { core::ptr::addr_of_mut!(RECORD_15).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11935:13
+      |
+11935 |             unsafe { core::ptr::addr_of_mut!(RECORD_16).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11947:13
+      |
+11947 |             unsafe { core::ptr::addr_of_mut!(RECORD_18).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11958:17
+      |
+11958 |         record: unsafe { core::ptr::addr_of_mut!(RECORD_17).cast::<u8>() },
+      |                 ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11969:13
+      |
+11969 |             unsafe { core::ptr::addr_of_mut!(RECORD_19).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11970:13
+      |
+11970 |             unsafe { core::ptr::addr_of_mut!(RECORD_20).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11971:13
+      |
+11971 |             unsafe { core::ptr::addr_of_mut!(RECORD_21).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11984:17
+      |
+11984 |         record: unsafe { core::ptr::addr_of_mut!(RECORD_2).cast::<u8>() },
+      |                 ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11998:13
+      |
+11998 |             unsafe { core::ptr::addr_of_mut!(RECORD_1).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:11999:13
+      |
+11999 |             unsafe { core::ptr::addr_of_mut!(RECORD_0).cast::<u8>() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12088:29
+      |
+12088 |         query_free_handler: unsafe { core::ptr::addr_of!(QUERY_FREE_MEM_HANDLER).cast() },
+      |                             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12090:20
+      |
+12090 |         anon_slot: unsafe { core::ptr::addr_of_mut!(ANON_ON_DEMAND) },
+      |                    ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12091:21
+      |
+12091 |         xpmem_slot: unsafe { core::ptr::addr_of_mut!(XPMEM_PAGE_IN_REMOTE_ON_ATTACH) },
+      |                     ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12100:9
+      |
+12100 |         unsafe { core::ptr::addr_of_mut!(MEMORY_NODES).cast() },
+      |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12109:13
+      |
+12109 |             unsafe { core::ptr::addr_of_mut!(VMAP_ALLOCATOR) },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12118:18
+      |
+12118 |             ops: unsafe { core::ptr::addr_of_mut!(NUMA_SYSFS_MEMINFO) },
+      |                  ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12119:20
+      |
+12119 |             nodes: unsafe { core::ptr::addr_of_mut!(MEMORY_NODES).cast() },
+      |                    ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12242:13
+      |
+12242 |             unsafe { core::ptr::addr_of_mut!(CORE_DEBUG_0).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12243:13
+      |
+12243 |             unsafe { core::ptr::addr_of_mut!(CORE_DEBUG_1).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12418:20
+      |
+12418 |         allocator: unsafe { core::ptr::addr_of_mut!(ALLOCATOR) },
+      |                    ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12441:16
+      |
+12441 |         nodes: unsafe { core::ptr::addr_of_mut!(MEMORY_NODES).cast() },
+      |                ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12460:20
+      |
+12460 |         log_count: unsafe { core::ptr::addr_of_mut!(PAGE_FAULT_LOG_COUNT) },
+      |                    ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12461:18
+      |
+12461 |         log_pid: unsafe { core::ptr::addr_of_mut!(PAGE_FAULT_LOG_PID) },
+      |                  ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12484:13
+      |
+12484 |             unsafe { core::ptr::addr_of_mut!(RECORD_0).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12486:13
+      |
+12486 |             unsafe { core::ptr::addr_of_mut!(RECORD_1).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12487:13
+      |
+12487 |             unsafe { core::ptr::addr_of_mut!(RECORD_2).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12570:13
+      |
+12570 |             unsafe { core::ptr::addr_of_mut!(RECORD_3).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12571:13
+      |
+12571 |             unsafe { core::ptr::addr_of_mut!(RECORD_4).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12572:13
+      |
+12572 |             unsafe { core::ptr::addr_of_mut!(RECORD_5).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12573:13
+      |
+12573 |             unsafe { core::ptr::addr_of_mut!(RECORD_6).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12574:13
+      |
+12574 |             unsafe { core::ptr::addr_of_mut!(RECORD_7).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/mem_helpers.rs:12576:13
+      |
+12576 |             unsafe { core::ptr::addr_of_mut!(RECORD_8).cast() },
+      |             ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/page_alloc.rs:3382:28
+     |
+3382 |             pa_start_slot: unsafe { core::ptr::addr_of_mut!(PA_START) },
+     |                            ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/page_alloc.rs:3383:26
+     |
+3383 |             pa_end_slot: unsafe { core::ptr::addr_of_mut!(PA_END) },
+     |                          ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/page_alloc.rs:3384:25
+     |
+3384 |             kernel_end: unsafe { core::ptr::addr_of_mut!(KERNEL_END) },
+     |                         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+     --> /src/kernel/rust/process_helpers.rs:13167:18
+      |
+13167 |     let config = unsafe { core::ptr::addr_of!(process_extend_region_entry_config) };
+      |                  ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:8770:5
+     |
+8770 |     unsafe { core::ptr::addr_of!(X86_END) as CULong }
+     |     ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:8939:5
+     |
+8939 |     unsafe { core::ptr::addr_of!(MEMORY_VSYSCALL_PAGE) as *mut c_void }
+     |     ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:9169:18
+     |
+9169 |     let result = unsafe { core::arch::x86_64::__cpuid(op as u32) };
+     |                  ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:9573:9
+     |
+9573 |         unsafe { core::ptr::addr_of_mut!(OWNED_FIXED_VIRT).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:9584:9
+     |
+9584 |         unsafe { core::ptr::addr_of_mut!(OWNED_INIT_PT_LOCK).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:9592:9
+     |
+9592 |         unsafe { core::ptr::addr_of_mut!(OWNED_INIT_PT_LOADED).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:9600:9
+     |
+9600 |         unsafe { core::ptr::addr_of_mut!(OWNED_BOOT_PT).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:9608:9
+     |
+9608 |         unsafe { core::ptr::addr_of_mut!(OWNED_INIT_PT).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:9616:9
+     |
+9616 |         unsafe { core::ptr::addr_of_mut!(OWNED_LAST_PAGE).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+    --> /src/kernel/rust/x86_memory_helpers.rs:9967:9
+     |
+9967 |         unsafe { core::ptr::addr_of_mut!(OWNED_USE_1GB_PAGE).cast() },
+     |         ^^^^^^ unnecessary `unsafe` block
+
+error: aborting due to 1 previous error; 70 warnings emitted
+
+For more information about this error, try `rustc --explain E0616`.

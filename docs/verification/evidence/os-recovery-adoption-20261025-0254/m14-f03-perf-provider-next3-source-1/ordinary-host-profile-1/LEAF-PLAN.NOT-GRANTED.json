@@ -1,0 +1,261 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_BOUND_PRIVATE_PERF3_SEVEN_COMMAND_PROFILE_UNRUN_NOT_GRANTED",
+  "runtime_authority": null,
+  "sequential": true,
+  "compiler_jobs": 1,
+  "commands": [
+    {
+      "id": "rust-host-object",
+      "argv": [
+        "/usr/bin/env",
+        "TMPDIR=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/future-output-1",
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-name",
+        "f03_perf_next3_fixture",
+        "--crate-type",
+        "lib",
+        "--emit=obj",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "--cfg",
+        "enable_perf",
+        "--cfg",
+        "f03_perf_provider_next3_bridges_selected_candidate",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/lib.fixture.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/future-output-1/providers.o"
+      ],
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. rust-host-object",
+      "expected": "exit0;two new wrappers plus exact existing Rust atomic forwarding body; ABI16",
+      "timeout_seconds": 90,
+      "stdout_limit_bytes": 16384,
+      "stderr_limit_bytes": 16384,
+      "requires_fresh_Root_ordinary_grant": true
+    },
+    {
+      "id": "selected-witness",
+      "argv": [
+        "/usr/bin/env",
+        "TMPDIR=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/future-output-1",
+        "/usr/bin/cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+        "-DMCKERNEL_RUST_F03_PERF_PROVIDER_NEXT3_BRIDGES",
+        "-c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/real-header-selector-witness.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/future-output-1/selected.o"
+      ],
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. selected-witness",
+      "expected": "exit0; selected3 or allthree original C fallback definitions; typed callback/provider ABI",
+      "timeout_seconds": 90,
+      "stdout_limit_bytes": 16384,
+      "stderr_limit_bytes": 16384,
+      "requires_fresh_Root_ordinary_grant": true
+    },
+    {
+      "id": "fallback-none-witness",
+      "argv": [
+        "/usr/bin/env",
+        "TMPDIR=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/future-output-1",
+        "/usr/bin/cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "-c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/real-header-selector-witness.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/future-output-1/fallback-none.o"
+      ],
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. fallback-none-witness",
+      "expected": "exit0; selected3 or allthree original C fallback definitions; typed callback/provider ABI",
+      "timeout_seconds": 90,
+      "stdout_limit_bytes": 16384,
+      "stderr_limit_bytes": 16384,
+      "requires_fresh_Root_ordinary_grant": true
+    },
+    {
+      "id": "fallback-helper-witness",
+      "argv": [
+        "/usr/bin/env",
+        "TMPDIR=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/future-output-1",
+        "/usr/bin/cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+        "-c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/real-header-selector-witness.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/future-output-1/fallback-helper.o"
+      ],
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. fallback-helper-witness",
+      "expected": "exit0; selected3 or allthree original C fallback definitions; typed callback/provider ABI",
+      "timeout_seconds": 90,
+      "stdout_limit_bytes": 16384,
+      "stderr_limit_bytes": 16384,
+      "requires_fresh_Root_ordinary_grant": true
+    },
+    {
+      "id": "fallback-callback-witness",
+      "argv": [
+        "/usr/bin/env",
+        "TMPDIR=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/future-output-1",
+        "/usr/bin/cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "-DMCKERNEL_RUST_F03_PERF_PROVIDER_NEXT3_BRIDGES",
+        "-c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/real-header-selector-witness.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/future-output-1/fallback-callback.o"
+      ],
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. fallback-callback-witness",
+      "expected": "exit0; selected3 or allthree original C fallback definitions; typed callback/provider ABI",
+      "timeout_seconds": 90,
+      "stdout_limit_bytes": 16384,
+      "stderr_limit_bytes": 16384,
+      "requires_fresh_Root_ordinary_grant": true
+    },
+    {
+      "id": "host-parity-link",
+      "argv": [
+        "/usr/bin/env",
+        "TMPDIR=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/future-output-1",
+        "/usr/bin/cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/driver.c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/future-output-1/selected.o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/future-output-1/providers.o",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/future-output-1/parity"
+      ],
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. host-parity-link",
+      "expected": "exit0; inert mocked providers only, no actual PMU or atomic load",
+      "timeout_seconds": 90,
+      "stdout_limit_bytes": 16384,
+      "stderr_limit_bytes": 16384,
+      "requires_fresh_Root_ordinary_grant": true
+    },
+    {
+      "id": "host-parity-run",
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/future-output-1/parity"
+      ],
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. host-parity-run",
+      "expected": "exit0; stdout exactly PASS perf-next3 872 C/Rust pairs; 1744 exact provider traces; ABI16; selected3; reused atomic bridge\n",
+      "timeout_seconds": 90,
+      "stdout_limit_bytes": 16384,
+      "stderr_limit_bytes": 16384,
+      "requires_fresh_Root_ordinary_grant": true
+    }
+  ],
+  "future_output_root": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/future-output-1",
+  "output_root_created": false,
+  "expected_stdout": "PASS perf-next3 872 C/Rust pairs; 1744 exact provider traces; ABI16; selected3; reused atomic bridge\n",
+  "source_inputs": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/lib.fixture.rs",
+      "bytes": 2190,
+      "sha256": "c26bd9f5e85ab6817dc3a7cb86f7b58400ac587786ba1eadb072ddb130597bf6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/selected-bridges.Rust.inc",
+      "bytes": 1378,
+      "sha256": "d1a94a5454b599770563eb017bfacbb15a0682afc783439ffa3dab867e826b93"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/retained-abi-types.Rust.inc",
+      "bytes": 66,
+      "sha256": "24d812dee2beebc060993d304fc5e4ef04d3b0a0cc6eaf042adb89bea48c15cc"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/retained-syscall-atomic64-read-bridge.Rust.inc",
+      "bytes": 266,
+      "sha256": "d446a06fa13c518903d083a747a347abc7b2795db77f0e2bcfe9345f5b63843d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/selector-witness.c",
+      "bytes": 1082,
+      "sha256": "5c1f88b0bf1950cf3aa16682c30e741fac2058d1a9d41e0bbe424b4de234e17b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/paired-selectors.C.inc",
+      "bytes": 1715,
+      "sha256": "9885c949bbfd4680aace4d1ad0b5de892266c7a334f588bf63569681b24b3eef"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/driver.c",
+      "bytes": 5331,
+      "sha256": "2b65a479edd676114af763500ecea87e5c99fbb41bd194f818049b70e8bf6a88"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/original.C.inc",
+      "bytes": 395,
+      "sha256": "0c90ea9016f841fbf031cdd12e035af2bbbcd0e4a62041d1561c1df38d143f70"
+    }
+  ],
+  "tool_refs": {
+    "stable_Rust": {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "bytes": 654904,
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1"
+    },
+    "C_compiler": {
+      "path": "/usr/bin/cc",
+      "bytes": 1158288,
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+    }
+  },
+  "expected_C_Rust_pairs": 872,
+  "expected_single_call_traces": 1744,
+  "expected_ABI_words": 16,
+  "selected_callbacks": 3,
+  "new_Rust_wrappers": 2,
+  "reused_existing_Rust_bridge": 1,
+  "requires": "Fresh exact Root ordinary account/source/ownership/resource grant; old nonces and releases remain consumed.",
+  "actual_compiler_commands": 0,
+  "actual_runtime_tests": 0,
+  "source_recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/FUTURE-HOST-COMMAND-PLAN.NOT-GRANTED.json",
+    "bytes": 11521,
+    "sha256": "aac12d508eae342fd788255453a0899b66ba073dd3b0dff1d5ac6f4881ed516d"
+  },
+  "full_output_growth_reserve": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/FULL-OUTPUT-GROWTH-RESERVE.json",
+    "bytes": 3358,
+    "sha256": "08da8936f5e3a47b5ff5e7668f76ca861056ba34ad027b9fa86d798dc5db95af"
+  },
+  "real_header_binding": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/REAL-HEADER-BINDING.json",
+    "bytes": 2167,
+    "sha256": "abf218c0cf497544128579f217b8947126b75f83179d28fc69e24c68bb156bec"
+  },
+  "derived_argv_changes": "Fresh private output root; four selector C witness paths use real literal header declarations; first six commands prefix pinned env TMPDIR=<fresh output>. Exact original compiler arguments, wrapper bodies, driver/oracle and cases retained otherwise. Retained runner90s wall/60s CPU ceilings explicitly replace30s proposal only in this new profile."
+}

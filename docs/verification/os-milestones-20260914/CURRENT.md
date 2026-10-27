@@ -1,3 +1,24 @@
+## Root37 free; F05 v3 complete entry ready — 2026-10-27T22:54:52.236710+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+CURRENT113 firstRustcommand FAIL E0616 privateirqsave; wall3.113695s/CPU3.110836/
+RSS419364KiB, resource→compiler63.602679s. Later3commandsUNRUN; stopped363375
+retained. Independentfailedbuildcurrentfree070e/Root37b6ed accepted; noheavy live.
+Oneboundedcorrectioncac599 removesonlyillegalduplicateassert; identicalunconditional
+lock_helpers59 witness remains. Independentd18c SOURCEPASS/Rootadoptionb09e, no retryyet.
+AcceptedCURRENT112 C87/Rust52/process67/native0/file0 unchanged.
+
+F05v3actualoverlayc4a78/receipt07dc composed12.002560s andindependentfullmapf1dcPASS.
+Actualowner7345/manifest9a66, Rootsourceauth177e/cap9311, fixed60e/dca/908f/125c.
+Root37entrysource/mechanicalreview4ba3PASS: static37a115/bridge33f1/auth615d, fullQMP92B.
+PublishingallsourceBEFOREfreshresource/daemonatomicPASS/onceentry; nonce31770UNUSED.
+SeparateRuststartupcollectord0bf actual5HOSTsteps/all16controlsPASS939e/Rootadoption4052,
+rawargv8/empty/NULL/twoenv proven; newstageproposal sourceunderway, oldbe6eFAIL preserved.
+Perf3actual7HOSTcommands0/5.913008s; retainedELFqualifier/finalreview pending.
+Debug32HOST11d85 acceptedcandidateonly; next114private1e3b candidate/source notretired.
+Weeklyrefreshincludedfirst/current1percentused, same7f4spent22812.3311/ceiling57774.852125,
+no newtime/credits/holdclear. Fixed05:36:09Z/earlierclamps/realholds/mutex27:4/scratch21/floors.
+
 ## Actual startup failure retained; metadata suffix passes — 2026-10-27T22:37:17.063394+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

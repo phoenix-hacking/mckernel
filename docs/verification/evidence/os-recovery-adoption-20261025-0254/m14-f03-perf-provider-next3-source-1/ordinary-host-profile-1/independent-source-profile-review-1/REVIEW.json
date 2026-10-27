@@ -1,0 +1,119 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/guardian_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-27T22:47:54.458973+00:00",
+  "decision": "PASS_SOURCE",
+  "blocking_findings": [],
+  "execution_release": false,
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/SOURCE-READY.json",
+    "bytes": 3400,
+    "sha256": "14d6dd8e97d620a38e31c9f2830face957ad920c0c9418518d242bc0d6a1b46a"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/PROFILE.NOT-GRANTED.json",
+    "bytes": 46359,
+    "sha256": "f0b32ae6431694faabdc237f8a312ce7f3565b2d35544f139ff57b141423c8c8"
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/MANIFEST.json",
+    "bytes": 7313,
+    "sha256": "d839b2de1a7830797802f0f38dae93169d243cc4ef128a5bcec444e08228da4a"
+  },
+  "leaf_plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/LEAF-PLAN.NOT-GRANTED.json",
+    "bytes": 14422,
+    "sha256": "57d5766f116867180b16ec4be453adb29c64d5cbd0b435efc48c46212400ebba"
+  },
+  "original_source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/SOURCE-READY.json",
+    "bytes": 2100,
+    "sha256": "4cecde9baa9d4b80c14cf4ceaec308c37744512e744497855ab55414c4f5546c"
+  },
+  "original_recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/FUTURE-HOST-COMMAND-PLAN.NOT-GRANTED.json",
+    "bytes": 11521,
+    "sha256": "aac12d508eae342fd788255453a0899b66ba073dd3b0dff1d5ac6f4881ed516d"
+  },
+  "retained_runner_sha256": "6e98a1fbcbce2e822a815a05516287e7122cbd8e06d43277134b27b70cf3ad34",
+  "exact_input_pins": 167,
+  "commands": 7,
+  "planned_pairs": 872,
+  "planned_single_provider_traces": 1744,
+  "ABI_words": 16,
+  "new_Rust_wrapper_bodies": 2,
+  "existing_atomic_bridge_reused": 1,
+  "real_header_binding": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/REAL-HEADER-BINDING.json",
+    "bytes": 2167,
+    "sha256": "abf218c0cf497544128579f217b8947126b75f83179d28fc69e24c68bb156bec"
+  },
+  "full_growth_reserve": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/FULL-OUTPUT-GROWTH-RESERVE.json",
+    "bytes": 3358,
+    "sha256": "08da8936f5e3a47b5ff5e7668f76ca861056ba34ad027b9fa86d798dc5db95af"
+  },
+  "retained_only_qualifier": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/qualify_retained.py",
+    "bytes": 7624,
+    "sha256": "93b7ae6f4f7322bc659a3e2dcf6946e4cc332aa95478aec29b9d72cfd12a15d5"
+  },
+  "source_findings": [
+    "ExactSOURCE14d6dd8e/profilef0b32ae6/manifestd839b2de/all167inputpins+leafplan anddeclaredartifacts independentlymatch. OriginalREADY4cecde9b/recipeaac12d50 retained unchanged. Sourcechecker/qualifier remainUNRUN inthisreview.",
+    "Sevenliteralcommands derive originalargv exactly by freshoutput substitution,4realheaderwitnesspath substitutions and pinnedenvTMPDIR prefix forfirst6compiler/linkcommands. Cwdabsoluteexistingparent; output/capture disjointfresh. No compiler/provider/harness prefix alreadyaccepted is replayed here; these seven are the originalUNRUN next3HOSTobligations.",
+    "TwoRustwrappers forwardexacteventrawpointer once andreturnCInt; init publicint,unsignedlong,int keeps64bitcallbackand narrows low32tou32 exactlylikeoriginalC call tosupportedx86provider. HeaderretainsPOSTK_DEBUG_TEMP_FIX_29 uint64alternativebutselectedC staticassertrequiresactualu32defaultABI; no silent acceptance of64bitproviderprofile.",
+    "Thirdcallbackaliasesexisting syscall_atomic64_read_bridge; literalRustbodymatchretainedpreimage andexistingatomichelpersSeqCst implementation remainsunchanged. No duplicatedatomicport/algorithm/retry/allocation/ref ownership change.",
+    "Fourwitnesses use literaloriginalperfctr.h/atomic.hdeclarationslices includingconditionalinitprototype andconstatomicread; this is genuine declarationprovenance,notwholeproductionheaderpreprocessing. Actualcallbacktypes andatomic8byte/align8/offset0 staticallychecked byselectedpair; fallbacknone/helperonly/callbackonly leaveall3originalClocalfunctions.",
+    "Rustfixture retains originalABI16 andthreeexplicit inertlink_name endpoints. Cdriver includes originalCfallbackbodies,comparesactualselectedfunctiontableidentity,andchecks16ABIwords. 8pointervalues*6intreturns=48extra pairs;4counter*8fullwidthconfigs*4mode*6returns=768initpairs;8pointer*7signedlongresults=56atomicpairs,total872. EachC/Rustleg requiresone exactprovidertrace,total1744,includingnegative/edgevaluesandhighbittruncation. No invalidpointer dereference/realPMU/realatomicload occurs.",
+    "Retainedqualifier validates actualconsumedprofile/grant/nonce/7actualargvandpositivejoins/groups/streams/emptydiagnostics/frozenstdout; read-onlynm/readelf requires3uniqueRustboundaries,3selectedCU references/R64tablepointers,readonly128BABI16,only3inertendpoints andall3originalfallbacklocals. Existingatomicaliascannotbe replacedbyduplicatebody. Its future tooloutputs/actualartifactevidence are stillrequired; no source-only success substituted.",
+    "Qualifier93b7ae6f is a separate unrun Root retained-output command after7successfulcommands,not itselfincluded intheseven fixturecommands or implicitnativeclearance. Root must keep its exactpinnedsource/tools/absoluteoutput andordinaryCPU6/resource envelope whenauthorizing it. No compiler/harnessreplay is needed forqualification.",
+    "8GiB reserve explicitlycovers6finalartifacts/32Rusttemp/12Ctemp/8linkertemp/14outerstreams/controlrecords/metadata/1GiBemergency,total5760MiB plus2432MiBrounding. PerfileFSIZE ishonestlynotaggregatequota. First6commandsTMPDIRroutesfixedtooltemporaryoutputstosameHOSTreservedleaf. Existingadmission requiresHOST16+8=24GiBfree,scratch12GiB,currentmemoryfloor; resourceobservationsremainRootfuture.",
+    "Existing6e98CPU6/job1/AS2GiB/60CPU/90wall/FSIZE64MiB/core0/shared7jobs21.6619GiB/oneheavy/minclampedfixedwindow/account/realholds retained. Granttemplateauthorizedfalse/nonce/times/reservationsnull. No acceptedoldgrant/nativeholderretirement is inferred.",
+    "Initialauxiliarypreimagepreparationfailure863fed84 andfailedscript retained; boundedsourcecorrection copiesfiveexactauxrefs privately usingoriginalpreimagehashes. No callback/oracle/body change. SourceCMake/proposedselectors/canonicalintegration untouched; no currentdefault/native/wholefile retirement credit."
+  ],
+  "resources": {
+    "cpu": 6,
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds_each": 60,
+    "FSIZE_bytes": 67108864,
+    "CORE_bytes": 0,
+    "wall_seconds_each": 90,
+    "aggregate_jobs": 7,
+    "aggregate_GiB": "21.6619"
+  },
+  "host_growth_reserve_bytes": 8589934592,
+  "required_HOST_free_bytes": 25769803776,
+  "required_scratch_free_bytes": 12884901888,
+  "Root_command_template": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/ROOT-COMMAND.TEMPLATE.NOT-AUTHORITY.json",
+    "bytes": 1571,
+    "sha256": "62f209d06d1de52ed149bd4ac761f4d57ea12fd90be9cf686d99d7a04ed9df1d"
+  },
+  "Root_grant_schema": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/ROOT-GRANT.SCHEMA.NOT-A-GRANT.json",
+    "bytes": 960,
+    "sha256": "e135868323688deee664307f9d2b2ddb1d3181293028a86bc3175f9cac919df6"
+  },
+  "Root_retained_qualifier_template": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/ROOT-RETAINED-QUALIFIER-COMMAND.NOT-GRANTED.json",
+    "bytes": 1419,
+    "sha256": "79c55b859418bc2e527ab07f9015512392625119a4334c0096acafa37727e3e2"
+  },
+  "fresh_Root_requirements": "Useabsoluteprofile/grantpaths;freshunusedHOSTnonce/exactprofilef0b32ae6+runner6e98/sourcepins/currentCPU6exclusion/account+realholds/nativeownership/sharedreservations/actualHOST24GiBscratch12GiB headroom. Sourceapproval authorizesnoactualcompiler/harness/qualifier andsuppliesnonativeclearance.",
+  "actual_compiler_test_qualifier_guard_resource_account_queries": 0,
+  "production_default_acceptance": false,
+  "native_acceptance": false,
+  "whole_file_retirement": false,
+  "new_execution_authority": false,
+  "remaining": "Actual7HOSTcommandscaptures/872pairs/1744traces/ABI16+retainedELFqualification andpositiveordinaryretirement; Rootmatchingcurrentdefaultsource/object/link/selectorsandapplicableoriginalnativecoverage. No newperhelpernativequota.",
+  "review_actions": {
+    "bounded_source_data_AST_pins_andfiniteoracle_review": true,
+    "no_workload_query_guard_compiler_CPP_testexecutable_native": true,
+    "no_canonical_Git_edit": true,
+    "only_assigned_independent_source_profile_review_directory_written": true
+  },
+  "persistent_controls": "Fixed2026-10-28T05:36:09Z/v2earlierclamps/boot7bfc5687,creditrun7f/cap57774.852125/spent>=22812.3311/allrealholds/oneheavy4CPU12GiB512tasks/permanentnativeownership unchanged. Rootsolecanonical/grants,parentexclusiveoutercontrols;Root113heavybuild independent."
+}

@@ -1,0 +1,36 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_PRIVATE_NEXT3_SOURCE_COMPOSITION_ONLY",
+  "C_bodies": 3,
+  "new_Rust_wrapper_bodies": 2,
+  "existing_Rust_atomic_bridge_reused": 1,
+  "exact_atomic_reuse_sha256": "d446a06fa13c518903d083a747a347abc7b2795db77f0e2bcfe9345f5b63843d",
+  "atomic_memory_order_provider_unchanged": "SeqCst",
+  "raw_init_conversion": "hw_config: CULong as u32 reproduces genuine x86 unsigned-long to unsigned-int C conversion",
+  "raw_init_unsupported_variant": "Selected genuine C provider-type assertion fails rather than accepting POSTK_DEBUG_TEMP_FIX_29 uint64-code ABI. Original C fallback retains the original header-dependent behavior.",
+  "reverse_deltas_restore_entire_preimages": true,
+  "all_FILE_LINE_logical_identities_preserved": 193,
+  "paired_CMake_gates": [
+    {
+      "line": "list(APPEND RUST_KERNEL_CFG \"--cfg\" \"f03_perf_provider_next3_bridges_selected_candidate\")",
+      "ancestor_conditions": [
+        "if (ENABLE_RUST_KERNEL AND \"${ARCH}\" STREQUAL \"x86_64\")",
+        "if (MCKERNEL_HOST_IRQ_ABI STREQUAL \"linux-6.12\")",
+        "if (ARCH STREQUAL \"x86_64\" AND NOT ENABLE_UBSAN)",
+        "if (ENABLE_PERF)"
+      ]
+    },
+    {
+      "line": "COMPILE_DEFINITIONS \"MCKERNEL_RUST_F03_PERF_ALLOC_BRIDGES;MCKERNEL_RUST_F03_PERF_COUNTER_CONTROL_BRIDGES;MCKERNEL_RUST_F03_PERF_PROVIDER_NEXT3_BRIDGES\")",
+      "ancestor_conditions": [
+        "if (RUST_KERNEL_ENABLED)",
+        "if (MCKERNEL_HOST_IRQ_ABI STREQUAL \"linux-6.12\")",
+        "if (ARCH STREQUAL \"x86_64\" AND NOT ENABLE_UBSAN)",
+        "if (ENABLE_PERF)"
+      ]
+    }
+  ],
+  "canonical_writes": 0,
+  "compiler_commands": 0,
+  "fixture_runs": 0
+}

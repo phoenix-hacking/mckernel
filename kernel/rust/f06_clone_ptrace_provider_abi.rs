@@ -28,5 +28,6 @@ const _: () = {
     assert!(core::mem::align_of::<McsRwlockLock>() == 64);
     assert!(core::mem::size_of::<McsRwlockNodeIrqsave>() == 64);
     assert!(core::mem::align_of::<McsRwlockNodeIrqsave>() == 64);
-    assert!(core::mem::offset_of!(McsRwlockNodeIrqsave, irqsave) == 0);
+    // The irqsave offset-zero witness is asserted unconditionally in
+    // lock_helpers.rs, inside the defining module's existing const block.
 };

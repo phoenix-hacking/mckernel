@@ -1,0 +1,361 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_EXACT_ROOT37_ENTRY_SOURCE_SCHEMA_AND_FINAL_MECHANICAL_BINDINGS",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/custody_release_review",
+  "at": "2026-10-27T22:54:00.780571+00:00",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/SOURCE-READY.json",
+    "bytes": 8503,
+    "sha256": "d80bf1653882fa8d203b7f5485043a93d5a8c1058bb190acaa57da3e1099455e"
+  },
+  "reused_predecessor_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/independent-entry-source-review-1/REVIEW.json",
+    "bytes": 7684,
+    "sha256": "f7f3c083b07cd3f5ff40de4500173c77870d4582903d2b6241256a0e0049c2f2"
+  },
+  "actual_static": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-root37-1/STATIC-NATIVE-BINDINGS.NOT-RELEASED.json",
+    "bytes": 11600,
+    "sha256": "37a115a78e4d99e3b6fab17e3f917138ef831a94eeb8525998be3c7fdba9d148"
+  },
+  "actual_bridge": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-root37-1/root_once_f05_v3_entry.py",
+    "bytes": 13147,
+    "sha256": "33f1c0bcd44ba49101c9acdfc1b3413e6187621065b9902faecb3f6b91c22476"
+  },
+  "actual_Root_source_adoption": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-root37-1/ROOT-ACTUAL-SOURCE-ADOPTION.json",
+    "bytes": 5178,
+    "sha256": "51fab0403329387ae5f5b1ff5a293d5c194ddfc0cba1f3e4cda47ac8995db454"
+  },
+  "conditional_authorization": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-root37-1/ROOT-CONDITIONAL-ONCE-ENTRY-AUTHORIZATION.json",
+    "bytes": 2556,
+    "sha256": "615d5faf503cb47446e095f68ad6f44d7eab221911cf1b625170e3ffa6368988"
+  },
+  "profile_sha256": "e5584b2c6fecbec0660dfeda3193468cf78af6a9dee0f4cc849e64abbdca1081",
+  "nonce": "31770ebb739fea402ded939617921dda",
+  "case": "M14-05-05-owned-processvm-v3-causal-204B",
+  "root_ledger37": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER37.json",
+    "bytes": 4591,
+    "sha256": "b6ed7c321b348e90e13a51607d88af09893ab760e3decdd4d16d000a130155e8"
+  },
+  "current_free": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-CORRECTED-SCALAR4-NEXT4-BUILD-ADMISSION-1/independent-failed-build-review-1/CURRENT-FREE.json",
+    "bytes": 92521,
+    "sha256": "070e0f2c4f367da3444f30300bfbeb193af6d1bb7cc6cda663a1cb154bfe9f13"
+  },
+  "exact_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--fsize=33554432",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-runtime-1/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/f05v3n1",
+    "--nonce",
+    "31770ebb739fea402ded939617921dda",
+    "--owner-sha256",
+    "24210e3ededacd6576f61a96e7233baaa1ac243629e5ec25ce06ded1463bb99f",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/f05v3n1-inputs/manifest-base-join-corrected.json",
+    "--manifest-sha256",
+    "9a66a12e53e3fd7d4dd2edb8fa9ce5021a20e022996fa2d10e74c9cea326da53"
+  ],
+  "findings": [
+    "Root37b6ed/latest failed113free070e authenticates holder1730479/start93849786, runner1731468/start93859497, positive failed joins and retained363375 stoppedExit1. Failed Rust build remains FAIL.",
+    "InheritedRoot36/startup85ce,112free52e,111free9904 and Root4bf19 remain distinct proofs with positive waits/reaps/leasefalse. Historical physical observer stays baseline; latest actual actor/container/cgroup checks supplement it.",
+    "Independent read-only retained-schema68statements including UID1000 (67afterUID),52assertions PASS. No guard/clock/observer/resource/Docker/native operation executed.",
+    "Normal capturea70b and resource-oncebeb9 exact predecessor bytes. Prepare/binder/bridge source changes only Root37 key/count/messages and disjoint newD/CAPTURE. Latest resource source adds strict failed113 provenance while retaining guard1f15/observer2b73,capacity,cgroup,actor,exclusiveoutput and emptydirectory checks.",
+    "Final adopted helpers match sealed source. Bridge33f1 AST differs only STATIC_SHA None to actualstatic37a115; obsolete fill-only comment removed, no algorithm change. Auth615d binds bridge/static/profilee558/oneinvocation/31770/exactargv/adoption51fab.",
+    "Actualstatic binds sourceauthority177e/cap9311/stagef1dc/CURRENT110acceptance, scratch+repository9a66, owner2421/evaluatore55/overlayc4a78/Rustcollector908f/app125c.143-source proof reused without rehash. Rootbinder0/positivejoin/closedstreams and exactstatic stdout authenticate; owner/manifest API not replayed.",
+    "Only fixedF05v3 with payload /bin/mcexec -t1 0 /apps/app, zero extra arguments,twoenv,10s/1024 eligible; no startup/c020 crossreuse and original235/227/v2FAIL unchanged.",
+    "19sealed pure mocksPASS reused not rerun. Strict120s freshness,3-clock only-tightening,allholds,O_EXCL durable oncegrant and designated daemon independent execution-review checks remain unchanged."
+  ],
+  "readonly_schema": {
+    "statements": 68,
+    "excluding_UID": 67,
+    "assertions": 52,
+    "passed": true
+  },
+  "reported_mocks": {
+    "count": 19,
+    "passed": true,
+    "reexecuted": false
+  },
+  "actual_static_binder": {
+    "bytes": 945,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-root37-1/ROOT-ACTUAL-STATIC-BINDER-JOIN.json",
+    "sha256": "155a577081462e1edb2c4b0c15be3304ce51130594c9acb0678989b10c45cfa4"
+  },
+  "review_reader_note": "Initial offline receipt construction expected obsolete STATIC_SHA fill comment retained; stopped before publication. Exact AST comparison confirms sole literal replacement and comment removal; no source/predicate change.",
+  "remaining": [
+    "Publish/fetch exact finalstatic/helpers/bridge/auth before freshcapture.",
+    "Fresh120s actual resource/current/account and exact pending input require designated daemon independent execution PASS. Conditional Root authorization is not execution release.",
+    "Native PID1/kmsg/causality/strict lifecycle/retirement remain OPEN."
+  ],
+  "runtime_authority": null,
+  "native_acceptance": false,
+  "execution_release": false,
+  "source_and_mechanical_binding_acceptance": true,
+  "actions": {
+    "readonly_hash_AST_schema_only": true,
+    "unchanged143rehash": 0,
+    "guard_queries_resource_observer_compiler_tests_workload_cleanup_canonical_Git": 0,
+    "subagents": 0
+  },
+  "references": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/SOURCE-READY.json",
+      "bytes": 8503,
+      "sha256": "d80bf1653882fa8d203b7f5485043a93d5a8c1058bb190acaa57da3e1099455e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/EXACT-CONTEXT-MAP.json",
+      "bytes": 7629,
+      "sha256": "02a1722fc67e5f12b349b158a79ec48c6eda34da2f54c188e9e476c03aecda3f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/PURE-MOCK-RESULT.json",
+      "bytes": 2546,
+      "sha256": "a2686eb4909c393c34a09f5948e7a7f348123cbbf157835f58c9230676833c94"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/PURE-SOURCE-CONTEXT-CHECKS.json",
+      "bytes": 452,
+      "sha256": "9a7674763a02346fbb6614b98c92db3c9b1907058d0afd32b4e1783570428abe"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/ROOT-CONDITIONAL-AUTHORIZATION.TEMPLATE.NOT-AUTHORIZED.json",
+      "bytes": 1805,
+      "sha256": "817e1574997b583a2e19bda8eb064ecf4eb9df3d4529af9891e94450761e1451"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/ROOT-MECHANICAL-FILL.PROPOSAL.json",
+      "bytes": 4529,
+      "sha256": "2f88ee14516af6722d5fdcefb5ecdd5b27176aba7dcb37b3bb55ebf14d3cc67c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/STATIC-NATIVE-BINDINGS.TEMPLATE.NOT-RELEASED.json",
+      "bytes": 10730,
+      "sha256": "e33c7472cebe915482b774bdb1c69cdc563dddb5ccdba32ef2d60c90c39c7fc0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/bind_f05_v3_resource.py",
+      "bytes": 4860,
+      "sha256": "7821cb38a1a9265dd9b884b63105afbc350e4e3267c72bb2d8c216fb6154919c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/bind_f05_v3_resource.py.context.patch",
+      "bytes": 3629,
+      "sha256": "c1ace13721ba173771d1e59afa49f83db1a0b5f0fc4b5c36524126fbfa550b20"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/capture_fresh_f05_v3_resource.py",
+      "bytes": 16523,
+      "sha256": "7f63397250225a1b26777162090a71e8a032e169c37af785d0d4a3768d8a18e4"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/capture_fresh_f05_v3_resource.py.context.patch",
+      "bytes": 12844,
+      "sha256": "6c5e90c0e11c03bb18ec848e8d0960a62c7130ac30f3ec8edd86a955df104302"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/prepare_f05_v3_bindings.py",
+      "bytes": 5872,
+      "sha256": "24512f03aec7b0b2913504fa6bf829608aaf203aaa2f5c88e7af63591867cebd"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/prepare_f05_v3_bindings.py.context.patch",
+      "bytes": 2942,
+      "sha256": "cc98f3e87634967ef1912509262aedc005f363b55d057b6229f3b6e4b59dad46"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/root_once_f05_v3_entry.py",
+      "bytes": 13152,
+      "sha256": "8199a875787e368769067f5ef119f358c6ca2a00bd4d9526fd23bd61aa792dcc"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/root_once_f05_v3_entry.py.context.patch",
+      "bytes": 3346,
+      "sha256": "11fc11045aaeb70056642c8e4dfe6e4a9a2da626fb4a4de0f6f382f751327006"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/run_f05_v3_resource_once.py",
+      "bytes": 2833,
+      "sha256": "beb9a4dcd7e6398d5de4d3ed367abaf5208302e6551038d9a1b309818cd3eb92"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/run_f05_v3_resource_once.py.context.patch",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/run_native_f05_v3_capture.py",
+      "bytes": 5063,
+      "sha256": "a70bce36bc718bc6479aff1ba2ba422daf601942f02e521bba54a7115a62ec8f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/run_native_f05_v3_capture.py.context.patch",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/test_f05_v3_context_mock.py",
+      "bytes": 10043,
+      "sha256": "d5b926575b8da92760a0f649b2f52813204fe973dd0bd025ee4d43a709651688"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/EXACT-CONTEXT-MAP.json",
+      "bytes": 7629,
+      "sha256": "02a1722fc67e5f12b349b158a79ec48c6eda34da2f54c188e9e476c03aecda3f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/independent-entry-source-review-1/REVIEW.json",
+      "bytes": 7684,
+      "sha256": "f7f3c083b07cd3f5ff40de4500173c77870d4582903d2b6241256a0e0049c2f2"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-root37-1/STATIC-NATIVE-BINDINGS.NOT-RELEASED.json",
+      "bytes": 11600,
+      "sha256": "37a115a78e4d99e3b6fab17e3f917138ef831a94eeb8525998be3c7fdba9d148"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-root37-1/root_once_f05_v3_entry.py",
+      "bytes": 13147,
+      "sha256": "33f1c0bcd44ba49101c9acdfc1b3413e6187621065b9902faecb3f6b91c22476"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-root37-1/ROOT-CONDITIONAL-ONCE-ENTRY-AUTHORIZATION.json",
+      "bytes": 2556,
+      "sha256": "615d5faf503cb47446e095f68ad6f44d7eab221911cf1b625170e3ffa6368988"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-root37-1/ROOT-ACTUAL-SOURCE-ADOPTION.json",
+      "bytes": 5178,
+      "sha256": "51fab0403329387ae5f5b1ff5a293d5c194ddfc0cba1f3e4cda47ac8995db454"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-root37-1/bind_f05_v3_resource.py",
+      "bytes": 4860,
+      "sha256": "7821cb38a1a9265dd9b884b63105afbc350e4e3267c72bb2d8c216fb6154919c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-root37-1/capture_fresh_f05_v3_resource.py",
+      "bytes": 16523,
+      "sha256": "7f63397250225a1b26777162090a71e8a032e169c37af785d0d4a3768d8a18e4"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-root37-1/prepare_f05_v3_bindings.py",
+      "bytes": 5872,
+      "sha256": "24512f03aec7b0b2913504fa6bf829608aaf203aaa2f5c88e7af63591867cebd"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-root37-1/run_f05_v3_resource_once.py",
+      "bytes": 2833,
+      "sha256": "beb9a4dcd7e6398d5de4d3ed367abaf5208302e6551038d9a1b309818cd3eb92"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-root37-1/run_native_f05_v3_capture.py",
+      "bytes": 5063,
+      "sha256": "a70bce36bc718bc6479aff1ba2ba422daf601942f02e521bba54a7115a62ec8f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/ROOT-SOURCE-AUTHORITY.ACTUAL.json",
+      "bytes": 34866,
+      "sha256": "177e6b42bbec7057638e96742eb11e15399d3db1245ed1681ede78d45f21c894"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/CASE-CAPABILITY.ACTUAL.json",
+      "bytes": 4601,
+      "sha256": "9311a3fb4b96cda5aab2de7b862da5aa291ee2db870cb773750250d14e4aaf2f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/independent-actual-stage-review-1/REVIEW.json",
+      "bytes": 28131,
+      "sha256": "f1dc620ad30e534fefbc14068ed6ced3a4e3a58c04cb5bf35c8dc15c8bd70a41"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT110-INDEPENDENT-DEFAULT-ARTIFACT-ACCEPTANCE.json",
+      "bytes": 1187,
+      "sha256": "eea9eb098cca17dc29fd2fe3111aa1b53c3119aed7827101fdbd7c69d4e15737"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-root37-1/ACTUAL-SCRATCH-MANIFEST-STAGE.json",
+      "bytes": 1211,
+      "sha256": "93d1a34a28471c052f9e8a8ff1e45319e614dab066fd8e1c913a9ad17339f1fc"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/ROOT-ACTUAL-V3-MANIFEST.BASE-JOIN-CORRECTED.json",
+      "bytes": 9797,
+      "sha256": "9a66a12e53e3fd7d4dd2edb8fa9ce5021a20e022996fa2d10e74c9cea326da53"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/f05v3n1-inputs/manifest-base-join-corrected.json",
+      "bytes": 9797,
+      "sha256": "9a66a12e53e3fd7d4dd2edb8fa9ce5021a20e022996fa2d10e74c9cea326da53"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-runtime-1/native_diagnostic_container_owner.py",
+      "bytes": 94279,
+      "sha256": "24210e3ededacd6576f61a96e7233baaa1ac243629e5ec25ce06ded1463bb99f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-runtime-1/native_diagnostic.py",
+      "bytes": 130020,
+      "sha256": "e55ad576c45a5eaee742b47081612924a0fca12fc803d30fb359cc9ea6bc57e2"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-overlay-materialization-1/overlay.json",
+      "bytes": 15398,
+      "sha256": "07dcd89c157c6f1decd09d19d674b961f4c41747062146a47b5be619a4026fcf"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-root37-1/ACTUAL-SCRATCH-MANIFEST-STAGE.json",
+      "bytes": 1211,
+      "sha256": "93d1a34a28471c052f9e8a8ff1e45319e614dab066fd8e1c913a9ad17339f1fc"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/f05v3n1-inputs/manifest-base-join-corrected.json",
+      "bytes": 9797,
+      "sha256": "9a66a12e53e3fd7d4dd2edb8fa9ce5021a20e022996fa2d10e74c9cea326da53"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/ROOT-ACTUAL-V3-MANIFEST.BASE-JOIN-CORRECTED.json",
+      "bytes": 9797,
+      "sha256": "9a66a12e53e3fd7d4dd2edb8fa9ce5021a20e022996fa2d10e74c9cea326da53"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/CASE-CAPABILITY.ACTUAL.json",
+      "bytes": 4601,
+      "sha256": "9311a3fb4b96cda5aab2de7b862da5aa291ee2db870cb773750250d14e4aaf2f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-root37-1/ROOT-ACTUAL-STATIC-BINDER-JOIN.json",
+      "bytes": 945,
+      "sha256": "155a577081462e1edb2c4b0c15be3304ce51130594c9acb0678989b10c45cfa4"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER37.json",
+      "bytes": 4591,
+      "sha256": "b6ed7c321b348e90e13a51607d88af09893ab760e3decdd4d16d000a130155e8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/PURE-MOCK-RESULT.json",
+      "bytes": 2546,
+      "sha256": "a2686eb4909c393c34a09f5948e7a7f348123cbbf157835f58c9230676833c94"
+    }
+  ]
+}

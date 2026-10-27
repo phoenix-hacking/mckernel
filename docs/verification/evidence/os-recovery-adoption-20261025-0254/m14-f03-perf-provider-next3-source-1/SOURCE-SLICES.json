@@ -1,0 +1,29 @@
+[
+  {
+    "name": "perf_counter_extra_set_bridge",
+    "original": "static int\nperf_counter_extra_set_bridge(void *event)\n{\n\treturn ihk_mc_perfctr_set_extra((struct mc_perf_event *)event);\n}\n",
+    "selector": "#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_PROVIDER_NEXT3_BRIDGES)\nextern int perf_counter_extra_set_bridge(void *event);\n#else\n#line 20498\nstatic int\nperf_counter_extra_set_bridge(void *event)\n{\n\treturn ihk_mc_perfctr_set_extra((struct mc_perf_event *)event);\n}\n#endif\n#line 20503\n",
+    "physical_first": 20616,
+    "logical_first": 20498,
+    "logical_after": 20503,
+    "selected_Rust_symbol": "perf_counter_extra_set_bridge"
+  },
+  {
+    "name": "perf_counter_init_raw_bridge",
+    "original": "static int\nperf_counter_init_raw_bridge(int counter_id, unsigned long hw_config, int mode)\n{\n\treturn ihk_mc_perfctr_init_raw(counter_id, hw_config, mode);\n}\n",
+    "selector": "#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_PROVIDER_NEXT3_BRIDGES)\nextern int perf_counter_init_raw_bridge(int counter_id, unsigned long hw_config, int mode);\n_Static_assert(sizeof(unsigned long)==8 && sizeof(unsigned int)==4, \"supported Rust perf init code narrowing ABI\");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&ihk_mc_perfctr_init_raw), int (*)(int,unsigned int,int)), \"selected x86 Rust provider requires original u32 code ABI\");\n#else\n#line 20504\nstatic int\nperf_counter_init_raw_bridge(int counter_id, unsigned long hw_config, int mode)\n{\n\treturn ihk_mc_perfctr_init_raw(counter_id, hw_config, mode);\n}\n#endif\n#line 20509\n",
+    "physical_first": 20622,
+    "logical_first": 20504,
+    "logical_after": 20509,
+    "selected_Rust_symbol": "perf_counter_init_raw_bridge"
+  },
+  {
+    "name": "perf_event_atomic64_read_bridge",
+    "original": "static long\nperf_event_atomic64_read_bridge(void *value)\n{\n\treturn ihk_atomic64_read((ihk_atomic64_t *)value);\n}\n",
+    "selector": "#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_PROVIDER_NEXT3_BRIDGES)\nextern long syscall_atomic64_read_bridge(void *value);\n#define perf_event_atomic64_read_bridge syscall_atomic64_read_bridge\n_Static_assert(sizeof(ihk_atomic64_t)==8 && __alignof__(ihk_atomic64_t)==8 && __builtin_offsetof(ihk_atomic64_t,counter64)==0, \"existing atomic64 provider layout ABI\");\n_Static_assert(__builtin_types_compatible_p(__typeof__(&ihk_atomic64_read), long (*)(const ihk_atomic64_t *)), \"existing atomic64 read provider C ABI\");\n#else\n#line 20564\nstatic long\nperf_event_atomic64_read_bridge(void *value)\n{\n\treturn ihk_atomic64_read((ihk_atomic64_t *)value);\n}\n#endif\n#line 20569\n",
+    "physical_first": 20682,
+    "logical_first": 20564,
+    "logical_after": 20569,
+    "selected_Rust_symbol": "syscall_atomic64_read_bridge"
+  }
+]

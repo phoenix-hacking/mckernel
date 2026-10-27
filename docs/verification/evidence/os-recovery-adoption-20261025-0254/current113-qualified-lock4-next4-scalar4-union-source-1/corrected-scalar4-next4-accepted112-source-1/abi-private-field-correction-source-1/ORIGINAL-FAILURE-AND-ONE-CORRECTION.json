@@ -1,0 +1,28 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "runtime_authority": null,
+  "family": "Rust E0616 duplicate private irqsave offset assertion",
+  "original_worker_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-CORRECTED-SCALAR4-NEXT4-BUILD-ADMISSION-1/OUTPUT/work/evidence/worker-result.json",
+    "bytes": 4879,
+    "sha256": "50820d4834af6826309251484142ec6d658d3428c9ec89464cec9dd9ad22be7a"
+  },
+  "original_stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-CORRECTED-SCALAR4-NEXT4-BUILD-ADMISSION-1/OUTPUT/work/evidence/00.stderr",
+    "bytes": 18209,
+    "sha256": "bd6461f67dc0da9b38b2f14ed61175fa79d145030352760a60200fee893671fe"
+  },
+  "first_failed_command_index": 0,
+  "returncode": 1,
+  "CPU_seconds": 3.110836,
+  "maximum_RSS_KiB": 419364,
+  "wall_seconds_recorded": 3.113694906234741,
+  "wall_seconds_rounded": 3.113695,
+  "passed_compiler_prefix": 0,
+  "remaining_commands_unrun": 3,
+  "required_next_commands": 4,
+  "correction_count": 1,
+  "bounded_correction": "Remove only illegal duplicate cross-module assertion and replace explanatory comment; no type visibility/layout/runtime/body/otherABI witness change.",
+  "on_repeated_failure": "Escalate to expert; no automatic further candidate/replay.",
+  "actual_correction_compiler_invocations": 0
+}

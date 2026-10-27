@@ -1,0 +1,568 @@
+--- qualified-F05-81bb/main.rs
++++ fixed-original-startup/main.rs
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ //! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+-//! One private F05 PID1 collector successor. No generic init/configuration modes.
++//! Fixed original startup.argv-empty PID1 collector; no runtime profile modes.
+ #![allow(unsafe_op_in_unsafe_fn)]
+ #[cfg(not(all(
+     target_os = "linux",
+@@ -11,13 +11,14 @@
+ compile_error!("this collector's reviewed FFI profile is Linux x86_64 little-endian only");
+ #[cfg(test)]
+ mod host_tests;
+-mod lifecycle;
++mod profile;
+ mod report;
+ mod supervisor;
+ #[cfg(test)]
+ mod tests;
+ 
+-use lifecycle::{Check, RAW_LIMIT};
++use profile::{BOOT_ARGV, PAYLOAD_ARGV, PAYLOAD_CWD};
++const RAW_LIMIT: usize = 262_144;
+ use std::ffi::{c_char, c_int, c_void, CString};
+ use std::fs::{File, OpenOptions};
+ use std::io::Read;
+@@ -102,7 +103,7 @@
+     } else {
+         10_000
+     };
+-    let result = supervise(path, argv, HELPER_ENV, None, timeout, outer, None);
++    let result = supervise(path, argv, HELPER_ENV, None, timeout, outer);
+     if !result.clean {
+         *safe = false;
+     }
+@@ -172,15 +173,7 @@
+     }
+ }
+ fn poweroff_forever(console: Option<&File>, outer: u64) -> ! {
+-    let _ = supervise(
+-        "/poweroff",
+-        &["/poweroff"],
+-        HELPER_ENV,
+-        None,
+-        2000,
+-        outer,
+-        None,
+-    );
++    let _ = supervise("/poweroff", &["/poweroff"], HELPER_ENV, None, 2000, outer);
+     if let Some(console) = console {
+         let _ = write_all_bounded(
+             console.as_raw_fd(),
+@@ -221,7 +214,6 @@
+     let mut loaded = 0;
+     let mut empty = false;
+     let mut saved_level = None;
+-    let mut observer = None;
+     let operation = (|| -> Check<()> {
+         for (kind, path) in [
+             ("proc", "/proc"),
+@@ -306,20 +298,18 @@
+         helper(
+             "boot",
+             "/bin/native-boot",
+-            &["/bin/native-boot", "hidos", "allow_oversubscribe"],
++            BOOT_ARGV,
+             outer,
+             &mut safe,
+             console.as_ref(),
+         )?;
+-        observer = Some(Observer::prepare()?);
+         payload = supervise(
+             "/bin/mcexec",
+             PAYLOAD_ARGV,
+             PAYLOAD_ENV,
+-            Some("/case/work"),
++            Some(PAYLOAD_CWD),
+             10_000,
+             outer,
+-            observer.as_mut(),
+         );
+         if !payload.clean {
+             safe = false;
+@@ -331,18 +321,14 @@
+         if begin_retirement == 0 {
+             return Err("retirement clock unavailable".into());
+         }
+-        let observer = observer.as_mut().ok_or("missing bound observer")?;
+         loop {
+             let current = now_ns();
+             if current == 0 || current >= end {
+                 return Err("original post-reap retirement deadline".into());
+             }
+-            // Gate release is forbidden after the application is reaped. Keep
+-            // observing parent lifecycle through actual final0 and DELETE.
+-            if !observer.service(false) {
+-                return Err(observer.failure.clone().unwrap_or("observer failed".into()));
+-            }
+-            if retirement_ready(current, end, procfs_empty(), observer.complete())? {
++            // Preserve original Cstartup namespace retirement; F05's causal
++            // gate, child link and actual lifecycle ACK proof are not selected.
++            if startup_retirement_ready(current, end, procfs_empty())? {
+                 empty = true;
+                 break;
+             }
+@@ -353,11 +339,6 @@
+     let mut good = operation.is_ok();
+     if let Err(error) = operation {
+         let _ = save("/case/evidence/collector.failure", error.as_bytes(), outer);
+-    }
+-    if let Some(observer) = &observer {
+-        if let Some(error) = &observer.failure {
+-            let _ = save("/case/evidence/observer.failure", error.as_bytes(), outer);
+-        }
+     }
+     let teardown = format!(
+         "modules_loaded={loaded} processes_reaped={} procfs_empty={} nested_os_retained=1\n",
+@@ -366,22 +347,14 @@
+     if save("/case/evidence/teardown", teardown.as_bytes(), outer).is_err() {
+         good = false;
+     }
+-    // Keep exactly one unmodified klogctl(3) snapshot. The separately retained
+-    // kmsg sequence is never concatenated to console, transformed or deduplicated.
++    // Original startup publishes exactly one unchanged raw klogctl(3) snapshot.
++    // There is no F05 incremental observer, gate or reconstructed serial stream.
+     let mut kernel_log = vec![0u8; RAW_LIMIT];
+     let count = unsafe { klogctl(3, kernel_log.as_mut_ptr().cast(), kernel_log.len() as i32) };
+     if count < 0 || count == kernel_log.len() as i32 {
+         good = false;
+     } else {
+         kernel_log.truncate(count as usize);
+-        if let Some(observer) = observer.as_mut() {
+-            if let Err(error) = observer.final_snapshot_covers_observation(&kernel_log) {
+-                good = false;
+-                let _ = save("/case/evidence/snapshot.failure", error.as_bytes(), outer);
+-            }
+-        } else {
+-            good = false;
+-        }
+         if save("/case/evidence/kernel.log", &kernel_log, outer).is_err() {
+             good = false;
+         }
+--- qualified-F05-81bb/supervisor.rs
++++ fixed-original-startup/supervisor.rs
+@@ -1,21 +1,15 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ //! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+-//! Direct selected-profile translation of collector b3fc4f supervise()/drain().
+-use crate::lifecycle::{snapshot_bodies, Check, KmsgSequence, Lifecycle, GATE_PATH};
+-use std::collections::BTreeMap;
++//! Generic supervisor extracted from qualified F05 source61bdd82d; startup
++//! omits case-specific observer code and preserves all actual process ownership.
++pub type Check<T> = Result<T, String>;
+ use std::ffi::{c_char, c_int, c_void, CString};
+ use std::fs::{File, OpenOptions};
+-use std::io::{Read, Seek, SeekFrom, Write};
+ use std::os::fd::AsRawFd;
+-use std::os::unix::fs::{FileExt, MetadataExt, OpenOptionsExt};
+-use std::path::PathBuf;
+-#[cfg(test)]
+-#[path = "observer_tests.rs"]
+-mod observer_tests;
++use std::os::unix::fs::OpenOptionsExt;
+ 
+ pub const MS: u64 = 1_000_000;
+ pub const STREAM_LIMIT: usize = 1024;
+-pub const PAYLOAD_ARGV: &[&str] = &["/bin/mcexec", "-t", "1", "0", "/apps/app"];
+ pub const PAYLOAD_ENV: &[&str] = &["PATH=/usr/bin:/bin", "COKERNEL_PATH=/apps"];
+ pub const HELPER_ENV: &[&str] = &["PATH=/bin:/sbin:/usr/bin:/usr/sbin", "LC_ALL=C"];
+ const EINTR: i32 = 4;
+@@ -86,18 +80,13 @@
+ pub fn bounded_deadline(requested: u64, outer: u64, reserve: u64) -> u64 {
+     requested.min(outer.saturating_sub(reserve))
+ }
+-/// The original absolute post-reap deadline is never refreshed by an empty
+-/// namespace or an interim -11. An unreadable namespace always remains failure.
+-pub fn retirement_ready(
+-    current: u64,
+-    end: u64,
+-    namespace: Check<bool>,
+-    owners_complete: bool,
+-) -> Check<bool> {
++/// Original Cstartup retirement: readable empty numeric procfs namespace within
++/// the same5s absolute deadline. This is not the separate F05 lifecycle proof.
++pub fn startup_retirement_ready(current: u64, end: u64, namespace: Check<bool>) -> Check<bool> {
+     if current == 0 || current >= end {
+         return Err("original post-reap retirement deadline".into());
+     }
+-    Ok(namespace? && owners_complete)
++    namespace
+ }
+ pub fn sleep_ms(ms: u64) {
+     let time = Timespec {
+@@ -281,159 +270,10 @@
+     }
+ }
+ 
+-pub struct Observer {
+-    gate: File,
+-    gate_path: PathBuf,
+-    ring: File,
+-    retained: File,
+-    sequence: KmsgSequence,
+-    lifecycle: Option<Lifecycle>,
+-    original_gate_identity: (u64, u64),
+-    messages: BTreeMap<String, usize>,
+-    caught_up: bool,
+-    pub failure: Option<String>,
+-}
+-impl Observer {
+-    pub fn prepare() -> Check<Self> {
+-        let gate = OpenOptions::new()
+-            .read(true)
+-            .write(true)
+-            .create_new(true)
+-            .mode(0o600)
+-            .custom_flags(O_CLOEXEC | 0x20000)
+-            .open(GATE_PATH)
+-            .map_err(|e| format!("exclusive empty gate creation: {e}"))?; // O_NOFOLLOW
+-        let metadata = gate
+-            .metadata()
+-            .map_err(|e| format!("gate descriptor metadata: {e}"))?;
+-        if !metadata.is_file() || metadata.len() != 0 || metadata.mode() & 0o777 != 0o600 {
+-            return Err("new gate is not an empty mode0600 regular file".into());
+-        }
+-        let mut ring = OpenOptions::new()
+-            .read(true)
+-            .custom_flags(O_CLOEXEC | O_NONBLOCK)
+-            .open("/dev/kmsg")
+-            .map_err(|e| format!("non-destructive kmsg open: {e}"))?;
+-        ring.seek(SeekFrom::End(0))
+-            .map_err(|e| format!("kmsg prelaunch sequence cut: {e}"))?;
+-        let retained = OpenOptions::new()
+-            .write(true)
+-            .create_new(true)
+-            .mode(0o600)
+-            .open("/case/evidence/lifecycle.kmsg")
+-            .map_err(|e| format!("exclusive raw kmsg retention: {e}"))?;
+-        Ok(Self {
+-            gate,
+-            gate_path: PathBuf::from(GATE_PATH),
+-            ring,
+-            retained,
+-            sequence: KmsgSequence::default(),
+-            lifecycle: None,
+-            original_gate_identity: (metadata.dev(), metadata.ino()),
+-            messages: BTreeMap::new(),
+-            caught_up: false,
+-            failure: None,
+-        })
+-    }
+-    pub fn bind_actual_child(&mut self, pid: i32) -> Check<()> {
+-        if self.lifecycle.is_some() {
+-            return Err("observer already bound to a launcher".into());
+-        }
+-        self.lifecycle = Some(Lifecycle::new(pid)?);
+-        Ok(())
+-    }
+-    fn turn(&mut self, allow_gate: bool) -> Check<()> {
+-        self.caught_up = false;
+-        let state = self
+-            .lifecycle
+-            .as_mut()
+-            .ok_or("observer has no actual spawned launcher")?;
+-        let mut raw = [0u8; 8192];
+-        let mut caught_up = false;
+-        for _ in 0..32 {
+-            match self.ring.read(&mut raw) {
+-                Ok(0) => return Err("unexpected kmsg EOF".into()),
+-                Ok(count) => {
+-                    // Retain complete genuine records, including the offending
+-                    // row on a parser failure. Never forward these to serial.
+-                    self.retained
+-                        .write_all(&raw[..count])
+-                        .map_err(|e| format!("raw kmsg retention write: {e}"))?;
+-                    let message = self.sequence.accept(&raw[..count])?;
+-                    *self.messages.entry(message.to_owned()).or_default() += 1;
+-                    state.accept(message)?;
+-                }
+-                Err(e) if e.kind() == std::io::ErrorKind::WouldBlock => {
+-                    caught_up = true;
+-                    break;
+-                }
+-                Err(e) if e.kind() == std::io::ErrorKind::Interrupted => continue,
+-                Err(e) => return Err(format!("kmsg read failure/overflow: {e}")),
+-            }
+-        }
+-        self.caught_up = caught_up;
+-        // A bounded turn that leaves a backlog cannot release the gate: there
+-        // may be an unvalidated foreign/duplicate/premature event still queued.
+-        if caught_up && allow_gate && state.child_ready() {
+-            let path = std::fs::symlink_metadata(&self.gate_path)
+-                .map_err(|e| format!("gate pathname metadata: {e}"))?;
+-            let descriptor = self
+-                .gate
+-                .metadata()
+-                .map_err(|e| format!("gate descriptor recheck: {e}"))?;
+-            if !path.is_file()
+-                || path.len() != 0
+-                || descriptor.len() != 0
+-                || (path.dev(), path.ino()) != self.original_gate_identity
+-                || (descriptor.dev(), descriptor.ino()) != self.original_gate_identity
+-            {
+-                return Err("gate replaced or nonempty before release".into());
+-            }
+-            match self.gate.write_at(b"G", 0) {
+-                Ok(1) => state.record_gate_write()?,
+-                other => return Err(format!("exact one-byte gate release failed: {other:?}")),
+-            }
+-        }
+-        Ok(())
+-    }
+-    pub fn service(&mut self, allow_gate: bool) -> bool {
+-        if self.failure.is_some() {
+-            return false;
+-        }
+-        if let Err(error) = self.turn(allow_gate) {
+-            self.failure = Some(error);
+-            return false;
+-        }
+-        true
+-    }
+-    pub fn complete(&self) -> bool {
+-        self.failure.is_none()
+-            && self.caught_up
+-            && self.lifecycle.as_ref().is_some_and(Lifecycle::complete)
+-    }
+-    pub fn final_snapshot_covers_observation(&mut self, snapshot: &[u8]) -> Check<()> {
+-        self.retained
+-            .sync_all()
+-            .map_err(|e| format!("incremental log sync: {e}"))?;
+-        let bodies = snapshot_bodies(snapshot)?;
+-        // Match exact WHOLE native record bodies and multiplicity. A short
+-        // observed body embedded inside another record cannot prove coverage.
+-        // Parse every snapshot line; unknown/malformed envelopes fail rather
+-        // than being dropped or normalized. The raw snapshot is never edited.
+-        for (message, count) in &self.messages {
+-            if bodies.get(message).copied().unwrap_or(0) < *count {
+-                return Err(format!(
+-                    "final raw snapshot lost observed record body: {message}"
+-                ));
+-            }
+-        }
+-        Ok(())
+-    }
+-}
+-
+ /// Real /bin/mcexec remains the direct child, with the exact old argv/env/cwd.
+ /// This is the existing 10s deadline, TERM at stop, KILL after100ms, and 2s reap
+-/// reserve. Lifecycle servicing is added within each original poll turn.
++/// reserve. This fixed startup build omits the F05 observer entirely: the
++/// qualified predecessor's constant observer=None hooks have no operation.
+ pub fn supervise(
+     path: &str,
+     argv: &[&str],
+@@ -441,7 +281,6 @@
+     cwd: Option<&str>,
+     timeout_ms: u64,
+     outer: u64,
+-    mut observer: Option<&mut Observer>,
+ ) -> ResultRecord {
+     let mut result = ResultRecord::default();
+     result.started = now_ns();
+@@ -519,11 +358,6 @@
+             }
+             pair[1] = -1;
+         }
+-        if let Some(observer) = observer.as_deref_mut() {
+-            if observer.bind_actual_child(child).is_err() {
+-                result.fault = true;
+-            }
+-        }
+         if unsafe { setpgid(child, child) } != 0 && ![EACCES, ESRCH].contains(&errno()) {
+             result.fault = true;
+         }
+@@ -540,11 +374,6 @@
+                 result.fault = true;
+                 leader.signal(9);
+                 break;
+-            }
+-            if let Some(observer) = observer.as_deref_mut() {
+-                if !observer.service(!stopping && now < limit) {
+-                    result.fault = true;
+-                }
+             }
+             if !ready && leader.unreaped {
+                 // Linux x86_64 siginfo_t is128bytes, si_pid at offset16. Use
+--- qualified-F05-81bb/report.rs
++++ fixed-original-startup/report.rs
+@@ -1,7 +1,8 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ //! Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+-//! Literal selected ND_PROCESS_EXEC_WAIT frame, retaining the existing wire keys.
+-use crate::lifecycle::Check;
++//! Fixed original startup.argv-empty frame, retaining the existing wire keys.
++use crate::profile::{argv_json, PAYLOAD_CWD};
++use crate::supervisor::Check;
+ use crate::supervisor::{ResultRecord, Stream, STREAM_LIMIT};
+ use std::fmt::Write;
+ 
+@@ -16,13 +17,23 @@
+         STREAM_LIMIT, stream.eof_ns)
+ }
+ fn frame_inner(result: &ResultRecord, empty: bool) -> String {
+-    format!(concat!("ND_PAYLOAD {{\"argv\":[\"/bin/mcexec\",\"-t\",\"1\",\"0\",\"/apps/app\"],",
+-        "\"cwd\":\"/case/work\",\"env\":{{\"PATH\":\"/usr/bin:/bin\",\"COKERNEL_PATH\":\"/apps\"}},",
+-        "\"raw_wait_status\":{},\"started_ns\":{},\"reaped_ns\":{},\"finished_ns\":{},",
+-        "\"streams\":{{\"stdout\":{},\"stderr\":{}}},\"procfs_empty\":{}}}\n"),
+-        result.status, result.started, result.reaped, result.finished,
+-        stream_json(&result.out), stream_json(&result.err),
+-        empty && result.clean && !result.fault && !result.timeout)
++    format!(
++        concat!(
++            "ND_PAYLOAD {{\"argv\":{},",
++            "\"cwd\":\"{}\",\"env\":{{\"PATH\":\"/usr/bin:/bin\",\"COKERNEL_PATH\":\"/apps\"}},",
++            "\"raw_wait_status\":{},\"started_ns\":{},\"reaped_ns\":{},\"finished_ns\":{},",
++            "\"streams\":{{\"stdout\":{},\"stderr\":{}}},\"procfs_empty\":{}}}\n"
++        ),
++        argv_json(),
++        PAYLOAD_CWD,
++        result.status,
++        result.started,
++        result.reaped,
++        result.finished,
++        stream_json(&result.out),
++        stream_json(&result.err),
++        empty && result.clean && !result.fault && !result.timeout
++    )
+ }
+ pub fn frame(result: &ResultRecord, empty: bool) -> Check<Vec<u8>> {
+     let mut text = frame_inner(result, empty);
+--- qualified-F05-81bb/host_tests.rs
++++ fixed-original-startup/host_tests.rs
+@@ -34,7 +34,6 @@
+         None,
+         1000,
+         outer,
+-        None,
+     );
+     assert_eq!(r.status, 37 << 8);
+     assert_eq!(r.out.data, [0, 255, 65, 10]);
+@@ -54,15 +53,7 @@
+             4,
+         ),
+     ] {
+-        let r = supervise(
+-            path,
+-            &[path],
+-            PAYLOAD_ENV,
+-            cwd,
+-            1000,
+-            now_ns() + 5000 * MS,
+-            None,
+-        );
++        let r = supervise(path, &[path], PAYLOAD_ENV, cwd, 1000, now_ns() + 5000 * MS);
+         assert_eq!(r.status, 126 << 8);
+         assert_eq!(r.child_stage, stage);
+         assert_eq!(r.child_errno, 2);
+@@ -80,7 +71,6 @@
+         None,
+         100,
+         now_ns() + 5000 * MS,
+-        None,
+     );
+     assert_eq!(r.status, 9);
+     assert!(r.timeout && r.clean && !r.fault && r.out.eof && r.err.eof);
+@@ -97,7 +87,6 @@
+         None,
+         1000,
+         now_ns() + 5000 * MS,
+-        None,
+     );
+     assert_eq!(r.status, 0);
+     assert!(r.clean && !r.fault && !r.timeout && r.out.eof && r.err.eof);
+@@ -117,7 +106,6 @@
+         None,
+         1000,
+         now_ns() + 5000 * MS,
+-        None,
+     );
+     assert_eq!(r.status, 0);
+     assert!(r.clean && !r.fault && !r.timeout);
+@@ -126,3 +114,84 @@
+     assert_eq!(r.out.data.len(), 1024);
+     assert_eq!(r.err.data.len(), 1024);
+ }
++fn fakeexec_path() -> &'static str {
++    option_env!("STARTUP_FAKEEXEC_PATH").expect(
++        "Root must compile this test cohort with the exact qualified private STARTUP_FAKEEXEC_PATH",
++    )
++}
++#[test]
++fn host_startup_actual_exec_argv_empty_null_and_frame_pair() {
++    let _guard = PROCESS_TEST.lock().unwrap();
++    own_orphans();
++    let r = supervise(
++        fakeexec_path(),
++        crate::profile::PAYLOAD_ARGV,
++        PAYLOAD_ENV,
++        None,
++        1000,
++        now_ns() + 5000 * MS,
++    );
++    let expected=b"{\"case\":\"startup.argv-empty\",\"argc\":4,\"argv\":[\"app\",\"A\",\"\",\"B\"],\"terminator_is_null\":true}\n";
++    assert_eq!(r.status, 0);
++    assert_eq!(r.out.data, expected);
++    assert!(r.err.data.is_empty());
++    assert!(r.clean && !r.fault && !r.timeout && r.out.eof && r.err.eof);
++    let frame = String::from_utf8(crate::report::frame(&r, true).unwrap()).unwrap();
++    assert!(frame.starts_with(&format!(
++        "ND_PAYLOAD {{\"argv\":{},",
++        crate::profile::argv_json()
++    )));
++    assert!(frame.contains("\"raw_wait_status\":0,"));
++    let expected_hex = expected
++        .iter()
++        .map(|b| format!("{b:02x}"))
++        .collect::<String>();
++    assert!(frame.contains(&format!("\"hex\":\"{expected_hex}\"")));
++}
++#[test]
++fn host_startup_rejects_original_c020_noargs_and_dropped_empty_argument() {
++    let _guard = PROCESS_TEST.lock().unwrap();
++    own_orphans();
++    let wrong_cases: &[&[&str]] = &[
++        &["/bin/mcexec", "-t", "1", "0", "/apps/app"],
++        &["/bin/mcexec", "-t", "1", "0", "app", "A", "B"],
++    ];
++    for argv in wrong_cases {
++        let r = supervise(
++            fakeexec_path(),
++            argv,
++            PAYLOAD_ENV,
++            None,
++            1000,
++            now_ns() + 5000 * MS,
++        );
++        assert_eq!(r.status, 41 << 8);
++        assert!(r.out.data.is_empty());
++        assert_eq!(r.err.data, b"unexpected argc or argv terminator\n");
++        assert!(r.clean && !r.fault && !r.timeout && r.out.eof && r.err.eof);
++        // The fixed production startup frame is not used to relabel these
++        // intentionally wrong generic supervisor invocations as startup PASS.
++    }
++}
++#[test]
++fn host_actual_child_observes_requested_fresh_private_cwd() {
++    let _guard = PROCESS_TEST.lock().unwrap();
++    own_orphans();
++    let directory =
++        std::env::temp_dir().join(format!("startup-cwd-{}-{}", std::process::id(), now_ns()));
++    std::fs::create_dir(&directory).unwrap();
++    let directory = directory.canonicalize().unwrap();
++    let cwd = directory.to_str().unwrap();
++    let r = supervise(
++        "/bin/sh",
++        &["/bin/sh", "-c", "pwd -P"],
++        PAYLOAD_ENV,
++        Some(cwd),
++        1000,
++        now_ns() + 5000 * MS,
++    );
++    std::fs::remove_dir(&directory).unwrap();
++    assert_eq!(r.status, 0);
++    assert_eq!(r.out.data, format!("{cwd}\n").as_bytes());
++    assert!(r.clean && !r.fault && !r.timeout && r.err.data.is_empty());
++}

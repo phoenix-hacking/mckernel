@@ -1,0 +1,70 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_ROOT37_NOT_EXECUTION_AUTHORITY",
+  "new_directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-root37-1",
+  "capture_directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-root37-1/CAPTURE",
+  "copy_sources": {
+    "prepare_f05_v3_bindings.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/prepare_f05_v3_bindings.py",
+      "bytes": 5872,
+      "sha256": "24512f03aec7b0b2913504fa6bf829608aaf203aaa2f5c88e7af63591867cebd"
+    },
+    "bind_f05_v3_resource.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/bind_f05_v3_resource.py",
+      "bytes": 4860,
+      "sha256": "7821cb38a1a9265dd9b884b63105afbc350e4e3267c72bb2d8c216fb6154919c"
+    },
+    "capture_fresh_f05_v3_resource.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/capture_fresh_f05_v3_resource.py",
+      "bytes": 16523,
+      "sha256": "7f63397250225a1b26777162090a71e8a032e169c37af785d0d4a3768d8a18e4"
+    },
+    "run_f05_v3_resource_once.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/run_f05_v3_resource_once.py",
+      "bytes": 2833,
+      "sha256": "beb9a4dcd7e6398d5de4d3ed367abaf5208302e6551038d9a1b309818cd3eb92"
+    },
+    "run_native_f05_v3_capture.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/run_native_f05_v3_capture.py",
+      "bytes": 5063,
+      "sha256": "a70bce36bc718bc6479aff1ba2ba422daf601942f02e521bba54a7115a62ec8f"
+    },
+    "root_once_f05_v3_entry.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/root_once_f05_v3_entry.py",
+      "bytes": 13152,
+      "sha256": "8199a875787e368769067f5ef119f358c6ca2a00bd4d9526fd23bd61aa792dcc"
+    }
+  },
+  "static_template": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/STATIC-NATIVE-BINDINGS.TEMPLATE.NOT-RELEASED.json",
+    "bytes": 10730,
+    "sha256": "e33c7472cebe915482b774bdb1c69cdc563dddb5ccdba32ef2d60c90c39c7fc0"
+  },
+  "Root_still_fills_actual": [
+    "artifact_acceptance",
+    "author",
+    "independent_review",
+    "native_runtime_authority",
+    "root_runtime_grant",
+    "runtime_authority",
+    "scratch_manifest_stage",
+    "source_publication",
+    "stage_result"
+  ],
+  "before_capture": "Root adopts exact helpers; creates truthful actual scratch-stage receipt (existing manifest9a66 source/scratch match), fills artifact/source refs; full expectedQEMUargv/QMP precheck then prepare --nonce31770; bind bridgeSTATIC_SHA to actualstatic; authbridge/static exactrefs+independentreview+publication before freshresource.",
+  "resource_once_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-root37-1/run_f05_v3_resource_once.py"
+  ],
+  "post_binder_bridge_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-root37-1/root_once_f05_v3_entry.py",
+    "--authorization-sha256",
+    null
+  ],
+  "runtime_authority": null
+}
