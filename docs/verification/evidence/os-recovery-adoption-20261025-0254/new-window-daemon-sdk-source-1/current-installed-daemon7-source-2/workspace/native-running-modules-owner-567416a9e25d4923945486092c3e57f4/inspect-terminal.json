@@ -1,0 +1,532 @@
+{
+  "AppArmorProfile": "docker-default",
+  "Args": [
+    "/driver.py",
+    "--execute"
+  ],
+  "Config": {
+    "AttachStderr": true,
+    "AttachStdin": false,
+    "AttachStdout": true,
+    "Cmd": [
+      "/driver.py",
+      "--execute"
+    ],
+    "Domainname": "",
+    "Entrypoint": [
+      "/usr/bin/python3"
+    ],
+    "Env": [
+      "container=oci"
+    ],
+    "Hostname": "aba3f938b6ea",
+    "Image": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+    "Labels": {
+      "io.buildah.version": "1.43.1",
+      "license": "BSD-3-Clause",
+      "mckernel.owner": "567416a9e25d4923945486092c3e57f4",
+      "name": "rockylinux",
+      "org.opencontainers.image.authors": "Lukas Magauer, Neil Hanlon, Louis Abel",
+      "org.opencontainers.image.licenses": "BSD-3-Clause",
+      "org.opencontainers.image.source": "https://git.resf.org/sig_core/rocky-kiwi-descriptions/src/branch/r10",
+      "org.opencontainers.image.title": "rockylinux",
+      "org.opencontainers.image.vendor": "Rocky Enterprise Software Foundation",
+      "org.opencontainers.image.version": "10",
+      "summary": "Rocky Linux Base image",
+      "vendor": "Rocky Enterprise Software Foundation",
+      "version": "10"
+    },
+    "OnBuild": null,
+    "OpenStdin": false,
+    "StdinOnce": false,
+    "Tty": false,
+    "User": "1000:1000",
+    "Volumes": null,
+    "WorkingDir": "/"
+  },
+  "Created": "2026-10-27T00:38:34.565900801Z",
+  "Driver": "overlay2",
+  "ExecIDs": null,
+  "GraphDriver": {
+    "Data": {
+      "LowerDir": "/var/lib/docker/overlay2/1b7133d87270c46139114c9845a2ee5c6e23eb85375a94b0bd31ee13181d9994-init/diff:/var/lib/docker/overlay2/7dfdeca53dbb9dd0b2a42681dfe546347648e0f11b7b03876404223be540f39f/diff:/var/lib/docker/overlay2/2a23ddce6067a5847fc046c77f050a037a224c752e9e6ff2d7d56ac9162e8982/diff",
+      "MergedDir": "/var/lib/docker/overlay2/1b7133d87270c46139114c9845a2ee5c6e23eb85375a94b0bd31ee13181d9994/merged",
+      "UpperDir": "/var/lib/docker/overlay2/1b7133d87270c46139114c9845a2ee5c6e23eb85375a94b0bd31ee13181d9994/diff",
+      "WorkDir": "/var/lib/docker/overlay2/1b7133d87270c46139114c9845a2ee5c6e23eb85375a94b0bd31ee13181d9994/work"
+    },
+    "Name": "overlay2"
+  },
+  "HostConfig": {
+    "AutoRemove": false,
+    "Binds": null,
+    "BlkioDeviceReadBps": [],
+    "BlkioDeviceReadIOps": [],
+    "BlkioDeviceWriteBps": [],
+    "BlkioDeviceWriteIOps": [],
+    "BlkioWeight": 0,
+    "BlkioWeightDevice": [],
+    "CapAdd": null,
+    "CapDrop": [
+      "ALL"
+    ],
+    "Cgroup": "",
+    "CgroupParent": "",
+    "CgroupnsMode": "host",
+    "ConsoleSize": [
+      0,
+      0
+    ],
+    "ContainerIDFile": "",
+    "CpuCount": 0,
+    "CpuPercent": 0,
+    "CpuPeriod": 0,
+    "CpuQuota": 0,
+    "CpuRealtimePeriod": 0,
+    "CpuRealtimeRuntime": 0,
+    "CpuShares": 0,
+    "CpusetCpus": "2-5",
+    "CpusetMems": "",
+    "DeviceCgroupRules": null,
+    "DeviceRequests": null,
+    "Devices": [],
+    "Dns": [],
+    "DnsOptions": [],
+    "DnsSearch": [],
+    "ExtraHosts": null,
+    "GroupAdd": null,
+    "IOMaximumBandwidth": 0,
+    "IOMaximumIOps": 0,
+    "Init": true,
+    "IpcMode": "private",
+    "Isolation": "",
+    "Links": null,
+    "LogConfig": {
+      "Config": {},
+      "Type": "json-file"
+    },
+    "MaskedPaths": [
+      "/proc/asound",
+      "/proc/acpi",
+      "/proc/kcore",
+      "/proc/keys",
+      "/proc/latency_stats",
+      "/proc/timer_list",
+      "/proc/timer_stats",
+      "/proc/sched_debug",
+      "/proc/scsi",
+      "/sys/firmware",
+      "/sys/devices/virtual/powercap"
+    ],
+    "Memory": 12884901888,
+    "MemoryReservation": 0,
+    "MemorySwap": 12884901888,
+    "MemorySwappiness": null,
+    "Mounts": [
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output",
+        "Target": "/out",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+        "Target": "/nightly",
+        "Type": "bind"
+      },
+      {
+        "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/workspace/native-running-modules-candidate-567416a9e25d4923945486092c3e57f4",
+        "Target": "/work",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/candidate",
+        "Target": "/candidate",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/source-materialization-1/materialized-source",
+        "Target": "/src",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/DAEMON-PREPARATION.json",
+        "Target": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/DAEMON-PREPARATION.json",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/daemon_sdk_driver.py",
+        "Target": "/driver.py",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-DAEMON7-POSTGROWTH-SDK-ADMISSION-3/SDK7-REQUEST.json",
+        "Target": "/request.json",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-8/m15-bfd-owner-successor/compile_image_owner.py",
+        "Target": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-8/m15-bfd-owner-successor/compile_image_owner.py",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-8/m15-bfd-owner-successor/COMPILE-PROFILE.json",
+        "Target": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-8/m15-bfd-owner-successor/COMPILE-PROFILE.json",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-8/m15-bfd-owner-successor/compile_host_helper.py",
+        "Target": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-8/m15-bfd-owner-successor/compile_host_helper.py",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile-request.PREPARED.json",
+        "Target": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile-request.PREPARED.json",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/image-toolchain.json",
+        "Target": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/image-toolchain.json",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py",
+        "Target": "/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py",
+        "Target": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd-owner-successor/compile_host_helper.py",
+        "Target": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd-owner-successor/compile_host_helper.py",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/native_rust_exact_build_offline.py",
+        "Target": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/native_rust_exact_build_offline.py",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/DAEMON-INPUTS.json",
+        "Target": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/DAEMON-INPUTS.json",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/EXACT-DAEMON-QUALIFIER-COMMAND.json",
+        "Target": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/EXACT-DAEMON-QUALIFIER-COMMAND.json",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/canonical-source-producer-SDK-target-operation-1/bounded-top-level-cache-dependency-correction-1/selected-source-1/workspace/native-running-modules-candidate-1315033c6e40480ea1b61cf8159c0c19/output/whole70-tool-default/ihk/linux/user/libihk.so",
+        "Target": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/canonical-source-producer-SDK-target-operation-1/bounded-top-level-cache-dependency-correction-1/selected-source-1/workspace/native-running-modules-candidate-1315033c6e40480ea1b61cf8159c0c19/output/whole70-tool-default/ihk/linux/user/libihk.so",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/canonical-source-producer-SDK-target-operation-1/bounded-top-level-cache-dependency-correction-1/selected-source-1/workspace/native-running-modules-candidate-1315033c6e40480ea1b61cf8159c0c19/evidence/receipt.json",
+        "Target": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/canonical-source-producer-SDK-target-operation-1/bounded-top-level-cache-dependency-correction-1/selected-source-1/workspace/native-running-modules-candidate-1315033c6e40480ea1b61cf8159c0c19/evidence/receipt.json",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/canonical-source-producer-SDK-target-operation-1/bounded-top-level-cache-dependency-correction-1/selected-source-1/workspace/native-running-modules-candidate-1315033c6e40480ea1b61cf8159c0c19/output/whole70-tool-default/ihk/linux/user",
+        "Target": "/accepted-libihk",
+        "Type": "bind"
+      }
+    ],
+    "NanoCpus": 4000000000,
+    "NetworkMode": "none",
+    "OomKillDisable": false,
+    "OomScoreAdj": 0,
+    "PidMode": "",
+    "PidsLimit": 512,
+    "PortBindings": {},
+    "Privileged": false,
+    "PublishAllPorts": false,
+    "ReadonlyPaths": [
+      "/proc/bus",
+      "/proc/fs",
+      "/proc/irq",
+      "/proc/sys",
+      "/proc/sysrq-trigger"
+    ],
+    "ReadonlyRootfs": true,
+    "RestartPolicy": {
+      "MaximumRetryCount": 0,
+      "Name": "no"
+    },
+    "Runtime": "runc",
+    "SecurityOpt": [
+      "no-new-privileges"
+    ],
+    "ShmSize": 67108864,
+    "Tmpfs": {
+      "/tmp": "rw,nodev,nosuid,size=256m"
+    },
+    "UTSMode": "",
+    "Ulimits": [],
+    "UsernsMode": "",
+    "VolumeDriver": "",
+    "VolumesFrom": null
+  },
+  "HostnamePath": "/var/lib/docker/containers/aba3f938b6ea7b29576a979ebb71f84ea76214329fe0693164e37055b72cec70/hostname",
+  "HostsPath": "/var/lib/docker/containers/aba3f938b6ea7b29576a979ebb71f84ea76214329fe0693164e37055b72cec70/hosts",
+  "Id": "aba3f938b6ea7b29576a979ebb71f84ea76214329fe0693164e37055b72cec70",
+  "Image": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+  "LogPath": "/var/lib/docker/containers/aba3f938b6ea7b29576a979ebb71f84ea76214329fe0693164e37055b72cec70/aba3f938b6ea7b29576a979ebb71f84ea76214329fe0693164e37055b72cec70-json.log",
+  "MountLabel": "",
+  "Mounts": [
+    {
+      "Destination": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/EXACT-DAEMON-QUALIFIER-COMMAND.json",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/EXACT-DAEMON-QUALIFIER-COMMAND.json",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/canonical-source-producer-SDK-target-operation-1/bounded-top-level-cache-dependency-correction-1/selected-source-1/workspace/native-running-modules-candidate-1315033c6e40480ea1b61cf8159c0c19/output/whole70-tool-default/ihk/linux/user/libihk.so",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/canonical-source-producer-SDK-target-operation-1/bounded-top-level-cache-dependency-correction-1/selected-source-1/workspace/native-running-modules-candidate-1315033c6e40480ea1b61cf8159c0c19/output/whole70-tool-default/ihk/linux/user/libihk.so",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/accepted-libihk",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/canonical-source-producer-SDK-target-operation-1/bounded-top-level-cache-dependency-correction-1/selected-source-1/workspace/native-running-modules-candidate-1315033c6e40480ea1b61cf8159c0c19/output/whole70-tool-default/ihk/linux/user",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/src",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/source-materialization-1/materialized-source",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/DAEMON-PREPARATION.json",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/DAEMON-PREPARATION.json",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd-owner-successor/compile_host_helper.py",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-8/m15-bfd-owner-successor/compile_host_helper.py",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/native_rust_exact_build_offline.py",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-14/default-image-preparation-1/native_rust_exact_build_offline.py",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/DAEMON-INPUTS.json",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/DAEMON-INPUTS.json",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/out",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/nightly",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/driver.py",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/daemon_sdk_driver.py",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/canonical-source-producer-SDK-target-operation-1/bounded-top-level-cache-dependency-correction-1/selected-source-1/workspace/native-running-modules-candidate-1315033c6e40480ea1b61cf8159c0c19/evidence/receipt.json",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/canonical-source-producer-SDK-target-operation-1/bounded-top-level-cache-dependency-correction-1/selected-source-1/workspace/native-running-modules-candidate-1315033c6e40480ea1b61cf8159c0c19/evidence/receipt.json",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/work",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": true,
+      "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/workspace/native-running-modules-candidate-567416a9e25d4923945486092c3e57f4",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/candidate",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-daemon-sdk-source-1/current-installed-daemon7-source-2/candidate",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-8/m15-bfd-owner-successor/compile_host_helper.py",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-8/m15-bfd-owner-successor/compile_host_helper.py",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/image-toolchain.json",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/image-toolchain.json",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/request.json",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-DAEMON7-POSTGROWTH-SDK-ADMISSION-3/SDK7-REQUEST.json",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-8/m15-bfd-owner-successor/compile_image_owner.py",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-8/m15-bfd-owner-successor/compile_image_owner.py",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-8/m15-bfd-owner-successor/COMPILE-PROFILE.json",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-8/m15-bfd-owner-successor/COMPILE-PROFILE.json",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile-request.PREPARED.json",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/dual-container/reuse/compile-only-candidate/compile-request.PREPARED.json",
+      "Type": "bind"
+    }
+  ],
+  "Name": "/mckernel-external-567416a9e25d4923945486092c3e57f4",
+  "NetworkSettings": {
+    "Bridge": "",
+    "EndpointID": "",
+    "Gateway": "",
+    "GlobalIPv6Address": "",
+    "GlobalIPv6PrefixLen": 0,
+    "HairpinMode": false,
+    "IPAddress": "",
+    "IPPrefixLen": 0,
+    "IPv6Gateway": "",
+    "LinkLocalIPv6Address": "",
+    "LinkLocalIPv6PrefixLen": 0,
+    "MacAddress": "",
+    "Networks": {
+      "none": {
+        "Aliases": null,
+        "DNSNames": null,
+        "DriverOpts": null,
+        "EndpointID": "",
+        "Gateway": "",
+        "GlobalIPv6Address": "",
+        "GlobalIPv6PrefixLen": 0,
+        "IPAMConfig": null,
+        "IPAddress": "",
+        "IPPrefixLen": 0,
+        "IPv6Gateway": "",
+        "Links": null,
+        "MacAddress": "",
+        "NetworkID": "8c4a9a65ad813cb3f458da3761bdeba25d43fc777fb9fb0b91756f4e1553fa11"
+      }
+    },
+    "Ports": {},
+    "SandboxID": "685641cd0fe9fe4c7ce6164fff438d8f9d1acc740a16b21b44623fbf1ce61f94",
+    "SandboxKey": "/var/run/docker/netns/685641cd0fe9",
+    "SecondaryIPAddresses": null,
+    "SecondaryIPv6Addresses": null
+  },
+  "Path": "/usr/bin/python3",
+  "Platform": "linux",
+  "ProcessLabel": "",
+  "ResolvConfPath": "/var/lib/docker/containers/aba3f938b6ea7b29576a979ebb71f84ea76214329fe0693164e37055b72cec70/resolv.conf",
+  "RestartCount": 0,
+  "State": {
+    "Dead": false,
+    "Error": "",
+    "ExitCode": 0,
+    "FinishedAt": "2026-10-27T00:38:36.286271135Z",
+    "OOMKilled": false,
+    "Paused": false,
+    "Pid": 0,
+    "Restarting": false,
+    "Running": false,
+    "StartedAt": "2026-10-27T00:38:34.982286885Z",
+    "Status": "exited"
+  }
+}

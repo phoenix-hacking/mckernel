@@ -1,0 +1,24 @@
+Change Dir: '/work/daemon-sdk-1/build'
+
+Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile -j1 ihkmond
+/usr/bin/cmake -S/candidate/default-selection -B/work/daemon-sdk-1/build --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/gmake  -f CMakeFiles/Makefile2 ihkmond
+gmake[1]: Entering directory '/work/daemon-sdk-1/build'
+/usr/bin/cmake -S/candidate/default-selection -B/work/daemon-sdk-1/build --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/cmake -E cmake_progress_start /work/daemon-sdk-1/build/CMakeFiles 1
+/usr/bin/gmake  -f CMakeFiles/Makefile2 sdk-daemon/CMakeFiles/ihkmond.dir/all
+gmake[2]: Entering directory '/work/daemon-sdk-1/build'
+/usr/bin/gmake  -f sdk-daemon/CMakeFiles/ihkmond.dir/build.make sdk-daemon/CMakeFiles/ihkmond.dir/depend
+gmake[3]: Entering directory '/work/daemon-sdk-1/build'
+cd /work/daemon-sdk-1/build && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /candidate/default-selection /candidate/default-selection/user /work/daemon-sdk-1/build /work/daemon-sdk-1/build/sdk-daemon /work/daemon-sdk-1/build/sdk-daemon/CMakeFiles/ihkmond.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/work/daemon-sdk-1/build'
+/usr/bin/gmake  -f sdk-daemon/CMakeFiles/ihkmond.dir/build.make sdk-daemon/CMakeFiles/ihkmond.dir/build
+gmake[3]: Entering directory '/work/daemon-sdk-1/build'
+[100%] Generating ihkmond
+cd /work/daemon-sdk-1/build/sdk-daemon && /usr/bin/cmake -E env IHKMOND_TMP=/tmp/ihkmond /nightly/bin/rustc --edition=2021 -C opt-level=2 -C debuginfo=1 -C relocation-model=pic -C linker=/usr/bin/cc /candidate/default-selection/user/rust/ihkmond.rs -C link-arg=/accepted-libihk/libihk.so -C link-arg=/usr/lib64/libudev.so -C link-arg=-Wl,-rpath,/usr/local/lib64 -o /work/daemon-sdk-1/build/sdk-daemon/ihkmond
+gmake[3]: Leaving directory '/work/daemon-sdk-1/build'
+[100%] Built target ihkmond
+gmake[2]: Leaving directory '/work/daemon-sdk-1/build'
+/usr/bin/cmake -E cmake_progress_start /work/daemon-sdk-1/build/CMakeFiles 0
+gmake[1]: Leaving directory '/work/daemon-sdk-1/build'
+

@@ -1,0 +1,65 @@
+{
+  "F05_copy_route": "copy_from_user/copy_to_user -> x86_process_vm_copy_impl; not established as the regular delegated file byte-transfer route by these artifacts",
+  "actual_route_evidence": null,
+  "byte_contract": [
+    "8209-byte write/read with memcmp",
+    "one-byte pwrite offset4096",
+    "8209-byte pread with memcmp",
+    "reopened8209-byte read with memcmp",
+    "EOF/fsync/close/unlink/ENOENT"
+  ],
+  "case_id": "baseline.core.files",
+  "collector_compile": {
+    "bytes": 1537,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-next-core-cases-source-1/files/ACTUAL-COMPILE-RESULT.json",
+    "sha256": "8c3a1deb821de0b75d0eb15471d5e13d33e994fcf65a48a648db108c13d011a9"
+  },
+  "collector_profile": "ND_CORE_FILES",
+  "collector_source": {
+    "bytes": 27442,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-native-retirement-eagain-repair-1/native_diagnostic_guest_collector.c",
+    "sha256": "208204ffa5cc407cce0757dbcb797d5a5f646254fe0892608d5e8e36b704ec5b"
+  },
+  "oracle": {
+    "exit_code": 37,
+    "stderr_hex": "",
+    "stdout_hex": "4e41544956455f434f524520504153532066696c65730a"
+  },
+  "payload_function": "files_case lines42-68",
+  "payload_source": {
+    "bytes": 5758,
+    "path": "/home/holden/mckernel/scripts/tests/fixtures/native-application-core.c",
+    "sha256": "525bb7416c579da09c5f780b3ff6962287f07143488b6669bbee5ae744412743"
+  },
+  "prior_frozen_decision": {
+    "bytes": 6850,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f05-nearest-file-closure-1/F05-CLOSURE-DECISION.json",
+    "sha256": "34f35e212cfc521e71545bd700ac7fd1a2f3965226453524e439346c000b9e2b"
+  },
+  "read_route": {
+    "bytes": 1227766,
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/rust/syscall_policy.rs",
+    "sha256": "e7d533e6d27d216edfb091f51cbd7705ccde1410ed5d0b2f7efbc8fef4526308"
+  },
+  "read_route_lines": "syscall_read_body_result3530-3554: mckfd callback else forwarding",
+  "remaining": "Retain owner/guest/kmsg/stdout/stderr/evaluator captures. Record actual existing route evidence only if present. A files pass supplies ordinary successful cross-page file transfer; M14-05-05/process_vm/fault/partial-transfer closure stays open absent matching route evidence.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_F05_Rust": {
+    "bytes": 311375,
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/rust/x86_memory_helpers.rs",
+    "sha256": "5c60055053656751ea490be95c09d7343b0391797c21d5e6c97de97cb8d34c68"
+  },
+  "selected_dispatch": {
+    "pread64": "line40 DELEGATED syscall17",
+    "pwrite64": "line41 DELEGATED syscall18",
+    "read": "line24 HANDLED syscall0",
+    "write": "line25 DELEGATED syscall1"
+  },
+  "selected_syscall_list": {
+    "bytes": 5815,
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/include/syscall_list.h",
+    "sha256": "a9680be6ce9d26c6f1d3df2110e1ed4407a51f577381875c66801b07a54d5ead"
+  },
+  "status": "SUPPORTED_FILES_ORACLE_WITH_DIRECT_F05_ROUTE_UNPROVED",
+  "whole_file_acceptance": false
+}

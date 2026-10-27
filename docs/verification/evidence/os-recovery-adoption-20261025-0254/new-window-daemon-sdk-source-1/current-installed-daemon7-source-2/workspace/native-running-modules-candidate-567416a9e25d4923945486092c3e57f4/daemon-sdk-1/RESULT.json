@@ -1,0 +1,174 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_PINNED_DAEMON_ABI_SELECTED_RULE_LINK_LOADER_ONLY",
+  "commands": [
+    {
+      "label": "linux-ABI",
+      "argv": [
+        "/usr/bin/cc",
+        "-std=gnu11",
+        "-O2",
+        "-Werror",
+        "-MD",
+        "-MF",
+        "/work/daemon-sdk-1/linux-ABI.d",
+        "-I/src/ihk/linux/include",
+        "-I/src/ihk/include",
+        "-c",
+        "/candidate/linux_abi_witness.c",
+        "-o",
+        "/work/daemon-sdk-1/linux-ABI.o"
+      ],
+      "rc": 0
+    },
+    {
+      "label": "libudev-ABI",
+      "argv": [
+        "/usr/bin/cc",
+        "-std=gnu11",
+        "-O2",
+        "-Werror",
+        "-MD",
+        "-MF",
+        "/work/daemon-sdk-1/libudev-ABI.d",
+        "-I/src/ihk/linux/include",
+        "-I/src/ihk/include",
+        "-c",
+        "/candidate/libudev_abi_witness.c",
+        "-o",
+        "/work/daemon-sdk-1/libudev-ABI.o"
+      ],
+      "rc": 0
+    },
+    {
+      "label": "selected-configure",
+      "argv": [
+        "/usr/bin/cmake",
+        "-S",
+        "/candidate/default-selection",
+        "-B",
+        "/work/daemon-sdk-1/build",
+        "-DCMAKE_C_COMPILER:FILEPATH=/usr/bin/cc",
+        "-DIHK_USER_RUSTC:FILEPATH=/nightly/bin/rustc",
+        "-DCMAKE_INSTALL_PREFIX:PATH=/usr/local",
+        "-DCMAKE_VERBOSE_MAKEFILE:BOOL=ON"
+      ],
+      "rc": 0
+    },
+    {
+      "label": "selected-build",
+      "argv": [
+        "/usr/bin/cmake",
+        "--build",
+        "/work/daemon-sdk-1/build",
+        "--target",
+        "ihkmond",
+        "--parallel",
+        "1"
+      ],
+      "rc": 0
+    },
+    {
+      "label": "daemon-dynamic",
+      "argv": [
+        "/usr/bin/readelf",
+        "-d",
+        "/work/daemon-sdk-1/build/sdk-daemon/ihkmond"
+      ],
+      "rc": 0
+    },
+    {
+      "label": "daemon-imports",
+      "argv": [
+        "/usr/bin/nm",
+        "-D",
+        "--undefined-only",
+        "/work/daemon-sdk-1/build/sdk-daemon/ihkmond"
+      ],
+      "rc": 0
+    },
+    {
+      "label": "daemon-loader",
+      "argv": [
+        "/lib64/ld-linux-x86-64.so.2",
+        "--library-path",
+        "/accepted-libihk",
+        "--list",
+        "/work/daemon-sdk-1/build/sdk-daemon/ihkmond"
+      ],
+      "rc": 0
+    }
+  ],
+  "daemon_sha256": "eaa4a2564f0f54fb52d8075517e2b33d87d9ca460c571e92346ba8e76e1e4d36",
+  "daemon_bytes": 5741048,
+  "pins": {
+    "cc": {
+      "executable_version": "cc (GCC) 14.3.1 20251022 (Red Hat 14.3.1-4)\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+      "owner": "gcc",
+      "path": "/usr/bin/cc",
+      "rpm_nevra": "gcc-0:14.3.1-4.4.el10.x86_64",
+      "sha256": "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2",
+      "target": "/usr/bin/gcc",
+      "version": "cc (GCC) 14.3.1 20251022 (Red Hat 14.3.1-4)\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+    },
+    "cmake": {
+      "executable_version": "cmake version 3.31.8\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).",
+      "owner": "cmake",
+      "path": "/usr/bin/cmake",
+      "rpm_nevra": "cmake-0:3.31.8-1.el10.x86_64",
+      "sha256": "a2ec9c59d15b48b6abba45cfaa873df186e01a2e3ca99302ada1e51637f4cfd1",
+      "target": "/usr/bin/cmake",
+      "version": "cmake version 3.31.8\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake)."
+    },
+    "daemon": {
+      "path": "default-selection/user/rust/ihkmond.rs",
+      "sha256": "0c0b4b6d286e9f0fdbdacf1d32c3cd33ec96d4d2420550771a0dc732dd84d86e"
+    },
+    "libihk": {
+      "path": "/accepted-libihk/libihk.so",
+      "sha256": "89639e9d56c390968a86a95bb734128ec61bd0f6de28f7c7992cfb9e00b9ef96"
+    },
+    "libudev_header": {
+      "owner": "systemd-devel",
+      "path": "/usr/include/libudev.h",
+      "rpm_nevra": "systemd-devel-0:257-23.el10_2.2.rocky.0.1.x86_64",
+      "sha256": "bd5dcd4efe29f79c1c43f3b1d8cfbdb7cc359b51b3d1edeb1676f799496e159d",
+      "target": "/usr/include/libudev.h"
+    },
+    "libudev_library": {
+      "owner": "systemd-libs",
+      "path": "/usr/lib64/libudev.so",
+      "rpm_nevra": "systemd-libs-0:257-23.el10_2.2.rocky.0.1.x86_64",
+      "sha256": "c574e97e30c70ab355e6a5bc0948620bbaac57c9e1e536bf24a747bd8d245ff1",
+      "target": "/usr/lib64/libudev.so.1.7.10"
+    },
+    "nm": {
+      "executable_version": "GNU nm version 2.41-63.el10\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis program is free software; you may redistribute it under the terms of\nthe GNU General Public License version 3 or (at your option) any later version.\nThis program has absolutely no warranty.",
+      "owner": "binutils",
+      "path": "/usr/bin/nm",
+      "rpm_nevra": "binutils-0:2.41-63.el10.x86_64",
+      "sha256": "df99ae7b36cf9aa2da1e447026082ae5faddb7d7f12ebce911503c3022ed4bf1",
+      "target": "/usr/bin/nm",
+      "version": "GNU nm version 2.41-63.el10\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis program is free software; you may redistribute it under the terms of\nthe GNU General Public License version 3 or (at your option) any later version.\nThis program has absolutely no warranty."
+    },
+    "readelf": {
+      "executable_version": "GNU readelf version 2.41-63.el10\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis program is free software; you may redistribute it under the terms of\nthe GNU General Public License version 3 or (at your option) any later version.\nThis program has absolutely no warranty.",
+      "owner": "binutils",
+      "path": "/usr/bin/readelf",
+      "rpm_nevra": "binutils-0:2.41-63.el10.x86_64",
+      "sha256": "c5e0de5f419ed907fdc0b7b0a6087ff5c54a8c68db4da01097bdf84a296349b7",
+      "target": "/usr/bin/readelf",
+      "version": "GNU readelf version 2.41-63.el10\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis program is free software; you may redistribute it under the terms of\nthe GNU General Public License version 3 or (at your option) any later version.\nThis program has absolutely no warranty."
+    },
+    "rustc": {
+      "path": "/nightly/bin/rustc",
+      "sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09"
+    },
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing."
+  },
+  "production_daemon_main_executed": false,
+  "mock_parity_executed": false,
+  "full_default_graph_or_install_accepted": false,
+  "native_acceptance": false,
+  "M15_file_closure": false
+}

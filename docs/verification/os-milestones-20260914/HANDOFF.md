@@ -1,3 +1,49 @@
+## SDK7 accepted; safe continuation boundary — 2026-10-27T00:43Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Goal ACTIVE, same thread/creditrun/fixed end2026-10-27T11:24:50Z. Root ends this
+coordinator turn at the parent's explicit safe-boundary instruction; NO goalpause,
+control restart, newwindow or workload replay. No live query holder/heavy owner.
+
+SDK4nonce567416a9e25d4923945486092c3e57f4 CONSUMED ONCE. UID1000owner1321840/
+start85894350/tool50416 joined0/18.970178s. AllSEVEN retained commands returned0:
+LinuxABI/libudevABI/selectedconfigure+Rustihkmondbuild/dynamic/import/loader.
+Artifact5741048B eaa4a2564f0f54fb52d8075517e2b33d87d9ca460c571e92346ba8e76e1e4d36.
+Actual independent PASS_SDK7_ABI_SELECTED_RULE_LINK_LOADER and
+PASS_SDK7_POSTJOIN_CURRENT_PHYSICAL recorded in ACTUAL-DAEMON7-INDEPENDENT-
+{SDK-ARTIFACT,POSTJOIN-CURRENT}-ACCEPTANCE.json. All14Docker+1admission clients
+reaped/groupsabsent; CIDaba3f938 normalremoved/threeownedrecordsreleased; actual
+postjoin27b72a85/twoownmutexprobesclosed/mountcapacityaccepted. Queryholder1321693/
+start85889965/FD3/tool50460 normallyclosed/joined0; no remainingcustody. No cleanup
+or successfulSDKcommand replay. Allpriorquery/OCI/custodyfailures retained.
+
+Onefixedm15.daemon.supported-target/SDK ledgeracceptance added. Productionmain,
+mockparity/fullgraph/install/native/M15file flags remainFALSE. Currentdefault/
+native/file/C-retirement delta0; matchingnativecases2; fullM14/M15 OPEN/practical35/35.
+FirstSDKcompiler timestamp/CPU/RSS unmeasured, not inferred from filetimestamps.
+Actualoldestlive→owner46.514673s, query→owner20.853177s, custodyclose→owner4479.518115s.
+APIrefusal→successfulSDKfinish1932.260761s. Lasttwo full30minbuckets0; newSDKevent
+is currentincompletebucket; no95percentclaim. Resourcecapacity remainsample.
+
+EXACT NEXT ROOT PREPARATION (no guest/clock/grant):
+`/bin/bash docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-core-files-root-preparation-source-1/ROOT-NEXT-COMMAND.SOURCE-ONLY.sh`
+READYf0fbd9fa/script69a435fb uses unchangedfilesmanifest/collector/payload/image/modules,
+exclusive scratch/n290files1 staging then existingowner450 purepathguards+f368validator.
+Prepareall static fields FIRST, then freshactualnativeadmission and baseline.core.files.
+SDKepochfinished, so HEAD/sourcefreeze released after this savedcheckpoint.
+Files8209Btransfer tests remaindiagnostic: readregularfd forward/write/pread/pwrite
+DELEGATED; direct F05usercopy/processVMroute evidence stillrequired for M14-05-05.
+No neworacle/quota/image rebuild. FilesHOSTprep includes actualSDKpostjoinref.
+
+Parallelactual lanes continue across turn: F03owner native_retirement_repair private
+execveatselected-region Rust; F06owner scratch_growth_mutator_source coherentprivate
+mmapflags/PRCTL/mmapdispatch batch and ONE expertcorrectedgetterHOST grant CPU6/2GiB;
+F02owner mm_unlock_fixture callbacktable elevencommandplan waiting purepreflight
+onCPU6 AFTER getterFREE, no compilergrantyet. Getterearlier0child refusals preserved;
+expert canonical04b5/adf guard reuse/21pure+realcurrentpreflightPASS, no nullblanketbypass.
+F02align8 typedcontract independentlyaccepted; observedGCC32 historicalplacement.
+RootsolecanonicalGitwriter. No sourceworker grants authorize anotherheavy owner.
+
 ## SDK query expired safely; parallel prlimit qualification passed — 2026-10-27T00:35Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
@@ -23,6 +69,12 @@ context delay, not CPU shortage. Adjustment: reviewer static-ready plus one
 prebuilt deterministic binding batch before the next fresh clock. Source owner
 partial_runtime_finish prepares A4; Root owns admission/actual SDK7 next; files
 native remains next after SDK. Fixed deadline/account/resources unchanged.
+
+Parallel addendum at safe boundary: F06 expert-corrected getter actually passed
+three commands/1456pairs, alljoined, CPU.075078s/wall.096670s andCPU6released.
+F02 owner now has a conditional existing-profile eleven-command grant onlyafter
+unchanged pureCPU6preflight/canonicalaccountguards pass; stop/retain on failure.
+These HOST source checks confer no selected-image/native/file acceptance.
 
 ## SDK actual API refusal corrected; parallel HOST compiler results — 2026-10-27T00:21Z
 
