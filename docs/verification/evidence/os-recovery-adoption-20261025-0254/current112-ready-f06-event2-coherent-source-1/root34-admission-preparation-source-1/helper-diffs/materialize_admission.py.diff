@@ -1,0 +1,83 @@
+--- Root34-CURRENT113/materialize_admission.py
++++ Root34-CURRENT112/materialize_admission.py
+@@ -4,7 +4,7 @@
+ """
+ from pathlib import Path
+ import argparse,hashlib,importlib.util,json,os,re
+-D=Path(__file__).resolve().parent;P=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/next4-scalar4-logical-line-hold-successor-source-1');E=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254')
++D=Path(__file__).resolve().parent;P=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/actual-origin-bound-source-1');E=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254')
+ def read(p):return json.loads(Path(p).read_bytes())
+ def ref(p):
+  p=Path(p);raw=p.read_bytes();return dict(path=str(p),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+@@ -14,7 +14,7 @@
+  with Path(p).open('xb') as stream:stream.write(raw)
+ def materialize(bindings_path):
+  b=read(bindings_path)
+- assert b['author']=='/root' and b['decision']=='MATERIALIZE_REVIEWED_CURRENT113_STATIC_INPUTS_AND_HOLDER_ONLY'
++ assert b['author']=='/root' and b['decision']=='MATERIALIZE_REVIEWED_CURRENT112_STATIC_INPUTS_AND_HOLDER_ONLY'
+  assert b['maximum_invocations']==1 and b['root_attests_exact_UID1000_readonly_exports'] is True
+  assert re.fullmatch('[0-9a-f]{32}',b['nonce']) and b['nonce']!='ea92dbc3148490a122f116a6afa7b010'
+  assert b['preparation_manifest']==ref(D/'PREPARATION-MANIFEST.json')
+@@ -28,22 +28,25 @@
+  assert b['nonce'] not in ledger['consumed_nonces']
+  for key in ['native_custody_clearance','independent_source_profile_review','source_adoption']:auth(b[key])
+  adoption=read(b['source_adoption']['path'])
+- assert adoption['author']=='/root' and adoption['status']=='ROOT_SOURCE_ADOPTED_CURRENT113_NEXT4_SCALAR4_NOT_BUILT'
++ assert b['source_adoption']=={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/root-source-adoption-1/ROOT-SOURCE-ADOPTION.json', 'bytes': 6510, 'sha256': '497e0cd8e354973a63437bc5db0f0f893e035a84dbf5a34a96cf6e88f10f095a'}
++ assert b['independent_source_profile_review']=={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/actual-origin-bound-source-1/independent-source-review-1/INDEPENDENT-SOURCE-REVIEW.json', 'bytes': 8358, 'sha256': '487e15236a7f917af46ed3480377e8d39ae3bb15c1623036de7e129ec0bdc811'}
++ assert adoption['author']=='/root' and adoption['status']=='ROOT_SOURCE_ADOPTED_QUALIFIED_F03_EVENT2_AND_F06_ALLOC_FREE_ORIGIN_NOT_BUILT'
+  for row in adoption['files']:
+   assert ref(row['canonical']['path'])==row['canonical']
+   assert ref(row['private_source']['path'])==row['private_source']
+   assert row['canonical']['sha256']==row['private_source']['sha256']
+- for row in read(P/'RUST-SUBTREE-CLOSED-SOURCE-MAP.json')['files']:
++ for row in read(Path(read(P/'PROFILE.SOURCE-ONLY.json')['inputs']['source_directory_exports'][0]['manifest']['path']))['files']:
+   assert ref(row['snapshot']['path'])==row['snapshot']
+   assert ref(E.parents[3]/'kernel/rust'/row['relative'])['sha256']==row['snapshot']['sha256']
++ assert b['actual_origin_producer']=={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/oci-origin-bind-correction-source-1/ROOT-ACTUAL-ORIGIN-PRODUCER-RESULT.json', 'bytes': 3409, 'sha256': '3b8d6a5ccf96dc48bf218531c1e312bad8ac09794f42133cbcc80ab08a9d1256'}
+  origin=read(auth(b['actual_origin_producer']))
+  assert origin['author']=='/root' and origin['returncode']==0 and origin['direct_child_joined'] is True and origin['streams_closed'] is True
+  header=b['actual_generated_header'];auth(header);assert origin['actual_header']==header
+  context=read(auth(b['actual_origin_binding']));environment=read(auth(b['actual_Rust_environment']));auth(b['actual_CMake_origin'])
+  template=read(P/'PROFILE.SOURCE-ONLY.json')
+- assert context['command']==template['exact_commands'][3]
+- assert context['source_sha256']==ref(P/'candidate/arch/x86_64/kernel/syscall.c')['sha256']
+- assert context['profile_sha256']==ref(P/'candidate/scripts/f06_origin_command_profile.json')['sha256']
++ assert context['command']==template['exact_commands'][2]
++ assert context['source_sha256']==ref(Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/candidate/arch/x86_64/kernel/syscall.c'))['sha256']
++ assert context['profile_sha256']==ref(Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/candidate/scripts/f06_origin_command_profile.json'))['sha256']
+  assert environment=={'MCKERNEL_F06_RT_SIGRETURN_ORIGIN':'/src/arch/x86_64/kernel/syscall.c'}
+  assert template['exact_commands'][0]['argv'].count('MCKERNEL_F06_RT_SIGRETURN_ORIGIN=/src/arch/x86_64/kernel/syscall.c')==1
+  spec=importlib.util.spec_from_file_location('current110_materialization_v2_runner',D/'run_build_only.py')
+@@ -51,15 +54,14 @@
+  root=Path(b['admission']);assert root.is_absolute() and root.parent==E and re.fullmatch('ROOT-[A-Za-z0-9-]+',root.name) and not root.exists()
+  profile=read(P/'PROFILE.SOURCE-ONLY.json');assert profile['request_sha256'] is None
+  profile['native_custody_clearance']=b['native_custody_clearance']
+- preview=next(r['postimage'] for r in profile['inputs']['postimages'] if r.get('source_preview_not_runtime_producer'))
+- assert preview['sha256']==header['sha256'] and preview['bytes']==header['bytes']
+- for row in profile['inputs']['postimages']:
+-  if row['postimage']==preview:
+-   row['postimage']=header;row.pop('source_preview_not_runtime_producer');row['actual_origin_producer_receipt']=b['actual_origin_producer']
+- for row in profile['cohort_source_bindings']:
+-  if row['postimage']==preview:row['postimage']=header
++ assert ref(P/'PROFILE.SOURCE-ONLY.json')['sha256']=='a253477abbd879d505c4d2b20bf6717a1214f4e57b76604af3632f8aedda2153'
++ assert len(profile['exact_commands'])==4 and sum(not row['replace'] for row in profile['inputs']['objects'])==8
++ assert not any(row.get('source_preview_not_runtime_producer') for row in profile['inputs']['postimages'])
++ assert next(row['postimage'] for row in profile['inputs']['postimages'] if row['relative']=='kernel/rust/f06-origin/f06_rt_sigreturn_origin.h')==header
++ assert profile['origin_source_materialization']['actual_producer_receipt']==b['actual_origin_producer']
++ assert profile['origin_source_materialization']['actual_generated_header']==header
+  profile['actual_root_adoption']=b['source_adoption']
+- profile['origin_source_materialization'].update(status='ACTUAL_CURRENT113_ORIGIN_PRODUCER_BOUND',actual_producer_receipt=b['actual_origin_producer'],actual_generated_header=header,actual_origin_binding=b['actual_origin_binding'],actual_Rust_environment=b['actual_Rust_environment'],actual_CMake_origin=b['actual_CMake_origin'])
++ profile['origin_source_materialization'].update(status='ACTUAL_CURRENT112_ALREADY_GENERATED_ORIGIN_BOUND_NO_REPLAY',actual_producer_receipt=b['actual_origin_producer'],actual_generated_header=header,actual_origin_binding=b['actual_origin_binding'],actual_Rust_environment=b['actual_Rust_environment'],actual_CMake_origin=b['actual_CMake_origin'])
+  root.mkdir(mode=0o700)
+  tools=['run_build_only.py','build_only_worker.py','hold_and_run_build_only.py','publish_approved_ready.py']
+  for name in tools:write(root/name,(D/name).read_bytes())
+@@ -72,7 +74,7 @@
+  profile['request_sha256']=ref(rp)['sha256'];profile['actual_nonce']=b['nonce']
+  write(root/'PROFILE.SOURCE-ONLY.json',profile)
+  export=read(P/'INPUT-EXPORT.TEMPLATE.NOT-AUTHORITY.json')
+- export['qualified_readonly_files']=[header if row==preview else row for row in export['qualified_readonly_files']]
++ assert header in export['qualified_readonly_files']
+  export['actual_origin_producer_receipt']=b['actual_origin_producer']
+  export.update(author='/root',decision='PASS_EXACT_UID1000_READONLY_BUILD_EXPORTS',status='ROOT_CURRENT110_ACTUAL_READONLY_EXPORT_BINDING',request_sha256=profile['request_sha256'])
+  for row in export['qualified_readonly_files']:

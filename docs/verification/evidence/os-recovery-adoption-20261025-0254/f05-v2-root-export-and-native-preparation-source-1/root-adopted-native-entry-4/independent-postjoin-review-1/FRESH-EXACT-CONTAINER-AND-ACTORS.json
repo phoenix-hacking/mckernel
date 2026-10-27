@@ -1,0 +1,162 @@
+{
+  "scope": "Functional OS only; no security testing. Root-authorized read-only exact container and process ownership observations.",
+  "observed_at": 1793135047.4138467,
+  "container": "cdb61f4c3c36a4862b327bebb812296be183e7906c8117dfcf0cf47ce9b4ad6b",
+  "nonce": "6e8068fed0e1dd27d6724a46ffbbff14",
+  "queries": [
+    {
+      "argv": [
+        "sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "id=cdb61f4c3c36a4862b327bebb812296be183e7906c8117dfcf0cf47ce9b4ad6b"
+      ],
+      "pid": 1696353,
+      "returncode": 0,
+      "positive_wait": true,
+      "streams_closed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "name=^/mckernel-native-diagnostic-6e8068fed0e1dd27d6724a46ffbbff14$"
+      ],
+      "pid": 1696365,
+      "returncode": 0,
+      "positive_wait": true,
+      "streams_closed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "label=mckernel.native-diagnostic.owner=6e8068fed0e1dd27d6724a46ffbbff14"
+      ],
+      "pid": 1696375,
+      "returncode": 0,
+      "positive_wait": true,
+      "streams_closed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "cdb61f4c3c36a4862b327bebb812296be183e7906c8117dfcf0cf47ce9b4ad6b"
+      ],
+      "pid": 1696384,
+      "returncode": 1,
+      "positive_wait": true,
+      "streams_closed": true,
+      "stdout": "[]\n",
+      "stderr": "Error: No such object: cdb61f4c3c36a4862b327bebb812296be183e7906c8117dfcf0cf47ce9b4ad6b\n"
+    },
+    {
+      "argv": [
+        "sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "-q",
+        "--no-trunc"
+      ],
+      "pid": 1696402,
+      "returncode": 0,
+      "positive_wait": true,
+      "streams_closed": true,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "cgroup": {
+    "/sys/fs/cgroup/pids/mckernel-dev/pids.current": "0"
+  },
+  "all_25_owned_Docker_clients_reaped": true,
+  "current_owned_pid_and_pgrp_absent": [
+    1694753,
+    1694795,
+    1694799,
+    1694809,
+    1694815,
+    1694821,
+    1694827,
+    1694835,
+    1694846,
+    1694854,
+    1694860,
+    1694866,
+    1695027,
+    1695033,
+    1695039,
+    1695048,
+    1695054,
+    1695060,
+    1695066,
+    1695072,
+    1695078,
+    1695084,
+    1695090,
+    1695096,
+    1695102,
+    1695108,
+    1695114,
+    1695120
+  ],
+  "proc_existence": {
+    "1695108": false,
+    "1694854": false,
+    "1695114": false,
+    "1694860": false,
+    "1695120": false,
+    "1694866": false,
+    "1694753": false,
+    "1695027": false,
+    "1695033": false,
+    "1695039": false,
+    "1695048": false,
+    "1694795": false,
+    "1695054": false,
+    "1694799": false,
+    "1695060": false,
+    "1694809": false,
+    "1695066": false,
+    "1694815": false,
+    "1695072": false,
+    "1695102": false,
+    "1694821": false,
+    "1695078": false,
+    "1694827": false,
+    "1695084": false,
+    "1695090": false,
+    "1694835": false,
+    "1695096": false,
+    "1694846": false
+  }
+}

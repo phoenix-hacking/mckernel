@@ -1,3 +1,30 @@
+## Root34 free; CURRENT112 actual static admission ready — 2026-10-27T21:17:48.225492+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ActualF05Root4guest producedexact204stdout/emptyerr/raw0 andownedchildread/patch/
+readback/privateunchanged/reap observations. WholecaseFAIL remains: missingparent
+procfsdelete/childdeleteafterparentterminal; bothretirement-11. Source56030191 proves
+visibleprocfs removal precedestidsledgerretirement andone-shotcollectorlogcapture
+races retry; no eventualsuccess/unsafeleak inferred. Normalretirementindependentbf19
+reaped25Dockerclients/QEMU, removedcontainer, releasedleases/pids0/twoclosedprobes.
+Root34c817 current;3c67/6e8068 consumedonce, no retry/cleanup replay. Nativeclosure0.
+
+Rootactuallymaterialized112staticinputs .108318s/PID1699836joined0, nonce5c2cd5ea297e4770a1e1f4ea05d8cf9b
+UNUSED/profilea95aa8ee. Fourcommands/eightretained/113Rustsources, actualorigin aeece,
+Root7sourceadoption retained. Helpers sourcePASS27a745; sourcepublication then
+preholder/soleholder/freshresource/realindependentPASS/Rootpublishernext. Thisready
+compilerbatch doesnotwaitfor113staticClinefixorF05observerrepair. Old1137f8 blockedbce300;
+scalarconditionalcorrection551586 SOURCEPASSd9a1 restores3430/3435/Rust735cunchanged,
+rebound113profilefuture. OriginalLOCK4WAKE3notadopted; foregroundcorrected7792pendingCPP.
+F02local14configs384B source92d4/interfaces99a3 reusegenuineinternalstorage; typeddebug
+32GLOBAL independent, noCglobalization. M15startup/235RustlauncherSourcePASS660aonly.
+
+21:16review retains17:36:09baseline/30minnonoverlap: closed20:36–21:06bucket10ordinary
+commands/oneactualguest/fullnative0/production0/file0. Current21:06–21:36partial no
+compiler yet; no95%claim. Peak53040KiB/CPU.913841 arecontrollerchildren, notguestusage.
+Sameparentexclusivecontrols/fixed05:36:09Z/earlierclamps/account/holds/oneheavy/floors.
+Latestpushed/fetchedbfeedb11c; actualRoot4+Root34/112checkpoint nowpreparing.
+
 ## 20:56 steering: native retry source; LOCK4 selector correction held — 2026-10-27T20:57:30.126652+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
