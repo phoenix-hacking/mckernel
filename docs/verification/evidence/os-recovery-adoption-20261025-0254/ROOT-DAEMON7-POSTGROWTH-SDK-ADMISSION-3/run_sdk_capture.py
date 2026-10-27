@@ -2,9 +2,10 @@
 UID1000 exact reviewed SDK owner through existing990 capture; no query FD inheritance.
 """
 from pathlib import Path
-import json,hashlib,types,resource,os,time,importlib.util
+import json,hashlib,types,resource,os,time,importlib.util,subprocess
 A=Path(__file__).resolve().parent;E=A.parent
 assert os.getuid()==os.geteuid()==os.getgid()==os.getegid()==1000
+assert subprocess.check_output(['git','-C','/home/holden/mckernel','rev-parse','HEAD'],text=True).strip()==json.loads((A/'SDK-HEAD-BINDING.json').read_bytes())['commit']
 policy=E/'scratch-growth-final-copy-close-source-1/recover_growth_custody.py';assert hashlib.sha256(policy.read_bytes()).hexdigest()=='04b5c6af885baca472e99e590bf07ae360dacad95487709477cf3d2bf8d6c90a'
 spec=importlib.util.spec_from_file_location('actual_account_guard',policy);g=importlib.util.module_from_spec(spec);spec.loader.exec_module(g);g.check_account_state(json.loads(Path('/home/holden/mckernel/.git/os-autopilot/state.json').read_bytes()),time.time())
 live=json.loads((A/'LIVE-CURRENT.json').read_bytes());now=[time.time(),time.monotonic(),time.clock_gettime(time.CLOCK_BOOTTIME)];assert all(0<=n-live['clock'][k]<120 for n,k in zip(now,['wall','monotonic','boot']));assert all(n<e for n,e in zip(now,g.CUTOFFS))
