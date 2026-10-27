@@ -17311,7 +17311,24 @@ mod process_global_storage {
     use core::mem::{align_of, offset_of, size_of};
     use core::ptr::null_mut;
 
-    use crate::abi::{AbiListHead, IhkSpinlock, McsRwlockLock};
+    use crate::abi::{AbiListHead, CInt, IhkSpinlock, McsRwlockLock};
+
+    // Preserve the existing plain C int ABI and boot defaults. Initialization
+    // owns writes before normal scheduler/application consumers observe these
+    // flags; existing extern accesses retain their current synchronization.
+    // Keep plain mutable storage: changing this to an AtomicI32, bool, or a
+    // lazy initializer would change the original C/Rust access contract.
+    const _: [(); 4] = [(); size_of::<CInt>()];
+    const _: [(); 4] = [(); align_of::<CInt>()];
+
+    #[no_mangle]
+    pub static mut idle_halt: CInt = 0;
+
+    #[no_mangle]
+    pub static mut allow_oversubscribe: CInt = 0;
+
+    #[no_mangle]
+    pub static mut time_sharing: CInt = 1;
 
     // These are the existing owned ABI types, not replacement representations.
     // The independent genuine-header witness must qualify this exact profile.
@@ -17358,4 +17375,62 @@ mod process_global_storage {
     // Existing scheduler/affinity callers retain their IRQ and lock pairing.
     #[no_mangle]
     pub static mut runq_reservation_lock: IhkSpinlock = IhkSpinlock { head_tail: 0 };
+}
+
+// Own one runtime-consumed callback table using the existing qualified selector.
+// The original C-produced offsets/values and genuine C ABI witnesses stay live.
+#[cfg(process_global_storage_candidate)]
+mod process_idle_callback_storage {
+    use core::mem::{align_of, offset_of, size_of};
+    use crate::abi::CULong;
+    use crate::sched_helpers::SchedIdleCallbacks;
+
+    // Reuse the existing callback representation. Its address-sized arguments
+    // and the C unsigned-long arguments have the same supported LP64 ABI.
+    // These are the exact ten existing symbol targets, with no new wrappers,
+    // callback execution, initialization, lifetime or IRQ ownership changes.
+    unsafe extern "C" {
+        fn sched_idle_current_cpu_bridge() -> usize;
+        fn process_spin_lock_bridge(lock_addr: usize) -> CULong;
+        fn process_spin_unlock_bridge(lock_addr: usize, irqstate: CULong);
+        fn cpu_enable_interrupt();
+        fn cpu_disable_interrupt();
+        fn schedule();
+        fn sched_do_migrate_public();
+        fn kmalloc_consolidate_free_list();
+        fn process_sched_zero_free_bridge();
+        fn cpu_safe_halt();
+    }
+
+    const _: [(); 8] = [(); size_of::<usize>()];
+    const _: [(); 8] = [(); size_of::<CULong>()];
+    const _: [(); 80] = [(); size_of::<SchedIdleCallbacks>()];
+    const _: [(); 8] = [(); align_of::<SchedIdleCallbacks>()];
+    const _: [(); 0] = [(); offset_of!(SchedIdleCallbacks, current_cpu)];
+    const _: [(); 8] = [(); offset_of!(SchedIdleCallbacks, lock)];
+    const _: [(); 16] = [(); offset_of!(SchedIdleCallbacks, unlock)];
+    const _: [(); 24] = [(); offset_of!(SchedIdleCallbacks, enable_interrupt)];
+    const _: [(); 32] = [(); offset_of!(SchedIdleCallbacks, disable_interrupt)];
+    const _: [(); 40] = [(); offset_of!(SchedIdleCallbacks, schedule)];
+    const _: [(); 48] = [(); offset_of!(SchedIdleCallbacks, migrate)];
+    const _: [(); 56] = [(); offset_of!(SchedIdleCallbacks, consolidate)];
+    const _: [(); 64] = [(); offset_of!(SchedIdleCallbacks, zero_free)];
+    const _: [(); 72] = [(); offset_of!(SchedIdleCallbacks, safe_halt)];
+
+    // Keep this immutable callback array in the original readonly-data class.
+    // Object flags/RELA and final physical mapping require independent proof.
+    #[no_mangle]
+    #[link_section = ".rodata.process_idle_callbacks"]
+    pub static process_idle_callbacks: SchedIdleCallbacks = SchedIdleCallbacks {
+        current_cpu: sched_idle_current_cpu_bridge,
+        lock: process_spin_lock_bridge,
+        unlock: process_spin_unlock_bridge,
+        enable_interrupt: cpu_enable_interrupt,
+        disable_interrupt: cpu_disable_interrupt,
+        schedule,
+        migrate: sched_do_migrate_public,
+        consolidate: kmalloc_consolidate_free_list,
+        zero_free: process_sched_zero_free_bridge,
+        safe_halt: cpu_safe_halt,
+    };
 }

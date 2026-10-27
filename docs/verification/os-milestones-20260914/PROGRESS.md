@@ -103,7 +103,7 @@ This milestone is outside the 35 functional checks and M14. Source selection is 
 
 | Goal | Project runtime source | State |
 | --- | --- | --- |
-| M15-F01 | host-kernel/native-rust/mcctrl_vm_write_compat.c | blocked |
+| M15-F01 | host-kernel/native-rust/mcctrl_vm_write_compat.c | partial |
 | M15-F02 | executer/user/mcexec.c | open |
 | M15-F03 | executer/user/mcinspect_bfd_shim.c | open |
 | M15-F04 | executer/user/eclair_bfd_shim.c | open |
@@ -121,8 +121,8 @@ M15 closes with the delivered-runtime ownership manifest, actual Rust/assembly p
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-10-27T00:42:15+00:00`
-- Launcher state heartbeat: `2026-10-27T00:42:04.674265+00:00`
+- Dashboard refreshed: `2026-10-27T01:06:05+00:00`
+- Launcher state heartbeat: `2026-10-27T01:05:53.896785+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
 - Worker PID: `1263621`; server PID: `1263623`
 - Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261026T215559Z-7d46d297`

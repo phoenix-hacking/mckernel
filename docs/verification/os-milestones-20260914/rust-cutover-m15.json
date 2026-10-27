@@ -3,7 +3,7 @@
   "id": "M15",
   "scope_id": "project-owned-runtime-rust-cutover-v1-20261024",
   "title": "Complete Rust/assembly custom host modules and integration runtime",
-  "as_of": "2026-10-27T00:42:15.136349+00:00",
+  "as_of": "2026-10-27T00:51:28.144279+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user2026-10-24: custom code outside the Rocky/Linux baseline must be Rust, including loadable IHK/project modules; previous reviewed-assembly allowance retained.",
@@ -115,7 +115,7 @@
       "id": "M15-F01",
       "path": "host-kernel/native-rust/mcctrl_vm_write_compat.c",
       "target": "mcctrl.ko",
-      "status": "blocked",
+      "status": "partial",
       "source_selection": "host-kernel/kbuild/Kbuild.in:10",
       "existing_rust": [
         "host-kernel/native-rust/mcctrl.rs",
@@ -207,7 +207,7 @@
           ]
         }
       ],
-      "blocker": "Pinned6.12 lacks ready Rust MM/static-key abstractions. Raw down_write/up_write alone is not equivalent; tracing/static-key registration and LKMM access/barrier semantics remain to prove. No kernel change or unsupported substitution is authorized.",
+      "blocker": "Actual accepted current290 startup/memory/files use predecessor mcctrl06e8/SMP2eb3, while RustMM staged modules57546/887dc are offline-only. Need authenticated inherited-VMA adoption and owned revoke through Mirror::inherit_vmas/revoke_fork_aliases with RustMM tuple; existing strict235 consumer/unchanged oracle ready for actual binding.",
       "file_closure": {
         "status": "open",
         "requirement": "Remove this project C object from actual selected Kbuild/staging only after equivalent Rust successors and matched module proof."
@@ -226,9 +226,9 @@
         "compiler_or_native_execution": false
       },
       "latest_dispatcher_checkpoint": {
-        "implemented": "Accepted two-module artifact/base/F4Doverlay retained. New actualbody two-MM fixture independentlyPASS isolation/wrap/repeatedVMA/trace controlledscope. Native startup stillunrun.",
-        "actual": "Accepted two-module artifact/base/F4Doverlay retained. New actualbody two-MM fixture independentlyPASS isolation/wrap/repeatedVMA/trace controlledscope. Native startup stillunrun.",
-        "limits": "Controlled HOST/source scopes only; selected default/native/wholefile/Cboundary retirement remain open."
+        "implemented": "Three Rust MM successors and reviewed assembly already exist/currentKbuildselected; retained two-module stage and controlled fixtures accepted. Do not re-port.",
+        "actual": "Independent exact tuple review f5271b63 disproves inference from baseline-module current290 smokes to changed RustMM native paths. Existing strict235 native plan is nearest prepared consumer.",
+        "limits": "No new RustMM native/wholefile acceptance. Source-unimplemented/unsupported-abstraction blocker is historical at source scope."
       },
       "current_increment": {
         "at": "2026-10-25T04:53:34.467560+00:00",
@@ -244,6 +244,12 @@
         "native_file_retirement": "OPEN; coherent current retained-module functional MM consumer proof required",
         "new_tests": 0,
         "new_native": 0
+      },
+      "historical_blocker_before_20261027_native_tuple_review": "Pinned6.12 lacks ready Rust MM/static-key abstractions. Raw down_write/up_write alone is not equivalent; tracing/static-key registration and LKMM access/barrier semantics remain to prove. No kernel change or unsupported substitution is authorized.",
+      "current_native_gap_review": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m15-mm-nearest-file-closure-1/INDEPENDENT-SCOPE-DECISION.json",
+        "bytes": 12219,
+        "sha256": "f5271b63de77683aa1dbbc64cf86ee474aea004c3525f1bdf8374738b523869a"
       }
     },
     {

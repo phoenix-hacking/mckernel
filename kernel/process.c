@@ -723,9 +723,17 @@ ihk_spinlock_t runq_reservation_lock;
 #line 566
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+extern int idle_halt;
+extern int allow_oversubscribe;
+extern int time_sharing;
+#else
+#line 568
 int idle_halt = 0;
 int allow_oversubscribe = 0;
 int time_sharing = 1;
+#endif
+#line 571
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 static const struct process_init_state_offsets process_init_state_offsets = {
@@ -5612,6 +5620,10 @@ const struct sched_idle_values process_idle_values = {
 	.need_migrate = CPU_FLAG_NEED_MIGRATE,
 	.monitor_idle = IHK_OS_MONITOR_IDLE, .monitor_kernel = IHK_OS_MONITOR_KERNEL,
 };
+#ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+extern const struct sched_idle_callbacks process_idle_callbacks;
+#else
+#line 4016
 const struct sched_idle_callbacks process_idle_callbacks = {
 	.current_cpu = sched_idle_current_cpu_bridge,
 	.lock = process_spin_lock_bridge, .unlock = process_spin_unlock_bridge,
@@ -5620,6 +5632,8 @@ const struct sched_idle_callbacks process_idle_callbacks = {
 	.consolidate = kmalloc_consolidate_free_list,
 	.zero_free = process_sched_zero_free_bridge, .safe_halt = cpu_safe_halt,
 };
+#endif
+#line 4024
 _Static_assert(sizeof(unsigned long) == 8 && sizeof(void *) == 8,
 	"idle callback ABI requires supported LP64");
 _Static_assert(__builtin_types_compatible_p(__typeof__(((struct thread *)0)->status), int)

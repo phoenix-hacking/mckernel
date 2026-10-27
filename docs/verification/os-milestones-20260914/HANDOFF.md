@@ -1,3 +1,44 @@
+## Files accepted; canonical F02 default cohort next — 2026-10-27T01:05Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Files1 nonce108cd725fce84fe769c9ff99e5f97562 CONSUMED; caller1326494/start85948526/
+tool85344 joined0/38.735631s. Exact23Bstdout/stderr0/exit37/procfsempty and PID255
+retirement0 at34.068648s beforepowerdown34.718785s independentlyaccepted; actual
+QEMU-9 remains afterguestshutdown/hostquit. All30ownercommandsreaped, CIDfe99b8b1
+normalremoved/knownactorsgroupsabsent/mutexprobesclosed/mountfloors. Actual100owner+
+6guestexports retained. Receipts CURRENT290-FILES1-INDEPENDENT-{CASE,POSTJOIN}-ACCEPTANCE.
+No nativecleanup/replay remains. Currentmatchingdiagnosticcases3(startup,memory,files).
+New20minreviewdelta: SDKpackage+1, nativecase+1, defaultcutover/file/C-retirement0;
+fullM14/M15OPEN/practical35/35. Fileslibcforwarding doesnotclosefrozenM14-05-05.
+
+Root has ACTUALLYpromoted qualifiedF02fourdataowners into canonical process.c9692036c
+andprocess_helpers851acd51:three4Bflags plusreadonly80Bcallbacktable. Sameexisting
+pairedGLOBAL_STORAGE/process_global_storage_candidate selectors, no CMakechange.
+NextactualwholeRust/processC/eleveninputlink uses UNCHANGEDbc9/bc00/91f6runner/worker/
+holder, nineROprefixobjects andfiveROpostimages; noframeworkrewrite/allfilewait.
+ActualRootstatic directory ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1 hasfreshnonce
+ d52e2aa8388a645c39da3dc6e2a3e6e6, requestadoption/export/bootstrap; noholder/clockyet.
+Allstaticpublication beforefreshresourceclock. Exactnextordinaryholder command:
+`/home/holden/anaconda3/bin/python3 -I -B docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/hold_and_run_build_only.py --bootstrap-grant docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/ROOT-HOLDER-BOOTSTRAP-GRANT.json`
+OnlyafteractualREADY: runcapture_and_bind_resource.py, obtainoneexactindependent
+executionPASS thenexistingpublish_approved_ready.py withactualapprovedinputSHA.
+Caller/holderUID1000; onlyDockerclient sudo-A; 4CPU2-5/12GiB/512/noNet/global27:4.
+Actual18GiBreservations/21.5GiB ceiling below21.7531cap; allfixed3cutoffs retained.
+
+F03execdefinedregions192/41HOSTPASS/coherent4slice private; F06flags/set/getprivate
+HOSTproofs retained, coherentbatchdispatchfixture failedtwoheadercontextattempts
+andSTOPPED, passedwholeC/Rustprefixreused; no furtherblindretry. F02callbackoriginal
+PICFAIL correctedonlytoactualproductionlarge/static, unchangedreadonlyoraclePASS.
+ActualSource lanes reactivated withfollowup_task: F03nextselectedexit/syscall,
+F06nextselectedarchbridge, M15daemondefault/main and M15libihkdefault/fullgraph reuse.
+Fiveactualturns includingRoot confirmed; availableidleSource slotsarenotCPUcapacity.
+M15MMnewmodulepair887dc/57546 remainsOFFLINE-only; acceptednativesusedold2eb3/06e8.
+Existingstrict235 current290+RustMM successor offlinecommand READYa0914, NOTRUN;
+it alsoexercisesF05verify/usercopy viaexec/wait, notallprocessVM/faultbranches.
+Daemon26mockHOSTtask64profile hasnoactualperjobenforcement; no unboundedrun or
+NPROC64workaround (actualUID1000threads939). Exactargv retained; defaultgraphsource
+proposal continues. No repeatedSDK7/3355prefix or image/module rebuild performed.
+
 ## SDK7 accepted; safe continuation boundary — 2026-10-27T00:43Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

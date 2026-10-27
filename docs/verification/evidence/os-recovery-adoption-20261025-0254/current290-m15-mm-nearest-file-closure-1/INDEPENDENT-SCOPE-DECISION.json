@@ -1,0 +1,171 @@
+{
+  "task_id": "current290-m15-mm-nearest-file-closure-1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/default_witness_gate",
+  "implementation_ownership": false,
+  "decision": "M15_F01_NATIVE_FILE_CLOSURE_NOT_PROVEN_EXACT_MODULE_TUPLE_AND_CHANGED_PATH_GAP",
+  "execution_authority": false,
+  "canonical_worklist_changed": false,
+  "source_implemented": true,
+  "current_selected_project_C_wrapper": false,
+  "source_scope": "SOURCE-REUSE/source_reconciliation20261025 supersede historical source-unimplemented debt only; do not reimplement these wrappers.",
+  "native_case_status": {
+    "startup.argv-empty": "accepted at diagnostic case scope only",
+    "baseline.core.memory": "accepted at diagnostic case scope only"
+  },
+  "current290_case_modules": [
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/module-runtime-snapshots-1/ihk.ko",
+      "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+      "size": 1527808
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/runtime-inputs/ihk-smp-x86_64.ko",
+      "sha256": "2eb3e8e6d7e43f55ca262cb455212e205831e26980f10d4ce8ef99556fd2269d",
+      "size": 12944152
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/terminal-control-native-successor-1/runtime-inputs/mcctrl.ko",
+      "sha256": "06e8b9b571f21b41821aa03a32ebf4ae20ae19cf4b110c3af2c81b491b92ef86",
+      "size": 2662320
+    }
+  ],
+  "retained_Rust_MM_target_modules": {
+    "modules/ihk-smp-x86_64.ko": {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/workspace/native-running-modules-candidate-15817c3475cb4d3da5b21edd26b5ffb2/modules/ihk-smp-x86_64.ko",
+      "sha256": "887dc3567e6035c921588e61b45b41a8ef32a972d142fe2ba82ec48442353b12",
+      "size": 13098896
+    },
+    "modules/mcctrl.ko": {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/workspace/native-running-modules-candidate-15817c3475cb4d3da5b21edd26b5ffb2/modules/mcctrl.ko",
+      "sha256": "57546af5110c0674b307e5ac5a328228abbe784f890f69521db5f594f21f6ae8",
+      "size": 2578512
+    }
+  },
+  "decisive_finding": "Both accepted current290 cases use OLD SMP2eb3e8e6/mcctrl06e8b9b5, explicitly the predecessor hashes in the MM replacement inputs. Accepted RustMM SMP887dc356/mcctrl57546af5 pair was staged offline, not consumed by these native manifests. Module load/application PASS cannot prove the replacement changed paths.",
+  "references": {
+    "source_reuse": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-mm-source-1/SOURCE-REUSE.json",
+      "bytes": 5230,
+      "sha256": "60f5a3f569551b70ce7a29329aa621be2e8d097a0ec8963e21a3bab8b045aff7"
+    },
+    "memory_case_acceptance": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT290-MEMORY1-INDEPENDENT-CASE-ACCEPTANCE.json",
+      "bytes": 1765,
+      "sha256": "f92aeeb8a823b9084d074a7fbf248661f388bf1b8abfae18466710d135a2ea55"
+    },
+    "startup_case_acceptance": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT290-NATIVE2-INDEPENDENT-STARTUP-CASE-ACCEPTANCE.json",
+      "bytes": 2511,
+      "sha256": "267a357e29f1be9cbcdd88293010d539c20c709eb9dc0ef6efe2ac9f4a6f7a22"
+    },
+    "memory_manifest": {
+      "path": "/home/holden/mckernel-work/scratch/n290memory1/m.json",
+      "bytes": 7704,
+      "sha256": "40c1d0f42d7aba3852e47630dfbd33e95b270dd08ebbe8167c9f0c911cf0b8e0"
+    },
+    "startup_manifest": {
+      "path": "/home/holden/mckernel-work/scratch/n290startup2/m.json",
+      "bytes": 7701,
+      "sha256": "54a6306da54f9aa18d1ccc8d8ec7647e586037257d78788f8fc50d6068d001a0"
+    },
+    "two_module_staging_acceptance": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ACTUAL-MM-TWO-MODULE-STAGE-INDEPENDENT-ACCEPTANCE.json",
+      "bytes": 1413,
+      "sha256": "224b84de2fc09d0bd1e0dc41c82ea08257880fe2e7cf5ef4ebc1d9a17f308385"
+    },
+    "two_module_exact_inputs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-mm-source-1/native-queue-source-2/artifact-binding-source-1/TWO-MODULE-PATCH-INPUTS.ARTIFACT-BOUND.json",
+      "bytes": 3410,
+      "sha256": "6668064bfdcd874a9777b9b8f0eb5b69805d123084ef7698de8369530ecccd23"
+    },
+    "existing_native_plan": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-mm-source-1/native-queue-source-2/HANDOFF.md",
+      "bytes": 3106,
+      "sha256": "05cee6b4fe32445a675eee96121c8b1d20d1ea3f48b4bd490eb1686fca60dd66"
+    },
+    "existing_overlay_argv": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-mm-source-1/native-queue-source-2/STRICT235-OVERLAY-ARGV.PENDING.json",
+      "bytes": 1614,
+      "sha256": "4c2e0b150df7097be8633dce16479d5c73447bed67e663e069dd77fa50b6d810"
+    },
+    "actual_MM_fixture": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mm-unlock-fixture-actual-1/RESULT.json",
+      "bytes": 3560,
+      "sha256": "850fc5b26accba458fa45329f39b8fb5429ee58fba90a9eb779d85dd9cd71f76"
+    },
+    "actual_MM_fixture_stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mm-unlock-fixture-actual-1/run-stdout.txt",
+      "bytes": 128,
+      "sha256": "07909581c14b93133243f6f2a20fb9538040d858946fe93971b54757bca24a71"
+    }
+  },
+  "existing_proof_preserved": [
+    "Canonical Rust mcctrl_mm_write.rs plus reviewed trace-gate/warning assembly selected; three C-wrapper successors already implemented.",
+    "Accepted retained module/composite codegen and processed trace/warning metadata remain at exact prior artifact scope; original SDK FAIL is unchanged.",
+    "Accepted offline two-module stage changes only SMP/mcctrl records and size fields; F4D_overlay_staged=false, guest_runs=0 and MM_behavior_acceptance=false.",
+    "Existing actual-body HOST fixture PASS:64 outer/inner trace-mask epochs, sequence wrap and repeated-VMA idempotence, unlock ordering,16 writer-bit reads and8 repeated warnings. Lower Linux primitives are mocks; no native Linux concurrency credit."
+  ],
+  "changed_path_obligations": [
+    {
+      "id": "M15-F01-01",
+      "path": "mcctrl_mm_write::mmap_write_lock",
+      "source_entry": "mcctrl_process::current_fork_adopted_v4 -> Mirror::inherit_vmas at mcctrl_vm.rs:240; also revoke_fork_aliases:407/415",
+      "required_functional_evidence": "Actual authenticated child/MM inherited adoption in the RustMM module cohort reaches write lock, sequence begin/barrier and acquire trace gate; existing HOST/codegen evidence retains branch equivalence detail.",
+      "retained_current290_native": "Not established: no matching replacement module tuple; startup/memory captures do not establish this entry."
+    },
+    {
+      "id": "M15-F01-02",
+      "path": "mcctrl_mm_write::mmap_write_unlock",
+      "source_entry": "InheritedWrite::drop at mcctrl_vm.rs:202, reached after inherit_vmas result at:282 and revoke live-MM result at:448; terminal zero-users revoke explicit unlock:411",
+      "required_functional_evidence": "Actual changed MM operation exits with write unlock/sequence-end/VMA epoch release before subsequent registration publication/MM drop, with genuine cleanup ACK and bounded retirement. Do not infer from ordinary mmap or module load.",
+      "retained_current290_native": "Not established for replacement tuple/consumer."
+    },
+    {
+      "id": "M15-F01-03",
+      "path": "mcctrl_mm_write::vma_start_write",
+      "source_entry": "inherit_vmas plan loop mcctrl_vm.rs:268; revoke_fork_aliases matching mirror pass1 at:435",
+      "required_functional_evidence": "Actual authenticated inherited VMA plan and/or matching live-MM revoke pass1 reaches VMA write provider before PFN zap/owner swap. HOST fixture already covers repeated current-sequence skip and write publication; no new native oracle invented.",
+      "retained_current290_native": "Not established. Ordinary Mirror::clear uses down_write/up_write directly at:464/490 and is not this changed provider path."
+    }
+  ],
+  "capture_observation": "Narrow searches of accepted memory serial/result and startup serial contain no fork/inherit/revoke or MM-write epoch evidence that could bridge the source-to-native changed-path gap. This absence is not a claim those operations can never run; case/module binding is independently insufficient.",
+  "smallest_existing_supported_next_check": {
+    "case": "original strict235 Rust process/exec/wait case; existing MM native queue, not a new workload",
+    "plan": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-mm-source-1/native-queue-source-2/HANDOFF.md",
+    "overlay_argv": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-mm-source-1/native-queue-source-2/STRICT235-OVERLAY-ARGV.PENDING.json",
+    "already_accepted_base": {
+      "cpio_sha256": "e62de6abe597335a8e8624a31592f845740bc25c960d5dd414b8d71718c6bf2f",
+      "gzip_sha256": "472fa126ad3209c20fb2737bddfe29d2cb1dd4e6fb63c89e5a405463e538686b"
+    },
+    "retained_tuple": "IHKdaced291/SMP887dc356/mcctrl57546af5",
+    "retained_original_case_artifacts": "image10972f87,launcherdca02501,bootcccbf269,payload537cb22b,collectorc020",
+    "unchanged_oracles": "exact235B stdout, empty stderr/raw0, both EOF/reap/ECHILD, actual child/parent cleanup ACK and final retirement, procfs empty, complete log/error scan, normal owned teardown and independent physical postjoin",
+    "next_preparation": "Bind actual accepted MM base refs into an additive successor of existing overlay/owner/backend packet. Existing overlay argv still has null base refs. For current290 use, dispatcher must explicitly review/bind currentimagee6a82 together with the RustMM pair; retained original image10972 binding cannot be silently replaced. No module rebuild is indicated.",
+    "changed_path_connection": "Genuine current-fork adoption/child-MM seal in strict235 reaches Mirror::inherit_vmas; owned child cleanup/revoke reaches revoke_fork_aliases. Actual entry/branch provenance must bind the replacement tuple and real child/parent ACKs, not just a case PASS.",
+    "authority": "No operation granted by this review; existing global/capacity/lease/mutex/production and independent runtime gates remain required."
+  },
+  "checks": [
+    {
+      "scope": "read-only exact accepted case manifests vs retained MM old/new module references",
+      "status": "PASS_FACTUAL_MISMATCH_CONFIRMED"
+    },
+    {
+      "scope": "bounded actual source call-site mapping and retained actual-body fixture scope review",
+      "status": "PASS_SOURCE_EVIDENCE_SCOPE_ONLY"
+    }
+  ],
+  "new_compiler_fixture_native_runs": 0,
+  "module_rehashes": 0,
+  "canonical_writes": 0,
+  "changed_paths": [
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m15-mm-nearest-file-closure-1/INDEPENDENT-SCOPE-DECISION.json"
+  ],
+  "blocker": "Native manifests consume predecessor module pair; no actual inherited/revoke changed-path proof for RustMM pair. Frozen strict235 next packet still needs genuine current binding/release.",
+  "next_task": "Dispatcher owns additive M15-F01 tracker reconciliation and existing strict235 coherent MM native packet binding; no re-port/rebuild/new oracle/quota."
+}
