@@ -1,0 +1,36 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F03-F06-RUSTMM-STRICT235-NATIVE-ADMISSION-1/check_postnative_current.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/resource-observer-window-correction-source-1/check_postnative_current_new12h.py
+@@ -12,7 +12,7 @@
+ import time
+ import types
+ 
+-HERE = Path(__file__).resolve().parent
++HERE = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F03-F06-RUSTMM-STRICT235-NATIVE-ADMISSION-1')
+ EVIDENCE = HERE.parent
+ CID = '980a381b1f48afd516248d0a89c91362f2b3149de7eb718a5546c5ff4ad9f13c'
+ NONCE = 'a6dbd7d514dbdc410c4ecffe5c0a135d'
+@@ -22,8 +22,23 @@
+     return json.loads(path.read_text())
+ 
+ 
++def current_window_guard():
++    # Literal reviewed guard context; no path search or copied guard body.
++    import importlib.util
++    path = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/operation-account-window-new12h-source-1/actual-guardian-clamp-successor-1/actual_account_window_v2.py')
++    raw = path.read_bytes()
++    assert len(raw) == 4521 and hashlib.sha256(raw).hexdigest() == '1f152e3f18384643cd35d203fcc2a4292950a1c90758734859bdb980cf45fda0'
++    spec = importlib.util.spec_from_file_location('source31_resource_actual_window', path)
++    assert spec is not None and spec.loader is not None
++    module = importlib.util.module_from_spec(spec)
++    exec(compile(raw, str(path), 'exec'), module.__dict__)
++    assert module.__file__ == str(path) and module.__spec__.origin == str(path)
++    return module.guard()
++
++
+ def observe():
+-    assert os.getuid() == os.geteuid() == 1000 and time.time() < 1793100290
++    assert os.getuid() == os.geteuid() == 1000
++    current_window_guard()
+     source = EVIDENCE / 'current290-build3-postjoin-current-physical-1/check_current.py'
+     raw = source.read_bytes()
+     assert hashlib.sha256(raw).hexdigest() == '3cefea1bf7e5dc6ab95b4498137622cc0b0a46df2e98c724988171cd831d756b'
