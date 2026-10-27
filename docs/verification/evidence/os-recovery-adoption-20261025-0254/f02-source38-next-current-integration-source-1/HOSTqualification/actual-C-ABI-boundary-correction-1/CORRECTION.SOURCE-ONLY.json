@@ -1,0 +1,43 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_WAIT_ROOT_CORRECTION_INSTRUCTION",
+  "failed_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-source38-next-current-integration-source-1/HOSTqualification/fixture/five_extra.c",
+    "bytes": 8228,
+    "sha256": "5f83d883c32911e4a9caa30af946c0f5edc732a4c94372cdb4ba1c771e076343"
+  },
+  "corrected_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-source38-next-current-integration-source-1/HOSTqualification/actual-C-ABI-boundary-correction-1/fixture/five_extra.c",
+    "bytes": 8222,
+    "sha256": "04dce35b69dce0f8dac747ad7441d82052db43b59e5884a6cbaff40d1f40f9b9"
+  },
+  "actual_boundary_header": {
+    "path": "/home/holden/mckernel/lib/include/ihk/mm.h",
+    "bytes": 9548,
+    "sha256": "a1b412608df7512a1b7295c6f19b3ec5a77e6364e8f24b208ab1a29e7556e5b1"
+  },
+  "actual_nominal_types": {
+    "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/types.h",
+    "bytes": 1074,
+    "sha256": "c37a7c748f2439ddfd847725a4d559c008f2aca09c45114fb07e73337013f449"
+  },
+  "delta": "Two external mock declarations now use exact ihk_mc_ap_flag and uintptr_t aliases from genuine headers. On this actual header uintptr_t is unsignedlonglong, not unsignedlong. Mock bodies/arguments/assertions/productionRust/statics unchanged.",
+  "successful_prefixes_reused": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-source38-next-current-integration-source-1/HOSTqualification/actual-HOST-1/line13.o",
+      "bytes": 9592,
+      "sha256": "eaf677cfed9aeb43c5acd38df61f1e3f17c5f2c02f6024849054ff95b134b10c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-source38-next-current-integration-source-1/HOSTqualification/actual-HOST-1/eight",
+      "bytes": 17808,
+      "sha256": "c7a4c7143ac34d6ff3dae6ead80caabdeaeeef0b8006afe74762b6fbfce98620"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-source38-next-current-integration-source-1/HOSTqualification/actual-HOST-1/eight.map",
+      "bytes": 34180,
+      "sha256": "44bca1601686b8bae0f2f2f46c399b5876fa7d3885401d992dce1913f19e9701"
+    }
+  ],
+  "compiler_executions": 0
+}

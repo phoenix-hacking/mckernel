@@ -1,0 +1,353 @@
+{
+  "AppArmorProfile": "docker-default",
+  "Args": [
+    "-I",
+    "-B",
+    "/driver.py",
+    "--execute"
+  ],
+  "Config": {
+    "AttachStderr": true,
+    "AttachStdin": false,
+    "AttachStdout": true,
+    "Cmd": [
+      "-I",
+      "-B",
+      "/driver.py",
+      "--execute"
+    ],
+    "Domainname": "",
+    "Entrypoint": [
+      "/usr/bin/python3"
+    ],
+    "Env": [
+      "container=oci"
+    ],
+    "Hostname": "2314f82681e3",
+    "Image": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+    "Labels": {
+      "io.buildah.version": "1.43.1",
+      "license": "BSD-3-Clause",
+      "mckernel.owner": "7cf529a05d0430c6651f07b63168e8e1",
+      "name": "rockylinux",
+      "org.opencontainers.image.authors": "Lukas Magauer, Neil Hanlon, Louis Abel",
+      "org.opencontainers.image.licenses": "BSD-3-Clause",
+      "org.opencontainers.image.source": "https://git.resf.org/sig_core/rocky-kiwi-descriptions/src/branch/r10",
+      "org.opencontainers.image.title": "rockylinux",
+      "org.opencontainers.image.vendor": "Rocky Enterprise Software Foundation",
+      "org.opencontainers.image.version": "10",
+      "summary": "Rocky Linux Base image",
+      "vendor": "Rocky Enterprise Software Foundation",
+      "version": "10"
+    },
+    "OnBuild": null,
+    "OpenStdin": false,
+    "StdinOnce": false,
+    "Tty": false,
+    "User": "1000:1000",
+    "Volumes": null,
+    "WorkingDir": "/"
+  },
+  "Created": "2026-10-27T04:21:03.357890977Z",
+  "Driver": "overlay2",
+  "ExecIDs": null,
+  "GraphDriver": {
+    "Data": {
+      "LowerDir": "/var/lib/docker/overlay2/83081b8bf81c8f7c4ec2c17455691f269f65719ed05b714c3b63de77e6d5f946-init/diff:/var/lib/docker/overlay2/7dfdeca53dbb9dd0b2a42681dfe546347648e0f11b7b03876404223be540f39f/diff:/var/lib/docker/overlay2/2a23ddce6067a5847fc046c77f050a037a224c752e9e6ff2d7d56ac9162e8982/diff",
+      "MergedDir": "/var/lib/docker/overlay2/83081b8bf81c8f7c4ec2c17455691f269f65719ed05b714c3b63de77e6d5f946/merged",
+      "UpperDir": "/var/lib/docker/overlay2/83081b8bf81c8f7c4ec2c17455691f269f65719ed05b714c3b63de77e6d5f946/diff",
+      "WorkDir": "/var/lib/docker/overlay2/83081b8bf81c8f7c4ec2c17455691f269f65719ed05b714c3b63de77e6d5f946/work"
+    },
+    "Name": "overlay2"
+  },
+  "HostConfig": {
+    "AutoRemove": false,
+    "Binds": null,
+    "BlkioDeviceReadBps": [],
+    "BlkioDeviceReadIOps": [],
+    "BlkioDeviceWriteBps": [],
+    "BlkioDeviceWriteIOps": [],
+    "BlkioWeight": 0,
+    "BlkioWeightDevice": [],
+    "CapAdd": null,
+    "CapDrop": [
+      "ALL"
+    ],
+    "Cgroup": "",
+    "CgroupParent": "",
+    "CgroupnsMode": "host",
+    "ConsoleSize": [
+      0,
+      0
+    ],
+    "ContainerIDFile": "",
+    "CpuCount": 0,
+    "CpuPercent": 0,
+    "CpuPeriod": 0,
+    "CpuQuota": 0,
+    "CpuRealtimePeriod": 0,
+    "CpuRealtimeRuntime": 0,
+    "CpuShares": 0,
+    "CpusetCpus": "2-5",
+    "CpusetMems": "",
+    "DeviceCgroupRules": null,
+    "DeviceRequests": null,
+    "Devices": [],
+    "Dns": [],
+    "DnsOptions": [],
+    "DnsSearch": [],
+    "ExtraHosts": null,
+    "GroupAdd": null,
+    "IOMaximumBandwidth": 0,
+    "IOMaximumIOps": 0,
+    "Init": true,
+    "IpcMode": "private",
+    "Isolation": "",
+    "Links": null,
+    "LogConfig": {
+      "Config": {},
+      "Type": "json-file"
+    },
+    "MaskedPaths": [
+      "/proc/asound",
+      "/proc/acpi",
+      "/proc/kcore",
+      "/proc/keys",
+      "/proc/latency_stats",
+      "/proc/timer_list",
+      "/proc/timer_stats",
+      "/proc/sched_debug",
+      "/proc/scsi",
+      "/sys/firmware",
+      "/sys/devices/virtual/powercap"
+    ],
+    "Memory": 12884901888,
+    "MemoryReservation": 0,
+    "MemorySwap": 12884901888,
+    "MemorySwappiness": null,
+    "Mounts": [
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/thread-exit-observation-repair-source-1/repro-admission-source-1/input-mirror",
+        "Target": "/repro-src",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+        "Target": "/nightly",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel",
+        "Target": "/home/holden/mckernel",
+        "Type": "bind"
+      },
+      {
+        "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/thread-exit-observation-repair-source-1/repro-admission-source-1/workspace/native-running-modules-candidate-7cf529a05d0430c6651f07b63168e8e1",
+        "Target": "/work",
+        "Type": "bind"
+      },
+      {
+        "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/thread-exit-observation-repair-source-1/repro-admission-source-1/workspace/native-running-modules-candidate-7cf529a05d0430c6651f07b63168e8e1/fixture-output",
+        "Target": "/work/fixture-output",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/thread-exit-observation-repair-source-1/repro-admission-source-1/workspace/preparation-7cf529a05d0430c6651f07b63168e8e1",
+        "Target": "/preparation",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/thread-exit-observation-repair-source-1/repro-admission-source-1/repro_driver.py",
+        "Target": "/driver.py",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/thread-exit-observation-repair-source-1/repro-admission-source-1/REPRO-REQUEST.json",
+        "Target": "/request.json",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py",
+        "Target": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py",
+        "Type": "bind"
+      }
+    ],
+    "NanoCpus": 4000000000,
+    "NetworkMode": "none",
+    "OomKillDisable": false,
+    "OomScoreAdj": 0,
+    "PidMode": "",
+    "PidsLimit": 64,
+    "PortBindings": {},
+    "Privileged": false,
+    "PublishAllPorts": false,
+    "ReadonlyPaths": [
+      "/proc/bus",
+      "/proc/fs",
+      "/proc/irq",
+      "/proc/sys",
+      "/proc/sysrq-trigger"
+    ],
+    "ReadonlyRootfs": true,
+    "RestartPolicy": {
+      "MaximumRetryCount": 0,
+      "Name": "no"
+    },
+    "Runtime": "runc",
+    "SecurityOpt": [
+      "no-new-privileges"
+    ],
+    "ShmSize": 67108864,
+    "Tmpfs": {
+      "/tmp": "rw,nodev,nosuid,size=256m"
+    },
+    "UTSMode": "",
+    "Ulimits": [],
+    "UsernsMode": "",
+    "VolumeDriver": "",
+    "VolumesFrom": null
+  },
+  "HostnamePath": "/var/lib/docker/containers/2314f82681e30dc1604e9149b544a82d788b014662be46ceb3552357c408ca09/hostname",
+  "HostsPath": "/var/lib/docker/containers/2314f82681e30dc1604e9149b544a82d788b014662be46ceb3552357c408ca09/hosts",
+  "Id": "2314f82681e30dc1604e9149b544a82d788b014662be46ceb3552357c408ca09",
+  "Image": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+  "LogPath": "/var/lib/docker/containers/2314f82681e30dc1604e9149b544a82d788b014662be46ceb3552357c408ca09/2314f82681e30dc1604e9149b544a82d788b014662be46ceb3552357c408ca09-json.log",
+  "MountLabel": "",
+  "Mounts": [
+    {
+      "Destination": "/repro-src",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/thread-exit-observation-repair-source-1/repro-admission-source-1/input-mirror",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/home/holden/mckernel",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/work",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": true,
+      "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/thread-exit-observation-repair-source-1/repro-admission-source-1/workspace/native-running-modules-candidate-7cf529a05d0430c6651f07b63168e8e1",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/work/fixture-output",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": true,
+      "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/thread-exit-observation-repair-source-1/repro-admission-source-1/workspace/native-running-modules-candidate-7cf529a05d0430c6651f07b63168e8e1/fixture-output",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/driver.py",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/thread-exit-observation-repair-source-1/repro-admission-source-1/repro_driver.py",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/nightly",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/preparation",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/thread-exit-observation-repair-source-1/repro-admission-source-1/workspace/preparation-7cf529a05d0430c6651f07b63168e8e1",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/request.json",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/daemon-sdk7-next-production-criterion-source-1/container64-owner-successor-source-1/thread-exit-observation-repair-source-1/repro-admission-source-1/REPRO-REQUEST.json",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py",
+      "Type": "bind"
+    }
+  ],
+  "Name": "/mckernel-external-7cf529a05d0430c6651f07b63168e8e1",
+  "NetworkSettings": {
+    "Bridge": "",
+    "EndpointID": "",
+    "Gateway": "",
+    "GlobalIPv6Address": "",
+    "GlobalIPv6PrefixLen": 0,
+    "HairpinMode": false,
+    "IPAddress": "",
+    "IPPrefixLen": 0,
+    "IPv6Gateway": "",
+    "LinkLocalIPv6Address": "",
+    "LinkLocalIPv6PrefixLen": 0,
+    "MacAddress": "",
+    "Networks": {
+      "none": {
+        "Aliases": null,
+        "DNSNames": null,
+        "DriverOpts": null,
+        "EndpointID": "",
+        "Gateway": "",
+        "GlobalIPv6Address": "",
+        "GlobalIPv6PrefixLen": 0,
+        "IPAMConfig": null,
+        "IPAddress": "",
+        "IPPrefixLen": 0,
+        "IPv6Gateway": "",
+        "Links": null,
+        "MacAddress": "",
+        "NetworkID": "8c4a9a65ad813cb3f458da3761bdeba25d43fc777fb9fb0b91756f4e1553fa11"
+      }
+    },
+    "Ports": {},
+    "SandboxID": "5b43015772f1b140ef97945ef3f2b3aa4f6692803e62e88593c01082f7d58e68",
+    "SandboxKey": "/var/run/docker/netns/5b43015772f1",
+    "SecondaryIPAddresses": null,
+    "SecondaryIPv6Addresses": null
+  },
+  "Path": "/usr/bin/python3",
+  "Platform": "linux",
+  "ProcessLabel": "",
+  "ResolvConfPath": "/var/lib/docker/containers/2314f82681e30dc1604e9149b544a82d788b014662be46ceb3552357c408ca09/resolv.conf",
+  "RestartCount": 0,
+  "State": {
+    "Dead": false,
+    "Error": "",
+    "ExitCode": 0,
+    "FinishedAt": "2026-10-27T04:21:03.940325491Z",
+    "OOMKilled": false,
+    "Paused": false,
+    "Pid": 0,
+    "Restarting": false,
+    "Running": false,
+    "StartedAt": "2026-10-27T04:21:03.70947533Z",
+    "Status": "exited"
+  }
+}

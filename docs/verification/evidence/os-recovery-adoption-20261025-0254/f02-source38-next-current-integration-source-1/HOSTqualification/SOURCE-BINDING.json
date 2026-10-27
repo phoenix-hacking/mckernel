@@ -1,0 +1,415 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_HOST_FIXTURE_PREPARATION",
+  "production_preimages": [
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "bytes": 217647,
+      "sha256": "9692036c3aa2d580a2a134c2d4a8fc32ab5ff4215b44128668858d6fac131b12"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "bytes": 603471,
+      "sha256": "851acd51fab945456edd87c001a63b867634f51207fbf1900451edaa368b09ea"
+    }
+  ],
+  "production_candidate": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-source38-next-current-integration-source-1/candidate/kernel/process.c",
+      "bytes": 218419,
+      "sha256": "8d7fc71197eba2e9c29d32de49c6e97aa3f27ee36986bb637eaa73e6f2230038"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-source38-next-current-integration-source-1/candidate/kernel/rust/process_helpers.rs",
+      "bytes": 605160,
+      "sha256": "f54652a091b8b426ede0ed1610193c88d3c15cdd7a4e9d6a1e1dfa760be5f3d0"
+    }
+  ],
+  "actual13ABI": [
+    {
+      "name": "process_mckfd_free_bridge_source_line",
+      "value": 171,
+      "declaration": "const int process_mckfd_free_bridge_source_line = 171;",
+      "actual_current_object": {
+        "section": ".rodata",
+        "section_flags": 2,
+        "section_alignment": 32,
+        "symbol_offset": 1148,
+        "size": 4,
+        "minimum_symbol_alignment": 4,
+        "bytes_hex": "ab000000",
+        "signed_value": 171
+      },
+      "Rust_consumer": {
+        "name": "process_mckfd_free_bridge",
+        "source_body_sha256": "60d5fcf125caf48202140c349a338b2feb293a955ffff71a9982a31c3bbf3d6c",
+        "exact_Source37_reuse": true,
+        "exact_current_body_unchanged": true
+      }
+    },
+    {
+      "name": "process_policy_free_bridge_source_line",
+      "value": 253,
+      "declaration": "const int process_policy_free_bridge_source_line = 253;",
+      "actual_current_object": {
+        "section": ".rodata",
+        "section_flags": 2,
+        "section_alignment": 32,
+        "symbol_offset": 1144,
+        "size": 4,
+        "minimum_symbol_alignment": 4,
+        "bytes_hex": "fd000000",
+        "signed_value": 253
+      },
+      "Rust_consumer": {
+        "name": "process_policy_free_bridge",
+        "source_body_sha256": "3ae521b1890aea4f99f2420b246b891c5062f9b13f737f82929c4a14bcb6aae8",
+        "exact_Source37_reuse": true,
+        "exact_current_body_unchanged": true
+      }
+    },
+    {
+      "name": "process_optional_free_bridge_source_line",
+      "value": 258,
+      "declaration": "const int process_optional_free_bridge_source_line = 258;",
+      "actual_current_object": {
+        "section": ".rodata",
+        "section_flags": 2,
+        "section_alignment": 32,
+        "symbol_offset": 1140,
+        "size": 4,
+        "minimum_symbol_alignment": 4,
+        "bytes_hex": "02010000",
+        "signed_value": 258
+      },
+      "Rust_consumer": {
+        "name": "process_optional_free_bridge",
+        "source_body_sha256": "64668c920a03eb030eab4ae793a144652272ca9e08be4ea44d9525098b813ea2",
+        "exact_Source37_reuse": true,
+        "exact_current_body_unchanged": true
+      }
+    },
+    {
+      "name": "process_alloc_bridge_source_line",
+      "value": 340,
+      "declaration": "const int process_alloc_bridge_source_line = 340;",
+      "actual_current_object": {
+        "section": ".rodata",
+        "section_flags": 2,
+        "section_alignment": 32,
+        "symbol_offset": 1136,
+        "size": 4,
+        "minimum_symbol_alignment": 4,
+        "bytes_hex": "54010000",
+        "signed_value": 340
+      },
+      "Rust_consumer": {
+        "name": "process_alloc_bridge",
+        "source_body_sha256": "b05cf873e60f83a934300c6857aa49c04aec5f47c461d0e9fdf6fcf66f031c6f",
+        "exact_Source37_reuse": true,
+        "exact_current_body_unchanged": true
+      }
+    },
+    {
+      "name": "process_free_vm_bridge_source_line",
+      "value": 561,
+      "declaration": "const int process_free_vm_bridge_source_line = 561;",
+      "actual_current_object": {
+        "section": ".rodata",
+        "section_flags": 2,
+        "section_alignment": 32,
+        "symbol_offset": 1132,
+        "size": 4,
+        "minimum_symbol_alignment": 4,
+        "bytes_hex": "31020000",
+        "signed_value": 561
+      },
+      "Rust_consumer": {
+        "name": "process_free_vm_bridge",
+        "source_body_sha256": "ff66a5a3d77408db46c6a6d1ddd74705ed7bc5fabd9f1c6a83ee563a4d59cd6e",
+        "exact_Source37_reuse": true,
+        "exact_current_body_unchanged": true
+      }
+    },
+    {
+      "name": "process_create_thread_alloc_pages_source_line",
+      "value": 788,
+      "declaration": "const int process_create_thread_alloc_pages_source_line = 788;",
+      "actual_current_object": {
+        "section": ".rodata",
+        "section_flags": 2,
+        "section_alignment": 32,
+        "symbol_offset": 1128,
+        "size": 4,
+        "minimum_symbol_alignment": 4,
+        "bytes_hex": "14030000",
+        "signed_value": 788
+      },
+      "Rust_consumer": {
+        "name": "process_create_thread_alloc_pages_bridge",
+        "source_body_sha256": "4ff801d409b18aab1c28004110a8e8191d828868e70ba9ecdafb0c3dd02dec44",
+        "exact_Source37_reuse": true,
+        "exact_current_body_unchanged": true
+      }
+    },
+    {
+      "name": "process_split_range_alloc_source_line",
+      "value": 1628,
+      "declaration": "const int process_split_range_alloc_source_line = 1628;",
+      "actual_current_object": {
+        "section": ".rodata",
+        "section_flags": 2,
+        "section_alignment": 32,
+        "symbol_offset": 852,
+        "size": 4,
+        "minimum_symbol_alignment": 4,
+        "bytes_hex": "5c060000",
+        "signed_value": 1628
+      },
+      "Rust_consumer": {
+        "name": "process_split_range_alloc_bridge",
+        "source_body_sha256": "6f90bbc2295f66485fa8fd1c60330abecebc9da96c47f37c5f16c12b2dbf95d7",
+        "exact_Source37_reuse": true,
+        "exact_current_body_unchanged": true
+      }
+    },
+    {
+      "name": "process_range_kfree_bridge_source_line",
+      "value": 1817,
+      "declaration": "const int process_range_kfree_bridge_source_line = 1817;",
+      "actual_current_object": {
+        "section": ".rodata",
+        "section_flags": 2,
+        "section_alignment": 32,
+        "symbol_offset": 848,
+        "size": 4,
+        "minimum_symbol_alignment": 4,
+        "bytes_hex": "19070000",
+        "signed_value": 1817
+      },
+      "Rust_consumer": {
+        "name": "process_range_kfree_bridge",
+        "source_body_sha256": "e9f7f4828aeeafa2049c0dd111c40a18bc2693ee7e884d6db212e6ee34554930",
+        "exact_Source37_reuse": true,
+        "exact_current_body_unchanged": true
+      }
+    },
+    {
+      "name": "process_free_range_pages_source_line",
+      "value": 1873,
+      "declaration": "const int process_free_range_pages_source_line = 1873;",
+      "actual_current_object": {
+        "section": ".rodata",
+        "section_flags": 2,
+        "section_alignment": 32,
+        "symbol_offset": 844,
+        "size": 4,
+        "minimum_symbol_alignment": 4,
+        "bytes_hex": "51070000",
+        "signed_value": 1873
+      },
+      "Rust_consumer": {
+        "name": "free_pages",
+        "source_body_sha256": "7ab4b1f408b22e5b4dc580a0778b63e7e45a701a41f4e95f045f1e53dbcdb679",
+        "exact_Source37_reuse": true,
+        "exact_current_body_unchanged": true
+      }
+    },
+    {
+      "name": "process_add_range_alloc_bridge_source_line",
+      "value": 2256,
+      "declaration": "const int process_add_range_alloc_bridge_source_line = 2256;",
+      "actual_current_object": {
+        "section": ".rodata",
+        "section_flags": 2,
+        "section_alignment": 32,
+        "symbol_offset": 836,
+        "size": 4,
+        "minimum_symbol_alignment": 4,
+        "bytes_hex": "d0080000",
+        "signed_value": 2256
+      },
+      "Rust_consumer": {
+        "name": "process_add_range_alloc_bridge",
+        "source_body_sha256": "8c47c74878a6f7c0248bf04e28c22422241fe5c7e2c3ec0bcf0ed22d4a3f98cb",
+        "exact_Source37_reuse": true,
+        "exact_current_body_unchanged": true
+      }
+    },
+    {
+      "name": "process_add_range_free_bridge_source_line",
+      "value": 2261,
+      "declaration": "const int process_add_range_free_bridge_source_line = 2261;",
+      "actual_current_object": {
+        "section": ".rodata",
+        "section_flags": 2,
+        "section_alignment": 32,
+        "symbol_offset": 832,
+        "size": 4,
+        "minimum_symbol_alignment": 4,
+        "bytes_hex": "d5080000",
+        "signed_value": 2261
+      },
+      "Rust_consumer": {
+        "name": "process_add_range_free_bridge",
+        "source_body_sha256": "db5a9c920e35ecac286a0a19e5e4ce0d19c67c14dc5813320a1008138a1149bf",
+        "exact_Source37_reuse": true,
+        "exact_current_body_unchanged": true
+      }
+    },
+    {
+      "name": "process_page_fault_anon_alloc_line",
+      "value": 3058,
+      "declaration": "const int process_page_fault_anon_alloc_line = 3058;",
+      "actual_current_object": {
+        "section": ".rodata",
+        "section_flags": 2,
+        "section_alignment": 32,
+        "symbol_offset": 780,
+        "size": 4,
+        "minimum_symbol_alignment": 4,
+        "bytes_hex": "f20b0000",
+        "signed_value": 3058
+      },
+      "Rust_consumer": {
+        "name": "process_page_fault_anon_allocate_body_result",
+        "source_body_sha256": "11903a912edfa67ef84cb4263481959482089d7dc5ad45688ca6525ea3ea213d",
+        "exact_Source37_reuse": true,
+        "exact_current_body_unchanged": true
+      }
+    },
+    {
+      "name": "process_free_thread_pages_source_line",
+      "value": 3501,
+      "declaration": "const int process_free_thread_pages_source_line = 3501;",
+      "actual_current_object": {
+        "section": ".rodata",
+        "section_flags": 2,
+        "section_alignment": 32,
+        "symbol_offset": 400,
+        "size": 4,
+        "minimum_symbol_alignment": 4,
+        "bytes_hex": "ad0d0000",
+        "signed_value": 3501
+      },
+      "Rust_consumer": {
+        "name": "process_free_thread_pages_bridge",
+        "source_body_sha256": "fa3197a432f69c10d830b694865dfb4412b347dc93711d9a4ca2d77395882a7e",
+        "exact_Source37_reuse": true,
+        "exact_current_body_unchanged": true
+      }
+    }
+  ],
+  "existing_sources": [
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+      "bytes": 311375,
+      "sha256": "5c60055053656751ea490be95c09d7343b0391797c21d5e6c97de97cb8d34c68"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/fixture/actual_forwarding.c",
+      "bytes": 4812,
+      "sha256": "0162f76966e5e70953b853577a98283ed7fe1cf28af74ccd1fe464f3869c8d98"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/fixture/actual_allocator_abi.c",
+      "bytes": 1485,
+      "sha256": "ec35f02fb97db676c63ce91e789f29ddfea741d0eb0b3abc9d73ebecbcfe85d6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-5/actual-forwarding-first-1/fixture/all_original_bodies.ACTUAL-C.inc",
+      "bytes": 2094,
+      "sha256": "581b56e81f198fa66fe8023660d9d61cc9cce2a62bedb5ebd5eb6c09bb9dd949"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-10/fixture/process_create_thread_alloc_pages_bridge.ACTUAL-C.inc",
+      "bytes": 212,
+      "sha256": "0b456f666403336b86d3494f7a1dac07c9129f77608c372b7d24b692d91bd65a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-10/next-free-range-entry-source-1/fixture/process_free_range_pages_bridge.ACTUAL-C.inc",
+      "bytes": 153,
+      "sha256": "b60e34d197386178581029143ebfc9fa8d82bc96f2575880b7ecd2d09300c44e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/new-window-source-10/next-thread-page-release-source-1/fixture/actual_reference.c",
+      "bytes": 3054,
+      "sha256": "07f3e75c07f268025c83b08c68ea14b86d6dd9d148aa021e1a4ea2368bbba699"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-process/next-page-fault-anonymous-allocation/fixture/original_reference.REAL-ALLOCATOR-ABI-SOURCE-ONLY.c.inc",
+      "bytes": 2419,
+      "sha256": "df9fd57d34b2a0ca3ec1eb6b9d9932db113f7ed124a601f945bf8b959c0fdecc"
+    }
+  ],
+  "exact_current_Rust_consumer_spans": [
+    {
+      "name": "eight_original_tracked_consumers",
+      "sha256": "16cb73307f8ed608839b8ce442afe361301eceb11add6df967171036cdafc8e2",
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-source38-next-current-integration-source-1/HOSTqualification/fixture/tracked_current.ACTUAL.rs.inc",
+      "exact_current_source": true
+    },
+    {
+      "name": "process_create_thread_alloc_pages_bridge",
+      "sha256": "5e98fe22c41de57b9d4be40a9bbc34249a516f3ea9b11ecdad02741834f7cd9e",
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-source38-next-current-integration-source-1/HOSTqualification/fixture/process_create_thread_alloc_pages_bridge.ACTUAL.rs.inc",
+      "exact_current_source": true
+    },
+    {
+      "name": "process_free_thread_pages_bridge",
+      "sha256": "29badbecc91a5fd7266cebcedb93ef3f1039bddfc9aa90ca042abc3a13a8376d",
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-source38-next-current-integration-source-1/HOSTqualification/fixture/process_free_thread_pages_bridge.ACTUAL.rs.inc",
+      "exact_current_source": true
+    },
+    {
+      "name": "process_split_range_alloc_bridge",
+      "sha256": "ea5735ceb5061fddd55206e181a29afe495e97ed83cbc9b59be49b6355817638",
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-source38-next-current-integration-source-1/HOSTqualification/fixture/process_split_range_alloc_bridge.ACTUAL.rs.inc",
+      "exact_current_source": true
+    },
+    {
+      "name": "free_pages",
+      "sha256": "497166fe546d37efcda6198c1412a0aa5b35a2c0180900536f3a251b1e1e438b",
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-source38-next-current-integration-source-1/HOSTqualification/fixture/free_pages.ACTUAL.rs.inc",
+      "exact_current_source": true
+    },
+    {
+      "name": "process_page_fault_anon_allocate_body_result",
+      "sha256": "4071bfa03b5bfd5dfeaf0f45b78b7b4d3c7a2f1bb73b488a49203cdc08421dbd",
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-source38-next-current-integration-source-1/HOSTqualification/fixture/process_page_fault_anon_allocate_body_result.ACTUAL.rs.inc",
+      "exact_current_source": true
+    },
+    {
+      "name": "x86_smaller_page_size_result",
+      "sha256": "1abd278efa282aab1e4f8bd7720b177d73de29a7e3d203f2acc3f4a8ad1ab809",
+      "supporting_existing_geometry": true,
+      "exact_current_source": true
+    },
+    {
+      "name": "arch_get_smaller_page_size",
+      "sha256": "af7ee5aa65410277eaf435e6f02066ff482ade9c5b06b764662c40e53b569a6c",
+      "supporting_existing_geometry": true,
+      "exact_current_source": true
+    },
+    {
+      "name": "x86_use_1gb_page_bridge",
+      "sha256": "3aefac1881598eb271c9606ec0e34c73246e8a087cc1ed5360273dbfe5b46bc3",
+      "supporting_existing_geometry": true,
+      "exact_current_source": true
+    }
+  ],
+  "original82_assertion_fixture_unchanged": true,
+  "C_filename_coordinate_adaptation": "Only retained#line filenames map to actualproduction/src/kernel/process.c;8Cmetadata definitions becomeextern declarations so currentRuststorage is tested. OriginalCfunctionalgorithms and82assertionfile remainunchanged.",
+  "abi": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-source38-next-current-integration-source-1/HOSTqualification/fixture/abi.ACTUAL.rs",
+    "bytes": 76151,
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "runtime_authority": null,
+  "new_native_quota": 0
+}

@@ -1,3 +1,106 @@
+## Final safe-turn cursor: all jobs joined; FP static bound; HOST13 passed — 2026-10-27T04:54Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Goal ACTIVE. No live Rootheavy/guest/query/admissionclock or ordinaryCPU6job.
+Coordinator ends this turn before the NEXT freshclock; continue samegoal/window/
+ledger, fixed11:24:50Z. Do notpause/restart/reset orreplay completed operations.
+
+Source-profile FP PASS0f8f07fd; ordinarymanifest-only staging DONE:
+scratch/f42-fp-native1/m.json exactf93e13de, p/empty. Nonce86c485c4719a61f118032f283a3f7e62
+BOUND RESERVED UNUSED; staticbindingsfc06d1f8. Actual sourcepub/fetch atthischeckpoint
+mustbeverified beforefreshcapture. NEXT commands in current-f42-fp-native-execution-
+static-source-1/ROOT-COMMANDS.md: check-static; capture_fresh_fp_resource.py;
+prepare_fp_bindings.py --bind-fresh; oneindependentexactreview; Rootgrant/capture.
+Do NOT rerun stage_manifest_only.py/--nonce/offline-materialization; allalreadyDONE.
+No freshresource/grant/CAPTURE/guest created. Current FPvalue/F04 remainsOPEN.
+One Root-controlled heavy operation only. Ifanother operation becomes legitimately
+entry-readyfirst, useit, notwaitingforallsources; preserveexactartifact/native scopes.
+
+F02 thirteen provenance-line HOST qualification nowPASS:292comparisons/13genuineABI/
+13readonlyvalues/13actuallinkedRustconsumerorigins, ACTUAL-HOST13-HANDOFF603fa11c.
+Eightcommands alljoined/CPU6free; totalCPU0.482084/wall0.545595/RSS105056KiB.
+Firstcompiler04:50:49.928549; originalC5mockuintptr_t nominalsignatureFAIL retained;
+one exactgenuineheader fixturecorrection+4suffixcommands reused3passedprefixes.
+Failure→correctedsuffixstart134.113313s; initialqueuetimingUNKNOWN. No production
+Rustbody/staticchange, newdefault link orretireddata credit. Current84Cdata remain;
+future13qualifieddefaultownership leaves71(46mutabledebugsymbolfamilies/25readonly
+metadata). Those46families hold78descriptorentries, not46entries ormissingfunctions.
+Originalstrict235clone/exec/ENOENT/wait/reap/ECHILD reusableafterexactprovider/data
+binding; no per-recordguestquota. Existing3cmddefaultscope pending, don'tholdready
+sync/processVM4cmd cohortforunsupported5cmdscope. Itsadb270c2SourceProfilePASS,
+actualHOST proofs reused; notcanonical/notcompiled. CPU6grant complete/released.
+
+No newacceptedMcKernelnative/fileclosure sincepriorreview. Platformjoin/procfs probe
+andFPofflinebytes scopes remainasbelow. DaemonSource28observercorrection d326fc26
+isuncompiled/SourceReview+newactualRootadmissionpending; preserveoldcase8failure/
+passed0–7. Currentcanonicalkernel remainsacceptedf42 SourceNEXT10; no furtherdata/
+functioncandidate adopted. All service/account/resource/permanentmutex/scratch21/
+reservefloors unchanged. M14/M15 remainOPEN, one supportedfile eachcomplete.
+
+## Safe coordinator checkpoint: FP static adopted; no live heavy clock — 2026-10-27T04:47Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Goal ACTIVE, same thread/ledger/fixed11:24:50Z. Root ends this turn before another
+fresh clock; no pause/restart/newwindow/creditreset. No Rootheavy/guest/queryclock
+is live. Private source/ordinary jobs continue under their existing exact grants.
+
+Accepted default f42/C76/45/33exports remains current. Since04:20 review there is
+0 new default/native/file/C-retirement acceptance. Total native remains5instances/
+4distinctcases; one supportedfile eachM14/M15 complete. FullM14/M15 OPEN.
+Short same-image probe nonce7cf529a05d0430c6651f07b63168e8e1 CONSUMED ONCE/tool92106
+exit0/owner1399331start87230736 joined0/2.509738s. Ccompile0.137431/observe0.014911s,
+kernelpids64before/after proved. Realjoined14/15 withbirth87230860; knownjoined14
+brieflyenumerated withsamebirth/rawR afterjoin0, then literal1/final1. Historical
+1fffextraTID/cause UNKNOWN. Independentcurrentplatform observation and normalowned
+retirement/currentfree accepted; no daemon26/native/M15credit. Census320(not321),
+all16recordedactors/groupsabsent, ownprobesclosed/CID2314f826 absent/recordsremoved.
+Clientbirthticks/outercaller numericidentity unrecorded; actualparenttooljoin0 retained.
+Originalwronglabel query retained plus exactmckernel.owner label correction supplement.
+
+FP sameexistingcase practical.rust-std.fp-thread-state nowactualofflinebytesaccepted:
+base4b70703e/overlayc6cda46d/manifestf93e13de; onlybaseimage→qualifiedf42 changed,
+modules887dc/57546/daced, originalpayload348864/oracle254/argv unchanged. Ordinary
+stage1403545start87310279 joined0/21.123859s; CPU/RSS UNKNOWN. InitialRootwrapper
+Nonecallback preexecfailure retained; localcallablecallbackregressionpassed, no
+actualstage replay/guest. CurrentFPvalue/04-04filejoin remainsOPEN untilactualguest.
+
+NEXT PRIORITY Root: current-f42-fp-native-execution-static-source-1 Source/profile
+PASS0f8f07fd, unchangedgenericowner45010/validatorf368, truefinalBEGINretirement0
+required; sampled60/missingfinal0 remainsFAIL. Manifest-only scratch/f42-fp-native1/
+m.json stagedexactf93e13de, p/empty. FreshFPnonce86c485c4719a61f118032f283a3f7e62
+RESERVED UNUSED; STATIC-NATIVE-BINDINGS fc06d1f8. Sourcepub/fetch finishes atthis
+checkpoint; no resource snapshot/executiongrant/CAPTURE/guest yet. FreshRootturn
+must verifypublication/account/custody then capture_fresh_fp_resource.py and
+prepare_fp_bindings.py --bind-fresh; one exactindependentreview thenRootgrant+
+run_native_fp_capture.py. Do not replayoffline materialization/manifeststage/--nonce.
+Bootstrap exactcompilerprovenance limit and c020early-procfsemptycollector timing
+risk retained; actual final0 oracle unchanged. ExistingFPcase addsnoquota/neworacle.
+
+Parallelreadydefaultsource: qualified-sync-processvm-next-default-source-1 adb270c2
+independentSOURCE_PROFILE PASS; fivepostimages/106Rust/same4commands+8Cprefixes,
+35exports=33carry+2publicentries, expectedC75/31/U−2+0. Notcanonical/notcompiled.
+No nativeVM/VMlock192/directABI6/lifetime/PMUcredit. Don'tholdreadyfunctionbatch
+forunready13data/unsupported5stageprofile. F02 thirteen runtimeCIntlines confirmed
+real runtimeinputs; existingprivateowner solewriter, ordinaryCPU6≤8commands grant
+active whenready (AS2GiB/CPU60/FSIZE64MiB/wall90 perchild/e8b guards). Reconcileits
+actualhandles before givingCPU6anotherjob. Current84Cdata stillcounted; remaining71
+othermetadata explicitlyretainedafterfuture13proof, notmissingfunctions/retireddata.
+
+Daemon joined-task-observer-correction-source-1 d326fc26/source28 57330900 is
+source-ready only: realpthread targets/returns unchanged; onlyterminalobserver
+waitsexactjoinedTID/birth→ENOENT withinoriginal8s thenfinalsingleton1, rejectsunknown/
+unjoined/reused. BothCexecutables/oldpassed0–7 retained, failed8 preserved; changed
+mock + unchanged0c0b Rustfixture regeneration needed(noRust.o wasretained), nowretains
+new.o; actualsuffix8–25/ring/oversize pendingfreshsource/executionreview/admission.
+Latestpostjoin input intentionallyNULL untilRootslot; no stalehead blocker.
+
+Strategy: BUILD and artifactacceptance separate; reportingfixes mustnotserialize
+legitimatecompiler feedback. Actualexecutionguards alwaysmandatory, acceptance/ABI/
+native/retirement claims waitrealproof. Preserve30minnonoverlapbaseline;195.00s
+compilefinish→acceptance vs563.92s isone measuredstep, no overall95%claim or verified
+180sjoin target. Source-ready→entry separate/unknown whereabsent, no mtime inference.
+All caps/permanent27:4/reservefloors/scratch21/account/service/windowcontrols unchanged.
+
 ## NEXT10 default artifact accepted; short daemon diagnosis next — 2026-10-27T04:09Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

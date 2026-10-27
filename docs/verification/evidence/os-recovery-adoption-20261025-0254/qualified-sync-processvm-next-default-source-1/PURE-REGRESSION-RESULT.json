@@ -1,0 +1,43 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_EIGHT_REUSED_FOCUSED_PURE_REGRESSIONS",
+  "argv": [
+    "taskset",
+    "-c",
+    "0",
+    "prlimit",
+    "--as=2147483648",
+    "--cpu=30",
+    "--core=0",
+    "--",
+    "timeout",
+    "60s",
+    "python3",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-next-default-source-1",
+    "-p",
+    "test_*.py",
+    "-v"
+  ],
+  "returncode": 0,
+  "tests": 8,
+  "elapsed_reported_seconds": 0.009,
+  "tests_sources": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-next-default-source-1/test_two_corrections.py",
+      "bytes": 3685,
+      "sha256": "42dc61318b93b10ac4bbf1b3e6bdad187b8a38c531a8a6c6408febdc2b9819c1"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-next-default-source-1/test_postbuild_binding.py",
+      "bytes": 2133,
+      "sha256": "0f5704bb7d04b23a589e5521281644d2756aab3e375dae893577ec1e7a69aa3b"
+    }
+  ],
+  "actual_runtime_observer_calls": 0,
+  "compiler_container_current_capture_calls": 0
+}

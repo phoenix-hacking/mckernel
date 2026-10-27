@@ -1,0 +1,55 @@
+#[no_mangle]
+pub unsafe extern "C" fn process_page_fault_anon_allocate_body_result(
+    vm: *mut ProcessVm,
+    range: *mut VmRange,
+    fault_addr: CULong,
+    reason: CULong,
+    ptep_out: *mut *mut CULong,
+    pgaddr_out: *mut *mut c_void,
+    pgsize_out: *mut SizeT,
+    p2align_out: *mut CInt,
+    virt_out: *mut *mut c_void,
+    error_out: *mut CInt,
+) -> CInt {
+    // Existing caller owns the page-table lock throughout. No allocation has
+    // succeeded on entry; success transfers its virtual pointer to that caller.
+    loop {
+        let npages = (*pgsize_out / PAGE_SIZE as SizeT) as CInt;
+        *virt_out = crate::mem_helpers::_ihk_mc_alloc_aligned_pages_node(
+            npages, *p2align_out,
+            IHK_MC_AP_NOWAIT | if (*range).flag & VR_AP_USER != 0 { 0x001000 } else { 0 },
+            -1, 1, fault_addr,
+            process_page_fault_anon_alloc_file as *mut i8,
+            process_page_fault_anon_alloc_line,
+        );
+        if !(*virt_out).is_null() {
+            return 0;
+        }
+        // Reload pgshift after the allocator, exactly as in the original.
+        if (*range).pgshift == 0 && *pgsize_out != PAGE_SIZE as SizeT {
+            *error_out = crate::x86_memory_helpers::arch_get_smaller_page_size(
+                null_mut(), *pgsize_out, pgsize_out, p2align_out,
+            );
+            if *error_out != 0 {
+                let _ = kprintf(
+                    b"page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx):arch_get_smaller_page_size(anon) failed. %d\n\0".as_ptr().cast(),
+                    vm, (*range).start, (*range).end, (*range).flag,
+                    fault_addr, reason, *error_out,
+                );
+                return 1;
+            }
+            // Unlike the prepare slice, the original clears ptep only AFTER
+            // a successful shrink; on shrink failure it preserves old ptep.
+            *ptep_out = null_mut();
+            *pgaddr_out = (fault_addr & !((*pgsize_out as CULong).wrapping_sub(1))) as *mut c_void;
+            continue;
+        }
+        *error_out = -ENOMEM;
+        let _ = kprintf(
+            b"page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx):cannot allocate new page. %d\n\0".as_ptr().cast(),
+            vm, (*range).start, (*range).end, (*range).flag,
+            fault_addr, reason, *error_out,
+        );
+        return 1;
+    }
+}

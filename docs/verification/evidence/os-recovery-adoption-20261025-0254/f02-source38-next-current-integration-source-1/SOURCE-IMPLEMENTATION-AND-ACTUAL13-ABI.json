@@ -1,0 +1,380 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "IMPLEMENTED_PRIVATE_SOURCE_ONLY_NOT_COMPILED",
+  "preimages": [
+    {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "bytes": 217647,
+      "sha256": "9692036c3aa2d580a2a134c2d4a8fc32ab5ff4215b44128668858d6fac131b12"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "bytes": 603471,
+      "sha256": "851acd51fab945456edd87c001a63b867634f51207fbf1900451edaa368b09ea"
+    }
+  ],
+  "postimages": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-source38-next-current-integration-source-1/candidate/kernel/process.c",
+      "bytes": 218419,
+      "sha256": "8d7fc71197eba2e9c29d32de49c6e97aa3f27ee36986bb637eaa73e6f2230038"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-source38-next-current-integration-source-1/candidate/kernel/rust/process_helpers.rs",
+      "bytes": 605160,
+      "sha256": "f54652a091b8b426ede0ed1610193c88d3c15cdd7a4e9d6a1e1dfa760be5f3d0"
+    }
+  ],
+  "current_process_object": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-F02-DATA-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+    "bytes": 73408,
+    "sha256": "b8168c1f52369f7909bf174fe1c926a4a4a3be4a63cd0667741841680b0ca289"
+  },
+  "data_records": [
+    {
+      "name": "process_mckfd_free_bridge_source_line",
+      "value": 171,
+      "declaration": "const int process_mckfd_free_bridge_source_line = 171;",
+      "actual_current_object": {
+        "section": ".rodata",
+        "section_flags": 2,
+        "section_alignment": 32,
+        "symbol_offset": 1148,
+        "size": 4,
+        "minimum_symbol_alignment": 4,
+        "bytes_hex": "ab000000",
+        "signed_value": 171
+      },
+      "Rust_consumer": {
+        "name": "process_mckfd_free_bridge",
+        "source_body_sha256": "60d5fcf125caf48202140c349a338b2feb293a955ffff71a9982a31c3bbf3d6c",
+        "exact_Source37_reuse": true,
+        "exact_current_body_unchanged": true
+      }
+    },
+    {
+      "name": "process_policy_free_bridge_source_line",
+      "value": 253,
+      "declaration": "const int process_policy_free_bridge_source_line = 253;",
+      "actual_current_object": {
+        "section": ".rodata",
+        "section_flags": 2,
+        "section_alignment": 32,
+        "symbol_offset": 1144,
+        "size": 4,
+        "minimum_symbol_alignment": 4,
+        "bytes_hex": "fd000000",
+        "signed_value": 253
+      },
+      "Rust_consumer": {
+        "name": "process_policy_free_bridge",
+        "source_body_sha256": "3ae521b1890aea4f99f2420b246b891c5062f9b13f737f82929c4a14bcb6aae8",
+        "exact_Source37_reuse": true,
+        "exact_current_body_unchanged": true
+      }
+    },
+    {
+      "name": "process_optional_free_bridge_source_line",
+      "value": 258,
+      "declaration": "const int process_optional_free_bridge_source_line = 258;",
+      "actual_current_object": {
+        "section": ".rodata",
+        "section_flags": 2,
+        "section_alignment": 32,
+        "symbol_offset": 1140,
+        "size": 4,
+        "minimum_symbol_alignment": 4,
+        "bytes_hex": "02010000",
+        "signed_value": 258
+      },
+      "Rust_consumer": {
+        "name": "process_optional_free_bridge",
+        "source_body_sha256": "64668c920a03eb030eab4ae793a144652272ca9e08be4ea44d9525098b813ea2",
+        "exact_Source37_reuse": true,
+        "exact_current_body_unchanged": true
+      }
+    },
+    {
+      "name": "process_alloc_bridge_source_line",
+      "value": 340,
+      "declaration": "const int process_alloc_bridge_source_line = 340;",
+      "actual_current_object": {
+        "section": ".rodata",
+        "section_flags": 2,
+        "section_alignment": 32,
+        "symbol_offset": 1136,
+        "size": 4,
+        "minimum_symbol_alignment": 4,
+        "bytes_hex": "54010000",
+        "signed_value": 340
+      },
+      "Rust_consumer": {
+        "name": "process_alloc_bridge",
+        "source_body_sha256": "b05cf873e60f83a934300c6857aa49c04aec5f47c461d0e9fdf6fcf66f031c6f",
+        "exact_Source37_reuse": true,
+        "exact_current_body_unchanged": true
+      }
+    },
+    {
+      "name": "process_free_vm_bridge_source_line",
+      "value": 561,
+      "declaration": "const int process_free_vm_bridge_source_line = 561;",
+      "actual_current_object": {
+        "section": ".rodata",
+        "section_flags": 2,
+        "section_alignment": 32,
+        "symbol_offset": 1132,
+        "size": 4,
+        "minimum_symbol_alignment": 4,
+        "bytes_hex": "31020000",
+        "signed_value": 561
+      },
+      "Rust_consumer": {
+        "name": "process_free_vm_bridge",
+        "source_body_sha256": "ff66a5a3d77408db46c6a6d1ddd74705ed7bc5fabd9f1c6a83ee563a4d59cd6e",
+        "exact_Source37_reuse": true,
+        "exact_current_body_unchanged": true
+      }
+    },
+    {
+      "name": "process_create_thread_alloc_pages_source_line",
+      "value": 788,
+      "declaration": "const int process_create_thread_alloc_pages_source_line = 788;",
+      "actual_current_object": {
+        "section": ".rodata",
+        "section_flags": 2,
+        "section_alignment": 32,
+        "symbol_offset": 1128,
+        "size": 4,
+        "minimum_symbol_alignment": 4,
+        "bytes_hex": "14030000",
+        "signed_value": 788
+      },
+      "Rust_consumer": {
+        "name": "process_create_thread_alloc_pages_bridge",
+        "source_body_sha256": "4ff801d409b18aab1c28004110a8e8191d828868e70ba9ecdafb0c3dd02dec44",
+        "exact_Source37_reuse": true,
+        "exact_current_body_unchanged": true
+      }
+    },
+    {
+      "name": "process_split_range_alloc_source_line",
+      "value": 1628,
+      "declaration": "const int process_split_range_alloc_source_line = 1628;",
+      "actual_current_object": {
+        "section": ".rodata",
+        "section_flags": 2,
+        "section_alignment": 32,
+        "symbol_offset": 852,
+        "size": 4,
+        "minimum_symbol_alignment": 4,
+        "bytes_hex": "5c060000",
+        "signed_value": 1628
+      },
+      "Rust_consumer": {
+        "name": "process_split_range_alloc_bridge",
+        "source_body_sha256": "6f90bbc2295f66485fa8fd1c60330abecebc9da96c47f37c5f16c12b2dbf95d7",
+        "exact_Source37_reuse": true,
+        "exact_current_body_unchanged": true
+      }
+    },
+    {
+      "name": "process_range_kfree_bridge_source_line",
+      "value": 1817,
+      "declaration": "const int process_range_kfree_bridge_source_line = 1817;",
+      "actual_current_object": {
+        "section": ".rodata",
+        "section_flags": 2,
+        "section_alignment": 32,
+        "symbol_offset": 848,
+        "size": 4,
+        "minimum_symbol_alignment": 4,
+        "bytes_hex": "19070000",
+        "signed_value": 1817
+      },
+      "Rust_consumer": {
+        "name": "process_range_kfree_bridge",
+        "source_body_sha256": "e9f7f4828aeeafa2049c0dd111c40a18bc2693ee7e884d6db212e6ee34554930",
+        "exact_Source37_reuse": true,
+        "exact_current_body_unchanged": true
+      }
+    },
+    {
+      "name": "process_free_range_pages_source_line",
+      "value": 1873,
+      "declaration": "const int process_free_range_pages_source_line = 1873;",
+      "actual_current_object": {
+        "section": ".rodata",
+        "section_flags": 2,
+        "section_alignment": 32,
+        "symbol_offset": 844,
+        "size": 4,
+        "minimum_symbol_alignment": 4,
+        "bytes_hex": "51070000",
+        "signed_value": 1873
+      },
+      "Rust_consumer": {
+        "name": "free_pages",
+        "source_body_sha256": "7ab4b1f408b22e5b4dc580a0778b63e7e45a701a41f4e95f045f1e53dbcdb679",
+        "exact_Source37_reuse": true,
+        "exact_current_body_unchanged": true
+      }
+    },
+    {
+      "name": "process_add_range_alloc_bridge_source_line",
+      "value": 2256,
+      "declaration": "const int process_add_range_alloc_bridge_source_line = 2256;",
+      "actual_current_object": {
+        "section": ".rodata",
+        "section_flags": 2,
+        "section_alignment": 32,
+        "symbol_offset": 836,
+        "size": 4,
+        "minimum_symbol_alignment": 4,
+        "bytes_hex": "d0080000",
+        "signed_value": 2256
+      },
+      "Rust_consumer": {
+        "name": "process_add_range_alloc_bridge",
+        "source_body_sha256": "8c47c74878a6f7c0248bf04e28c22422241fe5c7e2c3ec0bcf0ed22d4a3f98cb",
+        "exact_Source37_reuse": true,
+        "exact_current_body_unchanged": true
+      }
+    },
+    {
+      "name": "process_add_range_free_bridge_source_line",
+      "value": 2261,
+      "declaration": "const int process_add_range_free_bridge_source_line = 2261;",
+      "actual_current_object": {
+        "section": ".rodata",
+        "section_flags": 2,
+        "section_alignment": 32,
+        "symbol_offset": 832,
+        "size": 4,
+        "minimum_symbol_alignment": 4,
+        "bytes_hex": "d5080000",
+        "signed_value": 2261
+      },
+      "Rust_consumer": {
+        "name": "process_add_range_free_bridge",
+        "source_body_sha256": "db5a9c920e35ecac286a0a19e5e4ce0d19c67c14dc5813320a1008138a1149bf",
+        "exact_Source37_reuse": true,
+        "exact_current_body_unchanged": true
+      }
+    },
+    {
+      "name": "process_page_fault_anon_alloc_line",
+      "value": 3058,
+      "declaration": "const int process_page_fault_anon_alloc_line = 3058;",
+      "actual_current_object": {
+        "section": ".rodata",
+        "section_flags": 2,
+        "section_alignment": 32,
+        "symbol_offset": 780,
+        "size": 4,
+        "minimum_symbol_alignment": 4,
+        "bytes_hex": "f20b0000",
+        "signed_value": 3058
+      },
+      "Rust_consumer": {
+        "name": "process_page_fault_anon_allocate_body_result",
+        "source_body_sha256": "11903a912edfa67ef84cb4263481959482089d7dc5ad45688ca6525ea3ea213d",
+        "exact_Source37_reuse": true,
+        "exact_current_body_unchanged": true
+      }
+    },
+    {
+      "name": "process_free_thread_pages_source_line",
+      "value": 3501,
+      "declaration": "const int process_free_thread_pages_source_line = 3501;",
+      "actual_current_object": {
+        "section": ".rodata",
+        "section_flags": 2,
+        "section_alignment": 32,
+        "symbol_offset": 400,
+        "size": 4,
+        "minimum_symbol_alignment": 4,
+        "bytes_hex": "ad0d0000",
+        "signed_value": 3501
+      },
+      "Rust_consumer": {
+        "name": "process_free_thread_pages_bridge",
+        "source_body_sha256": "fa3197a432f69c10d830b694865dfb4412b347dc93711d9a4ca2d77395882a7e",
+        "exact_Source37_reuse": true,
+        "exact_current_body_unchanged": true
+      }
+    }
+  ],
+  "records": 13,
+  "all_other_84_minus_13_records_retained": true,
+  "original_four_controls_callback_storage_unchanged": true,
+  "Source38_reuse_scope": "Existing Source37/38 process provenance declarations and consumer APIs are identical to current for this13record slice. Its old lifetime candidate declarations/headers/objects are not imported; its HOST GNU_RETAIN failure remainsOPEN.",
+  "selectors": {
+    "C": "MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE",
+    "Rust": "process_global_storage_candidate",
+    "new_selector": false
+  },
+  "logical_line_preservation": "Macro inserted immediately before existing #line100; each13 declaration remains exactly one physical line. Every other later source byte and #line directive is unchanged. Original __FILE__ pointers and all46ddebug records are unchanged.",
+  "compiler_executions": 0,
+  "production_artifacts_mutated": false,
+  "current84_record_retirement_credit": 0,
+  "retained_Source37_consumer_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/new-window-source-37-coherent-lifetime-worker-whole-rust-source-1/bounded-pregrant-correction-1/candidate/kernel/rust/process_helpers.rs",
+    "bytes": 601849,
+    "sha256": "7d170103ee933868da093acf4ad3af4c7fcb5434abf17fb64d39443c598bcdbd"
+  },
+  "consumer_rows": [
+    {
+      "data": "process_mckfd_free_bridge_source_line",
+      "consumer": "process_mckfd_free_bridge"
+    },
+    {
+      "data": "process_policy_free_bridge_source_line",
+      "consumer": "process_policy_free_bridge"
+    },
+    {
+      "data": "process_optional_free_bridge_source_line",
+      "consumer": "process_optional_free_bridge"
+    },
+    {
+      "data": "process_alloc_bridge_source_line",
+      "consumer": "process_alloc_bridge"
+    },
+    {
+      "data": "process_free_vm_bridge_source_line",
+      "consumer": "process_free_vm_bridge"
+    },
+    {
+      "data": "process_create_thread_alloc_pages_source_line",
+      "consumer": "process_create_thread_alloc_pages_bridge"
+    },
+    {
+      "data": "process_split_range_alloc_source_line",
+      "consumer": "process_split_range_alloc_bridge"
+    },
+    {
+      "data": "process_range_kfree_bridge_source_line",
+      "consumer": "process_range_kfree_bridge"
+    },
+    {
+      "data": "process_free_range_pages_source_line",
+      "consumer": "free_pages"
+    },
+    {
+      "data": "process_add_range_alloc_bridge_source_line",
+      "consumer": "process_add_range_alloc_bridge"
+    },
+    {
+      "data": "process_add_range_free_bridge_source_line",
+      "consumer": "process_add_range_free_bridge"
+    },
+    {
+      "data": "process_page_fault_anon_alloc_line",
+      "consumer": "process_page_fault_anon_allocate_body_result"
+    },
+    {
+      "data": "process_free_thread_pages_source_line",
+      "consumer": "process_free_thread_pages_bridge"
+    }
+  ]
+}
