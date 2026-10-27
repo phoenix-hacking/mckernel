@@ -1,0 +1,54 @@
+--- CURRENT109/run_build_only.py
++++ CURRENT110/run_build_only.py
+@@ -5,9 +5,9 @@
+ import argparse,hashlib,json,os,stat,subprocess,time
+ from pathlib import Path
+ D=Path(__file__).resolve().parent
+-DEADLINE=1793100290
++DEADLINE=1793165769
+ MEMORY=12884901888
+-BUDGET=23357213271  # current aggregate 21.7531 GiB planning ceiling
++BUDGET=23259332608  # current aggregate21.661941528320312GiB ceiling
+ PROTECTED_SUFFIX='actual-current290-default-image-attempt-5'
+ SUDO_DOCKER_PREFIX=['/usr/bin/sudo','-A','/usr/bin/docker','--host=unix:///var/run/docker.sock']
+ 
+@@ -136,7 +136,21 @@
+         else:require(argv==['/usr/bin/ld', '-e', 'arch_start', '-T', '/work/output/build/kernel/config/smp-x86.lds', '--build-id', '-Map=/work/output/build/kernel/mckernel.img.map', '--dependency-file=CMakeFiles/mckernel.img.dir/link.d', 'CMakeFiles/mckernel.img.dir/mem.c.o', 'CMakeFiles/mckernel.img.dir/syscall.c.o', 'CMakeFiles/mckernel.img.dir/process.c.o', 'CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/context.S.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/interrupt.S.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o', 'CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/trampoline.S.o', 'rust/mckernel_rust.o', '-o', 'mckernel.img'],'unchanged exact eleven-input raw linker argv')
+     return commands
+ 
++
++def current_operation_guard():
++    # Read-only fixed-window/account successor; no release or outer control.
++    import importlib.util
++    policy = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/operation-account-window-new12h-source-1/actual_account_window.py')
++    require(reference(policy)=={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/operation-account-window-new12h-source-1/actual_account_window.py', 'bytes': 4674, 'sha256': '8bf26bae56a019876c6a1463945733c85be5016d21ac5f6f955c29fd131a8cbe'}, 'pinned NEW12h account/window guard')
++    spec=importlib.util.spec_from_file_location('current110_actual_account_window',policy)
++    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
++    clocks=module.guard()
++    require(reference(Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/ACTUAL-GUARDIAN-VERIFIED.json'))=={'path': '/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/ACTUAL-GUARDIAN-VERIFIED.json', 'bytes': 2462, 'sha256': '8a33c90172e4fea5f3d1541758fef205a5e6c24440875ebbfd45f6512c9021f9'}, 'fixed actual guardian receipt')
++    require(all(now<cutoff for now,cutoff in zip(clocks,[1793165769.0, 947874.5689514667, 963213.6960030915])), 'stricter actual parent fixed cutoffs')
++    return clocks
++
+ def execute(grant_path):
++    current_operation_guard()
+     require(os.getuid()==os.geteuid()==1000,'host runner remains UID1000; only exact reviewed Docker-client prefix is elevated')
+     profile=read(D/'PROFILE.SOURCE-ONLY.json');grant=read(grant_path)
+     require(profile['runtime_authority'] is None,'profile cannot grant runtime authority')
+@@ -186,7 +200,8 @@
+     rows=mounts(profile,export,output)
+     require(len({r['target'] for r in rows})==len(rows),'no duplicate RO mount targets')
+     for row in rows:require(os.access(row['host'],os.R_OK),'actual UID1000 input bind read access')
+-    name='current290-build-only-'+grant['nonce'];require(name.replace('-','').isalnum() and len(name)<=120,'bounded container identity')
++    name='current110-build-only-'+grant['nonce'];require(name.replace('-','').isalnum() and len(name)<=120,'bounded container identity')
++    current_operation_guard()
+     argv=docker_argv(profile,name,rows,output)
+     (output/'claim.json').write_text(json.dumps(dict(grant=reference(grant_path),argv=argv,pid=os.getpid(),scope=profile['scope'],native_authority=False),indent=2)+'\n')
+     # No --rm or automatic kill/cleanup: exact positive local terminal proof is retained.
+@@ -197,6 +212,7 @@
+     state=subprocess.run(docker_prefix(profile,grant,review)+['inspect','--format','{{json .State}}',cid],stdout=subprocess.PIPE,stderr=subprocess.PIPE,check=True,text=True)
+     terminal=json.loads(state.stdout);require(terminal['Running'] is False and terminal['Pid']==0,'positive local terminal container proof required')
+     (output/'terminal.json').write_text(json.dumps(dict(returncode=result.returncode,container=cid,state=terminal,default_native_retirement_acceptance=False),indent=2)+'\n')
++    current_operation_guard()
+     require(result.returncode==terminal['ExitCode']==0 and not terminal['OOMKilled'],'build failed; preserve first result and stop')
+     print(json.dumps(dict(status='BUILD_ONLY_COMPLETE_PENDING_PRODUCER_AND_ELF_ACCEPTANCE',output=str(output),container=cid)))
+ 

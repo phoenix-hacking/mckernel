@@ -1,3 +1,49 @@
+## NEW12h actual progress and steering — 2026-10-27T18:04:15.074538+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Same activeRoot01a17e6f; hardUTC2026-10-28T05:36:09Z; actual guardian MONO947874.5689514667/
+BOOT963213.6960030915 min-clamps. Parent control restoration COMPLETE: guardian1619833/
+92037917,20minmonitor1621307/92054340,phone1621308/92054340 LIVE/exclusiveleases held per
+restart-20261027-1717/ACTUAL-RESTART-COMPLETE.json. Parent owns controls exclusively.
+Root operationguardv2 independently accepted1f152/365e9; samecreditrun7f/57774.852125/
+cumulative>=22812.3311 unchanged. No new allowance or service hold clearance.
+
+Source31 nonce d275 CONSUMED ONCE: actual C-ring failed-11 before terminalreceipt;
+Rust-ring/oversize UNRUN, compilers0. Outer join2.991994s;14Docker+1admissionclients,
+container04f8 removed/three recordsreleased/currentfree independently acceptede9a026b3.
+No cleanup replay. Rootledger26=3156e5fa. Preserved original collision and expired
+observer failures; newobserver2b736 exact old45observation statements plus reviewed
+currentguard. Static primary Cbinary proves4190536B frame exceeds2MiB stack; reviewed
+resource correctionb8b4 makes fixture/C8MiB, Rustchildren2MiB, no binary/oraclechange.
+Source32 freshnonce36aa4e210a1c5fcda971047b941f9659 RESERVED UNUSED/requestcc7f79da;
+staticprepared once, no workload. Needs fetchedsource/currentadmission/exactrelease.
+
+Mcexec acceptedF4D sources Root-adopted19paths/17writes; actualfinitecopy7015files/
+121362296B PASS12.492552s; realruntimebindingb5dbb51 and adoptionpreflightPASS/new19map
+086a1f49. Sixconfigure/context/link/import/install/installedELF phases UNRUN. Independent
+source review caught stable-reader LEGACY_SHA mismatch before execution; boundedcoherent
+correction in progress. No349body rewrite/installedproduction/wholefilecredit.
+F05static CloneTIDbranch/object/finalRustprovider proof independent332abb:8Rustbodies/
+89relocations on actuale87f. Fiveadoptedruntimefiles preserved. ActualofflineF05composition
+PASS22.065214s manifestd1a611ca;204B/1024Bstreams/10s/originalACKchildterminalwait unchanged.
+Native/sourceauthority/capability/actualpostjoin remainOPEN. No native execution from stage.
+
+HOST19 sixcallbacks+idle116B source-adopted; CURRENT1105newcompilercommands source-reviewed,
+first-entry/resource/qualifier successor ready pending finalreview/materialization/actual
+holder/resourcegrant. Currentacceptedimagee87f/C100/process70 unchanged. No CURRENT109 or
+HOST19 replay. Newguestapps0/newcandidatebuilds0/compiled0/productionlinked0/native0/file0
+in thiswindow so far. M12practical35/35; M14files2/6 and M15files1/8 remainOPEN; original
+wholeFP4096/1024FAIL preserved. AdditionalF03mask/start/stop andF06alloc/free privateRust
+source-ready; HOST executionpending. F06filenameCmetadataexception unadopted/explicitdebt.
+
+20minreview record: ROOT-NEW12H-ACTUAL-ADMISSION-1/TWENTY-MINUTE-ENGINEERING-REVIEW-1.json.
+Original30minbucketbaseline17:36:09 retained; no95%claim. Source31ready→ownerentry
+571.266s/resource→entry70.257s; firstcompiler
+notentered, CPU/RSSunmeasured. Strategy: correctedSource32thenexecutor soleheavy; actual
+CURRENT110materialization/cheapCPU6HOSTentry in parallel, literalhelperchecks before
+freshadmission. Retain independentreview and original resourcefloors/strongerpacketfloors.
+Pushed/fetched checkpoint59f4dbc53 + exactobservercorrectionca136f599 retained.
+
 ## NEW12h source integration checkpoint — 2026-10-27T17:42:54.072028+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

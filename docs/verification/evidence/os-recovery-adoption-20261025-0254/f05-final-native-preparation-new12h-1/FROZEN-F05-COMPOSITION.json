@@ -1,0 +1,254 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "protected": {
+    "payload": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-native-preparation-1/payload.snapshot",
+      "size": 5624488,
+      "sha256": "be508daa7549a50312306bb1064d4df9fe738dc9d7ba6dd32d58e8a1d97258a2",
+      "mode": 33133
+    },
+    "payload_source": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-native-preparation-1/app.rs.snapshot",
+      "size": 10987,
+      "sha256": "4aef0b5f30bc8090bdbe102332e39895b328b3ebe2735c3d011d5c035c602e68",
+      "mode": 33060
+    },
+    "frozen_oracle": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-native-preparation-1/primary-oracle.json",
+      "size": 1474,
+      "sha256": "de8c41a3a53a3cf823c9c6cfe242f363cb823dfa173be854f6d89188a20e7aae",
+      "mode": 33060
+    },
+    "expected_stdout": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-native-preparation-1/expected.stdout",
+      "size": 204,
+      "sha256": "23b067b03362e707b543c24afe8f22b907e07ab7141219d4b7b95eb703fade45",
+      "mode": 33060
+    },
+    "payload_contract": {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "/apps/app"
+      ],
+      "cwd": "/case/work",
+      "env": {
+        "PATH": "/usr/bin:/bin",
+        "COKERNEL_PATH": "/apps"
+      },
+      "oracle": {
+        "stdout_hex": "4f574e45445f463035207631206368696c6472656e3d3120636c6f6e655f6368696c645f7365747469643d3120706172656e745f7469645f756e6368616e6765643d310a74726163656d653d302073696773746f703d3139207065656b3d3020706f6b653d3020726561646261636b3d302063726f73735f346b5f776f72643d310a6368696c645f76657269666965643d3120707269766174655f756e6368616e6765643d31206368696c645f657869743d30207265617065643d310a4f574e45445f46303520504153530a",
+        "stderr_hex": "",
+        "exit_code": 0
+      },
+      "stdout_limit_bytes": 1024,
+      "stderr_limit_bytes": 1024
+    },
+    "profile": {
+      "memory_mib": 8192,
+      "name": "native-diagnostic-4vcpu-8192mib",
+      "numa_nodes": 2,
+      "vcpus": 4
+    },
+    "modules": [
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/module-runtime-snapshots-1/ihk.ko",
+        "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+        "size": 1527808
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/workspace/native-running-modules-candidate-15817c3475cb4d3da5b21edd26b5ffb2/modules/ihk-smp-x86_64.ko",
+        "sha256": "887dc3567e6035c921588e61b45b41a8ef32a972d142fe2ba82ec48442353b12",
+        "size": 13098896
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/workspace/native-running-modules-candidate-15817c3475cb4d3da5b21edd26b5ffb2/modules/mcctrl.ko",
+        "sha256": "57546af5110c0674b307e5ac5a328228abbe784f890f69521db5f594f21f6ae8",
+        "size": 2578512
+      }
+    ],
+    "launcher": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/launcher-runtime-snapshot-1/mcexec",
+      "sha256": "dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954",
+      "size": 394648
+    },
+    "collector": {
+      "mode": 33277,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/collector-helper-diagnostic",
+      "sha256": "c020a8e0ab43e222caf901d92bfecb2a8d8cf20ea0b539910a17a578f1fd12fc",
+      "size": 1021320
+    },
+    "base": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-mm-source-1/native-queue-source-2/mm-strict235-coherent-base-1.cpio.gz",
+      "sha256": "472fa126ad3209c20fb2737bddfe29d2cb1dd4e6fb63c89e5a405463e538686b",
+      "size": 12915408
+    },
+    "base_raw": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-mm-source-1/native-queue-source-2/mm-strict235-coherent-base-1.cpio",
+      "sha256": "e62de6abe597335a8e8624a31592f845740bc25c960d5dd414b8d71718c6bf2f",
+      "size": 42612968
+    },
+    "original_image": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/mckernel.img",
+      "sha256": "10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2",
+      "size": 8439816
+    },
+    "template_manifest": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-default-rust-mm-strict235-preparation-1/offline-preparation-1/manifest.HOST-STATIC.json",
+      "size": 8669,
+      "sha256": "bc1e08b4356fd0b02ef62c392ec2b7d3688029e1955c66a2e01126611c61fef5",
+      "mode": 33152
+    },
+    "overlay_module": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_overlay.py",
+      "sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d",
+      "size": 26579
+    },
+    "record_deriver": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/stage_repaired_kernel_elf.py",
+      "sha256": "80ac598940f2e7f2e6f929c8bef7ecb3b70f5ae68b7daa1aa317b1459e17651b",
+      "size": 10270
+    },
+    "diagnostic_module": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-case-adapter-source-1/native/native_diagnostic.py",
+      "size": 97074,
+      "sha256": "c3a1a4b5755813bf94289fb8091078ca58c96a4d8026f00ce14e2c7626a62484",
+      "mode": 33152
+    },
+    "cleanup_profile": {
+      "schema_version": 1,
+      "id": "begin-cleanup-real-ack-owned-processvm-204B-v1",
+      "consumer": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-1/mcctrl_process.rs",
+        "size": 54854,
+        "sha256": "8bf30cd8ae79cc778bd91816f30aaf7a37ccc2aab59822ca2a03587426a212b8",
+        "mode": 33152
+      },
+      "provider": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-lifecycle-epipe-repair-1/smp_application.rs",
+        "sha256": "f5c56d83a13f10a712a4555849f52078c2d410254080150d34408011daf527a5",
+        "size": 72744,
+        "mode": 33152
+      },
+      "modules": [
+        {
+          "mode": 33188,
+          "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/module-runtime-snapshots-1/ihk.ko",
+          "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+          "size": 1527808
+        },
+        {
+          "mode": 33188,
+          "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/workspace/native-running-modules-candidate-15817c3475cb4d3da5b21edd26b5ffb2/modules/ihk-smp-x86_64.ko",
+          "sha256": "887dc3567e6035c921588e61b45b41a8ef32a972d142fe2ba82ec48442353b12",
+          "size": 13098896
+        },
+        {
+          "mode": 33188,
+          "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/workspace/native-running-modules-candidate-15817c3475cb4d3da5b21edd26b5ffb2/modules/mcctrl.ko",
+          "sha256": "57546af5110c0674b307e5ac5a328228abbe784f890f69521db5f594f21f6ae8",
+          "size": 2578512
+        }
+      ],
+      "child_trace_cases": [
+        "M14-05-05-owned-processvm-204B"
+      ],
+      "case_binding": {
+        "source": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-native-preparation-1/app.rs.snapshot",
+          "size": 10987,
+          "sha256": "4aef0b5f30bc8090bdbe102332e39895b328b3ebe2735c3d011d5c035c602e68",
+          "mode": 33060
+        },
+        "oracle": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-native-preparation-1/primary-oracle.json",
+          "size": 1474,
+          "sha256": "de8c41a3a53a3cf823c9c6cfe242f363cb823dfa173be854f6d89188a20e7aae",
+          "mode": 33060
+        },
+        "host_qualification": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-host-qualification-1/ACTUAL-RESULT.json",
+          "size": 7418,
+          "sha256": "ca6f2ee37dde1da02ffb1d001a9c6457fdf4fbefe20017e45e34a9f12796e604",
+          "mode": 33152
+        },
+        "payload_timeout_ms": 10000
+      }
+    },
+    "source_capability": {
+      "collector_source": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/native_diagnostic_guest_collector.helper-diagnostic.c",
+        "size": 25205,
+        "sha256": "b3fc4fe0d46ae95a0b428a3c2ff46a8836affc0d929da9a2809cbe3e15b5e2d6",
+        "mode": 33204
+      },
+      "collector_handoff": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/FINAL-HELPER-DIAGNOSTIC-HANDOFF.json",
+        "size": 3274,
+        "sha256": "487cb9029ba43f28b0f85217d86c54b38ad7a5bdc099884e82fa2dc29db46245",
+        "mode": 33204
+      },
+      "collector_selected_compile_proposal": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/SOURCE-AND-COMPILE-PROPOSAL.json",
+        "size": 6691,
+        "sha256": "312afad7d6e25cda7c8a713b7d81c153b3b1c3bcc614761937bd85f20b6aa41c",
+        "mode": 33204
+      },
+      "collector_modeled_validation": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/ordinary-check-1/result.json",
+        "size": 5950,
+        "sha256": "e78a91e5048fb9281d9afc69a9aa3d092ad64d1c037f8bb10970a5bb7770d27d",
+        "mode": 33152
+      },
+      "selected_mode": "ND_PROCESS_EXEC_WAIT",
+      "payload_argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "/apps/app"
+      ],
+      "boot_argv": [
+        "/bin/native-boot",
+        "hidos",
+        "allow_oversubscribe"
+      ],
+      "native_boot_provenance_limit": "Adjacent selected boot source/binary strings; exact boot compiler receipt not located. This is not exact compiler/source or current native capability proof."
+    },
+    "postrun_constraints": {
+      "parent_real_ACK": true,
+      "child_terminal60": true,
+      "matched_parent_wait4_after_terminal": true,
+      "child_successful_query_not_required": true,
+      "positive_join_and_physical_retirement_required": true,
+      "no_native_or_wholefile_credit_from_composition": true
+    },
+    "case_id": "M14-05-05-owned-processvm-204B",
+    "host_qualification": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-host-qualification-1/ACTUAL-RESULT.json",
+      "size": 7418,
+      "sha256": "ca6f2ee37dde1da02ffb1d001a9c6457fdf4fbefe20017e45e34a9f12796e604",
+      "mode": 33152
+    }
+  },
+  "output_directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1",
+  "disallowed_image_sha256": [
+    "1e7a1f689f565e3ba35def32d4f8c9ae729f0e5945c4fbeadee4eb523738a4a2",
+    "685ace3f1536a959198343d7c965e027dfd91f00b17b36e4d6906a177873087f",
+    "10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2",
+    "26eb201ab8160b98e9a95ac3bae116a6392f343faf60641bb62faa7116a793eb"
+  ],
+  "phase": "CURRENT109_F05_SOURCE_PREPARATION_ONLY",
+  "required_image_sha256": "e87f5155eb82c13ab268e8a35fb13bf1560ffd5a5f97c8fd2af78f0281fc3d78"
+}

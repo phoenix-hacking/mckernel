@@ -1,0 +1,9 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRESERVED_SOURCE_PREPARATION_PATH_MAPPING_FAILURE",
+  "source_sha256": "c570f9dda527d1a3105a46219cb0dae46cc1e3a53cff791221fa1078c4be28c9",
+  "error": "ValueError: retained producer output is a container /work/output/build path, not a host absolute path.",
+  "at_statement": "outputs = {Path(r[output][path]).relative_to(A/OUTPUT/work/output/build) ...}",
+  "partial_outputs": "112 ordinary Rust source snapshots,4ordinary C/CMake snapshots and closed source map already written. No profile/runner/grant, compiler or workload created.",
+  "bounded_correction": "Translate exact /work/output/build prefix to existing CURRENT109 OUTPUT/work/output/build host root; independently hash-check translated bytes. Resume only byte-identical existing own source snapshots and map; do not overwrite."
+}

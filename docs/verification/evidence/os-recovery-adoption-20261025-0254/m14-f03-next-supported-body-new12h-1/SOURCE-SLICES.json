@@ -1,0 +1,29 @@
+[
+  {
+    "name": "perf_counter_mask_check_bridge",
+    "physical_line": 20879,
+    "logical_line": 20761,
+    "logical_next_line": 20766,
+    "original": "static int\nperf_counter_mask_check_bridge(unsigned long counter_mask)\n{\n\treturn ihk_mc_perf_counter_mask_check(counter_mask);\n}\n",
+    "selector": "#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_COUNTER_CONTROL_BRIDGES)\nextern int perf_counter_mask_check_bridge(unsigned long counter_mask);\n#else\n#line 20761\nstatic int\nperf_counter_mask_check_bridge(unsigned long counter_mask)\n{\n\treturn ihk_mc_perf_counter_mask_check(counter_mask);\n}\n#endif\n#line 20766\n",
+    "provider": "ihk_mc_perf_counter_mask_check(counter_mask)"
+  },
+  {
+    "name": "perf_counter_start_bridge",
+    "physical_line": 20899,
+    "logical_line": 20781,
+    "logical_next_line": 20786,
+    "original": "static int\nperf_counter_start_bridge(unsigned long counter_mask)\n{\n\treturn ihk_mc_perfctr_start(counter_mask);\n}\n",
+    "selector": "#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_COUNTER_CONTROL_BRIDGES)\nextern int perf_counter_start_bridge(unsigned long counter_mask);\n#else\n#line 20781\nstatic int\nperf_counter_start_bridge(unsigned long counter_mask)\n{\n\treturn ihk_mc_perfctr_start(counter_mask);\n}\n#endif\n#line 20786\n",
+    "provider": "ihk_mc_perfctr_start(counter_mask)"
+  },
+  {
+    "name": "perf_counter_stop_bridge",
+    "physical_line": 20905,
+    "logical_line": 20787,
+    "logical_next_line": 20792,
+    "original": "static int\nperf_counter_stop_bridge(unsigned long counter_mask, int flags)\n{\n\treturn ihk_mc_perfctr_stop(counter_mask, flags);\n}\n",
+    "selector": "#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_COUNTER_CONTROL_BRIDGES)\nextern int perf_counter_stop_bridge(unsigned long counter_mask, int flags);\n#else\n#line 20787\nstatic int\nperf_counter_stop_bridge(unsigned long counter_mask, int flags)\n{\n\treturn ihk_mc_perfctr_stop(counter_mask, flags);\n}\n#endif\n#line 20792\n",
+    "provider": "ihk_mc_perfctr_stop(counter_mask, flags)"
+  }
+]

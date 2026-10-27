@@ -1,0 +1,19 @@
+--- CURRENT109/hold_and_run_build_only.py
++++ CURRENT110/hold_and_run_build_only.py
+@@ -31,7 +31,7 @@
+     # Ordinary read-only FD/flock preparation only. One independent actual build
+     # review follows HOLDER.READY and remains mandatory before any Docker call.
+     r.require(b['native_custody_clearance']==p['native_custody_clearance'],'accepted current postcleanup proof only');r.auth(b['native_custody_clearance'])
+-    r.require(time.time()<r.DEADLINE,'fixed campaign deadline')
++    r.current_operation_guard()
+     handshake=r.strict_parent(b['fresh_handshake_root']);r.require(not os.path.lexists(handshake),'fresh exclusive handshake namespace')
+     mutex=r.strict_parent(b['permanent_mutex_path']);st=mutex.lstat()
+     r.require(stat.S_ISREG(st.st_mode) and (st.st_dev,st.st_ino)==(27,4),'same permanent27:4; no replacement')
+@@ -51,6 +51,7 @@
+         # No inference, Docker action, query or build occurs while waiting.
+         until=min(r.DEADLINE,time.time()+1200);go=handshake/'ROOT-BUILD-GRANT.READY.json'
+         while not go.exists():
++            r.current_operation_guard()
+             r.require(time.time()<until,'unlaunched holder wait expired before new actual build grant')
+             time.sleep(0.25)
+         g=r.read(go);r.require(g['author']=='/root' and g['nonce']==b['nonce'],'same root grant-ready identity')

@@ -1,0 +1,17 @@
+{
+  "status": "PASS_SOURCE_STUB_CONTROLS_ONLY",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "checks": [
+    "three exact per-child hard/soft stack values with fake resource",
+    "unexpected/compiler label cannot change limits",
+    "applied resource mismatch fails closed",
+    "fixture argv changes only exact stack limit",
+    "retained machine frame exceeds original2MiB and fits proposed8MiB",
+    "controller retains8MiB and h990 child preexec selects label stack",
+    "driver changes only captured fixture stack2to8MiB"
+  ],
+  "checks_count": 7,
+  "actual_helper_runs": 0,
+  "actual_resource_mutations": 0,
+  "compiler_calls": 0
+}

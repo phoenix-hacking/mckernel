@@ -1,0 +1,11 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/validator-templates/qualify_host13_storage.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/resource-and-qualifier-preparation-1/validator-templates/qualify_host13_storage.py
+@@ -4,7 +4,7 @@
+ from pathlib import Path
+ import hashlib,importlib.util,json,struct
+ D=Path(__file__).resolve().parent
+-STATIC=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1')
++STATIC=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/resource-and-qualifier-preparation-1')
+ EXPECTED=json.loads((STATIC/'ACCEPTANCE-INPUTS.SOURCE-ONLY.json').read_text())
+ s=(D/'qualify_clone_pointer_and_warning_suffix.py').read_text();ctx={'__file__':str(D/'qualify_host13_storage.py')};exec(compile(s[:s.index("\nclone=ns['_reuse_elf_function']")],'accepted strict actual readers','exec'),ctx)
+ P=ctx['P'];B=ctx['B'];rust=ctx['rust'];process=ctx['process'];ref=ctx['ref'];final=ctx['final'];data=ctx['data'];rels=ctx['ns']['_reuse_elf_owning_relocations'];object_bytes=ctx['ns']['_reuse_elf_object_bytes'];Elf=ctx['Elf']

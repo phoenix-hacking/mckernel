@@ -1,0 +1,2 @@
+import profile_clone_witness
+assert callable(profile_clone_witness.validate)

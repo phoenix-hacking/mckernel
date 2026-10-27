@@ -1,0 +1,116 @@
+
+# /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/rust-subtree-five-timer/syscall_policy.rs:17296
+17296: pub extern "C" fn ptrace_request_dispatch_result(request: CLong) -> CInt {
+17297:     if request == PTRACE_TRACEME {
+17298:         PTRACE_DISPATCH_TRACEME
+17299:     } else if request == PTRACE_KILL
+17300:         || request == PTRACE_CONT
+17301:         || request == PTRACE_SINGLESTEP
+17302:         || request == PTRACE_SYSCALL
+17303:     {
+17304:         PTRACE_DISPATCH_WAKEUP
+17305:     } else if request == PTRACE_GETREGS {
+17306:         PTRACE_DISPATCH_GETREGS
+17307:     } else if request == PTRACE_SETREGS {
+17308:         PTRACE_DISPATCH_SETREGS
+17309:     } else if request == PTRACE_GETFPREGS {
+17310:         PTRACE_DISPATCH_GETFPREGS
+17311:     } else if request == PTRACE_SETFPREGS {
+17312:         PTRACE_DISPATCH_SETFPREGS
+17313:     } else if request == PTRACE_PEEKUSER {
+17314:         PTRACE_DISPATCH_PEEKUSER
+17315:     } else if request == PTRACE_POKEUSER {
+17316:         PTRACE_DISPATCH_POKEUSER
+17317:     } else if request == PTRACE_PEEKTEXT || request == PTRACE_PEEKDATA {
+17318:         PTRACE_DISPATCH_PEEKTEXT
+17319:     } else if request == PTRACE_POKETEXT || request == PTRACE_POKEDATA {
+17320:         PTRACE_DISPATCH_POKETEXT
+17321:     } else if request == PTRACE_SETOPTIONS {
+17322:         PTRACE_DISPATCH_SETOPTIONS
+17323:     } else if request == PTRACE_ATTACH {
+17324:         PTRACE_DISPATCH_ATTACH
+17325:     } else if request == PTRACE_DETACH {
+17326:         PTRACE_DISPATCH_DETACH
+17327:     } else if request == PTRACE_GETSIGINFO {
+17328:         PTRACE_DISPATCH_GETSIGINFO
+17329:     } else if request == PTRACE_SETSIGINFO {
+
+# /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/rust-subtree-five-timer/syscall_policy.rs:17380
+17380:         PTRACE_DISPATCH_PEEKUSER => match ops.peekuser_fn {
+17381:             Some(peekuser) => unsafe { peekuser(pid, addr, data) },
+17382:             None => -(EOPNOTSUPP as CLong),
+17383:         },
+17384:         PTRACE_DISPATCH_POKEUSER => match ops.pokeuser_fn {
+17385:             Some(pokeuser) => unsafe { pokeuser(pid, addr, data) },
+17386:             None => -(EOPNOTSUPP as CLong),
+17387:         },
+17388:         PTRACE_DISPATCH_PEEKTEXT => match ops.peektext_fn {
+17389:             Some(peektext) => unsafe { peektext(pid, addr, data) },
+17390:             None => -(EOPNOTSUPP as CLong),
+17391:         },
+17392:         PTRACE_DISPATCH_POKETEXT => match ops.poketext_fn {
+17393:             Some(poketext) => unsafe { poketext(pid, addr, data) },
+17394:             None => -(EOPNOTSUPP as CLong),
+17395:         },
+17396:         PTRACE_DISPATCH_SETOPTIONS => match ops.setoptions_fn {
+17397:             Some(setoptions) => unsafe { setoptions(pid, data as CInt) as CLong },
+17398:             None => -(EOPNOTSUPP as CLong),
+17399:         },
+17400:         PTRACE_DISPATCH_ATTACH => match ops.attach_fn {
+
+# /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/rust-subtree-five-timer/syscall_policy.rs:25467
+25467: unsafe extern "C" fn f03_ptrace_vm_read(
+25468:     vm: CULong, addr: CULong, value: *mut CULong,
+25469: ) -> CLong {
+25470:     // SAFETY: Actual full helper retains VM and a writable one-word destination.
+25471:     // Preserve the genuine provider's C int -> C long sign extension.
+25472:     unsafe {
+25473:         crate::x86_memory_helpers::read_process_vm(
+25474:             vm as *mut ProcessVm, value.cast(), addr as *const c_void, size_of::<CULong>(),
+25475:         ) as CLong
+25476:     }
+25477: }
+25478: unsafe extern "C" fn f03_ptrace_vm_write(
+25479:     vm: CULong, addr: CULong, value: CULong,
+25480: ) -> CLong {
+25481:     // SAFETY: An initialized local word remains live through the actual patch;
+25482:     // no guessed mapping/Page getter or additional VM reference is introduced.
+25483:     unsafe {
+25484:         crate::x86_memory_helpers::patch_process_vm(
+25485:             vm as *mut ProcessVm, addr as *mut c_void,
+25486:             addr_of!(value).cast(), size_of::<CULong>(),
+25487:         ) as CLong
+25488:     }
+25489: }
+25490: unsafe extern "C" fn f03_ptrace_text_log(event: CInt, addr: CULong) {
+
+# /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/rust-subtree-five-timer/syscall_policy.rs:25517
+25517: pub unsafe extern "C" fn f03_ptrace_peektext_v1(
+25518:     pid: CInt, addr: CLong, data: CLong,
+25519: ) -> CLong {
+25520:     unsafe {
+25521:         ptrace_peektext_body_result(
+25522:             pid, addr, data, addr_of!(F03_PTRACE_IO_OFFSETS), Some(f03_ptrace_io_find),
+25523:             Some(f03_ptrace_io_unlock), Some(f03_ptrace_vm_read),
+25524:             Some(syscall_copy_to_user_bridge), Some(f03_ptrace_text_log),
+25525:         )
+25526:     }
+25527: }
+25528: 
+25529: /// Patch one actual tracee VM word with unchanged provider errors and unlock.
+25530: ///
+25531: /// # Safety
+25532: /// The same genuine VM/tracee ownership contract as original C applies. No new
+25533: /// storage, protection guarantee, fault policy or mapping reference is invented.
+25534: #[no_mangle]
+25535: pub unsafe extern "C" fn f03_ptrace_poketext_v1(
+25536:     pid: CInt, addr: CLong, data: CLong,
+25537: ) -> CLong {
+25538:     unsafe {
+25539:         ptrace_poketext_body_result(
+25540:             pid, addr, data, addr_of!(F03_PTRACE_IO_OFFSETS), Some(f03_ptrace_io_find),
+25541:             Some(f03_ptrace_io_unlock), Some(f03_ptrace_vm_write), Some(f03_ptrace_text_log),
+25542:         )
+25543:     }
+25544: }
+25545: 

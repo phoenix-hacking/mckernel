@@ -1,0 +1,109 @@
+
+docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT109-NEXT-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+fffffffffe8513f0 <f03_ptrace_peektext_v1>:
+fffffffffe8513f0:	55                   	push   %rbp
+fffffffffe8513f1:	48 89 e5             	mov    %rsp,%rbp
+fffffffffe8513f4:	41 57                	push   %r15
+fffffffffe8513f6:	41 56                	push   %r14
+fffffffffe8513f8:	53                   	push   %rbx
+fffffffffe8513f9:	50                   	push   %rax
+fffffffffe8513fa:	49 89 d6             	mov    %rdx,%r14
+fffffffffe8513fd:	49 89 f7             	mov    %rsi,%r15
+fffffffffe851400:	89 fe                	mov    %edi,%esi
+fffffffffe851402:	48 b8 70 72 85 fe ff 	movabs $0xfffffffffe857270,%rax
+fffffffffe851409:	ff ff ff 
+fffffffffe85140c:	31 ff                	xor    %edi,%edi
+fffffffffe85140e:	ff d0                	call   *%rax
+fffffffffe851410:	48 85 c0             	test   %rax,%rax
+fffffffffe851413:	74 48                	je     fffffffffe85145d <f03_ptrace_peektext_v1+0x6d>
+fffffffffe851415:	48 89 c3             	mov    %rax,%rbx
+fffffffffe851418:	f7 80 58 10 00 00 60 	testl  $0x60,0x1058(%rax)
+fffffffffe85141f:	00 00 00 
+fffffffffe851422:	48 8b b8 68 10 00 00 	mov    0x1068(%rax),%rdi
+fffffffffe851429:	48 c7 45 e0 00 00 00 	movq   $0x0,-0x20(%rbp)
+fffffffffe851430:	00 
+fffffffffe851431:	74 36                	je     fffffffffe851469 <f03_ptrace_peektext_v1+0x79>
+fffffffffe851433:	48 85 ff             	test   %rdi,%rdi
+fffffffffe851436:	74 46                	je     fffffffffe85147e <f03_ptrace_peektext_v1+0x8e>
+fffffffffe851438:	48 b8 b0 af 8a fe ff 	movabs $0xfffffffffe8aafb0,%rax
+fffffffffe85143f:	ff ff ff 
+fffffffffe851442:	48 8d 75 e0          	lea    -0x20(%rbp),%rsi
+fffffffffe851446:	b9 08 00 00 00       	mov    $0x8,%ecx
+fffffffffe85144b:	4c 89 fa             	mov    %r15,%rdx
+fffffffffe85144e:	ff d0                	call   *%rax
+fffffffffe851450:	85 c0                	test   %eax,%eax
+fffffffffe851452:	0f 84 e3 00 00 00    	je     fffffffffe85153b <f03_ptrace_peektext_v1+0x14b>
+fffffffffe851458:	4c 63 f0             	movslq %eax,%r14
+fffffffffe85145b:	eb 28                	jmp    fffffffffe851485 <f03_ptrace_peektext_v1+0x95>
+fffffffffe85145d:	49 c7 c6 fd ff ff ff 	mov    $0xfffffffffffffffd,%r14
+fffffffffe851464:	e9 c4 00 00 00       	jmp    fffffffffe85152d <f03_ptrace_peektext_v1+0x13d>
+fffffffffe851469:	49 c7 c6 fb ff ff ff 	mov    $0xfffffffffffffffb,%r14
+fffffffffe851470:	f0 ff 8b 14 12 00 00 	lock decl 0x1214(%rbx)
+fffffffffe851477:	74 43                	je     fffffffffe8514bc <f03_ptrace_peektext_v1+0xcc>
+fffffffffe851479:	e9 af 00 00 00       	jmp    fffffffffe85152d <f03_ptrace_peektext_v1+0x13d>
+fffffffffe85147e:	49 c7 c6 f2 ff ff ff 	mov    $0xfffffffffffffff2,%r14
+fffffffffe851485:	48 b8 78 cd 8f fe ff 	movabs $0xfffffffffe8fcd78,%rax
+fffffffffe85148c:	ff ff ff 
+fffffffffe85148f:	8b 00                	mov    (%rax),%eax
+fffffffffe851491:	3d 00 00 00 01       	cmp    $0x1000000,%eax
+fffffffffe851496:	72 1b                	jb     fffffffffe8514b3 <f03_ptrace_peektext_v1+0xc3>
+fffffffffe851498:	48 bf c9 90 90 fe ff 	movabs $0xfffffffffe9090c9,%rdi
+fffffffffe85149f:	ff ff ff 
+fffffffffe8514a2:	48 b9 c0 45 87 fe ff 	movabs $0xfffffffffe8745c0,%rcx
+fffffffffe8514a9:	ff ff ff 
+fffffffffe8514ac:	4c 89 fe             	mov    %r15,%rsi
+fffffffffe8514af:	31 c0                	xor    %eax,%eax
+fffffffffe8514b1:	ff d1                	call   *%rcx
+fffffffffe8514b3:	f0 ff 8b 14 12 00 00 	lock decl 0x1214(%rbx)
+fffffffffe8514ba:	75 71                	jne    fffffffffe85152d <f03_ptrace_peektext_v1+0x13d>
+fffffffffe8514bc:	4c 8b bb 68 10 00 00 	mov    0x1068(%rbx),%r15
+fffffffffe8514c3:	48 8b b3 d0 10 00 00 	mov    0x10d0(%rbx),%rsi
+fffffffffe8514ca:	48 b8 00 56 8a fe ff 	movabs $0xfffffffffe8a5600,%rax
+fffffffffe8514d1:	ff ff ff 
+fffffffffe8514d4:	48 89 df             	mov    %rbx,%rdi
+fffffffffe8514d7:	ff d0                	call   *%rax
+fffffffffe8514d9:	48 8b bb c0 12 00 00 	mov    0x12c0(%rbx),%rdi
+fffffffffe8514e0:	48 be 80 fc 90 fe ff 	movabs $0xfffffffffe90fc80,%rsi
+fffffffffe8514e7:	ff ff ff 
+fffffffffe8514ea:	48 b8 e0 43 83 fe ff 	movabs $0xfffffffffe8343e0,%rax
+fffffffffe8514f1:	ff ff ff 
+fffffffffe8514f4:	ba f2 01 00 00       	mov    $0x1f2,%edx
+fffffffffe8514f9:	ff d0                	call   *%rax
+fffffffffe8514fb:	48 b8 e0 09 82 fe ff 	movabs $0xfffffffffe8209e0,%rax
+fffffffffe851502:	ff ff ff 
+fffffffffe851505:	48 89 df             	mov    %rbx,%rdi
+fffffffffe851508:	be 45 00 00 00       	mov    $0x45,%esi
+fffffffffe85150d:	ff d0                	call   *%rax
+fffffffffe85150f:	48 b8 70 64 84 fe ff 	movabs $0xfffffffffe846470,%rax
+fffffffffe851516:	ff ff ff 
+fffffffffe851519:	48 89 df             	mov    %rbx,%rdi
+fffffffffe85151c:	ff d0                	call   *%rax
+fffffffffe85151e:	48 b8 60 bf 8a fe ff 	movabs $0xfffffffffe8abf60,%rax
+fffffffffe851525:	ff ff ff 
+fffffffffe851528:	4c 89 ff             	mov    %r15,%rdi
+fffffffffe85152b:	ff d0                	call   *%rax
+fffffffffe85152d:	4c 89 f0             	mov    %r14,%rax
+fffffffffe851530:	48 83 c4 08          	add    $0x8,%rsp
+fffffffffe851534:	5b                   	pop    %rbx
+fffffffffe851535:	41 5e                	pop    %r14
+fffffffffe851537:	41 5f                	pop    %r15
+fffffffffe851539:	5d                   	pop    %rbp
+fffffffffe85153a:	c3                   	ret    
+fffffffffe85153b:	48 b8 c0 2a 84 fe ff 	movabs $0xfffffffffe842ac0,%rax
+fffffffffe851542:	ff ff ff 
+fffffffffe851545:	48 8d 75 e0          	lea    -0x20(%rbp),%rsi
+fffffffffe851549:	ba 08 00 00 00       	mov    $0x8,%edx
+fffffffffe85154e:	4c 89 f7             	mov    %r14,%rdi
+fffffffffe851551:	ff d0                	call   *%rax
+fffffffffe851553:	4c 63 f0             	movslq %eax,%r14
+fffffffffe851556:	f0 ff 8b 14 12 00 00 	lock decl 0x1214(%rbx)
+fffffffffe85155d:	0f 84 59 ff ff ff    	je     fffffffffe8514bc <f03_ptrace_peektext_v1+0xcc>
+fffffffffe851563:	eb c8                	jmp    fffffffffe85152d <f03_ptrace_peektext_v1+0x13d>
+
+Disassembly of section .fixup:
+
+Disassembly of section .vsyscall:

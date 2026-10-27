@@ -1,0 +1,950 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_READONLY_CURRENT109_STATIC_BINDING_NOT_NATIVE_ACCEPTANCE",
+  "artifacts": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT109-NEXT-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+      "size": 10253728,
+      "sha256": "e87f5155eb82c13ab268e8a35fb13bf1560ffd5a5f97c8fd2af78f0281fc3d78"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT109-NEXT-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+      "size": 18266936,
+      "sha256": "92301a0441ab56fd244d6151dc46fb4810a42adbe8523644016b056f9c6a3e43"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT109-NEXT-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "size": 364944,
+      "sha256": "7f7e92dfe185c92830863c78c61e66b74b2e313a933921b69af405d4589097db"
+    }
+  ],
+  "Rust_provider_bindings": [
+    {
+      "symbol": "write_process_vm",
+      "size": 859,
+      "image_address": "0xfffffffffe8dd470",
+      "exact_final_bytes_equal_after_all_relocations": true,
+      "relocations": [
+        {
+          "offset": 65,
+          "type": 1,
+          "symbol": "",
+          "symbol_section": 5419,
+          "symbol_value": 0,
+          "addend": 40745,
+          "exact_anonymous_C_string_hex": "7838365f757365725f636f7079282570293a206572726f723a206f7574206f6620757365722072616e676520616464723d256c782073697a653d256c780a00",
+          "resolved_final_value": "0xfffffffffe91230c"
+        },
+        {
+          "offset": 75,
+          "type": 1,
+          "symbol": "kprintf",
+          "symbol_section": 2235,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8745c0"
+        },
+        {
+          "offset": 169,
+          "type": 1,
+          "symbol": "page_fault_process_vm",
+          "symbol_section": 2730,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe887580"
+        },
+        {
+          "offset": 286,
+          "type": 1,
+          "symbol": "ihk_mc_pt_virt_to_phys_size",
+          "symbol_section": 1997,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe86cd20"
+        },
+        {
+          "offset": 310,
+          "type": 1,
+          "symbol": "boot_param",
+          "symbol_section": 5575,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe9590d0"
+        },
+        {
+          "offset": 440,
+          "type": 1,
+          "symbol": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data20OWNED_INIT_PT_LOADED",
+          "symbol_section": 5556,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe959030"
+        },
+        {
+          "offset": 465,
+          "type": 1,
+          "symbol": "linux_page_offset_base",
+          "symbol_section": 5617,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe95e918"
+        },
+        {
+          "offset": 498,
+          "type": 1,
+          "symbol": "x86_user_copy_log_external_debug",
+          "symbol_section": 5946,
+          "symbol_value": 0,
+          "addend": 24,
+          "resolved_final_value": "0xfffffffffe8ff738"
+        },
+        {
+          "offset": 517,
+          "type": 1,
+          "symbol": "",
+          "symbol_section": 5419,
+          "symbol_value": 0,
+          "addend": 40920,
+          "exact_anonymous_C_string_hex": "7838365f757365725f636f7079282570293a207061206973206f757473696465206f66204c574b206d656d6f72792c2070613a2025702c20637073697a653a20256c750a00",
+          "resolved_final_value": "0xfffffffffe9123bb"
+        },
+        {
+          "offset": 539,
+          "type": 1,
+          "symbol": "kprintf",
+          "symbol_section": 2235,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8745c0"
+        },
+        {
+          "offset": 565,
+          "type": 1,
+          "symbol": "ihk_mc_map_virtual",
+          "symbol_section": 1924,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe86a950"
+        },
+        {
+          "offset": 739,
+          "type": 1,
+          "symbol": "ihk_mc_unmap_virtual",
+          "symbol_section": 2040,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe86dac0"
+        },
+        {
+          "offset": 767,
+          "type": 1,
+          "symbol": "",
+          "symbol_section": 5419,
+          "symbol_value": 0,
+          "addend": 40808,
+          "exact_anonymous_C_string_hex": "7838365f757365725f636f7079282570293a206572726f723a20504620666f72202570206661696c65643a2025640a00",
+          "resolved_final_value": "0xfffffffffe91234b"
+        },
+        {
+          "offset": 777,
+          "type": 1,
+          "symbol": "kprintf",
+          "symbol_section": 2235,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8745c0"
+        },
+        {
+          "offset": 801,
+          "type": 1,
+          "symbol": "",
+          "symbol_section": 5419,
+          "symbol_value": 0,
+          "addend": 40856,
+          "exact_anonymous_C_string_hex": "7838365f757365725f636f7079282570293a206572726f723a207265736f6c76696e6720706879736963616c2061646472657373206f662025703a2025640a00",
+          "resolved_final_value": "0xfffffffffe91237b"
+        },
+        {
+          "offset": 824,
+          "type": 1,
+          "symbol": "kprintf",
+          "symbol_section": 2235,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8745c0"
+        }
+      ]
+    },
+    {
+      "symbol": "read_process_vm",
+      "size": 859,
+      "image_address": "0xfffffffffe8aafb0",
+      "exact_final_bytes_equal_after_all_relocations": true,
+      "relocations": [
+        {
+          "offset": 65,
+          "type": 1,
+          "symbol": "",
+          "symbol_section": 5419,
+          "symbol_value": 0,
+          "addend": 40745,
+          "exact_anonymous_C_string_hex": "7838365f757365725f636f7079282570293a206572726f723a206f7574206f6620757365722072616e676520616464723d256c782073697a653d256c780a00",
+          "resolved_final_value": "0xfffffffffe91230c"
+        },
+        {
+          "offset": 75,
+          "type": 1,
+          "symbol": "kprintf",
+          "symbol_section": 2235,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8745c0"
+        },
+        {
+          "offset": 169,
+          "type": 1,
+          "symbol": "page_fault_process_vm",
+          "symbol_section": 2730,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe887580"
+        },
+        {
+          "offset": 286,
+          "type": 1,
+          "symbol": "ihk_mc_pt_virt_to_phys_size",
+          "symbol_section": 1997,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe86cd20"
+        },
+        {
+          "offset": 310,
+          "type": 1,
+          "symbol": "boot_param",
+          "symbol_section": 5575,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe9590d0"
+        },
+        {
+          "offset": 440,
+          "type": 1,
+          "symbol": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data20OWNED_INIT_PT_LOADED",
+          "symbol_section": 5556,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe959030"
+        },
+        {
+          "offset": 465,
+          "type": 1,
+          "symbol": "linux_page_offset_base",
+          "symbol_section": 5617,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe95e918"
+        },
+        {
+          "offset": 498,
+          "type": 1,
+          "symbol": "x86_user_copy_log_external_debug",
+          "symbol_section": 5946,
+          "symbol_value": 0,
+          "addend": 24,
+          "resolved_final_value": "0xfffffffffe8ff738"
+        },
+        {
+          "offset": 517,
+          "type": 1,
+          "symbol": "",
+          "symbol_section": 5419,
+          "symbol_value": 0,
+          "addend": 40920,
+          "exact_anonymous_C_string_hex": "7838365f757365725f636f7079282570293a207061206973206f757473696465206f66204c574b206d656d6f72792c2070613a2025702c20637073697a653a20256c750a00",
+          "resolved_final_value": "0xfffffffffe9123bb"
+        },
+        {
+          "offset": 539,
+          "type": 1,
+          "symbol": "kprintf",
+          "symbol_section": 2235,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8745c0"
+        },
+        {
+          "offset": 565,
+          "type": 1,
+          "symbol": "ihk_mc_map_virtual",
+          "symbol_section": 1924,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe86a950"
+        },
+        {
+          "offset": 739,
+          "type": 1,
+          "symbol": "ihk_mc_unmap_virtual",
+          "symbol_section": 2040,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe86dac0"
+        },
+        {
+          "offset": 767,
+          "type": 1,
+          "symbol": "",
+          "symbol_section": 5419,
+          "symbol_value": 0,
+          "addend": 40808,
+          "exact_anonymous_C_string_hex": "7838365f757365725f636f7079282570293a206572726f723a20504620666f72202570206661696c65643a2025640a00",
+          "resolved_final_value": "0xfffffffffe91234b"
+        },
+        {
+          "offset": 777,
+          "type": 1,
+          "symbol": "kprintf",
+          "symbol_section": 2235,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8745c0"
+        },
+        {
+          "offset": 801,
+          "type": 1,
+          "symbol": "",
+          "symbol_section": 5419,
+          "symbol_value": 0,
+          "addend": 40856,
+          "exact_anonymous_C_string_hex": "7838365f757365725f636f7079282570293a206572726f723a207265736f6c76696e6720706879736963616c2061646472657373206f662025703a2025640a00",
+          "resolved_final_value": "0xfffffffffe91237b"
+        },
+        {
+          "offset": 824,
+          "type": 1,
+          "symbol": "kprintf",
+          "symbol_section": 2235,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8745c0"
+        }
+      ]
+    },
+    {
+      "symbol": "patch_process_vm",
+      "size": 1052,
+      "image_address": "0xfffffffffe88a5f0",
+      "exact_final_bytes_equal_after_all_relocations": true,
+      "relocations": [
+        {
+          "offset": 53,
+          "type": 1,
+          "symbol": "x86_user_copy_log_patch_start_debug",
+          "symbol_section": 5950,
+          "symbol_value": 0,
+          "addend": 24,
+          "resolved_final_value": "0xfffffffffe8ff778"
+        },
+        {
+          "offset": 75,
+          "type": 1,
+          "symbol": "",
+          "symbol_section": 5419,
+          "symbol_value": 0,
+          "addend": 40989,
+          "exact_anonymous_C_string_hex": "70617463685f70726f636573735f766d2825702c25702c25702c256c78290a00",
+          "resolved_final_value": "0xfffffffffe912400"
+        },
+        {
+          "offset": 85,
+          "type": 1,
+          "symbol": "kprintf",
+          "symbol_section": 2235,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8745c0"
+        },
+        {
+          "offset": 134,
+          "type": 1,
+          "symbol": "",
+          "symbol_section": 5419,
+          "symbol_value": 0,
+          "addend": 40745,
+          "exact_anonymous_C_string_hex": "7838365f757365725f636f7079282570293a206572726f723a206f7574206f6620757365722072616e676520616464723d256c782073697a653d256c780a00",
+          "resolved_final_value": "0xfffffffffe91230c"
+        },
+        {
+          "offset": 144,
+          "type": 1,
+          "symbol": "kprintf",
+          "symbol_section": 2235,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8745c0"
+        },
+        {
+          "offset": 214,
+          "type": 1,
+          "symbol": "page_fault_process_vm",
+          "symbol_section": 2730,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe887580"
+        },
+        {
+          "offset": 350,
+          "type": 1,
+          "symbol": "ihk_mc_pt_virt_to_phys_size",
+          "symbol_section": 1997,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe86cd20"
+        },
+        {
+          "offset": 374,
+          "type": 1,
+          "symbol": "boot_param",
+          "symbol_section": 5575,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe9590d0"
+        },
+        {
+          "offset": 504,
+          "type": 1,
+          "symbol": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data20OWNED_INIT_PT_LOADED",
+          "symbol_section": 5556,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe959030"
+        },
+        {
+          "offset": 529,
+          "type": 1,
+          "symbol": "linux_page_offset_base",
+          "symbol_section": 5617,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe95e918"
+        },
+        {
+          "offset": 562,
+          "type": 1,
+          "symbol": "x86_user_copy_log_external_debug",
+          "symbol_section": 5946,
+          "symbol_value": 0,
+          "addend": 24,
+          "resolved_final_value": "0xfffffffffe8ff738"
+        },
+        {
+          "offset": 581,
+          "type": 1,
+          "symbol": "",
+          "symbol_section": 5419,
+          "symbol_value": 0,
+          "addend": 40920,
+          "exact_anonymous_C_string_hex": "7838365f757365725f636f7079282570293a207061206973206f757473696465206f66204c574b206d656d6f72792c2070613a2025702c20637073697a653a20256c750a00",
+          "resolved_final_value": "0xfffffffffe9123bb"
+        },
+        {
+          "offset": 603,
+          "type": 1,
+          "symbol": "kprintf",
+          "symbol_section": 2235,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8745c0"
+        },
+        {
+          "offset": 629,
+          "type": 1,
+          "symbol": "ihk_mc_map_virtual",
+          "symbol_section": 1924,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe86a950"
+        },
+        {
+          "offset": 803,
+          "type": 1,
+          "symbol": "ihk_mc_unmap_virtual",
+          "symbol_section": 2040,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe86dac0"
+        },
+        {
+          "offset": 820,
+          "type": 1,
+          "symbol": "x86_user_copy_log_patch_done_debug",
+          "symbol_section": 5948,
+          "symbol_value": 0,
+          "addend": 24,
+          "resolved_final_value": "0xfffffffffe8ff758"
+        },
+        {
+          "offset": 846,
+          "type": 1,
+          "symbol": "",
+          "symbol_section": 5419,
+          "symbol_value": 0,
+          "addend": 41131,
+          "exact_anonymous_C_string_hex": "70617463685f70726f636573735f766d2825702c25702c25702c256c78293a25640a00",
+          "resolved_final_value": "0xfffffffffe91248e"
+        },
+        {
+          "offset": 856,
+          "type": 1,
+          "symbol": "kprintf",
+          "symbol_section": 2235,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8745c0"
+        },
+        {
+          "offset": 914,
+          "type": 1,
+          "symbol": "",
+          "symbol_section": 5419,
+          "symbol_value": 0,
+          "addend": 40808,
+          "exact_anonymous_C_string_hex": "7838365f757365725f636f7079282570293a206572726f723a20504620666f72202570206661696c65643a2025640a00",
+          "resolved_final_value": "0xfffffffffe91234b"
+        },
+        {
+          "offset": 924,
+          "type": 1,
+          "symbol": "kprintf",
+          "symbol_section": 2235,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8745c0"
+        },
+        {
+          "offset": 968,
+          "type": 1,
+          "symbol": "x86_user_copy_log_bridge",
+          "symbol_section": 5143,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8eadc0"
+        },
+        {
+          "offset": 1010,
+          "type": 1,
+          "symbol": "",
+          "symbol_section": 5419,
+          "symbol_value": 0,
+          "addend": 41098,
+          "exact_anonymous_C_string_hex": "70617463685f70726f636573735f766d282570293a763270282570293a25640a00",
+          "resolved_final_value": "0xfffffffffe91246d"
+        },
+        {
+          "offset": 1031,
+          "type": 1,
+          "symbol": "kprintf",
+          "symbol_section": 2235,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8745c0"
+        }
+      ]
+    },
+    {
+      "symbol": "clone_child_tid_store_needed_result",
+      "size": 14,
+      "image_address": "0xfffffffffe8423d0",
+      "exact_final_bytes_equal_after_all_relocations": true,
+      "relocations": []
+    },
+    {
+      "symbol": "f03_ptrace_peektext_v1",
+      "size": 373,
+      "image_address": "0xfffffffffe8513f0",
+      "exact_final_bytes_equal_after_all_relocations": true,
+      "relocations": [
+        {
+          "offset": 20,
+          "type": 1,
+          "symbol": "find_thread",
+          "symbol_section": 1374,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe857270"
+        },
+        {
+          "offset": 74,
+          "type": 1,
+          "symbol": "read_process_vm",
+          "symbol_section": 3682,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8aafb0"
+        },
+        {
+          "offset": 151,
+          "type": 1,
+          "symbol": "f03_ptrace_text_debug",
+          "symbol_section": 0,
+          "symbol_value": 0,
+          "addend": 24,
+          "resolved_final_value": "0xfffffffffe8fcd78"
+        },
+        {
+          "offset": 170,
+          "type": 1,
+          "symbol": "",
+          "symbol_section": 5419,
+          "symbol_value": 0,
+          "addend": 3129,
+          "exact_anonymous_C_string_hex": "7074726163655f7065656b746578743a2062616420617265612020616464723d3078256c6c780a00",
+          "resolved_final_value": "0xfffffffffe9090c9"
+        },
+        {
+          "offset": 180,
+          "type": 1,
+          "symbol": "kprintf",
+          "symbol_section": 2235,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8745c0"
+        },
+        {
+          "offset": 220,
+          "type": 1,
+          "symbol": "profile_accumulate_events",
+          "symbol_section": 3520,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8a5600"
+        },
+        {
+          "offset": 242,
+          "type": 1,
+          "symbol": "",
+          "symbol_section": 5419,
+          "symbol_value": 0,
+          "addend": 30835,
+          "exact_anonymous_C_string_hex": "6b65726e656c2f727573742f70726f66696c652e727300",
+          "resolved_final_value": "0xfffffffffe90fc80"
+        },
+        {
+          "offset": 252,
+          "type": 1,
+          "symbol": "_kfree",
+          "symbol_section": 733,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8343e0"
+        },
+        {
+          "offset": 269,
+          "type": 1,
+          "symbol": "",
+          "symbol_section": 386,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_section_symbol_name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust6procfs17procfs_thread_ctl",
+          "resolved_final_value": "0xfffffffffe8209e0"
+        },
+        {
+          "offset": 289,
+          "type": 1,
+          "symbol": "destroy_thread",
+          "symbol_section": 1047,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe846470"
+        },
+        {
+          "offset": 304,
+          "type": 1,
+          "symbol": "release_process_vm",
+          "symbol_section": 3694,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8abf60"
+        },
+        {
+          "offset": 333,
+          "type": 1,
+          "symbol": "copy_to_user",
+          "symbol_section": 1002,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe842ac0"
+        }
+      ]
+    },
+    {
+      "symbol": "f03_ptrace_poketext_v1",
+      "size": 345,
+      "image_address": "0xfffffffffe851780",
+      "exact_final_bytes_equal_after_all_relocations": true,
+      "relocations": [
+        {
+          "offset": 20,
+          "type": 1,
+          "symbol": "find_thread",
+          "symbol_section": 1374,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe857270"
+        },
+        {
+          "offset": 70,
+          "type": 1,
+          "symbol": "patch_process_vm",
+          "symbol_section": 2807,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe88a5f0"
+        },
+        {
+          "offset": 147,
+          "type": 1,
+          "symbol": "f03_ptrace_text_debug",
+          "symbol_section": 0,
+          "symbol_value": 0,
+          "addend": 56,
+          "resolved_final_value": "0xfffffffffe8fcd98"
+        },
+        {
+          "offset": 166,
+          "type": 1,
+          "symbol": "",
+          "symbol_section": 5419,
+          "symbol_value": 0,
+          "addend": 3169,
+          "exact_anonymous_C_string_hex": "7074726163655f706f6b65746578743a206261642061646472657373203078256c6c780a00",
+          "resolved_final_value": "0xfffffffffe9090f1"
+        },
+        {
+          "offset": 176,
+          "type": 1,
+          "symbol": "kprintf",
+          "symbol_section": 2235,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8745c0"
+        },
+        {
+          "offset": 216,
+          "type": 1,
+          "symbol": "profile_accumulate_events",
+          "symbol_section": 3520,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8a5600"
+        },
+        {
+          "offset": 238,
+          "type": 1,
+          "symbol": "",
+          "symbol_section": 5419,
+          "symbol_value": 0,
+          "addend": 30835,
+          "exact_anonymous_C_string_hex": "6b65726e656c2f727573742f70726f66696c652e727300",
+          "resolved_final_value": "0xfffffffffe90fc80"
+        },
+        {
+          "offset": 248,
+          "type": 1,
+          "symbol": "_kfree",
+          "symbol_section": 733,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8343e0"
+        },
+        {
+          "offset": 265,
+          "type": 1,
+          "symbol": "",
+          "symbol_section": 386,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_section_symbol_name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust6procfs17procfs_thread_ctl",
+          "resolved_final_value": "0xfffffffffe8209e0"
+        },
+        {
+          "offset": 285,
+          "type": 1,
+          "symbol": "destroy_thread",
+          "symbol_section": 1047,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe846470"
+        },
+        {
+          "offset": 300,
+          "type": 1,
+          "symbol": "release_process_vm",
+          "symbol_section": 3694,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8abf60"
+        }
+      ]
+    },
+    {
+      "symbol": "sys_clone",
+      "size": 344,
+      "image_address": "0xfffffffffe8bfdb0",
+      "exact_final_bytes_equal_after_all_relocations": true,
+      "relocations": [
+        {
+          "offset": 58,
+          "type": 1,
+          "symbol": "locals",
+          "symbol_section": 5618,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe95e920"
+        },
+        {
+          "offset": 83,
+          "type": 1,
+          "symbol": "num_processors",
+          "symbol_section": 5737,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8ff9d0"
+        },
+        {
+          "offset": 118,
+          "type": 1,
+          "symbol": "clv",
+          "symbol_section": 5580,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe9590f8"
+        },
+        {
+          "offset": 246,
+          "type": 1,
+          "symbol": "arch_clone_reader_lock_bridge",
+          "symbol_section": 0,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8082e0"
+        },
+        {
+          "offset": 270,
+          "type": 1,
+          "symbol": "do_fork",
+          "symbol_section": 0,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe805740"
+        },
+        {
+          "offset": 308,
+          "type": 1,
+          "symbol": "arch_clone_reader_unlock_bridge",
+          "symbol_section": 0,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8082f0"
+        }
+      ]
+    },
+    {
+      "symbol": "sys_ptrace",
+      "size": 163,
+      "image_address": "0xfffffffffe8c5520",
+      "exact_final_bytes_equal_after_all_relocations": true,
+      "relocations": [
+        {
+          "offset": 56,
+          "type": 1,
+          "symbol": "f03_ptrace_entry_ops_v1",
+          "symbol_section": 0,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe9025a0"
+        },
+        {
+          "offset": 66,
+          "type": 1,
+          "symbol": "ptrace_syscall_body_result",
+          "symbol_section": 3616,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8a8f90"
+        },
+        {
+          "offset": 90,
+          "type": 1,
+          "symbol": "f03_ptrace_entry_debug_v1",
+          "symbol_section": 0,
+          "symbol_value": 0,
+          "addend": 24,
+          "resolved_final_value": "0xfffffffffe8fcd58"
+        },
+        {
+          "offset": 110,
+          "type": 1,
+          "symbol": "",
+          "symbol_section": 5419,
+          "symbol_value": 0,
+          "addend": 33220,
+          "exact_anonymous_C_string_hex": "7074726163652825642c256c642c25702c2570293a2072657475726e696e672025640a00",
+          "resolved_final_value": "0xfffffffffe9105c6"
+        },
+        {
+          "offset": 120,
+          "type": 1,
+          "symbol": "kprintf",
+          "symbol_section": 2235,
+          "symbol_value": 0,
+          "addend": 0,
+          "resolved_final_value": "0xfffffffffe8745c0"
+        }
+      ]
+    }
+  ],
+  "do_fork_relevant_relocations": [
+    {
+      "offset": 1392,
+      "type": 1,
+      "symbol": "clone_child_tid_store_needed_result",
+      "symbol_section": 0,
+      "symbol_value": 0,
+      "addend": 0,
+      "final_value": "0xfffffffffe8423d0",
+      "final_operand_address": "0xfffffffffe805cb0"
+    },
+    {
+      "offset": 3595,
+      "type": 1,
+      "symbol": "write_process_vm",
+      "symbol_section": 0,
+      "symbol_value": 0,
+      "addend": 0,
+      "final_value": "0xfffffffffe8dd470",
+      "final_operand_address": "0xfffffffffe80654b"
+    }
+  ],
+  "ptrace_ops_peek_poke_relocations": [
+    {
+      "offset": 64,
+      "type": 1,
+      "symbol": "f03_ptrace_peektext_v1",
+      "symbol_section": 0,
+      "symbol_value": 0,
+      "addend": 0,
+      "final_value": "0xfffffffffe8513f0"
+    },
+    {
+      "offset": 72,
+      "type": 1,
+      "symbol": "f03_ptrace_poketext_v1",
+      "symbol_section": 0,
+      "symbol_value": 0,
+      "addend": 0,
+      "final_value": "0xfffffffffe851780"
+    }
+  ]
+}

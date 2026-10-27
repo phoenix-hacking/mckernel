@@ -1,0 +1,75 @@
+
+# /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-current26eb-next-default-source-1/rust-subtree-five-timer/x86_memory_helpers.rs:7380
+7380: #[no_mangle]
+7381: pub unsafe extern "C" fn read_process_vm(
+7382:     vm: *mut ProcessVm,
+7383:     kdst: *mut c_void,
+7384:     usrc: *const c_void,
+7385:     size: SizeT,
+7386: ) -> CInt {
+7387:     x86_read_process_vm_public_result(
+7388:         vm,
+7389:         kdst,
+7390:         usrc,
+7391:         size,
+7392:         Some(x86_user_page_fault_bridge),
+7393:         Some(x86_user_vtop_bridge),
+7394:         Some(x86_user_is_memory_bridge),
+7395:         Some(x86_user_map_bridge),
+7396:         Some(x86_user_unmap_bridge),
+7397:         Some(x86_user_phys_to_virt_bridge),
+7398:         Some(x86_user_copy_log_bridge),
+7399:     )
+7400: }
+7401: 
+7402: #[no_mangle]
+7403: pub unsafe extern "C" fn write_process_vm(
+7404:     vm: *mut ProcessVm,
+7405:     udst: *mut c_void,
+7406:     ksrc: *const c_void,
+7407:     size: SizeT,
+7408: ) -> CInt {
+7409:     x86_write_process_vm_public_result(
+7410:         vm,
+7411:         udst,
+7412:         ksrc,
+7413:         size,
+7414:         Some(x86_user_page_fault_bridge),
+7415:         Some(x86_user_vtop_bridge),
+7416:         Some(x86_user_is_memory_bridge),
+7417:         Some(x86_user_map_bridge),
+7418:         Some(x86_user_unmap_bridge),
+7419:         Some(x86_user_phys_to_virt_bridge),
+7420:         Some(x86_user_copy_log_bridge),
+7421:     )
+7422: }
+7423: 
+7424: #[no_mangle]
+7425: pub unsafe extern "C" fn patch_process_vm(
+7426:     vm: *mut ProcessVm,
+7427:     udst: *mut c_void,
+7428:     ksrc: *const c_void,
+7429:     size: SizeT,
+7430: ) -> CInt {
+7431:     x86_patch_process_vm_public_result(
+7432:         vm,
+7433:         udst,
+7434:         ksrc,
+7435:         size,
+7436:         Some(x86_user_page_fault_bridge),
+7437:         Some(x86_user_vtop_bridge),
+7438:         Some(x86_user_is_memory_bridge),
+7439:         Some(x86_user_map_bridge),
+7440:         Some(x86_user_unmap_bridge),
+7441:         Some(x86_user_phys_to_virt_bridge),
+7442:         Some(x86_user_copy_log_bridge),
+7443:     )
+7444: }
+7445: 
+7446: // Same tracked allocator used by the C provider. Static C callsite data keeps
+7447: // its original file/line/flag; no Rust file!()/line!() substitution or new policy.
+7448: #[no_mangle]
+7449: pub unsafe extern "C" fn x86_pt_free_pages_bridge(pt: *mut c_void, nr_pages: CInt) {
+7450:     unsafe {
+7451:         _ihk_mc_free_pages(
+7452:             pt, nr_pages, x86_pt_free_pages_flag,

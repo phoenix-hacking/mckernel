@@ -1,0 +1,162 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "NOT_A_RUNNABLE_MANIFEST_GENERATED_REFS_MUST_COME_FROM_ACTUAL_STAGING",
+  "producer": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/stage_current109_f05_specific.py",
+  "template_manifest_reuse": "Exact structural template only; old235 case/payload/oracle/cleanup case list not reused as F05 acceptance.",
+  "selected_case_id": "M14-05-05-owned-processvm-204B",
+  "selected_image": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT109-NEXT-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+    "size": 10253728,
+    "sha256": "e87f5155eb82c13ab268e8a35fb13bf1560ffd5a5f97c8fd2af78f0281fc3d78",
+    "mode": 33261
+  },
+  "selected_payload": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-native-preparation-1/payload.snapshot",
+    "size": 5624488,
+    "sha256": "be508daa7549a50312306bb1064d4df9fe738dc9d7ba6dd32d58e8a1d97258a2",
+    "mode": 33133
+  },
+  "payload_contract": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "PATH": "/usr/bin:/bin",
+      "COKERNEL_PATH": "/apps"
+    },
+    "oracle": {
+      "stdout_hex": "4f574e45445f463035207631206368696c6472656e3d3120636c6f6e655f6368696c645f7365747469643d3120706172656e745f7469645f756e6368616e6765643d310a74726163656d653d302073696773746f703d3139207065656b3d3020706f6b653d3020726561646261636b3d302063726f73735f346b5f776f72643d310a6368696c645f76657269666965643d3120707269766174655f756e6368616e6765643d31206368696c645f657869743d30207265617065643d310a4f574e45445f46303520504153530a",
+      "stderr_hex": "",
+      "exit_code": 0
+    },
+    "stdout_limit_bytes": 1024,
+    "stderr_limit_bytes": 1024
+  },
+  "cleanup_profile": {
+    "schema_version": 1,
+    "id": "begin-cleanup-real-ack-owned-processvm-204B-v1",
+    "consumer": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/wait-error-observation-1/mcctrl_process.rs",
+      "size": 54854,
+      "sha256": "8bf30cd8ae79cc778bd91816f30aaf7a37ccc2aab59822ca2a03587426a212b8",
+      "mode": 33152
+    },
+    "provider": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-lifecycle-epipe-repair-1/smp_application.rs",
+      "sha256": "f5c56d83a13f10a712a4555849f52078c2d410254080150d34408011daf527a5",
+      "size": 72744,
+      "mode": 33152
+    },
+    "modules": [
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/module-runtime-snapshots-1/ihk.ko",
+        "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+        "size": 1527808
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/workspace/native-running-modules-candidate-15817c3475cb4d3da5b21edd26b5ffb2/modules/ihk-smp-x86_64.ko",
+        "sha256": "887dc3567e6035c921588e61b45b41a8ef32a972d142fe2ba82ec48442353b12",
+        "size": 13098896
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261024-1/resource-parallelism/sdk-operation/inert-rust-boilerplate-correction-1/workspace/native-running-modules-candidate-15817c3475cb4d3da5b21edd26b5ffb2/modules/mcctrl.ko",
+        "sha256": "57546af5110c0674b307e5ac5a328228abbe784f890f69521db5f594f21f6ae8",
+        "size": 2578512
+      }
+    ],
+    "child_trace_cases": [
+      "M14-05-05-owned-processvm-204B"
+    ],
+    "case_binding": {
+      "source": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-native-preparation-1/app.rs.snapshot",
+        "size": 10987,
+        "sha256": "4aef0b5f30bc8090bdbe102332e39895b328b3ebe2735c3d011d5c035c602e68",
+        "mode": 33060
+      },
+      "oracle": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-native-preparation-1/primary-oracle.json",
+        "size": 1474,
+        "sha256": "de8c41a3a53a3cf823c9c6cfe242f363cb823dfa173be854f6d89188a20e7aae",
+        "mode": 33060
+      },
+      "host_qualification": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-host-qualification-1/ACTUAL-RESULT.json",
+        "size": 7418,
+        "sha256": "ca6f2ee37dde1da02ffb1d001a9c6457fdf4fbefe20017e45e34a9f12796e604",
+        "mode": 33152
+      },
+      "payload_timeout_ms": 10000
+    }
+  },
+  "profile": {
+    "memory_mib": 8192,
+    "name": "native-diagnostic-4vcpu-8192mib",
+    "numa_nodes": 2,
+    "vcpus": 4
+  },
+  "unchanged_launcher": {
+    "mode": 33261,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/launcher-runtime-snapshot-1/mcexec",
+    "sha256": "dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954",
+    "size": 394648
+  },
+  "unchanged_collector": {
+    "mode": 33277,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/collector-helper-diagnostic",
+    "sha256": "c020a8e0ab43e222caf901d92bfecb2a8d8cf20ea0b539910a17a578f1fd12fc",
+    "size": 1021320
+  },
+  "outputs_to_produce": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/current109-f05-mm-base.cpio.gz",
+      "sha256": null,
+      "size": null
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/owned-processvm-204B.cpio.gz",
+      "sha256": null,
+      "size": null
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/f05-overlay.json",
+      "sha256": null,
+      "size": null
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/runtime-inputs/ihk-smp-x86_64.ko",
+      "sha256": null,
+      "size": null
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/runtime-inputs/mcctrl.ko",
+      "sha256": null,
+      "size": null
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/manifest.HOST-STATIC.json",
+      "sha256": null,
+      "size": null
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-final-native-preparation-new12h-1/offline-materialization-1/OFFLINE-COMPOSITION-RESULT.json",
+      "sha256": null,
+      "size": null
+    }
+  ],
+  "final_manifest_algorithm": "Clone exact retained structural template; replace only current image/derived base/payload/argv/oracle/modules/staging descriptors and exact newF05 cleanup profile; invoke COMPLETE adopted c3a1 _validate_manifest then write. No synthetic/native captures.",
+  "new_base_record_change": [
+    "images/mckernel.img"
+  ],
+  "overlay_expected_producer": "Retained46d41 overlay primitive builds new overlay from exact derived base, c020 collector, dca025 launcher, be508 payload; complete stagedmap/source/record checks remain in adopted evaluator.",
+  "nonce": null,
+  "runtime_authority": null
+}

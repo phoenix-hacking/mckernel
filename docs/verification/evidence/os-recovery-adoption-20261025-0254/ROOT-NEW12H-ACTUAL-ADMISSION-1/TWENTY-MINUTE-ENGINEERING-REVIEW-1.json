@@ -1,0 +1,76 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-27T18:04:15.074538+00:00",
+  "review_cadence_seconds": 1200,
+  "velocity_bucket_seconds": 1800,
+  "original_baseline_epoch": 1793122569,
+  "bucket_index": 0,
+  "bucket_start": 1793122569,
+  "bucket_end": 1793124369,
+  "bucket_complete": false,
+  "goal_active": true,
+  "closure": {
+    "practical": "35/35",
+    "M14_files": "2/6",
+    "M15_files": "1/8",
+    "new_whole_file_closures": 0,
+    "native_delta": 0,
+    "production_linked_delta": 0,
+    "compiled_delta": 0,
+    "retired_C_boundaries": 0
+  },
+  "source_delta": {
+    "integrated_Rust_callbacks": 6,
+    "integrated_idle_tables": 2,
+    "idle_bytes": 116,
+    "mcexec_canonical_writes": 17,
+    "mcexec_selected_sources": 19,
+    "additional_private_F03_callbacks": 3,
+    "additional_private_F06_callbacks": 2
+  },
+  "actual_results": {
+    "Source31": "FAIL_C_RING_SIGSEGV_-11_UNCHANGED_EVIDENCE",
+    "Source31_outer_join_seconds": 2.9919939489336684,
+    "Source31_normal_retirement_independently_accepted": true,
+    "Source31_remaining_Rust_calls_unrun": 2,
+    "mcexec_source_copy_files": 7015,
+    "mcexec_source_copy_bytes": 121362296,
+    "mcexec_source_copy_seconds": 12.492552191019058,
+    "mcexec_adoption_preflight": "PASS",
+    "F05_static_Rust_bodies": 8,
+    "F05_static_relocations": 89,
+    "F05_offline_composition_seconds": 22.06521414592862,
+    "new_guest_apps": 0,
+    "new_candidate_builds": 0
+  },
+  "latency": {
+    "first_compiler_entered": false,
+    "seconds_since_window_activation_without_compiler": 1686.0745368003845,
+    "Source31_ready_to_owner_entry_seconds": 571.2664682865143,
+    "Source31_fresh_resource_to_owner_entry_seconds": 70.25738453865051,
+    "source32_failure_to_validated_runtime_fix_seconds": null,
+    "C_stack_source_correction_reviewed_runtime_unrun": true
+  },
+  "largest_avoidable_handoff": "Expired literal observer cutoff and unexercised stable-reader hash context delayed entry; exact helper source preflights now precede actual admission.",
+  "scheduling_adjustment": "Ready next heavy: Source32 corrected threecall batch, then executor default operation; CURRENT110 first-entry materialization and qualifiers prepare in parallel. CPU6 ready-body HOST runner uses existing capture/resource checks under new guard. No new framework or capacity expansion.",
+  "owners": {
+    "M14_F01": "already supported-complete; no duplicate implementation",
+    "M14_F02": "Root/current110; host19_source_review resource/qualifier",
+    "M14_F03": "m14_f03_next_body source-ready; Root current110 integration",
+    "M14_F04": "already supported-complete; no duplicate implementation",
+    "M14_F05": "f05_adapter_export prepared stage; Root composition complete; native pending",
+    "M14_F06": "m14_f06_next_body source-ready; filename metadata exception pending",
+    "M15_executor": "mcexec_default_prepare literal helper correction; guardian_execution_review independent review",
+    "M15_daemon": "daemon_final_suffix_repair stack8 Source32; daemon_execution_review release",
+    "ordinary_HOST": "new12h_guardian_binding source adapter"
+  },
+  "CPU_RSS": "Unmeasured for actual sourcecopy/composition/owned-capture; no replay for metrics.",
+  "claims": {
+    "target_95_percent_achieved": false,
+    "source_only_is_runtime_acceptance": false
+  },
+  "parent_control_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/ACTUAL-RESTART-COMPLETE.json",
+    "sha256": "bcf0d7bed35cd63838ee3b07245a0084d1bce5487e2d05432715c84f3855b9f8"
+  }
+}

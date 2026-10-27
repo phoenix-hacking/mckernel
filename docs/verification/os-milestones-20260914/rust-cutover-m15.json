@@ -3,7 +3,7 @@
   "id": "M15",
   "scope_id": "project-owned-runtime-rust-cutover-v1-20261024",
   "title": "Complete Rust/assembly custom host modules and integration runtime",
-  "as_of": "2026-10-27T05:45:27.592657+00:00",
+  "as_of": "2026-10-27T18:04:15.074538+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user2026-10-24: custom code outside the Rocky/Linux baseline must be Rust, including loadable IHK/project modules; previous reviewed-assembly allowance retained.",
@@ -1978,10 +1978,31 @@
       "actual_progress": "Source28mockcompilePASS/RustEROFSFAIL,0observercases; normalownedretirement/currentfree accepted98887bde; F4Ddefaultproposal SourcePASS only.",
       "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/DAEMON-SOURCE28-FAILED-INDEPENDENT-POSTJOIN-CURRENT-ACCEPTANCE.json",
       "engineering_percentage": null
+    },
+    {
+      "at": "2026-10-27T18:04:15.074538+00:00",
+      "actual_progress": "HOST19source6callbacks+116Bdata; mcexec19sourceadoption+actualcopy/preflight; F05static8/89+offlinecomposition; Source31CringFAILretired, Source32stackcorrectionready. Default/native/file deltas0.",
+      "evidence": "../evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/TWENTY-MINUTE-ENGINEERING-REVIEW-1.json"
     }
   ],
   "latest_dispatcher_checkpoint": {
-    "at": "2026-10-27T04:11:09.052321+00:00",
-    "actual": "No newM15file/native credit; real daemon singletonFAIL retained and precise sameimage8s repro source reviewed. SDK7 successes not replayed."
+    "at": "2026-10-27T18:04:15.074538+00:00",
+    "evidence": "../evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/TWENTY-MINUTE-ENGINEERING-REVIEW-1.json",
+    "actual_progress": {
+      "Source31": "FAIL_C_RING_SIGSEGV_-11_UNCHANGED_EVIDENCE",
+      "Source31_outer_join_seconds": 2.9919939489336684,
+      "Source31_normal_retirement_independently_accepted": true,
+      "Source31_remaining_Rust_calls_unrun": 2,
+      "mcexec_source_copy_files": 7015,
+      "mcexec_source_copy_bytes": 121362296,
+      "mcexec_source_copy_seconds": 12.492552191019058,
+      "mcexec_adoption_preflight": "PASS",
+      "F05_static_Rust_bodies": 8,
+      "F05_static_relocations": 89,
+      "F05_offline_composition_seconds": 22.06521414592862,
+      "new_guest_apps": 0,
+      "new_candidate_builds": 0
+    },
+    "limits": "Source/adoption/static proof only; no new compiled/default/native/wholefile credit; same original acceptance."
   }
 }

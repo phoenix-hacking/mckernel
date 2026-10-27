@@ -1,0 +1,70 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/guardian_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "at": "2026-10-27T17:48:12.380890+00:00",
+  "decision": "PASS_EXACT_FINITE_SOURCE_MATERIALIZER_REQUIRES_FRESH_ROOT_ORDINARY_GRANT",
+  "blocking_findings": [],
+  "reviewed_inputs": {
+    "ROOT-EXECUTE.md": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/materialization-preparation-1/ROOT-EXECUTE.md",
+      "bytes": 3697,
+      "sha256": "e6927a9445cd51e6f0dbcb9cb8ca5115a32058c631fa155e233bad12557a4899"
+    },
+    "materialize_once.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/materialization-preparation-1/materialize_once.py",
+      "bytes": 8417,
+      "sha256": "ca0c7806f2ac3e916acc5969f6b7cd61f6ca421c3a723676c69cd71584b16ff6"
+    },
+    "MATERIALIZATION-PLAN.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/materialization-preparation-1/MATERIALIZATION-PLAN.json",
+      "bytes": 3260543,
+      "sha256": "d18fc623e9b8a866381b7ae567500ec1f02b58e860aa22b4d086f7965b031b61"
+    },
+    "FIXTURE-RESULT.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/materialization-preparation-1/FIXTURE-RESULT.json",
+      "bytes": 903,
+      "sha256": "fa3eb131e048f3b228c6363e7a7670a27801a14be47a0b975882656496c7bb13"
+    },
+    "ROOT-GRANT.TEMPLATE.NOT-AUTHORITY.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/materialization-preparation-1/ROOT-GRANT.TEMPLATE.NOT-AUTHORITY.json",
+      "bytes": 2022,
+      "sha256": "c60ac4ab39a7f6452aa2d64d2f964f69e00eb5b28af9937c7b97655798496fdd"
+    }
+  },
+  "files": 7015,
+  "planned_bytes": 121362296,
+  "source_overlays": 19,
+  "qualification_only_overlays": 2,
+  "verified": [
+    "Exact scriptca0c7806/8417B and pland18fc623/3260543B match. Original plan reference d85253e7/3265788B matches retained bytes. Source inventory has7015 unique entries and exact121362296B total below256MiB.",
+    "Compared every finite inventory row: original7014 -> new7015,6994 rows byte-identical,20 changed existing rows, one added ihk/linux/user/rust/ihkmond.rs, no deletion. Changed+added paths equal exactly19 accepted adoption postimages plus2 exact qualification-only cache/ABI inputs. Each overlay source path/size/hash equals its reviewed provider.",
+    "All19 actual canonical postimage bytes independently match fresh plan and reviewed adoption manifest277ee83e. Source overrides equal the19 manifest hashes. Source C references and other original finite files remain present; no349-body rewrite or whole-file retirement claim.",
+    "Stable regular copy opens source O_NOFOLLOW|O_CLOEXEC, compares before/opened/closed/after device,inode,mode,nlink,size,mtime,ctime and exact copied bytes/hash, uses exclusive destination create and fsync, preserves planned mode and rejects destination nlink!=1. Symlink content/hash/size and pre/post node identity are checked. No hardlink, timestamp normalization, BUILDID mutation or old namespace reuse occurs.",
+    "Finite relative/count/byte validation rejects duplicates and parent escape. Exact reviewed symlink entries are never an ancestor of another inventory entry. Final os.walk refuses directory symlinks and raises walk errors, requiring exact inventory equality before result. Existing output namespace is refused; failures retain partial output/journal for explicit reconciliation.",
+    "Ordinary UID/EUID1000 and affinity exactlyCPU0 are required. Entry and completion floors preserve minimum available memory25501368320B; HOST free>=16GiB+full scratch-backing growth gap+complete copy+16MiB and scratch free>=12GiB. No resource profile widening.",
+    "Pinned operation guard1f152e3f runs read-only at entry/completion and retains current parent guardian live birth/journal minimums and canonical unchanged account semantics. Per-entry/per1MiB-chunk current_window checks pinned actual activation and parent receipt and the minimum of their fixed UTC/BOOT/MONO cutoffs. Current dynamic parent journal tightening is additionally checked by the live operation guard at both boundaries.",
+    "Root grant is mandatory, hash-bound by argv, exact scope/status/plan/script/window/credit identity, spent>=22812.3311 and<57774.852125, current account guard passed/real holds absent, exact bound current account/native ownership references and observation age[0,60]s. Template remains NOT_GRANTED and false/null; it cannot pass.",
+    "Actual fixed window and parent receipt/operation guard/adoption manifest pins match retained current bytes. Output root is fresh exact actual-source-materialization-1 under this preparation; no copy was performed in review. Success writes actual result only after source/floor/live account+guardian completion checks.",
+    "Thirteen retained tiny fixture controls were read without replay. Their scope is fixtures/static plan, with actual campaign bytes copied0. This review neither counts those as actual source materialization nor reuses the consumed historical sourcecopy release."
+  ],
+  "root_conditions": [
+    "Before the one copy command Root must independently capture and interpret actual current account/native ownership and resource state, with all real holds and native holders honored. Reference hashes alone do not prove those predicates: the reviewed current observations must support the explicit grant true fields.",
+    "Root must issue a fresh exact ordinary sourcecopy grant no older than60s and bind its actual path/hash on the reviewed taskset CPU0 command. This review approves source/control design only; the template and this review are not the actual grant.",
+    "If any source, guard, clock, memory/storage floor or ownership check fails, preserve failure and partial namespace; no automatic cleanup/replay, old nonce/release or new allowance follows.",
+    "Same creditrun7f4af94a83b14cc08f97401f5891d965/ceiling57774.852125/cumulative spent>=22812.3311 and all holds persist. Fixed UTC2026-10-28T05:36:09Z, boot7bfc5687-6c04-4d15-84eb-b92ab9a55dcb, original BOOT963213.804550928/MONO947875.677502648 and earlier parent BOOT963213.6960030915/MONO947874.5689514667 remain ceilings.",
+    "Successful materialization is source-only. Runtime binding, new19-member map review/publication, configure/link/import/install, loader/native/retirement and source-language acceptance remain separately required. No compiler, Docker, root, guest, cleanup or outer-control authority is supplied."
+  ],
+  "review_actions": {
+    "source_and_plan_hash_row_comparison_only": true,
+    "canonical19_readonly_postimage_checks": true,
+    "no_fixture_or_runtime_replay": true,
+    "no_actualcopy_compiler_Docker_root_cleanup_guest": true,
+    "no_canonical_state_or_outer_control_mutation": true,
+    "only_this_review_file_written": true
+  },
+  "actual_sourcecopy_executed": false,
+  "execution_authority": false,
+  "runtime_release": false
+}
