@@ -1,0 +1,2577 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_MATCHED_F05_SOURCE_DEFAULT_LINK_343_PROVIDERS_SEVEN_STORAGE_ON_NATIVE60E_TUPLE_ONLY",
+  "independent": true,
+  "reviewer": "/root/custody_release_review",
+  "at": "2026-10-27T23:31:24.130897+00:00",
+  "original_reconciliation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f05-nearest-file-closure-1/SELECTED-F05-RECONCILIATION.json",
+    "bytes": 56742,
+    "sha256": "faf1d548f34d23edf2cd0eee1c3cbdb9c36b8a908bc1aeb6c603ea891442c0e3"
+  },
+  "original_validator": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f05-nearest-file-closure-1/reconcile_f05.py",
+    "bytes": 5372,
+    "sha256": "21cdf4fd7d7dc44c05829eae07d43207187b2806b56781f90dd052a88c3afaf3"
+  },
+  "native_kernel": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/mckernel.img",
+    "bytes": 10255112,
+    "sha256": "60e62f97ef48ecaf14174af1c5b75d7181969f439c1b45c618d6c16d4bc40d57"
+  },
+  "matching_Rust_object": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+    "bytes": 18274528,
+    "sha256": "e2c3032791bbd657a85629dd48ca86b3b93f3ef729305568031776d5674ad9d0"
+  },
+  "memory_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/arch/x86_64/kernel/memory.c",
+    "bytes": 168454,
+    "sha256": "d017514e056abdd216b999cead679dc700341b9c1aa85f6d79cc4351e850f880"
+  },
+  "memory_object": {
+    "bytes": 2888,
+    "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/image-receipt-identity-successor-source-1/actual-current290-default-image-attempt-3/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+    "sha256": "d3207c7a7844086196676c82d66e6aa4f1233e37b167460e23ba089ec71aca85"
+  },
+  "source_modules": [
+    {
+      "prior": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/rust/x86_memory_helpers.rs",
+        "bytes": 311375,
+        "sha256": "5c60055053656751ea490be95c09d7343b0391797c21d5e6c97de97cb8d34c68"
+      },
+      "current": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/rust-subtree/x86_memory_helpers.rs",
+        "bytes": 311375,
+        "sha256": "5c60055053656751ea490be95c09d7343b0391797c21d5e6c97de97cb8d34c68"
+      },
+      "byte_identical": true
+    },
+    {
+      "prior": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/rust/x86_memory_loggers.rs",
+        "bytes": 3172,
+        "sha256": "1ce031eb323776480cca1b717f776989340413a71d4123b8ef99689e83bc9708"
+      },
+      "current": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/rust-subtree/x86_memory_loggers.rs",
+        "bytes": 3172,
+        "sha256": "1ce031eb323776480cca1b717f776989340413a71d4123b8ef99689e83bc9708"
+      },
+      "byte_identical": true
+    },
+    {
+      "prior": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/kernel/rust/x86_memory_logger_bridges.rs",
+        "bytes": 9235,
+        "sha256": "ada5c28856267259c7215c13ee57e1b4602a62b4815513b7cf5961c53a4813ce"
+      },
+      "current": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current110-host19-production-preparation-source-1/rust-subtree/x86_memory_logger_bridges.rs",
+        "bytes": 9235,
+        "sha256": "ada5c28856267259c7215c13ee57e1b4602a62b4815513b7cf5961c53a4813ce"
+      },
+      "byte_identical": true
+    }
+  ],
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 94404,
+    "sha256": "64242ef204a7696369462487e5ca17e63f24d1a9d4c9957e43778b643a2fa288"
+  },
+  "actual_producer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/OUTPUT/work/evidence/worker-result.json",
+    "bytes": 15637,
+    "sha256": "0210d04c49eb7aa74303eef84403b792026d7758228e94b96161eb632caf7dae"
+  },
+  "c_runtime_functions": 0,
+  "c_runtime_OBJECTs": 0,
+  "c_allocated_relocations": 0,
+  "only_allocated_C_metadata": [
+    {
+      "index": 15,
+      "nameoff": 164,
+      "type": 7,
+      "flags": 2,
+      "addr": 0,
+      "offset": 776,
+      "size": 48,
+      "link": 0,
+      "info": 0,
+      "align": 8,
+      "entsize": 0,
+      "name": ".note.gnu.property"
+    }
+  ],
+  "original343_providers_rejoined": [
+    {
+      "name": "flush_nfo_tlb",
+      "Rust_size": 6,
+      "current_final_address": "0xfffffffffe837bf0",
+      "current_final_size": 6,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "flush_nfo_tlb_mm",
+      "Rust_size": 6,
+      "current_final_address": "0xfffffffffe857e30",
+      "current_final_size": 6,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_vdso_packet_prepare_result",
+      "Rust_size": 27,
+      "current_final_address": "0xfffffffffe8eb1d0",
+      "current_final_size": 27,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_early_alloc_pages_body_result",
+      "Rust_size": 174,
+      "current_final_address": "0xfffffffffe8e0e20",
+      "current_final_size": 174,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_early_alloc_invalidate_body_result",
+      "Rust_size": 27,
+      "current_final_address": "0xfffffffffe8e0de0",
+      "current_final_size": 27,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_get_last_early_heap_body_result",
+      "Rust_size": 18,
+      "current_final_address": "0xfffffffffe8e0fe0",
+      "current_final_size": 18,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "early_alloc_pages",
+      "Rust_size": 681,
+      "current_final_address": "0xfffffffffe84ba30",
+      "current_final_size": 681,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "early_alloc_invalidate",
+      "Rust_size": 23,
+      "current_final_address": "0xfffffffffe84ba10",
+      "current_final_size": 23,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "get_last_early_heap",
+      "Rust_size": 19,
+      "current_final_address": "0xfffffffffe85d720",
+      "current_final_size": 19,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_check_available_page_size_body_result",
+      "Rust_size": 89,
+      "current_final_address": "0xfffffffffe8de640",
+      "current_final_size": 89,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_enable_ptattr_no_execute_body_result",
+      "Rust_size": 23,
+      "current_final_address": "0xfffffffffe8e0f60",
+      "current_final_size": 23,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "enable_ptattr_no_execute",
+      "Rust_size": 29,
+      "current_final_address": "0xfffffffffe84bd30",
+      "current_final_size": 29,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_ihk_mc_allocate_body_result",
+      "Rust_size": 36,
+      "current_final_address": "0xfffffffffe8e1040",
+      "current_final_size": 36,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_ihk_mc_free_body_result",
+      "Rust_size": 45,
+      "current_final_address": "0xfffffffffe8e1070",
+      "current_final_size": 45,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "ihk_mc_allocate",
+      "Rust_size": 340,
+      "current_final_address": "0xfffffffffe8684b0",
+      "current_final_size": 340,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "ihk_mc_free",
+      "Rust_size": 173,
+      "current_final_address": "0xfffffffffe865b40",
+      "current_final_size": 173,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_setup_l2_body_result",
+      "Rust_size": 123,
+      "current_final_address": "0xfffffffffe8ea130",
+      "current_final_size": 123,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_setup_l3_body_result",
+      "Rust_size": 352,
+      "current_final_address": "0xfffffffffe8ea1b0",
+      "current_final_size": 352,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_page_table_body_result",
+      "Rust_size": 670,
+      "current_final_address": "0xfffffffffe8e1e40",
+      "current_final_size": 670,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "init_page_table",
+      "Rust_size": 1285,
+      "current_final_address": "0xfffffffffe870d40",
+      "current_final_size": 1285,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_print_pte_body_result",
+      "Rust_size": 577,
+      "current_final_address": "0xfffffffffe8e4c80",
+      "current_final_size": 577,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "ihk_mc_pt_print_pte",
+      "Rust_size": 1181,
+      "current_final_address": "0xfffffffffe86c130",
+      "current_final_size": 1181,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_attr_to_l3attr_result",
+      "Rust_size": 35,
+      "current_final_address": "0xfffffffffe8de2e0",
+      "current_final_size": 35,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_attr_to_l2attr_result",
+      "Rust_size": 35,
+      "current_final_address": "0xfffffffffe8de2e0",
+      "current_final_size": 35,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_attr_to_l1attr_result",
+      "Rust_size": 35,
+      "current_final_address": "0xfffffffffe8de280",
+      "current_final_size": 35,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_set_pte_value_result",
+      "Rust_size": 73,
+      "current_final_address": "0xfffffffffe8e9370",
+      "current_final_size": 73,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "set_pte",
+      "Rust_size": 85,
+      "current_final_address": "0xfffffffffe8b6dc0",
+      "current_final_size": 85,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "set_pt_large_page",
+      "Rust_size": 24,
+      "current_final_address": "0xfffffffffe86c5d0",
+      "current_final_size": 24,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_normal_set_large_bridge",
+      "Rust_size": 24,
+      "current_final_address": "0xfffffffffe8e1de0",
+      "current_final_size": 24,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "ihk_mc_pt_set_large_page",
+      "Rust_size": 24,
+      "current_final_address": "0xfffffffffe86c5d0",
+      "current_final_size": 24,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "ihk_mc_pt_set_page",
+      "Rust_size": 21,
+      "current_final_address": "0xfffffffffe86c5f0",
+      "current_final_size": 21,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_set_pte_value_result",
+      "Rust_size": 137,
+      "current_final_address": "0xfffffffffe8e8230",
+      "current_final_size": 137,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_smaller_page_size_result",
+      "Rust_size": 134,
+      "current_final_address": "0xfffffffffe8ea480",
+      "current_final_size": 134,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_early_alloc_align_end_result",
+      "Rust_size": 19,
+      "current_final_address": "0xfffffffffe85c2c0",
+      "current_final_size": 19,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_early_alloc_exhausted_result",
+      "Rust_size": 14,
+      "current_final_address": "0xfffffffffe8e0dd0",
+      "current_final_size": 14,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_early_alloc_next_result",
+      "Rust_size": 16,
+      "current_final_address": "0xfffffffffe8e0e10",
+      "current_final_size": 16,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_indices_result",
+      "Rust_size": 78,
+      "current_final_address": "0xfffffffffe8e4830",
+      "current_final_size": 78,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_walk_bounds_result",
+      "Rust_size": 107,
+      "current_final_address": "0xfffffffffe8ec4d0",
+      "current_final_size": 107,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_walk_step_result",
+      "Rust_size": 49,
+      "current_final_address": "0xfffffffffe8ec6b0",
+      "current_final_size": 49,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_walk_pte_range_result",
+      "Rust_size": 354,
+      "current_final_address": "0xfffffffffe8ec540",
+      "current_final_size": 354,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_virt_to_phys_level_result",
+      "Rust_size": 111,
+      "current_final_address": "0xfffffffffe8eb440",
+      "current_final_size": 111,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_virt_to_phys_size_result",
+      "Rust_size": 360,
+      "current_final_address": "0xfffffffffe8e8960",
+      "current_final_size": 360,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_virt_to_pagemap_result",
+      "Rust_size": 81,
+      "current_final_address": "0xfffffffffe8e8900",
+      "current_final_size": 81,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_split_large_page_prepare_result",
+      "Rust_size": 86,
+      "current_final_address": "0xfffffffffe8ea870",
+      "current_final_size": 86,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_split_large_page_next_entry_result",
+      "Rust_size": 14,
+      "current_final_address": "0xfffffffffe8ea860",
+      "current_final_size": 14,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_split_large_page_source_result",
+      "Rust_size": 113,
+      "current_final_address": "0xfffffffffe8ea8f0",
+      "current_final_size": 113,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_split_large_page_child_map_result",
+      "Rust_size": 50,
+      "current_final_address": "0xfffffffffe8ea820",
+      "current_final_size": 50,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_split_large_page_publish_result",
+      "Rust_size": 23,
+      "current_final_address": "0xfffffffffe8ea8d0",
+      "current_final_size": 23,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_split_large_page_source_unmap_result",
+      "Rust_size": 36,
+      "current_final_address": "0xfffffffffe8ea970",
+      "current_final_size": 36,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_split_large_page_body_result",
+      "Rust_size": 658,
+      "current_final_address": "0xfffffffffe8ea580",
+      "current_final_size": 658,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_split_body_result",
+      "Rust_size": 383,
+      "current_final_address": "0xfffffffffe8e82c0",
+      "current_final_size": 383,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_pt_page_aligned_addr_result",
+      "Rust_size": 29,
+      "current_final_address": "0xfffffffffe8deae0",
+      "current_final_size": 29,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_pt_page_target_result",
+      "Rust_size": 33,
+      "current_final_address": "0xfffffffffe8deb00",
+      "current_final_size": 33,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_clear_page_result",
+      "Rust_size": 238,
+      "current_final_address": "0xfffffffffe8e4260",
+      "current_final_size": 238,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "ihk_mc_pt_clear_page",
+      "Rust_size": 206,
+      "current_final_address": "0xfffffffffe86b980",
+      "current_final_size": 206,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "ihk_mc_pt_clear_large_page",
+      "Rust_size": 180,
+      "current_final_address": "0xfffffffffe86b8c0",
+      "current_final_size": 180,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_visit_pte_action_result",
+      "Rust_size": 177,
+      "current_final_address": "0xfffffffffe8eb4b0",
+      "current_final_size": 177,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_visit_pte_leaf_result",
+      "Rust_size": 51,
+      "current_final_address": "0xfffffffffe8eb570",
+      "current_final_size": 51,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_visit_pte_level_result",
+      "Rust_size": 579,
+      "current_final_address": "0xfffffffffe8eb5b0",
+      "current_final_size": 579,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_visit_pte_root_result",
+      "Rust_size": 279,
+      "current_final_address": "0xfffffffffe8eb890",
+      "current_final_size": 279,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_visit_pte_range_dispatch_result",
+      "Rust_size": 33,
+      "current_final_address": "0xfffffffffe8eb860",
+      "current_final_size": 33,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_range_validate_result",
+      "Rust_size": 31,
+      "current_final_address": "0xfffffffffe8dfca0",
+      "current_final_size": 31,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_range_free_physical_result",
+      "Rust_size": 23,
+      "current_final_address": "0xfffffffffe8dec90",
+      "current_final_size": 23,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_range_entry_action_result",
+      "Rust_size": 54,
+      "current_final_address": "0xfffffffffe8dec50",
+      "current_final_size": 54,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_range_old_entry_result",
+      "Rust_size": 56,
+      "current_final_address": "0xfffffffffe8df620",
+      "current_final_size": 56,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_old_action_bridge",
+      "Rust_size": 255,
+      "current_final_address": "0xfffffffffe8de9e0",
+      "current_final_size": 255,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_range_old_action_result",
+      "Rust_size": 92,
+      "current_final_address": "0xfffffffffe8df3c0",
+      "current_final_size": 92,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_remote_flush_tlb_add_addr_result",
+      "Rust_size": 119,
+      "current_final_address": "0xfffffffffe8e9130",
+      "current_final_size": 119,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_range_old_effects_result",
+      "Rust_size": 497,
+      "current_final_address": "0xfffffffffe8df420",
+      "current_final_size": 497,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_range_child_table_result",
+      "Rust_size": 278,
+      "current_final_address": "0xfffffffffe8deb30",
+      "current_final_size": 278,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_range_leaf_body_result",
+      "Rust_size": 300,
+      "current_final_address": "0xfffffffffe8dedf0",
+      "current_final_size": 300,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_range_level_body_result",
+      "Rust_size": 986,
+      "current_final_address": "0xfffffffffe8def20",
+      "current_final_size": 986,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_range_root_body_result",
+      "Rust_size": 141,
+      "current_final_address": "0xfffffffffe8df9b0",
+      "current_final_size": 141,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_change_attr_leaf_action_result",
+      "Rust_size": 23,
+      "current_final_address": "0xfffffffffe8de620",
+      "current_final_size": 23,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_change_attr_entry_action_result",
+      "Rust_size": 62,
+      "current_final_address": "0xfffffffffe8de5e0",
+      "current_final_size": 62,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_change_attr_range_result",
+      "Rust_size": 1000,
+      "current_final_address": "0xfffffffffe8e3e70",
+      "current_final_size": 1000,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_set_range_leaf_action_result",
+      "Rust_size": 17,
+      "current_final_address": "0xfffffffffe8e9590",
+      "current_final_size": 17,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_set_range_entry_action_result",
+      "Rust_size": 137,
+      "current_final_address": "0xfffffffffe8e9500",
+      "current_final_size": 137,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_set_range_map_entry_result",
+      "Rust_size": 115,
+      "current_final_address": "0xfffffffffe8e9e50",
+      "current_final_size": 115,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_memobj_flush_bridge",
+      "Rust_size": 21,
+      "current_final_address": "0xfffffffffe8de970",
+      "current_final_size": 21,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_rss_sub_bridge",
+      "Rust_size": 51,
+      "current_final_address": "0xfffffffffe8e0180",
+      "current_final_size": 51,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_memobj_rss_sub_bridge",
+      "Rust_size": 72,
+      "current_final_address": "0xfffffffffe8de990",
+      "current_final_size": 72,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_range_walk_l3_bridge",
+      "Rust_size": 227,
+      "current_final_address": "0xfffffffffe8dfe80",
+      "current_final_size": 227,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_range_walk_l2_bridge",
+      "Rust_size": 227,
+      "current_final_address": "0xfffffffffe8dfd90",
+      "current_final_size": 227,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_range_walk_l1_bridge",
+      "Rust_size": 200,
+      "current_final_address": "0xfffffffffe8dfcc0",
+      "current_final_size": 200,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "clear_range_l1",
+      "Rust_size": 983,
+      "current_final_address": "0xfffffffffe8411a0",
+      "current_final_size": 983,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "clear_range_l2",
+      "Rust_size": 1416,
+      "current_final_address": "0xfffffffffe841580",
+      "current_final_size": 1416,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "clear_range_l3",
+      "Rust_size": 1536,
+      "current_final_address": "0xfffffffffe841b10",
+      "current_final_size": 1536,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_range_l4_body",
+      "Rust_size": 319,
+      "current_final_address": "0xfffffffffe8decb0",
+      "current_final_size": 319,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_range_walk_l4_bridge",
+      "Rust_size": 523,
+      "current_final_address": "0xfffffffffe8dff70",
+      "current_final_size": 523,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_range_top_log_bridge",
+      "Rust_size": 77,
+      "current_final_address": "0xfffffffffe8dfa40",
+      "current_final_size": 77,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_range_public_body",
+      "Rust_size": 839,
+      "current_final_address": "0xfffffffffe8df660",
+      "current_final_size": 839,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "ihk_mc_pt_clear_range",
+      "Rust_size": 23,
+      "current_final_address": "0xfffffffffe86ba50",
+      "current_final_size": 23,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "ihk_mc_pt_free_range",
+      "Rust_size": 26,
+      "current_final_address": "0xfffffffffe86bb90",
+      "current_final_size": 26,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_range_top_result",
+      "Rust_size": 516,
+      "current_final_address": "0xfffffffffe8dfa90",
+      "current_final_size": 516,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_set_range_conflict_result",
+      "Rust_size": 147,
+      "current_final_address": "0xfffffffffe8e9460",
+      "current_final_size": 147,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_set_range_alloc_failed_result",
+      "Rust_size": 147,
+      "current_final_address": "0xfffffffffe8e93c0",
+      "current_final_size": 147,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_set_range_walk_failed_result",
+      "Rust_size": 70,
+      "current_final_address": "0xfffffffffe8e9ff0",
+      "current_final_size": 70,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_set_range_map_effect_result",
+      "Rust_size": 365,
+      "current_final_address": "0xfffffffffe8e9ce0",
+      "current_final_size": 365,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_set_range_leaf_body_result",
+      "Rust_size": 324,
+      "current_final_address": "0xfffffffffe8e95b0",
+      "current_final_size": 324,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_set_range_level_body_result",
+      "Rust_size": 916,
+      "current_final_address": "0xfffffffffe8e9700",
+      "current_final_size": 916,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_set_range_top_result",
+      "Rust_size": 274,
+      "current_final_address": "0xfffffffffe8e9ed0",
+      "current_final_size": 274,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pte_store_result",
+      "Rust_size": 23,
+      "current_final_address": "0xfffffffffe8e8b40",
+      "current_final_size": 23,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pte_publish_table_result",
+      "Rust_size": 27,
+      "current_final_address": "0xfffffffffe8e8b20",
+      "current_final_size": 27,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pte_clear_result",
+      "Rust_size": 25,
+      "current_final_address": "0xfffffffffe8e8b00",
+      "current_final_size": 25,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pte_apply_attr_result",
+      "Rust_size": 35,
+      "current_final_address": "0xfffffffffe8e8ad0",
+      "current_final_size": 35,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_kernel_lock_needed_result",
+      "Rust_size": 21,
+      "current_final_address": "0xfffffffffe8e4880",
+      "current_final_size": 21,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_alloc_zeroed_result",
+      "Rust_size": 52,
+      "current_final_address": "0xfffffffffe8e3e30",
+      "current_final_size": 52,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_get_pte_result",
+      "Rust_size": 614,
+      "current_final_address": "0xfffffffffe8e45c0",
+      "current_final_size": 614,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_set_page_body_result",
+      "Rust_size": 755,
+      "current_final_address": "0xfffffffffe8e4ed0",
+      "current_final_size": 755,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_lookup_default_pgshift_result",
+      "Rust_size": 22,
+      "current_final_address": "0xfffffffffe8e2ea0",
+      "current_final_size": 22,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_lookup_l4_empty_pgshift_result",
+      "Rust_size": 17,
+      "current_final_address": "0xfffffffffe8e2ec0",
+      "current_final_size": 17,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_lookup_level_action_result",
+      "Rust_size": 37,
+      "current_final_address": "0xfffffffffe8e2ee0",
+      "current_final_size": 37,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_lookup_shape_result",
+      "Rust_size": 55,
+      "current_final_address": "0xfffffffffe8e2f10",
+      "current_final_size": 55,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_lookup_pte_result",
+      "Rust_size": 542,
+      "current_final_address": "0xfffffffffe8e48a0",
+      "current_final_size": 542,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_arch_vrflag_to_ptattr_result",
+      "Rust_size": 35,
+      "current_final_address": "0xfffffffffe8de200",
+      "current_final_size": 35,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "arch_get_smaller_page_size",
+      "Rust_size": 136,
+      "current_final_address": "0xfffffffffe837c40",
+      "current_final_size": 136,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "arch_vrflag_to_ptattr",
+      "Rust_size": 134,
+      "current_final_address": "0xfffffffffe83dd40",
+      "current_final_size": 134,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_move_pte_preflight_result",
+      "Rust_size": 35,
+      "current_final_address": "0xfffffffffe8e34b0",
+      "current_final_size": 35,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_move_one_page_body_result",
+      "Rust_size": 319,
+      "current_final_address": "0xfffffffffe8e3340",
+      "current_final_size": 319,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_move_pte_range_body_result",
+      "Rust_size": 193,
+      "current_final_address": "0xfffffffffe8e34e0",
+      "current_final_size": 193,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_load_cr3_result",
+      "Rust_size": 9,
+      "current_final_address": "0xfffffffffe8e2e30",
+      "current_final_size": 9,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_read_cr3_result",
+      "Rust_size": 9,
+      "current_final_address": "0xfffffffffe8e8e00",
+      "current_final_size": 9,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_flush_tlb_body_result",
+      "Rust_size": 36,
+      "current_final_address": "0xfffffffffe8e0f80",
+      "current_final_size": 36,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_flush_tlb_result",
+      "Rust_size": 12,
+      "current_final_address": "0xfffffffffe84e460",
+      "current_final_size": 12,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "flush_tlb",
+      "Rust_size": 12,
+      "current_final_address": "0xfffffffffe84e460",
+      "current_final_size": 12,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_flush_tlb_single_body_result",
+      "Rust_size": 14,
+      "current_final_address": "0xfffffffffe8881e0",
+      "current_final_size": 14,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_flush_tlb_single_result",
+      "Rust_size": 9,
+      "current_final_address": "0xfffffffffe8580e0",
+      "current_final_size": 9,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "flush_tlb_single",
+      "Rust_size": 9,
+      "current_final_address": "0xfffffffffe8580e0",
+      "current_final_size": 9,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_load_page_table_body_result",
+      "Rust_size": 55,
+      "current_final_address": "0xfffffffffe8e2e40",
+      "current_final_size": 55,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "load_page_table",
+      "Rust_size": 283,
+      "current_final_address": "0xfffffffffe86a810",
+      "current_final_size": 283,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "ihk_mc_load_page_table",
+      "Rust_size": 283,
+      "current_final_address": "0xfffffffffe86a810",
+      "current_final_size": 283,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "get_init_page_table",
+      "Rust_size": 19,
+      "current_final_address": "0xfffffffffe85d700",
+      "current_final_size": 19,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "get_boot_page_table",
+      "Rust_size": 19,
+      "current_final_address": "0xfffffffffe85d5b0",
+      "current_final_size": 19,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "ihk_mc_pt_virt_to_pagemap",
+      "Rust_size": 270,
+      "current_final_address": "0xfffffffffe86cbe0",
+      "current_final_size": 270,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "ihk_mc_pt_virt_to_phys_size",
+      "Rust_size": 342,
+      "current_final_address": "0xfffffffffe86cd10",
+      "current_final_size": 342,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "ihk_mc_pt_virt_to_phys",
+      "Rust_size": 19,
+      "current_final_address": "0xfffffffffe86ccf0",
+      "current_final_size": 19,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_map_fixed_area_body_result",
+      "Rust_size": 235,
+      "current_final_address": "0xfffffffffe8e2fe0",
+      "current_final_size": 235,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "map_fixed_area",
+      "Rust_size": 317,
+      "current_final_address": "0xfffffffffe876040",
+      "current_final_size": 317,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_normal_area_body_result",
+      "Rust_size": 222,
+      "current_final_address": "0xfffffffffe8e1b70",
+      "current_final_size": 222,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_normal_area_public",
+      "Rust_size": 235,
+      "current_final_address": "0xfffffffffe8e1c50",
+      "current_final_size": 235,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_text_area_body_result",
+      "Rust_size": 188,
+      "current_final_address": "0xfffffffffe8e2570",
+      "current_final_size": 188,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_text_map_kernel_start_bridge",
+      "Rust_size": 13,
+      "current_final_address": "0xfffffffffe8e2680",
+      "current_final_size": 13,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_text_end_bridge",
+      "Rust_size": 16,
+      "current_final_address": "0xfffffffffe8e0dc0",
+      "current_final_size": 16,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "init_text_area",
+      "Rust_size": 202,
+      "current_final_address": "0xfffffffffe871c10",
+      "current_final_size": 202,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_fixed_area_body_result",
+      "Rust_size": 23,
+      "current_final_address": "0xfffffffffe8e12a0",
+      "current_final_size": 23,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_fixed_area_public",
+      "Rust_size": 29,
+      "current_final_address": "0xfffffffffe8e12c0",
+      "current_final_size": 29,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_low_area_body_result",
+      "Rust_size": 47,
+      "current_final_address": "0xfffffffffe8e1b20",
+      "current_final_size": 47,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "init_low_area",
+      "Rust_size": 57,
+      "current_final_address": "0xfffffffffe870d00",
+      "current_final_size": 57,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_vsyscall_area_body_result",
+      "Rust_size": 80,
+      "current_final_address": "0xfffffffffe8e27b0",
+      "current_final_size": 80,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_vsyscall_area_public",
+      "Rust_size": 360,
+      "current_final_address": "0xfffffffffe8e2800",
+      "current_final_size": 360,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_linux_kernel_mapping_body_result",
+      "Rust_size": 568,
+      "current_final_address": "0xfffffffffe8e1450",
+      "current_final_size": 568,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_linux_kernel_mapping_public",
+      "Rust_size": 871,
+      "current_final_address": "0xfffffffffe8e1690",
+      "current_final_size": 871,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_virt_to_phys_body_result",
+      "Rust_size": 104,
+      "current_final_address": "0xfffffffffe8eb3d0",
+      "current_final_size": 104,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_phys_to_virt_body_result",
+      "Rust_size": 16,
+      "current_final_address": "0xfffffffffe8e3970",
+      "current_final_size": 16,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "virt_to_phys",
+      "Rust_size": 245,
+      "current_final_address": "0xfffffffffe87d890",
+      "current_final_size": 245,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "phys_to_virt",
+      "Rust_size": 49,
+      "current_final_address": "0xfffffffffe87bfa0",
+      "current_final_size": 49,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_free_pages_user_bridge",
+      "Rust_size": 262,
+      "current_final_address": "0xfffffffffe8de860",
+      "current_final_size": 262,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_page_unmap_bridge",
+      "Rust_size": 17,
+      "current_final_address": "0xfffffffffe89cba0",
+      "current_final_size": 17,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_phys_to_virt_bridge",
+      "Rust_size": 49,
+      "current_final_address": "0xfffffffffe87bfa0",
+      "current_final_size": 49,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_reserve_arch_pages_body_result",
+      "Rust_size": 199,
+      "current_final_address": "0xfffffffffe8e91b0",
+      "current_final_size": 199,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "ihk_mc_reserve_arch_pages",
+      "Rust_size": 644,
+      "current_final_address": "0xfffffffffe86d4c0",
+      "current_final_size": 644,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_move_pte_entry_parts_result",
+      "Rust_size": 48,
+      "current_final_address": "0xfffffffffe8e3480",
+      "current_final_size": 48,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_destroy_pt_entry_action_result",
+      "Rust_size": 91,
+      "current_final_address": "0xfffffffffe8e0d60",
+      "current_final_size": 91,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_create_result",
+      "Rust_size": 104,
+      "current_final_address": "0xfffffffffe8e4350",
+      "current_final_size": 104,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_destroy_table_result",
+      "Rust_size": 49,
+      "current_final_address": "0xfffffffffe8e4470",
+      "current_final_size": 49,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_destroy_root_result",
+      "Rust_size": 66,
+      "current_final_address": "0xfffffffffe8e4420",
+      "current_final_size": 66,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "ihk_mc_pt_create",
+      "Rust_size": 153,
+      "current_final_address": "0xfffffffffe86ba70",
+      "current_final_size": 153,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "ihk_mc_pt_destroy",
+      "Rust_size": 118,
+      "current_final_address": "0xfffffffffe86bb10",
+      "current_final_size": 118,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "ihk_mc_pt_prepare_map",
+      "Rust_size": 578,
+      "current_final_address": "0xfffffffffe86bee0",
+      "current_final_size": 578,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "walk_pte_l1",
+      "Rust_size": 241,
+      "current_final_address": "0xfffffffffe8dcf10",
+      "current_final_size": 241,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "walk_pte_l2",
+      "Rust_size": 241,
+      "current_final_address": "0xfffffffffe8dd040",
+      "current_final_size": 241,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "walk_pte_l3",
+      "Rust_size": 241,
+      "current_final_address": "0xfffffffffe8dd170",
+      "current_final_size": 241,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "walk_pte_l4",
+      "Rust_size": 250,
+      "current_final_address": "0xfffffffffe8dd2a0",
+      "current_final_size": 250,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "walk_pte_l1_safe",
+      "Rust_size": 44,
+      "current_final_address": "0xfffffffffe8dd010",
+      "current_final_size": 44,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "walk_pte_l2_safe",
+      "Rust_size": 44,
+      "current_final_address": "0xfffffffffe8dd140",
+      "current_final_size": 44,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "walk_pte_l3_safe",
+      "Rust_size": 48,
+      "current_final_address": "0xfffffffffe8dd270",
+      "current_final_size": 48,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "walk_pte_l4_safe",
+      "Rust_size": 439,
+      "current_final_address": "0xfffffffffe8dd3a0",
+      "current_final_size": 439,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "visit_pte_l1",
+      "Rust_size": 77,
+      "current_final_address": "0xfffffffffe8d77e0",
+      "current_final_size": 77,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_visit_walk_l1_bridge",
+      "Rust_size": 230,
+      "current_final_address": "0xfffffffffe8eb9b0",
+      "current_final_size": 230,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "visit_pte_l2",
+      "Rust_size": 663,
+      "current_final_address": "0xfffffffffe8d7880",
+      "current_final_size": 663,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_visit_walk_l2_bridge",
+      "Rust_size": 227,
+      "current_final_address": "0xfffffffffe8ebc60",
+      "current_final_size": 227,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "visit_pte_l3",
+      "Rust_size": 671,
+      "current_final_address": "0xfffffffffe8d7c80",
+      "current_final_size": 671,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_visit_walk_l3_bridge",
+      "Rust_size": 227,
+      "current_final_address": "0xfffffffffe8ebf10",
+      "current_final_size": 227,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "visit_pte_l4",
+      "Rust_size": 447,
+      "current_final_address": "0xfffffffffe8d80a0",
+      "current_final_size": 447,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_visit_walk_l4_bridge",
+      "Rust_size": 219,
+      "current_final_address": "0xfffffffffe8ec1c0",
+      "current_final_size": 219,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "visit_pte_range",
+      "Rust_size": 220,
+      "current_final_address": "0xfffffffffe8d82e0",
+      "current_final_size": 220,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "visit_pte_l1_safe",
+      "Rust_size": 66,
+      "current_final_address": "0xfffffffffe8d7830",
+      "current_final_size": 66,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_visit_walk_l1_safe_bridge",
+      "Rust_size": 439,
+      "current_final_address": "0xfffffffffe8ebaa0",
+      "current_final_size": 439,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "visit_pte_l2_safe",
+      "Rust_size": 344,
+      "current_final_address": "0xfffffffffe8d7b20",
+      "current_final_size": 344,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_visit_walk_l2_safe_bridge",
+      "Rust_size": 441,
+      "current_final_address": "0xfffffffffe8ebd50",
+      "current_final_size": 441,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "visit_pte_l3_safe",
+      "Rust_size": 374,
+      "current_final_address": "0xfffffffffe8d7f20",
+      "current_final_size": 374,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_visit_walk_l3_safe_bridge",
+      "Rust_size": 441,
+      "current_final_address": "0xfffffffffe8ec000",
+      "current_final_size": 441,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "visit_pte_l4_safe",
+      "Rust_size": 119,
+      "current_final_address": "0xfffffffffe8d8260",
+      "current_final_size": 119,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_visit_walk_l4_safe_bridge",
+      "Rust_size": 513,
+      "current_final_address": "0xfffffffffe8ec2a0",
+      "current_final_size": 513,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "visit_pte_range_safe",
+      "Rust_size": 65,
+      "current_final_address": "0xfffffffffe8d83c0",
+      "current_final_size": 65,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_prepare_map_result",
+      "Rust_size": 260,
+      "current_final_address": "0xfffffffffe8e4ac0",
+      "current_final_size": 260,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_set_pte_body_result",
+      "Rust_size": 274,
+      "current_final_address": "0xfffffffffe8e8080",
+      "current_final_size": 274,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_verify_process_vm_result",
+      "Rust_size": 227,
+      "current_final_address": "0xfffffffffe8eb2e0",
+      "current_final_size": 227,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_process_vm_copy_result",
+      "Rust_size": 989,
+      "current_final_address": "0xfffffffffe8e3a10",
+      "current_final_size": 989,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_copy_from_user_result",
+      "Rust_size": 20,
+      "current_final_address": "0xfffffffffe8e0690",
+      "current_final_size": 20,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_copy_to_user_result",
+      "Rust_size": 20,
+      "current_final_address": "0xfffffffffe8e0690",
+      "current_final_size": 20,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_getlong_user_result",
+      "Rust_size": 31,
+      "current_final_address": "0xfffffffffe8e1020",
+      "current_final_size": 31,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_getint_user_result",
+      "Rust_size": 27,
+      "current_final_address": "0xfffffffffe8e1000",
+      "current_final_size": 27,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_setlong_user_result",
+      "Rust_size": 44,
+      "current_final_address": "0xfffffffffe8ea100",
+      "current_final_size": 44,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_setint_user_result",
+      "Rust_size": 43,
+      "current_final_address": "0xfffffffffe8ea0a0",
+      "current_final_size": 43,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_strlen_user_result",
+      "Rust_size": 191,
+      "current_final_address": "0xfffffffffe8ead50",
+      "current_final_size": 191,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_strcpy_from_user_result",
+      "Rust_size": 202,
+      "current_final_address": "0xfffffffffe8eabc0",
+      "current_final_size": 202,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_copy_from_user_public_result",
+      "Rust_size": 27,
+      "current_final_address": "0xfffffffffe8e0670",
+      "current_final_size": 27,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_copy_to_user_public_result",
+      "Rust_size": 27,
+      "current_final_address": "0xfffffffffe8e0670",
+      "current_final_size": 27,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_copy_from_user_direct_public_result",
+      "Rust_size": 760,
+      "current_final_address": "0xfffffffffe8e0370",
+      "current_final_size": 760,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_copy_to_user_direct_public_result",
+      "Rust_size": 776,
+      "current_final_address": "0xfffffffffe8e06b0",
+      "current_final_size": 776,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_strlen_user_public_result",
+      "Rust_size": 191,
+      "current_final_address": "0xfffffffffe8eac90",
+      "current_final_size": 191,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_strcpy_from_user_public_result",
+      "Rust_size": 199,
+      "current_final_address": "0xfffffffffe8eaaf0",
+      "current_final_size": 199,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_getlong_user_public_result",
+      "Rust_size": 31,
+      "current_final_address": "0xfffffffffe8e1020",
+      "current_final_size": 31,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_getint_user_public_result",
+      "Rust_size": 27,
+      "current_final_address": "0xfffffffffe8e1000",
+      "current_final_size": 27,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_setlong_user_public_result",
+      "Rust_size": 44,
+      "current_final_address": "0xfffffffffe8ea0d0",
+      "current_final_size": 44,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_setint_user_public_result",
+      "Rust_size": 43,
+      "current_final_address": "0xfffffffffe8ea070",
+      "current_final_size": 43,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_verify_process_vm_public_result",
+      "Rust_size": 230,
+      "current_final_address": "0xfffffffffe8eb1f0",
+      "current_final_size": 230,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_read_process_vm_public_result",
+      "Rust_size": 744,
+      "current_final_address": "0xfffffffffe8e8e10",
+      "current_final_size": 744,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_write_process_vm_public_result",
+      "Rust_size": 760,
+      "current_final_address": "0xfffffffffe8ec6f0",
+      "current_final_size": 760,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_patch_process_vm_public_result",
+      "Rust_size": 922,
+      "current_final_address": "0xfffffffffe8e35d0",
+      "current_final_size": 922,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "copy_from_user",
+      "Rust_size": 955,
+      "current_final_address": "0xfffffffffe8426f0",
+      "current_final_size": 955,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "copy_to_user",
+      "Rust_size": 955,
+      "current_final_address": "0xfffffffffe842ab0",
+      "current_final_size": 955,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "strlen_user",
+      "Rust_size": 443,
+      "current_final_address": "0xfffffffffe8be930",
+      "current_final_size": 443,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "strcpy_from_user",
+      "Rust_size": 446,
+      "current_final_address": "0xfffffffffe8be270",
+      "current_final_size": 446,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "getlong_user",
+      "Rust_size": 25,
+      "current_final_address": "0xfffffffffe85e3b0",
+      "current_final_size": 25,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "getint_user",
+      "Rust_size": 22,
+      "current_final_address": "0xfffffffffe85e240",
+      "current_final_size": 22,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "setlong_user",
+      "Rust_size": 39,
+      "current_final_address": "0xfffffffffe8b9050",
+      "current_final_size": 39,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "setint_user",
+      "Rust_size": 38,
+      "current_final_address": "0xfffffffffe8b8e20",
+      "current_final_size": 38,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "verify_process_vm",
+      "Rust_size": 227,
+      "current_final_address": "0xfffffffffe8d76f0",
+      "current_final_size": 227,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "read_process_vm",
+      "Rust_size": 859,
+      "current_final_address": "0xfffffffffe8ab0a0",
+      "current_final_size": 859,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "write_process_vm",
+      "Rust_size": 859,
+      "current_final_address": "0xfffffffffe8dd560",
+      "current_final_size": 859,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "patch_process_vm",
+      "Rust_size": 1052,
+      "current_final_address": "0xfffffffffe88a5e0",
+      "current_final_size": 1052,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_free_pages_bridge",
+      "Rust_size": 259,
+      "current_final_address": "0xfffffffffe8e44b0",
+      "current_final_size": 259,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_effect_log_bridge",
+      "Rust_size": 251,
+      "current_final_address": "0xfffffffffe8de760",
+      "current_final_size": 251,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_clear_range_log_bridge",
+      "Rust_size": 183,
+      "current_final_address": "0xfffffffffe8df300",
+      "current_final_size": 183,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_alloc_pages_bridge",
+      "Rust_size": 59,
+      "current_final_address": "0xfffffffffe8e3df0",
+      "current_final_size": 59,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_set_page_log_bridge",
+      "Rust_size": 32,
+      "current_final_address": "0xfffffffffe8e8060",
+      "current_final_size": 32,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_split_log_bridge",
+      "Rust_size": 201,
+      "current_final_address": "0xfffffffffe8ea9a0",
+      "current_final_size": 201,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_split_panic_bridge",
+      "Rust_size": 26,
+      "current_final_address": "0xfffffffffe8eaa70",
+      "current_final_size": 26,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_split_rss_add_bridge",
+      "Rust_size": 48,
+      "current_final_address": "0xfffffffffe8eaa90",
+      "current_final_size": 48,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_split_rss_sub_bridge",
+      "Rust_size": 51,
+      "current_final_address": "0xfffffffffe8e0180",
+      "current_final_size": 51,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_set_page_bridge",
+      "Rust_size": 11920,
+      "current_final_address": "0xfffffffffe8e51d0",
+      "current_final_size": 11920,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_split_alloc_new_pt_bridge",
+      "Rust_size": 98,
+      "current_final_address": "0xfffffffffe8ea510",
+      "current_final_size": 98,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_split_page_map_bridge",
+      "Rust_size": 10,
+      "current_final_address": "0xfffffffffe8881d0",
+      "current_final_size": 10,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_split_page_unmap_bridge",
+      "Rust_size": 17,
+      "current_final_address": "0xfffffffffe89cba0",
+      "current_final_size": 17,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_split_flush_bridge",
+      "Rust_size": 39,
+      "current_final_address": "0xfffffffffe8adcc0",
+      "current_final_size": 39,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_visit_pte_log_bridge",
+      "Rust_size": 83,
+      "current_final_address": "0xfffffffffe8eb800",
+      "current_final_size": 83,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_split_log_bridge",
+      "Rust_size": 66,
+      "current_final_address": "0xfffffffffe8e8860",
+      "current_final_size": 66,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_split_lookup_bridge",
+      "Rust_size": 72,
+      "current_final_address": "0xfffffffffe8e88b0",
+      "current_final_size": 72,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_splitable_bridge",
+      "Rust_size": 44,
+      "current_final_address": "0xfffffffffe872690",
+      "current_final_size": 44,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_split_large_bridge",
+      "Rust_size": 1055,
+      "current_final_address": "0xfffffffffe8e8440",
+      "current_final_size": 1055,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "ihk_mc_pt_split",
+      "Rust_size": 507,
+      "current_final_address": "0xfffffffffe86c9e0",
+      "current_final_size": 507,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_split_phys_to_page_bridge",
+      "Rust_size": 17,
+      "current_final_address": "0xfffffffffe87bf80",
+      "current_final_size": 17,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "ihk_mc_pt_lookup_pte",
+      "Rust_size": 577,
+      "current_final_address": "0xfffffffffe86bc90",
+      "current_final_size": 577,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_set_pte_log_bridge",
+      "Rust_size": 106,
+      "current_final_address": "0xfffffffffe8e81a0",
+      "current_final_size": 106,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_set_pte_panic_bridge",
+      "Rust_size": 26,
+      "current_final_address": "0xfffffffffe8e8210",
+      "current_final_size": 26,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "ihk_mc_pt_set_pte",
+      "Rust_size": 460,
+      "current_final_address": "0xfffffffffe86c610",
+      "current_final_size": 460,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_set_range_log_bridge",
+      "Rust_size": 563,
+      "current_final_address": "0xfffffffffe8e9aa0",
+      "current_final_size": 563,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "set_range_l1",
+      "Rust_size": 694,
+      "current_final_address": "0xfffffffffe8b6e20",
+      "current_final_size": 694,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "set_range_l2",
+      "Rust_size": 2344,
+      "current_final_address": "0xfffffffffe8b70e0",
+      "current_final_size": 2344,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "set_range_l3",
+      "Rust_size": 2360,
+      "current_final_address": "0xfffffffffe8b7a10",
+      "current_final_size": 2360,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "set_range_l4",
+      "Rust_size": 1613,
+      "current_final_address": "0xfffffffffe8b8350",
+      "current_final_size": 1613,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "ihk_mc_pt_set_range",
+      "Rust_size": 497,
+      "current_final_address": "0xfffffffffe86c7e0",
+      "current_final_size": 497,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_move_flush_tlb_bridge",
+      "Rust_size": 12,
+      "current_final_address": "0xfffffffffe84e460",
+      "current_final_size": 12,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "move_pte_range",
+      "Rust_size": 420,
+      "current_final_address": "0xfffffffffe881270",
+      "current_final_size": 420,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_attr_mask_bridge",
+      "Rust_size": 19,
+      "current_final_address": "0xfffffffffe8de230",
+      "current_final_size": 19,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_attr_to_l1attr_public",
+      "Rust_size": 48,
+      "current_final_address": "0xfffffffffe8de250",
+      "current_final_size": 48,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_attr_to_l2attr_public",
+      "Rust_size": 46,
+      "current_final_address": "0xfffffffffe8de2b0",
+      "current_final_size": 46,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_attr_to_l3attr_public",
+      "Rust_size": 46,
+      "current_final_address": "0xfffffffffe8de2b0",
+      "current_final_size": 46,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "ihk_mc_pt_change_attr_range",
+      "Rust_size": 1146,
+      "current_final_address": "0xfffffffffe86b440",
+      "current_final_size": 1146,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_destroy_helper_failed_panic_bridge",
+      "Rust_size": 26,
+      "current_final_address": "0xfffffffffe8e43c0",
+      "current_final_size": 26,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_load_page_table_panic_bridge",
+      "Rust_size": 26,
+      "current_final_address": "0xfffffffffe8e2e80",
+      "current_final_size": 26,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_fixed_panic_bridge",
+      "Rust_size": 26,
+      "current_final_address": "0xfffffffffe8e12e0",
+      "current_final_size": 26,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_normal_panic_bridge",
+      "Rust_size": 26,
+      "current_final_address": "0xfffffffffe8e1dc0",
+      "current_final_size": 26,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_low_panic_bridge",
+      "Rust_size": 26,
+      "current_final_address": "0xfffffffffe8e1b50",
+      "current_final_size": 26,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_text_panic_bridge",
+      "Rust_size": 26,
+      "current_final_address": "0xfffffffffe8e2690",
+      "current_final_size": 26,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_linux_panic_bridge",
+      "Rust_size": 26,
+      "current_final_address": "0xfffffffffe8e1b00",
+      "current_final_size": 26,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_vsyscall_panic_bridge",
+      "Rust_size": 26,
+      "current_final_address": "0xfffffffffe8e2980",
+      "current_final_size": 26,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_reserve_arch_pages_panic_bridge",
+      "Rust_size": 26,
+      "current_final_address": "0xfffffffffe8e9290",
+      "current_final_size": 26,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_early_alloc_panic_bridge",
+      "Rust_size": 60,
+      "current_final_address": "0xfffffffffe8e0ed0",
+      "current_final_size": 60,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_destroy_panic_bridge",
+      "Rust_size": 60,
+      "current_final_address": "0xfffffffffe8e43e0",
+      "current_final_size": 60,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_page_table_panic_bridge",
+      "Rust_size": 52,
+      "current_final_address": "0xfffffffffe8e2170",
+      "current_final_size": 52,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_early_alloc_last_page_slot_bridge",
+      "Rust_size": 16,
+      "current_final_address": "0xfffffffffe8e0e00",
+      "current_final_size": 16,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_early_alloc_end_bridge",
+      "Rust_size": 16,
+      "current_final_address": "0xfffffffffe8e0dc0",
+      "current_final_size": 16,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_bootstrap_mem_end_bridge",
+      "Rust_size": 19,
+      "current_final_address": "0xfffffffffe8de5a0",
+      "current_final_size": 19,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_addr_init_pt_loaded_bridge",
+      "Rust_size": 18,
+      "current_final_address": "0xfffffffffe8dd980",
+      "current_final_size": 18,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_page_table_init_pt_slot_bridge",
+      "Rust_size": 16,
+      "current_final_address": "0xfffffffffe8e20f0",
+      "current_final_size": 16,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_page_table_boot_pt_slot_bridge",
+      "Rust_size": 16,
+      "current_final_address": "0xfffffffffe8e20e0",
+      "current_final_size": 16,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_page_table_loaded_slot_bridge",
+      "Rust_size": 16,
+      "current_final_address": "0xfffffffffe8e2120",
+      "current_final_size": 16,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_page_table_lock_bridge",
+      "Rust_size": 16,
+      "current_final_address": "0xfffffffffe8e2130",
+      "current_final_size": 16,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_page_table_size_bridge",
+      "Rust_size": 11,
+      "current_final_address": "0xfffffffffe8477b0",
+      "current_final_size": 11,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_page_table_init_pt_bridge",
+      "Rust_size": 19,
+      "current_final_address": "0xfffffffffe85d700",
+      "current_final_size": 19,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_page_table_boot_pt_bridge",
+      "Rust_size": 19,
+      "current_final_address": "0xfffffffffe85d5b0",
+      "current_final_size": 19,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_map_fixed_area_init_pt_bridge",
+      "Rust_size": 19,
+      "current_final_address": "0xfffffffffe85d700",
+      "current_final_size": 19,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_map_fixed_area_fixed_virt_slot_bridge",
+      "Rust_size": 16,
+      "current_final_address": "0xfffffffffe8e30f0",
+      "current_final_size": 16,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_use_1gb_page_bridge",
+      "Rust_size": 18,
+      "current_final_address": "0xfffffffffe8eae90",
+      "current_final_size": 18,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_vsyscall_page_bridge",
+      "Rust_size": 16,
+      "current_final_address": "0xfffffffffe8e2970",
+      "current_final_size": 16,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_user_map_kernel_start_bridge",
+      "Rust_size": 13,
+      "current_final_address": "0xfffffffffe8e2680",
+      "current_final_size": 13,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_early_alloc_invalidate_bridge",
+      "Rust_size": 6,
+      "current_final_address": "0xfffffffffe837bf0",
+      "current_final_size": 6,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_page_table_normal_bridge",
+      "Rust_size": 235,
+      "current_final_address": "0xfffffffffe8e1c50",
+      "current_final_size": 235,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_page_table_linux_bridge",
+      "Rust_size": 17,
+      "current_final_address": "0xfffffffffe8e2100",
+      "current_final_size": 17,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_page_table_fixed_bridge",
+      "Rust_size": 29,
+      "current_final_address": "0xfffffffffe8e12c0",
+      "current_final_size": 29,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_page_table_text_bridge",
+      "Rust_size": 202,
+      "current_final_address": "0xfffffffffe871c10",
+      "current_final_size": 202,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_page_table_vsyscall_bridge",
+      "Rust_size": 17,
+      "current_final_address": "0xfffffffffe8e21b0",
+      "current_final_size": 17,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_page_table_low_bridge",
+      "Rust_size": 57,
+      "current_final_address": "0xfffffffffe870d00",
+      "current_final_size": 57,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_page_table_load_bridge",
+      "Rust_size": 283,
+      "current_final_address": "0xfffffffffe86a810",
+      "current_final_size": 283,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_page_table_spin_init_bridge",
+      "Rust_size": 10,
+      "current_final_address": "0xfffffffffe86d890",
+      "current_final_size": 10,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_check_available_page_size_bridge",
+      "Rust_size": 64,
+      "current_final_address": "0xfffffffffe8de6a0",
+      "current_final_size": 64,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_normal_get_memory_address_bridge",
+      "Rust_size": 17,
+      "current_final_address": "0xfffffffffe8e1d40",
+      "current_final_size": 17,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_linux_find_command_line_bridge",
+      "Rust_size": 186,
+      "current_final_address": "0xfffffffffe877db0",
+      "current_final_size": 186,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_linux_get_nr_memory_chunks_bridge",
+      "Rust_size": 25,
+      "current_final_address": "0xfffffffffe869470",
+      "current_final_size": 25,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_linux_get_memory_chunk_bridge",
+      "Rust_size": 114,
+      "current_final_address": "0xfffffffffe8693b0",
+      "current_final_size": 114,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_reserve_arch_pages_bridge",
+      "Rust_size": 6,
+      "current_final_address": "0xfffffffffe8e9280",
+      "current_final_size": 6,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_mem_cpuid_edx_bridge",
+      "Rust_size": 24,
+      "current_final_address": "0xfffffffffe8e0c80",
+      "current_final_size": 24,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_kmalloc_bridge",
+      "Rust_size": 213,
+      "current_final_address": "0xfffffffffe8e2b30",
+      "current_final_size": 213,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_kmalloc_initialized_bridge",
+      "Rust_size": 109,
+      "current_final_address": "0xfffffffffe8e2c10",
+      "current_final_size": 109,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_kfree_bridge",
+      "Rust_size": 32,
+      "current_final_address": "0xfffffffffe8e2b10",
+      "current_final_size": 32,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_page_table_alloc_bridge",
+      "Rust_size": 59,
+      "current_final_address": "0xfffffffffe8e1e00",
+      "current_final_size": 59,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_user_page_fault_bridge",
+      "Rust_size": 17,
+      "current_final_address": "0xfffffffffe8eb080",
+      "current_final_size": 17,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_user_verify_bridge",
+      "Rust_size": 227,
+      "current_final_address": "0xfffffffffe8eb0c0",
+      "current_final_size": 227,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_user_vtop_bridge",
+      "Rust_size": 19,
+      "current_final_address": "0xfffffffffe8eb1b0",
+      "current_final_size": 19,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_user_is_memory_bridge",
+      "Rust_size": 129,
+      "current_final_address": "0xfffffffffe8eafd0",
+      "current_final_size": 129,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_user_map_bridge",
+      "Rust_size": 17,
+      "current_final_address": "0xfffffffffe8eb060",
+      "current_final_size": 17,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_user_unmap_bridge",
+      "Rust_size": 17,
+      "current_final_address": "0xfffffffffe8eb0a0",
+      "current_final_size": 17,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_user_phys_to_virt_bridge",
+      "Rust_size": 49,
+      "current_final_address": "0xfffffffffe87bfa0",
+      "current_final_size": 49,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_arch_mem_virt_to_phys_bridge",
+      "Rust_size": 245,
+      "current_final_address": "0xfffffffffe87d890",
+      "current_final_size": 245,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_arch_mem_phys_to_virt_bridge",
+      "Rust_size": 49,
+      "current_final_address": "0xfffffffffe87bfa0",
+      "current_final_size": 49,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_virt_to_phys_bridge",
+      "Rust_size": 245,
+      "current_final_address": "0xfffffffffe87d890",
+      "current_final_size": 245,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_phys_to_virt_bridge",
+      "Rust_size": 49,
+      "current_final_address": "0xfffffffffe87bfa0",
+      "current_final_size": 49,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_pt_print_log_bridge",
+      "Rust_size": 165,
+      "current_final_address": "0xfffffffffe8e4bd0",
+      "current_final_size": 165,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_common_vrflag_to_ptattr_bridge",
+      "Rust_size": 104,
+      "current_final_address": "0xfffffffffe8e01c0",
+      "current_final_size": 104,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "split_contiguous_pages",
+      "Rust_size": 8,
+      "current_final_address": "0xfffffffffe8a0ac0",
+      "current_final_size": 8,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_mem_log_int_bridge",
+      "Rust_size": 36,
+      "current_final_address": "0xfffffffffe8e32d0",
+      "current_final_size": 36,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_mem_log_bridge",
+      "Rust_size": 63,
+      "current_final_address": "0xfffffffffe8e3290",
+      "current_final_size": 63,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_normal_log_bridge",
+      "Rust_size": 83,
+      "current_final_address": "0xfffffffffe8e1d60",
+      "current_final_size": 83,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_text_log_bridge",
+      "Rust_size": 66,
+      "current_final_address": "0xfffffffffe8e2630",
+      "current_final_size": 66,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_page_table_log_bridge",
+      "Rust_size": 36,
+      "current_final_address": "0xfffffffffe8e2140",
+      "current_final_size": 36,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_addr_log_bridge",
+      "Rust_size": 104,
+      "current_final_address": "0xfffffffffe8dd9a0",
+      "current_final_size": 104,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_init_linux_log_bridge",
+      "Rust_size": 241,
+      "current_final_address": "0xfffffffffe8e1a00",
+      "current_final_size": 241,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_map_fixed_area_log_bridge",
+      "Rust_size": 86,
+      "current_final_address": "0xfffffffffe8e3100",
+      "current_final_size": 86,
+      "prior_source_provider_name_retained": true
+    },
+    {
+      "name": "x86_user_copy_log_bridge",
+      "Rust_size": 286,
+      "current_final_address": "0xfffffffffe8eaeb0",
+      "current_final_size": 286,
+      "prior_source_provider_name_retained": true
+    }
+  ],
+  "provider_count": 343,
+  "seven_owned_storage": [
+    {
+      "slot": "x86_memory_last_page_slot",
+      "owner": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data15OWNED_LAST_PAGE",
+      "owner_bytes": 8,
+      "current_final_slot_address": "0xfffffffffe904420",
+      "current_final_pointer": "0xfffffffffe959018",
+      "initial_zero": true
+    },
+    {
+      "slot": "x86_memory_init_pt_slot",
+      "owner": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data13OWNED_INIT_PT",
+      "owner_bytes": 8,
+      "current_final_slot_address": "0xfffffffffe904418",
+      "current_final_pointer": "0xfffffffffe959010",
+      "initial_zero": true
+    },
+    {
+      "slot": "x86_memory_boot_pt_slot",
+      "owner": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data13OWNED_BOOT_PT",
+      "owner_bytes": 8,
+      "current_final_slot_address": "0xfffffffffe9043f8",
+      "current_final_pointer": "0xfffffffffe959008",
+      "initial_zero": true
+    },
+    {
+      "slot": "x86_memory_init_pt_loaded_slot",
+      "owner": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data20OWNED_INIT_PT_LOADED",
+      "owner_bytes": 4,
+      "current_final_slot_address": "0xfffffffffe904408",
+      "current_final_pointer": "0xfffffffffe959030",
+      "initial_zero": true
+    },
+    {
+      "slot": "x86_memory_init_pt_lock_address",
+      "owner": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data18OWNED_INIT_PT_LOCK",
+      "owner_bytes": 4,
+      "current_final_slot_address": "0xfffffffffe904410",
+      "current_final_pointer": "0xfffffffffe959028",
+      "initial_zero": true
+    },
+    {
+      "slot": "x86_memory_fixed_virt_slot",
+      "owner": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data16OWNED_FIXED_VIRT",
+      "owner_bytes": 8,
+      "current_final_slot_address": "0xfffffffffe904400",
+      "current_final_pointer": "0xfffffffffe959020",
+      "initial_zero": true
+    },
+    {
+      "slot": "x86_clear_l3_use_1gb_page",
+      "owner": "_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data18OWNED_USE_1GB_PAGE",
+      "owner_bytes": 4,
+      "current_final_slot_address": "0xfffffffffe9043e0",
+      "current_final_pointer": "0xfffffffffe95902c",
+      "initial_zero": true
+    }
+  ],
+  "attr_mask_initial": "0x807",
+  "all_five_production_commands_zero": true,
+  "exact_retained_memory_link_token": "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
+  "new_source_port_or_compiler_commands": 0,
+  "original_validator_scope_preserved": "Same fixed343 name ownership and7actualfinalpointer criteria as acceptedoriginal; no broad new image/source inventory or perhelpernative quota.",
+  "native_case_acceptance": null,
+  "file_closure": false,
+  "limitations": "Build/source/link rejoin only. Native case/retirement independently qualified by daemon reviewer; this record neither duplicates nor predicts its verdict."
+}

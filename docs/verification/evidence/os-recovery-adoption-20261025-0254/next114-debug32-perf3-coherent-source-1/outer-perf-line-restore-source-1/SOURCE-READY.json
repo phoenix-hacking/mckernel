@@ -1,0 +1,105 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "NEXT114_ONE_BOUNDED_OUTER_PERF_LINE_RESTORE_SOURCE_READY_NOT_RELEASED",
+  "runtime_authority": null,
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/outer-perf-line-restore-source-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 118438,
+    "sha256": "b61944ddc4574d4d2aded2e4e6d557098366524232258ff59d8b6692e6d6299a"
+  },
+  "kernel": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/outer-perf-line-restore-source-1/candidate/kernel/syscall.c",
+    "bytes": 918715,
+    "sha256": "d6e9c595364f72018b96ccba50e97ebc71ff438b8e91315982e287d63ff8bafb"
+  },
+  "tiny_patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/outer-perf-line-restore-source-1/kernel-syscall-outer-perf-restore.patch",
+    "bytes": 300,
+    "sha256": "76e3e82758ea5c9cce3c53b0347f5477f45268ed88e98067bb74749aca3d59a2"
+  },
+  "changed_only_line_proof": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/outer-perf-line-restore-source-1/CHANGED-ONLY-CONDITIONAL-LINE-PROOF.json",
+    "bytes": 8081,
+    "sha256": "23a56f40d42141237d2b680b9b84b781c74d470be53dfc6e2dbb69e558028365"
+  },
+  "closed_Rust_map_unchanged": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/RUST-SUBTREE-CLOSED-SOURCE-MAP.json",
+    "bytes": 130515,
+    "sha256": "015762b0a7e5e3ad54b8a43cd9b109f4dabe29b16e662058c306f372361c90aa"
+  },
+  "next_steps": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/outer-perf-line-restore-source-1/ROOT-NEXT-STEPS.NOT-AUTHORITY.json",
+    "bytes": 1081,
+    "sha256": "cc6a477ceae6a78b0f2292ef843dc74a7326e0f0098d23309bd756685383f39e"
+  },
+  "tools": [
+    {
+      "name": "run_build_only.py",
+      "predecessor": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/run_build_only.py",
+        "bytes": 24216,
+        "sha256": "e7793d93365a22ba7a40ca301380fafe41dc754c59f469991238cc4699532a2f"
+      },
+      "successor": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/outer-perf-line-restore-source-1/run_build_only.py",
+        "bytes": 24216,
+        "sha256": "e7793d93365a22ba7a40ca301380fafe41dc754c59f469991238cc4699532a2f"
+      },
+      "byte_identical": true
+    },
+    {
+      "name": "build_only_worker.py",
+      "predecessor": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/build_only_worker.py",
+        "bytes": 4113,
+        "sha256": "0bdd40596f7d5a9fb056b9ff24c7033336af1305ce143391debd225a71d2b105"
+      },
+      "successor": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/outer-perf-line-restore-source-1/build_only_worker.py",
+        "bytes": 4113,
+        "sha256": "0bdd40596f7d5a9fb056b9ff24c7033336af1305ce143391debd225a71d2b105"
+      },
+      "byte_identical": true
+    },
+    {
+      "name": "hold_and_run_build_only.py",
+      "predecessor": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/hold_and_run_build_only.py",
+        "bytes": 7010,
+        "sha256": "d17bd70e3e3e6ef7febe48b6f0f892ab6f1a94c74e89d43808bbea8b5dc21551"
+      },
+      "successor": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/outer-perf-line-restore-source-1/hold_and_run_build_only.py",
+        "bytes": 7010,
+        "sha256": "d17bd70e3e3e6ef7febe48b6f0f892ab6f1a94c74e89d43808bbea8b5dc21551"
+      },
+      "byte_identical": true
+    },
+    {
+      "name": "publish_approved_ready.py",
+      "predecessor": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/publish_approved_ready.py",
+        "bytes": 3497,
+        "sha256": "af39ab7d55b8a11ca5a4a5361ce41639dd6207ffc3d9b0e55d64355d44697401"
+      },
+      "successor": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/outer-perf-line-restore-source-1/publish_approved_ready.py",
+        "bytes": 3497,
+        "sha256": "af39ab7d55b8a11ca5a4a5361ce41639dd6207ffc3d9b0e55d64355d44697401"
+      },
+      "byte_identical": true
+    }
+  ],
+  "commands": 4,
+  "new_objects": 3,
+  "retained_objects": 8,
+  "Rust_sources": 119,
+  "Rust_files_changed": 0,
+  "source_lines_added": 5,
+  "known_profiles": 4,
+  "observable_line_before": 21246,
+  "observable_line_after": 21223,
+  "counts_candidate_only": true,
+  "all_actual_calls": 0,
+  "canonical_or_Git_writes": 0
+}

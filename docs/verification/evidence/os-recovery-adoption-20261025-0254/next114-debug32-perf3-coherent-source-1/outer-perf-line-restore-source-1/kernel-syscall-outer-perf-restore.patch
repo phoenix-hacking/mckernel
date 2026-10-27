@@ -1,0 +1,14 @@
+--- original114/kernel/syscall.c
++++ corrected114/kernel/syscall.c
+@@ -21289,6 +21289,11 @@
+ 	return do_syscall(request, cpu);
+ }
+ #endif /*ENABLE_PERF*/
++#ifdef ENABLE_PERF
++#line 21118
++#else
++#line 21150
++#endif
+ 
+ #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ extern struct vm_range_numa_policy *

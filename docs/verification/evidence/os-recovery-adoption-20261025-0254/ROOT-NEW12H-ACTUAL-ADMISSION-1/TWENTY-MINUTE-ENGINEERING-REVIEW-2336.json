@@ -1,0 +1,77 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "thread": "01a17e6f-112f-7660-8771-85d15e07a26c",
+  "recorded_at": "2026-10-27T23:48:53.923243+00:00",
+  "review_cadence_minutes": 20,
+  "baseline": "2026-10-27T17:36:09Z",
+  "measurement_bucket_start": "2026-10-27T23:06:09Z",
+  "measurement_bucket_end": "2026-10-27T23:36:09Z",
+  "bucket_complete": true,
+  "production_commands_passed": 4,
+  "accepted_new_kernel_artifacts": 1,
+  "selected_C_function_replacements": 4,
+  "selected_process_C_OBJECT_replacements": 4,
+  "accepted_counts": {
+    "C_functions": 83,
+    "Rust_cohort_exports": 56,
+    "process_C_OBJECTs": 63
+  },
+  "production_span_seconds": 20.37364959716797,
+  "production_CPU_seconds": 20.372311,
+  "production_RSS_KiB": 590944,
+  "resource_to_first_compiler_seconds": 49.74696397781372,
+  "failure_to_successful_Rust_finish_seconds": 1280.263797044754,
+  "first_compiler_from_baseline_seconds": 2608.941661,
+  "native_cases_accepted": 1,
+  "actual_guest_applications": 1,
+  "native_tuple": "F05fixed60e/dcaCexecutor/908fRustsupervisor/125cRustpayload/e55/owner66da; NOTM15Ruststartup",
+  "native_owner_wall_seconds": 38.36654710769653,
+  "native_controller_CPU_seconds": 1.049177,
+  "native_controller_RSS_KiB": 52908,
+  "native_resource_to_entry_seconds": [
+    44.82052755355835,
+    44.82052744796965,
+    44.82052731292788
+  ],
+  "native_case_acceptance": "e3c1/f3ba",
+  "current_free": "d4ca/Root40/305433",
+  "whole_file_delta_at_bucket_cutoff": 0,
+  "next_bucket_file_decision": "M14F05e2e168/Root216b adoptedAFTER23:36cutoff; +1supportedfile belongs23:36\u201300:06ONLY",
+  "practical": "35/35 unchanged",
+  "M15_files": "1/8 unchanged",
+  "M14_files_at_end_of_bucket": "2/6; subsequentnextbucket3/6",
+  "actual_next_startup": "d0bf/e5d/ff227/60e/23e2/eb045/dd94; Root40entrysource804730/finalmechanical773221, static248b/bridgef9c4/auth0e3b; no nativeyet",
+  "largest_avoidable_handoff": "Postfailurebinding/publication/current-boundaryhandoffs dominate20.374s build and38.367s native;1280.264s failure\u2192Rustsuccess includesinterveningF05operation, notallidle.",
+  "scheduling_adjustment": "KeepfirstreadyRuststartup6d2e next; prewarmexactreviewer, publishallfixedsourcesbeforefreshcapture, mechanicaloncebridge no newbodyafterclock. Combined114 GLOBAL32+perf3 reuses113arch/origin; boundedouterPERFofflinefix941b preservesunaffectedHOST proofs.",
+  "resources": {
+    "disks": {
+      "/home/holden/mckernel": {
+        "available_bytes": 148964577280,
+        "ismount": false,
+        "st_dev": 66306
+      },
+      "/home/holden/mckernel-work/scratch": {
+        "available_bytes": 47867342848,
+        "ismount": true,
+        "st_dev": 1828
+      }
+    },
+    "load_average": [
+      0.75,
+      0.97,
+      1.06
+    ],
+    "memory": {
+      "MemAvailable_kib": 26809716,
+      "MemTotal_kib": 32421580
+    }
+  },
+  "unknown_measurements": [
+    "earliestglobalreadyunknown",
+    "actualguestCPU/peaknotmeasured;controllerfiguresnotguest",
+    "sourceimplementationlatencyunavailable"
+  ],
+  "gain95percent_achieved": false,
+  "deadline": "2026-10-28T05:36:09Z",
+  "account": "includedweeklyfirst/same7f4debits/ceiling/realholds"
+}

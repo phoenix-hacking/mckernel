@@ -1,0 +1,55 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "status": "ROOT_ACCEPTS_ORIGINAL_SUPPORTED_M14_F05_FILE_COMPLETE_WITH_EXPLICIT_SCOPE_LIMITS",
+  "at": "2026-10-27T23:41:09.147937+00:00",
+  "file_id": "M14-F05",
+  "file_path": "arch/x86_64/kernel/memory.c",
+  "independent_supported_file_decision": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f05-owned-processvm-v3-file-closure-review-1/F05-SUPPORTED-FILE-CLOSURE-DECISION.json",
+    "bytes": 17332,
+    "sha256": "e2e16884c04de64672ea7424066093b12befd743e88c077b5422dc2e947e82d8"
+  },
+  "matched_source_build_link": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f05-owned-processvm-v3-file-closure-review-1/MATCHED-F05-60E-SOURCE-LINK-REUSE.json",
+    "bytes": 83566,
+    "sha256": "a78a99a390f1af60d3a8f84b9a272329ab9e24148adbfcfd90122784bf5d5c87"
+  },
+  "native_case_acceptance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/F05-V3-INDEPENDENT-FUNCTIONAL-NATIVE-ACCEPTANCE.json",
+    "bytes": 2635,
+    "sha256": "07749396feca73ed4444c3614c088a89baec67c42f4e063211af4e321218dd0d"
+  },
+  "counts": {
+    "selected_memory_C_runtime_functions": 0,
+    "selected_memory_C_runtime_OBJECTs": 0,
+    "selected_memory_C_allocated_relocations": 0,
+    "Rust_providers": 343,
+    "Rust_storage_cells": 7,
+    "new_native_cases_from_reused_daemon_proof": 1,
+    "new_guest_cases_from_reused_daemon_proof": 1,
+    "extra_native_runs_by_this_review": 0,
+    "extra_compilers": 0
+  },
+  "supported_files_complete_after": 3,
+  "supported_files_total": 6,
+  "new_supported_file_closures": 1,
+  "new_native_cases_counted_here": 0,
+  "limits": [
+    "G causality is an inference from exact executed908f supervisor/125c payload/source and complete native ordering. There is no invented standalone G-write log; raw readRET1 alone is not identified as G.",
+    "Direct native public write_process_vm wrapper-address execution, deliberate EFAULT/partial-transfer/error-recovery branches, every large-page/TLB/concurrent path and exhaustive fault-fixup coverage are not claimed.",
+    "Parent host_mapping invalidated value0/completed0 remains exact; no completed1 normalization. Original complete deletion/finalretirement0 predicates supply release proof.",
+    "Full captures and original oracles remain immutable and complete. Daemon exclusively performed full RAW/native/ownership review; this file review did not duplicate native replay or ownership queries."
+  ],
+  "preserved_failures_and_holds": [
+    "Original whole FP4096-declared/1024-actual stream FAIL remains FAIL; no normalization.",
+    "Historical strict235/227 and v2 wholecase failures retain original identities/oracles/scores; newv3 is additive only.",
+    "Source38 and lifetime obligations outside exact supportedF05 scope remain OPEN.",
+    "Latest CURRENT113 image5a5944/C83/Rust56/process63 default acceptance is distinct from frozenF05native60e/dca/908f/125c/e55 tuple. No CURRENT113 whole-image native acceptance is inferred.",
+    "Working mixed C+Rust-helper launcherdca remains selected; no M15 executor or whole-project language closure.",
+    "M14 remaining files/final integration and practical35 denominator unchanged by this independent file decision; Root alone records canonical file-count update."
+  ],
+  "M14_complete": false,
+  "M15_complete": false,
+  "practical": "35/35 unchanged"
+}

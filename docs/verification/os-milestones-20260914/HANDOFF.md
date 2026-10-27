@@ -1,3 +1,24 @@
+## Supported F05 file accepted; correct Rust startup ready — 2026-10-27T23:48:53.923243+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M14F05supportedfileCOMPLETE independente2e168/Root216b: matched343Rust+7storage/
+zeroCruntimeFUNC/OBJECT/allocatedRELA, actualfixed60e/e2c ownedmemorynativee3c1 and
+currentfreed4ca. M14files3/6/globalM14OPEN/M15files1/8OPEN/practical35/35unchanged.
+Publicwritewrapperentry anddeliberateEFAULT/partialnativebranches remainunobserved;
+originalapplicable-nativeclause satisfiedwithoutnewhelperquotas. Alloldfailures/holds retained.
+FiledecisionAFTER23:36 belongs23:36–00:06; completed23:06–23:36 only+4selectedfunctions/
++4scalarobjects/+1kernelartifact/+1F05nativecase, file0atcutoff, norecountpriorstartupFAIL.
+Accepted1135a59/C83/Rust56/process63 retained. Root40ledger3054/currentfreed4ca, noheavy.
+
+CorrectRuststartup6d2e original8argv(emptyincluded)/2env/91B/10s1024 sourceRoot40
+804730/finalmechanical773221PASS; actualstat248b/bridgef9c4/auth0e3b/Rootadoption2a3c.
+Newcollectord0bf939e/4052, exactnewstage23e2/eb045/dd94; af2/5298/e5d/60e/ff227unchanged.
+Publishingthenfreshresource/atomicdaemonPASS/prewrittenonceentry NEXT.
+Combined114GLOBAL32+perf3 boundedouterPERFrestore941b SOURCEPASS, candidateC80/
+Rust59exports/process31, noadoption/compiler/nativecredityet. ForegroundownsLOCAL14+
+3configs andptrace_setsiginfo futurewrapper; noduplicateassignments. Concisemodeloutput
+only, fulllocalproof/rawcapture/oraclesunchanged. Fixed05:36/earlierclamps/account/oneheavy.
+
 ## CURRENT113 independently accepted; frozen native jobs preserved — 2026-10-27T23:19:56.035733+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-27T23:19:56.035733+00:00",
+  "as_of": "2026-10-27T23:41:09.147937+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -1712,7 +1712,7 @@
       "id": "M14-F05",
       "c_file": "arch/x86_64/kernel/memory.c",
       "title": "x86 page-table, address translation and user-copy support",
-      "status": "partial",
+      "status": "complete",
       "owner": "/root/f02_contract",
       "inventory_basis": "Exact current image compile database and final link contract; surviving body counts still unmeasured.",
       "object_output": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/memory.c.o",
@@ -1757,7 +1757,7 @@
         {
           "id": "M14-05-01",
           "title": "Early allocation and boot page-table construction, normal/fixed/Linux/vsyscall mapping regions and page-table destruction.",
-          "status": "partial",
+          "status": "complete",
           "owner": "dispatcher integrated /root/m14_actual_consumer_fix reviewed bridge slice",
           "remaining_c_functions": null,
           "rust_consumer": "Canonical Rust large-page forwarder, text-map-start getter and linker_end address getter; existing PUBLIC selection, exact C fallbacks retained.",
@@ -1862,12 +1862,14 @@
               "default_link": false,
               "native": false
             }
-          ]
+          ],
+          "supported_scope_acceptance": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F05-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+          "unobserved_native_limits_recorded": true
         },
         {
           "id": "M14-05-02",
           "title": "PTE encode/decode, level/page-size selection, large-page split/merge and mapping attributes.",
-          "status": "unassessed",
+          "status": "complete",
           "owner": null,
           "remaining_c_functions": null,
           "rust_consumer": null,
@@ -1889,12 +1891,14 @@
               "status": "unassessed",
               "evidence": []
             }
-          }
+          },
+          "supported_scope_acceptance": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F05-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+          "unobserved_native_limits_recorded": true
         },
         {
           "id": "M14-05-03",
           "title": "Page-table walkers, lookup/map/unmap/replace and fault-PTE translation, including partial failure ownership.",
-          "status": "partial",
+          "status": "complete",
           "owner": "foreground:/root/m14_memory_cutover",
           "remaining_c_functions": null,
           "rust_consumer": "kernel/rust/x86_memory_helpers.rs::x86_clear_old_action_bridge",
@@ -2221,12 +2225,14 @@
                 "running_image_unchanged": true
               }
             }
-          ]
+          ],
+          "supported_scope_acceptance": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F05-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+          "unobserved_native_limits_recorded": true
         },
         {
           "id": "M14-05-04",
           "title": "TLB invalidation/load-page-table and CPU synchronization with reviewed architecture instructions.",
-          "status": "unassessed",
+          "status": "complete",
           "owner": null,
           "remaining_c_functions": null,
           "rust_consumer": null,
@@ -2248,12 +2254,14 @@
               "status": "unassessed",
               "evidence": []
             }
-          }
+          },
+          "supported_scope_acceptance": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F05-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+          "unobserved_native_limits_recorded": true
         },
         {
           "id": "M14-05-05",
           "title": "Usercopy and process-VM verify/read/write/patch entrypoints, bounded mapping lifetimes and fault fixups.",
-          "status": "partial",
+          "status": "complete",
           "owner": null,
           "remaining_c_functions": null,
           "rust_consumer": null,
@@ -2277,7 +2285,9 @@
             }
           },
           "historical_status_before_current290": "unassessed",
-          "current_native_gap": "Matching memory smoke does not provide read/pread/cross-page write byte-contract; prepared baseline.core.files is next supported test and needs actual F05 route evidence. Process-VM/fault/partial branches are not inferred."
+          "current_native_gap": "Matching memory smoke does not provide read/pread/cross-page write byte-contract; prepared baseline.core.files is next supported test and needs actual F05 route evidence. Process-VM/fault/partial branches are not inferred.",
+          "supported_scope_acceptance": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F05-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+          "unobserved_native_limits_recorded": true
         }
       ],
       "validation_concerns": [
@@ -2286,7 +2296,7 @@
         "Kernel/user mapping ABI and actual boot table layout; prove symbols/default flags in the artifact before native mapping regression credit."
       ],
       "file_closure": {
-        "status": "open",
+        "status": "complete",
         "requirement": "All supported live implementations from this translation unit and its included headers/macros are Rust/reviewed assembly; no substantive live C callbacks, wrappers or unknown owners remain. Preserve declarations and excluded fallback source where useful.",
         "residual_c_bytes": 0,
         "residual_c_functions": 0,
@@ -2294,10 +2304,12 @@
           "docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f05-nearest-file-closure-1/SELECTED-F05-RECONCILIATION.json",
           "docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT290-MEMORY1-INDEPENDENT-CASE-ACCEPTANCE.json",
           "docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f05-nearest-file-closure-1/F05-CLOSURE-DECISION.json",
-          "docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f05-nearest-file-closure-1/F05-STRICT235-ACTUAL-USERCOPY-SCOPE-DECISION.json"
+          "docs/verification/evidence/os-recovery-adoption-20261025-0254/current290-m14-f05-nearest-file-closure-1/F05-STRICT235-ACTUAL-USERCOPY-SCOPE-DECISION.json",
+          "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F05-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+          "docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f05-owned-processvm-v3-file-closure-review-1/F05-SUPPORTED-FILE-CLOSURE-DECISION.json"
         ],
-        "current_scope": "Selected current290 GCC14 F05 memory.c runtime object; whole-file remains open for existing functional native obligation.",
-        "current_blocker": "Direct read/write/patch_process_vm and partial-fault behavior have no established supported frozen native consumer; verify/from-user/to-user now qualified by strict235.",
+        "current_scope": "Originalsupportednative_linux_irq_work_v6_12 F05file: matched343Rustproviders+7storage/zeroC memory.o and actual60e/e2c functionalnative PEEK/POKE/privateCOW/crosspage/writeback/readback+causalretirement. Notallerrorbranches orSource38/external-lifetime/globalOSacceptance.",
+        "current_blocker": null,
         "next_supported_test": null
       },
       "active_lane_20261024": {
@@ -2326,9 +2338,16 @@
         }
       ],
       "latest_dispatcher_checkpoint": {
-        "implemented": "Selected current290 C memory object0FUNC/OBJECT/allocatedrelocs;343Rustproviders+7storage retained.",
-        "actual": "Four scoped diagnostics accepted; strict235 native exec argv/envp verify/from-user plus wait4 status to-user routes now qualified on F02 image.",
-        "limits": "Full M14-05-05/file remains open for direct process-VM read/write/patch/partialfault consumer gap; no automatic whole-file acceptance."
+        "at": "2026-10-27T23:41:09.147937+00:00",
+        "decision": "SUPPORTED_FILE_COMPLETE",
+        "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F05-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+        "selected_memory_C_runtime_functions": 0,
+        "selected_memory_C_runtime_OBJECTs": 0,
+        "selected_memory_C_allocated_relocations": 0,
+        "Rust_providers": 343,
+        "Rust_storage_cells": 7,
+        "native_case": "e3c1/fixed60e+e2c/dca/908f125c",
+        "limits": "Publicwritewrapper-entryaddress anddeliberateEFAULT/partial-returnbranches not separatelyobserved; originalapplicable-nativeclause satisfied, no perhelperquota/allbranchclaim; wholeFP/235227/v2/source38holdspreserved."
       },
       "current_increment": {
         "at": "2026-10-24T11:43:50.774989+00:00",
@@ -2340,6 +2359,11 @@
         "implemented": "SelectedzeroC source retained. f02_contract prepares42trace/state move_pte_range cases using retained875f object, no wholecrate replay; unrun.",
         "actual": "SelectedzeroC source retained. f02_contract prepares42trace/state move_pte_range cases using retained875f object, no wholecrate replay; unrun.",
         "limits": "Controlled HOST/source scopes only; selected default/native/wholefile/Cboundary retirement remain open."
+      },
+      "checkpoint": {
+        "implemented": "AlloriginalsupportedF05liveimplementation/header/macros selectedRust/reviewedassembly; Cmemory.o0runtimeFUNC/OBJECT/allocatedRELA.",
+        "actual": "Independentmatched343+7 source/build/finalownership a78, exact204Bownedprocessvm-v3/nativee3c1+causalchildparentretirement/currentfreed4ca. Rootadoptsupportedfilee2e168/actualclosure.",
+        "limits": "ExactOriginalSupportedFile only. Deliberateerror/partialnative branches remainunobserved; no broaderSource38/external-lifetime/globalOS ornewlatestkernelF05run claim."
       }
     },
     {
@@ -3622,14 +3646,22 @@
       "actual_progress": "CURRENT113 independently02c100 accepted5a5944/Rust896eb7/56cohortexports/C64+19=83/process63. FournewselectedRustF06functionreplacements+fourreadonlyCIntstorageowners. Fourcommands0/span20.373650/CPU20.372311/RSS590944/resource->compiler49.746964. OriginalE0616 andoneboundedcorrection preserved; identicalunconditionaldefiningmodulewitness retained. Root39/currentfree13ed. All56bodies/new4providers/10callbacks+7schedulerconsumers/8scalarconsumers/inheritedfoldedargs+tables/logger/raw245metadata contract accepted. SevenoldCsectionprovenance/lifetime/native/wholefile OPEN.",
       "engineering_percentage": null,
       "evidence": "../evidence/os-recovery-adoption-20261025-0254/CURRENT113-INDEPENDENT-DEFAULT-ARTIFACT-ACCEPTANCE.json"
+    },
+    {
+      "at": "2026-10-27T23:41:09.147937+00:00",
+      "actual_progress": "OriginalM14F05supportedfilecompletee2e168/Rootadoption matched343Rust+7storage/zeroC+strictactualownedprocessvm-v3nativee3c1/currentfreed4ca. M14files3/6, globalM14/M15OPEN/practical35unchanged. Fault/partial-nativebranchandpublicwritewrapperentryunobserved remainexplicitlimits; no newquota. Nativecase+1alreadycountedatnativeacceptance, no duplicatecasecount.",
+      "engineering_percentage": null,
+      "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F05-ACTUAL-SUPPORTED-FILE-CLOSURE.json"
     }
   ],
   "latest_dispatcher_checkpoint": {
-    "at": "2026-10-27T23:19:56.035733+00:00",
+    "at": "2026-10-27T23:41:09.147937+00:00",
     "accepted_production": "CURRENT113/5a5944c0/C83/Rust56cohort/process63",
-    "current_free": "Root39/eacc369b/13ed764e",
-    "native": "F05v3preguestROproofpathFAIL preserved; sourcefixowner66da/outercdc finalsource+mechanical PASS5bdd; newnativeentrynext",
-    "next_action": "Publish/fetchfinalcdcRoot39entry thenfreshresource/exactatomicPASS/onceentry; correctRuststartupstage23e2/eb045/dd94 separatelyready",
-    "whole_file_delta": 0
+    "current_free": "Root40/305433/d4ca",
+    "native": "F05v3 exactnativefunctionalcaseaccepted e3c1; correctRuststartup6d2e entryfinalsourceRoot40reviewnext",
+    "next_action": "FinalizecorrectRuststartupRoot40source/capability/staticpublication/freshrelease; parallelcoherent114GLOBAL32+perf3 FILELINEoneboundedfix.",
+    "whole_file_delta": 0,
+    "M14_supported_files": "3/6",
+    "F05_supported_file": "COMPLETE originalscope/e2e168"
   }
 }

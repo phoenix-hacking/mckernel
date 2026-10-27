@@ -1,0 +1,159 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/current110_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-27T23:41:36.966743+00:00",
+  "decision": "BLOCKED_SOURCE_PERF3_OUTER_ENABLE_PERF_OFF_FILELINE_DRIFT",
+  "execution_release": false,
+  "runtime_authority": null,
+  "native_acceptance": false,
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/SOURCE-READY.json",
+    "bytes": 5878,
+    "sha256": "54187907543026694e67b94858967a0009c63089aa291c5caa9d7b00c1ee7d0a"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 118099,
+    "sha256": "f7613369ae67bc22b7569016e2bdb706ac310affb539ab84b498bcf2b7646059"
+  },
+  "composition": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/SELECTIVE-COMPOSITION-PROOF.json",
+    "bytes": 6127,
+    "sha256": "b1f0d6b675e0cd901c1d4ca6ff90ebef6a0169e78e51fa913ceb493da2eecfe7"
+  },
+  "source_map": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/RUST-SUBTREE-CLOSED-SOURCE-MAP.json",
+    "bytes": 130515,
+    "sha256": "015762b0a7e5e3ad54b8a43cd9b109f4dabe29b16e662058c306f372361c90aa"
+  },
+  "blocking_findings": [
+    {
+      "id": "PERF3_OUTER_GUARD_FILELINE_1",
+      "base": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/candidate/kernel/syscall.c",
+        "bytes": 917339,
+        "sha256": "a96938c6f650f5ed7d8183bd7bb8da1a03c477e13e4093b68a1099ea252a35b2"
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/candidate/kernel/syscall.c",
+        "bytes": 918659,
+        "sha256": "a9ba5105a7e6317a77b29aeacd926c8fa146131ee2bfb2a6fe663853f3164fce"
+      },
+      "condition": {
+        "ENABLE_PERF": false,
+        "MCKERNEL_RUST_SYSCALL_POLICY_HELPERS": true
+      },
+      "introduced_physical_lines": 23,
+      "outer_guard": "New three paired selectors are entirely inside #ifdef ENABLE_PERF (candidatephysical20615..21291). Their #line restores are skipped when ENABLE_PERF is off. Closing #endif has no unconditional/conditional original-line restore; next #line is candidatephysical21575.",
+      "live_observable_witness": {
+        "function": "syscall_vm_policy_insert_log_bridge",
+        "call": "dkprintf(\"%s: %p,%p: %lx-%lx (nodemask)%lx (policy)%d\\n\",",
+        "base_physical_line": 21341,
+        "candidate_physical_line": 21364,
+        "base_active_logical_line": 21223,
+        "candidate_active_logical_line": 21246,
+        "active_guard_stack": [
+          "#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS"
+        ],
+        "last_unconditional_line_anchor": {
+          "base_physical_line": 20252,
+          "directive": "#line 20135",
+          "next_physical_line": 20253,
+          "next_logical_line": 20135
+        },
+        "macro_reference": {
+          "path": "/home/holden/mckernel/lib/include/ihk/debug.h",
+          "bytes": 1294,
+          "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc"
+        },
+        "macro_effect": "dkprintf declares static structddebug in __verbose and stores .line=__LINE__; defaultflags0 still emits this descriptor. Thus supported perfOFF/helperON changes actual debug metadata identity by23, independently of whether loggingprints."
+      },
+      "reason": "GLOBAL32process96conditional controls remain valid but cover process.c only; they cannot establish the new kernel/syscall.c outerperf guard. New callback-local resets preserve perfON paths but do not restore skippedouterblock effects for perfOFF.",
+      "smallest_required_correction": "One bounded sourceowner correction restoring inherited original logical identity outside the outer ENABLE_PERF block, accounting for active/skipped branches while preserving callback bodies/selectors and all original metadata. Rebind exactcandidate/profile/sourceproof; no newcompiler/CPP/oracle or framework requested.",
+      "actual_CPP_or_compiler_run": false
+    }
+  ],
+  "unaffected_findings": [
+    "ExactREADY541879/profilef761/compositionb1f0 refs match. GLOBAL32source10d98/fa334 and actualHOST11d85 remain retainedpositive, with unchangedprocessC/processcommand/defaultflags0/envfile/CMakeinput bindings and LOCAL14/config owners. No debug32port is duplicated.",
+    "Only syscall_policy.rs changes in119map: originalprefix plus exactHOST-qualified2wrapperfragment (whitespace separator only); existing syscall_atomic64_read_bridge remains onebody. PERFextra_set forwards originalborrowedevent to existingx86Rustprovider. PERFinit preserves unsignedlong\u2192u32 code conversion and signedCInt modes/results; selectedC asserts actualprovider signature/narrowing. ThirdC callback selects existingatomic64body/layout/type ABI, not a duplicatedalgorithm.",
+    "ExactthreepairedC fragments preserve alloriginalfallbackbodies; CMake adds onepairedRustcfg/Cdefine under originalENABLE_PERF/supportedselectedbranch. Originalcallback-local active reset numbers20498/20504/20564 and joins20503/20509/20569 are retained. ActualperfON default source/HOST behavior positives are not relabelled by this off-configuration finding.",
+    "Profile fourcommands are fullRust/kernelC/processC/raw11link;3new8retained match exactobject set. ProcessC and rawlink commands equalpreviousGLOBAL32profile; Rust adds onlyperf3cfg. Eightretained source/hash/bytes refs match actualaccepted inputs including113archda1e. Unchanged113archsource/argv/genuineorigin2c419 remains reusable without compiler/producerreplay.",
+    "Runner/worker only specialize previous3/2/9 to4/3/8 with outputsRust/kernelC/processC; holder/publisher byteidentical. No guard/account/fixedclock/resource/mutex/oneheavy widening. Sourcepublication/request/nonce/adoption/resources/holder/output/executionreview/custody remainNULL. Root40/latestF05nativefree is prospective actualadmission context, not newauthority supplied by this sourcepacket.",
+    "ExpectedC80/Rust59cohort/process31 are unaccepted predictions. Rustcohort+3 comprises two newlyselectedwrapperexports plus one already-existing atomicprovider newlytracked atthis boundary; no thirdnewatomicbody or fullfile/native credit."
+  ],
+  "retained_proofs": {
+    "debug32_source": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/newdebug32-next114-source/actual113-three-command-reuse-source-1/independent-source-profile-review-1/INDEPENDENT-SOURCE-PROFILE-REVIEW.json",
+      "bytes": 15293,
+      "sha256": "10d980d9a96c4df46ad9abe7762195c6162205ab640c2d5e77d0e7f2b0095ebe"
+    },
+    "perf3_actual_HOST": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/ordinary-host-profile-1/independent-actual-review-1/FINAL-REVIEW.json",
+      "bytes": 15157,
+      "sha256": "4af93d3013c136a3dc9db8df2652959adc45c9d6814f137cc502feba476d87b3"
+    },
+    "accepted113": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT113-ABI-PRIVATE-CORRECTION-BUILD-ADMISSION-1/independent-artifact-review-1/INDEPENDENT-ACCEPTANCE.json",
+      "bytes": 5905,
+      "sha256": "02c1001e037ea4d57d3d2dc5fdffa3655ce6d94c36a77ff6ea84b409f1f18cbd"
+    },
+    "paired_fragments": [
+      {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/perf_counter_extra_set_bridge.original.C.inc",
+        "bytes": 123,
+        "sha256": "2d740b1d75d7d84b6207884c2149a7d28f9da1099ff81fdfe1550da37deb7695"
+      },
+      {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/perf_counter_extra_set_bridge.paired-selector.C.inc",
+        "bytes": 323,
+        "sha256": "00a87d87940d144a8c8bbe3d97171681a9d6f90a2260706bdc334b0a4933cf62"
+      },
+      {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/perf_counter_init_raw_bridge.original.C.inc",
+        "bytes": 157,
+        "sha256": "976286decb9ea6d0dcee1ac52d1aea7d3f926ecffd6a22a9a8160cab1cad798c"
+      },
+      {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/perf_counter_init_raw_bridge.paired-selector.C.inc",
+        "bytes": 686,
+        "sha256": "d566e625cc8da8e560a36009ac2faa236815742f11eba467ea7fd4beb3aaeb93"
+      },
+      {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/perf_event_atomic64_read_bridge.original.C.inc",
+        "bytes": 113,
+        "sha256": "aeb6307f9a31c5bf6a6aa6904d10ba9c58a973e4d0fd2f924d91db60f6c3fe51"
+      },
+      {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/perf_event_atomic64_read_bridge.paired-selector.C.inc",
+        "bytes": 704,
+        "sha256": "b87bff6bea48456ab836a7e0f7425f9ffc641cbb1a9e24eaa775c2d93b7bb08b"
+      }
+    ],
+    "Rust_wrappers": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-perf-provider-next3-source-1/selected-bridges.Rust.inc",
+      "bytes": 1378,
+      "sha256": "d1a94a5454b599770563eb017bfacbb15a0682afc783439ffa3dab867e826b93"
+    },
+    "genuine_origin": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/root-source-adoption-1/ROOT-ACTUAL-ORIGIN-PRODUCER.json",
+      "bytes": 3725,
+      "sha256": "2c419c6405deef8d6e8c2479e57f88884e34a84fec300e0aff5311ea04b944fb"
+    }
+  },
+  "nonblocking_metadata_note": "retained_actual113arch.source names exactaccepted113da1e path/hash/bytes and runtime mounts use source.path. Its inherited retained_archive_member string still names older112arch path; this unused archival hint is not used to qualify the actualobject. Futuremetadata should preserve truthful retention mapping without changing actual source.path/hash.",
+  "reader_notes": [
+    "Preliminary literal__LINE__ kmalloc witness was found inside contradictory nested helperguards and was withdrawn before finalfinding. The finalblocker above uses livehelperON dkprintf metadata instead.",
+    "One reviewer sourcecomparison initially required exact newline separator for appendedRustfragment; literalreadback established identicalprefix and exactfragment modulo interfragmentblanklines, with no sourcechange."
+  ],
+  "next_action": "Root/sourceowner prepares smallestouterperfguard linecorrection and matching sourceprofile successor. Preserve thisBLOCKED original541879/f761 record and allpositiveGLOBAL32/HOST artifacts; no rereplay. F05/startup/native work remains independent and doesnotwait for this private source repair.",
+  "review_actions": {
+    "readonly_source_hash_AST_literal_diff_finite_guard_scope_and_linear_arithmetic_only": true,
+    "no_generic_parser_or_newpipeline": true,
+    "no_full119walk_or_oldHOST_or96control_reexecution": true,
+    "compiler_CPP_query_guard_resource_workload_Git_canonical_calls": 0,
+    "subagents": 0,
+    "only_owned_independent_review_directory_written": true
+  }
+}

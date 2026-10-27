@@ -1,0 +1,124 @@
+{
+  "decision": "PASS_CURRENT_FREE",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Exact outercdc normal ownership retirement, separate from native case acceptance.",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/daemon_execution_review",
+  "at": "2026-10-27T23:33:52.727377+00:00",
+  "nonce": "cdc739fc1e365619d5be1b9745ecc291",
+  "nonce_consumed_once": true,
+  "current_boundary": {
+    "owner_pid": 1746887,
+    "owner_starttime": 94092314,
+    "capture_caller_pid": 1746883,
+    "capture_caller_returncode": 0,
+    "bridge_pid": 1746777,
+    "container": "d709acb5c5b508f6c69f0431f08ec232c2214767868eaa340612323b98c44112",
+    "actual_docker_clients": 30,
+    "all_actual_client_positive_reaps": true,
+    "all33_actor_pid_and_pgrp_absent": true,
+    "exact_cid_name_label_absent": true,
+    "no_running_containers_observed": true,
+    "native_cgroup_pids_current": 0,
+    "lease_retained": false,
+    "owner_absence_verified": true,
+    "normal_rm_returncode": 0,
+    "qemu_positive_reap": {
+      "pid_in_container": 11,
+      "returncode": -9,
+      "cleanup_reaped": true,
+      "errors": []
+    },
+    "permanent27_4_mutex_closed_exclusive_probes": [
+      "16: FLOCK  ADVISORY  WRITE 1748429 00:1b:4 0 EOF",
+      "16: FLOCK  ADVISORY  WRITE 1748429 00:1b:4 0 EOF"
+    ]
+  },
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-outer-cdc-root39-1/independent-actual-native-review-1/RAW-CAPTURE-MANIFEST.json",
+      "bytes": 57594,
+      "sha256": "0ea73f0c4839586aa704a034402ba0d3c7631a16bcaeaf0f9d2c3b3796551488"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-outer-cdc-root39-1/independent-actual-native-review-1/RAW-OWNER/result.json",
+      "bytes": 257,
+      "sha256": "b7eb4a46fb0a65fcc0b47394ec7fdceedaa34678be8a58f67a047d74adea3033"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-outer-cdc-root39-1/independent-actual-native-review-1/RAW-OWNER/owner.json",
+      "bytes": 790,
+      "sha256": "4f45c36ce19b224474d2b5c591a2cd2b95088fd4779f666a3e35d045814c06fe"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-outer-cdc-root39-1/independent-actual-native-review-1/RAW-OWNER/state.json",
+      "bytes": 224,
+      "sha256": "8f64521284e61c6b90c0e54574778624ad158e9b6c8fd520de85e33915c62d66"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-outer-cdc-root39-1/independent-actual-native-review-1/RAW-OWNER/027-rm.json",
+      "bytes": 284,
+      "sha256": "962675dca0e8a64d1896617d16592e276acfc2f89de630c017ff29437474f40a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-outer-cdc-root39-1/independent-actual-native-review-1/RAW-OWNER/027-rm.stdout",
+      "bytes": 65,
+      "sha256": "591b2f6280e2a0031b76f58b847a1ee8bdc4349e32bfec1092a9c6846c3de100"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-outer-cdc-root39-1/independent-actual-native-review-1/RAW-OWNER/028-ps.json",
+      "bytes": 308,
+      "sha256": "e6f330c5faf84d2b6ce5b88a312a5d6a85ee6b0bf96d8e3eb32645b6e1755273"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-outer-cdc-root39-1/independent-actual-native-review-1/RAW-OWNER/029-ps.json",
+      "bytes": 312,
+      "sha256": "dc9ed40905948583d6f9fe58f04e3281b1437913e40f5a635ea553ddb362097d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-outer-cdc-root39-1/independent-actual-native-review-1/RAW-OWNER/030-ps.json",
+      "bytes": 308,
+      "sha256": "518759c67b92e9785b3cb2366572da661e8bf860c1da72baf5b1f8b9c1a0afef"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-outer-cdc-root39-1/independent-actual-native-review-1/RAW-ATTEMPT/result.json",
+      "bytes": 99505,
+      "sha256": "3d1f9fcb005731dbaf2266f8195b2958c689c952fc367500eedd5f3433ef4962"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-outer-cdc-root39-1/independent-actual-native-review-1/FRESH-BASELINE-READONLY.stdout",
+      "bytes": 125769,
+      "sha256": "425232f6cd54e60627f2e4ba4d832355e36da4e5b61c98218bb8f08f5168503c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-outer-cdc-root39-1/independent-actual-native-review-1/FRESH-BASELINE-READONLY.JOINED.json",
+      "bytes": 209,
+      "sha256": "274e15b88092f9787a56e67de81a5b169abdd7b18931496123150d828b40f383"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-outer-cdc-root39-1/independent-actual-native-review-1/FRESH-EXACT-CONTAINER-AND-ACTORS.json",
+      "bytes": 2948,
+      "sha256": "c0e0c3d499b28a442991f077a4f120b557e20f0097f28b17b989b87a4876f0d3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-outer-cdc-root39-1/CAPTURE/JOINED.json",
+      "bytes": 224,
+      "sha256": "9af96b5b8c96f68be196b8c297fa589f731889c3e9443fbebd5f15195f452f86"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-outer-cdc-root39-1/ROOT-ONCE-ENTRY.JOINED.json",
+      "bytes": 1505,
+      "sha256": "1b575757e72bc08f51fc00212df9bb497732f313bd17cd24e84bc25a3aa63bc8"
+    }
+  ],
+  "basis": [
+    "Normal owner journal retained all30 Docker commands with positive reap; stop/kill/wait/log/inspect/rm completed through original owner, final ID/name/label probes empty. Owner flush records absence verified and lease released.",
+    "Fresh exact readonly CID/name/label queries and inspect reconcile journal with physical absence. Fresh native cgroup has zero tasks. All33 exact owner/helper/bridge/client PIDs and PGRPs absent from fresh census/current proc.",
+    "Original unchanged baseline observer completed return0 with closed streams and two normal exclusive27:4 probes. These supplement actual current operation positive joins/removal/release; historical baseline alone is not free proof."
+  ],
+  "reviewer_cleanup_or_signals": 0,
+  "new_workloads": 0,
+  "runtime_acceptance_from_wrapper_status": false,
+  "native_acceptance": "separate full original-case review pending",
+  "root_ledger_update": "Root may append consumed outercdc once as next ledger; no new operation released."
+}

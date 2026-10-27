@@ -1,0 +1,213 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "runtime_authority": null,
+  "status": "PASS_BOUNDED_EXISTING_CONDITIONAL_IDENTITY_CHECK_ONLY_NO_CPP",
+  "base": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/candidate/kernel/syscall.c",
+    "bytes": 917339,
+    "sha256": "a96938c6f650f5ed7d8183bd7bb8da1a03c477e13e4093b68a1099ea252a35b2"
+  },
+  "original_union_kernel": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/candidate/kernel/syscall.c",
+    "bytes": 918659,
+    "sha256": "a9ba5105a7e6317a77b29aeacd926c8fa146131ee2bfb2a6fe663853f3164fce"
+  },
+  "corrected_kernel": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/outer-perf-line-restore-source-1/candidate/kernel/syscall.c",
+    "bytes": 918715,
+    "sha256": "d6e9c595364f72018b96ccba50e97ebc71ff438b8e91315982e287d63ff8bafb"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/outer-perf-line-restore-source-1/kernel-syscall-outer-perf-restore.patch",
+    "bytes": 300,
+    "sha256": "76e3e82758ea5c9cce3c53b0347f5477f45268ed88e98067bb74749aca3d59a2"
+  },
+  "existing_checker": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/check_source.py",
+    "bytes": 7879,
+    "sha256": "d3226f8865075be5eb001950a8d0ca03b7ddace7ae6a7def918f60dbaf755c1d"
+  },
+  "checker_function": "identities",
+  "bounded_base_interval_physical": [
+    20252,
+    21348
+  ],
+  "incoming_unconditional_anchor": {
+    "physical": 20252,
+    "directive": "#line20135"
+  },
+  "outer_ENDIF_base_physical": 21268,
+  "outer_ENDIF_original_candidate_physical": 21291,
+  "restore_outside_outer_guard": "#ifdef ENABLE_PERF\n#line 21118\n#else\n#line 21150\n#endif\n",
+  "added_physical_lines": 5,
+  "unchanged_original_C_lines_in_order": true,
+  "known_profile_results": [
+    {
+      "helpers": false,
+      "ENABLE_PERF": false,
+      "active_original_C_identities_checked": 285,
+      "base_live_physical": 21341,
+      "base_live_identity": [
+        21223,
+        null,
+        false
+      ],
+      "before_live_physical": 21364,
+      "before_live_identity": [
+        21246,
+        null,
+        false
+      ],
+      "after_live_physical": 21369,
+      "after_live_identity": [
+        21223,
+        null,
+        false
+      ],
+      "active_original_C_locations_equal": true
+    },
+    {
+      "helpers": false,
+      "ENABLE_PERF": true,
+      "active_original_C_identities_checked": 690,
+      "base_live_physical": 21341,
+      "base_live_identity": [
+        21193,
+        null,
+        false
+      ],
+      "before_live_physical": 21364,
+      "before_live_identity": [
+        21193,
+        null,
+        false
+      ],
+      "after_live_physical": 21369,
+      "after_live_identity": [
+        21193,
+        null,
+        false
+      ],
+      "active_original_C_locations_equal": true
+    },
+    {
+      "helpers": true,
+      "ENABLE_PERF": false,
+      "active_original_C_identities_checked": 113,
+      "base_live_physical": 21341,
+      "base_live_identity": [
+        21223,
+        null,
+        true
+      ],
+      "before_live_physical": 21364,
+      "before_live_identity": [
+        21246,
+        null,
+        true
+      ],
+      "after_live_physical": 21369,
+      "after_live_identity": [
+        21223,
+        null,
+        true
+      ],
+      "active_original_C_locations_equal": true
+    },
+    {
+      "helpers": true,
+      "ENABLE_PERF": true,
+      "active_original_C_identities_checked": 390,
+      "base_live_physical": 21341,
+      "base_live_identity": [
+        21193,
+        null,
+        true
+      ],
+      "before_live_physical": 21364,
+      "before_live_identity": [
+        21193,
+        null,
+        true
+      ],
+      "after_live_physical": 21369,
+      "after_live_identity": [
+        21193,
+        null,
+        true
+      ],
+      "active_original_C_locations_equal": true
+    }
+  ],
+  "normalized_known_conjunctions": {
+    "#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS) && !defined(ENABLE_TOFU)": {
+      "method": "one-line conjunction-of-known-defined-guards to one synthetic ifdef; physical line count unchanged",
+      "terms": [
+        "defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS)",
+        "defined(MCKERNEL_RUST_F03_LEAF_CALLBACKS)",
+        "!defined(ENABLE_TOFU)"
+      ]
+    },
+    "#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(ENABLE_TOFU)": {
+      "method": "one-line conjunction-of-known-defined-guards to one synthetic ifdef; physical line count unchanged",
+      "terms": [
+        "defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS)",
+        "defined(ENABLE_TOFU)"
+      ]
+    },
+    "#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_ATTR_CALLBACKS)": {
+      "method": "one-line conjunction-of-known-defined-guards to one synthetic ifdef; physical line count unchanged",
+      "terms": [
+        "defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS)",
+        "defined(MCKERNEL_RUST_F03_PERF_ATTR_CALLBACKS)"
+      ]
+    },
+    "#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_EVENT_PROVIDER_BRIDGES)": {
+      "method": "one-line conjunction-of-known-defined-guards to one synthetic ifdef; physical line count unchanged",
+      "terms": [
+        "defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS)",
+        "defined(MCKERNEL_RUST_F03_PERF_EVENT_PROVIDER_BRIDGES)"
+      ]
+    },
+    "#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_COUNTER_CONTROL_BRIDGES)": {
+      "method": "one-line conjunction-of-known-defined-guards to one synthetic ifdef; physical line count unchanged",
+      "terms": [
+        "defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS)",
+        "defined(MCKERNEL_RUST_F03_PERF_COUNTER_CONTROL_BRIDGES)"
+      ]
+    },
+    "#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_PROVIDER_NEXT3_BRIDGES)": {
+      "method": "one-line conjunction-of-known-defined-guards to one synthetic ifdef; physical line count unchanged",
+      "terms": [
+        "defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS)",
+        "defined(MCKERNEL_RUST_F03_PERF_PROVIDER_NEXT3_BRIDGES)"
+      ]
+    }
+  },
+  "observable_witness": {
+    "function": "syscall_vm_policy_insert_log_bridge",
+    "macro": "dkprintf: lib/include/ihk/debug.h Ddebug.line=__LINE__",
+    "helpers": true,
+    "ENABLE_PERF": false,
+    "base_physical": 21341,
+    "base_logical": 21223,
+    "original_candidate_physical": 21364,
+    "original_candidate_logical": 21246,
+    "corrected_logical": 21223
+  },
+  "earlier_hypothesis": {
+    "expression": "syscall_vm_policy_clear_alloc_bridge kmalloc_tracked __LINE__21301",
+    "disposition": "Under contradictory nested helper guards; no observable-use claim. Earlier reviewer hypothesis refined, not actual runtime failure."
+  },
+  "initial_checker_probe_refinement": "First pure probe ended inside pre-existing outer helper block; balanced bounded interval now ends immediately after vm_policy_insert_log_bridge. No CPP/compiler/workload ran.",
+  "Rust_inventory_rehashed": false,
+  "Rust_closed_map_reference_unchanged": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/RUST-SUBTREE-CLOSED-SOURCE-MAP.json",
+    "bytes": 130515,
+    "sha256": "015762b0a7e5e3ad54b8a43cd9b109f4dabe29b16e662058c306f372361c90aa"
+  },
+  "all_actual_compiler_CPP_queries_guards_workloads": 0,
+  "canonical_or_Git_writes": 0,
+  "HOST4af93_or_11d85_replays": 0,
+  "app_stream_or_oracle_mutations": 0
+}
