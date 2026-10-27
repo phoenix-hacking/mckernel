@@ -1,3 +1,50 @@
+## 20:56 steering: native retry source; LOCK4 selector correction held — 2026-10-27T20:57:30.126652+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Active thread unchanged; Root33a0d1/currentfree04dd, no heavy or guest live. Current
+20:36:09–21:06:09 bucket isPARTIAL:10newordinaryHOSTcommands0 (F06three3.790010s,
+LOCK4seven6.190092s),4canonicalbodies/7files adopted, production/native/fileclosures0.
+ActualRoot3ownerentry37.979262s afterresource; atomicPASS→claim~.203s proveshandoff
+correction at exactscope, no95%claim. OwnerpreacquireQMP133>107FAIL preserved; runtime
+fixnotyetvalidated. Root4shortparent92B sourceprecheck5bdaPASS; sourcecontext review
+beforepublication/freshresource, no expirednonce/grant replay.
+
+Live20:55correction: originalLOCK4e384/WAKE3a947 Cselectors NOTadopted. Conditional
+#line clone+7 andhelperOFFrestoration needforegroundexclusive successor; retained
+HOSTABI/mockproof461b doesnotproveproductionFILELINE. Private113originalunion is
+preservedinadmissible; ownerpreparesdisjointF06next4+scalar4 successor. Canonical112
+onlyqualifiedevent2/F06allocfree unaffected. Debug32GLOBAL isindependent;14LOCAL
+requiresclone5/copy6/extend3 companionRustconfig scope aftercurrentnativeentry,
+no Cglobalization. Native/F05campaign continues. Full review2056 records owners,
+measurements/unknownCPU+RSS, fixed17:36:09baseline/30minbuckets andexactnextcommand.
+
+## Root33 current free after preflight failure; four-body source adopted — 2026-10-27T20:50:39.900953+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ActualRoot3 entry occurred once at20:45:42.863Z/37.979262s resourceage after atomic
+independentPASS30568 at37.7275s. Durableclaim8af052c0 at37.9301s; bridge handoff
+~0.203s toclaim/~0.252s tonormalentry, no postPASSmodelaction. Actualowner FAIL1
+in.556969s/CPU.505552/RSS53124KiB: QMPpathname133B exceeds107B. Trace rejectsbefore
+native mutex/ownerqueue/evidencedir/container/guest. OriginalFAIL preserved, helper0
+andbridge0 do not normalize owner1. No guest/nativebehavior/wholefile gain.
+Independentcurrentfree04dd3534 jointly binds freshphysical9b967f00, two closed
+mutexprobes, exactpreacquiresource/positivejoins/emptyattemptparent/absentattempt.
+Root33a0d1c7f5 consumed3c67 once; old95a6/ff617 abandonedUNENTERED. No cleanup needed
+or performed. Parentcontrols/05:36:09Z/all earlierclamps/account/oneheavy unchanged.
+Root4 nonce6e8068fed0e1dd27d6724a46ffbbff14 reservedunused withshortprivateparent
+scratch/f05v2n4/fullQMP92B; source-only context successor inprogress, no release.
+
+Root actually adopted7sourcefiles for4HOSTqualified F03event2/F06alloc-free bodies,
+retaining accepted111counter3/runqueue/processsource. Genuinefilename-origin producer
+passed0/.044767s,268Bheaderaeece54c with actualarchargv/CMake/env binding; actual-origin
+profile preparation independent. No112compiler yet: acceptedproduction remains111
+0bbe8259/C91/Rust48/process67; expected87/52 is not acceptance. NativeF05case stays60e62
+andbfdda/Cdca025, all143pins unchanged by canonicalsourceadoption. Scalar4 HOST accepted
+735c748a; LOCK4 sevencommand source ready7535e4 under review; F06next4 threecommand
+profile diskreserve correction addresses42*64MiB outputs, retains1891passedcomparisons.
+No passedbuild/HOST/prefix replay. Latest pushed/fetchedf15ff3c81; next checkpoint includes
+actualfailedentry/Root33/112source. M14/M15OPEN;35/35; native/fileclosures0; no95%claim.
+
 ## F05 native still unentered; one-shot handoff correction — 2026-10-27T20:41:49.077948+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

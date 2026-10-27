@@ -1,0 +1,111 @@
+{
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--fsize=33554432",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/bound-native-runtime-1/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/f05-v2-owned-processvm-current110-20261027-1-run",
+    "--nonce",
+    "3c67e3eb994c24683417880bfe0155a6",
+    "--owner-sha256",
+    "af2b1f57a19949e9867de2496b16063859c47298e9cf03b401e95de5bded5a10",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/f05-v2-owned-processvm-current110-20261027-1-inputs/manifest.json",
+    "--manifest-sha256",
+    "a035f93e5193e92183ac47b3c4271a40e4184563489f7cb7aa59bc7bebff573a"
+  ],
+  "caller_pid": 1687309,
+  "caller_starttime": "93138752",
+  "started_at": 1793133942.8634582,
+  "grant": {
+    "author": "/root",
+    "decision": "GRANTED_ONE_EXACT_NATIVE_F05_V2",
+    "exact_argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/usr/bin/prlimit",
+      "--fsize=33554432",
+      "--as=2147483648:2147483648",
+      "--core=0:0",
+      "--",
+      "/usr/bin/sudo",
+      "-A",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/bound-native-runtime-1/native_diagnostic_container_owner.py",
+      "--attempt-parent",
+      "/home/holden/mckernel-work/scratch/f05-v2-owned-processvm-current110-20261027-1-run",
+      "--nonce",
+      "3c67e3eb994c24683417880bfe0155a6",
+      "--owner-sha256",
+      "af2b1f57a19949e9867de2496b16063859c47298e9cf03b401e95de5bded5a10",
+      "--manifest",
+      "/home/holden/mckernel-work/scratch/f05-v2-owned-processvm-current110-20261027-1-inputs/manifest.json",
+      "--manifest-sha256",
+      "a035f93e5193e92183ac47b3c4271a40e4184563489f7cb7aa59bc7bebff573a"
+    ],
+    "execution_review": {
+      "bytes": 10343,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/root-adopted-native-entry-3/ACTUAL-INDEPENDENT-NATIVE-EXECUTION-REVIEW.json",
+      "sha256": "30568d04534c1ae13f02a2101e870b2de5aeddcc06e7a1f1551a5461d5c9fce1"
+    },
+    "fresh_resource_physical": {
+      "bytes": 202273,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/root-adopted-native-entry-3/ROOT-FRESH-NATIVE-RESOURCE-PHYSICAL-1.json",
+      "sha256": "8b1294740905e6b2650860a90837c010684fe4017b2df37580796fd16f874912"
+    },
+    "maximum_invocations": 1,
+    "nonce": "3c67e3eb994c24683417880bfe0155a6",
+    "pending_execution_packet": {
+      "bytes": 8937,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/root-adopted-native-entry-3/ROOT-EXECUTION-GRANT.PENDING-REVIEW.json",
+      "sha256": "8d6743e20513c106d9de05d60a98c35f906db61e2c750e2abaa4d11d72c67c48"
+    },
+    "runtime_authority": "ONE_EXACT_NATIVE_F05_V2_ORIGINAL_CONTRACT_OPERATION"
+  },
+  "clampsUsed": {
+    "authorizedFixedLimits": [
+      1793165769.0,
+      947874.5689514667,
+      963213.6960030915
+    ],
+    "resourceCutoffs": [
+      1793165769.0,
+      947874.5689514667,
+      963213.6959701729
+    ],
+    "packetCutoffs": [
+      1793165769.0,
+      947874.5689514667,
+      963213.6959701729
+    ],
+    "liveGuardianCutoffs": [
+      1793165769.0,
+      947874.5689514667,
+      963213.6959701729
+    ],
+    "effectiveCutoffs": [
+      1793165769.0,
+      947874.5689514667,
+      963213.6959701729
+    ],
+    "resourceAgesSeconds": [
+      37.97741174697876,
+      37.977411556988955,
+      37.977411444997415
+    ]
+  }
+}

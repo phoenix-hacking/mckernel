@@ -1,0 +1,47 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "runtime_authority": null,
+  "status": "EXACT_SOURCE_MOUNT_CORRECTION_NOT_RUNTIME_QUALIFIED",
+  "predecessor_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 96582,
+    "sha256": "459f31c4c3e246376460e01e73c5550f9e97e401abfe6346b481a67d836859b8"
+  },
+  "readonly_source_root": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source",
+  "source_observations": [
+    {
+      "container_target": "/src/scripts/derive_f06_origin.py",
+      "underlying_readonly_source_path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/scripts/derive_f06_origin.py",
+      "underlying_leaf_exists": false,
+      "disposition": "Remove unnecessary compile-time OCI mount; use exact HOST source producer input before the four-command container; canonical CMake adoption stays unchanged."
+    },
+    {
+      "container_target": "/src/scripts/f06_origin_command_profile.json",
+      "underlying_readonly_source_path": "/home/holden/mckernel/docs/verification/evidence/velocity-intervention-20261023-6/m14-file-lanes/x86-cpu/new-window-source-18-current289-union-source-1/qualified-getsiginfo-current290-successor-1/default-image-current290-coherent-overlay-source-1/authenticated-materialization-and-entry-source-1/source-materialization-current290-ihk3114-attempt-1/materialized-source/scripts/f06_origin_command_profile.json",
+      "underlying_leaf_exists": false,
+      "disposition": "Remove unnecessary compile-time OCI mount; use exact HOST source producer input before the four-command container; canonical CMake adoption stays unchanged."
+    }
+  ],
+  "origin_header": {
+    "container_target": "/work/output/build/kernel/rust/f06-origin/f06_rt_sigreturn_origin.h",
+    "underlying_mount": "/work writable fresh output/work bind",
+    "exact_target_preparation": "    # Exact new header bind target lies under fresh writable /work, never /src.\n    origin_target=build/'kernel/rust/f06-origin/f06_rt_sigreturn_origin.h'\n    origin_target.parent.mkdir(mode=0o700)\n    require(not os.path.lexists(origin_target),'fresh exact origin header bind target')\n    origin_target.touch(mode=0o400,exist_ok=False)\n",
+    "readonly_nested_mount": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/origin-source-preview/f06_rt_sigreturn_origin.h",
+      "bytes": 268,
+      "sha256": "aeece54c3b6f01c326fff3eb925b89b88acd3b198b0047393c8c9c0d78f74ded"
+    },
+    "fresh_parent_mkdir": true,
+    "fresh_leaf_touch": true,
+    "source6153_mutations": 0
+  },
+  "compiler_commands_unchanged": true,
+  "eight_retained_inputs_unchanged": true,
+  "Root32_lineage_modified": false,
+  "actual_Docker": 0,
+  "actual_producer": 0,
+  "actual_materializations": 0,
+  "actual_tests": 0,
+  "canonical_mutations": 0,
+  "limitations": "Static mount-layout resolution only; exact Docker execution needs fresh Root admission/review. Header preview must be replaced with actual bound producer output before build release."
+}

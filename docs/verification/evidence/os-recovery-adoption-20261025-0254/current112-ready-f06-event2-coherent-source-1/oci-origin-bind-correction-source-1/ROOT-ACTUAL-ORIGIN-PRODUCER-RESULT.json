@@ -1,0 +1,67 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "purpose": "Generate actual F06 Rust filename origin header from exact proposed production arch argv; no compiler/native.",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=60:60",
+    "--fsize=67108864:67108864",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/candidate/scripts/derive_f06_origin.py",
+    "--profile",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/candidate/scripts/f06_origin_command_profile.json",
+    "--source",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/candidate/arch/x86_64/kernel/syscall.c",
+    "--output",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/oci-origin-bind-correction-source-1/ROOT-ORIGIN-PRODUCER-OUTPUT-1"
+  ],
+  "pid": 1690196,
+  "returncode": 0,
+  "direct_child_joined": true,
+  "streams_closed": true,
+  "started_at": 1793134136.847298,
+  "finished_at": 1793134136.8920653,
+  "account_window_before": [
+    1793134136.846546,
+    916243.415502604,
+    931581.542553234
+  ],
+  "account_window_after": [
+    1793134136.89207,
+    916243.461028609,
+    931581.588079392
+  ],
+  "independent_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/oci-origin-bind-correction-source-1/independent-source-review-1/INDEPENDENT-SOURCE-REVIEW.json",
+    "bytes": 10490,
+    "sha256": "8de6b12e4a242c80fc9f902162aeae058a4522e073a7edd59fe8b0753d7524c9"
+  },
+  "proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/oci-origin-bind-correction-source-1/LITERAL-ORIGIN-PRODUCER.NOT-GRANTED.json",
+    "bytes": 3925,
+    "sha256": "9068c90b96b0234b3e3512b53001b0b381928150f7de4f6dc7d00282833585ee"
+  },
+  "stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/oci-origin-bind-correction-source-1/ROOT-ACTUAL-ORIGIN-PRODUCER.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/oci-origin-bind-correction-source-1/ROOT-ACTUAL-ORIGIN-PRODUCER.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "actual_header": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/oci-origin-bind-correction-source-1/ROOT-ORIGIN-PRODUCER-OUTPUT-1/f06_rt_sigreturn_origin.h",
+    "bytes": 268,
+    "sha256": "aeece54c3b6f01c326fff3eb925b89b88acd3b198b0047393c8c9c0d78f74ded"
+  }
+}

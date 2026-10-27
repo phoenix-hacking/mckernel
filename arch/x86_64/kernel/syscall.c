@@ -424,18 +424,34 @@ arch_rt_sigreturn_check_signal_bridge(int signum, void *regs, int num)
 #endif
 #line 381
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && (defined(MCKERNEL_RUST_F06_RT_SIGRETURN_ALLOC) || defined(MCKERNEL_RUST_F06_RT_SIGRETURN_FREE))
+#include "f06_rt_sigreturn_origin.h"
+_Static_assert(__builtin_strcmp(__FILE__, MCKERNEL_F06_RT_SIGRETURN_ORIGIN) == 0,
+        "F06 signal allocator original __FILE__ binding drift");
+#endif
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_RT_SIGRETURN_ALLOC)
+extern void *arch_rt_sigreturn_alloc_bridge(size_t size, unsigned long flags);
+#else
+#line 382
 void *
 arch_rt_sigreturn_alloc_bridge(size_t size, unsigned long flags)
 {
 	return kmalloc_tracked(size, flags, __FILE__, __LINE__);
 }
 
+#endif
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_RT_SIGRETURN_FREE)
+extern void arch_rt_sigreturn_free_bridge(void *ptr);
+#else
+#line 388
 void
 arch_rt_sigreturn_free_bridge(void *ptr)
 {
 	kfree_tracked(ptr, __FILE__, __LINE__);
 }
 
+#endif
+#line 394
 void
 arch_rt_sigreturn_xrstor_bridge(void *fpregs)
 {

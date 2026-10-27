@@ -1,0 +1,34 @@
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -36048,3 +36048,31 @@
+ pub unsafe extern "C" fn perf_counter_stop_bridge(counter_mask: CULong, flags: CInt) -> CInt {
+     unsafe { crate::x86_perfctr::ihk_mc_perfctr_stop(counter_mask, flags) }
+ }
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++/// Forward the original event pointer and exact signed C-int result.
++/// # Safety
++/// Caller retains the original live-event, perf-state and synchronization contract.
++/// This cast preserves the raw address; it creates no reference or field access.
++/// The existing architecture provider retains its behavior and any effects.
++#[cfg(all(enable_perf, f03_perf_event_provider_bridges_selected_candidate))]
++#[no_mangle]
++pub unsafe extern "C" fn perf_event_set_period_bridge(event: *mut c_void) -> CInt {
++    unsafe { crate::x86_perfctr::ihk_mc_event_set_period(event.cast()) }
++}
++
++/// Forward the original event pointer and full x86_64 unsigned-long result.
++/// # Safety
++/// Same original event lifetime, current-CPU perf context and caller ordering.
++/// No dereference, ownership transfer, validation or PMU policy is introduced.
++#[cfg(all(enable_perf, f03_perf_event_provider_bridges_selected_candidate))]
++#[no_mangle]
++pub unsafe extern "C" fn perf_event_update_bridge(event: *mut c_void) -> CULong {
++    unsafe { crate::x86_perfctr::ihk_mc_event_update(event.cast()) }
++}
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++// Default OFF. Root alone may insert after metadata-owner disposition.
++#[cfg(any(f06_rt_sigreturn_alloc_candidate, f06_rt_sigreturn_free_candidate))]
++#[path = "f06_rt_sigreturn_alloc_free.rs"]
++mod f06_rt_sigreturn_alloc_free;

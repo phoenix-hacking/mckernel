@@ -20673,11 +20673,17 @@ int perf_counter_set(struct mc_perf_event *event)
 }
 #endif
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_EVENT_PROVIDER_BRIDGES)
+extern unsigned long perf_event_update_bridge(void *event);
+#else
+#line 20558
 static unsigned long
 perf_event_update_bridge(void *event)
 {
 	return ihk_mc_event_update((struct mc_perf_event *)event);
 }
+#endif
+#line 20563
 
 static long
 perf_event_atomic64_read_bridge(void *value)
@@ -20888,11 +20894,17 @@ perf_counter_mask_check_bridge(unsigned long counter_mask)
 #endif
 #line 20766
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PERF_EVENT_PROVIDER_BRIDGES)
+extern int perf_event_set_period_bridge(void *event);
+#else
+#line 20767
 static int
 perf_event_set_period_bridge(void *event)
 {
 	return ihk_mc_event_set_period((struct mc_perf_event *)event);
 }
+#endif
+#line 20772
 
 #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static int
