@@ -1,0 +1,45 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sync-processvm-host13-unused-import-warning-correction-1/qualify_produced_cohort.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sync-processvm-host13-validator-import-suffix-1/qualify_produced_cohort.py
+@@ -10,6 +10,12 @@
+  raw=p.read_bytes();return dict(path=str(p),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+ def write(p,value):
+  with p.open('x') as stream:json.dump(value,stream,indent=2);stream.write('\n')
++def bind_validator_dependencies(manifest):
++ helpers=manifest['unchanged_helpers'];assert set(helpers)=={'profile_clone_witness.py','narrow_f02_alias_identity.py'}
++ for row in helpers.values():assert ref(Path(row['path']))==row, 'accepted readonly validator dependency changed'
++ directories={Path(row['path']).parent for row in helpers.values()};assert len(directories)==1
++ sys.path.insert(0,str(next(iter(directories))))
++ return helpers
+ def main():
+  parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--admission',required=True);args=parser.parse_args()
+  root=Path(args.admission);assert root.is_absolute() and root.parent==E and str(root.resolve(strict=True))==args.admission and re.fullmatch(r'ROOT-[A-Za-z0-9-]+',root.name)
+@@ -20,9 +26,9 @@
+   assert producer['status']=='ACTUAL_BUILD_ONLY_FIVE_COMMAND_PRODUCER' and len(producer['commands'])==5 and all(r['returncode']==0 for r in producer['commands'])
+   assert producer['source_profile']==ref(root/'PROFILE.SOURCE-ONLY.json') and profile['exact_commands']==frozen['exact_commands']
+   for key in ['objects','configuration','postimages','source_directory_exports']:assert profile['inputs'][key]==frozen['inputs'][key],('actual source/retained prefix differs',key)
+-  templates=json.loads((D/'VALIDATOR-TEMPLATE-SOURCES.json').read_text())['templates']
++  manifest=json.loads((D/'VALIDATOR-TEMPLATE-SOURCES.json').read_text());helpers=bind_validator_dependencies(manifest);templates=manifest['templates']
+   for name,row in templates.items():
+-   file=D/'validator-templates'/name;raw=file.read_bytes();assert hashlib.sha256(raw).hexdigest()==row['template_sha256'],('frozen checker changed',name)
++   file=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sync-processvm-host13-unused-import-warning-correction-1/validator-templates')/name;raw=file.read_bytes();assert hashlib.sha256(raw).hexdigest()==row['template_sha256'],('frozen checker changed',name)
+    text=raw.decode().replace('__ACTUAL_ADMISSION_BASENAME__',root.name);(out/name).write_text(text)
+   write(out/'ACTUAL-VALIDATOR-CONTEXT.json',dict(runtime_authority=None,admission=str(root),producer=ref(producer_path),profile=ref(root/'PROFILE.SOURCE-ONLY.json'),static_inputs=ref(D/'ACCEPTANCE-INPUTS.SOURCE-ONLY.json')))
+   sys.path.insert(0,str(out))
+@@ -30,7 +36,7 @@
+    runpy.run_path(str(out/filename),run_name='__main__');report['completed'].append(filename)
+   # Reuse the unchanged exact two-pair alias predicate on newly produced bytes.
+   source=(out/'qualify_clone_pointer_and_warning_suffix.py').read_text();ns={'__file__':str(out/'qualify_next_providers.py')};exec(compile(source[:source.index("\nclone=ns['_reuse_elf_function']")],'accepted current-cohort strict ELF readers','exec'),ns)
+-  spec=importlib.util.spec_from_file_location('actual_cohort_narrow_alias',out/'narrow_f02_alias_identity.py');gate=importlib.util.module_from_spec(spec);spec.loader.exec_module(gate)
++  spec=importlib.util.spec_from_file_location('actual_cohort_narrow_alias',Path(helpers['narrow_f02_alias_identity.py']['path']));gate=importlib.util.module_from_spec(spec);spec.loader.exec_module(gate)
+   rust=ns['rust'];final=ns['final'];data=ns['data'];rels=ns['ns']['_reuse_elf_owning_relocations'];object_bytes=ns['ns']['_reuse_elf_object_bytes']
+   def own(name):
+    values=[s for s in rust.symbols if s['name']==name and s['shndx']!=0];assert len(values)==1;v=dict(values[0]);v['other']=rust.raw[rust.table['offset']+v['index']*24+5];return v
+@@ -38,7 +44,7 @@
+   for i,(original,rel) in enumerate(zip(gate.TARGETS,rels(rust,own('process_idle_callbacks')))):
+    actual=rel['target']['name'];a=own(original);b=own(actual);fa=final(original);fb=final(actual)
+    rows.append(dict(offset=rel['offset'],type=rel['type'],addend=rel['addend'],original_name=original,actual_name=actual,original_object_symbol=a,actual_object_symbol=b,original_final_symbol=fa,actual_final_symbol=fb,original_object_code_hex=object_bytes(rust,a).hex(),actual_object_code_hex=object_bytes(rust,b).hex(),original_final_code_hex=data(fa).hex(),actual_final_code_hex=data(fb).hex(),final_table_pointer=pointers[i]))
+-  alias=gate.validate(rows);write(out/'CURRENT-NARROW-ALIAS-IDENTITY-GATE.json',dict(scope=report['scope'],status=alias['status'],decision=alias,predicate=ref(out/'narrow_f02_alias_identity.py'),general_alias_waiver=False,native_acceptance=False))
++  alias=gate.validate(rows);write(out/'CURRENT-NARROW-ALIAS-IDENTITY-GATE.json',dict(scope=report['scope'],status=alias['status'],decision=alias,predicate=ref(Path(helpers['narrow_f02_alias_identity.py']['path'])),general_alias_waiver=False,native_acceptance=False))
+   files=['RESULT.json','IMAGE-LINK-RESULT.json','NEXT-PROVIDERS-RESULT.json','RETAINED-F02-DATA-OWNERS-RESULT.json','CURRENT-NARROW-ALIAS-IDENTITY-GATE.json']
+   for name in files:assert json.loads((out/name).read_text())['status'].startswith('PASS'),name
+   providers=json.loads((out/'NEXT-PROVIDERS-RESULT.json').read_text());warnings=json.loads((out/'CLONE-FINAL-POINTER-AND-WARNINGS.json').read_text())

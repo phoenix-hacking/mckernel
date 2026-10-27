@@ -1,0 +1,234 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "OPEN_CONSUMER13_BINDINGS_WITH_ALL_BASE_ARTIFACT_GATES_PASSED",
+  "static_acceptance_inputs": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sync-processvm-host13-validator-import-suffix-1/ACCEPTANCE-INPUTS.SOURCE-ONLY.json",
+    "bytes": 50488,
+    "sha256": "711656fb1b62c60b9aca2535cc9d1f853a6ec22f2b1a7a0db93b91b6187605f4"
+  },
+  "actual_admission": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SYNC-PROCESSVM-HOST13-FIVE-BUILD-ADMISSION-1",
+  "completed": [
+    "qualify_clone_pointer_and_warning_suffix.py",
+    "qualify_actual_f02_profile.py",
+    "qualify_actual_image_suffix.py",
+    "qualify_next_providers.py",
+    "qualify_retained_f02_owners.py",
+    "qualify_host13_storage.py"
+  ],
+  "native_acceptance": false,
+  "whole_file_retirement": false,
+  "physical_postjoin": "SEPARATE_ROOT_READER",
+  "compiler_container_Git_grant_actions": 0,
+  "producer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SYNC-PROCESSVM-HOST13-FIVE-BUILD-ADMISSION-1/OUTPUT/work/evidence/producer-contract.json",
+    "bytes": 16835,
+    "sha256": "ca4479f672d926cc523c71c7062868f409e842c1318e0eda16f3cf09567f7f9a"
+  },
+  "actual_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SYNC-PROCESSVM-HOST13-FIVE-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 96277,
+    "sha256": "f13bdbff42626012b73c8c3701afa2bf5991649b055918821b418901d19b0e9c"
+  },
+  "compiled_outputs": [
+    {
+      "path": "/work/output/build/kernel/rust/mckernel_rust.o",
+      "bytes": 18259624,
+      "sha256": "e9cc19209572b008257385f1251e4f8f7fa30c15540bc28255cdbe13f017b90e"
+    },
+    {
+      "path": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+      "bytes": 71144,
+      "sha256": "055c157831118f4b434a92e03725a05bd9ff8c3071235b8c79ab6019c94a9c40"
+    },
+    {
+      "path": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "bytes": 366696,
+      "sha256": "351b652e511bde906867a4751591c4915a84e275359c74609db6d3b6cd169afb"
+    },
+    {
+      "path": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "bytes": 113648,
+      "sha256": "1ceffd6dfbba55025440938e7c6884b1beaab336083c64aa77b3ae50ab5bf7c9"
+    },
+    {
+      "path": "/work/output/build/kernel/mckernel.img",
+      "bytes": 10251784,
+      "sha256": "26eb201ab8160b98e9a95ac3bae116a6392f343faf60641bb62faa7116a793eb"
+    }
+  ],
+  "actual_C_function_delta": {
+    "CMakeFiles/mckernel.img.dir/syscall.c.o": {
+      "original_allocated_FUNC_count": 76,
+      "actual_allocated_FUNC_count": 75,
+      "actual_removed_names": [
+        "sync_child_event"
+      ],
+      "new_C_function_names": [],
+      "exact_expected_selected_provider_removals": [
+        "sync_child_event"
+      ],
+      "retained_partial_bodies": [
+        "do_execveat",
+        "do_fork",
+        "do_mmap",
+        "terminate"
+      ]
+    },
+    "CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o": {
+      "original_allocated_FUNC_count": 45,
+      "actual_allocated_FUNC_count": 31,
+      "actual_removed_names": [
+        "arch_process_vm_rw_find_process_bridge",
+        "arch_process_vm_rw_hold_vm_bridge",
+        "arch_process_vm_rw_lookup_range_bridge",
+        "arch_process_vm_rw_memcpy_bridge",
+        "arch_process_vm_rw_page_fault_bridge",
+        "arch_process_vm_rw_phys_to_virt_bridge",
+        "arch_process_vm_rw_process_unlock_bridge",
+        "arch_process_vm_rw_read_lock_bridge",
+        "arch_process_vm_rw_read_unlock_bridge",
+        "arch_process_vm_rw_release_vm_bridge",
+        "arch_process_vm_rw_update_lock_bridge",
+        "arch_process_vm_rw_update_unlock_bridge",
+        "arch_process_vm_rw_vtop_bridge",
+        "do_process_vm_read_writev"
+      ],
+      "new_C_function_names": [],
+      "exact_expected_selected_provider_removals": [
+        "arch_process_vm_rw_find_process_bridge",
+        "arch_process_vm_rw_hold_vm_bridge",
+        "arch_process_vm_rw_lookup_range_bridge",
+        "arch_process_vm_rw_memcpy_bridge",
+        "arch_process_vm_rw_page_fault_bridge",
+        "arch_process_vm_rw_phys_to_virt_bridge",
+        "arch_process_vm_rw_process_unlock_bridge",
+        "arch_process_vm_rw_read_lock_bridge",
+        "arch_process_vm_rw_read_unlock_bridge",
+        "arch_process_vm_rw_release_vm_bridge",
+        "arch_process_vm_rw_update_lock_bridge",
+        "arch_process_vm_rw_update_unlock_bridge",
+        "arch_process_vm_rw_vtop_bridge",
+        "do_process_vm_read_writev"
+      ],
+      "retained_partial_bodies": []
+    }
+  },
+  "actual_Rust_exports": 35,
+  "exact_expected_undefined": {
+    "removed": [
+      "sync_child_event",
+      "do_process_vm_read_writev",
+      "process_mckfd_free_bridge_source_line",
+      "process_policy_free_bridge_source_line",
+      "process_optional_free_bridge_source_line",
+      "process_alloc_bridge_source_line",
+      "process_free_vm_bridge_source_line",
+      "process_create_thread_alloc_pages_source_line",
+      "process_split_range_alloc_source_line",
+      "process_range_kfree_bridge_source_line",
+      "process_free_range_pages_source_line",
+      "process_add_range_alloc_bridge_source_line",
+      "process_add_range_free_bridge_source_line",
+      "process_page_fault_anon_alloc_line",
+      "process_free_thread_pages_source_line"
+    ],
+    "added": [],
+    "all_other_provider_witnesses_exact": true
+  },
+  "warnings": {
+    "original": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEXT10-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/evidence/00.stderr",
+      "bytes": 55586,
+      "sha256": "ab1f2f7fb19aa10fcc052dc732f2785c1970f7e1b0362b77be3ca5760c803b7f"
+    },
+    "warning_headers_equal": false,
+    "new_only": {
+      "warning: unused imports: `align_of` and `size_of`": 1,
+      "warning: 142 warnings emitted": 1
+    },
+    "old_only": {
+      "warning: 141 warnings emitted": 1
+    },
+    "Rust_warning_count": 142,
+    "new_source_bound_warning_headers": [
+      "warning: unused imports: `align_of` and `size_of`"
+    ],
+    "new_warning_disposition_required": false,
+    "C_warnings": {
+      "process": {
+        "actual_rows": [],
+        "added": {},
+        "removed": {},
+        "stderr": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SYNC-PROCESSVM-HOST13-FIVE-BUILD-ADMISSION-1/OUTPUT/work/evidence/01.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "kernel": {
+        "actual_rows": [
+          "/src/kernel/syscall.c:7546:19: warning: unused variable \u2018range\u2019 [-Wunused-variable]",
+          "/src/kernel/syscall.c:26376:51: warning: \u2018syscall_itimer_offsets\u2019 defined but not used [-Wunused-const-variable=]",
+          "/src/kernel/syscall.c:26058:57: warning: \u2018sched_syscall_offsets\u2019 defined but not used [-Wunused-const-variable=]",
+          "/src/kernel/syscall.c:24297:66: warning: \u2018syscall_cputime_offsets\u2019 defined but not used [-Wunused-const-variable=]",
+          "/src/kernel/syscall.c:4910:46: warning: \u2018wait_scan_kernel_offsets\u2019 defined but not used [-Wunused-const-variable=]",
+          "/src/kernel/syscall.c:4877:41: warning: \u2018wait_zombie_kernel_offsets\u2019 defined but not used [-Wunused-const-variable=]",
+          "/src/kernel/syscall.c:4720:43: warning: \u2018ptrace_detach_kernel_offsets\u2019 defined but not used [-Wunused-const-variable=]"
+        ],
+        "added": {},
+        "removed": {},
+        "stderr": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SYNC-PROCESSVM-HOST13-FIVE-BUILD-ADMISSION-1/OUTPUT/work/evidence/02.stderr",
+          "bytes": 1755,
+          "sha256": "345b1c66a19eb0d998ac4464adca0554b4c138ead644458d2bc767dbc3fde65b"
+        }
+      },
+      "arch": {
+        "actual_rows": [],
+        "added": {},
+        "removed": {},
+        "stderr": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SYNC-PROCESSVM-HOST13-FIVE-BUILD-ADMISSION-1/OUTPUT/work/evidence/03.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    "prior_two_fixed_LP64_declaration_warnings_remain_debt": true
+  },
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sync-processvm-host13-validator-import-suffix-1/actual-qualification-1/RESULT.json",
+      "bytes": 30608,
+      "sha256": "6dd0ef2059cd109030d5bdbedadd83ac1ced6e41f2b153b139960a4dc36384c2"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sync-processvm-host13-validator-import-suffix-1/actual-qualification-1/IMAGE-LINK-RESULT.json",
+      "bytes": 13857,
+      "sha256": "87fa36544d2e058a68d5c62e6b945f75149ea8729f1a85267c79dd0fc1dc4999"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sync-processvm-host13-validator-import-suffix-1/actual-qualification-1/NEXT-PROVIDERS-RESULT.json",
+      "bytes": 25523,
+      "sha256": "538a996f6c6a387e9b8142fc455fea4a7c04e3d0679ff7308927c70650f9bc7a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sync-processvm-host13-validator-import-suffix-1/actual-qualification-1/RETAINED-F02-DATA-OWNERS-RESULT.json",
+      "bytes": 14048,
+      "sha256": "d9163559d7f344663c326e9638e140b9e7bf6bef43bb018355867175031836af"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sync-processvm-host13-validator-import-suffix-1/actual-qualification-1/CURRENT-NARROW-ALIAS-IDENTITY-GATE.json",
+      "bytes": 1034,
+      "sha256": "596517ae89d39346c8c20a87b36d3a8ffc1eeb74a42445621d03f2df72d129e8"
+    }
+  ],
+  "Source38_different_source_debt_closed": false,
+  "HOST13_storage_and_consumers": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sync-processvm-host13-validator-import-suffix-1/actual-qualification-1/HOST13-STORAGE-AND-CONSUMERS.json",
+    "bytes": 42322,
+    "sha256": "fc848965b4515942ea1442c7f7c5806b629cfe77bf82b4729cbaf8639582bc1a"
+  },
+  "HOST13_final_consumer_bindings_complete": false,
+  "HOST13_default_retirement": false
+}

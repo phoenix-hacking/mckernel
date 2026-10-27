@@ -1,0 +1,66 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_BOUND_MECHANICAL_UNUSED_IMPORT_WARNING_DISPOSITION_FOR_INDEPENDENT_REVIEW",
+  "header": "warning: unused imports: `align_of` and `size_of`",
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-host13-five-stage-source-1/rust-subtree/syscall_policy.rs",
+    "bytes": 1259403,
+    "sha256": "02ddaecff895693d389b0a6710c0ff4579c91caf2b53ea5f62746f4b8125d812"
+  },
+  "compiled_policy_ref": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-host13-five-stage-source-1/rust-subtree/syscall_policy.rs",
+    "bytes": 1259403,
+    "sha256": "02ddaecff895693d389b0a6710c0ff4579c91caf2b53ea5f62746f4b8125d812"
+  },
+  "line": 35769,
+  "column": 18,
+  "module": "f03_sync_child_layout_v2",
+  "imported_types": "core::mem::size_of/align_of const layout functions; offset_of macro remains used",
+  "uses": "size_of/align_of occur only inside cfg-disabled49word fixture static; no production expression or ABI declaration changes",
+  "actual_fixture_cfg_selected": false,
+  "actual_production_cfg_selected": true,
+  "baseline_stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEXT10-DEFAULT-BUILD-ADMISSION-1/OUTPUT/work/evidence/00.stderr",
+    "bytes": 55586,
+    "sha256": "ab1f2f7fb19aa10fcc052dc732f2785c1970f7e1b0362b77be3ca5760c803b7f"
+  },
+  "actual_stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SYNC-PROCESSVM-HOST13-FIVE-BUILD-ADMISSION-1/OUTPUT/work/evidence/00.stderr",
+    "bytes": 55794,
+    "sha256": "72ed15d8ce59998bc956cf89220b867e963d4210e91497f0c26a6243518508d9"
+  },
+  "actual_Rust_warnings": 142,
+  "baseline_Rust_warnings": 141,
+  "exact_added_headers": {
+    "warning: unused imports: `align_of` and `size_of`": 1,
+    "warning: 142 warnings emitted": 1
+  },
+  "exact_removed_headers": {
+    "warning: 141 warnings emitted": 1
+  },
+  "original_failure_preserved": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/qualified-sync-processvm-host13-five-stage-source-1/actual-qualification-1/FINAL-ARTIFACT-QUALIFICATION.json",
+    "bytes": 2220,
+    "sha256": "8bf9dab649a189661bde450318383f241692ec7acd9b8aab744accafde849368"
+  },
+  "actual_producer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SYNC-PROCESSVM-HOST13-FIVE-BUILD-ADMISSION-1/OUTPUT/work/evidence/producer-contract.json",
+    "bytes": 16835,
+    "sha256": "ca4479f672d926cc523c71c7062868f409e842c1318e0eda16f3cf09567f7f9a"
+  },
+  "actual_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-SYNC-PROCESSVM-HOST13-FIVE-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json",
+    "bytes": 96277,
+    "sha256": "f13bdbff42626012b73c8c3701afa2bf5991649b055918821b418901d19b0e9c"
+  },
+  "retry_driver_byteexact": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sync-processvm-host13-unused-import-warning-correction-1/qualify_produced_cohort.py",
+    "bytes": 6931,
+    "sha256": "6e69f95e330645dc7213175d3b0d0cd7115bfeb4ea838dd9a25c473fad7ef27b"
+  },
+  "retry_output": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/sync-processvm-host13-unused-import-warning-correction-1/actual-qualification-1",
+  "original_failed_output_unmodified": true,
+  "compiler_container_canonical_Git_grant_actions": 0,
+  "HOST13_final_consumer_bindings": "OPEN_UNLESS_EXACT_REAL_PROOF",
+  "independent_disposition_receipt": null
+}

@@ -1,4 +1,33 @@
-## Five-stage build joined; narrow qualification repair — 2026-10-27T05:36Z
+## Accepted coherent five-stage artifact; daemon static prepared — 2026-10-27T05:38:58Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+IndependentartifactPASS004291b3 joins9fe81078basegates+ed3fb6ac exact13folded
+consumerarguments+bf8d80abcurrentfree. Actual26eb201a10251784B defaultimage accepted;
+35Rustexports/Cfunctions75kernel+31arch=106 vsprior121. ProcessC0functions,
+OBJECT84→71;13readonlysignedCIntowners nowRust withgenuinefinalcallarguments.
+Delta is2selectedentries+13reusedadapters, not15newalgorithms. No newnative,
+wholefile, Source38GNU_RETAIN, PMU/MM/lifetime orM14/M15completion. Remaining71
+metadata classified46debugsymbolfamilies/25readonly; old4data/callback unchanged.
+
+Fivecommands0/22.257436wall/22.254142CPU/648704KiB peak;7Cprefixes reused.
+Compilerfinish→actualdecision375.695261s; terminaltooljoinOBSERVATION→decision
+354.625827s, exactjoinevent/sourceReady timingUNK2026-10-27T05:38:58ZN.180targetnotverified/met.
+FirstwarningFAIL8bf9 preserved; exactfixture-import disposition+8tests; suffix
+importFAIL07002c25 preserved then4literalreal-import tests/freshreadonlysuffixPASS.
+No compilerrepeat orwarning/ABI/consumer waiver. Scripted13OPEN kept unchanged,
+exactindependentinstruction supplement closes onlythisactualtuple.
+
+NEXT actualslot: daemonSource28 suffix. SourceprofilePASS; typedsourcee4f64eff and
+21consumednonceledger5376e1f7 Rootrecorded. Ordinary STATICprepare DONEonce;
+nonce d4134805d53969c694dd03c112991116 RESERVEDUNUSED, requeste0ca6a20. No
+freshresource/actualexecutionrelease/OWNERcapture yet. Do NOTrepeatprepare/mirror.
+Existingowner finishesbatchpublication/bind APIs thenRootfreshcapture/exactreview/
+ownedentry. Original8second/singleton/TIDbirth/positivejoin guards intact; case0–7
+prefixes reused, suffix8–25 only+requiredRustfixture objectregeneration. FP pathcorrected
+static6a8fa40f alsoready, no newstaging/nonce/runtime. Rootoneheavy, solecanonical/Git.
+Samegoalactive/fixed11:24:50Z/creditledger/account/realholds/resources unchanged.
+
+## Five-stage build joined; narrow qualification repair — 2026-10-27T05:34Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 Independent current-free acceptance bf8d80ab now confirms actual FIVE caller/holder
