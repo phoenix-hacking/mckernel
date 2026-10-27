@@ -3,7 +3,7 @@
   "id": "M15",
   "scope_id": "project-owned-runtime-rust-cutover-v1-20261024",
   "title": "Complete Rust/assembly custom host modules and integration runtime",
-  "as_of": "2026-10-27T19:06:35.717743+00:00",
+  "as_of": "2026-10-27T19:46:22.263905+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user2026-10-24: custom code outside the Rocky/Linux baseline must be Rust, including loadable IHK/project modules; previous reviewed-assembly allowance retained.",
@@ -1480,6 +1480,11 @@
       "at": "2026-10-27T19:06:35.717743+00:00",
       "actual_progress": "CURRENT110 actual5productioncommands PASS; independent selecteddefault60e62/Rust45/C94/process68, sixCfunction replacements+116BRustidledata. No native/wholefile delta. Source32threecallsbehaviorPASS/outerFAILmissingafterpidsOPEN. Executor actualprecommandfailureea96retired, mappingexpert active. OriginalF05nativeHOLD; foregroundv2readyfornewHOSTqualification.",
       "evidence": "../evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/TWENTY-MINUTE-ENGINEERING-REVIEW-1856.json"
+    },
+    {
+      "at": "2026-10-27T19:46:22.263905+00:00",
+      "actual_progress": "CURRENT111 independentlyselecteddefault0bbe/Rust48/C91/process67,3callbacks+208BRustdata;4commands0/21.678797ssum. Executor6phase selectedtarget/stagedinstall354oldCsource definitionsabsent; native/file/all349/all51/allocationOPEN. F05v2HOST/finalizer/offlinecompositionPASS, nativeentrysource27dfready; no native/filedelta.",
+      "evidence": "../evidence/os-recovery-adoption-20261025-0254/CURRENT111-INDEPENDENT-DEFAULT-ARTIFACT-ACCEPTANCE.json"
     }
   ],
   "engineering_updates": [
@@ -1991,26 +1996,24 @@
     }
   ],
   "latest_dispatcher_checkpoint": {
-    "at": "2026-10-27T19:06:35.717743+00:00",
-    "evidence": "../evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/TWENTY-MINUTE-ENGINEERING-REVIEW-1856.json",
+    "at": "2026-10-27T19:46:22.263905+00:00",
     "actual_progress": {
-      "accepted_selected_default_image": "60e62f97ef48ecaf14174af1c5b75d7181969f439c1b45c618d6c16d4bc40d57",
-      "new_candidate_builds": 1,
-      "new_production_commands_passed": 5,
-      "Rust_exports": 45,
-      "C_functions": 94,
-      "process_C_objects": 68,
-      "C_functions_replaced_delta": 6,
-      "Rust_idle_bytes_delta": 116,
+      "accepted_default_image": "0bbe8259f4c2dd1d0b54616b3b84842bcf2991e2417346371449cfd66ed9fb69",
+      "Rust_exports": 48,
+      "C_functions": 91,
+      "process_C_objects": 67,
+      "new_production_commands": 4,
+      "new_C_function_replacements": 3,
+      "new_Rust_runqueue_bytes": 208,
       "native_credit_delta": 0,
       "whole_file_credit_delta": 0,
-      "new_guest_apps": 0,
-      "Source32_remaining_three_calls": "PASS_NO_REPLAY",
-      "Source32_outer": "FAIL_AFTERPIDS64_OPEN",
-      "executor_ea96": "CONSUMED_DRIVER_PRECOMMAND_FAILURE_NORMAL_RETIREMENT_PENDING_INDEPENDENT",
-      "F05_original": "NATIVE_HOLD",
-      "F05_v2": "SOURCE_READY_HOST_UNRUN"
+      "executor_selected_C_definitions_absent": 354,
+      "F05_v2_offline_composition_seconds": 21.411662,
+      "F05_native_target": "60e62f97",
+      "installed_executor_loader_commands": 3,
+      "loader_acceptance": "PENDING_REVIEW"
     },
-    "limits": "Selected-build ABI/link ownership accepted; matching native and supported whole-file acceptance remain open. Original failed runs retained."
+    "evidence": "../evidence/os-recovery-adoption-20261025-0254/CURRENT111-INDEPENDENT-DEFAULT-ARTIFACT-ACCEPTANCE.json",
+    "limits": "Selecteddefault/stagedinstall only; matching native and original fullfile/ABI/semantic/allocation obligations remain."
   }
 }

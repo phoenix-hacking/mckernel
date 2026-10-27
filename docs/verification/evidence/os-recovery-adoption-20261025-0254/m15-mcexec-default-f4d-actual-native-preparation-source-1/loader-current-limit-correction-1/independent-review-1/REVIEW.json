@@ -1,0 +1,121 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/guardian_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "at": "2026-10-27T19:42:55.409395+00:00",
+  "decision": "PASS_SOURCE",
+  "blocking_findings": [],
+  "execution_release": false,
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/loader-current-limit-correction-1/READY.SOURCE-ONLY.json",
+    "bytes": 3074,
+    "sha256": "1204366bb3947207111807552b3c02e40ba11581a50e70a6c3ac81ffde5d4423"
+  },
+  "packet": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/loader-current-limit-correction-1/LOADER-THREE-COMMANDS.NOT-RELEASED.json",
+    "bytes": 20870,
+    "sha256": "455a43daa524dee21cdeb2e91d4204fb855f9ed6601fb20fe9a9b2caf3548041"
+  },
+  "wrapper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/loader-current-limit-correction-1/run_installed_loader_h990_once.py",
+    "bytes": 8743,
+    "sha256": "aa62b0133491860b67766b693134cd2c7c68f06296cbba8b6de6bd100b929e56"
+  },
+  "grant_template": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/loader-current-limit-correction-1/ROOT-LOADER-GRANT.TEMPLATE.NOT-AUTHORITY.json",
+    "bytes": 1705,
+    "sha256": "53e731a731aef0ba2e8c48c9a5d4dfc4c5f6a53a6bdeded1a747951627beab63"
+  },
+  "prior_focused_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/independent-loader-source-review-1/REVIEW.json",
+    "bytes": 6990,
+    "sha256": "84dc4386a9407cac928dbf2e3b9517d2216e1ea2452065e62dd1215464daf521"
+  },
+  "resolved_finding": "LOADER_AGGREGATE_CURRENT_CAP is resolved only for exact packet455a43da and wrapperaa62b013. Original23941543572 packet/template and blocked review84dc4386 remain preserved.",
+  "delta_checks": [
+    "READY1204366b and every declared successor artifact size/SHA256 independently match. Corrected packet455a43da differs from originalc10d only profile.aggregate_memory_ceiling_bytes23941543572 -> actual invocation23259332608. All14inputs/3argv/oracles/paths and all other profile/data fields are exact.",
+    "Corrected wrapperaa62b013 is byte-exact original2a6 wrapper after only packet SHA dependency replacement and explicit Root aggregate_reserved_memory_bytes check. type(reserved) is int,536870912<=reserved<=profile.aggregate_memory_ceiling_bytes==23259332608. Missing,bool,float,string,underreservation,overlimit/oldcap reject.",
+    "Root reservation total explicitly includes this512MiB job plus all other active reservations; wrapper validates bound amount while Root remains actual shared-budget observation/allocation owner. This creates no new memory/job/heavy allowance.",
+    "Original h990 selected lifecycle/owned capture/positive child+group+stream checks, stableFD input/capacity functions, CPU6/onejob/AS512MiB/CPU30/wall45+6cleanup/FSIZE128MiB/FD256/core0, exact guardv2 and fresh120s Root grant semantics remain byte-exact.",
+    "Successor template binds actual packet/wrapper/profile pins and leaves statusNOT_GRANTED/reservationnull/CPU6false/clocksnull. Seven retained delta controls pass; no test/guard/loader was replayed in this review."
+  ],
+  "reused_prior_findings": [
+    "All14 installed-loader/readelf/env/guest-lib/provider/acceptance input byte/mode/resolved-path pins and all3 argv checked in prior84dc source review remain the exact selected inputs.",
+    "Installe5d18169 binds accepted7908 six-phase result with exact16B RPATH change from buildcae240a8; loader0853/libcb058/libnumabe20 tuple and original metadata/version/--verify empty streams/--list exact paths predicates remain unchanged.",
+    "Fresh empty trusted cwd and env-i/no ambient LD state remain mandatory. --inhibit-cache uses pinned guest library path; installed RPATH is neither rewritten nor inhibited, and any different selected provider rejects.",
+    "Raw captures need independent actual output interpretation, all3directjoins/groups/closedstreams and stable before/after inputs. Source approval is not installed loader/main/native/349parity/51data/allocation/fullABI/wholefile acceptance."
+  ],
+  "Root_literal_command": [
+    "taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=536870912:536870912",
+    "--cpu=30:30",
+    "--fsize=134217728:134217728",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/loader-current-limit-correction-1/run_installed_loader_h990_once.py",
+    "--grant",
+    "ACTUAL_ROOT_LOADER_GRANT.json",
+    "--grant-sha256",
+    "ACTUAL_GRANT_SHA256"
+  ],
+  "required_actual_Root_grant": {
+    "author": "/root",
+    "status": "PASS_ROOT_ORDINARY_INSTALLED_LOADER_THREE_COMMANDS",
+    "execution_count": 1,
+    "packet": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/loader-current-limit-correction-1/LOADER-THREE-COMMANDS.NOT-RELEASED.json",
+      "sha256": "455a43daa524dee21cdeb2e91d4204fb855f9ed6601fb20fe9a9b2caf3548041"
+    },
+    "source": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/loader-current-limit-correction-1/run_installed_loader_h990_once.py",
+      "sha256": "aa62b0133491860b67766b693134cd2c7c68f06296cbba8b6de6bd100b929e56"
+    },
+    "profile": {
+      "AS_bytes": 536870912,
+      "CORE": 0,
+      "CPU": 6,
+      "CPU_seconds": 30,
+      "Docker": false,
+      "FSIZE_bytes": 134217728,
+      "HOST_MemAvailable_reserve_bytes": 4294967296,
+      "NOFILE": 256,
+      "aggregate_jobs_max": 7,
+      "aggregate_memory_ceiling_bytes": 23259332608,
+      "commands_sequential": 3,
+      "compiler": false,
+      "daemon_or_CLI_main": false,
+      "disk_HOST_floor_bytes": 17179869184,
+      "disk_scratch_floor_bytes": 12884901888,
+      "full_output_growth_reserve_bytes": 1073741824,
+      "guest": false,
+      "normal_owned_cleanup_seconds": 6,
+      "ordinary_jobs": 1,
+      "root": false,
+      "work_wall_seconds": 45
+    },
+    "aggregate_reserved_memory_bytes": "actual integer total including job,536870912..23259332608",
+    "observed_clocks": "fresh3actual clocks age[0,120)s",
+    "ordinary_CPU6_reserved": true,
+    "current_account_admission": "actual current Root account/holds/shared-headroom evidence",
+    "independent_source_review": "exact this review reference"
+  },
+  "conditions": [
+    "Root must separately substantiate current CPU6 slot/shared CPU-RAM-job budget, current account/holds/ownership/capacity and fixed-window admission before actual one-shot grant. No new workload is authorized by this source review.",
+    "Use corrected wrapper/packet only and preserve still-fresh actual-installed-loader-1 output namespace. If it exists/partial/failed, preserve and reconcile; no unchanged replay.",
+    "Later actual native/staged final-map must preserve exact installed/bin/provider bytes and no cache/RPATH override; frozen foreground F05 C selection remains unchanged unless Root explicitly adopts a separate coherent successor.",
+    "Same fixedUTC05:36Z/v2earlierMONO947874.5689514667/BOOT963213.6960030915/boot7bfc5687, creditrun7f/57774.852125/cumulative>=22812.3311/allholds/resourcecontrols/parentexclusive outercontrols persist."
+  ],
+  "review_actions": {
+    "delta_only_byte_data_AST_checks_reusing_prior14pin_review": true,
+    "no_actual_loader_guard_capacity_account_query_admission": true,
+    "no_workload_stage_or_canonical_edit": true,
+    "only_this_review_directory_written": true
+  }
+}

@@ -1,3 +1,93 @@
+## F05v2 static admission ready; CURRENT111 accepted — 2026-10-27T20:08:09.879763+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+CURRENT111 independently accepted cf7e582c:0bbe8259/Rust48/C91/process67.
+All4buildcommands0/21.678797ssum/21.700729sspan/CPU21.713679/RSS589584KiB,
+currentfree9904/Root32ledger822f; no heavy live. Native/wholefile delta0.
+F05v2 stays exact60e62/bfdda/5298/af2b, fullactualscratchmanifesta035PASS143pins,
+map/case eligibility51f88a81 PASS, 5entryhelper source27df158d PASS.
+Rootsourceauthoritya926/casecapability79081/staticdf318 bound torealmap;
+freshnonce95a6e9dddf8a378d9b0e17f02617c451 RESERVED UNUSED. Sourcepush/fetch thenfresh
+resource/exactrelease/entry NEXT; no resourceclock or nativegrant yet. Original
+HOSTSTATICscratchrefusal andv1HOLD preserved; no guardweakening or passedwork replay.
+
+InstalledRustexecutor actual3loadercommands independentlyPASS8417dbe4, .115295s
+capture/.148716CPU. 354oldCdefsabsentselectedtarget; main/native/file/all349/all51/
+allocation OPEN. No re-port/rebuild. F03event2 HOST7 actuallyPASS6.043107s,
+independentacceptancepending; nextprivateCURRENT112union459f31 combinesonlyready
+F06alloc/free+Rustfilenameorigin+event2, 4commands/113Rustsource/sameprocessa4309.
+Ready-source families F03perf3/F06next4/F02scalar4 and foregroundLOCK4 remain
+private; reuse1891passedF06comparisons, no speculativebuildor native delay.
+
+19:56steering record retains17:36:09baseline/nonoverlap30minbuckets/20mincadence,
+no95%claim. MechanicalbindingbeforeF05entry islongestblocker; staticreviewprewarmed
+beforefreshclock, actualRootgrant keptcentral. Parentexclusivecontrols/sameaccount/
+05:36:09Zminclamps/permanent27:4/scratch21/floors/oneheavy unchanged.
+
+## CURRENT111 independently accepted; F05v2 native preparation — 2026-10-27T19:46:22.263905+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+AcceptedCURRENT111 image0bbe8259/Rust48/C66+25=91/process67, cf7e582c.
+Fouractualcommands0; sumwall21.678797s/span21.700729s/CPU21.713679s/
+cumulativechildRSS589584KiB. Rootnonce799CONSUMEDONCE/tool87104 terminal0;
+holder1659765/runner1660450joined, retainedstoppedCID5c92/Pid0/noOOM,
+currentfree9904aa3c/Root32ledger822f. No heavy currently. No successfulbuild replay.
+NewselectedRust3callbacks+208B26fieldtable; actualschedule17foldedfields/9data-only,
+inheritedconsumers/logger/warnings positivelyproved. Native/filedelta0;35/35,
+M14files2/6,M15files1/8 OPEN. F05v2stays60e62 acceptedartifact, notrolledto0bbe.
+
+Executor sixphase selectedtarget/stagedinstallaccepted7908e5c0;354oldsource
+functionsabsent(349bridges+main+util_thread+3inline), not365unwrittenRustfunctions.
+No native/file/all349semantics/all51ABI/allocationclosure. ActualinstalledELF3loader
+commands now0/joined/0.115295s capturedwall/.148716CPU; pending exactloaderreview.
+No CLI main run. Reuse F4D producer/object/parity/ABI at exactscope; F05workingC
+launcherdca025 unchanged; originalstartup+235nativeobligations remain.
+
+F05v2 exactofflinecompositionPASS21.411662s/tool70310/PID1663915 joined0,
+overlaycfcc7970/15643433B, actual5298evaluator+af2bowner/143canonicalimportPASS.
+Originalv1HOLD preserved. Rootfirstfull-ownercheck onHOSTSTATICmanifest correctly
+rejectedrequiredscratchpath beforeanyworkload; preserveoriginalfailure and do
+normalapprovedscratchmanifestcopy, noownerguardweakening. Fiveentryhelper successors
+sourcePASS27df158d, replacing selectedexpiredcutoff/235bindings coherently.
+NextRoot: actualscratchmanifest/fullmap/capability/sourceauthority/staticbindings,
+sourcepublication, thenfreshnormalresource/independentexactrelease forF05v2.
+No resourceclock/nativegrant/nonce yet. Caseimage60e62/bfddapayload fixed.
+
+F03twoeventbridge source+7HOSTprofile c10db27d accepted/unrun, readyindependent.
+F06Rustorigin HOST840accepted a5d372fa; canonical/default/nativeOPEN.
+Rootsourcebacklogsufficient; no freshinventory requested. Parentexclusivecontrols/
+fixed05:36:09Z/same7fcreditledger/realholds/mutex27:4/scratch21/floors unchanged.
+Latestpushed/fetchedsourcecheckpoint6440c9f47; coherentactualresults checkpoint next.
+
+## CURRENT111 sole holder live; executor independently accepted — 2026-10-27T19:26:19.001876+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Soleheavy holder1659765/start92650542/FD3 permanent27:4 LIVE tool87104 waiting exact
+CURRENT111four-command release. Rootadmission2 nonce799adcb935b7640bdc2389c91abc00dd,
+profile82b1159f, Root31ledger0fbc2077. No Docker/build from holder yet at thisentry.
+Do not start anotherheavy or clearholder. Sourcecdeebb accepted; freshresource06c8bdc8
+and pendinggrantee695b6 awaiting actual independentreview+RootGO within120s.
+
+Executor7d21 all6phases0/2.938714s, wholetool5.735564s, normalretirement/currentfree
+29c02920 and selectedtarget/stagedinstall acceptance7908e5c0 PASS. ReuseexactF4D
+Rustobject+ASM; actualbuildcae240a8/installe5d18169(396200B), exact16BRPATH-onlychange.
+Main/native/all349parity/all51ABI/allocation/wholefile remainOPEN; noCretirementclaim.
+Root31 consumed7d onlyonce. Fresh1115a9 staticnamespace1 abandonedunused/preserved.
+
+F05v2 independentHOSTacceptanceebe76add PASS; Rootfinalizer actuallyPASS/.051934s,
+boundevaluator529830ad/100261B in f05-v2-root-export-and-native-preparation-source-1/
+bound-native-runtime-1. No nativeauthority. Ownerliteralprivatebindingpreparation
+active; originalv1nativeHOLD preserved. Foregroundexclusivepayload/template/finalizer
+unchanged. F06HOSTaccepted a5d372fa/840parity+exactRustfilename+GCCpositive/negative;
+canonicalF06/default/nativeOPEN. NextF03twoeventbridge source32c519de ready/unrun.
+
+19:16steering record ROOT-NEW12H-ACTUAL-ADMISSION-1/TWENTY-MINUTE-ENGINEERING-REVIEW-1916.json.
+Same30minbaseline17:36:09, no95%claim; F05source→compiler480.655572s. Backlogsufficient;
+no pre-bound unassignedF02metadatafamily outsideadoptedtimer/idle/scheduler208 available
+withoutnewinventory; foregroundcapacityoffer deferred to keepcriticalpathmoving.
+Checkpoint6440c9f47 pushed/fetched actualsourcewrapper25rows andCURRENT111120rows.
+Fixed05:36:09Z/sameaccount/parentcontrols/resources; acceptedkernelstill60e62/C94/process68.
+
 ## F05v2 actual HOST3 and F06 origin HOST6 passed — 2026-10-27T19:15:15.436109+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

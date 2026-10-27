@@ -1,0 +1,9 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRESERVED_OFFLINE_LITERAL_OFFSET_READER_FAILURE",
+  "field": "thread_mod_clone_offset",
+  "value": 5212,
+  "failure": "Literal0x145c is folded relative to sched_list pointer: actual0x374=5212-4328.",
+  "correction_predicate": "Require exact lea-0x10e8(%r13),%r14 and mov0x374(%r13),%ecx with positive exact tablevalues, not arbitrary constant matching.",
+  "artifact_acceptance": false
+}

@@ -1,0 +1,240 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_DERIVED_PRIVATE_OUTPUT_RECIPE_NOT_GRANTED",
+  "runtime_authority": null,
+  "sequential": true,
+  "compiler_jobs": 1,
+  "commands": [
+    {
+      "id": "rust-host-object",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--crate-name",
+        "f03_event_provider_fixture",
+        "--crate-type",
+        "lib",
+        "--emit=obj",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "--cfg",
+        "enable_perf",
+        "--cfg",
+        "f03_perf_event_provider_bridges_selected_candidate",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1/lib.fixture.rs",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1/ordinary-host-profile-1/future-output-1/providers.o"
+      ],
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. rust-host-object",
+      "timeout_seconds": 90,
+      "stdout_limit_bytes": 16384,
+      "stderr_limit_bytes": 16384,
+      "expected": "exit0;two Rust wrapper exports and ABI8; no production provider execution",
+      "requires_fresh_Root_ordinary_grant": true
+    },
+    {
+      "id": "selected-witness",
+      "argv": [
+        "/usr/bin/cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+        "-DMCKERNEL_RUST_F03_PERF_EVENT_PROVIDER_BRIDGES",
+        "-c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1/selector-witness.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1/ordinary-host-profile-1/future-output-1/selected.o"
+      ],
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. selected-witness",
+      "timeout_seconds": 90,
+      "stdout_limit_bytes": 16384,
+      "stderr_limit_bytes": 16384,
+      "expected": "exit0; original C ABI and exact selected/fallback callback ownership",
+      "requires_fresh_Root_ordinary_grant": true
+    },
+    {
+      "id": "fallback-none-witness",
+      "argv": [
+        "/usr/bin/cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "-c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1/selector-witness.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1/ordinary-host-profile-1/future-output-1/fallback-none.o"
+      ],
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. fallback-none-witness",
+      "timeout_seconds": 90,
+      "stdout_limit_bytes": 16384,
+      "stderr_limit_bytes": 16384,
+      "expected": "exit0; original C ABI and exact selected/fallback callback ownership",
+      "requires_fresh_Root_ordinary_grant": true
+    },
+    {
+      "id": "fallback-helper-witness",
+      "argv": [
+        "/usr/bin/cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+        "-c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1/selector-witness.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1/ordinary-host-profile-1/future-output-1/fallback-helper.o"
+      ],
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. fallback-helper-witness",
+      "timeout_seconds": 90,
+      "stdout_limit_bytes": 16384,
+      "stderr_limit_bytes": 16384,
+      "expected": "exit0; original C ABI and exact selected/fallback callback ownership",
+      "requires_fresh_Root_ordinary_grant": true
+    },
+    {
+      "id": "fallback-callback-witness",
+      "argv": [
+        "/usr/bin/cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "-DMCKERNEL_RUST_F03_PERF_EVENT_PROVIDER_BRIDGES",
+        "-c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1/selector-witness.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1/ordinary-host-profile-1/future-output-1/fallback-callback.o"
+      ],
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. fallback-callback-witness",
+      "timeout_seconds": 90,
+      "stdout_limit_bytes": 16384,
+      "stderr_limit_bytes": 16384,
+      "expected": "exit0; original C ABI and exact selected/fallback callback ownership",
+      "requires_fresh_Root_ordinary_grant": true
+    },
+    {
+      "id": "host-parity-link",
+      "argv": [
+        "/usr/bin/cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1/driver.c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1/ordinary-host-profile-1/future-output-1/selected.o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1/ordinary-host-profile-1/future-output-1/providers.o",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1/ordinary-host-profile-1/future-output-1/parity"
+      ],
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. host-parity-link",
+      "timeout_seconds": 90,
+      "stdout_limit_bytes": 16384,
+      "stderr_limit_bytes": 16384,
+      "expected": "exit0; only inert endpoint providers, no kernel/PMU provider object",
+      "requires_fresh_Root_ordinary_grant": true
+    },
+    {
+      "id": "host-parity-run",
+      "argv": [
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1/ordinary-host-profile-1/future-output-1/parity"
+      ],
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. host-parity-run",
+      "timeout_seconds": 90,
+      "stdout_limit_bytes": 16384,
+      "stderr_limit_bytes": 16384,
+      "expected": "exit0; stdout exactly PASS event-provider 120 C/Rust pairs; 240 exact pointer/operation/result traces; ABI8; selected2\n",
+      "requires_fresh_Root_ordinary_grant": true
+    }
+  ],
+  "future_output_root": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1/ordinary-host-profile-1/future-output-1",
+  "output_root_created": false,
+  "expected_stdout": "PASS event-provider 120 C/Rust pairs; 240 exact pointer/operation/result traces; ABI8; selected2\n",
+  "tool_refs": {
+    "stable_Rust": {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "bytes": 654904,
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1"
+    },
+    "C_compiler": {
+      "path": "/usr/bin/cc",
+      "bytes": 1158288,
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+    }
+  },
+  "requires": "Fresh Root current account/source/ownership ordinary admission and exact grant; no old nonce/release reuse",
+  "actual_compiler_commands": 0,
+  "actual_behavioral_tests": 0,
+  "proposed_ordinary_limits": {
+    "cpu": 6,
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "wall_seconds_each": 30,
+    "CPU_seconds_each": 30,
+    "FSIZE_bytes": 67108864,
+    "CORE_bytes": 0
+  },
+  "actual_profile_authority": null,
+  "no_PMUs_or_event_dereferences": true,
+  "original_supported_file_predicate": "Matching production default selected C/Rust/link and native proof before supported-file or whole-file retirement.",
+  "source_inputs": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1/lib.fixture.rs",
+      "bytes": 1311,
+      "sha256": "ffe87dab6de8448ebd02bc1dd3986c2a799000e899e4d9b3f9b041f40adb4440"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1/selected-bridges.Rust.inc",
+      "bytes": 1157,
+      "sha256": "317d72f151104bdc6fd00d357cb76362e4e6ac0e6b3be54134a7b2c3aeefdc8c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1/retained-abi-types.Rust.inc",
+      "bytes": 44,
+      "sha256": "e27a868d2a7208df018da040bfb9228703774da5280bc31bc3bbd28767510f7c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1/selector-witness.c",
+      "bytes": 755,
+      "sha256": "90869fbae30387d437c6a09873f3a510e1df9a57719c8b6556a88d7baf074bf4"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1/paired-selectors.C.inc",
+      "bytes": 649,
+      "sha256": "a4efc65c1feb8305763e38dc821c4f98c18faae158897ba794db1da38cd6782a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1/driver.c",
+      "bytes": 3640,
+      "sha256": "1aed8e661dff576266eb7569655f19ede3a3832822fb7f3143c99a9191de92c6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1/original.C.inc",
+      "bytes": 245,
+      "sha256": "998894b17839d1e44653d1cfea3f975d67bb917235ad4a8920ce5ba51d03d3b6"
+    }
+  ],
+  "source_recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-event-provider-bridges-next-source-1/FUTURE-HOST-COMMAND-PLAN.NOT-GRANTED.json",
+    "bytes": 11606,
+    "sha256": "47c925925d84c05a4e2952740b9f9830ea0958cad9e2bb5e3e9da3777748d1cf"
+  },
+  "actual_runner_limit_disposition": "Retained6e98 runner enforces common90s wall/60s CPU limits. Source recipe30s is a proposal; this fresh profile explicitly binds the retained existing ceilings, with no past failure or released command altered."
+}

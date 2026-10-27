@@ -1,0 +1,278 @@
+{
+  "acceptance_contract": [
+    "Exactly unchanged input hashes before/after; pin loader/readelf/env executables and guest libc/libnuma by recorded path/hash; no ambient LD_PRELOAD,LD_LIBRARY_PATH or cwd libraries.",
+    "ELF64 x86_64 PIE, expected PT_INTERP /lib64/ld-linux-x86-64.so.2, DT_NEEDED exact libnuma.so.1+libc.so.6; compare required symbol/version rows against actual retained SDK07capture without broad version/name allowance.",
+    "Preserve actual installed /usr/local/lib64 RPATH and exact e5d bytes; no RPATH normalization/relink. Empty trusted cwd and exact named library mappings remain required; a different RPATH-selected provider stops, never waived.",
+    "Pinned loader --verify returns0 with empty stdout/stderr. --list returns0, empty stderr, maps libnuma/libc to exact pinned guestlibdir and loader to exact selected baseline loader; linux-vdso is kernelprovided, no unexpected dependency/path allowed.",
+    "Raw loader address strings are retained; any parser may classify only known ASLR address fields, not normalize dependency names or paths. No full function ABI/behavior acceptance from load resolution.",
+    "All3directchildren/ownedgroups joined, streams closed/untruncated and original failures preserved. Nonzero/missing input/version-provider failure stops this family; no unchanged retry."
+  ],
+  "actual_SDK_acceptance_sha256": "cce9143dbb49f14a061b23e3ba1fb0ed52dfd14ae1e577445f7b2450d2c203af",
+  "actual_default_staged_install_acceptance": {
+    "bytes": 14457,
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/container-input-closure-expert-1/INDEPENDENT-SIX-PHASE-ACCEPTANCE-CURRENT-FREE.json",
+    "resolved_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/container-input-closure-expert-1/INDEPENDENT-SIX-PHASE-ACCEPTANCE-CURRENT-FREE.json",
+    "sha256": "7908e5c0475ecd3e9f51ff7b1000617907f992ce9065b523ad513172af69cd2e"
+  },
+  "actual_executor_sha256": "e5d18169ee50581274b374bba17fcefebe39e828885f367bfee182beaa3df756",
+  "actual_output_hashes": null,
+  "at": null,
+  "bounded_successor_of_sha256": "2ab6269b3b00e01583649cdb01bf0710bec44cff4c498d378e22de5a30e068b1",
+  "canonical_proposal_sha256": "101e9a34677699c91b7c5690fdc33c792639860b8a5ef1a4fa3bbcdcc3402be2",
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "--wide",
+        "--file-header",
+        "--program-headers",
+        "--dynamic",
+        "--dyn-syms",
+        "--version-info",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/output/mcexec-default-install-1/usr/local/bin/mcexec"
+      ],
+      "capture_directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/actual-installed-loader-1/0",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/actual-installed-loader-1/empty-cwd",
+      "expected_returncode": 0,
+      "index": 0,
+      "label": "actual-installed-F4D-ELF-interpreter-needed-symbol-versions",
+      "outputs": {
+        "status": {
+          "actual_sha256": null,
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/actual-installed-loader-1/0/status.json"
+        },
+        "stderr": {
+          "actual_sha256": null,
+          "expected_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/actual-installed-loader-1/0/stderr"
+        },
+        "stdout": {
+          "actual_sha256": null,
+          "expected_sha256": null,
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/actual-installed-loader-1/0/stdout"
+        }
+      },
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Read retained exact F4D ELF metadata only."
+    },
+    {
+      "argv": [
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LC_ALL=C",
+        "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64/ld-linux-x86-64.so.2",
+        "--verify",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/output/mcexec-default-install-1/usr/local/bin/mcexec"
+      ],
+      "capture_directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/actual-installed-loader-1/1",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/actual-installed-loader-1/empty-cwd",
+      "expected_returncode": 0,
+      "index": 1,
+      "label": "actual-installed-F4D-exact-loader-verify",
+      "outputs": {
+        "status": {
+          "actual_sha256": null,
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/actual-installed-loader-1/1/status.json"
+        },
+        "stderr": {
+          "actual_sha256": null,
+          "expected_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/actual-installed-loader-1/1/stderr"
+        },
+        "stdout": {
+          "actual_sha256": null,
+          "expected_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/actual-installed-loader-1/1/stdout"
+        }
+      },
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Pinned loader diagnostic only; never executor main/device/guest."
+    },
+    {
+      "argv": [
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LC_ALL=C",
+        "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64/ld-linux-x86-64.so.2",
+        "--inhibit-cache",
+        "--library-path",
+        "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64",
+        "--list",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/output/mcexec-default-install-1/usr/local/bin/mcexec"
+      ],
+      "capture_directory": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/actual-installed-loader-1/2",
+      "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/actual-installed-loader-1/empty-cwd",
+      "expected_returncode": 0,
+      "index": 2,
+      "label": "actual-installed-F4D-exact-library-closure-list",
+      "outputs": {
+        "status": {
+          "actual_sha256": null,
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/actual-installed-loader-1/2/status.json"
+        },
+        "stderr": {
+          "actual_sha256": null,
+          "expected_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/actual-installed-loader-1/2/stderr"
+        },
+        "stdout": {
+          "actual_sha256": null,
+          "expected_sha256": null,
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/actual-installed-loader-1/2/stdout"
+        }
+      },
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Pinned loader diagnostic only; never executor main/device/guest."
+    }
+  ],
+  "commands_executed": 0,
+  "current_physical_postjoin": null,
+  "cwd_execution_note": "Existing h990 owned_capture records command.cwd but Popen does not itself set cwd. Root existing envelope must chdir into the verified fresh empty-cwd before the three fixed sequential children, or use an already reviewed equivalent cwd-aware capture. Do not assume the JSON cwd key enforces it.",
+  "full_growth_note": "ExistingFSIZE128MiB is per file;3commands x2streams permits768MiB before source-bound postjoin hash caps reject oversized streams. Reserve1GiB atHOST in addition to16GiB floor for complete failed-capture preservation and metadata. No profile/command expansion.",
+  "inputs": [
+    {
+      "bytes": 396200,
+      "mode": 33261,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/output/mcexec-default-install-1/usr/local/bin/mcexec",
+      "resolved_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/output/mcexec-default-install-1/usr/local/bin/mcexec",
+      "sha256": "e5d18169ee50581274b374bba17fcefebe39e828885f367bfee182beaa3df756"
+    },
+    {
+      "bytes": 930600,
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64/ld-linux-x86-64.so.2",
+      "resolved_path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64/ld-linux-x86-64.so.2",
+      "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b"
+    },
+    {
+      "bytes": 2339896,
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64/libc.so.6",
+      "resolved_path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64/libc.so.6",
+      "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
+    },
+    {
+      "bytes": 62328,
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64/libnuma.so.1",
+      "resolved_path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64/libnuma.so.1",
+      "sha256": "be20c2b16781eea6c69d47816bf15869f90f2a009628c310049da1d2f3c31e4e"
+    },
+    {
+      "bytes": 658360,
+      "mode": 33261,
+      "path": "/usr/bin/readelf",
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-readelf",
+      "sha256": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb"
+    },
+    {
+      "bytes": 43352,
+      "mode": 33261,
+      "path": "/usr/bin/env",
+      "resolved_path": "/usr/bin/env",
+      "sha256": "5f7c7882898e9e280e93579b459e22b339c4f38cfd54a05b46b81dfb60c557cc"
+    },
+    {
+      "bytes": 82640,
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/workspace/native-running-modules-candidate-f4dcf272cd194553825efd493d5c034a/output/m15-executor-captures/07/stdout",
+      "resolved_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/workspace/native-running-modules-candidate-f4dcf272cd194553825efd493d5c034a/output/m15-executor-captures/07/stdout",
+      "sha256": "535b4fc8b5bfff6f8bde3311792c1ff1bc89ea82d4e0f2bf8a09735434044ce3"
+    },
+    {
+      "bytes": 1544,
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/workspace/native-running-modules-candidate-f4dcf272cd194553825efd493d5c034a/output/m15-executor-captures/08/stdout",
+      "resolved_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/workspace/native-running-modules-candidate-f4dcf272cd194553825efd493d5c034a/output/m15-executor-captures/08/stdout",
+      "sha256": "acaa33518723f85dc6db6689931c86aa5dd60a39dc73f367ac1d1b190aac7e6d"
+    },
+    {
+      "bytes": 1712,
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ACTUAL-F4D-EXECUTOR-INDEPENDENT-SDK-PRODUCER-ACCEPTANCE.json",
+      "resolved_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ACTUAL-F4D-EXECUTOR-INDEPENDENT-SDK-PRODUCER-ACCEPTANCE.json",
+      "sha256": "cce9143dbb49f14a061b23e3ba1fb0ed52dfd14ae1e577445f7b2450d2c203af"
+    },
+    {
+      "bytes": 26961,
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/actual-F4D-qualified-canonical-integration-source-1/ACTUAL-F4D-QUALIFIED-CANONICAL-DELTA.DEFAULT-GATE-OPEN.json",
+      "resolved_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/actual-F4D-qualified-canonical-integration-source-1/ACTUAL-F4D-QUALIFIED-CANONICAL-DELTA.DEFAULT-GATE-OPEN.json",
+      "sha256": "101e9a34677699c91b7c5690fdc33c792639860b8a5ef1a4fa3bbcdcc3402be2"
+    },
+    {
+      "bytes": 121940,
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/actual-F4D-qualified-canonical-integration-source-1/F4D-QUALIFIED-EXECUTOR-TO-CANONICAL897.patch",
+      "resolved_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/actual-F4D-qualified-canonical-integration-source-1/F4D-QUALIFIED-EXECUTOR-TO-CANONICAL897.patch",
+      "sha256": "759e5e38feaec7d520e66d07d7bb57e586b7cd94ec09c42504d450dbc4963357"
+    },
+    {
+      "bytes": 110,
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/workspace/native-running-modules-candidate-f4dcf272cd194553825efd493d5c034a/output/m15-executor-sdk-default-1/build/executer/user/rust/mcexec_buildid_generated.rs",
+      "resolved_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/sdk11-lifetime-adapter-source-1/workspace/native-running-modules-candidate-f4dcf272cd194553825efd493d5c034a/output/m15-executor-sdk-default-1/build/executer/user/rust/mcexec_buildid_generated.rs",
+      "sha256": "b78f9a063641abe7c0f4f1d5925bb0b90529ec30ceb3d88001a6a64d70697afe"
+    },
+    {
+      "bytes": 8,
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-9c96ba665d8d4ef19f81420e9fe33814/modules/ihk-compat-build-id.bin",
+      "resolved_path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-9c96ba665d8d4ef19f81420e9fe33814/modules/ihk-compat-build-id.bin",
+      "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0"
+    },
+    {
+      "bytes": 14457,
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/container-input-closure-expert-1/INDEPENDENT-SIX-PHASE-ACCEPTANCE-CURRENT-FREE.json",
+      "resolved_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/container-input-closure-expert-1/INDEPENDENT-SIX-PHASE-ACCEPTANCE-CURRENT-FREE.json",
+      "sha256": "7908e5c0475ecd3e9f51ff7b1000617907f992ce9065b523ad513172af69cd2e"
+    }
+  ],
+  "ordinary_reservation": null,
+  "output_root": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/actual-installed-loader-1",
+  "profile": {
+    "AS_bytes": 536870912,
+    "CORE": 0,
+    "CPU": 6,
+    "CPU_seconds": 30,
+    "Docker": false,
+    "FSIZE_bytes": 134217728,
+    "HOST_MemAvailable_reserve_bytes": 4294967296,
+    "NOFILE": 256,
+    "aggregate_jobs_max": 7,
+    "aggregate_memory_ceiling_bytes": 23941543572,
+    "commands_sequential": 3,
+    "compiler": false,
+    "daemon_or_CLI_main": false,
+    "disk_HOST_floor_bytes": 17179869184,
+    "disk_scratch_floor_bytes": 12884901888,
+    "full_output_growth_reserve_bytes": 1073741824,
+    "guest": false,
+    "normal_owned_cleanup_seconds": 6,
+    "ordinary_jobs": 1,
+    "root": false,
+    "work_wall_seconds": 45
+  },
+  "remaining_gaps": [
+    "SourceABI49/349 provider parity/all51dataABI/allocation remainOPEN.",
+    "No native/default/production/wholeM15 acceptance.",
+    "Latest root shared-budget/currentproof/admission and actual CPU6slot grant required at entry; no historical acceptance reused as slot authority."
+  ],
+  "required_empty_trusted_cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/actual-installed-loader-1/empty-cwd",
+  "root_grant": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_profile": "Existing reviewed ordinaryCPU6/h990 retained-input profile, sequential3commands/1job; no new controller/harness.",
+  "separate_native_work": "Originalstartup+235contracts retained; optional F05v2 Rustexecutor selection requires explicit coherent successor, not mutation of frozenforeground.",
+  "source_BUILDID_hex": "3331313464396500",
+  "source_correction": "Actual installedELF source selection/output namespace/currentguard+realRootgrant only; original three diagnostic argv otherwise unchanged.",
+  "source_descriptor": {
+    "bytes": 18660,
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-mm-source-1/f4d-executor-native-startup-source-1/loader-closure-source-1/EXACT-THREE-LOADER-COMMANDS.ATTEMPT2.ROOT-GRANTED.json",
+    "resolved_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-mm-source-1/f4d-executor-native-startup-source-1/loader-closure-source-1/EXACT-THREE-LOADER-COMMANDS.ATTEMPT2.ROOT-GRANTED.json",
+    "sha256": "2ab6269b3b00e01583649cdb01bf0710bec44cff4c498d378e22de5a30e068b1"
+  },
+  "status": "SOURCE_ONLY_INSTALLED_THREE_LOADER_COMMANDS_NOT_GRANTED",
+  "why_output_hashes_null": "No command ran. Future raw stdout/stderr/status hashes must come from closed-stream joined captures; only deterministic --verify empty streams have an expected-content hash now."
+}

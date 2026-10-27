@@ -1,0 +1,70 @@
+{
+  "DT_NEEDED": [
+    "libnuma.so.1",
+    "libc.so.6"
+  ],
+  "PT_INTERP": "/lib64/ld-linux-x86-64.so.2",
+  "acceptance": {
+    "bytes": 14457,
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/container-input-closure-expert-1/INDEPENDENT-SIX-PHASE-ACCEPTANCE-CURRENT-FREE.json",
+    "resolved_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/container-input-closure-expert-1/INDEPENDENT-SIX-PHASE-ACCEPTANCE-CURRENT-FREE.json",
+    "sha256": "7908e5c0475ecd3e9f51ff7b1000617907f992ce9065b523ad513172af69cd2e"
+  },
+  "accepted_build": {
+    "bytes": 396200,
+    "mode": 33261,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/output/m15-executor-sdk-default-1/build/executer/user/mcexec",
+    "resolved_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/output/m15-executor-sdk-default-1/build/executer/user/mcexec",
+    "sha256": "cae240a8a57f73dd794352fb149407f5d610b4a89aad0ffb7dee61f8ce9c2e75"
+  },
+  "accepted_installed": {
+    "bytes": 396200,
+    "mode": 33261,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/output/mcexec-default-install-1/usr/local/bin/mcexec",
+    "resolved_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/output/mcexec-default-install-1/usr/local/bin/mcexec",
+    "sha256": "e5d18169ee50581274b374bba17fcefebe39e828885f367bfee182beaa3df756"
+  },
+  "actual_install_change": {
+    "new": "/usr/local/lib64",
+    "offset": 5355,
+    "old": "::::::::::::::::",
+    "whole_output_equals_exact_allowed_transformation": true
+  },
+  "dynamic_import_rows": 124,
+  "execution_authority": false,
+  "expected_BUILDID": "3114d9e",
+  "installed_loader_qualification": null,
+  "prior_loader_acceptance": {
+    "bytes": 1510,
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ACTUAL-F4D-LOADER-INDEPENDENT-COMPATIBILITY-ACCEPTANCE.json",
+    "resolved_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ACTUAL-F4D-LOADER-INDEPENDENT-COMPATIBILITY-ACCEPTANCE.json",
+    "sha256": "7676635a86beecf4f1e6912d65c700eb99d02c4a65f1a457e4670339f8e71c80"
+  },
+  "providers": {
+    "ld-linux-x86-64.so.2": {
+      "bytes": 930600,
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64/ld-linux-x86-64.so.2",
+      "resolved_path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64/ld-linux-x86-64.so.2",
+      "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b"
+    },
+    "libc.so.6": {
+      "bytes": 2339896,
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64/libc.so.6",
+      "resolved_path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64/libc.so.6",
+      "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
+    },
+    "libnuma.so.1": {
+      "bytes": 62328,
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64/libnuma.so.1",
+      "resolved_path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64/libnuma.so.1",
+      "sha256": "be20c2b16781eea6c69d47816bf15869f90f2a009628c310049da1d2f3c31e4e"
+    }
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_EXACT_INSTALLED_EXECUTOR_AND_GUEST_PROVIDERS"
+}

@@ -1,0 +1,220 @@
+{
+  "schema": "mckernel.mcexec.exact-default-six-phase.independent-artifact-acceptance.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/daemon_execution_review",
+  "implementation_ownership": false,
+  "decision": "PASS_EXACT_DEFAULT_TARGET_LINK_STAGED_COMPONENT_INSTALL_AND_CURRENT_FREE",
+  "at": "2026-10-27T19:25:35.608689+00:00",
+  "nonce": "7d21874e10a4f79465c03c4a499373b3",
+  "nonce_disposition": "CONSUMED_EXACTLY_ONCE",
+  "default_selected_target_acceptance": true,
+  "staged_selected_component_install_acceptance": true,
+  "installed_prefix_scope": "Private /work/output/mcexec-default-install-1/usr/local/bin/mcexec; no hostproduction deployment or native app execution.",
+  "current_free_acceptance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/container-input-closure-expert-1/INDEPENDENT-SIX-PHASE-CURRENT-FREE.json",
+    "bytes": 9806,
+    "sha256": "29c02920da44bf659dafd84ea2045706eb462c0c993ad392701588139a2fd941"
+  },
+  "actual_receipt": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/evidence/receipt.json",
+    "bytes": 11562,
+    "sha256": "7304b696bd0b4fe0132749f530640a449e1dbd6f90610ac7c62e03b048173a2d"
+  },
+  "source_profile_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/container-input-closure-expert-1/independent-source-review-1/REVIEW.json",
+    "bytes": 10684,
+    "sha256": "783b64fc926c4df86b9b317bc7031a5c8060f5bcbee2e2dadf816593fdd6cc37"
+  },
+  "exact_release_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/container-input-closure-expert-1/INDEPENDENT-EXECUTION-REVIEW.json",
+    "bytes": 8086,
+    "sha256": "ab8d666df2c6151e23e4ad0c50adebc46d688a1df02787e13c3c7cda094dbda4"
+  },
+  "command_results": {
+    "labels": [
+      "current-configure",
+      "producer-context",
+      "current-link",
+      "current-ELF-imports",
+      "current-install",
+      "installed-ELF"
+    ],
+    "returncodes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "positive_join_groups_absent_closed_streams": true,
+    "all12_capture_bytehashes_verified": true,
+    "exact_PREP_argv_and_purpose_bindings_verified": true,
+    "sum_command_wall_seconds": 2.9387138038873672,
+    "outer_tool_wall_seconds": 5.735563516616821,
+    "new_Rust_body_compiles": 0,
+    "new_ASM_compiles": 0,
+    "new_C_or_Rust_body_rewrites": 0,
+    "CPU_and_peak_RSS": "UNMEASURED"
+  },
+  "default_configuration": {
+    "actual_context": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/mcexec-default-captures/01/stdout",
+      "bytes": 30647,
+      "sha256": "10755fbd3f0a188584fd507950030a7fd377db27f01546bce6ab20a4add6a73e"
+    },
+    "selected_sources": [
+      "rust/mcexec_helpers.o"
+    ],
+    "ASM_archive_only": true,
+    "project_C_objects": [],
+    "ENABLE_RUST_USER_TOOLS": "ON",
+    "MCEXEC_ALLOW_C_REFERENCE": "OFF",
+    "MCEXEC_USER_RUSTC": "/nightly/bin/rustc",
+    "compute_RUSTC_before_after": "/nightly/bin/rustc",
+    "same_current_source_selector_hashes": true,
+    "supported_optional_flags_preserved": true
+  },
+  "inherited_F4D_producer": {
+    "decision": {
+      "Make_target_only_allowed": false,
+      "decision": "REUSE_EXACT_F4D_OBJECT_AND_ASM_ARCHIVE",
+      "execution_authority": false,
+      "link_only_if_metadata_mtime_stale": true,
+      "preserved_producer_context_sha256": "4e1f6c908da5bda4d7c281ab9a2bbc7b77a8f051cc504ea6507632b334c9772c",
+      "reuse_ASM_archive": true,
+      "reuse_Rust_object": true
+    },
+    "Rust_object": {
+      "sha256": "6bfeaed7849315e70895effe519ad159f704121b0a40360808c0c79333485c6f",
+      "bytes": 760376
+    },
+    "ASM_archive": {
+      "sha256": "7e13d093dbee785ad4034367f53a05fc97fa29a28a8cbdc866892ff3a452b4f4",
+      "bytes": 3034
+    },
+    "retained_context": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/RETAINED-F4D-EXACT-PRODUCER-CONTEXT.json",
+      "bytes": 7237,
+      "sha256": "d5f8f26e9046c8d72524c9908a2d271c1f6243e0281a2406717b902286bc2244"
+    },
+    "accepted_SDK_proof": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ACTUAL-F4D-EXECUTOR-INDEPENDENT-SDK-PRODUCER-ACCEPTANCE.json",
+      "bytes": 1712,
+      "sha256": "cce9143dbb49f14a061b23e3ba1fb0ed52dfd14ae1e577445f7b2450d2c203af"
+    },
+    "accepted_loader_compatibility_proof": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ACTUAL-F4D-LOADER-INDEPENDENT-COMPATIBILITY-ACCEPTANCE.json",
+      "bytes": 1510,
+      "sha256": "7676635a86beecf4f1e6912d65c700eb99d02c4a65f1a457e4670339f8e71c80"
+    },
+    "matching_current_object_archive_source_tool_SDK_ABI_flags_BuildID_context": true,
+    "inherited_scope": "Same fixed supported SDK producer/header ABI and loader compatibility only. Priorproofs also explicitly leave all349 provider parity/all51 data ABI/main/native unaccepted."
+  },
+  "actual_ELF": {
+    "build": {
+      "bytes": 396200,
+      "path": "/work/output/m15-executor-sdk-default-1/build/executer/user/mcexec",
+      "sha256": "cae240a8a57f73dd794352fb149407f5d610b4a89aad0ffb7dee61f8ce9c2e75"
+    },
+    "staged_installed": {
+      "bytes": 396200,
+      "path": "/work/output/mcexec-default-install-1/usr/local/bin/mcexec",
+      "sha256": "e5d18169ee50581274b374bba17fcefebe39e828885f367bfee182beaa3df756"
+    },
+    "current_build_byteidentical_to_F4D_accepted_binary": true,
+    "ELF64_little_endian_x86_64_ET_DYN_DF_1_PIE": true,
+    "unique_global_Rust_main": true,
+    "BUILDID_in_ELF_and_generated": "3114d9e",
+    "DT_NEEDED": [
+      "libnuma.so.1",
+      "libc.so.6"
+    ],
+    "PT_INTERP": "/lib64/ld-linux-x86-64.so.2",
+    "dynamic_import_rows_equal_qualified": 124,
+    "actual_link_command_equals_generated_and_phase02": true,
+    "install_component": "mcexec_runtime",
+    "only_installed_byte_change": {
+      "offset": 5355,
+      "old": "::::::::::::::::",
+      "new": "/usr/local/lib64",
+      "whole_output_equals_exact_allowed_transformation": true
+    },
+    "Rust_object_global_data_symbols_preserved_in_ELF_with_kind_size": 48,
+    "data_scope_note": "Metadata-preservation observation for48 globalobject symbols; does not establish all51 data ABI parity or runtime behavior."
+  },
+  "independent_validation": [
+    "Retained exact owner.validate_library_receipt passes VALIDATED_MCEXEC_DEFAULT_TARGET_LINK_INSTALL_ONLY on actual receipt/request. It checks six literal PREPcommands, configuration,source-produced currentcontext,prefixdecision,linkproof,stageprefix and exact allowedCMake installbytes. No tests/compilers/applications rerun.",
+    "All6actualcaptures0 have positive creatorjoins/groupabsence/closedstreams and exact retained stdout/stderr hashes. Phase02 actualargv equals current generatedlink.txt;source selection is only sameRustobject plusASMarchive,not projectCobjects.",
+    "Independent bytes/sizehashes of actual copiedRustobject/ASMarchive equal retainedF4D inputs and actualcontext. ComputeRUSTC unchanged. CurrentbuildELF hashcae240a8 equals originalSDKacceptedbinary;therefore inheritedexactartifact proof is retained atoriginalscope.",
+    "Additionalreadonly hostreadelf and primaryELF-byte checks confirm64-bitx86_64 ET_DYN withDF_1_PIE,oneglobalFUNCmain,exactneededlibs/interpreter,124qualifieddynamicimportrows andBUILDID3114d9e. Hostreadelf older human-readable Type text saysSharedobject;primaryDF_1_PIE resolves presentationdifference. Originalpinned pipeline oracle unchanged.",
+    "Independent installed_bytes pureELF parser reconstructs staged396200B file exactly from current396200B build by replacing16colon RPATHpadding with/usr/local/lib64 atoffset5355. No other bytechange. No installedapplication or loader/main was invoked byreviewer.",
+    "Currentfree29c02920 separately verifies owner1657766positivewait0,14Docker+1admission clients,terminal0/removal/currentCIDabsence,3rawrecordarchive/release/pathabsence andfreshphysical27:4closedprobes/currentcensus. Root31 may appendnonceonce;no ownedcleanup pending."
+  ],
+  "proof_files": {
+    "CURRENT-LINK-PROOF.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/evidence/CURRENT-LINK-PROOF.json",
+      "bytes": 16564,
+      "sha256": "603eca66878e8cd798f1d5db123a5801b0de951f9047365c257c201a96f79f14"
+    },
+    "CURRENT-INSTALL-PROOF.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/evidence/CURRENT-INSTALL-PROOF.json",
+      "bytes": 551,
+      "sha256": "fa977b4c6f3498b1934d6c68ca3d220cd8b33bce2dd187b4e1612175ed4ec31c"
+    },
+    "COMPUTE-RUSTC-BEFORE.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/evidence/COMPUTE-RUSTC-BEFORE.json",
+      "bytes": 32,
+      "sha256": "b5b54b8217dcb56728d2a8e6d00e152ad5406e41b882ea6914ecbd48339877b3"
+    }
+  },
+  "capture_records": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/mcexec-default-captures/00/RESULT.json",
+      "bytes": 1761,
+      "sha256": "83b407d9a1170698ced162731041221c3a6dcf081b03cc422553d330f21d67bc"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/mcexec-default-captures/01/RESULT.json",
+      "bytes": 2178,
+      "sha256": "fe68c573c296837d617dbaffacc48da1dbefb8dfdbc416382baa2fbcd60495ec"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/mcexec-default-captures/02/RESULT.json",
+      "bytes": 1423,
+      "sha256": "1b89bac6b74d912f2729c568573455031c7d789e3524c369f22a0d57ce38ef32"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/mcexec-default-captures/03/RESULT.json",
+      "bytes": 1265,
+      "sha256": "471073670bbe64d6f85d5ad692c4982908962ed038e8aeb7942ac27099baa585"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/mcexec-default-captures/04/RESULT.json",
+      "bytes": 1409,
+      "sha256": "2a2a6ed45a81345fb75c60e3ae79c55c3831c13c3e48be9e0ef90c98e920e9cd"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/mcexec-default-captures/05/RESULT.json",
+      "bytes": 1240,
+      "sha256": "b4618c0f7619ecc04bbd9d944a1aeb31294218abf3abf625af44fd08f0482440"
+    }
+  ],
+  "acceptance_limits": {
+    "application_main_executed": false,
+    "native_acceptance": false,
+    "all349_provider_parity": false,
+    "all51_data_ABI": false,
+    "allocation_proof": false,
+    "whole_M15": false,
+    "whole_file_retired": false,
+    "retired_C_boundary_claim": false,
+    "production_deployment": false,
+    "real_guest_apps_added": 0
+  },
+  "next_open_predicates": [
+    "Project349 semantic/provider parity and all51 data ABI obligations require their own exactmatched proof. SameSDKobject/headeracceptance is narrower.",
+    "Actual application_main/nativeexecutor qualification and fullM15file retirement remainOPEN;stagedcomponent acceptance does not close them."
+  ],
+  "new_execution_authority": null
+}
