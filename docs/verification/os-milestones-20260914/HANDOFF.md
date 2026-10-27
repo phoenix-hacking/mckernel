@@ -1,3 +1,60 @@
+## Five-stage build joined; narrow qualification repair — 2026-10-27T05:36Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Independent current-free acceptance bf8d80ab now confirms actual FIVE caller/holder
+joins, numeric births absent, retainedexitedCID5bc0/Pid0, closedprobes, UUID/floors.
+No liveheavy/queryclock. Nonce302e CONSUMED; no repeatedbuild. All5commands passed
+in22.257436s/22.254142CPU/648704KiB peak; artifact/native flags remainFALSE.
+Warningpolicy repair is exact fixture-only align_of/size_of imports at syscall_policy
+35769:18; independent source-bound disposition accepted, original8bf9FAIL retained.
+No source/body/ABI change or recompilation. One independent finalinstruction review
+of13foldedreadonlyconsumer values is active; missingproof staysOPEN.
+
+Ready nextqueues: pathcorrectedFP static owner binds current-free/schema safely;
+daemonSource28 SOURCEPROFILEPASS confirmed, existingowner prepares exactsuffix
+staticadmission. Both need their own genuine fresh runtime release; no successful
+SDK/native/prefix replay. McexecF4D proposal9a94 source-only ready, no defaultcredit.
+Root remains sole actualgrant/canonical/Git writer; fixed11:24:50Z/ledger unchanged.
+
+## Live engineering cursor — 2026-10-27T05:33Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Goal ACTIVE, same thread/credit ledger/fixed11:24:50Z. Supersedes the04:54 cursor
+without overwriting its historical state. FPnonce86c485c4719a61f118032f283a3f7e62
+was CONSUMED: innercontainer manifest payload path outside frozenROexports failed
+beforeQEMU. Caller/owner/all25children joined, ownedCID removed, currentfree
+independently accepted569c6ed6. NoFP/native credit; do not replay its stage/nonce.
+Paired directmanifest+overlay metadata path-only successor df4b SOURCEPASS reuses
+byteidenticalpayload/cpio/kernel/modules/oracle. Fresh successor/runtime refs pending.
+
+Combined five-stage cohort canonical sevenfiles adopted and committed/fetched
+39940133ea468823d27f5843ed90814407f8fabe; publication128refs verified. Actualnonce
+302eabc386ed259685d41fbec898b174 CONSUMED once; exactindependentexecutionPASS
+177cbc7c; holder1421934/start87648002/FD3, runner1422088/start87651466 both joined0.
+Tool29895 positiveexit0; retainedCID5bc0c443a79a17ee957b2525771c2c8cbafbc4d5842b456a0c208c3450838622
+exited0/Pid0. ALLFIVE productioncommands0: fullRust/processC/kernelC/archC/11inputld;
+sevenCprefixes reused. Artifactqualification FAIL8bf9 early on exactnewwarning
+unused imports align_of,size_of; no artifact/native/13data retirement credit yet.
+Private validator correction underway, no rebuild/suppression. Actualpostjoinreader
+PASS persisted POSTBUILD-CURRENT.stdout76035B; independentcurrentfree decisionpending.
+Root first printed observer output unsaved; preserved and performed one readonly
+recapture, no workload replay.
+
+Since05:00review: accepteddefault/native/file deltas0; compiledcohort+1. Current
+acceptedartifact remainsf42/C76+45; supportedfile COMPLETE counts M14one/M15one;
+bothmilestonesOPEN. Firstcompiler/exactjoin/sourceReady timings awaiting retained
+producerreceipt; unknown when absent, no inferredmtimes/95percent/180targetclaim.
+Largestavoidablehandoff: FP runtime-export mismatch after staticstaging. Adjustment:
+preflight actualfrozenDockerbindmap against knownmanifest+overlay inputs together.
+Buildfeedback proceeds under realguards while downstreamwarning/reportrepair runs.
+
+Activeownednextoutputs: qualified_batch_default_profile exactwarningpolicy suffix;
+custody_release_review currentfree/artifact; native_retirement_repair freshFPstatic;
+partial_runtime_finish Source28 daemon suffixstatic. McexecF4D privateproposal9a94
+reuses14Rustpatches, no newbodies/default/install/native credit. Source28observer
+d326 source/profilePASS, historicalextraTID unknown; actualretry notrun. Rootsole
+canonical/Git/actualgrant writer; resource/account/holds/permanent27:4 unchanged.
+
 ## Final safe-turn cursor: all jobs joined; FP static bound; HOST13 passed — 2026-10-27T04:54Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
@@ -36,6 +93,12 @@ isuncompiled/SourceReview+newactualRootadmissionpending; preserveoldcase8failure
 passed0–7. Currentcanonicalkernel remainsacceptedf42 SourceNEXT10; no furtherdata/
 functioncandidate adopted. All service/account/resource/permanentmutex/scratch21/
 reservefloors unchanged. M14/M15 remainOPEN, one supportedfile eachcomplete.
+
+
+Actual FIVE timing receipt now available: first compiler05:31:10.392373Z,
+last command05:31:32.649809Z; span22.257436s/CPU22.254142s/peak648704KiB.
+Exactholderjoin/source-ready event timestamps unknown; terminaltooljoin observed
+05:31:53.719243Z. Image26eb201a10251784B is produced, notyetaccepted.
 
 ## Safe coordinator checkpoint: FP static adopted; no live heavy clock — 2026-10-27T04:47Z
 
