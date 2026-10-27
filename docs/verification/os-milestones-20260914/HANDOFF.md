@@ -1,3 +1,125 @@
+## Executor pre-command failure retired; F02 ABI prefix passed — 2026-10-27T19:07:50.083374+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Executor ea96 CONSUMED ONCE; actual containerSTART succeeded, driver failed on
+unmapped SHA-bound gitlink-inputs.json authority before all6commands. Tool61777
+terminal1/2.500598s, owner1650696/start92532120 joined. CID172c598a removed,
+15clients normalterminal/groupsabsent/3recordsreleased/permanentmutexfree independently
+292acc02. Rootledger30=520073be. No retry or sixphase/349bodycompile replay.
+Expert owner traces complete container input closure and pure readonly-mount regression.
+
+F02 CPU6 actual first26fieldABI compilePASS0/.079208s, child1652341 joined/groupsabsent/
+streamsclosed. Root relative --profile/--grant path failed after runnerchdir;
+original failure retained in successor-host-profile-2/future-capture-2. Only6unrun
+commands prepared under fresh output3/capture3, retaining exact actualABI output2.
+Next Root invokes absolute metadata paths. No Cobject/native/wholefile credit yet.
+
+Foreground F05v2 source7fa47f37/oraclec38ea126 READY; private3stageHOST binding in
+preparation. Original4aef/be508/c3a1 stays nativeHOLD; foreground exclusively owns
+v2payload/adapter/finalizer. F03counter3 selective integration review and F06
+Rustfilename sourcePASS691b1fab proceed independently. CURRENT110 default60e62/
+Rust45/C94/process68 remains accepted; native/file0. Fixed05:36:09Z/sameaccount and
+parentexclusivecontrols preserved. No heavy/CPU6 job live at this checkpoint.
+
+## CURRENT110 accepted; executor fresh admission; F05 original held — 2026-10-27T19:03:50.816008+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+CURRENT110 selected default artifact independently ACCEPTED: image60e62f97,
+Rust45/C69+25=94/process68. Five actual production commands0, wall21.660360s,
+CPU21.628372s, cumulative child peak603768KiB. Exact current consumer review
+cb63220e resolves127targets including11anonymous strings; final review01e8f377.
+Root acceptance: evidence/os-recovery-adoption-20261025-0254/
+CURRENT110-INDEPENDENT-DEFAULT-ARTIFACT-ACCEPTANCE.json. Original warning/parser
+FAIL/OPEN records retained. Native/whole-file delta0; practical35/35,
+M14files2/6 and M15files1/8 remain OPEN. No CURRENT109/HOST19 replay.
+
+Executor first actual001dd attempt failed Docker START on missing readonly
+libdwarf mountpoint; no six-phase command ran. Normal retirement/current-free
+independently fcf8072e; Root ledger29. One reviewed FD-relative empty-directory
+repair actually PASS1.349599s, all7015source files unchanged (9ed14286).
+Fresh byte-identical shape2 context/newnonceea96 reserved unused; fresh admission
+and exact review in progress. Expired unentered shape1 admission preserved.
+Root owns next entry: configure/context/link/import/install/installedELF;
+reuse349-body F4D object, no new Rust compilation authority or metadata normalization.
+
+F05 ORIGINAL4aef/be508/c3a1 native release HELD by foreground: unsupported clone
+flags, parent-owned forwarded clone trace, rawexit60 observed as231. Hold0229b141.
+Foreground exclusively owns corrected v2 payload/oracle/adapter proposal.
+Historical204B/89controls/static8body89relocation proofs remain scoped; no native
+acceptance inferred. Other lanes continue. Source32 all3calls behavior PASS;
+outeralias FAIL/missingafter-pids64 remain OPEN, no successful call replay.
+HOST10 actual10commands PASS/1272comparisons, no default/native credit.
+F02 208B data and F06 Rust filename alternatives independently source-reviewed
+in parallel; F03 counter3 ready for selective integration.
+
+Parent outer controls exclusively restored per ACTUAL-RESTART-COMPLETE.json:
+guardian1619833/92037917, monitor1621307/92054340, phone1621308/92054340.
+No competing controls. Fixed cutoff2026-10-28T05:36:09Z, tighter BOOT963213.6960030915/
+MONO947874.5689514667, same7f credit ledger/57774.852125 ceiling/real holds.
+One heavy/permanent27:4/scratch21/resource floors unchanged. Latest pushed/fetched
+checkpoint6eab65342c299ea58888fcf1f90441d60830e30f.
+
+Steering: original nonoverlapping30min baseline17:36:09 retained;20min cadence.
+First compiler2608.942s after activation; Source31ready→entry571.266s,
+resource→entry70.257s versus2.991994s failed attempt. No95%gain claim.
+Largest observed avoidable handoff remains literal helper/source binding and
+expired admission churn; exact total blocked duration unavailable. Adjustment:
+prewarm independent static reviewer before fresh120s capture, then immediately
+publish/enter; independent source/HOST preparation overlaps sole-heavy work.
+
+## CURRENT110 five production commands joined — 2026-10-27T18:28:41.353863+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Source109/HOST19 remain completed/no replay. CURRENT110nonce4162 CONSUMED ONCE:
+all5newproductioncommands0, wholeRust+3Ccompiles+11inputlink, firstcompiler
+2026-10-27T18:19:37.941661Z (2608.942s afteractualactivation).
+Actualcommands wall21.660360s/CPU21.628372s/
+maxchildRSS603768KiB(cumulativeworkerpeak). Newcandidateimage60e62f97,10255112B.
+Holdertool77455 terminal0, holder1635037/runner1635602 joined/absent, ce098container
+exited0/Pid0/noOOM; permanent27:4 released/currentfree independently7398c36b.
+No heavy/native operation live now; stoppedcontainer is retained. Rootledger28 appended.
+
+FirstactualqualificationFAILe8ee544e preserved: new syscall declaration pointer-type
+warning (143vs142). IndependentexactABI7398 proves thin64-bit raw pointer pass,
+unchanged EDI/RSI and17Btailjmp to actualRustsyscall; all11inputs/source/headers/HOST140
+bound. No suppression/generalwarningallowance/recompile. One exactdata successor is
+prepared pendingbinding/review/run; artifactaccepteddefault stille87f/C100/process70
+untilcurrenttuple validators pass. M14files2/6/M15files1/8/practical35/35 unchanged.
+
+Source32threecalls actuallyPASS, outerpostvalidatorFAIL preserved/missingafter-pids64OPEN;
+retainedalias regression andhostrevalidationPASS withzero reruns. HOST10 actualallPASS/
+independent0ba68;F03counter3+F06alloc/free2 ready forlaterintegration; Rustfilename
+alternative avoidsproposedCdata but futureproducer/HOSTcheck stillUNRUN. F05actualoffline
+composition/manifestd1a611ca ready; independentstaticCloneTID accepted, nativepending.
+Executor literalreader fix nowactivelyrunning via followup_task; earlier send_message
+notes to its completedworker did not startrepair (avoidablehandoff, corrected). No349body
+rewrite/oldSDKrebuild. Parentcontrols exclusive/fixed05:36:09Z/v2clamps/same7fcreditguards.
+
+NEXT Root: exactCURRENT110warning-data qualifier on retainedartifacts, independentlyaccept
+currentimage ifalloriginalpredicates prove; executor actual6phase operation afterfresh
+Root28source/account/native/resource release. No mandatory M15waitbeforeM14compiler.
+
+## Actual CURRENT110 build running — 2026-10-27T18:20:31.149116+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+CURRENT110 nonce4162b71a697cfc5ce7ed037f77e18c7f actually ENTERED under Root27/new
+sourcepubcb0e7f205, resource2c3dd161, independent exactinput67197d1b approving2bfd84cb.
+Soleheavy holder1635037/start92251956/FD3 holds permanent27:4; live tool77455;
+containerce098a5ea7f3a8db0070dd6f034259eedfa9d50ec5cdbcacadbab98a2d3f229d. Do NOT replay/cleanup/launch anotherheavy while live. Commands are
+newfullRust/processC/kernelC/archC/11inputlink; acceptedCURRENT109/HOST19 unchanged.
+Root awaits actual compiler/joins/artifact qualification; no default/native credit yet.
+
+Source32nonce36aa CONSUMED ONCE: ALL3mockcallsPASS (C/Rustringparity+oversize1048592),
+fixturejoin0/.289214s/outerjoin2.898732s, normalretirement/currentfree independente279c521.
+Outer postvalidatorFAIL preserved: old ihkmond symlink resolves into new ring-C capture
+and globcounts alias. Expert localregression+retainedhostvalidationPASS, no call replay.
+Missingafter-pids64/driverreceipt/outer0 remainOPEN. Rootledger27cc9d9570.
+HOST10 freshCPU6commands allPASS/independent0ba68fff;432F03pairs+832alloc+8freeF06,
+10normaljoins/.805655stool/.575466capture sum; no currentCPU6job or native delta.
+F05offlinecompositionPASS22.065s/manifestd1a611ca; nativecapability/release stillOPEN.
+No 95%claim; supportedfilecounts2/6+1/8/practical35 remain. Parentcontrols exclusive,
+fixed05:36:09Z/currentv2clamps/samecreditrun/ceilings/realholds preserved.
+
 ## NEW12h actual progress and steering — 2026-10-27T18:04:15.074538+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

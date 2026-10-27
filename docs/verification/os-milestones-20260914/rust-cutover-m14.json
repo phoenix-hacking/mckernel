@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-27T18:04:15.074538+00:00",
+  "as_of": "2026-10-27T19:06:35.717743+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -2974,6 +2974,11 @@
     {
       "at": "2026-10-26T23:33:39.496042+00:00",
       "actual_progress": "Matching current290 baseline.core.memory independently accepted: stdout24B/exit37/stderr0/procfsempty; PID255 retirement0 before powerdown, original QEMU-9 retained. Actual caller0/38.849s/all30commands reaped/normalcontainer removal/fresh physicalfree accepted. Growth final copiedFD closure accepted; original reserve/account/rootdir observer failures preserved. SDK7 reviewed twohop/currenthead adapter source PASS, actual accepted input materialization next; no SDK commands or whole-file/M14/M15 closures."
+    },
+    {
+      "at": "2026-10-27T19:06:35.717743+00:00",
+      "actual_progress": "CURRENT110 actual5productioncommands PASS; independent selecteddefault60e62/Rust45/C94/process68, sixCfunction replacements+116BRustidledata. No native/wholefile delta. Source32threecallsbehaviorPASS/outerFAILmissingafterpidsOPEN. Executor actualprecommandfailureea96retired, mappingexpert active. OriginalF05nativeHOLD; foregroundv2readyfornewHOSTqualification.",
+      "evidence": "../evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/TWENTY-MINUTE-ENGINEERING-REVIEW-1856.json"
     }
   ],
   "engineering_updates": [
@@ -3573,23 +3578,26 @@
     }
   ],
   "latest_dispatcher_checkpoint": {
-    "at": "2026-10-27T18:04:15.074538+00:00",
-    "evidence": "../evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/TWENTY-MINUTE-ENGINEERING-REVIEW-1.json",
+    "at": "2026-10-27T19:06:35.717743+00:00",
+    "evidence": "../evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/TWENTY-MINUTE-ENGINEERING-REVIEW-1856.json",
     "actual_progress": {
-      "Source31": "FAIL_C_RING_SIGSEGV_-11_UNCHANGED_EVIDENCE",
-      "Source31_outer_join_seconds": 2.9919939489336684,
-      "Source31_normal_retirement_independently_accepted": true,
-      "Source31_remaining_Rust_calls_unrun": 2,
-      "mcexec_source_copy_files": 7015,
-      "mcexec_source_copy_bytes": 121362296,
-      "mcexec_source_copy_seconds": 12.492552191019058,
-      "mcexec_adoption_preflight": "PASS",
-      "F05_static_Rust_bodies": 8,
-      "F05_static_relocations": 89,
-      "F05_offline_composition_seconds": 22.06521414592862,
+      "accepted_selected_default_image": "60e62f97ef48ecaf14174af1c5b75d7181969f439c1b45c618d6c16d4bc40d57",
+      "new_candidate_builds": 1,
+      "new_production_commands_passed": 5,
+      "Rust_exports": 45,
+      "C_functions": 94,
+      "process_C_objects": 68,
+      "C_functions_replaced_delta": 6,
+      "Rust_idle_bytes_delta": 116,
+      "native_credit_delta": 0,
+      "whole_file_credit_delta": 0,
       "new_guest_apps": 0,
-      "new_candidate_builds": 0
+      "Source32_remaining_three_calls": "PASS_NO_REPLAY",
+      "Source32_outer": "FAIL_AFTERPIDS64_OPEN",
+      "executor_ea96": "CONSUMED_DRIVER_PRECOMMAND_FAILURE_NORMAL_RETIREMENT_PENDING_INDEPENDENT",
+      "F05_original": "NATIVE_HOLD",
+      "F05_v2": "SOURCE_READY_HOST_UNRUN"
     },
-    "limits": "Source/adoption/static proof only; no new compiled/default/native/wholefile credit; same original acceptance."
+    "limits": "Selected-build ABI/link ownership accepted; matching native and supported whole-file acceptance remain open. Original failed runs retained."
   }
 }

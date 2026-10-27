@@ -1,0 +1,72 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/guardian_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "decision": "PASS_EXECUTION",
+  "at": "2026-10-27T19:04:18.734182+00:00",
+  "reviewed_release_payload_sha256": "2f66cc025b88ebf84d5a29f6b1b10aca66aade43c46e1e02b23b927fa2c7c1be",
+  "release_proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/runtime-execution-after-shape-2/RELEASE-PAYLOAD.PROPOSAL.json",
+    "bytes": 4561,
+    "sha256": "2f66cc025b88ebf84d5a29f6b1b10aca66aade43c46e1e02b23b927fa2c7c1be"
+  },
+  "request": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/runtime-execution-after-shape-2/ADOPT-REQUEST.json",
+    "sha256": "2bee97016da5e45c76bc516eacc3f11cc841f6953fa364e323c4a100aa39f4b2"
+  },
+  "nonce": "ea96c79fb14fa362522b690615e25f4f",
+  "current_admission": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/runtime-execution-after-shape-2/CURRENT-ADMISSION.ACTUAL.json",
+    "sha256": "f9163df1e302ab13bedad712ed9f5884238ea58012764bcbd2d1cbd31fcb6a84"
+  },
+  "source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/INDEPENDENT-CORRECTED-SOURCE-REVIEW.json",
+    "sha256": "ff308f27212da597ab459c7a5cd7a9c1dc04ddfd80d1936c9388a74a2416ca1c"
+  },
+  "source_publication": {
+    "bytes": 19265,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/runtime-execution-after-shape-2/ROOT-ACTUAL-SOURCE-PUBLICATION.json",
+    "sha256": "e9a24f8059c6d29b0186ef43a049e4132067cb4a230b5949b9b7a209fabed0c2"
+  },
+  "actual_shape": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/libdwarf-mountpoint-correction-source-1/ROOT-ACTUAL-MOUNTPOINT-REPAIR.json",
+    "bytes": 3211,
+    "sha256": "9ed14286468679e2723dacecc6b2d631c8ea248dc6eea8afab862877e9adba48"
+  },
+  "nonce_ledger": {
+    "bytes": 3088,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER29.json",
+    "sha256": "55e7344b27126499f3f52e6b4c1a5d51dbf17db02f8f690520fa16e20cd46704"
+  },
+  "latest_postjoin_acceptance": {
+    "bytes": 21680,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/INDEPENDENT-FAILED-START-CURRENT-FREE.json",
+    "sha256": "fcf8072e398662044a760468b62fe4e66831640e868f5f4952bce7c3e961ad2f"
+  },
+  "observed_review_clock_ages_seconds": [
+    51.56996417045593,
+    51.56996367801912,
+    51.5699630510062
+  ],
+  "expires_wall": 1793127927.1642094,
+  "checks": [
+    "Exact payload2f66cc02 binds fresh request2bee9701/nonceea96, same independently reviewed corrected19+outer5 and exact actual new wrapper path/hash. No expired shape1 admission or consumed001dd namespace is reused.",
+    "Publicatione9a24f80 honestly reuses fetched6eab byte-equivalence and explicitly binds actual shape2 five file paths/hashes and new request; new_request_fetched=false. Exact five bytes independently match reviewed map. No new source or Git push required for this unchanged-code metadata context.",
+    "Actual repair9ed14286 is transitively bound through admission/publication: empty0700 targetinode59779887, unchanged sourceRoot59667059, exact7015file/121362296B before/after metadata digestad86ac63. No original materialization or code binding rewritten.",
+    "Complete Root ledger29/55e7344b includes consumed001dd and excludes fresh nonce from consumed/abandoned. Independent postfailed-start/currentfreefcf8072e remains bound. Original START failure preserved; all six producer phases remain unrun before this grant.",
+    "Fresh typed admissionf9163df1 binds exact one-heavy4CPU/12GiB/512task/no-network/jobs1 profile, no running Docker/cgrouptasks, error-free current physical census and retained memory/storage/fullgap floors. All3 observed clock ages<120s at review.",
+    "Unchanged outer original+source5 authentication repeats inside27:4 before original admission, with guardv2 account/deadline checks and one-second polling. Original cleaning-mode container/client/record-release predicates remain intact.",
+    "Only six configure/context/link/import/install/installed-ELF phases. REUSE_EXACT_F4D_OBJECT_AND_ASM_ARCHIVE is mandatory beforelink with genuine source/tools/SDK/ABI/flags/BUILDID3114d9e/computeRUSTC. No349-body compile, source recopy, timestamp/BUILDID normalization, loader/native or whole-file acceptance granted."
+  ],
+  "mandatory_conditions": [
+    "Root publishes exact independent review into unchanged payload and enters explicit wrapper before admission expiry; stale entry must stop.",
+    "Same fixed actual window/v2 earlier cutoffs/boot, creditrun7f/57774.852125/cumulative>=22812.3311/all real holds, one-heavy/exclusions/floors remain effective.",
+    "One operation; preserve first failure; uncertainty retains original native ownership and bounded cleanup requirements."
+  ],
+  "review_actions": {
+    "supplied_evidence_local_hashes_and_clocks_only": true,
+    "no_actual_query_Docker_root_workload_compiler_cleanup": true,
+    "only_this_review_file_written": true
+  }
+}

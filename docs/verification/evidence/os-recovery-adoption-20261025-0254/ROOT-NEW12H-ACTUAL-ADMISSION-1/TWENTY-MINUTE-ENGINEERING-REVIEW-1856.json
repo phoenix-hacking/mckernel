@@ -1,0 +1,82 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "review_at": "2026-10-27T19:06:19.023273+00:00",
+  "thread": "01a17e6f-112f-7660-8771-85d15e07a26c",
+  "goal_status": "active",
+  "measurement_baseline_epoch": 1793122569,
+  "bucket_seconds": 1800,
+  "review_cadence_seconds": 1200,
+  "nonoverlapping_buckets": [
+    {
+      "start": "2026-10-27T17:36:09Z",
+      "end_exclusive": "2026-10-27T18:06:09Z",
+      "new_selected_default_artifacts": 0,
+      "native_delta": 0,
+      "whole_file_delta": 0
+    },
+    {
+      "start": "2026-10-27T18:06:09Z",
+      "end_exclusive": "2026-10-27T18:36:09Z",
+      "actual_new_builds": 1,
+      "production_commands_pass": 5,
+      "artifact_acceptance_pending_at_bucket_end": true,
+      "native_delta": 0,
+      "whole_file_delta": 0
+    },
+    {
+      "start": "2026-10-27T18:36:09Z",
+      "end_exclusive": "2026-10-27T19:06:09Z",
+      "state": "closed",
+      "accepted_selected_default_artifacts": 1,
+      "new_Rust_exports": 6,
+      "new_C_function_replacements": 6,
+      "new_Rust_idle_tables": 2,
+      "new_Rust_idle_bytes": 116,
+      "process_C_objects_delta": -2,
+      "native_delta": 0,
+      "whole_file_delta": 0
+    }
+  ],
+  "actual_compiler": {
+    "first_epoch": 1793125177.9416614,
+    "activation_to_first_seconds": 2608.9416614,
+    "wall_seconds": 21.660359621,
+    "cpu_seconds": 21.628372,
+    "cumulative_child_RSS_KiB": 603768
+  },
+  "latency": {
+    "Source31_ready_to_entry_seconds": 571.266,
+    "Source31_resource_to_entry_seconds": 70.257,
+    "Source31_failed_attempt_wall_seconds": 2.991994,
+    "latest_executor_fresh_admission_to_entry_seconds": 69.34396886825562,
+    "latest_executor_failed_attempt_wall_seconds": 2.5005975,
+    "complete_queue_wait_start": "unknown",
+    "failure_to_validated_fix_seconds": null,
+    "why_fix_time_unknown": "Mountpoint correction was source/data validated; subsequent actual entry exposed unmapped authority before any6phase; no successful complete executor fix yet."
+  },
+  "largest_observed_avoidable_handoff": "Literal source/helper/container path bindings; expired120s admission preserved on recovery. Exact cumulative blocked duration unmeasured.",
+  "scheduling_change": "Prewarm static reviewer before fresh admission; run next source-ready CPU6 HOST fixture independently of heavy executor input-closure repair. Use followup_task for completed source owners.",
+  "owners": {
+    "canonical_integration": "/root",
+    "executor_input_closure": "/root/mcexec_default_prepare",
+    "F02_recipe": "/root/m14_f02_next_data",
+    "F02_review": "/root/current110_execution_review",
+    "F03_integration_review": "/root/host19_source_review",
+    "F06_source_review": "/root/custody_release_review",
+    "F05_v2_payload_adapter": "foreground exclusive",
+    "F05_HOST_profile": "/root/f05_adapter_export",
+    "executor_retirement_review": "/root/guardian_execution_review"
+  },
+  "critical_path_next": "Root enter ready F02sevenHOSTcommands after exact packagingPASS; executor owner produce full readonly authority-mount closure correction before fresh source review/release. No heavy until independent ea96currentfree.",
+  "disk_last_observed_bytes": {
+    "host": 149841649664,
+    "scratch": 47870644224
+  },
+  "overlap": "Model source/reviews overlap; actual CPU6job absent at record. Sole executorheavy joined failed before6phases.",
+  "target_95_percent_claimed": false,
+  "practical": "35/35",
+  "M14": "OPEN2/6",
+  "M15": "OPEN1/8",
+  "original_failures_preserved": true,
+  "fixed_deadline": "2026-10-28T05:36:09Z"
+}
