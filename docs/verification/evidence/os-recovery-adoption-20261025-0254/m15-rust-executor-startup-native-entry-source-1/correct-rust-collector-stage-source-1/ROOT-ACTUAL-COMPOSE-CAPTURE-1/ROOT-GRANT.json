@@ -1,0 +1,86 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "decision": "ONE_EXACT_CORRECT_RUST_STARTUP_OVERLAY_COMPOSITION_NOT_NATIVE",
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_overlay.py",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/root-adopted-stage-source-1/offline-materialization-1/current110-f05-mm-base.cpio.gz",
+    "/home/holden/mckernel-work/scratch/stability-packet001-compile-20260913-1/startup.argv-empty/payload",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-host-qualification-1/attempt-1/startup-supervisor",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/output/mcexec-default-install-1/usr/local/bin/mcexec",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/correct-rust-collector-stage-source-1/correct-rust-startup-overlay.cpio.gz",
+    "--collector-sha256",
+    "d0bf61dc45754e72d3ebab34853756c6ce5cce0c9e84ac1713122ba1cf8f0d5a",
+    "--mcexec-sha256",
+    "e5d18169ee50581274b374bba17fcefebe39e828885f367bfee182beaa3df756",
+    "--payload-sha256",
+    "ff227c83b2da598110768e13f5e042b437e049659706b56079cc73f7c818a836",
+    "--base-sha256",
+    "a6377bfe9735b5b6a8183d3f710305b78093512ab378a9529c38e88b13f15b37",
+    "--base-size",
+    "13308321",
+    "--base-cpio-sha256",
+    "d983c1747414b3a676676108de2cf91a98983698356a2353aab03e236f83b31c",
+    "--base-cpio-size",
+    "44428264"
+  ],
+  "source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/correct-rust-collector-stage-source-1/independent-source-review-1/REVIEW.json",
+    "bytes": 6478,
+    "sha256": "4f4a553a71ebe33609786c2b7b967d523587f6ce1ec4105cd86c8ac8365475ec"
+  },
+  "source_plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/correct-rust-collector-stage-source-1/STAGE-PLAN.NOT-RELEASED.json",
+    "bytes": 22907,
+    "sha256": "ead8af0bb3b7d57f004a9d3e1782c1ccda3836ea0eddbf680cd7453f543a6cb5"
+  },
+  "admission": {
+    "wall": 1793142450.3159335,
+    "monotonic": 924556.88489066,
+    "boottime": 939895.011941507,
+    "fixed_cutoffs": [
+      1793165769.0,
+      947874.5689514667,
+      963213.6959701729
+    ],
+    "memory_available_bytes": 27418329088,
+    "aggregate_reserved_bytes": 21474836480,
+    "strict_memory_floor_bytes": 23357213694,
+    "host_free_bytes": 149128998912,
+    "scratch_free_bytes": 47868719104,
+    "budget": {
+      "schema_version": 2,
+      "id": "7f4af94a83b14cc08f97401f5891d965",
+      "budget": "57774.852125",
+      "initial_balance": "57774.8521250000",
+      "minimum_balance": "52079.8011050000",
+      "last_balance": "52079.8011050000",
+      "spent": "22812.3311000000",
+      "remaining": "34962.5210250000",
+      "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"
+    },
+    "heartbeat_at": "2026-10-27T23:07:24.821328+00:00",
+    "phase": "running",
+    "account_wall": 1793142450.3169916,
+    "heartbeat_age_seconds": 5.495663642883301,
+    "available_prepaid_balance": "52079.8011050000",
+    "spendControlReached": false,
+    "loadavg": [
+      1.16,
+      1.07,
+      1.06
+    ],
+    "CPU_affinity": [
+      6
+    ]
+  },
+  "other_heavy_jobs": 1,
+  "other_reserved_memory_bytes": 12884901888,
+  "aggregate_reserved_memory_bytes": 15032385536,
+  "aggregate_jobs": 2,
+  "cpu6_exclusive": true,
+  "other_ordinary_jobs": 0,
+  "runtime_authority": null
+}

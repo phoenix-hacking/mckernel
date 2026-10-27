@@ -1,0 +1,20 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/native-entry-source-preparation-1/root37-successor-source-1/prepare_f05_v3_bindings.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v3-root-export-native-preparation-source-1/root-adopted-native-entry-outer-cdc-1/prepare_f05_v3_bindings.py
+@@ -18,7 +18,7 @@
+ def main():
+  p=argparse.ArgumentParser(description=__doc__);mode=p.add_mutually_exclusive_group(required=True);mode.add_argument('--nonce');mode.add_argument('--check-static',action='store_true');args=p.parse_args()
+  b=read(A/'STATIC-NATIVE-BINDINGS.TEMPLATE.NOT-RELEASED.json')
+- for key in ['source_authority','case_capability','stage_map_acceptance','root_ledger37','owner_source','offline_manifest','capture_helper','collector','payload','overlay','overlay_manifest','latest_serial_operation_physical_acceptance','artifact_acceptance']:
++ for key in ['source_authority','case_capability','stage_map_acceptance','root_ledger38','owner_source','offline_manifest','capture_helper','collector','payload','overlay','overlay_manifest','latest_serial_operation_physical_acceptance','artifact_acceptance']:
+   checked(b[key])
+  manifest=read(Path(b['offline_manifest']['path']));need(manifest['case_id']=='M14-05-05-owned-processvm-v3-causal-204B' and manifest['payload']['oracle']==b['expected_oracle'] and len(bytes.fromhex(b['expected_oracle']['stdout_hex']))==204 and b['expected_oracle']['exit_code']==0 and b['expected_oracle']['stderr_hex']=='','F05 v3 causal oracle differs')
+  # Real first API imports and full immutable manifest validation, no backend/guest.
+@@ -41,7 +41,7 @@
+  checked(stage['scratch_manifest']);b['manifest']=stage['scratch_manifest'];b['attempt_parent']=stage['planned_attempt_parent'];b['planned_attempt_parent']=stage['planned_attempt_parent'];b['scratch_manifest_stage']=ref(A/'ACTUAL-SCRATCH-MANIFEST-STAGE.json');b['stage_result']=b['scratch_manifest_stage']
+  pure_owner._manifest_identity(b['manifest']['path'],b['manifest']['sha256']);pure_owner._manifest_outside_writable_parent(b['manifest']['path'],b['attempt_parent']);v.load_manifest(b['manifest']['path'])
+  need(not list(Path(b['attempt_parent']).iterdir()),'fresh attempt parent is not empty')
+- ledger=read(Path(b['root_ledger37']['path']));need(len(ledger['consumed_nonces'])==37 and ledger['latest_accepted_free_boundary']==b['latest_serial_operation_physical_acceptance'],'exact Root37/free boundary')
++ ledger=read(Path(b['root_ledger38']['path']));need(len(ledger['consumed_nonces'])==38 and ledger['latest_accepted_free_boundary']==b['latest_serial_operation_physical_acceptance'],'exact Root38/free boundary')
+  for flag,value in [('--manifest',b['manifest']['path']),('--attempt-parent',b['attempt_parent']),('--manifest-sha256',b['manifest']['sha256'])]:b['exact_argv'][b['exact_argv'].index(flag)+1]=value
+ 
+  if args.nonce:

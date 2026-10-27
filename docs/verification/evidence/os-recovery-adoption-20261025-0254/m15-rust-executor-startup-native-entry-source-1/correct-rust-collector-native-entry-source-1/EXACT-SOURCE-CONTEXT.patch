@@ -1,0 +1,146 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/root-adopted-entry-1/prepare_startup_bindings.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/correct-rust-collector-native-entry-source-1/templates/prepare_startup_bindings.py
+@@ -18,7 +18,7 @@
+ def main():
+  p=argparse.ArgumentParser(description=__doc__);mode=p.add_mutually_exclusive_group(required=True);mode.add_argument('--nonce');mode.add_argument('--check-static',action='store_true');args=p.parse_args()
+  b=read(A/'STATIC-NATIVE-BINDINGS.TEMPLATE.NOT-RELEASED.json')
+- for key in ['source_authority','case_capability','stage_map_acceptance','root_ledger35','owner_source','offline_manifest','capture_helper','collector','payload','overlay','overlay_manifest','latest_serial_operation_physical_acceptance','artifact_acceptance']:
++ for key in ['source_authority','case_capability','stage_map_acceptance','root_ledger35','owner_source','offline_manifest','capture_helper','collector','payload','overlay','overlay_manifest','latest_serial_operation_physical_acceptance','artifact_acceptance','compiled_collector_adoption','compiled_collector_caseprofile','compiled_collector_HOST_acceptance','compiled_collector_facts','nonce_reservation']:
+   checked(b[key])
+  manifest=read(Path(b['offline_manifest']['path']));need(manifest['case_id']=='startup.argv-empty' and manifest['payload']['oracle']==b['expected_oracle'] and len(bytes.fromhex(b['expected_oracle']['stdout_hex']))==91 and b['expected_oracle']['exit_code']==0 and b['expected_oracle']['stderr_hex']=='','original startup oracle differs')
+  # Real first API imports and full immutable manifest validation, no backend/guest.
+@@ -30,6 +30,11 @@
+  need(validated['artifacts']['mckernel_image']['sha256']=='60e62f97ef48ecaf14174af1c5b75d7181969f439c1b45c618d6c16d4bc40d57','accepted CURRENT110 image')
+  for key in ['executor_supplement','executor_contract','loader_acceptance','composed_case_binding']:checked(b[key])
+  need(validated['artifacts']['mcexec']['sha256']=='e5d18169ee50581274b374bba17fcefebe39e828885f367bfee182beaa3df756','actual staged Rust executor')
++ facts=read(Path(b['compiled_collector_facts']['path']));profile=read(Path(b['compiled_collector_caseprofile']['path']));adopt=read(Path(b['compiled_collector_adoption']['path']))
++ need(facts['actual_test_count']==16 and facts['filtered']==facts['ignored']==0,'reuse all16 actual startup producer controls')
++ need(facts['payload_argv']==profile['argv']==validated['payload']['argv']==b['expected_guest_argv'] and facts['payload_env']==profile['env']==validated['payload']['env'] and facts['payload_cwd']==profile['cwd']==validated['payload']['cwd'],'actual compiled startup producer launch profile')
++ need(facts['oracle']==profile['oracle']==validated['payload']['oracle'] and facts['source_caseprofile']['sha256']==b['compiled_collector_caseprofile']['sha256'],'compiled original91B oracle/profile join')
++ need(facts['actual_collector_artifact']['sha256']==adopt['artifact']['sha256']==validated['staging']['collector']['sha256']=='d0bf61dc45754e72d3ebab34853756c6ce5cce0c9e84ac1713122ba1cf8f0d5a','correct compiled Rust startup collector, never oldc020')
+  supplement_path=Path(b['executor_supplement']['path']);spec=importlib.util.spec_from_file_location('literal_original_startup_executor_supplement',supplement_path);supplement=importlib.util.module_from_spec(spec);spec.loader.exec_module(supplement)
+  need(supplement.__file__==str(supplement_path) and supplement.__spec__.origin==str(supplement_path),'literal supplement import context')
+  need(b['executor_supplement']['sha256']=='29f9add4327e6eff4dffe7dcac02ad1b10a8349ae621b8b3ee673426ba2bfaca' and b['executor_contract']['sha256']=='0e3a0cf6e63914e9cc23b6e8a6850156f1cd2ad4a481b517e1354e76a1fed443','exact executor supplement/contract')
+@@ -41,7 +46,7 @@
+  checked(stage['scratch_manifest']);b['manifest']=stage['scratch_manifest'];b['attempt_parent']=stage['planned_attempt_parent'];b['planned_attempt_parent']=stage['planned_attempt_parent'];b['scratch_manifest_stage']=ref(A/'ACTUAL-SCRATCH-MANIFEST-STAGE.json');b['stage_result']=b['scratch_manifest_stage']
+  pure_owner._manifest_identity(b['manifest']['path'],b['manifest']['sha256']);pure_owner._manifest_outside_writable_parent(b['manifest']['path'],b['attempt_parent']);v.load_manifest(b['manifest']['path'])
+  need(not list(Path(b['attempt_parent']).iterdir()),'fresh attempt parent is not empty')
+- ledger=read(Path(b['root_ledger35']['path']));need(len(ledger['consumed_nonces'])==35 and ledger['latest_accepted_free_boundary']==b['latest_serial_operation_physical_acceptance'],'exact Root35/free boundary')
++ ledger=read(Path(b['root_ledger35']['path']));need(len(ledger['consumed_nonces'])==39 and ledger['latest_accepted_free_boundary']==b['latest_serial_operation_physical_acceptance'],'exact Root39/free boundary')
+  for flag,value in [('--manifest',b['manifest']['path']),('--attempt-parent',b['attempt_parent']),('--manifest-sha256',b['manifest']['sha256'])]:b['exact_argv'][b['exact_argv'].index(flag)+1]=value
+ 
+  if args.nonce:
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/root-adopted-entry-1/capture_fresh_startup_resource.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/correct-rust-collector-native-entry-source-1/templates/capture_fresh_startup_resource.py
+@@ -1,6 +1,6 @@
+ """Functional McKernel OS/apps and Rust migration only; no security testing.
+ Private source successor of strict native resource capture. No execution grant.
+-Retains reviewed historical physical observer and adds exact Root35/CURRENT112 plus separately retained native/111 ownership.
++Retains original resource predicates and adds exact Root39/CURRENT113 plus complete Root38/V3 historical controls. Sourcecheckpoint only; Root must rebind after any later operation.
+ """
+ from pathlib import Path
+ import argparse
+@@ -16,10 +16,10 @@
+ GUARD_SHA = '1f152e3f18384643cd35d203fcc2a4292950a1c90758734859bdb980cf45fda0'
+ OBSERVER = E/'daemon-final-ring-suffix-source-1/new12h-operation-preparation-1/resource-observer-window-correction-source-1/check_postnative_current_new12h.py'
+ OBSERVER_SHA = '2b7362126fbe70475a208e40df9eb56fa12df0993d83d0aa9b9a22a36638481c'
+-LEDGER = E/'ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER35.json'
+-LEDGER_SHA = '5cc235f9518e488ba50d700c7b9c256410e77495a7117a3b912101b71baf05c1'
+-FREE = E/'ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/independent-postbuild-review-1/CURRENT-FREE.json'
+-FREE_SHA = '52e1dc0902642855c11df0c726dbc365720db1623fc4082748b010255ff844aa'
++LEDGER = E/'ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER39.json'
++LEDGER_SHA = 'eacc369bb4d3691000ea8adb1e736e6f9c734d251ca06151fb41ffc2ec9ef56e'
++FREE = E/'ROOT-CURRENT113-ABI-PRIVATE-CORRECTION-BUILD-ADMISSION-1/independent-postbuild-current-free-review-1/CURRENT-FREE.json'
++FREE_SHA = '13ed764e3ba6fd28861336eacbce7effffc29e879210122ea0e92a2bbb0f952d'
+ INHERITED111 = E/'ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/INDEPENDENT-POSTBUILD-CURRENT-FREE.json'
+ INHERITED_NATIVE = E/'f05-v2-root-export-and-native-preparation-source-1/root-adopted-native-entry-4/independent-postjoin-review-1/REVIEW.json'
+ 
+@@ -51,21 +51,24 @@
+         free = json.loads(FREE.read_bytes())
+         assert ledger['author'] == '/root' and ledger['complete_within_declared_current_boundary'] is True
+         assert ledger['root_attests_no_unlisted_post_boundary_execution_or_custody_operation'] is True
+-        assert len(ledger['consumed_nonces']) == len(set(ledger['consumed_nonces'])) == 35
++        assert len(ledger['consumed_nonces']) == len(set(ledger['consumed_nonces'])) == 39
+         assert ledger['latest_accepted_free_boundary'] == ref(FREE)
+-        assert free['decision'] == 'PASS_POSITIVE_CURRENT112_FOUR_COMMAND_TERMINATION_AND_CURRENT_FREE_PERMANENT_MUTEX'
++        assert free['decision'] == 'PASS_POSITIVE_CURRENT113_CORRECTED_FOUR_COMMAND_TERMINATION_AND_CURRENT_FREE_PERMANENT_MUTEX'
+         assert free['independent'] is True and free['implementation_ownership'] is False
+         assert free['nonce'] == ledger['consumed_nonces'][-1] and free['nonce_consumed'] is True
+-        assert free['holder']['pid'] == 1702852 and free['holder']['starttime'] == 93360315 and free['holder']['device'] == 27 and free['holder']['inode'] == 4
+-        assert free['runner'] == dict(pid=1702974,starttime=93366390,returncode=0,joined=True)
+-        assert free['retained_stopped_container'] == '50970ddb9d70fd3133037de8b68b6aebb92a3bfe4d311185c706d8f9969811bb'
++        assert free['holder']['pid'] == 1740038 and free['holder']['starttime'] == 93979211 and free['holder']['device'] == 27 and free['holder']['inode'] == 4
++        assert free['runner'] == dict(pid=1740211,starttime=93985841,returncode=0,joined=True)
++        assert free['retained_stopped_container'] == 'bd5d81e6d79b527932bbe45ce139e7b358b546c701d63e8677c7035441e61f97'
+         stored_current = checked(free['current_observation'])
+-        assert not stored_current['proc_errors'] and len(stored_current['closed_permanent_mutex_probes']) == 2
++        assert not stored_current['observer_result']['group_membership_observation']['errors'] and len(stored_current['observer_result']['closed_exclusive_probes']) == 2
++        assert stored_current['permanent_mutex_currently_free'] is True and stored_current['pids_current'] == 0
++        assert stored_current['new_actors_absent'] == [dict(pid=1740038,starttime=93979211,role='holder'),dict(pid=1740211,starttime=93985841,role='runner')]
+         assert checked(free['runner_join']) == free['runner']
+         local_terminal = checked(free['local_terminal'])
+         assert local_terminal['joined'] is True and local_terminal['returncode'] == 0 and local_terminal['holder'] == free['holder']
+         tool_join = checked(free['holder_tool_result'])
+-        assert tool_join['actual_tool_terminal'] is True and tool_join['actual_tool_exit_code'] == 0 and tool_join['positive_wait_observed'] is True
++        assert tool_join['tool_terminal_observed'] is True and tool_join['terminal_exit_code'] == 0
++        assert tool_join['holder'] == free['holder'] and tool_join['runner'] == free['runner']
+         terminal = checked(free['container_terminal'])
+         assert terminal['container'] == free['retained_stopped_container'] and terminal['returncode'] == 0
+         assert terminal['state']['Running'] is False and terminal['state']['Pid'] == 0 and terminal['state']['ExitCode'] == 0
+@@ -121,6 +124,18 @@
+             else:
+                 assert not result.stdout.strip()
+             docker.append(dict(argv=argv,returncode=result.returncode,stdout=result.stdout,stderr=result.stderr,positive_wait=True))
++        # Exact reviewed Root38 observer preserves all58 prior controls/V3/failed113.
++        # This addition does not replace the original historical baseline observer.
++        root38_observer = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/root38-correction-admission-source-1/observe_root38_current.py')
++        assert ref(root38_observer) == {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/abi-private-field-correction-source-1/root38-correction-admission-source-1/observe_root38_current.py', 'bytes': 5305, 'sha256': 'eb7a8d45a065ab88d94afd905c68c18d8eb04b069eac00ccd641e6b3977d0238'}
++        root38_child = subprocess.run(['/home/holden/anaconda3/bin/python3','-I','-B',str(root38_observer)],capture_output=True,timeout=40)
++        assert root38_child.returncode == 0 and not root38_child.stderr
++        root38_current = json.loads(root38_child.stdout)
++        assert root38_current['status'] == 'PASS_ROOT38_V3_PRE_GUEST_FAILED_RETIREMENT_CURRENT_PENDING_ROOT_ACCEPTANCE'
++        assert root38_current['known_numeric_controls_absent'] == [1725949, 1726070, 1726074, 1726076, 1726082, 1726088, 1726094, 1726100, 1726106, 1726112, 1726118, 1726124, 1726347, 1726353, 1726359, 1726365, 1726371, 1726378, 1726384, 1726390, 1726396, 1726402, 1726408, 1726414, 1726420, 1726426, 1726432, 1726438, 1730479, 1731468, 1735781, 1735836, 1735840, 1735842, 1735848, 1735854, 1735860, 1735866, 1735872, 1735878, 1735884, 1735890, 1735966, 1735972, 1735978, 1735984, 1735990, 1735996, 1736002, 1736009, 1736015, 1736021, 1736027, 1736033, 1736039, 1736045, 1736051, 1736057]
++        assert not root38_current['group_membership_observation']['errors']
++        assert root38_current['new_V3_25_clients_reaped'] is True
++        assert root38_current['retained_failed113_container_exit'] == 1
+         memory = {line.split(':')[0]:int(line.split()[1])*1024 for line in Path('/proc/meminfo').read_text().splitlines() if line.startswith(('MemTotal:','MemAvailable:'))}
+         assert memory['MemAvailable'] >= 24*2**30
+         paths = ['/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us','/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us','/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes','/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy','/sys/fs/cgroup/pids/mckernel-dev/pids.max']
+@@ -136,7 +151,7 @@
+         assert all(a < b for a,b in zip(guard.guard(),cutoffs))
+         value = dict(scope=__doc__.splitlines()[0],observed_clocks=clocks,fixed_cutoffs=list(cutoffs),freshness_seconds_max=120,
+             boot_id=guard.BOOT,root_ledger35=ref(LEDGER),actual_latest_operation_postjoin_acceptance=ref(FREE),
+-            current_physical_observation=current,known_actual_actor_controls_absent=actors,retained_current112_terminal=terminal,
++            current_physical_observation=current,known_actual_actor_controls_absent=actors,root38_historical_current=root38_current,root38_query_capture=dict(returncode=root38_child.returncode,stdout=root38_child.stdout.decode(),stderr=root38_child.stderr.decode()),retained_current113_terminal=terminal,
+             inherited_current111=ref(INHERITED111),inherited_native_retirement=ref(INHERITED_NATIVE),retained_current111_terminal=inherited_terminal,
+             no_existing_heavy=True,running_container_observation=docker[0],retained_stopped_observation=docker[1],
+             active_shared_records_absent=True,capacity=current['capacity'],memory=memory,cgroup=cgroup,pids_current=pids,
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/root-adopted-entry-1/root_once_startup_entry.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/correct-rust-collector-native-entry-source-1/templates/root_once_startup_entry.py
+@@ -14,8 +14,8 @@
+ import subprocess
+ import time
+ 
+-BASE = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1')
+-STARTUP = BASE/'root-adopted-entry-1'
++BASE = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/correct-rust-collector-native-entry-source-1')
++STARTUP = BASE/'root-adopted-correct-entry-1'
+ AUTH = STARTUP/'ROOT-CONDITIONAL-ONCE-ENTRY-AUTHORIZATION.json'
+ STATIC = STARTUP/'STATIC-NATIVE-BINDINGS.NOT-RELEASED.json'
+ PENDING = STARTUP/'ROOT-EXECUTION-GRANT.PENDING-REVIEW.json'
+@@ -30,12 +30,12 @@
+ STDOUT = STARTUP/'ROOT-ONCE-ENTRY.stdout'
+ STDERR = STARTUP/'ROOT-ONCE-ENTRY.stderr'
+ HELPER = STARTUP/'run_native_startup_capture.py'
+-GUARD = BASE.parent/'operation-account-window-new12h-source-1/actual-guardian-clamp-successor-1/actual_account_window_v2.py'
+-STATIC_SHA = '21a54c6af7dc67cce6e1a8cb8fbc7f1f076ca488e09cebf2dbe9b959f896a4a5'
++GUARD = BASE.parent.parent/'operation-account-window-new12h-source-1/actual-guardian-clamp-successor-1/actual_account_window_v2.py'
++STATIC_SHA = 'ROOT_FINAL_STATIC_SHA256'
+ HELPER_SHA = '32354b7717eb63e100ad04309c7cfcb4bcd75badf5d05704617e2e6487a6de68'
+ GUARD_SHA = '1f152e3f18384643cd35d203fcc2a4292950a1c90758734859bdb980cf45fda0'
+ PROFILE_SHA = 'e5584b2c6fecbec0660dfeda3193468cf78af6a9dee0f4cc849e64abbdca1081'
+-NONCE = 'be6ef5d386ef68c2562799dd22cdcc86'
++NONCE = '6d2e6c210f8bf62b1a4f1abc127fb09a'
+ CASE = 'startup.argv-empty'
+ REVIEWER = '/root/daemon_execution_review'
+ HELPER_ARGV = ['/home/holden/anaconda3/bin/python3','-I','-B',str(HELPER)]

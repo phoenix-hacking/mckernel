@@ -1,3 +1,24 @@
+## CURRENT113 independently accepted; frozen native jobs preserved — 2026-10-27T23:19:56.035733+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Accepted11302c100: image5a5944/Rust896eb7/C64+19=83/Rust56/process63. Fournewselected
+Rustfunctions+fourreadonlyCIntowners1/4002/1/0, all56fullbodies/currentconsumers,
+10callbackedges/7schedulerconsumers/8scalarconsumers/inheritedtables+logger/raw245
+metadata contractPASS. SevenoldCsectionprovenancedeltas/native/lifetime/fileOPEN.
+Fourcommands20.373650span/CPU20.372311/RSS590944/resource→compiler49.746964;
+failure→successfulRustfinish1280.263797s includinginterveningF05attempt, notallidle.
+Root39/eacc/currentfree13ed; stoppedbd5dExit0 andoriginal363375Exit1 preserved.
+Allcorrected113progress belongs23:06–23:36bucket, no priorbucketdoublecount.
+
+F05owner66da compilerfileROfix880a/9429; latestRoot39entry finalsource+mechanical
+PASS5bdd: staticc6a76/bridgea5a998/authf6f8. Actuale55contextone-linefact7e4e
+usesexactretainedvalidatorpath; no dummycopies. Newoutercdc/guestgate31770distinct.
+Frozen60e/dca/908f/125c/c4a78/9a66 unchanged; noHEADchurninvalidatesfrozenjob.
+ActualcorrectRuststartupstage23e2/manifesteb045/fullmapdd94/HOST939e adopted4052;
+newentrysource8c253/nonce6d2e UNUSED andreleaseNULLuntilactualcurrentbinding.
+Next114GLOBAL32 private3commandproposal reusesactual113arch/genuineorigin/witness59.
+Fixed05:36:09Z/earlierclamps/accountincludedfirst/sameledger/realholds/oneheavy/floors.
+
 ## Root38 free; corrected compiler batch ready — 2026-10-27T23:04:06.925784+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
