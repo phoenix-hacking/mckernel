@@ -1,0 +1,44 @@
+{
+  "actual_campaign_guard": false,
+  "actual_context_main": false,
+  "actual_resource_observation": false,
+  "checks": [
+    "original_literal_readers_failure_reproduced",
+    "four_extracted_nodes_and_TOOL_RULES_AST_exact",
+    "only_observer_hash_assignment_AST_changed",
+    "corrected_literal_readers_returns_actual_provider",
+    "actual_TOOL_RULES_match_preparation_target_tools",
+    "literal_digest_regular_fixture_pass",
+    "digest_symlink_rejected",
+    "digest_multilink_rejected",
+    "unlisted_tool_alias_rejected",
+    "literal_tool_digest_fixture_alias_stable_metadata_pass",
+    "wrong_tool_hash_rejected",
+    "changed_whole_helper_source_rejected",
+    "stable_FD_source_replacement_rejected"
+  ],
+  "compiler_or_container": false,
+  "execution_authority": false,
+  "extracted_ast_equal": true,
+  "extracted_ast_sha256": "f86037e89eddac5797b23a5454cc53e9b3c101bf98151095a3b2eacf918d7a76",
+  "extracted_nodes": [
+    "TOOL_RULES",
+    "need",
+    "digest",
+    "tool_digest"
+  ],
+  "old_failure": "accepted stable-reader source changed",
+  "provider_prior": {
+    "bytes": 18215,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/executor-sdk-user-rustc-source-4/truthful-suffix-receipt-source-1/target_tools_sdk_driver.RETAINED-PREFIX-SUFFIX.SOURCE-ONLY.py",
+    "sha256": "30a86c386f09741a18e7873f0869526edb4bc3e63524bdfc47431ac8695de3a4"
+  },
+  "provider_selected": {
+    "bytes": 18214,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/executor-integration-source-2/executor-sdk-user-rustc-source-4/target_tools_sdk_driver.RETAINED-PREFIX-SUFFIX.SOURCE-ONLY.py",
+    "sha256": "bb8be09522d6b4729dd7ca599b199a5b3060265636c8239af2a810059b6721a8"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "seconds": 0.03301228291820735,
+  "status": "PASS_LITERAL_READERS_AND_EXACT_PROVIDER_AST"
+}
