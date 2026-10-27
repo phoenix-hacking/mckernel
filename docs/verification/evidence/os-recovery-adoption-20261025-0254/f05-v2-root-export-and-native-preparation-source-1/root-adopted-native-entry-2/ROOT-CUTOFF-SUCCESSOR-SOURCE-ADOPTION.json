@@ -1,0 +1,51 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "decision": "ADOPT_ONLY_TIGHTENING_NATIVE_ENTRY_SOURCE_SUCCESSOR_NOT_EXECUTION_RELEASE",
+  "sources": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/root-adopted-native-entry-2/prepare_f05_v2_bindings.py",
+      "bytes": 5242,
+      "sha256": "aa85ea996e1dfd6e36b751a700543f6174f524944282ef9be6752a702ac3f465"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/root-adopted-native-entry-2/capture_fresh_f05_v2_resource.py",
+      "bytes": 9591,
+      "sha256": "bdb3bec8364c8bbd12cfe32527d917c0a9e3ff892765868154875bee224396b6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/root-adopted-native-entry-2/run_f05_v2_resource_once.py",
+      "bytes": 2833,
+      "sha256": "98b00a1eede2ac341f5c3f3c703dc414801320ca5d9beb2d1f629bdd03f43404"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/root-adopted-native-entry-2/bind_f05_v2_resource.py",
+      "bytes": 4853,
+      "sha256": "0fb54c204998ecbcc57b1bc67cc6cd7a107344bc86d51a2079205f6eb2476d3e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/root-adopted-native-entry-2/run_native_f05_v2_capture.py",
+      "bytes": 5035,
+      "sha256": "187d0eab660355f0763be0897b3ecb1f34ea4ad9941bed6f977d5a839ab86241"
+    }
+  ],
+  "independent_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/native-cutoff-tightening-successor-source-1/independent-source-review-1/REVIEW.json",
+    "bytes": 9352,
+    "sha256": "16601bcf2af82864fd093e72aba212b8d746f75792ec220b44a4a9ec1a1853ee"
+  },
+  "prior_context_preserved": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/root-adopted-native-entry-1",
+  "abandoned_unconsumed_nonce": "95a6e9dddf8a378d9b0e17f02617c451",
+  "old_resource_preserved": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/root-adopted-native-entry-1/ROOT-FRESH-NATIVE-RESOURCE-PHYSICAL-1.json",
+    "bytes": 201737,
+    "sha256": "cd78f7390160749f167f043543b40caf18892ec4d8f4ecbbd0b1acd2415561a5"
+  },
+  "old_resource_join": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/root-adopted-native-entry-1/RESOURCE-1-CAPTURE-JOIN.json",
+    "bytes": 1596,
+    "sha256": "a00274002ab8c2102b906d82e95c4e34d35891333c6f7e68fd4ecfc40876925a"
+  },
+  "old_failure": "Binder correctly rejected tighterliveBOOT against exactstaticoldbinding; no nativePopen/release/pendingpacket",
+  "runtime_authority": null
+}
