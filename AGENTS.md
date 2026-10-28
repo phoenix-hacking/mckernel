@@ -1,3 +1,9 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](docs/verification/os-milestones-20260914/RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
+
+--- Retained prior context ---
+
 Current user instruction — NEW12h run activated 2026-10-27T17:36:09+00:00, ending 2026-10-28T05:36:09+00:00. Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 Read [current twelve-hour window](docs/verification/os-milestones-20260914/RUN-WINDOW-12H-20261027.md). This replaces earlier expired18h time limits; preserve original credit ledger, all evidence and native controls. Accepted CURRENT109 build and HOST19 are complete; do not replay. Source31 has only three unfinished ring/oversize invocations and needs new admission.

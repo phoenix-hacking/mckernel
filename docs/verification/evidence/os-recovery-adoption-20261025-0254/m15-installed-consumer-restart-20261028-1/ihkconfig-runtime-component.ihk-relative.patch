@@ -1,0 +1,18 @@
+--- a/linux/user/CMakeLists.txt
++++ b/linux/user/CMakeLists.txt
+@@ -294,7 +294,14 @@
+ install(TARGETS "ihklib"
+ 	LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT ihklib_runtime
+ 	ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT ihklib_development)
+-install(TARGETS "ihkconfig" "ihkosctl"
++# Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++# Select the already-built management CLI alone without unrelated user targets.
++# An unqualified install still includes both runtime components.
++install(TARGETS "ihkconfig"
++	RUNTIME DESTINATION "${CMAKE_INSTALL_SBINDIR}" COMPONENT ihkconfig_runtime
++	LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
++	ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}")
++install(TARGETS "ihkosctl"
+ 	RUNTIME DESTINATION "${CMAKE_INSTALL_SBINDIR}"
+ 	LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+ 	ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}")

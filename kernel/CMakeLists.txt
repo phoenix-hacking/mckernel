@@ -298,6 +298,16 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_shmget_dispatch.rs")
 				set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
 				    COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_SHMGET_DISPATCH")
+				# Complete existing native signal-return FP ownership transaction.
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_native_signal_restore_fp_candidate")
+				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_native_signal_restore_fp.rs")
+				set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
+				    COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_NATIVE_SIGNAL_RESTORE_FP")
+				# Complete legacy VDSO info body under the same supported profile.
+				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_vdso_info_candidate")
+				list(APPEND RUST_KERNEL_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_vdso_info.rs")
+				set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
+				    COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_VDSO_INFO")
 
 				set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
 				    "${MCKERNEL_F06_ORIGIN_PROFILE}"

@@ -1,0 +1,14 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/check_retained_stage.py
+
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/py39-checker-api-correction-source-1/check_retained_stage_py39.py
+
+@@ -66,7 +66,7 @@
+
+  binding=json.loads((ROOT/'original227-contract-case-correction-source-1/COLLECTOR-AND-STAGE-BINDING.json').read_bytes());owner=load(binding['normal_owner'],'retained_normal_owner_stage_APIs');owner._manifest_identity(stage['scratch_manifest']['path'],stage['scratch_manifest']['sha256']);owner._manifest_outside_writable_parent(stage['scratch_manifest']['path'],stage['planned_attempt_parent'])
+  # Final source/output identities still match after full parsing; no second archive read.
+  for row,identity in [(manifest['staging']['base_initramfs'],base_identity),(manifest['staging']['derived_initramfs'],archive_identity),(receipt_row,receipt_identity)]:
+-  after=Path(row['path']).stat(follow_symlinks=False);need(all(getattr(after,k)==identity[k]for k in IDENTITY),'input identity changed during parse')
++  after=Path(row['path']).lstat();need(all(getattr(after,k)==identity[k]for k in IDENTITY),'input identity changed during parse')
+  map_ref=write('ACTUAL-FULL-FINAL-MAP.json',fullmap)
+  summaries=[]
+  for row in records:

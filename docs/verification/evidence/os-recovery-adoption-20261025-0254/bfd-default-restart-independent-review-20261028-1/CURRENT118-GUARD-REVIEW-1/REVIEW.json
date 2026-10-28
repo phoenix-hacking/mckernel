@@ -1,0 +1,110 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_EXACT_CURRENT118_INITIAL_OPERATION_GUARD_SOURCE_ONLY",
+  "reviewer": "/root/bfd_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "at": "2026-10-28T19:26:16.290975+00:00",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current118-operation-source-1/SOURCE-READY.json",
+    "bytes": 4983,
+    "sha256": "ec8643f07d0e48c1738d910a041fe1ea6dfa70b7d86cb9f6d79b7527e30e7787"
+  },
+  "sources": {
+    "current118_guard_adapter.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current118-operation-source-1/current118_guard_adapter.py",
+      "bytes": 3009,
+      "sha256": "3a90d200d4bcb81d68f9aed22c37f8a3ebc5389896c29b6f2a7973e9ae66da91"
+    },
+    "operation_window_guard118.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current118-operation-source-1/operation_window_guard118.py",
+      "bytes": 8511,
+      "sha256": "d02781a862ff41f8116b84eab955f66969b0db8137b9b255ba6b656958eac275"
+    },
+    "test_operation118.py": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current118-operation-source-1/test_operation118.py",
+      "bytes": 8632,
+      "sha256": "acf78cd4efe83a00e6a0916857bb5b00911b77ed875a55805eff67e95633fb60"
+    }
+  },
+  "templates": {
+    "ROOT118-OPERATION-SUCCESSOR.TEMPLATE.NOT-AUTHORITY.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/current118-operation-source-1/ROOT118-OPERATION-SUCCESSOR.TEMPLATE.NOT-AUTHORITY.json",
+      "bytes": 1038,
+      "sha256": "450763bf88a258bfefe3cf338c6ddd00bb0fdf0c0f058eaf997098f549b09bd6"
+    }
+  },
+  "reused_sources": {
+    "guardian": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/guardian_guard.py",
+      "bytes": 13388,
+      "sha256": "48893862bb3262a2c81d282215e4b9771b8f659e635a21856096c41233774f18"
+    },
+    "operation117": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current117-next-default-cohort-source-20261028-1/operation_window_guard117.py",
+      "bytes": 8202,
+      "sha256": "5d81b57b20f4652b0f9e8d62f8935b66c98fc0d35fd63377a31aa1f2eec777c3"
+    },
+    "adapter117": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current117-next-default-cohort-source-20261028-1/current117_guard_adapter.py",
+      "bytes": 3009,
+      "sha256": "44bbe2e0ab0518eb7936f854935153dab5816df28133190eac6eae9af31cfe03"
+    }
+  },
+  "prior_restart_guard_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/RESTART-GUARD-REVIEW-1/REVIEW.json",
+    "bytes": 10685,
+    "sha256": "2ecc7b073f38beee54271c3266edd8c430f69983e323dba4baa694e87c9cf694"
+  },
+  "exact_diff": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/CURRENT118-GUARD-REVIEW-1/EXACT-117-118.diff",
+    "bytes": 3510,
+    "sha256": "47836371fdd6d73a1e3c64c8edbdae7f1822fcff8e55c33a4b60ef53b8f39fd7"
+  },
+  "pure_tests": {
+    "record": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/CURRENT118-GUARD-REVIEW-1/PURE-REGRESSION.json",
+      "bytes": 773,
+      "sha256": "a0b093acdf8a1a87c9e17a329a35f1358cf86c9416aead76aba36e34171dbaba"
+    },
+    "methods": 8,
+    "result": "PASS"
+  },
+  "unchanged_AST_function_bodies_from117": [
+    "load_predecessor",
+    "load_window",
+    "check_account_state",
+    "guard",
+    "authenticated",
+    "decode",
+    "triplet"
+  ],
+  "findings": [
+    "All declared source/template/reused references authenticate; guardd02781a8 and adapter3a90d200 match the exact source-ready snapshot. Adapter differs from accepted117 source only in OPERATION=current118-build; sealed config schema and configure-once/guard/current_cutoffs APIs are unchanged.",
+    "CURRENT118 is a new initial operation exactly as CURRENT117 was. Only current118-build is recognized; successor.predecessor_cutoffs must be actual JSON null/None, first_prepared_window_sha256 must equal immutable0bfb54bf, and author/decision/window/account/operation/subject bindings plus independent exact successor review remain mandatory. No expired predecessor grant,117 alias or new runtime authority is fabricated.",
+    "Immutable window triplet remains1793253600/1035706.5689547858/1051044.6960026678. Separate118 operation caps are actual tighter1793253600/1035704.5689393478/1051042.6959879305; further tighter caps pass, wider values and exact reached boundaries refuse. Existing window file remains unchanged.",
+    "Exact fresh thread01a183ec and reviewed guardian48893862 replace retired identities. Guardian entrypoint must be exactly guard. The unchanged byte-pinned predecessor account checker preserves cumulative run7f4/57774.852125, spent floor22812.3311, heartbeat/stop/service/auth/billing holds and original accounting rules. Reviewed guardian source retains current control chain, uncertainty and reparent checks.",
+    "The only remaining source changes versus117 are nested E predecessor lookup path, operation name/error label, fresh thread, tightened operation cap tuple and exact guardian reference requirement. Seven account/window/authentication/live-dispatch function AST bodies are identical to117. No sources from sealed restart9source or earlier accepted prefixes changed."
+  ],
+  "source_blockers": [],
+  "conditions": [
+    "This source/API PASS supplies no operation-window review for actual118 subjects. Root must bind the exact final accepted116/source_map118/recipe118 and cohort consumers into an actual explicit initial118 successor and obtain independent exact successor review.",
+    "Use the guard/adapter at the exact reviewed absolute paths. A deeper copy changes E resolution and needs its own reviewed path binding and hashes; templates with null author/decision/subjects are not authority.",
+    "Existing fresh controls/account/guardian/typed current boundary, unused nonce, published source closure, independent execution approver and actual resource/soleheavy admission remain required before the genuine producer. No live check, exporter, materializer, compiler or native execution was performed here.",
+    "Retain prior117 failures, completed SDK/export/ports, all consumed prefixes/nonces, dirty source changes, stopped scratch21, exclusions and permanent27:4. Do not replay an expired operation or weaken original resource/oracle predicates."
+  ],
+  "next_Root_operation": {
+    "owner": "/root",
+    "action": "Integrate exact source/API into the118 source cohort and bind its real final subject map in the actual initial-operation successor; independent operation review and later fresh execution/resource release remain separate.",
+    "operation": "current118-build",
+    "predecessor_cutoffs": null,
+    "first_prepared_window_sha256": "0bfb54bff698f53c744d797e2f57db94db08cd20120da70566d555fa6c1e320e"
+  },
+  "actual_actions": {
+    "live_guard_account": 0,
+    "export_materializer_compiler_Docker_native": 0,
+    "nonce_or_execution_grants": 0,
+    "implementation_source_edits": 0
+  },
+  "runtime_authority": null
+}

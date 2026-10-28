@@ -1,0 +1,118 @@
+{
+  "accepted_sdk_files": 10,
+  "actual_cli": 0,
+  "actual_compiler": 0,
+  "actual_configure": 0,
+  "actual_guard": 0,
+  "actual_install": 0,
+  "actual_link": 0,
+  "actual_native": 0,
+  "bindings": {
+    "CMakeLists.txt.candidate": {
+      "bytes": 13891,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/CMakeLists.txt.candidate",
+      "sha256": "fd6b395982d4badb2e0574496cae19a7863b2f16d3841659de573ffdb14da4b2"
+    },
+    "GUARDED-CURRENT-CONSUMER-RECIPE.json": {
+      "bytes": 14409,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/GUARDED-CURRENT-CONSUMER-RECIPE.json",
+      "sha256": "c769a4a30c0434ff3fc964271661f4d913241e1eb1f59f081379154c934ccd59"
+    },
+    "PRELINK-CONTRACT.json": {
+      "bytes": 21707,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/PRELINK-CONTRACT.json",
+      "sha256": "4ad455c494631e685a5d3a78d281a4fbe2b0a56f079ed23475d3bf4e092d33dc"
+    },
+    "RESULT.md": {
+      "bytes": 4344,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/RESULT.md",
+      "sha256": "44d6831a8a02c6bef9ff9f4b564838085cca0f6ca6d46a8d6d19f817955b2be1"
+    },
+    "SOURCE-READY.json": {
+      "bytes": 6686,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/SOURCE-READY.json",
+      "sha256": "31413165357bb231f8ee1ebf4437b97c6e9d0fc497183ffa532f0a2dc78cb7f8"
+    },
+    "ihkconfig-runtime-component.ihk-relative.patch": {
+      "bytes": 912,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/ihkconfig-runtime-component.ihk-relative.patch",
+      "sha256": "f2dee32ef6bbd4d013390dee864ee161c59b8b2350c2272662f88ab4de272c5f"
+    },
+    "prelink_reuse_guard.py": {
+      "bytes": 6787,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/prelink_reuse_guard.py",
+      "sha256": "98ce1fc8f9fa6dfe9038e0db4eb4162dd59bdf61919395557e5fefc4f2345fa9"
+    }
+  },
+  "controls": [
+    {
+      "configuration": {
+        "accepted_buildid": "3114d9e",
+        "capacity": 8,
+        "current_buildid": "3114d9e",
+        "mode": "IDENTICAL"
+      },
+      "expected": "ACCEPT",
+      "name": "identical-real-accepted-config",
+      "result": "PASS"
+    },
+    {
+      "configuration": {
+        "accepted_buildid": "3114d9e",
+        "capacity": 8,
+        "current_buildid": "a7ddca2",
+        "mode": "ONLY_EQUAL_CAPACITY_BUILDID"
+      },
+      "expected": "ACCEPT",
+      "name": "seven-character-current-abbreviation",
+      "result": "PASS"
+    },
+    {
+      "expected": "REJECT",
+      "name": "eight-character-current-abbreviation-is-incompatible",
+      "reason": "BUILDID capacity changed",
+      "result": "PASS"
+    },
+    {
+      "expected": "REJECT",
+      "name": "real-CMake-version-fallback-is-incompatible",
+      "reason": "BUILDID capacity changed",
+      "result": "PASS"
+    },
+    {
+      "expected": "REJECT",
+      "name": "same-width-feature-drift",
+      "reason": "non-BUILDID config drift",
+      "result": "PASS"
+    },
+    {
+      "expected": "REJECT",
+      "name": "C-string-escape-is-not-an-ASCII-literal",
+      "reason": "one plain ASCII BUILDID in each config",
+      "result": "PASS"
+    },
+    {
+      "expected": "REJECT",
+      "name": "duplicate-whitespace-directive",
+      "reason": "duplicate or unsupported BUILDID directive",
+      "result": "PASS"
+    },
+    {
+      "expected": "REJECT",
+      "name": "non-ASCII-seven-byte-ID",
+      "reason": "one plain ASCII BUILDID in each config",
+      "result": "PASS"
+    }
+  ],
+  "default_compiler_credit": false,
+  "exact_selector_edit": true,
+  "file_closure": false,
+  "generated_headers": 0,
+  "negative_controls": 6,
+  "positive_controls": 2,
+  "public_headers": 18,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_files": 58,
+  "status": "PASS_INDEPENDENT_BYTE_AND_PURE_BUILDID_CONTROLS",
+  "unchanged_accepted_source_files": 57
+}

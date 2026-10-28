@@ -1,0 +1,45 @@
+{
+  "independent": true,
+  "implementation_ownership": false,
+  "decision": "PASS_EXACT_ROOT61_BFD_OBSERVER_DEPENDENCIES",
+  "required_decision": "PASS_EXACT_ROOT61_BFD_OBSERVER_DEPENDENCIES",
+  "observer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/observe_bfd_current61.py",
+    "bytes": 10858,
+    "sha256": "72c560fd144f0fa547b2e3c3a5cd50b3695f7a53a9f10a8d2336515844958540"
+  },
+  "guard_adapter": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/bfd_guard_facade.py",
+    "bytes": 1709,
+    "sha256": "d8609bef10dc39d54f1fa64c7ab81da22d297674054969e4728f7225bfc91931"
+  },
+  "guard_configuration": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/BFD-FINAL-INTEGRATION-1/GUARD-FACADE-CONFIG.ACTUAL.json",
+    "bytes": 805,
+    "sha256": "0a1550ca5de876e7bc57db54350ffc046dc0e31c615b7b52c20b525bf80b1dc5"
+  },
+  "runtime_authority": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/bfd_review",
+  "at": "2026-10-28T19:32:10.421741+00:00",
+  "checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/BFD-ACTUAL-CONFIG-REVIEW-1/RECURSIVE-CHECK.json",
+    "bytes": 635,
+    "sha256": "226ae594fe674c25ecc2773f05dd3aa4557c6a30419c74293041ac2c7724df05"
+  },
+  "common_dependency_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/BFD-ACTUAL-CONFIG-REVIEW-1/COMMON-DEPENDENCY-REVIEW.json",
+    "bytes": 3526,
+    "sha256": "46e8b5df8614770378b2860e989ea6400fe01c66c0fd89de64d86653d59e7820"
+  },
+  "actual_physical_config": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/BFD-FINAL-INTEGRATION-1/PHYSICAL-HISTORY-CONFIG.ACTUAL.json",
+    "bytes": 6241,
+    "sha256": "1ad82f2b127e52867b65f3ed60f742878e3aba47b37e40168ae4e45a9dc13f02"
+  },
+  "findings": [
+    "Exact top observer72c560fd selects its authenticated private current60 source, whose ACTUAL-PINS common edge selects private unchanged5877common. current60 observe reads local ROOT-ACTUAL-RUNTIME-DEPENDENCIES.json; retained old common_dependencies metadata does not route live guard selection.",
+    "Top consumer binds exact BFD operation facade d860 and same immutable actual config0a1550ca as common/physical; source-set/operation guardian/current cap review remains already settled at exact110ef/e3cd/4889.",
+    "Root61/free6c83 remains historical accepted boundary, with no new physical clearance or file/default/native acceptance. Root must fill exact static dependency DATA, publish/fetch its closure, prewarm independent reviewer and obtain fresh admission before any runtime step."
+  ]
+}

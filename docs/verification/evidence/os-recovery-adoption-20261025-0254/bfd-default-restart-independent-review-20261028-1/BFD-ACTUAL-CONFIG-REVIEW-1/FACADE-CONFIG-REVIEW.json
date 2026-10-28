@@ -1,0 +1,75 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_EXACT_BFD_FACADE_CONFIGURATION_SOURCE_BINDING",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/bfd_review",
+  "recorded_at": "2026-10-28T19:30:21.638851+00:00",
+  "guard_adapter": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/bfd_guard_facade.py",
+    "bytes": 1709,
+    "sha256": "d8609bef10dc39d54f1fa64c7ab81da22d297674054969e4728f7225bfc91931"
+  },
+  "guard_configuration": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/BFD-FINAL-INTEGRATION-1/GUARD-FACADE-CONFIG.ACTUAL.json",
+    "bytes": 805,
+    "sha256": "0a1550ca5de876e7bc57db54350ffc046dc0e31c615b7b52c20b525bf80b1dc5"
+  },
+  "runtime_guard": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/cohort/runtime_guard.py",
+    "bytes": 1989,
+    "sha256": "1fcf1e44b3cbc8bca5b6d97e8959e721d2acb74a075816de6f1e835e66569b4e"
+  },
+  "operation_binding": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/cohort/ROOT-OPERATION-BINDINGS.json",
+    "bytes": 4759,
+    "sha256": "80390c77c16466a3cbfe81a5c5a09f023e0142b91fbceb4c76e394650bf99fff"
+  },
+  "actual_successor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/BFD-FINAL-INTEGRATION-1/EXPLICIT-BFD-OPERATION-SUCCESSOR.json",
+    "bytes": 5730,
+    "sha256": "110ef6f3599a72f93a792a87f6cd7222126768780b6ec6f57bc9bf9db4b6a91f"
+  },
+  "actual_operation_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-independent-review-20261028-1/BFD-ROUTING-REVIEW-1/BFD-ACTUAL-OPERATION-WINDOW-REVIEW.json",
+    "bytes": 7101,
+    "sha256": "e3cd2813067b0e9712ecbecf8efec64e2cc960eb0bb609c0b140fb91cea84089"
+  },
+  "prior_settled_routing_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-independent-review-20261028-1/BFD-ROUTING-REVIEW-1/REVIEW.json",
+    "bytes": 4661,
+    "sha256": "4ffd48ad99ff145a7e2ef8233895cd00c0877782b4c09bdccf7797655c4b2b21"
+  },
+  "physical_config_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/BFD-ACTUAL-CONFIG-REVIEW-1/PHYSICAL-CONFIG-REVIEW.json",
+    "bytes": 7128,
+    "sha256": "d5f6c442899136184f06eacb40227c81854efc0ee2cc2502ce009975e3445705"
+  },
+  "checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-restart-independent-review-20261028-1/BFD-ACTUAL-CONFIG-REVIEW-1/CHECK.json",
+    "bytes": 655,
+    "sha256": "f8f3903c9a490125957725a42917d3913321a993cee6802c3999cde89dec5077"
+  },
+  "findings": [
+    "Actual Root config0a1550 authenticates exact routed runtime1fcf and operation binding80390c. Root author, BFD operation, no-runtime-authority and exact current tighter clamp tuple match frozen cohort pins and independently reviewed actual operation110ef/e3cd.",
+    "Actual runtime subjects() returns exactly12 current final source/metadata subjects equal to operation binding and actual successor. Every subject byte reference matches; runtime_guard.module() authenticates copied shared9eefd before pure validation. Guardian remains reviewed48893862; fresh thread/caps/account rules come from reviewed source, not a relabeled old operation.",
+    "Actual BFD facade configure(ref), binding() and current_cutoffs() pass with no live effects. The wrapper delegates guard() to the exact runtime, which validates the same binding and twelve source subjects before live account/guardian calls. All live calls remain unexecuted by this review.",
+    "Physical-historyaf7c config review is now consumer-compatible and binds unchanged eight historical source refs and this exact facade/config. Root must write actual physical config pointing to it before exact common/top dependency reviews can be completed.",
+    "Root61/free6c83 and accepted3103 source export/SDK21 remain retained facts at their exact scope. They are not refreshed by static config validation. Actual fresh physical/held observations, resource/PID/birth/lock ownership, nonce availability, prewarmed independent reviewer, publication and execution gates remain required."
+  ],
+  "test_profile": {
+    "CPU": 0,
+    "address_space_bytes": 2147483648,
+    "CPU_seconds": 30,
+    "jobs": 1
+  },
+  "pure_fixture_clock_triplet": [
+    1793216000,
+    997600,
+    1013000
+  ],
+  "source_blockers": [],
+  "actual_live_guard_account_capture_or_producer_calls": 0,
+  "runtime_authority": null,
+  "next_Root_operation": "Write exact actual PHYSICAL-HISTORY-CONFIG with Rootauthor, unchanged af7c/eight source refs, facade d860 and guard config0a1550, independent_review referencing PHYSICAL-CONFIG-REVIEW.json. Provide that immutable actual file for common/top dependency review; no physical clock or runtime yet."
+}

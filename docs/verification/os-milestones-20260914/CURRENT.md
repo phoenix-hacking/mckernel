@@ -2,6 +2,93 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
 
+## Twenty-minute engineering checkpoint — 2026-10-28T19:36Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Bucket19:16:28.104–19:36:28.104: actualHOST5compiler+2behaviorcommands PASS,
+6804C/Rustpairs (F03do_munmap4860/ABI27; F06xstatecopyto1944/headerABI).
+All7children positivelywait4joined0/groupsabsent/closedstreams; independent
+source+HOSTreviews2fd83dd3/01363cb2/qualification872c2109 PASS. F03wall.295794s/
+CPU.205139s/RSS97440KiB; F06sumwall.335533s/CPU.288683s/RSS135704KiB.
+FirstHOSTcompiler19:26:43.296,931.301s afterrelaunch; productionfirstcompiler
+stillUNOBSERVED. Actual productionbuild/native/file/Cretirement deltas0.
+
+Root adopted exact9reviewed118canonicalSOURCEpaths, preserving all116preimages;
+receiptc161d7b6, review8ddeb7a6. Currentdefaultartifact remains116/42473e03,
+C71/Rust68; no source count is artifact/native credit.118cohort/export successor
+finishing genuineRootreceipt compatibility; no actualexport/origin/build replay.
+F03body4util_show_syscall_profile and F06body4copy_from (rebased118) source-ready,
+not compiled. M15CLI/library source reuse independentlyPASS4236f20b; realdefault
+configure/generated BUILDIDcapacity/install/artifact proof remains queued.
+
+BFDrestart routing/operation/schema and exactfacade/physical/common/top reviews
+allPASS; Rootmaterialized actualstaticENTRY-BINDINGS with noncefaac1b4804174de5800c58d61ba98004
+RESERVEDUNUSED, outputabsent, noholder. NextcriticalownerRoot: exactGitpublication,
+seal; actualindependent/root/observerreview PREWARM before anycaptureclock; fresh
+ownedphysical/resource/onceentry before unchanged3commanddefaultproducer.
+Original227recursive sourceindependentPASS628b75da; alternatepreparation ready,
+frozenCURRENT110/60e stageee6b remains narrower than116nativequalification.
+Largestavoidablehandoff is actualcontrol/dependency propagation, not capacity.
+Schedulingchange: BFDpublication/admission first while disjointsourceowners work;
+no more source-only preparation displaces its ready compilerentry.
+
+Practical35/35,M14files4/6,M15files1/8 remain; wholeM14/M15OPEN.11h36m24.995s
+stopped downtime is separate; original30minbaseline retained, no95percentclaim.
+Exactbucket/measurements/queue/blocker record:
+../evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/STEERING-20261028T193628.json.
+
+## Armed controls and catchup steering — 2026-10-28T19:18Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual parent restart receipt is now present: guardian2111552/101236067,
+monitor2111966/101243270 and retained phone1894242/96505809; exact modelchain
+2109395→2109397→2109399 is live/currentthread01a183ec. No new controllers created.
+Actual earliest UTC1793253600/MONO1035704.5689393478/BOOT1051042.6959879305
+supersedes the later inherited limits. Core launch/account/holds remain unchanged.
+Specific monitor startup-shell→systemd1311 reparenting was observed with exact
+PID/birth retained; successor read-only guard pins this transition for review.
+No model/process observation provides native/heavy clearance.
+
+Overdue monitor catchup records startup segment19:11:11.995–19:16:28.104 only;
+new nonoverlapping20minute baseline19:16:28.104, next19:36:28.104. Stopped downtime
+07:34:47–19:11:11.995 (41784.995s) is separate. Actual new compiler/default/native/
+file/Cretirement deltas0; first-compiler latency remains unobserved. Recovered
+predecessor readback1 is not a new workload. BFD entrycoupling/schema independent
+sourcePASS81402e04/dc7a6747 with7baseline+3independent pure controls; no runtime.
+Concrete scheduling change: original227 owner now implements recursive observer
+control routing; BFDroute implements its separate facade/runtime routing while
+restartguard0947/guardian4889 undergo independent review. Two remaining M14
+file owners implement do_munmap and arch_ptrace_xstate_copy_to_bridge privately;
+banked117/118 composition and M15installedconsumer integration advance separately.
+No95percent/speedup claim. Catchup evidence:
+../evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/CATCHUP-STEERING-20261028T191628.json.
+
+## Restart reconciliation — 2026-10-28T19:13Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Explicit restart continues the same immutable window and credit run. Old model
+controls are retired; native clearance is not inferred. Parent restart controls
+receipt ACTUAL-CONTROLS-ARMED.json remains pending; no heavy/native entry.
+Retained Root61/currentfree observations are historical until fresh admission.
+
+Interrupted original227 readback actually completed: independent receipt ee6bb536,
+child1924509/birth97022280 positively wait4joined0, streams closed/group absent,
+CPU0, wall0.840896s/CPU0.816350s/RSS213384KiB; 66 archive records/60 final members
+match. Six raw evidence references verified; current child proc absent. Adopt
+retained stage/archive proof only for frozen CURRENT110/60e, without replay or
+matching116 native/file credit. Exact recovery/adoption evidence:
+../evidence/os-recovery-adoption-20261025-0254/restart-adoption-20261028T1911/ADOPTION-AND-RECOVERED-READBACK.json.
+
+Accepted CURRENT116 C71/Rust68/practical35of35/M14files4of6/M15files1of8 unchanged.
+Active disjoint owners: m14_compose prepares next118 from banked117 plus reviewed
+F03/F06 body2; m15_consumer advances installed CLI/library source integration;
+bfd_review resolves exact entrycoupling/dependency review; original227 prepares
+final runtime subjects; restart_guard implements the concrete stale-thread/retired-
+guardian admission repair. Source work only; no SDK/export/build/native replay.
+Fresh watcher lower MONO1035704.5689393478 tightens inherited1035705.5689454618;
+UTC1793253600/BOOT1051043.6959931096 remain ceilings. Parent receipt may tighten.
+Stopped downtime since07:34:47Z is excluded from active engineering measurements.
+
 ## Execution cursor — 2026-10-28T07:33Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

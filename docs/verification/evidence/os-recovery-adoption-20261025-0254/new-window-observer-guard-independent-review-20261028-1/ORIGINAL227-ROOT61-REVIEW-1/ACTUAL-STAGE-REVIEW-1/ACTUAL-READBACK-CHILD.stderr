@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/check_retained_stage.py", line 81, in <module>
+    try:main()
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/check_retained_stage.py", line 69, in main
+    after=Path(row['path']).stat(follow_symlinks=False);need(all(getattr(after,k)==identity[k]for k in IDENTITY),'input identity changed during parse')
+TypeError: stat() got an unexpected keyword argument 'follow_symlinks'

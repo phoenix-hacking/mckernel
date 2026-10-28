@@ -1,0 +1,99 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/m14_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewed_at": "2026-10-28T19:28:02.012279+00:00",
+  "decision": "PASS_F03_DO_MUNMAP_PRIVATE_SOURCE_ABI_OWNERSHIP_AND_ACTUAL_HOST_ONLY",
+  "runtime_authority": null,
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body3-restart-20261028-1/SOURCE-READY.json",
+    "bytes": 9993,
+    "sha256": "18baaa67ad01d599d482677e4a40b7964c74340ce27d0f8da4c70084010bc360"
+  },
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body3-restart-20261028-1/do-munmap-entry.Rust.inc",
+    "bytes": 2270,
+    "sha256": "725f2c56ed37f5bc219fbfea587658bcf6e1863e910d3a523cbf35cd1ac68992"
+  },
+  "existing_body": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body3-restart-20261028-1/do-munmap-body.current.Rust.inc",
+    "bytes": 1938,
+    "sha256": "b01e77b2f0a0fa8b7ae501a48bba56db8da114cb9d76dc093fb691190d4f3c4f"
+  },
+  "data_binding": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body3-restart-20261028-1/do-munmap-binding.C.inc",
+    "bytes": 667,
+    "sha256": "c565636d721728fe552a15c27376206902465292a8e30dbcb17614408b578d1c"
+  },
+  "integration_patches": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body3-restart-20261028-1/syscall.c.patch",
+      "bytes": 1430,
+      "sha256": "3e8ed71d1bfab49125ea08874633cc9c031653e2ba105020dc9e5d36e4408855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body3-restart-20261028-1/syscall_policy.rs.patch",
+      "bytes": 2505,
+      "sha256": "2659af23ca0123217d147c1de30cacd7012ab5650c5ab86f618ee282a20dd684"
+    }
+  ],
+  "actual_HOST_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body3-restart-20261028-1/output-PENDING-ROOT/ACTUAL-HOST-RESULT.json",
+    "bytes": 13951,
+    "sha256": "62754b7bface5f2874a8d1841b0fd490e38c4903b492489e6685b2169b1cfdcf"
+  },
+  "actual_artifacts": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body3-restart-20261028-1/output-PENDING-ROOT/callbacks.o",
+      "bytes": 2544,
+      "sha256": "65676b33f59b0dc7732e46537ae6f0072a6501711d3ab8866382280c80ec70f1"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body3-restart-20261028-1/output-PENDING-ROOT/parity",
+      "bytes": 57152,
+      "sha256": "18ddcf13124e6df41fc940b3c285422793f02ab8bdba19d7041f19bb04b610d4"
+    }
+  ],
+  "source_checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-restart-independent-review-20261028-1/BODY3-REVIEW-1/SOURCE-CHECKS.json",
+    "bytes": 17353,
+    "sha256": "4043ba4986f2f98712145961e2a32eebf7bb537d247985143c9059e6d2f0e104"
+  },
+  "checks": {
+    "genuine_header_ABI_values": 27,
+    "binding_bytes": 48,
+    "binding_alignment": 8,
+    "C_Rust_pairs": 4860,
+    "independent_per_invocation_oracles": 9720,
+    "actual_commands": 3,
+    "all_positive_wait4_joins_groups_absent_streams_closed": true,
+    "all_stderr_empty": true,
+    "exact_grant_plan_argv": true,
+    "existing_complete_Rust_body_reused": true,
+    "fixture_entry_only_adds_ABI_witness": true,
+    "reviewer_compiler_or_fixture_replays": 0
+  },
+  "findings": [
+    "Exact original C entry and complete retained C body bind the oracle; candidate reuses the exact existing production do_munmap_body_result, not an equivalent implementation. New entry performs the same currentCPU/currentThread borrowed VM/process extraction and uses genuine Process offsets. Original live aligned CPU/thread/process/VM and caller range-lock/lifetime exclusion remain required; no new reference ownership, locks, mappings or allocation.",
+    "Immutable48B reprC six-callback binding keeps original order and genuine C typedef signatures. Existing selected begin/remove/finish aliases remain Rust; clear_host/set_host/log and downstream provider/request contracts remain explicit C debt. LP64 pointer/ulong/size_t and int32 flag/result match original entry and providers.",
+    "Existing body preserves unsigned wrapping ranges, reads straight-map fields only after removal, preserves containment bypass, removal-error precedence, original C int32 narrowing of long clear result, PROT_READ|WRITE|EXEC and fullwidth forwarding/holding flag. begin/remove/host/finish/log sequence and initial ro_freed0 are unchanged. HOST uses deterministic mocks only.",
+    "Fixture new entry differs only by additive27-value Rust ABI witness; real C headers/layouts compare CPU/Thread/VM/Process sizes,alignments,borrowed field offsets,binding field offsets and widths/protection values.4860pairs cover12ranges,3hold values,3remove results,3ro outputs,5clear extrema,3set results;9720separate full-state/result/order oracles prevent C/Rust mutual-equality-only acceptance.",
+    "All three exact granted argv completed0, actual stdout matches fixture result, all original stderr empty, executable authenticated. Actual children2116313/101304799,2116320/101304808,2116325/101304825 have positive matching wait4 joins, absent groups/proc entries and closed streams in retained reports. No runtime nonce or actual MM/native effect occurred.",
+    "Paired existing helper selector retains original C fallback and dispatch-dependent source logical lines. Both patches also apply by exact unique contexts to sealed118 in memory, preserving clear_host/perfmmap/VDSO and all other source; final coherent composition still requires Root review/fresh origin bindings."
+  ],
+  "conditions": [
+    "Root must compose exact patches with118 through fresh preimages and preserve concurrent work. No credential draft/service-held endpoint/signal work is admitted.",
+    "Full production crate/selected genericTU/link and fallbackTU must prove zero selected C do_munmap and one Rust global resolving all actual direct/folded callers; authenticate real CPU/processVM/Process ABI,48B data binding and relocations to all six original selected owners. Preserve logical allocation/debug origins, all389registry rows and inherited proofs.",
+    "Matching current-candidate unmap/range/remap/hostPTE/lifecycle and restoration behavior remains required. HOST fixture substitutes currentCPU/range/host providers and cannot prove native MM/ownership behavior. New default artifact,C retirement,native and wholefile credit all remain0; F03/fullM14/M15 stayOPEN.",
+    "Immutable epoch1793253600, MONO1035704.5689393478, BOOT1051042.6959879305 and original7f4creditrun/57774.852125 ceiling apply with any tighter parent actual cap; this review creates no execution grant. Preserve scratch21/exclusions/locks/permanent27:4, all dirty work and all original failures."
+  ],
+  "counts": {
+    "source_body_qualified": 1,
+    "actual_HOST_fixtures": 1,
+    "default_artifacts": 0,
+    "C_retirements": 0,
+    "native_cases": 0,
+    "file_closures": 0
+  }
+}

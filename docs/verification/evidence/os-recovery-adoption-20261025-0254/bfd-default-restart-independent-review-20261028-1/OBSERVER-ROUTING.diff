@@ -1,0 +1,43 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/current61-after116-consumer-source-1/consumer-physical-shape-correction-source-1/observe_current61_original227.py
+
++++ docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/actual-entry-coupling-source-1/observe_bfd_current61.py
+
+@@ -8,7 +8,7 @@
+
+ import os
+ 
+ HERE=Path(__file__).resolve().parent
+-PINS={'ledger60': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER60.json', 'bytes': 24066, 'sha256': 'bd4b75db9c1c7cdb2993aa957c0c9a690eed39210d751ba89319c29ef4fc28d4'}, 'current60_source': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/observe_current60_postjoin.py', 'bytes': 13268, 'sha256': 'de9f6a1b76faded7a31227d13fe30cab33867ba769eb0a0b7234ea564946f048'}, 'capture2': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/ACTUAL-POSTJOIN-OBSERVATION-2-CPU0.json', 'bytes': 5944082, 'sha256': 'ebbd745f00e17f52fb2e4f589633ca74c9e64e44a643f875c6d9697dc7c9a270'}, 'capture2_join': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/ACTUAL-CPU0-POSTJOIN-2.RESULT.json', 'bytes': 1142, 'sha256': '01189006547b80fe7de923c073f7a43951da3297805c9c08a1c4e6e3ae983263'}, 'compose_result': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/future-capture-1/ACTUAL-COMPOSE-RESULT.json', 'bytes': 3596, 'sha256': '2afd5f7fb1ffb3501bda6071b135e055262a681a6fa2f09f7c07eff737ba3728'}, 'CID': '57a5fb1f62bc707ee90412fe9585718cdaa39e4110854f91bf4cb6df4380fda3'}
++PINS={'ledger60': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER60.json', 'bytes': 24066, 'sha256': 'bd4b75db9c1c7cdb2993aa957c0c9a690eed39210d751ba89319c29ef4fc28d4'}, 'current60_source': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/actual-entry-coupling-source-1/observe_bfd_current60_history.py', 'bytes': 13303, 'sha256': '4bc439b4ad5b648c3d669974540cedb3171a306554cc2e8cb0e4f5cab736f220'}, 'capture2': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/ACTUAL-POSTJOIN-OBSERVATION-2-CPU0.json', 'bytes': 5944082, 'sha256': 'ebbd745f00e17f52fb2e4f589633ca74c9e64e44a643f875c6d9697dc7c9a270'}, 'capture2_join': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/ACTUAL-CPU0-POSTJOIN-2.RESULT.json', 'bytes': 1142, 'sha256': '01189006547b80fe7de923c073f7a43951da3297805c9c08a1c4e6e3ae983263'}, 'compose_result': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/future-capture-1/ACTUAL-COMPOSE-RESULT.json', 'bytes': 3596, 'sha256': '2afd5f7fb1ffb3501bda6071b135e055262a681a6fa2f09f7c07eff737ba3728'}, 'CID': '57a5fb1f62bc707ee90412fe9585718cdaa39e4110854f91bf4cb6df4380fda3'}
+ CURRENT={'ledger': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER61.json', 'bytes': 24665, 'sha256': '20e2470a6f7f81b188350af1374611801f68eacbf80ee8916814bd48962f4fa2'}, 'latest_free': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/CURRENT116-POSTJOIN-REVIEW-1/CURRENT-FREE.json', 'bytes': 12188, 'sha256': '6c83eee41b7e90d0f055034b9bbd30cfc9e32efac9e8285a90fc8948f7b82e7d'}, 'root_inputs': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER61.json', 'bytes': 24665, 'sha256': '20e2470a6f7f81b188350af1374611801f68eacbf80ee8916814bd48962f4fa2'}, 'ledger_key': 'Root61', 'compose_result': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/future-capture-1/ACTUAL-COMPOSE-RESULT.json', 'bytes': 3596, 'sha256': '2afd5f7fb1ffb3501bda6071b135e055262a681a6fa2f09f7c07eff737ba3728'}}
+ STATUS='PASS_Root61_CURRENT_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE'
+ 
+@@ -71,10 +71,10 @@
+
+  ledger,free,ext,actors=validate_current(CURRENT)
+  b=json.loads((HERE/'ROOT61-RUNTIME-DEPENDENCIES.json').read_bytes())
+  need(b['author']=='/root' and b['observer']==ref(__file__) and b['ledger']==CURRENT['ledger'],'exact Root61 runtime deps')
+- review=checked(b['independent_review']);need(review['independent'] is True and review['implementation_ownership'] is False and review['decision']=='PASS_EXACT_ROOT61_ORIGINAL227_OBSERVER_DEPENDENCIES' and review['observer']==ref(__file__),'independent Root61 configured deps')
++ review=checked(b['independent_review']);need(review['independent'] is True and review['implementation_ownership'] is False and review['decision']=='PASS_EXACT_ROOT61_BFD_OBSERVER_DEPENDENCIES' and review['observer']==ref(__file__),'independent Root61 configured deps')
+  for key in ['guard_adapter','guard_configuration']:
+   need(review[key]==b[key],'exact reviewed '+key);auth(b[key])
+- guard=load(b['guard_adapter'],'original227_current61_actual_guard');need(guard.OPERATION=='original227','original227 guard operation');guard.configure(b['guard_configuration']);first=guard.guard()
++ guard=load(b['guard_adapter'],'original227_current61_actual_guard');need(guard.OPERATION=='bfd-current-default-two-tools','BFD guard operation');guard.configure(b['guard_configuration']);first=guard.guard()
+  old=load(PINS['current60_source'],'genuine116_current60_reobservation');history=old.observe()
+  need(history['Root60']==PINS['ledger60'] and history['ordinary_build_nonce']=='ff79f7711b2ba35b039f3a191ab09663','ordinary116 freshly reobserved without replay')
+  census=history['group_membership_observation'];need(not census['errors'],'complete current actor census')
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/observe_current60_postjoin.py
+
++++ docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/new-window-producer-cohort-source-1/latest-root61-consumer-successor-source-1/actual-entry-coupling-source-1/observe_bfd_current60_history.py
+
+@@ -85,7 +85,7 @@
+
+ def observe():
+  need(os.getuid()==os.geteuid()==1000,'ordinary readonly observer profile')
+  rows,common,actors=validate_current()
+- dependencies=checked(PINS['common_dependencies']);guard,_physical=common.configured_dependencies(dependencies)
++ dependencies=json.loads((HERE/'ROOT-ACTUAL-RUNTIME-DEPENDENCIES.json').read_bytes());guard,_physical=common.configured_dependencies(dependencies)
+  first=guard.guard();history=common.observe()
+  for actor in actors:need(not Path('/proc',str(actor['pid'])).exists(),'all53 prior/new host PIDs absent')
+  need(not Path('/proc/1901931/fd/3').exists(),'retired holder descriptor absent')
+

@@ -1,6 +1,6 @@
-Current implementation priority: [M14/M15 completion and functional refinement](FOCUS-UNTIL-20261024-1700.md).
+Current implementation priority: [M14/M15 completion and functional refinement](FOCUS-UNTIL-20261025-2300.md).
 
-Current delivery target and included-first/explicit-credit handoff limits: [October24 run window](RUN-WINDOW-20261024.md). Active resident billing controls remain authoritative.
+Current delivery target and included-first/explicit-credit handoff limits: [October26 eighteen-hour run](RUN-WINDOW-18H-20261026.md). Active resident billing controls remain authoritative.
 
 # Convergent execution policy
 

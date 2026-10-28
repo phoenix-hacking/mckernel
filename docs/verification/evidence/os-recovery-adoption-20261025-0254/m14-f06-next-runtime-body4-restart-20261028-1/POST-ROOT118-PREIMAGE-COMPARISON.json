@@ -1,0 +1,131 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRESERVED116PRIVATECANDIDATE_ROOT118SOURCE_ADOPTION_NOTICE_REBASE_REQUIRED_BEFORE_GRANT",
+  "canonical_comparison": [
+    {
+      "relative": "arch/x86_64/kernel/syscall.c",
+      "pinned": {
+        "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+        "bytes": 117955,
+        "sha256": "8d24cb88289de08ac581eaa9a88de7690a05b54db4897069e06a3a24ddd80561"
+      },
+      "current_observed": {
+        "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+        "bytes": 118164,
+        "sha256": "600159adb357be6c08a2156d8081b23701044b24dbefb763a234c0b13bdce6ec"
+      },
+      "matches_pinned": false
+    },
+    {
+      "relative": "kernel/CMakeLists.txt",
+      "pinned": {
+        "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+        "bytes": 40960,
+        "sha256": "9650cc9f9d2396dfdb5ff74428de3b4e9965bf3b9910a0f6cbbcdc0f37cbd4a1"
+      },
+      "current_observed": {
+        "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+        "bytes": 41705,
+        "sha256": "6a1cca7de5bef74ff1d5b8d890c1b5c7482455251c285d89b242e268932d834e"
+      },
+      "matches_pinned": false
+    },
+    {
+      "relative": "kernel/rust/lib.rs",
+      "pinned": {
+        "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+        "bytes": 2381,
+        "sha256": "6dc007c983c21a43647cbc3864b27a5ff794a085aa2edf1eeb94057f87ac4b60"
+      },
+      "current_observed": {
+        "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+        "bytes": 2463,
+        "sha256": "81eb7976135803483d4e3bfea0d2988df4b3080e5a894532dfd8f672bbdf551e"
+      },
+      "matches_pinned": false
+    },
+    {
+      "relative": "kernel/rust/abi.rs",
+      "pinned": {
+        "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+        "bytes": 76151,
+        "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+      },
+      "current_observed": {
+        "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+        "bytes": 76151,
+        "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+      },
+      "matches_pinned": true
+    }
+  ],
+  "dependency_comparison": [
+    {
+      "pinned": {
+        "path": "/home/holden/mckernel/kernel/include/process.h",
+        "bytes": 26602,
+        "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649"
+      },
+      "current_observed": {
+        "path": "/home/holden/mckernel/kernel/include/process.h",
+        "bytes": 26602,
+        "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649"
+      },
+      "matches_pinned": true
+    },
+    {
+      "pinned": {
+        "path": "/home/holden/mckernel/lib/include/memory.h",
+        "bytes": 1377,
+        "sha256": "42c0c943511a9eb26133c9f1ca132ade5eb10606ae43c96f6d81d59a69ffeca2"
+      },
+      "current_observed": {
+        "path": "/home/holden/mckernel/lib/include/memory.h",
+        "bytes": 1377,
+        "sha256": "42c0c943511a9eb26133c9f1ca132ade5eb10606ae43c96f6d81d59a69ffeca2"
+      },
+      "matches_pinned": true
+    },
+    {
+      "pinned": {
+        "path": "/home/holden/mckernel/arch/x86_64/kernel/include/registers.h",
+        "bytes": 5778,
+        "sha256": "43fd6d2e278953684574224927fe65bc514a88c5529d97f688e1e21b1864a6fc"
+      },
+      "current_observed": {
+        "path": "/home/holden/mckernel/arch/x86_64/kernel/include/registers.h",
+        "bytes": 5778,
+        "sha256": "43fd6d2e278953684574224927fe65bc514a88c5529d97f688e1e21b1864a6fc"
+      },
+      "matches_pinned": true
+    },
+    {
+      "pinned": {
+        "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+        "bytes": 311375,
+        "sha256": "5c60055053656751ea490be95c09d7343b0391797c21d5e6c97de97cb8d34c68"
+      },
+      "current_observed": {
+        "path": "/home/holden/mckernel/kernel/rust/x86_memory_helpers.rs",
+        "bytes": 311375,
+        "sha256": "5c60055053656751ea490be95c09d7343b0391797c21d5e6c97de97cb8d34c68"
+      },
+      "matches_pinned": true
+    },
+    {
+      "pinned": {
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "bytes": 1275861,
+        "sha256": "f7e198ea69673323175b90ee109e4c5e7d89d6316f7c0b9f878b0f2c7d6a25ae"
+      },
+      "current_observed": {
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "bytes": 1280595,
+        "sha256": "d35d716aec8b6b6ea58f0c1891abb86fa8dc31867f296ea1cd66da67a8454f42"
+      },
+      "matches_pinned": false
+    }
+  ],
+  "root_notice": "Root informational message reports independently reviewed118 canonical SOURCE adoption now; no build/native credit. Preserve pinned116original snapshots and let Root rebase before futuregrant.",
+  "runtime_authority": null
+}

@@ -1,0 +1,9 @@
+type DoMunmapVoidFn = unsafe extern "C" fn();
+type DoMunmapRemoveRangeFn = unsafe extern "C" fn(*mut c_void, CULong, CULong, *mut CInt) -> CInt;
+type DoMunmapClearHostFn = unsafe extern "C" fn(CULong, SizeT, CInt) -> CLong;
+type DoMunmapLogFn = unsafe extern "C" fn(CULong, SizeT, CInt);
+type MprotectSetHostVmaFn = unsafe extern "C" fn(CULong, SizeT, CInt, CInt) -> CInt;
+const EINVAL: CInt = 22;
+const PROT_READ: CInt = 0x01;
+const PROT_WRITE: CInt = 0x02;
+const PROT_EXEC: CInt = 0x04;

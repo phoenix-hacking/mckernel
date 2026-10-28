@@ -1,0 +1,21 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "command": [
+    "taskset",
+    "-c",
+    "0",
+    "python3",
+    "-B",
+    "docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/test118_pipeline.py"
+  ],
+  "returncode": 1,
+  "tests": 2,
+  "errors": 2,
+  "error": "FileNotFoundError: cohort-successor-1/operation_window_guard117.py",
+  "cause": "Two retained test-only guard filename references were not transformed by initial source derivation.",
+  "correction": "Bind both test-only source references to exact shared118 guard BYTEref in RESTART-GUARD-SOURCE-DEPENDENCY.json; no runtime source or semantics changed.",
+  "actual_guard_calls": 0,
+  "actual_export": 0,
+  "actual_materialization": 0,
+  "compiler_calls": 0
+}

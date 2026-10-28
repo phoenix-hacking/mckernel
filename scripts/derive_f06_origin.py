@@ -10,7 +10,7 @@ import json
 from pathlib import Path
 import re
 
-PROFILE_SHA256 = "f9f51aa43d4a572b08f26fae7340f16998044590c9c684489ed0cf4d15e17d6f"
+PROFILE_SHA256 = "a1e1b96f570cc96c6dd3ad767825554cf2f6508a16dfb2cb18cb52ff1399d5aa"
 
 
 def derive(profile_path, source_path):

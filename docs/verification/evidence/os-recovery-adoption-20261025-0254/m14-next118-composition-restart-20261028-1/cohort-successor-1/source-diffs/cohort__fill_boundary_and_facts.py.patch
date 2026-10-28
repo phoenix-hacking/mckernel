@@ -1,0 +1,9 @@
+--- a/cohort/fill_boundary_and_facts.py
++++ b/cohort/fill_boundary_and_facts.py
+@@ -18,5 +18,5 @@
+  assert review['decision']=='PASS_EXACT_OBSERVER_SCHEMA_SOURCE_BINDING' and review['independent'] is True and review['reviewed_observer_schema']==z['observer_schema']
+  b=dict(author='/root',decision='BIND_EXISTING_REVIEWED_CURRENT_BUILD_BOUNDARY',nonce_ledger=z['nonce_ledger'],native_custody_clearance=z['native_custody_clearance'],observer=z['observer'],independent_current_boundary_review=z['independent_current_boundary_review'],observer_schema=z['observer_schema'],observer_schema_review=z['observer_schema_review'],root_attests_exact_current_boundary=True)
+  target=D/'ROOT-ACTUAL-CURRENT-BOUNDARY.json';write(target,b);facts.update(current_boundary=ref(target),observer_schema=z['observer_schema'],observer_schema_review=z['observer_schema_review']);write(D/'ROOT-ACTUAL-BUILD-FACTS.json',facts)
+- print(json.dumps(dict(status='ROOT_CURRENT117_BOUNDARY_FACTS_DATA_ONLY',boundary=ref(target),facts=ref(D/'ROOT-ACTUAL-BUILD-FACTS.json'))))
++ print(json.dumps(dict(status='ROOT_CURRENT118_BOUNDARY_FACTS_DATA_ONLY',boundary=ref(target),facts=ref(D/'ROOT-ACTUAL-BUILD-FACTS.json'))))
+ if __name__=='__main__':main()

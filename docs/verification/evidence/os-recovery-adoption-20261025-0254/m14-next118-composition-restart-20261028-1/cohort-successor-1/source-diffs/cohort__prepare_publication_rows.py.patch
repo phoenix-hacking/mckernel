@@ -1,0 +1,26 @@
+--- a/cohort/prepare_publication_rows.py
++++ b/cohort/prepare_publication_rows.py
+@@ -1,5 +1,5 @@
+ """Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+-Root preclock static row assembly using cached121 refs; no source-export traversal.
++Root preclock static row assembly using cached123 refs; no source-export traversal.
+ """
+ from pathlib import Path
+ import hashlib,json
+@@ -15,6 +15,7 @@
+ for directory in p['inputs']['source_directory_exports']:
+  for source in read(directory['manifest']['path'])['files']:add(source['snapshot'])
+ for source in p['inputs']['postimages']:add(source['postimage'])
++for source in p['inputs']['external_relative_modules']:add(source['source'])
+ for n in z['future_private_metadata_names']:add(ref(D/n))
+ b=read(f['current_boundary']['path'])
+ for k in z['future_observer_refs_from_boundary']:
+@@ -27,7 +28,7 @@
+ add(ref(D/'ROOT-OPERATION-BINDINGS.json'))
+ for key in ['successor','independent_review']:add(operation[key])
+ for row in operation['expected_subjects'].values():add(row)
+-v=dict(scope=z['scope'],status='ROOT117_CACHED_PUBLICATION_ROWS_PREPARED_NOT_FETCH_PROOF',runtime_authority=None,rows=rows,actual_fetched_commit=None,source_export_traversal_replayed=False)
++v=dict(scope=z['scope'],status='ROOT118_CACHED_PUBLICATION_ROWS_PREPARED_NOT_FETCH_PROOF',runtime_authority=None,rows=rows,actual_fetched_commit=None,source_export_traversal_replayed=False)
+ f=A/'PUBLICATION-ROWS.PREPARED.json'
+ with f.open('x') as o:json.dump(v,o,indent=2);o.write('\n')
+ print(json.dumps(dict(status=v['status'],reference=ref(f),rows=len(rows))))

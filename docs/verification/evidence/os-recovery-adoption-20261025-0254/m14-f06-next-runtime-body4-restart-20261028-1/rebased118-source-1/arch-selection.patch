@@ -1,0 +1,21 @@
+--- a/arch/x86_64/kernel/syscall.c
++++ b/arch/x86_64/kernel/syscall.c
+@@ -1546,6 +1546,10 @@
+ 	return copy_to_user((void *)user_addr, thread->fp_regs, bytes);
+ }
+ 
++#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_PTRACE_XSTATE_COPY_FROM)
++extern long arch_ptrace_xstate_copy_from_bridge(unsigned long thread_addr,
++		unsigned long user_addr, size_t bytes);
++#else
+ long
+ arch_ptrace_xstate_copy_from_bridge(unsigned long thread_addr,
+ 		unsigned long user_addr, size_t bytes)
+@@ -1557,6 +1561,7 @@
+ 	}
+ 	return copy_from_user(thread->fp_regs, (void *)user_addr, bytes);
+ }
++#endif
+ 
+ void
+ arch_ptrace_regset_log_bridge(int event, long type)

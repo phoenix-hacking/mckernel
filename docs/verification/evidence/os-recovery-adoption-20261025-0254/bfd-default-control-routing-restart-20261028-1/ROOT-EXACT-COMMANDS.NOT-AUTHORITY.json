@@ -1,0 +1,121 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "runtime_authority": null,
+  "commands": [
+    {
+      "owner": "/root",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Prepare actual reviewed data before clocks",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/prepare_entry_inputs.py",
+        "--root-input",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/ROOT-ACTUAL-ENTRY-DATA.json",
+        "--root-input-sha256",
+        "ACTUAL_ROOT_DATA_SHA256"
+      ]
+    },
+    {
+      "owner": "/root",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Bind actual fetched closure before clocks",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/seal_source_publication.py",
+        "--publication",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/ACTUAL-FETCHED-PUBLICATION.json",
+        "--publication-sha256",
+        "ACTUAL_FETCHED_PUBLICATION_SHA256"
+      ]
+    },
+    {
+      "owner": "/root/observerreview",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual independent prewarm BEFORE Root physical clock; Root must not invoke",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/finite_review.py",
+        "--independent-reviewer",
+        "/root/observerreview",
+        "--bindings",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/SEALED-ENTRY-BINDINGS.json",
+        "--handoff",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/HANDOFF-1"
+      ]
+    },
+    {
+      "owner": "/root",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual finite CPU0 preholder physical capture after verified independent PREWARM",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/root_capture_once.py",
+        "--bindings",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/SEALED-ENTRY-BINDINGS.json",
+        "--handoff",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/HANDOFF-1",
+        "--phase",
+        "physical"
+      ]
+    },
+    {
+      "owner": "/root",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Existing sole heavy FD3 holder after physical capture",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/cohort/hold_and_run_build_only.py",
+        "--bootstrap-grant",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/cohort/ROOT-HOLDER-BOOTSTRAP-GRANT.json"
+      ]
+    },
+    {
+      "owner": "/root",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Prewritten exact held input after holder readiness",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/prepare_entry_inputs.py",
+        "--held"
+      ]
+    },
+    {
+      "owner": "/root",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual finite CPU0 held capture while independent prewarm waits",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/root_capture_once.py",
+        "--bindings",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/SEALED-ENTRY-BINDINGS.json",
+        "--handoff",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/HANDOFF-1",
+        "--phase",
+        "held"
+      ]
+    },
+    {
+      "owner": "/root",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Once publication only after actual independently emitted PASS",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/publish_after_independent_pass_once.py",
+        "--bindings",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/SEALED-ENTRY-BINDINGS.json",
+        "--handoff",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/entry/HANDOFF-1"
+      ]
+    }
+  ],
+  "source_export_or_materializer_replay": false,
+  "requires": "Root actual JSON/data/reviews/source-publication/unusednonce/only-holder reservation authorization; actual independent waiting PID/birth prewarm before fresh clocks; actual account/guardian/time/120s/freshresource/soleheavy. Root must not invoke approver."
+}

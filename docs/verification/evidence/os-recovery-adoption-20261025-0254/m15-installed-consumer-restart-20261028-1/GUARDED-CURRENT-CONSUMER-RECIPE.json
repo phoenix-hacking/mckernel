@@ -1,0 +1,289 @@
+{
+  "artifact_expectations": {
+    "buildid_compatibility": "Pinned ihkconfig.rs uses IHKCONFIG_BUILDID only through len()+1. Only one plain ASCII BUILDID literal may differ, of identical byte length; every other config byte remains exact. This bounded reconciliation is source-ready, not independently accepted.",
+    "cli_project_imports": [
+      "ihk_get_num_os_instances",
+      "ihk_get_os_instances",
+      "ihk_reserve_cpu",
+      "ihk_reserve_mem"
+    ],
+    "install": "Fresh actual target-specific cmake_install rules, library and CLI only; preserved full install semantics. Capture resulting artifact bytes and RPATH changes rather than demand preinstall==postinstall.",
+    "library_roots": {
+      "__argc": "B",
+      "__argv": "B",
+      "_ihk_os_assign_cpu_str": "T",
+      "_ihk_os_set_ikc_map_str": "T",
+      "_ihk_reserve_cpu_str": "T",
+      "_ihk_reserve_mem_str": "T",
+      "cpu_req2str": "T",
+      "cpu_str2count": "T",
+      "cpu_str2req": "T",
+      "dump_reserve_mem_conf": "T",
+      "ihk_create_os": "T",
+      "ihk_create_os_str": "T",
+      "ihk_destroy_os": "T",
+      "ihk_get_num_os_instances": "T",
+      "ihk_get_num_reserved_cpus": "T",
+      "ihk_get_num_reserved_mem_chunks": "T",
+      "ihk_get_os_instances": "T",
+      "ihk_os_assign_cpu": "T",
+      "ihk_os_assign_cpu_str": "T",
+      "ihk_os_assign_mem": "T",
+      "ihk_os_boot": "T",
+      "ihk_os_clear_kmsg": "T",
+      "ihk_os_freeze": "T",
+      "ihk_os_get_eventfd": "T",
+      "ihk_os_get_ikc_map": "T",
+      "ihk_os_get_kmsg_size": "T",
+      "ihk_os_get_num_assigned_cpus": "T",
+      "ihk_os_get_num_assigned_mem_chunks": "T",
+      "ihk_os_get_num_numa_nodes": "T",
+      "ihk_os_get_num_pagesizes": "T",
+      "ihk_os_get_pagesizes": "T",
+      "ihk_os_get_status": "T",
+      "ihk_os_getperfevent": "T",
+      "ihk_os_getrusage": "T",
+      "ihk_os_kargs": "T",
+      "ihk_os_kargs_str": "T",
+      "ihk_os_kmsg": "T",
+      "ihk_os_load": "T",
+      "ihk_os_makedumpfile": "T",
+      "ihk_os_perfctl": "T",
+      "ihk_os_query_cpu": "T",
+      "ihk_os_query_free_mem": "T",
+      "ihk_os_query_mem": "T",
+      "ihk_os_query_total_mem": "T",
+      "ihk_os_release_cpu": "T",
+      "ihk_os_release_mem": "T",
+      "ihk_os_set_ikc_map": "T",
+      "ihk_os_set_ikc_map_str": "T",
+      "ihk_os_setperfevent": "T",
+      "ihk_os_shutdown": "T",
+      "ihk_os_thaw": "T",
+      "ihk_query_cpu": "T",
+      "ihk_query_mem": "T",
+      "ihk_release_cpu": "T",
+      "ihk_release_mem": "T",
+      "ihk_reserve_cpu": "T",
+      "ihk_reserve_cpu_str": "T",
+      "ihk_reserve_mem": "T",
+      "ihk_reserve_mem_conf": "T",
+      "ihk_reserve_mem_conf_str": "T",
+      "ihk_reserve_mem_str": "T",
+      "ihk_set_loglevel": "T",
+      "ihklib_device_open": "T",
+      "ihklib_os_open": "T",
+      "ihklib_os_query_mem_sysfs": "T",
+      "ihklib_os_query_mem_type_str": "D",
+      "ikc_req2str": "T",
+      "ikc_str2count": "T",
+      "ikc_str2req": "T",
+      "loglevel": "D",
+      "mem_req2str": "T",
+      "mem_str2count": "T",
+      "mem_str2req": "T",
+      "namespace_files": "D",
+      "parse_env": "T",
+      "reserve_mem_conf": "D"
+    },
+    "readback": "After genuine current links/installs, retain all new artifact hashes and nm/readelf/loader records. Expected roots, imports, usage bytes and loader behavior reuse the exact original consumer contract; the retained validator expects OLD installed hashes and must not be pointed at newly-linked artifacts unchanged. A new artifact contract must bind genuine link/install receipts and measured RPATH changes before actual current-artifact acceptance.",
+    "retained_archive_sha256": "b80749336c343575475b70af267461db0b0be4ea1d70ce3ade6910aa9b21a869",
+    "retained_cli_object_sha256": "9b2ed04ab4d7ce4375030a92d30b4911759397c65d5b11f896dc62d316faecc4",
+    "retained_native_rsp_sha256": "736d4bb02335f153ad2eaa134371d085e70599f3538014b37714d7453305f29b"
+  },
+  "blocked_by": "Root actual controls, fresh operation/resource/admission grant and independent review of exact source patch, BUILDID capacity reconciliation and pinned SDK command/capture profile.",
+  "cache_seed": {
+    "bytes": 12667,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/default-selector-coherent-successor-1/target-toolchain-cache-qualified-source-1/selected-target.EXACT-EXTERNAL-CACHE-SEED.cmake",
+    "sha256": "a75f7188e5b37caba67e0d0c575151e1c9135b2b4b7c2e85d2db7a785edf37cb"
+  },
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "-C",
+        "/operation/accepted-cache-seed.cmake",
+        "-S",
+        "/source",
+        "-B",
+        "/work/output/current-ihkconfig-library-consumer",
+        "-DENABLE_RUST_USER_TOOLS=ON",
+        "-DIHK_ENABLE_RUST_WHOLE_LIBRARY=ON",
+        "-DIHK_ALLOW_CLI_C_FALLBACK=OFF",
+        "-DIHK_USER_RUSTC=/nightly/bin/rustc",
+        "-DMCKERNEL_RUNTIME_TOOL_RUSTC=/nightly/bin/rustc",
+        "-DMCKERNEL_ALLOW_RUNTIME_SCRIPT_FALLBACK=OFF",
+        "-DIHKLIB_USE_QUALIFIED_EXTERNAL_ARCHIVE=ON",
+        "-DIHKLIB_QUALIFIED_RUST_ARCHIVE=/accepted-sdk11/ihk/linux/user/rust/whole70/libihklib_whole70.a",
+        "-DIHKLIB_ACTUAL_RUST_NATIVE_LIBS=-lgcc_s;-lutil;-lrt;-lpthread;-lm;-ldl;-lc"
+      ],
+      "note": "Existing explicitly qualified external-archive reuse path; default selectors remain Rust. Configure may run platform compiler probes, never a whole70 or CLI Rust compile.",
+      "phase": "configure-current-private-selector",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. configure-current-private-selector"
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/operation/prelink_reuse_guard.py",
+        "--contract",
+        "/operation/PRELINK-CONTRACT.json",
+        "--source-root",
+        "/source",
+        "--accepted-root",
+        "/accepted-sdk11",
+        "--build-root",
+        "/work/output/current-ihkconfig-library-consumer"
+      ],
+      "expected_exit": 0,
+      "note": "No child commands, source writes or ELF execution; PASS is prelink source reuse only. Any unexpected config (including fallback BUILDID length), source/header, SDK byte, link or install drift stops before staging/linking.",
+      "phase": "guard-current-config-sources-generated-links-and-install-rules",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. guard-current-config-sources-generated-links-and-install-rules"
+    },
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "-E",
+        "make_directory",
+        "/work/output/current-ihkconfig-library-consumer/ihk/linux/user/rust"
+      ],
+      "expected_exit": 0,
+      "phase": "create-private-rust-object-destination",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. create-private-rust-object-destination"
+    },
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "-E",
+        "copy",
+        "/accepted-sdk11/ihk/linux/user/rust/ihkconfig.o",
+        "/work/output/current-ihkconfig-library-consumer/ihk/linux/user/rust/ihkconfig.o"
+      ],
+      "phase": "stage-guarded-accepted-cli-object",
+      "prerequisites": [
+        "Immediately preceding prelink guard must genuinely pass against this configure output and unchanged accepted SDK bytes; changing any guarded inputs/rules requires guard re-evaluation and affected review.",
+        "Only a genuinely reviewed equal-capacity BUILDID substitution may differ from accepted config; all other config bytes/header sets remain exact.",
+        "This command stages only the accepted Rust CLI object after its destination exists."
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. stage-guarded-accepted-cli-object"
+    },
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "-E",
+        "cmake_link_script",
+        "CMakeFiles/ihklib.dir/link.txt",
+        "--verbose=1"
+      ],
+      "cwd": "/work/output/current-ihkconfig-library-consumer/ihk/linux/user",
+      "phase": "link-library-with-generated-current-target-rule",
+      "prerequisites": [
+        "Generated rule strict --gc-sections/-z,defs and all76requiredroots, accepted archive exact; no ihklib.c/object operand."
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. link-library-with-generated-current-target-rule"
+    },
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "-E",
+        "cmake_link_script",
+        "CMakeFiles/ihkconfig.dir/link.txt",
+        "--verbose=1"
+      ],
+      "cwd": "/work/output/current-ihkconfig-library-consumer/ihk/linux/user",
+      "phase": "link-cli-with-generated-current-target-rule",
+      "prerequisites": [
+        "Generated rule uses only retained Rustihkconfig.o, just-linked Rustlibihk and pinned thirdparty libraries; no ihkconfig.c/object operand."
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. link-cli-with-generated-current-target-rule"
+    },
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "-E",
+        "env",
+        "DESTDIR=/work/output/current-consumer-destdir",
+        "/usr/bin/cmake",
+        "--install",
+        "/work/output/current-ihkconfig-library-consumer",
+        "--prefix",
+        "/usr/local",
+        "--component",
+        "ihklib_runtime"
+      ],
+      "phase": "private-library-component-install",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. private-library-component-install"
+    },
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "-E",
+        "env",
+        "DESTDIR=/work/output/current-consumer-destdir",
+        "/usr/bin/cmake",
+        "--install",
+        "/work/output/current-ihkconfig-library-consumer",
+        "--prefix",
+        "/usr/local",
+        "--component",
+        "ihkconfig_runtime"
+      ],
+      "phase": "private-cli-component-install",
+      "prerequisites": [
+        "Root integrates/reviews private component patch into isolated source copy; unchanged canonical source cannot claim this component installed."
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. private-cli-component-install"
+    }
+  ],
+  "critical_warning": "No cmake --build, make, whole70 archive generation or Rust CLI compile. This is a current default-selected target graph with explicit qualified archive/object reuse; direct generated links do not prove the unmodified default compiler path. Reuse all accepted SDK11 prefixes; do not replay them.",
+  "default_compiler_credit": false,
+  "file_credit": false,
+  "independent_review_required": [
+    "IHK-relative component patch and preserved full-install semantics",
+    "BUILDID capacity equivalence at exact pinned source hashes",
+    "Exact current generated-rule templates and SDK byte/source reuse",
+    "Root execution/capture/retirement profile before actual commands"
+  ],
+  "matching_native_credit": false,
+  "native_credit": false,
+  "next_executable_command": [
+    "/usr/bin/cmake",
+    "-C",
+    "/operation/accepted-cache-seed.cmake",
+    "-S",
+    "/source",
+    "-B",
+    "/work/output/current-ihkconfig-library-consumer",
+    "-DENABLE_RUST_USER_TOOLS=ON",
+    "-DIHK_ENABLE_RUST_WHOLE_LIBRARY=ON",
+    "-DIHK_ALLOW_CLI_C_FALLBACK=OFF",
+    "-DIHK_USER_RUSTC=/nightly/bin/rustc",
+    "-DMCKERNEL_RUNTIME_TOOL_RUSTC=/nightly/bin/rustc",
+    "-DMCKERNEL_ALLOW_RUNTIME_SCRIPT_FALLBACK=OFF",
+    "-DIHKLIB_USE_QUALIFIED_EXTERNAL_ARCHIVE=ON",
+    "-DIHKLIB_QUALIFIED_RUST_ARCHIVE=/accepted-sdk11/ihk/linux/user/rust/whole70/libihklib_whole70.a",
+    "-DIHKLIB_ACTUAL_RUST_NATIVE_LIBS=-lgcc_s;-lutil;-lrt;-lpthread;-lm;-ldl;-lc"
+  ],
+  "private_selector_patch": {
+    "apply_cwd": "/source/ihk",
+    "bytes": 912,
+    "canonical_preimage_sha256": "a21e1cfbb064a03458201bfbea520d2f04e87ea287f58451d65031e74d728369",
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/ihkconfig-runtime-component.ihk-relative.patch",
+    "sha256": "f2dee32ef6bbd4d013390dee864ee161c59b8b2350c2272662f88ab4de272c5f"
+  },
+  "readonly_mappings": {
+    "/accepted-sdk11": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/canonical-source-producer-SDK-target-operation-1/bounded-top-level-cache-dependency-correction-1/selected-source-1/workspace/native-running-modules-candidate-1315033c6e40480ea1b61cf8159c0c19/output/whole70-tool-default",
+    "/nightly": "Reuse exact SDK11 mounted pinned usertoolchain; do not substitute hostrustc",
+    "/operation/PRELINK-CONTRACT.json": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/PRELINK-CONTRACT.json",
+    "/operation/accepted-cache-seed.cmake": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-15/m15-libihk-next/default-selector-coherent-successor-1/target-toolchain-cache-qualified-source-1/selected-target.EXACT-EXTERNAL-CACHE-SEED.cmake",
+    "/operation/prelink_reuse_guard.py": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-installed-consumer-restart-20261028-1/prelink_reuse_guard.py",
+    "/source": "Root-owned isolated coherent source with IHK-relative patch integrated and all58exact inputs bound by PRELINK-CONTRACT; not the dirty checkout. Source Git metadata/configure must produce a BUILDID of the accepted capacity. No fake .git or generated config substitution."
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_GUARDED_RECIPE_UNRUN_REQUIRES_INDEPENDENT_SOURCE_AND_EXECUTION_REVIEW",
+  "unchanged_fresh_installed_consumer_recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-resume-20261028-1/m15-ihkconfig-library-default-consumer-source-20261028-1/FRESH-INSTALLED-CONSUMER-RECIPE.json",
+    "scope": "Separate already-installed SDK11 bytes only; no current-source artifact claim. Original six commands remain unrun in this worker.",
+    "sha256": "cfffff28bfab98713eafb581362e8c6476fbbae7356ad1b9d7b9dadf26f2cef7"
+  }
+}

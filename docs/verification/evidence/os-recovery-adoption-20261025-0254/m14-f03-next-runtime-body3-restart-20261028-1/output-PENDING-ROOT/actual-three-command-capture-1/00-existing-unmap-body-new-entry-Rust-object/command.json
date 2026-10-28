@@ -1,0 +1,46 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "index": 0,
+  "label": "00-existing-unmap-body-new-entry-Rust-object",
+  "argv": [
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--crate-name",
+    "f03_do_munmap_entry",
+    "--crate-type",
+    "lib",
+    "--edition=2021",
+    "-C",
+    "panic=abort",
+    "-C",
+    "opt-level=2",
+    "--emit=obj=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body3-restart-20261028-1/output-PENDING-ROOT/callbacks.o",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body3-restart-20261028-1/lib.fixture.rs"
+  ],
+  "cwd": "/home/holden/mckernel",
+  "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. HOST mock unmap/range/host callbacks only; no actual MM, syscall, Docker, root, guest, hardware or control action.",
+  "actor": {
+    "pid": 2116313,
+    "start": "101304799",
+    "ppid": 2116312,
+    "pgrp": 2116313,
+    "session": 2116313,
+    "state": "S"
+  },
+  "affinity": [
+    6
+  ],
+  "preentry_clocks_epoch_MONO_BOOT": [
+    1793215603.2948983,
+    997709.863854496,
+    1013047.990904895
+  ],
+  "started_epoch": 1793215603.2961376,
+  "limits": {
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds": 90,
+    "jobs": 1
+  },
+  "stdout": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body3-restart-20261028-1/output-PENDING-ROOT/actual-three-command-capture-1/00-existing-unmap-body-new-entry-Rust-object/stdout",
+  "stderr": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-next-runtime-body3-restart-20261028-1/output-PENDING-ROOT/actual-three-command-capture-1/00-existing-unmap-body-new-entry-Rust-object/stderr"
+}

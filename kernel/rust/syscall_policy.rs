@@ -13793,7 +13793,7 @@ unsafe extern "C" {
         container_size: *mut *mut SizeT,
         vdso_offset: *mut *mut isize,
     );
-    #[cfg(not(native_linux_irq_work_v6_12))]
+    #[cfg(all(not(native_linux_irq_work_v6_12), not(f06_vdso_info_candidate)))]
     fn vdso_get_vdso_info() -> CInt;
     fn arch_vdso_setup_log_bridge(event: CInt, error: CInt);
     fn arch_vdso_add_range_bridge(
@@ -13977,6 +13977,12 @@ pub unsafe extern "C" fn calculate_time_from_tsc(ts: *mut TimeSpec) {
     write_volatile(addr_of_mut!((*ts).tv_sec), sec);
     write_volatile(addr_of_mut!((*ts).tv_nsec), nsec as CLong);
 }
+
+#[cfg(f06_vdso_info_candidate)]
+#[path = "f06_vdso_info.rs"]
+mod f06_vdso_info;
+#[cfg(all(f06_vdso_info_candidate, not(native_linux_irq_work_v6_12)))]
+use self::f06_vdso_info::vdso_get_vdso_info;
 
 #[cfg(native_linux_irq_work_v6_12)]
 unsafe extern "C" fn vdso_get_vdso_info() -> CInt {
@@ -36309,4 +36315,106 @@ mod ptrace_wakeup_step_callback {
         unsafe { set_single_step(thread_addr as *mut Thread) };
     }
     const _: PtraceSetSingleStepFn = ptrace_wakeup_set_single_step_bridge;
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+mod f03_clear_host_pte_entry_v1 {
+    use core::mem::offset_of;
+    use crate::abi::{CInt, CLong, CULong, ProcessVm, SizeT};
+    use super::{clear_host_pte_body_result, syscall_get_processor_id_bridge,
+                ClearHostPteLogFn, SyscallDoSyscall3Fn};
+
+    #[repr(C)]
+    struct ClearHostBinding {
+        munmap_nr: CInt,
+        forward: Option<SyscallDoSyscall3Fn>,
+        log: Option<ClearHostPteLogFn>,
+    }
+    unsafe extern "C" {
+        static f03_clear_host_pte_binding_v1: ClearHostBinding;
+    }
+
+    /// Preserve the existing host-PTE request and borrowed VM lock-state protocol.
+    ///
+    /// # Safety
+    /// The current CPU/thread/VM remain live throughout the original synchronous
+    /// forwarding operation. The caller retains the original range-lock ownership
+    /// when `holding_lock` is nonzero. No range is acquired, released or remapped
+    /// by this wrapper; the genuine existing forwarding provider retains its own
+    /// complete context/request and endpoint contracts, including existing holds.
+    #[no_mangle]
+    pub unsafe extern "C" fn clear_host_pte(
+        addr: CULong, len: SizeT, holding_lock: CInt,
+    ) -> CLong {
+        // SAFETY: Same original CPU-local/thread lookup and borrowed VM.
+        let cpu = unsafe { crate::cls::get_this_cpu_local_var() };
+        let thread = unsafe { (*cpu).current };
+        let vm = unsafe { (*thread).vm };
+        let processor = unsafe { syscall_get_processor_id_bridge() };
+        // SAFETY: Immutable header-derived syscall number and genuine existing
+        // providers. The exact complete Rust body publishes CPU before forward,
+        // restores -1 before logging, and returns the original signed result.
+        unsafe {
+            let binding = &f03_clear_host_pte_binding_v1;
+            clear_host_pte_body_result(
+                vm.cast(), addr, len, holding_lock,
+                offset_of!(ProcessVm, is_memory_range_lock_taken),
+                processor, binding.munmap_nr, binding.forward, binding.log,
+            )
+        }
+    }
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(enable_perf)]
+mod f03_perf_mmap_entry_v1 {
+    use crate::abi::{CInt, CLong, CULong, Mckfd, SizeT, X86UserContext};
+    use super::{perf_mmap_body_result, PerfDoMmapFn};
+
+    // Actual C headers supply constants and offsets; no duplicated perf-page ABI.
+    #[repr(C)]
+    struct MmapBinding {
+        map_anonymous: CInt,
+        prot_write: CInt,
+        data_head: SizeT,
+        capabilities: SizeT,
+        cap_user_rdpmc: CULong,
+        do_mmap: Option<PerfDoMmapFn>,
+    }
+
+    unsafe extern "C" {
+        static f03_perf_mmap_binding_v1: MmapBinding;
+    }
+
+    /// Invoke the existing complete Rust mapping transaction with the original ABI.
+    ///
+    /// # Safety
+    /// `ctx` is the genuine live syscall context. The existing mmap provider owns
+    /// allocation, synchronization and mapping lifetime. A nonnegative result must
+    /// name the writable mapping covering both actual perf-page metadata fields,
+    /// exactly as required by the original callback. `sfd` remains unused.
+    #[no_mangle]
+    pub unsafe extern "C" fn f03_perf_mmap_v1(
+        _sfd: *mut Mckfd,
+        ctx: *mut X86UserContext,
+    ) -> CLong {
+        // SAFETY: Read the same six actual registers in their original order.
+        let addr = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg0(ctx) };
+        let len = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg1(ctx) } as SizeT;
+        let prot = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg2(ctx) } as CInt;
+        let flags = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg3(ctx) } as CInt;
+        let fd = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg4(ctx) } as CInt;
+        let off = unsafe { crate::x86_cpu_helpers::ihk_mc_syscall_arg5(ctx) } as CLong;
+        // SAFETY: Immutable, cfg-matched header/provider data; existing Rust body
+        // retains negative errors without metadata access and owns success writes.
+        unsafe {
+            let binding = &f03_perf_mmap_binding_v1;
+            perf_mmap_body_result(
+                addr, len, prot, flags, fd, off,
+                binding.map_anonymous, binding.prot_write,
+                binding.data_head, binding.capabilities,
+                binding.cap_user_rdpmc, binding.do_mmap,
+            )
+        }
+    }
 }

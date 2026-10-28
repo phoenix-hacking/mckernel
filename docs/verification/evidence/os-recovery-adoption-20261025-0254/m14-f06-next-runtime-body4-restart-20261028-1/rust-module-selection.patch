@@ -1,0 +1,9 @@
+--- a/kernel/rust/lib.rs
++++ b/kernel/rust/lib.rs
+@@ -121,3 +121,6 @@
+ 
+ #[cfg(all(f03_prlimit_body_candidate,target_arch="x86_64"))]
+ pub mod f03_prlimit;
++
++#[cfg(f06_ptrace_xstate_copy_from_candidate)]
++mod f06_ptrace_xstate_copy_from;

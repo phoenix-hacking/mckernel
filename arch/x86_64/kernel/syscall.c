@@ -471,6 +471,7 @@ extern long native_xrstor_checked(const unsigned char *buffer, uint64_t mask);
 extern unsigned int arch_native_signal_mxcsr_mask_bridge(void);
 extern long arch_native_signal_reset_fp_bridge(void);
 
+#ifndef MCKERNEL_RUST_F06_NATIVE_SIGNAL_RESTORE_FP
 long arch_native_signal_restore_fp_bridge(unsigned long user_address, int size)
 {
 	int configured = get_xsave_size();
@@ -504,6 +505,7 @@ out:
 	kfree_tracked(allocation, __FILE__, __LINE__);
 	return result;
 }
+#endif /* selected signal-return FP lifecycle is Rust-owned */
 
 long arch_native_signal_bad_frame_bridge(long error)
 {
@@ -2962,6 +2964,7 @@ long sys_time(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#ifndef MCKERNEL_RUST_F06_VDSO_INFO
 int vdso_get_vdso_info(void)
 {
 	int error;
@@ -2999,6 +3002,7 @@ out:
 	dkprintf("vdso_get_vdso_info(): %d\n", error);
 	return error;
 } /* vdso_get_vdso_info() */
+#endif /* public legacy VDSO info flow is Rust-selected */
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 extern int vdso_map_global_pages(void);

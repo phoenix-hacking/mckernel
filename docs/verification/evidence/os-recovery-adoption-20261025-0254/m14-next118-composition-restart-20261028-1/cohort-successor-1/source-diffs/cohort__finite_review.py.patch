@@ -1,0 +1,31 @@
+--- a/cohort/finite_review.py
++++ b/cohort/finite_review.py
+@@ -29,7 +29,7 @@
+  need(job_policy['aggregate_memory_bytes']==p['aggregate_memory_budget_bytes']==23259332608 and job_policy['heavy_memory_bytes']==p['memory_bytes']==12884901888 and job_policy['heavy_pids']==p['pids']==512,'static policy to exact profile resources')
+  need(job_policy['exact_authorizing_excerpt'] in Path(job_policy['original_authorization']['path']).read_text(),'exact original7-job authorization')
+  need(job_policy['aggregate_build_jobs_max']==7 and job_policy['heavy_compiler_jobs_reserved']==4 and job_policy['ordinary_CPU6_jobs_reserved']==1 and job_policy['other_build_jobs_reserved']==0 and job_policy['total_reserved_build_jobs']==5 and job_policy['one_heavy_max']==1,'original jobpolicy/reservation exact7/4+1')
+- need(p['CPU']==[2,3,4,5] and refs['worker']['sha256']=='0b7d4040a0139e5191ca1eac9909b1ed1658ff7e3d38b3749593029e1ad7d8e3','source-pinned sequential worker; conservative4-job reservation')
++ need(p['CPU']==[2,3,4,5] and refs['worker']['sha256']=='04e67f1f1f3e299bb948c518ad64b2ad92c93e9ca08f3919fdbbd67631c56d59','source-pinned sequential worker; conservative4-job reservation')
+  need(p['actual_nonce']==q['nonce']==a['nonce']==b['nonce'],'cold exact nonce')
+  need(p['request_sha256']==refs['request_payload']['sha256']==x['request_sha256']==a['request_sha256'],'cold exact request closure')
+  need(a['profile']==refs['profile'] and a['input_export']==refs['input_export'] and a['request']==refs['request_payload'],'cold actual request adoption')
+@@ -38,7 +38,7 @@
+  need(context['nonce_ledger']==refs['nonce_ledger'] and context['accepted_current_free']==refs['native_custody_clearance'] and context['current_boundary']==refs['current_boundary'],'cold exact source current-boundary context')
+  need(p['native_custody_clearance']==boundary['native_custody_clearance']==refs['native_custody_clearance'] and boundary['nonce_ledger']==refs['nonce_ledger'],'cold current boundary')
+  need(ledger['complete_within_declared_current_boundary'] is True and ledger['root_attests_no_unlisted_post_boundary_execution_or_custody_operation'] is True and b['nonce'] not in ledger['consumed_nonces'],'fresh complete nonce ledger')
+- need(pub['runtime_authority'] is None and pub['status'].startswith('PASS_FETCHED_CURRENT117_') and re.fullmatch('[a-f0-9]{40}',pub['commit']) and pub['unchanged_accepted_SDK'] is True and pub['passed_compiler_prefix_replayed'] is False,'actual source publication')
++ need(pub['runtime_authority'] is None and pub['status'].startswith('PASS_FETCHED_CURRENT118_') and re.fullmatch('[a-f0-9]{40}',pub['commit']) and pub['unchanged_accepted_SDK'] is True and pub['passed_compiler_prefix_replayed'] is False,'actual source publication')
+  for row in pub['rows']:verify_ref(row['actual'])
+  published={r['actual']['path'] for r in pub['rows']}
+  for k in ['profile','runner','worker','holder_source','publisher_source','request_payload','capture_source','finite_verifier','handoff_common','hot_predicates','root_capture_source','publisher_adapter','aggregate_job_policy','observer_schema','observer_schema_review']:
+@@ -46,8 +46,8 @@
+  runner=load(refs['runner'],'cold_pinned_existing_runner');runner.current_operation_guard()
+  predicates=load(refs['hot_predicates'],'independent_review_local_exact_hot_predicates')
+  need(runner.commands_for_plan(p)==p['exact_commands'],'cold exact fourargv')
+- rows=runner.source_directory_postimages(p);need(len(rows)==122,'closed122Rust')
+- expected=[r['source'] for r in p['inputs']['configuration']]+[r['source'] for r in p['inputs']['objects'] if not r['replace']]+[r['postimage'] for r in p['inputs']['postimages']]+[r['postimage'] for r in rows]
++ rows=runner.source_directory_postimages(p);need(len(rows)==123,'closed123Rust')
++ expected=[r['source'] for r in p['inputs']['configuration']]+[r['source'] for r in p['inputs']['objects'] if not r['replace']]+[r['postimage'] for r in p['inputs']['postimages']]+[r['postimage'] for r in rows]+[r['source'] for r in p['inputs']['external_relative_modules']]
+  need(x['qualified_readonly_files']==expected and x['SDK21_recompiled'] is False and x['source6153_entries']==6153,'cold exact export closure/SDK reuse')
+  for row in expected:verify_ref(row)
+  limits=[min(z) for z in zip(CUTOFFS,p['fixed_three_clock_cutoffs'],b['authorized_cutoffs'])];in_window(clocks(),limits)

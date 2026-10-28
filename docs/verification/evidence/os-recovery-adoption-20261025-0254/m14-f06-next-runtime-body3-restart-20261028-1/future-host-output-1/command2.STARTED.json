@@ -1,0 +1,41 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Compile entire Rust candidate unchanged with exact current ABI snapshot and mocked existing Rust usercopy provider.",
+  "argv": [
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--edition=2021",
+    "--test",
+    "-C",
+    "opt-level=2",
+    "-C",
+    "link-arg=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body3-restart-20261028-1/future-host-output-1/oracle.o",
+    "-C",
+    "link-arg=-no-pie",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body3-restart-20261028-1/fixture.rs",
+    "-o",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body3-restart-20261028-1/future-host-output-1/fixture"
+  ],
+  "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body3-restart-20261028-1",
+  "identity": {
+    "pid": 2116756,
+    "birth": "101308125",
+    "ppid": 2116749,
+    "pgrp": 2116756,
+    "session": 2116756,
+    "state": "R"
+  },
+  "affinity": [
+    7
+  ],
+  "AS_limit": [
+    2147483648,
+    2147483648
+  ],
+  "CPU_limit": [
+    60,
+    60
+  ],
+  "epoch": 1793215636.563461,
+  "monotonic": 997743.132417599,
+  "boot": 1013081.25946991
+}

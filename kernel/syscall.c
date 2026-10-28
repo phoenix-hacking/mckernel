@@ -5744,6 +5744,21 @@ clear_host_pte_log_bridge(long error)
 	kprintf("clear_host_pte failed. %ld\n", error);
 }
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+struct f03_clear_host_pte_binding {
+	int munmap_nr;
+	syscall_do_syscall3_fn_t forward;
+	clear_host_pte_log_fn_t log;
+};
+const struct f03_clear_host_pte_binding f03_clear_host_pte_binding_v1 = {
+	.munmap_nr = __NR_munmap,
+	.forward = syscall_do_syscall3_bridge,
+	.log = clear_host_pte_log_bridge,
+};
+extern long clear_host_pte(uintptr_t, size_t, int);
+#else
+#line 5721
 long clear_host_pte(uintptr_t addr, size_t len, int holding_memory_range_lock)
 {
 	struct thread *thread = get_this_cpu_local_var()->current;
@@ -5754,6 +5769,13 @@ long clear_host_pte(uintptr_t addr, size_t len, int holding_memory_range_lock)
 			ihk_mc_get_processor_id(), __NR_munmap,
 			syscall_do_syscall3_bridge, clear_host_pte_log_bridge);
 }
+#endif
+#if defined(MCKERNEL_RUST_SYSCALL_OFFLOAD) && defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_DISPATCH_CONTEXT)
+#line 5720
+#else
+#line 5729
+#endif
+
 
 static int set_host_vma(uintptr_t addr, size_t len, int prot, int holding_memory_range_lock)
 {
@@ -21281,6 +21303,28 @@ perf_fcntl(struct mckfd *sfd, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+extern long f03_perf_mmap_v1(struct mckfd *, ihk_mc_user_context_t *);
+#define perf_mmap f03_perf_mmap_v1
+struct f03_perf_mmap_binding {
+	int map_anonymous;
+	int prot_write;
+	size_t data_head;
+	size_t capabilities;
+	unsigned long cap_user_rdpmc;
+	perf_do_mmap_fn_t do_mmap;
+};
+const struct f03_perf_mmap_binding f03_perf_mmap_binding_v1 = {
+	.map_anonymous = MAP_ANONYMOUS,
+	.prot_write = PROT_WRITE,
+	.data_head = __builtin_offsetof(struct perf_event_mmap_page, data_head),
+	.capabilities = __builtin_offsetof(struct perf_event_mmap_page, capabilities),
+	.cap_user_rdpmc = 1UL << 2,
+	.do_mmap = do_mmap,
+};
+#else
+#line 21087
 static long
 perf_mmap(struct mckfd *sfd, ihk_mc_user_context_t *ctx)
 {
@@ -21301,6 +21345,9 @@ perf_mmap(struct mckfd *sfd, ihk_mc_user_context_t *ctx)
 					   capabilities),
 			1UL << 2, do_mmap);
 }
+#endif
+#line 21106
+
 
 static int
 perf_event_open_counter_alloc_bridge(void *thread, void *event)

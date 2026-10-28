@@ -117,11 +117,13 @@
       }
     ]
   },
-  "composed_arch_source_sha256": "8d24cb88289de08ac581eaa9a88de7690a05b54db4897069e06a3a24ddd80561",
+  "composed_arch_source_sha256": "600159adb357be6c08a2156d8081b23701044b24dbefb763a234c0b13bdce6ec",
   "exact_commands": [
     {
       "argv": [
         "/usr/bin/cc",
+        "-DMCKERNEL_RUST_F06_NATIVE_SIGNAL_RESTORE_FP",
+        "-DMCKERNEL_RUST_F06_VDSO_INFO",
         "-DMCKERNEL_RUST_F06_SHMGET_DISPATCH",
         "-DIHK_IKC_USE_LINUX_WORK_IRQ",
         "-DIHK_OS_MANYCORE",

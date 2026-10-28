@@ -1,0 +1,22 @@
+--- a/observe_current61_current117.py
++++ b/observe_current61_current118.py
+@@ -72,16 +72,16 @@
+  ledger,free,ext,actors=validate_current(CURRENT)
+  b=json.loads((HERE/'ROOT61-RUNTIME-DEPENDENCIES.json').read_bytes())
+  need(b['author']=='/root' and b['observer']==ref(__file__) and b['ledger']==CURRENT['ledger'],'exact Root61 runtime deps')
+- review=checked(b['independent_review']);need(review['independent'] is True and review['implementation_ownership'] is False and review['decision']=='PASS_EXACT_ROOT61_CURRENT117_OBSERVER_DEPENDENCIES' and review['observer']==ref(__file__),'independent Root61 configured deps')
++ review=checked(b['independent_review']);need(review['independent'] is True and review['implementation_ownership'] is False and review['decision']=='PASS_EXACT_ROOT61_CURRENT118_OBSERVER_DEPENDENCIES' and review['observer']==ref(__file__),'independent Root61 configured deps')
+  for key in ['guard_adapter','guard_configuration']:
+   need(review[key]==b[key],'exact reviewed '+key);auth(b[key])
+- guard=load(b['guard_adapter'],'original227_current61_actual_guard');need(guard.OPERATION=='current117-build','current117-build guard operation');guard.configure(b['guard_configuration']);first=guard.guard()
++ guard=load(b['guard_adapter'],'original227_current61_actual_guard');need(guard.OPERATION=='current118-build','current118-build guard operation');guard.configure(b['guard_configuration']);first=guard.guard()
+  old=load(PINS['current60_source'],'genuine116_current60_reobservation');history=old.observe()
+  need(history['Root60']==PINS['ledger60'] and history['ordinary_build_nonce']=='ff79f7711b2ba35b039f3a191ab09663','ordinary116 freshly reobserved without replay')
+  census=history['group_membership_observation'];need(not census['errors'],'complete current actor census')
+  for actor in actors:
+   need(not Path('/proc',str(actor['pid'])).exists() and not any(row['pid']==actor['pid'] or row['pgrp']==actor.get('group',actor['pid']) for row in census['rows']),'all prior/build/sourcequalification/capture actors absent')
+- last=guard.guard();cutoffs=guard.current_cutoffs();need(all(now<limit<=ceiling for now,limit,ceiling in zip(last,cutoffs,(1793253600.0,1035705.5689454618,1051043.6959931096))),'exact original227 earliest inherited clamps')
++ last=guard.guard();cutoffs=guard.current_cutoffs();need(all(now<limit<=ceiling for now,limit,ceiling in zip(last,cutoffs,(1793253600.0,1035704.5689393478,1051042.6959879305))),'exact original227 earliest inherited clamps')
+  value=consumer_value(history,first,last,cutoffs,guard.BOOT)
+  boundary=checked(ref(BOUNDARY))
+  need(boundary['author']=='/root' and boundary['decision']=='BIND_EXISTING_REVIEWED_CURRENT_BUILD_BOUNDARY' and boundary['root_attests_exact_current_boundary'] is True,'exact Root build boundary descriptor')

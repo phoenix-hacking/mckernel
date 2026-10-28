@@ -1,0 +1,11 @@
+--- a/cohort/build_only_worker.py
++++ b/cohort/build_only_worker.py
+@@ -11,7 +11,7 @@
+     with p.open('rb') as stream:
+         for block in iter(lambda:stream.read(1<<20),b''):h.update(block)
+     return dict(path=str(p),bytes=p.stat().st_size,sha256=h.hexdigest())
+-CUTOFFS=[1793253600.0, 1035705.5689454618, 1051043.6959931096]
++CUTOFFS=[1793253600.0, 1035704.5689393478, 1051042.6959879305]
+ BOOT='7bfc5687-6c04-4d15-84eb-b92ab9a55dcb'
+ def window_remaining():
+     clocks=[time.time(),time.monotonic(),time.clock_gettime(time.CLOCK_BOOTTIME)]

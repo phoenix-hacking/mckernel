@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/test_recursive_successor.py", line 178, in <module>
+    if __name__=='__main__':main()
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/test_recursive_successor.py", line 143, in main
+    result=root.observe()
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/SYNTHETIC-CONTROLS-TEST-1/current61/observe_current61_original227.py", line 82, in observe
+    need(not Path('/proc',str(actor['pid'])).exists() and not any(row['pid']==actor['pid'] or row['pgrp']==actor.get('group',actor['pid']) for row in census['rows']),'all prior/build/sourcequalification/capture actors absent')
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/SYNTHETIC-CONTROLS-TEST-1/current61/observe_current61_original227.py", line 17, in need
+    if not ok:raise ValueError(why)
+ValueError: all prior/build/sourcequalification/capture actors absent

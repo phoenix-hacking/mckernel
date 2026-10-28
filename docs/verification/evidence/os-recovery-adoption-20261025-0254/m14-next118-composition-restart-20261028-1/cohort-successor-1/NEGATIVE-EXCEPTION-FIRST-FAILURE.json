@@ -1,0 +1,10 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "returncode": 1,
+  "tests": 2,
+  "errors": 1,
+  "error": "RuntimeError: exact118 external3 module manifest",
+  "cause": "New negative control expected ValueError/AssertionError but actual unchanged runner.require raises RuntimeError.",
+  "correction": "Assert actual RuntimeError for runner negatives only; preserve existing strict rejection conditions.",
+  "actual_runtime_operations": 0
+}

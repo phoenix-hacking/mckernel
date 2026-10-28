@@ -1,0 +1,24 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -28688,6 +28688,11 @@
+ extern void save_uctx(void *, void *);
+ 
+ /* TODO: use copy_from_user() */
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
++extern int util_show_syscall_profile(void);
++#else
++#line 28277
+ int util_show_syscall_profile()
+ {
+ 	int i;
+@@ -28709,6 +28714,9 @@
+ 
+ 	return 0;
+ }
++#endif
++#line 28297
++
+ 
+ int util_thread(struct uti_attr *arg)
+ {

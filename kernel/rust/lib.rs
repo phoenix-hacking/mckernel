@@ -121,3 +121,6 @@ pub mod f03_perf_attr_callbacks;
 
 #[cfg(all(f03_prlimit_body_candidate,target_arch="x86_64"))]
 pub mod f03_prlimit;
+
+#[cfg(f06_native_signal_restore_fp_candidate)]
+mod f06_native_signal_restore_fp;

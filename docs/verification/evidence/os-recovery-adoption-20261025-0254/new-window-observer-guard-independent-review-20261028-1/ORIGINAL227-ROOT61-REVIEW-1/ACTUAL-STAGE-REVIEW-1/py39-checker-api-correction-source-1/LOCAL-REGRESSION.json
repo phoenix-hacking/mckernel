@@ -1,0 +1,21 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_LOCAL_PINNED_PYTHON39_NOFOLLOW_METADATA_REGRESSIONS",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/ORIGINAL227-ROOT61-REVIEW-1/ACTUAL-STAGE-REVIEW-1/py39-checker-api-correction-source-1/test_py39_metadata.py"
+  ],
+  "returncode": 0,
+  "test_methods": 3,
+  "tests": [
+    "Exact one-expression source delta; every other checker byte unchanged.",
+    "Actual regularfile lstat equals os.stat follow_symlinks=False for all9 originalidentity fields.",
+    "Actual symlink lstat keeps link metadata, differs from followed target and detects regular\u2192symlink identity replacement."
+  ],
+  "actual_archive_guard_native_Root_data_nonce_actions": 0
+}

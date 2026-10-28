@@ -1,0 +1,184 @@
+{
+  "changes": [
+    {
+      "diff": "",
+      "previous": {
+        "bytes": 23317,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-newwindow-integration-source-20261028-1/configured-dependencies-successor-1/revision2/observe_root59_configured.py",
+        "sha256": "5877ec1acbc121c99dd564e3c5f0801995417ae08e66887e34afd3b4c8a30515"
+      },
+      "replacements": [],
+      "successor": {
+        "bytes": 23317,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/SYNTHETIC-CONTROLS-TEST-3/common/observe_root59_configured.py",
+        "sha256": "5877ec1acbc121c99dd564e3c5f0801995417ae08e66887e34afd3b4c8a30515"
+      }
+    },
+    {
+      "diff": "",
+      "previous": {
+        "bytes": 13268,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/observe_current60_postjoin.py",
+        "sha256": "de9f6a1b76faded7a31227d13fe30cab33867ba769eb0a0b7234ea564946f048"
+      },
+      "replacements": [],
+      "successor": {
+        "bytes": 13268,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/SYNTHETIC-CONTROLS-TEST-3/current60/observe_current60_postjoin.py",
+        "sha256": "de9f6a1b76faded7a31227d13fe30cab33867ba769eb0a0b7234ea564946f048"
+      }
+    },
+    {
+      "diff": "--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/current61-after116-consumer-source-1/consumer-physical-shape-correction-source-1/observe_current61_original227.py\n+++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/SYNTHETIC-CONTROLS-TEST-3/current61/observe_current61_original227.py\n@@ -8,7 +8,7 @@\n import os\n \n HERE=Path(__file__).resolve().parent\n-PINS={'ledger60': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER60.json', 'bytes': 24066, 'sha256': 'bd4b75db9c1c7cdb2993aa957c0c9a690eed39210d751ba89319c29ef4fc28d4'}, 'current60_source': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/observe_current60_postjoin.py', 'bytes': 13268, 'sha256': 'de9f6a1b76faded7a31227d13fe30cab33867ba769eb0a0b7234ea564946f048'}, 'capture2': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/ACTUAL-POSTJOIN-OBSERVATION-2-CPU0.json', 'bytes': 5944082, 'sha256': 'ebbd745f00e17f52fb2e4f589633ca74c9e64e44a643f875c6d9697dc7c9a270'}, 'capture2_join': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/ACTUAL-CPU0-POSTJOIN-2.RESULT.json', 'bytes': 1142, 'sha256': '01189006547b80fe7de923c073f7a43951da3297805c9c08a1c4e6e3ae983263'}, 'compose_result': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/future-capture-1/ACTUAL-COMPOSE-RESULT.json', 'bytes': 3596, 'sha256': '2afd5f7fb1ffb3501bda6071b135e055262a681a6fa2f09f7c07eff737ba3728'}, 'CID': '57a5fb1f62bc707ee90412fe9585718cdaa39e4110854f91bf4cb6df4380fda3'}\n+PINS={'ledger60': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER60.json', 'bytes': 24066, 'sha256': 'bd4b75db9c1c7cdb2993aa957c0c9a690eed39210d751ba89319c29ef4fc28d4'}, 'current60_source': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/SYNTHETIC-CONTROLS-TEST-3/current60/observe_current60_postjoin.py', 'bytes': 13268, 'sha256': 'de9f6a1b76faded7a31227d13fe30cab33867ba769eb0a0b7234ea564946f048'}, 'capture2': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/ACTUAL-POSTJOIN-OBSERVATION-2-CPU0.json', 'bytes': 5944082, 'sha256': 'ebbd745f00e17f52fb2e4f589633ca74c9e64e44a643f875c6d9697dc7c9a270'}, 'capture2_join': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/profile-caller-correction-source-1/ACTUAL-CPU0-POSTJOIN-2.RESULT.json', 'bytes': 1142, 'sha256': '01189006547b80fe7de923c073f7a43951da3297805c9c08a1c4e6e3ae983263'}, 'compose_result': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/future-capture-1/ACTUAL-COMPOSE-RESULT.json', 'bytes': 3596, 'sha256': '2afd5f7fb1ffb3501bda6071b135e055262a681a6fa2f09f7c07eff737ba3728'}, 'CID': '57a5fb1f62bc707ee90412fe9585718cdaa39e4110854f91bf4cb6df4380fda3'}\n CURRENT={'ledger': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER61.json', 'bytes': 24665, 'sha256': '20e2470a6f7f81b188350af1374611801f68eacbf80ee8916814bd48962f4fa2'}, 'latest_free': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-observer-guard-independent-review-20261028-1/CURRENT116-POSTJOIN-REVIEW-1/CURRENT-FREE.json', 'bytes': 12188, 'sha256': '6c83eee41b7e90d0f055034b9bbd30cfc9e32efac9e8285a90fc8948f7b82e7d'}, 'root_inputs': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER61.json', 'bytes': 24665, 'sha256': '20e2470a6f7f81b188350af1374611801f68eacbf80ee8916814bd48962f4fa2'}, 'ledger_key': 'Root61', 'compose_result': {'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/future-capture-1/ACTUAL-COMPOSE-RESULT.json', 'bytes': 3596, 'sha256': '2afd5f7fb1ffb3501bda6071b135e055262a681a6fa2f09f7c07eff737ba3728'}}\n STATUS='PASS_Root61_CURRENT_BOUNDARY_OBSERVATION_PENDING_ROOT_ACCEPTANCE'\n \n",
+      "previous": {
+        "bytes": 10855,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/current61-after116-consumer-source-1/consumer-physical-shape-correction-source-1/observe_current61_original227.py",
+        "sha256": "35d5b4a5b21008fbc44f0bd55dc10542294925f06f5d3c445fcee43485316930"
+      },
+      "replacements": [
+        {
+          "previous": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/observe_current60_postjoin.py",
+          "successor": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/SYNTHETIC-CONTROLS-TEST-3/current60/observe_current60_postjoin.py"
+        }
+      ],
+      "successor": {
+        "bytes": 10906,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/SYNTHETIC-CONTROLS-TEST-3/current61/observe_current61_original227.py",
+        "sha256": "7a023944a69cc4e5129897246f9e569d50b9dabb4a665a8dbe3632ff9fbf816c"
+      }
+    },
+    {
+      "diff": "",
+      "previous": {
+        "bytes": 7557,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/current61-after116-consumer-source-1/consumer-physical-shape-correction-source-1/finalizer-window-clamp-correction-source-1/root-adopted-process227-entry-1/prepare_startup_bindings.py",
+        "sha256": "36ebb5d47c89c07de9747725a71c8fbd7505f8de58d1d3f2fc9ab0d85117cd05"
+      },
+      "replacements": [],
+      "successor": {
+        "bytes": 7557,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/SYNTHETIC-CONTROLS-TEST-3/root-adopted-process227-entry-1/prepare_startup_bindings.py",
+        "sha256": "36ebb5d47c89c07de9747725a71c8fbd7505f8de58d1d3f2fc9ab0d85117cd05"
+      }
+    },
+    {
+      "diff": "",
+      "previous": {
+        "bytes": 4873,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/current61-after116-consumer-source-1/consumer-physical-shape-correction-source-1/finalizer-window-clamp-correction-source-1/root-adopted-process227-entry-1/bind_startup_resource.py",
+        "sha256": "53fff08018f444d717e52867d09b9cca43143e6b66f02f3482e5f90968d2c458"
+      },
+      "replacements": [],
+      "successor": {
+        "bytes": 4873,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/SYNTHETIC-CONTROLS-TEST-3/root-adopted-process227-entry-1/bind_startup_resource.py",
+        "sha256": "53fff08018f444d717e52867d09b9cca43143e6b66f02f3482e5f90968d2c458"
+      }
+    },
+    {
+      "diff": "",
+      "previous": {
+        "bytes": 2835,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/current61-after116-consumer-source-1/consumer-physical-shape-correction-source-1/finalizer-window-clamp-correction-source-1/root-adopted-process227-entry-1/run_startup_resource_once.py",
+        "sha256": "7425ffe5c6f79249528ebad192c12e3f2b19994ceac44191d36cd4f5801d25f1"
+      },
+      "replacements": [],
+      "successor": {
+        "bytes": 2835,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/SYNTHETIC-CONTROLS-TEST-3/root-adopted-process227-entry-1/run_startup_resource_once.py",
+        "sha256": "7425ffe5c6f79249528ebad192c12e3f2b19994ceac44191d36cd4f5801d25f1"
+      }
+    },
+    {
+      "diff": "--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/current61-after116-consumer-source-1/consumer-physical-shape-correction-source-1/finalizer-window-clamp-correction-source-1/root-adopted-process227-entry-1/capture_fresh_startup_resource.py\n+++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/SYNTHETIC-CONTROLS-TEST-3/root-adopted-process227-entry-1/capture_fresh_startup_resource.py\n@@ -5,8 +5,8 @@\n from pathlib import Path\n import argparse,hashlib,importlib.util,json,os\n A=Path(__file__).resolve().parent\n-OBSERVER_REF={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/current61-after116-consumer-source-1/consumer-physical-shape-correction-source-1/observe_current61_original227.py', 'bytes': 10855, 'sha256': '35d5b4a5b21008fbc44f0bd55dc10542294925f06f5d3c445fcee43485316930'}\n-GUARD=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/current61-after116-consumer-source-1/consumer-physical-shape-correction-source-1/finalizer-window-clamp-correction-source-1/root-adopted-process227-entry-1/runtime_guard.py')\n+OBSERVER_REF={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/SYNTHETIC-CONTROLS-TEST-3/current61/observe_current61_original227.py', 'bytes': 10906, 'sha256': '7a023944a69cc4e5129897246f9e569d50b9dabb4a665a8dbe3632ff9fbf816c'}\n+GUARD=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/SYNTHETIC-CONTROLS-TEST-3/root-adopted-process227-entry-1/runtime_guard.py')\n GUARD_SHA='0a08571f26509a6366e244a7a685f9e83ebf7040514541c3766d65fdf3e30262'\n def ref(p):\n  p=Path(p);b=p.read_bytes();return dict(path=str(p),bytes=len(b),sha256=hashlib.sha256(b).hexdigest())\n",
+      "previous": {
+        "bytes": 5165,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/current61-after116-consumer-source-1/consumer-physical-shape-correction-source-1/finalizer-window-clamp-correction-source-1/root-adopted-process227-entry-1/capture_fresh_startup_resource.py",
+        "sha256": "998e872fbac2b94e67f94db2d0efc016eaf41e619cbb90a17d749b21df27c4a9"
+      },
+      "replacements": [
+        {
+          "previous": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/current61-after116-consumer-source-1/consumer-physical-shape-correction-source-1/finalizer-window-clamp-correction-source-1/root-adopted-process227-entry-1",
+          "successor": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/SYNTHETIC-CONTROLS-TEST-3/root-adopted-process227-entry-1"
+        },
+        {
+          "previous": "{'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/current61-after116-consumer-source-1/consumer-physical-shape-correction-source-1/observe_current61_original227.py', 'bytes': 10855, 'sha256': '35d5b4a5b21008fbc44f0bd55dc10542294925f06f5d3c445fcee43485316930'}",
+          "successor": "{'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/SYNTHETIC-CONTROLS-TEST-3/current61/observe_current61_original227.py', 'bytes': 10906, 'sha256': '7a023944a69cc4e5129897246f9e569d50b9dabb4a665a8dbe3632ff9fbf816c'}"
+        }
+      ],
+      "successor": {
+        "bytes": 5052,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/SYNTHETIC-CONTROLS-TEST-3/root-adopted-process227-entry-1/capture_fresh_startup_resource.py",
+        "sha256": "1ae9d9ced3c93ea031d54e92dfa231945a55b83421b8ef586ba6c536765eb1bf"
+      }
+    },
+    {
+      "diff": "--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/current61-after116-consumer-source-1/consumer-physical-shape-correction-source-1/finalizer-window-clamp-correction-source-1/root-adopted-process227-entry-1/run_native_startup_capture.py\n+++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/SYNTHETIC-CONTROLS-TEST-3/root-adopted-process227-entry-1/run_native_startup_capture.py\n@@ -39,7 +39,7 @@\n review=json.loads(Path(G['execution_review']['path']).read_bytes());packet_raw=Path(G['pending_execution_packet']['path']).read_bytes()\n assert review['decision']=='PASS_EXECUTION' and review['implementation_ownership'] is False and review['reviewer']!='/root' and review['payload_sha256']==hashlib.sha256(packet_raw).hexdigest()\n P=json.loads(packet_raw);assert G['exact_argv']==P['exact_argv'] and G['nonce']==P['nonce']\n-policy=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/current61-after116-consumer-source-1/consumer-physical-shape-correction-source-1/finalizer-window-clamp-correction-source-1/root-adopted-process227-entry-1/runtime_guard.py')\n+policy=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/SYNTHETIC-CONTROLS-TEST-3/root-adopted-process227-entry-1/runtime_guard.py')\n assert hashlib.sha256(policy.read_bytes()).hexdigest()=='0a08571f26509a6366e244a7a685f9e83ebf7040514541c3766d65fdf3e30262'\n spec=importlib.util.spec_from_file_location('f05v2_literal_actual_new12h_guard',policy);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)\n assert m.__file__==str(policy) and m.__spec__.origin==str(policy)\n",
+      "previous": {
+        "bytes": 5213,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/current61-after116-consumer-source-1/consumer-physical-shape-correction-source-1/finalizer-window-clamp-correction-source-1/root-adopted-process227-entry-1/run_native_startup_capture.py",
+        "sha256": "7e71518071dc52287be497c8f0cf15f45ffeb5df55ad3f4b1b4eac1608497963"
+      },
+      "replacements": [
+        {
+          "previous": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/current61-after116-consumer-source-1/consumer-physical-shape-correction-source-1/finalizer-window-clamp-correction-source-1/root-adopted-process227-entry-1",
+          "successor": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/SYNTHETIC-CONTROLS-TEST-3/root-adopted-process227-entry-1"
+        }
+      ],
+      "successor": {
+        "bytes": 5130,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/SYNTHETIC-CONTROLS-TEST-3/root-adopted-process227-entry-1/run_native_startup_capture.py",
+        "sha256": "8f31bb590732631cd3b4abc4822d42c7fcebe04e7f95d5742554b7b0281022cd"
+      }
+    },
+    {
+      "diff": "",
+      "previous": {
+        "bytes": 2013,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/current61-after116-consumer-source-1/consumer-physical-shape-correction-source-1/finalizer-window-clamp-correction-source-1/root-adopted-process227-entry-1/runtime_guard.py",
+        "sha256": "0a08571f26509a6366e244a7a685f9e83ebf7040514541c3766d65fdf3e30262"
+      },
+      "replacements": [],
+      "successor": {
+        "bytes": 2013,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/SYNTHETIC-CONTROLS-TEST-3/root-adopted-process227-entry-1/runtime_guard.py",
+        "sha256": "0a08571f26509a6366e244a7a685f9e83ebf7040514541c3766d65fdf3e30262"
+      }
+    },
+    {
+      "allowed_changes": [
+        "BASE/path hardpins",
+        "STATIC_SHA final composition slot",
+        "HELPER_SHA source hardpin"
+      ],
+      "diff": "--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/current61-after116-consumer-source-1/consumer-physical-shape-correction-source-1/finalizer-window-clamp-correction-source-1/root-adopted-process227-entry-1/root_once_startup_entry.py\n+++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/SYNTHETIC-CONTROLS-TEST-3/root-adopted-process227-entry-1/root_once_startup_entry.TEMPLATE.NOT-AUTHORITY.py\n@@ -14,7 +14,7 @@\n import subprocess\n import time\n \n-BASE = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/current61-after116-consumer-source-1/consumer-physical-shape-correction-source-1/finalizer-window-clamp-correction-source-1')\n+BASE = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/SYNTHETIC-CONTROLS-TEST-3')\n STARTUP = BASE/'root-adopted-process227-entry-1'\n AUTH = STARTUP/'ROOT-CONDITIONAL-ONCE-ENTRY-AUTHORIZATION.json'\n STATIC = STARTUP/'STATIC-NATIVE-BINDINGS.NOT-RELEASED.json'\n@@ -30,9 +30,9 @@\n STDOUT = STARTUP/'ROOT-ONCE-ENTRY.stdout'\n STDERR = STARTUP/'ROOT-ONCE-ENTRY.stderr'\n HELPER = STARTUP/'run_native_startup_capture.py'\n-GUARD = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/current61-after116-consumer-source-1/consumer-physical-shape-correction-source-1/finalizer-window-clamp-correction-source-1/root-adopted-process227-entry-1/runtime_guard.py')\n-STATIC_SHA = '94d1ef8483c15aa2838227ccc5daf65ad537d5fed6d262fcd7f66693b072e590'\n-HELPER_SHA = '7e71518071dc52287be497c8f0cf15f45ffeb5df55ad3f4b1b4eac1608497963'\n+GUARD = Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/SYNTHETIC-CONTROLS-TEST-3/root-adopted-process227-entry-1/runtime_guard.py')\n+STATIC_SHA = 'ROOT_FINAL_RESTART_STATIC_SHA256'\n+HELPER_SHA = '8f31bb590732631cd3b4abc4822d42c7fcebe04e7f95d5742554b7b0281022cd'\n GUARD_SHA = '0a08571f26509a6366e244a7a685f9e83ebf7040514541c3766d65fdf3e30262'\n PROFILE_SHA = 'e5584b2c6fecbec0660dfeda3193468cf78af6a9dee0f4cc849e64abbdca1081'\n NONCE = '6b4696fd4f4ebe3b8bcae3cd3406bd37'\n",
+      "previous": {
+        "bytes": 13506,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current116-actual-postjoin-current60-source-20261028-1/current61-after116-consumer-source-1/consumer-physical-shape-correction-source-1/finalizer-window-clamp-correction-source-1/root-adopted-process227-entry-1/root_once_startup_entry.py",
+        "sha256": "363adbdeb72fe9ccd61dd2e69e88f5ada95b4f9e6e76b554bbdd0ff66cbdd49b"
+      },
+      "successor": {
+        "bytes": 13308,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/original227-runtime-bindings-restart-20261028-1/recursive-successor-1/SYNTHETIC-CONTROLS-TEST-3/root-adopted-process227-entry-1/root_once_startup_entry.TEMPLATE.NOT-AUTHORITY.py",
+        "sha256": "90d953a068572c4a796672ccba74e28d0a0c162cff3908c170503a5011f550c5"
+      }
+    }
+  ],
+  "new_guardian": {
+    "bytes": 13388,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/guardian_guard.py",
+    "sha256": "48893862bb3262a2c81d282215e4b9771b8f659e635a21856096c41233774f18"
+  },
+  "new_shared_guard": {
+    "bytes": 8622,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/restart-operation-guard-source-20261028-1/operation_window_guard.py",
+    "sha256": "0947dc484d8071dfab53d2ddadd652f7a9746c394bce79faf31b7cbe85eac058"
+  },
+  "physical_history_source_reused": {
+    "bytes": 9521,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/new-window-physical-history-successor-source-20261028-1/physical_history_successor.py",
+    "sha256": "af7cfd5a37a56672205ef0bc133d0c679aa5a7103450cf73ff1ba4f50479ca87"
+  },
+  "runtime_authority": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing."
+}

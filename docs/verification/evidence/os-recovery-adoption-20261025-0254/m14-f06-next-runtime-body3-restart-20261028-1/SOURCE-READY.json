@@ -1,0 +1,195 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "owner": "/root/f06_next",
+  "status": "PRIVATE_NEXT_F06_SOURCE_READY_FOR_INDEPENDENT_REVIEW_AND_FRESH_ORDINARY_GRANT",
+  "target": "arch_ptrace_xstate_copy_to_bridge",
+  "accepted_frontier": "CURRENT116 arch77db1a40, one GLOBAL FUNC size46 at0x2c0 among17",
+  "files": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body3-restart-20261028-1/f06_ptrace_xstate_copy_to.rs",
+      "bytes": 1714,
+      "sha256": "c2a01b19c1434a13b6adf24607490b35ea8771c17824b8cebf10e7d5ae19618a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body3-restart-20261028-1/arch-selection.patch",
+      "bytes": 676,
+      "sha256": "7885742ff93ecc2a373b43ed1c13762b409ae4273321fca1cc6b4dfba8c0d37e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body3-restart-20261028-1/rust-module-selection.patch",
+      "bytes": 235,
+      "sha256": "20f50ed4c5305209475a5da4d9cd356a68d308bf5690ae6a1938ffa78710ee1f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body3-restart-20261028-1/cmake-selection.PROPOSAL.patch",
+      "bytes": 770,
+      "sha256": "f1967a961cfab0fb73d0a7bddf91801ea635039115a1620cd0ae5d4dd7048cf5"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body3-restart-20261028-1/abi_probe.c",
+      "bytes": 1553,
+      "sha256": "88a704ebe691e55358a641cbdacca34a6890aebd055ff2218425c6e6e88c5461"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body3-restart-20261028-1/oracle.c",
+      "bytes": 1811,
+      "sha256": "eb059f00894dada4fd324b4c947d6919d0a546584cb7e40c784cc55e187223e1"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body3-restart-20261028-1/original-xstate-copy-to.c.inc",
+      "bytes": 285,
+      "sha256": "ffaf6ad103d6d18ff38b847dd26f89fd7dafb202093b8d5508832aacb4a7546c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body3-restart-20261028-1/fixture.rs",
+      "bytes": 6476,
+      "sha256": "fd8b784f82475ece07c8d6c977daf20e265df2037b6eb6423684443c2c5e4d24"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body3-restart-20261028-1/abi.snapshot.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body3-restart-20261028-1/PREIMAGES.json",
+      "bytes": 4669,
+      "sha256": "d71db4284d6d6cade8335ad206e233f0f369d93e659fab217165cbebee304f99"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body3-restart-20261028-1/SELECTED-CURRENT116-ARCH-FRONTIER.json",
+      "bytes": 3580,
+      "sha256": "fb6c40ab4508af172dad6ff0e43c819f6dc1e59c3ef54cf02583821e3f4c3128"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body3-restart-20261028-1/FUTURE-HOST-COMMANDS.NOT-GRANTED.json",
+      "bytes": 10925,
+      "sha256": "4312769d2d446a8bec1d4ddef3b0112b9621a9c6fcaf7587e244fe2fe438d046"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body3-restart-20261028-1/SOURCE-CHECK.RESULT.json",
+      "bytes": 2432,
+      "sha256": "c7d66aad13347dc9e258942dd1813a0b8b20724f816d182ffa10cd2553b5afd2"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body3-restart-20261028-1/ROOT-NEXT.md",
+      "bytes": 5431,
+      "sha256": "8621ba0339bd9ee9e86466a76ba2124d4c40c03a58ece4d8e020b0885568606c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body3-restart-20261028-1/prepare_source.py",
+      "bytes": 9638,
+      "sha256": "ded6015c62abde2fa5bd9cad46b50ebc2731ec9804be3367cf57ed9f938aa405"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body3-restart-20261028-1/check_source.py",
+      "bytes": 7225,
+      "sha256": "0e59361ec9bf5d03b9c7abbaead09cf83db2f94db669c27c2d8ce836932eebdc"
+    }
+  ],
+  "source_check_actual": {
+    "argv": [
+      "taskset",
+      "-c",
+      "7",
+      "python3",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body3-restart-20261028-1/check_source.py"
+    ],
+    "exit": 0,
+    "pure_checks": 39
+  },
+  "actual_compiler_runs": 0,
+  "actual_fixture_runs": 0,
+  "actual_native_runs": 0,
+  "actual_shared_writes": 0,
+  "actual_build_delta": 0,
+  "actual_file_closure_delta": 0,
+  "prepared_future_c_rust_pairs": 1944,
+  "next_exact_command_after_fresh_root_grant": {
+    "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Compile actual current kernel-header thread/pointer/result ABI witness only.",
+    "argv": [
+      "/usr/bin/gcc-9",
+      "-Werror=incompatible-pointer-types",
+      "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+      "-DIHK_OS_MANYCORE",
+      "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+      "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+      "-DMCKERNEL_NATIVE_CLONE3",
+      "-DMCKERNEL_NATIVE_CLONE_TID",
+      "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+      "-DMCKERNEL_NATIVE_FUTEX",
+      "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+      "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+      "-DMCKERNEL_RUST_BITOPS",
+      "-DMCKERNEL_RUST_LIST_HELPERS",
+      "-DMCKERNEL_RUST_LOCK_HELPERS",
+      "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+      "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+      "-DMCKERNEL_RUST_PTE_HELPERS",
+      "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+      "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+      "-DPROFILE_ENABLE",
+      "-D__KERNEL__",
+      "-DMCKERNEL_NATIVE_FORK_OWNED_TRANSACTION",
+      "-DMCKERNEL_RUST_RLIMIT_HELPERS",
+      "-DMCKERNEL_RUST_SCHED_POLICY_HELPERS",
+      "-DMCKERNEL_RUST_SCHED_PRIO_HELPERS",
+      "-DMCKERNEL_RUST_SHMID_HELPERS",
+      "-DMCKERNEL_RUST_SHM_PERM_HELPERS",
+      "-DMCKERNEL_RUST_SIGNAL_HELPERS",
+      "-DMCKERNEL_RUST_SYSCALL_OFFLOAD",
+      "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+      "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build/kernel/include",
+      "-I/home/holden/mckernel/kernel/include",
+      "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build/kernel",
+      "-I/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/kernel-syscall/current-composition10-compiler-preparation-1/bounded-storage-nominal-correction-current80-1/expert-conditional-projection-correction-1/generated-build",
+      "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+      "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+      "-I/home/holden/mckernel/ihk/ikc/include",
+      "-I/home/holden/mckernel/ihk/linux/include",
+      "-I/home/holden/mckernel/lib/include",
+      "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Wno-unused-parameter",
+      "-Wno-sign-compare",
+      "-Wno-unused-function",
+      "-Wno-implicit-fallthrough",
+      "-Wno-stringop-truncation",
+      "-ffreestanding",
+      "-O2",
+      "-nostdinc",
+      "-isystem",
+      "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+      "-fno-omit-frame-pointer",
+      "-mcmodel=large",
+      "-mno-red-zone",
+      "-mno-sse",
+      "-c",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body3-restart-20261028-1/abi_probe.c",
+      "-o",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-next-runtime-body3-restart-20261028-1/future-host-output-1/abi_probe.o"
+    ]
+  },
+  "definition_of_done": "Independent source/ABI/ownership review; fresh ordinary4command real-header/original-C/exact-module fixture qualification; Root compose with actual117/118 then fullcrate/selected+fallbackTU/defaultlink and matching-current native proof at their separate scope.",
+  "holds_preserved": "No do_signal/complete-dispatch/undefined-domain/service-hold bypass; no source-only runtime or file credit.",
+  "runtime_authority": null,
+  "accepted_current_unchanged": {
+    "CURRENT": 116,
+    "selected_C": 71,
+    "focused_Rust": 68,
+    "M14_files": [
+      4,
+      6
+    ],
+    "M15_files": [
+      1,
+      8
+    ],
+    "practical": [
+      35,
+      35
+    ]
+  }
+}

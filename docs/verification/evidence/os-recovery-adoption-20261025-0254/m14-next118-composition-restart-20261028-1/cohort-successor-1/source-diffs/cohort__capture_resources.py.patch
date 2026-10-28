@@ -1,0 +1,13 @@
+--- a/cohort/capture_resources.py
++++ b/cohort/capture_resources.py
+@@ -5,8 +5,8 @@
+ from pathlib import Path
+ import argparse,hashlib,importlib.util,json,os,subprocess,time
+ D=Path(__file__).resolve().parent;E=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254')
+-GUARD=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current117-next-default-cohort-source-20261028-1/cohort/runtime_guard.py')
+-GUARD_SHA='c65408703a6358153dde2a81588365c3ce74d5f3007464466aeb3c178c6ba294'
++GUARD=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-composition-restart-20261028-1/cohort-successor-1/cohort/runtime_guard.py')
++GUARD_SHA='0a88b83a544b33b0974ebb0f273f86946d056bfb70e415e133ef9c03a6e2bd74'
+ BOUNDARY=D/'ROOT-ACTUAL-CURRENT-BOUNDARY.json'
+ AGGREGATE=23259332608
+ SCOPE='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
