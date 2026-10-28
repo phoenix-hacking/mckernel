@@ -1,0 +1,73 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_FINITE_CURRENT_BFD_REQUEST_NOT_AUTHORITY",
+  "runtime_authority": null,
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "-S",
+        "/candidate/tool-project",
+        "-B",
+        "/work/current-bfd-build",
+        "-DCMAKE_C_COMPILER=/usr/bin/cc",
+        "-DSTAGED_USER_SOURCE=/src/executer/user",
+        "-DORIGINAL_SOURCE=/src",
+        "-DCMAKE_VERBOSE_MAKEFILE=ON",
+        "-DIHK_USER_RUSTC:FILEPATH=/nightly/bin/rustc"
+      ],
+      "argv_compact_json_LF_sha256": "4722eba1838cdd8bf2f70b83be4901c8f447fe44b744497b1b705f4a562e2591",
+      "cwd": "/work",
+      "id": "0-current-selected-tools-configure",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Configure genuine current executer/user targets using accepted native SDK layout witness; no full SDK/image rebuild",
+      "new_output": "/work/current-bfd-build/CMakeCache.txt"
+    },
+    {
+      "argv": [
+        "/usr/bin/cmake",
+        "--build",
+        "/work/current-bfd-build",
+        "--target",
+        "mcinspect",
+        "eclair",
+        "--parallel",
+        "1"
+      ],
+      "argv_compact_json_LF_sha256": "3bca7895d79c545b9ae88ee1eab77413fcdbcca2c7b12d7e5819014e4dbb4230",
+      "cwd": "/work",
+      "id": "1-build-only-mcinspect-eclair",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Build only selected tools and genuine required vendor/object dependencies",
+      "new_output": "/work/current-bfd-build/executer/user/mcinspect"
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/candidate/inspect_project_objects.py",
+        "/work/current-bfd-build",
+        "/work/BFD-CURRENT-PROJECT-OBJECTS.json"
+      ],
+      "argv_compact_json_LF_sha256": "38333655f91e619e98a2efefa80cc04db26753d38a6fa4ba592b0ff6abc1afef",
+      "cwd": "/work",
+      "id": "2-actual-project-object-selection",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Verify genuine new linkfiles/project objects and Rust providers; no replay of SDK21 equivalence/error vectors",
+      "new_output": "/work/BFD-CURRENT-PROJECT-OBJECTS.json"
+    }
+  ],
+  "source_export_plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-current-default-selector-preparation-source-1/root-current-production-dispatch-source-1/CURRENT-SOURCE-EXPORT-PLAN.NOT-AUTHORITY.json",
+    "bytes": 1160708,
+    "sha256": "960c6aa8f2ec8d9aa8efb4336371c3dbebda852181c82f95c2b0864005074e18"
+  },
+  "asset_map": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-current-default-selector-preparation-source-1/root-current-production-dispatch-source-1/ASSET-CLOSED-MAP.json",
+    "bytes": 1610,
+    "sha256": "be21c605ec521c8c11f7771b3405d0956ee065852496c2567bfef73415ae55bf"
+  },
+  "accepted_SDK21": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ACTUAL-BFD-SDK21-INDEPENDENT-ARTIFACT-AND-BEHAVIOR-ACCEPTANCE.json",
+    "bytes": 2083,
+    "sha256": "1231c1f6aae61548964d19c8feab74bef96e94cc21c4c853a1841df3b6e04c8e"
+  },
+  "SDK21_eightpairs_prefix_replays": 0
+}

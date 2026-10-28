@@ -1,3 +1,67 @@
+## F02 supported file COMPLETE; native/current-free adopted — 2026-10-28T05:29:59.132373+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Independent ef56cfbc actualmatchingCURRENT115/original235 native PASS, f76d267e normal
+currentfree PASS and e1bfaee5 originalF02fileclosure PASS are ROOTADOPTED. Rootnative
+95e0231f, file M14-F02-ACTUAL-SUPPORTED-FILE-CLOSURE.json a6b3779a. Exactde9f115/e5d/
+ab3e/537cb fullunchanged5298+strict235/BEGIN/parentACKDELETEdistinctqueryfinal0 and
+originalchildscopes satisfied;30ownerclientsreaped/35hostcontrolsabsent/CIDremoved/
+cgroup0/permanentmutexfree. No reviewer cleanup or allbranch claim. Process0runtime
+FUNC/OBJECT/non-noteALLOC and48B GNU-propertyNOTE remainexplicit. M14files4/6 now
+F01/F02/F04/F05; F03/F06 OPEN. C79/Rust60 unchanged; M15files1/8/practical35 unchanged.
++1actualnativequalificationrun,+0uniquelogicalcataloguecases,+1supportedfile.
+Actualcaller38.015760s/CPU0.968379/RSS52900KiB; resource→caller2.462759s; actual
+PREWARM→caller22.845764s. GuestCPU/RSSunknown. No95percent speedupclaim.
+
+CURRENT ledgerRoot59/8917629d count69 adoptsf76currentfree, physicalpendingFALSE;
+nonce4d1c consumedonce. Old96unconsumedabandoned/failedresourceprefix0/oldwaiterfa0e
+preserved, no replay. SharedMounts53fullrecordmultiset comparator56347 preserves
+allfields/types/otherarrays/rc/stderr; all16actualdata controls retained.
+
+NEXT116 source8610/4bd/adoptionef82/originfa9/121Rust/8retained/4commands remainready
+UNRUN; canonical8sourcepathscommitted, acceptedselectedimageis115. ExactDATAhandoff
+D116/post-native-clearance-data-handoff-source-1/SOURCE-READY-HANDOFF.json31f47ed6
+retains allprefixes. Its sharedcurrentobserver handlespost53ordinaryoperationsonly,
+so newlyconsumednative4d1c needs realnative-lifecycle/currentfree/schema binding;
+nevercallitordinary orreuse270a. Original227 correctedbinder1fdf/stage6cec/7f06/
+sourcea5c+typedhelperfb2d retained, nativeUNRUN; DATAhandoff97f066d8 has samegenuine
+postnativeobserver obligation. Root59/f76 areactualfactsavailablefornextnormal
+admission, notexecutionauthority. No archive/SDK/compiler/payloadreplay necessary.
+No furtherjobwillstartwithoutalloriginalprerequisitesandwholeworstcasetime fitting
+fixed05:36:09Z/earlierclamps. No window/budgetextension or holdclear.
+
+DISPATCHRULE: EVERYwork/deliverablerequestusesfollowup_task (idle/completedORrunning);
+send_message onlyinformationalupdates toanactive task. Verifynewturnonce. AGENTS.md
+updatedatnormalcheckpoint; no launcher edits. Realholds/includedfirst/same7f4credits/
+cumulativedebits/ceiling/oneheavy/CPUcaps/reserves/permanent27:4/scratch21/floors remain.
+
+## Matching115 native pre-entry refused; exact mount-order diagnosis — 2026-10-28T05:02:30.113872+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Selectednextjob is F02matching115original235 (existingonefileclausea455). Actual
+compose0657/fullmap82d6/stage35c7, producer→normalpreparestatic0, nonce96d07 and
+bridgef2ca were sourcebound/published927c. Independenttypedwaiter2172/a071 actual
+PID1867190/birth96078348 PREWARMdd875 existedBEFOREcapture. Wrappertool65426 returned1,
+child1867630 positivejoined1/streamsclosed; observer5ad7 line80 demanded exactraw
+Dockerinspecttuple. STRICTfailstop preserved: no bridge/pending/template/grant/claim/
+lease/guest; resourceprefix0. Nonce96 remainsABANDONEDUNCONSUMED; Root57/68 unchanged.
+Rootrefusalb18fba3d/indep99f4 records this orchestrationrefusal, notkernel/appfailure.
+
+One exactnormallyjoinedreadonlyCID52aeinspect diagnosed ONLY /Mounts listorder:53full
+records identical ascanonicalwhole-recordmultiset, allotherJSONfields exact. Rawbefore/
+after/stderr andDIAGNOSIS in normal-entry-preclock-source-1/cid-inspect-order-diagnosis-1;
+parentpointer ACTUAL-NATIVE-REFUSAL-DOCKER-MOUNT-ORDER-DIAGNOSIS.json. Mcexecowner owns
+oneboundedtypedcomparison successor: preserve allfields/state/source/RW/identity,
+normalize ONLYgenuineMountsordering withuniqueDestination; other3CLIoutputsstrict.
+Sharedfixalso required116/227; no unchangedcapture/replay or expectedevidencereplacement.
+Oldreviewer has nolease andfinishesoriginal600s wait withoutsignals/fakemarkers.
+
+CURRENT115 acceptedC79/R60/process0runtimeC remainsreal; M14files3/6/M15files1/8/35practical,
+no newnative/file. 116source8610/adoptionef82/originfa9/cohort6afe/adapter23bd ready,
+butcommon838f affected andwillbeupdatedproportionally. Original227 binder1fdf/stage6cec
+ready, current/sourcecohorta5c344case60e separate. Fixed05:36:09Z/earlierclamps/account/
+cumulativeledger/caps/permanent27:4/scratch21/floors/realholds preserved.
+
 ## CURRENT115 independently accepted; F02 matching native remains — 2026-10-28T04:24:01.731108+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

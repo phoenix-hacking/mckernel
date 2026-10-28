@@ -1,0 +1,111 @@
+{
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--fsize=33554432",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/bound-native-runtime-1/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/f02p115n1",
+    "--nonce",
+    "4d1c28c2d9caa913e4ab1e8a504ac5ea",
+    "--owner-sha256",
+    "af2b1f57a19949e9867de2496b16063859c47298e9cf03b401e95de5bded5a10",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/f02p115n1-inputs/manifest.json",
+    "--manifest-sha256",
+    "b362c873552a9d3e4344dc311cc5fc69b7fa28b2f7ffe8a05cdd815d57b6b6ec"
+  ],
+  "caller_pid": 1875152,
+  "caller_starttime": "96203538",
+  "started_at": 1793164590.742842,
+  "grant": {
+    "author": "/root",
+    "decision": "GRANTED_ONE_EXACT_NATIVE_M15_STARTUP",
+    "exact_argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/usr/bin/prlimit",
+      "--fsize=33554432",
+      "--as=2147483648:2147483648",
+      "--core=0:0",
+      "--",
+      "/usr/bin/sudo",
+      "-A",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/bound-native-runtime-1/native_diagnostic_container_owner.py",
+      "--attempt-parent",
+      "/home/holden/mckernel-work/scratch/f02p115n1",
+      "--nonce",
+      "4d1c28c2d9caa913e4ab1e8a504ac5ea",
+      "--owner-sha256",
+      "af2b1f57a19949e9867de2496b16063859c47298e9cf03b401e95de5bded5a10",
+      "--manifest",
+      "/home/holden/mckernel-work/scratch/f02p115n1-inputs/manifest.json",
+      "--manifest-sha256",
+      "b362c873552a9d3e4344dc311cc5fc69b7fa28b2f7ffe8a05cdd815d57b6b6ec"
+    ],
+    "execution_review": {
+      "bytes": 6515,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/root-adopted-matching115-process235-entry-2/ACTUAL-INDEPENDENT-NATIVE-EXECUTION-REVIEW.json",
+      "sha256": "faa0514dc1db2818060ae74b01cf11bd9bc13e9f42a57ffadf6cd8bd5bf71962"
+    },
+    "fresh_resource_physical": {
+      "bytes": 3216986,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/root-adopted-matching115-process235-entry-2/ROOT-FRESH-NATIVE-RESOURCE-PHYSICAL-1.json",
+      "sha256": "aa751e83bd384f084faf428280ad11d0a18b5cb49832053a02b75c9a565078a0"
+    },
+    "maximum_invocations": 1,
+    "nonce": "4d1c28c2d9caa913e4ab1e8a504ac5ea",
+    "pending_execution_packet": {
+      "bytes": 9506,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/root-adopted-matching115-process235-entry-2/ROOT-EXECUTION-GRANT.PENDING-REVIEW.json",
+      "sha256": "9952ca6d649a1dc56f2e8bc2e0c5a2a72cfc27dd2aee63af476b8c87eae69618"
+    },
+    "runtime_authority": "ONE_EXACT_NATIVE_M15_STARTUP_ORIGINAL_CONTRACT_OPERATION"
+  },
+  "clampsUsed": {
+    "authorizedFixedLimits": [
+      1793165769.0,
+      947874.5689514667,
+      963213.6960030915
+    ],
+    "resourceCutoffs": [
+      1793165769.0,
+      947874.5689514667,
+      963213.695968197
+    ],
+    "packetCutoffs": [
+      1793165769.0,
+      947874.5689514667,
+      963213.695968197
+    ],
+    "liveGuardianCutoffs": [
+      1793165769.0,
+      947874.5689514667,
+      963213.695968197
+    ],
+    "effectiveCutoffs": [
+      1793165769.0,
+      947874.5689514667,
+      963213.695968197
+    ],
+    "resourceAgesSeconds": [
+      2.45070219039917,
+      2.4507019420852885,
+      2.4507019680459052
+    ]
+  }
+}

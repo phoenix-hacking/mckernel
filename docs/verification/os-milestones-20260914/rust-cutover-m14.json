@@ -3,7 +3,7 @@
   "id": "M14",
   "scope_id": "mckernel-lwk-rust-cutover-v1-20261023",
   "title": "Complete Rust and assembly implementation of the supported McKernel LWK",
-  "as_of": "2026-10-28T04:22:35.962356+00:00",
+  "as_of": "2026-10-28T05:29:23.220910+00:00",
   "status": "open",
   "assignment_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
   "authority": "Explicit user instruction: separate full Rust cutover from the existing milestones, enumerate every C file requiring conversion and break each into subgoals.",
@@ -398,7 +398,7 @@
       "id": "M14-F02",
       "c_file": "kernel/process.c",
       "title": "Process, thread, address-space and scheduling lifecycle",
-      "status": "partial",
+      "status": "complete",
       "owner": "/root/mm_unlock_fixture",
       "inventory_basis": "Exact retained allocated-symbol frontier chat-thirty-minute-oversight-1/M14-SELECTED-OBJECT-FRONTIER.json; private HOST evidence separate from current290 selected image.",
       "object_output": "kernel/CMakeFiles/mckernel.img.dir/process.c.o",
@@ -923,25 +923,16 @@
         "native_credit": false
       },
       "latest_dispatcher_checkpoint": {
-        "at": "2026-10-28T04:22:35.962356+00:00",
-        "accepted_production": "CURRENT115/de9fdd13/C79=61+18/Rust60/process0runtimeC",
-        "independent_acceptance": "b9ed6b2e; Rootaae76fa2 CURRENT115-INDEPENDENT-DEFAULT-ARTIFACT-ACCEPTANCE.json",
-        "current_free": "270a9339; Root54/count65 after227ordinarycompose",
-        "deltas": {
-          "selected_C_function_deselections": 1,
-          "new_Rust_selected_providers": 1,
-          "C_metadata_objects_deselected": 31,
-          "native": 0,
-          "whole_file": 0
-        },
+        "at": "2026-10-28T05:29:23.220910+00:00",
+        "accepted_production": "CURRENT115/de9f/C79/Rust60/process0runtimeC",
+        "native_acceptance": "ef56/f76",
+        "M14_supported_files": "4/6",
+        "next_action": "Preserve116/227 READY; postnativeobserver/current/nonce/fullwindow needed beforeactualnewadmission.",
         "limits": [
-          "process.c.o zeroSTT_FUNC/OBJECT and non-note runtimeALLOC;48B.gnu.propertySHT_NOTE retained.",
-          "All31Ruststorageowners/folded16/full389registry/currentconsumers and CPUID2actualorigin verified.",
-          "179body/finalimagecomparisons plusprlimit/CPUIDsupplements positive; no allbranchesexecuted claim.",
-          "No nativeproof onnewde9f image yet. F02originalcontracta455 OPEN onlymatching applicable235native afteractualstage/admission."
-        ],
-        "next_action": "Firstfullyready original227 frozen60e or coherent116build; matching115original235 native sourceb18f prepared separately. No passedprefix/SDK replay.",
-        "M14_supported_files": "3/6"
+          "Exact supported CURRENT115/de9f default only; excludedfallbacks/declarations/variant limitations retained.",
+          "No claimallbranches or allhelpers executed; originalapplicablenativeclause satisfied.",
+          "WholeM14/M15 remainOPEN; no wholeOS/bugfree/productionclaim; originalwholeFP4096/1024FAIL retained."
+        ]
       },
       "prior_recorded_owner_before_20261025": "/root/m14_process_cutover",
       "checkpoint_before_20261027_active_frontier": {
@@ -950,11 +941,31 @@
         "inventory_basis": "Exact current image compile database and final link contract; surviving body counts still unmeasured."
       },
       "checkpoint": {
-        "implemented": "Existing four Rust data owners remain actualdefault/nativequalified; private next13readonlyCInt provenance-line successor reuses actual runtimeconsumers and preserveslogicalfile/line+46Ddebugrecords.",
-        "actual": "CurrentprocessC still84allocateddata/0functions. Private13 HOSTqualificationPASS292comparisons/13ABI/13readonlyvalues/13Rustorigins; default3cmd+ownership pending.",
-        "limits": "Afterfuture13qualifiedretirement,71other metadata records remain (46Ddebug+25otherreadonlylayout/config/stringrecords); not71missingfunctions/retireddata. Originalstrict235nativecases reusableafterexactprovider/data binding; no per-recordguestquota."
+        "implemented": "All supportedprocessruntime implementation/storage selectedRust/reviewedassembly;0runtimeC FUNC/OBJECT/non-noteALLOC.",
+        "actual": "Independent115artifact+matchingoriginal235 fullstrictnative/lifecycle/currentfree accepted; originalfilecontract satisfied.",
+        "limits": "Exact supporteddefault only;48B GNU-propertyNOTE retained, fallback/variants/globalM14/M15 limits preserved. No allbranchclaim."
       },
       "latest_checkpoint": {
+        "at": "2026-10-28T05:29:23.220910+00:00",
+        "actual_progress": "OriginalM14F02supportedfileCOMPLETE: accepted115zero runtimeprocessC+matchingoriginal235nativeef56/currentfreef76 undera455originalcontract. M14files4/6; C79/Rust60 unchanged; M15files1/8/practical35unchanged.",
+        "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F02-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+        "native_qualification_runs": 1,
+        "new_unique_catalogue_cases": 0,
+        "wholefile_delta": 1,
+        "limits": [
+          "Exact supported CURRENT115/de9f default only; excludedfallbacks/declarations/variant limitations retained.",
+          "No claimallbranches or allhelpers executed; originalapplicablenativeclause satisfied.",
+          "WholeM14/M15 remainOPEN; no wholeOS/bugfree/productionclaim; originalwholeFP4096/1024FAIL retained."
+        ]
+      },
+      "evidence": [],
+      "latest_default_artifact_evidence": {
+        "root": "docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT114-INDEPENDENT-DEFAULT-ARTIFACT-ACCEPTANCE.json",
+        "independent": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/independent-artifact-review-1/INDEPENDENT-ACCEPTANCE.json",
+        "native_credit": false,
+        "whole_file_credit": false
+      },
+      "checkpoint_before_supported_115_native_closure": {
         "at": "2026-10-28T04:22:35.962356+00:00",
         "accepted_production": "CURRENT115/de9fdd13/C79=61+18/Rust60/process0runtimeC",
         "independent_acceptance": "b9ed6b2e; Rootaae76fa2 CURRENT115-INDEPENDENT-DEFAULT-ARTIFACT-ACCEPTANCE.json",
@@ -975,12 +986,12 @@
         "next_action": "Firstfullyready original227 frozen60e or coherent116build; matching115original235 native sourceb18f prepared separately. No passedprefix/SDK replay.",
         "M14_supported_files": "3/6"
       },
-      "evidence": [],
-      "latest_default_artifact_evidence": {
-        "root": "docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT114-INDEPENDENT-DEFAULT-ARTIFACT-ACCEPTANCE.json",
-        "independent": "docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/independent-artifact-review-1/INDEPENDENT-ACCEPTANCE.json",
-        "native_credit": false,
-        "whole_file_credit": false
+      "closure": "complete",
+      "supported_default_file_complete": true,
+      "completion_evidence": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F02-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+        "bytes": 2689,
+        "sha256": "a6b3779a8f612a4070531e0da775b7fa6b4b29b4545ee221dac5d5268223994f"
       }
     },
     {
@@ -3111,6 +3122,19 @@
       "at": "2026-10-27T19:46:22.263905+00:00",
       "actual_progress": "CURRENT111 independentlyselecteddefault0bbe/Rust48/C91/process67,3callbacks+208BRustdata;4commands0/21.678797ssum. Executor6phase selectedtarget/stagedinstall354oldCsource definitionsabsent; native/file/all349/all51/allocationOPEN. F05v2HOST/finalizer/offlinecompositionPASS, nativeentrysource27dfready; no native/filedelta.",
       "evidence": "../evidence/os-recovery-adoption-20261025-0254/CURRENT111-INDEPENDENT-DEFAULT-ARTIFACT-ACCEPTANCE.json"
+    },
+    {
+      "at": "2026-10-28T05:29:23.220910+00:00",
+      "actual_progress": "OriginalM14F02supportedfileCOMPLETE: accepted115zero runtimeprocessC+matchingoriginal235nativeef56/currentfreef76 undera455originalcontract. M14files4/6; C79/Rust60 unchanged; M15files1/8/practical35unchanged.",
+      "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F02-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+      "native_qualification_runs": 1,
+      "new_unique_catalogue_cases": 0,
+      "wholefile_delta": 1,
+      "limits": [
+        "Exact supported CURRENT115/de9f default only; excludedfallbacks/declarations/variant limitations retained.",
+        "No claimallbranches or allhelpers executed; originalapplicablenativeclause satisfied.",
+        "WholeM14/M15 remainOPEN; no wholeOS/bugfree/productionclaim; originalwholeFP4096/1024FAIL retained."
+      ]
     }
   ],
   "engineering_updates": [
@@ -3776,27 +3800,31 @@
       ],
       "next_action": "Firstfullyready original227 frozen60e or coherent116build; matching115original235 native sourceb18f prepared separately. No passedprefix/SDK replay.",
       "M14_supported_files": "3/6"
+    },
+    {
+      "at": "2026-10-28T05:29:23.220910+00:00",
+      "actual_progress": "OriginalM14F02supportedfileCOMPLETE: accepted115zero runtimeprocessC+matchingoriginal235nativeef56/currentfreef76 undera455originalcontract. M14files4/6; C79/Rust60 unchanged; M15files1/8/practical35unchanged.",
+      "evidence": "docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F02-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+      "native_qualification_runs": 1,
+      "new_unique_catalogue_cases": 0,
+      "wholefile_delta": 1,
+      "limits": [
+        "Exact supported CURRENT115/de9f default only; excludedfallbacks/declarations/variant limitations retained.",
+        "No claimallbranches or allhelpers executed; originalapplicablenativeclause satisfied.",
+        "WholeM14/M15 remainOPEN; no wholeOS/bugfree/productionclaim; originalwholeFP4096/1024FAIL retained."
+      ]
     }
   ],
   "latest_dispatcher_checkpoint": {
-    "at": "2026-10-28T04:22:35.962356+00:00",
-    "accepted_production": "CURRENT115/de9fdd13/C79=61+18/Rust60/process0runtimeC",
-    "independent_acceptance": "b9ed6b2e; Rootaae76fa2 CURRENT115-INDEPENDENT-DEFAULT-ARTIFACT-ACCEPTANCE.json",
-    "current_free": "270a9339; Root54/count65 after227ordinarycompose",
-    "deltas": {
-      "selected_C_function_deselections": 1,
-      "new_Rust_selected_providers": 1,
-      "C_metadata_objects_deselected": 31,
-      "native": 0,
-      "whole_file": 0
-    },
+    "at": "2026-10-28T05:29:23.220910+00:00",
+    "accepted_production": "CURRENT115/de9f/C79/Rust60/process0runtimeC",
+    "native_acceptance": "ef56/f76",
+    "M14_supported_files": "4/6",
+    "next_action": "Preserve116/227 READY; postnativeobserver/current/nonce/fullwindow needed beforeactualnewadmission.",
     "limits": [
-      "process.c.o zeroSTT_FUNC/OBJECT and non-note runtimeALLOC;48B.gnu.propertySHT_NOTE retained.",
-      "All31Ruststorageowners/folded16/full389registry/currentconsumers and CPUID2actualorigin verified.",
-      "179body/finalimagecomparisons plusprlimit/CPUIDsupplements positive; no allbranchesexecuted claim.",
-      "No nativeproof onnewde9f image yet. F02originalcontracta455 OPEN onlymatching applicable235native afteractualstage/admission."
-    ],
-    "next_action": "Firstfullyready original227 frozen60e or coherent116build; matching115original235 native sourceb18f prepared separately. No passedprefix/SDK replay.",
-    "M14_supported_files": "3/6"
+      "Exact supported CURRENT115/de9f default only; excludedfallbacks/declarations/variant limitations retained.",
+      "No claimallbranches or allhelpers executed; originalapplicablenativeclause satisfied.",
+      "WholeM14/M15 remainOPEN; no wholeOS/bugfree/productionclaim; originalwholeFP4096/1024FAIL retained."
+    ]
   }
 }

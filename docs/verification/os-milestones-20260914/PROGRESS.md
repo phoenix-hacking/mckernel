@@ -87,7 +87,7 @@ File rows contain existing partial Rust work. Unassessed subgoals do not mean ze
 | File goal | Compute C translation unit | Functional subgoals | File state |
 | --- | --- | --- | --- |
 | M14-F01 | kernel/mem.c | 5/5 complete | complete |
-| M14-F02 | kernel/process.c | 0/5 complete | partial |
+| M14-F02 | kernel/process.c | 0/5 complete | complete |
 | M14-F03 | kernel/syscall.c | 0/5 complete | partial |
 | M14-F04 | arch/x86_64/kernel/cpu.c | 5/5 complete | complete |
 | M14-F05 | arch/x86_64/kernel/memory.c | 5/5 complete | complete |
@@ -121,8 +121,8 @@ M15 closes with the delivered-runtime ownership manifest, actual Rust/assembly p
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-10-28T04:24:01+00:00`
-- Launcher state heartbeat: `2026-10-28T04:23:53.375333+00:00`
+- Dashboard refreshed: `2026-10-28T05:29:59+00:00`
+- Launcher state heartbeat: `2026-10-28T05:29:46.752534+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
 - Worker PID: `1616668`; server PID: `1616670`
 - Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261027T173609Z-4d9be33b`

@@ -1,0 +1,98 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE",
+  "decision": "PASS_SOURCE_EXACT_MATCHING115_ORIGINAL235_TYPED_BYTE_INDEPENDENT_WAITER",
+  "independent": true,
+  "reviewer": "/root/guardian_execution_review",
+  "implementation_ownership": false,
+  "runtime_authority": null,
+  "reviewed_source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/independent-execution-waiter-source-1/typed-byte-cold-source-1/SOURCE-READY.json",
+    "bytes": 3770,
+    "sha256": "2a69367cdc764ee2e766a645d4881e2f6b93300fe2316ccaaf946379f20f3216"
+  },
+  "designated_waiter_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/independent-execution-waiter-source-1/review_exact_matching235.typed_bytes.py",
+    "bytes": 13227,
+    "sha256": "2172aedc24d23dc30d0457b6df54af4861c4d96babe8cbbc92a96bdb81bbb0e0"
+  },
+  "actual_cold_preflight": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/independent-execution-waiter-source-1/typed-byte-cold-source-1/ACTUAL-COLD-PREFLIGHT.json",
+    "bytes": 3653,
+    "sha256": "5c80310b5dff2506a0282e47bf5f6eb52cc1bd20614a01eadd3c74eee6cf56a5"
+  },
+  "preserved_predecessor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/independent-execution-waiter-source-1/review_exact_matching235.py",
+    "bytes": 13045,
+    "sha256": "8240d384b8a7dc6108f54a45af7159f956f331e52f9ad630fad9255c3743024f"
+  },
+  "static": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/root-adopted-matching115-process235-entry-1/STATIC-NATIVE-BINDINGS.NOT-RELEASED.json",
+    "bytes": 16719,
+    "sha256": "270a7076d2776746ab824e374c3cfebe0152cd3887d7665bb8250e4b0f35b959"
+  },
+  "conditional_authorization": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/root-adopted-matching115-process235-entry-1/ROOT-CONDITIONAL-ONCE-ENTRY-AUTHORIZATION.json",
+    "bytes": 2760,
+    "sha256": "707632483fd5f0e9d5a8b376bce2c5a6361f6346d7fc972e794a555681663cc6"
+  },
+  "source_publication": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/root-adopted-matching115-process235-entry-1/ACTUAL-STATIC-SOURCE-PUBLICATION.json",
+    "bytes": 20448,
+    "sha256": "552fe79942a515e01f77495a47c9bafe09d87adc87a8459a2c92049c5878f374"
+  },
+  "designated_runtime_reviewer": "/root/daemon_execution_review",
+  "exact_Root_launch_after_source_review": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/independent-execution-waiter-source-1/review_exact_matching235.typed_bytes.py",
+    "--publication-sha256",
+    "552fe79942a515e01f77495a47c9bafe09d87adc87a8459a2c92049c5878f374"
+  ],
+  "focused_checks": {
+    "source_AST_parsed": true,
+    "typed_successor_hot_AST_identical": true,
+    "typed_successor_main_AST_identical": true,
+    "typed_successor_durable_AST_identical": true,
+    "actual_source_static_authorization_publication_refs_match": true,
+    "actual_JSON_subject_refs_verified_and_parsed": 9,
+    "observer_authenticated_as_rawPython_bytes": true,
+    "original5publishedcapture_sources_exact": true,
+    "bridge_and_binder_literal_source_hashes_exact": true,
+    "actual_cold_preflight_zeroeffect_claims_verified_against_bound_source": true
+  },
+  "findings": [
+    "Exact2172source exclusively separates rawPython observer authentication from realJSON checked() subjects. Original8240already authenticated allsubjects asrawrefs; this is an explicittyped JSON-validation successor, not evidence of an actual8240 JSONloop executionfailure. Original8240/3f98 retained and uninvoked.",
+    "Cold reads actualstatic270a7076/auth707632/pub552f and exactRoot57/count68/unusednonce96d07/currentfree270a933. Original235case/argv/collectorab3e/oracle235B and actual115de9f image required. Rootconditionalonceauthority binds exactcase/argv/nonce/static/reviewer/bridge; it does not itself release execution.",
+    "ACTUAL-COLD-PREFLIGHT5c8031 exercises actualcold() with realJSON/static/rawobserver and literalbridge/binder hashes, with only their imports stubbed. It claims0guard/observer/helperimports/main/resources/reviewpublications/nativeworkloads. It is scoped cold compatibility proof, not actualwaiting or HOTapproval.",
+    "Actualproduction cold uses normal literalbridgef2ca and binder8ba9 imports. Their module __file__/spec.origin are checked. Imported modules expose purebinding APIs and guardonlyonexplicitcalls; waiter never calls bridge enter_once or owner/nativehelper.",
+    "Main rejects anyprior output/PREWARM/refusal/completion/temp, resource/pending/join/template, onceclaim/grant/refusal. It guards account/fixedclocks before exclusivefsyncedPREWARM containing genuine ownPID/startbirth/source/static/auth/pub/nonce. Rootmust verify actualalivewaiting receipt before resourceclock.",
+    "Finite600s wait uses existingbinder completionmarker onlyafter pendingwrites complete; marker is neitherauthority nor a newfunctionalcase gate. Refusal is preserved once; no retry or fallback execution.",
+    "HOT invokes originalbridge.bind_inputs(AUTH_SHA), reproduces entire originalbinder.packet_for packet and resourcejoin equality, then checks positivecapturejoin/closedstreams/emptyerr/exactcaptureargv, exactobservedRoot57schema/free/boundary, actorPGRP/census,2closedprobes, CIDqueryjoins,24GiBMemAvailable/cgroup12GiB4CPU512pids, HOST16/scratch12 floors, norunningcontainer andprivatefreshdirectories. Retainedcapacityschema host/scratch integer values matches actualHOTcode.",
+    "Originalbridge.clamps_for extracts unchangedpureentry_clamps and calls actualv2guard: threefiniteclocks, exactpacket/resourcecutoffs, minonlyinheritedceilings, strict0<=age<120 andearliestdeadline. FullHOT andclamps are repeatedaftertemporaryreceiptfsync andbeforeatomicPASSpublication.",
+    "Sourceonly can write independentPASS_EXECUTION afterallactualfreshpayloadchecks. It hardlinks exclusivecompletedtemporaryJSON toexactnormalreviewoutput andfsyncsparent; noRootgrant/nativeentry/workload/cleanup operation. NormalRootbridge independently rechecksactualreview/resource/freshness at entry.",
+    "Waiter revieweridentitydaemon is the designated independentexecutionreviewer and differsfromRoot/sourceowner. This independent source review does not synthesize daemonexecutionapproval or claim actualnativebehavior."
+  ],
+  "Root_dispatch_conditions": [
+    "Launch exact2172 source and sealedpublication552f argv after this sourcePASS; do not launch8240 as an unchanged retry",
+    "Require actual PREWARM PID/birth/source/static/auth/pub/nonce match and positive waiting state withresource/pending absent BEFORE Rootresourcecapture",
+    "Rootalone normalresourcecapture+prewrittenoncebridge; waiter only publishesactualreview afteractualfreshpending/join",
+    "On anyrefusal preserveevidence and no automaticretry/oldresource redate; Rootrelease stillrequires exactactualindependentPASS andoriginalonceguards"
+  ],
+  "actual_review_effects": {
+    "waiter_main_or_cold_executed": 0,
+    "guard_or_account": 0,
+    "proc_or_resource_query": 0,
+    "bridge_or_binder_API": 0,
+    "approval_or_grant_publications": 0,
+    "workload_or_native": 0
+  },
+  "open_predicates": [
+    "ActualdesignateddaemonPID/birth PREWARM andwaiting state",
+    "Actualfresh120sresource/pending/join and runtimeindependentHOT decision",
+    "Rootonceentry under itsactualconditionalauthorization and freshguard",
+    "Actualmatching115original235protocol/normalretirement and separateF02fileacceptance"
+  ],
+  "blockers": []
+}

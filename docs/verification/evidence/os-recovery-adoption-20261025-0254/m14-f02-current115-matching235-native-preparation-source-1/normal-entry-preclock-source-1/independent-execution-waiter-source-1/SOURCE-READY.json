@@ -1,0 +1,61 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "READY_MINIMAL_EXACT_MATCHING115_235_INDEPENDENT_RECEIPT_WAITER_SOURCE_ONLY",
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/independent-execution-waiter-source-1/review_exact_matching235.py",
+    "bytes": 13045,
+    "sha256": "8240d384b8a7dc6108f54a45af7159f956f331e52f9ad630fad9255c3743024f"
+  },
+  "static": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/root-adopted-matching115-process235-entry-1/STATIC-NATIVE-BINDINGS.NOT-RELEASED.json",
+    "bytes": 16719,
+    "sha256": "270a7076d2776746ab824e374c3cfebe0152cd3887d7665bb8250e4b0f35b959"
+  },
+  "authorization": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/root-adopted-matching115-process235-entry-1/ROOT-CONDITIONAL-ONCE-ENTRY-AUTHORIZATION.json",
+    "bytes": 2760,
+    "sha256": "707632483fd5f0e9d5a8b376bce2c5a6361f6346d7fc972e794a555681663cc6"
+  },
+  "publication": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/root-adopted-matching115-process235-entry-1/ACTUAL-STATIC-SOURCE-PUBLICATION.json",
+    "bytes": 20448,
+    "sha256": "552fe79942a515e01f77495a47c9bafe09d87adc87a8459a2c92049c5878f374"
+  },
+  "reused_bridge": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/root-adopted-matching115-process235-entry-1/root_once_startup_entry.py",
+    "bytes": 13301,
+    "sha256": "f2ca4c2983a35cfb7238e415f9284787bf1d43f05cbfa12f18df37e4b7f58532"
+  },
+  "reused_binder": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/root-adopted-matching115-process235-entry-1/bind_startup_resource.py",
+    "bytes": 4857,
+    "sha256": "8ba9856c6793e15cfc850c0b1542fb9ff244be8d79816f0cb786ccc417d9de59"
+  },
+  "normal_entry": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/root-adopted-matching115-process235-entry-1/run_native_startup_capture.py",
+    "bytes": 5072,
+    "sha256": "232844c7cdb6caf253056b7d6ee6c1c9345b9eaabbcfc397f6769574962e3722"
+  },
+  "reviewer": "/root/daemon_execution_review",
+  "function_reuse": [
+    "bridge.bind_inputs(auth_sha) exact original source/current/pub/resource closure",
+    "binder.packet_for entire pending packet equality",
+    "bridge.clamps_for original guard/threeclocks/minclamps/strict120 before and after temporary receipt fsync"
+  ],
+  "finite_wait_seconds": 600,
+  "prewarm_receipt": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/independent-execution-waiter-source-1/PREWARM.json",
+  "review_output": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/root-adopted-matching115-process235-entry-1/ACTUAL-INDEPENDENT-NATIVE-EXECUTION-REVIEW.json",
+  "source_validation": "AST PASS; actualfile/static/pub/ledger cold inputs read only, no script import/main/guard/query/resource invoked",
+  "launch_after_independent_source_review": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/independent-execution-waiter-source-1/review_exact_matching235.py",
+    "--publication-sha256",
+    "552fe79942a515e01f77495a47c9bafe09d87adc87a8459a2c92049c5878f374"
+  ],
+  "root_clock_precondition": "Actual PREWARM pid/birth/source receipt must exist with resource/pending absent; then Root alone invokes normal resource/bridge.",
+  "no_authority": "No root/grant/onceentry/caller/Docker/compiler/native/cleanup operations. Refusal exits once with no retry.",
+  "runtime_authority": null,
+  "source_review_required_before_start": true
+}

@@ -1,0 +1,97 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE",
+  "decision": "PASS_SOURCE_EXACT_NAMESPACE2_MATCHING115_ORIGINAL235_WAITER_CONTEXT_ONLY",
+  "independent": true,
+  "reviewer": "/root/guardian_execution_review",
+  "implementation_ownership": false,
+  "runtime_authority": null,
+  "reviewed_source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/independent-execution-waiter-source-1/SOURCE-READY.json",
+    "bytes": 1846,
+    "sha256": "e2723f4c8c550e94903f44229240937a0cb0c40b1b62a495e7b5b062c5be0d2d"
+  },
+  "designated_waiter_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/independent-execution-waiter-source-1/review_exact_matching235.typed_bytes.py",
+    "bytes": 13227,
+    "sha256": "4b66d149c1e29954d829c9bc12477786064234792be752b6c5d426bf40984a49"
+  },
+  "reviewed_context_comparison": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/independent-execution-waiter-source-1/ACTUAL-CONTEXT-BINDING-COMPARISON.json",
+    "bytes": 2646,
+    "sha256": "3d4b342cf9a465da30d0fc7f4dcdcc7fe17f7e101088c3bd05ec460bb185db3b"
+  },
+  "reused_full_waiter_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-1/independent-execution-waiter-source-1/typed-byte-cold-source-1/independent-source-review-1/REVIEW.json",
+    "bytes": 8558,
+    "sha256": "a071b39ec21d074399c6214e4d8a706e1872760353a4e964b79e8f19cd78a385"
+  },
+  "reused_namespace2_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/independent-source-review-1/REVIEW.json",
+    "bytes": 10473,
+    "sha256": "734ed022b2dd49c6ef952880d90678f1ce158be21fd2318865e7578c93e23a61"
+  },
+  "actual_bound_refs": {
+    "STATIC_SHA": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/root-adopted-matching115-process235-entry-2/STATIC-NATIVE-BINDINGS.NOT-RELEASED.json",
+      "bytes": 16713,
+      "sha256": "a86fe2dabb5b9fb01dff179b78356a0552fd56e3e216fbc6c6feca91dfe43bd9"
+    },
+    "AUTH_SHA": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/root-adopted-matching115-process235-entry-2/ROOT-CONDITIONAL-ONCE-ENTRY-AUTHORIZATION.json",
+      "bytes": 2751,
+      "sha256": "56ddb283245b7357522fa612a7a137e63475bf205708db921dade686c64af906"
+    },
+    "BRIDGE_SHA": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/root-adopted-matching115-process235-entry-2/root_once_startup_entry.py",
+      "bytes": 13301,
+      "sha256": "a708a65cbc119b6c93f9af92e8f0958a86165db1763f1a71ae099efff80908f1"
+    }
+  },
+  "new_nonce": "4d1c28c2d9caa913e4ab1e8a504ac5ea",
+  "source_AST_checks": {
+    "all9_function_ASTs_identical2172": true,
+    "entire_module_AST_identical_except_five_assignments": [
+      "F",
+      "STATIC_SHA",
+      "AUTH_SHA",
+      "BRIDGE_SHA",
+      "NONCE"
+    ],
+    "actual_source_bytes": 13227,
+    "context_refs_verified": 3
+  },
+  "findings": [
+    "Exact4b66source differsfrom independentlyreviewed2172 only F dirnameentry2 andactualstatic a86f/auth56dd/bridgea708/nonce4d1c literals. All9functions, guard/HOT/pendingequality/postfsync/atomicPASS/wait/refusal logic remainidentical; no repeat13Kalgorithm review or HOT33replay.",
+    "ActualRootstatic/auth/bridge files match boundrefs. Sameoriginal235case/de9f115image/observer2456/currentRoot57count68/free270a. Rootconditionalauthorization matchesexactnewnonce/static/bridge andremainsconditional onactualindependentexecutionreview.",
+    "OriginalF1failedresource/oldnonce96d07/source2172/a071 remainpreserved. NewF2 output/PREWARM/refusal/once/resource namespace is mechanicallydistinct; no oldresource/release restored.",
+    "ActualpublicationCLI digest remains Rootdata input; pureactualcold result awaitsrealpublication bytes. SourcecontextPASS doesnotclaimcoldtest, actualPIDwait, physicalobservation or executionapproval.",
+    "Flatpublication must include actualselected2456observer/schema andtransitivefb2d helper plusnormalall5sources/static/auth/bridge. Existing waitercold checks and Rootpublication/sourceguards remain; actualnewpubdigest must be supplied atlaunch."
+  ],
+  "Root_launch_interface": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/independent-execution-waiter-source-1/review_exact_matching235.typed_bytes.py",
+    "--publication-sha256",
+    null
+  ],
+  "required_before_capture": [
+    "Exactactualpublicationdigest supplied to --publication-sha256 and actualpurecold result onnewstatic/auth/pub JSON/rawsource, withimports stubbed andzeroeffects",
+    "Designateddaemon actual4b66 process: ownPID/birth/source/static/auth/pub/nonce PREWARM matches, stillwaiting; resource/pending absent beforecapture",
+    "Rootnormalresourcecapture andprewrittenoncebridge onlyafter allpreclockconditions; actualfresh independentPASS stillrequired"
+  ],
+  "actual_pure_cold_result_at_review": null,
+  "actual_effects_by_reviewer": {
+    "sourceexecution_or_import": 0,
+    "guard_account_resource_queries": 0,
+    "approval_or_grant": 0,
+    "workload_native": 0
+  },
+  "blockers": [],
+  "open": [
+    "Actualpublication2/fetchedbytes and pureactualcoldresult",
+    "ActualdaemonPIDbirth PREWARM waiting",
+    "Actualfresh120sresource/pending/HOTPASS andRootonceentry"
+  ]
+}

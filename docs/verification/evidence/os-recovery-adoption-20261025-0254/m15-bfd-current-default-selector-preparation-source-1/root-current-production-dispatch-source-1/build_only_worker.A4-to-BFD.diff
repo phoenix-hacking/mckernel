@@ -1,0 +1,33 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/build_only_worker.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-current-default-selector-preparation-source-1/root-current-production-dispatch-source-1/build_only_worker.py
+@@ -25,12 +25,14 @@
+     require(os.getuid()==os.geteuid()==1000,'UID1000 required')
+     require(os.sched_getaffinity(0)=={2,3,4,5},'exact reserved CPU2-5')
+     require(plan['runtime_authority'] is None,'input plan must not act as runtime authority')
+-    require(len(plan['commands'])==4,'exact four selected build commands')
++    require(len(plan['commands'])==3,'exact three current BFD producer commands')
+     require(plan['deadline_epoch']==1793165769,'fixed actual campaign deadline')
+     seconds=min(19800,int(window_remaining()))
+     require(seconds>0,'before fixed deadline');signal.signal(signal.SIGALRM,alarm_handler);signal.alarm(seconds)
+     for row in plan['tool_files']:
+         require(reference(row['path'])==row,'qualified pinned executable/library bytes')
++    for row in plan['tool_sha256_pins']:
++        require(hashlib.sha256(Path(row['path']).read_bytes()).hexdigest()==row['sha256'],'qualified SDK CXX/BFD header/library bytes')
+     records=[]
+     try:
+         for index,command in enumerate(plan['commands']):
+@@ -45,10 +47,12 @@
+             after=resource.getrusage(resource.RUSAGE_CHILDREN)
+             row=dict(index=index,argv=command['argv'],cwd=command['cwd'],started_at_epoch=started,finished_at_epoch=time.time(),returncode=returncode,CPU_seconds=(after.ru_utime+after.ru_stime)-(usage.ru_utime+usage.ru_stime),maximum_child_RSS_KiB=after.ru_maxrss)
+             records.append(row)
+-            require(returncode==0,'first failed compiler/link stops suffix')
++            require(returncode==0,'first failed configure/build/readback stops suffix')
+             require(target.is_file() and not target.is_symlink() and target.stat().st_size>0,'new ordinary output required')
+             row['output']=reference(target)
+-        (out/'producer-contract.json').write_text(json.dumps(dict(status='ACTUAL_BUILD_ONLY_FOUR_COMMAND_PRODUCER',source_profile=plan['source_profile'],contract=plan['producer_contract'],commands=records,configuration_reuse_not_fresh_configure=True,default_native_retirement_acceptance=False),indent=2)+'\n')
++            if index==1:
++                other=Path('/work/current-bfd-build/executer/user/eclair');require(other.is_file() and not other.is_symlink() and other.stat().st_size>0,'both selected tools produced');row['second_output']=reference(other)
++        (out/'producer-contract.json').write_text(json.dumps(dict(status='ACTUAL_CURRENT_BFD_THREE_COMMAND_PRODUCER',source_profile=plan['source_profile'],contract=plan['producer_contract'],commands=records,fresh_genuine_two_target_configure=True,default_native_retirement_acceptance=False),indent=2)+'\n')
+         status='PASS_BUILD_ONLY_PENDING_CURRENT_DEFAULT_AND_NATIVE_VALIDATORS'
+     except BaseException as error:
+         status='FAIL_PRESERVE_CAPTURE_NO_AUTOMATIC_RETRY'

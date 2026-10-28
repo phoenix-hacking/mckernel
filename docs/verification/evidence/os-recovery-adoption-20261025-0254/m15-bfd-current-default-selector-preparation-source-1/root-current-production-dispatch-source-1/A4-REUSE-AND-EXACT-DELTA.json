@@ -1,0 +1,48 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "A4_runner": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/run_build_only.py",
+    "bytes": 24465,
+    "sha256": "2471d24bcf8eaa5054c3d33b9ca9cc1cc77bd505e791b7ca6365e9ca0c854a6c"
+  },
+  "A4_holder": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/hold_and_run_build_only.py",
+    "bytes": 7010,
+    "sha256": "d17bd70e3e3e6ef7febe48b6f0f892ab6f1a94c74e89d43808bbea8b5dc21551"
+  },
+  "A4_worker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/build_only_worker.py",
+    "bytes": 4113,
+    "sha256": "0bdd40596f7d5a9fb056b9ff24c7033336af1305ce143391debd225a71d2b105"
+  },
+  "holder_byteexact": true,
+  "unchanged_runner_functions": [
+    "resource_guards",
+    "docker_prefix",
+    "current_operation_guard",
+    "auth",
+    "strict_parent",
+    "reference"
+  ],
+  "changed_runner_functions": [
+    "mounts",
+    "commands_for_plan",
+    "verify_bfd_source_export(new source-specific closed-map predicate)",
+    "docker_argv(CWD only)",
+    "execute(producer-input/output setup only)"
+  ],
+  "same_control_guards": [
+    "independent exact execution PASS",
+    "fresh_root_grant",
+    "actual27:4holder_and_CPUreservation",
+    "CPU2-5/12GiB/512tasks/networknone",
+    "currentaccount/deadlineboot",
+    "oneheavy/aggregate/floors",
+    "positivecontainerterminal/quarantine",
+    "noautocleanup"
+  ],
+  "new_worker_exact3_not4": true,
+  "SDK_or_old21_replay": false,
+  "source_map_records": 3103,
+  "source_regular_file_bytes": 60864972
+}

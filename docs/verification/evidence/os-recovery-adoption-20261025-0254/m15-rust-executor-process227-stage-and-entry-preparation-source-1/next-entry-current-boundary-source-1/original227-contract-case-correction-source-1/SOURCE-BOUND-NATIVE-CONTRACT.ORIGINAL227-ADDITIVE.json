@@ -1,0 +1,175 @@
+{
+  "F05_v2_can_supply_narrow_executor_native_only_after_explicit_successor": true,
+  "all349_all51_allocation_or_wholefile_acceptance": false,
+  "cases": {
+    "M14-05-05-owned-processvm-v2-204B": {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "/apps/app"
+      ],
+      "cwd": "/case/work",
+      "environment": {
+        "COKERNEL_PATH": "/apps",
+        "PATH": "/usr/bin:/bin"
+      },
+      "oracle": {
+        "exit_code": 0,
+        "stderr_hex": "",
+        "stdout_hex": "4f574e45445f463035207632206368696c6472656e3d3120636c6f6e655f6368696c645f7365747469643d3120706172656e745f7469645f756e6368616e6765643d310a74726163656d653d302073696773746f703d3139207065656b3d3020706f6b653d3020726561646261636b3d302063726f73735f346b5f776f72643d310a6368696c645f76657269666965643d3120707269766174655f756e6368616e6765643d31206368696c645f657869743d30207265617065643d310a4f574e45445f46303520504153530a"
+      },
+      "payload": {
+        "bytes": 5624424,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-owned-processvm-v2-host-qualification-1/future-host-output-1/app",
+        "sha256": "bfdda7ef5d3db84097086254125b8d31c958068495c2f8346ba0c9015ab1553d"
+      }
+    },
+    "P-M06-01-process-exec-wait-235B": {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "/apps/app"
+      ],
+      "cwd": "/case/work",
+      "environment": {
+        "COKERNEL_PATH": "/apps",
+        "PATH": "/usr/bin:/bin"
+      },
+      "oracle": {
+        "exit_code": 0,
+        "stderr_hex": "",
+        "stdout_hex": "706172656e742073746172740a6368696c642065786563207375636365737320746f6b656e3d66697865642d76310a706172656e742077616974207375636365737320657869743d333720656f663d31207265617065643d3120656368696c643d310a6368696c642065786563206572726f72206572726e6f3d454e4f454e542073746174653d333720756e6368616e6765643d310a706172656e742077616974206572726f7220657869743d343220656f663d31207265617065643d3120656368696c643d310a706172656e7420636f6d706c657465206368696c6472656e3d32206f776e65643d300a"
+      },
+      "payload": {
+        "bytes": 5628568,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/payload.snapshot",
+        "sha256": "537cb22b2af1f7fca1202afaf45b017364823c185c2ec47474093e51647ba5b8"
+      }
+    },
+    "startup.argv-empty": {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "app",
+        "A",
+        "",
+        "B"
+      ],
+      "cwd": "/case/work",
+      "environment": {
+        "COKERNEL_PATH": "/apps",
+        "PATH": "/usr/bin:/bin"
+      },
+      "oracle": {
+        "exit_code": 0,
+        "stderr_hex": "",
+        "stdout_hex": "7b2263617365223a22737461727475702e617267762d656d707479222c2261726763223a342c2261726776223a5b22617070222c2241222c22222c2242225d2c227465726d696e61746f725f69735f6e756c6c223a747275657d0a"
+      },
+      "payload": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/scratch/stability-packet001-compile-20260913-1/startup.argv-empty/payload",
+        "sha256": "ff227c83b2da598110768e13f5e042b437e049659706b56079cc73f7c818a836",
+        "size": 20528
+      }
+    },
+    "P-M01-02-child-SIGTERM-and-exec-recovery-227B": {
+      "case_id": "P-M01-02-child-SIGTERM-and-exec-recovery-227B",
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "/apps/app"
+      ],
+      "cwd": "/case/work",
+      "environment": {
+        "COKERNEL_PATH": "/apps",
+        "PATH": "/usr/bin:/bin"
+      },
+      "oracle": {
+        "exit_code": 0,
+        "stderr_hex": "",
+        "stdout_hex": "7265636f7665727920706172656e742073746172740a706172656e742063616e63656c207369676e616c3d31352072656164793d3120707265726561703d3020656f663d31207265617065643d3120656368696c643d31206f776e65643d300a6368696c642065786563207375636365737320746f6b656e3d66697865642d76310a706172656e74207265636f76657279206578656320657869743d333720656f663d31207265617065643d3120656368696c643d310a706172656e74207265636f7665727920636f6d706c657465206368696c6472656e3d32206f776e65643d300a"
+      },
+      "payload": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-227/payload.snapshot",
+        "bytes": 5631824,
+        "sha256": "6abb5e9046444c64d72139f85fcae9e4796eff7ceb5cc2dd1e5b1a47ef3695a5"
+      },
+      "original_case_manifest": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-227/ACTUAL-NATIVE227-ABI2-C020-MANIFEST.json",
+        "bytes": 6688,
+        "sha256": "18e15b835a22e4a64716bf66da40d603ead7ae7f8ce32b08c3d4b8979f3ced7a"
+      },
+      "source_caseprofile": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-collector-source-1/COLLECTOR-CASEPROFILE.json",
+        "bytes": 8267,
+        "sha256": "f57a9ab960e47b86f2afbdd35a9253c1683c59c2eebc7851e3a7b880efc44300"
+      },
+      "signal_recovery_original_oracle_records": [
+        "recovery parent start",
+        "parent cancel signal=15 ready=1 prereap=0 eof=1 reaped=1 echild=1 owned=0",
+        "child exec success token=fixed-v1",
+        "parent recovery exec exit=37 eof=1 reaped=1 echild=1",
+        "parent recovery complete children=2 owned=0"
+      ],
+      "scope": "Exactly original SIGTERM15/cancel readiness/prereap0/EOF/reaped/ECHILD/owned0 then exec37 recovery, no per-child sampled-terminal strengthening; complete5298 assertions remain unchanged."
+    }
+  },
+  "execution_authority": false,
+  "f05_current_frozen_launcher": "dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954",
+  "installed": {
+    "bytes": 396200,
+    "mode": 33261,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/output/mcexec-default-install-1/usr/local/bin/mcexec",
+    "resolved_path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/output/mcexec-default-install-1/usr/local/bin/mcexec",
+    "sha256": "e5d18169ee50581274b374bba17fcefebe39e828885f367bfee182beaa3df756"
+  },
+  "original_startup_and235_contracts_retained": true,
+  "profile": {
+    "memory_mib": 8192,
+    "name": "native-diagnostic-4vcpu-8192mib",
+    "numa_nodes": 2,
+    "vcpus": 4
+  },
+  "providers": {
+    "ld-linux-x86-64.so.2": {
+      "bytes": 930600,
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64/ld-linux-x86-64.so.2",
+      "resolved_path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64/ld-linux-x86-64.so.2",
+      "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b"
+    },
+    "libc.so.6": {
+      "bytes": 2339896,
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64/libc.so.6",
+      "resolved_path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64/libc.so.6",
+      "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4"
+    },
+    "libnuma.so.1": {
+      "bytes": 62328,
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64/libnuma.so.1",
+      "resolved_path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root/lib64/libnuma.so.1",
+      "sha256": "be20c2b16781eea6c69d47816bf15869f90f2a009628c310049da1d2f3c31e4e"
+    }
+  },
+  "required_unchanged_module_hashes": {
+    "ihk-smp-x86_64.ko": "887dc3567e6035c921588e61b45b41a8ef32a972d142fe2ba82ec48442353b12",
+    "ihk.ko": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+    "mcctrl.ko": "57546af5110c0674b307e5ac5a328228abbe784f890f69521db5f594f21f6ae8"
+  },
+  "retained_native_contract": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-integration-source-1/MATCHING-NATIVE-EXISTING-CASES.NEW-RUST-LAUNCHER.NOT-RELEASED.json",
+    "sha256": "bd5a30a591cb2e8a19616dbf4c5f50bb799597233cbdbd93e013ec52d060a0b1"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_EXPLICIT_NATIVE_EXECUTOR_BINDING"
+}

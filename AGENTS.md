@@ -1,6 +1,31 @@
-Current user priority: [M14/M15 completion, functional refinement and twenty-minute steering through October24 at17:00PDT](docs/verification/os-milestones-20260914/FOCUS-UNTIL-20261024-1700.md). Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Current user instruction — NEW12h run activated 2026-10-27T17:36:09+00:00, ending 2026-10-28T05:36:09+00:00. Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
-Current delivery target and included-first/explicit-credit handoff limits: [October24 run window](docs/verification/os-milestones-20260914/RUN-WINDOW-20261024.md). Active resident billing controls remain authoritative.
+Read [current twelve-hour window](docs/verification/os-milestones-20260914/RUN-WINDOW-12H-20261027.md). This replaces earlier expired18h time limits; preserve original credit ledger, all evidence and native controls. Accepted CURRENT109 build and HOST19 are complete; do not replay. Source31 has only three unfinished ring/oversize invocations and needs new admission.
+
+--- Earlier retained context ---
+
+Current user priority: [M14/M15 completion, refinement and twenty-minute steering in the new eighteen-hour run](docs/verification/os-milestones-20260914/FOCUS-UNTIL-20261025-2300.md). Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Replacement launcher and remote instructions: [operator handoff](docs/verification/os-milestones-20260914/RESTART-READY-20261026.md).
+The user will run `python3 -B scripts/start_os_campaign.py --run`; preparation
+does not start the campaign. Preserve the original October27 04:24:50 PDT cutoff
+and existing credit ledger. Read phone instructions from the dedicated GitHub
+`os-phone-control` branch's `PHONE-INSTRUCTIONS.md`, using the reviewed intake;
+do not replace this dirty checkout or treat that branch as engineering sources.
+Use `python3 -B scripts/push_os_checkpoint.py origin <engineering-branch>` for
+engineering pushes. The local pre-push hook and the wrapper check phone changes;
+the bounded poller also checks every60seconds. Only new enabled request IDs enter
+the existing instruction inbox. Intake never resumes a stopped campaign, clears
+a real hold, executes a Markdown shell command or changes a budget.
+
+Current delivery target and included-first/explicit-credit handoff limits: [October26 eighteen-hour run](docs/verification/os-milestones-20260914/RUN-WINDOW-18H-20261026.md). Active resident billing controls remain authoritative.
+
+Latest communication-recovery instruction and stopped-state handoff:
+[RECOVERY-20261026.md](docs/verification/os-milestones-20260914/RECOVERY-20261026.md).
+Preserve durable Markdown context, account/deadline limits and actual owner
+retirement when recovering verified campaign processes. Do not repeat successful
+work or treat model retirement as native cleanup. The former window is expired;
+the user separately authorized the October26 eighteen-hour continuation.
 
 # McKernel Rust Migration Agent Notes
 
@@ -120,13 +145,14 @@ behavior as part of growth; uncertain effects retain ownership and stop. Apply
 between workloads after the normal independent operation review. This user
 instruction supplies resize authorization; do not ask again for that same action.
 
-## Active agent dispatch rule — 2026-10-22
+## Active agent dispatch rule — 2026-10-28
 
-New work for a completed or idle agent MUST use `followup_task` to start a new
-turn. Use `send_message` only to steer an already running agent. Confirm the new
-turn/status once, then wait for its result without busy-polling. Sending a message
-to a completed agent and waiting for it is not productive work. Apply this rule
-before reporting a review or implementation lane as active.
+Use `followup_task` for EVERY assignment requesting work or a deliverable. It
+starts an idle/completed agent and delivers an assignment to a running agent;
+no status-dependent tool choice is needed. Reserve `send_message` for
+informational updates to an already-running task. Verify a new turn/status once,
+then let it work without busy-polling. A message to a completed agent does not
+start work. Apply this rule before reporting any lane as active.
 
 ## Current user priority — functional OS (2026-10-17)
 
