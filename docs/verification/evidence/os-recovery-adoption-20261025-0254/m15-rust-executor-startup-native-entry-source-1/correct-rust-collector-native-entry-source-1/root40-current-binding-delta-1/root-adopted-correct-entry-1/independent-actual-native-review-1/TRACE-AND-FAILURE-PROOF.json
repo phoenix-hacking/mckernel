@@ -1,0 +1,249 @@
+{
+  "actual_attempt_result": {
+    "bytes": 2994,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/correct-rust-collector-native-entry-source-1/root40-current-binding-delta-1/root-adopted-correct-entry-1/independent-actual-native-review-1/RAW-ATTEMPT/result.json",
+    "sha256": "717c9cbce03b2c8e7b6af68cab64aefea2e591477b5c7e69c0d4757700ae566e"
+  },
+  "actual_qmp_transcript": {
+    "bytes": 247069,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/correct-rust-collector-native-entry-source-1/root40-current-binding-delta-1/root-adopted-correct-entry-1/independent-actual-native-review-1/RAW-ATTEMPT/qmp.transcript.json",
+    "sha256": "bfc785234b035dd1009870593c55bd913908823fe6c97873b3fdae8f87070189"
+  },
+  "actual_serial": {
+    "bytes": 136008,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/correct-rust-collector-native-entry-source-1/root40-current-binding-delta-1/root-adopted-correct-entry-1/independent-actual-native-review-1/RAW-ATTEMPT/serial.log",
+    "sha256": "525a20c9f14f639ef3661be6a5974bbe185115f2f10c76ddb715c49494b5dd39"
+  },
+  "collector_source": [
+    {
+      "bytes": 13552,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-source-1/main.rs",
+      "sha256": "3366dc3aedf3a9499f866bd372046b3792ac6528f81b9ce81f637fde80a58ba5"
+    },
+    {
+      "bytes": 22104,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-source-1/supervisor.rs",
+      "sha256": "a6e805b21adb9624e916619ea3f8e36d8ac2dbdb6965d8e44ab49f7800c9ba13"
+    },
+    {
+      "bytes": 1016,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-source-1/profile.rs",
+      "sha256": "b395546ba05320c50d215770d760bc4ea6f4348a35b8ce03458f21bc6ca7df0a"
+    },
+    {
+      "bytes": 2196,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-supervisor-source-1/report.rs",
+      "sha256": "da958f3e0ca75817781b2914843f40bddbcbf9735204ff7f1658549ddcdaf4b9"
+    }
+  ],
+  "decision": "FAIL_ORIGINAL_BEGIN_RETIREMENT_PREDICATE_REPRODUCED_WITH_EXACT_STARTUP_MAIN_BYTES",
+  "exact_report": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "A",
+      "",
+      "B"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "finished_ns": 34649745401,
+    "procfs_empty": true,
+    "raw_wait_status": 0,
+    "reaped_ns": 34176476033,
+    "started_ns": 31909714196,
+    "streams": {
+      "stderr": {
+        "discarded": 0,
+        "eof": true,
+        "eof_ns": 34074411944,
+        "hex": "",
+        "limit": 1024,
+        "observed": 0,
+        "retained": 0,
+        "truncated": false
+      },
+      "stdout": {
+        "discarded": 0,
+        "eof": true,
+        "eof_ns": 34074440160,
+        "hex": "7b2263617365223a22737461727475702e617267762d656d707479222c2261726763223a342c2261726776223a5b22617070222c2241222c22222c2242225d2c227465726d696e61746f725f69735f6e756c6c223a747275657d0a",
+        "limit": 1024,
+        "observed": 91,
+        "retained": 91,
+        "truncated": false
+      }
+    }
+  },
+  "full_capture_manifest": {
+    "bytes": 58510,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/correct-rust-collector-native-entry-source-1/root40-current-binding-delta-1/root-adopted-correct-entry-1/independent-actual-native-review-1/RAW-CAPTURE-MANIFEST.json",
+    "sha256": "1fa605205d4c3ac2b77adc67274c460809c7d6856a5ca26c140ececa49ec0d83"
+  },
+  "independent": true,
+  "native_acceptance": false,
+  "nonce": "6d2e6c210f8bf62b1a4f1abc127fb09a",
+  "original_contract": {
+    "bytes": 6595,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-actual-native-preparation-source-1/SOURCE-BOUND-NATIVE-CONTRACT.json",
+    "sha256": "0e3a0cf6e63914e9cc23b6e8a6850156f1cd2ad4a481b517e1354e76a1fed443"
+  },
+  "ownership": {
+    "QEMU_pid_namespace_note": "PID10 is the namespaced QEMU identity. No comparison with hostPID10 or reviewer signal was performed.",
+    "actual_QEMU_positive_reap": {
+      "argv": [
+        "/usr/libexec/qemu-kvm",
+        "-machine",
+        "q35",
+        "-accel",
+        "tcg,thread=multi",
+        "-cpu",
+        "max,la57=off",
+        "-smp",
+        "4,sockets=2,cores=2,threads=1",
+        "-m",
+        "8192",
+        "-object",
+        "memory-backend-ram,size=4G,id=ram-node0",
+        "-object",
+        "memory-backend-ram,size=4G,id=ram-node1",
+        "-numa",
+        "node,nodeid=0,cpus=0-1,memdev=ram-node0",
+        "-numa",
+        "node,nodeid=1,cpus=2-3,memdev=ram-node1",
+        "-nic",
+        "none",
+        "-display",
+        "none",
+        "-no-reboot",
+        "-no-shutdown",
+        "-S",
+        "-monitor",
+        "none",
+        "-qmp",
+        "unix:/home/holden/mckernel-work/scratch/m15st2/attempt-6d2e6c210f8bf62b1a4f1abc127fb09a/qmp.sock,server=on,wait=off",
+        "-serial",
+        "file:/home/holden/mckernel-work/scratch/m15st2/attempt-6d2e6c210f8bf62b1a4f1abc127fb09a/serial.log",
+        "-debugcon",
+        "file:/home/holden/mckernel-work/scratch/m15st2/attempt-6d2e6c210f8bf62b1a4f1abc127fb09a/debugcon.log",
+        "-global",
+        "isa-debugcon.iobase=0xe9",
+        "-kernel",
+        "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+        "-initrd",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/correct-rust-collector-stage-source-1/correct-rust-startup-overlay.cpio.gz",
+        "-append",
+        "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
+      ],
+      "pgid": 10,
+      "pid": 10,
+      "returncode": -9,
+      "sid": 10,
+      "starttime_ticks": 94271949
+    },
+    "cleanup": {
+      "errors": [],
+      "reaped": true
+    },
+    "current_free": {
+      "bytes": 11241,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-startup-native-entry-source-1/correct-rust-collector-native-entry-source-1/root40-current-binding-delta-1/root-adopted-correct-entry-1/independent-actual-native-review-1/CURRENT-FREE.json",
+      "sha256": "d9e0c9fbf7eda3f3d4ccd96b3808c6609a5641e365a75f73a02da23f3a95d081"
+    }
+  },
+  "predicate": {
+    "ACK_abandoned_one_is_permitted_by_original_contract": true,
+    "actual_query_tokens_and_errno": [
+      {
+        "errno": -11,
+        "token": 513
+      }
+    ],
+    "exact_expression": "all(a[2]==-11 for a in attempts[:-1]) and attempts[-1][2]==0",
+    "final_errno_zero_observed": false,
+    "full_evaluator_replay": false,
+    "full_evaluator_replay_limit": "The original FAIL path does not retain all host observation timestamps. None were invented. Only the exact original pure failing predicate was replayed. No subsequent gate is claimed passed.",
+    "function": "_check_begin_cleanup",
+    "line": 1338,
+    "offline_original_pure_AST_replay": {
+      "message": "BEGIN retirement result",
+      "result": "DiagnosticError"
+    },
+    "source": {
+      "bytes": 100261,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/bound-native-runtime-1/native_diagnostic.py",
+      "sha256": "529830adcd6fafa13979bf6036b2812c88630c5e0112ce4d80f9fc28cc30d4da"
+    }
+  },
+  "preserved": [
+    "Earlier wrong-argv startup FAIL",
+    "Original strict235/227 and F05 v2 FAILs",
+    "F05 v3 native success remains its separate exact tuple",
+    "WholeFP4096/1024FAIL",
+    "No349/51/354/allocation/file/native-closure inference"
+  ],
+  "qmp_statuses_observed": [
+    "running",
+    "shutdown"
+  ],
+  "raw_wait_status": 0,
+  "reviewer": "/root/custody_release_review",
+  "runtime_execution_by_this_offline_review": 0,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_actual_lifecycle_rows": [
+    {
+      "line": 901,
+      "text": "<6>[   32.138322] ihk_smp_x86_64: IHK-SMP: application SCHEDULE os=0 generation=1 pid=258 cpu=0"
+    },
+    {
+      "line": 902,
+      "text": "<6>[   32.146255] ihk_smp_x86_64: IHK-SMP: application procfs published os=0 generation=1 pid=258 tid=258"
+    },
+    {
+      "line": 1436,
+      "text": "<6>[   34.149288] mcctrl: application_process=cleanup_requested os=0 generation=1 pid=258 intent_errno=0"
+    },
+    {
+      "line": 1437,
+      "text": "<6>[   34.153910] ihk_smp_x86_64: IHK-SMP: application cleanup ACK os=0 generation=1 pid=258 token=3 errno=0 abandoned=1"
+    },
+    {
+      "line": 1438,
+      "text": "<6>[   34.158954] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=1 pid=258 token=513 errno=-11"
+    },
+    {
+      "line": 1440,
+      "text": "<6>[   34.170858] ihk_smp_x86_64: IHK-SMP: application procfs deleted os=0 generation=1 pid=258 tid=258"
+    }
+  ],
+  "source_cause": {
+    "correction_implemented_by_reviewer": false,
+    "inference": "This completion condition permits publication before the pinned BEGIN retirement contract is satisfied. The evidence demonstrates an observation/completion mismatch; it does not establish eventual retirement, a kernel leak, or a Rust executor fault.",
+    "main_lines": [
+      319,
+      335,
+      350,
+      359
+    ],
+    "observed": "The sole retirement query returns -11 before procfs deletion. The exact final serial snapshot contains deletion and ND_PAYLOAD but no final query returning0.",
+    "smallest_next_source_correction": "In the existing Rust startup collector, bind the sole actual scheduled application's os/generation/PID and require its genuine terminal, successful real cleanup ACK, deletion and final retirement query errno0 before final publication, within the existing absolute5s postreap/outer deadlines. Preserve raw bytes, all unknown/duplicate/malformed-row checks, exact argv/two environment values,10s payload/1024B streams and the unchanged original evaluator. Reuse qualified Rust lifecycle parsing where applicable; introduce no F05 G gate/child protocol, fixed grace sleep, normalized errno, C helper or new runtime quota.",
+    "source_fact": "After payload reap the Rust collector finishes on readable empty numeric procfs, then emits one raw klogctl(3) snapshot; the readiness helper does not require definitive application retirement.",
+    "supervisor_lines": [
+      83,
+      90
+    ]
+  },
+  "stderr_bytes": 0,
+  "stdout_bytes": 91,
+  "stdout_utf8": "{\"case\":\"startup.argv-empty\",\"argc\":4,\"argv\":[\"app\",\"A\",\"\",\"B\"],\"terminator_is_null\":true}\n",
+  "syscall_terminal": {
+    "line": 1434,
+    "text": "<6>[   34.138882] mcctrl: application_syscall=delivered os=0 generation=1 pid=258 worker=6 delivery=512 cpu=0 number=231"
+  }
+}
