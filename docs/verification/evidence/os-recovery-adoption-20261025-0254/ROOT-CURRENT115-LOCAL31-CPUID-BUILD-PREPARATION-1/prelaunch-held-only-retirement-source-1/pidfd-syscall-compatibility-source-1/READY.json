@@ -1,0 +1,67 @@
+{
+  "scope": "Functional OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "READY_TYPED_LIBC_PIDFD_COMPATIBILITY_SOURCE_NOT_EXECUTED",
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/interrupt_exact_unlaunched_holder_compat.py",
+    "bytes": 11933,
+    "sha256": "b522399a853f84e40ae593781b7987c03fbd61864e086db05b80b452388c82d2"
+  },
+  "typed_backend": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/pidfd_syscall_backend.py",
+    "bytes": 3017,
+    "sha256": "da4427225d0660fef7139f7af33e4175c464caff4dd265175eed9dda5d909994"
+  },
+  "source_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/SOURCE-PROFILE.NOT-A-GRANT.json",
+    "bytes": 8035,
+    "sha256": "2afaea38de2605f9f5219d2fe0955fad3b936c351233d2321a3b8a73184dfa12"
+  },
+  "Root_grant_template": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/ROOT-GRANT.TEMPLATE.NOT-A-GRANT.json",
+    "bytes": 1354,
+    "sha256": "1c419fb40ed47eedc209a73be8ba3987d45e6540fe78030390402adcdfd81cfe"
+  },
+  "precheck_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/precheck_typed_backend.py",
+    "bytes": 1110,
+    "sha256": "d348a270750e21c12b3f433aa1d97b80495669928737f124c17a369a4c4228af"
+  },
+  "actual_precheck_stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/ACTUAL-PRECHECK.stdout",
+    "bytes": 824,
+    "sha256": "a0548202f7bd3ba90257de02262cd55f39709c8a4921878b3f1ab88df8f29df5"
+  },
+  "actual_precheck_stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/ACTUAL-PRECHECK.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "typed_mock_negative_controls": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/TYPED-BACKEND-CONTROLS.json",
+    "bytes": 2502,
+    "sha256": "f00a241019b4bd9d37ac06b56fabbc9e4d1621d29f4fe351f527638e5374c880"
+  },
+  "Root_next": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/ROOT-NEXT.md",
+    "bytes": 2092,
+    "sha256": "f4eaa63653bc7e23d69cfae75c0c61173cea0f7916dbc1434dc5926b66a41e1a"
+  },
+  "genuine_header": {
+    "path": "/usr/include/x86_64-linux-gnu/asm/unistd_64.h",
+    "bytes": 9286,
+    "sha256": "698d4666c969b0b4d0bed328b4a4f3cab765ec1a9948e0f14751f0ce56d91535"
+  },
+  "libc": {
+    "path": "/usr/lib/x86_64-linux-gnu/libc-2.31.so",
+    "bytes": 2029592,
+    "sha256": "53b909551f8e581120ddc2d24cfb5df76c52e3c2e2a5dac0d202b25638b3e902"
+  },
+  "mock_controls": 9,
+  "actual_interpreter_precheck": "PASS /usr/bin/python3 3.8.10",
+  "actual_kernel_pidfd_support": null,
+  "actual_signals": 0,
+  "holder_live_queries": 0,
+  "actual_grant": null,
+  "actual_retirement": null,
+  "runtime_authority": null
+}

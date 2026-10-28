@@ -1,0 +1,174 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE_AND_ONE_EXACT_CONDITIONAL_HELD_ONLY_RETIREMENT_RELEASE",
+  "source_review_decision": "PASS_SOURCE",
+  "independent": true,
+  "reviewer": "/root/guardian_execution_review",
+  "implementation_ownership": false,
+  "conditional_release": true,
+  "maximum_invocations": 1,
+  "maximum_signal_calls": 1,
+  "signal": "SIGINT",
+  "mechanism": "Exact Linux x86_64 typed libc syscall434 pidfd_open and424 pidfd_send_signal; no numeric/group fallback",
+  "holder": {
+    "path": "/run/lock/mckernel-development.lock",
+    "pid": 1815979,
+    "starttime": 95215128,
+    "device": 27,
+    "inode": 4,
+    "fd": 3
+  },
+  "original_positive_join_tool_session": 11857,
+  "reviewed_READY": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/READY.json",
+    "bytes": 4233,
+    "sha256": "f4b4cf7883c7d89d1a3a8ca53c8049ea7819b4aa5a90edfbd0cccba50be2e18b"
+  },
+  "reviewed_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/interrupt_exact_unlaunched_holder_compat.py",
+    "bytes": 11933,
+    "sha256": "b522399a853f84e40ae593781b7987c03fbd61864e086db05b80b452388c82d2"
+  },
+  "reviewed_backend": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/pidfd_syscall_backend.py",
+    "bytes": 3017,
+    "sha256": "da4427225d0660fef7139f7af33e4175c464caff4dd265175eed9dda5d909994"
+  },
+  "reviewed_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/SOURCE-PROFILE.NOT-A-GRANT.json",
+    "bytes": 8035,
+    "sha256": "2afaea38de2605f9f5219d2fe0955fad3b936c351233d2321a3b8a73184dfa12"
+  },
+  "reviewed_grant_template": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/ROOT-GRANT.TEMPLATE.NOT-A-GRANT.json",
+    "bytes": 1354,
+    "sha256": "1c419fb40ed47eedc209a73be8ba3987d45e6540fe78030390402adcdfd81cfe"
+  },
+  "reviewed_genuine_header": {
+    "path": "/usr/include/x86_64-linux-gnu/asm/unistd_64.h",
+    "bytes": 9286,
+    "sha256": "698d4666c969b0b4d0bed328b4a4f3cab765ec1a9948e0f14751f0ce56d91535"
+  },
+  "reviewed_libc": {
+    "path": "/usr/lib/x86_64-linux-gnu/libc-2.31.so",
+    "bytes": 2029592,
+    "sha256": "53b909551f8e581120ddc2d24cfb5df76c52e3c2e2a5dac0d202b25638b3e902"
+  },
+  "reviewed_precheck_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/precheck_typed_backend.py",
+    "bytes": 1110,
+    "sha256": "d348a270750e21c12b3f433aa1d97b80495669928737f124c17a369a4c4228af"
+  },
+  "reviewed_precheck_stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/ACTUAL-PRECHECK.stdout",
+    "bytes": 824,
+    "sha256": "a0548202f7bd3ba90257de02262cd55f39709c8a4921878b3f1ab88df8f29df5"
+  },
+  "reviewed_precheck_stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/ACTUAL-PRECHECK.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "reviewed_mock_controls": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/TYPED-BACKEND-CONTROLS.json",
+    "bytes": 2502,
+    "sha256": "f00a241019b4bd9d37ac06b56fabbc9e4d1621d29f4fe351f527638e5374c880"
+  },
+  "reused_prior_exact_conditional_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/independent-source-review-1/DIRECTORY-FSYNC-CORRECTED-REVIEW.json",
+    "bytes": 10526,
+    "sha256": "22c6cfd5e5be160cc4ce60b2e641ccca563b8a05e3970a322b16174e7d969f9a"
+  },
+  "preserved_prior_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/interrupt_exact_unlaunched_holder.DIRECTORY-FSYNC-CORRECTED.py",
+    "bytes": 11252,
+    "sha256": "10772f6af24e47198a9917036d74a13a9e8059d6adee8f4137313b360f1fb822"
+  },
+  "preserved_prior_READY": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/READY.DIRECTORY-FSYNC-CORRECTED.json",
+    "bytes": 3083,
+    "sha256": "c654c3acf76be364caa31e75ece4ce22defcea52796b70aacc3cb360e2398c0d"
+  },
+  "preserved_prior_Root_grant": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/ROOT-ACTUAL-ONE-HOLDER-INTERRUPT-GRANT.json",
+    "bytes": 1757,
+    "sha256": "7e4d6be35786284631cff8cb6602a1b082844db4038aa776c458b7fdf2d422e3"
+  },
+  "approved_exact_command_after_fresh_Root_grant": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/interrupt_exact_unlaunched_holder_compat.py",
+    "--grant",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/prelaunch-held-only-retirement-source-1/pidfd-syscall-compatibility-source-1/ROOT-ACTUAL-ONE-HOLDER-INTERRUPT-COMPAT-GRANT.json"
+  ],
+  "findings": [
+    {
+      "predicate": "Typed genuine platform/header/libc binding",
+      "result": "PASS_SOURCE",
+      "evidence": "Backend requires Linux x86_64 little-endian LP64, long/pointer8B and signed/unsignedint4B. Resolved /usr/include/asm/unistd_64.h must equal actual pinned header698d; exact headerbytes9286 independently verified with one __NR_pidfd_open434 and one __NR_pidfd_send_signal424 definition. Exact libc2.31 ELF53b90955/2029592B is authenticated before CDLL. No guessed architecture number or interpreter fallback is used."
+    },
+    {
+      "predicate": "Raw syscall ABI, errno and finite arguments",
+      "result": "PASS_SOURCE",
+      "evidence": "CFUNCTYPE uses c_long result and syscall number; open arguments c_int PID,c_uint flags0; send arguments c_int fd,c_int SIGINT,c_void_p NULL,c_uint flags0. ctypes prototypes are fixed integer/pointer forms appropriate to the selected x86_64 libc syscall ABI, with no floating or vector arguments. Both CDLL and prototypes use_errno=True; set_errno(0) precedes call and result-1 raises OSError(get_errno()) without fallback. Open requires exact int1815979, result int0..INTMAX; send requires nonnegative intfd and exactly zero success. Unexpected results fail closed."
+    },
+    {
+      "predicate": "Capability preflight has zero kernel/signal effect",
+      "result": "PASS_RETAINED_PRECHECK_ONLY",
+      "evidence": "Actual retained /usr/bin/python3 3.8.10 stdout reports genuine header/libc/platform/type/symbol precheck PASS; source only authenticates, loads libc, constructs prototypes and asserts their argtypes/restype. It never calls either syscall method, holder/proc query or guard. Nine retained mock/negative controls cover434FD23,424sameFD/SIGINT2/NULL/uint0,wrongPID,negativeFD,open/senderrno,unexpectedreturn,headerhash and nofallbackAST. Reviewer did not import/run any backend, precheck or mock. Actual kernel pidfd support remains UNKNOWN; ENOSYS/EPERM/ESRCH or other errors must stop the one operation."
+    },
+    {
+      "predicate": "Helper delta is compatibility plus fresh immutable context only",
+      "result": "PASS_SOURCE",
+      "evidence": "Read complete helper diff from10772: native-Python capability assertion replaced by exact da4427 backend authentication/load, open/send calls replaced by its two methods, and grant/journal filenames move to fresh COMPAT namespace. FIXED target/refs, GUARD/GUARD_SHA and five original functions including verify_live have exact identical AST. Directoryfsync correction, exception/finally and all live identity/expiry/grant/freeze checks remain unchanged. No project/runtime algorithm or canonical source is modified."
+    },
+    {
+      "predicate": "Exact same pidfd, target and held-only protection",
+      "result": "PASS_STATIC_CONDITIONAL",
+      "evidence": "At Root execution: PID1815979/birth95215128/UID1000/FD3permanent27:4 must pass two full livechecks around open_pidfd. pidfd self-fdinfo must report exact target PID before second check. Same returned pidfd is sent once and closed in finally. Live checks require one thread/no children, precise source/bootstrap cmdline, caught/unblocked/nonignored SIGINT, CLOEXEC samepermanentFD and sole fullEOF WRITEflock, all10forbidden build/READY/RUNNER/OUTPUT paths absent. Root freeze prevents a publisher race. No numeric PID/group signal, fallback, retry, cleanup or unlock exists."
+    },
+    {
+      "predicate": "One durable attempt and original finally retirement path",
+      "result": "PASS_STATIC_CONDITIONAL",
+      "evidence": "Fresh COMPAT actionjournal uses exclusive create; ENTERED file flush/fsync followed by own containing directoryfd fsync precedes livecheck/pidfd/signal. ATTEMPTING receipt is fsynced before one send. Failure records failedclosed, never retries/escalates. Only helper own pidfd and directoryfd close; target lockFD is untouched by helper. Exact original holder source still raises KeyboardInterrupt through no-child exception path and finally closes its own lockFD; this is conditional on successful live held-only checks."
+    },
+    {
+      "predicate": "Fresh grant, old failure and expired build authority scope",
+      "result": "PASS_STATIC_CONDITIONAL",
+      "evidence": "Previous Root invocation failed native-Python hasattr assertion before guard/journal/livequery/signal by the reviewed source ordering; original10772/c654/22c6 review and oldgrant remain preserved. Compatibility is an explicit changed backend, not an unchanged retry or interpreter substitution. New COMPAT grant must pin b522helper/2afprofile/thisreview, one invocation, exactholder/tool11857, both Root attestations, freshissued<=expires<=issued+60 and current v2 account/window checks. Old5748resource/3db1pending/91e5refusal/cf36unusedabandoned disposition remain immutable and cannot become build authority."
+    },
+    {
+      "predicate": "Signal result never equals positive retirement/current-free",
+      "result": "PASS_SCOPE",
+      "evidence": "SIGNAL_SENT_NOT_RETIREMENT stays current_free=false. Root must positively join actual tool11857, then obtain separate independent full ownership/current-free and two closed mutex probes. No compiler/build/native/guest admission, resource freshness renewal, clock extension or budget reset follows this release."
+    }
+  ],
+  "conditions_for_exact_release": [
+    "Root alone creates fresh ROOT-ACTUAL-ONE-HOLDER-INTERRUPT-COMPAT-GRANT.json pinning exact reviewedhelper/backend/profile and this review; oldgrant is not reusable.",
+    "Root freezes every buildpublisher/grant/READY write until holder positivejoin and attests no buildrunner/Docker started. All double-livechecks and actual kernel backend calls must pass; any uncertainty stops with no fallback/retry.",
+    "Current exact v2 account/window guard and all realholds permit this one operation under original fixed deadlines/creditrun.",
+    "One durable COMPAT attempt and at most one SIGINT via the exact verified pidfd; preserve all failures/expired records.",
+    "Root positively joins original tool11857 and obtains independent current-free/probes before later authority; no sameinvocation compiler/native launch."
+  ],
+  "actual_Root_grant_reviewed": null,
+  "actual_kernel_pidfd_support": null,
+  "actual_live_target_verified_by_reviewer": false,
+  "actual_syscalls_by_reviewer": 0,
+  "actual_signals_by_reviewer": 0,
+  "actual_proc_guard_account_queries_by_reviewer": 0,
+  "actual_retirement": null,
+  "current_free": false,
+  "build_or_native_execution_approval": false,
+  "compiler_or_guest_authority": false,
+  "runtime_authority": "CONDITIONAL_EXACT_HELD_ONLY_COMPAT_INTERRUPT_REQUIRES_ACTUAL_ROOT_GRANT_AND_ALL_HELPER_CHECKS",
+  "persistent_controls": {
+    "fixed_UTC_cutoff": "2026-10-28T05:36:09Z",
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "credit_run": "7f4af94a83b14cc08f97401f5891d965",
+    "credit_ceiling": 57774.852125,
+    "cumulative_spent_floor": 22812.3311,
+    "real_holds_effective": true,
+    "Root_owns_actual_execution_and_followup": true
+  },
+  "review_method": "Read-only sealed refs, genuineheader/libc hashes, complete typedbackend/precheck/helperdiff, selected AST preservation and retained precheck/mock reports. No backend import, syscall, signal, guard/account/proc query, workload/cleanup or canonical write."
+}

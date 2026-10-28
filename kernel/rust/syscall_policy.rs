@@ -36122,3 +36122,8 @@ pub unsafe extern "C" fn perf_counter_init_raw_bridge(
 // The third C callback selects the existing syscall_atomic64_read_bridge.
 // Its already-exported exact body calls atomic_helpers::ihk_atomic64_read.
 // No duplicate Rust atomic forwarding body or new atomic algorithm is added.
+
+// Functional OS only; no security testing. Root-reviewed supported-profile candidate; native/whole-file proof separate.
+#[cfg(f06_obtain_clone_cpuid_candidate)]
+#[path = "f06_obtain_clone_cpuid.rs"]
+mod f06_obtain_clone_cpuid;

@@ -1,0 +1,54 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "CHANGES_REQUIRED_PRESERVE_ACCEPTED_CURRENT114_PERF_LINE_CONTEXT",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/daemon_execution_review",
+  "recorded_at": "2026-10-28T03:09:29.269955+00:00",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/SOURCE-READY.json",
+    "bytes": 5651,
+    "sha256": "d3c1c6042226d68502f5edfb7532d97f7343359182b1f08529272696a1a65dab"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/PROFILE.NOT-GRANTED.json",
+    "bytes": 190078,
+    "sha256": "e601809110cb1ba396d95ba2da371b7b5c081d84250d38ee4e866a476fd9511e"
+  },
+  "proof": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/independent-source-review-1/SOURCE-PROOF.json",
+    "bytes": 30702,
+    "sha256": "abc7a970690fa744d05b56fd2a60ad8590cc2fe9e21ab4226181c088b9e76469"
+  },
+  "blocking_findings": [
+    {
+      "id": "accepted_CURRENT114_outer_perf_line_restore_omitted",
+      "severity": "blocking source provenance and debug-line regression",
+      "evidence": "Packet declares a9ba5105 preimage but accepted CURRENT114 actual d6e9c595 includes exact ENABLE_PERF branch #line21118/#line21150 block after #endif /*ENABLE_PERF*/. Candidate71694 retains stale omission. Three wake-region conditional line checks only compare against a9ba stalebase.",
+      "minimal_correction": "Preserve exact accepted5-line ENABLE_PERF #line block in private WAKE4 C candidate (or derive same patch from actual d6e9 acceptedbase), retain wake outer exit restoration once, refresh changed C/profile/source hashes and compare line identities to accepted CURRENT114 across selected/ptrace-off/policy-off and ENABLE_PERF on/off. No provider-body/Rust redesign or compiler replay required."
+    }
+  ],
+  "positive_source_checks": [
+    "All14 READY source references exact. WAKE3 2992B fragment equals retained7792 corrected bank bytes; candidatepolicy is exact2975base + newline + unchangedfragment + newline + newtyped single_stepforwarder. Only newlogic is one address cast and call to existing set_single_step under original lifetime/exclusion/null provider contract.",
+    "ExistingABI aliases exactly match C signatures int(ulong,ulong),void(ulong),int(ulong,ulong,int),ulong(ulong,ulong,ulong,int). Genuine Cinclude/type_static_asserts and Rust realcrate16word witness cover Cint/ulong/pointer/thread/context sizes/alignment/ptrace/uctx/saved/signal offsets/rflags. No ABI mirror or privilege/provider body test.",
+    "Independent readonly actual0109 C ELF parse confirms four currently LIVE executable12B callbacks and positive ptrace_wakeup_sig249B. Original source-elided IO5 is excluded and not credited.",
+    "HOSTcontext records119existing genuine sources plus3preserved relative modules; onlyHOSTpolicy suffix16word witness appended. No broad119-source rehash or canonical copy performed.",
+    "Seven proposed commands include genuine wholeRust selected/cfg-off counterpart differing only f03_ptrace_entry_candidate pair plus emitpath; matching Cfallback undef and separate selected/fallback partiallinks prevent earlier sys_ptrace duplicate ownership family. Qualifier requires allocated relocation edge within actual ptrace_wakeup_sig function range for each4target, no addresswitness substitution; all GNU_RETAIN sections checked for bothjoints.",
+    "CPU6/job1/AS2GiB/CPU60s/wall90s/FSIZE64MiB and fixedwindow/credit/aggregate controls unchanged. Actual Root grant, compiler ABI/consumer evidence, production default/image/provider-fold/native and wholefile remain OPEN."
+  ],
+  "new_source_logic_count": 1,
+  "reused_adapters": 3,
+  "new_algorithms": 0,
+  "runtime_authority": null,
+  "execution_release": false,
+  "native_acceptance": false,
+  "production_acceptance": false,
+  "retirement_credit": 0,
+  "review_actions": {
+    "compilers_CPP_helpers_or_tests": 0,
+    "queries_grants_native_cleanup_Git_canonical": 0,
+    "subagents": 0,
+    "independent_readonly_current114_ELF_symbols": true
+  },
+  "blocker": "Missing accepted ENABLE_PERF outer #line restoration in new private C candidate."
+}

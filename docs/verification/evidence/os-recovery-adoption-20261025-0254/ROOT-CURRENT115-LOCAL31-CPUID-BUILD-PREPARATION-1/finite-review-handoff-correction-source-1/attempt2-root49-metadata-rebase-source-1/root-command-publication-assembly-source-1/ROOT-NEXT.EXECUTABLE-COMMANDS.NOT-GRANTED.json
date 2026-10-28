@@ -1,0 +1,126 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "runtime_authority": null,
+  "actual_A2": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2",
+  "nonce": "92e8d698cfe12176ddd0375937cbaeb1",
+  "commands": [
+    {
+      "owner": "Root",
+      "stage": "Exactreviewedcurrent49boundaryfill; oldRoot48preserved",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/attempt2-root49-metadata-rebase-source-1/root-command-publication-assembly-source-1/fill_current49_boundary.py"
+      ]
+    },
+    {
+      "owner": "Root",
+      "stage": "ActualfreshA2staticbindings",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/attempt2-root49-metadata-rebase-source-1/fill_attempt2_metadata.py",
+        "--phase",
+        "static"
+      ]
+    },
+    {
+      "owner": "Root",
+      "stage": "Existingreviewedstaticmaterializer/guard; nocompiler",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/materialize_admission.py",
+        "--root-bindings",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/ROOT-ACTUAL-BINDINGS-1.json"
+      ]
+    },
+    {
+      "owner": "Root",
+      "stage": "Cachedpublicationrows assembly; hashonly11newsmallfiles, not120snapshots",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/attempt2-root49-metadata-rebase-source-1/root-command-publication-assembly-source-1/prepare_publication_rows.py"
+      ]
+    },
+    {
+      "owner": "Root",
+      "stage": "Stage/push/fetch exactpreparedrowpaths using existing engineeringcheckpoint method",
+      "prepared_rows": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/PUBLICATION-ROWS.PREPARED.json",
+      "actual_engineering_branch": null,
+      "actual_pushed_fetched_commit": null
+    },
+    {
+      "owner": "Root",
+      "stage": "Existingexactfetchedblob verification; actualfinalcommitargument required",
+      "argv_prefix": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/attempt2-root49-metadata-rebase-source-1/root-command-publication-assembly-source-1/verify_exact_fetched_rows.py",
+        "--prepared-rows",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/PUBLICATION-ROWS.PREPARED.json",
+        "--fetched-commit"
+      ],
+      "actual_final_commit_argument": null
+    },
+    {
+      "owner": "Root",
+      "stage": "Prepareactualcold/handoffmetadata afterpublication;noclocks",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/attempt2-root49-metadata-rebase-source-1/fill_attempt2_metadata.py",
+        "--phase",
+        "handoff"
+      ]
+    },
+    {
+      "owner": "/root/custody_release_review",
+      "stage": "EXCLUSIVEcorrectedverifierlaunch beforefreshclock; Rootmustnotinvoke",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/strict-json-final-publication-correction-source-1/finite_review.py",
+        "--independent-reviewer",
+        "/root/custody_release_review",
+        "--bindings",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/attempt2-root49-metadata-rebase-source-1/REVIEWER-ACTUAL-BINDINGS.json",
+        "--handoff",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/FINITE-REVIEW-HANDOFF"
+      ]
+    },
+    {
+      "owner": "Root",
+      "stage": "WaitonlyactualPREWARM_READY/liveidentity before physicalclock",
+      "actual_ready": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-2/FINITE-REVIEW-HANDOFF/PREWARM_READY.json"
+    },
+    {
+      "owner": "Root",
+      "stage": "Followalreadysealedexactphysical/holder/resource/heldcapture/independentPASS/publishersequence; no exploratorycompositionhot",
+      "source_commands": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/attempt2-root49-metadata-rebase-source-1/EXACT-ATTEMPT2-ROOT-AND-INDEPENDENT-COMMANDS.NOT-GRANTED.json",
+        "bytes": 8632,
+        "sha256": "18d489555a398767b86b301556490a7bab20bf449feaf2f3b4d6a51b7481a368"
+      }
+    }
+  ],
+  "compiler_argv_unchanged": true,
+  "compiler_commands": 4,
+  "retained_objects": 8,
+  "Rust_files": 120,
+  "source_fetched_rows_plan": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/finite-review-handoff-correction-source-1/attempt2-root49-metadata-rebase-source-1/root-command-publication-assembly-source-1/PUBLICATION-ROWS.SOURCE-PLAN.NOT-AUTHORITY.json",
+    "bytes": 83128,
+    "sha256": "b853f6982fe6c487ac0fcbba624e10ce4dc7a684fb12bfb9dfb9fef7d42cc172"
+  },
+  "actual_source_staging_or_publication": null,
+  "actual_verifier_or_clocks_started_by_source_owner": false
+}

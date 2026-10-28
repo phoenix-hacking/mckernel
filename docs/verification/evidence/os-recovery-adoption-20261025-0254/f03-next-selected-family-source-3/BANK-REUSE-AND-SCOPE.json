@@ -1,0 +1,61 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "symbols": [
+    "ptrace_wakeup_clear_saved_bridge",
+    "ptrace_wakeup_set_single_step_bridge",
+    "ptrace_wakeup_trace_syscall_bridge",
+    "ptrace_wakeup_pending_take_bridge"
+  ],
+  "bank_ready": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f03-wake3-lock4-line-correction-1/READY.SOURCE-ONLY.json",
+    "bytes": 5675,
+    "sha256": "7792d78fc1424824c2dab0e3c707b0ea46166d2a8480d0f609b513e30a8c3eb4"
+  },
+  "WAKE3_original_ready": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f03-wake3-source-1/READY.SOURCE-ONLY.json",
+  "bank_Rust_fragment_reused_byteexact": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/REUSED-WAKE3.FRAGMENT.rs",
+    "bytes": 2992,
+    "sha256": "9da45c56b4f4aca72eefb0d7b6950a826f31a51a6b676e5ca60fddc8e9a18dd8"
+  },
+  "bank_corrected_C": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f03-wake3-lock4-line-correction-1/postimage/wake3/kernel/syscall.c",
+    "bytes": 917671,
+    "sha256": "d131e832cdab67968a712e734168e2a6df3cf97d0fc6398e3cc9e54101721666"
+  },
+  "current114_C_base": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/candidate/kernel/syscall.c",
+    "bytes": 918659,
+    "sha256": "a9ba5105a7e6317a77b29aeacd926c8fa146131ee2bfb2a6fe663853f3164fce"
+  },
+  "current114_policy_base": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/rust-subtree/syscall_policy.rs",
+    "bytes": 1268496,
+    "sha256": "2975c9c2d0c398a8acffb52b0936ae46ab2b73d65d45113be93730802fe276d7"
+  },
+  "new_Rust_bodies": 1,
+  "new_body_scope": "Single typed forwarding adapter only; existing set_single_step and all process_helpers providers unchanged.",
+  "new_algorithms": 0,
+  "CMake_changes": 0,
+  "shared_wakeup_outer_restore_count": 1,
+  "conditional_line_checks": [
+    {
+      "profile": "selected",
+      "active_original_lines_checked": 61,
+      "old_exit": 24482,
+      "new_exit": 24482
+    },
+    {
+      "profile": "ptrace-off",
+      "active_original_lines_checked": 90,
+      "old_exit": 24482,
+      "new_exit": 24482
+    },
+    {
+      "profile": "policy-off",
+      "active_original_lines_checked": 3,
+      "old_exit": 24494,
+      "new_exit": 24494
+    }
+  ],
+  "runtime_authority": null
+}

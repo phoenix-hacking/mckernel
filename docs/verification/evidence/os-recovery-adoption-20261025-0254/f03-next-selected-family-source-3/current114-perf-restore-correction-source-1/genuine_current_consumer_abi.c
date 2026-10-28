@@ -1,0 +1,7 @@
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
+#include "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/candidate/kernel/syscall.c"
+_Static_assert(__builtin_types_compatible_p(__typeof__(&ptrace_wakeup_clear_saved_bridge),int (*)(unsigned long,unsigned long)),"clear callback ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&ptrace_wakeup_set_single_step_bridge),void (*)(unsigned long)),"step callback ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&ptrace_wakeup_trace_syscall_bridge),int (*)(unsigned long,unsigned long,int)),"trace callback ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&ptrace_wakeup_pending_take_bridge),unsigned long (*)(unsigned long,unsigned long,unsigned long,int)),"take callback ABI");
+const unsigned long f03_wakeup4_C_ABI[16]={sizeof(int),__alignof__(int),sizeof(unsigned long),__alignof__(unsigned long),sizeof(void *),__alignof__(void *),sizeof(struct thread),__alignof__(struct thread),__builtin_offsetof(struct thread,ptrace),__builtin_offsetof(struct thread,uctx),__builtin_offsetof(struct thread,ptrace_saved_uctx_valid),__builtin_offsetof(struct thread,ptrace_sendsig),__builtin_offsetof(struct thread,ptrace_recvsig),sizeof(ihk_mc_user_context_t),__alignof__(ihk_mc_user_context_t),__builtin_offsetof(ihk_mc_user_context_t,gpr.rflags)};

@@ -1,0 +1,24 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE_ONLY_MOCK_CONTROLS_NO_REAL_APPROVAL",
+  "valid_UTF8_JSON_object": true,
+  "duplicate_nonfinite_overflow_malformed_UTF8_UTF16_array_trailing_rejected": 9,
+  "Python_ref_verified_without_JSON_decode": true,
+  "same_verified_raw_buffer_parsed": true,
+  "rejected_callback_no_final_receipt": true,
+  "rejected_callback_events": [
+    "fsync",
+    "callback-reject-stale121"
+  ],
+  "accepted_callback_order": [
+    "fsync",
+    "callback-pass120",
+    "link",
+    "fsync"
+  ],
+  "after_temp_fsync_before_link": true,
+  "receipt_implementation_ownership_false": true,
+  "receipt_maximum_invocations_1": true,
+  "receipt_payload_exact_pending_SHA": true,
+  "actual_reviewer_guard_query_resource_grant_or_workload_executions": 0
+}

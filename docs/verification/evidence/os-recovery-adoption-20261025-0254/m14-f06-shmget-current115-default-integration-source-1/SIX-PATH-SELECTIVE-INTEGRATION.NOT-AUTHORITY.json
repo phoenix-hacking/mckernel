@@ -1,0 +1,124 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "READY_PRIVATE_SHM12_SELECTIVE_CURRENT115_SOURCE_NOT_ADOPTED",
+  "writes": [
+    {
+      "relative": "arch/x86_64/kernel/syscall.c",
+      "preimage": {
+        "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+        "bytes": 117757,
+        "sha256": "d060dbf5b83e29b1d5f16e7504972f05cb53d553fb754de1a67566d2c0f06b37"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-shmget-current115-default-integration-source-1/candidate/arch/x86_64/kernel/syscall.c",
+        "bytes": 117955,
+        "sha256": "8d24cb88289de08ac581eaa9a88de7690a05b54db4897069e06a3a24ddd80561"
+      }
+    },
+    {
+      "relative": "kernel/rust/lib.rs",
+      "preimage": {
+        "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+        "bytes": 2318,
+        "sha256": "c84205fd8d0b4c729bf5598d5b6d0e578617de8e8af3a00bdcf886e69a8019e2"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-shmget-current115-default-integration-source-1/candidate/kernel/rust/lib.rs",
+        "bytes": 2381,
+        "sha256": "6dc007c983c21a43647cbc3864b27a5ff794a085aa2edf1eeb94057f87ac4b60"
+      }
+    },
+    {
+      "relative": "kernel/CMakeLists.txt",
+      "preimage": {
+        "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+        "bytes": 40587,
+        "sha256": "98b7bd3bb16384c32f5e268e34938c981ebe89474d80f143bc9b221881500a77"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-shmget-current115-default-integration-source-1/candidate/kernel/CMakeLists.txt",
+        "bytes": 40960,
+        "sha256": "9650cc9f9d2396dfdb5ff74428de3b4e9965bf3b9910a0f6cbbcdc0f37cbd4a1"
+      }
+    },
+    {
+      "relative": "kernel/rust/f06_shmget_dispatch.rs",
+      "preimage": null,
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-shmget-current115-default-integration-source-1/candidate/kernel/rust/f06_shmget_dispatch.rs",
+        "bytes": 752,
+        "sha256": "6069b676a090b703d0b8b91ff701223857a7371524a05c5f94bd932982b97c4b"
+      }
+    },
+    {
+      "relative": "scripts/f06_origin_command_profile.json",
+      "preimage": {
+        "path": "/home/holden/mckernel/scripts/f06_origin_command_profile.json",
+        "bytes": 8956,
+        "sha256": "4306a26c60fd6904c0644087d7dcfb7481b985045e216b8bec5575aafab5d418"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-shmget-current115-default-integration-source-1/candidate/scripts/f06_origin_command_profile.json",
+        "bytes": 9003,
+        "sha256": "f9f51aa43d4a572b08f26fae7340f16998044590c9c684489ed0cf4d15e17d6f"
+      }
+    },
+    {
+      "relative": "scripts/derive_f06_origin.py",
+      "preimage": {
+        "path": "/home/holden/mckernel/scripts/derive_f06_origin.py",
+        "bytes": 7565,
+        "sha256": "c5e34ad75d4685d1532f8a36d6fdd33b5b82faea5b5368830c3b5e84abed38d0"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-shmget-current115-default-integration-source-1/candidate/scripts/derive_f06_origin.py",
+        "bytes": 7565,
+        "sha256": "65e0782d72b63097f88289f0092c63acff8a369086ccfee6eaf18937e619ba37"
+      }
+    }
+  ],
+  "qualified_HOST": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/local-target-identity-reader-correction-source-1/independent-actual-host-review-1/REVIEW.json",
+    "bytes": 25267,
+    "sha256": "67fadd26e4eccc8da668fe79233125e4cdfcba6b48a904693d5ef0bebe87b503"
+  },
+  "frozen_leaf": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f06-second-family-qualification-source-1/f06_shmget_dispatch.rs",
+    "bytes": 752,
+    "sha256": "6069b676a090b703d0b8b91ff701223857a7371524a05c5f94bd932982b97c4b"
+  },
+  "frozen_C_selector": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f06-second-family-qualification-source-1/syscall.c.diff",
+    "bytes": 484,
+    "sha256": "117b8d0a43c39faf8b63d637bd3eed7b82331c884cd3bed78c0fc7386dfcbb5f"
+  },
+  "existing_provider_policy_unchanged": {
+    "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+    "bytes": 1268725,
+    "sha256": "d2522903a4a1335aa551f87c17c8e8765f9f7373fb84984b2dd062ac301004c0"
+  },
+  "generic_F03_trio_and_WAKE4_policy_writes": 0,
+  "root_lib_CMake_edit_sites": [
+    {
+      "path": "kernel/rust/lib.rs",
+      "anchor": "mod shmid_helpers;",
+      "after": "mod shmid_helpers;\n#[cfg(f06_shmget_dispatch_candidate)]\nmod f06_shmget_dispatch;"
+    },
+    {
+      "path": "kernel/CMakeLists.txt",
+      "anchor": "\t\t\t\tset_property(SOURCE \"${MCKERNEL_F06_C_SOURCE}\" APPEND PROPERTY\n\t\t\t\t    COMPILE_DEFINITIONS \"MCKERNEL_RUST_F06_OBTAIN_CLONE_CPUID\")",
+      "after": "\t\t\t\tset_property(SOURCE \"${MCKERNEL_F06_C_SOURCE}\" APPEND PROPERTY\n\t\t\t\t    COMPILE_DEFINITIONS \"MCKERNEL_RUST_F06_OBTAIN_CLONE_CPUID\")\n\t\t\t\t# Existing genuine-ABI shmget adapter; same supported profile/provider.\n\t\t\t\tlist(APPEND RUST_KERNEL_CFG \"--cfg\" \"f06_shmget_dispatch_candidate\")\n\t\t\t\tlist(APPEND RUST_KERNEL_SRCS \"${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_shmget_dispatch.rs\")\n\t\t\t\tset_property(SOURCE \"${MCKERNEL_F06_C_SOURCE}\" APPEND PROPERTY\n\t\t\t\t    COMPILE_DEFINITIONS \"MCKERNEL_RUST_F06_SHMGET_DISPATCH\")"
+    }
+  ],
+  "preserved_CPUID_arch_source": true,
+  "origin_producer_algorithm_unchanged": true,
+  "origin_profile_changes_only": [
+    "composed_arch_source_sha256",
+    "selected arch argv adds paired SHM selector"
+  ],
+  "default_selected_within_existing_supported_CPUID_branch": true,
+  "new_optional_runtime_profiles": 0,
+  "all_original_C_fallback_and_logical_line_anchors_preserved": true,
+  "actual_source_adoption": null,
+  "compiler_or_workload_execution": 0
+}

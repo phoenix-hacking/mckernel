@@ -1,3 +1,29 @@
+## CURRENT115 unlaunched review expired; holder still owned — 2026-10-28T02:43:07.164062+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+A=ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-1: resource5748/pending3db1 expired
+beforeindependentPASS; refusal91e5 sealed. No publisher/READY/RUNNER/OUTPUT/Docker/
+compiler ran. Preservecf36 unusednamespace andallpassedsource/HOST/fourcommandrecipe;
+no extension/replay. EXACTunlaunchedholder1815979/start95215128/fd3=27:4, tool11857
+stillLIVE andnotfree. NormalownedpidfdSIGINT source10772/c654 fixesexclusivejournal
+dirfsync; focusedguardianreleasepending. Rootaloneactualgrant/oneinterrupt/positive
+join, thenindependentcurrentfree beforefreshnamespace/admission. No watcher/native
+cleanup/signals or policyrestart. Largestloss is120sreviewparsing/receipt delay, not
+CPU. Finite cold-verifier+atomicreview-emission source mustbecomplete/source-reviewed
+andactuallywaitingBEFOREnextclock; aftercaptureonlyfreshdatachecks.
+
+Completed02:06–02:36: +1original235nativecase732da/534971/currentfree563d, nofile/C/data
+artifactcredit. AcceptedC80/Rust59/process31; M14files3/6/M15files1/8/practical35/35.
+F02be282 all31+16folded HOSTPASS, NEXT1159pathsource45c4/sourcee6e2+observere916 passed
+andstaticprofile022d materialized0; 145rows fetchverifiedcommita6e491ef. Noactualbuild.
+227sourceafd499 originalcancel/recovery remainsHOSTunrun; BFD67b996 currentselector
+ready(validdiagnosticcontextOPEN), acceptedSDK21/8pairsreused. F03trio93fb/callfoldcd78
+qualified; future4wakecallbacks reuse7792 WAKE3bank+onlyonenewforwarder d3c1, no duplicate
+3port. F06 finalreader finite15localpairs/19edges fcfe underindependentreview; all4
+passedcompilerobjectsand2readerfailuresretained. SameRoot48/59consumed/latestnative
+free563d untilheld-onlypositiveclosure; fixed05:36:09Z/account/debits/earlierclamps/
+realholds/permanent27:4/scratch21/oneheavy/floors. No95percentclaim.
+
 ## Original235 native accepted; qualified metadata enters115 — 2026-10-28T02:20:13.327363+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

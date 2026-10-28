@@ -1,0 +1,73 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "existing_accepted_frontier": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/independent-artifact-review-1/CORE-ARTIFACT-READBACK.json",
+    "bytes": 1314665,
+    "sha256": "e741e81d8992eb43ad1b09db24a56e6cf813801f897a90b43dcb9b522aa240fb"
+  },
+  "actual_selected_C": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+    "bytes": 359600,
+    "sha256": "0109b8edb2d6dbb75cb0416146b8545ee25989ebe53e9a13499f5fcda3df737a"
+  },
+  "target_definitions": {
+    "ptrace_wakeup_clear_saved_bridge": [
+      {
+        "name": "ptrace_wakeup_clear_saved_bridge",
+        "kind": 2,
+        "bind": 0,
+        "ndx": 1,
+        "value": 1472,
+        "size": 12
+      }
+    ],
+    "ptrace_wakeup_set_single_step_bridge": [
+      {
+        "name": "ptrace_wakeup_set_single_step_bridge",
+        "kind": 2,
+        "bind": 0,
+        "ndx": 1,
+        "value": 1456,
+        "size": 12
+      }
+    ],
+    "ptrace_wakeup_trace_syscall_bridge": [
+      {
+        "name": "ptrace_wakeup_trace_syscall_bridge",
+        "kind": 2,
+        "bind": 0,
+        "ndx": 1,
+        "value": 1440,
+        "size": 12
+      }
+    ],
+    "ptrace_wakeup_pending_take_bridge": [
+      {
+        "name": "ptrace_wakeup_pending_take_bridge",
+        "kind": 2,
+        "bind": 0,
+        "ndx": 1,
+        "value": 1424,
+        "size": 12
+      }
+    ]
+  },
+  "current_real_consumer": [
+    {
+      "name": "ptrace_wakeup_sig",
+      "kind": 2,
+      "bind": 0,
+      "ndx": 1,
+      "value": 1152,
+      "size": 249
+    }
+  ],
+  "expected_selected_C_function_delta": "61\u219257 for this private exact114+WAKE3+step slice only; predicted until actualcompiler/defaultlink",
+  "new_Rust_algorithm_count": 0,
+  "banked_Rust_three_reimplemented": false,
+  "new_typed_forwarder_count": 1,
+  "new_architecture_provider_body_changes": 0,
+  "production_default_object_image_native": "OPEN",
+  "ordinaryHOST_compile_or_runtime_run": 0,
+  "runtime_authority": null
+}
