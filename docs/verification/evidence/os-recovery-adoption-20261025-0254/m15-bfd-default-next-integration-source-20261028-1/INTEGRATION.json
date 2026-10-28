@@ -1,0 +1,129 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "predecessor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-current-default-selector-preparation-source-1/SOURCE-READY.json",
+    "bytes": 5781,
+    "sha256": "67b99680016b85c606757e8fd58c176638c5208fe473f91707217b193dec731e"
+  },
+  "acceptance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ACTUAL-BFD-SDK21-INDEPENDENT-ARTIFACT-AND-BEHAVIOR-ACCEPTANCE.json",
+    "bytes": 2083,
+    "sha256": "1231c1f6aae61548964d19c8feab74bef96e94cc21c4c853a1841df3b6e04c8e"
+  },
+  "canonical_preimage": {
+    "path": "/home/holden/mckernel/executer/user/CMakeLists.txt",
+    "bytes": 27799,
+    "sha256": "1208a097f57f5b9d3deee4d23fc55c7c598d8a88aab9002d4c65ae13a36cea57"
+  },
+  "sites": [
+    {
+      "before": "\t\tset(MCINSPECT_RUST_OBJ \"${CMAKE_CURRENT_BINARY_DIR}/rust/mcinspect_helpers.o\")",
+      "after": "\t\tinclude(\"${CMAKE_CURRENT_SOURCE_DIR}/cmake/BfdRustAccessors.cmake\")\n\t\tset(MCINSPECT_RUST_OBJ \"${CMAKE_CURRENT_BINARY_DIR}/rust/mcinspect_helpers.o\")"
+    },
+    {
+      "before": "\t\tlist(APPEND MCINSPECT_SRCS mcinspect_bfd_shim.c)",
+      "after": "\t\tlist(APPEND MCINSPECT_SRCS \"${BFD_RUST_OBJ}\")"
+    },
+    {
+      "before": "\t\tlist(APPEND ECLAIR_SRCS eclair_bfd_shim.c)",
+      "after": "\t\tlist(APPEND ECLAIR_SRCS \"${BFD_RUST_OBJ}\")"
+    },
+    {
+      "before": "\tadd_dependencies(mcinspect mcinspect_rust_helpers)",
+      "after": "\tadd_dependencies(mcinspect mcinspect_rust_helpers bfd_rust_accessors)\n\tset_target_properties(mcinspect PROPERTIES LINKER_LANGUAGE C)"
+    },
+    {
+      "before": "\tadd_dependencies(eclair eclair_rust_helpers)",
+      "after": "\tadd_dependencies(eclair eclair_rust_helpers bfd_rust_accessors)\n\tset_target_properties(eclair PROPERTIES LINKER_LANGUAGE C)"
+    }
+  ],
+  "preserved_sources": [
+    {
+      "relative": "executer/user/mcinspect_bfd_shim.c",
+      "actual": {
+        "path": "/home/holden/mckernel/executer/user/mcinspect_bfd_shim.c",
+        "bytes": 306,
+        "sha256": "4bc272746c75f53d563b5f557fc20bdede364cb7ca532cc8b407e62cf256835d"
+      },
+      "accepted_bank_sha256": "4bc272746c75f53d563b5f557fc20bdede364cb7ca532cc8b407e62cf256835d"
+    },
+    {
+      "relative": "executer/user/eclair_bfd_shim.c",
+      "actual": {
+        "path": "/home/holden/mckernel/executer/user/eclair_bfd_shim.c",
+        "bytes": 297,
+        "sha256": "e2317b32f6fde2d2998e7ccbc69a2a903cdf881b08d19b08eb5d5c9ac86a5e1e"
+      },
+      "accepted_bank_sha256": "e2317b32f6fde2d2998e7ccbc69a2a903cdf881b08d19b08eb5d5c9ac86a5e1e"
+    },
+    {
+      "relative": "executer/user/rust/mcinspect_helpers.rs",
+      "actual": {
+        "path": "/home/holden/mckernel/executer/user/rust/mcinspect_helpers.rs",
+        "bytes": 98836,
+        "sha256": "7449e7856d6699ee9fa245a75f3e63488fb42603b0e19c574bf148c9d84a9590"
+      },
+      "accepted_bank_sha256": "7449e7856d6699ee9fa245a75f3e63488fb42603b0e19c574bf148c9d84a9590"
+    },
+    {
+      "relative": "executer/user/rust/eclair_helpers.rs",
+      "actual": {
+        "path": "/home/holden/mckernel/executer/user/rust/eclair_helpers.rs",
+        "bytes": 90194,
+        "sha256": "9f1f3b1bd2e496f9e4485535af4f3dd73bfcf975887ba9cdfed6a33d64940d0e"
+      },
+      "accepted_bank_sha256": "9f1f3b1bd2e496f9e4485535af4f3dd73bfcf975887ba9cdfed6a33d64940d0e"
+    },
+    {
+      "relative": "executer/user/rust/arch_eclair_x86_64.rs",
+      "actual": {
+        "path": "/home/holden/mckernel/executer/user/rust/arch_eclair_x86_64.rs",
+        "bytes": 7574,
+        "sha256": "48e1af9fa7ec6c026a7a3c7657e147e04c905573ee5c08a7bcca4f5a57c634dd"
+      },
+      "accepted_bank_sha256": "48e1af9fa7ec6c026a7a3c7657e147e04c905573ee5c08a7bcca4f5a57c634dd"
+    }
+  ],
+  "changes": [
+    {
+      "relative": "executer/user/CMakeLists.txt",
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/candidate/executer/user/CMakeLists.txt",
+        "bytes": 28027,
+        "sha256": "a77da8f2ccaf54997c043cf30c22c8e67fedd3b7b318b54709df2820f29f5e4b"
+      },
+      "preimage": {
+        "path": "/home/holden/mckernel/executer/user/CMakeLists.txt",
+        "bytes": 27799,
+        "sha256": "1208a097f57f5b9d3deee4d23fc55c7c598d8a88aab9002d4c65ae13a36cea57"
+      }
+    },
+    {
+      "relative": "executer/user/cmake/BfdRustAccessors.cmake",
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/candidate/executer/user/cmake/BfdRustAccessors.cmake",
+        "bytes": 2626,
+        "sha256": "325d811a58fa96cc6543825d88963ee0167be2d93ff5ddd8cd35f8c2089d5f4d"
+      },
+      "preimage": null
+    },
+    {
+      "relative": "executer/user/cmake/bfd_layout_witness.c",
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/candidate/executer/user/cmake/bfd_layout_witness.c",
+        "bytes": 2115,
+        "sha256": "4fd1248188a4ccf23fa576a9bb849fa5f9bbaa1fee69ad949a9c94b9f95989b9"
+      },
+      "preimage": null
+    },
+    {
+      "relative": "executer/user/rust/bfd_accessors.rs",
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-bfd-default-next-integration-source-20261028-1/candidate/executer/user/rust/bfd_accessors.rs",
+        "bytes": 2400,
+        "sha256": "f75c6ed4d793eaa1a906a0752dce079efef9aab2897888ffd9ccfc45f03a561b"
+      },
+      "preimage": null
+    }
+  ]
+}
