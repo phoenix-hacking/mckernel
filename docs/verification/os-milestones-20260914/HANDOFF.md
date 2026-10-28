@@ -2,6 +2,34 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
 
+## Twenty-minute checkpoint and retained retirement failure — 2026-10-28T21:16Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Bucket20:56:28.104491–21:16:28.104491: six actual HOST commands, five successful
+and one retained fixture-link failure. F03 BODY7 completed1800C/Rustpairs plus
+ABI20/one metadata check/four disabled-invalid-pointer calls. F06 corrected partial
+link and144pairs completed in the following bucket; do not count them twice.
+Production/default/native/file/C-retirement deltas0. Practical35/35, M14files4/6,
+M15files1/8; accepted compute116/C71/Rust68 and BFDf920 links unchanged.
+
+Producer-to-current-free wait at bucket end88m16.907s; actual producer wall8.201202s/
+CPU8.009559s remains separate. First HOST compiler15m31.301s after relaunch;
+first production configure36m50.980s; original30min baseline and stopped downtime
+41784.995s retained. No95percent claim. Measured snapshot host137.46GiB/scratch44.57GiB
+free, above16/12GiB floors. Exact resource records in STEERING-20261028T211628.json.
+
+After bucket, retirement attempt2 parent2153594/birth101972261 joined1 after2.460s:
+four read-only query children positively joined0; no removal claim/removal.
+Exact Labels/Env equal pinned image; inherited mckernel.owner=c56c... was incorrectly
+required absent. FAILED-ATTEMPT-2 9c2f8338 and pending71-nonce ledger62ff5bbe preserve
+all custody and prior365/1fbee chain. Empty own27:4 rows do not establish clearance.
+One bounded profile correction requires exact inherited configuration/no overrides;
+its label is never BFD job ownership. bfd_route owns correction, bfd_review release,
+Root exact mutation; m14_compose updates full current observer bindings. No workload
+entry until genuine retirement, parent join and fresh independent current-free proof.
+Concrete scheduling adjustment: finish this narrow correction/release before further
+integration handoffs; F03/F06 private BODY8 source/HOST work proceeds independently.
+
 ## Retirement attempt stopped before query — 2026-10-28T20:56Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

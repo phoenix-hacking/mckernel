@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/retire_exact_bfd_stopped_container.py", line 446, in <module>
+    if __name__=='__main__':raise SystemExit(main())
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/retire_exact_bfd_stopped_container.py", line 438, in main
+    result=transaction(ops);complete=True;print(json.dumps(dict(status='RETIREMENT_COMPLETE_PENDING_PARENT_JOIN_AND_FRESH_CURRENT',result=result)));return 0
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/retire_exact_bfd_stopped_container.py", line 415, in transaction
+    ops.acquire();ops.safe();ops.census('PREINSPECT-1',True);ops.logs();proof,_=ops.census('PREINSPECT-2',True)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/retire_exact_bfd_stopped_container.py", line 385, in census
+    validate_profile(inspected[0],image[0],self.b,self.p,self.profile,self.claim,self.terminal)
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/retire_exact_bfd_stopped_container.py", line 76, in validate_profile
+    need(c.get('Labels')==image['Config'].get('Labels') and (c.get('Labels') or {}).get('mckernel.owner') is None and c.get('Env')==image['Config'].get('Env'),'unchanged image labels/env; no fabricated owner label')
+  File "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/retire_exact_bfd_stopped_container.py", line 17, in need
+    if not ok:raise Refusal(why)
+__main__.Refusal: unchanged image labels/env; no fabricated owner label
