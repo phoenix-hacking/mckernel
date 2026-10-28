@@ -2,6 +2,32 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
 
+## Tactical steering follow-up — 2026-10-28T23:51Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+23:16:28–23:36:28 bucket: production/default/native/file/C-retirement delta0;
+CURRENT116 C71/Rust68, M14 4/6, M15 1/8 unchanged. A2 holder/verifier actually
+joined after the bucket; nonce1d3f abandoned without compiler/container/READY.
+Checkpoint7ce4bff1b verified at origin. M15 collector compile reviewcd8c4ce4 PASS
+for its one23:09:58 HOST compiler only (previous bucket); behavior remains unrun.
+
+Exact A3 blocker: typed boundary authenticates old Root63's93 actors but does not
+consume the later A2 closed-custody frontier or reject its abandoned nonce.
+Owner m14_compose implements only the missing supplement/nonce/fresh-census
+predicates; m14_review independently reviews. Preserve all71 consumed/native
+history, original full capture and120s. New A3 nonce e984210ca59641b299cf42d392eb953b
+reserved UNUSED; no admission/capture/grant. All reservation DATA prepared before
+clock, then Root one-tool physical→holder→fill→held→publisher after exact release.
+This corrects113.985610s physical-to-input handoff; no validated fix yet.
+
+Independent actual turns: f03_next privateBODY12, f06_next privateBODY11,
+m15_consumer SDK11 source/component/authentic Git-mount adoption command.
+No SDK/export/origin/cleanup replay. Largest measured wait remains BFD producer
+8.201202s versus7352.546147s to accepted current-free. Exact ready-to-entry and
+failure-to-validated-fix unavailable while not fully ready. Original30minbaseline,
+stopped41784.995407s, deadline06:00Z/cumulative credits/sole controls unchanged;
+no95percent claim. Details: restart-adoption-20261028T1911/STEERING-20261028T233628-TACTICAL-FOLLOWUP.json.
+
 ## Actual failed CURRENT118 attempt retired — 2026-10-28T23:41Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
