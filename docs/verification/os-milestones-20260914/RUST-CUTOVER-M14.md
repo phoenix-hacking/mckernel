@@ -1,3 +1,5 @@
+Current supported artifact (2026-10-28): CURRENT115 independentlyaccepted b9ed6b2e/Rootaae76 has C79(61kernel+18arch)/Rust60 and process0 runtimeCfunctions/objects;48B toolchain GNU-propertyNOTE remains. All31 last processmetadata owners/registry/currentconsumers pass. Applicable matching-native proof on image de9fdd13 is still required for F02 wholefile; old60e native is historical. M14 files3/6(F01/F04/F05), M15 files1/8, practical35/35 remain separate.
+
 Current supported-file checkpoint (2026-10-27): F01 and F04 are complete at their original supported scopes. F04 uses independently accepted diagnostic FP-value/trace/retirement proof on image26eb. The whole FP run remains FAIL because declared4096 and actual1024 stream caps differ; no application/full-protocol native PASS is claimed. See `evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json`. M14 remains OPEN; current selected syscall C function counts are75/31 and process metadata71. Historical unassessed entries below retain their original dates.
 
 ## Engineering cursor — 2026-10-24T23:14Z

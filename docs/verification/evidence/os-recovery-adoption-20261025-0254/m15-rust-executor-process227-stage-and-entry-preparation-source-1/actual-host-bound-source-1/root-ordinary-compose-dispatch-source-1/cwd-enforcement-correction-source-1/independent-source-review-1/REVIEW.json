@@ -1,0 +1,64 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE_PROFILE_EXACT_ONE227_ORDINARY_COMPOSE_CWD_CORRECTED",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/custody_release_review",
+  "runtime_authority": null,
+  "reviewed_source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/cwd-enforcement-correction-source-1/SOURCE-READY.json",
+    "bytes": 3094,
+    "sha256": "86601f47d85e0b74c1305120ce92136aaae2efee641f66f019990af49e00399f"
+  },
+  "reviewed_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/cwd-enforcement-correction-source-1/PROFILE.NOT-GRANTED.json",
+    "bytes": 16888,
+    "sha256": "14432ba87d56d94f16b2429b5641b21c10278f0033e6b61b3e32406e9ce63277"
+  },
+  "reviewed_runner": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/cwd-enforcement-correction-source-1/run_one_compose.py",
+    "bytes": 5666,
+    "sha256": "3c29f691bdc4a6815d1884366adaf5aa5cdc9cbdb5d82eb66f1f4fea6de40bc1"
+  },
+  "reviewed_invoker": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/cwd-enforcement-correction-source-1/invoke_actual_compose.py",
+    "bytes": 743,
+    "sha256": "c3a5e1aea6201c2ea549937ae91da68c96a686da66f043934e4833658339a97f"
+  },
+  "reviewed_Root_commands": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/cwd-enforcement-correction-source-1/ROOT-NEXT.EXECUTABLE-COMMANDS.NOT-GRANTED.json",
+    "bytes": 7076,
+    "sha256": "a628e7f01f799247d032f83bd494b1c54d18386d6750418fc37f4b3b8a84272a"
+  },
+  "preserved_original_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/independent-source-review-1/REVIEW.json",
+    "bytes": 6584,
+    "sha256": "4127cd78fc104c1d6982297b773fee917efb9537b1fd3e1bda74a45178177c77"
+  },
+  "closed_finding": "os.chdir(command[\"cwd\"]) now immediately precedes original990 owned_capture. The child inherits the exact sealed cwd as with successful6e98. D parent adaptation retains original ordinary helper, capture, output and binder roots.",
+  "independent_source_checks": {
+    "reverse_AST_exact_original_after_removing_one_chdir_and_path_adaptation": true,
+    "profile_only_runner_ref_changed": true,
+    "commands_cwd_output_capture_inputs_identical": true,
+    "input_pins": 33,
+    "new_grant_template_exact_profile_and_runner_hashes": true,
+    "actual_grant_unbound": true,
+    "original_runner_profile_and_review_immutable": true
+  },
+  "reused_reviewed_scope": [
+    "Same exact generic46d compose argv and genuine qualifiedab3e/e5d/base with original227 payload6abb/expected227B4eba; only235 payload path/SHA/output differences retained.",
+    "Existing6e98 profile/grant and original account/window/resource admission preserved; exactRootcurrentledger/free/nonce/CPU6 exclusion/reservations remain fresh actualRoot inputs.",
+    "One sequential CPU6 compose; AS2GiB, CPU60, wall90, effective FSIZE32MiB, CORE0 and64PID reservation; aggregate7jobs/21.6619GiB unchanged. No compiler/payload/native execution.",
+    "Guard precedes fresh output/capture creation. Original990 owns direct child/group, bounded retirement and closed streams before reading captures. No automatic retry or successful-prefix replay.",
+    "Full actual dynamicJSON stdout bytes retained unchanged as receipt; finalmap required, overlaydigest checked; subsequent exact941a binder uses actual receipt hash and full bytes, not a fixed oracle or fabricated hash."
+  ],
+  "compose_commands": 1,
+  "compiler_commands": 0,
+  "actual_Root_grant": null,
+  "actual_resources": null,
+  "actual_operation_nonce": null,
+  "actual_compose": null,
+  "actual_native_authority": null,
+  "performed": "Focused delta read, selected source hashes, reverse AST and JSON metadata equality only. No guard/query/grant/compose/compiler/test replay/workload/binder/canonical/Git action.",
+  "remaining": "Root alone supplies actual current source/account/resources/CPU6 grant and invokes once under the existing reviewed ordinary profile. This receipt accepts source/profile only and grants no native or later workload."
+}

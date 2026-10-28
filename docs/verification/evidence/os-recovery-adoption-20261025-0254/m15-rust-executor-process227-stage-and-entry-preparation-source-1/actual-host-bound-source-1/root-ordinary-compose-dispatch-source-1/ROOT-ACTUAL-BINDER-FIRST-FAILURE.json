@@ -1,0 +1,32 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "at": "2026-10-28T04:21:44.443654+00:00",
+  "actual_compose_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/future-capture-1/ACTUAL-COMPOSE-RESULT.json",
+    "bytes": 3596,
+    "sha256": "2afd5f7fb1ffb3501bda6071b135e055262a681a6fa2f09f7c07eff737ba3728"
+  },
+  "actual_binder_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--",
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/bind_actual_compose.py"
+  ],
+  "returncode": 1,
+  "failure": "ValueError: retained exact case contract",
+  "source_location": "m15-mcexec-default-f4d-actual-native-preparation-source-1/validate_staged_executor_binding.py:26",
+  "actual_observation": "executor_contract.cases lacks exact original227 manifest case_id at supplemental binding validation",
+  "before_native_admission": true,
+  "compose_replay_required": false,
+  "correction_owner": "/root/mcexec_default_prepare",
+  "runtime_authority": null
+}

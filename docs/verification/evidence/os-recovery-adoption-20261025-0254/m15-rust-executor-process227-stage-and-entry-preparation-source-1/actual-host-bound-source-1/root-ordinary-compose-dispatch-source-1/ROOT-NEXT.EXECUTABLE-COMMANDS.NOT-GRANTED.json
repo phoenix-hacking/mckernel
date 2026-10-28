@@ -1,0 +1,94 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "runtime_authority": null,
+  "actual_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/PROFILE.NOT-GRANTED.json",
+    "bytes": 16852,
+    "sha256": "207a05934cc6ec8baf9613cf95d9ce209330044532672d9618dca369d1dee7b8"
+  },
+  "knowncurrent_context": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/KNOWN-CURRENT-CONTEXT.NOT-AUTHORITY.json",
+    "bytes": 934,
+    "sha256": "373b46b04fc64aa3e6d8db971040af232cf90023ec71592962b5ddc682e66b08"
+  },
+  "Root_data_only_fill": {
+    "grant_template": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/ROOT-ORDINARY-GRANT.TEMPLATE.NOT-AUTHORITY.json",
+    "actual_grant": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/ROOT-ACTUAL-ONE-COMPOSE-GRANT.json",
+    "fresh_CPU6_exclusion_template": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/ROOT-CPU6-EXCLUSION.TEMPLATE.NOT-AUTHORITY.json",
+    "actual_exclusion": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/ROOT-ACTUAL-CPU6-EXCLUSION.json",
+    "only_fresh_slots": [
+      "current_nonce_ledger",
+      "current_native_free",
+      "nonce",
+      "authorized/authorized_by",
+      "issued_wall/expires_wall",
+      "actualcpu6exclusion",
+      "reserved_jobs_other/reserved_GiB_other/heavy_jobs_current"
+    ]
+  },
+  "Root_prepare_known_output_ancestor": [
+    "/usr/bin/mkdir",
+    "-p",
+    "--mode=700",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/stage-source"
+  ],
+  "Root_one_compose": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/invoke_actual_compose.py"
+  ],
+  "subsequent_literal_binder_dispatch": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--",
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/bind_actual_compose.py"
+  ],
+  "binder_argv_derivation": "Exact qualified941ad --bind-existing-root-composition --receipt expected_overlay.json --receipt-sha256 hashofACTUALcompleteRootstdoutreceipt; logsactualargvbeforeexec",
+  "compose_command": {
+    "id": "compose227-once-retained46d-fullmap",
+    "argv": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_overlay.py",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/root-adopted-stage-source-1/offline-materialization-1/current110-f05-mm-base.cpio.gz",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-227/payload.snapshot",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-host-preparation-source-1/future-output-1/process235-supervisor",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-mcexec-default-f4d-root-adoption-1/root-binding-preparation-new12h-1/runtime-execution-preparation-1/legacy-reader-binding-correction-source-1/cohort/workspace/native-running-modules-candidate-7d21874e10a4f79465c03c4a499373b3/output/mcexec-default-install-1/usr/local/bin/mcexec",
+      "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/stage-source/root-actual-compose-1/process227-overlay.cpio.gz",
+      "--collector-sha256",
+      "ab3e775e6a9df8d36bbbb974ddafbb26493c24f1aaf49487f5fc27c5583bed6c",
+      "--mcexec-sha256",
+      "e5d18169ee50581274b374bba17fcefebe39e828885f367bfee182beaa3df756",
+      "--payload-sha256",
+      "6abb5e9046444c64d72139f85fcae9e4796eff7ceb5cc2dd1e5b1a47ef3695a5",
+      "--base-sha256",
+      "a6377bfe9735b5b6a8183d3f710305b78093512ab378a9529c38e88b13f15b37",
+      "--base-size",
+      "13308321",
+      "--base-cpio-sha256",
+      "d983c1747414b3a676676108de2cf91a98983698356a2353aab03e236f83b31c",
+      "--base-cpio-size",
+      "44428264"
+    ],
+    "cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1",
+    "leaf": "F227ComposeOnly",
+    "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. One exact original generic46d overlay composition from actualqualified ab3e collector and original227 payload; no compiler/payload/native execution.",
+    "wall": 90,
+    "argv_compact_json_LF_sha256": "6ff5bcf84814efb17f32d57d0fbd0f994d79082086b58d850706527dbd77770e"
+  },
+  "exact_output_parent": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/stage-source/root-actual-compose-1",
+  "exact_capture_parent": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/future-capture-1",
+  "actual_grant": null,
+  "actual_compose_result": null,
+  "actual_binder_result": null,
+  "native_release": null
+}

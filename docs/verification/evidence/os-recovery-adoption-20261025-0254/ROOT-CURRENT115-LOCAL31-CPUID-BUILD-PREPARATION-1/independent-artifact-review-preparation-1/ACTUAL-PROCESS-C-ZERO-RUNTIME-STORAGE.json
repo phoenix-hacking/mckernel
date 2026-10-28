@@ -1,0 +1,89 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_ACTUAL_CURRENT115_SELECTED_PROCESS_C_ZERO_RUNTIME_FUNCTION_OBJECT_AND_ALLOCATED_BYTES",
+  "independent": true,
+  "reviewer": "/root/current110_execution_review",
+  "actual_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/PROFILE.SOURCE-ONLY.json",
+    "bytes": 112642,
+    "sha256": "962a36fa1fffe62c8f6c3d6b6f98a2440689fd81e407cf6476be9a35e33247f6"
+  },
+  "actual_process_C_object": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+    "bytes": 2864,
+    "sha256": "3717ed77bd1761c734e93a72d4e5a0b770698f17760470286019f6ec6a6973dd"
+  },
+  "actual_four_command_join": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/ROOT-ACTUAL-TOOL-RESULT.json",
+    "bytes": 2325,
+    "sha256": "d871dbbb42e7e4866d8b433da58538162d1dfef224925147920bae21cfa5af81"
+  },
+  "allocated_OBJECT_definitions": [],
+  "allocated_FUNCTION_definitions": [],
+  "nonempty_ALLOC_sections": [
+    {
+      "name_off": 164,
+      "type": 7,
+      "flags": 2,
+      "addr": 0,
+      "offset": 752,
+      "size": 48,
+      "link": 0,
+      "info": 0,
+      "align": 8,
+      "entsize": 0,
+      "index": 15,
+      "name": ".note.gnu.property"
+    }
+  ],
+  "compiler_property_NOTE_bytes": 48,
+  "compiler_property_NOTE_raw_hex": "040000002000000005000000474e5500020001c0040000000000000000000000010001c0040000000100000000000000",
+  "compiler_property_NOTE_byte_equal_accepted114": true,
+  "non_note_runtime_code_data_allocated_bytes": 0,
+  "exact_previous31_C_OBJECTs_transferred_to_Rust": [
+    "process_clone_vm_debug",
+    "process_clone_ranges_debug",
+    "process_clone_ranges_ok_debug",
+    "process_clone_sigcommon_debug",
+    "process_clone_sigshared_debug",
+    "process_copy_pte_found_debug",
+    "process_copy_pte_size_debug",
+    "process_copy_pte_allocated_debug",
+    "process_copy_pte_zeroed_debug",
+    "process_copy_pte_copied_debug",
+    "process_copy_pte_installed_debug",
+    "process_extend_region_exists_debug",
+    "process_extend_region_alloc_debug",
+    "process_extend_region_success_debug",
+    "process_clone_config",
+    "process_copy_entry_config",
+    "process_extend_region_entry_config",
+    "process_schedule_exit_debug_input",
+    "process_sched_timer_configuration",
+    "process_init_stack_entry_config",
+    "process_init_stack_free_line",
+    "process_init_stack_free_file",
+    "process_init_stack_alloc_line",
+    "process_init_stack_alloc_file",
+    "process_page_fault_anon_alloc_file",
+    "process_page_fault_cow_alloc_line",
+    "process_page_fault_cow_alloc_file",
+    "process_remap_free_line",
+    "process_remap_free_file",
+    "process_add_range_arch_memclear_callback",
+    "process_tracked_allocator_source_file"
+  ],
+  "storage_final_image_proof": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/independent-artifact-review-preparation-1/ACTUAL-STORAGE-REGISTRY-PRODUCER-PREFIX.json",
+    "bytes": 274554,
+    "sha256": "6fd3052a59d2fad672878f219a098446967781f84ffc20e36efc6c7c23fcf7ce"
+  },
+  "qualified_fields_and_current_folded_dataflow_proof": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/independent-artifact-review-preparation-1/ACTUAL-PRLIMIT-DATA-FOLDED-WARNING-SUPPLEMENT.json",
+    "bytes": 79843,
+    "sha256": "e2aca758fd628aeee3ef25b6d4d4bfba7d422b8f62a3b88d338130daf3b76bef"
+  },
+  "native_or_wholefile_contract_evaluation": false,
+  "wholefile_contract_evaluator_must_assess_original_supported_config_and_native_requirements": true,
+  "runtime_authority": null
+}

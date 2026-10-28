@@ -1,0 +1,19 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/run_one_compose.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/actual-host-bound-source-1/root-ordinary-compose-dispatch-source-1/cwd-enforcement-correction-source-1/run_one_compose.py
+@@ -4,7 +4,7 @@
+ """
+ from pathlib import Path
+ import argparse,hashlib,importlib.util,json,os,resource,signal,time
+-D=Path(__file__).resolve().parent
++D=Path(__file__).resolve().parent.parent
+ E=D.parents[2]
+ ORD=E/'ordinary-host-new12h-runner-source-1/run_new12h_host.py'
+ ORD_SHA='6e98a1fbcbce2e822a815a05516287e7122cbd8e06d43277134b27b70cf3ad34'
+@@ -46,6 +46,7 @@
+  def limits():
+   r.limits() # Original CPU6/AS2GiB/CPU60/CORE0; preserve stricter235 FSIZE32MiB.
+   resource.setrlimit(resource.RLIMIT_FSIZE,(32*2**20,32*2**20))
++ os.chdir(command['cwd'])
+  joined=capture.owned_capture(command,step,90,limits);write(step/'whole-join.json',joined)
+  write(cap/'RESULTS.json',dict(status='JOINED_COMPOSE_PENDING_RECEIPT_BINDING',results=[dict(index=0,leaf=command['leaf'],join=joined)],native_acceptance=False))
+  need(joined['returncode']==0 and joined['direct_child_joined'] and joined['group_absent'] and joined['closed_streams'] and not joined['error'] and not joined['retirement_error'],'first compose failure; preserve no retry')

@@ -1,0 +1,11 @@
+--- a/kernel/rust/lib.rs
++++ b/kernel/rust/lib.rs
+@@ -53,6 +53,8 @@
+ mod rlimit_helpers;
+ mod sched_helpers;
+ mod shmid_helpers;
++#[cfg(f06_shmget_dispatch_candidate)]
++mod f06_shmget_dispatch;
+ mod shmobj;
+ mod smp_ikc;
+ mod spinlock_helpers;

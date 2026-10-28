@@ -1,0 +1,677 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_READ_ONLY_WAKE4_RAW_ELF_AND_CAPTURE_JOIN_PREDICATES",
+  "ABI_words": [
+    4,
+    4,
+    8,
+    8,
+    8,
+    8,
+    5568,
+    64,
+    4384,
+    4296,
+    4624,
+    5032,
+    5024,
+    224,
+    8,
+    200
+  ],
+  "real_current_consumer": {
+    "name": "ptrace_wakeup_sig",
+    "kind": 2,
+    "bind": 0,
+    "ndx": 1,
+    "value": 1840,
+    "size": 331
+  },
+  "selected_real_callback_relocations": {
+    "ptrace_wakeup_clear_saved_bridge": [
+      {
+        "section": ".text",
+        "offset": 2063,
+        "relocation_type": 27,
+        "addend": 0
+      }
+    ],
+    "ptrace_wakeup_set_single_step_bridge": [
+      {
+        "section": ".text",
+        "offset": 2049,
+        "relocation_type": 27,
+        "addend": 0
+      }
+    ],
+    "ptrace_wakeup_trace_syscall_bridge": [
+      {
+        "section": ".text",
+        "offset": 2021,
+        "relocation_type": 27,
+        "addend": 0
+      }
+    ],
+    "ptrace_wakeup_pending_take_bridge": [
+      {
+        "section": ".text",
+        "offset": 1993,
+        "relocation_type": 27,
+        "addend": 0
+      }
+    ]
+  },
+  "owners": [
+    {
+      "name": "ptrace_wakeup_clear_saved_bridge",
+      "Rust": {
+        "name": "ptrace_wakeup_clear_saved_bridge",
+        "kind": 2,
+        "bind": 1,
+        "ndx": 3644,
+        "value": 0,
+        "size": 26
+      },
+      "selected_joint": {
+        "name": "ptrace_wakeup_clear_saved_bridge",
+        "kind": 2,
+        "bind": 1,
+        "ndx": 3644,
+        "value": 0,
+        "size": 26
+      },
+      "fallback_C": {
+        "name": "ptrace_wakeup_clear_saved_bridge",
+        "kind": 2,
+        "bind": 0,
+        "ndx": 1,
+        "value": 2432,
+        "size": 52
+      },
+      "fallback_joint": {
+        "name": "ptrace_wakeup_clear_saved_bridge",
+        "kind": 2,
+        "bind": 0,
+        "ndx": 2,
+        "value": 2464,
+        "size": 52
+      }
+    },
+    {
+      "name": "ptrace_wakeup_set_single_step_bridge",
+      "Rust": {
+        "name": "ptrace_wakeup_set_single_step_bridge",
+        "kind": 2,
+        "bind": 1,
+        "ndx": 3650,
+        "value": 0,
+        "size": 34
+      },
+      "selected_joint": {
+        "name": "ptrace_wakeup_set_single_step_bridge",
+        "kind": 2,
+        "bind": 1,
+        "ndx": 3650,
+        "value": 0,
+        "size": 34
+      },
+      "fallback_C": {
+        "name": "ptrace_wakeup_set_single_step_bridge",
+        "kind": 2,
+        "bind": 0,
+        "ndx": 1,
+        "value": 2368,
+        "size": 52
+      },
+      "fallback_joint": {
+        "name": "ptrace_wakeup_set_single_step_bridge",
+        "kind": 2,
+        "bind": 0,
+        "ndx": 2,
+        "value": 2400,
+        "size": 52
+      }
+    },
+    {
+      "name": "ptrace_wakeup_trace_syscall_bridge",
+      "Rust": {
+        "name": "ptrace_wakeup_trace_syscall_bridge",
+        "kind": 2,
+        "bind": 1,
+        "ndx": 3655,
+        "value": 0,
+        "size": 37
+      },
+      "selected_joint": {
+        "name": "ptrace_wakeup_trace_syscall_bridge",
+        "kind": 2,
+        "bind": 1,
+        "ndx": 3655,
+        "value": 0,
+        "size": 37
+      },
+      "fallback_C": {
+        "name": "ptrace_wakeup_trace_syscall_bridge",
+        "kind": 2,
+        "bind": 0,
+        "ndx": 1,
+        "value": 2304,
+        "size": 52
+      },
+      "fallback_joint": {
+        "name": "ptrace_wakeup_trace_syscall_bridge",
+        "kind": 2,
+        "bind": 0,
+        "ndx": 2,
+        "value": 2336,
+        "size": 52
+      }
+    },
+    {
+      "name": "ptrace_wakeup_pending_take_bridge",
+      "Rust": {
+        "name": "ptrace_wakeup_pending_take_bridge",
+        "kind": 2,
+        "bind": 1,
+        "ndx": 3645,
+        "value": 0,
+        "size": 39
+      },
+      "selected_joint": {
+        "name": "ptrace_wakeup_pending_take_bridge",
+        "kind": 2,
+        "bind": 1,
+        "ndx": 3645,
+        "value": 0,
+        "size": 39
+      },
+      "fallback_C": {
+        "name": "ptrace_wakeup_pending_take_bridge",
+        "kind": 2,
+        "bind": 0,
+        "ndx": 1,
+        "value": 2240,
+        "size": 52
+      },
+      "fallback_joint": {
+        "name": "ptrace_wakeup_pending_take_bridge",
+        "kind": 2,
+        "bind": 0,
+        "ndx": 2,
+        "value": 2272,
+        "size": 52
+      }
+    }
+  ],
+  "retained_sections": [
+    182,
+    182
+  ],
+  "artifacts_stable": [
+    {
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/HOST-output-proposed-1/rust-selected.o",
+        "bytes": 18318216,
+        "sha256": "d9ce4f28e976102ee052e878784a254b3af3e5be9a0c5df4ee23096b973330d4"
+      },
+      "device": 66306,
+      "inode": 59802743,
+      "nlink": 1,
+      "mode": "0o600",
+      "stable_during_review": true
+    },
+    {
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/HOST-output-proposed-1/rust-fallback.o",
+        "bytes": 18311872,
+        "sha256": "0d1a7addaec30f6f8e1a2a2a012312b369736ab30e61813f9af21363a9a24947"
+      },
+      "device": 66306,
+      "inode": 59802754,
+      "nlink": 1,
+      "mode": "0o600",
+      "stable_during_review": true
+    },
+    {
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/genuine-executer-include-closure-source-1/HOST-output-proposed-1/selected.o",
+        "bytes": 375328,
+        "sha256": "c86f8fae8a03063f246ed4284be2fedbc0b36a5e7c6daf66ccd6f92cba32246b"
+      },
+      "device": 66306,
+      "inode": 59803111,
+      "nlink": 1,
+      "mode": "0o600",
+      "stable_during_review": true
+    },
+    {
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/genuine-executer-include-closure-source-1/HOST-output-proposed-1/fallback.o",
+        "bytes": 381960,
+        "sha256": "10b01a3ae8c059d385109483e35eb2b1b7be907dbacaba8fe596ca7c10ccc95a"
+      },
+      "device": 66306,
+      "inode": 59803122,
+      "nlink": 1,
+      "mode": "0o600",
+      "stable_during_review": true
+    },
+    {
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/genuine-executer-include-closure-source-1/HOST-output-proposed-1/selected-joint.o",
+        "bytes": 18820400,
+        "sha256": "c23190c693074e98a88eed68fc26f569309d63fca43dbd8ecb6274bc22611462"
+      },
+      "device": 66306,
+      "inode": 59803132,
+      "nlink": 1,
+      "mode": "0o600",
+      "stable_during_review": true
+    },
+    {
+      "artifact": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/genuine-executer-include-closure-source-1/HOST-output-proposed-1/fallback-joint.o",
+        "bytes": 18819760,
+        "sha256": "887bb2ea8c8c858cec0283f73ffbed9a5934ff5f3bdd7096006b9460c62f80ab"
+      },
+      "device": 66306,
+      "inode": 59803142,
+      "nlink": 1,
+      "mode": "0o600",
+      "stable_during_review": true
+    }
+  ],
+  "five_suffix_command_joins": [
+    {
+      "index": 0,
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/genuine-executer-include-closure-source-1/future-capture-1/step0/command.json",
+        "bytes": 4806,
+        "sha256": "0aa93ede736e3e88e27ed92875e02ce64db5dd71c122bda8416012ebf944732f"
+      },
+      "join": {
+        "pid": 1852550,
+        "start": 95805822,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.64943095901981,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/genuine-executer-include-closure-source-1/future-capture-1/step0/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59803108,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793160613523002575,
+            "ctime_ns": 1793160613523002575
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/genuine-executer-include-closure-source-1/future-capture-1/step0/stderr",
+            "sha256": "6fca1d32e680463284c8c251f8a73a4f9cd06282cd363df5046dca6908784897",
+            "device": 66306,
+            "inode": 59803109,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 1041,
+            "mtime_ns": 1793160613563003836,
+            "ctime_ns": 1793160613563003836
+          }
+        }
+      }
+    },
+    {
+      "index": 1,
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/genuine-executer-include-closure-source-1/future-capture-1/step1/command.json",
+        "bytes": 4842,
+        "sha256": "62b00efa531c07ca7998af995074622f0db93af30035133ac1dc01a7fa0895c2"
+      },
+      "join": {
+        "pid": 1852557,
+        "start": 95805981,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.6230099550448358,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/genuine-executer-include-closure-source-1/future-capture-1/step1/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59803119,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793160615111052646,
+            "ctime_ns": 1793160615111052646
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/genuine-executer-include-closure-source-1/future-capture-1/step1/stderr",
+            "sha256": "6fca1d32e680463284c8c251f8a73a4f9cd06282cd363df5046dca6908784897",
+            "device": 66306,
+            "inode": 59803120,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 1041,
+            "mtime_ns": 1793160615151053907,
+            "ctime_ns": 1793160615151053907
+          }
+        }
+      }
+    },
+    {
+      "index": 2,
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/genuine-executer-include-closure-source-1/future-capture-1/step2/command.json",
+        "bytes": 1725,
+        "sha256": "29873522b4a549a64b3751ee5494b3b606a146af8b6e5e81fabe8a1591edae72"
+      },
+      "join": {
+        "pid": 1852561,
+        "start": 95806132,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.07346734392922372,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/genuine-executer-include-closure-source-1/future-capture-1/step2/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59803129,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793160616627100446,
+            "ctime_ns": 1793160616627100446
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/genuine-executer-include-closure-source-1/future-capture-1/step2/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59803130,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793160616627100446,
+            "ctime_ns": 1793160616627100446
+          }
+        }
+      }
+    },
+    {
+      "index": 3,
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/genuine-executer-include-closure-source-1/future-capture-1/step3/command.json",
+        "bytes": 1725,
+        "sha256": "0f82fd9c9bd82d16506c209dc898df31cdd8667867fff405b603ef9f882bb754"
+      },
+      "join": {
+        "pid": 1852564,
+        "start": 95806230,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 0.07832423795480281,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/genuine-executer-include-closure-source-1/future-capture-1/step3/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59803139,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793160617603131221,
+            "ctime_ns": 1793160617603131221
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/genuine-executer-include-closure-source-1/future-capture-1/step3/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59803140,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793160617603131221,
+            "ctime_ns": 1793160617603131221
+          }
+        }
+      }
+    },
+    {
+      "index": 4,
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/genuine-executer-include-closure-source-1/future-capture-1/step4/command.json",
+        "bytes": 1389,
+        "sha256": "beafa590694f5a68423dc334a75cc928897334b896c4b4cced59c06f0cedd601"
+      },
+      "join": {
+        "pid": 1852566,
+        "start": 95806329,
+        "returncode": 0,
+        "direct_child_joined": true,
+        "group_absent": true,
+        "remaining_group_members": [],
+        "unexpected_group_members": [],
+        "timed_out": false,
+        "error": null,
+        "retirement_error": null,
+        "seconds": 10.139128218987025,
+        "closed_streams": true,
+        "captures": {
+          "stdout": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/genuine-executer-include-closure-source-1/future-capture-1/step4/stdout",
+            "sha256": "20606c58298e369b4401d88a58c7717e4660e8fe7470a4fbe6ce1ab03acf5e26",
+            "device": 66306,
+            "inode": 59803149,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 105,
+            "mtime_ns": 1793160628687480715,
+            "ctime_ns": 1793160628687480715
+          },
+          "stderr": {
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/genuine-executer-include-closure-source-1/future-capture-1/step4/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "device": 66306,
+            "inode": 59803150,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600",
+            "nlink": 1,
+            "size": 0,
+            "mtime_ns": 1793160618591162374,
+            "ctime_ns": 1793160618591162374
+          }
+        }
+      }
+    }
+  ],
+  "two_retained_Rust_producer_joins": [
+    {
+      "refs": {
+        "object": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/HOST-output-proposed-1/rust-selected.o",
+          "bytes": 18318216,
+          "sha256": "d9ce4f28e976102ee052e878784a254b3af3e5be9a0c5df4ee23096b973330d4"
+        },
+        "command": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/future-capture-1/step0/command.json",
+          "bytes": 4512,
+          "sha256": "30b72ab0c20c126ef20563b6ce92ee9e93b4d45994ab32d8806ba12c760bc31e"
+        },
+        "join": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/future-capture-1/step0/whole-join.json",
+          "bytes": 1311,
+          "sha256": "c9c42f6cd6eed00e3954ea3c542a4fbbc34c6029ee50964fbec388441e341f32"
+        }
+      },
+      "join": {
+        "captures": {
+          "stderr": {
+            "ctime_ns": 1793158537237858996,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 59802738,
+            "mode": "0o600",
+            "mtime_ns": 1793158537237858996,
+            "nlink": 1,
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/future-capture-1/step0/stderr",
+            "sha256": "f280e16132b64879b364f99e187f6c1db9094cb1d9fcb2040cbe8b0bbd0bca98",
+            "size": 78997,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1793158518585267276,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 59802737,
+            "mode": "0o600",
+            "mtime_ns": 1793158518585267276,
+            "nlink": 1,
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/future-capture-1/step0/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          }
+        },
+        "closed_streams": true,
+        "direct_child_joined": true,
+        "error": null,
+        "group_absent": true,
+        "pid": 1838983,
+        "remaining_group_members": [],
+        "retirement_error": null,
+        "returncode": 0,
+        "seconds": 18.706770096090622,
+        "start": 95596328,
+        "timed_out": false,
+        "unexpected_group_members": []
+      }
+    },
+    {
+      "refs": {
+        "object": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/HOST-output-proposed-1/rust-fallback.o",
+          "bytes": 18311872,
+          "sha256": "0d1a7addaec30f6f8e1a2a2a012312b369736ab30e61813f9af21363a9a24947"
+        },
+        "command": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/future-capture-1/step1/command.json",
+          "bytes": 4473,
+          "sha256": "37dcb6366c45718f8941c6111f0c0bfc642c43787828bafaac01aa7162b591c6"
+        },
+        "join": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/future-capture-1/step1/whole-join.json",
+          "bytes": 1311,
+          "sha256": "93ddec9b7d77b02a2317989ad6d268c569900461e919dd3e0c397bf967cd7a53"
+        }
+      },
+      "join": {
+        "captures": {
+          "stderr": {
+            "ctime_ns": 1793158556738477586,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 59802749,
+            "mode": "0o600",
+            "mtime_ns": 1793158556738477586,
+            "nlink": 1,
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/future-capture-1/step1/stderr",
+            "sha256": "f280e16132b64879b364f99e187f6c1db9094cb1d9fcb2040cbe8b0bbd0bca98",
+            "size": 78997,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1793158538141887674,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 59802748,
+            "mode": "0o600",
+            "mtime_ns": 1793158538141887674,
+            "nlink": 1,
+            "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/future-capture-1/step1/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          }
+        },
+        "closed_streams": true,
+        "direct_child_joined": true,
+        "error": null,
+        "group_absent": true,
+        "pid": 1839405,
+        "remaining_group_members": [],
+        "retirement_error": null,
+        "returncode": 0,
+        "seconds": 18.650303330970928,
+        "start": 95598284,
+        "timed_out": false,
+        "unexpected_group_members": []
+      }
+    }
+  ],
+  "Elf_class_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-source38-next-current-integration-source-1/check_thirteen_storage.py",
+    "bytes": 6103,
+    "sha256": "ba2b4764ce71f01cf2a4d80e6892acfa7862bb47455a945122b2c69646cb50cf"
+  },
+  "decoder_scope": "AST-extracted Elf class only; no helper main/qualifier/executable replay",
+  "source_body_identity_proof": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/genuine-executer-include-closure-source-1/GENUINE-RELATIVE-INCLUDE-AND-PREFIX-PROOF.json",
+    "bytes": 13283,
+    "sha256": "b0f411aa85538ad7e122fe419a3ae004c70066d238f9a92913f620c186f2d42d"
+  },
+  "original_context_failure_stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/future-capture-1/step2/stderr",
+    "bytes": 594,
+    "sha256": "748f042b3450f7cae5b7dfaa710c37afe803d2f2d0afd78fe54574250bcd627f"
+  },
+  "native_or_default_acceptance": false
+}

@@ -1,0 +1,103 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_WAKEUP4_GENUINE_ABI_CURRENT_C_CONSUMER_AND_MATCHED_FALLBACK_ELF_ONLY",
+  "ABI_words": [
+    4,
+    4,
+    8,
+    8,
+    8,
+    8,
+    5568,
+    64,
+    4384,
+    4296,
+    4624,
+    5032,
+    5024,
+    224,
+    8,
+    200
+  ],
+  "real_current_consumer": {
+    "name": "ptrace_wakeup_sig",
+    "kind": 2,
+    "bind": 0,
+    "ndx": 1,
+    "value": 1840,
+    "size": 331
+  },
+  "selected_consumer_edges": {
+    "ptrace_wakeup_clear_saved_bridge": [
+      {
+        "section": ".text",
+        "offset": 2063,
+        "relocation_type": 27,
+        "addend": 0
+      }
+    ],
+    "ptrace_wakeup_set_single_step_bridge": [
+      {
+        "section": ".text",
+        "offset": 2049,
+        "relocation_type": 27,
+        "addend": 0
+      }
+    ],
+    "ptrace_wakeup_trace_syscall_bridge": [
+      {
+        "section": ".text",
+        "offset": 2021,
+        "relocation_type": 27,
+        "addend": 0
+      }
+    ],
+    "ptrace_wakeup_pending_take_bridge": [
+      {
+        "section": ".text",
+        "offset": 1993,
+        "relocation_type": 27,
+        "addend": 0
+      }
+    ]
+  },
+  "retained_sections": [
+    182,
+    182
+  ],
+  "artifacts": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/HOST-output-proposed-1/rust-selected.o",
+      "bytes": 18318216,
+      "sha256": "d9ce4f28e976102ee052e878784a254b3af3e5be9a0c5df4ee23096b973330d4"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/HOST-output-proposed-1/rust-fallback.o",
+      "bytes": 18311872,
+      "sha256": "0d1a7addaec30f6f8e1a2a2a012312b369736ab30e61813f9af21363a9a24947"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/genuine-executer-include-closure-source-1/HOST-output-proposed-1/selected.o",
+      "bytes": 375328,
+      "sha256": "c86f8fae8a03063f246ed4284be2fedbc0b36a5e7c6daf66ccd6f92cba32246b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/genuine-executer-include-closure-source-1/HOST-output-proposed-1/fallback.o",
+      "bytes": 381960,
+      "sha256": "10b01a3ae8c059d385109483e35eb2b1b7be907dbacaba8fe596ca7c10ccc95a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/genuine-executer-include-closure-source-1/HOST-output-proposed-1/selected-joint.o",
+      "bytes": 18820400,
+      "sha256": "c23190c693074e98a88eed68fc26f569309d63fca43dbd8ecb6274bc22611462"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/genuine-executer-include-closure-source-1/HOST-output-proposed-1/fallback-joint.o",
+      "bytes": 18819760,
+      "sha256": "887bb2ea8c8c858cec0283f73ffbed9a5934ff5f3bdd7096006b9460c62f80ab"
+    }
+  ],
+  "dynamic_behavior_run": 0,
+  "production_default_link_native": "OPEN",
+  "wholefile_retirement": false
+}

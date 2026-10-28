@@ -1,0 +1,236 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "F02_FILE_OPEN_MATCHING_CURRENT115_APPLICABLE_NATIVE_PROOF_MISSING",
+  "independent": true,
+  "reviewer": "/root/guardian_execution_review",
+  "implementation_ownership": false,
+  "wholefile_complete": false,
+  "native_acceptance_for_current115": false,
+  "runtime_authority": null,
+  "original_contract": {
+    "worklist": {
+      "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/rust-cutover-m14.json",
+      "bytes": 236785,
+      "sha256": "6c9c450b3ae424468ee05c94ec62fdf33c62da95dfdbc145acc061a245b65e57"
+    },
+    "definition_of_done": "No live McKernel-owned compute-kernel C implementation remains on the supported default co-booted LWK path; the Rust/reviewed-assembly image works with the existing Linux supporting control plane and the practical application/lifecycle baseline.",
+    "proof_stage_definitions": {
+      "implementation": "Reuse or implement Rust owning the complete supported behavior, including substantive callbacks; retain reviewed assembly and remove live compute-C implementation dependency.",
+      "focused_checks": "Run the relevant actual-body regression and error/lifetime checks under the existing ordinary profile; reuse matching accepted evidence.",
+      "production_link": "Compile the real selected translation unit and Rust object, then prove default selection, ABI and ownership in the matched linked image. A C wrapper calling Rust is insufficient while substantive C remains.",
+      "native_validation": "Demonstrate applicable actual native functional behavior on matching artifacts; record exact supported scope and unresolved branches. Model-only results are insufficient."
+    },
+    "F02_file_closure_requirement": "All supported live implementations from this translation unit and its included headers/macros are Rust/reviewed assembly; no substantive live C callbacks, wrappers or unknown owners remain. Preserve declarations and excluded fallback source where useful.",
+    "F02_validation_concerns": [
+      "Idle lost-wakeup window, runq_lock/interrupt ordering and CPU status transitions must remain exact.",
+      "Clone/exec/wait/exit repeated in one OS; cancellation/cleanup/PID reuse and allocation failure unwinds.",
+      "No new native credit claimed for source-integrated idle helper; confirm current linked default path before retirement."
+    ],
+    "original_M14_MD": {
+      "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/RUST-CUTOVER-M14.md",
+      "bytes": 35584,
+      "sha256": "99cbdcae0b6e08593c77f8f53d5a3ca57981ffbbbecf78cacceedeb0a443d47d"
+    },
+    "native_clause_location": "RUST-CUTOVER-M14.md:227 / proof_stage_definitions.native_validation",
+    "no_new_quota": "Original applicable matching-artifact native demonstration; no per-helper/per-record/allbranch/stress quota."
+  },
+  "accepted_original_file_precedents": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F01-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+      "bytes": 2140,
+      "sha256": "0f311e0330490763c8cb94f1dac20694bb0069e7be4af88af6b75401590c8385"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F04-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+      "bytes": 3832,
+      "sha256": "f936dce9f10173d6febab4949a3a6a87b5629873c2960ec9ba2113eb77e75de0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/M14-F05-ACTUAL-SUPPORTED-FILE-CLOSURE.json",
+      "bytes": 3551,
+      "sha256": "216b4622e0437a2c424303e40ab5c3a6007094949f24b2c3b94f00fe07df0b25"
+    }
+  ],
+  "reused_current115_evidence": {
+    "producer_storage_registry_prefix": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/independent-artifact-review-preparation-1/ACTUAL-STORAGE-REGISTRY-PRODUCER-PREFIX.json",
+      "bytes": 274554,
+      "sha256": "6fd3052a59d2fad672878f219a098446967781f84ffc20e36efc6c7c23fcf7ce"
+    },
+    "exact_process_C_zero_runtime": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/independent-artifact-review-preparation-1/ACTUAL-PROCESS-C-ZERO-RUNTIME-STORAGE.json",
+      "bytes": 4097,
+      "sha256": "ce0b276639cafdb0311712272261ab78aa10960cbec52b7ec4e83dc360e3436b"
+    },
+    "current_folded_consumers_and_prlimit_supplement": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/independent-artifact-review-preparation-1/ACTUAL-PRLIMIT-DATA-FOLDED-WARNING-SUPPLEMENT.json",
+      "bytes": 79843,
+      "sha256": "e2aca758fd628aeee3ef25b6d4d4bfba7d422b8f62a3b88d338130daf3b76bef"
+    },
+    "actual_four_command_tool_join": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/ROOT-ACTUAL-TOOL-RESULT.json",
+      "bytes": 2325,
+      "sha256": "d871dbbb42e7e4866d8b433da58538162d1dfef224925147920bae21cfa5af81"
+    },
+    "independent_positive_current_free": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/independent-postbuild-current-free-review-1/CURRENT-FREE.json",
+      "bytes": 5561,
+      "sha256": "270a93392db9d5c64c7546d43ac36cb604b85da4668884736b4920b623c3111d"
+    }
+  },
+  "exact_current115_tuple": {
+    "Rust": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+      "bytes": 18335928,
+      "sha256": "91aa747b114e3b1990ef2ce057a12f8efc52247657516d610f83edb011f4bd9c"
+    },
+    "process_C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+      "bytes": 2864,
+      "sha256": "3717ed77bd1761c734e93a72d4e5a0b770698f17760470286019f6ec6a6973dd"
+    },
+    "arch_C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
+      "bytes": 100832,
+      "sha256": "7f5308bdc361e4c5b86bb77e8984b1c32fcb5fe317c6ae45fe9b4475a93a397c"
+    },
+    "retained_kernel_C": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o",
+      "bytes": 359600,
+      "sha256": "0109b8edb2d6dbb75cb0416146b8545ee25989ebe53e9a13499f5fcda3df737a"
+    },
+    "image": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/output/build/kernel/mckernel.img",
+      "bytes": 10257496,
+      "sha256": "de9fdd13b55a5a17158fa8247cc9351c1d9b1944a72c45bac9e4774473dca024"
+    }
+  },
+  "clause_evaluation": [
+    {
+      "clause": "Implementation and residual process-TU C closure",
+      "status": "PASS_CURRENT_SUPPORTED_DEFAULT_SELECTED_SCOPE_FROM_REUSED_EVIDENCE",
+      "reason": "Selected process3717 has0allocatedSTT_FUNC,0allocatedSTT_OBJECT and0non-note runtimeALLOCbytes. All previous31named Cobjects move to actualRustABIowners and matchingfinal image. Exactly48allocatedbytes remain as .note.gnu.property/SHT_NOTE toolchain metadata, byte-identical accepted114; do not assert literallyzeroALLOC. Header/macro/substantive callback debt cannot be hidden under zero namedcounts, but owner exactnon-noteALLOCproof closes thisTU runtime contribution. Existing source/default scope and original excludedfallback capabilities remain unchanged."
+    },
+    {
+      "clause": "Relevant focused checks and original functional limits",
+      "status": "REUSE_ACCEPTED_SCOPED_PROOF_NO_NEW_TEST_MATRIX",
+      "reason": "Reuse actual qualifiedF02LOCAL14/config3/final14 storage/type checks and oldfocusedprocess/scheduler parity at exactsource scope; finalnew16folded/currentconsumer179function/prlimit16 evidence is beingaccepted by its originalowner. This task adds no stress, variant, helper or branch quota. Nondefault/source38/lifetime limits remain asoriginal, not newsupporteddefaultfile blockers."
+    },
+    {
+      "clause": "Production default selection/ABI/ownership",
+      "status": "SUPPORTING_PROOFS_PASS_FINAL_ARTIFACT_OWNER_DECISION_IN_PROGRESS",
+      "reason": "Actualfourcommands0/defaultnewRust91aa/process3717/arch7f53/image de9f produced; storage31/389recordmultiset and exactRustowners are proven. Current110 owner exclusively seals finalconsumer/artifactdecision; do not duplicateitsreadback or imply thisfileevaluation independentlyreaccepted fullimage. Registryorderchange is explicit and not a neworderquota."
+    },
+    {
+      "clause": "Applicable native functional behavior on matching artifacts",
+      "status": "OPEN_UNMET_ORIGINAL_NATIVE_CLAUSE",
+      "reason": "No actualnative case receipt or explicit acceptednative carryover binding exists for current115de9f. Owner confirmed179bodycomparison is acceptedCURRENT114 or qualifiedF02HOST8e16 plus existingcodegendifferences, not frozen-native60e. Prior235/scheduler/process evidence remains valid at originaltuples, but cannot establishmatchingcurrent115 solelybecause processCzero/storageABIsame."
+    }
+  ],
+  "precise_remaining_predicates": [
+    {
+      "predicate": "Matching current115 native functional demonstration",
+      "substantive_original_requirement": true,
+      "state": "MISSING",
+      "smallest_existing_check": "P-M06-01-process-exec-wait-235B using unchanged original payload and acceptance contract, bound to exactacceptedcurrent115de9f kernel artifact/currentmodules/executor."
+    },
+    {
+      "predicate": "Final actual current115 default artifact receipt",
+      "substantive_new_requirement": false,
+      "state": "PARALLEL_OWNER_SEAL_PENDING_AT_THIS_REVIEW",
+      "owner": "/root/current110_execution_review",
+      "instruction": "Append/use its actual finalreceipt when sealed; no additionalcompiler/readback is requested."
+    }
+  ],
+  "prior_native_exact_scope": {
+    "original235_acceptance": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/independent-actual-native-review-1/REVIEW.json",
+      "bytes": 10359,
+      "sha256": "732da40fcc57a37460d41da3b1c7348f69a5a4c1a10044c6678eb0e4b1a6084d"
+    },
+    "case": "P-M06-01-process-exec-wait-235B",
+    "accepted_image_sha256": "60e62f97ef48ecaf14174af1c5b75d7181969f439c1b45c618d6c16d4bc40d57",
+    "target_image_sha256": "de9fdd13b55a5a17158fa8247cc9351c1d9b1944a72c45bac9e4774473dca024",
+    "case_acceptance_remains_valid": true,
+    "matches_current115": false,
+    "why_not_a_reuse_waiver": "F01 reused matching selectedcodegen/native evidence; F04 accepted actualmatching26eb nativevalue proof while retaining wholeprotocolFAIL; F05 matched source/build/link plusactual60e case. These demonstrate applicable scopedproof, not universalautomaticcarryover to a differentkernelimage."
+  },
+  "smallest_next_existing_functional_case": {
+    "case_id": "P-M06-01-process-exec-wait-235B",
+    "guest_argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "guest_cwd": "/case/work",
+    "guest_env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "boot_argv": [
+      "/bin/native-boot",
+      "hidos",
+      "allow_oversubscribe"
+    ],
+    "expected_stdout_bytes": 235,
+    "expected_stderr_bytes": 0,
+    "expected_raw_exit": 0,
+    "timeout_ms": 10000,
+    "stream_limit_each": 1024,
+    "retirement_seconds": 5,
+    "existing_reusable_collector": {
+      "bytes": 5750848,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-host-preparation-source-1/future-output-1/process235-supervisor",
+      "sha256": "ab3e775e6a9df8d36bbbb974ddafbb26493c24f1aaf49487f5fc27c5583bed6c"
+    },
+    "existing_reusable_original_payload": {
+      "bytes": 5628568,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/payload.snapshot",
+      "sha256": "537cb22b2af1f7fca1202afaf45b017364823c185c2ec47474093e51647ba5b8"
+    },
+    "existing_selected_executor_sha256": "e5d18169ee50581274b374bba17fcefebe39e828885f367bfee182beaa3df756",
+    "contract_inputs": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/CASE-CAPABILITY.ACTUAL.json",
+      "bytes": 8328,
+      "sha256": "3015af25f623b57462e6372d65c198fc7bbc7466fc95aea800785230a2fae364"
+    },
+    "original_complete_evaluator_sha256": "529830adcd6fafa13979bf6036b2812c88630c5e0112ce4d80f9fc28cc30d4da",
+    "original_executor_contract_sha256": "0e3a0cf6e63914e9cc23b6e8a6850156f1cd2ad4a481b517e1354e76a1fed443",
+    "required_actual_evidence": "Newmanifest/stage/hash bindings must prove that actualbootedkernel is current115de9f with its acceptednewRust91aa/selectedprocess3717 and compatibleactualmodule/executor tuple. Preserve unchanged235stdout/oracle and original5298 childordinarycorrespondence/authority/parentBEGIN-ACK/procfsDELETE/parentfinal0/empty namespace and normalownership retirement. No extra childfinal0 or per-recordguestpredicate. Actualconsumer execution is the originalprocess/clone/exec/wait/lifecycle case, sufficientrepresentativeF02native proof at its supportedscope; noclaim allerror/migration/SMPbranches.",
+    "do_not_replay": "Oldnonce d21f is consumed; oldcf49/701c manifest/stage/60e tuple is historical, notcurrent115 authority. Reuse collector/payload/loader/proof bodies only whereexactnewbindingshold, do notrerunHOST26oroldcompilers."
+  },
+  "next_owner_action": {
+    "owner": "Root coordinates existing process235 stage/native owner; same current source/account/window/ownership/resource controls.",
+    "task": "After finalartifactseal, derive one fresh private successor of existingoriginal235 stage/native context, replacingonly genuinekernel/currentartifact/module/manifest/sourceauthority bindings with actualcurrent115 and a newunusednonce. Obtain originalindependentnative release, then run that exact existingcase once and assessapplicable F02native/result/retirement.",
+    "exact_existing_consumer_command": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "existing_host_entry_template": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/root_once_startup_entry.py",
+    "existing_preparation_sequence": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/ROOT-NEXT-COMMANDS.CORRECTED.NOT-AUTHORIZED.json",
+      "bytes": 6512,
+      "sha256": "837cb06ef9deff48918057fd76121b116c3ff92a8756b2a2429fadff83bdafdc"
+    },
+    "host_command_limit": "Existinghostentrypath is historicalconsumedcontext; do NOTinvokeit. A literalreadycurrent115 hostcommand cannot honestlyexist until newactualmanifest/stage/adoption/nonce/currentledger/resource/release are bound. Root uses the existing oncebridge in that newprivatecontext; thisreceipt supplies noexecutionauthority."
+  },
+  "scope_limits": [
+    "F02file remainsOPEN pending originalmatchingnative proof, with finalartifactreceipt completed by separateowner.",
+    "Do not require nativeeach31metadatarecord/five-subgoal/allbranch/newstressmatrix; original supporteddefaultscope only.",
+    "Preserve existing35/35, oldnativefailures and limits; thisreview changes no milestones/canonicalcounts.",
+    "NoF03/F06native/fileclosure, allRustOS acceptance orlatestkernel nativecredit is inferred."
+  ],
+  "review_actions": {
+    "source_inventory_or_hashwalk": 0,
+    "raw_current115_artifact_walk": 0,
+    "compiler_or_native_replay": 0,
+    "guard_account_resource_proc_queries": 0,
+    "canonical_Git_or_grant_writes": 0,
+    "originalcontract_and_exactscoped_evidence_readonly": true
+  }
+}

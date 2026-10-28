@@ -1,0 +1,315 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE_COHERENT_NEXT116_EIGHT_PATH_COMPOSITION_AND_FOUR_COMMAND_RECIPE",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/daemon_execution_review",
+  "recorded_at": "2026-10-28T04:19:20.070321+00:00",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/SOURCE-READY.json",
+    "bytes": 4467,
+    "sha256": "86109336da795b0e7684374a9b0eb782f30b0b1710fdf92da7e0ef90263acf9e"
+  },
+  "selective_map": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/SELECTIVE-EIGHT-SOURCE-MAP.json",
+    "bytes": 62010,
+    "sha256": "eaaf7f21bc849e585d36bb288d9ef5646f85b36837af3f4ba6b8b6c5f6d685d4"
+  },
+  "production_recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/MINIMAL-PRODUCTION-CONTINUATION.NOT-GRANTED.json",
+    "bytes": 26765,
+    "sha256": "d612ce89f7b8d9b708609cf8c140ad3d3717b54696dcaea754ff2c6faad1f9d9"
+  },
+  "source_sha256": {
+    "arch/x86_64/kernel/syscall.c": "8d24cb88289de08ac581eaa9a88de7690a05b54db4897069e06a3a24ddd80561",
+    "kernel/rust/lib.rs": "6dc007c983c21a43647cbc3864b27a5ff794a085aa2edf1eeb94057f87ac4b60",
+    "kernel/CMakeLists.txt": "9650cc9f9d2396dfdb5ff74428de3b4e9965bf3b9910a0f6cbbcdc0f37cbd4a1",
+    "kernel/rust/f06_shmget_dispatch.rs": "6069b676a090b703d0b8b91ff701223857a7371524a05c5f94bd932982b97c4b",
+    "scripts/f06_origin_command_profile.json": "f9f51aa43d4a572b08f26fae7340f16998044590c9c684489ed0cf4d15e17d6f",
+    "scripts/derive_f06_origin.py": "65e0782d72b63097f88289f0092c63acff8a369086ccfee6eaf18937e619ba37",
+    "kernel/syscall.c": "c34318da009e2f834084c8e6beb24a9e788c3f6c91c19d1c5dc4e49ff48538ef",
+    "kernel/rust/syscall_policy.rs": "f7e198ea69673323175b90ee109e4c5e7d89d6316f7c0b9f878b0f2c7d6a25ae"
+  },
+  "outer_source_sha256": {
+    "arch/x86_64/kernel/syscall.c": "d060dbf5b83e29b1d5f16e7504972f05cb53d553fb754de1a67566d2c0f06b37",
+    "kernel/rust/lib.rs": "c84205fd8d0b4c729bf5598d5b6d0e578617de8e8af3a00bdcf886e69a8019e2",
+    "kernel/CMakeLists.txt": "98b7bd3bb16384c32f5e268e34938c981ebe89474d80f143bc9b221881500a77",
+    "kernel/rust/f06_shmget_dispatch.rs": null,
+    "scripts/f06_origin_command_profile.json": "4306a26c60fd6904c0644087d7dcfb7481b985045e216b8bec5575aafab5d418",
+    "scripts/derive_f06_origin.py": "c5e34ad75d4685d1532f8a36d6fdd33b5b82faea5b5368830c3b5e84abed38d0",
+    "kernel/syscall.c": "d6e9c595364f72018b96ccba50e97ebc71ff438b8e91315982e287d63ff8bafb",
+    "kernel/rust/syscall_policy.rs": "d2522903a4a1335aa551f87c17c8e8765f9f7373fb84984b2dd062ac301004c0"
+  },
+  "guarded_writes": [
+    {
+      "relative": "arch/x86_64/kernel/syscall.c",
+      "preimage": {
+        "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+        "bytes": 117757,
+        "sha256": "d060dbf5b83e29b1d5f16e7504972f05cb53d553fb754de1a67566d2c0f06b37"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/candidate/arch/x86_64/kernel/syscall.c",
+        "bytes": 117955,
+        "sha256": "8d24cb88289de08ac581eaa9a88de7690a05b54db4897069e06a3a24ddd80561"
+      },
+      "frozen_input": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-shmget-current115-default-integration-source-1/candidate/arch/x86_64/kernel/syscall.c",
+        "bytes": 117955,
+        "sha256": "8d24cb88289de08ac581eaa9a88de7690a05b54db4897069e06a3a24ddd80561"
+      },
+      "patch": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/patches/arch__x86_64__kernel__syscall.c.patch",
+        "bytes": 484,
+        "sha256": "117b8d0a43c39faf8b63d637bd3eed7b82331c884cd3bed78c0fc7386dfcbb5f"
+      }
+    },
+    {
+      "relative": "kernel/rust/lib.rs",
+      "preimage": {
+        "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+        "bytes": 2318,
+        "sha256": "c84205fd8d0b4c729bf5598d5b6d0e578617de8e8af3a00bdcf886e69a8019e2"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/candidate/kernel/rust/lib.rs",
+        "bytes": 2381,
+        "sha256": "6dc007c983c21a43647cbc3864b27a5ff794a085aa2edf1eeb94057f87ac4b60"
+      },
+      "frozen_input": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-shmget-current115-default-integration-source-1/candidate/kernel/rust/lib.rs",
+        "bytes": 2381,
+        "sha256": "6dc007c983c21a43647cbc3864b27a5ff794a085aa2edf1eeb94057f87ac4b60"
+      },
+      "patch": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/patches/kernel__rust__lib.rs.patch",
+        "bytes": 244,
+        "sha256": "e3bbca4a05ef6847628ed831f96d80d37b044861f09beba96ff7fa5f90f83ccc"
+      }
+    },
+    {
+      "relative": "kernel/CMakeLists.txt",
+      "preimage": {
+        "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+        "bytes": 40587,
+        "sha256": "98b7bd3bb16384c32f5e268e34938c981ebe89474d80f143bc9b221881500a77"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/candidate/kernel/CMakeLists.txt",
+        "bytes": 40960,
+        "sha256": "9650cc9f9d2396dfdb5ff74428de3b4e9965bf3b9910a0f6cbbcdc0f37cbd4a1"
+      },
+      "frozen_input": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-shmget-current115-default-integration-source-1/candidate/kernel/CMakeLists.txt",
+        "bytes": 40960,
+        "sha256": "9650cc9f9d2396dfdb5ff74428de3b4e9965bf3b9910a0f6cbbcdc0f37cbd4a1"
+      },
+      "patch": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/patches/kernel__CMakeLists.txt.patch",
+        "bytes": 771,
+        "sha256": "3e09d6b79a3f5e9c366a44e3d2415faf68595046445c91e65e69f6c45aefc74f"
+      }
+    },
+    {
+      "relative": "kernel/rust/f06_shmget_dispatch.rs",
+      "preimage": null,
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/candidate/kernel/rust/f06_shmget_dispatch.rs",
+        "bytes": 752,
+        "sha256": "6069b676a090b703d0b8b91ff701223857a7371524a05c5f94bd932982b97c4b"
+      },
+      "frozen_input": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-shmget-current115-default-integration-source-1/candidate/kernel/rust/f06_shmget_dispatch.rs",
+        "bytes": 752,
+        "sha256": "6069b676a090b703d0b8b91ff701223857a7371524a05c5f94bd932982b97c4b"
+      }
+    },
+    {
+      "relative": "scripts/f06_origin_command_profile.json",
+      "preimage": {
+        "path": "/home/holden/mckernel/scripts/f06_origin_command_profile.json",
+        "bytes": 8956,
+        "sha256": "4306a26c60fd6904c0644087d7dcfb7481b985045e216b8bec5575aafab5d418"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/candidate/scripts/f06_origin_command_profile.json",
+        "bytes": 9003,
+        "sha256": "f9f51aa43d4a572b08f26fae7340f16998044590c9c684489ed0cf4d15e17d6f"
+      },
+      "frozen_input": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-shmget-current115-default-integration-source-1/candidate/scripts/f06_origin_command_profile.json",
+        "bytes": 9003,
+        "sha256": "f9f51aa43d4a572b08f26fae7340f16998044590c9c684489ed0cf4d15e17d6f"
+      },
+      "patch": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/patches/scripts__f06_origin_command_profile.json.patch",
+        "bytes": 580,
+        "sha256": "a1633ac893e209744a702b39a45f5eedcfe438ebcf276dedb06f7cdba93d6a8e"
+      }
+    },
+    {
+      "relative": "scripts/derive_f06_origin.py",
+      "preimage": {
+        "path": "/home/holden/mckernel/scripts/derive_f06_origin.py",
+        "bytes": 7565,
+        "sha256": "c5e34ad75d4685d1532f8a36d6fdd33b5b82faea5b5368830c3b5e84abed38d0"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/candidate/scripts/derive_f06_origin.py",
+        "bytes": 7565,
+        "sha256": "65e0782d72b63097f88289f0092c63acff8a369086ccfee6eaf18937e619ba37"
+      },
+      "frozen_input": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-shmget-current115-default-integration-source-1/candidate/scripts/derive_f06_origin.py",
+        "bytes": 7565,
+        "sha256": "65e0782d72b63097f88289f0092c63acff8a369086ccfee6eaf18937e619ba37"
+      },
+      "patch": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/patches/scripts__derive_f06_origin.py.patch",
+        "bytes": 341,
+        "sha256": "b71c5d19fdf0f9c6d6015e137315e1eb3cef318ec2c7de6388dafc66236685f0"
+      }
+    },
+    {
+      "relative": "kernel/syscall.c",
+      "preimage": {
+        "path": "/home/holden/mckernel/kernel/syscall.c",
+        "bytes": 918715,
+        "sha256": "d6e9c595364f72018b96ccba50e97ebc71ff438b8e91315982e287d63ff8bafb"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/candidate/kernel/syscall.c",
+        "bytes": 920543,
+        "sha256": "c34318da009e2f834084c8e6beb24a9e788c3f6c91c19d1c5dc4e49ff48538ef"
+      },
+      "frozen_input": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/coherent-seven-current115-source-1/candidate/kernel/syscall.c",
+        "bytes": 920543,
+        "sha256": "c34318da009e2f834084c8e6beb24a9e788c3f6c91c19d1c5dc4e49ff48538ef"
+      },
+      "patch": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/patches/kernel__syscall.c.patch",
+        "bytes": 4287,
+        "sha256": "edf5e88422df2e458551028bcdf1534a344742fb8e10c6eeb3200b0479fcf6a8"
+      }
+    },
+    {
+      "relative": "kernel/rust/syscall_policy.rs",
+      "preimage": {
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "bytes": 1268725,
+        "sha256": "d2522903a4a1335aa551f87c17c8e8765f9f7373fb84984b2dd062ac301004c0"
+      },
+      "postimage": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/candidate/kernel/rust/syscall_policy.rs",
+        "bytes": 1275861,
+        "sha256": "f7e198ea69673323175b90ee109e4c5e7d89d6316f7c0b9f878b0f2c7d6a25ae"
+      },
+      "frozen_input": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/coherent-seven-current115-source-1/candidate/kernel/rust/syscall_policy.rs",
+        "bytes": 1275861,
+        "sha256": "f7e198ea69673323175b90ee109e4c5e7d89d6316f7c0b9f878b0f2c7d6a25ae"
+      },
+      "patch": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/patches/kernel__rust__syscall_policy.rs.patch",
+        "bytes": 8114,
+        "sha256": "17f75a3ee06315df15fccef327dd9dcbb7ef9b8ece9a0ced06d832e1df1c42e2"
+      }
+    }
+  ],
+  "qualification": {
+    "WAKE4_actual": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/current114-perf-restore-correction-source-1/absolute-helper-context-correction-source-1/genuine-executer-include-closure-source-1/independent-actual-review-1/REVIEW.json",
+      "bytes": 13725,
+      "sha256": "bb8ea937eaf9fa0ce452008c7ce52fc9781cd322d2a9e12e9938bfb13dfe387b"
+    },
+    "SHM_actual": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/local-target-identity-reader-correction-source-1/independent-actual-host-review-1/REVIEW.json",
+      "bytes": 25267,
+      "sha256": "67fadd26e4eccc8da668fe79233125e4cdfcba6b48a904693d5ef0bebe87b503"
+    },
+    "trio_actual": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/independent-actual-review-1/REVIEW.json",
+      "bytes": 5262,
+      "sha256": "93fb50b8e2127848efaacd3785579201edd439b39b34fde81d3ed9d65024cc13"
+    },
+    "fold_source_packet": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/actual-new-rust-folded-caller-proof-source-1/SOURCE-READY.json",
+      "bytes": 5552,
+      "sha256": "cd78c6242308e01d70b4eb1a29a861048e2f081b94c2aa3af27996b8c690e47c"
+    },
+    "fold_actual_readback": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/actual-new-rust-folded-caller-proof-source-1/ACTUAL-FOLDED-CALLER-PROOF.json",
+      "bytes": 23821,
+      "sha256": "983f3da717461cf53d1f52640912292129f904b3e00236e0f7dafbc83403e188"
+    },
+    "fold_checker": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/actual-new-rust-folded-caller-proof-source-1/check_actual_folded_callers.py",
+      "bytes": 3533,
+      "sha256": "6eb7e02986a8e0ae10175bbfbc50b8e7c62c74b3c3acb6277422dfeb4251bf75"
+    },
+    "fold_scope": "Retained source/actual object readback, not an invented independent receipt. Future116 actual currentobject/finalimage proof remains required."
+  },
+  "actual115_prerequisite": {
+    "independent_artifact_acceptance": null,
+    "actual_process_object": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+      "bytes": 2864,
+      "sha256": "3717ed77bd1761c734e93a72d4e5a0b770698f17760470286019f6ec6a6973dd"
+    },
+    "condition": "Root must bind genuine independent actualCURRENT115 artifact acceptance before retaining3717 in actual116 build grant; build0 and hash alone grant no default/native/file credit."
+  },
+  "checks": [
+    "All8canonicalpreimages/privatepostimages/frozenparentinputs exact. SixSHMpaths and2genericF03paths copiedbyteexact, not reimplemented. GuardedRootcopy checks every preimage/postimage before firstcopy; Root alone supplies actual adoption authority.",
+    "Trio modules/3WAKEreusedfragment/singletypedstep preserve qualified bytes; existing provider algorithms,lifetime/exclusion/null/pendingnodeownership unchanged. CPUIDmodule/LOCAL31 metadata and processhelpers retain115 context.",
+    "AcceptedpostENABLE_PERF21118/21150 and sharedwakeouter24477/24491 restores eachonce. CFILE/source/typeABI/currentconsumer predicates preserved at known supportedselector scope; no allCPPconfig claim or source-elidedIO5/HOSTsignaladdress credit.",
+    "SHMbridge6069 preserves original signedlong\u2192key_t narrowing and existingdo_shmget IPC/ref/allocation contract; originalC fallback underselectoroff intact. CMake/lib/exactarchprofile add onlyexistingnewSHMcfg/define in supportedprofile.",
+    "derive_f06_origin algorithm byteidentical exceptPROFILE_SHA. Archprofile binds8d24actualsource and exactnewarchcommand. Freshgenuineorigin outputs are required; old115origin receipt cannot be reused.",
+    "121Rustreference map plus3externalrelative module metadata coherent; no unchanged121hashloop run. Rustargv equals115+SHMcfg, genericCargv equals114generic, archargv equals115+SHMdefine, exact11inputlink unchanged;3newoutputs+8retained disjoint cover11tokens.",
+    "WAKE4actualbb8 now satisfies stale sourceREADY/parentrecipe unrun dependency additively:5suffix+2retainedRustproducers. Trio93fb,foldcd78/raw983f/readbackchecker6eb7 and SHM67f retained at exactscope. No new bodytest/replay/nativequota/gate.",
+    "Production qualification remains originalpositiveABI/type/table fields,each4ptrace_wakeup_sig edges,realRustdirectORfinitefoldedcontrol/argument/context sequence and exactnewRustorigin finalimage relocationbytes. No emptyrelocation or symbolname-only acceptance."
+  ],
+  "exact_command_recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next116-f03-seven-f06-shmget-selective-composition-source-1/MINIMAL-PRODUCTION-CONTINUATION.NOT-GRANTED.json",
+    "bytes": 26765,
+    "sha256": "d612ce89f7b8d9b708609cf8c140ad3d3717b54696dcaea754ff2c6faad1f9d9"
+  },
+  "prerequisite_origin": {
+    "producer": "/src/scripts/derive_f06_origin.py",
+    "profile": "/src/scripts/f06_origin_command_profile.json",
+    "actual_source": "/src/arch/x86_64/kernel/syscall.c",
+    "output": "/work/output/build/kernel/f06-origin",
+    "action": "Root reuse existing CMake/origin materializer against sixfile successor; fresh genuine origin outputs required, no old115 origin receipt reuse"
+  },
+  "parent_currentconsumer_recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f03-next-selected-family-source-3/coherent-seven-current115-source-1/EXACT-DEFAULT-OBJECT-CALLER-AND-FOLD-CHECK.RECIPE.json",
+    "bytes": 5262,
+    "sha256": "97285a33f889f33d71403daab6ef3989a26759a5413a1fb0f4833b16745a78ca"
+  },
+  "paths": 8,
+  "new_producers": 3,
+  "retained_objects": 8,
+  "link_inputs": 11,
+  "new_source_algorithms": 0,
+  "new_body_tests": 0,
+  "execution_release": false,
+  "runtime_authority": null,
+  "actual_build_acceptance": false,
+  "production_default_acceptance": false,
+  "native_acceptance": false,
+  "retired_C_files": 0,
+  "source_count_credit": 0,
+  "review_actions": {
+    "compiler_tests_CPP_runtime_queries_guards_grants_canonical_Git": 0,
+    "subagents": 0,
+    "unchanged121source_hashloop": 0
+  },
+  "remaining": [
+    "Bind actual115 independentartifactacceptance before reusingprocess3717",
+    "Rootselectiveadoption/closedexport/freshgenuineorigin/profile/sourcepub/account/resource/oneheavyadmission",
+    "Actual3producer+link/currentABI/consumer/fold/finalimage acceptance",
+    "Separate native/wholefile originalacceptance"
+  ],
+  "blocking_source_findings": [],
+  "blocker": null
+}

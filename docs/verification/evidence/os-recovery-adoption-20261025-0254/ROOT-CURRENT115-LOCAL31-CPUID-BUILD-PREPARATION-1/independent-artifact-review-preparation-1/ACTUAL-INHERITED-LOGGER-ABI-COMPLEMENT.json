@@ -1,0 +1,356 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_EXACT_CURRENT115_INHERITED_LOGGER_FOLDED_ARGUMENT_AND_SELECTED_C_REMOVAL_COMPLEMENT",
+  "independent": true,
+  "reviewer": "/root/current110_execution_review",
+  "actual_Rust": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+    "bytes": 18335928,
+    "sha256": "91aa747b114e3b1990ef2ce057a12f8efc52247657516d610f83edb011f4bd9c"
+  },
+  "actual_image": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-ADMISSION-4/OUTPUT/work/output/build/kernel/mckernel.img",
+    "bytes": 10257496,
+    "sha256": "de9fdd13b55a5a17158fa8247cc9351c1d9b1944a72c45bac9e4774473dca024"
+  },
+  "unchanged_logger_reader": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT112-EVENT2-ALLOC2-BUILD-ADMISSION-1/independent-postbuild-review-1/check_inherited_core_current112.py",
+    "bytes": 9813,
+    "sha256": "48e15963abac9b905581f7f287762fd08b6cd7d54098960e783a5b9b9b30fe52"
+  },
+  "four_LOCAL_logger_records": [
+    {
+      "label": "F06_PROCESS_VM_IOV_LOCAL_DEBUG",
+      "Rust": {
+        "index": 734,
+        "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy30F06_PROCESS_VM_IOV_LOCAL_DEBUG",
+        "bind": 0,
+        "type": 1,
+        "shndx": 5521,
+        "value": 0,
+        "size": 32
+      },
+      "final": {
+        "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy30F06_PROCESS_VM_IOV_LOCAL_DEBUG",
+        "bind": 0,
+        "type": 1,
+        "other": 0,
+        "shndx": 3,
+        "value": 18446744073685425984,
+        "size": 32
+      },
+      "strings": [
+        {
+          "input_offset": 0,
+          "literal": "/src/kernel/rust/syscall_policy.rs",
+          "current_final_address": "0xfffffffffe907aea"
+        },
+        {
+          "input_offset": 8,
+          "literal": "arch_process_vm_rw_log_bridge",
+          "current_final_address": "0xfffffffffe90898e"
+        }
+      ],
+      "line": 35093,
+      "initial_nonpointer_bytes": "00000000000000001589000000000000"
+    },
+    {
+      "label": "F06_PROCESS_VM_IOV_REMOTE_DEBUG",
+      "Rust": {
+        "index": 737,
+        "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy31F06_PROCESS_VM_IOV_REMOTE_DEBUG",
+        "bind": 0,
+        "type": 1,
+        "shndx": 5523,
+        "value": 0,
+        "size": 32
+      },
+      "final": {
+        "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy31F06_PROCESS_VM_IOV_REMOTE_DEBUG",
+        "bind": 0,
+        "type": 1,
+        "other": 0,
+        "shndx": 3,
+        "value": 18446744073685426016,
+        "size": 32
+      },
+      "strings": [
+        {
+          "input_offset": 0,
+          "literal": "/src/kernel/rust/syscall_policy.rs",
+          "current_final_address": "0xfffffffffe907aea"
+        },
+        {
+          "input_offset": 8,
+          "literal": "arch_process_vm_rw_log_bridge",
+          "current_final_address": "0xfffffffffe90898e"
+        }
+      ],
+      "line": 35100,
+      "initial_nonpointer_bytes": "00000000000000001c89000000000000"
+    },
+    {
+      "label": "F06_PROCESS_VM_FOUND_DEBUG",
+      "Rust": {
+        "index": 735,
+        "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy26F06_PROCESS_VM_FOUND_DEBUG",
+        "bind": 0,
+        "type": 1,
+        "shndx": 5513,
+        "value": 0,
+        "size": 32
+      },
+      "final": {
+        "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy26F06_PROCESS_VM_FOUND_DEBUG",
+        "bind": 0,
+        "type": 1,
+        "other": 0,
+        "shndx": 3,
+        "value": 18446744073685425856,
+        "size": 32
+      },
+      "strings": [
+        {
+          "input_offset": 0,
+          "literal": "/src/kernel/rust/syscall_policy.rs",
+          "current_final_address": "0xfffffffffe907aea"
+        },
+        {
+          "input_offset": 8,
+          "literal": "arch_process_vm_rw_log_bridge",
+          "current_final_address": "0xfffffffffe90898e"
+        }
+      ],
+      "line": 35107,
+      "initial_nonpointer_bytes": "00000000000000002389000000000000"
+    },
+    {
+      "label": "F06_PROCESS_VM_COPY_DEBUG",
+      "Rust": {
+        "index": 736,
+        "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy25F06_PROCESS_VM_COPY_DEBUG",
+        "bind": 0,
+        "type": 1,
+        "shndx": 5510,
+        "value": 0,
+        "size": 32
+      },
+      "final": {
+        "name": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy25F06_PROCESS_VM_COPY_DEBUG",
+        "bind": 0,
+        "type": 1,
+        "other": 0,
+        "shndx": 3,
+        "value": 18446744073685425824,
+        "size": 32
+      },
+      "strings": [
+        {
+          "input_offset": 0,
+          "literal": "/src/kernel/rust/syscall_policy.rs",
+          "current_final_address": "0xfffffffffe907aea"
+        },
+        {
+          "input_offset": 8,
+          "literal": "arch_process_vm_rw_log_bridge",
+          "current_final_address": "0xfffffffffe90898e"
+        }
+      ],
+      "line": 35114,
+      "initial_nonpointer_bytes": "00000000000000002a89000000000000"
+    }
+  ],
+  "four_actual_logger_flag_consumers": [
+    {
+      "offset": 28,
+      "record": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy30F06_PROCESS_VM_IOV_LOCAL_DEBUG",
+      "line_flags_address": "0xfffffffffe8fdf58"
+    },
+    {
+      "offset": 77,
+      "record": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy26F06_PROCESS_VM_FOUND_DEBUG",
+      "line_flags_address": "0xfffffffffe8fded8"
+    },
+    {
+      "offset": 164,
+      "record": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy25F06_PROCESS_VM_COPY_DEBUG",
+      "line_flags_address": "0xfffffffffe8fdeb8"
+    },
+    {
+      "offset": 283,
+      "record": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust14syscall_policy31F06_PROCESS_VM_IOV_REMOTE_DEBUG",
+      "line_flags_address": "0xfffffffffe8fdf78"
+    }
+  ],
+  "logger_other_exact_targets": [
+    {
+      "offset": 15,
+      "kind": "EXACT_FOUR_ENTRY_LOGGER_JUMP_TABLE",
+      "address": "0xfffffffffe905308",
+      "exact_current_callback_offsets": [
+        26,
+        281,
+        75,
+        162
+      ],
+      "final_values": [
+        18446744073684623514,
+        18446744073684623769,
+        18446744073684623563,
+        18446744073684623650
+      ]
+    },
+    {
+      "offset": 62,
+      "kind": "EXACT_STRING",
+      "address": "0xfffffffffe90a609",
+      "literal": "local_iov[%d].iov_base: 0x%lx, len: %lu\n"
+    },
+    {
+      "offset": 104,
+      "kind": "EXACT_STRING",
+      "address": "0xfffffffffe90a66d",
+      "literal": "PROCESS_VM_READ"
+    },
+    {
+      "offset": 114,
+      "kind": "EXACT_STRING",
+      "address": "0xfffffffffe90a65c",
+      "literal": "PROCESS_VM_WRITE"
+    },
+    {
+      "offset": 139,
+      "kind": "EXACT_STRING",
+      "address": "0xfffffffffe90a67d",
+      "literal": "pid %d found, doing %s: liovcnt: %d, riovcnt: %d \n"
+    },
+    {
+      "offset": 191,
+      "kind": "EXACT_STRING",
+      "address": "0xfffffffffe90a6b3",
+      "literal": "<-"
+    },
+    {
+      "offset": 201,
+      "kind": "EXACT_STRING",
+      "address": "0xfffffffffe90a6b0",
+      "literal": "->"
+    },
+    {
+      "offset": 234,
+      "kind": "EXACT_STRING",
+      "address": "0xfffffffffe90a6b6",
+      "literal": "local_iov[%d]: 0x%lx %s remote_iov[%d]: 0x%lx, %lu copied, psize: %lu, rpage_left: %lu\n"
+    },
+    {
+      "offset": 314,
+      "kind": "EXACT_STRING",
+      "address": "0xfffffffffe90a632",
+      "literal": "remote_iov[%d].iov_base: 0x%lx, len: %lu\n"
+    }
+  ],
+  "logger337B_full_final_code_equal114": true,
+  "thirteen_current_folded_arguments": [
+    {
+      "data": "process_mckfd_free_bridge_source_line",
+      "consumer": "process_mckfd_free_bridge",
+      "signed_CInt": 171,
+      "ABI_argument": "edx",
+      "current_instruction": "fffffffffe899e28:\tmov    $0xab,%edx"
+    },
+    {
+      "data": "process_policy_free_bridge_source_line",
+      "consumer": "process_policy_free_bridge",
+      "signed_CInt": 253,
+      "ABI_argument": "edx",
+      "current_instruction": "fffffffffe89cd48:\tmov    $0xfd,%edx"
+    },
+    {
+      "data": "process_optional_free_bridge_source_line",
+      "consumer": "process_optional_free_bridge",
+      "signed_CInt": 258,
+      "ABI_argument": "edx",
+      "current_instruction": "fffffffffe89b3b8:\tmov    $0x102,%edx"
+    },
+    {
+      "data": "process_alloc_bridge_source_line",
+      "consumer": "process_alloc_bridge",
+      "signed_CInt": 340,
+      "ABI_argument": "ecx",
+      "current_instruction": "fffffffffe890b8a:\tmov    $0x154,%ecx"
+    },
+    {
+      "data": "process_free_vm_bridge_source_line",
+      "consumer": "process_free_vm_bridge",
+      "signed_CInt": 561,
+      "ABI_argument": "edx",
+      "current_instruction": "fffffffffe8978b8:\tmov    $0x231,%edx"
+    },
+    {
+      "data": "process_create_thread_alloc_pages_source_line",
+      "consumer": "process_create_thread_alloc_pages_bridge",
+      "signed_CInt": 788,
+      "ABI_argument": "stack eighth",
+      "current_instruction": "fffffffffe893f0c:\tpush   $0x314"
+    },
+    {
+      "data": "process_split_range_alloc_source_line",
+      "consumer": "process_split_range_alloc_bridge",
+      "signed_CInt": 1628,
+      "ABI_argument": "ecx",
+      "current_instruction": "fffffffffe8a0aea:\tmov    $0x65c,%ecx"
+    },
+    {
+      "data": "process_range_kfree_bridge_source_line",
+      "consumer": "process_range_kfree_bridge",
+      "signed_CInt": 1817,
+      "ABI_argument": "edx",
+      "current_instruction": "fffffffffe89dcd8:\tmov    $0x719,%edx"
+    },
+    {
+      "data": "process_free_range_pages_source_line",
+      "consumer": "process_memory_range_free_bridge",
+      "signed_CInt": 1873,
+      "ABI_argument": "r8d",
+      "current_instruction": "fffffffffe89a630:\tmov    $0x751,%r8d"
+    },
+    {
+      "data": "process_add_range_alloc_bridge_source_line",
+      "consumer": "process_add_range_alloc_bridge",
+      "signed_CInt": 2256,
+      "ABI_argument": "ecx",
+      "current_instruction": "fffffffffe89039f:\tmov    $0x8d0,%ecx"
+    },
+    {
+      "data": "process_add_range_free_bridge_source_line",
+      "consumer": "process_add_range_free_bridge",
+      "signed_CInt": 2261,
+      "ABI_argument": "edx",
+      "current_instruction": "fffffffffe890498:\tmov    $0x8d5,%edx"
+    },
+    {
+      "data": "process_page_fault_anon_alloc_line",
+      "consumer": "process_page_fault_anon_allocate_body_result",
+      "signed_CInt": 3058,
+      "ABI_argument": "stack eighth",
+      "current_instruction": "fffffffffe89b449:\tpush   $0xbf2"
+    },
+    {
+      "data": "process_free_thread_pages_source_line",
+      "consumer": "process_free_thread_pages_bridge",
+      "signed_CInt": 3501,
+      "ABI_argument": "r8d",
+      "current_instruction": "fffffffffe897812:\tmov    $0xdad,%r8d"
+    }
+  ],
+  "C_function_removal_exactly_obtain_clone_cpuid": true,
+  "actual_process_zero_runtime": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/independent-artifact-review-preparation-1/ACTUAL-PROCESS-C-ZERO-RUNTIME-STORAGE.json",
+    "bytes": 4097,
+    "sha256": "ce0b276639cafdb0311712272261ab78aa10960cbec52b7ec4e83dc360e3436b"
+  },
+  "existing_syscall17B_full_final_ABI_reproduced": true,
+  "old_unrelated_seven_C_section_relative_deltas_remain_OPEN": true,
+  "native_acceptance": false,
+  "wholefile_retirement": false
+}

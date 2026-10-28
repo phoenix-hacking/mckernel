@@ -1,3 +1,47 @@
+## CURRENT115 independently accepted; F02 matching native remains — 2026-10-28T04:24:01.731108+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actualindependentb9ed6b2e/Rootaae76 accepts CURRENT115 imagede9fdd13(10257496B), Rust91aa,
+process3717/arch7f53: selectedC80→79(61+18), Rust59→60, processCobjects31→0. Process0
+runtimeFUNC/OBJECT and0non-noteALLOC,48B.gnu.propertySHT_NOTE retained/disclosed. All31
+Rustowners/folded16/full389registry/CPUID2origin/currentconsumers and179body/finalproofs
+plusprlimit supplement pass. All4 commands0/21.393919s/CPU21.426008/RSS592908KiB; resource
+→compiler0.669549s. Independentcurrentfree270a/noheavy, oldCID52ae retained. Acceptance
+belongs04:06–04:36 bucket; no backdate to buildbucket. Native/filedelta0, M14files3/6
+M15files1/8/practical35 unchanged. F02originalcontracta455 OPEN onlymatchingapplicable
+235native onnewde9f; old60e native cannotbeclaimedmatching. Matchingbase sourceb18f
+replacesONLYembeddedkernel withrealnewimage, actualcomposition/stage/release pending.
+
+F03fiveunfinishedHOSTsuffixpassed/alljoins/groupsgone/closedstreams; independentbb8
+Root5a774 reuses twoRustprefixes. ReadyNEXT116 eightpaths8610/4bd374 reviewed, exact
+3new+8retainedinclprocess3717/fourcommands; no canonicaladoption/compiler yet. Current111
+prepares complete preclockcohort using provenA4sequence, not priorbrokenhelpers.
+Original227 actualonecompose0/fullmap2afd/tool67662, then binder refusedretainedexecutor
+contractmissing227case6091 BEFOREnative/staging. Ownerboundedadditive7f06contract keeps
+old3cases/checker29f9, real227facts only; no compose replay. Sourcecorrectionreviewpending.
+Root54/16554de5/count65 current, free270a remainslatestheavy; noheavy/CPU6jobs live.
+Allsource/default/native/file deltas separate. Fixed05:36:09Z/earlierclamps/includedfirst/
+samecreditledger/debits/caps/permanent27:4/scratch21/floors/realholds unchanged.
+
+## CURRENT115 actual four-command build passed; acceptance pending — 2026-10-28T04:08:07.733364+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+A4 actualcold e436/staticpublication2f0b/fetch bfa6bdfc, physical8ecc/held5464 and
+independentPASSc647 entered existing publisher0791 and holder tool54261. All4 actual
+commands returned0; Rust91aa/process3717/arch7f53/image de9fdd13(10257496B). Actual
+commandwall21.393919s/span21.411762s/CPU21.426008s/RSS592908KiB. Resource→firstcompiler
+0.669549s, independentapprovalage0.136326s; original120s/postfsync unchanged. First
+compiler04:05:25.909183Z, qualification02:13:29→compiler6716.909s includes integration/
+failedadmission/ownedretirement, not whollyidle. No95percentclaim.
+Holder1849845/start95775567 and runner1849881/start95777018 positivejoined0; stopped
+CID52ae1a85 retained exited0/noOOM. Roottoolreceiptd871/2325B; actualnoncefab368
+consumed once. Artifactowner current110 and independentcurrentfreeowner custody
+review actual outputs/joins now. Acceptedcounts STILL C80/Rust59/process31, files
+M14 3/6/M15 1/8/practical35/35 until actual independent artifact decision. No newnative.
+Original227 actualHOST-bound source00ad and review21224 ready; next ordinarycompose
+dispatch source preparation current111, no compiler/payload/collector replay.
+Samefixed05:36:09Z/earlierclocks/account/cumulativeledger/realholds/caps/floors.
+
 ## A4 complete cohort ready; focused review before capture — 2026-10-28T04:02:50.090312+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

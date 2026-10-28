@@ -1,0 +1,499 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.page_fault_process_memory_range:
+
+0000000000000000 <page_fault_process_memory_range>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	41 57                	push   %r15
+   6:	41 56                	push   %r14
+   8:	41 55                	push   %r13
+   a:	41 54                	push   %r12
+   c:	53                   	push   %rbx
+   d:	48 83 ec 68          	sub    $0x68,%rsp
+  11:	49 89 cd             	mov    %rcx,%r13
+  14:	49 89 d4             	mov    %rdx,%r12
+  17:	49 89 f7             	mov    %rsi,%r15
+  1a:	49 89 fe             	mov    %rdi,%r14
+  1d:	48 c7 45 98 00 00 00 00 	movq   $0x0,-0x68(%rbp)
+  25:	48 c7 45 a8 00 00 00 00 	movq   $0x0,-0x58(%rbp)
+  2d:	c7 45 d4 00 00 00 00 	movl   $0x0,-0x2c(%rbp)
+  34:	c7 45 d0 00 00 00 00 	movl   $0x0,-0x30(%rbp)
+  3b:	48 c7 45 c8 00 00 00 00 	movq   $0x0,-0x38(%rbp)
+  43:	48 c7 45 88 00 00 00 00 	movq   $0x0,-0x78(%rbp)
+  4b:	48 c7 45 80 00 00 00 00 	movq   $0x0,-0x80(%rbp)
+  53:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	55: R_X86_64_64	process_page_fault_entry_log_body_result
+  5d:	ff d0                	call   *%rax
+  5f:	48 83 ec 08          	sub    $0x8,%rsp
+  63:	48 8d 45 d0          	lea    -0x30(%rbp),%rax
+  67:	4c 8d 55 d4          	lea    -0x2c(%rbp),%r10
+  6b:	4c 8d 5d a0          	lea    -0x60(%rbp),%r11
+  6f:	48 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%rbx	71: R_X86_64_64	process_page_fault_prepare_body_result
+  79:	4c 8d 45 98          	lea    -0x68(%rbp),%r8
+  7d:	4c 8d 4d a8          	lea    -0x58(%rbp),%r9
+  81:	4c 89 75 90          	mov    %r14,-0x70(%rbp)
+  85:	4c 89 f7             	mov    %r14,%rdi
+  88:	4c 89 fe             	mov    %r15,%rsi
+  8b:	4c 89 e2             	mov    %r12,%rdx
+  8e:	4c 89 e9             	mov    %r13,%rcx
+  91:	50                   	push   %rax
+  92:	41 52                	push   %r10
+  94:	41 53                	push   %r11
+  96:	ff d3                	call   *%rbx
+  98:	48 83 c4 20          	add    $0x20,%rsp
+  9c:	85 c0                	test   %eax,%eax
+  9e:	4c 89 65 b8          	mov    %r12,-0x48(%rbp)
+  a2:	74 53                	je     f7 <page_fault_process_memory_range+0xf7>
+  a4:	8b 5d d0             	mov    -0x30(%rbp),%ebx
+  a7:	4c 8b 4d 88          	mov    -0x78(%rbp),%r9
+  ab:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	ad: R_X86_64_64	process_page_fault_out_return_debug
+  b5:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	b7: R_X86_64_64	process_page_fault_out_rss_sub_debug
+  bf:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	c1: R_X86_64_64	process_page_fault_out_stray_debug
+  c9:	49 be 00 00 00 00 00 00 00 00 	movabs $0x0,%r14	cb: R_X86_64_64	process_page_fault_out_body_result
+  d3:	4c 8d 45 a0          	lea    -0x60(%rbp),%r8
+  d7:	48 8b 7d 90          	mov    -0x70(%rbp),%rdi
+  db:	4c 89 fe             	mov    %r15,%rsi
+  de:	48 8b 55 b8          	mov    -0x48(%rbp),%rdx
+  e2:	4c 89 e9             	mov    %r13,%rcx
+  e5:	50                   	push   %rax
+  e6:	41 52                	push   %r10
+  e8:	41 53                	push   %r11
+  ea:	53                   	push   %rbx
+  eb:	41 ff d6             	call   *%r14
+  ee:	48 83 c4 20          	add    $0x20,%rsp
+  f2:	e9 90 05 00 00       	jmp    687 <page_fault_process_memory_range+0x687>
+  f7:	4c 8b 75 98          	mov    -0x68(%rbp),%r14
+  fb:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	fd: R_X86_64_64	process_page_fault_pte_state_debug+0x18
+ 105:	8b 00                	mov    (%rax),%eax
+ 107:	3d 00 00 00 01       	cmp    $0x1000000,%eax
+ 10c:	72 4c                	jb     15a <page_fault_process_memory_range+0x15a>
+ 10e:	4d 85 f6             	test   %r14,%r14
+ 111:	74 16                	je     129 <page_fault_process_memory_range+0x129>
+ 113:	31 c9                	xor    %ecx,%ecx
+ 115:	49 83 3e 00          	cmpq   $0x0,(%r14)
+ 119:	0f 94 c1             	sete   %cl
+ 11c:	4d 8b 06             	mov    (%r14),%r8
+ 11f:	41 c1 e8 0b          	shr    $0xb,%r8d
+ 123:	41 83 e0 01          	and    $0x1,%r8d
+ 127:	eb 0b                	jmp    134 <page_fault_process_memory_range+0x134>
+ 129:	41 b8 ff ff ff ff    	mov    $0xffffffff,%r8d
+ 12f:	b9 ff ff ff ff       	mov    $0xffffffff,%ecx
+ 134:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	136: R_X86_64_64	.lrodata.str1.1+0x6dde
+ 13e:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	140: R_X86_64_64	.lrodata.str1.1+0x5d91
+ 148:	49 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%r9	14a: R_X86_64_64	kprintf
+ 152:	4c 89 f2             	mov    %r14,%rdx
+ 155:	31 c0                	xor    %eax,%eax
+ 157:	41 ff d1             	call   *%r9
+ 15a:	4d 85 f6             	test   %r14,%r14
+ 15d:	4c 89 6d c0          	mov    %r13,-0x40(%rbp)
+ 161:	74 5b                	je     1be <page_fault_process_memory_range+0x1be>
+ 163:	49 83 3e 00          	cmpq   $0x0,(%r14)
+ 167:	74 1f                	je     188 <page_fault_process_memory_range+0x188>
+ 169:	49 f7 06 00 08 00 00 	testq  $0x800,(%r14)
+ 170:	75 16                	jne    188 <page_fault_process_memory_range+0x188>
+ 172:	48 bf 00 f0 ff ff ff ff 0f 00 	movabs $0xffffffffff000,%rdi
+ 17c:	49 23 3e             	and    (%r14),%rdi
+ 17f:	48 89 7d c8          	mov    %rdi,-0x38(%rbp)
+ 183:	e9 c2 01 00 00       	jmp    34a <page_fault_process_memory_range+0x34a>
+ 188:	48 8b 5d a8          	mov    -0x58(%rbp),%rbx
+ 18c:	44 8b 6d d4          	mov    -0x2c(%rbp),%r13d
+ 190:	48 c7 45 c8 ff ff ff ff 	movq   $0xffffffffffffffff,-0x38(%rbp)
+ 198:	49 8b 7f 38          	mov    0x38(%r15),%rdi
+ 19c:	48 85 ff             	test   %rdi,%rdi
+ 19f:	0f 84 db 00 00 00    	je     280 <page_fault_process_memory_range+0x280>
+ 1a5:	4d 8d 67 38          	lea    0x38(%r15),%r12
+ 1a9:	49 f7 06 00 08 00 00 	testq  $0x800,(%r14)
+ 1b0:	74 2d                	je     1df <page_fault_process_memory_range+0x1df>
+ 1b2:	48 c7 c3 00 f0 ff ff 	mov    $0xfffffffffffff000,%rbx
+ 1b9:	49 23 1e             	and    (%r14),%rbx
+ 1bc:	eb 29                	jmp    1e7 <page_fault_process_memory_range+0x1e7>
+ 1be:	48 8b 5d a8          	mov    -0x58(%rbp),%rbx
+ 1c2:	44 8b 6d d4          	mov    -0x2c(%rbp),%r13d
+ 1c6:	48 c7 45 c8 ff ff ff ff 	movq   $0xffffffffffffffff,-0x38(%rbp)
+ 1ce:	49 8b 7f 38          	mov    0x38(%r15),%rdi
+ 1d2:	48 85 ff             	test   %rdi,%rdi
+ 1d5:	0f 84 a2 00 00 00    	je     27d <page_fault_process_memory_range+0x27d>
+ 1db:	4d 8d 67 38          	lea    0x38(%r15),%r12
+ 1df:	49 03 5f 40          	add    0x40(%r15),%rbx
+ 1e3:	49 2b 5f 18          	sub    0x18(%r15),%rbx
+ 1e7:	48 8b 07             	mov    (%rdi),%rax
+ 1ea:	48 8b 40 08          	mov    0x8(%rax),%rax
+ 1ee:	48 85 c0             	test   %rax,%rax
+ 1f1:	74 23                	je     216 <page_fault_process_memory_range+0x216>
+ 1f3:	48 8d 4d c8          	lea    -0x38(%rbp),%rcx
+ 1f7:	4c 8d 45 80          	lea    -0x80(%rbp),%r8
+ 1fb:	48 89 de             	mov    %rbx,%rsi
+ 1fe:	44 89 ea             	mov    %r13d,%edx
+ 201:	4c 8b 4d b8          	mov    -0x48(%rbp),%r9
+ 205:	ff d0                	call   *%rax
+ 207:	89 c3                	mov    %eax,%ebx
+ 209:	89 45 d0             	mov    %eax,-0x30(%rbp)
+ 20c:	85 c0                	test   %eax,%eax
+ 20e:	4c 8b 6d c0          	mov    -0x40(%rbp),%r13
+ 212:	75 12                	jne    226 <page_fault_process_memory_range+0x226>
+ 214:	eb 47                	jmp    25d <page_fault_process_memory_range+0x25d>
+ 216:	c7 45 d0 fa ff ff ff 	movl   $0xfffffffa,-0x30(%rbp)
+ 21d:	bb fa ff ff ff       	mov    $0xfffffffa,%ebx
+ 222:	4c 8b 6d c0          	mov    -0x40(%rbp),%r13
+ 226:	48 c7 85 78 ff ff ff 00 00 00 00 	movq   $0x0,-0x88(%rbp)
+ 231:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	233: R_X86_64_64	zeroobj_create
+ 23b:	48 8d bd 78 ff ff ff 	lea    -0x88(%rbp),%rdi
+ 242:	ff d0                	call   *%rax
+ 244:	85 c0                	test   %eax,%eax
+ 246:	0f 85 03 06 00 00    	jne    84f <page_fault_process_memory_range+0x84f>
+ 24c:	49 8b 04 24          	mov    (%r12),%rax
+ 250:	48 3b 85 78 ff ff ff 	cmp    -0x88(%rbp),%rax
+ 257:	0f 85 4a fe ff ff    	jne    a7 <page_fault_process_memory_range+0xa7>
+ 25d:	48 8b 7d c8          	mov    -0x38(%rbp),%rdi
+ 261:	48 83 ff ff          	cmp    $0xffffffffffffffff,%rdi
+ 265:	4c 8b 65 b8          	mov    -0x48(%rbp),%r12
+ 269:	0f 85 db 00 00 00    	jne    34a <page_fault_process_memory_range+0x34a>
+ 26f:	44 8b 6d d4          	mov    -0x2c(%rbp),%r13d
+ 273:	4c 8b 75 98          	mov    -0x68(%rbp),%r14
+ 277:	48 8b 5d a8          	mov    -0x58(%rbp),%rbx
+ 27b:	eb 03                	jmp    280 <page_fault_process_memory_range+0x280>
+ 27d:	45 31 f6             	xor    %r14d,%r14d
+ 280:	4c 8b 65 a0          	mov    -0x60(%rbp),%r12
+ 284:	8b 45 d0             	mov    -0x30(%rbp),%eax
+ 287:	89 45 b0             	mov    %eax,-0x50(%rbp)
+ 28a:	4c 89 e7             	mov    %r12,%rdi
+ 28d:	48 c1 ef 0c          	shr    $0xc,%rdi
+ 291:	41 8b 57 28          	mov    0x28(%r15),%edx
+ 295:	83 e2 04             	and    $0x4,%edx
+ 298:	c1 e2 0a             	shl    $0xa,%edx
+ 29b:	48 83 ca 02          	or     $0x2,%rdx
+ 29f:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	2a1: R_X86_64_64	process_page_fault_anon_alloc_file
+ 2a9:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	2ab: R_X86_64_64	_ihk_mc_alloc_aligned_pages_node
+ 2b3:	44 89 ee             	mov    %r13d,%esi
+ 2b6:	b9 ff ff ff ff       	mov    $0xffffffff,%ecx
+ 2bb:	41 b8 01 00 00 00    	mov    $0x1,%r8d
+ 2c1:	4c 8b 4d b8          	mov    -0x48(%rbp),%r9
+ 2c5:	68 f2 0b 00 00       	push   $0xbf2
+ 2ca:	ff 30                	push   (%rax)
+ 2cc:	41 ff d2             	call   *%r10
+ 2cf:	48 83 c4 10          	add    $0x10,%rsp
+ 2d3:	48 85 c0             	test   %rax,%rax
+ 2d6:	0f 84 bc 03 00 00    	je     698 <page_fault_process_memory_range+0x698>
+ 2dc:	8b 4d b0             	mov    -0x50(%rbp),%ecx
+ 2df:	4c 89 65 a0          	mov    %r12,-0x60(%rbp)
+ 2e3:	44 89 6d d4          	mov    %r13d,-0x2c(%rbp)
+ 2e7:	89 4d d0             	mov    %ecx,-0x30(%rbp)
+ 2ea:	4c 89 75 98          	mov    %r14,-0x68(%rbp)
+ 2ee:	48 89 5d a8          	mov    %rbx,-0x58(%rbp)
+ 2f2:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	2f4: R_X86_64_64	process_page_fault_anon_map_debug
+ 2fc:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	2fe: R_X86_64_64	process_page_fault_anon_clear_debug
+ 306:	4c 8d 75 c8          	lea    -0x38(%rbp),%r14
+ 30a:	49 bd 00 00 00 00 00 00 00 00 	movabs $0x0,%r13	30c: R_X86_64_64	process_page_fault_anon_clear_body_result
+ 314:	4c 89 ff             	mov    %r15,%rdi
+ 317:	48 89 de             	mov    %rbx,%rsi
+ 31a:	4c 89 e2             	mov    %r12,%rdx
+ 31d:	48 89 c1             	mov    %rax,%rcx
+ 320:	45 31 c0             	xor    %r8d,%r8d
+ 323:	4c 8b 65 b8          	mov    -0x48(%rbp),%r12
+ 327:	4d 89 e1             	mov    %r12,%r9
+ 32a:	41 52                	push   %r10
+ 32c:	41 53                	push   %r11
+ 32e:	68 a2 0f 00 00       	push   $0xfa2
+ 333:	6a 01                	push   $0x1
+ 335:	41 56                	push   %r14
+ 337:	48 8b 5d c0          	mov    -0x40(%rbp),%rbx
+ 33b:	53                   	push   %rbx
+ 33c:	41 ff d5             	call   *%r13
+ 33f:	49 89 dd             	mov    %rbx,%r13
+ 342:	48 83 c4 30          	add    $0x30,%rsp
+ 346:	48 8b 7d c8          	mov    -0x38(%rbp),%rdi
+ 34a:	4c 8b 75 80          	mov    -0x80(%rbp),%r14
+ 34e:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	350: R_X86_64_64	phys_to_page
+ 358:	ff d0                	call   *%rax
+ 35a:	48 89 45 88          	mov    %rax,-0x78(%rbp)
+ 35e:	49 8b 4f 28          	mov    0x28(%r15),%rcx
+ 362:	49 09 ce             	or     %rcx,%r14
+ 365:	44 89 f6             	mov    %r14d,%esi
+ 368:	81 e6 00 01 00 00    	and    $0x100,%esi
+ 36e:	c1 e6 08             	shl    $0x8,%esi
+ 371:	48 81 ce 04 00 02 00 	or     $0x20004,%rsi
+ 378:	41 f7 c6 00 02 00 00 	test   $0x200,%r14d
+ 37f:	ba 04 00 02 00       	mov    $0x20004,%edx
+ 384:	48 0f 44 d6          	cmove  %rsi,%rdx
+ 388:	31 f6                	xor    %esi,%esi
+ 38a:	41 f7 c6 00 00 07 00 	test   $0x70000,%r14d
+ 391:	40 0f 95 c6          	setne  %sil
+ 395:	44 89 f7             	mov    %r14d,%edi
+ 398:	c1 ef 10             	shr    $0x10,%edi
+ 39b:	83 e7 02             	and    $0x2,%edi
+ 39e:	45 89 f0             	mov    %r14d,%r8d
+ 3a1:	41 81 e0 00 00 04 00 	and    $0x40000,%r8d
+ 3a8:	49 c1 e0 2d          	shl    $0x2d,%r8
+ 3ac:	49 09 f8             	or     %rdi,%r8
+ 3af:	44 89 f7             	mov    %r14d,%edi
+ 3b2:	c1 e7 08             	shl    $0x8,%edi
+ 3b5:	81 e7 00 00 04 00    	and    $0x40000,%edi
+ 3bb:	4c 09 c7             	or     %r8,%rdi
+ 3be:	48 09 f7             	or     %rsi,%rdi
+ 3c1:	48 09 d7             	or     %rdx,%rdi
+ 3c4:	48 bb 00 00 00 00 00 00 00 80 	movabs $0x8000000000000000,%rbx
+ 3ce:	48 31 fb             	xor    %rdi,%rbx
+ 3d1:	41 f6 c5 01          	test   $0x1,%r13b
+ 3d5:	75 12                	jne    3e9 <page_fault_process_memory_range+0x3e9>
+ 3d7:	41 f7 c5 00 00 00 60 	test   $0x60000000,%r13d
+ 3de:	74 0d                	je     3ed <page_fault_process_memory_range+0x3ed>
+ 3e0:	41 81 e6 00 20 00 00 	and    $0x2000,%r14d
+ 3e7:	74 04                	je     3ed <page_fault_process_memory_range+0x3ed>
+ 3e9:	48 83 cb 40          	or     $0x40,%rbx
+ 3ed:	48 85 c0             	test   %rax,%rax
+ 3f0:	74 17                	je     409 <page_fault_process_memory_range+0x409>
+ 3f2:	0f b6 50 20          	movzbl 0x20(%rax),%edx
+ 3f6:	80 c2 f8             	add    $0xf8,%dl
+ 3f9:	80 fa f9             	cmp    $0xf9,%dl
+ 3fc:	77 0f                	ja     40d <page_fault_process_memory_range+0x40d>
+ 3fe:	8b 50 30             	mov    0x30(%rax),%edx
+ 401:	83 fa 02             	cmp    $0x2,%edx
+ 404:	0f 9c c2             	setl   %dl
+ 407:	eb 06                	jmp    40f <page_fault_process_memory_range+0x40f>
+ 409:	b2 01                	mov    $0x1,%dl
+ 40b:	eb 02                	jmp    40f <page_fault_process_memory_range+0x40f>
+ 40d:	31 d2                	xor    %edx,%edx
+ 40f:	41 f7 c5 00 00 00 20 	test   $0x20000000,%r13d
+ 416:	40 0f 94 c6          	sete   %sil
+ 41a:	89 cf                	mov    %ecx,%edi
+ 41c:	c1 ef 11             	shr    $0x11,%edi
+ 41f:	83 e7 01             	and    $0x1,%edi
+ 422:	40 08 f7             	or     %sil,%dil
+ 425:	f7 c1 00 20 00 00    	test   $0x2000,%ecx
+ 42b:	41 0f 94 c0          	sete   %r8b
+ 42f:	89 de                	mov    %ebx,%esi
+ 431:	83 e6 40             	and    $0x40,%esi
+ 434:	41 84 f8             	test   %dil,%r8b
+ 437:	75 12                	jne    44b <page_fault_process_memory_range+0x44b>
+ 439:	84 d2                	test   %dl,%dl
+ 43b:	75 0e                	jne    44b <page_fault_process_memory_range+0x44b>
+ 43d:	48 85 f6             	test   %rsi,%rsi
+ 440:	75 22                	jne    464 <page_fault_process_memory_range+0x464>
+ 442:	48 83 e3 bd          	and    $0xffffffffffffffbd,%rbx
+ 446:	e9 ab 01 00 00       	jmp    5f6 <page_fault_process_memory_range+0x5f6>
+ 44b:	81 e1 01 20 00 00    	and    $0x2001,%ecx
+ 451:	48 89 da             	mov    %rbx,%rdx
+ 454:	48 83 e2 bd          	and    $0xffffffffffffffbd,%rdx
+ 458:	48 09 ce             	or     %rcx,%rsi
+ 45b:	48 0f 44 da          	cmove  %rdx,%rbx
+ 45f:	e9 92 01 00 00       	jmp    5f6 <page_fault_process_memory_range+0x5f6>
+ 464:	48 8b 55 a0          	mov    -0x60(%rbp),%rdx
+ 468:	44 8b 75 d4          	mov    -0x2c(%rbp),%r14d
+ 46c:	48 85 c0             	test   %rax,%rax
+ 46f:	48 89 55 b0          	mov    %rdx,-0x50(%rbp)
+ 473:	75 26                	jne    49b <page_fault_process_memory_range+0x49b>
+ 475:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	477: R_X86_64_64	.lrodata.str1.1+0x6a81
+ 47f:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	481: R_X86_64_64	.lrodata.str1.1+0x5d91
+ 489:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	48b: R_X86_64_64	kprintf
+ 493:	31 c0                	xor    %eax,%eax
+ 495:	ff d1                	call   *%rcx
+ 497:	48 8b 55 b0          	mov    -0x50(%rbp),%rdx
+ 49b:	48 89 d7             	mov    %rdx,%rdi
+ 49e:	48 c1 ef 0c          	shr    $0xc,%rdi
+ 4a2:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	4a4: R_X86_64_64	process_page_fault_cow_alloc_file
+ 4ac:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	4ae: R_X86_64_64	process_page_fault_cow_alloc_line
+ 4b6:	44 8b 11             	mov    (%rcx),%r10d
+ 4b9:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	4bb: R_X86_64_64	_ihk_mc_alloc_aligned_pages_node
+ 4c3:	ba 02 00 00 00       	mov    $0x2,%edx
+ 4c8:	44 89 f6             	mov    %r14d,%esi
+ 4cb:	b9 ff ff ff ff       	mov    $0xffffffff,%ecx
+ 4d0:	41 b8 01 00 00 00    	mov    $0x1,%r8d
+ 4d6:	4d 89 e1             	mov    %r12,%r9
+ 4d9:	41 52                	push   %r10
+ 4db:	ff 30                	push   (%rax)
+ 4dd:	41 ff d3             	call   *%r11
+ 4e0:	48 83 c4 10          	add    $0x10,%rsp
+ 4e4:	48 85 c0             	test   %rax,%rax
+ 4e7:	0f 84 0d 02 00 00    	je     6fa <page_fault_process_memory_range+0x6fa>
+ 4ed:	49 89 c6             	mov    %rax,%r14
+ 4f0:	49 bc 00 00 00 00 00 80 ff ff 	movabs $0xffff800000000000,%r12
+ 4fa:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	4fc: R_X86_64_64	process_page_fault_cow_copy_debug+0x18
+ 504:	8b 00                	mov    (%rax),%eax
+ 506:	48 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%rdx	508: R_X86_64_64	_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data20OWNED_INIT_PT_LOADED
+ 510:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	512: R_X86_64_64	linux_page_offset_base
+ 51a:	3d 00 00 00 01       	cmp    $0x1000000,%eax
+ 51f:	72 6d                	jb     58e <page_fault_process_memory_range+0x58e>
+ 521:	83 3a 00             	cmpl   $0x0,(%rdx)
+ 524:	4d 89 e5             	mov    %r12,%r13
+ 527:	74 03                	je     52c <page_fault_process_memory_range+0x52c>
+ 529:	4c 8b 29             	mov    (%rcx),%r13
+ 52c:	4c 03 6d c8          	add    -0x38(%rbp),%r13
+ 530:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	532: R_X86_64_64	mem_virt_to_phys_bridge
+ 53a:	4c 89 f7             	mov    %r14,%rdi
+ 53d:	ff d0                	call   *%rax
+ 53f:	4c 8b 4d c8          	mov    -0x38(%rbp),%r9
+ 543:	48 83 ec 08          	sub    $0x8,%rsp
+ 547:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	549: R_X86_64_64	.lrodata.str1.1+0x5d59
+ 551:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	553: R_X86_64_64	.lrodata.str1.1+0x5d91
+ 55b:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	55d: R_X86_64_64	kprintf
+ 565:	4c 89 f2             	mov    %r14,%rdx
+ 568:	4c 89 e9             	mov    %r13,%rcx
+ 56b:	49 89 c0             	mov    %rax,%r8
+ 56e:	31 c0                	xor    %eax,%eax
+ 570:	ff 75 b0             	push   -0x50(%rbp)
+ 573:	41 ff d2             	call   *%r10
+ 576:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	578: R_X86_64_64	linux_page_offset_base
+ 580:	48 83 c4 10          	add    $0x10,%rsp
+ 584:	48 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%rdx	586: R_X86_64_64	_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data20OWNED_INIT_PT_LOADED
+ 58e:	83 3a 00             	cmpl   $0x0,(%rdx)
+ 591:	74 03                	je     596 <page_fault_process_memory_range+0x596>
+ 593:	4c 8b 21             	mov    (%rcx),%r12
+ 596:	4c 03 65 c8          	add    -0x38(%rbp),%r12
+ 59a:	48 8b 55 b0          	mov    -0x50(%rbp),%rdx
+ 59e:	74 1a                	je     5ba <page_fault_process_memory_range+0x5ba>
+ 5a0:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	5a2: R_X86_64_64	memcpy
+ 5aa:	4c 89 f7             	mov    %r14,%rdi
+ 5ad:	4c 89 e6             	mov    %r12,%rsi
+ 5b0:	48 8b 55 b0          	mov    -0x50(%rbp),%rdx
+ 5b4:	ff d0                	call   *%rax
+ 5b6:	48 8b 55 b0          	mov    -0x50(%rbp),%rdx
+ 5ba:	48 83 ec 08          	sub    $0x8,%rsp
+ 5be:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	5c0: R_X86_64_64	process_page_fault_cow_rss_sub_debug
+ 5c8:	49 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%r9	5ca: R_X86_64_64	process_page_fault_cow_rss_add_debug
+ 5d2:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	5d4: R_X86_64_64	process_page_fault_cow_commit_body_result
+ 5dc:	48 8d 75 c8          	lea    -0x38(%rbp),%rsi
+ 5e0:	4c 8d 45 88          	lea    -0x78(%rbp),%r8
+ 5e4:	4c 89 ff             	mov    %r15,%rdi
+ 5e7:	4c 89 f1             	mov    %r14,%rcx
+ 5ea:	50                   	push   %rax
+ 5eb:	41 ff d2             	call   *%r10
+ 5ee:	48 83 c4 10          	add    $0x10,%rsp
+ 5f2:	48 8b 45 88          	mov    -0x78(%rbp),%rax
+ 5f6:	4c 8b 45 98          	mov    -0x68(%rbp),%r8
+ 5fa:	4c 8b 4d a8          	mov    -0x58(%rbp),%r9
+ 5fe:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	600: R_X86_64_64	process_page_fault_out_return_debug
+ 608:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	60a: R_X86_64_64	process_page_fault_out_rss_sub_debug
+ 612:	49 be 00 00 00 00 00 00 00 00 	movabs $0x0,%r14	614: R_X86_64_64	process_page_fault_out_stray_debug
+ 61c:	49 bc 00 00 00 00 00 00 00 00 	movabs $0x0,%r12	61e: R_X86_64_64	process_page_fault_set_pte_attr_debug
+ 626:	49 bd 00 00 00 00 00 00 00 00 	movabs $0x0,%r13	628: R_X86_64_64	process_page_fault_set_pte_rss_skip_debug
+ 630:	48 8b 7d 90          	mov    -0x70(%rbp),%rdi
+ 634:	4c 89 fe             	mov    %r15,%rsi
+ 637:	48 8b 55 b8          	mov    -0x48(%rbp),%rdx
+ 63b:	48 8b 4d c0          	mov    -0x40(%rbp),%rcx
+ 63f:	41 52                	push   %r10
+ 641:	41 53                	push   %r11
+ 643:	41 56                	push   %r14
+ 645:	41 54                	push   %r12
+ 647:	41 55                	push   %r13
+ 649:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	64b: R_X86_64_64	process_page_fault_set_pte_rss_add_debug
+ 653:	41 52                	push   %r10
+ 655:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	657: R_X86_64_64	.ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers30process_fault_set_range_target
+ 65f:	41 52                	push   %r10
+ 661:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	663: R_X86_64_64	ihk_mc_pt_set_pte
+ 66b:	41 52                	push   %r10
+ 66d:	50                   	push   %rax
+ 66e:	53                   	push   %rbx
+ 66f:	ff 75 c8             	push   -0x38(%rbp)
+ 672:	ff 75 a0             	push   -0x60(%rbp)
+ 675:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	677: R_X86_64_64	process_page_fault_install_finish_body_result
+ 67f:	ff d0                	call   *%rax
+ 681:	48 83 c4 60          	add    $0x60,%rsp
+ 685:	89 c3                	mov    %eax,%ebx
+ 687:	89 d8                	mov    %ebx,%eax
+ 689:	48 83 c4 68          	add    $0x68,%rsp
+ 68d:	5b                   	pop    %rbx
+ 68e:	41 5c                	pop    %r12
+ 690:	41 5d                	pop    %r13
+ 692:	41 5e                	pop    %r14
+ 694:	41 5f                	pop    %r15
+ 696:	5d                   	pop    %rbp
+ 697:	c3                   	ret    
+ 698:	48 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%rbx	69a: R_X86_64_64	_ihk_mc_alloc_aligned_pages_node
+ 6a2:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	6a4: R_X86_64_64	.lrodata.str1.1+0x69d8
+ 6ac:	49 81 fc 00 10 00 00 	cmp    $0x1000,%r12
+ 6b3:	0f 84 ae 00 00 00    	je     767 <page_fault_process_memory_range+0x767>
+ 6b9:	41 83 7f 48 00       	cmpl   $0x0,0x48(%r15)
+ 6be:	4c 8b 6d c0          	mov    -0x40(%rbp),%r13
+ 6c2:	0f 85 4e 01 00 00    	jne    816 <page_fault_process_memory_range+0x816>
+ 6c8:	49 81 fc 01 00 00 40 	cmp    $0x40000001,%r12
+ 6cf:	72 55                	jb     726 <page_fault_process_memory_range+0x726>
+ 6d1:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	6d3: R_X86_64_64	_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data18OWNED_USE_1GB_PAGE
+ 6db:	83 38 00             	cmpl   $0x0,(%rax)
+ 6de:	74 46                	je     726 <page_fault_process_memory_range+0x726>
+ 6e0:	b8 00 00 00 40       	mov    $0x40000000,%eax
+ 6e5:	41 bd 12 00 00 00    	mov    $0x12,%r13d
+ 6eb:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	6ed: R_X86_64_64	process_page_fault_anon_alloc_file
+ 6f5:	49 89 db             	mov    %rbx,%r11
+ 6f8:	eb 76                	jmp    770 <page_fault_process_memory_range+0x770>
+ 6fa:	49 8b 57 18          	mov    0x18(%r15),%rdx
+ 6fe:	49 8b 4f 20          	mov    0x20(%r15),%rcx
+ 702:	4d 8b 47 28          	mov    0x28(%r15),%r8
+ 706:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	708: R_X86_64_64	.lrodata.str1.1+0x6ab3
+ 710:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	712: R_X86_64_64	kprintf
+ 71a:	48 8b 75 90          	mov    -0x70(%rbp),%rsi
+ 71e:	4d 89 e1             	mov    %r12,%r9
+ 721:	e9 12 01 00 00       	jmp    838 <page_fault_process_memory_range+0x838>
+ 726:	49 81 fc 00 00 20 00 	cmp    $0x200000,%r12
+ 72d:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	72f: R_X86_64_64	process_page_fault_anon_alloc_file
+ 737:	49 89 db             	mov    %rbx,%r11
+ 73a:	76 0d                	jbe    749 <page_fault_process_memory_range+0x749>
+ 73c:	b8 00 00 20 00       	mov    $0x200000,%eax
+ 741:	41 bd 09 00 00 00    	mov    $0x9,%r13d
+ 747:	eb 27                	jmp    770 <page_fault_process_memory_range+0x770>
+ 749:	b8 00 10 00 00       	mov    $0x1000,%eax
+ 74e:	45 31 ed             	xor    %r13d,%r13d
+ 751:	49 81 fc 01 10 00 00 	cmp    $0x1001,%r12
+ 758:	73 16                	jae    770 <page_fault_process_memory_range+0x770>
+ 75a:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	75c: R_X86_64_64	.lrodata.str1.1+0x6973
+ 764:	45 31 e4             	xor    %r12d,%r12d
+ 767:	4c 8b 6d c0          	mov    -0x40(%rbp),%r13
+ 76b:	e9 a6 00 00 00       	jmp    816 <page_fault_process_memory_range+0x816>
+ 770:	41 be 00 00 20 00    	mov    $0x200000,%r14d
+ 776:	49 89 c4             	mov    %rax,%r12
+ 779:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+ 780:	4c 89 e7             	mov    %r12,%rdi
+ 783:	48 c1 ef 0c          	shr    $0xc,%rdi
+ 787:	41 8b 57 28          	mov    0x28(%r15),%edx
+ 78b:	83 e2 04             	and    $0x4,%edx
+ 78e:	c1 e2 0a             	shl    $0xa,%edx
+ 791:	48 83 ca 02          	or     $0x2,%rdx
+ 795:	44 89 ee             	mov    %r13d,%esi
+ 798:	b9 ff ff ff ff       	mov    $0xffffffff,%ecx
+ 79d:	41 b8 01 00 00 00    	mov    $0x1,%r8d
+ 7a3:	4c 8b 4d b8          	mov    -0x48(%rbp),%r9
+ 7a7:	68 f2 0b 00 00       	push   $0xbf2
+ 7ac:	41 ff 32             	push   (%r10)
+ 7af:	41 ff d3             	call   *%r11
+ 7b2:	48 83 c4 10          	add    $0x10,%rsp
+ 7b6:	48 85 c0             	test   %rax,%rax
+ 7b9:	75 39                	jne    7f4 <page_fault_process_memory_range+0x7f4>
+ 7bb:	49 81 fc 00 10 00 00 	cmp    $0x1000,%r12
+ 7c2:	74 44                	je     808 <page_fault_process_memory_range+0x808>
+ 7c4:	41 83 7f 48 00       	cmpl   $0x0,0x48(%r15)
+ 7c9:	75 3d                	jne    808 <page_fault_process_memory_range+0x808>
+ 7cb:	31 c0                	xor    %eax,%eax
+ 7cd:	49 81 fc 01 00 20 00 	cmp    $0x200001,%r12
+ 7d4:	0f 93 c0             	setae  %al
+ 7d7:	44 8d 2c c0          	lea    (%rax,%rax,8),%r13d
+ 7db:	41 bc 00 10 00 00    	mov    $0x1000,%r12d
+ 7e1:	4d 0f 43 e6          	cmovae %r14,%r12
+ 7e5:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	7e7: R_X86_64_64	process_page_fault_anon_alloc_file
+ 7ef:	49 89 db             	mov    %rbx,%r11
+ 7f2:	eb 8c                	jmp    780 <page_fault_process_memory_range+0x780>
+ 7f4:	4c 89 e3             	mov    %r12,%rbx
+ 7f7:	48 f7 db             	neg    %rbx
+ 7fa:	48 23 5d b8          	and    -0x48(%rbp),%rbx
+ 7fe:	45 31 f6             	xor    %r14d,%r14d
+ 801:	31 c9                	xor    %ecx,%ecx
+ 803:	e9 d7 fa ff ff       	jmp    2df <page_fault_process_memory_range+0x2df>
+ 808:	4c 8b 6d c0          	mov    -0x40(%rbp),%r13
+ 80c:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	80e: R_X86_64_64	.lrodata.str1.1+0x69d8
+ 816:	4c 89 65 a0          	mov    %r12,-0x60(%rbp)
+ 81a:	49 8b 57 18          	mov    0x18(%r15),%rdx
+ 81e:	49 8b 4f 20          	mov    0x20(%r15),%rcx
+ 822:	4d 8b 47 28          	mov    0x28(%r15),%r8
+ 826:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	828: R_X86_64_64	kprintf
+ 830:	48 8b 75 90          	mov    -0x70(%rbp),%rsi
+ 834:	4c 8b 4d b8          	mov    -0x48(%rbp),%r9
+ 838:	31 c0                	xor    %eax,%eax
+ 83a:	6a f4                	push   $0xfffffffffffffff4
+ 83c:	41 55                	push   %r13
+ 83e:	41 ff d2             	call   *%r10
+ 841:	48 83 c4 10          	add    $0x10,%rsp
+ 845:	bb f4 ff ff ff       	mov    $0xfffffff4,%ebx
+ 84a:	e9 58 f8 ff ff       	jmp    a7 <page_fault_process_memory_range+0xa7>
+ 84f:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	851: R_X86_64_64	.lrodata.str1.1+0x5db1
+ 859:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	85b: R_X86_64_64	panic
+ 863:	ff d0                	call   *%rax
