@@ -1,0 +1,57 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.process_release_sigcommon_bridge:
+
+0000000000000000 <process_release_sigcommon_bridge>:
+   0:	48 85 ff             	test   %rdi,%rdi
+   3:	0f 84 b6 00 00 00    	je     bf <process_release_sigcommon_bridge+0xbf>
+   9:	48 8b 87 48 08 00 00 	mov    0x848(%rdi),%rax
+  10:	f0 ff 4f 40          	lock decl 0x40(%rdi)
+  14:	0f 85 a5 00 00 00    	jne    bf <process_release_sigcommon_bridge+0xbf>
+  1a:	55                   	push   %rbp
+  1b:	48 89 e5             	mov    %rsp,%rbp
+  1e:	41 57                	push   %r15
+  20:	41 56                	push   %r14
+  22:	41 54                	push   %r12
+  24:	53                   	push   %rbx
+  25:	48 89 fb             	mov    %rdi,%rbx
+  28:	4c 8d b7 48 08 00 00 	lea    0x848(%rdi),%r14
+  2f:	4c 39 f0             	cmp    %r14,%rax
+  32:	74 62                	je     96 <process_release_sigcommon_bridge+0x96>
+  34:	49 8b 3e             	mov    (%r14),%rdi
+  37:	48 85 ff             	test   %rdi,%rdi
+  3a:	74 5a                	je     96 <process_release_sigcommon_bridge+0x96>
+  3c:	4c 39 f7             	cmp    %r14,%rdi
+  3f:	74 55                	je     96 <process_release_sigcommon_bridge+0x96>
+  41:	49 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%r15	43: R_X86_64_64	process_tracked_allocator_source_file
+  4b:	49 bc 00 00 00 00 00 00 00 00 	movabs $0x0,%r12	4d: R_X86_64_64	_kfree
+  55:	66 66 2e 0f 1f 84 00 00 00 00 00 	data16 cs nopw 0x0(%rax,%rax,1)
+  60:	48 8b 07             	mov    (%rdi),%rax
+  63:	49 89 06             	mov    %rax,(%r14)
+  66:	48 85 c0             	test   %rax,%rax
+  69:	74 04                	je     6f <process_release_sigcommon_bridge+0x6f>
+  6b:	4c 89 70 08          	mov    %r14,0x8(%rax)
+  6f:	48 c7 07 29 01 10 00 	movq   $0x100129,(%rdi)
+  76:	48 c7 47 08 29 02 20 00 	movq   $0x200229,0x8(%rdi)
+  7e:	49 8b 37             	mov    (%r15),%rsi
+  81:	ba 02 01 00 00       	mov    $0x102,%edx
+  86:	41 ff d4             	call   *%r12
+  89:	49 8b 3e             	mov    (%r14),%rdi
+  8c:	48 85 ff             	test   %rdi,%rdi
+  8f:	74 05                	je     96 <process_release_sigcommon_bridge+0x96>
+  91:	4c 39 f7             	cmp    %r14,%rdi
+  94:	75 ca                	jne    60 <process_release_sigcommon_bridge+0x60>
+  96:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	98: R_X86_64_64	process_tracked_allocator_source_file
+  a0:	48 8b 30             	mov    (%rax),%rsi
+  a3:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	a5: R_X86_64_64	_kfree
+  ad:	48 89 df             	mov    %rbx,%rdi
+  b0:	ba 02 01 00 00       	mov    $0x102,%edx
+  b5:	5b                   	pop    %rbx
+  b6:	41 5c                	pop    %r12
+  b8:	41 5e                	pop    %r14
+  ba:	41 5f                	pop    %r15
+  bc:	5d                   	pop    %rbp
+  bd:	ff e0                	jmp    *%rax
+  bf:	c3                   	ret    

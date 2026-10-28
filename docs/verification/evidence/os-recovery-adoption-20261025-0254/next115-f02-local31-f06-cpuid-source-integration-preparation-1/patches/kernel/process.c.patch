@@ -1,0 +1,457 @@
+--- a/kernel/process.c
++++ b/kernel/process.c
+@@ -246,8 +246,20 @@
+ 			       uintptr_t addr, struct vm_range **splitp);
+ 
+ #ifdef MCKERNEL_RUST_PROCESS_HELPERS
++#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
++/* These C-only feature axes have no paired Rust configuration input. */
++#if defined(RUSAGE_DEBUG) || defined(TIMER_CPU_ID) || \
++    defined(ARCH_MEMCLEAR) || defined(ENABLE_FUGAKU_HACKS)
++#error "Unqualified final process metadata profile; disable local companions for C fallback"
++#endif
++extern const char *const process_tracked_allocator_source_file;
++#else
++#line 170
+ const char *const process_tracked_allocator_source_file = __FILE__;
+ #endif
++#line 171
++#endif
++#line 172
+ #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+ PROCESS_TRACKED_LINE_STORAGE(process_mckfd_free_bridge_source_line, 171);
+ void process_mckfd_free_bridge(struct mckfd *fdp);
+@@ -1269,6 +1281,8 @@
+     void (*modify_context)(void *,int,unsigned long);
+     int (*copy_ranges)(struct process_vm *,struct process_vm *);
+ };
++#ifndef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
++#line 1005
+ static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+ process_clone_vm_debug = {
+     .file = __FILE__, .func = "clone_thread",
+@@ -1294,6 +1308,15 @@
+     .file = __FILE__, .func = "clone_thread",
+     .line = 1208, .flags = DDEBUG_DEFAULT,
+ };
++#endif
++#line 1030
++#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
++#ifndef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
++#error local config companions require process verbose data
++#endif
++extern const struct process_clone_config process_clone_config;
++#else
++#line 1030
+ const struct process_clone_config process_clone_config = {
+     .stack_pages=KERNEL_STACK_NR_PAGES, .page_size=PAGE_SIZE,
+     .page_align=PAGE_P2ALIGN, .nowait=IHK_MC_AP_NOWAIT,
+@@ -1306,11 +1329,14 @@
+     .modify_context=process_user_context_modify_bridge,
+     .copy_ranges=copy_user_ranges,
+ };
++#endif
++#line 1042
+ struct thread *process_clone_thread_body_result(struct thread *,unsigned long,
+         unsigned long,int,const struct process_clone_config *);
+ struct thread *clone_thread(struct thread *org,unsigned long pc,unsigned long sp,
+         int clone_flags);
+ #else
++#line 1047
+ #line 992
+ struct thread *
+ clone_thread(struct thread *org, unsigned long pc, unsigned long sp,
+@@ -1625,6 +1651,11 @@
+ 	process_thread_action_result(thread, process_free_thread_pages_bridge);
+ 	return NULL;
+ }
++#endif
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++#line 1359
++#else
++#line 1305
+ #endif
+ #line 1306
+ 
+@@ -1738,6 +1769,8 @@
+ };
+ 
+ #ifdef MCKERNEL_RUST_PROCESS_HELPERS
++#ifndef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
++#line 1417
+ static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+ process_copy_pte_found_debug = {
+     .file = __FILE__, .func = "copy_user_pte",
+@@ -1768,6 +1801,8 @@
+     .file = __FILE__, .func = "copy_user_pte",
+     .line = 1514, .flags = DDEBUG_DEFAULT,
+ };
++#endif
++#line 1447
+ struct process_copy_entry_config {
+     size_t page_size;
+     int page_shift;
+@@ -1786,6 +1821,13 @@
+     struct ddebug *copied_debug;
+     struct ddebug *installed_debug;
+ };
++#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
++#ifndef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
++#error local config companions require process verbose data
++#endif
++extern const struct process_copy_entry_config process_copy_entry_config;
++#else
++#line 1465
+ const struct process_copy_entry_config process_copy_entry_config = {
+     .page_size = PAGE_SIZE, .page_shift = PAGE_SHIFT,
+     .nowait = IHK_MC_AP_NOWAIT, .user_category = IHK_MC_PG_USER,
+@@ -1799,6 +1841,8 @@
+     .copied_debug = &process_copy_pte_copied_debug,
+     .installed_debug = &process_copy_pte_installed_debug,
+ };
++#endif
++#line 1478
+ 
+ int process_copy_user_pte_body_result(void *,void *,pte_t *,void *,int,
+         size_t,int,unsigned long,int,int,unsigned long,const char *,int,int,
+@@ -1807,6 +1851,7 @@
+ int copy_user_pte(void *arg0,page_table_t src_pt,pte_t *src_ptep,
+         void *pgaddr,int pgshift);
+ #else
++#line 1486
+ #line 1415
+ static int copy_user_pte(void *arg0, page_table_t src_pt, pte_t *src_ptep, void *pgaddr, int pgshift)
+ {
+@@ -1917,6 +1962,11 @@
+ 	}
+ 	return error;
+ }
++#endif
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++#line 1594
++#else
++#line 1524
+ #endif
+ #line 1525
+ 
+@@ -3239,14 +3289,21 @@
+ #line 2289
+ 
+ #ifdef MCKERNEL_RUST_PROCESS_HELPERS
++#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
++extern void (* const process_add_range_arch_memclear_callback)(void *, unsigned long);
++#else
++#line 2291
+ #ifdef ARCH_MEMCLEAR
+ void (* const process_add_range_arch_memclear_callback)(void *, unsigned long) = memclear;
+ #else
+ void (* const process_add_range_arch_memclear_callback)(void *, unsigned long) = NULL;
+ #endif
++#endif
++#line 2296
+ void process_add_range_memclear_bridge(unsigned long phys,
+ 				       unsigned long bytes);
+ #else
++#line 2299
+ #line 2290
+ void process_add_range_memclear_bridge(unsigned long phys,
+ 				       unsigned long bytes)
+@@ -3257,6 +3314,11 @@
+ 	memset((void *)phys_to_virt(phys), 0, bytes);
+ #endif
+ }
++#endif
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++#line 2307
++#else
++#line 2299
+ #endif
+ #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+ #line 2296
+@@ -3470,8 +3532,15 @@
+ #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+ /* Preserve displaced remap diagnostics and tracked-free source identity as
+  * static C ABI data only. Rust owns the complete callback computation. */
++#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
++extern const char *const process_remap_free_file;
++extern const int process_remap_free_line;
++#else
++#line 2440
+ const char *const process_remap_free_file = __FILE__;
+ const int process_remap_free_line = 2469;
++#endif
++#line 2442
+ #ifdef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
+ extern struct ddebug process_remap_one_page_entry_debug;
+ #else
+@@ -3506,6 +3575,11 @@
+ #endif
+ #line 2457
+ #else
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++#line 2455
++#else
++#line 2475
++#endif
+ #line 2458
+ int remap_one_page(void *arg0, page_table_t pt, pte_t *ptep,
+ 		   void *pgaddr, int pgshift)
+@@ -3550,6 +3624,11 @@
+ 			arg0, pt, ptep, *ptep, pgaddr, pgshift, error);
+ 	return error;
+ }
++#endif
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++#line 2500
++#else
++#line 2501
+ #endif
+ #line 2502
+ 
+@@ -4035,19 +4114,34 @@
+ #endif
+ 
+ #ifdef MCKERNEL_RUST_PROCESS_HELPERS
++#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
++extern const char *const process_page_fault_cow_alloc_file;
++extern const int process_page_fault_cow_alloc_line;
++#else
++#line 2840
+ const char *const process_page_fault_cow_alloc_file = __FILE__;
+ const int process_page_fault_cow_alloc_line = 3145;
++#endif
++#line 2842
+ int process_page_fault_cow_allocate_body_result(struct process_vm *, struct vm_range *,
+         struct page *, size_t, int, uintptr_t, uint64_t, void **, int *);
+ #endif
++#line 2845
+ 
+ #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+ /* Original allocation tracking identities retain static storage lifetime. */
++#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
++extern const char *const process_page_fault_anon_alloc_file;
++#else
++#line 2848
+ const char *const process_page_fault_anon_alloc_file = __FILE__;
++#endif
++#line 2849
+ PROCESS_TRACKED_LINE_STORAGE(process_page_fault_anon_alloc_line, 3058);
+ int process_page_fault_anon_allocate_body_result(struct process_vm *, struct vm_range *,
+         uintptr_t, uint64_t, pte_t **, void **, size_t *, int *, void **, int *);
+ #endif
++#line 2853
+ 
+ #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+ unsigned long process_page_fault_mapping_state_body_result(struct vm_range *, uintptr_t,
+@@ -4996,10 +5090,23 @@
+ /* Declarative source metadata only. The subtraction distances refer to the
+  * retained callback call-sites above; no #line occurs between them and here.
+  * This preserves their actual logical __LINE__ without guessing a numeric line. */
++#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
++#line 3481
++_Static_assert(__LINE__ - 122 == 3359, "process stack alloc source line mismatch");
++#line 3483
++_Static_assert(__LINE__ - 119 == 3364, "process stack free source line mismatch");
++extern const char *const process_init_stack_alloc_file;
++extern const int process_init_stack_alloc_line;
++extern const char *const process_init_stack_free_file;
++extern const int process_init_stack_free_line;
++#else
++#line 3480
+ const char *const process_init_stack_alloc_file = __FILE__;
+ const int process_init_stack_alloc_line = __LINE__ - 122;
+ const char *const process_init_stack_free_file = __FILE__;
+ const int process_init_stack_free_line = __LINE__ - 119;
++#endif
++#line 3484
+ #ifdef MCKERNEL_RUST_PROCESS_GLOBAL_STORAGE
+ extern const int process_init_stack_user_category;
+ _Static_assert((IHK_MC_PG_USER) == 1, "process_init_stack_user_category selected supported configuration");
+@@ -5042,6 +5149,7 @@
+ void process_init_stack_modify_context_bridge(void *, int, unsigned long);
+ void process_init_stack_log_bridge(int, const unsigned long *);
+ #endif
++#line 3507
+ #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+ #line 3504
+ #else
+@@ -5076,6 +5184,17 @@
+     void (*modify_context)(void *uctx, int reg, unsigned long value);
+     void (*log)(int event, const unsigned long *args);
+ };
++#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
++_Static_assert(PAGE_SIZE == 4096UL && PAGE_SHIFT == 12 &&
++    USER_STACK_PAGE_MASK == 0xffffffffffe00000UL &&
++    USER_STACK_PAGE_SHIFT == 21 && USER_STACK_PREPAGE_SIZE == 2097152UL &&
++    USER_STACK_PAGE_P2ALIGN == 9 && IHK_MC_AP_NOWAIT == 2UL &&
++    IHK_MC_AP_USER == 4096UL && MPOL_NO_STACK == 2 &&
++    IHK_UCR_STACK_POINTER == 1 && PF_POPULATE == (1UL << 30),
++    "Unqualified process initial-stack metadata constants");
++extern const struct process_init_stack_entry_config process_init_stack_entry_config;
++#else
++#line 3531
+ const struct process_init_stack_entry_config process_init_stack_entry_config = {
+     .page_size = PAGE_SIZE,
+     .page_shift = PAGE_SHIFT,
+@@ -5103,9 +5222,16 @@
+     .modify_context = process_init_stack_modify_context_bridge,
+     .log = process_init_stack_log_bridge,
+ };
++#endif
++#line 3558
+ int init_process_stack(struct thread *, struct program_load_desc *, unsigned long,
+         int, char **, int, char **);
+ #else
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++#line 3558
++#else
++#line 3541
++#endif
+ #line 3473
+ int init_process_stack(struct thread *thread, struct program_load_desc *pn,
+                         unsigned long at_base, int argc, char **argv,
+@@ -5138,10 +5264,17 @@
+ 			process_init_stack_log_bridge);
+ }
+ #endif
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++#line 3590
++#else
+ #line 3503
+-
+-
+-#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++#endif
++#line 3503
++
++
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++#ifndef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
++#line 3506
+ static struct ddebug __aligned(8) __attribute__((section("__verbose")))
+ process_extend_region_exists_debug = {
+     .file = __FILE__, .func = "extend_process_region",
+@@ -5157,6 +5290,8 @@
+     .file = __FILE__, .func = "extend_process_region",
+     .line = 3428, .flags = DDEBUG_DEFAULT,
+ };
++#endif
++#line 3521
+ unsigned long process_extend_region_body_result(
+     struct process_vm *,unsigned long,unsigned long,unsigned long,
+     size_t,int,unsigned long,size_t,unsigned long,unsigned long,unsigned long,
+@@ -5182,6 +5317,13 @@
+     struct ddebug * alloc_debug;
+     struct ddebug * success_debug;
+ };
++#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
++#ifndef MCKERNEL_RUST_PROCESS_VERBOSE_DATA
++#error local config companions require process verbose data
++#endif
++extern const struct process_extend_region_entry_config process_extend_region_entry_config;
++#else
++#line 3546
+ const struct process_extend_region_entry_config process_extend_region_entry_config = {
+     .page_size = PAGE_SIZE,
+     .page_shift = PAGE_SHIFT,
+@@ -5202,10 +5344,17 @@
+     .alloc_debug = &process_extend_region_alloc_debug,
+     .success_debug = &process_extend_region_success_debug,
+ };
++#endif
++#line 3566
+ unsigned long extend_process_region(struct process_vm *, unsigned long, unsigned long,
+         unsigned long);
+ #line 3536
+ #else
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++#line 3534
++#else
++#line 3569
++#endif
+ #line 3364
+ unsigned long extend_process_region(struct process_vm *vm,
+ 		unsigned long end_allocated,
+@@ -5276,6 +5425,11 @@
+ 
+ 	return new_end_allocated;
+ }
++#endif
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++#line 3605
++#else
++#line 3433
+ #endif
+ #line 3432
+ 
+@@ -6111,13 +6265,20 @@
+ #endif
+ 
+ #ifdef MCKERNEL_RUST_PROCESS_HELPERS
++#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
++extern const int process_sched_timer_configuration[2];
++#else
++#line 4167
+ #ifdef TIMER_CPU_ID
+ const int process_sched_timer_configuration[2] = { 1, TIMER_CPU_ID };
+ #else
+ const int process_sched_timer_configuration[2] = { 0, 0 };
+ #endif
++#endif
++#line 4172
+ void process_sched_timer_init_bridge(int cpu);
+ #else
++#line 4174
+ #line 4166
+ void process_sched_timer_init_bridge(int cpu)
+ {
+@@ -6130,6 +6291,11 @@
+ 	(void)cpu;
+ #endif
+ }
++#endif
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++#line 4184
++#else
++#line 4177
+ #endif
+ #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+ #line 4174
+@@ -6627,14 +6793,25 @@
+ };
+ #endif
+ #line 4623
++#ifdef MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS
++extern const struct sched_exit_debug *const process_schedule_exit_debug_input;
++#else
++#line 4623
+ #ifdef RUSAGE_DEBUG
+ const struct sched_exit_debug *const process_schedule_exit_debug_input =
+  &process_sched_exit_debug;
+ #else
+ const struct sched_exit_debug *const process_schedule_exit_debug_input = NULL;
+ #endif
++#endif
++#line 4629
+ void schedule(void);
+ #else
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++#line 4628
++#else
++#line 4636
++#endif
+ #line 4618
+ void schedule(void)
+ {
+@@ -6939,6 +7116,11 @@
+ 	}
+ #endif
+ }
++#endif
++#ifdef MCKERNEL_RUST_PROCESS_HELPERS
++#line 4933
++#else
++#line 4921
+ #endif
+ #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+ #line 4933

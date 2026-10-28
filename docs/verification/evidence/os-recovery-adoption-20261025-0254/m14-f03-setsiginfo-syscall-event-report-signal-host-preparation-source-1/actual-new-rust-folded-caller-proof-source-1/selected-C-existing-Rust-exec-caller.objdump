@@ -1,0 +1,12 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/HOST-output-proposed-1/selected.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000002bd5 <do_execveat+0x385>:
+    2bd5:	48 8b b5 60 fe ff ff 	mov    -0x1a0(%rbp),%rsi
+    2bdc:	4c 89 f7             	mov    %r14,%rdi
+    2bdf:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	2be1: R_X86_64_PLTOFF64	f03_execveat_ptrace_report_v1
+    2be9:	4c 01 f8             	add    %r15,%rax
+    2bec:	ff d0                	callq  *%rax

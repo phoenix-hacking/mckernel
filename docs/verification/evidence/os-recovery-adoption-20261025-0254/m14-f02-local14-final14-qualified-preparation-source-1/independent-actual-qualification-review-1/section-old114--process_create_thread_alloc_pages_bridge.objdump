@@ -1,0 +1,22 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.process_create_thread_alloc_pages_bridge:
+
+0000000000000000 <process_create_thread_alloc_pages_bridge>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	48 89 f2             	mov    %rsi,%rdx
+   7:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	9: R_X86_64_64	process_tracked_allocator_source_file
+  11:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	13: R_X86_64_64	_ihk_mc_alloc_aligned_pages_node
+  1b:	31 f6                	xor    %esi,%esi
+  1d:	b9 ff ff ff ff       	mov    $0xffffffff,%ecx
+  22:	45 31 c0             	xor    %r8d,%r8d
+  25:	49 c7 c1 ff ff ff ff 	mov    $0xffffffffffffffff,%r9
+  2c:	68 14 03 00 00       	push   $0x314
+  31:	ff 30                	push   (%rax)
+  33:	41 ff d2             	call   *%r10
+  36:	48 83 c4 10          	add    $0x10,%rsp
+  3a:	5d                   	pop    %rbp
+  3b:	c3                   	ret    

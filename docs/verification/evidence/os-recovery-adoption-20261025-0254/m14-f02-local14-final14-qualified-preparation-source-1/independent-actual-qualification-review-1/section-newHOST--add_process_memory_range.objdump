@@ -1,0 +1,191 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/HOST-output-proposed-1/rust-selected.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.add_process_memory_range:
+
+0000000000000000 <add_process_memory_range>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	41 57                	push   %r15
+   6:	41 56                	push   %r14
+   8:	41 55                	push   %r13
+   a:	41 54                	push   %r12
+   c:	53                   	push   %rbx
+   d:	48 83 ec 18          	sub    $0x18,%rsp
+  11:	49 89 d6             	mov    %rdx,%r14
+  14:	49 89 f4             	mov    %rsi,%r12
+  17:	48 3b 77 78          	cmp    0x78(%rdi),%rsi
+  1b:	0f 82 e8 00 00 00    	jb     109 <add_process_memory_range+0x109>
+  21:	49 89 ff             	mov    %rdi,%r15
+  24:	4c 39 b7 80 00 00 00 	cmp    %r14,0x80(%rdi)
+  2b:	0f 82 d8 00 00 00    	jb     109 <add_process_memory_range+0x109>
+  31:	4d 89 cd             	mov    %r9,%r13
+  34:	4c 89 45 c8          	mov    %r8,-0x38(%rbp)
+  38:	48 89 4d d0          	mov    %rcx,-0x30(%rbp)
+  3c:	48 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%rdx	3e: R_X86_64_64	.lrodata.str1.1+0x64af
+  46:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	48: R_X86_64_64	_kmalloc
+  50:	be 02 00 00 00       	mov    $0x2,%esi
+  55:	bf 58 00 00 00       	mov    $0x58,%edi
+  5a:	b9 d0 08 00 00       	mov    $0x8d0,%ecx
+  5f:	ff d0                	call   *%rax
+  61:	48 85 c0             	test   %rax,%rax
+  64:	0f 84 d2 00 00 00    	je     13c <add_process_memory_range+0x13c>
+  6a:	48 89 c3             	mov    %rax,%rbx
+  6d:	48 8b 45 20          	mov    0x20(%rbp),%rax
+  71:	8b 4d 18             	mov    0x18(%rbp),%ecx
+  74:	48 8b 55 10          	mov    0x10(%rbp),%rdx
+  78:	48 89 1b             	mov    %rbx,(%rbx)
+  7b:	4c 89 63 18          	mov    %r12,0x18(%rbx)
+  7f:	4c 89 73 20          	mov    %r14,0x20(%rbx)
+  83:	48 8b 75 c8          	mov    -0x38(%rbp),%rsi
+  87:	48 89 73 28          	mov    %rsi,0x28(%rbx)
+  8b:	4c 89 6b 38          	mov    %r13,0x38(%rbx)
+  8f:	48 89 53 40          	mov    %rdx,0x40(%rbx)
+  93:	89 4b 48             	mov    %ecx,0x48(%rbx)
+  96:	48 89 43 50          	mov    %rax,0x50(%rbx)
+  9a:	48 c7 43 30 00 00 00 00 	movq   $0x0,0x30(%rbx)
+  a2:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	a4: R_X86_64_64	vm_range_insert
+  ac:	4c 89 ff             	mov    %r15,%rdi
+  af:	48 89 de             	mov    %rbx,%rsi
+  b2:	ff d0                	call   *%rax
+  b4:	85 c0                	test   %eax,%eax
+  b6:	0f 84 f5 00 00 00    	je     1b1 <add_process_memory_range+0x1b1>
+  bc:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	be: R_X86_64_64	.lrodata.str1.1+0xf3f
+  c6:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	c8: R_X86_64_64	.lrodata.str1.1+0x634e
+  d0:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	d2: R_X86_64_64	kprintf
+  da:	89 c2                	mov    %eax,%edx
+  dc:	41 89 c6             	mov    %eax,%r14d
+  df:	31 c0                	xor    %eax,%eax
+  e1:	ff d1                	call   *%rcx
+  e3:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	e5: R_X86_64_64	.lrodata.str1.1+0x64af
+  ed:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	ef: R_X86_64_64	_kfree
+  f7:	48 89 df             	mov    %rbx,%rdi
+  fa:	ba d5 08 00 00       	mov    $0x8d5,%edx
+  ff:	ff d0                	call   *%rax
+ 101:	44 89 f0             	mov    %r14d,%eax
+ 104:	e9 eb 01 00 00       	jmp    2f4 <add_process_memory_range+0x2f4>
+ 109:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	10b: R_X86_64_64	.lrodata.str1.1+0x63b4
+ 113:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	115: R_X86_64_64	.lrodata.str1.1+0x634e
+ 11d:	49 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%r8	11f: R_X86_64_64	kprintf
+ 127:	4c 89 e2             	mov    %r12,%rdx
+ 12a:	4c 89 f1             	mov    %r14,%rcx
+ 12d:	31 c0                	xor    %eax,%eax
+ 12f:	41 ff d0             	call   *%r8
+ 132:	b8 ea ff ff ff       	mov    $0xffffffea,%eax
+ 137:	e9 b8 01 00 00       	jmp    2f4 <add_process_memory_range+0x2f4>
+ 13c:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ 141:	0f 32                	rdmsr  
+ 143:	48 c1 e2 20          	shl    $0x20,%rdx
+ 147:	89 c1                	mov    %eax,%ecx
+ 149:	48 09 d1             	or     %rdx,%rcx
+ 14c:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	14e: R_X86_64_64	locals
+ 156:	48 8b 10             	mov    (%rax),%rdx
+ 159:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ 160:	48 39 ca             	cmp    %rcx,%rdx
+ 163:	77 23                	ja     188 <add_process_memory_range+0x188>
+ 165:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	167: R_X86_64_64	num_processors
+ 16f:	48 63 36             	movslq (%rsi),%rsi
+ 172:	48 c1 e6 0e          	shl    $0xe,%rsi
+ 176:	48 01 f2             	add    %rsi,%rdx
+ 179:	48 39 ca             	cmp    %rcx,%rdx
+ 17c:	72 0a                	jb     188 <add_process_memory_range+0x188>
+ 17e:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ 186:	48 98                	cltq   
+ 188:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	18a: R_X86_64_64	clv
+ 192:	48 8b 09             	mov    (%rcx),%rcx
+ 195:	48 85 c9             	test   %rcx,%rcx
+ 198:	0f 84 aa 00 00 00    	je     248 <add_process_memory_range+0x248>
+ 19e:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ 1a5:	8b 8c 01 28 1f 00 00 	mov    0x1f28(%rcx,%rax,1),%ecx
+ 1ac:	e9 9c 00 00 00       	jmp    24d <add_process_memory_range+0x24d>
+ 1b1:	48 8b 55 d0          	mov    -0x30(%rbp),%rdx
+ 1b5:	48 83 fa ff          	cmp    $0xffffffffffffffff,%rdx
+ 1b9:	0f 84 27 01 00 00    	je     2e6 <add_process_memory_range+0x2e6>
+ 1bf:	48 8b 4d c8          	mov    -0x38(%rbp),%rcx
+ 1c3:	f7 c1 00 03 00 00    	test   $0x300,%ecx
+ 1c9:	0f 84 c4 00 00 00    	je     293 <add_process_memory_range+0x293>
+ 1cf:	f7 c1 00 12 00 40    	test   $0x40001200,%ecx
+ 1d5:	0f 94 c0             	sete   %al
+ 1d8:	f7 c1 00 00 07 00    	test   $0x70000,%ecx
+ 1de:	0f 95 c1             	setne  %cl
+ 1e1:	20 c1                	and    %al,%cl
+ 1e3:	44 0f b6 e9          	movzbl %cl,%r13d
+ 1e7:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1e9: R_X86_64_64	update_process_page_table
+ 1f1:	4c 89 ff             	mov    %r15,%rdi
+ 1f4:	48 89 de             	mov    %rbx,%rsi
+ 1f7:	ff d0                	call   *%rax
+ 1f9:	48 8b 55 d0          	mov    -0x30(%rbp),%rdx
+ 1fd:	85 c0                	test   %eax,%eax
+ 1ff:	0f 84 ba 00 00 00    	je     2bf <add_process_memory_range+0x2bf>
+ 205:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	207: R_X86_64_64	.lrodata.str1.1+0x6367
+ 20f:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	211: R_X86_64_64	.lrodata.str1.1+0x634e
+ 219:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	21b: R_X86_64_64	kprintf
+ 223:	41 89 c6             	mov    %eax,%r14d
+ 226:	31 c0                	xor    %eax,%eax
+ 228:	ff d1                	call   *%rcx
+ 22a:	48 8b 73 18          	mov    0x18(%rbx),%rsi
+ 22e:	48 8b 53 20          	mov    0x20(%rbx),%rdx
+ 232:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	234: R_X86_64_64	remove_process_memory_range
+ 23c:	4c 89 ff             	mov    %r15,%rdi
+ 23f:	31 c9                	xor    %ecx,%ecx
+ 241:	ff d0                	call   *%rax
+ 243:	e9 9b fe ff ff       	jmp    e3 <add_process_memory_range+0xe3>
+ 248:	b9 ff ff ff ff       	mov    $0xffffffff,%ecx
+ 24d:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	24f: R_X86_64_64	.lrodata.str1.1+0x4847
+ 257:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	259: R_X86_64_64	.lrodata.str1.1+0x64af
+ 261:	48 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%rbx	263: R_X86_64_64	kprintf
+ 26b:	ba d0 08 00 00       	mov    $0x8d0,%edx
+ 270:	31 c0                	xor    %eax,%eax
+ 272:	ff d3                	call   *%rbx
+ 274:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	276: R_X86_64_64	.lrodata.str1.1+0x6327
+ 27e:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	280: R_X86_64_64	.lrodata.str1.1+0x634e
+ 288:	31 c0                	xor    %eax,%eax
+ 28a:	ff d3                	call   *%rbx
+ 28c:	b8 f4 ff ff ff       	mov    $0xfffffff4,%eax
+ 291:	eb 61                	jmp    2f4 <add_process_memory_range+0x2f4>
+ 293:	f7 c1 00 00 00 40    	test   $0x40000000,%ecx
+ 299:	75 40                	jne    2db <add_process_memory_range+0x2db>
+ 29b:	f7 c1 00 10 00 00    	test   $0x1000,%ecx
+ 2a1:	75 60                	jne    303 <add_process_memory_range+0x303>
+ 2a3:	48 8b 43 28          	mov    0x28(%rbx),%rax
+ 2a7:	45 31 ed             	xor    %r13d,%r13d
+ 2aa:	f7 c1 00 00 07 00    	test   $0x70000,%ecx
+ 2b0:	41 0f 95 c5          	setne  %r13b
+ 2b4:	a9 00 00 07 00       	test   $0x70000,%eax
+ 2b9:	0f 85 28 ff ff ff    	jne    1e7 <add_process_memory_range+0x1e7>
+ 2bf:	45 85 ed             	test   %r13d,%r13d
+ 2c2:	74 22                	je     2e6 <add_process_memory_range+0x2e6>
+ 2c4:	4d 29 e6             	sub    %r12,%r14
+ 2c7:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	2c9: R_X86_64_64	process_add_range_memclear_bridge
+ 2d1:	48 89 d7             	mov    %rdx,%rdi
+ 2d4:	4c 89 f6             	mov    %r14,%rsi
+ 2d7:	ff d0                	call   *%rax
+ 2d9:	eb 0b                	jmp    2e6 <add_process_memory_range+0x2e6>
+ 2db:	48 8b 43 38          	mov    0x38(%rbx),%rax
+ 2df:	81 48 08 00 00 01 00 	orl    $0x10000,0x8(%rax)
+ 2e6:	48 8b 4d 28          	mov    0x28(%rbp),%rcx
+ 2ea:	31 c0                	xor    %eax,%eax
+ 2ec:	48 85 c9             	test   %rcx,%rcx
+ 2ef:	74 03                	je     2f4 <add_process_memory_range+0x2f4>
+ 2f1:	48 89 19             	mov    %rbx,(%rcx)
+ 2f4:	48 83 c4 18          	add    $0x18,%rsp
+ 2f8:	5b                   	pop    %rbx
+ 2f9:	41 5c                	pop    %r12
+ 2fb:	41 5d                	pop    %r13
+ 2fd:	41 5e                	pop    %r14
+ 2ff:	41 5f                	pop    %r15
+ 301:	5d                   	pop    %rbp
+ 302:	c3                   	ret    
+ 303:	48 8b 53 18          	mov    0x18(%rbx),%rdx
+ 307:	48 8b 4b 20          	mov    0x20(%rbx),%rcx
+ 30b:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	30d: R_X86_64_64	process_remaining_memory_log_debug+0x18
+ 315:	8b 00                	mov    (%rax),%eax
+ 317:	3d 00 00 00 01       	cmp    $0x1000000,%eax
+ 31c:	72 c8                	jb     2e6 <add_process_memory_range+0x2e6>
+ 31e:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	320: R_X86_64_64	.lrodata.str1.1+0x6389
+ 328:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	32a: R_X86_64_64	.lrodata.str1.1+0x634e
+ 332:	49 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%r8	334: R_X86_64_64	kprintf
+ 33c:	31 c0                	xor    %eax,%eax
+ 33e:	41 ff d0             	call   *%r8
+ 341:	eb a3                	jmp    2e6 <add_process_memory_range+0x2e6>

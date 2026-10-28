@@ -1,0 +1,346 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE",
+  "independent": true,
+  "reviewer": "/root/guardian_execution_review",
+  "implementation_ownership": false,
+  "execution_release": false,
+  "review_kind": "Focused current115 Root48 no-argument physical observer API and finite boundary additions; no actual observation.",
+  "reviewed_READY": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/current-boundary-observer-source-1/READY.json",
+    "bytes": 2939,
+    "sha256": "d187ac48a1b87544a651f12d077c1a758a7d42bf537188eee2bc460152b250f5"
+  },
+  "reviewed_observer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/current-boundary-observer-source-1/observe_root48_current115.py",
+    "bytes": 34582,
+    "sha256": "d9929d4abaa7032bb77580d9e73da5ba457a49f4b779941aa090063509285574"
+  },
+  "reviewed_derivation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/current-boundary-observer-source-1/SOURCE-DERIVATION.json",
+    "bytes": 2890,
+    "sha256": "40f0fee9eba5dcf9c5869da04e340c6107193ae12f1d109e9c96713ef5b0596f"
+  },
+  "reviewed_pure_controls": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/current-boundary-observer-source-1/PURE-RECEIPT-AND-AST-CONTROLS.json",
+    "bytes": 26225,
+    "sha256": "84d75eb45f0f3da0db8c00dd2c76e18b44f3af5af7964a6419d3a9071e4da447"
+  },
+  "reviewed_readme": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/current-boundary-observer-source-1/README.md",
+    "bytes": 2538,
+    "sha256": "4b9f427b949dd7117872200278b415e50decdb147f86b1cb271c30c6c54a9998"
+  },
+  "retained_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/CURRENT-BOUND-CAPTURE.SOURCE-ONLY.py",
+    "bytes": 28982,
+    "sha256": "9e9c4eee38ddec1497a344cb7204708d39ad53c620836f64117000031caa5903"
+  },
+  "capture_resources_consumer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/capture_resources.py",
+    "bytes": 10924,
+    "sha256": "7aab343e055f726741fd3defe6ab11fbdd277368c86220855c4a54ac15c5e27e"
+  },
+  "bound_ledger": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER48.json",
+    "bytes": 39102,
+    "sha256": "8dafffd053d7642695d7e0f28c3b68a14c4b0fb8ac9244699843368fed82f48a"
+  },
+  "bound_native_clearance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/independent-actual-native-review-1/CURRENT-FREE.json",
+    "bytes": 5497,
+    "sha256": "563d0ce4db6695fb78adfaae2d2d91ca02afa6fa9c1621704d071b883718b89e"
+  },
+  "bound_latest_exact": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/independent-actual-native-review-1/FRESH-EXACT-CONTAINER-AND-ACTORS.json",
+    "bytes": 58073,
+    "sha256": "5d562aab74781305a3193a2fbf7ecdd4d8a51bbac0b043ccf6e73b62002eefa0"
+  },
+  "findings": [
+    {
+      "predicate": "No-argument API and actual observation construction",
+      "result": "PASS_SOURCE",
+      "evidence": "observe() has no parameters. Exact capture_resources.py loads the boundary-pinned observer and calls observe() before holder acquisition. Named import only defines constants/functions; query and guard body is not executed on import. Future result is built from direct retained physical observer, direct census, bounded read-only commands and guard calls, not caller-supplied physical facts. No fail-open catch or source-ready-to-observed conversion is added."
+    },
+    {
+      "predicate": "Retained helper and resource assertion preservation",
+      "result": "PASS_SOURCE",
+      "evidence": "ref, checked, validate_root40_latest, validate_root42_latest and validate_latest_native_current have identical ASTs to retained9e9c source. Independently compared original main with-block assertions:67of74 remain exact AST. Seven intentional changes are count56to59, latest-free ref, native-only static case/nonce/source slots replaced by current115 boundary references, and native-only empty output directory handling delegated to unchanged build capture. Original live system/resource/guard/mutex/scratch/history assertions are retained."
+    },
+    {
+      "predicate": "All historical ownership controls remain",
+      "result": "PASS_SOURCE",
+      "evidence": "Current113 and inherited111 joins/stopped containers, Root38/V3 and failed113, Root40 exact30clients/33actors/CID, Root41 failed startup, Root42/current114 holder/runner and retained stopped image, and22a1 normal native controls remain validated. Existing failures retain their real exit values. Current/latest native output labels now Root48/free563d/exact5d56;22a1 data is explicitly historical rather than contradictory latest metadata."
+    },
+    {
+      "predicate": "Exact finite Root48 native235 actor and receipt additions",
+      "result": "PASS_SOURCE",
+      "evidence": "Root48 hash8dafff/count59/unique nonces and latest563d boundary are pinned. Independent235 review/exact5d56 binds consumed d21f nonce, PROTOCOL_PASS/normal retirement, exact CIDcf8479d23553018d39eabd2d1de0b1c858b850a57b3b82650271ed1287185199,30positive client reaps, actual bridge/capture joins and QEMU cleanup. Owner1805542/95052477, capture1805538/95052465 and30client births are genuine32known births. Bridge1805537 birth is null: numeric PID/PGRP absence and actual bridge positive join only, no invented birth. Future observer checks all33 PID paths and census PID/PGRPs absent."
+    },
+    {
+      "predicate": "Five exact235 query controls",
+      "result": "PASS_SOURCE",
+      "evidence": "Pinned exact receipt supplies only running ps, exact CID ps, exact name ps, exact label ps and exact CID inspect. Future subprocesses have15s bounds and exact expected returncode/stdout/stderr checks. These read-only controls do not replay the native30commands or perform stop/kill/rm/workloads."
+    },
+    {
+      "predicate": "Twelve ordinary operations and37 actual joins without gaps",
+      "result": "PASS_SOURCE",
+      "evidence": "Exact ordered12nonce list is asserted. Eleven results-bearing records use checked actual refs; the sole original235 composition uses exact kind/nonce and its join ref rather than being skipped. Independently read all12refs and37join records: direct child joined, group absent, streams closed, no timeout/error/retirement error. Actual nonzero failure returns remain nonzero; only retirement/current ownership is covered. Future observer checks every ordinary PID/group against proc absence and census."
+    },
+    {
+      "predicate": "Root current-boundary authority remains separate",
+      "result": "PASS_SOURCE",
+      "evidence": "API requires Root-authored current115 boundary with exact Root48 ledger/563d clearance/self observer and authenticated independent source review. No actual boundary/observation/grant is supplied by READY. Unchanged capture_resources independently checks current guard/account, fresh120s physical facts, source/export/publication/profile/nonce, genuine held27:4 holder birth+FLOCK, output absence and held resource admission. Native launch-only slots removed from extracted API are not treated as build execution authority."
+    },
+    {
+      "predicate": "Exclusions, clocks, account, resources and floors are preserved",
+      "result": "PASS_SOURCE",
+      "evidence": "Exact v2guard1f152 and base physical observer2b736 remain pinned. Permanent27:4/scratch21 exclusive probes, lock/active-record absence, scratchdev1828, census/errors and native cgroup constraints remain. Base physical floors HOST16GiB/scratch12GiB+576MiB and capture stricter scratch14091616256 remain; unchanged4CPU2-5/12GiB/512pids/no-network/no-swap reservation and aggregate23259332608cap apply. API retains MemAvailable24GiB and exact cgroup limits; current first/last guard checks tighten original fixed cutoffs. No new window/credit allowance or hold override."
+    }
+  ],
+  "preserved_AST_helpers": [
+    "ref",
+    "checked",
+    "validate_root40_latest",
+    "validate_root42_latest",
+    "validate_latest_native_current"
+  ],
+  "original_resource_assertions": 74,
+  "original_resource_assertions_retained_exact": 67,
+  "interface_assertion_changes": [
+    "len(ledger['consumed_nonces']) == len(set(ledger['consumed_nonces'])) == 56",
+    "ledger['latest_accepted_free_boundary'] == ROOT_CURRENT_FREE",
+    "static['root_ledger35'] == ref(LEDGER) and static['latest_serial_operation_physical_acceptance'] == ROOT_CURRENT_FREE",
+    "static['expected_case'] == 'P-M06-01-process-exec-wait-235B'",
+    "static['nonce'] not in ledger['consumed_nonces'] + ledger['reserved_abandoned_unconsumed_nonces']",
+    "ref(Path(source['path'])) == source",
+    "path.is_dir() and (not list(path.iterdir()))"
+  ],
+  "finite_latest_actor_records": [
+    {
+      "kind": "owner",
+      "pid": 1805542,
+      "start": 95052477,
+      "pgid": 1805537
+    },
+    {
+      "kind": "capture",
+      "pid": 1805538,
+      "start": 95052465,
+      "pgid": 1805537
+    },
+    {
+      "kind": "bridge",
+      "pid": 1805537,
+      "start": null,
+      "pgid": 1805537
+    },
+    {
+      "kind": "001-ps.json",
+      "pid": 1805544,
+      "start": 95052516,
+      "pgid": 1805544
+    },
+    {
+      "kind": "002-ps.json",
+      "pid": 1805550,
+      "start": 95052518,
+      "pgid": 1805550
+    },
+    {
+      "kind": "003-image.json",
+      "pid": 1805556,
+      "start": 95052519,
+      "pgid": 1805556
+    },
+    {
+      "kind": "004-create.json",
+      "pid": 1805562,
+      "start": 95052520,
+      "pgid": 1805562
+    },
+    {
+      "kind": "005-ps.json",
+      "pid": 1805568,
+      "start": 95052525,
+      "pgid": 1805568
+    },
+    {
+      "kind": "006-ps.json",
+      "pid": 1805574,
+      "start": 95052527,
+      "pgid": 1805574
+    },
+    {
+      "kind": "007-ps.json",
+      "pid": 1805580,
+      "start": 95052528,
+      "pgid": 1805580
+    },
+    {
+      "kind": "008-inspect.json",
+      "pid": 1805586,
+      "start": 95052530,
+      "pgid": 1805586
+    },
+    {
+      "kind": "009-start.json",
+      "pid": 1805592,
+      "start": 95052531,
+      "pgid": 1805592
+    },
+    {
+      "kind": "010-wait.json",
+      "pid": 1805769,
+      "start": 95056249,
+      "pgid": 1805769
+    },
+    {
+      "kind": "011-ps.json",
+      "pid": 1805775,
+      "start": 95056251,
+      "pgid": 1805775
+    },
+    {
+      "kind": "012-ps.json",
+      "pid": 1805781,
+      "start": 95056253,
+      "pgid": 1805781
+    },
+    {
+      "kind": "013-ps.json",
+      "pid": 1805787,
+      "start": 95056255,
+      "pgid": 1805787
+    },
+    {
+      "kind": "014-inspect.json",
+      "pid": 1805793,
+      "start": 95056256,
+      "pgid": 1805793
+    },
+    {
+      "kind": "015-wait.json",
+      "pid": 1805800,
+      "start": 95056258,
+      "pgid": 1805800
+    },
+    {
+      "kind": "016-logs.json",
+      "pid": 1805806,
+      "start": 95056260,
+      "pgid": 1805806
+    },
+    {
+      "kind": "017-inspect.json",
+      "pid": 1805812,
+      "start": 95056261,
+      "pgid": 1805812
+    },
+    {
+      "kind": "018-ps.json",
+      "pid": 1805820,
+      "start": 95056263,
+      "pgid": 1805820
+    },
+    {
+      "kind": "019-ps.json",
+      "pid": 1805827,
+      "start": 95056264,
+      "pgid": 1805827
+    },
+    {
+      "kind": "020-ps.json",
+      "pid": 1805833,
+      "start": 95056266,
+      "pgid": 1805833
+    },
+    {
+      "kind": "021-inspect.json",
+      "pid": 1805839,
+      "start": 95056267,
+      "pgid": 1805839
+    },
+    {
+      "kind": "022-stop.json",
+      "pid": 1805845,
+      "start": 95056269,
+      "pgid": 1805845
+    },
+    {
+      "kind": "023-kill.json",
+      "pid": 1805851,
+      "start": 95056271,
+      "pgid": 1805851
+    },
+    {
+      "kind": "024-wait.json",
+      "pid": 1805857,
+      "start": 95056272,
+      "pgid": 1805857
+    },
+    {
+      "kind": "025-logs.json",
+      "pid": 1805863,
+      "start": 95056274,
+      "pgid": 1805863
+    },
+    {
+      "kind": "026-inspect.json",
+      "pid": 1805869,
+      "start": 95056275,
+      "pgid": 1805869
+    },
+    {
+      "kind": "027-rm.json",
+      "pid": 1805875,
+      "start": 95056277,
+      "pgid": 1805875
+    },
+    {
+      "kind": "028-ps.json",
+      "pid": 1805881,
+      "start": 95056279,
+      "pgid": 1805881
+    },
+    {
+      "kind": "029-ps.json",
+      "pid": 1805887,
+      "start": 95056281,
+      "pgid": 1805887
+    },
+    {
+      "kind": "030-ps.json",
+      "pid": 1805893,
+      "start": 95056282,
+      "pgid": 1805893
+    }
+  ],
+  "known_latest_births": 32,
+  "bridge_birth": null,
+  "ordinary_operations": 12,
+  "ordinary_positive_join_records": 37,
+  "preseal_issues_resolved": [
+    "Latest/current labels corrected from historical22a1 to exactRoot48, preserving22a1 explicitly as history.",
+    "Join-only original235 composition added to exact12ordinary coverage; no silent skip remains."
+  ],
+  "actual_observer_calls_by_reviewer": 0,
+  "guard_account_or_live_resource_queries_by_reviewer": 0,
+  "compiler_workload_native_cleanup_calls_by_reviewer": 0,
+  "canonical_edits": 0,
+  "pending": [
+    "Root binds actual current boundary to this review and exact observer only if no intervening unlisted operation.",
+    "Root alone authorizes fresh read-only physical/resource capture; source PASS is not actual current-free evidence.",
+    "Fresh held admission/resource facts need their own120s execution review/grant. Any later ledger/ownership change requires honest successor; no evidence redating."
+  ],
+  "persistent_controls": {
+    "fixed_UTC_cutoff": "2026-10-28T05:36:09Z",
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "credit_run": "7f4af94a83b14cc08f97401f5891d965",
+    "credit_ceiling": 57774.852125,
+    "cumulative_spent_floor": 22812.3311,
+    "real_holds_effective": true,
+    "Root_owns_boundary_and_grants": true
+  },
+  "review_method": "Read-only sealed source/metadata and exact retained receipts, AST comparison, finite33actors and37joins. No observer import/main/API, guard/account/proc/resource/Docker query, subprocess/workload/compiler/native/cleanup or canonical mutation."
+}

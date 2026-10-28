@@ -1,0 +1,170 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.release_process_vm:
+
+0000000000000000 <release_process_vm>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	41 57                	push   %r15
+   6:	41 56                	push   %r14
+   8:	41 55                	push   %r13
+   a:	41 54                	push   %r12
+   c:	53                   	push   %rbx
+   d:	50                   	push   %rax
+   e:	48 85 ff             	test   %rdi,%rdi
+  11:	0f 84 fa 00 00 00    	je     111 <release_process_vm+0x111>
+  17:	48 89 fb             	mov    %rdi,%rbx
+  1a:	f0 ff 8f bc 00 00 00 	lock decl 0xbc(%rdi)
+  21:	0f 85 ea 00 00 00    	jne    111 <release_process_vm+0x111>
+  27:	4c 8b a3 88 00 00 00 	mov    0x88(%rbx),%r12
+  2e:	4d 85 e4             	test   %r12,%r12
+  31:	0f 84 da 00 00 00    	je     111 <release_process_vm+0x111>
+  37:	9c                   	pushf  
+  38:	41 5f                	pop    %r15
+  3a:	fa                   	cli    
+  3b:	49 bd 00 00 00 00 00 00 00 00 	movabs $0x0,%r13	3d: R_X86_64_64	cpu_local_var_initialized
+  45:	41 83 7d 00 00       	cmpl   $0x0,0x0(%r13)
+  4a:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	4c: R_X86_64_64	locals
+  54:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	56: R_X86_64_64	clv
+  5e:	74 54                	je     b4 <release_process_vm+0xb4>
+  60:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+  65:	0f 32                	rdmsr  
+  67:	48 c1 e2 20          	shl    $0x20,%rdx
+  6b:	89 c1                	mov    %eax,%ecx
+  6d:	48 09 d1             	or     %rdx,%rcx
+  70:	48 8b 16             	mov    (%rsi),%rdx
+  73:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+  7a:	48 39 ca             	cmp    %rcx,%rdx
+  7d:	77 23                	ja     a2 <release_process_vm+0xa2>
+  7f:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	81: R_X86_64_64	num_processors
+  89:	48 63 36             	movslq (%rsi),%rsi
+  8c:	48 c1 e6 0e          	shl    $0xe,%rsi
+  90:	48 01 f2             	add    %rsi,%rdx
+  93:	48 39 ca             	cmp    %rcx,%rdx
+  96:	72 0a                	jb     a2 <release_process_vm+0xa2>
+  98:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+  a0:	48 98                	cltq   
+  a2:	48 8b 0f             	mov    (%rdi),%rcx
+  a5:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+  ac:	f0 ff 84 01 28 1f 00 00 	lock incl 0x1f28(%rcx,%rax,1)
+  b4:	b9 00 00 02 00       	mov    $0x20000,%ecx
+  b9:	f0 41 0f c1 8c 24 04 05 00 00 	lock xadd %ecx,0x504(%r12)
+  c3:	89 c8                	mov    %ecx,%eax
+  c5:	c1 e8 10             	shr    $0x10,%eax
+  c8:	66 39 c1             	cmp    %ax,%cx
+  cb:	75 33                	jne    100 <release_process_vm+0x100>
+  cd:	4d 8b b4 24 08 05 00 00 	mov    0x508(%r12),%r14
+  d5:	eb 0c                	jmp    e3 <release_process_vm+0xe3>
+  d7:	66 0f 1f 84 00 00 00 00 00 	nopw   0x0(%rax,%rax,1)
+  e0:	4d 8b 36             	mov    (%r14),%r14
+  e3:	4d 85 f6             	test   %r14,%r14
+  e6:	74 38                	je     120 <release_process_vm+0x120>
+  e8:	49 8b 46 38          	mov    0x38(%r14),%rax
+  ec:	48 85 c0             	test   %rax,%rax
+  ef:	74 ef                	je     e0 <release_process_vm+0xe0>
+  f1:	4c 89 f7             	mov    %r14,%rdi
+  f4:	31 f6                	xor    %esi,%esi
+  f6:	ff d0                	call   *%rax
+  f8:	eb e6                	jmp    e0 <release_process_vm+0xe0>
+  fa:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+ 100:	41 8b 8c 24 04 05 00 00 	mov    0x504(%r12),%ecx
+ 108:	66 39 c1             	cmp    %ax,%cx
+ 10b:	74 c0                	je     cd <release_process_vm+0xcd>
+ 10d:	f3 90                	pause  
+ 10f:	eb ef                	jmp    100 <release_process_vm+0x100>
+ 111:	48 83 c4 08          	add    $0x8,%rsp
+ 115:	5b                   	pop    %rbx
+ 116:	41 5c                	pop    %r12
+ 118:	41 5d                	pop    %r13
+ 11a:	41 5e                	pop    %r14
+ 11c:	41 5f                	pop    %r15
+ 11e:	5d                   	pop    %rbp
+ 11f:	c3                   	ret    
+ 120:	66 f0 41 83 84 24 04 05 00 00 02 	lock addw $0x2,0x504(%r12)
+ 12b:	41 83 7d 00 00       	cmpl   $0x0,0x0(%r13)
+ 130:	74 74                	je     1a6 <release_process_vm+0x1a6>
+ 132:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ 137:	0f 32                	rdmsr  
+ 139:	48 c1 e2 20          	shl    $0x20,%rdx
+ 13d:	89 c1                	mov    %eax,%ecx
+ 13f:	48 09 d1             	or     %rdx,%rcx
+ 142:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	144: R_X86_64_64	locals
+ 14c:	48 8b 10             	mov    (%rax),%rdx
+ 14f:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ 156:	48 39 ca             	cmp    %rcx,%rdx
+ 159:	77 2f                	ja     18a <release_process_vm+0x18a>
+ 15b:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	15d: R_X86_64_64	num_processors
+ 165:	48 63 36             	movslq (%rsi),%rsi
+ 168:	48 c1 e6 0e          	shl    $0xe,%rsi
+ 16c:	48 01 f2             	add    %rsi,%rdx
+ 16f:	48 39 ca             	cmp    %rcx,%rdx
+ 172:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	174: R_X86_64_64	clv
+ 17c:	72 16                	jb     194 <release_process_vm+0x194>
+ 17e:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ 186:	48 98                	cltq   
+ 188:	eb 0a                	jmp    194 <release_process_vm+0x194>
+ 18a:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	18c: R_X86_64_64	clv
+ 194:	48 8b 09             	mov    (%rcx),%rcx
+ 197:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ 19e:	f0 ff 8c 01 28 1f 00 00 	lock decl 0x1f28(%rcx,%rax,1)
+ 1a6:	41 57                	push   %r15
+ 1a8:	9d                   	popf   
+ 1a9:	48 8b 83 98 00 00 00 	mov    0x98(%rbx),%rax
+ 1b0:	48 85 c0             	test   %rax,%rax
+ 1b3:	74 0c                	je     1c1 <release_process_vm+0x1c1>
+ 1b5:	48 8b b3 90 00 00 00 	mov    0x90(%rbx),%rsi
+ 1bc:	48 89 df             	mov    %rbx,%rdi
+ 1bf:	ff d0                	call   *%rax
+ 1c1:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1c3: R_X86_64_64	free_all_process_memory_range
+ 1cb:	48 89 df             	mov    %rbx,%rdi
+ 1ce:	ff d0                	call   *%rax
+ 1d0:	4c 8b b3 88 00 00 00 	mov    0x88(%rbx),%r14
+ 1d7:	4d 85 f6             	test   %r14,%r14
+ 1da:	74 30                	je     20c <release_process_vm+0x20c>
+ 1dc:	48 8b 3b             	mov    (%rbx),%rdi
+ 1df:	41 8b b6 c8 01 00 00 	mov    0x1c8(%r14),%esi
+ 1e6:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1e8: R_X86_64_64	detach_address_space
+ 1f0:	ff d0                	call   *%rax
+ 1f2:	49 c7 86 80 00 00 00 00 00 00 00 	movq   $0x0,0x80(%r14)
+ 1fd:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1ff: R_X86_64_64	release_process
+ 207:	4c 89 f7             	mov    %r14,%rdi
+ 20a:	ff d0                	call   *%rax
+ 20c:	48 89 5d d0          	mov    %rbx,-0x30(%rbp)
+ 210:	49 89 de             	mov    %rbx,%r14
+ 213:	49 bc 00 00 00 00 00 00 00 00 	movabs $0x0,%r12	215: R_X86_64_64	process_tracked_allocator_source_file
+ 21d:	48 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%rbx	21f: R_X86_64_64	_kfree
+ 227:	49 81 c6 f8 00 00 00 	add    $0xf8,%r14
+ 22e:	74 4b                	je     27b <release_process_vm+0x27b>
+ 230:	49 8b 06             	mov    (%r14),%rax
+ 233:	48 85 c0             	test   %rax,%rax
+ 236:	74 43                	je     27b <release_process_vm+0x27b>
+ 238:	49 bd 00 00 00 00 00 00 00 00 	movabs $0x0,%r13	23a: R_X86_64_64	rb_erase
+ 242:	66 66 66 66 66 2e 0f 1f 84 00 00 00 00 00 	data16 data16 data16 data16 cs nopw 0x0(%rax,%rax,1)
+ 250:	49 89 c7             	mov    %rax,%r15
+ 253:	48 8b 40 10          	mov    0x10(%rax),%rax
+ 257:	48 85 c0             	test   %rax,%rax
+ 25a:	75 f4                	jne    250 <release_process_vm+0x250>
+ 25c:	4c 89 ff             	mov    %r15,%rdi
+ 25f:	4c 89 f6             	mov    %r14,%rsi
+ 262:	41 ff d5             	call   *%r13
+ 265:	49 8b 34 24          	mov    (%r12),%rsi
+ 269:	4c 89 ff             	mov    %r15,%rdi
+ 26c:	ba fd 00 00 00       	mov    $0xfd,%edx
+ 271:	ff d3                	call   *%rbx
+ 273:	49 8b 06             	mov    (%r14),%rax
+ 276:	48 85 c0             	test   %rax,%rax
+ 279:	75 d5                	jne    250 <release_process_vm+0x250>
+ 27b:	49 8b 34 24          	mov    (%r12),%rsi
+ 27f:	48 8b 7d d0          	mov    -0x30(%rbp),%rdi
+ 283:	ba 31 02 00 00       	mov    $0x231,%edx
+ 288:	48 89 d8             	mov    %rbx,%rax
+ 28b:	48 83 c4 08          	add    $0x8,%rsp
+ 28f:	5b                   	pop    %rbx
+ 290:	41 5c                	pop    %r12
+ 292:	41 5d                	pop    %r13
+ 294:	41 5e                	pop    %r14
+ 296:	41 5f                	pop    %r15
+ 298:	5d                   	pop    %rbp
+ 299:	ff e0                	jmp    *%rax

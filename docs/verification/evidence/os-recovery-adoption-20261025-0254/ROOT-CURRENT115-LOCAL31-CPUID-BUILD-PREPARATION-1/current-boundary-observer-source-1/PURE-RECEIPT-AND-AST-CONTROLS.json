@@ -1,0 +1,714 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_PURE_RETAINED_RECEIPT_AND_AST_CONTROLS_ONLY",
+  "source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/current-boundary-observer-source-1/observe_root48_current115.py",
+    "bytes": 34582,
+    "sha256": "d9929d4abaa7032bb77580d9e73da5ba457a49f4b779941aa090063509285574"
+  },
+  "retained_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/CURRENT-BOUND-CAPTURE.SOURCE-ONLY.py",
+    "bytes": 28982,
+    "sha256": "9e9c4eee38ddec1497a344cb7204708d39ad53c620836f64117000031caa5903"
+  },
+  "byte_semantically_unchanged_AST_helper_functions": [
+    "ref",
+    "checked",
+    "validate_root40_latest",
+    "validate_root42_latest",
+    "validate_latest_native_current"
+  ],
+  "original_resource_assertions": 74,
+  "original_assertions_retained_exact_AST": 67,
+  "changed_assertions_exactly": [
+    "len(ledger['consumed_nonces']) == len(set(ledger['consumed_nonces'])) == 56",
+    "ledger['latest_accepted_free_boundary'] == ROOT_CURRENT_FREE",
+    "static['root_ledger35'] == ref(LEDGER) and static['latest_serial_operation_physical_acceptance'] == ROOT_CURRENT_FREE",
+    "static['expected_case'] == 'P-M06-01-process-exec-wait-235B'",
+    "static['nonce'] not in ledger['consumed_nonces'] + ledger['reserved_abandoned_unconsumed_nonces']",
+    "ref(Path(source['path'])) == source",
+    "path.is_dir() and (not list(path.iterdir()))"
+  ],
+  "removed_native_only_checks_disposition": "Native launch case/nonce/source/output/scratch empty-directory checks are replaced by Root115 current-boundary refs and unchanged build capture_resources held source/output/nonce checks; all original system/resource/guard/mutex/scratch identity/previous historical checks retained.",
+  "Root48": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER48.json",
+    "bytes": 39102,
+    "sha256": "8dafffd053d7642695d7e0f28c3b68a14c4b0fb8ac9244699843368fed82f48a"
+  },
+  "native235_free": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/independent-actual-native-review-1/CURRENT-FREE.json",
+    "bytes": 5497,
+    "sha256": "563d0ce4db6695fb78adfaae2d2d91ca02afa6fa9c1621704d071b883718b89e"
+  },
+  "native235_exact": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/independent-actual-native-review-1/FRESH-EXACT-CONTAINER-AND-ACTORS.json",
+    "bytes": 58073,
+    "sha256": "5d562aab74781305a3193a2fbf7ecdd4d8a51bbac0b043ccf6e73b62002eefa0"
+  },
+  "actual235_actors": [
+    {
+      "kind": "owner",
+      "pid": 1805542,
+      "start": 95052477,
+      "pgid": 1805537
+    },
+    {
+      "kind": "capture",
+      "pid": 1805538,
+      "start": 95052465,
+      "pgid": 1805537
+    },
+    {
+      "kind": "bridge",
+      "pid": 1805537,
+      "start": null,
+      "pgid": 1805537
+    },
+    {
+      "kind": "001-ps.json",
+      "pid": 1805544,
+      "start": 95052516,
+      "pgid": 1805544
+    },
+    {
+      "kind": "002-ps.json",
+      "pid": 1805550,
+      "start": 95052518,
+      "pgid": 1805550
+    },
+    {
+      "kind": "003-image.json",
+      "pid": 1805556,
+      "start": 95052519,
+      "pgid": 1805556
+    },
+    {
+      "kind": "004-create.json",
+      "pid": 1805562,
+      "start": 95052520,
+      "pgid": 1805562
+    },
+    {
+      "kind": "005-ps.json",
+      "pid": 1805568,
+      "start": 95052525,
+      "pgid": 1805568
+    },
+    {
+      "kind": "006-ps.json",
+      "pid": 1805574,
+      "start": 95052527,
+      "pgid": 1805574
+    },
+    {
+      "kind": "007-ps.json",
+      "pid": 1805580,
+      "start": 95052528,
+      "pgid": 1805580
+    },
+    {
+      "kind": "008-inspect.json",
+      "pid": 1805586,
+      "start": 95052530,
+      "pgid": 1805586
+    },
+    {
+      "kind": "009-start.json",
+      "pid": 1805592,
+      "start": 95052531,
+      "pgid": 1805592
+    },
+    {
+      "kind": "010-wait.json",
+      "pid": 1805769,
+      "start": 95056249,
+      "pgid": 1805769
+    },
+    {
+      "kind": "011-ps.json",
+      "pid": 1805775,
+      "start": 95056251,
+      "pgid": 1805775
+    },
+    {
+      "kind": "012-ps.json",
+      "pid": 1805781,
+      "start": 95056253,
+      "pgid": 1805781
+    },
+    {
+      "kind": "013-ps.json",
+      "pid": 1805787,
+      "start": 95056255,
+      "pgid": 1805787
+    },
+    {
+      "kind": "014-inspect.json",
+      "pid": 1805793,
+      "start": 95056256,
+      "pgid": 1805793
+    },
+    {
+      "kind": "015-wait.json",
+      "pid": 1805800,
+      "start": 95056258,
+      "pgid": 1805800
+    },
+    {
+      "kind": "016-logs.json",
+      "pid": 1805806,
+      "start": 95056260,
+      "pgid": 1805806
+    },
+    {
+      "kind": "017-inspect.json",
+      "pid": 1805812,
+      "start": 95056261,
+      "pgid": 1805812
+    },
+    {
+      "kind": "018-ps.json",
+      "pid": 1805820,
+      "start": 95056263,
+      "pgid": 1805820
+    },
+    {
+      "kind": "019-ps.json",
+      "pid": 1805827,
+      "start": 95056264,
+      "pgid": 1805827
+    },
+    {
+      "kind": "020-ps.json",
+      "pid": 1805833,
+      "start": 95056266,
+      "pgid": 1805833
+    },
+    {
+      "kind": "021-inspect.json",
+      "pid": 1805839,
+      "start": 95056267,
+      "pgid": 1805839
+    },
+    {
+      "kind": "022-stop.json",
+      "pid": 1805845,
+      "start": 95056269,
+      "pgid": 1805845
+    },
+    {
+      "kind": "023-kill.json",
+      "pid": 1805851,
+      "start": 95056271,
+      "pgid": 1805851
+    },
+    {
+      "kind": "024-wait.json",
+      "pid": 1805857,
+      "start": 95056272,
+      "pgid": 1805857
+    },
+    {
+      "kind": "025-logs.json",
+      "pid": 1805863,
+      "start": 95056274,
+      "pgid": 1805863
+    },
+    {
+      "kind": "026-inspect.json",
+      "pid": 1805869,
+      "start": 95056275,
+      "pgid": 1805869
+    },
+    {
+      "kind": "027-rm.json",
+      "pid": 1805875,
+      "start": 95056277,
+      "pgid": 1805875
+    },
+    {
+      "kind": "028-ps.json",
+      "pid": 1805881,
+      "start": 95056279,
+      "pgid": 1805881
+    },
+    {
+      "kind": "029-ps.json",
+      "pid": 1805887,
+      "start": 95056281,
+      "pgid": 1805887
+    },
+    {
+      "kind": "030-ps.json",
+      "pid": 1805893,
+      "start": 95056282,
+      "pgid": 1805893
+    }
+  ],
+  "known_births": 32,
+  "unknown_bridge_birth": {
+    "pid": 1805537,
+    "birth": null,
+    "evidence": "Exact retained bridge positive join; only numeric PID/PGRP absence checked, no invented birth"
+  },
+  "ordinary_operations": 12,
+  "ordinary_positive_join_records": [
+    {
+      "nonce": "7c105a2dae96f0713ec587f1d716c259",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/future-capture-1/RESULTS.json",
+        "bytes": 1737,
+        "sha256": "e92ba5ac353c7fc1439d9da82b0fb970952900aaa0286169d318afa1cd574828"
+      },
+      "index": 0,
+      "pid": 1780696,
+      "birth": 94615785,
+      "returncode": 1
+    },
+    {
+      "nonce": "303c66187868654a9a7dbb7ca58f1f52",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/RESULTS.json",
+        "bytes": 8498,
+        "sha256": "8ecd67583bdcbe37b68058046698a30e87263704b39fcd17e60a387f58341297"
+      },
+      "index": 0,
+      "pid": 1783264,
+      "birth": 94670179,
+      "returncode": 0
+    },
+    {
+      "nonce": "303c66187868654a9a7dbb7ca58f1f52",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/RESULTS.json",
+        "bytes": 8498,
+        "sha256": "8ecd67583bdcbe37b68058046698a30e87263704b39fcd17e60a387f58341297"
+      },
+      "index": 1,
+      "pid": 1783271,
+      "birth": 94670253,
+      "returncode": 0
+    },
+    {
+      "nonce": "303c66187868654a9a7dbb7ca58f1f52",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/RESULTS.json",
+        "bytes": 8498,
+        "sha256": "8ecd67583bdcbe37b68058046698a30e87263704b39fcd17e60a387f58341297"
+      },
+      "index": 2,
+      "pid": 1783274,
+      "birth": 94670323,
+      "returncode": 0
+    },
+    {
+      "nonce": "303c66187868654a9a7dbb7ca58f1f52",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/RESULTS.json",
+        "bytes": 8498,
+        "sha256": "8ecd67583bdcbe37b68058046698a30e87263704b39fcd17e60a387f58341297"
+      },
+      "index": 3,
+      "pid": 1783275,
+      "birth": 94670388,
+      "returncode": 0
+    },
+    {
+      "nonce": "303c66187868654a9a7dbb7ca58f1f52",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/RESULTS.json",
+        "bytes": 8498,
+        "sha256": "8ecd67583bdcbe37b68058046698a30e87263704b39fcd17e60a387f58341297"
+      },
+      "index": 4,
+      "pid": 1783283,
+      "birth": 94670456,
+      "returncode": 1
+    },
+    {
+      "nonce": "42f49c156973fe69f9bc912198cf8031",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/future-capture-1/RESULTS.json",
+        "bytes": 12505,
+        "sha256": "6a67293c72d64b27f5d360668f861e09cd042882e5332bf9fa400f5b0d74e1ef"
+      },
+      "index": 0,
+      "pid": 1784955,
+      "birth": 94698050,
+      "returncode": 0
+    },
+    {
+      "nonce": "42f49c156973fe69f9bc912198cf8031",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/future-capture-1/RESULTS.json",
+        "bytes": 12505,
+        "sha256": "6a67293c72d64b27f5d360668f861e09cd042882e5332bf9fa400f5b0d74e1ef"
+      },
+      "index": 1,
+      "pid": 1784983,
+      "birth": 94700136,
+      "returncode": 0
+    },
+    {
+      "nonce": "42f49c156973fe69f9bc912198cf8031",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/future-capture-1/RESULTS.json",
+        "bytes": 12505,
+        "sha256": "6a67293c72d64b27f5d360668f861e09cd042882e5332bf9fa400f5b0d74e1ef"
+      },
+      "index": 2,
+      "pid": 1784986,
+      "birth": 94700241,
+      "returncode": 0
+    },
+    {
+      "nonce": "42f49c156973fe69f9bc912198cf8031",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/future-capture-1/RESULTS.json",
+        "bytes": 12505,
+        "sha256": "6a67293c72d64b27f5d360668f861e09cd042882e5332bf9fa400f5b0d74e1ef"
+      },
+      "index": 3,
+      "pid": 1784989,
+      "birth": 94700346,
+      "returncode": 0
+    },
+    {
+      "nonce": "42f49c156973fe69f9bc912198cf8031",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/future-capture-1/RESULTS.json",
+        "bytes": 12505,
+        "sha256": "6a67293c72d64b27f5d360668f861e09cd042882e5332bf9fa400f5b0d74e1ef"
+      },
+      "index": 4,
+      "pid": 1784991,
+      "birth": 94700455,
+      "returncode": 0
+    },
+    {
+      "nonce": "42f49c156973fe69f9bc912198cf8031",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/future-capture-1/RESULTS.json",
+        "bytes": 12505,
+        "sha256": "6a67293c72d64b27f5d360668f861e09cd042882e5332bf9fa400f5b0d74e1ef"
+      },
+      "index": 5,
+      "pid": 1784993,
+      "birth": 94700559,
+      "returncode": 0
+    },
+    {
+      "nonce": "42f49c156973fe69f9bc912198cf8031",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/future-capture-1/RESULTS.json",
+        "bytes": 12505,
+        "sha256": "6a67293c72d64b27f5d360668f861e09cd042882e5332bf9fa400f5b0d74e1ef"
+      },
+      "index": 6,
+      "pid": 1785011,
+      "birth": 94700682,
+      "returncode": 1
+    },
+    {
+      "nonce": "3de3cbddc4028413e2d89ad8d98c8865",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/future-capture-1/RESULTS.json",
+        "bytes": 3635,
+        "sha256": "74f892095661bb31a4c315274b27972d7bc945a58078ab29e4f8558a1720878d"
+      },
+      "index": 0,
+      "pid": 1786510,
+      "birth": 94731324,
+      "returncode": 0
+    },
+    {
+      "nonce": "3de3cbddc4028413e2d89ad8d98c8865",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/future-capture-1/RESULTS.json",
+        "bytes": 3635,
+        "sha256": "74f892095661bb31a4c315274b27972d7bc945a58078ab29e4f8558a1720878d"
+      },
+      "index": 1,
+      "pid": 1786515,
+      "birth": 94731399,
+      "returncode": 0
+    },
+    {
+      "nonce": "dffc3e89e3ba8b0195ca3f2eb8a04dd6",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-host-preparation-source-1/future-capture-1/RESULTS.json",
+        "bytes": 9280,
+        "sha256": "5df89d07a8ff3a72f39c2b40a13caf11e9725f43b7f3e12e1291d2647050cb9e"
+      },
+      "index": 0,
+      "pid": 1789646,
+      "birth": 94789648,
+      "returncode": 0
+    },
+    {
+      "nonce": "dffc3e89e3ba8b0195ca3f2eb8a04dd6",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-host-preparation-source-1/future-capture-1/RESULTS.json",
+        "bytes": 9280,
+        "sha256": "5df89d07a8ff3a72f39c2b40a13caf11e9725f43b7f3e12e1291d2647050cb9e"
+      },
+      "index": 1,
+      "pid": 1789661,
+      "birth": 94789681,
+      "returncode": 0
+    },
+    {
+      "nonce": "dffc3e89e3ba8b0195ca3f2eb8a04dd6",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-host-preparation-source-1/future-capture-1/RESULTS.json",
+        "bytes": 9280,
+        "sha256": "5df89d07a8ff3a72f39c2b40a13caf11e9725f43b7f3e12e1291d2647050cb9e"
+      },
+      "index": 2,
+      "pid": 1789672,
+      "birth": 94789781,
+      "returncode": 0
+    },
+    {
+      "nonce": "dffc3e89e3ba8b0195ca3f2eb8a04dd6",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-host-preparation-source-1/future-capture-1/RESULTS.json",
+        "bytes": 9280,
+        "sha256": "5df89d07a8ff3a72f39c2b40a13caf11e9725f43b7f3e12e1291d2647050cb9e"
+      },
+      "index": 3,
+      "pid": 1789711,
+      "birth": 94789944,
+      "returncode": 0
+    },
+    {
+      "nonce": "dffc3e89e3ba8b0195ca3f2eb8a04dd6",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-host-preparation-source-1/future-capture-1/RESULTS.json",
+        "bytes": 9280,
+        "sha256": "5df89d07a8ff3a72f39c2b40a13caf11e9725f43b7f3e12e1291d2647050cb9e"
+      },
+      "index": 4,
+      "pid": 1789724,
+      "birth": 94790206,
+      "returncode": 0
+    },
+    {
+      "nonce": "06c6182152c2d8cdb9d84e0b0261621f",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/absolute-retained-reference-correction-source-1/future-capture-1/RESULTS.json",
+        "bytes": 1840,
+        "sha256": "0d32a4f7c65bf1ce25526183e6e1a2f83aef5d3b2cc154cb9fab1a3d546a2f87"
+      },
+      "index": 0,
+      "pid": 1795115,
+      "birth": 94890049,
+      "returncode": 1
+    },
+    {
+      "nonce": "8e2cd1e4aa716a36524172aa2c08c0cc",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-stage-preparation-source-1/root-actual-qualified-input-plan-source-1/root-actual-compose-1/ROOT-CAPTURE/ROOT-ACTUAL-COMPOSE-JOIN.json",
+        "bytes": 1303,
+        "sha256": "b376775af704682bbe232021ef3984ff3afa8545fb85c473c13ff050da288a76"
+      },
+      "index": 0,
+      "pid": 1796683,
+      "birth": 94922626,
+      "returncode": 0
+    },
+    {
+      "nonce": "4cea7939b0ae2d977d9f73cdf88a9644",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/typed-timer-array-alignment-reader-correction-source-1/future-capture-1/RESULTS.json",
+        "bytes": 1851,
+        "sha256": "f28a628a1ea859024be5f4bd7b7628a157ea08b87b2558e8648e8fe8af791e8b"
+      },
+      "index": 0,
+      "pid": 1799085,
+      "birth": 94966259,
+      "returncode": 2
+    },
+    {
+      "nonce": "91015d4c834b89aa69df1d25d01fee01",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/actual-capture-1/RESULTS.json",
+        "bytes": 8403,
+        "sha256": "585b9ffd51cdc9ba75c020b512fec74c24fbb41c1353d7888a6c2baaad14ebb9"
+      },
+      "index": 0,
+      "pid": 1801001,
+      "birth": 95000297,
+      "returncode": 0
+    },
+    {
+      "nonce": "91015d4c834b89aa69df1d25d01fee01",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/actual-capture-1/RESULTS.json",
+        "bytes": 8403,
+        "sha256": "585b9ffd51cdc9ba75c020b512fec74c24fbb41c1353d7888a6c2baaad14ebb9"
+      },
+      "index": 1,
+      "pid": 1801008,
+      "birth": 95000352,
+      "returncode": 0
+    },
+    {
+      "nonce": "91015d4c834b89aa69df1d25d01fee01",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/actual-capture-1/RESULTS.json",
+        "bytes": 8403,
+        "sha256": "585b9ffd51cdc9ba75c020b512fec74c24fbb41c1353d7888a6c2baaad14ebb9"
+      },
+      "index": 2,
+      "pid": 1801011,
+      "birth": 95000419,
+      "returncode": 0
+    },
+    {
+      "nonce": "91015d4c834b89aa69df1d25d01fee01",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/actual-capture-1/RESULTS.json",
+        "bytes": 8403,
+        "sha256": "585b9ffd51cdc9ba75c020b512fec74c24fbb41c1353d7888a6c2baaad14ebb9"
+      },
+      "index": 3,
+      "pid": 1801017,
+      "birth": 95000485,
+      "returncode": 0
+    },
+    {
+      "nonce": "91015d4c834b89aa69df1d25d01fee01",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/actual-capture-1/RESULTS.json",
+        "bytes": 8403,
+        "sha256": "585b9ffd51cdc9ba75c020b512fec74c24fbb41c1353d7888a6c2baaad14ebb9"
+      },
+      "index": 4,
+      "pid": 1801018,
+      "birth": 95000540,
+      "returncode": 1
+    },
+    {
+      "nonce": "150d370d34ca5da1a1d2f84569011ab6",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/RESULTS.json",
+        "bytes": 9081,
+        "sha256": "b7e863586302c21aa399d019020134cad1f4baaabcc9e401d4ee3df6fc3e32b1"
+      },
+      "index": 0,
+      "pid": 1801258,
+      "birth": 95005888,
+      "returncode": 0
+    },
+    {
+      "nonce": "150d370d34ca5da1a1d2f84569011ab6",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/RESULTS.json",
+        "bytes": 9081,
+        "sha256": "b7e863586302c21aa399d019020134cad1f4baaabcc9e401d4ee3df6fc3e32b1"
+      },
+      "index": 1,
+      "pid": 1801310,
+      "birth": 95008036,
+      "returncode": 0
+    },
+    {
+      "nonce": "150d370d34ca5da1a1d2f84569011ab6",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/RESULTS.json",
+        "bytes": 9081,
+        "sha256": "b7e863586302c21aa399d019020134cad1f4baaabcc9e401d4ee3df6fc3e32b1"
+      },
+      "index": 2,
+      "pid": 1801316,
+      "birth": 95008194,
+      "returncode": 0
+    },
+    {
+      "nonce": "150d370d34ca5da1a1d2f84569011ab6",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/RESULTS.json",
+        "bytes": 9081,
+        "sha256": "b7e863586302c21aa399d019020134cad1f4baaabcc9e401d4ee3df6fc3e32b1"
+      },
+      "index": 3,
+      "pid": 1801319,
+      "birth": 95008350,
+      "returncode": 0
+    },
+    {
+      "nonce": "150d370d34ca5da1a1d2f84569011ab6",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/RESULTS.json",
+        "bytes": 9081,
+        "sha256": "b7e863586302c21aa399d019020134cad1f4baaabcc9e401d4ee3df6fc3e32b1"
+      },
+      "index": 4,
+      "pid": 1801321,
+      "birth": 95008445,
+      "returncode": 1
+    },
+    {
+      "nonce": "9b4326c03b020c8662cca6b0d5731d4a",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/future-capture-1/RESULTS.json",
+        "bytes": 5537,
+        "sha256": "08dd4207707766b3af96b171a4dd4a26f64ae6aa8a765fe631607414e76ec274"
+      },
+      "index": 0,
+      "pid": 1807156,
+      "birth": 95074497,
+      "returncode": 0
+    },
+    {
+      "nonce": "9b4326c03b020c8662cca6b0d5731d4a",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/future-capture-1/RESULTS.json",
+        "bytes": 5537,
+        "sha256": "08dd4207707766b3af96b171a4dd4a26f64ae6aa8a765fe631607414e76ec274"
+      },
+      "index": 1,
+      "pid": 1807230,
+      "birth": 95076574,
+      "returncode": 0
+    },
+    {
+      "nonce": "9b4326c03b020c8662cca6b0d5731d4a",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/future-capture-1/RESULTS.json",
+        "bytes": 5537,
+        "sha256": "08dd4207707766b3af96b171a4dd4a26f64ae6aa8a765fe631607414e76ec274"
+      },
+      "index": 2,
+      "pid": 1807235,
+      "birth": 95076672,
+      "returncode": 0
+    },
+    {
+      "nonce": "b7999202cca1b22f3e2b7bb9e17384a2",
+      "reference": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/foreground-f06-shmget-current114-abi-source-1/got64-reader-correction-source-1/future-capture-1/RESULTS.json",
+        "bytes": 1784,
+        "sha256": "6e6f548c8bf43073add416b9e3268afa3f07a5b5067cc042193909a0a4209037"
+      },
+      "index": 0,
+      "pid": 1808000,
+      "birth": 95089624,
+      "returncode": 1
+    }
+  ],
+  "pure_test_assertions": [
+    "five retained helper ASTs exact",
+    "seven native-interface predicate substitutions only",
+    "Root48 count59 and latest free exact",
+    "235 all30 command reaps and33actors/32births/one explicitNone",
+    "all12 ordinary operations covered including compose join",
+    "37 actual positive joined/groupabsent/closed records without live observation"
+  ],
+  "observer_calls": 0,
+  "guard_calls": 0,
+  "subprocess_calls": 0,
+  "proc_queries": 0,
+  "runtime_authority": null
+}

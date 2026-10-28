@@ -1,0 +1,131 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.create_address_space:
+
+0000000000000000 <create_address_space>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	41 57                	push   %r15
+   6:	41 56                	push   %r14
+   8:	41 55                	push   %r13
+   a:	41 54                	push   %r12
+   c:	53                   	push   %rbx
+   d:	50                   	push   %rax
+   e:	85 f6                	test   %esi,%esi
+  10:	0f 88 b9 01 00 00    	js     1cf <create_address_space+0x1cf>
+  16:	41 89 f6             	mov    %esi,%r14d
+  19:	41 89 f5             	mov    %esi,%r13d
+  1c:	4e 8d 24 ad a8 00 00 00 	lea    0xa8(,%r13,4),%r12
+  24:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	26: R_X86_64_64	process_tracked_allocator_source_file
+  2e:	4c 8b 38             	mov    (%rax),%r15
+  31:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	33: R_X86_64_64	_kmalloc
+  3b:	be 02 00 00 00       	mov    $0x2,%esi
+  40:	44 89 e7             	mov    %r12d,%edi
+  43:	4c 89 fa             	mov    %r15,%rdx
+  46:	b9 54 01 00 00       	mov    $0x154,%ecx
+  4b:	ff d0                	call   *%rax
+  4d:	48 85 c0             	test   %rax,%rax
+  50:	0f 84 ea 00 00 00    	je     140 <create_address_space+0x140>
+  56:	48 89 c3             	mov    %rax,%rbx
+  59:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	5b: R_X86_64_64	ihk_mc_pt_create
+  63:	bf 02 00 00 00       	mov    $0x2,%edi
+  68:	ff d0                	call   *%rax
+  6a:	48 85 c0             	test   %rax,%rax
+  6d:	0f 84 3b 01 00 00    	je     1ae <create_address_space+0x1ae>
+  73:	49 c1 e5 02          	shl    $0x2,%r13
+  77:	48 b9 f8 ff ff ff 03 00 00 00 	movabs $0x3fffffff8,%rcx
+  81:	49 21 cc             	and    %rcx,%r12
+  84:	31 c9                	xor    %ecx,%ecx
+  86:	66 2e 0f 1f 84 00 00 00 00 00 	cs nopw 0x0(%rax,%rax,1)
+  90:	c6 04 0b 00          	movb   $0x0,(%rbx,%rcx,1)
+  94:	c6 44 0b 01 00       	movb   $0x0,0x1(%rbx,%rcx,1)
+  99:	c6 44 0b 02 00       	movb   $0x0,0x2(%rbx,%rcx,1)
+  9e:	c6 44 0b 03 00       	movb   $0x0,0x3(%rbx,%rcx,1)
+  a3:	c6 44 0b 04 00       	movb   $0x0,0x4(%rbx,%rcx,1)
+  a8:	c6 44 0b 05 00       	movb   $0x0,0x5(%rbx,%rcx,1)
+  ad:	c6 44 0b 06 00       	movb   $0x0,0x6(%rbx,%rcx,1)
+  b2:	c6 44 0b 07 00       	movb   $0x0,0x7(%rbx,%rcx,1)
+  b7:	48 83 c1 08          	add    $0x8,%rcx
+  bb:	49 39 cc             	cmp    %rcx,%r12
+  be:	75 d0                	jne    90 <create_address_space+0x90>
+  c0:	41 f6 c5 04          	test   $0x4,%r13b
+  c4:	74 1b                	je     e1 <create_address_space+0xe1>
+  c6:	31 d2                	xor    %edx,%edx
+  c8:	0f 1f 84 00 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+  d0:	48 8d 34 13          	lea    (%rbx,%rdx,1),%rsi
+  d4:	c6 04 31 00          	movb   $0x0,(%rcx,%rsi,1)
+  d8:	48 ff c2             	inc    %rdx
+  db:	48 83 fa 04          	cmp    $0x4,%rdx
+  df:	75 ef                	jne    d0 <create_address_space+0xd0>
+  e1:	44 89 b3 a4 00 00 00 	mov    %r14d,0xa4(%rbx)
+  e8:	48 89 03             	mov    %rax,(%rbx)
+  eb:	b8 01 00 00 00       	mov    $0x1,%eax
+  f0:	87 43 18             	xchg   %eax,0x18(%rbx)
+  f3:	b8 27 00 00 00       	mov    $0x27,%eax
+  f8:	0f 1f 84 00 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+ 100:	c6 44 03 f9 00       	movb   $0x0,-0x7(%rbx,%rax,1)
+ 105:	c6 44 03 fa 00       	movb   $0x0,-0x6(%rbx,%rax,1)
+ 10a:	c6 44 03 fb 00       	movb   $0x0,-0x5(%rbx,%rax,1)
+ 10f:	c6 44 03 fc 00       	movb   $0x0,-0x4(%rbx,%rax,1)
+ 114:	c6 44 03 fd 00       	movb   $0x0,-0x3(%rbx,%rax,1)
+ 119:	c6 44 03 fe 00       	movb   $0x0,-0x2(%rbx,%rax,1)
+ 11e:	c6 44 03 ff 00       	movb   $0x0,-0x1(%rbx,%rax,1)
+ 123:	c6 04 03 00          	movb   $0x0,(%rbx,%rax,1)
+ 127:	48 83 c0 08          	add    $0x8,%rax
+ 12b:	48 3d a7 00 00 00    	cmp    $0xa7,%rax
+ 131:	75 cd                	jne    100 <create_address_space+0x100>
+ 133:	31 c0                	xor    %eax,%eax
+ 135:	87 83 a0 00 00 00    	xchg   %eax,0xa0(%rbx)
+ 13b:	e9 bb 00 00 00       	jmp    1fb <create_address_space+0x1fb>
+ 140:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ 145:	0f 32                	rdmsr  
+ 147:	48 c1 e2 20          	shl    $0x20,%rdx
+ 14b:	89 c1                	mov    %eax,%ecx
+ 14d:	48 09 d1             	or     %rdx,%rcx
+ 150:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	152: R_X86_64_64	locals
+ 15a:	48 8b 10             	mov    (%rax),%rdx
+ 15d:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ 164:	48 39 ca             	cmp    %rcx,%rdx
+ 167:	77 23                	ja     18c <create_address_space+0x18c>
+ 169:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	16b: R_X86_64_64	num_processors
+ 173:	48 63 36             	movslq (%rsi),%rsi
+ 176:	48 c1 e6 0e          	shl    $0xe,%rsi
+ 17a:	48 01 f2             	add    %rsi,%rdx
+ 17d:	48 39 ca             	cmp    %rcx,%rdx
+ 180:	72 0a                	jb     18c <create_address_space+0x18c>
+ 182:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ 18a:	48 98                	cltq   
+ 18c:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	18e: R_X86_64_64	clv
+ 196:	48 8b 09             	mov    (%rcx),%rcx
+ 199:	48 85 c9             	test   %rcx,%rcx
+ 19c:	74 35                	je     1d3 <create_address_space+0x1d3>
+ 19e:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ 1a5:	8b 8c 01 28 1f 00 00 	mov    0x1f28(%rcx,%rax,1),%ecx
+ 1ac:	eb 2a                	jmp    1d8 <create_address_space+0x1d8>
+ 1ae:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1b0: R_X86_64_64	process_tracked_allocator_source_file
+ 1b8:	48 8b 30             	mov    (%rax),%rsi
+ 1bb:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1bd: R_X86_64_64	_kfree
+ 1c5:	48 89 df             	mov    %rbx,%rdi
+ 1c8:	ba 02 01 00 00       	mov    $0x102,%edx
+ 1cd:	ff d0                	call   *%rax
+ 1cf:	31 db                	xor    %ebx,%ebx
+ 1d1:	eb 28                	jmp    1fb <create_address_space+0x1fb>
+ 1d3:	b9 ff ff ff ff       	mov    $0xffffffff,%ecx
+ 1d8:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	1da: R_X86_64_64	.lrodata.str1.1+0x448c
+ 1e2:	49 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%r8	1e4: R_X86_64_64	kprintf
+ 1ec:	31 db                	xor    %ebx,%ebx
+ 1ee:	4c 89 fe             	mov    %r15,%rsi
+ 1f1:	ba 54 01 00 00       	mov    $0x154,%edx
+ 1f6:	31 c0                	xor    %eax,%eax
+ 1f8:	41 ff d0             	call   *%r8
+ 1fb:	48 89 d8             	mov    %rbx,%rax
+ 1fe:	48 83 c4 08          	add    $0x8,%rsp
+ 202:	5b                   	pop    %rbx
+ 203:	41 5c                	pop    %r12
+ 205:	41 5d                	pop    %r13
+ 207:	41 5e                	pop    %r14
+ 209:	41 5f                	pop    %r15
+ 20b:	5d                   	pop    %rbp
+ 20c:	c3                   	ret    

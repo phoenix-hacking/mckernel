@@ -1,0 +1,106 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/HOST-output-proposed-1/rust-selected.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.process_page_fault_anon_allocate_body_result:
+
+0000000000000000 <process_page_fault_anon_allocate_body_result>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	41 57                	push   %r15
+   6:	41 56                	push   %r14
+   8:	41 55                	push   %r13
+   a:	41 54                	push   %r12
+   c:	53                   	push   %rbx
+   d:	48 83 ec 18          	sub    $0x18,%rsp
+  11:	4c 89 4d c0          	mov    %r9,-0x40(%rbp)
+  15:	4d 89 c7             	mov    %r8,%r15
+  18:	48 89 4d c8          	mov    %rcx,-0x38(%rbp)
+  1c:	49 89 d6             	mov    %rdx,%r14
+  1f:	49 89 f4             	mov    %rsi,%r12
+  22:	48 89 7d d0          	mov    %rdi,-0x30(%rbp)
+  26:	4c 8b 6d 18          	mov    0x18(%rbp),%r13
+  2a:	48 8b 5d 10          	mov    0x10(%rbp),%rbx
+  2e:	eb 31                	jmp    61 <process_page_fault_anon_allocate_body_result+0x61>
+  30:	b8 00 00 00 40       	mov    $0x40000000,%eax
+  35:	b9 12 00 00 00       	mov    $0x12,%ecx
+  3a:	48 89 03             	mov    %rax,(%rbx)
+  3d:	41 89 4d 00          	mov    %ecx,0x0(%r13)
+  41:	48 8b 45 28          	mov    0x28(%rbp),%rax
+  45:	c7 00 00 00 00 00    	movl   $0x0,(%rax)
+  4b:	49 c7 07 00 00 00 00 	movq   $0x0,(%r15)
+  52:	31 c0                	xor    %eax,%eax
+  54:	48 2b 03             	sub    (%rbx),%rax
+  57:	4c 21 f0             	and    %r14,%rax
+  5a:	48 8b 4d c0          	mov    -0x40(%rbp),%rcx
+  5e:	48 89 01             	mov    %rax,(%rcx)
+  61:	48 8b 3b             	mov    (%rbx),%rdi
+  64:	48 c1 ef 0c          	shr    $0xc,%rdi
+  68:	41 8b 75 00          	mov    0x0(%r13),%esi
+  6c:	41 8b 54 24 28       	mov    0x28(%r12),%edx
+  71:	83 e2 04             	and    $0x4,%edx
+  74:	c1 e2 0a             	shl    $0xa,%edx
+  77:	48 83 ca 02          	or     $0x2,%rdx
+  7b:	b9 ff ff ff ff       	mov    $0xffffffff,%ecx
+  80:	41 b8 01 00 00 00    	mov    $0x1,%r8d
+  86:	4d 89 f1             	mov    %r14,%r9
+  89:	68 f2 0b 00 00       	push   $0xbf2
+  8e:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	90: R_X86_64_64	.lrodata.str1.1+0x64af
+  98:	50                   	push   %rax
+  99:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	9b: R_X86_64_64	_ihk_mc_alloc_aligned_pages_node
+  a3:	ff d0                	call   *%rax
+  a5:	48 83 c4 10          	add    $0x10,%rsp
+  a9:	48 8b 4d 20          	mov    0x20(%rbp),%rcx
+  ad:	48 89 01             	mov    %rax,(%rcx)
+  b0:	48 85 c0             	test   %rax,%rax
+  b3:	0f 85 a4 00 00 00    	jne    15d <process_page_fault_anon_allocate_body_result+0x15d>
+  b9:	41 83 7c 24 48 00    	cmpl   $0x0,0x48(%r12)
+  bf:	75 53                	jne    114 <process_page_fault_anon_allocate_body_result+0x114>
+  c1:	48 8b 03             	mov    (%rbx),%rax
+  c4:	48 3d 00 10 00 00    	cmp    $0x1000,%rax
+  ca:	74 48                	je     114 <process_page_fault_anon_allocate_body_result+0x114>
+  cc:	48 3d 01 00 00 40    	cmp    $0x40000001,%rax
+  d2:	72 13                	jb     e7 <process_page_fault_anon_allocate_body_result+0xe7>
+  d4:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	d6: R_X86_64_64	_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data18OWNED_USE_1GB_PAGE
+  de:	83 39 00             	cmpl   $0x0,(%rcx)
+  e1:	0f 85 49 ff ff ff    	jne    30 <process_page_fault_anon_allocate_body_result+0x30>
+  e7:	48 3d 00 00 20 00    	cmp    $0x200000,%rax
+  ed:	76 11                	jbe    100 <process_page_fault_anon_allocate_body_result+0x100>
+  ef:	b8 00 00 20 00       	mov    $0x200000,%eax
+  f4:	b9 09 00 00 00       	mov    $0x9,%ecx
+  f9:	e9 3c ff ff ff       	jmp    3a <process_page_fault_anon_allocate_body_result+0x3a>
+  fe:	66 90                	xchg   %ax,%ax
+ 100:	48 3d 01 10 00 00    	cmp    $0x1001,%rax
+ 106:	72 66                	jb     16e <process_page_fault_anon_allocate_body_result+0x16e>
+ 108:	b8 00 10 00 00       	mov    $0x1000,%eax
+ 10d:	31 c9                	xor    %ecx,%ecx
+ 10f:	e9 26 ff ff ff       	jmp    3a <process_page_fault_anon_allocate_body_result+0x3a>
+ 114:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	116: R_X86_64_64	.lrodata.str1.1+0x6e30
+ 11e:	48 8b 45 28          	mov    0x28(%rbp),%rax
+ 122:	c7 00 f4 ff ff ff    	movl   $0xfffffff4,(%rax)
+ 128:	49 8b 54 24 18       	mov    0x18(%r12),%rdx
+ 12d:	49 8b 4c 24 20       	mov    0x20(%r12),%rcx
+ 132:	4d 8b 44 24 28       	mov    0x28(%r12),%r8
+ 137:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	139: R_X86_64_64	kprintf
+ 141:	48 8b 75 d0          	mov    -0x30(%rbp),%rsi
+ 145:	4d 89 f1             	mov    %r14,%r9
+ 148:	31 c0                	xor    %eax,%eax
+ 14a:	6a f4                	push   $0xfffffffffffffff4
+ 14c:	ff 75 c8             	push   -0x38(%rbp)
+ 14f:	41 ff d2             	call   *%r10
+ 152:	48 83 c4 10          	add    $0x10,%rsp
+ 156:	b8 01 00 00 00       	mov    $0x1,%eax
+ 15b:	eb 02                	jmp    15f <process_page_fault_anon_allocate_body_result+0x15f>
+ 15d:	31 c0                	xor    %eax,%eax
+ 15f:	48 83 c4 18          	add    $0x18,%rsp
+ 163:	5b                   	pop    %rbx
+ 164:	41 5c                	pop    %r12
+ 166:	41 5d                	pop    %r13
+ 168:	41 5e                	pop    %r14
+ 16a:	41 5f                	pop    %r15
+ 16c:	5d                   	pop    %rbp
+ 16d:	c3                   	ret    
+ 16e:	48 c7 03 00 00 00 00 	movq   $0x0,(%rbx)
+ 175:	41 c7 45 00 ff ff ff ff 	movl   $0xffffffff,0x0(%r13)
+ 17d:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	17f: R_X86_64_64	.lrodata.str1.1+0x6dcb
+ 187:	eb 95                	jmp    11e <process_page_fault_anon_allocate_body_result+0x11e>

@@ -1,0 +1,40 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/HOST-output-proposed-1/rust-selected.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.brk_extend_bridge:
+
+0000000000000000 <brk_extend_bridge>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	41 56                	push   %r14
+   6:	53                   	push   %rbx
+   7:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	9: R_X86_64_64	__verbose
+  11:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	13: R_X86_64_64	__verbose
+  1b:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	1d: R_X86_64_64	__verbose
+  25:	48 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%rbx	27: R_X86_64_64	.lrodata.str1.1+0x64af
+  2f:	49 be 00 00 00 00 00 00 00 00 	movabs $0x0,%r14	31: R_X86_64_64	process_extend_region_body_result
+  39:	41 b8 00 10 00 00    	mov    $0x1000,%r8d
+  3f:	41 b9 0c 00 00 00    	mov    $0xc,%r9d
+  45:	50                   	push   %rax
+  46:	41 52                	push   %r10
+  48:	41 53                	push   %r11
+  4a:	68 5f 0d 00 00       	push   $0xd5f
+  4f:	68 50 0d 00 00       	push   $0xd50
+  54:	53                   	push   %rbx
+  55:	6a 01                	push   $0x1
+  57:	68 00 10 00 00       	push   $0x1000
+  5c:	6a 02                	push   $0x2
+  5e:	6a 01                	push   $0x1
+  60:	6a 15                	push   $0x15
+  62:	6a 00                	push   $0x0
+  64:	6a 09                	push   $0x9
+  66:	68 00 00 e0 ff       	push   $0xffffffffffe00000
+  6b:	68 00 00 20 00       	push   $0x200000
+  70:	68 00 f0 ff ff       	push   $0xfffffffffffff000
+  75:	41 ff d6             	call   *%r14
+  78:	48 81 c4 80 00 00 00 	add    $0x80,%rsp
+  7f:	5b                   	pop    %rbx
+  80:	41 5e                	pop    %r14
+  82:	5d                   	pop    %rbp
+  83:	c3                   	ret    

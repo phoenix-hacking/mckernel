@@ -1,0 +1,26 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/HOST-output-proposed-1/rust-selected.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.syscall:
+
+0000000000000945 <syscall+0x945>:
+ 945:	4d 85 c9             	test   %r9,%r9
+ 948:	74 4b                	je     995 <syscall+0x995>
+ 94a:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ 951:	49 8b bc 00 a8 1e 00 00 	mov    0x1ea8(%r8,%rax,1),%rdi
+ 959:	4d 89 a9 88 00 00 00 	mov    %r13,0x88(%r9)
+ 960:	48 85 ff             	test   %rdi,%rdi
+ 963:	74 27                	je     98c <syscall+0x98c>
+ 965:	8b b7 20 11 00 00    	mov    0x1120(%rdi),%esi
+ 96b:	f7 c6 00 02 00 00    	test   $0x200,%esi
+ 971:	74 19                	je     98c <syscall+0x98c>
+ 973:	83 e6 01             	and    $0x1,%esi
+ 976:	c1 e6 07             	shl    $0x7,%esi
+ 979:	83 ce 05             	or     $0x5,%esi
+ 97c:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	97e: R_X86_64_64	ptrace_report_signal
+ 986:	ff d0                	callq  *%rax
+ 988:	4c 8b 4d c0          	mov    -0x40(%rbp),%r9
+ 98c:	4d 8b a9 88 00 00 00 	mov    0x88(%r9),%r13
+ 993:	eb 07                	jmp    99c <syscall+0x99c>
+ 995:	49 c7 c5 f2 ff ff ff 	mov    $0xfffffffffffffff2,%r13

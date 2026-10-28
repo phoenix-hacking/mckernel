@@ -1,0 +1,47 @@
+--- a/executer/user/CMakeLists.txt
++++ b/executer/user/CMakeLists.txt
+@@ -169,6 +169,7 @@
+ if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
+ 	find_program(RUSTC rustc)
+ 	if (RUSTC)
++		include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/BfdRustAccessors.cmake")
+ 		set(MCINSPECT_RUST_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rust/mcinspect_helpers.o")
+ 		add_custom_command(
+ 			OUTPUT "${MCINSPECT_RUST_OBJ}"
+@@ -192,14 +193,15 @@
+ 		set_source_files_properties("${MCINSPECT_RUST_OBJ}"
+ 			PROPERTIES EXTERNAL_OBJECT TRUE GENERATED TRUE)
+ 		list(REMOVE_ITEM MCINSPECT_SRCS mcinspect.c)
+-		list(APPEND MCINSPECT_SRCS mcinspect_bfd_shim.c)
++		list(APPEND MCINSPECT_SRCS "${BFD_RUST_OBJ}")
+ 		list(APPEND MCINSPECT_SRCS "${MCINSPECT_RUST_OBJ}")
+ 	endif()
+ endif()
+ 
+ add_executable(mcinspect ${MCINSPECT_SRCS})
+ if (TARGET mcinspect_rust_helpers)
+-	add_dependencies(mcinspect mcinspect_rust_helpers)
++	add_dependencies(mcinspect mcinspect_rust_helpers bfd_rust_accessors)
++	set_target_properties(mcinspect PROPERTIES LINKER_LANGUAGE C)
+ 	target_compile_definitions(mcinspect PRIVATE MCINSPECT_RUST_HELPERS)
+ endif()
+ if (NOT LIBDWARF)
+@@ -264,7 +266,7 @@
+ 			PROPERTIES EXTERNAL_OBJECT TRUE GENERATED TRUE)
+ 		list(REMOVE_ITEM ECLAIR_SRCS eclair.c)
+ 		list(REMOVE_ITEM ECLAIR_SRCS arch/${ARCH}/arch-eclair.c)
+-		list(APPEND ECLAIR_SRCS eclair_bfd_shim.c)
++		list(APPEND ECLAIR_SRCS "${BFD_RUST_OBJ}")
+ 		list(APPEND ECLAIR_SRCS "${ECLAIR_RUST_OBJ}")
+ 		list(APPEND ECLAIR_SRCS "${ECLAIR_ARCH_RUST_OBJ}")
+ 	endif()
+@@ -272,7 +274,8 @@
+ 
+ add_executable(eclair ${ECLAIR_SRCS})
+ if (TARGET eclair_rust_helpers)
+-	add_dependencies(eclair eclair_rust_helpers)
++	add_dependencies(eclair eclair_rust_helpers bfd_rust_accessors)
++	set_target_properties(eclair PROPERTIES LINKER_LANGUAGE C)
+ 	target_compile_definitions(eclair PRIVATE ECLAIR_RUST_HELPERS)
+ endif()
+ if (TARGET eclair_arch_rust)

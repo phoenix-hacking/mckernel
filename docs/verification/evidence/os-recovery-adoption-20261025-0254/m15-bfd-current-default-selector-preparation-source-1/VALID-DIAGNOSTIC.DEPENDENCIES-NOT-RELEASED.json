@@ -1,0 +1,42 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "VALID_NATIVE_DIAGNOSTIC_OPEN_EXACT_INPUTS_AND_OPERATION_REQUIRED",
+  "accepted8pairs": "help/error/missing/stripped-input only; not valid McKernel diagnostic",
+  "mcinspect": {
+    "argv": [
+      "/case/tools/mcinspect",
+      "--kernel=/case/input/mckernel.img",
+      "--ps"
+    ],
+    "requires": [
+      "actual selected linked mcinspect artifact from new producer",
+      "live McKernel/IHK /dev/mcos0 belonging to reviewed native owner",
+      "exact matching unstripped DWARF kernel image and independent expected live process facts",
+      "explicit ordinary live-state diagnostic operation under current native controls"
+    ],
+    "source": "executer/user/mcinspect.c init_bfd_symbols then /dev/mcos0 then DWARF/mcps; no offline-dump option"
+  },
+  "eclair": {
+    "argv": [
+      "/case/tools/eclair",
+      "-k",
+      "/case/input/mckernel.img",
+      "-d",
+      "/case/input/mcdump",
+      "-l"
+    ],
+    "stdin": "info threads\nquit\ny\n",
+    "requires": [
+      "actual selected linked eclair artifact from new producer",
+      "genuine matching McKernel mcdump with physchunks and every described physmemN section",
+      "matching exact unstripped kernel image and independently grounded thread/process facts",
+      "pinned gdb and bounded normal eclair/gdb child ownership/EOF retirement under same isolation; no synthesized dump"
+    ],
+    "source": "executer/user/eclair.c setup_symbols/setup_dump/setup_constants/setup_threads/start_gdb; existing scripts/eclair-dump-backtrace.exp.in is live mode and unbounded, so is not released unchanged"
+  },
+  "actual_valid_dump_ref": null,
+  "actual_live_device_owner_ref": null,
+  "actual_matching_kernel_ref": null,
+  "valid_diagnostic_execution_release": null,
+  "smallest_blocker": "No hash-bound genuine valid McKernel dump or live /dev/mcos0 diagnostic context is supplied by SDK21 error/ELF fixtures. First perform new current configure/build/object proof, then Root bind one genuine matched input/native context and its expected state. No per-record native quota added."
+}

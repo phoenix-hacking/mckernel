@@ -1,0 +1,82 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_ACTUAL_F03_THREE_WRAPPER_HOST_ABI_ELF_AND_MATCHING_FALLBACK_QUALIFICATION",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/daemon_execution_review",
+  "recorded_at": "2026-10-28T02:11:11.191747+00:00",
+  "source_ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/SOURCE-READY.json",
+    "bytes": 2724,
+    "sha256": "be0fa9281c60d906f33bd0c9fd08113b388108f716a47d7b1358d8e9283f24f1"
+  },
+  "source_profile_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/independent-source-profile-review-1/REVIEW.json",
+    "bytes": 15602,
+    "sha256": "d5a5d41c2ca36a098c0b9ac8694d42db2df8e5b594730c3f1624a1b769e3f3aa"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/PROFILE.NOT-GRANTED.json",
+    "bytes": 137463,
+    "sha256": "673c18b6b103581f08731835de32cae27cc24d99369ab8ef763cb2864bce856e"
+  },
+  "Root_ordinary_grant": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/ROOT-ACTUAL-HOST-GRANT-1.json",
+    "bytes": 3528,
+    "sha256": "fae4b5422e3f9b3b65f9630da47b9bd4e238b66afedaa5aa80580c133fef9ae9"
+  },
+  "actual_results": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/future-capture-1/RESULTS.json",
+    "bytes": 5537,
+    "sha256": "08dd4207707766b3af96b171a4dd4a26f64ae6aa8a765fe631607414e76ec274"
+  },
+  "worker_qualification": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/HOST-output-proposed-1/CHANGED-BOUNDARY-QUALIFICATION.json",
+    "bytes": 5439,
+    "sha256": "bb0921c0cda9203566f474ff5c271fa142982e3abea22903de3c2b91bc3241cb"
+  },
+  "independent_facts": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/independent-actual-review-1/ELF-BINDING-FACTS.json",
+    "bytes": 16977,
+    "sha256": "c3b0a90dddfeeefa4474e54beed437ce25f4bee9b90b08d7874c5f3c4c795e62"
+  },
+  "accepted_scope": [
+    "Three current selected Rust wrapper exports executable GLOBAL, matching selected joint and exact nine-word C/Rust ABI witness.",
+    "Actual selected C object has allocated f03_ptrace_setsiginfo_v1 relocation and no selected C definition of three Rust entries; positive allocated consumer identity only, no dynamic ptrace behavior inferred.",
+    "Signal address edge is a typed STT_OBJECT8/R_X86_64_64 HOST_ABI_WITNESS append only. Production C source elision receives zero Rust caller or retirement credit.",
+    "Matching wholecrate cfg-off Rust defines none of sys_ptrace or the three entry names; C fallback owns one positive GLOBAL executable sys_ptrace and original three fallback functions remain executable in fallback joint.",
+    "Both selected and fallback partial joints preserve all182allocated GNU_RETAIN Rust sections each.",
+    "Actual new Rust signal/publicevent relocation arrays empty. Their real production call/folding proofs stay OPEN. Retained CURRENT114 positive publicevent references remain historical and are not newobject consumer proof."
+  ],
+  "actual_commands": 3,
+  "retained_passed_prefix_commands_replayed": 0,
+  "actual_suffix_wall_seconds": 32.83185718418099,
+  "actual_compile_warning_stderr_bytes": 85978,
+  "all_suffix_positive_joins_groups_absent_streams_closed": true,
+  "original_duplicate_GLOBAL_sys_ptrace_failure_preserved": true,
+  "changedcounts": {
+    "HOST_ABI_ELF_qualified_wrappers": 3,
+    "actual_new_suffix_commands": 3,
+    "selected_runtime_C_functions_retired": 0,
+    "native_apps": 0,
+    "new_kernel_builds": 0,
+    "whole_files_retired": 0
+  },
+  "open_predicates": [
+    "actual new Rust signal call or fold proof",
+    "actual new public-event call or fold proof",
+    "production-default integration/link/native for these three wrappers",
+    "whole-file C retirement"
+  ],
+  "native_acceptance": false,
+  "production_acceptance": false,
+  "new_dynamic_behavior_tests": 0,
+  "reviewer_actions": {
+    "compiler_linker_qualifier_executable_replay": 0,
+    "readonly_independent_ELF_parse": true,
+    "runtime_queries_guards_grants_cleanup_canonical_Git": 0,
+    "subagents": 0
+  },
+  "blocking_findings": [],
+  "blocker": null
+}

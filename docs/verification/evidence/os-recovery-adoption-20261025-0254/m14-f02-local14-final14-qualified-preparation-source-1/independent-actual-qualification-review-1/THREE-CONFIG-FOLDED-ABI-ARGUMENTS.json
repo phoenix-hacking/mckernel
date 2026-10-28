@@ -1,0 +1,1551 @@
+{
+  "decision": "PASS_EXACT_THREE_FOLDED_CONFIG_SYSV_FORWARDERS",
+  "Rust": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/HOST-output-proposed-1/rust-selected.o",
+    "bytes": 18319336,
+    "sha256": "8e16eb4d2ffd345af2bde3a4a5d34c766e852fdee5527bf6f2beca206519d7ec"
+  },
+  "proofs": [
+    {
+      "consumer": "copy_user_pte",
+      "actual_callee": "process_copy_user_pte_body_result",
+      "config": "process_copy_entry_config",
+      "field_arguments": [
+        {
+          "ABI_argument": 6,
+          "actual": 4096,
+          "field": "page_size",
+          "offset": 0,
+          "kind": "Q",
+          "expected": 4096
+        },
+        {
+          "ABI_argument": 7,
+          "actual": 12,
+          "field": "page_shift",
+          "offset": 8,
+          "kind": "i",
+          "expected": 12
+        },
+        {
+          "ABI_argument": 8,
+          "actual": 2,
+          "field": "nowait",
+          "offset": 16,
+          "kind": "Q",
+          "expected": 2
+        },
+        {
+          "ABI_argument": 9,
+          "actual": 1,
+          "field": "user_category",
+          "offset": 24,
+          "kind": "i",
+          "expected": 1
+        },
+        {
+          "ABI_argument": 10,
+          "actual": 0,
+          "field": "kernel_category",
+          "offset": 28,
+          "kind": "i",
+          "expected": 0
+        },
+        {
+          "ABI_argument": 11,
+          "actual": 2147483648,
+          "field": "wipe_on_fork",
+          "offset": 32,
+          "kind": "Q",
+          "expected": 2147483648
+        },
+        {
+          "ABI_argument": 12,
+          "actual": [
+            "EXACT_READONLY_NUL_STRING",
+            "2f686f6d652f686f6c64656e2f6d636b65726e656c2f646f63732f766572696669636174696f6e2f65766964656e63652f6f732d7265636f766572792d61646f7074696f6e2d32303236313032352d303235342f6d31342d6630322d6c6f63616c31342d66696e616c31342d7175616c69666965642d7072657061726174696f6e2d736f757263652d312f63616e6469646174652f6b65726e656c2f70726f636573732e6300"
+          ],
+          "field": "file",
+          "offset": 40,
+          "kind": "ptr",
+          "expected": [
+            "EXACT_READONLY_NUL_STRING",
+            "2f686f6d652f686f6c64656e2f6d636b65726e656c2f646f63732f766572696669636174696f6e2f65766964656e63652f6f732d7265636f766572792d61646f7074696f6e2d32303236313032352d303235342f6d31342d6630322d6c6f63616c31342d66696e616c31342d7175616c69666965642d7072657061726174696f6e2d736f757263652d312f63616e6469646174652f6b65726e656c2f70726f636573732e6300"
+          ]
+        },
+        {
+          "ABI_argument": 13,
+          "actual": 1464,
+          "field": "alloc_line",
+          "offset": 48,
+          "kind": "i",
+          "expected": 1464
+        },
+        {
+          "ABI_argument": 14,
+          "actual": 1520,
+          "field": "free_line",
+          "offset": 52,
+          "kind": "i",
+          "expected": 1520
+        },
+        {
+          "ABI_argument": 15,
+          "actual": [
+            "INPUT_DEFINED_ADDRESS",
+            5810,
+            0,
+            [
+              "process_copy_pte_found_debug"
+            ]
+          ],
+          "field": "found_debug",
+          "offset": 64,
+          "kind": "ptr",
+          "expected": [
+            "INPUT_DEFINED_ADDRESS",
+            5810,
+            0,
+            [
+              "process_copy_pte_found_debug"
+            ]
+          ]
+        },
+        {
+          "ABI_argument": 16,
+          "actual": [
+            "INPUT_DEFINED_ADDRESS",
+            5814,
+            0,
+            [
+              "process_copy_pte_size_debug"
+            ]
+          ],
+          "field": "size_debug",
+          "offset": 72,
+          "kind": "ptr",
+          "expected": [
+            "INPUT_DEFINED_ADDRESS",
+            5814,
+            0,
+            [
+              "process_copy_pte_size_debug"
+            ]
+          ]
+        },
+        {
+          "ABI_argument": 17,
+          "actual": [
+            "INPUT_DEFINED_ADDRESS",
+            5806,
+            0,
+            [
+              "process_copy_pte_allocated_debug"
+            ]
+          ],
+          "field": "allocated_debug",
+          "offset": 80,
+          "kind": "ptr",
+          "expected": [
+            "INPUT_DEFINED_ADDRESS",
+            5806,
+            0,
+            [
+              "process_copy_pte_allocated_debug"
+            ]
+          ]
+        },
+        {
+          "ABI_argument": 18,
+          "actual": [
+            "INPUT_DEFINED_ADDRESS",
+            5816,
+            0,
+            [
+              "process_copy_pte_zeroed_debug"
+            ]
+          ],
+          "field": "zeroed_debug",
+          "offset": 88,
+          "kind": "ptr",
+          "expected": [
+            "INPUT_DEFINED_ADDRESS",
+            5816,
+            0,
+            [
+              "process_copy_pte_zeroed_debug"
+            ]
+          ]
+        },
+        {
+          "ABI_argument": 19,
+          "actual": [
+            "INPUT_DEFINED_ADDRESS",
+            5808,
+            0,
+            [
+              "process_copy_pte_copied_debug"
+            ]
+          ],
+          "field": "copied_debug",
+          "offset": 96,
+          "kind": "ptr",
+          "expected": [
+            "INPUT_DEFINED_ADDRESS",
+            5808,
+            0,
+            [
+              "process_copy_pte_copied_debug"
+            ]
+          ]
+        },
+        {
+          "ABI_argument": 20,
+          "actual": [
+            "INPUT_DEFINED_ADDRESS",
+            5812,
+            0,
+            [
+              "process_copy_pte_installed_debug"
+            ]
+          ],
+          "field": "installed_debug",
+          "offset": 104,
+          "kind": "ptr",
+          "expected": [
+            "INPUT_DEFINED_ADDRESS",
+            5812,
+            0,
+            [
+              "process_copy_pte_installed_debug"
+            ]
+          ]
+        }
+      ],
+      "full_current_instruction_trace": [
+        {
+          "offset": 0,
+          "bytes_hex": "55",
+          "instruction": "push   %rbp"
+        },
+        {
+          "offset": 1,
+          "bytes_hex": "4889e5",
+          "instruction": "mov    %rsp,%rbp"
+        },
+        {
+          "offset": 4,
+          "bytes_hex": "4157",
+          "instruction": "push   %r15"
+        },
+        {
+          "offset": 6,
+          "bytes_hex": "4156",
+          "instruction": "push   %r14"
+        },
+        {
+          "offset": 8,
+          "bytes_hex": "4155",
+          "instruction": "push   %r13"
+        },
+        {
+          "offset": 10,
+          "bytes_hex": "4154",
+          "instruction": "push   %r12"
+        },
+        {
+          "offset": 12,
+          "bytes_hex": "53",
+          "instruction": "push   %rbx"
+        },
+        {
+          "offset": 13,
+          "bytes_hex": "50",
+          "instruction": "push   %rax"
+        },
+        {
+          "offset": 14,
+          "bytes_hex": "48b80000000000000000",
+          "instruction": "movabs $0x0,%rax"
+        },
+        {
+          "offset": 24,
+          "bytes_hex": "48be0000000000000000",
+          "instruction": "movabs $0x0,%rsi"
+        },
+        {
+          "offset": 34,
+          "bytes_hex": "49ba0000000000000000",
+          "instruction": "movabs $0x0,%r10"
+        },
+        {
+          "offset": 44,
+          "bytes_hex": "49bb0000000000000000",
+          "instruction": "movabs $0x0,%r11"
+        },
+        {
+          "offset": 54,
+          "bytes_hex": "48bb0000000000000000",
+          "instruction": "movabs $0x0,%rbx"
+        },
+        {
+          "offset": 64,
+          "bytes_hex": "49be0000000000000000",
+          "instruction": "movabs $0x0,%r14"
+        },
+        {
+          "offset": 74,
+          "bytes_hex": "49bf0000000000000000",
+          "instruction": "movabs $0x0,%r15"
+        },
+        {
+          "offset": 84,
+          "bytes_hex": "41bc00000080",
+          "instruction": "mov    $0x80000000,%r12d"
+        },
+        {
+          "offset": 90,
+          "bytes_hex": "49bd0000000000000000",
+          "instruction": "movabs $0x0,%r13"
+        },
+        {
+          "offset": 100,
+          "bytes_hex": "41b900100000",
+          "instruction": "mov    $0x1000,%r9d"
+        },
+        {
+          "offset": 106,
+          "bytes_hex": "50",
+          "instruction": "push   %rax"
+        },
+        {
+          "offset": 107,
+          "bytes_hex": "56",
+          "instruction": "push   %rsi"
+        },
+        {
+          "offset": 108,
+          "bytes_hex": "4152",
+          "instruction": "push   %r10"
+        },
+        {
+          "offset": 110,
+          "bytes_hex": "4153",
+          "instruction": "push   %r11"
+        },
+        {
+          "offset": 112,
+          "bytes_hex": "53",
+          "instruction": "push   %rbx"
+        },
+        {
+          "offset": 113,
+          "bytes_hex": "4156",
+          "instruction": "push   %r14"
+        },
+        {
+          "offset": 115,
+          "bytes_hex": "68f0050000",
+          "instruction": "push   $0x5f0"
+        },
+        {
+          "offset": 120,
+          "bytes_hex": "68b8050000",
+          "instruction": "push   $0x5b8"
+        },
+        {
+          "offset": 125,
+          "bytes_hex": "4157",
+          "instruction": "push   %r15"
+        },
+        {
+          "offset": 127,
+          "bytes_hex": "4154",
+          "instruction": "push   %r12"
+        },
+        {
+          "offset": 129,
+          "bytes_hex": "6a00",
+          "instruction": "push   $0x0"
+        },
+        {
+          "offset": 131,
+          "bytes_hex": "6a01",
+          "instruction": "push   $0x1"
+        },
+        {
+          "offset": 133,
+          "bytes_hex": "6a02",
+          "instruction": "push   $0x2"
+        },
+        {
+          "offset": 135,
+          "bytes_hex": "6a0c",
+          "instruction": "push   $0xc"
+        },
+        {
+          "offset": 137,
+          "instruction": "call   *%r13",
+          "callee": "process_copy_user_pte_body_result",
+          "SysV_arguments": [
+            [
+              "ARG",
+              1
+            ],
+            [
+              "INPUT_DEFINED_ADDRESS",
+              5808,
+              0,
+              [
+                "process_copy_pte_copied_debug"
+              ]
+            ],
+            [
+              "ARG",
+              3
+            ],
+            [
+              "ARG",
+              4
+            ],
+            [
+              "ARG",
+              5
+            ],
+            4096,
+            12,
+            2,
+            1,
+            0,
+            2147483648,
+            [
+              "EXACT_READONLY_NUL_STRING",
+              "2f686f6d652f686f6c64656e2f6d636b65726e656c2f646f63732f766572696669636174696f6e2f65766964656e63652f6f732d7265636f766572792d61646f7074696f6e2d32303236313032352d303235342f6d31342d6630322d6c6f63616c31342d66696e616c31342d7175616c69666965642d7072657061726174696f6e2d736f757263652d312f63616e6469646174652f6b65726e656c2f70726f636573732e6300"
+            ],
+            1464,
+            1520,
+            [
+              "INPUT_DEFINED_ADDRESS",
+              5810,
+              0,
+              [
+                "process_copy_pte_found_debug"
+              ]
+            ],
+            [
+              "INPUT_DEFINED_ADDRESS",
+              5814,
+              0,
+              [
+                "process_copy_pte_size_debug"
+              ]
+            ],
+            [
+              "INPUT_DEFINED_ADDRESS",
+              5806,
+              0,
+              [
+                "process_copy_pte_allocated_debug"
+              ]
+            ],
+            [
+              "INPUT_DEFINED_ADDRESS",
+              5816,
+              0,
+              [
+                "process_copy_pte_zeroed_debug"
+              ]
+            ],
+            [
+              "INPUT_DEFINED_ADDRESS",
+              5808,
+              0,
+              [
+                "process_copy_pte_copied_debug"
+              ]
+            ],
+            [
+              "INPUT_DEFINED_ADDRESS",
+              5812,
+              0,
+              [
+                "process_copy_pte_installed_debug"
+              ]
+            ]
+          ]
+        }
+      ],
+      "all_config_fields_forwarded_exact": true,
+      "scope": "Only config-derived ABI arguments; existing entry dynamic-argument behavior remains at unchanged source/body contract."
+    },
+    {
+      "consumer": "extend_process_region",
+      "actual_callee": "process_extend_region_body_result",
+      "config": "process_extend_region_entry_config",
+      "field_arguments": [
+        {
+          "ABI_argument": 5,
+          "actual": 4096,
+          "field": "page_size",
+          "offset": 0,
+          "kind": "Q",
+          "expected": 4096
+        },
+        {
+          "ABI_argument": 6,
+          "actual": 12,
+          "field": "page_shift",
+          "offset": 8,
+          "kind": "i",
+          "expected": 12
+        },
+        {
+          "ABI_argument": 7,
+          "actual": 18446744073709547520,
+          "field": "page_mask",
+          "offset": 16,
+          "kind": "Q",
+          "expected": 18446744073709547520
+        },
+        {
+          "ABI_argument": 8,
+          "actual": 2097152,
+          "field": "large_page_size",
+          "offset": 24,
+          "kind": "Q",
+          "expected": 2097152
+        },
+        {
+          "ABI_argument": 9,
+          "actual": 18446744073707454464,
+          "field": "large_page_mask",
+          "offset": 32,
+          "kind": "Q",
+          "expected": 18446744073707454464
+        },
+        {
+          "ABI_argument": 10,
+          "actual": 9,
+          "field": "large_page_p2align",
+          "offset": 40,
+          "kind": "Q",
+          "expected": 9
+        },
+        {
+          "ABI_argument": 11,
+          "actual": 0,
+          "field": "page_p2align",
+          "offset": 48,
+          "kind": "Q",
+          "expected": 0
+        },
+        {
+          "ABI_argument": 12,
+          "actual": 21,
+          "field": "large_page_shift",
+          "offset": 56,
+          "kind": "i",
+          "expected": 21
+        },
+        {
+          "ABI_argument": 13,
+          "actual": 1,
+          "field": "mpol_no_heap",
+          "offset": 64,
+          "kind": "Q",
+          "expected": 1
+        },
+        {
+          "ABI_argument": 14,
+          "actual": 2,
+          "field": "ap_nowait",
+          "offset": 72,
+          "kind": "Q",
+          "expected": 2
+        },
+        {
+          "ABI_argument": 15,
+          "actual": 4096,
+          "field": "ap_user",
+          "offset": 80,
+          "kind": "Q",
+          "expected": 4096
+        },
+        {
+          "ABI_argument": 16,
+          "actual": 1,
+          "field": "pg_user",
+          "offset": 88,
+          "kind": "i",
+          "expected": 1
+        },
+        {
+          "ABI_argument": 17,
+          "actual": [
+            "EXACT_READONLY_NUL_STRING",
+            "2f686f6d652f686f6c64656e2f6d636b65726e656c2f646f63732f766572696669636174696f6e2f65766964656e63652f6f732d7265636f766572792d61646f7074696f6e2d32303236313032352d303235342f6d31342d6630322d6c6f63616c31342d66696e616c31342d7175616c69666965642d7072657061726174696f6e2d736f757263652d312f63616e6469646174652f6b65726e656c2f70726f636573732e6300"
+          ],
+          "field": "file",
+          "offset": 96,
+          "kind": "ptr",
+          "expected": [
+            "EXACT_READONLY_NUL_STRING",
+            "2f686f6d652f686f6c64656e2f6d636b65726e656c2f646f63732f766572696669636174696f6e2f65766964656e63652f6f732d7265636f766572792d61646f7074696f6e2d32303236313032352d303235342f6d31342d6630322d6c6f63616c31342d66696e616c31342d7175616c69666965642d7072657061726174696f6e2d736f757263652d312f63616e6469646174652f6b65726e656c2f70726f636573732e6300"
+          ]
+        },
+        {
+          "ABI_argument": 18,
+          "actual": 3408,
+          "field": "alloc_line",
+          "offset": 104,
+          "kind": "i",
+          "expected": 3408
+        },
+        {
+          "ABI_argument": 19,
+          "actual": 3423,
+          "field": "free_line",
+          "offset": 108,
+          "kind": "i",
+          "expected": 3423
+        },
+        {
+          "ABI_argument": 20,
+          "actual": [
+            "INPUT_DEFINED_ADDRESS",
+            5826,
+            0,
+            [
+              "process_extend_region_exists_debug"
+            ]
+          ],
+          "field": "exists_debug",
+          "offset": 112,
+          "kind": "ptr",
+          "expected": [
+            "INPUT_DEFINED_ADDRESS",
+            5826,
+            0,
+            [
+              "process_extend_region_exists_debug"
+            ]
+          ]
+        },
+        {
+          "ABI_argument": 21,
+          "actual": [
+            "INPUT_DEFINED_ADDRESS",
+            5822,
+            0,
+            [
+              "process_extend_region_alloc_debug"
+            ]
+          ],
+          "field": "alloc_debug",
+          "offset": 120,
+          "kind": "ptr",
+          "expected": [
+            "INPUT_DEFINED_ADDRESS",
+            5822,
+            0,
+            [
+              "process_extend_region_alloc_debug"
+            ]
+          ]
+        },
+        {
+          "ABI_argument": 22,
+          "actual": [
+            "INPUT_DEFINED_ADDRESS",
+            5828,
+            0,
+            [
+              "process_extend_region_success_debug"
+            ]
+          ],
+          "field": "success_debug",
+          "offset": 128,
+          "kind": "ptr",
+          "expected": [
+            "INPUT_DEFINED_ADDRESS",
+            5828,
+            0,
+            [
+              "process_extend_region_success_debug"
+            ]
+          ]
+        }
+      ],
+      "full_current_instruction_trace": [
+        {
+          "offset": 0,
+          "bytes_hex": "55",
+          "instruction": "push   %rbp"
+        },
+        {
+          "offset": 1,
+          "bytes_hex": "4889e5",
+          "instruction": "mov    %rsp,%rbp"
+        },
+        {
+          "offset": 4,
+          "bytes_hex": "4156",
+          "instruction": "push   %r14"
+        },
+        {
+          "offset": 6,
+          "bytes_hex": "53",
+          "instruction": "push   %rbx"
+        },
+        {
+          "offset": 7,
+          "bytes_hex": "48b80000000000000000",
+          "instruction": "movabs $0x0,%rax"
+        },
+        {
+          "offset": 17,
+          "bytes_hex": "49ba0000000000000000",
+          "instruction": "movabs $0x0,%r10"
+        },
+        {
+          "offset": 27,
+          "bytes_hex": "49bb0000000000000000",
+          "instruction": "movabs $0x0,%r11"
+        },
+        {
+          "offset": 37,
+          "bytes_hex": "48bb0000000000000000",
+          "instruction": "movabs $0x0,%rbx"
+        },
+        {
+          "offset": 47,
+          "bytes_hex": "49be0000000000000000",
+          "instruction": "movabs $0x0,%r14"
+        },
+        {
+          "offset": 57,
+          "bytes_hex": "41b800100000",
+          "instruction": "mov    $0x1000,%r8d"
+        },
+        {
+          "offset": 63,
+          "bytes_hex": "41b90c000000",
+          "instruction": "mov    $0xc,%r9d"
+        },
+        {
+          "offset": 69,
+          "bytes_hex": "50",
+          "instruction": "push   %rax"
+        },
+        {
+          "offset": 70,
+          "bytes_hex": "4152",
+          "instruction": "push   %r10"
+        },
+        {
+          "offset": 72,
+          "bytes_hex": "4153",
+          "instruction": "push   %r11"
+        },
+        {
+          "offset": 74,
+          "bytes_hex": "685f0d0000",
+          "instruction": "push   $0xd5f"
+        },
+        {
+          "offset": 79,
+          "bytes_hex": "68500d0000",
+          "instruction": "push   $0xd50"
+        },
+        {
+          "offset": 84,
+          "bytes_hex": "53",
+          "instruction": "push   %rbx"
+        },
+        {
+          "offset": 85,
+          "bytes_hex": "6a01",
+          "instruction": "push   $0x1"
+        },
+        {
+          "offset": 87,
+          "bytes_hex": "6800100000",
+          "instruction": "push   $0x1000"
+        },
+        {
+          "offset": 92,
+          "bytes_hex": "6a02",
+          "instruction": "push   $0x2"
+        },
+        {
+          "offset": 94,
+          "bytes_hex": "6a01",
+          "instruction": "push   $0x1"
+        },
+        {
+          "offset": 96,
+          "bytes_hex": "6a15",
+          "instruction": "push   $0x15"
+        },
+        {
+          "offset": 98,
+          "bytes_hex": "6a00",
+          "instruction": "push   $0x0"
+        },
+        {
+          "offset": 100,
+          "bytes_hex": "6a09",
+          "instruction": "push   $0x9"
+        },
+        {
+          "offset": 102,
+          "bytes_hex": "680000e0ff",
+          "instruction": "push   $0xffffffffffe00000"
+        },
+        {
+          "offset": 107,
+          "bytes_hex": "6800002000",
+          "instruction": "push   $0x200000"
+        },
+        {
+          "offset": 112,
+          "bytes_hex": "6800f0ffff",
+          "instruction": "push   $0xfffffffffffff000"
+        },
+        {
+          "offset": 117,
+          "instruction": "call   *%r14",
+          "callee": "process_extend_region_body_result",
+          "SysV_arguments": [
+            [
+              "ARG",
+              1
+            ],
+            [
+              "ARG",
+              2
+            ],
+            [
+              "ARG",
+              3
+            ],
+            [
+              "ARG",
+              4
+            ],
+            4096,
+            12,
+            18446744073709547520,
+            2097152,
+            18446744073707454464,
+            9,
+            0,
+            21,
+            1,
+            2,
+            4096,
+            1,
+            [
+              "EXACT_READONLY_NUL_STRING",
+              "2f686f6d652f686f6c64656e2f6d636b65726e656c2f646f63732f766572696669636174696f6e2f65766964656e63652f6f732d7265636f766572792d61646f7074696f6e2d32303236313032352d303235342f6d31342d6630322d6c6f63616c31342d66696e616c31342d7175616c69666965642d7072657061726174696f6e2d736f757263652d312f63616e6469646174652f6b65726e656c2f70726f636573732e6300"
+            ],
+            3408,
+            3423,
+            [
+              "INPUT_DEFINED_ADDRESS",
+              5826,
+              0,
+              [
+                "process_extend_region_exists_debug"
+              ]
+            ],
+            [
+              "INPUT_DEFINED_ADDRESS",
+              5822,
+              0,
+              [
+                "process_extend_region_alloc_debug"
+              ]
+            ],
+            [
+              "INPUT_DEFINED_ADDRESS",
+              5828,
+              0,
+              [
+                "process_extend_region_success_debug"
+              ]
+            ]
+          ]
+        }
+      ],
+      "all_config_fields_forwarded_exact": true,
+      "scope": "Only config-derived ABI arguments; existing entry dynamic-argument behavior remains at unchanged source/body contract."
+    },
+    {
+      "consumer": "init_process_stack",
+      "actual_callee": "process_init_stack_body_result",
+      "config": "process_init_stack_entry_config",
+      "field_arguments": [
+        {
+          "ABI_argument": 8,
+          "actual": 4096,
+          "field": "page_size",
+          "offset": 0,
+          "kind": "Q",
+          "expected": 4096
+        },
+        {
+          "ABI_argument": 9,
+          "actual": 12,
+          "field": "page_shift",
+          "offset": 8,
+          "kind": "i",
+          "expected": 12
+        },
+        {
+          "ABI_argument": 10,
+          "actual": 18446744073707454464,
+          "field": "user_stack_page_mask",
+          "offset": 16,
+          "kind": "Q",
+          "expected": 18446744073707454464
+        },
+        {
+          "ABI_argument": 11,
+          "actual": 21,
+          "field": "user_stack_page_shift",
+          "offset": 24,
+          "kind": "i",
+          "expected": 21
+        },
+        {
+          "ABI_argument": 12,
+          "actual": 2097152,
+          "field": "user_stack_prepage_size",
+          "offset": 32,
+          "kind": "Q",
+          "expected": 2097152
+        },
+        {
+          "ABI_argument": 13,
+          "actual": 0,
+          "field": "stack_alloc_size_override",
+          "offset": 40,
+          "kind": "Q",
+          "expected": 0
+        },
+        {
+          "ABI_argument": 14,
+          "actual": 9,
+          "field": "user_stack_page_p2align",
+          "offset": 48,
+          "kind": "i",
+          "expected": 9
+        },
+        {
+          "ABI_argument": 15,
+          "actual": 2,
+          "field": "alloc_nowait",
+          "offset": 56,
+          "kind": "Q",
+          "expected": 2
+        },
+        {
+          "ABI_argument": 16,
+          "actual": 4096,
+          "field": "alloc_user",
+          "offset": 64,
+          "kind": "Q",
+          "expected": 4096
+        },
+        {
+          "ABI_argument": 17,
+          "actual": 2,
+          "field": "mpol_no_stack",
+          "offset": 72,
+          "kind": "Q",
+          "expected": 2
+        },
+        {
+          "ABI_argument": 18,
+          "actual": 1,
+          "field": "user_context_sp_reg",
+          "offset": 80,
+          "kind": "i",
+          "expected": 1
+        },
+        {
+          "ABI_argument": 19,
+          "actual": 1073741824,
+          "field": "pf_populate",
+          "offset": 88,
+          "kind": "Q",
+          "expected": 1073741824
+        },
+        {
+          "ABI_argument": 20,
+          "actual": [
+            "INPUT_DEFINED_ADDRESS",
+            3124,
+            0,
+            [
+              "process_init_stack_alloc_aligned_bridge"
+            ]
+          ],
+          "field": "alloc_aligned",
+          "offset": 96,
+          "kind": "fn",
+          "expected": [
+            "INPUT_DEFINED_ADDRESS",
+            3124,
+            0,
+            [
+              "process_init_stack_alloc_aligned_bridge"
+            ]
+          ]
+        },
+        {
+          "ABI_argument": 21,
+          "actual": [
+            "INPUT_DEFINED_ADDRESS",
+            3129,
+            0,
+            [
+              "process_init_stack_free_pages_bridge"
+            ]
+          ],
+          "field": "free_pages",
+          "offset": 104,
+          "kind": "fn",
+          "expected": [
+            "INPUT_DEFINED_ADDRESS",
+            3129,
+            0,
+            [
+              "process_init_stack_free_pages_bridge"
+            ]
+          ]
+        },
+        {
+          "ABI_argument": 22,
+          "actual": [
+            "INPUT_DEFINED_ADDRESS",
+            3122,
+            0,
+            [
+              "process_init_stack_add_range_bridge"
+            ]
+          ],
+          "field": "add_range",
+          "offset": 112,
+          "kind": "fn",
+          "expected": [
+            "INPUT_DEFINED_ADDRESS",
+            3122,
+            0,
+            [
+              "process_init_stack_add_range_bridge"
+            ]
+          ]
+        },
+        {
+          "ABI_argument": 23,
+          "actual": [
+            "INPUT_DEFINED_ADDRESS",
+            2583,
+            0,
+            [
+              "mem_virt_to_phys_bridge",
+              "process_init_stack_virt_to_phys_bridge",
+              "process_memset_smp_virt_to_phys_bridge",
+              "syscall_virt_to_phys_bridge",
+              "virt_to_phys",
+              "x86_arch_mem_virt_to_phys_bridge",
+              "x86_pt_virt_to_phys_bridge",
+              "x86_virt_to_phys_bridge"
+            ]
+          ],
+          "field": "virt_to_phys",
+          "offset": 120,
+          "kind": "fn",
+          "expected": [
+            "INPUT_DEFINED_ADDRESS",
+            2583,
+            0,
+            [
+              "mem_virt_to_phys_bridge",
+              "process_init_stack_virt_to_phys_bridge",
+              "process_memset_smp_virt_to_phys_bridge",
+              "syscall_virt_to_phys_bridge",
+              "virt_to_phys",
+              "x86_arch_mem_virt_to_phys_bridge",
+              "x86_pt_virt_to_phys_bridge",
+              "x86_virt_to_phys_bridge"
+            ]
+          ]
+        },
+        {
+          "ABI_argument": 24,
+          "actual": [
+            "INPUT_DEFINED_ADDRESS",
+            3127,
+            0,
+            [
+              "process_init_stack_attr_bridge"
+            ]
+          ],
+          "field": "attr",
+          "offset": 128,
+          "kind": "fn",
+          "expected": [
+            "INPUT_DEFINED_ADDRESS",
+            3127,
+            0,
+            [
+              "process_init_stack_attr_bridge"
+            ]
+          ]
+        },
+        {
+          "ABI_argument": 25,
+          "actual": [
+            "INPUT_DEFINED_ADDRESS",
+            3136,
+            0,
+            [
+              "process_init_stack_pt_set_range_bridge",
+              "xpmem_pt_set_range_bridge"
+            ]
+          ],
+          "field": "pt_set_range",
+          "offset": 136,
+          "kind": "fn",
+          "expected": [
+            "INPUT_DEFINED_ADDRESS",
+            3136,
+            0,
+            [
+              "process_init_stack_pt_set_range_bridge",
+              "xpmem_pt_set_range_bridge"
+            ]
+          ]
+        },
+        {
+          "ABI_argument": 26,
+          "actual": [
+            "INPUT_DEFINED_ADDRESS",
+            1528,
+            0,
+            [
+              "get_system_body_result",
+              "process_init_stack_hwcap_bridge",
+              "shmobj_new_page_mapped_result",
+              "zeroobj_initial_page_offset_result"
+            ]
+          ],
+          "field": "hwcap",
+          "offset": 144,
+          "kind": "fn",
+          "expected": [
+            "INPUT_DEFINED_ADDRESS",
+            1528,
+            0,
+            [
+              "get_system_body_result",
+              "process_init_stack_hwcap_bridge",
+              "shmobj_new_page_mapped_result",
+              "zeroobj_initial_page_offset_result"
+            ]
+          ]
+        },
+        {
+          "ABI_argument": 27,
+          "actual": [
+            "INPUT_DEFINED_ADDRESS",
+            1937,
+            0,
+            [
+              "ihk_mc_modify_user_context",
+              "process_init_stack_modify_context_bridge",
+              "process_user_context_modify_bridge"
+            ]
+          ],
+          "field": "modify_context",
+          "offset": 152,
+          "kind": "fn",
+          "expected": [
+            "INPUT_DEFINED_ADDRESS",
+            1937,
+            0,
+            [
+              "ihk_mc_modify_user_context",
+              "process_init_stack_modify_context_bridge",
+              "process_user_context_modify_bridge"
+            ]
+          ]
+        },
+        {
+          "ABI_argument": 28,
+          "actual": [
+            "INPUT_DEFINED_ADDRESS",
+            3131,
+            0,
+            [
+              "process_init_stack_log_bridge"
+            ]
+          ],
+          "field": "log",
+          "offset": 160,
+          "kind": "fn",
+          "expected": [
+            "INPUT_DEFINED_ADDRESS",
+            3131,
+            0,
+            [
+              "process_init_stack_log_bridge"
+            ]
+          ]
+        }
+      ],
+      "full_current_instruction_trace": [
+        {
+          "offset": 0,
+          "bytes_hex": "55",
+          "instruction": "push   %rbp"
+        },
+        {
+          "offset": 1,
+          "bytes_hex": "4889e5",
+          "instruction": "mov    %rsp,%rbp"
+        },
+        {
+          "offset": 4,
+          "bytes_hex": "4157",
+          "instruction": "push   %r15"
+        },
+        {
+          "offset": 6,
+          "bytes_hex": "4156",
+          "instruction": "push   %r14"
+        },
+        {
+          "offset": 8,
+          "bytes_hex": "4155",
+          "instruction": "push   %r13"
+        },
+        {
+          "offset": 10,
+          "bytes_hex": "4154",
+          "instruction": "push   %r12"
+        },
+        {
+          "offset": 12,
+          "bytes_hex": "53",
+          "instruction": "push   %rbx"
+        },
+        {
+          "offset": 13,
+          "bytes_hex": "50",
+          "instruction": "push   %rax"
+        },
+        {
+          "offset": 14,
+          "bytes_hex": "49ba0000000000000000",
+          "instruction": "movabs $0x0,%r10"
+        },
+        {
+          "offset": 24,
+          "bytes_hex": "49bb0000000000000000",
+          "instruction": "movabs $0x0,%r11"
+        },
+        {
+          "offset": 34,
+          "bytes_hex": "48bb0000000000000000",
+          "instruction": "movabs $0x0,%rbx"
+        },
+        {
+          "offset": 44,
+          "bytes_hex": "49be0000000000000000",
+          "instruction": "movabs $0x0,%r14"
+        },
+        {
+          "offset": 54,
+          "bytes_hex": "49bf0000000000000000",
+          "instruction": "movabs $0x0,%r15"
+        },
+        {
+          "offset": 64,
+          "bytes_hex": "49bc0000000000000000",
+          "instruction": "movabs $0x0,%r12"
+        },
+        {
+          "offset": 74,
+          "bytes_hex": "49bd0000000000000000",
+          "instruction": "movabs $0x0,%r13"
+        },
+        {
+          "offset": 84,
+          "bytes_hex": "48b80000000000000000",
+          "instruction": "movabs $0x0,%rax"
+        },
+        {
+          "offset": 94,
+          "bytes_hex": "4152",
+          "instruction": "push   %r10"
+        },
+        {
+          "offset": 96,
+          "bytes_hex": "4153",
+          "instruction": "push   %r11"
+        },
+        {
+          "offset": 98,
+          "bytes_hex": "53",
+          "instruction": "push   %rbx"
+        },
+        {
+          "offset": 99,
+          "bytes_hex": "4156",
+          "instruction": "push   %r14"
+        },
+        {
+          "offset": 101,
+          "bytes_hex": "4157",
+          "instruction": "push   %r15"
+        },
+        {
+          "offset": 103,
+          "bytes_hex": "4154",
+          "instruction": "push   %r12"
+        },
+        {
+          "offset": 105,
+          "bytes_hex": "4155",
+          "instruction": "push   %r13"
+        },
+        {
+          "offset": 107,
+          "bytes_hex": "50",
+          "instruction": "push   %rax"
+        },
+        {
+          "offset": 108,
+          "bytes_hex": "48b80000000000000000",
+          "instruction": "movabs $0x0,%rax"
+        },
+        {
+          "offset": 118,
+          "bytes_hex": "50",
+          "instruction": "push   %rax"
+        },
+        {
+          "offset": 119,
+          "bytes_hex": "6800000040",
+          "instruction": "push   $0x40000000"
+        },
+        {
+          "offset": 124,
+          "bytes_hex": "6a01",
+          "instruction": "push   $0x1"
+        },
+        {
+          "offset": 126,
+          "bytes_hex": "6a02",
+          "instruction": "push   $0x2"
+        },
+        {
+          "offset": 128,
+          "bytes_hex": "6800100000",
+          "instruction": "push   $0x1000"
+        },
+        {
+          "offset": 133,
+          "bytes_hex": "6a02",
+          "instruction": "push   $0x2"
+        },
+        {
+          "offset": 135,
+          "bytes_hex": "6a09",
+          "instruction": "push   $0x9"
+        },
+        {
+          "offset": 137,
+          "bytes_hex": "6a00",
+          "instruction": "push   $0x0"
+        },
+        {
+          "offset": 139,
+          "bytes_hex": "6800002000",
+          "instruction": "push   $0x200000"
+        },
+        {
+          "offset": 144,
+          "bytes_hex": "6a15",
+          "instruction": "push   $0x15"
+        },
+        {
+          "offset": 146,
+          "bytes_hex": "680000e0ff",
+          "instruction": "push   $0xffffffffffe00000"
+        },
+        {
+          "offset": 151,
+          "bytes_hex": "6a0c",
+          "instruction": "push   $0xc"
+        },
+        {
+          "offset": 153,
+          "bytes_hex": "6800100000",
+          "instruction": "push   $0x1000"
+        },
+        {
+          "offset": 158,
+          "bytes_hex": "ff7510",
+          "instruction": "push   0x10(%rbp)"
+        },
+        {
+          "offset": 161,
+          "bytes_hex": "48b80000000000000000",
+          "instruction": "movabs $0x0,%rax"
+        },
+        {
+          "offset": 171,
+          "instruction": "call   *%rax",
+          "callee": "process_init_stack_body_result",
+          "SysV_arguments": [
+            [
+              "ARG",
+              1
+            ],
+            [
+              "ARG",
+              2
+            ],
+            [
+              "ARG",
+              3
+            ],
+            [
+              "ARG",
+              4
+            ],
+            [
+              "ARG",
+              5
+            ],
+            [
+              "ARG",
+              6
+            ],
+            [
+              "ARG",
+              7
+            ],
+            4096,
+            12,
+            18446744073707454464,
+            21,
+            2097152,
+            0,
+            9,
+            2,
+            4096,
+            2,
+            1,
+            1073741824,
+            [
+              "INPUT_DEFINED_ADDRESS",
+              3124,
+              0,
+              [
+                "process_init_stack_alloc_aligned_bridge"
+              ]
+            ],
+            [
+              "INPUT_DEFINED_ADDRESS",
+              3129,
+              0,
+              [
+                "process_init_stack_free_pages_bridge"
+              ]
+            ],
+            [
+              "INPUT_DEFINED_ADDRESS",
+              3122,
+              0,
+              [
+                "process_init_stack_add_range_bridge"
+              ]
+            ],
+            [
+              "INPUT_DEFINED_ADDRESS",
+              2583,
+              0,
+              [
+                "mem_virt_to_phys_bridge",
+                "process_init_stack_virt_to_phys_bridge",
+                "process_memset_smp_virt_to_phys_bridge",
+                "syscall_virt_to_phys_bridge",
+                "virt_to_phys",
+                "x86_arch_mem_virt_to_phys_bridge",
+                "x86_pt_virt_to_phys_bridge",
+                "x86_virt_to_phys_bridge"
+              ]
+            ],
+            [
+              "INPUT_DEFINED_ADDRESS",
+              3127,
+              0,
+              [
+                "process_init_stack_attr_bridge"
+              ]
+            ],
+            [
+              "INPUT_DEFINED_ADDRESS",
+              3136,
+              0,
+              [
+                "process_init_stack_pt_set_range_bridge",
+                "xpmem_pt_set_range_bridge"
+              ]
+            ],
+            [
+              "INPUT_DEFINED_ADDRESS",
+              1528,
+              0,
+              [
+                "get_system_body_result",
+                "process_init_stack_hwcap_bridge",
+                "shmobj_new_page_mapped_result",
+                "zeroobj_initial_page_offset_result"
+              ]
+            ],
+            [
+              "INPUT_DEFINED_ADDRESS",
+              1937,
+              0,
+              [
+                "ihk_mc_modify_user_context",
+                "process_init_stack_modify_context_bridge",
+                "process_user_context_modify_bridge"
+              ]
+            ],
+            [
+              "INPUT_DEFINED_ADDRESS",
+              3131,
+              0,
+              [
+                "process_init_stack_log_bridge"
+              ]
+            ]
+          ]
+        }
+      ],
+      "all_config_fields_forwarded_exact": true,
+      "scope": "Only config-derived ABI arguments; existing entry dynamic-argument behavior remains at unchanged source/body contract."
+    }
+  ],
+  "nonforwarded_copy_fields": [
+    "visit_flags proven separately in copy_user_ranges"
+  ]
+}

@@ -1,3 +1,28 @@
+## Original235 native accepted; qualified metadata enters115 — 2026-10-28T02:20:13.327363+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Original235 strict full5298 PASS732da/Root534971, exact235/emptyerr/0, parent255/children
+258+261, ACK3/0/DELETE/distinct147zero; native38.323439s/CPU.989225/controllerRSS53048,
+resource→entry16.311053s. Positivecurrentfree563d/all30clients33actors/normalCIDremoval.
+Root48 ledger8dafff/count59 includesd21f andtwoordinarysuffixes. Runtime02:04–02:05
+belongs01:36–02:06; lateracceptance+1case belongs02:06–02:36. Filesunchanged. Original
+M15filecontract1e579 remainsOPEN: next original227 SIGTERM/exec recovery, byteexact
+Rustobserver/sourceafd499 ready; no payloadrecompile/349rewrite/newquota.
+
+F02 HOSTbe282 qualifiesall31storage/ABI/registry+16foldedconsumerpredicates; original
+readerexit2OPEN preserved withfinitepositivesupplement. RootNEXT1159pathsource45c4
+adopted aftercbfbc SOURCEPASS; pureoriginproducer0/cdcfd. Sourcebuildd78d fourcommands/
+3newobjects+8real114retained (zero-byteOCItargetsrejectedbeforecompiler). Current
+observer/mechanicalreviews prewarming BEFOREclock. AcceptedC80/Rust59/process31 stay
+untilactualselectedartifact; no projectedC0/filecredit. F03 actualsuffix3PASS93fb,
+newRustcall/foldcd78 sourceproof finalimage/nativeOPEN. F06shmget4compile0 retained;
+exact15localtarget/19edge ELFreader successor inprogress, no compilerreplay.
+BFD acceptedSDK21/8errorpairs1231 reused; fivecurrentselectorchanges67b996 ready,
+validdump/device nativecontext stillrequired. Nextfullyreadyheavy115; futurebatches
+reusequalifiedsource withoutchurningreadyjob. M14files3/6/M15files1/8/practical35/35.
+Fixed30minbaseline/20minreviews; no95percentgain. Same05:36:09Z/account/debits/earlier
+clamps/realholds/permanent27:4/scratch21/oneheavy/resourcefloors; no cleanup/restarts.
+
 ## Four closure lanes and original235 staging — 2026-10-28T01:57:29.754285+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

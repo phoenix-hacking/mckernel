@@ -1,0 +1,457 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.destroy_thread:
+
+0000000000000000 <destroy_thread>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	41 57                	push   %r15
+   6:	41 56                	push   %r14
+   8:	41 55                	push   %r13
+   a:	41 54                	push   %r12
+   c:	53                   	push   %rbx
+   d:	48 83 ec 18          	sub    $0x18,%rsp
+  11:	48 85 ff             	test   %rdi,%rdi
+  14:	0f 84 49 08 00 00    	je     863 <destroy_thread+0x863>
+  1a:	48 89 fb             	mov    %rdi,%rbx
+  1d:	49 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%r15	1f: R_X86_64_64	num_processors
+  27:	45 8b 37             	mov    (%r15),%r14d
+  2a:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	2c: R_X86_64_64	process_destroy_thread_hash_detach_bridge
+  34:	ff d0                	call   *%rax
+  36:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	38: R_X86_64_64	process_destroy_thread_time_account_bridge
+  40:	48 89 df             	mov    %rbx,%rdi
+  43:	ff d0                	call   *%rax
+  45:	48 8b bb d0 10 00 00 	mov    0x10d0(%rbx),%rdi
+  4c:	48 85 ff             	test   %rdi,%rdi
+  4f:	0f 84 0e 08 00 00    	je     863 <destroy_thread+0x863>
+  55:	9c                   	pushf  
+  56:	41 5d                	pop    %r13
+  58:	fa                   	cli    
+  59:	49 bc 00 00 00 00 00 00 00 00 	movabs $0x0,%r12	5b: R_X86_64_64	cpu_local_var_initialized
+  63:	41 83 3c 24 00       	cmpl   $0x0,(%r12)
+  68:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	6a: R_X86_64_64	locals
+  72:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	74: R_X86_64_64	clv
+  7c:	74 4a                	je     c8 <destroy_thread+0xc8>
+  7e:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+  83:	0f 32                	rdmsr  
+  85:	48 c1 e2 20          	shl    $0x20,%rdx
+  89:	89 c1                	mov    %eax,%ecx
+  8b:	48 09 d1             	or     %rdx,%rcx
+  8e:	49 8b 13             	mov    (%r11),%rdx
+  91:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+  98:	48 39 ca             	cmp    %rcx,%rdx
+  9b:	77 19                	ja     b6 <destroy_thread+0xb6>
+  9d:	49 63 37             	movslq (%r15),%rsi
+  a0:	48 c1 e6 0e          	shl    $0xe,%rsi
+  a4:	48 01 f2             	add    %rsi,%rdx
+  a7:	48 39 ca             	cmp    %rcx,%rdx
+  aa:	72 0a                	jb     b6 <destroy_thread+0xb6>
+  ac:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+  b4:	48 98                	cltq   
+  b6:	49 8b 0a             	mov    (%r10),%rcx
+  b9:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+  c0:	f0 ff 84 01 28 1f 00 00 	lock incl 0x1f28(%rcx,%rax,1)
+  c8:	b9 00 00 02 00       	mov    $0x20000,%ecx
+  cd:	f0 0f c1 8f c0 00 00 00 	lock xadd %ecx,0xc0(%rdi)
+  d5:	89 c8                	mov    %ecx,%eax
+  d7:	c1 e8 10             	shr    $0x10,%eax
+  da:	66 39 c1             	cmp    %ax,%cx
+  dd:	0f 85 0d 01 00 00    	jne    1f0 <destroy_thread+0x1f0>
+  e3:	48 89 d8             	mov    %rbx,%rax
+  e6:	48 05 d8 10 00 00    	add    $0x10d8,%rax
+  ec:	74 3a                	je     128 <destroy_thread+0x128>
+  ee:	48 8b 8b e0 10 00 00 	mov    0x10e0(%rbx),%rcx
+  f5:	48 85 c9             	test   %rcx,%rcx
+  f8:	74 2e                	je     128 <destroy_thread+0x128>
+  fa:	48 8b 93 d8 10 00 00 	mov    0x10d8(%rbx),%rdx
+ 101:	48 85 d2             	test   %rdx,%rdx
+ 104:	74 22                	je     128 <destroy_thread+0x128>
+ 106:	48 39 c2             	cmp    %rax,%rdx
+ 109:	74 1d                	je     128 <destroy_thread+0x128>
+ 10b:	48 89 4a 08          	mov    %rcx,0x8(%rdx)
+ 10f:	48 89 11             	mov    %rdx,(%rcx)
+ 112:	48 c7 83 d8 10 00 00 29 01 10 00 	movq   $0x100129,0x10d8(%rbx)
+ 11d:	48 c7 83 e0 10 00 00 29 02 20 00 	movq   $0x200229,0x10e0(%rbx)
+ 128:	48 8b 87 a8 00 00 00 	mov    0xa8(%rdi),%rax
+ 12f:	48 89 45 d0          	mov    %rax,-0x30(%rbp)
+ 133:	48 8b 87 00 01 00 00 	mov    0x100(%rdi),%rax
+ 13a:	48 85 c0             	test   %rax,%rax
+ 13d:	48 89 7d c0          	mov    %rdi,-0x40(%rbp)
+ 141:	0f 84 58 01 00 00    	je     29f <destroy_thread+0x29f>
+ 147:	83 bb 58 14 00 00 03 	cmpl   $0x3,0x1458(%rbx)
+ 14e:	0f 85 af 00 00 00    	jne    203 <destroy_thread+0x203>
+ 154:	48 63 8f 08 01 00 00 	movslq 0x108(%rdi),%rcx
+ 15b:	48 85 c9             	test   %rcx,%rcx
+ 15e:	0f 8e 3b 01 00 00    	jle    29f <destroy_thread+0x29f>
+ 164:	44 8b 83 6c 14 00 00 	mov    0x146c(%rbx),%r8d
+ 16b:	8b 53 14             	mov    0x14(%rbx),%edx
+ 16e:	48 c1 e1 04          	shl    $0x4,%rcx
+ 172:	48 c7 c6 f0 ff ff ff 	mov    $0xfffffffffffffff0,%rsi
+ 179:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+ 180:	48 8d 7e 10          	lea    0x10(%rsi),%rdi
+ 184:	48 39 f9             	cmp    %rdi,%rcx
+ 187:	0f 84 12 01 00 00    	je     29f <destroy_thread+0x29f>
+ 18d:	48 39 5c 30 18       	cmp    %rbx,0x18(%rax,%rsi,1)
+ 192:	48 89 fe             	mov    %rdi,%rsi
+ 195:	75 e9                	jne    180 <destroy_thread+0x180>
+ 197:	48 c7 44 38 08 00 00 00 00 	movq   $0x0,0x8(%rax,%rdi,1)
+ 1a0:	44 89 04 38          	mov    %r8d,(%rax,%rdi,1)
+ 1a4:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1a6: R_X86_64_64	_RNvNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers17REPLACE_TID_DEBUG+0x18
+ 1ae:	8b 00                	mov    (%rax),%eax
+ 1b0:	3d 00 00 00 01       	cmp    $0x1000000,%eax
+ 1b5:	0f 82 e4 00 00 00    	jb     29f <destroy_thread+0x29f>
+ 1bb:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	1bd: R_X86_64_64	.lrodata.str1.1+0x111d
+ 1c5:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	1c7: R_X86_64_64	.lrodata.str1.1+0x1152
+ 1cf:	49 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%r9	1d1: R_X86_64_64	kprintf
+ 1d9:	48 89 d9             	mov    %rbx,%rcx
+ 1dc:	31 c0                	xor    %eax,%eax
+ 1de:	4d 89 dc             	mov    %r11,%r12
+ 1e1:	41 ff d1             	call   *%r9
+ 1e4:	e9 9f 00 00 00       	jmp    288 <destroy_thread+0x288>
+ 1e9:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+ 1f0:	8b 8f c0 00 00 00    	mov    0xc0(%rdi),%ecx
+ 1f6:	66 39 c1             	cmp    %ax,%cx
+ 1f9:	0f 84 e4 fe ff ff    	je     e3 <destroy_thread+0xe3>
+ 1ff:	f3 90                	pause  
+ 201:	eb ed                	jmp    1f0 <destroy_thread+0x1f0>
+ 203:	48 3b 5d d0          	cmp    -0x30(%rbp),%rbx
+ 207:	0f 84 92 00 00 00    	je     29f <destroy_thread+0x29f>
+ 20d:	48 63 8f 08 01 00 00 	movslq 0x108(%rdi),%rcx
+ 214:	48 85 c9             	test   %rcx,%rcx
+ 217:	0f 8e 82 00 00 00    	jle    29f <destroy_thread+0x29f>
+ 21d:	8b 53 14             	mov    0x14(%rbx),%edx
+ 220:	48 c1 e1 04          	shl    $0x4,%rcx
+ 224:	48 83 c1 10          	add    $0x10,%rcx
+ 228:	31 f6                	xor    %esi,%esi
+ 22a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+ 230:	48 8d 7e 10          	lea    0x10(%rsi),%rdi
+ 234:	48 39 f9             	cmp    %rdi,%rcx
+ 237:	74 66                	je     29f <destroy_thread+0x29f>
+ 239:	48 39 5c 30 08       	cmp    %rbx,0x8(%rax,%rsi,1)
+ 23e:	48 89 fe             	mov    %rdi,%rsi
+ 241:	75 ed                	jne    230 <destroy_thread+0x230>
+ 243:	48 c7 44 38 f8 00 00 00 00 	movq   $0x0,-0x8(%rax,%rdi,1)
+ 24c:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	24e: R_X86_64_64	_RNvNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers17RELEASE_TID_DEBUG+0x18
+ 256:	8b 00                	mov    (%rax),%eax
+ 258:	3d 00 00 00 01       	cmp    $0x1000000,%eax
+ 25d:	72 40                	jb     29f <destroy_thread+0x29f>
+ 25f:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	261: R_X86_64_64	.lrodata.str1.1+0x10eb
+ 269:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	26b: R_X86_64_64	.lrodata.str1.1+0x110f
+ 273:	49 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%r8	275: R_X86_64_64	kprintf
+ 27d:	48 89 d9             	mov    %rbx,%rcx
+ 280:	31 c0                	xor    %eax,%eax
+ 282:	4d 89 dc             	mov    %r11,%r12
+ 285:	41 ff d0             	call   *%r8
+ 288:	4d 89 e3             	mov    %r12,%r11
+ 28b:	49 bc 00 00 00 00 00 00 00 00 	movabs $0x0,%r12	28d: R_X86_64_64	cpu_local_var_initialized
+ 295:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	297: R_X86_64_64	clv
+ 29f:	48 8b 83 68 10 00 00 	mov    0x1068(%rbx),%rax
+ 2a6:	48 85 c0             	test   %rax,%rax
+ 2a9:	0f 84 0e 01 00 00    	je     3bd <destroy_thread+0x3bd>
+ 2af:	4c 8b 00             	mov    (%rax),%r8
+ 2b2:	4d 85 c0             	test   %r8,%r8
+ 2b5:	0f 84 02 01 00 00    	je     3bd <destroy_thread+0x3bd>
+ 2bb:	4c 89 c0             	mov    %r8,%rax
+ 2be:	48 25 7f ff ff ff    	and    $0xffffffffffffff7f,%rax
+ 2c4:	48 3d 60 ff ff ff    	cmp    $0xffffffffffffff60,%rax
+ 2ca:	0f 84 ed 00 00 00    	je     3bd <destroy_thread+0x3bd>
+ 2d0:	8b 73 10             	mov    0x10(%rbx),%esi
+ 2d3:	9c                   	pushf  
+ 2d4:	5f                   	pop    %rdi
+ 2d5:	fa                   	cli    
+ 2d6:	41 83 3c 24 00       	cmpl   $0x0,(%r12)
+ 2db:	74 4a                	je     327 <destroy_thread+0x327>
+ 2dd:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ 2e2:	0f 32                	rdmsr  
+ 2e4:	48 c1 e2 20          	shl    $0x20,%rdx
+ 2e8:	89 c1                	mov    %eax,%ecx
+ 2ea:	48 09 d1             	or     %rdx,%rcx
+ 2ed:	49 8b 13             	mov    (%r11),%rdx
+ 2f0:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ 2f7:	48 39 ca             	cmp    %rcx,%rdx
+ 2fa:	77 19                	ja     315 <destroy_thread+0x315>
+ 2fc:	4d 63 0f             	movslq (%r15),%r9
+ 2ff:	49 c1 e1 0e          	shl    $0xe,%r9
+ 303:	4c 01 ca             	add    %r9,%rdx
+ 306:	48 39 ca             	cmp    %rcx,%rdx
+ 309:	72 0a                	jb     315 <destroy_thread+0x315>
+ 30b:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ 313:	48 98                	cltq   
+ 315:	49 8b 0a             	mov    (%r10),%rcx
+ 318:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ 31f:	f0 ff 84 01 28 1f 00 00 	lock incl 0x1f28(%rcx,%rax,1)
+ 327:	b9 00 00 02 00       	mov    $0x20000,%ecx
+ 32c:	f0 41 0f c1 88 a0 00 00 00 	lock xadd %ecx,0xa0(%r8)
+ 335:	89 c8                	mov    %ecx,%eax
+ 337:	c1 e8 10             	shr    $0x10,%eax
+ 33a:	66 39 c1             	cmp    %ax,%cx
+ 33d:	0f 85 ed 04 00 00    	jne    830 <destroy_thread+0x830>
+ 343:	85 f6                	test   %esi,%esi
+ 345:	78 19                	js     360 <destroy_thread+0x360>
+ 347:	44 39 f6             	cmp    %r14d,%esi
+ 34a:	7d 14                	jge    360 <destroy_thread+0x360>
+ 34c:	48 c7 c0 fe ff ff ff 	mov    $0xfffffffffffffffe,%rax
+ 353:	89 f1                	mov    %esi,%ecx
+ 355:	48 d3 c0             	rol    %cl,%rax
+ 358:	c1 ee 06             	shr    $0x6,%esi
+ 35b:	49 21 44 f0 20       	and    %rax,0x20(%r8,%rsi,8)
+ 360:	66 f0 41 83 80 a0 00 00 00 02 	lock addw $0x2,0xa0(%r8)
+ 36a:	41 83 3c 24 00       	cmpl   $0x0,(%r12)
+ 36f:	74 4a                	je     3bb <destroy_thread+0x3bb>
+ 371:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ 376:	0f 32                	rdmsr  
+ 378:	48 c1 e2 20          	shl    $0x20,%rdx
+ 37c:	89 c1                	mov    %eax,%ecx
+ 37e:	48 09 d1             	or     %rdx,%rcx
+ 381:	49 8b 13             	mov    (%r11),%rdx
+ 384:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ 38b:	48 39 ca             	cmp    %rcx,%rdx
+ 38e:	77 19                	ja     3a9 <destroy_thread+0x3a9>
+ 390:	49 63 37             	movslq (%r15),%rsi
+ 393:	48 c1 e6 0e          	shl    $0xe,%rsi
+ 397:	48 01 f2             	add    %rsi,%rdx
+ 39a:	48 39 ca             	cmp    %rcx,%rdx
+ 39d:	72 0a                	jb     3a9 <destroy_thread+0x3a9>
+ 39f:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ 3a7:	48 98                	cltq   
+ 3a9:	49 8b 0a             	mov    (%r10),%rcx
+ 3ac:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ 3b3:	f0 ff 8c 01 28 1f 00 00 	lock decl 0x1f28(%rcx,%rax,1)
+ 3bb:	57                   	push   %rdi
+ 3bc:	9d                   	popf   
+ 3bd:	48 8b bb 00 13 00 00 	mov    0x1300(%rbx),%rdi
+ 3c4:	48 85 ff             	test   %rdi,%rdi
+ 3c7:	74 5d                	je     426 <destroy_thread+0x426>
+ 3c9:	4c 8d b3 00 13 00 00 	lea    0x1300(%rbx),%r14
+ 3d0:	4c 39 f7             	cmp    %r14,%rdi
+ 3d3:	74 51                	je     426 <destroy_thread+0x426>
+ 3d5:	49 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%r15	3d7: R_X86_64_64	process_tracked_allocator_source_file
+ 3df:	49 bc 00 00 00 00 00 00 00 00 	movabs $0x0,%r12	3e1: R_X86_64_64	_kfree
+ 3e9:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+ 3f0:	48 8b 07             	mov    (%rdi),%rax
+ 3f3:	49 89 06             	mov    %rax,(%r14)
+ 3f6:	48 85 c0             	test   %rax,%rax
+ 3f9:	74 04                	je     3ff <destroy_thread+0x3ff>
+ 3fb:	4c 89 70 08          	mov    %r14,0x8(%rax)
+ 3ff:	48 c7 07 29 01 10 00 	movq   $0x100129,(%rdi)
+ 406:	48 c7 47 08 29 02 20 00 	movq   $0x200229,0x8(%rdi)
+ 40e:	49 8b 37             	mov    (%r15),%rsi
+ 411:	ba 02 01 00 00       	mov    $0x102,%edx
+ 416:	41 ff d4             	call   *%r12
+ 419:	49 8b 3e             	mov    (%r14),%rdi
+ 41c:	48 85 ff             	test   %rdi,%rdi
+ 41f:	74 05                	je     426 <destroy_thread+0x426>
+ 421:	4c 39 f7             	cmp    %r14,%rdi
+ 424:	75 ca                	jne    3f0 <destroy_thread+0x3f0>
+ 426:	48 8b bb 98 13 00 00 	mov    0x1398(%rbx),%rdi
+ 42d:	48 85 ff             	test   %rdi,%rdi
+ 430:	74 1e                	je     450 <destroy_thread+0x450>
+ 432:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	434: R_X86_64_64	process_tracked_allocator_source_file
+ 43c:	48 8b 30             	mov    (%rax),%rsi
+ 43f:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	441: R_X86_64_64	_kfree
+ 449:	ba 02 01 00 00       	mov    $0x102,%edx
+ 44e:	ff d0                	call   *%rax
+ 450:	48 8b bb a0 13 00 00 	mov    0x13a0(%rbx),%rdi
+ 457:	48 85 ff             	test   %rdi,%rdi
+ 45a:	74 1e                	je     47a <destroy_thread+0x47a>
+ 45c:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	45e: R_X86_64_64	process_tracked_allocator_source_file
+ 466:	48 8b 30             	mov    (%rax),%rsi
+ 469:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	46b: R_X86_64_64	_kfree
+ 473:	ba 02 01 00 00       	mov    $0x102,%edx
+ 478:	ff d0                	call   *%rax
+ 47a:	48 8b bb a8 13 00 00 	mov    0x13a8(%rbx),%rdi
+ 481:	48 85 ff             	test   %rdi,%rdi
+ 484:	74 1e                	je     4a4 <destroy_thread+0x4a4>
+ 486:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	488: R_X86_64_64	process_tracked_allocator_source_file
+ 490:	48 8b 30             	mov    (%rax),%rsi
+ 493:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	495: R_X86_64_64	_kfree
+ 49d:	ba 02 01 00 00       	mov    $0x102,%edx
+ 4a2:	ff d0                	call   *%rax
+ 4a4:	48 8b bb b0 12 00 00 	mov    0x12b0(%rbx),%rdi
+ 4ab:	49 bc 00 00 00 00 00 00 00 00 	movabs $0x0,%r12	4ad: R_X86_64_64	mem_pagealloc_track_log_bridge
+ 4b5:	49 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%r15	4b7: R_X86_64_64	pagealloc_track_free_result
+ 4bf:	48 85 ff             	test   %rdi,%rdi
+ 4c2:	0f 84 33 01 00 00    	je     5fb <destroy_thread+0x5fb>
+ 4c8:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	4ca: R_X86_64_64	x86_cpu_xsave_size
+ 4d2:	4c 63 30             	movslq (%rax),%r14
+ 4d5:	49 81 c6 ff 0f 00 00 	add    $0xfff,%r14
+ 4dc:	49 c1 ee 0c          	shr    $0xc,%r14
+ 4e0:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	4e2: R_X86_64_64	_RNvNtCsbVRkTr4hvpt_13mckernel_rust15x86_cpu_helpers21RELEASE_FP_REGS_DEBUG+0x18
+ 4ea:	8b 00                	mov    (%rax),%eax
+ 4ec:	3d 00 00 00 01       	cmp    $0x1000000,%eax
+ 4f1:	72 22                	jb     515 <destroy_thread+0x515>
+ 4f3:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	4f5: R_X86_64_64	.lrodata.str1.1+0x7e8c
+ 4fd:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	4ff: R_X86_64_64	kprintf
+ 507:	44 89 f6             	mov    %r14d,%esi
+ 50a:	31 c0                	xor    %eax,%eax
+ 50c:	ff d1                	call   *%rcx
+ 50e:	48 8b bb b0 12 00 00 	mov    0x12b0(%rbx),%rdi
+ 515:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	517: R_X86_64_64	memdebug
+ 51f:	4c 8b 08             	mov    (%rax),%r9
+ 522:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	524: R_X86_64_64	pagealloc_track_initialized
+ 52c:	8b 00                	mov    (%rax),%eax
+ 52e:	48 83 ec 08          	sub    $0x8,%rsp
+ 532:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	534: R_X86_64_64	.lrodata.str1.1+0x1169
+ 53c:	44 89 f6             	mov    %r14d,%esi
+ 53f:	31 d2                	xor    %edx,%edx
+ 541:	41 b8 12 0c 00 00    	mov    $0xc12,%r8d
+ 547:	41 54                	push   %r12
+ 549:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	54b: R_X86_64_64	mem_pagealloc_invalid_size_bridge
+ 553:	41 52                	push   %r10
+ 555:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	557: R_X86_64_64	mem_pagealloc_invalid_free_bridge
+ 55f:	41 52                	push   %r10
+ 561:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	563: R_X86_64_64	mem_pagealloc_track_noirq_unlock_bridge
+ 56b:	41 52                	push   %r10
+ 56d:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	56f: R_X86_64_64	mem_pagealloc_track_noirq_lock_bridge
+ 577:	41 52                	push   %r10
+ 579:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	57b: R_X86_64_64	mem_kmalloc_remote_unlock_bridge
+ 583:	41 52                	push   %r10
+ 585:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	587: R_X86_64_64	mem_kmalloc_remote_lock_bridge
+ 58f:	41 52                	push   %r10
+ 591:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	593: R_X86_64_64	___kfree
+ 59b:	41 52                	push   %r10
+ 59d:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	59f: R_X86_64_64	mem_pagealloc_track_meta_alloc_bridge
+ 5a7:	41 52                	push   %r10
+ 5a9:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	5ab: R_X86_64_64	___ihk_mc_free_pages
+ 5b3:	41 52                	push   %r10
+ 5b5:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	5b7: R_X86_64_64	pagealloc_addr_hash_locks
+ 5bf:	41 52                	push   %r10
+ 5c1:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	5c3: R_X86_64_64	pagealloc_addr_hash
+ 5cb:	41 52                	push   %r10
+ 5cd:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	5cf: R_X86_64_64	pagealloc_track_hash_locks
+ 5d7:	41 52                	push   %r10
+ 5d9:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	5db: R_X86_64_64	pagealloc_track_hash
+ 5e3:	41 52                	push   %r10
+ 5e5:	50                   	push   %rax
+ 5e6:	41 ff d7             	call   *%r15
+ 5e9:	48 81 c4 80 00 00 00 	add    $0x80,%rsp
+ 5f0:	48 c7 83 b0 12 00 00 00 00 00 00 	movq   $0x0,0x12b0(%rbx)
+ 5fb:	48 8b bb 68 15 00 00 	mov    0x1568(%rbx),%rdi
+ 602:	49 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%r15	604: R_X86_64_64	process_tracked_allocator_source_file
+ 60c:	49 8b 37             	mov    (%r15),%rsi
+ 60f:	49 bc 00 00 00 00 00 00 00 00 	movabs $0x0,%r12	611: R_X86_64_64	_kfree
+ 619:	ba 02 01 00 00       	mov    $0x102,%edx
+ 61e:	41 ff d4             	call   *%r12
+ 621:	4c 8b b3 d8 12 00 00 	mov    0x12d8(%rbx),%r14
+ 628:	4d 85 f6             	test   %r14,%r14
+ 62b:	74 34                	je     661 <destroy_thread+0x661>
+ 62d:	49 8b 86 48 08 00 00 	mov    0x848(%r14),%rax
+ 634:	f0 41 ff 4e 40       	lock decl 0x40(%r14)
+ 639:	75 26                	jne    661 <destroy_thread+0x661>
+ 63b:	4c 89 6d c8          	mov    %r13,-0x38(%rbp)
+ 63f:	4d 8d ae 48 08 00 00 	lea    0x848(%r14),%r13
+ 646:	4c 39 e8             	cmp    %r13,%rax
+ 649:	0f 85 ab 01 00 00    	jne    7fa <destroy_thread+0x7fa>
+ 64f:	49 8b 37             	mov    (%r15),%rsi
+ 652:	4c 89 f7             	mov    %r14,%rdi
+ 655:	ba 02 01 00 00       	mov    $0x102,%edx
+ 65a:	41 ff d4             	call   *%r12
+ 65d:	4c 8b 6d c8          	mov    -0x38(%rbp),%r13
+ 661:	48 3b 5d d0          	cmp    -0x30(%rbp),%rbx
+ 665:	0f 84 ec 00 00 00    	je     757 <destroy_thread+0x757>
+ 66b:	49 8b 0f             	mov    (%r15),%rcx
+ 66e:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	670: R_X86_64_64	memdebug
+ 678:	4c 8b 08             	mov    (%rax),%r9
+ 67b:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	67d: R_X86_64_64	pagealloc_track_initialized
+ 685:	8b 00                	mov    (%rax),%eax
+ 687:	48 83 ec 08          	sub    $0x8,%rsp
+ 68b:	48 89 df             	mov    %rbx,%rdi
+ 68e:	be 20 00 00 00       	mov    $0x20,%esi
+ 693:	31 d2                	xor    %edx,%edx
+ 695:	41 b8 ad 0d 00 00    	mov    $0xdad,%r8d
+ 69b:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	69d: R_X86_64_64	mem_pagealloc_track_log_bridge
+ 6a5:	41 52                	push   %r10
+ 6a7:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	6a9: R_X86_64_64	mem_pagealloc_invalid_size_bridge
+ 6b1:	41 52                	push   %r10
+ 6b3:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	6b5: R_X86_64_64	mem_pagealloc_invalid_free_bridge
+ 6bd:	41 52                	push   %r10
+ 6bf:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	6c1: R_X86_64_64	mem_pagealloc_track_noirq_unlock_bridge
+ 6c9:	41 52                	push   %r10
+ 6cb:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	6cd: R_X86_64_64	mem_pagealloc_track_noirq_lock_bridge
+ 6d5:	41 52                	push   %r10
+ 6d7:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	6d9: R_X86_64_64	mem_kmalloc_remote_unlock_bridge
+ 6e1:	41 52                	push   %r10
+ 6e3:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	6e5: R_X86_64_64	mem_kmalloc_remote_lock_bridge
+ 6ed:	41 52                	push   %r10
+ 6ef:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	6f1: R_X86_64_64	___kfree
+ 6f9:	41 52                	push   %r10
+ 6fb:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	6fd: R_X86_64_64	mem_pagealloc_track_meta_alloc_bridge
+ 705:	41 52                	push   %r10
+ 707:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	709: R_X86_64_64	___ihk_mc_free_pages
+ 711:	41 52                	push   %r10
+ 713:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	715: R_X86_64_64	pagealloc_addr_hash_locks
+ 71d:	41 52                	push   %r10
+ 71f:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	721: R_X86_64_64	pagealloc_addr_hash
+ 729:	41 52                	push   %r10
+ 72b:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	72d: R_X86_64_64	pagealloc_track_hash_locks
+ 735:	41 52                	push   %r10
+ 737:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	739: R_X86_64_64	pagealloc_track_hash
+ 741:	41 52                	push   %r10
+ 743:	50                   	push   %rax
+ 744:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	746: R_X86_64_64	pagealloc_track_free_result
+ 74e:	ff d0                	call   *%rax
+ 750:	48 81 c4 80 00 00 00 	add    $0x80,%rsp
+ 757:	48 8b 45 c0          	mov    -0x40(%rbp),%rax
+ 75b:	66 f0 83 80 c0 00 00 00 02 	lock addw $0x2,0xc0(%rax)
+ 764:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	766: R_X86_64_64	cpu_local_var_initialized
+ 76e:	83 38 00             	cmpl   $0x0,(%rax)
+ 771:	0f 84 e9 00 00 00    	je     860 <destroy_thread+0x860>
+ 777:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ 77c:	0f 32                	rdmsr  
+ 77e:	48 c1 e2 20          	shl    $0x20,%rdx
+ 782:	89 c1                	mov    %eax,%ecx
+ 784:	48 09 d1             	or     %rdx,%rcx
+ 787:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	789: R_X86_64_64	locals
+ 791:	48 8b 10             	mov    (%rax),%rdx
+ 794:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ 79b:	48 39 ca             	cmp    %rcx,%rdx
+ 79e:	0f 87 a0 00 00 00    	ja     844 <destroy_thread+0x844>
+ 7a4:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	7a6: R_X86_64_64	num_processors
+ 7ae:	48 63 36             	movslq (%rsi),%rsi
+ 7b1:	48 c1 e6 0e          	shl    $0xe,%rsi
+ 7b5:	48 01 f2             	add    %rsi,%rdx
+ 7b8:	48 39 ca             	cmp    %rcx,%rdx
+ 7bb:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	7bd: R_X86_64_64	clv
+ 7c5:	0f 82 83 00 00 00    	jb     84e <destroy_thread+0x84e>
+ 7cb:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ 7d3:	48 98                	cltq   
+ 7d5:	eb 77                	jmp    84e <destroy_thread+0x84e>
+ 7d7:	66 0f 1f 84 00 00 00 00 00 	nopw   0x0(%rax,%rax,1)
+ 7e0:	48 c7 07 29 01 10 00 	movq   $0x100129,(%rdi)
+ 7e7:	48 c7 47 08 29 02 20 00 	movq   $0x200229,0x8(%rdi)
+ 7ef:	49 8b 37             	mov    (%r15),%rsi
+ 7f2:	ba 02 01 00 00       	mov    $0x102,%edx
+ 7f7:	41 ff d4             	call   *%r12
+ 7fa:	49 8b 7d 00          	mov    0x0(%r13),%rdi
+ 7fe:	48 85 ff             	test   %rdi,%rdi
+ 801:	0f 84 48 fe ff ff    	je     64f <destroy_thread+0x64f>
+ 807:	4c 39 ef             	cmp    %r13,%rdi
+ 80a:	0f 84 3f fe ff ff    	je     64f <destroy_thread+0x64f>
+ 810:	48 8b 07             	mov    (%rdi),%rax
+ 813:	49 89 45 00          	mov    %rax,0x0(%r13)
+ 817:	48 85 c0             	test   %rax,%rax
+ 81a:	74 c4                	je     7e0 <destroy_thread+0x7e0>
+ 81c:	4c 89 68 08          	mov    %r13,0x8(%rax)
+ 820:	eb be                	jmp    7e0 <destroy_thread+0x7e0>
+ 822:	66 66 66 66 66 2e 0f 1f 84 00 00 00 00 00 	data16 data16 data16 data16 cs nopw 0x0(%rax,%rax,1)
+ 830:	41 8b 88 a0 00 00 00 	mov    0xa0(%r8),%ecx
+ 837:	66 39 c1             	cmp    %ax,%cx
+ 83a:	0f 84 03 fb ff ff    	je     343 <destroy_thread+0x343>
+ 840:	f3 90                	pause  
+ 842:	eb ec                	jmp    830 <destroy_thread+0x830>
+ 844:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	846: R_X86_64_64	clv
+ 84e:	48 8b 09             	mov    (%rcx),%rcx
+ 851:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ 858:	f0 ff 8c 01 28 1f 00 00 	lock decl 0x1f28(%rcx,%rax,1)
+ 860:	41 55                	push   %r13
+ 862:	9d                   	popf   
+ 863:	48 83 c4 18          	add    $0x18,%rsp
+ 867:	5b                   	pop    %rbx
+ 868:	41 5c                	pop    %r12
+ 86a:	41 5d                	pop    %r13
+ 86c:	41 5e                	pop    %r14
+ 86e:	41 5f                	pop    %r15
+ 870:	5d                   	pop    %rbp
+ 871:	c3                   	ret    

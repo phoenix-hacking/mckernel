@@ -1,0 +1,124 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/HOST-output-proposed-1/rust-selected.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.create_address_space:
+
+0000000000000000 <create_address_space>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	41 57                	push   %r15
+   6:	41 56                	push   %r14
+   8:	41 54                	push   %r12
+   a:	53                   	push   %rbx
+   b:	85 f6                	test   %esi,%esi
+   d:	0f 88 a9 01 00 00    	js     1bc <create_address_space+0x1bc>
+  13:	41 89 f6             	mov    %esi,%r14d
+  16:	41 89 f4             	mov    %esi,%r12d
+  19:	4e 8d 3c a5 a8 00 00 00 	lea    0xa8(,%r12,4),%r15
+  21:	48 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%rdx	23: R_X86_64_64	.lrodata.str1.1+0x64af
+  2b:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	2d: R_X86_64_64	_kmalloc
+  35:	be 02 00 00 00       	mov    $0x2,%esi
+  3a:	44 89 ff             	mov    %r15d,%edi
+  3d:	b9 54 01 00 00       	mov    $0x154,%ecx
+  42:	ff d0                	call   *%rax
+  44:	48 85 c0             	test   %rax,%rax
+  47:	0f 84 e3 00 00 00    	je     130 <create_address_space+0x130>
+  4d:	48 89 c3             	mov    %rax,%rbx
+  50:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	52: R_X86_64_64	ihk_mc_pt_create
+  5a:	bf 02 00 00 00       	mov    $0x2,%edi
+  5f:	ff d0                	call   *%rax
+  61:	48 85 c0             	test   %rax,%rax
+  64:	0f 84 34 01 00 00    	je     19e <create_address_space+0x19e>
+  6a:	49 c1 e4 02          	shl    $0x2,%r12
+  6e:	48 b9 f8 ff ff ff 03 00 00 00 	movabs $0x3fffffff8,%rcx
+  78:	49 21 cf             	and    %rcx,%r15
+  7b:	31 c9                	xor    %ecx,%ecx
+  7d:	0f 1f 00             	nopl   (%rax)
+  80:	c6 04 0b 00          	movb   $0x0,(%rbx,%rcx,1)
+  84:	c6 44 0b 01 00       	movb   $0x0,0x1(%rbx,%rcx,1)
+  89:	c6 44 0b 02 00       	movb   $0x0,0x2(%rbx,%rcx,1)
+  8e:	c6 44 0b 03 00       	movb   $0x0,0x3(%rbx,%rcx,1)
+  93:	c6 44 0b 04 00       	movb   $0x0,0x4(%rbx,%rcx,1)
+  98:	c6 44 0b 05 00       	movb   $0x0,0x5(%rbx,%rcx,1)
+  9d:	c6 44 0b 06 00       	movb   $0x0,0x6(%rbx,%rcx,1)
+  a2:	c6 44 0b 07 00       	movb   $0x0,0x7(%rbx,%rcx,1)
+  a7:	48 83 c1 08          	add    $0x8,%rcx
+  ab:	49 39 cf             	cmp    %rcx,%r15
+  ae:	75 d0                	jne    80 <create_address_space+0x80>
+  b0:	41 f6 c4 04          	test   $0x4,%r12b
+  b4:	74 1b                	je     d1 <create_address_space+0xd1>
+  b6:	31 d2                	xor    %edx,%edx
+  b8:	0f 1f 84 00 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+  c0:	48 8d 34 13          	lea    (%rbx,%rdx,1),%rsi
+  c4:	c6 04 31 00          	movb   $0x0,(%rcx,%rsi,1)
+  c8:	48 ff c2             	inc    %rdx
+  cb:	48 83 fa 04          	cmp    $0x4,%rdx
+  cf:	75 ef                	jne    c0 <create_address_space+0xc0>
+  d1:	44 89 b3 a4 00 00 00 	mov    %r14d,0xa4(%rbx)
+  d8:	48 89 03             	mov    %rax,(%rbx)
+  db:	b8 01 00 00 00       	mov    $0x1,%eax
+  e0:	87 43 18             	xchg   %eax,0x18(%rbx)
+  e3:	b8 27 00 00 00       	mov    $0x27,%eax
+  e8:	0f 1f 84 00 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+  f0:	c6 44 03 f9 00       	movb   $0x0,-0x7(%rbx,%rax,1)
+  f5:	c6 44 03 fa 00       	movb   $0x0,-0x6(%rbx,%rax,1)
+  fa:	c6 44 03 fb 00       	movb   $0x0,-0x5(%rbx,%rax,1)
+  ff:	c6 44 03 fc 00       	movb   $0x0,-0x4(%rbx,%rax,1)
+ 104:	c6 44 03 fd 00       	movb   $0x0,-0x3(%rbx,%rax,1)
+ 109:	c6 44 03 fe 00       	movb   $0x0,-0x2(%rbx,%rax,1)
+ 10e:	c6 44 03 ff 00       	movb   $0x0,-0x1(%rbx,%rax,1)
+ 113:	c6 04 03 00          	movb   $0x0,(%rbx,%rax,1)
+ 117:	48 83 c0 08          	add    $0x8,%rax
+ 11b:	48 3d a7 00 00 00    	cmp    $0xa7,%rax
+ 121:	75 cd                	jne    f0 <create_address_space+0xf0>
+ 123:	31 c0                	xor    %eax,%eax
+ 125:	87 83 a0 00 00 00    	xchg   %eax,0xa0(%rbx)
+ 12b:	e9 bf 00 00 00       	jmp    1ef <create_address_space+0x1ef>
+ 130:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ 135:	0f 32                	rdmsr  
+ 137:	48 c1 e2 20          	shl    $0x20,%rdx
+ 13b:	89 c1                	mov    %eax,%ecx
+ 13d:	48 09 d1             	or     %rdx,%rcx
+ 140:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	142: R_X86_64_64	locals
+ 14a:	48 8b 10             	mov    (%rax),%rdx
+ 14d:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ 154:	48 39 ca             	cmp    %rcx,%rdx
+ 157:	77 23                	ja     17c <create_address_space+0x17c>
+ 159:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	15b: R_X86_64_64	num_processors
+ 163:	48 63 36             	movslq (%rsi),%rsi
+ 166:	48 c1 e6 0e          	shl    $0xe,%rsi
+ 16a:	48 01 f2             	add    %rsi,%rdx
+ 16d:	48 39 ca             	cmp    %rcx,%rdx
+ 170:	72 0a                	jb     17c <create_address_space+0x17c>
+ 172:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ 17a:	48 98                	cltq   
+ 17c:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	17e: R_X86_64_64	clv
+ 186:	48 8b 09             	mov    (%rcx),%rcx
+ 189:	48 85 c9             	test   %rcx,%rcx
+ 18c:	74 32                	je     1c0 <create_address_space+0x1c0>
+ 18e:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ 195:	8b 8c 01 28 1f 00 00 	mov    0x1f28(%rcx,%rax,1),%ecx
+ 19c:	eb 27                	jmp    1c5 <create_address_space+0x1c5>
+ 19e:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	1a0: R_X86_64_64	.lrodata.str1.1+0x64af
+ 1a8:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1aa: R_X86_64_64	_kfree
+ 1b2:	48 89 df             	mov    %rbx,%rdi
+ 1b5:	ba 02 01 00 00       	mov    $0x102,%edx
+ 1ba:	ff d0                	call   *%rax
+ 1bc:	31 db                	xor    %ebx,%ebx
+ 1be:	eb 2f                	jmp    1ef <create_address_space+0x1ef>
+ 1c0:	b9 ff ff ff ff       	mov    $0xffffffff,%ecx
+ 1c5:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	1c7: R_X86_64_64	.lrodata.str1.1+0x4847
+ 1cf:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	1d1: R_X86_64_64	.lrodata.str1.1+0x64af
+ 1d9:	49 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%r8	1db: R_X86_64_64	kprintf
+ 1e3:	31 db                	xor    %ebx,%ebx
+ 1e5:	ba 54 01 00 00       	mov    $0x154,%edx
+ 1ea:	31 c0                	xor    %eax,%eax
+ 1ec:	41 ff d0             	call   *%r8
+ 1ef:	48 89 d8             	mov    %rbx,%rax
+ 1f2:	5b                   	pop    %rbx
+ 1f3:	41 5c                	pop    %r12
+ 1f5:	41 5e                	pop    %r14
+ 1f7:	41 5f                	pop    %r15
+ 1f9:	5d                   	pop    %rbp
+ 1fa:	c3                   	ret    

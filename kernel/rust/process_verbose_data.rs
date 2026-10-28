@@ -247,12 +247,9 @@ pub static mut process_init_stack_log_ap_user_debug: Ddebug =
 #[link_section = "__verbose"]
 pub static mut process_schedule_switch_debug: Ddebug = record!("schedule", 4684);
 
-// Not selected by CMake. Enable only with Rust companion configs and paired C
-// suppression of their original descriptors. Rust visibility does not export ELF
+// Jointly selected with the three Rust companion configs and paired C
+// suppression of original descriptors. Rust visibility does not export ELF
 // locals; linkage="internal" keeps their original names local to this object.
-#[cfg(process_verbose_local_companions)]
-compile_error!("C-local debug storage requires coordinated companion config migration");
-
 #[cfg(process_verbose_local_companions)]
 pub(crate) mod local {
     use super::{Ddebug, INITIAL_FLAGS, SOURCE_FILE};

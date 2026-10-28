@@ -1,0 +1,1473 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current:
+
+0000000000000000 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current>:
+       0:	55                   	push   %rbp
+       1:	48 89 e5             	mov    %rsp,%rbp
+       4:	41 57                	push   %r15
+       6:	41 56                	push   %r14
+       8:	41 55                	push   %r13
+       a:	41 54                	push   %r12
+       c:	53                   	push   %rbx
+       d:	48 81 ec d8 01 00 00 	sub    $0x1d8,%rsp
+      14:	48 89 fb             	mov    %rdi,%rbx
+      17:	48 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%rdx	19: R_X86_64_64	.lrodata.str1.1+0x43ef
+      21:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	23: R_X86_64_64	_kmalloc
+      2b:	bf 48 00 00 00       	mov    $0x48,%edi
+      30:	31 f6                	xor    %esi,%esi
+      32:	b9 6a 10 00 00       	mov    $0x106a,%ecx
+      37:	ff d0                	call   *%rax
+      39:	48 85 c0             	test   %rax,%rax
+      3c:	0f 84 1f 01 00 00    	je     161 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x161>
+      42:	48 c7 40 08 00 00 00 00 	movq   $0x0,0x8(%rax)
+      4a:	48 c7 00 00 00 00 00 	movq   $0x0,(%rax)
+      51:	48 c7 40 10 38 00 00 00 	movq   $0x38,0x10(%rax)
+      59:	48 c7 40 18 00 00 00 00 	movq   $0x0,0x18(%rax)
+      61:	48 c7 40 20 00 00 00 00 	movq   $0x0,0x20(%rax)
+      69:	48 c7 40 28 00 00 00 00 	movq   $0x0,0x28(%rax)
+      71:	48 c7 40 30 00 00 00 00 	movq   $0x0,0x30(%rax)
+      79:	48 c7 40 38 00 00 00 00 	movq   $0x0,0x38(%rax)
+      81:	48 c7 40 40 00 00 00 00 	movq   $0x0,0x40(%rax)
+      89:	41 bf ea ff ff ff    	mov    $0xffffffea,%r15d
+      8f:	83 7b 04 00          	cmpl   $0x0,0x4(%rbx)
+      93:	0f 85 3c 02 00 00    	jne    2d5 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x2d5>
+      99:	8b 33                	mov    (%rbx),%esi
+      9b:	48 8b 7b 08          	mov    0x8(%rbx),%rdi
+      9f:	83 fe 40             	cmp    $0x40,%esi
+      a2:	0f 93 c1             	setae  %cl
+      a5:	48 85 ff             	test   %rdi,%rdi
+      a8:	0f 94 c2             	sete   %dl
+      ab:	08 ca                	or     %cl,%dl
+      ad:	0f 85 22 02 00 00    	jne    2d5 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x2d5>
+      b3:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	b5: R_X86_64_64	cpu_local_var_initialized
+      bd:	41 83 3b 00          	cmpl   $0x0,(%r11)
+      c1:	49 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%r8	c3: R_X86_64_64	clv
+      cb:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	cd: R_X86_64_64	locals
+      d5:	49 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%r9	d7: R_X86_64_64	num_processors
+      df:	48 89 45 c8          	mov    %rax,-0x38(%rbp)
+      e3:	74 54                	je     139 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x139>
+      e5:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+      ea:	0f 32                	rdmsr  
+      ec:	48 c1 e2 20          	shl    $0x20,%rdx
+      f0:	89 c1                	mov    %eax,%ecx
+      f2:	48 09 d1             	or     %rdx,%rcx
+      f5:	49 8b 12             	mov    (%r10),%rdx
+      f8:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+      ff:	48 39 ca             	cmp    %rcx,%rdx
+     102:	77 1f                	ja     123 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x123>
+     104:	49 89 fe             	mov    %rdi,%r14
+     107:	49 63 39             	movslq (%r9),%rdi
+     10a:	48 c1 e7 0e          	shl    $0xe,%rdi
+     10e:	48 01 fa             	add    %rdi,%rdx
+     111:	4c 89 f7             	mov    %r14,%rdi
+     114:	48 39 ca             	cmp    %rcx,%rdx
+     117:	72 0a                	jb     123 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x123>
+     119:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+     121:	48 98                	cltq   
+     123:	49 8b 08             	mov    (%r8),%rcx
+     126:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+     12d:	f0 ff 84 01 28 1f 00 00 	lock incl 0x1f28(%rcx,%rax,1)
+     135:	48 8b 45 c8          	mov    -0x38(%rbp),%rax
+     139:	49 be 00 00 00 00 00 00 00 00 	movabs $0x0,%r14	13b: R_X86_64_64	.lbss._RNvNtCsbVRkTr4hvpt_13mckernel_rust21fork_control_registry8REGISTRY+0xa08
+     143:	66 66 66 66 2e 0f 1f 84 00 00 00 00 00 	data16 data16 data16 cs nopw 0x0(%rax,%rax,1)
+     150:	b1 01                	mov    $0x1,%cl
+     152:	41 86 0e             	xchg   %cl,(%r14)
+     155:	84 c9                	test   %cl,%cl
+     157:	0f 84 aa 00 00 00    	je     207 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x207>
+     15d:	f3 90                	pause  
+     15f:	eb ef                	jmp    150 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x150>
+     161:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+     166:	0f 32                	rdmsr  
+     168:	48 c1 e2 20          	shl    $0x20,%rdx
+     16c:	89 c1                	mov    %eax,%ecx
+     16e:	48 09 d1             	or     %rdx,%rcx
+     171:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	173: R_X86_64_64	locals
+     17b:	48 8b 10             	mov    (%rax),%rdx
+     17e:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+     185:	48 39 ca             	cmp    %rcx,%rdx
+     188:	77 23                	ja     1ad <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1ad>
+     18a:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	18c: R_X86_64_64	num_processors
+     194:	48 63 36             	movslq (%rsi),%rsi
+     197:	48 c1 e6 0e          	shl    $0xe,%rsi
+     19b:	48 01 f2             	add    %rsi,%rdx
+     19e:	48 39 ca             	cmp    %rcx,%rdx
+     1a1:	72 0a                	jb     1ad <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1ad>
+     1a3:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+     1ab:	48 98                	cltq   
+     1ad:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	1af: R_X86_64_64	clv
+     1b7:	48 8b 09             	mov    (%rcx),%rcx
+     1ba:	48 85 c9             	test   %rcx,%rcx
+     1bd:	74 10                	je     1cf <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1cf>
+     1bf:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+     1c6:	8b 8c 01 28 1f 00 00 	mov    0x1f28(%rcx,%rax,1),%ecx
+     1cd:	eb 05                	jmp    1d4 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1d4>
+     1cf:	b9 ff ff ff ff       	mov    $0xffffffff,%ecx
+     1d4:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	1d6: R_X86_64_64	.lrodata.str1.1+0x448c
+     1de:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	1e0: R_X86_64_64	.lrodata.str1.1+0x43ef
+     1e8:	49 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%r8	1ea: R_X86_64_64	kprintf
+     1f2:	ba 6a 10 00 00       	mov    $0x106a,%edx
+     1f7:	31 c0                	xor    %eax,%eax
+     1f9:	41 ff d0             	call   *%r8
+     1fc:	41 bf f4 ff ff ff    	mov    $0xfffffff4,%r15d
+     202:	e9 ec 00 00 00       	jmp    2f3 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x2f3>
+     207:	48 c1 e6 05          	shl    $0x5,%rsi
+     20b:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	20d: R_X86_64_64	.lbss._RNvNtCsbVRkTr4hvpt_13mckernel_rust21fork_control_registry8REGISTRY
+     215:	4c 8d 2c 0e          	lea    (%rsi,%rcx,1),%r13
+     219:	4c 8b 24 0e          	mov    (%rsi,%rcx,1),%r12
+     21d:	41 bf fe ff ff ff    	mov    $0xfffffffe,%r15d
+     223:	4d 85 e4             	test   %r12,%r12
+     226:	74 17                	je     23f <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x23f>
+     228:	49 39 7d 08          	cmp    %rdi,0x8(%r13)
+     22c:	75 11                	jne    23f <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x23f>
+     22e:	41 bf f0 ff ff ff    	mov    $0xfffffff0,%r15d
+     234:	41 80 7d 19 01       	cmpb   $0x1,0x19(%r13)
+     239:	0f 85 c9 00 00 00    	jne    308 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x308>
+     23f:	41 c6 06 00          	movb   $0x0,(%r14)
+     243:	41 83 3b 00          	cmpl   $0x0,(%r11)
+     247:	0f 84 88 00 00 00    	je     2d5 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x2d5>
+     24d:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+     252:	0f 32                	rdmsr  
+     254:	48 c1 e2 20          	shl    $0x20,%rdx
+     258:	89 c0                	mov    %eax,%eax
+     25a:	48 09 d0             	or     %rdx,%rax
+     25d:	49 8b 12             	mov    (%r10),%rdx
+     260:	48 c7 45 b0 00 00 00 00 	movq   $0x0,-0x50(%rbp)
+     268:	48 c7 c1 ff ff ff ff 	mov    $0xffffffffffffffff,%rcx
+     26f:	c7 45 a8 ff ff ff ff 	movl   $0xffffffff,-0x58(%rbp)
+     276:	41 bc 00 00 00 00    	mov    $0x0,%r12d
+     27c:	48 39 c2             	cmp    %rax,%rdx
+     27f:	4c 89 6d b8          	mov    %r13,-0x48(%rbp)
+     283:	77 2c                	ja     2b1 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x2b1>
+     285:	49 63 31             	movslq (%r9),%rsi
+     288:	48 c1 e6 0e          	shl    $0xe,%rsi
+     28c:	48 01 f2             	add    %rsi,%rdx
+     28f:	48 39 c2             	cmp    %rax,%rdx
+     292:	72 1d                	jb     2b1 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x2b1>
+     294:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+     29c:	48 63 c8             	movslq %eax,%rcx
+     29f:	48 c7 45 b0 00 00 00 00 	movq   $0x0,-0x50(%rbp)
+     2a7:	45 31 ed             	xor    %r13d,%r13d
+     2aa:	31 f6                	xor    %esi,%esi
+     2ac:	45 31 e4             	xor    %r12d,%r12d
+     2af:	eb 05                	jmp    2b6 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x2b6>
+     2b1:	45 31 ed             	xor    %r13d,%r13d
+     2b4:	31 f6                	xor    %esi,%esi
+     2b6:	48 8b 45 c8          	mov    -0x38(%rbp),%rax
+     2ba:	49 8b 10             	mov    (%r8),%rdx
+     2bd:	48 69 c9 c0 1f 00 00 	imul   $0x1fc0,%rcx,%rcx
+     2c4:	f0 ff 8c 0a 28 1f 00 00 	lock decl 0x1f28(%rdx,%rcx,1)
+     2cc:	45 85 ff             	test   %r15d,%r15d
+     2cf:	0f 84 64 02 00 00    	je     539 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x539>
+     2d5:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	2d7: R_X86_64_64	.lrodata.str1.1+0x43ef
+     2df:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	2e1: R_X86_64_64	_kfree
+     2e9:	48 89 c7             	mov    %rax,%rdi
+     2ec:	ba 70 10 00 00       	mov    $0x1070,%edx
+     2f1:	ff d1                	call   *%rcx
+     2f3:	44 89 f8             	mov    %r15d,%eax
+     2f6:	48 81 c4 d8 01 00 00 	add    $0x1d8,%rsp
+     2fd:	5b                   	pop    %rbx
+     2fe:	41 5c                	pop    %r12
+     300:	41 5d                	pop    %r13
+     302:	41 5e                	pop    %r14
+     304:	41 5f                	pop    %r15
+     306:	5d                   	pop    %rbp
+     307:	c3                   	ret    
+     308:	41 c6 45 19 01       	movb   $0x1,0x19(%r13)
+     30d:	41 c6 06 00          	movb   $0x0,(%r14)
+     311:	41 83 3b 00          	cmpl   $0x0,(%r11)
+     315:	74 4a                	je     361 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x361>
+     317:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+     31c:	0f 32                	rdmsr  
+     31e:	48 c1 e2 20          	shl    $0x20,%rdx
+     322:	89 c1                	mov    %eax,%ecx
+     324:	48 09 d1             	or     %rdx,%rcx
+     327:	49 8b 12             	mov    (%r10),%rdx
+     32a:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+     331:	48 39 ca             	cmp    %rcx,%rdx
+     334:	77 19                	ja     34f <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x34f>
+     336:	49 63 31             	movslq (%r9),%rsi
+     339:	48 c1 e6 0e          	shl    $0xe,%rsi
+     33d:	48 01 f2             	add    %rsi,%rdx
+     340:	48 39 ca             	cmp    %rcx,%rdx
+     343:	72 0a                	jb     34f <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x34f>
+     345:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+     34d:	48 98                	cltq   
+     34f:	49 8b 08             	mov    (%r8),%rcx
+     352:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+     359:	f0 ff 8c 01 28 1f 00 00 	lock decl 0x1f28(%rcx,%rax,1)
+     361:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+     366:	0f 32                	rdmsr  
+     368:	48 c1 e2 20          	shl    $0x20,%rdx
+     36c:	89 c1                	mov    %eax,%ecx
+     36e:	48 09 d1             	or     %rdx,%rcx
+     371:	49 8b 12             	mov    (%r10),%rdx
+     374:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+     37b:	48 39 ca             	cmp    %rcx,%rdx
+     37e:	77 19                	ja     399 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x399>
+     380:	49 63 31             	movslq (%r9),%rsi
+     383:	48 c1 e6 0e          	shl    $0xe,%rsi
+     387:	48 01 f2             	add    %rsi,%rdx
+     38a:	48 39 ca             	cmp    %rcx,%rdx
+     38d:	72 0a                	jb     399 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x399>
+     38f:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+     397:	48 98                	cltq   
+     399:	49 8b 08             	mov    (%r8),%rcx
+     39c:	c7 45 a0 f3 ff ff ff 	movl   $0xfffffff3,-0x60(%rbp)
+     3a3:	c7 45 a8 ff ff ff ff 	movl   $0xffffffff,-0x58(%rbp)
+     3aa:	48 85 c9             	test   %rcx,%rcx
+     3ad:	4c 89 6d b8          	mov    %r13,-0x48(%rbp)
+     3b1:	74 3b                	je     3ee <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x3ee>
+     3b3:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+     3ba:	49 8b 54 24 10       	mov    0x10(%r12),%rdx
+     3bf:	48 3b 94 01 a8 1e 00 00 	cmp    0x1ea8(%rcx,%rax,1),%rdx
+     3c7:	75 25                	jne    3ee <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x3ee>
+     3c9:	41 83 bc 24 88 00 00 00 04 	cmpl   $0x4,0x88(%r12)
+     3d2:	75 1a                	jne    3ee <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x3ee>
+     3d4:	41 83 bc 24 ec 01 00 00 02 	cmpl   $0x2,0x1ec(%r12)
+     3dd:	75 0f                	jne    3ee <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x3ee>
+     3df:	49 83 bc 24 78 02 00 00 00 	cmpq   $0x0,0x278(%r12)
+     3e8:	0f 84 7d 06 00 00    	je     a6b <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xa6b>
+     3ee:	48 c7 45 b0 00 00 00 00 	movq   $0x0,-0x50(%rbp)
+     3f6:	45 31 ed             	xor    %r13d,%r13d
+     3f9:	31 f6                	xor    %esi,%esi
+     3fb:	48 c7 45 c0 00 00 00 00 	movq   $0x0,-0x40(%rbp)
+     403:	41 83 3b 00          	cmpl   $0x0,(%r11)
+     407:	74 69                	je     472 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x472>
+     409:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+     40e:	0f 32                	rdmsr  
+     410:	48 c1 e2 20          	shl    $0x20,%rdx
+     414:	89 c1                	mov    %eax,%ecx
+     416:	48 09 d1             	or     %rdx,%rcx
+     419:	49 8b 12             	mov    (%r10),%rdx
+     41c:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+     423:	48 39 ca             	cmp    %rcx,%rdx
+     426:	77 25                	ja     44d <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x44d>
+     428:	4d 89 cf             	mov    %r9,%r15
+     42b:	49 89 f1             	mov    %rsi,%r9
+     42e:	49 63 37             	movslq (%r15),%rsi
+     431:	48 c1 e6 0e          	shl    $0xe,%rsi
+     435:	48 01 f2             	add    %rsi,%rdx
+     438:	4c 89 ce             	mov    %r9,%rsi
+     43b:	4d 89 f9             	mov    %r15,%r9
+     43e:	48 39 ca             	cmp    %rcx,%rdx
+     441:	72 0a                	jb     44d <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x44d>
+     443:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+     44b:	48 98                	cltq   
+     44d:	49 8b 08             	mov    (%r8),%rcx
+     450:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+     457:	f0 ff 84 01 28 1f 00 00 	lock incl 0x1f28(%rcx,%rax,1)
+     45f:	eb 11                	jmp    472 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x472>
+     461:	66 66 66 66 66 66 2e 0f 1f 84 00 00 00 00 00 	data16 data16 data16 data16 data16 cs nopw 0x0(%rax,%rax,1)
+     470:	f3 90                	pause  
+     472:	b0 01                	mov    $0x1,%al
+     474:	41 86 06             	xchg   %al,(%r14)
+     477:	84 c0                	test   %al,%al
+     479:	75 f5                	jne    470 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x470>
+     47b:	48 8b 45 b8          	mov    -0x48(%rbp),%rax
+     47f:	48 8b 00             	mov    (%rax),%rax
+     482:	41 bf fb ff ff ff    	mov    $0xfffffffb,%r15d
+     488:	48 85 c0             	test   %rax,%rax
+     48b:	74 27                	je     4b4 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x4b4>
+     48d:	4c 39 e0             	cmp    %r12,%rax
+     490:	75 22                	jne    4b4 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x4b4>
+     492:	48 8b 45 b8          	mov    -0x48(%rbp),%rax
+     496:	48 39 78 08          	cmp    %rdi,0x8(%rax)
+     49a:	4c 8b 65 c0          	mov    -0x40(%rbp),%r12
+     49e:	75 18                	jne    4b8 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x4b8>
+     4a0:	80 78 19 01          	cmpb   $0x1,0x19(%rax)
+     4a4:	75 12                	jne    4b8 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x4b8>
+     4a6:	48 8b 45 b8          	mov    -0x48(%rbp),%rax
+     4aa:	c6 40 19 00          	movb   $0x0,0x19(%rax)
+     4ae:	44 8b 7d a0          	mov    -0x60(%rbp),%r15d
+     4b2:	eb 04                	jmp    4b8 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x4b8>
+     4b4:	4c 8b 65 c0          	mov    -0x40(%rbp),%r12
+     4b8:	41 c6 06 00          	movb   $0x0,(%r14)
+     4bc:	41 83 3b 00          	cmpl   $0x0,(%r11)
+     4c0:	74 6a                	je     52c <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x52c>
+     4c2:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+     4c7:	0f 32                	rdmsr  
+     4c9:	48 c1 e2 20          	shl    $0x20,%rdx
+     4cd:	89 c0                	mov    %eax,%eax
+     4cf:	48 09 d0             	or     %rdx,%rax
+     4d2:	49 8b 12             	mov    (%r10),%rdx
+     4d5:	48 c7 c1 ff ff ff ff 	mov    $0xffffffffffffffff,%rcx
+     4dc:	48 39 c2             	cmp    %rax,%rdx
+     4df:	0f 87 d1 fd ff ff    	ja     2b6 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x2b6>
+     4e5:	4c 89 6d c0          	mov    %r13,-0x40(%rbp)
+     4e9:	4d 89 c2             	mov    %r8,%r10
+     4ec:	49 89 f0             	mov    %rsi,%r8
+     4ef:	4d 89 cd             	mov    %r9,%r13
+     4f2:	49 63 31             	movslq (%r9),%rsi
+     4f5:	48 c1 e6 0e          	shl    $0xe,%rsi
+     4f9:	48 01 f2             	add    %rsi,%rdx
+     4fc:	48 39 c2             	cmp    %rax,%rdx
+     4ff:	72 0b                	jb     50c <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x50c>
+     501:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+     509:	48 63 c8             	movslq %eax,%rcx
+     50c:	48 8b 45 c8          	mov    -0x38(%rbp),%rax
+     510:	4c 89 c6             	mov    %r8,%rsi
+     513:	4d 89 e9             	mov    %r13,%r9
+     516:	4d 89 d0             	mov    %r10,%r8
+     519:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	51b: R_X86_64_64	locals
+     523:	4c 8b 6d c0          	mov    -0x40(%rbp),%r13
+     527:	e9 8e fd ff ff       	jmp    2ba <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x2ba>
+     52c:	48 8b 45 c8          	mov    -0x38(%rbp),%rax
+     530:	45 85 ff             	test   %r15d,%r15d
+     533:	0f 85 9c fd ff ff    	jne    2d5 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x2d5>
+     539:	45 84 e4             	test   %r12b,%r12b
+     53c:	48 89 7d 98          	mov    %rdi,-0x68(%rbp)
+     540:	0f 84 92 01 00 00    	je     6d8 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x6d8>
+     546:	48 85 f6             	test   %rsi,%rsi
+     549:	0f 84 40 02 00 00    	je     78f <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x78f>
+     54f:	80 7e 24 07          	cmpb   $0x7,0x24(%rsi)
+     553:	4c 89 65 c0          	mov    %r12,-0x40(%rbp)
+     557:	0f 85 66 03 00 00    	jne    8c3 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x8c3>
+     55d:	80 7e 25 01          	cmpb   $0x1,0x25(%rsi)
+     561:	4c 8b 6d b8          	mov    -0x48(%rbp),%r13
+     565:	0f 85 93 03 00 00    	jne    8fe <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x8fe>
+     56b:	66 c7 46 24 09 00    	movw   $0x9,0x24(%rsi)
+     571:	4c 8b 66 08          	mov    0x8(%rsi),%r12
+     575:	4d 8b bc 24 68 10 00 00 	mov    0x1068(%r12),%r15
+     57d:	31 ff                	xor    %edi,%edi
+     57f:	4d 85 ff             	test   %r15,%r15
+     582:	0f 84 0f 09 00 00    	je     e97 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xe97>
+     588:	48 89 75 d0          	mov    %rsi,-0x30(%rbp)
+     58c:	49 8b b4 24 d0 10 00 00 	mov    0x10d0(%r12),%rsi
+     594:	48 85 f6             	test   %rsi,%rsi
+     597:	0f 84 fa 08 00 00    	je     e97 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xe97>
+     59d:	f0 41 ff 8c 24 14 12 00 00 	lock decl 0x1214(%r12)
+     5a6:	0f 85 52 03 00 00    	jne    8fe <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x8fe>
+     5ac:	4c 89 6d b8          	mov    %r13,-0x48(%rbp)
+     5b0:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	5b2: R_X86_64_64	profile_accumulate_events
+     5ba:	4c 89 e7             	mov    %r12,%rdi
+     5bd:	ff d0                	call   *%rax
+     5bf:	49 8b bc 24 c0 12 00 00 	mov    0x12c0(%r12),%rdi
+     5c7:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	5c9: R_X86_64_64	.lrodata.str1.1+0x7ae3
+     5d1:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	5d3: R_X86_64_64	_kfree
+     5db:	ba f2 01 00 00       	mov    $0x1f2,%edx
+     5e0:	ff d0                	call   *%rax
+     5e2:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	5e4: R_X86_64_64	.ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust6procfs17procfs_thread_ctl
+     5ec:	4c 89 e7             	mov    %r12,%rdi
+     5ef:	be 45 00 00 00       	mov    $0x45,%esi
+     5f4:	ff d0                	call   *%rax
+     5f6:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	5f8: R_X86_64_64	destroy_thread
+     600:	4c 89 e7             	mov    %r12,%rdi
+     603:	ff d0                	call   *%rax
+     605:	4d 8b af 88 00 00 00 	mov    0x88(%r15),%r13
+     60c:	4d 85 ed             	test   %r13,%r13
+     60f:	0f 84 50 08 00 00    	je     e65 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xe65>
+     615:	f0 41 ff 8f bc 00 00 00 	lock decl 0xbc(%r15)
+     61d:	48 8b 45 c8          	mov    -0x38(%rbp),%rax
+     621:	49 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%r8	623: R_X86_64_64	clv
+     62b:	49 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%r9	62d: R_X86_64_64	num_processors
+     635:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	637: R_X86_64_64	locals
+     63f:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	641: R_X86_64_64	cpu_local_var_initialized
+     649:	0f 85 74 02 00 00    	jne    8c3 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x8c3>
+     64f:	9c                   	pushf  
+     650:	58                   	pop    %rax
+     651:	fa                   	cli    
+     652:	48 89 45 a0          	mov    %rax,-0x60(%rbp)
+     656:	41 83 3b 00          	cmpl   $0x0,(%r11)
+     65a:	74 54                	je     6b0 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x6b0>
+     65c:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+     661:	0f 32                	rdmsr  
+     663:	48 c1 e2 20          	shl    $0x20,%rdx
+     667:	89 c1                	mov    %eax,%ecx
+     669:	48 09 d1             	or     %rdx,%rcx
+     66c:	49 8b 12             	mov    (%r10),%rdx
+     66f:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+     676:	48 39 ca             	cmp    %rcx,%rdx
+     679:	77 19                	ja     694 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x694>
+     67b:	49 63 31             	movslq (%r9),%rsi
+     67e:	48 c1 e6 0e          	shl    $0xe,%rsi
+     682:	48 01 f2             	add    %rsi,%rdx
+     685:	48 39 ca             	cmp    %rcx,%rdx
+     688:	72 0a                	jb     694 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x694>
+     68a:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+     692:	48 98                	cltq   
+     694:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	696: R_X86_64_64	clv
+     69e:	48 8b 09             	mov    (%rcx),%rcx
+     6a1:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+     6a8:	f0 ff 84 01 28 1f 00 00 	lock incl 0x1f28(%rcx,%rax,1)
+     6b0:	b9 00 00 02 00       	mov    $0x20000,%ecx
+     6b5:	f0 41 0f c1 8d 04 05 00 00 	lock xadd %ecx,0x504(%r13)
+     6be:	89 c8                	mov    %ecx,%eax
+     6c0:	c1 e8 10             	shr    $0x10,%eax
+     6c3:	66 39 c1             	cmp    %ax,%cx
+     6c6:	0f 85 f9 02 00 00    	jne    9c5 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x9c5>
+     6cc:	4d 8b a5 08 05 00 00 	mov    0x508(%r13),%r12
+     6d3:	e9 f6 01 00 00       	jmp    8ce <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x8ce>
+     6d8:	4d 85 ed             	test   %r13,%r13
+     6db:	0f 84 ae 00 00 00    	je     78f <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x78f>
+     6e1:	41 80 7d 24 01       	cmpb   $0x1,0x24(%r13)
+     6e6:	4c 89 65 c0          	mov    %r12,-0x40(%rbp)
+     6ea:	0f 87 d3 01 00 00    	ja     8c3 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x8c3>
+     6f0:	41 c6 45 24 09       	movb   $0x9,0x24(%r13)
+     6f5:	4d 8b 7d 08          	mov    0x8(%r13),%r15
+     6f9:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	6fb: R_X86_64_64	release_thread_checked
+     703:	4c 89 ff             	mov    %r15,%rdi
+     706:	ff d0                	call   *%rax
+     708:	85 c0                	test   %eax,%eax
+     70a:	0f 85 55 07 00 00    	jne    e65 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xe65>
+     710:	4d 8b 65 10          	mov    0x10(%r13),%r12
+     714:	49 8b bc 24 70 04 00 00 	mov    0x470(%r12),%rdi
+     71c:	49 c7 84 24 70 04 00 00 00 00 00 00 	movq   $0x0,0x470(%r12)
+     728:	48 85 ff             	test   %rdi,%rdi
+     72b:	74 1b                	je     748 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x748>
+     72d:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	72f: R_X86_64_64	.lrodata.str1.1+0x43ef
+     737:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	739: R_X86_64_64	_kfree
+     741:	ba 70 10 00 00       	mov    $0x1070,%edx
+     746:	ff d0                	call   *%rax
+     748:	41 c6 45 24 09       	movb   $0x9,0x24(%r13)
+     74d:	4c 89 ff             	mov    %r15,%rdi
+     750:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	752: R_X86_64_64	release_thread_checked
+     75a:	ff d0                	call   *%rax
+     75c:	83 f8 02             	cmp    $0x2,%eax
+     75f:	0f 85 00 07 00 00    	jne    e65 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xe65>
+     765:	41 c6 45 24 09       	movb   $0x9,0x24(%r13)
+     76a:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	76c: R_X86_64_64	release_process_checked
+     774:	4c 89 e7             	mov    %r12,%rdi
+     777:	ff d0                	call   *%rax
+     779:	83 f8 01             	cmp    $0x1,%eax
+     77c:	0f 85 e3 06 00 00    	jne    e65 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xe65>
+     782:	41 c6 45 24 04       	movb   $0x4,0x24(%r13)
+     787:	40 b7 01             	mov    $0x1,%dil
+     78a:	e9 d8 06 00 00       	jmp    e67 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xe67>
+     78f:	48 89 5d d0          	mov    %rbx,-0x30(%rbp)
+     793:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	795: R_X86_64_64	.lrodata.str1.1+0x43ef
+     79d:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	79f: R_X86_64_64	_kfree
+     7a7:	48 89 c7             	mov    %rax,%rdi
+     7aa:	ba 70 10 00 00       	mov    $0x1070,%edx
+     7af:	4d 89 c7             	mov    %r8,%r15
+     7b2:	4d 89 cc             	mov    %r9,%r12
+     7b5:	4d 89 d5             	mov    %r10,%r13
+     7b8:	4c 89 db             	mov    %r11,%rbx
+     7bb:	ff d1                	call   *%rcx
+     7bd:	49 89 db             	mov    %rbx,%r11
+     7c0:	4d 89 ea             	mov    %r13,%r10
+     7c3:	4d 89 e1             	mov    %r12,%r9
+     7c6:	4d 89 f8             	mov    %r15,%r8
+     7c9:	83 3b 00             	cmpl   $0x0,(%rbx)
+     7cc:	4c 8b 7d b8          	mov    -0x48(%rbp),%r15
+     7d0:	74 4a                	je     81c <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x81c>
+     7d2:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+     7d7:	0f 32                	rdmsr  
+     7d9:	48 c1 e2 20          	shl    $0x20,%rdx
+     7dd:	89 c1                	mov    %eax,%ecx
+     7df:	48 09 d1             	or     %rdx,%rcx
+     7e2:	49 8b 12             	mov    (%r10),%rdx
+     7e5:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+     7ec:	48 39 ca             	cmp    %rcx,%rdx
+     7ef:	77 19                	ja     80a <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x80a>
+     7f1:	49 63 31             	movslq (%r9),%rsi
+     7f4:	48 c1 e6 0e          	shl    $0xe,%rsi
+     7f8:	48 01 f2             	add    %rsi,%rdx
+     7fb:	48 39 ca             	cmp    %rcx,%rdx
+     7fe:	72 0a                	jb     80a <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x80a>
+     800:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+     808:	48 98                	cltq   
+     80a:	49 8b 08             	mov    (%r8),%rcx
+     80d:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+     814:	f0 ff 84 01 28 1f 00 00 	lock incl 0x1f28(%rcx,%rax,1)
+     81c:	b0 01                	mov    $0x1,%al
+     81e:	41 86 06             	xchg   %al,(%r14)
+     821:	84 c0                	test   %al,%al
+     823:	48 8b 7d d0          	mov    -0x30(%rbp),%rdi
+     827:	74 12                	je     83b <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x83b>
+     829:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+     830:	f3 90                	pause  
+     832:	b0 01                	mov    $0x1,%al
+     834:	41 86 06             	xchg   %al,(%r14)
+     837:	84 c0                	test   %al,%al
+     839:	75 f5                	jne    830 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x830>
+     83b:	49 8b 37             	mov    (%r15),%rsi
+     83e:	48 85 f6             	test   %rsi,%rsi
+     841:	74 15                	je     858 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x858>
+     843:	48 8b 45 98          	mov    -0x68(%rbp),%rax
+     847:	49 39 47 08          	cmp    %rax,0x8(%r15)
+     84b:	75 0b                	jne    858 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x858>
+     84d:	41 80 7f 19 01       	cmpb   $0x1,0x19(%r15)
+     852:	0f 85 ad 00 00 00    	jne    905 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x905>
+     858:	41 c6 06 00          	movb   $0x0,(%r14)
+     85c:	41 83 3b 00          	cmpl   $0x0,(%r11)
+     860:	74 4a                	je     8ac <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x8ac>
+     862:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+     867:	0f 32                	rdmsr  
+     869:	48 c1 e2 20          	shl    $0x20,%rdx
+     86d:	89 c1                	mov    %eax,%ecx
+     86f:	48 09 d1             	or     %rdx,%rcx
+     872:	49 8b 12             	mov    (%r10),%rdx
+     875:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+     87c:	48 39 ca             	cmp    %rcx,%rdx
+     87f:	77 19                	ja     89a <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x89a>
+     881:	49 63 31             	movslq (%r9),%rsi
+     884:	48 c1 e6 0e          	shl    $0xe,%rsi
+     888:	48 01 f2             	add    %rsi,%rdx
+     88b:	48 39 ca             	cmp    %rcx,%rdx
+     88e:	72 0a                	jb     89a <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x89a>
+     890:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+     898:	48 98                	cltq   
+     89a:	49 8b 08             	mov    (%r8),%rcx
+     89d:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+     8a4:	f0 ff 8c 01 28 1f 00 00 	lock decl 0x1f28(%rcx,%rax,1)
+     8ac:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	8ae: R_X86_64_64	.ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust21fork_control_registry6retain
+     8b6:	ff d0                	call   *%rax
+     8b8:	41 bf fb ff ff ff    	mov    $0xfffffffb,%r15d
+     8be:	e9 30 fa ff ff       	jmp    2f3 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x2f3>
+     8c3:	31 ff                	xor    %edi,%edi
+     8c5:	e9 c9 05 00 00       	jmp    e93 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xe93>
+     8ca:	4d 8b 24 24          	mov    (%r12),%r12
+     8ce:	4d 85 e4             	test   %r12,%r12
+     8d1:	0f 84 19 04 00 00    	je     cf0 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xcf0>
+     8d7:	49 8b 44 24 38       	mov    0x38(%r12),%rax
+     8dc:	48 85 c0             	test   %rax,%rax
+     8df:	74 e9                	je     8ca <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x8ca>
+     8e1:	4c 89 e7             	mov    %r12,%rdi
+     8e4:	31 f6                	xor    %esi,%esi
+     8e6:	ff d0                	call   *%rax
+     8e8:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	8ea: R_X86_64_64	cpu_local_var_initialized
+     8f2:	49 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%r9	8f4: R_X86_64_64	num_processors
+     8fc:	eb cc                	jmp    8ca <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x8ca>
+     8fe:	31 ff                	xor    %edi,%edi
+     900:	e9 92 05 00 00       	jmp    e97 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xe97>
+     905:	41 c6 47 19 01       	movb   $0x1,0x19(%r15)
+     90a:	41 c6 06 00          	movb   $0x0,(%r14)
+     90e:	41 83 3b 00          	cmpl   $0x0,(%r11)
+     912:	0f 84 c1 00 00 00    	je     9d9 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x9d9>
+     918:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+     91d:	0f 32                	rdmsr  
+     91f:	48 c1 e2 20          	shl    $0x20,%rdx
+     923:	89 c1                	mov    %eax,%ecx
+     925:	48 09 d1             	or     %rdx,%rcx
+     928:	49 8b 12             	mov    (%r10),%rdx
+     92b:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+     932:	48 39 ca             	cmp    %rcx,%rdx
+     935:	77 19                	ja     950 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x950>
+     937:	49 63 19             	movslq (%r9),%rbx
+     93a:	48 c1 e3 0e          	shl    $0xe,%rbx
+     93e:	48 01 da             	add    %rbx,%rdx
+     941:	48 39 ca             	cmp    %rcx,%rdx
+     944:	72 0a                	jb     950 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x950>
+     946:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+     94e:	48 98                	cltq   
+     950:	49 8b 08             	mov    (%r8),%rcx
+     953:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+     95a:	f0 ff 8c 01 28 1f 00 00 	lock decl 0x1f28(%rcx,%rax,1)
+     962:	41 83 3b 00          	cmpl   $0x0,(%r11)
+     966:	48 b8 03 00 00 00 fb ff ff ff 	movabs $0xfffffffb00000003,%rax
+     970:	48 89 86 88 00 00 00 	mov    %rax,0x88(%rsi)
+     977:	74 75                	je     9ee <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x9ee>
+     979:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+     97e:	0f 32                	rdmsr  
+     980:	48 c1 e2 20          	shl    $0x20,%rdx
+     984:	89 c1                	mov    %eax,%ecx
+     986:	48 09 d1             	or     %rdx,%rcx
+     989:	49 8b 12             	mov    (%r10),%rdx
+     98c:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+     993:	48 39 ca             	cmp    %rcx,%rdx
+     996:	77 19                	ja     9b1 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x9b1>
+     998:	49 63 19             	movslq (%r9),%rbx
+     99b:	48 c1 e3 0e          	shl    $0xe,%rbx
+     99f:	48 01 da             	add    %rbx,%rdx
+     9a2:	48 39 ca             	cmp    %rcx,%rdx
+     9a5:	72 0a                	jb     9b1 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x9b1>
+     9a7:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+     9af:	48 98                	cltq   
+     9b1:	49 8b 08             	mov    (%r8),%rcx
+     9b4:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+     9bb:	f0 ff 84 01 28 1f 00 00 	lock incl 0x1f28(%rcx,%rax,1)
+     9c3:	eb 29                	jmp    9ee <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x9ee>
+     9c5:	41 8b 8d 04 05 00 00 	mov    0x504(%r13),%ecx
+     9cc:	66 39 c1             	cmp    %ax,%cx
+     9cf:	0f 84 f7 fc ff ff    	je     6cc <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x6cc>
+     9d5:	f3 90                	pause  
+     9d7:	eb ec                	jmp    9c5 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x9c5>
+     9d9:	48 b8 03 00 00 00 fb ff ff ff 	movabs $0xfffffffb00000003,%rax
+     9e3:	48 89 86 88 00 00 00 	mov    %rax,0x88(%rsi)
+     9ea:	eb 02                	jmp    9ee <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x9ee>
+     9ec:	f3 90                	pause  
+     9ee:	b0 01                	mov    $0x1,%al
+     9f0:	41 86 06             	xchg   %al,(%r14)
+     9f3:	84 c0                	test   %al,%al
+     9f5:	75 f5                	jne    9ec <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x9ec>
+     9f7:	49 8b 07             	mov    (%r15),%rax
+     9fa:	48 85 c0             	test   %rax,%rax
+     9fd:	74 1b                	je     a1a <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xa1a>
+     9ff:	48 39 f0             	cmp    %rsi,%rax
+     a02:	75 16                	jne    a1a <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xa1a>
+     a04:	48 8b 45 98          	mov    -0x68(%rbp),%rax
+     a08:	49 39 47 08          	cmp    %rax,0x8(%r15)
+     a0c:	75 0c                	jne    a1a <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xa1a>
+     a0e:	41 80 7f 19 01       	cmpb   $0x1,0x19(%r15)
+     a13:	75 05                	jne    a1a <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xa1a>
+     a15:	41 c6 47 19 00       	movb   $0x0,0x19(%r15)
+     a1a:	41 c6 06 00          	movb   $0x0,(%r14)
+     a1e:	41 83 3b 00          	cmpl   $0x0,(%r11)
+     a22:	0f 84 84 fe ff ff    	je     8ac <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x8ac>
+     a28:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+     a2d:	0f 32                	rdmsr  
+     a2f:	48 c1 e2 20          	shl    $0x20,%rdx
+     a33:	89 c1                	mov    %eax,%ecx
+     a35:	48 09 d1             	or     %rdx,%rcx
+     a38:	49 8b 12             	mov    (%r10),%rdx
+     a3b:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+     a42:	48 39 ca             	cmp    %rcx,%rdx
+     a45:	0f 87 4f fe ff ff    	ja     89a <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x89a>
+     a4b:	49 63 31             	movslq (%r9),%rsi
+     a4e:	48 c1 e6 0e          	shl    $0xe,%rsi
+     a52:	48 01 f2             	add    %rsi,%rdx
+     a55:	48 39 ca             	cmp    %rcx,%rdx
+     a58:	0f 82 3c fe ff ff    	jb     89a <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x89a>
+     a5e:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+     a66:	e9 2d fe ff ff       	jmp    898 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x898>
+     a6b:	49 89 ff             	mov    %rdi,%r15
+     a6e:	48 c7 85 b0 fe ff ff 00 00 00 00 	movq   $0x0,-0x150(%rbp)
+     a79:	48 c7 85 a8 fe ff ff 00 00 00 00 	movq   $0x0,-0x158(%rbp)
+     a84:	48 c7 85 a0 fe ff ff 00 00 00 00 	movq   $0x0,-0x160(%rbp)
+     a8f:	48 c7 85 98 fe ff ff 00 00 00 00 	movq   $0x0,-0x168(%rbp)
+     a9a:	48 c7 85 90 fe ff ff 00 00 00 00 	movq   $0x0,-0x170(%rbp)
+     aa5:	48 c7 85 88 fe ff ff 00 00 00 00 	movq   $0x0,-0x178(%rbp)
+     ab0:	48 c7 85 80 fe ff ff 00 00 00 00 	movq   $0x0,-0x180(%rbp)
+     abb:	48 c7 85 78 fe ff ff 00 00 00 00 	movq   $0x0,-0x188(%rbp)
+     ac6:	48 c7 85 70 fe ff ff 00 00 00 00 	movq   $0x0,-0x190(%rbp)
+     ad1:	48 c7 85 68 fe ff ff 00 00 00 00 	movq   $0x0,-0x198(%rbp)
+     adc:	48 c7 85 60 fe ff ff 00 00 00 00 	movq   $0x0,-0x1a0(%rbp)
+     ae7:	48 c7 85 58 fe ff ff 00 00 00 00 	movq   $0x0,-0x1a8(%rbp)
+     af2:	48 c7 85 50 fe ff ff 00 00 00 00 	movq   $0x0,-0x1b0(%rbp)
+     afd:	48 c7 85 48 fe ff ff 00 00 00 00 	movq   $0x0,-0x1b8(%rbp)
+     b08:	48 c7 85 40 fe ff ff 00 00 00 00 	movq   $0x0,-0x1c0(%rbp)
+     b13:	48 c7 85 38 fe ff ff 00 00 00 00 	movq   $0x0,-0x1c8(%rbp)
+     b1e:	31 c0                	xor    %eax,%eax
+     b20:	41 0f b6 8c 04 e0 02 00 00 	movzbl 0x2e0(%r12,%rax,1),%ecx
+     b29:	88 8c 05 38 fe ff ff 	mov    %cl,-0x1c8(%rbp,%rax,1)
+     b30:	41 0f b6 8c 04 e1 02 00 00 	movzbl 0x2e1(%r12,%rax,1),%ecx
+     b39:	88 8c 05 39 fe ff ff 	mov    %cl,-0x1c7(%rbp,%rax,1)
+     b40:	41 0f b6 8c 04 e2 02 00 00 	movzbl 0x2e2(%r12,%rax,1),%ecx
+     b49:	88 8c 05 3a fe ff ff 	mov    %cl,-0x1c6(%rbp,%rax,1)
+     b50:	41 0f b6 8c 04 e3 02 00 00 	movzbl 0x2e3(%r12,%rax,1),%ecx
+     b59:	88 8c 05 3b fe ff ff 	mov    %cl,-0x1c5(%rbp,%rax,1)
+     b60:	48 83 c0 04          	add    $0x4,%rax
+     b64:	48 3d 80 00 00 00    	cmp    $0x80,%rax
+     b6a:	75 b4                	jne    b20 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xb20>
+     b6c:	49 8b 8c 24 68 02 00 00 	mov    0x268(%r12),%rcx
+     b74:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	b76: R_X86_64_64	.ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest15control_receipt
+     b7e:	48 8d bd e8 fe ff ff 	lea    -0x118(%rbp),%rdi
+     b85:	48 8d 95 38 fe ff ff 	lea    -0x1c8(%rbp),%rdx
+     b8c:	4c 89 e6             	mov    %r12,%rsi
+     b8f:	ff d0                	call   *%rax
+     b91:	83 bd e8 fe ff ff 01 	cmpl   $0x1,-0x118(%rbp)
+     b98:	0f 84 0d 01 00 00    	je     cab <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xcab>
+     b9e:	48 8b 85 48 ff ff ff 	mov    -0xb8(%rbp),%rax
+     ba5:	49 3b 84 24 50 02 00 00 	cmp    0x250(%r12),%rax
+     bad:	0f 85 f8 00 00 00    	jne    cab <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xcab>
+     bb3:	48 8b 85 50 ff ff ff 	mov    -0xb0(%rbp),%rax
+     bba:	49 3b 84 24 58 02 00 00 	cmp    0x258(%r12),%rax
+     bc2:	0f 85 e3 00 00 00    	jne    cab <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xcab>
+     bc8:	48 8b 85 58 ff ff ff 	mov    -0xa8(%rbp),%rax
+     bcf:	49 3b 84 24 60 02 00 00 	cmp    0x260(%r12),%rax
+     bd7:	0f 85 ce 00 00 00    	jne    cab <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xcab>
+     bdd:	48 89 5d d0          	mov    %rbx,-0x30(%rbp)
+     be1:	41 0f b6 84 24 60 03 00 00 	movzbl 0x360(%r12),%eax
+     bea:	88 45 af             	mov    %al,-0x51(%rbp)
+     bed:	84 c0                	test   %al,%al
+     bef:	0f 84 ea 0d 00 00    	je     19df <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x19df>
+     bf5:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	bf7: R_X86_64_64	.ltext._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest8runnable24runtime_retirement_ready
+     bff:	4c 89 e7             	mov    %r12,%rdi
+     c02:	ff d0                	call   *%rax
+     c04:	b1 01                	mov    $0x1,%cl
+     c06:	48 89 4d c0          	mov    %rcx,-0x40(%rbp)
+     c0a:	48 c7 45 b0 00 00 00 00 	movq   $0x0,-0x50(%rbp)
+     c12:	84 c0                	test   %al,%al
+     c14:	0f 84 59 0e 00 00    	je     1a73 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1a73>
+     c1a:	49 83 bc 24 90 00 00 00 00 	cmpq   $0x0,0x90(%r12)
+     c23:	0f 84 42 0e 00 00    	je     1a6b <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1a6b>
+     c29:	49 8b 84 24 b0 00 00 00 	mov    0xb0(%r12),%rax
+     c31:	48 85 c0             	test   %rax,%rax
+     c34:	0f 84 31 0e 00 00    	je     1a6b <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1a6b>
+     c3a:	c7 45 a0 f0 ff ff ff 	movl   $0xfffffff0,-0x60(%rbp)
+     c41:	48 c7 45 b0 00 00 00 00 	movq   $0x0,-0x50(%rbp)
+     c49:	80 78 24 06          	cmpb   $0x6,0x24(%rax)
+     c4d:	0f 85 20 0e 00 00    	jne    1a73 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1a73>
+     c53:	48 c7 45 b0 00 00 00 00 	movq   $0x0,-0x50(%rbp)
+     c5b:	80 78 25 00          	cmpb   $0x0,0x25(%rax)
+     c5f:	41 bd 00 00 00 00    	mov    $0x0,%r13d
+     c65:	be 00 00 00 00       	mov    $0x0,%esi
+     c6a:	49 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%r8	c6c: R_X86_64_64	clv
+     c74:	49 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%r9	c76: R_X86_64_64	num_processors
+     c7e:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	c80: R_X86_64_64	locals
+     c88:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	c8a: R_X86_64_64	cpu_local_var_initialized
+     c92:	48 8b 5d d0          	mov    -0x30(%rbp),%rbx
+     c96:	4c 89 ff             	mov    %r15,%rdi
+     c99:	0f 84 64 f7 ff ff    	je     403 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x403>
+     c9f:	c6 40 24 07          	movb   $0x7,0x24(%rax)
+     ca3:	45 31 ed             	xor    %r13d,%r13d
+     ca6:	e9 8c 0d 00 00       	jmp    1a37 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1a37>
+     cab:	48 c7 45 b0 00 00 00 00 	movq   $0x0,-0x50(%rbp)
+     cb3:	45 31 ed             	xor    %r13d,%r13d
+     cb6:	31 f6                	xor    %esi,%esi
+     cb8:	48 c7 45 c0 00 00 00 00 	movq   $0x0,-0x40(%rbp)
+     cc0:	49 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%r8	cc2: R_X86_64_64	clv
+     cca:	49 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%r9	ccc: R_X86_64_64	num_processors
+     cd4:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	cd6: R_X86_64_64	locals
+     cde:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	ce0: R_X86_64_64	cpu_local_var_initialized
+     ce8:	4c 89 ff             	mov    %r15,%rdi
+     ceb:	e9 13 f7 ff ff       	jmp    403 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x403>
+     cf0:	66 f0 41 83 85 04 05 00 00 02 	lock addw $0x2,0x504(%r13)
+     cfa:	41 83 3b 00          	cmpl   $0x0,(%r11)
+     cfe:	74 5e                	je     d5e <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xd5e>
+     d00:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+     d05:	0f 32                	rdmsr  
+     d07:	48 c1 e2 20          	shl    $0x20,%rdx
+     d0b:	89 c1                	mov    %eax,%ecx
+     d0d:	48 09 d1             	or     %rdx,%rcx
+     d10:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	d12: R_X86_64_64	locals
+     d1a:	48 8b 10             	mov    (%rax),%rdx
+     d1d:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+     d24:	48 39 ca             	cmp    %rcx,%rdx
+     d27:	77 19                	ja     d42 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xd42>
+     d29:	49 63 31             	movslq (%r9),%rsi
+     d2c:	48 c1 e6 0e          	shl    $0xe,%rsi
+     d30:	48 01 f2             	add    %rsi,%rdx
+     d33:	48 39 ca             	cmp    %rcx,%rdx
+     d36:	72 0a                	jb     d42 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xd42>
+     d38:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+     d40:	48 98                	cltq   
+     d42:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	d44: R_X86_64_64	clv
+     d4c:	48 8b 09             	mov    (%rcx),%rcx
+     d4f:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+     d56:	f0 ff 8c 01 28 1f 00 00 	lock decl 0x1f28(%rcx,%rax,1)
+     d5e:	48 8b 45 a0          	mov    -0x60(%rbp),%rax
+     d62:	50                   	push   %rax
+     d63:	9d                   	popf   
+     d64:	49 8b 87 98 00 00 00 	mov    0x98(%r15),%rax
+     d6b:	48 85 c0             	test   %rax,%rax
+     d6e:	74 0c                	je     d7c <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xd7c>
+     d70:	49 8b b7 90 00 00 00 	mov    0x90(%r15),%rsi
+     d77:	4c 89 ff             	mov    %r15,%rdi
+     d7a:	ff d0                	call   *%rax
+     d7c:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	d7e: R_X86_64_64	free_all_process_memory_range
+     d86:	4c 89 ff             	mov    %r15,%rdi
+     d89:	ff d0                	call   *%rax
+     d8b:	4d 8b a7 88 00 00 00 	mov    0x88(%r15),%r12
+     d92:	4d 85 e4             	test   %r12,%r12
+     d95:	74 3d                	je     dd4 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xdd4>
+     d97:	49 8b 3f             	mov    (%r15),%rdi
+     d9a:	41 8b b4 24 c8 01 00 00 	mov    0x1c8(%r12),%esi
+     da2:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	da4: R_X86_64_64	detach_address_space
+     dac:	ff d0                	call   *%rax
+     dae:	49 c7 84 24 80 00 00 00 00 00 00 00 	movq   $0x0,0x80(%r12)
+     dba:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	dbc: R_X86_64_64	release_process_checked
+     dc4:	4c 89 e7             	mov    %r12,%rdi
+     dc7:	ff d0                	call   *%rax
+     dc9:	83 f8 01             	cmp    $0x1,%eax
+     dcc:	0f 94 c0             	sete   %al
+     dcf:	89 45 a0             	mov    %eax,-0x60(%rbp)
+     dd2:	eb 07                	jmp    ddb <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xddb>
+     dd4:	c7 45 a0 00 00 00 00 	movl   $0x0,-0x60(%rbp)
+     ddb:	4d 89 fc             	mov    %r15,%r12
+     dde:	49 81 c4 f8 00 00 00 	add    $0xf8,%r12
+     de5:	74 4a                	je     e31 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xe31>
+     de7:	49 8b 04 24          	mov    (%r12),%rax
+     deb:	48 85 c0             	test   %rax,%rax
+     dee:	74 41                	je     e31 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xe31>
+     df0:	49 89 c5             	mov    %rax,%r13
+     df3:	48 8b 40 10          	mov    0x10(%rax),%rax
+     df7:	48 85 c0             	test   %rax,%rax
+     dfa:	75 f4                	jne    df0 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xdf0>
+     dfc:	4c 89 ef             	mov    %r13,%rdi
+     dff:	4c 89 e6             	mov    %r12,%rsi
+     e02:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	e04: R_X86_64_64	rb_erase
+     e0c:	ff d0                	call   *%rax
+     e0e:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	e10: R_X86_64_64	process_tracked_allocator_source_file
+     e18:	48 8b 30             	mov    (%rax),%rsi
+     e1b:	4c 89 ef             	mov    %r13,%rdi
+     e1e:	ba fd 00 00 00       	mov    $0xfd,%edx
+     e23:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	e25: R_X86_64_64	_kfree
+     e2d:	ff d0                	call   *%rax
+     e2f:	eb b6                	jmp    de7 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xde7>
+     e31:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	e33: R_X86_64_64	process_tracked_allocator_source_file
+     e3b:	48 8b 30             	mov    (%rax),%rsi
+     e3e:	4c 89 ff             	mov    %r15,%rdi
+     e41:	ba 31 02 00 00       	mov    $0x231,%edx
+     e46:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	e48: R_X86_64_64	_kfree
+     e50:	ff d0                	call   *%rax
+     e52:	80 7d a0 00          	cmpb   $0x0,-0x60(%rbp)
+     e56:	74 0d                	je     e65 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xe65>
+     e58:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
+     e5c:	c6 40 24 08          	movb   $0x8,0x24(%rax)
+     e60:	e9 22 f9 ff ff       	jmp    787 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x787>
+     e65:	31 ff                	xor    %edi,%edi
+     e67:	48 8b 45 c8          	mov    -0x38(%rbp),%rax
+     e6b:	49 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%r8	e6d: R_X86_64_64	clv
+     e75:	49 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%r9	e77: R_X86_64_64	num_processors
+     e7f:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	e81: R_X86_64_64	locals
+     e89:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	e8b: R_X86_64_64	cpu_local_var_initialized
+     e93:	4c 8b 6d b8          	mov    -0x48(%rbp),%r13
+     e97:	41 83 3b 00          	cmpl   $0x0,(%r11)
+     e9b:	74 55                	je     ef2 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xef2>
+     e9d:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+     ea2:	0f 32                	rdmsr  
+     ea4:	48 c1 e2 20          	shl    $0x20,%rdx
+     ea8:	89 c1                	mov    %eax,%ecx
+     eaa:	48 09 d1             	or     %rdx,%rcx
+     ead:	49 8b 12             	mov    (%r10),%rdx
+     eb0:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+     eb7:	48 39 ca             	cmp    %rcx,%rdx
+     eba:	77 19                	ja     ed5 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xed5>
+     ebc:	49 63 31             	movslq (%r9),%rsi
+     ebf:	48 c1 e6 0e          	shl    $0xe,%rsi
+     ec3:	48 01 f2             	add    %rsi,%rdx
+     ec6:	48 39 ca             	cmp    %rcx,%rdx
+     ec9:	72 0a                	jb     ed5 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xed5>
+     ecb:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+     ed3:	48 98                	cltq   
+     ed5:	49 8b 08             	mov    (%r8),%rcx
+     ed8:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+     edf:	f0 ff 84 01 28 1f 00 00 	lock incl 0x1f28(%rcx,%rax,1)
+     ee7:	48 8b 45 c8          	mov    -0x38(%rbp),%rax
+     eeb:	eb 05                	jmp    ef2 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xef2>
+     eed:	0f 1f 00             	nopl   (%rax)
+     ef0:	f3 90                	pause  
+     ef2:	b1 01                	mov    $0x1,%cl
+     ef4:	41 86 0e             	xchg   %cl,(%r14)
+     ef7:	84 c9                	test   %cl,%cl
+     ef9:	75 f5                	jne    ef0 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xef0>
+     efb:	4d 8b 65 00          	mov    0x0(%r13),%r12
+     eff:	41 bf fe ff ff ff    	mov    $0xfffffffe,%r15d
+     f05:	4d 85 e4             	test   %r12,%r12
+     f08:	74 17                	je     f21 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xf21>
+     f0a:	48 8b 4d 98          	mov    -0x68(%rbp),%rcx
+     f0e:	49 39 4d 08          	cmp    %rcx,0x8(%r13)
+     f12:	75 0d                	jne    f21 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xf21>
+     f14:	41 bf f0 ff ff ff    	mov    $0xfffffff0,%r15d
+     f1a:	41 80 7d 19 01       	cmpb   $0x1,0x19(%r13)
+     f1f:	75 5f                	jne    f80 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xf80>
+     f21:	41 c6 06 00          	movb   $0x0,(%r14)
+     f25:	41 83 3b 00          	cmpl   $0x0,(%r11)
+     f29:	74 4d                	je     f78 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xf78>
+     f2b:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+     f30:	0f 32                	rdmsr  
+     f32:	48 c1 e2 20          	shl    $0x20,%rdx
+     f36:	89 c0                	mov    %eax,%eax
+     f38:	48 09 d0             	or     %rdx,%rax
+     f3b:	49 8b 12             	mov    (%r10),%rdx
+     f3e:	48 c7 c1 ff ff ff ff 	mov    $0xffffffffffffffff,%rcx
+     f45:	48 39 c2             	cmp    %rax,%rdx
+     f48:	0f 87 44 01 00 00    	ja     1092 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1092>
+     f4e:	49 63 31             	movslq (%r9),%rsi
+     f51:	48 c1 e6 0e          	shl    $0xe,%rsi
+     f55:	48 01 f2             	add    %rsi,%rdx
+     f58:	48 39 c2             	cmp    %rax,%rdx
+     f5b:	48 8b 45 c8          	mov    -0x38(%rbp),%rax
+     f5f:	0f 82 25 01 00 00    	jb     108a <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x108a>
+     f65:	65 8b 0c 25 00 00 00 00 	mov    %gs:0x0,%ecx
+     f6d:	48 63 c9             	movslq %ecx,%rcx
+     f70:	48 89 c7             	mov    %rax,%rdi
+     f73:	e9 1e 04 00 00       	jmp    1396 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1396>
+     f78:	48 89 c7             	mov    %rax,%rdi
+     f7b:	e9 2d 04 00 00       	jmp    13ad <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x13ad>
+     f80:	41 c6 45 19 01       	movb   $0x1,0x19(%r13)
+     f85:	41 c6 06 00          	movb   $0x0,(%r14)
+     f89:	41 83 3b 00          	cmpl   $0x0,(%r11)
+     f8d:	74 4e                	je     fdd <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xfdd>
+     f8f:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+     f94:	0f 32                	rdmsr  
+     f96:	48 c1 e2 20          	shl    $0x20,%rdx
+     f9a:	89 c1                	mov    %eax,%ecx
+     f9c:	48 09 d1             	or     %rdx,%rcx
+     f9f:	49 8b 12             	mov    (%r10),%rdx
+     fa2:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+     fa9:	48 39 ca             	cmp    %rcx,%rdx
+     fac:	77 19                	ja     fc7 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xfc7>
+     fae:	49 63 31             	movslq (%r9),%rsi
+     fb1:	48 c1 e6 0e          	shl    $0xe,%rsi
+     fb5:	48 01 f2             	add    %rsi,%rdx
+     fb8:	48 39 ca             	cmp    %rcx,%rdx
+     fbb:	72 0a                	jb     fc7 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xfc7>
+     fbd:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+     fc5:	48 98                	cltq   
+     fc7:	49 8b 08             	mov    (%r8),%rcx
+     fca:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+     fd1:	f0 ff 8c 01 28 1f 00 00 	lock decl 0x1f28(%rcx,%rax,1)
+     fd9:	48 8b 45 c8          	mov    -0x38(%rbp),%rax
+     fdd:	be f3 ff ff ff       	mov    $0xfffffff3,%esi
+     fe2:	41 83 bc 24 88 00 00 00 05 	cmpl   $0x5,0x88(%r12)
+     feb:	0f 85 c1 02 00 00    	jne    12b2 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x12b2>
+     ff1:	49 83 bc 24 90 00 00 00 00 	cmpq   $0x0,0x90(%r12)
+     ffa:	0f 84 b2 02 00 00    	je     12b2 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x12b2>
+    1000:	40 84 ff             	test   %dil,%dil
+    1003:	0f 84 95 00 00 00    	je     109e <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x109e>
+    1009:	49 8b 8c 24 b0 00 00 00 	mov    0xb0(%r12),%rcx
+    1011:	48 85 c9             	test   %rcx,%rcx
+    1014:	0f 84 87 02 00 00    	je     12a1 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x12a1>
+    101a:	0f b6 49 24          	movzbl 0x24(%rcx),%ecx
+    101e:	80 7d c0 00          	cmpb   $0x0,-0x40(%rbp)
+    1022:	0f 84 8d 00 00 00    	je     10b5 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x10b5>
+    1028:	80 f9 08             	cmp    $0x8,%cl
+    102b:	0f 85 70 02 00 00    	jne    12a1 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x12a1>
+    1031:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1033: R_X86_64_64	.ltext._RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest8runnable24runtime_retirement_ready
+    103b:	4c 89 e7             	mov    %r12,%rdi
+    103e:	4d 89 c7             	mov    %r8,%r15
+    1041:	ff d0                	call   *%rax
+    1043:	be f3 ff ff ff       	mov    $0xfffffff3,%esi
+    1048:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	104a: R_X86_64_64	cpu_local_var_initialized
+    1052:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	1054: R_X86_64_64	locals
+    105c:	49 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%r9	105e: R_X86_64_64	num_processors
+    1066:	4d 89 f8             	mov    %r15,%r8
+    1069:	89 c1                	mov    %eax,%ecx
+    106b:	48 8b 45 c8          	mov    -0x38(%rbp),%rax
+    106f:	84 c9                	test   %cl,%cl
+    1071:	75 4b                	jne    10be <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x10be>
+    1073:	48 b9 03 00 00 00 f3 ff ff ff 	movabs $0xfffffff300000003,%rcx
+    107d:	49 89 8c 24 88 00 00 00 	mov    %rcx,0x88(%r12)
+    1085:	e9 28 02 00 00       	jmp    12b2 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x12b2>
+    108a:	48 89 c7             	mov    %rax,%rdi
+    108d:	e9 04 03 00 00       	jmp    1396 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1396>
+    1092:	48 8b 45 c8          	mov    -0x38(%rbp),%rax
+    1096:	48 89 c7             	mov    %rax,%rdi
+    1099:	e9 f8 02 00 00       	jmp    1396 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1396>
+    109e:	48 b9 03 00 00 00 f0 ff ff ff 	movabs $0xfffffff000000003,%rcx
+    10a8:	49 89 8c 24 88 00 00 00 	mov    %rcx,0x88(%r12)
+    10b0:	e9 f8 01 00 00       	jmp    12ad <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x12ad>
+    10b5:	80 f9 04             	cmp    $0x4,%cl
+    10b8:	0f 85 e3 01 00 00    	jne    12a1 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x12a1>
+    10be:	48 8d 48 18          	lea    0x18(%rax),%rcx
+    10c2:	48 ba 4d 43 46 4b 44 30 30 31 	movabs $0x313030444b46434d,%rdx
+    10cc:	49 89 94 24 e0 02 00 00 	mov    %rdx,0x2e0(%r12)
+    10d4:	49 8b 94 24 80 00 00 00 	mov    0x80(%r12),%rdx
+    10dc:	49 8b 74 24 60       	mov    0x60(%r12),%rsi
+    10e1:	49 8b 7c 24 70       	mov    0x70(%r12),%rdi
+    10e6:	48 c7 40 18 03 00 00 00 	movq   $0x3,0x18(%rax)
+    10ee:	48 c7 40 20 02 00 00 00 	movq   $0x2,0x20(%rax)
+    10f6:	48 89 50 28          	mov    %rdx,0x28(%rax)
+    10fa:	48 89 78 30          	mov    %rdi,0x30(%rax)
+    10fe:	48 89 70 38          	mov    %rsi,0x38(%rax)
+    1102:	48 ba 4d 43 46 4b 43 30 30 31 	movabs $0x313030434b46434d,%rdx
+    110c:	48 89 50 40          	mov    %rdx,0x40(%rax)
+    1110:	49 8d bc 24 20 01 00 00 	lea    0x120(%r12),%rdi
+    1118:	49 8b 84 24 d0 01 00 00 	mov    0x1d0(%r12),%rax
+    1120:	49 c7 84 24 d0 01 00 00 00 00 00 00 	movq   $0x0,0x1d0(%r12)
+    112c:	49 89 84 24 78 02 00 00 	mov    %rax,0x278(%r12)
+    1134:	48 8b 41 28          	mov    0x28(%rcx),%rax
+    1138:	48 89 45 90          	mov    %rax,-0x70(%rbp)
+    113c:	48 8b 41 20          	mov    0x20(%rcx),%rax
+    1140:	48 89 45 88          	mov    %rax,-0x78(%rbp)
+    1144:	48 8b 41 18          	mov    0x18(%rcx),%rax
+    1148:	48 89 45 80          	mov    %rax,-0x80(%rbp)
+    114c:	48 8b 41 10          	mov    0x10(%rcx),%rax
+    1150:	48 89 85 78 ff ff ff 	mov    %rax,-0x88(%rbp)
+    1157:	48 8b 01             	mov    (%rcx),%rax
+    115a:	48 8b 49 08          	mov    0x8(%rcx),%rcx
+    115e:	48 89 8d 70 ff ff ff 	mov    %rcx,-0x90(%rbp)
+    1165:	48 89 85 68 ff ff ff 	mov    %rax,-0x98(%rbp)
+    116c:	48 c7 85 e8 fe ff ff 00 00 00 00 	movq   $0x0,-0x118(%rbp)
+    1177:	48 c7 85 f0 fe ff ff 00 00 00 00 	movq   $0x0,-0x110(%rbp)
+    1182:	48 c7 85 f8 fe ff ff 00 00 00 00 	movq   $0x0,-0x108(%rbp)
+    118d:	48 c7 85 00 ff ff ff 00 00 00 00 	movq   $0x0,-0x100(%rbp)
+    1198:	48 c7 85 08 ff ff ff 00 00 00 00 	movq   $0x0,-0xf8(%rbp)
+    11a3:	48 c7 85 10 ff ff ff 00 00 00 00 	movq   $0x0,-0xf0(%rbp)
+    11ae:	48 c7 85 18 ff ff ff 00 00 00 00 	movq   $0x0,-0xe8(%rbp)
+    11b9:	48 c7 85 20 ff ff ff 00 00 00 00 	movq   $0x0,-0xe0(%rbp)
+    11c4:	48 c7 85 28 ff ff ff 00 00 00 00 	movq   $0x0,-0xd8(%rbp)
+    11cf:	48 c7 85 30 ff ff ff 00 00 00 00 	movq   $0x0,-0xd0(%rbp)
+    11da:	48 c7 85 38 ff ff ff 00 00 00 00 	movq   $0x0,-0xc8(%rbp)
+    11e5:	48 c7 85 40 ff ff ff 00 00 00 00 	movq   $0x0,-0xc0(%rbp)
+    11f0:	48 c7 85 48 ff ff ff 00 00 00 00 	movq   $0x0,-0xb8(%rbp)
+    11fb:	48 c7 85 50 ff ff ff 00 00 00 00 	movq   $0x0,-0xb0(%rbp)
+    1206:	48 c7 85 58 ff ff ff 00 00 00 00 	movq   $0x0,-0xa8(%rbp)
+    1211:	48 c7 85 60 ff ff ff 00 00 00 00 	movq   $0x0,-0xa0(%rbp)
+    121c:	48 8d b5 e8 fe ff ff 	lea    -0x118(%rbp),%rsi
+    1223:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1225: R_X86_64_64	memcpy
+    122d:	ba b0 00 00 00       	mov    $0xb0,%edx
+    1232:	4d 89 c7             	mov    %r8,%r15
+    1235:	ff d0                	call   *%rax
+    1237:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	1239: R_X86_64_64	cpu_local_var_initialized
+    1241:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	1243: R_X86_64_64	locals
+    124b:	49 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%r9	124d: R_X86_64_64	num_processors
+    1255:	4d 89 f8             	mov    %r15,%r8
+    1258:	48 8b 45 c8          	mov    -0x38(%rbp),%rax
+    125c:	49 89 84 24 d0 01 00 00 	mov    %rax,0x1d0(%r12)
+    1264:	49 89 84 24 d8 01 00 00 	mov    %rax,0x1d8(%r12)
+    126c:	48 8b 4d b0          	mov    -0x50(%rbp),%rcx
+    1270:	49 89 8c 24 e0 01 00 00 	mov    %rcx,0x1e0(%r12)
+    1278:	8b 4d a8             	mov    -0x58(%rbp),%ecx
+    127b:	41 89 8c 24 e8 01 00 00 	mov    %ecx,0x1e8(%r12)
+    1283:	49 c7 84 24 ec 01 00 00 01 00 00 00 	movq   $0x1,0x1ec(%r12)
+    128f:	41 c7 84 24 88 00 00 00 06 00 00 00 	movl   $0x6,0x88(%r12)
+    129b:	31 ff                	xor    %edi,%edi
+    129d:	31 f6                	xor    %esi,%esi
+    129f:	eb 14                	jmp    12b5 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x12b5>
+    12a1:	41 c7 84 24 88 00 00 00 03 00 00 00 	movl   $0x3,0x88(%r12)
+    12ad:	be f0 ff ff ff       	mov    $0xfffffff0,%esi
+    12b2:	48 89 c7             	mov    %rax,%rdi
+    12b5:	41 83 3b 00          	cmpl   $0x0,(%r11)
+    12b9:	74 58                	je     1313 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1313>
+    12bb:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+    12c0:	0f 32                	rdmsr  
+    12c2:	48 c1 e2 20          	shl    $0x20,%rdx
+    12c6:	89 c1                	mov    %eax,%ecx
+    12c8:	48 09 d1             	or     %rdx,%rcx
+    12cb:	49 8b 12             	mov    (%r10),%rdx
+    12ce:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+    12d5:	48 39 ca             	cmp    %rcx,%rdx
+    12d8:	77 1f                	ja     12f9 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x12f9>
+    12da:	41 89 f7             	mov    %esi,%r15d
+    12dd:	49 63 31             	movslq (%r9),%rsi
+    12e0:	48 c1 e6 0e          	shl    $0xe,%rsi
+    12e4:	48 01 f2             	add    %rsi,%rdx
+    12e7:	44 89 fe             	mov    %r15d,%esi
+    12ea:	48 39 ca             	cmp    %rcx,%rdx
+    12ed:	72 0a                	jb     12f9 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x12f9>
+    12ef:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+    12f7:	48 98                	cltq   
+    12f9:	49 8b 08             	mov    (%r8),%rcx
+    12fc:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+    1303:	f0 ff 84 01 28 1f 00 00 	lock incl 0x1f28(%rcx,%rax,1)
+    130b:	48 8b 45 c8          	mov    -0x38(%rbp),%rax
+    130f:	eb 02                	jmp    1313 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1313>
+    1311:	f3 90                	pause  
+    1313:	b1 01                	mov    $0x1,%cl
+    1315:	41 86 0e             	xchg   %cl,(%r14)
+    1318:	84 c9                	test   %cl,%cl
+    131a:	75 f5                	jne    1311 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1311>
+    131c:	49 8b 4d 00          	mov    0x0(%r13),%rcx
+    1320:	41 bf fb ff ff ff    	mov    $0xfffffffb,%r15d
+    1326:	48 85 c9             	test   %rcx,%rcx
+    1329:	74 1e                	je     1349 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1349>
+    132b:	4c 39 e1             	cmp    %r12,%rcx
+    132e:	75 19                	jne    1349 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1349>
+    1330:	48 8b 4d 98          	mov    -0x68(%rbp),%rcx
+    1334:	49 39 4d 08          	cmp    %rcx,0x8(%r13)
+    1338:	75 0f                	jne    1349 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1349>
+    133a:	41 80 7d 19 01       	cmpb   $0x1,0x19(%r13)
+    133f:	75 08                	jne    1349 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1349>
+    1341:	41 c6 45 19 00       	movb   $0x0,0x19(%r13)
+    1346:	41 89 f7             	mov    %esi,%r15d
+    1349:	41 c6 06 00          	movb   $0x0,(%r14)
+    134d:	41 83 3b 00          	cmpl   $0x0,(%r11)
+    1351:	74 55                	je     13a8 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x13a8>
+    1353:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+    1358:	0f 32                	rdmsr  
+    135a:	48 c1 e2 20          	shl    $0x20,%rdx
+    135e:	89 c0                	mov    %eax,%eax
+    1360:	48 09 d0             	or     %rdx,%rax
+    1363:	49 8b 12             	mov    (%r10),%rdx
+    1366:	48 c7 c1 ff ff ff ff 	mov    $0xffffffffffffffff,%rcx
+    136d:	48 39 c2             	cmp    %rax,%rdx
+    1370:	77 20                	ja     1392 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1392>
+    1372:	49 63 31             	movslq (%r9),%rsi
+    1375:	48 c1 e6 0e          	shl    $0xe,%rsi
+    1379:	48 01 f2             	add    %rsi,%rdx
+    137c:	48 39 c2             	cmp    %rax,%rdx
+    137f:	48 8b 45 c8          	mov    -0x38(%rbp),%rax
+    1383:	72 11                	jb     1396 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1396>
+    1385:	65 8b 0c 25 00 00 00 00 	mov    %gs:0x0,%ecx
+    138d:	48 63 c9             	movslq %ecx,%rcx
+    1390:	eb 04                	jmp    1396 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1396>
+    1392:	48 8b 45 c8          	mov    -0x38(%rbp),%rax
+    1396:	49 8b 10             	mov    (%r8),%rdx
+    1399:	48 69 c9 c0 1f 00 00 	imul   $0x1fc0,%rcx,%rcx
+    13a0:	f0 ff 8c 0a 28 1f 00 00 	lock decl 0x1f28(%rdx,%rcx,1)
+    13a8:	45 85 ff             	test   %r15d,%r15d
+    13ab:	74 34                	je     13e1 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x13e1>
+    13ad:	48 85 ff             	test   %rdi,%rdi
+    13b0:	74 1b                	je     13cd <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x13cd>
+    13b2:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	13b4: R_X86_64_64	.lrodata.str1.1+0x43ef
+    13bc:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	13be: R_X86_64_64	_kfree
+    13c6:	ba 70 10 00 00       	mov    $0x1070,%edx
+    13cb:	ff d0                	call   *%rax
+    13cd:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	13cf: R_X86_64_64	.ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust21fork_control_registry6retain
+    13d7:	48 89 df             	mov    %rbx,%rdi
+    13da:	ff d0                	call   *%rax
+    13dc:	e9 12 ef ff ff       	jmp    2f3 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x2f3>
+    13e1:	4c 89 6d b8          	mov    %r13,-0x48(%rbp)
+    13e5:	48 8b 0b             	mov    (%rbx),%rcx
+    13e8:	48 89 5d d0          	mov    %rbx,-0x30(%rbp)
+    13ec:	48 8b 53 08          	mov    0x8(%rbx),%rdx
+    13f0:	48 89 95 f0 fe ff ff 	mov    %rdx,-0x110(%rbp)
+    13f7:	48 89 8d e8 fe ff ff 	mov    %rcx,-0x118(%rbp)
+    13fe:	c6 85 f8 fe ff ff 01 	movb   $0x1,-0x108(%rbp)
+    1405:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	1407: R_X86_64_64	do_syscall
+    140f:	48 89 c7             	mov    %rax,%rdi
+    1412:	8b 75 a8             	mov    -0x58(%rbp),%esi
+    1415:	4d 89 c4             	mov    %r8,%r12
+    1418:	4d 89 cd             	mov    %r9,%r13
+    141b:	4c 89 db             	mov    %r11,%rbx
+    141e:	ff d1                	call   *%rcx
+    1420:	4d 89 eb             	mov    %r13,%r11
+    1423:	4d 89 e2             	mov    %r12,%r10
+    1426:	49 89 c1             	mov    %rax,%r9
+    1429:	83 3b 00             	cmpl   $0x0,(%rbx)
+    142c:	74 58                	je     1486 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1486>
+    142e:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+    1433:	0f 32                	rdmsr  
+    1435:	48 c1 e2 20          	shl    $0x20,%rdx
+    1439:	89 c1                	mov    %eax,%ecx
+    143b:	48 09 d1             	or     %rdx,%rcx
+    143e:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1440: R_X86_64_64	locals
+    1448:	48 8b 10             	mov    (%rax),%rdx
+    144b:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+    1452:	48 39 ca             	cmp    %rcx,%rdx
+    1455:	77 19                	ja     1470 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1470>
+    1457:	49 63 3b             	movslq (%r11),%rdi
+    145a:	48 c1 e7 0e          	shl    $0xe,%rdi
+    145e:	48 01 fa             	add    %rdi,%rdx
+    1461:	48 39 ca             	cmp    %rcx,%rdx
+    1464:	72 0a                	jb     1470 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1470>
+    1466:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+    146e:	48 98                	cltq   
+    1470:	49 8b 0a             	mov    (%r10),%rcx
+    1473:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+    147a:	f0 ff 84 01 28 1f 00 00 	lock incl 0x1f28(%rcx,%rax,1)
+    1482:	eb 02                	jmp    1486 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1486>
+    1484:	f3 90                	pause  
+    1486:	b0 01                	mov    $0x1,%al
+    1488:	41 86 06             	xchg   %al,(%r14)
+    148b:	84 c0                	test   %al,%al
+    148d:	75 f5                	jne    1484 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1484>
+    148f:	48 8b 4d b8          	mov    -0x48(%rbp),%rcx
+    1493:	48 8b 39             	mov    (%rcx),%rdi
+    1496:	41 bf fe ff ff ff    	mov    $0xfffffffe,%r15d
+    149c:	48 85 ff             	test   %rdi,%rdi
+    149f:	48 8b 75 d0          	mov    -0x30(%rbp),%rsi
+    14a3:	74 16                	je     14bb <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x14bb>
+    14a5:	48 8b 45 98          	mov    -0x68(%rbp),%rax
+    14a9:	48 39 41 08          	cmp    %rax,0x8(%rcx)
+    14ad:	75 0c                	jne    14bb <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x14bb>
+    14af:	41 bf f0 ff ff ff    	mov    $0xfffffff0,%r15d
+    14b5:	80 79 19 01          	cmpb   $0x1,0x19(%rcx)
+    14b9:	75 70                	jne    152b <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x152b>
+    14bb:	41 c6 06 00          	movb   $0x0,(%r14)
+    14bf:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	14c1: R_X86_64_64	cpu_local_var_initialized
+    14c9:	83 38 00             	cmpl   $0x0,(%rax)
+    14cc:	0f 84 a1 03 00 00    	je     1873 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1873>
+    14d2:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+    14d7:	0f 32                	rdmsr  
+    14d9:	48 c1 e2 20          	shl    $0x20,%rdx
+    14dd:	89 c1                	mov    %eax,%ecx
+    14df:	48 09 d1             	or     %rdx,%rcx
+    14e2:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	14e4: R_X86_64_64	locals
+    14ec:	48 8b 10             	mov    (%rax),%rdx
+    14ef:	45 31 c0             	xor    %r8d,%r8d
+    14f2:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+    14f9:	48 39 ca             	cmp    %rcx,%rdx
+    14fc:	0f 87 b9 00 00 00    	ja     15bb <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x15bb>
+    1502:	49 63 3b             	movslq (%r11),%rdi
+    1505:	48 c1 e7 0e          	shl    $0xe,%rdi
+    1509:	48 01 fa             	add    %rdi,%rdx
+    150c:	48 39 ca             	cmp    %rcx,%rdx
+    150f:	4c 8b 65 c0          	mov    -0x40(%rbp),%r12
+    1513:	0f 82 02 02 00 00    	jb     171b <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x171b>
+    1519:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+    1521:	48 98                	cltq   
+    1523:	45 31 c0             	xor    %r8d,%r8d
+    1526:	e9 f0 01 00 00       	jmp    171b <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x171b>
+    152b:	c6 41 19 01          	movb   $0x1,0x19(%rcx)
+    152f:	41 c6 06 00          	movb   $0x0,(%r14)
+    1533:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1535: R_X86_64_64	cpu_local_var_initialized
+    153d:	83 38 00             	cmpl   $0x0,(%rax)
+    1540:	74 54                	je     1596 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1596>
+    1542:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+    1547:	0f 32                	rdmsr  
+    1549:	48 c1 e2 20          	shl    $0x20,%rdx
+    154d:	89 c1                	mov    %eax,%ecx
+    154f:	48 09 d1             	or     %rdx,%rcx
+    1552:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1554: R_X86_64_64	locals
+    155c:	48 8b 10             	mov    (%rax),%rdx
+    155f:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+    1566:	48 39 ca             	cmp    %rcx,%rdx
+    1569:	77 19                	ja     1584 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1584>
+    156b:	4d 63 03             	movslq (%r11),%r8
+    156e:	49 c1 e0 0e          	shl    $0xe,%r8
+    1572:	4c 01 c2             	add    %r8,%rdx
+    1575:	48 39 ca             	cmp    %rcx,%rdx
+    1578:	72 0a                	jb     1584 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1584>
+    157a:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+    1582:	48 98                	cltq   
+    1584:	49 8b 0a             	mov    (%r10),%rcx
+    1587:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+    158e:	f0 ff 8c 01 28 1f 00 00 	lock decl 0x1f28(%rcx,%rax,1)
+    1596:	4d 85 c9             	test   %r9,%r9
+    1599:	74 29                	je     15c4 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x15c4>
+    159b:	49 63 c1             	movslq %r9d,%rax
+    159e:	85 c0                	test   %eax,%eax
+    15a0:	b9 b9 ff ff ff       	mov    $0xffffffb9,%ecx
+    15a5:	41 bd b9 ff ff ff    	mov    $0xffffffb9,%r13d
+    15ab:	44 0f 48 e8          	cmovs  %eax,%r13d
+    15af:	4c 39 c8             	cmp    %r9,%rax
+    15b2:	44 0f 45 e9          	cmovne %ecx,%r13d
+    15b6:	45 31 c0             	xor    %r8d,%r8d
+    15b9:	eb 69                	jmp    1624 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1624>
+    15bb:	4c 8b 65 c0          	mov    -0x40(%rbp),%r12
+    15bf:	e9 57 01 00 00       	jmp    171b <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x171b>
+    15c4:	83 bf 88 00 00 00 07 	cmpl   $0x7,0x88(%rdi)
+    15cb:	75 4e                	jne    161b <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x161b>
+    15cd:	83 bf ec 01 00 00 02 	cmpl   $0x2,0x1ec(%rdi)
+    15d4:	75 45                	jne    161b <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x161b>
+    15d6:	48 8b 45 c8          	mov    -0x38(%rbp),%rax
+    15da:	48 39 87 d8 01 00 00 	cmp    %rax,0x1d8(%rdi)
+    15e1:	75 29                	jne    160c <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x160c>
+    15e3:	48 8b 45 b0          	mov    -0x50(%rbp),%rax
+    15e7:	48 39 87 e0 01 00 00 	cmp    %rax,0x1e0(%rdi)
+    15ee:	75 1c                	jne    160c <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x160c>
+    15f0:	8b 45 a8             	mov    -0x58(%rbp),%eax
+    15f3:	39 87 e8 01 00 00    	cmp    %eax,0x1e8(%rdi)
+    15f9:	75 11                	jne    160c <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x160c>
+    15fb:	48 8b 45 c8          	mov    -0x38(%rbp),%rax
+    15ff:	48 39 87 d0 01 00 00 	cmp    %rax,0x1d0(%rdi)
+    1606:	0f 84 9d 04 00 00    	je     1aa9 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1aa9>
+    160c:	45 31 c0             	xor    %r8d,%r8d
+    160f:	4d 89 e2             	mov    %r12,%r10
+    1612:	4d 89 eb             	mov    %r13,%r11
+    1615:	48 8b 75 d0          	mov    -0x30(%rbp),%rsi
+    1619:	eb 03                	jmp    161e <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x161e>
+    161b:	45 31 c0             	xor    %r8d,%r8d
+    161e:	41 bd f3 ff ff ff    	mov    $0xfffffff3,%r13d
+    1624:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1626: R_X86_64_64	cpu_local_var_initialized
+    162e:	83 38 00             	cmpl   $0x0,(%rax)
+    1631:	48 8b 5d b8          	mov    -0x48(%rbp),%rbx
+    1635:	4c 8b 65 c0          	mov    -0x40(%rbp),%r12
+    1639:	74 58                	je     1693 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1693>
+    163b:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+    1640:	0f 32                	rdmsr  
+    1642:	48 c1 e2 20          	shl    $0x20,%rdx
+    1646:	89 c1                	mov    %eax,%ecx
+    1648:	48 09 d1             	or     %rdx,%rcx
+    164b:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	164d: R_X86_64_64	locals
+    1655:	48 8b 10             	mov    (%rax),%rdx
+    1658:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+    165f:	48 39 ca             	cmp    %rcx,%rdx
+    1662:	77 19                	ja     167d <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x167d>
+    1664:	4d 63 0b             	movslq (%r11),%r9
+    1667:	49 c1 e1 0e          	shl    $0xe,%r9
+    166b:	4c 01 ca             	add    %r9,%rdx
+    166e:	48 39 ca             	cmp    %rcx,%rdx
+    1671:	72 0a                	jb     167d <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x167d>
+    1673:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+    167b:	48 98                	cltq   
+    167d:	49 8b 0a             	mov    (%r10),%rcx
+    1680:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+    1687:	f0 ff 84 01 28 1f 00 00 	lock incl 0x1f28(%rcx,%rax,1)
+    168f:	eb 02                	jmp    1693 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1693>
+    1691:	f3 90                	pause  
+    1693:	b0 01                	mov    $0x1,%al
+    1695:	41 86 06             	xchg   %al,(%r14)
+    1698:	84 c0                	test   %al,%al
+    169a:	75 f5                	jne    1691 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1691>
+    169c:	48 8b 03             	mov    (%rbx),%rax
+    169f:	41 bf fb ff ff ff    	mov    $0xfffffffb,%r15d
+    16a5:	48 85 c0             	test   %rax,%rax
+    16a8:	74 1c                	je     16c6 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x16c6>
+    16aa:	48 39 f8             	cmp    %rdi,%rax
+    16ad:	75 17                	jne    16c6 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x16c6>
+    16af:	48 8b 45 98          	mov    -0x68(%rbp),%rax
+    16b3:	48 39 43 08          	cmp    %rax,0x8(%rbx)
+    16b7:	75 0d                	jne    16c6 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x16c6>
+    16b9:	80 7b 19 01          	cmpb   $0x1,0x19(%rbx)
+    16bd:	75 07                	jne    16c6 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x16c6>
+    16bf:	c6 43 19 00          	movb   $0x0,0x19(%rbx)
+    16c3:	45 89 ef             	mov    %r13d,%r15d
+    16c6:	41 c6 06 00          	movb   $0x0,(%r14)
+    16ca:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	16cc: R_X86_64_64	cpu_local_var_initialized
+    16d4:	83 38 00             	cmpl   $0x0,(%rax)
+    16d7:	74 54                	je     172d <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x172d>
+    16d9:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+    16de:	0f 32                	rdmsr  
+    16e0:	48 c1 e2 20          	shl    $0x20,%rdx
+    16e4:	89 c1                	mov    %eax,%ecx
+    16e6:	48 09 d1             	or     %rdx,%rcx
+    16e9:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	16eb: R_X86_64_64	locals
+    16f3:	48 8b 10             	mov    (%rax),%rdx
+    16f6:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+    16fd:	48 39 ca             	cmp    %rcx,%rdx
+    1700:	77 19                	ja     171b <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x171b>
+    1702:	49 63 3b             	movslq (%r11),%rdi
+    1705:	48 c1 e7 0e          	shl    $0xe,%rdi
+    1709:	48 01 fa             	add    %rdi,%rdx
+    170c:	48 39 ca             	cmp    %rcx,%rdx
+    170f:	72 0a                	jb     171b <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x171b>
+    1711:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+    1719:	48 98                	cltq   
+    171b:	49 8b 0a             	mov    (%r10),%rcx
+    171e:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+    1725:	f0 ff 8c 01 28 1f 00 00 	lock decl 0x1f28(%rcx,%rax,1)
+    172d:	45 85 ff             	test   %r15d,%r15d
+    1730:	0f 85 3d 01 00 00    	jne    1873 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1873>
+    1736:	4d 85 c0             	test   %r8,%r8
+    1739:	74 2b                	je     1766 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1766>
+    173b:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	173d: R_X86_64_64	.ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust21fork_control_registry15detach_terminal
+    1745:	48 8d bd 38 fe ff ff 	lea    -0x1c8(%rbp),%rdi
+    174c:	4c 89 c2             	mov    %r8,%rdx
+    174f:	ff d0                	call   *%rax
+    1751:	80 bd 38 fe ff ff 00 	cmpb   $0x0,-0x1c8(%rbp)
+    1758:	74 20                	je     177a <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x177a>
+    175a:	44 8b bd 3c fe ff ff 	mov    -0x1c4(%rbp),%r15d
+    1761:	e9 0d 01 00 00       	jmp    1873 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1873>
+    1766:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1768: R_X86_64_64	.ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust21fork_control_registry6retain
+    1770:	48 89 f7             	mov    %rsi,%rdi
+    1773:	ff d0                	call   *%rax
+    1775:	e9 f3 00 00 00       	jmp    186d <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x186d>
+    177a:	48 8b 9d 40 fe ff ff 	mov    -0x1c0(%rbp),%rbx
+    1781:	48 8b 83 90 00 00 00 	mov    0x90(%rbx),%rax
+    1788:	48 c7 83 90 00 00 00 00 00 00 00 	movq   $0x0,0x90(%rbx)
+    1793:	48 85 c0             	test   %rax,%rax
+    1796:	0f 84 b9 00 00 00    	je     1855 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1855>
+    179c:	48 89 85 08 fe ff ff 	mov    %rax,-0x1f8(%rbp)
+    17a3:	48 8b 83 98 00 00 00 	mov    0x98(%rbx),%rax
+    17aa:	48 8b 8b a0 00 00 00 	mov    0xa0(%rbx),%rcx
+    17b1:	48 89 85 10 fe ff ff 	mov    %rax,-0x1f0(%rbp)
+    17b8:	48 89 8d 18 fe ff ff 	mov    %rcx,-0x1e8(%rbp)
+    17bf:	48 8b 83 a8 00 00 00 	mov    0xa8(%rbx),%rax
+    17c6:	48 89 85 20 fe ff ff 	mov    %rax,-0x1e0(%rbp)
+    17cd:	48 8b 83 b0 00 00 00 	mov    0xb0(%rbx),%rax
+    17d4:	48 89 85 28 fe ff ff 	mov    %rax,-0x1d8(%rbp)
+    17db:	48 8b 83 b8 00 00 00 	mov    0xb8(%rbx),%rax
+    17e2:	48 89 85 30 fe ff ff 	mov    %rax,-0x1d0(%rbp)
+    17e9:	45 84 e4             	test   %r12b,%r12b
+    17ec:	0f 84 99 00 00 00    	je     188b <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x188b>
+    17f2:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	17f4: R_X86_64_64	.ltext._RNvMNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest13child_creditsNtB2_12ChildCredits25release_runtime_after_ack
+    17fc:	48 8d bd b8 fe ff ff 	lea    -0x148(%rbp),%rdi
+    1803:	48 8d b5 08 fe ff ff 	lea    -0x1f8(%rbp),%rsi
+    180a:	ff d0                	call   *%rax
+    180c:	48 83 bd b8 fe ff ff 00 	cmpq   $0x0,-0x148(%rbp)
+    1814:	0f 85 95 00 00 00    	jne    18af <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x18af>
+    181a:	48 8b bb b0 02 00 00 	mov    0x2b0(%rbx),%rdi
+    1821:	48 c7 83 b0 02 00 00 00 00 00 00 	movq   $0x0,0x2b0(%rbx)
+    182c:	48 85 ff             	test   %rdi,%rdi
+    182f:	0f 84 d4 00 00 00    	je     1909 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1909>
+    1835:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	1837: R_X86_64_64	.lrodata.str1.1+0x43ef
+    183f:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1841: R_X86_64_64	_kfree
+    1849:	ba 70 10 00 00       	mov    $0x1070,%edx
+    184e:	ff d0                	call   *%rax
+    1850:	e9 b4 00 00 00       	jmp    1909 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1909>
+    1855:	48 b8 03 00 00 00 fb ff ff ff 	movabs $0xfffffffb00000003,%rax
+    185f:	48 89 83 88 00 00 00 	mov    %rax,0x88(%rbx)
+    1866:	c6 85 f8 fe ff ff 00 	movb   $0x0,-0x108(%rbp)
+    186d:	41 bf fb ff ff ff    	mov    $0xfffffffb,%r15d
+    1873:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1875: R_X86_64_64	_RNvXs2_NtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guestNtB5_11SubmitGuardNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop
+    187d:	48 8d bd e8 fe ff ff 	lea    -0x118(%rbp),%rdi
+    1884:	ff d0                	call   *%rax
+    1886:	e9 68 ea ff ff       	jmp    2f3 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x2f3>
+    188b:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	188d: R_X86_64_64	.ltext._RNvMNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest13child_creditsNtB2_12ChildCredits17release_after_ack
+    1895:	48 8d bd b8 fe ff ff 	lea    -0x148(%rbp),%rdi
+    189c:	48 8d b5 08 fe ff ff 	lea    -0x1f8(%rbp),%rsi
+    18a3:	ff d0                	call   *%rax
+    18a5:	48 83 bd b8 fe ff ff 00 	cmpq   $0x0,-0x148(%rbp)
+    18ad:	74 5a                	je     1909 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1909>
+    18af:	48 81 c3 90 00 00 00 	add    $0x90,%rbx
+    18b6:	48 8b 85 e0 fe ff ff 	mov    -0x120(%rbp),%rax
+    18bd:	48 89 43 28          	mov    %rax,0x28(%rbx)
+    18c1:	48 8b 85 d8 fe ff ff 	mov    -0x128(%rbp),%rax
+    18c8:	48 89 43 20          	mov    %rax,0x20(%rbx)
+    18cc:	48 8b 85 d0 fe ff ff 	mov    -0x130(%rbp),%rax
+    18d3:	48 89 43 18          	mov    %rax,0x18(%rbx)
+    18d7:	48 8b 85 c8 fe ff ff 	mov    -0x138(%rbp),%rax
+    18de:	48 89 43 10          	mov    %rax,0x10(%rbx)
+    18e2:	48 8b 85 b8 fe ff ff 	mov    -0x148(%rbp),%rax
+    18e9:	48 8b 8d c0 fe ff ff 	mov    -0x140(%rbp),%rcx
+    18f0:	48 89 4b 08          	mov    %rcx,0x8(%rbx)
+    18f4:	48 89 03             	mov    %rax,(%rbx)
+    18f7:	c6 85 f8 fe ff ff 00 	movb   $0x0,-0x108(%rbp)
+    18fe:	41 bf f0 ff ff ff    	mov    $0xfffffff0,%r15d
+    1904:	e9 6a ff ff ff       	jmp    1873 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1873>
+    1909:	48 8b bb c0 00 00 00 	mov    0xc0(%rbx),%rdi
+    1910:	48 c7 83 c0 00 00 00 00 00 00 00 	movq   $0x0,0xc0(%rbx)
+    191b:	48 85 ff             	test   %rdi,%rdi
+    191e:	74 1b                	je     193b <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x193b>
+    1920:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	1922: R_X86_64_64	.lrodata.str1.1+0x43ef
+    192a:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	192c: R_X86_64_64	_kfree
+    1934:	ba 70 10 00 00       	mov    $0x1070,%edx
+    1939:	ff d0                	call   *%rax
+    193b:	48 8b bb 78 02 00 00 	mov    0x278(%rbx),%rdi
+    1942:	48 c7 83 78 02 00 00 00 00 00 00 	movq   $0x0,0x278(%rbx)
+    194d:	48 85 ff             	test   %rdi,%rdi
+    1950:	74 1b                	je     196d <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x196d>
+    1952:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	1954: R_X86_64_64	.lrodata.str1.1+0x43ef
+    195c:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	195e: R_X86_64_64	_kfree
+    1966:	ba 70 10 00 00       	mov    $0x1070,%edx
+    196b:	ff d0                	call   *%rax
+    196d:	48 8b bb d0 01 00 00 	mov    0x1d0(%rbx),%rdi
+    1974:	48 c7 83 d0 01 00 00 00 00 00 00 	movq   $0x0,0x1d0(%rbx)
+    197f:	48 85 ff             	test   %rdi,%rdi
+    1982:	74 1b                	je     199f <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x199f>
+    1984:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	1986: R_X86_64_64	.lrodata.str1.1+0x43ef
+    198e:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1990: R_X86_64_64	_kfree
+    1998:	ba 70 10 00 00       	mov    $0x1070,%edx
+    199d:	ff d0                	call   *%rax
+    199f:	c6 85 f8 fe ff ff 00 	movb   $0x0,-0x108(%rbp)
+    19a6:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	19a8: R_X86_64_64	.lrodata.str1.1+0x43ef
+    19b0:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	19b2: R_X86_64_64	_kfree
+    19ba:	48 89 df             	mov    %rbx,%rdi
+    19bd:	ba 70 10 00 00       	mov    $0x1070,%edx
+    19c2:	ff d0                	call   *%rax
+    19c4:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	19c6: R_X86_64_64	_RNvXs2_NtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guestNtB5_11SubmitGuardNtNtNtCskWZGD7wR08e_4core3ops4drop4Drop4drop
+    19ce:	48 8d bd e8 fe ff ff 	lea    -0x118(%rbp),%rdi
+    19d5:	ff d0                	call   *%rax
+    19d7:	45 31 ff             	xor    %r15d,%r15d
+    19da:	e9 14 e9 ff ff       	jmp    2f3 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x2f3>
+    19df:	49 83 bc 24 90 00 00 00 00 	cmpq   $0x0,0x90(%r12)
+    19e8:	74 2d                	je     1a17 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1a17>
+    19ea:	49 8d b4 24 90 00 00 00 	lea    0x90(%r12),%rsi
+    19f2:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	19f4: R_X86_64_64	.ltext._RNvMNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest13child_creditsNtB2_12ChildCredits27prepare_revoked_destruction
+    19fc:	48 8d bd e8 fe ff ff 	lea    -0x118(%rbp),%rdi
+    1a03:	ff d0                	call   *%rax
+    1a05:	80 bd e8 fe ff ff 00 	cmpb   $0x0,-0x118(%rbp)
+    1a0c:	74 20                	je     1a2e <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1a2e>
+    1a0e:	8b 85 ec fe ff ff    	mov    -0x114(%rbp),%eax
+    1a14:	89 45 a0             	mov    %eax,-0x60(%rbp)
+    1a17:	48 c7 45 b0 00 00 00 00 	movq   $0x0,-0x50(%rbp)
+    1a1f:	45 31 ed             	xor    %r13d,%r13d
+    1a22:	31 f6                	xor    %esi,%esi
+    1a24:	48 c7 45 c0 00 00 00 00 	movq   $0x0,-0x40(%rbp)
+    1a2c:	eb 4a                	jmp    1a78 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1a78>
+    1a2e:	4c 8b ad f0 fe ff ff 	mov    -0x110(%rbp),%r13
+    1a35:	31 c0                	xor    %eax,%eax
+    1a37:	41 8b 8c 24 e8 01 00 00 	mov    0x1e8(%r12),%ecx
+    1a3f:	89 4d a8             	mov    %ecx,-0x58(%rbp)
+    1a42:	49 8b 4c 24 10       	mov    0x10(%r12),%rcx
+    1a47:	48 89 4d b0          	mov    %rcx,-0x50(%rbp)
+    1a4b:	41 c7 84 24 88 00 00 00 05 00 00 00 	movl   $0x5,0x88(%r12)
+    1a57:	c7 45 a0 00 00 00 00 	movl   $0x0,-0x60(%rbp)
+    1a5e:	48 89 c6             	mov    %rax,%rsi
+    1a61:	0f b6 45 af          	movzbl -0x51(%rbp),%eax
+    1a65:	48 89 45 c0          	mov    %rax,-0x40(%rbp)
+    1a69:	eb 0d                	jmp    1a78 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1a78>
+    1a6b:	48 c7 45 b0 00 00 00 00 	movq   $0x0,-0x50(%rbp)
+    1a73:	45 31 ed             	xor    %r13d,%r13d
+    1a76:	31 f6                	xor    %esi,%esi
+    1a78:	49 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%r8	1a7a: R_X86_64_64	clv
+    1a82:	49 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%r9	1a84: R_X86_64_64	num_processors
+    1a8c:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	1a8e: R_X86_64_64	locals
+    1a96:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	1a98: R_X86_64_64	cpu_local_var_initialized
+    1aa0:	48 8b 5d d0          	mov    -0x30(%rbp),%rbx
+    1aa4:	e9 3f f2 ff ff       	jmp    ce8 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0xce8>
+    1aa9:	48 83 bf 90 00 00 00 00 	cmpq   $0x0,0x90(%rdi)
+    1ab1:	0f 84 55 fb ff ff    	je     160c <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x160c>
+    1ab7:	48 8b 87 b0 00 00 00 	mov    0xb0(%rdi),%rax
+    1abe:	48 85 c0             	test   %rax,%rax
+    1ac1:	0f 84 45 fb ff ff    	je     160c <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x160c>
+    1ac7:	0f b6 40 24          	movzbl 0x24(%rax),%eax
+    1acb:	80 7d c0 00          	cmpb   $0x0,-0x40(%rbp)
+    1acf:	74 3f                	je     1b10 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1b10>
+    1ad1:	3c 08                	cmp    $0x8,%al
+    1ad3:	0f 85 33 fb ff ff    	jne    160c <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x160c>
+    1ad9:	83 bf d4 02 00 00 02 	cmpl   $0x2,0x2d4(%rdi)
+    1ae0:	0f 85 26 fb ff ff    	jne    160c <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x160c>
+    1ae6:	48 83 bf c8 02 00 00 00 	cmpq   $0x0,0x2c8(%rdi)
+    1aee:	0f 84 18 fb ff ff    	je     160c <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x160c>
+    1af4:	83 bf dc 02 00 00 00 	cmpl   $0x0,0x2dc(%rdi)
+    1afb:	0f 8e 0b fb ff ff    	jle    160c <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x160c>
+    1b01:	48 83 bf b0 02 00 00 00 	cmpq   $0x0,0x2b0(%rdi)
+    1b09:	75 0d                	jne    1b18 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1b18>
+    1b0b:	e9 fc fa ff ff       	jmp    160c <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x160c>
+    1b10:	3c 04                	cmp    $0x4,%al
+    1b12:	0f 85 f4 fa ff ff    	jne    160c <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x160c>
+    1b18:	49 89 f8             	mov    %rdi,%r8
+    1b1b:	4d 89 e2             	mov    %r12,%r10
+    1b1e:	4d 89 eb             	mov    %r13,%r11
+    1b21:	45 31 ed             	xor    %r13d,%r13d
+    1b24:	48 8b 75 d0          	mov    -0x30(%rbp),%rsi
+    1b28:	e9 f7 fa ff ff       	jmp    1624 <_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18fork_control_guest9final_ack23destroy_and_ack_current+0x1624>

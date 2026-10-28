@@ -1,0 +1,25 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.process_sched_timer_init_bridge:
+
+0000000000000000 <process_sched_timer_init_bridge>:
+   0:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	2: R_X86_64_64	process_sched_timer_configuration
+   a:	83 38 00             	cmpl   $0x0,(%rax)
+   d:	74 0e                	je     1d <process_sched_timer_init_bridge+0x1d>
+   f:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	11: R_X86_64_64	process_sched_timer_configuration+0x4
+  19:	3b 38                	cmp    (%rax),%edi
+  1b:	74 01                	je     1e <process_sched_timer_init_bridge+0x1e>
+  1d:	c3                   	ret    
+  1e:	55                   	push   %rbp
+  1f:	48 89 e5             	mov    %rsp,%rbp
+  22:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	24: R_X86_64_64	timers_lock
+  2c:	31 c9                	xor    %ecx,%ecx
+  2e:	87 08                	xchg   %ecx,(%rax)
+  30:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	32: R_X86_64_64	timers
+  3a:	48 89 00             	mov    %rax,(%rax)
+  3d:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	3f: R_X86_64_64	timers+0x8
+  47:	48 89 01             	mov    %rax,(%rcx)
+  4a:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	4c: R_X86_64_64	wake_timers_loop
+  54:	ff d0                	call   *%rax

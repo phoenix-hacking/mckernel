@@ -1,0 +1,24 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/materialize_admission.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/materializer-external-input-authentication-correction-source-1/materialize_admission.py
+@@ -4,7 +4,7 @@
+ """
+ from pathlib import Path
+ import argparse,hashlib,importlib.util,json,os,re
+-D=Path(__file__).resolve().parent;E=D.parent
++C=Path(__file__).resolve().parent;D=C.parent;E=D.parent
+ S=E/'next115-f02-local31-f06-cpuid-source-integration-preparation-1'
+ def read(p):return json.loads(Path(p).read_bytes())
+ def ref(p):
+@@ -17,8 +17,10 @@
+  b=read(bindings);assert b['author']=='/root' and b['decision']=='MATERIALIZE_REVIEWED_CURRENT115_LOCAL31_CPUID_STATIC_INPUTS_AND_HOLDER_ONLY'
+  assert b['maximum_invocations']==1 and b['root_attests_exact_UID1000_readonly_exports'] is True
+  assert re.fullmatch('[0-9a-f]{32}',b['nonce'])
+- assert b['preparation_manifest']==ref(D/'PREPARATION-MANIFEST.json')
+- for row in read(auth(b['preparation_manifest']))['files']:auth(row)
++ assert b['preparation_manifest']==ref(C/'PREPARATION-MANIFEST.json')
++ manifest=read(auth(b['preparation_manifest']))
++ for row in manifest['files']:auth(row)
++ for row in manifest['external_inputs']:auth(row)
+  boundary=read(auth(b['current_boundary']))
+  assert boundary['author']=='/root' and boundary['decision']=='BIND_EXISTING_REVIEWED_CURRENT_BUILD_BOUNDARY' and boundary['root_attests_exact_current_boundary'] is True
+  for k in ['nonce_ledger','native_custody_clearance','observer','independent_current_boundary_review']:auth(boundary[k])

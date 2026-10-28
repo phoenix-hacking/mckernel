@@ -1,0 +1,31 @@
+#[cfg(f03_ptrace_entry_candidate)]
+mod ptrace_syscall_event_entry {
+    use core::mem::offset_of;
+
+    use crate::abi::Thread;
+
+    use super::{
+        f03_exec_report_signal_v1, ptrace_syscall_event_body_result, PtraceReportSignalFn,
+    };
+
+    /// Preserve the public syscall-event notification used by architecture callers.
+    ///
+    /// # Safety
+    /// The caller supplies the same live thread and synchronous ptrace notification
+    /// context as the original public C entry. The existing helper/provider retain
+    /// the original state read, signal decision, locking and scheduling contract.
+    #[no_mangle]
+    pub unsafe extern "C" fn ptrace_syscall_event(thread: *mut Thread) {
+        // SAFETY: Use the actual defining-module field offset and unchanged signal
+        // adapter. The original void entry deliberately discards the helper status.
+        let _ = unsafe {
+            ptrace_syscall_event_body_result(
+                thread.cast(),
+                offset_of!(Thread, ptrace),
+                Some(f03_exec_report_signal_v1),
+            )
+        };
+    }
+
+    const _: PtraceReportSignalFn = f03_exec_report_signal_v1;
+}

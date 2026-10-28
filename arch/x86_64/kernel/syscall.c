@@ -981,6 +981,10 @@ static ptrdiff_t vdso_offset;
 
 extern int num_processors;
 
+#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F06_OBTAIN_CLONE_CPUID)
+extern int obtain_clone_cpuid(cpu_set_t *cpu_set, int use_last);
+#else
+#line 884
 int obtain_clone_cpuid(cpu_set_t *cpu_set, int use_last) {
 	int min_queue_len = -1;
 	int cpu, min_cpu = -1, uti_cpu = -1;
@@ -1023,6 +1027,8 @@ int obtain_clone_cpuid(cpu_set_t *cpu_set, int use_last) {
 
     return min_cpu;
 }
+#endif
+#line 926
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 extern long sys_prctl(int n, ihk_mc_user_context_t *ctx);

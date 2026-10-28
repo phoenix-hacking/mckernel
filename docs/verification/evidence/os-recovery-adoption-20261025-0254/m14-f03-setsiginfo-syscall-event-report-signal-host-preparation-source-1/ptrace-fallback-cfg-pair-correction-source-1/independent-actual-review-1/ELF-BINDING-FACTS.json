@@ -1,0 +1,345 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "method": "Independent Python struct ELF64-LE byte reader; no producer, qualifier or executable replay.",
+  "ABI_words": [
+    128,
+    8,
+    160,
+    8,
+    24,
+    4384,
+    4,
+    8,
+    2
+  ],
+  "selected_Rust_exports": [
+    {
+      "name": "f03_ptrace_setsiginfo_v1",
+      "size": 676,
+      "section": ".ltext.f03_ptrace_setsiginfo_v1",
+      "binding": 1
+    },
+    {
+      "name": "ptrace_syscall_event",
+      "size": 47,
+      "section": ".ltext.ptrace_syscall_event",
+      "binding": 1
+    },
+    {
+      "name": "f03_exec_report_signal_v1",
+      "size": 17,
+      "section": ".ltext.f03_exec_report_signal_v1",
+      "binding": 1
+    }
+  ],
+  "actual_setsiginfoconsumer": [
+    {
+      "section": ".data.rel.ro",
+      "offset": 240,
+      "relocation_type": 1,
+      "addend": 0
+    }
+  ],
+  "HOST_only_signal_address_witness": [
+    {
+      "section": ".data.rel.ro",
+      "offset": 0,
+      "relocation_type": 1,
+      "addend": 0
+    }
+  ],
+  "actual_new_Rust_signal_relocations": [],
+  "actual_new_publicevent_relocations": [],
+  "retained114_historical_publicevent_refs": [
+    {
+      "section": ".ltext.arch_ptrace_syscall_event",
+      "offset": 20,
+      "relocation_type": 1,
+      "addend": 0
+    },
+    {
+      "section": ".ltext.f03_execveat_ptrace_report_v1",
+      "offset": 634,
+      "relocation_type": 1,
+      "addend": 0
+    },
+    {
+      "section": ".ltext.syscall",
+      "offset": 1003,
+      "relocation_type": 1,
+      "addend": 0
+    },
+    {
+      "section": ".ltext.syscall",
+      "offset": 2285,
+      "relocation_type": 1,
+      "addend": 0
+    }
+  ],
+  "fallback_C_functions": [
+    {
+      "name": "ptrace_setsiginfo",
+      "size": 158,
+      "section": ".text",
+      "binding": 0
+    },
+    {
+      "name": "ptrace_syscall_event",
+      "size": 71,
+      "section": ".text",
+      "binding": 1
+    },
+    {
+      "name": "ptrace_report_signal_bridge",
+      "size": 52,
+      "section": ".text",
+      "binding": 0
+    }
+  ],
+  "fallback_C_sys_ptrace": {
+    "name": "sys_ptrace",
+    "size": 272,
+    "section": ".text",
+    "binding": 1
+  },
+  "matching_cfg_off_Rust_absent_exact_four_symbols": [
+    "sys_ptrace",
+    "f03_ptrace_setsiginfo_v1",
+    "ptrace_syscall_event",
+    "f03_exec_report_signal_v1"
+  ],
+  "GNU_RETAIN_sections_preserved": {
+    "selected": 182,
+    "fallback": 182
+  },
+  "artifacts": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/HOST-output-proposed-1/rust-selected.o",
+      "bytes": 18335360,
+      "sha256": "4d2265b8d178fd44fe3f57ea76c92d3ed372cdda1205518d4d4a6505d4bb37c4"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/HOST-output-proposed-1/selected.o",
+      "bytes": 375672,
+      "sha256": "e38590f82c505f4081faffb495b8826668cb97a6b5306aa06f6af72c257c7e39"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/HOST-output-proposed-1/fallback.o",
+      "bytes": 381128,
+      "sha256": "665a6b43e1cd4c0c692a57be763dd2f4f245e57870cf1ac278086e7897cf7272"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/HOST-output-proposed-1/selected-joint.o",
+      "bytes": 18838592,
+      "sha256": "8ddacc49ddf5afd2eb0a2d0dcac9daaaec28f43c2952669efef4d9a7d54d91f3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/HOST-output-proposed-1/rust-fallback.o",
+      "bytes": 18312032,
+      "sha256": "1683613e56712f8333b8138e1902d3c69530e747c9fc869bc187ed59a6c4250c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/HOST-output-proposed-1/fallback-joint.o",
+      "bytes": 18819280,
+      "sha256": "53a8af4f0e9d47a87f69340a60950da0219f9bb8d1046b45ac99e852349e0591"
+    }
+  ],
+  "actual_suffix_steps": [
+    {
+      "index": 0,
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/future-capture-1/step0/command.json",
+        "bytes": 4620,
+        "sha256": "0c91da2fb3ed32e803b7ce013d86622e647094478081d3649de22b835bd0c13b"
+      },
+      "whole_join": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/future-capture-1/step0/whole-join.json",
+        "bytes": 1303,
+        "sha256": "d65658022079fc74576a692b0b10a9611347f7e7ceed159ae3649427c6f06f49"
+      },
+      "direct_wait": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/future-capture-1/step0/direct-wait.json",
+        "bytes": 82,
+        "sha256": "a07a8e426dd92d63bcd3e21d2bcdc73e8fee26e16df503d6318d0dcb33fd2676"
+      },
+      "admission": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/future-capture-1/step0/admission.json",
+        "bytes": 1085,
+        "sha256": "90d8d6f221bc19b3c811ab4e2c238a3b0f2139d247c2123dac3df1fec0e800e4"
+      },
+      "pid": 1807156,
+      "start": 95074497,
+      "seconds": 19.874676270061173,
+      "returncode": 0,
+      "positive_join": true,
+      "group_absent": true,
+      "streams_closed": true,
+      "captures": {
+        "stdout": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/future-capture-1/step0/stdout",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/future-capture-1/step0/stderr",
+          "bytes": 85978,
+          "sha256": "bfeae0f2b8987b89f802612fca79434304d568f43e84a6ca57f795f6b80f4652"
+        }
+      }
+    },
+    {
+      "index": 1,
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/future-capture-1/step1/command.json",
+        "bytes": 1681,
+        "sha256": "66755de1c64f6b9970497594e2e611e02bbc1dd3e0c010e0b9c7c379fd76c503"
+      },
+      "whole_join": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/future-capture-1/step1/whole-join.json",
+        "bytes": 1300,
+        "sha256": "c69be0046b1e476ee811d65e10e97cfdd16493d6bd97dc77d9bea2f74548dacf"
+      },
+      "direct_wait": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/future-capture-1/step1/direct-wait.json",
+        "bytes": 82,
+        "sha256": "c6c7e2c5160333023dfedbbe32b606fd5792d79d3d917727f1a6a3756b4d92ef"
+      },
+      "admission": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/future-capture-1/step1/admission.json",
+        "bytes": 1085,
+        "sha256": "944b01502d4a9108e1bb40c221157ccbda03196fe2754ba5d6506ef8575c7f12"
+      },
+      "pid": 1807230,
+      "start": 95076574,
+      "seconds": 0.07698891405016184,
+      "returncode": 0,
+      "positive_join": true,
+      "group_absent": true,
+      "streams_closed": true,
+      "captures": {
+        "stdout": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/future-capture-1/step1/stdout",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/future-capture-1/step1/stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "index": 2,
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/future-capture-1/step2/command.json",
+        "bytes": 1274,
+        "sha256": "366b98be4ef9fb216899a3dd5119584c44c5963aeed739b5bee0d6f228dbf918"
+      },
+      "whole_join": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/future-capture-1/step2/whole-join.json",
+        "bytes": 1301,
+        "sha256": "d1e2433a3efac4813793dff86da43e654532efbfb156ee0a2303e1a5ada4c9d0"
+      },
+      "direct_wait": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/future-capture-1/step2/direct-wait.json",
+        "bytes": 82,
+        "sha256": "4d8850d00d4cc0a7e271059f8a64d95bf432c9574b1095501ee27d173457f469"
+      },
+      "admission": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/future-capture-1/step2/admission.json",
+        "bytes": 1082,
+        "sha256": "d00a19845448804e22d43458feac4d03e7fd76fac5b8ab931435d97c7198a714"
+      },
+      "pid": 1807235,
+      "start": 95076672,
+      "seconds": 12.880192000069655,
+      "returncode": 0,
+      "positive_join": true,
+      "group_absent": true,
+      "streams_closed": true,
+      "captures": {
+        "stdout": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/future-capture-1/step2/stdout",
+          "bytes": 110,
+          "sha256": "52f3351eaffc955f047c5bba40fbfecbec9b20ed52b0f8944cc7d833959ef49f"
+        },
+        "stderr": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/future-capture-1/step2/stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    }
+  ],
+  "retained_prefix_producers": [
+    {
+      "index": 0,
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/step0/command.json",
+        "bytes": 4572,
+        "sha256": "970560b0869475ff9e13cfca135a16a8caf92b2927fbdf617590700fbc8e8a89"
+      },
+      "join": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/step0/whole-join.json",
+        "bytes": 1298,
+        "sha256": "5771505a4a919b455093165082166dc52a6936f849a93024cc210ddea3dd7e02"
+      }
+    },
+    {
+      "index": 1,
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/step1/command.json",
+        "bytes": 4550,
+        "sha256": "6257fe5bac35bbd0a5febdb9ce3708645a5d83d2c1b6971f0c5e63dfb805236a"
+      },
+      "join": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/step1/whole-join.json",
+        "bytes": 1297,
+        "sha256": "7fbdf3471e7ea0c16b2875361f710c8178420d7c6aac300a8e5af36b2f00ea55"
+      }
+    },
+    {
+      "index": 2,
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/step2/command.json",
+        "bytes": 4606,
+        "sha256": "05d90d59f453f759d04850573f27d097fedda89ce98e11b1199ed8f736c7eaec"
+      },
+      "join": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/step2/whole-join.json",
+        "bytes": 1297,
+        "sha256": "8b96f61d1199ed09bf37cf7086fd78613b2e979863e4809f00b0303023674841"
+      }
+    },
+    {
+      "index": 3,
+      "command": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/step3/command.json",
+        "bytes": 1559,
+        "sha256": "a8ace610480d83ab8a4e9180dd19954dfd7da88e9698af0e9ec9408834eb09f5"
+      },
+      "join": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/step3/whole-join.json",
+        "bytes": 1296,
+        "sha256": "9c7c17d656c54bbe35c45d08649e425e8c7881d9cc25623a4161668340d1bd24"
+      }
+    }
+  ],
+  "preserved_failure": {
+    "stderr": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/step4/stderr",
+      "bytes": 829,
+      "sha256": "489a521648f2cb48921775f9203a20a11cd1e50ababf056b287fe5833db07ead"
+    },
+    "join": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/future-capture-1/step4/whole-join.json",
+      "bytes": 1298,
+      "sha256": "26abfe8124e839ed8a1858b0bcae5645185c157ba7ba0892f9fea93accaeda4d"
+    },
+    "returncode": 1
+  },
+  "cfg_pair_delta": "Only --cfg f03_ptrace_entry_candidate pair removed; output destination changed to fresh rust-fallback.o; all other whole119Rust argv exact.",
+  "new_dynamic_behavior_tests": 0,
+  "production_default_or_native_credit": 0
+}

@@ -1,0 +1,77 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "at": "2026-10-28T02:10:18.999870+00:00",
+  "status": "ACCEPTED_ORIGINAL235_RUST_EXECUTOR_NATIVE_CASE_ONLY",
+  "case": "P-M06-01-process-exec-wait-235B",
+  "independent_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/independent-actual-native-review-1/REVIEW.json",
+    "bytes": 10359,
+    "sha256": "732da40fcc57a37460d41da3b1c7348f69a5a4c1a10044c6678eb0e4b1a6084d"
+  },
+  "trace": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/independent-actual-native-review-1/TRACE-AND-NATIVE-PROOF.json",
+    "bytes": 23832,
+    "sha256": "fed38482477ff2fae655c87afdfd82aeaf057cb6d55ca06ace34499e68e76518"
+  },
+  "current_free": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/independent-actual-native-review-1/CURRENT-FREE.json",
+    "bytes": 5497,
+    "sha256": "563d0ce4db6695fb78adfaae2d2d91ca02afa6fa9c1621704d071b883718b89e"
+  },
+  "Root47": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER47.json",
+    "bytes": 35231,
+    "sha256": "d21b8336f837a3434f6fb2898268b05d60478ae120c6d50599d3a65d712a9a60"
+  },
+  "nonce": "d21f4e17faf1b0b806419b1860bd0598",
+  "source_tuple": {
+    "executor": "e5d18169",
+    "collector": "ab3e775e",
+    "payload": "537cb22b",
+    "kernel": "60e62f97",
+    "archive": "701cd7d8",
+    "manifest": "cf49bed6"
+  },
+  "actual": {
+    "stdout_bytes": 235,
+    "stderr_bytes": 0,
+    "exit_code": 0,
+    "caller": {
+      "joined": true,
+      "returncode": 0,
+      "caller_pid": 1805538,
+      "caller_starttime": "95052465",
+      "started_at": 1793153079.9998791,
+      "finished_at": 1793153118.3233182,
+      "cpu_seconds": 0.9892249999999999,
+      "peak_rss_kib": 53048
+    },
+    "native_wall_seconds": 38.32343912124634,
+    "resource_to_entry_seconds": 16.31105327606201,
+    "parent_pid": 255,
+    "children": [
+      258,
+      261
+    ],
+    "parent_ACK_token": 3,
+    "parent_ACK_errno": 0,
+    "parent_DELETE": true,
+    "distinct_parent_query": 147,
+    "parent_final_errno": 0,
+    "payload_seconds": 1.451539511,
+    "postreap_seconds": 0.416438122
+  },
+  "accepted_delta": {
+    "native_cases": 1,
+    "guest_cases": 1,
+    "files": 0,
+    "C_functions": 0
+  },
+  "limits": [
+    "Exact original strict235 unchanged full5298 plus original executor supplement29f9; not all349/all51/allocation/file closure.",
+    "Both childDELETE observed; childquery-11, no claim childfinal0. Originalcase requiresparentfinal0.",
+    "Actualexecution02:04:39\u201302:05:18 belongs01:36\u201302:06 runtime bucket; this later independentacceptance belongs02:06\u201302:36 acceptance bucket."
+  ],
+  "whole_file_contract_review": "pending separate exact originalcontract reconciliation; no newquota"
+}

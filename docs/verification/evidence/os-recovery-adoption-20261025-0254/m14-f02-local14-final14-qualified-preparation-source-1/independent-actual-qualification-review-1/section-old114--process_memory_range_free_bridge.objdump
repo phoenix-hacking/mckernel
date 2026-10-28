@@ -1,0 +1,558 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.process_memory_range_free_bridge:
+
+0000000000000000 <process_memory_range_free_bridge>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	41 57                	push   %r15
+   6:	41 56                	push   %r14
+   8:	41 55                	push   %r13
+   a:	41 54                	push   %r12
+   c:	53                   	push   %rbx
+   d:	48 83 ec 38          	sub    $0x38,%rsp
+  11:	49 89 f6             	mov    %rsi,%r14
+  14:	48 89 fb             	mov    %rdi,%rbx
+  17:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	19: R_X86_64_64	process_free_range_body_debug+0x58
+  21:	8b 00                	mov    (%rax),%eax
+  23:	3d ff ff ff 00       	cmp    $0xffffff,%eax
+  28:	76 24                	jbe    4e <process_memory_range_free_bridge+0x4e>
+  2a:	49 8b 56 18          	mov    0x18(%r14),%rdx
+  2e:	49 8b 4e 20          	mov    0x20(%r14),%rcx
+  32:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	34: R_X86_64_64	.lrodata.str1.1+0x68ac
+  3c:	49 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%r8	3e: R_X86_64_64	kprintf
+  46:	48 89 de             	mov    %rbx,%rsi
+  49:	31 c0                	xor    %eax,%eax
+  4b:	41 ff d0             	call   *%r8
+  4e:	b8 ea ff ff ff       	mov    $0xffffffea,%eax
+  53:	48 85 db             	test   %rbx,%rbx
+  56:	0f 84 76 05 00 00    	je     5d2 <process_memory_range_free_bridge+0x5d2>
+  5c:	4d 85 f6             	test   %r14,%r14
+  5f:	0f 84 6d 05 00 00    	je     5d2 <process_memory_range_free_bridge+0x5d2>
+  65:	4c 8b 13             	mov    (%rbx),%r10
+  68:	4d 85 d2             	test   %r10,%r10
+  6b:	0f 84 61 05 00 00    	je     5d2 <process_memory_range_free_bridge+0x5d2>
+  71:	49 8b 06             	mov    (%r14),%rax
+  74:	4c 39 f0             	cmp    %r14,%rax
+  77:	75 09                	jne    82 <process_memory_range_free_bridge+0x82>
+  79:	31 ff                	xor    %edi,%edi
+  7b:	31 c0                	xor    %eax,%eax
+  7d:	e9 82 00 00 00       	jmp    104 <process_memory_range_free_bridge+0x104>
+  82:	49 8b 4e 10          	mov    0x10(%r14),%rcx
+  86:	48 85 c9             	test   %rcx,%rcx
+  89:	74 13                	je     9e <process_memory_range_free_bridge+0x9e>
+  8b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+  90:	48 89 cf             	mov    %rcx,%rdi
+  93:	48 8b 49 08          	mov    0x8(%rcx),%rcx
+  97:	48 85 c9             	test   %rcx,%rcx
+  9a:	75 f4                	jne    90 <process_memory_range_free_bridge+0x90>
+  9c:	eb 26                	jmp    c4 <process_memory_range_free_bridge+0xc4>
+  9e:	48 89 c7             	mov    %rax,%rdi
+  a1:	48 83 e7 fc          	and    $0xfffffffffffffffc,%rdi
+  a5:	74 1b                	je     c2 <process_memory_range_free_bridge+0xc2>
+  a7:	4c 89 f1             	mov    %r14,%rcx
+  aa:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+  b0:	48 3b 4f 10          	cmp    0x10(%rdi),%rcx
+  b4:	75 0e                	jne    c4 <process_memory_range_free_bridge+0xc4>
+  b6:	48 89 f9             	mov    %rdi,%rcx
+  b9:	48 8b 3f             	mov    (%rdi),%rdi
+  bc:	48 83 e7 fc          	and    $0xfffffffffffffffc,%rdi
+  c0:	75 ee                	jne    b0 <process_memory_range_free_bridge+0xb0>
+  c2:	31 ff                	xor    %edi,%edi
+  c4:	49 8b 4e 08          	mov    0x8(%r14),%rcx
+  c8:	48 85 c9             	test   %rcx,%rcx
+  cb:	74 11                	je     de <process_memory_range_free_bridge+0xde>
+  cd:	0f 1f 00             	nopl   (%rax)
+  d0:	48 89 c8             	mov    %rcx,%rax
+  d3:	48 8b 49 10          	mov    0x10(%rcx),%rcx
+  d7:	48 85 c9             	test   %rcx,%rcx
+  da:	75 f4                	jne    d0 <process_memory_range_free_bridge+0xd0>
+  dc:	eb 26                	jmp    104 <process_memory_range_free_bridge+0x104>
+  de:	48 83 e0 fc          	and    $0xfffffffffffffffc,%rax
+  e2:	74 1e                	je     102 <process_memory_range_free_bridge+0x102>
+  e4:	4c 89 f1             	mov    %r14,%rcx
+  e7:	66 0f 1f 84 00 00 00 00 00 	nopw   0x0(%rax,%rax,1)
+  f0:	48 3b 48 08          	cmp    0x8(%rax),%rcx
+  f4:	75 0e                	jne    104 <process_memory_range_free_bridge+0x104>
+  f6:	48 89 c1             	mov    %rax,%rcx
+  f9:	48 8b 00             	mov    (%rax),%rax
+  fc:	48 83 e0 fc          	and    $0xfffffffffffffffc,%rax
+ 100:	75 ee                	jne    f0 <process_memory_range_free_bridge+0xf0>
+ 102:	31 c0                	xor    %eax,%eax
+ 104:	49 8b 4e 38          	mov    0x38(%r14),%rcx
+ 108:	48 85 c9             	test   %rcx,%rcx
+ 10b:	74 09                	je     116 <process_memory_range_free_bridge+0x116>
+ 10d:	f6 41 0a 10          	testb  $0x10,0xa(%rcx)
+ 111:	0f 94 c2             	sete   %dl
+ 114:	eb 02                	jmp    118 <process_memory_range_free_bridge+0x118>
+ 116:	b2 01                	mov    $0x1,%dl
+ 118:	4c 8b 8b 88 00 00 00 	mov    0x88(%rbx),%r9
+ 11f:	48 85 ff             	test   %rdi,%rdi
+ 122:	74 06                	je     12a <process_memory_range_free_bridge+0x12a>
+ 124:	4c 8b 5f 20          	mov    0x20(%rdi),%r11
+ 128:	eb 03                	jmp    12d <process_memory_range_free_bridge+0x12d>
+ 12a:	45 31 db             	xor    %r11d,%r11d
+ 12d:	4d 8b a9 58 06 00 00 	mov    0x658(%r9),%r13
+ 134:	49 8b 76 18          	mov    0x18(%r14),%rsi
+ 138:	48 89 75 c0          	mov    %rsi,-0x40(%rbp)
+ 13c:	48 85 c0             	test   %rax,%rax
+ 13f:	74 06                	je     147 <process_memory_range_free_bridge+0x147>
+ 141:	4c 8b 40 18          	mov    0x18(%rax),%r8
+ 145:	eb 03                	jmp    14a <process_memory_range_free_bridge+0x14a>
+ 147:	45 31 c0             	xor    %r8d,%r8d
+ 14a:	4c 89 4d a8          	mov    %r9,-0x58(%rbp)
+ 14e:	4d 8b b9 68 06 00 00 	mov    0x668(%r9),%r15
+ 155:	49 8b 76 20          	mov    0x20(%r14),%rsi
+ 159:	48 89 75 c8          	mov    %rsi,-0x38(%rbp)
+ 15d:	4d 8b 66 30          	mov    0x30(%r14),%r12
+ 161:	4d 85 e4             	test   %r12,%r12
+ 164:	40 0f 95 c6          	setne  %sil
+ 168:	4c 39 6d c0          	cmp    %r13,-0x40(%rbp)
+ 16c:	41 0f 94 c1          	sete   %r9b
+ 170:	41 08 f1             	or     %sil,%r9b
+ 173:	4c 89 6d b0          	mov    %r13,-0x50(%rbp)
+ 177:	0f 85 c1 01 00 00    	jne    33e <process_memory_range_free_bridge+0x33e>
+ 17d:	4c 89 7d a0          	mov    %r15,-0x60(%rbp)
+ 181:	41 0f b7 76 28       	movzwl 0x28(%r14),%esi
+ 186:	f7 c6 02 03 00 00    	test   $0x302,%esi
+ 18c:	0f 84 4f 04 00 00    	je     5e1 <process_memory_range_free_bridge+0x5e1>
+ 192:	4c 8d ab b0 00 00 00 	lea    0xb0(%rbx),%r13
+ 199:	4c 8b 7d c0          	mov    -0x40(%rbp),%r15
+ 19d:	4c 8b 65 c8          	mov    -0x38(%rbp),%r12
+ 1a1:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1a3: R_X86_64_64	cpu_local_var_initialized
+ 1ab:	83 38 00             	cmpl   $0x0,(%rax)
+ 1ae:	49 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%r8	1b0: R_X86_64_64	locals
+ 1b8:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	1ba: R_X86_64_64	num_processors
+ 1c2:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	1c4: R_X86_64_64	clv
+ 1cc:	74 4a                	je     218 <process_memory_range_free_bridge+0x218>
+ 1ce:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ 1d3:	0f 32                	rdmsr  
+ 1d5:	48 c1 e2 20          	shl    $0x20,%rdx
+ 1d9:	89 c1                	mov    %eax,%ecx
+ 1db:	48 09 d1             	or     %rdx,%rcx
+ 1de:	49 8b 10             	mov    (%r8),%rdx
+ 1e1:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ 1e8:	48 39 ca             	cmp    %rcx,%rdx
+ 1eb:	77 19                	ja     206 <process_memory_range_free_bridge+0x206>
+ 1ed:	48 63 36             	movslq (%rsi),%rsi
+ 1f0:	48 c1 e6 0e          	shl    $0xe,%rsi
+ 1f4:	48 01 f2             	add    %rsi,%rdx
+ 1f7:	48 39 ca             	cmp    %rcx,%rdx
+ 1fa:	72 0a                	jb     206 <process_memory_range_free_bridge+0x206>
+ 1fc:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ 204:	48 98                	cltq   
+ 206:	48 8b 0f             	mov    (%rdi),%rcx
+ 209:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ 210:	f0 ff 84 01 28 1f 00 00 	lock incl 0x1f28(%rcx,%rax,1)
+ 218:	b9 00 00 02 00       	mov    $0x20000,%ecx
+ 21d:	f0 41 0f c1 4d 00    	lock xadd %ecx,0x0(%r13)
+ 223:	89 c8                	mov    %ecx,%eax
+ 225:	c1 e8 10             	shr    $0x10,%eax
+ 228:	66 39 c1             	cmp    %ax,%cx
+ 22b:	0f 85 3f 01 00 00    	jne    370 <process_memory_range_free_bridge+0x370>
+ 231:	49 8b 3a             	mov    (%r10),%rdi
+ 234:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	236: R_X86_64_64	x86_clear_range_public_body
+ 23e:	48 89 de             	mov    %rbx,%rsi
+ 241:	4c 89 fa             	mov    %r15,%rdx
+ 244:	4c 89 e1             	mov    %r12,%rcx
+ 247:	45 31 c0             	xor    %r8d,%r8d
+ 24a:	45 31 c9             	xor    %r9d,%r9d
+ 24d:	ff d0                	call   *%rax
+ 24f:	66 f0 83 83 b0 00 00 00 02 	lock addw $0x2,0xb0(%rbx)
+ 258:	41 89 c2             	mov    %eax,%r10d
+ 25b:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	25d: R_X86_64_64	cpu_local_var_initialized
+ 265:	83 38 00             	cmpl   $0x0,(%rax)
+ 268:	4c 8b 6d b0          	mov    -0x50(%rbp),%r13
+ 26c:	74 68                	je     2d6 <process_memory_range_free_bridge+0x2d6>
+ 26e:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ 273:	0f 32                	rdmsr  
+ 275:	48 c1 e2 20          	shl    $0x20,%rdx
+ 279:	89 c1                	mov    %eax,%ecx
+ 27b:	48 09 d1             	or     %rdx,%rcx
+ 27e:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	280: R_X86_64_64	locals
+ 288:	48 8b 10             	mov    (%rax),%rdx
+ 28b:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ 292:	48 39 ca             	cmp    %rcx,%rdx
+ 295:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	297: R_X86_64_64	clv
+ 29f:	77 23                	ja     2c4 <process_memory_range_free_bridge+0x2c4>
+ 2a1:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	2a3: R_X86_64_64	num_processors
+ 2ab:	48 63 36             	movslq (%rsi),%rsi
+ 2ae:	48 c1 e6 0e          	shl    $0xe,%rsi
+ 2b2:	48 01 f2             	add    %rsi,%rdx
+ 2b5:	48 39 ca             	cmp    %rcx,%rdx
+ 2b8:	72 0a                	jb     2c4 <process_memory_range_free_bridge+0x2c4>
+ 2ba:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ 2c2:	48 98                	cltq   
+ 2c4:	48 8b 0f             	mov    (%rdi),%rcx
+ 2c7:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ 2ce:	f0 ff 8c 01 28 1f 00 00 	lock decl 0x1f28(%rcx,%rax,1)
+ 2d6:	41 83 fa fe          	cmp    $0xfffffffe,%r10d
+ 2da:	74 39                	je     315 <process_memory_range_free_bridge+0x315>
+ 2dc:	45 85 d2             	test   %r10d,%r10d
+ 2df:	74 34                	je     315 <process_memory_range_free_bridge+0x315>
+ 2e1:	49 8b 56 18          	mov    0x18(%r14),%rdx
+ 2e5:	49 8b 4e 20          	mov    0x20(%r14),%rcx
+ 2e9:	48 83 ec 08          	sub    $0x8,%rsp
+ 2ed:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	2ef: R_X86_64_64	.lrodata.str1.1+0x2614
+ 2f7:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	2f9: R_X86_64_64	kprintf
+ 301:	48 89 de             	mov    %rbx,%rsi
+ 304:	4d 89 f8             	mov    %r15,%r8
+ 307:	4d 89 e1             	mov    %r12,%r9
+ 30a:	31 c0                	xor    %eax,%eax
+ 30c:	41 52                	push   %r10
+ 30e:	41 ff d3             	call   *%r11
+ 311:	48 83 c4 10          	add    $0x10,%rsp
+ 315:	49 8b 7e 38          	mov    0x38(%r14),%rdi
+ 319:	48 85 ff             	test   %rdi,%rdi
+ 31c:	74 18                	je     336 <process_memory_range_free_bridge+0x336>
+ 31e:	f0 ff 4f 18          	lock decl 0x18(%rdi)
+ 322:	75 12                	jne    336 <process_memory_range_free_bridge+0x336>
+ 324:	48 8b 07             	mov    (%rdi),%rax
+ 327:	48 85 c0             	test   %rax,%rax
+ 32a:	74 0a                	je     336 <process_memory_range_free_bridge+0x336>
+ 32c:	48 8b 00             	mov    (%rax),%rax
+ 32f:	48 85 c0             	test   %rax,%rax
+ 332:	74 02                	je     336 <process_memory_range_free_bridge+0x336>
+ 334:	ff d0                	call   *%rax
+ 336:	4d 8b 66 30          	mov    0x30(%r14),%r12
+ 33a:	4c 8b 7d a0          	mov    -0x60(%rbp),%r15
+ 33e:	48 8d 73 08          	lea    0x8(%rbx),%rsi
+ 342:	4d 85 e4             	test   %r12,%r12
+ 345:	75 3a                	jne    381 <process_memory_range_free_bridge+0x381>
+ 347:	4d 39 6e 18          	cmp    %r13,0x18(%r14)
+ 34b:	75 34                	jne    381 <process_memory_range_free_bridge+0x381>
+ 34d:	48 8b 45 a8          	mov    -0x58(%rbp),%rax
+ 351:	48 8b 80 60 06 00 00 	mov    0x660(%rax),%rax
+ 358:	4c 01 e8             	add    %r13,%rax
+ 35b:	49 39 46 20          	cmp    %rax,0x20(%r14)
+ 35f:	41 0f 94 c5          	sete   %r13b
+ 363:	eb 1f                	jmp    384 <process_memory_range_free_bridge+0x384>
+ 365:	66 66 2e 0f 1f 84 00 00 00 00 00 	data16 cs nopw 0x0(%rax,%rax,1)
+ 370:	41 8b 4d 00          	mov    0x0(%r13),%ecx
+ 374:	66 39 c1             	cmp    %ax,%cx
+ 377:	0f 84 b4 fe ff ff    	je     231 <process_memory_range_free_bridge+0x231>
+ 37d:	f3 90                	pause  
+ 37f:	eb ef                	jmp    370 <process_memory_range_free_bridge+0x370>
+ 381:	45 31 ed             	xor    %r13d,%r13d
+ 384:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	386: R_X86_64_64	rb_erase
+ 38e:	4c 89 f7             	mov    %r14,%rdi
+ 391:	ff d0                	call   *%rax
+ 393:	4c 39 b3 00 01 00 00 	cmp    %r14,0x100(%rbx)
+ 39a:	74 57                	je     3f3 <process_memory_range_free_bridge+0x3f3>
+ 39c:	4c 39 b3 08 01 00 00 	cmp    %r14,0x108(%rbx)
+ 3a3:	74 62                	je     407 <process_memory_range_free_bridge+0x407>
+ 3a5:	4c 39 b3 10 01 00 00 	cmp    %r14,0x110(%rbx)
+ 3ac:	74 6d                	je     41b <process_memory_range_free_bridge+0x41b>
+ 3ae:	4c 39 b3 18 01 00 00 	cmp    %r14,0x118(%rbx)
+ 3b5:	74 78                	je     42f <process_memory_range_free_bridge+0x42f>
+ 3b7:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	3b9: R_X86_64_64	process_tracked_allocator_source_file
+ 3c1:	4d 85 e4             	test   %r12,%r12
+ 3c4:	74 79                	je     43f <process_memory_range_free_bridge+0x43f>
+ 3c6:	4c 2b 7d b0          	sub    -0x50(%rbp),%r15
+ 3ca:	4d 03 7e 30          	add    0x30(%r14),%r15
+ 3ce:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	3d0: R_X86_64_64	_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data20OWNED_INIT_PT_LOADED
+ 3d8:	83 38 00             	cmpl   $0x0,(%rax)
+ 3db:	0f 84 98 00 00 00    	je     479 <process_memory_range_free_bridge+0x479>
+ 3e1:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	3e3: R_X86_64_64	linux_page_offset_base
+ 3eb:	48 8b 00             	mov    (%rax),%rax
+ 3ee:	e9 90 00 00 00       	jmp    483 <process_memory_range_free_bridge+0x483>
+ 3f3:	48 c7 83 00 01 00 00 00 00 00 00 	movq   $0x0,0x100(%rbx)
+ 3fe:	4c 39 b3 08 01 00 00 	cmp    %r14,0x108(%rbx)
+ 405:	75 9e                	jne    3a5 <process_memory_range_free_bridge+0x3a5>
+ 407:	48 c7 83 08 01 00 00 00 00 00 00 	movq   $0x0,0x108(%rbx)
+ 412:	4c 39 b3 10 01 00 00 	cmp    %r14,0x110(%rbx)
+ 419:	75 93                	jne    3ae <process_memory_range_free_bridge+0x3ae>
+ 41b:	48 c7 83 10 01 00 00 00 00 00 00 	movq   $0x0,0x110(%rbx)
+ 426:	4c 39 b3 18 01 00 00 	cmp    %r14,0x118(%rbx)
+ 42d:	75 88                	jne    3b7 <process_memory_range_free_bridge+0x3b7>
+ 42f:	48 c7 83 18 01 00 00 00 00 00 00 	movq   $0x0,0x118(%rbx)
+ 43a:	e9 78 ff ff ff       	jmp    3b7 <process_memory_range_free_bridge+0x3b7>
+ 43f:	45 84 ed             	test   %r13b,%r13b
+ 442:	0f 84 37 01 00 00    	je     57f <process_memory_range_free_bridge+0x57f>
+ 448:	49 8b 76 18          	mov    0x18(%r14),%rsi
+ 44c:	49 8b 56 20          	mov    0x20(%r14),%rdx
+ 450:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	452: R_X86_64_64	process_free_range_clear_main_bridge
+ 45a:	48 89 df             	mov    %rbx,%rdi
+ 45d:	49 89 cf             	mov    %rcx,%r15
+ 460:	ff d0                	call   *%rax
+ 462:	4c 89 f9             	mov    %r15,%rcx
+ 465:	48 8b 45 a8          	mov    -0x58(%rbp),%rax
+ 469:	48 c7 80 60 06 00 00 00 00 00 00 	movq   $0x0,0x660(%rax)
+ 474:	e9 06 01 00 00       	jmp    57f <process_memory_range_free_bridge+0x57f>
+ 479:	48 b8 00 00 00 00 00 80 ff ff 	movabs $0xffff800000000000,%rax
+ 483:	49 01 c7             	add    %rax,%r15
+ 486:	49 8b 76 20          	mov    0x20(%r14),%rsi
+ 48a:	49 2b 76 18          	sub    0x18(%r14),%rsi
+ 48e:	48 c1 ee 0c          	shr    $0xc,%rsi
+ 492:	49 89 cc             	mov    %rcx,%r12
+ 495:	48 8b 09             	mov    (%rcx),%rcx
+ 498:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	49a: R_X86_64_64	memdebug
+ 4a2:	4c 8b 08             	mov    (%rax),%r9
+ 4a5:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	4a7: R_X86_64_64	pagealloc_track_initialized
+ 4af:	8b 00                	mov    (%rax),%eax
+ 4b1:	48 83 ec 08          	sub    $0x8,%rsp
+ 4b5:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	4b7: R_X86_64_64	mem_pagealloc_track_log_bridge
+ 4bf:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	4c1: R_X86_64_64	mem_pagealloc_invalid_size_bridge
+ 4c9:	49 bd 00 00 00 00 00 00 00 00 	movabs $0x0,%r13	4cb: R_X86_64_64	mem_pagealloc_track_noirq_unlock_bridge
+ 4d3:	4c 89 ff             	mov    %r15,%rdi
+ 4d6:	49 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%r15	4d8: R_X86_64_64	mem_pagealloc_track_noirq_lock_bridge
+ 4e0:	31 d2                	xor    %edx,%edx
+ 4e2:	41 b8 51 07 00 00    	mov    $0x751,%r8d
+ 4e8:	41 52                	push   %r10
+ 4ea:	41 53                	push   %r11
+ 4ec:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	4ee: R_X86_64_64	mem_pagealloc_invalid_free_bridge
+ 4f6:	41 52                	push   %r10
+ 4f8:	41 55                	push   %r13
+ 4fa:	41 57                	push   %r15
+ 4fc:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	4fe: R_X86_64_64	mem_kmalloc_remote_unlock_bridge
+ 506:	41 52                	push   %r10
+ 508:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	50a: R_X86_64_64	mem_kmalloc_remote_lock_bridge
+ 512:	41 52                	push   %r10
+ 514:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	516: R_X86_64_64	___kfree
+ 51e:	41 52                	push   %r10
+ 520:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	522: R_X86_64_64	mem_pagealloc_track_meta_alloc_bridge
+ 52a:	41 52                	push   %r10
+ 52c:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	52e: R_X86_64_64	___ihk_mc_free_pages
+ 536:	41 52                	push   %r10
+ 538:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	53a: R_X86_64_64	pagealloc_addr_hash_locks
+ 542:	41 52                	push   %r10
+ 544:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	546: R_X86_64_64	pagealloc_addr_hash
+ 54e:	41 52                	push   %r10
+ 550:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	552: R_X86_64_64	pagealloc_track_hash_locks
+ 55a:	41 52                	push   %r10
+ 55c:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	55e: R_X86_64_64	pagealloc_track_hash
+ 566:	41 52                	push   %r10
+ 568:	50                   	push   %rax
+ 569:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	56b: R_X86_64_64	pagealloc_track_free_result
+ 573:	ff d0                	call   *%rax
+ 575:	4c 89 e1             	mov    %r12,%rcx
+ 578:	48 81 c4 80 00 00 00 	add    $0x80,%rsp
+ 57f:	48 8b 31             	mov    (%rcx),%rsi
+ 582:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	584: R_X86_64_64	_kfree
+ 58c:	4c 89 f7             	mov    %r14,%rdi
+ 58f:	ba 19 07 00 00       	mov    $0x719,%edx
+ 594:	ff d0                	call   *%rax
+ 596:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	598: R_X86_64_64	process_free_range_body_debug+0x38
+ 5a0:	8b 08                	mov    (%rax),%ecx
+ 5a2:	31 c0                	xor    %eax,%eax
+ 5a4:	81 f9 00 00 00 01    	cmp    $0x1000000,%ecx
+ 5aa:	72 26                	jb     5d2 <process_memory_range_free_bridge+0x5d2>
+ 5ac:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	5ae: R_X86_64_64	.lrodata.str1.1+0x2683
+ 5b6:	49 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%r8	5b8: R_X86_64_64	kprintf
+ 5c0:	48 89 de             	mov    %rbx,%rsi
+ 5c3:	48 8b 55 c0          	mov    -0x40(%rbp),%rdx
+ 5c7:	48 8b 4d c8          	mov    -0x38(%rbp),%rcx
+ 5cb:	31 c0                	xor    %eax,%eax
+ 5cd:	41 ff d0             	call   *%r8
+ 5d0:	31 c0                	xor    %eax,%eax
+ 5d2:	48 83 c4 38          	add    $0x38,%rsp
+ 5d6:	5b                   	pop    %rbx
+ 5d7:	41 5c                	pop    %r12
+ 5d9:	41 5d                	pop    %r13
+ 5db:	41 5e                	pop    %r14
+ 5dd:	41 5f                	pop    %r15
+ 5df:	5d                   	pop    %rbp
+ 5e0:	c3                   	ret    
+ 5e1:	4c 89 55 b8          	mov    %r10,-0x48(%rbp)
+ 5e5:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	5e7: R_X86_64_64	_RNvNtNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers17owned_memory_data18OWNED_USE_1GB_PAGE
+ 5ef:	83 3e 00             	cmpl   $0x0,(%rsi)
+ 5f2:	48 c7 c6 00 00 e0 ff 	mov    $0xffffffffffe00000,%rsi
+ 5f9:	49 c7 c5 00 00 00 c0 	mov    $0xffffffffc0000000,%r13
+ 600:	4c 0f 44 ee          	cmove  %rsi,%r13
+ 604:	be 00 00 20 00       	mov    $0x200000,%esi
+ 609:	41 ba 00 00 00 40    	mov    $0x40000000,%r10d
+ 60f:	4c 0f 44 d6          	cmove  %rsi,%r10
+ 613:	4d 89 ef             	mov    %r13,%r15
+ 616:	4c 23 7d c0          	and    -0x40(%rbp),%r15
+ 61a:	31 f6                	xor    %esi,%esi
+ 61c:	41 b1 01             	mov    $0x1,%r9b
+ 61f:	48 85 ff             	test   %rdi,%rdi
+ 622:	74 46                	je     66a <process_memory_range_free_bridge+0x66a>
+ 624:	4d 39 fb             	cmp    %r15,%r11
+ 627:	76 41                	jbe    66a <process_memory_range_free_bridge+0x66a>
+ 629:	4d 89 d4             	mov    %r10,%r12
+ 62c:	eb 14                	jmp    642 <process_memory_range_free_bridge+0x642>
+ 62e:	66 90                	xchg   %ax,%ax
+ 630:	49 89 ff             	mov    %rdi,%r15
+ 633:	49 f7 df             	neg    %r15
+ 636:	4c 23 7d c0          	and    -0x40(%rbp),%r15
+ 63a:	49 89 fc             	mov    %rdi,%r12
+ 63d:	4d 39 fb             	cmp    %r15,%r11
+ 640:	76 28                	jbe    66a <process_memory_range_free_bridge+0x66a>
+ 642:	bf 00 00 20 00       	mov    $0x200000,%edi
+ 647:	49 81 fc 00 00 20 00 	cmp    $0x200000,%r12
+ 64e:	77 e0                	ja     630 <process_memory_range_free_bridge+0x630>
+ 650:	bf 00 10 00 00       	mov    $0x1000,%edi
+ 655:	49 81 fc 01 10 00 00 	cmp    $0x1001,%r12
+ 65c:	73 d2                	jae    630 <process_memory_range_free_bridge+0x630>
+ 65e:	be f4 ff ff ff       	mov    $0xfffffff4,%esi
+ 663:	45 31 c9             	xor    %r9d,%r9d
+ 666:	4c 8b 7d c0          	mov    -0x40(%rbp),%r15
+ 66a:	48 8b 7d c8          	mov    -0x38(%rbp),%rdi
+ 66e:	4e 8d 24 17          	lea    (%rdi,%r10,1),%r12
+ 672:	49 ff cc             	dec    %r12
+ 675:	4d 21 ec             	and    %r13,%r12
+ 678:	48 85 c0             	test   %rax,%rax
+ 67b:	0f 84 83 00 00 00    	je     704 <process_memory_range_free_bridge+0x704>
+ 681:	4d 39 c4             	cmp    %r8,%r12
+ 684:	76 7e                	jbe    704 <process_memory_range_free_bridge+0x704>
+ 686:	48 8b 45 c8          	mov    -0x38(%rbp),%rax
+ 68a:	48 ff c8             	dec    %rax
+ 68d:	eb 16                	jmp    6a5 <process_memory_range_free_bridge+0x6a5>
+ 68f:	90                   	nop
+ 690:	4c 8d 14 38          	lea    (%rax,%rdi,1),%r10
+ 694:	49 89 fc             	mov    %rdi,%r12
+ 697:	49 f7 dc             	neg    %r12
+ 69a:	4d 21 d4             	and    %r10,%r12
+ 69d:	49 89 fa             	mov    %rdi,%r10
+ 6a0:	4d 39 c4             	cmp    %r8,%r12
+ 6a3:	76 5f                	jbe    704 <process_memory_range_free_bridge+0x704>
+ 6a5:	bf 00 00 20 00       	mov    $0x200000,%edi
+ 6aa:	49 81 fa 00 00 20 00 	cmp    $0x200000,%r10
+ 6b1:	77 dd                	ja     690 <process_memory_range_free_bridge+0x690>
+ 6b3:	bf 00 10 00 00       	mov    $0x1000,%edi
+ 6b8:	49 81 fa 01 10 00 00 	cmp    $0x1001,%r10
+ 6bf:	73 cf                	jae    690 <process_memory_range_free_bridge+0x690>
+ 6c1:	48 85 c9             	test   %rcx,%rcx
+ 6c4:	0f 94 c0             	sete   %al
+ 6c7:	08 d0                	or     %dl,%al
+ 6c9:	88 45 d7             	mov    %al,-0x29(%rbp)
+ 6cc:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	6ce: R_X86_64_64	.lrodata.str1.1+0x2580
+ 6d6:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	6d8: R_X86_64_64	kprintf
+ 6e0:	be f4 ff ff ff       	mov    $0xfffffff4,%esi
+ 6e5:	31 c0                	xor    %eax,%eax
+ 6e7:	ff d1                	call   *%rcx
+ 6e9:	4c 8d ab b0 00 00 00 	lea    0xb0(%rbx),%r13
+ 6f0:	4c 8b 65 c8          	mov    -0x38(%rbp),%r12
+ 6f4:	80 7d d7 00          	cmpb   $0x0,-0x29(%rbp)
+ 6f8:	4c 8b 55 b8          	mov    -0x48(%rbp),%r10
+ 6fc:	0f 84 9b fa ff ff    	je     19d <process_memory_range_free_bridge+0x19d>
+ 702:	eb 48                	jmp    74c <process_memory_range_free_bridge+0x74c>
+ 704:	48 85 c9             	test   %rcx,%rcx
+ 707:	0f 94 c0             	sete   %al
+ 70a:	08 d0                	or     %dl,%al
+ 70c:	45 84 c9             	test   %r9b,%r9b
+ 70f:	74 0b                	je     71c <process_memory_range_free_bridge+0x71c>
+ 711:	4c 8d ab b0 00 00 00 	lea    0xb0(%rbx),%r13
+ 718:	84 c0                	test   %al,%al
+ 71a:	eb 26                	jmp    742 <process_memory_range_free_bridge+0x742>
+ 71c:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	71e: R_X86_64_64	.lrodata.str1.1+0x2580
+ 726:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	728: R_X86_64_64	kprintf
+ 730:	88 45 d7             	mov    %al,-0x29(%rbp)
+ 733:	31 c0                	xor    %eax,%eax
+ 735:	ff d1                	call   *%rcx
+ 737:	4c 8d ab b0 00 00 00 	lea    0xb0(%rbx),%r13
+ 73e:	80 7d d7 00          	cmpb   $0x0,-0x29(%rbp)
+ 742:	4c 8b 55 b8          	mov    -0x48(%rbp),%r10
+ 746:	0f 84 55 fa ff ff    	je     1a1 <process_memory_range_free_bridge+0x1a1>
+ 74c:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	74e: R_X86_64_64	cpu_local_var_initialized
+ 756:	83 38 00             	cmpl   $0x0,(%rax)
+ 759:	74 68                	je     7c3 <process_memory_range_free_bridge+0x7c3>
+ 75b:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ 760:	0f 32                	rdmsr  
+ 762:	48 c1 e2 20          	shl    $0x20,%rdx
+ 766:	89 c1                	mov    %eax,%ecx
+ 768:	48 09 d1             	or     %rdx,%rcx
+ 76b:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	76d: R_X86_64_64	locals
+ 775:	48 8b 10             	mov    (%rax),%rdx
+ 778:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ 77f:	48 39 ca             	cmp    %rcx,%rdx
+ 782:	77 23                	ja     7a7 <process_memory_range_free_bridge+0x7a7>
+ 784:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	786: R_X86_64_64	num_processors
+ 78e:	48 63 36             	movslq (%rsi),%rsi
+ 791:	48 c1 e6 0e          	shl    $0xe,%rsi
+ 795:	48 01 f2             	add    %rsi,%rdx
+ 798:	48 39 ca             	cmp    %rcx,%rdx
+ 79b:	72 0a                	jb     7a7 <process_memory_range_free_bridge+0x7a7>
+ 79d:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ 7a5:	48 98                	cltq   
+ 7a7:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	7a9: R_X86_64_64	clv
+ 7b1:	48 8b 09             	mov    (%rcx),%rcx
+ 7b4:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ 7bb:	f0 ff 84 01 28 1f 00 00 	lock incl 0x1f28(%rcx,%rax,1)
+ 7c3:	b9 00 00 02 00       	mov    $0x20000,%ecx
+ 7c8:	f0 41 0f c1 4d 00    	lock xadd %ecx,0x0(%r13)
+ 7ce:	89 c8                	mov    %ecx,%eax
+ 7d0:	c1 e8 10             	shr    $0x10,%eax
+ 7d3:	66 39 c1             	cmp    %ax,%cx
+ 7d6:	75 18                	jne    7f0 <process_memory_range_free_bridge+0x7f0>
+ 7d8:	49 8b 46 38          	mov    0x38(%r14),%rax
+ 7dc:	48 85 c0             	test   %rax,%rax
+ 7df:	74 1c                	je     7fd <process_memory_range_free_bridge+0x7fd>
+ 7e1:	f0 ff 40 18          	lock incl 0x18(%rax)
+ 7e5:	4d 8b 4e 38          	mov    0x38(%r14),%r9
+ 7e9:	eb 15                	jmp    800 <process_memory_range_free_bridge+0x800>
+ 7eb:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+ 7f0:	41 8b 4d 00          	mov    0x0(%r13),%ecx
+ 7f4:	66 39 c1             	cmp    %ax,%cx
+ 7f7:	74 df                	je     7d8 <process_memory_range_free_bridge+0x7d8>
+ 7f9:	f3 90                	pause  
+ 7fb:	eb f3                	jmp    7f0 <process_memory_range_free_bridge+0x7f0>
+ 7fd:	45 31 c9             	xor    %r9d,%r9d
+ 800:	49 8b 3a             	mov    (%r10),%rdi
+ 803:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	805: R_X86_64_64	x86_clear_range_public_body
+ 80d:	48 89 de             	mov    %rbx,%rsi
+ 810:	4c 89 fa             	mov    %r15,%rdx
+ 813:	4c 89 e1             	mov    %r12,%rcx
+ 816:	41 b8 01 00 00 00    	mov    $0x1,%r8d
+ 81c:	ff d0                	call   *%rax
+ 81e:	41 89 c3             	mov    %eax,%r11d
+ 821:	49 8b 7e 38          	mov    0x38(%r14),%rdi
+ 825:	48 85 ff             	test   %rdi,%rdi
+ 828:	74 20                	je     84a <process_memory_range_free_bridge+0x84a>
+ 82a:	f0 ff 4f 18          	lock decl 0x18(%rdi)
+ 82e:	75 1a                	jne    84a <process_memory_range_free_bridge+0x84a>
+ 830:	48 8b 07             	mov    (%rdi),%rax
+ 833:	48 85 c0             	test   %rax,%rax
+ 836:	74 12                	je     84a <process_memory_range_free_bridge+0x84a>
+ 838:	48 8b 00             	mov    (%rax),%rax
+ 83b:	48 85 c0             	test   %rax,%rax
+ 83e:	74 0a                	je     84a <process_memory_range_free_bridge+0x84a>
+ 840:	4c 89 5d b8          	mov    %r11,-0x48(%rbp)
+ 844:	ff d0                	call   *%rax
+ 846:	4c 8b 5d b8          	mov    -0x48(%rbp),%r11
+ 84a:	66 f0 41 83 45 00 02 	lock addw $0x2,0x0(%r13)
+ 851:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	853: R_X86_64_64	cpu_local_var_initialized
+ 85b:	83 38 00             	cmpl   $0x0,(%rax)
+ 85e:	4c 8b 6d b0          	mov    -0x50(%rbp),%r13
+ 862:	74 68                	je     8cc <process_memory_range_free_bridge+0x8cc>
+ 864:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ 869:	0f 32                	rdmsr  
+ 86b:	48 c1 e2 20          	shl    $0x20,%rdx
+ 86f:	89 c1                	mov    %eax,%ecx
+ 871:	48 09 d1             	or     %rdx,%rcx
+ 874:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	876: R_X86_64_64	locals
+ 87e:	48 8b 10             	mov    (%rax),%rdx
+ 881:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ 888:	48 39 ca             	cmp    %rcx,%rdx
+ 88b:	77 23                	ja     8b0 <process_memory_range_free_bridge+0x8b0>
+ 88d:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	88f: R_X86_64_64	num_processors
+ 897:	48 63 36             	movslq (%rsi),%rsi
+ 89a:	48 c1 e6 0e          	shl    $0xe,%rsi
+ 89e:	48 01 f2             	add    %rsi,%rdx
+ 8a1:	48 39 ca             	cmp    %rcx,%rdx
+ 8a4:	72 0a                	jb     8b0 <process_memory_range_free_bridge+0x8b0>
+ 8a6:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ 8ae:	48 98                	cltq   
+ 8b0:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	8b2: R_X86_64_64	clv
+ 8ba:	48 8b 09             	mov    (%rcx),%rcx
+ 8bd:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ 8c4:	f0 ff 8c 01 28 1f 00 00 	lock decl 0x1f28(%rcx,%rax,1)
+ 8cc:	41 83 fb fe          	cmp    $0xfffffffe,%r11d
+ 8d0:	0f 84 3f fa ff ff    	je     315 <process_memory_range_free_bridge+0x315>
+ 8d6:	45 85 db             	test   %r11d,%r11d
+ 8d9:	0f 84 36 fa ff ff    	je     315 <process_memory_range_free_bridge+0x315>
+ 8df:	49 8b 56 18          	mov    0x18(%r14),%rdx
+ 8e3:	49 8b 4e 20          	mov    0x20(%r14),%rcx
+ 8e7:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	8e9: R_X86_64_64	.lrodata.str1.1+0x25c1
+ 8f1:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	8f3: R_X86_64_64	kprintf
+ 8fb:	48 89 de             	mov    %rbx,%rsi
+ 8fe:	4d 89 f8             	mov    %r15,%r8
+ 901:	4d 89 e1             	mov    %r12,%r9
+ 904:	31 c0                	xor    %eax,%eax
+ 906:	41 53                	push   %r11
+ 908:	41 ff 76 38          	push   0x38(%r14)
+ 90c:	41 ff d2             	call   *%r10
+ 90f:	e9 fd f9 ff ff       	jmp    311 <process_memory_range_free_bridge+0x311>

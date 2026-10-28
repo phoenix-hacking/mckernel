@@ -1,0 +1,53 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.process_create_thread_release_address_space_bridge:
+
+0000000000000000 <process_create_thread_release_address_space_bridge>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	41 56                	push   %r14
+   6:	53                   	push   %rbx
+   7:	48 85 ff             	test   %rdi,%rdi
+   a:	0f 84 97 00 00 00    	je     a7 <process_create_thread_release_address_space_bridge+0xa7>
+  10:	48 89 fb             	mov    %rdi,%rbx
+  13:	f0 ff 4f 18          	lock decl 0x18(%rdi)
+  17:	0f 85 8a 00 00 00    	jne    a7 <process_create_thread_release_address_space_bridge+0xa7>
+  1d:	48 8b 43 10          	mov    0x10(%rbx),%rax
+  21:	48 85 c0             	test   %rax,%rax
+  24:	74 09                	je     2f <process_create_thread_release_address_space_bridge+0x2f>
+  26:	48 8b 73 08          	mov    0x8(%rbx),%rsi
+  2a:	48 89 df             	mov    %rbx,%rdi
+  2d:	ff d0                	call   *%rax
+  2f:	4c 8b 33             	mov    (%rbx),%r14
+  32:	49 8d be 00 08 00 00 	lea    0x800(%r14),%rdi
+  39:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	3b: R_X86_64_64	memset
+  43:	ba 00 08 00 00       	mov    $0x800,%edx
+  48:	31 f6                	xor    %esi,%esi
+  4a:	ff d0                	call   *%rax
+  4c:	48 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%rdx	4e: R_X86_64_64	mem_phys_to_virt_bridge
+  56:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	58: R_X86_64_64	x86_pt_free_pages_bridge
+  60:	49 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%r8	62: R_X86_64_64	x86_pt_destroy_panic_bridge
+  6a:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	6c: R_X86_64_64	.ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers26x86_pt_destroy_table_inner
+  74:	bf 04 00 00 00       	mov    $0x4,%edi
+  79:	4c 89 f6             	mov    %r14,%rsi
+  7c:	ff d0                	call   *%rax
+  7e:	85 c0                	test   %eax,%eax
+  80:	75 2a                	jne    ac <process_create_thread_release_address_space_bridge+0xac>
+  82:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	84: R_X86_64_64	process_tracked_allocator_source_file
+  8c:	48 8b 30             	mov    (%rax),%rsi
+  8f:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	91: R_X86_64_64	_kfree
+  99:	48 89 df             	mov    %rbx,%rdi
+  9c:	ba 02 01 00 00       	mov    $0x102,%edx
+  a1:	5b                   	pop    %rbx
+  a2:	41 5e                	pop    %r14
+  a4:	5d                   	pop    %rbp
+  a5:	ff e0                	jmp    *%rax
+  a7:	5b                   	pop    %rbx
+  a8:	41 5e                	pop    %r14
+  aa:	5d                   	pop    %rbp
+  ab:	c3                   	ret    
+  ac:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	ae: R_X86_64_64	.lrodata.str1.1+0x99fe
+  b6:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	b8: R_X86_64_64	panic
+  c0:	ff d0                	call   *%rax

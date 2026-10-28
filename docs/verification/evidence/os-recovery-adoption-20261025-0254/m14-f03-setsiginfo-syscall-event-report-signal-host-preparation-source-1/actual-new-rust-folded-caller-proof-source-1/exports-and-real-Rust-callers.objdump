@@ -1,0 +1,227 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/HOST-output-proposed-1/rust-selected.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.arch_ptrace_syscall_event:
+
+0000000000000000 <arch_ptrace_syscall_event>:
+   0:	48 85 f6             	test   %rsi,%rsi
+   3:	74 4a                	je     4f <arch_ptrace_syscall_event+0x4f>
+   5:	48 89 96 88 00 00 00 	mov    %rdx,0x88(%rsi)
+   c:	48 85 ff             	test   %rdi,%rdi
+   f:	74 36                	je     47 <arch_ptrace_syscall_event+0x47>
+  11:	8b 87 20 11 00 00    	mov    0x1120(%rdi),%eax
+  17:	a9 00 02 00 00       	test   $0x200,%eax
+  1c:	74 29                	je     47 <arch_ptrace_syscall_event+0x47>
+  1e:	55                   	push   %rbp
+  1f:	48 89 e5             	mov    %rsp,%rbp
+  22:	53                   	push   %rbx
+  23:	50                   	push   %rax
+  24:	83 e0 01             	and    $0x1,%eax
+  27:	c1 e0 07             	shl    $0x7,%eax
+  2a:	83 c8 05             	or     $0x5,%eax
+  2d:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	2f: R_X86_64_64	ptrace_report_signal
+  37:	48 89 f3             	mov    %rsi,%rbx
+  3a:	89 c6                	mov    %eax,%esi
+  3c:	ff d1                	callq  *%rcx
+  3e:	48 89 de             	mov    %rbx,%rsi
+  41:	48 83 c4 08          	add    $0x8,%rsp
+  45:	5b                   	pop    %rbx
+  46:	5d                   	pop    %rbp
+  47:	48 8b 86 88 00 00 00 	mov    0x88(%rsi),%rax
+  4e:	c3                   	retq   
+  4f:	48 c7 c0 f2 ff ff ff 	mov    $0xfffffffffffffff2,%rax
+  56:	c3                   	retq   
+
+Disassembly of section .ltext.f03_exec_report_signal_v1:
+
+0000000000000000 <f03_exec_report_signal_v1>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	6: R_X86_64_64	ptrace_report_signal
+   e:	5d                   	pop    %rbp
+   f:	ff e0                	jmpq   *%rax
+
+Disassembly of section .ltext.f03_execveat_ptrace_report_v1:
+
+0000000000000000 <f03_execveat_ptrace_report_v1>:
+   0:	b8 ea ff ff ff       	mov    $0xffffffea,%eax
+   5:	48 85 ff             	test   %rdi,%rdi
+   8:	0f 84 ea 02 00 00    	je     2f8 <f03_execveat_ptrace_report_v1+0x2f8>
+   e:	48 85 f6             	test   %rsi,%rsi
+  11:	0f 84 e1 02 00 00    	je     2f8 <f03_execveat_ptrace_report_v1+0x2f8>
+  17:	55                   	push   %rbp
+  18:	48 89 e5             	mov    %rsp,%rbp
+  1b:	41 57                	push   %r15
+  1d:	41 56                	push   %r14
+  1f:	41 55                	push   %r13
+  21:	41 54                	push   %r12
+  23:	53                   	push   %rbx
+  24:	48 83 ec 58          	sub    $0x58,%rsp
+  28:	48 89 fb             	mov    %rdi,%rbx
+  2b:	f7 87 20 11 00 00 10 01 00 00 	testl  $0x110,0x1120(%rdi)
+  35:	0f 84 6f 01 00 00    	je     1aa <f03_execveat_ptrace_report_v1+0x1aa>
+  3b:	31 c0                	xor    %eax,%eax
+  3d:	0f 1f 00             	nopl   (%rax)
+  40:	0f b6 8c 03 70 10 00 00 	movzbl 0x1070(%rbx,%rax,1),%ecx
+  48:	88 4c 05 80          	mov    %cl,-0x80(%rbp,%rax,1)
+  4c:	0f b6 8c 03 71 10 00 00 	movzbl 0x1071(%rbx,%rax,1),%ecx
+  54:	88 4c 05 81          	mov    %cl,-0x7f(%rbp,%rax,1)
+  58:	0f b6 8c 03 72 10 00 00 	movzbl 0x1072(%rbx,%rax,1),%ecx
+  60:	88 4c 05 82          	mov    %cl,-0x7e(%rbp,%rax,1)
+  64:	0f b6 8c 03 73 10 00 00 	movzbl 0x1073(%rbx,%rax,1),%ecx
+  6c:	88 4c 05 83          	mov    %cl,-0x7d(%rbp,%rax,1)
+  70:	48 83 c0 04          	add    $0x4,%rax
+  74:	48 83 f8 58          	cmp    $0x58,%rax
+  78:	75 c6                	jne    40 <f03_execveat_ptrace_report_v1+0x40>
+  7a:	49 89 f5             	mov    %rsi,%r13
+  7d:	49 be 00 00 00 00 00 00 00 00 	movabs $0x0,%r14	7f: R_X86_64_64	cpu_local_var_initialized
+  87:	41 83 3e 00          	cmpl   $0x0,(%r14)
+  8b:	49 bc 00 00 00 00 00 00 00 00 	movabs $0x0,%r12	8d: R_X86_64_64	locals
+  95:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	97: R_X86_64_64	num_processors
+  9f:	49 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%r15	a1: R_X86_64_64	clv
+  a9:	74 4b                	je     f6 <f03_execveat_ptrace_report_v1+0xf6>
+  ab:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+  b0:	0f 32                	rdmsr  
+  b2:	48 c1 e2 20          	shl    $0x20,%rdx
+  b6:	89 c1                	mov    %eax,%ecx
+  b8:	48 09 d1             	or     %rdx,%rcx
+  bb:	49 8b 14 24          	mov    (%r12),%rdx
+  bf:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+  c6:	48 39 ca             	cmp    %rcx,%rdx
+  c9:	77 19                	ja     e4 <f03_execveat_ptrace_report_v1+0xe4>
+  cb:	48 63 36             	movslq (%rsi),%rsi
+  ce:	48 c1 e6 0e          	shl    $0xe,%rsi
+  d2:	48 01 f2             	add    %rsi,%rdx
+  d5:	48 39 ca             	cmp    %rcx,%rdx
+  d8:	72 0a                	jb     e4 <f03_execveat_ptrace_report_v1+0xe4>
+  da:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+  e2:	48 98                	cltq   
+  e4:	49 8b 0f             	mov    (%r15),%rcx
+  e7:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+  ee:	f0 ff 8c 01 28 1f 00 00 	lock decl 0x1f28(%rcx,%rax,1)
+  f6:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	f8: R_X86_64_64	ptrace_report_signal
+ 100:	48 89 df             	mov    %rbx,%rdi
+ 103:	be 05 04 00 00       	mov    $0x405,%esi
+ 108:	ff d0                	callq  *%rax
+ 10a:	41 83 3e 00          	cmpl   $0x0,(%r14)
+ 10e:	4c 89 ee             	mov    %r13,%rsi
+ 111:	74 55                	je     168 <f03_execveat_ptrace_report_v1+0x168>
+ 113:	b9 01 01 00 c0       	mov    $0xc0000101,%ecx
+ 118:	0f 32                	rdmsr  
+ 11a:	48 c1 e2 20          	shl    $0x20,%rdx
+ 11e:	89 c1                	mov    %eax,%ecx
+ 120:	48 09 d1             	or     %rdx,%rcx
+ 123:	49 8b 14 24          	mov    (%r12),%rdx
+ 127:	48 c7 c0 ff ff ff ff 	mov    $0xffffffffffffffff,%rax
+ 12e:	48 39 ca             	cmp    %rcx,%rdx
+ 131:	77 23                	ja     156 <f03_execveat_ptrace_report_v1+0x156>
+ 133:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	135: R_X86_64_64	num_processors
+ 13d:	48 63 3f             	movslq (%rdi),%rdi
+ 140:	48 c1 e7 0e          	shl    $0xe,%rdi
+ 144:	48 01 fa             	add    %rdi,%rdx
+ 147:	48 39 ca             	cmp    %rcx,%rdx
+ 14a:	72 0a                	jb     156 <f03_execveat_ptrace_report_v1+0x156>
+ 14c:	65 8b 04 25 00 00 00 00 	mov    %gs:0x0,%eax
+ 154:	48 98                	cltq   
+ 156:	49 8b 0f             	mov    (%r15),%rcx
+ 159:	48 69 c0 c0 1f 00 00 	imul   $0x1fc0,%rax,%rax
+ 160:	f0 ff 84 01 28 1f 00 00 	lock incl 0x1f28(%rcx,%rax,1)
+ 168:	31 c0                	xor    %eax,%eax
+ 16a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+ 170:	0f b6 4c 05 80       	movzbl -0x80(%rbp,%rax,1),%ecx
+ 175:	88 8c 03 70 10 00 00 	mov    %cl,0x1070(%rbx,%rax,1)
+ 17c:	0f b6 4c 05 81       	movzbl -0x7f(%rbp,%rax,1),%ecx
+ 181:	88 8c 03 71 10 00 00 	mov    %cl,0x1071(%rbx,%rax,1)
+ 188:	0f b6 4c 05 82       	movzbl -0x7e(%rbp,%rax,1),%ecx
+ 18d:	88 8c 03 72 10 00 00 	mov    %cl,0x1072(%rbx,%rax,1)
+ 194:	0f b6 4c 05 83       	movzbl -0x7d(%rbp,%rax,1),%ecx
+ 199:	88 8c 03 73 10 00 00 	mov    %cl,0x1073(%rbx,%rax,1)
+ 1a0:	48 83 c0 04          	add    $0x4,%rax
+ 1a4:	48 83 f8 58          	cmp    $0x58,%rax
+ 1a8:	75 c6                	jne    170 <f03_execveat_ptrace_report_v1+0x170>
+ 1aa:	31 c0                	xor    %eax,%eax
+ 1ac:	f7 83 20 11 00 00 00 02 00 00 	testl  $0x200,0x1120(%rbx)
+ 1b6:	0f 84 2e 01 00 00    	je     2ea <f03_execveat_ptrace_report_v1+0x2ea>
+ 1bc:	4c 8b b3 c8 10 00 00 	mov    0x10c8(%rbx),%r14
+ 1c3:	31 c0                	xor    %eax,%eax
+ 1c5:	66 66 2e 0f 1f 84 00 00 00 00 00 	data16 nopw %cs:0x0(%rax,%rax,1)
+ 1d0:	0f b6 8c 03 70 10 00 00 	movzbl 0x1070(%rbx,%rax,1),%ecx
+ 1d8:	88 4c 05 80          	mov    %cl,-0x80(%rbp,%rax,1)
+ 1dc:	0f b6 8c 03 71 10 00 00 	movzbl 0x1071(%rbx,%rax,1),%ecx
+ 1e4:	88 4c 05 81          	mov    %cl,-0x7f(%rbp,%rax,1)
+ 1e8:	0f b6 8c 03 72 10 00 00 	movzbl 0x1072(%rbx,%rax,1),%ecx
+ 1f0:	88 4c 05 82          	mov    %cl,-0x7e(%rbp,%rax,1)
+ 1f4:	0f b6 8c 03 73 10 00 00 	movzbl 0x1073(%rbx,%rax,1),%ecx
+ 1fc:	88 4c 05 83          	mov    %cl,-0x7d(%rbp,%rax,1)
+ 200:	48 83 c0 04          	add    $0x4,%rax
+ 204:	48 83 f8 58          	cmp    $0x58,%rax
+ 208:	75 c6                	jne    1d0 <f03_execveat_ptrace_report_v1+0x1d0>
+ 20a:	48 8d 83 30 11 00 00 	lea    0x1130(%rbx),%rax
+ 211:	31 c9                	xor    %ecx,%ecx
+ 213:	66 66 66 66 2e 0f 1f 84 00 00 00 00 00 	data16 data16 data16 nopw %cs:0x0(%rax,%rax,1)
+ 220:	0f b6 14 0e          	movzbl (%rsi,%rcx,1),%edx
+ 224:	88 94 0b 30 11 00 00 	mov    %dl,0x1130(%rbx,%rcx,1)
+ 22b:	0f b6 54 0e 01       	movzbl 0x1(%rsi,%rcx,1),%edx
+ 230:	88 94 0b 31 11 00 00 	mov    %dl,0x1131(%rbx,%rcx,1)
+ 237:	0f b6 54 0e 02       	movzbl 0x2(%rsi,%rcx,1),%edx
+ 23c:	88 94 0b 32 11 00 00 	mov    %dl,0x1132(%rbx,%rcx,1)
+ 243:	0f b6 54 0e 03       	movzbl 0x3(%rsi,%rcx,1),%edx
+ 248:	88 94 0b 33 11 00 00 	mov    %dl,0x1133(%rbx,%rcx,1)
+ 24f:	48 83 c1 04          	add    $0x4,%rcx
+ 253:	48 81 f9 e0 00 00 00 	cmp    $0xe0,%rcx
+ 25a:	75 c4                	jne    220 <f03_execveat_ptrace_report_v1+0x220>
+ 25c:	c7 83 10 12 00 00 01 00 00 00 	movl   $0x1,0x1210(%rbx)
+ 266:	48 89 83 c8 10 00 00 	mov    %rax,0x10c8(%rbx)
+ 26d:	48 c7 83 b8 11 00 00 00 00 00 00 	movq   $0x0,0x11b8(%rbx)
+ 278:	8b b3 20 11 00 00    	mov    0x1120(%rbx),%esi
+ 27e:	f7 c6 00 02 00 00    	test   $0x200,%esi
+ 284:	74 18                	je     29e <f03_execveat_ptrace_report_v1+0x29e>
+ 286:	83 e6 01             	and    $0x1,%esi
+ 289:	c1 e6 07             	shl    $0x7,%esi
+ 28c:	83 ce 05             	or     $0x5,%esi
+ 28f:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	291: R_X86_64_64	ptrace_report_signal
+ 299:	48 89 df             	mov    %rbx,%rdi
+ 29c:	ff d0                	callq  *%rax
+ 29e:	48 8b 83 b8 11 00 00 	mov    0x11b8(%rbx),%rax
+ 2a5:	4c 89 b3 c8 10 00 00 	mov    %r14,0x10c8(%rbx)
+ 2ac:	31 c0                	xor    %eax,%eax
+ 2ae:	31 c9                	xor    %ecx,%ecx
+ 2b0:	0f b6 54 0d 80       	movzbl -0x80(%rbp,%rcx,1),%edx
+ 2b5:	88 94 0b 70 10 00 00 	mov    %dl,0x1070(%rbx,%rcx,1)
+ 2bc:	0f b6 54 0d 81       	movzbl -0x7f(%rbp,%rcx,1),%edx
+ 2c1:	88 94 0b 71 10 00 00 	mov    %dl,0x1071(%rbx,%rcx,1)
+ 2c8:	0f b6 54 0d 82       	movzbl -0x7e(%rbp,%rcx,1),%edx
+ 2cd:	88 94 0b 72 10 00 00 	mov    %dl,0x1072(%rbx,%rcx,1)
+ 2d4:	0f b6 54 0d 83       	movzbl -0x7d(%rbp,%rcx,1),%edx
+ 2d9:	88 94 0b 73 10 00 00 	mov    %dl,0x1073(%rbx,%rcx,1)
+ 2e0:	48 83 c1 04          	add    $0x4,%rcx
+ 2e4:	48 83 f9 58          	cmp    $0x58,%rcx
+ 2e8:	75 c6                	jne    2b0 <f03_execveat_ptrace_report_v1+0x2b0>
+ 2ea:	48 83 c4 58          	add    $0x58,%rsp
+ 2ee:	5b                   	pop    %rbx
+ 2ef:	41 5c                	pop    %r12
+ 2f1:	41 5d                	pop    %r13
+ 2f3:	41 5e                	pop    %r14
+ 2f5:	41 5f                	pop    %r15
+ 2f7:	5d                   	pop    %rbp
+ 2f8:	c3                   	retq   
+
+Disassembly of section .ltext.ptrace_syscall_event:
+
+0000000000000000 <ptrace_syscall_event>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	48 85 ff             	test   %rdi,%rdi
+   7:	74 0e                	je     17 <ptrace_syscall_event+0x17>
+   9:	8b b7 20 11 00 00    	mov    0x1120(%rdi),%esi
+   f:	f7 c6 00 02 00 00    	test   $0x200,%esi
+  15:	75 02                	jne    19 <ptrace_syscall_event+0x19>
+  17:	5d                   	pop    %rbp
+  18:	c3                   	retq   
+  19:	83 e6 01             	and    $0x1,%esi
+  1c:	c1 e6 07             	shl    $0x7,%esi
+  1f:	83 ce 05             	or     $0x5,%esi
+  22:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	24: R_X86_64_64	ptrace_report_signal
+  2c:	5d                   	pop    %rbp
+  2d:	ff e0                	jmpq   *%rax

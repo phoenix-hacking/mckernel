@@ -1,0 +1,153 @@
+{
+  "status": "PASS_CHANGED_THREE_WRAPPER_ABI_ELF_ONLY",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "ABI_words": [
+    128,
+    8,
+    160,
+    8,
+    24,
+    4384,
+    4,
+    8,
+    2
+  ],
+  "Rust_exports": [
+    {
+      "name": "f03_ptrace_setsiginfo_v1",
+      "size": 676,
+      "section": ".ltext.f03_ptrace_setsiginfo_v1",
+      "binding": 1
+    },
+    {
+      "name": "ptrace_syscall_event",
+      "size": 47,
+      "section": ".ltext.ptrace_syscall_event",
+      "binding": 1
+    },
+    {
+      "name": "f03_exec_report_signal_v1",
+      "size": 17,
+      "section": ".ltext.f03_exec_report_signal_v1",
+      "binding": 1
+    }
+  ],
+  "selected_TU_real_consumer_relocations": {
+    "f03_ptrace_setsiginfo_v1": [
+      {
+        "section": ".data.rel.ro",
+        "offset": 240,
+        "relocation_type": 1,
+        "addend": 0
+      }
+    ]
+  },
+  "retained114_public_event_consumers": [
+    {
+      "section": ".ltext.arch_ptrace_syscall_event",
+      "offset": 20,
+      "relocation_type": 1,
+      "addend": 0
+    },
+    {
+      "section": ".ltext.f03_execveat_ptrace_report_v1",
+      "offset": 634,
+      "relocation_type": 1,
+      "addend": 0
+    },
+    {
+      "section": ".ltext.syscall",
+      "offset": 1003,
+      "relocation_type": 1,
+      "addend": 0
+    },
+    {
+      "section": ".ltext.syscall",
+      "offset": 2285,
+      "relocation_type": 1,
+      "addend": 0
+    }
+  ],
+  "HOST_ABI_WITNESS_signal_address_relocations": [
+    {
+      "section": ".data.rel.ro",
+      "offset": 0,
+      "relocation_type": 1,
+      "addend": 0
+    }
+  ],
+  "selected_production_C_signal_consumer": "SOURCE_ELIDED_UNDER_SELECTED_FLAGS_NOT_REQUIRED_OR_CREDITED",
+  "actual_new_Rust_signal_relocations": [],
+  "actual_new_Rust_signal_call_or_folding_proof": "OPEN_REQUIRES_SEPARATE_CALL_OR_FOLD_ANALYSIS",
+  "actual_new_public_event_relocations": [],
+  "actual_new_public_event_consumer_or_folding_proof": "OPEN_RETAINED114_REFS_ARE_NOT_NEWOBJECT_PROOF",
+  "fallback_C_functions": [
+    {
+      "name": "ptrace_setsiginfo",
+      "size": 158,
+      "section": ".text",
+      "binding": 0
+    },
+    {
+      "name": "ptrace_syscall_event",
+      "size": 71,
+      "section": ".text",
+      "binding": 1
+    },
+    {
+      "name": "ptrace_report_signal_bridge",
+      "size": 52,
+      "section": ".text",
+      "binding": 0
+    }
+  ],
+  "fallback_C_sys_ptrace": {
+    "name": "sys_ptrace",
+    "size": 272,
+    "section": ".text",
+    "binding": 1
+  },
+  "matching_fallback_Rust": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/HOST-output-proposed-1/rust-fallback.o",
+    "bytes": 18312032,
+    "sha256": "1683613e56712f8333b8138e1902d3c69530e747c9fc869bc187ed59a6c4250c"
+  },
+  "fallback_Rust_cfg": "fullselectedcfg-minus-only-f03_ptrace_entry_candidate",
+  "retained_Rust_sections": 182,
+  "fallback_retained_Rust_sections": 182,
+  "artifacts": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/HOST-output-proposed-1/rust-selected.o",
+      "bytes": 18335360,
+      "sha256": "4d2265b8d178fd44fe3f57ea76c92d3ed372cdda1205518d4d4a6505d4bb37c4"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/HOST-output-proposed-1/selected.o",
+      "bytes": 375672,
+      "sha256": "e38590f82c505f4081faffb495b8826668cb97a6b5306aa06f6af72c257c7e39"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/HOST-output-proposed-1/fallback.o",
+      "bytes": 381128,
+      "sha256": "665a6b43e1cd4c0c692a57be763dd2f4f245e57870cf1ac278086e7897cf7272"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/HOST-output-proposed-1/selected-joint.o",
+      "bytes": 18838592,
+      "sha256": "8ddacc49ddf5afd2eb0a2d0dcac9daaaec28f43c2952669efef4d9a7d54d91f3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/HOST-output-proposed-1/rust-fallback.o",
+      "bytes": 18312032,
+      "sha256": "1683613e56712f8333b8138e1902d3c69530e747c9fc869bc187ed59a6c4250c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/ptrace-fallback-cfg-pair-correction-source-1/HOST-output-proposed-1/fallback-joint.o",
+      "bytes": 18819280,
+      "sha256": "53a8af4f0e9d47a87f69340a60950da0219f9bb8d1046b45ac99e852349e0591"
+    }
+  ],
+  "new_dynamic_behavior_tests_run": 0,
+  "native_credit": 0,
+  "production_acceptance": false
+}

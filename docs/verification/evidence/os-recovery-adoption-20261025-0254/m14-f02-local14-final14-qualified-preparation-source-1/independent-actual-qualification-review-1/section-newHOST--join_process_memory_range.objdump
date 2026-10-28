@@ -1,0 +1,117 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/HOST-output-proposed-1/rust-selected.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.join_process_memory_range:
+
+0000000000000000 <join_process_memory_range>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	41 57                	push   %r15
+   6:	41 56                	push   %r14
+   8:	41 55                	push   %r13
+   a:	41 54                	push   %r12
+   c:	53                   	push   %rbx
+   d:	50                   	push   %rax
+   e:	48 89 d3             	mov    %rdx,%rbx
+  11:	49 89 f7             	mov    %rsi,%r15
+  14:	49 89 fe             	mov    %rdi,%r14
+  17:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	19: R_X86_64_64	process_remaining_range_debug+0x58
+  21:	8b 00                	mov    (%rax),%eax
+  23:	49 bd 00 00 00 00 00 00 00 00 	movabs $0x0,%r13	25: R_X86_64_64	kprintf
+  2d:	3d 00 00 00 01       	cmp    $0x1000000,%eax
+  32:	72 22                	jb     56 <join_process_memory_range+0x56>
+  34:	49 8b 57 18          	mov    0x18(%r15),%rdx
+  38:	49 8b 4f 20          	mov    0x20(%r15),%rcx
+  3c:	4c 8b 43 18          	mov    0x18(%rbx),%r8
+  40:	4c 8b 4b 20          	mov    0x20(%rbx),%r9
+  44:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	46: R_X86_64_64	.lrodata.str1.1+0x6ca7
+  4e:	4c 89 f6             	mov    %r14,%rsi
+  51:	31 c0                	xor    %eax,%eax
+  53:	41 ff d5             	call   *%r13
+  56:	41 bc ea ff ff ff    	mov    $0xffffffea,%r12d
+  5c:	4d 85 ff             	test   %r15,%r15
+  5f:	0f 84 e1 00 00 00    	je     146 <join_process_memory_range+0x146>
+  65:	48 85 db             	test   %rbx,%rbx
+  68:	0f 84 d8 00 00 00    	je     146 <join_process_memory_range+0x146>
+  6e:	49 8b 47 20          	mov    0x20(%r15),%rax
+  72:	48 3b 43 18          	cmp    0x18(%rbx),%rax
+  76:	0f 85 ca 00 00 00    	jne    146 <join_process_memory_range+0x146>
+  7c:	49 8b 4f 28          	mov    0x28(%r15),%rcx
+  80:	48 3b 4b 28          	cmp    0x28(%rbx),%rcx
+  84:	0f 85 bc 00 00 00    	jne    146 <join_process_memory_range+0x146>
+  8a:	49 8b 4f 38          	mov    0x38(%r15),%rcx
+  8e:	48 3b 4b 38          	cmp    0x38(%rbx),%rcx
+  92:	0f 85 ae 00 00 00    	jne    146 <join_process_memory_range+0x146>
+  98:	48 85 c9             	test   %rcx,%rcx
+  9b:	74 12                	je     af <join_process_memory_range+0xaf>
+  9d:	49 2b 47 18          	sub    0x18(%r15),%rax
+  a1:	49 03 47 40          	add    0x40(%r15),%rax
+  a5:	48 3b 43 40          	cmp    0x40(%rbx),%rax
+  a9:	0f 85 97 00 00 00    	jne    146 <join_process_memory_range+0x146>
+  af:	49 8d 76 08          	lea    0x8(%r14),%rsi
+  b3:	48 8b 43 20          	mov    0x20(%rbx),%rax
+  b7:	49 89 47 20          	mov    %rax,0x20(%r15)
+  bb:	48 8b 7b 38          	mov    0x38(%rbx),%rdi
+  bf:	48 85 ff             	test   %rdi,%rdi
+  c2:	74 1e                	je     e2 <join_process_memory_range+0xe2>
+  c4:	f0 ff 4f 18          	lock decl 0x18(%rdi)
+  c8:	75 18                	jne    e2 <join_process_memory_range+0xe2>
+  ca:	48 8b 07             	mov    (%rdi),%rax
+  cd:	48 85 c0             	test   %rax,%rax
+  d0:	74 10                	je     e2 <join_process_memory_range+0xe2>
+  d2:	48 8b 00             	mov    (%rax),%rax
+  d5:	48 85 c0             	test   %rax,%rax
+  d8:	74 08                	je     e2 <join_process_memory_range+0xe2>
+  da:	49 89 f4             	mov    %rsi,%r12
+  dd:	ff d0                	call   *%rax
+  df:	4c 89 e6             	mov    %r12,%rsi
+  e2:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	e4: R_X86_64_64	rb_erase
+  ec:	48 89 df             	mov    %rbx,%rdi
+  ef:	ff d0                	call   *%rax
+  f1:	49 39 9e 00 01 00 00 	cmp    %rbx,0x100(%r14)
+  f8:	0f 84 8d 00 00 00    	je     18b <join_process_memory_range+0x18b>
+  fe:	49 39 9e 08 01 00 00 	cmp    %rbx,0x108(%r14)
+ 105:	0f 84 94 00 00 00    	je     19f <join_process_memory_range+0x19f>
+ 10b:	49 39 9e 10 01 00 00 	cmp    %rbx,0x110(%r14)
+ 112:	0f 84 9b 00 00 00    	je     1b3 <join_process_memory_range+0x1b3>
+ 118:	49 39 9e 18 01 00 00 	cmp    %rbx,0x118(%r14)
+ 11f:	0f 84 a2 00 00 00    	je     1c7 <join_process_memory_range+0x1c7>
+ 125:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	127: R_X86_64_64	.lrodata.str1.1+0x64af
+ 12f:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	131: R_X86_64_64	_kfree
+ 139:	48 89 df             	mov    %rbx,%rdi
+ 13c:	ba 19 07 00 00       	mov    $0x719,%edx
+ 141:	ff d0                	call   *%rax
+ 143:	45 31 e4             	xor    %r12d,%r12d
+ 146:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	148: R_X86_64_64	process_remaining_range_debug+0x78
+ 150:	8b 00                	mov    (%rax),%eax
+ 152:	3d 00 00 00 01       	cmp    $0x1000000,%eax
+ 157:	72 20                	jb     179 <join_process_memory_range+0x179>
+ 159:	49 8b 57 18          	mov    0x18(%r15),%rdx
+ 15d:	49 8b 4f 20          	mov    0x20(%r15),%rcx
+ 161:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	163: R_X86_64_64	.lrodata.str1.1+0x6cd6
+ 16b:	4c 89 f6             	mov    %r14,%rsi
+ 16e:	49 89 d8             	mov    %rbx,%r8
+ 171:	45 89 e1             	mov    %r12d,%r9d
+ 174:	31 c0                	xor    %eax,%eax
+ 176:	41 ff d5             	call   *%r13
+ 179:	44 89 e0             	mov    %r12d,%eax
+ 17c:	48 83 c4 08          	add    $0x8,%rsp
+ 180:	5b                   	pop    %rbx
+ 181:	41 5c                	pop    %r12
+ 183:	41 5d                	pop    %r13
+ 185:	41 5e                	pop    %r14
+ 187:	41 5f                	pop    %r15
+ 189:	5d                   	pop    %rbp
+ 18a:	c3                   	ret    
+ 18b:	4d 89 be 00 01 00 00 	mov    %r15,0x100(%r14)
+ 192:	49 39 9e 08 01 00 00 	cmp    %rbx,0x108(%r14)
+ 199:	0f 85 6c ff ff ff    	jne    10b <join_process_memory_range+0x10b>
+ 19f:	4d 89 be 08 01 00 00 	mov    %r15,0x108(%r14)
+ 1a6:	49 39 9e 10 01 00 00 	cmp    %rbx,0x110(%r14)
+ 1ad:	0f 85 65 ff ff ff    	jne    118 <join_process_memory_range+0x118>
+ 1b3:	4d 89 be 10 01 00 00 	mov    %r15,0x110(%r14)
+ 1ba:	49 39 9e 18 01 00 00 	cmp    %rbx,0x118(%r14)
+ 1c1:	0f 85 5e ff ff ff    	jne    125 <join_process_memory_range+0x125>
+ 1c7:	4d 89 be 18 01 00 00 	mov    %r15,0x118(%r14)
+ 1ce:	e9 52 ff ff ff       	jmp    125 <join_process_memory_range+0x125>

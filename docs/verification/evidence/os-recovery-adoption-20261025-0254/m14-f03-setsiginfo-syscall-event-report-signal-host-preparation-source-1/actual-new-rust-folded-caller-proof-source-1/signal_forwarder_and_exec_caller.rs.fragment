@@ -1,0 +1,45 @@
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Private policy fragment; original helper and shared F06 public bodies unchanged.
+unsafe extern "C" {
+    #[link_name="preempt_enable"] fn f03_exec_report_preempt_enable_v1();
+    #[link_name="preempt_disable"] fn f03_exec_report_preempt_disable_v1();
+}
+#[cfg_attr(f03_ptrace_entry_candidate, no_mangle)]
+unsafe extern "C" fn f03_exec_report_signal_v1(thread:*mut c_void,sig:CInt) {
+    ptrace_report_signal(thread.cast(),sig);
+}
+unsafe extern "C" fn f03_exec_report_arch_event_v1(
+    thread:*mut c_void,ctx:*mut c_void,setret:CLong,
+)->CLong {
+    arch_ptrace_syscall_event(thread.cast(),ctx.cast(),setret)
+}
+/// # Safety
+/// Original exec Thread/syscall-context spans are live and fully initialized.
+/// Raw scratch has the actual kernel-context alignment/extent. In the unchanged
+/// helper each scratch read is dominated by a full copy into that same scratch;
+/// no assume_init or typed read of uninitialized scratch occurs. Signal/event
+/// callbacks retain their original ownership and can update ptrace/context state.
+#[no_mangle]
+pub unsafe extern "C" fn f03_execveat_ptrace_report_v1(
+    thread:*mut Thread,syscall_ctx:*mut X86UserContext,
+)->CInt {
+    const OFFSETS:PtraceReportExecOffsets=PtraceReportExecOffsets {
+        thread_ptrace_offset:offset_of!(Thread,ptrace),
+        thread_ctx_offset:offset_of!(Thread,ctx),
+        thread_uctx_offset:offset_of!(Thread,uctx),
+        thread_ptrace_saved_uctx_offset:offset_of!(Thread,ptrace_saved_uctx),
+        thread_ptrace_saved_uctx_valid_offset:offset_of!(Thread,ptrace_saved_uctx_valid),
+    };
+    let mut scratch=MaybeUninit::<crate::abi::X86KernelContext>::uninit();
+    ptrace_report_exec_body_result(
+        thread.cast(),syscall_ctx.cast(),&OFFSETS,
+        size_of::<crate::abi::X86KernelContext>(),size_of::<X86UserContext>(),
+        scratch.as_mut_ptr().cast(),
+        Some(f03_exec_report_preempt_enable_v1),Some(f03_exec_report_preempt_disable_v1),
+        Some(f03_exec_report_signal_v1),Some(f03_exec_report_arch_event_v1),
+    )
+}
+
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

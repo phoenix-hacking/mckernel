@@ -1,0 +1,27 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "runtime_authority": null,
+  "after_only": "Root genuine9-file canonical adoption and reviewed source permission; no materialization/compiler yet",
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel/scripts/derive_f06_origin.py",
+    "--profile",
+    "/home/holden/mckernel/scripts/f06_origin_command_profile.json",
+    "--source",
+    "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+    "--output",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT115-LOCAL31-CPUID-BUILD-PREPARATION-1/ROOT-ACTUAL-ORIGIN-PRODUCER-OUTPUT-1"
+  ],
+  "expected_output_names": [
+    "f06_rt_sigreturn_origin.h",
+    "f06_clone_cpuid_metadata.rs",
+    "ORIGIN-BINDING.json",
+    "rust-environment.json",
+    "f06_rt_sigreturn_origin.cmake"
+  ],
+  "actual_returncode": null,
+  "actual_header_hash": null,
+  "actual_metadata_hash": null,
+  "container_generated_metadata_path": "/work/output/build/kernel/rust/f06-origin/f06_clone_cpuid_metadata.rs"
+}

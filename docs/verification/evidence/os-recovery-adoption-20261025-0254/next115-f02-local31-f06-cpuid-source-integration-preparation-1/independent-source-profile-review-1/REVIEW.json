@@ -1,0 +1,228 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_SOURCE",
+  "independent": true,
+  "reviewer": "/root/guardian_execution_review",
+  "implementation_ownership": false,
+  "execution_release": false,
+  "review_kind": "Focused NEXT115 nine-path source composition and ABI/origin review over accepted CURRENT114; existing provider and HOST proof reused.",
+  "reviewed_READY": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next115-f02-local31-f06-cpuid-source-integration-preparation-1/READY.json",
+    "bytes": 3198,
+    "sha256": "2a3d9917c24825859600f62ff0ca8bfe5f0426afad0784761640fa55b55bfe68"
+  },
+  "reviewed_source_recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next115-f02-local31-f06-cpuid-source-integration-preparation-1/SELECTIVE-SOURCE-RECIPE.json",
+    "bytes": 14013,
+    "sha256": "d901cfb119452e40db7e1c3b76ce9ce3f50c3928cecf333717b920f09528b6f2"
+  },
+  "reviewed_command_recipe": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next115-f02-local31-f06-cpuid-source-integration-preparation-1/NEXT115-COMMAND-RECIPE.NOT-GRANTED.json",
+    "bytes": 18468,
+    "sha256": "8d2d38c1a9d74522972afaa6a6316477bdf4b3615d7591e978e4d4fea9d12f14"
+  },
+  "reviewed_metadata_dependencies": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next115-f02-local31-f06-cpuid-source-integration-preparation-1/METADATA-AND-DEPENDENCIES.json",
+    "bytes": 4920,
+    "sha256": "7f368c022c9c54c111328ca3afaf9f807af88301ea61a5591904aaa7f236c9d5"
+  },
+  "reviewed_logical_overlay": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next115-f02-local31-f06-cpuid-source-integration-preparation-1/RUST-SOURCE-OVERLAY.json",
+    "bytes": 2296,
+    "sha256": "ea08ec4bbc06851014e6bc655e24134621842226b42aba5e573f7eb0a683d173"
+  },
+  "reviewed_composition_checks": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next115-f02-local31-f06-cpuid-source-integration-preparation-1/PURE-COMPOSITION-CHECKS.json",
+    "bytes": 645,
+    "sha256": "c6089d78455c5e647beb5b5aa6997ba60e7d004d507bf20d28470e2f4740bdf3"
+  },
+  "reviewed_root_next": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next115-f02-local31-f06-cpuid-source-integration-preparation-1/ROOT-NEXT.md",
+    "bytes": 4665,
+    "sha256": "6a7fad002862d6483bd14a2d2b7146d14d9d8f80b170f7189b05d4947e7dd528"
+  },
+  "base_acceptance": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/CURRENT114-INDEPENDENT-DEFAULT-ARTIFACT-ACCEPTANCE.json",
+    "bytes": 2642,
+    "sha256": "4ef8dfd0182fc82e79b0af3ec44524d733ff7bf111ca1511afc82e529d266277"
+  },
+  "retained_F02_HOST_storage_ABI": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/typed-timer-array-alignment-reader-correction-source-1/QUALIFIER-output-proposed-1/LOCAL14-FINAL14-HOST-QUALIFICATION.json",
+    "bytes": 497565,
+    "sha256": "243210c98b2b63fdf765a09ed97c6e99d7f75e6a44afe48c34af5789bd5f41a1"
+  },
+  "reused_F06_32193_ABI8_actual_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/independent-actual-review-1/REVIEW.json",
+    "bytes": 29830,
+    "sha256": "a3dbfdc5c39d1e71902163867e6c18c4fa51bb92f910f3bae81534ec52a55626"
+  },
+  "reused_F06_origin_READY": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/default-origin-selection-source-1/READY.json",
+    "bytes": 4399,
+    "sha256": "d9edbfd2ffe8f5588e2ca60a5a04c5958f6a3187d0fec67828100aba7c11275d"
+  },
+  "findings": [
+    {
+      "predicate": "Exact nine-path selective composition and current preimages",
+      "result": "PASS_SOURCE",
+      "evidence": "Verified current canonical and retained preimage hashes, all nine private postimages and patches. Applied every patch in memory with unique exact context and obtained its exact private candidate. The one new module is absent canonically. All eight nonshared candidate files are byte-identical to their retained F02 or F06 proposal postimages. kernel/CMakeLists.txt is the only overlap: applying retained F02 local14/final14 patches and retained F06 changes in either order produces the exact composed CMake bytes. Current syscall_policy.rs remains a byte-preserved prefix plus the small CPUID module selector. executer/user/CMakeLists.txt and BFD context are outside the nine paths and untouched."
+    },
+    {
+      "predicate": "F02 typed writable debug storage and internal/readonly ownership",
+      "result": "PASS_SOURCE",
+      "evidence": "All F02 process.c/process_helpers.rs/process_verbose_data.rs candidate bytes equal the existing frozen composition. Real crate::debug::Ddebug is retained, with static mut storage in __verbose for registry flag writes, actual32B/alignment8/field offsets and flags0. Fourteen internal descriptor definitions retain linkage=internal; Rust visibility is not ELF globalization. Three configs are immutable repr(C) values using existing actual callback/struct definitions; their raw pointers address the mutable descriptor storage without creating safe references. Fourteen final readonly values reuse actual ArchMemclear/SchedExitDebug and existing config callback types; private pointer-cell Sync shares only immutable bits and does not assert pointee Sync or lifecycle clearance."
+    },
+    {
+      "predicate": "F02 FILE/LINE/default flags and fallbacks",
+      "result": "PASS_SOURCE_WITH_OPEN_VARIANTS",
+      "evidence": "Existing mandatory C assertion compares actual __FILE__ to MCKERNEL_PROCESS_DDEBUG_FILE and DDEBUG_DEFAULT to flags. Proposed process C command uses /src/kernel/process.c plus matching Rust MCKERNEL_PROCESS_C_FILE and flags0; HOST private fixture FILE is explicitly not production FILE. Numeric logical #line and existing static assertions preserve source metadata. Rust process_sched_timer_configuration remains the exact typed [CInt;2]=[0,0] with natural4-byte element alignment, not an invented8-byte array requirement. CMake pairs data/local-companion options only in linux6.12/notUBSAN/notDEBUG_PRINT/notFugaku; direct selected RUSAGE_DEBUG/TIMER_CPU_ID/ARCH_MEMCLEAR/Fugaku reject. OptionOFF retains original C owners. Nondefault full-object/link/native variant obligations remain OPEN; CPP/source checks are not runtime acceptance."
+    },
+    {
+      "predicate": "F02 actual HOST proof and sixteen folded consumers remain distinguished",
+      "result": "PASS_SCOPE",
+      "evidence": "Retained HOST storage/ABI result has status OPEN_CURRENT_FOLDED_CONSUMER_SUPPLEMENT_REQUIRED with exactly sixteen explicit predicates. The source packet leaves its folded supplement null; no vanished named relocation is treated as consumer proof. The frozen 14descriptor+3config+14final scope is storage only at this stage. Retained current110/current114/currentHOST consumer/folding readback still must be joined independently before complete production consumer credit."
+    },
+    {
+      "predicate": "F06 existing algorithm and genuine current types",
+      "result": "PASS_SOURCE",
+      "evidence": "Private module is exactly the retained origin-selection postimage and retains the banked51fba function body already covered by32193 HOST vectors and real-header ABI8. Actual crate ABI CpuSet/CInt/SizeT, CPU-local/affinity/locking/atomic providers and Ddebug type are reused. No new algorithm or mirrored ABI was added. Dedicated C macro plus policyhelpers deselects original C only in the paired selected branch; exact C fallback body and numeric#line884/downstream926 remain. New Rust cfg is f06_obtain_clone_cpuid_candidate; no Native cfg or native IRQ/AP/sharedGS/TSS/XSAVE/lock-lifetime clearance is added."
+    },
+    {
+      "predicate": "F06 genuine FILE/FUNC/LINE/FMT/flags origin",
+      "result": "PASS_SOURCE_ACTUAL_OBJECT_PENDING",
+      "evidence": "Origin producer pins the exact command-profile bytes and composed arch source hash; requires the one literal final -c /src/arch/x86_64/kernel/syscall.c under exact compiler/CWD, rejects prefix maps/sourcefilename overrides/injections and binds genuine debug.h by hash. Exact original function body and actual retained C metadata determine two32B/alignment8 descriptors: FILE /src/arch/x86_64/kernel/syscall.c, FUNC obtain_clone_cpuid, line_flags898/908, flags0 and genuinely NULL FMT. Recognized inactive DEBUG_PRINT_SC block and no override are enforced. Mandatory env! include and origin bindings fail on absent setup; actual emitted source constants/compiled descriptor identity still must be checked. No Rust file!/line! origin is substituted."
+    },
+    {
+      "predicate": "Build dependencies and exact command-origin context",
+      "result": "PASS_SOURCE",
+      "evidence": "Generated f06_clone_cpuid_metadata.rs and new leaf are actual Rust build dependencies; defining debug.h joins source/profile/producer CMake configure dependencies. Proposed arch compile argv/CWD/output equal the exact origin-profile command. Relative to accepted CURRENT114, Rust compile adds only generated metadata env and local-companion/CPUID cfgs; process compile adds only paired local-companion macro. Existing raw GNU ld11-input command is unchanged. Eight accepted114 inputs, including unchanged kernel syscall C, are retained; three new objects require four compiler/link commands after bounded origin-data setup. No SDK21 or kernel syscall C replay is proposed. Actual Root materialization, command binding and fresh admission remain separate."
+    },
+    {
+      "predicate": "Provenance and authority honesty",
+      "result": "PASS_SOURCE",
+      "evidence": "Overlay is logical only: three replaced Rust modules plus one leaf, actual export/adoption/grant/sourcecount/compiler/artifact/native/file results null. F03 trio and F06 shmget excluded. This review creates no canonical source write, workload/guard/resource/account/ownership query, execution authority, fabricated installed claim, count change or new quota. Existing fixed window/account/realholds/oneheavy/floors and original profile limits remain authoritative."
+    }
+  ],
+  "exact_selective_paths": [
+    "arch/x86_64/kernel/syscall.c",
+    "kernel/CMakeLists.txt",
+    "kernel/process.c",
+    "kernel/rust/f06_obtain_clone_cpuid.rs",
+    "kernel/rust/process_helpers.rs",
+    "kernel/rust/process_verbose_data.rs",
+    "kernel/rust/syscall_policy.rs",
+    "scripts/derive_f06_origin.py",
+    "scripts/f06_origin_command_profile.json"
+  ],
+  "pending_folded_consumer_predicates": [
+    {
+      "name": "process_copy_entry_config",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_extend_region_entry_config",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_schedule_exit_debug_input",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_sched_timer_configuration",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_init_stack_entry_config",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_init_stack_free_line",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_init_stack_free_file",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_init_stack_alloc_line",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_init_stack_alloc_file",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_page_fault_anon_alloc_file",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_page_fault_cow_alloc_line",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_page_fault_cow_alloc_file",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_remap_free_line",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_remap_free_file",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_add_range_arch_memclear_callback",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    },
+    {
+      "name": "process_tracked_allocator_source_file",
+      "predicate": "Exact current folded consumer instruction/dataflow and original value/pointer ABI",
+      "reason": "No surviving named relocation; do not infer consumer acceptance. Preserve these actual objects for independent focused readback, no compiler replay."
+    }
+  ],
+  "downstream_actual_new_current_conditions": [
+    "Root selective canonical adoption guarded by current exact preimages; recompose if another writer changes them; materialize and bind genuine closed Rust export rather than claiming this overlay is installed.",
+    "Independent sixteen F02 folded-consumer readback supplement over retained actual objects/current context; do not replay compilers to manufacture named references.",
+    "Fresh Root current account/window/source/ownership/resource/admission and execution review for exact existing heavy profile; source PASS is not release.",
+    "Actual bounded origin setup and four compiler/link commands with exact proposed FILE/flags/environment/argv or honestly reviewed rebinding; preserve failures and successful prefixes.",
+    "Run retained qualify_two_descriptors.py on actual new Rust/selected arch C object paths+fullhashes; require exact two Rust records, no matching C records/definition and unique Rust provider.",
+    "Existing whole-image review on actual final artifacts: full registry multiset, FILE/FUNC/FMT/LINE/flags/stride/bounds, callback/config pointers and folded dataflow, all inherited timer120/idle116/runqueue208/global32/raw metadata/ABI/import requirements, actual unique final providers and real current caller joins.",
+    "Any native/default/whole-file retirement requires separate matching actual evidence and authority; no native blind enable or C retirement from source/CPP/HOST storage alone."
+  ],
+  "actual_new_commands_run_by_reviewer": 0,
+  "compiler_CPP_or_workload_calls_by_reviewer": 0,
+  "canonical_mutations": 0,
+  "new_algorithm_bodies": 0,
+  "production_or_native_acceptance": false,
+  "persistent_controls": {
+    "fixed_UTC_cutoff": "2026-10-28T05:36:09Z",
+    "v2_cutoffs_upper_bound": [
+      1793165769.0,
+      947874.5689514667,
+      963213.6960030915
+    ],
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "credit_run": "7f4af94a83b14cc08f97401f5891d965",
+    "credit_ceiling": 57774.852125,
+    "cumulative_spent_floor": 22812.3311,
+    "real_holds_effective": true,
+    "Root_owns_canonical_and_grants": true
+  },
+  "review_method": "Read-only small manifests, selective patches and candidate/type/origin source; bounded nine-path exact hashes and in-memory patch application/commutativity; retained proposal/postimage identity; proposed command structural comparison and Python AST parse. No CPP/compiler/replayed vectors, guard/resource/account/native call or broader inventory/hashwalk."
+}

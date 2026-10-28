@@ -1,0 +1,70 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/HOST-output-proposed-1/rust-selected.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.detach_address_space:
+
+0000000000000000 <detach_address_space>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	41 56                	push   %r14
+   6:	53                   	push   %rbx
+   7:	48 85 ff             	test   %rdi,%rdi
+   a:	0f 84 e3 00 00 00    	je     f3 <detach_address_space+0xf3>
+  10:	48 89 fb             	mov    %rdi,%rbx
+  13:	48 63 87 a4 00 00 00 	movslq 0xa4(%rdi),%rax
+  1a:	48 85 c0             	test   %rax,%rax
+  1d:	0f 9e c2             	setle  %dl
+  20:	48 89 f9             	mov    %rdi,%rcx
+  23:	48 81 c1 a8 00 00 00 	add    $0xa8,%rcx
+  2a:	40 0f 94 c7          	sete   %dil
+  2e:	40 08 d7             	or     %dl,%dil
+  31:	75 1e                	jne    51 <detach_address_space+0x51>
+  33:	31 d2                	xor    %edx,%edx
+  35:	66 66 2e 0f 1f 84 00 00 00 00 00 	data16 cs nopw 0x0(%rax,%rax,1)
+  40:	39 34 91             	cmp    %esi,(%rcx,%rdx,4)
+  43:	0f 84 99 00 00 00    	je     e2 <detach_address_space+0xe2>
+  49:	48 ff c2             	inc    %rdx
+  4c:	48 39 d0             	cmp    %rdx,%rax
+  4f:	75 ef                	jne    40 <detach_address_space+0x40>
+  51:	f0 ff 4b 18          	lock decl 0x18(%rbx)
+  55:	0f 85 98 00 00 00    	jne    f3 <detach_address_space+0xf3>
+  5b:	48 8b 43 10          	mov    0x10(%rbx),%rax
+  5f:	48 85 c0             	test   %rax,%rax
+  62:	74 09                	je     6d <detach_address_space+0x6d>
+  64:	48 8b 73 08          	mov    0x8(%rbx),%rsi
+  68:	48 89 df             	mov    %rbx,%rdi
+  6b:	ff d0                	call   *%rax
+  6d:	4c 8b 33             	mov    (%rbx),%r14
+  70:	49 8d be 00 08 00 00 	lea    0x800(%r14),%rdi
+  77:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	79: R_X86_64_64	memset
+  81:	ba 00 08 00 00       	mov    $0x800,%edx
+  86:	31 f6                	xor    %esi,%esi
+  88:	ff d0                	call   *%rax
+  8a:	48 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%rdx	8c: R_X86_64_64	mem_phys_to_virt_bridge
+  94:	48 b9 00 00 00 00 00 00 00 00 	movabs $0x0,%rcx	96: R_X86_64_64	x86_pt_free_pages_bridge
+  9e:	49 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%r8	a0: R_X86_64_64	x86_pt_destroy_panic_bridge
+  a8:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	aa: R_X86_64_64	.ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust18x86_memory_helpers26x86_pt_destroy_table_inner
+  b2:	bf 04 00 00 00       	mov    $0x4,%edi
+  b7:	4c 89 f6             	mov    %r14,%rsi
+  ba:	ff d0                	call   *%rax
+  bc:	85 c0                	test   %eax,%eax
+  be:	75 38                	jne    f8 <detach_address_space+0xf8>
+  c0:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	c2: R_X86_64_64	.lrodata.str1.1+0x64af
+  ca:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	cc: R_X86_64_64	_kfree
+  d4:	48 89 df             	mov    %rbx,%rdi
+  d7:	ba 02 01 00 00       	mov    $0x102,%edx
+  dc:	5b                   	pop    %rbx
+  dd:	41 5e                	pop    %r14
+  df:	5d                   	pop    %rbp
+  e0:	ff e0                	jmp    *%rax
+  e2:	c7 04 91 00 00 00 00 	movl   $0x0,(%rcx,%rdx,4)
+  e9:	f0 ff 4b 18          	lock decl 0x18(%rbx)
+  ed:	0f 84 68 ff ff ff    	je     5b <detach_address_space+0x5b>
+  f3:	5b                   	pop    %rbx
+  f4:	41 5e                	pop    %r14
+  f6:	5d                   	pop    %rbp
+  f7:	c3                   	ret    
+  f8:	48 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%rdi	fa: R_X86_64_64	.lrodata.str1.1+0x9e56
+ 102:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	104: R_X86_64_64	panic
+ 10c:	ff d0                	call   *%rax

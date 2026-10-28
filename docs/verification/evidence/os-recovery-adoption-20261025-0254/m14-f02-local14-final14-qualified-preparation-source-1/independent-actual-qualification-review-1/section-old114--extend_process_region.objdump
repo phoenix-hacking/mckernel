@@ -1,0 +1,65 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.brk_extend_bridge:
+
+0000000000000000 <brk_extend_bridge>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	41 57                	push   %r15
+   6:	41 56                	push   %r14
+   8:	41 55                	push   %r13
+   a:	41 54                	push   %r12
+   c:	53                   	push   %rbx
+   d:	50                   	push   %rax
+   e:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	10: R_X86_64_64	process_extend_region_entry_config
+  18:	4c 8b 00             	mov    (%rax),%r8
+  1b:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	1d: R_X86_64_64	process_extend_region_entry_config+0x8
+  25:	44 8b 08             	mov    (%rax),%r9d
+  28:	48 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%rbx	2a: R_X86_64_64	process_extend_region_entry_config+0x38
+  32:	8b 1b                	mov    (%rbx),%ebx
+  34:	49 be 00 00 00 00 00 00 00 00 	movabs $0x0,%r14	36: R_X86_64_64	process_extend_region_entry_config+0x58
+  3e:	45 8b 3e             	mov    (%r14),%r15d
+  41:	49 be 00 00 00 00 00 00 00 00 	movabs $0x0,%r14	43: R_X86_64_64	process_extend_region_entry_config+0x68
+  4b:	45 8b 2e             	mov    (%r14),%r13d
+  4e:	49 be 00 00 00 00 00 00 00 00 	movabs $0x0,%r14	50: R_X86_64_64	process_extend_region_entry_config+0x6c
+  58:	41 8b 06             	mov    (%r14),%eax
+  5b:	49 bc 00 00 00 00 00 00 00 00 	movabs $0x0,%r12	5d: R_X86_64_64	process_extend_region_entry_config+0x60
+  65:	49 be 00 00 00 00 00 00 00 00 	movabs $0x0,%r14	67: R_X86_64_64	process_extend_region_entry_config+0x70
+  6f:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	71: R_X86_64_64	process_extend_region_entry_config+0x78
+  79:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	7b: R_X86_64_64	process_extend_region_entry_config+0x80
+  83:	41 ff 32             	push   (%r10)
+  86:	41 ff 33             	push   (%r11)
+  89:	41 ff 36             	push   (%r14)
+  8c:	50                   	push   %rax
+  8d:	41 55                	push   %r13
+  8f:	41 ff 34 24          	push   (%r12)
+  93:	41 57                	push   %r15
+  95:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	97: R_X86_64_64	process_extend_region_entry_config+0x50
+  9f:	ff 30                	push   (%rax)
+  a1:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	a3: R_X86_64_64	process_extend_region_entry_config+0x48
+  ab:	ff 30                	push   (%rax)
+  ad:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	af: R_X86_64_64	process_extend_region_entry_config+0x40
+  b7:	ff 30                	push   (%rax)
+  b9:	53                   	push   %rbx
+  ba:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	bc: R_X86_64_64	process_extend_region_entry_config+0x30
+  c4:	ff 30                	push   (%rax)
+  c6:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	c8: R_X86_64_64	process_extend_region_entry_config+0x28
+  d0:	ff 30                	push   (%rax)
+  d2:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	d4: R_X86_64_64	process_extend_region_entry_config+0x20
+  dc:	ff 30                	push   (%rax)
+  de:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	e0: R_X86_64_64	process_extend_region_entry_config+0x18
+  e8:	ff 30                	push   (%rax)
+  ea:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	ec: R_X86_64_64	process_extend_region_entry_config+0x10
+  f4:	ff 30                	push   (%rax)
+  f6:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	f8: R_X86_64_64	process_extend_region_body_result
+ 100:	ff d0                	call   *%rax
+ 102:	48 81 c4 88 00 00 00 	add    $0x88,%rsp
+ 109:	5b                   	pop    %rbx
+ 10a:	41 5c                	pop    %r12
+ 10c:	41 5d                	pop    %r13
+ 10e:	41 5e                	pop    %r14
+ 110:	41 5f                	pop    %r15
+ 112:	5d                   	pop    %rbp
+ 113:	c3                   	ret    

@@ -1,0 +1,78 @@
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -33,8 +33,10 @@
+ 
+ option(ENABLE_RUST_KERNEL "Enable Rust code in the McKernel image" ON)
+ # Functional OS migration: paired typed Rust storage for 32 public debug objects.
+-# The 14 C-local descriptors retain their existing C config owners.
++# Internal descriptors and their three configs use a separate atomic selector.
+ option(ENABLE_RUST_PROCESS_VERBOSE_DATA "Use typed Rust process debug globals" ON)
++option(ENABLE_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS "Use joint Rust local debug/config storage" ON)
++set(MCKERNEL_PROCESS_VERBOSE_LOCAL_SELECTED OFF)
+ option(ENABLE_PROCESS_DEBUG_PRINT "Initialize process dynamic debug as enabled" OFF)
+ set(MCKERNEL_PROCESS_DDEBUG_FLAGS 0)
+ if (ENABLE_PROCESS_DEBUG_PRINT)
+@@ -166,12 +168,23 @@
+ 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/native_xstate.rs"
+ 	)
+ 		set(RUST_KERNEL_CFG)
++        # Existing config literals are qualified for this production profile.
++        if (ENABLE_RUST_PROCESS_VERBOSE_DATA AND
++            ENABLE_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS AND
++            MCKERNEL_HOST_IRQ_ABI STREQUAL "linux-6.12" AND
++            NOT ENABLE_UBSAN AND NOT ENABLE_PROCESS_DEBUG_PRINT AND
++            NOT ENABLE_FUGAKU_HACKS)
++            set(MCKERNEL_PROCESS_VERBOSE_LOCAL_SELECTED ON)
++        endif()
+         file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/rust/process_verbose_build_inputs.txt"
+-            CONTENT "selected=${ENABLE_RUST_PROCESS_VERBOSE_DATA}\nfile=${MCKERNEL_PROCESS_C_FILE}\nflags=${MCKERNEL_PROCESS_DDEBUG_FLAGS}\n")
++            CONTENT "selected=${ENABLE_RUST_PROCESS_VERBOSE_DATA}\nlocal=${MCKERNEL_PROCESS_VERBOSE_LOCAL_SELECTED}\nfile=${MCKERNEL_PROCESS_C_FILE}\nflags=${MCKERNEL_PROCESS_DDEBUG_FLAGS}\n")
+         list(APPEND RUST_KERNEL_SRCS
+             "${CMAKE_CURRENT_BINARY_DIR}/rust/process_verbose_build_inputs.txt")
+         if (ENABLE_RUST_PROCESS_VERBOSE_DATA)
+             list(APPEND RUST_KERNEL_CFG "--cfg" "process_verbose_data")
++            if (MCKERNEL_PROCESS_VERBOSE_LOCAL_SELECTED)
++                list(APPEND RUST_KERNEL_CFG "--cfg" "process_verbose_local_companions")
++            endif()
+             list(APPEND RUST_KERNEL_SRCS
+                 "${CMAKE_CURRENT_SOURCE_DIR}/rust/process_verbose_data.rs"
+                 "${MCKERNEL_PROCESS_C_FILE}"
+@@ -273,9 +286,18 @@
+ 				    message(FATAL_ERROR "F06 source origin producer rejected the profile/source")
+ 				endif()
+ 				include("${MCKERNEL_F06_ORIGIN_DIR}/f06_rt_sigreturn_origin.cmake")
++				# Existing supported x86/linux6.12/non-UBSAN branch only; no new native profile.
++				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_obtain_clone_cpuid_candidate")
++				list(APPEND RUST_KERNEL_SRCS
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_obtain_clone_cpuid.rs"
++				    "${MCKERNEL_F06_ORIGIN_DIR}/f06_clone_cpuid_metadata.rs")
++				set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
++				    COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_OBTAIN_CLONE_CPUID")
++
+ 				set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+ 				    "${MCKERNEL_F06_ORIGIN_PROFILE}"
+ 				    "${MCKERNEL_F06_ORIGIN_PRODUCER}"
++				    "${PROJECT_SOURCE_DIR}/lib/include/ihk/debug.h"
+ 				    "${MCKERNEL_F06_C_SOURCE}")
+ 				list(APPEND RUST_KERNEL_SRCS
+ 				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_rt_sigreturn_alloc_free.rs"
+@@ -367,6 +389,7 @@
+             "MCKERNEL_PROCESS_C_FILE=${MCKERNEL_PROCESS_C_FILE}"
+             "MCKERNEL_PROCESS_DDEBUG_FLAGS=${MCKERNEL_PROCESS_DDEBUG_FLAGS}"
+ 			"MCKERNEL_F06_RT_SIGRETURN_ORIGIN=${MCKERNEL_F06_RT_SIGRETURN_ORIGIN}"
++			"MCKERNEL_F06_CLONE_CPUID_METADATA_RS=${MCKERNEL_F06_CLONE_CPUID_METADATA_RS}"
+ 			${RUSTC}
+ 			--crate-name mckernel_rust
+ 			--crate-type lib
+@@ -731,6 +754,11 @@
+         "MCKERNEL_PROCESS_DDEBUG_FILE=\"${MCKERNEL_PROCESS_C_FILE}\"")
+ endif()
+ 
++if (RUST_KERNEL_ENABLED AND MCKERNEL_PROCESS_VERBOSE_LOCAL_SELECTED)
++    set_property(SOURCE "${MCKERNEL_PROCESS_C_FILE}" APPEND PROPERTY
++        COMPILE_DEFINITIONS MCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS)
++endif()
++
+ add_executable(mckernel.img ${MCKERNEL_SRCS})
+ if (RUST_KERNEL_ENABLED)
+ 	add_dependencies(mckernel.img mckernel_rust_obj)

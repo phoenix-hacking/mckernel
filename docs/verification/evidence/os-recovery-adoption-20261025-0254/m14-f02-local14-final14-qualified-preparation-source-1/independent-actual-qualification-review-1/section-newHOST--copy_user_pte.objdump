@@ -1,0 +1,48 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/HOST-output-proposed-1/rust-selected.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.copy_user_pte:
+
+0000000000000000 <copy_user_pte>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	41 57                	push   %r15
+   6:	41 56                	push   %r14
+   8:	41 55                	push   %r13
+   a:	41 54                	push   %r12
+   c:	53                   	push   %rbx
+   d:	50                   	push   %rax
+   e:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	10: R_X86_64_64	__verbose
+  18:	48 be 00 00 00 00 00 00 00 00 	movabs $0x0,%rsi	1a: R_X86_64_64	__verbose
+  22:	49 ba 00 00 00 00 00 00 00 00 	movabs $0x0,%r10	24: R_X86_64_64	__verbose
+  2c:	49 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%r11	2e: R_X86_64_64	__verbose
+  36:	48 bb 00 00 00 00 00 00 00 00 	movabs $0x0,%rbx	38: R_X86_64_64	__verbose
+  40:	49 be 00 00 00 00 00 00 00 00 	movabs $0x0,%r14	42: R_X86_64_64	__verbose
+  4a:	49 bf 00 00 00 00 00 00 00 00 	movabs $0x0,%r15	4c: R_X86_64_64	.lrodata.str1.1+0x64af
+  54:	41 bc 00 00 00 80    	mov    $0x80000000,%r12d
+  5a:	49 bd 00 00 00 00 00 00 00 00 	movabs $0x0,%r13	5c: R_X86_64_64	process_copy_user_pte_body_result
+  64:	41 b9 00 10 00 00    	mov    $0x1000,%r9d
+  6a:	50                   	push   %rax
+  6b:	56                   	push   %rsi
+  6c:	41 52                	push   %r10
+  6e:	41 53                	push   %r11
+  70:	53                   	push   %rbx
+  71:	41 56                	push   %r14
+  73:	68 f0 05 00 00       	push   $0x5f0
+  78:	68 b8 05 00 00       	push   $0x5b8
+  7d:	41 57                	push   %r15
+  7f:	41 54                	push   %r12
+  81:	6a 00                	push   $0x0
+  83:	6a 01                	push   $0x1
+  85:	6a 02                	push   $0x2
+  87:	6a 0c                	push   $0xc
+  89:	41 ff d5             	call   *%r13
+  8c:	48 83 c4 78          	add    $0x78,%rsp
+  90:	5b                   	pop    %rbx
+  91:	41 5c                	pop    %r12
+  93:	41 5d                	pop    %r13
+  95:	41 5e                	pop    %r14
+  97:	41 5f                	pop    %r15
+  99:	5d                   	pop    %rbp
+  9a:	c3                   	ret    

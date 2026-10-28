@@ -1,0 +1,15 @@
+
+/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.process_free_vm_bridge:
+
+0000000000000000 <process_free_vm_bridge>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	6: R_X86_64_64	process_tracked_allocator_source_file
+   e:	48 8b 30             	mov    (%rax),%rsi
+  11:	48 b8 00 00 00 00 00 00 00 00 	movabs $0x0,%rax	13: R_X86_64_64	_kfree
+  1b:	ba 31 02 00 00       	mov    $0x231,%edx
+  20:	5d                   	pop    %rbp
+  21:	ff e0                	jmp    *%rax

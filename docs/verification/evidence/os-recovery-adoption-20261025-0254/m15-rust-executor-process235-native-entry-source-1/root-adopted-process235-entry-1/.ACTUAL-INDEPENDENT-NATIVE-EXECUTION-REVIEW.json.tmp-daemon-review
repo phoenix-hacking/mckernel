@@ -1,0 +1,203 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_EXECUTION",
+  "reviewer": "/root/daemon_execution_review",
+  "implementation_ownership": false,
+  "independent": true,
+  "maximum_invocations": 1,
+  "nonce": "d21f4e17faf1b0b806419b1860bd0598",
+  "payload_sha256": "7b41e7fdf818cbc8d39f13fc4fa60a7f9e5640b695cebfa377a600cd64a3b346",
+  "pending_execution_packet": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/ROOT-EXECUTION-GRANT.PENDING-REVIEW.json",
+    "bytes": 8938,
+    "sha256": "7b41e7fdf818cbc8d39f13fc4fa60a7f9e5640b695cebfa377a600cd64a3b346"
+  },
+  "exact_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--fsize=33554432",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/bound-native-runtime-1/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/m15p235",
+    "--nonce",
+    "d21f4e17faf1b0b806419b1860bd0598",
+    "--owner-sha256",
+    "af2b1f57a19949e9867de2496b16063859c47298e9cf03b401e95de5bded5a10",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/m15p235-inputs/manifest.json",
+    "--manifest-sha256",
+    "cf49bed61322fa0f1ccb6536bdd14753903c3ec3ac2b105e22ec64c809f0a86a"
+  ],
+  "static_bindings": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/STATIC-NATIVE-BINDINGS.NOT-RELEASED.json",
+    "bytes": 15416,
+    "sha256": "62a777c3d66b8ba6ca7a39d09aa82f396f8b8a5297dacc3ff8c9eabd295cc34f"
+  },
+  "fresh_resource_physical": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/ROOT-FRESH-NATIVE-RESOURCE-PHYSICAL-1.json",
+    "bytes": 2106160,
+    "sha256": "e435a628e16b086a3715c315387001b4ce42a43f4a8d8563a4231230e40b4b12"
+  },
+  "source_publication": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/ACTUAL-STATIC-SOURCE-PUBLICATION.json",
+    "bytes": 7467,
+    "sha256": "3956e28bdb87df9876fd53bc5777d890276618791376181c4005cdad4faad247"
+  },
+  "manifest": {
+    "bytes": 9106,
+    "path": "/home/holden/mckernel-work/scratch/m15p235-inputs/manifest.json",
+    "sha256": "cf49bed61322fa0f1ccb6536bdd14753903c3ec3ac2b105e22ec64c809f0a86a"
+  },
+  "root_ledger35": {
+    "bytes": 34515,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-NEW12H-ACTUAL-ADMISSION-1/ROOT-CURRENT-NONCE-LEDGER46.json",
+    "sha256": "cf33b44d37c1ff3897001137f440aad68b54365714d25c8043d49bf5ad96214c"
+  },
+  "source_authority": {
+    "bytes": 6435,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/ROOT-SOURCE-AUTHORITY.ACTUAL.json",
+    "sha256": "cd427097c83015f50d1b4fbd688bdb27dd8f945bc1ba6c076ce7edf02ec54732"
+  },
+  "case_capability": {
+    "bytes": 8328,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/CASE-CAPABILITY.ACTUAL.json",
+    "sha256": "3015af25f623b57462e6372d65c198fc7bbc7466fc95aea800785230a2fae364"
+  },
+  "profile": {
+    "cap_drop": "ALL",
+    "container_CPU_affinity": "2-5",
+    "container_CPU_count": 4,
+    "container_memory_bytes": 12884901888,
+    "container_network": "none",
+    "container_swap_bytes": 0,
+    "container_tasks": 512,
+    "container_uid": "1000:1000",
+    "guest": {
+      "memory_mib": 8192,
+      "name": "native-diagnostic-4vcpu-8192mib",
+      "numa_nodes": 2,
+      "vcpus": 4
+    },
+    "no_new_privileges": true,
+    "outer_grace_kill": null,
+    "outer_wall_kill": null,
+    "owner_as_bytes": [
+      2147483648,
+      2147483648
+    ],
+    "payload_timeout_ms": 10000,
+    "runner_timeout_seconds": 300,
+    "stream_cap_bytes": 33554432
+  },
+  "Root_conditional_authorization": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/ROOT-CONDITIONAL-ONCE-ENTRY-AUTHORIZATION.json",
+    "bytes": 2606,
+    "sha256": "b091af52dfc831b4c8d2cecef88f200178987987af99578aad8d0a5c766c6c3d"
+  },
+  "reviewed_at": "2026-10-28T02:04:39.774192+00:00",
+  "reviewed_clocks": [
+    1793153079.7720623,
+    935186.341019172,
+    950524.468069818
+  ],
+  "resource_ages_seconds": [
+    16.09081268310547,
+    16.09081280103419,
+    16.09081303596031
+  ],
+  "effective_fixed_cutoffs": [
+    1793165769.0,
+    947874.5689514667,
+    963213.695968197
+  ],
+  "current_free": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-native-entry-source-1/publication-files-correction-source-1/root-adopted-retirement-entry-1/independent-actual-native-review-1/CURRENT-FREE.json",
+    "bytes": 3836,
+    "sha256": "0ae5bc9786d46e957d46df5dddc7849aa06c60ed1081fb3a345798d888501fb1"
+  },
+  "current_checks": {
+    "actual_Root_number": 46,
+    "legacy_schema_key": "root_ledger35",
+    "consumed_nonces": 56,
+    "new_nonce_unused": true,
+    "resource_wrapper_positive_join0": true,
+    "publication_files_schema_and_exact_static_helpers": true,
+    "latest_native30clients33actors_positive_retirement_reobserved": true,
+    "current114_holder_runner_absent_and_stopped0": true,
+    "historical_startup25clients28actors_and_F05v3_30clients33actors_reobserved": true,
+    "no_existing_heavy": true,
+    "pids_current": 0,
+    "all_resource_streams_closed": true,
+    "closed_mutex_probes": 2,
+    "capacity": {
+      "/home/holden/mckernel": 148469452800,
+      "/home/holden/mckernel-work/scratch": 47864991744
+    },
+    "MemAvailable": 27338784768
+  },
+  "case_binding": {
+    "case": "P-M06-01-process-exec-wait-235B",
+    "collector": {
+      "bytes": 5750848,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-host-preparation-source-1/future-output-1/process235-supervisor",
+      "sha256": "ab3e775e6a9df8d36bbbb974ddafbb26493c24f1aaf49487f5fc27c5583bed6c"
+    },
+    "compiled_collector_HOST_acceptance": {
+      "bytes": 14818,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-host-preparation-source-1/independent-actual-review-1/REVIEW.json",
+      "sha256": "c532759d41e3809d4e17d5e080a5f675750d21a69915579d4032c0ccf5b99d7b"
+    },
+    "compiled_collector_caseprofile": {
+      "bytes": 8424,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-collector-source-1/child-cancellation-authority-correction-1/COLLECTOR-CASEPROFILE.json",
+      "sha256": "b498429874fef8fe1522d358a7b3eeff85297da3aa2604095e4e9027ffc284f3"
+    },
+    "stage_map_acceptance": {
+      "bytes": 18013,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-stage-preparation-source-1/root-actual-qualified-input-plan-source-1/independent-actual-stage-review-1/REVIEW.json",
+      "sha256": "29ecca8a373669b44fcb081e3834cf2733112a09816b3b313ab40f8bea7c0f8c"
+    },
+    "exact_guest_argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "exact_oracle": {
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stdout_hex": "706172656e742073746172740a6368696c642065786563207375636365737320746f6b656e3d66697865642d76310a706172656e742077616974207375636365737320657869743d333720656f663d31207265617065643d3120656368696c643d310a6368696c642065786563206572726f72206572726e6f3d454e4f454e542073746174653d333720756e6368616e6765643d310a706172656e742077616974206572726f7220657869743d343220656f663d31207265617065643d3120656368696c643d310a706172656e7420636f6d706c657465206368696c6472656e3d32206f776e65643d300a"
+    },
+    "env": {
+      "PATH": "/usr/bin:/bin",
+      "COKERNEL_PATH": "/apps"
+    },
+    "cwd": "/case/work",
+    "payload_timeout_ms": 10000,
+    "post_reap_retirement_ms": 5000,
+    "stdout_stderr_each_limit": 1024,
+    "original_boot": [
+      "/bin/native-boot",
+      "hidos",
+      "allow_oversubscribe"
+    ],
+    "new_subject": "Qualified ab3e original235 collector with all26HOST controls; original537cb payload/e5d executor/60e image and strict235 oracle. No startup/F05/c020 substitution.",
+    "old_raw_failures_preserved": true
+  },
+  "authority_scope": "Root reviewed preauthorized bridge may mechanically publish one exact actual grant and normal entry after this atomic exact PASS; original actualv2account guard/all earlier minclamps/120s/O_EXCL durableclaim/no retry remain mandatory. No refresh or extension.",
+  "native_acceptance": false,
+  "runtime_workloads_by_reviewer": 0,
+  "canonical_Git_or_query_guard_calls": 0,
+  "blocker": null
+}
