@@ -1,0 +1,20 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/uuid-api-correction-source-1/retire_exact_bfd_stopped_container.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/image-metadata-profile-correction-source-1/retire_exact_bfd_stopped_container.py
+@@ -5,7 +5,7 @@
+ from pathlib import Path
+ import argparse,ast,copy,hashlib,importlib.util,json,math,os,re,resource,signal,stat,subprocess,time,types,uuid
+ D=Path(__file__).resolve().parent
+-BINDINGS_SHA='fa92f810ea19d5b8cd2d4d6f16e2f7d9b34a0647f4a2999652ce55ce01fd4dea'
++BINDINGS_SHA='83c104435ed34b7137f3ff7e84e4e5569130114e9fd1bab95311d9cd54da3aba'
+ SELF=D/'retire_exact_bfd_stopped_container.py'
+ SCOPE='Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
+ PREFIX=['/usr/bin/sudo','-A','/usr/bin/docker','--host=unix:///var/run/docker.sock']
+@@ -73,7 +73,7 @@
+  st=item['State'];need(st['Status']=='exited' and st['Running'] is False and st['Pid']==0 and st['ExitCode']==0 and not any(st[k] for k in ('Paused','Restarting','OOMKilled','Dead')) and st['Error']=='','normal exit0/Pid0/noOOM')
+  image_id=profile['inputs']['image'];need(image['Id']==item['Image']==image_id,'exact immutable OCI image')
+  c=item['Config'];h=item['HostConfig'];need(c['Image']==image_id and c['User']=='1000:1000' and c['WorkingDir']=='/work' and c['Entrypoint']==['/usr/bin/python3'] and c['Cmd']==['-I','-B','/build-only-worker.py','/build-only-plan.json'],'exact actual user/entry/command/workdir')
+- need(c.get('Labels')==image['Config'].get('Labels') and (c.get('Labels') or {}).get('mckernel.owner') is None and c.get('Env')==image['Config'].get('Env'),'unchanged image labels/env; no fabricated owner label')
++ need(c.get('Labels')==image['Config'].get('Labels')==b['approved_image_labels'] and c.get('Env')==image['Config'].get('Env')==b['approved_image_environment'],'exact pinned inherited image labels/env; no creation overrides or current ownership inference')
+  need(c.get('OpenStdin') is False and c.get('Tty') is False and c.get('StdinOnce') is False,'no interactive stdin/tty')
+  fixed=dict(ReadonlyRootfs=True,Privileged=False,AutoRemove=False,NetworkMode='none',CpusetCpus='2-5',CpusetMems='',Memory=12<<30,MemorySwap=12<<30,PidsLimit=512,CgroupParent='',PidMode='',IpcMode='private',UTSMode='',UsernsMode='',CpuShares=0,CpuPeriod=0,CpuQuota=0,NanoCpus=0)
+  for k,v in fixed.items():need(type(h.get(k))is type(v) and h[k]==v,'exact OCI resource/namespace '+k)
