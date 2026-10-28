@@ -2,6 +2,83 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
 
+## Actual failed CURRENT118 attempt retired — 2026-10-28T23:41Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+CURRENT116 C71/Rust68 andBFDf9202toolartifacts remainaccepted. Practical35/35,
+M14files4/6,M15files1/8; newproduction/native/file/C-retirement deltas0.
+Root63/freee13/6b2e/be0e acceptedbase andall71consumed/nativehistory preserved.
+
+CURRENT118A2 nonce1d3f2239b2884cedbd9e7dbe248ae1aa ABANDONEDUNLAUNCHED:
+staticmaterializer passed usingPython3.9;123export20cb/origin5c930/8retainedobjects/
+source6153/SDK21 reused. Publication corrected9stale source refs againstfrozen55,
+thencompleted736fetchedrows/all25nonselfrefs+jobpolicy parent; expert8fe/4891/cold4f91.
+Originalprofile8dd/fourcommands unchanged andUNRUN. Allwronginterpreter/metadata/
+publication/cache/firstcoldfailure evidence retained. No SDKcommonowner fabricated.
+
+Independentfinite2198306/b102756246 PREWARM23d34489; Rootphysicalcapture returned0/
+joined/groupabsent, butphysical→inputfill113.985610s leftonly~6s beforeoriginal120s.
+Heldcapture2199449 rejectedexpiredphysical; no COMPLETE/HotPASS/READY/runner/container.
+Neverrenewtimestamp/replayphysicalorheldphase. RootwithdrewonlyOWNfailedoperation
+binding, preserved6cac inRootD; holder2198978/b102765089 exitednormalguardfinally1,
+actualtool40829 joined1, originalprocabsent and27:4rowsnone. Originalverifier600s
+waitexpired/joined1/groupabsent/streamsclosed. No signals/controller/budget/window
+change. Theseactualretirefacts areNOTfreshnewnative/heavy clearance.
+
+Schedulingfix: m14_compose preparesfreshA3/newRootnonce/explicitfailedunlaunched
+supplement andallfixedreservationDATA BEFOREclock; Rootexecutesexactexistingphysical,
+holder,fill,held,oncepublisher inONEboundedtoolorchestration withoutmodelhandoff.
+Keeporiginal120s/ABI/ownership/resources/guards. No oldnonce/sourceexport/origin/
+cleanup/producer replay. Rootcohort operationbinding deliberatelyWITHDRAWN forA2.
+
+M15laneactualHOSTcollectorcompilepassed1command,staticbinary4f089eba/5652008B,
+wall0.566984s/CPU0.563423s/RSS144144KiB; binaryNEVERexecuted. Libelf extraction/
+HOSTbehavior/staging/nativeCURRENT110/60e remainsopen; retired2460cp forbidden.
+Installedihklib/ihkconfigRoot63prep46ec reusesSDK11 objects/archive/authenticreadonlyGit
+mount; noadapterneeded. Rootsource/mountadoption/quiescence/freshentry stillrequired.
+M14cumulativeF03d622/F06230af andBODY10/11 HOST resultsbankedprivate, canonical118
+unchanged. Exactnonoverlap22:36/22:56/23:16/23:36records inrestart-adoption evidence;
+original30minbaseline/stoppeddowntime41784.995s retained, no95percentclaim.
+
+## Twenty-minute engineering checkpoint — 2026-10-28T22:16Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Bucket21:56:28.104491–22:16:28.104491:3HOSTcommands all0,2compiler/link+1behavior,
+396C/Rustpairs/ABI8 forF03frequencyprovider reuse. CPU0.115443s/sumcommandwall
+0.151007s/peakRSS91672KiB; no newCstorage/registryrecords. One exact123file/112Rust
+sourceexport and genuine5-fileoriginmetadata producer returned0, positiveparentjoins,
+combinedwall0.229371s/CPU0.169508s/peak20360KiB; bothSOURCEpreparation only.
+Production/default/native/file/C-retirement deltas0. Practical35/35/M14files4/6/
+M15files1/8; accepted116C71/Rust68 andBFDf920two links retained. No95percentclaim.
+
+Root63/freee13/ledger6b2e/typedbindingbe0e accepted; cleanup andcapture not replayed.
+Current118unusednonce1d3f2239b2884cedbd9e7dbe248ae1aa RESERVED, numericadmission1
+observedabsent. Originalnon-numericproposal preserved; canonicaldescriptorpath
+correctedDATAonly tocohort/ROOT-ACTUAL-CURRENT-BOUNDARY.json, oldfc914/e108 preserved.
+Canonicaltypedcouplingc625/finalc110 passed (finalrefaddition afterbucketend);34subject
+current118operation16eb/review9d34/config8afd/cohortoperation6cac ready. Sources55
+unchanged. Onlycompletealiases+Rootauthor/UIDattest remainforstaticmaterialization.
+
+Postbucketrequiredpublicationpreflight caught a concrete source-helperdefect:
+runtime_data_rows traverses retainedhistorical/provenance versions and rejects two
+executer/user/CMakeLists.txt hashes ascurrent. No materializer/runtime/query ran.
+original227 ownsone bounded additivepublication-only correction; retainactualruntime
+loader/config/ledger/capture/retirement bytes andfullhistory, avoidrehashingoldarchives
+or treating historicalsource references ascurrentdependencies. No sourceexport/origin
+replay. Rootnextexactcommand remains existingcohort/materialize_admission.py under
+reviewedCPU0/AS2GiB; default4commands UNRUN untilactualadmission/release.
+
+F03cumulativeBODY3–9 source/API d622 andF06cumulative12paths/7exactmodules/8newfuncs/
+3Ruststorageowners230af passed; they stayprivatebehind118default qualification.
+Current snapshot host147362324480B/scratch47862149120B above16/12GiB floors.
+FirstHOSTcompiler15m31.301s/firstproductionconfigure36m50.980s afterrelaunch;
+exactready-to-Rustcompilerchild latencyunretained. Original30minbaseline/stopped
+41784.995s andlastproducer8.201202s separate; no percentage uplift fromsourcework.
+Schedulingchange: deriveactualdestinations fromexistingvalidators beforeRootauthorship,
+preflightonlyrequiredcurrentpublicationedges beforealiasseal, thenadmitnearestready
+producer. No capacity expansion/newframework ornative/modelownership shortcuts.
+Exactbucket/status: STEERING-20261028T221628.json inrestart-adoption evidence.
+
 ## Twenty-minute checkpoint; Root63 actual current adopted — 2026-10-28T21:56Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

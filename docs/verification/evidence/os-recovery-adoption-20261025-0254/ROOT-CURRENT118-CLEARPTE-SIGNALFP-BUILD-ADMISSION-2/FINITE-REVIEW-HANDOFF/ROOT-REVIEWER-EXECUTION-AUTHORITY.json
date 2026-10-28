@@ -1,0 +1,163 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "author": "/root",
+  "decision": "AUTHORIZE_ONE_ORIGINAL_INDEPENDENT_CURRENT118_FINITE_REVIEW_PROCESS",
+  "reviewer": "/root/observerreview",
+  "maximum_invocations": 1,
+  "nonce": "1d3f2239b2884cedbd9e7dbe248ae1aa",
+  "prepared_release": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-2/FINITE-REVIEW-HANDOFF/REVIEWER-EXECUTION-RELEASE.PREPARED.json",
+    "bytes": 22678,
+    "sha256": "83fa44452f0b2a032ef45247060ac4f9e478463325335f13afbe00172199f826"
+  },
+  "commands": [
+    {
+      "owner": "/root/observerreview",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. One original finite PREWARM/Hot verifier; Root must not invoke.",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/finite_review.py",
+        "--independent-reviewer",
+        "/root/observerreview",
+        "--bindings",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/REVIEWER-ACTUAL-BINDINGS.json",
+        "--handoff",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-2/FINITE-REVIEW-HANDOFF"
+      ],
+      "enforced_profile": {
+        "uid": 1000,
+        "affinity": [
+          0
+        ],
+        "AS_bytes": 2147483648,
+        "finite_wait_seconds": 600,
+        "automatic_timeout_kill": false
+      }
+    },
+    {
+      "owner": "/root",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Exact owned once capture with positive direct join and group absence.",
+      "phase": "physical",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=60:60",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/root_capture_once.py",
+        "--bindings",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/ROOT-ACTUAL-CAPTURE-PUBLISH-BINDINGS.json",
+        "--handoff",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-2/FINITE-REVIEW-HANDOFF",
+        "--phase",
+        "physical"
+      ],
+      "enforced_profile": {
+        "uid": 1000,
+        "affinity": [
+          0
+        ],
+        "AS_bytes": 2147483648,
+        "CPU_seconds": 60,
+        "owner_wait_seconds": 90,
+        "automatic_kill": false
+      }
+    },
+    {
+      "owner": "/root",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Exact owned once capture with positive direct join and group absence.",
+      "phase": "held",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=60:60",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/root_capture_once.py",
+        "--bindings",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/ROOT-ACTUAL-CAPTURE-PUBLISH-BINDINGS.json",
+        "--handoff",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-2/FINITE-REVIEW-HANDOFF",
+        "--phase",
+        "held"
+      ],
+      "enforced_profile": {
+        "uid": 1000,
+        "affinity": [
+          0
+        ],
+        "AS_bytes": 2147483648,
+        "CPU_seconds": 60,
+        "owner_wait_seconds": 90,
+        "automatic_kill": false
+      }
+    },
+    {
+      "owner": "/root",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Holder-only permanent27:4 bootstrap after actual physical success.",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-2/hold_and_run_build_only.py",
+        "--bootstrap-grant",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-2/ROOT-HOLDER-BOOTSTRAP-GRANT.json"
+      ]
+    },
+    {
+      "owner": "/root",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Existing exact held-input data fill after holder readiness.",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/ROOT-PREWRITTEN-RESOURCE-INPUT-FILL.py"
+      ]
+    },
+    {
+      "owner": "/root",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Once adapter after actual independent HotPASS; original holder alone consumes READY.",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/publish_after_independent_pass_once.py",
+        "--bindings",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-next118-recursive-fixture-expert-20261028-1/next-current-boundary-successor-1/prepared118-current63-1/cohort/ROOT-ACTUAL-CAPTURE-PUBLISH-BINDINGS.json",
+        "--handoff",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT118-CLEARPTE-SIGNALFP-BUILD-ADMISSION-2/FINITE-REVIEW-HANDOFF"
+      ]
+    }
+  ],
+  "clamps": [
+    1793253600.0,
+    1035704.5689393478,
+    1051042.6959879305
+  ],
+  "credit_run_id": "7f4af94a83b14cc08f97401f5891d965",
+  "credit_ceiling": "57774.852125",
+  "minimum_cumulative_spent": "22812.3311",
+  "actual_fresh_guard_clocks": [
+    1793230045.6666842,
+    1012152.235640882,
+    1027490.362690983
+  ],
+  "requires_fresh_guard_before_Popen": true,
+  "no_new_controllers": true,
+  "producer_permission": "Conditional original four-command build-only sequence after all original actual physical/holder/independent HotPASS/once READY predicates; no native grant",
+  "metadata_count_clarification": "Source directory contains123 total files including112 .rs; prepared fieldsource_directory_Rust_files123 is total map size, not Rust language file count.",
+  "no_new_budget_window_or_native_clearance": true,
+  "runtime_authority": null
+}
