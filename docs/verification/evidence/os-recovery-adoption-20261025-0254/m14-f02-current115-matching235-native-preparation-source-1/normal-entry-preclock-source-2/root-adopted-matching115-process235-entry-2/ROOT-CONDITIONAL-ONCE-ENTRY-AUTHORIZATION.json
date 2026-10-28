@@ -1,0 +1,55 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "Root_actual_source_adoption": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/root-adopted-matching115-process235-entry-2/ROOT-ACTUAL-SOURCE-ADOPTION.json",
+    "bytes": 2940,
+    "sha256": "6ad725aa22c839e98783555e09429dbe0acf4bd85d5861c616158c6961050fd3"
+  },
+  "Root_conditionally_authorized_at": "2026-10-28T05:13:41.512381+00:00",
+  "authorized": true,
+  "authorized_by": "/root",
+  "bridge_sha256": "a708a65cbc119b6c93f9af92e8f0958a86165db1763f1a71ae099efff80908f1",
+  "case": "P-M06-01-process-exec-wait-235B",
+  "decision": "CONDITIONALLY_AUTHORIZE_ONE_EXACT_ORIGINAL_STARTUP_ENTRY_AFTER_PASS",
+  "exact_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--fsize=33554432",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-v2-root-export-and-native-preparation-source-1/bound-native-runtime-1/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/f02p115n1",
+    "--nonce",
+    "4d1c28c2d9caa913e4ab1e8a504ac5ea",
+    "--owner-sha256",
+    "af2b1f57a19949e9867de2496b16063859c47298e9cf03b401e95de5bded5a10",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/f02p115n1-inputs/manifest.json",
+    "--manifest-sha256",
+    "b362c873552a9d3e4344dc311cc5fc69b7fa28b2f7ffe8a05cdd815d57b6b6ec"
+  ],
+  "independent_execution_review": null,
+  "independent_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/independent-source-review-1/REVIEW.json",
+    "bytes": 10473,
+    "sha256": "734ed022b2dd49c6ef952880d90678f1ce158be21fd2318865e7578c93e23a61"
+  },
+  "maximum_invocations": 1,
+  "nonce": "4d1c28c2d9caa913e4ab1e8a504ac5ea",
+  "profile_sha256": "e5584b2c6fecbec0660dfeda3193468cf78af6a9dee0f4cc849e64abbdca1081",
+  "reviewer": "/root/daemon_execution_review",
+  "static_bindings": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-current115-matching235-native-preparation-source-1/normal-entry-preclock-source-2/root-adopted-matching115-process235-entry-2/STATIC-NATIVE-BINDINGS.NOT-RELEASED.json",
+    "bytes": 16713,
+    "sha256": "a86fe2dabb5b9fb01dff179b78356a0552fd56e3e216fbc6c6feca91dfe43bd9"
+  }
+}

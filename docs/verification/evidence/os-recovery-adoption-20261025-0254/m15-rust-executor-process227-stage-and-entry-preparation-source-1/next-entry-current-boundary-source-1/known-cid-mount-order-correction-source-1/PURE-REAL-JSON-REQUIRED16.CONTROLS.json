@@ -1,0 +1,31 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_REQUIRED16_REAL_JSON_MOUNT_ORDER_CONTROLS_SAME_UNCHANGED_HELPER",
+  "helper": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process227-stage-and-entry-preparation-source-1/next-entry-current-boundary-source-1/known-cid-mount-order-correction-source-1/known_cid_inspect_compare.py",
+    "bytes": 2056,
+    "sha256": "fb2dbf184ee6c4c3bd861963b72918cda3c781e1bbd47c278b993ccecf6a02a1"
+  },
+  "checks": [
+    "PASS actual genuine53Mountrecord permutation only",
+    "PASS retained exact inspect",
+    "REJECT missing full mount record",
+    "REJECT extra full mount record",
+    "REJECT duplicate complete mount multiplicity",
+    "REJECT duplicate Destination distinct record",
+    "REJECT Source change",
+    "REJECT Destination change",
+    "REJECT RW change",
+    "REJECT nonMount State Running change",
+    "REJECT nonMount HostConfig ReadonlyRootfs change",
+    "REJECT nonMount scalar type State ExitCode false versus0",
+    "REJECT wrong exact CID",
+    "REJECT nonzero inspect status",
+    "REJECT nonempty inspect stderr",
+    "REJECT otherCLIraw-whitespace change"
+  ],
+  "count": 16,
+  "source_implementation_changed": false,
+  "queries": 0,
+  "runtime_authority": null
+}
