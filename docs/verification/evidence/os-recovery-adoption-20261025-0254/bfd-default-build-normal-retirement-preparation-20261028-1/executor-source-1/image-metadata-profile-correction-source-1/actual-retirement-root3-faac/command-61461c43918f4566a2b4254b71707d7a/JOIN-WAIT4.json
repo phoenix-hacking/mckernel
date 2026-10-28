@@ -1,0 +1,50 @@
+{
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "\nimport json,os,sys\ncaller=[int(sys.argv[2]),sys.argv[3]]\ncaller_parent=int(open('/proc/'+str(caller[0])+'/stat','rb').read().rpartition(b') ')[2].split()[1])\nheavy={'qemu-system-x86_64','qemu-system-aarch64','qemu-kvm','mcexec','firecracker',\n       'rustc','cargo','make','ninja','buildah','gcc','g++','cc','clang','clang++'}\ndef publisher(exe,argv):\n    name=os.path.basename(exe[:-10] if exe.endswith(' (deleted)') else exe)\n    if name in heavy or name.startswith('qemu-system-'): return True\n    if name in ('docker','podman') and any(a in ('build','run','start') for a in argv[1:]): return True\n    if any(path in argv for path in ['/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/cohort/run_build_only.py', '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-control-routing-restart-20261028-1/cohort/hold_and_run_build_only.py', '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/image-metadata-profile-correction-source-1/retire_exact_bfd_stopped_container.py']): return True\n    for arg in argv:\n        base=os.path.basename(arg)\n        if (base.startswith(('native_rust_exact_','native-exact-','native_exact_')) and\n            base.endswith(('.py','.sh')) and any(term in base for term in ('build','cleanup','recovery','prepare'))): return True\n    return False\ndef snapshot():\n    rows=[]; publishers=[]; groups=[]; found=False\n    entries=os.listdir('/proc')\n    if len(entries)>4096: raise ValueError('process-count')\n    for name in entries:\n        if not name.isdigit(): continue\n        pid=int(name)\n        with open('/proc/'+name+'/stat','rb') as f: raw=f.read(65537)\n        if len(raw)>65536: raise ValueError('stat-size')\n        left,sep,right=raw.rpartition(b') ')\n        if not sep or not left.startswith(str(pid).encode()+b' ('): raise ValueError('stat-prefix')\n        fields=right.split()\n        if len(fields)<50 or fields[0] not in (b'R',b'S',b'D',b'Z',b'T',b't',b'X',b'x',b'K',b'W',b'P',b'I'): raise ValueError('stat-fields')\n        for field in fields[1:]:\n            digits=field[1:] if field.startswith(b'-') else field\n            if not digits or any(c<48 or c>57 for c in digits): raise ValueError('stat-number')\n        ppid=int(fields[1]); start=int(fields[19])\n        if ppid<0 or start<0: raise ValueError('stat-number')\n        with open('/proc/'+name+'/cmdline','rb') as f: command=f.read(65537)\n        if len(command)>65536 or (command and not command.endswith(b'\\0')): raise ValueError('cmdline-size-or-termination')\n        argv=[a.decode('utf-8','strict') for a in command[:-1].split(b'\\0')] if command else []\n        if len(argv)>256 or any(len(a)>16384 for a in argv): raise ValueError('cmdline-arguments')\n        if not argv and fields[0] not in (b'Z',b'X',b'x') and not (int(fields[6]) & 0x200000): raise ValueError('live-cmdline-empty')\n        exe=os.readlink('/proc/'+name+'/exe') if argv else ''\n        with open('/proc/'+name+'/stat','rb') as f: again=f.read(65537)\n        check=again.rpartition(b') ')[2].split()\n        if len(check)<50 or check[19]!=fields[19]: raise ValueError('process-raced')\n        if pid==caller[0]:\n            if str(start)!=caller[1]: raise ValueError('caller-raced')\n            found=True\n        elif argv and not (pid==caller_parent and os.path.basename(exe)=='sudo') and publisher(exe,argv): publishers.append([pid,str(start),exe])\n        rows.append([pid,ppid,str(start)]); groups.append([pid,ppid,str(start),int(fields[2]),int(fields[3])])\n    if not found: raise ValueError('caller-missing')\n    return sorted(rows),publishers,sorted(groups)\nif os.geteuid()!=0: raise ValueError('not-root')\nwith open('/proc/sys/kernel/random/boot_id') as f: boot=f.read().strip()\nfirst,pubs1,groups1=snapshot(); second,pubs2,groups2=snapshot()\nwith open('/proc/sys/kernel/random/boot_id') as f: after=f.read().strip()\nif boot!=after: raise ValueError('boot-raced')\nprint(json.dumps({'schema':'fp-save-image.proc.v1','uid':os.geteuid(),'boot_id':boot,\n                  'challenge':sys.argv[1],'caller':caller,'publishers':pubs1+pubs2,'snapshots':[first,second], 'groups':[groups1,groups2]}))\n",
+    "f4def39a37484db2bc5f6a0ef767e81f",
+    "2158579",
+    "102053058"
+  ],
+  "birth": 102053413,
+  "client_retirement_unproven": false,
+  "finished_epoch": 1793223089.6027293,
+  "group_absent": true,
+  "group_members": [],
+  "peak_rss_kib": 22484,
+  "pid": 2158617,
+  "positive_wait4": true,
+  "process_group": 2158617,
+  "raw": {
+    "status.json": {
+      "bytes": 4642,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/image-metadata-profile-correction-source-1/actual-retirement-root3-faac/command-61461c43918f4566a2b4254b71707d7a/status.json",
+      "sha256": "f9d1f3f74a9c76d262323d969b7d00e48c0f6e366d4f4f43b1e34503be10baa2"
+    },
+    "stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/image-metadata-profile-correction-source-1/actual-retirement-root3-faac/command-61461c43918f4566a2b4254b71707d7a/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout": {
+      "bytes": 34923,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/bfd-default-build-normal-retirement-preparation-20261028-1/executor-source-1/image-metadata-profile-correction-source-1/actual-retirement-root3-faac/command-61461c43918f4566a2b4254b71707d7a/stdout",
+      "sha256": "02e79421ffac7b251fcdbaf2940b6442c141dd91404e35594048fc4e8bd32b46"
+    }
+  },
+  "returncode": 0,
+  "signals_sent": 0,
+  "started_epoch": 1793223089.4420433,
+  "started_monotonic": 1005196.010904501,
+  "streams_closed": true,
+  "system_cpu_seconds": 0.043587,
+  "user_cpu_seconds": 0.110869,
+  "wait4_pid": 2158617,
+  "wait4_status": 0,
+  "wall_seconds": 0.1607810480054468
+}

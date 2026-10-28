@@ -2,6 +2,26 @@ Functional McKernel OS/apps and Rust/assembly migration only; no security testin
 
 Current user instruction: NEW run through Wednesday October28 at11p.m. PDT (2026-10-29T06:00:00+00:00). Read [active run window](RUN-WINDOW-UNTIL-20261028-2300.md). This supersedes the expired twelve-hour cutoff and prior shutdown pause. Explicitly resume work; preserve cumulative credits and all evidence. Root59/f76 and M14F02 closure remain accepted. Fresh operation/window/account/identity gates are still required.
 
+## Exact BFD container retired; fresh current pending — 2026-10-28T21:32Z
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Third exact retirement returned0; Root parent2158579/birth102053058 positively joined0
+with closed streams, wall8.730653s/childCPU6.831824s/peakRSS35584KiB/stderr0.
+RESULTfd477de8 records exact2460 container absence, protected363 retained originals,
+zero signals and zero SDK/common/owner-record releases. Independent actual-retirement
+acceptance953b3f32 verifies fourteen command joins/one exact removal/all363 protected
+files and parentexit; fresh full current-free acceptance remains REQUIRED before
+any heavy/native entry. The inherited c56 label was matched as immutable image
+metadata, never current job ownership. Both failed attempts and71nonce history remain.
+
+Root next: materialize reviewed full postjoin operation/config, perform fresh bounded
+capture, independent current-free acceptance. m14_compose supplies concrete DATA;
+m14_review checks narrow72actor source successor4647/mapf4a7. original227 owner now
+implements typed118 consumer/materializer successor so genuine new boundary can enter
+without substituting DATA into the old Root61-only consumer. F03BODY8 HOST640pairs/
+3commandsPASS is later-bucket evidence, no default/native/file/C-retirement credit.
+Practical35/35/M14files4/6/M15files1/8 unchanged; no95percent claim.
+
 ## Twenty-minute checkpoint and retained retirement failure — 2026-10-28T21:16Z
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
