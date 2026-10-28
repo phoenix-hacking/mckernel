@@ -1,0 +1,34 @@
+In file included from /home/holden/mckernel/arch/x86_64/kernel/include/ihk/atomic.h:16,
+                 from /home/holden/mckernel/lib/include/mc_perf_event.h:7,
+                 from /home/holden/mckernel/lib/include/ihk/cpu.h:20,
+                 from /home/holden/mckernel/kernel/include/process.h:18,
+                 from /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/original_full_body.c:2:
+/home/holden/mckernel/kernel/include/lwk/compiler.h:490:14: warning: mismatch in argument 3 type of built-in function 'memcpy'; expected 'long unsigned int' [-Wbuiltin-declaration-mismatch]
+  490 | extern void *memcpy(void *dest, const void *src, size_t n);
+      |              ^~~~~~
+In file included from /home/holden/mckernel/ihk/ikc/include/ikc/ihk.h:38,
+                 from /home/holden/mckernel/arch/x86_64/kernel/include/ihk/ikc.h:16,
+                 from /home/holden/mckernel/kernel/include/syscall.h:20,
+                 from /home/holden/mckernel/kernel/include/process.h:26,
+                 from /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/original_full_body.c:2:
+/home/holden/mckernel/lib/include/string.h:19:8: warning: mismatch in return type of built-in function 'strlen'; expected 'long unsigned int' [-Wbuiltin-declaration-mismatch]
+   19 | size_t strlen(const char *p);
+      |        ^~~~~~
+/home/holden/mckernel/lib/include/string.h:20:8: warning: mismatch in return type of built-in function 'strnlen'; expected 'long unsigned int' [-Wbuiltin-declaration-mismatch]
+   20 | size_t strnlen(const char *p, size_t maxlen);
+      |        ^~~~~~~
+/home/holden/mckernel/lib/include/string.h:22:7: warning: mismatch in argument 3 type of built-in function 'strncpy'; expected 'long unsigned int' [-Wbuiltin-declaration-mismatch]
+   22 | char *strncpy(char *dest, const char *src, size_t maxlen);
+      |       ^~~~~~~
+/home/holden/mckernel/lib/include/string.h:24:5: warning: mismatch in argument 3 type of built-in function 'strncmp'; expected 'long unsigned int' [-Wbuiltin-declaration-mismatch]
+   24 | int strncmp(const char *s1, const char *s2, size_t n);
+      |     ^~~~~~~
+/home/holden/mckernel/lib/include/string.h:31:5: warning: mismatch in argument 3 type of built-in function 'memcmp'; expected 'long unsigned int' [-Wbuiltin-declaration-mismatch]
+   31 | int memcmp(const void *s1, const void *s2, size_t n);
+      |     ^~~~~~
+/home/holden/mckernel/lib/include/string.h:32:7: warning: mismatch in argument 3 type of built-in function 'memset'; expected 'long unsigned int' [-Wbuiltin-declaration-mismatch]
+   32 | void *memset(void *s, int n, size_t l);
+      |       ^~~~~~
+/home/holden/mckernel/lib/include/string.h:44:12: warning: mismatch in argument 2 type of built-in function 'snprintf'; expected 'long unsigned int' [-Wbuiltin-declaration-mismatch]
+   44 | extern int snprintf(char * buf, size_t size, const char *fmt, ...);
+      |            ^~~~~~~~

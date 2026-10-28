@@ -1,0 +1,3308 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "goal": "01a17e6f-112f-7660-8771-85d15e07a26c",
+  "fixed_deadline_UTC": "2026-10-28T05:36:09Z",
+  "fixed_cutoffs": [
+    1793165769.0,
+    947874.5689514667,
+    963213.6960030915
+  ],
+  "resources": {
+    "cpu": 6,
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds_each": 60,
+    "FSIZE_bytes": 67108864,
+    "CORE_bytes": 0,
+    "wall_seconds_each": 90,
+    "aggregate_jobs": 7,
+    "aggregate_GiB": "21.6619"
+  },
+  "host_growth_reserve_bytes": 4294967296,
+  "task_id": "F02-LOCAL14-CONFIG3-FINAL14-DEFAULT-HOST-PROPOSAL",
+  "status": "SOURCE_PROFILE_NOT_GRANTED",
+  "capture_root": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/future-capture-1",
+  "production_acceptance": false,
+  "LOCAL14_selected": true,
+  "retained_steps0_to7_no_replay": true,
+  "original_joint_outputs_failed": true,
+  "internal_and_capture_bound_bytes": {
+    "outer_capture_max": 939524096,
+    "CPP_internal_capture_max": 1073741824,
+    "positive_objects_and_partial_links_max": 335544320,
+    "metadata_reserve": 134217728,
+    "compiler_temp_reserve": 134217728,
+    "total": 2617245696,
+    "headroom_to_4GiB": 1677721600
+  },
+  "invocation_requirement": "ABSOLUTE profile and grant paths",
+  "commands": [
+    {
+      "id": "00-new-fullRust-local14-final14-consumers",
+      "argv": [
+        "/usr/bin/cmake",
+        "-E",
+        "env",
+        "MAKEFLAGS=",
+        "MCKERNEL_RUST_VERSION=1.8.0",
+        "MCKERNEL_RUST_BUILDID=3114d9e",
+        "MCKERNEL_X86_ENABLE_SSE=1",
+        "MCKERNEL_CPU_C_FILE=/src/arch/x86_64/kernel/cpu.c",
+        "MCKERNEL_F06_RT_SIGRETURN_ORIGIN=/src/arch/x86_64/kernel/syscall.c",
+        "MCKERNEL_PROCESS_C_FILE=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/candidate/kernel/process.c",
+        "MCKERNEL_PROCESS_DDEBUG_FLAGS=0",
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/bin/rustc",
+        "--crate-name",
+        "mckernel_rust",
+        "--crate-type",
+        "lib",
+        "--edition=2021",
+        "-C",
+        "panic=abort",
+        "-C",
+        "opt-level=2",
+        "-C",
+        "debuginfo=2",
+        "-C",
+        "code-model=large",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "no-redzone=yes",
+        "-C",
+        "force-frame-pointers=yes",
+        "-C",
+        "overflow-checks=off",
+        "-C",
+        "force-unwind-tables=no",
+        "-C",
+        "no-vectorize-loops",
+        "-C",
+        "no-vectorize-slp",
+        "-C",
+        "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+        "--cfg",
+        "f03_io_diagnostic_callbacks_candidate",
+        "--cfg",
+        "f03_mincore_candidate",
+        "--cfg",
+        "f03_move_pages_candidate",
+        "--cfg",
+        "f03_sched_bridges_candidate",
+        "--cfg",
+        "f03_signal_process_bridges_candidate",
+        "--cfg",
+        "f03_dispatch_context_candidate",
+        "--cfg",
+        "f03_leaf_callbacks_candidate",
+        "--cfg",
+        "native_linux_irq_work_v6_12",
+        "--cfg",
+        "f03_syscall_entry_candidate",
+        "--cfg",
+        "f03_futex_atomic_candidate",
+        "--cfg",
+        "f03_futex_no_uaccess_candidate",
+        "--cfg",
+        "process_global_storage_candidate",
+        "--cfg",
+        "f03_syscall_table_candidate",
+        "--cfg",
+        "f03_ptrace_entry_candidate",
+        "--cfg",
+        "f03_syscall_table_clone3",
+        "--cfg",
+        "enable_profile",
+        "--cfg",
+        "enable_perf",
+        "--cfg",
+        "enable_rusage",
+        "--cfg",
+        "f03_prlimit_body_candidate",
+        "--cfg",
+        "f03_do_exit_supported_candidate",
+        "--cfg",
+        "f03_unmap_begin_selected_candidate",
+        "--cfg",
+        "f03_unmap_remove_selected_candidate",
+        "--cfg",
+        "f03_unmap_finish_selected_candidate",
+        "--cfg",
+        "f03_mmap_page_callback_candidate",
+        "--cfg",
+        "f03_wait_release_selected_candidate",
+        "--cfg",
+        "f06_mmap_flag_providers",
+        "--cfg",
+        "f06_prctl_set_register_candidate",
+        "--cfg",
+        "f06_prctl_get_register_candidate",
+        "--cfg",
+        "f06_mmap_dispatch_bridge_candidate",
+        "--cfg",
+        "f03_wait_process_release_selected_candidate",
+        "--cfg",
+        "f03_terminate_refcount_selected_candidate",
+        "--cfg",
+        "f03_ptrace_io_find_selected_candidate",
+        "--cfg",
+        "f03_ptrace_io_unlock_selected_candidate",
+        "--cfg",
+        "f06_ptrace_context_candidate",
+        "--cfg",
+        "f06_ptrace_alloc_candidate",
+        "--cfg",
+        "f06_vdso_add_range_candidate",
+        "--cfg",
+        "f06_vdso_set_range_candidate",
+        "--cfg",
+        "f03_sync_child_event_candidate",
+        "--cfg",
+        "f06_process_vm_entry_candidate",
+        "--cfg",
+        "f03_exit_waitq_wake_selected_candidate",
+        "--cfg",
+        "f06_copy_to_user_candidate",
+        "--cfg",
+        "f06_copy_from_user_candidate",
+        "--cfg",
+        "f06_forward_context_candidate",
+        "--cfg",
+        "f03_perf_alloc_bridges_selected_candidate",
+        "--cfg",
+        "f06_rt_sigreturn_syscall_candidate",
+        "--cfg",
+        "f06_rt_sigreturn_set_signal_candidate",
+        "--cfg",
+        "f06_rt_sigreturn_check_signal_candidate",
+        "--cfg",
+        "f03_perf_counter_control_bridges_selected_candidate",
+        "--cfg",
+        "f03_perf_event_provider_bridges_selected_candidate",
+        "--cfg",
+        "f06_rt_sigreturn_alloc_candidate",
+        "--cfg",
+        "f06_rt_sigreturn_free_candidate",
+        "--cfg",
+        "f06_clone_reader_lock_candidate",
+        "--cfg",
+        "f06_clone_reader_unlock_candidate",
+        "--cfg",
+        "f06_ptrace_find_thread_candidate",
+        "--cfg",
+        "f06_ptrace_thread_unlock_candidate",
+        "--cfg",
+        "f03_perf_provider_next3_bridges_selected_candidate",
+        "--cfg",
+        "process_verbose_local_companions",
+        "--emit=obj=/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/HOST-output-proposed-1/rust-selected.o",
+        "--cfg",
+        "process_verbose_data",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/lib.rs"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 00-new-fullRust-local14-final14-consumers"
+    },
+    {
+      "id": "01-actual-selected-processTU-and-genuine-configABI",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_RUST_PROCESS_HELPERS",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/include",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel/ihk/ikc/include",
+        "-I/home/holden/mckernel/ihk/linux/include",
+        "-I/home/holden/mckernel/lib/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-DMCKERNEL_RUST_PROCESS_GLOBAL_STORAGE",
+        "-DMCKERNEL_RUST_PROCESS_VERBOSE_DATA",
+        "-DMCKERNEL_PROCESS_DDEBUG_FLAGS=0",
+        "-DMCKERNEL_PROCESS_DDEBUG_FILE=\"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/candidate/kernel/process.c\"",
+        "-DMCKERNEL_RUST_PROCESS_VERBOSE_LOCAL_COMPANIONS",
+        "-c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/fixture/genuine_candidate_abi.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/HOST-output-proposed-1/selected.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 01-actual-selected-processTU-and-genuine-configABI"
+    },
+    {
+      "id": "02-optionOFF-original-C-config-metadata",
+      "argv": [
+        "/usr/bin/gcc-9",
+        "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+        "-DIHK_OS_MANYCORE",
+        "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+        "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+        "-DMCKERNEL_NATIVE_CLONE3",
+        "-DMCKERNEL_NATIVE_CLONE_TID",
+        "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+        "-DMCKERNEL_NATIVE_FUTEX",
+        "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+        "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+        "-DMCKERNEL_RUST_BITOPS",
+        "-DMCKERNEL_RUST_LIST_HELPERS",
+        "-DMCKERNEL_RUST_LOCK_HELPERS",
+        "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+        "-DMCKERNEL_RUST_PTE_HELPERS",
+        "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+        "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+        "-DPROFILE_ENABLE",
+        "-D__KERNEL__",
+        "-DMCKERNEL_RUST_PROCESS_HELPERS",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/include",
+        "-I/home/holden/mckernel/kernel/include",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel",
+        "-I/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64/include",
+        "-I/home/holden/mckernel/ihk/cokernel/smp/x86_64",
+        "-I/home/holden/mckernel/ihk/ikc/include",
+        "-I/home/holden/mckernel/ihk/linux/include",
+        "-I/home/holden/mckernel/lib/include",
+        "-I/home/holden/mckernel/arch/x86_64/kernel/include",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        "-Wno-implicit-fallthrough",
+        "-Wno-stringop-truncation",
+        "-ffreestanding",
+        "-O2",
+        "-nostdinc",
+        "-isystem",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+        "-fno-omit-frame-pointer",
+        "-mcmodel=large",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-DMCKERNEL_RUST_PROCESS_GLOBAL_STORAGE",
+        "-DMCKERNEL_RUST_PROCESS_VERBOSE_DATA",
+        "-DMCKERNEL_PROCESS_DDEBUG_FLAGS=0",
+        "-DMCKERNEL_PROCESS_DDEBUG_FILE=\"/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/candidate/kernel/process.c\"",
+        "-c",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/fixture/genuine_candidate_abi.c",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/HOST-output-proposed-1/optionOFF.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 02-optionOFF-original-C-config-metadata"
+    },
+    {
+      "id": "03-new-selected-partial-link",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/rust-lld",
+        "-flavor",
+        "gnu",
+        "-r",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/HOST-output-proposed-1/rust-selected.o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/HOST-output-proposed-1/selected.o",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/HOST-output-proposed-1/selected-joint.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 03-new-selected-partial-link"
+    },
+    {
+      "id": "04-optionOFF-partial-link-retained-actual114Rust",
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/rust-lld",
+        "-flavor",
+        "gnu",
+        "-r",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/HOST-output-proposed-1/optionOFF.o",
+        "-o",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/HOST-output-proposed-1/optionOFF-joint.o"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 04-optionOFF-partial-link-retained-actual114Rust"
+    },
+    {
+      "id": "05-fixed-selected-reject-optionOFF-CPP",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/run_fixed_cpp_controls.py",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/FIXED-CPP-CONTROLS.NOT-GRANTED.json"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 05-fixed-selected-reject-optionOFF-CPP"
+    },
+    {
+      "id": "06-new-object-config-and-actual-consumer-readback",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/qualify_changed_objects.py",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/HOST-output-proposed-1"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. 06-new-object-config-and-actual-consumer-readback"
+    }
+  ],
+  "leaves": [
+    {
+      "name": "F02local14final14changed",
+      "first": 0,
+      "last": 6,
+      "plan": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/EXACT-SEVEN-COMMAND-HOST-PROPOSAL.NOT-GRANTED.json",
+        "bytes": 16098,
+        "sha256": "cf985ee66c45330886187422c1000077e2c0415058f02c47a9598b7d98aa0105"
+      },
+      "output": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/HOST-output-proposed-1",
+      "expected_stdout": "F02 LOCAL14+FINAL14 HOST boundary PASS\n"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch/auxvec.h",
+      "bytes": 355,
+      "sha256": "c5728dd4851916b51ce04a993154bd7d9124170b136319f7677a9d843cd4d8c7"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch/cpu.h",
+      "bytes": 913,
+      "sha256": "2130ac820f72c6349cab63f6d456cd0ff23fb00a99a745681e56a7ec4eb9b187"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch/mm.h",
+      "bytes": 141,
+      "sha256": "9d8faad8307f160b596b51cd482bcc6dd5c38a62b848ec6bc6c09dd714d4cdfe"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch/mman.h",
+      "bytes": 839,
+      "sha256": "8e3844987296722aceac782975db7889b37889afdcab23d6c2d24bb3df33f9ec"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch/shm.h",
+      "bytes": 866,
+      "sha256": "a1183834da90fb674307d65ebb0ffabe19315dd88353c46815921f6e88090366"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-bitops.h",
+      "bytes": 598,
+      "sha256": "c4a9e5067fb84742e5bb411b1a373bed1a4917abb17dc618e8d2630bd6f2d79a"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-futex.h",
+      "bytes": 424,
+      "sha256": "1229adc72ebf596abc31ee9daad76ee005072ebb0aa29b3d71835ccfe95feb55"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-lock.h",
+      "bytes": 4603,
+      "sha256": "ca8baa66ed77634cd6319a918211b3eb8fe80fc7dcb2ac0110ab6bfbd0c1b81b"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-memory-helpers.h",
+      "bytes": 39581,
+      "sha256": "e76daf9493fdd20505af19f52f32ed83a7864c29cbbbfb05c4605557d2b27957"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-memory.h",
+      "bytes": 8996,
+      "sha256": "1704ac32bf55f421c802df661c844b496a1660b8b89e5d12cc2d994d835b5b49"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/arch-string.h",
+      "bytes": 238,
+      "sha256": "98fe2c9021167e9b08d75dbe5ffc6b25bc84d708a8baeaf60d16fcb88e5b3831"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/cas.h",
+      "bytes": 488,
+      "sha256": "d03e8e36c861102f71364cbc11f3b108e17075fa3ebc7aab400c1dcea61977c6"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/cpulocal.h",
+      "bytes": 1299,
+      "sha256": "9c717afdbf8c77744c8f1ca9a8c00e4ffa2eb623f310905799b9c1b07bd685b2"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/elf.h",
+      "bytes": 1271,
+      "sha256": "96a1889d8bc9597efaed3260d4bcc57ef86dd2380c2a09b53a2525c87cce50ac"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/errno.h",
+      "bytes": 5167,
+      "sha256": "79e1671f269b7dab1f2e1ea672c402bc03738b85029b6f3b3031efe22dde9157"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/hwcap.h",
+      "bytes": 195,
+      "sha256": "29a039580a68367d2e375bc063f72bf9ef9d37b9fa18daeb0524af8eefe10d93"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/atomic.h",
+      "bytes": 2680,
+      "sha256": "829c76b8e61efd50e6cbc968c6eac56fc7b151c9da4143fd40bde176117ef78d"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/context.h",
+      "bytes": 2286,
+      "sha256": "13a67bcf26c512ac27ece4ab801e5e96976b88ec505d9f549e53755b431171f8"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/ikc.h",
+      "bytes": 578,
+      "sha256": "aa2a06a3c5a3ed09eac86668e6d16e427cdd8d9dff1449b2e3f3c53d97952beb"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/ihk/types.h",
+      "bytes": 1074,
+      "sha256": "c37a7c748f2439ddfd847725a4d559c008f2aca09c45114fb07e73337013f449"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/prctl.h",
+      "bytes": 319,
+      "sha256": "e8aa2802f0ea3948242f335513f22c6741f3028b67228298d9c14df8ce242a70"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/registers.h",
+      "bytes": 5778,
+      "sha256": "43fd6d2e278953684574224927fe65bc514a88c5529d97f688e1e21b1864a6fc"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/rlimit.h",
+      "bytes": 2508,
+      "sha256": "c5c9b7255c09d56766d2c2bec72b6261579e51e2925457fcc8c098fe08cd907a"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/signal.h",
+      "bytes": 7474,
+      "sha256": "3cea81b9b2f723fbff2cafa634761d50316a397d06df2c12f94fe5f0dae03752"
+    },
+    {
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/include/syscall_list.h",
+      "bytes": 5815,
+      "sha256": "a9680be6ce9d26c6f1d3df2110e1ed4407a51f577381875c66801b07a54d5ead"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/OUTPUT/work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+      "bytes": 66600,
+      "sha256": "a4309e34ffe1a1c7c99eee1a2f2fb665cab907a33341956a96078b095edb63bf"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o",
+      "bytes": 18275816,
+      "sha256": "1836ac74294186335742d17b4d53cd2217b2b17f6f471d317e55faf1fa7f346b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f02-source38-next-current-integration-source-1/check_thirteen_storage.py",
+      "bytes": 6103,
+      "sha256": "ba2b4764ce71f01cf2a4d80e6892acfa7862bb47455a945122b2c69646cb50cf"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/CMAKE-ENV-BINDING-PROPOSAL.json",
+      "bytes": 4698,
+      "sha256": "d86294dd70c20c70e14b72627092c4951291d60c28d2169d710af2c55835012b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/COMMAND-RECIPE.NOT-ADMITTED.json",
+      "bytes": 17652,
+      "sha256": "a305de599ae0757c3476f2ad86a3f7e479c1e8cd2387b0c316bd3003fcb25f26"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/NEGATIVE-CONTROLS.NOT-ADMITTED.json",
+      "bytes": 12391,
+      "sha256": "707a8c31c1981e45fffbfd7300e0c539c9d5bdd021e1ef966848e1fbeaa1ad97"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/README.md",
+      "bytes": 5116,
+      "sha256": "1380f117643e9044e25389ef5806e5a53464d0d1fa0e80268cff340adab13efd"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/RETAINED-CONSUMER-EVIDENCE.json",
+      "bytes": 30810,
+      "sha256": "5d70f51860471e00d55592b09d98013877daf599b0f6520abe9b0cf56fe39816"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/SOURCE-CONTEXT.json",
+      "bytes": 2408,
+      "sha256": "0e0905983ac1080513daa84be7bf08bbe99a25a1c239655c331b4502615a98de"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/cmake-proposal/composed.CMakeLists.txt",
+      "bytes": 37667,
+      "sha256": "13d792e64a23017ece17b09c53712b27161b3e0a382cf8266dba33da92bc5b83"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/cmake-proposal/current112-to-verbose32.diff",
+      "bytes": 3383,
+      "sha256": "705403884c8fb37b3e1ccbfeadf6fc88f2629dd87882d56d183c25d71b850131"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/cmake-proposal/current112.CMakeLists.txt",
+      "bytes": 35478,
+      "sha256": "7f808fcd791cb1a96c06976faeb5313cf991e6e7aa50c38e49d8bb4d60676b69"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/fixture/genuine_abi.c",
+      "bytes": 877,
+      "sha256": "27872226f7e2df59a26d413e456ce444d2c77b9acfe62f76bf931057158666cb"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/fixture/provider.rs",
+      "bytes": 372,
+      "sha256": "d36723bc248a8a779596ef461d79497c1bc08356e77ef6c9f2871f5873d682d9"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/negative_controls.py",
+      "bytes": 1720,
+      "sha256": "59f61a598c35bf40e409d3706aa23b9f4ff2d10b07b993e1b97c4e939b4d2009"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/prepare_host_source.py",
+      "bytes": 9231,
+      "sha256": "055bbb09001966c1f6c86380f1feb40797abb31750f7a5d0519cc8e5b28af67d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/qualify_metadata.py",
+      "bytes": 5213,
+      "sha256": "58751c96f49cd78a67999a4132c2c2d5176f5ecaee840d8d11f895b3bd256ea0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/seal_profile.py",
+      "bytes": 5205,
+      "sha256": "633f75da6f64bc579225729ce8b9b0161385f2e5b2f7e42b9cc55820536bd295"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/operation-account-window-new12h-source-1/ACTUAL-WINDOW.json",
+      "bytes": 815,
+      "sha256": "91bdfb1de3955a684d0766ffa85a5e18deda8f5f49c6ce1d85fcdbf2df6e3d86"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/operation-account-window-new12h-source-1/actual-guardian-clamp-successor-1/ACTUAL-GUARDIAN-VERIFIED.json",
+      "bytes": 2462,
+      "sha256": "8a33c90172e4fea5f3d1541758fef205a5e6c24440875ebbfd45f6512c9021f9"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/operation-account-window-new12h-source-1/actual-guardian-clamp-successor-1/actual_account_window_v2.py",
+      "bytes": 4521,
+      "sha256": "1f152e3f18384643cd35d203fcc2a4292950a1c90758734859bdb980cf45fda0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/operation-account-window-new12h-source-1/actual_account_window.py",
+      "bytes": 4674,
+      "sha256": "8bf26bae56a019876c6a1463945733c85be5016d21ac5f6f955c29fd131a8cbe"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ordinary-host-new12h-runner-source-1/admission_new12h.py",
+      "bytes": 2782,
+      "sha256": "7df167b39842976391b6461f831c1a1349e1f3880892c37268579378e8f15a76"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ordinary-host-new12h-runner-source-1/run_new12h_host.py",
+      "bytes": 7521,
+      "sha256": "6e98a1fbcbce2e822a815a05516287e7122cbd8e06d43277134b27b70cf3ad34"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/phase5-m03-handshake-runtime-checkpoint-20261020-1/sdk-physical-source/run_two_commands_source_bound_corrected.py",
+      "bytes": 14753,
+      "sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/cokernel/smp/x86_64/bootparam.h",
+      "bytes": 4490,
+      "sha256": "6e72eae27f27625efa66bdf0a76d661cb4a8050ceb117fb75c56ff63678e5da1"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/cokernel/smp/x86_64/builtin_dma.h",
+      "bytes": 669,
+      "sha256": "34e75e1ce52ad9920fabd22eb112bb2066a55b6a6e62d4362bbf605f3715c3b8"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/cokernel/smp/x86_64/include/ihk/memconst.h",
+      "bytes": 198,
+      "sha256": "38b25a9fedbcf50d9eae799681aff60705d6e2e5e3559bcb721b0541ce98dc61"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/cokernel/smp/x86_64/include/march.h",
+      "bytes": 1174,
+      "sha256": "32984f29c20133f89b2410c922fc291cd675f2942b6128cea55d0e0ff3826f49"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/cokernel/smp/x86_64/perf_event.h",
+      "bytes": 7685,
+      "sha256": "c3462968982be0e7e52967a4d72ff95a18d540175928f59ab459702c86cecb6a"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/ikc/include/ikc/ihk.h",
+      "bytes": 4138,
+      "sha256": "0ddad6947192b527be6a6f9560718c98fb70b50cb2cbb838094d0ca6ce199e3e"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/ikc/include/ikc/master.h",
+      "bytes": 1395,
+      "sha256": "63fb24c40078b464fa751f1e564a7fa548e3047a91fd54c5cf9029fceb4eefbd"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/ikc/include/ikc/msg.h",
+      "bytes": 987,
+      "sha256": "3f88492d20e5177f11298e15401ae460bb7cc7173035b71dcf3074ee319bdf6f"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/ikc/include/ikc/queue.h",
+      "bytes": 4501,
+      "sha256": "0acb85aee2d3b0b7620a0b222461815c6c96c530c5b7182fe60e8ae52ec4e461"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/affinity.h",
+      "bytes": 5866,
+      "sha256": "f77500409d7c5b93d1855f9027edf1b654975d7b538ba388908454200fb02dad"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/arch/arm64/ihk/archdefs.h",
+      "bytes": 870,
+      "sha256": "233ae0e501b78ebbe9d31826dae93e0751e886aef8f2f37b4f966cb1ed7a44d6"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/arch/arm64/ihk/msr.h",
+      "bytes": 148,
+      "sha256": "0ddd049b02c500ecaa1cd10949974f6f38712e2308c9e2040d232a6e70caa90f"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/arch/arm64/ihk/rdtsc.h",
+      "bytes": 437,
+      "sha256": "b67c55c99492ff0a49a3c88e1586eb10e4b716098b78c39f33e9c834c2232048"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/arch/x86_64/ihk/archdefs.h",
+      "bytes": 754,
+      "sha256": "463977909a6ac27a12b89fec21c89b4c8900b4d1d7d1d93e375fc1e17b7f958c"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/arch/x86_64/ihk/msr.h",
+      "bytes": 55,
+      "sha256": "6d02515e7754a960d3e440a15233db9a933549d2e63d817bf9ecf7702ae5bf1b"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/arch/x86_64/ihk/rdtsc.h",
+      "bytes": 214,
+      "sha256": "9daedc33bd36ede2f2f07450d78ff9473237dcd6d11fb035ad1d272903b52e74"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/ihk_debug.h",
+      "bytes": 919,
+      "sha256": "63160ae79466f721b35bae1f2a8dad1378bcd4b8525045930abfaf4ec47383d7"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/ihk_host_driver.h",
+      "bytes": 31132,
+      "sha256": "924c4a99f25d9fe832146ee21dd1f0b64b7cbf5d350c59f7f075dbc934a50d85"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/ihk_host_misc.h",
+      "bytes": 1032,
+      "sha256": "50e7931e58fe623d7102867e59ecb88d0b31ddc1bd64e28ec64b0c76789ad584"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/ihk_host_user.h",
+      "bytes": 5704,
+      "sha256": "2335260024075a08becbe74651162a950aee8bea603e9a451cb8bcae3aa0ef97"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/ihk_monitor.h",
+      "bytes": 1575,
+      "sha256": "6fb530c99848036f8c71f946c01d2f7189e15c3e8a42b9962be980eaf29e3b60"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/ihk_rusage.h",
+      "bytes": 1404,
+      "sha256": "afc786f096e70bd9b89834b5b0af81ee0e1cfe3f3cd2e73ef5f88db4d63d5d01"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/ihklib.h",
+      "bytes": 5025,
+      "sha256": "00b5bc8a195fbb94e2b14f73c6925bb85621da8a33aa349d32f20c70dcc4055a"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/ihklib_private.h",
+      "bytes": 3788,
+      "sha256": "4f23ed46409f3ee55720cfb2f291b912ef7824e743c1dd6ba0f0f8f22af53320"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/ikc.h",
+      "bytes": 312,
+      "sha256": "a7a03e3f661eac44cbef67fa41bf398adda43fc37df1c0d9fa88427d6c69127b"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/misc/debug.h",
+      "bytes": 1151,
+      "sha256": "c655094348cc408dbfec0af6d401ab4a7457f8106f1e8b53df5380f750055251"
+    },
+    {
+      "path": "/home/holden/mckernel/ihk/linux/include/ihk/status.h",
+      "bytes": 995,
+      "sha256": "fef81cf170da96d41500a572c22e44c272f7110eff815cf43944de0e429d81e7"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/affinity.h",
+      "bytes": 1801,
+      "sha256": "9f7dbbeebedd2f74961bfe6833c75ebb2306e9eb072d69ee8ce3486f0a0f82c7"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/amemcpy.h",
+      "bytes": 566,
+      "sha256": "86443ff03bcbe2b7533389c598a051dc2f6ff0a043a4c500361edf3920672639"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/asm.h",
+      "bytes": 341,
+      "sha256": "3451da3e86495a6d48a16fe1eda73e54ed3448444a0ca693e2864160b1738880"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/auxvec.h",
+      "bytes": 1485,
+      "sha256": "415e66bbd2c64043e7deca79dcb2edb92f4d46c79e0820e6d3daa6d3b83c175e"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/cls.h",
+      "bytes": 2984,
+      "sha256": "19719fe663c33bc3aec62875baa7f1b8d4a0e0042b5a8aae94fe7b6c9799a4c1"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/elfcore.h",
+      "bytes": 2535,
+      "sha256": "2cae06fb07488ee4787ebc2f5679a6c0a19e9c7a9bce24964e8ea04d27d2b8d8"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/elfcoregpl.h",
+      "bytes": 1235,
+      "sha256": "1a0bf361c1e98971148bd7240a17091f2b78c009fcad22e09a277fb606d82c96"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/futex.h",
+      "bytes": 6087,
+      "sha256": "75acd5b0a0e542777c9fb86c5f75ab9e4a1f9d4df5e59fd516cf854614725407"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/generic-rlimit.h",
+      "bytes": 445,
+      "sha256": "94bca7ac86e30806385aea32eeba1c6a39dea32a6d8f5c79167c3473bc3dffbb"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/hash.h",
+      "bytes": 1237,
+      "sha256": "a0997e0086fc4a4437624cd386c4686744c3268fd91dcf8c168e39dc3a8c85be"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/host_helpers.h",
+      "bytes": 31520,
+      "sha256": "24eb8e76a71e81e70d01ab20a96334f7deb8a07bd9839bac5a45c0e01cee30a4"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/init.h",
+      "bytes": 1172,
+      "sha256": "cb6f321f4b90c08839800b0bf89bc35ee758c4b78913a8c9ee6d1af8224fd074"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/kmalloc.h",
+      "bytes": 1171,
+      "sha256": "fff00b6875c3f87a0d9c4bdfeadf3c3d3eb731d843dc0650f6364352ac2b1144"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/kmsg.h",
+      "bytes": 379,
+      "sha256": "47434be82c72e66bdc82ded4da08159eb6c63f7b1060142539e081a2f1f2d5b5"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/kref.h",
+      "bytes": 791,
+      "sha256": "b9133e7bbcd8e3d8869af4bf4e529c8d4dc7c2adffb34ab2cd757f87c3294214"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/llist.h",
+      "bytes": 3946,
+      "sha256": "2f062bf21a0e17f0ae290194705c2e54f87f18932f4dbf6556b12e37665412d4"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/lwk/compiler-gcc.h",
+      "bytes": 11651,
+      "sha256": "1a2693ab50b3768ca2ca362bb0e6773bdabc12425ad4061802b3aca20dbe47a2"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/lwk/compiler.h",
+      "bytes": 17894,
+      "sha256": "eeb3c5b9d47dc32d73908c9048002a34ef77e5d6bdc03346b27b494ded5b49dd"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/lwk/futex.h",
+      "bytes": 2519,
+      "sha256": "d2c23d5be2889daede230635d0731ef42cfe868b3e611ee6bced77da5f9f7783"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/lwk/stddef.h",
+      "bytes": 358,
+      "sha256": "2e915a7ca2a67b2c57690836bcf2bc37639ae657f5e294ee3309cb13652a4b3b"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/mc_jhash.h",
+      "bytes": 1228,
+      "sha256": "7028ad304778ec4de6440a2a451028f6396ee4d438bb0abc50c57ea80eb83c48"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/memobj.h",
+      "bytes": 3957,
+      "sha256": "7d587411f1b6957c6fcc6f61d8f03b052d875cfd774f602aefe05ff99f536bb9"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/mman.h",
+      "bytes": 1781,
+      "sha256": "99faf3bbb639ab4eca2c5444dcc95cff0e7046c91fc3fa1a97c88375ee6107e8"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/object_helpers.h",
+      "bytes": 61009,
+      "sha256": "0131700fc9f5bfdae8e1210664befb8a20f7655ba96b55a7d64abbe7703f517a"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/page.h",
+      "bytes": 1647,
+      "sha256": "c8f3f5e7804c71430c814395ea14a1ee93267180713caeb39880b662cc9cd0dc"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/pager.h",
+      "bytes": 1223,
+      "sha256": "24460cdc45191c6ad0905f10a8e2cb89d4fd4b347cffc1ec3914ce51104bed7f"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/plist.h",
+      "bytes": 4349,
+      "sha256": "d66b1a000f5226a06ef28f3ba75f34a0acea9cd4cd5a93c8113ca5764d9b2a29"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/prio.h",
+      "bytes": 1489,
+      "sha256": "0ba9b795da29de2d05b92394938e24298ec59216d1eaa17be5ffcb29aec52ce4"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/process.h",
+      "bytes": 26602,
+      "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/process_helpers.h",
+      "bytes": 75149,
+      "sha256": "1e4eceec2c06dcd409d86cbd5e24616684d83e828d62d6ca534e08c4e0a20bcb"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/profile.h",
+      "bytes": 3241,
+      "sha256": "a3185194bca3733304a30c08b70de466ecdcf1da223ab5053687d4cd125171ec"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/rbtree.h",
+      "bytes": 3107,
+      "sha256": "86022fb1a246c7ba43bb66913ca4c6a6e9a7d896607c6364ea941b5304ae5332"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/rbtree_augmented.h",
+      "bytes": 2805,
+      "sha256": "766f0033c8959b63d83dbc9ef000d2c2047888cd04a7285fb5cc37aaa7daed6e"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/rusage.h",
+      "bytes": 1167,
+      "sha256": "f548ed5eeded34cd0d6a7a89d56c9beff6c31afbd9df7d725888f7eaf641541e"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/rusage_private.h",
+      "bytes": 3262,
+      "sha256": "9cc30af76f445517a70fbbaa2bc6d2a48dee12bc8fd08bc0e1c37d571693d972"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/sched_helpers.h",
+      "bytes": 34428,
+      "sha256": "9712a3df59eb0251f517ce01254e4576119868924b35f7da6fbee294bff966ae"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/shm.h",
+      "bytes": 1948,
+      "sha256": "014fdc724bc42d1245776a4b161463c0df35040f0a5c961144023989ff6f5761"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/syscall.h",
+      "bytes": 20836,
+      "sha256": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/sysfs.h",
+      "bytes": 1870,
+      "sha256": "1e39dc9fc8622960810b50b90a9ebfb94e4379307869006c88734bd7c8d8c311"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/sysfs_msg.h",
+      "bytes": 1918,
+      "sha256": "53cc4d50f4e95f4245bce36a7e296ba0d6797fbb9018bf0c6893eee2ee28e7d3"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/time.h",
+      "bytes": 1780,
+      "sha256": "6d5ec6fd43f6632b5772fbdd99c96957d842951052034a3e355aa63c13ba56d7"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/timer.h",
+      "bytes": 867,
+      "sha256": "7b19b3b4dbdde3d79b4479b5465ee3604f8666ebf7c5992e36e99e6453bf5ec9"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/tofu/tof_core_bg_reg.h",
+      "bytes": 44,
+      "sha256": "78b24b58c117adf22b9103f7401ea647435e617849b1b006025b52fe4ec19f91"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/tofu/tof_core_cq_reg.h",
+      "bytes": 43,
+      "sha256": "446cb7191795ae1fdf245b8063e677a921f5c092a7b7e44653cb20c02d059844"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/tofu/tof_icc.h",
+      "bytes": 27745,
+      "sha256": "60e73009c200304e7517873416eb6ded2ab7852f93b39dcc5dae0285a5c58fd5"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/tofu/tof_uapi.h",
+      "bytes": 12333,
+      "sha256": "8320fe5165a08a288aa52cdad1e9bb95688ba45e66a96bc1b671b33edb089de5"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/tofu/tof_utofu_bg_bch.h",
+      "bytes": 101,
+      "sha256": "dbe75cc2076e19016e4a9ecfb7d68d126c970b96c2f32aa3ccd3ea338be5b48c"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/tofu/tof_utofu_cq_trans.h",
+      "bytes": 143,
+      "sha256": "dc5797e3c40b52921e4f90fbfb11d933e7e33426186fa30c48d692d005246ecd"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/tofu/tofu_generated-tof_core_bg.h",
+      "bytes": 448,
+      "sha256": "04a7244fd0c3db29e72994f60f4662ff29c33e19049b34b7f57bc113b8d54261"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/tofu/tofu_generated-tof_core_cq.h",
+      "bytes": 133,
+      "sha256": "70845ec3c06ef7f67a2f0162c2221c59e62e487ec9d849e2e1fb108db21c46cc"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/tofu/tofu_generated-tof_utofu_bg.h",
+      "bytes": 316,
+      "sha256": "6727afb4e2f18d6c664f3a66d041210ca423b907d2a3cb9d8287d2d8269ffe42"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/tofu/tofu_generated-tof_utofu_cq.h",
+      "bytes": 533,
+      "sha256": "0b4439c7dbb7ac5fff2ef9b458cc01db8c59035695d96d87bcfd11c1a96bf7e7"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/tofu/tofu_generated-tof_utofu_device.h",
+      "bytes": 235,
+      "sha256": "c8ec59864023fa9f427d72e60969fc551f95b82ed19cd97dcdc8a34a544dedca"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/tofu/tofu_generated-tof_utofu_mbpt.h",
+      "bytes": 484,
+      "sha256": "445193a29a80d3e592c5233b689bcf7e7a9e98afafea234e4bdb7c605f05a96a"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/tofu/tofu_stag_range.h",
+      "bytes": 315,
+      "sha256": "0a50544bf15888109e460dc53e955dffed859bcb3bc26c7e4e66170c4caa2e04"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/uio.h",
+      "bytes": 486,
+      "sha256": "f1f1e29cec39675214291cfe435b6fb80b423ce13ced0b54727659df486e9991"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/waitq.h",
+      "bytes": 1847,
+      "sha256": "f3fc8247a033a77efa407f6fe365a2b1bcad404e96de2cbf845f407a2e5946ff"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/xpmem.h",
+      "bytes": 1465,
+      "sha256": "2b1d10e87af013675c7bf415af85cead8378a24c93ac56a2169a69d993692163"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/include/xpmem_private.h",
+      "bytes": 9751,
+      "sha256": "15b9c6b73a7957096f20016efe73f24183b22d63392a86cf842404c4bf429697"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "path": "/home/holden/mckernel/kernel/rust/debug.rs",
+      "bytes": 13020,
+      "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/bitmap.h",
+      "bytes": 8433,
+      "sha256": "8794a15a94fbc2cefd474fa88b3b894f7bfc476b01ee6c5ba960744f3ca60906"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/bitops-__ffs.h",
+      "bytes": 169,
+      "sha256": "1bac5f7fdf72c0b27a5d16f4d114b78b5a1e281362e2fdff33d63cad07399b55"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/bitops-clear_bit.h",
+      "bytes": 194,
+      "sha256": "fcbfd165132740bad97c2711f233e4ee32c4f8a334d5f20dfbc86e365c6ae182"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/bitops-ffz.h",
+      "bytes": 161,
+      "sha256": "fab21aff3c44d0cb1ed4771372de40a72435c397db28cda9049af1d26c94cc7b"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/bitops-fls.h",
+      "bytes": 138,
+      "sha256": "e9ddda6ecb235a01cd6c210b5597a6062dab497942276cc74d810a5e98872023"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/bitops-set_bit.h",
+      "bytes": 186,
+      "sha256": "f835208f62bee9336cf857c7e2c3b06078f54d9f165455f9ab70c985d819b61f"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/bitops-test_bit.h",
+      "bytes": 117,
+      "sha256": "1f2fdb9a3a7d2b22d897df29955ea9c8c94fe0a78d3262aa762a7990f47ce635"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/bitops.h",
+      "bytes": 1149,
+      "sha256": "85c1781bb49918a97d8e04c48b3723927377e6d157824f4bd79e38243d6809ff"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ctype.h",
+      "bytes": 861,
+      "sha256": "2156a2b75341299f2034885bd2021b2f757a3e4934484915482c41f4c7b62a52"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/generic-errno.h",
+      "bytes": 2497,
+      "sha256": "7dca1a209f95dbc287627f3b590621762063acc080b65709aea88d3f48c8bfe4"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ihk/cpu.h",
+      "bytes": 5479,
+      "sha256": "a25efd9095efe3f357efb2a2d7d810e2a6d1ed0aea3c6e1d4fac2c0ee8a83c81"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ihk/debug.h",
+      "bytes": 1294,
+      "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ihk/dma.h",
+      "bytes": 657,
+      "sha256": "30b66e735b9cc5e2abfb95b604d0b903c74cae1c80198bb0466fa8f8784e0de4"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ihk/lock.h",
+      "bytes": 2907,
+      "sha256": "fd34fe3adae00d309fc48e4a8f8c4170edfdfc6bfffd5b37db13f5391ed84f6f"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ihk/mm.h",
+      "bytes": 9548,
+      "sha256": "a1b412608df7512a1b7295c6f19b3ec5a77e6364e8f24b208ab1a29e7556e5b1"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ihk/monitor.h",
+      "bytes": 167,
+      "sha256": "15c58b8c1ba5085536ed8725a9178cc48a65a62e5dda6005a6278d6e49b79d91"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ihk/page_alloc.h",
+      "bytes": 2623,
+      "sha256": "4332184f12d9609e978153b5ac4e20dbf0e61ba5de253cb0073fa75376b5ccd1"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/ihk/perfctr.h",
+      "bytes": 2397,
+      "sha256": "c075498676943becced5b999376d16f60f78e5a9c1d0098b2bf2c484d70eed47"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/limits.h",
+      "bytes": 1358,
+      "sha256": "b71fc4ae02cfb82c474b61012bd55375ec7e0b0826a3280755ddb3631cc0a6ee"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/list.h",
+      "bytes": 2870,
+      "sha256": "4ddb20f524e073fb69b6fcb1268121c76c653c4007d914437555a4d17af48440"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/mc_perf_event.h",
+      "bytes": 8775,
+      "sha256": "8a9978dcab179a63b3aff3b66641a4814bacaf86cf4631ecdf39e32df45ea5dd"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/mc_xpmem.h",
+      "bytes": 2923,
+      "sha256": "f6968b085de67c21b916fc09123c5e5f07d2d6065d9aaa08fdcec8a2bd99c0a5"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/memory.h",
+      "bytes": 1377,
+      "sha256": "42c0c943511a9eb26133c9f1ca132ade5eb10606ae43c96f6d81d59a69ffeca2"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/string.h",
+      "bytes": 1588,
+      "sha256": "f612dad80dd16ff0d4d6232f155cc879522de6203ce015afa3ef0c36c3dd5636"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/types.h",
+      "bytes": 515,
+      "sha256": "72179c1e931fdfdfa700d2ecfe745e344027ac0b4af299e8a9ec17957fc9a399"
+    },
+    {
+      "path": "/home/holden/mckernel/lib/include/vsprintf.h",
+      "bytes": 479,
+      "sha256": "7fc1f83e54593724ed9f370bba90e788c80eda40dd90f76b4ee3fb5a4292cb7e"
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/os_goal_credits.py",
+      "bytes": 5178,
+      "sha256": "adf5187240ed8199746eef3b59b79d4d38c4ae8ac5821c8d8324833926b21ec3"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/config.h",
+      "bytes": 1055,
+      "sha256": "da78d6a8c94b274adad3159b1cc373b00e5de7fea6cc2ae7955a700078db6b2f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/executer/user/lib/libdwarf/config.h",
+      "bytes": 4766,
+      "sha256": "ad9aa07ead23aa8a07f90e820d94bd057c3fb69dbf38d00ee3a03fbc39066f99"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/executer/user/lib/libdwarf/libdwarf.h",
+      "bytes": 171097,
+      "sha256": "727cd79fecf8f9b469eb20fd0d1cf4bd3102b1d96a77b3320a99d323763f527c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/ihk/config.h",
+      "bytes": 464,
+      "sha256": "9b316a20da4fee5188d6b103ecb21fe508277242cac0a081554d3362276d9712"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/include/swapfmt.h",
+      "bytes": 878,
+      "sha256": "e14e0134c80c2a4bfcda779285b57d46e01a70702eb608fb6b378ff763d90183"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/release-fp-regs-production/production-c-abi-assertions.h",
+      "bytes": 629,
+      "sha256": "50b83b93409a72f3c93a2675b42c39e0237f7e42d368c1b7e0bc35d5a5f1ad0d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/C-LINE-ORIGINS.json",
+      "bytes": 42709,
+      "sha256": "c64155a8a96a3aebb0ff51d80de37648b6449034f6f0bbe55bc17e77876b6e5b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/CMakeLists.txt.patch",
+      "bytes": 3329,
+      "sha256": "e49ea37bd4427d42875d85236ad61d6c95fe8b5262acfb388ce90ac2d27734d3"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/CURRENT111-C-COMMAND.json",
+      "bytes": 2533,
+      "sha256": "19373ec4e36ea35137e3b46e5b42aed0adda1ae68a110797d9520d8cb388a65a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/EXACT46-SLOT78-MAP.json",
+      "bytes": 28935,
+      "sha256": "13266701cb2ff7a38b73ccb9718e0c2078adf522d80c21c09a7821200f8cf9ee"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/HANDOFF.md",
+      "bytes": 11083,
+      "sha256": "906dc70d34c11abe7788f089a5ad7b4d3108cc89b11b843d0daeb63d7c425024"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/LOCAL14-COMPANION-DEPENDENCIES.json",
+      "bytes": 1293,
+      "sha256": "26f4f72fa3e5055060290d15455b0119240be3d64b4d82364b56caa81c54f7e0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/PACKET-SHA256.json",
+      "bytes": 2773,
+      "sha256": "999ea5051c20aed5a7780b24b5a53a3f019d4f83ea8bacd052c7e5ed49bc7f68"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/READY.SOURCE-ONLY.json",
+      "bytes": 4100,
+      "sha256": "e7d77b16826fb96189c35a07f444157eadbc75e3290b618bbd4c24451c0cbd9c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/RESERVED-METADATA.json",
+      "bytes": 22751,
+      "sha256": "5ed6612a49e0f19e50326919842772d31edaec2fadf474aefbb176b1b28af9ad"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/RETAINED-ELF-READBACK.json",
+      "bytes": 30150,
+      "sha256": "26c09b6e69bb2bfa00997126177a7402821ce6edea2eb3336d883b165cab25a2"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/ROOT-BASE-AND-REFERENCES.json",
+      "bytes": 1480,
+      "sha256": "f157c81345bc4e90c41ae4205fb98ecfcf387bea4494e6477b976f64297d9a89"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/STATIC-SOURCE-CHECKS.json",
+      "bytes": 3361,
+      "sha256": "2422d13af0c5f15e1aa08c2439d2abdb3f2a73d3336f4008347d549bb278ebbf"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/base/kernel/CMakeLists.txt",
+      "bytes": 32630,
+      "sha256": "1ca3a50f17c4f019f165231f1a04b530806dd9bb6875b302c3869fc70271c310"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/base/kernel/process.c",
+      "bytes": 219432,
+      "sha256": "ccca48c2021c4041ef729c88f184c50f2ccc7749739271b211993e96087c70c4"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/base/kernel/rust/lib.rs",
+      "bytes": 2252,
+      "sha256": "fe60e37167124fba9599112683332c75e1f18ee046afd351a075f3bcf03ed3f7"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/base/kernel/rust/process_helpers.rs",
+      "bytes": 608687,
+      "sha256": "b93ee208c78e05243cdece49bf6d7ceb50b9afc3c3c2b62af1637c2fc4346d91"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/check_source.py",
+      "bytes": 7879,
+      "sha256": "d3226f8865075be5eb001950a8d0ca03b7ddace7ae6a7def918f60dbaf755c1d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/lib.rs.patch",
+      "bytes": 227,
+      "sha256": "d955aabfa98836b6ed0c239bd3dee3bb2a4ef1f3333cdb51289aced569b940e2"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/CMakeLists.txt",
+      "bytes": 34819,
+      "sha256": "7703fe09496e011d2e2f1841b5192b54903713ff43d656a27c51bf1f436a520e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/process.c",
+      "bytes": 224941,
+      "sha256": "dc4450b232c8dc0798918bfecba168990288afc53c51c82fa75635f06bb5fbe3"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/lib.rs",
+      "bytes": 2318,
+      "sha256": "c84205fd8d0b4c729bf5598d5b6d0e578617de8e8af3a00bdcf886e69a8019e2"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/postimage/kernel/rust/process_verbose_data.rs",
+      "bytes": 11499,
+      "sha256": "8eaa8f0bff3d10a433fa88b899e56b9bd4aefd719c49f15c1487ffe335d65b27"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/prepare_source.py",
+      "bytes": 8085,
+      "sha256": "cff5b3c17207af943a2237cf41825e49c70316f7e293420d1a8077d06259402c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/process.c.patch",
+      "bytes": 21862,
+      "sha256": "ad15a766a7fa6b87e7e8f5a77da550c598e2656ad5c0b2d235040ee66d549fc5"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/process_verbose_data.rs.patch",
+      "bytes": 11929,
+      "sha256": "b3acd736ba61f4c0312be24edbf3601fbd0f9fab3587480e973490e691e34714"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/read_retained_metadata.py",
+      "bytes": 3870,
+      "sha256": "bb6c3bccf25f2bbae5a608e255258c901d834ef7b1c728c8c633c807157f37da"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/references/kernel/rust/debug.rs",
+      "bytes": 13020,
+      "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/references/kernel/rust/lib.rs",
+      "bytes": 2252,
+      "sha256": "fe60e37167124fba9599112683332c75e1f18ee046afd351a075f3bcf03ed3f7"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1/references/lib/include/ihk/debug.h",
+      "bytes": 1294,
+      "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/bin/rustc",
+      "bytes": 645792,
+      "sha256": "70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/libLLVM-22-rust-1.95.0-nightly.so",
+      "bytes": 43,
+      "sha256": "89feb533eabb3a0377c7e12fc62c629a3b2c7ff28c315f61fe4dc0fdf4e6a62b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/libLLVM.so.22.1-rust-1.95.0-nightly",
+      "bytes": 201649376,
+      "sha256": "a7fe29550a088de8770838e923ca8600077f4b6912c80e4a3daeadd0fb05d227"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/librustc_driver-63b8deb6c23747dd.so",
+      "bytes": 154029632,
+      "sha256": "9f00b9316db6d42fee821fa4e86601a6ec853c004569d644fd9c30b892f9c7d0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libcompiler_builtins-bbfdd99d24659dd7.rlib",
+      "bytes": 4351706,
+      "sha256": "664ab9539ec3e1a7d5a54f3b4677ac2dd56152c3a01784709563459a7e68c62d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/nightly-2026-02-19-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libcore-5202d9b43b836218.rlib",
+      "bytes": 2935902,
+      "sha256": "39987bd26679bef50d9fdf6b3ad752baacc1a0a7e9524476c6e158315c666202"
+    },
+    {
+      "path": "/usr/bin/as",
+      "bytes": 696624,
+      "sha256": "8d45684bbd6420e3e97907257c510f199bb6c5f9b02ea8ee0a590c1a8b662ead"
+    },
+    {
+      "path": "/usr/bin/env",
+      "bytes": 43352,
+      "sha256": "5f7c7882898e9e280e93579b459e22b339c4f38cfd54a05b46b81dfb60c557cc"
+    },
+    {
+      "path": "/usr/bin/gcc-9",
+      "bytes": 1158288,
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+    },
+    {
+      "path": "/usr/bin/ld",
+      "bytes": 1732192,
+      "sha256": "476b24d5cc1fef54f80412d06e7430b2dcf4e2b6f1525ee17e6eaaf16b28a00f"
+    },
+    {
+      "path": "/usr/bin/python3",
+      "bytes": 5490456,
+      "sha256": "298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/cc1",
+      "bytes": 25675096,
+      "sha256": "c09275e2d3f811e23d255eac415bfedd9e68ba8b5cf4b261d2fce136b5e8fc99"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/collect2",
+      "bytes": 622960,
+      "sha256": "5228dbf1e15d16694059023d16e7f13f201ea0d76a82e8837c6483dc21d66682"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/crtbegin.o",
+      "bytes": 2592,
+      "sha256": "2ec4003c2b1159660d970814f788053b60f831adc6464b0b38ef00693ca4a92c"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/crtend.o",
+      "bytes": 1360,
+      "sha256": "c29d8ba35b3afad85993fa8f64b1a4d91678deaeb0f1cae952f12c0bdd4c83c1"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/ISO_Fortran_binding.h",
+      "bytes": 8471,
+      "sha256": "e6c48a44b17aedb57bc05b277301c84503124d08246b33f255b4325b8b48e41c"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/adxintrin.h",
+      "bytes": 2831,
+      "sha256": "004316dda219d75290f9c994158d58be3eae23f4ff1e1411bd4abe68327a7dfa"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/ammintrin.h",
+      "bytes": 3216,
+      "sha256": "00f596658c96e0ea74a574554e3f2d739eacae5506f3268b902285260c461575"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/avx2intrin.h",
+      "bytes": 58632,
+      "sha256": "165d05451455f9b21dc2296c34d9ef035f1f74c8f09e13f05a8b17770e609ce5"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/avx5124fmapsintrin.h",
+      "bytes": 6535,
+      "sha256": "e4570e2de16675735261df1c6097affb291d665a8d27627990a36ce99be6ca76"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/avx5124vnniwintrin.h",
+      "bytes": 4256,
+      "sha256": "94150200eb408c2680e45896d3162ad6cb4d19b5a0c149e5c6b50ccf53be03e4"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/avx512bitalgintrin.h",
+      "bytes": 8850,
+      "sha256": "3ff04054b093d555f66ff611f4f33cc5697b74a8a93d90ebe35c5e6644a800e6"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/avx512bwintrin.h",
+      "bytes": 101510,
+      "sha256": "ac712bdd85dec3a3ecdba6a97829e74d83e48bee4c1d5b985b14c8692ccb3750"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/avx512cdintrin.h",
+      "bytes": 5822,
+      "sha256": "2281020cc3ecd83472ee8749e47d37856b7eb5f0a4d5018d13220dde84c3c81d"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/avx512dqintrin.h",
+      "bytes": 85372,
+      "sha256": "dc3a3c597b6f63c2c4f0fa55d417053457e1f3369a4fc27dde50f5b7dac94f99"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/avx512erintrin.h",
+      "bytes": 12965,
+      "sha256": "a2ae296d3eee79ce2ae844b88e57c7f43751118c6276946734955b7e2d5474ab"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/avx512fintrin.h",
+      "bytes": 511281,
+      "sha256": "66e377330c19fe613ff569b924a504bf7bee935e59d62b6f95e99dff2415ffdb"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/avx512ifmaintrin.h",
+      "bytes": 3430,
+      "sha256": "0f6f2f4d05a69274871401bc7dcd027d94462fa93a2ee088c8c6299f2d608787"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/avx512ifmavlintrin.h",
+      "bytes": 5385,
+      "sha256": "24dd279cc97be3c806131de1fb2c1f948e79f5a3073dd6026a90dfbd7acbf81f"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/avx512pfintrin.h",
+      "bytes": 10288,
+      "sha256": "584267cd0378791b04483f114d8e01570704f9f1390d6d670f72cf4991729af2"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/avx512vbmi2intrin.h",
+      "bytes": 19810,
+      "sha256": "b1f41726ceda0e460ff5211020410e9fdb31952ff237bffe7ea20ecba12ea329"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/avx512vbmi2vlintrin.h",
+      "bytes": 37120,
+      "sha256": "79c48bfc353fef6b4c5c32eff55cb513fe08e2e104e4217095b14e4486f7dd7f"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/avx512vbmiintrin.h",
+      "bytes": 4921,
+      "sha256": "83005e38982d630102f7f9bc2a46174657c34418ae851b7bb14ee65fcb7ca9cd"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/avx512vbmivlintrin.h",
+      "bytes": 8364,
+      "sha256": "5623fed9515254cec9e85c6255aeaedf0e9d5ee0c749308f3f877ae0d11fbffd"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/avx512vlbwintrin.h",
+      "bytes": 143849,
+      "sha256": "c10df366fdd54a99fca3b27efb9c2371306c3caa7f8e5d6e5a76f8936fec1910"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/avx512vldqintrin.h",
+      "bytes": 61317,
+      "sha256": "eec88fcdfaa88e900d9d80fa9acfd78fee7c784aed8b1d9a9eb7953ddad08359"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/avx512vlintrin.h",
+      "bytes": 425487,
+      "sha256": "dbf9b972fab80b5cc3f2acdcb058e6793d45f1989e2734e46c7b4cf6ca6cbac2"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/avx512vnniintrin.h",
+      "bytes": 4969,
+      "sha256": "6df02b99681d3501aa9e65ec33373a9d23aa61c398c988f4a32df682ec46bb79"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/avx512vnnivlintrin.h",
+      "bytes": 8244,
+      "sha256": "032d1451e3912084f60f9c6e6f59a288592f235cd3625207b71b45b5a4e12e38"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/avx512vpopcntdqintrin.h",
+      "bytes": 3110,
+      "sha256": "4c916315239eba9de89b31da40dfb63f2a0cd633dd8766949eb82197e14f73f3"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/avx512vpopcntdqvlintrin.h",
+      "bytes": 4667,
+      "sha256": "bf38ea2e2a132f6f95f8548ba3c949435166779898812365a1507bc03001a1ba"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/avxintrin.h",
+      "bytes": 50613,
+      "sha256": "794eb4be167e4427101d55cdc3e87c03a337b453c5037b406b70814688122d62"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/backtrace-supported.h",
+      "bytes": 2982,
+      "sha256": "60c31019882c95885e4f33c8baae4f054920ae7b94fc5af3efa7d45cfd589d2c"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/backtrace.h",
+      "bytes": 9080,
+      "sha256": "267b16a253f1b2535778dedd9afbfaa955430d87543e507cfc0d414cc910f20d"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/bmi2intrin.h",
+      "bytes": 3388,
+      "sha256": "0c2e21e2d3b3ea55e7fc341d3ca5bfd35bb53fe2547f70b59e86739168b186de"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/bmiintrin.h",
+      "bytes": 5628,
+      "sha256": "1b4ed180b1a87e6f0f481b96d53b3c9e1f71c672d9e8612a7605ab88de76f5ca"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/bmmintrin.h",
+      "bytes": 1154,
+      "sha256": "723bf8e6733cf32b57c50085c2107ace22f592b54deb0f5eafb307a7e5945529"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/cet.h",
+      "bytes": 2665,
+      "sha256": "6b6c0cc6ecc7243c505e4353a2f499cab344ffceff3204f73173aba1c6391a28"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/cetintrin.h",
+      "bytes": 3333,
+      "sha256": "25f141c5b617534206a5675ba1586c5e201a3f4513501c6761ab0741d04aaf64"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/cldemoteintrin.h",
+      "bytes": 1614,
+      "sha256": "3365b1788785689b7c688eb091dd7e66294309e98a1755a41ae879924f2743c5"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/clflushoptintrin.h",
+      "bytes": 1663,
+      "sha256": "e7f19123faa48e4337e3251c2540427980c7a60233c58b304cc91a719104e75f"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/clwbintrin.h",
+      "bytes": 1585,
+      "sha256": "2105a1b6fc6d2f17cccd620128bef5354236de939c059fb9b43642e024c4d7a1"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/clzerointrin.h",
+      "bytes": 1491,
+      "sha256": "f113a525120b7d44d12d200534e2b161853c7d083884847f08e290a1bc9affb0"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/cpuid.h",
+      "bytes": 9069,
+      "sha256": "20fa5069125fff5d0cab175fcec998127a46f38cc161335442c1d8715e2be588"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/cross-stdarg.h",
+      "bytes": 2558,
+      "sha256": "51251013fcf78e42d0d29ecf8bfeeebfe60a8effa5fa4de8da07e28f0e53c521"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/emmintrin.h",
+      "bytes": 51412,
+      "sha256": "4b384fb4980d088a136988a78372d4debe90a47c0643f0fbbd2ded73184063a7"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/f16cintrin.h",
+      "bytes": 3410,
+      "sha256": "3d706cc1272b6e379608e8567aeb5fde0a65609169da93ac76216894f48204e1"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/float.h",
+      "bytes": 16979,
+      "sha256": "4b2a2fc52d2b2341e423f68ec2b2e57b1537393eedc5b7a6fe544a8eaaee7d4c"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/fma4intrin.h",
+      "bytes": 9132,
+      "sha256": "b6ad8533340ab771e2cc4c6ddb47643c3f0769484094bde17f15e7c105c1e670"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/fmaintrin.h",
+      "bytes": 10116,
+      "sha256": "f3fe6ff389be56b2e9efa4b4d3a9ec480d299fdb02d62b986cde5e8c4247e0be"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/fxsrintrin.h",
+      "bytes": 2056,
+      "sha256": "01c331250da37ba34dc9d65ebb1a6eeca2b62d943b000d3f052bb19c94dc64eb"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/gcov.h",
+      "bytes": 1394,
+      "sha256": "aa7207b1963a792b801caa3f39d6b17e3b2f0ff0052bc8e2ff7e2ceaf8ee4a37"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/gfniintrin.h",
+      "bytes": 15050,
+      "sha256": "71cab1c20c604ab029c9cd9f7694865c62640817a024cbf6fec507f55e4021f8"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/ia32intrin.h",
+      "bytes": 7873,
+      "sha256": "a968849cdf2ececb21e4addad48fdab3c446cf5e91b6061d9f138ec5bac1a456"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/immintrin.h",
+      "bytes": 6463,
+      "sha256": "d2fdcf5ffd93dba2f43cf148fd2bf614cfe002cf2210b77bc7dfd61fb0a0efec"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/iso646.h",
+      "bytes": 1272,
+      "sha256": "ba53bb0925d9ddf42196519a1c58b328cb87d84ecbe2da555cc4b4123845fe0a"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/limits.h",
+      "bytes": 6089,
+      "sha256": "c22d44de9cc1fd841e51fa2a5c7e0779b83124db9a923dca8b5268b7aa84f7a2"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/lwpintrin.h",
+      "bytes": 3400,
+      "sha256": "be496e61347413b896411180a1fb59f9a93f2538934ae47d2d775a92a07b5618"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/lzcntintrin.h",
+      "bytes": 2398,
+      "sha256": "8e60370b8948bc81d7f8d15bc912a9b59cc603cbd87917723deac152b3b2077f"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/mm3dnow.h",
+      "bytes": 7076,
+      "sha256": "93d143b98e05290124b6ffe847405dcf55f1bf81fd2befa3bb3a6e810eac0450"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/mm_malloc.h",
+      "bytes": 1783,
+      "sha256": "4c9f44f4c8c4422c76609e4224e07a932e14ef37995a8e6ddf676622ba767547"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/mmintrin.h",
+      "bytes": 31354,
+      "sha256": "ed6e4d62e45a57d0ddfcdc1b7c690913619c7fa105f97135a3a66551460708ab"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/movdirintrin.h",
+      "bytes": 2347,
+      "sha256": "6386b7f3c89fd566d2e6f43c81aae35aba56e01fe329833f139a088aaca815e5"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/mwaitxintrin.h",
+      "bytes": 1747,
+      "sha256": "9f6efe3b7c196b27079883ff06e966ba781c48070b3e918063019cafaab18c96"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/nmmintrin.h",
+      "bytes": 1288,
+      "sha256": "59bd2f03fd5f1b0c46942c76bd7f9f5d02161d5fce586620d8b8ab5c7f101e19"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/objc/NXConstStr.h",
+      "bytes": 1392,
+      "sha256": "e85dde436f93b77cbba996e30f004f943e29bf763deb11f0176594e339160f64"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/objc/Object.h",
+      "bytes": 2018,
+      "sha256": "8c17dd3939e6f5f703aa7a1d4e7b1ffdfccff5bb67d8811d44299160d388b349"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/objc/Protocol.h",
+      "bytes": 1541,
+      "sha256": "b455f2d1444ee452a9e5810c8598a0e92c8099f14c397c952b9307f12aef4962"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/objc/message.h",
+      "bytes": 5183,
+      "sha256": "4454f03bb3657329716626efa729e3edb59ed95a8ce971e268be596a048f281f"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/objc/objc-decls.h",
+      "bytes": 1476,
+      "sha256": "2f1b1cd965b9dbe03efaeaa8e9f0e09b6a74dc1da934463f8c7969e54d97f52a"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/objc/objc-exception.h",
+      "bytes": 4828,
+      "sha256": "e7130993a892db04a63934bbf08615fc412c9bf8602a1f7b526cc8bd7e1467e4"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/objc/objc-sync.h",
+      "bytes": 2342,
+      "sha256": "f09578393ce5686f931ec2b3bfcd21eb8c81c67d065270954cea07eda931daea"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/objc/objc.h",
+      "bytes": 6360,
+      "sha256": "8853d717306273e83cc39f52546b82ae0b11af57c5608b885d7ba7b9a57582e6"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/objc/runtime.h",
+      "bytes": 52218,
+      "sha256": "bb08d4b3860fa07e7486d38ce3b7298e4215a3d20ca8b0448bd9b2d626a762e0"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/objc/thr.h",
+      "bytes": 3986,
+      "sha256": "407fda2c236858d8bd3936e523347d3d2d4614252f9a1ea4a23b8d04b33bb8ff"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/omp.h",
+      "bytes": 7435,
+      "sha256": "61bc6503981ea41da02b340f0debabe0c8e5216b8060782d7627a244bb4a7036"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/openacc.h",
+      "bytes": 5570,
+      "sha256": "9cdad1384d18a477d511bf04b440d618bd9ee38aebaa62712cda27accb925169"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/pconfigintrin.h",
+      "bytes": 2348,
+      "sha256": "42c87f064940a90ed6aeb02dde25ef069126037dd1af9d54bc91b890d278511e"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/pkuintrin.h",
+      "bytes": 1741,
+      "sha256": "b60d43cd36b1bb43b370597616a848b97b027810c2923d7703055c17e663a99e"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/pmmintrin.h",
+      "bytes": 4368,
+      "sha256": "5e3de9274a70ad82ffe3bb39e08681e1ede48838ebb155caec575e642cde8b6d"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/popcntintrin.h",
+      "bytes": 1750,
+      "sha256": "b75151fdd7e2a22480bd8dd0c9785a5a5d6e82fbf699b515e7714a28b0314f4f"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/prfchwintrin.h",
+      "bytes": 1447,
+      "sha256": "ccbbc112b6dcccef3c771b7143db735c88f175b1287e8e29a5b47ff23816dc0c"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/quadmath.h",
+      "bytes": 9358,
+      "sha256": "e8711f597c69a64800a00b80644f66156623323615b03d0cdba4b4c845e44736"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/quadmath_weak.h",
+      "bytes": 3208,
+      "sha256": "666936d1e7ddc08bf0c94e0f82cbedcbca6b3ad0a69e385d753cf530453144b8"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/rdseedintrin.h",
+      "bytes": 2017,
+      "sha256": "5daaa9013027980180324fe7a768a7f58473db37dbeb0c9bf8e9b7ce30268427"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/rtmintrin.h",
+      "bytes": 2733,
+      "sha256": "3bac07bdf9e3530784a4a74131682a7c6e007996994d040c4003648b1d4873aa"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/sanitizer/asan_interface.h",
+      "bytes": 7254,
+      "sha256": "bd565dd52c8cff599d543f810e0f1d693afa57659b3132885c96a9fa11cc9fef"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/sanitizer/common_interface_defs.h",
+      "bytes": 10978,
+      "sha256": "6d25d92854c152e7deff063ec25beed096fb7d53fceaf6d24dd2d7ab86a74ee8"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/sanitizer/lsan_interface.h",
+      "bytes": 3848,
+      "sha256": "c03401b0ee123a509bb9e79ac2c08b0e089e2a64632ec8f270895141fd4e3293"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/sanitizer/tsan_interface.h",
+      "bytes": 6102,
+      "sha256": "7f153ce1b1ddbae3a71791e83986d5ae25f42f83d3d56041bcad4a7671b11ae8"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/sgxintrin.h",
+      "bytes": 7091,
+      "sha256": "6e3503a82ef10a15388b95611b7989336f88352c81fe174093413c0516ee23af"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/shaintrin.h",
+      "bytes": 3204,
+      "sha256": "4436905ec6786870bb30f0f920466ea4ed31bd6e19221cd39934c70e4eef3409"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/smmintrin.h",
+      "bytes": 28405,
+      "sha256": "dd2b49c0f501e7e003d2cd8886f39ac287c0f7d9cb8f127fac3f0930bdcbdbc2"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/stdalign.h",
+      "bytes": 1210,
+      "sha256": "f344cfb26c6fc295368285dad445e7142d828e5cc672608af84e42ef5a5dd96d"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/stdarg.h",
+      "bytes": 4072,
+      "sha256": "0b1d4f68c42c238ae96d07e0e9d5868732054fc8ba704c1dde891649ff117483"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/stdatomic.h",
+      "bytes": 9321,
+      "sha256": "cff4333dd21347c88344e296fe5a686a222111bfd4b5eff8c2b65b975033eb19"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/stdbool.h",
+      "bytes": 1524,
+      "sha256": "de1ff4572bf7f1bc0367e68ca72fc15f3b860415215459b2faac87913afe196e"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h",
+      "bytes": 12959,
+      "sha256": "45e80e1302342753d2f9e5945248fe3af7cf328a99804d2ec561850bbb550f7d"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/stdfix.h",
+      "bytes": 6000,
+      "sha256": "e046d47a8c28859afecc692c4d5ebecad3cea4022cdcfc71ea9ae93e2348edb4"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/stdint-gcc.h",
+      "bytes": 9457,
+      "sha256": "34bfc080a004f51bab25912abe93b7599ad45d29b722efda2c0f10e27ccf72f5"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/stdint.h",
+      "bytes": 328,
+      "sha256": "86a7914ab7d6a18465a6fb9a7b54f945cad604fdbf3ca0d10e4e0254e0037911"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/stdnoreturn.h",
+      "bytes": 1136,
+      "sha256": "09fd7c81fe92bb130719557ad2c9a3714e3bcb1f2b5a1b04ae728f7ade19b60f"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/syslimits.h",
+      "bytes": 330,
+      "sha256": "22dd0ab81baadd5a8d455b445855f341d419c7b0267beca235de00b7ec78e529"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/tbmintrin.h",
+      "bytes": 5242,
+      "sha256": "db78e978d545c787e54245fc25b21bf7c9098d2dafc4ed66b8d226badd88fe53"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/tmmintrin.h",
+      "bytes": 8343,
+      "sha256": "7b5366c310f86a4d4093e57ed7d4064e9f6d40fd8759acf685c6d9e769c74ab8"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/unwind.h",
+      "bytes": 10905,
+      "sha256": "cfca46e3e05d94a3ef407fcb8ca5ef1b2b0092461df8fab1c027fb19f80cd33b"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/vaesintrin.h",
+      "bytes": 3473,
+      "sha256": "bdd93941ddf323435a77be1a6a57e290ebc462bdc73ae132994040655830a875"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/varargs.h",
+      "bytes": 139,
+      "sha256": "f9acb21973be5764aa2fd689c941ad963c1ecdd133f3a6529f279803135f8268"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/vpclmulqdqintrin.h",
+      "bytes": 2727,
+      "sha256": "e91c1a28c8a8e6f60d7843324a8d03cbfedf168a8ce984de03746c0801d9db3f"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/waitpkgintrin.h",
+      "bytes": 1999,
+      "sha256": "23218e2c076f6ed1bff7f0d60c030e36a540a2efe1d41eace916569c39c0858f"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/wbnoinvdintrin.h",
+      "bytes": 1620,
+      "sha256": "40a70b4bbe4915449e4097967278f7967a85e4d7bac55a33e123e5d102520095"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/wmmintrin.h",
+      "bytes": 4656,
+      "sha256": "4fe0b3fc766ca5ab867bc482e28fb8aba3caea7a4351e92010dd48b2e6cf9e75"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/x86intrin.h",
+      "bytes": 1429,
+      "sha256": "a42840a64e57a032edbca148e1c0800bdff41c2ba65acdd6ab731b8a77742f8c"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/xmmintrin.h",
+      "bytes": 42387,
+      "sha256": "5130203eaa909f27998c62c997d8e9f8a196894d860315a4869aaa66a9e5f69f"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/xopintrin.h",
+      "bytes": 28568,
+      "sha256": "7d3825c9e48ef877f1ba9e6f0026b081864ba172b9380f9baafb8268763bdd37"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/xsavecintrin.h",
+      "bytes": 1821,
+      "sha256": "a892922ce985795e159d0db384f826c4dd8a49cddd7f48982f7099d51a0fed07"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/xsaveintrin.h",
+      "bytes": 2472,
+      "sha256": "3ef958d3799926afb841cf0f893cba8e1f841a4eabc4df2279a9ffb68b3477df"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/xsaveoptintrin.h",
+      "bytes": 1851,
+      "sha256": "ddc460c8bc99d26ea28fda364b87c99bc5fd9803dbcab367cdfc213cb6d4ccea"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/xsavesintrin.h",
+      "bytes": 2157,
+      "sha256": "b9ae97d7e102d62c385ed2a36e15b1fec7e31eae0ac20ff94509ae539c853154"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/xtestintrin.h",
+      "bytes": 1687,
+      "sha256": "05f30095fff1e4dcb44900f20eaf3888d6680130755df4b3a009ec05cff0777a"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/libgcc.a",
+      "bytes": 3045214,
+      "sha256": "82b6c0bfc28d5314fffaaa2a920516575f347972f685b5805f5749a87a617df0"
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/libgcc_s.so",
+      "bytes": 132,
+      "sha256": "69a56a9993b7729b29b274e65016031c81f2397f176ed5ad44d59bd50425e0bd"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/crt1.o",
+      "bytes": 2040,
+      "sha256": "27daac7b3f9e861ef8df49f45b2a8ffb7130a1899f86efe53c6f84d63fd3cd0d"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/crti.o",
+      "bytes": 1360,
+      "sha256": "2f1c31070d95f398fe4c1388408e83283cc7e0cee0ebb64882e0b331e8e178e8"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/crtn.o",
+      "bytes": 760,
+      "sha256": "a2266079f95b84ccc2162ebbf279bcd78858a748aa1882e0bdb912316c76a58f"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libc.so",
+      "bytes": 298,
+      "sha256": "641105852be34f26444a269e7e78000c625eec5a6384112a6ab294e6dd64ab92"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "bytes": 2029592,
+      "sha256": "53b909551f8e581120ddc2d24cfb5df76c52e3c2e2a5dac0d202b25638b3e902"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libc_nonshared.a",
+      "bytes": 23930,
+      "sha256": "2aabc899fd2f27ff0bc1fd8540bd55e5e860560a601a1023df587b4454789b7d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/SUFFIX-RECIPE.NOT-ADMITTED.json",
+      "bytes": 4061,
+      "sha256": "c6cb4421c362fcf15dd8c925c2a946494459934a41554c8e5582f776bd71c7b8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/NEGATIVE-CONTROLS.NOT-ADMITTED.json",
+      "bytes": 12631,
+      "sha256": "c68453a5135a3385a1ad6042a5ee4edf0233185789a6d53bd42e84b17a194e5f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/seal_suffix.py",
+      "bytes": 5160,
+      "sha256": "26a1a493c84b3b2565c1432ac4b15ac2101599e2295a5852aa29e642d5d247d1"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/README.md",
+      "bytes": 3784,
+      "sha256": "56f03b013878ff6c8c03526068ac5188ae5a040c666edb6086b847a2c21ef4cc"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/qualifier-binding-only.diff",
+      "bytes": 3325,
+      "sha256": "7707ea1cdc059825c3396852f0874d0edf646f5baf20470d700a8f31ee2d3f4c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/qualify_retained_metadata.py",
+      "bytes": 5267,
+      "sha256": "3df982a8c79411fad27dd27cd7559619e0f2b9973d7a5dfb33c4089ca987de8a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/RETAINED-LINKER-DIAGNOSIS.json",
+      "bytes": 13181,
+      "sha256": "8b2531335af7e768f1af365a8dfb25bac471ba92834b85b21414b4a55093cae7"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/RETAINED-PREFIX-AND-FAILURE.json",
+      "bytes": 26318,
+      "sha256": "ed0fd71b3c64d320afba5e62728877ab7a7030296485583cf6981ecbc6215f9f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/joint-retain-linker-correction-source-1/prepare_suffix.py",
+      "bytes": 7540,
+      "sha256": "65d637d3ade4921ee6632c41bac9a926373d995becd14982e53541cae495c40c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/HOST-output-proposed-1/abi.o",
+      "bytes": 3776,
+      "sha256": "27aefc1e1d0566f41435ee109834625ecd9c6d3dba8680dc0d118e72a6b924ef"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/HOST-output-proposed-1/fallback.o",
+      "bytes": 75576,
+      "sha256": "287350e32f5de21b3f47108cafa46351b542b5ad2a202a30ff0767d8baebdc79"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/HOST-output-proposed-1/joint0.o",
+      "bytes": 74512,
+      "sha256": "e0afd5643cfa89e597128380c916be37dc56af2b57b87c9ea13080f1d9b9bdd3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/HOST-output-proposed-1/joint1.o",
+      "bytes": 74512,
+      "sha256": "32ea1824104b815a14e09029f73266d138d9e92191d6f285d613f4b7d628e634"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/HOST-output-proposed-1/rust0.o",
+      "bytes": 12656,
+      "sha256": "6baec47c0a0e532fa8cb3b7a4a7ac87fb8222fdb3e1c29b6c81b1044d6c15375"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/HOST-output-proposed-1/rust1.o",
+      "bytes": 12656,
+      "sha256": "2c56b45cf6e56eb11d6395eec4b5bd22dd3bd7bcbdc147d0600b06b35589593a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/HOST-output-proposed-1/selected0.o",
+      "bytes": 66752,
+      "sha256": "c59915d84836a42270463e932e3a657002f00abc89f9b5e2dbe48622fed6bf45"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/HOST-output-proposed-1/selected1.o",
+      "bytes": 66752,
+      "sha256": "ea0a8bd05a588c6d56d17856e5b6c98dbd9f7289efd3b7d470bfab3a2701d19a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/CONSUMED-GRANT.json",
+      "bytes": 1941,
+      "sha256": "537db9335d5c8a6ceba6d6fa54d2e6ea3bae17a9f6e99184b94bd50e26edb350"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/FIRST-FAILURE.json",
+      "bytes": 158,
+      "sha256": "332bdf711051e2b67601573c35e0c95f3146d1a9253e2e3501b56fa5ba81033e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/RESULTS.json",
+      "bytes": 14960,
+      "sha256": "7921b006c385e0402a2b8dbcb4cb7bce61c5756f84572f626cfbee5d018f0e4d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step0/admission.json",
+      "bytes": 1085,
+      "sha256": "76e1ccb35bada71d932cd27d94e182f58886038758f05634622eb0e8e38491a6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step0/command.json",
+      "bytes": 2719,
+      "sha256": "7d2b55f74ecc18aa99ec3419cf3fae74b1f186adb58a0ca6e703ea7966c2e256"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step0/direct-join.json",
+      "bytes": 260,
+      "sha256": "b15fbd84fbd3873c1869bc42deaedcc3e8f58b37fd932a6ad35a58081838c295"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step0/direct-wait.json",
+      "bytes": 82,
+      "sha256": "48bf786c050f134b60037ac40bfbe32f1f6ed76c3611888902b4056e9ad58840"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step0/started.json",
+      "bytes": 36,
+      "sha256": "9b723af53a3b4d8340d1b909b6c604bce940cc91897f3e64940de024c4dc7917"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step0/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step0/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step0/whole-join.json",
+      "bytes": 1152,
+      "sha256": "adc104258a2dad31046857d1fccd9ed8b42f6eeb973a6279ea17d2b0aa23ee08"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step1/admission.json",
+      "bytes": 1087,
+      "sha256": "2089f65c05e5c41a5e61bec98e5cf4659eb979f151696938ad723681a758c64c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step1/command.json",
+      "bytes": 1462,
+      "sha256": "f965b5347689288a3e8ab476d01355ea189d72d34e85adfa615da41eb4607713"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step1/direct-join.json",
+      "bytes": 260,
+      "sha256": "5469b4745c680adf12156ad3192e53c9ca8724f3b980047d5376f3daa2ebd9cb"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step1/direct-wait.json",
+      "bytes": 82,
+      "sha256": "a78bb1d9f2301dab7aa6431c077912d9afe65c8c451383687b5edc2329154c64"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step1/started.json",
+      "bytes": 36,
+      "sha256": "1423706329a64de372369b80286e06a630bdcd3edc22b46e7d4454984ee5514a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step1/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step1/whole-join.json",
+      "bytes": 1152,
+      "sha256": "094750b2f1fe6b963557c36e836bb5f98878d50bbd6478b9ad307ae955f12ae0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step2/admission.json",
+      "bytes": 1088,
+      "sha256": "842e574e35c050194bde0ddd421888972f811cc73e1f820f3499b1de98aa9768"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step2/command.json",
+      "bytes": 1462,
+      "sha256": "df9f4f54ed52473d89e88a0abb5de042dedc624217cb4d55129a25e303312012"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step2/direct-join.json",
+      "bytes": 260,
+      "sha256": "0025d46886b667bcdce98f46f9b5448e01bd65b956ea79b307c83d99456b71be"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step2/direct-wait.json",
+      "bytes": 82,
+      "sha256": "aa743da9a296e9fed68d93e847c572ae68b42e132df147ce205cfc623838ea31"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step2/started.json",
+      "bytes": 36,
+      "sha256": "606da6036ef6174d74bd6ec042d039f6fcd2d1ed9f95aae4cf273b9bd0707acf"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step2/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step2/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step2/whole-join.json",
+      "bytes": 1152,
+      "sha256": "f8f17830f4ac24759d3bde665858ad03f08d9520cc573a3727ce4193f40e57da"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step3/admission.json",
+      "bytes": 1087,
+      "sha256": "47291dc1cfad1c410a5960663aa7fdb897ff6158cd67168d565f6a7547bfc66b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step3/command.json",
+      "bytes": 3008,
+      "sha256": "a78292edcbbdd4311dc54daff565f37f1c5253a56ab31be8fd5fc7b571f14684"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step3/direct-join.json",
+      "bytes": 260,
+      "sha256": "9e554b727f941f41531ee1c61a20c4af4d234bc4db0e9fc854a428e0b3269fa1"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step3/direct-wait.json",
+      "bytes": 82,
+      "sha256": "873d4a477f92b7dd1eaa2e679d07cbba8f3d21e5eff17e8dfea793788b088e35"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step3/started.json",
+      "bytes": 36,
+      "sha256": "dc6903460cb327d4f01c64e448740d97e81b537789dea68b3218f650500178c4"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step3/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step3/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step3/whole-join.json",
+      "bytes": 1152,
+      "sha256": "e1e5148f1637994bdd1aad03c247ac6f27761f09429f91654957350e30fde468"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step4/admission.json",
+      "bytes": 1088,
+      "sha256": "e9f17028248e8ea572f7398388ec87e91ce335cc6fa6831525ae48ba2d080b86"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step4/command.json",
+      "bytes": 3033,
+      "sha256": "7063c54122579c8edb12a0e620b5fd84fdf96cbb408c13cd8e63f703a6bcaec5"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step4/direct-join.json",
+      "bytes": 260,
+      "sha256": "291e47a99472c1d210263a84fcd095a4929aec39a98718c6fe998e43801a396c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step4/direct-wait.json",
+      "bytes": 82,
+      "sha256": "1922bc4e77796c5656d953338fbcc0cf20a865d10ee0df211cf049f1a9386291"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step4/started.json",
+      "bytes": 36,
+      "sha256": "8f29ae096a92f56f5afa10800f59c7555cd54fac2626b62ab6cdca454fd1073f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step4/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step4/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step4/whole-join.json",
+      "bytes": 1152,
+      "sha256": "1140062ba9e92a6c1f8ef9ac5d652f34051f48b524edad7c011c9569c87a2cc4"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step5/admission.json",
+      "bytes": 1087,
+      "sha256": "4b48f3e84252fe0a7284b3ed15d6640630771c0f130eeb8e78a1a03c2e2673f8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step5/command.json",
+      "bytes": 2718,
+      "sha256": "23ba9cb55ea9dee019c8dce773b148c560665e8c36d17fad2cd4e85e06fbc2f6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step5/direct-join.json",
+      "bytes": 260,
+      "sha256": "c08bdedc39c56aacb516e69950507664ae12bb01888894ec1606fb031a17146f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step5/direct-wait.json",
+      "bytes": 82,
+      "sha256": "a6d0e8f35380fe7b85fd96aed977d8a5c8c00a44c99a389bedc8d21d7bc4a133"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step5/started.json",
+      "bytes": 36,
+      "sha256": "803691199ab6df1db077e5f4e39541c66384d045a95f0385fb21774b721b2f15"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step5/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step5/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step5/whole-join.json",
+      "bytes": 1152,
+      "sha256": "39c87e624a5c5fdfa3a295dfd80977bd86c92dc4034aebb98bcce65b4a20372f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step6/admission.json",
+      "bytes": 1087,
+      "sha256": "d0544df423034af411c90aed8b3ea0a91901fa8af8347932b2486d6b94de0f6b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step6/command.json",
+      "bytes": 1067,
+      "sha256": "5057cb2a4115fee2a6bbab4d0fe3f0b06dd190768c5148125f510e7ef5e03cc5"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step6/direct-join.json",
+      "bytes": 260,
+      "sha256": "bd489159618719234af1825c816f00d5f7ac76245d667208fcaab90a27a99eca"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step6/direct-wait.json",
+      "bytes": 82,
+      "sha256": "5cdb2e5235ea6a68011baca024dac15190338e834f156ffa43651eb3e4bb2ab4"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step6/started.json",
+      "bytes": 36,
+      "sha256": "18e5e7257d84898bb96d20e4c803d85e479dc02a9d052ff98f5832410f4bf490"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step6/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step6/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step6/whole-join.json",
+      "bytes": 1152,
+      "sha256": "9592c0f9ed0be453239e8200b5aa5e7fd82419af78c0ba34ede4720f179a0cae"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step7/admission.json",
+      "bytes": 1088,
+      "sha256": "f24b4a5a74eb9689c681271a7478a63fbaf2f7a7033b0a4fb2a10bc8d2bbaefe"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step7/command.json",
+      "bytes": 1067,
+      "sha256": "29771229f56925c0162cb31f713005fb6733e6d393a2775517aee2d90ee371d5"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step7/direct-join.json",
+      "bytes": 260,
+      "sha256": "faac5ea19cd330bfa5b0a6ddaa9fecc54402e6d6d29e5f8aa7ddf4f8c349eaee"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step7/direct-wait.json",
+      "bytes": 82,
+      "sha256": "d26d61ce1171193a0f5314ad03908ca782686fc34522f82f8103a6b7becdf412"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step7/started.json",
+      "bytes": 36,
+      "sha256": "d7672960750f0f71dfb00054cf085daa06ff4ce0dac9089600ff933b812847ea"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step7/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step7/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step7/whole-join.json",
+      "bytes": 1152,
+      "sha256": "8536f68cf9ee1cb46d206b314c3cdb679bb7c69991b118ad6adc462997502cfb"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step8/admission.json",
+      "bytes": 1087,
+      "sha256": "c9128364bf974b2686dd838768867bfe24870f5eabef68e8e014c7a237a4d4c2"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step8/command.json",
+      "bytes": 952,
+      "sha256": "47ee8b2665e7671363905607227e865e3e04ff454593f0db53cad256e40801d6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step8/direct-join.json",
+      "bytes": 260,
+      "sha256": "7364fb537eae0e077cc5ecf99c1ba8e929b70728cdeb79b809500ae6208c252b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step8/direct-wait.json",
+      "bytes": 82,
+      "sha256": "9bae660d85b6e3a5710f0380fd7b666dc38ab4601d630cf4f8d7936c2396f172"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step8/started.json",
+      "bytes": 36,
+      "sha256": "b03d86ebae5e8eb9ccf5a70c5296220b548a16ea3c0ace12c549a8da2254141f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step8/stderr",
+      "bytes": 531,
+      "sha256": "a11694173539a364824d696a63891a4d4ae0ff74c085f2fbb094e4186b502a37"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step8/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/future-capture-1/step8/whole-join.json",
+      "bytes": 1154,
+      "sha256": "30d39d6294cfb81db007ec3e2df2f8e215f41a25c08958814396ac232f3a6808"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/PROFILE.NOT-GRANTED.json",
+      "bytes": 93382,
+      "sha256": "c18160bee23ccf77cbbe7ef11eb556b0cb1984af5f566a233770fee3a5a00ce3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/ROOT-ACTUAL-TOOL-RESULT.json",
+      "bytes": 1646,
+      "sha256": "6fd92b995626239abddb1c13440fed92bee31e0f6c76fbe69c56c4606fbd245f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/rust-lld",
+      "bytes": 11412256,
+      "sha256": "5cd8306e6589847a21f0430ea0842f3305fb6ec83fefa6ce8a42e83a63576c82"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "bytes": 654904,
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/manifest-rustc-x86_64-unknown-linux-gnu",
+      "bytes": 1691,
+      "sha256": "7f9965aa68aee483844018cd4ea3dae6054209a18b0e6220fce58c9b346702fe"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/multirust-channel-manifest.toml",
+      "bytes": 1204892,
+      "sha256": "d07838bdc65828621960baeb078220c8dd893929105efeb3614d8fdcb0aabebc"
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/libLLVM.so.21.1-rust-1.92.0-stable",
+      "bytes": 186540512,
+      "sha256": "6fe074f0e285cca6e6a00767d32fc0cd1b3141d40daedf5d8fc4e6fd7efce624"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/f05-causal-rust-supervisor-host-qualification-1/independent-actual-review-1/REVIEW.json",
+      "bytes": 27823,
+      "sha256": "9b5433a8f3cf35ea159e33d1d342292daa4237eeb1a2f95a5c623370b5bc0e91"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/image-toolchain.json",
+      "bytes": 72685013,
+      "sha256": "a68e02b3b66b8bfbae96bf742dc8702b6e81dd97b92189b87437c3d08fccdf72"
+    },
+    {
+      "path": "/var/lib/dpkg/status",
+      "bytes": 2713326,
+      "sha256": "71be45bceeb0e0dcfc40d5a34922c0c2f8ae4a9f104da39d0e757c318b0d3707"
+    },
+    {
+      "path": "/var/lib/dpkg/info/binutils-x86-64-linux-gnu.list",
+      "bytes": 9128,
+      "sha256": "a4e9339a1eb41ee660c43e4abdcf3339a67d4ae841dd985befa34cb9726092ec"
+    },
+    {
+      "path": "/var/lib/dpkg/info/binutils-x86-64-linux-gnu.md5sums",
+      "bytes": 13335,
+      "sha256": "53f1557b51b67574b53cc2ad0917991f0a770ffc0ec6bc12dd28ad9c4b4ab699"
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libpthread.so.0",
+      "bytes": 157224,
+      "sha256": "af27ed906f6185e0143b9c0d0da287788efa7eb6b2639e44d48fb2939415fdc5"
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libz.so.1",
+      "bytes": 108936,
+      "sha256": "ccfda8d7e0d2f77c8a4feb2febbae057edab668d7d7ee6410e2c517724c056c8"
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libm.so.6",
+      "bytes": 1369384,
+      "sha256": "a0e70f48f02a399e8dd37f861a99e226c285a9daf50a25d19fff7ccf18b97f9c"
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libgcc_s.so.1",
+      "bytes": 146000,
+      "sha256": "1785fc8cd9a2ba72f773b0b60b20e58ff79bf30ce2fd8e241c8b31303dcea17e"
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libc.so.6",
+      "bytes": 2029592,
+      "sha256": "53b909551f8e581120ddc2d24cfb5df76c52e3c2e2a5dac0d202b25638b3e902"
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "bytes": 191504,
+      "sha256": "cfd44e4341767033532d1483c8250d200ad4cdf535d0abc19064ae34cdc51ca0"
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libstdc++.so.6",
+      "bytes": 2526680,
+      "sha256": "fffbe6d8bad58795568e1ad15ba95f5862c3e98af7a43efa7f8cf594be913b5f"
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libdl.so.2",
+      "bytes": 18848,
+      "sha256": "e0d0cace80b627e50ca3f7b621b64917677c27c74077080854d57cf4e548edc6"
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/librt.so.1",
+      "bytes": 35960,
+      "sha256": "fd90f6cc09dda34e0fefeaba5bc60533773c4240f9e7ef672c508b1d610c425e"
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libtinfo.so.6",
+      "bytes": 192032,
+      "sha256": "3d79a61fb19fd7597c1ba90e85e4e25310f885c82f8b91f04fb62658de126f58"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/abi.rs",
+      "bytes": 76151,
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/abi_checks.c",
+      "bytes": 65125,
+      "sha256": "f8deda08de0eccda152a6416a01bec00e6984c1cf4c998e9ca877b1bbe31c23a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/abort.rs",
+      "bytes": 1554,
+      "sha256": "443c480129b1191c0cd2b7ccf3663e185f5cb7cb386512854286404e11236d2a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/affinity.rs",
+      "bytes": 1909,
+      "sha256": "99ccbc64101e6c551c8bc033016a616dbcd709ec0c6b46067bffe92e3839ef7e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/ap.rs",
+      "bytes": 16148,
+      "sha256": "274823af8fcdf10462e9d1c2dff532b251754b63971778f8b412f698093d1137"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/arch_copy_from_user_bridge.rs",
+      "bytes": 779,
+      "sha256": "062516036d0aa91d8a1db80b652dc9b7f7c4388c8ca99d180d871160d2699610"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/arch_copy_to_user_bridge.rs",
+      "bytes": 851,
+      "sha256": "d774aa618e354ae4de6e16f9293fb86f1458a2a29a4e03672c5e026072ff35c3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/arch_rt_sigreturn_check_signal_bridge.rs",
+      "bytes": 768,
+      "sha256": "964cdb4cc60d83e6d0762901d4e70e27d0e533b2deb8b3f88d7a2557b56099b9"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/arch_rt_sigreturn_set_signal_bridge.rs",
+      "bytes": 837,
+      "sha256": "9c1059f9c814739336d1b68ff18f14768b73d6cc477f13be531b0ccb577639c8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/arch_rt_sigreturn_syscall_bridge.rs",
+      "bytes": 748,
+      "sha256": "c2b972091d99383f52baabf74a17ce15a55d7e51b3e74a88d41e6d7330f5597d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/arch_syscall_forward_context_bridge.rs",
+      "bytes": 604,
+      "sha256": "3f14c1b94b1a071910623ec25551381b846ed36f3c2cefbf501cf33eb036314a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/atomic_helpers.rs",
+      "bytes": 6207,
+      "sha256": "8acf10a907cede816da8300d36bf967d938cc672dd75dbb3ecc8f3992ec42941"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/bitmap.rs",
+      "bytes": 28875,
+      "sha256": "9ac9a8be0b412844451ff65fd6a3b519e0372c73b8f920a72c59f528f1786a17"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/bitops.rs",
+      "bytes": 8469,
+      "sha256": "ee6c09e24ecf0d98b49e0608d5cf1f1d75ce20b6c2c9131a5ce1827233dd8f0f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/builtin_dma.rs",
+      "bytes": 4397,
+      "sha256": "d8f210ea795836bb372a80b1d778aa409f00412f105de6f22e9ddc09d356c2b5"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/clone3.rs",
+      "bytes": 4013,
+      "sha256": "3f7433685512e989f2a82ca213ced344fb5dd5a113733485fcfd724ffe2c9094"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/cls.rs",
+      "bytes": 7877,
+      "sha256": "c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/cls_helpers.rs",
+      "bytes": 2679,
+      "sha256": "ab25e420794160eff18989a7e240c602aa9cad2f9836cc87cdfff544bb3e5e0c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/debug.rs",
+      "bytes": 13020,
+      "sha256": "fed7537d21f5d5fe0fc3ffdb1fe44783f5f9ac13937b3bdbbcc452cc2fa5eb16"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/devobj.rs",
+      "bytes": 11862,
+      "sha256": "037942094e57b06c3620d885aeb2816bd0f82c436512b383e852a8041f4163a5"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/f03_perf_attr_callbacks.rs",
+      "bytes": 1638,
+      "sha256": "116a1b3561009f530817c96341a8d1b58e1ab1ea275856f7582168c126ca2017"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/f03_perf_event_attr_abi.rs",
+      "bytes": 1722,
+      "sha256": "8eec931271fd3829c6fffbadf3f2ae1da13796cc1929f3685145d0cd65c8d285"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/f03_prlimit.rs",
+      "bytes": 10668,
+      "sha256": "dff579f83b624f601ab9379b7e2287000501f9ce0ee705fd2e3b0c9969981e43"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/f06_clone_ptrace_provider_abi.rs",
+      "bytes": 1788,
+      "sha256": "cac59960063f7d66b66808a30d6b8fbbbfb61a0da49393167e97920fbadf8f07"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/f06_clone_reader_lock.rs",
+      "bytes": 707,
+      "sha256": "9689ea37321108ce6d8fd7ce186bfc1aa027e412132885e2cc7eaa1ef10f2027"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/f06_clone_reader_unlock.rs",
+      "bytes": 647,
+      "sha256": "b70c27ddecbdce81fa0d95264be5ae50277b83f905a1fae1790c33be3cbe3aba"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/f06_mmap_dispatch_bridge.rs",
+      "bytes": 1006,
+      "sha256": "f49062df4a7ed65eb68a70735981a348c8e892b48320bab73e59f1bb5d430084"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/f06_mmap_flags.rs",
+      "bytes": 1411,
+      "sha256": "862a9af87abfeb269fac4196564475ebb3dcf5a04ea89937b367c45c333d63b9"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/f06_prctl_get_register.rs",
+      "bytes": 645,
+      "sha256": "54a14ed47775362b4bb2a3644cb37b5669357edeb185130c1b84441d35df568d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/f06_prctl_set_register.rs",
+      "bytes": 659,
+      "sha256": "7cfbad6524e5ca293b22d5efaa7572492a95bfd2953ba8b01ee09113a287c3a2"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/f06_process_vm_entry.rs",
+      "bytes": 5428,
+      "sha256": "0e9d9d23db1a376f38757fba98c6b34d0aed4f4b6c45398b0b9372d7624c3d2e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/f06_ptrace_alloc.rs",
+      "bytes": 773,
+      "sha256": "bcb605d9ae7d117b7ce87b51d1bb3468e4dd62a46606cc9d0bde6972ca57b9b0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/f06_ptrace_context.rs",
+      "bytes": 828,
+      "sha256": "5c24cfbe6519b8e2a449c1240fb9015baf401fd40814a02cca9237a5adae4dc8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/f06_ptrace_find_thread.rs",
+      "bytes": 623,
+      "sha256": "aa31e203fd50cab109860b532e52b3e6087f20e2d9dcc6544d81d7d0c1c7a37b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/f06_ptrace_thread_unlock.rs",
+      "bytes": 637,
+      "sha256": "0f70edd6f7fd6328d3dc16cb58bddd6739e97ad94432cc75a152707c4d4a4192"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/f06_rt_sigreturn_alloc_free.rs",
+      "bytes": 1707,
+      "sha256": "e65cd47a047b631168cea48403ad8c877a05a660384a13da180ac5df1c17fa7d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/f06_vdso_add_range.rs",
+      "bytes": 1074,
+      "sha256": "89462d17ffe853d5dd4980c960bce9e62c64be799474a9e56cb085bd3c7c6805"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/f06_vdso_set_range.rs",
+      "bytes": 1408,
+      "sha256": "78ac29d3e81b388994cfab31eb732716a5c1980a8dd9944dffc6a873af44eeea"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/fileobj.rs",
+      "bytes": 32461,
+      "sha256": "52836335742d3df2088d87c6454111f3094358b9ba604ea5c32d2f92243681bb"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/fork_child_credits.rs",
+      "bytes": 28612,
+      "sha256": "63b82c97cc6e1204585cfaf2b89ef378b88c1d207a8e82c2f1400bc352f9c98d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/fork_constructed_credits.rs",
+      "bytes": 10534,
+      "sha256": "4c1e96ef4fbf5cb66acc54d900d37fcd68fb4d50dd1337c4428b3f5e2ecd1972"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/fork_control_guest.rs",
+      "bytes": 18671,
+      "sha256": "26797f574fa1ba7006eb27ff3a1a7750ec04b83f71a2e90b8c35c4c536b33acd"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/fork_control_registry.rs",
+      "bytes": 14785,
+      "sha256": "a2f92bb11cba42fef0d95e1f1e1a4c526351ff90860baed7913fa26c91137ba5"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/fork_final_ack.rs",
+      "bytes": 5506,
+      "sha256": "093f742dfe4969d78b2ca6b8b643df94042945e890d26003dec9d1818c34826b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/fork_runnable_child.rs",
+      "bytes": 12855,
+      "sha256": "a9387ae13b85785176b95fc6ddc79b08bd31dd7960b0730307b41b5a05b5d137"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/freeze.rs",
+      "bytes": 2046,
+      "sha256": "825144fe47b7f0409e4830c5349c14389d84b48fad0aa464ea09c3f2bd186ae0"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/futex.rs",
+      "bytes": 34480,
+      "sha256": "ecfafb1d08247eec584c429c0bc9cd4fbd75d1bd8f01e10847e5dad796a6b4d7"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/gencore.rs",
+      "bytes": 12884,
+      "sha256": "67754cacf5f7567a526bde5790bbd2114df81d8ddadbd3abc641123729742bdb"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/hash.rs",
+      "bytes": 872,
+      "sha256": "9dd27922476ed87117500dc130fdce75f389347beb32df8d47b34b014ffe0a03"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/host_helpers.rs",
+      "bytes": 180826,
+      "sha256": "79ec492e531d9793206cd9ebc84482ab695fcfdc284675492d81ee5a072eeaac"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/hugefileobj.rs",
+      "bytes": 14364,
+      "sha256": "164579599f8651d0588a35b8951ee5b0d2174bb9da5e9a4c59be9f71dfbfb9a9"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/ikc_manycore.rs",
+      "bytes": 10469,
+      "sha256": "e3f3f3ffee3bc8ac892748123ad7fe40b85c5705969d4204dab15ba37c6de137"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/ikc_master.rs",
+      "bytes": 15978,
+      "sha256": "800a8846a4a58657b4fbef61b5cab9f0319992be96a0011f64bcbf6db7f372be"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/ikc_queue.rs",
+      "bytes": 27590,
+      "sha256": "99d7dbb864955fc43b698a74ae3acaa654ba82daf6e8ff638f5d73371cf59af3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/init.rs",
+      "bytes": 17659,
+      "sha256": "42ca08af0f1087b3914a58e9c445fff6ae27e3b76da2ee2ee3255181bb4b8886"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/lib.rs",
+      "bytes": 2318,
+      "sha256": "c84205fd8d0b4c729bf5598d5b6d0e578617de8e8af3a00bdcf886e69a8019e2"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/list_helpers.rs",
+      "bytes": 5770,
+      "sha256": "dac9c2f37c64967eebd8c466426fcdf1bf8d201b5c5ee5f1f466893517feb66a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/listeners.rs",
+      "bytes": 4517,
+      "sha256": "da1e4d66e7dd5e5d11aa479d18d108f72ef201b1d7014c7670f30e70747a1cef"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/llist.rs",
+      "bytes": 2753,
+      "sha256": "246764fe6b346d78bb3cac84b1773469106dc99ae394cefe0c9317d08b7305f8"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/lock_helpers.rs",
+      "bytes": 12202,
+      "sha256": "76ba778630a7ee5085cb645056191ff3c4599e70a3fa73524fd496422c3075f3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/mem_helpers.rs",
+      "bytes": 444772,
+      "sha256": "f544c5177156ad5de8544bb95c46bbc8e2ac870a25c4895ca4cefb7c8cc79680"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/mikc.rs",
+      "bytes": 6093,
+      "sha256": "2907fa6d7ca49a15b737435bd61b2c1f372618ec2396aea570a8d76fd8342024"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/native_fault.rs",
+      "bytes": 2089,
+      "sha256": "771c46717169d52685bea87386dd15afd7f193fc5c9eefbce1544d67788a6025"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/native_futex.rs",
+      "bytes": 5413,
+      "sha256": "62680e8304363c77e287a1ab6bc61dc469a86217e64316e003057b5f126607ad"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/native_signal.rs",
+      "bytes": 12106,
+      "sha256": "aea4bf00889641d831f4cebf5c452924947e0255cf1f5d47437e804bcbadb250"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/native_vdso.rs",
+      "bytes": 3914,
+      "sha256": "c04188e452afb4e597bdf2b1fe63544f85d0fbbe5f8879300d48091311b9667e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/native_xstate.rs",
+      "bytes": 2237,
+      "sha256": "b0b39e0df8298740f53a6b76c5ce6905dfdd9092328578df18225c4a57e8100e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/numparse.rs",
+      "bytes": 46665,
+      "sha256": "2d0aa19a78c86a6ea9a7a25d95aea484f981f6219a215314ddbeaee6d89a46ab"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/object_helpers.rs",
+      "bytes": 235965,
+      "sha256": "7444ec38a30cdb2b0505b939f02eacb5018d3732a97fcd12b3eba189133f0f06"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/page_alloc.rs",
+      "bytes": 96482,
+      "sha256": "d0df730f3bbca8f307fb7fe72397c5c8d2a3431f36685a5579503b081e93f1ec"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/page_helpers.rs",
+      "bytes": 22774,
+      "sha256": "f2f61bd6889f05c29f1531e4c6ade16a0698ac9f03b712caadfefd76cc35e56c"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/pager.rs",
+      "bytes": 35974,
+      "sha256": "d0e498292ce0e2ad8c68f7c4e2bdffb3d2f6fa99962ae3340e74bede0cdfb30f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/plist.rs",
+      "bytes": 5274,
+      "sha256": "27e3cef715e399f28035ba62240e4a9b6c73948e37cfb8578e0614e4ee3141ca"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/process_helpers.rs",
+      "bytes": 618027,
+      "sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/process_verbose_data.rs",
+      "bytes": 11354,
+      "sha256": "aa26573589d6db2678e60892b834b8b3c34838b1e53d8439e3b9d920fd292bfb"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/procfs.rs",
+      "bytes": 36968,
+      "sha256": "6a3609c3ced73cafdffec032e3f2876e08eee5628ba2470137729ca7a804c90e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/profile.rs",
+      "bytes": 20253,
+      "sha256": "2eacbb02e1988ac524e94b1c7824629cfa97bf5a18ddef5c046f0c60106ce543"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/pte_helpers.rs",
+      "bytes": 7855,
+      "sha256": "d6117286cc222c27ae6f76773796efd77d9f87b969644555e0a6286721653e62"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/rbtree.rs",
+      "bytes": 22536,
+      "sha256": "114e8dbd0b48abc156879bfd2f019071c30174019e97904c028ccee911840256"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/refcount_helpers.rs",
+      "bytes": 3105,
+      "sha256": "07430d9fe1529bb81a4b76c7a998546b8e54219f1d7c2d91f398ea7c28b618ba"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/rlimit_helpers.rs",
+      "bytes": 2512,
+      "sha256": "7310af0b90bd37d146f7741c4f93fc75e37d00691c6f72ced645879fe21d1c30"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/sched_helpers.rs",
+      "bytes": 186213,
+      "sha256": "c4e6153bef33ec018d2efc88c93854a4dc351f78c901ed3cb25f73524d7c0020"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/shmid_helpers.rs",
+      "bytes": 6666,
+      "sha256": "03961aa8192d7b6dd3958c2dcbf4994c005a158bd932dfd37e1666ba4a96b912"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/shmobj.rs",
+      "bytes": 21670,
+      "sha256": "bfb452f3e28a6e5b649f7128a8f18d17bbc6e04d3c978feca8ef27db82e8e0b5"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/smp_ikc.rs",
+      "bytes": 21408,
+      "sha256": "ef29938daeccad4487971157d61b33f0db61d6a5714a4d11e7e78c62c9c9f289"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/spinlock_helpers.rs",
+      "bytes": 3105,
+      "sha256": "7b6c1e87f521eaf4674128afd7bff71785bead4ff7c9eb3c9a668d6a0cb0cbe7"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/string.rs",
+      "bytes": 13172,
+      "sha256": "579d8c06bb766a270548399a8820733516a167bb8af5d1fea46d8a51f7e8fbf3"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/syscall_policy.rs",
+      "bytes": 1268496,
+      "sha256": "2975c9c2d0c398a8acffb52b0936ae46ab2b73d65d45113be93730802fe276d7"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/sysfs.rs",
+      "bytes": 25143,
+      "sha256": "b01664e416e5bab418fb2f8b2d4de6cf061c7f638c1fbce6a04c08d4667ae4f7"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/tests/do_munmap_host_clear_actual_harness.py",
+      "bytes": 15609,
+      "sha256": "5bc4f912d6e5ebe70c606cecb7e83f9bcad551323892d0206506202eef3d3767"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/tests/ihk_module_helpers_smoke.c",
+      "bytes": 201624,
+      "sha256": "34f004c090cbaf2dbc92142f2073d1c0a6585ebdda765fdc987e51296c601b0d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/tests/pending_free_batch_actual_harness.py",
+      "bytes": 31241,
+      "sha256": "980f0c33b3867a20767e42937545db1f16cc574e2edf73c434ff4301d5a6e5df"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/tests/pending_free_batch_vectors.c",
+      "bytes": 7331,
+      "sha256": "e383220db41f5f73243de264798f78e0d299621e6c3161002a9fee16366741a5"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/tests/pending_free_batch_vectors.rs",
+      "bytes": 26823,
+      "sha256": "b0142ecf00f2d67eaa2ac949f75bd8fcf24dc8d05817a1c2a0ce7019428fec25"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/tests/pending_free_c_actual_harness.py",
+      "bytes": 14732,
+      "sha256": "75c85b8721a4da9413370d707602bf96259689b92926a7eb9b92093af9e6b9d9"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/tests/pending_free_inventory_harness_v1.py",
+      "bytes": 9794,
+      "sha256": "95098a30d43596b3a80be9f0e56ecd4bb13e0514254d60207953be313fca89f1"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/tests/pending_free_inventory_reference_v1.c",
+      "bytes": 8355,
+      "sha256": "2755ba19e0d7083895daf82f815aca84090a0231d46c119bab93248467490aa6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/tests/pending_free_inventory_v1.rs",
+      "bytes": 9943,
+      "sha256": "26d1528f296979683850a846bb7a600a451a75a51db50f4d0900e9bdddc6b742"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/tests/pending_free_inventory_vectors_v1.rs",
+      "bytes": 1619,
+      "sha256": "bf966b1226f4134609f565bb4e27d89ceff41a79fc842aeac7c8a05999668664"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/tests/run_equivalence.sh",
+      "bytes": 5010284,
+      "sha256": "b6e5926d39edcdc9b65f00877e74564af4b363ad20034ab5ccccbb9c919ab737"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/tests/run_memory_equivalence.py",
+      "bytes": 4198,
+      "sha256": "bb72e9c3899c56cecc6b4fe3b2bf1292b2a59d48fc876aeb2501b6bea455cb93"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/tests/string_bcmp.rs",
+      "bytes": 2959,
+      "sha256": "2b9971c05894f2dc2c3b5fa6612df172ff17d9df083cf2623160dd753b2e79d6"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/tests/string_bcmp_harness.py",
+      "bytes": 2786,
+      "sha256": "08d5fcd0c0382e2cb15dc877afafe268a72acc4f3224ca4ceea6bdf21be6fe8d"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/timer.rs",
+      "bytes": 8090,
+      "sha256": "6f1b4789d52cd402b4707d66a929bdac25fc6235dcf3c5fd34b9f17a33e22d5a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/tofu_uapi.rs",
+      "bytes": 83617,
+      "sha256": "1fa2b20f7d59e963c4c9cc0c1f5be777f791a1d77f3071e9a1a81e2000d72bbe"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/ubsan.rs",
+      "bytes": 9830,
+      "sha256": "b60d0e76924877f961ea001c501fc3bcfc2fd88f31180db018543cd882b3f501"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/waitq.rs",
+      "bytes": 10868,
+      "sha256": "246a850a7e305d69d55de5903273e35ba62cc204167cc95acc90973c8f0aaefc"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/x86_coredump.rs",
+      "bytes": 3426,
+      "sha256": "ad0b5a20a61f54247b05af1b6d62d8c77e6d060705357bde188d1762635cb631"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/x86_cpu_helpers.rs",
+      "bytes": 255992,
+      "sha256": "8db479fbea9493ee498bf5d78aef71589b49d9f065e13a8617b5765cd681c194"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/x86_cpu_log_providers.rs",
+      "bytes": 3237,
+      "sha256": "42daf55b7e94b026e1a5567c01f5d91ebf69316a3eaa532477852e364cdd431a"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/x86_local.rs",
+      "bytes": 4525,
+      "sha256": "9f102654a22895615da854b08ea8e043a6c17b9157e4b77e5b58783e70abeb3f"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/x86_memory_helpers.rs",
+      "bytes": 311375,
+      "sha256": "5c60055053656751ea490be95c09d7343b0391797c21d5e6c97de97cb8d34c68"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/x86_memory_logger_bridges.rs",
+      "bytes": 9235,
+      "sha256": "ada5c28856267259c7215c13ee57e1b4602a62b4815513b7cf5961c53a4813ce"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/x86_memory_loggers.rs",
+      "bytes": 3172,
+      "sha256": "1ce031eb323776480cca1b717f776989340413a71d4123b8ef99689e83bc9708"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/x86_perfctr.rs",
+      "bytes": 16091,
+      "sha256": "9cabce0fb4295d421a3f5194b7ebb854bdfa93c4126573a643ab2a08e9d11af7"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/x86_setup.rs",
+      "bytes": 29158,
+      "sha256": "1bf9b326873b22034dfba47165c95bdcc599d41533a112c64de72950e99589fe"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/x86_vsyscall.rs",
+      "bytes": 2556,
+      "sha256": "87a888402b181da0bf9c94c6675b85f20cb21480041bb18c7ea42f0bf12f90d7"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/xpmem_helpers.rs",
+      "bytes": 236058,
+      "sha256": "e8c7970b672c724f14da2eb0a12fdbcd11df62f824422a5f8a98da4364328255"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/rust-subtree/zeroobj.rs",
+      "bytes": 6442,
+      "sha256": "eed90e36aceaaa44936a7c9513c0768278cfdd61882eb9327941f0751c9e9b5b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/candidate/kernel/CMakeLists.txt",
+      "bytes": 39984,
+      "sha256": "551b3174f40e59b207f3cf69829bf95d1fbd47cdc4623c31082ead84bc7cc68e"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/candidate/kernel/process.c",
+      "bytes": 231146,
+      "sha256": "12a8396d729e342d2d43130be73acf7960409cf4d2e432a415fb303a031fa055"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/candidate/kernel/rust/process_helpers.rs",
+      "bytes": 618027,
+      "sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/candidate/kernel/rust/process_verbose_data.rs",
+      "bytes": 11354,
+      "sha256": "aa26573589d6db2678e60892b834b8b3c34838b1e53d8439e3b9d920fd292bfb"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/fixture/genuine_candidate_abi.c",
+      "bytes": 10647,
+      "sha256": "3859b5f1f288ad9b78ba87d00fd1caefe7fb1645444d5ef3c1871840e1a79d93"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/run_fixed_cpp_controls.py",
+      "bytes": 1653,
+      "sha256": "3ae2fbd99e467da2a968219989b1a188f7beba120dd01b5dc23d52690c1e3e76"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/qualify_changed_objects.py",
+      "bytes": 7806,
+      "sha256": "b711bdf06d1af8358e3d02b049439d93e50e674d18b042f3c7f88a91981bf53b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/FIXED-CPP-CONTROLS.NOT-GRANTED.json",
+      "bytes": 25741,
+      "sha256": "a49580caf72cc0901092dbc81c0882d1e634dfd1b2c8484ec0abb1da6d9cfdf5"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/EXACT-LOCAL14-CONFIG3-MAP.json",
+      "bytes": 17849,
+      "sha256": "ace180729fc895a80a40639c44232d9b58f1a41392099768d0add7ad5f8a359b"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/EXACT14-TYPES-AND-CONSUMERS.json",
+      "bytes": 14954,
+      "sha256": "49d4de3b739d2c1ebb73926dc27dc4bf90bc61e72746c8f78cada9d618258a18"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/EXACT-SEVEN-COMMAND-HOST-PROPOSAL.NOT-GRANTED.json",
+      "bytes": 16098,
+      "sha256": "cf985ee66c45330886187422c1000077e2c0415058f02c47a9598b7d98aa0105"
+    }
+  ],
+  "scope_limit": "Default0/localON only, selected nondefault rejection and optionOFF_CPP explicit. No source integration/wholefile/native/allprofile credit."
+}

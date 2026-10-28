@@ -1,0 +1,46 @@
+--- initial-proposed-reader
++++ callback-identity-reader
+@@ -4,7 +4,7 @@
+ """
+ import hashlib,importlib.util,json,re,struct,sys
+ from pathlib import Path
+-D=Path(__file__).resolve().parent;E=D.parent
++D=Path(__file__).resolve().parent.parent;E=D.parent
+ G=E/'m14-f02-verbose32-host-preparation-source-1'
+ N=Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1')
+ 
+@@ -34,6 +34,11 @@
+  kind,symbol,addend=reloc;assert kind==1 and 0<symbol['ndx']<len(elf.sections)
+  z=elf.sections[symbol['ndx']];at=z['off']+symbol['value']+addend-z['addr'];end=z['off']+z['size']
+  data=elf.data[at:end];assert b'\0' in data;return data.split(b'\0',1)[0].decode()
++def same_callback(old_target,new_target):
++ expected={old_target['undefined_name']} if 'undefined_name' in old_target else set(old_target['names'])
++ actual={new_target['undefined_name']} if 'undefined_name' in new_target else set(new_target['names'])
++ assert expected and expected&actual,('actual callback identity',old_target,new_target)
++ return sorted(expected&actual)
+ def normalized_raw(raw,relocs):
+  b=bytearray(raw)
+  for off in relocs:b[off:off+8]=b'\0'*8
+@@ -46,9 +51,9 @@
+  targets=[]
+  for off,oldr in oldrel.items():
+   oldt=target(baseline,oldr);newt=target(new,rel[off])
+-  if 'undefined_name' in oldt:
+-   expected=oldt['undefined_name'];assert expected==newt.get('undefined_name') or expected in newt.get('names',[]),(name,off,oldt,newt)
+-   targets.append(dict(offset=off,callback=expected,actual=newt))
++  if 'undefined_name' in oldt or baseline.sections[oldt['ndx']]['flags']&4:
++   names=same_callback(oldt,newt)
++   targets.append(dict(offset=off,callback_names=names,actual=newt))
+   else:
+    # The fourteen default final cells/config use only source strings or callbacks.
+    assert string(baseline,oldr)==baseline_file
+@@ -82,8 +87,7 @@
+   fileoff=row['fields']['file'][0];assert string(rust,rel[fileoff])==file and string(baseline,old_rel[fileoff])==baseline_file
+   for field,(off,kind) in row['fields'].items():
+    if kind=='fn':
+-    original=target(baseline,old_rel[off]);expected=original.get('undefined_name');assert expected
+-    actual=target(rust,rel[off]);assert expected==actual.get('undefined_name') or expected in actual.get('names',[])
++    original=target(baseline,old_rel[off]);actual=target(rust,rel[off]);same_callback(original,actual)
+   # Existing optionOFF C owners are unique and retain original LOCAL debug targets.
+   one(fallback,name,size);one(offjoint,name,size)
+   configs.append(dict(name=name,bytes=size,readonly=True,exact_scalar_padding_bytes=True,LOCAL_debug_pointer_fields=debug,file=file));allnew.append(name)

@@ -1,0 +1,29 @@
+--- a/kernel/CMakeLists.txt
++++ b/kernel/CMakeLists.txt
+@@ -273,9 +273,18 @@
+ 				    message(FATAL_ERROR "F06 source origin producer rejected the profile/source")
+ 				endif()
+ 				include("${MCKERNEL_F06_ORIGIN_DIR}/f06_rt_sigreturn_origin.cmake")
++				# Existing supported x86/linux6.12/non-UBSAN branch only; no new native profile.
++				list(APPEND RUST_KERNEL_CFG "--cfg" "f06_obtain_clone_cpuid_candidate")
++				list(APPEND RUST_KERNEL_SRCS
++				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_obtain_clone_cpuid.rs"
++				    "${MCKERNEL_F06_ORIGIN_DIR}/f06_clone_cpuid_metadata.rs")
++				set_property(SOURCE "${MCKERNEL_F06_C_SOURCE}" APPEND PROPERTY
++				    COMPILE_DEFINITIONS "MCKERNEL_RUST_F06_OBTAIN_CLONE_CPUID")
++
+ 				set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+ 				    "${MCKERNEL_F06_ORIGIN_PROFILE}"
+ 				    "${MCKERNEL_F06_ORIGIN_PRODUCER}"
++				    "${PROJECT_SOURCE_DIR}/lib/include/ihk/debug.h"
+ 				    "${MCKERNEL_F06_C_SOURCE}")
+ 				list(APPEND RUST_KERNEL_SRCS
+ 				    "${CMAKE_CURRENT_SOURCE_DIR}/rust/f06_rt_sigreturn_alloc_free.rs"
+@@ -367,6 +376,7 @@
+             "MCKERNEL_PROCESS_C_FILE=${MCKERNEL_PROCESS_C_FILE}"
+             "MCKERNEL_PROCESS_DDEBUG_FLAGS=${MCKERNEL_PROCESS_DDEBUG_FLAGS}"
+ 			"MCKERNEL_F06_RT_SIGRETURN_ORIGIN=${MCKERNEL_F06_RT_SIGRETURN_ORIGIN}"
++			"MCKERNEL_F06_CLONE_CPUID_METADATA_RS=${MCKERNEL_F06_CLONE_CPUID_METADATA_RS}"
+ 			${RUSTC}
+ 			--crate-name mckernel_rust
+ 			--crate-type lib

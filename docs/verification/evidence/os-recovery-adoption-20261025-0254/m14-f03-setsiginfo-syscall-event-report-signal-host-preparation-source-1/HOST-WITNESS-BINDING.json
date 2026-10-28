@@ -1,0 +1,22 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "runtime_authority": null,
+  "production_policy": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/candidate/kernel/rust/syscall_policy.rs",
+    "bytes": 1271776,
+    "sha256": "6e4ace933e7141a6b611d70fd22aac1324ea70954e8915439f77fbdd664b425f"
+  },
+  "HOST_policy": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/context-root/kernel/rust/syscall_policy.rs",
+    "bytes": 1272814,
+    "sha256": "5d5bc3d92195355b11455fa8c200acf495e8a8cac65136774bdf180f76d583f6"
+  },
+  "witness_only": "\n// HOST qualification witness only; not part of the production candidate patch.\n#[cfg(f03_ptrace_entry_candidate)]\n#[no_mangle]\npub static f03_ptrace_HOST_ABI: [usize; 9] = [\n    core::mem::size_of::<crate::abi::SigInfo>(),\n    core::mem::align_of::<crate::abi::SigInfo>(),\n    core::mem::size_of::<crate::abi::SigPending>(),\n    core::mem::align_of::<crate::abi::SigPending>(),\n    core::mem::offset_of!(crate::abi::SigPending, info),\n    core::mem::offset_of!(crate::abi::Thread, ptrace),\n    core::mem::size_of::<crate::abi::CInt>(),\n    core::mem::size_of::<crate::abi::CLong>(),\n    IHK_MC_AP_NOWAIT as usize,\n];\n#[cfg(f03_ptrace_entry_candidate)]\nconst _: unsafe extern \"C\" fn(crate::abi::CInt, *mut crate::abi::SigInfo) -> crate::abi::CLong = ptrace_setsiginfo_entry::f03_ptrace_setsiginfo_v1;\n#[cfg(f03_ptrace_entry_candidate)]\nconst _: unsafe extern \"C\" fn(*mut crate::abi::Thread) = ptrace_syscall_event_entry::ptrace_syscall_event;\n#[cfg(f03_ptrace_entry_candidate)]\nconst _: PtraceReportSignalFn = f03_exec_report_signal_v1;\n",
+  "uses_actual_defining_ABI_module": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/context-root/kernel/rust/abi.rs",
+    "bytes": 76151,
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "no_runtime_provider_stubs": true,
+  "no_ABI_mirrors": true
+}

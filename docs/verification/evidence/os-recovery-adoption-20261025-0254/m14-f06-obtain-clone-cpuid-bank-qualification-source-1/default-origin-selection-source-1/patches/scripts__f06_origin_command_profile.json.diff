@@ -1,0 +1,120 @@
+--- a/scripts/f06_origin_command_profile.json
++++ b/scripts/f06_origin_command_profile.json
+@@ -1,25 +1,15 @@
+ {
+-  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+-  "status": "CURRENT113_EXACT_PROPOSED_C_PRODUCER_SOURCE_ONLY_NOT_AUTHORITY",
+-  "runtime_authority": null,
+   "accepted_CURRENT111": {
++    "bytes": 253155,
+     "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/independent-final-consumer-review-1/DEFAULT-ARTIFACT-REVIEW.json",
+-    "bytes": 253155,
+     "sha256": "ffa9df9dbbde40440bc7b07b50876ea22fea2829d8987f26e2a11e04febcd545"
+   },
+   "accepted_CURRENT111_profile": {
++    "bytes": 93795,
+     "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT111-COUNTER3-RUNQUEUE208-BUILD-ADMISSION-2/PROFILE.SOURCE-ONLY.json",
+-    "bytes": 93795,
+     "sha256": "82b1159fc5e39220a370f5024b9df4069d2f764748015f017203e824288313fa"
+   },
+-  "arch_predecessor_profile": {
+-    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json",
+-    "bytes": 94404,
+-    "sha256": "64242ef204a7696369462487e5ca17e63f24d1a9d4c9957e43778b643a2fa288"
+-  },
+   "arch_predecessor_command": {
+-    "stage": "selected x86 syscall object",
+-    "cwd": "/work/output/build/kernel",
+     "argv": [
+       "/usr/bin/cc",
+       "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+@@ -91,12 +81,45 @@
+       "-c",
+       "/src/arch/x86_64/kernel/syscall.c"
+     ],
+-    "new_output": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o"
+-  },
++    "cwd": "/work/output/build/kernel",
++    "new_output": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
++    "stage": "selected x86 syscall object"
++  },
++  "arch_predecessor_profile": {
++    "bytes": 94404,
++    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT110-HOST19-BUILD-ADMISSION-1/PROFILE.SOURCE-ONLY.json",
++    "sha256": "64242ef204a7696369462487e5ca17e63f24d1a9d4c9957e43778b643a2fa288"
++  },
++  "clone_cpuid_origin_reference": {
++    "actual_descriptor_proof_sha256": "6e34d56e818f3bd063d789515dbc1d92e0dc218fa7851acbae98d53d651a17cf",
++    "debug_header_sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc",
++    "original_body_sha256": "ea8468b0bb065c689557ef76cb6178b08aecbc0ff9e450234c03d53cedd904a4",
++    "retained_C_metadata": [
++      {
++        "alignment": 8,
++        "bytes": 32,
++        "file_utf8": "/src/arch/x86_64/kernel/syscall.c",
++        "flags": 0,
++        "fmt": null,
++        "function_utf8": "obtain_clone_cpuid",
++        "line": 898,
++        "line_flags": 898
++      },
++      {
++        "alignment": 8,
++        "bytes": 32,
++        "file_utf8": "/src/arch/x86_64/kernel/syscall.c",
++        "flags": 0,
++        "fmt": null,
++        "function_utf8": "obtain_clone_cpuid",
++        "line": 908,
++        "line_flags": 908
++      }
++    ]
++  },
++  "composed_arch_source_sha256": "d060dbf5b83e29b1d5f16e7504972f05cb53d553fb754de1a67566d2c0f06b37",
+   "exact_commands": [
+     {
+-      "stage": "selected x86 syscall object",
+-      "cwd": "/work/output/build/kernel",
+       "argv": [
+         "/usr/bin/cc",
+         "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+@@ -142,6 +165,7 @@
+         "-DMCKERNEL_RUST_F06_CLONE_READER_UNLOCK",
+         "-DMCKERNEL_RUST_F06_PTRACE_FIND_THREAD",
+         "-DMCKERNEL_RUST_F06_PTRACE_THREAD_UNLOCK",
++        "-DMCKERNEL_RUST_F06_OBTAIN_CLONE_CPUID",
+         "-I/work/output/build/kernel/rust/f06-origin",
+         "-I/work/output/build/kernel/include",
+         "-I/src/kernel/include",
+@@ -175,19 +199,23 @@
+         "-c",
+         "/src/arch/x86_64/kernel/syscall.c"
+       ],
+-      "new_output": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o"
++      "cwd": "/work/output/build/kernel",
++      "new_output": "/work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o",
++      "stage": "selected x86 syscall object"
+     }
+   ],
+-  "composed_arch_source_sha256": "c1cdce29e5e7582f1934370bef27f552a4c9480c0849c93a2d602300ef4cf099",
+   "new_C_runtime_objects": 0,
++  "predecessor_CURRENT112_origin_context": {
++    "bytes": 3409,
++    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/oci-origin-bind-correction-source-1/ROOT-ACTUAL-ORIGIN-PRODUCER-RESULT.json",
++    "sha256": "3b8d6a5ccf96dc48bf218531c1e312bad8ac09794f42133cbcc80ab08a9d1256"
++  },
+   "predecessor_CURRENT112_source_adoption": {
++    "bytes": 6510,
+     "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/root-source-adoption-1/ROOT-SOURCE-ADOPTION.json",
+-    "bytes": 6510,
+     "sha256": "497e0cd8e354973a63437bc5db0f0f893e035a84dbf5a34a96cf6e88f10f095a"
+   },
+-  "predecessor_CURRENT112_origin_context": {
+-    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current112-ready-f06-event2-coherent-source-1/oci-origin-bind-correction-source-1/ROOT-ACTUAL-ORIGIN-PRODUCER-RESULT.json",
+-    "bytes": 3409,
+-    "sha256": "3b8d6a5ccf96dc48bf218531c1e312bad8ac09794f42133cbcc80ab08a9d1256"
+-  }
++  "runtime_authority": null,
++  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
++  "status": "PROPOSED_F06_CLONE_CPUID_PAIRED_SELECTION_AND_ORIGIN_SOURCE_ONLY"
+ }

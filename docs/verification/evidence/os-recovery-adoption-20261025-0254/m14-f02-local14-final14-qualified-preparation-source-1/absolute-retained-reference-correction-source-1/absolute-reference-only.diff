@@ -1,0 +1,26 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/fallback-storage-class-readback-correction-source-1/qualify_changed_objects.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/absolute-retained-reference-correction-source-1/qualify_changed_objects.py
+@@ -11,10 +11,10 @@
+ RUST_CONTEXT_ROOT=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/context-root/kernel/rust')
+ CURRENT_PROPOSAL=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/EXACT-SEVEN-COMMAND-HOST-PROPOSAL.NOT-GRANTED.json')
+ CURRENT_CONTEXT=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/CLOSED-RUST-MODULE-CONTEXT.json')
+-STORAGE_MANIFEST=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/fallback-storage-class-readback-correction-source-1/EXACT17-ORIGINAL-HOST-C-STORAGE.json')
+-STORAGE_MANIFEST_REF={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/fallback-storage-class-readback-correction-source-1/EXACT17-ORIGINAL-HOST-C-STORAGE.json', 'bytes': 9776, 'sha256': '6bb1582edd42a7d0266c9f3c30be938f0fa889c199efb01baf81405b1321880b'}
+-RETAINED_IDENTITIES=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/fallback-storage-class-readback-correction-source-1/RETAINED-SIX-PREFIX-INPUT-IDENTITIES.json')
+-RETAINED_IDENTITIES_REF={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/fallback-storage-class-readback-correction-source-1/RETAINED-SIX-PREFIX-INPUT-IDENTITIES.json', 'bytes': 25274, 'sha256': '2b0ae81a2076815c1facfa2c834a90c58a877ff993fa505a33e9423dd41068a2'}
++STORAGE_MANIFEST=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/absolute-retained-reference-correction-source-1/EXACT17-ORIGINAL-HOST-C-STORAGE.json')
++STORAGE_MANIFEST_REF={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/absolute-retained-reference-correction-source-1/EXACT17-ORIGINAL-HOST-C-STORAGE.json', 'bytes': 9794, 'sha256': '2885319e49e50748242b84005b9d2d74e1723f2402ed0ac10a2d2713a24748b2'}
++RETAINED_IDENTITIES=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/absolute-retained-reference-correction-source-1/RETAINED-SIX-PREFIX-INPUT-IDENTITIES.json')
++RETAINED_IDENTITIES_REF={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/absolute-retained-reference-correction-source-1/RETAINED-SIX-PREFIX-INPUT-IDENTITIES.json', 'bytes': 25296, 'sha256': 'abaa6388ec5099fc510c2604872d47eb7b42202d82972a72aba05db33206cfb7'}
+ COUNTER_REF={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/callback-target-reader-source-clarification-1/independent-source-profile-review-1/ACTUAL114-RETAINED-REGISTRY-COUNTEREXAMPLE.json', 'bytes': 43493, 'sha256': '73af30120ba84d74519c6fe7b3c1d0c555b08bacee6328300149153de144bdbd'}
+ 
+ def load(path,name):
+@@ -129,7 +129,7 @@
+ def verify_retained_identities():
+  assert ref(RETAINED_IDENTITIES)==RETAINED_IDENTITIES_REF
+  for row in read(RETAINED_IDENTITIES)['records']:
+-  path=Path(row['reference']['path']);s=path.lstat()
++  path=Path(row['reference']['path']);assert path.is_absolute();s=path.lstat()
+   assert stat.S_ISREG(s.st_mode) and not path.is_symlink()
+   assert (s.st_dev,s.st_ino,s.st_uid,s.st_gid,stat.S_IMODE(s.st_mode),s.st_nlink,s.st_mtime_ns,s.st_ctime_ns)==(row['device'],row['inode'],row['uid'],row['gid'],row['mode'],row['nlink'],row['mtime_ns'],row['ctime_ns'])
+   assert ref(path)==row['reference']

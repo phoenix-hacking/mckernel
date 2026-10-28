@@ -1,0 +1,122 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "runtime_authority": null,
+  "source_only": true,
+  "steps": [
+    {
+      "stage": "Root actual boundary fill before clocks",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/finalize_context.py",
+        "--bind-current-capture",
+        "--root-inputs",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/ROOT-ACTUAL-FINAL-FILL.INPUT.json",
+        "--root-inputs-sha256",
+        "ROOT_ACTUAL_FINAL_FILL_SHA256"
+      ],
+      "requires": "Actual Root46 ledger/free+author/nonintervening attestations; NULLs are not authority",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Root actual boundary fill before clocks"
+    },
+    {
+      "stage": "Independent current capture source review",
+      "argv": null,
+      "requires": "Review exact CURRENT-BOUND-CAPTURE.SOURCE-ONLY.py/current Root46 literals and bounded235 delta; fill actual independent review ref",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Independent current capture source review"
+    },
+    {
+      "stage": "Root seals source context",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/finalize_context.py",
+        "--seal-source-context",
+        "--root-inputs",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/ROOT-ACTUAL-FINAL-FILL.INPUT.json",
+        "--root-inputs-sha256",
+        "ROOT_ACTUAL_FINAL_FILL_SHA256"
+      ],
+      "requires": "Exact Rootcase/source/custody/reservation/currentcapture review refs",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Root seals source context"
+    },
+    {
+      "stage": "Actual owner manifest API check",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/prepare_startup_bindings.py",
+        "--check-static"
+      ],
+      "requires": "Root owns actual API operation; source preparation does not run it",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual owner manifest API check"
+    },
+    {
+      "stage": "Bind reserved unused235 nonce",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/prepare_startup_bindings.py",
+        "--nonce",
+        "d21f4e17faf1b0b806419b1860bd0598"
+      ],
+      "requires": "Prior stage rc0 and genuine staged manifest/fresh namespace",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Bind reserved unused235 nonce"
+    },
+    {
+      "stage": "Bind exact oncebridge source",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/finalize_context.py",
+        "--bind-bridge"
+      ],
+      "requires": "Actual static exists; no authority from binding",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Bind exact oncebridge source"
+    },
+    {
+      "stage": "Root exact source publication",
+      "argv": null,
+      "requires": "Actual PASS_ACTUAL_PUSH_FETCH_AND_EXACT_NATIVE_STATIC_BLOBS with files:list including static+all5 capture_sources; rows is not files",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Root exact source publication"
+    },
+    {
+      "stage": "Root resource wrapper one invocation",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/run_startup_resource_once.py"
+      ],
+      "requires": "Reviewedsource/adoption/publication/exact actual authority; capture only once",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Root resource wrapper one invocation"
+    },
+    {
+      "stage": "MANDATORY STOP unless resource wrapper rc0/positive join and resource+pending files exist",
+      "argv": null,
+      "requires": "No bridge after exception/nonzero/missingoutputs; preserve namespace/refusal; no retry",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. MANDATORY STOP unless resource wrapper rc0/positive join and resource+pending files exist"
+    },
+    {
+      "stage": "Independent exact execution review",
+      "argv": null,
+      "requires": "Fresh resource/pending/actual ledger/full235 contract; parent owns release",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Independent exact execution review"
+    },
+    {
+      "stage": "Root oncebridge one normal entry",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/root-adopted-process235-entry-1/root_once_startup_entry.py"
+      ],
+      "requires": "Only after all previous success and actual independent PASS/Rootconditionalonceauthorization; no alternate path",
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Root oncebridge one normal entry"
+    }
+  ]
+}

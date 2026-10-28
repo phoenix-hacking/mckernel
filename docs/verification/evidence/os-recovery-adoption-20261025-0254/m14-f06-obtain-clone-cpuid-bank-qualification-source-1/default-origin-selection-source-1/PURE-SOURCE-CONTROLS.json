@@ -1,0 +1,57 @@
+{
+  "decision": "PASS_SOURCE_DATA_ONLY",
+  "checks": [
+    "actual_preimage:arch/x86_64/kernel/syscall.c",
+    "actual_preimage:kernel/CMakeLists.txt",
+    "actual_preimage:kernel/rust/syscall_policy.rs",
+    "actual_preimage:scripts/derive_f06_origin.py",
+    "actual_preimage:scripts/f06_origin_command_profile.json",
+    "private_postimage:arch/x86_64/kernel/syscall.c",
+    "private_postimage:kernel/CMakeLists.txt",
+    "private_postimage:kernel/rust/f06_obtain_clone_cpuid.rs",
+    "private_postimage:kernel/rust/syscall_policy.rs",
+    "private_postimage:lib/include/ihk/debug.h",
+    "private_postimage:scripts/derive_f06_origin.py",
+    "private_postimage:scripts/f06_origin_command_profile.json",
+    "all_current_policy_bytes_preserved_prefix",
+    "51fba_full_function_body_byteexact",
+    "fallback_and_downstream_logical_lines_preserved",
+    "no_Rust_file_line_descriptor_origin",
+    "reject:LINE_override",
+    "reject:descriptor_line_shift",
+    "reject:qualified_body_drift",
+    "reject:debug_selector_enable",
+    "reject:real_header_drift",
+    "reject:profile_byte_drift",
+    "reject:source_byte_drift",
+    "defining_debug_header_is_CMake_configure_dependency"
+  ],
+  "count": 24,
+  "generated_slots": [
+    {
+      "file_utf8": "/src/arch/x86_64/kernel/syscall.c",
+      "function_utf8": "obtain_clone_cpuid",
+      "fmt": null,
+      "line": 898,
+      "flags": 0,
+      "line_flags": 898,
+      "bytes": 32,
+      "alignment": 8
+    },
+    {
+      "file_utf8": "/src/arch/x86_64/kernel/syscall.c",
+      "function_utf8": "obtain_clone_cpuid",
+      "fmt": null,
+      "line": 908,
+      "flags": 0,
+      "line_flags": 908,
+      "bytes": 32,
+      "alignment": 8
+    }
+  ],
+  "compiler_calls": 0,
+  "CPP_calls": 0,
+  "behavior_vector_replays": 0,
+  "compiled_Rust_metadata": null,
+  "native_acceptance": false
+}

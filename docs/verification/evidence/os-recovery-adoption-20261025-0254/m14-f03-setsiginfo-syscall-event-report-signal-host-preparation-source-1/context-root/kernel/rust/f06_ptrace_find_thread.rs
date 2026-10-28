@@ -1,0 +1,12 @@
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Exact existing adapter; find_thread retains lookup/lock/reference ownership.
+use crate::abi::{CInt, CULong};
+
+/// # Safety
+/// Exact existing find_thread lookup/ref contract; nonnull returned pointer
+/// carries the original held reference which the caller must release once.
+#[no_mangle]
+pub unsafe extern "C" fn arch_ptrace_find_thread_bridge(tgid: CInt, tid: CInt) -> CULong {
+    // SAFETY: genuine process provider retains lookup, validation and locking.
+    unsafe { crate::process_helpers::find_thread(tgid, tid) as CULong }
+}

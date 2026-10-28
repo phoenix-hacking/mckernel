@@ -1,0 +1,3 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Additive source-only correction of a991/3438. The genuine existing ptrace_report_signal_fn_t const address is EXPLICITLY HOST_ABI_WITNESS. Both production C bridge use sites are source-elided under selected flags; no surviving production C edge is claimed or required. Real setsiginfo C consumers, ABI fields, exports, fallback and GNU_RETAIN checks remain. Retained114 public event references remain historical. Actual new Rust signal/public-event call or folding proof remains OPEN. No production C/Rust/selector body changes, semantic replay, compiler execution, grant or native quota.

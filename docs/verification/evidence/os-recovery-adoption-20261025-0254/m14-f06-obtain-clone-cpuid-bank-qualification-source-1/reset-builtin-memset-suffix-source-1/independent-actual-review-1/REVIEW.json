@@ -1,0 +1,494 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/guardian_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-28T01:16:27.789683+00:00",
+  "decision": "PASS_EXISTING_F06_FULLBODY_REAL_ABI_HOST_QUALIFICATION_ONLY",
+  "blocking_findings": [],
+  "original_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/independent-source-profile-review-1/REVIEW.json",
+    "bytes": 10626,
+    "sha256": "7ae2aa143fb096ef6cb0b542afccc294bda6dac09cd1c393ea12a86ab5135f5a"
+  },
+  "bounded_fixture_correction_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/independent-source-profile-review-1/REVIEW.json",
+    "bytes": 14343,
+    "sha256": "cf5e5b346f621ac7f3735ae5e81ce9561e9bbb05cc7ac9faceb7072549622425"
+  },
+  "suffix_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/PROFILE.NOT-GRANTED.json",
+    "bytes": 45096,
+    "sha256": "4bab567e4f7a181f23278a3345e20278ef99d6d0d968649aa059f6698fa215e7"
+  },
+  "suffix_results": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/future-capture-1/RESULTS.json",
+    "bytes": 3635,
+    "sha256": "74f892095661bb31a4c315274b27972d7bc945a58078ab29e4f8558a1720878d"
+  },
+  "consumed_suffix_grant": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/future-capture-1/CONSUMED-GRANT.json",
+    "bytes": 2055,
+    "sha256": "2abf7ad691c8170c1afb00238eeaebc843562bf1e3e79bb0c490edd1be508563"
+  },
+  "actual_suffix_grant": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/ROOT-ACTUAL-TWO-COMMAND-HOST-GRANT-1.json",
+    "bytes": 3468,
+    "sha256": "d5f3d874ed9abbab37ad50b0fab933884abf26baedd57ad79c0b6d82ee6c4c5d"
+  },
+  "suffix_nonce": "3de3cbddc4028413e2d89ad8d98c8865",
+  "nonce_consumed_no_replay": true,
+  "Root_outer_tool_observation": {
+    "source": "Parent actual-tool completion report in this task",
+    "tool_identifier": 22171,
+    "returncode": 0,
+    "reported_stdout": "PASS 2 sequential ordinary HOST commands; default/native acceptance separate",
+    "runner_process_pid": null,
+    "separate_durable_outer_tool_join_file": null,
+    "evidence_limit": "Do not confuse toolidentifier22171 with a PID. Actual6requiredchildprocess wait/group/stream receipts are independently verified below."
+  },
+  "required_successful_commands_completed": 6,
+  "retained_successful_prefix_commands": 4,
+  "new_successful_suffix_commands": 2,
+  "original_failed_link_attempts_preserved": 1,
+  "command_proofs": [
+    {
+      "phase": "retained-prefix",
+      "index": 0,
+      "pid": 1783264,
+      "start": 94670179,
+      "returncode": 0,
+      "seconds": 0.12900771596468985,
+      "all_positive_join_group_absent_closed_streams": true,
+      "files": {
+        "command.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step0/command.json",
+          "bytes": 1307,
+          "sha256": "976372818941fc285de80a4cb6f146d822761efe82c839343cdfeabdd104f2b3"
+        },
+        "admission.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step0/admission.json",
+          "bytes": 1084,
+          "sha256": "2a2bc00a91a9231c3411477b2158c64ce87056f7514f18e051ae4f152d8a6bad"
+        },
+        "whole-join.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step0/whole-join.json",
+          "bytes": 1174,
+          "sha256": "fbb0f87bc0d17bc042140c0d216762eb0bced1a9dd65ed2737cf9c9253c1140f"
+        },
+        "direct-wait.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step0/direct-wait.json",
+          "bytes": 82,
+          "sha256": "a74a5db582fecfa799307c70caae6a40db826664129b6c253eed8470822df039"
+        },
+        "direct-join.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step0/direct-join.json",
+          "bytes": 260,
+          "sha256": "cab8580800576f202db86cbc373f7525ebb89fe2356b7246f1300cfe5753650d"
+        },
+        "stdout": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step0/stdout",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step0/stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "phase": "retained-prefix",
+      "index": 1,
+      "pid": 1783271,
+      "start": 94670253,
+      "returncode": 0,
+      "seconds": 0.06437110691331327,
+      "all_positive_join_group_absent_closed_streams": true,
+      "files": {
+        "command.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step1/command.json",
+          "bytes": 3293,
+          "sha256": "dc5a12807f35a95cc62750bc7d0547befdaa3ca0a64dd5f7f83df6583e2356d7"
+        },
+        "admission.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step1/admission.json",
+          "bytes": 1087,
+          "sha256": "7ad9f381bb1099a772d8177cfb071b29a5cad070f0fa07e7d1d50c46fa448d5d"
+        },
+        "whole-join.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step1/whole-join.json",
+          "bytes": 1177,
+          "sha256": "8f55774bb5b130b8a8952e864898d8f9056f116f26c7b73e4f518995219751bc"
+        },
+        "direct-wait.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step1/direct-wait.json",
+          "bytes": 82,
+          "sha256": "4d0757f545e16d4bc92f60d3925865ace1713bbba55b308e276dfefbc5d1f14b"
+        },
+        "direct-join.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step1/direct-join.json",
+          "bytes": 260,
+          "sha256": "132d1e5523c9e68397983562bd911d8d17e0046234f67ccebc8f84164bae5e17"
+        },
+        "stdout": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step1/stdout",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step1/stderr",
+          "bytes": 3081,
+          "sha256": "3ffa5bd6c62f643ab616e0611f8b0406403ef6b18adb6a15891cdb6d71703166"
+        }
+      }
+    },
+    {
+      "phase": "retained-prefix",
+      "index": 2,
+      "pid": 1783274,
+      "start": 94670323,
+      "returncode": 0,
+      "seconds": 0.022812753915786743,
+      "all_positive_join_group_absent_closed_streams": true,
+      "files": {
+        "command.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step2/command.json",
+          "bytes": 909,
+          "sha256": "2974058a541b005d07f8e5009e0a2b5bacf755fd557440f64e85d0ed1fccb31f"
+        },
+        "admission.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step2/admission.json",
+          "bytes": 1087,
+          "sha256": "9e0b719522244a8c672b078a17258e946a24cd22223e838acf070a3c2af3b270"
+        },
+        "whole-join.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step2/whole-join.json",
+          "bytes": 1175,
+          "sha256": "2a23359ea79c180e145687c4782a8a29be7c6295202affedfca3c6ab51f7f7c5"
+        },
+        "direct-wait.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step2/direct-wait.json",
+          "bytes": 82,
+          "sha256": "8e4545cb906286361c813c0f651232ffb0f2963dab25c45e5eb5862b0a8e890a"
+        },
+        "direct-join.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step2/direct-join.json",
+          "bytes": 261,
+          "sha256": "2c8c778d1d7682ff4f7e45c0ad0b3f57979943150a0478a35173cd206bb711e8"
+        },
+        "stdout": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step2/stdout",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step2/stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "phase": "retained-prefix",
+      "index": 3,
+      "pid": 1783275,
+      "start": 94670388,
+      "returncode": 0,
+      "seconds": 0.05434431892354041,
+      "all_positive_join_group_absent_closed_streams": true,
+      "files": {
+        "command.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step3/command.json",
+          "bytes": 3274,
+          "sha256": "9bd4178617f01e6651b248654c365927ad183589a3a3301ac0fed832095bc869"
+        },
+        "admission.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step3/admission.json",
+          "bytes": 1086,
+          "sha256": "10a23d612ae6e3ebc652265233c0671529d0122f6d4ff44e2da14fb8f3a3d042"
+        },
+        "whole-join.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step3/whole-join.json",
+          "bytes": 1177,
+          "sha256": "60fdde20497c264649b5e8dc63a48ea9ae6eed660809ccaab4c2bb0e9152a9fb"
+        },
+        "direct-wait.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step3/direct-wait.json",
+          "bytes": 82,
+          "sha256": "a714ba27f782a2fa1ff0d96fedcc16d44e9b7adfbe9bcb01a41434afbbf8eac5"
+        },
+        "direct-join.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step3/direct-join.json",
+          "bytes": 260,
+          "sha256": "6950dc82d77ae9ff50540bd6f268aea2afdbbe40e4f53246c0bc508e69bd8a00"
+        },
+        "stdout": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step3/stdout",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step3/stderr",
+          "bytes": 3125,
+          "sha256": "b959b22e6af4f40c7915afcf974866130bd6e111b8738f98622670967785d7fa"
+        }
+      }
+    },
+    {
+      "phase": "corrected-suffix",
+      "index": 0,
+      "pid": 1786510,
+      "start": 94731324,
+      "returncode": 0,
+      "seconds": 0.14247225294820964,
+      "all_positive_join_group_absent_closed_streams": true,
+      "files": {
+        "command.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/future-capture-1/step0/command.json",
+          "bytes": 3969,
+          "sha256": "e934ee000f41298919adc71636d2dee18c55137fe06c3edf9721ec9b48631edf"
+        },
+        "admission.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/future-capture-1/step0/admission.json",
+          "bytes": 1085,
+          "sha256": "ebf8be15dffcc6c7476b307680a9458c7ebcdfc6f91de9499a4d361966dcdb41"
+        },
+        "whole-join.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/future-capture-1/step0/whole-join.json",
+          "bytes": 1251,
+          "sha256": "2952038cb4cea991c130a42485ffdbcbc474d64fcca34e5a3214ebd89b2052e3"
+        },
+        "direct-wait.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/future-capture-1/step0/direct-wait.json",
+          "bytes": 82,
+          "sha256": "030fb9e45da3281a69246ee3a093dfce95edb009e77c3cf9a2cc38901afe6fbd"
+        },
+        "direct-join.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/future-capture-1/step0/direct-join.json",
+          "bytes": 260,
+          "sha256": "7f64441c4c2c6f634837f092b530c1b4e99738fca3505f811009d00d5575b3c3"
+        },
+        "stdout": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/future-capture-1/step0/stdout",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/future-capture-1/step0/stderr",
+          "bytes": 4150,
+          "sha256": "67dc458e0e6b56099e5d61ea31f32c6dd69bb8704b6211ad8745ced1f4ef7877"
+        }
+      }
+    },
+    {
+      "phase": "corrected-suffix",
+      "index": 1,
+      "pid": 1786515,
+      "start": 94731399,
+      "returncode": 0,
+      "seconds": 0.2075099899666384,
+      "all_positive_join_group_absent_closed_streams": true,
+      "files": {
+        "command.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/future-capture-1/step1/command.json",
+          "bytes": 709,
+          "sha256": "8bc5d1ef474f6ee8a8e8e7d1600a7ef9681f7579a6f25ee7ac380c5659c80231"
+        },
+        "admission.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/future-capture-1/step1/admission.json",
+          "bytes": 1086,
+          "sha256": "70d52a947e6c538d2ce16d93ae4437d381aed2a0c5f3c0051a269b50e0f8e790"
+        },
+        "whole-join.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/future-capture-1/step1/whole-join.json",
+          "bytes": 1249,
+          "sha256": "a876ce2cb8e7482cb0779f55704f33f92e9518363add6680974cfad98faadc7f"
+        },
+        "direct-wait.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/future-capture-1/step1/direct-wait.json",
+          "bytes": 82,
+          "sha256": "554f5d574285b8b6db1f209bcfdec1f4b51aef2e3cb8c7c1ce68fdb8fea6f8a4"
+        },
+        "direct-join.json": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/future-capture-1/step1/direct-join.json",
+          "bytes": 259,
+          "sha256": "fbe3dad3cb0fe7b34e97abc21516ffc737d1bff5df34f813a70c0131bedb426b"
+        },
+        "stdout": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/future-capture-1/step1/stdout",
+          "bytes": 156,
+          "sha256": "3bad2d5271f65fae3a3935d4ba4ca0e48032144a982ff8d038fb979f35ee56cf"
+        },
+        "stderr": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/future-capture-1/step1/stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    }
+  ],
+  "retained_object_full_byte_inode_provenance": [
+    {
+      "identity": {
+        "st_ctime_ns": 1793149257180592795,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 59800273,
+        "st_mode": 33152,
+        "st_mtime_ns": 1793149257180592795,
+        "st_nlink": 1,
+        "st_size": 5304,
+        "st_uid": 1000
+      },
+      "reference": {
+        "bytes": 5304,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-output-1/public-Rust.o",
+        "sha256": "a5cbf533070a0b3cc0bc6b8cf6f1276d776959028e35dc9bcd99e75b7ada50f6"
+      }
+    },
+    {
+      "identity": {
+        "st_ctime_ns": 1793149257868617500,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 59800282,
+        "st_mode": 33152,
+        "st_mtime_ns": 1793149257868617500,
+        "st_nlink": 1,
+        "st_size": 3776,
+        "st_uid": 1000
+      },
+      "reference": {
+        "bytes": 3776,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-output-1/original-C-original-name.o",
+        "sha256": "10d172904d42cd2698405f4eb98794ef99d5b8fa758dd8b0b7d853570183cbe4"
+      }
+    },
+    {
+      "identity": {
+        "st_ctime_ns": 1793149258540641626,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 59800291,
+        "st_mode": 33152,
+        "st_mtime_ns": 1793149258540641626,
+        "st_nlink": 1,
+        "st_size": 3792,
+        "st_uid": 1000
+      },
+      "reference": {
+        "bytes": 3792,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-output-1/original-C.o",
+        "sha256": "67385e1743e5b82c0001c43bde3d382fd87d3c3f1508bd88b2dc35530a247f15"
+      }
+    },
+    {
+      "identity": {
+        "st_ctime_ns": 1793149259212665752,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 59800302,
+        "st_mode": 33152,
+        "st_mtime_ns": 1793149259212665752,
+        "st_nlink": 1,
+        "st_size": 1656,
+        "st_uid": 1000
+      },
+      "reference": {
+        "bytes": 1656,
+        "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-output-1/real-public-C-ABI.o",
+        "sha256": "0db17c7a3f66317096f0c5978d308ea0606d70e75ccd18f9585e33305a5dcaae"
+      }
+    }
+  ],
+  "new_comparison_ELF": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/future-output-1/compare-actual",
+    "bytes": 23152,
+    "sha256": "c1740d9bc86bd0b1298cc77164270a28b1b583b6a8d05d45f8ae10052fd4faf0"
+  },
+  "bank_Rust_fragment": {
+    "bytes": 5091,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-obtain-clone-cpuid-source-1/candidate/syscall_policy.obtain_clone_cpuid.FRAGMENT.rs",
+    "sha256": "51fba192655518d24fce2017b959257834931c8e15870ff9e5cd86f278577243"
+  },
+  "original_C_body": {
+    "bytes": 1443,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-obtain-clone-cpuid-source-1/future-fixture-source-only/original-entry.ACTUAL.inc",
+    "sha256": "ea8468b0bb065c689557ef76cb6178b08aecbc0ff9e450234c03d53cedd904a4"
+  },
+  "actual_public_Rust_fixture": {
+    "bytes": 1610,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-obtain-clone-cpuid-source-1/future-fixture-source-only/actual-public-Rust-fixture.rs",
+    "sha256": "ba5b5e7f7f0200d323eaf8f1475b9cd165c6f331238b1310ff00635bb7b9580b"
+  },
+  "real_Rust_ABI": {
+    "bytes": 76151,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-obtain-clone-cpuid-source-1/future-fixture-source-only/abi.ACTUAL.rs",
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "real_Rust_affinity": {
+    "bytes": 1909,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-obtain-clone-cpuid-source-1/future-fixture-source-only/affinity.ACTUAL.rs",
+    "sha256": "99ccbc64101e6c551c8bc033016a616dbcd709ec0c6b46067bffe92e3839ef7e"
+  },
+  "actual_stdout": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/future-capture-1/step1/stdout",
+    "bytes": 156,
+    "sha256": "3bad2d5271f65fae3a3935d4ba4ca0e48032144a982ff8d038fb979f35ee56cf"
+  },
+  "actual_vectors": 32193,
+  "real_ABI_facts": 8,
+  "actual_findings": [
+    "Sixrequiredsuccesses are4retainedRust/fullC/objcopy/realCABI commands plusnewcorrectedlink/vectorcommands. Allcode0/positivewaits/groupabsent/closedstreams;no prefixrecompile/reobjcopy. Newlink1786510/start94731324=.142472s,vector1786515/start94731399=.207510s.",
+    "Actual156Bstdout matchesunchanged32193/ABI8/fulltraceoracle exactly;vectorstderr empty. Originaldriver memcmp comparesall callbackevents/order/lockIRQcookie/gettercounts/diagnostictext/status/counters/result aftersamezeroedrealstructs. Mask/count/pattern/use_last/debugloops andspecificuniquemin/staletie/unsignedwrap/truncationchecks remain unchanged.",
+    "ActualrawC-original-name vsobjcopyrenamed ELF inspection showsidenticalflags+bytesforallallocatedsections .text,.data,.bss,.rodata.str1.8,.rodata,__verbose,.note.gnu.property,.eh_frame. GLOBALFUNC differsonlysymbolname obtain_clone_cpuid\u2192original_C_obtain_clone_cpuid;bothvalue0/size471/section1. Originalfunctiontextobtain_clone_cpuid and/src/arch/x86_64/kernel/syscall.c strings remaininallocateddata;renamedname doesnot. Nofunctionlabel/oraclenormalization.",
+    "PublicRustobject hasoneactualGLOBALpublicobtain_clone_cpuidFUNC. RawRust51fba/Cea846/ABIff48/affinity99cc/sourcechecks match,4artifacthashes/fullinodes unchanged. RealCheaderstaticasserts compiledandruntimeABI8passedagainstactualRustdefiningmodules,notnewtype mirrors.",
+    "Only2HOSTresetcalls use__builtin_memset;allotherdriverbytes unchanged percf5sourceproof. Actualnewlinkstderr isexactoriginal8builtin-declaration-mismatch+1misleading-indentationwarningprefix withonlycorrectedsourcepathcontext. Old2undefined__inline_memset errors absentbecausecalltokensfixed;no warningflags/waiver introduced. Rawold4390Bfailure andnew4150Bwarningcapture preserved.",
+    "HOSTcontrolscope remains IRQ/spin/AP/CPUlocalfixturecallbacks plusrealalignedHOST-ownedSeqCstAtomic64reservationincrements andrealCPU_ISSET. NoactualnativeIRQ/AP/preemption/GS/TSS/XSAVE/lifetime/resourceclearance orkernelalgo deploymentproven.",
+    "Recordedsource/currentadmissions preserveCPU6/job1/AS2GiB/60CPU/90wall/FSIZE64MiB/core0/8GiBfullgrowth/HOST24GiBscratch12GiB/shared7jobs21.6619GiB/minclampedwindow/accountcreditrun. Noactualguard/account/resource/holderqueries inreview."
+  ],
+  "first_failure_remains_FAIL": {
+    "results": {
+      "bytes": 8498,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/RESULTS.json",
+      "sha256": "8ecd67583bdcbe37b68058046698a30e87263704b39fcd17e60a387f58341297"
+    },
+    "link_stderr": {
+      "bytes": 4390,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/future-capture-1/step4/stderr",
+      "sha256": "e65f0031f0b161ad06399bcb32189384371466d1d9af5b5afe387ff918f56c8b"
+    },
+    "initial_step4_returncode": 1,
+    "initial_step5_unrun": true
+  },
+  "compiler_link_warnings": {
+    "actual": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/reset-builtin-memset-suffix-source-1/future-capture-1/step0/stderr",
+      "bytes": 4150,
+      "sha256": "67dc458e0e6b56099e5d61ea31f32c6dd69bb8704b6211ad8745ced1f4ef7877"
+    },
+    "builtin_declaration_mismatch_count": 8,
+    "misleading_indentation_count": 1,
+    "no_new_warning_category": true,
+    "no_warning_suppression_added": true
+  },
+  "native_acceptance": false,
+  "production_default_acceptance": false,
+  "wholefile_retirement": false,
+  "C_retirement_credit": 0,
+  "new_execution_authority": false,
+  "precise_next_default_blocker": [
+    "CurrentproductionarchstillownsCentry;no nativeRustcfg/source-defaultselection/fullcrate/linkedcurrentartifact acceptance forbankedentry yet. RootmustcomposeexactexistingbodyandpublicABI into currentdefaultcohort underoriginalcontracts.",
+    "BankRustDdebugdescriptors useRustfile!/line!;thisHOSTtest comparesprintftext/flagbehavior,not originalCregistryFILE/LINE identity. Preserve/fixandqualifythatdatacontext beforeclaimingdefaultmetadata parity. ThisdoesnotinvalidateHOSTvectors oraddnativeperhelperquota.",
+    "Existingrunq_reservation_lockCdata dependency andrealIRQ/AP/provider-slotlifetimes/nativefunctionalcoverage remainoriginalopenintegrationobligations."
+  ],
+  "review_actions": {
+    "focusedretainedandactualcaptures_4artifacts_ELFbytes_only": true,
+    "no_compiler_query_guard_workload_cleanup_canonical_Git": true,
+    "no_fullshared_hashwalk": true,
+    "only_assigned_independent_actual_review_directory_written": true
+  },
+  "persistent_controls": "Fixed05:36Z/v2earlierclamps/boot7bfc5687,creditrun7f/cap57774.852125/spent>=22812.3311/allrealholds/oneheavy/permanentnativeownership unchanged. Rootalonecanonical/grants,parentexclusiveoutercontrols;otherqualifiedqueuesindependent."
+}

@@ -1,0 +1,96 @@
+--- actual114/syscall_policy.rs
++++ three-wrapper-candidate/syscall_policy.rs
+@@ -35445,6 +35445,7 @@
+     #[link_name="preempt_enable"] fn f03_exec_report_preempt_enable_v1();
+     #[link_name="preempt_disable"] fn f03_exec_report_preempt_disable_v1();
+ }
++#[cfg_attr(f03_ptrace_entry_candidate, no_mangle)]
+ unsafe extern "C" fn f03_exec_report_signal_v1(thread:*mut c_void,sig:CInt) {
+     ptrace_report_signal(thread.cast(),sig);
+ }
+@@ -36122,3 +36123,85 @@
+ // The third C callback selects the existing syscall_atomic64_read_bridge.
+ // Its already-exported exact body calls atomic_helpers::ihk_atomic64_read.
+ // No duplicate Rust atomic forwarding body or new atomic algorithm is added.
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(f03_ptrace_entry_candidate)]
++mod ptrace_setsiginfo_entry {
++    use core::mem::{offset_of, size_of, MaybeUninit};
++    use core::ptr::addr_of;
++
++    use crate::abi::{CInt, CLong, CULong, SigInfo, SigPending};
++
++    use super::{
++        f03_ptrace_io_find, f03_ptrace_io_unlock, ptrace_setsiginfo_body_result,
++        syscall_alloc_bridge, syscall_copy_from_user_bridge, F03_PTRACE_IO_OFFSETS,
++        IHK_MC_AP_NOWAIT,
++    };
++
++    /// Set tracee signal information through the existing complete Rust helper.
++    ///
++    /// # Safety
++    /// The original ptrace syscall contract applies. Data is an opaque user address
++    /// consumed only by the genuine usercopy provider. The helper owns tracee
++    /// find/unlock, pending-slot mutation and allocation/error ordering. This entry
++    /// supplies live, aligned scratch storage for its synchronous invocation only.
++    #[no_mangle]
++    pub unsafe extern "C" fn f03_ptrace_setsiginfo_v1(
++        pid: CInt,
++        data: *mut SigInfo,
++    ) -> CLong {
++        let mut info = MaybeUninit::<SigInfo>::uninit();
++        // SAFETY: Use the actual ABI types and existing offsets/providers. Scratch
++        // is never read here or assumed initialized; the helper retains its exact
++        // full-usercopy checks before consuming it. No user reference is formed.
++        unsafe {
++            ptrace_setsiginfo_body_result(
++                pid,
++                data as CULong,
++                info.as_mut_ptr().cast(),
++                size_of::<SigInfo>(),
++                size_of::<SigPending>(),
++                IHK_MC_AP_NOWAIT,
++                offset_of!(SigPending, info) as CULong,
++                addr_of!(F03_PTRACE_IO_OFFSETS),
++                Some(f03_ptrace_io_find),
++                Some(f03_ptrace_io_unlock),
++                Some(syscall_alloc_bridge),
++                Some(syscall_copy_from_user_bridge),
++            )
++        }
++    }
++}
++
++// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
++#[cfg(f03_ptrace_entry_candidate)]
++mod ptrace_syscall_event_entry {
++    use core::mem::offset_of;
++
++    use crate::abi::Thread;
++
++    use super::{
++        f03_exec_report_signal_v1, ptrace_syscall_event_body_result, PtraceReportSignalFn,
++    };
++
++    /// Preserve the public syscall-event notification used by architecture callers.
++    ///
++    /// # Safety
++    /// The caller supplies the same live thread and synchronous ptrace notification
++    /// context as the original public C entry. The existing helper/provider retain
++    /// the original state read, signal decision, locking and scheduling contract.
++    #[no_mangle]
++    pub unsafe extern "C" fn ptrace_syscall_event(thread: *mut Thread) {
++        // SAFETY: Use the actual defining-module field offset and unchanged signal
++        // adapter. The original void entry deliberately discards the helper status.
++        let _ = unsafe {
++            ptrace_syscall_event_body_result(
++                thread.cast(),
++                offset_of!(Thread, ptrace),
++                Some(f03_exec_report_signal_v1),
++            )
++        };
++    }
++
++    const _: PtraceReportSignalFn = f03_exec_report_signal_v1;
++}

@@ -1,3 +1,51 @@
+## Four closure lanes and original235 staging — 2026-10-28T01:57:29.754285+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+AcceptedCURRENT114 remains C80/Rust59/process31; M14files3/6/M15files1/8/practical35/35.
+No new artifact/native/file closure in current01:36–02:06 bucket. F02 actual six producer
+commands reused; final typed reader11.979s reached all storage/ABI/registry checks then
+intentionalOPEN16 folded consumers (ed7c), not another type failure. Current110 owns
+retained compiled-consumer supplement. F06 CPUID full32193/ABI8 accepted a3db; default
+origin candidate d9ed ready. Independent shmget four actual compiler/link commands0,
+reader type29 width failure retained; current111+startup reviewer own one exact suffix.
+F03 corrected HOST-only signal witness source c738 accepted; actual six-command CPU6
+qualification running tool3941, no production-edge/replacement credit from C elision.
+Original235 actual collectorab3e/all26 HOST controls c532/Root2597 and full60 stage
+29ecca/add185 passed; archive701c/manifestcf49 changesonly init+payload vsstartup.
+Reserved d21f unused; Root46 and case/source/current admission pending. Root solegrant
+owner; first fully ready heavy job proceeds without waiting unrelated kernel source.
+Fixed30min baseline17:36:09Z; largest avoidable delay is interface binding/LLM handoff,
+not CPU; unmeasured intervals stayunknown. Earlier startup native7965 remains accepted
+only at original91B scope. No95percent claim. Cutover then intensive functional tests
+then broad cleanup; quality retained now. Same05:36:09Z/account/creditledger/earlier
+clamps/realholds/permanent27:4/scratch21/oneheavy/resource floors.
+
+## Rust executor original startup native accepted — 2026-10-28T00:58:57.364575+00:00
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Rootbdf1/independent7965/trace905b FULL original5298startupPASS: actuale5dRustexecutor+
+33c11collector/8073archive/06e9manifest/frozen60e/ff227. Exactapp/A/empty/B,91stdout/
+emptyerr/raw0/EOF; PID256terminal231/intent0/ACK3zero/query513-11/DELETE/distinct515zero
+withinoriginal5s. Caller1777757/start94569138 joined0/wall38.691238/CPU.963369/controller
+RSS52896/resource→entry42.780761s. All30Dockerclients/33actors retired/currentfree0ae5;
+Root45ledger610578/46consumed, noheavy. +1nativefunctionalcase in00:36–01:06; nofile/
+all349/all51/allocationclaim. Oldbe6e/6d2e/5fe0 andsource/composefailurespreserved.
+
+Completed00:06–00:36: accepted114c48f C83→80/R56→59/process63→31;4commands21.691956sum/
+21.709497span/CPU21.709201/RSS592140/resource→compiler65.563648. +3selectedCfunction
+deselections(twoRustnew+existingatomic)+32metadata/64slots2048B; native/filedelta0.
+M14files3/6/M15files1/8/practical35/35. No95percentgain. Nativefix elapsed49m33.495s
+includeskernel/collector/qualification/binding+Rooterrors, notwhollyidle.
+
+F02actualordinary firstRustcommandFAILED .283066s missing genuine relativevdso.rs
+fromflatRusttree; joined/groupsabsent/closedstreams, suffix1..6UNRUN. Onebounded
+privateproduction-layout/sourceclosurefix inprogress, noRustbodychange/noGLOBAL32
+prefixreplay. F06all19algorithmsalreadybanked; existingobtain_clone_cpuid genuineABI/
+fullbody profile54c0 source reviewactive; noalgorithmrewrite. NextORIGINAL M15native
+strict235 perbd5a/0e3a, retained537cb/e5d/8417; sourceowner bindsRustcollector toactual
+235/argv5/boot hidos+allow_oversubscribe; startup33cnotreusedunchanged. Alloriginal
+limits/holds/deadline05:36:09Z/earlierclamps/accountincludedfirst/ledger/mutex/floors.
+
 ## Fresh Root44 namespace ready after pre-capture publication refusal — 2026-10-28T00:41:36.771818+00:00
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

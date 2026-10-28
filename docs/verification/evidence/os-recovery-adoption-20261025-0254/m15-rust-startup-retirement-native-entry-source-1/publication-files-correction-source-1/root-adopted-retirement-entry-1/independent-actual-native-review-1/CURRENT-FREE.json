@@ -1,0 +1,85 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Exact correctedstartup current-free only.",
+  "decision": "PASS_POSITIVE_CORRECTED_STARTUP_NATIVE_OPERATION_RETIREMENT_AND_CURRENT_FREE",
+  "independent": true,
+  "implementation_ownership": false,
+  "reviewer": "/root/custody_release_review",
+  "nonce": "22a1d92ed402f4d333bf527185e792b2",
+  "nonce_consumed": true,
+  "current_free": true,
+  "normal_owned_retirement": true,
+  "container": "4d448d42c06bb9b8a6c6129ce089e6f0941d30a26015d5d5245614d4e6cbb703",
+  "actual_statuses": {
+    "capture_returncode": 0,
+    "bridge_returncode": 0,
+    "owner_result": {
+      "absence_verified": true,
+      "application_acceptance": false,
+      "container": "4d448d42c06bb9b8a6c6129ce089e6f0941d30a26015d5d5245614d4e6cbb703",
+      "failure": null,
+      "lease_retained": false,
+      "secondary": [],
+      "secondary_omitted": 0,
+      "signal_number": null,
+      "status": "PROTOCOL_PASS"
+    },
+    "container_state": {
+      "Dead": false,
+      "Error": "",
+      "ExitCode": 0,
+      "FinishedAt": "2026-10-28T00:44:44.904276753Z",
+      "OOMKilled": false,
+      "Paused": false,
+      "Pid": 0,
+      "Restarting": false,
+      "Running": false,
+      "StartedAt": "2026-10-28T00:44:07.544234933Z",
+      "Status": "exited"
+    },
+    "QEMU_cleanup": {
+      "errors": [],
+      "reaped": true
+    }
+  },
+  "owned_client_retirement": {
+    "actual_commands": 30,
+    "all_exact_reaped": true,
+    "all33_owned_actor_PIDs_and_PGRPs_absent": true
+  },
+  "fresh_current": {
+    "exact_observation": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-native-entry-source-1/publication-files-correction-source-1/root-adopted-retirement-entry-1/independent-actual-native-review-1/FRESH-EXACT-CONTAINER-AND-ACTORS.json",
+      "bytes": 57699,
+      "sha256": "18c546cdb315a459a88814ba0f7b12d56723b0f30d1b3fd0e06534bd238453d4"
+    },
+    "baseline_observation": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-native-entry-source-1/publication-files-correction-source-1/root-adopted-retirement-entry-1/independent-actual-native-review-1/FRESH-BASELINE-READONLY.stdout",
+      "bytes": 123949,
+      "sha256": "1265aa17441b1d021494b2604939771613f8e449795652b0f61cf72f6f05b987"
+    },
+    "baseline_join": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-native-entry-source-1/publication-files-correction-source-1/root-adopted-retirement-entry-1/independent-actual-native-review-1/FRESH-BASELINE-READONLY.JOINED.json",
+      "bytes": 652,
+      "sha256": "786794b663afaeea27f03ebb1777e3bddcacea43e5b03db8dc16230875fe53e3"
+    },
+    "exactCID_name_label_absent": true,
+    "no_running_containers": true,
+    "pids_current": 0,
+    "closed_permanent_mutex_probes": [
+      "112: FLOCK  ADVISORY  WRITE 1778840 00:1b:4 0 EOF",
+      "112: FLOCK  ADVISORY  WRITE 1778840 00:1b:4 0 EOF"
+    ],
+    "census_errors": []
+  },
+  "complete_raw_capture": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-native-entry-source-1/publication-files-correction-source-1/root-adopted-retirement-entry-1/independent-actual-native-review-1/RAW-CAPTURE-MANIFEST.json",
+    "bytes": 70946,
+    "sha256": "2c0b44efb3da273a211025439f5b9ea2d6c2b6631130493f22a7b321fec19323"
+  },
+  "native_acceptance": false,
+  "case_acceptance": "Independent full original-contract native review follows; no inference from wrapper0.",
+  "next_operation_authority": null,
+  "runtime_authority": null,
+  "reviewer_cleanup_signals_or_retries": 0,
+  "new_workloads": 0
+}

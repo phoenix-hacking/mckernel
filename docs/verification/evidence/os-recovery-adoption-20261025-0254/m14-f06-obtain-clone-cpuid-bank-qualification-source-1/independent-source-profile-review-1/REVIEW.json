@@ -1,0 +1,127 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/guardian_execution_review",
+  "independent": true,
+  "implementation_ownership": false,
+  "recorded_at": "2026-10-28T00:59:52.568013+00:00",
+  "decision": "PASS_SOURCE",
+  "blocking_findings": [],
+  "execution_release": false,
+  "ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/READY.json",
+    "bytes": 4762,
+    "sha256": "b4b7b9e6896a8a2fea66e06a5d9a9626e643fef6e204555a9a50f943542a5ae7"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/PROFILE.NOT-GRANTED.json",
+    "bytes": 52449,
+    "sha256": "54c0fdf186829201af58d96da1eb09de4f72025a5fc18c8a210b1c13b4a9fc3a"
+  },
+  "leaf": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/LEAF-PLAN.NOT-GRANTED.json",
+    "bytes": 17472,
+    "sha256": "25dba2af859584297792c36f5e14ce3c359f2fa9253a0da5114cc32d1ee526ab"
+  },
+  "source_join": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/SOURCE-JOIN-AND-DIAGNOSTIC-BINDING.json",
+    "bytes": 4164,
+    "sha256": "d22e61156e9bb10388214b2632fdec2e34e472b6343b77ef09a360f9182cf49c"
+  },
+  "real_header_closure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/REAL-HEADER-INPUT-CLOSURE.json",
+    "bytes": 57423,
+    "sha256": "b248a7b42587efcf9f83b23c5655ec04a0f58b99c31408fadd9ac73623673dd2"
+  },
+  "retained_readonly_preflight": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/READONLY-PREFLIGHT-RESULT.json",
+    "bytes": 791,
+    "sha256": "ec64f21c9c155636f38b277ee47879e0cd1e10e4e03f1a4ae40016a59b2d37a8"
+  },
+  "growth_reserve": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/FULL-OUTPUT-GROWTH-RESERVE.json",
+    "bytes": 840,
+    "sha256": "a313552ab5f93774d50be5eae836ea416547a0ce48a63124d39c2edb8b7d2686"
+  },
+  "bank_handoff": {
+    "bytes": 7814,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-obtain-clone-cpuid-source-1/sourcehandoff/SOURCE-IMPLEMENTATION-AND-ABI-PLAN.json",
+    "sha256": "100401ad5896097ee99db3a752215f00907c29845be461ca110e384437ec9d25"
+  },
+  "bank_Rust_fragment": {
+    "bytes": 5091,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-obtain-clone-cpuid-source-1/candidate/syscall_policy.obtain_clone_cpuid.FRAGMENT.rs",
+    "sha256": "51fba192655518d24fce2017b959257834931c8e15870ff9e5cd86f278577243"
+  },
+  "original_C_body": {
+    "bytes": 1443,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-obtain-clone-cpuid-source-1/future-fixture-source-only/original-entry.ACTUAL.inc",
+    "sha256": "ea8468b0bb065c689557ef76cb6178b08aecbc0ff9e450234c03d53cedd904a4"
+  },
+  "actual_C_subject": {
+    "bytes": 117560,
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/current113-qualified-lock4-next4-scalar4-union-source-1/corrected-scalar4-next4-accepted112-source-1/candidate/arch/x86_64/kernel/syscall.c",
+    "sha256": "c1cdce29e5e7582f1934370bef27f552a4c9480c0849c93a2d602300ef4cf099"
+  },
+  "public_Rust_fixture": {
+    "bytes": 1610,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-6/m14-file-lanes/x86-syscall/next-obtain-clone-cpuid-source-1/future-fixture-source-only/actual-public-Rust-fixture.rs",
+    "sha256": "ba5b5e7f7f0200d323eaf8f1475b9cd165c6f331238b1310ff00635bb7b9580b"
+  },
+  "profile_input_pins": 180,
+  "preflight180pin_result_reused": true,
+  "no_duplicate_inventory_or180hashloop": true,
+  "focused_findings": [
+    "Exact READYb4b7b9e6/profile54c0fdf1/12declaredsourcefiles/currentCbody/bankhandoff/Rustfragment/publicfixtures/keyobjcopy-env-GCC pins match; sourcepreflightec64 reports all180pins andexisting6e98 schema PASS0.536s. No checker/compiler/CPP/importedvalidator/guard/query was rerun here.",
+    "Currentc1cd archC subject contains exactoriginalea846 body; privateoriginal_full_body.c ends in thoseunchangedbytes underoriginalobtain_clone_cpuid name and#line884 /src/arch/x86_64/kernel/syscall.c. Retained current114archobject ownership/provenance remainsreferencecontext; no functiondata/native retirement inferred.",
+    "Onlyfixturelabelfix: compileoriginalC functionname,then exactpinnedobjcopy --redefine-sym obtain_clone_cpuid=original_C_obtain_clone_cpuid intoa distinctobject. No preprocessorfunctionrename,algorithm edit,diagnosticstringnormalization,sectionflagpatch ororaclerelaxation. Objcopysymbolrename retainscompiled__FUNCTION__/__func__/FILE/LINE strings.",
+    "Privatecomparisondriver equalsoriginald5583a44 afterreplacingonlythreepreprocessrename/include lineswithcomment+extern separatelycompiledoracle declaration. Remaining32193vectors/fulltrace/state/memcmp/ABI8/expectedstdout bytes unchanged.",
+    "Rustfragment51fba/publicfixtureba5b5 usesexactactualabi.ACTUALff48 andaffinity.ACTUAL99cc definingmodules,notnewCpuSet/CpuLocalVar/spinlockmirrors. GenuineCcaller includesactualprocess.h/cls.h/affinity.h,checks publicsignature/status3/u64runq/alignedreservation andcompares8sizeof/align/offsetfacts toruntimeRustvalues throughdriver.",
+    "Finiteclosure108realheaderfiles and15explicitknowninactivealternatives record actualincludeedges; GCC9vsIntel/clang, BSD, LinuxHOSTdriverunderIHK_OS_MANYCORE,UACCESSabsent,and#if0 branches remainunselected. references/config.h retains3114d9e andfirstincludepriority; no missingactiveheader waived andnoCPPsuccess claimed.",
+    "Exactly6literalargv/cwd/pin rows: existingRustobject;originalCobject;onesymbolrename;genuineCABIobject;comparisonlink;oneoriginalvectorrun. Rustargv hasno nativecfg;Cproducerflags retaintype/configviewonly. Alloutput/capture pathsfresh/absolute;firstfourcompiler/linkcommandsuseHOSTleafTMPDIR.",
+    "Vectorcountsum(2^0..2^8)*7patterns*3use_lastvalues*3debugflags=32193. Fullobservationsinclude callbacks/gettercounts/order,savedIRQcookie,pairlocks/status/u64counters/exactdiagnostictext andresult. memsetreset removespadding/nondeterministicstate. Existingunique-min use_last=-1,stale-earliertie,unsignedsize_twrap/inttruncation,low32debugformatsemantics deliberately preserved.",
+    "Controlscope isexplicit: IRQ/spin/AP/CPUlocalaccess usesfixturecallbacks;realCPU_ISSET andrealalignedHOST-ownedAtomicU64/SeqCst reservationincrement execute. This doesnotproveactualIRQ/preemption/AP/nativeGS/TSS/XSAVE/MSR/usercopy/lifetimes. Existingprocess.c runq_reservation_lock definition remainsCdependency.",
+    "Fourdebugdescriptorsareconsumedbyexistingfixtureandlogprintfstringscompared. BankRustdescriptors retainfile!/line! metadata;thisHOSTfixturedoesnotcomparetheirFILE/LINEidentitytoCregistryrecords. Sourceprofilegrantsnoproductionregistrymetadataacceptance oroldholdclearance; thisscopeobservationdoesnotblocktheboundedHOSTqualification orcreateanewnativequota.",
+    "Historicalheldindexf340 namesobtain_clone_cpuid asIMPLEMENTATION_SOURCE_REFERENCE_ONLY withsame100401handoff; no competingport/defaultadoption/retirementisgranted. Reusingthisbank isqualificationwork,notsecondimplementation.",
+    "Same6e98ordinaryCPU6/job1/AS2GiB/60CPU/90wall/FSIZE64MiB/core0/shared7jobs21.6619GiB/oneheavy/minclampedwindow/account controls. Enumerated5502926848Bgrowth includes6artifacts,Rust/Ctemps,objcopyfullfiles,12streams,records/emergency;8GiBreserve leaves3087007744Bmargin. ExistingadmissionrequiresHOST24GiBfree/scratch12GiB andrealsharedheadroom; notanaggregatequota."
+  ],
+  "planned_vectors": 32193,
+  "planned_real_ABI_facts": 8,
+  "new_Rust_algorithms": 0,
+  "Rust_body_changes": 0,
+  "resources": {
+    "AS_bytes": 2147483648,
+    "CORE_bytes": 0,
+    "CPU_seconds_each": 60,
+    "FSIZE_bytes": 67108864,
+    "aggregate_GiB": "21.6619",
+    "aggregate_jobs": 7,
+    "cpu": 6,
+    "jobs": 1,
+    "wall_seconds_each": 90
+  },
+  "host_growth_reserve_bytes": 8589934592,
+  "Root_command_template": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/ROOT-COMMAND.NOT-AUTHORITY.json",
+    "bytes": 854,
+    "sha256": "00ba6421bea676d4c4633d3c85aa2ed54c63d69e58df077c9c4df469ee3e9b98"
+  },
+  "Root_grant_schema_not_authority": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/ROOT-GRANT.SCHEMA.NOT-A-GRANT.json",
+    "bytes": 967,
+    "sha256": "47e8f9869fd876760e69572df7d837b7da41087d6bac73cf5179a4a6e9245a0c"
+  },
+  "Root_requirements": "Fresh Root CPU6/profile54c0fdf1/runner6e98/unusedordinarynonce/exactsourcepins/currentaccount+realholds/nativeownership/sharedreservations/currentHOST24GiBscratch12GiB headroom. Preserve Rootcurrentnativeoperation/oneheavy/exclusions. No old consumed release/nonce or retiredmodel proof suppliesnativeauthority.",
+  "actual_compiler_CPP_test_guard_resource_queries": 0,
+  "native_acceptance": false,
+  "production_default_acceptance": false,
+  "wholefile_retirement": false,
+  "new_execution_authority": false,
+  "remaining": "Actual6HOSTcommands/ABI8/32193vectors andpositivegroups/streams; thenRootmatchingcurrentfullcrate/defaultobject/link/source-selectionandapplicableoriginalnative/dataownership obligations. No blindnativecfg enabling ornewperhelpernativegate.",
+  "review_actions": {
+    "focusedsource_literalfixture_delta_ABI_closure_andprofilechecks": true,
+    "no_compiler_CPP_query_guard_guest_workload_cleanup": true,
+    "no_canonical_Git_edits": true,
+    "only_assigned_independent_source_profile_review_directory_written": true
+  },
+  "persistent_controls": "Fixed2026-10-28T05:36:09Z/v2earlierclamps/boot7bfc5687,creditrun7f/cap57774.852125/spent>=22812.3311/allrealholds/oneheavy/permanentnativeownership unchanged. Rootsolecanonical/grants,parentexclusiveoutercontrols;otherprivateownerspreserved."
+}

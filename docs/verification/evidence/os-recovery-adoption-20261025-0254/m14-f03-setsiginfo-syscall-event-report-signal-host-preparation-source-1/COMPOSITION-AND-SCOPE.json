@@ -1,0 +1,76 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "runtime_authority": null,
+  "body6777": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f03-next-unbanked-body-source-1/READY.SOURCE-ONLY.json",
+    "bytes": 4826,
+    "sha256": "6777a7ee53e19cf740e7e32a4a59ce109cb44746c6a721ab7b41adc01e2088a7"
+  },
+  "pair357b": {
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/f03-next-unbanked-wrappers-source-2/READY.SOURCE-ONLY.json",
+    "bytes": 5554,
+    "sha256": "357b7db9a6ca4e7ff65c5bca90157a117bd26f10e3560318959ab17d0356ac35"
+  },
+  "baseC": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/outer-perf-line-restore-source-1/candidate/kernel/syscall.c",
+    "bytes": 918715,
+    "sha256": "d6e9c595364f72018b96ccba50e97ebc71ff438b8e91315982e287d63ff8bafb"
+  },
+  "baseRust": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/next114-debug32-perf3-coherent-source-1/rust-subtree/syscall_policy.rs",
+    "bytes": 1268496,
+    "sha256": "2975c9c2d0c398a8acffb52b0936ae46ab2b73d65d45113be93730802fe276d7"
+  },
+  "newC": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/candidate/kernel/syscall.c",
+    "bytes": 919612,
+    "sha256": "9c5c7cacb4216a082a7dafb4f14aaa9005195b0f975a0d7d0374b813b5b26fef"
+  },
+  "newRust": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/candidate/kernel/rust/syscall_policy.rs",
+    "bytes": 1271776,
+    "sha256": "6e4ace933e7141a6b611d70fd22aac1324ea70954e8915439f77fbdd664b425f"
+  },
+  "selected_C_wrappers": [
+    "ptrace_setsiginfo",
+    "ptrace_syscall_event",
+    "ptrace_report_signal_bridge"
+  ],
+  "new_Rust_definitions": 2,
+  "existing_Rust_body_exported": "f03_exec_report_signal_v1",
+  "existing_selector": "f03_ptrace_entry_candidate / MCKERNEL_RUST_F03_PTRACE_ENTRY with policyhelpers",
+  "new_cfg_axes": 0,
+  "semantic_helpers": [
+    {
+      "name": "ptrace_setsiginfo_body_result",
+      "source_sha256": "6108db00eecb8578cbdb457168dbaf1ec03d2c2ec82b2c5c2f95faac36e01b34",
+      "bytes": 3996,
+      "unchanged": true
+    },
+    {
+      "name": "ptrace_syscall_event_body_result",
+      "source_sha256": "dd945388de2d48a1e1cebe3633d120a4a1a7138e915b13f2bf914c2bd6b067c5",
+      "bytes": 574,
+      "unchanged": true
+    },
+    {
+      "name": "ptrace_report_signal",
+      "source_sha256": "731a24d16a52183f91624ffe1c6e7308e2a563ee576981185940fa11dfc42506",
+      "bytes": 817,
+      "unchanged": true
+    }
+  ],
+  "setsig_C_insertions": [
+    {
+      "anchor": "\t}\n\tthread_unlock(child);\n\treturn rc;\n#endif\n}\n#endif\n#line 25332\n\n",
+      "addition": "#if defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) && defined(MCKERNEL_RUST_F03_PTRACE_ENTRY)\nextern long f03_ptrace_setsiginfo_v1(int pid, siginfo_t *data);\n#define ptrace_setsiginfo f03_ptrace_setsiginfo_v1\n#else\n#line 25333\n"
+    },
+    {
+      "anchor": "\t\t\t\t\t\t0, &info, sizeof(info));\n\t\t\t}\n\t\t}\n\t}\n\tthread_unlock(child);\n\treturn rc;\n#endif\n}\n",
+      "addition": "#endif\n#line 25424\n"
+    }
+  ],
+  "WAKE3_LOCK4_F02_changes": 0,
+  "all_actual_cpp_compiler_HOST_link_native_run": false,
+  "root_sole_integration_admission": true
+}

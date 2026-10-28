@@ -1,0 +1,81 @@
+{
+  "decision": "PRIVATE_SELECTIVE_CURRENT_CANONICAL_DEFAULT_CANDIDATE_NOT_ADOPTED",
+  "function_body_byteexact_51fba": true,
+  "paired_C": "MCKERNEL_RUST_SYSCALL_POLICY_HELPERS && MCKERNEL_RUST_F06_OBTAIN_CLONE_CPUID",
+  "paired_Rust": "f06_obtain_clone_cpuid_candidate",
+  "postimages": {
+    "arch/x86_64/kernel/syscall.c": {
+      "adoption_write_required": true,
+      "bytes": 117757,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/default-origin-selection-source-1/candidate/arch/x86_64/kernel/syscall.c",
+      "sha256": "d060dbf5b83e29b1d5f16e7504972f05cb53d553fb754de1a67566d2c0f06b37"
+    },
+    "kernel/CMakeLists.txt": {
+      "adoption_write_required": true,
+      "bytes": 39560,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/default-origin-selection-source-1/candidate/kernel/CMakeLists.txt",
+      "sha256": "4ce20f4552f4092a6934a73ed6d95ec9bf979ba646c1cec328012fd1e1d32d8c"
+    },
+    "kernel/rust/f06_obtain_clone_cpuid.rs": {
+      "adoption_write_required": true,
+      "bytes": 5524,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/default-origin-selection-source-1/candidate/kernel/rust/f06_obtain_clone_cpuid.rs",
+      "sha256": "b04605181a7446ca8a9119ef32ab223d40921a6a98c37679051042aa87e349b2"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "adoption_write_required": true,
+      "bytes": 1268725,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/default-origin-selection-source-1/candidate/kernel/rust/syscall_policy.rs",
+      "sha256": "d2522903a4a1335aa551f87c17c8e8765f9f7373fb84984b2dd062ac301004c0"
+    },
+    "lib/include/ihk/debug.h": {
+      "adoption_write_required": false,
+      "bytes": 1294,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/default-origin-selection-source-1/candidate/lib/include/ihk/debug.h",
+      "sha256": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc"
+    },
+    "scripts/derive_f06_origin.py": {
+      "adoption_write_required": true,
+      "bytes": 7565,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/default-origin-selection-source-1/candidate/scripts/derive_f06_origin.py",
+      "sha256": "c5e34ad75d4685d1532f8a36d6fdd33b5b82faea5b5368830c3b5e84abed38d0"
+    },
+    "scripts/f06_origin_command_profile.json": {
+      "adoption_write_required": true,
+      "bytes": 8956,
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f06-obtain-clone-cpuid-bank-qualification-source-1/default-origin-selection-source-1/candidate/scripts/f06_origin_command_profile.json",
+      "sha256": "4306a26c60fd6904c0644087d7dcfb7481b985045e216b8bec5575aafab5d418"
+    }
+  },
+  "preimages": {
+    "arch/x86_64/kernel/syscall.c": {
+      "bytes": 117560,
+      "path": "/home/holden/mckernel/arch/x86_64/kernel/syscall.c",
+      "sha256": "c1cdce29e5e7582f1934370bef27f552a4c9480c0849c93a2d602300ef4cf099"
+    },
+    "kernel/CMakeLists.txt": {
+      "bytes": 38957,
+      "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+      "sha256": "872aad13259b7ea9af399c186c03d0c7e4fda3eeabc6b71086f5a7917776fbdc"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "bytes": 1268496,
+      "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+      "sha256": "2975c9c2d0c398a8acffb52b0936ae46ab2b73d65d45113be93730802fe276d7"
+    },
+    "scripts/derive_f06_origin.py": {
+      "bytes": 3997,
+      "path": "/home/holden/mckernel/scripts/derive_f06_origin.py",
+      "sha256": "8ec9a997344d71630d7c5fe00f38a7fec9eece303bd5367864646b62e548ea70"
+    },
+    "scripts/f06_origin_command_profile.json": {
+      "bytes": 8022,
+      "path": "/home/holden/mckernel/scripts/f06_origin_command_profile.json",
+      "sha256": "05fdb74bd1424fcea241ef028329214166a3db08fd95a79c52e04268670531e8"
+    }
+  },
+  "producer_profile_sha256": "4306a26c60fd6904c0644087d7dcfb7481b985045e216b8bec5575aafab5d418",
+  "raw_algorithm_reimplemented": false,
+  "runtime_authority": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing."
+}

@@ -1,0 +1,5 @@
+rust-lld: error: duplicate symbol: sys_ptrace
+>>> defined at syscall_policy.rs:35184 (/src/kernel/rust/syscall_policy.rs:35184)
+>>>            /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/ROOT-CURRENT114-GLOBAL32-PERF3-BUILD-ADMISSION-1/OUTPUT/work/output/build/kernel/rust/mckernel_rust.o:(sys_ptrace)
+>>> defined at syscall.c:25426 (/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/candidate/kernel/syscall.c:25426)
+>>>            /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f03-setsiginfo-syscall-event-report-signal-host-preparation-source-1/signal-address-witness-correction-source-1/HOST-output-proposed-1/fallback.o:(.text+0x6b90)

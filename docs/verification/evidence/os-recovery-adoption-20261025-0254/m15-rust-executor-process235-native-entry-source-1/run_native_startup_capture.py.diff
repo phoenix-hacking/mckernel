@@ -1,0 +1,11 @@
+--- /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-startup-retirement-native-entry-source-1/publication-files-correction-source-1/templates/run_native_startup_capture.py
++++ /home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m15-rust-executor-process235-native-entry-source-1/templates/run_native_startup_capture.py
+@@ -46,7 +46,7 @@
+ clocks=m.guard();cutoffs=m.current_cutoffs()
+ R=json.loads(Path(G['fresh_resource_physical']['path']).read_bytes())
+ clampsUsed=entry_clamps(clocks,R['observed_clocks'],R['fixed_cutoffs'],P['fixed_cutoffs'],cutoffs)
+-assert P['decision']=='PENDING_ONE_EXACT_NATIVE_M15_STARTUP_RELEASE' and P['expected_case']=='startup.argv-empty'
++assert P['decision']=='PENDING_ONE_EXACT_NATIVE_M15_STARTUP_RELEASE' and P['expected_case']=='P-M06-01-process-exec-wait-235B'
+ assert P['expected_new_image_sha256']=='60e62f97ef48ecaf14174af1c5b75d7181969f439c1b45c618d6c16d4bc40d57'
+ assert P['owner_sha256']=='af2b1f57a19949e9867de2496b16063859c47298e9cf03b401e95de5bded5a10' and P['evaluator_sha256']=='529830adcd6fafa13979bf6036b2812c88630c5e0112ce4d80f9fc28cc30d4da'
+ C=A/'CAPTURE';assert C.is_dir() and not list(C.iterdir())

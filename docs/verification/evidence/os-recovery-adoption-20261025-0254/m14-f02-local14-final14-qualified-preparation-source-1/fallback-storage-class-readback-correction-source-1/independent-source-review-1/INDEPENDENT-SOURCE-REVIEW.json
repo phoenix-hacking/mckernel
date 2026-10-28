@@ -1,0 +1,83 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "BLOCKED_SOURCE_RETAINED_IDENTITY_RELATIVE_PATH_UNDER_QUALIFIER_CWD",
+  "independent": true,
+  "reviewer": "/root/current110_execution_review",
+  "at": "2026-10-28T01:22:57.804559+00:00",
+  "ready": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/fallback-storage-class-readback-correction-source-1/SOURCE-READY.json",
+    "bytes": 2965,
+    "sha256": "4099f5703d6d6ac8334779ce78fef91353bd76a75b296855c8f4f0fb560cb818"
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/fallback-storage-class-readback-correction-source-1/PROFILE.NOT-GRANTED.json",
+    "bytes": 172751,
+    "sha256": "e82e93644846650f9dc96b96a3ca4c7dd890098e14fdb9cdec8cb1cc018e7473"
+  },
+  "reader": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/fallback-storage-class-readback-correction-source-1/qualify_changed_objects.py",
+    "bytes": 17256,
+    "sha256": "5fc0fd79aa79593ffef0d54cc49cca2e9bbbed5c934fa83466aa04ac206ef38d"
+  },
+  "prior_positive_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/independent-source-profile-review-1/INDEPENDENT-SOURCE-PROFILE-REVIEW.json",
+    "bytes": 28168,
+    "sha256": "1c76b0989fedcddec8bccd919599c4620763da213e9ff8ceace143998c8a4383"
+  },
+  "storage_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/fallback-storage-class-readback-correction-source-1/EXACT17-ORIGINAL-HOST-C-STORAGE.json",
+    "bytes": 9776,
+    "sha256": "6bb1582edd42a7d0266c9f3c30be938f0fa889c199efb01baf81405b1321880b"
+  },
+  "retained_identity_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/fallback-storage-class-readback-correction-source-1/RETAINED-SIX-PREFIX-INPUT-IDENTITIES.json",
+    "bytes": 25274,
+    "sha256": "2b0ae81a2076815c1facfa2c834a90c58a877ff993fa505a33e9423dd41068a2"
+  },
+  "diagnosis": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/fallback-storage-class-readback-correction-source-1/EXACT-DIAGNOSIS-AND-CORRECTION.json",
+    "bytes": 4592,
+    "sha256": "42016794823735cd5295bfe24c7da8b39a165bf7a68f4486447767a1133968e4"
+  },
+  "blocking_findings": [
+    {
+      "id": "RELATIVE_RETAINED_INPUT_UNDER_NEW_CWD",
+      "retained_reference": {
+        "path": "docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/HOST-output-proposed-1/selected0.o",
+        "bytes": 66752,
+        "sha256": "c59915d84836a42270463e932e3a657002f00abc89f9b5e2dbe48622fed6bf45"
+      },
+      "command_cwd": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/fallback-storage-class-readback-correction-source-1",
+      "path_attempted_by_verify_retained_identities": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/fallback-storage-class-readback-correction-source-1/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/HOST-output-proposed-1/selected0.o",
+      "actual_pinned_file": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-verbose32-host-preparation-source-1/HOST-output-proposed-1/selected0.o",
+      "failure": "verify_retained_identities calls Path(relative).lstat() after ordinary runner chdir to suffixQ; the retained original HOST selected0.o is therefore unresolved. No helper main need run to establish this.",
+      "minimal_correction": "Preserve4099/e82e and all artifacts. Convert this retained reference to the exact absolute path without changing bytes/device/inode/metadata, rebind manifest/helper/profile; or use explicit reviewed pinned-repo-root resolution. No broad writable allowance or workload replay."
+    }
+  ],
+  "positive_findings": [
+    "Correction is finite17 names/sizes/bindings/type/alignment/section/flags taken from original GLOBAL32 HOST C; allowed .data.rel.ro[.local] flagsWA3 or .rodata flagsA2 are exact per-name, not generic writable acceptance. Production114 remains .rodata/A2 and selectedRust stays .lrodata.<name>/ALLOC|LARGE with no WRITE; no physical C partial-link readonly/RELRO claim.",
+    "All original helper functions except main are AST-identical, including strict default readonly one(), config scalar/padding/file/callback/local-target comparisons, registry46/102/148 and folded consumer OPEN/exit2. Two fallback callsite groups alone use exact_original_C_fallback_storage; no Rust/C source body, ABI, cfg, default/nondefault selection or oracle changes.",
+    "Actual retained six producer/CPP/link results all0 with positive waits/groups absent/streams closed; original seventh qualifier return1 and11.717353s failure remain retained.41 artifact/CPP/stream references verify exact byte digest and device/inode/uid/gid/mode/nlink/mtime/ctime when resolved at their actual repository location. All are reused inputs, not compiler replays.",
+    "Profile has exactly one Python qualifier command with old artifacts as input and a fresh report/capture as output. Existing6e98 metadata validator passes; CPU6/job1/AS2GiB/CPU60/FSIZE64MiB/CORE0/90s, original4GiB reserve, fixedclocks and currentgrant obligations unchanged."
+  ],
+  "retained_prefix": {
+    "original_results": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/future-capture-1/RESULTS.json",
+      "bytes": 12505,
+      "sha256": "6a67293c72d64b27f5d360668f861e09cd042882e5332bf9fa400f5b0d74e1ef"
+    },
+    "positive_commands": 6,
+    "identity_checked_files": 41,
+    "producer_CPP_link_replays": 0
+  },
+  "current_source_pass": false,
+  "runtime_authority": null,
+  "helper_main_actions": 0,
+  "compilers": 0,
+  "CPP": 0,
+  "guard_or_resource_queries": 0,
+  "workloads": 0,
+  "canonical_mutations": 0,
+  "native_acceptance": false,
+  "whole_file_retirement": false
+}

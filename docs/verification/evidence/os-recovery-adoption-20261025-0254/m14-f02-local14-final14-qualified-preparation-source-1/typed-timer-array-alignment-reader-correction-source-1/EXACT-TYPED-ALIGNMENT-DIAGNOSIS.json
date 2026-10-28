@@ -1,0 +1,173 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "original_failed_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/absolute-retained-reference-correction-source-1/PROFILE.NOT-GRANTED.json",
+    "bytes": 172442,
+    "sha256": "f047bb8aaaa0a6017e54779870056cb43b22b9fdfb0d7792dd58323a3b6ae730"
+  },
+  "original_results": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/absolute-retained-reference-correction-source-1/future-capture-1/RESULTS.json",
+    "bytes": 1840,
+    "sha256": "0d32a4f7c65bf1ce25526183e6e1a2f83aef5d3b2cc154cb9fab1a3d546a2f87"
+  },
+  "original_stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/absolute-retained-reference-correction-source-1/future-capture-1/step0/stderr",
+    "bytes": 1356,
+    "sha256": "831f479e14e89428992ec8f325faf36412ef10ceb010fb815bb4a60b3b398afa"
+  },
+  "failure_seconds": 11.703411027090624,
+  "first_failing_name": "process_sched_timer_configuration",
+  "failed_property": "generic section_alignment>=min(symbol_size,8) requires8 for genuine [CInt;2] align4",
+  "retained_metadata": [
+    {
+      "artifact": "Rust",
+      "name": "process_sched_timer_configuration",
+      "symbol_size": 8,
+      "symbol_value": 0,
+      "kind": 1,
+      "binding": 1,
+      "section": ".lrodata.process_sched_timer_configuration",
+      "flags": 268435458,
+      "section_alignment": 4,
+      "timer_raw_bytes": "0000000000000000"
+    },
+    {
+      "artifact": "Rust",
+      "name": "process_init_stack_entry_config",
+      "symbol_size": 168,
+      "symbol_value": 0,
+      "kind": 1,
+      "binding": 1,
+      "section": ".lrodata.process_init_stack_entry_config",
+      "flags": 268435458,
+      "section_alignment": 8,
+      "timer_raw_bytes": null
+    },
+    {
+      "artifact": "selected_joint",
+      "name": "process_sched_timer_configuration",
+      "symbol_size": 8,
+      "symbol_value": 0,
+      "kind": 1,
+      "binding": 1,
+      "section": ".lrodata.process_sched_timer_configuration",
+      "flags": 268435458,
+      "section_alignment": 4,
+      "timer_raw_bytes": "0000000000000000"
+    },
+    {
+      "artifact": "selected_joint",
+      "name": "process_init_stack_entry_config",
+      "symbol_size": 168,
+      "symbol_value": 0,
+      "kind": 1,
+      "binding": 1,
+      "section": ".lrodata.process_init_stack_entry_config",
+      "flags": 268435458,
+      "section_alignment": 8,
+      "timer_raw_bytes": null
+    },
+    {
+      "artifact": "C_fallback",
+      "name": "process_sched_timer_configuration",
+      "symbol_size": 8,
+      "symbol_value": 8,
+      "kind": 1,
+      "binding": 1,
+      "section": ".rodata",
+      "flags": 2,
+      "section_alignment": 8,
+      "timer_raw_bytes": "0000000000000000"
+    },
+    {
+      "artifact": "C_fallback",
+      "name": "process_init_stack_entry_config",
+      "symbol_size": 168,
+      "symbol_value": 0,
+      "kind": 1,
+      "binding": 1,
+      "section": ".data.rel.ro",
+      "flags": 3,
+      "section_alignment": 32,
+      "timer_raw_bytes": null
+    },
+    {
+      "artifact": "off_joint",
+      "name": "process_sched_timer_configuration",
+      "symbol_size": 8,
+      "symbol_value": 8,
+      "kind": 1,
+      "binding": 1,
+      "section": ".rodata",
+      "flags": 2,
+      "section_alignment": 8,
+      "timer_raw_bytes": "0000000000000000"
+    },
+    {
+      "artifact": "off_joint",
+      "name": "process_init_stack_entry_config",
+      "symbol_size": 168,
+      "symbol_value": 0,
+      "kind": 1,
+      "binding": 1,
+      "section": ".data.rel.ro",
+      "flags": 3,
+      "section_alignment": 32,
+      "timer_raw_bytes": null
+    },
+    {
+      "artifact": "production114_C",
+      "name": "process_sched_timer_configuration",
+      "symbol_size": 8,
+      "symbol_value": 8,
+      "kind": 1,
+      "binding": 1,
+      "section": ".rodata",
+      "flags": 2,
+      "section_alignment": 32,
+      "timer_raw_bytes": "0000000000000000"
+    },
+    {
+      "artifact": "production114_C",
+      "name": "process_init_stack_entry_config",
+      "symbol_size": 168,
+      "symbol_value": 192,
+      "kind": 1,
+      "binding": 1,
+      "section": ".rodata",
+      "flags": 2,
+      "section_alignment": 32,
+      "timer_raw_bytes": null
+    }
+  ],
+  "genuine_Rust_type": "[CInt;2]",
+  "CInt_definition": "pub type CInt = i32;",
+  "defining_and_consuming_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/context-root/kernel/rust/process_helpers.rs",
+    "bytes": 618027,
+    "sha256": "be562522271404c8e5f7cf07f7a7fff9caed6e7be125d4098c7cfb35d1134da1"
+  },
+  "CInt_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/context-root/kernel/rust/abi.rs",
+    "bytes": 76151,
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "original_C_type": "const int[2]",
+  "original_C_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/preimages/kernel/process.c",
+    "bytes": 226577,
+    "sha256": "110e3e820fed06adbbf647e2f52bc06a157b7001653157863e7e6733b878d172"
+  },
+  "actual168_C_ABI_witness": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/fixture/genuine_candidate_abi.c",
+    "bytes": 10647,
+    "sha256": "3859b5f1f288ad9b78ba87d00fd1caefe7fb1645444d5ef3c1871840e1a79d93"
+  },
+  "actual168_witness_remains_size168_align8": true,
+  "source_changes": 0,
+  "readonly_all17_preserved": true,
+  "debug14_WRITE_preserved": true,
+  "correction": "Only readonly=true and exact timer-array name uses size8/typealignment4; all other names retain previous size-based bound; ALLOC/nonEXEC/nonWRITE/type/bind/size/rawbytes/relocs unchanged.",
+  "producer_CPP_link_replay": 0,
+  "runtime_authority": null
+}

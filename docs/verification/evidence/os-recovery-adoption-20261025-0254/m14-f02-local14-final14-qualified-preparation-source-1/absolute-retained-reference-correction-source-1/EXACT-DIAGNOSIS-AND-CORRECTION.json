@@ -1,0 +1,98 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "runtime_authority": null,
+  "original_profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/PROFILE.NOT-GRANTED.json",
+    "bytes": 173375,
+    "sha256": "016031f71441daf8783d3443db6bbb52659daf11d247f058efe15a15b18a7147"
+  },
+  "original_results": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/future-capture-1/RESULTS.json",
+    "bytes": 12505,
+    "sha256": "6a67293c72d64b27f5d360668f861e09cd042882e5332bf9fa400f5b0d74e1ef"
+  },
+  "original_failed_qualifier": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/qualify_changed_objects.py",
+    "bytes": 14261,
+    "sha256": "7bbd8c63f70dd5497eb2b936c43f2b6636fad2f108f8adf014957bbbd4144c59"
+  },
+  "original_stderr": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/future-capture-1/step6/stderr",
+    "bytes": 893,
+    "sha256": "2ecac86fba7f77c60f39d00bf47bf557c58078f9ede0eae90785e92e46b2caf8"
+  },
+  "original_failure_returncode": 1,
+  "original_failure_wall_seconds": 11.717353324056603,
+  "first_failing_name": "process_clone_config",
+  "production_baseline": "All17 .rodata/A(2)",
+  "original_HOST_C_and_new_Cfallback": "Exact per-name original .data.rel.ro/.data.rel.ro.local WA(3), or .rodata A(2); unchanged ABI/binding/size/alignment",
+  "new_Rust_and_selected_joint": "All17 .lrodata.<name> ALLOC|LARGE 0x10000002; noWRITE",
+  "classification": "Original HOST compiler relocation-backed C const class, not observed Rust layout/storage mismatch. PartialHOST C data is not claimed physically readonly or finalRELRO.",
+  "bounded_correction": "Only two Cfallback call sites use exact17 original named class; strict Rust/production readonly remains unchanged. All rawfield/callback/metadata/consumer/defaultlimit predicates remain unchanged.",
+  "storage_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/absolute-retained-reference-correction-source-1/EXACT17-ORIGINAL-HOST-C-STORAGE.json",
+    "bytes": 9794,
+    "sha256": "2885319e49e50748242b84005b9d2d74e1723f2402ed0ac10a2d2713a24748b2"
+  },
+  "retained_input_identities": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/absolute-retained-reference-correction-source-1/RETAINED-SIX-PREFIX-INPUT-IDENTITIES.json",
+    "bytes": 25296,
+    "sha256": "abaa6388ec5099fc510c2604872d47eb7b42202d82972a72aba05db33206cfb7"
+  },
+  "successful_prefix_metrics": [
+    {
+      "index": 0,
+      "returncode": 0,
+      "wall_seconds": 19.90066980791744,
+      "direct_join": true,
+      "group_absent": true,
+      "closed_streams": true
+    },
+    {
+      "index": 1,
+      "returncode": 0,
+      "wall_seconds": 0.0742355058901012,
+      "direct_join": true,
+      "group_absent": true,
+      "closed_streams": true
+    },
+    {
+      "index": 2,
+      "returncode": 0,
+      "wall_seconds": 0.06710535997990519,
+      "direct_join": true,
+      "group_absent": true,
+      "closed_streams": true
+    },
+    {
+      "index": 3,
+      "returncode": 0,
+      "wall_seconds": 0.09658646991010755,
+      "direct_join": true,
+      "group_absent": true,
+      "closed_streams": true
+    },
+    {
+      "index": 4,
+      "returncode": 0,
+      "wall_seconds": 0.08508333098143339,
+      "direct_join": true,
+      "group_absent": true,
+      "closed_streams": true
+    },
+    {
+      "index": 5,
+      "returncode": 0,
+      "wall_seconds": 0.26787680306006223,
+      "direct_join": true,
+      "group_absent": true,
+      "closed_streams": true
+    }
+  ],
+  "correction_count": 1,
+  "compiler_CPP_link_replay": 0,
+  "Rust_or_C_source_body_changes": 0,
+  "canonical_or_Git_writes": 0,
+  "actual_next_grant": null,
+  "on_further_real_ABI_mismatch": "Stop/report exact artifact predicates; never broadly accept writable storage or edit Rust to satisfy reader."
+}

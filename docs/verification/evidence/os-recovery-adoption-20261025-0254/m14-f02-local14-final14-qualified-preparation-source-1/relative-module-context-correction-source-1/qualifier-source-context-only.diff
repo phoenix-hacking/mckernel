@@ -1,0 +1,39 @@
+--- original-qualified-reader
++++ genuine-context-reader
+@@ -8,6 +8,9 @@
+ G=E/'m14-f02-verbose32-host-preparation-source-1'
+ N=Path('/home/holden/mckernel-work/host-preparation/velocity-intervention-20261026-1/restart-20261027-1717/foreground-f02-verbose46-source-1')
+ COUNTER=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/callback-target-reader-source-clarification-1/independent-source-profile-review-1/ACTUAL114-RETAINED-REGISTRY-COUNTEREXAMPLE.json')
++RUST_CONTEXT_ROOT=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/context-root/kernel/rust')
++CURRENT_PROPOSAL=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/EXACT-SEVEN-COMMAND-HOST-PROPOSAL.NOT-GRANTED.json')
++CURRENT_CONTEXT=Path('/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/relative-module-context-correction-source-1/CLOSED-RUST-MODULE-CONTEXT.json')
+ COUNTER_REF={'path': '/home/holden/mckernel/docs/verification/evidence/os-recovery-adoption-20261025-0254/m14-f02-local14-final14-qualified-preparation-source-1/callback-target-reader-source-clarification-1/independent-source-profile-review-1/ACTUAL114-RETAINED-REGISTRY-COUNTEREXAMPLE.json', 'bytes': 43493, 'sha256': '73af30120ba84d74519c6fe7b3c1d0c555b08bacee6328300149153de144bdbd'}
+ 
+ def load(path,name):
+@@ -103,7 +106,7 @@
+     else:
+      prefix='/src/kernel/rust/';assert original.startswith(prefix),(label,row['name'],original,actual)
+      relative=original[len(prefix):];assert relative in source_files
+-     expected=str(D/'rust-subtree'/relative);origin_binding='exact existing Rust source-directory relocation to HOST source argv'
++     expected=str(RUST_CONTEXT_ROOT/relative);origin_binding='exact existing Rust source-directory relocation to HOST source argv'
+     assert actual==expected,(label,row['name'],original,actual,expected)
+    entries.append(dict(offset=off,original=original,actual=actual,provenance=origin_binding))
+   reports.append(dict(name=row['name'],binding=row['bind'],bytes=row['size'],slots=row['size']//32,original_section_index=row['shndx'],actual_section=nz['name'],exact_packed_bytes_and_relocation_positions=True,string_provenance=entries))
+@@ -120,7 +123,7 @@
+  return dict(label=label,objects=148,slots=205,bytes=6560,process_objects=46,process_slots=78,process_bytes=2496,unrelated_objects=102,unrelated_slots=127,unrelated_bytes=4064)
+ 
+ def main():
+- out=Path(sys.argv[1]);proposal=read(D/'EXACT-SEVEN-COMMAND-HOST-PROPOSAL.NOT-GRANTED.json')
++ out=Path(sys.argv[1]);proposal=read(CURRENT_PROPOSAL)
+  for key in ['retained_actual114_Rust','retained_actual114_process']:
+   r=proposal[key];assert ref(r['path'])==r
+  baseline=m.m.Elf(proposal['retained_actual114_process']['path'])
+@@ -131,7 +134,7 @@
+  assert manifest['retained_actual114_Rust']==proposal['retained_actual114_Rust']
+  retained=m.m.Elf(proposal['retained_actual114_Rust']['path'])
+  assert len(verbose_symbols(retained))==134 and sum(s['size'] for s in verbose_symbols(retained))==6112
+- source_files={r['relative'] for r in read(D/'RUST-SUBTREE-CLOSED-SOURCE-MAP.json')['files']}
++ source_files={r['relative'] for r in read(CURRENT_CONTEXT)['Rust_files']}
+  registry=[process_metadata(rust,allrows,0,file,True),m.metadata(selected,[],0,file),process_metadata(joint,allrows,0,file,True),m.metadata(fallback,locals,0,file)]
+  whole_registry=[whole_container(elf,manifest,allrows,label) for elf,label in [(rust,'selectedRust'),(joint,'selectedjoint'),(offjoint,'optionOFFjoint')]]
+  unrelated=[preserve_unrelated(elf,retained,manifest,label,source_files) for elf,label in [(rust,'selectedRust'),(joint,'selectedjoint'),(offjoint,'optionOFFjoint')]]
